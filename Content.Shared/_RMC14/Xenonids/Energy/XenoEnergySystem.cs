@@ -46,7 +46,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
 
     private void OnXenoEnergyRemove(Entity<XenoEnergyComponent> ent, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(ent, ent.Comp.Alert);
+        _alerts.ClearAlert((ent.Owner, null), ent.Comp.Alert);
     }
 
     private void OnMeleeHit(Entity<XenoEnergyComponent> xeno, ref MeleeHitEvent args)
@@ -58,7 +58,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         var isDown = false;
         foreach (var hit in args.HitEntities)
         {
-            if (!_xeno.CanAbilityAttackTarget(xeno.Owner, hit))
+            if (!_xeno.CanGainRewardsFromTarget(xeno.Owner, hit)) // CMU14: no rewards from vehicles
                 continue;
 
             if (xeno.Comp.IgnoreLateInfected && TryComp<VictimInfectedComponent>(hit, out var infect) && infect.CurrentStage >= infect.FinalSymptomsStart)
@@ -85,7 +85,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         if (!xeno.Comp.GainOnProjectiles)
             return;
 
-        if (_xeno.CanAbilityAttackTarget(xeno, args.Hit))
+        if (_xeno.CanGainRewardsFromTarget(xeno, args.Hit)) // CMU14: no rewards from vehicles
         {
             AddEnergy(xeno, xeno.Comp.GainAttack);
             UpdateAlert(xeno);
@@ -104,7 +104,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         var max = _alerts.GetMaxSeverity(xeno.Comp.Alert);
         var severity = max - ContentHelpers.RoundToLevels(level, xeno.Comp.Max, max + 1);
         string? energyResourceMessage = (int)xeno.Comp.Current + " / " + xeno.Comp.Max;
-        _alerts.ShowAlert(xeno, xeno.Comp.Alert, (short)severity, dynamicMessage: energyResourceMessage);
+        _alerts.ShowAlert((xeno.Owner, null), xeno.Comp.Alert, (short)severity, dynamicMessage: energyResourceMessage);
     }
 
     private void OnXenoActionEnergyUseAttempt(Entity<XenoActionEnergyComponent> action, ref RMCActionUseAttemptEvent args)
@@ -133,7 +133,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
             return;
 
         if (popup && xeno.Comp.Current < xeno.Comp.Max && energy > 0)
-            _popup.PopupClient(Loc.GetString(xeno.Comp.PopupGain), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString(xeno.Comp.PopupGain), xeno, xeno);
 
         xeno.Comp.Current = Math.Min(xeno.Comp.Max, xeno.Comp.Current + energy);
         Dirty(xeno);
@@ -153,7 +153,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         {
             var popup = Loc.GetString(xeno.Comp != null ? xeno.Comp.PopupNotEnough : "rmc-xeno-not-enough-energy");
             if (predicted)
-                _popup.PopupClient(popup, xeno, xeno, PopupType.SmallCaution);
+                _popup.PopupEntity(popup, xeno, xeno, PopupType.SmallCaution);
             else
                 _popup.PopupEntity(popup, xeno, xeno, PopupType.SmallCaution);
         }
@@ -205,7 +205,7 @@ public sealed partial class XenoEnergySystem : EntitySystem
         if (TryRemoveEnergy((xeno, xeno.Comp), energy))
             return true;
 
-        _popup.PopupClient(Loc.GetString(xeno.Comp.PopupNotEnough), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString(xeno.Comp.PopupNotEnough), xeno, xeno);
         return false;
     }
 

@@ -1,0 +1,35 @@
+- type: entity
+  parent: RMCPatchBase
+  id: RuMCPatchBEAR
+  name: BEAR patch
+  description: A skull to remember. Red lines to fear. No mercy. No questions. Only results.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/Patches/BEAR.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _RuMC14/Clothing/Patches/BEAR.rsi
+      state: patch
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/Patches/BEAR.rsi
+      state: helmet
+
+- type: entity
+  parent: RMCPatchBase
+  id: RuMCPatchBEARHammer
+  name: BEAR patch 'Hammer'
+  description: A skull to remember. Red lines to fear. No mercy. No questions. Only results.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/Patches/BEAR_hammer.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _RuMC14/Clothing/Patches/BEAR_hammer.rsi
+      state: patch
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RuMC14/Clothing/Patches/BEAR_hammer.rsi
+      state: helmet

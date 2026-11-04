@@ -1,0 +1,311 @@
+# A TV news crew flown in to cover the conflict: a reporter in front of the camera, a camera operator broadcasting
+# to the colony's TVs and a sound technician on the boom mic.
+
+# jobs
+
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: AU14JobCivilianNewsCrewBase
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-journalist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: journalist
+  setPreference: true
+  ranks:
+    RMCRankCivilian: []
+  icon: "AU14JobIconColonyJournalist"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  - aunews
+  roleWeight: 0.25
+  hidden: false
+
+- type: job
+  parent: AU14JobCivilianNewsCrewBase
+  id: AU14JobCivilianNewsReporter
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: AU14NewsCrewReporterOutfit
+  roundRole: CivilianNewsReporter
+  name: cmu-job-name-news-reporter
+  description: cmu-job-description-news-reporter
+  playTimeTracker: AU14JobCivilianNewsReporter
+  startingGear: AU14GearNewsReporter
+
+- type: job
+  parent: AU14JobCivilianNewsCrewBase
+  id: AU14JobCivilianNewsCameraOperator
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: AU14NewsCrewCameraOperatorOutfit
+  roundRole: CivilianNewsCameraOperator
+  name: cmu-job-name-news-camera-operator
+  description: cmu-job-description-news-camera-operator
+  playTimeTracker: AU14JobCivilianNewsCameraOperator
+  startingGear: AU14GearNewsCameraOperator
+
+- type: job
+  parent: AU14JobCivilianNewsCrewBase
+  id: AU14JobCivilianNewsSoundTechnician
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: AU14NewsCrewSoundTechnicianOutfit
+  roundRole: CivilianNewsSoundTechnician
+  name: cmu-job-name-news-sound-technician
+  description: cmu-job-description-news-sound-technician
+  playTimeTracker: AU14JobCivilianNewsSoundTechnician
+  startingGear: AU14GearNewsSoundTechnician
+
+- type: playTimeTracker
+  id: AU14JobCivilianNewsReporter
+  isHumanoid: true
+
+- type: playTimeTracker
+  id: AU14JobCivilianNewsCameraOperator
+  isHumanoid: true
+
+- type: playTimeTracker
+  id: AU14JobCivilianNewsSoundTechnician
+  isHumanoid: true
+
+# gear
+
+- type: startingGear
+  id: AU14GearNewsReporter
+  equipment:
+    id: AU14IDCardNewsReporter
+    jumpsuit: CMJumpsuitLiaisonCorporateFormal
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    back: CMUPressBackpack
+  storage:
+    back:
+    - CMArmorPress
+    - CMArmorHelmetPress
+    - CMUPhotoCamera
+    - CMUCameraFilm
+    - CMUCameraFilm
+    - CMUMobilePhone
+  inhand:
+  - RMCCorrespondentMicrophone
+
+- type: startingGear
+  id: AU14GearNewsCameraOperator
+  equipment:
+    id: AU14IDCardNewsCameraOperator
+    jumpsuit: CMJumpsuitTShirtGray
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    back: CMUPressBackpack
+  storage:
+    back:
+    - CMArmorPress
+    - CMArmorHelmetPress
+    - CMUCameraFilm
+    - CMUCameraFilm
+  inhand:
+  - RMCCameraBroadcasting
+
+- type: startingGear
+  id: AU14GearNewsSoundTechnician
+  equipment:
+    id: AU14IDCardNewsSoundTechnician
+    jumpsuit: CMJumpsuitTShirtWhite
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    back: CMUPressBackpack
+  storage:
+    back:
+    - CMArmorPress
+    - CMArmorHelmetPress
+    - RMCCorrespondentMicrophone
+  inhand:
+  - CMUBoomMic
+
+# Each crew member's jacket, shoes and hat are picked when they spawn. The jumpsuit stays in the starting gear:
+# the ID card and pockets need it on first.
+
+- type: entity
+  id: AU14NewsCrewReporterOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketTanPufferVest
+      - AU14CivilianJacketKhakiPufferVest
+      - AU14CivilianJacketBomberJacket
+      - RMCCoatBomberKhaki
+      - RMCCoatBomberBlack
+      - AU14CivilianJacketBlueParka
+      shoes:
+      - RMCShoesBlack
+      - RMCShoesBrown
+      - RMCShoesFancyLeather
+
+- type: entity
+  id: AU14NewsCrewCameraOperatorOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketKhakiPufferVest
+      - AU14CivilianJacketGrayPufferVest
+      - AU14CivilianJacketTanPufferVest
+      - AU14CivilianJacketGrayPufferJacket
+      - AU14CivilianJacketGreenParka
+      shoes:
+      - CMBootsBlack
+      - RMCShoesBrown
+      - RMCShoesBlack
+      head:
+      - AU14CivBallCapBlack
+      - AU14CivBallCapBlueTrucker
+      - AU14CivBallCapRedTrucker
+
+- type: entity
+  id: AU14NewsCrewSoundTechnicianOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketGrayPufferJacket
+      - AU14CivilianJacketBomberJacket
+      - AU14CivilianJacketOldCoat
+      - AU14CivilianJacketGrayPufferVest
+      - RMCCoatBomberGrey
+      shoes:
+      - CMBootsBlack
+      - RMCShoesBlack
+      - RMCShoesBrown
+      head:
+      - AU14CivBallCapBlack
+      - AU14CivBallCapBlueTrucker
+      - AU14CivBallCapRedTrucker
+
+# ID cards
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardNewsReporter
+  name: news reporter ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianNewsReporter
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardNewsCameraOperator
+  name: camera operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianNewsCameraOperator
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: AU14IDCardNewsSoundTechnician
+  name: sound technician ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianNewsSoundTechnician
+
+# ghost roles
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14PartyJobNewsReporter
+  name: News Reporter
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: News Reporter
+    description: You lead a TV news crew. Find the story, get it on camera and get your crew home alive.
+    reregister: false
+    job: AU14JobCivilianNewsReporter
+    raffle:
+      settings: short
+    rules: You are a civilian reporter. Report on what you see; you are not a combatant.
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14PartyJobNewsCameraOperator
+  name: News Camera Operator
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: News Camera Operator
+    description: You run the broadcasting camera for a TV news crew. Keep the reporter in frame and the colony's TVs tuned in.
+    reregister: false
+    job: AU14JobCivilianNewsCameraOperator
+    raffle:
+      settings: short
+    rules: You are a civilian camera operator. Film what you see; you are not a combatant.
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: AU14PartyJobNewsSoundTechnician
+  name: News Sound Technician
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: News Sound Technician
+    description: You work the boom mic for a TV news crew. Sync it to the crew's camera and stay close so the broadcast has sound.
+    reregister: false
+    job: AU14JobCivilianNewsSoundTechnician
+    raffle:
+      settings: short
+    rules: You are a civilian sound technician. Record what you hear; you are not a combatant.
+
+# party
+
+- type: partySpawn
+  id: NewsCrewSpawn
+  leadersToSpawn:
+    AU14PartyJobNewsReporter: 1
+  gruntsToSpawn:
+    AU14PartyJobNewsCameraOperator: 1
+    AU14PartyJobNewsSoundTechnician: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: NewsCrewThirdParty
+  partyspawn: NewsCrewSpawn
+  displayName: TV News Crew
+  entrymethod: shuttle
+  weight: 3
+  minplayers: 0
+  maxplayers: 400
+  roundstart: false
+  ghostsNeeded: 3
+  ghostsCallable: true
+  announcearrival: A civilian news shuttle has landed in the conflict zone. Expect cameras.

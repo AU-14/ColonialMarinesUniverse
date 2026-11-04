@@ -26,5 +26,5 @@ public sealed partial class XenoSoakingDamageComponent : Component
     public Color RageColor = Color.FromHex("#AD1313");
 
     [DataField, AutoNetworkedField]
-    public TimeSpan RageDuration = TimeSpan.FromSeconds(3);
+    public TimeSpan RageDuration = TimeSpan.FromSeconds(4);
 }

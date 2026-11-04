@@ -74,13 +74,13 @@
   parent: CMMREFoodBase
   id: CMMREFoodDessert
   components:
-  - type: Food
+  - type: Edible
     transferAmount: 1
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 3
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 3
+      reagents:
         - ReagentId: Nutriment
           Quantity: 2
         - ReagentId: RMCSugar

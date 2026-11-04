@@ -1,3 +1,4 @@
+using Content.Shared.Humanoid;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -20,4 +21,11 @@ public sealed partial class RMCClothingFoldableComponent : Component
 /// </summary>
 [DataRecord]
 [Serializable, NetSerializable]
-public readonly partial record struct FoldableType(string Prefix, LocId Name, int Priority, string? BlacklistedPrefix, LocId? BlacklistPopup, bool HideAccessories = false);
+public readonly partial record struct FoldableType(
+    string Prefix,
+    LocId Name,
+    int Priority,
+    string? BlacklistedPrefix,
+    LocId? BlacklistPopup,
+    bool HideAccessories = false,
+    List<HumanoidVisualLayers>? RevealLayers = null);

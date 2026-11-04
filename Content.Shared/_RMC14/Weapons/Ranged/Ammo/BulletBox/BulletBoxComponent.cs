@@ -16,6 +16,14 @@ public sealed partial class BulletBoxComponent : Component
     [DataField(required: true), AutoNetworkedField]
     public EntProtoId BulletType;
 
+    /// <summary>
+    /// The cartridge/shell prototype to chamber when this box loads into an empty ready slot.
+    /// Null means leave the gun's currently configured ammo prototype untouched, so existing
+    /// boxes that don't care about ammo variants keep working unmodified.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntProtoId? AmmoProto;
+
     [DataField, AutoNetworkedField]
     public string? UsedIn;
 

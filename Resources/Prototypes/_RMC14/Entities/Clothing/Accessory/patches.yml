@@ -543,8 +543,8 @@
 - type: entity
   parent: RMCPatchBase
   id: RMCPatchCLF
-  name: CLF patch
-  description: "A circular, fire-resistant patch with a white border. The design features three white stars and a tricolor background: green, black, and red, symbolizing the Colonial Liberation Front's fight for independence and unity. This patch is worn by CLF fighters as a badge of defiance against corporate and governmental oppression, representing their struggle for a free and self-determined colonial future. Though feared and reviled by some, it remains a powerful symbol of resistance and revolution."
+  name: INSFOR patch
+  description: "A circular, fire-resistant patch with a white border. The design features three white stars and a tricolor background: green, black, and red, symbolizing INSFOR's fight for independence and unity. This patch is worn by INSFOR fighters as a badge of defiance against corporate and governmental oppression, representing their struggle for a free and self-determined colonial future. Though feared and reviled by some, it remains a powerful symbol of resistance and revolution."
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Accessory/Patches/CLF/clf_patch.rsi

@@ -19,7 +19,9 @@
     speechSounds: Alto
 
 - type: entity
-  parent: RMCImaginaryFriend
+  parent:
+  - RMCImaginaryFriend
+  - AppearanceHuman
   id: RMCImaginaryFriendHumanoid
   categories: [ HideSpawnMenu ]
   components:
@@ -65,7 +67,7 @@
     - map: [ "enum.VisorVisualLayers.Base" ]
     - map: [ "pocket1" ]
     - map: [ "pocket2" ]
-  - type: HumanoidAppearance
+  - type: HumanoidProfile
     species: Human
   - type: Input
     context: "ghost"
@@ -73,15 +75,6 @@
     needsHands: false
   - type: Ghost
     canInteract: true
-  - type: Hands
-    hands:
-      hand_right:
-        location: Right
-      hand_left:
-        location: Left
-    sortedHands:
-    - hand_right
-    - hand_left
   - type: Thieving
     stripTimeReduction: 9999
     stealthy: true

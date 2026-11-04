@@ -1,0 +1,440 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/hunter/pred_gear.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "UNIFORM"
+    },
+    {
+      "name": "mesh_shirt"
+    },
+    {
+      "name": "CAPE"
+    },
+    {
+      "name": "ceremonialcape"
+    },
+    {
+      "name": "fullcape"
+    },
+    {
+      "name": "thirdcape"
+    },
+    {
+      "name": "halfcape"
+    },
+    {
+      "name": "quartercape"
+    },
+    {
+      "name": "damagedcape"
+    },
+    {
+      "name": "councilor_poncho"
+    },
+    {
+      "name": "EQUIPMENT"
+    },
+    {
+      "name": "beltbag"
+    },
+    {
+      "name": "beltbag_w",
+      "directions": 4
+    },
+    {
+      "name": "yauttrap0"
+    },
+    {
+      "name": "yauttrap1"
+    },
+    {
+      "name": "yauttrapgrass"
+    },
+    {
+      "name": "yauttrapdirt"
+    },
+    {
+      "name": "teleporter",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "falcon_drone"
+    },
+    {
+      "name": "falcon_drone_badblood"
+    },
+    {
+      "name": "falcon_drone_active",
+      "directions": 4
+    },
+    {
+      "name": "falcon_drone_badblood_active",
+      "directions": 4
+    },
+    {
+      "name": "falcon_drone_destroyed"
+    },
+    {
+      "name": "falcon_drone_emped"
+    },
+    {
+      "name": "dissolving_vial"
+    },
+    {
+      "name": "dissolving_gel",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "MEDICINE"
+    },
+    {
+      "name": "crystal"
+    },
+    {
+      "name": "thwei_1",
+      "delays": [
+        [
+          0.6,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "burn_herbs"
+    },
+    {
+      "name": "brute_herbs"
+    },
+    {
+      "name": "WEAPONS"
+    },
+    {
+      "name": "metal_chain"
+    },
+    {
+      "name": "metal_gauntlet"
+    },
+    {
+      "name": "clansword_alt"
+    },
+    {
+      "name": "clansword_alt2"
+    },
+    {
+      "name": "clansword_alt3"
+    },
+    {
+      "name": "glaive_skull"
+    },
+    {
+      "name": "glaive"
+    },
+    {
+      "name": "glaive_alt"
+    },
+    {
+      "name": "wrist"
+    },
+    {
+      "name": "scim"
+    },
+    {
+      "name": "scim_alt"
+    },
+    {
+      "name": "combistick"
+    },
+    {
+      "name": "combistick_f"
+    },
+    {
+      "name": "war_axe"
+    },
+    {
+      "name": "duelling_hatchet"
+    },
+    {
+      "name": "duelling_sword"
+    },
+    {
+      "name": "duelling_club"
+    },
+    {
+      "name": "duelling_knife"
+    },
+    {
+      "name": "plasma_retro"
+    },
+    {
+      "name": "plasma_ebony"
+    },
+    {
+      "name": "plasma_bronze"
+    },
+    {
+      "name": "plasma_silver"
+    },
+    {
+      "name": "plasma_crimson"
+    },
+    {
+      "name": "plasma_bone"
+    },
+    {
+      "name": "disc"
+    },
+    {
+      "name": "disc_active0",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "predknife"
+    },
+    {
+      "name": "clansword"
+    },
+    {
+      "name": "predscythe_alt"
+    },
+    {
+      "name": "predscythe"
+    },
+    {
+      "name": "spike"
+    },
+    {
+      "name": "whip"
+    },
+    {
+      "name": "spearhunter"
+    },
+    {
+      "name": "disc_active",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "shield"
+    },
+    {
+      "name": "shield_ready"
+    },
+    {
+      "name": "MISC"
+    },
+    {
+      "name": "houndpad",
+      "delays": [
+        [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "visor_meson"
+    },
+    {
+      "name": "visor_thermal"
+    },
+    {
+      "name": "visor_nvg"
+    },
+    {
+      "name": "scanner"
+    },
+    {
+      "name": "hellnade",
+      "delays": [
+        [
+          0.8,
+          0.8,
+          0.8
+        ]
+      ]
+    },
+    {
+      "name": "hellnade_active",
+      "delays": [
+        [
+          0.8,
+          0.8,
+          0.8
+        ]
+      ]
+    },
+    {
+      "name": "TROPHIES"
+    },
+    {
+      "name": "scalp_1"
+    },
+    {
+      "name": "scalp_1_blood"
+    },
+    {
+      "name": "scalp_2"
+    },
+    {
+      "name": "scalp_2_blood"
+    },
+    {
+      "name": "scalp_3"
+    },
+    {
+      "name": "scalp_3_blood"
+    },
+    {
+      "name": "scalp_4"
+    },
+    {
+      "name": "scalp_4_blood"
+    },
+    {
+      "name": "UNSORTED"
+    },
+    {
+      "name": "polishing_rag"
+    },
+    {
+      "name": "medicomp"
+    },
+    {
+      "name": "medicomp_open"
+    },
+    {
+      "name": "UNUSED"
+    },
+    {
+      "name": "emitter-notarget",
+      "delays": [
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "emitter-human",
+      "delays": [
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "emitter-xeno",
+      "delays": [
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "name": "staff"
+    },
+    {
+      "name": "longaxe"
+    },
+    {
+      "name": "TOOLS"
+    },
+    {
+      "name": "utilitybelt_pred"
+    },
+    {
+      "name": "\u002Butilitybelt_pred_half"
+    },
+    {
+      "name": "\u002Butilitybelt_pred_full"
+    },
+    {
+      "name": "wirescutter"
+    },
+    {
+      "name": "wrench"
+    },
+    {
+      "name": "welder"
+    },
+    {
+      "name": "welder_on",
+      "delays": [
+        [
+          0.17999999,
+          0.17999999
+        ]
+      ]
+    },
+    {
+      "name": "screwdriver"
+    },
+    {
+      "name": "multitool"
+    },
+    {
+      "name": "bar"
+    },
+    {
+      "name": "bracer_shield_off"
+    },
+    {
+      "name": "bracer_shield"
+    },
+    {
+      "name": "bracer_shield_ready"
+    }
+  ]
+}

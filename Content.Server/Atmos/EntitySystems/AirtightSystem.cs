@@ -19,19 +19,22 @@ namespace Content.Server.Atmos.EntitySystems
             SubscribeLocalEvent<AirtightComponent, ComponentInit>(OnAirtightInit);
             SubscribeLocalEvent<AirtightComponent, ComponentShutdown>(OnAirtightShutdown);
             SubscribeLocalEvent<AirtightComponent, AnchorStateChangedEvent>(OnAirtightPositionChanged);
-            SubscribeLocalEvent<AirtightComponent, ReAnchorEvent>(OnAirtightReAnchor);
             SubscribeLocalEvent<AirtightComponent, MoveEvent>(OnAirtightMoved);
         }
 
         private void OnAirtightInit(Entity<AirtightComponent> airtight, ref ComponentInit args)
         {
-            // TODO AIRTIGHT what FixAirBlockedDirectionInitialize even for?
-            if (!airtight.Comp.FixAirBlockedDirectionInitialize)
+            // If this entity blocks air in all directions (e.g. full tile walls, doors, and windows)
+            // we can skip some expensive logic.
+            if (airtight.Comp.InitialAirBlockedDirection == (int)AtmosDirection.All)
             {
+                airtight.Comp.CurrentAirBlockedDirection = airtight.Comp.InitialAirBlockedDirection;
                 UpdatePosition(airtight);
                 return;
             }
 
+            // Otherwise we need to determine its current blocked air directions based on rotation
+            // and check if it's still airtight.
             var xform = Transform(airtight);
             airtight.Comp.CurrentAirBlockedDirection =
                 (int) Rotate((AtmosDirection) airtight.Comp.InitialAirBlockedDirection, xform.LocalRotation);
@@ -66,19 +69,6 @@ namespace Content.Server.Atmos.EntitySystems
 
             var airtightEv = new AirtightChanged(uid, airtight, false, (gridId.Value, tilePos));
             RaiseLocalEvent(uid, ref airtightEv, true);
-        }
-
-        private void OnAirtightReAnchor(EntityUid uid, AirtightComponent airtight, ref ReAnchorEvent args)
-        {
-            foreach (var gridId in new[] { args.OldGrid, args.Grid })
-            {
-                // Update and invalidate new position.
-                airtight.LastPosition = (gridId, args.TilePos);
-                InvalidatePosition(gridId, args.TilePos);
-
-                var airtightEv = new AirtightChanged(uid, airtight, false, (gridId, args.TilePos));
-                RaiseLocalEvent(uid, ref airtightEv, true);
-            }
         }
 
         private void OnAirtightMoved(Entity<AirtightComponent> ent, ref MoveEvent ev)
@@ -122,8 +112,7 @@ namespace Content.Server.Atmos.EntitySystems
 
         public void InvalidatePosition(Entity<MapGridComponent?> grid, Vector2i pos)
         {
-            var query = GetEntityQuery<AirtightComponent>();
-            _explosionSystem.UpdateAirtightMap(grid, pos, grid, query);
+            _explosionSystem.UpdateAirtightMap(grid, pos, grid);
             _atmosphereSystem.InvalidateTile(grid.Owner, pos);
         }
 

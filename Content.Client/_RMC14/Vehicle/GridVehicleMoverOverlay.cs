@@ -183,7 +183,7 @@ public sealed class GridVehicleMoverOverlay : Overlay
                 continue;
 
             var basePosition = _transform.GetWorldPosition(xform);
-            var rotation = xform.LocalRotation;
+            var rotation = _transform.GetWorldRotation(xform);
 
             for (var i = 0; i < enter.EntryPoints.Count; i++)
             {

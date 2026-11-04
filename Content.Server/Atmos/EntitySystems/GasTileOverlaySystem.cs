@@ -1,5 +1,3 @@
-using System.Runtime.CompilerServices;
-using Content.Server.Atmos.Components;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -12,7 +10,6 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Player;
 using Robust.Shared;
-using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -20,6 +17,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Threading;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using System.Runtime.CompilerServices;
 
 // ReSharper disable once RedundantUsingDirective
 
@@ -30,11 +28,12 @@ namespace Content.Server.Atmos.EntitySystems
     {
         [Robust.Shared.IoC.Dependency] private IGameTiming _gameTiming = default!;
         [Robust.Shared.IoC.Dependency] private IPlayerManager _playerManager = default!;
-        [Robust.Shared.IoC.Dependency] private IMapManager _mapManager = default!;
-        [Robust.Shared.IoC.Dependency] private IConfigurationManager _confMan = default!;
         [Robust.Shared.IoC.Dependency] private IParallelManager _parMan = default!;
         [Robust.Shared.IoC.Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Robust.Shared.IoC.Dependency] private ChunkingSystem _chunkingSys = default!;
+
+        [Robust.Shared.IoC.Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
+        [Robust.Shared.IoC.Dependency] private EntityQuery<GasTileOverlayComponent> _gasTileOverlayQuery = default!;
 
         /// <summary>
         /// Per-tick cache of sessions.
@@ -60,17 +59,12 @@ namespace Content.Server.Atmos.EntitySystems
         private float _updateInterval;
 
         private int _thresholds;
-        private EntityQuery<MapGridComponent> _gridQuery;
-        private EntityQuery<GasTileOverlayComponent> _query;
 
         private bool _doUpdate;
 
         public override void Initialize()
         {
             base.Initialize();
-
-            _query = GetEntityQuery<GasTileOverlayComponent>();
-            _gridQuery = GetEntityQuery<MapGridComponent>();
 
             _updateJob = new UpdatePlayerJob()
             {
@@ -79,17 +73,14 @@ namespace Content.Server.Atmos.EntitySystems
                 ChunkIndexPool = _chunkIndexPool,
                 Sessions = _sessions,
                 ChunkingSys = _chunkingSys,
-                MapManager = _mapManager,
                 ChunkViewerPool = _chunkViewerPool,
                 LastSentChunks = _lastSentChunks,
-                GridQuery = _gridQuery,
+                GridQuery = _mapGridQuery,
             };
 
             _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
-            Subs.CVar(_confMan, CCVars.NetGasOverlayTickRate, UpdateTickRate, true);
-            Subs.CVar(_confMan, CCVars.GasOverlayThresholds, UpdateThresholds, true);
-            Subs.CVar(_confMan, CVars.NetPVS, OnPvsToggle, true);
-            Subs.CVar(_confMan, RMCCVars.RMCGasTileOverlayUpdate, v => _doUpdate = v, true);
+
+            InitializeCVars();
 
             SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
             SubscribeLocalEvent<GasTileOverlayComponent, ComponentStartup>(OnStartup);
@@ -143,7 +134,7 @@ namespace Content.Server.Atmos.EntitySystems
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Invalidate(Entity<GasTileOverlayComponent?> grid, Vector2i index)
         {
-            if (_query.Resolve(grid.Owner, ref grid.Comp))
+            if (_gasTileOverlayQuery.Resolve(grid.Owner, ref grid.Comp))
                 grid.Comp.InvalidTiles.Add(index);
         }
 
@@ -177,7 +168,16 @@ namespace Content.Server.Atmos.EntitySystems
 
         public GasOverlayData GetOverlayData(GasMixture? mixture)
         {
-            var data = new GasOverlayData(0, new byte[VisibleGasId.Length]);
+            ThermalByte byteTemp;
+            if (mixture == null)
+            {
+                byteTemp = new();
+                byteTemp.SetVacuum();
+            }
+            else
+                byteTemp = new(mixture.Temperature);
+
+            var data = new GasOverlayData(0, new byte[VisibleGasId.Length], byteTemp);
 
             for (var i = 0; i < VisibleGasId.Length; i++)
             {
@@ -217,15 +217,27 @@ namespace Content.Server.Atmos.EntitySystems
             }
 
             var changed = false;
+
+            ThermalByte newByteTemp = new();
+
+            if (tile.Hotspot.Valid)
+                newByteTemp.SetTemperature(tile.Hotspot.Temperature);
+            else if (!tile.Space && tile.Air?.TotalMoles <= 5f)
+                newByteTemp.SetVacuum();
+            else if (!tile.Space && tile.Air != null)
+                newByteTemp = new(tile.Air.Temperature);
+
             if (oldData.Equals(default))
             {
                 changed = true;
-                oldData = new GasOverlayData(tile.Hotspot.State, new byte[VisibleGasId.Length]);
+                oldData = new GasOverlayData(tile.Hotspot.State, new byte[VisibleGasId.Length], newByteTemp);
             }
-            else if (oldData.FireState != tile.Hotspot.State)
+            else if (oldData.FireState != tile.Hotspot.State ||
+                     Math.Abs(oldData.ByteGasTemperature.Value - newByteTemp.Value) > 1 || // Dirty Temperature when there is more then 1 byte difference. That should measure up to minimum 4 degreese difference, 6 degreese on average.
+                     (oldData.ByteGasTemperature.Value != newByteTemp.Value && newByteTemp.Value > ThermalByte.TempResolution)) // change of special ThermalByte value
             {
                 changed = true;
-                oldData = new GasOverlayData(tile.Hotspot.State, oldData.Opacity);
+                oldData = new GasOverlayData(tile.Hotspot.State, oldData.Opacity, newByteTemp);
             }
 
             if (tile is {Air: not null, NoGridTile: false})
@@ -376,7 +388,6 @@ namespace Content.Server.Atmos.EntitySystems
             public int BatchSize => 2;
 
             public IEntityManager EntManager;
-            public IMapManager MapManager;
             public ChunkingSystem ChunkingSys;
             public GasTileOverlaySystem System;
             public ObjectPool<HashSet<Vector2i>> ChunkIndexPool;
@@ -394,7 +405,7 @@ namespace Content.Server.Atmos.EntitySystems
                 var chunksInRange = ChunkingSys.GetChunksForSession(playerSession, ChunkSize, ChunkIndexPool, ChunkViewerPool);
                 var previouslySent = LastSentChunks[playerSession];
 
-                var ev = new GasOverlayUpdateEvent();
+                GasOverlayUpdateEvent? ev = null;
 
                 foreach (var (netGrid, oldIndices) in previouslySent)
                 {
@@ -405,7 +416,7 @@ namespace Content.Server.Atmos.EntitySystems
 
                         // If grid was deleted then don't worry about sending it to the client.
                         if (!EntManager.TryGetEntity(netGrid, out var gridId) || GridQuery.HasComp(gridId.Value))
-                            ev.RemovedChunks[netGrid] = oldIndices;
+                            (ev ??= new()).RemovedChunks[netGrid] = oldIndices;
                         else
                         {
                             oldIndices.Clear();
@@ -426,17 +437,20 @@ namespace Content.Server.Atmos.EntitySystems
                     if (old.Count == 0)
                         ChunkIndexPool.Return(old);
                     else
-                        ev.RemovedChunks.Add(netGrid, old);
+                        (ev ??= new()).RemovedChunks.Add(netGrid, old);
                 }
 
                 foreach (var (netGrid, gridChunks) in chunksInRange)
                 {
                     // Not all grids have atmospheres.
                     if (!EntManager.TryGetEntity(netGrid, out var grid) || !EntManager.TryGetComponent(grid, out GasTileOverlayComponent? overlay))
+                    {
+                        gridChunks.Clear();
+                        ChunkIndexPool.Return(gridChunks);
                         continue;
+                    }
 
-                    List<GasOverlayChunk> dataToSend = new();
-                    ev.UpdatedChunks[netGrid] = dataToSend;
+                    List<GasOverlayChunk>? dataToSend = null;
 
                     previouslySent.TryGetValue(netGrid, out var previousChunks);
 
@@ -448,14 +462,17 @@ namespace Content.Server.Atmos.EntitySystems
                         // If the chunk was updated since we last sent it, send it again
                         if (value.LastUpdate > LastSessionUpdate)
                         {
-                            dataToSend.Add(value);
+                            (dataToSend ??= new()).Add(value);
                             continue;
                         }
 
                         // Always send it if we didn't previously send it
                         if (previousChunks == null || !previousChunks.Contains(gIndex))
-                            dataToSend.Add(value);
+                            (dataToSend ??= new()).Add(value);
                     }
+
+                    if (dataToSend != null)
+                        (ev ??= new()).UpdatedChunks[netGrid] = dataToSend;
 
                     previouslySent[netGrid] = gridChunks;
                     if (previousChunks != null)
@@ -465,11 +482,23 @@ namespace Content.Server.Atmos.EntitySystems
                     }
                 }
 
-                if (ev.UpdatedChunks.Count != 0 || ev.RemovedChunks.Count != 0)
+                // Keep the grid sets transferred to previouslySent; only return the temporary dictionary.
+                chunksInRange.Clear();
+                ChunkViewerPool.Return(chunksInRange);
+
+                if (ev != null)
                     System.RaiseNetworkEvent(ev, playerSession.Channel);
             }
         }
 
         #endregion
+
+        private void InitializeCVars()
+        {
+            Subs.CVar(ConfMan, CCVars.NetGasOverlayTickRate, UpdateTickRate, true);
+            Subs.CVar(ConfMan, CCVars.GasOverlayThresholds, UpdateThresholds, true);
+            Subs.CVar(ConfMan, CVars.NetPVS, OnPvsToggle, true);
+            Subs.CVar(ConfMan, RMCCVars.RMCGasTileOverlayUpdate, v => _doUpdate = v, true);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.Server.Antag.Components;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
@@ -17,24 +18,26 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.GameRules;
 
 [TestFixture]
-public sealed class TraitorRuleTest
+public sealed class TraitorRuleTest : GameTest
 {
     private const string TraitorGameRuleProtoId = "Traitor";
     private const string TraitorAntagRoleName = "Traitor";
     private static readonly ProtoId<NpcFactionPrototype> SyndicateFaction = "Syndicate";
     private static readonly ProtoId<NpcFactionPrototype> NanotrasenFaction = "NanoTrasen";
 
+    public override PoolSettings PoolSettings => new()
+    {
+        Dirty = true,
+        DummyTicker = false,
+        Connected = true,
+        InLobby = true,
+    };
+
     [Test]
     [Ignore("RMC14 doesn't use traitors")]
     public async Task TestTraitorObjectives()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings()
-        {
-            Dirty = true,
-            DummyTicker = false,
-            Connected = true,
-            InLobby = true,
-        });
+        var pair = Pair;
         var server = pair.Server;
         var client = pair.Client;
         var entMan = server.EntMan;
@@ -85,7 +88,7 @@ public sealed class TraitorRuleTest
         await server.WaitPost(() =>
         {
             var gameRuleEnt = ticker.AddGameRule(TraitorGameRuleProtoId);
-            Assert.That(entMan.TryGetComponent<TraitorRuleComponent>(gameRuleEnt, out traitorRule));
+            Assert.That(entMan.TryGetComponent(gameRuleEnt, out traitorRule));
 
             // Ready up
             ticker.ToggleReadyAll(true);
@@ -124,9 +127,6 @@ public sealed class TraitorRuleTest
             $"MaxDifficulty exceeded! Objectives: {string.Join(", ", mindComp.Objectives.Select(o => FormatObjective(o, entMan)))}");
         Assert.That(mindComp.Objectives, Is.Not.Empty,
             $"No objectives assigned!");
-
-
-        await pair.CleanReturnAsync();
     }
 
     private static string FormatObjective(Entity<ObjectiveComponent> entity, IEntityManager entMan)

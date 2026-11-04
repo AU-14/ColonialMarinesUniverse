@@ -1,11 +1,14 @@
 using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared._RMC14.Atmos;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
+
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
@@ -34,6 +37,8 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
     private EntityQuery<DamageOnCollideComponent> _damageOnCollideQuery;
 
     private readonly List<Entity<DamageOnCollideComponent>> _damageOnCollide = new();
+    private readonly Dictionary<EntityUid, HashSet<CollideChainComponent>> _chainsByTarget = new();
+    public long ChainCleanupVisits { get; private set; }
 
     public override void Initialize()
     {
@@ -42,6 +47,70 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
         SubscribeLocalEvent<DamageOnCollideComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<DamageOnCollideComponent, EndCollideEvent>(OnEndCollide);
+        SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
+        SubscribeLocalEvent<CollideChainComponent, ComponentStartup>(OnChainStartup);
+        SubscribeLocalEvent<CollideChainComponent, ComponentShutdown>(OnChainShutdown);
+        SubscribeLocalEvent<CollideChainComponent, AfterAutoHandleStateEvent>(OnChainHandleState);
+    }
+
+    private void OnChainStartup(Entity<CollideChainComponent> ent, ref ComponentStartup args)
+    {
+        ent.Comp.IndexedOwner = ent.Owner;
+        ent.Comp.HitsReplaced = ReindexChain;
+        ReindexChain(ent.Comp);
+    }
+
+    private void OnChainHandleState(Entity<CollideChainComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        // Generated entity-set replication updates the collection in place.
+        // Before startup, OnChainStartup will index the populated set.
+        if (ent.Comp.HitsReplaced != null)
+            ReindexChain(ent.Comp);
+    }
+
+    private void OnChainShutdown(Entity<CollideChainComponent> ent, ref ComponentShutdown args)
+    {
+        ent.Comp.HitsReplaced = null;
+        UnindexChain(ent.Comp);
+    }
+
+    private void UnindexChain(CollideChainComponent chain)
+    {
+        foreach (var target in chain.IndexedHits)
+        {
+            if (!_chainsByTarget.TryGetValue(target, out var owners)) continue;
+            owners.Remove(chain);
+            if (owners.Count == 0) _chainsByTarget.Remove(target);
+        }
+        chain.IndexedHits.Clear();
+    }
+
+    private void TrackChainHit(CollideChainComponent chain, EntityUid target)
+    {
+        if (!chain.IndexedHits.Add(target)) return;
+        if (!_chainsByTarget.TryGetValue(target, out var owners))
+            _chainsByTarget[target] = owners = new();
+        owners.Add(chain);
+    }
+
+    private void ReindexChain(CollideChainComponent chain)
+    {
+        UnindexChain(chain);
+        // Covers deserialization, authoritative state replacement and admin replacement.
+        foreach (var target in chain.Hit) TrackChainHit(chain, target);
+    }
+
+    private void OnEntityTerminating(ref EntityTerminatingEvent args)
+    {
+        var terminating = args.Entity.Owner;
+        if (!_chainsByTarget.Remove(terminating, out var owners)) return;
+        foreach (var chain in owners)
+        {
+            ChainCleanupVisits++;
+            chain.IndexedHits.Remove(terminating);
+            if (!chain.Deleted && chain.Hit.Remove(terminating))
+                Dirty(chain.IndexedOwner, chain);
+        }
     }
 
     private void OnStartCollide(Entity<DamageOnCollideComponent> ent, ref StartCollideEvent args)
@@ -81,7 +150,11 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         if (_hive.FromSameHive(ent.Owner, other))
             return;
 
-        if (ent.Comp.Fire && HasComp<RMCImmuneToFireTileDamageComponent>(other))
+        // CMU14: tile-fire immunity honors its bypass whitelist here too, matching
+        // SharedRMCFlammableSystem.CanFireBypassImmunity (AU-14 PR #2296 scope).
+        if (ent.Comp.Fire &&
+            TryComp<RMCImmuneToFireTileDamageComponent>(other, out var tileFireImmunity) &&
+            !_whitelist.IsWhitelistPass(tileFireImmunity.BypassWhitelist, ent.Owner))
             return;
 
         if (HasComp<UncloakOnHitComponent>(ent.Owner))
@@ -96,7 +169,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             var damage = ent.Comp.Damage;
             if (ent.Comp.Acidic)
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
-            _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
+            var ignoreResistances = ent.Comp.IgnoreResistances
+                && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
+            _damageable.TryChangeDamage(other, damage, ignoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
             DoEmote(ent, other);
             didEmote = true;
         }
@@ -105,14 +180,21 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             var damage = ent.Comp.ChainDamage;
             if (ent.Comp.Acidic)
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
-            _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances);
+            var ignoreResistances = ent.Comp.IgnoreResistances
+                && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
+            _damageable.TryChangeDamage(other, damage, ignoreResistances);
         }
+
+        // CMU14: the damage above can delete the target outright, and everything after
+        // this point adds components or status effects to it.
+        if (TerminatingOrDeleted(other))
+            return;
 
         _xenoSpit.SetAcidCombo(other, ent.Comp.AcidComboDuration, ent.Comp.AcidComboDamage, ent.Comp.AcidComboParalyze, ent.Comp.AcidComboResists);
 
         if (ent.Comp.Paralyze > TimeSpan.Zero && !_standing.IsDown(other) && (!_size.TryGetSize(other, out var size) || size < RMCSizes.Big))
         {
-            _stun.TryParalyze(other, ent.Comp.Paralyze, true);
+            _stun.TryParalyze(other, ent.Comp.Paralyze, true); // CMU14: yautja acid paralysis exemption removed (CM-SS13 parity)
 
             if (!didEmote)
                 DoEmote(ent, other);
@@ -133,6 +215,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
         if (chain.Comp.Hit.Add(add))
         {
+            TrackChainHit(chain.Comp, add);
             Dirty(chain);
             return true;
         }
@@ -206,4 +289,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         if (comp.Chain is { } chain && TerminatingOrDeleted(chain))
             comp.Chain = null;
     }
+    public DamageSpecifier GetCollideDamage(Entity<DamageOnCollideComponent> ent)
+    {
+        return ent.Comp.Damage;
+    }
+
 }

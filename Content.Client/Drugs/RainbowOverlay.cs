@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared.CCVar;
 using Content.Shared.Drugs;
 using Content.Shared.StatusEffectNew;
@@ -20,7 +21,7 @@ public sealed partial class RainbowOverlay : Overlay
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IEntitySystemManager _sysMan = default!;
     [Dependency] private IGameTiming _timing = default!;
-    private readonly SharedStatusEffectsSystem _statusEffects = default!;
+    private readonly StatusEffectsSystem _statusEffects = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -41,10 +42,10 @@ public sealed partial class RainbowOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
 
-        _statusEffects = _sysMan.GetEntitySystem<SharedStatusEffectsSystem>();
+        _statusEffects = _sysMan.GetEntitySystem<StatusEffectsSystem>();
 
         _rainbowShader = _prototypeManager.Index(Shader).InstanceUnique();
-        _config.OnValueChanged(CCVars.ReducedMotion, OnReducedMotionChanged, invokeImmediately: true);
+        _config.OnValueChanged(CCVars.DisableRainbowOverlay, OnReducedMotionChanged, invokeImmediately: true);
     }
 
     private void OnReducedMotionChanged(bool reducedMotion)
@@ -82,7 +83,7 @@ public sealed partial class RainbowOverlay : Overlay
         if (!_entityManager.TryGetComponent(_playerManager.LocalEntity, out EyeComponent? eyeComp))
             return false;
 
-        if (args.Viewport.Eye != eyeComp.Eye)
+        if (!args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
             return false;
 
         return EffectScale > 0;

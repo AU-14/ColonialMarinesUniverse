@@ -109,7 +109,7 @@ namespace Content.Client.Verbs.UI
             Close();
 
             var menu = popup ?? _context.RootMenu;
-            menu.MenuBody.DisposeAllChildren();
+            menu.MenuBody.RemoveAllChildren();
 
             CurrentTarget = target;
             CurrentVerbs = _verbSystem.GetVerbs(target, user, Verb.VerbTypes, out ExtraCategories, force);
@@ -132,74 +132,27 @@ namespace Content.Client.Verbs.UI
         /// <summary>
         ///     Fill the verb pop-up using the verbs stored in <see cref="CurrentVerbs"/>
         /// </summary>
+        // CMU14: reuse unchanged root entries and defer category contents until opened.
         private void FillVerbPopup(ContextMenuPopup popup)
         {
-            HashSet<string> listedCategories = new();
-            var extras = new ValueList<string>(ExtraCategories.Count);
-
-            foreach (var cat in ExtraCategories)
-            {
-                extras.Add(cat.Text);
-            }
-
-            foreach (var verb in CurrentVerbs)
-            {
-                if (verb.Category == null)
-                {
-                    var element = new VerbMenuElement(verb);
-                    _context.AddElement(popup, element);
-                }
-                // Add the category if it's not an extra (this is to avoid shuffling if we're filling from server verbs response).
-                else if (!extras.Contains(verb.Category.Text) && listedCategories.Add(verb.Category.Text))
-                    AddVerbCategory(verb.Category, popup);
-            }
-
-            foreach (var category in ExtraCategories)
-            {
-                if (listedCategories.Add(category.Text))
-                    AddVerbCategory(category, popup);
-            }
-
-            popup.InvalidateMeasure();
+            CMUFillVerbPopup(popup);
         }
 
         /// <summary>
         ///     Add a verb category button to the pop-up
         /// </summary>
+        // CMU14: use the same lazy category construction as normal menu reconciliation.
         public void AddVerbCategory(VerbCategory category, ContextMenuPopup popup)
         {
-            // Get a list of the verbs in this category
-            List<Verb> verbsInCategory = new();
-            var drawIcons = false;
             foreach (var verb in CurrentVerbs)
             {
-                if (verb.Category?.Text == category.Text)
-                {
-                    verbsInCategory.Add(verb);
-                    drawIcons = drawIcons || verb.Icon != null || verb.IconEntity != null;
-                }
-            }
-
-            if (verbsInCategory.Count == 0 && !ExtraCategories.Contains(category))
+                if (verb.Category?.Text != category.Text)
+                    continue;
+                CMUPlaceCategory(popup, new List<Control>(), category, popup.MenuBody.ChildCount);
                 return;
-
-            var style = verbsInCategory.FirstOrDefault()?.TextStyleClass ?? Verb.DefaultTextStyleClass;
-            var element = new VerbMenuElement(category, style);
-            _context.AddElement(popup, element);
-
-            // Create the pop-up that appears when hovering over this element
-            element.SubMenu = new ContextMenuPopup(_context, element);
-            foreach (var verb in verbsInCategory)
-            {
-                var subElement = new VerbMenuElement(verb)
-                {
-                    IconVisible = drawIcons,
-                    TextVisible = !category.IconsOnly
-                };
-                _context.AddElement(element.SubMenu, subElement);
             }
-
-            element.SubMenu.MenuBody.Columns = category.Columns;
+            if (ExtraCategories.Contains(category))
+                CMUPlaceCategory(popup, new List<Control>(), category, popup.MenuBody.ChildCount);
         }
 
         /// <summary>
@@ -207,11 +160,12 @@ namespace Content.Client.Verbs.UI
         /// </summary>
         public void AddServerVerbs(List<Verb>? verbs, ContextMenuPopup popup)
         {
-            popup.MenuBody.DisposeAllChildren();
+            // popup.MenuBody.RemoveAllChildren(); // CMU14: reconcile existing rows after merging the reply.
 
             // Verbs may be null if the server does not think we can see the target entity. This **should** not happen.
             if (verbs == null)
             {
+                popup.MenuBody.RemoveAllChildren(); // CMU14: errors replace all actions.
                 // remove "waiting for server..." and inform user that something went wrong.
                 _context.AddElement(popup, new ContextMenuElement(Loc.GetString("verb-system-null-server-response")));
                 return;
@@ -245,6 +199,8 @@ namespace Content.Client.Verbs.UI
                 // If there's only one verb in the category, then it will act as if they clicked on that verb.
                 // Otherwise it opens the category menu.
 
+                verbElement.SubMenu?.CMUEnsureContents(); // CMU14: preserve the single-verb shortcut for lazy categories.
+
                 if (verbElement.SubMenu == null || verbElement.SubMenu.ChildCount == 0)
                     return;
 
@@ -273,7 +229,7 @@ namespace Content.Client.Verbs.UI
 
             if (verbElement.SubMenu == null)
             {
-                var popupElement = new ConfirmationMenuElement(verb, "Confirm");
+                var popupElement = new ConfirmationMenuElement(verb, Loc.GetString("generic-confirm"));
                 verbElement.SubMenu = new ContextMenuPopup(_context, verbElement);
                 _context.AddElement(verbElement.SubMenu, popupElement);
             }
@@ -289,6 +245,9 @@ namespace Content.Client.Verbs.UI
 
             OpenMenu.Close();
             OpenMenu = null;
+            // CMU14: release the last target's verbs and their captured actions when the menu closes.
+            CurrentVerbs.Clear();
+            ExtraCategories.Clear();
         }
 
         private void HandleVerbsResponse(VerbsResponseEvent msg)

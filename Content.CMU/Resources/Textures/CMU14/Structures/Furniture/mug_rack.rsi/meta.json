@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/pull/12389 (commit 1fc18aac3d5a6cb7e33190aaa98b21c4b350c598), ported to CMU by troy",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "mug-rack"
+    },
+    {
+      "name": "mugs-1"
+    },
+    {
+      "name": "mugs-2"
+    },
+    {
+      "name": "mugs-3"
+    }
+  ]
+}

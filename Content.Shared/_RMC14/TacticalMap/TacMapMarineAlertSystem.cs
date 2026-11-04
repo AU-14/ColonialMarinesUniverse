@@ -27,7 +27,7 @@ public sealed partial class TacMapMarineAlertSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        EnsureComp<TacMapMarineAlertComponent>(args.Equipee);
+        EnsureComp<TacMapMarineAlertComponent>(args.EquipTarget);
     }
     private void OnGotUnequipped(Entity<GrantTacMapAlertComponent> ent, ref GotUnequippedEvent args)
     {
@@ -36,16 +36,16 @@ public sealed partial class TacMapMarineAlertSystem : EntitySystem
 
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
-        if (!_inv.TryGetInventoryEntity<GrantTacMapAlertComponent>(args.Equipee, out _))
-            RemCompDeferred<TacMapMarineAlertComponent>(args.Equipee);
+        if (!_inv.TryGetInventoryEntity<GrantTacMapAlertComponent>(args.EquipTarget, out _))
+            RemCompDeferred<TacMapMarineAlertComponent>(args.EquipTarget);
     }
 
     private void OnStartup(Entity<TacMapMarineAlertComponent> ent, ref ComponentStartup args)
     {
-        _alerts.ShowAlert(ent, ent.Comp.Alert);
+        _alerts.ShowAlert((ent.Owner, null), ent.Comp.Alert);
     }
     private void OnRemove(Entity<TacMapMarineAlertComponent> ent, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(ent, ent.Comp.Alert);
+        _alerts.ClearAlert((ent.Owner, null), ent.Comp.Alert);
     }
 }

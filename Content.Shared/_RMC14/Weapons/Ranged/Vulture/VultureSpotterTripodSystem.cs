@@ -66,7 +66,7 @@ public sealed partial class VultureSpotterTripodSystem : EntitySystem
     {
         if (args.Handled ||
             !TryComp(ent, out ItemSlotsComponent? slots) ||
-            !_itemSlots.TryGetSlot(ent.Owner, ent.Comp.ScopeSlot, out var slot, slots) ||
+            !_itemSlots.TryGetSlot((ent.Owner, slots), ent.Comp.ScopeSlot, out var slot) ||
             slot.Item is not { } scopeUid ||
             !TryComp(scopeUid, out ScopeComponent? scope))
         {
@@ -85,7 +85,7 @@ public sealed partial class VultureSpotterTripodSystem : EntitySystem
     {
         var hasScope =
             TryComp(ent, out ItemSlotsComponent? slots) &&
-            _itemSlots.TryGetSlot(ent.Owner, ent.Comp.ScopeSlot, out var slot, slots) &&
+            _itemSlots.TryGetSlot((ent.Owner, slots), ent.Comp.ScopeSlot, out var slot) &&
             slot.HasItem;
 
         _appearance.SetData(ent.Owner, VultureSpotterTripodVisuals.HasScope, hasScope);

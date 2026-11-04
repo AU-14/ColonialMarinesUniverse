@@ -1,0 +1,900 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/turf/walls/windows.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "window",
+      "directions": 4
+    },
+    {
+      "name": "fwindow",
+      "directions": 4
+    },
+    {
+      "name": "rwindow",
+      "directions": 4
+    },
+    {
+      "name": "twindow",
+      "directions": 4
+    },
+    {
+      "name": "twindowold",
+      "directions": 8
+    },
+    {
+      "name": "window1"
+    },
+    {
+      "name": "window2"
+    },
+    {
+      "name": "window3"
+    },
+    {
+      "name": "window4"
+    },
+    {
+      "name": "window5"
+    },
+    {
+      "name": "window6"
+    },
+    {
+      "name": "window7"
+    },
+    {
+      "name": "window8"
+    },
+    {
+      "name": "window9"
+    },
+    {
+      "name": "window10"
+    },
+    {
+      "name": "window11"
+    },
+    {
+      "name": "window13"
+    },
+    {
+      "name": "window12"
+    },
+    {
+      "name": "window14"
+    },
+    {
+      "name": "window15"
+    },
+    {
+      "name": "window0"
+    },
+    {
+      "name": "rwindow15"
+    },
+    {
+      "name": "rwindow0"
+    },
+    {
+      "name": "rwindow1"
+    },
+    {
+      "name": "rwindow2"
+    },
+    {
+      "name": "rwindow3"
+    },
+    {
+      "name": "rwindow4"
+    },
+    {
+      "name": "rwindow5"
+    },
+    {
+      "name": "rwindow6"
+    },
+    {
+      "name": "rwindow7"
+    },
+    {
+      "name": "rwindow8"
+    },
+    {
+      "name": "rwindow9"
+    },
+    {
+      "name": "rwindow10"
+    },
+    {
+      "name": "rwindow11"
+    },
+    {
+      "name": "rwindow12"
+    },
+    {
+      "name": "rwindow13"
+    },
+    {
+      "name": "rwindow14"
+    },
+    {
+      "name": "twindow0"
+    },
+    {
+      "name": "twindow1"
+    },
+    {
+      "name": "twindow2"
+    },
+    {
+      "name": "twindow3"
+    },
+    {
+      "name": "twindow4"
+    },
+    {
+      "name": "twindow5"
+    },
+    {
+      "name": "twindow6"
+    },
+    {
+      "name": "twindow7"
+    },
+    {
+      "name": "twindow8"
+    },
+    {
+      "name": "twindow9"
+    },
+    {
+      "name": "twindow10"
+    },
+    {
+      "name": "twindow11"
+    },
+    {
+      "name": "twindow12"
+    },
+    {
+      "name": "twindow13"
+    },
+    {
+      "name": "twindow14"
+    },
+    {
+      "name": "twindow15"
+    },
+    {
+      "name": "phoronrwindow",
+      "directions": 8
+    },
+    {
+      "name": "phoronwindow",
+      "directions": 8
+    },
+    {
+      "name": "phoronwindow0"
+    },
+    {
+      "name": "phoronrwindow1"
+    },
+    {
+      "name": "phoronrwindow2"
+    },
+    {
+      "name": "phoronrwindow3"
+    },
+    {
+      "name": "phoronrwindow4"
+    },
+    {
+      "name": "phoronrwindow5"
+    },
+    {
+      "name": "phoronrwindow6"
+    },
+    {
+      "name": "phoronrwindow7"
+    },
+    {
+      "name": "phoronrwindow8"
+    },
+    {
+      "name": "phoronrwindow9"
+    },
+    {
+      "name": "phoronrwindow10"
+    },
+    {
+      "name": "phoronrwindow11"
+    },
+    {
+      "name": "phoronrwindow12"
+    },
+    {
+      "name": "phoronrwindow13"
+    },
+    {
+      "name": "phoronrwindow14"
+    },
+    {
+      "name": "phoronrwindow15"
+    },
+    {
+      "name": "phoronrwindow0"
+    },
+    {
+      "name": "phoronwindow1"
+    },
+    {
+      "name": "phoronwindow2"
+    },
+    {
+      "name": "phoronwindow3"
+    },
+    {
+      "name": "phoronwindow4"
+    },
+    {
+      "name": "phoronwindow5"
+    },
+    {
+      "name": "phoronwindow6"
+    },
+    {
+      "name": "phoronwindow7"
+    },
+    {
+      "name": "phoronwindow8"
+    },
+    {
+      "name": "phoronwindow9"
+    },
+    {
+      "name": "phoronwindow10"
+    },
+    {
+      "name": "phoronwindow11"
+    },
+    {
+      "name": "phoronwindow12"
+    },
+    {
+      "name": "phoronwindow13"
+    },
+    {
+      "name": "phoronwindow14"
+    },
+    {
+      "name": "phoronwindow15"
+    },
+    {
+      "name": "alm_rwindow0"
+    },
+    {
+      "name": "alm_rwindow1"
+    },
+    {
+      "name": "alm_rwindow2"
+    },
+    {
+      "name": "alm_rwindow3"
+    },
+    {
+      "name": "alm_rwindow4"
+    },
+    {
+      "name": "alm_rwindow8"
+    },
+    {
+      "name": "alm_rwindow12"
+    },
+    {
+      "name": "alm_window0"
+    },
+    {
+      "name": "alm_window1"
+    },
+    {
+      "name": "alm_window2"
+    },
+    {
+      "name": "alm_window3"
+    },
+    {
+      "name": "alm_window4"
+    },
+    {
+      "name": "alm_window8"
+    },
+    {
+      "name": "alm_window12"
+    },
+    {
+      "name": "chig_rwindow0"
+    },
+    {
+      "name": "chig_rwindow1"
+    },
+    {
+      "name": "chig_rwindow2"
+    },
+    {
+      "name": "chig_rwindow3"
+    },
+    {
+      "name": "chig_rwindow4"
+    },
+    {
+      "name": "chig_rwindow8"
+    },
+    {
+      "name": "chig_rwindow12"
+    },
+    {
+      "name": "col_window0_old"
+    },
+    {
+      "name": "col_window1_old"
+    },
+    {
+      "name": "col_window2_old"
+    },
+    {
+      "name": "col_window3_old"
+    },
+    {
+      "name": "col_window4_old"
+    },
+    {
+      "name": "col_window8_old"
+    },
+    {
+      "name": "col_window12_old"
+    },
+    {
+      "name": "col_rwindow0_old"
+    },
+    {
+      "name": "col_rwindow1_old"
+    },
+    {
+      "name": "col_rwindow2_old"
+    },
+    {
+      "name": "col_rwindow3_old"
+    },
+    {
+      "name": "col_rwindow4_old"
+    },
+    {
+      "name": "col_rwindow8_old"
+    },
+    {
+      "name": "col_rwindow12_old."
+    },
+    {
+      "name": "white_window0"
+    },
+    {
+      "name": "white_window1"
+    },
+    {
+      "name": "white_window2"
+    },
+    {
+      "name": "white_window3"
+    },
+    {
+      "name": "white_window4"
+    },
+    {
+      "name": "white_window8"
+    },
+    {
+      "name": "white_window12"
+    },
+    {
+      "name": "white_rwindow0"
+    },
+    {
+      "name": "white_rwindow1"
+    },
+    {
+      "name": "white_rwindow2"
+    },
+    {
+      "name": "white_rwindow3"
+    },
+    {
+      "name": "white_rwindow4"
+    },
+    {
+      "name": "white_rwindow8"
+    },
+    {
+      "name": "white_rwindow12"
+    },
+    {
+      "name": "wood_window0"
+    },
+    {
+      "name": "wood_window1"
+    },
+    {
+      "name": "wood_window2"
+    },
+    {
+      "name": "wood_window3"
+    },
+    {
+      "name": "wood_window4"
+    },
+    {
+      "name": "wood_window5"
+    },
+    {
+      "name": "wood_window8"
+    },
+    {
+      "name": "wood_window12"
+    },
+    {
+      "name": "wood_rwindow0"
+    },
+    {
+      "name": "wood_rwindow1"
+    },
+    {
+      "name": "wood_rwindow2"
+    },
+    {
+      "name": "wood_rwindow3"
+    },
+    {
+      "name": "wood_rwindow4"
+    },
+    {
+      "name": "wood_rwindow5"
+    },
+    {
+      "name": "wood_rwindow8"
+    },
+    {
+      "name": "wood_rwindow12"
+    },
+    {
+      "name": "col_window5"
+    },
+    {
+      "name": "col_window9"
+    },
+    {
+      "name": "col_window10"
+    },
+    {
+      "name": "col_window6"
+    },
+    {
+      "name": "col_rwindow5"
+    },
+    {
+      "name": "col_rwindow9"
+    },
+    {
+      "name": "col_rwindow10"
+    },
+    {
+      "name": "col_rwindow6"
+    },
+    {
+      "name": "col_window0"
+    },
+    {
+      "name": "col_window1"
+    },
+    {
+      "name": "col_window2"
+    },
+    {
+      "name": "col_window3"
+    },
+    {
+      "name": "col_window4"
+    },
+    {
+      "name": "col_window8"
+    },
+    {
+      "name": "col_window12"
+    },
+    {
+      "name": "col_rwindow0"
+    },
+    {
+      "name": "col_rwindow1"
+    },
+    {
+      "name": "col_rwindow2"
+    },
+    {
+      "name": "col_rwindow3"
+    },
+    {
+      "name": "col_rwindow4"
+    },
+    {
+      "name": "col_rwindow8"
+    },
+    {
+      "name": "col_rwindow12"
+    },
+    {
+      "name": "prison_window0"
+    },
+    {
+      "name": "prison_window1"
+    },
+    {
+      "name": "prison_window2"
+    },
+    {
+      "name": "prison_window3"
+    },
+    {
+      "name": "prison_window4"
+    },
+    {
+      "name": "prison_window5"
+    },
+    {
+      "name": "prison_window6"
+    },
+    {
+      "name": "prison_window8"
+    },
+    {
+      "name": "prison_window9"
+    },
+    {
+      "name": "prison_window10"
+    },
+    {
+      "name": "prison_window12"
+    },
+    {
+      "name": "prison_rwindow5"
+    },
+    {
+      "name": "prison_rwindow9"
+    },
+    {
+      "name": "prison_rwindow10"
+    },
+    {
+      "name": "prison_rwindow6"
+    },
+    {
+      "name": "prison_rwindow0"
+    },
+    {
+      "name": "prison_rwindow4"
+    },
+    {
+      "name": "prison_rwindow8"
+    },
+    {
+      "name": "prison_rwindow12"
+    },
+    {
+      "name": "prison_rwindow2"
+    },
+    {
+      "name": "prison_rwindow3"
+    },
+    {
+      "name": "prison_rwindow1"
+    },
+    {
+      "name": "prison_cellwindow5"
+    },
+    {
+      "name": "prison_cellwindow9"
+    },
+    {
+      "name": "prison_cellwindow10"
+    },
+    {
+      "name": "prison_cellwindow6"
+    },
+    {
+      "name": "prison_cellwindow0"
+    },
+    {
+      "name": "prison_cellwindow4"
+    },
+    {
+      "name": "prison_cellwindow8"
+    },
+    {
+      "name": "prison_cellwindow12"
+    },
+    {
+      "name": "prison_cellwindow2"
+    },
+    {
+      "name": "prison_cellwindow3"
+    },
+    {
+      "name": "prison_cellwindow1"
+    },
+    {
+      "name": "bnkr_window0"
+    },
+    {
+      "name": "bnkr_window1"
+    },
+    {
+      "name": "bnkr_window2"
+    },
+    {
+      "name": "bnkr_window3"
+    },
+    {
+      "name": "bnkr_window4"
+    },
+    {
+      "name": "bnkr_window8"
+    },
+    {
+      "name": "bnkr_window12"
+    },
+    {
+      "name": "bnkr2_rwindow0"
+    },
+    {
+      "name": "bunker4"
+    },
+    {
+      "name": "bunker7"
+    },
+    {
+      "name": "bunker5"
+    },
+    {
+      "name": "bunker10"
+    },
+    {
+      "name": "bunker11"
+    },
+    {
+      "name": "bunker12"
+    },
+    {
+      "name": "bnkr_rwindow0"
+    },
+    {
+      "name": "bnkr_rwindow1"
+    },
+    {
+      "name": "bnkr_rwindow2"
+    },
+    {
+      "name": "bnkr_rwindow3"
+    },
+    {
+      "name": "bnkr_rwindow4"
+    },
+    {
+      "name": "bnkr_rwindow8"
+    },
+    {
+      "name": "bnkr_rwindow12"
+    },
+    {
+      "name": "hngr_window0"
+    },
+    {
+      "name": "hngr_window1"
+    },
+    {
+      "name": "hngr_window2"
+    },
+    {
+      "name": "hngr_window3"
+    },
+    {
+      "name": "hngr_window4"
+    },
+    {
+      "name": "hngr_window8"
+    },
+    {
+      "name": "hngr_window12"
+    },
+    {
+      "name": "hngr_rwindow0"
+    },
+    {
+      "name": "hngr_rwindow1"
+    },
+    {
+      "name": "hngr_rwindow2"
+    },
+    {
+      "name": "hngr_rwindow3"
+    },
+    {
+      "name": "hngr_rwindow4"
+    },
+    {
+      "name": "hngr_rwindow8"
+    },
+    {
+      "name": "hngr_rwindow12"
+    },
+    {
+      "name": "ai_window0"
+    },
+    {
+      "name": "ai_window1"
+    },
+    {
+      "name": "ai_window2"
+    },
+    {
+      "name": "ai_window3"
+    },
+    {
+      "name": "ai_window4"
+    },
+    {
+      "name": "ai_window8"
+    },
+    {
+      "name": "ai_window12"
+    },
+    {
+      "name": "ai_rwindow0"
+    },
+    {
+      "name": "ai_rwindow1"
+    },
+    {
+      "name": "ai_rwindow2"
+    },
+    {
+      "name": "ai_rwindow3"
+    },
+    {
+      "name": "ai_rwindow4"
+    },
+    {
+      "name": "ai_rwindow8"
+    },
+    {
+      "name": "ai_rwindow12"
+    },
+    {
+      "name": "w_ai_window0"
+    },
+    {
+      "name": "w_ai_window1"
+    },
+    {
+      "name": "w_ai_window2"
+    },
+    {
+      "name": "w_ai_window3"
+    },
+    {
+      "name": "w_ai_window4"
+    },
+    {
+      "name": "w_ai_window8"
+    },
+    {
+      "name": "w_ai_window12"
+    },
+    {
+      "name": "w_ai_rwindow0"
+    },
+    {
+      "name": "w_ai_rwindow1"
+    },
+    {
+      "name": "w_ai_rwindow2"
+    },
+    {
+      "name": "w_ai_rwindow3"
+    },
+    {
+      "name": "w_ai_rwindow4"
+    },
+    {
+      "name": "w_ai_rwindow8"
+    },
+    {
+      "name": "w_ai_rwindow12"
+    },
+    {
+      "name": "alm_ai_rwindow0"
+    },
+    {
+      "name": "alm_ai_rwindow1"
+    },
+    {
+      "name": "alm_ai_rwindow2"
+    },
+    {
+      "name": "alm_ai_rwindow3"
+    },
+    {
+      "name": "alm_ai_rwindow4"
+    },
+    {
+      "name": "alm_ai_rwindow8"
+    },
+    {
+      "name": "alm_ai_rwindow12"
+    },
+    {
+      "name": "pred_window0"
+    },
+    {
+      "name": "pred_window1"
+    },
+    {
+      "name": "pred_window2"
+    },
+    {
+      "name": "pred_window3"
+    },
+    {
+      "name": "pred_window4"
+    },
+    {
+      "name": "pred_window8"
+    },
+    {
+      "name": "pred_window12"
+    },
+    {
+      "name": "pred_window13"
+    },
+    {
+      "name": "pred_window14"
+    },
+    {
+      "name": "pred_window7"
+    },
+    {
+      "name": "pred_window11"
+    },
+    {
+      "name": "pred_window15"
+    },
+    {
+      "name": "pred_window5"
+    },
+    {
+      "name": "pred_window9"
+    },
+    {
+      "name": "pred_window10"
+    },
+    {
+      "name": "pred_window6"
+    },
+    {
+      "name": "blank"
+    }
+  ]
+}

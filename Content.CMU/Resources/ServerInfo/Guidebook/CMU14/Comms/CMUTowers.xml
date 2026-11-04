@@ -1,0 +1,46 @@
+<Document>
+  # Comms and Sensor Towers
+
+  Colonies have fixed towers that are often broken when you arrive. Getting them working is a job for engineers: only people trained in engineering can repair them.
+
+  ## Communications Towers
+  <Box>
+    <GuideEntityEmbed Entity="AU14CommunicationsTower" Caption="Communications tower"/>
+  </Box>
+  Many radio channels only carry through a working communications tower, including the [bold]Colony[/bold], [bold]CMB[/bold] and faction channels. While no tower is up, those channels go quiet.
+
+  To get a tower working:
+  - [bold]Repair it[/bold]: weld its panels back together with a blowtorch. It can take several passes, so examine the tower to see if there's still damage.
+  - [bold]Tune it[/bold]: use a security access tuner on it to add your faction's frequencies. The tower then starts broadcasting them.
+  - [bold]Power it[/bold]: a tower does nothing without power, so fix the local APC and, if need be, the colony's power grid.
+
+  If the tower is destroyed or loses power, the channels it carries stop until it's fixed. Guard it.
+
+  ## Field Antenna Masts
+  <Box>
+    <GuideEntityEmbed Entity="AU14CommsMastField" Caption="Field antenna mast"/>
+  </Box>
+  When there's no working tower nearby, you can raise your own. A [bold]field antenna mast[/bold] relays the combat nets (the squad, command, intel, JTAC and MP channels) around it, so a forward position or command post can stay on the net.
+  - [bold]Building it[/bold]: it's a staged job for someone with [bold]engineering training[/bold] (level 2) or [bold]RTO/JTAC training[/bold] (level 4). Pick [bold]antenna mast parts[/bold] from the metal build menu, lay a footing on open ground, raise and weld the lattice, guy it, fit an antenna head from requisitions and tune the feed. The full step list is in [textlink="the AN/PRC-117G guide" link="AU14CommsANPRC"].
+  - [bold]Keying it[/bold]: a mast only carries the nets of sides whose [bold]COMSEC fill card[/bold] has been loaded into its open feed. An unkeyed mast carries nothing.
+  - [bold]Range[/bold]: full signal out to about 75 tiles, and a weaker signal out to about 100.
+  - [bold]It needs power.[/bold] An unpowered mast relays nothing, so build it in an area whose APC has power, with its equipment channel on. In the field, bring a PACMAN generator and APC electronics to power the area (see [textlink="Power" link="CMUGuideEngPower"]).
+  - [color=red]It can be taken over.[/color] Anyone who opens the feed can load their own side's card into it, and hostile saboteurs can splice a tap into it to listen in. Put it somewhere you can hold.
+  - If it's damaged, weld it back up with a blowtorch. If it's destroyed, everyone relying on it drops off the net.
+
+  ## Sensor Towers
+  <Box>
+    <GuideEntityEmbed Entity="AU14SensorTower" Caption="Sensor tower"/>
+  </Box>
+  A working sensor tower tracks unknown lifeforms in the area and shows them on the tactical map.
+
+  To repair it, in order:
+  - Weld the plates back together with a [bold]blowtorch[/bold].
+  - Fix the wiring with [bold]wire cutters[/bold].
+  - Realign it with a [bold]wrench[/bold].
+  - Switch it on. Activation assigns the tower to the operator's IFF faction; that side receives sensor contacts on its tactical maps. A [bold]multitool[/bold] can reconfigure ownership while it is running.
+
+  Tower markers stay visible while the sensors are offline. Switching a tower off or losing it to another faction ends your side's sensor feed.
+
+  Examine the tower if you're not sure which step comes next. A sensor tower breaks down again at random after a while, so keep checking on it.
+</Document>

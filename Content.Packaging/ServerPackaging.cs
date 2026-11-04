@@ -19,10 +19,13 @@ public static class ServerPackaging
         new PlatformReg("osx-x64", "MacOS", false),
         new PlatformReg("osx-arm64", "MacOS", false),
         // Non-default platforms (i.e. for Watchdog Git)
-        new PlatformReg("win-x86", "Windows", false),
-        new PlatformReg("linux-x86", "Linux", false),
-        new PlatformReg("linux-arm", "Linux", false),
         new PlatformReg("freebsd-x64", "FreeBSD", false),
+    };
+
+    private static IReadOnlySet<string> ServerContentIgnoresResources { get; } = new HashSet<string>
+    {
+        "ServerInfo",
+        "Changelog",
     };
 
     private static List<string> PlatformRids => Platforms
@@ -54,10 +57,18 @@ public static class ServerPackaging
         "ru",
         "tr",
         "zh-Hans",
-        "zh-Hant"
+        "zh-Hant",
+        "server_config.toml" // RT config (use our Content-facing one)
     };
 
-    public static async Task PackageServer(bool skipBuild, bool noRestore, bool hybridAcz, IPackageLogger logger, string configuration, List<string>? platforms = null)
+    public static async Task PackageServer(
+        bool skipBuild,
+        bool noRestore,
+        bool hybridAcz,
+        bool logBuild,
+        IPackageLogger logger,
+        string configuration,
+        List<string>? platforms = null)
     {
         if (platforms == null)
         {
@@ -70,7 +81,7 @@ public static class ServerPackaging
             // Rather than hosting the client ZIP on the watchdog or on a separate server,
             //  Hybrid ACZ uses the ACZ hosting functionality to host it as part of the status host,
             //  which means that features such as automatic UPnP forwarding still work properly.
-            await ClientPackaging.PackageClient(skipBuild, noRestore, configuration, logger);
+            await ClientPackaging.PackageClient(skipBuild, noRestore, logBuild, configuration, logger);
         }
 
         // Good variable naming right here.
@@ -79,11 +90,17 @@ public static class ServerPackaging
             if (!platforms.Contains(platform.Rid))
                 continue;
 
-            await BuildPlatform(platform, skipBuild, noRestore, hybridAcz, configuration, logger);
+            await BuildPlatform(platform, skipBuild, noRestore, hybridAcz, logBuild, configuration, logger);
         }
     }
 
-    private static async Task BuildPlatform(PlatformReg platform, bool skipBuild, bool noRestore, bool hybridAcz, string configuration, IPackageLogger logger)
+    private static async Task BuildPlatform(PlatformReg platform,
+        bool skipBuild,
+        bool noRestore,
+        bool hybridAcz,
+        bool logBuild,
+        string configuration,
+        IPackageLogger logger)
     {
         logger.Info($"Building project for {platform.TargetOs}...");
 
@@ -104,9 +121,14 @@ public static class ServerPackaging
                     "/m"
                 }
             };
-
             if (noRestore)
                 startInfo.ArgumentList.Add("--no-restore");
+
+            if (logBuild)
+            {
+                startInfo.ArgumentList.Add($"/bl:{Path.Combine("release", $"server-{platform.Rid}.binlog")}");
+                startInfo.ArgumentList.Add("/p:ReportAnalyzer=true");
+            }
 
             await ProcessHelpers.RunCheck(startInfo);
 
@@ -165,6 +187,12 @@ public static class ServerPackaging
         var passes = graph.AllPasses.ToList();
 
         pass.Dependencies.Add(new AssetPassDependency(graph.Output.Name));
+
+        // Include a TOML config file - include the ss14 one from Resources if possible, using the RT one as a fallback.
+        var toml = Path.Combine(contentDir, "Resources", "ConfigPresets", "server_config.toml");
+        var robustToml = Path.Combine("RobustToolbox", "bin", "Server", platform.Rid, "publish", "server_config.toml");
+        pass.InjectFileFromDisk("server_config.toml", File.Exists(toml) ? toml : robustToml);
+
         passes.Add(pass);
 
         AssetGraph.CalculateGraph(passes, logger);
@@ -193,7 +221,17 @@ public static class ServerPackaging
             contentAssemblies,
             cancel: cancel);
 
-        await RobustServerPackaging.WriteServerResources(contentDir, inputPassResources, cancel);
+        await RobustServerPackaging.WriteServerResources(
+            contentDir,
+            inputPassResources,
+            ServerContentIgnoresResources.Concat(SharedPackaging.AdditionalIgnoredResources).ToHashSet(),
+            cancel);
+
+        await RobustSharedPackaging.DoResourceCopy(
+            Path.Combine(contentDir, "Content.CMU", "Resources"),
+            inputPassResources,
+            new HashSet<string>(),
+            cancel: cancel);
 
         if (hybridAcz)
         {
@@ -204,7 +242,7 @@ public static class ServerPackaging
         inputPassResources.InjectFinished();
     }
 
-    // This returns both content assemblies, for example Content.Server.dll, and dependencies, for example Npgsql.
+    // This returns both content assemblies (e.g. Content.Server.dll) and dependencies (e.g. Npgsql)
     private static IEnumerable<string> GetContentAssemblyNamesToCopy(DepsHandler deps)
     {
         var depsContent = deps.RecursiveGetLibrariesFrom("Content.Server").SelectMany(GetLibraryNames);

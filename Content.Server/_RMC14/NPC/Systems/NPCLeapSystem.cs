@@ -1,3 +1,4 @@
+using System.Numerics; // CMU14
 using Content.Server._RMC14.NPC.Components;
 using Content.Server.DoAfter;
 using Content.Server.Interaction;
@@ -28,10 +29,10 @@ public sealed partial class NPCLeapSystem : EntitySystem
 
     private void OnShutdown(Entity<NPCLeapComponent> ent, ref ComponentShutdown args)
     {
-        if (ent.Comp.CurrentDoAfter != null)
-        {
+        // CMU14: ended doafters are culled from the component dict after ~0.5s, so only
+        // cancel one still running or the lookup logs an invalid-id error
+        if (_doafter.IsRunning(ent.Comp.CurrentDoAfter))
             _doafter.Cancel(ent.Comp.CurrentDoAfter);
-        }
     }
 
     public override void Update(float frameTime)
@@ -44,18 +45,22 @@ public sealed partial class NPCLeapSystem : EntitySystem
 
             if (!_xformQuery.TryGetComponent(comp.Target, out var targetXform))
             {
+                // CMU14: clear the stale leap id or the shutdown cancel later hits a culled doafter
+                comp.CurrentDoAfter = null;
                 comp.Status = LeapStatus.TargetUnreachable;
                 continue;
             }
 
             if (targetXform.MapID != xform.MapID)
             {
+                comp.CurrentDoAfter = null; // CMU14
                 comp.Status = LeapStatus.TargetUnreachable;
                 continue;
             }
 
             if (!TryComp<DoAfterComponent>(uid, out var after))
             {
+                comp.CurrentDoAfter = null; // CMU14
                 comp.Status = LeapStatus.Unspecified;
                 continue;
             }
@@ -130,7 +135,14 @@ public sealed partial class NPCLeapSystem : EntitySystem
                 var worldPos = _transform.GetMoverCoordinates(uid);
                 var targetPos = _transform.GetMoverCoordinates(comp.Target);
 
-                var addedDis = (targetPos.Position - worldPos.Position).Normalized() * comp.LeapDistance;
+                var offset = targetPos.Position - worldPos.Position;
+                if (offset == Vector2.Zero) // CMU14: Normalized() of a zero vector is NaN and crashes the leap
+                {
+                    comp.Status = LeapStatus.Unspecified;
+                    continue;
+                }
+
+                var addedDis = offset.Normalized() * comp.LeapDistance;
 
                 var destination = worldPos.WithPosition(worldPos.Position + addedDis);
 

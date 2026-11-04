@@ -1,12 +1,15 @@
+using Content.Shared.Atmos;
 using Content.Server.Atmos.EntitySystems;
+using Robust.Shared.Audio.Systems;
 using Content.Server.Body.Systems;
-using Content.Shared.Chemistry.EntitySystems;
-using Content.Server.Forensics;
 using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.FixedPoint;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
@@ -14,9 +17,7 @@ using Content.Shared.Nutrition.Components;
 using Content.Shared.Smoking;
 using Content.Shared.Temperature;
 using Robust.Server.GameObjects;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Content.Shared.Atmos;
 
 namespace Content.Server.Nutrition.EntitySystems
 {
@@ -106,7 +107,7 @@ namespace Content.Server.Nutrition.EntitySystems
         {
             if (args.Slot == "mask")
             {
-                _forensics.TransferDna(entity.Owner, args.Equipee, false);
+                _forensics.TransferDna(entity.Owner, args.EquipTarget, false);
             }
         }
 
@@ -157,7 +158,7 @@ namespace Content.Server.Nutrition.EntitySystems
                 }
 
                 _reactiveSystem.DoEntityReaction(containerManager.Owner, inhaledSolution, ReactionMethod.Ingestion);
-                _bloodstreamSystem.TryAddToChemicals((containerManager.Owner, bloodstream), inhaledSolution);
+                _bloodstreamSystem.TryAddToBloodstream((containerManager.Owner, bloodstream), inhaledSolution);
             }
 
             _timer -= UpdateTimer;

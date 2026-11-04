@@ -1,0 +1,49 @@
+# Mimic: humanoid abomination that assimilates incapacitated humans.
+# Combat form. While transformed via AbominationMimicSystem it polymorphs
+# into a real MobHuman wearing the victim's face.
+- type: entity
+  parent: AU14BiomorphBase
+  id: AU14BiomorphMimic
+  name: mimic biomorph
+  description: A wet, vaguely humanoid silhouette. Its features won't stop sliding.
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/Abominations/mimic.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: alive
+  - type: GhostRole
+    name: Mimic Biomorph
+    description: Assimilate the downed and disappear into the colony wearing their faces.
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      375: Dead
+  - type: MobStateActions
+    actions:
+      Alive:
+      - ActionBiomorphAssimilate
+      - ActionBiomorphMimicTransform
+  - type: BiomorphMimic
+    transformDuration: 960
+  - type: BiomorphAssimilate
+    doAfter: 8
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Biomorph
+    - BiomorphMimic
+  - type: ActiveRadio
+    channels:
+    - Biomorph
+    - BiomorphMimic
+  - type: UserInterface
+    interfaces:
+      enum.BiomorphMimicUiKey.Key:
+        type: BiomorphMimicBui
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 62
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.99
+    baseSprintSpeed: 5.06

@@ -223,6 +223,12 @@
   id: ArtifactCrusherMachineCircuitboard
   result: ArtifactCrusherMachineCircuitboard
 
+# Teleportation
+- type: latheRecipe
+  parent: [ BaseGoldCircuitboardRecipe, BaseResearchMachineRecipeCategory ]
+  id: StationTeleporterMachineCircuitboard
+  result: StationTeleporterMachineCircuitboard
+
 # Anomaly
 - type: latheRecipe
   parent: [ BaseCircuitboardRecipe, BaseResearchMachineRecipeCategory ]
@@ -250,6 +256,11 @@
   parent: [ BaseCircuitboardRecipe, BaseServiceMachineRecipeCategory ]
   id: DawInstrumentMachineCircuitboard
   result: DawInstrumentMachineCircuitboard
+
+- type: latheRecipe
+  parent: [BaseCircuitboardRecipe]
+  id: SmartFridgeCircuitboard
+  result: SmartFridgeCircuitboard
 
 # Bar
 - type: latheRecipe

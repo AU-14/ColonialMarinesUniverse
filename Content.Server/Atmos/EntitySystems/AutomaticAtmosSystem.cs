@@ -1,5 +1,5 @@
-using Content.Server.Atmos.Components;
 using Content.Server.Shuttles.Systems;
+using Content.Shared.Atmos.Components;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Events;
 
@@ -23,6 +23,11 @@ public sealed partial class AutomaticAtmosSystem : EntitySystem
     {
         if (_atmosphereSystem.HasAtmosphere(ent))
             return;
+
+        // cmu edit start: grids that breathe the air of the grid beneath them don't get an empty one of their own
+        if (HasComp<Content.Server.CMU14.Atmos.CMUBorrowedAtmosphereComponent>(ent))
+            return;
+        // cmu edit end
 
         // We can't actually count how many tiles there are efficiently, so instead estimate with the mass.
         if (ev.NewMass / ShuttleSystem.TileDensityMultiplier >= 7.0f)

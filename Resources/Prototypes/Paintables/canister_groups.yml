@@ -1,0 +1,31 @@
+- type: paintableGroup
+  cost: 2
+  id: Canisters
+  defaultStyle: storage
+  styles:
+    air: AirCanister
+    ammonia: AmmoniaCanister
+    carbon-dioxide: CarbonDioxideCanister
+    frezon: FrezonCanister
+    nitrogen: NitrogenCanister
+    nitrous-oxide: NitrousOxideCanister
+    oxygen: OxygenCanister
+    plasma: PlasmaCanister
+    storage: StorageCanister
+    tritium: TritiumCanister
+    water-vapor: WaterVaporCanister
+
+# CMU14 Begin
+- type: paintableGroup
+  cost: 2
+  id: CMUCanisters
+  defaultStyle: air
+  styles:
+    storage: CMUCanisterEmpty
+    air: CMUCanisterAir
+    oxygen: CMUCanisterOxygen
+    nitrogen: CMUCanisterNitrogen
+    plasma: CMUCanisterPlasma
+    carbon-dioxide: CMUCanisterCarbonDioxide
+    nitrous-oxide: CMUCanisterNitrousOxide
+# CMU14 End

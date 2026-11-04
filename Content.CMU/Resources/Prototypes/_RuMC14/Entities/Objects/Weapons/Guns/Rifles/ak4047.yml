@@ -1,0 +1,178 @@
+﻿- type: entity
+  parent: RMCMagazineRifleAK4047
+  id: RuMCMagazineRifleAK4047Tracer
+  name: "AK4047 magazine (10x24mm Tracer)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RMCMagazineRifleAK4047
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+      - RuMCCartridgeRifle10x24Tracer
+    proto: RuMCCartridgeRifle10x24Tracer
+    capacity: 40
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/ak4047.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: RuMCCartridgeRifle10x24Tracer
+  name: 10x24 Tracer
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBullet10x24Tracer
+  - type: Tag
+    tags:
+    - Cartridge
+    - RuMCCartridgeRifle10x24Tracer
+
+- type: entity
+  parent: BulletRifle10x24mmTracer
+  id: RuMCBullet10x24Tracer
+  name: bullet (10x24 Tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#00ff66"
+    radius: 2
+    energy: 8.0
+
+- type: Tag
+  id: RuMCCartridgeRifle10x24Tracer
+
+#Mags bakelite
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazineRifleAK4047bakelite
+  name: "AK4047 magazine (10x24mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RuMCMagazineRifleAK4047bakelite
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 40
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/ak4047.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazineRifleAK4047bakeliteLarge
+  name: "AK4047 magazine (10x24mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RuMCMagazineRifleAK4047bakelite
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 65
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/ak4047.rsi
+    layers:
+    - state: base_2
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazineRifleAK4047APbakelite
+  name: "AK4047 AP magazine (10x24mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RuMCMagazineRifleAK4047APbakelite
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mmAP
+    proto: CMCartridgeRifle10x24mmAP
+    capacity: 40
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/ak4047.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#212121"
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
+
+#buben
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazineRifleAK4047buben
+  name: "AK4047 drum (10x24mm)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - RuMCMagazineRifleAK4047buben
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 95
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/ak4047_drum.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+#Tags
+- type: Tag
+  id: RuMCMagazineRifleAK4047bakelite
+
+- type: Tag
+  id: RuMCMagazineRifleAK4047APbakelite
+
+- type: Tag
+  id: RuMCMagazineRifleAK4047buben

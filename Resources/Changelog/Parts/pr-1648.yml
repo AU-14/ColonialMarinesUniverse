@@ -1,0 +1,14 @@
+author: TheMaiji
+category: CMU
+changes:
+- message: Expanded Yautja roles, profile customization, clan progression, equipment,
+    and support creatures.
+  type: Add
+- message: Added Hunter Ship content and hunting grounds with deployment and return
+    routes.
+  type: Add
+- message: Fixed Yautja medical treatment, bracer tracking, cloaking, and weapon interactions
+    with current gameplay systems.
+  type: Fix
+time: '2026-09-29T22:56:37.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1648

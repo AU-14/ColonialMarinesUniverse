@@ -12,6 +12,10 @@ namespace Content.Shared.Drowsiness;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 public sealed partial class DrowsinessStatusEffectComponent : Component
 {
+    /// <summary>Some owners provide deterministic induction while retaining the drowsiness overlay.</summary>
+    [DataField]
+    public bool CausesSleep = true;
+
     /// <summary>
     /// The random time between sleeping incidents, (min, max).
     /// </summary>

@@ -1,0 +1,456 @@
+- type: cmu3DModel
+  id: CMU3DWallDoubleTubeLight
+  label: Double wall tubes
+  status: draft
+  sourcePrototypes:
+  - RMCLightFixtureDouble
+  - RMCLightFixtureDoubleAlwaysPowered
+  - RMCLightFixtureDoubleOffset
+  wallMounted: true
+  sourceDirections: 4
+  description: Slim fluorescent tubes with small end fittings and five source-owned states. The source halo is excluded from
+    solid geometry. Mount height, depth, paired tube separation and glass shading are inferred. No emitted light or independent
+    blink timer. See SOURCES_TUBE_LIGHTS.md.
+  referenceRsi: _RMC14/Structures/Wallmounts/LightingOffset/light_tube.rsi
+  referenceState: ptube1
+  fitInsideWall: true
+  backWallMountTargets:
+  - RMCWallStrata
+  - RMCWallHybrisa
+  - RMCWallHybrisaRock
+  - RMCWallPrisonReinforced
+  - RMCWallHybrisaMedical
+  - RMCWallKutjevoRockBorder
+  - RMCWallHybrisaEngiReinforced
+  - RMCWallHybrisaEngi
+  - RMCWallKutjevoRock
+  - RMCWallElevatorNoConnect1
+  - RMCWallElevatorArrivals
+  poweredLightStates:
+    ptube1:
+      parts:
+      - label: Narrow wall rail
+        min: -0.375000, -0.520000, 2.284375
+        max: 0.375000, -0.501000, 2.315625
+        color: '#383737'
+      - label: Left end fitting
+        min: -0.375000, -0.646500, 2.268750
+        max: -0.312500, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Left end highlight
+        min: -0.365750, -0.647500, 2.312000
+        max: -0.321750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Right end fitting
+        min: 0.312500, -0.646500, 2.268750
+        max: 0.375000, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Right end highlight
+        min: 0.321750, -0.647500, 2.312000
+        max: 0.365750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Tube 1 left socket
+        min: -0.332000, -0.568000, 2.277000
+        max: -0.300000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 right socket
+        min: 0.300000, -0.568000, 2.277000
+        max: 0.332000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 glass body
+        min: -0.306000, -0.573000, 2.277000
+        max: 0.306000, -0.527000, 2.323000
+        color: '#C5A47B'
+        shape: CylinderX
+      - label: Tube 1 glass front
+        min: -0.300000, -0.574000, 2.286000
+        max: 0.300000, -0.569000, 2.314000
+        color: '#FFE0AA'
+      - label: Tube 1 glass highlight
+        min: -0.288000, -0.569000, 2.313000
+        max: 0.288000, -0.549000, 2.325000
+        color: '#FFF4D4'
+      - label: Tube 2 left socket
+        min: -0.332000, -0.630500, 2.277000
+        max: -0.300000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 right socket
+        min: 0.300000, -0.630500, 2.277000
+        max: 0.332000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 glass body
+        min: -0.306000, -0.635500, 2.277000
+        max: 0.306000, -0.589500, 2.323000
+        color: '#C5A47B'
+        shape: CylinderX
+      - label: Tube 2 glass front
+        min: -0.300000, -0.636500, 2.286000
+        max: 0.300000, -0.631500, 2.314000
+        color: '#FFE0AA'
+      - label: Tube 2 glass highlight
+        min: -0.288000, -0.631500, 2.313000
+        max: 0.288000, -0.611500, 2.325000
+        color: '#FFF4D4'
+    ptube0:
+      parts:
+      - label: Narrow wall rail
+        min: -0.375000, -0.520000, 2.284375
+        max: 0.375000, -0.501000, 2.315625
+        color: '#383737'
+      - label: Left end fitting
+        min: -0.375000, -0.646500, 2.268750
+        max: -0.312500, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Left end highlight
+        min: -0.365750, -0.647500, 2.312000
+        max: -0.321750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Right end fitting
+        min: 0.312500, -0.646500, 2.268750
+        max: 0.375000, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Right end highlight
+        min: 0.321750, -0.647500, 2.312000
+        max: 0.365750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Tube 1 left socket
+        min: -0.332000, -0.568000, 2.277000
+        max: -0.300000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 right socket
+        min: 0.300000, -0.568000, 2.277000
+        max: 0.332000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 glass body
+        min: -0.306000, -0.573000, 2.277000
+        max: 0.306000, -0.527000, 2.323000
+        color: '#6F6B68'
+        shape: CylinderX
+      - label: Tube 1 glass front
+        min: -0.300000, -0.574000, 2.286000
+        max: 0.300000, -0.569000, 2.314000
+        color: '#8A827B'
+      - label: Tube 1 glass highlight
+        min: -0.288000, -0.569000, 2.313000
+        max: 0.288000, -0.549000, 2.325000
+        color: '#A49B91'
+      - label: Tube 2 left socket
+        min: -0.332000, -0.630500, 2.277000
+        max: -0.300000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 right socket
+        min: 0.300000, -0.630500, 2.277000
+        max: 0.332000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 glass body
+        min: -0.306000, -0.635500, 2.277000
+        max: 0.306000, -0.589500, 2.323000
+        color: '#6F6B68'
+        shape: CylinderX
+      - label: Tube 2 glass front
+        min: -0.300000, -0.636500, 2.286000
+        max: 0.300000, -0.631500, 2.314000
+        color: '#8A827B'
+      - label: Tube 2 glass highlight
+        min: -0.288000, -0.631500, 2.313000
+        max: 0.288000, -0.611500, 2.325000
+        color: '#A49B91'
+    ptube-empty:
+      parts:
+      - label: Narrow wall rail
+        min: -0.375000, -0.520000, 2.284375
+        max: 0.375000, -0.501000, 2.315625
+        color: '#383737'
+      - label: Left end fitting
+        min: -0.375000, -0.646500, 2.268750
+        max: -0.312500, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Left end highlight
+        min: -0.365750, -0.647500, 2.312000
+        max: -0.321750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Right end fitting
+        min: 0.312500, -0.646500, 2.268750
+        max: 0.375000, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Right end highlight
+        min: 0.321750, -0.647500, 2.312000
+        max: 0.365750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Tube 1 left socket
+        min: -0.332000, -0.568000, 2.277000
+        max: -0.300000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 right socket
+        min: 0.300000, -0.568000, 2.277000
+        max: 0.332000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 2 left socket
+        min: -0.332000, -0.630500, 2.277000
+        max: -0.300000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 right socket
+        min: 0.300000, -0.630500, 2.277000
+        max: 0.332000, -0.594500, 2.323000
+        color: '#383737'
+    ptube-broken:
+      parts:
+      - label: Narrow wall rail
+        min: -0.375000, -0.520000, 2.284375
+        max: 0.375000, -0.501000, 2.315625
+        color: '#383737'
+      - label: Left end fitting
+        min: -0.375000, -0.646500, 2.268750
+        max: -0.312500, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Left end highlight
+        min: -0.365750, -0.647500, 2.312000
+        max: -0.321750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Right end fitting
+        min: 0.312500, -0.646500, 2.268750
+        max: 0.375000, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Right end highlight
+        min: 0.321750, -0.647500, 2.312000
+        max: 0.365750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Tube 1 left socket
+        min: -0.332000, -0.568000, 2.277000
+        max: -0.300000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 right socket
+        min: 0.300000, -0.568000, 2.277000
+        max: 0.332000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 left retained glass
+        min: -0.306000, -0.573000, 2.277000
+        max: -0.130000, -0.527000, 2.323000
+        color: '#A39B93'
+        shape: CylinderX
+      - label: Tube 1 right retained glass
+        min: 0.222000, -0.573000, 2.277000
+        max: 0.306000, -0.527000, 2.323000
+        color: '#A39B93'
+        shape: CylinderX
+      - label: Tube 1 left jagged glass
+        min: -0.160000, -0.571000, 2.305000
+        max: -0.105000, -0.555000, 2.320000
+        color: '#C4BEB8'
+      - label: Tube 1 right jagged glass
+        min: 0.184000, -0.544000, 2.277000
+        max: 0.238000, -0.528000, 2.296000
+        color: '#756E68'
+      - label: Tube 2 left socket
+        min: -0.332000, -0.630500, 2.277000
+        max: -0.300000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 right socket
+        min: 0.300000, -0.630500, 2.277000
+        max: 0.332000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 left retained glass
+        min: -0.306000, -0.635500, 2.277000
+        max: -0.130000, -0.589500, 2.323000
+        color: '#A39B93'
+        shape: CylinderX
+      - label: Tube 2 right retained glass
+        min: 0.222000, -0.635500, 2.277000
+        max: 0.306000, -0.589500, 2.323000
+        color: '#A39B93'
+        shape: CylinderX
+      - label: Tube 2 left jagged glass
+        min: -0.160000, -0.633500, 2.305000
+        max: -0.105000, -0.617500, 2.320000
+        color: '#C4BEB8'
+      - label: Tube 2 right jagged glass
+        min: 0.184000, -0.606500, 2.277000
+        max: 0.238000, -0.590500, 2.296000
+        color: '#756E68'
+    ptube-burned:
+      parts:
+      - label: Narrow wall rail
+        min: -0.375000, -0.520000, 2.284375
+        max: 0.375000, -0.501000, 2.315625
+        color: '#383737'
+      - label: Left end fitting
+        min: -0.375000, -0.646500, 2.268750
+        max: -0.312500, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Left end highlight
+        min: -0.365750, -0.647500, 2.312000
+        max: -0.321750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Right end fitting
+        min: 0.312500, -0.646500, 2.268750
+        max: 0.375000, -0.513000, 2.331250
+        color: '#625A53'
+      - label: Right end highlight
+        min: 0.321750, -0.647500, 2.312000
+        max: 0.365750, -0.636500, 2.329000
+        color: '#95897F'
+      - label: Tube 1 left socket
+        min: -0.332000, -0.568000, 2.277000
+        max: -0.300000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 right socket
+        min: 0.300000, -0.568000, 2.277000
+        max: 0.332000, -0.532000, 2.323000
+        color: '#383737'
+      - label: Tube 1 glass body
+        min: -0.306000, -0.573000, 2.277000
+        max: 0.306000, -0.527000, 2.323000
+        color: '#655E59'
+        shape: CylinderX
+      - label: Tube 1 glass front
+        min: -0.300000, -0.574000, 2.286000
+        max: 0.300000, -0.569000, 2.314000
+        color: '#837973'
+      - label: Tube 1 glass highlight
+        min: -0.288000, -0.569000, 2.313000
+        max: 0.288000, -0.549000, 2.325000
+        color: '#B1A69C'
+      - label: Tube 1 charred glass patch 0
+        min: -0.275000, -0.574500, 2.275500
+        max: -0.242000, -0.525500, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 1 charred glass patch 1
+        min: -0.195000, -0.574500, 2.275500
+        max: -0.171000, -0.525500, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 1 charred glass patch 2
+        min: -0.100000, -0.574500, 2.275500
+        max: -0.065000, -0.525500, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 1 charred glass patch 3
+        min: 0.018000, -0.574500, 2.275500
+        max: 0.050000, -0.525500, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 1 charred glass patch 4
+        min: 0.122000, -0.574500, 2.275500
+        max: 0.151000, -0.525500, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 1 charred glass patch 5
+        min: 0.220000, -0.574500, 2.275500
+        max: 0.250000, -0.525500, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 2 left socket
+        min: -0.332000, -0.630500, 2.277000
+        max: -0.300000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 right socket
+        min: 0.300000, -0.630500, 2.277000
+        max: 0.332000, -0.594500, 2.323000
+        color: '#383737'
+      - label: Tube 2 glass body
+        min: -0.306000, -0.635500, 2.277000
+        max: 0.306000, -0.589500, 2.323000
+        color: '#655E59'
+        shape: CylinderX
+      - label: Tube 2 glass front
+        min: -0.300000, -0.636500, 2.286000
+        max: 0.300000, -0.631500, 2.314000
+        color: '#837973'
+      - label: Tube 2 glass highlight
+        min: -0.288000, -0.631500, 2.313000
+        max: 0.288000, -0.611500, 2.325000
+        color: '#B1A69C'
+      - label: Tube 2 charred glass patch 0
+        min: -0.275000, -0.637000, 2.275500
+        max: -0.242000, -0.588000, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 2 charred glass patch 1
+        min: -0.195000, -0.637000, 2.275500
+        max: -0.171000, -0.588000, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 2 charred glass patch 2
+        min: -0.100000, -0.637000, 2.275500
+        max: -0.065000, -0.588000, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 2 charred glass patch 3
+        min: 0.018000, -0.637000, 2.275500
+        max: 0.050000, -0.588000, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 2 charred glass patch 4
+        min: 0.122000, -0.637000, 2.275500
+        max: 0.151000, -0.588000, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+      - label: Tube 2 charred glass patch 5
+        min: 0.220000, -0.637000, 2.275500
+        max: 0.250000, -0.588000, 2.324500
+        color: '#3F3B38'
+        shape: CylinderX
+  parts:
+  - label: Narrow wall rail
+    min: -0.375000, -0.520000, 2.284375
+    max: 0.375000, -0.501000, 2.315625
+    color: '#383737'
+  - label: Left end fitting
+    min: -0.375000, -0.646500, 2.268750
+    max: -0.312500, -0.513000, 2.331250
+    color: '#625A53'
+  - label: Left end highlight
+    min: -0.365750, -0.647500, 2.312000
+    max: -0.321750, -0.636500, 2.329000
+    color: '#95897F'
+  - label: Right end fitting
+    min: 0.312500, -0.646500, 2.268750
+    max: 0.375000, -0.513000, 2.331250
+    color: '#625A53'
+  - label: Right end highlight
+    min: 0.321750, -0.647500, 2.312000
+    max: 0.365750, -0.636500, 2.329000
+    color: '#95897F'
+  - label: Tube 1 left socket
+    min: -0.332000, -0.568000, 2.277000
+    max: -0.300000, -0.532000, 2.323000
+    color: '#383737'
+  - label: Tube 1 right socket
+    min: 0.300000, -0.568000, 2.277000
+    max: 0.332000, -0.532000, 2.323000
+    color: '#383737'
+  - label: Tube 1 glass body
+    min: -0.306000, -0.573000, 2.277000
+    max: 0.306000, -0.527000, 2.323000
+    color: '#C5A47B'
+    shape: CylinderX
+  - label: Tube 1 glass front
+    min: -0.300000, -0.574000, 2.286000
+    max: 0.300000, -0.569000, 2.314000
+    color: '#FFE0AA'
+  - label: Tube 1 glass highlight
+    min: -0.288000, -0.569000, 2.313000
+    max: 0.288000, -0.549000, 2.325000
+    color: '#FFF4D4'
+  - label: Tube 2 left socket
+    min: -0.332000, -0.630500, 2.277000
+    max: -0.300000, -0.594500, 2.323000
+    color: '#383737'
+  - label: Tube 2 right socket
+    min: 0.300000, -0.630500, 2.277000
+    max: 0.332000, -0.594500, 2.323000
+    color: '#383737'
+  - label: Tube 2 glass body
+    min: -0.306000, -0.635500, 2.277000
+    max: 0.306000, -0.589500, 2.323000
+    color: '#C5A47B'
+    shape: CylinderX
+  - label: Tube 2 glass front
+    min: -0.300000, -0.636500, 2.286000
+    max: 0.300000, -0.631500, 2.314000
+    color: '#FFE0AA'
+  - label: Tube 2 glass highlight
+    min: -0.288000, -0.631500, 2.313000
+    max: 0.288000, -0.611500, 2.325000
+    color: '#FFF4D4'

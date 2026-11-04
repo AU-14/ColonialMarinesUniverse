@@ -1,0 +1,25 @@
+<Document>
+  # United Nations Interstellar Settlement Corps
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearUNISCRifleman" Caption="Rifleman"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearUNISCCorpsman" Caption="Corpsman"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearUNISCEnforcer" Caption="Enforcer"/>
+  </Box>
+
+  The [bold]United Nations Interstellar Settlement Corps[/bold] (UNISC) is the branch of the [textlink="United Nations" link="CMUGuideLoreUN"] responsible for the protection of humanity's settlements, first in the Sol System and now across its colonies among the stars. It is best known on the frontier for its [bold]peacekeepers[/bold].
+
+  ## History
+  - It was founded by the UN's original core members.
+  - It began as the [bold]United Nations Interplanetary Corps[/bold] (UNIC), protecting Earth and the near-Earth colonies and surveying nearby stars with probes. Though technically military, it was a relaxed service where combat was rare and military training was optional.
+  - Its crews were drilled in first contact and quarantine procedures, and every ship carried a "greeting package" for meeting non-human life.
+  - As humanity settled further out, its remit grew to policing and protecting distant colonies, and by 2117 it had been renamed to reflect its new role.
+  - It brokered the agreement that ended the Core Conflict and created the [textlink="Independent Core System Colonies" link="CMUGuideLoreICSC"].
+
+  ## Peacekeepers
+  - UNISC peacekeepers are drawn mainly from the ICSC, whose neutral position between the great powers makes its people acceptable to all sides.
+  - They deploy for humanitarian aid, protecting civilians, the wounded and anyone else caught up in a conflict.
+  - They enforce the [textlink="Geneva Conventions of 12th August 2106" link="AU14UCMJGENCON"].
+  - Under the Conventions, peacekeepers deployed for humanitarian aid must not be attacked unless they take part in the fighting for reasons other than self-defense.
+  - Where neutral forces are present in a conflict, they are expected to shelter anyone seeking refuge and, if they withdraw, to evacuate whoever asks for their help.
+</Document>

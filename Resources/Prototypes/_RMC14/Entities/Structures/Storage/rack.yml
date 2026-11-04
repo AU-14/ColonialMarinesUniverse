@@ -4,6 +4,8 @@
   name: rack
   description: A bunch of metal shelves stacked on top of eachother. Excellent for storage purposes, less so as cover.
   components:
+  - type: CMUReconFurniture
+    material: Shelf
   - type: VehicleSmashable
   - type: Transform
     anchored: false
@@ -31,6 +33,7 @@
         layer:
         - TableLayer
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

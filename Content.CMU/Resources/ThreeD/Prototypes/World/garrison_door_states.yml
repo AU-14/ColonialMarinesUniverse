@@ -1,0 +1,5474 @@
+# Stable door states; source attribution in SOURCES_DOOR_STATES.md.
+# Z up; game pivots and individual door mechanisms retained.
+
+- type: cmu3DModel
+  id: CMU3DAlmayerBlastDoor
+  label: AlmayerBlastDoor closed
+  sourcePrototypes:
+  - RMCPodDoorAlmayer
+  - RMCPodDoorAlmayerIndestructible
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.5, -0.09, 0
+    max: -0.46, 0.09, 2.65
+    color: '#353535'
+    label: shutter guide
+  - min: 0.46, -0.09, 0
+    max: 0.5, 0.09, 2.65
+    color: '#353535'
+    label: shutter guide
+  - min: -0.5, -0.13, 2.48
+    max: 0.5, 0.13, 2.74
+    color: '#353535'
+    label: upper roll housing
+  - min: -0.46, -0.145, 2.52
+    max: 0.46, -0.131, 2.69
+    color: '#5F6161'
+    label: headbox face
+  - min: -0.46, 0.131, 2.52
+    max: 0.46, 0.145, 2.69
+    color: '#5F6161'
+    label: headbox face back
+  - min: -0.5, -0.105, 0
+    max: 0.5, 0.105, 0.045
+    color: '#353535'
+    label: threshold
+  - min: -0.46, -0.1, 0.05
+    max: 0.46, 0.1, 2.49
+    color: '#353535'
+    label: heavy retractable leaf
+  - min: -0.43, -0.115, 1.93
+    max: 0.43, -0.101, 2.42
+    color: '#5F6161'
+    label: top armor inset
+  - min: -0.43, 0.101, 1.93
+    max: 0.43, 0.115, 2.42
+    color: '#5F6161'
+    label: top armor inset back
+  - min: -0.405, -0.13, 1.98
+    max: 0.405, -0.116, 2.39
+    color: '#353535'
+    label: top armor face
+  - min: -0.405, 0.116, 1.98
+    max: 0.405, 0.13, 2.39
+    color: '#353535'
+    label: top armor face back
+  - min: -0.46, -0.119, 0.74
+    max: 0.46, 0.119, 0.88
+    color: '#5F6161'
+    label: central heavy rib
+  - min: -0.46, -0.134, 0.54
+    max: 0.46, -0.12, 0.73
+    color: '#211E1C'
+    label: dark warning band
+  - min: -0.46, 0.12, 0.54
+    max: 0.46, 0.134, 0.73
+    color: '#211E1C'
+    label: dark warning band back
+  - min: -0.445, -0.151, 0.562
+    max: -0.377, -0.137, 0.618
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.445, 0.137, 0.562
+    max: -0.377, 0.151, 0.618
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.417, -0.151, 0.617
+    max: -0.349, -0.137, 0.673
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.417, 0.137, 0.617
+    max: -0.349, 0.151, 0.673
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.295, -0.151, 0.562
+    max: -0.227, -0.137, 0.618
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.295, 0.137, 0.562
+    max: -0.227, 0.151, 0.618
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.267, -0.151, 0.617
+    max: -0.199, -0.137, 0.673
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.267, 0.137, 0.617
+    max: -0.199, 0.151, 0.673
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.145, -0.151, 0.562
+    max: -0.077, -0.137, 0.618
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.145, 0.137, 0.562
+    max: -0.077, 0.151, 0.618
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.117, -0.151, 0.617
+    max: -0.049, -0.137, 0.673
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.117, 0.137, 0.617
+    max: -0.049, 0.151, 0.673
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.005, -0.151, 0.562
+    max: 0.073, -0.137, 0.618
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.005, 0.137, 0.562
+    max: 0.073, 0.151, 0.618
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.033, -0.151, 0.617
+    max: 0.101, -0.137, 0.673
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.033, 0.137, 0.617
+    max: 0.101, 0.151, 0.673
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.155, -0.151, 0.562
+    max: 0.223, -0.137, 0.618
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.155, 0.137, 0.562
+    max: 0.223, 0.151, 0.618
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.183, -0.151, 0.617
+    max: 0.251, -0.137, 0.673
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.183, 0.137, 0.617
+    max: 0.251, 0.151, 0.673
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.305, -0.151, 0.562
+    max: 0.373, -0.137, 0.618
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.305, 0.137, 0.562
+    max: 0.373, 0.151, 0.618
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.333, -0.151, 0.617
+    max: 0.401, -0.137, 0.673
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.333, 0.137, 0.617
+    max: 0.401, 0.151, 0.673
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.46, -0.134, 1.06
+    max: 0.46, -0.12, 1.25
+    color: '#211E1C'
+    label: dark warning band
+  - min: -0.46, 0.12, 1.06
+    max: 0.46, 0.134, 1.25
+    color: '#211E1C'
+    label: dark warning band back
+  - min: -0.445, -0.151, 1.082
+    max: -0.377, -0.137, 1.138
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.445, 0.137, 1.082
+    max: -0.377, 0.151, 1.138
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.417, -0.151, 1.137
+    max: -0.349, -0.137, 1.193
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.417, 0.137, 1.137
+    max: -0.349, 0.151, 1.193
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.295, -0.151, 1.082
+    max: -0.227, -0.137, 1.138
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.295, 0.137, 1.082
+    max: -0.227, 0.151, 1.138
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.267, -0.151, 1.137
+    max: -0.199, -0.137, 1.193
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.267, 0.137, 1.137
+    max: -0.199, 0.151, 1.193
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.145, -0.151, 1.082
+    max: -0.077, -0.137, 1.138
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.145, 0.137, 1.082
+    max: -0.077, 0.151, 1.138
+    color: '#A74718'
+    label: slanted hazard back
+  - min: -0.117, -0.151, 1.137
+    max: -0.049, -0.137, 1.193
+    color: '#A74718'
+    label: slanted hazard
+  - min: -0.117, 0.137, 1.137
+    max: -0.049, 0.151, 1.193
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.005, -0.151, 1.082
+    max: 0.073, -0.137, 1.138
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.005, 0.137, 1.082
+    max: 0.073, 0.151, 1.138
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.033, -0.151, 1.137
+    max: 0.101, -0.137, 1.193
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.033, 0.137, 1.137
+    max: 0.101, 0.151, 1.193
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.155, -0.151, 1.082
+    max: 0.223, -0.137, 1.138
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.155, 0.137, 1.082
+    max: 0.223, 0.151, 1.138
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.183, -0.151, 1.137
+    max: 0.251, -0.137, 1.193
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.183, 0.137, 1.137
+    max: 0.251, 0.151, 1.193
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.305, -0.151, 1.082
+    max: 0.373, -0.137, 1.138
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.305, 0.137, 1.082
+    max: 0.373, 0.151, 1.138
+    color: '#A74718'
+    label: slanted hazard back
+  - min: 0.333, -0.151, 1.137
+    max: 0.401, -0.137, 1.193
+    color: '#A74718'
+    label: slanted hazard
+  - min: 0.333, 0.137, 1.137
+    max: 0.401, 0.151, 1.193
+    color: '#A74718'
+    label: slanted hazard back
+  doorState: Closed
+  referencePrototype: RMCPodDoorAlmayer
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/poddoor.rsi
+  referenceState: closed
+  sourceDirections: 4
+  alternateDoorModel: CMU3DAlmayerBlastDoorOpen
+- type: cmu3DModel
+  id: CMU3DAlmayerBlastDoorOpen
+  label: AlmayerBlastDoor open
+  sourcePrototypes:
+  - RMCPodDoorAlmayerOpen
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.49, -0.16, -0.035
+    max: 0.49, 0.16, -0.004
+    color: '#171B1B'
+    label: floor recess
+  - min: -0.5, -0.17, 0
+    max: 0.5, -0.13, 0.045
+    color: '#5F6161'
+    label: floor shutter lip
+  - min: -0.5, 0.13, 0
+    max: 0.5, 0.17, 0.045
+    color: '#5F6161'
+    label: floor shutter lip
+  - min: -0.5, -0.13, 0
+    max: -0.45, 0.13, 0.045
+    color: '#5F6161'
+    label: recess end cap
+  - min: 0.45, -0.13, 0
+    max: 0.5, 0.13, 0.045
+    color: '#5F6161'
+    label: recess end cap
+  - min: -0.47, -0.17, 0.045
+    max: -0.385, -0.13, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: -0.47, 0.13, 0.045
+    max: -0.385, 0.17, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: -0.26, -0.17, 0.045
+    max: -0.175, -0.13, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: -0.26, 0.13, 0.045
+    max: -0.175, 0.17, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: -0.05, -0.17, 0.045
+    max: 0.035, -0.13, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: -0.05, 0.13, 0.045
+    max: 0.035, 0.17, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: 0.16, -0.17, 0.045
+    max: 0.245, -0.13, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: 0.16, 0.13, 0.045
+    max: 0.245, 0.17, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: 0.37, -0.17, 0.045
+    max: 0.455, -0.13, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  - min: 0.37, 0.13, 0.045
+    max: 0.455, 0.17, 0.052
+    color: '#A74718'
+    label: retracted warning marker
+  doorState: Open
+  referencePrototype: RMCPodDoorAlmayer
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/poddoor.rsi
+  referenceState: open
+  sourceDirections: 4
+  alternateDoorModel: CMU3DAlmayerBlastDoor
+- type: cmu3DModel
+  id: CMU3DBlackBlastDoor
+  label: BlackBlastDoor closed
+  sourcePrototypes:
+  - RMCPodDoorAlmayerBlack
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.5, -0.09, 0
+    max: -0.46, 0.09, 2.65
+    color: '#242629'
+    label: shutter guide
+  - min: 0.46, -0.09, 0
+    max: 0.5, 0.09, 2.65
+    color: '#242629'
+    label: shutter guide
+  - min: -0.5, -0.13, 2.48
+    max: 0.5, 0.13, 2.74
+    color: '#242629'
+    label: upper roll housing
+  - min: -0.46, -0.145, 2.52
+    max: 0.46, -0.131, 2.69
+    color: '#41444A'
+    label: headbox face
+  - min: -0.46, 0.131, 2.52
+    max: 0.46, 0.145, 2.69
+    color: '#41444A'
+    label: headbox face back
+  - min: -0.5, -0.105, 0
+    max: 0.5, 0.105, 0.045
+    color: '#242629'
+    label: threshold
+  - min: -0.46, -0.1, 0.05
+    max: 0.46, 0.1, 2.49
+    color: '#242629'
+    label: heavy retractable leaf
+  - min: -0.43, -0.115, 1.93
+    max: 0.43, -0.101, 2.42
+    color: '#41444A'
+    label: top armor inset
+  - min: -0.43, 0.101, 1.93
+    max: 0.43, 0.115, 2.42
+    color: '#41444A'
+    label: top armor inset back
+  - min: -0.405, -0.13, 1.98
+    max: 0.405, -0.116, 2.39
+    color: '#242629'
+    label: top armor face
+  - min: -0.405, 0.116, 1.98
+    max: 0.405, 0.13, 2.39
+    color: '#242629'
+    label: top armor face back
+  - min: -0.46, -0.119, 0.74
+    max: 0.46, 0.119, 0.88
+    color: '#41444A'
+    label: central heavy rib
+  - min: -0.46, -0.134, 0.54
+    max: 0.46, -0.12, 0.73
+    color: '#211E1C'
+    label: dark warning band
+  - min: -0.46, 0.12, 0.54
+    max: 0.46, 0.134, 0.73
+    color: '#211E1C'
+    label: dark warning band back
+  - min: -0.445, -0.151, 0.562
+    max: -0.377, -0.137, 0.618
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.445, 0.137, 0.562
+    max: -0.377, 0.151, 0.618
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.417, -0.151, 0.617
+    max: -0.349, -0.137, 0.673
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.417, 0.137, 0.617
+    max: -0.349, 0.151, 0.673
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.295, -0.151, 0.562
+    max: -0.227, -0.137, 0.618
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.295, 0.137, 0.562
+    max: -0.227, 0.151, 0.618
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.267, -0.151, 0.617
+    max: -0.199, -0.137, 0.673
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.267, 0.137, 0.617
+    max: -0.199, 0.151, 0.673
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.145, -0.151, 0.562
+    max: -0.077, -0.137, 0.618
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.145, 0.137, 0.562
+    max: -0.077, 0.151, 0.618
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.117, -0.151, 0.617
+    max: -0.049, -0.137, 0.673
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.117, 0.137, 0.617
+    max: -0.049, 0.151, 0.673
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.005, -0.151, 0.562
+    max: 0.073, -0.137, 0.618
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.005, 0.137, 0.562
+    max: 0.073, 0.151, 0.618
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.033, -0.151, 0.617
+    max: 0.101, -0.137, 0.673
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.033, 0.137, 0.617
+    max: 0.101, 0.151, 0.673
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.155, -0.151, 0.562
+    max: 0.223, -0.137, 0.618
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.155, 0.137, 0.562
+    max: 0.223, 0.151, 0.618
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.183, -0.151, 0.617
+    max: 0.251, -0.137, 0.673
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.183, 0.137, 0.617
+    max: 0.251, 0.151, 0.673
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.305, -0.151, 0.562
+    max: 0.373, -0.137, 0.618
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.305, 0.137, 0.562
+    max: 0.373, 0.151, 0.618
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.333, -0.151, 0.617
+    max: 0.401, -0.137, 0.673
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.333, 0.137, 0.617
+    max: 0.401, 0.151, 0.673
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.46, -0.134, 1.06
+    max: 0.46, -0.12, 1.25
+    color: '#211E1C'
+    label: dark warning band
+  - min: -0.46, 0.12, 1.06
+    max: 0.46, 0.134, 1.25
+    color: '#211E1C'
+    label: dark warning band back
+  - min: -0.445, -0.151, 1.082
+    max: -0.377, -0.137, 1.138
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.445, 0.137, 1.082
+    max: -0.377, 0.151, 1.138
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.417, -0.151, 1.137
+    max: -0.349, -0.137, 1.193
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.417, 0.137, 1.137
+    max: -0.349, 0.151, 1.193
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.295, -0.151, 1.082
+    max: -0.227, -0.137, 1.138
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.295, 0.137, 1.082
+    max: -0.227, 0.151, 1.138
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.267, -0.151, 1.137
+    max: -0.199, -0.137, 1.193
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.267, 0.137, 1.137
+    max: -0.199, 0.151, 1.193
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.145, -0.151, 1.082
+    max: -0.077, -0.137, 1.138
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.145, 0.137, 1.082
+    max: -0.077, 0.151, 1.138
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: -0.117, -0.151, 1.137
+    max: -0.049, -0.137, 1.193
+    color: '#3B2923'
+    label: slanted hazard
+  - min: -0.117, 0.137, 1.137
+    max: -0.049, 0.151, 1.193
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.005, -0.151, 1.082
+    max: 0.073, -0.137, 1.138
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.005, 0.137, 1.082
+    max: 0.073, 0.151, 1.138
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.033, -0.151, 1.137
+    max: 0.101, -0.137, 1.193
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.033, 0.137, 1.137
+    max: 0.101, 0.151, 1.193
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.155, -0.151, 1.082
+    max: 0.223, -0.137, 1.138
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.155, 0.137, 1.082
+    max: 0.223, 0.151, 1.138
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.183, -0.151, 1.137
+    max: 0.251, -0.137, 1.193
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.183, 0.137, 1.137
+    max: 0.251, 0.151, 1.193
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.305, -0.151, 1.082
+    max: 0.373, -0.137, 1.138
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.305, 0.137, 1.082
+    max: 0.373, 0.151, 1.138
+    color: '#3B2923'
+    label: slanted hazard back
+  - min: 0.333, -0.151, 1.137
+    max: 0.401, -0.137, 1.193
+    color: '#3B2923'
+    label: slanted hazard
+  - min: 0.333, 0.137, 1.137
+    max: 0.401, 0.151, 1.193
+    color: '#3B2923'
+    label: slanted hazard back
+  doorState: Closed
+  referencePrototype: RMCPodDoorAlmayerBlack
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/almayer_poddoor.rsi
+  referenceState: closed
+  sourceDirections: 4
+  alternateDoorModel: CMU3DBlackBlastDoorOpen
+- type: cmu3DModel
+  id: CMU3DBlackBlastDoorOpen
+  label: BlackBlastDoor open
+  sourcePrototypes:
+  - RMCPodDoorAIBlackLockdown
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.49, -0.16, -0.035
+    max: 0.49, 0.16, -0.004
+    color: '#171B1B'
+    label: floor recess
+  - min: -0.5, -0.17, 0
+    max: 0.5, -0.13, 0.045
+    color: '#41444A'
+    label: floor shutter lip
+  - min: -0.5, 0.13, 0
+    max: 0.5, 0.17, 0.045
+    color: '#41444A'
+    label: floor shutter lip
+  - min: -0.5, -0.13, 0
+    max: -0.45, 0.13, 0.045
+    color: '#41444A'
+    label: recess end cap
+  - min: 0.45, -0.13, 0
+    max: 0.5, 0.13, 0.045
+    color: '#41444A'
+    label: recess end cap
+  - min: -0.47, -0.17, 0.045
+    max: -0.385, -0.13, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: -0.47, 0.13, 0.045
+    max: -0.385, 0.17, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: -0.26, -0.17, 0.045
+    max: -0.175, -0.13, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: -0.26, 0.13, 0.045
+    max: -0.175, 0.17, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: -0.05, -0.17, 0.045
+    max: 0.035, -0.13, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: -0.05, 0.13, 0.045
+    max: 0.035, 0.17, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: 0.16, -0.17, 0.045
+    max: 0.245, -0.13, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: 0.16, 0.13, 0.045
+    max: 0.245, 0.17, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: 0.37, -0.17, 0.045
+    max: 0.455, -0.13, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  - min: 0.37, 0.13, 0.045
+    max: 0.455, 0.17, 0.052
+    color: '#3B2923'
+    label: retracted warning marker
+  doorState: Open
+  referencePrototype: RMCPodDoorAlmayerBlack
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/almayer_poddoor.rsi
+  referenceState: open
+  sourceDirections: 4
+  alternateDoorModel: CMU3DBlackBlastDoor
+- type: cmu3DModel
+  id: CMU3DRedBlastDoor
+  label: RedBlastDoor closed
+  sourcePrototypes:
+  - RMCPodDoorHybrisaRed
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.5, -0.09, 0
+    max: -0.46, 0.09, 2.65
+    color: '#353737'
+    label: shutter guide
+  - min: 0.46, -0.09, 0
+    max: 0.5, 0.09, 2.65
+    color: '#353737'
+    label: shutter guide
+  - min: -0.5, -0.13, 2.48
+    max: 0.5, 0.13, 2.74
+    color: '#353737'
+    label: upper roll housing
+  - min: -0.46, -0.145, 2.52
+    max: 0.46, -0.131, 2.69
+    color: '#595C5C'
+    label: headbox face
+  - min: -0.46, 0.131, 2.52
+    max: 0.46, 0.145, 2.69
+    color: '#595C5C'
+    label: headbox face back
+  - min: -0.5, -0.105, 0
+    max: 0.5, 0.105, 0.045
+    color: '#353737'
+    label: threshold
+  - min: -0.46, -0.1, 0.05
+    max: 0.46, 0.1, 2.49
+    color: '#353737'
+    label: heavy retractable leaf
+  - min: -0.43, -0.115, 1.93
+    max: 0.43, -0.101, 2.42
+    color: '#595C5C'
+    label: top armor inset
+  - min: -0.43, 0.101, 1.93
+    max: 0.43, 0.115, 2.42
+    color: '#595C5C'
+    label: top armor inset back
+  - min: -0.405, -0.13, 1.98
+    max: 0.405, -0.116, 2.39
+    color: '#353737'
+    label: top armor face
+  - min: -0.405, 0.116, 1.98
+    max: 0.405, 0.13, 2.39
+    color: '#353737'
+    label: top armor face back
+  - min: -0.46, -0.119, 0.74
+    max: 0.46, 0.119, 0.88
+    color: '#595C5C'
+    label: central heavy rib
+  - min: -0.46, -0.134, 0.54
+    max: 0.46, -0.12, 0.73
+    color: '#211E1C'
+    label: dark warning band
+  - min: -0.46, 0.12, 0.54
+    max: 0.46, 0.134, 0.73
+    color: '#211E1C'
+    label: dark warning band back
+  - min: -0.445, -0.151, 0.562
+    max: -0.377, -0.137, 0.618
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.445, 0.137, 0.562
+    max: -0.377, 0.151, 0.618
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.417, -0.151, 0.617
+    max: -0.349, -0.137, 0.673
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.417, 0.137, 0.617
+    max: -0.349, 0.151, 0.673
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.295, -0.151, 0.562
+    max: -0.227, -0.137, 0.618
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.295, 0.137, 0.562
+    max: -0.227, 0.151, 0.618
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.267, -0.151, 0.617
+    max: -0.199, -0.137, 0.673
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.267, 0.137, 0.617
+    max: -0.199, 0.151, 0.673
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.145, -0.151, 0.562
+    max: -0.077, -0.137, 0.618
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.145, 0.137, 0.562
+    max: -0.077, 0.151, 0.618
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.117, -0.151, 0.617
+    max: -0.049, -0.137, 0.673
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.117, 0.137, 0.617
+    max: -0.049, 0.151, 0.673
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.005, -0.151, 0.562
+    max: 0.073, -0.137, 0.618
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.005, 0.137, 0.562
+    max: 0.073, 0.151, 0.618
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.033, -0.151, 0.617
+    max: 0.101, -0.137, 0.673
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.033, 0.137, 0.617
+    max: 0.101, 0.151, 0.673
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.155, -0.151, 0.562
+    max: 0.223, -0.137, 0.618
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.155, 0.137, 0.562
+    max: 0.223, 0.151, 0.618
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.183, -0.151, 0.617
+    max: 0.251, -0.137, 0.673
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.183, 0.137, 0.617
+    max: 0.251, 0.151, 0.673
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.305, -0.151, 0.562
+    max: 0.373, -0.137, 0.618
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.305, 0.137, 0.562
+    max: 0.373, 0.151, 0.618
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.333, -0.151, 0.617
+    max: 0.401, -0.137, 0.673
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.333, 0.137, 0.617
+    max: 0.401, 0.151, 0.673
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.46, -0.134, 1.06
+    max: 0.46, -0.12, 1.25
+    color: '#211E1C'
+    label: dark warning band
+  - min: -0.46, 0.12, 1.06
+    max: 0.46, 0.134, 1.25
+    color: '#211E1C'
+    label: dark warning band back
+  - min: -0.445, -0.151, 1.082
+    max: -0.377, -0.137, 1.138
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.445, 0.137, 1.082
+    max: -0.377, 0.151, 1.138
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.417, -0.151, 1.137
+    max: -0.349, -0.137, 1.193
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.417, 0.137, 1.137
+    max: -0.349, 0.151, 1.193
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.295, -0.151, 1.082
+    max: -0.227, -0.137, 1.138
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.295, 0.137, 1.082
+    max: -0.227, 0.151, 1.138
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.267, -0.151, 1.137
+    max: -0.199, -0.137, 1.193
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.267, 0.137, 1.137
+    max: -0.199, 0.151, 1.193
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.145, -0.151, 1.082
+    max: -0.077, -0.137, 1.138
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.145, 0.137, 1.082
+    max: -0.077, 0.151, 1.138
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: -0.117, -0.151, 1.137
+    max: -0.049, -0.137, 1.193
+    color: '#B5293B'
+    label: slanted hazard
+  - min: -0.117, 0.137, 1.137
+    max: -0.049, 0.151, 1.193
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.005, -0.151, 1.082
+    max: 0.073, -0.137, 1.138
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.005, 0.137, 1.082
+    max: 0.073, 0.151, 1.138
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.033, -0.151, 1.137
+    max: 0.101, -0.137, 1.193
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.033, 0.137, 1.137
+    max: 0.101, 0.151, 1.193
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.155, -0.151, 1.082
+    max: 0.223, -0.137, 1.138
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.155, 0.137, 1.082
+    max: 0.223, 0.151, 1.138
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.183, -0.151, 1.137
+    max: 0.251, -0.137, 1.193
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.183, 0.137, 1.137
+    max: 0.251, 0.151, 1.193
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.305, -0.151, 1.082
+    max: 0.373, -0.137, 1.138
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.305, 0.137, 1.082
+    max: 0.373, 0.151, 1.138
+    color: '#B5293B'
+    label: slanted hazard back
+  - min: 0.333, -0.151, 1.137
+    max: 0.401, -0.137, 1.193
+    color: '#B5293B'
+    label: slanted hazard
+  - min: 0.333, 0.137, 1.137
+    max: 0.401, 0.151, 1.193
+    color: '#B5293B'
+    label: slanted hazard back
+  doorState: Closed
+  referencePrototype: RMCPodDoorHybrisaRed
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Hybrisa/redpoddoor.rsi
+  referenceState: closed
+  sourceDirections: 4
+  alternateDoorModel: CMU3DRedBlastDoorOpen
+- type: cmu3DModel
+  id: CMU3DRedBlastDoorOpen
+  label: RedBlastDoor open
+  sourcePrototypes: []
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.49, -0.16, -0.035
+    max: 0.49, 0.16, -0.004
+    color: '#171B1B'
+    label: floor recess
+  - min: -0.5, -0.17, 0
+    max: 0.5, -0.13, 0.045
+    color: '#595C5C'
+    label: floor shutter lip
+  - min: -0.5, 0.13, 0
+    max: 0.5, 0.17, 0.045
+    color: '#595C5C'
+    label: floor shutter lip
+  - min: -0.5, -0.13, 0
+    max: -0.45, 0.13, 0.045
+    color: '#595C5C'
+    label: recess end cap
+  - min: 0.45, -0.13, 0
+    max: 0.5, 0.13, 0.045
+    color: '#595C5C'
+    label: recess end cap
+  - min: -0.47, -0.17, 0.045
+    max: -0.385, -0.13, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: -0.47, 0.13, 0.045
+    max: -0.385, 0.17, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: -0.26, -0.17, 0.045
+    max: -0.175, -0.13, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: -0.26, 0.13, 0.045
+    max: -0.175, 0.17, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: -0.05, -0.17, 0.045
+    max: 0.035, -0.13, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: -0.05, 0.13, 0.045
+    max: 0.035, 0.17, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: 0.16, -0.17, 0.045
+    max: 0.245, -0.13, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: 0.16, 0.13, 0.045
+    max: 0.245, 0.17, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: 0.37, -0.17, 0.045
+    max: 0.455, -0.13, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  - min: 0.37, 0.13, 0.045
+    max: 0.455, 0.17, 0.052
+    color: '#B5293B'
+    label: retracted warning marker
+  doorState: Open
+  referencePrototype: RMCPodDoorHybrisaRed
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Hybrisa/redpoddoor.rsi
+  referenceState: open
+  sourceDirections: 4
+  alternateDoorModel: CMU3DRedBlastDoor
+- type: cmu3DModel
+  id: CMU3DUltraBlastDoor
+  label: UltraBlastDoor closed
+  sourcePrototypes:
+  - RMCPodDoorHybrisaIndestructibleUltra
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.5, -0.09, 0
+    max: -0.46, 0.09, 2.65
+    color: '#292C2C'
+    label: shutter guide
+  - min: 0.46, -0.09, 0
+    max: 0.5, 0.09, 2.65
+    color: '#292C2C'
+    label: shutter guide
+  - min: -0.5, -0.13, 2.48
+    max: 0.5, 0.13, 2.74
+    color: '#292C2C'
+    label: upper roll housing
+  - min: -0.46, -0.145, 2.52
+    max: 0.46, -0.131, 2.69
+    color: '#565958'
+    label: headbox face
+  - min: -0.46, 0.131, 2.52
+    max: 0.46, 0.145, 2.69
+    color: '#565958'
+    label: headbox face back
+  - min: -0.5, -0.105, 0
+    max: 0.5, 0.105, 0.045
+    color: '#292C2C'
+    label: threshold
+  - min: -0.46, -0.13, 0.05
+    max: 0.46, 0.13, 2.49
+    color: '#292C2C'
+    label: reinforced retractable core
+  - min: -0.43, -0.146, 0.08
+    max: 0.43, -0.132, 0.77
+    color: '#565958'
+    label: armor tier
+  - min: -0.43, 0.132, 0.08
+    max: 0.43, 0.146, 0.77
+    color: '#565958'
+    label: armor tier back
+  - min: -0.4, -0.163, 0.13
+    max: -0.37, -0.149, 0.72
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.4, 0.149, 0.13
+    max: -0.37, 0.163, 0.72
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.278, -0.163, 0.13
+    max: -0.248, -0.149, 0.72
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.278, 0.149, 0.13
+    max: -0.248, 0.163, 0.72
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.156, -0.163, 0.13
+    max: -0.126, -0.149, 0.72
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.156, 0.149, 0.13
+    max: -0.126, 0.163, 0.72
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.034, -0.163, 0.13
+    max: -0.004, -0.149, 0.72
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.034, 0.149, 0.13
+    max: -0.004, 0.163, 0.72
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.088, -0.163, 0.13
+    max: 0.118, -0.149, 0.72
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.088, 0.149, 0.13
+    max: 0.118, 0.163, 0.72
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.21, -0.163, 0.13
+    max: 0.24, -0.149, 0.72
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.21, 0.149, 0.13
+    max: 0.24, 0.163, 0.72
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.332, -0.163, 0.13
+    max: 0.362, -0.149, 0.72
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.332, 0.149, 0.13
+    max: 0.362, 0.163, 0.72
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.406, -0.164, 0.12
+    max: -0.382, -0.15, 0.151
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.406, 0.15, 0.12
+    max: -0.382, 0.164, 0.151
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.406, -0.164, 0.7
+    max: -0.382, -0.15, 0.731
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.406, 0.15, 0.7
+    max: -0.382, 0.164, 0.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.144, -0.164, 0.12
+    max: -0.12, -0.15, 0.151
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.144, 0.15, 0.12
+    max: -0.12, 0.164, 0.151
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.144, -0.164, 0.7
+    max: -0.12, -0.15, 0.731
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.144, 0.15, 0.7
+    max: -0.12, 0.164, 0.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.118, -0.164, 0.12
+    max: 0.142, -0.15, 0.151
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.118, 0.15, 0.12
+    max: 0.142, 0.164, 0.151
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.118, -0.164, 0.7
+    max: 0.142, -0.15, 0.731
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.118, 0.15, 0.7
+    max: 0.142, 0.164, 0.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.38, -0.164, 0.12
+    max: 0.404, -0.15, 0.151
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.38, 0.15, 0.12
+    max: 0.404, 0.164, 0.151
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.38, -0.164, 0.7
+    max: 0.404, -0.15, 0.731
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.38, 0.15, 0.7
+    max: 0.404, 0.164, 0.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.43, -0.146, 0.87
+    max: 0.43, -0.132, 1.56
+    color: '#565958'
+    label: armor tier
+  - min: -0.43, 0.132, 0.87
+    max: 0.43, 0.146, 1.56
+    color: '#565958'
+    label: armor tier back
+  - min: -0.4, -0.163, 0.92
+    max: -0.37, -0.149, 1.51
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.4, 0.149, 0.92
+    max: -0.37, 0.163, 1.51
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.278, -0.163, 0.92
+    max: -0.248, -0.149, 1.51
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.278, 0.149, 0.92
+    max: -0.248, 0.163, 1.51
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.156, -0.163, 0.92
+    max: -0.126, -0.149, 1.51
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.156, 0.149, 0.92
+    max: -0.126, 0.163, 1.51
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.034, -0.163, 0.92
+    max: -0.004, -0.149, 1.51
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.034, 0.149, 0.92
+    max: -0.004, 0.163, 1.51
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.088, -0.163, 0.92
+    max: 0.118, -0.149, 1.51
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.088, 0.149, 0.92
+    max: 0.118, 0.163, 1.51
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.21, -0.163, 0.92
+    max: 0.24, -0.149, 1.51
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.21, 0.149, 0.92
+    max: 0.24, 0.163, 1.51
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.332, -0.163, 0.92
+    max: 0.362, -0.149, 1.51
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.332, 0.149, 0.92
+    max: 0.362, 0.163, 1.51
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.406, -0.164, 0.91
+    max: -0.382, -0.15, 0.941
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.406, 0.15, 0.91
+    max: -0.382, 0.164, 0.941
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.406, -0.164, 1.49
+    max: -0.382, -0.15, 1.521
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.406, 0.15, 1.49
+    max: -0.382, 0.164, 1.521
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.144, -0.164, 0.91
+    max: -0.12, -0.15, 0.941
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.144, 0.15, 0.91
+    max: -0.12, 0.164, 0.941
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.144, -0.164, 1.49
+    max: -0.12, -0.15, 1.521
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.144, 0.15, 1.49
+    max: -0.12, 0.164, 1.521
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.118, -0.164, 0.91
+    max: 0.142, -0.15, 0.941
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.118, 0.15, 0.91
+    max: 0.142, 0.164, 0.941
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.118, -0.164, 1.49
+    max: 0.142, -0.15, 1.521
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.118, 0.15, 1.49
+    max: 0.142, 0.164, 1.521
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.38, -0.164, 0.91
+    max: 0.404, -0.15, 0.941
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.38, 0.15, 0.91
+    max: 0.404, 0.164, 0.941
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.38, -0.164, 1.49
+    max: 0.404, -0.15, 1.521
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.38, 0.15, 1.49
+    max: 0.404, 0.164, 1.521
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.43, -0.146, 1.66
+    max: 0.43, -0.132, 2.35
+    color: '#565958'
+    label: armor tier
+  - min: -0.43, 0.132, 1.66
+    max: 0.43, 0.146, 2.35
+    color: '#565958'
+    label: armor tier back
+  - min: -0.4, -0.163, 1.71
+    max: -0.37, -0.149, 2.3
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.4, 0.149, 1.71
+    max: -0.37, 0.163, 2.3
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.278, -0.163, 1.71
+    max: -0.248, -0.149, 2.3
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.278, 0.149, 1.71
+    max: -0.248, 0.163, 2.3
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.156, -0.163, 1.71
+    max: -0.126, -0.149, 2.3
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.156, 0.149, 1.71
+    max: -0.126, 0.163, 2.3
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.034, -0.163, 1.71
+    max: -0.004, -0.149, 2.3
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: -0.034, 0.149, 1.71
+    max: -0.004, 0.163, 2.3
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.088, -0.163, 1.71
+    max: 0.118, -0.149, 2.3
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.088, 0.149, 1.71
+    max: 0.118, 0.163, 2.3
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.21, -0.163, 1.71
+    max: 0.24, -0.149, 2.3
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.21, 0.149, 1.71
+    max: 0.24, 0.163, 2.3
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: 0.332, -0.163, 1.71
+    max: 0.362, -0.149, 2.3
+    color: '#353837'
+    label: tier reinforcing groove
+  - min: 0.332, 0.149, 1.71
+    max: 0.362, 0.163, 2.3
+    color: '#353837'
+    label: tier reinforcing groove back
+  - min: -0.406, -0.164, 1.7
+    max: -0.382, -0.15, 1.731
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.406, 0.15, 1.7
+    max: -0.382, 0.164, 1.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.406, -0.164, 2.28
+    max: -0.382, -0.15, 2.311
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.406, 0.15, 2.28
+    max: -0.382, 0.164, 2.311
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.144, -0.164, 1.7
+    max: -0.12, -0.15, 1.731
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.144, 0.15, 1.7
+    max: -0.12, 0.164, 1.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: -0.144, -0.164, 2.28
+    max: -0.12, -0.15, 2.311
+    color: '#252A28'
+    label: plate rivet
+  - min: -0.144, 0.15, 2.28
+    max: -0.12, 0.164, 2.311
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.118, -0.164, 1.7
+    max: 0.142, -0.15, 1.731
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.118, 0.15, 1.7
+    max: 0.142, 0.164, 1.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.118, -0.164, 2.28
+    max: 0.142, -0.15, 2.311
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.118, 0.15, 2.28
+    max: 0.142, 0.164, 2.311
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.38, -0.164, 1.7
+    max: 0.404, -0.15, 1.731
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.38, 0.15, 1.7
+    max: 0.404, 0.164, 1.731
+    color: '#252A28'
+    label: plate rivet back
+  - min: 0.38, -0.164, 2.28
+    max: 0.404, -0.15, 2.311
+    color: '#252A28'
+    label: plate rivet
+  - min: 0.38, 0.15, 2.28
+    max: 0.404, 0.164, 2.311
+    color: '#252A28'
+    label: plate rivet back
+  doorState: Closed
+  referencePrototype: RMCPodDoorHybrisaIndestructibleUltra
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Hybrisa/ultra_reinforced.rsi
+  referenceState: closed
+  sourceDirections: 4
+  alternateDoorModel: CMU3DUltraBlastDoorOpen
+- type: cmu3DModel
+  id: CMU3DUltraBlastDoorOpen
+  label: UltraBlastDoor open
+  sourcePrototypes: []
+  status: draft
+  description: Floor-retracting blast door with the open leaf below its threshold. Source closed/open frames and collider
+    inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and intermediate
+    animation are not represented.
+  parts:
+  - min: -0.49, -0.16, -0.035
+    max: 0.49, 0.16, -0.004
+    color: '#171B1B'
+    label: floor recess
+  - min: -0.5, -0.17, 0
+    max: 0.5, -0.13, 0.045
+    color: '#565958'
+    label: floor shutter lip
+  - min: -0.5, 0.13, 0
+    max: 0.5, 0.17, 0.045
+    color: '#565958'
+    label: floor shutter lip
+  - min: -0.5, -0.13, 0
+    max: -0.45, 0.13, 0.045
+    color: '#565958'
+    label: recess end cap
+  - min: 0.45, -0.13, 0
+    max: 0.5, 0.13, 0.045
+    color: '#565958'
+    label: recess end cap
+  doorState: Open
+  referencePrototype: RMCPodDoorHybrisaIndestructibleUltra
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Hybrisa/ultra_reinforced.rsi
+  referenceState: open
+  sourceDirections: 4
+  alternateDoorModel: CMU3DUltraBlastDoor
+- type: cmu3DModel
+  id: CMU3DAlmayerRollingShutter
+  label: AlmayerRollingShutter closed
+  sourcePrototypes:
+  - RMCShutterAlmayer
+  - RMCShutterAlmayerAntiTheft
+  status: draft
+  description: Upward-retracting rolling shutter with raised lower bar and side guides. Source closed/open frames
+    and collider inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and
+    intermediate animation are not represented.
+  parts:
+  - min: -0.5, -0.09, 0
+    max: -0.46, 0.09, 2.65
+    color: '#838582'
+    label: shutter guide
+  - min: 0.46, -0.09, 0
+    max: 0.5, 0.09, 2.65
+    color: '#838582'
+    label: shutter guide
+  - min: -0.5, -0.13, 2.48
+    max: 0.5, 0.13, 2.74
+    color: '#838582'
+    label: upper roll housing
+  - min: -0.46, -0.145, 2.52
+    max: 0.46, -0.131, 2.69
+    color: '#B6B8B3'
+    label: headbox face
+  - min: -0.46, 0.131, 2.52
+    max: 0.46, 0.145, 2.69
+    color: '#B6B8B3'
+    label: headbox face back
+  - min: -0.5, -0.105, 0
+    max: 0.5, 0.105, 0.045
+    color: '#838582'
+    label: threshold
+  - min: -0.46, -0.065, 0.18
+    max: 0.46, 0.065, 2.49
+    color: '#838582'
+    label: rolling sheet
+  - min: -0.46, -0.085, 0.23
+    max: 0.46, 0.085, 0.33
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 0.23
+    max: 0.46, 0.1, 0.257
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 0.433
+    max: 0.46, 0.085, 0.533
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 0.433
+    max: 0.46, 0.1, 0.46
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 0.636
+    max: 0.46, 0.085, 0.736
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 0.636
+    max: 0.46, 0.1, 0.663
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 0.839
+    max: 0.46, 0.085, 0.939
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 0.839
+    max: 0.46, 0.1, 0.866
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 1.042
+    max: 0.46, 0.085, 1.142
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 1.042
+    max: 0.46, 0.1, 1.069
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 1.245
+    max: 0.46, 0.085, 1.345
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 1.245
+    max: 0.46, 0.1, 1.272
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 1.448
+    max: 0.46, 0.085, 1.548
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 1.448
+    max: 0.46, 0.1, 1.475
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 1.651
+    max: 0.46, 0.085, 1.751
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 1.651
+    max: 0.46, 0.1, 1.678
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 1.854
+    max: 0.46, 0.085, 1.954
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 1.854
+    max: 0.46, 0.1, 1.881
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 2.057
+    max: 0.46, 0.085, 2.157
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 2.057
+    max: 0.46, 0.1, 2.084
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.085, 2.26
+    max: 0.46, 0.085, 2.36
+    color: '#B6B8B3'
+    label: horizontal shutter slat
+  - min: -0.46, -0.1, 2.26
+    max: 0.46, 0.1, 2.287
+    color: '#838582'
+    label: lower slat fold
+  - min: -0.46, -0.11, 0.055
+    max: 0.46, 0.11, 0.195
+    color: '#838582'
+    label: bottom bar
+  - min: -0.44, -0.126, 0.069
+    max: -0.368, -0.112, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.44, 0.112, 0.069
+    max: -0.368, 0.126, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.412, -0.126, 0.114
+    max: -0.34, -0.112, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.412, 0.112, 0.114
+    max: -0.34, 0.126, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.292, -0.126, 0.069
+    max: -0.22, -0.112, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.292, 0.112, 0.069
+    max: -0.22, 0.126, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.264, -0.126, 0.114
+    max: -0.192, -0.112, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.264, 0.112, 0.114
+    max: -0.192, 0.126, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.144, -0.126, 0.069
+    max: -0.072, -0.112, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.144, 0.112, 0.069
+    max: -0.072, 0.126, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.116, -0.126, 0.114
+    max: -0.044, -0.112, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.116, 0.112, 0.114
+    max: -0.044, 0.126, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.004, -0.126, 0.069
+    max: 0.076, -0.112, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.004, 0.112, 0.069
+    max: 0.076, 0.126, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.032, -0.126, 0.114
+    max: 0.104, -0.112, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.032, 0.112, 0.114
+    max: 0.104, 0.126, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.152, -0.126, 0.069
+    max: 0.224, -0.112, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.152, 0.112, 0.069
+    max: 0.224, 0.126, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.18, -0.126, 0.114
+    max: 0.252, -0.112, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.18, 0.112, 0.114
+    max: 0.252, 0.126, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.3, -0.126, 0.069
+    max: 0.372, -0.112, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.3, 0.112, 0.069
+    max: 0.372, 0.126, 0.112
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.328, -0.126, 0.114
+    max: 0.4, -0.112, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.328, 0.112, 0.114
+    max: 0.4, 0.126, 0.157
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  doorState: Closed
+  referencePrototype: RMCShutterAlmayer
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/shutter.rsi
+  referenceState: closed
+  sourceDirections: 4
+  alternateDoorModel: CMU3DAlmayerRollingShutterOpen
+- type: cmu3DModel
+  id: CMU3DAlmayerRollingShutterOpen
+  label: AlmayerRollingShutter open
+  sourcePrototypes:
+  - RMCShutterAlmayerOpen
+  status: draft
+  description: Upward-retracting rolling shutter with raised lower bar and side guides. Source closed/open frames
+    and collider inspected. One-tile centerline; hidden mechanisms and height remain inferred. Power, welding and
+    intermediate animation are not represented.
+  parts:
+  - min: -0.5, -0.09, 0
+    max: -0.46, 0.09, 2.65
+    color: '#838582'
+    label: shutter guide
+  - min: 0.46, -0.09, 0
+    max: 0.5, 0.09, 2.65
+    color: '#838582'
+    label: shutter guide
+  - min: -0.5, -0.13, 2.48
+    max: 0.5, 0.13, 2.74
+    color: '#838582'
+    label: upper roll housing
+  - min: -0.46, -0.145, 2.52
+    max: 0.46, -0.131, 2.69
+    color: '#B6B8B3'
+    label: headbox face
+  - min: -0.46, 0.131, 2.52
+    max: 0.46, 0.145, 2.69
+    color: '#B6B8B3'
+    label: headbox face back
+  - min: -0.5, -0.105, 0
+    max: 0.5, 0.105, 0.045
+    color: '#838582'
+    label: threshold
+  - min: -0.46, -0.11, 2.4
+    max: 0.46, 0.11, 2.54
+    color: '#838582'
+    label: raised bottom bar
+  - min: -0.44, -0.126, 2.414
+    max: -0.368, -0.112, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.44, 0.112, 2.414
+    max: -0.368, 0.126, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.412, -0.126, 2.459
+    max: -0.34, -0.112, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.412, 0.112, 2.459
+    max: -0.34, 0.126, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.292, -0.126, 2.414
+    max: -0.22, -0.112, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.292, 0.112, 2.414
+    max: -0.22, 0.126, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.264, -0.126, 2.459
+    max: -0.192, -0.112, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.264, 0.112, 2.459
+    max: -0.192, 0.126, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.144, -0.126, 2.414
+    max: -0.072, -0.112, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.144, 0.112, 2.414
+    max: -0.072, 0.126, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: -0.116, -0.126, 2.459
+    max: -0.044, -0.112, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: -0.116, 0.112, 2.459
+    max: -0.044, 0.126, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.004, -0.126, 2.414
+    max: 0.076, -0.112, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.004, 0.112, 2.414
+    max: 0.076, 0.126, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.032, -0.126, 2.459
+    max: 0.104, -0.112, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.032, 0.112, 2.459
+    max: 0.104, 0.126, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.152, -0.126, 2.414
+    max: 0.224, -0.112, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.152, 0.112, 2.414
+    max: 0.224, 0.126, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.18, -0.126, 2.459
+    max: 0.252, -0.112, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.18, 0.112, 2.459
+    max: 0.252, 0.126, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.3, -0.126, 2.414
+    max: 0.372, -0.112, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.3, 0.112, 2.414
+    max: 0.372, 0.126, 2.457
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  - min: 0.328, -0.126, 2.459
+    max: 0.4, -0.112, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker
+  - min: 0.328, 0.112, 2.459
+    max: 0.4, 0.126, 2.502
+    color: '#9E4A24'
+    label: bottom bar slanted marker back
+  doorState: Open
+  referencePrototype: RMCShutterAlmayer
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Shutters/Almayer/shutter.rsi
+  referenceState: open
+  sourceDirections: 4
+  alternateDoorModel: CMU3DAlmayerRollingShutter
+- type: cmu3DModel
+  id: CMU3DLegacyAlmayerDoor
+  label: Almayer legacy double door
+  sourcePrototypes:
+  - RMCDoubleDoorAlmayerSolid
+  status: draft
+  description: Single entity spanning two cells along local Y, from -0.49 to +1.49. East source frame establishes
+    two wide leaves; open pose retracts to the outer jambs. Actual collider pivot retained; source padding is not
+    copied as translation. Depth and height are inferred.
+  parts:
+  - min: -0.15, -0.49, 0.0
+    max: 0.15, -0.41000000000000003, 2.7
+    color: '#2D3136'
+    label: outer jamb
+  - min: -0.15, 1.4100000000000001, 0.0
+    max: 0.15, 1.49, 2.7
+    color: '#2D3136'
+    label: outer jamb
+  - min: -0.13, -0.41000000000000003, 2.52
+    max: 0.13, 1.4100000000000001, 2.66
+    color: '#151C22'
+    label: continuous upper track
+  - min: -0.145, -0.41000000000000003, 2.61
+    max: 0.145, 1.4100000000000001, 2.65
+    color: '#565C60'
+    label: upper rail highlight
+  - min: -0.17, -0.49, 0.0
+    max: 0.17, 1.49, 0.06
+    color: '#151C22'
+    label: two tile threshold
+  - min: 0.16, -0.475, 0.95
+    max: 0.174, -0.43000000000000005, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp
+  - min: -0.174, -0.475, 0.95
+    max: -0.16, -0.43000000000000005, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp back
+  - min: 0.16, 1.425, 0.95
+    max: 0.174, 1.47, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp
+  - min: -0.174, 1.425, 0.95
+    max: -0.16, 1.47, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp back
+  - min: -0.1, -0.41000000000000003, 0.06
+    max: 0.1, 0.49, 2.52
+    color: '#2D3136'
+    label: closed sliding leaf
+  - min: 0.102, -0.36, 2.16
+    max: 0.116, 0.44, 2.42
+    color: '#151C22'
+    label: upper recessed panel
+  - min: -0.116, -0.36, 2.16
+    max: -0.102, 0.44, 2.42
+    color: '#151C22'
+    label: upper recessed panel back
+  - min: 0.12, -0.37, 1.15
+    max: 0.134, 0.45, 1.2
+    color: '#565C60'
+    label: panel waist ridge
+  - min: -0.134, -0.37, 1.15
+    max: -0.12, 0.45, 1.2
+    color: '#565C60'
+    label: panel waist ridge back
+  - min: 0.12, -0.32999999999999996, 1.39
+    max: 0.134, -0.30400000000000005, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, -0.32999999999999996, 1.39
+    max: -0.12, -0.30400000000000005, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, -0.265, 1.39
+    max: 0.134, -0.239, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, -0.265, 1.39
+    max: -0.12, -0.239, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, -0.19999999999999996, 1.39
+    max: 0.134, -0.17400000000000004, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, -0.19999999999999996, 1.39
+    max: -0.12, -0.17400000000000004, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, -0.135, 1.39
+    max: 0.134, -0.10899999999999999, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, -0.135, 1.39
+    max: -0.12, -0.10899999999999999, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, -0.06999999999999995, 1.39
+    max: 0.134, -0.04400000000000004, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, -0.06999999999999995, 1.39
+    max: -0.12, -0.04400000000000004, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, -0.0050000000000000044, 1.39
+    max: 0.134, 0.02100000000000002, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, -0.0050000000000000044, 1.39
+    max: -0.12, 0.02100000000000002, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.115, -0.36, 0.14
+    max: 0.129, -0.30000000000000004, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, -0.36, 0.14
+    max: -0.115, -0.30000000000000004, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, -0.21999999999999997, 0.14
+    max: 0.129, -0.16000000000000003, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, -0.21999999999999997, 0.14
+    max: -0.115, -0.16000000000000003, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, -0.07999999999999996, 0.14
+    max: 0.129, -0.020000000000000018, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, -0.07999999999999996, 0.14
+    max: -0.115, -0.020000000000000018, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.06, 0.14
+    max: 0.129, 0.12, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.06, 0.14
+    max: -0.115, 0.12, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.2, 0.14
+    max: 0.129, 0.26, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.2, 0.14
+    max: -0.115, 0.26, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.33999999999999997, 0.14
+    max: 0.129, 0.4, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.33999999999999997, 0.14
+    max: -0.115, 0.4, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: -0.1, 0.51, 0.06
+    max: 0.1, 1.4100000000000001, 2.52
+    color: '#2D3136'
+    label: closed sliding leaf
+  - min: 0.102, 0.56, 2.16
+    max: 0.116, 1.3599999999999999, 2.42
+    color: '#151C22'
+    label: upper recessed panel
+  - min: -0.116, 0.56, 2.16
+    max: -0.102, 1.3599999999999999, 2.42
+    color: '#151C22'
+    label: upper recessed panel back
+  - min: 0.12, 0.55, 1.15
+    max: 0.134, 1.37, 1.2
+    color: '#565C60'
+    label: panel waist ridge
+  - min: -0.134, 0.55, 1.15
+    max: -0.12, 1.37, 1.2
+    color: '#565C60'
+    label: panel waist ridge back
+  - min: 0.12, 0.59, 1.39
+    max: 0.134, 0.616, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, 0.59, 1.39
+    max: -0.12, 0.616, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, 0.655, 1.39
+    max: 0.134, 0.681, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, 0.655, 1.39
+    max: -0.12, 0.681, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, 0.72, 1.39
+    max: 0.134, 0.746, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, 0.72, 1.39
+    max: -0.12, 0.746, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, 0.7849999999999999, 1.39
+    max: 0.134, 0.8109999999999999, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, 0.7849999999999999, 1.39
+    max: -0.12, 0.8109999999999999, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, 0.85, 1.39
+    max: 0.134, 0.876, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, 0.85, 1.39
+    max: -0.12, 0.876, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.12, 0.915, 1.39
+    max: 0.134, 0.9410000000000001, 1.65
+    color: '#151C22'
+    label: vent bank
+  - min: -0.134, 0.915, 1.39
+    max: -0.12, 0.9410000000000001, 1.65
+    color: '#151C22'
+    label: vent bank back
+  - min: 0.115, 0.56, 0.14
+    max: 0.129, 0.62, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.56, 0.14
+    max: -0.115, 0.62, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.7, 0.14
+    max: 0.129, 0.76, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.7, 0.14
+    max: -0.115, 0.76, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.8400000000000001, 0.14
+    max: 0.129, 0.9, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.8400000000000001, 0.14
+    max: -0.115, 0.9, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.98, 0.14
+    max: 0.129, 1.04, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.98, 0.14
+    max: -0.115, 1.04, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 1.12, 0.14
+    max: 0.129, 1.1800000000000002, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 1.12, 0.14
+    max: -0.115, 1.1800000000000002, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 1.26, 0.14
+    max: 0.129, 1.3199999999999998, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 1.26, 0.14
+    max: -0.115, 1.3199999999999998, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  doorState: Closed
+  referencePrototype: RMCDoubleDoorAlmayerSolid
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/DoubleDoor/almayer_solid.rsi
+  referenceState: closed
+  sourceDirections: 4
+  alternateDoorModel: CMU3DLegacyAlmayerDoorOpen
+- type: cmu3DModel
+  id: CMU3DLegacyAlmayerDoorOpen
+  label: Almayer legacy double door open
+  sourcePrototypes: []
+  status: draft
+  description: Single entity spanning two cells along local Y, from -0.49 to +1.49. East source frame establishes
+    two wide leaves; open pose retracts to the outer jambs. Actual collider pivot retained; source padding is not
+    copied as translation. Depth and height are inferred.
+  parts:
+  - min: -0.15, -0.49, 0.0
+    max: 0.15, -0.41000000000000003, 2.7
+    color: '#2D3136'
+    label: outer jamb
+  - min: -0.15, 1.4100000000000001, 0.0
+    max: 0.15, 1.49, 2.7
+    color: '#2D3136'
+    label: outer jamb
+  - min: -0.13, -0.41000000000000003, 2.52
+    max: 0.13, 1.4100000000000001, 2.66
+    color: '#151C22'
+    label: continuous upper track
+  - min: -0.145, -0.41000000000000003, 2.61
+    max: 0.145, 1.4100000000000001, 2.65
+    color: '#565C60'
+    label: upper rail highlight
+  - min: -0.17, -0.49, 0.0
+    max: 0.17, 1.49, 0.06
+    color: '#151C22'
+    label: two tile threshold
+  - min: 0.16, -0.475, 0.95
+    max: 0.174, -0.43000000000000005, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp
+  - min: -0.174, -0.475, 0.95
+    max: -0.16, -0.43000000000000005, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp back
+  - min: 0.16, 1.425, 0.95
+    max: 0.174, 1.47, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp
+  - min: -0.174, 1.425, 0.95
+    max: -0.16, 1.47, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp back
+  doorState: Open
+  referencePrototype: RMCDoubleDoorAlmayerSolid
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/DoubleDoor/almayer_solid.rsi
+  referenceState: open
+  sourceDirections: 4
+  alternateDoorModel: CMU3DLegacyAlmayerDoor
+- type: cmu3DModel
+  id: CMU3DLegacyEngineerDoor
+  label: Engineering legacy double door
+  sourcePrototypes:
+  - RMCDoubleDoorEngineerGlass
+  - RMCDoubleDoorEngineerGlassEngineering
+  status: draft
+  description: Single entity spanning two cells along local Y, from -0.49 to +1.49. East source frame establishes
+    two wide leaves; open pose retracts to the outer jambs. Actual collider pivot retained; source padding is not
+    copied as translation. Depth and height are inferred.
+  parts:
+  - min: -0.15, -0.49, 0.0
+    max: 0.15, -0.41000000000000003, 2.7
+    color: '#966811'
+    label: outer jamb
+  - min: -0.15, 1.4100000000000001, 0.0
+    max: 0.15, 1.49, 2.7
+    color: '#966811'
+    label: outer jamb
+  - min: -0.13, -0.41000000000000003, 2.52
+    max: 0.13, 1.4100000000000001, 2.66
+    color: '#523804'
+    label: continuous upper track
+  - min: -0.145, -0.41000000000000003, 2.61
+    max: 0.145, 1.4100000000000001, 2.65
+    color: '#B58B32'
+    label: upper rail highlight
+  - min: -0.17, -0.49, 0.0
+    max: 0.17, 1.49, 0.06
+    color: '#523804'
+    label: two tile threshold
+  - min: 0.16, -0.475, 0.95
+    max: 0.174, -0.43000000000000005, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp
+  - min: -0.174, -0.475, 0.95
+    max: -0.16, -0.43000000000000005, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp back
+  - min: 0.16, 1.425, 0.95
+    max: 0.174, 1.47, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp
+  - min: -0.174, 1.425, 0.95
+    max: -0.16, 1.47, 1.09
+    color: '#B8BEB7'
+    label: outer jamb lamp back
+  - min: -0.1, -0.41000000000000003, 0.06
+    max: 0.1, 0.49, 2.52
+    color: '#966811'
+    label: closed sliding leaf
+  - min: 0.102, -0.36, 2.16
+    max: 0.116, 0.44, 2.42
+    color: '#523804'
+    label: upper recessed panel
+  - min: -0.116, -0.36, 2.16
+    max: -0.102, 0.44, 2.42
+    color: '#523804'
+    label: upper recessed panel back
+  - min: 0.12, -0.28500000000000003, 0.81
+    max: 0.134, 0.365, 1.9
+    color: '#B58B32'
+    label: window surround
+  - min: -0.134, -0.28500000000000003, 0.81
+    max: -0.12, 0.365, 1.9
+    color: '#B58B32'
+    label: window surround back
+  - min: 0.136, -0.29000000000000004, 0.9
+    max: 0.15, 0.37, 1.81
+    color: '#8FA6A3'
+    label: wide window
+  - min: -0.15, -0.29000000000000004, 0.9
+    max: -0.136, 0.37, 1.81
+    color: '#8FA6A3'
+    label: wide window back
+  - min: 0.152, -0.25, 1.14
+    max: 0.166, 0.32999999999999996, 1.74
+    color: '#B8C9C5'
+    label: glass highlight
+  - min: -0.166, -0.25, 1.14
+    max: -0.152, 0.32999999999999996, 1.74
+    color: '#B8C9C5'
+    label: glass highlight back
+  - min: 0.115, -0.36, 0.14
+    max: 0.129, -0.30000000000000004, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, -0.36, 0.14
+    max: -0.115, -0.30000000000000004, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, -0.21999999999999997, 0.14
+    max: 0.129, -0.16000000000000003, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, -0.21999999999999997, 0.14
+    max: -0.115, -0.16000000000000003, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, -0.07999999999999996, 0.14
+    max: 0.129, -0.020000000000000018, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, -0.07999999999999996, 0.14
+    max: -0.115, -0.020000000000000018, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.06, 0.14
+    max: 0.129, 0.12, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.06, 0.14
+    max: -0.115, 0.12, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.2, 0.14
+    max: 0.129, 0.26, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.2, 0.14
+    max: -0.115, 0.26, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.33999999999999997, 0.14
+    max: 0.129, 0.4, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.33999999999999997, 0.14
+    max: -0.115, 0.4, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: -0.1, 0.51, 0.06
+    max: 0.1, 1.4100000000000001, 2.52
+    color: '#966811'
+    label: closed sliding leaf
+  - min: 0.102, 0.56, 2.16
+    max: 0.116, 1.3599999999999999, 2.42
+    color: '#523804'
+    label: upper recessed panel
+  - min: -0.116, 0.56, 2.16
+    max: -0.102, 1.3599999999999999, 2.42
+    color: '#523804'
+    label: upper recessed panel back
+  - min: 0.12, 0.635, 0.81
+    max: 0.134, 1.2850000000000001, 1.9
+    color: '#B58B32'
+    label: window surround
+  - min: -0.134, 0.635, 0.81
+    max: -0.12, 1.2850000000000001, 1.9
+    color: '#B58B32'
+    label: window surround back
+  - min: 0.136, 0.63, 0.9
+    max: 0.15, 1.29, 1.81
+    color: '#8FA6A3'
+    label: wide window
+  - min: -0.15, 0.63, 0.9
+    max: -0.136, 1.29, 1.81
+    color: '#8FA6A3'
+    label: wide window back
+  - min: 0.152, 0.67, 1.14
+    max: 0.166, 1.25, 1.74
+    color: '#B8C9C5'
+    label: glass highlight
+  - min: -0.166, 0.67, 1.14
+    max: -0.152, 1.25, 1.74
+    color: '#B8C9C5'
+    label: glass highlight back
+  - min: 0.115, 0.56, 0.14
+    max: 0.129, 0.62, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.56, 0.14
+    max: -0.115, 0.62, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.7, 0.14
+    max: 0.129, 0.76, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.7, 0.14
+    max: -0.115, 0.76, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.8400000000000001, 0.14
+    max: 0.129, 0.9, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.8400000000000001, 0.14
+    max: -0.115, 0.9, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 0.98, 0.14
+    max: 0.129, 1.04, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 0.98, 0.14
+    max: -0.115, 1.04, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 1.12, 0.14
+    max: 0.129, 1.1800000000000002, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 1.12, 0.14
+    max: -0.115, 1.1800000000000002, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  - min: 0.115, 1.26, 0.14
+    max: 0.129, 1.3199999999999998, 0.23
+    color: '#AC8029'
+    label: lower hazard marks
+  - min: -0.129, 1.26, 0.14
+    max: -0.115, 1.3199999999999998, 0.23
+    color: '#AC8029'
+    label: lower hazard marks back
+  doorState: Closed
+  referencePrototype: RMCDoubleDoorEngineerGlass
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/DoubleDoor/engineer_glass.rsi
+  referenceState: closed
+  sourceDirections: 4
+  alternateDoorModel: CMU3DLegacyEngineerDoorOpen
+- type: cmu3DModel
+  id: CMU3DLegacyEngineerDoorOpen
+  label: Engineering legacy double door open
+  sourcePrototypes: []
+  status: draft
+  description: Single entity spanning two cells along local Y, from -0.49 to +1.49. East source frame establishes
+    two wide leaves; open pose retracts to the outer jambs. Actual collider pivot retained; source padding is not
+    copied as translation. Depth and height are inferred.
+  parts:
+  - min: -0.15, -0.49, 0.0
+    max: 0.15, -0.41000000000000003, 2.7
+    color: '#966811'
+    label: outer jamb
+  - min: -0.15, 1.4100000000000001, 0.0
+    max: 0.15, 1.49, 2.7
+    color: '#966811'
+    label: outer jamb
+  - min: -0.13, -0.41000000000000003, 2.52
+    max: 0.13, 1.4100000000000001, 2.66
+    color: '#523804'
+    label: continuous upper track
+  - min: -0.145, -0.41000000000000003, 2.61
+    max: 0.145, 1.4100000000000001, 2.65
+    color: '#B58B32'
+    label: upper rail highlight
+  - min: -0.17, -0.49, 0.0
+    max: 0.17, 1.49, 0.06
+    color: '#523804'
+    label: two tile threshold
+  - min: 0.16, -0.475, 0.95
+    max: 0.174, -0.43000000000000005, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp
+  - min: -0.174, -0.475, 0.95
+    max: -0.16, -0.43000000000000005, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp back
+  - min: 0.16, 1.425, 0.95
+    max: 0.174, 1.47, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp
+  - min: -0.174, 1.425, 0.95
+    max: -0.16, 1.47, 1.09
+    color: '#BCD0AC'
+    label: outer jamb lamp back
+  doorState: Open
+  referencePrototype: RMCDoubleDoorEngineerGlass
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/DoubleDoor/engineer_glass.rsi
+  referenceState: open
+  sourceDirections: 4
+  alternateDoorModel: CMU3DLegacyEngineerDoor
+- type: cmu3DModel
+  id: CMU3DSinglePersonalDoorOpen
+  label: personal door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#969995'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#BFC2BC'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#BFC2BC'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#969995'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#BFC2BC'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#BFC2BC'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#969995'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#535555'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlock
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/personal_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSinglePersonalDoor
+- type: cmu3DModel
+  id: CMU3DSingleCommandGovforDoorGlassOpen
+  label: command govfor door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockCommandGovforGlassLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/command_govfor_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleCommandGovforDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleCommandGovforDoorOpen
+  label: command govfor door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockCommandGovforLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/command_govfor_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleCommandGovforDoor
+- type: cmu3DModel
+  id: CMU3DSingleComDoorOpen
+  label: com door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#344A7D'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#6173A3'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#6173A3'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#344A7D'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#6173A3'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#6173A3'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#344A7D'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#151B38'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockCommandLockedColony
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/com_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleComDoor
+- type: cmu3DModel
+  id: CMU3DSingleEngineerGovforDoorGlassOpen
+  label: engineer govfor door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockEngineerGovforGlassLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/engineer_govfor_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleEngineerGovforDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleEngineerGovforDoorOpen
+  label: engineer govfor door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockEngineerGovforLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/engineer_govfor_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleEngineerGovforDoor
+- type: cmu3DModel
+  id: CMU3DSingleEngiDoorOpen
+  label: engi door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#966610'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#966610'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#966610'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#513703'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockEngineerLockedColony
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/engi_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleEngiDoor
+- type: cmu3DModel
+  id: CMU3DSingleEngiDoorGlassOpen
+  label: engi door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#966610'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#966610'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#B18735'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#966610'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#513703'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockGlassEngineer
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/engi_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleEngiDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleMediDoorGlassOpen
+  label: medi door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#A9A18D'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#A9A18D'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#A9A18D'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#6B6455'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockGlassMedicalLockedColony
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/medi_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleMediDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleSecDoorGlassOpen
+  label: sec door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#871B20'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#871B20'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#871B20'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#440B0C'
+    label: threshold
+  doorState: Open
+  referencePrototype: CMAirlockGlassSecurityLockedColony
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/sec_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleSecDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleGovforDoorGlassOpen
+  label: govfor door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockGovforGlassLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/govfor_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleGovforDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleGovforDoorOpen
+  label: govfor door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockGovforLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/govfor_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleGovforDoor
+- type: cmu3DModel
+  id: CMU3DSingleMediDoorOpen
+  label: medi door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#A9A18D'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#A9A18D'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#D0CBB9'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#A9A18D'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#6B6455'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#9E7420'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#9E7420'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockMedical
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/medi_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleMediDoor
+- type: cmu3DModel
+  id: CMU3DSingleMedicalGovforDoorGlassOpen
+  label: medical govfor door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockMedicalGovforGlassLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/medical_govfor_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleMedicalGovforDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleMedicalGovforDoorOpen
+  label: medical govfor door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  - min: -0.37, -0.129, 0.12
+    max: -0.31, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.37, 0.115, 0.12
+    max: -0.31, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.345, -0.129, 0.175
+    max: -0.285, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.345, 0.115, 0.175
+    max: -0.285, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.243, -0.129, 0.12
+    max: -0.183, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.243, 0.115, 0.12
+    max: -0.183, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.218, -0.129, 0.175
+    max: -0.158, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.218, 0.115, 0.175
+    max: -0.158, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.116, -0.129, 0.12
+    max: -0.056, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.116, 0.115, 0.12
+    max: -0.056, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: -0.091, -0.129, 0.175
+    max: -0.031, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: -0.091, 0.115, 0.175
+    max: -0.031, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.011, -0.129, 0.12
+    max: 0.071, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.011, 0.115, 0.12
+    max: 0.071, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.036, -0.129, 0.175
+    max: 0.096, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.036, 0.115, 0.175
+    max: 0.096, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.138, -0.129, 0.12
+    max: 0.198, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.138, 0.115, 0.12
+    max: 0.198, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.163, -0.129, 0.175
+    max: 0.223, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.163, 0.115, 0.175
+    max: 0.223, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.265, -0.129, 0.12
+    max: 0.325, -0.115, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.265, 0.115, 0.12
+    max: 0.325, 0.129, 0.173
+    color: '#D0D028'
+    label: slanted threshold marking back
+  - min: 0.29, -0.129, 0.175
+    max: 0.35, -0.115, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking
+  - min: 0.29, 0.115, 0.175
+    max: 0.35, 0.129, 0.228
+    color: '#D0D028'
+    label: slanted threshold marking back
+  doorState: Open
+  referencePrototype: CMAirlockMedicalGovforLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/medical_govfor_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleMedicalGovforDoor
+- type: cmu3DModel
+  id: CMU3DSingleSecurityGovforDoorGlassOpen
+  label: security govfor door glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  doorState: Open
+  referencePrototype: CMAirlockSecurityGovforGlassLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/security_govfor_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleSecurityGovforDoorGlass
+- type: cmu3DModel
+  id: CMU3DSingleSecurityGovforDoorOpen
+  label: security govfor door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#918975'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#635D4E'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#464239'
+    label: threshold
+  doorState: Open
+  referencePrototype: CMAirlockSecurityGovforLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/security_govfor_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSingleSecurityGovforDoor
+- type: cmu3DModel
+  id: CMU3DPairedAlmayerGlassOpen
+  label: almayer glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#2B3034'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#53595D'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#53595D'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#191E22'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#53595D'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#191E22'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorAlmayerGlass
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/almayer_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedAlmayerGlass
+- type: cmu3DModel
+  id: CMU3DPairedCommandGlassOpen
+  label: command glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#344A7D'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#6173A3'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#6173A3'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#151B38'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#6173A3'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#151B38'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorColonyCommandGlassLocked
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/command_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedCommandGlass
+- type: cmu3DModel
+  id: CMU3DPairedEngineerGlassOpen
+  label: engineer glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#966610'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#B18735'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#B18735'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#513703'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#B18735'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#513703'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorColonyEngineerGlassLocked
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/engineer_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedEngineerGlass
+- type: cmu3DModel
+  id: CMU3DPairedEngineerSolidOpen
+  label: engineer solid door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#966610'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#B18735'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#B18735'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#513703'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#B18735'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#513703'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorColonyEngineerSolidLocked
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/engineer_solid.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedEngineerSolid
+- type: cmu3DModel
+  id: CMU3DPairedSecurityGlassOpen
+  label: security glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#871B20'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#AE363D'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#AE363D'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#440B0C'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#AE363D'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#440B0C'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorColonySecurityGlassLocked
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/security_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedSecurityGlass
+- type: cmu3DModel
+  id: CMU3DPairedSecuritySolidOpen
+  label: security solid door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#871B20'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#AE363D'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#AE363D'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#440B0C'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#AE363D'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#440B0C'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorColonySecuritySolidLocked
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/security_solid.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedSecuritySolid
+- type: cmu3DModel
+  id: CMU3DPairedCommandGovforGlassOpen
+  label: command govfor glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#635D4E'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#918975'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#918975'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#464239'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#918975'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#464239'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorCommandGovforGlassLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/Double/command_govfor_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedCommandGovforGlass
+- type: cmu3DModel
+  id: CMU3DPairedGovforGlassOpen
+  label: govfor glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#635D4E'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#918975'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#918975'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#464239'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#918975'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#464239'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorGovforGlassLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/Double/govfor_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedGovforGlass
+- type: cmu3DModel
+  id: CMU3DPairedGovforSolidOpen
+  label: govfor solid door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#635D4E'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#918975'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#918975'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#464239'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#918975'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#464239'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorGovforLocked
+  referenceRsi: /Textures/CMU14/Structures/Doors/Airlocks/Double/govfor_solid.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedGovforSolid
+- type: cmu3DModel
+  id: CMU3DPairedPersonalSolidOpen
+  label: personal solid door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#969995'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#BFC2BC'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#BFC2BC'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#535555'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#BFC2BC'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#535555'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorPersonalSolid
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/personal_solid.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedPersonalSolid
+- type: cmu3DModel
+  id: CMU3DPairedHybrisaMedicalGlassOpen
+  label: hybrisa medical glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#575C50'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#818479'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#818479'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#343B32'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#818479'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#343B32'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: RMCDoubleDoorHybrisaGlassMecical
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/hybrisa_medical_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DPairedHybrisaMedicalGlass
+- type: cmu3DModel
+  id: CMU3DHybrisaAirlockOpen
+  label: Hybrisa airlock open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  parts:
+  - min: -0.48, -0.19, 0
+    max: -0.395, 0.19, 2.63
+    color: '#747A7B'
+    label: left door jamb
+  - min: 0.395, -0.19, 0
+    max: 0.48, 0.19, 2.63
+    color: '#747A7B'
+    label: right door jamb
+  - min: -0.48, -0.19, 2.58
+    max: 0.48, 0.19, 2.74
+    color: '#474E50'
+    label: door lintel
+  - min: -0.48, -0.21, 0
+    max: 0.48, 0.21, 0.07
+    color: '#747A7B'
+    label: threshold
+  - min: -0.46, -0.205, 0.19
+    max: -0.41, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: -0.46, -0.205, 2.15
+    max: -0.41, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 0.19
+    max: 0.46, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 2.15
+    max: 0.46, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  sourceDirections: 4
+  doorState: Open
+  referencePrototype: RMCAirlockHybrisa
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/hybrisa_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DHybrisaAirlock
+- type: cmu3DModel
+  id: CMU3DHybrisaPersonalAirlockOpen
+  label: Hybrisa personal airlock open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  parts:
+  - min: -0.48, -0.19, 0
+    max: -0.395, 0.19, 2.63
+    color: '#747A7B'
+    label: left door jamb
+  - min: 0.395, -0.19, 0
+    max: 0.48, 0.19, 2.63
+    color: '#747A7B'
+    label: right door jamb
+  - min: -0.48, -0.19, 2.58
+    max: 0.48, 0.19, 2.74
+    color: '#474E50'
+    label: door lintel
+  - min: -0.48, -0.21, 0
+    max: 0.48, 0.21, 0.07
+    color: '#747A7B'
+    label: threshold
+  - min: -0.46, -0.205, 0.19
+    max: -0.41, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: -0.46, -0.205, 2.15
+    max: -0.41, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 0.19
+    max: 0.46, -0.19, 0.49
+    color: '#BAA348'
+    label: jamb warning stripe
+  - min: 0.41, -0.205, 2.15
+    max: 0.46, -0.19, 2.45
+    color: '#BAA348'
+    label: jamb warning stripe
+  sourceDirections: 4
+  doorState: Open
+  referencePrototype: RMCAirlockHybrisaPersonal
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/hybrisa_personal_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DHybrisaPersonalAirlock
+- type: cmu3DModel
+  id: CMU3DHybrisaDoubleGlassDoorOpen
+  label: Hybrisa double glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#575C50'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#818479'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#818479'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#343B32'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#818479'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#343B32'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  sourceDirections: 4
+  yawOffset: 90
+  doorState: Open
+  referencePrototype: RMCDoubleDoorGlassHybrisa
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/hybrisa_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DHybrisaDoubleGlassDoor
+- type: cmu3DModel
+  id: CMU3DHybrisaGlassAirlockOpen
+  label: Hybrisa glazed airlock open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.41, 0.16, 2.61
+    color: '#8A9382'
+    label: left jamb
+  - min: 0.41, -0.16, 0
+    max: 0.49, 0.16, 2.61
+    color: '#8A9382'
+    label: right jamb
+  - min: -0.49, -0.16, 2.56
+    max: 0.49, 0.16, 2.74
+    color: '#8A9382'
+    label: lintel
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.065
+    color: '#8A9382'
+    label: threshold
+  - min: -0.46, -0.18, 0.16
+    max: -0.425, -0.161, 0.25
+    color: '#D8A348'
+    label: jamb warning
+  - min: -0.46, -0.18, 0.35
+    max: -0.425, -0.161, 0.44
+    color: '#D8A348'
+    label: jamb warning
+  - min: -0.46, -0.18, 2.25
+    max: -0.425, -0.161, 2.34
+    color: '#D8A348'
+    label: jamb warning
+  - min: -0.46, -0.18, 2.43
+    max: -0.425, -0.161, 2.52
+    color: '#D8A348'
+    label: jamb warning
+  - min: 0.428, -0.18, 0.16
+    max: 0.463, -0.161, 0.25
+    color: '#D8A348'
+    label: jamb warning
+  - min: 0.428, -0.18, 0.35
+    max: 0.463, -0.161, 0.44
+    color: '#D8A348'
+    label: jamb warning
+  - min: 0.428, -0.18, 2.25
+    max: 0.463, -0.161, 2.34
+    color: '#D8A348'
+    label: jamb warning
+  - min: 0.428, -0.18, 2.43
+    max: 0.463, -0.161, 2.52
+    color: '#D8A348'
+    label: jamb warning
+  sourceDirections: 4
+  doorState: Open
+  referencePrototype: CMAirlockGlassHybrisa
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/hybrisa_door_glass.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DHybrisaGlassAirlock
+- type: cmu3DModel
+  id: CMU3DMaintenanceAirlockOpen
+  label: Maintenance airlock open
+  sourcePrototypes: []
+  status: draft
+  description: Open counterpart of the gray maintenance airlock. Empty doorway and full frame volumes; matches the
+    closed assembly palette.
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.41, 0.16, 2.61
+    color: '#7A8382'
+    label: left jamb
+  - min: 0.41, -0.16, 0
+    max: 0.49, 0.16, 2.61
+    color: '#7A8382'
+    label: right jamb
+  - min: -0.49, -0.16, 2.56
+    max: 0.49, 0.16, 2.74
+    color: '#7A8382'
+    label: lintel
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.065
+    color: '#7A8382'
+    label: threshold
+  - label: retracted hazard edge
+    min: -0.487, -0.178, 0.21
+    max: -0.411, -0.162, 0.32
+    color: '#BC6725'
+  - label: retracted hazard edge
+    min: -0.487, -0.178, 1.55
+    max: -0.411, -0.162, 1.66
+    color: '#BC6725'
+  - label: retracted hazard edge
+    min: -0.487, 0.162, 0.21
+    max: -0.411, 0.178, 0.32
+    color: '#BC6725'
+  - label: retracted hazard edge
+    min: -0.487, 0.162, 1.55
+    max: -0.411, 0.178, 1.66
+    color: '#BC6725'
+  sourceDirections: 4
+  doorState: Open
+  referencePrototype: CMAirlockMaint
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/maint_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DMaintenanceAirlock
+
+- type: cmu3DModel
+  id: CMU3DSecurityAirlockOpen
+  label: sec door door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  parts:
+  - min: -0.49, -0.16, 0
+    max: -0.4, 0.16, 2.64
+    color: '#871B20'
+    label: door jamb
+  - min: -0.466, -0.177, 0.04
+    max: -0.437, -0.16, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: -0.466, 0.16, 0.04
+    max: -0.437, 0.177, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: 0.4, -0.16, 0
+    max: 0.49, 0.16, 2.64
+    color: '#871B20'
+    label: door jamb
+  - min: 0.424, -0.177, 0.04
+    max: 0.453, -0.16, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: 0.424, 0.16, 0.04
+    max: 0.453, 0.177, 2.62
+    color: '#AE363D'
+    label: jamb raised edge
+  - min: -0.49, -0.16, 2.55
+    max: 0.49, 0.16, 2.64
+    color: '#871B20'
+    label: header
+  - min: -0.49, -0.18, 0
+    max: 0.49, 0.18, 0.06
+    color: '#440B0C'
+    label: threshold
+  doorState: Open
+  referencePrototype: CMAirlockSecurity
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/sec_door.rsi
+  referenceState: open
+  alternateDoorModel: CMU3DSecurityAirlock
+- type: cmu3DModel
+  id: CMU3DMedicalDoubleGlassDoorOpen
+  label: Medical paired glass door open
+  sourcePrototypes: []
+  status: draft
+  description: Fully open pose retaining the authored frame and threshold, with sliding leaves retracted. Explicit
+    open source state inspected. No intermediate animation or dynamic lighting; hidden mechanism remains inferred.
+  sourceDirections: 4
+  yawOffset: 90
+  parts:
+  - min: 0.405, -0.16, 0
+    max: 0.5, 0.16, 2.73
+    color: '#A9A18D'
+    label: outer door jamb
+  - min: 0.43, -0.179, 0.035
+    max: 0.46, -0.16, 2.7
+    color: '#D0CBB9'
+    label: outer jamb highlight
+  - min: 0.43, 0.16, 0.035
+    max: 0.46, 0.179, 2.7
+    color: '#D0CBB9'
+    label: outer jamb highlight
+  - min: -0.5, -0.13, 2.51
+    max: 0.405, 0.13, 2.66
+    color: '#6B6455'
+    label: continuous top track
+  - min: -0.5, -0.145, 2.6
+    max: 0.405, 0.145, 2.64
+    color: '#D0CBB9'
+    label: top track lip
+  - min: -0.5, -0.17, 0
+    max: 0.5, 0.17, 0.06
+    color: '#6B6455'
+    label: threshold
+  - min: 0.431, -0.194, 0.91
+    max: 0.473, -0.18, 1.055
+    color: '#CED1C8'
+    label: outer access reader
+  - min: 0.431, 0.18, 0.91
+    max: 0.473, 0.194, 1.055
+    color: '#CED1C8'
+    label: outer access reader back
+  doorState: Open
+  referencePrototype: CMDoubleDoorMedicalGlass
+  referenceRsi: /Textures/_RMC14/Structures/Doors/Airlocks/Double/medical_glass.rsi
+  referenceState: door_open
+  alternateDoorModel: CMU3DMedicalDoubleGlassDoor

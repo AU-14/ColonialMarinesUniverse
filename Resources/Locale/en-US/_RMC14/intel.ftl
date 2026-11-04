@@ -51,8 +51,10 @@ rmc-ui-intel-colony-status =
 
 ## Tech Control Console
 rmc-ui-tech-tier-header = [font size=14][bold]Tier: { $tier }[/bold][/font]
-rmc-ui-tech-points = [font size=14][bold]Points: { $points }[/bold][/font]
-rmc-ui-tech-points-value = Tech points: { $value }
+# cmu edit start: the tech console shows the combined objective + intel pool
+rmc-ui-tech-points = [font size=14][bold]Points (objective + intel): { $points }[/bold][/font]
+rmc-ui-tech-points-value = Points (objective + intel): { $value }
+# cmu edit end
 rmc-ui-tech-repurchasable = Repurchasable
 rmc-ui-tech-incremental-price = Incremental price: +{ $increase } per purchase
 rmc-ui-tech-purchase-button = Purchase

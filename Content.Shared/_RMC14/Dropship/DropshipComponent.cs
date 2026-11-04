@@ -90,6 +90,18 @@ public sealed partial class DropshipComponent : Component
     [DataField]
     public EntityUid? LaunchAlarmEntity;
 
+    // CMU14: set while a ship fire alarm is active; life support vents hold their gas mix.
+    [DataField, Access(typeof(SharedDropshipSystem), Other = AccessPermissions.ReadWrite)] // CMU14
+    public bool FireAlarmActive;
+
+    /// <summary>Optional takeoff cue; null preserves the standard shuttle startup sound.</summary>
+    [DataField]
+    public SoundSpecifier? StartupSound;
+
+    /// <summary>Optional flight ambience; null preserves the standard FTL travel sound.</summary>
+    [DataField]
+    public SoundSpecifier? TravelSound;
+
     [DataField]
     public SoundSpecifier ArrivalSound = new SoundPathSpecifier("/Audio/_RMC14/Machines/Shuttle/engine_landing.ogg");
 

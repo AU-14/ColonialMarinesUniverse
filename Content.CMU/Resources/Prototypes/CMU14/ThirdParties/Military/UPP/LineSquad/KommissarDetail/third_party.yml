@@ -1,0 +1,112 @@
+# UPP Kommissar detail, called in through the UPP intel list: a kommissar and two line infantry guards.
+
+- type: job
+  parent: CMUJobUPPKommissar
+  id: CMUJobUPPKommissarDetail
+  startingGear: CMUGearUPPKommissarDetail
+  spawnMenuRoleName: UPP Kommissar (Kommissar Detail)
+  chevrons:
+    UPP_Commissar:
+      entity: AU14ChevronUPPNICommisar
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPKommissarDetail
+  name: UPP Kommissar (Kommissar Detail)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-kommissar-name
+    description: cmu-upp-kommissar-description
+    reregister: false
+    job: CMUJobUPPKommissarDetail
+    raffle:
+      settings: short
+    rules: cmu-upp-kommissar-rules
+
+- type: job
+  parent: CMUJobUPPLineRifleman
+  id: CMUJobUPPKommissarGuard
+  name: cmu-job-title-upp-kommissar-guard
+  description: cmu-upp-kommissar-guard-description
+  startingGear: CMUGearUPPKommissarGuard
+  spawnMenuRoleName: UPP Kommissar Guard (Kommissar Detail)
+  supervisors: cmu-upp-kommissar-guard-supervisors
+  chevrons:
+    UPP_Gefreiter:
+      entity: AU14ChevronUPPNIGefreiter
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPKommissarGuard
+  name: UPP Kommissar Guard (Kommissar Detail)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-kommissar-guard-name
+    description: cmu-upp-kommissar-guard-description
+    reregister: false
+    job: CMUJobUPPKommissarGuard
+    raffle:
+      settings: short
+    rules: cmu-upp-kommissar-guard-rules
+
+# The kommissar's own loadout has no uniform, so nothing to pin a chevron to; this one adds it.
+- type: startingGear
+  parent: CMUGearUPPKommissar
+  id: CMUGearUPPKommissarDetail
+  equipment:
+    jumpsuit: CMJumpsuitSPP
+
+- type: startingGear
+  parent: CMUGearUPPLineRifleman
+  id: CMUGearUPPKommissarGuard
+  equipment:
+    id: CMUIDCardUPPKommissarGuard
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPKommissarGuard
+  name: UPP kommissar guard ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPKommissarGuard
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: partySpawn
+  id: CMUUPPKommissarDetailSpawn
+  leadersToSpawn:
+    CMUJobUPPKommissarDetail: 1
+  gruntsToSpawn:
+    CMUJobUPPKommissarGuard: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUPPKommissarDetail
+  displayName: UPP Kommissar Detail
+  partyspawn: CMUUPPKommissarDetailSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

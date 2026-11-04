@@ -69,6 +69,10 @@ public sealed partial class VehicleSupplyConsoleComponent : Component
     [DataField(required: true)]
     public List<VehicleSupplyEntry> Vehicles = new();
 
+    // CMU14: optional groundside mapping override; ships inherit their side.
+    [DataField]
+    public string? Faction;
+
     [DataField]
     public float LiftSearchRange = 20f;
 

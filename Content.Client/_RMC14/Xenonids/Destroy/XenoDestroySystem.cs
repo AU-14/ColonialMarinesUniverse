@@ -20,18 +20,11 @@ public sealed partial class XenoDestroySystem : SharedXenoDestroySystem
 
         SubscribeAllEvent<XenoDestroyLeapStartEvent>(OnXenoLeapStart);
     }
-    public Animation LeapAnimation(XenoDestroyComponent destroy, Vector2 leapOffset)
+
+    public Animation LeapAnimation(XenoDestroyComponent destroy, Vector2 leapOffset) // CMU14 Method
     {
         var midpoint = (leapOffset / 2);
-        var opposite = -midpoint;
-
         midpoint += new Vector2(0, JumpHeight);
-        opposite += new Vector2(0, JumpHeight);
-
-        //How it works is simple
-        //xeno goes from midpoint to midpoint, where midpoint is half the distance to the desired location
-        //with extra y added so it feels like it's in the air
-        //since the xeno gets moved halfway through theres an opposite midpoint so their general location is preserved
 
         var midtime = (float)(destroy.CrashTime.TotalSeconds / 2f);
 
@@ -49,8 +42,7 @@ public sealed partial class XenoDestroySystem : SharedXenoDestroySystem
                     {
                         new AnimationTrackProperty.KeyFrame(Vector2.Zero, 0f),
                         new AnimationTrackProperty.KeyFrame(midpoint, midtime),
-                        new AnimationTrackProperty.KeyFrame(opposite, 0f),
-                        new AnimationTrackProperty.KeyFrame(Vector2.Zero, midtime),
+                        new AnimationTrackProperty.KeyFrame(leapOffset, midtime),
                     }
                 }
             }

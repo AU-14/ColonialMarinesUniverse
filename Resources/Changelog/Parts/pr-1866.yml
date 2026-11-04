@@ -1,0 +1,25 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Fixed larva and facehuggers being unable to fit under single-entity double
+    doors.
+  type: Fix
+- message: Laser designator lasers are visible through walls with nightvision.
+  type: Tweak
+- message: Xenos that try to move while resting will now wake up. No more fat-fingering
+    the rest key during combat and paying the price.
+  type: Tweak
+- message: Fixed Major Evolution boon not working when queen was out of ovi.
+  type: Fix
+- message: Made some boons check for hive, to avoid issues when two or more hives
+    exist at the same time.
+  type: Fix
+- message: Fixed being unable to weed on tiles with ledges or platforms.
+  type: Fix
+- message: Fixed ghosts not following xenos after they evolve.
+  type: Fix
+- message: Xenos can now release nested hosts with right click verb. You must target
+    the nest sprite to do this.
+  type: Add
+time: '2026-08-25T22:57:01.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1866

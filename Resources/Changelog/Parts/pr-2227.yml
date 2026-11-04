@@ -1,0 +1,11 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The client stutters less around Z-level openings
+  type: Fix
+- message: Expedition NPC squads cost far less server time in firefights
+  type: Fix
+- message: The game uses less memory at the main menu
+  type: Fix
+time: '2026-10-19T14:43:53.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2227

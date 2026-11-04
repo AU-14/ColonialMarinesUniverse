@@ -60,7 +60,7 @@
     contents:
     - id: RMCRadioHandheldColony
     - id: CMFireExtinguisherPortable
-    - id: CMDefibrillator
+    - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator
     - id: CMHealthAnalyzer
 
 - type: entity

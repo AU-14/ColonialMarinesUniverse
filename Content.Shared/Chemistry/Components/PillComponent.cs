@@ -12,4 +12,11 @@ public sealed partial class PillComponent : Component
     [DataField("pillType")]
     [ViewVariables(VVAccess.ReadWrite)]
     public uint PillType;
+
+    /// <summary>
+    /// Whether swallowing this pill transfers its complete solution directly into the bloodstream.
+    /// Pills using the upstream digestion model leave this disabled.
+    /// </summary>
+    [DataField]
+    public bool DirectBloodstream;
 }

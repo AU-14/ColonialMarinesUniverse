@@ -1,9 +1,10 @@
-﻿using Content.Shared._RMC14.CCVar;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.CCVar;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
+using Content.Shared.Popups; // CMU14
 using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Network;

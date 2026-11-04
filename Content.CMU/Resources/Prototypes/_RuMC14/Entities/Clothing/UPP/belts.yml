@@ -1,0 +1,353 @@
+- type: entity
+  parent: RMCBeltBaseStorageNoVisuals
+  id: RuMCUPPNavalInfantryBeltGrenade
+  name: PD-54-Grenade
+  description: A vest designed for 12 grenades, equipped with special fasteners for securely holding grenades from the socialist bloc. It also accommodates flyers.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/grenade.rsi
+    layers:
+    - state: icon
+    - state: one
+      visible: false
+    - state: two
+      visible: false
+    - state: three
+      visible: false
+    - state: four
+      visible: false
+    - state: five
+      visible: false
+    - state: six
+      visible: false
+    - state: seven
+      visible: false
+    - state: eight
+      visible: false
+    - state: nine
+      visible: false
+    - state: ten
+      visible: false
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/belt/grenade.rsi
+  - type: Item
+    size: Large
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,11,3 # 12 slots
+    whitelist:
+      tags:
+      - Grenade
+      - Flare
+  - type: FixedItemSizeStorage
+  - type: ItemMapper
+    mapLayers:
+      one:
+        minCount: 1
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      two:
+        minCount: 2
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      three:
+        minCount: 3
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      four:
+        minCount: 4
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      five:
+        minCount: 5
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      six:
+        minCount: 6
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      seven:
+        minCount: 7
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      eight:
+        minCount: 8
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      nine:
+        minCount: 9
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+      ten:
+        minCount: 10
+        whitelist:
+          tags:
+          - Grenade
+          - Flare
+
+- type: entity
+  parent: RMCBeltMachineGunner
+  id: RuMCUPPNavalInfantryBeltMachinegunner
+  name: RD-154-Machinegunner
+  description: Recently adopted by UPP military, this belt allows machinegunners to carry more ammo boxes into battle. It also found use with SOF breachers using Type 23 shotguns.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/machinegunner.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/belt/machinegunner.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,13,1 # 7 slots
+    whitelist:
+      tags:
+      - AU14MagazineSmartGunUPP
+      - CMMagazinePistol
+      - CMMagazineRifle
+      - RuMCMagazineAH12
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+      - CMMagazineSniper
+      - RMCMagazineLMGQYJ72
+      - RMCShellShotgun
+      - Flare
+      - RuMCMagazineTachanka
+      - RuMCMagazineUTES-C
+      - RuMCMagazineUTES-CTracter
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - RMCMagazineLMGQYJ72
+      - RuMCMagazineTachanka
+      - RuMCMagazineAH12
+      - RuMCMagazineUTES-C
+      - RuMCMagazineUTES-CTracter
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: Tag
+    tags:
+    - RuMCMachineGunnerRig
+
+- type: Tag
+  id: RuMCMachineGunnerRig
+
+- type: entity
+  parent: RMCBeltBaseStorageNoVisuals
+  id: RuMCUPPNavalInfantryBeltShotgun
+  name: RD-23-Shotgun
+  description: This belt, designed for UPP assault teams, holds 23mm and 12 gauge rounds. The hard-shell loops ensure that the rounds are ready for quick reloading during close combat.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/shotgun.rsi
+    layers:
+    - state: icon
+    - state: sixth
+      visible: false
+    - state: third
+      visible: false
+    - state: half
+      visible: false
+    - state: twothirds
+      visible: false
+    - state: fivesixths
+      visible: false
+    - state: full
+      visible: false
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/belt/shotgun.rsi
+  - type: Item
+    size: Large
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,13,3 # 14 slots
+    whitelist:
+      tags:
+      - RMCShellShotgun
+      - RMCCartridge458SOCOM
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+  - type: FixedItemSizeStorage
+  - type: ItemMapper
+    mapLayers:
+      sixth:
+        minCount: 1
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      third:
+        minCount: 3
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      half:
+        minCount: 6
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      twothirds:
+        minCount: 9
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      fivesixths:
+        minCount: 12
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+      full:
+        minCount: 14
+        whitelist:
+          tags:
+          - RMCShellShotgun
+          - RMCCartridge458SOCOM
+
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: RuMCUPPNavalInfantryBeltPistol
+  name: RD-18-Pistol
+  description: A lightweight waist-mounted pouch designed for carrying weapons. Used by officers, vehicle crews, and support personnel.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/pistol.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/belt/pistol.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: CMBeltBase
+  id: RuMCUPPNavalInfantryBeltKnife
+  name: RD-6-Bayonet
+  description: A rare belt set for experienced operatives. With it, you're either a professional or an amateur.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/knife.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/belt/knife.rsi
+  - type: ItemSlots
+  - type: CMHolster
+  - type: UsableWhileDevoured
+  - type: CMItemSlots
+    cooldown: 1
+    cooldownPopup: You need to wait before drawing another knife!
+    count: 12
+    slot:
+      name: Knife
+      whitelist:
+        tags:
+        - ThrowingKnife
+
+- type: entity
+  parent: CMBeltMarine
+  id: RuMCUPPNavalInfantryBeltAmmo
+  name: RD-74-Magazine
+  description: The standard belt for riflemen, adopted along with the AG80. It holds five rifle magazines, making it the primary equipment for UPP infantry.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/ammo.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/belt/ammo.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+
+- type: entity
+  parent: RMCBeltUtilityGeneral
+  id: RuMCUPPNavalInfantryBeltGeneral
+  name: RD-47-General
+  description: The classic Soviet-era load-bearing system, updated for modern use. Its modular pouches can carry rifle magazines, grenades, or tools, making it a favorite among experienced soldiers.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/general.rsi
+  - type: Clothing
+    slots:
+    - suitStorage
+    - belt
+    sprite: _RuMC14/Clothing/UPP/belt/general.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: CMBeltMarine
+  id: RuMCUPPNavalInfantryBeltRevolver
+  name: RD-44-Revolver
+  description: This bag, designed for military police and UPP officers, contains quick-loading devices and a revolver. It allows for quick reloading of weapons in stressful situations where every second counts.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/belt/revolver.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: webley # TODO RMC14 per-gun underlay
+      map: [ "enum.CMHolsterLayers.Fill" ]
+      visible: false
+    - sprite: _RuMC14/Clothing/UPP/belt/revolver.rsi
+      state: icon-front
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/belt/revolver.rsi
+    slots:
+    - suitStorage
+    - belt
+  - type: Storage # holds up to 6 mags plus gun
+    maxItemSize: Normal
+    grid:
+    - 0,0,13,1 # 7 slots
+    whitelist:
+      tags:
+      - RMCRevolver
+      - RMCMagazineRevolver
+  - type: FixedItemSizeStorage
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-one-gun
+      whitelist:
+        tags:
+        - RMCRevolver
+    - popup: rmc-storage-limit-max-loaders
+      count: 6
+      whitelist:
+        tags:
+        - RMCMagazineRevolver
+  - type: CMHolster
+    whitelist:
+      tags:
+      - RMCRevolver
+  - type: Tag
+    tags:
+    - RMCGeneralRevolverHolster
+  - type: ItemCamouflage
+    camouflageVariations: { }

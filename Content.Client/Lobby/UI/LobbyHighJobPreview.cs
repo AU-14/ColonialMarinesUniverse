@@ -45,9 +45,13 @@ internal static class LobbyHighJobPreview
 
     private static readonly (string Key, string Label)[] Gamemodes =
     {
+        ("ForceOnForce", "FOF"), // CMU14: FoF joins the preview; its rows read the dealing priority below.
         ("Insurgency", "INS"),
+        ("DistressSignal", "DS"),
         ("ColonyFall", "CF"),
-        ("DistressSignal", "DS")
+        // ("Jailbreak", "JB"),
+        // ("Prometheus", "PRO"),
+        // ("Criminal", "CRI")
     };
 
     public static string GetDisplayJobName(JobPrototype job)
@@ -66,36 +70,89 @@ internal static class LobbyHighJobPreview
         var jobs = new Dictionary<string, JobPrototype>();
         var gamemodeLabels = new Dictionary<string, List<string>>();
 
+        void AddHigh(JobPrototype job, string gamemodeLabel)
+        {
+            if (!jobs.ContainsKey(job.ID))
+            {
+                jobOrder.Add(job.ID);
+                jobs[job.ID] = job;
+                gamemodeLabels[job.ID] = new List<string>();
+            }
+
+            var labels = gamemodeLabels[job.ID];
+            if (!labels.Contains(gamemodeLabel))
+                labels.Add(gamemodeLabel);
+        }
+
         foreach (var (gamemode, label) in Gamemodes)
         {
+            // CMU14: FoF dealing elevates equivalent roles across sides, so its rows scan every
+            // job through the dealing getter; the stored dict alone misses the elevated twins.
+            if (gamemode == "ForceOnForce")
+            {
+                foreach (var job in prototypeManager.EnumeratePrototypes<JobPrototype>())
+                {
+                    if (!profile.IsForceOnForceJobReachable(job))
+                        continue;
+
+                    if (profile.GetForceOnForceJobPriority(job, prototypeManager) == JobPriority.High)
+                        AddHigh(job, label);
+                }
+
+                continue;
+            }
+
             foreach (var (jobId, priority) in profile.GetJobPrioritiesForGamemode(gamemode))
             {
-                if (priority != JobPriority.High ||
-                    !prototypeManager.TryIndex(jobId, out JobPrototype? job))
-                {
+                if (!prototypeManager.TryIndex(jobId, out JobPrototype? job))
                     continue;
-                }
 
-                if (!jobs.ContainsKey(job.ID))
-                {
-                    jobOrder.Add(job.ID);
-                    jobs[job.ID] = job;
-                    gamemodeLabels[job.ID] = new List<string>();
-                }
+                if (priority != JobPriority.High)
+                    continue;
 
-                var labels = gamemodeLabels[job.ID];
-                if (!labels.Contains(label))
-                    labels.Add(label);
+                AddHigh(job, label);
             }
         }
 
         var entries = new List<LobbyHighJobPreviewEntry>();
         foreach (var jobId in jobOrder)
         {
-            entries.Add(new LobbyHighJobPreviewEntry(jobs[jobId], gamemodeLabels[jobId]));
+            var labels = gamemodeLabels[jobId];
+
+            // A job high-priority in every mode needs no labels - that is the common case, since
+            // GetJobPrioritiesForGamemode falls back to the character's general priorities for any
+            // mode they haven't customised. Listing all of them would just be noise.
+            if (labels.Count == Gamemodes.Length)
+                labels = new List<string>();
+
+            entries.Add(new LobbyHighJobPreviewEntry(jobs[jobId], labels));
         }
 
+        // Nothing marked High anywhere still leaves a sprite on screen, so name whatever job the
+        // character actually has rather than showing an unexplained figure.
+        if (entries.Count == 0 && TryGetFallbackJob(profile, prototypeManager) is { } fallback)
+            entries.Add(fallback);
+
         return entries;
+    }
+
+    private static LobbyHighJobPreviewEntry? TryGetFallbackJob(
+        HumanoidCharacterProfile profile,
+        IPrototypeManager prototypeManager)
+    {
+        // Passing null gets the character's general priorities rather than any per-mode overrides.
+        var priorities = profile.GetJobPrioritiesForGamemode(null);
+
+        foreach (var wanted in new[] { JobPriority.High, JobPriority.Medium, JobPriority.Low })
+        {
+            foreach (var (jobId, priority) in priorities)
+            {
+                if (priority == wanted && prototypeManager.TryIndex(jobId, out JobPrototype? job))
+                    return new LobbyHighJobPreviewEntry(job, Array.Empty<string>());
+            }
+        }
+
+        return null;
     }
 
     public static string GetSignature(IReadOnlyList<LobbyHighJobPreviewEntry> entries)

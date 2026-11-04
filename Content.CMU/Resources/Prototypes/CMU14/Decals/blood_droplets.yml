@@ -1,0 +1,80 @@
+- type: decal
+  parent: RMCDecalBloodBase
+  id: CMUBloodDroplet1
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "1"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet2
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "2"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet3
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "3"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet4
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "4"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet5
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "5"
+
+# White copies of the RMC blood splatters, tinted by the bleeder's blood colour like the droplets above.
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodSplatter1
+  sprite:
+    sprite: CMU14/Decals/blood_splatter.rsi
+    state: splatter1
+
+- type: decal
+  parent: CMUBloodSplatter1
+  id: CMUBloodSplatter2
+  sprite:
+    sprite: CMU14/Decals/blood_splatter.rsi
+    state: splatter2
+
+- type: decal
+  parent: CMUBloodSplatter1
+  id: CMUBloodSplatter3
+  sprite:
+    sprite: CMU14/Decals/blood_splatter.rsi
+    state: splatter3
+
+- type: decal
+  parent: CMUBloodSplatter1
+  id: CMUBloodSplatter4
+  sprite:
+    sprite: CMU14/Decals/blood_splatter.rsi
+    state: splatter4
+
+- type: decal
+  parent: CMUBloodSplatter1
+  id: CMUBloodSplatter5
+  sprite:
+    sprite: CMU14/Decals/blood_splatter.rsi
+    state: splatter5
+
+- type: decal
+  parent: CMUBloodSplatter1
+  id: CMUBloodSplatter6
+  sprite:
+    sprite: CMU14/Decals/blood_splatter.rsi
+    state: splatter6

@@ -1,9 +1,11 @@
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Systems;
+using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Projectiles.Penetration;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Ranged.Vulture;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -20,6 +22,7 @@ public sealed partial class VultureRifleSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private TemporarySpeedModifiersSystem _temporarySpeed = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
@@ -48,7 +51,10 @@ public sealed partial class VultureRifleSystem : EntitySystem
 
         _damageable.TryChangeDamage(args.User, ent.Comp.UnbracedDamage, origin: ent.Owner, tool: ent.Owner);
         _stun.TryKnockdown(args.User, ent.Comp.UnbracedKnockdown, true);
-        _stun.TrySlowdown(args.User, ent.Comp.UnbracedSlowdown, true, ent.Comp.UnbracedWalkModifier, ent.Comp.UnbracedSprintModifier);
+        _temporarySpeed.ModifySpeed(args.User,
+        [
+            new(ent.Comp.UnbracedSlowdown, ent.Comp.UnbracedWalkModifier, ent.Comp.UnbracedSprintModifier),
+        ]);
 
         var fromMap = _transform.GetMapCoordinates(args.User);
         var toMap = _transform.ToMapCoordinates(args.ToCoordinates);

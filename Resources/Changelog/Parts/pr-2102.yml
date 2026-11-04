@@ -1,0 +1,37 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Every platoon can get COMSEC fill cards and radios from ASRS and their
+    command vendor, and OPFOR no longer gets GOVFOR keys
+  type: Fix
+- message: Synths bleed white again, and their limbs can't be eaten
+  type: Fix
+- message: Borrowing visor NVGs no longer leaves a green overlay stuck on a synth's
+    built-in night vision
+  type: Fix
+- message: Riders can't use buttons from Mind's Eye, can end Silence Host early, and
+    Psychic Whisper works again
+  type: Fix
+- message: Rider abilities now actually go on cooldown
+  type: Tweak
+- message: The host shows a typing indicator when the Rider speaks through them, and
+    Riders get night vision in Mind's Eye
+  type: Add
+- message: Orbital strikes destroy vehicles for good instead of leaving them repairable
+  type: Fix
+- message: The CLF tech tree and objectives consoles can't be blown out of the camp
+  type: Fix
+- message: GOVFOR and OPFOR each get their own specialist kits
+  type: Fix
+- message: Colony Fall tribes always spawn with bowmen and a shaman
+  type: Fix
+- message: Yautja limb trophies, kill counting and duel credit work properly, and
+    butchering no longer deletes the corpse's gear
+  type: Fix
+- message: Butchered xenos drop real trophies, and headless corpses can't be raised
+    as thralls
+  type: Fix
+- message: Yautja self-destruct has a hotkey
+  type: Add
+time: '2026-10-09T09:40:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2102

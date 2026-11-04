@@ -1,6 +1,8 @@
-using Content.Shared.Humanoid.Markings;
+using Content.Client.CMU14.MagicMirror; // cmu edit
+using Content.Client.Humanoid;
+using Content.Shared.Humanoid; // cmu edit
+using Content.Shared.Preferences; // cmu edit
 using Content.Shared.MagicMirror;
-using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 
 namespace Content.Client.MagicMirror;
@@ -10,6 +12,12 @@ public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
     [ViewVariables]
     private MagicMirrorWindow? _window;
 
+    private readonly MarkingsViewModel _markingsModel = new();
+
+    // cmu edit start: regulation scissors get the regulation haircut menu
+    private CMURegulationMirrorWindow? _cmuRegulationWindow;
+    // cmu edit end
+
     public MagicMirrorBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
     }
@@ -18,50 +26,55 @@ public sealed class MagicMirrorBoundUserInterface : BoundUserInterface
     {
         base.Open();
 
+        // cmu edit start: regulation scissors get the regulation haircut menu
+        if (EntMan.HasComponent<CMURegulationMirrorComponent>(Owner))
+        {
+            _cmuRegulationWindow = this.CreateWindow<CMURegulationMirrorWindow>();
+            _cmuRegulationWindow.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
+            _cmuRegulationWindow.OnCut += markings => SendPredictedMessage(new MagicMirrorSelectMessage(markings));
+            return;
+        }
+        // cmu edit end
+
         _window = this.CreateWindow<MagicMirrorWindow>();
 
-        _window.OnHairSelected += tuple => SelectHair(MagicMirrorCategory.Hair, tuple.id, tuple.slot);
-        _window.OnHairColorChanged += args => ChangeColor(MagicMirrorCategory.Hair, args.marking, args.slot);
-        _window.OnHairSlotAdded += delegate () { AddSlot(MagicMirrorCategory.Hair); };
-        _window.OnHairSlotRemoved += args => RemoveSlot(MagicMirrorCategory.Hair, args);
+        _window.Title = EntMan.GetComponent<MetaDataComponent>(Owner).EntityName;
 
-        _window.OnFacialHairSelected += tuple => SelectHair(MagicMirrorCategory.FacialHair, tuple.id, tuple.slot);
-        _window.OnFacialHairColorChanged +=
-            args => ChangeColor(MagicMirrorCategory.FacialHair, args.marking, args.slot);
-        _window.OnFacialHairSlotAdded += delegate () { AddSlot(MagicMirrorCategory.FacialHair); };
-        _window.OnFacialHairSlotRemoved += args => RemoveSlot(MagicMirrorCategory.FacialHair, args);
-    }
+        _window.MarkingsPicker.SetModel(_markingsModel);
 
-    private void SelectHair(MagicMirrorCategory category, string marking, int slot)
-    {
-        SendMessage(new MagicMirrorSelectMessage(category, marking, slot));
-    }
-
-    private void ChangeColor(MagicMirrorCategory category, Marking marking, int slot)
-    {
-        SendMessage(new MagicMirrorChangeColorMessage(category, new(marking.MarkingColors), slot));
-    }
-
-    private void RemoveSlot(MagicMirrorCategory category, int slot)
-    {
-        SendMessage(new MagicMirrorRemoveSlotMessage(category, slot));
-    }
-
-    private void AddSlot(MagicMirrorCategory category)
-    {
-        SendMessage(new MagicMirrorAddSlotMessage(category));
+        _markingsModel.MarkingsChanged += (_, _) =>
+        {
+            SendPredictedMessage(new MagicMirrorSelectMessage(_markingsModel.Markings));
+        };
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
 
-        if (state is not MagicMirrorUiState data || _window == null)
+        if (state is not MagicMirrorUiState data)
+            return;
+
+        // cmu edit start: regulation scissors get the regulation haircut menu
+        if (_cmuRegulationWindow != null)
         {
+            var species = HumanoidCharacterProfile.DefaultSpecies;
+            var sex = Sex.Male;
+            if (EntMan.TryGetComponent(Owner, out MagicMirrorComponent? mirror) &&
+                EntMan.TryGetComponent(mirror.Target, out HumanoidProfileComponent? humanoid))
+            {
+                species = humanoid.Species;
+                sex = humanoid.Sex;
+            }
+
+            _cmuRegulationWindow.Update(data.OrganMarkingData, data.AppliedMarkings, species, sex);
             return;
         }
+        // cmu edit end
 
-        _window.UpdateState(data);
+        _markingsModel.OrganData = data.OrganMarkingData;
+        _markingsModel.OrganProfileData = data.OrganProfileData;
+        _markingsModel.Markings = data.AppliedMarkings;
     }
 }
 

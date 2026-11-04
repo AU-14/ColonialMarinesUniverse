@@ -1,0 +1,10 @@
+# Satchel of holding for admin ghosts. Same storage, but nothing drawn on the wearer's back, so an aghost doesn't
+# show a glowing satchel when visible.
+- type: entity
+  parent: ClothingBackpackSatchelHolding
+  id: CMUClothingBackpackSatchelHoldingAdminGhost
+  suffix: Admin Ghost, No Worn Sprite
+  components:
+  - type: Clothing
+    clothingVisuals:
+      back: []

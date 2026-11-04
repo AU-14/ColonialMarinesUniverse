@@ -49,6 +49,7 @@
   - type: Item
     size: Large
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
@@ -65,6 +66,9 @@
       behaviors:
       - !type:BurnBodyBehavior { }
   - type: XenoFriendly
+  - type: NpcFactionMember # CMU14: hostile structure, valid sentry/turret target
+    factions:
+    - RMCXeno
   - type: RMCNightVisionVisible
     priority: -1
   - type: Corrodible

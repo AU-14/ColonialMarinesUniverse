@@ -6,6 +6,8 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Ranged.AimedShot.FocusedShooting;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
 using Content.Shared.StatusEffect;
@@ -137,7 +139,8 @@ public sealed partial class AimedProjectileSystem : EntitySystem
 
                 // Calculate the current health damage
                 var damage = new DamageSpecifier();
-                damage.DamageDict.Add("Piercing", (threshold.Value - damageable.TotalDamage) * currentHealthDamage);
+                damage.DamageDict.Add("Piercing",
+                    (threshold.Value - _damageable.GetTotalDamage((target, damageable))) * currentHealthDamage);
 
                 // Apply a multiplier to the bonus damage based on the amount of focus stacks.
                 if (focusedFire)

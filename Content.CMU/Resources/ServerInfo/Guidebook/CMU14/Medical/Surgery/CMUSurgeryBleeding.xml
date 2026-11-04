@@ -1,0 +1,33 @@
+<Document>
+  # Bleeding, Burns and Complications
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUFixOVein" Caption="Fix-O-Vein"/>
+    <GuideEntityEmbed Entity="CMBurnKit10" Caption="Burn kit"/>
+    <GuideEntityEmbed Entity="CMUOrganClampItem" Caption="Organ clamp"/>
+  </Box>
+
+  ## Stop Internal Bleeding
+  Works on any body part. Can be done on your own limbs.
+  1. [italic]Open the incision.[/italic]
+
+  2. Mend the bleed with a [bold]Fix-O-Vein[/bold].
+
+  3. Cauterize the incision shut with a [bold]cautery[/bold].
+
+  ## Debride Eschar
+  Cuts away a full-thickness burn (eschar). Works on any body part, and doesn't need an incision.
+  1. Debride the eschar with a [bold]burn kit[/bold] or [bold]ointment[/bold].
+
+  See [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"] for how eschar forms.
+
+  ## Complications
+  Once a body part is open, you may find complications that have to be dealt with. The surgery window lists any the part has. Each one is a single step:
+  - [bold]Torn vessel[/bold]: Tie Off Torn Vessel, with a [bold]hemostat[/bold].
+  - [bold]Foreign body[/bold]: Extract Foreign Body, with a [bold]hemostat[/bold].
+  - [bold]Bone splinters[/bold]: Remove Bone Fragments, with a [bold]hemostat[/bold].
+  - [bold]Compartment pressure[/bold]: Relieve Compartment Pressure, with a [bold]scalpel[/bold].
+  - [bold]Contaminated wound[/bold]: Debride Contaminated Tissue, with a [bold]scalpel[/bold].
+  - [bold]Organ adhesions[/bold]: Free Organ Adhesions, with a [bold]scalpel[/bold].
+  - [bold]Organ hemorrhage[/bold]: Pack Organ Bleed, with an [bold]organ clamp[/bold].
+</Document>

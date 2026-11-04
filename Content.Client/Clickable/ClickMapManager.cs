@@ -67,7 +67,7 @@ namespace Content.Client.Clickable
         {
             if (!_textureMaps.TryGetValue(texture, out var clickMap))
             {
-                return false;
+                return IsCMURsiRegionOccluding(texture, pos); // CMU14: articulated RSI texture regions.
             }
 
             return SampleClickMap(clickMap, pos, clickMap.Size, Vector2i.Zero);
@@ -211,6 +211,10 @@ namespace Content.Client.Clickable
     public interface IClickMapManager
     {
         public bool IsOccluding(Texture texture, Vector2i pos);
+
+        // CMU14: retain pixel hit-testing for independently animated crops of RSI frame zero.
+        public void RegisterRsiRegion(Texture texture, RSI rsi, RSI.StateId state, RsiDirection direction, UIBox2i region);
+        public Texture CMUSolidTexture { get; }
 
         public bool IsOccluding(RSI rsi, RSI.StateId state, RsiDirection dir, int frame, Vector2i pos);
     }

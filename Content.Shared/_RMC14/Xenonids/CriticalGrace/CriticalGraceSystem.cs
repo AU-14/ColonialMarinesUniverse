@@ -45,6 +45,10 @@ public sealed partial class CriticalGraceSystem : EntitySystem
 
     private void OnInCriticalGraceRemove(Entity<InCriticalGraceComponent> ent, ref ComponentShutdown args)
     {
+        // The component is still resolvable during shutdown. Mark the grace period as over before
+        // threshold verification so this stopping component cannot force the mob back to Alive.
+        ent.Comp.Over = true;
+
         if (!TerminatingOrDeleted(ent) && TryComp<MobThresholdsComponent>(ent, out var thresholds))
         {
             _mobThresholds.VerifyThresholds(ent, thresholds);

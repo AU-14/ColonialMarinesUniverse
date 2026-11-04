@@ -1,0 +1,13 @@
+- type: entity
+  parent: RMCHEFAArmband
+  id: RuMCArmbandWhite
+  name: white armband
+  description: white armband
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/Universal/Armband/white_armband.rsi
+    state: icon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _RuMC14/Clothing/Universal/Armband/white_armband.rsi
+      state: armband

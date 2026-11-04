@@ -1,0 +1,65 @@
+- type: job
+  parent: RMCJobRibbonBase
+  id: AU14JobMobBoss
+  displayWeight: 10
+  roundSide: ThirdParty
+  roundForce: MOB
+  roundRole: MobBoss
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-mobboss
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: FactionLanguageLeader
+    factionTag: Mob
+
+  name: au14-job-name-mobboss
+  description: au14-job-description-mobboss
+  setPreference: true
+  playTimeTracker: AU14JobMobBoss
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCriminal
+    time: 7200 # 2 hours
+  startingGear: AU14GearMobBoss
+  icon: "AU14JobIconColonyMobBoss"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-mobboss
+  accessGroups:
+  - aumob
+  roleWeight: 0.25
+  ranks:
+    RMCRankCivilian: []
+
+- type: startingGear
+  id: AU14GearMobBoss
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonCharcoal
+    shoes: RMCShoesLaceup
+    id: AU14IDCardMobBoss
+    back: CMSatchel
+    pocket1: CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointMobBoss
+  name: Spawn Point Mob Boss
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobMobBoss
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobMobBoss
+  isHumanoid: true

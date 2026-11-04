@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared.Drowsiness;
 using Content.Shared.StatusEffectNew;
 using Robust.Client.Graphics;
@@ -17,7 +18,7 @@ public sealed partial class DrowsinessOverlay : Overlay
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IEntitySystemManager _sysMan = default!;
     [Dependency] private IGameTiming _timing = default!;
-    private readonly SharedStatusEffectsSystem _statusEffects = default!;
+    private readonly StatusEffectsSystem _statusEffects = default!;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
     public override bool RequestScreenTexture => true;
@@ -33,7 +34,7 @@ public sealed partial class DrowsinessOverlay : Overlay
     {
         IoCManager.InjectDependencies(this);
 
-        _statusEffects = _sysMan.GetEntitySystem<SharedStatusEffectsSystem>();
+        _statusEffects = _sysMan.GetEntitySystem<StatusEffectsSystem>();
 
         _drowsinessShader = _prototypeManager.Index(Shader).InstanceUnique();
     }
@@ -58,7 +59,7 @@ public sealed partial class DrowsinessOverlay : Overlay
         if (!_entityManager.TryGetComponent(_playerManager.LocalEntity, out EyeComponent? eyeComp))
             return false;
 
-        if (args.Viewport.Eye != eyeComp.Eye)
+        if (!args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
             return false;
 
         _visualScale = Math.Clamp(CurrentPower / PowerDivisor, 0.0f, 1.0f);

@@ -1,0 +1,113 @@
+- type: entity
+  parent:
+  - AppearanceDroneAndroid
+  - AU14MobWorkingJoe
+  id: CMUDroneAndroid
+  name: drone android
+  description: A stripped-down synthetic drone frame with exposed servos and a sparse combat-rated control bus.
+  suffix: CMU14
+  components:
+  - type: CMUDroneAndroid
+    nameDataset: CMUNamesDroneAndroid
+    maxNameLength: 24
+    followCloseRange: 1
+  - type: RemoveComponents
+    components:
+    - type: WorkingJoeVoice
+    - type: IntrinsicRadioReceiver
+    - type: IntrinsicRadioTransmitter
+    - type: ActiveRadio
+  - type: Inventory
+    templateId: cmuDroneAndroid
+  # AU14MobWorkingJoe is the behavioral parent and also supplies an appearance;
+  # explicitly select the drone graph after prototype inheritance is merged.
+  - type: InitialBody
+    organs:
+      Torso: CMUPartDroneAndroidTorso
+      Head: CMUPartDroneAndroidHead
+      ArmLeft: CMUPartRoboticLeftArm
+      ArmRight: CMUPartRoboticRightArm
+      HandLeft: CMUPartRoboticLeftHand
+      HandRight: CMUPartRoboticRightHand
+      LegLeft: CMUPartRoboticLeftLeg
+      LegRight: CMUPartRoboticRightLeg
+      FootLeft: CMUPartRoboticLeftFoot
+      FootRight: CMUPartRoboticRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganHumanStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
+  - type: HumanoidProfile
+    species: DroneAndroid
+    voice: AU14WorkingJoeSounds
+  - type: Synth
+    canUseGuns: true
+    removeComponents: CMUDroneAndroidRemoveComponents
+    generation: cmu-species-drone-android-generation
+    critThreshold: 74
+    deadThreshold: 80
+    repairTime: 5
+    selfRepairTime: 9999
+    hideGeneration: true
+    useHumanHealthIcons: true
+    hideXenoSynthIcon: true
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+  - type: RMCInnateSlowdown
+    slowdown: 1.15
+  - type: NoClothingSlowdown
+    walkModifier: 1
+    sprintModifier: 1
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepBorg
+  - type: Skills
+    skills: {}
+  - type: HTN
+    rootTask:
+      task: CMUDroneFollowCompound
+    enabled: false
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
+      state: rifleman
+  - type: UserIFF
+    factions:
+    - GOVFOR
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: GrantMarineIcons
+    factions:
+    - UNMC
+
+- type: entity
+  parent: AppearanceDroneAndroid
+  id: CMUDroneAndroidDummy
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCSynthRemoveComponents
+  id: CMUDroneAndroidRemoveComponents
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MindContainer
+  - type: SSDIndicator
+
+- type: entity
+  parent: BaseItem
+  id: CMURuinedDroneCore
+  name: ruined drone core
+  description: The scorched control core from a destroyed drone android. It is only useful as evidence now.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/module.rsi
+    state: mainboard
+  - type: Item
+    size: Small
+  - type: CMURuinedDroneCore

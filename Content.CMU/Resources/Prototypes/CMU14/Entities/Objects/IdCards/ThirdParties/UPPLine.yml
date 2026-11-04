@@ -1,0 +1,131 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineRifleman
+  name: UPP line infantry rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineRifleman
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineMedic
+  name: UPP line infantry medic ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineMedic
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineSapper
+  name: UPP line infantry sapper ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineSapper
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineSpecialist
+  name: UPP line infantry specialist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineSpecialist
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineLeader
+  name: UPP line infantry squad leader ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineLeader
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineCommando
+  name: UPP naval infantry commando ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineCommando
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineCommandoMedic
+  name: UPP naval infantry commando medic ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineCommandoMedic
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineCommandoLeader
+  name: UPP naval infantry commando leader ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineCommandoLeader
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPLineSynthetic
+  name: UPP support synthetic ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPLineSynthetic
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPKommissar
+  name: UPP kommissar ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPKommissar
+  - type: ItemIFF
+    factions:
+    - AUUpp
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardUPPDivisionKommissar
+  name: UPP division kommissar ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPDivisionKommissar
+  - type: ItemIFF
+    factions:
+    - AUUpp

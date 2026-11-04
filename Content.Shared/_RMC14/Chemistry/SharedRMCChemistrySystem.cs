@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer; // CMU14
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -10,7 +11,6 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
-using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -24,7 +24,6 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private SharedSolutionContainerSystem _solution = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -33,9 +32,6 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<SolutionComponent, ComponentGetState>(OnSolutionGetState);
-        SubscribeLocalEvent<SolutionComponent, ComponentHandleState>(OnSolutionHandleState);
-
         SubscribeLocalEvent<DetailedExaminableSolutionComponent, ExaminedEvent>(OnDetailedSolutionExamined);
 
         SubscribeLocalEvent<RMCChemicalDispenserComponent, MapInitEvent>(OnDispenserMapInit);
@@ -58,20 +54,6 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                 subs.Event<RMCChemicalDispenserEjectBeakerBuiMsg>(OnChemicalDispenserEjectBeakerMsg);
                 subs.Event<RMCChemicalDispenserDispenseBuiMsg>(OnChemicalDispenserDispenseMsg);
             });
-    }
-
-    private void OnSolutionGetState(Entity<SolutionComponent> ent, ref ComponentGetState args)
-    {
-        var s = new Solution(ent.Comp.Solution, _prototypes);
-        args.State = new SolutionComponentState(s);
-    }
-
-    private void OnSolutionHandleState(Entity<SolutionComponent> ent, ref ComponentHandleState args)
-    {
-        if (args.Current is not SolutionComponentState s)
-            return;
-
-        ent.Comp.Solution = new Solution(s.Solution, _prototypes);
     }
 
     private void OnDetailedSolutionExamined(Entity<DetailedExaminableSolutionComponent> ent, ref ExaminedEvent args)
@@ -147,7 +129,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                     refillable.Solution = ent.Comp.Solution;
                     ent.Comp.Direction = SolutionTransferDirection.Input;
                     Dirty(ent, refillable);
-                    _popup.PopupClient("Now drawing", ent, user, PopupType.Medium);
+                    _popup.PopupEntity("Now drawing", ent, user, PopupType.Medium);
                 }
                 else
                 {
@@ -156,7 +138,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                     drainable.Solution = ent.Comp.Solution;
                     ent.Comp.Direction = SolutionTransferDirection.Output;
                     Dirty(ent, drainable);
-                    _popup.PopupClient("Now dispensing", ent, user, PopupType.Medium);
+                    _popup.PopupEntity("Now dispensing", ent, user, PopupType.Medium);
                 }
             },
         });
@@ -171,6 +153,18 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
         }
         else
         {
+            // CMU14 start - flamer tanks also accept lab glassware. Both pour directions raise this event, so the
+            // tank's reagent whitelist and the mixed fuel profile are enforced here for beaker pours.
+            if (TryComp<RMCFlamerTankComponent>(ent, out var flamerTank) && HasComp<FitsInDispenserComponent>(args.From))
+            {
+                if (!EntityManager.System<SharedRMCFlamerSystem>().CanAcceptPour(
+                        (ent.Owner, flamerTank), args.ToSolution.Comp.Solution, args.FromSolution.Comp.Solution, out var reason))
+                {
+                    args.Cancel(reason);
+                }
+                return;
+            }
+            // CMU14 end
             if (_entityWhitelist.IsWhitelistFail(ent.Comp.TargetWhitelist, args.From))
                 args.Cancel(Loc.GetString(ent.Comp.Popup));
         }
@@ -239,7 +233,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
 
     private void OnChemicalDispenserBeakerSettingMsg(Entity<RMCChemicalDispenserComponent> ent, ref RMCChemicalDispenserBeakerBuiMsg args)
     {
-        if (!_itemSlots.TryGetSlot(ent, ent.Comp.ContainerSlotId, out var slot) ||
+        if (!_itemSlots.TryGetSlot((ent.Owner, null), ent.Comp.ContainerSlotId, out var slot) ||
             slot.ContainerSlot?.ContainedEntity is not { } contained ||
             !_solution.TryGetMixableSolution(contained, out var solutionEnt, out _) ||
             !ent.Comp.Settings.Contains(args.Amount))
@@ -253,7 +247,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
 
     private void OnChemicalDispenserEjectBeakerMsg(Entity<RMCChemicalDispenserComponent> ent, ref RMCChemicalDispenserEjectBeakerBuiMsg args)
     {
-        if (!_itemSlots.TryGetSlot(ent, ent.Comp.ContainerSlotId, out var slot))
+        if (!_itemSlots.TryGetSlot((ent.Owner, null), ent.Comp.ContainerSlotId, out var slot))
             return;
 
         _itemSlots.TryEjectToHands(ent, slot, args.Actor, true);
@@ -262,7 +256,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
 
     private void OnChemicalDispenserDispenseMsg(Entity<RMCChemicalDispenserComponent> ent, ref RMCChemicalDispenserDispenseBuiMsg args)
     {
-        if (!_itemSlots.TryGetSlot(ent, ent.Comp.ContainerSlotId, out var slot) ||
+        if (!_itemSlots.TryGetSlot((ent.Owner, null), ent.Comp.ContainerSlotId, out var slot) ||
             slot.ContainerSlot?.ContainedEntity is not { } contained ||
             !_solution.TryGetMixableSolution(contained, out var solutionEnt, out _) ||
             !ent.Comp.Reagents.Contains(args.Reagent) ||

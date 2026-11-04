@@ -1,0 +1,74 @@
+- type: entity
+  parent: [RuMCUPPNavalInfantryBackpack]
+  id: RuMCUPPNavalInfantryBackpackMedical
+  name: UPP lightweight backpack
+  description: Compact and lightweight backpack with an external strap. Perfect for quick raids. Has straps for a first aid kit.
+  components:
+    - type: Sprite
+      sprite: _RuMC14/Clothing/UPP/backpack/standard_2.rsi
+      state: icon
+    - type: Clothing
+      sprite: _RuMC14/Clothing/UPP/backpack/standard_2.rsi
+      slots:
+        - back
+    - type: ItemSlots
+      slots:
+        # Слот для аптечки
+        med_slot:
+          name: medical-pouch-slot
+          whitelist:
+            tags:
+              - CMFirstAidKit
+          priority: 3
+    - type: ItemMapper
+      sprite: _RuMC14/Clothing/UPP/backpack/standard_2.rsi
+      mapLayers:
+        med:
+          whitelist:
+            tags:
+              - CMFirstAidKit
+    - type: ContainerContainer
+      containers:
+        med_slot: !type:ContainerSlot {}
+        storagebase: !type:Container {}
+    - type: Storage
+      maxItemSize: Normal
+      grid:
+      - 0,0,10,1
+
+- type: entity
+  parent: CMSatchel
+  id: RuMCUPPNavalInfantryBackpack
+  name: UPP lightweight backpack
+  description: My back hurts, my legs are tired, but at least I don't have to crawl to a dead enemy to get more ammunition. I have everything I need with me.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/backpack/standard_1.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,17,1
+
+- type: entity
+  parent: CMBackpack
+  id: RuMCUPPNavalInfantryBackpackBig
+  name: UPP assault backpack
+  description: The assault version. It holds exactly as much as you need to survive the evening. And not an ounce of unnecessary heroism. The motherland will remember you.
+  components:
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/backpack/standard_big.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,24,1
+
+- type: entity
+  parent: CMSatchel
+  id: RuMCUPPNavalInfantrySatchel
+  name: UPP assault satchel
+  description: My back hurts, my legs are tired, but at least I don't have to crawl to a dead enemy to get more ammunition. I have everything I need with me.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/satchel/standard.rsi

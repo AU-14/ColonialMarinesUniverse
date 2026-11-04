@@ -23,7 +23,7 @@
     recoilUnwielded: 4
     scatterWielded: 10
     scatterUnwielded: 20
-    baseFireRate: 0.625
+    baseFireRate: 1
     burstScatterMult: 5
   - type: BallisticAmmoProvider
     proto: CMShellShotgunBuckshot

@@ -15,7 +15,7 @@
   - type: GhostRole
     name: cm-job-name-xeno-runner
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Runner/runner.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Runner/runner.rsi # AU14-Edit
   - type: Eye
     pvsScale: 1.5
   - type: MobState
@@ -28,6 +28,7 @@
     carrierWhitelist:
       components:
       - Synth
+      - Yautja # CMU14: Yautja may carry this caste too - CM-SS13's grab gate reaches MOB_SIZE_XENO (mob_grab.dm:82-89).
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -63,17 +64,16 @@
         - BulletImpassable
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaCatecholamine
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaCatecholamine
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -107,12 +107,16 @@
   - type: MeleeWeapon
     attackRate: 1.4
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: Tackle
     min: 4
     max: 5
@@ -158,14 +162,19 @@
   parent: CMXenoRunnerBase
   id: CMXenoRunner
   components:
+  - type: DamageEvasion # CMU14
+    damageThreshold: 120
+    damageWindow: 3
+    evasionBonus: 75
+    evasionDuration: 4
   - type: GuideHelp
     guides:
     - RMCGuideRoleRunner
   - type: MobThresholds
-    thresholds:
+    thresholds: # CMU14
       0: Alive
-      230: Critical
-      330: Dead
+      270: Critical
+      360: Dead
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -199,7 +208,7 @@
   suffix: Acider
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Runner/acider_runner.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Runner/acider_runner.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base", "enum.ForTheHiveVisualLayers.Base" ]
       state: alive
@@ -261,8 +270,8 @@
           Heat: 1
       duration: 20
   - type: ForTheHive
-    baseSprite: _AU14/Mobs/Xenos/Runner/acider_runner.rsi # AU14-Edit
-    activeSprite: _AU14/Mobs/Xenos/Runner/acider_runner_primed.rsi # AU14-Edit
+    baseSprite: CMU14/Mobs/Xenos/Runner/acider_runner.rsi # AU14-Edit
+    activeSprite: CMU14/Mobs/Xenos/Runner/acider_runner_primed.rsi # AU14-Edit
     baseDamage:
       types:
         Heat: 1

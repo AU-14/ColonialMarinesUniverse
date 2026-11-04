@@ -1,0 +1,668 @@
+- type: cmu3DModel
+  status: draft
+  connectToNeighbours: true
+  sourceDirections: 1
+  id: CMU3DColonyReinforcedWindow
+  label: Colony reinforced window
+  sourcePrototypes:
+  - CMWindowWhiteColonyReinforced
+  referenceRsi: _RMC14/Structures/Windows/colony_rwindow.rsi
+  referenceState: col_rwindow0
+  parts:
+  - label: Deep colony sill
+    min: -0.4400000, -0.1050000, 0.0000000
+    max: 0.4400000, 0.1050000, 0.8100000
+    color: '#575C55FF'
+  - label: Dark bottom seam -1
+    min: -0.4400000, -0.1350000, 0.0000000
+    max: 0.4400000, -0.1050000, 0.0700000
+    color: '#363835FF'
+  - label: Dark bottom seam 1
+    min: -0.4400000, 0.1050000, 0.0000000
+    max: 0.4400000, 0.1350000, 0.0700000
+    color: '#363835FF'
+  - label: Foot rim -1
+    min: -0.4400000, -0.1420000, 0.0700000
+    max: 0.4400000, -0.1050000, 0.1100000
+    color: '#636860FF'
+  - label: Foot rim 1
+    min: -0.4400000, 0.1050000, 0.0700000
+    max: 0.4400000, 0.1420000, 0.1100000
+    color: '#636860FF'
+  - label: Lower fascia -1
+    min: -0.4400000, -0.1250000, 0.1100000
+    max: 0.4400000, -0.1050000, 0.5500000
+    color: '#575C55FF'
+  - label: Lower fascia 1
+    min: -0.4400000, 0.1050000, 0.1100000
+    max: 0.4400000, 0.1250000, 0.5500000
+    color: '#575C55FF'
+  - label: Raised sill rim -1
+    min: -0.4400000, -0.1450000, 0.5500000
+    max: 0.4400000, -0.1050000, 0.6600000
+    color: '#636860FF'
+  - label: Raised sill rim 1
+    min: -0.4400000, 0.1050000, 0.5500000
+    max: 0.4400000, 0.1450000, 0.6600000
+    color: '#636860FF'
+  - label: Upper recessed channel -1
+    min: -0.4400000, -0.1320000, 0.6600000
+    max: 0.4400000, -0.1050000, 0.7500000
+    color: '#42453FFF'
+  - label: Upper recessed channel 1
+    min: -0.4400000, 0.1050000, 0.6600000
+    max: 0.4400000, 0.1320000, 0.7500000
+    color: '#42453FFF'
+  - label: Pane seating lip -1
+    min: -0.4400000, -0.1420000, 0.7500000
+    max: 0.4400000, -0.1050000, 0.8100000
+    color: '#305F61FF'
+  - label: Pane seating lip 1
+    min: -0.4400000, 0.1050000, 0.7500000
+    max: 0.4400000, 0.1420000, 0.8100000
+    color: '#305F61FF'
+  - label: Sill lug 0 -1
+    min: -0.4246250, -0.1600000, 0.1300000
+    max: -0.3566250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 0 -1
+    min: -0.4046250, -0.1660000, 0.2200000
+    max: -0.3766250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 0 1
+    min: -0.4246250, 0.1250000, 0.1300000
+    max: -0.3566250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 0 1
+    min: -0.4046250, 0.1600000, 0.2200000
+    max: -0.3766250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 1 -1
+    min: -0.1746250, -0.1600000, 0.1300000
+    max: -0.1066250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 1 -1
+    min: -0.1546250, -0.1660000, 0.2200000
+    max: -0.1266250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 1 1
+    min: -0.1746250, 0.1250000, 0.1300000
+    max: -0.1066250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 1 1
+    min: -0.1546250, 0.1600000, 0.2200000
+    max: -0.1266250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 2 -1
+    min: 0.1066250, -0.1600000, 0.1300000
+    max: 0.1746250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 2 -1
+    min: 0.1266250, -0.1660000, 0.2200000
+    max: 0.1546250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 2 1
+    min: 0.1066250, 0.1250000, 0.1300000
+    max: 0.1746250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 2 1
+    min: 0.1266250, 0.1600000, 0.2200000
+    max: 0.1546250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 3 -1
+    min: 0.3566250, -0.1600000, 0.1300000
+    max: 0.4246250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 3 -1
+    min: 0.3766250, -0.1660000, 0.2200000
+    max: 0.4046250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 3 1
+    min: 0.3566250, 0.1250000, 0.1300000
+    max: 0.4246250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 3 1
+    min: 0.3766250, 0.1600000, 0.2200000
+    max: 0.4046250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: West free end carrier
+    min: -0.4400000, -0.1050000, 0.8100000
+    max: -0.3437500, 0.1050000, 2.6000000
+    color: '#636860FF'
+    omitWhenConnected: 8
+  - label: West carrier band 0.81 -1
+    min: -0.4400000, -0.1230000, 0.8100000
+    max: -0.3437500, -0.1050000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 0.81 1
+    min: -0.4400000, 0.1050000, 0.8100000
+    max: -0.3437500, 0.1230000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.17 -1
+    min: -0.4400000, -0.1230000, 1.1700000
+    max: -0.3437500, -0.1050000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.17 1
+    min: -0.4400000, 0.1050000, 1.1700000
+    max: -0.3437500, 0.1230000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.91 -1
+    min: -0.4400000, -0.1230000, 1.9100000
+    max: -0.3437500, -0.1050000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.91 1
+    min: -0.4400000, 0.1050000, 1.9100000
+    max: -0.3437500, 0.1230000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 8
+  - label: West carrier band 2.38 -1
+    min: -0.4400000, -0.1230000, 2.3800000
+    max: -0.3437500, -0.1050000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 8
+  - label: West carrier band 2.38 1
+    min: -0.4400000, 0.1050000, 2.3800000
+    max: -0.3437500, 0.1230000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 1.08 -1
+    min: -0.4400000, -0.1530000, 1.0100000
+    max: -0.3687500, -0.1230000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 1.08 1
+    min: -0.4400000, 0.1230000, 1.0100000
+    max: -0.3687500, 0.1530000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 2.16 -1
+    min: -0.4400000, -0.1530000, 2.0900000
+    max: -0.3687500, -0.1230000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 2.16 1
+    min: -0.4400000, 0.1230000, 2.0900000
+    max: -0.3687500, 0.1530000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West inner rubber seal
+    min: -0.3437500, -0.0750000, 0.8100000
+    max: -0.3125000, 0.0750000, 2.6000000
+    color: '#363835FF'
+    omitWhenConnected: 8
+  - label: East free end carrier
+    min: 0.3437500, -0.1050000, 0.8100000
+    max: 0.4400000, 0.1050000, 2.6000000
+    color: '#636860FF'
+    omitWhenConnected: 4
+  - label: East carrier band 0.81 -1
+    min: 0.3437500, -0.1230000, 0.8100000
+    max: 0.4400000, -0.1050000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 0.81 1
+    min: 0.3437500, 0.1050000, 0.8100000
+    max: 0.4400000, 0.1230000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.17 -1
+    min: 0.3437500, -0.1230000, 1.1700000
+    max: 0.4400000, -0.1050000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.17 1
+    min: 0.3437500, 0.1050000, 1.1700000
+    max: 0.4400000, 0.1230000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.91 -1
+    min: 0.3437500, -0.1230000, 1.9100000
+    max: 0.4400000, -0.1050000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.91 1
+    min: 0.3437500, 0.1050000, 1.9100000
+    max: 0.4400000, 0.1230000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 4
+  - label: East carrier band 2.38 -1
+    min: 0.3437500, -0.1230000, 2.3800000
+    max: 0.4400000, -0.1050000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 4
+  - label: East carrier band 2.38 1
+    min: 0.3437500, 0.1050000, 2.3800000
+    max: 0.4400000, 0.1230000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 1.08 -1
+    min: 0.3687500, -0.1530000, 1.0100000
+    max: 0.4400000, -0.1230000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 1.08 1
+    min: 0.3687500, 0.1230000, 1.0100000
+    max: 0.4400000, 0.1530000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 2.16 -1
+    min: 0.3687500, -0.1530000, 2.0900000
+    max: 0.4400000, -0.1230000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 2.16 1
+    min: 0.3687500, 0.1230000, 2.0900000
+    max: 0.4400000, 0.1530000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East inner rubber seal
+    min: 0.3125000, -0.0750000, 0.8100000
+    max: 0.3437500, 0.0750000, 2.6000000
+    color: '#363835FF'
+    omitWhenConnected: 4
+  - label: Colony pane rows 0-0
+    min: -0.4400000, -0.0350000, 2.5186364
+    max: 0.4400000, 0.0350000, 2.6000000
+    color: '#97A7A8B0'
+  - label: Colony pane rows 1-1
+    min: -0.4400000, -0.0350000, 2.4372727
+    max: 0.4400000, 0.0350000, 2.5186364
+    color: '#B5BDBEB0'
+  - label: Colony pane rows 2-8
+    min: -0.4400000, -0.0350000, 1.8677273
+    max: 0.4400000, 0.0350000, 2.4372727
+    color: '#AAB5B678'
+  - label: Colony pane rows 9-13
+    min: -0.4400000, -0.0350000, 1.4609091
+    max: 0.4400000, 0.0350000, 1.8677273
+    color: '#9FABAD78'
+  - label: Colony pane rows 14-17
+    min: -0.4400000, -0.0350000, 1.1354545
+    max: 0.4400000, 0.0350000, 1.4609091
+    color: '#72949578'
+  - label: Colony pane rows 18-19
+    min: -0.4400000, -0.0350000, 0.9727273
+    max: 0.4400000, 0.0350000, 1.1354545
+    color: '#72949578'
+  - label: Colony pane rows 20-20
+    min: -0.4400000, -0.0350000, 0.8913636
+    max: 0.4400000, 0.0350000, 0.9727273
+    color: '#5A8182B0'
+  - label: Colony pane rows 21-21
+    min: -0.4400000, -0.0350000, 0.8100000
+    max: 0.4400000, 0.0350000, 0.8913636
+    color: '#305F61B0'
+  description: Olive-grey industrial carrier, four raised sill lugs and pale teal glazing matched to the colony source palette.
+    All cardinal runs use the existing connection owner; free end carriers disappear at joins. Physical height, depth, rear
+    construction and pane transmission are inferred. Broken replacement is separately modeled. See SOURCES_COLONY_ULTRA_WINDOWS.md.
+    Unjoined ends stop .06 tiles short of the boundary to clear projecting wall trim; joined ends extend to the grid edge.
+  connectionEndInset: 0.06
+
+- type: cmu3DModel
+  status: draft
+  connectToNeighbours: true
+  sourceDirections: 1
+  id: CMU3DColonyReinforcedWindowFrame
+  label: Colony reinforced open frame
+  sourcePrototypes:
+  - RMCWindowFrameColonyReinforced
+  referenceRsi: _RMC14/Structures/Windows/Frames/colony_rframe.rsi
+  referenceState: col_rframe0
+  parts:
+  - label: Deep colony sill
+    min: -0.4400000, -0.1050000, 0.0000000
+    max: 0.4400000, 0.1050000, 0.8100000
+    color: '#575C55FF'
+  - label: Dark bottom seam -1
+    min: -0.4400000, -0.1350000, 0.0000000
+    max: 0.4400000, -0.1050000, 0.0700000
+    color: '#363835FF'
+  - label: Dark bottom seam 1
+    min: -0.4400000, 0.1050000, 0.0000000
+    max: 0.4400000, 0.1350000, 0.0700000
+    color: '#363835FF'
+  - label: Foot rim -1
+    min: -0.4400000, -0.1420000, 0.0700000
+    max: 0.4400000, -0.1050000, 0.1100000
+    color: '#636860FF'
+  - label: Foot rim 1
+    min: -0.4400000, 0.1050000, 0.0700000
+    max: 0.4400000, 0.1420000, 0.1100000
+    color: '#636860FF'
+  - label: Lower fascia -1
+    min: -0.4400000, -0.1250000, 0.1100000
+    max: 0.4400000, -0.1050000, 0.5500000
+    color: '#575C55FF'
+  - label: Lower fascia 1
+    min: -0.4400000, 0.1050000, 0.1100000
+    max: 0.4400000, 0.1250000, 0.5500000
+    color: '#575C55FF'
+  - label: Raised sill rim -1
+    min: -0.4400000, -0.1450000, 0.5500000
+    max: 0.4400000, -0.1050000, 0.6600000
+    color: '#636860FF'
+  - label: Raised sill rim 1
+    min: -0.4400000, 0.1050000, 0.5500000
+    max: 0.4400000, 0.1450000, 0.6600000
+    color: '#636860FF'
+  - label: Upper recessed channel -1
+    min: -0.4400000, -0.1320000, 0.6600000
+    max: 0.4400000, -0.1050000, 0.7500000
+    color: '#42453FFF'
+  - label: Upper recessed channel 1
+    min: -0.4400000, 0.1050000, 0.6600000
+    max: 0.4400000, 0.1320000, 0.7500000
+    color: '#42453FFF'
+  - label: Pane seating lip -1
+    min: -0.4400000, -0.1420000, 0.7500000
+    max: 0.4400000, -0.1050000, 0.8100000
+    color: '#305F61FF'
+  - label: Pane seating lip 1
+    min: -0.4400000, 0.1050000, 0.7500000
+    max: 0.4400000, 0.1420000, 0.8100000
+    color: '#305F61FF'
+  - label: Sill lug 0 -1
+    min: -0.4246250, -0.1600000, 0.1300000
+    max: -0.3566250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 0 -1
+    min: -0.4046250, -0.1660000, 0.2200000
+    max: -0.3766250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 0 1
+    min: -0.4246250, 0.1250000, 0.1300000
+    max: -0.3566250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 0 1
+    min: -0.4046250, 0.1600000, 0.2200000
+    max: -0.3766250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 1 -1
+    min: -0.1746250, -0.1600000, 0.1300000
+    max: -0.1066250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 1 -1
+    min: -0.1546250, -0.1660000, 0.2200000
+    max: -0.1266250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 1 1
+    min: -0.1746250, 0.1250000, 0.1300000
+    max: -0.1066250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 1 1
+    min: -0.1546250, 0.1600000, 0.2200000
+    max: -0.1266250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 2 -1
+    min: 0.1066250, -0.1600000, 0.1300000
+    max: 0.1746250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 2 -1
+    min: 0.1266250, -0.1660000, 0.2200000
+    max: 0.1546250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 2 1
+    min: 0.1066250, 0.1250000, 0.1300000
+    max: 0.1746250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 2 1
+    min: 0.1266250, 0.1600000, 0.2200000
+    max: 0.1546250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 3 -1
+    min: 0.3566250, -0.1600000, 0.1300000
+    max: 0.4246250, -0.1250000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 3 -1
+    min: 0.3766250, -0.1660000, 0.2200000
+    max: 0.4046250, -0.1600000, 0.6000000
+    color: '#575C55FF'
+  - label: Sill lug 3 1
+    min: 0.3566250, 0.1250000, 0.1300000
+    max: 0.4246250, 0.1600000, 0.7000000
+    color: '#575C55FF'
+  - label: Lug inset 3 1
+    min: 0.3766250, 0.1600000, 0.2200000
+    max: 0.4046250, 0.1660000, 0.6000000
+    color: '#575C55FF'
+  - label: West free end carrier
+    min: -0.4400000, -0.1050000, 0.8100000
+    max: -0.3437500, 0.1050000, 2.6000000
+    color: '#636860FF'
+    omitWhenConnected: 8
+  - label: West carrier band 0.81 -1
+    min: -0.4400000, -0.1230000, 0.8100000
+    max: -0.3437500, -0.1050000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 0.81 1
+    min: -0.4400000, 0.1050000, 0.8100000
+    max: -0.3437500, 0.1230000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.17 -1
+    min: -0.4400000, -0.1230000, 1.1700000
+    max: -0.3437500, -0.1050000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.17 1
+    min: -0.4400000, 0.1050000, 1.1700000
+    max: -0.3437500, 0.1230000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.91 -1
+    min: -0.4400000, -0.1230000, 1.9100000
+    max: -0.3437500, -0.1050000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 8
+  - label: West carrier band 1.91 1
+    min: -0.4400000, 0.1050000, 1.9100000
+    max: -0.3437500, 0.1230000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 8
+  - label: West carrier band 2.38 -1
+    min: -0.4400000, -0.1230000, 2.3800000
+    max: -0.3437500, -0.1050000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 8
+  - label: West carrier band 2.38 1
+    min: -0.4400000, 0.1050000, 2.3800000
+    max: -0.3437500, 0.1230000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 1.08 -1
+    min: -0.4400000, -0.1530000, 1.0100000
+    max: -0.3687500, -0.1230000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 1.08 1
+    min: -0.4400000, 0.1230000, 1.0100000
+    max: -0.3687500, 0.1530000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 2.16 -1
+    min: -0.4400000, -0.1530000, 2.0900000
+    max: -0.3687500, -0.1230000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West retaining clamp 2.16 1
+    min: -0.4400000, 0.1230000, 2.0900000
+    max: -0.3687500, 0.1530000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 8
+  - label: West inner rubber seal
+    min: -0.3437500, -0.0750000, 0.8100000
+    max: -0.3125000, 0.0750000, 2.6000000
+    color: '#363835FF'
+    omitWhenConnected: 8
+  - label: East free end carrier
+    min: 0.3437500, -0.1050000, 0.8100000
+    max: 0.4400000, 0.1050000, 2.6000000
+    color: '#636860FF'
+    omitWhenConnected: 4
+  - label: East carrier band 0.81 -1
+    min: 0.3437500, -0.1230000, 0.8100000
+    max: 0.4400000, -0.1050000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 0.81 1
+    min: 0.3437500, 0.1050000, 0.8100000
+    max: 0.4400000, 0.1230000, 1.1700000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.17 -1
+    min: 0.3437500, -0.1230000, 1.1700000
+    max: 0.4400000, -0.1050000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.17 1
+    min: 0.3437500, 0.1050000, 1.1700000
+    max: 0.4400000, 0.1230000, 1.9100000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.91 -1
+    min: 0.3437500, -0.1230000, 1.9100000
+    max: 0.4400000, -0.1050000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 4
+  - label: East carrier band 1.91 1
+    min: 0.3437500, 0.1050000, 1.9100000
+    max: 0.4400000, 0.1230000, 2.3800000
+    color: '#636860FF'
+    omitWhenConnected: 4
+  - label: East carrier band 2.38 -1
+    min: 0.3437500, -0.1230000, 2.3800000
+    max: 0.4400000, -0.1050000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 4
+  - label: East carrier band 2.38 1
+    min: 0.3437500, 0.1050000, 2.3800000
+    max: 0.4400000, 0.1230000, 2.6000000
+    color: '#7D817BFF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 1.08 -1
+    min: 0.3687500, -0.1530000, 1.0100000
+    max: 0.4400000, -0.1230000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 1.08 1
+    min: 0.3687500, 0.1230000, 1.0100000
+    max: 0.4400000, 0.1530000, 1.1500000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 2.16 -1
+    min: 0.3687500, -0.1530000, 2.0900000
+    max: 0.4400000, -0.1230000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East retaining clamp 2.16 1
+    min: 0.3687500, 0.1230000, 2.0900000
+    max: 0.4400000, 0.1530000, 2.2300000
+    color: '#575C55FF'
+    omitWhenConnected: 4
+  - label: East inner rubber seal
+    min: 0.3125000, -0.0750000, 0.8100000
+    max: 0.3437500, 0.0750000, 2.6000000
+    color: '#363835FF'
+    omitWhenConnected: 4
+  description: Open replacement selected by the source colony construction graph after breakage or disassembly. Retains the
+    sill and free-end carriers without glazing or an invented overhead lintel. Cardinal joins are preserved. Off-map replacement;
+    shatter, debris, native destruction/reconstruction and physical dimensions remain unverified. See SOURCES_COLONY_ULTRA_WINDOWS.md.
+    Unjoined ends stop .06 tiles short of the boundary to clear projecting wall trim; joined ends extend to the grid edge.
+  connectionEndInset: 0.06
+
+- type: cmu3DModel
+  id: CMU3DUltraDirectionalWindow
+  panelEndTargets:
+  - RMCWallHybrisa
+  - RMCWallHybrisaEngiReinforced
+  - RMCWallStrata
+  - CMWindowUltraDirectional
+  label: Ultra-reinforced directional window
+  status: draft
+  sourcePrototypes:
+  - CMWindowUltraDirectional
+  sourceDirections: 4
+  referenceRsi: _RMC14/Structures/Windows/directional.rsi
+  referenceState: fwindow
+  parts:
+  - label: Dark bottom anchoring strip
+    min: -0.4900000, -0.4600000, 0.0360000
+    max: 0.4900000, -0.3800000, 0.1091250
+    color: '#404040'
+  - label: Blue sill gasket
+    min: -0.4687500, -0.4600000, 0.1091250
+    max: 0.4687500, -0.3930000, 0.1514605
+    color: '#75AFC0'
+  - label: Pale upper rim
+    min: -0.4900000, -0.4600000, 1.4369211
+    max: 0.4900000, -0.3930000, 1.4985000
+    color: '#D7F4FF'
+  - label: Upper blue gasket
+    min: -0.4687500, -0.4600000, 1.3984342
+    max: 0.4687500, -0.4000000, 1.4369211
+    color: '#86C6DD'
+  - label: Ultra pane
+    min: -0.4687500, -0.4520000, 0.1514605
+    max: 0.4687500, -0.4180000, 1.3984342
+    color: '#86C6DD85'
+  - label: West reinforcing rail
+    min: -0.3281250, -0.4600000, 0.1514605
+    max: -0.2968750, -0.4050000, 1.4523158
+    color: '#66A0B388'
+  - label: West lower rail shoe
+    min: -0.3365000, -0.4600000, 0.1437632
+    max: -0.2885000, -0.3950000, 0.4439605
+    color: '#5B879A'
+  - label: West upper rail shoe
+    min: -0.3425000, -0.4600000, 1.3214605
+    max: -0.2825000, -0.3950000, 1.4985000
+    color: '#729EAC'
+  - label: West edge clip 0.12
+    min: -0.4900000, -0.4600000, 0.1014276
+    max: -0.4587500, -0.3800000, 0.1553092
+    color: '#404040'
+  - label: West edge clip 1.5
+    min: -0.4900000, -0.4600000, 1.1636645
+    max: -0.4587500, -0.3800000, 1.2175461
+    color: '#404040'
+  - label: West edge clip 1.77
+    min: -0.4900000, -0.4600000, 1.3714934
+    max: -0.4587500, -0.3800000, 1.4253750
+    color: '#404040'
+  - label: East reinforcing rail
+    min: 0.2968750, -0.4600000, 0.1514605
+    max: 0.3281250, -0.4050000, 1.4523158
+    color: '#66A0B388'
+  - label: East lower rail shoe
+    min: 0.2885000, -0.4600000, 0.1437632
+    max: 0.3365000, -0.3950000, 0.4439605
+    color: '#5B879A'
+  - label: East upper rail shoe
+    min: 0.2825000, -0.4600000, 1.3214605
+    max: 0.3425000, -0.3950000, 1.4985000
+    color: '#729EAC'
+  - label: East edge clip 0.12
+    min: 0.4587500, -0.4600000, 0.1014276
+    max: 0.4900000, -0.3800000, 0.1553092
+    color: '#404040'
+  - label: East edge clip 1.5
+    min: 0.4587500, -0.4600000, 1.1636645
+    max: 0.4900000, -0.3800000, 1.2175461
+    color: '#404040'
+  - label: East edge clip 1.77
+    min: 0.4587500, -0.4600000, 1.3714934
+    max: 0.4900000, -0.3800000, 1.4253750
+    color: '#404040'
+  description: "Pale blue podium glazing with two source-spaced reinforcing rails, short dark edge clips and bright top rim.\
+    \ Thin assembly remains within the exact local directional fixture footprint X \xB10.49, Y -0.49..-0.38 and follows saved\
+    \ facing. Height, depth and transmission are inferred. Indestructible source has no broken state or animation strip. See\
+    \ SOURCES_COLONY_ULTRA_WINDOWS.md. Pane height is inferred as 1.4625 tiles from its 18-pixel source relative to a 32-pixel\
+    \ wall. Existing support placement seats desk-mounted panes on exact counters; otherwise the narrow anchoring strip starts\
+    \ .036 above the floor overlay."
+  placement: surface

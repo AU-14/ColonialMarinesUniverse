@@ -1,0 +1,12 @@
+author: Ignies
+category: CMU
+changes:
+- message: ID cards now have their own ATM PIN, shown in your character notes.
+  type: Add
+- message: 'Reworked the colony ATM: enter your PIN to withdraw, deposit or transfer
+    money.'
+  type: Tweak
+- message: The Sapper's siphon rig also steals the PINs of the ATM's recent customers.
+  type: Add
+time: '2026-09-30T22:56:23.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2048

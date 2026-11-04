@@ -1,0 +1,18 @@
+author: silasadam
+category: CMU
+changes:
+- message: Added Yautja Limb regeneration
+  type: Add
+- message: Yautja healing gun can heal IB/Fracs/Eschar/etc on a long do-after.
+  type: Tweak
+- message: Yautja take several tackles to knock down. [4]
+  type: Tweak
+- message: Yautja hunting traps are now completely invisible to everyone except the
+    yautja.
+  type: Tweak
+- message: Yautja cloak has been returned to true-cloak status.
+  type: Tweak
+- message: Yautja have a map symbol&hunting traps track the target for 5 minutes.
+  type: Add
+time: '2026-09-13T00:28:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1931

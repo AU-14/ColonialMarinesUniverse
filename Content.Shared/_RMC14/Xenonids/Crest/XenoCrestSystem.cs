@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.Actions;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Stunnable;
 using Content.Shared.StatusEffectNew;
 
 namespace Content.Shared._RMC14.Xenonids.Crest;
@@ -29,6 +30,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
         SubscribeLocalEvent<XenoCrestComponent, CMGetArmorEvent>(OnXenoCrestGetArmor);
 
         SubscribeLocalEvent<XenoCrestComponent, BeforeStatusEffectAddedEvent>(OnXenoCrestBeforeStatusAdded);
+        SubscribeLocalEvent<XenoCrestComponent, KnockDownAttemptEvent>(OnXenoCrestKnockdownAttempt);
 
         SubscribeLocalEvent<XenoCrestComponent, XenoFortifyAttemptEvent>(OnXenoCrestFortifyAttempt);
         SubscribeLocalEvent<XenoCrestComponent, XenoTailSweepAttemptEvent>(OnXenoCrestTailSweepAttempt);
@@ -65,7 +67,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
 
         _armor.UpdateArmorValue((xeno, null));
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
         _appearance.SetData(xeno, XenoVisualLayers.Crest, xeno.Comp.Lowered);
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoToggleCrestActionEvent>(xeno))
@@ -92,11 +94,17 @@ public sealed partial class XenoCrestSystem : EntitySystem
             args.Cancelled = true;
     }
 
+    private void OnXenoCrestKnockdownAttempt(Entity<XenoCrestComponent> xeno, ref KnockDownAttemptEvent args)
+    {
+        if (xeno.Comp.Lowered)
+            args.Cancelled = true;
+    }
+
     private void OnXenoCrestFortifyAttempt(Entity<XenoCrestComponent> xeno, ref XenoFortifyAttemptEvent args)
     {
         if (xeno.Comp.Lowered)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-toggle-crest-cant-fortify"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-toggle-crest-cant-fortify"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -105,7 +113,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
     {
         if (xeno.Comp.Lowered)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-toggle-crest-cant-tail-sweep"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-toggle-crest-cant-tail-sweep"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -114,7 +122,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
     {
         if (xeno.Comp.Lowered)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-toggle-crest-cant-rest"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-toggle-crest-cant-rest"), xeno, xeno);
             args.Cancelled = true;
         }
     }

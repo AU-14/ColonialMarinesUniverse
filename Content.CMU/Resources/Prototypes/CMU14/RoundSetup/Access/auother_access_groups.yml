@@ -1,0 +1,66 @@
+- type: accessGroup
+  id: aumob
+  tags:
+  - CMAccessColonyPublic
+
+- type: accessGroup
+  id: auwy
+  tags:
+  - CMAccessColonyPublic
+  - AU14AccessCorporateWEYU
+
+- type: accessGroup
+  id: auprodigy
+  tags:
+  - CMAccessColonyPublic
+  - CMU14AccessCorporateProdigy
+
+- type: accessGroup
+  id: AUPrisonStaff
+  tags:
+  - AUAccessPrison
+
+- type: accessGroup
+  id: aulegacygroupcommand # bandaid for officers (legacy AA)
+  tags:
+  - RMCAccessCommand
+  - RMCAccessSeniorCommand
+  - CMAccessGovforCommand
+  - CMAccessBrig
+  - CMAccessArmory
+  - CMAccessMedPrep
+  - CMAccessMedical
+  - CMAccessChemistry
+  - CMAccessMarineRifleman
+  - CMAccessMarinePrep
+  - CMAccessSmartPrep
+  - CMAccessSquadLeaderPrep
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessCrewman
+  - CMAccessRequisitions
+  - RMCAccessVehicleCrew
+
+- type: accessGroup
+  id: aulegacygroupmilp
+  tags:
+  - CMAccessBrig
+  - CMAccessArmory
+
+- type: accessGroup
+  id: aulegacygroupcommandnologistics
+  tags:
+  - CMAccessGovforCommand
+  - CMAccessBrig
+  - CMAccessArmory
+  - CMAccessMedPrep
+  - CMAccessMedical
+  - CMAccessChemistry
+  - CMAccessMarineRifleman
+  - CMAccessMarinePrep
+  - CMAccessSmartPrep
+  - CMAccessSquadLeaderPrep
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessCrewman
+  - RMCAccessVehicleCrew

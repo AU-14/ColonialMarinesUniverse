@@ -418,9 +418,9 @@
   description: A gun case containing the M41AE2 heavy pulse rifle. You can get additional ammunition at requisitions.
   components:
   - type: Storage
-    maxItemSize: Ginormous
+    maxItemSize: Colossal
     grid:
-    - 0,0,7,1
+    - 0,0,8,5
     whitelist:
       tags:
       - RMCWeaponRifleM54CE2
@@ -517,6 +517,27 @@
     contents:
     - id: WeaponShotgunMOU53
     - id: RMCAttachmentMOU53Stock
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: CMUOlympietsCase
+  name: Olympiets shotgun case
+  description: A gun case containing the Olympiets shotgun. It does come loaded, but you'll still have to find ammunition as you go.
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,1,1
+    whitelist:
+      tags:
+      - CMUWeaponShotgunOlympiets
+      - RMCAttachmentMOU53Stock
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponShotgunOlympiets
+    - id: RMCAttachmentMOU53Stock
+
+
 
 - type: entity
   parent: RMCGunCaseBase
@@ -724,15 +745,17 @@
   name: type 23 shotgunner equipment case
   description: A gun case containing an Type 23 tactical shotgun, a box of high-dispersive shock grenades, and a box of buckshot shells.
   components:
+  - type: Item
+    size: Ginormous # CMU14
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous # CMU14: starting stock bumps the gun's size to Ginormous
     grid:
     - 0,0,21,3
   - type: StorageFill
     contents:
     - id: CMUWeaponShotgunType23Tactical
     - id: RMCBoxShotgunHDSG
-      amount: 6
+      amount: 5
     - id: RMCBoxShotgunHeavySlugs
       amount: 4
     - id: RMCBoxShotgunHeavyBuckshot
@@ -740,14 +763,14 @@
     - id: RMCBoxShotgunHeavyFlechette
       amount: 4
     - id: RMCBoxShotgunHeavyDragonbreath
-      amount: 3
+      amount: 2
     - id: AU14Altyn
 
 - type: entity
   parent: RMCBaseEquipmentCase
   id: AU14HAZOPSShotgunCase
   name: heavy shotgunner equipment case
-  description: A gun case containing an spas-12 shotgun.
+  description: A gun case containing an spas-12 shotgun, a box of high-dispersive shock grenades, and a mixed shell load.
   components:
   - type: Storage
     maxItemSize: Huge
@@ -756,12 +779,20 @@
   - type: StorageFill
     contents:
     - id: AU14WeaponShotgunSPAS12HAZOPS
+    # cmu edit start: HAZOPS shotgunners get the PVS-71
+    - id: CMUHelmetGarbPVS71NightVision
+    # cmu edit end
+    # CMU14: match the sibling heavy shotgunner cases, shock and flame loads included
+    - id: RMCBoxShotgunHDSG
+      amount: 5
     - id: RMCBoxShotgunSlugs
-      amount: 6
+      amount: 4
     - id: RMCBoxShotgunBuckshot
-      amount: 6
+      amount: 4
     - id: RMCBoxShotgunFlechette
-      amount: 6
+      amount: 4
+    - id: RMCBoxShotgunIncendiaryBuckshot
+      amount: 2
 
 - type: entity
   parent: RMCBaseEquipmentCase
@@ -920,3 +951,23 @@
     - id: RMCMagazineM2C
     - id: AU14MagazineM2CTracter
     - id: RMCBeltMachineGunner
+
+- type: entity
+  parent: RMCCaseBase
+  id: CMUGunCaseRifleNSG23
+  name: NSG23 Rifle case
+  description: A gun case containing the NSG23.
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,5,1
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRifleSSG45NoLockStripped
+    - id: RMCMagazineRifleSSG45
+      amount: 7
+    - id: RMCMagazineRifleSSG45Extended
+      amount: 2
+    - id: RMCMagazineRifleSSG45AP
+      amount: 2

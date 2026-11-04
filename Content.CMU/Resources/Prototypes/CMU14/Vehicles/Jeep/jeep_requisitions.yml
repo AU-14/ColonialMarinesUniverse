@@ -1,0 +1,54 @@
+# Jeep crates on the platoons' ASRS catalogs, which list this among their parents; a catalog's
+# categories add up through its parents. A platoon's account opens a round at 20,000: the cheapest
+# jeep takes a quarter of it, the gun jeep over half. Each jeep starts the round with one in stock
+# and restocks one every 30 minutes up to two; the gun jeep restocks one an hour instead, so a
+# standard round fields at most two of each jeep and effectively one gun jeep.
+- type: entity
+  abstract: true
+  id: CMUASRSJeepKits
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Vehicles
+      entries:
+      - cost: 5000
+        crate: CMUCrateJeepCargo
+        maxStock: 2
+        startingStock: 1
+        stockReplenishDelay: 1800
+      - cost: 7000
+        crate: CMUCrateJeepMedical
+        maxStock: 2
+        startingStock: 1
+        stockReplenishDelay: 1800
+      - cost: 9000
+        crate: CMUCrateJeepTransport
+        maxStock: 2
+        startingStock: 1
+        stockReplenishDelay: 1800
+      - cost: 12000
+        crate: CMUCrateJeepGunner
+        maxStock: 2
+        startingStock: 1
+        stockReplenishDelay: 3600
+
+# The colony's ASRS console only gets the cargo and medical jeeps, on the same one-at-a-time,
+# restock-to-two footing as the platoons'.
+- type: entity
+  abstract: true
+  id: CMUASRSColonyJeepKits
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Vehicles
+      entries:
+      - cost: 5000
+        crate: CMUCrateJeepCargoColony
+        maxStock: 2
+        startingStock: 1
+        stockReplenishDelay: 1800
+      - cost: 7000
+        crate: CMUCrateJeepMedicalColony
+        maxStock: 2
+        startingStock: 1
+        stockReplenishDelay: 1800

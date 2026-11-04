@@ -100,7 +100,7 @@ public sealed partial class RMCFoldableGunSystem : EntitySystem
             _hands.TryPickupAnyHand(user, newEntity);
         }
 
-        _popup.PopupPredicted(selfText, othersText, user, user);
+        _popup.PopupEntity(selfText, othersText, user, user);
         _audio.PlayPredicted(ent.Comp.ToggleFoldSound, user, user);
 
         PredictedQueueDel(ent.Owner);
@@ -113,7 +113,7 @@ public sealed partial class RMCFoldableGunSystem : EntitySystem
         if (ent.Comp.Fired)
         {
             var popupText = Loc.GetString("rmc-gun-foldable-launcher-fold-already-fired-attempt", ("weapon", ent));
-            _popup.PopupClient(popupText, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(popupText, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -134,7 +134,7 @@ public sealed partial class RMCFoldableGunSystem : EntitySystem
             var selfText = Loc.GetString(ent.Comp.FoldText, ("weapon", ent));
             var othersText = Loc.GetString(ent.Comp.FoldTextOthers, ("user", user), ("weapon", ent));
 
-            _popup.PopupPredicted(selfText, othersText, user, user);
+            _popup.PopupEntity(selfText, othersText, user, user);
             return true;
         }
 

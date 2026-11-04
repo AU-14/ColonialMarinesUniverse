@@ -1,8 +1,0 @@
-- type: entity
-  parent: BaseMindRoleAntag
-  id: MindRoleThreat
-  name: Threat Role
-  components:
-  - type: MindRole
-    exclusiveAntag: true
-    roleType: TeamAntagonist

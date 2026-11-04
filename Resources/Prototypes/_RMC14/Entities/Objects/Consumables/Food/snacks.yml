@@ -3,15 +3,15 @@
   id: RMCFoodSnackBase
   abstract: true
   components:
-  - type: Food
+  - type: Edible
   - type: Tag
     tags:
       - FoodSnack
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/packaged.rsi
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 25 # Room for extra condiments
         reagents:
         - ReagentId: Nutriment
@@ -57,9 +57,8 @@
   - type: Sprite
     state: barcardine-o
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: Nutriment
@@ -99,9 +98,8 @@
   - type: Sprite
     state: boonie-o
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: Nutriment
@@ -139,9 +137,8 @@
     state: chunk-o
   - type: Item
     size: Normal
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 20 # It's going to take a bit to eat this goddamn thing.
         reagents:
         - ReagentId: Nutriment
@@ -186,9 +183,8 @@
     state: hunk-o
   - type: Item
     size: Large
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 40 # Remember what I said before? It's worse now.
         reagents:
         - ReagentId: Nutriment
@@ -216,9 +212,8 @@
       - salty
   - type: Sprite
     state: kepler_chips
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 20
         reagents:
         - ReagentId: Nutriment
@@ -226,7 +221,7 @@
         - ReagentId: TableSalt # Holy shit these are salty.
           Quantity: 12
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketKeplerCrispsTrash
 
@@ -243,9 +238,8 @@
       - salty
   - type: Sprite
     state: kepler_flame
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 20
         reagents:
         - ReagentId: Nutriment
@@ -255,7 +249,7 @@
         - ReagentId: Hotsauce
           Quantity: 8
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketKeplerCrispsFlamehotTrash
 
@@ -271,9 +265,8 @@
       - peppery
   - type: Sprite
     state: wy_pepper
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: Nutriment
@@ -281,7 +274,7 @@
         - ReagentId: Blackpepper
           Quantity: 1
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketPepperChipsTrash
 
@@ -317,9 +310,9 @@
   - type: Sprite
     state: hburger
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: Nutriment
@@ -359,9 +352,9 @@
   - type: Sprite
     state: open-burrito
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    id: food
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: Nutriment
@@ -399,9 +392,8 @@
   - type: Sprite
     state: open-hotdog
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: Nutriment
@@ -423,9 +415,8 @@
       - nutriment
   - type: Sprite
     state: eat_bar
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 10
         reagents:
         - ReagentId: Nutriment
@@ -433,7 +424,7 @@
         - ReagentId: TableSalt
           Quantity: 1
   - type: Item
-  - type: Food
+  - type: Edible
     trash:
     - RMCFoodPacketEATBarTrash
 

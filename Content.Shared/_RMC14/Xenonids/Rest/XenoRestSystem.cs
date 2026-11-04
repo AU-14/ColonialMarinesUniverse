@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
@@ -30,6 +31,7 @@ public sealed partial class XenoRestSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
 
     public override void Initialize()
     {
@@ -68,7 +70,7 @@ public sealed partial class XenoRestSystem : EntitySystem
         if (HasComp<XenoRestingComponent>(user))
         {
             args.Cancelled = true;
-            _popup.PopupClient(Loc.GetString(ent.Comp.Popup), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString(ent.Comp.Popup), user, user, PopupType.SmallCaution);
         }
     }
 
@@ -116,79 +118,79 @@ public sealed partial class XenoRestSystem : EntitySystem
 
     private void OnXenoSecreteStructureAttempt(Entity<XenoRestingComponent> xeno, ref XenoSecreteStructureAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-secrete"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-secrete"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingHeadbuttAttempt(Entity<XenoRestingComponent> xeno, ref XenoHeadbuttAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-headbutt"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-headbutt"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingFortifyAttempt(Entity<XenoRestingComponent> xeno, ref XenoFortifyAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-fortify"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-fortify"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingTailSweepAttempt(Entity<XenoRestingComponent> xeno, ref XenoTailSweepAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-tail-sweep"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-tail-sweep"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingToggleCrestAttempt(Entity<XenoRestingComponent> xeno, ref XenoToggleCrestAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-toggle-crest"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-toggle-crest"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingLeapAttempt(Entity<XenoRestingComponent> xeno, ref XenoLeapAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-leap"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-leap"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingLungeAttempt(Entity<XenoRestingComponent> xeno, ref XenoLungeAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-lunge"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-lunge"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingPunchAttempt(Entity<XenoRestingComponent> xeno, ref XenoPunchAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-punch"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-punch"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingFlingAttempt(Entity<XenoRestingComponent> xeno, ref XenoFlingAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-fling"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-fling"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingChargettempt(Entity<XenoRestingComponent> xeno, ref XenoChargeAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-charge"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-charge"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingStompAttempt(Entity<XenoRestingComponent> xeno, ref XenoStompAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-stomp"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-stomp"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingGutAttempt(Entity<XenoRestingComponent> xeno, ref XenoGutAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-gut"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-gut"), xeno, xeno);
         args.Cancelled = true;
     }
 
     private void OnXenoRestingScreechAttempt(Entity<XenoRestingComponent> xeno, ref XenoScreechAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-xeno-rest-cant-screech"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-rest-cant-screech"), xeno, xeno);
         args.Cancelled = true;
     }
 
@@ -213,5 +215,42 @@ public sealed partial class XenoRestSystem : EntitySystem
     public bool IsResting(Entity<XenoRestingComponent?> ent)
     {
         return Resolve(ent, ref ent.Comp, false);
+    }
+
+    public bool TryRestAction(Entity<XenoComponent?> ent, bool ignoreCooldown = false, bool ignoreEnabled = false)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        foreach (var (actionId, actionComp) in _rmcActions.GetActionsWithEvent<XenoRestActionEvent>(ent))
+        {
+            if (actionComp.AttachedEntity != ent.Owner)
+                continue;
+
+            if (!ignoreEnabled && actionComp is not { Enabled: true })
+                continue;
+
+            if (!ignoreCooldown && actionComp.Cooldown.HasValue && actionComp.Cooldown.Value.End > _timing.CurTime)
+                continue;
+
+            _actions.PerformAction(ent.Owner, (actionId, actionComp));
+            return true;
+        }
+
+        // Xeno had no rest action for some reason.
+        return false;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        // If a resting xeno tries to move while resting, unrest them if possible.
+        var query = EntityQueryEnumerator<XenoRestingComponent, InputMoverComponent>();
+        while (query.MoveNext(out var xeno, out var rest, out var mover))
+        {
+            if (rest.Running && mover.HasDirectionalMovement)
+                TryRestAction(xeno);
+        }
     }
 }

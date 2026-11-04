@@ -17,13 +17,13 @@ public sealed class GrilleWindowConstruction : InteractionTest
     {
         // Construct Grille
         await StartConstruction(Grille);
-        await InteractUsing(Rod, 10);
+        await InteractUsing(Rod, 10); // CMU14: graphs still consume the upstream MetalRod stack
         ClientAssertPrototype(Grille, Target);
         var grille = Target;
 
         // Construct Window
         await StartConstruction(Window);
-        await InteractUsing(Glass, 10);
+        await InteractUsing(Glass, 10); // CMU14: graphs still consume the upstream Glass stack
         ClientAssertPrototype(Window, Target);
 
         // Deconstruct Window

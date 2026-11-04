@@ -1,0 +1,19 @@
+# Wendigo stomach, shared by the natural and the lab-made Wendigo. The ingestion system only needs an organ with
+# a Stomach component in the body; no Satiation (hunger/thirst) is required, so Wendigos never starve.
+# Digestion keeps everything in the stomach: nothing passes into the bloodstream, so raw meat and organs cannot poison
+# or sicken the lab Wendigo's bloodstream heart, and the natural Wendigo (no bloodstream) behaves the same.
+- type: entity
+  parent: OrganAnimalStomach
+  id: CMUOrganWendigoStomach
+  name: wendigo stomach
+  description: A distended, iron-hard stomach. It still smells of what it last swallowed.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Metabolizer
+    maxReagents: 3
+    metabolizerTypes: [ Animal ]
+    stages: [ Digestion ]
+    solutions:
+      Digestion:
+        solutionName: stomach
+        solutionOnBody: false

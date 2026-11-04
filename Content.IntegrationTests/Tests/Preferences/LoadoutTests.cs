@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using Content.IntegrationTests.Fixtures;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.Marines.Orders;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
@@ -9,7 +12,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.Preferences;
 
 [TestFixture]
-public sealed class LoadoutTests
+public sealed class LoadoutTests : GameTest
 {
     [TestPrototypes]
     private const string Prototypes = @"
@@ -21,25 +24,90 @@ public sealed class LoadoutTests
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorGrey
 
+- type: loadout
+  id: TestPointLoadoutThree
+  cost: 3
+
+- type: loadout
+  id: TestPointLoadoutFour
+  cost: 4
+
+- type: entity
+  id: TestLoadoutSkill
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillDefinition
+
+- type: loadout
+  id: TestSkillUpgrade
+  cost: 2
+  maxSelections: 2
+  effects:
+  - !type:SkillLoadoutEffect
+    skill: TestLoadoutSkill
+    amount: 1
+
 - type: loadoutGroup
   id: LoadoutTesterJumpsuit
   name: generic-unknown
   loadouts:
   - TestJumpsuit
 
+- type: loadoutGroup
+  id: LoadoutTesterPoints
+  name: generic-unknown
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - TestPointLoadoutThree
+  - TestPointLoadoutFour
+
+- type: loadoutGroup
+  id: LoadoutTesterSkills
+  name: generic-unknown
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - TestSkillUpgrade
+
 - type: roleLoadout
   id: JobLoadoutTester
   groups:
   - LoadoutTesterJumpsuit
 
+- type: roleLoadout
+  id: JobLoadoutPointTester
+  points: 5
+  groups:
+  - LoadoutTesterPoints
+
+- type: roleLoadout
+  id: JobLoadoutSkillTester
+  points: 5
+  groups:
+  - LoadoutTesterSkills
+
 - type: job
   id: LoadoutTester
   playTimeTracker: PlayTimeLoadoutTester
+
+- type: job
+  id: LoadoutSkillTester
+  playTimeTracker: PlayTimeLoadoutTester
+  roundComponents:
+  - type: Skills
+    skills:
+      TestLoadoutSkill: 1
 ";
 
     private readonly Dictionary<string, EntProtoId> _expectedEquipment = new()
     {
         ["jumpsuit"] = "ClothingUniformJumpsuitColorGrey"
+    };
+
+    public override PoolSettings PoolSettings => new()
+    {
+        Dirty = true,
     };
 
     /// <summary>
@@ -48,10 +116,7 @@ public sealed class LoadoutTests
     [Test]
     public async Task TestEmptyLoadout()
     {
-        var pair = await PoolManager.GetServerClient(new PoolSettings()
-        {
-            Dirty = true,
-        });
+        var pair = Pair;
         var server = pair.Server;
 
         var entManager = server.ResolveDependency<IEntityManager>();
@@ -86,6 +151,180 @@ public sealed class LoadoutTests
             Assert.That(checkedCount, Is.EqualTo(_expectedEquipment.Count), "Number of items does not match expected!");
 
             entManager.DeleteEntity(tester);
+        });
+    }
+
+    /// <summary>
+    /// Checks that changing a selection immediately updates its remaining points.
+    /// </summary>
+    [Test]
+    public async Task TestSelectionUpdatesPoints()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var protoManager = server.ResolveDependency<IPrototypeManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            var loadout = new RoleLoadout("JobLoadoutPointTester")
+            {
+                Points = 5,
+                SelectedLoadouts =
+                {
+                    ["LoadoutTesterPoints"] = new List<Loadout>(),
+                },
+            };
+
+            Assert.That(loadout.AddLoadout("LoadoutTesterPoints", "TestPointLoadoutThree", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(2));
+
+            // Replacing an item at the group limit must refund the old item as well.
+            Assert.That(loadout.AddLoadout("LoadoutTesterPoints", "TestPointLoadoutFour", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(1));
+
+            Assert.That(loadout.RemoveLoadout("LoadoutTesterPoints", "TestPointLoadoutFour", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(5));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Checks that repeatable skill upgrades respect their cap, spend points per copy,
+    /// and add to the entity's existing job skill level.
+    /// </summary>
+    [Test]
+    public async Task TestRepeatableSkillUpgrade()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var protoManager = server.ResolveDependency<IPrototypeManager>();
+        var stationSystem = entManager.System<StationSpawningSystem>();
+        var skillsSystem = entManager.System<SkillsSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var loadout = new RoleLoadout("JobLoadoutSkillTester")
+            {
+                Points = 5,
+                SelectedLoadouts =
+                {
+                    ["LoadoutTesterSkills"] = new List<Loadout>(),
+                },
+            };
+
+            Assert.That(loadout.AddLoadout("LoadoutTesterSkills", "TestSkillUpgrade", protoManager), Is.True);
+            Assert.That(loadout.AddLoadout("LoadoutTesterSkills", "TestSkillUpgrade", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(1));
+            Assert.That(loadout.AddLoadout("LoadoutTesterSkills", "TestSkillUpgrade", protoManager), Is.False);
+            Assert.That(loadout.SelectedLoadouts["LoadoutTesterSkills"], Has.Count.EqualTo(2));
+
+            var profile = new HumanoidCharacterProfile();
+            profile.SetLoadout(loadout);
+            var tester = stationSystem.SpawnPlayerMob(
+                testMap.GridCoords,
+                job: "LoadoutSkillTester",
+                profile,
+                station: null);
+
+            Assert.That(skillsSystem.GetSkill(tester, "TestLoadoutSkill"), Is.EqualTo(3));
+
+            Assert.That(loadout.RemoveLoadout("LoadoutTesterSkills", "TestSkillUpgrade", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(3));
+
+            entManager.DeleteEntity(tester);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ColonyAdministratorLeadershipUpgradeGrantsOrderActions()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var entManager = server.ResolveDependency<IEntityManager>();
+        var protoManager = server.ResolveDependency<IPrototypeManager>();
+        var stationSystem = entManager.System<StationSpawningSystem>();
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var loadout = new RoleLoadout("JobAU14JobCivilianColonyAdministrator")
+            {
+                Points = 100,
+                SelectedLoadouts =
+                {
+                    ["ColonyAdministratorSkillsAU14"] = new List<Loadout>(),
+                },
+            };
+
+            Assert.That(loadout.AddLoadout(
+                "ColonyAdministratorSkillsAU14",
+                "ColonyAdministratorLeadershipSkillAU14",
+                protoManager), Is.True);
+
+            var profile = new HumanoidCharacterProfile();
+            profile.SetLoadout(loadout);
+            var administrator = stationSystem.SpawnPlayerMob(
+                testMap.GridCoords,
+                job: "AU14JobCivilianColonyAdministrator",
+                profile,
+                station: null);
+
+            Assert.That(entManager.TryGetComponent(administrator, out MarineOrdersComponent? orders), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(orders!.MoveActionEntity, Is.Not.Null);
+                Assert.That(orders.HoldActionEntity, Is.Not.Null);
+                Assert.That(orders.FocusActionEntity, Is.Not.Null);
+            });
+
+            entManager.DeleteEntity(administrator);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Checks that every loadout referenced by a group exists.
+    /// </summary>
+    [Test]
+    public async Task TestLoadoutGroupReferences()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var protoManager = server.ResolveDependency<IPrototypeManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            var missing = new List<string>();
+
+            foreach (var group in protoManager.EnumeratePrototypes<LoadoutGroupPrototype>())
+            {
+                foreach (var loadout in group.Loadouts)
+                {
+                    if (!protoManager.HasIndex<LoadoutPrototype>(loadout))
+                        missing.Add($"{group.ID}: {loadout}");
+                }
+            }
+
+            Assert.That(missing, Is.Empty,
+                $"Loadout groups reference unknown loadouts:\n{string.Join('\n', missing)}");
         });
 
         await pair.CleanReturnAsync();

@@ -11,6 +11,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Network;
@@ -23,6 +24,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 {
     [Dependency] private BulletBoxSystem _bulletBox = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -87,14 +89,14 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 
         if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicleUid) || vehicleUid == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-no-vehicle"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-no-vehicle"), ent, user);
             return false;
         }
 
         if (!TryComp(vehicleUid.Value, out HardpointSlotsComponent? hardpoints) ||
             !TryComp(vehicleUid.Value, out ItemSlotsComponent? itemSlots))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), ent, user);
             return false;
         }
 
@@ -214,7 +216,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 
             if (GetDirectUnloadAmount(directAmmo, directHardpointAmmo, args.AmmoSlot) <= 0)
             {
-                _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-empty", ("box", directAmmoUid)), ent, args.Actor);
+                _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-empty", ("box", directAmmoUid)), ent, args.Actor);
                 return;
             }
 
@@ -239,7 +241,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
             activeItem is not { } activeBox ||
             !TryComp(activeBox, out BulletBoxComponent? box))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-hold-ammo"), ent, args.Actor);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-hold-ammo"), ent, args.Actor);
             return;
         }
 
@@ -254,7 +256,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
             var popup = box.Amount <= 0
                 ? Loc.GetString("rmc-vehicle-ammo-loader-empty", ("box", activeBox))
                 : Loc.GetString("rmc-vehicle-ammo-loader-full", ("target", ammoUid));
-            _popup.PopupClient(popup, ent, args.Actor);
+            _popup.PopupEntity(popup, ent, args.Actor);
             return;
         }
 
@@ -284,7 +286,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
             if (actor == user)
                 return true;
 
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-in-use"), loader, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-in-use"), loader, user);
             return false;
         }
 
@@ -432,7 +434,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 
         if (!_vehicleSystem.TryGetVehicleFromInterior(loader.Owner, out var vehicleUid) || vehicleUid == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-no-vehicle"), loader, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-no-vehicle"), loader, user);
             return false;
         }
 
@@ -440,14 +442,14 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 
         if (loader.Comp.BulletType != null && loader.Comp.BulletType != box.BulletType)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-wrong-ammo"), loader, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-wrong-ammo"), loader, user);
             return false;
         }
 
         if (!TryComp(vehicle, out HardpointSlotsComponent? hardpoints) ||
             !TryComp(vehicle, out ItemSlotsComponent? itemSlots))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), loader, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), loader, user);
             return false;
         }
 
@@ -456,7 +458,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
             var popup = result == AmmoLoaderLookupResult.WrongAmmo
                 ? Loc.GetString("rmc-vehicle-ammo-loader-wrong-ammo")
                 : Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint");
-            _popup.PopupClient(popup, loader, user);
+            _popup.PopupEntity(popup, loader, user);
             return false;
         }
 
@@ -484,7 +486,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 
         if (!_vehicleSystem.TryGetVehicleFromInterior(loader.Owner, out var vehicleUid) || vehicleUid == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-no-vehicle"), loader, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-no-vehicle"), loader, user);
             return false;
         }
 
@@ -493,13 +495,13 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
         if (!TryComp(vehicle, out HardpointSlotsComponent? hardpoints) ||
             !TryComp(vehicle, out ItemSlotsComponent? itemSlots))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), loader, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), loader, user);
             return false;
         }
 
         if (!TryFindAmmoProvider(vehicle, hardpoints, itemSlots, loader.Comp, slotPath, out var provider))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), loader, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-no-hardpoint"), loader, user);
             return false;
         }
 
@@ -673,7 +675,8 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
                 slot.Capacity,
                 CanLoadSlot(heldBox, ammoPrototype, ammo, hardpointAmmo, slot.SlotIndex),
                 _hardpointAmmo.HasUnloadRounds(hardpointAmmo, ammo, slot.SlotIndex),
-                slot.IsReadySlot));
+                slot.IsReadySlot,
+                slot.IsReadySlot ? _bulletBox.GetBoxForAmmo(ammo.Proto) : null)); // CMU14
         }
 
         return entries;
@@ -729,9 +732,14 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
         if (box.Comp.Amount <= 0)
             Del(box.Owner);
 
+        // RMC14: swap the chambered shell type when loading into an empty ready slot,
+        // so boxes like AP/HE/canister variants can all feed the same gun.
+        if (ammoSlot == 0 && ammo.Count == 0 && box.Comp.AmmoProto is { } ammoProto)
+            _gun.SetBallisticProto((ammoUid, ammo), ammoProto);
+
         _hardpointAmmo.TryLoadIntoSlot((ammoUid, hardpointAmmo), ammo, ammoSlot, transferAmount);
 
-        _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-loaded", ("amount", transferAmount), ("target", ammoUid)), loader, user);
+        _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-loaded", ("amount", transferAmount), ("target", ammoUid)), loader, user);
     }
 
     private void DoDirectUnloadAmmoSlot(
@@ -747,18 +755,19 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
         if (transferAmount <= 0)
             return;
 
-        var unloadedAmount = SpawnUnloadedAmmo(user, refill, transferAmount);
+        var unloadedAmount = SpawnUnloadedAmmo(user, refill, transferAmount, ammoSlot == 0 ? ammo.Proto : null); // CMU14
         if (unloadedAmount <= 0)
             return;
 
         _hardpointAmmo.TryUnloadFromSlot((ammoUid, hardpointAmmo), ammo, ammoSlot, unloadedAmount);
 
-        _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-unloaded", ("amount", unloadedAmount), ("target", ammoUid)), loader, user);
+        _popup.PopupEntity(Loc.GetString("rmc-vehicle-ammo-loader-unloaded", ("amount", unloadedAmount), ("target", ammoUid)), loader, user);
     }
 
-    private int SpawnUnloadedAmmo(EntityUid user, RefillableByBulletBoxComponent refill, int amount)
+    private int SpawnUnloadedAmmo(EntityUid user, RefillableByBulletBoxComponent refill, int amount, EntProtoId? chamberedProto) // CMU14 Method
     {
-        if (amount <= 0 || refill.BulletType is not { } prototype)
+        // CMU14: chambered variant rounds unload as the shell box that loaded them, not the generic bullet type box
+        if (amount <= 0 || (_bulletBox.GetBoxForAmmo(chamberedProto) ?? refill.BulletType) is not { } prototype)
             return 0;
 
         var remaining = amount;

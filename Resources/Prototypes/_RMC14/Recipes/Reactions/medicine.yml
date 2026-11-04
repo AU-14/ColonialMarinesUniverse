@@ -68,6 +68,7 @@
 
 - type: reaction
   id: CMDexalin
+  quantized: true
   reactants:
     RMCOxygen:
       amount: 2
@@ -184,7 +185,6 @@
 
 - type: reaction
   id: CMUFentanylPrecursor
-  minTemp: 350
   reactants:
     CMUOxycodone:
       amount: 1
@@ -195,8 +195,6 @@
 
 - type: reaction
   id: CMUFentanyl
-  minTemp: 400
-  maxTemp: 420
   reactants:
     CMUFentanylPrecursor:
       amount: 1
@@ -204,12 +202,17 @@
       amount: 1
     RMCPhosphorus:
       amount: 1
+  # CMU14 Begin: cooking gas leak cut, colony cook rooms have no atmos counterplay
+  # effects:
+  # - !type:CreateGas
+  #   gas: NitrousOxide
+  #   moles: 1
+  # CMU14 End
   products:
     CMUFentanyl: 1
 
 - type: reaction
   id: CMUMethPrecursor
-  minTemp: 370
   reactants:
     RMCMethylphenidate:
       amount: 2
@@ -217,12 +220,17 @@
       amount: 1
     RMCPhosphorus:
       amount: 1
+  # CMU14 Begin: cooking gas leak cut
+  # effects:
+  # - !type:CreateGas
+  #   gas: Ammonia
+  #   moles: 1
+  # CMU14 End
   products:
     CMUMethPrecursor: 3
 
 - type: reaction
   id: CMUMethBase
-  minTemp: 400
   reactants:
     CMUMethPrecursor:
       amount: 1
@@ -235,7 +243,6 @@
 
 - type: reaction
   id: CMUMethamphetamine
-  maxTemp: 320
   reactants:
     CMUMethBase:
       amount: 1
@@ -443,3 +450,17 @@
       amount: 1
   products:
     RMCLipozine: 3
+
+- type: reaction
+  id: RMCRussianRed
+  reactants:
+    RMCEthanol:
+      amount: 1
+    CMArithrazine:
+      amount: 1
+    CMTricordrazine:
+      amount: 1
+  products:
+    RMCRussianRed: 3
+
+

@@ -1,0 +1,12 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                xmlns:fighter="clr-namespace:Content.Client.CMU14.Fighter"
+                MouseFilter="Ignore" RectClipContent="True">
+    <BoxContainer Orientation="Vertical" SeparationOverride="5" Margin="8" MouseFilter="Ignore">
+        <fighter:FighterCockpitReadout Name="Title" Text="{Loc 'cmu-manpad-radar-title'}" MinHeight="20" MaxHeight="20" />
+        <fighter:FighterCockpitReadout Name="Identification" MinHeight="18" MaxHeight="18" />
+        <fighter:FighterAirspaceMapControl Name="Map" VerticalExpand="True" MouseFilter="Ignore" />
+        <fighter:FighterCockpitReadout Name="Sector" MinHeight="20" MaxHeight="20" />
+        <fighter:FighterCockpitReadout Name="Status" MinHeight="28" MaxHeight="28" />
+        <fighter:FighterCockpitReadout Text="{Loc 'cmu-manpad-radar-legend'}" MinHeight="24" MaxHeight="24" />
+    </BoxContainer>
+</PanelContainer>

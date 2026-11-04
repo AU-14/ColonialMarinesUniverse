@@ -780,7 +780,7 @@ public sealed partial class TacticalMapWrapper : Control
         CooldownBar.MinValue = (float)LastUpdateAt.TotalSeconds;
         CooldownBar.MaxValue = (float)NextUpdateAt.TotalSeconds;
         CooldownBar.Value = (float)(LastUpdateAt.TotalSeconds + NextUpdateAt.TotalSeconds - time.CurTime.TotalSeconds);
-        CooldownLabel.Text = Loc.GetString("ui-tactical-map-cooldown-seconds", ("seconds", (int)cooldown.TotalSeconds));
+        CMUUpdateCooldownText((int) cooldown.TotalSeconds); // CMU14: only localize visible second changes.
     }
 
     private bool IsInQueenEyeMode()
@@ -891,6 +891,35 @@ public sealed partial class TacticalMapWrapper : Control
             }
         }
 
+        foreach ((int id, TacticalMapBlip blip) in userComp.WeYuBlips) // CMU14
+        {
+            if (id == playerNetId)
+            {
+                playerIndices = blip.Indices;
+                return true;
+            }
+        }
+
+        foreach ((int id, TacticalMapBlip blip) in userComp.AbominationBlips) // CMU14
+        {
+            if (id == playerNetId)
+            {
+                playerIndices = blip.Indices;
+                return true;
+            }
+        }
+
+        // CMU14 Begin: resolve the local hunter marker from its private map channel.
+        foreach ((int id, TacticalMapBlip blip) in userComp.YautjaBlips)
+        {
+            if (id == playerNetId)
+            {
+                playerIndices = blip.Indices;
+                return true;
+            }
+        }
+        // CMU14 End
+
         return false;
     }
 
@@ -913,7 +942,7 @@ public sealed partial class TacticalMapWrapper : Control
         SquadObjectivesContainer.Visible = true;
 
         // Clear existing labels
-        SquadObjectivesBox.DisposeAllChildren();
+        SquadObjectivesBox.ReleaseChildren();
 
         // Create a label for each objective type
         foreach (SquadObjectiveType objectiveType in Enum.GetValues<SquadObjectiveType>())

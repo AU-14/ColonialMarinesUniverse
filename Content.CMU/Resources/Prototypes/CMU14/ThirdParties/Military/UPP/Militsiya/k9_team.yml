@@ -1,0 +1,90 @@
+# The K9 call-in for UPP forces: a militsiya handler and a military police dog, in place of the S&R team.
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUIntelThirdPartyK9HandlerUPP
+  name: UPP Militsiya K9 Handler
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPMilitsiya
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-upp-k9handler
+    description: cmu-job-description-upp-k9handler
+    job: CMUJobUPPK9Handler
+    rules: cmu-uppline-rules
+    raffle:
+      settings: short
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillPolice: 3
+      RMCSkillMedical: 1
+  - type: K9Handler
+
+- type: job
+  parent: AU14Jobk9handlerBase
+  id: CMUJobUPPK9Handler
+  roundForce: UPPLine
+  name: cmu-job-title-upp-k9handler
+  description: cmu-job-description-upp-k9handler
+  startingGear: CMUGearUPPK9Handler
+  playTimeTracker: AU14JobThirdPartyK9Handler
+  spawnMenuRoleName: cmu-job-name-upp-k9handler
+  supervisors: cmu-uppline-leader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankSPPSMlts:
+      entity: AU14ChevronPAPStarshiyMilitsioner
+      requirements: []
+
+- type: startingGear
+  parent: CMUGearUPPMilitsiyaBase
+  id: CMUGearUPPK9Handler
+  equipment:
+    id: CMUIDCardUPPK9Handler
+    neck: RMCWhistle
+    suitstorage: RMCWeaponSMGType19
+  storage:
+    pocket1:
+    - RMCMagazineSMGType19
+    - RMCMagazineSMGType19
+    - RMCMagazineSMGType19
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPK9Handler
+  name: UPP militsiya K9 handler ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPK9Handler
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: partySpawn
+  id: CMUIntelThirdPartyK9UPPSpawn
+  leadersToSpawn:
+    CMUIntelThirdPartyK9HandlerUPP: 1
+  gruntsToSpawn:
+    AU14MobK9MPGhostRole: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUIntelThirdPartyK9UPP
+  displayName: UPP Militsiya K9 Team
+  partyspawn: CMUIntelThirdPartyK9UPPSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false

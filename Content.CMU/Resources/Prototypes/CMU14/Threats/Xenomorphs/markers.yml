@@ -1,0 +1,32 @@
+- type: entity
+  name: xeno cf threat entity Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatentityspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Entity
+    ID: xenocf
+
+- type: entity
+  name: xeno cf threat member Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatmemberspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Member
+    ID: xenocf
+
+- type: entity
+  name: xeno cf threat Leader Spawn Marker
+  parent: MarkerBase
+  id: xenocfthreatleaderspawnmarker
+  components:
+  - type: Sprite
+    state: green
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+    ID: xenocf

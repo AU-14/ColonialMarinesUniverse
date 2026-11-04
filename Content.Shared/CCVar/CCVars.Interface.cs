@@ -20,7 +20,10 @@ public sealed partial class CCVars
     /// The layout style of the UI
     /// </summary>
     public static readonly CVarDef<string> UILayout =
-        CVarDef.Create("ui.layout", "Default", CVar.CLIENTONLY | CVar.ARCHIVE);
+        // cmu edit start
+        // CVarDef.Create("ui.layout", "Default", CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("ui.layout", "Separated", CVar.CLIENTONLY | CVar.ARCHIVE);
+        // cmu edit end
 
     /// <summary>
     /// If true, uses the improved Gmod-style construction menu instead of the classic one.
@@ -142,4 +145,16 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<int> AdminOverlayStackMax =
         CVarDef.Create("ui.admin_overlay_stack_max", 3, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// The default state for showing admin overlays in the strip menu.
+    /// </summary>
+    public static readonly CVarDef<bool> AdminStripMenuOverlayDefault =
+        CVarDef.Create("ui.admin_strip_menu_overlay_default", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// If true, ghosts will see an "(F)" button next to chat messages, which can be used to follow the sender.
+    /// </summary>
+    public static readonly CVarDef<bool> InterfaceChatFollowButton =
+        CVarDef.Create("ui.chat_follow_button", true, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 }

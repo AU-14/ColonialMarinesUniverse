@@ -1,0 +1,21 @@
+author: PoltavskaPraca
+category: CMU
+changes:
+- message: vehicle pit and asrs pit now correctly eat items and mobs when they arent
+    raised or are preparing to move
+  type: Add
+- message: crewmen now have to order their vehicle parts via ASRS requisitions, all
+    parts have dollar values on purchases. That means modules are replaceable now.
+  type: Add
+- message: req starting balance now is 30k dollars
+  type: Add
+- message: pilots now have access to the vehicle vendor (the one where the tanks/jets
+    are stored)
+  type: Add
+- message: changed some module and vehilce weapon names to CMss13 variation (like
+    ACE acannon -> AC3-E acannon
+  type: Tweak
+- message: asrs pit now doesn't check for obj every 0.5 seconds when it's lowered
+  type: Tweak
+time: '2026-10-18T10:04:19.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2173

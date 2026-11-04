@@ -1,8 +1,8 @@
 using System;
-using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Bull;
+using Content.Shared.CMU14.Threats.Mobs.Xeno.Caste.Bull;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.Xenonids;
+namespace Content.Tests.Shared.CMU14.Xenonids;
 
 [TestFixture]
 public sealed class CMUXenoBullChargeTest

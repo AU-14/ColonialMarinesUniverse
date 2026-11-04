@@ -38,6 +38,7 @@
 
                 <BoxContainer Orientation="Vertical" SeparationOverride="3" HorizontalExpand="True">
                     <Label Text="Vehicle Hardpoints" StyleClasses="LabelHeading"/>
+                    <Button Name="RepairFrameButton" Text="{Loc 'rmc-hardpoint-ui-repair-frame'}"/>
                     <Label
                         Name="ErrorLabel"
                         Access="Public"

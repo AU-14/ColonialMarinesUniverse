@@ -115,8 +115,10 @@
   - type: IntegratedVisors
     startToggled: true
     visorsToAdd:
-    - RMCVisorMedicalAdvancedIntegrated
-    - RMCVisorSquadIntegrated
+    # CMU14: corpsmen get the combined medical squad optic
+    # - RMCVisorMedicalAdvancedIntegrated
+    # - RMCVisorSquadIntegrated
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: CMArmorHelmetM10Medic
@@ -410,6 +412,10 @@
   - type: HideLayerClothing
     slots:
     - Snout
+    layers:
+      Snout: HEAD
+  - type: MycotoxinProtection
+    fullProtection: true
 
 # M45 Sniper Spec
 - type: entity
@@ -455,6 +461,8 @@
     - Snout
 
 # M3-T Demo Spec
+    layers:
+      Snout: HEAD
 - type: entity
   parent: ArmorHelmetM10
   id: RMCArmorHelmetM3TDemo

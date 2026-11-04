@@ -1,6 +1,8 @@
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared.Explosion.Components; // CMU14
 using Content.Shared.Throwing;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Systems;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Timing;
 
@@ -67,6 +69,17 @@ public sealed partial class RMCTriggerSystem : EntitySystem
                 continue;
 
             _trigger.Trigger(uid);
+
+            // CMU14 Begin
+            // scatter payloads (flares) spawn their contents on the scatter system's next update and Del themselves.
+            // queueing it here could delete it before that update ever saw it
+            if (TryComp<ScatteringGrenadeComponent>(uid, out var scatter) && scatter.IsTriggered && scatter.Count > 0)
+            {
+                RemCompDeferred<ActiveTriggerOnThrowEndComponent>(uid);
+                continue;
+            }
+            // CMU14 End
+
             if (!EntityManager.IsQueuedForDeletion(uid) && !TerminatingOrDeleted(uid))
                 QueueDel(uid);
         }

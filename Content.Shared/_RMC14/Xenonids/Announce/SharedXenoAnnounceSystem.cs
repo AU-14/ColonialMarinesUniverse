@@ -39,9 +39,16 @@ public abstract partial class SharedXenoAnnounceSystem : EntitySystem
         }
     }
 
+    // CMU14
+    /// <summary>
+    ///     Wraps a hive announcement's heading. The fallback is the shared xeno announcement violet,
+    ///     not the old #921992: that magenta measured 1.9:1 against the announcement band, the worst
+    ///     text contrast in the chat, and it is what a hive with no colour of its own still gets.
+    /// </summary>
     public string WrapHive(string message, Color? color = null, EntityUid? hive = null)
     {
-        color ??= Color.FromHex("#921992");
+        // CMU14
+        color ??= Color.FromHex("#C9A7EA");
         return $"[color={color.Value.ToHex()}][font size=16][bold]{message}[/bold][/font][/color]\n\n";
     }
 
@@ -127,6 +134,6 @@ public abstract partial class SharedXenoAnnounceSystem : EntitySystem
 
     public string FormatQueenMother(string message)
     {
-        return $"\n[bold][color=#7575F3][font size=24]Queen Mother Psychic Directive[/font][/color][/bold]\n\n[color=red][font size=14]{message}[/font][/color]\n\n";
+        return Loc.GetString("cmu-announcement-queen-mother", ("message", message));
     }
 }

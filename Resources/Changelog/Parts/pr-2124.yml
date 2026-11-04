@@ -1,0 +1,10 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The AN/PRC-117G search receiver no longer sometimes misses a single radio
+    line said just after its sweep went past
+  type: Fix
+- message: Fixed the flaky 3D stair camera and stun merge tests
+  type: Code
+time: '2026-10-09T17:32:36.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2124

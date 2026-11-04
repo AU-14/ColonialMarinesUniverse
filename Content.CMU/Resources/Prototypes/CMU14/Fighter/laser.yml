@@ -1,0 +1,14 @@
+- type: entity
+  id: CMUFighterLaser
+  name: fighter laser designation
+  description: A bright aircraft targeting laser. Its beam points toward the aircraft. Move away!
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#FF3636"
+    radius: 4
+    energy: 2
+  - type: FighterLaser
+  - type: TimedDespawn
+    lifetime: 10

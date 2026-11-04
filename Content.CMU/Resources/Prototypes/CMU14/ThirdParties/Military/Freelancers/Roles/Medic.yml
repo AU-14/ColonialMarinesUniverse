@@ -1,0 +1,71 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobFreelancerMedic
+  roundSide: ThirdParty
+  roundForce: CMUFreelancers
+  roundRole: FreelancerMedic
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-freelancer-prefix-medic
+  name: cmu-freelancer-name-medic
+  description: cmu-freelancer-description
+  playTimeTracker: CMUJobFreelancerMedic
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearFreelancerMedic
+  spawnMenuRoleName: Freelancer Medic (3rd party)
+  greeting: cmu-freelancer-greeting
+  icon: RMCJobIconFreelancerMedic
+  joinNotifyCrew: false
+  supervisors: cmu-freelancer-leader
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: CMUBaseMobSpeciesFreelancers
+  id: CMUJobFreelancerMedic
+  name: Freelancer Medic
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-freelancer-name-medic
+    description: cmu-freelancer-description
+    reregister: false
+    job: CMUJobFreelancerMedic
+    raffle:
+      settings: short
+    rules: cmu-freelancer-rules
+
+- type: startingGear
+  id: CMUGearFreelancerMedic
+  equipment:
+    eyes: RMCGlassesMedicalHUDGlasses
+    back: RMCSatchelLightpackFreelancerMedic
+    belt: CMBeltMedicBagFilled
+    suitstorage: WeaponRifleMAR40
+    pocket1: RMCPouchMedicalERT
+    pocket2: RMCPouchMagazineLargeMAR40
+    gloves: RMCHandsVeteranPMC
+    jumpsuit: RMCJumpsuitFreelancer
+    outerClothing: CMArmorFreelancer
+    shoes: RMCBootsSPPFilled
+    id: CMUIDCardFreelancerMedic
+    ears: RMCHeadsetDistressDukes
+
+- type: playTimeTracker
+  id: CMUJobFreelancerMedic

@@ -1,0 +1,146 @@
+- type: entity
+  abstract: true
+  parent: RMCWeaponSMGMP5Alt
+  id: CMUWeaponSMGMP5AltLoadoutBase
+  components:
+  - type: AttachableHolder
+    randomAttachmentChance: 0
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCAttachmentSuppressorCompact
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentLaserSight
+        whitelist:
+          tags:
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentBipod
+          - RMCAttachmentM203GrenadeLauncher
+          - RMCAttachmentExtinguisher
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RMCAttachmentMP5AltStockCollapsible
+        whitelist:
+          tags:
+          - RMCAttachmentMP5AltStockCollapsible
+
+- type: entity
+  parent: CMUWeaponSMGMP5AltLoadoutBase
+  id: CMUWeaponSMGMP5AltStandard
+  suffix: Filled, Standard, Sling, Laser Sight
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMMagazineSMGMP5
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGMP5
+
+- type: entity
+  parent: CMUWeaponSMGMP5AltLoadoutBase
+  id: CMUWeaponSMGMP5AltDrum
+  suffix: Filled, Drum, Sling, Laser Sight
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGMP5Drum
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGMP5
+
+- type: entity
+  parent: CMUWeaponSMGMP5AltLoadoutBase
+  id: CMUWeaponSMGMP5AltAP
+  suffix: Filled, AP, Sling, Laser Sight
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGMP5AP
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGMP5
+
+- type: entity
+  parent: CMUWeaponSMGMP5AltLoadoutBase
+  id: CMUWeaponSMGMP5AltAPDrum
+  suffix: Filled, AP Drum, Sling, Laser Sight
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGMP5APDrum
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGMP5
+
+- type: entity
+  parent: CMUWeaponSMGMP5AltLoadoutBase
+  id: CMUWeaponSMGMP5AltSquashHead
+  suffix: Filled, Squash-Head, Sling, Laser Sight
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGMP5SquashHead
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGMP5
+
+- type: entity
+  parent: CMUWeaponSMGMP5AltLoadoutBase
+  id: CMUWeaponSMGMP5AltSquashHeadDrum
+  suffix: Filled, Squash-Head Drum, Sling, Laser Sight
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGMP5SquashHeadDrum
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGMP5

@@ -1,0 +1,163 @@
+- type: entity
+  name: RPG-32 Grenade Launcher
+  parent:  [BaseWeaponLauncher, CMBaseWeaponGun, RMCBaseAttachableHolder]
+  id: RuMCWeaponLauncherRPG32
+  description: "The RPG-32 is an advanced rocket launcher designed for UPP assault units."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/RPG32_inhands.rsi
+    layers:
+    - state: base
+      sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/RPG32.rsi
+      map: ["enum.GunVisualLayers.Base"]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/RPG32_inhands.rsi
+    quickEquip: true
+    slots:
+    - suitStorage
+  - type: Gun
+    fireRate: 0.9
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/m5_shoot.ogg
+    resetOnHandSelected: false
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCProjectileRocketHJRA12
+    capacity: 1
+    cycleable: true
+    mayTransfer: false
+    insertDelay: 5
+    cycleDelay: 5
+    proto: RMCRocketHJRA12AT
+    soundInsert:
+      path: /Audio/_RMC14/Weapons/Guns/Cock/m5_ammo.ogg
+  - type: Corrodible
+    isCorrodible: false
+  - type: ExplosionResistance
+    damageCoefficient: 0
+  - type: Wieldable
+  - type: GunRequiresWield
+  - type: RMCNameItemOnVend
+    item: PrimaryGun
+  - type: OnShootTriggerAmmoTimer
+    delay: 0.25 # TODO RMC14 Make some way for rockets to explode when they stop, for shooting at the ground closer than max range.
+    # This is a temporary hack to guarantee it will always go off after stopping even if it doesn't collide with anything.
+    # Works for almost all gameplay purposes at least right now because even max range rockets are less than 0.2s and it's fast enough not matter.
+  - type: ShootAtFixedPoint
+    shootArcProj: false
+  - type: WieldableSpeedModifiers
+    base: 0.55
+    light: 0.72
+    medium: 0.78
+    heavy: 0.84
+  - type: WieldDelay
+    baseDelay: 1.1
+    preventFiring: true
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-stock: -0.65, 0
+  - type: IgnorePredictionHide
+  - type: GunIgnorePrediction
+  - type: AssistedReloadWeapon
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/explosive_mouse.rsi
+      state: all
+
+- type: entity
+  parent: BaseItem
+  id: RuMCRocketRPG_Termobaric
+  name: RPG32 Termobaric rocket
+  description: Rocket for the UPP assault units.
+  components:
+  - type: Tag
+    tags:
+    - RMCProjectileRocketHJRA12
+  - type: CartridgeAmmo
+    proto: RuMCProjectileRocketRPG_Termobaric
+    deleteOnSpawn: true
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/rpg_rocket.rsi
+    layers:
+    - state: rpg_Phosphorus
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Normal
+  - type: Appearance
+  - type: SpentAmmoVisuals
+    state: rpg_Phosphorus
+    suffix: false
+  - type: IgnorePredictionHide
+  - type: RMCLoreExaminable
+    content: rmc-lore-examinable-hjra-12-extreme-intensity-incendiary-rocket
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: RMCProjectileRocket84mm
+  id: RuMCProjectileRocketRPG_Termobaric
+  name: RPG32 Termobaric rocket
+  description: Rocket for the UPP assault units.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/RPG32/rpg_rocket.rsi
+    layers:
+    - state: rpg_Phosphorus
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: Projectile
+    deleteOnCollide: false
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Heat: 50
+    maxFixedRange: 7
+  - type: Explosive
+    maxIntensity: 10
+    intensitySlope: 20
+    totalIntensity: 5
+    canCreateVacuum: false
+  - type: DeleteOnTrigger
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+  - type: SpawnOnTerminate
+    spawn: RuMCSmokeTermobaric
+    spawnOffset: -0.5
+  - type: RMCAreaDamage
+    damageArea: 3.5
+    falloffDistance: 3.5
+
+- type: entity
+  parent: Smoke
+  id: RuMCSmokeTermobaricNoSpread
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Occluder
+  - type: Sprite
+    sprite: _RMC14/Effects/smoke.rsi
+    state: smoke2
+  - type: TimedDespawn
+    lifetime: 0.3
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: Appearance
+  - type: DeleteOnExplosion
+  - type: RMCIgniteOnCollide
+    maxStacks: 1
+    intensity: 75
+    burnColor: "#b55e28"
+  - type: EdgeSpreader
+    id: Smoke
+
+- type: entity
+  parent: RuMCSmokeTermobaricNoSpread
+  id: RuMCSmokeTermobaric
+  components:
+  - type: EvenSmoke
+    spawn: RuMCSmokeTermobaricNoSpread
+    initialSpread: 3
+    range: 3

@@ -14,9 +14,11 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.ScissorCut;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Explosion;
 using Content.Shared.Hands;
@@ -37,6 +39,8 @@ using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Components; // CMU14
+using Robust.Shared.Physics.Systems; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Numerics;
@@ -71,6 +75,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
     [Dependency] private RMCPullingSystem _rmcPull = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!; // CMU14
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 
@@ -104,13 +109,13 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
 
         if (!_interaction.InRangeUnobstructed(xeno, target, xeno.Comp.Range) || _rmcMap.IsTileBlocked(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
-        if (!_area.TryGetArea(target, out var area, out var _) || area.Value.Comp.NoTunnel)
+        if (!_area.TryGetArea(target, out var area, out var _) || !_area.CanDestroyLeapInto(area.Value)) // CMU14
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-area"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-area"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -140,7 +145,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
 
         if (!_interaction.InRangeUnobstructed(xeno, coords, xeno.Comp.Range) || _rmcMap.IsTileBlocked(coords))
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -151,9 +156,13 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
         {
             var leaping = EnsureComp<XenoDestroyLeapingComponent>(xeno);
             leaping.Target = coords;
-            leaping.LeapMoveAt = _timing.CurTime + xeno.Comp.CrashTime / 2;
+            // CMU14: no mid flight move; the teleport happens on landing in Update
+            //leaping.LeapMoveAt = _timing.CurTime + xeno.Comp.CrashTime / 2;
             leaping.LeapEndAt = _timing.CurTime + xeno.Comp.CrashTime;
             Dirty(xeno.Owner, leaping);
+
+            // CMU14: airborne means unhittable at either spot, not parked on the telegraphed tile
+            _physics.SetCanCollide(xeno, false);
 
             var filter = Filter.Pvs(xeno);
             Vector2 offset = _transform.ToMapCoordinates(coords).Position - _transform.GetMapCoordinates(xeno).Position;
@@ -284,17 +293,22 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
                 continue;
             }
 
-            if (leaping.LeapMoveAt != null && time > leaping.LeapMoveAt)
-            {
-                if (leaping.Target != null)
-                    _transform.SetCoordinates(uid, leaping.Target.Value);
-
-                leaping.LeapMoveAt = null;
-                Dirty(uid, leaping);
-            }
+            // CMU14: mid flight teleport removed (refired rocket hit a hitbox king/queen leaps)
+            //if (leaping.LeapMoveAt != null && time > leaping.LeapMoveAt)
+            //{
+            //    if (leaping.Target != null)
+            //        _transform.SetCoordinates(uid, leaping.Target.Value);
+            //
+            //    leaping.LeapMoveAt = null;
+            //    Dirty(uid, leaping);
+            //}
 
             if (leaping.LeapEndAt == null || time < leaping.LeapEndAt)
                 continue;
+
+            // CMU14: teleport on landing, not halfway, or the hitbox sits on the landing/telegraphed tile while the sprite is still airborne
+            if (leaping.Target != null)
+                _transform.SetCoordinates(uid, leaping.Target.Value);
 
             CrashDown((uid, destroy));
         }
@@ -322,6 +336,9 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
 
     protected virtual void OnLeapingRemove(Entity<XenoDestroyLeapingComponent> xeno, ref ComponentRemove args)
     {
+        if (_net.IsServer && HasComp<PhysicsComponent>(xeno)) // CMU14
+            _physics.SetCanCollide(xeno, true);
+
         var actions = _actions.GetActions(xeno);
         foreach (var action in actions)
         {

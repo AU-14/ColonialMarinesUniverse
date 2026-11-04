@@ -36,11 +36,18 @@
   - type: UserInterface
     interfaces:
       enum.RMCCameraUiKey.Key:
-        type: RMCCameraBui
+        # cmu edit start: in-world television screen, watched from anywhere it can be seen
+        type: CMUTelevisionBui
+        interactionRange: 0
+        # cmu edit end
   - type: RMCCameraComputer
-    protoIds:
-    - RMCTelevision
     title: rmc-television-title
+  # cmu edit start: one channel for everyone, closes when out of sight
+  - type: CMUTelevision
+  # cmu edit end
+  - type: CameraNetworkReceiver
+    networks: [RMCTelevision]
+    supportedSources: Rmc
   - type: Machine
     board: RMCCircuitboardTelevision
 
@@ -92,10 +99,17 @@
   - type: UserInterface
     interfaces:
       enum.RMCCameraUiKey.Key:
-        type: RMCCameraBui
+        # cmu edit start: in-world television screen, watched from anywhere it can be seen
+        type: CMUTelevisionBui
+        interactionRange: 0
+        # cmu edit end
   - type: RMCCameraComputer
-    protoIds:
-    - RMCTelevision
     title: rmc-television-title
+  # cmu edit start: one channel for everyone, closes when out of sight
+  - type: CMUTelevision
+  # cmu edit end
+  - type: CameraNetworkReceiver
+    networks: [RMCTelevision]
+    supportedSources: Rmc
   - type: Machine
     board: RMCCircuitboardTelevision

@@ -37,3 +37,9 @@ public record struct ShotAttemptedEvent
         Cancelled = false;
     }
 }
+
+/// <summary>
+/// Raised client-side when fire input is pressed while a gun is still waiting for <see cref="GunComponent.NextFire"/>.
+/// </summary>
+[ByRefEvent]
+public readonly record struct GunCooldownAttemptEvent(EntityUid User, Entity<GunComponent> Used);

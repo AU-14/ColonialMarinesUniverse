@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server.Maps;
+using Content.Shared.Maps;
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Content.Server.AU14.Round;
+using Content.Server.CMU14.Round;
 
 namespace Content.Server.GameTicking
 {
@@ -41,7 +41,8 @@ namespace Content.Server.GameTicking
 
         public void UpdateInfoText()
         {
-            var filter = Filter.Empty().AddPlayers(_playerManager.NetworkedSessions);
+            var filter = Filter.Empty().AddPlayers(
+                _playerManager.NetworkedSessions.Where(session => session.Channel.IsConnected));
             RaiseNetworkEvent(GetInfoMsg(), filter);
             RaiseNetworkEvent(GetRoundStatusMsg(), filter);
         }
@@ -114,15 +115,18 @@ namespace Content.Server.GameTicking
 
             var govforShip = _auRoundSystem.GetSelectedGovforShip();
             var opforShip = _auRoundSystem.GetSelectedOpforShip();
-            var govforShipDisplay = !string.IsNullOrWhiteSpace(govforShip) ? govforShip : "None";
-            var opforShipDisplay = !string.IsNullOrWhiteSpace(opforShip) ? opforShip : "None";
+            var govforShipDisplay = !string.IsNullOrWhiteSpace(govforShip) ? govforShip : Loc.GetString("lobby-info-none"); // CMU14: Hardcode localization
+            var opforShipDisplay = !string.IsNullOrWhiteSpace(opforShip) ? opforShip : Loc.GetString("lobby-info-none"); // CMU14: Hardcode localization
 
-            var gmTitle = LocalizeOrRaw(preset.ModeTitle);
-            var desc = LocalizeOrRaw(preset.Description);
-            var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name;
-            var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name;
-            var govforPlatoonDisplay = !string.IsNullOrWhiteSpace(govforPlatoon) ? govforPlatoon : "None";
-            var opforPlatoonDisplay = !string.IsNullOrWhiteSpace(opforPlatoon) ? opforPlatoon : "None";
+            var displayPreset = Decoy ?? preset;
+            var gmTitle = LocalizeOrRaw(displayPreset.ModeTitle);
+            var desc = LocalizeOrRaw(displayPreset.Description);
+            // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
+            var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoonProto ? Loc.GetString(govforPlatoonProto.Name) : null;
+            var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon is { } opforPlatoonProto ? Loc.GetString(opforPlatoonProto.Name) : null;
+            var govforPlatoonDisplay = !string.IsNullOrWhiteSpace(govforPlatoon) ? govforPlatoon : Loc.GetString("lobby-info-none");
+            var opforPlatoonDisplay = !string.IsNullOrWhiteSpace(opforPlatoon) ? opforPlatoon : Loc.GetString("lobby-info-none");
+            // CMU14 End
             return Loc.GetString(
                 RunLevel == GameRunLevel.PreRoundLobby
                     ? "game-ticker-get-info-preround-text"
@@ -140,6 +144,41 @@ namespace Content.Server.GameTicking
                 ("desc", desc));
         }
 
+        /// <summary>
+        ///     Structured round info for the lobby table. Order matters: these are laid out two
+        ///     columns per row, each heading with its value directly underneath.
+        /// </summary>
+        private List<LobbyRoundInfoField> GetRoundInfoFields()
+        {
+            const string govforColor = "#007EE7";
+            const string opforColor = "#FF2000";
+
+            var preset = CurrentPreset ?? Preset;
+            if (preset == null)
+                return new List<LobbyRoundInfoField>();
+
+            string Display(string? value) => !string.IsNullOrWhiteSpace(value) ? value : Loc.GetString("lobby-info-none"); // CMU14: Hardcode localization
+
+            // Order is the display order - the lobby renders these in sequence, so this list is
+            // where the panel's reading order is decided. Planet and gamemode lead because they are
+            // what a player checks first to decide whether to ready up; the GOVFOR/OPFOR pairs are
+            // reference detail read afterwards, and each pair is kept adjacent so the two sides sit
+            // side by side in the two-column grid rather than stacking.
+            return new List<LobbyRoundInfoField>
+            {
+                new(Loc.GetString("lobby-info-planet"), Display(GetPlanetMapName())),
+                new(Loc.GetString("lobby-info-gamemode"), Display(LocalizeOrRaw(preset.ModeTitle))),
+                new(Loc.GetString("lobby-info-govfor-ship"), Display(_auRoundSystem.GetSelectedGovforShip()), govforColor),
+                new(Loc.GetString("lobby-info-opfor-ship"), Display(_auRoundSystem.GetSelectedOpforShip()), opforColor),
+                new(Loc.GetString("lobby-info-govfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoonInfo ? Loc.GetString(govforPlatoonInfo.Name) : null), govforColor), // CMU14: Hardcode localization
+                new(Loc.GetString("lobby-info-opfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedOpforPlatoon is { } opforPlatoonInfo ? Loc.GetString(opforPlatoonInfo.Name) : null), opforColor), // CMU14: Hardcode localization
+                new(Loc.GetString("lobby-info-players"), Loc.GetString(
+                    "lobby-info-players-value",
+                    ("count", _playerManager.PlayerCount),
+                    ("ready", _playerGameStatuses.Values.Count(x => x == PlayerGameStatus.ReadyToPlay)))),
+            };
+        }
+
         private TickerConnectionStatusEvent GetConnectionStatusMsg()
         {
             return new TickerConnectionStatusEvent(RoundStartTimeSpan);
@@ -148,7 +187,8 @@ namespace Content.Server.GameTicking
         private TickerLobbyStatusEvent GetStatusMsg(ICommonSession session)
         {
             _playerGameStatuses.TryGetValue(session.UserId, out var status);
-            return new TickerLobbyStatusEvent(RunLevel != GameRunLevel.PreRoundLobby, LobbyBackground, status == PlayerGameStatus.ReadyToPlay, _roundStartTime, RoundPreloadTime, RoundStartTimeSpan, Paused);
+            // CMU14: map preload status.
+            return new TickerLobbyStatusEvent(RunLevel != GameRunLevel.PreRoundLobby, LobbyBackground, status == PlayerGameStatus.ReadyToPlay, _roundStartTime, RoundPreloadTime, RoundStartTimeSpan, Paused, _map.MapExists(DefaultMap));
         }
 
         private void SendStatusToAll()
@@ -161,7 +201,7 @@ namespace Content.Server.GameTicking
 
         private TickerLobbyInfoEvent GetInfoMsg()
         {
-            return new (GetInfoText());
+            return new (GetInfoText(), GetRoundInfoFields(), GetLobbyLineup());
         }
 
         private TickerRoundStatusEvent GetRoundStatusMsg()
@@ -276,6 +316,7 @@ namespace Content.Server.GameTicking
                     continue;
                 RaiseNetworkEvent(GetStatusMsg(playerSession), playerSession.Channel);
             }
+            UpdateInfoText();
         }
 
         public void ToggleReady(ICommonSession player, bool ready)
@@ -291,7 +332,6 @@ namespace Content.Server.GameTicking
                 return;
             }
 
-            var status = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;
             _playerGameStatuses[player.UserId] = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;
             RaiseNetworkEvent(GetStatusMsg(player), player.Channel);
             // update server info to reflect new ready count

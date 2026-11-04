@@ -1,0 +1,8 @@
+author: murdocstarsim
+category: CMU
+changes:
+- message: Fixed the department in SOP that was displaying an incorrect name and was
+    missing headers.
+  type: Fix
+time: '2026-09-30T21:26:00.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2057

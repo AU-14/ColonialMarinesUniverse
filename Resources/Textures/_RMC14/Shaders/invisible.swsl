@@ -21,6 +21,6 @@ void fragment() {
     else
       alpha = 0.0;
 
-    COLOR.xyz = sprite.xyz;
+    COLOR.xyz = sprite.xyz * max(visibility, 0.0); // CMU14
     COLOR.a = alpha;
 }

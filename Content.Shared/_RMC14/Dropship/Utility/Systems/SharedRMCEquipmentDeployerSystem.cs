@@ -5,17 +5,22 @@ using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Emplacements;
+using Content.Shared._RMC14.NPC;
 using Content.Shared._RMC14.PowerLoader;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Dropship.Utility.Systems;
 
@@ -26,10 +31,16 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBuckleSystem _buckle = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedRMCNPCSystem _rmcNpc = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SentrySystem _sentry = default!;
+    [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
     [Dependency] private SharedWeaponMountSystem _weaponMount = default!;
 
     public override void Initialize()
@@ -101,6 +112,16 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
 
     private void OnRemovedFromContainer(Entity<RMCEquipmentDeployerComponent> ent, ref EntGotRemovedFromContainerMessage args)
     {
+        // A server container/parent update can remove the deployer while the
+        // client is applying game state (notably when a crashed dropship's
+        // contents are reparented). Trying to insert its deployed equipment
+        // during that same removal recursively mutates container metadata and
+        // can produce the mutually-exclusive InContainer + Detached flags.
+        // The authoritative component/container state is already part of the
+        // update being applied, so do not predict another transition here.
+        if (_timing.ApplyingState)
+            return;
+
         if (ent.Comp.DeployEntity != null)
         {
             TryDeploy(ent,  false);
@@ -205,14 +226,23 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
         if (!equipmentDeployerComponent.IsDeployable)
             return false;
 
+        // Some equipment requires map/z-level checks that only the server can perform.
+        if (equipmentDeployerComponent.ServerAuthoritativeDeployment && _net.IsClient)
+            return false;
+
+        var attempt = new RMCEquipmentDeployAttemptEvent(deploy, deployOffset, user);
+        RaiseLocalEvent(deployer, attempt);
+        if (attempt.Cancelled)
+            return false;
+
         if (user != null)
         {
-            if (_entityWhitelist.IsBlacklistPass(equipmentDeployerComponent.Blacklist, user.Value))
+            if (_entityWhitelist.IsWhitelistPass(equipmentDeployerComponent.Blacklist, user.Value))
                 return false;
 
-            if (_alert.Get() < equipmentDeployerComponent.AlertLevelRequired && deploy)
+            if (_alert.Get(deployer) < equipmentDeployerComponent.AlertLevelRequired && deploy) // CMU14
             {
-                _popup.PopupClient(Loc.GetString("rmc-sentry-not-emergency", ("deployer", deployer)), deployer, user.Value);
+                _popup.PopupEntity(Loc.GetString("rmc-sentry-not-emergency", ("deployer", deployer)), deployer, user.Value);
                 return false;
             }
         }
@@ -230,12 +260,25 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
             }
 
             if (!deploy)
+            {
+                if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                    _rmcNpc.SleepNPC(deployingEntity.Value);
+
                 _container.Insert(deployingEntity.Value, container);
+            }
             else
             {
                 _container.EmptyContainer(container, false, Transform(deployer).Coordinates.Offset(deployOffset));
                 if (equipmentDeployerComponent.DeployEntity != null)
                     _transform.SetLocalRotation(deployingEntity.Value, Transform(deployingEntity.Value).LocalRotation + Angle.FromDegrees(rotationOffset));
+
+                _dropship.TryGetGridFaction(deployer, out var faction);
+                // CMU14: an unconfigured turret stays asleep instead of treating everything as hostile.
+                //_sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction);
+                //if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                //    _rmcNpc.WakeNPC(deployingEntity.Value);
+                if (_sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction))
+                    _rmcNpc.WakeNPC(deployingEntity.Value);
             }
         }
 
@@ -249,6 +292,13 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
             : equipmentDeployerComponent.UnDeployAudio;
 
         _audio.PlayPredicted(audio, Transform(deployer).Coordinates, user);
+
+        if (deployingEntity is { } equipment)
+        {
+            var deployedEvent = new RMCEquipmentDeployedEvent(deploy, equipment);
+            RaiseLocalEvent(deployer, deployedEvent);
+        }
+
         return true;
     }
 
@@ -300,7 +350,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     /// <param name="equipmentDeployer">The <see cref="RMCEquipmentDeployerComponent"/> of the deployer</param>
     public void SetAutoDeploy(EntityUid deployer, bool autoDeploy, RMCEquipmentDeployerComponent? equipmentDeployer = null)
     {
-        if (!Resolve(deployer, ref equipmentDeployer, false))
+        if (!Resolve(deployer, ref equipmentDeployer, false) || !equipmentDeployer.CanAutoDeploy)
             return;
 
         equipmentDeployer.AutoDeploy = autoDeploy;
@@ -354,10 +404,11 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
         if (!TryComp(deployed, out DamageableComponent? damageable))
             return false;
 
-        if (damageable.TotalDamage <= 0)
+        var totalDamage = _damageable.GetTotalDamage((deployed, damageable));
+        if (totalDamage <= 0)
             return false;
 
-        damage = damageable.TotalDamage;
+        damage = totalDamage;
         return true;
     }
 }

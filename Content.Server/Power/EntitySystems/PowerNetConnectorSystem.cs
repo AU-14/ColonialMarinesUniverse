@@ -3,7 +3,7 @@ using Content.Server.Power.NodeGroups;
 
 namespace Content.Server.Power.EntitySystems;
 
-public sealed class PowerNetConnectorSystem : EntitySystem
+public sealed partial class PowerNetConnectorSystem : EntitySystem
 {
     public override void Initialize()
     {
@@ -26,7 +26,7 @@ public sealed class PowerNetConnectorSystem : EntitySystem
         where TComp : BaseNetConnectorComponent<TNet>
         where TNet : class
     {
-        component.ClearNet();
+        component.ClearNet(uid);
     }
 
     private void OnPowerSupplierInit(EntityUid uid, PowerSupplierComponent component, ComponentInit args)
@@ -56,11 +56,9 @@ public sealed class PowerNetConnectorSystem : EntitySystem
 
     public void BaseNetConnectorInit<T>(EntityUid uid, BaseNetConnectorComponent<T> component) where T : class
     {
-        component.SetOwner(uid);
-
         if (component.NeedsNet)
         {
-            component.TryFindAndSetNet();
+            component.TryFindAndSetNet(uid);
         }
     }
 }

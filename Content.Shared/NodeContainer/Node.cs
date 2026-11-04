@@ -17,6 +17,13 @@ public abstract partial class Node
     [DataField("nodeGroupID")]
     public NodeGroupID NodeGroupID { get; private set; } = NodeGroupID.Default;
 
+    // CMU14 Connection Begin: how the node joins cables (Adjacent as before; Direct and Both for the cables run by hand), and the cables that are joined to it so.
+    [DataField("connection")]
+    public NodeConnectorMode Connection { get; private set; } = NodeConnectorMode.Adjacent;
+
+    public readonly HashSet<Node> DirectLinks = new();
+    // CMU14 End
+
     /// <summary>
     ///     The node group this node is a part of.
     /// </summary>
@@ -92,7 +99,8 @@ public abstract partial class Node
     /// of this asymmetric relation are made to manually update with <see cref="NodeGroupSystem.QueueReflood"/>.
     /// </para>
     /// </remarks>
-    public abstract IEnumerable<Node> GetReachableNodes(TransformComponent xform,
+    public abstract IEnumerable<Node> GetReachableNodes(
+        Entity<TransformComponent> xform,
         EntityQuery<NodeContainerComponent> nodeQuery,
         EntityQuery<TransformComponent> xformQuery,
         Entity<MapGridComponent>? grid,

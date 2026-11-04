@@ -55,6 +55,7 @@
     damage:
       types:
         Heat: 20 # TODO RMC14 damage fall-off and higher at close range
+  - type: XenoAcidProjectile
   - type: CMArmorPiercing
     amount: 10
   - type: XenoProjectile
@@ -112,6 +113,7 @@
       shader: unshaded
   - type: XenoSlowingSpitProjectile
     armorResistsKnockdown: true
+    neurotoxin: true # CMU14: CM-SS13 /datum/ammo/xeno/toxin (the Sentinel's neurotoxic spit)
   - type: XenoProjectile
     deleteOnFriendlyXeno: true
   - type: DrainOnHit
@@ -133,6 +135,7 @@
     damage:
       types:
         Heat: 16
+  - type: XenoAcidProjectile
   - type: XenoToxicSpitProjectile
   - type: RMCProjectileSkipXenos
   - type: XenoProjectile
@@ -155,6 +158,8 @@
     armorResistsKnockdown: false
     slow: 0
     paralyze: 4
+    neurotoxin: true # CMU14: NO_NEURO species shrug this spit's paralysis (CM-SS13 apply_neuro)
+    instaNeuro: true # CMU14: /datum/ammo/xeno/toxin/queen passes insta_neuro, so Endurance does not protect
   - type: XenoProjectile
     deleteOnFriendlyXeno: true
   - type: ProjectileMaxRange
@@ -174,9 +179,13 @@
     - state: neurotoxin
       shader: unshaded
   - type: XenoSlowingSpitProjectile
+    # CMU14: ActionXenoScatteredSpit is the one neuro-spit whose knockdown reaches a neuro-immune
+    # Yautja. slow stays 0 here, so the ability's slow never applies to them.
+    knocksDownNeuroImmune: true
     slow: 0
     paralyze: 1
     armorResistsKnockdown: false
+    neurotoxin: true # CMU14: NO_NEURO species shrug this spit's paralysis (CM-SS13 apply_neuro)
   - type: XenoProjectile
     deleteOnFriendlyXeno: true
   - type: ProjectileMaxRange
@@ -199,6 +208,7 @@
     damage:
       types:
         Heat: 10
+  - type: XenoAcidProjectile
   - type: XenoProjectile
     deleteOnFriendlyXeno: false
   - type: ProjectileMaxRange
@@ -219,6 +229,7 @@
     superSlow: false
     slow: 5
     paralyze: 0
+    slowsYautja: false # CMU14: cmss13 bone chips skip preds
   - type: Projectile
     impactEffect: null
     damage:
@@ -277,11 +288,16 @@
     lifetime: 10
   - type: XenoProjectile
     deleteOnFriendlyXeno: false
+  - type: XenoAcidProjectile
   - type: SpawnOnTerminate
     spawn: RMCSmokeAcid
     popup: rmc-glob-land
     popupType: LargeCaution
     spawnOffset: -0.5
+  # CMU14: xeno feedback and lifecycle.
+  - type: DropshipAcidProjectile
+    damagePerSecond: 20
+    duration: 12
   - type: ProjectileMaxRange
     max: 10
   - type: XenoSlowingSpitProjectile
@@ -345,20 +361,25 @@
     slow: 0
     paralyze: 4
     armorResistsKnockdown: false
+    neurotoxin: true # CMU14: NO_NEURO species shrug this spit's paralysis (CM-SS13 apply_neuro)
+    instaNeuro: true # CMU14: CM-SS13's neurotoxin glob is gas, not /proc/apply_neuro, so Endurance never protects
   - type: NeurotoxinInjector
     neuroPerSecond: 5
     injectInContact: false
     affectsDead: false
     affectsInfectedNested: false
     toxinDamage:
-      groups:
-        Toxin: 2
+      types:
+        Poison: 1
+        Radiation: 1
     oxygenDamage:
       types:
         Asphyxiation: 150
     coughDamage:
-      groups:
-        Brute: 5
+      types:
+        Blunt: 1.66
+        Slash: 1.67
+        Piercing: 1.67
   - type: RMCProjectileAccuracy
     accuracy: 95
   - type: Ammo
@@ -571,7 +592,7 @@
   - type: Sprite
     sprite: _RMC14/Effects/beam.rsi
     state: oppressor_tail_hook
-    drawDepth: Effects # Draws above mobs
+    drawdepth: Effects # Draws above mobs
   - type: ProjectileMaxRange
     max: 3.5
   - type: PreventCollideWithDead

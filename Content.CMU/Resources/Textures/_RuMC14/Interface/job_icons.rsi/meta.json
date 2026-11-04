@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": " 'tallant.y' from Discord",
+  "size": {
+    "x": 16,
+    "y": 16
+  },
+    "states": [
+        {
+            "name": "Las-Bio_reg"
+        },
+        {
+            "name": "Las-Bio_eng"
+        },
+        {
+            "name": "Las-Bio_sl"
+        },
+        {
+            "name": "Las-Bio_kom"
+        },
+        {
+            "name": "Las-Bio_med"
+        },
+        {
+            "name": "Las-Bio_sint"
+        },
+        {
+            "name": "sab-VAISO_reg"
+        },
+        {
+            "name": "sab-VAISO_sl"
+        },
+        {
+            "name": "sab-VAISO_med"
+        },
+        {
+            "name": "sab-VAISO_eng"
+        },
+        {
+            "name": "black-Mafia_kom"
+        },
+        {
+            "name": "black-Mafia_eng"
+        },
+        {
+            "name": "black-Mafia_surg"
+        },
+        {
+            "name": "black-Mafia_recruit"
+        },
+        {
+            "name": "black-Mafia_sint"
+        },
+        {
+            "name": "black-Mafia_reg"
+        },
+        {
+            "name": "black-Mafia_med"
+        }
+    ]
+}

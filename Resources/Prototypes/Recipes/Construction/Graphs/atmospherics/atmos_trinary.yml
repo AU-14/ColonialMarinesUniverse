@@ -1,0 +1,125 @@
+- type: constructionGraph
+  id: !type:CreateVariants
+    values: [ GasTrinary, GasTrinaryAlt1, GasTrinaryAlt2 ]
+  start: start
+  graph:
+  - node: start
+    edges:
+    # Filter
+    - to: filter
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+    - to: filterflipped
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+    # Mixer
+    - to: mixer
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+    - to: mixerflipped
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+    - to: pneumaticvalve
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+  # Filter
+  - node: filter
+    entity: !type:CreateVariants
+      values: [ CMUGasFilter, CMUGasFilterAlt1, CMUGasFilterAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: filterflipped
+    entity: !type:CreateVariants
+      values: [ CMUGasFilterFlipped, CMUGasFilterFlippedAlt1, CMUGasFilterFlippedAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  # Mixer
+  - node: mixer
+    entity: !type:CreateVariants
+      values: [ CMUGasMixer, CMUGasMixerAlt1, CMUGasMixerAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: mixerflipped
+    entity: !type:CreateVariants
+      values: [ CMUGasMixerFlipped, CMUGasMixerFlippedAlt1, CMUGasMixerFlippedAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: pneumaticvalve
+    entity: !type:CreateVariants
+      values: [ CMUPressureControlledValve, CMUPressureControlledValveAlt1, CMUPressureControlledValveAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1

@@ -1,0 +1,70 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWeYuLegalSupervisor
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WeYuLegalSupervisor
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: exec_super
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-weyuexec-prefix-legalsupervisor
+  name: cmu-weyuexec-name-legalsupervisor
+  description: cmu-weyuexec-description-legalsupervisor
+  playTimeTracker: CMUJobWeYuLegalSupervisor
+  ranks:
+    RMCRankWeYaLegalSupervisor: []
+  startingGear: CMUGearWeYuLegalSupervisor
+  spawnMenuRoleName: WY Legal Supervisor (event)
+  greeting: cmu-weyuexec-greeting
+  icon: CMJobIconExecSuper
+  joinNotifyCrew: false
+  supervisors: cmu-weyuexec-supervisors-sitedirector
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWeYuLegalSupervisor
+  name: WY Legal Supervisor
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-weyuexec-name-legalsupervisor
+    description: cmu-weyuexec-description-legalsupervisor
+    reregister: false
+    job: CMUJobWeYuLegalSupervisor
+    raffle:
+      settings: short
+    rules: cmu-weyuexec-rules
+
+- type: startingGear
+  id: CMUGearWeYuLegalSupervisor
+  equipment:
+    id: CMUIDCardWeYuLegalSupervisor
+    jumpsuit: CMJumpsuitLiaisonBlack
+    outerClothing: RMCJacketCorporateBlack
+    shoes: RMCShoesLaceup
+    ears: RMCHeadsetDistressWeYa
+    back: CMSatchel
+    pocket1: RMCUniversalRecorder
+    pocket2: CMClipboard
+  inhand:
+  - RMCBriefcasePaperPen
+
+- type: playTimeTracker
+  id: CMUJobWeYuLegalSupervisor

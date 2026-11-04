@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/bloodburster_stage.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "burst_stand",
+      "directions": 4,
+      "delays": [
+        [2.4, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [2.4, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [2.4, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+        [2.4, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+      ]
+    },
+    {
+      "name": "bursted_stand",
+      "directions": 4
+    }
+  ]
+}

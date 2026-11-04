@@ -23,9 +23,9 @@ public partial class MobStateSystem
     }
 
     /// <summary>
-    /// Run a MobState update check. This will trigger update events if the state has been changed.
+    /// Run a MobState update check. This allows systems to override the threshold-derived state before it is applied.
     /// </summary>
-    /// <param name="entity">Target Entity we want to change the MobState of</param>
+    /// <param name="entity">Target Entity we want to update the MobState of</param>
     /// <param name="component">MobState Component attached to the entity</param>
     /// <param name="origin">Entity that caused the state update (if applicable)</param>
     public void UpdateMobState(EntityUid entity, MobStateComponent? component = null, EntityUid? origin = null)
@@ -33,7 +33,7 @@ public partial class MobStateSystem
         if (!_mobStateQuery.Resolve(entity, ref component))
             return;
 
-        var ev = new UpdateMobStateEvent {Target = entity, Component = component, Origin = origin};
+        var ev = new UpdateMobStateEvent(entity, component, component.CurrentState, origin);
         RaiseLocalEvent(entity, ref ev);
         ChangeState(entity, component, ev.State, origin: origin);
     }
@@ -128,11 +128,11 @@ public partial class MobStateSystem
 }
 
 /// <summary>
-/// Event that gets triggered when we want to update the mobstate. This allows for systems to override MobState changes
+/// Event raised before a threshold-derived mob state is applied, allowing systems to override the resulting state.
 /// </summary>
-/// <param name="Target">The Entity whose MobState is changing</param>
-/// <param name="Component">The MobState Component owned by the Target</param>
-/// <param name="State">The new MobState we want to set</param>
+/// <param name="Target">The entity whose MobState is changing</param>
+/// <param name="Component">The MobState Component owned by the target</param>
+/// <param name="State">The new MobState to apply</param>
 /// <param name="Origin">Entity that caused the state update (if applicable)</param>
 [ByRefEvent]
 public record struct UpdateMobStateEvent(EntityUid Target, MobStateComponent Component, MobState State,

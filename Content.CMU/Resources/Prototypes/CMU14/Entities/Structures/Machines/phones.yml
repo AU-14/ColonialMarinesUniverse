@@ -1,0 +1,7 @@
+- type: entity
+  parent: RMCRotaryPhoneWallmount
+  id: RMCEmergencyPhone
+  name: emergency phone
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Machines/emergencyphone.rsi

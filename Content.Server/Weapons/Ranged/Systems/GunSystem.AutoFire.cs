@@ -1,4 +1,4 @@
-using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 
@@ -27,15 +27,15 @@ public sealed partial class GunSystem
                 if (!autoShoot.Enabled)
                     continue;
 
-                AttemptShoot(uid, gun);
+                AttemptShoot((uid, gun));
             }
             else if (gun.BurstActivated)
             {
                 var parent = TransformSystem.GetParentUid(uid);
-                if (HasComp<DamageableComponent>(parent))
-                    AttemptShoot(parent, uid, gun, gun.ShootCoordinates ?? new EntityCoordinates(uid, gun.DefaultDirection));
-                else
-                    AttemptShoot(uid, gun);
+                gun.ShootCoordinates ??= new EntityCoordinates(uid, gun.DefaultDirection);
+                // Continue this press without rearming the trigger after every bullet.
+                // The resetting overload would turn held burst fire into full auto.
+                AttemptShoot(HasComp<DamageableComponent>(parent) ? parent : uid, (uid, gun));
             }
         }
     }

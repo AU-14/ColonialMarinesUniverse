@@ -8,16 +8,13 @@ using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
-using Robust.Shared.Collections;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Utility;
 
 namespace Content.Shared.Station;
 
 public abstract partial class SharedStationSpawningSystem : EntitySystem
 {
-    [Dependency] protected IPrototypeManager PrototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] protected InventorySystem InventorySystem = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
@@ -25,41 +22,56 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     [Dependency] private SharedStorageSystem _storage = default!;
     [Dependency] private SharedTransformSystem _xformSystem = default!;
 
-    private EntityQuery<HandsComponent> _handsQuery;
-    private EntityQuery<InventoryComponent> _inventoryQuery;
-    private EntityQuery<StorageComponent> _storageQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _handsQuery = GetEntityQuery<HandsComponent>();
-        _inventoryQuery = GetEntityQuery<InventoryComponent>();
-        _storageQuery = GetEntityQuery<StorageComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
+    [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
+    [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
+    [Dependency] private EntityQuery<StorageComponent> _storageQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     /// <summary>
     ///     Equips the data from a `RoleLoadout` onto an entity.
     /// </summary>
-    public void EquipRoleLoadout(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto)
+    public void EquipRoleLoadout(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto, bool applyEffects = true)
     {
         // Order loadout selections by the order they appear on the prototype.
         foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
         {
             foreach (var items in group.Value)
             {
-                if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
+                if (!ProtoMan.TryIndex(items.Prototype, out var loadoutProto))
                 {
                     Log.Error($"Unable to find loadout prototype for {items.Prototype}");
                     continue;
                 }
 
-                EquipStartingGear(entity, loadoutProto, raiseEvent: false);
+                EquipStartingGear(entity, loadoutProto, raiseEvent: false, keepOnFail: true); // CMU14: selected loadouts always reach the player
             }
         }
 
+        if (applyEffects)
+            ApplyRoleLoadoutEffects(entity, loadout, roleProto);
+
         EquipRoleName(entity, loadout, roleProto);
+    }
+
+    /// <summary>
+    /// Applies gameplay effects from selected loadouts in their configured group order.
+    /// This can be called separately when another spawn step must establish base state first.
+    /// </summary>
+    public void ApplyRoleLoadoutEffects(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto)
+    {
+        foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)))
+        {
+            foreach (var selected in group.Value)
+            {
+                if (!ProtoMan.TryIndex(selected.Prototype, out var loadoutProto))
+                    continue;
+
+                foreach (var effect in loadoutProto.Effects)
+                {
+                    effect.ApplyToEntity(entity, EntityManager, ProtoMan);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -74,7 +86,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             name = loadout.EntityName;
         }
 
-        if (string.IsNullOrEmpty(name) && PrototypeManager.TryIndex(roleProto.NameDataset, out var nameData))
+        if (string.IsNullOrEmpty(name) && ProtoMan.Resolve(roleProto.NameDataset, out var nameData))
         {
             name = Loc.GetString(_random.Pick(nameData.Values));
         }
@@ -85,27 +97,27 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
         }
     }
 
-    public void EquipStartingGear(EntityUid entity, LoadoutPrototype loadout, bool raiseEvent = true)
+    public void EquipStartingGear(EntityUid entity, LoadoutPrototype loadout, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
-        EquipStartingGear(entity, loadout.StartingGear, raiseEvent);
-        EquipStartingGear(entity, (IEquipmentLoadout) loadout, raiseEvent);
+        EquipStartingGear(entity, loadout.StartingGear, raiseEvent, keepOnFail);
+        EquipStartingGear(entity, (IEquipmentLoadout) loadout, raiseEvent, keepOnFail);
     }
 
     /// <summary>
     /// <see cref="EquipStartingGear(Robust.Shared.GameObjects.EntityUid,System.Nullable{Robust.Shared.Prototypes.ProtoId{Content.Shared.Roles.StartingGearPrototype}},bool)"/>
     /// </summary>
-    public void EquipStartingGear(EntityUid entity, ProtoId<StartingGearPrototype>? startingGear, bool raiseEvent = true)
+    public void EquipStartingGear(EntityUid entity, ProtoId<StartingGearPrototype>? startingGear, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
-        PrototypeManager.TryIndex(startingGear, out var gearProto);
-        EquipStartingGear(entity, gearProto, raiseEvent);
+        ProtoMan.Resolve(startingGear, out var gearProto);
+        EquipStartingGear(entity, gearProto, raiseEvent, keepOnFail);
     }
 
     /// <summary>
     /// <see cref="EquipStartingGear(Robust.Shared.GameObjects.EntityUid,System.Nullable{Robust.Shared.Prototypes.ProtoId{Content.Shared.Roles.StartingGearPrototype}},bool)"/>
     /// </summary>
-    public void EquipStartingGear(EntityUid entity, StartingGearPrototype? startingGear, bool raiseEvent = true)
+    public void EquipStartingGear(EntityUid entity, StartingGearPrototype? startingGear, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
-        EquipStartingGear(entity, (IEquipmentLoadout?) startingGear, raiseEvent);
+        EquipStartingGear(entity, (IEquipmentLoadout?) startingGear, raiseEvent, keepOnFail);
     }
 
     /// <summary>
@@ -114,7 +126,8 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     /// <param name="entity">Entity to load out.</param>
     /// <param name="startingGear">Starting gear to use.</param>
     /// <param name="raiseEvent">Should we raise the event for equipped. Set to false if you will call this manually</param>
-    public void EquipStartingGear(EntityUid entity, IEquipmentLoadout? startingGear, bool raiseEvent = true)
+    /// <param name="keepOnFail">CMU14: on a failed slot equip, hold the item in a free hand instead of deleting it; with no free hand it is deleted. Job gear keeps the default so a loadout selection that already filled the slot does not leave a spare.</param>
+    public void EquipStartingGear(EntityUid entity, IEquipmentLoadout? startingGear, bool raiseEvent = true, bool keepOnFail = false) // CMU14: keepOnFail
     {
         if (startingGear == null)
             return;
@@ -128,8 +141,21 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                 var equipmentStr = startingGear.GetGear(slot.Name);
                 if (!string.IsNullOrEmpty(equipmentStr))
                 {
-                    var equipmentEntity = Spawn(equipmentStr, xform.Coordinates);
-                    InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true);
+                    // cmu edit start: platoon equipment swaps
+                    var equipmentEntity = Spawn(CMUOverrideGear(equipmentStr), xform.Coordinates);
+                    // cmu edit end
+                    // cmu edit start: the loadout already filled this slot and keeps it, so don't leave a spare on the floor
+                    // CMU14: a failed loadout item must still reach the player, hand first, then their feet
+                    if (!InventorySystem.TryEquip(entity, equipmentEntity, slot.Name, silent: true, force: true))
+                    {
+                        if (keepOnFail
+                            && _handsQuery.TryComp(entity, out var hands)
+                            && _handsSystem.TryGetEmptyHand((entity, hands), out var emptyHand))
+                            _handsSystem.TryPickup(entity, equipmentEntity, emptyHand, checkActionBlocker: false, handsComp: hands);
+                        else
+                            Del(equipmentEntity);
+                    }
+                    // cmu edit end
                 }
             }
         }
@@ -140,7 +166,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             var coords = xform.Coordinates;
             foreach (var prototype in inhand)
             {
-                var inhandEntity = Spawn(prototype, coords);
+                var inhandEntity = Spawn(CMUOverrideGear(prototype), coords); // cmu edit: platoon equipment swaps
 
                 if (_handsSystem.TryGetEmptyHand((entity, handsComponent), out var emptyHand))
                 {
@@ -159,23 +185,34 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
                 if (entProtos == null || entProtos.Count == 0)
                     continue;
 
-                if (inventoryComp != null &&
-                    InventorySystem.TryGetSlotEntity(entity, slotName, out var slotEnt, inventoryComponent: inventoryComp) &&
-                    _storageQuery.TryComp(slotEnt, out var storage))
+                // CMU14 Begin
+                EntityUid? slotEnt = null;
+                StorageComponent? storage = null;
+                if (inventoryComp != null)
                 {
+                    InventorySystem.TryGetSlotEntity(entity, slotName, out slotEnt, inventoryComponent: inventoryComp);
 
-                    foreach (var entProto in entProtos)
-                    {
-                        var spawnedEntity = Spawn(entProto, coords);
-                        if (TryComp(spawnedEntity, out ItemComponent? item))
-                        {
-                            var ev = new CMStorageItemFillEvent((spawnedEntity, item), storage);
-                            RaiseLocalEvent(slotEnt.Value, ref ev);
-                        }
-
-                        _storage.Insert(slotEnt.Value, spawnedEntity, out _, storageComp: storage, playSound: false);
-                    }
+                    if (slotEnt != null)
+                        _storageQuery.TryComp(slotEnt.Value, out storage);
                 }
+
+                foreach (var entProto in entProtos)
+                {
+                    // Spawn only what can actually be placed; an orphaned kit item would
+                    // drop at the player's feet and out a covert antag.
+                    if (slotEnt == null || storage == null)
+                        continue;
+
+                    var spawnedEntity = Spawn(CMUOverrideGear(entProto), coords); // CMU14 (platoon equipment swaps)
+                    if (TryComp(spawnedEntity, out ItemComponent? item))
+                    {
+                        var ev = new CMStorageItemFillEvent((spawnedEntity, item), storage);
+                        RaiseLocalEvent(slotEnt.Value, ref ev);
+                    }
+
+                    _storage.Insert(slotEnt.Value, spawnedEntity, out _, storageComp: storage, playSound: false);
+                }
+                // CMU14 End
             }
         }
 
@@ -185,6 +222,17 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             RaiseLocalEvent(entity, ref ev);
         }
     }
+
+    // cmu edit start
+    /// <summary>
+    ///     Lets the server swap a piece of starting gear or loadout equipment for another as it's spawned, e.g. a
+    ///     platoon's own version of a uniform or satchel.
+    /// </summary>
+    protected virtual EntProtoId CMUOverrideGear(EntProtoId proto)
+    {
+        return proto;
+    }
+    // cmu edit end
 
     /// <summary>
     ///     Gets all the gear for a given slot when passed a loadout.
@@ -204,7 +252,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
         {
             foreach (var items in group.Value)
             {
-                if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutPrototype))
+                if (!ProtoMan.Resolve(items.Prototype, out var loadoutPrototype))
                     return null;
 
                 var gear = ((IEquipmentLoadout) loadoutPrototype).GetGear(slot);

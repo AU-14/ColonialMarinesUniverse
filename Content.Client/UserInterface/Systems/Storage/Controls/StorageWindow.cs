@@ -7,6 +7,7 @@ using Content.Client.Storage;
 using Content.Client.Storage.Systems;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Item;
+using Content.Shared._RMC14.Storage;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
 using Content.Shared.Item;
@@ -115,7 +116,7 @@ public sealed partial class StorageWindow : BaseWindow
             HorizontalExpand = true,
             Name = "StorageLabel",
             ClipText = true,
-            Text = "Dummy",
+            Text = Loc.GetString("comp-storage-window-dummy"),
             StyleClasses =
             {
                 "FancyWindowTitle",
@@ -420,6 +421,7 @@ public sealed partial class StorageWindow : BaseWindow
         control.OnPieceUnpressed -= OnPieceUnpressed;
     }
 
+    // CMU14 method: compare an owned placement snapshot without allocating on unchanged refreshes.
     public void BuildItemPieces()
     {
         if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var storageComp))
@@ -430,19 +432,8 @@ public sealed partial class StorageWindow : BaseWindow
 
         var boundingGrid = storageComp.Grid.GetBoundingBox();
         var size = _emptyTexture!.Size * 2;
-        var containedEntities = storageComp.Container.ContainedEntities.Reverse().ToArray();
-        if (_lastUpdate.Grid.Equals(boundingGrid) &&
-            _lastUpdate.Contained.SequenceEqual(containedEntities) &&
-            _lastUpdate.Stored.Count == storageComp.StoredItems.Count &&
-            _lastUpdate.Stored.All(kvp => storageComp.StoredItems.TryGetValue(kvp.Key, out var v) && kvp.Value == v))
-        {
+        if (!CMUUpdatePlacementSnapshot(storageComp, boundingGrid))
             return;
-        }
-
-        _lastUpdate = (boundingGrid, containedEntities, storageComp.StoredItems);
-
-        _contained.Clear();
-        _contained.AddRange(storageComp.Container.ContainedEntities.Reverse());
 
         var width = boundingGrid.Width + 1;
         var height = boundingGrid.Height + 1;
@@ -544,6 +535,7 @@ public sealed partial class StorageWindow : BaseWindow
         };
     }
 
+    // CMU14 method: draw saved positions using one live occupancy snapshot; no unused mouse preview.
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
@@ -581,10 +573,6 @@ public sealed partial class StorageWindow : BaseWindow
             }
         }
 
-        var itemSystem = _entity.System<ItemSystem>();
-        var storageSystem = _entity.System<StorageSystem>();
-        var handsSystem = _entity.System<HandsSystem>();
-
         foreach (var child in _backgroundGrid.Children)
         {
             child.ModulateSelfOverride = null;
@@ -596,90 +584,7 @@ public sealed partial class StorageWindow : BaseWindow
         if (!_entity.TryGetComponent<StorageComponent>(StorageEntity, out var storageComponent))
             return;
 
-        EntityUid currentEnt;
-        ItemStorageLocation currentLocation;
-        var usingInHand = false;
-        if (_storageController.IsDragging && _storageController.DraggingGhost is { } dragging)
-        {
-            currentEnt = dragging.Entity;
-            currentLocation = dragging.Location;
-        }
-        else if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                 storageSystem.CanInsert(StorageEntity.Value, handEntity, _player.LocalEntity, out _, storageComp: storageComponent, ignoreLocation: true))
-        {
-            currentEnt = handEntity;
-            currentLocation = new ItemStorageLocation(_storageController.DraggingRotation, Vector2i.Zero);
-            usingInHand = true;
-        }
-        else
-        {
-            return;
-        }
-
-        if (!_entity.TryGetComponent<ItemComponent>(currentEnt, out var itemComp))
-            return;
-
-        var origin = GetMouseGridPieceLocation((currentEnt, itemComp), currentLocation);
-
-        var itemShape = itemSystem.GetAdjustedItemShape(
-            (StorageEntity.Value, storageComponent),
-            (currentEnt, itemComp),
-            currentLocation.Rotation,
-            origin);
-        var itemBounding = itemShape.GetBoundingBox();
-
-        var validLocation = storageSystem.ItemFitsInGridLocation(
-            (currentEnt, itemComp),
-            (StorageEntity.Value, storageComponent),
-            origin,
-            currentLocation.Rotation);
-
-        foreach (var locations in storageComponent.SavedLocations)
-        {
-            if (!_entity.TryGetComponent<MetaDataComponent>(currentEnt, out var meta) || meta.EntityName != locations.Key)
-                continue;
-
-            float spot = 0;
-            var marked = new ValueList<Control>();
-
-            foreach (var location in locations.Value)
-            {
-                var shape = itemSystem.GetAdjustedItemShape((StorageEntity.Value, storageComponent), currentEnt, location);
-                var bound = shape.GetBoundingBox();
-
-                var spotFree = storageSystem.ItemFitsInGridLocation(currentEnt, StorageEntity.Value, location);
-
-                if (spotFree)
-                    spot++;
-
-                for (var y = bound.Bottom; y <= bound.Top; y++)
-                {
-                    for (var x = bound.Left; x <= bound.Right; x++)
-                    {
-                        if (TryGetBackgroundCell(x, y, out var cell) && shape.Contains(x, y) && !marked.Contains(cell))
-                        {
-                            marked.Add(cell);
-                            cell.ModulateSelfOverride = spotFree
-                                ? Color.FromHsv(new Vector4(0.18f, 1 / spot, 0.5f / spot + 0.5f, 1f))
-                                : Color.FromHex("#2222CC");
-                        }
-                    }
-                }
-            }
-        }
-
-        var validColor = usingInHand ? Color.Goldenrod : Color.FromHex("#1E8000");
-
-        for (var y = itemBounding.Bottom; y <= itemBounding.Top; y++)
-        {
-            for (var x = itemBounding.Left; x <= itemBounding.Right; x++)
-            {
-                if (TryGetBackgroundCell(x, y, out var cell) && itemShape.Contains(x, y))
-                {
-                    // cell.ModulateSelfOverride = validLocation ? validColor : Color.FromHex("#B40046");
-                }
-            }
-        }
+        CMUUpdateSavedLocationHighlights((StorageEntity.Value, storageComponent));
     }
 
     protected override DragMode GetDragModeFor(Vector2 relativeMousePos)
@@ -743,12 +648,17 @@ public sealed partial class StorageWindow : BaseWindow
             return;
 
         var storageSystem = _entity.System<StorageSystem>();
+        var rmcStorageSystem = _entity.System<RMCStorageSystem>();
         var handsSystem = _entity.System<HandsSystem>();
 
         if (args.Function == ContentKeyFunctions.MoveStoredItem && StorageEntity != null)
         {
+            if (!_entity.TryGetComponent(StorageEntity.Value, out StorageComponent? storageComponent))
+                return;
+
             if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                storageSystem.CanInsert(StorageEntity.Value, handEntity, _player.LocalEntity, out _))
+                storageSystem.CanInsert(StorageEntity.Value, handEntity, out _, storageComp: storageComponent) &&
+                rmcStorageSystem.CanInsert((StorageEntity.Value, storageComponent), handEntity, _player.LocalEntity, out _))
             {
                 if (!CMInventoryExtensions.TryGetFirst(StorageEntity.Value, handEntity, out var insertLocation))
                     return;

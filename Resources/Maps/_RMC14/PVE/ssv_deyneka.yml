@@ -31675,7 +31675,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -4.093451,91.5
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded # CMU14
   entities:
   - uid: 3450
     components:
@@ -43490,7 +43490,7 @@ entities:
     - type: Transform
       pos: -3.5,-38.5
       parent: 1
-- proto: RMCTacticalMapTableLarge
+- proto: CMUTacticalMapTableLargeGovfor
   entities:
   - uid: 5513
     components:

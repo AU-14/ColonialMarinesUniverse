@@ -20,6 +20,7 @@
   - type: RemoveComponents
     components:
     - type: Damageable
+    - type: Injurable
     - type: Destructible
     - type: Corrodible
 
@@ -39,6 +40,7 @@
   - type: RemoveComponents
     components:
     - type: Damageable
+    - type: Injurable
 
 - type: entity
   parent: CMSeatBase
@@ -60,8 +62,18 @@
   - type: RemoveComponents
     components:
     - type: Damageable
+    - type: Injurable
     - type: Destructible
     - type: Corrodible
+
+- type: entity
+  parent: RMCSeatDriver
+  id: RMCSeatVanDriver
+  name: van driver seat
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/chairs.rsi
+    state: comfychair
 
 - type: entity
   parent: CMSeatBase
@@ -122,6 +134,7 @@
   - type: RemoveComponents
     components:
     - type: Damageable
+    - type: Injurable
     - type: Destructible
     - type: Corrodible
 
@@ -247,6 +260,7 @@
   - type: RemoveComponents
     components:
     - type: Damageable
+    - type: Injurable
     - type: Destructible
     - type: Corrodible
 

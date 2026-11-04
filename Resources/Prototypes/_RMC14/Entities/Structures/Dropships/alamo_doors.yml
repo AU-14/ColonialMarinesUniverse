@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCDropshipDoorBase
   id: CMAlamoDoor
   name: fallujah crew hatch
@@ -16,14 +16,6 @@
   - type: RemoveComponents
     components:
     - type: DoorBolt
-
-- type: entity
-  parent: CMAlamoCockpit
-  id: CMAlamoCockpitOpfor
-  suffix: Alamo, Opfor
-  components:
-  - type: AccessReader
-    access: [ [ "AU14AccessOpforPilot" ] ]
 
 - type: entity
   parent: RMCDropshipDoorAftBase

@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Robust.Shared.Network;
@@ -88,13 +89,13 @@ public sealed partial class XenoVenatorSystem : EntitySystem
 
         if (_timing.CurTime < xeno.Comp.StoreAcidLockedUntil)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-venator-store-acid-locked"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-venator-store-acid-locked"), xeno, xeno);
             return;
         }
 
         if (xeno.Comp.AcidCharges >= xeno.Comp.MaxAcidCharges)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-venator-store-acid-full"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-venator-store-acid-full"), xeno, xeno);
             return;
         }
 
@@ -105,7 +106,7 @@ public sealed partial class XenoVenatorSystem : EntitySystem
         xeno.Comp.AcidCharges++;
         Dirty(xeno);
         _armor.UpdateArmorValue((xeno, null));
-        _popup.PopupClient(Loc.GetString("cm-xeno-venator-store-acid", ("charges", xeno.Comp.AcidCharges)), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-venator-store-acid", ("charges", xeno.Comp.AcidCharges)), xeno, xeno);
     }
 
     private void OnSpitAction(Entity<XenoVenatorComponent> xeno, ref XenoVenatorSpitActionEvent args)

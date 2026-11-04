@@ -59,14 +59,16 @@ public sealed partial class HumanoidVoicelinesSystem : EntitySystem
         [SkrellSpecies] = RMCCVars.RMCPlayEmotesSkrell,
     };
 
-    private EntityQuery<HumanoidAppearanceComponent> _humanoidAppearanceQuery;
+    private EntityQuery<HumanoidProfileComponent> _humanoidProfileQuery;
 
     public override void Initialize()
     {
-        _humanoidAppearanceQuery = GetEntityQuery<HumanoidAppearanceComponent>();
+        base.Initialize();
+
+        _humanoidProfileQuery = GetEntityQuery<HumanoidProfileComponent>();
     }
 
-    public bool ShouldPlayVoiceline(Entity<HumanoidAppearanceComponent?> vocalizer, ICommonSession forPlayer)
+    public bool ShouldPlayVoiceline(Entity<HumanoidProfileComponent?> vocalizer, ICommonSession forPlayer)
     {
         if (forPlayer.AttachedEntity == vocalizer &&
             !_config.GetClientCVar(forPlayer.Channel, RMCCVars.RMCPlayVoicelinesYourself))
@@ -74,7 +76,7 @@ public sealed partial class HumanoidVoicelinesSystem : EntitySystem
             return false;
         }
 
-        if (!_humanoidAppearanceQuery.Resolve(vocalizer, ref vocalizer.Comp, false) ||
+        if (!_humanoidProfileQuery.Resolve(vocalizer, ref vocalizer.Comp, false) ||
             !_voicelineCVars.TryGetValue(vocalizer.Comp.Species, out var play))
         {
             return true;
@@ -83,7 +85,7 @@ public sealed partial class HumanoidVoicelinesSystem : EntitySystem
         return _config.GetClientCVar<bool>(forPlayer.Channel, play.Name);
     }
 
-    public bool ShouldPlayEmote(Entity<HumanoidAppearanceComponent?> vocalizer, ICommonSession forPlayer)
+    public bool ShouldPlayEmote(Entity<HumanoidProfileComponent?> vocalizer, ICommonSession forPlayer)
     {
         if (forPlayer.AttachedEntity == vocalizer &&
             !_config.GetClientCVar(forPlayer.Channel, RMCCVars.RMCPlayEmotesYourself))
@@ -91,7 +93,7 @@ public sealed partial class HumanoidVoicelinesSystem : EntitySystem
             return false;
         }
 
-        if (!_humanoidAppearanceQuery.Resolve(vocalizer, ref vocalizer.Comp, false) ||
+        if (!_humanoidProfileQuery.Resolve(vocalizer, ref vocalizer.Comp, false) ||
             !_emoteCVars.TryGetValue(vocalizer.Comp.Species, out var play))
         {
             return true;

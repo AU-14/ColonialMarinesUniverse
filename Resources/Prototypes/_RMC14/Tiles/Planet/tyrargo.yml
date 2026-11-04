@@ -3,7 +3,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetMattedGrassTyrargo
-  name: matted grass
+  name: tiles-rmc-legacy-matted-grass
   sprite: /Textures/_RMC14/Tiles/planet/auto_tyrargo_grass/grass.png
   variants: 8
   placementVariants:
@@ -46,6 +46,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetMattedGrass3Tyrargo
+  name: tiles-rmc-legacy-matted-grass
   sprite: /Textures/_RMC14/Tiles/planet/auto_tyrargo_grass/grass_mud.png
   variants: 8
   placementVariants:

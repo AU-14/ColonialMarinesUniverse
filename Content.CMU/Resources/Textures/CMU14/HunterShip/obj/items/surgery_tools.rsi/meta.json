@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/surgery_tools.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "saw"
+    },
+    {
+      "name": "saw_on",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "scalpel"
+    },
+    {
+      "name": "retractor"
+    },
+    {
+      "name": "hemostat"
+    },
+    {
+      "name": "cautery"
+    },
+    {
+      "name": "cautery_on",
+      "delays": [
+        [
+          0.3,
+          0.2,
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "drill"
+    },
+    {
+      "name": "drill_on",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "bonesetter"
+    },
+    {
+      "name": "fixovein"
+    },
+    {
+      "name": "line_brute"
+    },
+    {
+      "name": "line_burn"
+    },
+    {
+      "name": "bone-gel"
+    },
+    {
+      "name": "bone-gel_75"
+    },
+    {
+      "name": "bone-gel_50"
+    },
+    {
+      "name": "bone-gel_25"
+    },
+    {
+      "name": "bone-gel_0"
+    },
+    {
+      "name": "scalpel_laser"
+    },
+    {
+      "name": "scalpel_laser_on",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "scalpel_laser_2"
+    },
+    {
+      "name": "scalpel_laser_2_on",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "scalpel_laser_3"
+    },
+    {
+      "name": "scalpel_laser_3_on",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "scalpel_manager"
+    },
+    {
+      "name": "scalpel_manager_on",
+      "delays": [
+        [
+          0.3,
+          0.2,
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "pict_system"
+    },
+    {
+      "name": "pump"
+    },
+    {
+      "name": "predator_cautery"
+    },
+    {
+      "name": "predator_hemostat"
+    },
+    {
+      "name": "predator_retractor"
+    },
+    {
+      "name": "predator_scalpel"
+    },
+    {
+      "name": "predator_bonesaw"
+    },
+    {
+      "name": "predator_bonesetter"
+    },
+    {
+      "name": "predator_bone-gel"
+    },
+    {
+      "name": "predator_drill"
+    },
+    {
+      "name": "predator_drill_on",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "predator_fixovein"
+    },
+    {
+      "name": "drapes"
+    },
+    {
+      "name": "wound_clamp_on"
+    },
+    {
+      "name": "stabilizer_gel"
+    },
+    {
+      "name": "wound_clamp"
+    },
+    {
+      "name": "healing_gun"
+    },
+    {
+      "name": "healing_gun_empty"
+    },
+    {
+      "name": "healing_gun_on",
+      "delays": [
+        [
+          1.9,
+          1.9,
+          1.9,
+          1.9,
+          1.9,
+          1.9,
+          1.9,
+          1.9,
+          1.9
+        ]
+      ]
+    },
+    {
+      "name": "healing_gel"
+    }
+  ]
+}

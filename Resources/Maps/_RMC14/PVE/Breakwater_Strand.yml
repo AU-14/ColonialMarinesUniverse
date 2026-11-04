@@ -54022,7 +54022,7 @@ entities:
     - type: Transform
       pos: -30.519722,55.615574
       parent: 2
-- proto: RMCTacticalMapTableLargeRotated
+- proto: CMUTacticalMapTableLargeRotatedGovfor
   entities:
   - uid: 3002
     components:

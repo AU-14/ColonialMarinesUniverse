@@ -84,6 +84,13 @@
   offset: 0, 0.125
 
 - type: typingIndicator
+  id: vulpkanin
+  typingState: vulpkanin0
+  idleState: vulpkanin3
+  offset: 0, 0.125
+
+
+- type: typingIndicator
   id: joe
   typingState: joe0
   idleState: joe3

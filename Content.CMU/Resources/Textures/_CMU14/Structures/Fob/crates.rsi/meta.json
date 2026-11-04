@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "CM-SS13 contributors (FOB Defense Rework by Git-Nivrak and Thwomper). Source: https://github.com/cmss13-devs/cmss13/blob/2cb8bdbb3e2ae072e3a46293856adddceec334d1/icons/obj/structures/crates.dmi (PR 9293). Converted from DMI to RSI without redrawing; directions and animation timings retained.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "fob_crate",
+      "directions": 1
+    }
+  ]
+}

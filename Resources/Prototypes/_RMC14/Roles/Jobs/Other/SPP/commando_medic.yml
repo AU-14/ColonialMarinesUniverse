@@ -106,7 +106,7 @@
     - CMHealthAnalyzer
     - CMSurgicalLine
     - CMSynthGraft
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     - CMAdvFirstAidKit
     - CMRollerBedSpawnFolded
     - CMCrowbar

@@ -4,7 +4,7 @@
 - type: accessLevel
   id: CMAccessRequisitions
   parent: RMCBaseCommandAccess
-  name: Requisitions
+  name: rmc-access-requisitions
 
 
 - type: accessLevel

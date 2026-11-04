@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Imported from cmss13-devs/cmss13 at 5f144e83d141f75baba01b69f5c6fb85a644e0ab; original DMI icons/obj/items/gifts.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "source"
+    }
+  ]
+}

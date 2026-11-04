@@ -23,7 +23,6 @@ public sealed partial class RMCMeleeWeaponSystem : SharedRMCMeleeWeaponSystem
 {
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IInputManager _input = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private MapSystem _map = default!;
     [Dependency] private MeleeWeaponSystem _melee = default!;
     [Dependency] private IPlayerManager _player = default!;

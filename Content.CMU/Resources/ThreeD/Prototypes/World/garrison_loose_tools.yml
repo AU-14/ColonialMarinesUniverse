@@ -1,0 +1,1650 @@
+# Loose source-specific tools. All models remain drafts.
+- type: cmu3DModel
+  id: CMU3DLooseSpoon
+  label: Metal spoon
+  status: draft
+  sourcePrototypes:
+  - RMCSpoon
+  referencePrototype: RMCSpoon
+  referenceRsi: _RMC14/Objects/Tools/Kitchen/spoon.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: raised bowl rim solid 1
+    min: -0.062500000, 0.281250000, 0.019000000
+    max: 0.031250000, 0.343750000, 0.075000000
+    color: '#897B7B'
+  - label: raised bowl rim solid 2
+    min: -0.093750000, 0.093750000, 0.019000000
+    max: -0.062500000, 0.312500000, 0.075000000
+    color: '#897B7B'
+  - label: raised bowl rim solid 3
+    min: 0.031250000, 0.093750000, 0.019000000
+    max: 0.062500000, 0.312500000, 0.075000000
+    color: '#897B7B'
+  - label: raised bowl rim solid 4
+    min: -0.125000000, 0.125000000, 0.019000000
+    max: -0.093750000, 0.281250000, 0.075000000
+    color: '#897B7B'
+  - label: raised bowl rim solid 5
+    min: 0.062500000, 0.125000000, 0.019000000
+    max: 0.093750000, 0.281250000, 0.075000000
+    color: '#897B7B'
+  - label: raised bowl rim solid 6
+    min: -0.062500000, 0.062500000, 0.019000000
+    max: 0.031250000, 0.125000000, 0.075000000
+    color: '#897B7B'
+  - label: raised bowl rim original surface
+    min: -0.125000000, 0.062500000, 0.074000000
+    max: 0.093750000, 0.343750000, 0.075000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3500
+    surfaceAxis: XY
+  - label: recessed spoon bowl solid 1
+    min: -0.062500000, 0.125000000, 0.019000000
+    max: 0.031250000, 0.281250000, 0.035000000
+    color: '#766D6A'
+  - label: recessed spoon bowl original surface
+    min: -0.062500000, 0.125000000, 0.034000000
+    max: 0.031250000, 0.281250000, 0.035000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3501
+    surfaceAxis: XY
+  - label: narrow continuous neck solid 1
+    min: -0.062500000, -0.093750000, 0.015000000
+    max: 0.031250000, 0.062500000, 0.048000000
+    color: '#766D6A'
+  - label: narrow continuous neck original surface
+    min: -0.062500000, -0.093750000, 0.047000000
+    max: 0.031250000, 0.062500000, 0.048000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3502
+    surfaceAxis: XY
+  - label: thick riveted grip solid 1
+    min: -0.093750000, -0.375000000, 0.000000000
+    max: 0.062500000, -0.093750000, 0.080000000
+    color: '#393939'
+  - label: thick riveted grip solid 2
+    min: -0.062500000, -0.406250000, 0.000000000
+    max: 0.031250000, -0.375000000, 0.080000000
+    color: '#393939'
+  - label: thick riveted grip original surface
+    min: -0.093750000, -0.406250000, 0.079000000
+    max: 0.062500000, -0.093750000, 0.080000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3503
+    surfaceAxis: XY
+  - label: rounded underside of spoon bowl
+    min: -0.093625000, 0.090125000, 0.000000000
+    max: 0.062375000, 0.316125000, 0.035000000
+    color: '#766D6A'
+    shape: Ellipsoid
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: raised bowl rim solid 1
+          min: -0.062500000, 0.281250000, 0.019000000
+          max: 0.031250000, 0.343750000, 0.075000000
+          color: '#897B7B'
+        - label: raised bowl rim solid 2
+          min: -0.093750000, 0.093750000, 0.019000000
+          max: -0.062500000, 0.312500000, 0.075000000
+          color: '#897B7B'
+        - label: raised bowl rim solid 3
+          min: 0.031250000, 0.093750000, 0.019000000
+          max: 0.062500000, 0.312500000, 0.075000000
+          color: '#897B7B'
+        - label: raised bowl rim solid 4
+          min: -0.125000000, 0.125000000, 0.019000000
+          max: -0.093750000, 0.281250000, 0.075000000
+          color: '#897B7B'
+        - label: raised bowl rim solid 5
+          min: 0.062500000, 0.125000000, 0.019000000
+          max: 0.093750000, 0.281250000, 0.075000000
+          color: '#897B7B'
+        - label: raised bowl rim solid 6
+          min: -0.062500000, 0.062500000, 0.019000000
+          max: 0.031250000, 0.125000000, 0.075000000
+          color: '#897B7B'
+        - label: raised bowl rim original surface
+          min: -0.125000000, 0.062500000, 0.074000000
+          max: 0.093750000, 0.343750000, 0.075000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3500
+          surfaceAxis: XY
+        - label: recessed spoon bowl solid 1
+          min: -0.062500000, 0.125000000, 0.019000000
+          max: 0.031250000, 0.281250000, 0.035000000
+          color: '#766D6A'
+        - label: recessed spoon bowl original surface
+          min: -0.062500000, 0.125000000, 0.034000000
+          max: 0.031250000, 0.281250000, 0.035000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3501
+          surfaceAxis: XY
+        - label: narrow continuous neck solid 1
+          min: -0.062500000, -0.093750000, 0.015000000
+          max: 0.031250000, 0.062500000, 0.048000000
+          color: '#766D6A'
+        - label: narrow continuous neck original surface
+          min: -0.062500000, -0.093750000, 0.047000000
+          max: 0.031250000, 0.062500000, 0.048000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3502
+          surfaceAxis: XY
+        - label: thick riveted grip solid 1
+          min: -0.093750000, -0.375000000, 0.000000000
+          max: 0.062500000, -0.093750000, 0.080000000
+          color: '#393939'
+        - label: thick riveted grip solid 2
+          min: -0.062500000, -0.406250000, 0.000000000
+          max: 0.031250000, -0.375000000, 0.080000000
+          color: '#393939'
+        - label: thick riveted grip original surface
+          min: -0.093750000, -0.406250000, 0.079000000
+          max: 0.062500000, -0.093750000, 0.080000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3503
+          surfaceAxis: XY
+        - label: rounded underside of spoon bowl
+          min: -0.093625000, 0.090125000, 0.000000000
+          max: 0.062375000, 0.316125000, 0.035000000
+          color: '#766D6A'
+          shape: Ellipsoid
+      delays:
+      - 1
+  description: Loose world tool only. Separate source-shaped solid head, shaft and grip with original top RGBA,
+    real open jaw/gaps, stepped blade bevels and recessed spoon/spade interiors. Heights and hidden depth are inferred;
+    original pivots, gameplay and held/equipped sprites are unchanged. Unsupported appearances retain sprite fallback.
+    All drafts; see SOURCES_LOOSE_TOOLS.md.
+- type: cmu3DModel
+  id: CMU3DLooseWrench
+  label: Open jaw wrench
+  status: draft
+  sourcePrototypes:
+  - CMWrench
+  referencePrototype: CMWrench
+  referenceRsi: _RMC14/Objects/Tools/wrench.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: open jaw and wrench head solid 1
+    min: -0.406250000, 0.031250000, 0.006000000
+    max: -0.281250000, 0.156250000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 2
+    min: -0.437500000, 0.000000000, 0.006000000
+    max: -0.406250000, 0.125000000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 3
+    min: -0.281250000, -0.125000000, 0.006000000
+    max: -0.250000000, 0.125000000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 4
+    min: -0.468750000, 0.000000000, 0.006000000
+    max: -0.437500000, 0.093750000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 5
+    min: -0.250000000, -0.093750000, 0.006000000
+    max: -0.187500000, 0.093750000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 6
+    min: -0.500000000, 0.000000000, 0.006000000
+    max: -0.468750000, 0.062500000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 7
+    min: -0.343750000, -0.156250000, 0.006000000
+    max: -0.281250000, 0.031250000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 8
+    min: -0.406250000, -0.125000000, 0.006000000
+    max: -0.343750000, -0.031250000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 9
+    min: -0.437500000, -0.125000000, 0.006000000
+    max: -0.406250000, -0.062500000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head solid 10
+    min: -0.250000000, -0.125000000, 0.006000000
+    max: -0.218750000, -0.093750000, 0.082000000
+    color: '#525252'
+  - label: open jaw and wrench head original surface
+    min: -0.500000000, -0.156250000, 0.081000000
+    max: -0.187500000, 0.156250000, 0.082000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3504
+    surfaceAxis: XY
+  - label: continuous steel shank solid 1
+    min: -0.187500000, -0.093750000, 0.006000000
+    max: 0.187500000, 0.062500000, 0.062000000
+    color: '#969696'
+  - label: continuous steel shank original surface
+    min: -0.187500000, -0.093750000, 0.061000000
+    max: 0.187500000, 0.062500000, 0.062000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3505
+    surfaceAxis: XY
+  - label: thicker butt grip solid 1
+    min: 0.187500000, -0.093750000, 0.000000000
+    max: 0.437500000, 0.062500000, 0.075000000
+    color: '#525252'
+  - label: thicker butt grip solid 2
+    min: 0.437500000, -0.093750000, 0.000000000
+    max: 0.468750000, 0.031250000, 0.075000000
+    color: '#525252'
+  - label: thicker butt grip original surface
+    min: 0.187500000, -0.093750000, 0.074000000
+    max: 0.468750000, 0.062500000, 0.075000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3506
+    surfaceAxis: XY
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: open jaw and wrench head solid 1
+          min: -0.406250000, 0.031250000, 0.006000000
+          max: -0.281250000, 0.156250000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 2
+          min: -0.437500000, 0.000000000, 0.006000000
+          max: -0.406250000, 0.125000000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 3
+          min: -0.281250000, -0.125000000, 0.006000000
+          max: -0.250000000, 0.125000000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 4
+          min: -0.468750000, 0.000000000, 0.006000000
+          max: -0.437500000, 0.093750000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 5
+          min: -0.250000000, -0.093750000, 0.006000000
+          max: -0.187500000, 0.093750000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 6
+          min: -0.500000000, 0.000000000, 0.006000000
+          max: -0.468750000, 0.062500000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 7
+          min: -0.343750000, -0.156250000, 0.006000000
+          max: -0.281250000, 0.031250000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 8
+          min: -0.406250000, -0.125000000, 0.006000000
+          max: -0.343750000, -0.031250000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 9
+          min: -0.437500000, -0.125000000, 0.006000000
+          max: -0.406250000, -0.062500000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head solid 10
+          min: -0.250000000, -0.125000000, 0.006000000
+          max: -0.218750000, -0.093750000, 0.082000000
+          color: '#525252'
+        - label: open jaw and wrench head original surface
+          min: -0.500000000, -0.156250000, 0.081000000
+          max: -0.187500000, 0.156250000, 0.082000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3504
+          surfaceAxis: XY
+        - label: continuous steel shank solid 1
+          min: -0.187500000, -0.093750000, 0.006000000
+          max: 0.187500000, 0.062500000, 0.062000000
+          color: '#969696'
+        - label: continuous steel shank original surface
+          min: -0.187500000, -0.093750000, 0.061000000
+          max: 0.187500000, 0.062500000, 0.062000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3505
+          surfaceAxis: XY
+        - label: thicker butt grip solid 1
+          min: 0.187500000, -0.093750000, 0.000000000
+          max: 0.437500000, 0.062500000, 0.075000000
+          color: '#525252'
+        - label: thicker butt grip solid 2
+          min: 0.437500000, -0.093750000, 0.000000000
+          max: 0.468750000, 0.031250000, 0.075000000
+          color: '#525252'
+        - label: thicker butt grip original surface
+          min: 0.187500000, -0.093750000, 0.074000000
+          max: 0.468750000, 0.062500000, 0.075000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3506
+          surfaceAxis: XY
+      delays:
+      - 1
+  description: Loose world tool only. Separate source-shaped solid head, shaft and grip with original top RGBA,
+    real open jaw/gaps, stepped blade bevels and recessed spoon/spade interiors. Heights and hidden depth are inferred;
+    original pivots, gameplay and held/equipped sprites are unchanged. Unsupported appearances retain sprite fallback.
+    All drafts; see SOURCES_LOOSE_TOOLS.md.
+- type: cmu3DModel
+  id: CMU3DLooseHatchet
+  label: Gardening hatchet
+  status: draft
+  sourcePrototypes:
+  - RMCToolHatchet
+  referencePrototype: RMCToolHatchet
+  referenceRsi: _RMC14/Objects/Tools/Hydroponics/hatchet.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: hatchet head and poll solid 1
+    min: -0.187500000, -0.062500000, 0.014000000
+    max: -0.156250000, 0.187500000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 2
+    min: -0.218750000, -0.062500000, 0.014000000
+    max: -0.187500000, 0.156250000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 3
+    min: -0.156250000, 0.031250000, 0.014000000
+    max: -0.125000000, 0.156250000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 4
+    min: -0.125000000, 0.062500000, 0.014000000
+    max: -0.093750000, 0.125000000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 5
+    min: -0.093750000, 0.062500000, 0.014000000
+    max: -0.062500000, 0.093750000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 6
+    min: -0.062500000, 0.031250000, 0.014000000
+    max: -0.031250000, 0.062500000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 7
+    min: -0.031250000, 0.000000000, 0.014000000
+    max: 0.000000000, 0.031250000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 8
+    min: 0.000000000, -0.031250000, 0.014000000
+    max: 0.031250000, 0.000000000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 9
+    min: -0.156250000, -0.062500000, 0.014000000
+    max: -0.125000000, -0.031250000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll solid 10
+    min: 0.031250000, -0.062500000, 0.014000000
+    max: 0.062500000, -0.031250000, 0.098000000
+    color: '#5B5555'
+  - label: hatchet head and poll original surface
+    min: -0.218750000, -0.062500000, 0.097000000
+    max: 0.062500000, 0.187500000, 0.098000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3507
+    surfaceAxis: XY
+  - label: continuous angled shaft and grip solid 1
+    min: -0.125000000, 0.125000000, 0.000000000
+    max: -0.062500000, 0.250000000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 2
+    min: -0.156250000, 0.156250000, 0.000000000
+    max: -0.125000000, 0.218750000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 3
+    min: -0.062500000, 0.062500000, 0.000000000
+    max: -0.031250000, 0.218750000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 4
+    min: -0.093750000, 0.093750000, 0.000000000
+    max: -0.062500000, 0.125000000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 5
+    min: -0.031250000, 0.031250000, 0.000000000
+    max: 0.000000000, 0.125000000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 6
+    min: 0.000000000, 0.000000000, 0.000000000
+    max: 0.031250000, 0.093750000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 7
+    min: 0.031250000, -0.031250000, 0.000000000
+    max: 0.062500000, 0.062500000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 8
+    min: 0.062500000, -0.093750000, 0.000000000
+    max: 0.093750000, 0.031250000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 9
+    min: 0.093750000, -0.125000000, 0.000000000
+    max: 0.125000000, 0.000000000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 10
+    min: 0.125000000, -0.156250000, 0.000000000
+    max: 0.156250000, -0.031250000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 11
+    min: 0.156250000, -0.187500000, 0.000000000
+    max: 0.187500000, -0.062500000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 12
+    min: 0.187500000, -0.250000000, 0.000000000
+    max: 0.218750000, -0.093750000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 13
+    min: 0.218750000, -0.250000000, 0.000000000
+    max: 0.250000000, -0.125000000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 14
+    min: 0.250000000, -0.250000000, 0.000000000
+    max: 0.281250000, -0.156250000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip solid 15
+    min: 0.281250000, -0.218750000, 0.000000000
+    max: 0.312500000, -0.187500000, 0.078000000
+    color: '#767672'
+  - label: continuous angled shaft and grip original surface
+    min: -0.156250000, -0.250000000, 0.077000000
+    max: 0.312500000, 0.250000000, 0.078000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3508
+    surfaceAxis: XY
+  - label: thin curved cutting edge solid 1
+    min: -0.250000000, -0.062500000, 0.035000000
+    max: -0.218750000, 0.125000000, 0.060000000
+    color: '#A6A6A0'
+  - label: thin curved cutting edge solid 2
+    min: -0.281250000, -0.031250000, 0.035000000
+    max: -0.250000000, 0.093750000, 0.060000000
+    color: '#A6A6A0'
+  - label: thin curved cutting edge solid 3
+    min: -0.312500000, 0.000000000, 0.035000000
+    max: -0.281250000, 0.062500000, 0.060000000
+    color: '#A6A6A0'
+  - label: thin curved cutting edge original surface
+    min: -0.312500000, -0.062500000, 0.059000000
+    max: -0.218750000, 0.125000000, 0.060000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3509
+    surfaceAxis: XY
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: hatchet head and poll solid 1
+          min: -0.187500000, -0.062500000, 0.014000000
+          max: -0.156250000, 0.187500000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 2
+          min: -0.218750000, -0.062500000, 0.014000000
+          max: -0.187500000, 0.156250000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 3
+          min: -0.156250000, 0.031250000, 0.014000000
+          max: -0.125000000, 0.156250000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 4
+          min: -0.125000000, 0.062500000, 0.014000000
+          max: -0.093750000, 0.125000000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 5
+          min: -0.093750000, 0.062500000, 0.014000000
+          max: -0.062500000, 0.093750000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 6
+          min: -0.062500000, 0.031250000, 0.014000000
+          max: -0.031250000, 0.062500000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 7
+          min: -0.031250000, 0.000000000, 0.014000000
+          max: 0.000000000, 0.031250000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 8
+          min: 0.000000000, -0.031250000, 0.014000000
+          max: 0.031250000, 0.000000000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 9
+          min: -0.156250000, -0.062500000, 0.014000000
+          max: -0.125000000, -0.031250000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll solid 10
+          min: 0.031250000, -0.062500000, 0.014000000
+          max: 0.062500000, -0.031250000, 0.098000000
+          color: '#5B5555'
+        - label: hatchet head and poll original surface
+          min: -0.218750000, -0.062500000, 0.097000000
+          max: 0.062500000, 0.187500000, 0.098000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3507
+          surfaceAxis: XY
+        - label: continuous angled shaft and grip solid 1
+          min: -0.125000000, 0.125000000, 0.000000000
+          max: -0.062500000, 0.250000000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 2
+          min: -0.156250000, 0.156250000, 0.000000000
+          max: -0.125000000, 0.218750000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 3
+          min: -0.062500000, 0.062500000, 0.000000000
+          max: -0.031250000, 0.218750000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 4
+          min: -0.093750000, 0.093750000, 0.000000000
+          max: -0.062500000, 0.125000000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 5
+          min: -0.031250000, 0.031250000, 0.000000000
+          max: 0.000000000, 0.125000000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 6
+          min: 0.000000000, 0.000000000, 0.000000000
+          max: 0.031250000, 0.093750000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 7
+          min: 0.031250000, -0.031250000, 0.000000000
+          max: 0.062500000, 0.062500000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 8
+          min: 0.062500000, -0.093750000, 0.000000000
+          max: 0.093750000, 0.031250000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 9
+          min: 0.093750000, -0.125000000, 0.000000000
+          max: 0.125000000, 0.000000000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 10
+          min: 0.125000000, -0.156250000, 0.000000000
+          max: 0.156250000, -0.031250000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 11
+          min: 0.156250000, -0.187500000, 0.000000000
+          max: 0.187500000, -0.062500000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 12
+          min: 0.187500000, -0.250000000, 0.000000000
+          max: 0.218750000, -0.093750000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 13
+          min: 0.218750000, -0.250000000, 0.000000000
+          max: 0.250000000, -0.125000000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 14
+          min: 0.250000000, -0.250000000, 0.000000000
+          max: 0.281250000, -0.156250000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip solid 15
+          min: 0.281250000, -0.218750000, 0.000000000
+          max: 0.312500000, -0.187500000, 0.078000000
+          color: '#767672'
+        - label: continuous angled shaft and grip original surface
+          min: -0.156250000, -0.250000000, 0.077000000
+          max: 0.312500000, 0.250000000, 0.078000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3508
+          surfaceAxis: XY
+        - label: thin curved cutting edge solid 1
+          min: -0.250000000, -0.062500000, 0.035000000
+          max: -0.218750000, 0.125000000, 0.060000000
+          color: '#A6A6A0'
+        - label: thin curved cutting edge solid 2
+          min: -0.281250000, -0.031250000, 0.035000000
+          max: -0.250000000, 0.093750000, 0.060000000
+          color: '#A6A6A0'
+        - label: thin curved cutting edge solid 3
+          min: -0.312500000, 0.000000000, 0.035000000
+          max: -0.281250000, 0.062500000, 0.060000000
+          color: '#A6A6A0'
+        - label: thin curved cutting edge original surface
+          min: -0.312500000, -0.062500000, 0.059000000
+          max: -0.218750000, 0.125000000, 0.060000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3509
+          surfaceAxis: XY
+      delays:
+      - 1
+  description: Loose world tool only. Separate source-shaped solid head, shaft and grip with original top RGBA,
+    real open jaw/gaps, stepped blade bevels and recessed spoon/spade interiors. Heights and hidden depth are inferred;
+    original pivots, gameplay and held/equipped sprites are unchanged. Unsupported appearances retain sprite fallback.
+    All drafts; see SOURCES_LOOSE_TOOLS.md.
+  supportProbePart: continuous angled shaft and grip solid 11
+- type: cmu3DModel
+  id: CMU3DLooseMiniHoe
+  label: Mini hoe
+  status: draft
+  sourcePrototypes:
+  - RMCToolMiniHoe
+  referencePrototype: RMCToolMiniHoe
+  referenceRsi: _RMC14/Objects/Tools/Hydroponics/mini_hoe.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: lower tine web and neck solid 1
+    min: -0.187500000, 0.250000000, 0.014000000
+    max: -0.156250000, 0.281250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 2
+    min: -0.250000000, 0.218750000, 0.014000000
+    max: -0.187500000, 0.250000000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 3
+    min: -0.156250000, 0.218750000, 0.014000000
+    max: -0.125000000, 0.250000000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 4
+    min: -0.281250000, 0.156250000, 0.014000000
+    max: -0.250000000, 0.218750000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 5
+    min: -0.218750000, 0.187500000, 0.014000000
+    max: -0.156250000, 0.218750000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 6
+    min: -0.125000000, 0.187500000, 0.014000000
+    max: -0.093750000, 0.218750000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 7
+    min: -0.250000000, 0.125000000, 0.014000000
+    max: -0.218750000, 0.187500000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 8
+    min: -0.187500000, 0.156250000, 0.014000000
+    max: -0.125000000, 0.187500000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 9
+    min: -0.093750000, 0.156250000, 0.014000000
+    max: -0.062500000, 0.187500000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 10
+    min: -0.312500000, 0.125000000, 0.014000000
+    max: -0.281250000, 0.156250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 11
+    min: -0.218750000, 0.093750000, 0.014000000
+    max: -0.187500000, 0.156250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 12
+    min: -0.156250000, 0.125000000, 0.014000000
+    max: -0.093750000, 0.156250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 13
+    min: -0.062500000, 0.093750000, 0.014000000
+    max: -0.031250000, 0.156250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 14
+    min: -0.281250000, 0.093750000, 0.014000000
+    max: -0.250000000, 0.125000000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 15
+    min: -0.187500000, 0.062500000, 0.014000000
+    max: -0.156250000, 0.125000000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 16
+    min: -0.125000000, 0.093750000, 0.014000000
+    max: -0.093750000, 0.125000000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 17
+    min: -0.250000000, 0.062500000, 0.014000000
+    max: -0.218750000, 0.093750000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 18
+    min: -0.156250000, 0.062500000, 0.014000000
+    max: -0.125000000, 0.093750000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 19
+    min: -0.093750000, 0.062500000, 0.014000000
+    max: -0.062500000, 0.093750000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 20
+    min: -0.218750000, 0.031250000, 0.014000000
+    max: -0.187500000, 0.062500000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 21
+    min: -0.125000000, 0.031250000, 0.014000000
+    max: -0.093750000, 0.062500000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 22
+    min: -0.062500000, 0.031250000, 0.014000000
+    max: -0.031250000, 0.062500000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 23
+    min: -0.187500000, 0.000000000, 0.014000000
+    max: -0.125000000, 0.031250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 24
+    min: -0.093750000, 0.000000000, 0.014000000
+    max: -0.062500000, 0.031250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck solid 25
+    min: -0.031250000, 0.000000000, 0.014000000
+    max: 0.000000000, 0.031250000, 0.052000000
+    color: '#202020'
+  - label: lower tine web and neck original surface
+    min: -0.312500000, 0.000000000, 0.051000000
+    max: 0.000000000, 0.281250000, 0.052000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3510
+    surfaceAxis: XY
+  - label: raised source metal tine ridges solid 1
+    min: -0.187500000, 0.218750000, 0.014000000
+    max: -0.156250000, 0.250000000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 2
+    min: -0.250000000, 0.187500000, 0.014000000
+    max: -0.218750000, 0.218750000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 3
+    min: -0.156250000, 0.187500000, 0.014000000
+    max: -0.125000000, 0.218750000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 4
+    min: -0.218750000, 0.156250000, 0.014000000
+    max: -0.187500000, 0.187500000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 5
+    min: -0.125000000, 0.156250000, 0.014000000
+    max: -0.093750000, 0.187500000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 6
+    min: -0.281250000, 0.125000000, 0.014000000
+    max: -0.250000000, 0.156250000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 7
+    min: -0.187500000, 0.125000000, 0.014000000
+    max: -0.156250000, 0.156250000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 8
+    min: -0.093750000, 0.093750000, 0.014000000
+    max: -0.062500000, 0.156250000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 9
+    min: -0.250000000, 0.093750000, 0.014000000
+    max: -0.218750000, 0.125000000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 10
+    min: -0.156250000, 0.093750000, 0.014000000
+    max: -0.125000000, 0.125000000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 11
+    min: -0.218750000, 0.062500000, 0.014000000
+    max: -0.187500000, 0.093750000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 12
+    min: -0.125000000, 0.062500000, 0.014000000
+    max: -0.093750000, 0.093750000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 13
+    min: -0.187500000, 0.031250000, 0.014000000
+    max: -0.125000000, 0.062500000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 14
+    min: -0.093750000, 0.031250000, 0.014000000
+    max: -0.062500000, 0.062500000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges solid 15
+    min: -0.062500000, 0.000000000, 0.014000000
+    max: -0.031250000, 0.031250000, 0.094000000
+    color: '#444444'
+  - label: raised source metal tine ridges original surface
+    min: -0.281250000, 0.000000000, 0.093000000
+    max: -0.031250000, 0.250000000, 0.094000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3511
+    surfaceAxis: XY
+  - label: thicker angled handle solid 1
+    min: -0.062500000, -0.031250000, 0.000000000
+    max: 0.062500000, 0.000000000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 2
+    min: -0.031250000, -0.093750000, 0.000000000
+    max: 0.093750000, -0.031250000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 3
+    min: 0.093750000, -0.218750000, 0.000000000
+    max: 0.125000000, -0.062500000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 4
+    min: 0.000000000, -0.125000000, 0.000000000
+    max: 0.093750000, -0.093750000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 5
+    min: 0.125000000, -0.250000000, 0.000000000
+    max: 0.156250000, -0.093750000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 6
+    min: 0.031250000, -0.156250000, 0.000000000
+    max: 0.093750000, -0.125000000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 7
+    min: 0.156250000, -0.281250000, 0.000000000
+    max: 0.187500000, -0.125000000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 8
+    min: 0.062500000, -0.187500000, 0.000000000
+    max: 0.093750000, -0.156250000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 9
+    min: 0.187500000, -0.312500000, 0.000000000
+    max: 0.218750000, -0.156250000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 10
+    min: 0.218750000, -0.312500000, 0.000000000
+    max: 0.250000000, -0.187500000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle solid 11
+    min: 0.250000000, -0.312500000, 0.000000000
+    max: 0.281250000, -0.218750000, 0.083000000
+    color: '#766D6A'
+  - label: thicker angled handle original surface
+    min: -0.062500000, -0.312500000, 0.082000000
+    max: 0.281250000, 0.000000000, 0.083000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3512
+    surfaceAxis: XY
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: lower tine web and neck solid 1
+          min: -0.187500000, 0.250000000, 0.014000000
+          max: -0.156250000, 0.281250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 2
+          min: -0.250000000, 0.218750000, 0.014000000
+          max: -0.187500000, 0.250000000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 3
+          min: -0.156250000, 0.218750000, 0.014000000
+          max: -0.125000000, 0.250000000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 4
+          min: -0.281250000, 0.156250000, 0.014000000
+          max: -0.250000000, 0.218750000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 5
+          min: -0.218750000, 0.187500000, 0.014000000
+          max: -0.156250000, 0.218750000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 6
+          min: -0.125000000, 0.187500000, 0.014000000
+          max: -0.093750000, 0.218750000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 7
+          min: -0.250000000, 0.125000000, 0.014000000
+          max: -0.218750000, 0.187500000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 8
+          min: -0.187500000, 0.156250000, 0.014000000
+          max: -0.125000000, 0.187500000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 9
+          min: -0.093750000, 0.156250000, 0.014000000
+          max: -0.062500000, 0.187500000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 10
+          min: -0.312500000, 0.125000000, 0.014000000
+          max: -0.281250000, 0.156250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 11
+          min: -0.218750000, 0.093750000, 0.014000000
+          max: -0.187500000, 0.156250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 12
+          min: -0.156250000, 0.125000000, 0.014000000
+          max: -0.093750000, 0.156250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 13
+          min: -0.062500000, 0.093750000, 0.014000000
+          max: -0.031250000, 0.156250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 14
+          min: -0.281250000, 0.093750000, 0.014000000
+          max: -0.250000000, 0.125000000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 15
+          min: -0.187500000, 0.062500000, 0.014000000
+          max: -0.156250000, 0.125000000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 16
+          min: -0.125000000, 0.093750000, 0.014000000
+          max: -0.093750000, 0.125000000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 17
+          min: -0.250000000, 0.062500000, 0.014000000
+          max: -0.218750000, 0.093750000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 18
+          min: -0.156250000, 0.062500000, 0.014000000
+          max: -0.125000000, 0.093750000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 19
+          min: -0.093750000, 0.062500000, 0.014000000
+          max: -0.062500000, 0.093750000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 20
+          min: -0.218750000, 0.031250000, 0.014000000
+          max: -0.187500000, 0.062500000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 21
+          min: -0.125000000, 0.031250000, 0.014000000
+          max: -0.093750000, 0.062500000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 22
+          min: -0.062500000, 0.031250000, 0.014000000
+          max: -0.031250000, 0.062500000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 23
+          min: -0.187500000, 0.000000000, 0.014000000
+          max: -0.125000000, 0.031250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 24
+          min: -0.093750000, 0.000000000, 0.014000000
+          max: -0.062500000, 0.031250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck solid 25
+          min: -0.031250000, 0.000000000, 0.014000000
+          max: 0.000000000, 0.031250000, 0.052000000
+          color: '#202020'
+        - label: lower tine web and neck original surface
+          min: -0.312500000, 0.000000000, 0.051000000
+          max: 0.000000000, 0.281250000, 0.052000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3510
+          surfaceAxis: XY
+        - label: raised source metal tine ridges solid 1
+          min: -0.187500000, 0.218750000, 0.014000000
+          max: -0.156250000, 0.250000000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 2
+          min: -0.250000000, 0.187500000, 0.014000000
+          max: -0.218750000, 0.218750000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 3
+          min: -0.156250000, 0.187500000, 0.014000000
+          max: -0.125000000, 0.218750000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 4
+          min: -0.218750000, 0.156250000, 0.014000000
+          max: -0.187500000, 0.187500000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 5
+          min: -0.125000000, 0.156250000, 0.014000000
+          max: -0.093750000, 0.187500000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 6
+          min: -0.281250000, 0.125000000, 0.014000000
+          max: -0.250000000, 0.156250000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 7
+          min: -0.187500000, 0.125000000, 0.014000000
+          max: -0.156250000, 0.156250000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 8
+          min: -0.093750000, 0.093750000, 0.014000000
+          max: -0.062500000, 0.156250000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 9
+          min: -0.250000000, 0.093750000, 0.014000000
+          max: -0.218750000, 0.125000000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 10
+          min: -0.156250000, 0.093750000, 0.014000000
+          max: -0.125000000, 0.125000000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 11
+          min: -0.218750000, 0.062500000, 0.014000000
+          max: -0.187500000, 0.093750000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 12
+          min: -0.125000000, 0.062500000, 0.014000000
+          max: -0.093750000, 0.093750000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 13
+          min: -0.187500000, 0.031250000, 0.014000000
+          max: -0.125000000, 0.062500000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 14
+          min: -0.093750000, 0.031250000, 0.014000000
+          max: -0.062500000, 0.062500000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges solid 15
+          min: -0.062500000, 0.000000000, 0.014000000
+          max: -0.031250000, 0.031250000, 0.094000000
+          color: '#444444'
+        - label: raised source metal tine ridges original surface
+          min: -0.281250000, 0.000000000, 0.093000000
+          max: -0.031250000, 0.250000000, 0.094000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3511
+          surfaceAxis: XY
+        - label: thicker angled handle solid 1
+          min: -0.062500000, -0.031250000, 0.000000000
+          max: 0.062500000, 0.000000000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 2
+          min: -0.031250000, -0.093750000, 0.000000000
+          max: 0.093750000, -0.031250000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 3
+          min: 0.093750000, -0.218750000, 0.000000000
+          max: 0.125000000, -0.062500000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 4
+          min: 0.000000000, -0.125000000, 0.000000000
+          max: 0.093750000, -0.093750000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 5
+          min: 0.125000000, -0.250000000, 0.000000000
+          max: 0.156250000, -0.093750000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 6
+          min: 0.031250000, -0.156250000, 0.000000000
+          max: 0.093750000, -0.125000000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 7
+          min: 0.156250000, -0.281250000, 0.000000000
+          max: 0.187500000, -0.125000000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 8
+          min: 0.062500000, -0.187500000, 0.000000000
+          max: 0.093750000, -0.156250000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 9
+          min: 0.187500000, -0.312500000, 0.000000000
+          max: 0.218750000, -0.156250000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 10
+          min: 0.218750000, -0.312500000, 0.000000000
+          max: 0.250000000, -0.187500000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle solid 11
+          min: 0.250000000, -0.312500000, 0.000000000
+          max: 0.281250000, -0.218750000, 0.083000000
+          color: '#766D6A'
+        - label: thicker angled handle original surface
+          min: -0.062500000, -0.312500000, 0.082000000
+          max: 0.281250000, 0.000000000, 0.083000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3512
+          surfaceAxis: XY
+      delays:
+      - 1
+  description: Loose world tool only. Separate source-shaped solid head, shaft and grip with original top RGBA,
+    real open jaw/gaps, stepped blade bevels and recessed spoon/spade interiors. Heights and hidden depth are inferred;
+    original pivots, gameplay and held/equipped sprites are unchanged. Unsupported appearances retain sprite fallback.
+    All drafts; see SOURCES_LOOSE_TOOLS.md.
+- type: cmu3DModel
+  id: CMU3DLooseSpade
+  label: Hand spade
+  status: draft
+  sourcePrototypes:
+  - RMCToolSpade
+  referencePrototype: RMCToolSpade
+  referenceRsi: _RMC14/Objects/Tools/Hydroponics/spade.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: curved spade blade outline solid 1
+    min: -0.343750000, 0.281250000, 0.022000000
+    max: -0.156250000, 0.375000000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 2
+    min: -0.156250000, 0.093750000, 0.022000000
+    max: -0.125000000, 0.343750000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 3
+    min: -0.125000000, 0.093750000, 0.022000000
+    max: -0.093750000, 0.312500000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 4
+    min: -0.343750000, 0.187500000, 0.022000000
+    max: -0.250000000, 0.281250000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 5
+    min: -0.093750000, 0.093750000, 0.022000000
+    max: -0.062500000, 0.281250000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 6
+    min: -0.312500000, 0.156250000, 0.022000000
+    max: -0.250000000, 0.187500000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 7
+    min: -0.281250000, 0.125000000, 0.022000000
+    max: -0.250000000, 0.156250000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 8
+    min: -0.062500000, 0.093750000, 0.022000000
+    max: -0.031250000, 0.156250000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline solid 9
+    min: -0.031250000, 0.093750000, 0.022000000
+    max: 0.000000000, 0.125000000, 0.078000000
+    color: '#5B5555'
+  - label: curved spade blade outline original surface
+    min: -0.343750000, 0.093750000, 0.077000000
+    max: 0.000000000, 0.375000000, 0.078000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3513
+    surfaceAxis: XY
+  - label: shallow recessed blade channel solid 1
+    min: -0.250000000, 0.093750000, 0.022000000
+    max: -0.156250000, 0.281250000, 0.052000000
+    color: '#484343'
+  - label: shallow recessed blade channel original surface
+    min: -0.250000000, 0.093750000, 0.051000000
+    max: -0.156250000, 0.281250000, 0.052000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3514
+    surfaceAxis: XY
+  - label: continuous wooden handle solid 1
+    min: -0.125000000, 0.062500000, 0.000000000
+    max: 0.031250000, 0.093750000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 2
+    min: -0.093750000, 0.031250000, 0.000000000
+    max: 0.062500000, 0.062500000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 3
+    min: -0.062500000, 0.000000000, 0.000000000
+    max: 0.093750000, 0.031250000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 4
+    min: -0.031250000, -0.031250000, 0.000000000
+    max: 0.125000000, 0.000000000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 5
+    min: 0.000000000, -0.062500000, 0.000000000
+    max: 0.156250000, -0.031250000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 6
+    min: 0.031250000, -0.093750000, 0.000000000
+    max: 0.187500000, -0.062500000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 7
+    min: 0.062500000, -0.125000000, 0.000000000
+    max: 0.218750000, -0.093750000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 8
+    min: 0.093750000, -0.156250000, 0.000000000
+    max: 0.250000000, -0.125000000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 9
+    min: 0.125000000, -0.187500000, 0.000000000
+    max: 0.250000000, -0.156250000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle solid 10
+    min: 0.156250000, -0.218750000, 0.000000000
+    max: 0.250000000, -0.187500000, 0.085000000
+    color: '#61584C'
+  - label: continuous wooden handle original surface
+    min: -0.125000000, -0.218750000, 0.084000000
+    max: 0.250000000, 0.093750000, 0.085000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3515
+    surfaceAxis: XY
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: curved spade blade outline solid 1
+          min: -0.343750000, 0.281250000, 0.022000000
+          max: -0.156250000, 0.375000000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 2
+          min: -0.156250000, 0.093750000, 0.022000000
+          max: -0.125000000, 0.343750000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 3
+          min: -0.125000000, 0.093750000, 0.022000000
+          max: -0.093750000, 0.312500000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 4
+          min: -0.343750000, 0.187500000, 0.022000000
+          max: -0.250000000, 0.281250000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 5
+          min: -0.093750000, 0.093750000, 0.022000000
+          max: -0.062500000, 0.281250000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 6
+          min: -0.312500000, 0.156250000, 0.022000000
+          max: -0.250000000, 0.187500000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 7
+          min: -0.281250000, 0.125000000, 0.022000000
+          max: -0.250000000, 0.156250000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 8
+          min: -0.062500000, 0.093750000, 0.022000000
+          max: -0.031250000, 0.156250000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline solid 9
+          min: -0.031250000, 0.093750000, 0.022000000
+          max: 0.000000000, 0.125000000, 0.078000000
+          color: '#5B5555'
+        - label: curved spade blade outline original surface
+          min: -0.343750000, 0.093750000, 0.077000000
+          max: 0.000000000, 0.375000000, 0.078000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3513
+          surfaceAxis: XY
+        - label: shallow recessed blade channel solid 1
+          min: -0.250000000, 0.093750000, 0.022000000
+          max: -0.156250000, 0.281250000, 0.052000000
+          color: '#484343'
+        - label: shallow recessed blade channel original surface
+          min: -0.250000000, 0.093750000, 0.051000000
+          max: -0.156250000, 0.281250000, 0.052000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3514
+          surfaceAxis: XY
+        - label: continuous wooden handle solid 1
+          min: -0.125000000, 0.062500000, 0.000000000
+          max: 0.031250000, 0.093750000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 2
+          min: -0.093750000, 0.031250000, 0.000000000
+          max: 0.062500000, 0.062500000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 3
+          min: -0.062500000, 0.000000000, 0.000000000
+          max: 0.093750000, 0.031250000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 4
+          min: -0.031250000, -0.031250000, 0.000000000
+          max: 0.125000000, 0.000000000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 5
+          min: 0.000000000, -0.062500000, 0.000000000
+          max: 0.156250000, -0.031250000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 6
+          min: 0.031250000, -0.093750000, 0.000000000
+          max: 0.187500000, -0.062500000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 7
+          min: 0.062500000, -0.125000000, 0.000000000
+          max: 0.218750000, -0.093750000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 8
+          min: 0.093750000, -0.156250000, 0.000000000
+          max: 0.250000000, -0.125000000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 9
+          min: 0.125000000, -0.187500000, 0.000000000
+          max: 0.250000000, -0.156250000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle solid 10
+          min: 0.156250000, -0.218750000, 0.000000000
+          max: 0.250000000, -0.187500000, 0.085000000
+          color: '#61584C'
+        - label: continuous wooden handle original surface
+          min: -0.125000000, -0.218750000, 0.084000000
+          max: 0.250000000, 0.093750000, 0.085000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3515
+          surfaceAxis: XY
+      delays:
+      - 1
+  description: Loose world tool only. Separate source-shaped solid head, shaft and grip with original top RGBA,
+    real open jaw/gaps, stepped blade bevels and recessed spoon/spade interiors. Heights and hidden depth are inferred;
+    original pivots, gameplay and held/equipped sprites are unchanged. Unsupported appearances retain sprite fallback.
+    All drafts; see SOURCES_LOOSE_TOOLS.md.
+- type: cmu3DModel
+  id: CMU3DLooseKitchenKnife
+  label: Kitchen and chef knife
+  status: draft
+  sourcePrototypes:
+  - RMCKitchenKnife
+  - RMCKitchenKnifeChef
+  referencePrototype: RMCKitchenKnife
+  referenceRsi: _RMC14/Objects/Weapons/Melee/Kitchen/knife.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: steel blade spine and tang solid 1
+    min: 0.031250000, -0.125000000, 0.000000000
+    max: 0.062500000, 0.468750000, 0.057000000
+    color: '#766D6A'
+  - label: steel blade spine and tang solid 2
+    min: 0.000000000, -0.125000000, 0.000000000
+    max: 0.031250000, 0.437500000, 0.057000000
+    color: '#766D6A'
+  - label: steel blade spine and tang solid 3
+    min: -0.031250000, -0.125000000, 0.000000000
+    max: 0.000000000, 0.406250000, 0.057000000
+    color: '#766D6A'
+  - label: steel blade spine and tang solid 4
+    min: -0.062500000, -0.125000000, 0.000000000
+    max: -0.031250000, 0.343750000, 0.057000000
+    color: '#766D6A'
+  - label: steel blade spine and tang solid 5
+    min: -0.093750000, -0.093750000, 0.000000000
+    max: -0.062500000, 0.250000000, 0.057000000
+    color: '#766D6A'
+  - label: steel blade spine and tang original surface
+    min: -0.093750000, -0.125000000, 0.056000000
+    max: 0.062500000, 0.468750000, 0.057000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3516
+    surfaceAxis: XY
+  - label: thin source curved cutting edge solid 1
+    min: 0.000000000, 0.437500000, 0.026000000
+    max: 0.031250000, 0.468750000, 0.040000000
+    color: '#D5CCC3'
+  - label: thin source curved cutting edge solid 2
+    min: -0.031250000, 0.406250000, 0.026000000
+    max: 0.000000000, 0.437500000, 0.040000000
+    color: '#D5CCC3'
+  - label: thin source curved cutting edge solid 3
+    min: -0.062500000, 0.343750000, 0.026000000
+    max: -0.031250000, 0.406250000, 0.040000000
+    color: '#D5CCC3'
+  - label: thin source curved cutting edge solid 4
+    min: -0.093750000, 0.250000000, 0.026000000
+    max: -0.062500000, 0.343750000, 0.040000000
+    color: '#D5CCC3'
+  - label: thin source curved cutting edge solid 5
+    min: -0.125000000, -0.093750000, 0.026000000
+    max: -0.093750000, 0.250000000, 0.040000000
+    color: '#D5CCC3'
+  - label: thin source curved cutting edge solid 6
+    min: -0.093750000, -0.125000000, 0.026000000
+    max: -0.062500000, -0.093750000, 0.040000000
+    color: '#D5CCC3'
+  - label: thin source curved cutting edge original surface
+    min: -0.125000000, -0.125000000, 0.039000000
+    max: 0.031250000, 0.468750000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3517
+    surfaceAxis: XY
+  - label: riveted dark knife handle solid 1
+    min: -0.062500000, -0.437500000, 0.000000000
+    max: 0.062500000, -0.125000000, 0.085000000
+    color: '#393939'
+  - label: riveted dark knife handle solid 2
+    min: -0.093750000, -0.437500000, 0.000000000
+    max: -0.062500000, -0.156250000, 0.085000000
+    color: '#393939'
+  - label: riveted dark knife handle solid 3
+    min: -0.062500000, -0.468750000, 0.000000000
+    max: 0.031250000, -0.437500000, 0.085000000
+    color: '#393939'
+  - label: riveted dark knife handle original surface
+    min: -0.093750000, -0.468750000, 0.084000000
+    max: 0.062500000, -0.125000000, 0.085000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3518
+    surfaceAxis: XY
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: steel blade spine and tang solid 1
+          min: 0.031250000, -0.125000000, 0.000000000
+          max: 0.062500000, 0.468750000, 0.057000000
+          color: '#766D6A'
+        - label: steel blade spine and tang solid 2
+          min: 0.000000000, -0.125000000, 0.000000000
+          max: 0.031250000, 0.437500000, 0.057000000
+          color: '#766D6A'
+        - label: steel blade spine and tang solid 3
+          min: -0.031250000, -0.125000000, 0.000000000
+          max: 0.000000000, 0.406250000, 0.057000000
+          color: '#766D6A'
+        - label: steel blade spine and tang solid 4
+          min: -0.062500000, -0.125000000, 0.000000000
+          max: -0.031250000, 0.343750000, 0.057000000
+          color: '#766D6A'
+        - label: steel blade spine and tang solid 5
+          min: -0.093750000, -0.093750000, 0.000000000
+          max: -0.062500000, 0.250000000, 0.057000000
+          color: '#766D6A'
+        - label: steel blade spine and tang original surface
+          min: -0.093750000, -0.125000000, 0.056000000
+          max: 0.062500000, 0.468750000, 0.057000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3516
+          surfaceAxis: XY
+        - label: thin source curved cutting edge solid 1
+          min: 0.000000000, 0.437500000, 0.026000000
+          max: 0.031250000, 0.468750000, 0.040000000
+          color: '#D5CCC3'
+        - label: thin source curved cutting edge solid 2
+          min: -0.031250000, 0.406250000, 0.026000000
+          max: 0.000000000, 0.437500000, 0.040000000
+          color: '#D5CCC3'
+        - label: thin source curved cutting edge solid 3
+          min: -0.062500000, 0.343750000, 0.026000000
+          max: -0.031250000, 0.406250000, 0.040000000
+          color: '#D5CCC3'
+        - label: thin source curved cutting edge solid 4
+          min: -0.093750000, 0.250000000, 0.026000000
+          max: -0.062500000, 0.343750000, 0.040000000
+          color: '#D5CCC3'
+        - label: thin source curved cutting edge solid 5
+          min: -0.125000000, -0.093750000, 0.026000000
+          max: -0.093750000, 0.250000000, 0.040000000
+          color: '#D5CCC3'
+        - label: thin source curved cutting edge solid 6
+          min: -0.093750000, -0.125000000, 0.026000000
+          max: -0.062500000, -0.093750000, 0.040000000
+          color: '#D5CCC3'
+        - label: thin source curved cutting edge original surface
+          min: -0.125000000, -0.125000000, 0.039000000
+          max: 0.031250000, 0.468750000, 0.040000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3517
+          surfaceAxis: XY
+        - label: riveted dark knife handle solid 1
+          min: -0.062500000, -0.437500000, 0.000000000
+          max: 0.062500000, -0.125000000, 0.085000000
+          color: '#393939'
+        - label: riveted dark knife handle solid 2
+          min: -0.093750000, -0.437500000, 0.000000000
+          max: -0.062500000, -0.156250000, 0.085000000
+          color: '#393939'
+        - label: riveted dark knife handle solid 3
+          min: -0.062500000, -0.468750000, 0.000000000
+          max: 0.031250000, -0.437500000, 0.085000000
+          color: '#393939'
+        - label: riveted dark knife handle original surface
+          min: -0.093750000, -0.468750000, 0.084000000
+          max: 0.062500000, -0.125000000, 0.085000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3518
+          surfaceAxis: XY
+      delays:
+      - 1
+  description: Loose world tool only. Separate source-shaped solid head, shaft and grip with original top RGBA,
+    real open jaw/gaps, stepped blade bevels and recessed spoon/spade interiors. Heights and hidden depth are inferred;
+    original pivots, gameplay and held/equipped sprites are unchanged. Unsupported appearances retain sprite fallback.
+    All drafts; see SOURCES_LOOSE_TOOLS.md.
+- type: cmu3DModel
+  id: CMU3DLoosePlasticKnife
+  label: Plastic kitchen knife
+  status: draft
+  sourcePrototypes:
+  - RMCKitchenKnifePlastic
+  referencePrototype: RMCKitchenKnifePlastic
+  referenceRsi: _RMC14/Objects/Weapons/Melee/Kitchen/knife.rsi
+  referenceState: plastic
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: plastic blade spine solid 1
+    min: 0.031250000, -0.125000000, 0.012000000
+    max: 0.062500000, 0.437500000, 0.045000000
+    color: '#B4B4AE'
+  - label: plastic blade spine solid 2
+    min: 0.000000000, -0.125000000, 0.012000000
+    max: 0.031250000, 0.406250000, 0.045000000
+    color: '#B4B4AE'
+  - label: plastic blade spine solid 3
+    min: -0.031250000, -0.125000000, 0.012000000
+    max: 0.000000000, 0.343750000, 0.045000000
+    color: '#B4B4AE'
+  - label: plastic blade spine solid 4
+    min: -0.062500000, -0.093750000, 0.012000000
+    max: -0.031250000, 0.250000000, 0.045000000
+    color: '#B4B4AE'
+  - label: plastic blade spine original surface
+    min: -0.062500000, -0.125000000, 0.044000000
+    max: 0.062500000, 0.437500000, 0.045000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3519
+    surfaceAxis: XY
+  - label: thin source curved cutting edge solid 1
+    min: 0.031250000, 0.437500000, 0.020000000
+    max: 0.062500000, 0.468750000, 0.032000000
+    color: '#D4D4CE'
+  - label: thin source curved cutting edge solid 2
+    min: 0.000000000, 0.406250000, 0.020000000
+    max: 0.031250000, 0.437500000, 0.032000000
+    color: '#D4D4CE'
+  - label: thin source curved cutting edge solid 3
+    min: -0.031250000, 0.343750000, 0.020000000
+    max: 0.000000000, 0.406250000, 0.032000000
+    color: '#D4D4CE'
+  - label: thin source curved cutting edge solid 4
+    min: -0.062500000, 0.250000000, 0.020000000
+    max: -0.031250000, 0.343750000, 0.032000000
+    color: '#D4D4CE'
+  - label: thin source curved cutting edge solid 5
+    min: -0.093750000, -0.093750000, 0.020000000
+    max: -0.062500000, 0.250000000, 0.032000000
+    color: '#D4D4CE'
+  - label: thin source curved cutting edge solid 6
+    min: -0.062500000, -0.125000000, 0.020000000
+    max: -0.031250000, -0.093750000, 0.032000000
+    color: '#D4D4CE'
+  - label: thin source curved cutting edge original surface
+    min: -0.093750000, -0.125000000, 0.031000000
+    max: 0.062500000, 0.468750000, 0.032000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3520
+    surfaceAxis: XY
+  - label: ribbed plastic handle solid 1
+    min: -0.093750000, -0.375000000, 0.000000000
+    max: 0.062500000, -0.125000000, 0.076000000
+    color: '#91918F'
+  - label: ribbed plastic handle solid 2
+    min: -0.062500000, -0.406250000, 0.000000000
+    max: 0.031250000, -0.375000000, 0.076000000
+    color: '#91918F'
+  - label: ribbed plastic handle original surface
+    min: -0.093750000, -0.406250000, 0.075000000
+    max: 0.062500000, -0.125000000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseToolsSurface3521
+    surfaceAxis: XY
+  spriteStates:
+    plastic:
+      frames:
+      - parts:
+        - label: plastic blade spine solid 1
+          min: 0.031250000, -0.125000000, 0.012000000
+          max: 0.062500000, 0.437500000, 0.045000000
+          color: '#B4B4AE'
+        - label: plastic blade spine solid 2
+          min: 0.000000000, -0.125000000, 0.012000000
+          max: 0.031250000, 0.406250000, 0.045000000
+          color: '#B4B4AE'
+        - label: plastic blade spine solid 3
+          min: -0.031250000, -0.125000000, 0.012000000
+          max: 0.000000000, 0.343750000, 0.045000000
+          color: '#B4B4AE'
+        - label: plastic blade spine solid 4
+          min: -0.062500000, -0.093750000, 0.012000000
+          max: -0.031250000, 0.250000000, 0.045000000
+          color: '#B4B4AE'
+        - label: plastic blade spine original surface
+          min: -0.062500000, -0.125000000, 0.044000000
+          max: 0.062500000, 0.437500000, 0.045000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3519
+          surfaceAxis: XY
+        - label: thin source curved cutting edge solid 1
+          min: 0.031250000, 0.437500000, 0.020000000
+          max: 0.062500000, 0.468750000, 0.032000000
+          color: '#D4D4CE'
+        - label: thin source curved cutting edge solid 2
+          min: 0.000000000, 0.406250000, 0.020000000
+          max: 0.031250000, 0.437500000, 0.032000000
+          color: '#D4D4CE'
+        - label: thin source curved cutting edge solid 3
+          min: -0.031250000, 0.343750000, 0.020000000
+          max: 0.000000000, 0.406250000, 0.032000000
+          color: '#D4D4CE'
+        - label: thin source curved cutting edge solid 4
+          min: -0.062500000, 0.250000000, 0.020000000
+          max: -0.031250000, 0.343750000, 0.032000000
+          color: '#D4D4CE'
+        - label: thin source curved cutting edge solid 5
+          min: -0.093750000, -0.093750000, 0.020000000
+          max: -0.062500000, 0.250000000, 0.032000000
+          color: '#D4D4CE'
+        - label: thin source curved cutting edge solid 6
+          min: -0.062500000, -0.125000000, 0.020000000
+          max: -0.031250000, -0.093750000, 0.032000000
+          color: '#D4D4CE'
+        - label: thin source curved cutting edge original surface
+          min: -0.093750000, -0.125000000, 0.031000000
+          max: 0.062500000, 0.468750000, 0.032000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3520
+          surfaceAxis: XY
+        - label: ribbed plastic handle solid 1
+          min: -0.093750000, -0.375000000, 0.000000000
+          max: 0.062500000, -0.125000000, 0.076000000
+          color: '#91918F'
+        - label: ribbed plastic handle solid 2
+          min: -0.062500000, -0.406250000, 0.000000000
+          max: 0.031250000, -0.375000000, 0.076000000
+          color: '#91918F'
+        - label: ribbed plastic handle original surface
+          min: -0.093750000, -0.406250000, 0.075000000
+          max: 0.062500000, -0.125000000, 0.076000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseToolsSurface3521
+          surfaceAxis: XY
+      delays:
+      - 1
+  description: Loose world tool only. Separate source-shaped solid head, shaft and grip with original top RGBA,
+    real open jaw/gaps, stepped blade bevels and recessed spoon/spade interiors. Heights and hidden depth are inferred;
+    original pivots, gameplay and held/equipped sprites are unchanged. Unsupported appearances retain sprite fallback.
+    All drafts; see SOURCES_LOOSE_TOOLS.md.

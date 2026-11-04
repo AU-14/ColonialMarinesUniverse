@@ -12,6 +12,9 @@ cm-xeno-nest-failed-cant-there = We can't create a nest there!
 cm-xeno-nest-failed-cant-already-there = There is already someone nested there!
 rmc-xeno-nest-failed-dead = This host is dead.
 
+rmc-xeno-nest-unnest-verb = Release host
+rmc-xeno-nest-unnest-start = We begin working {$target} free from the nest...
+
 cm-xeno-nest-break-out-start-self = You start struggling to free yourself from the resin nest...
 cm-xeno-nest-break-out-start-others = {$user} starts struggling against the resin nest!
 cm-xeno-nest-break-out-struggle-others = {$user} thrashes against the resin, trying to break free!

@@ -8,12 +8,11 @@ public sealed partial class HardpointSystem
         EntityUid vehicle,
         EntityUid hardpoint,
         float amount,
-        float previous,
         HardpointIntegrityComponent integrity,
         bool wasFunctional)
     {
         RefreshGunModifiers(hardpoint);
-        TryTriggerHardpointFailure(vehicle, hardpoint, amount, previous, integrity);
+        TryTriggerHardpointFailure(vehicle, hardpoint, amount, integrity);
 
         if (hardpoint != vehicle)
         {

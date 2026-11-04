@@ -1,0 +1,162 @@
+<controls:ChemSimulatorWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Chemistry.Research"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:ui="clr-namespace:Content.Client.CMU14.UI"
+    Title="{Loc ui-chem-simulator-window-name}" MinSize="940 470">
+    <PanelContainer>
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#252832" />
+        </PanelContainer.PanelOverride>
+        <TextureRect TexturePath="/Textures/CMU14/Interface/Backgrounds/bg-weyland.png"
+                     Stretch="KeepAspectCovered" CanShrink="True" MouseFilter="Ignore" />
+        <ScrollContainer HScrollEnabled="False" VScrollEnabled="True">
+            <BoxContainer Orientation="Horizontal" Margin="4">
+                <!-- Left column: status, mode, actions -->
+                <BoxContainer Orientation="Vertical" MinWidth="260" HorizontalExpand="True" SizeFlagsStretchRatio="2" Margin="0 0 2 0">
+                    <PanelContainer Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc research-sim-ui-header-status}" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="2">
+                                <ProgressBar Name="CreditsBar" Access="Public" SetHeight="20" HorizontalExpand="True">
+                                    <Label Name="CreditsLabel" Access="Public" Align="Right" Margin="0 0 4 0" VerticalAlignment="Center" />
+                                </ProgressBar>
+                                <PanelContainer Name="StatusPanel" Access="Public">
+                                    <Label Name="StatusLabel" Access="Public" Margin="5 1" />
+                                </PanelContainer>
+                                <Label Name="CostLabel" Access="Public" FontColorOverride="#7D8EA6" />
+                                <Label Name="OverdoseLabel" Access="Public" FontColorOverride="#7D8EA6" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc research-sim-ui-header-mode}" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <GridContainer Columns="2" HSeparationOverride="2" VSeparationOverride="2" Margin="6 4 6 5">
+                                <ui:CMUMachineButton Name="AmplifyButton" Access="Public" HorizontalExpand="True"
+                                                     ToolTip="{Loc research-sim-ui-amplify-tooltip}" />
+                                <ui:CMUMachineButton Name="SuppressButton" Access="Public" HorizontalExpand="True"
+                                                     ToolTip="{Loc research-sim-ui-suppress-tooltip}" />
+                                <ui:CMUMachineButton Name="AddButton" Access="Public" HorizontalExpand="True"
+                                                     ToolTip="{Loc research-sim-ui-add-tooltip}" />
+                                <ui:CMUMachineButton Name="RelateButton" Access="Public" HorizontalExpand="True"
+                                                     ToolTip="{Loc research-sim-ui-relate-tooltip}" />
+                            </GridContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc research-sim-ui-header-actions}" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="2">
+                                <ui:CMUMachineButton Name="SimulateButton" Access="Public" HorizontalExpand="True" />
+                                <ui:CMUMachineButton Name="OverrideButton" Access="Public" HorizontalExpand="True" ToggleMode="True"
+                                                     ToolTip="{Loc research-sim-ui-override-tooltip}" />
+                                <ui:CMUMachineButton Name="EjectTargetButton" Access="Public" HorizontalExpand="True" />
+                                <ui:CMUMachineButton Name="EjectReferenceButton" Access="Public" HorizontalExpand="True" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <!-- Right column: target, reference, recipe selection -->
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" MinWidth="420" SizeFlagsStretchRatio="3" Margin="2 0 0 0">
+                    <PanelContainer Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc research-sim-ui-header-target}" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="4">
+                                <PanelContainer Name="TargetStatusPanel" Access="Public">
+                                    <BoxContainer Orientation="Horizontal" Margin="5 1">
+                                        <SpriteView Name="TargetIcon" Access="Public" SetSize="24 24" Margin="0 0 6 0" />
+                                        <Label Name="TargetNameLabel" Access="Public" VerticalAlignment="Center" />
+                                    </BoxContainer>
+                                </PanelContainer>
+                                <BoxContainer Name="TargetPropertiesPanel" Access="Public">
+                                    <BoxContainer Name="TargetPropertiesBox" Access="Public" Orientation="Vertical"
+                                                  HorizontalExpand="True" SeparationOverride="2" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="ReferenceSection" Access="Public" Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc research-sim-ui-header-reference}" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="4">
+                                <PanelContainer Name="ReferenceStatusPanel" Access="Public">
+                                    <BoxContainer Orientation="Horizontal" Margin="5 1">
+                                        <SpriteView Name="ReferenceIcon" Access="Public" SetSize="24 24" Margin="0 0 6 0" />
+                                        <Label Name="ReferenceNameLabel" Access="Public" VerticalAlignment="Center" />
+                                    </BoxContainer>
+                                </PanelContainer>
+                                <BoxContainer Name="ReferencePropertiesPanel" Access="Public">
+                                    <BoxContainer Name="ReferencePropertiesBox" Access="Public" Orientation="Vertical"
+                                                  HorizontalExpand="True" SeparationOverride="2" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Name="RecipePickerSection" Access="Public" Visible="False">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="{Loc research-sim-ui-header-pick-recipe}" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="2">
+                                <BoxContainer Name="RecipeCandidatesBox" Access="Public" Orientation="Vertical" SeparationOverride="2" />
+                                <ui:CMUMachineButton Name="FinalizeButton" Access="Public" Disabled="True" Margin="0 2 0 0" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </ScrollContainer>
+    </PanelContainer>
+</controls:ChemSimulatorWindow>

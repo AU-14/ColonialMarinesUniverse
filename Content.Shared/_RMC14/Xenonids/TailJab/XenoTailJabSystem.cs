@@ -2,11 +2,13 @@ using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Rotate;
 using Content.Shared._RMC14.Xenonids.Stab;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio.Systems;
@@ -28,6 +30,7 @@ public sealed partial class XenoTailJabSystem : EntitySystem
     [Dependency] private SharedRMCMeleeWeaponSystem _rmcMelee = default!;
     [Dependency] private RMCObstacleSlammingSystem _rmcObstacleSlamming = default!;
     [Dependency] private RMCSlowSystem _rmcSlow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private XenoRotateSystem _rotate = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -82,7 +85,8 @@ public sealed partial class XenoTailJabSystem : EntitySystem
         }
 
         _rmcMelee.DoLunge(xeno, target);
-        _rmcSlow.TrySlowdown(target, xeno.Comp.SlowdownTime);
+        if (!_yautjaSlow.TryApply(target, xeno.Comp.YautjaSlow)) // CMU14
+            _rmcSlow.TrySlowdown(target, xeno.Comp.SlowdownTime);
         _rmcObstacleSlamming.ApplyBonuses(target, xeno.Comp.WallSlamStunTime, xeno.Comp.WallSlamSlowdownTime);
 
         var origin = _transform.GetMapCoordinates(xeno);

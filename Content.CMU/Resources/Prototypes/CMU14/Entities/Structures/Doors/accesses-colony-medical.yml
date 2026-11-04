@@ -1,0 +1,107 @@
+# Colony medical variants of the medical doors, matching CMAirlockMedicalLockedColony.
+
+# Airlocks
+- type: entity
+  parent: CMAirlockMaint
+  id: CMUAirlockMaintMedicalLockedColony
+  suffix: Medical, Colony, Locked, Maint
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMUAirlockMorgueLockedColony
+  suffix: Morgue, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMAirlockMedical
+  id: CMUAirlockChemistryLockedColony
+  suffix: Chemistry, Colony, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+# Double doors
+- type: entity
+  parent: CMDoubleDoorMedicalGlass
+  id: CMUDoubleDoorMedicalGlassLockedColony
+  suffix: Medical, Colony, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUDoubleDoorMedicalSolidLockedColony
+  suffix: Medical, Colony, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUDoubleDoorMorgueSolidLockedColony
+  suffix: Morgue, Colony, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalGlass
+  id: CMUDoubleDoorChemistryGlassLockedColony
+  suffix: Chemistry, Colony, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMDoubleDoorMedicalSolid
+  id: CMUDoubleDoorChemistrySolidLockedColony
+  suffix: Chemistry, Colony, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyChem"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorMedicalGlass
+  id: CMURMCDoubleDoorMedicalGlassLockedColony
+  suffix: Medical, Colony, Glass, Locked, Warship Style
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorMedicalSolid
+  id: CMURMCDoubleDoorMedicalSolidLockedColony
+  suffix: Medical, Colony, Solid, Locked, Warship Style
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorMedicalSolid
+  id: CMURMCDoubleDoorMorgueSolidLockedColony
+  suffix: Morgue, Colony, Solid, Locked, Warship Style
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorMedicalGlass
+  id: CMURMCDoubleDoorResearchGlassLockedColony
+  suffix: Research, Colony, Glass, Locked, Warship Style
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: RMCDoubleDoorMedicalSolid
+  id: CMURMCDoubleDoorResearchSolidLockedColony
+  suffix: Research, Colony, Solid, Locked, Warship Style
+  components:
+  - type: AccessReader
+    access: [["CMAccessColonyResearch"], ["CMAccessColonyCommand"]]

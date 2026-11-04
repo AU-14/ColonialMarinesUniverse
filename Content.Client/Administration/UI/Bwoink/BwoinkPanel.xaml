@@ -1,16 +1,24 @@
-﻿<BoxContainer
+﻿<!-- Margin here, not on rootPanel in AHelpUIController.cs: that panel is CrtScreenPanel now, which
+     carries no content margin of its own by design (see the lobby sidebar's own top zone for the
+     same pattern) - the inset belongs to whatever sits inside it, not to the screen plane itself. -->
+<BoxContainer
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Orientation="Vertical"
-    HorizontalExpand="True">
+    HorizontalExpand="True"
+    Margin="8">
     <OutputPanel Name="TextOutput" VerticalExpand="true" />
     <RichTextLabel Name="TypingIndicator" Access="Public" />
-    <PanelContainer Margin="0 3 0 0" HorizontalExpand="True">
+    <!-- StyleClassCrtBwoinkInput: a filled band with rules top and bottom, not an unstyled wrapper -
+         the input used to be the one place in this window with no explicit background or border at
+         all, which is a big part of why it read as an afterthought rather than the control you are
+         actually meant to type into. -->
+    <PanelContainer Margin="0 6 0 0" HorizontalExpand="True"
+                    StyleClasses="CrtBwoinkInput">
         <HistoryLineEdit Name="SenderLineEdit"
                          PlaceHolder="Type admin help message..."
                          HorizontalExpand="True"
                          MinHeight="34"
                          SetHeight="34" />
     </PanelContainer>
-    <RichTextLabel Name="RelayedToDiscordLabel" Access="Public" Visible="False" />
 </BoxContainer>

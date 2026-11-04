@@ -1,0 +1,27 @@
+# Ported from cmss13 PR 6973.
+- type: entity
+  parent: BoxBase
+  id: CMUBoxStompers
+  name: Reebok shoe box
+  description: A fancy shoe box with reflective surface and Weyland-Yutani logo on top, says 'Reebok Stompers' on the back.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Storage/stompers_box.rsi
+    layers:
+    - state: box-1
+      map: ["enum.StorageFillLayers.Fill"]
+  - type: Item
+    size: Normal
+    shape:
+    - 0,0,1,1
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,1,1
+  - type: Appearance
+  - type: StorageFillVisualizer
+    fillBaseName: box
+    maxFillLevels: 1
+  - type: StorageFill
+    contents:
+    - id: RMCShoesWeYaStompers

@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Tantrum;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Network;
@@ -35,7 +36,7 @@ public sealed partial class XenoFurySystem : EntitySystem
 
         foreach (var ent in args.HitEntities)
         {
-            if (_xeno.CanAbilityAttackTarget(xeno, ent))
+            if (_xeno.CanGainRewardsFromTarget(xeno, ent)) // CMU14: no rewards from vehicles
             {
                 validHit = true;
                 break;

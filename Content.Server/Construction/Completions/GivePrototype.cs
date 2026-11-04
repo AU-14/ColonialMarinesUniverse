@@ -24,17 +24,18 @@ public sealed partial class GivePrototype : IGraphAction
         if (string.IsNullOrEmpty(Prototype))
             return;
 
-        if (EntityPrototypeHelpers.HasComponent<StackComponent>(Prototype))
+        if (IoCManager.Resolve<IPrototypeManager>().TryIndex(Prototype, out var prototype) &&
+            prototype.HasComp<StackComponent>(entityManager.ComponentFactory))
         {
             var stackSystem = entityManager.EntitySysManager.GetEntitySystem<StackSystem>();
-            var stacks = stackSystem.SpawnMultiple(Prototype, Amount, userUid ?? uid);
+            var stacks = stackSystem.SpawnMultipleNextToOrDrop(Prototype, Amount, userUid ?? uid);
 
             if (userUid is null || !entityManager.TryGetComponent(userUid, out HandsComponent? handsComp))
                 return;
 
             foreach (var item in stacks)
             {
-                stackSystem.TryMergeToHands(item, userUid.Value, hands: handsComp);
+                stackSystem.TryMergeToHands(item, (userUid.Value, handsComp));
             }
         }
         else

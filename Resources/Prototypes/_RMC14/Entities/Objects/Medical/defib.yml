@@ -41,8 +41,9 @@
     - Toxin: -12
     - Genetic: -12
     zapHeal:
-      groups:
-        Airloss: -400
+      types:
+        Asphyxiation: -200
+        Bloodloss: -200
     zapSound:
       path: /Audio/_RMC14/Medical/defib_release.ogg
       params:
@@ -86,7 +87,7 @@
   components:
   - type: PowerCellDraw
     enabled: false
-    useRate: 66
+    useCharge: 66
   - type: RMCPowerUsageDisplay
   - type: UseOnSynthBlocked
     whitelist:
@@ -120,7 +121,68 @@
     sprite: _RMC14/Objects/Medical/compact_defib.rsi
     size: Small
   - type: PowerCellDraw
-    useRate: 350
+    useCharge: 350
+  # cmu edit start: AEDs analyze, talk the user through the shock and pick their own energy
+  - type: CMUDefibCharge
+    fixed: true
+  - type: CMUDefibVoice
+    automated: true
+    shockAdvisedSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/shockadvised.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    noShockAdvisedSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/noshockadvised.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    standClearSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/standclear_pushtoshock.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    standClearBeforeShock: 2.6
+  - type: GuideHelp
+    guides:
+    - CMUGuideDefibrillators
+    - MedicalDoctor
+  - type: Defibrillator
+    chargeSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/charging.ogg
+      params:
+        volume: -10
+        maxDistance: 6
+    zapSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/shock.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    successSound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/ifnopulsepushanalyze.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+    readySound:
+      path: /Audio/CMU14/Medical/MedicalDevices/AED/heartrate_AEDBeepLoopable.ogg
+      params:
+        volume: -6
+        maxDistance: 6
+  # cmu edit end
+
+- type: entity
+  id: CMUDefibrillatorCompactSynth
+  parent: RMCDefibrillatorCompact
+  name: advanced automated external defibrillator
+  description: A modificatied version of a normal automated external defibrillator, it uses a experimental battery to retain its compact size, while still holding considerably more charge then traditional compact defibrillator. Unfortunately, due to technology still being in the early stages, the metals within are so dense and heavy that only a synthetic can reasonably carry and use the device.
+  components:
+  - type: PowerCellDraw
+    useCharge: 132
+  - type: WhitelistPickupBy
+    whitelist:
+      components:
+        - Synth
+  - type: RMCSynthItemRestriction
 
 # TODO RMC14: synth reset key sprites currently all use a makeshift_key placeholder.
 # Replace them with original art that does not include Alien media logos.
@@ -139,7 +201,7 @@
       visible: false
   - type: PowerCellDraw
     enabled: false
-    useRate: 1000
+    useCharge: 1000
   - type: RMCPowerUsageDisplay
   - type: RequiresSkill
     skills:

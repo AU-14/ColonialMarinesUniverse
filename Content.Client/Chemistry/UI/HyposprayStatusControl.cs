@@ -15,15 +15,15 @@ public sealed class HyposprayStatusControl : Control
     private readonly RichTextLabel _label;
     private readonly SharedSolutionContainerSystem _solutionContainers;
 
-    private FixedPoint2 PrevVolume;
-    private FixedPoint2 PrevMaxVolume;
-    private bool PrevOnlyAffectsMobs;
+    private FixedPoint2 _prevVolume;
+    private FixedPoint2 _prevMaxVolume;
+    private bool _prevOnlyAffectsMobs;
 
     public HyposprayStatusControl(Entity<HyposprayComponent> parent, SharedSolutionContainerSystem solutionContainers)
     {
         _parent = parent;
         _solutionContainers = solutionContainers;
-        _label = new RichTextLabel { StyleClasses = { StyleNano.StyleClassItemStatus } };
+        _label = new RichTextLabel { StyleClasses = { StyleClass.ItemStatus } };
         AddChild(_label);
     }
 
@@ -34,15 +34,15 @@ public sealed class HyposprayStatusControl : Control
         if (!_solutionContainers.TryGetSolution(_parent.Owner, _parent.Comp.SolutionName, out _, out var solution))
             return;
 
-        // only updates the UI if any of the details are different than they previously were
-        if (PrevVolume == solution.Volume
-            && PrevMaxVolume == solution.MaxVolume
-            && PrevOnlyAffectsMobs == _parent.Comp.OnlyAffectsMobs)
+        // Only update the UI if any of the details changed.
+        if (_prevVolume == solution.Volume
+            && _prevMaxVolume == solution.MaxVolume
+            && _prevOnlyAffectsMobs == _parent.Comp.OnlyAffectsMobs)
             return;
 
-        PrevVolume = solution.Volume;
-        PrevMaxVolume = solution.MaxVolume;
-        PrevOnlyAffectsMobs = _parent.Comp.OnlyAffectsMobs;
+        _prevVolume = solution.Volume;
+        _prevMaxVolume = solution.MaxVolume;
+        _prevOnlyAffectsMobs = _parent.Comp.OnlyAffectsMobs;
 
         var modeStringLocalized = Loc.GetString((_parent.Comp.OnlyAffectsMobs && _parent.Comp.CanContainerDraw) switch
         {

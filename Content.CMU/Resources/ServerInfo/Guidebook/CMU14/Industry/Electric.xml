@@ -1,0 +1,41 @@
+<Document>
+  # Power & oil
+
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Equipment recipes" link="CMUGuideIndustryRecipes"]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCSteamGenerator" Caption="GENERATE"/>
+    <GuideEntityEmbed Entity="RUMCTransformerDown" Caption="HV → MV"/>
+    <GuideEntityEmbed Entity="PowerPanel" Caption="ELECTRICAL PANEL"/>
+  </Box>
+  [bold]Generator → HV cable → step-down transformer → MV cable → electrical panel → nearby machines.[/bold] Anchor the electrical panel directly over the MV cable; it supplies powered devices within five tiles. Anchor equipment and connect the matching cable networks. A generator alone does not power every machine in the room.
+
+  ## Choose a source
+  - [bold]Steam:[/bold] feed steam from your boiler to the generator.
+  - [bold]Solar:[/bold] expose panels to sunlight and orient them toward it; shade reduces output.
+  - [bold]Diesel / gas turbine:[/bold] supply the specified fuel through a suitable container or fluid connection. Keep the tank filled.
+  - [bold]Geothermal:[/bold] place near lava; ordinary cave floor supplies no heat.
+  - [bold]Battery buffer / bank:[/bold] store surplus generation. They need charging before they can cover shortages.
+
+  Cable shafts connect matching voltage networks between Z-levels. Keep HV, MV and LV separate. Use a powered cell charger for removable tool cells.
+
+  [textlink="Make an electrical panel" link="CMUGuideIndustryRecipes"] · [textlink="Run a processing machine" link="CMUGuideIndustryMachines"]
+
+  ## Turn oil into useful supplies
+  <Box>
+    <GuideEntityEmbed Entity="RUMCOilPump" Caption="ON THE DEPOSIT"/>
+    <GuideEntityEmbed Entity="RUMCDistillationTower" Caption="SEPARATE FRACTIONS"/>
+  </Box>
+  1. Activate a [textlink="prospector" link="CMUGuideIndustryTools"] to find nearby deposits. Place the oil pump on one and power it.
+  2. Lay a touching [textlink="liquid pipe run" link="CMUGuideIndustryPipes"] from the pump to the tower. Use a screwdriver on the first pipe, then the pump → OUTPUT → Connect selected pipe. Select the last pipe, then the tower → crude oil INPUT → Connect selected pipe.
+  3. Connect storage/output routes for [bold]all fractions[/bold]: naphtha, light fuel, heavy fuel and refinery gas. Full outputs can stop production.
+  4. Route light fuel and heavy fuel to the fuel mixer's matching INPUTS. [bold]30 units light fuel + 20 units heavy fuel → 50 units diesel.[/bold] Connect its diesel OUTPUT to a separate barrel's INPUT. Supply power and leave room for the finished fuel.
+
+  [bold]Sell diesel:[/bold] move the filled barrel onto the colony ASRS elevator and send it away using the requisitions console. Diesel pays per unit actually inside; an empty barrel does not earn the fuel's value. [textlink="Selling controls" link="CMUGuideIndustryProducts"]
+
+  For plastics: crack suitable fractions into ethylene, polymerize it into pellets, then use a bender for sheets.
+
+  Open each machine's window for its exact inputs, fluids and circuit. To fill a canister, hold it and right-click a fillable tank → [bold]Draw the liquid into the container[/bold]. Click a fillable tank or generator with the filled canister to pour it in.
+
+  [textlink="Pipe connection controls" link="CMUGuideIndustryPipes"] · [textlink="Machine quick reference" link="CMUGuideIndustryMachines"]
+</Document>

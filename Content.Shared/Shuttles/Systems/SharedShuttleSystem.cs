@@ -14,7 +14,6 @@ namespace Content.Shared.Shuttles.Systems;
 
 public abstract partial class SharedShuttleSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] protected FixtureSystem Fixtures = default!;
     [Dependency] protected SharedMapSystem Maps = default!;
@@ -24,11 +23,10 @@ public abstract partial class SharedShuttleSystem : EntitySystem
 
     public const float FTLRange = 256f;
     public const float FTLBufferRange = 8f;
-    public const float TileDensityMultiplier = 0.5f;
+    public const float TileDensityMultiplier = 800f;
 
-    private EntityQuery<MapGridComponent> _gridQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
 
     private List<Entity<MapGridComponent>> _grids = new();
 
@@ -37,10 +35,6 @@ public abstract partial class SharedShuttleSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<FixturesComponent, GridFixtureChangeEvent>(OnGridFixtureChange);
-
-        _gridQuery = GetEntityQuery<MapGridComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
     }
 
     private void OnGridFixtureChange(EntityUid uid, FixturesComponent manager, GridFixtureChangeEvent args)
@@ -58,7 +52,7 @@ public abstract partial class SharedShuttleSystem : EntitySystem
     public bool CanFTLTo(EntityUid shuttleUid, MapId targetMap, EntityUid consoleUid)
     {
         var mapUid = Maps.GetMapOrInvalid(targetMap);
-        var shuttleMap = _xformQuery.GetComponent(shuttleUid).MapID;
+        var shuttleMap = Transform(shuttleUid).MapID;
 
         if (shuttleMap == targetMap)
             return true;
@@ -73,7 +67,7 @@ public abstract partial class SharedShuttleSystem : EntitySystem
                 return false;
             }
 
-            if (!_itemSlots.TryGetSlot(consoleUid, SharedShuttleConsoleComponent.DiskSlotName, out var itemSlot, component: slot) || !itemSlot.HasItem)
+            if (!_itemSlots.TryGetSlot((consoleUid, slot), SharedShuttleConsoleComponent.DiskSlotName, out var itemSlot) || !itemSlot.HasItem)
             {
                 return false;
             }
@@ -142,7 +136,7 @@ public abstract partial class SharedShuttleSystem : EntitySystem
         if (!Resolve(gridUid, ref physics))
             return true;
 
-        if (physics.BodyType != BodyType.Static && physics.Mass < 10f)
+        if (physics.BodyType != BodyType.Static && physics.Mass < (20f * TileDensityMultiplier)) // A grid of approx 20 tiles, to not draw tiny grids.
         {
             return false;
         }
@@ -189,8 +183,17 @@ public abstract partial class SharedShuttleSystem : EntitySystem
     /// </summary>
     public bool FTLFree(EntityUid shuttleUid, EntityCoordinates coordinates, Angle angle, List<ShuttleExclusionObject>? exclusionZones)
     {
+        // CMU14 Begin: validate before transforming the destination.
+        if (!coordinates.IsValid(EntityManager) || !double.IsFinite(angle.Theta) ||
+            !Maps.TryGetMap(XformSystem.GetMapId(coordinates), out _))
+        {
+            Log.Error($"Found invalid FTL destination with coordinates {coordinates} and angle {angle} for shuttle {shuttleUid}");
+            return false;
+        }
+        // CMU14 End
+
         if (!_physicsQuery.TryGetComponent(shuttleUid, out var shuttlePhysics) ||
-            !_xformQuery.TryGetComponent(shuttleUid, out var shuttleXform))
+            !TryComp(shuttleUid, out TransformComponent? shuttleXform))
         {
             return false;
         }

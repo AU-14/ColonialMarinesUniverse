@@ -1,0 +1,7 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: You no longer lose your position in queue when becoming a lesser drone/facehugger.
+  type: Tweak
+time: '2026-09-19T06:04:37.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1973

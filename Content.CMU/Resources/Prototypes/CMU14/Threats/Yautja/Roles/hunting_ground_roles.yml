@@ -1,0 +1,192 @@
+# Hunt prey are the bodies our own third parties spawn, so they land wearing the same kits players see in a round.
+# The aliases only swap the ghost role blurb for the preserve one and drop the job playtime gates, prey is open to everyone.
+
+- type: entity
+  parent: AU14IntelThirdPartyCLFCommandoReinforcements
+  id: CMUYautjaHuntCLFCommando
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: CMUIntelThirdPartyCLFEngineerReinforcements
+  id: CMUYautjaHuntCLFEngineer
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14IntelThirdPartyCLFCommandoMedicReinforcements
+  id: CMUYautjaHuntCLFCommandoMedic
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14IntelThirdPartyCLFCommandoLeaderReinforcements
+  id: CMUYautjaHuntCLFCommandoLeader
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobWYPMCPartyContractorM42A
+  id: CMUYautjaHuntPMCContractorM42A
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobWYPMCPartyContractorNSG23
+  id: CMUYautjaHuntPMCContractorNSG23
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobWYPMCPartyContractorM39B2
+  id: CMUYautjaHuntPMCContractorM39B2
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobWYPMCPartyLeader
+  id: CMUYautjaHuntPMCLeader
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobWYPMCPartySmartgunner
+  id: CMUYautjaHuntPMCSmartgunner
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobWYPMCPartyEngineer
+  id: CMUYautjaHuntPMCEngineer
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobWYPMCPartyMedic
+  id: CMUYautjaHuntPMCMedic
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobRMCRRTRifleman
+  id: CMUYautjaHuntRoyalMarinesRifleman
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobRMCRRTCorpsman
+  id: CMUYautjaHuntRoyalMarinesCorpsman
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobRMCRRTCommander
+  id: CMUYautjaHuntRoyalMarinesCommander
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobRMCRRTSmartgunner
+  id: CMUYautjaHuntRoyalMarinesSmartgunner
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobRMCRRTBreacher
+  id: CMUYautjaHuntRoyalMarinesBreacher
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: AU14JobRMCRRTMarksman
+  id: CMUYautjaHuntRoyalMarinesMarksman
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: CMUJobFreelancerStandard
+  id: CMUYautjaHuntFreelancerStandard
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []
+
+- type: entity
+  parent: CMUJobFreelancerLeader
+  id: CMUYautjaHuntFreelancerLeader
+  suffix: Yautja Prey
+  components:
+  - type: GhostRole
+    description: cmu-yautja-hunt-prey-ghost-description
+    rules: cmu-yautja-hunt-prey-ghost-rules
+    requirements: []

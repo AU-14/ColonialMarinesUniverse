@@ -1,10 +1,9 @@
+using Content.Server.Administration.Logs; // CMU14: teleport links in admin notifications
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Hands.Systems;
 using Content.Server.Radio;
-using Content.Server.Speech;
-using Content.Server.Speech.Components;
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Radio;
@@ -13,6 +12,9 @@ using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chat;
 using Content.Shared.Coordinates;
+using Content.Shared.Radio;
+using Content.Shared.Speech;
+using Content.Shared.Speech.Components;
 using Robust.Server.Audio;
 using Robust.Shared.Audio;
 using Robust.Shared.Player;
@@ -23,6 +25,7 @@ namespace Content.Server._RMC14.Telephone;
 public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 {
     [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!; // CMU14: teleport links in admin notifications
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private CommunicationsTowerSystem _communicationsTower = default!;
@@ -40,6 +43,8 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 
         SubscribeLocalEvent<RMCTelephoneComponent, ListenEvent>(OnListen);
         SubscribeLocalEvent<RMCTelephoneRingEvent>(OnTelephoneRing);
+
+        CMUInitialize(); // cmu edit
     }
 
     private void OnRadioSendAttempt(ref RadioSendAttemptEvent ev)
@@ -114,7 +119,12 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 
         if (TryComp<RotaryPhoneComponent>(ev.Receiving, out var phone) && phone.NotifyAdmins)
         {
-            _chatManager.SendAdminAnnouncement(Loc.GetString("admin-call-incoming", ("actor", Name(ev.Actor)), ("from", Name(ev.Calling)), ("to", Name(ev.Receiving))));
+            _chatManager.SendAdminAnnouncement(Loc.GetString("admin-call-incoming", ("actor", Name(ev.Actor)), ("from", Name(ev.Calling)), ("to", ToPrettyString(ev.Receiving))));
+
+            // CMU14: teleport links to the caller and the called phone
+            if (_adminLog.CreateTpLinks(Loc.GetString("admin-call-teleport-header"),
+                    [(ev.Actor, Name(ev.Actor)), (ev.Receiving, Name(ev.Receiving))], out var tpLinks))
+                _chatManager.SendAdminAnnouncementNoFormatOrEscape(tpLinks);
         }
     }
 
@@ -123,12 +133,17 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
         if (HasComp<RMCTelephoneComponent>(source) || HasComp<XenoComponent>(source))
             return;
 
-        if (!_hands.IsHolding(source, ent))
+        if (!CMUIsHoldingPhone(source, ent)) // cmu edit: mobile phones
             return;
+
+        // cmu edit start: 911 dispatch calls
+        if (CMUHandleEmergencyListen(ent, source, message))
+            return;
+        // cmu edit end
 
         if (ent.Comp.RotaryPhone is not { } rotary ||
             !TryGetOtherPhone(rotary, out var otherPhone) ||
-            !_rmcHands.TryGetHolder(otherPhone, out var holder) ||
+            !CMUTryGetPhoneHolder(otherPhone, out var holder) || // cmu edit: mobile phones
             !TryComp(holder, out ActorComponent? actor))
         {
             return;

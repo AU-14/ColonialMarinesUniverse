@@ -1,0 +1,19 @@
+<Document>
+  # Points
+
+  Your faction earns two kinds of points.
+
+  ## Objective Points
+  - Earned by completing objectives. Each objective shows what it's worth on the objectives console.
+  - They count toward your [bold]final objective[/bold]: reach the target and it unlocks.
+  - Some vendors let you buy gear with them.
+
+  ## Intel Points
+  - Earned from intel: processing it at the Analyzer, reading documents, and restoring the colony's communications and power. See [textlink="Intel" link="CMUGuideIntel"].
+  - Spent on unlocking extra information about an objective, from its intel window on the objectives console, and on hijacking a dropship.
+
+  ## The Tech Tree
+  The tech tree console shows your [bold]combined[/bold] points: objective points plus intel points. That's everything you have to spend there.
+  - Buying something spends your [bold]intel points first[/bold], and only uses objective points for whatever intel can't cover.
+  - Objective points are what get you to the final objective, so gathering intel lets you buy upgrades without slowing your march to victory.
+</Document>

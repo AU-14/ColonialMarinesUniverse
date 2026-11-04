@@ -5,6 +5,9 @@
   name: plasteel barricade
   description: A sturdy and easily assembled barricade made of reinforced plasteel plates, the pinnacle of strongpoints. Use a blowtorch to repair.
   components:
+  - type: VehicleSmashable
+    minDestroyWeightClass: Light
+    minContinueWeightClass: Medium
   - type: Climbable
   - type: Anchorable
   - type: MeleeSound
@@ -111,8 +114,9 @@
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
     - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMBurnBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: RMCConstructionUpgradeTarget
     upgrades: null
     downgrade: RMCBiohazardUpgradePlasteel
@@ -141,8 +145,9 @@
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
     - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMBruteBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: RMCConstructionUpgradeTarget
     upgrades: null
     downgrade: RMCBruteUpgradePlasteel

@@ -17,12 +17,12 @@ public sealed partial class VictimBurstVisualizerSystem : VisualizerSystem<Victi
         if (args.Sprite is not { } sprite)
             return;
 
-        var rsiPath = component.RsiPath;
+        var rsiPath = component.BurstsFromBack ? component.BackRsiPath : component.RsiPath;
 
-        var spriteState = state switch
+        string? spriteState = state switch
         {
-            VictimBurstState.Bursting => component.BurstingState,
-            VictimBurstState.Burst => component.BurstState,
+            VictimBurstState.Bursting => component.BurstsFromBack ? component.BackBurstingState : component.BurstingState,
+            VictimBurstState.Burst => component.BurstsFromBack ? component.BackBurstState : component.BurstState,
             _ => null
         };
 

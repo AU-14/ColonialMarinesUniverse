@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMBaseDoor
   id: RMCDropshipDoorBase
   abstract: true
@@ -34,6 +34,7 @@
     closedSpriteState: door_closed
     canCrush: false
     performCollisionCheck: true
+    checkFixtureCollision: true # CMU14: the tile check only sees the anchor tile, so 2-3 tile hatches auto-closed on people and shoved them
   - type: Airlock
     denySpriteState: door_deny
     powered: true
@@ -89,7 +90,7 @@
     powerLoad: 0
     needsPower: false
   - type: AccessReader
-    access: [ [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: BlockTileFire
 
 - type: entity
@@ -113,7 +114,16 @@
         layer:
         - AirlockLayer
   - type: Occluder
-    boundingBox: "-0.5,-1.5,0.5,1.5"
+    polygon:
+    - -0.5,-1.5
+    - 0.5,-1.5
+    - 0.5,1.5
+    - -0.5,1.5
+  # CMU14: engine airtight covers only the tile the door is anchored on; seal the two extra tiles of the 3-tile fixture
+  - type: CMUWideAirtight
+    offsets:
+    - 0,-1
+    - 0,1
 
 - type: entity
   parent: RMCDropshipDoorBase
@@ -137,7 +147,15 @@
         layer:
         - AirlockLayer
   - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
+    polygon:
+    - -0.5,-0.5
+    - 0.5,-0.5
+    - 0.5,1.5
+    - -0.5,1.5
+  # CMU14: engine airtight covers only the tile the door is anchored on; seal the second tile of the 2-tile fixture
+  - type: CMUWideAirtight
+    offsets:
+    - 0,1
 
 - type: entity
   parent: RMCDropshipDoorBase
@@ -161,4 +179,12 @@
         layer:
         - AirlockLayer
   - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
+    polygon:
+    - -0.5,-0.5
+    - 0.5,-0.5
+    - 0.5,1.5
+    - -0.5,1.5
+  # CMU14: engine airtight covers only the tile the door is anchored on; seal the second tile of the 2-tile fixture
+  - type: CMUWideAirtight
+    offsets:
+    - 0,1

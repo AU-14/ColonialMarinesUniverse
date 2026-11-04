@@ -10,7 +10,7 @@ using Robust.Client.UserInterface.CustomControls;
 
 namespace Content.Client.UserInterface.Systems.Storage.Controls;
 
-public sealed class ItemGridPiece : Control, IEntityControl
+public sealed partial class ItemGridPiece : Control, IEntityControl // CMU14: control-owned label presentation.
 {
     private readonly IEntityManager _entityManager;
     private readonly StorageUIController _storageController;
@@ -119,7 +119,7 @@ public sealed class ItemGridPiece : Control, IEntityControl
             return;
         }
 
-        var adjustedShape = _entityManager.System<ItemSystem>().GetAdjustedItemShape((container.Owner, storageComp), (Entity, itemComponent), Location.Rotation, Vector2i.Zero);
+        var adjustedShape = CMUGetDrawShape((container.Owner, storageComp), (Entity, itemComponent)); // CMU14
         var boundingGrid = adjustedShape.GetBoundingBox();
         var size = _centerTexture!.Size * 2 * UIScale;
 
@@ -141,12 +141,20 @@ public sealed class ItemGridPiece : Control, IEntityControl
                 var offset = size * 2 * new Vector2(x - boundingGrid.Left, y - boundingGrid.Bottom);
                 var topLeft = PixelPosition + offset.Floored();
 
-                if (GetTexture(adjustedShape, new Vector2i(x, y), Direction.NorthEast) is {} neTexture)
+                // CMU14 Begin: share neighbor tests between the four corners.
+                var position = new Vector2i(x, y);
+                var top = !adjustedShape.Contains(position - Vector2i.Up);
+                var bottom = !adjustedShape.Contains(position - Vector2i.Down);
+                var left = !adjustedShape.Contains(position + Vector2i.Left);
+                var right = !adjustedShape.Contains(position + Vector2i.Right);
+                // CMU14 End
+
+                if (GetTexture(top, bottom, left, right, Direction.NorthEast) is {} neTexture) // CMU14
                 {
                     var neOffset = new Vector2(size.X, 0);
                     handle.DrawTextureRect(neTexture, new UIBox2(topLeft + neOffset, topLeft + neOffset + size), colorModulate);
                 }
-                if (GetTexture(adjustedShape, new Vector2i(x, y), Direction.NorthWest) is {} nwTexture)
+                if (GetTexture(top, bottom, left, right, Direction.NorthWest) is {} nwTexture) // CMU14
                 {
                     _texturesPositions.Add((nwTexture, Position + offset / UIScale));
                     handle.DrawTextureRect(nwTexture, new UIBox2(topLeft, topLeft + size), colorModulate);
@@ -157,12 +165,12 @@ public sealed class ItemGridPiece : Control, IEntityControl
                         marked = false;
                     }
                 }
-                if (GetTexture(adjustedShape, new Vector2i(x, y), Direction.SouthEast) is {} seTexture)
+                if (GetTexture(top, bottom, left, right, Direction.SouthEast) is {} seTexture) // CMU14
                 {
                     var seOffset = size;
                     handle.DrawTextureRect(seTexture, new UIBox2(topLeft + seOffset, topLeft + seOffset + size), colorModulate);
                 }
-                if (GetTexture(adjustedShape, new Vector2i(x, y), Direction.SouthWest) is {} swTexture)
+                if (GetTexture(top, bottom, left, right, Direction.SouthWest) is {} swTexture) // CMU14
                 {
                     var swOffset = new Vector2(0, size.Y);
                     handle.DrawTextureRect(swTexture, new UIBox2(topLeft + swOffset, topLeft + swOffset + size), colorModulate);
@@ -184,7 +192,10 @@ public sealed class ItemGridPiece : Control, IEntityControl
 
             var sizeDifference = ((boundingGrid.Size + Vector2i.One) * _centerTexture.Size * 2 - sprite.Size) * UIScale;
 
-            var spriteBox = new Box2Rotated(new Box2(0f, sprite.Height * scale, sprite.Width * scale, 0f), -iconRotation, Vector2.Zero);
+            var spriteBox = new Box2Rotated(
+                Box2.FromTwoPoints(Vector2.Zero, new Vector2(sprite.Width * scale, sprite.Height * scale)),
+                -iconRotation,
+                Vector2.Zero);
             var root = spriteBox.CalcBoundingBox().BottomLeft;
             var pos = PixelPosition * 2
                       + (Parent?.GlobalPixelPosition ?? Vector2.Zero)
@@ -222,7 +233,9 @@ public sealed class ItemGridPiece : Control, IEntityControl
             }
         }
 
-        _entityManager.System<RMCIconLabelSystem>().DrawStorage(Entity, UIScale, iconPosition, handle);
+        // CMU14: reuse localized label text between draws.
+        // _entityManager.System<RMCIconLabelSystem>().DrawStorage(Entity, UIScale, iconPosition, handle);
+        CMUDrawIconLabel(iconPosition, handle);
     }
 
     protected override bool HasPoint(Vector2 point)
@@ -257,13 +270,9 @@ public sealed class ItemGridPiece : Control, IEntityControl
         OnPieceUnpressed?.Invoke(args, this);
     }
 
-    private Texture? GetTexture(IReadOnlyList<Box2i> boxes, Vector2i position, Direction corner)
+    // CMU14 method: neighbor membership is computed once per cell by the caller.
+    private Texture? GetTexture(bool top, bool bottom, bool left, bool right, Direction corner)
     {
-        var top = !boxes.Contains(position - Vector2i.Up);
-        var bottom = !boxes.Contains(position - Vector2i.Down);
-        var left = !boxes.Contains(position + Vector2i.Left);
-        var right = !boxes.Contains(position + Vector2i.Right);
-
         switch (corner)
         {
             case Direction.NorthEast:

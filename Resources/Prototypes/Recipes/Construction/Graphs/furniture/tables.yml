@@ -1,4 +1,4 @@
-﻿- type: constructionGraph
+- type: constructionGraph
   id: Table
   start: start
   graph:
@@ -11,7 +11,7 @@
             - !type:SnapToGrid
               southRotation: true
           steps:
-            - material: MetalRod
+            - material: CMRodMetal # CMU14: fork rods (CMRodMetal), not upstream MetalRod
               amount: 2
               doAfter: 1
         - to: CounterWoodFrame
@@ -27,7 +27,7 @@
             - !type:SnapToGrid
               southRotation: true
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
 
@@ -38,7 +38,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-                prototype: PartRodMetal
+                prototype: CMRodMetal # CMU14: refund fork rods
                 amount: 2
           steps:
             - tool: Anchoring
@@ -46,13 +46,13 @@
 
         - to: Table
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
 
         - to: TableReinforced
           steps:
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 1
               doAfter: 1
             - tool: Welding
@@ -60,8 +60,14 @@
 
         - to: TableGlass
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
+              doAfter: 1
+
+        - to: TableCard
+          steps:
+            - material: Cardboard
+              amount: 3
               doAfter: 1
 
         - to: TableReinforcedGlass
@@ -112,14 +118,14 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
           steps:
           - tool: Anchoring
             doAfter: 1
         - to: CounterMetal
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
 
@@ -130,7 +136,7 @@
         - to: TableFrame
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
           steps:
             - tool: Anchoring
@@ -142,7 +148,7 @@
         - to: TableFrame
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlasteel1
+              prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
               amount: 1
           steps:
             - tool: Welding
@@ -156,11 +162,23 @@
         - to: TableFrame
           completed:
             - !type:SpawnPrototype
-              prototype: SheetGlass1
+              prototype: CMSheetGlass1 # CMU14: refund fork glass
               amount: 1
           steps:
             - tool: Anchoring
               doAfter: 1
+
+    - node: TableCard
+      entity: TableCard
+      edges:
+        - to: TableFrame
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialCardboard1
+              amount: 3
+          steps:
+            - tool: Slicing
+              doAfter: 2
 
     - node: TableReinforcedGlass
       entity: TableReinforcedGlass
@@ -168,7 +186,7 @@
         - to: TableFrame
           completed:
             - !type:SpawnPrototype
-              prototype: SheetRGlass1
+              prototype: SheetRGlass1 # CMU14: refund the upstream sheet the build step consumed; the fork sheet carries CMSteel the table never cost
               amount: 1
           steps:
             - tool: Anchoring
@@ -224,6 +242,11 @@
         - to: TableFancyBlue
           steps:
             - material: FloorCarpetBlue
+              amount: 1
+
+        - to: TableFancySkyBlue
+          steps:
+            - material: FloorCarpetSkyBlue
               amount: 1
 
         - to: TableFancyCyan
@@ -296,6 +319,18 @@
           steps:
             - tool: Prying
               doAfter: 1
+
+    - node: TableFancySkyBlue
+      entity: TableFancySkyBlue
+      edges:
+        - to: TableWood
+          completed:
+          - !type:SpawnPrototype
+            prototype: FloorCarpetItemSkyBlue
+            amount: 1
+          steps:
+          - tool: Prying
+            doAfter: 1
 
     - node: TableFancyCyan
       entity: TableFancyCyan
@@ -387,7 +422,7 @@
         - to: CounterMetalFrame
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
           steps:
             - tool: Anchoring
@@ -411,7 +446,7 @@
       - to: TableFrame
         completed:
         - !type:SpawnPrototype
-          prototype: SheetSteel1
+          prototype: CMSheetMetal1 # CMU14: refund fork metal
           amount: 1
         steps:
         - tool: Anchoring

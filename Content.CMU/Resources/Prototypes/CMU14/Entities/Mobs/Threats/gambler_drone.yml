@@ -1,0 +1,30 @@
+- type: entity
+  parent: CMXenoDrone
+  id: CMXenoDroneGambler
+  suffix: Gambler
+  description: WE ARE GOING TO MAKE A XILLION BUCKS!! I cant stop winning.
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/Xenos/Drone/gambler_drone.rsi
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoPheromones
+    - CMUActionXenoGamble
+  - type: XenoEvolution
+    strains: []
+  - type: CMUXenoGambler
+    pool: CMUXenoGamblerDefault
+    rolls: 6
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/CMU14/Xeno/Gambler/play_on_init_gamble.ogg
+      params:
+        volume: -6
+  - type: SoundOnDeath
+    sound:
+      path: /Audio/CMU14/Xeno/Gambler/play_on_death.ogg
+      params:
+        volume: -6
+  - type: RMCActionOrder
+    id: CMXenoDroneGambler

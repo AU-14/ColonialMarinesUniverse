@@ -21,8 +21,9 @@
     southDrawDepth: OverMobs
   - type: Barricade
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: InteractionOutline
   - type: RMCDropshipBlocked
   - type: Sprite

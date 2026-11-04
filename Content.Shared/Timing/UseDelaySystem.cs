@@ -9,7 +9,7 @@ public sealed partial class UseDelaySystem : EntitySystem
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private MetaDataSystem _metadata = default!;
 
-    private const string DefaultId = "default";
+    public const string DefaultId = "default";
 
     public override void Initialize()
     {

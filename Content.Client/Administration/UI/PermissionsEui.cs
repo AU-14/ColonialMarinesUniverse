@@ -27,7 +27,7 @@ namespace Content.Client.Administration.UI
         [Dependency] private IClientAdminManager _adminManager = default!;
 
         private readonly Menu _menu;
-        private readonly List<DefaultWindow> _subWindows = new();
+        private readonly List<BaseWindow> _subWindows = new();
 
         private Dictionary<int, PermissionsEuiState.AdminRankData> _ranks =
             new();
@@ -216,7 +216,7 @@ namespace Content.Client.Administration.UI
                 var titleControl = new Label { Text = admin.Title ?? Loc.GetString("permissions-eui-edit-admin-title-control-text").ToLowerInvariant() };
                 if (admin.Title == null) // none
                 {
-                    titleControl.StyleClasses.Add(StyleBase.StyleClassItalic);
+                    titleControl.StyleClasses.Add(StyleClass.Italic);
                 }
 
                 al.AddChild(titleControl);
@@ -240,7 +240,7 @@ namespace Content.Client.Administration.UI
                 var rankControl = new Label { Text = rank };
                 if (italic)
                 {
-                    rankControl.StyleClasses.Add(StyleBase.StyleClassItalic);
+                    rankControl.StyleClasses.Add(StyleClass.Italic);
                 }
 
                 al.AddChild(rankControl);
@@ -287,6 +287,13 @@ namespace Content.Client.Administration.UI
                     editButton.ToolTip = Loc.GetString("permissions-eui-do-not-have-required-flags-to-edit-rank-tooltip");
                 }
             }
+        }
+
+        private bool CanGrantFlag(AdminFlags flag)
+        {
+            return AdminFlagsHelper.CanGrant(
+                _adminManager.GetAdminData()?.Flags ?? AdminFlags.None,
+                flag);
         }
 
         private void OnEditRankPressed(KeyValuePair<int, PermissionsEuiState.AdminRankData> rank)
@@ -340,11 +347,19 @@ namespace Content.Client.Administration.UI
                 tab.AddChild(adminVBox);
                 tab.AddChild(rankVBox);
 
-                Contents.AddChild(tab);
+                ContentsContainer.AddChild(tab);
+                ContentsContainer.MinSize = new(600, 400);
             }
-
-            protected override Vector2 ContentsMinimumSize => new Vector2(600, 400);
         }
+
+        // cmu edit start: hover text for each permission, so senior staff know what they're handing out
+        private static string? FlagDescription(AdminFlags flag)
+        {
+            return Loc.TryGetString($"cmu-admin-flag-desc-{flag.ToString().ToLowerInvariant()}", out var description)
+                ? description
+                : null;
+        }
+        // cmu edit end
 
         private sealed partial class EditAdminWindow : DefaultWindow
         {
@@ -411,29 +426,30 @@ namespace Content.Client.Administration.UI
                 {
                     // Can only grant out perms you also have yourself.
                     // Primarily intended to prevent people giving themselves +HOST with +PERMISSIONS but generalized.
-                    var disable = !ui._adminManager.HasFlag(flag);
+                    var disable = !ui.CanGrantFlag(flag);
                     var flagName = flag.ToString().ToUpper();
+                    var flagTooltip = FlagDescription(flag); // cmu edit
 
                     var group = new ButtonGroup();
 
                     var inherit = new Button
                     {
                         Text = "I",
-                        StyleClasses = { StyleBase.ButtonOpenRight },
+                        StyleClasses = { StyleClass.ButtonOpenRight },
                         Disabled = disable,
                         Group = group,
                     };
                     var sub = new Button
                     {
                         Text = "-",
-                        StyleClasses = { StyleBase.ButtonOpenBoth },
+                        StyleClasses = { StyleClass.ButtonOpenBoth },
                         Disabled = disable,
                         Group = group
                     };
                     var plus = new Button
                     {
                         Text = "+",
-                        StyleClasses = { StyleBase.ButtonOpenLeft },
+                        StyleClasses = { StyleClass.ButtonOpenLeft },
                         Disabled = disable,
                         Group = group
                     };
@@ -458,7 +474,10 @@ namespace Content.Client.Administration.UI
                         inherit.Pressed = true;
                     }
 
-                    permGrid.AddChild(new Label { Text = flagName });
+                    // cmu edit start: hover a permission to see what it does
+                    permGrid.AddChild(new Label { Text = flagName, ToolTip = flagTooltip, MouseFilter = MouseFilterMode.Stop });
+                    inherit.ToolTip = sub.ToolTip = plus.ToolTip = flagTooltip;
+                    // cmu edit end
                     permGrid.AddChild(inherit);
                     permGrid.AddChild(sub);
                     permGrid.AddChild(plus);
@@ -479,7 +498,7 @@ namespace Content.Client.Administration.UI
 
                 bottomButtons.AddChild(SaveButton);
 
-                Contents.AddChild(new BoxContainer
+                ContentsContainer.AddChild(new BoxContainer
                 {
                     Orientation = LayoutOrientation.Vertical,
                     Children =
@@ -574,13 +593,14 @@ namespace Content.Client.Administration.UI
                 {
                     // Can only grant out perms you also have yourself.
                     // Primarily intended to prevent people giving themselves +HOST with +PERMISSIONS but generalized.
-                    var disable = !ui._adminManager.HasFlag(flag);
+                    var disable = !ui.CanGrantFlag(flag);
                     var flagName = flag.ToString().ToUpper();
 
                     var checkBox = new CheckBox
                     {
                         Disabled = disable,
-                        Text = flagName
+                        Text = flagName,
+                        ToolTip = FlagDescription(flag), // cmu edit: hover a permission to see what it does
                     };
 
                     if (data != null && (data.Value.Value.Flags & flag) != 0)
@@ -605,7 +625,7 @@ namespace Content.Client.Administration.UI
 
                 bottomButtons.AddChild(SaveButton);
 
-                Contents.AddChild(new BoxContainer
+                ContentsContainer.AddChild(new BoxContainer
                 {
                     Orientation = LayoutOrientation.Vertical,
                     Children =

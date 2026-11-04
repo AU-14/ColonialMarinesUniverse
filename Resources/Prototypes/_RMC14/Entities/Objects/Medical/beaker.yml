@@ -62,6 +62,7 @@
   name: beaker
   description: A beaker. Can hold up to 60 units.
   components:
+  - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
   - type: Sprite
     sprite: _RMC14/Objects/Medical/beaker.rsi
     layers:
@@ -78,9 +79,9 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 5
     fillBaseName: beaker
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 60
   - type: Openable
     opened: true
@@ -113,6 +114,7 @@
   name: large beaker
   description: A large beaker. Can hold up to 120 units.
   components:
+  - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
   - type: Sprite
     sprite: _RMC14/Objects/Medical/large_beaker.rsi
     layers:
@@ -125,9 +127,9 @@
       visible: false
   - type: Item
     sprite: _RMC14/Objects/Medical/large_beaker.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 120
   - type: SolutionContainerVisuals
     maxFillLevels: 5
@@ -159,6 +161,7 @@
   name: high-capacity beaker
   description: A beaker with an enlarged holding capacity, made with blue-tinted plexiglass in order to withstand greater pressure. Can hold up to 300 units.
   components:
+  - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
   - type: Sprite
     sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
     layers:
@@ -171,9 +174,8 @@
       visible: false
   - type: Item
     sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 300
   - type: SolutionContainerVisuals
     maxFillLevels: 5
@@ -272,8 +274,9 @@
         type: TransferAmountBoundUserInterface
   - type: Appearance
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Glass
+  - type: Injurable
+    damageContainer: Inorganic
   - type: DnaSubstanceTrace
 
 # Minitank /obj/item/reagent_container/glass/minitank
@@ -293,9 +296,8 @@
   - type: Item
     size: Normal
     sprite: _RMC14/Objects/Tanks/minitank.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    solution:
         maxVol: 180
   - type: SolutionContainerVisuals
     maxFillLevels: 5
@@ -475,9 +477,9 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 6
     fillBaseName: vial
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 30
   - type: SolutionTransfer
     transferAmount: 5
@@ -517,9 +519,9 @@
   description: A small glass vial. Can hold up to 30 units. Contains Tricordrazine, a weak general use medicine for treating damage.
   suffix: Filled, Tricordrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
+  - type: Solution
+    id: beaker
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: CMTricordrazine

@@ -1,0 +1,50 @@
+- type: entity
+  name: Destroy Solaris Steel Vein
+  parent: MarkerBase
+  id: destroy_mineable_solaris_steel
+  description: "Destroy a steel-rich mineable vein on the map"
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: destroymineablesolarissteel
+    factionNeutral: false
+    allowedPresets:
+    - ForceOnForce
+    factions:
+    - opfor
+    - govfor
+    repeating: false
+    objectiveLevel: 1
+    customPoints: 10
+    objectiveDescription: "Destroy a steel-rich mineable vein (mineablesolarisrocksteel)"
+  - type: DestroyObjective
+    targetPrototype: mineablesolarisrocksteel
+    useAnyEntity: true
+    destroyCount: 1
+
+- type: entity
+  name: Destroy AI Processor
+  parent: MarkerBase
+  id: destroy_ai_processor
+  description: "Destroy the AI Processor."
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: destroyaioricessir
+    factionNeutral: false
+    allowedPresets:
+    - ForceOnForce
+    - DistressSignal
+    factions:
+    - opfor
+    - govfor
+    repeating: false
+    objectiveLevel: 1
+    customPoints: 15
+    objectiveDescription: "Destroy the AI Processor"
+  - type: DestroyObjective
+    targetPrototype: AU14ObjectiveItemAIProcessor
+    useAnyEntity: true
+    destroyCount: 1

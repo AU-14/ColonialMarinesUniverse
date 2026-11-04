@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Prevented invalid fire state from repeatedly disrupting server updates.
+  type: Fix
+- message: Revalidated broken atmosphere links and stopped repeated round-end requests
+    from completed threat timers.
+  type: Fix
+- message: Added bounded server memory and client state-application diagnostics for
+    lag investigations.
+  type: Admin
+time: '2026-09-27T11:59:07.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2037

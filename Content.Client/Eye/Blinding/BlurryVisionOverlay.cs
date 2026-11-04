@@ -1,6 +1,6 @@
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Content.Client.Viewport;
+using Content.Client.CMU14.ZLevels.Core; // cmu edit
 using Content.Shared.CCVar;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
@@ -81,16 +81,10 @@ namespace Content.Client.Eye.Blinding
             if (!_entityManager.TryGetComponent(_playerManager.LocalSession?.AttachedEntity, out EyeComponent? eyeComp))
                 return false;
 
-            if (!ShouldDrawForViewportEye(args.Viewport.Eye, eyeComp.Eye))
+            if (!args.Viewport.Eye.IsPlayerView(eyeComp.Eye)) // cmu edit
                 return false;
 
             return _currentMagnitude > 0.01f;
-        }
-
-        internal static bool ShouldDrawForViewportEye(Robust.Shared.Graphics.IEye? viewportEye, Robust.Shared.Graphics.IEye playerEye)
-        {
-            return ReferenceEquals(viewportEye, playerEye) ||
-                   viewportEye is ScalingViewport.ZEye { Depth: 0, BlurCurrentLevel: true };
         }
 
         protected override void Draw(in OverlayDrawArgs args)
@@ -112,7 +106,7 @@ namespace Content.Client.Eye.Blinding
 
             // While the cataracts shader is designed to be tame enough to keep motion sickness at bay, the general waviness means that those who are particularly sensitive to motion sickness will probably hurl.
             // So the reasonable alternative here is to replace it with a static effect! Specifically, one that replicates the blindness effect seen across most SS13 servers.
-            if (_configManager.GetCVar(CCVars.ReducedMotion))
+            if (_configManager.GetCVar(CCVars.DisableBlurryVision))
             {
                 _circleMaskShader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
                 _circleMaskShader.SetParameter("Zoom", zoom);

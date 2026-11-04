@@ -9,7 +9,7 @@ namespace Content.Client.Actions.UI
     /// <summary>
     /// Tooltip for actions or alerts because they are very similar.
     /// </summary>
-    public sealed class ActionAlertTooltip : PanelContainer
+    public sealed partial class ActionAlertTooltip : PanelContainer // CMU14: cached text updates.
     {
         private const float TooltipTextMaxWidth = 350;
 
@@ -23,11 +23,12 @@ namespace Content.Client.Actions.UI
         public (TimeSpan Start, TimeSpan End)? Cooldown { get; set; }
         public string? DynamicMessage { get; set; }
 
-        public ActionAlertTooltip(FormattedMessage name, FormattedMessage? desc, string? requires = null, FormattedMessage? charges = null)
+        public ActionAlertTooltip(FormattedMessage name, FormattedMessage? desc, string? requires = null)
         {
+            Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetSystem;
             _gameTiming = IoCManager.Resolve<IGameTiming>();
 
-            SetOnlyStyleClass(StyleNano.StyleClassTooltipPanel);
+            SetOnlyStyleClass(StyleClass.TooltipPanel);
 
             BoxContainer vbox;
             AddChild(vbox = new BoxContainer
@@ -38,7 +39,7 @@ namespace Content.Client.Actions.UI
             var nameLabel = new RichTextLabel
             {
                 MaxWidth = TooltipTextMaxWidth,
-                StyleClasses = {StyleNano.StyleClassTooltipActionTitle}
+                StyleClasses = { StyleClass.TooltipTitle }
             };
             nameLabel.SetMessage(name);
             vbox.AddChild(nameLabel);
@@ -48,27 +49,16 @@ namespace Content.Client.Actions.UI
                 var description = new RichTextLabel
                 {
                     MaxWidth = TooltipTextMaxWidth,
-                    StyleClasses = {StyleNano.StyleClassTooltipActionDescription}
+                    StyleClasses = { StyleClass.TooltipDesc }
                 };
                 description.SetMessage(desc);
                 vbox.AddChild(description);
             }
 
-            if (charges != null && !string.IsNullOrWhiteSpace(charges.ToString()))
-            {
-                var chargesLabel = new RichTextLabel
-                {
-                    MaxWidth = TooltipTextMaxWidth,
-                    StyleClasses = { StyleNano.StyleClassTooltipActionCharges }
-                };
-                chargesLabel.SetMessage(charges);
-                vbox.AddChild(chargesLabel);
-            }
-
             vbox.AddChild(_cooldownLabel = new RichTextLabel
             {
                 MaxWidth = TooltipTextMaxWidth,
-                StyleClasses = {StyleNano.StyleClassTooltipActionCooldown},
+                StyleClasses = { StyleClass.TooltipDesc },
                 Visible = false
             });
 
@@ -84,7 +74,7 @@ namespace Content.Client.Actions.UI
                 var requiresLabel = new RichTextLabel
                 {
                     MaxWidth = TooltipTextMaxWidth,
-                    StyleClasses = {StyleNano.StyleClassTooltipActionRequirements}
+                    StyleClasses = { StyleClass.TooltipDesc }
                 };
 
                 if (!FormattedMessage.TryFromMarkup("[color=#635c5c]" + requires + "[/color]", out var markup))
@@ -96,41 +86,11 @@ namespace Content.Client.Actions.UI
             }
         }
 
+        // CMU14 method: only rebuild markup when the displayed inputs change.
         protected override void FrameUpdate(FrameEventArgs args)
         {
             base.FrameUpdate(args);
-            if (!Cooldown.HasValue)
-            {
-                _cooldownLabel.Visible = false;
-            }
-            else
-            {
-                var timeLeft = Cooldown.Value.End - _gameTiming.CurTime;
-                if (timeLeft > TimeSpan.Zero)
-                {
-                    var duration = Cooldown.Value.End - Cooldown.Value.Start;
-
-                    if (FormattedMessage.TryFromMarkup(Loc.GetString("ui-actionslot-duration", ("duration", (int)duration.TotalSeconds), ("timeLeft", (int)timeLeft.TotalSeconds + 1)), out var markup))
-                    {
-                        _cooldownLabel.SetMessage(markup);
-                        _cooldownLabel.Visible = true;
-                    }
-                }
-                else
-                {
-                    _cooldownLabel.Visible = false;
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(DynamicMessage))
-            {
-                _dynamicMessageLabel.Visible = false;
-            }
-            else if (FormattedMessage.TryFromMarkup($"[color=#ffffff]{DynamicMessage}[/color]", out var dynamicMarkup))
-            {
-                _dynamicMessageLabel.SetMessage(dynamicMarkup);
-                _dynamicMessageLabel.Visible = true;
-            }
+            CMUUpdateText();
         }
     }
 }

@@ -240,6 +240,12 @@ namespace Content.Server.Administration.UI
                 return;
             }
 
+            var (bad, rankName) = await FetchAndCheckRank(ua.RankId);
+            if (bad)
+            {
+                return;
+            }
+
             var admin = await _db.GetAdminDataForAsync(ua.UserId);
             if (admin == null)
             {
@@ -261,12 +267,6 @@ namespace Content.Server.Administration.UI
             await _db.UpdateAdminAsync(admin);
 
             var playerRecord = await _db.GetPlayerRecordByUserId(ua.UserId);
-            var (bad, rankName) = await FetchAndCheckRank(ua.RankId);
-            if (bad)
-            {
-                return;
-            }
-
             var name = playerRecord?.LastSeenUserName ?? ua.UserId.ToString();
             var title = ua.Title ?? "<no title>";
             var flags = AdminFlagsHelper.PosNegFlagsText(ua.PosFlags, ua.NegFlags);
@@ -434,7 +434,8 @@ namespace Content.Server.Administration.UI
 
         private bool UserAdminFlagCheck(AdminFlags flags)
         {
-            return _adminManager.HasAdminFlag(Player, flags);
+            var data = _adminManager.GetAdminData(Player);
+            return data != null && AdminFlagsHelper.CanGrant(data.Flags, flags);
         }
 
         private bool CanTouchAdmin(Admin admin)

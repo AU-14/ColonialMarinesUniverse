@@ -1,5 +1,4 @@
 using Content.Client.Hands.Systems;
-using Content.Client.NPC.HTN;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Robust.Client.Graphics;
@@ -28,12 +27,12 @@ public sealed partial class CombatModeSystem : SharedCombatModeSystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CombatModeComponent, AfterAutoHandleStateEvent>(OnHandleState);
+        SubscribeLocalEvent<CombatModeComponent, CombatModeStateAppliedEvent>(OnHandleState);
 
         Subs.CVar(_cfg, CCVars.CombatModeIndicatorsPointShow, OnShowCombatIndicatorsChanged, true);
     }
 
-    private void OnHandleState(EntityUid uid, CombatModeComponent component, ref AfterAutoHandleStateEvent args)
+    private void OnHandleState(EntityUid uid, CombatModeComponent component, ref CombatModeStateAppliedEvent args)
     {
         UpdateHud(uid);
     }
@@ -59,11 +58,6 @@ public sealed partial class CombatModeSystem : SharedCombatModeSystem
     {
         base.SetInCombatMode(entity, value, component);
         UpdateHud(entity);
-    }
-
-    protected override bool IsNpc(EntityUid uid)
-    {
-        return HasComp<HTNComponent>(uid);
     }
 
     private void UpdateHud(EntityUid entity)

@@ -1,8 +1,7 @@
 observe-nevermind = Nevermind
 observe-confirm = Observe
-observe-warning-1 = Are you sure you want to observe?
-observe-warning-2 = When you observe, you will not be able to join as marine.
-  It might also take some time to become a xenonid or responder!
+observe-warning-1 = Do you want to observe this round?
+observe-warning-2 = Observing means you cannot join this round the normal way. Afterwards the only way in is a ghost role, and not every faction offers them. If you want to play this round, use "Join the Round" instead.
 observe-warning-window-title = Warning
-observe-as-admin = Admin Observe
-observe-as-player = Player Observe
+observe-as-admin = As Admin
+observe-as-player = Observe

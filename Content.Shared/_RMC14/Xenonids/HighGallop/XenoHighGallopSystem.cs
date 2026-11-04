@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Maps;
 using Content.Shared.Stunnable;
@@ -24,6 +25,7 @@ public sealed partial class XenoHighGallopSystem : EntitySystem
     [Dependency] private TagSystem _tags = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
@@ -91,7 +93,8 @@ public sealed partial class XenoHighGallopSystem : EntitySystem
                 continue;
 
             _stun.TryParalyze(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.StunDuration), true);
-            _slow.TrySlowdown(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.SlowDuration));
+            if (!_yautjaSlow.TryApply(ent, xeno.Comp.YautjaSlow)) // CMU14
+                _slow.TrySlowdown(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.SlowDuration));
         }
     }
 }

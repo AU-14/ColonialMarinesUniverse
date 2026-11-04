@@ -1,0 +1,4 @@
+- type: shader
+  id: CMUTankCookOffVolume
+  kind: source
+  path: /Textures/CMU14/Effects/tank_cook_off.swsl

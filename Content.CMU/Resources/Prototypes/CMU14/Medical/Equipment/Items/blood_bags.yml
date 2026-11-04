@@ -1,0 +1,210 @@
+# CMU14: typed blood packs, plasma and saline bags, and IV pressure bags.
+# CMBloodPackFull (RMC) is the O- pack.
+
+- type: entity
+  parent: CMBloodPackFull
+  id: CMUBloodPackFullOPositive
+  name: blood pack (O+)
+  suffix: CMU, Full, O+
+  components:
+  - type: CMUBloodPackType
+    bloodType: OPositive
+
+- type: entity
+  parent: CMBloodPackFull
+  id: CMUBloodPackFullAPositive
+  name: blood pack (A+)
+  suffix: CMU, Full, A+
+  components:
+  - type: CMUBloodPackType
+    bloodType: APositive
+
+- type: entity
+  parent: CMBloodPackFull
+  id: CMUBloodPackFullANegative
+  name: blood pack (A-)
+  suffix: CMU, Full, A-
+  components:
+  - type: CMUBloodPackType
+    bloodType: ANegative
+
+- type: entity
+  parent: CMBloodPackFull
+  id: CMUBloodPackFullBPositive
+  name: blood pack (B+)
+  suffix: CMU, Full, B+
+  components:
+  - type: CMUBloodPackType
+    bloodType: BPositive
+
+- type: entity
+  parent: CMBloodPackFull
+  id: CMUBloodPackFullBNegative
+  name: blood pack (B-)
+  suffix: CMU, Full, B-
+  components:
+  - type: CMUBloodPackType
+    bloodType: BNegative
+
+- type: entity
+  parent: CMBloodPackFull
+  id: CMUBloodPackFullABPositive
+  name: blood pack (AB+)
+  suffix: CMU, Full, AB+
+  components:
+  - type: CMUBloodPackType
+    bloodType: ABPositive
+
+- type: entity
+  parent: CMBloodPackFull
+  id: CMUBloodPackFullABNegative
+  name: blood pack (AB-)
+  suffix: CMU, Full, AB-
+  components:
+  - type: CMUBloodPackType
+    bloodType: ABNegative
+
+- type: entity
+  parent: CMBloodPack
+  id: CMUBloodPlasmaPack
+  name: blood plasma pack (AB+)
+  description: A pack of blood plasma. It runs in faster than whole blood and slows bleeding for a while after it's given. Plasma matches the other way round to blood; AB plasma suits anyone, O plasma only O patients.
+  suffix: CMU, Full, AB+
+  components:
+  - type: CMUBloodPackType
+    bloodType: ABPositive
+  - type: CMUPerishableBlood
+    shelfLife: 1200 # 20 minutes
+  - type: BloodPack
+    transferableReagents: [ CMUBloodPlasma ]
+  - type: CMUIVFlow
+    multiplier: 2
+  - type: SolutionContainerManager
+    solutions:
+      pack:
+        maxVol: 300
+        reagents:
+        - ReagentId: CMUBloodPlasma
+          Quantity: 300
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackABNegative
+  name: blood plasma pack (AB-)
+  suffix: CMU, Full, AB-
+  components:
+  - type: CMUBloodPackType
+    bloodType: ABNegative
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackAPositive
+  name: blood plasma pack (A+)
+  suffix: CMU, Full, A+
+  components:
+  - type: CMUBloodPackType
+    bloodType: APositive
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackANegative
+  name: blood plasma pack (A-)
+  suffix: CMU, Full, A-
+  components:
+  - type: CMUBloodPackType
+    bloodType: ANegative
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackBPositive
+  name: blood plasma pack (B+)
+  suffix: CMU, Full, B+
+  components:
+  - type: CMUBloodPackType
+    bloodType: BPositive
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackBNegative
+  name: blood plasma pack (B-)
+  suffix: CMU, Full, B-
+  components:
+  - type: CMUBloodPackType
+    bloodType: BNegative
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackOPositive
+  name: blood plasma pack (O+)
+  suffix: CMU, Full, O+
+  components:
+  - type: CMUBloodPackType
+    bloodType: OPositive
+
+- type: entity
+  parent: CMUBloodPlasmaPack
+  id: CMUBloodPlasmaPackONegative
+  name: blood plasma pack (O-)
+  suffix: CMU, Full, O-
+  components:
+  - type: CMUBloodPackType
+    bloodType: ONegative
+
+- type: entity
+  parent: CMBloodPack
+  id: CMUSalineBag
+  name: saline IV bag
+  description: A bag of saline. It stands in for lost blood volume, but if too much of someone's blood ends up being saline it starts to poison them.
+  suffix: CMU, Full
+  components:
+  - type: BloodPack
+    transferableReagents: [ Saline ]
+  - type: SolutionContainerManager
+    solutions:
+      pack:
+        maxVol: 300
+        reagents:
+        - ReagentId: Saline
+          Quantity: 300
+
+- type: entity
+  parent: BaseItem
+  id: CMUIVPressureBag
+  name: IV pressure bag
+  description: An inflatable cuff that wraps around a bag hanging on an IV stand and squeezes it, making the drip run twice as fast. Use it on an IV stand to fit it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/blood_pack.rsi
+    state: bloodpack
+    color: "#7d8fa3"
+  - type: Item
+    size: Small
+  - type: CMUIVPressureBag
+    multiplier: 2
+
+# A portable cooler that only takes blood packs, IV bags and the like, and keeps blood and plasma from going bad.
+- type: entity
+  parent: RMCBeerCooler
+  id: CMUBloodCooler
+  name: blood cooler
+  description: A compact insulated cooler for blood packs and IV bags. Blood and plasma kept inside it stay fresh. Small enough to fit in a satchel.
+  suffix: Empty
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Medical/blood_cooler.rsi
+    state: blood_cooler
+    layers:
+    - state: blood_cooler
+      map: ["closeLayer"]
+    - state: blood_cooler-open
+      map: ["openLayer"]
+  - type: Item
+    size: Normal
+  - type: Storage
+    grid:
+    - 0,0,5,1
+    maxItemSize: Small
+    whitelist:
+      tags:
+      - CMBloodPack
+  - type: CMUBloodRefrigerator

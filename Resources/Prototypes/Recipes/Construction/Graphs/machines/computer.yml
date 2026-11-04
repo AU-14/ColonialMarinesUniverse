@@ -1,4 +1,4 @@
-﻿- type: constructionGraph
+- type: constructionGraph
   id: Computer
   start: start
   graph:
@@ -9,7 +9,7 @@
             - !type:SetAnchor
               value: false
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 5
               doAfter: 2.5
 
@@ -32,7 +32,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 5
             - !type:DeleteEntity {}
           steps:
@@ -84,7 +84,7 @@
           conditions:
             - !type:EntityAnchored {}
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 2
 
         - to: missingWires
@@ -113,7 +113,7 @@
             - !type:EntityAnchored {}
           completed:
             - !type:SpawnPrototype
-              prototype: SheetGlass1
+              prototype: CMSheetGlass1 # CMU14: refund fork glass
               amount: 2
           steps:
             - tool: Prying
@@ -138,7 +138,7 @@
             - !type:EntityAnchored {}
           completed:
             - !type:SpawnPrototype
-              prototype: ShardGlass
+              prototype: CMShardGlass # CMU14: fork glass shards
               amount: 2
           steps:
             - tool: Prying

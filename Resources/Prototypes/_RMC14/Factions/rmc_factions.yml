@@ -1,63 +1,15 @@
-﻿- type: npcFaction
-  id: UNMC
-  hostile:
-  - RMCXeno
-  - CLF
-  - AUColonist
-  - Civilian
-  - CMUAPE
-
-- type: npcFaction
-  id: RMCXeno
-  name: Prime Hive
-  hostile:
-  - UNMC
-  - NanoTrasen
-  - SPP
-  - GOVFOR
-  - OPFOR
-  - Halcyon
-  - WeYa
-  - Civilian
-  - CLF
-  - TSE
-  - AUColonist
-  - CMUAPE
-  - CMUYautja
-
-- type: npcFaction
-  id: CMUAPE
-  name: Apes
-  hostile:
-  - UNMC
-  - NanoTrasen
-  - SPP
-  - GOVFOR
-  - OPFOR
-  - Halcyon
-  - WeYa
-  - Civilian
-  - CLF
-  - TSE
-  - AUColonist
-
-
-- type: npcFaction
-  id: RMCDumb
-  hostile:
-  - GOVFOR
-  - OPFOR
-  - UNMC
-  - RMCXeno
-  - SPP
-  - Halcyon
-  - WeYa
-  - Civilian
-  - CLF
-  - TSE
-  - AUColonist
-  - CMUAPE
-
+#
+# You're probably looking for: CMU14/Roles/Shared/Factions/*.yml
+#
+# - type: npcFaction
+#   id: UNMC # CMU14 - moved
+#
+# - type: npcFaction
+#   id: RMCXeno # CMU14 - moved
+#   name: Prime Hive
+#
+# - type: npcFaction
+#   id: RMCDumb # CMU14 - moved
 
 - type: npcFaction
   id: SPP
@@ -66,18 +18,6 @@
 
 - type: npcFaction
   id: Halcyon
-  hostile:
-  - RMCXeno
-
-
-
-- type: npcFaction
-  id: WeYa
-  hostile:
-  - RMCXeno
-
-- type: npcFaction
-  id: Civilian
   hostile:
   - RMCXeno
 

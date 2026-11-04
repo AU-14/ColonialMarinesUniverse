@@ -1,3 +1,4 @@
+using Content.Shared.Administration; // cmu edit
 using Content.Client.Administration.Managers;
 using Content.Client.Movement.Systems;
 using Content.Shared.Sandbox;
@@ -13,7 +14,6 @@ namespace Content.Client.Sandbox
     {
         [Dependency] private IClientAdminManager _adminManager = default!;
         [Dependency] private IClientConsoleHost _consoleHost = default!;
-        [Dependency] private IMapManager _map = default!;
         [Dependency] private IPlacementManager _placement = default!;
         [Dependency] private ContentEyeSystem _contentEye = default!;
         [Dependency] private SharedTransformSystem _transform = default!;
@@ -32,7 +32,9 @@ namespace Content.Client.Sandbox
 
         private void CheckStatus()
         {
-            var currentStatus = _sandboxEnabled || _adminManager.IsActive();
+            // cmu edit start: the sandbox tools need spawn permission, not just a place on the admin list
+            var currentStatus = _sandboxEnabled || _adminManager.HasFlag(AdminFlags.Spawn);
+            // cmu edit end
             if (currentStatus == SandboxAllowed)
                 return;
             SandboxAllowed = currentStatus;
@@ -83,6 +85,11 @@ namespace Content.Client.Sandbox
             RaiseNetworkEvent(new MsgSandboxSuicide());
         }
 
+        public void ToggleThermalVision()
+        {
+            RaiseNetworkEvent(new MsgSandboxThermalVision());
+        }
+
         public bool Copy(ICommonSession? session, EntityCoordinates coords, EntityUid uid)
         {
             if (!SandboxAllowed)
@@ -98,6 +105,8 @@ namespace Content.Client.Sandbox
 
                 if (_placement.Eraser)
                     _placement.ToggleEraser();
+
+                _placement.Direction = _transform.GetWorldRotation(uid).GetCardinalDir();
 
                 _placement.BeginPlacing(new()
                 {
@@ -116,6 +125,9 @@ namespace Content.Client.Sandbox
 
             if (_placement.Eraser)
                 _placement.ToggleEraser();
+
+            _placement.Direction = (Direction)(tileRef.Tile.RotationMirroring % 4 * 2);
+            _placement.Mirrored = tileRef.Tile.RotationMirroring >= 4;
 
             _placement.BeginPlacing(new()
             {

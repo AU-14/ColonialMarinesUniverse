@@ -1,0 +1,36 @@
+- type: gameMap
+  id: CMUWaterTest
+  mapName: Water Effects Test Arena
+  mapPath: /Maps/CMU14/Test/water.yml
+  minPlayers: 0
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    CMUWaterTest:
+      stationProto: StandardStationArena
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Water Effects Test Arena
+      - type: StationJobs
+        availableJobs:
+          Passenger: [ -1, -1 ]
+
+# Human specimens wear the same equipment so the composed sprite can be compared
+# across depths (including uniform, boots, armor and in-hand sprites).
+- type: startingGear
+  id: CMUWaterTestGear
+  equipment:
+    jumpsuit: JumpsuitMarine
+    shoes: CMBootsBlack
+    outerClothing: CMArmorM3Medium
+
+- type: entity
+  parent: CMMobHuman
+  id: CMUWaterTestHuman
+  name: water test marine
+  suffix: Testing
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Loadout
+    prototypes: [ CMUWaterTestGear ]
+  - type: WaterTestSubject

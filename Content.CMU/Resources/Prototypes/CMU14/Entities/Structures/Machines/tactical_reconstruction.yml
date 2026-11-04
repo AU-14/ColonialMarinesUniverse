@@ -1,0 +1,27 @@
+# Development table for the initial structural survey and normal tactical contacts.
+- type: entity
+  parent: CMUTacticalMapTableGovfor
+  id: CMUTacticalReconstructionTableGovfor
+  name: battlefield reconstruction table
+  suffix: Govfor, Prototype
+  description: A prototype three-dimensional structural survey table with shared tactical orders.
+  components:
+  - type: CMUTacticalReconstruction
+  - type: ActivatableUI
+    key: enum.CMUReconstructionUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUReconstructionUiKey.Key:
+        type: CMUReconstructionBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+
+- type: entity
+  parent: CMUTacticalReconstructionTableGovfor
+  id: CMUTacticalReconstructionTableOpfor
+  suffix: Opfor, Prototype
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessOpforCommand" ] ]
+  - type: TacticalMapComputer
+    faction: opfor

@@ -24,6 +24,8 @@
   name: AD-71E VTOL
   description: A twin tilt-jet VTOL, the Blackfoot is the Bearcat's ugly big sister. For what she lacks in fire power and agility, she more than makes up for in utility and love handles. First tested by UN Northridge on United Nations soil, the Blackfoot is currently undergoing active combat trials. This craft appears to be undergoing maintenance and is not ready to fly.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_vtol.rsi
     state: vtol
@@ -35,6 +37,8 @@
   name: AD-71E VTOL
   description: A twin tilt-jet VTOL, the Blackfoot is the Bearcat's ugly big sister. For what she lacks in fire power and agility, she more than makes up for in utility and love handles. First tested by UN Northridge on United Nations soil, the Blackfoot is currently undergoing active combat trials. This craft appears to have crash landed, and is inoperable.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_vtol.rsi
     state: vtol_damaged
@@ -52,7 +56,7 @@
     state: evac_black
   - type: Physics
     fixedRotation: true
-
+    canCollide: False
 - type: entity
   parent: RMCPropTyrargoVehicleBase
   id: RMCPropTyrargoVehicleEvacGreen
@@ -67,12 +71,15 @@
     fixedRotation: true
 
 # M887
+    canCollide: False
 - type: entity
   parent: RMCPropTyrargoVehicleBase
   id: RMCPropTyrargoVehicleTruck
   name: M887 Truck
   description: A small box-type van. It's a compact vehicle with a rectangular cargo area, typically designed for transporting goods or small equipment. It features a high roof and straight sides, providing ample vertical space for storage. Its size makes it maneuverable and ideal for urban driving and tight spaces. This van appears to be non-functional, likely due to excessive use during the recent outbreak.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_truck.rsi
     state: truck
@@ -82,6 +89,8 @@
   id: RMCPropTyrargoVehicleTruckBroken
   suffix: Broken
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: truck_broken
 
@@ -91,6 +100,8 @@
   id: RMCPropTyrargoVehicleTruckAlt
   name: M991 Truck
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_truck.rsi
     state: truck_alt
@@ -100,6 +111,8 @@
   id: RMCPropTyrargoVehicleTruckAltBroken
   suffix: Broken
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: truck_alt_broken
 
@@ -110,6 +123,8 @@
   name: M577 Armored Personnel Carrier
   description: An M577 Armored Personnel Carrier. An armored transport with four big wheels. This one is no longer in working order, serving now as a roadblock.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_apc.rsi
     state: apc
@@ -119,6 +134,8 @@
   id: RMCPropTyrargoVehicleAPCDestroyed
   suffix: Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: apc_destroyed
 
@@ -127,6 +144,8 @@
   id: RMCPropTyrargoVehicleAPCMedical
   suffix: Medical
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: apc_med
 
@@ -135,6 +154,8 @@
   id: RMCPropTyrargoVehicleAPCMedicalDestroyed
   suffix: Medical, Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: apc_med_destroyed
 
@@ -145,6 +166,8 @@
   name: BISON Automated Transport Vehicle
   description: The BISON ATV is an remote-controlled logistical supply vehicle, intended to assist UNMC rear-line logistics forces in moving supplies. It requires someone to be standing near it for the auto-pilot functions to work. This model is non-functional.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_bison.rsi
     state: bison
@@ -154,6 +177,8 @@
   id: RMCPropTyrargoVehicleATVDestroyed
   suffix: Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: bison_destroyed
 
@@ -162,6 +187,8 @@
   id: RMCPropTyrargoVehicleATVOpen
   suffix: Open
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: bison_open
 
@@ -170,6 +197,8 @@
   id: RMCPropTyrargoVehicleATVOpenDestroyed
   suffix: Open, Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: bison_open_destroyed
 
@@ -180,6 +209,8 @@
   name: M34 Marshal IFV
   description: Developed by Weston-Yamada, the RAT (Rover Armed Transport) was originally designed for the TSE military as an armed version of their RT series of expeditionary vehicles, being instead adopted by the UN Marine Corps. It's heavier and and more durable then the M570 series the Marines use, as they don't have a need for APCs capable of being transported via a dropship.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_ifv.rsi
     state: ifv
@@ -191,6 +222,8 @@
   name: M255 Armored Half-Track
   description: A UN half-track, used everywhere in the Marine Corps. Comes in multiple different configurations, from being able to haul troops to mounting a mobile mortar. Versatile and cheap. This one appears to be non-functional due to overuse during the recent outbreak.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_halftrack.rsi
     state: truck
@@ -200,6 +233,8 @@
   id: RMCPropTyrargoVehicleHalfTrackBroken
   suffix: Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: truck_broken
 
@@ -208,6 +243,8 @@
   id: RMCPropTyrargoVehicleHalfTrackAlt
   suffix: Alt
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: truck_alt
 
@@ -216,6 +253,8 @@
   id: RMCPropTyrargoVehicleHalfTrackAltDestroyed
   suffix: Alt, Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: truck_alt_broken
 
@@ -226,6 +265,8 @@
   name: M540-B Armored Recon Carrier
   description: An M540-B Armored Recon Carrier. A lightly armored reconnaissance and intelligence vehicle. This one has been rendered inoperable.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_humvee.rsi
     state: humvee
@@ -235,6 +276,8 @@
   id: RMCPropTyrargoVehicleHumveeDestroyed
   suffix: Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: humvee_broken
 
@@ -243,6 +286,8 @@
   id: RMCPropTyrargoVehicleHumveeCarrier
   suffix: Carrier
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: humvee_carrier
 
@@ -251,6 +296,8 @@
   id: RMCPropTyrargoVehicleHumveeCarrierDestroyed
   suffix: Carrier, Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: humvee_carrier_broken
 
@@ -259,6 +306,8 @@
   id: RMCPropTyrargoVehicleHumveeMed
   suffix: Medical
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: humvee_med
 
@@ -267,6 +316,8 @@
   id: RMCPropTyrargoVehicleHumveeMedDestroyed
   suffix: Medical, Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: humvee_med_broken
 
@@ -276,6 +327,8 @@
   id: RMCPropTyrargoVehicleHumveeTurret
   name: M356 'Rattlesnake' 25mm autocannon
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_humvee.rsi
     state: humvee_gun
@@ -285,6 +338,8 @@
   id: RMCPropTyrargoVehicleHumveeTurretDestroyed
   suffix: Destroyed
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: humvee_gun_broken
 
@@ -298,6 +353,8 @@
   suffix: Destroyed
   description: A giant piece of armor with a big gun, it knew what it had to do, and it served its duty.
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_tank.rsi
     state: tank_broken
@@ -308,6 +365,8 @@
   name: M34A2 Longstreet Light Tank turret
   description:
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_tank.rsi
     state: turret_broken
@@ -319,6 +378,8 @@
   suffix: Destroyed
   description:
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_tank.rsi
     state: glauncher_broken
@@ -330,6 +391,8 @@
   suffix: Destroyed
   description:
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     sprite: _RMC14/Structures/Tyrargo_Vehicles/tyrargo_tank.rsi
     state: ltb_broken

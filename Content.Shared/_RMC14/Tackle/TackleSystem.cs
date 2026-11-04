@@ -1,7 +1,9 @@
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Xenonids.Collision;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Buckle.Components;
@@ -41,6 +43,9 @@ public sealed partial class TackleSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedGunSystem _gunSystem = default!;
+
+    private const float YautjaTackleChanceMultiplier = 0.2f; // CMU14: CM-SS13 tackle_mult for a Yautja target
+    private const int YautjaTackleCounterOffset = 2; // CMU14: CM-SS13 tackle counter offset for a Yautja target
 
     private readonly List<EntityUid> _trackersToRemove = new();
 
@@ -83,8 +88,23 @@ public sealed partial class TackleSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (tracker.Count < tackle.Min ||
-            tracker.Count < _random.Next(tackle.Min, tackle.Max + 1))
+        // CMU14: upstream condition, kept verbatim and bound to a local so a Yautja can be resolved
+        // separately below; upstream was `if (tracker.Count < tackle.Min || tracker.Count < _random.Next(...))`.
+        var failing = tracker.Count < tackle.Min ||
+                      tracker.Count < _random.Next(tackle.Min, tackle.Max + 1);
+
+        // CMU14 Begin: CM-SS13 (/mob/living/carbon/xenomorph/attack_alien.dm) tackles a Yautja with
+        // tackle_mult 0.2 and +2 on both ends of the tackle counter, so its fail check differs.
+        if (IsRegularYautja(target))
+        {
+            var minTackles = tackle.Min + YautjaTackleCounterOffset;
+            var maxTackles = tackle.Max + YautjaTackleCounterOffset;
+            failing = tracker.Count < minTackles ||
+                      (tracker.Count < maxTackles && !_random.Prob(tackle.Chance * YautjaTackleChanceMultiplier));
+        }
+        // CMU14 End
+
+        if (failing) // CMU14: tests the condition assembled above instead of the upstream expression
         {
             _adminLog.Add(LogType.RMCTackle, $"{ToPrettyString(user)} tried to tackle {ToPrettyString(target)}.");
 
@@ -184,8 +204,7 @@ public sealed partial class TackleSystem : EntitySystem
                                     ("gun", item)),
                                 PopupType.MediumCaution);
 
-                            var ev = new UpdateClientAmmoEvent();
-                            RaiseLocalEvent(item, ref ev);
+                            _gunSystem.UpdateAmmoCount(item);
                         }
                     }
                 }
@@ -199,7 +218,6 @@ public sealed partial class TackleSystem : EntitySystem
         var attackerSkill = _skills.GetSkill(user, disarm.Skill);
         var defenderSkill = _skills.GetSkill(target.Owner, disarm.Skill);
         disarmChance -= 5 * attackerSkill;
-        disarmChance -= GetYautjaShoveChanceBonus(user) * 100f;
         disarmChance += 5 * defenderSkill;
 
         if (disarmChance <= 25)
@@ -296,11 +314,13 @@ public sealed partial class TackleSystem : EntitySystem
         _colorFlash.RaiseEffect(Color.Aqua, new List<EntityUid> { target }, Filter.PvsExcept(user));
     }
 
-    private float GetYautjaShoveChanceBonus(EntityUid user)
+    // CMU14 method
+    /// <summary>
+    /// CM-SS13 keeps Bad Bloods outside its Yautja species rules, so only regular Yautja get them here.
+    /// </summary>
+    private bool IsRegularYautja(EntityUid target)
     {
-        return TryComp(user, out YautjaComponent? yautja)
-            ? yautja.ShoveChanceBonus
-            : 0f;
+        return HasComp<YautjaComponent>(target) && !HasComp<YautjaBadBloodComponent>(target);
     }
 
     private void DoPvsPopups(EntityUid user, EntityUid target, string selfPopup, string targetPopup, Func<EntityUid, string> othersPopup, PopupType selfPopupType = PopupType.Small)
@@ -340,6 +360,10 @@ public sealed partial class TackleSystem : EntitySystem
             return;
 
         if (ent == args.DownedBy)
+            return;
+
+        if (TryComp<RecentlyStunnedByHostileXenoComponent>(ent, out var stepped) // CMU14
+            && _timing.CurTime - stepped.At < TimeSpan.FromSeconds(1))
             return;
 
         RemCompDeferred<TackledRecentlyByComponent>(ent);

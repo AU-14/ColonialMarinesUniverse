@@ -30,7 +30,7 @@ namespace Content.Shared.Chemistry.Components
         public LocId MetamorphicNameFull = "transformable-container-component-glass";
 
         /// <summary>
-        /// Which solution of the SolutionContainerManagerComponent to represent.
+        /// Which named solution to represent.
         /// If not set, will work as default.
         /// </summary>
         [DataField]

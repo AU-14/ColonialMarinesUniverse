@@ -11,13 +11,18 @@
   name: Crusher
   description: A huge alien with an enormous armored crest.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleCrusher
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Crusher/crusher.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Crusher/crusher.rsi # AU14-Edit
     scale: 1.3, 1.3
   - type: MobState
     allowedStates:
@@ -50,6 +55,9 @@
   - type: XenoDevour
   - type: XenoStomp
     directional: true
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 1
     directionalRange: 4
     directionalAngle: 90
     paralyzeTime: 1
@@ -59,10 +67,10 @@
     directionalTileEffect: RMCEffectXenoTelegraphRed
     damage:
       types:
-        Blunt: 80
+        Blunt: 65
     directionalMinDamage:
       types:
-        Blunt: 65
+        Blunt: 40
     selfEffect: CMEffectSelfStomp
   - type: XenoAnimateMovement
   - type: XenoPlasma
@@ -80,21 +88,22 @@
     angle: 60
     maxTargets: 2
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaChitin
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -103,10 +112,15 @@
         Quantity: 1
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 48
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: XenoMeleeSlow
     slowTime: 2
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 3.5
   - type: Tackle
     chance: 0.25
   - type: MovementSpeedModifier
@@ -130,7 +144,7 @@
     damage:
       types:
         Blunt: 15
-    armorPiercing: 5
+    armorPiercing: 2
   - type: RMCSize
     size: Immobile
   - type: XenoChargerJockey
@@ -175,11 +189,14 @@
     heal: 120
   - type: CrusherShield
   - type: XenoCharge
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 3.5
     chargeWindupSound:
       path: /Audio/_RMC14/Xeno/crusher_windup_sound.ogg
     damage:
       types:
-        Blunt: 80
+        Blunt: 65
         Structural: 750
   - type: XenoShield
   - type: XenoEvolution
@@ -194,7 +211,7 @@
   suffix: Charger
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Crusher/charger_crusher.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Crusher/charger_crusher.rsi # AU14-Edit
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -217,12 +234,16 @@
     sideArmor: 15
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 36
+      types:
+        Blunt: 12
+        Slash: 12
+        Piercing: 12
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.9
     baseSprintSpeed: 3.4
@@ -236,8 +257,20 @@
     hasAltFling: true
     paralyzeTime: 1
     slowTime: 8
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      ticks: 8
+  # CMU14 charger has its own cmss13 delegate, its slashes don't slow preds
+  - type: XenoMeleeSlow
+    slowTime: 2
+    yautjaSlow: {}
   - type: XenoStomp
     directional: false
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow: {}
+    yautjaSlowUnder:
+      super: true
+      effect: 1
     plasmaCost: 25
     knocksBack: true
     knockbackPower: 2

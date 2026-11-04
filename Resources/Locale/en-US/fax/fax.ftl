@@ -25,4 +25,14 @@ fax-machine-ui-paper-not-inserted = No paper
 
 fax-machine-chat-notify = "{$faxReceiver}" received new fax message from "{$fax}" fax
 
+# CMU14
+fax-machine-chat-notify-teleport-header = Teleport:{" "}
+
 fax-machine-printed-paper-name = printed paper
+
+fax-machine-sender-info =
+    ─────────────────────────────────────
+    Fax sent
+    from: {$sender_name} [address: {$sender_addr}]
+    to: {$recipient_name} [address: {$recipient_addr}]
+    at: {$time}

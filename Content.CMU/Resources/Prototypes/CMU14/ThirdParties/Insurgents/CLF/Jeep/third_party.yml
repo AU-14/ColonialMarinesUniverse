@@ -1,0 +1,30 @@
+- type: entity
+  parent: AU14IntelThirdPartyCLFInsurgentReinforcements
+  id: CMUCLFJeepCrew
+  name: CLF jeep crew
+  components:
+  # Ghost roles do not use character loadouts; supply civilian clothes alongside the round-start job.
+  - type: EquipEntityPreset
+    preset: AU14CLFGuerillaReinforcement
+  - type: GhostRole
+    name: cmu-clf-jeep-crew-name
+    description: cmu-clf-jeep-crew-description
+    rules: cmu-clf-rules
+    job: AU14JobCLFGuerilla
+
+- type: partySpawn
+  id: CMUCLFJeepSpawn
+  leadersToSpawn:
+    CMUCLFJeepCrew: 1
+  gruntsToSpawn:
+    CMUCLFJeepCrew: 1
+  entsToSpawn:
+    CMUVehicleJeepGunner: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  parent: CLFCellReinforcementsIntel
+  id: CMUCLFJeepReinforcements
+  displayName: cmu-clf-jeep-party-name
+  partyspawn: CMUCLFJeepSpawn

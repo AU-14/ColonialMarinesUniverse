@@ -1,0 +1,44 @@
+# Force on Force king of the hill. The strongest force inside the rectangle scores per tick,
+# and the zone relocates between objective markers to keep both sides moving.
+- type: entity
+  id: CMUHotspotObjective
+  name: Hotspot
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: CMUObjective
+    id: CMUHotspotObjective
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    factions:
+    - govfor
+    - opfor
+    objectiveLevel: 3
+    rollAnyway: true
+    objectiveWeight: 2
+    objectiveDescription: "Hold the hotspot. The strongest force inside it scores over time."
+  - type: HotspotObjective
+    catalog: true
+    halfWidth: 7
+    tickSeconds: 10
+    pointsPerTick: 1
+    normalizeByTeamSize: true
+    feedWinPoints: true
+    relocateAfterTicks: 5
+    zoneColorHex: "#FFB300"
+    factionZoneColors:
+      govfor: "#4CA44C"
+      opfor: "#FF4136"
+    zoneTile: FloorBlueCircuit
+    factionZoneTiles:
+      govfor: FloorGreenCircuit
+      opfor: FloorRedCircuit
+  - type: NavMapBeacon
+    text: Hotspot
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _RMC14/Markers/gm_tacmap_marks.rsi
+    state: star
+  - type: WarpPoint
+    location: cmu-warp-location-hotspot

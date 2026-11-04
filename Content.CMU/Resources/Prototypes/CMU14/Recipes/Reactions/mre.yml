@@ -1,0 +1,51 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: reaction
+  id: CMUHazelnutBeverageMix
+  reactants:
+    CMUHazelnutBeverage:
+      amount: 1
+    Water:
+      amount: 5
+  products:
+    CMUHazelnutChocolateDrink: 5
+
+- type: reaction
+  id: CMUChocolateBeverageMix
+  reactants:
+    CMUChocolateBeverage:
+      amount: 1
+    Water:
+      amount: 5
+  products:
+    RMCChocolateDrink: 5
+
+- type: reaction
+  id: CMUOrangeBeverageMix
+  reactants:
+    CMUOrangeBeverage:
+      amount: 1
+    Water:
+      amount: 5
+  products:
+    JuiceOrange: 5
+
+- type: reaction
+  id: CMULemonLimeBeverageMix
+  reactants:
+    CMULemonLimeBeverage:
+      amount: 1
+    Water:
+      amount: 5
+  products:
+    LemonLime: 5
+
+- type: reaction
+  id: CMUGrapeBeverageMix
+  reactants:
+    CMUGrapeBeverage:
+      amount: 1
+    Water:
+      amount: 5
+  products:
+    JuiceGrape: 5

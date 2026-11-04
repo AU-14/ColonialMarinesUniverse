@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/rollerbed.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "roller_down"
+    },
+    {
+      "name": "roller_up"
+    },
+    {
+      "name": "heavy_roller_up"
+    },
+    {
+      "name": "folded"
+    },
+    {
+      "name": "beacon_active_down",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "beacon_active_up",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "winched_stretcher",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "stretcher_up"
+    },
+    {
+      "name": "stretcher_down"
+    },
+    {
+      "name": "stretcher_box"
+    },
+    {
+      "name": "stretcher_folded"
+    },
+    {
+      "name": "surgical_down"
+    },
+    {
+      "name": "surgical_up"
+    },
+    {
+      "name": "surgical_folded"
+    },
+    {
+      "name": "bigrollerbody_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbody_down",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbloodbody_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbloodbody_down",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbodyalt_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbodyalt_down",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbodybloodalt_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbodybloodalt_down",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerempty_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerempty_down",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbloodempty_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerbloodempty_down",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerempty2_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerempty2_down",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerempty3_up",
+      "directions": 4
+    },
+    {
+      "name": "bigrollerempty3_down",
+      "directions": 4
+    },
+    {
+      "name": "bedroll_o",
+      "directions": 8
+    },
+    {
+      "name": "bedroll"
+    },
+    {
+      "name": "bedroll_comfy_o",
+      "directions": 8
+    },
+    {
+      "name": "bedroll_comfy"
+    }
+  ]
+}

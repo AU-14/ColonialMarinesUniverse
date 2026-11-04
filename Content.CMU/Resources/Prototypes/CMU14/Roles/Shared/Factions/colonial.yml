@@ -1,0 +1,37 @@
+- type: npcFaction
+  id: AUColonist
+  name: Colonists
+  allianceTarget: true
+  hostile:
+  - THREAT # whole threat family
+
+- type: npcFaction
+  parent: AUColonist
+  id: Civilian # legacy
+  name: Colonists (legacy)
+  allianceTarget: false
+
+- type: npcFaction
+  id: ColonySynth
+  name: Colony Synthetics
+
+- type: npcFaction
+  id: CLF
+  name: Colony Liberation Front
+  hidden: true # stealth insurgents
+  allianceTarget: true
+  hostile:
+  - THREAT
+  - GOVFOR
+
+- type: npcFaction
+  id: AUBureau
+  name: Colonial Marshals Bureau
+  allianceTarget: true
+  hostile:
+  - THREAT
+
+- type: npcFaction
+  parent: AUBureau
+  id: NSPA
+  name: Neroid Sector Policing Authority

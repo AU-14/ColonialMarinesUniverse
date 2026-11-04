@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/hunter/bow.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata. Arrows, projectiles (rotated to face north), inhands and the worn bow taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/obj/items/hunter/bow.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/items_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/items_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/pred_gear.dmi.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "unwielded"
+    },
+    {
+      "name": "wielded"
+    },
+    {
+      "name": "bow_loaded"
+    },
+    {
+      "name": "bow_expl",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "bow_emp",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "bow_trap"
+    },
+    {
+      "name": "arrow_trap"
+    },
+    {
+      "name": "arrow_trap_active"
+    },
+    {
+      "name": "arrow_expl"
+    },
+    {
+      "name": "arrow_expl_active",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "arrow_inert"
+    },
+    {
+      "name": "arrow_emp"
+    },
+    {
+      "name": "arrow_emp_active",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "projectile_expl"
+    },
+    {
+      "name": "projectile_expl_active",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "projectile_emp_active",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "projectile_trap"
+    },
+    {
+      "name": "bow-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bow_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bow_loaded-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow_loaded-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bow_loaded_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow_loaded_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bow_expl-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow_expl-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bow_expl_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow_expl_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bow_emp-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow_emp-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "bow_emp_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "bow_emp_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BACK",
+      "directions": 4
+    },
+    {
+      "name": "equipped-SUITSTORAGE",
+      "directions": 4
+    }
+  ]
+}

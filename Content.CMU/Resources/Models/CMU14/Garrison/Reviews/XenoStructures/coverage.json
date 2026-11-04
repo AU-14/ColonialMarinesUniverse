@@ -1,0 +1,571 @@
+{
+  "models": 92,
+  "coverage": [
+    {
+      "id": "WallXenoResinQueen",
+      "model": "CMU3DHiveWallXenoResinQueen"
+    },
+    {
+      "id": "WallXenoMembraneQueen",
+      "model": "CMU3DHiveWallXenoMembraneQueen"
+    },
+    {
+      "id": "DoorXenoResinQueen",
+      "model": "CMU3DHiveDoorXenoResinQueen"
+    },
+    {
+      "id": "RMCHiveCocoonKing",
+      "model": "CMU3DHiveRMCHiveCocoonKing"
+    },
+    {
+      "id": "HiveAcidPillarXeno",
+      "model": "CMU3DHiveHiveAcidPillarXeno"
+    },
+    {
+      "id": "HiveEggMorpherXeno",
+      "model": "CMU3DHiveHiveEggMorpherXeno"
+    },
+    {
+      "id": "HiveEggMorpherXenoConstructionNode",
+      "model": "CMU3DHiveHiveEggMorpherXenoConstructionNode"
+    },
+    {
+      "id": "HiveClusterXeno",
+      "model": "CMU3DHiveHiveClusterXeno"
+    },
+    {
+      "id": "HiveClusterXenoConstructionNode",
+      "model": "CMU3DHiveHiveClusterXenoConstructionNode"
+    },
+    {
+      "id": "HiveCoreXeno",
+      "model": "CMU3DHiveHiveCoreXeno"
+    },
+    {
+      "id": "HiveCoreXenoConstructionNode",
+      "model": "CMU3DHiveHiveCoreXenoConstructionNode"
+    },
+    {
+      "id": "HivePylonXeno",
+      "model": "CMU3DHiveHivePylonXeno"
+    },
+    {
+      "id": "HivePlasmaTreeXeno",
+      "model": "CMU3DHiveHivePlasmaTreeXeno"
+    },
+    {
+      "id": "HivePlasmaTreeXenoConstructionNode",
+      "model": "CMU3DHiveHivePlasmaTreeXenoConstructionNode"
+    },
+    {
+      "id": "HiveRecoveryNodeXeno",
+      "model": "CMU3DHiveHiveRecoveryNodeXeno"
+    },
+    {
+      "id": "HiveRecoveryNodeXenoConstructionNode",
+      "model": "CMU3DHiveHiveRecoveryNodeXenoConstructionNode"
+    },
+    {
+      "id": "XenoTrapperTrap",
+      "model": "CMU3DHiveXenoTrapperTrap"
+    },
+    {
+      "id": "XenoTrapperEmpoweredTrap",
+      "model": "CMU3DHiveXenoTrapperTrap"
+    },
+    {
+      "id": "DoorXenoResin",
+      "model": "CMU3DHiveDoorXenoResin"
+    },
+    {
+      "id": "DoorXenoResinThick",
+      "model": "CMU3DHiveDoorXenoResinQueen"
+    },
+    {
+      "id": "DoorXenoResinWeedbound",
+      "model": "CMU3DHiveDoorXenoResinWeedbound"
+    },
+    {
+      "id": "DoorXenoResinThickWeedbound",
+      "model": "CMU3DHiveDoorXenoResinThickWeedbound"
+    },
+    {
+      "id": "XenoEgg",
+      "model": "CMU3DHiveXenoEgg"
+    },
+    {
+      "id": "XenoEggDestroyed",
+      "model": "CMU3DHiveXenoEggDestroyed"
+    },
+    {
+      "id": "XenoEggDestroyedFragile",
+      "model": "CMU3DHiveXenoEggDestroyedFragile"
+    },
+    {
+      "id": "XenoEggDestroyedFragileSustained",
+      "model": "CMU3DHiveXenoEggDestroyedFragileSustained"
+    },
+    {
+      "id": "XenoStickyResin",
+      "model": "CMU3DHiveXenoStickyResin"
+    },
+    {
+      "id": "XenoStickyResinWeak",
+      "model": "CMU3DHiveXenoStickyResinWeak"
+    },
+    {
+      "id": "XenoFastResin",
+      "model": "CMU3DHiveXenoFastResin"
+    },
+    {
+      "id": "XenoStickyResinWeakWeedbound",
+      "model": "CMU3DHiveXenoStickyResinWeak"
+    },
+    {
+      "id": "XenoResinSpikes",
+      "model": "CMU3DHiveXenoResinSpikes"
+    },
+    {
+      "id": "XenoFruitLesser",
+      "model": "CMU3DHiveXenoFruitLesser"
+    },
+    {
+      "id": "XenoFruitGreater",
+      "model": "CMU3DHiveXenoFruitGreater"
+    },
+    {
+      "id": "XenoFruitUnstable",
+      "model": "CMU3DHiveXenoFruitUnstable"
+    },
+    {
+      "id": "XenoFruitSpore",
+      "model": "CMU3DHiveXenoFruitSpore"
+    },
+    {
+      "id": "XenoFruitSpeed",
+      "model": "CMU3DHiveXenoFruitSpeed"
+    },
+    {
+      "id": "XenoFruitPlasma",
+      "model": "CMU3DHiveXenoFruitPlasma"
+    },
+    {
+      "id": "XenoNest",
+      "model": "CMU3DHiveXenoNest"
+    },
+    {
+      "id": "XenoResinHole",
+      "model": "CMU3DHiveXenoResinHole"
+    },
+    {
+      "id": "XenoTunnel",
+      "model": "CMU3DHiveXenoTunnel"
+    },
+    {
+      "id": "XenoTunnelMaint",
+      "native": "existing maintenance-cover model"
+    },
+    {
+      "id": "XenoTunnelMaintNoXenoDesc",
+      "native": "existing maintenance-cover model"
+    },
+    {
+      "id": "XenoTunnelMaintHybrisa",
+      "native": "existing maintenance-cover model"
+    },
+    {
+      "id": "XenoTunnelMaintHybrisaNoXenoDesc",
+      "native": "existing maintenance-cover model"
+    },
+    {
+      "id": "WallXenoResin",
+      "model": "CMU3DHiveWallXenoResin"
+    },
+    {
+      "id": "WallXenoResinImpenetrable",
+      "model": "CMU3DHiveWallXenoResinQueen"
+    },
+    {
+      "id": "DoorXenoResinImpenetrable",
+      "model": "CMU3DHiveDoorXenoResinQueen"
+    },
+    {
+      "id": "WallXenoResinThick",
+      "model": "CMU3DHiveWallXenoResinQueen"
+    },
+    {
+      "id": "WallXenoMembrane",
+      "model": "CMU3DHiveWallXenoMembrane"
+    },
+    {
+      "id": "WallXenoMembraneThick",
+      "model": "CMU3DHiveWallXenoMembraneQueen"
+    },
+    {
+      "id": "WallXenoResinWeak",
+      "model": "CMU3DHiveWallXenoResin"
+    },
+    {
+      "id": "WallXenoResinWeedbound",
+      "model": "CMU3DHiveWallXenoResinWeedbound"
+    },
+    {
+      "id": "WallXenoResinThickWeedbound",
+      "model": "CMU3DHiveWallXenoResinThickWeedbound"
+    },
+    {
+      "id": "WallXenoResinReflective",
+      "model": "CMU3DHiveWallXenoResinReflective"
+    },
+    {
+      "id": "WallXenoResinReflectiveUnstable",
+      "model": "CMU3DHiveWallXenoResinReflective"
+    },
+    {
+      "id": "XenoWeeds",
+      "model": "CMU3DHiveXenoWeeds"
+    },
+    {
+      "id": "XenoWeedsSource",
+      "model": "CMU3DHiveXenoWeedsSource"
+    },
+    {
+      "id": "XenoWeedsSourceHidden",
+      "model": "CMU3DHiveXenoWeedsSourceHidden"
+    },
+    {
+      "id": "XenoHiveWeeds",
+      "model": "CMU3DHiveXenoHiveWeeds"
+    },
+    {
+      "id": "XenoHiveWeedsCluster",
+      "model": "CMU3DHiveXenoHiveWeedsCluster"
+    },
+    {
+      "id": "XenoHiveWeedsCore",
+      "model": "CMU3DHiveXenoHiveWeedsCore"
+    },
+    {
+      "id": "XenoHiveWeedsSource",
+      "model": "CMU3DHiveXenoHiveWeedsSource"
+    },
+    {
+      "id": "XenoHiveWeedsSourceHidden",
+      "model": "CMU3DHiveXenoHiveWeedsSourceHidden"
+    },
+    {
+      "id": "XenoWeedsWall",
+      "model": "CMU3DHiveXenoWeedsWall"
+    },
+    {
+      "id": "XenoHardyWeeds",
+      "model": "CMU3DHiveXenoHardyWeeds"
+    },
+    {
+      "id": "XenoHardyWeedsSource",
+      "model": "CMU3DHiveXenoHardyWeedsSource"
+    },
+    {
+      "id": "XenoHardyWeedsSourceHidden",
+      "model": "CMU3DHiveXenoHardyWeedsSourceHidden"
+    },
+    {
+      "id": "CMU14PathogenBlightCore",
+      "model": "CMU3DHiveCMU14PathogenBlightCore"
+    },
+    {
+      "id": "CMU14PathogenBlightCoreConstructionNode",
+      "model": "CMU3DHiveCMU14PathogenBlightCoreConstructionNode"
+    },
+    {
+      "id": "CMU14PathogenCluster",
+      "model": "CMU3DHiveCMU14PathogenCluster"
+    },
+    {
+      "id": "CMU14PathogenClusterConstructionNode",
+      "model": "CMU3DHiveCMU14PathogenClusterConstructionNode"
+    },
+    {
+      "id": "CMU14PathogenOvermindCore",
+      "model": "CMU3DHiveCMU14PathogenOvermindCore"
+    },
+    {
+      "id": "CMU14PathogenPlasmaTree",
+      "model": "CMU3DHiveCMU14PathogenPlasmaTree"
+    },
+    {
+      "id": "CMU14PathogenPlasmaTreeConstructionNode",
+      "model": "CMU3DHiveCMU14PathogenPlasmaTreeConstructionNode"
+    },
+    {
+      "id": "CMU14PathogenPylon",
+      "model": "CMU3DHiveCMU14PathogenPylon"
+    },
+    {
+      "id": "CMU14PathogenPylonConstructionNode",
+      "model": "CMU3DHiveCMU14PathogenPylonConstructionNode"
+    },
+    {
+      "id": "CMU14PathogenRecoveryNode",
+      "model": "CMU3DHiveCMU14PathogenRecoveryNode"
+    },
+    {
+      "id": "CMU14PathogenRecoveryNodeConstructionNode",
+      "model": "CMU3DHiveCMU14PathogenRecoveryNodeConstructionNode"
+    },
+    {
+      "id": "CMUPathogenSporeSac",
+      "model": "CMU3DHiveCMUPathogenSporeSac"
+    },
+    {
+      "id": "CMU14PathogenSporecaster",
+      "model": "CMU3DHiveCMU14PathogenSporecaster"
+    },
+    {
+      "id": "CMU14PathogenSporecasterConstructionNode",
+      "model": "CMU3DHiveCMU14PathogenSporecaster"
+    },
+    {
+      "id": "CMU14XenoMyceliumWall",
+      "model": "CMU3DHiveCMU14XenoMyceliumWall"
+    },
+    {
+      "id": "CMU14XenoThickMyceliumWall",
+      "model": "CMU3DHiveCMU14XenoThickMyceliumWall"
+    },
+    {
+      "id": "CMU14XenoMyceliumMembrane",
+      "model": "CMU3DHiveCMU14XenoMyceliumMembrane"
+    },
+    {
+      "id": "CMU14XenoThickMyceliumMembrane",
+      "model": "CMU3DHiveCMU14XenoThickMyceliumMembrane"
+    },
+    {
+      "id": "CMU14XenoMyceliumDoor",
+      "model": "CMU3DHiveCMU14XenoMyceliumDoor"
+    },
+    {
+      "id": "CMU14XenoThickMyceliumDoor",
+      "model": "CMU3DHiveCMU14XenoThickMyceliumDoor"
+    },
+    {
+      "id": "CMU14XenoMyceliumNest",
+      "model": "CMU3DHiveCMU14XenoMyceliumNest"
+    },
+    {
+      "id": "CMU14EffectWallMycelium",
+      "native": "transient construction effect"
+    },
+    {
+      "id": "CMU14EffectWallMyceliumThick",
+      "native": "transient construction effect"
+    },
+    {
+      "id": "CMU14EffectDoorMycelium",
+      "native": "transient construction effect"
+    },
+    {
+      "id": "CMU14EffectDoorMyceliumThick",
+      "native": "transient construction effect"
+    },
+    {
+      "id": "CMU14XenoMyceliumWeeds",
+      "model": "CMU3DHiveCMU14XenoMyceliumWeeds"
+    },
+    {
+      "id": "CMU14XenoMyceliumWeedsSource",
+      "model": "CMU3DHiveCMU14XenoMyceliumWeedsSource"
+    },
+    {
+      "id": "CMU14XenoMyceliumWeedsSourceHidden",
+      "model": "CMU3DHiveCMU14XenoMyceliumWeedsSourceHidden"
+    },
+    {
+      "id": "CMU14XenoMyceliumHiveWeeds",
+      "model": "CMU3DHiveCMU14XenoMyceliumHiveWeeds"
+    },
+    {
+      "id": "CMU14XenoMyceliumHiveWeedsSource",
+      "model": "CMU3DHiveCMU14XenoMyceliumHiveWeedsSource"
+    },
+    {
+      "id": "CMU14XenoMyceliumHiveWeedsSourceHidden",
+      "model": "CMU3DHiveCMU14XenoMyceliumHiveWeedsSourceHidden"
+    },
+    {
+      "id": "CMU14XenoMyceliumWeedsWall",
+      "model": "CMU3DHiveCMU14XenoMyceliumWeedsWall"
+    },
+    {
+      "id": "CMUXenoEggNotCF",
+      "model": "CMU3DHiveXenoEgg"
+    },
+    {
+      "id": "CMUXenoEggNotDS",
+      "model": "CMU3DHiveXenoEgg"
+    },
+    {
+      "id": "CMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth",
+      "model": "CMU3DHiveCMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth"
+    },
+    {
+      "id": "CMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth",
+      "model": "CMU3DHiveCMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthOffset1x2",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset1x2"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthOffset6x7",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset6x7"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthOffset8x13",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset8x13"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg5x9",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg5x9"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg7x15",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg7x15"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset1xNeg2",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset1xNeg2"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset9x10",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset9x10"
+    },
+    {
+      "id": "CMUHunterShipPlacedBaseItemEggItemSouthVariant02OffsetNeg7x11",
+      "model": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02OffsetNeg7x11"
+    },
+    {
+      "id": "XenoCollapseResin",
+      "model": "CMU3DHiveXenoCollapseResin"
+    }
+  ],
+  "sources": {
+    "/Textures/CMU14/Effects/pathogen_effects.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/pathogen_effects.dmi"
+    },
+    "/Textures/CMU14/HunterShip/mob/xenos/effects.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/xenos/effects.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+    },
+    "/Textures/CMU14/HunterShip/mob/xenos/weeds.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/xenos/weeds.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+    },
+    "/Textures/CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "taken from cm13 https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/pathogen_structures.dmi"
+    },
+    "/Textures/CMU14/Structures/Xeno/Pathogen/pathogen_structures48x48.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "taken from cm13 at https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/pathogen_structures48x48.dmi"
+    },
+    "/Textures/CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/pathogen_structures64x64.dmi"
+    },
+    "/Textures/CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "taken from cm13 at https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/pathogen_weeds.dmi"
+    },
+    "/Textures/CMU14/Structures/Xeno/Pathogen/spore_sac.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Sprites from cm https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/pathogen_effects.dmi"
+    },
+    "/Textures/CMU14/Structures/Xenos/xeno_collapse_resin.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Inverted and darkened from _RMC14/Structures/Xenos/xeno_floor_resins.rsi (fast) by wray-git."
+    },
+    "/Textures/_RMC14/Markers/landmarks.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/3f12d8b58e7b1b15c1ecbcfbb0e50532e4bdbcf4/icons/landmarks.dmi, SPP PMC spawn sound and ambient by github noctynral, recruit_spawn is a modification of marine_spawn by github Ian321, random_bombsupply by CatAndHats (github) based on Multitool icon taken from https://github.com/cmss13-devs/cmss13/blob/bec6653d487a49aa2b5a8e0c97bed9612f620211/icons/obj/items/devices.dmi. UNMC spawn by RosySaturniidae (github)"
+    },
+    "/Textures/_RMC14/Structures/Walls/bone_resin.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/turf/walls/prison/bone_resin.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/hive_cluster.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/e9ea97c1887d8b144e3e66d959a428c79f58c196/icons/mob/xenos/structures48x48.dmi, new sprites by Aleksh"
+    },
+    "/Textures/_RMC14/Structures/Xenos/hive_structures.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/e9ea97c1887d8b144e3e66d959a428c79f58c196/icons/mob/xenos/structures64x64.dmi, new sprites by Aleksh and recovery_plasma by Miyugi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/king_cocoon.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/085faa829b8e86366f180a5cc9d45dda0d9e4e0b/icons/obj/structures/alien/xenoKingHatchery.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/weedbound_resin_doors.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/weedbound_resin_walls.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/cfa259bbd2d627ed94a359fa8c0dec63006f49fa/icons/mob/xenos/effects.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_acid_pillar.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/f7b6b4d923f3a7b043f0a7b774e8eb14f2a84550/icons/obj/structures/alien/structures.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_deployed_trap.rsi": {
+      "license": "CC-BY-3.0",
+      "copyright": "Sprite made by Hazzulicious."
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_egg.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/20db6e3fc344d59ed9502ee7626d9fea89674713/icons/mob/xenos/effects.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_egg_fragile.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/20db6e3fc344d59ed9502ee7626d9fea89674713/icons/mob/xenos/effects.dmi, modified by Vermidia"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_egg_fragile_eggsac.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/20db6e3fc344d59ed9502ee7626d9fea89674713/icons/mob/xenos/effects.dmi, modified by Vermidia"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_floor_resins.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Sprites by Aleksh"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_fruit.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/e9ea97c1887d8b144e3e66d959a428c79f58c196/icons/mob/xenos/fruits.dmi, new sprites by Alekshhh"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_resin_door.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/af7813ee8c36f9195a88f3b3d018af2b8833cbea/icons/mob/xenos/effects.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_resin_spikes.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/b828ded0c88e7b8183e03173be93b2c32decc8a1/icons/obj/structures/alien/structures.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_resin_trap.rsi": {
+      "license": "CC-BY-3.0",
+      "copyright": "Taken from https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/xenos/effects.dmi, modified by Vermidia, new parasite trap sprite by Sigma Draconis"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_resin_wall.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/a0fcc13da4bf066a297541571a4a0f064681002f/icons/turf/walls/xeno.dmi"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_tunnel.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/e1a270d04e95a2294c43ecb309f17c294fcfeb8d/icons/obj/structures/ladders.dmi, hole by github noctyrnal"
+    },
+    "/Textures/_RMC14/Structures/Xenos/xeno_weeds.rsi": {
+      "license": "CC-BY-SA-3.0",
+      "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/ff659789647cc5b047e1c9a25693064d1facad2c/icons/mob/xenos/weeds.dmi, https://github.com/cmss13-devs/cmss13/blob/20db6e3fc344d59ed9502ee7626d9fea89674713/icons/mob/xenos/effects.dmi, minor edits to weed wall sprites by github noctyrnal"
+    }
+  }
+}

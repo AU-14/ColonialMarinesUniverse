@@ -1,0 +1,22 @@
+# The DEFAC foodline. The open for business button raises the kitchen shutters on its map, and while they're up the
+# NutriCo machines on that map stop dispensing so people eat what the mess technicians cook.
+
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUShutterKitchen
+  name: kitchen shutters
+  description: The DEFAC foodline's shutters. When they're up, the kitchen is open for business.
+  components:
+  - type: CMUKitchenShutter
+
+- type: entity
+  parent: RMCPodDoorButtonBigRedShip
+  id: CMUButtonKitchenOpenForBusiness
+  name: open for business button
+  description: Raises and lowers the kitchen shutters. While they're up, the NutriCo machines stop dispensing.
+  suffix: Locked, Kitchen
+  components:
+  - type: RMCDoorButton
+    id: kitchen shutters
+  - type: AccessReader
+    access: [ [ "CMUAccessKitchen" ] ]

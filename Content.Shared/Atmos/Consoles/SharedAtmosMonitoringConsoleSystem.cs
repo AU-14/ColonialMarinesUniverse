@@ -18,10 +18,8 @@ public abstract class SharedAtmosMonitoringConsoleSystem : EntitySystem
         Dictionary<Vector2i, Dictionary<AtmosMonitoringConsoleSubnet, ulong>> chunks;
 
         // Should this be a full component state or a delta-state?
-        if (args.FromTick <= component.CreationTick || component.ForceFullUpdate)
+        if (args.FromTick <= component.CreationTick || args.FromTick <= component.ForceFullUpdateTick)
         {
-            component.ForceFullUpdate = false;
-
             // Full state
             chunks = new(component.AtmosPipeChunks.Count);
 
@@ -84,27 +82,26 @@ public abstract class SharedAtmosMonitoringConsoleSystem : EntitySystem
                 state.Chunks[index] = new Dictionary<AtmosMonitoringConsoleSubnet, ulong>(data);
             }
 
-            state.AtmosDevices.Clear();
-            foreach (var (nuid, atmosDevice) in AtmosDevices)
-            {
-                state.AtmosDevices.Add(nuid, atmosDevice);
-            }
+            // Full states can share the original device dictionary with this delta.
+            state.AtmosDevices = new(AtmosDevices);
         }
 
         public AtmosMonitoringConsoleState CreateNewFullState(AtmosMonitoringConsoleState state)
         {
-            var chunks = new Dictionary<Vector2i, Dictionary<AtmosMonitoringConsoleSubnet, ulong>>(state.Chunks.Count);
+            var chunks = new Dictionary<Vector2i, Dictionary<AtmosMonitoringConsoleSubnet, ulong>>(AllChunks.Count);
 
             foreach (var (index, data) in state.Chunks)
             {
-                if (!AllChunks!.Contains(index))
+                if (!AllChunks.Contains(index) || ModifiedChunks.ContainsKey(index))
                     continue;
+                chunks[index] = new(data);
+            }
 
-                if (ModifiedChunks.ContainsKey(index))
-                    chunks[index] = new Dictionary<AtmosMonitoringConsoleSubnet, ulong>(ModifiedChunks[index]);
-
-                else
-                    chunks[index] = new Dictionary<AtmosMonitoringConsoleSubnet, ulong>(state.Chunks[index]);
+            // Newly added chunks are absent from the previous state's keys.
+            foreach (var (index, data) in ModifiedChunks)
+            {
+                if (AllChunks.Contains(index))
+                    chunks[index] = new(data);
             }
 
             return new AtmosMonitoringConsoleState(chunks, new(AtmosDevices));

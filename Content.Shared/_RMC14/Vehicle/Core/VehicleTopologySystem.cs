@@ -286,7 +286,7 @@ public sealed partial class VehicleTopologySystem : EntitySystem
         foreach (var slot in hardpoints.Slots)
         {
             if (string.IsNullOrWhiteSpace(slot.Id) ||
-                !_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) ||
+                !_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) ||
                 !itemSlot.HasItem ||
                 itemSlot.Item is not { } item)
             {
@@ -366,7 +366,7 @@ public sealed partial class VehicleTopologySystem : EntitySystem
                 continue;
 
             EntityUid? item = null;
-            if (_itemSlots.TryGetSlot(slotOwner, slot.Id, out var itemSlot, itemSlots) &&
+            if (_itemSlots.TryGetSlot((slotOwner, itemSlots), slot.Id, out var itemSlot) &&
                 itemSlot.HasItem)
             {
                 item = itemSlot.Item;
@@ -420,7 +420,7 @@ public sealed partial class VehicleTopologySystem : EntitySystem
 
             result.Add(compositeId);
 
-            if (!_itemSlots.TryGetSlot(slotOwner, slot.Id, out var itemSlot, itemSlots) ||
+            if (!_itemSlots.TryGetSlot((slotOwner, itemSlots), slot.Id, out var itemSlot) ||
                 !itemSlot.HasItem ||
                 itemSlot.Item is not { } nestedItem ||
                 !TryComp(nestedItem, out HardpointSlotsComponent? nestedHardpoints) ||
@@ -449,7 +449,7 @@ public sealed partial class VehicleTopologySystem : EntitySystem
                 continue;
 
             EntityUid? item = null;
-            if (_itemSlots.TryGetSlot(slotOwner, slot.Id, out var itemSlot, itemSlots) &&
+            if (_itemSlots.TryGetSlot((slotOwner, itemSlots), slot.Id, out var itemSlot) &&
                 itemSlot.HasItem)
             {
                 item = itemSlot.Item;
@@ -514,7 +514,7 @@ public sealed partial class VehicleTopologySystem : EntitySystem
                 continue;
 
             EntityUid? item = null;
-            if (_itemSlots.TryGetSlot(slotOwner, slot.Id, out var itemSlot, itemSlots) &&
+            if (_itemSlots.TryGetSlot((slotOwner, itemSlots), slot.Id, out var itemSlot) &&
                 itemSlot.HasItem)
             {
                 item = itemSlot.Item;

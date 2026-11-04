@@ -1,0 +1,8 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Xeno acid action remains toggled until deactivated or another ability is
+    used.
+  type: Tweak
+time: '2026-09-10T04:54:12.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1919

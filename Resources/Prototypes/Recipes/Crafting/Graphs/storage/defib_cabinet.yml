@@ -1,0 +1,27 @@
+- type: constructionGraph
+  id: DefibrillatorCabinet
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: done
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 5
+  - node: done
+    entity: DefibrillatorCabinet
+    edges:
+    - to: start
+      steps:
+      - tool: Screwing
+        doAfter: 5
+      conditions:
+      - !type:ContainerEmpty
+        container: "ItemCabinet"
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:EmptyAllContainers
+      - !type:DeleteEntity

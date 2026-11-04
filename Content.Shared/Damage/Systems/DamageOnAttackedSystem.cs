@@ -73,15 +73,15 @@ public sealed partial class DamageOnAttackedSystem : EntitySystem
             }
         }
 
-        totalDamage = _damageableSystem.TryChangeDamage(args.User, totalDamage, entity.Comp.IgnoreResistances, origin: entity);
+        totalDamage = _damageableSystem.ChangeDamage(args.User, totalDamage, entity.Comp.IgnoreResistances, origin: entity);
 
-        if (totalDamage != null && totalDamage.AnyPositive())
+        if (totalDamage.AnyPositive())
         {
             _adminLogger.Add(LogType.Damaged, $"{ToPrettyString(args.User):user} injured themselves by attacking {ToPrettyString(entity):target} and received {totalDamage.GetTotal():damage} damage");
             _audioSystem.PlayPredicted(entity.Comp.InteractSound, entity, args.User);
 
             if (entity.Comp.PopupText != null)
-                _popupSystem.PopupClient(Loc.GetString(entity.Comp.PopupText), args.User, args.User);
+                _popupSystem.PopupEntity(Loc.GetString(entity.Comp.PopupText), args.User, args.User);
 
         }
     }

@@ -1,0 +1,66 @@
+- type: entity
+  parent: DrinkBottlePlasticBaseFull
+  id: RuMCDrinkUPPwaterBottle
+  name: UPP bottled spring water
+  description: Ozonated water is completely safe for consumption.
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Water
+        Quantity: 45
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    utensil: None
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Drink/upp_water_bottle.rsi
+    layers:
+    - state: icon
+      map: ["enum.OpenableVisuals.Layer"]
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: {state: "icon_open"}
+          False: {state: "icon"}
+  - type: Item
+    size: Small
+  - type: DamageOnLand
+    damage: {}
+  - type: DamageOtherOnHit
+    damage: {}
+  - type: Appearance
+  - type: Sealable
+  - type: MREItem
+  - type: Destructible
+    thresholds: [] # TODO RMC14 destroy on explosion unless inside a container
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 5
+
+- type: entity
+  parent: RuMCDrinkUPPwaterBottle
+  id: RuMCDrinkUPPBugJuice
+  name: UPP packaging of pineapple juice
+  description:
+  components:
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: RMCJuiceBug
+        Quantity: 45
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Drink/upp_juice.rsi
+    layers:
+    - state: icon
+      map: ["enum.OpenableVisuals.Layer"]

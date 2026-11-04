@@ -1,0 +1,191 @@
+[
+  {
+    "map": "/Maps/CMU14/Vehicles/Blackfoot/blackfoot.yml",
+    "review": "layout-01.png",
+    "parts": 171,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml",
+    "review": "layout-02.png",
+    "parts": 142,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/CMU14/Vehicles/Interiors/Ambulance.yml",
+    "review": "layout-03.png",
+    "parts": 208,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/CMU14/Vehicles/Interiors/CopMonoSupron.yml",
+    "review": "layout-04.png",
+    "parts": 235,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/CMU14/Vehicles/Interiors/PaddyWagonVanEmpty.yml",
+    "review": "layout-05.png",
+    "parts": 149,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/CMU14/Vehicles/Interiors/arv.yml",
+    "review": "layout-06.png",
+    "parts": 264,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/CMU14/Vehicles/Interiors/truck_interior.yml",
+    "review": "layout-07.png",
+    "parts": 111,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/CMU14/Vehicles/Interiors/van_interior.yml",
+    "review": "layout-08.png",
+    "parts": 174,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/apc_command_interior.yml",
+    "review": "layout-09.png",
+    "parts": 446,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/apc_medical_interior.yml",
+    "review": "layout-10.png",
+    "parts": 480,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/apc_transport_interior.yml",
+    "review": "layout-11.png",
+    "parts": 474,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/box_van_interior.yml",
+    "review": "layout-12.png",
+    "parts": 163,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/humvee_arc_interior.yml",
+    "review": "layout-13.png",
+    "parts": 223,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/humvee_interior.yml",
+    "review": "layout-14.png",
+    "parts": 121,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/humvee_medical_interior.yml",
+    "review": "layout-15.png",
+    "parts": 158,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/humvee_transport_interior.yml",
+    "review": "layout-16.png",
+    "parts": 157,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/pizza_van_interior.yml",
+    "review": "layout-17.png",
+    "parts": 242,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_apc_interior.yml",
+    "review": "layout-18.png",
+    "parts": 269,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_tank_command_interior.yml",
+    "review": "layout-19.png",
+    "parts": 112,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_tank_interior.yml",
+    "review": "layout-20.png",
+    "parts": 96,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_van_armed_interior.yml",
+    "review": "layout-21.png",
+    "parts": 176,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_van_interior.yml",
+    "review": "layout-22.png",
+    "parts": 160,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_van_logistics_interior.yml",
+    "review": "layout-23.png",
+    "parts": 101,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_van_medical_interior.yml",
+    "review": "layout-24.png",
+    "parts": 203,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/spp_van_prisoner_interior.yml",
+    "review": "layout-25.png",
+    "parts": 200,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/tank_interior.yml",
+    "review": "layout-26.png",
+    "parts": 164,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  },
+  {
+    "map": "/Maps/_RMC14/Vehicles/van_interior.yml",
+    "review": "layout-27.png",
+    "parts": 320,
+    "eyeHeight": 1.65,
+    "seatedEyeCrossings": []
+  }
+]

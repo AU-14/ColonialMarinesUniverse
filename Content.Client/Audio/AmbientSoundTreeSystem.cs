@@ -5,7 +5,7 @@ using Robust.Shared.Physics;
 
 namespace Content.Client.Audio;
 
-public sealed class AmbientSoundTreeSystem : ComponentTreeSystem<AmbientSoundTreeComponent, AmbientSoundComponent>
+public sealed partial class AmbientSoundTreeSystem : ComponentTreeSystem<AmbientSoundTreeComponent, AmbientSoundComponent>
 {
     #region Component Tree Overrides
     protected override bool DoFrameUpdate => false;
@@ -21,7 +21,9 @@ public sealed class AmbientSoundTreeSystem : ComponentTreeSystem<AmbientSoundTre
         if (entry.Component.TreeUid == null)
             return default;
 
-        var pos = XformSystem.GetRelativePosition(entry.Transform, entry.Component.TreeUid.Value);
+        var pos = XformSystem.GetRelativePosition(
+            entry.Transform,
+            entry.Component.TreeUid.Value);
 
         return ExtractAabb(in entry, pos, default);
     }

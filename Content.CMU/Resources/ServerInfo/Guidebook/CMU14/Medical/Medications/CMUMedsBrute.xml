@@ -1,0 +1,13 @@
+<Document>
+  # Brute Medications
+
+  Brute damage is blunt, slash and piercing: punches, claws, blades and bullets. Dress the wounds first so they stop bleeding (see [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"]), then use these to heal the damage.
+
+  - [bold]Bicaridine[/bold]: the standard brute medicine. Overdose at 30 units.
+  - [bold]Meralyne[/bold]: heals brute faster than bicaridine, for severe trauma. Its overdose is lower, at 15 units, and corrodes cells.
+  - [bold]Tricordrazine[/bold]: heals a little of everything, brute included.
+
+  <GuideReagentEmbed Reagent="CMBicaridine"/>
+  <GuideReagentEmbed Reagent="CMMeralyne"/>
+  <GuideReagentEmbed Reagent="CMTricordrazine"/>
+</Document>

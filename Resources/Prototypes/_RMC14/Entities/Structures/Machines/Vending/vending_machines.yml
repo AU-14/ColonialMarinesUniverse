@@ -79,11 +79,6 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: VendingMachine
     pack: CMVendomat
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
-    offState: off
-    brokenState: broken
-    normalState: normal-unshaded
   - type: Corrodible
     timeToApply: 4
     structure: true
@@ -135,6 +130,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
   - type: VendingMachine
     pack: CMVendorCoffee
+  - type: VendingMachineVisuals
     ejectState: eject-unshaded
 
 - type: entity
@@ -307,6 +303,57 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
     offset: 0, 0.5
+  # cmu edit start: pours mess drinks into a cup or other container, like a soda fountain
+  - type: VendingMachine
+    pack: CMUNutriCoAutoDrinkEmpty
+  - type: ActivatableUI
+    key: enum.CMUAutoDrinkUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUAutoDrinkUiKey.Key:
+        type: CMUAutoDrinkBui
+      enum.VendingMachineUiKey.Key:
+        type: VendingMachineBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      autodrink_bay: !type:ContainerSlot
+  - type: CMUFoodlineVendor
+  - type: CMUAutoDrink
+    bay:
+      whitelistFailPopup: reagent-dispenser-component-cannot-put-entity-message
+      whitelist:
+        components:
+        - FitsInDispenser
+    drinks:
+    - reagent: Water
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCCoffee
+      name: cmu-autodrink-coffee
+      note: cmu-autodrink-note-hot
+    - reagent: RMCTea
+      name: cmu-autodrink-tea
+      note: cmu-autodrink-note-hot
+    - reagent: Milk
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCChocolateDrink
+      name: cmu-autodrink-chocolate-milk
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceOrange
+      name: cmu-autodrink-electrolyte-orange
+      note: cmu-autodrink-note-chilled
+    - reagent: LemonLime
+      name: cmu-autodrink-electrolyte-lemon-lime
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceGrape
+      name: cmu-autodrink-electrolyte-grape
+      note: cmu-autodrink-note-chilled
+    - reagent: Ice
+      name: cmu-autodrink-ice
+      extra: true
+  # cmu edit end
 
 - type: entity
   parent: CMVendorCola
@@ -326,6 +373,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
     offset: 0, 0.5
+  - type: CMUFoodlineVendor # cmu edit: shut off while the DEFAC foodline is open
 
 - type: entity
   parent: CMVendor
@@ -492,10 +540,11 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: CMVendorSec
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
-    access: [["AU14AccessGovforSecurity"], ["AU14AccessOpforSecurity"], ["CMAccessArmory"]]
+    access: [["AU14AccessGovforSecurity"], ["AU14AccessOpforSecurity"], ["CMAccessArmory"], ["CMAccessBrig"], ["CMAccessColonyBrig"]] # CMU14
 
 - type: vendingMachineInventory
   id: CMVendorSec
@@ -507,9 +556,13 @@
     # Pepper spray 4
     # InvestigationPepperSpray: 4
     CMStunbaton: 4
-    RMCGunCasePistolM77: 4
-    CMMagazinePistolM77AP: 16
-    CMMagazinePistolM88Rubber: 40
+    # cmu edit start: no Mod 88 in SecTech; pepper spray instead
+    # RMCGunCasePistolM77: 4
+    # CMMagazinePistolM77AP: 16
+    # CMMagazinePistolM88Rubber: 40
+    CMUPepperSpray: 4
+    CMUPepperSprayAntidote: 2
+    # cmu edit end
     # CMBeltSecurityMP: 10
     CMFlash: 5
     RMCGrenadeFlashBang: 6
@@ -518,8 +571,8 @@
     #RegulationTape: 5
     #TapeRecorder: 3
     #ClueScanner: 3
-    #Camera: 8
-    #CameraFilm: 8
+    CMUPhotoCamera: 8 # CMU14
+    CMUCameraFilm: 8 # CMU14
     CMU14TearGasGrenade: 4
     RMCWhistle: 5
     RMCFoodDonut: 12
@@ -542,6 +595,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: RMCVendorRiot
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
@@ -575,6 +629,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: CMVendorSEA
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
@@ -610,6 +665,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/nutri.rsi
   - type: VendingMachine
     pack: CMVendorNutri
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
 
@@ -646,6 +702,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/seeds.rsi
   - type: VendingMachine
     pack: CMVendorSeeds
+  - type: VendingMachineVisuals
     denyState: deny-unshaded
     ejectState: eject-unshaded
 
@@ -852,7 +909,7 @@
     - name: Products
       entries:
       - id: FoodContainerEgg
-        amount: 18
+        amount: 12
       - id: FoodMeatChicken
         amount: 36
       - id: FoodMeatFish

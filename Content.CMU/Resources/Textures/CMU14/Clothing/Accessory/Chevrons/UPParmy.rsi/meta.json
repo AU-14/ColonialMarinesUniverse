@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "'hubaruba' from Discord",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ranks_s1"
+    },
+    {
+      "name": "big_s1"
+    },
+    {
+      "name": "ranks_s2"
+    },
+    {
+      "name": "big_s2"
+    },
+    {
+      "name": "ranks_s3"
+    },
+    {
+      "name": "big_s3"
+    },
+    {
+      "name": "ranks_s4"
+    },
+    {
+      "name": "big_s4"
+    },
+    {
+      "name": "ranks_s5"
+    },
+    {
+      "name": "big_s5"
+    },
+    {
+      "name": "ranks_s6"
+    },
+    {
+      "name": "big_s6"
+    },
+    {
+      "name": "ranks_p7"
+    },
+    {
+      "name": "big_p7"
+    },
+    {
+      "name": "ranks_p8"
+    },
+    {
+      "name": "big_p8"
+    },
+    {
+      "name": "ranks_o9"
+    },
+    {
+      "name": "big_o9"
+    },
+    {
+      "name": "ranks_o10"
+    },
+    {
+      "name": "big_o10"
+    },
+    {
+      "name": "ranks_o11"
+    },
+    {
+      "name": "big_o11"
+    },
+    {
+      "name": "ranks_o12"
+    },
+    {
+      "name": "big_o12"
+    },
+    {
+      "name": "ranks_go13"
+    },
+    {
+      "name": "big_go13"
+    },
+    {
+      "name": "ranks_go14"
+    },
+    {
+      "name": "big_go14"
+    },
+    {
+      "name": "ranks_go15"
+    },
+    {
+      "name": "big_go15"
+    },
+    {
+      "name": "ranks_g16"
+    },
+    {
+      "name": "big_g16"
+    },
+    {
+      "name": "ranks_g17"
+    },
+    {
+      "name": "big_g17"
+    },
+    {
+      "name": "ranks_g18"
+    },
+    {
+      "name": "big_g18"
+    },
+    {
+      "name": "ranks_g19"
+    },
+    {
+      "name": "big_g19"
+    },
+    {
+      "name": "equipped-ranks_s",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_p",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_o",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_go",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_g",
+      "directions": 4
+    },
+    {
+      "name": "equipped-ranks_WorldGeneral",
+      "directions": 4
+    },
+    {
+      "name": "ranks_WorldGeneral"
+    },
+    {
+      "name": "big_WorldGeneral"
+    }
+  ]
+}

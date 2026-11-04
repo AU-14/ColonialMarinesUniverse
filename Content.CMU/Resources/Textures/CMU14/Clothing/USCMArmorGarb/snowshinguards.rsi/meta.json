@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve PR 785 (https://github.com/cmss13-devs/cmss13-pve/pull/785) at https://github.com/nauticall/PvE-CMSS13/blob/c171a7fc8a7c2653fd27365597b4c5051e05f665/icons/mob/humans/onmob/ties.dmi, https://github.com/nauticall/PvE-CMSS13/blob/c171a7fc8a7c2653fd27365597b4c5051e05f665/icons/obj/items/clothing/ties.dmi. Ported by troy. Any states not listed there are copied from jungleshinguards.rsi.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "helmet",
+      "directions": 4
+    }
+  ]
+}

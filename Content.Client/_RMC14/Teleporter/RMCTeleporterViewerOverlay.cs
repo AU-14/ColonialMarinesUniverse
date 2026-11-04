@@ -47,6 +47,7 @@ public sealed partial class RMCTeleporterViewerOverlay : Overlay
 
         _container = _entity.System<SharedContainerSystem>();
         _entityLookup = _entity.System<EntityLookupSystem>();
+        _map = _entity.System<SharedMapSystem>();
         _physics = _entity.System<SharedPhysicsSystem>();
         _sprite = _entity.System<SpriteSystem>();
         _teleporter = _entity.System<SharedRMCTeleporterSystem>();
@@ -69,7 +70,8 @@ public sealed partial class RMCTeleporterViewerOverlay : Overlay
         var eyeRot = eye?.Rotation ?? default;
         foreach (var selfContact in _physics.GetEntitiesIntersectingBody(player, (int) CollisionGroup.MobLayer))
         {
-            if (!_teleporterViewerQuery.TryComp(selfContact, out var viewer))
+            if (!_teleporterViewerQuery.TryComp(selfContact, out var viewer) ||
+                !viewer.ProjectionEnabled)
                 continue;
 
             var viewerPosition = _transform.GetWorldPosition(selfContact);
@@ -78,6 +80,18 @@ public sealed partial class RMCTeleporterViewerOverlay : Overlay
                 var otherViewerPosition = _transform.GetMapCoordinates(otherViewer);
                 var viewerPositionDiff = otherViewerPosition.Position - viewerPosition;
                 var otherViewerAABB = _physics.GetWorldAABB(otherViewer);
+
+                if (!PrepareProjection(
+                        handle,
+                        viewer,
+                        otherViewer,
+                        otherViewerAABB,
+                        viewerPositionDiff,
+                        out var projectionGrid,
+                        out var projectionGridComponent))
+                {
+                    continue;
+                }
 
                 _toDraw.Clear();
                 _viewerContacts.Clear();
@@ -94,7 +108,8 @@ public sealed partial class RMCTeleporterViewerOverlay : Overlay
                     if (_container.IsEntityInContainer(viewerContact))
                         continue;
 
-                    if (viewerContactTransform.Anchored &&
+                    if (!viewer.ProjectAnchored &&
+                        viewerContactTransform.Anchored &&
                         !_xenoQuery.HasComp(viewerContact) &&
                         !_tileFireQuery.HasComp(viewerContact))
                     {
@@ -105,6 +120,9 @@ public sealed partial class RMCTeleporterViewerOverlay : Overlay
                     // since they share a parent entity uid but i don't got time to do that
                     // good luck future coder
                     var (position, rotation) = _transform.GetWorldPositionRotation(viewerContactTransform);
+                    if (!IsProjectedPosition(viewer, projectionGrid, projectionGridComponent, position))
+                        continue;
+
                     _toDraw.Add(((viewerContact, viewerContactSprite), position, rotation));
                 }
 

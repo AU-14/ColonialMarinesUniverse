@@ -93,8 +93,8 @@ public sealed partial class RMCAdminEui : BaseEui
 
         var mobState = entities.System<MobStateSystem>();
         var xenos = new List<Xeno>();
-        var xenoQuery = entities.EntityQueryEnumerator<ActorComponent, XenoComponent, MetaDataComponent>();
-        while (xenoQuery.MoveNext(out var uid, out _, out _, out var metaData))
+        var xenoQuery = entities.EntityQueryEnumerator<XenoComponent, MetaDataComponent>();
+        while (xenoQuery.MoveNext(out var uid, out _, out var metaData))
         {
             if (metaData.EntityPrototype is not { } proto)
                 continue;
@@ -165,7 +165,7 @@ public sealed partial class RMCAdminEui : BaseEui
             specialistSkills,
             points,
             extraPoints
-        );
+        ) { CMUDetails = CreateCMUDetails() }; // CMU14
     }
 
     public override void HandleMessage(EuiMessageBase msg)
@@ -173,6 +173,9 @@ public sealed partial class RMCAdminEui : BaseEui
         base.HandleMessage(msg);
 
         if (!HasPermission())
+            return;
+
+        if (HandleCMUMessage(msg)) // CMU14
             return;
 
         switch (msg)

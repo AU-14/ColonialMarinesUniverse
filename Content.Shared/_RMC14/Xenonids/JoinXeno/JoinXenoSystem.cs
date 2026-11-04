@@ -6,6 +6,7 @@ using Content.Shared.Actions;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
@@ -136,8 +137,12 @@ public sealed partial class JoinXenoSystem : EntitySystem
 
         var entries = new List<JoinXenoHiveEntry>();
         var hives = EntityQueryEnumerator<HiveComponent, MetaDataComponent>();
-        while (hives.MoveNext(out var hiveId, out _, out var metaData))
+        // CMU14: keep queued hives visible so players can still leave an inactive hive's queue.
+        while (hives.MoveNext(out var hiveId, out var hive, out var metaData))
         {
+            if (!_hive.CMUIsHiveActive((hiveId, hive)) && !queueStatus.Queues.ContainsKey(hiveId))
+                continue;
+
             var status = JoinXenoQueueStatus.NotQueued;
             var position = 0;
             if (queueStatus.Queues.TryGetValue(hiveId, out var queueUserStatus))
@@ -175,7 +180,7 @@ public sealed partial class JoinXenoSystem : EntitySystem
         // If the game has been going on longer than the death ignore time, then check how long since the ghost has died
         if (_gameTicker.RoundDuration() > _burrowedLarvaDeathIgnoreTime)
         {
-            var timeSinceDeath = _timing.CurTime.Subtract(ghostComp.TimeOfDeath);
+            var timeSinceDeath = _timing.RealTime.Subtract(ghostComp.TimeOfDeath);
 
             if (timeSinceDeath < _burrowedLarvaDeathTime)
             {

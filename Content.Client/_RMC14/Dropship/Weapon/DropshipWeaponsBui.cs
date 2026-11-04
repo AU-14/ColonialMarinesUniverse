@@ -329,9 +329,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         void SetQuickTargetControls(DropshipWeaponsButtonData? previous, DropshipWeaponsButtonData? next)
         {
-            TryGetWeapons(first, out var one, out var two, out var three, out var four, out _, out _, out _, out _, out _);
+            TryGetWeapons(first, out var one, out var two, out var three, out var four, out var five, out _, out _, out _, out _, out _); // CMU14: fifth weapon (midway chin gun)
             screen.TopRow.SetData(fire, quick, four: previous, five: next);
-            screen.LeftRow.SetData(one, two, three, four);
+            screen.LeftRow.SetData(one, two, three, four, five); // CMU14
             screen.BottomRow.SetData(exit);
             screen.ScreenLabel.Text = TargetAcquisition();
         }
@@ -357,6 +357,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     out var two,
                     out var three,
                     out var four,
+                    out var five, // CMU14
                     out var utilityOne,
                     out var utilityTwo,
                     out var utilityThree,
@@ -364,7 +365,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     out var electronicSystemTwo
                 );
                 screen.LeftRow.SetData(one, two, utilityOne, utilityTwo, utilityThree);
-                screen.RightRow.SetData(three, four, electronicSystemOne, electronicSystemTwo);
+                screen.RightRow.SetData(three, four, electronicSystemOne, electronicSystemTwo, five); // CMU14: fifth weapon
 
                 var text = new StringBuilder();
                 void AddWeaponEntry(DropshipWeaponsButtonData? data)
@@ -393,6 +394,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 AddWeaponEntry(two);
                 AddWeaponEntry(three);
                 AddWeaponEntry(four);
+                AddWeaponEntry(five); // CMU14
 
                 screen.ScreenLabel.Text = text.ToString();
                 screen.ScreenLabel.VerticalAlignment = VAlignment.Top;
@@ -440,8 +442,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                 screen.BottomRow.SetData(exit, five: next);
                 screen.TopRow.SetData(fire, quick, five: previous);
-                TryGetWeapons(first, out var one, out var two, out var three, out var four, out _, out _, out _, out _, out _);
+                TryGetWeapons(first, out var one, out var two, out var three, out var four, out var five, out _, out _, out _, out _, out _); // CMU14
                 screen.LeftRow.SetData(cancel, one, two, three, four);
+                screen.RightRow.SetData(five); // CMU14: left row is full with cancel, fifth weapon goes right
                 screen.ScreenLabel.Text = TargetAcquisition();
                 break;
             }
@@ -634,14 +637,18 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                                               Loc.GetString("rmc-dropship-equipment-deployer-status",
                                                   ("deployed", equipmentDeployer.IsDeployed
                                                       ? Loc.GetString("rmc-dropship-equipment-deployed")
-                                                      : Loc.GetString("rmc-dropship-equipment-undeployed"))) + "\n" +
-                                              Loc.GetString("rmc-dropship-equipment-deployer-auto-deploy",
-                                                  ("autoDeploy", equipmentDeployer.AutoDeploy
-                                                      ? Loc.GetString("rmc-dropship-equipment-enabled")
-                                                      : Loc.GetString("rmc-dropship-equipment-disabled")));
+                                                      : Loc.GetString("rmc-dropship-equipment-undeployed"))) +
+                                              (equipmentDeployer.CanAutoDeploy
+                                                  ? "\n" + Loc.GetString("rmc-dropship-equipment-deployer-auto-deploy",
+                                                      ("autoDeploy", equipmentDeployer.AutoDeploy
+                                                          ? Loc.GetString("rmc-dropship-equipment-enabled")
+                                                          : Loc.GetString("rmc-dropship-equipment-disabled")))
+                                                  : string.Empty);
 
                     screen.LeftRow.SetData(one: !equipmentDeployer.IsDeployed ? equipmentDeploy : equipmentRetract,
-                        two: !equipmentDeployer.AutoDeploy ? equipmentAutoDeployOn : equipmentAutoDeployOff);
+                        two: equipmentDeployer.CanAutoDeploy
+                            ? !equipmentDeployer.AutoDeploy ? equipmentAutoDeployOn : equipmentAutoDeployOff
+                            : null);
                 }
                 break;
             }
@@ -735,6 +742,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                         out var two,
                         out var three,
                         out var four,
+                        out var five, // CMU14
                         out _,
                         out _,
                         out _,
@@ -742,7 +750,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                         out _
                     );
 
-                    var weaponButtons = new [] { one, two, three, four };
+                    var weaponButtons = new [] { one, two, three, four, five }; // CMU14
                     var weaponData = new List<WeaponDisplayInfo>();
 
                     foreach (var button in weaponButtons)
@@ -799,13 +807,14 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     out var two,
                     out var three,
                     out var four,
+                    out var five, // CMU14
                     out _,
                     out _,
                     out _,
                     out _,
                     out _
                 );
-                screen.RightRow.SetData(one, two, three, four);
+                screen.RightRow.SetData(one, two, three, four, five); // CMU14
 
                 var selectedWeaponId = first
                     ? terminal.ScreenOne.Weapon
@@ -983,7 +992,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         bool WantsClf() => string.IsNullOrEmpty(faction) || faction == "CLF";
 
         var lines = EntMan.GetComponentOrNull<TacticalMapLinesComponent>(Owner);
-        if (lines != null)
+        if (lines != null) // CMU14 Statement
         {
             if (WantsMarines())
                 wrapper.Map.Lines.AddRange(lines.MarineLines);
@@ -995,6 +1004,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 wrapper.Map.Lines.AddRange(lines.GovforLines);
             if (WantsClf())
                 wrapper.Map.Lines.AddRange(lines.ClfLines);
+            if (faction == "WEYU")
+                wrapper.Map.Lines.AddRange(lines.WeYuLines);
+            wrapper.Map.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
         var labels = EntMan.GetComponentOrNull<TacticalMapLabelsComponent>(Owner);
@@ -1036,6 +1048,13 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     allLabels[label.Key] = label.Value;
                 }
             }
+            if (faction == "WEYU") // CMU14
+            {
+                foreach (var label in labels.WeYuLabels)
+                {
+                    allLabels[label.Key] = label.Value;
+                }
+            }
 
             wrapper.UpdateTacticalLabels(allLabels);
         }
@@ -1062,6 +1081,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         out DropshipWeaponsButtonData? two,
         out DropshipWeaponsButtonData? three,
         out DropshipWeaponsButtonData? four,
+        out DropshipWeaponsButtonData? five, // CMU14: midway carries a fifth (chin) weapon
         out DropshipWeaponsButtonData? utilityOne,
         out DropshipWeaponsButtonData? utilityTwo,
         out DropshipWeaponsButtonData? utilityThree,
@@ -1072,6 +1092,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         two = default;
         three = default;
         four = default;
+        five = default; // CMU14
         utilityOne = default;
         utilityTwo = default;
         utilityThree = default;
@@ -1168,6 +1189,9 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 EntMan.TryGetComponent(contained, out DropshipWeaponComponent? weapon);
                 EntMan.TryGetComponent(contained, out RMCEquipmentDeployerComponent? deployer);
 
+                if (weapon?.DirectFireOnly == true)
+                    continue;
+
                 if (weapon == null && deployer == null)
                     continue;
 
@@ -1192,7 +1216,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 var order = hasLocation ? (int)location : int.MaxValue;
                 weapons.Add(new OrderedWeapon(data, order));
 
-                if (weapons.Count >= 4)
+                // CMU14: was capped at 4 then sorted, so the midway's fifth mount silently fell off the end
+                if (weapons.Count >= 5)
                     break;
             }
         }
@@ -1203,6 +1228,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         two = weapons.Count > 1 ? weapons[1].Data : null;
         three = weapons.Count > 2 ? weapons[2].Data : null;
         four = weapons.Count > 3 ? weapons[3].Data : null;
+        five = weapons.Count > 4 ? weapons[4].Data : null; // CMU14
 
         utility.TryGetValue(0, out utilityOne);
         utility.TryGetValue(1, out utilityTwo);

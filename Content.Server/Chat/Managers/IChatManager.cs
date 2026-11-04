@@ -25,6 +25,9 @@ namespace Content.Server.Chat.Managers
         void SendAdminAnnouncement(string message, AdminFlags? flagBlacklist = null, AdminFlags? flagWhitelist = null);
         void SendAdminAnnouncementMessage(ICommonSession player, string message, bool suppressLog = true);
 
+        // CMU14: unescaped variant of SendAdminAnnouncement for command links; the caller must escape all dynamic text
+        void SendAdminAnnouncementNoFormatOrEscape(string message);
+
         // RMC14
         void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat,
             INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false,
@@ -35,9 +38,9 @@ namespace Content.Server.Chat.Managers
         // RMC14
 
         void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay,
-            IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false);
+            IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false, Color? backgroundColorOverride = null, Color? accentColorOverride = null);
 
-        void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride, string? audioPath = null, float audioVolume = 0, bool hidePopup = false);
+        void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride, string? audioPath = null, float audioVolume = 0, bool hidePopup = false, Color? backgroundColorOverride = null, Color? accentColorOverride = null);
 
         void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false);
 
@@ -57,8 +60,9 @@ namespace Content.Server.Chat.Managers
         RateLimitStatus HandleRateLimit(ICommonSession player);
 
         // CMU14
-        string AddGhostFollowButton(string wrappedMessage, EntityUid source, INetChannel recipient);
         string AddXenoWatchButton(string wrappedMessage, EntityUid source, INetChannel recipient);
         // CMU14
+
+        string PrependFollowButtonIfAppropriate(string wrappedMessage, EntityUid source, INetChannel recipient);
     }
 }

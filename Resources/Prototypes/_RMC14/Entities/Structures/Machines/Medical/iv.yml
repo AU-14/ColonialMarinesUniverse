@@ -29,6 +29,7 @@
       map: [ "enum.IVDripVisualLayers.Base" ]
     - state: reagent0
       map: [ "enum.IVDripVisualLayers.Reagent" ]
+  - type: CMUBloodRefrigerator # CMU14: keeps hanging blood and plasma fresh
   - type: IVDrip
     reagentStates:
     - 0: reagent0
@@ -89,8 +90,9 @@
   - type: InjectableSolution
     solution: pack
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Glass
+  - type: Injurable
+    damageContainer: Inorganic
   - type: DamageOnHighSpeedImpact
     minimumSpeed: 2
     damage:
@@ -116,9 +118,12 @@
 - type: entity
   parent: CMBloodPack
   id: CMBloodPackFull # TODO RMC14 blood types
-  name: blood pack
-  suffix: CM, Full
+  name: blood pack (O-) # CMU14: O-, the universal donor
+  suffix: CM, Full, O-
   components:
+  - type: CMUBloodPackType # CMU14
+    bloodType: ONegative
+  - type: CMUPerishableBlood # CMU14: goes bad out of the fridge
   - type: SolutionContainerManager
     solutions:
       pack:

@@ -1,11 +1,10 @@
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Components.SolutionManager;
-using Content.Shared.Chemistry.Hypospray.Events;
+using Content.Shared.Chemistry.Events;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
-using Content.Shared.Forensics;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -21,6 +20,7 @@ namespace Content.Shared.Chemistry.EntitySystems;
 public sealed partial class HypospraySystem : EntitySystem
 {
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private ForensicsSystem _forensics = default!;
     [Dependency] private ReactiveSystem _reactiveSystem = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -97,15 +97,15 @@ public sealed partial class HypospraySystem : EntitySystem
                 return false;
         }
 
-        string? msgFormat = null;
-
         // Self event
-        var selfEvent = new SelfBeforeHyposprayInjectsEvent(user, entity.Owner, target);
+        var selfEvent = new SelfBeforeInjectEvent(user, entity.Owner, target);
         RaiseLocalEvent(user, selfEvent);
 
         if (selfEvent.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString(selfEvent.InjectMessageOverride ?? "hypospray-cant-inject", ("owner", Identity.Entity(target, EntityManager))), target, user);
+            var message = selfEvent.OverrideMessage ??
+                          Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager)));
+            _popup.PopupEntity(message, target, user);
             return false;
         }
 
@@ -115,12 +115,14 @@ public sealed partial class HypospraySystem : EntitySystem
             return false;
 
         // Target event
-        var targetEvent = new TargetBeforeHyposprayInjectsEvent(user, entity.Owner, target);
-        RaiseLocalEvent(target, targetEvent);
+        var targetEvent = new TargetBeforeInjectEvent(user, entity.Owner, target);
+        RaiseLocalEvent(target, ref targetEvent);
 
         if (targetEvent.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString(targetEvent.InjectMessageOverride ?? "hypospray-cant-inject", ("owner", Identity.Entity(target, EntityManager))), target, user);
+            var message = targetEvent.OverrideMessage ??
+                          Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager)));
+            _popup.PopupEntity(message, target, user);
             return false;
         }
 
@@ -129,27 +131,25 @@ public sealed partial class HypospraySystem : EntitySystem
         if (!EligibleEntity(target, component))
             return false;
 
-        // The target event gets priority for the overriden message.
-        if (targetEvent.InjectMessageOverride != null)
-            msgFormat = targetEvent.InjectMessageOverride;
-        else if (selfEvent.InjectMessageOverride != null)
-            msgFormat = selfEvent.InjectMessageOverride;
-        else if (target == user)
-            msgFormat = "hypospray-component-inject-self-message";
-
         if (!_solutionContainers.TryGetSolution(uid, component.SolutionName, out var hypoSpraySoln, out var hypoSpraySolution) || hypoSpraySolution.Volume == 0)
         {
-            _popup.PopupClient(Loc.GetString("hypospray-component-empty-message"), target, user);
+            _popup.PopupEntity(Loc.GetString("hypospray-component-empty-message"), target, user);
             return true;
         }
 
         if (!_solutionContainers.TryGetInjectableSolution(target, out var targetSoln, out var targetSolution))
         {
-            _popup.PopupClient(Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager))), target, user);
+            _popup.PopupEntity(Loc.GetString("hypospray-cant-inject", ("target", Identity.Entity(target, EntityManager))), target, user);
             return false;
         }
 
-        _popup.PopupClient(Loc.GetString(msgFormat ?? "hypospray-component-inject-other-message", ("other", target)), target, user);
+        // Overrides are already localized strings. Preserve the old target-over-self priority.
+        var successMessage = targetEvent.OverrideMessage ??
+                             selfEvent.OverrideMessage ??
+                             (target == user
+                                 ? Loc.GetString("hypospray-component-inject-self-message")
+                                 : Loc.GetString("hypospray-component-inject-other-message", ("other", target)));
+        _popup.PopupEntity(successMessage, target, user);
 
         if (target != user)
         {
@@ -170,7 +170,7 @@ public sealed partial class HypospraySystem : EntitySystem
 
         if (realTransferAmount <= 0)
         {
-            _popup.PopupClient(Loc.GetString("hypospray-component-transfer-already-full-message", ("owner", target)), target, user);
+            _popup.PopupEntity(Loc.GetString("hypospray-component-transfer-already-full-message", ("owner", target)), target, user);
             return true;
         }
 
@@ -182,8 +182,7 @@ public sealed partial class HypospraySystem : EntitySystem
         _reactiveSystem.DoEntityReaction(target, removedSolution, ReactionMethod.Injection);
         _solutionContainers.TryAddSolution(targetSoln.Value, removedSolution);
 
-        var ev = new TransferDnaEvent { Donor = target, Recipient = uid };
-        RaiseLocalEvent(target, ref ev);
+        _forensics.TransferDna(uid, target);
 
         // same LogType as syringes...
         _adminLogger.Add(LogType.ForceFeed, $"{ToPrettyString(user):user} injected {ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {ToPrettyString(uid):using}");
@@ -205,7 +204,7 @@ public sealed partial class HypospraySystem : EntitySystem
 
         if (realTransferAmount <= 0)
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("injector-component-target-is-empty-message",
                     ("target", Identity.Entity(target, EntityManager))),
                 entity.Owner, user);
@@ -219,7 +218,7 @@ public sealed partial class HypospraySystem : EntitySystem
             return false;
         }
 
-        _popup.PopupClient(Loc.GetString("injector-component-draw-success-message",
+        _popup.PopupEntity(Loc.GetString("injector-component-draw-success-message",
             ("amount", removedSolution.Volume),
             ("target", Identity.Entity(target, EntityManager))), entity.Owner, user);
         return true;
@@ -230,10 +229,10 @@ public sealed partial class HypospraySystem : EntitySystem
         // TODO: Does checking for BodyComponent make sense as a "can be hypospray'd" tag?
         // In SS13 the hypospray ONLY works on mobs, NOT beakers or anything else.
         // But this is 14, we dont do what SS13 does just because SS13 does it.
-        return component.OnlyAffectsMobs
-            ? HasComp<SolutionContainerManagerComponent>(entity) &&
-              HasComp<MobStateComponent>(entity)
-            : HasComp<SolutionContainerManagerComponent>(entity);
+        if (component.OnlyAffectsMobs && !HasComp<MobStateComponent>(entity))
+            return false;
+
+        return _solutionContainers.TryGetInjectableSolution(entity, out _, out _);
     }
 
     #endregion
@@ -266,7 +265,7 @@ public sealed partial class HypospraySystem : EntitySystem
     {
         SetMode(entity, !entity.Comp.OnlyAffectsMobs);
         var msg = (entity.Comp.OnlyAffectsMobs && entity.Comp.CanContainerDraw) ? "hypospray-verb-mode-inject-mobs-only" : "hypospray-verb-mode-inject-all";
-        _popup.PopupClient(Loc.GetString(msg), entity, user);
+        _popup.PopupEntity(Loc.GetString(msg), entity, user);
     }
 
     public void SetMode(Entity<HyposprayComponent> entity, bool onlyAffectsMobs)

@@ -1,0 +1,54 @@
+- type: loadout
+  id: SynthWebbingSurgicalBlueAU14
+  cost: 10
+  inhand:
+  - CMWebbingSurgicalBlue
+
+- type: loadout
+  id: SynthWebbingSurgicalGreenCMU14
+  cost: 10
+  inhand:
+  - CMWebbingSurgicalGreen
+
+- type: loadout
+  id: SynthDropSurgicalGreenCMU14
+  cost: 10
+  inhand:
+  - CMU14DropSurgicalGreen
+
+- type: loadout
+  id: SynthDropSurgicalBlueCMU14
+  cost: 10
+  inhand:
+  - CMU14DropSurgicalBlue
+
+- type: loadout
+  id: SynthDropSurgicalBlackCMU14
+  cost: 10
+  inhand:
+  - CMU14DropSurgicalBlack
+
+- type: loadout
+  id: SynthToolWebbingFilledAU14
+  cost: 10
+  inhand:
+  - RMCToolWebbingFilled
+
+- type: loadout
+  id: SynthWebbingDropPouchAU14
+  cost: 2
+  storage:
+    back:
+    - RMCWebbingDropPouch
+
+- type: loadout
+  id: SynthWebbingBlackAU14
+  cost: 2
+  inhand:
+  - CMWebbingBlack
+
+- type: loadout
+  id: SynthWebbingBrownAU14
+  cost: 2
+  inhand:
+  - CMWebbingBrown

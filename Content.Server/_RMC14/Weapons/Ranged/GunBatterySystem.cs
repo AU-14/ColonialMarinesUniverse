@@ -1,8 +1,11 @@
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared._RMC14.Weapons.Ranged.Battery;
+using Content.Shared.Power;
+using Content.Shared.Power.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Weapons.Ranged;
 
@@ -11,6 +14,7 @@ public sealed partial class GunBatterySystem : EntitySystem
     [Dependency] private BatterySystem _battery = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private RMCGunBatterySystem _gunBattery = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private EntityQuery<GunDrainBatteryOnShootComponent> _gunDrainBatteryQuery;
     private EntityQuery<BatteryComponent> _batteryQuery;
@@ -21,6 +25,7 @@ public sealed partial class GunBatterySystem : EntitySystem
         _batteryQuery = GetEntityQuery<BatteryComponent>();
 
         SubscribeLocalEvent<GunDrainBatteryOnShootComponent, MapInitEvent>(OnDrainMapInit);
+        SubscribeLocalEvent<GunDrainBatteryOnShootComponent, GunBatteryDrainChangedEvent>(OnDrainChanged);
         SubscribeLocalEvent<GunDrainBatteryOnShootComponent, GunShotEvent>(OnDrainBatteryShot);
         SubscribeLocalEvent<GunDrainBatteryOnShootComponent, EntInsertedIntoContainerMessage>(OnDrainInserted);
         SubscribeLocalEvent<GunDrainBatteryOnShootComponent, EntRemovedFromContainerMessage>(OnDrainRemoved);
@@ -50,14 +55,21 @@ public sealed partial class GunBatterySystem : EntitySystem
         if (!_container.TryGetContainer(ent, ent.Comp.BatteryContainer, out var container))
             return;
 
-        var left = ent.Comp.Drain;
+        var left = 0f;
+        foreach (var _ in args.Ammo)
+        {
+            left += ent.Comp.MinDrainMultiplier < 1
+                ? ent.Comp.Drain * _random.NextFloat(ent.Comp.MinDrainMultiplier, 1)
+                : ent.Comp.Drain;
+        }
         foreach (var contained in container.ContainedEntities)
         {
             if (!_batteryQuery.TryComp(contained, out var cell))
                 continue;
 
-            var change = Math.Min(left, cell.CurrentCharge);
-            _battery.SetCharge(contained, cell.CurrentCharge - change, cell);
+            var currentCharge = _battery.GetCharge((contained, cell));
+            var change = Math.Min(left, currentCharge);
+            _battery.SetCharge((contained, cell), currentCharge - change);
 
             left -= change;
             if (left <= 0)
@@ -67,10 +79,19 @@ public sealed partial class GunBatterySystem : EntitySystem
         UpdatePowered(ent, container);
     }
 
+    private void OnDrainChanged(Entity<GunDrainBatteryOnShootComponent> ent, ref GunBatteryDrainChangedEvent args)
+    {
+        if (_container.TryGetContainer(ent, ent.Comp.BatteryContainer, out var container))
+            UpdatePowered(ent, container);
+    }
+
     private void OnDrainInserted(Entity<GunDrainBatteryOnShootComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
         if (args.Container.ID != ent.Comp.BatteryContainer)
             return;
+
+        if (_batteryQuery.HasComp(args.Entity))
+            EnsureComp<BatteryInGunComponent>(args.Entity);
 
         UpdatePowered(ent, args.Container);
     }
@@ -104,7 +125,7 @@ public sealed partial class GunBatterySystem : EntitySystem
         foreach (var contained in container.ContainedEntities)
         {
             if (!_batteryQuery.TryComp(contained, out var battery) ||
-                battery.CurrentCharge < gun.Comp.Drain)
+                _battery.GetCharge((contained, battery)) < gun.Comp.Drain)
             {
                 continue;
             }

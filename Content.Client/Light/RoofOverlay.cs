@@ -17,15 +17,17 @@ public sealed partial class RoofOverlay : Overlay
 {
     private readonly IEntityManager _entManager;
     [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IOverlayManager _overlay = default!;
 
     private readonly EntityLookupSystem _lookup;
     private readonly SharedMapSystem _mapSystem;
     private readonly SharedRoofSystem _roof = default!;
     private readonly SharedTransformSystem _xformSystem;
+    private readonly TurfSystem _turf;
 
     private List<Entity<MapGridComponent>> _grids = new();
+    private readonly HashSet<Vector2i> _entityRoofTiles = new(); // CMU14
+    private readonly Dictionary<Vector2i, Color> _entityRoofColors = new(); // CMU14
 
     public override OverlaySpace Space => OverlaySpace.BeforeLighting;
 
@@ -40,6 +42,7 @@ public sealed partial class RoofOverlay : Overlay
         _mapSystem = _entManager.System<SharedMapSystem>();
         _roof = _entManager.System<SharedRoofSystem>();
         _xformSystem = _entManager.System<SharedTransformSystem>();
+        _turf = _entManager.System<TurfSystem>();
 
         ZIndex = ContentZIndex;
     }
@@ -83,11 +86,14 @@ public sealed partial class RoofOverlay : Overlay
 
                     worldHandle.SetTransform(matty);
 
-                    var tileEnumerator = _mapSystem.GetTilesEnumerator(grid.Owner, grid, bounds);
+                    var tileEnumerator = _mapSystem.GetTilesIntersecting(grid.Owner, grid, bounds);
                     var color = roof.Color;
 
                     while (tileEnumerator.MoveNext(out var tileRef))
                     {
+                        if (_turf.IsSpace(tileRef))
+                            continue;
+
                         var local = _lookup.GetLocalBounds(tileRef, grid.Comp.TileSize);
                         worldHandle.DrawRect(local, color);
                     }
@@ -113,13 +119,22 @@ public sealed partial class RoofOverlay : Overlay
 
                     worldHandle.SetTransform(matty);
 
-                    var tileEnumerator = _mapSystem.GetTilesEnumerator(grid.Owner, grid, bounds);
+                    var tileEnumerator = _mapSystem.GetTilesIntersecting(grid.Owner, grid, bounds);
                     var roofEnt = (grid.Owner, grid.Comp, roof);
+                    // CMU14: batch proven roof coverage; retain exact checks for fixture edges and containers.
+                    var localBounds = _xformSystem.GetInvWorldMatrix(grid.Owner).TransformBox(bounds.CalcBoundingBox());
+                    _roof.GetEntityRoofColors(roofEnt, localBounds, _entityRoofColors, _entityRoofTiles);
 
                     // Due to stencilling we essentially draw on unrooved tiles
                     while (tileEnumerator.MoveNext(out var tileRef))
                     {
-                        var color = _roof.GetColor(roofEnt, tileRef.GridIndices);
+                        if (_turf.IsSpace(tileRef))
+                            continue;
+
+                        // CMU14
+                        var index = tileRef.GridIndices;
+                        var color = _roof.GetColor(roofEnt, index, _entityRoofTiles.Contains(index),
+                            _entityRoofColors.TryGetValue(index, out var entityColor) ? entityColor : null);
 
                         if (color == null)
                         {

@@ -3,9 +3,11 @@
   alias:
   - rmcdistresssignal
   - cmdistresssignal
-  - rmcds
   name: rmc-distress-signal-title
   description: rmc-distress-signal-description
   showInVote: false
+  # CMU14 Start: per-preset dropship fabricator points
+  dropshipFabricatorStartingPoints: 18000
+  # CMU14 End
   rules:
   - CMDistressSignal

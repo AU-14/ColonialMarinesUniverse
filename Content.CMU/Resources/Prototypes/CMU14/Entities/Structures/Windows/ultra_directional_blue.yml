@@ -1,0 +1,12 @@
+- type: entity
+  parent: CMWindowUltraDirectional
+  id: CMUWindowUltraDirectionalBlue
+  suffix: Blue
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Windows/directional.rsi
+    state: window
+    color: "#969696"
+  - type: Icon
+    sprite: _RMC14/Structures/Windows/directional.rsi
+    state: window

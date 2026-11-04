@@ -1,13 +1,15 @@
-using Content.Shared._CMU14.Intel;
+using Content.Shared.CMU14.Intel;
 using Content.Shared._RMC14.Intel;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
-namespace Content.IntegrationTests._CMU14.Intel;
+namespace Content.IntegrationTests.CMU14.Intel;
 
 [TestFixture]
 public sealed class IntelConsoleClaimPrototypeTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUComputerIntelCLFClaimablePrototype = "CMUComputerIntelCLFClaimable";
+
     [Test]
     public async Task ClfBaseIntelConsoleIsClaimableByGovfor()
     {
@@ -18,7 +20,7 @@ public sealed class IntelConsoleClaimPrototypeTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.ResolveDependency<IComponentFactory>();
-            var prototype = prototypes.Index<EntityPrototype>("CMUComputerIntelCLFClaimable");
+            var prototype = prototypes.Index<EntityPrototype>(CMUComputerIntelCLFClaimablePrototype);
 
             Assert.Multiple(() =>
             {
@@ -26,7 +28,7 @@ public sealed class IntelConsoleClaimPrototypeTest
                 Assert.That(prototype.TryComp<ClaimableIntelConsoleComponent>(out var claim, factory), Is.True);
                 Assert.That(claim!.ClaimingTeam, Is.EqualTo(Team.GovFor));
                 Assert.That(claim.RequiredPreset, Is.EqualTo("Insurgency"));
-                Assert.That(claim.ClaimTime, Is.EqualTo(TimeSpan.FromSeconds(10)));
+                Assert.That(claim.ClaimTime, Is.EqualTo(TimeSpan.FromSeconds(45)));
             });
         });
 

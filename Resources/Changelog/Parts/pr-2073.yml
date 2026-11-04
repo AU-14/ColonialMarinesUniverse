@@ -1,0 +1,16 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Reduced allocation spikes when dumping, deleting, or filling storage.
+  type: Fix
+- message: Fixed repeated deleted-entity errors affecting fighter cameras, resin traps,
+    secretion ownership, and weapon locks.
+  type: Fix
+- message: Fixed interrupted fire and dropship processing, unnecessary plant updates,
+    and chemistry simulator readiness errors.
+  type: Fix
+- message: Recover identical admin-log writes after an ambiguous commit without discarding
+    conflicting records; improve long-stall diagnostics.
+  type: Admin
+time: '2026-10-03T17:50:34.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2073

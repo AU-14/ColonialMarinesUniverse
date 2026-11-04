@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Wieldable.Events;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.ActionBlocker;
+using Content.Shared.CMU14.Attachable; // CMU14
 using Content.Shared.Containers;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
@@ -95,35 +96,40 @@ public sealed partial class AttachableHolderSystem : EntitySystem
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-barrel");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCActivateAttachableRail,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-rail");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCActivateAttachableStock,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-stock");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCActivateAttachableUnderbarrel,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             ToggleAttachable(userUid, "rmc-aslot-underbarrel");
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Bind(CMKeyFunctions.RMCFieldStripHeldItem,
                 InputCmdHandler.FromDelegate(session =>
                     {
                         if (session?.AttachedEntity is { } userUid)
                             FieldStripHeldItem(userUid);
                     },
-                    handle: false))
+                    handle: false,
+                    outsidePrediction: false))
             .Register<AttachableHolderSystem>();
     }
 
@@ -134,6 +140,7 @@ public sealed partial class AttachableHolderSystem : EntitySystem
 
     private void OnHolderMapInit(Entity<AttachableHolderComponent> holder, ref MapInitEvent args)
     {
+        EnsureCMUSlingSlot(holder); // CMU14: compatible weapons have a dedicated sling mount.
         var xform = Transform(holder.Owner);
         var coords = new EntityCoordinates(holder.Owner, Vector2.Zero);
         var doRandom = _random.Prob(holder.Comp.RandomAttachmentChance);
@@ -152,10 +159,15 @@ public sealed partial class AttachableHolderSystem : EntitySystem
             if (attachment == null)
                 continue;
 
-            var container = _container.EnsureContainer<ContainerSlot>(holder, slotId);
-            container.OccludesLight = false;
-
             var attachableUid = Spawn(attachment, coords);
+            // CMU14: loadout slings use their own mount, leaving the rail free.
+            var targetSlot = TryComp<CMUSlingComponent>(attachableUid, out var sling) &&
+                             sling.Mount == CMUSlingMount.Sling &&
+                             holder.Comp.Slots.ContainsKey(CMUSlingSlot)
+                ? CMUSlingSlot
+                : slotId;
+            var container = _container.EnsureContainer<ContainerSlot>(holder, targetSlot);
+            container.OccludesLight = false;
             if (!_container.Insert(attachableUid, container, containerXform: xform))
                 continue;
         }
@@ -539,11 +551,11 @@ public sealed partial class AttachableHolderSystem : EntitySystem
             return false;
 
         if (!string.IsNullOrWhiteSpace(slotId))
-            return _whitelist.IsWhitelistPass(holder.Comp.Slots[slotId].Whitelist, attachableUid);
+            return IsCMUSlotCompatible(holder, slotId, attachableUid); // CMU14: sling mounting mode.
 
         foreach (var key in holder.Comp.Slots.Keys)
         {
-            if (_whitelist.IsWhitelistPass(holder.Comp.Slots[key].Whitelist, attachableUid))
+            if (IsCMUSlotCompatible(holder, key, attachableUid)) // CMU14: sling mounting mode.
             {
                 slotId = key;
                 return true;
@@ -619,7 +631,7 @@ public sealed partial class AttachableHolderSystem : EntitySystem
 
         foreach (var slotId in holder.Comp.Slots.Keys)
         {
-            if (_whitelist.IsWhitelistPass(holder.Comp.Slots[slotId].Whitelist, attachableUid) && (!ignoreLock || !holder.Comp.Slots[slotId].Locked))
+            if (IsCMUSlotCompatible(holder, slotId, attachableUid) && (!ignoreLock || !holder.Comp.Slots[slotId].Locked)) // CMU14: sling mounting mode.
                 list.Add(slotId);
         }
 
@@ -676,22 +688,35 @@ public sealed partial class AttachableHolderSystem : EntitySystem
         Dirty(holder);
     }
 
-    public bool TryGetInhandSupercedingGun(EntityUid user, out EntityUid attachable, [NotNullWhen(true)] out GunComponent? gunComp)
+    public bool TryGetSupercedingGun(Entity<AttachableHolderComponent?> holder, out Entity<GunComponent> gun)
     {
-        attachable = default;
+        gun = default;
 
-        if (_hands.GetActiveItem(user) is not { } active ||
-            !TryComp(active, out AttachableHolderComponent? holderComp) ||
-            holderComp.SupercedingAttachable == null)
+        if (!Resolve(holder, ref holder.Comp, false) ||
+            holder.Comp.SupercedingAttachable is not { } attachable ||
+            !TryComp(attachable, out GunComponent? gunComp))
         {
-            gunComp = null;
             return false;
         }
 
-        if(!TryComp(holderComp.SupercedingAttachable, out gunComp))
-            return false;
+        gun = (attachable, gunComp);
+        return true;
+    }
 
-        attachable = holderComp.SupercedingAttachable.Value;
+    public bool TryGetInhandSupercedingGun(EntityUid user, out EntityUid attachable, [NotNullWhen(true)] out GunComponent? gunComp)
+    {
+        attachable = default;
+        gunComp = null;
+
+        if (_hands.GetActiveItem(user) is not { } active ||
+            !TryComp(active, out AttachableHolderComponent? holderComp) ||
+            !TryGetSupercedingGun((active, holderComp), out var gun))
+        {
+            return false;
+        }
+
+        attachable = gun.Owner;
+        gunComp = gun.Comp;
         return true;
     }
 

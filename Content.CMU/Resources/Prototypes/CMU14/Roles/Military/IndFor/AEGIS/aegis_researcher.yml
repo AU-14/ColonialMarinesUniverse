@@ -1,0 +1,78 @@
+- type: job
+  parent: CMUJobBaseAegis
+  id: CMUJobAegisResearcher
+  name: cmu-job-name-aegis-researcher
+  description: cmu-job-description-aegis-researcher
+  startingGear: CMUGearAegisResearcher
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 2
+      RMCSkillMedical: 3
+      RMCSkillResearch: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-job-prefix-aegis-researcher
+
+- type: startingGear
+  id: CMUGearAegisResearcher
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianVirologist
+    outerClothing: RMCLabcoatVirology
+    gloves: CMHandsLatex
+    shoes: CMBootsBlackFilled
+    mask: CMMaskSterile
+    eyes: RMCGlassesReagentHUDGlasses
+    back: CMSatchelMedical
+    ears: AU14HeadsetGovforAuxiliary
+    id: CMUIDCardAegisResearcher
+  storage:
+    back:
+    - CMUStampAegis
+
+# ├──[ Spawnpoint ]──────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointAegisResearcher
+  name: AEGIS researcher spawn point
+  suffix: CMU, Job
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobAegisResearcher
+  - type: Sprite
+    state: x
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidAegisResearcher
+  name: AEGIS researcher
+  suffix: CMU, Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/aegis.rsi
+    state: keycard
+  - type: RandomHumanoidSpawner
+    settings: CMUSettingsAegisResearcher
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUSettingsAegisResearcher
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-aegis-researcher
+    description: cmu-ghost-role-information-aegis-researcher-description
+    rules: cmu-ghost-role-information-aegis-rules
+    reregister: false
+    job: CMUJobAegisResearcher
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+
+- type: roleLoadout
+  id: JobCMUJobAegisResearcher
+  points: 7
+  groups:
+  - AegisStampGroupCMU

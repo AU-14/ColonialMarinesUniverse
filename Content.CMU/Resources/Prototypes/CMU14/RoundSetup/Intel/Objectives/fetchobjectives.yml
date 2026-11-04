@@ -1,0 +1,306 @@
+- type: entity
+  parent: MarkerBase
+  id: fetchgenericmarker
+  name: Fetch Generic Marker
+  suffix: Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    generic: true
+
+# Category markers are also used as the parents for their objective prototypes.
+# This lets an objective placed on a map double as a spawn point for other fetch
+# objectives in the same category, while the generic marker remains a fallback
+# for older maps.
+- type: entity
+  parent: MarkerBase
+  id: fetchmedicalobjectivemarker
+  name: Fetch Medical Objective Marker
+  suffix: Medical Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchmedicalobjectivemarker
+
+- type: entity
+  parent: MarkerBase
+  id: fetchresearchobjectivemarker
+  name: Fetch Research Objective Marker
+  suffix: Research Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchresearchobjectivemarker
+
+- type: entity
+  parent: MarkerBase
+  id: fetchdataobjectivemarker
+  name: Fetch Data Objective Marker
+  suffix: Data Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchdataobjectivemarker
+
+- type: entity
+  parent: MarkerBase
+  id: fetchmilitaryobjectivemarker
+  name: Fetch Military Objective Marker
+  suffix: Military Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchmilitaryobjectivemarker
+
+- type: entity
+  name: Fetch Ore Objective
+  parent: MarkerBase
+  id: fetchoreobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchoreobj
+    factionNeutral: true
+    allowedPresets:
+    - Insurgency
+    - ColonyFall
+    factions:
+    - opfor
+    repeating: true
+    objectiveLevel: 3
+    customPoints: 100
+    maxRepeatable: 3
+    objectiveDescription: "Acquire Steel Ore"
+  - type: FetchObjective
+    targetPrototype: SteelOre
+    spawnMarkerId: fetchoreobjectivemarker
+    fetchCount: 500
+    useAnyEntity: true
+    catalog: false
+
+- type: entity
+  name: Fetch BlackBox Objective Spawn Marker
+  parent: MarkerBase
+  id: fetchoreobjectivemarker
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    fetchId: fetchoreobjectivemarker
+
+- type: entity
+  name: Fetch crown Objective
+  parent: fetchresearchobjectivemarker
+  id: fetchcrownobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchcrownobj
+    factionNeutral: false
+    allowedPresets:
+    - Insurgency
+    - ColonyFall
+    factions:
+    - opfor
+    - govfor
+    repeating: false
+    objectiveLevel: 3
+    customPoints: 100
+    roundEndMessage: Finding the Crown
+    objectiveDescription: "Retrieve the Alien Crown Artifact"
+  - type: FetchObjective
+    targetPrototype: ClothingHeadHatXmasCrown
+    spawnMarkerId: fetchresearchobjectivemarker
+    spawnCount: 1
+    fetchCount: 1
+
+- type: entity
+  name: Fetch AN/PRC-982 Objective
+  parent: fetchmilitaryobjectivemarker
+  id: fetchanprcobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchanprcobj
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    - Insurgency
+    - ColonyFall
+    factions:
+    - opfor
+    - govfor
+    - weyu
+    - CLF
+    repeating: false
+    objectiveLevel: 1
+    customPoints: 10
+    roundEndMessage: Finding the AN/PRC-982
+    objectiveDescription: "Retrieve the AN/PRC-982 portable radio transceiver box"
+  - type: FetchObjective
+    targetPrototype: AU14ObjectiveItemPortableRadioTransceiver
+    spawnMarkerId: fetchmilitaryobjectivemarker
+    spawnCount: 1
+    fetchCount: 1
+
+- type: entity
+  name: Fetch CIR-60 Blackbox Objective
+  parent: fetchdataobjectivemarker
+  id: fetchblackboxobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchblackboxobj
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    - DistressSignal
+    - ColonyFall
+    - Insurgency
+    factions:
+    - opfor
+    - govfor
+    - weyu
+    - CLF
+    repeating: false
+    objectiveLevel: 1
+    customPoints: 15
+    roundEndMessage: Finding the CIR-60 Blackbox
+    objectiveDescription: "Retrieve the CIR-60 'blackbox' colony information recorder"
+  - type: FetchObjective
+    targetPrototype: AU14ObjectiveItemBlackboxRecorder
+    spawnMarkerId: fetchdataobjectivemarker
+    spawnCount: 1
+    fetchCount: 1
+    useAnyEntity: true
+
+- type: entity
+  name: Fetch Nuclear Launch Codes Booklet Objective
+  parent: fetchmilitaryobjectivemarker
+  id: fetchnuclearlaunchcodesobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchnuclearlaunchcodesobj
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    - DistressSignal
+    - ColonyFall
+    - Insurgency
+    factions:
+    - opfor
+    - govfor
+    - weyu
+    - CLF
+    repeating: false
+    objectiveLevel: 1
+    customPoints: 10
+    roundEndMessage: Finding the Nuclear Launch Codes Booklet
+    objectiveDescription: "Retrieve the Nuclear Launch Codes Booklet"
+  - type: FetchObjective
+    targetPrototype: AU14ObjectiveItemNuclearLaunchCodes
+    spawnMarkerId: fetchmilitaryobjectivemarker
+    spawnCount: 1
+    fetchCount: 1
+
+- type: entity
+  name: Fetch Theater Operations Handbook Objective
+  parent: fetchmilitaryobjectivemarker
+  id: fetchtheaterhandbookobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchtheaterhandbookobj
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    - DistressSignal
+    - ColonyFall
+    - Insurgency
+    factions:
+    - opfor
+    - govfor
+    - weyu
+    - CLF
+    repeating: false
+    objectiveLevel: 1
+    customPoints: 10
+    roundEndMessage: Finding the Theater Operations Handbook
+    objectiveDescription: "Retrieve the Theater Operations Handbook"
+  - type: FetchObjective
+    targetPrototype: AU14ObjectiveItemTheaterHandbook
+    spawnMarkerId: fetchmilitaryobjectivemarker
+    spawnCount: 1
+    fetchCount: 1
+
+- type: entity
+  name: Fetch RCS-9 ARDSU Objective
+  parent: fetchdataobjectivemarker
+  id: fetchattmosdatastorageunitobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchdatastorageobj
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    - DistressSignal
+    - ColonyFall
+    - Insurgency
+    factions:
+    - opfor
+    - govfor
+    - weyu
+    - CLF
+    repeating: false
+    objectiveLevel: 1
+    customPoints: 15
+    roundEndMessage: Finding the RCS-9 ARDSUs
+    objectiveDescription: "Retrieve two ARCS-9 atmospheric radar data storage units"
+  - type: FetchObjective
+    targetPrototype: AU14ObjectiveItemAtmosphericRadarStorageUnit
+    spawnMarkerId: fetchdataobjectivemarker
+    spawnCount: 3
+    fetchCount: 2
+
+- type: entity
+  name: Fetch WY Laptop Objective
+  parent: fetchresearchobjectivemarker
+  id: fetchwylaptopobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchwylaptopobjj
+    factionNeutral: true
+    allowedPresets:
+    - ForceOnForce
+    - Insurgency
+    - DistressSignal
+    factions:
+    - opfor
+    - govfor
+    - CLF
+    repeating: false
+    objectiveLevel: 2
+    customPoints: 30
+    roundEndMessage: Finding the WY laptop
+    objectiveDescription: "Retrieve the Weyland-Yutani Research laptop."
+  - type: FetchObjective
+    targetPrototype: AU14ObjectiveItemWYLaptop
+    spawnMarkerId: fetchresearchobjectivemarker
+    spawnCount: 1
+    fetchCount: 1

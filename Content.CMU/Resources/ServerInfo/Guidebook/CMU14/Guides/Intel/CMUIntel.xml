@@ -1,0 +1,65 @@
+<Document>
+  # Intel
+
+  The colony is littered with intel: paper scraps, reports, folders, technical manuals and experimental devices. Gathering it earns your faction intel points. In Distress Signal and Force on Force, it's scattered across the map at the start of the round.
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCIntelPaperScrap" Caption="Paper scrap"/>
+    <GuideEntityEmbed Entity="RMCIntelProgressReport" Caption="Progress report"/>
+    <GuideEntityEmbed Entity="RMCIntelFolder" Caption="Intel folder"/>
+    <GuideEntityEmbed Entity="RMCIntelTechnicalManual" Caption="Technical manual"/>
+  </Box>
+
+  ## Where to Look
+  - Intel turns up at set spots around each map, and now and then in any [bold]filing cabinet[/bold] or on any [bold]table[/bold]. Check the drawers.
+  - A [bold]data detector[/bold] beeps when intel or an objective item is nearby. Turn it on in your hand, and switch between short and long range.
+  - Recover the [bold]CIR-60 blackbox[/bold] objective at your Analyzer and it prints an [bold]intel survey[/bold]: the three areas of the map with the most intel still out there. It's a snapshot from the moment it prints, so move fast.
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCIntelDetector" Caption="Data detector"/>
+    <GuideEntityEmbed Entity="RMCIntelRetrieveHealthAnalyzer" Caption="Experimental device"/>
+  </Box>
+
+  ## Turning It In
+  Bring intel back to your faction's [bold]Analyzer Machine[/bold] and use it on the machine. The Analyzer credits its intel points to your faction.
+  - Each item can only be processed once. In Force on Force, whichever side gets it to their Analyzer first gets the points.
+  - You can also read a document in your hand to earn its points. Hand it in afterwards to finish it off.
+
+  ## The Intel Computer
+  <Box>
+    <GuideEntityEmbed Entity="RMCComputerIntelGovfor" Caption="Intel computer"/>
+  </Box>
+  Each faction's base also has an [bold]intel computer[/bold]. Instead of the item itself, you bring back what you've read.
+  - Read an intel document in your hand first. That earns its reading points for your faction, and you remember what it said.
+  - Click the intel computer with an empty hand to type it in. Each entry takes a couple of seconds, less with intel training, and it keeps going until you've uploaded everything you've read.
+  - Each entry unlocks the next intel that document points to and tells you where to find it, just like the Analyzer does.
+  - It can't handle experimental devices, since they can't be read. Those have to go to the Analyzer.
+
+  The two work together. A document you've read and uploaded can still be handed in at the Analyzer for its small recovery value, without paying out twice for the reading.
+
+  ## Encrypted Data Disks
+  <Box>
+    <GuideEntityEmbed Entity="CMUIntelDataDisk" Caption="Encrypted data disk"/>
+  </Box>
+  A handful of [bold]encrypted data disks[/bold] are hidden with the rest of the intel. Each one is worth a full intel point, but only the intel computer can crack them. The Analyzer can't read them at all.
+  - Hold the disk and click the intel computer with it to open the decryption terminal. Stay at the computer with the disk in hand while you work.
+  - The key is [bold]4 digits[/bold], each from [bold]0 to 5[/bold], and digits can repeat.
+  - Every guess is logged with pegs: a [color=#3DDC84]green[/color] peg for each digit that's right and in the right place, and a [color=#F5C542]yellow[/color] peg for each digit that's right but in the wrong place.
+  - There's no limit on attempts. Take your time.
+  - Type the code with your keyboard and press Enter, or use the on-screen keypad.
+  - Use the [bold]notes[/bold] row to mark digits as in or out of the code. The keypad is tinted to match.
+  - Press [bold]Use[/bold] next to an old guess to load it back in and tweak it. The terminal won't let you submit the same guess twice.
+  - Crack it and the disk uploads to that computer's faction and wipes itself.
+
+  Tip: start with guesses like 0011 and 2233 to find out which digits are in the key, then work out where they go.
+
+  ## Locked Intel and Clues
+  Intel is chained together. Most items start [bold]locked[/bold]: the Analyzer can't make sense of them until you've processed the intel that points to them.
+  - Processing an item unlocks the next pieces in the chain, and tells you where to find them, such as "a folder in the medbay".
+  - Start with the paper scraps, which are never locked, and follow the clues from there.
+
+  ## What It's Worth
+  - Paper scraps and reports are worth a little each; folders, technical manuals and especially experimental devices are worth more.
+  - A whole map's worth of intel adds up to around 37 intel points.
+  - See [textlink="Points" link="CMUGuideObjectivePoints"] for what you can spend them on.
+</Document>

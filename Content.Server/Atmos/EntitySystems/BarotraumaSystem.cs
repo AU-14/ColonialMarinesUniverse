@@ -3,7 +3,9 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.Components;
 using Content.Shared.Alert;
 using Content.Shared.Atmos;
-using Content.Shared.Damage;
+using Content.Shared.Damage; // CMU14
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -17,7 +19,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private DamageableSystem _damageableSystem = default!;
         [Dependency] private AlertsSystem _alertsSystem = default!;
-        [Dependency] private IAdminLogManager _adminLogger= default!;
+        [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private InventorySystem _inventorySystem = default!;
 
         private const float UpdateTimer = 1f;
@@ -27,27 +29,14 @@ namespace Content.Server.Atmos.EntitySystems
         {
             SubscribeLocalEvent<PressureProtectionComponent, GotEquippedEvent>(OnPressureProtectionEquipped);
             SubscribeLocalEvent<PressureProtectionComponent, GotUnequippedEvent>(OnPressureProtectionUnequipped);
-            SubscribeLocalEvent<PressureProtectionComponent, ComponentInit>(OnUpdateResistance);
+            SubscribeLocalEvent<PressureProtectionComponent, ComponentStartup>(OnUpdateResistance);
             SubscribeLocalEvent<PressureProtectionComponent, ComponentRemove>(OnUpdateResistance);
-
-            SubscribeLocalEvent<PressureImmunityComponent, ComponentInit>(OnPressureImmuneInit);
-            SubscribeLocalEvent<PressureImmunityComponent, ComponentRemove>(OnPressureImmuneRemove);
         }
 
-        private void OnPressureImmuneInit(EntityUid uid, PressureImmunityComponent pressureImmunity, ComponentInit args)
+        [SubscribeLocalEvent]
+        private void OnBarotraumaInit(Entity<BarotraumaComponent> ent, ref MapInitEvent args)
         {
-            if (TryComp<BarotraumaComponent>(uid, out var barotrauma))
-            {
-                barotrauma.HasImmunity = true;
-            }
-        }
-
-        private void OnPressureImmuneRemove(EntityUid uid, PressureImmunityComponent pressureImmunity, ComponentRemove args)
-        {
-            if (TryComp<BarotraumaComponent>(uid, out var barotrauma))
-            {
-                barotrauma.HasImmunity = false;
-            }
+            RefreshPressureImmunity(ent, ent.Comp);
         }
 
         /// <summary>
@@ -63,17 +52,17 @@ namespace Content.Server.Atmos.EntitySystems
 
         private void OnPressureProtectionEquipped(EntityUid uid, PressureProtectionComponent pressureProtection, GotEquippedEvent args)
         {
-            if (TryComp<BarotraumaComponent>(args.Equipee, out var barotrauma) && barotrauma.ProtectionSlots.Contains(args.Slot))
+            if (TryComp<BarotraumaComponent>(args.EquipTarget, out var barotrauma) && barotrauma.ProtectionSlots.Contains(args.Slot))
             {
-                UpdateCachedResistances(args.Equipee, barotrauma);
+                UpdateCachedResistances(args.EquipTarget, barotrauma);
             }
         }
 
         private void OnPressureProtectionUnequipped(EntityUid uid, PressureProtectionComponent pressureProtection, GotUnequippedEvent args)
         {
-            if (TryComp<BarotraumaComponent>(args.Equipee, out var barotrauma) && barotrauma.ProtectionSlots.Contains(args.Slot))
+            if (TryComp<BarotraumaComponent>(args.EquipTarget, out var barotrauma) && barotrauma.ProtectionSlots.Contains(args.Slot))
             {
-                UpdateCachedResistances(args.Equipee, barotrauma);
+                UpdateCachedResistances(args.EquipTarget, barotrauma);
             }
         }
 
@@ -81,7 +70,8 @@ namespace Content.Server.Atmos.EntitySystems
         /// Computes the pressure resistance for the entity coming from the equipment and any innate resistance.
         /// The ProtectionSlots field of the Barotrauma component specifies which parts must be protected for the protection to have any effet.
         /// </summary>
-        private void UpdateCachedResistances(EntityUid uid, BarotraumaComponent barotrauma)
+        // CMU14: made public so the life support grant can recache when gear is already worn.
+        public void UpdateCachedResistances(EntityUid uid, BarotraumaComponent barotrauma)
         {
 
             if (barotrauma.ProtectionSlots.Count != 0)
@@ -167,6 +157,19 @@ namespace Content.Server.Atmos.EntitySystems
             return Math.Max(modified, Atmospherics.OneAtmosphere);
         }
 
+        /// <summary>
+        /// Refreshes whether the entity is immune to pressure damage.
+        /// </summary>
+        public void RefreshPressureImmunity(EntityUid uid, BarotraumaComponent? barotrauma = null)
+        {
+            if (!Resolve(uid, ref barotrauma, false))
+                return;
+
+            var ev = new RefreshPressureImmunityEvent();
+            RaiseLocalEvent(uid, ref ev);
+            barotrauma.HasImmunity = ev.IsImmune;
+        }
+
         public bool TryGetPressureProtectionValues(
             Entity<PressureProtectionComponent?> ent,
             [NotNullWhen(true)] out float? highMultiplier,
@@ -210,9 +213,10 @@ namespace Content.Server.Atmos.EntitySystems
             while (enumerator.MoveNext(out var uid, out var barotrauma, out var damageable))
             {
                 var totalDamage = FixedPoint2.Zero;
+                var damageSpecifier = _damageableSystem.GetAllDamage((uid, damageable));
                 foreach (var (barotraumaDamageType, _) in barotrauma.Damage.DamageDict)
                 {
-                    if (!damageable.Damage.DamageDict.TryGetValue(barotraumaDamageType, out var damage))
+                    if (!damageSpecifier.DamageDict.TryGetValue(barotraumaDamageType, out var damage))
                         continue;
                     totalDamage += damage;
                 }
@@ -237,7 +241,10 @@ namespace Content.Server.Atmos.EntitySystems
                 if (pressure <= Atmospherics.HazardLowPressure)
                 {
                     // Deal damage and ignore resistances. Resistance to pressure damage should be done via pressure protection gear.
-                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false);
+                    // CMU14: pressure injury must not produce impact blood splatter.
+                    // _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false);
+                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * Atmospherics.LowPressureDamage, true, false,
+                        impact: DamageImpact.Generic with { Delivery = DamageImpactDelivery.Environment });
 
                     if (!barotrauma.TakingDamage)
                     {
@@ -252,7 +259,10 @@ namespace Content.Server.Atmos.EntitySystems
                     var damageScale = MathF.Min(((pressure / Atmospherics.HazardHighPressure) - 1) * Atmospherics.PressureDamageCoefficient, Atmospherics.MaxHighPressureDamage);
 
                     // Deal damage and ignore resistances. Resistance to pressure damage should be done via pressure protection gear.
-                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false);
+                    // CMU14: pressure injury must not produce impact blood splatter.
+                    // _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false);
+                    _damageableSystem.TryChangeDamage(uid, barotrauma.Damage * damageScale, true, false,
+                        impact: DamageImpact.Generic with { Delivery = DamageImpactDelivery.Environment });
 
                     if (!barotrauma.TakingDamage)
                     {

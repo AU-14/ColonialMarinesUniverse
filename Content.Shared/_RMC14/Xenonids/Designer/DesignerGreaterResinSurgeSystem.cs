@@ -18,9 +18,6 @@ namespace Content.Shared._RMC14.Xenonids.Designer;
 
 public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
 {
-    private const float EffectSearchPaddingMultiplier = 2f;
-
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -31,6 +28,8 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
+
+    private const float EffectSearchPaddingMultiplier = 2f;
 
     public override void Initialize()
     {
@@ -88,7 +87,7 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
         // Server-authoritative cooldown gate (action useDelay is UI-side).
         if (_timing.CurTime < ent.Comp.NextGreaterResinSurgeAt)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-cooldown"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-cooldown"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -140,7 +139,7 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
 
         if (tileCenters.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-none"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-none"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -219,7 +218,7 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
                 continue;
 
             // Spawn after the enumerator is disposed to avoid modifying anchored entity collections mid-iteration.
-            var spawned = Spawn(pending.WallPrototype, tileCenter.SnapToGrid(EntityManager, _map));
+            var spawned = Spawn(pending.WallPrototype, tileCenter.SnapToGrid(EntityManager));
             _hive.SetSameHive(user, spawned);
 
             foreach (var nodeUid in nodesToConvert)
@@ -230,9 +229,9 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
         }
 
         if (affected == 0)
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-none"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-none"), user, user, PopupType.SmallCaution);
         else
-            _popup.PopupClient(Loc.GetString("rmc-xeno-designer-greater-surge-success", ("count", affected)), user, user, PopupType.Small);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-designer-greater-surge-success", ("count", affected)), user, user, PopupType.Small);
     }
 
     private void CleanupEffects(DesignerGreaterResinSurgePendingComponent pending)

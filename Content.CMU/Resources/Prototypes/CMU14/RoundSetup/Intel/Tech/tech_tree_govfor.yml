@@ -1,0 +1,7 @@
+# Fallback list for GOVFOR platoons that don't name their own tech tree (IntelSystem looks this ID up).
+# Platoons pick their faction list in platoons.yml; see Factions/.
+- type: entity
+  parent: CMUIntelTechTree_UA
+  id: CMUIntelTechTree_GOVFOR
+  name: intel tech tree (GovFor)
+  categories: [ HideSpawnMenu ]

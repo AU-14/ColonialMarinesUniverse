@@ -1,0 +1,87 @@
+- type: entity
+  parent: RMCBaseWeaponLauncher
+  id: RuMCWeaponLauncherDisposableIncen
+  name: RPO-Pchela
+  description: "RPO-Pchela is a single-use rocket launcher with an incendiary warhead. It doesn't blast — it burns. When it hits, the area is covered in burning mixture."
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpo.rsi
+    layers:
+      - state: icon
+        map: ["enum.GunVisualLayers.Base"]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpo.rsi
+  - type: Item
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpo.rsi
+  - type: BallisticAmmoProvider
+    proto: RMCRocketHJRA12Incen
+    cycleable: false
+    whitelist:
+      tags: []
+  - type: RMCFoldableGun
+    foldDelay: 1.95
+    foldText: rmc-gun-foldable-launcher-fold-self
+    foldTextOthers: rmc-gun-foldable-launcher-fold-others
+    finishText: rmc-gun-foldable-launcher-fold-finish-self
+    finishTextOthers: rmc-gun-foldable-launcher-fold-finish-others
+    toggleFoldSound:
+      path: /Audio/_RMC14/Weapons/Handling/component_pickup.ogg
+      params:
+        variation: 0.2
+    foldedEntity: RuMCWeaponLauncherDisposableFoldedIncen
+
+- type: entity
+  parent: [BaseItem, RMCBaseMeleeWeapon]
+  id: RuMCWeaponLauncherDisposableFoldedIncen
+  name: RPO-Pchela
+  description: "RPO-Pchela is a single-use rocket launcher with an incendiary warhead. It doesn't blast — it burns. When it hits, the area is covered in burning mixture."
+  suffix: Folded
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpo.rsi
+    state: icon-folded
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpo.rsi
+    equippedPrefix: folded
+    quickEquip: false
+    slots:
+    - suitStorage
+  - type: Item
+    sprite: _RuMC14/Objects/Weapons/Guns/RocketLaunchers/rpo.rsi
+    heldPrefix: folded
+    size: Normal
+  - type: RMCFoldableGun
+    foldDelay: 7
+    foldText: rmc-gun-foldable-launcher-unfold-self
+    foldTextOthers: rmc-gun-foldable-launcher-unfold-others
+    finishText: rmc-gun-foldable-launcher-unfold-finish-self
+    finishTextOthers: rmc-gun-foldable-launcher-unfold-finish-others
+    toggleFoldSound:
+      path: /Audio/_RMC14/Weapons/Handling/component_pickup.ogg
+      params:
+        variation: 0.2
+    foldedEntity: RuMCWeaponLauncherDisposableIncen
+    examineText: rmc-gun-foldable-launcher-examine-unfold
+    onActivate: true
+  - type: EmitSoundOnPickup
+    sound:
+      collection: RMCEquipGun
+      params:
+        volume: -6
+  - type: EmitSoundOnDrop
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      collection: GenericHit

@@ -39,10 +39,11 @@
     whitelist:
       tags:
       - Matchstick
-  - type: StorageFill
-    contents:
-    - id: RMCMatchstickPaper
-      amount: 6
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: RMCMatchstickPaper
+        amount: 6
   - type: ItemCounter
     count:
       tags: [Matchstick]

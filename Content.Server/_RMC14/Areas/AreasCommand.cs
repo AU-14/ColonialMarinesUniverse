@@ -58,6 +58,97 @@ public sealed partial class AreasCommand : ToolshedCommand
         Load(a => a.MortarFire);
     }
 
+    [CommandImplementation("cleanup")]
+    public void Cleanup([CommandInvocationContext] IInvocationContext ctx)
+    {
+        _map = GetSys<MapSystem>();
+
+        var areaSystem = GetSys<AreaSystem>();
+        var gridQuery = GetEntityQuery<MapGridComponent>();
+        var areaQuery = GetEntityQuery<AreaComponent>();
+        var emptyAreaTiles = new List<(EntityUid GridId,
+            MapGridComponent Grid,
+            TransformComponent GridXform,
+            HashSet<Vector2i> Indices)>();
+        var removedSavedAreas = 0;
+
+        var areaGridQuery = EntityManager.AllEntityQueryEnumerator<AreaGridComponent, MapGridComponent, TransformComponent>();
+        while (areaGridQuery.MoveNext(out var gridId, out var areaGrid, out var grid, out var gridXform))
+        {
+            var emptyTiles = new HashSet<Vector2i>();
+            foreach (var indices in new List<Vector2i>(areaGrid.Areas.Keys))
+            {
+                if (!_map.GetTileRef(gridId, grid, indices).Tile.IsEmpty)
+                    continue;
+
+                emptyTiles.Add(indices);
+                areaSystem.RemoveArea(areaGrid, indices);
+                removedSavedAreas++;
+            }
+
+            if (emptyTiles.Count == 0)
+                continue;
+
+            emptyAreaTiles.Add((gridId, grid, gridXform, emptyTiles));
+            EntityManager.Dirty(gridId, areaGrid);
+        }
+
+        var transformSystem = GetSys<SharedTransformSystem>();
+        var toDelete = new List<EntityUid>();
+        var removedAreaEntities = 0;
+
+        var entityQuery = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+        while (entityQuery.MoveNext(out var uid, out var xform))
+        {
+            if (uid == xform.MapUid || uid == xform.GridUid)
+                continue;
+
+            var overEmptyTile = false;
+            if (xform.GridUid is { } gridId)
+            {
+                if (!gridQuery.TryComp(gridId, out var grid) ||
+                    !_map.GetTileRef(gridId, grid, xform.Coordinates).Tile.IsEmpty)
+                {
+                    continue;
+                }
+
+                overEmptyTile = true;
+            }
+            else if (emptyAreaTiles.Count > 0)
+            {
+                var mapCoordinates = transformSystem.ToMapCoordinates(xform.Coordinates);
+                foreach (var emptyAreaGrid in emptyAreaTiles)
+                {
+                    if (mapCoordinates.MapId != emptyAreaGrid.GridXform.MapID ||
+                        !emptyAreaGrid.Indices.Contains(_map.WorldToTile(emptyAreaGrid.GridId,
+                            emptyAreaGrid.Grid,
+                            mapCoordinates.Position)))
+                    {
+                        continue;
+                    }
+
+                    overEmptyTile = true;
+                    break;
+                }
+            }
+
+            if (!overEmptyTile)
+                continue;
+
+            toDelete.Add(uid);
+            if (areaQuery.HasComp(uid))
+                removedAreaEntities++;
+        }
+
+        foreach (var uid in toDelete)
+        {
+            QDel(uid);
+        }
+
+        ctx.WriteLine($"Removed {toDelete.Count} entities ({removedAreaEntities} areas) and " +
+                      $"{removedSavedAreas} saved areas from empty tiles.");
+    }
+
     private void Load(Predicate<AreaComponent> predicate)
     {
         _map = GetSys<MapSystem>();

@@ -1,0 +1,105 @@
+# One-directional waste dump: no pump, no power. Deletes inlet line gas into
+# open sky, so it needs a roofless tile (the same exposure rule outdoor
+# relaxation uses). Faster than venting through a passive vent because the tile
+# and LINDA never sit in the path.
+# Screwdriver toggles open/closed. Multitool opens the service panel; with the
+# panel open, crowbar deconstructs.
+- type: entity
+  parent: ConstructibleMachine
+  id: CMUExhaustVent
+  name: EX-1 exhaust vent
+  suffix: CMU
+  description: "One-way waste dump. Discharges line gas into open sky; needs a clear stack above. Screwdriver opens/closes. Multitool opens the panel; pry to deconstruct."
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: WiresPanel
+    openingTool: Pulsing
+    examineTextClosed: cmu-zlevel-panel-closed
+    examineTextOpen: cmu-zlevel-panel-open
+  - type: Construction
+    graph: CMUExhaustVentGraph
+    node: built
+  - type: Machine
+    board: CMUExhaustVentMachineCircuitboard
+  - type: AtmosDevice
+  - type: CMUExhaustVent
+  - type: SubFloorHide
+    visibleLayers:
+    - enum.SubfloorLayers.FirstLayer
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _RMC14/Structures/Piping/Atmospherics/vent_scrubber.rsi
+    layers:
+    - state: pipeFourway
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+    - state: in
+      map: [ "enum.SubfloorLayers.FirstLayer" ]
+  - type: Appearance
+  - type: PipeColorVisuals
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: AtmosPipeLayers
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+# Direct build instead of the generic machine-frame flow: the construction menu
+# only lists isCM recipes, and the vent board has no crafting source anyway.
+# The Machine component still auto-stocks board and parts on spawn.
+- type: constructionGraph
+  id: CMUExhaustVentGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 5
+        doAfter: 2.5
+  - node: built
+    entity: CMUExhaustVent
+    edges:
+    - to: start
+      conditions:
+      - !type:WirePanel
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 5
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: construction
+  id: CMUExhaustVentRecipe
+  name: exhaust vent
+  description: A one-way waste dump that discharges line gas into open sky. Needs a clear stack above; screwdriver opens and closes it.
+  graph: CMUExhaustVentGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-atmospherics
+  objectType: Structure
+  placementMode: AlignAtmosPipeLayers
+  canRotate: false
+  isCM: true
+  conditions:
+  - !type:TileNotBlocked

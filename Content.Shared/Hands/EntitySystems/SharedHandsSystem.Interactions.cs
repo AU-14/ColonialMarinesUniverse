@@ -9,18 +9,14 @@ using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Localizations;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Hands.EntitySystems;
 
 public abstract partial class SharedHandsSystem : EntitySystem
 {
-    [Dependency] private INetManager _net = default!;
     [Dependency] private RMCHandsSystem _rmcHands = default!;
-    [Dependency] private IGameTiming _timing = default!;
 
     private void InitializeInteractions()
     {
@@ -93,33 +89,20 @@ public abstract partial class SharedHandsSystem : EntitySystem
 
     private void SwapHandsPressed(ICommonSession? session)
     {
-        SwapHands(session, false);
+        if (session?.AttachedEntity is not { } player)
+            return;
+
+        if (TryComp<HandsComponent>(player, out var hands))
+            SwapHands((player, hands), true, false);
     }
 
     private void SwapHandsReversePressed(ICommonSession? session)
     {
-        SwapHands(session, true);
-    }
-
-    private void SwapHands(ICommonSession? session, bool reverse)
-    {
-        if (!TryComp(session?.AttachedEntity, out HandsComponent? component))
+        if (session?.AttachedEntity is not { } player)
             return;
 
-        // if (!_actionBlocker.CanInteract(session.AttachedEntity.Value, null))
-        //     return;
-
-        if (component.ActiveHandId == null || component.Hands.Count < 2)
-            return;
-
-        var currentIndex = component.SortedHands.IndexOf(component.ActiveHandId);
-        var newActiveIndex = (currentIndex + (reverse ? -1 : 1) + component.Hands.Count) % component.Hands.Count;
-        var nextHand = component.SortedHands[newActiveIndex];
-
-        // RMC14
-        if (_net.IsClient && _timing.IsFirstTimePredicted)
-            RaisePredictiveEvent(new RequestSetHandEvent(nextHand));
-        // TrySetActiveHand((session.AttachedEntity.Value, component), nextHand);
+        if (TryComp<HandsComponent>(player, out var hands))
+            SwapHands((player, hands), true, true);
     }
 
     private bool DropPressed(ICommonSession? session, EntityCoordinates coords, EntityUid netEntity)
@@ -196,7 +179,7 @@ public abstract partial class SharedHandsSystem : EntitySystem
         if (!CanDropHeld(uid, handName, checkActionBlocker))
             return false;
 
-        if (!CanPickupToHand(uid, entity.Value, handsComp.ActiveHandId, checkActionBlocker, handsComp))
+        if (!CanPickupToHand(uid, entity.Value, handsComp.ActiveHandId, checkActionBlocker: checkActionBlocker, handsComp: handsComp))
             return false;
 
         DoDrop(uid, handName, false, log: false);

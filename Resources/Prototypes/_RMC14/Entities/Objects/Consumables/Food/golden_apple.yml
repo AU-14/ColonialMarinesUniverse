@@ -4,9 +4,8 @@
   name: golden apple
   description: Emblazoned upon the apple is the word 'Kallisti'.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: Nutriment

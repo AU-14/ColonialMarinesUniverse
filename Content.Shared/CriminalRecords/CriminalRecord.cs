@@ -1,4 +1,5 @@
 using Content.Shared.Security;
+using Content.Shared.StationRecords;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CriminalRecords;
@@ -7,8 +8,8 @@ namespace Content.Shared.CriminalRecords;
 /// Criminal record for a crewmember.
 /// Can be viewed and edited in a criminal records console by security.
 /// </summary>
-[Serializable, NetSerializable, DataRecord]
-public sealed partial record CriminalRecord
+[Serializable, NetSerializable]
+public sealed partial record CriminalRecord : StationRecord
 {
     /// <summary>
     /// Status of the person (None, Wanted, Detained).
@@ -41,6 +42,14 @@ public sealed partial record CriminalRecord
     /// </summary>
     [DataField]
     public int Bounty;
+
+    // cmu edit start: warrants and arrests
+    [DataField]
+    public List<Content.Shared.CMU14.CriminalRecords.CMURecordWarrant> CMUWarrants = new();
+
+    [DataField]
+    public List<Content.Shared.CMU14.CriminalRecords.CMURecordArrest> CMUArrests = new();
+    // cmu edit end
 }
 
 /// <summary>

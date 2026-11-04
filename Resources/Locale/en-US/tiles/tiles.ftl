@@ -142,3 +142,72 @@ tiles-xeno-maint = xeno techmaint
 tiles-dark-squiggly = dark steel squiggly tile
 
 tiles-au14-scab-resin = scab resin
+
+
+tiles-rcd-plating = RCD plating
+
+tiles-steel-floor-slats-continuous = steel continuous slat tile
+
+tiles-steel-floor-vertical-slats-bordered = steel vertical bordered slat tile
+
+tiles-steel-floor-horizontal-slats-bordered = steel horizontal bordered slat tile
+
+tiles-white-floor-slats-continuous = white steel continuous slat tile
+
+tiles-white-floor-vertical-slats-bordered = white steel vertical bordered slat tile
+
+tiles-white-floor-horizontal-slats-bordered = white steel horizontal bordered slat tile
+
+tiles-dark-floor-slats-continuous = dark steel continuous slat tile
+
+tiles-dark-floor-vertical-slats-bordered = dark steel vertical bordered slat tile
+
+tiles-dark-floor-horizontal-slats-bordered = dark steel horizontal bordered slat tile
+
+tiles-uranium-glass-floor = uranium glass floor
+
+tiles-plasma-glass-floor = plasma glass floor
+
+tiles-plastitanium-glass-floor = plastitanium glass floor
+
+tiles-dark-astro-grass = dark astro-grass
+
+tiles-light-astro-grass = light astro-grass
+
+tiles-astro-ironsand = astro-ironsand
+
+tiles-astro-ironsand-borderless = borderless astro-ironsand
+
+tiles-desert-astro-sand = desert astro-sand
+
+tiles-white-marble = white marble tile
+
+tiles-white-marble-mono = white marble mono tile
+
+tiles-dark-marble = dark marble tile
+
+tiles-dark-marble-mono = dark marble mono tile
+
+tiles-plasma-marble = plasmarble tile
+
+tiles-uranium-marble = uranium marble tile
+
+tiles-exo-viscera = exodermis viscera floor
+
+tiles-exo-hull = exodermis hull floor
+
+tiles-exo-techmaint = exodermis techmaint floor
+
+tiles-exo-horizontal = exodermis horizontal floor
+
+tiles-exo-vertical = exodermis vertical floor
+
+tiles-exo-corner-ne = exodermis NE corner floor
+
+tiles-exo-corner-nw = exodermis NW corner floor
+
+tiles-exo-corner-se = exodermis SE corner floor
+
+tiles-exo-corner-sw = exodermis SW corner floor
+
+tiles-exo-borg = mechadermis floor

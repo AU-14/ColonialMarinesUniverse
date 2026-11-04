@@ -1,0 +1,48 @@
+- type: rank
+  id: CMU14RankProdigyJuniorExecutive
+  name: Junior Executive
+  prefix: Jr. Exec.
+  paygrade: PRC2
+
+- type: rank
+  id: CMU14RankProdigyExecutive
+  name: Executive
+  prefix: Exec.
+  paygrade: PRC3
+
+- type: rank
+  id: CMU14RankProdigySeniorExecutive
+  name: Senior Executive
+  prefix: Sr. Exec.
+  paygrade: PRC4
+
+- type: rank
+  id: CMU14RankProdigyExecutiveSpecialist
+  name: Executive Specialist
+  prefix: Exec. Spc.
+  paygrade: PRC5
+
+- type: rank
+  id: CMU14RankProdigyExecutiveSupervisor
+  name: Executive Supervisor
+  prefix: Exec. Spvsr.
+  paygrade: PRC6
+
+- type: rank
+  id: CMU14RankProdigyAssistantManager
+  name: Assistant Manager
+  prefix: Assis. Mng.
+  paygrade: PRC7
+
+- type: rank
+  id: CMU14RankProdigySupervisor
+  name: Regional Supervisor
+  prefix: Reg. Spvsr.
+  paygrade: PRS7
+
+# Lawyers
+- type: rank
+  id: CMU14RankProdigyLegalSpecialist
+  name: Legal Specialist
+  prefix: Legal Spc.
+  paygrade: PRS5

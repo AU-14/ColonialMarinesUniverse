@@ -1,6 +1,5 @@
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Xenonids.Acid;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Robust.Shared.Prototypes;
 
@@ -8,7 +7,6 @@ namespace Content.Server._RMC14.Xenonids.Acid;
 
 public sealed partial class AcidExtinguisherCleanupSystem : EntitySystem
 {
-    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private SharedXenoAcidSystem _xenoAcid = default!;
 
     private static readonly ProtoId<ReagentPrototype> AcidRemovedBy = "Water";
@@ -31,14 +29,7 @@ public sealed partial class AcidExtinguisherCleanupSystem : EntitySystem
         if (strength >= XenoAcidStrength.Strong)
             return;
 
-        var solEnt = args.Solution;
-        foreach (var (_, solution) in _solutionContainer.EnumerateSolutions((solEnt, solEnt)))
-        {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
+        if (args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
             _xenoAcid.RemoveAcid(target);
-            return;
-        }
     }
 }

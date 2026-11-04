@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Serialization;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.LinkAccount;
 
@@ -10,5 +10,6 @@ public sealed record SharedRMCPatronTier(
     bool Figurines,
     bool LobbyMessage,
     bool RoundEndShoutout,
-    string Tier
+    string Tier,
+    int Priority
 );

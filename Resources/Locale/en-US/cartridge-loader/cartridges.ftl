@@ -7,6 +7,7 @@ news-read-program-name = Station news
 
 crew-manifest-program-name = Crew manifest
 crew-manifest-cartridge-loading = Loading ...
+crew-manifest-cartridge-loading-failed = Failed to load crew manifest!
 
 net-probe-program-name = NetProbe
 net-probe-scan = Scanned {$device}!
@@ -86,14 +87,18 @@ wanted-list-unknown-reason-label = unknown reason
 wanted-list-initiator-label = [color=darkgray]Initiator:[/color] [color=white]{$initiator}[/color]
 wanted-list-unknown-initiator-label = unknown initiator
 
+# cmu edit start: eliminated shown as deceased
 wanted-list-status-label = [color=darkgray]status:[/color] {$status ->
         [suspected] [color=yellow]suspected[/color]
         [wanted] [color=red]wanted[/color]
         [detained] [color=#b18644]detained[/color]
         [paroled] [color=green]paroled[/color]
         [discharged] [color=green]discharged[/color]
+        [hostile] [color=darkred]hostile[/color]
+        [eliminated] [color=gray]deceased[/color]
         *[other] none
     }
+# cmu edit end
 
 wanted-list-history-table-time-col = Time
 wanted-list-history-table-reason-col = Crime

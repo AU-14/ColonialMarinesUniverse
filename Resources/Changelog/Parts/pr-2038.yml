@@ -1,0 +1,18 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Tactical hover can use empty air above the planet in all game modes.
+  type: Fix
+- message: Barricades can no longer be built on uncovered water.
+  type: Fix
+- message: LACN equipment vendors supply engineering materials.
+  type: Fix
+- message: Generated research recipes accept both uranium reagent sources.
+  type: Fix
+- message: UPP tanks can select their railgun as the primary weapon.
+  type: Fix
+- message: SLAW, SMAW, Mk86, and grenade launcher crates restock one crate every 20
+    minutes.
+  type: Tweak
+time: '2026-09-27T12:07:00.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2038

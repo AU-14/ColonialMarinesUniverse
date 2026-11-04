@@ -66,4 +66,4 @@
   - type: HiveConstructionRequiresHiveWeeds
   - type: HiveConstructionRequiresSpace
   - type: WarpPoint
-    location: plasma tree
+    location: cmu-warp-location-plasma-tree

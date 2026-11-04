@@ -1,0 +1,34 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Made by spartanbobby for cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/pull/1267",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "loaded",
+            "directions": 4
+        },
+        {
+            "name": "spent",
+            "directions": 4
+        },
+        {
+            "name": "empty",
+            "directions": 4
+        },
+        {
+            "name": "folded"
+        },
+        {
+            "name": "inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right",
+            "directions": 4
+        }
+    ]
+}

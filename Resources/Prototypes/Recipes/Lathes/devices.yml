@@ -22,6 +22,24 @@
     Plastic: 100
     Glass: 100
 
+- type: latheRecipe # CMU14
+  parent: BasePartRecipe
+  id: CMUIgniter
+  result: Igniter
+  materials:
+    CMSteel: 300
+    RMCPlastic: 100
+    CMGlass: 100
+
+- type: latheRecipe # CMU14
+  parent: BasePartRecipe
+  id: RMCGeigerCounter
+  result: RMCGeigerCounter
+  materials:
+    CMSteel: 300
+    RMCPlastic: 100
+    CMGlass: 150
+
 - type: latheRecipe
   parent: BaseWeaponRecipe
   id: ChemicalPayload
@@ -64,6 +82,15 @@
 
 - type: latheRecipe
   parent: BasePartRecipe
+  id: VoiceSensor
+  result: voicesensor
+  materials:
+    Steel: 100
+    Plastic: 200
+    Glass: 100
+
+- type: latheRecipe
+  parent: BasePartRecipe
   id: SignallerAdvanced
   result: RemoteSignallerAdvanced
   materials:
@@ -90,6 +117,18 @@
   materials:
     Steel: 400
     Glass: 100
+
+- type: latheRecipe
+  id: TeleporterChipBlank
+  result: TeleporterChipBlank
+  categories:
+  - Tools
+  - Research
+  completetime: 2
+  materials:
+    Steel: 50
+    Plastic: 50
+    Plasma: 25
 
 - type: latheRecipe
   parent: BaseToolRecipe
@@ -157,7 +196,7 @@
 
 - type: latheRecipe
   id: WeaponForceGun
-  result: WeaponForceGun
+  result: WeaponForceGunEmpty
   categories:
   - Tools
   completetime: 5
@@ -197,7 +236,7 @@
 
 - type: latheRecipe
   id: WeaponTetherGun
-  result: WeaponTetherGun
+  result: WeaponTetherGunEmpty
   categories:
   - Tools
   completetime: 5
@@ -216,3 +255,23 @@
     Steel: 500
     Glass: 400
     Gold: 100
+
+- type: latheRecipe
+  id: CableDetStack1
+  result: CableDetStack1
+  categories:
+  - Weapons
+  completetime: 2
+  materials:
+    Plastic: 50
+    Plasma: 25
+    Gold: 20
+
+- type: latheRecipe
+  id: EmptyDetonator
+  result: EmptyDetonator
+  categories:
+  - Weapons
+  completetime: 3
+  materials:
+    Steel: 100

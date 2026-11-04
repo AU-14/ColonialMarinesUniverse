@@ -1,0 +1,11 @@
+- type: department
+  parent: CMDepartmentBase
+  id: CMUDepartmentAegis
+  name: cmu-department-aegis
+  description: cmu-department-aegis-description
+  color: "#5c7fb8"
+  roles:
+  - CMUJobAegisObserver
+  - CMUJobAegisLeadResearcher
+  - CMUJobAegisResearcher
+  faction: govfor

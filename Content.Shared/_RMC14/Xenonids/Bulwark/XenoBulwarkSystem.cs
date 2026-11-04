@@ -11,6 +11,7 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Events;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
@@ -61,6 +62,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
     {
         SubscribeLocalEvent<XenoBulwarkComponent, CMGetArmorEvent>(OnGetArmor);
         SubscribeLocalEvent<XenoBulwarkComponent, BeforeStatusEffectAddedEvent>(OnBeforeStatusAdded);
+        SubscribeLocalEvent<XenoBulwarkComponent, KnockDownAttemptEvent>(OnKnockdownAttempt);
         SubscribeLocalEvent<XenoBulwarkComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshSpeed);
         SubscribeLocalEvent<XenoBulwarkComponent, GetMeleeDamageEvent>(OnGetMeleeDamage);
         SubscribeLocalEvent<XenoBulwarkComponent, XenoEncasedPlatesActionEvent>(OnEncasedPlatesAction);
@@ -95,6 +97,12 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
             args.Cancelled = true;
     }
 
+    private void OnKnockdownAttempt(Entity<XenoBulwarkComponent> xeno, ref KnockDownAttemptEvent args)
+    {
+        if (xeno.Comp.Encased)
+            args.Cancelled = true;
+    }
+
     private void OnGetMeleeDamage(Entity<XenoBulwarkComponent> xeno, ref GetMeleeDamageEvent args)
     {
         if (xeno.Comp.Encased)
@@ -114,7 +122,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
         UpdateEncasedSize(xeno);
 
         Dirty(xeno);
-        _speed.RefreshMovementSpeedModifiers(xeno);
+        _speed.RefreshMovementSpeedModifiers((xeno.Owner, null));
         _armor.UpdateArmorValue((xeno, null));
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoEncasedPlatesActionEvent>(xeno))
@@ -128,7 +136,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
 
         if (xeno.Comp.Encased && !InPlateBashRange(xeno.Owner, args.Target, xeno.Comp.PlateBashEncasedRange))
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-bulwark-plate-bash-adjacent"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-bulwark-plate-bash-adjacent"), xeno, xeno);
             return;
         }
 
@@ -186,7 +194,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
 
         if (xeno.Comp.Encased)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-bulwark-tail-swing-encased"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-bulwark-tail-swing-encased"), xeno, xeno);
             return;
         }
 
@@ -243,7 +251,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
 
         if (!xeno.Comp.Encased)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-bulwark-reflective-shield-encase"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-bulwark-reflective-shield-encase"), xeno, xeno);
             return;
         }
 

@@ -57,7 +57,7 @@ namespace Content.Benchmarks
         private sealed class X4 { }
         private sealed class X5 { }
 
-        private sealed class TestDummy
+        private sealed partial class TestDummy
         {
             [Dependency] private X1 _x1;
             [Dependency] private X2 _x2;

@@ -1,0 +1,22 @@
+{
+  "output": "Content.CMU/Resources/Audio/CMU14/Dropships/Mohawk/landing.ogg",
+  "duration_seconds": 10,
+  "sample_rate": 48000,
+  "channels": 1,
+  "peak_dbfs_before_encoding": -6,
+  "fade_in_seconds": 0.01,
+  "fade_out_seconds": 0.05,
+  "sources": [
+    {
+      "title": "spaceship takeoff.wav", "preview_label": "Extended spaceship lift-off",
+      "author": "pointparkcinema",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "page": "https://freesound.org/people/pointparkcinema/sounds/407253/",
+      "download": "https://cdn.freesound.org/previews/407/407253_7237186-hq.mp3",
+      "start_seconds": 15,
+      "end_seconds": 25,
+      "sha256": "0a0e48b018fccd24a1728d179bea0d0d8fed49b117f47ab9c9bd3bd6f08f668b"
+    }
+  ]
+}

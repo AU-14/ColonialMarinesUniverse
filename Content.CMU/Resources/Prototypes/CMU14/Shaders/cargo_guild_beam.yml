@@ -1,0 +1,4 @@
+- type: shader
+  id: CMUCascadeParticle
+  kind: source
+  path: /Textures/CMU14/Industry/Effects/cascade_particle.swsl

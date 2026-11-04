@@ -1,0 +1,18 @@
+author: maertayn
+category: CMU
+changes:
+- message: 'New colony antags: Arsonist, Bounty Hunter, CLF Saboteur, Vigilante, WY-Agent'
+  type: Add
+- message: Added colony antag systems to most of the solo antags
+  type: Add
+- message: Round end summary of colony antag achievements based on their new systems
+  type: Add
+- message: Gate hijack larva surge mechanics for xeno hijackers only
+  type: Tweak
+- message: Capped Yautja thrall resurrection to three thralls, per bracer, if their
+    master dies so will they
+  type: Fix
+- message: Fix xeno leap NaN, reagent heat capacity, enumerator, and log cache races
+  type: Fix
+time: '2026-08-29T18:07:27.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1883

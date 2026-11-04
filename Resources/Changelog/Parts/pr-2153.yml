@@ -1,0 +1,7 @@
+author: StiffRobot
+category: CMU
+changes:
+- message: Added Pilot-Visors to the Aircrew vendors of UPP, Prodigy and WY
+  type: Fix
+time: '2026-10-11T14:02:29.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2153

@@ -3,11 +3,14 @@ using System.Linq;
 using Content.Shared._RMC14.Xenonids.CriticalGrace;
 using Content.Shared.Alert;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Events;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing; // CMU14
 
 namespace Content.Shared.Mobs.Systems;
 
@@ -15,6 +18,16 @@ public sealed partial class MobThresholdSystem : EntitySystem
 {
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IGameTiming _timing = default!; // CMU14
+
+    private readonly HashSet<EntityUid> _damageThresholdUpdates = new();
+
+    /// <summary>
+    /// Returns whether the target's mob state is currently being recalculated in response to damage.
+    /// </summary>
+    public bool IsDamageThresholdUpdateInProgress(EntityUid target)
+        => _damageThresholdUpdates.Contains(target);
 
     public override void Initialize()
     {
@@ -30,7 +43,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
     private void OnGetState(EntityUid uid, MobThresholdsComponent component, ref ComponentGetState args)
     {
-        var thresholds = new Dictionary<FixedPoint2, MobState>();
+        var thresholds = new Dictionary<FixedPoint2, MobState>(component.Thresholds.Count);
         foreach (var (key, value) in component.Thresholds)
         {
             thresholds.Add(key, value);
@@ -51,7 +64,10 @@ public sealed partial class MobThresholdSystem : EntitySystem
         component.Thresholds = new SortedDictionary<FixedPoint2, MobState>(state.UnsortedThresholds);
         component.TriggersAlerts = state.TriggersAlerts;
         component.CurrentThresholdState = state.CurrentThresholdState;
+        component.StateAlertDict = new Dictionary<MobState, ProtoId<AlertPrototype>>(state.StateAlertDict);
+        component.ShowOverlays = state.ShowOverlays;
         component.AllowRevives = state.AllowRevives;
+        component.DisplayDamageInAlert = state.DisplayDamageInAlert;
     }
 
     #region Public API
@@ -271,7 +287,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
         if (!TryGetThresholdForState(target2, MobState.Dead, out var ent2DeadThreshold, threshold2))
             ent2DeadThreshold = 0;
 
-        damage = (oldDamage.Damage / ent1DeadThreshold.Value) * ent2DeadThreshold.Value;
+        damage = (_damageable.GetAllDamage((target1, oldDamage)) / ent1DeadThreshold.Value) * ent2DeadThreshold.Value;
         return true;
     }
 
@@ -338,9 +354,14 @@ public sealed partial class MobThresholdSystem : EntitySystem
     private void CheckThresholds(EntityUid target, MobStateComponent mobStateComponent,
         MobThresholdsComponent thresholdsComponent, DamageableComponent damageableComponent, EntityUid? origin = null)
     {
+        // CMU14: state-application callbacks can see revived mob state with the corpse's old damage.
+        // Both mob states are replicated; recalculating here can latch the client back into death.
+        if (_timing.ApplyingState)
+            return;
+
         foreach (var (threshold, mobState) in thresholdsComponent.Thresholds.Reverse())
         {
-            if (damageableComponent.TotalDamage < threshold)
+            if (_damageable.GetTotalDamage((target, damageableComponent)) < threshold)
                 continue;
 
             TriggerThreshold(target, mobState, mobStateComponent, thresholdsComponent, origin);
@@ -355,17 +376,20 @@ public sealed partial class MobThresholdSystem : EntitySystem
         MobThresholdsComponent? thresholds = null,
         EntityUid? origin = null)
     {
-        if (!Resolve(target, ref mobState, ref thresholds) ||
-            mobState.CurrentState == newState)
-        {
+        if (!Resolve(target, ref mobState, ref thresholds))
             return;
-        }
 
-        if (mobState.CurrentState != MobState.Dead || thresholds.AllowRevives)
+        // RMC14: defibrillation can set the mob state directly. Refresh the cached threshold
+        // even when it already matches the mob state, or a later update can restore death.
+        if ((mobState.CurrentState != MobState.Dead || thresholds.AllowRevives) &&
+            thresholds.CurrentThresholdState != newState)
         {
             thresholds.CurrentThresholdState = newState;
             Dirty(target, thresholds);
         }
+
+        if (mobState.CurrentState == newState)
+            return;
 
         _mobStateSystem.UpdateMobState(target, mobState, origin);
     }
@@ -382,8 +406,9 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
         var hasIncap = TryGetIncapThreshold(target, out var healthMax, threshold);
         var state = currentMobState;
+        var totalDamage = _damageable.GetTotalDamage((target, damageable));
 
-        if (hasIncap && HasComp<InCriticalGraceComponent>(target) && damageable.TotalDamage > healthMax)
+        if (hasIncap && HasComp<InCriticalGraceComponent>(target) && totalDamage >= healthMax)
             state = MobState.Critical;
 
         if (!threshold.StateAlertDict.TryGetValue(state, out var currentAlert))
@@ -402,7 +427,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
         if (threshold.DisplayDamageInAlert && hasIncap && healthMax != null)
         {
-            int healthCurrent = (int)healthMax - (int)damageable.TotalDamage;
+            int healthCurrent = (int)healthMax - (int)totalDamage;
             healthMessage = healthCurrent + " / " + healthMax;
         }
 
@@ -420,7 +445,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
             }
 
             if (TryGetNextState(target, currentMobState, out var nextState, threshold) &&
-                TryGetPercentageForState(target, nextState.Value, damageable.TotalDamage, out var percentage))
+                TryGetPercentageForState(target, nextState.Value, totalDamage, out var percentage))
             {
                 percentage = FixedPoint2.Clamp(percentage.Value, 0, 1);
 
@@ -442,10 +467,20 @@ public sealed partial class MobThresholdSystem : EntitySystem
     {
         if (!TryComp<MobStateComponent>(target, out var mobState))
             return;
-        CheckThresholds(target, mobState, thresholds, args.Damageable, args.Origin);
-        var ev = new MobThresholdChecked(target, mobState, thresholds, args.Damageable);
-        RaiseLocalEvent(target, ref ev, true);
-        UpdateAlerts(target, mobState.CurrentState, thresholds, args.Damageable);
+
+        var ownsDamageMarker = _damageThresholdUpdates.Add(target);
+        try
+        {
+            CheckThresholds(target, mobState, thresholds, args.Damageable, args.Origin);
+            var ev = new MobThresholdChecked(target, mobState, thresholds, args.Damageable);
+            RaiseLocalEvent(target, ref ev, true);
+            UpdateAlerts(target, mobState.CurrentState, thresholds, args.Damageable);
+        }
+        finally
+        {
+            if (ownsDamageMarker)
+                _damageThresholdUpdates.Remove(target);
+        }
     }
 
     private void MobThresholdStartup(EntityUid target, MobThresholdsComponent thresholds, ComponentStartup args)
@@ -464,7 +499,8 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
     private void OnUpdateMobState(EntityUid target, MobThresholdsComponent component, ref UpdateMobStateEvent args)
     {
-        if (!component.AllowRevives && component.CurrentThresholdState == MobState.Dead)
+        // RMC14: only an explicit revival may leave death, including deaths imposed by organs.
+        if (!component.AllowRevives && args.Component.CurrentState == MobState.Dead)
         {
             args.State = MobState.Dead;
         }

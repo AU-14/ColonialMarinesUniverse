@@ -5,9 +5,10 @@ using Content.Client.Administration.Systems;
 using Content.Client.Stylesheets;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
+using Robust.Client.GameObjects; // CMU14
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -26,6 +27,7 @@ internal sealed class AdminNameOverlay : Overlay
     private readonly IUserInterfaceManager _userInterfaceManager;
     private readonly SharedRoleSystem _roles;
     private readonly IPrototypeManager _prototypeManager;
+    private SpriteSystem? _sprite; // CMU14: resolved lazily for admin role icons
     private readonly Font _font;
     private readonly Font _fontBold;
     private AdminOverlayAntagFormat _overlayFormat;
@@ -134,7 +136,7 @@ internal sealed class AdminNameOverlay : Overlay
                 ? null
                 : _prototypeManager.Index(playerInfo.RoleProto.Value);
 
-            var roleName = Loc.GetString(rolePrototype?.Name ?? RoleTypePrototype.FallbackName);
+            var roleName = rolePrototype?.Name ?? RoleTypePrototype.FallbackName;
             var roleColor = rolePrototype?.Color ?? RoleTypePrototype.FallbackColor;
             var roleSymbol = rolePrototype?.Symbol ?? RoleTypePrototype.FallbackSymbol;
 
@@ -213,7 +215,7 @@ internal sealed class AdminNameOverlay : Overlay
             {
                 color = Color.GreenYellow;
                 color.A = alpha;
-                args.ScreenHandle.DrawString(_font, screenCoordinates + currentOffset, Loc.GetString(playerInfo.StartingJob), uiScale, playerInfo.Connected ? color : colorDisconnected);
+                args.ScreenHandle.DrawString(_font, screenCoordinates + currentOffset, playerInfo.StartingJob, uiScale, playerInfo.Connected ? color : colorDisconnected);
                 currentOffset += lineoffset;
             }
 
@@ -241,7 +243,7 @@ internal sealed class AdminNameOverlay : Overlay
                     color = roleColor;
                     symbol = IsFiltered(playerInfo.RoleProto) ? symbol : string.Empty;
                     text = IsFiltered(playerInfo.RoleProto)
-                        ? roleName.ToUpper()
+                        ? Loc.GetString(roleName).ToUpper()
                         : string.Empty;
                     break;
                 case AdminOverlayAntagFormat.Subtype:
@@ -261,10 +263,24 @@ internal sealed class AdminNameOverlay : Overlay
 
             // Draw antag label
             color.A = alpha;
+
+            // CMU14 Admin Role Icon Begin: draw the role's icon in place of the glyph
+            var labelPosition = screenCoordinates + currentOffset;
+            if (playerInfo.AntagIcon is { } antagIcon && !string.IsNullOrEmpty(symbol) && !string.IsNullOrEmpty(text))
+            {
+                _sprite ??= _entityManager.System<SpriteSystem>();
+                var iconSize = lineoffset.Y;
+                var iconRect = UIBox2.FromDimensions(labelPosition, new Vector2(iconSize, iconSize));
+                args.ScreenHandle.DrawTextureRect(_sprite.Frame0(antagIcon), iconRect, Color.White.WithAlpha(alpha));
+                labelPosition += new Vector2(iconSize + 2f * uiScale, 0f);
+                symbol = string.Empty;
+            }
+            // CMU14 End
+
             var label = !string.IsNullOrEmpty(symbol)
                 ? Loc.GetString("player-tab-character-name-antag-symbol", ("symbol", symbol), ("name", text))
                 : text;
-            args.ScreenHandle.DrawString(_fontBold, screenCoordinates + currentOffset, label, uiScale, color);
+            args.ScreenHandle.DrawString(_fontBold, labelPosition, label, uiScale, color); // CMU14: labelPosition
             currentOffset += lineoffset;
 
             //Save the coordinates and size of the text block, for stack merge check

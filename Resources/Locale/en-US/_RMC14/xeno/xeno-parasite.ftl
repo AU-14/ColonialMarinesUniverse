@@ -1,8 +1,10 @@
 rmc-xeno-failed-cant-infect = We can't infect {THE($target)}!
 rmc-xeno-failed-cant-reach = We can't reach {$target}, they need to be lying down!
 rmc-xeno-failed-target-dead = We can't infect the dead!
-rmc-xeno-infect-success = The tiny xenonid smashes against {$target}'s {$clothing} and rips it off!
-rmc-xeno-infect-fail = The tiny xenonid smashes against {$target}'s {$clothing}!
+# cmu edit start: lore names
+rmc-xeno-infect-success = The tiny xenomorph smashes against {$target}'s {$clothing} and rips it off!
+rmc-xeno-infect-fail = The tiny xenomorph smashes against {$target}'s {$clothing}!
+# cmu edit end
 rmc-xeno-failed-parasite-dead = We can't infect with a dead child!
 rmc-xeno-cant-throw = We can't throw {THE($target)}!
 

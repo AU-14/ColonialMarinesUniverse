@@ -4,6 +4,10 @@
   sounds:
     Scream:
       collection: CMMaleScreams
+    # cmu edit start
+    CMUBurning:
+      collection: CMUMaleBurning
+    # cmu edit end
     Laugh:
       collection: MaleLaugh
 
@@ -13,5 +17,9 @@
   sounds:
     Scream:
       collection: CMFemaleScreams
+    # cmu edit start
+    CMUBurning:
+      collection: CMUFemaleBurning
+    # cmu edit end
     Laugh:
       collection: FemaleLaugh

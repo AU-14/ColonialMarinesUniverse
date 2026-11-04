@@ -8,10 +8,14 @@
     state: icon
   - type: Item
     size: Small
-  - type: Drink
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    utensil: None
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
   - type: CraftsIntoMolotov
   - type: SolutionTransfer
@@ -41,9 +45,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/grenadine.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Grenadine
@@ -57,9 +61,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/tequila.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Tequila
@@ -73,9 +77,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/absinthe.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Absinthe
@@ -89,9 +93,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/cognac.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Cognac
@@ -105,9 +109,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/davenport.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 50
         reagents:
         - ReagentId: RMCSpecialBlendWhiskey
@@ -121,9 +125,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/davenport.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 50
         reagents:
         - ReagentId: RMCSpecialBlendWhiskey
@@ -137,9 +141,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/gin.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Gin
@@ -153,9 +157,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/goldschlager.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Gildlager
@@ -169,9 +173,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/kahlua.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: CoffeeLiqueur
@@ -185,9 +189,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/vermouth.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Vermouth
@@ -201,9 +205,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/melon_liquor.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: MelonLiquor
@@ -217,9 +221,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/blue_curacao.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: BlueCuracao
@@ -233,9 +237,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/patron.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Patron
@@ -249,9 +253,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/purple_wine.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Wine
@@ -265,9 +269,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/rum.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Rum
@@ -281,9 +285,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/sake.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Sake
@@ -297,9 +301,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/red_star_vodka.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Vodka
@@ -313,9 +317,9 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/whiskey.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 100
         reagents:
         - ReagentId: Whiskey

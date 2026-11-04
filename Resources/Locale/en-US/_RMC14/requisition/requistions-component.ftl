@@ -3,6 +3,8 @@ requisition-paperwork-receiver-name = Logistics Branch
 requisition-paperwork-reward-message = Confirmation Received! transferred ${$amount} from budget surplus
 
 # Requisition Invoice
+rmc-requisition-invoice-attach = Attach Invoice
+rmc-requisition-invoice-remove = Remove Invoice
 requisition-paper-print-name = {$name} invoice
 requisition-paper-print-manifest = [head=2]
     {$containerName}[/head][bold]{$content}[/bold][head=2]

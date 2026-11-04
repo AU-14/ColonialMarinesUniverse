@@ -54,7 +54,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
             return;
 
         if (args.Popup)
-            _popup.PopupClient(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
     }
 
     private void OnPortGunSeatUnstrapped(Entity<VehiclePortGunSeatComponent> ent, ref UnstrappedEvent args)
@@ -75,7 +75,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
 
         if (portGun.Operator != null && portGun.Operator != args.User)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-in-use", ("operator", Name(portGun.Operator.Value))), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-in-use", ("operator", Name(portGun.Operator.Value))), ent, args.User);
             return;
         }
 
@@ -102,6 +102,10 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
         operatorComp.Controller = ent.Owner;
         Dirty(args.User, operatorComp);
 
+        var watching = EnsureComp<VehicleWatchingComponent>(args.User);
+        watching.Watching = vehicle;
+        Dirty(args.User, watching);
+
         if (HasComp<VehicleEnterComponent>(vehicle))
         {
             _eye.SetTarget(args.User, vehicle);
@@ -120,7 +124,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
             return;
 
         if (!TryComp(gunUid, out ItemSlotsComponent? gunSlots) ||
-            !_itemSlots.TryGetSlot(gunUid, "gun_magazine", out var magSlot, gunSlots))
+            !_itemSlots.TryGetSlot((gunUid, gunSlots), "gun_magazine", out var magSlot))
         {
             return;
         }
@@ -131,7 +135,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
                 return;
         }
 
-        if (!_itemSlots.CanInsert(gunUid, args.Used, args.User, magSlot))
+        if (!_itemSlots.CanInsert(gunUid, magSlot, args.Used, args.User))
             return;
 
         if (!_hands.TryDrop(args.User, args.Used))
@@ -210,7 +214,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
             return;
 
         if (!TryComp(gunUid, out ItemSlotsComponent? gunSlots) ||
-            !_itemSlots.TryGetSlot(gunUid, "gun_magazine", out var magSlot, gunSlots) ||
+            !_itemSlots.TryGetSlot((gunUid, gunSlots), "gun_magazine", out var magSlot) ||
             !magSlot.HasItem)
         {
             return;
@@ -243,24 +247,24 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
 
         if (!TryGetPortGunSeat(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-need-seat"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-need-seat"), ent, user);
             return false;
         }
 
         if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicleUid) || vehicleUid == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-no-vehicle"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-no-vehicle"), ent, user);
             return false;
         }
 
         vehicle = vehicleUid.Value;
 
         if (!TryComp(vehicle, out ItemSlotsComponent? itemSlots) ||
-            !_itemSlots.TryGetSlot(vehicle, ent.Comp.GunSlotId, out var slot, itemSlots) ||
+            !_itemSlots.TryGetSlot((vehicle, itemSlots), ent.Comp.GunSlotId, out var slot) ||
             !slot.HasItem ||
             slot.Item == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
             return false;
         }
 
@@ -268,7 +272,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
 
         if (!TryComp(gunUid, out VehiclePortGunComponent? portGunComp) || !TryComp(gunUid, out GunComponent? _))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
             return false;
         }
 
@@ -294,7 +298,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
         var vehicle = vehicleUid.Value;
 
         if (!TryComp(vehicle, out ItemSlotsComponent? itemSlots) ||
-            !_itemSlots.TryGetSlot(vehicle, ent.Comp.GunSlotId, out var slot, itemSlots) ||
+            !_itemSlots.TryGetSlot((vehicle, itemSlots), ent.Comp.GunSlotId, out var slot) ||
             !slot.HasItem ||
             slot.Item == null)
         {
@@ -320,6 +324,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
 
         var vehicle = operatorComp.Vehicle;
         RemCompDeferred<VehiclePortGunOperatorComponent>(user);
+        RemCompDeferred<VehicleWatchingComponent>(user);
 
         if (operatorComp.Controller != null)
             _viewToggle.DisableViewToggle(user, operatorComp.Controller.Value);

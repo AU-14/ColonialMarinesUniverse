@@ -1,0 +1,389 @@
+using System.Globalization;
+using System.Numerics;
+using Content.Shared.CCVar;
+using Content.Shared.Clothing.Components;
+using Content.Shared.Movement.Components;
+using Robust.Client.GameObjects;
+using Robust.Client.GameStates;
+using Robust.Client.Physics;
+using Robust.Client.Player;
+using Robust.Client.Timing;
+using Robust.Shared.Configuration;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Log;
+using Robust.Shared.Map;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Timing;
+
+namespace Content.Client.CMU14.Diagnostics;
+
+public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
+{
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private IClientGameStateManager _gameStates = default!;
+    [Dependency] private IClientGameTiming _timing = default!;
+    [Dependency] private ILogManager _log = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+
+    private ISawmill _sawmill = default!;
+
+    private static readonly TimeSpan LowBufferSampleInterval = TimeSpan.FromSeconds(5);
+
+    private bool _enabled = true;
+    private float _snapThreshold = 0.75f;
+    private int _catchupApplyThreshold = 3;
+    private float _logCooldown = 1f;
+
+    private LocalPlayerSnapshot? _lastFrameSnapshot;
+    private TimeSpan _nextCatchupLog;
+    private TimeSpan _nextLowBufferSample;
+    private TimeSpan _nextSnapLog;
+    private TimeSpan _nextParentMotionLog;
+    private uint _stateApplyFrame;
+    private int _stateApplicationsThisFrame;
+    private GameTick _lastAppliedStateTick;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _sawmill = _log.GetSawmill("cmu.rubberband");
+
+        UpdatesAfter.Add(typeof(TransformSystem));
+        UpdatesAfter.Add(typeof(global::Robust.Client.Physics.PhysicsSystem));
+        UpdatesOutsidePrediction = true;
+
+        _gameStates.GameStateApplied += OnGameStateApplied;
+        _players.LocalPlayerAttached += OnLocalPlayerAttached;
+        _players.LocalPlayerDetached += OnLocalPlayerDetached;
+
+        Subs.CVar(_configuration, CCVars.CMURubberbandDiagnosticsEnabled, OnEnabledChanged, true);
+        Subs.CVar(_configuration, CCVars.CMURubberbandDiagnosticsSnapThreshold, value => _snapThreshold = Math.Max(0f, value), true);
+        Subs.CVar(_configuration, CCVars.CMURubberbandDiagnosticsCatchupApplyThreshold, value => _catchupApplyThreshold = Math.Max(1, value), true);
+        Subs.CVar(_configuration, CCVars.CMURubberbandDiagnosticsLogCooldown, value => _logCooldown = Math.Max(0f, value), true);
+    }
+
+    public override void Shutdown()
+    {
+        _gameStates.GameStateApplied -= OnGameStateApplied;
+        _players.LocalPlayerAttached -= OnLocalPlayerAttached;
+        _players.LocalPlayerDetached -= OnLocalPlayerDetached;
+
+        base.Shutdown();
+    }
+
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+
+        if (!_enabled)
+            return;
+
+        if (!TryGetSnapshot(out var current))
+        {
+            _lastFrameSnapshot = null;
+            return;
+        }
+
+        if (_lastFrameSnapshot is { } previous && IsComparable(previous, current))
+        {
+            var distance = (current.LocalPosition - previous.LocalPosition).Length();
+            var worldDistance = (current.MapPosition - previous.MapPosition).Length();
+            var threshold = GetFrameSnapThreshold(previous, current, frameTime);
+            if (float.IsFinite(distance) && distance >= threshold)
+            {
+                if (CanLog(ref _nextSnapLog))
+                    LogMotion(previous, current, distance, worldDistance, parentMotion: false);
+            }
+            else if (float.IsFinite(worldDistance) && worldDistance >= threshold && CanLog(ref _nextParentMotionLog))
+            {
+                // A seated passenger inherits shuttle motion. Retain it as context, not a player correction.
+                LogMotion(previous, current, distance, worldDistance, parentMotion: true);
+            }
+        }
+
+        _lastFrameSnapshot = current;
+    }
+
+    private void OnGameStateApplied(GameStateAppliedArgs args)
+    {
+        if (!_enabled)
+            return;
+
+        if (_stateApplyFrame != _timing.CurFrame)
+        {
+            _stateApplyFrame = _timing.CurFrame;
+            _stateApplicationsThisFrame = 0;
+        }
+
+        _stateApplicationsThisFrame++;
+
+        var stateTickGap = GetStateTickGap(args.AppliedState.ToSequence);
+
+        // This callback runs before prediction replay. Comparing its older authoritative position
+        // with the last rendered frame mistakes normal prediction rewind for visible rubberbanding.
+        // FrameUpdate compares positions after replay; state callbacks only describe buffer health.
+        MaybeLogStateProgress(args, stateTickGap);
+        _lastAppliedStateTick = args.AppliedState.ToSequence;
+    }
+
+    private void OnLocalPlayerAttached(EntityUid uid)
+    {
+        ResetSnapshots();
+
+        if (!_enabled || !TryGetSnapshot(out var snapshot))
+            return;
+
+        _sawmill.Info($"local-player-attached {FormatSnapshot(snapshot)} {FormatTiming()}");
+    }
+
+    private void OnLocalPlayerDetached(EntityUid uid)
+    {
+        ResetSnapshots();
+
+        if (!_enabled)
+            return;
+
+        _sawmill.Info($"local-player-detached ent={uid} player={FormatPlayer()} {FormatTiming()}");
+    }
+
+    private void OnEnabledChanged(bool enabled)
+    {
+        _enabled = enabled;
+        ResetSnapshots();
+
+        if (!_enabled)
+            return;
+
+        _sawmill.Info($"diagnostics-enabled snapThreshold={F(_snapThreshold)} catchupApplyThreshold={_catchupApplyThreshold} cooldown={F(_logCooldown)}");
+    }
+
+    private void MaybeLogStateProgress(GameStateAppliedArgs args, uint stateTickGap)
+    {
+        var catchup = _stateApplicationsThisFrame >= _catchupApplyThreshold;
+        var skippedStateTick = stateTickGap > 1;
+        var noteworthy = catchup || skippedStateTick;
+
+        if (noteworthy)
+        {
+            if (!CanLog(ref _nextCatchupLog))
+                return;
+        }
+        else
+        {
+            // A low buffer after applying one state is not a catch-up burst. Sample it separately,
+            // before traversing the buffer, so ordinary updates do not pay for logging every tick.
+            var now = _timing.RealTime;
+            if (now < _nextLowBufferSample)
+                return;
+
+            _nextLowBufferSample = now + TimeSpan.FromSeconds(
+                Math.Max(LowBufferSampleInterval.TotalSeconds, _logCooldown));
+        }
+
+        var applicable = _gameStates.GetApplicableStateCount();
+        var lowBuffer = applicable < _gameStates.MinBufferSize;
+        if (!noteworthy && !lowBuffer)
+            return;
+
+        LocalPlayerSnapshot? snapshot = TryGetSnapshot(out var current) ? current : null;
+        var kind = catchup ? "state-catchup" : skippedStateTick ? "state-tick-gap" : "state-low-buffer";
+        var message = $"{kind} appliesThisFrame={_stateApplicationsThisFrame} lowBuffer={lowBuffer} skippedStateTick={skippedStateTick} {FormatState(args, stateTickGap, applicable)} {(snapshot is { } value ? FormatSnapshot(value) : $"player={FormatPlayer()} ent=none")} {FormatTiming()}";
+        if (noteworthy)
+            _sawmill.Warning(message);
+        else
+            _sawmill.Info(message);
+    }
+
+    private bool TryGetSnapshot(out LocalPlayerSnapshot snapshot)
+    {
+        snapshot = default;
+
+        if (_players.LocalEntity is not { } entity ||
+            !Exists(entity) ||
+            !TryComp(entity, out TransformComponent? xform))
+        {
+            return false;
+        }
+
+        var map = _transform.GetMapCoordinates(entity, xform: xform);
+        if (map.MapId == MapId.Nullspace)
+            return false;
+
+        var velocity = Vector2.Zero;
+        if (TryComp(entity, out PhysicsComponent? body))
+            velocity = body.LinearVelocity;
+
+        snapshot = new LocalPlayerSnapshot(
+            entity,
+            GetNetEntity(entity),
+            map.MapId,
+            xform.GridUid,
+            xform.ParentUid,
+            map.Position,
+            xform.LocalPosition,
+            velocity,
+            velocity.Length(),
+            _timing.CurTick,
+            _timing.LastRealTick,
+            _timing.CurFrame,
+            _timing.RealTime);
+
+        return true;
+    }
+
+    private void LogMotion(
+        LocalPlayerSnapshot previous,
+        LocalPlayerSnapshot current,
+        float distance,
+        float worldDistance,
+        bool parentMotion)
+    {
+        var message = $"{(parentMotion ? "parent-motion" : "snap reason=frame")} dist={F(distance)} space=parent worldDist={F(worldDistance)} state=none previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}";
+        if (parentMotion)
+            _sawmill.Info(message);
+        else
+            _sawmill.Warning(message);
+    }
+
+    private string FormatState(GameStateAppliedArgs args, uint stateTickGap, int? applicable = null)
+    {
+        return $"stateFrom={args.AppliedState.FromSequence} stateTo={args.AppliedState.ToSequence} stateTickGap={stateTickGap} payload={args.AppliedState.PayloadSize} detached={args.Detached.Count} bufferApplicable={applicable ?? _gameStates.GetApplicableStateCount()} bufferTotal={_gameStates.StateCount} bufferTarget={_gameStates.TargetBufferSize} bufferMin={_gameStates.MinBufferSize} mergeThreshold={_gameStates.StateBufferMergeThreshold} predictionEnabled={_gameStates.IsPredictionEnabled}";
+    }
+
+    private string FormatSnapshot(LocalPlayerSnapshot snapshot)
+    {
+        // Current snapshots are logged synchronously. Historical motion stays in the value snapshot;
+        // detailed component text is only needed when a line is actually emitted.
+        return $"player={FormatPlayer()} ping={_players.LocalSession?.Ping ?? -1} ent={ToPrettyString(snapshot.Entity)} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} snapTick={snapshot.CurTick} snapRealTick={snapshot.LastRealTick} snapFrame={snapshot.Frame} snapTime={F(snapshot.RealTime.TotalSeconds)} physics=\"{FormatPhysics(snapshot.Entity)}\" mover=\"{FormatMover(snapshot.Entity)}\" relay=\"{FormatRelay(snapshot.Entity)}\"";
+    }
+
+    private string FormatPhysics(EntityUid entity)
+    {
+        if (!TryComp(entity, out PhysicsComponent? body))
+            return "none";
+
+        return $"bodyType={body.BodyType} bodyStatus={body.BodyStatus} awake={body.Awake} predict={body.Predict} canCollide={body.CanCollide} contacts={body.ContactCount}";
+    }
+
+    private static string FormatPrevious(LocalPlayerSnapshot snapshot)
+    {
+        return $"ent={snapshot.Entity} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} tick={snapshot.CurTick} realTick={snapshot.LastRealTick} frame={snapshot.Frame} time={F(snapshot.RealTime.TotalSeconds)}";
+    }
+
+    private string FormatTiming()
+    {
+        return $"timing cur={_timing.CurTick} lastReal={_timing.LastRealTick} lastProcessed={_timing.LastProcessedTick} tickFraction={_timing.TickFraction} inPrediction={_timing.InPrediction} firstPrediction={_timing.IsFirstTimePredicted} applyingState={_timing.ApplyingState} tickAdjust={F(_timing.TickTimingAdjustment)} realFrameMs={F(_timing.RealFrameTime.TotalMilliseconds)} avgFps={F(_timing.FramesPerSecondAvg)}";
+    }
+
+    private string FormatMover(EntityUid entity)
+    {
+        if (!TryComp(entity, out InputMoverComponent? mover))
+            return "none";
+
+        return $"held={mover.HeldMoveButtons} wish={FormatVector(mover.WishDir)} sprinting={mover.Sprinting} canMove={mover.CanMove} relative={FormatEntity(mover.RelativeEntity)} relativeRot={F(mover.RelativeRotation.Theta)} targetRot={F(mover.TargetRelativeRotation.Theta)} lastInput={mover.LastInputTick}/{mover.LastInputSubTick}";
+    }
+
+    private string FormatRelay(EntityUid entity)
+    {
+        var relay = TryComp(entity, out RelayInputMoverComponent? relayComp)
+            ? FormatEntity(relayComp.RelayEntity)
+            : "none";
+
+        var relaySource = TryComp(entity, out MovementRelayTargetComponent? relayTarget)
+            ? FormatEntity(relayTarget.Source)
+            : "none";
+
+        return $"relayTo={relay} relaySource={relaySource} pilotedByClothing={HasComp<PilotedByClothingComponent>(entity)}";
+    }
+
+    private string FormatPlayer()
+    {
+        var name = _players.LocalSession?.Name ?? "none";
+        return $"\"{name.Replace("\"", "\\\"")}\"";
+    }
+
+    private static string FormatEntity(EntityUid? entity)
+    {
+        return entity is { } value && value.IsValid()
+            ? value.ToString()
+            : "none";
+    }
+
+    private static string FormatVector(Vector2 vector)
+    {
+        return $"({F(vector.X)},{F(vector.Y)})";
+    }
+
+    private static string F(float value)
+    {
+        return float.IsFinite(value)
+            ? value.ToString("0.###", CultureInfo.InvariantCulture)
+            : value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private static string F(double value)
+    {
+        return double.IsFinite(value)
+            ? value.ToString("0.###", CultureInfo.InvariantCulture)
+            : value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    private float GetFrameSnapThreshold(LocalPlayerSnapshot previous, LocalPlayerSnapshot current, float frameTime)
+    {
+        var elapsed = Math.Max(frameTime, (float) _timing.RealFrameTime.TotalSeconds);
+        elapsed = Math.Clamp(elapsed, 0f, 0.25f);
+
+        return Math.Max(_snapThreshold, Math.Max(previous.Speed, current.Speed) * elapsed + _snapThreshold);
+    }
+
+    private uint GetStateTickGap(GameTick appliedTick)
+    {
+        if (_lastAppliedStateTick == GameTick.Zero || appliedTick.Value <= _lastAppliedStateTick.Value)
+            return 0;
+
+        return appliedTick.Value - _lastAppliedStateTick.Value;
+    }
+
+    private bool CanLog(ref TimeSpan nextLog)
+    {
+        var now = _timing.RealTime;
+        if (now < nextLog)
+            return false;
+
+        nextLog = now + TimeSpan.FromSeconds(_logCooldown);
+        return true;
+    }
+
+    private static bool IsComparable(LocalPlayerSnapshot previous, LocalPlayerSnapshot current)
+    {
+        // Following a different entity or moving between coordinate spaces starts a new baseline.
+        return previous.Entity == current.Entity && previous.MapId == current.MapId &&
+            previous.GridUid == current.GridUid && previous.ParentUid == current.ParentUid;
+    }
+
+    private void ResetSnapshots()
+    {
+        _lastFrameSnapshot = null;
+        _stateApplicationsThisFrame = 0;
+        _lastAppliedStateTick = GameTick.Zero;
+        _nextCatchupLog = _nextSnapLog = _nextParentMotionLog = TimeSpan.Zero;
+        _nextLowBufferSample = default;
+    }
+
+    private readonly record struct LocalPlayerSnapshot(
+        EntityUid Entity,
+        NetEntity NetEntity,
+        MapId MapId,
+        EntityUid? GridUid,
+        EntityUid ParentUid,
+        Vector2 MapPosition,
+        Vector2 LocalPosition,
+        Vector2 LinearVelocity,
+        float Speed,
+        GameTick CurTick,
+        GameTick LastRealTick,
+        uint Frame,
+        TimeSpan RealTime);
+}

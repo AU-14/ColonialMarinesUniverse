@@ -1,6 +1,8 @@
+using Content.Server.Administration.Managers; // cmu edit
 using System.Threading.Tasks;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
+using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.GameWindow;
 using Content.Shared.Players;
@@ -22,12 +24,16 @@ namespace Content.Server.GameTicking
         [ViewVariables]
         private TimeSpan _joinTimingWarnThreshold = TimeSpan.FromSeconds(5);
 
+        private bool _joinTimingLogEnabled = true;
+
         [Dependency] private IPlayerManager _playerManager = default!;
 
         private void InitializePlayer()
         {
             Subs.CVar(_cfg, CCVars.GameJoinTimingWarnSeconds,
                 seconds => _joinTimingWarnThreshold = TimeSpan.FromSeconds(Math.Max(0f, seconds)), true);
+            Subs.CVar(_cfg, CCVars.GameJoinTimingLogEnabled,
+                enabled => _joinTimingLogEnabled = enabled, true);
 
             _playerManager.PlayerStatusChanged += PlayerStatusChanged;
         }
@@ -82,7 +88,7 @@ namespace Content.Server.GameTicking
 
                     if (firstConnection && _cfg.GetCVar(CCVars.AdminNewPlayerJoinSound))
                         _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Effects/newplayerping.ogg"),
-                            Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false,
+                            Filter.Empty().AddPlayers(_adminManager.ActiveAdminsWithFlag(AdminFlags.AdminAlerts)), false, // cmu edit
                             audioParams: new AudioParams { Volume = -5f });
 
                     break;
@@ -106,6 +112,7 @@ namespace Content.Server.GameTicking
                             SpawnWaitDb();
                         }
 
+                        _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} connected to the game.");
                         break;
                     }
 
@@ -134,6 +141,8 @@ namespace Content.Server.GameTicking
                         }
                     }
 
+                    _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} connected to the game.");
+
                     break;
                 }
 
@@ -146,6 +155,8 @@ namespace Content.Server.GameTicking
                     }
 
                     _userDb.ClientDisconnected(session);
+
+                    _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} disconnected from the game.");
                     break;
                 }
             }
@@ -216,6 +227,9 @@ namespace Content.Server.GameTicking
             DateTime? start = null,
             string baseline = "Connected status was set")
         {
+            if (!_joinTimingLogEnabled)
+                return;
+
             var elapsed = DateTime.UtcNow - (start ?? session.ConnectedTime);
             if (elapsed < _joinTimingWarnThreshold)
             {
@@ -238,6 +252,9 @@ namespace Content.Server.GameTicking
 
         private void LogSlowJoinPhase(ICommonSession session, string step, TimeSpan elapsed)
         {
+            if (!_joinTimingLogEnabled)
+                return;
+
             if (elapsed < _joinTimingWarnThreshold)
             {
                 Log.Debug(
@@ -268,6 +285,8 @@ namespace Content.Server.GameTicking
                 _chatManager.DispatchServerMessage(session, Loc.GetString("game-ticker-player-join-game-message"));
 
             _playerGameStatuses[session.UserId] = PlayerGameStatus.JoinedGame;
+            if (RunLevel == GameRunLevel.PreRoundLobby)
+                UpdateInfoText();
             _db.AddRoundPlayers(RoundId, session.UserId);
 
             if (_adminManager.HasAdminFlag(session, AdminFlags.Admin))

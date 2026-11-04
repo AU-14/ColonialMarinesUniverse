@@ -1,0 +1,45 @@
+<Document>
+  # Cryogenic Medicines and Recipes
+  Place a beaker in a powered cryo pod and put the patient inside. Supply cold gas from a freezer. The medicines below work on living and dead patients once the body reaches the required temperature, except Opporozidone, which treats dead patients only. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"].
+  The six newer medicines consume 0.5 units per second at normal metabolism. Damage recovery occurs each second while the medicine is present.
+  - [bold]Standard Cryoxadone[/bold]: a separate, non-Marine reagent that heals 6 asphyxiation and 6 blood loss per second at 213 K or colder. The recipes below use Marine Cryoxadone instead.
+  - [bold]Aloxadone[/bold]: heals 6 each of heat, shock, cold and caustic damage per second. It also closes each burn wound by 6 per second, including severe burns, at 213 K or colder.
+  - [bold]Traumoxadone[/bold]: heals 6 each of blunt, piercing and slash damage per second. It also closes each brute wound by 6 per second, including gaping cuts, at 213 K or colder.
+  - [bold]Urishoxadone[/bold]: heals 6 poison and 6 radiation damage per second at 213 K or colder.
+  - [bold]Doxarubixadone[/bold]: heals 6 cellular damage per second and restores 6 health per second to each attached organ at 213 K or colder.
+  - [bold]Necrosol[/bold]: regenerates one missing native limb per 5 units, gradually mends every fractured bone, and regenerates 1% of normal blood volume per second at 213 K or colder. It does not heal general damage.
+  - [bold]Opporozidone[/bold]: reverses 5 seconds of rot per second and extends an active revival deadline by 5 seconds per unit in dead patients at 150 K or colder. Rot describes corpse decay; the separate revival deadline determines when the body becomes permanently unrevivable. It cannot reverse permanent death or an expired revival deadline.
+  - [bold]Marine Cryoxadone and Clonexadone[/bold]: older Marine cryogenic medicines. They use their own formulations and work below 170 K.
+
+  ## Cryogenic Recipes
+  All amounts are reagent units (u). Unqualified elemental ingredients come from the chemical dispenser. Recipe temperatures are the minimum mixture temperature when mixing; treatment temperatures are listed above. A hotplate flatpack is available from the medical supply vendor for heating temperature-sensitive recipes.
+  - [bold]Marine Cryoxadone[/bold]: 1 Marine Dexalin + 1 Water + 1 Oxygen makes 3 Marine Cryoxadone.
+  - [bold]Aloxadone[/bold]: 2 Marine Cryoxadone + 1 Aloe + 2 Marine Leporazine makes 4 Aloxadone.
+  - [bold]Traumoxadone[/bold]: 1 Marine Cryoxadone + 1 Phenol from mutant carrots + 1 Lipozine makes 2 Traumoxadone.
+  - [bold]Urishoxadone[/bold]: 3 Marine Cryoxadone + 5 Urishiol + 2 Marine Arithrazine makes 5 Urishoxadone.
+  - [bold]Doxarubixadone[/bold]: 1 Marine Cryoxadone + 1 CMU Unstable Mutagen makes 2 Doxarubixadone.
+  - [bold]Necrosol[/bold]: 3 Marine Cardiocaine + 1 Mindbreaker Toxin + 2 Marine Cryoxadone makes 2 Necrosol at 370 K or hotter.
+  - [bold]Opporozidone[/bold]: 1 Mindbreaker Toxin + 1 Phoron + 1 Doxarubixadone makes 3 Opporozidone at 400 K or hotter.
+
+  ## Cryogenic Precursors
+  Aloe comes from aloe plants, Urishiol from nettles or death nettles, and Phenol from mutant carrots. Phoron can be taken from phoron sheets or reagent tanks.
+  - [bold]Marine Dexalin[/bold]: 2 Oxygen + 5.1 Phoron makes 1 Marine Dexalin and returns 5 Phoron.
+  - [bold]Marine Leporazine[/bold]: 1 Silicon + 1 Copper with 5 Phoron as a catalyst makes 2 Marine Leporazine.
+  - [bold]Marine Dylovene[/bold]: 1 Silicon + 1 Potassium + 1 Nitrogen makes 3 Marine Dylovene.
+  - [bold]Marine Arithrazine[/bold]: 1 Marine Dylovene + 1 Phosphorus makes 2 Marine Arithrazine.
+  - [bold]Table Salt[/bold]: 1 Chlorine + 1 Sodium makes 2 Table Salt.
+  - [bold]Lipozine[/bold]: 1 Table Salt + 1 Ethanol + 1 Radium makes 3 Lipozine.
+  - [bold]CMU Unstable Mutagen[/bold]: 1 Chlorine + 1 Radium + 1 Phosphorus makes 3 CMU Unstable Mutagen.
+  - [bold]Mindbreaker Toxin[/bold]: 1 Silicon + 1 Hydrogen + 1 Marine Dylovene makes 3 Mindbreaker Toxin.
+  - [bold]Marine Cardiocaine[/bold]: 1 Marine Epinephrine + 1 Marine Bicaridine + 1 Iron makes 3 Marine Cardiocaine.
+
+  <GuideReagentEmbed Reagent="CMCryoxadone"/>
+  <GuideReagentEmbed Reagent="CMClonexadone"/>
+  <GuideReagentEmbed Reagent="Cryoxadone"/>
+  <GuideReagentEmbed Reagent="Aloxadone"/>
+  <GuideReagentEmbed Reagent="Traumoxadone"/>
+  <GuideReagentEmbed Reagent="Urishoxadone"/>
+  <GuideReagentEmbed Reagent="Doxarubixadone"/>
+  <GuideReagentEmbed Reagent="Necrosol"/>
+  <GuideReagentEmbed Reagent="Opporozidone"/>
+</Document>

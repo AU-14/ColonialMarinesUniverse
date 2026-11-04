@@ -1,167 +1,193 @@
-# port from Cosmatic Drift
+# Ported from Cosmetic Drift.
 
 - type: species
   id: Avali
   name: species-name-avali
   roundStart: false
   prototype: CMMobAvali
-  sprites: MobAvaliSprites
-  markingLimits: MobAvaliMarkingLimits
-  dollPrototype: MobAvaliDummy
+  dollPrototype: AppearanceAvali
   skinColoration: Hues
   maleFirstNames: RMCNamesAvaliFirst
   femaleFirstNames: RMCNamesAvaliFirst
   lastNames: RMCNamesAvaliLast
   naming: FirstLastCombined
+  defaultSoundsBySex:
+  - RMCMaleAvali
+  - RMCFemaleAvali
+  - RMCMaleAvali
+  voices:
+  - RMCMaleAvali
+  - RMCFemaleAvali
 
-- type: speciesBaseSprites
-  id: MobAvaliSprites
-  sprites:
-    Head: MobAvaliHead
-    Chest: MobAvaliTorso
-    UndergarmentTop: MobHumanoidAnyMarking
-    UndergarmentBottom: MobHumanoidAnyMarking
-    HeadTop: MobHumanoidAnyMarking
-    HeadSide: MobHumanoidAnyMarking
-    Tail: MobHumanoidAnyMarking
-    Eyes: MobAvaliEyes
-    LArm: MobAvaliLArm
-    RArm: MobAvaliRArm
-    LHand: MobAvaliLHand
-    RHand: MobAvaliRHand
-    LLeg: MobAvaliLLeg
-    RLeg: MobAvaliRLeg
-    LFoot: MobAvaliLFoot
-    RFoot: MobAvaliRFoot
-
-- type: humanoidBaseSprite
-  id: MobAvaliEyes
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: eyes
-
-- type: markingPoints
-  id: MobAvaliMarkingLimits
-  onlyWhitelisted: true
-  points:
-    Hair:
-      points: 1
+- type: markingsGroup
+  parent: Undergarments
+  id: Avali
+  onlyGroupWhitelisted: true
+  limits:
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
       required: false
-    FacialHair:
-      points: 0
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 0
       required: false
-    Tail:
-      points: 1
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
       required: true
-      defaultMarkings: [ AvaliTailBase ]
-    Snout:
-      points: 1
+      default: [ AvaliTailBase ]
+    enum.HumanoidVisualLayers.Snout:
+      limit: 1
       required: false
-    HeadTop:
-      points: 1
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
       required: false
-    HeadSide:
-      points: 1
+    enum.HumanoidVisualLayers.HeadSide:
+      limit: 1
       required: true
-      defaultMarkings: [ AvaliEarsBase ]
-    Chest:
-      points: 1
+      default: [ AvaliEarsBase ]
+    enum.HumanoidVisualLayers.Chest:
+      limit: 1
       required: false
-    UndergarmentBottom:
-      points: 1
+    enum.HumanoidVisualLayers.UndergarmentBottom:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUnderwearBoxersBlue ]
-    UndergarmentTop:
-      points: 1
+      default: [ RMCUnderwearBoxersBlue ]
+    enum.HumanoidVisualLayers.UndergarmentTop:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUndershirtStandard ]
-    Legs:
-      points: 2
+      default: [ RMCUndershirtStandard ]
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 2
       required: false
-    Arms:
-      points: 4
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.LArm:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 4
       required: false
 
-- type: humanoidBaseSprite
-  id: MobAvaliHead
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: head_m
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceAvali
+  categories: [ HideSpawnMenu ]
+  name: avali appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: OrganAvaliTorso
+      Head: OrganAvaliHead
+      ArmLeft: OrganAvaliArmLeft
+      ArmRight: OrganAvaliArmRight
+      HandRight: OrganAvaliHandRight
+      HandLeft: OrganAvaliHandLeft
+      LegLeft: OrganAvaliLegLeft
+      LegRight: OrganAvaliLegRight
+      FootLeft: OrganAvaliFootLeft
+      FootRight: OrganAvaliFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganAvaliEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Avali
+    voice: RMCMaleAvali
+  - type: Inventory
+    speciesId: avali
 
-- type: humanoidBaseSprite
-  id: MobAvaliHeadMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: head_m
+- type: entity
+  parent: OrganBaseOrganic
+  id: OrganAvali
+  abstract: true
+  suffix: avali
 
-- type: humanoidBaseSprite
-  id: MobAvaliHeadFemale
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: head_f
+- type: entity
+  id: OrganAvaliVisual
+  abstract: true
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: _RMC14/Mobs/Avali/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Avali
 
-- type: humanoidBaseSprite
-  id: MobAvaliTorso
-  baseSprite:
+- type: entity
+  parent: [ OrganAvali, OrganAvaliVisual ]
+  id: OrganAvaliExternal
+  abstract: true
+  components:
+  - type: Sprite
     sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: torso_m
 
-- type: humanoidBaseSprite
-  id: MobAvaliTorsoMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: torso_m
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganAvaliExternal ]
+  id: OrganAvaliTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
 
-- type: humanoidBaseSprite
-  id: MobAvaliTorsoFemale
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: torso_f
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganAvaliExternal ]
+  id: OrganAvaliHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.HeadTop
+    - enum.HumanoidVisualLayers.HeadSide
 
-- type: humanoidBaseSprite
-  id: MobAvaliLLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: l_leg
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganAvaliExternal ]
+  id: OrganAvaliArmLeft
 
-- type: humanoidBaseSprite
-  id: MobAvaliLHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: l_hand
+- type: entity
+  parent: [ OrganBaseArmRight, OrganAvaliExternal ]
+  id: OrganAvaliArmRight
 
-- type: humanoidBaseSprite
-  id: MobAvaliLArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: l_arm
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganAvaliExternal ]
+  id: OrganAvaliHandLeft
 
-- type: humanoidBaseSprite
-  id: MobAvaliLFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: l_foot
+- type: entity
+  parent: [ OrganBaseHandRight, OrganAvaliExternal ]
+  id: OrganAvaliHandRight
 
-- type: humanoidBaseSprite
-  id: MobAvaliRLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: r_leg
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganAvaliExternal ]
+  id: OrganAvaliLegLeft
 
-- type: humanoidBaseSprite
-  id: MobAvaliRHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: r_hand
+- type: entity
+  parent: [ OrganBaseLegRight, OrganAvaliExternal ]
+  id: OrganAvaliLegRight
 
-- type: humanoidBaseSprite
-  id: MobAvaliRArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: r_arm
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganAvaliExternal ]
+  id: OrganAvaliFootLeft
 
-- type: humanoidBaseSprite
-  id: MobAvaliRFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Avali/parts.rsi
-    state: r_foot
+- type: entity
+  parent: [ OrganBaseFootRight, OrganAvaliExternal ]
+  id: OrganAvaliFootRight
+
+- type: entity
+  parent: [ OrganAvaliVisual, OrganBaseEyes, OrganHumanInternal ]
+  id: OrganAvaliEyes

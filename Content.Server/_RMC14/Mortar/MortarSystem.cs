@@ -2,12 +2,13 @@ using System.Numerics;
 using Content.Server._RMC14.Dropship;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
-using Content.Shared._CMU14.ZLevels.Core;
-using Content.Shared._CMU14.ZLevels.Ordnance;
+using Content.Shared.CMU14.ZLevels.Core;
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Mortar;
 using Content.Shared._RMC14.Rangefinder;
+using Content.Shared.Chat;
 using Content.Shared.Maps;
 using Robust.Server.Containers;
 using Robust.Shared.Map;
@@ -25,7 +26,6 @@ public sealed partial class MortarSystem : SharedMortarSystem
     [Dependency] private ContainerSystem _container = default!;
     [Dependency] private DropshipSystem _dropship = default!;
     [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
@@ -333,7 +333,7 @@ public sealed partial class MortarSystem : SharedMortarSystem
         if (_container.TryGetContainer(mortar, mortar.Comp.ContainerId, out var container) &&
             !_container.CanInsert(shell, container))
         {
-            _popup.PopupClient(Loc.GetString("rmc-mortar-cant-insert", ("shell", shell), ("mortar", mortar)), user, user, SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-cant-insert", ("shell", shell), ("mortar", mortar)), user, user, SmallCaution);
             return false;
         }
 

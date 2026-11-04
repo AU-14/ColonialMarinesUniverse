@@ -1,0 +1,699 @@
+# Generated source-shaped reagent cart drafts; see SOURCES_REAGENT_TANKS.md.
+- type: cmu3DModel
+  id: CMU3DRMCTankReagentEmpty
+  label: Empty reagent cart
+  status: draft
+  sourcePrototypes:
+  - RMCTankReagentEmpty
+  referencePrototype: RMCTankReagentEmpty
+  referenceRsi: _RMC14/Structures/Storage/reagent_tank.rsi
+  referenceState: tank_normal
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  placement: floor
+  groundOffset: 0, 0
+  reagentTankAppearance:
+    vesselParts: &id001
+    - upper vessel
+    - lower vessel
+  description: 'Source-shaped asymmetric wheeled reagent cart: equipment cabinet, narrow vessel, frame, handle and
+    low chassis. Original body/vessel/status crops retained. Empty white vessel is the authored base; the bounded
+    appearance adapter owns live fill tint over it. Source noRot retained. Hidden depth and rear wheels are inferred;
+    no falling-liquid or pumping animation. See SOURCES_REAGENT_TANKS.md.'
+  parts:
+  - min: -0.4062500, -0.2350000, 0.0625000
+    max: 0.0000000, 0.2250000, 0.7812500
+    color: '#464944'
+    label: left cabinet core
+  - min: -0.4062500, -0.2350000, 0.7812500
+    max: 0.0000000, 0.2250000, 0.8125000
+    color: '#575B55'
+    label: stepped cabinet crown
+  - min: -0.4375000, -0.2460000, 0.0625000
+    max: 0.0312500, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original cabinet face
+    surface: CMU3DReagentTankSurface1420
+    surfaceAxis: XZ
+  - min: -0.3750000, -0.2000000, 0.0625000
+    max: 0.2812500, 0.2000000, 0.1250000
+    color: '#252624'
+    label: low wheeled chassis
+  - min: -0.3750000, -0.2000000, 0.0000000
+    max: -0.2812500, -0.1250000, 0.0937500
+    color: '#252624'
+    label: left front wheel
+    shape: CylinderY
+  - min: -0.3750000, 0.1250000, 0.0000000
+    max: -0.2812500, 0.2000000, 0.0937500
+    color: '#252624'
+    label: left rear wheel
+    shape: CylinderY
+  - min: 0.1562500, -0.2000000, 0.0000000
+    max: 0.2500000, -0.1250000, 0.0937500
+    color: '#252624'
+    label: right front wheel
+    shape: CylinderY
+  - min: 0.1562500, 0.1250000, 0.0000000
+    max: 0.2500000, 0.2000000, 0.0937500
+    color: '#252624'
+    label: right rear wheel
+    shape: CylinderY
+  - min: -0.3750000, -0.2460000, 0.0000000
+    max: -0.2812500, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: left wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.1562500, -0.2460000, 0.0000000
+    max: 0.2500000, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: right wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.2500000, -0.2250000, 0.1250000
+    max: 0.3125000, 0.2000000, 0.7187500
+    color: '#252624'
+    label: right upright frame
+  - min: 0.3750000, -0.2000000, 0.5000000
+    max: 0.4375000, 0.2000000, 0.8125000
+    color: '#464944'
+    label: push handle grip
+  - min: 0.3125000, -0.2000000, 0.4375000
+    max: 0.4062500, 0.2000000, 0.5000000
+    color: '#363835'
+    label: push handle lower return
+  - min: 0.0312500, -0.2250000, 0.7187500
+    max: 0.4375000, 0.2000000, 0.7500000
+    color: '#252624'
+    label: upper vessel frame
+  - min: 0.0312500, -0.2390000, 0.2187500
+    max: 0.3125000, 0.2000000, 0.2812500
+    color: '#A5A6A7'
+    label: fixed middle frame bar
+  - min: 0.0312500, -0.2460000, 0.0625000
+    max: 0.4375000, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original right frame and handle
+    surface: CMU3DReagentTankSurface1422
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.2812500
+    max: 0.2500000, 0.2000000, 0.7187500
+    color: '#FFFFFF'
+    label: upper vessel
+    surface: CMU3DReagentTankSurface1423
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.1250000
+    max: 0.2500000, 0.2000000, 0.2187500
+    color: '#FFFFFF'
+    label: lower vessel
+    surface: CMU3DReagentTankSurface1424
+    surfaceAxis: XZ
+  - min: -0.3437500, -0.2500000, 0.1250000
+    max: -0.3125000, -0.2470000, 0.3750000
+    color: '#FFFFFF'
+    label: static green source indicator
+    surface: CMU3DReagentTankSurface1425
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DRMCTankReagentDermaline
+  label: Dermaline reagent cart
+  status: draft
+  sourcePrototypes:
+  - RMCTankReagentDermaline
+  referencePrototype: RMCTankReagentDermaline
+  referenceRsi: _RMC14/Structures/Storage/reagent_tank.rsi
+  referenceState: tank_normal
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  placement: floor
+  groundOffset: 0, 0
+  reagentTankAppearance:
+    vesselParts: *id001
+  description: 'Source-shaped asymmetric wheeled reagent cart: equipment cabinet, narrow vessel, frame, handle and
+    low chassis. Original body/vessel/status crops retained. Empty white vessel is the authored base; the bounded
+    appearance adapter owns live fill tint over it. Source noRot retained. Hidden depth and rear wheels are inferred;
+    no falling-liquid or pumping animation. See SOURCES_REAGENT_TANKS.md.'
+  parts:
+  - min: -0.4062500, -0.2350000, 0.0625000
+    max: 0.0000000, 0.2250000, 0.7812500
+    color: '#464944'
+    label: left cabinet core
+  - min: -0.4062500, -0.2350000, 0.7812500
+    max: 0.0000000, 0.2250000, 0.8125000
+    color: '#575B55'
+    label: stepped cabinet crown
+  - min: -0.4375000, -0.2460000, 0.0625000
+    max: 0.0312500, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original cabinet face
+    surface: CMU3DReagentTankSurface1420
+    surfaceAxis: XZ
+  - min: -0.3750000, -0.2000000, 0.0625000
+    max: 0.2812500, 0.2000000, 0.1250000
+    color: '#252624'
+    label: low wheeled chassis
+  - min: -0.3750000, -0.2000000, 0.0000000
+    max: -0.2812500, -0.1250000, 0.0937500
+    color: '#252624'
+    label: left front wheel
+    shape: CylinderY
+  - min: -0.3750000, 0.1250000, 0.0000000
+    max: -0.2812500, 0.2000000, 0.0937500
+    color: '#252624'
+    label: left rear wheel
+    shape: CylinderY
+  - min: 0.1562500, -0.2000000, 0.0000000
+    max: 0.2500000, -0.1250000, 0.0937500
+    color: '#252624'
+    label: right front wheel
+    shape: CylinderY
+  - min: 0.1562500, 0.1250000, 0.0000000
+    max: 0.2500000, 0.2000000, 0.0937500
+    color: '#252624'
+    label: right rear wheel
+    shape: CylinderY
+  - min: -0.3750000, -0.2460000, 0.0000000
+    max: -0.2812500, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: left wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.1562500, -0.2460000, 0.0000000
+    max: 0.2500000, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: right wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.2500000, -0.2250000, 0.1250000
+    max: 0.3125000, 0.2000000, 0.7187500
+    color: '#252624'
+    label: right upright frame
+  - min: 0.3750000, -0.2000000, 0.5000000
+    max: 0.4375000, 0.2000000, 0.8125000
+    color: '#464944'
+    label: push handle grip
+  - min: 0.3125000, -0.2000000, 0.4375000
+    max: 0.4062500, 0.2000000, 0.5000000
+    color: '#363835'
+    label: push handle lower return
+  - min: 0.0312500, -0.2250000, 0.7187500
+    max: 0.4375000, 0.2000000, 0.7500000
+    color: '#252624'
+    label: upper vessel frame
+  - min: 0.0312500, -0.2390000, 0.2187500
+    max: 0.3125000, 0.2000000, 0.2812500
+    color: '#A5A6A7'
+    label: fixed middle frame bar
+  - min: 0.0312500, -0.2460000, 0.0625000
+    max: 0.4375000, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original right frame and handle
+    surface: CMU3DReagentTankSurface1422
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.2812500
+    max: 0.2500000, 0.2000000, 0.7187500
+    color: '#FFFFFF'
+    label: upper vessel
+    surface: CMU3DReagentTankSurface1423
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.1250000
+    max: 0.2500000, 0.2000000, 0.2187500
+    color: '#FFFFFF'
+    label: lower vessel
+    surface: CMU3DReagentTankSurface1424
+    surfaceAxis: XZ
+  - min: -0.3437500, -0.2500000, 0.1250000
+    max: -0.3125000, -0.2470000, 0.3750000
+    color: '#FFFFFF'
+    label: static green source indicator
+    surface: CMU3DReagentTankSurface1425
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DRMCTankReagentMeralyne
+  label: Meralyne reagent cart
+  status: draft
+  sourcePrototypes:
+  - RMCTankReagentMeralyne
+  referencePrototype: RMCTankReagentMeralyne
+  referenceRsi: _RMC14/Structures/Storage/reagent_tank.rsi
+  referenceState: tank_normal
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  placement: floor
+  groundOffset: 0, 0
+  reagentTankAppearance:
+    vesselParts: *id001
+  description: 'Source-shaped asymmetric wheeled reagent cart: equipment cabinet, narrow vessel, frame, handle and
+    low chassis. Original body/vessel/status crops retained. Empty white vessel is the authored base; the bounded
+    appearance adapter owns live fill tint over it. Source noRot retained. Hidden depth and rear wheels are inferred;
+    no falling-liquid or pumping animation. See SOURCES_REAGENT_TANKS.md.'
+  parts:
+  - min: -0.4062500, -0.2350000, 0.0625000
+    max: 0.0000000, 0.2250000, 0.7812500
+    color: '#464944'
+    label: left cabinet core
+  - min: -0.4062500, -0.2350000, 0.7812500
+    max: 0.0000000, 0.2250000, 0.8125000
+    color: '#575B55'
+    label: stepped cabinet crown
+  - min: -0.4375000, -0.2460000, 0.0625000
+    max: 0.0312500, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original cabinet face
+    surface: CMU3DReagentTankSurface1420
+    surfaceAxis: XZ
+  - min: -0.3750000, -0.2000000, 0.0625000
+    max: 0.2812500, 0.2000000, 0.1250000
+    color: '#252624'
+    label: low wheeled chassis
+  - min: -0.3750000, -0.2000000, 0.0000000
+    max: -0.2812500, -0.1250000, 0.0937500
+    color: '#252624'
+    label: left front wheel
+    shape: CylinderY
+  - min: -0.3750000, 0.1250000, 0.0000000
+    max: -0.2812500, 0.2000000, 0.0937500
+    color: '#252624'
+    label: left rear wheel
+    shape: CylinderY
+  - min: 0.1562500, -0.2000000, 0.0000000
+    max: 0.2500000, -0.1250000, 0.0937500
+    color: '#252624'
+    label: right front wheel
+    shape: CylinderY
+  - min: 0.1562500, 0.1250000, 0.0000000
+    max: 0.2500000, 0.2000000, 0.0937500
+    color: '#252624'
+    label: right rear wheel
+    shape: CylinderY
+  - min: -0.3750000, -0.2460000, 0.0000000
+    max: -0.2812500, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: left wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.1562500, -0.2460000, 0.0000000
+    max: 0.2500000, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: right wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.2500000, -0.2250000, 0.1250000
+    max: 0.3125000, 0.2000000, 0.7187500
+    color: '#252624'
+    label: right upright frame
+  - min: 0.3750000, -0.2000000, 0.5000000
+    max: 0.4375000, 0.2000000, 0.8125000
+    color: '#464944'
+    label: push handle grip
+  - min: 0.3125000, -0.2000000, 0.4375000
+    max: 0.4062500, 0.2000000, 0.5000000
+    color: '#363835'
+    label: push handle lower return
+  - min: 0.0312500, -0.2250000, 0.7187500
+    max: 0.4375000, 0.2000000, 0.7500000
+    color: '#252624'
+    label: upper vessel frame
+  - min: 0.0312500, -0.2390000, 0.2187500
+    max: 0.3125000, 0.2000000, 0.2812500
+    color: '#A5A6A7'
+    label: fixed middle frame bar
+  - min: 0.0312500, -0.2460000, 0.0625000
+    max: 0.4375000, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original right frame and handle
+    surface: CMU3DReagentTankSurface1422
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.2812500
+    max: 0.2500000, 0.2000000, 0.7187500
+    color: '#FFFFFF'
+    label: upper vessel
+    surface: CMU3DReagentTankSurface1423
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.1250000
+    max: 0.2500000, 0.2000000, 0.2187500
+    color: '#FFFFFF'
+    label: lower vessel
+    surface: CMU3DReagentTankSurface1424
+    surfaceAxis: XZ
+  - min: -0.3437500, -0.2500000, 0.1250000
+    max: -0.3125000, -0.2470000, 0.3750000
+    color: '#FFFFFF'
+    label: static green source indicator
+    surface: CMU3DReagentTankSurface1425
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DRMCTankReagentPhoron
+  label: Phoron reagent cart
+  status: draft
+  sourcePrototypes:
+  - RMCTankReagentPhoron
+  referencePrototype: RMCTankReagentPhoron
+  referenceRsi: _RMC14/Structures/Storage/reagent_tank.rsi
+  referenceState: tank_normal
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  placement: floor
+  groundOffset: 0, 0
+  reagentTankAppearance:
+    vesselParts: *id001
+  description: 'Source-shaped asymmetric wheeled reagent cart: equipment cabinet, narrow vessel, frame, handle and
+    low chassis. Original body/vessel/status crops retained. Empty white vessel is the authored base; the bounded
+    appearance adapter owns live fill tint over it. Source noRot retained. Hidden depth and rear wheels are inferred;
+    no falling-liquid or pumping animation. See SOURCES_REAGENT_TANKS.md.'
+  parts:
+  - min: -0.4062500, -0.2350000, 0.0625000
+    max: 0.0000000, 0.2250000, 0.7812500
+    color: '#464944'
+    label: left cabinet core
+  - min: -0.4062500, -0.2350000, 0.7812500
+    max: 0.0000000, 0.2250000, 0.8125000
+    color: '#575B55'
+    label: stepped cabinet crown
+  - min: -0.4375000, -0.2460000, 0.0625000
+    max: 0.0312500, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original cabinet face
+    surface: CMU3DReagentTankSurface1420
+    surfaceAxis: XZ
+  - min: -0.3750000, -0.2000000, 0.0625000
+    max: 0.2812500, 0.2000000, 0.1250000
+    color: '#252624'
+    label: low wheeled chassis
+  - min: -0.3750000, -0.2000000, 0.0000000
+    max: -0.2812500, -0.1250000, 0.0937500
+    color: '#252624'
+    label: left front wheel
+    shape: CylinderY
+  - min: -0.3750000, 0.1250000, 0.0000000
+    max: -0.2812500, 0.2000000, 0.0937500
+    color: '#252624'
+    label: left rear wheel
+    shape: CylinderY
+  - min: 0.1562500, -0.2000000, 0.0000000
+    max: 0.2500000, -0.1250000, 0.0937500
+    color: '#252624'
+    label: right front wheel
+    shape: CylinderY
+  - min: 0.1562500, 0.1250000, 0.0000000
+    max: 0.2500000, 0.2000000, 0.0937500
+    color: '#252624'
+    label: right rear wheel
+    shape: CylinderY
+  - min: -0.3750000, -0.2460000, 0.0000000
+    max: -0.2812500, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: left wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.1562500, -0.2460000, 0.0000000
+    max: 0.2500000, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: right wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.2500000, -0.2250000, 0.1250000
+    max: 0.3125000, 0.2000000, 0.7187500
+    color: '#252624'
+    label: right upright frame
+  - min: 0.3750000, -0.2000000, 0.5000000
+    max: 0.4375000, 0.2000000, 0.8125000
+    color: '#464944'
+    label: push handle grip
+  - min: 0.3125000, -0.2000000, 0.4375000
+    max: 0.4062500, 0.2000000, 0.5000000
+    color: '#363835'
+    label: push handle lower return
+  - min: 0.0312500, -0.2250000, 0.7187500
+    max: 0.4375000, 0.2000000, 0.7500000
+    color: '#252624'
+    label: upper vessel frame
+  - min: 0.0312500, -0.2390000, 0.2187500
+    max: 0.3125000, 0.2000000, 0.2812500
+    color: '#A5A6A7'
+    label: fixed middle frame bar
+  - min: 0.0312500, -0.2460000, 0.0625000
+    max: 0.4375000, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original right frame and handle
+    surface: CMU3DReagentTankSurface1422
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.2812500
+    max: 0.2500000, 0.2000000, 0.7187500
+    color: '#FFFFFF'
+    label: upper vessel
+    surface: CMU3DReagentTankSurface1423
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.1250000
+    max: 0.2500000, 0.2000000, 0.2187500
+    color: '#FFFFFF'
+    label: lower vessel
+    surface: CMU3DReagentTankSurface1424
+    surfaceAxis: XZ
+  - min: -0.3437500, -0.2500000, 0.1250000
+    max: -0.3125000, -0.2470000, 0.3750000
+    color: '#FFFFFF'
+    label: static green source indicator
+    surface: CMU3DReagentTankSurface1425
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DRMCTankReagentSulphuricAcid
+  label: SulphuricAcid reagent cart
+  status: draft
+  sourcePrototypes:
+  - RMCTankReagentSulphuricAcid
+  referencePrototype: RMCTankReagentSulphuricAcid
+  referenceRsi: _RMC14/Structures/Storage/reagent_tank.rsi
+  referenceState: tank_normal
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  placement: floor
+  groundOffset: 0, 0
+  reagentTankAppearance:
+    vesselParts: *id001
+  description: 'Source-shaped asymmetric wheeled reagent cart: equipment cabinet, narrow vessel, frame, handle and
+    low chassis. Original body/vessel/status crops retained. Empty white vessel is the authored base; the bounded
+    appearance adapter owns live fill tint over it. Source noRot retained. Hidden depth and rear wheels are inferred;
+    no falling-liquid or pumping animation. See SOURCES_REAGENT_TANKS.md.'
+  parts:
+  - min: -0.4062500, -0.2350000, 0.0625000
+    max: 0.0000000, 0.2250000, 0.7812500
+    color: '#464944'
+    label: left cabinet core
+  - min: -0.4062500, -0.2350000, 0.7812500
+    max: 0.0000000, 0.2250000, 0.8125000
+    color: '#575B55'
+    label: stepped cabinet crown
+  - min: -0.4375000, -0.2460000, 0.0625000
+    max: 0.0312500, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original cabinet face
+    surface: CMU3DReagentTankSurface1420
+    surfaceAxis: XZ
+  - min: -0.3750000, -0.2000000, 0.0625000
+    max: 0.2812500, 0.2000000, 0.1250000
+    color: '#252624'
+    label: low wheeled chassis
+  - min: -0.3750000, -0.2000000, 0.0000000
+    max: -0.2812500, -0.1250000, 0.0937500
+    color: '#252624'
+    label: left front wheel
+    shape: CylinderY
+  - min: -0.3750000, 0.1250000, 0.0000000
+    max: -0.2812500, 0.2000000, 0.0937500
+    color: '#252624'
+    label: left rear wheel
+    shape: CylinderY
+  - min: 0.1562500, -0.2000000, 0.0000000
+    max: 0.2500000, -0.1250000, 0.0937500
+    color: '#252624'
+    label: right front wheel
+    shape: CylinderY
+  - min: 0.1562500, 0.1250000, 0.0000000
+    max: 0.2500000, 0.2000000, 0.0937500
+    color: '#252624'
+    label: right rear wheel
+    shape: CylinderY
+  - min: -0.3750000, -0.2460000, 0.0000000
+    max: -0.2812500, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: left wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.1562500, -0.2460000, 0.0000000
+    max: 0.2500000, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: right wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.2500000, -0.2250000, 0.1250000
+    max: 0.3125000, 0.2000000, 0.7187500
+    color: '#252624'
+    label: right upright frame
+  - min: 0.3750000, -0.2000000, 0.5000000
+    max: 0.4375000, 0.2000000, 0.8125000
+    color: '#464944'
+    label: push handle grip
+  - min: 0.3125000, -0.2000000, 0.4375000
+    max: 0.4062500, 0.2000000, 0.5000000
+    color: '#363835'
+    label: push handle lower return
+  - min: 0.0312500, -0.2250000, 0.7187500
+    max: 0.4375000, 0.2000000, 0.7500000
+    color: '#252624'
+    label: upper vessel frame
+  - min: 0.0312500, -0.2390000, 0.2187500
+    max: 0.3125000, 0.2000000, 0.2812500
+    color: '#A5A6A7'
+    label: fixed middle frame bar
+  - min: 0.0312500, -0.2460000, 0.0625000
+    max: 0.4375000, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original right frame and handle
+    surface: CMU3DReagentTankSurface1422
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.2812500
+    max: 0.2500000, 0.2000000, 0.7187500
+    color: '#FFFFFF'
+    label: upper vessel
+    surface: CMU3DReagentTankSurface1423
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.1250000
+    max: 0.2500000, 0.2000000, 0.2187500
+    color: '#FFFFFF'
+    label: lower vessel
+    surface: CMU3DReagentTankSurface1424
+    surfaceAxis: XZ
+  - min: -0.3437500, -0.2500000, 0.1250000
+    max: -0.3125000, -0.2470000, 0.3750000
+    color: '#FFFFFF'
+    label: static green source indicator
+    surface: CMU3DReagentTankSurface1425
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DWaterTank
+  label: Water reagent cart
+  status: draft
+  sourcePrototypes:
+  - RMCTankReagentWater
+  referencePrototype: RMCTankReagentWater
+  referenceRsi: _RMC14/Structures/Storage/reagent_tank.rsi
+  referenceState: tank_normal
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  placement: floor
+  groundOffset: 0, 0
+  reagentTankAppearance:
+    vesselParts: *id001
+  description: 'Source-shaped asymmetric wheeled reagent cart: equipment cabinet, narrow vessel, frame, handle and
+    low chassis. Original body/vessel/status crops retained. Empty white vessel is the authored base; the bounded
+    appearance adapter owns live fill tint over it. Source noRot retained. Hidden depth and rear wheels are inferred;
+    no falling-liquid or pumping animation. See SOURCES_REAGENT_TANKS.md.'
+  parts:
+  - min: -0.4062500, -0.2350000, 0.0625000
+    max: 0.0000000, 0.2250000, 0.7812500
+    color: '#464944'
+    label: left cabinet core
+  - min: -0.4062500, -0.2350000, 0.7812500
+    max: 0.0000000, 0.2250000, 0.8125000
+    color: '#575B55'
+    label: stepped cabinet crown
+  - min: -0.4375000, -0.2460000, 0.0625000
+    max: 0.0312500, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original cabinet face
+    surface: CMU3DReagentTankSurface1420
+    surfaceAxis: XZ
+  - min: -0.3750000, -0.2000000, 0.0625000
+    max: 0.2812500, 0.2000000, 0.1250000
+    color: '#252624'
+    label: low wheeled chassis
+  - min: -0.3750000, -0.2000000, 0.0000000
+    max: -0.2812500, -0.1250000, 0.0937500
+    color: '#252624'
+    label: left front wheel
+    shape: CylinderY
+  - min: -0.3750000, 0.1250000, 0.0000000
+    max: -0.2812500, 0.2000000, 0.0937500
+    color: '#252624'
+    label: left rear wheel
+    shape: CylinderY
+  - min: 0.1562500, -0.2000000, 0.0000000
+    max: 0.2500000, -0.1250000, 0.0937500
+    color: '#252624'
+    label: right front wheel
+    shape: CylinderY
+  - min: 0.1562500, 0.1250000, 0.0000000
+    max: 0.2500000, 0.2000000, 0.0937500
+    color: '#252624'
+    label: right rear wheel
+    shape: CylinderY
+  - min: -0.3750000, -0.2460000, 0.0000000
+    max: -0.2812500, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: left wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.1562500, -0.2460000, 0.0000000
+    max: 0.2500000, -0.2430000, 0.0625000
+    color: '#FFFFFF'
+    label: right wheel source edge
+    surface: CMU3DReagentTankSurface1421
+    surfaceAxis: XZ
+  - min: 0.2500000, -0.2250000, 0.1250000
+    max: 0.3125000, 0.2000000, 0.7187500
+    color: '#252624'
+    label: right upright frame
+  - min: 0.3750000, -0.2000000, 0.5000000
+    max: 0.4375000, 0.2000000, 0.8125000
+    color: '#464944'
+    label: push handle grip
+  - min: 0.3125000, -0.2000000, 0.4375000
+    max: 0.4062500, 0.2000000, 0.5000000
+    color: '#363835'
+    label: push handle lower return
+  - min: 0.0312500, -0.2250000, 0.7187500
+    max: 0.4375000, 0.2000000, 0.7500000
+    color: '#252624'
+    label: upper vessel frame
+  - min: 0.0312500, -0.2390000, 0.2187500
+    max: 0.3125000, 0.2000000, 0.2812500
+    color: '#A5A6A7'
+    label: fixed middle frame bar
+  - min: 0.0312500, -0.2460000, 0.0625000
+    max: 0.4375000, -0.2430000, 0.8125000
+    color: '#FFFFFF'
+    label: original right frame and handle
+    surface: CMU3DReagentTankSurface1422
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.2812500
+    max: 0.2500000, 0.2000000, 0.7187500
+    color: '#FFFFFF'
+    label: upper vessel
+    surface: CMU3DReagentTankSurface1423
+    surfaceAxis: XZ
+  - min: 0.0312500, -0.2320000, 0.1250000
+    max: 0.2500000, 0.2000000, 0.2187500
+    color: '#FFFFFF'
+    label: lower vessel
+    surface: CMU3DReagentTankSurface1424
+    surfaceAxis: XZ
+  - min: -0.3437500, -0.2500000, 0.1250000
+    max: -0.3125000, -0.2470000, 0.3750000
+    color: '#FFFFFF'
+    label: static green source indicator
+    surface: CMU3DReagentTankSurface1425
+    surfaceAxis: XZ

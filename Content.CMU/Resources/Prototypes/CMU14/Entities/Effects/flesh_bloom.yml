@@ -1,0 +1,28 @@
+- type: entity
+  id: CMUEffectFleshBloomTelegraph
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUFleshBloomTelegraph
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  id: CMUEffectReaperRitual
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUReaperRitual
+  - type: TimedDespawn
+    lifetime: 123
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: XenoFleshBloom
+  id: CMUFleshBloom
+  components:
+  - type: Sprite
+    color: "#51475B88"

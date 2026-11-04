@@ -41,7 +41,8 @@ public sealed partial class OrbitalCannonComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntProtoId<OrbitalCannonWarheadComponent>[] WarheadTypes =
-        ["RMCOrbitalCannonWarheadExplosive", "RMCOrbitalCannonWarheadIncendiary", "RMCOrbitalCannonWarheadCluster", "RMCOrbitalCannonWarheadAegis"];
+        ["RMCOrbitalCannonWarheadExplosive", "RMCOrbitalCannonWarheadIncendiary",
+        "RMCOrbitalCannonWarheadCluster", "RMCOrbitalCannonWarheadAegis", "CMUOrbitalCannonWarheadAegis"];
 
     [DataField, AutoNetworkedField]
     public int[] PossibleFuelRequirements = [4, 5, 6, 6];

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCWeaponFlamer
   id: RMCWeaponFlamerSPP
   name: LPO80 incinerator unit
@@ -39,6 +39,11 @@
       rmc-aslot-rail: -0.032, 0.092
       rmc-aslot-stock: -0.468, 0.064
       rmc-aslot-underbarrel: 0.284, -0.313
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCWeaponFlamer
@@ -48,6 +53,10 @@
   components:
   - type: Corrodible
     isCorrodible: false
+  - type: GunUserWhitelist # CMU14
+    whitelist:
+      components:
+      - PyroWhitelist
   - type: RMCCanUseBroiler
   - type: RMCIgniter
     enabled: true

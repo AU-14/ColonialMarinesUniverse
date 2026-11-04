@@ -41,6 +41,8 @@
   - type: FaxMachine
     name: "Colony Marshal Bureau"
     notifyAdmins: true
+    groups:
+    - marshal-bureau
 
 - type: entity
   parent: CMFax
@@ -61,6 +63,8 @@
   - type: FaxMachine
     name: "Marine High Command"
     notifyAdmins: true
+    groups:
+    - military-command
 
 - type: entity
   parent: CMFax
@@ -70,6 +74,8 @@
   - type: FaxMachine
     name: "Marine Provost Office"
     notifyAdmins: true
+    groups:
+    - military-command
 
 - type: entity
   parent: CMFax

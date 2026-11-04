@@ -1,0 +1,20 @@
+<Document>
+  # Suffocation Medications
+
+  Suffocation damage is asphyxiation and blood loss: not breathing, damaged lungs, a stopped heart or bleeding out. Fix the cause first, whether that's the airway, the lungs, the heart or the bleeding, or the damage keeps coming back.
+
+  - [bold]Dexalin[/bold]: the standard suffocation medicine. It also clears respiratory strain. Overdose at 30 units.
+  - [bold]Dexalin Plus[/bold]: works faster than dexalin, but overdoses at only 5 units. Measure it carefully.
+  - [bold]Albuterol[/bold]: heals suffocation damage and clears respiratory strain. Overdose at 20 units.
+  - [bold]Inaprovaline[/bold]: a stabilizer. If the lungs still work, it lets a patient keep breathing even in cardiac arrest, and it heals suffocation damage while they're critical. It's also a weak painkiller. Its overdose is very high, at 110 units, but an overdose damages the heart.
+  - [bold]Tricordrazine[/bold]: heals a little of everything, suffocation included.
+
+  Breathing from an [bold]oxygen tank[/bold] on internals clears suffocation damage three times as fast. The medical supply vendor stocks medical oxygen tanks and medical gas masks for this.
+
+  Blood loss won't go away with medicine. Stop the bleeding and replace the blood with blood packs or an IV drip.
+
+  <GuideReagentEmbed Reagent="CMDexalin"/>
+  <GuideReagentEmbed Reagent="CMDexalinPlus"/>
+  <GuideReagentEmbed Reagent="AU14Albuterol"/>
+  <GuideReagentEmbed Reagent="CMInaprovaline"/>
+</Document>

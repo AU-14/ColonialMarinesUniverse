@@ -1,14 +1,17 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._RMC14.Interaction;
+using Content.Shared.CMU14.Sentry; // cmu edit
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.NPC;
 using Content.Shared._RMC14.Tools;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared.NPC.Systems;
 using Content.Shared._RMC14.Weapons.Ranged.Homing;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
@@ -161,10 +164,18 @@ public sealed partial class SentrySystem : EntitySystem
         {
             case SentryMode.Off:
             {
+                // cmu edit start: a broken sentry won't power up until it's repaired
+                if (HasComp<CMUSentryBrokenComponent>(sentry))
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-sentry-broken-cant-turn-on", ("sentry", sentry)), sentry, user, PopupType.SmallCaution);
+                    return;
+                }
+                // cmu edit end
+
                 if (!TryComp<SentryTargetingComponent>(sentry, out var targeting) || targeting.FriendlyFactions.Count == 0)
                 {
                     var noFactionMsg = Loc.GetString("rmc-sentry-no-faction-set", ("sentry", sentry));
-                    _popup.PopupClient(noFactionMsg, sentry, user);
+                    _popup.PopupEntity(noFactionMsg, sentry, user);
                     return;
                 }
 
@@ -173,20 +184,20 @@ public sealed partial class SentrySystem : EntitySystem
                     if (sentry != defense && defense.Comp.Mode == SentryMode.On)
                     {
                         var ret = Loc.GetString("rmc-sentry-too-close", ("defense", defense));
-                        _popup.PopupClient(ret, sentry, user);
+                        _popup.PopupEntity(ret, sentry, user);
                         return;
                     }
                 }
                 mode = SentryMode.On;
                 var msg = Loc.GetString("rmc-sentry-on", ("sentry", sentry));
-                _popup.PopupClient(msg, sentry, user);
+                _popup.PopupEntity(msg, sentry, user);
                 break;
             }
             default:
             {
                 mode = SentryMode.Off;
                 var msg = Loc.GetString("rmc-sentry-off", ("sentry", sentry));
-                _popup.PopupClient(msg, sentry, user);
+                _popup.PopupEntity(msg, sentry, user);
                 break;
             }
         }
@@ -203,6 +214,11 @@ public sealed partial class SentrySystem : EntitySystem
 
     private void OnSentryInteractUsing(Entity<SentryComponent> sentry, ref InteractUsingEvent args)
     {
+        // cmu edit start: leave tools another system already used alone, like a broken sentry's repair
+        if (args.Handled)
+            return;
+        // cmu edit end
+
         if (sentry.Comp.IsLocked)
             return;
 
@@ -238,7 +254,7 @@ public sealed partial class SentrySystem : EntitySystem
                 _audio.PlayPredicted(sentry.Comp.ScrewdriverSound, sentry, user);
                 var selfMsg = Loc.GetString("rmc-sentry-rotate-self", ("sentry", sentry));
                 var othersMsg = Loc.GetString("rmc-sentry-rotate-others", ("user", user), ("sentry", sentry));
-                _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+                _popup.PopupEntity(selfMsg, othersMsg, user, user);
                 args.Handled = true;
             }
             else
@@ -248,7 +264,7 @@ public sealed partial class SentrySystem : EntitySystem
                     ret = Loc.GetString("rmc-sentry-active-norot", ("sentry", sentry));
                 else
                     ret = Loc.GetString("rmc-sentry-item-norot", ("sentry", sentry));
-                _popup.PopupClient(ret, sentry, user);
+                _popup.PopupEntity(ret, sentry, user);
             }
             return;
         }
@@ -260,7 +276,7 @@ public sealed partial class SentrySystem : EntitySystem
             !_tag.HasTag(used, magazineTag))
         {
             var msg = Loc.GetString("rmc-sentry-magazine-does-not-fit", ("sentry", sentry), ("magazine", used));
-            _popup.PopupClient(msg, sentry, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, sentry, user, PopupType.SmallCaution);
             return;
         }
 
@@ -280,7 +296,7 @@ public sealed partial class SentrySystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-sentry-magazine-swap-start-user", ("magazine", used), ("sentry", sentry));
             var othersMsg = Loc.GetString("rmc-sentry-magazine-swap-start-others", ("user", user), ("magazine", used), ("sentry", sentry));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 
@@ -301,7 +317,7 @@ public sealed partial class SentrySystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-sentry-magazine-swap-finish-user", ("magazine", used), ("sentry", sentry));
         var othersMsg = Loc.GetString("rmc-sentry-magazine-swap-finish-others", ("user", user), ("magazine", used), ("sentry", sentry));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
 
         _audio.PlayPredicted(sentry.Comp.MagazineSwapSound, sentry, user);
     }
@@ -323,7 +339,7 @@ public sealed partial class SentrySystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-sentry-disassemble-finish-self", ("sentry", sentry));
         var othersMsg = Loc.GetString("rmc-sentry-disassemble-finish-others", ("user", user), ("sentry", sentry));
-        _popup.PopupPredicted(selfMsg, othersMsg, sentry, user);
+        _popup.PopupEntity(selfMsg, othersMsg, sentry, user);
     }
 
     private void StartAssignFaction(Entity<SentryComponent> sentry, EntityUid user)
@@ -354,7 +370,7 @@ public sealed partial class SentrySystem : EntitySystem
         RaiseLocalEvent(sentry.Owner, ref ev);
 
         var msg = Loc.GetString("rmc-sentry-faction-assigned", ("sentry", sentry));
-        _popup.PopupPredicted(msg, msg, sentry, args.User);
+        _popup.PopupEntity(msg, msg, sentry, args.User);
 
         UpdateState(sentry);
     }
@@ -380,7 +396,7 @@ public sealed partial class SentrySystem : EntitySystem
             _targeting.ClearFactionAssignment((sentry.Owner, targeting));
 
         var msg = Loc.GetString("rmc-sentry-faction-cleared", ("sentry", sentry));
-        _popup.PopupPredicted(msg, msg, sentry, args.User);
+        _popup.PopupEntity(msg, msg, sentry, args.User);
 
         UpdateState(sentry);
     }
@@ -483,6 +499,10 @@ public sealed partial class SentrySystem : EntitySystem
                 _pointLight.SetEnabled(sentry, true);
                 break;
         }
+
+        // CMU14: let fixed support variants keep broken wrecks nonblocking after a mode refresh.
+        var updated = new CMUSentryStateUpdatedEvent();
+        RaiseLocalEvent(sentry, ref updated);
     }
 
     private bool CanDeployPopup(
@@ -494,16 +514,24 @@ public sealed partial class SentrySystem : EntitySystem
         coordinates = default;
         rotation = default;
 
+        if (HasComp<VehicleInteriorOccupantComponent>(user))
+        {
+            _popup.PopupEntity(Loc.GetString("emplacement-mount-deploy-vehicle"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
         var moverCoordinates = _transform.GetMoverCoordinateRotation(user, Transform(user));
         coordinates = moverCoordinates.Coords;
         rotation = moverCoordinates.worldRot.GetCardinalDir().ToAngle();
 
         var direction = rotation.GetCardinalDir();
         coordinates = coordinates.Offset(direction.ToVec());
-        if (!_rmcMap.CanBuildOn(coordinates))
+        // CMU14: allow deploying against barricades while preserving other obstruction checks.
+        // if (!_rmcMap.CanBuildOn(coordinates))
+        if (!_rmcMap.CanDeployWeaponOn(coordinates))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", sentry));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -522,7 +550,7 @@ public sealed partial class SentrySystem : EntitySystem
         if (!_container.CanInsert(used, slot, true))
         {
             var msg = Loc.GetString("rmc-sentry-magazine-invalid", ("item", used));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -531,7 +559,7 @@ public sealed partial class SentrySystem : EntitySystem
             !HasComp<BypassInteractionChecksComponent>(user))
         {
             var msg = Loc.GetString("rmc-sentry-magazine-swap-not-empty");
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -558,14 +586,14 @@ public sealed partial class SentrySystem : EntitySystem
         if (sentry.Comp.Upgrades is not { Length: > 0 } upgrades)
         {
             var msg = Loc.GetString("rmc-sentry-upgrade-not-upgradeable", ("sentry", sentry));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
         if (sentry.Comp.Mode != SentryMode.Item)
         {
             var msg = Loc.GetString("rmc-sentry-upgrade-not-item", ("sentry", sentry));
-            _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -575,7 +603,7 @@ public sealed partial class SentrySystem : EntitySystem
                 !TryComp(active, out SentryUpgradeItemComponent? upgradeComp))
             {
                 var msg = Loc.GetString("rmc-sentry-upgrade-not-holding", ("sentry", sentry));
-                _popup.PopupClient(msg, user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
                 return false;
             }
 
@@ -608,7 +636,7 @@ public sealed partial class SentrySystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-sentry-disassemble-start-self", ("sentry", sentry));
             var othersMsg = Loc.GetString("rmc-sentry-disassemble-start-others", ("user", user), ("sentry", sentry));
-            _popup.PopupPredicted(selfMsg, othersMsg, sentry, user);
+            _popup.PopupEntity(selfMsg, othersMsg, sentry, user);
         }
     }
 
@@ -616,6 +644,11 @@ public sealed partial class SentrySystem : EntitySystem
     {
         if (sentry.Comp.Mode == mode)
             return false;
+
+        // cmu edit start: a broken sentry won't power up until it's repaired
+        if (mode == SentryMode.On && HasComp<CMUSentryBrokenComponent>(sentry))
+            return false;
+        // cmu edit end
 
         sentry.Comp.Mode = mode;
         UpdateState(sentry);
@@ -671,6 +704,6 @@ public sealed partial class SentrySystem : EntitySystem
         _damageableSystem.TryChangeDamage(args.User, sentry.Comp.SpikeDamage, origin: sentry, tool: sentry);
         var self = Loc.GetString("rmc-sentry-spikes-self");
         var others = Loc.GetString("rmc-sentry-spikes-others", ("target", args.User));
-        _popup.PopupPredicted(self, others, sentry, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(self, others, sentry, args.User, PopupType.SmallCaution);
     }
 }

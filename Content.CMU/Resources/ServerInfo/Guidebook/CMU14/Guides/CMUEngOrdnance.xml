@@ -1,0 +1,83 @@
+<Document>
+  # Ordnance
+
+  Engineers with chemistry access can mix their own flamer fuel, and anyone with the right odds and ends can put together a molotov or a pipe bomb.
+
+  ## Flamer Fuel
+  <Box>
+    <GuideEntityEmbed Entity="RMCTankFlamerColony" Caption="Flamer tank"/>
+    <GuideEntityEmbed Entity="RMCTankReagentEmpty" Caption="Reagent tank"/>
+  </Box>
+  Flamer tanks can't be filled from beakers. The fuel has to go into a [bold]reagent tank[/bold] first, and the flamer tank is filled from that.
+  - Mix the fuel in beakers, then pour it into an empty reagent tank.
+  - Use an empty flamer tank on the reagent tank to fill it.
+  - A flamer tank only holds one kind of fuel at a time; you can't mix fuels in it.
+  - Welding fuel works in a pinch: fill a flamer tank straight from a fuel tank.
+
+  ### Napalm
+  Plain napalm is the base for the custom mixes.
+  - [color=red]Put the water in first.[/color] Mix [bold]1 water, 1 phoron, 1 aluminum and 1 sulphuric acid[/bold]. Without the water, the phoron, aluminum and acid react on their own and [color=red]explode[/color].
+  - Plain napalm burns fine on its own, but the mixes below are better at particular jobs.
+
+  ### Custom Mixes
+  - [bold]Sticky napalm[/bold]: 1 napalm + 1 welding fuel. Burns cooler, but clings and keeps burning much longer. Good for denying an area.
+  - [bold]High-combustion napalm[/bold]: 1 napalm + 1 chlorine trifluoride. Burns much hotter, but doesn't last. Good for hurting whatever's in the fire right now.
+  - [bold]UT-Napthal fuel[/bold]: 1 napalm + 1 phoron + 1 chlorine trifluoride makes 3. The standard flamer fuel.
+  - [bold]Napalm B[/bold]: 2 napalm + 1 phoron + 1 methane + 1 chlorine trifluoride. Spreads over a wide area and burns slowly.
+  - [bold]Napalm E[/bold]: 2 sticky napalm + 1 phoron + 1 chlorine trifluoride. Burns through the best fire retardants.
+
+  ### Chlorine Trifluoride
+  Several mixes need chlorine trifluoride. [color=red]Put the water in first[/color] again: [bold]1 water, 1 chlorine and 3 fluorine[/bold]. Without the water, the chlorine and fluorine [color=red]explode[/color].
+
+  ### Methane
+  4 hydrogen + 1 carbon makes 1 methane, for Napalm B.
+
+  For every fuel's burn strength and duration, see [textlink="OT Chemicals" link="CMUOrdinanceChemicals"].
+
+  ## Molotovs
+  <Box>
+    <GuideEntityEmbed Entity="RMCDrinkAlcoholTequila" Caption="Bottle of liquor"/>
+    <GuideEntityEmbed Entity="RMCGrenadeMolotov" Caption="Improvised firebomb"/>
+  </Box>
+  A molotov (improvised firebomb) is a bottle of something flammable with a paper wick. When it breaks it sets the ground around it on fire.
+  - [bold]Making it[/bold]: use a piece of [bold]paper[/bold] on a bottle of liquor. After 2 seconds the paper becomes the wick and you have a firebomb. Examine a bottle to check whether it can be made into one.
+  - [bold]What's in the bottle matters[/bold]. The more flammable the contents, the longer the fire burns. Liquor works, but only barely: a bottle needs at least half its volume in alcohol. Top it up with napalm or other flamer fuels to make it much stronger. [color=red]Water ruins it[/color].
+  - Light it with a lighter or another igniter, then throw it.
+  - Like a pipe bomb, the fuse is [color=#FFA500]random[/color]: 1 to 4 seconds. Don't hold on to it.
+
+  ## Pipe Bombs
+  A pipe bomb is a crude, homemade explosive. It's cheap to make from common parts, has a short and unpredictable fuse, and throws out a burst of shrapnel.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMSheetMetal10" Caption="5 metal"/>
+    <GuideEntityEmbed Entity="CMWelder" Caption="Welder"/>
+    <GuideEntityEmbed Entity="RMCLighter" Caption="Lighter"/>
+    <GuideEntityEmbed Entity="RMCCableCoil" Caption="5 cable"/>
+  </Box>
+
+  ### What You Need
+  - [bold]5 metal sheets[/bold] in a single stack.
+  - [bold]A welder[/bold] with at least 5 units of fuel.
+  - [bold]A lighter[/bold]. It's used up to make the fuse, so bring a second one to light the bomb.
+  - [bold]5 lengths of cable[/bold] in a single coil.
+
+  ### Making It
+  Every step is a short do-after, so stand still until it finishes.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUPipeBombCasing" Caption="1. Casing"/>
+    <GuideEntityEmbed Entity="CMUPipeBombFuse" Caption="2. With fuse"/>
+    <GuideEntityEmbed Entity="CMUPipeBomb" Caption="3. Finished"/>
+  </Box>
+  1. [bold]Casing[/bold]: turn your welder on and use it on the stack of metal sheets. After 5 seconds it uses 5 sheets and 5 fuel and gives you an empty casing.
+
+  2. [bold]Fuse[/bold]: use a lighter on the casing. After 2 seconds the lighter is used up and the casing is ready for wiring.
+
+  3. [bold]Wiring[/bold]: use a cable coil on it. After 2 seconds it uses 5 cable and you have a finished pipe bomb.
+
+  ### Using It
+  - Light the fuse with a lit lighter or another igniter, then throw it.
+  - The fuse is [color=#FFA500]random[/color]: it goes off anywhere from 1 to 4 seconds after lighting. Don't hold on to it.
+  - It explodes and throws 20 pieces of shrapnel in every direction. Anyone standing near it will be hurt badly.
+  - Make casings ahead of time. Metal and fuel are the slow part, and a casing is harmless until it's wired.
+</Document>

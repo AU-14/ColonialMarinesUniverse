@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Sprite animation studies · Garrison Redux</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#0d171d;color:#dfe9e7}body{max-width:1200px;margin:auto;padding:26px}h1{font-size:27px}p{color:#b4c6c7;line-height:1.6}a{color:#8ee1c8}.controls{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:18px;background:#192931;border-radius:9px}label{display:flex;gap:8px;align-items:center}button,select{padding:8px;background:#253a43;color:inherit;border:1px solid #48616a;border-radius:5px}button{cursor:pointer}button:disabled{opacity:.5}input[type=range]{width:180px}.views{display:grid;grid-template-columns:250px 1fr;gap:20px;margin-top:22px}figure{margin:0}img{width:224px;height:224px;object-fit:contain;image-rendering:pixelated;background:#17262d}figcaption{color:#adc4c2;font-size:14px;margin:12px 0}canvas{width:100%;height:540px;display:block;touch-action:none;border:1px solid #30484f;border-radius:7px}output{font-variant-numeric:tabular-nums}#error{color:#ffb3a0;white-space:pre-wrap}@media(max-width:700px){.views{grid-template-columns:1fr}canvas{height:390px}}
+</style></head><body>
+<h1>Source sprite and 3D animation</h1>
+<p>Compare each authored state and frame with its original sprite. Source facing selects the matching model; the camera rotates independently.</p>
+<div class="controls">
+<label>Model <select id="family" disabled></select></label>
+<label>Facing <select id="facing" disabled><option value="0">South</option><option value="1">North</option><option value="2">East</option><option value="3">West</option></select></label>
+<label>State <select id="state" disabled></select></label>
+<button id="play" disabled>Play loop</button><button id="previous" disabled aria-label="Previous frame">Previous frame</button><button id="next" disabled aria-label="Next frame">Next frame</button><button id="reset" disabled>Restart</button>
+<label>Time <input id="time" type="range" min="0" max="1" step=".001" value="0" disabled></label><output id="clock">0.000 s</output>
+</div>
+<p id="frame" aria-live="polite">Loading source frames and geometry…</p><p id="error" role="alert" hidden></p>
+<div class="views"><figure><img id="source" alt="Original sprite for the selected state, facing and frame"><figcaption>Original RGBA source pixels, enlarged without smoothing.</figcaption></figure>
+<figure><canvas id="model" tabindex="0" aria-label="Rotatable 3D model. Drag or use arrow keys to orbit; scroll to zoom."></canvas><figcaption>Drag to rotate; scroll to zoom.</figcaption></figure></div>
+<p>This offline study loops the source frame timings. In the game, the existing sprite controls playback. Draft geometry, hidden surfaces, gameplay triggers and interaction still require review.</p>
+<p><a href="./">Return to the Redux map</a></p><script type="module" src="./sprite-animation.js"></script>
+</body></html>

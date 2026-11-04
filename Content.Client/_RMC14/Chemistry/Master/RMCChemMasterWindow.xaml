@@ -5,7 +5,7 @@
     MinSize="600 720">
     <ScrollContainer HScrollEnabled="False" VScrollEnabled="True">
         <BoxContainer Orientation="Vertical">
-            <BoxContainer Orientation="Horizontal">
+            <BoxContainer Name="PillBottleStatusContainer" Access="Public" Orientation="Horizontal">
                 <RichTextLabel Text="{Loc rmc-chem-master-status}" />
                 <Control HorizontalExpand="True" />
                 <Button Name="SelectAllButton" Access="Public" StyleClasses="OpenBoth"
@@ -62,14 +62,33 @@
                 <Button Name="BufferAllButton" Access="Public" HorizontalExpand="True"
                         Text="{Loc rmc-chem-master-all-reagents}" StyleClasses="OpenBoth" />
             </BoxContainer>
-            <RichTextLabel Text="{Loc rmc-chem-master-pills}" Margin="0 20 0 0" />
-            <ui:BlueHorizontalSeparator />
-            <BoxContainer Orientation="Horizontal">
-                <Button Name="CreatePillsButton" Access="Public" StyleClasses="OpenBoth"
-                        Text="{Loc rmc-chem-master-pills-create}" />
-                <Control Name="PillAmountContainer" Access="Public" />
-                <GridContainer Name="PillTypeContainer" Access="Public"
-                               StyleClasses="OpenBoth" Margin="0 0 5 0" Columns="8" />
+            <BoxContainer Name="StimmasterContainer" Access="Public" Orientation="Vertical" Visible="False" Margin="0 20 0 0">
+                <BoxContainer Orientation="Horizontal">
+                    <RichTextLabel Text="{Loc cmu-stimmaster-injectors}" />
+                    <Control HorizontalExpand="True" />
+                    <Button Name="StimmasterSelectAllButton" Access="Public" StyleClasses="OpenBoth"
+                            Text="{Loc rmc-chem-master-select-all}" Visible="False" />
+                </BoxContainer>
+                <ui:BlueHorizontalSeparator />
+                <RichTextLabel Name="StimmasterNoneLabel" Access="Public"
+                               Text="{Loc cmu-stimmaster-none}" />
+                <BoxContainer Name="StimmasterStoredInjectors" Access="Public"
+                              Orientation="Vertical" />
+                <Button Name="FillStimsButton" Access="Public" HorizontalExpand="True" StyleClasses="OpenBoth"
+                        Text="{Loc cmu-stimmaster-fill}" />
+                <Button Name="CreateStimsButton" Access="Public" HorizontalExpand="True" StyleClasses="OpenBoth"
+                        Text="{Loc cmu-stimmaster-create}" />
+            </BoxContainer>
+            <BoxContainer Name="PillFabricationContainer" Access="Public" Orientation="Vertical">
+                <RichTextLabel Text="{Loc rmc-chem-master-pills}" Margin="0 20 0 0" />
+                <ui:BlueHorizontalSeparator />
+                <BoxContainer Orientation="Horizontal">
+                    <Button Name="CreatePillsButton" Access="Public" StyleClasses="OpenBoth"
+                            Text="{Loc rmc-chem-master-pills-create}" />
+                    <Control Name="PillAmountContainer" Access="Public" />
+                    <GridContainer Name="PillTypeContainer" Access="Public"
+                                   StyleClasses="OpenBoth" Margin="0 0 5 0" Columns="8" />
+                </BoxContainer>
             </BoxContainer>
             <Control Visible="False"> <!-- TODO RMC14 -->
                 <RichTextLabel Text="{Loc rmc-chem-master-glassware}" Margin="0 20 0 0" />

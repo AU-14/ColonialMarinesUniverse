@@ -11,7 +11,6 @@ namespace Content.Server.Fluids.EntitySystems;
 public sealed partial class PuddleDebugDebugOverlaySystem : SharedPuddleDebugOverlaySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private PuddleSystem _puddle = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedMapSystem _map = default!;
@@ -79,7 +78,7 @@ public sealed partial class PuddleDebugDebugOverlaySystem : SharedPuddleDebugOve
                     if (!Resolve(uid, ref puddle, ref xform, false))
                         continue;
 
-                    var pos = xform.Coordinates.ToVector2i(EntityManager, _mapManager, _transform);
+                    var pos = xform.Coordinates.ToVector2i(EntityManager, _transform);
                     var vol = _puddle.CurrentVolume(uid, puddle);
                     data.Add(new PuddleDebugOverlayData(pos, vol));
                 }

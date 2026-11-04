@@ -1,0 +1,5 @@
+- type: loadout
+  id: BeltUtilityCombatSynthAU14
+  cost: 5
+  equipment:
+    belt: CMBeltUtilityCombat

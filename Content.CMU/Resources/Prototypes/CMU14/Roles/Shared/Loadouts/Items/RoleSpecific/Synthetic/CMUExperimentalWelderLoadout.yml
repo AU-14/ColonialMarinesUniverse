@@ -1,0 +1,5 @@
+- type: loadout
+  id: RMCWelderExperimentalLoadout
+  cost: 15
+  inhand:
+  - RMCWelderExperimental

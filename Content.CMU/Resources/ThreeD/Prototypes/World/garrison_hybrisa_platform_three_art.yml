@@ -1,0 +1,17 @@
+# Exact CC-BY-SA-3.0 source crops; see SOURCES_PLATFORM_THREE.md.
+- type: cmu3DSurface
+  id: CMU3DPlatformThreeBeam
+  atlasIndex: 1200
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DPlatformThreeBeam.png
+- type: cmu3DSurface
+  id: CMU3DPlatformThreeSupport
+  atlasIndex: 1201
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DPlatformThreeSupport.png
+- type: cmu3DSurface
+  id: CMU3DPlatformThreeFoot
+  atlasIndex: 1202
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DPlatformThreeFoot.png
+- type: cmu3DSurface
+  id: CMU3DPlatformThreeCap
+  atlasIndex: 1203
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DPlatformThreeCap.png

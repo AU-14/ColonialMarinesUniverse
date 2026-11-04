@@ -1,0 +1,315 @@
+#Parkas
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketBlueParka
+  name: blue parka
+  description: A nice parka, designed to keep you warm in cold weather.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/blueparka.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/blueparka.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketGreenParka
+  name: green parka
+  description: A nice parka, designed to keep you warm in cold weather.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/greenparka.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/greenparka.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketRedParka
+  name: red parka
+  description: A nice parka, designed to keep you warm in cold weather.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/redparka.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/redparka.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketYellowParka
+  name: yellow parka
+  description: A nice parka, designed to keep you warm in cold weather.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/yellowparka.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/yellowparka.rsi
+
+# Puffer Jackets
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketGrayPufferJacket
+  name: gray puffer jacket
+  description: A stylish puffer jacket.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/graypufferjacket.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/graypufferjacket.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketKhakiPufferJacket
+  name: khaki puffer jacket
+  description: A stylish puffer jacket.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/kahkipufferjacket.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/kahkipufferjacket.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketOrangePufferJacket
+  name: orange puffer jacket
+  description: A stylish puffer jacket.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/orangepufferjacket.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/orangepufferjacket.rsi
+
+#Puffer Vests
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketGrayPufferVest
+  name: gray puffer vest
+  description: A stylish puffer vest.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/graypuffervest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/graypuffervest.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketKhakiPufferVest
+  name: khaki puffer vest
+  description: A stylish puffer vest.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/kahkipuffervest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/kahkipuffervest.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketTanPufferVest
+  name: tan puffer vest
+  description: A stylish puffer vest.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/tanpuffervest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/tanpuffervest.rsi
+
+#Windbreakers
+
+- type: entity
+  parent: RMCJacketWindbreaker
+  id: AU14WindbreakerBlue
+  name: blue windbreaker
+  description: A windbreaker designed to keep you warm in windy conditions. Its also waterproof.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/bluewindbreaker.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/bluewindbreaker.rsi
+
+#misc/other
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketBomberJacket
+  name: bomber jacket
+  description: A simple bomber jacket, originally designed for pilots.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/bomberjacket.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/bomberjacket.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketOldCoat
+  name: old coat
+  description: A very old coat, something your grandpa would wear...
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/oldcoat.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/oldcoat.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianJacketSnowSuit
+  name: snow jacket
+  description: A white snow jacket for very cold conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/snowsuit.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/snowsuit.rsi
+  - type: TemperatureProtection
+    heatingCoefficient: 1.1
+    coolingCoefficient: 0.1
+
+#trench coats
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianTanTrenchCoat
+  name: tan trench coat
+  description: A sturdy and well made trench coat, good for rainy weather.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/tantrenchcoat.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/tantrenchcoat.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianGrayTrenchCoat
+  name: gray trench coat
+  description: A sturdy and well made trench coat, good for rainy weather.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/graytrenchcoat.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/graytrenchcoat.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianBrownTrenchCoat
+  name: brown trench coat
+  description: A sturdy and well made trench coat, good for rainy weather.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/browntrenchcoat.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/browntrenchcoat.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianBaristaApron
+  name: barista apron
+  description: A sturdy and well made apron, good for keeping your clothes clean.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/cuppajoesapron.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/cuppajoesapron.rsi
+
+#outer jumpsuits
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianTurnoutGear
+  name: firefighting turnout gear
+  description: A pair of fire resistant turnouts, used both in the military and civilian sectors.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/firefighterturnouts.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/firefighterturnouts.rsi
+  - type: TemperatureProtection
+    heatingCoefficient: 0.5
+    coolingCoefficient: 0.65
+  - type: FireProtection
+    reduction: 0.45
+  - type: CMUFireCoverage
+    uncoveredHeadPenalty: 0.6
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianFullSuitParamedicRed
+  name: red paramedic jumpsuit
+  description: A water proof jumpsuit designed for paramedics and EMTs.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/redparamedic.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/redparamedic.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianFullSuitParamedicGreen
+  name: green paramedic jumpsuit
+  description: A water proof jumpsuit designed for paramedics and EMTs.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/greenparamedic.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/greenparamedic.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianFullSuitSanitation
+  name: sanitation jumpsuit
+  description: A water proof jumpsuit designed for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/sanitation.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/sanitation.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: CMUClothingOuterSuitEngineer
+  name: We-Yu engineer jumpsuit
+  description: A water proof jumpsuit designed for the hardworking man.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/wyengineer.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/ServiceOuterJumpsuits/wyengineer.rsi
+
+#Hazard Vests
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianHazardVestParamedicGreen
+  name: green paramedic hazard vest
+  description: A reflective vest made to keep paramedics safe while working in dark conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/greenparamedichazardvest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/greenparamedichazardvest.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianHazardVestParamedicWhite
+  name: white paramedic hazard vest
+  description: A reflective vest made to keep paramedics safe while working in dark conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/whiteparamedichazardvest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/whiteparamedichazardvest.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianHazardVestSanitation
+  name: sanitation hazard vest
+  description: A reflective vest made to keep sanitation workers safe while working in dark conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/sanitationhazardvest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/sanitationhazardvest.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14CivilianHazardVestKellandMiningCorporation
+  name: Kelland Mining hazard vest
+  description: A reflective vest made to keep Kelland Mining Corporation workers safe while working in dark conditions.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/kellandmininghazardvest.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Civilian/Jacket/HazardVests/kellandmininghazardvest.rsi

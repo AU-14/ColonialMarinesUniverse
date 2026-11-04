@@ -9,7 +9,7 @@ namespace Content.Shared._RMC14.Marines.Squads;
 public sealed partial class SquadLeaderHeadsetComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public HashSet<ProtoId<RadioChannelPrototype>> Channels; // SquadSystem.UpdateSquadLeaderHeadsetChannels handles it
+    public HashSet<ProtoId<RadioChannelPrototype>> Channels = []; // SquadSystem.UpdateSquadLeaderHeadsetChannels fills it
 
     [DataField, AutoNetworkedField]
     public EntityUid Leader;

@@ -1,0 +1,57 @@
+- type: radioChannel
+  id: ColonyMedical
+  name: chat-radio-colony-medical
+  keycode: "z"
+  frequency: 147.7
+  color: "#4fb58a"
+  longRange: true
+  tower: true
+
+- type: entity
+  parent: CMEncryptionKey
+  id: CMUEncryptionKeyColonyMedical
+  name: colony medical encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - ColonyMedical
+    defaultChannel: Colony
+  - type: Sprite
+    state: med_key
+
+- type: entity
+  parent: CMHeadsetColony
+  id: CMUHeadsetColonyMedical
+  name: colony medical headset
+  description: A colony headset with an extra key for the colony medical channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUEncryptionKeyColonyMedical
+
+- type: entity
+  parent: CMEncryptionKey
+  id: CMUEncryptionKeyColonyEmergency
+  name: colony emergency services encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - ColonyMedical
+    - radioCMB
+    defaultChannel: Colony
+  - type: Sprite
+    state: med_key
+
+- type: entity
+  parent: CMHeadsetColony
+  id: CMUHeadsetColonyEmergency
+  name: colony emergency services headset
+  description: A colony headset keyed for the colony medical and CMB channels, issued to emergency responders.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUEncryptionKeyColonyEmergency

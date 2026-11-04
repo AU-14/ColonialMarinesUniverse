@@ -2,22 +2,24 @@ using System.Linq;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.Components;
-using Content.Server.Speech.EntitySystems;
-using Content.Server.Speech.Prototypes;
+using Content.Server._RMC14.Language.Systems; // CMU14
+using Content.Shared.Speech.EntitySystems;
 using Content.Server.Players;
-using Content.Shared._CMU14.Threats.Mobs.Xeno;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.CMU14.Threats.Mobs.Xeno;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
-using Content.Shared.AU14;
+using Content.Shared.CMU14;
+using ManageHiveComponent = Content.Shared._RMC14.Xenonids.ManageHive.ManageHiveComponent;
 using Content.Shared.Chat;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
+using Content.Shared.Speech.Prototypes;
 using Robust.Shared.Player;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
@@ -27,8 +29,8 @@ using Content.Shared.Chat.Prototypes;
 using Robust.Shared.Replays;
 using Robust.Shared.Network;
 using Robust.Server.GameObjects;
-using CultistComponent = Content.Shared._CMU14.Threats.Mobs.Cultist.CultistComponent;
-using HasKnowledgeOfXenoLanguageComponent = Content.Shared._CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
+using CultistComponent = Content.Shared.CMU14.Threats.Mobs.Cultist.CultistComponent;
+using HasKnowledgeOfXenoLanguageComponent = Content.Shared.CMU14.Threats.Mobs.Xeno.HasKnowledgeOfXenoLanguageComponent;
 
 namespace Content.Server._RMC14.Chat.Chat;
 
@@ -43,6 +45,7 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private LanguageSystem _language = default!; // CMU14
 
 
     private static readonly ProtoId<ReplacementAccentPrototype> ChatSanitize = "CMChatSanitize";
@@ -55,6 +58,7 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
         base.Initialize();
 
         SubscribeLocalEvent<ImaginaryFriendComponent, ChatMessageAfterGetRecipients>(OnImaginaryFriendGetRecipients);
+        SubscribeLocalEvent<XenoComponent, ChatMessageAfterGetRecipients>(OnXenoAfterGetRecipients);
     }
 
     private void OnImaginaryFriendGetRecipients(Entity<ImaginaryFriendComponent> ent, ref ChatMessageAfterGetRecipients args)
@@ -74,6 +78,58 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
             args.Recipients.Remove(session);
     }
 
+    private void OnXenoAfterGetRecipients(Entity<XenoComponent> ent, ref ChatMessageAfterGetRecipients args)
+    {
+        if (args.Purpose != ChatRecipientPurpose.Speech)
+            return;
+
+        _toRemove.Clear();
+        var hive = _hive.GetHive(ent.Owner);
+        var hivebroken = IsHivebrokenXeno(ent.Owner);
+        foreach (var (session, data) in args.Recipients)
+        {
+            if (data.Observer)
+                continue;
+
+            if (CanHearXenoSpeech(ent.Owner, session.AttachedEntity, hivebroken, hive))
+                continue;
+
+            _toRemove.Add(session);
+        }
+
+        foreach (var session in _toRemove)
+        {
+            args.Recipients.Remove(session);
+        }
+    }
+
+    private bool CanHearXenoSpeech(
+        EntityUid source,
+        EntityUid? listener,
+        bool hivebroken,
+        Entity<HiveComponent>? hive)
+    {
+        // CMU14: language grants admit their listeners through this filter, but the hivebroken
+        // allowlist wins. Converted xenos speak Common, so an unguarded shortcut leaks
+        // hivebroken chat to ordinary humans.
+        if (listener is { } hearer
+            && !hivebroken
+            && _language.CanUnderstand(hearer, _chatSystem.GetCurrentLanguageForSpeech(source)))
+            return true;
+
+        if (!hivebroken)
+        {
+            return HasComp<XenoComponent>(listener) ||
+                   HasComp<HasKnowledgeOfXenoLanguageComponent>(listener) ||
+                   (HasComp<ManageHiveComponent>(source) && hive is not null && hive.Value.Comp.Corrupted);
+        }
+
+        return HasComp<XenoComponent>(listener) ||
+               HasComp<HasKnowledgeOfXenoLanguageComponent>(listener) ||
+               HasComp<YautjaComponent>(listener) ||
+               HasComp<YautjaThrallComponent>(listener) ||
+               HasComp<YautjaHivebrokenXenoComponent>(listener);
+    }
 
     public override string SanitizeMessageReplaceWords(EntityUid source, string msg)
     {

@@ -1,0 +1,98 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobCCAFRifleman
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: CMUCCAF
+  roundRole: CMUJobCCAFRifleman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: rmc_rifleman
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: cmu-job-prefix-ccaf-rifleman
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - French
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - French
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: cmu-job-name-ccaf-rifleman-title
+  description: cmu-job-description-ccaf
+  playTimeTracker: CMUJobCCAFRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    CMURankCCAFPrivate:
+      entity: CMUChevronCCAFPrivate
+      requirements: []
+  spawnMenuRoleName: CCAF Rifleman (CMU, Fire Team)
+  icon: "CMJobIconEmpty"
+  startingGear: CMUGearCCAFRifleman
+  greeting: cmu-job-greeting-ccaf
+  joinNotifyCrew: false
+  supervisors: cmu-job-name-ccaf-section-commander
+  hidden: true
+
+- type: entity
+  parent: CMUBaseMobSpeciesCCAF
+  suffix: CMU, CCAF, Fire Team
+  id: CMUJobCCAFRifleman
+  name: CCAF Rifleman (Fire Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadCCAF
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-ccaf-rifleman
+    description: cmu-job-description-ccaf
+    reregister: false
+    job: CMUJobCCAFRifleman
+    raffle:
+      settings: short
+    rules: cmu-job-rules-ccaf
+
+- type: startingGear
+  id: CMUGearCCAFRifleman
+  equipment:
+    id: CMUIDCardCCAFRifleman
+    jumpsuit: AU14CCAFUniform
+    outerClothing: AU14CCAFArmor
+    head: AU14CCAFHelmetISACV
+    shoes: CMBootsBlackFilled
+    gloves: CMHandsBlackMarine
+    ears: CMUHeadsetCCAF
+    pocket2: AU14PouchIFAKFill
+    belt: CMBeltMarine
+    pocket1: RMCPouchMagazineLarge
+    back: CMBackpackSniper
+    suitstorage: CMUWeaponRifleM75AMASLoaded
+  storage:
+    belt:
+    - AU14MagazineRifleM75AMAS
+    - AU14MagazineRifleM75AMAS
+    - AU14MagazineRifleM75AMAS
+    - AU14MagazineRifleM75AMAS
+    - AU14MagazineRifleM75AMAS
+    pocket1:
+    - AU14MagazineRifleM75AMAS
+    - AU14MagazineRifleM75AMAS
+    - AU14MagazineRifleM75AMAS
+    back:
+    - CMUGrenadeBFAB
+    - CMUGrenadeBFAB
+    - CMUGrenadeBFAB
+    - CMUGrenadeBFAB

@@ -1,12 +1,13 @@
 using System.Linq;
-using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
-using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
-namespace Content.IntegrationTests._CMU14.Medical.Core;
+namespace Content.IntegrationTests.CMU14.Medical.Core;
 
 [TestFixture]
 public sealed class CMUMedicalBodyIndexTest
@@ -14,10 +15,9 @@ public sealed class CMUMedicalBodyIndexTest
     [TestPrototypes]
     private const string Prototypes = """
 - type: entity
+  parent: AppearanceCMUHuman
   id: CMUMedicalBodyIndexFallbackDummy
   components:
-  - type: Body
-    prototype: CMUHumanBody
   - type: StandingState
 """;
 
@@ -73,10 +73,11 @@ public sealed class CMUMedicalBodyIndexTest
         {
             var entMan = server.EntMan;
             var body = entMan.System<SharedBodySystem>();
+            var detachable = entMan.System<DetachableOrganSystem>();
             var medical = entMan.System<CMUMedicalBodyIndexSystem>();
-            var transform = entMan.System<SharedTransformSystem>();
             var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             EntityUid? detachedArm = null;
+            EntityUid? detachedCarrier = null;
             EntityUid? replacementArm = null;
 
             try
@@ -88,7 +89,8 @@ public sealed class CMUMedicalBodyIndexTest
                 var parentSlot = body.GetParentPartAndSlotOrNull(leftArm);
                 Assert.That(parentSlot, Is.Not.Null);
                 detachedArm = leftArm;
-                transform.DetachEntity(leftArm, entMan.GetComponent<TransformComponent>(leftArm));
+                detachedCarrier = detachable.Detach(leftArm);
+                Assert.That(detachedCarrier, Is.Not.Null);
 
                 var foundRemovedPart = medical.TryGetBodyPart(patient, leftArmKey, out _);
                 var foundRemovedSnapshot = medical.TryGetSnapshot(patient, out var removedSnapshot);
@@ -136,12 +138,14 @@ public sealed class CMUMedicalBodyIndexTest
             }
             finally
             {
-                if (detachedArm is { } detached && entMan.EntityExists(detached))
+                if (detachedCarrier is { } carrier && entMan.EntityExists(carrier))
+                    entMan.DeleteEntity(carrier);
+                else if (detachedArm is { } detached && entMan.EntityExists(detached))
                     entMan.DeleteEntity(detached);
-                if (replacementArm is { } replacement && entMan.EntityExists(replacement))
-                    entMan.DeleteEntity(replacement);
                 if (entMan.EntityExists(patient))
                     entMan.DeleteEntity(patient);
+                if (replacementArm is { } replacement && entMan.EntityExists(replacement))
+                    entMan.DeleteEntity(replacement);
             }
         });
 

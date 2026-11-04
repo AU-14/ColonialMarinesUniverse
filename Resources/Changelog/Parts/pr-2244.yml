@@ -1,0 +1,34 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The ASRS standby screen no longer covers the catalogue while you're reading
+    it
+  type: Fix
+- message: Defibrillators work on a corpse that got a new heart
+  type: Fix
+- message: TWE rations no longer say TSE and UNMC
+  type: Fix
+- message: The queen can heal xenos on other floors
+  type: Fix
+- message: The new pulse rifle sounds are no longer louder than every other gun
+  type: Fix
+- message: A revived queen can be tracked again
+  type: Fix
+- message: Xenos can't use the jukebox
+  type: Fix
+- message: Your cigarette smoke keeps animating while you're buckled
+  type: Fix
+- message: Ghosts are see-through again and no longer show up as just burns and bandages
+  type: Fix
+- message: Taking off a chevron removes its rank
+  type: Fix
+- message: Replicants take on their target's rank and faction
+  type: Fix
+- message: BEAR no longer shows up in the rank menu
+  type: Fix
+- message: The CLF commando leader can give orders
+  type: Fix
+- message: Things thrown onto the lowered vehicle lift fall in again, vehicles don't
+  type: Fix
+time: '2026-10-21T10:29:11.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2244

@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Word;
 using Content.Shared.Chat;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Server.Audio;
 using Robust.Shared.Audio;
@@ -17,6 +17,12 @@ namespace Content.Server._RMC14.Announce;
 public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
 {
     private const string QueenAnnouncementPreset = "XenoQueen";
+
+    /// <summary>Row tint for xeno announcements. A ground, not a highlight - the title and body sit on it.</summary>
+    private static readonly Color AnnouncementBackground = Color.FromHex("#2A1740");
+
+    /// <summary>Left rule down the row, matching the Queen Mother heading in the locale.</summary>
+    private static readonly Color AnnouncementAccent = Color.FromHex("#7575F3");
 
     [Dependency] private IAdminLogManager _adminLogs = default!;
     [Dependency] private AudioSystem _audio = default!;
@@ -61,7 +67,7 @@ public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
             _generalAnnounce.AnnounceAdvanced(request, filter);
         }
 
-        _chat.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrapped, source, false, true, null, hidePopup: true);
+        _chat.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrapped, source, false, true, null, hidePopup: true, backgroundColorOverride: AnnouncementBackground, accentColorOverride: AnnouncementAccent);
         _audio.PlayGlobal(sound, filter, true);
 
         if (popup == null)

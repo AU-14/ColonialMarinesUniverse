@@ -1,0 +1,10 @@
+- type: entity
+  parent: AUSubmissionPointBase
+  id: AUSalvageSubmissionPoint
+  name: salvage submission point
+  description: A collection unit for salvaged goods. Insert items to receive payment based on their grade.
+  suffix: Salvage
+  components:
+  - type: SubmissionStorage
+    categories:
+    - CMUCommodityCategorySalvage

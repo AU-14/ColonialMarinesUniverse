@@ -1,0 +1,259 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Ported from cmss13-devs/cmss13 icons/mob/hud/actions_yautja.dmi. Framed states are composed from the original pred_template/pred_template_on button state plus original action overlays. Extra local action states are retained where CMSS13 has no matching overlay.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "cloak",
+      "directions": 1
+    },
+    {
+      "name": "combi",
+      "directions": 1
+    },
+    {
+      "name": "falcon_drone",
+      "directions": 1
+    },
+    {
+      "name": "gel_vial",
+      "directions": 1
+    },
+    {
+      "name": "leap",
+      "directions": 1
+    },
+    {
+      "name": "looc_toggle",
+      "directions": 1
+    },
+    {
+      "name": "mark_for_hunt",
+      "directions": 1
+    },
+    {
+      "name": "mark_panel",
+      "directions": 1
+    },
+    {
+      "name": "plasma_caster",
+      "directions": 1
+    },
+    {
+      "name": "pred_template",
+      "directions": 1
+    },
+    {
+      "name": "pred_template_on",
+      "directions": 1
+    },
+    {
+      "name": "self_destruct",
+      "directions": 1
+    },
+    {
+      "name": "smartdisc",
+      "directions": 1
+    },
+    {
+      "name": "thwei",
+      "directions": 1
+    },
+    {
+      "name": "translator",
+      "directions": 1,
+      "delays": [
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "visor",
+      "directions": 1
+    },
+    {
+      "name": "visor_on",
+      "directions": 1
+    },
+    {
+      "name": "wristblade",
+      "directions": 1
+    },
+    {
+      "name": "zoom",
+      "directions": 1
+    },
+    {
+      "name": "cloak_framed",
+      "directions": 1
+    },
+    {
+      "name": "combi_framed",
+      "directions": 1
+    },
+    {
+      "name": "lantern_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "lantern_off_framed",
+      "directions": 1
+    },
+    {
+      "name": "falcon_drone_framed",
+      "directions": 1
+    },
+    {
+      "name": "gel_vial_framed",
+      "directions": 1
+    },
+    {
+      "name": "leap_framed",
+      "directions": 1
+    },
+    {
+      "name": "looc_toggle_framed",
+      "directions": 1
+    },
+    {
+      "name": "mark_for_hunt_framed",
+      "directions": 1
+    },
+    {
+      "name": "mark_panel_framed",
+      "directions": 1
+    },
+    {
+      "name": "plasma_caster_framed",
+      "directions": 1
+    },
+    {
+      "name": "self_destruct_framed",
+      "directions": 1
+    },
+    {
+      "name": "smartdisc_framed",
+      "directions": 1
+    },
+    {
+      "name": "thwei_framed",
+      "directions": 1
+    },
+    {
+      "name": "translator_framed",
+      "directions": 1,
+      "delays": [
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "visor_framed",
+      "directions": 1
+    },
+    {
+      "name": "visor_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "wristblade_framed",
+      "directions": 1
+    },
+    {
+      "name": "zoom_framed",
+      "directions": 1
+    },
+    {
+      "name": "bracer_framed",
+      "directions": 1
+    },
+    {
+      "name": "bracer_shield_framed",
+      "directions": 1
+    },
+    {
+      "name": "hunting_trap_framed",
+      "directions": 1
+    },
+    {
+      "name": "scimitar_framed",
+      "directions": 1
+    },
+    {
+      "name": "voice_click_framed",
+      "directions": 1
+    },
+    {
+      "name": "voice_death_framed",
+      "directions": 1
+    },
+    {
+      "name": "voice_growl_framed",
+      "directions": 1
+    },
+    {
+      "name": "voice_laugh_framed",
+      "directions": 1
+    },
+    {
+      "name": "voice_pain_framed",
+      "directions": 1
+    },
+    {
+      "name": "voice_roar_framed",
+      "directions": 1
+    },
+    {
+      "name": "audio_panel_framed",
+      "directions": 1
+    },
+    {
+      "name": "zoom_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "cloak_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "plasma_caster_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "wristblade_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "scimitar_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "bracer_shield_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "combi_on_framed",
+      "directions": 1
+    },
+    {
+      "name": "self_destruct_on_framed",
+      "directions": 1
+    }
+  ]
+}

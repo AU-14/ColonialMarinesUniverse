@@ -3,43 +3,53 @@ using Content.Server.RoundEnd;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
-namespace Content.Server.GameTicking.Commands
+namespace Content.Server.GameTicking.Commands;
+
+[AdminCommand(AdminFlags.Round)]
+public sealed partial class RestartRoundCommand : LocalizedEntityCommands
 {
-    [AdminCommand(AdminFlags.Round)]
-    public sealed partial class RestartRoundCommand : IConsoleCommand
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private RoundEndSystem _roundEndSystem = default!;
+
+    public override string Command => "restartround";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        [Dependency] private IEntityManager _e = default!;
-
-        public string Command => "restartround";
-        public string Description => "Ends the current round and starts the countdown for the next lobby.";
-        public string Help => string.Empty;
-
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        // CMU14: restartround ends the round for everyone; require an explicit confirm argument
+        if (args.Length == 0
+            || !args[0].Equals("confirm", StringComparison.OrdinalIgnoreCase))
         {
-            var ticker = _e.System<GameTicker>();
-
-            if (ticker.RunLevel != GameRunLevel.InRound)
-            {
-                shell.WriteLine("This can only be executed while the game is in a round - try restartroundnow");
-                return;
-            }
-
-            _e.System<RoundEndSystem>().EndRound();
+            shell.WriteLine(Loc.GetString("cmu-cmd-restartround-needs-confirm"));
+            return;
         }
+
+        if (_gameTicker.RunLevel != GameRunLevel.InRound)
+        {
+            shell.WriteLine(Loc.GetString("shell-can-only-run-while-round-is-active"));
+            return;
+        }
+
+        _roundEndSystem.EndRound();
     }
+}
 
-    [AdminCommand(AdminFlags.Round)]
-    public sealed partial class RestartRoundNowCommand : IConsoleCommand
+[AdminCommand(AdminFlags.Round)]
+public sealed partial class RestartRoundNowCommand : LocalizedEntityCommands
+{
+    [Dependency] private GameTicker _gameTicker = default!;
+
+    public override string Command => "restartroundnow";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        [Dependency] private IEntityManager _e = default!;
-
-        public string Command => "restartroundnow";
-        public string Description => "Moves the server from PostRound to a new PreRoundLobby.";
-        public string Help => String.Empty;
-
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        // CMU14: restartroundnow restarts the round for everyone; require an explicit confirm argument
+        if (args.Length == 0
+            || !args[0].Equals("confirm", StringComparison.OrdinalIgnoreCase))
         {
-            _e.System<GameTicker>().RestartRound();
+            shell.WriteLine(Loc.GetString("cmu-cmd-restartroundnow-needs-confirm"));
+            return;
         }
+
+        _gameTicker.RestartRound();
     }
 }

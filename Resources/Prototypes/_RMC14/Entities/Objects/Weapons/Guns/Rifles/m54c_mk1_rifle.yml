@@ -4,6 +4,9 @@
   id: RMCWeaponRifleM54CMK1
   description: An older design of the Pulse Rifle commonly used by the Marine Corps. Uses 10x24mm caseless ammunition.
   components:
+  # cmu edit start: M41s have a built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Rifles/m54cmk1.rsi
     layers:
@@ -84,6 +87,7 @@
           - RMCAttachmentMagneticHarness
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-stock:
         startingAttachable: RMCAttachmentM54CMK1StockCollapsible
         whitelist:

@@ -31,4 +31,5 @@ public sealed partial class AttachableHolderComponent : Component
  *   rmc-aslot-rail
  *   rmc-aslot-stock
  *   rmc-aslot-underbarrel
+ *   cmu-aslot-sling (CMU14: sling-only mount; localized in CMU14/attachable/sling.ftl)
  */

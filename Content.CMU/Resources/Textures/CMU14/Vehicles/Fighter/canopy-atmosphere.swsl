@@ -1,0 +1,42 @@
+// World-anchored cloud sea, also used while flying inside the opaque cloud layer.
+uniform highp float inCloud;
+uniform highp vec2 origin;
+uniform highp vec2 worldRight;
+uniform highp vec2 worldForward;
+uniform highp float terrainVisible;
+uniform highp vec2 terrainMin;
+uniform highp vec2 terrainMax;
+
+highp float skyHash(highp vec2 p) {
+    return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);
+}
+highp float skyNoise(highp vec2 p) {
+    highp vec2 i=floor(p);
+    highp vec2 f=fract(p);
+    f=f*f*(3.0-2.0*f);
+    return mix(mix(skyHash(i),skyHash(i+vec2(1.0,0.0)),f.x),
+               mix(skyHash(i+vec2(0.0,1.0)),skyHash(i+vec2(1.0,1.0)),f.x),f.y);
+}
+highp float skyFbm(highp vec2 p) {
+    return skyNoise(p)*0.53+skyNoise(p*2.03+17.0)*0.28+skyNoise(p*4.13+29.0)*0.13+skyNoise(p*8.3)*0.06;
+}
+void fragment() {
+    // DrawTextureRect UV.y is 1 at the TOP. Increasing travel must move
+    // a fixed cloud toward UV.y=0 (the tail), never toward the nose.
+    highp vec2 p=origin+(UV.x-0.5)*worldRight+(UV.y-0.5)*worldForward;
+    // Keep billows legible at the ground viewport's scale without introducing
+    // any independent drift that could make the aircraft appear to fly backward.
+    highp vec2 cloudPoint=p*3.0;
+    highp float body=skyFbm(cloudPoint);
+    highp float billow=skyFbm(cloudPoint*1.9+body*2.1);
+    highp float light=clamp(0.58+(body-skyFbm(cloudPoint-vec2(0.24,0.18)))*3.7,0.0,1.0);
+    highp vec3 cloud=mix(vec3(0.29,0.40,0.44),vec3(0.90,0.92,0.86),light*0.72+billow*0.28);
+    cloud=mix(cloud,vec3(0.73,0.78,0.78)+billow*0.13,inCloud);
+    // Reveal the AO over a 24-tile cloud bank. The mask is attached to the
+    // terrain, so approach and departure share one continuous moving backdrop.
+    highp vec2 edge=min(p-terrainMin,terrainMax-p);
+    highp float inside=min(edge.x,edge.y);
+    highp float opening=smoothstep(0.0,1.2,inside/(0.65+body*0.7));
+    highp float cover=max(inCloud,1.0-terrainVisible*opening);
+    COLOR=vec4(cloud,cover);
+}

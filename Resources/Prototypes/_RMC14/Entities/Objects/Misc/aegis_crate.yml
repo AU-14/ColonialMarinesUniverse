@@ -11,7 +11,7 @@
       radius: 20
       energy: 5.0
       color: "#FFE4CEFF"
-      mask: /Textures/Effects/LightMasks/double_cone.png
+      lightMask: ConeDouble
     - type: RotatingLight
       speed: 90
     - type: Sprite

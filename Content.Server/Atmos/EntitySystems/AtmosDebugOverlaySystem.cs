@@ -1,6 +1,6 @@
 using System.Numerics;
-using Content.Server.Atmos.Components;
 using Content.Shared.Atmos;
+using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.CCVar;
 using JetBrains.Annotations;
@@ -18,7 +18,6 @@ namespace Content.Server.Atmos.EntitySystems
     public sealed partial class AtmosDebugOverlaySystem : SharedAtmosDebugOverlaySystem
     {
         [Dependency] private IPlayerManager _playerManager = default!;
-        [Dependency] private IMapManager _mapManager = default!;
         [Dependency] private IConfigurationManager _configManager = default!;
         [Dependency] private SharedTransformSystem _transform = default!;
         [Dependency] private MapSystem _mapSystem = default!;
@@ -66,8 +65,12 @@ namespace Content.Server.Atmos.EntitySystems
                 return false;
             }
 
-            var message = new AtmosDebugOverlayDisableMessage();
-            RaiseNetworkEvent(message, observer.Channel);
+            // CMU14: the channel is already gone when a disconnect triggers this, sending would just log an error
+            if (observer.Channel.IsConnected)
+            {
+                var message = new AtmosDebugOverlayDisableMessage();
+                RaiseNetworkEvent(message, observer.Channel);
+            }
 
             return true;
         }

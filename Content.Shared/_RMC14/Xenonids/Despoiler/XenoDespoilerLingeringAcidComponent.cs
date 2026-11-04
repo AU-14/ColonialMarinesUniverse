@@ -2,7 +2,8 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Xenonids.Despoiler;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+// CMU14: replicate the marker, not server-only damage attribution and collision history.
+[RegisterComponent, NetworkedComponent]
 public sealed partial class XenoDespoilerLingeringAcidComponent : Component
 {
     [DataField]
@@ -14,6 +15,11 @@ public sealed partial class XenoDespoilerLingeringAcidComponent : Component
     [DataField]
     public float CrossBurnDamage = 20f;
 
-    [DataField, AutoNetworkedField]
+    // Damage attribution is only used on the server; clients do not need the caster entity.
+    [DataField]
     public EntityUid? Caster;
+
+    [DataField]
+    public HashSet<EntityUid> Damaged = new(); // CMU14
 }
+// CMU14 end

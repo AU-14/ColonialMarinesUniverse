@@ -49,7 +49,7 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
 
     private void OnXenoPlasmaRemove(Entity<XenoPlasmaComponent> ent, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(ent, ent.Comp.Alert);
+        _alerts.ClearAlert((ent.Owner, null), ent.Comp.Alert);
     }
 
     private void OnXenoRejuvenate(Entity<XenoPlasmaComponent> xeno, ref RejuvenateEvent args)
@@ -61,20 +61,20 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
     {
         if (xeno.Owner == args.Target)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-plasma-cannot-self"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-plasma-cannot-self"), xeno, xeno);
             return;
         }
 
         if (HasComp<XenoAttachedOvipositorComponent>(args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-plasma-ovipositor"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-plasma-ovipositor"), xeno, xeno);
             return;
         }
 
         if (!TryComp(args.Target, out XenoPlasmaComponent? targetPlasma) ||
             targetPlasma.MaxPlasma == 0)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-plasma-other-max-zero", ("target", args.Target)), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-plasma-other-max-zero", ("target", args.Target)), xeno, xeno);
             return;
         }
 
@@ -109,7 +109,7 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
 
         if (otherXeno.Plasma == otherXeno.MaxPlasma)
         {
-            _popup.PopupClient("That xeno already has max plasma!", args.Target.Value, self, PopupType.MediumCaution);
+            _popup.PopupEntity("That xeno already has max plasma!", args.Target.Value, self, PopupType.MediumCaution);
             return;
         }
 
@@ -194,7 +194,10 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
             var max = _alerts.GetMaxSeverity(xeno.Comp.Alert);
             var severity = max - ContentHelpers.RoundToLevels(level, xeno.Comp.MaxPlasma, max + 1);
             string? plasmaResourceMessage = (int)xeno.Comp.Plasma + " / " + xeno.Comp.MaxPlasma;
-            _alerts.ShowAlert(xeno, xeno.Comp.Alert, (short)severity, dynamicMessage: plasmaResourceMessage);
+            _alerts.ShowAlert((xeno.Owner, null),
+                xeno.Comp.Alert,
+                (short)severity,
+                dynamicMessage: plasmaResourceMessage);
         }
     }
 
@@ -216,7 +219,7 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
             popupOn ??= xeno.Owner;
             var popup = Loc.GetString("cm-xeno-not-enough-plasma");
             if (predicted)
-                _popup.PopupClient(popup, popupOn.Value, xeno, PopupType.MediumCaution);
+                _popup.PopupEntity(popup, popupOn.Value, xeno, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(popup, popupOn.Value, xeno, PopupType.MediumCaution);
         }
@@ -296,7 +299,7 @@ public sealed partial class XenoPlasmaSystem : EntitySystem
 
         popupOn ??= xeno.Owner.ToCoordinates();
         if (predicted)
-            _popup.PopupClient(Loc.GetString("cm-xeno-not-enough-plasma"), popupOn.Value, xeno, PopupType.MediumCaution);
+            _popup.PopupCoordinates(Loc.GetString("cm-xeno-not-enough-plasma"), popupOn.Value, xeno, PopupType.MediumCaution);
         else
             _popup.PopupCoordinates(Loc.GetString("cm-xeno-not-enough-plasma"), popupOn.Value, xeno, PopupType.MediumCaution);
 

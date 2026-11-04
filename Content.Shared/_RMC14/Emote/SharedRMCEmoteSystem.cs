@@ -98,7 +98,7 @@ public abstract partial class SharedRMCEmoteSystem : EntitySystem
         if (!_interaction.InRangeUnobstructed(user, args.Target, _interactRange))
         {
             var msg = Loc.GetString("rmc-hands-emotes-get-closer");
-            _popup.PopupClient(msg, user, user);
+            _popup.PopupEntity(msg, user, user);
             return;
         }
 
@@ -202,7 +202,7 @@ public abstract partial class SharedRMCEmoteSystem : EntitySystem
         if (_net.IsServer)
             ent.Comp.SpawnedEffect = SpawnAttachedTo(effect, ent.Owner.ToCoordinates());
 
-        _popup.PopupPredicted(popupSelf, popup, ent.Owner, ent.Owner, PopupType.Medium);
+        _popup.PopupEntity(popupSelf, popup, ent.Owner, ent.Owner, PopupType.Medium);
         Dirty(ent);
     }
 
@@ -265,8 +265,8 @@ public abstract partial class SharedRMCEmoteSystem : EntitySystem
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        _popup.PopupClient(popupSelf, uid, uid, PopupType.Medium);
-        _popup.PopupClient(popupSelfTarget, targetUid, targetUid, PopupType.Medium);
+        _popup.PopupEntity(popupSelf, uid, uid, PopupType.Medium);
+        _popup.PopupEntity(popupSelfTarget, targetUid, targetUid, PopupType.Medium);
 
         _melee.DoLunge(targetUid, uid);
 

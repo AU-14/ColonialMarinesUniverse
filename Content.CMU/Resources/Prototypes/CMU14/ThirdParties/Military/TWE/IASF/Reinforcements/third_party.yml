@@ -1,0 +1,24 @@
+# Intel call-in: a full IASF section, flown in by shuttle like the US Army infantry reinforcements.
+- type: partySpawn
+  id: CMUIASFReinforcementsSpawn
+  leadersToSpawn:
+    CMUIASFReinforcementTeamLead: 1
+  gruntsToSpawn:
+    CMUIASFReinforcementRifleman: 3
+    CMUIASFReinforcementRiflemanAmmo: 1
+    CMUIASFReinforcementMedicalTechnician: 1
+    CMUIASFReinforcementCombatEngineer: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUIASFReinforcements
+  displayName: IASF Paratrooper Reinforcements
+  partyspawn: CMUIASFReinforcementsSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 7
+  roundstart: false

@@ -14,3 +14,4 @@
     anchored: true
   - type: Physics
     bodyType: Static
+    canCollide: False

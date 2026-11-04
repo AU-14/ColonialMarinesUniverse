@@ -1,0 +1,289 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: DP-72 "Tachanka"
+  id: RuMCMachineGunTachanka
+  description: Soviet-era 7.62x54R heavy machine gun. With a pan magazine and a heavy barrel. Reliable, but heavy.
+  components:
+  - type: Item
+    size: Huge
+#  - type: Appearance
+#  - type: Corrodible
+#    isCorrodible: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/LMGs/Tachanka/tachanka_inhands.rsi
+    layers:
+    - state: base
+      sprite: _RuMC14/Objects/Weapons/Guns/LMGs/Tachanka/tachanka.rsi
+    - state: bolt-open
+      sprite: _RuMC14/Objects/Weapons/Guns/LMGs/Tachanka/tachanka.rsi
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      sprite: _RuMC14/Objects/Weapons/Guns/LMGs/Tachanka/tachanka.rsi
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/LMGs/Tachanka/tachanka_inhands.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_m60.ogg
+      params:
+        volume: -4
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - FullAuto
+    recoilWielded: 0
+    recoilUnwielded: 0
+    scatterWielded: 1
+    scatterUnwielded: 1
+    baseFireRate: 8
+    modifiers:
+      FullAuto:
+        fireDelay: 0.02
+        maxScatterModifier: 80
+        shotsToMaxScatter: 2
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 0.9
+    accuracyMultiplierUnwielded: 0.65
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RuMCMagazineTachankaLarge
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RuMCMagazineTachanka
+          - RuMCMagazineTachankaLarge
+          - RuMCMagazineTachankaLargeTracer
+  - type: GunDamageModifier
+    multiplier: 1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: 0, 0.1
+      rmc-aslot-underbarrel: 0.35, -0.3
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - RuMCMachineGunTachanka
+  - type: Wieldable
+  - type: WieldableSpeedModifiers
+    base: 0.70
+    light: 0.75
+    medium: 0.8
+    heavy: 0.75
+  - type: WieldDelay
+    baseDelay: 0.9
+  - type: GunRequiresWield
+
+# Magazines
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazineTachanka
+  name: DP-72 pan magazine (7.62x54R)
+  description: A 47-round pan magazine for the DP-72 light machine gun.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazineTachanka
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeLMGQYJ72
+      - RuMCCartridge762x54R
+    proto: RMCCartridgeLMGQYJ72
+    capacity: 47
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/LMGs/tachanka.rsi
+    layers:
+    - state: base_mini
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-3Mini
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Item
+    size: Large
+
+- type: entity
+  parent: RuMCMagazineTachanka
+  id: RuMCMagazineTracerTachanka
+  name: DP-72 pan magazine (7.62x54R Tracer)
+  description: A 47-round pan tracer magazine for the DP-72 light machine gun.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazineTachanka
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridge762x54RTracer
+      - RMCCartridgeLMGQYJ72
+      - RuMCCartridge762x54R
+    proto: RuMCCartridge762x54RTracer
+    capacity: 47
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/LMGs/tachanka.rsi
+    layers:
+    - state: base_mini
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-4MiniTracer
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Item
+    size: Large
+
+- type: entity
+  parent: RuMCMagazineTachanka
+  id: RuMCMagazineTachankaLarge
+  name: DP-72 extended pan magazine (7.62x54R)
+  description: An experimental 75-round pan magazine for the DP-72. Heavy, but holds more firepower.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazineTachankaLarge
+    - RuMCMagazineTachanka
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeLMGQYJ72
+      - RuMCCartridge762x54R
+    proto: RMCCartridgeLMGQYJ72
+    capacity: 75
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/LMGs/tachanka.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: RuMCMagazineTachanka
+  id: RuMCMagazineTachankaLargeTracer
+  name: DP-72 extended pan magazine (7.62x54R Tracer)
+  description: An experimental 75-round pan magazine for the DP-72. Heavy, but holds more firepower.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazineTachankaLargeTracer
+    - RuMCMagazineTachanka
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridge762x54RTracer
+      - RMCCartridgeLMGQYJ72
+      - RuMCCartridge762x54R
+    proto: RuMCCartridge762x54RTracer
+    capacity: 75
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/LMGs/tachanka.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-2Tracer
+      map: ["enum.GunVisualLayers.Mag"]
+
+# Cartridges
+
+- type: entity
+  parent: RuMCCartridge762x54R
+  id: RuMCCartridge762x54RTracer
+  name: 7.62x54R Tracer
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBullet762x54RTracer
+  - type: Tag
+    tags:
+    - RuMCCartridge762x54RTracer
+
+# Projectiles
+
+#- type: entity
+#  parent: CMBulletBase
+#  id: RuMCBullet762x54R
+#  name: bullet (7.62x54R)
+#  categories: [ HideSpawnMenu ]
+#  components:
+#  - type: Sprite
+#    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
+#    layers:
+#    - state: bullet
+#      shader: unshaded
+#  - type: Projectile
+#    damage:
+#      types:
+#        Piercing: 40
+#  - type: CMArmorPiercing
+#    amount: 25
+#  - type: RMCProjectileDamageFalloff
+#    thresholds:
+#    - range: 2
+#      falloff: 2
+#    - range: 20
+#      falloff: 9999
+#  - type: RMCProjectileAccuracy
+#    accuracy: 85
+#    thresholds:
+#    - range: 6
+#      falloff: 8
+
+- type: entity
+  parent: RuMCBullet762x54R
+  id: RuMCBullet762x54RTracer
+  name: bullet (762x54R Tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#00ff66"
+    radius: 2
+    energy: 8.0
+
+# Tags
+
+- type: Tag
+  id: RuMCMagazineTachanka
+
+- type: Tag
+  id: RuMCMagazineTachankaLarge
+
+- type: Tag
+  id: RuMCMagazineTachankaLargeTracer
+
+- type: Tag
+  id: RuMCCartridge762x54RTracer
+
+- type: Tag
+  id: RuMCMachineGunTachanka
+
+- type: Tag
+  id: RuMCTachankaMount

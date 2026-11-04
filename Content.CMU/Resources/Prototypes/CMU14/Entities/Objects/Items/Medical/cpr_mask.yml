@@ -1,0 +1,19 @@
+- type: entity
+  parent: ClothingMaskBase
+  id: CMUMaskCPR
+  name: CPR mask
+  description: A one-way valve mask placed over an unconscious patient's face. CPR given through it keeps them viable for longer.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/medical.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/medical.rsi
+  - type: IdentityBlocker
+    enabled: false
+  - type: CMUCPRMask
+  - type: Tag
+    tags:
+    - CMUCPRMask
+
+- type: Tag
+  id: CMUCPRMask

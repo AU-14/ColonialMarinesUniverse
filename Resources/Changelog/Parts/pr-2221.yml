@@ -1,0 +1,7 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Fixed US Army equipment on spawn, now actually getting equipment
+  type: Fix
+time: '2026-10-22T13:22:57.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2221

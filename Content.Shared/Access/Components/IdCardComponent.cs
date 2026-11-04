@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.Access.Components;
 
 [RegisterComponent, NetworkedComponent]
-[AutoGenerateComponentState]
+[AutoGenerateComponentState(true)]
 [Access(typeof(SharedIdCardSystem), typeof(SharedPdaSystem), typeof(SharedAgentIdCardSystem), Other = AccessPermissions.ReadWrite)]
 public sealed partial class IdCardComponent : Component
 {
@@ -27,7 +27,7 @@ public sealed partial class IdCardComponent : Component
     public string? _jobTitle;
 
     [Access(typeof(SharedIdCardSystem), typeof(SharedPdaSystem), typeof(SharedAgentIdCardSystem), Other = AccessPermissions.ReadWriteExecute)]
-    public string? LocalizedJobTitle { set => _jobTitle = value; get => _jobTitle ?? Loc.GetString(JobTitle ?? string.Empty); }
+    public string? LocalizedJobTitle { set => _jobTitle = value; get => _jobTitle ?? (JobTitle != null ? Loc.GetString(JobTitle) : string.Empty); }
 
     /// <summary>
     /// The state of the job icon rsi.
@@ -41,7 +41,7 @@ public sealed partial class IdCardComponent : Component
     /// </summary>
     [DataField]
     [AutoNetworkedField]
-    public ProtoId<AccessLevelPrototype>? JobPrototype;
+    public ProtoId<JobPrototype>? JobPrototype;
 
     /// <summary>
     /// The proto IDs of the departments associated with the job
@@ -77,4 +77,32 @@ public sealed partial class IdCardComponent : Component
     [DataField, AutoNetworkedField]
     public int AccountBalance;
     //AU14
+
+    // CMU14 ATM PIN Begin: per-card bank credentials. Server-only (neither networked nor
+    // serialized) so clients never receive another card's PIN and copied cards never share one.
+    /// <summary>
+    ///     5-digit bank account number (10000-99999), unique per card. Assigned when the card is created.
+    /// </summary>
+    [ViewVariables]
+    public int AccountNumber;
+
+    /// <summary>
+    ///     4-digit ATM PIN (1000-9999), unique per card. Assigned when the card is created.
+    /// </summary>
+    [ViewVariables]
+    public int AtmPin;
+
+    /// <summary>
+    ///     How many consecutive failed PIN attempts have been made.
+    /// </summary>
+    [ViewVariables]
+    public int PinAttempts;
+
+    /// <summary>
+    ///     Game-time timestamp after which the PIN lockout expires.
+    ///     Null means the card is not locked.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? PinLockedUntil;
+    // CMU14 End
 }

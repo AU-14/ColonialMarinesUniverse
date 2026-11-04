@@ -1,16 +1,15 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
-using Content.Server.Forensics;
 using Content.Server.GameTicking;
 using Content.Server.Hands.Systems;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Popups;
-using Content.Server.StationRecords.Systems;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Events;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Administration; // CMU14
 using Content.Shared.Forensics.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
@@ -23,6 +22,8 @@ using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.StationRecords;
+using Content.Shared.StationRecords.Components;
+using Content.Shared.StationRecords.Systems;
 using Content.Shared.Throwing;
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
@@ -32,7 +33,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Utility; // CMU14
 
 namespace Content.Server.Administration.Systems;
 
@@ -49,7 +50,6 @@ public sealed partial class AdminSystem : EntitySystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private PhysicsSystem _physics = default!;
     [Dependency] private PlayTimeTrackingManager _playTime = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedRoleSystem _role = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -103,7 +103,8 @@ public sealed partial class AdminSystem : EntitySystem
                 continue;
 
             if (!_playerManager.TryGetPlayerData(id, out var playerData))
-                return;
+                //return; // CMU14: one disconnected player must not abort the rebuild and strand the rest on stale last-round entries
+                continue;
 
             _playerManager.TryGetSessionById(id, out var session);
             _playerList[id] = GetPlayerInfo(playerData, session);
@@ -111,10 +112,12 @@ public sealed partial class AdminSystem : EntitySystem
 
         var updateEv = new FullPlayerListEvent() { PlayersInfo = _playerList.Values.ToList() };
 
-        foreach (var admin in _adminManager.ActiveAdmins)
+        foreach (var admin in _adminManager.ActiveAdminsWithFlag(AdminFlags.PlayerList)) // cmu edit
         {
             RaiseNetworkEvent(updateEv, admin.Channel);
         }
+
+        CMURelayToIngameAdmins(updateEv); // CMU14: in-game admins get the list without antag details
     }
 
     private void OnPlayerRenamed(Entity<ActorComponent> ent, ref EntityRenamedEvent args)
@@ -131,10 +134,12 @@ public sealed partial class AdminSystem : EntitySystem
             PlayerInfo = _playerList[player.UserId]
         };
 
-        foreach (var admin in _adminManager.ActiveAdmins)
+        foreach (var admin in _adminManager.ActiveAdminsWithFlag(AdminFlags.PlayerList)) // cmu edit
         {
             RaiseNetworkEvent(playerInfoChangedEvent, admin.Channel);
         }
+
+        CMURelayToIngameAdmins(playerInfoChangedEvent); // CMU14: in-game admins get the update without antag details
     }
 
     public PlayerInfo? GetCachedPlayerInfo(NetUserId? netUserId)
@@ -163,9 +168,13 @@ public sealed partial class AdminSystem : EntitySystem
     {
         UpdatePanicBunker();
 
-        if (!obj.IsAdmin)
+        if (!obj.IsAdmin || obj.Flags is not { } flags || (flags & AdminFlags.PlayerList) == 0) // cmu edit: needs the player list flag
         {
-            RaiseNetworkEvent(new FullPlayerListEvent(), obj.Player.Channel);
+            // CMU14: an ahelp-capable in-game admin gets the stripped list instead of a blind window
+            if (CMUIsIngameAhelpAdmin(obj.Player))
+                CMUSendIngamePlayerList(obj.Player);
+            else
+                RaiseNetworkEvent(new FullPlayerListEvent(), obj.Player.Channel);
             return;
         }
 
@@ -234,11 +243,18 @@ public sealed partial class AdminSystem : EntitySystem
         RoleTypePrototype? roleType = null;
         var startingRole = string.Empty;
         LocId? subtype = null;
+        SpriteSpecifier? antagIcon = null; // CMU14
         if (_minds.TryGetMind(session, out var mindId, out var mindComp) && mindComp is not null)
         {
-            sortWeight = _role.GetRoleCompByTime(mindComp)?.Comp.SortWeight ?? 0;
+            // sortWeight = _role.GetRoleCompByTime(mindComp)?.Comp.SortWeight ?? 0; // CMU14: replaced below
+            // CMU14 Admin Role Icon Begin: reuse the active mind role for its admin icon
+            var activeRole = _role.GetRoleCompByTime(mindComp);
+            sortWeight = activeRole?.Comp.SortWeight ?? 0;
+            if (activeRole is { } activeRoleEnt && TryComp<CMUAdminRoleIconComponent>(activeRoleEnt, out var roleIcon))
+                antagIcon = roleIcon.Icon;
+            // CMU14 End
 
-            if (_proto.TryIndex(mindComp.RoleType, out var role))
+            if (ProtoMan.TryIndex(mindComp.RoleType, out var role))
             {
                 roleType = role;
                 subtype = mindComp.Subtype;
@@ -277,7 +293,8 @@ public sealed partial class AdminSystem : EntitySystem
             data.UserId,
             connected,
             _roundActivePlayers.Contains(data.UserId),
-            overallPlaytime);
+            overallPlaytime,
+            antagIcon); // CMU14
     }
 
     private void OnPanicBunkerChanged(bool enabled)
@@ -399,8 +416,13 @@ public sealed partial class AdminSystem : EntitySystem
                 var name = Identity.Entity(entity, EntityManager);
                 _popup.PopupCoordinates(Loc.GetString("admin-erase-popup", ("user", name)), coordinates, PopupType.LargeCaution);
                 var filter = Filter.Pvs(coordinates, 1, EntityManager, _playerManager);
-                var audioParams = new AudioParams().WithVolume(3);
-                _audio.PlayStatic(new SoundPathSpecifier("/Audio/Effects/pop_high.ogg"), filter, coordinates, true, audioParams);
+                _audio.PlayStatic(
+                        new ResolvedPathSpecifier("/Audio/Effects/pop_high.ogg"),
+                        filter,
+                        coordinates,
+                        true,
+                        AudioParams.Default.AddVolume(3)
+                        );
             }
 
             foreach (var item in _inventory.GetHandOrInventoryEntities(entity))

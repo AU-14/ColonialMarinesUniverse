@@ -1,0 +1,32 @@
+- type: loadout
+  id: SurgicalCaseFilledSynthAU14
+  cost: 5
+  inhand:
+  - CMSurgicalCaseFilled
+
+- type: loadout
+  id: FireExtinguisherPortableSynthAU14
+  cost: 5
+  inhand:
+  - CMFireExtinguisherPortable
+
+- type: loadout
+  id: Metal50SynthAU14
+  cost: 5
+  maxSelections: 3
+  inhand:
+  - CMSheetMetal50
+
+- type: loadout
+  id: Glass50SynthAU14
+  cost: 2
+  maxSelections: 3
+  inhand:
+  - CMSheetGlass
+
+- type: loadout
+  id: Plasteel50SynthAU14
+  cost: 10
+  maxSelections: 3
+  inhand:
+  - CMSheetPlasteel50

@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Prototypes;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Requisitions;
@@ -16,6 +16,10 @@ public sealed partial class RequisitionsEntry
     [DataField(required: true)]
     public EntProtoId Crate;
 
+    // CMU14: faction vending entries are delivered as the complete item, including their contents.
+    [DataField]
+    public bool CMUFactionVendorItem;
+
     [DataField]
     public List<EntProtoId> Entities = new();
 
@@ -24,6 +28,10 @@ public sealed partial class RequisitionsEntry
     /// </summary>
     [DataField]
     public int MaxStock;
+
+    // CMU14: whole-crate purchases shared across a faction's terminals, without replenishment.
+    [DataField]
+    public int RoundLimit;
 
     /// <summary>
     /// Starting stock for limited ASRS entries. A negative value starts the entry at <see cref="MaxStock"/>.
@@ -35,7 +43,7 @@ public sealed partial class RequisitionsEntry
     /// How long it takes for a limited entry to restock.
     /// </summary>
     [DataField]
-    public TimeSpan StockReplenishDelay = TimeSpan.FromMinutes(10);
+    public TimeSpan StockReplenishDelay = TimeSpan.FromMinutes(5);
 
     /// <summary>
     /// How many units are restored each restock tick.
@@ -64,4 +72,10 @@ public sealed partial class RequisitionsEntry
     /// <summary>Name of the ordering department.</summary>
     [NonSerialized]
     public string? DeptName;
+
+    /// <summary>
+    /// The actual packed weight of an itemized ASRS shipment. Legacy catalog entries leave this at zero.
+    /// </summary>
+    [NonSerialized]
+    public int PackedWeight;
 }

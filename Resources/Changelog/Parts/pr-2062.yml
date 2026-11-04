@@ -1,0 +1,49 @@
+author: troytroy400
+category: CMU
+changes:
+- message: CMB and NSPA equipment vendors have a Long Arms section with options for
+    an HG 37-12 shotgun, Kramer enforcer rifle or MP5.
+  type: Add
+- message: CMB and NSPA equipment vendors now stock evidence marker boxes, spare forensic
+    scanners and nitrile gloves.
+  type: Add
+- message: Ambassadors now spawn with a universal translator.
+  type: Add
+- message: Flashbangs now blind and slow everyone in range with line of sight.
+  type: Tweak
+- message: Colony law enforcement roles no longer spawn with a gun case. Sidearms
+    and long arms are available from their vendors.
+  type: Tweak
+- message: The CMB Marshal now spawns with a revolver and has the Marshal coat.
+  type: Tweak
+- message: The CMB Deputy now spawns in the Bureau deputy coat instead of the parka.
+  type: Tweak
+- message: CMB windbreakers now fit the same suit storage items as the deputy parka.
+  type: Tweak
+- message: The CMB deputy parka no longer provides armor or slows you down.
+  type: Tweak
+- message: The CLF Surgeon has been merged into the CLF Physician, which now has full
+    surgery skill and the surgical kit. Insurgency now has 2 CLF Physician slots.
+  type: Tweak
+- message: Distress Signal gets more Intelligence Officer slots at higher population.
+    2 at 61 players, 3 at 86 and 4 at 111.
+  type: Tweak
+- message: The Kelland Warden has been removed from role selection.
+  type: Tweak
+- message: Renamed the Colony Operations Synthetic to Operations Synthetic.
+  type: Tweak
+- message: The UA recruiter description now properly says the United Americas instead
+    of US.
+  type: Tweak
+- message: Intel now spreads out across the map instead of sometimes piling up in
+    a few areas.
+  type: Fix
+- message: Backpacks are no longer backs of holding, all backpacks can no-longer store
+    other backpacks, rigs, pouches, etc.
+  type: Fix
+- message: The Separated HUD layout is now the default for new players as certain
+    chat features are locked behind it. This can be changed by the player anytime
+    in settings.
+  type: Tweak
+time: '2026-09-30T22:52:58.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2062

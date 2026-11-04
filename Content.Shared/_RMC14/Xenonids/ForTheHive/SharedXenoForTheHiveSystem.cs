@@ -6,10 +6,11 @@ using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
@@ -74,7 +75,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
         args.Handled = true;
         if (_container.IsEntityInContainer(xeno))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-for-the-hive-container"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-for-the-hive-container"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -87,7 +88,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
             _energy.TryRemoveEnergy(xeno.Owner, acid.Current / 4);
 
-            _popup.PopupClient(Loc.GetString("rmc-xeno-for-the-hive-cancel"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-for-the-hive-cancel"), xeno, xeno);
             RemCompDeferred<ActiveForTheHiveComponent>(xeno);
             return;
         }
@@ -103,7 +104,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
         ForTheHiveShout(xeno);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-for-the-hive-activate"), xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-for-the-hive-activate"), xeno, xeno, PopupType.Medium);
     }
 
     protected virtual void ForTheHiveShout(EntityUid xeno)
@@ -116,7 +117,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
         var ev = new ForTheHiveActivatedEvent();
         RaiseLocalEvent(xeno, ref ev);
         _pointLight.SetEnabled(xeno, true);
-        _movement.RefreshMovementSpeedModifiers(xeno);
+        _movement.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnForTheHiveRemoved(Entity<ActiveForTheHiveComponent> xeno, ref ComponentShutdown args)
@@ -128,7 +129,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
     private void OnForTheHiveGone(Entity<ActiveForTheHiveComponent> xeno, ref ComponentRemove args)
     {
-        _movement.RefreshMovementSpeedModifiers(xeno);
+        _movement.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnRefreshSpeed(Entity<ActiveForTheHiveComponent> xeno, ref RefreshMovementSpeedModifiersEvent args)
@@ -287,7 +288,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
     private void OnVentCrawlAttempt(Entity<ActiveForTheHiveComponent> xeno, ref VentEnterAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-vent-crawling-primed"), xeno, PopupType.SmallCaution);
+        _popup.PopupSelf(Loc.GetString("rmc-vent-crawling-primed"), xeno, PopupType.SmallCaution);
         args.Cancel();
     }
 }

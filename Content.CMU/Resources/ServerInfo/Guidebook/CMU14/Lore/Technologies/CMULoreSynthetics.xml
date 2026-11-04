@@ -1,0 +1,31 @@
+<Document>
+  # Synthetics
+
+  [bold]Synthetics[/bold], also called androids or, as many prefer, "artificial persons", are biomechanical humanoids built to look and act like people. The best of them are impossible to tell apart from a human by sight. They are a huge industry and are found on ships, stations and colonies throughout human space.
+
+  <Box>
+    <GuideEntityEmbed Entity="AU14MobWorkingJoeColony" Caption="Working Joe"/>
+  </Box>
+
+  ## History
+  - Weyland Corp was granted the first patent on synthetics in 2023. By the end of the century its David models were indistinguishable from humans and numbered in the millions, and Weyland-Yutani has led the field ever since.
+  - When Weyland's patent expired in 2120, competitors rushed in. [textlink="Seegson" link="CMUGuideLoreCorporations"] answered with the cheap, obviously robotic [bold]Working Joe[/bold], a hit on the frontier, and Weyland-Yutani copied the idea with its Davis line. [textlink="Hyperdyne" link="CMUGuideLoreCorporations"] went the other way, chasing a more-human-than-human design.
+  - Today Weyland-Yutani is the leading maker of synthetics, followed just behind by Seegson. Production is tightly controlled by the authorities, but synthetics still turn up on the black market.
+
+  ## Body
+  - A carbon-fiber skeleton carries vat-grown artificial muscle, powered by a hydrogen fuel cell in the chest that lasts around 400 days between refuelling.
+  - They are stronger, faster and better coordinated than a human, and never tire, sleep or feel fear. Some can feel pain.
+  - Instead of blood they circulate a thick [bold]white fluid[/bold] that lubricates their internals, and the sight of it is often the first sign that someone wasn't human after all.
+  - They don't need air, but they are more fragile than they look. Small-arms fire, explosions, corrosive atmospheres, vacuum and water getting into damaged internals can all wreck them, and a hit to the processor or power cell shuts one down instantly. A badly damaged synthetic can often keep working, handicapped.
+
+  ## Mind
+  - A synthetic's mind is driven by logic. They seem curious because they constantly seek input to feed their decision-making.
+  - Each unit leaves the factory with randomized quirks, so no two have quite the same personality. Newer models imitate human emotion very convincingly, but whether any of it is real is an open question.
+  - Behavioral inhibitors are meant to make them incapable of harming humans, unless they were built for combat.
+  - Legally, synthetics are property, though their high cost means few owners treat them as expendable.
+  - Many people are still frightened of them, and some refuse to trust them at all.
+
+  ## Military Use
+  - Weaponized synthetics, built or programmed to fight, are banned outright by [bold]Article 22[/bold] of the [textlink="Geneva Conventions" link="AU14UCMJGENCON"] (Autonomous Combat Weaponry), with no exceptions.
+  - Synthetics can still serve on the front line, so long as they aren't the ones doing the fighting. Many militaries use them as drivers, pilots, medics, scientific advisors and walking databases.
+</Document>

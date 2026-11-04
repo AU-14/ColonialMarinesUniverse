@@ -1,0 +1,56 @@
+namespace Content.Shared.CMU14.ColonyEconomy;
+
+/// <summary>
+///     Admin console: manages colony sales tax, income tax, and can call third parties.
+///     Third-party costs are paid from the colony budget.
+/// </summary>
+[RegisterComponent]
+public sealed partial class AdminConsoleComponent : Component
+{
+    /// <summary>
+    ///     Current colony-wide sales tax in percent (0–50).
+    ///     Applied to cash vendors and corporate ASRS orders. Revenue goes to colony budget.
+    /// </summary>
+    [DataField("salesTaxPercent")]
+    public float SalesTaxPercent = 0f;
+
+    /// <summary>
+    ///     Current colony-wide income tax in percent (0–50).
+    ///     Applied to salary payouts and corporate console cash withdrawals. Revenue goes to colony budget.
+    /// </summary>
+    [DataField("incomeTaxPercent")]
+    public float IncomeTaxPercent = 0f;
+
+    // RUMC: the tax on the parcels sold through the trade platforms
+    /// <summary>
+    ///     Current colony-wide tax on the parcels sold through the trade platforms, in percent (0–50).
+    ///     That share of the payout goes to the colony budget, the rest to the seller.
+    /// </summary>
+    [DataField("tradeTaxPercent")]
+    public float TradeTaxPercent = 0f;
+
+    /// <summary>
+    ///     Map of third-party prototype ID → cost deducted from colony budget.
+    /// </summary>
+    [DataField("callableParties")]
+    public Dictionary<string, float> CallableParties = new();
+
+    public HashSet<string> CalledParties = new();
+
+    /// <summary>
+    ///     How many third parties can be called in per round, across every console of this kind.
+    /// </summary>
+    [DataField("maxCallIns")]
+    public int MaxCallIns = 3;
+
+    /// <summary>
+    ///     How long after one call-in before the next can be made.
+    /// </summary>
+    [DataField("callInCooldown")]
+    public TimeSpan CallInCooldown = TimeSpan.FromMinutes(20);
+
+    /// <summary>
+    ///     When the next call-in can be made. Shared by every console of this kind.
+    /// </summary>
+    public TimeSpan NextCallInAt;
+}

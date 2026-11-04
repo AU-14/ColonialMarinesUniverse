@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Numerics;
-using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevels.Core;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
 
-namespace Content.IntegrationTests._CMU14.DroneOperator;
+namespace Content.IntegrationTests.CMU14.DroneOperator;
 
 [TestFixture]
 public sealed class CMUDroneOperatorZLevelRangeTest

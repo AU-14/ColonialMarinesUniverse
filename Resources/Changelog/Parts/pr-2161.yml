@@ -1,0 +1,8 @@
+author: PERed5
+category: CMU
+changes:
+- message: Intel tech tree names, descriptions and announcements now use localization
+    keys.
+  type: Code
+time: '2026-10-11T21:51:34.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2161

@@ -33,8 +33,9 @@
     - FullAuto
     soundGunshot:
       collection: RMCFlamerShoot
-  - type: UseDelay
-    delay: 2
+  # CMU14: no flat use delay, cadence is ShootUseDelay plus WieldDelay
+  #- type: UseDelay
+  #  delay: 2
   - type: ShootUseDelay
   - type: ContainerContainer
     containers:
@@ -50,6 +51,8 @@
         whitelist:
           tags:
           - RMCTankFlamer
+  - type: WieldDelay
+    baseDelay: 1.0 #CMU14 Change
   - type: Wieldable
   - type: WieldableSpeedModifiers
     base: 0.5
@@ -98,6 +101,11 @@
     - RMCWeaponIncineratorM34
   - type: RMCNameItemOnVend
     item: PrimaryGun
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCWeaponFlamer

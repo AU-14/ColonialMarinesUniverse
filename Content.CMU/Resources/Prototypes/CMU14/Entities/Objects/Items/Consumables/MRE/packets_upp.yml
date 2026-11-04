@@ -1,0 +1,118 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPSnackDriedCodSlice
+  name: "IRP snack (dried cod slice)"
+  description: "An IRP snack, some nutritious snack to be eaten in a breaktime or combined with a main dish."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPDriedCodSlice
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPSnackDriedTaran
+  name: "IRP snack (dried taran)"
+  description: "An IRP snack, some nutritious snack to be eaten in a breaktime or combined with a main dish."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPDriedTaran
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPSnackMashedPotatoes
+  name: "IRP snack (mashed potatoes)"
+  description: "An IRP snack, some nutritious snack to be eaten in a breaktime or combined with a main dish."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPMashedPotatoes
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPSnackRiceBall
+  name: "IRP snack (rice ball)"
+  description: "An IRP snack, some nutritious snack to be eaten in a breaktime or combined with a main dish."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_snack
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPRiceBall
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPDessertBirdMilk
+  name: "IRP dessert (bird milk)"
+  description: "An IRP side component. Contains a sweet dessert, to be eaten with tea or any other hot drink."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPBirdMilk
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPDessertToffees
+  name: "IRP dessert (toffees)"
+  description: "An IRP side component. Contains a sweet dessert, to be eaten with tea or any other hot drink."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPToffees
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPDessertHematogenBar
+  name: "IRP dessert (hematogen bar)"
+  description: "An IRP side component. Contains a sweet dessert, to be eaten with tea or any other hot drink."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPHematogenBar
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPDessertDarkChocolateBar
+  name: "IRP dessert (dark chocolate bar)"
+  description: "An IRP side component. Contains a sweet dessert, to be eaten with tea or any other hot drink."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPDarkChocolateBar
+
+- type: entity
+  parent: CMMREComponentBase
+  id: CMUMREPacketUPPDessertChocolateRiceCandies
+  name: "IRP dessert (chocolate rice candies)"
+  description: "An IRP side component. Contains a sweet dessert, to be eaten with tea or any other hot drink."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: upp_dessert
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMREFoodUPPChocolateRiceCandies

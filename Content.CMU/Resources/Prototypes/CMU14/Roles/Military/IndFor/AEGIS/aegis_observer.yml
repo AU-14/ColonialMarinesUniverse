@@ -1,0 +1,80 @@
+- type: job
+  parent: CMUJobBaseAegis
+  id: CMUJobAegisObserver
+  name: cmu-job-name-aegis-observer
+  description: cmu-job-description-aegis-observer
+  startingGear: CMUGearAegisObserver
+  accessGroups:
+  - ShipMasterAccess
+  - aulegacygroupcommand
+  - AU14GovforCommand
+  - CMAccessAegis
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 2
+      RMCSkillIntel: 3
+      RMCSkillLeadership: 3
+      RMCSkillResearch: 2
+      RMCSkillSurgery: 1
+      RMCSkillMedical: 2
+  - type: JobPrefix
+    prefix: cmu-job-prefix-aegis-observer
+
+- type: startingGear
+  id: CMUGearAegisObserver
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonIvy
+    shoes: RMCShoesLaceup
+    back: CMSatchel
+    ears: AU14HeadsetGovforAuxiliary
+    id: CMUIDCardAegisObserver
+  storage:
+    back:
+    - CMUStampAegis
+
+# ├──[ Spawnpoint ]──────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointAegisObserver
+  name: AEGIS observer spawn point
+  suffix: CMU, Job
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobAegisObserver
+  - type: Sprite
+    state: x
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidAegisObserver
+  name: AEGIS observer
+  suffix: CMU, Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/aegis.rsi
+    state: keycard
+  - type: RandomHumanoidSpawner
+    settings: CMUSettingsAegisObserver
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUSettingsAegisObserver
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-aegis-observer
+    description: cmu-ghost-role-information-aegis-observer-description
+    rules: cmu-ghost-role-information-aegis-rules
+    reregister: false
+    job: CMUJobAegisObserver
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+
+- type: roleLoadout
+  id: JobCMUJobAegisObserver
+  points: 7
+  groups:
+  - AegisStampGroupCMU

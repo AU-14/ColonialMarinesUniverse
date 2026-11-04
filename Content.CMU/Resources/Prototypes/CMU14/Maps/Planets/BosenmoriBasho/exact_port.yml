@@ -1,0 +1,1032 @@
+# Generated from the pinned CMSS13 source revision. Do not hand-edit; rerun tools/audit-bosenmori-conversion.ts.
+- type: entity
+  id: CMUBosenmoriExactVisualBase
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+
+- type: entity
+  parent: CMCorrodible
+  id: CMUBosenmoriExactStructureBase
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  id: CMUBosenmoriExactUnderfloorVisualBase
+  parent: CMUBosenmoriExactStructureBase
+  abstract: true
+  components:
+  - type: SubFloorHide
+
+- type: entity
+  id: CMUBosenmoriExact029778372cae2dd4
+  # CMSS13 source: /obj/structure/machinery/colony_floodlight_switch
+  name: "colony floodlight switch"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/465a5a6ebd7516555f51.rsi
+    state: "source"
+    noRot: true
+    offset: 0,0.9375
+
+- type: entity
+  id: CMUBosenmoriExact030603c74acec287
+  # CMSS13 source: /obj/item/prop/magazine/book/borntokill
+  name: "borntokill"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/4bc660353efa463eb4e5.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact0338188c0ccb42d9
+  # CMSS13 source: /obj/item/device/autopsy_scanner
+  name: "autopsy scanner"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/b8003fed28794bcc5db9.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact09e5280d47326336
+  # CMSS13 source: /obj/item/vehicle_coupon
+  name: "vehicle coupon"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/cc87f0e45ca44453817c.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact0cd9a2840adc6138
+  # CMSS13 source: /obj/item/storage/fancy/trading_card/green
+  name: "green trading card"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/8c3686ef3d3562fa0bcc.rsi
+    state: "source"
+    noRot: true
+    offset: 0.125,-0.03125
+
+- type: entity
+  id: CMUBosenmoriExact0df08484b31b7487
+  # CMSS13 source: /obj/effect/decal/cleanable/generic
+  name: "generic cleanable"
+  parent: CMUBosenmoriExactVisualBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/4f3927d69ba9680a0e99.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact14cbf0caf8f3ae0e
+  # CMSS13 source: /obj/item/book/manual/ripley_build_and_repair
+  name: "ripley build and repair"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/a360d96377c14eb4069b.rsi
+    state: "source"
+    noRot: true
+    offset: -0.15625,0.25
+
+- type: entity
+  id: CMUBosenmoriExact192b93fa69ec525e
+  # CMSS13 source: /obj/item/stack/sheet/animalhide/xeno/kinghide
+  name: "kinghide"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/2daf66364f4233aa0892.rsi
+    state: "source"
+    noRot: true
+    color: "#f7897cff"
+
+- type: entity
+  id: CMUBosenmoriExact1ce041fd9b455228
+  # CMSS13 source: /obj/effect/decal/cleanable/blood/oil
+  name: "oil"
+  parent: CMUBosenmoriExactVisualBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/ef6f572d14054fc74247.rsi
+    state: "source"
+    noRot: true
+    color: "#030303ff"
+
+- type: entity
+  id: CMUBosenmoriExact243192d0a62de8d4
+  # CMSS13 source: /obj/item/stack/nanopaste
+  name: "nanopaste"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/fb260cc98192029dc5f2.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact256bf5a752446c05
+  # CMSS13 source: /obj/item/device/camera_film
+  name: "camera film"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/b2cdc367119e967ce072.rsi
+    state: "source"
+    noRot: true
+    offset: -0.15625,0.59375
+
+- type: entity
+  id: CMUBosenmoriExact2aa9d2318bbc78cf
+  # CMSS13 source: /obj/structure/prop/almayer/whiteboard
+  name: "whiteboard"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/215f6888f43252c356dc.rsi
+    state: "source"
+    noRot: true
+    offset: 0.34375,1.28125
+
+- type: entity
+  id: CMUBosenmoriExact2c452340acc12295
+  # CMSS13 source: /obj/structure/machinery/fermenter
+  name: "fermenter"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/3763949844aabc8597a1.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact2da44e8e4f65f264
+  # CMSS13 source: /obj/item/prop/magazine/book/littleredbook
+  name: "littleredbook"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/fdd9c2dc9ded4eadcfbd.rsi
+    state: "source"
+    noRot: true
+    offset: 0.3125,-0.15625
+
+- type: entity
+  id: CMUBosenmoriExact2eb7690478bed40d
+  # CMSS13 source: /obj/item/prop/torch_frame
+  name: "torch frame"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/be67d57701457358e8c6.rsi
+    state: "source"
+    noRot: true
+    offset: 0,-1.0625
+
+- type: entity
+  id: CMUBosenmoriExact344a0a8c63196669
+  # CMSS13 source: /obj/item/toy/blink
+  name: "blink"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/405db837a23227648f60.rsi
+    state: "source"
+    noRot: true
+    offset: -0.25,0.15625
+
+- type: entity
+  id: CMUBosenmoriExact38570b29abd67137
+  # CMSS13 source: /obj/item/stack/sheet/mineral/tritium
+  name: "tritium"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/1431d1290889fbab9745.rsi
+    state: "source"
+    noRot: true
+    color: "#777777ff"
+
+- type: entity
+  id: CMUBosenmoriExact3d0fd1a3a9721b21
+  # CMSS13 source: /obj/item/implantcase
+  name: "implantcase"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/df9f0d2021e6357732a9.rsi
+    state: "source"
+    noRot: true
+    offset: -0.21875,0.25
+
+- type: entity
+  id: CMUBosenmoriExact45de1a3d0fd2855f
+  # CMSS13 source: /obj/item/xenos_claw
+  name: "xenos claw"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/b81a8d129da217083d66.rsi
+    state: "source"
+    noRot: true
+    offset: -0.71875,0.25
+
+- type: entity
+  id: CMUBosenmoriExact4da24bfbf5d3dccd
+  # CMSS13 source: /obj/structure/sign/banners/happybirthdaysteve
+  name: "happybirthdaysteve"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/73bc757d0865c27f861b.rsi
+    state: "source"
+    noRot: true
+    offset: 1,0.9375
+
+- type: entity
+  id: CMUBosenmoriExact4dc3d2c33038e3e8
+  # CMSS13 source: /obj/structure/flora/tree/jungle/bigtreeBOT
+  name: "bigtreebot"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/2d664010414830459f89.rsi
+    state: "source"
+    noRot: true
+    offset: 1,1.5
+
+- type: entity
+  id: CMUBosenmoriExact538895da9ee74713
+  # CMSS13 source: /obj/structure/floodgate
+  name: "floodgate"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/eb75dcfee6e52404c3ac.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact5a0a2e5a55fcea9c
+  # CMSS13 source: /obj/structure/sign/banners/maximumeffort
+  name: "maximumeffort"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/954bcc7911edcbea01a2.rsi
+    state: "source"
+    noRot: true
+    offset: 0.46875,0.84375
+
+- type: entity
+  id: CMUBosenmoriExact5af9bf381b4bda89
+  # CMSS13 source: /obj/structure/prop/almayer/missile_tube
+  name: "Pipeline Feeder"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/f52c0734b73f7ba9950a.rsi
+    state: "source"
+    noRot: true
+    offset: 1.5,1.09375
+    color: "#3d3d29ff"
+
+- type: entity
+  id: CMUBosenmoriExact5d4148d347b35b48
+  # CMSS13 source: /obj/item/book/manual/hydroponics_beekeeping
+  name: "hydroponics beekeeping"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/cd36fa204ba7cdce1b15.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact659b867338fa8ae8
+  # CMSS13 source: /obj/structure/machinery/gibber
+  name: "gibber"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/3b59b9fe329420c610ec.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact67c23fe7ae0796f5
+  # CMSS13 source: /obj/item/key
+  name: "key"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/f7950ae5d6c16803025e.rsi
+    state: "source"
+    noRot: true
+    offset: 0,0.53125
+
+- type: entity
+  id: CMUBosenmoriExact67e4329359350525
+  # CMSS13 source: /obj/item/stack/yautja_rope
+  name: "yautja rope"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/d44ba7c9233d4ff3a182.rsi
+    state: "source"
+    noRot: true
+    color: "#D2B48Cff"
+
+- type: entity
+  id: CMUBosenmoriExact69203fe98a7e9242
+  # CMSS13 source: /obj/item/prop/magazine/book/starshiptroopers
+  name: "starshiptroopers"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/fa0f3b261ec87e3550ec.rsi
+    state: "source"
+    noRot: true
+    offset: -0.09375,-0.09375
+
+- type: entity
+  id: CMUBosenmoriExact6c1bc5e4b4ff80f5
+  # CMSS13 source: /obj/structure/flora/tree/jungle/bigtreeTL
+  name: "bigtreetl"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/42c03510511942aca9a1.rsi
+    state: "source"
+    noRot: true
+    offset: 1,1.5
+
+- type: entity
+  id: CMUBosenmoriExact6e0f348c473a7dec
+  # CMSS13 source: /obj/structure/blocker/forcefield/human
+  name: "height difference"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/75c38619bd6d4b4a7f41.rsi
+    state: "source"
+    color: "#ffffff00"
+
+- type: entity
+  id: CMUBosenmoriExact6e439847127fa95c
+  # CMSS13 source: /obj/item/prop/tableflag/upp
+  name: "upp"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/338605ab824e716827f4.rsi
+    state: "source"
+    noRot: true
+    offset: 0.375,-0.28125
+
+- type: entity
+  id: CMUBosenmoriExact6ee24ee9c79ea082
+  # CMSS13 source: /obj/structure/machinery/botany/editor
+  name: "editor"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/5b1f271e7076d01f1e89.rsi
+    state: "source"
+    noRot: true
+    offset: 0.15625,0.5
+
+- type: entity
+  id: CMUBosenmoriExact711ea99069559131
+  # CMSS13 source: /obj/structure/prop/invuln/pipe_water
+  name: "pipe water"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/9a005a1715dc287b5a51.rsi
+    state: "source"
+    offset: -0.03125,-0.4375
+
+- type: entity
+  id: CMUBosenmoriExact7270e3efba8105e2
+  # CMSS13 source: /obj/structure/dispenser
+  name: "dispenser"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/13de746c07c8fcbd0a38.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact75466d098188f4f0
+  # CMSS13 source: /obj/structure/prop/ice_colony/surveying_device/measuring_device
+  name: "measuring device"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/2ea19d758a65954e162a.rsi
+    state: "source"
+
+- type: entity
+  id: CMUBosenmoriExact75709b28c3485043
+  # CMSS13 source: /obj/structure/prop/ice_colony/poly_kevlon_roll
+  name: "poly kevlon roll"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/766c46b5b628d14189da.rsi
+    state: "source"
+    offset: -0.25,0.53125
+
+- type: entity
+  id: CMUBosenmoriExact7682fa7c86672e96
+  # CMSS13 source: /obj/item/device/radio/listening_bug/radio_linked/wy
+  name: "wy"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/566a0e6ba020ed66bb7d.rsi
+    state: "source"
+    noRot: true
+    offset: -0.125,-0.1875
+
+- type: entity
+  id: CMUBosenmoriExact77a0c5deac62716d
+  # CMSS13 source: /obj/structure/filtration/machine_32x64/indestructible
+  name: "indestructible"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/358ad4c8dc9bd39ad67f.rsi
+    state: "source"
+    noRot: true
+    offset: 0,0.40625
+
+- type: entity
+  id: CMUBosenmoriExact783146243a089a5e
+  # CMSS13 source: /obj/item/facepaint/brown
+  name: "brown facepaint"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/050c4e93a3aad267424e.rsi
+    state: "source"
+    noRot: true
+    offset: -0.1875,0.1875
+
+- type: entity
+  id: CMUBosenmoriExact7e8084dd9795544a
+  # CMSS13 source: /obj/structure/prop/holidays/string_lights/corner
+  name: "corner"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/60432393497fe6a82846.rsi
+    state: "source"
+    offset: -0.75,0.96875
+
+- type: entity
+  id: CMUBosenmoriExact8727ef7264c4235c
+  # CMSS13 source: /obj/item/prop/magazine/book/bladerunner
+  name: "bladerunner"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/e1253e1f6ea3a1ea4ccc.rsi
+    state: "source"
+    noRot: true
+    offset: 0.375,0
+
+- type: entity
+  id: CMUBosenmoriExact91b877a311e788f8
+  # CMSS13 source: /obj/effect/spider/spiderling/nogrow
+  name: "nogrow"
+  parent: CMUBosenmoriExactVisualBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/c3feb0d1dbb8de3c874c.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact95966b148e5683b3
+  # CMSS13 source: /obj/structure/cryofeed/right
+  name: "Pipe Support Strut"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/e64a009c73769e9a0b03.rsi
+    state: "source"
+    noRot: true
+    color: "#3d3d29ff"
+
+- type: entity
+  id: CMUBosenmoriExact95ada83d60f10c0a
+  # CMSS13 source: /obj/item/prop/magazine/book/spacebeast
+  name: "spacebeast"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/46bbce2e4b0a9b125f77.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact9beea7d963d7d6fe
+  # CMSS13 source: /obj/effect/decal/grass_overlay/grass1/inner
+  name: "inner"
+  parent: CMUBosenmoriExactVisualBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/30b427e768d578cdff0f.rsi
+    state: "source"
+
+- type: entity
+  id: CMUBosenmoriExacta37c54a8924cd425
+  # CMSS13 source: /obj/item/device/analyzer/plant_analyzer
+  name: "plant analyzer"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/859debdc09b80621e6c9.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExacta4b214a3f36178a0
+  # CMSS13 source: /obj/structure/cryofeed
+  name: "Pipe Support Strut"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/b121a38b372d34812f4a.rsi
+    state: "source"
+    noRot: true
+    color: "#3d3d29ff"
+
+- type: entity
+  id: CMUBosenmoriExacta5b00b7e4a3f380f
+  # CMSS13 source: /obj/structure/urinal
+  name: "urinal"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/1800440d4ba2446a602e.rsi
+    state: "source"
+    offset: 0,0.90625
+
+- type: entity
+  id: CMUBosenmoriExacta835d41d8cb51723
+  # CMSS13 source: /obj/item/device/eftpos
+  name: "eftpos"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/e6dd145f8d61fcd2f22f.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExacta8f07e691870c57c
+  # CMSS13 source: /obj/structure/machinery/prop/almayer/computer/PC
+  name: "inventory computer"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/f296dfb968b89c38f716.rsi
+    state: "source"
+
+- type: entity
+  id: CMUBosenmoriExactaa2abfc1489ddc83
+  # CMSS13 source: /obj/structure/airlock_assembly/multi_tile
+  name: "multi tile"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/5fd341456a7657ab2205.rsi
+    state: "source"
+    offset: 0.5,0.5
+
+- type: entity
+  id: CMUBosenmoriExactaaa024ab7156ba4f
+  # CMSS13 source: /obj/item/shard/shrapnel/bone_chips
+  name: "bone chips"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/369ecae5e85ab1c60b67.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactac0d92c6d0f8f885
+  # CMSS13 source: /obj/structure/prop/invuln/catwalk_support
+  name: "catwalk support"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/b3ad50e0af649df08ade.rsi
+    state: "source"
+
+- type: entity
+  id: CMUBosenmoriExactad617c62251e469a
+  # CMSS13 source: /obj/item/prop/colony/game
+  name: "game"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/3bdb603920585cc05e34.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactb5206c22f639b239
+  # CMSS13 source: /obj/item/oldresearch/Chitin
+  name: "chitin"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/85cbca34e61908326624.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactb833d690c3043f2e
+  # CMSS13 source: /obj/structure/prop/ice_colony/flamingo
+  name: "flamingo"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/33c5b3c4eca67a6e8c3d.rsi
+    state: "source"
+
+- type: entity
+  id: CMUBosenmoriExactba86577046a2b06a
+  # CMSS13 source: /obj/item/stack/sheet/animalhide/cat
+  name: "cat"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/43bdd07f19f9ea163f36.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactbe9418a19ea80924
+  # CMSS13 source: /obj/structure/prop/ice_colony/hula_girl
+  name: "hula girl"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/440dc350fa8a2d31e580.rsi
+    state: "source"
+    noRot: true
+    offset: -0.125,0.125
+
+- type: entity
+  id: CMUBosenmoriExactc24686348dc96ee9
+  # CMSS13 source: /obj/item/prop/magazine/book/theartofwar
+  name: "theartofwar"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/25347f5a710d52a0d764.rsi
+    state: "source"
+    noRot: true
+    offset: 0.3125,0.25
+
+- type: entity
+  id: CMUBosenmoriExactc8d0a471254bb161
+  # CMSS13 source: /obj/item/device/black_market_hacking_device
+  name: "black market hacking device"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/7d8a934bc4d213328a39.rsi
+    state: "source"
+    noRot: true
+    offset: 0.09375,-0.34375
+
+- type: entity
+  id: CMUBosenmoriExactca8bfc84866b1b58
+  # CMSS13 source: /obj/structure/prop/server_equipment/laptop/on
+  name: "on laptop"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/4783d6d8ebfe33ab3ae3.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactcb99916d2ef175a4
+  # CMSS13 source: /obj/structure/prop/holidays/string_lights/cap
+  name: "cap"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/bcee039b2c608bbc42b2.rsi
+    state: "source"
+    offset: 0,-0.625
+
+- type: entity
+  id: CMUBosenmoriExactd06e3c1d23f70c4f
+  # CMSS13 source: /obj/item/storage/lockbox/loyalty
+  name: "loyalty"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/b7d9207c7017ce48d916.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactd70b2e0004853223
+  # CMSS13 source: /obj/item/book/codebook/twe
+  name: "twe"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/3880564bfed4c2caf6d5.rsi
+    state: "source"
+    noRot: true
+    offset: 0.3125,0.34375
+
+- type: entity
+  id: CMUBosenmoriExactd77fab66ca178a9b
+  # CMSS13 source: /obj/structure/flora/tree/jungle/bigtreeTR
+  name: "bigtreetr"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/eb56a0d13d9d1e85e3a4.rsi
+    state: "source"
+    noRot: true
+    offset: 1,1.5
+
+- type: entity
+  id: CMUBosenmoriExactd9fe74935e742081
+  # CMSS13 source: /obj/vehicle/train/cargo/trolley
+  name: "trolley"
+  parent: CMUBosenmoriExactVisualBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/99644aedcc374374ae07.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactdb45b5e7f04bb058
+  # CMSS13 source: /obj/structure/machinery/pipedispenser/disposal
+  name: "disposal pipe dispenser"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/109432040bb72c124fb6.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactde43c53d2102dc34
+  # CMSS13 source: /obj/effect/decal/cleanable/blood
+  name: "blood"
+  parent: CMUBosenmoriExactVisualBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/ef6f572d14054fc74247.rsi
+    state: "source"
+    noRot: true
+    color: "#830303ff"
+
+- type: entity
+  id: CMUBosenmoriExactdf2a37dfbaeeef0a
+  # CMSS13 source: /turf/closed/wall/r_wall/bunker/floodgate
+  name: "floodgate"
+  parent: RMCBaseWallInvincibleNoIcon
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/3bfcbd736a4834cdc50d.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExacte19f713bf6755a81
+  # CMSS13 source: /obj/vehicle/train/cargo/engine
+  name: "engine"
+  parent: CMUBosenmoriExactVisualBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/ee1f323ed1be82a477b7.rsi
+    state: "source"
+
+- type: entity
+  id: CMUBosenmoriExacte5dea12a0ccadbf4
+  # CMSS13 source: /obj/structure/prop/ice_colony/tiger_rug
+  name: "tiger rug"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/1b20f8fb47b1f8a99f74.rsi
+    state: "source"
+    offset: 0.5,0.5
+
+- type: entity
+  id: CMUBosenmoriExacte6a28d120524a524
+  # CMSS13 source: /obj/structure/displaycase
+  name: "displaycase"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/1e337712c06b194b6453.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExacte7cec90c38178228
+  # CMSS13 source: /obj/item/stack/sheet/xenochitin
+  name: "xenochitin"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/3757132b0cabbda01485.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExacte7ecce66a59c4112
+  # CMSS13 source: /obj/item/broken_device
+  name: "broken device"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/e9b51b089effedd715b6.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExacte9233d9b549104a5
+  # CMSS13 source: /obj/item/facepaint/black
+  name: "black facepaint"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/59549b2a3761efc11968.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactebc26c52996726cc
+  # CMSS13 source: /obj/structure/machinery/message_server
+  name: "message server"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/6d7b283439221f865469.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactf09fa2fa3b1465b2
+  # CMSS13 source: /obj/item/clothing/accessory/health/scrap
+  name: "scrap"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/7a1e0023eb742390ac1e.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactf279425d9ab0dfd9
+  # CMSS13 source: /obj/structure/prop/holidays/string_lights
+  name: "string lights"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/52ee26035931fcec5ea4.rsi
+    state: "source"
+    offset: 0.25,0.96875
+
+- type: entity
+  id: CMUBosenmoriExactf628f21e604b1317
+  # CMSS13 source: /obj/structure/prop/ice_colony/surveying_device
+  name: "surveying device"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/18205de5e8c22d4e6aed.rsi
+    state: "source"
+
+- type: entity
+  id: CMUBosenmoriExactf9e2f9b5e0503658
+  # CMSS13 source: /obj/structure/filtration/collector_pipes
+  name: "collector pipes"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/ce26d6d9c5e07ee08b22.rsi
+    state: "source"
+    noRot: true
+    offset: 0.90625,0.09375
+
+- type: entity
+  id: CMUBosenmoriExactfb4d3cdb2b1610c8
+  # CMSS13 source: /obj/item/book/manual/nuclear
+  name: "nuclear"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/4dbae2930335781804df.rsi
+    state: "source"
+    noRot: true
+    offset: 0.28125,-0.03125
+
+- type: entity
+  id: CMUBosenmoriExact0a3113f0f8b1878a
+  # CMSS13 source: /obj/structure/prop/dam/drill
+  name: "drill"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/e7a096db8da87afab8c4.rsi
+    state: "source"
+    noRot: true
+    offset: 0,1
+
+- type: entity
+  id: CMUBosenmoriExact2056adc5992958f8
+  # CMSS13 source: /obj/item/storage/fancy/vials/empty
+  name: "empty vials"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/00b0bc6030959750a65f.rsi
+    state: "source"
+    noRot: true
+    offset: 0,0.0625
+
+- type: entity
+  id: CMUBosenmoriExact3951317c0ed23a5d
+  # CMSS13 source: /obj/structure/sign/poster
+  name: "YOU ALWAYS KNOW A WORKING JOE."
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/dea7338ccea55ca092f4.rsi
+    state: "source"
+    noRot: true
+    offset: 0.21875,1.03125
+
+- type: entity
+  id: CMUBosenmoriExact52a504fb335e4b61
+  # CMSS13 source: /obj/structure/prop/server_equipment/laptop
+  name: "laptop"
+  parent: CMUBosenmoriExactStructureBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/33f02f49f1f6a965daa2.rsi
+    state: "source"
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExactb3bdea832f1385d1
+  # CMSS13 source: /obj/item/trash/uscm_mre
+  name: " crumbled TWE MRE"
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/d859f7fd53ce3c1ef2c2.rsi
+    state: "source"
+    noRot: true
+    offset: 0.40625,-0.03125

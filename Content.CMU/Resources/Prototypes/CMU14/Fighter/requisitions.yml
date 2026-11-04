@@ -1,0 +1,34 @@
+- type: entity
+  abstract: true
+  id: CMUASRSManpad
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Air Defense
+      entries:
+      - cost: 3000
+        crate: CMUCrateManpad
+        maxStock: 1
+        startingStock: 1
+        stockReplenishDelay: 900
+        stockReplenishAmount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateManpad
+  name: MANPAD team kit (launcher, rocket backpack, 3 rounds)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUFighterManpad
+    - id: CMUBackpackManpadFilled
+
+- type: entity
+  parent: AU14BackpackRockets
+  id: CMUBackpackManpadFilled
+  suffix: MANPAD, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mm
+      amount: 3

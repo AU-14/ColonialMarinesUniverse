@@ -1,0 +1,115 @@
+# Officers
+- type: rank
+  id: CMU14RankLACNCaptainGeneral
+  name: Captain General of the Navy
+  prefix: CGN
+  paygrade: O-10
+
+- type: rank
+  id: CMU14RankLACNAdmiralGeneral
+  name: Admiral General
+  prefix: ADMG
+  paygrade: O-9
+
+- type: rank
+  id: CMU14RankLACNAdmiral
+  name: Admiral
+  prefix: ADM
+  paygrade: O-8
+
+- type: rank
+  id: CMU14RankLACNViceAdmiral
+  name: Vice Admiral
+  prefix: VADM
+  paygrade: O-7
+
+- type: rank
+  id: CMU14RankLACNCounterAdmiral
+  name: Counter Admiral
+  prefix: CADM
+  paygrade: O-6
+
+- type: rank
+  id: CMU14RankLACNCaptain
+  name: Captain
+  prefix: CPT
+  paygrade: O-5
+
+- type: rank
+  id: CMU14RankLACNFrigateCaptain
+  name: Frigate Captain
+  prefix: FCPT
+  paygrade: O-4
+
+- type: rank
+  id: CMU14RankLACNCorvetteCaptain
+  name: Corvette Captain
+  prefix: CCPT
+  paygrade: O-3
+
+- type: rank
+  id: CMU14RankLACNShipLineLieutenant
+  name: Ship of the Line Lieutenant
+  prefix: LSLT
+  paygrade: O-2
+
+- type: rank
+  id: CMU14RankLACNEnsign
+  name: Ensign
+  prefix: ENS
+  paygrade: O-1
+
+# Enlisted
+- type: rank
+  id: CMU14RankLACNMasterSergeant
+  name: Master Sergeant
+  prefix: MSGT
+  paygrade: E-9
+
+- type: rank
+  id: CMU14RankLACNFirstClassSergeant
+  name: First Class Sergeant
+  prefix: 1SGT
+  paygrade: E-8
+
+- type: rank
+  id: CMU14RankLACNSecondClassSergeant
+  name: Second Class Sergeant
+  prefix: 2SGT
+  paygrade: E-7
+
+- type: rank
+  id: CMU14RankLACNThirdClassSergeant
+  name: Third Class Sergeant
+  prefix: 3SGT
+  paygrade: E-6
+
+- type: rank
+  id: CMU14RankLACNFirstClassCorporal
+  name: First Class Corporal
+  prefix: 1CPL
+  paygrade: E-5
+
+- type: rank
+  id: CMU14RankLACNSecondClassCorporal
+  name: Second Class Corporal
+  prefix: 2CPL
+  paygrade: E-4
+
+- type: rank
+  id: CMU14RankLACNThirdClassCorporal
+  name: Third Class Corporal
+  prefix: 3CCPL
+  paygrade: E-3
+
+- type: rank
+  id: CMU14RankLACNSailorFirstClass
+  name: First Class Sailor
+  prefix: 1CSR
+  paygrade: E-2
+
+- type: rank
+  id: CMU14RankLACNSailor
+  name: Sailor
+  prefix: SR
+  paygrade: E-1

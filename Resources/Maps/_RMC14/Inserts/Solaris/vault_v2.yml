@@ -852,7 +852,7 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-- proto: RMCInflatableDoorBroken
+- proto: CMUInflatableDoorBroken # CMU14
   entities:
   - uid: 33
     components:

@@ -88,3 +88,8 @@
     needsPower: false
   - type: Airlock
     powered: true
+  # CMU14: engine airtight covers only the tile the door is anchored on; seal the two side tiles of the 3-tile fixture
+  - type: CMUWideAirtight
+    offsets:
+    - -1,0
+    - 1,0

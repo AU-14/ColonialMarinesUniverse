@@ -1,0 +1,17 @@
+<Document>
+  # Construction
+
+  ## Construction Skill
+  - Your [bold]construction skill[/bold] makes building cheaper and faster: each level takes 10% off the materials and 10% off the time.
+  - Some things can't be built at all without construction training. The build menu marks them.
+  - Deconstructing something you built at a discount only gives back what you actually spent, so you can't profit by building and tearing down.
+
+  ## Building With Materials in Hand
+  Most things are built straight from a stack of materials:
+  - Hold a stack of [bold]metal[/bold], [bold]plasteel[/bold], [bold]wood[/bold] or [bold]barbed wire[/bold] and use it in your hand to open its build menu.
+  - The menu lists everything that stack can build and how much each costs.
+  - Pick what to build, then place it where you want it, facing the right way. Building takes a few seconds, during which you need to stand still.
+  - Some items, like barbed wire, can be made several at a time: choose how many to make at once.
+
+  A metal stack builds barricades, barbed wire, handrails, floor tiles, rods, girders, window frames, furniture, machine frames and field antenna masts. A plasteel stack builds plasteel barricades, reinforced window frames, plasteel rods and crates. A wood stack builds wooden barricades, crates and furniture. Barbed wire builds razorwire.
+</Document>

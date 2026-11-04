@@ -6,6 +6,8 @@ using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
@@ -177,7 +179,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-repairable-finish-self", ("target", ent));
         var othersMsg = Loc.GetString("rmc-repairable-finish-others", ("user", args.User), ("target", ent));
-        _popup.PopupPredicted(selfMsg, othersMsg, args.User, args.User);
+        _popup.PopupEntity(selfMsg, othersMsg, args.User, args.User);
         _audio.PlayPredicted(ent.Comp.RepairSound, ent, args.User);
     }
 
@@ -358,7 +360,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
 
         var damage = 0f;
         if (TryComp(ent, out DamageableComponent? damageable))
-            damage = damageable.TotalDamage.Float();
+            damage = _damageable.GetTotalDamage((ent, damageable)).Float();
 
         damage = ClampDamage(damage, ent.Comp.MaxDamage);
 
@@ -404,7 +406,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
             return false;
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("rmc-folding-barricade-deploy-start", ("barricade", ent)),
             Loc.GetString("rmc-folding-barricade-deploy-start-others", ("user", user), ("barricade", ent)),
             user,
@@ -483,7 +485,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
             return;
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("rmc-repairable-start-self", ("target", ent)),
             Loc.GetString("rmc-repairable-start-others", ("user", user), ("target", ent)),
             user,
@@ -514,7 +516,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
             return false;
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("rmc-folding-barricade-collapse-start", ("barricade", ent)),
             Loc.GetString("rmc-folding-barricade-collapse-start-others", ("user", user), ("barricade", ent)),
             user,
@@ -632,7 +634,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
         if (!_timing.IsFirstTimePredicted)
             return;
 
-        _popup.PopupClient(message, target, recipient, type);
+        _popup.PopupEntity(message, target, recipient, type);
     }
 
     private void PopupCoordinatesPredicted(
@@ -715,7 +717,7 @@ public sealed partial class RMCFoldingBarricadeSystem : EntitySystem
         ent.Comp.SuppressCountChange = true;
         try
         {
-            _stack.SetCount(ent, count, stack);
+            _stack.SetCount((ent, stack), count);
         }
         finally
         {

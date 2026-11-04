@@ -15,3 +15,9 @@ loadouts-count-items-in-group = {$item} and {$count} other {$count ->
 }
 
 loadouts-points-restriction = Insufficient points
+loadouts-point-cost-tooltip = Cost: {$cost} points per selection
+loadouts-selection-limit-reached = Selection limit reached
+loadouts-repeatable-name = {$name} ({$count}/{$max})
+loadouts-repeatable-name-cost = {$name} ({$count}/{$max}) — {$cost} points each
+loadouts-skill-upgrade-name = {$name} +{$amount}
+loadouts-skill-upgrade-invalid = This skill upgrade is not configured correctly

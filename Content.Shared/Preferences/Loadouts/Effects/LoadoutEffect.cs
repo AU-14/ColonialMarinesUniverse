@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Preferences.Loadouts.Effects;
@@ -18,4 +20,9 @@ public abstract partial class LoadoutEffect
         [NotNullWhen(false)] out FormattedMessage? reason);
 
     public virtual void Apply(RoleLoadout loadout) {}
+
+    /// <summary>
+    /// Applies gameplay state from this effect when the selected loadout is equipped.
+    /// </summary>
+    public virtual void ApplyToEntity(EntityUid entity, IEntityManager entityManager, IPrototypeManager prototypeManager) {}
 }

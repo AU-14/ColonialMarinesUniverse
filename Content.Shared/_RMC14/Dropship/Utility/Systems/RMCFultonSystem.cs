@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.CMU14.Dropship; // CMU14
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
@@ -67,26 +68,26 @@ public sealed partial class RMCFultonSystem : EntitySystem
 
         if (_mobState.IsAlive(target) || _mobState.IsCritical(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-not-dead", ("fulton", used), ("target", target)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-not-dead", ("fulton", used), ("target", target)), target, user);
             return;
         }
 
         if (HasComp<PerishableComponent>(target) && !_rotting.IsRotten(target) ||
             HasComp<RMCRevivableComponent>(target) && !_unrevivable.IsUnrevivable(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-not-unrevivable", ("fulton", used), ("target", target)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-not-unrevivable", ("fulton", used), ("target", target)), target, user);
             return;
         }
 
         if (!_rmcPlanet.IsOnPlanet(target.ToCoordinates()))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-not-planet", ("fulton", used)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-not-planet", ("fulton", used)), target, user);
             return;
         }
 
         if (!_area.CanFulton(target.ToCoordinates()))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-underground", ("fulton", used)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-underground", ("fulton", used)), target, user);
             return;
         }
 
@@ -98,7 +99,7 @@ public sealed partial class RMCFultonSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-fulton-attach-start-self", ("fulton", used), ("target", target));
             var othersMsg = Loc.GetString("rmc-fulton-attach-start-others", ("user", user), ("fulton", used), ("target", target));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 
@@ -117,6 +118,13 @@ public sealed partial class RMCFultonSystem : EntitySystem
         if (TryComp(target, out RMCCanBeFultonedComponent? canBeFultoned))
             _audio.PlayPredicted(canBeFultoned.FultonSound, active.ReturnTo, args.User);
 
+        // CMU14: call the fulton in over the faction's JTAC radio.
+        if (_net.IsServer && args.User is { } fultonUser)
+        {
+            var deployed = new CMUFultonDeployedEvent(fultonUser, target, active.ReturnTo, ent.Comp.ReturnDelay);
+            RaiseLocalEvent(ref deployed);
+        }
+
         var name = Name(target);
         _dropshipWeapon.MakeTarget(target, name, false);
         _rmcpulling.TryStopAllPullsFromAndOn(target);
@@ -125,7 +133,7 @@ public sealed partial class RMCFultonSystem : EntitySystem
         _transform.SetMapCoordinates(target, new MapCoordinates(_fultonCount++ * 50, 0, mapId));
 
         if (args.Used != null)
-            _stack.Use(args.Used.Value, 1);
+            _stack.TryUse(args.Used.Value, 1);
     }
 
     private MapId EnsureMap()

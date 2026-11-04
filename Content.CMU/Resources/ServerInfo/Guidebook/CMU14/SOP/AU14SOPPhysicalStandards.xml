@@ -1,0 +1,294 @@
+<Document>
+  # Physical Standards
+
+  All military personnel must meet these height, weight and age standards.
+
+  ## Requirements
+  - [bold]Height:[/bold] between 4'10" and 6'6".
+  - [bold]Age:[/bold] no older than 62, the mandatory retirement age.
+  - [bold]Weight:[/bold] within the range for your height, sex and age, shown in the tables below.
+  - Older personnel are allowed to weigh more. Men under 5'0" have no maximum.
+
+  ## Grooming Standards
+  Personnel must keep a neat, practical appearance. These rules are meant to keep hair and beards out of the way of helmets, masks and gear, not to make everyone look the same.
+  - [bold]Hair:[/bold] must sit above the shoulders. Longer hair is allowed if it is tied back into a ponytail, bun or braid that falls no lower than the lower back.
+  - Hair must not cover the eyes or get in the way of headwear, helmets or masks.
+  - [bold]Facial hair:[/bold] must stay on the face. Moustaches, goatees and trimmed beards are fine, long beards that hang off the chin or jaw are not.
+  - Unnatural hair colors are prohibited. 
+
+  ## Exact Limits
+  Minimum and maximum weights in pounds for each height, by age group.
+
+  ### Male
+  <Table Columns="6">
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]Height[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]Min[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]17-20[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]21-27[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]28-39[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]40+[/bold]</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">4' 10"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">86</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">4' 11"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">89</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">none</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 0"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">92</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">142</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">146</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">149</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">151</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 1"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">95</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">146</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">150</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">154</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">156</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 2"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">99</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">151</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">154</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">158</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">160</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 3"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">102</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">155</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">159</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">163</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">165</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 4"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">105</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">160</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">164</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">168</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">170</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 5"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">109</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">165</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">169</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">173</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">175</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 6"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">112</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">170</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">173</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">178</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">180</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 7"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">116</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">175</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">179</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">184</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">186</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 8"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">120</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">180</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">184</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">189</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">191</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 9"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">123</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">185</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">189</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">194</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">196</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 10"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">127</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">190</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">195</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">199</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">202</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 11"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">131</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">195</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">199</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">204</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">207</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 0"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">135</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">200</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">205</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">210</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">213</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 1"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">139</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">205</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">210</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">215</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">218</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 2"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">143</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">211</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">216</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">221</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">224</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 3"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">147</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">216</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">222</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">227</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">230</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 4"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">151</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">222</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">227</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">233</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">236</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 5"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">155</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">228</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">233</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">239</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">242</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 6"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">159</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">233</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">239</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">245</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">248</Box></ColorBox>
+  </Table>
+
+
+  ### Female
+  <Table Columns="6">
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]Height[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]Min[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]17-20[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]21-27[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]28-39[/bold]</Box></ColorBox>
+    <ColorBox Color="#263238" OutlineThickness="0"><Box Margin="1">[bold]40+[/bold]</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">4' 10"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">86</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">129</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">131</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">132</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">134</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">4' 11"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">89</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">134</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">135</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">136</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">138</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 0"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">92</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">138</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">139</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">141</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">143</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 1"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">95</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">142</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">144</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">145</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">147</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 2"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">99</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">146</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">148</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">150</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">152</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 3"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">102</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">151</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">153</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">154</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">156</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 4"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">105</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">155</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">157</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">159</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">161</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 5"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">109</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">160</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">162</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">164</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">166</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 6"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">112</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">165</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">166</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">168</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">171</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 7"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">116</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">169</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">171</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">173</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">176</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 8"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">120</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">174</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">176</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">178</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">181</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 9"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">123</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">179</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">181</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">183</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">186</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 10"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">127</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">184</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">186</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">188</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">191</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">5' 11"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">131</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">189</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">191</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">193</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">196</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 0"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">135</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">194</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">196</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">198</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">201</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 1"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">139</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">199</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">201</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">204</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">207</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 2"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">143</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">204</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">207</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">209</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">212</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 3"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">147</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">210</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">212</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">214</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">218</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 4"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">151</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">215</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">217</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">220</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">223</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 5"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">155</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">220</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">223</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">225</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">229</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">6' 6"</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">159</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">226</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">228</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">231</Box></ColorBox>
+    <ColorBox Color="#1B1B1B" OutlineThickness="0"><Box Margin="1">235</Box></ColorBox>
+  </Table>
+</Document>

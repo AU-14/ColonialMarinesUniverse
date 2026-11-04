@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Original Side A, Side B, End A and End B by thwompa from CM-SS13 PR 11767: https://github.com/cmss13-devs/cmss13/blob/54d910bb597694c08d972e81ea8d14691325a59a/icons/thwomp/thwompbot.aseprite. Original pixels packed into four directions for CMU; no alternate sprites used.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "body",
+      "directions": 4
+    }
+  ]
+}

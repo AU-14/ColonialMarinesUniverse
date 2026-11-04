@@ -17,7 +17,7 @@ public sealed partial class AegisCrateComponent : Component
     public SoundSpecifier? CloseSound;
 
     [DataField, AutoNetworkedField]
-    public EntProtoId OB = "RMCOrbitalCannonWarheadAegis";
+    public EntProtoId OB = "CMUOrbitalCannonWarheadAegis";
 
     [DataField, AutoNetworkedField]
     public TimeSpan? OpenAt;

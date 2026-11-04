@@ -1,0 +1,79 @@
+# ├──[ Event Badges ]────────────────────────────────────────────────┤
+- type: entity
+  abstract: true
+  id: CMUIDCardAegisBase
+  name: AEGIS access badge
+  description: A laminated AEGIS Armaments contractor credential. It opens the doors AEGIS rents aboard the ship, not the equipment they ship.
+  components:
+  - type: WarpPoint
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/aegis.rsi
+    state: keycard
+    drawdepth: SmallObjects
+  - type: Item
+    size: Tiny
+  - type: Clothing
+    slots:
+      - idcard
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: StationRecordKeyStorage
+
+- type: entity
+  abstract: true
+  parent: CMUIDCardAegisBase
+  id: CMUIDCardAegisUnlockBase
+  description: A ruggedized R&D credential stamped for the AEG-538-KRAKEN field evaluation. The only key that releases the platform's secure container.
+  components:
+  - type: Access
+    groups:
+      - CMAccessAegis
+  - type: AegisTrackable
+
+- type: entity
+  parent: CMUIDCardAegisUnlockBase
+  id: CMUIDCardAegisIntel
+  suffix: CMU, Intel-Bonus
+  description: A ruggedized R&D credential stamped for the AEG-538-KRAKEN field evaluation. The only key that releases the platform's secure container. It has some blood on it.
+  components:
+  - type: IntelRescueSurvivorObjective # unused
+    value: 2
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/aegis.rsi
+    state: bloody
+
+# ├──[ Staff Badges ]────────────────────────────────────────────────┤
+- type: entity
+  abstract: true
+  parent: CMUIDCardAegisBase
+  id: CMUIDCardAegisStaff
+  components:
+  - type: IdCard
+  - type: Access
+
+- type: entity
+  parent: CMUIDCardAegisStaff
+  id: CMUIDCardAegisResearcher
+  name: AEGIS researcher access badge
+  components:
+  - type: PresetIdCard
+    job: CMUJobAegisResearcher
+
+- type: entity
+  parent: CMUIDCardAegisStaff
+  id: CMUIDCardAegisLeadResearcher
+  name: AEGIS lead researcher access badge
+  components:
+  - type: PresetIdCard
+    job: CMUJobAegisLeadResearcher
+
+- type: entity
+  parent: CMUIDCardAegisStaff
+  id: CMUIDCardAegisObserver
+  name: AEGIS observer access badge
+  components:
+  - type: PresetIdCard
+    job: CMUJobAegisObserver
+  - type: AegisTrackable

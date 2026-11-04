@@ -1,0 +1,28 @@
+<Document>
+  # Colony Law Enforcement
+
+  Colony law enforcement keeps order on the colony: answering calls for help, investigating crimes, making arrests and keeping the criminal records.
+
+  <Box>
+    <GuideEntityEmbed Entity="ForensicScanner" Caption="Forensic scanner"/>
+    <GuideEntityEmbed Entity="CMURecordsTablet" Caption="Records tablet"/>
+    <GuideEntityEmbed Entity="RMCHandcuffs" Caption="Handcuffs"/>
+  </Box>
+
+  ## New to the Job?
+  1. Read [textlink="Colony Law Basics" link="CMUGuideLawBasics"] so you know what you're enforcing.
+
+  2. Check your gear in [textlink="Roles and Gear" link="CMUGuideLawRoles"].
+
+  3. Learn to [textlink="make an arrest" link="CMUGuideLawArrests"] by the book.
+
+  ## In This Guide
+  - [textlink="Roles and Gear" link="CMUGuideLawRoles"]: the agencies, your starting kit, the equipment vendor and vehicles.
+  - [textlink="Colony Law Basics" link="CMUGuideLawBasics"]: who's in charge, the classes of crime, weapons law and the ground rules.
+  - [textlink="Radio and 911 Dispatch" link="CMUGuideLawDispatch"]: staying in contact and answering calls for help.
+  - [textlink="Criminal Records" link="CMUGuideLawRecords"]: looking people up, setting statuses and recording crimes.
+  - [textlink="Arrests and Holding" link="CMUGuideLawArrests"]: detaining, restraining, citing and releasing.
+  - [textlink="Forensics" link="CMUGuideForensics"]: gathering evidence with the forensic scanner.
+
+  The full law is in the [textlink="Colonial Civil Code" link="AU14CCLaw"].
+</Document>

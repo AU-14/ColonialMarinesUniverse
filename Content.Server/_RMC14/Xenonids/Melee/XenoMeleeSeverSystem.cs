@@ -1,7 +1,8 @@
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.CMU14.Xenomorphs.Melee; // CMU14
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Melee;
-using Content.Shared.Body.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Mobs.Systems;
@@ -40,7 +41,12 @@ public sealed partial class XenoMeleeSeverSystem : EntitySystem
             if (!TryComp<BodyComponent>(target, out _))
                 continue;
 
-            if (!_random.Prob(xeno.Comp.Chance))
+            // CMU14: some mobs (yautja) shrug off the queen's sever roll
+            var chance = xeno.Comp.Chance;
+            if (TryComp<XenoMeleeSeverResistanceComponent>(target, out var resistance))
+                chance *= resistance.ChanceMultiplier;
+
+            if (!_random.Prob(Math.Clamp(chance, 0f, 1f)))
                 continue;
 
             TrySeverRandomLimb(target);
@@ -73,7 +79,7 @@ public sealed partial class XenoMeleeSeverSystem : EntitySystem
             chosen = legs;
 
         var (severedPartUid, severedPart) = _random.Pick(chosen);
-        var ev = new BodyPartSeveredEvent(body, severedPartUid, severedPart.PartType);
-        RaiseLocalEvent(severedPartUid, ref ev);
+        var ev = new BodyPartSeverAttemptEvent(body, severedPartUid, severedPart.PartType);
+        RaiseLocalEvent(severedPartUid, ref ev, broadcast: true); // CMU14: broadcast so non-directed observers see it
     }
 }

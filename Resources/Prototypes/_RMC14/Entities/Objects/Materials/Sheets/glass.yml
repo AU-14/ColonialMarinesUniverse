@@ -21,8 +21,10 @@
   abstract: true
   components:
   - type: Material
-    damageContainer: Inorganic
+  - type: Damageable
     damageModifierSet: Glass
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

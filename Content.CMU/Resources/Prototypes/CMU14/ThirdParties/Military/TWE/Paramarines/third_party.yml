@@ -1,0 +1,73 @@
+- type: partySpawn
+  id: ParamarinesSpawn
+  leadersToSpawn:
+    CMUJobParamarineTeamLeader: 1
+  gruntsToSpawn:
+    CMUJobParamarineRifleman: 2
+    CMUJobParamarineAssaultEngineer: 1
+    CMUJobParamarineMedicalTechnician: 1
+    CMUJobParamarineSynthetic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: partySpawn
+  id: CMUParamarinesReinforcementSpawn
+  leadersToSpawn:
+    CMUJobParamarineReinforcementTeamLeader: 1
+  gruntsToSpawn:
+    CMUJobParamarineReinforcementRifleman: 2
+    CMUJobParamarineReinforcementAssaultEngineer: 1
+    CMUJobParamarineReinforcementMedicalTechnician: 1
+    CMUJobParamarineSynthetic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: TWEParamarines
+  announceAsSurvivors: true
+  partyspawn: CMUParamarinesReinforcementSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 15
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false
+
+- type: partySpawn
+  id: ParamarinesCommandSpawn
+  leadersToSpawn:
+    CMUJobParamarineReinforcementCommander: 1
+  gruntsToSpawn:
+    CMUJobParamarineReinforcementPilot: 1
+    CMUJobParamarineReinforcementRifleman: 1
+    CMUJobParamarineReinforcementMedicalTechnician: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: TWEParamarinesCommand
+  announceAsSurvivors: true
+  partyspawn: ParamarinesCommandSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 5
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 2
+  roundstart: false
+
+- type: thirdParty
+  parent: TWEParamarines
+  id: TWEParamarinesSurv
+  partyspawn: ParamarinesSpawn
+  displayName: IASF Parachute Regiment (Survivors)
+  entrymethod: ground
+  weight: 5
+  ghostsNeeded: 0
+  roundstart: true
+  announcearrival: ''
+  blacklistedGamemodes:
+  - insurgency
+  - forceonforce
+  - colonyfall

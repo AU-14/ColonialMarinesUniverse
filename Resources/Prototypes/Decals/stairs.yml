@@ -4,167 +4,167 @@
 - type: decal
   id: StairsMaterialE
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsMaterialN
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsMaterialS
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsMaterialW
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsE
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsN
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsS
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsW
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsLE
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsLN
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsLS
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsLW
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsME
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsMN
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsMS
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsMW
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsRE
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsRN
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsRS
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsRW
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsStoneE
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsStoneN
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsStoneS
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsStoneW
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsWoodE
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsWoodN
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsWoodS
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated
 
 - type: decal
   id: StairsWoodW
   sprite:
-    sprite: _CMU14/deprecated.rsi
+    sprite: CMU14/deprecated.rsi
     state: deprecated

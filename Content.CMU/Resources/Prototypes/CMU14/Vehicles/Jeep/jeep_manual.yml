@@ -1,0 +1,297 @@
+# The jeep's field manual, left beside every jeep a crate opens into: the jeep drawn from its own art,
+# each part picked out by the click map the game uses for it, and a page on what it does, how it
+# breaks, how to fix it and how to change it.
+
+- type: entity
+  parent: BaseItem
+  id: CMUJeepManual
+  name: jeep field manual
+  description: The field manual for the military jeep, packed in its crate. Every part, what it does and how to fix it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/Books/Other/book.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Misc/Books/Other/book.rsi
+  - type: ActivatableUI
+    key: enum.CMUVehicleManualUiKey.Key
+    inHandsOnly: true
+  - type: UserInterface
+    interfaces:
+      enum.CMUVehicleManualUiKey.Key:
+        type: CMUVehicleManualBoundUserInterface
+  - type: CMUVehicleManual
+    manual: CMUJeepManual
+
+- type: cmuVehicleManual
+  id: CMUJeepManual
+  title: cmu-jeep-manual-title
+  sprite: CMU14/Structures/vehicles/jeep/jeep.rsi
+  layers:
+  - jeep_base
+  - wheels_0
+  - engine_0
+  - hood_closed
+  - fuel_door_closed
+  - door_driver_closed
+  - door_passenger_closed
+  - tailgate_closed
+  - spare_0
+  - jerrycan_0
+  - shovel_0
+  - axe_0
+  - jack_0
+  - extinguisher_0
+  - headlight_left_0
+  - headlight_right_0
+  - turn_signal_left_0
+  - turn_signal_right_0
+  - taillight_left_0
+  - taillight_right_0
+  - windshield_up_0
+  - searchlight_left_0
+  overlayLayers:
+  - jeep_overlay
+  - wheels_overlay_0
+  - hood_closed_overlay
+  - fuel_door_closed_overlay
+  - door_driver_closed_overlay
+  - door_passenger_closed_overlay
+  - tailgate_closed_overlay
+  - spare_overlay_0
+  - jerrycan_overlay_0
+  - shovel_overlay_0
+  - axe_overlay_0
+  - jack_overlay_0
+  - extinguisher_overlay_0
+  - headlight_left_overlay_0
+  - headlight_right_overlay_0
+  - turn_signal_left_overlay_0
+  - turn_signal_right_overlay_0
+  - taillight_left_overlay_0
+  - taillight_right_overlay_0
+  - windshield_up_overlay_0
+  - searchlight_left_overlay_0
+  # As the jeep's overlay entity slides its frames (CMUVehicleOverlayVisuals directionOffsets).
+  overlayLift:
+    South: 1
+    North: 0
+    East: 16
+    West: 16
+  openStates:
+    hood_closed: hood_open
+    hood_closed_overlay: hood_open_overlay
+    fuel_door_closed: fuel_door_open
+    fuel_door_closed_overlay: fuel_door_open_overlay
+    door_driver_closed: door_driver_open
+    door_driver_closed_overlay: door_driver_open_overlay
+    door_passenger_closed: door_passenger_open
+    door_passenger_closed_overlay: door_passenger_open_overlay
+    tailgate_closed: tailgate_open
+    tailgate_closed_overlay: tailgate_open_overlay
+    spare_0: spare_open_0
+    spare_overlay_0: spare_open_overlay_0
+    jerrycan_0: jerrycan_open_0
+    jerrycan_overlay_0: jerrycan_open_overlay_0
+    shovel_0: shovel_open_0
+    shovel_overlay_0: shovel_open_overlay_0
+    axe_0: axe_open_0
+    axe_overlay_0: axe_open_overlay_0
+    jack_0: jack_open_0
+    jack_overlay_0: jack_open_overlay_0
+  entries:
+  - id: fuel_door
+    name: cmu-jeep-manual-fuel-door
+    masks: [ click_fuel_door_closed ]
+    openMasks: [ click_fuel_door_open ]
+    highlight: true
+    about: cmu-jeep-manual-fuel-door-about
+    use: cmu-jeep-manual-fuel-door-use
+    replace: cmu-jeep-manual-fuel-door-replace
+  - id: hood
+    name: cmu-jeep-manual-hood
+    masks: [ click_hood_closed ]
+    openMasks: [ click_hood_open ]
+    about: cmu-jeep-manual-hood-about
+    use: cmu-jeep-manual-hood-use
+    damage: cmu-jeep-manual-panel-damage
+    repair: cmu-jeep-manual-panel-repair
+    replace: cmu-jeep-manual-panel-replace
+  - id: engine
+    name: cmu-jeep-manual-engine
+    openMasks: [ click_engine ]
+    about: cmu-jeep-manual-engine-about
+    use: cmu-jeep-manual-engine-use
+    damage: cmu-jeep-manual-engine-damage
+    repair: cmu-jeep-manual-engine-repair
+    replace: cmu-jeep-manual-engine-replace
+  - id: windshield
+    name: cmu-jeep-manual-windshield
+    masks: [ click_windshield_up ]
+    about: cmu-jeep-manual-windshield-about
+    use: cmu-jeep-manual-windshield-use
+    damage: cmu-jeep-manual-windshield-damage
+    repair: cmu-jeep-manual-weld-repair
+    replace: cmu-jeep-manual-panel-replace
+  - id: door_driver
+    name: cmu-jeep-manual-door-driver
+    masks: [ click_door_driver_closed ]
+    openMasks: [ click_door_driver_open ]
+    about: cmu-jeep-manual-door-driver-about
+    use: cmu-jeep-manual-door-use
+    damage: cmu-jeep-manual-panel-damage
+    repair: cmu-jeep-manual-panel-repair
+    replace: cmu-jeep-manual-panel-replace
+  - id: door_passenger
+    name: cmu-jeep-manual-door-passenger
+    masks: [ click_door_passenger_closed ]
+    openMasks: [ click_door_passenger_open ]
+    about: cmu-jeep-manual-door-passenger-about
+    use: cmu-jeep-manual-door-use
+    damage: cmu-jeep-manual-panel-damage
+    repair: cmu-jeep-manual-panel-repair
+    replace: cmu-jeep-manual-panel-replace
+  - id: tailgate
+    name: cmu-jeep-manual-tailgate
+    masks: [ click_tailgate_closed ]
+    openMasks: [ click_tailgate_open ]
+    about: cmu-jeep-manual-tailgate-about
+    use: cmu-jeep-manual-tailgate-use
+    damage: cmu-jeep-manual-panel-damage
+    repair: cmu-jeep-manual-panel-repair
+    replace: cmu-jeep-manual-panel-replace
+  - id: seat_driver
+    name: cmu-jeep-manual-seat-driver
+    masks: [ click_seat_driver ]
+    openMasks: [ click_seat_driver_open ]
+    about: cmu-jeep-manual-seat-driver-about
+    use: cmu-jeep-manual-seat-use
+  - id: seat_passenger
+    name: cmu-jeep-manual-seat-passenger
+    masks: [ click_seat_passenger ]
+    openMasks: [ click_seat_passenger_open ]
+    about: cmu-jeep-manual-seat-passenger-about
+    use: cmu-jeep-manual-seat-use
+  - id: wheels
+    name: cmu-jeep-manual-wheels
+    masks: [ click_wheels ]
+    about: cmu-jeep-manual-wheels-about
+    use: cmu-jeep-manual-wheels-use
+    damage: cmu-jeep-manual-wheels-damage
+    repair: cmu-jeep-manual-hull-repair
+    replace: cmu-jeep-manual-wheels-replace
+  - id: spare
+    name: cmu-jeep-manual-spare
+    masks: [ click_spare ]
+    openMasks: [ click_spare_open ]
+    about: cmu-jeep-manual-spare-about
+    use: cmu-jeep-manual-spare-use
+  - id: jerrycan
+    name: cmu-jeep-manual-jerrycan
+    masks: [ click_jerrycan ]
+    openMasks: [ click_jerrycan_open ]
+    about: cmu-jeep-manual-jerrycan-about
+    use: cmu-jeep-manual-kit-use
+    damage: cmu-jeep-manual-jerrycan-damage
+  - id: shovel
+    name: cmu-jeep-manual-shovel
+    masks: [ click_shovel ]
+    openMasks: [ click_shovel_open ]
+    about: cmu-jeep-manual-shovel-about
+    use: cmu-jeep-manual-kit-use
+  - id: axe
+    name: cmu-jeep-manual-axe
+    masks: [ click_axe ]
+    openMasks: [ click_axe_open ]
+    about: cmu-jeep-manual-axe-about
+    use: cmu-jeep-manual-kit-use
+  - id: jack
+    name: cmu-jeep-manual-jack
+    masks: [ click_jack ]
+    openMasks: [ click_jack_open ]
+    about: cmu-jeep-manual-jack-about
+    use: cmu-jeep-manual-kit-use
+  - id: extinguisher
+    name: cmu-jeep-manual-extinguisher
+    masks: [ click_extinguisher ]
+    about: cmu-jeep-manual-extinguisher-about
+    use: cmu-jeep-manual-kit-use
+  - id: headlights
+    name: cmu-jeep-manual-headlights
+    masks: [ click_headlight_left, click_headlight_right ]
+    about: cmu-jeep-manual-headlights-about
+    use: cmu-jeep-manual-headlights-use
+    damage: cmu-jeep-manual-lamp-damage
+    repair: cmu-jeep-manual-weld-repair
+    replace: cmu-jeep-manual-lamp-replace
+  - id: searchlight
+    name: cmu-jeep-manual-searchlight
+    masks: [ click_searchlight_left ]
+    about: cmu-jeep-manual-searchlight-about
+    use: cmu-jeep-manual-searchlight-use
+    damage: cmu-jeep-manual-lamp-damage
+    repair: cmu-jeep-manual-weld-repair
+    replace: cmu-jeep-manual-searchlight-replace
+  - id: turn_signals
+    name: cmu-jeep-manual-turn-signals
+    masks: [ click_turn_signal_left, click_turn_signal_right ]
+    about: cmu-jeep-manual-turn-signals-about
+    use: cmu-jeep-manual-turn-signals-use
+    damage: cmu-jeep-manual-lamp-damage
+    repair: cmu-jeep-manual-weld-repair
+    replace: cmu-jeep-manual-lamp-replace
+  - id: tail_lights
+    name: cmu-jeep-manual-tail-lights
+    masks: [ click_taillight_left, click_taillight_right ]
+    about: cmu-jeep-manual-tail-lights-about
+    use: cmu-jeep-manual-tail-lights-use
+    damage: cmu-jeep-manual-lamp-damage
+    repair: cmu-jeep-manual-weld-repair
+    replace: cmu-jeep-manual-lamp-replace
+  - id: key
+    name: cmu-jeep-manual-key
+    about: cmu-jeep-manual-key-about
+    use: cmu-jeep-manual-key-use
+  - id: controls
+    name: cmu-jeep-manual-controls
+    about: cmu-jeep-manual-controls-about
+    use: cmu-jeep-manual-controls-use
+  - id: hull
+    name: cmu-jeep-manual-hull
+    about: cmu-jeep-manual-hull-about
+    damage: cmu-jeep-manual-hull-damage
+    repair: cmu-jeep-manual-hull-repair
+  - id: fire
+    name: cmu-jeep-manual-fire
+    about: cmu-jeep-manual-fire-about
+    use: cmu-jeep-manual-fire-use
+  - id: crashes
+    name: cmu-jeep-manual-crashes
+    about: cmu-jeep-manual-crashes-about
+    damage: cmu-jeep-manual-crashes-damage
+    repair: cmu-jeep-manual-crashes-repair
+  - id: gun
+    name: cmu-jeep-manual-gun
+    about: cmu-jeep-manual-gun-about
+    use: cmu-jeep-manual-gun-use
+    repair: cmu-jeep-manual-gun-repair
+  - id: cargo
+    name: cmu-jeep-manual-cargo
+    about: cmu-jeep-manual-cargo-about
+    use: cmu-jeep-manual-cargo-use
+  - id: medical
+    name: cmu-jeep-manual-medical
+    about: cmu-jeep-manual-medical-about
+    use: cmu-jeep-manual-medical-use
+  - id: transport
+    name: cmu-jeep-manual-transport
+    about: cmu-jeep-manual-transport-about
+  - id: paint
+    name: cmu-jeep-manual-paint
+    about: cmu-jeep-manual-paint-about
+    use: cmu-jeep-manual-paint-use
+  - id: crate
+    name: cmu-jeep-manual-crate
+    about: cmu-jeep-manual-crate-about
+    use: cmu-jeep-manual-crate-use

@@ -13,12 +13,12 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility; // CMU14
 
 namespace Content.Shared._RMC14.Line;
 
 public sealed partial class LineSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -44,17 +44,18 @@ public sealed partial class LineSystem : EntitySystem
         _mapGridQuery = GetEntityQuery<MapGridComponent>();
     }
 
-    public List<LineTile> DrawLine(EntityCoordinates start, EntityCoordinates end, TimeSpan delayPer, float? range, out EntityUid? blocker, bool hitBlocker = false, bool thick = false, bool ignoreBarricades = false)
+    // CMU14 method: an optional caller-owned buffer is cleared and returned; other callers own a fresh list.
+    public List<LineTile> DrawLine(EntityCoordinates start, EntityCoordinates end, TimeSpan delayPer, float? range, out EntityUid? blocker, bool hitBlocker = false, bool thick = false, bool ignoreBarricades = false, List<LineTile>? buffer = null)
     {
         blocker = null;
         start = _mapSystem.AlignToGrid(start);
         end = _mapSystem.AlignToGrid(end);
-        var tiles = new List<LineTile>();
-        if (!start.TryDistance(EntityManager, _transform, end, out var distance))
+        var tiles = buffer ?? new List<LineTile>();
+        tiles.Clear();
+        if (!start.TryDistance(EntityManager, _transform, end, out var distance) || distance <= 0)
             return tiles;
 
-        if (range != null)
-            distance = Math.Min(range.Value, distance);
+        end = _transform.WithEntityId(end, start.EntityId); // CMU14: compare in one coordinate frame.
 
         var distanceX = end.X - start.X;
         var distanceY = end.Y - start.Y;
@@ -62,6 +63,8 @@ public sealed partial class LineSystem : EntitySystem
         var y = start.Y;
         var xOffset = distanceX / distance;
         var yOffset = distanceY / distance;
+        if (range != null)
+            distance = Math.Min(range.Value, distance); // CMU14: clamp length, not direction.
         var time = _timing.CurTime;
         var gridId = _transform.GetGrid(start.EntityId);
         if (gridId == null && _mapGridQuery.HasComp(start.EntityId))
@@ -75,38 +78,42 @@ public sealed partial class LineSystem : EntitySystem
         {
             x += xOffset;
             y += yOffset;
-            var center = new EntityCoordinates(start.EntityId, x, y).SnapToGrid(EntityManager, _mapManager);
+            var center = new EntityCoordinates(start.EntityId, x, y).SnapToGrid(EntityManager);
             if (center == lastCoords)
                 continue;
 
-            List<EntityCoordinates> coords = new(9);
-            coords.Add(center);
-            if (thick && i > 1)
-            {
-                for (var xo = -1; xo < 2; xo++)
-                {
-                    for (var yo = -1; yo < 2; yo++)
-                    {
-                        if (xo == 0 && yo == 0)
-                            continue;
-
-                        var point = new EntityCoordinates(start.EntityId, x + xo, y + yo).SnapToGrid(EntityManager, _mapManager);
-                        coords.Add(point);
-                    }
-                }
-            }
-
+            var coordCount = thick && i > 1 ? 9 : 1;
             var centerBlocked = false;
-            for (var j = 0; j < coords.Count; j++)
+            for (var j = 0; j < coordCount; j++)
             {
-                var entityCoords = coords[j];
-                var blocked = IsTileBlocked(grid, lastCoords, entityCoords, hitBlocker, out blocker, out var hitBlockerOverride, ignoreBarricades);
-                hitBlocker = hitBlockerOverride;
-
-                if (j == 0 && blocked && !hitBlocker)
+                var entityCoords = center;
+                if (j != 0)
                 {
-                    centerBlocked = true;
-                    break;
+                    // Center first, then the original x/y neighbor order, skipping its center.
+                    // Calculating each coordinate directly needs no unverifiable stack buffer.
+                    var index = j - 1;
+                    if (index >= 4)
+                        index++;
+                    var xo = index / 3 - 1;
+                    var yo = index % 3 - 1;
+                    entityCoords = new EntityCoordinates(start.EntityId, x + xo, y + yo).SnapToGrid(EntityManager);
+                }
+
+                // CMU14: a wide spray must not place its side tiles behind an intervening door or wall.
+                if (j != 0 && !CanReachTile(start, entityCoords, hitBlocker, ignoreBarricades))
+                    continue;
+
+                var blocked = IsTileBlocked(grid, lastCoords, entityCoords, hitBlocker, out blocker, out var hitBlockerOverride, ignoreBarricades);
+
+                if (blocked && !hitBlockerOverride)
+                {
+                    if (j == 0)
+                    {
+                        centerBlocked = true;
+                        break;
+                    }
+
+                    continue;
                 }
 
                 var mapCoords = _transform.ToMapCoordinates(entityCoords);
@@ -142,6 +149,37 @@ public sealed partial class LineSystem : EntitySystem
         return tiles;
     }
 
+    // CMU14: shared by spread selection and delayed flame travel so closing doors stop in-flight fuel.
+    public bool CanReachTile(EntityCoordinates start, EntityCoordinates end, bool hitBlocker = false, bool ignoreBarricades = false)
+    {
+        if (!start.IsValid(EntityManager) || !end.IsValid(EntityManager) ||
+            _transform.GetMapId(start) != _transform.GetMapId(end))
+            return false;
+
+        if (_transform.GetGrid(start) is not { } gridId || !TryComp(gridId, out MapGridComponent? gridComp))
+            return true;
+
+        Entity<MapGridComponent> grid = (gridId, gridComp);
+        var first = _mapSystem.TileIndicesFor(gridId, gridComp, start);
+        var last = _mapSystem.TileIndicesFor(gridId, gridComp, end);
+        var line = new GridLineEnumerator(first, last);
+        var previous = start;
+        while (line.MoveNext())
+        {
+            var index = line.Current;
+            if (index == first)
+                continue;
+
+            var coordinates = new EntityCoordinates(gridId, (index + new Vector2(0.5f, 0.5f)) * gridComp.TileSize);
+            if (IsTileBlocked(grid, previous, coordinates, hitBlocker, out _, out var mayHit, ignoreBarricades))
+                return index == last && mayHit;
+
+            previous = coordinates;
+        }
+
+        return true;
+    }
+
     private bool IsTileBlocked(Entity<MapGridComponent>? grid, EntityCoordinates previousCoords, EntityCoordinates coords, bool hitBlocker, [NotNullWhen(true)] out EntityUid? blocker, out bool hitBlockerOverride, bool ignoreBarricades = false)
     {
         blocker = default;
@@ -150,7 +188,7 @@ public sealed partial class LineSystem : EntitySystem
             return false;
 
         var indices = _mapSystem.TileIndicesFor(grid.Value, grid, coords);
-        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(grid.Value, grid, indices);
+        var anchored = _mapSystem.GetAnchoredEntities(grid.Value, grid, indices);
         while (anchored.MoveNext(out var uid))
         {
             if (_ignorePredictionHitQuery.HasComp(uid))
@@ -178,10 +216,11 @@ public sealed partial class LineSystem : EntitySystem
             }
             else if (_doorQuery.TryComp(uid, out var door))
             {
-                if (door.State != DoorState.Closed)
+                if (door.State == DoorState.Open) // CMU14: opening/closing doors still obstruct the spray.
                     continue;
 
                 blocker = uid.Value;
+                hitBlockerOverride = false; // CMU14: fire on the door tile can ignite occupants on either side.
                 return true;
             }
             else if (_tag.HasAnyTag(uid.Value, StructureTag, WallTag))

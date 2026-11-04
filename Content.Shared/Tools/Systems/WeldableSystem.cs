@@ -15,7 +15,8 @@ public sealed partial class WeldableSystem : EntitySystem
     [Dependency] private SharedToolSystem _toolSystem = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    private EntityQuery<WeldableComponent> _query;
+
+    [Dependency] private EntityQuery<WeldableComponent> _query = default!;
 
     public override void Initialize()
     {
@@ -24,8 +25,6 @@ public sealed partial class WeldableSystem : EntitySystem
         SubscribeLocalEvent<WeldableComponent, WeldFinishedEvent>(OnWeldFinished);
         SubscribeLocalEvent<LayerChangeOnWeldComponent, WeldableChangedEvent>(OnWeldChanged);
         SubscribeLocalEvent<WeldableComponent, ExaminedEvent>(OnExamine);
-
-        _query = GetEntityQuery<WeldableComponent>();
     }
 
     public bool IsWelded(EntityUid uid, WeldableComponent? component = null)
@@ -88,6 +87,11 @@ public sealed partial class WeldableSystem : EntitySystem
             return;
 
         SetWeldedState(uid, !component.IsWelded, component);
+        // cmu edit start: the torch leaves its marks for forensics
+        var toolmark = new Content.Shared.CMU14.Forensics.Toolmarks.CMUToolmarkEvent(uid, args.Used.Value,
+            Content.Shared.CMU14.Forensics.Toolmarks.CMUToolmarkKind.Weld);
+        RaiseLocalEvent(ref toolmark);
+        // cmu edit end
 
         // Log success
         _adminLogger.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(args.User):user} {(!component.IsWelded ? "un" : "")}welded {ToPrettyString(uid):target}");

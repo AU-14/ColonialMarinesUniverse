@@ -1,0 +1,7 @@
+author: Nox38
+category: CMU
+changes:
+- message: APCs should now fit full squads inside.
+  type: Tweak
+time: '2026-09-12T23:48:03.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1936

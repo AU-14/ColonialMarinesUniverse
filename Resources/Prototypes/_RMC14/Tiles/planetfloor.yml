@@ -146,7 +146,7 @@
 - type: tile
   parent: CMFloorSteel
   id: CMFloorSteelPlanetSolarPanel
-  name: solar panel
+  name: tiles-rmc-legacy-solar-panel
   sprite: /Textures/_RMC14/Tiles/floors/solarpanel.png
 
 - type: tile
@@ -162,11 +162,11 @@
 - type: tile
   parent: CMFloorSteel
   id: CMFloorSteelRechargeFloor
-  name: mech recharge floor
+  name: tiles-rmc-legacy-mech-recharge-floor
   sprite: /Textures/_RMC14/Tiles/floors/recharge_floor.png
 
 - type: tile
   parent: CMFloorSteel
   id: CMFloorCarpet
-  name: carpet
+  name: tiles-rmc-legacy-carpet
   sprite: /Textures/_RMC14/Tiles/floors/carpet_singular.png

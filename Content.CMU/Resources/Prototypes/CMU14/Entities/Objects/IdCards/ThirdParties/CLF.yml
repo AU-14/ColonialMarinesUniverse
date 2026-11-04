@@ -1,0 +1,23 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardCLFEngineer
+  name: INSFOR engineer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCLFEngineer
+  - type: ItemIFF
+    factions:
+    - FactionCLF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardCLFSpecialist
+  name: INSFOR specialist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCLFSpecialist
+  - type: ItemIFF
+    factions:
+    - FactionCLF

@@ -1,0 +1,475 @@
+# Dropped world headgear only. All geometry remains draft.
+- type: cmu3DModel
+  id: CMU3DLooseHardhatOrange
+  label: Orange mining hardhat
+  status: draft
+  sourcePrototypes:
+  - RMCHardhatOrange
+  referencePrototype: RMCHardhatOrange
+  referenceRsi: _RMC14/Objects/Clothing/Head/Helmets/Hardhats/orange.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: curved protective crown
+    min: -0.155000000, -0.126000000, 0.065000000
+    max: 0.155000000, 0.154000000, 0.245000000
+    color: '#B8672D'
+    shape: Ellipsoid
+  - label: left shell skirt
+    min: -0.155000000, -0.123000000, 0.011000000
+    max: -0.091000000, 0.115000000, 0.157000000
+    color: '#8C4230'
+    shape: Ellipsoid
+  - label: right shell skirt
+    min: 0.091000000, -0.123000000, 0.011000000
+    max: 0.155000000, 0.115000000, 0.157000000
+    color: '#8C4230'
+    shape: Ellipsoid
+  - label: front shell rim joining crown to brim
+    min: -0.145000000, -0.120000000, 0.018000000
+    max: 0.145000000, -0.052000000, 0.124000000
+    color: '#8C4230'
+    shape: Ellipsoid
+  - label: broad forward brim
+    min: -0.187500000, -0.206000000, 0.007000000
+    max: 0.187500000, 0.018000000, 0.047000000
+    color: '#6B2321'
+    shape: Ellipsoid
+  - label: original off lamp solid housing
+    min: -0.062500000, -0.169000000, 0.088500000
+    max: 0.062500000, -0.123000000, 0.213500000
+    color: '#FFFFFF'
+    surface: CMU3DLooseHeadgearSurface2800
+    surfaceAxis: XZ
+  description: Dropped world item only. Source-colored curved shell or separated shield panels with exact original
+    detail pixels. Bare static icon only; source layer/state/stain guards retain unsupported live appearances as
+    sprites. Hidden depth, height and curvature are inferred. Worn character art is unchanged. See SOURCES_LOOSE_HEADGEAR.md.
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: curved protective crown
+          min: -0.155000000, -0.126000000, 0.065000000
+          max: 0.155000000, 0.154000000, 0.245000000
+          color: '#B8672D'
+          shape: Ellipsoid
+        - label: left shell skirt
+          min: -0.155000000, -0.123000000, 0.011000000
+          max: -0.091000000, 0.115000000, 0.157000000
+          color: '#8C4230'
+          shape: Ellipsoid
+        - label: right shell skirt
+          min: 0.091000000, -0.123000000, 0.011000000
+          max: 0.155000000, 0.115000000, 0.157000000
+          color: '#8C4230'
+          shape: Ellipsoid
+        - label: front shell rim joining crown to brim
+          min: -0.145000000, -0.120000000, 0.018000000
+          max: 0.145000000, -0.052000000, 0.124000000
+          color: '#8C4230'
+          shape: Ellipsoid
+        - label: broad forward brim
+          min: -0.187500000, -0.206000000, 0.007000000
+          max: 0.187500000, 0.018000000, 0.047000000
+          color: '#6B2321'
+          shape: Ellipsoid
+        - label: original off lamp solid housing
+          min: -0.062500000, -0.169000000, 0.088500000
+          max: 0.062500000, -0.123000000, 0.213500000
+          color: '#FFFFFF'
+          surface: CMU3DLooseHeadgearSurface2800
+          surfaceAxis: XZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DLooseHardhatYellow
+  label: Yellow mining hardhat
+  status: draft
+  sourcePrototypes:
+  - RMCHardHat
+  referencePrototype: RMCHardHat
+  referenceRsi: _RMC14/Objects/Clothing/Head/Helmets/Hardhats/yellow.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: curved protective crown
+    min: -0.155000000, -0.126000000, 0.065000000
+    max: 0.155000000, 0.154000000, 0.245000000
+    color: '#D3AD39'
+    shape: Ellipsoid
+  - label: left shell skirt
+    min: -0.155000000, -0.123000000, 0.011000000
+    max: -0.091000000, 0.115000000, 0.157000000
+    color: '#A77235'
+    shape: Ellipsoid
+  - label: right shell skirt
+    min: 0.091000000, -0.123000000, 0.011000000
+    max: 0.155000000, 0.115000000, 0.157000000
+    color: '#A77235'
+    shape: Ellipsoid
+  - label: front shell rim joining crown to brim
+    min: -0.145000000, -0.120000000, 0.018000000
+    max: 0.145000000, -0.052000000, 0.124000000
+    color: '#A77235'
+    shape: Ellipsoid
+  - label: broad forward brim
+    min: -0.187500000, -0.206000000, 0.007000000
+    max: 0.187500000, 0.018000000, 0.047000000
+    color: '#804525'
+    shape: Ellipsoid
+  - label: original off lamp solid housing
+    min: -0.062500000, -0.169000000, 0.088500000
+    max: 0.062500000, -0.123000000, 0.213500000
+    color: '#FFFFFF'
+    surface: CMU3DLooseHeadgearSurface2801
+    surfaceAxis: XZ
+  description: Dropped world item only. Source-colored curved shell or separated shield panels with exact original
+    detail pixels. Bare static icon only; source layer/state/stain guards retain unsupported live appearances as
+    sprites. Hidden depth, height and curvature are inferred. Worn character art is unchanged. See SOURCES_LOOSE_HEADGEAR.md.
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: curved protective crown
+          min: -0.155000000, -0.126000000, 0.065000000
+          max: 0.155000000, 0.154000000, 0.245000000
+          color: '#D3AD39'
+          shape: Ellipsoid
+        - label: left shell skirt
+          min: -0.155000000, -0.123000000, 0.011000000
+          max: -0.091000000, 0.115000000, 0.157000000
+          color: '#A77235'
+          shape: Ellipsoid
+        - label: right shell skirt
+          min: 0.091000000, -0.123000000, 0.011000000
+          max: 0.155000000, 0.115000000, 0.157000000
+          color: '#A77235'
+          shape: Ellipsoid
+        - label: front shell rim joining crown to brim
+          min: -0.145000000, -0.120000000, 0.018000000
+          max: 0.145000000, -0.052000000, 0.124000000
+          color: '#A77235'
+          shape: Ellipsoid
+        - label: broad forward brim
+          min: -0.187500000, -0.206000000, 0.007000000
+          max: 0.187500000, 0.018000000, 0.047000000
+          color: '#804525'
+          shape: Ellipsoid
+        - label: original off lamp solid housing
+          min: -0.062500000, -0.169000000, 0.088500000
+          max: 0.062500000, -0.123000000, 0.213500000
+          color: '#FFFFFF'
+          surface: CMU3DLooseHeadgearSurface2801
+          surfaceAxis: XZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DLooseHardhatBlue
+  label: Blue mining hardhat
+  status: draft
+  sourcePrototypes:
+  - RMCHardhatBlue
+  referencePrototype: RMCHardhatBlue
+  referenceRsi: _RMC14/Objects/Clothing/Head/Helmets/Hardhats/blue.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: curved protective crown
+    min: -0.155000000, -0.126000000, 0.065000000
+    max: 0.155000000, 0.154000000, 0.245000000
+    color: '#3979D3'
+    shape: Ellipsoid
+  - label: left shell skirt
+    min: -0.155000000, -0.123000000, 0.011000000
+    max: -0.091000000, 0.115000000, 0.157000000
+    color: '#3557A7'
+    shape: Ellipsoid
+  - label: right shell skirt
+    min: 0.091000000, -0.123000000, 0.011000000
+    max: 0.155000000, 0.115000000, 0.157000000
+    color: '#3557A7'
+    shape: Ellipsoid
+  - label: front shell rim joining crown to brim
+    min: -0.145000000, -0.120000000, 0.018000000
+    max: 0.145000000, -0.052000000, 0.124000000
+    color: '#3557A7'
+    shape: Ellipsoid
+  - label: broad forward brim
+    min: -0.187500000, -0.206000000, 0.007000000
+    max: 0.187500000, 0.018000000, 0.047000000
+    color: '#255180'
+    shape: Ellipsoid
+  - label: original off lamp solid housing
+    min: -0.062500000, -0.169000000, 0.088500000
+    max: 0.062500000, -0.123000000, 0.213500000
+    color: '#FFFFFF'
+    surface: CMU3DLooseHeadgearSurface2802
+    surfaceAxis: XZ
+  description: Dropped world item only. Source-colored curved shell or separated shield panels with exact original
+    detail pixels. Bare static icon only; source layer/state/stain guards retain unsupported live appearances as
+    sprites. Hidden depth, height and curvature are inferred. Worn character art is unchanged. See SOURCES_LOOSE_HEADGEAR.md.
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: curved protective crown
+          min: -0.155000000, -0.126000000, 0.065000000
+          max: 0.155000000, 0.154000000, 0.245000000
+          color: '#3979D3'
+          shape: Ellipsoid
+        - label: left shell skirt
+          min: -0.155000000, -0.123000000, 0.011000000
+          max: -0.091000000, 0.115000000, 0.157000000
+          color: '#3557A7'
+          shape: Ellipsoid
+        - label: right shell skirt
+          min: 0.091000000, -0.123000000, 0.011000000
+          max: 0.155000000, 0.115000000, 0.157000000
+          color: '#3557A7'
+          shape: Ellipsoid
+        - label: front shell rim joining crown to brim
+          min: -0.145000000, -0.120000000, 0.018000000
+          max: 0.145000000, -0.052000000, 0.124000000
+          color: '#3557A7'
+          shape: Ellipsoid
+        - label: broad forward brim
+          min: -0.187500000, -0.206000000, 0.007000000
+          max: 0.187500000, 0.018000000, 0.047000000
+          color: '#255180'
+          shape: Ellipsoid
+        - label: original off lamp solid housing
+          min: -0.062500000, -0.169000000, 0.088500000
+          max: 0.062500000, -0.123000000, 0.213500000
+          color: '#FFFFFF'
+          surface: CMU3DLooseHeadgearSurface2802
+          surfaceAxis: XZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DLooseCMBHelmet
+  label: CMB M10 helmet
+  status: draft
+  sourcePrototypes:
+  - RMCArmorHelmetM10CMB
+  referencePrototype: RMCArmorHelmetM10CMB
+  referenceRsi: _RMC14/Objects/Clothing/Head/Helmets/CMB/cmb_helmet.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: rounded armored crown
+    min: -0.158625000, -0.116000000, 0.088000000
+    max: 0.127375000, 0.148000000, 0.320000000
+    color: '#282828'
+    shape: Ellipsoid
+  - label: left cheek shell
+    min: -0.177000000, -0.124000000, 0.022000000
+    max: -0.093000000, 0.114000000, 0.202000000
+    color: '#121212'
+    shape: Ellipsoid
+  - label: right cheek shell
+    min: 0.062000000, -0.124000000, 0.022000000
+    max: 0.146000000, 0.114000000, 0.202000000
+    color: '#121212'
+    shape: Ellipsoid
+  - label: rear neck shell
+    min: -0.149625000, 0.100000000, 0.047000000
+    max: 0.118375000, 0.156000000, 0.227000000
+    color: '#282828'
+    shape: Ellipsoid
+  - label: reinforced brow plate
+    min: -0.130625000, -0.152000000, 0.217000000
+    max: 0.099375000, -0.100000000, 0.283000000
+    color: '#3B3B3B'
+  - label: original crown and brow highlights
+    min: -0.125000000, -0.156000000, 0.207125000
+    max: 0.093750000, -0.152000000, 0.300875000
+    color: '#FFFFFF'
+    surface: CMU3DLooseHeadgearSurface2803
+    surfaceAxis: XZ
+  - label: lower chin rim
+    min: -0.118625000, -0.137000000, 0.007000000
+    max: 0.087375000, -0.001000000, 0.045000000
+    color: '#282828'
+    shape: Ellipsoid
+  - label: original lower chin highlights
+    min: -0.125000000, -0.142000000, 0.000000000
+    max: 0.093750000, -0.138000000, 0.082000000
+    color: '#FFFFFF'
+    surface: CMU3DLooseHeadgearSurface2804
+    surfaceAxis: XZ
+  - label: left chin attachment
+    min: -0.127000000, -0.130000000, 0.028000000
+    max: -0.091000000, -0.060000000, 0.098000000
+    color: '#121212'
+  - label: right chin attachment
+    min: 0.060000000, -0.130000000, 0.028000000
+    max: 0.096000000, -0.060000000, 0.098000000
+    color: '#121212'
+  description: Dropped world item only. Source-colored curved shell or separated shield panels with exact original
+    detail pixels. Bare static icon only; source layer/state/stain guards retain unsupported live appearances as
+    sprites. Hidden depth, height and curvature are inferred. Worn character art is unchanged. See SOURCES_LOOSE_HEADGEAR.md.
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: rounded armored crown
+          min: -0.158625000, -0.116000000, 0.088000000
+          max: 0.127375000, 0.148000000, 0.320000000
+          color: '#282828'
+          shape: Ellipsoid
+        - label: left cheek shell
+          min: -0.177000000, -0.124000000, 0.022000000
+          max: -0.093000000, 0.114000000, 0.202000000
+          color: '#121212'
+          shape: Ellipsoid
+        - label: right cheek shell
+          min: 0.062000000, -0.124000000, 0.022000000
+          max: 0.146000000, 0.114000000, 0.202000000
+          color: '#121212'
+          shape: Ellipsoid
+        - label: rear neck shell
+          min: -0.149625000, 0.100000000, 0.047000000
+          max: 0.118375000, 0.156000000, 0.227000000
+          color: '#282828'
+          shape: Ellipsoid
+        - label: reinforced brow plate
+          min: -0.130625000, -0.152000000, 0.217000000
+          max: 0.099375000, -0.100000000, 0.283000000
+          color: '#3B3B3B'
+        - label: original crown and brow highlights
+          min: -0.125000000, -0.156000000, 0.207125000
+          max: 0.093750000, -0.152000000, 0.300875000
+          color: '#FFFFFF'
+          surface: CMU3DLooseHeadgearSurface2803
+          surfaceAxis: XZ
+        - label: lower chin rim
+          min: -0.118625000, -0.137000000, 0.007000000
+          max: 0.087375000, -0.001000000, 0.045000000
+          color: '#282828'
+          shape: Ellipsoid
+        - label: original lower chin highlights
+          min: -0.125000000, -0.142000000, 0.000000000
+          max: 0.093750000, -0.138000000, 0.082000000
+          color: '#FFFFFF'
+          surface: CMU3DLooseHeadgearSurface2804
+          surfaceAxis: XZ
+        - label: left chin attachment
+          min: -0.127000000, -0.130000000, 0.028000000
+          max: -0.091000000, -0.060000000, 0.098000000
+          color: '#121212'
+        - label: right chin attachment
+          min: 0.060000000, -0.130000000, 0.028000000
+          max: 0.096000000, -0.060000000, 0.098000000
+          color: '#121212'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DLooseSWATVisor
+  label: Detached SWAT visor
+  status: draft
+  sourcePrototypes:
+  - RMCVisorSWAT
+  referencePrototype: RMCVisorSWAT
+  referenceRsi: _RMC14/Objects/Clothing/Mask/swat_shield.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: curved left shield and attachment
+    min: -0.273930296, -0.012982948, 0.000000000
+    max: -0.117680296, -0.000982948, 0.531250000
+    color: '#FFFFFF'
+    yaw: -25
+    surface: CMU3DLooseHeadgearSurface2805
+    surfaceAxis: XZ
+  - label: central amber shield
+    min: -0.125000000, -0.046000000, 0.000000000
+    max: 0.156250000, -0.034000000, 0.531250000
+    color: '#FFFFFF'
+    surface: CMU3DLooseHeadgearSurface2806
+    surfaceAxis: XZ
+  - label: curved right shield and attachment
+    min: 0.148930296, -0.012982948, 0.000000000
+    max: 0.305180296, -0.000982948, 0.531250000
+    color: '#FFFFFF'
+    yaw: 25
+    surface: CMU3DLooseHeadgearSurface2807
+    surfaceAxis: XZ
+  - label: left attachment pin
+    min: -0.264000000, -0.001000000, 0.449000000
+    max: -0.226000000, 0.043000000, 0.493000000
+    color: '#282828'
+    shape: CylinderX
+  - label: right attachment pin
+    min: 0.257000000, -0.001000000, 0.449000000
+    max: 0.295000000, 0.043000000, 0.493000000
+    color: '#282828'
+    shape: CylinderX
+  description: Dropped world item only. Source-colored curved shell or separated shield panels with exact original
+    detail pixels. Bare static icon only; source layer/state/stain guards retain unsupported live appearances as
+    sprites. Hidden depth, height and curvature are inferred. Worn character art is unchanged. See SOURCES_LOOSE_HEADGEAR.md.
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: curved left shield and attachment
+          min: -0.273930296, -0.012982948, 0.000000000
+          max: -0.117680296, -0.000982948, 0.531250000
+          color: '#FFFFFF'
+          yaw: -25
+          surface: CMU3DLooseHeadgearSurface2805
+          surfaceAxis: XZ
+        - label: central amber shield
+          min: -0.125000000, -0.046000000, 0.000000000
+          max: 0.156250000, -0.034000000, 0.531250000
+          color: '#FFFFFF'
+          surface: CMU3DLooseHeadgearSurface2806
+          surfaceAxis: XZ
+        - label: curved right shield and attachment
+          min: 0.148930296, -0.012982948, 0.000000000
+          max: 0.305180296, -0.000982948, 0.531250000
+          color: '#FFFFFF'
+          yaw: 25
+          surface: CMU3DLooseHeadgearSurface2807
+          surfaceAxis: XZ
+        - label: left attachment pin
+          min: -0.264000000, -0.001000000, 0.449000000
+          max: -0.226000000, 0.043000000, 0.493000000
+          color: '#282828'
+          shape: CylinderX
+        - label: right attachment pin
+          min: 0.257000000, -0.001000000, 0.449000000
+          max: 0.295000000, 0.043000000, 0.493000000
+          color: '#282828'
+          shape: CylinderX
+      delays:
+      - 1

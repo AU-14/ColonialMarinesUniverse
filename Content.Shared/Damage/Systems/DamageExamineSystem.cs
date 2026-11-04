@@ -12,7 +12,6 @@ namespace Content.Shared.Damage.Systems;
 public sealed partial class DamageExamineSystem : EntitySystem
 {
     [Dependency] private ExamineSystemShared _examine = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {
@@ -30,11 +29,14 @@ public sealed partial class DamageExamineSystem : EntitySystem
         RaiseLocalEvent(uid, ref ev);
         if (!ev.Message.IsEmpty)
         {
+            // cmu edit start: a gun's verb also lists its fire rate, accuracy and scatter, so it's its weapon stats
+            var isGun = HasComp<Content.Shared.Weapons.Ranged.Components.GunComponent>(uid);
             _examine.AddDetailedExamineVerb(args, component, ev.Message,
-                Loc.GetString("damage-examinable-verb-text"),
+                Loc.GetString(isGun ? "cmu-weapon-stats-verb-text" : "damage-examinable-verb-text"),
                 "/Textures/Interface/VerbIcons/smite.svg.192dpi.png",
-                Loc.GetString("damage-examinable-verb-message")
+                Loc.GetString(isGun ? "cmu-weapon-stats-verb-message" : "damage-examinable-verb-message")
             );
+            // cmu edit end
         }
     }
 
@@ -75,7 +77,7 @@ public sealed partial class DamageExamineSystem : EntitySystem
             if (damage.Value != FixedPoint2.Zero)
             {
                 msg.PushNewline();
-                msg.AddMarkupOrThrow(Loc.GetString("damage-value", ("type", _prototype.Index<DamageTypePrototype>(damage.Key).LocalizedName), ("amount", damage.Value)));
+                msg.AddMarkupOrThrow(Loc.GetString("damage-value", ("type", ProtoMan.Index<DamageTypePrototype>(damage.Key).LocalizedName), ("amount", damage.Value)));
             }
         }
 

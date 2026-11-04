@@ -1,4 +1,4 @@
-<Control xmlns="https://spacestation14.io" xmlns:system="clr-namespace:System;assembly=System.Runtime">
+<Control xmlns="https://spacestation14.io">
     <BoxContainer Name="MainContainer"
                   Orientation="Horizontal"
                   SetWidth="250">
@@ -22,11 +22,7 @@
         </Button>
         <Button Name="DoneButton"
                 VerticalExpand="True"
-                Text="{Loc 'nano-task-ui-done'}">
-            <Button.StyleClasses>
-                <system:String>ButtonSmall</system:String>
-                <system:String>OpenLeft</system:String>
-            </Button.StyleClasses>
-        </Button>
+                Text="{Loc 'nano-task-ui-done'}"
+                StyleClasses="ButtonSmall OpenLeft" />
     </BoxContainer>
 </Control>

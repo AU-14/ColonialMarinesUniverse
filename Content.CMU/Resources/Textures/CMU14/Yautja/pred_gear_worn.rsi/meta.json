@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/hunter/pred_gear.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined by the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    { "name": "clansword", "directions": 4 },
+    { "name": "clansword_alt", "directions": 4 },
+    { "name": "clansword_alt2", "directions": 4 },
+    { "name": "clansword_alt3", "directions": 4 },
+    {
+      "name": "combistick",
+      "directions": 4,
+      "delays": [
+        [0.1, 0.1],
+        [0.1, 0.1],
+        [0.1, 0.1],
+        [0.1, 0.1]
+      ]
+    },
+    { "name": "glaive", "directions": 4 },
+    { "name": "glaive_skull", "directions": 4 },
+    { "name": "glaive_alt", "directions": 4 },
+    { "name": "predscythe", "directions": 4 },
+    { "name": "predscythe_alt", "directions": 4 },
+    { "name": "war_axe", "directions": 4 },
+    { "name": "spearhunter", "directions": 4 },
+    { "name": "shield", "directions": 4 },
+    { "name": "ancient_shield", "directions": 4 },
+    { "name": "ancient_shield_alt", "directions": 4 },
+    { "name": "longaxe", "directions": 4 }
+  ]
+}

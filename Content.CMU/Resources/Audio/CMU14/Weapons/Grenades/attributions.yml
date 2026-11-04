@@ -1,0 +1,9 @@
+- files: ["sebb_beep.ogg", "sebb_explode.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 (cmss13-devs/cmss13#6667)"
+  source: "https://github.com/cmss13-devs/cmss13/pull/6667"
+
+- files: ["grenade.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13-pve (cmss13-devs/cmss13-pve#517)"
+  source: "https://github.com/cmss13-devs/cmss13-pve/pull/517"

@@ -19,6 +19,9 @@ public sealed partial class LoadoutContainer : BoxContainer
     private readonly EntityUid? _entity;
 
     public Button Select => SelectButton;
+    public Button Remove => RemoveButton;
+
+    public bool IsSelected { get; set; }
 
     public string? Text
     {
@@ -26,35 +29,45 @@ public sealed partial class LoadoutContainer : BoxContainer
         set => SelectButton.Text = value;
     }
 
-    public LoadoutContainer(ProtoId<LoadoutPrototype> proto, bool disabled, FormattedMessage? reason)
+    public LoadoutContainer(ProtoId<LoadoutPrototype> proto, bool disabled, FormattedMessage? reason, bool repeatable = false)
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
 
         SelectButton.Disabled = disabled;
+        SelectButton.ToggleMode = !repeatable;
+
+        var message = new FormattedMessage();
+        if (_protoManager.Resolve(proto, out var loadProto))
+        {
+            message.AddText(Loc.GetString("loadouts-point-cost-tooltip", ("cost", loadProto.Cost ?? 0)));
+            var ent = loadProto.DummyEntity ?? _entManager.System<LoadoutSystem>().GetFirstOrNull(loadProto);
+
+            if (ent != null)
+            {
+                _entity = _entManager.SpawnEntity(ent, MapCoordinates.Nullspace);
+                Sprite.SetEntity(_entity);
+
+                var description = _entManager.GetComponent<MetaDataComponent>(_entity.Value).EntityDescription;
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    message.PushNewline();
+                    message.AddText(description);
+                }
+            }
+        }
 
         if (disabled && reason != null)
         {
-            var tooltip = new Tooltip();
-            tooltip.SetMessage(reason);
-            SelectButton.TooltipSupplier = _ => tooltip;
+            message.PushNewline();
+            message.AddMessage(reason);
         }
 
-        if (_protoManager.TryIndex(proto, out var loadProto))
-        {
-            var ent = loadProto.DummyEntity ?? _entManager.System<LoadoutSystem>().GetFirstOrNull(loadProto);
-
-            if (ent == null)
-                return;
-
-            _entity = _entManager.SpawnEntity(ent, MapCoordinates.Nullspace);
-            Sprite.SetEntity(_entity);
-
-            var spriteTooltip = new Tooltip();
-            spriteTooltip.SetMessage(FormattedMessage.FromUnformatted(_entManager.GetComponent<MetaDataComponent>(_entity.Value).EntityDescription));
-
-            TooltipSupplier = _ => spriteTooltip;
-        }
+        var tooltip = new Tooltip();
+        tooltip.SetMessage(message);
+        SelectButton.TooltipSupplier = _ => tooltip;
+        Sprite.TooltipSupplier = _ => tooltip;
+        TooltipSupplier = _ => tooltip;
     }
 
     [System.Obsolete]

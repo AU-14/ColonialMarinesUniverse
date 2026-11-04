@@ -1,0 +1,69 @@
+- type: emoteSounds
+  id: Pathogen
+  params:
+    variation: 0.125
+    volume: -6
+  sounds:
+    Growl:
+      collection: PathogenGrowl
+    Hiss:
+      collection: PathogenHiss
+    XenoRoar:
+      collection: PathogenRoar
+    XenoHelp:
+      collection: XenoHelp
+    XenoTailSwipe:
+      collection: XenoTailSwipe
+
+- type: emoteSounds
+  id: PathogenAberration
+  params:
+    variation: 0.125
+    volume: -6
+  sounds:
+    Growl:
+      collection: PathogenGrowl
+    Hiss:
+      collection: PathogenAberrationHiss
+    XenoRoar:
+      collection: PathogenRoar
+    XenoHelp:
+      collection: XenoHelp
+    XenoTailSwipe:
+      collection: XenoTailSwipe
+
+
+- type: emoteSounds
+  id: PathogenAberrationBloodburster
+  params:
+    variation: 0.125
+    volume: -6
+  sounds:
+    Growl:
+      collection: PathogenGrowl
+    Hiss:
+      collection: PathogenAberrationHiss
+    XenoRoar:
+      collection: BloodbursterRoar
+    XenoHelp:
+      collection: XenoHelp
+    XenoTailSwipe:
+      collection: XenoTailSwipe
+
+
+- type: emoteSounds
+  id: PathogenBloodburster
+  params:
+    variation: 0.125
+    volume: -6
+  sounds:
+    Growl:
+      collection: PathogenGrowl
+    Hiss:
+      collection: PathogenHiss
+    XenoRoar:
+      collection: BloodbursterRoar
+    XenoHelp:
+      collection: XenoHelp
+    XenoTailSwipe:
+      collection: XenoTailSwipe

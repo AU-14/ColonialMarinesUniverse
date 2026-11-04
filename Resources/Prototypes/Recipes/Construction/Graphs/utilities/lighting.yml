@@ -6,14 +6,14 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalCyan
               name: construction-graph-tag-cyan-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
+                state: shard0
                 color: #52ff39
               doAfter: 1
     - node: icon
@@ -27,13 +27,13 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalBlue
               name: construction-graph-tag-blue-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
                 state: shard1
               doAfter: 1
     - node: icon
@@ -47,14 +47,14 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalYellow
               name: construction-graph-tag-yellow-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
+                state: shard2
               doAfter: 1
     - node: icon
       entity: LightTubeCrystalYellow
@@ -67,14 +67,14 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalPink
               name: construction-graph-tag-pink-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
+                state: shard3
               doAfter: 1
     - node: icon
       entity: LightTubeCrystalPink
@@ -87,14 +87,14 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalOrange
               name: construction-graph-tag-orange-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
+                state: shard0
               doAfter: 1
     - node: icon
       entity: LightTubeCrystalOrange
@@ -107,13 +107,13 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalBlack
               name: construction-graph-tag-black-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
                 state: shard1
               doAfter: 1
     - node: icon
@@ -127,14 +127,14 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalRed
               name: construction-graph-tag-red-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
+                state: shard2
               doAfter: 1
     - node: icon
       entity: LightTubeCrystalRed
@@ -147,14 +147,14 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalGreen
               name: construction-graph-tag-green-crystal-shard
               icon:
-                sprite: Objects/Materials/Shards/crystal.rsi
-                state: shard1
+                sprite: Objects/Materials/Shards/crystal-shard.rsi
+                state: shard3
               doAfter: 1
     - node: icon
       entity: LightTubeCrystalGreen
@@ -167,14 +167,14 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalCyan
         name: construction-graph-tag-cyan-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
+          state: shard0
           color: #52ff39
         doAfter: 1
   - node: icon
@@ -188,13 +188,13 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalBlue
         name: construction-graph-tag-blue-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
           state: shard1
         doAfter: 1
   - node: icon
@@ -208,14 +208,14 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalYellow
         name: construction-graph-tag-yellow-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
+          state: shard2
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalYellow
@@ -228,14 +228,14 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalPink
         name: construction-graph-tag-pink-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
+          state: shard3
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalPink
@@ -248,14 +248,14 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalOrange
         name: construction-graph-tag-orange-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
+          state: shard0
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalOrange
@@ -268,13 +268,13 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalBlack
         name: construction-graph-tag-black-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
           state: shard1
         doAfter: 1
   - node: icon
@@ -288,14 +288,14 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalRed
         name: construction-graph-tag-red-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
+          state: shard2
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalRed
@@ -308,14 +308,14 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalGreen
         name: construction-graph-tag-green-crystal-shard
         icon:
-          sprite: Objects/Materials/Shards/crystal.rsi
-          state: shard1
+          sprite: Objects/Materials/Shards/crystal-shard.rsi
+          state: shard3
         doAfter: 1
   - node: icon
     entity: LightBulbCrystalGreen

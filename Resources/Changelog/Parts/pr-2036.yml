@@ -1,0 +1,11 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Tanks now suffer spectacular ammunition cook-offs at zero integrity or
+    from critical anti-armor rocket and tank-shell hits.
+  type: Add
+- message: Tank cook-offs throw the turret and remaining crew out, leaving an irreparable
+    burning wreck that cannot be entered.
+  type: Add
+time: '2026-09-27T10:30:53.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2036

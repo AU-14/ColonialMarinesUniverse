@@ -1,3 +1,4 @@
 @echo off
-dotnet run --project Content.Server
+REM CMU14
+dotnet run --project Content.Server --configuration Tools
 pause

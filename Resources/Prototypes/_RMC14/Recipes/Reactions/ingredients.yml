@@ -6,7 +6,7 @@
   reactants:
     JuiceCherry:
       amount: 1
-    Sugar:
+    RMCSugar: # CMU14: fork sugar reagent, not upstream Sugar
       amount: 1
   products:
     RMCCherryJelly: 2
@@ -57,7 +57,7 @@
   products:
     BlueCuracao: 2
 
-- type: reaction
+- type: reaction # CMU14: potato vodka
   id: RMCVodka
   reactants:
     Enzyme:
@@ -84,7 +84,7 @@
       amount: 1
     Coffee:
       amount: 1
-    Sugar:
+    RMCSugar: # CMU14: fork sugar reagent, not upstream Sugar
       amount: 1
   products:
     CoffeeLiqueur: 3
@@ -268,7 +268,7 @@
   reactants:
     Water:
       amount: 2
-    Sugar:
+    RMCSugar: # CMU14: fork sugar reagent, not upstream Sugar
       amount: 1
     RMCJuiceMango:
       amount: 2
@@ -358,7 +358,7 @@
     Blood:
       amount: 5
   effects:
-  - !type:CreateEntityReactionEffect
+  - !type:SpawnEntity
     entity: FoodMeat
 
 - type: reaction
@@ -374,5 +374,55 @@
     EggCooked:
       amount: 5
   effects:
-  - !type:CreateEntityReactionEffect
+  - !type:SpawnEntity
     entity: FoodMealFriedegg
+
+- type: reaction
+  id: RMCInstantOrange
+  reactants:
+    Water:
+      amount: 6
+    RMCInstantJuicePowderOrange:
+      amount: 1
+  products:
+    RMCInstantJuiceOrange: 6
+
+- type: reaction
+  id: RMCInstantApple
+  reactants:
+    Water:
+      amount: 6
+    RMCInstantJuicePowderApple:
+      amount: 1
+  products:
+    RMCInstantJuiceApple: 6
+
+- type: reaction
+  id: RMCInstantWatermelon
+  reactants:
+    Water:
+      amount: 6
+    RMCInstantJuicePowderWatermelon:
+      amount: 1
+  products:
+    RMCInstantJuiceWatermelon: 6
+
+- type: reaction
+  id: RMCInstantGrape
+  reactants:
+    Water:
+      amount: 6
+    RMCInstantJuicePowderGrape:
+      amount: 1
+  products:
+    RMCInstantJuiceGrape: 6
+
+- type: reaction
+  id: RMCInstantPineapple
+  reactants:
+    Water:
+      amount: 6
+    RMCInstantJuicePowderPineapple:
+      amount: 1
+  products:
+    RMCInstantJuicePineapple: 6

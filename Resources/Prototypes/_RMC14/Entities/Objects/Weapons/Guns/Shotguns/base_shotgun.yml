@@ -127,7 +127,7 @@
     size: Small
   - type: CartridgeAmmo
     proto: CMPelletShotgunBuckshot
-    deleteOnSpawn: true
+    deleteOnSpawn: false # CMU14: spent shells eject instead of despawning
     soundEject:
       collection: ShellEject
     soundInsert:

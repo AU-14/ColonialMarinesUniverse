@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "icon, base and mag-0 taken from cmss13-pve PR 375 (https://github.com/cmss13-devs/cmss13-pve/pull/375) at https://github.com/KoishiVibe/PVE13-KOISHI-2/blob/4f5a5dae5061c55ea298caff369582019ce67a0b/icons/obj/items/weapons/guns/guns_by_faction/uscm.dmi. Inhand, worn and sling states copied from the M41A MK1 (m54cmk1.rsi, created by Cephalopod222 and github noctyrnal), as in the original. Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "base"
+    },
+    {
+      "name": "mag-0"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "wielded-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "wielded-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    },
+    {
+      "name": "sling",
+      "directions": 4
+    },
+    {
+      "name": "equipped-SUITSTORAGE",
+      "directions": 4
+    }
+  ]
+}

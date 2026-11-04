@@ -1,0 +1,11 @@
+cmu-yautja-admin-editor-open = Редактор яутжей
+cmu-yautja-admin-editor-round-only = Охоту можно инициализировать только во время активного раунда.
+cmu-yautja-admin-editor-hunt-already-initialized = Охота уже была инициализирована, настройки обновлены.
+cmu-yautja-admin-editor-hunt-initialize-failed = Не удалось инициализировать охоту яутжей.
+cmu-yautja-admin-editor-hunt-initialized = Охота яутжей инициализирована.
+cmu-yautja-admin-editor-slots-invalid = Количество яутжей должно быть от 1 до 50.
+cmu-yautja-admin-editor-slots-applied = Активное количество яутжей установлено: {$slots}.
+cmu-yautja-admin-editor-slots-saved = Количество яутжей {$slots} сохранено для следующей охоты.
+cmu-yautja-admin-editor-random-invalid = Шанс охоты должен быть от 0% до 100%.
+cmu-yautja-admin-editor-random-enabled-message = Случайные охоты включены: {$insurgency}% на Insurgency, {$distress}% на Distress Signal и Force on Force.
+cmu-yautja-admin-editor-random-disabled = Случайная инициализация отключена.

@@ -1,0 +1,24 @@
+- type: entity
+  name: Fetch Unobtanium obj
+  parent: MarkerBase
+  id: fetchcrystalobjective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: fetchcrystalobjective
+    finalType: InstantWin
+    factionNeutral: false
+    allowedPresets:
+    - DistressSignal
+    factions:
+    - govfor
+    repeating: false
+    objectiveLevel: 3
+    customPoints: 100
+    objectiveDescription: "Harvest the Rare Crystal deposits scattered across the jungle"
+  - type: FetchObjective
+    targetPrototype: SteelOre
+    spawnMarkerId: fetchoreobjectivemarker
+    fetchCount: 500
+    useAnyEntity: true

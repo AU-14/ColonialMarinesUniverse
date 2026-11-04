@@ -1,17 +1,20 @@
+using Content.Shared._RMC14.Weapons.Melee; // CMU14
 using System.Linq;
 using System.Text;
-using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Slowing;
+using Content.Shared._RMC14.Xenonids.ClawSharpness; // cmu14 
 using Content.Shared.Alert;
 using Content.Shared.Armor;
 using Content.Shared.Body.Part;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Examine;
 using Content.Shared.Explosion;
@@ -139,13 +142,13 @@ public sealed partial class CMArmorSystem : EntitySystem
         var max = _alerts.GetMaxSeverity(xeno.ArmorAlert);
 
         var severity = max - ContentHelpers.RoundToLevels(ev.XenoArmor * ev.ArmorModifier, MaxXenoArmor, max + 1);
-        _alerts.ShowAlert(armored, xeno.ArmorAlert, (short)severity, dynamicMessage: armorMessage);
+        _alerts.ShowAlert((armored.Owner, null), xeno.ArmorAlert, (short)severity, dynamicMessage: armorMessage);
     }
 
     private void OnRemove(Entity<CMArmorComponent> armored, ref ComponentRemove args)
     {
         if (TryComp(armored, out XenoComponent? xeno))
-            _alerts.ClearAlert(armored, xeno.ArmorAlert);
+            _alerts.ClearAlert((armored.Owner, null), xeno.ArmorAlert);
     }
 
     private void OnDamageModify(Entity<CMArmorComponent> armored, ref DamageModifyEvent args)
@@ -217,7 +220,7 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnGotEquipped(Entity<CMArmorComponent> armored, ref GotEquippedEvent args)
     {
-        EnsureComp<CMArmorUserComponent>(args.Equipee);
+        EnsureComp<CMArmorUserComponent>(args.EquipTarget);
     }
 
     private void OnArmorVerbExamine(EntityUid uid, CMArmorComponent component, GetVerbsEvent<ExamineVerb> args)
@@ -239,12 +242,16 @@ public sealed partial class CMArmorSystem : EntitySystem
 
         using (args.PushGroup(nameof(CMArmorSystem), -10))
         {
+            TryComp<XenoClawsComponent>(ent, out var claws); // CMU14 test
+
+            
             var armorRatings = new[]
             {
                 ("rmc-examine-armor-xeno", ent.Comp.XenoArmor),
                 ("rmc-examine-armor-xeno-frontal", ent.Comp.FrontalArmor),
                 ("rmc-examine-armor-xeno-side", ent.Comp.SideArmor),
                 ("rmc-examine-armor-xeno-explosion", ent.Comp.ExplosionArmor),
+                ("rmc-examine-armor-xeno-piercing", claws?.ArmorPiercing ?? 0), // CMU14 AP displayed on examine, test
             };
 
             var examine = new StringBuilder();
@@ -272,6 +279,10 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnArmorCanPerformStep(Entity<CMHardArmorComponent> ent, ref InventoryRelayedEvent<CMSurgeryCanPerformStepEvent> args)
     {
+        // CMU14: yautja medicomp steps are surface-depth self-surgery
+        if (args.Args.IgnoreArmor)
+            return;
+
         if (args.Args.Invalid == StepInvalidReason.None)
             args.Args.Invalid = StepInvalidReason.Armor;
     }
@@ -347,7 +358,50 @@ public sealed partial class CMArmorSystem : EntitySystem
         var immuneToAP = TryComp<CMArmorComponent>(ent, out var armorComp) && armorComp.ImmuneToAP;
         if (HasComp<XenoComponent>(ent))
         {
-            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
+            // CMU14 XenoClawSlash Begin: a claw swing marked by XenoSystem applies the XVX slash
+            // multiplier per target, and only to xenos - a swing that catches a marine and a xeno must
+            // not boost the marine.
+            if ((args.Impact.Context & DamageImpactContext.XenoClaw) != 0)
+                args.Damage = args.Damage * XenoSystem.XENO_SLASH_DAMAGE_MULT;
+            // CMU14 End
+            // CMU14 XenoMeleeArmor Begin: CM-SS13's xeno combat configuration. Anything melee-type on a
+            // xeno deals x1.5 (GLOB.xeno_melee.damage_initial_multiplier): the item attack path, the claw
+            // swing and every xeno ability, which all route through apply_armoured_damage(..., ARMOR_MELEE).
+            // Xeno projectiles take GLOB.xeno_ranged instead, so a non-Melee impact is only counted when
+            // the attack is a body attack (tool == origin) - and only when it deals damage, because
+            // DamageModifyEvent also carries heals and Fury/Soak heal with origin: xeno, tool: xeno. The
+            // flat 20 penetration is the item-attack path only, and a xeno's own body attack ignores three
+            // quarters of the victim's armour (XVX_ARMOR_EFFECTIVEMULT).
+            var armorEffectiveness = 1f;
+            var hasOwnMultiplier = HasComp<MeleeDamageMultiplierComponent>(args.Origin);
+            var bodyAttackFromXeno = HasComp<XenoComponent>(args.Origin) &&
+                                     args.Tool == args.Origin &&
+                                     args.Damage.AnyPositive();
+            // Any melee hit on a xeno gets the x1.5, including a bare-handed punch from a non-xeno. The flat 20
+            // penetration below stays item-attack only, and the xeno armour bypass stays xeno-body-attack only, so a
+            // punch is boosted but does not strip armour.
+            var meleeAttack = args.Impact.Delivery == DamageImpactDelivery.Melee;
+
+            if (!hasOwnMultiplier && (meleeAttack || bodyAttackFromXeno))
+            {
+                args.Damage = args.Damage * 1.5f;
+
+                if (args.Tool is { } meleeTool && meleeTool != args.Origin)
+                {
+                    // CMU14: the local armorPiercing is what the xeno armour subtraction below consumes - writing
+                    // to args.ArmorPiercing here would be too late, since the local was seeded from it earlier.
+                    armorPiercing += 20;
+                }
+                else if (HasComp<XenoComponent>(args.Origin))
+                {
+                    armorEffectiveness = 0.25f;
+                }
+            }
+
+            // CMU14: upstream line is ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
+            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier * armorEffectiveness);
+            // CMU14 End
+
             if (!immuneToAP)
                 ev.XenoArmor -= armorPiercing;
         }
@@ -489,16 +543,16 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnArmorSpeedTierGotEquipped(Entity<RMCArmorSpeedTierComponent> armour, ref GotEquippedEvent args)
     {
-        EnsureComp(args.Equipee, out RMCArmorSpeedTierUserComponent comp);
+        EnsureComp(args.EquipTarget, out RMCArmorSpeedTierUserComponent comp);
 
-        RefreshArmorSpeedTier((args.Equipee, comp));
+        RefreshArmorSpeedTier((args.EquipTarget, comp));
     }
 
     private void OnArmorSpeedTierGotUnequipped(Entity<RMCArmorSpeedTierComponent> armour, ref GotUnequippedEvent args)
     {
-        EnsureComp(args.Equipee, out RMCArmorSpeedTierUserComponent comp);
+        EnsureComp(args.EquipTarget, out RMCArmorSpeedTierUserComponent comp);
 
-        RefreshArmorSpeedTier((args.Equipee, comp));
+        RefreshArmorSpeedTier((args.EquipTarget, comp));
     }
 
     private void RefreshArmorSpeedTier(Entity<RMCArmorSpeedTierUserComponent> user)
@@ -530,7 +584,7 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnAllowSuitStorageUserWhitelistGotEquipped(Entity<RMCAllowSuitStorageUserWhitelistComponent> ent, ref GotEquippedEvent args)
     {
-        OnAllowSuitStorageWhitelistEquipped(ent, args.Equipee);
+        OnAllowSuitStorageWhitelistEquipped(ent, args.EquipTarget);
     }
 
     private void OnAllowSuitStorageUserWhitelistGotUnequipped(Entity<RMCAllowSuitStorageUserWhitelistComponent> ent, ref GotUnequippedEvent args)

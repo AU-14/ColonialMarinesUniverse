@@ -13,12 +13,13 @@ public sealed partial class IdModificationConsoleComponent : Component
     public static string PrivilegedIdCardSlotId = "IdCardConsole-privilegedId";
     public static string TargetIdCardSlotId = "IdCardConsole-targetId";
 
+    [DataField] [AutoNetworkedField] // cmu edit: lets each faction's console ask for its own command access
     public ProtoId<AccessLevelPrototype> Access = "RMCAccessDatabase";
 
-    [DataField] [AutoNetworkedField]
+    [DataField(readOnly: true)] [AutoNetworkedField]
     public HashSet<ProtoId<AccessLevelPrototype>> AccessGroups = new();
 
-    [DataField] [AutoNetworkedField]
+    [DataField(readOnly: true)] [AutoNetworkedField]
     public HashSet<ProtoId<AccessLevelPrototype>> AccessList = new();
 
     [DataField] [AutoNetworkedField]
@@ -30,7 +31,7 @@ public sealed partial class IdModificationConsoleComponent : Component
     [DataField] [AutoNetworkedField]
     public bool HasIFF;
 
-    [DataField] [AutoNetworkedField]
+    [DataField(readOnly: true)] [AutoNetworkedField]
     public HashSet<ProtoId<AccessLevelPrototype>> HiddenAccessList = new();
 
     [DataField] [AutoNetworkedField]

@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
@@ -71,7 +72,7 @@ public sealed partial class XenoTumbleSystem : EntitySystem
         }
         else
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tumble-not-perpendicular"), args.Target, xeno, PopupType.LargeCaution);
+            _popup.PopupCoordinates(Loc.GetString("rmc-xeno-tumble-not-perpendicular"), args.Target, xeno, PopupType.LargeCaution);
             return;
         }
 

@@ -1,0 +1,10 @@
+- type: job
+  parent: CMJobXenoBase
+  id: CMU14JobPathogenBlight
+  name: cmu-job-name-pathogen-blight
+  playTimeTracker: CMU14JobPathogenBlight
+  supervisors: cmu-job-name-pathogen-overmind
+ 
+- type: playTimeTracker
+  id: CMU14JobPathogenBlight
+  isXeno: true

@@ -1,10 +1,13 @@
 using Content.Client.Message;
-using Content.Shared._CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
+using Content.Shared.CMU14.Dropship; // cmu edit
+using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Doors.Components;
 using Content.Shared.Shuttles.Systems;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
 
 namespace Content.Client._RMC14.Dropship;
@@ -63,6 +66,8 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         SetDoorHeader("Door Controls");
         SetRemoteControlHeader("Remote Control:");
         SetLaunchAlarmHeader("Launch Announcement Alarm");
+        SetFirearmHeader(Loc.GetString("cmu-gunship-firearm-header")); // CMU14
+        SetMasterAlarmHeader(Loc.GetString("cmu-dropship-master-alarm-header")); // CMU14
 
         if (_entities.TryGetComponent(Owner, out TransformComponent? transform) &&
             _entities.TryGetComponent(transform.ParentUid, out MetaDataComponent? metaData))
@@ -75,13 +80,6 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
             if (_tacticalLandActive)
             {
                 SendPredictedMessage(new DropshipNavigationTacticalLandCancelMsg());
-                return;
-            }
-
-            if (_tacticalHoverActive)
-            {
-                SendPredictedMessage(new DropshipNavigationTacticalHoverCancelMsg());
-                SetCancelDisabled(true);
                 return;
             }
 
@@ -109,11 +107,17 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         };
 
         _window.LockdownButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.None));
+        // cmu edit start
+        _window.CMULockDoorsOpenButton.Visible = _entities.HasComponent<CMUDropshipDoorsLockOpenComponent>(Owner);
+        _window.CMULockDoorsOpenButton.Button.OnPressed += _ => SendPredictedMessage(new CMUDropshipLockDoorsOpenMsg());
+        // cmu edit end
         _window.LockdownButtonAft.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Aft));
         _window.LockdownButtonPort.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Port));
         _window.LockdownButtonStarboard.Button.OnPressed += _ => SendPredictedMessage(new DropshipLockdownMsg(DoorLocation.Starboard));
         _window.RemoteControlButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipRemoteControlToggleMsg());
         _window.LaunchAlarmButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipLaunchAlarmToggleMsg());
+        _window.FirearmButton.Button.OnPressed += _ => SendPredictedMessage(new GunshipFirearmToggleMsg()); // CMU14
+        _window.MasterAlarmButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipMasterAlarmToggleMsg()); // CMU14
         _entities.System<DropshipSystem>().Uis.Add(this);
     }
 
@@ -129,27 +133,27 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
             return;
 
         _tacticalLandActive = false;
-        _tacticalHoverActive = destinations.CanCancelTacticalHover;
+        _tacticalHoverActive = destinations.TacticalHoverActive;
         _window.LaunchButton.Text = "Launch";
-        _window.CancelButton.Text = _tacticalHoverActive ? "Return Now" : "Cancel";
+        _window.CancelButton.Text = "Cancel";
 
         SetFlightHeader("Flight Controls");
 
         _window.DestinationsContainer.Visible = true;
         _window.ProgressBarContainer.Visible = false;
-        _window.CancelButton.Visible = true;
+        _window.CancelButton.Visible = !_tacticalHoverActive;
         _window.LaunchButton.Visible = true;
-        _window.CancelButton.Button.Disabled = !_tacticalHoverActive;
+        _window.CancelButton.Button.Disabled = true;
         _window.LaunchButton.Button.Disabled = true;
 
-        _window.DestinationsContainer.DisposeAllChildren();
+        _window.DestinationsContainer.ReleaseChildren();
 
         DropshipButton DestinationButton(string name, bool disabled, Action onPressed)
         {
             var button = new DropshipButton();
 
             button.Text = name;
-            button.Disabled = _tacticalHoverActive || disabled;
+            button.Disabled = disabled;
             button.BorderColor = Color.Transparent;
             button.BorderThickness = new Thickness(0);
             button.Button.ToggleMode = false;
@@ -170,7 +174,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         {
             var hoverStatus = new DropshipButton
             {
-                Text = "Tactical hover active - return now to cancel",
+                Text = Loc.GetString("cmu-tactical-land-hover-active"),
                 Disabled = true,
                 BorderColor = Color.FromHex("#4E6B8E"),
                 BorderThickness = new Thickness(1),
@@ -202,7 +206,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         {
             var tacticalButton = new DropshipButton
             {
-                Text = "Tactical Land",
+                Text = Loc.GetString("cmu-tactical-land-button"),
                 Disabled = false,
                 BorderColor = Color.FromHex("#2A6D2A"),
                 BorderThickness = new Thickness(1),
@@ -230,6 +234,8 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         RefreshDoorLockStatus(destinations.DoorLockStatus);
         SetRemoteControl(destinations.RemoteControlStatus);
         RefreshLaunchAlarmStatus(destinations.LaunchAlarmStatus);
+        SetFirearm(destinations.HasFirearm, destinations.FirearmArmed); // CMU14
+        SetMasterAlarm(destinations.HasMasterAlarm, destinations.MasterAlarmSilenced); // CMU14
     }
 
     private void Set(DropshipNavigationTacticalLandBuiState tactical)
@@ -240,23 +246,25 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         _tacticalLandActive = true;
         _tacticalHoverActive = false;
 
-        SetFlightHeader(tactical.TacticalHover ? "Tactical Hover" : "Tactical Landing");
+        SetFlightHeader(Loc.GetString(tactical.TacticalHover
+            ? "cmu-tactical-land-header-hover"
+            : "cmu-tactical-land-header-landing"));
 
         _window.DestinationsContainer.Visible = true;
         _window.ProgressBarContainer.Visible = false;
         _window.CancelButton.Visible = true;
         _window.LaunchButton.Visible = true;
 
-        _window.DestinationsContainer.DisposeAllChildren();
+        _window.DestinationsContainer.ReleaseChildren();
         _destinations.Clear();
 
         var status = new DropshipButton
         {
             Text = tactical.ClearForLanding
                 ? tactical.TacticalHover
-                    ? "WASD to position - hover point clear"
-                    : "WASD to position - landing point clear"
-                : "WASD to position - red = obstructed",
+                    ? Loc.GetString("cmu-tactical-land-hover-point-clear")
+                    : Loc.GetString("cmu-tactical-land-point-clear")
+                : Loc.GetString("cmu-tactical-land-point-obstructed"),
             Disabled = true,
             BorderColor = tactical.ClearForLanding ? Color.FromHex("#2A6D2A") : Color.FromHex("#7A2A2A"),
             BorderThickness = new Thickness(1),
@@ -265,7 +273,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
 
         var upButton = new DropshipButton
         {
-            Text = "Ascend Z-Level",
+            Text = Loc.GetString("cmu-tactical-land-ascend-level"),
             Disabled = !tactical.CanMoveUp,
             BorderColor = Color.FromHex("#4E6B8E"),
             BorderThickness = new Thickness(1),
@@ -276,7 +284,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
 
         var downButton = new DropshipButton
         {
-            Text = "Descend Z-Level",
+            Text = Loc.GetString("cmu-tactical-land-descend-level"),
             Disabled = !tactical.CanMoveDown,
             BorderColor = Color.FromHex("#4E6B8E"),
             BorderThickness = new Thickness(1),
@@ -285,13 +293,56 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         downButton.Button.OnPressed += _ => SendPredictedMessage(new DropshipNavigationTacticalLandMoveDownMsg());
         _window.DestinationsContainer.AddChild(downButton);
 
-        _window.LaunchButton.Text = tactical.TacticalHover ? "Hover" : "Land";
+        var rotationContainer = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            HorizontalExpand = true,
+        };
+
+        var rotateCounterClockwise = new DropshipButton
+        {
+            Text = Loc.GetString("cmu-tactical-land-rotate-left"),
+            BorderColor = Color.FromHex("#4E6B8E"),
+            BorderThickness = new Thickness(1),
+            HorizontalExpand = true,
+        };
+        rotateCounterClockwise.Button.ToggleMode = false;
+        rotateCounterClockwise.Button.OnPressed += _ => SendPredictedMessage(new DropshipNavigationTacticalLandRotateMsg(false));
+        rotationContainer.AddChild(rotateCounterClockwise);
+
+        var heading = new DropshipButton
+        {
+            Text = Loc.GetString("cmu-tactical-land-heading", ("degrees", tactical.RotationDegrees)),
+            Disabled = true,
+            BorderColor = Color.FromHex("#4E6B8E"),
+            BorderThickness = new Thickness(1),
+            HorizontalExpand = true,
+        };
+        rotationContainer.AddChild(heading);
+
+        var rotateClockwise = new DropshipButton
+        {
+            Text = Loc.GetString("cmu-tactical-land-rotate-right"),
+            BorderColor = Color.FromHex("#4E6B8E"),
+            BorderThickness = new Thickness(1),
+            HorizontalExpand = true,
+        };
+        rotateClockwise.Button.ToggleMode = false;
+        rotateClockwise.Button.OnPressed += _ => SendPredictedMessage(new DropshipNavigationTacticalLandRotateMsg(true));
+        rotationContainer.AddChild(rotateClockwise);
+
+        _window.DestinationsContainer.AddChild(rotationContainer);
+
+        _window.LaunchButton.Text = Loc.GetString(tactical.TacticalHover
+            ? "cmu-tactical-land-confirm-hover"
+            : "cmu-tactical-land-confirm-land");
         _window.LaunchButton.Button.Disabled = !tactical.ClearForLanding;
         _window.CancelButton.Text = "Cancel";
         _window.CancelButton.Button.Disabled = false;
 
         RefreshDoorLockStatus(tactical.DoorLockStatus);
         SetRemoteControl(tactical.RemoteControlStatus);
+        SetFirearm(tactical.HasFirearm, tactical.FirearmArmed); // CMU14
     }
 
     private void Set(DropshipNavigationTravellingBuiState travelling)
@@ -300,14 +351,14 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
             return;
 
         _tacticalLandActive = false;
-        _tacticalHoverActive = travelling.CanCancelTacticalHover;
+        _tacticalHoverActive = false;
         _window.DestinationsContainer.Visible = false;
         _window.ProgressBarContainer.Visible = true;
         _window.LaunchButton.Visible = false;
         _window.ProgressBar.Margin = new Thickness(0, 5, 0, 0);
 
-        _window.CancelButton.Text = _tacticalHoverActive ? "Return Now" : "Cancel";
-        _window.CancelButton.Visible = _tacticalHoverActive || travelling.Destination == travelling.DepartureLocation;
+        _window.CancelButton.Text = "Cancel";
+        _window.CancelButton.Visible = !_tacticalHoverActive && travelling.Destination == travelling.DepartureLocation;
         _window.CancelButton.Button.Disabled = false;
 
         var time = Math.Ceiling((travelling.Time.End - _timing.CurTime).TotalSeconds);
@@ -346,12 +397,11 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
                 return;
         }
 
-        if (_tacticalHoverActive)
-            SetCancelDisabled(false);
-
         RefreshDoorLockStatus(travelling.DoorLockStatus);
         SetRemoteControl(travelling.RemoteControlStatus);
         RefreshLaunchAlarmStatus(travelling.LaunchAlarmStatus);
+        SetFirearm(false, false); // CMU14: no fire control in transit
+        SetMasterAlarm(travelling.HasMasterAlarm, travelling.MasterAlarmSilenced); // CMU14
 
         var startEndTime = travelling.Time;
         _window.ProgressBar.MinValue = 0;
@@ -372,6 +422,23 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
     private void SetRemoteControlHeader(string label)
     {
         _window?.RemoteControlHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
+    }
+
+    // CMU14: gunship pilot firearm fire-control toggle
+    private void SetFirearmHeader(string label)
+    {
+        _window?.FirearmHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
+    }
+
+    private void SetFirearm(bool hasFirearm, bool armed)
+    {
+        if (_window == null)
+            return;
+
+        _window.FirearmRow.Visible = hasFirearm;
+        _window.FirearmButton.Text = armed
+            ? Loc.GetString("cmu-gunship-firearm-enabled")
+            : Loc.GetString("cmu-gunship-firearm-disabled");
     }
 
     private void SetLaunchAlarmHeader(string label)
@@ -461,6 +528,23 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
             return;
 
         _window.LaunchAlarmButton.Text = launchAlarmStatus ? "Stop Alarm" : "Start Alarm";
+    }
+
+    // CMU14: master alarm mute-only toggle, same flag as the gunship pilot action
+    private void SetMasterAlarm(bool hasMasterAlarm, bool silenced)
+    {
+        if (_window == null)
+            return;
+
+        _window.MasterAlarmRow.Visible = hasMasterAlarm;
+        _window.MasterAlarmButton.Text = silenced
+            ? Loc.GetString("cmu-dropship-master-alarm-unmute")
+            : Loc.GetString("cmu-dropship-master-alarm-mute");
+    }
+
+    private void SetMasterAlarmHeader(string label)
+    {
+        _window?.MasterAlarmHeader.SetMarkup($"[color=#0BDC49][font size=16][bold]{label}[/bold][/font][/color]");
     }
 
     public override void Update()

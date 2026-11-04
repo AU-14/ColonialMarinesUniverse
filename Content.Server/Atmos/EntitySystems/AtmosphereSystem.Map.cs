@@ -19,6 +19,7 @@ public partial class AtmosphereSystem
 
     private void OnMapStartup(EntityUid uid, MapAtmosphereComponent component, ComponentInit args)
     {
+        SanitizeMapMixture(component.Mixture); // CMU14: yaml writes the raw fields, bypassing setter validation
         component.Mixture.MarkImmutable();
         component.Overlay = _gasTileOverlaySystem.GetOverlayData(component.Mixture);
     }
@@ -54,11 +55,24 @@ public partial class AtmosphereSystem
             mixture.MarkImmutable();
         }
 
+        SanitizeMapMixture(mixture); // CMU14: non-finite values must never become the relaxation baseline
         component.Mixture = mixture;
         component.Overlay = _gasTileOverlaySystem.GetOverlayData(component.Mixture);
         Dirty(uid, component);
         if (updateTiles)
             RefreshAllGridMapAtmospheres(uid);
+    }
+
+    // CMU14 method: day/night drives this every 30s
+    public void SetMapGasTemperature(EntityUid uid, float temperature, MapAtmosphereComponent? component = null)
+    {
+        if (!Resolve(uid, ref component))
+            return;
+
+        component.Mixture.Temperature = temperature;
+        SanitizeMapMixture(component.Mixture);
+        component.Overlay = _gasTileOverlaySystem.GetOverlayData(component.Mixture);
+        Dirty(uid, component);
     }
 
     public void SetMapSpace(EntityUid uid, bool space, MapAtmosphereComponent? component = null, bool updateTiles = true)
@@ -73,6 +87,27 @@ public partial class AtmosphereSystem
 
         if (updateTiles)
             RefreshAllGridMapAtmospheres(uid);
+    }
+
+    // CMU14 method: map yaml deserializes straight into the public fields, so
+    // non-finite or negative values skip the setter validation entirely and
+    // would poison the immutable baseline that relaxation lerps toward. Zero
+    // the garbage moles, default a broken temperature or volume to room
+    // conditions.
+    private static void SanitizeMapMixture(GasMixture mixture)
+    {
+        for (var i = 0; i < mixture.Moles.Length; i++)
+        {
+            var moles = mixture.Moles[i];
+            if (!float.IsFinite(moles) || moles < 0f)
+                mixture.Moles[i] = 0f;
+        }
+
+        if (!float.IsFinite(mixture.Temperature))
+            mixture.Temperature = Atmospherics.T20C;
+
+        if (!float.IsFinite(mixture.Volume) || mixture.Volume <= 0f)
+            mixture.Volume = Atmospherics.CellVolume;
     }
 
     /// <summary>

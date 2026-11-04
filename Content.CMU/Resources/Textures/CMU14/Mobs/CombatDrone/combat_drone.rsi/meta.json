@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Original Thwompbot by thwompa from CM-SS13 PR 11767: https://github.com/cmss13-devs/cmss13/blob/54d910bb597694c08d972e81ea8d14691325a59a/icons/thwomp/thwompbot.aseprite. Alternate side mirrored, End A/B modified to remove grabbers and add a pulse turret, and hull/turret separated for CMU.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "body",
+      "directions": 4
+    },
+    {
+      "name": "hull",
+      "directions": 4
+    },
+    {
+      "name": "turret",
+      "directions": 4
+    }
+  ]
+}

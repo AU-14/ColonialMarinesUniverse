@@ -49,7 +49,7 @@ public sealed partial class RMCUnfoldCardboardSystem : EntitySystem
     {
         void NotEmptyPopup()
         {
-            _popup.PopupClient(Loc.GetString(ent.Comp.FailedNotEmptyText, ("entityName", ent.Owner)), ent, user);
+            _popup.PopupEntity(Loc.GetString(ent.Comp.FailedNotEmptyText, ("entityName", ent.Owner)), ent, user);
         }
 
         if (_cmInventory.GetItemSlotsFilled(ent.Owner).Filled != 0)

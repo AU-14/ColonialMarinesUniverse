@@ -1,0 +1,7 @@
+author: CatoChristopherMrow
+category: CMU
+changes:
+- message: Fixed gunships stealing some tiles, along with other various minor fixes
+  type: Fix
+time: '2026-09-12T23:41:19.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1924

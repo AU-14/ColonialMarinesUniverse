@@ -36,13 +36,13 @@ public sealed partial class ProjectileGrenadeComponent : Component
     public bool RandomAngle = false;
 
     /// <summary>
-    ///     The minimum speed the projectiles may come out at
+    /// The minimum velocity inherited by the projectiles, to vary the spread.
     /// </summary>
     [DataField]
     public float MinVelocity = 2f;
 
     /// <summary>
-    ///     The maximum speed the projectiles may come out at
+    /// The maximum velocity inherited by the projectiles, to vary the spread.
     /// </summary>
     [DataField]
     public float MaxVelocity = 6f;
@@ -52,4 +52,10 @@ public sealed partial class ProjectileGrenadeComponent : Component
     /// </summary>
     [DataField]
     public int DirectHitProjectiles = 5;
+
+    /// <summary>
+    /// The trigger key that will activate the grenade.
+    /// </summary>
+    [DataField]
+    public string TriggerKey = "timer";
 }

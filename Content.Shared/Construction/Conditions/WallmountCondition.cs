@@ -1,12 +1,13 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared.Physics;
-using Content.Shared.Tag;
+using Content.Shared.Tag; // CMU14
+using Content.Shared.Wall;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
-using Robust.Shared.Prototypes;
+using Robust.Shared.Prototypes; // CMU14
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Construction.Conditions
@@ -15,7 +16,7 @@ namespace Content.Shared.Construction.Conditions
     [DataDefinition]
     public sealed partial class WallmountCondition : IConstructionCondition
     {
-        private static readonly ProtoId<TagPrototype> WallTag = "Wall";
+        private static readonly ProtoId<TagPrototype> WallTag = "Wall"; // CMU14: RMC walls carry the tag, not WallComponent
 
         public bool Condition(EntityUid user, EntityCoordinates location, Direction direction)
         {
@@ -39,13 +40,12 @@ namespace Content.Shared.Construction.Conditions
 
             // now we need to check that user actually tries to build wallmount on a wall
             var physics = entManager.System<SharedPhysicsSystem>();
+            var tagSystem = entManager.System<TagSystem>(); // CMU14
             var rUserToObj = new CollisionRay(userWorldPosition, userToObject.Normalized(), (int) CollisionGroup.Impassable);
             var length = userToObject.Length();
 
-            var tagSystem = entManager.System<TagSystem>();
-
             var userToObjRaycastResults = physics.IntersectRayWithPredicate(entManager.GetComponent<TransformComponent>(user).MapID, rUserToObj, maxLength: length,
-                predicate: (e) => !tagSystem.HasTag(e, WallTag));
+                predicate: (e) => !IsWall(e, entManager, tagSystem)); // CMU14
 
             var targetWall = userToObjRaycastResults.FirstOrNull();
 
@@ -56,9 +56,16 @@ namespace Content.Shared.Construction.Conditions
             // check that we didn't try to build wallmount that facing another adjacent wall
             var rAdjWall = new CollisionRay(objWorldPosition, directionWithOffset.Normalized(), (int) CollisionGroup.Impassable);
             var adjWallRaycastResults = physics.IntersectRayWithPredicate(entManager.GetComponent<TransformComponent>(user).MapID, rAdjWall, maxLength: 0.5f,
-               predicate: e => e == targetWall.Value.HitEntity || !tagSystem.HasTag(e, WallTag));
+               predicate: e => e == targetWall.Value.HitEntity || !IsWall(e, entManager, tagSystem)); // CMU14
 
             return !adjWallRaycastResults.Any();
+        }
+
+        // CMU14 method
+        private static bool IsWall(EntityUid entity, IEntityManager entManager, TagSystem tagSystem)
+        {
+            return entManager.HasComponent<WallComponent>(entity)
+                || tagSystem.HasTag(entity, WallTag);
         }
 
         public ConstructionGuideEntry GenerateGuideEntry()

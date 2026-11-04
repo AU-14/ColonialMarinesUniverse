@@ -1,0 +1,65 @@
+- type: entity
+  id: CMUActionZLevelUp
+  name: Move up
+  description: Move up one Z-level
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: CMU14/ZLevels/Actions/misc.rsi
+      state: up
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUZLevelActionUp
+
+- type: entity
+  id: CMUActionZLevelDown
+  name: Move down
+  description: Move down one Z-level
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: CMU14/ZLevels/Actions/misc.rsi
+      state: down
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUZLevelActionDown
+
+- type: entity
+  id: CMUActionToggleLookUp
+  name: Look up
+  description: You lift your head and look up at the sky.
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: CMU14/ZLevels/Actions/misc.rsi
+      state: eye
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUToggleZLevelLookUpAction
+
+# Zero-g aboard a ship: push off through open space to the deck above or below.
+- type: entity
+  parent: CMUActionZLevelUp
+  id: CMUActionZeroGUp
+  name: Float up
+  description: Push off and float up through open space to the deck above.
+  components:
+  - type: Action
+    checkCanInteract: false
+    useDelay: 5
+
+- type: entity
+  parent: CMUActionZLevelDown
+  id: CMUActionZeroGDown
+  name: Float down
+  description: Push off and float down through open space to the deck below.
+  components:
+  - type: Action
+    checkCanInteract: false
+    useDelay: 5

@@ -126,7 +126,13 @@ namespace Content.Shared.Chat
             ChatDisplayMetadata? display = null,
             string? languageIcon = null, // RMC14
             NetEntity ghostFollowEntity = default,
-            NetEntity xenoWatchEntity = default) // CMU14
+            NetEntity xenoWatchEntity = default,
+            // Tints the row's background without the caller having to build a whole
+            // ChatDisplayMetadata just to set one field. Applied after the default display is
+            // resolved, so a caller can tint a message and still get the channel's normal
+            // sender/verb/label handling.
+            Color? backgroundColorOverride = null,
+            Color? accentColorOverride = null) // CMU14
         {
             Channel = channel;
             Message = message;
@@ -144,6 +150,10 @@ namespace Content.Shared.Chat
             SpeechStyleClass = speechStyleClass;
             RepeatCheckSender = repeatCheckSender;
             Display = display ?? CreateDefaultDisplay(channel);
+            if (backgroundColorOverride != null)
+                Display.BackgroundColorOverride = backgroundColorOverride;
+            if (accentColorOverride != null)
+                Display.AccentColor = accentColorOverride;
             LanguageIcon = languageIcon;
         }
 
@@ -196,7 +206,11 @@ namespace Content.Shared.Chat
                 ChatChannel.LOOC => "LOOC",
                 ChatChannel.OOC => "OOC",
                 ChatChannel.Dead => "DEAD",
-                ChatChannel.Admin => "ADMIN",
+                // ADM, not ADMIN: three characters fit the chat's prefix column alongside SAY/OOC/RAD
+                // instead of filling it and leaving admin messages with no gap before their text.
+                // ChatMessageRow.GetChannelLabel has a fallback copy of this table - it prefers this
+                // one when the message carries a label, so both have to say the same thing.
+                ChatChannel.Admin => "ADM",
                 ChatChannel.AdminAlert => "ALERT",
                 ChatChannel.AdminChat => "ASAY",
                 ChatChannel.MentorChat => "MENTOR",

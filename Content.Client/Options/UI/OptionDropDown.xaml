@@ -1,6 +1,12 @@
-﻿<Control xmlns="https://spacestation14.io">
-    <BoxContainer Orientation="Horizontal">
-        <Label Name="NameLabel" MinWidth="400" />
-        <OptionButton Name="Button" Access="Public" />
-    </BoxContainer>
+<Control xmlns="https://spacestation14.io">
+    <!-- Same full-width divider as the slider rows, so a section of mixed controls reads as one
+         list rather than a run of dividers that stops partway. -->
+    <PanelContainer StyleClasses="CrtOptionRow">
+        <!-- The label expands so the control is pushed to the right edge, putting every dropdown in
+             one column. -->
+        <BoxContainer Orientation="Horizontal">
+            <Label Name="NameLabel" HorizontalExpand="True" MinWidth="160" VerticalAlignment="Center" />
+            <OptionButton Name="Button" Access="Public" MinWidth="180" />
+        </BoxContainer>
+    </PanelContainer>
 </Control>

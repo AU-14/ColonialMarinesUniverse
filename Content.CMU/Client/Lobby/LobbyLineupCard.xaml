@@ -1,0 +1,14 @@
+<lobby:LobbyLineupCard xmlns="https://spacestation14.io"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:lobby="clr-namespace:Content.Client.CMU14.Lobby"
+                      xmlns:preview="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
+                      RectClipContent="True" MouseFilter="Stop">
+    <preview:ProfilePreviewSpriteView Name="Preview" Scale="1 1" Stretch="None" RectClipContent="False"
+                                      OverrideDirection="South" MouseFilter="Ignore" />
+    <Label Name="ReadyLabel" Text="{Loc 'cmu-lobby-lineup-ready'}" ClipText="True" VerticalAlignment="Stretch" VAlign="Center" Align="Center" MouseFilter="Ignore" />
+    <Label Name="CharacterName" ClipText="True" VerticalAlignment="Stretch" VAlign="Center" Align="Center" MouseFilter="Ignore" />
+    <Label Name="JobName" ClipText="True" VerticalAlignment="Stretch" VAlign="Center" Align="Center" MouseFilter="Ignore" />
+    <PanelContainer Name="BubblePanel" Visible="False" MouseFilter="Ignore">
+        <Label Name="BubbleText" Margin="3 1" ClipText="True" Align="Center" MouseFilter="Ignore" />
+    </PanelContainer>
+</lobby:LobbyLineupCard>

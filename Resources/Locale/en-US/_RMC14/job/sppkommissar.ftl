@@ -1,7 +1,9 @@
-﻿rmc-ghost-role-information-spp-kommissar-rules = You are a [color=red][bold]political officer of the SPP[/bold][/color]. You may or may not be hostile to the marines, depending on admin instructions.
+﻿# cmu edit start: lore names
+rmc-ghost-role-information-spp-kommissar-rules = You are a [color=red][bold]political officer of the UPP[/bold][/color]. You may or may not be hostile to the marines, depending on admin instructions.
                                              You don't remember any of your previous life, and you don't remember anything you learned as a ghost.
                                              You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
                                              You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
+# cmu edit end
 
 rmc-ghost-role-information-spp-kommissar-description = You are a political officer. Follow party order and serve as the authority on political matters. For the party!
 

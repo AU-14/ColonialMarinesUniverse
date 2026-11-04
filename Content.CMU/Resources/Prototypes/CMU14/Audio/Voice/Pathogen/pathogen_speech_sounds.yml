@@ -1,0 +1,17 @@
+- type: speechSounds
+  id: Pathogen
+  saySound:
+    collection: PathogenTalk
+  askSound:
+    collection: PathogenTalk
+  exclaimSound:
+    collection: PathogenTalk
+
+- type: speechSounds
+  id: Walker
+  saySound:
+    collection: WalkerTalk
+  askSound:
+    collection: WalkerTalk
+  exclaimSound:
+    collection: WalkerTalk

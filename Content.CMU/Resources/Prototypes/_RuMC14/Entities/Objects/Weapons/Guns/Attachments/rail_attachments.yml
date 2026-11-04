@@ -1,0 +1,55 @@
+- type: entity
+  parent: RMCM96SIntegratedScope
+  id: RuMCSVAROGIntegratedScope
+  name: SVAROG integrated skope
+  description: integrated skope
+  components:
+  - type: Sprite
+    state: scope
+  - type: Tag
+    tags:
+    - RMCAttachmentRail
+    - RuMCSVAROGIntegratedScope
+  - type: AttachableToggleable
+    breakOnMove: false
+    actionsToRelayWhitelist:
+      tags:
+      - RMCActionCycleZoomLevel
+    icon:
+      sprite: _RuMC14/Objects/Weapons/Guns/Attachments/Rail/rumc_SVAROG_rail.rsi
+      state: scope
+    actionName: rmc-attachable-action-name-m96s-scope
+    actionDesc: rmc-attachable-action-desc-scope-see-further
+  - type: AttachableSpeedMods
+    modifiers:
+    - conditions:
+        activeOnly: true
+      walk: -0.31
+      sprint: -0.448
+  - type: AttachableWeaponRangedMods
+    modifiers:
+    - fireDelayFlat: 0.1
+    - conditions:
+        activeOnly: true
+      fireDelayFlat: 0.25
+      accuracyAddMult: 0.35
+      damageFalloffAddMult: -0.4
+    - conditions:
+        wieldedOnly: true
+        inactiveOnly: true
+      accuracyAddMult: -0.05
+  - type: Scope
+    zoomLevels:
+    - name: 4x
+      zoom: 1.6
+      offset: 14
+      allowMovement: false
+      doAfter: 0
+    - name: 2x
+      zoom: 1
+      offset: 14
+      allowMovement: true
+      doAfter: 0
+
+- type: Tag
+  id: RuMCSVAROGIntegratedScope

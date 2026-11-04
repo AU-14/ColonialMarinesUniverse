@@ -60,7 +60,8 @@ public sealed partial class NightVisionOverlay : Overlay
 
         _entries.Clear();
         var entities = _entity.EntityQueryEnumerator<RMCNightVisionVisibleComponent, SpriteComponent, TransformComponent>();
-        while (entities.MoveNext(out var uid, out var visible, out var sprite, out var xform))
+        while (nightVision.DrawVisibleMobs &&
+               entities.MoveNext(out var uid, out var visible, out var sprite, out var xform))
         {
             _entries.Add(new NightVisionRenderEntry((uid, sprite, xform),
                 eye?.Position.MapId,
@@ -110,8 +111,10 @@ public sealed partial class NightVisionOverlay : Overlay
         _shader.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
         var colorVal = _config.GetCVar(RMCCVars.RMCNightVisionColor);
-        var color = ((NightVisionColor) colorVal).ToColor();
+        var color = nightVision.Tint ?? ((NightVisionColor) colorVal).ToColor();
         _shader.SetParameter("nv_color", new Vector3(color.R, color.G, color.B));
+        _shader.SetParameter("noise_strength", nightVision.NoiseStrength);
+        _shader.SetParameter("vignette_strength", nightVision.VignetteStrength);
 
         var worldHandle = args.WorldHandle;
         worldHandle.UseShader(_shader);
@@ -133,6 +136,10 @@ public sealed partial class NightVisionOverlay : Overlay
     {
         var (uid, sprite, xform) = ent;
         if (xform.MapID != map)
+            return;
+
+        // CMU14: these effects already render the composed body; a raw thermal redraw erases them.
+        if (HasCMUComposedPresentation(uid))
             return;
 
         var seeThrough = seeThroughContainers && !_xenoQuery.HasComp(uid);

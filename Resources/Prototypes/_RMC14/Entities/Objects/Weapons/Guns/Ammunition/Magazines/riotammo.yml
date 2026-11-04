@@ -64,6 +64,7 @@
     - RMCCartridgeRifle10x24mmRubber
   - type: CartridgeAmmo
     proto: BulletRifle10x24mmRubber
+    deleteOnSpawn: true # CMU14: caseless ammo, no casing to eject
 
 - type: entity
   parent: RMCBaseBullet

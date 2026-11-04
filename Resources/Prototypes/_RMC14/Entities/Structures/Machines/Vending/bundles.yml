@@ -52,7 +52,7 @@
   - type: CMVendorBundle
     bundle:
     - CMStasisBagFolded
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     - CMAdvFirstAidKitFilled
     - CMHealthAnalyzer
     - RMCMedevacStretcherFolded
@@ -151,7 +151,7 @@
     state: defib
   - type: CMVendorBundle
     bundle:
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     - CMAdvFirstAidKitFilled
     - CMHealthAnalyzer
     - CMSurgicalLine
@@ -172,7 +172,7 @@
     state: defib
   - type: CMVendorBundle
     bundle:
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     - CMAdvFirstAidKitFilled
     - CMHealthAnalyzer
     - CMSurgicalLine

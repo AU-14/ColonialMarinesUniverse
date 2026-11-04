@@ -26,6 +26,9 @@ public sealed partial class NightVisionComponent : Component
     public bool SeeThroughContainers;
 
     [DataField, AutoNetworkedField]
+    public bool DrawVisibleMobs = true;
+
+    [DataField, AutoNetworkedField]
     public bool Green;
 
     [DataField, AutoNetworkedField]
@@ -39,6 +42,18 @@ public sealed partial class NightVisionComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool OnlyHalf;
+
+    /// <summary>
+    /// Optional equipment-specific tint. Null keeps the player's configured infantry tint.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public Color? Tint;
+
+    [DataField, AutoNetworkedField]
+    public float NoiseStrength = 0.04f;
+
+    [DataField, AutoNetworkedField]
+    public float VignetteStrength = 3.168f;
 }
 
 [Serializable, NetSerializable]

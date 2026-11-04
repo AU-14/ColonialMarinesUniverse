@@ -29,6 +29,7 @@ namespace Content.Client.Verbs.UI
 
         public VerbMenuElement(Verb verb) : base(verb.Text)
         {
+            CMURememberVerb(verb); // CMU14: snapshot mutable presentation fields for row reconciliation.
             TooltipSupplier = sender =>
             {
                 var label = new RichTextLabel();
@@ -78,6 +79,9 @@ namespace Content.Client.Verbs.UI
 
         public VerbMenuElement(VerbCategory category, string styleClass) : base(category.Text)
         {
+            // CMU14: identify reusable category rows without retaining a global menu cache.
+            CMUCategory = category;
+            CMUCategoryStyle = styleClass;
             Label.SetOnlyStyleClass(styleClass);
 
             Icon.AddChild(new TextureRect()

@@ -11,7 +11,6 @@ using Content.IntegrationTests.Pair;
 using Content.Server.GameTicking;
 using Robust.Client.GameObjects;
 using Robust.Server.GameObjects;
-using Robust.Server.Player;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
@@ -20,6 +19,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
+using Robust.UnitTesting.Pool;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -69,6 +69,8 @@ namespace Content.MapRenderer.Painters
                         DeserializationOptions =
                         {
                             LogOrphanedGrids = false,
+                            LogInvalidEntities = false,
+                            InitializeMaps = true,
                         },
                     };
 
@@ -147,7 +149,6 @@ namespace Content.MapRenderer.Painters
             var server = _pair.Server;
 
             var sEntityManager = server.ResolveDependency<IServerEntityManager>();
-            var sPlayerManager = server.ResolveDependency<IPlayerManager>();
 
             var entityManager = server.ResolveDependency<IEntityManager>();
             var mapSys = entityManager.System<SharedMapSystem>();
@@ -162,13 +163,6 @@ namespace Content.MapRenderer.Painters
 
             await server.WaitPost(() =>
             {
-                var playerEntity = sPlayerManager.Sessions.Single().AttachedEntity;
-
-                if (playerEntity.HasValue)
-                {
-                    sEntityManager.DeleteEntity(playerEntity.Value);
-                }
-
                 if (_map is RenderMapPrototype)
                 {
                     var mapId = sEntityManager.System<GameTicker>().DefaultMap;

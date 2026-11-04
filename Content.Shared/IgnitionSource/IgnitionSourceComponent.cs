@@ -19,4 +19,11 @@ public sealed partial class IgnitionSourceComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float Temperature = 700f;
+
+    /// <summary>
+    /// Server-side HotspotExpose throttle; the first expose fires immediately (zero default).
+    /// </summary>
+    // CMU14: IgnitionSourceSystem re-exposes at 1 Hz instead of every tick.
+    [ViewVariables]
+    public TimeSpan NextExpose;
 }

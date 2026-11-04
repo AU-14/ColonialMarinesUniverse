@@ -13,7 +13,7 @@ public sealed partial class RMCHijackActiveMapComponent : Component
     public TimeSpan Next;
 
     [DataField]
-    public TimeSpan NextDelay = TimeSpan.FromSeconds(15);
+    public TimeSpan NextDelay = TimeSpan.FromSeconds(30); // CMU14: halve the recurring pipe explosion rate.
 
     [DataField]
     public List<EntityUid> Explode = new();

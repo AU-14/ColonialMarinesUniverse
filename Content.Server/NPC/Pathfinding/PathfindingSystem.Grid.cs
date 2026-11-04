@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Threading;
@@ -8,6 +9,7 @@ using Robust.Shared.Collections;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -96,7 +98,7 @@ public sealed partial class PathfindingSystem
             // TODO: Dump all this shit and just do it live it's probably fast enough.
             if (comp.DirtyChunks.Count == 0 ||
                 curTime < comp.NextUpdate ||
-                !_gridQuery.TryGetComponent(uid, out var mapGridComp))
+                !_mapGridQuery.TryGetComponent(uid, out var mapGridComp))
             {
                 continue;
             }
@@ -106,115 +108,137 @@ public sealed partial class PathfindingSystem
 
             // TODO: Often we invalidate the entire chunk when it might be something as simple as an airlock change
             // Would be better to handle that though this was safer and max it's taking is like 1-2ms every half-second.
-            var dirt = new GridPathfindingChunk[comp.DirtyChunks.Count];
-            var idx = 0;
-
-            foreach (var origin in comp.DirtyChunks)
+            var dirtyCount = comp.DirtyChunks.Count;
+            var dirt = ArrayPool<GridPathfindingChunk>.Shared.Rent(dirtyCount);
+            try
             {
-                var chunk = GetChunk(origin, uid, pathfinding);
-                dirt[idx] = chunk;
-                idx++;
-            }
+                var idx = 0;
 
-            // We force clear portals in a single-threaded context to be safe
-            // as they may not be thread-safe to touch.
-            foreach (var chunk in dirt)
-            {
-                foreach (var (_, poly) in chunk.PortalPolys)
+                foreach (var origin in comp.DirtyChunks)
                 {
-                    ClearPoly(poly);
+                    var chunk = GetChunk(origin, uid, pathfinding);
+                    dirt[idx] = chunk;
+                    idx++;
                 }
 
-                chunk.PortalPolys.Clear();
-
-                foreach (var portal in chunk.Portals)
+                // We force clear portals in a single-threaded context to be safe
+                // as they may not be thread-safe to touch.
+                for (var i = 0; i < dirtyCount; i++)
                 {
-                    dirtyPortals.Add(portal);
+                    var chunk = dirt[i];
+                    foreach (var (_, poly) in chunk.PortalPolys)
+                    {
+                        ClearPoly(poly);
+                    }
+
+                    chunk.PortalPolys.Clear();
+
+                    foreach (var portal in chunk.Portals)
+                    {
+                        dirtyPortals.Add(portal);
+                    }
                 }
-            }
 
-            // TODO: Inflate grid bounds slightly and get chunks.
-            // This is for map <> grid pathfinding
+                // TODO: Inflate grid bounds slightly and get chunks.
+                // This is for map <> grid pathfinding
 
-            // Without parallel this is roughly 3x slower on my desktop.
-            Parallel.For(0, dirt.Length, options, i =>
-            {
-                BuildBreadcrumbs(dirt[i], (uid, mapGridComp));
-            });
-
-            const int Division = 4;
-
-            // You can safely do this in parallel as long as no neighbor chunks are being touched in the same iteration.
-            // You essentially do bottom left, bottom right, top left, top right in quadrants.
-            // For each 4x4 block of chunks.
-
-            // i.e. first iteration: 0,0; 2,0; 0,2
-            // second iteration: 1,0; 3,0; 1;2
-            // third iteration: 0,1; 2,1; 0,3 etc
-
-            for (var it = 0; it < Division; it++)
-            {
-                var it1 = it;
-
-                Parallel.For(0, dirt.Length, options, j =>
+                if (dirtyCount == 1)
                 {
-                    var chunk = dirt[j];
-                    // Check if the chunk is safe on this iteration.
-                    var x = Math.Abs(chunk.Origin.X % 2);
-                    var y = Math.Abs(chunk.Origin.Y % 2);
-                    var index = x * 2 + y;
-
-                    if (index != it1)
-                        return;
-
-                    ClearOldPolys(chunk);
-                });
-            }
-
-            // TODO: You can probably skimp on some neighbor chunk caches
-            for (var it = 0; it < Division; it++)
-            {
-                var it1 = it;
-
-                Parallel.For(0, dirt.Length, options, j =>
-                {
-                    var chunk = dirt[j];
-                    // Check if the chunk is safe on this iteration.
-                    var x = Math.Abs(chunk.Origin.X % 2);
-                    var y = Math.Abs(chunk.Origin.Y % 2);
-                    var index = x * 2 + y;
-
-                    if (index != it1)
-                        return;
-
-                    BuildNavmesh(chunk, pathfinding);
+                    BuildBreadcrumbs(dirt[0], (uid, mapGridComp));
+                    ClearOldPolys(dirt[0]);
+                    BuildNavmesh(dirt[0], pathfinding);
 #if DEBUG
-                    Interlocked.Increment(ref updateCount);
+                    updateCount++;
 #endif
-                });
-            }
+                }
+                else
+                {
+                    // Without parallel this is roughly 3x slower on my desktop.
+                    Parallel.For(0, dirtyCount, options, i =>
+                    {
+                        BuildBreadcrumbs(dirt[i], (uid, mapGridComp));
+                    });
 
-            // Handle portals at the end after having cleared their neighbors above.
-            // We do this because there's no guarantee of where these are for chunks.
-            foreach (var portal in dirtyPortals)
+                    const int Division = 4;
+
+                    // You can safely do this in parallel as long as no neighbor chunks are being touched in the same iteration.
+                    // You essentially do bottom left, bottom right, top left, top right in quadrants.
+                    // For each 4x4 block of chunks.
+
+                    // i.e. first iteration: 0,0; 2,0; 0,2
+                    // second iteration: 1,0; 3,0; 1;2
+                    // third iteration: 0,1; 2,1; 0,3 etc
+
+                    for (var it = 0; it < Division; it++)
+                    {
+                        var it1 = it;
+
+                        Parallel.For(0, dirtyCount, options, j =>
+                        {
+                            var chunk = dirt[j];
+                            // Check if the chunk is safe on this iteration.
+                            var x = Math.Abs(chunk.Origin.X % 2);
+                            var y = Math.Abs(chunk.Origin.Y % 2);
+                            var index = x * 2 + y;
+
+                            if (index != it1)
+                                return;
+
+                            ClearOldPolys(chunk);
+                        });
+                    }
+
+                    // TODO: You can probably skimp on some neighbor chunk caches
+                    for (var it = 0; it < Division; it++)
+                    {
+                        var it1 = it;
+
+                        Parallel.For(0, dirtyCount, options, j =>
+                        {
+                            var chunk = dirt[j];
+                            // Check if the chunk is safe on this iteration.
+                            var x = Math.Abs(chunk.Origin.X % 2);
+                            var y = Math.Abs(chunk.Origin.Y % 2);
+                            var index = x * 2 + y;
+
+                            if (index != it1)
+                                return;
+
+                            BuildNavmesh(chunk, pathfinding);
+#if DEBUG
+                            Interlocked.Increment(ref updateCount);
+#endif
+                        });
+                    }
+
+                }
+
+                // Handle portals at the end after having cleared their neighbors above.
+                // We do this because there's no guarantee of where these are for chunks.
+                foreach (var portal in dirtyPortals)
+                {
+                    var polyA = GetPoly(portal.CoordinatesA);
+                    var polyB = GetPoly(portal.CoordinatesB);
+
+                    if (polyA == null || polyB == null)
+                        continue;
+
+                    DebugTools.Assert((polyA.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
+                    DebugTools.Assert((polyB.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
+                    var chunkA = GetChunk(polyA.ChunkOrigin, polyA.GraphUid);
+                    var chunkB = GetChunk(polyB.ChunkOrigin, polyB.GraphUid);
+
+                    chunkA.PortalPolys.TryAdd(portal, polyA);
+                    chunkB.PortalPolys.TryAdd(portal, polyB);
+                    AddNeighbors(polyA, polyB);
+                }
+
+                comp.DirtyChunks.Clear();
+            }
+            finally
             {
-                var polyA = GetPoly(portal.CoordinatesA);
-                var polyB = GetPoly(portal.CoordinatesB);
-
-                if (polyA == null || polyB == null)
-                    continue;
-
-                DebugTools.Assert((polyA.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
-                DebugTools.Assert((polyB.Data.Flags & PathfindingBreadcrumbFlag.Invalid) == 0x0);
-                var chunkA = GetChunk(polyA.ChunkOrigin, polyA.GraphUid);
-                var chunkB = GetChunk(polyB.ChunkOrigin, polyB.GraphUid);
-
-                chunkA.PortalPolys.TryAdd(portal, polyA);
-                chunkB.PortalPolys.TryAdd(portal, polyB);
-                AddNeighbors(polyA, polyB);
+                ArrayPool<GridPathfindingChunk>.Shared.Return(dirt, clearArray: true);
             }
-
-            comp.DirtyChunks.Clear();
         }
     }
 
@@ -272,7 +296,7 @@ public sealed partial class PathfindingSystem
     {
         if (!_fixturesQuery.TryGetComponent(ev.Sender, out var fixtures) ||
             !IsBodyRelevant(fixtures) ||
-            _gridQuery.HasComponent(ev.Sender))
+            _mapGridQuery.HasComponent(ev.Sender))
         {
             return;
         }
@@ -400,11 +424,13 @@ public sealed partial class PathfindingSystem
 
     private void BuildBreadcrumbs(GridPathfindingChunk chunk, Entity<MapGridComponent> grid)
     {
-        var sw = new Stopwatch();
-        sw.Start();
+        //var sw = new Stopwatch();
+        //sw.Start();
         var points = chunk.Points;
         var gridOrigin = chunk.Origin * ChunkSize;
-        var tileEntities = new ValueList<EntityUid>();
+        var tileEntities = new ValueList<Entity<FixturesComponent>>();
+        var fixtureList = new ValueList<(EntityUid, TransformComponent, ValueList<Fixture>)>();
+
         var chunkPolys = chunk.BufferPolygons;
 
         for (var i = 0; i < chunkPolys.Length; i++)
@@ -441,7 +467,7 @@ public sealed partial class PathfindingSystem
                         continue;
                     }
 
-                    var xform = _xformQuery.GetComponent(ent);
+                    var xform = Transform(ent);
 
                     if (xform.ParentUid != grid.Owner ||
                         _maps.LocalToTile(grid.Owner, grid.Comp, xform.Coordinates) != tilePos)
@@ -449,7 +475,24 @@ public sealed partial class PathfindingSystem
                         continue;
                     }
 
-                    tileEntities.Add(ent);
+                    tileEntities.Add((ent, fixtures));
+                }
+
+                // Cache fixtures list so we resolve everything once.
+                fixtureList.Clear();
+                foreach (var ent in tileEntities)
+                {
+                    if(!TryComp(ent, out TransformComponent? xform))
+                        continue;
+
+                    var entFixtures = new ValueList<Fixture>();
+                    foreach (var fixture in ent.Comp.Fixtures.Values)
+                    {
+                        if (fixture.Hard)
+                            entFixtures.Add(fixture);
+                    }
+
+                    fixtureList.Add((ent.Owner, xform, entFixtures));
                 }
 
                 for (var subX = 0; subX < SubStep; subX++)
@@ -465,18 +508,12 @@ public sealed partial class PathfindingSystem
                         var collisionLayer = 0x0;
                         var damage = 0f;
 
-                        foreach (var ent in tileEntities)
+                        foreach (var (ent, xform, fixtures) in fixtureList)
                         {
-                            if (!_fixturesQuery.TryGetComponent(ent, out var fixtures))
-                                continue;
-
                             var colliding = false;
-
-                            foreach (var fixture in fixtures.Fixtures.Values)
+                            foreach (var fixture in fixtures)
                             {
-                                // Don't need to re-do it.
-                                if (!fixture.Hard ||
-                                    (collisionMask & fixture.CollisionMask) == fixture.CollisionMask &&
+                                if ((collisionMask & fixture.CollisionMask) == fixture.CollisionMask &&
                                     (collisionLayer & fixture.CollisionLayer) == fixture.CollisionLayer)
                                 {
                                     continue;
@@ -491,10 +528,10 @@ public sealed partial class PathfindingSystem
                                         continue;
 
                                     intersects = true;
+                                    break;
                                 }
 
-                                if (!intersects ||
-                                    !_xformQuery.TryGetComponent(ent, out var xform))
+                                if (!intersects)
                                 {
                                     continue;
                                 }
@@ -513,7 +550,7 @@ public sealed partial class PathfindingSystem
                             if (!colliding)
                                 continue;
 
-                            if (_accessQuery.HasComponent(ent))
+                            if (_accessReaderQuery.HasComponent(ent))
                             {
                                 flags |= PathfindingBreadcrumbFlag.Access;
                             }

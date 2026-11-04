@@ -1,0 +1,42 @@
+- type: job
+  parent: AU14UPPGROMMachinegunner
+  id: AU14UPPGROMRRUMachinegunner
+  description: au14-uppgrom-rru-description
+  spawnMenuRoleName: UPP GROM Machinegunner (Rapid Response Unit)
+  startingGear: AU14GearUPPGROMRRUMachinegunner
+  greeting: au14-uppgrom-rru-greeting
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14UPPGROMRRUMachinegunner
+  name: UPP GROM Machinegunner
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforsquadautomaticriflemanRMC
+    description: au14-uppgrom-rru-description
+    reregister: false
+    job: AU14UPPGROMRRUMachinegunner
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMRRUMachinegunner
+  equipment:
+    id: AU14IDCardUPPGROMMachinegunner
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPP
+    shoes: RMCBootsSPPFilled
+    head: AU14UPPPatrolCap
+    belt: AU14BeltSmartGunOperatorPistolUPPFull
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelUPPRRUFullMachinegunner
+    ears: RMCHeadsetGROM
+    suitstorage: RMCWeaponLMGQYJ72

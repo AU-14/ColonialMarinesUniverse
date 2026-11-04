@@ -9,8 +9,8 @@ public sealed partial class GuideEntryPrototype : GuideEntry, IPrototype
     public string ID => Id;
 }
 
-[Virtual]
-public class GuideEntry
+[Virtual, DataDefinition]
+public partial class GuideEntry
 {
     /// <summary>
     ///     The file containing the contents of this guide.
@@ -24,7 +24,9 @@ public class GuideEntry
     public string Id = default!;
 
     /// <summary>
-    ///     The name of this guide. This gets localized.
+    ///     The name shown for this guide. This may be either a localization message ID
+    ///     or literal display text.
+    ///     Clients should attempt localization and fall back to the value itself.
     /// </summary>
     [DataField(required: true)] public string Name = default!;
 

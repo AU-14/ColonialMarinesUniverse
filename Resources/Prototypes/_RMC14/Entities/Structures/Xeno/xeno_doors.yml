@@ -6,6 +6,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUVehicleStickyResin # CMU14
   - type: InteractionOutline
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_door.rsi
@@ -51,8 +52,9 @@
   - type: RMCMesonsNonviewable
   - type: Occluder
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -64,7 +66,8 @@
   - type: VehicleSmashable
     deleteOnHit: true
     damageOnHit: 600
-    selfDamageMultiplier: 0.1
+    # CMU14: xeno feedback and lifecycle.
+    selfDamageMultiplier: 0.25
     slowdownMultiplier: 0.2
     slowdownDuration: 1.5
     requiredVehicleTag: VehicleHeavy
@@ -112,6 +115,9 @@
   name: thick resin door
   description: A thick resin door, which is more durable.
   components:
+  - type: CMUVehicleStickyResin # CMU14
+    chance: 0.6
+  - type: VehicleReinforcedObstacle
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_door.rsi
     layers:

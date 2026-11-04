@@ -1,0 +1,133 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobPMCWhiteout
+  chevrons:
+    AU14RankWeYuEnforcerSenior:
+      entity: AU14ChevronWeYuEnforcerSenior
+      requirements: []
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: PMCWhiteout
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_pvt
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-whiteout-prefix
+  - type: Language
+    spokenLanguages:
+    - English
+    - Japanese
+    understoodLanguages:
+    - English
+    - Japanese
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-job-title-whiteout
+  description: cmu-whiteout-description
+  playTimeTracker: CMUJobPMCWhiteout
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearPMCWhiteout
+  spawnMenuRoleName: WY Whiteout Operative (event)
+  greeting: cmu-whiteout-greeting
+  icon: RMCJobIconPMCWhiteout
+  joinNotifyCrew: false
+  supervisors: cmu-whiteout-leader
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobPMCWhiteout
+  name: WY Whiteout Operative
+  components:
+  - type: GhostTakeoverAvailable
+  - type: PyroWhitelist
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-whiteout-name
+    description: cmu-whiteout-description
+    reregister: false
+    job: CMUJobPMCWhiteout
+    raffle:
+      settings: short
+    rules: cmu-whiteout-rules
+
+- type: startingGear
+  id: CMUGearPMCWhiteout
+  equipment:
+    id: CMUIDCardPMCWhiteout
+    jumpsuit: RMCJumpsuitVeteranPMCCommando
+    outerClothing: CMArmorM4PMCCommando
+    gloves: RMCHandsVeteranPMCCommando
+    head: ArmorHelmetPMCCommando
+    shoes: RMCBootsPMCCommandoFilled
+    mask: RMCMaskCoifPMC
+    ears: RMCHeadsetDistressPMC
+    back: RMCSatchelPMC
+    belt: RMCWeaponFL3FlamerWhiteout
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: RMCPouchMagazineLargePMC
+    suitstorage: CMUWeaponRifleM54C2WhiteoutStandard
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosiveBreachingCharge
+    - RMCExplosiveBreachingCharge
+    - CMCrowbar
+    - RMCTankFlamerFL3Whiteout
+    - RMCTankFlamerFL3Whiteout
+    outerClothing:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    pocket1:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    pocket2:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+
+- type: playTimeTracker
+  id: CMUJobPMCWhiteout
+
+# Whiteout M41A loaded with standard rounds instead of HEAP.
+- type: entity
+  parent: RMCWeaponRifleM54C2Whiteout
+  id: CMUWeaponRifleM54C2WhiteoutStandard
+  suffix: Standard ammo
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMMagazineRifleM54C
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineRifleM54C
+          - CMMagazineRifleM54CAP
+          - CMMagazineRifleM54CExt
+          - RMCMagazineRifleM54CIncendiary
+          - RMCMagazineRifleM54CHEAP

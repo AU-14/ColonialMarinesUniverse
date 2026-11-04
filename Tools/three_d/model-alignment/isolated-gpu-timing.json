@@ -1,0 +1,48 @@
+{
+  "renderer": "NVIDIA GeForce RTX 4070 Ti SUPER/PCIe/SSE2",
+  "scope": "Isolated GPU draw; one maximum-size attachment covering a large part of the screen, not complete game frame rate",
+  "measurements": [
+    {
+      "name": "world-baseline",
+      "targetSize": [
+        640,
+        360
+      ],
+      "surfaceFlipU": null,
+      "surfaceVScale": null,
+      "surfaceSlot": null,
+      "samples": [],
+      "gpuMillisecondsMedian": 0.033792,
+      "gpuMillisecondsMax": 0.033792,
+      "gpuSamples": 12
+    },
+    {
+      "name": "one-512-part-attachment",
+      "targetSize": [
+        640,
+        360
+      ],
+      "surfaceFlipU": null,
+      "surfaceVScale": null,
+      "surfaceSlot": null,
+      "samples": [],
+      "gpuMillisecondsMedian": 4.3494399999999995,
+      "gpuMillisecondsMax": 4.373504,
+      "gpuSamples": 12
+    },
+    {
+      "name": "one-512-part-attachment",
+      "targetSize": [
+        640,
+        360
+      ],
+      "surfaceFlipU": null,
+      "surfaceVScale": null,
+      "surfaceSlot": null,
+      "samples": [],
+      "gpuMillisecondsMedian": 4.261888,
+      "gpuMillisecondsMax": 4.279296,
+      "gpuSamples": 12
+    }
+  ]
+}

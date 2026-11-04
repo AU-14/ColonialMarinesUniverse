@@ -1,0 +1,19 @@
+- type: loadout
+  id: CMULiaisonBlackSuitskirt
+  equipment:
+    jumpsuit: RMCJumpsuitLiaisonBlackSuitskirt
+
+- type: loadout
+  id: CMULiaisonCharcoalSuitskirt
+  equipment:
+    jumpsuit: RMCJumpsuitLiaisonCharcoalSuitskirt
+
+- type: loadout
+  id: CMULiaisonFieldSuitskirt
+  equipment:
+    jumpsuit: RMCJumpsuitLiaisonFieldSuitskirt
+
+- type: loadout
+  id: CMULiaisonSkirt
+  equipment:
+    jumpsuit: RMCJumpsuitLiaisonSkirt

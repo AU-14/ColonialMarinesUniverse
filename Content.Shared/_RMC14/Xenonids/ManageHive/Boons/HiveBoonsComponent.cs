@@ -3,25 +3,25 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(HiveBoonSystem))]
 public sealed partial class HiveBoonsComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int RoyalResin;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int RoyalResinMax = 10;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Dictionary<EntProtoId<HiveBoonDefinitionComponent>, TimeSpan> UnlockAt = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Dictionary<EntProtoId<HiveBoonDefinitionComponent>, TimeSpan> UsedAt = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Dictionary<EntProtoId<HiveBoonDefinitionComponent>, EntityUid> Active = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool KingAnnounced;
 }

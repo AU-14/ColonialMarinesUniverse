@@ -1,0 +1,15 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Cleaned up content build warnings and updated deprecated API usage.
+  type: Code
+- message: Fixed missing equipped sprites and client resource errors for the M81 riot
+    grenade launcher.
+  type: Fix
+- message: Fixed expedition casualty pickup, suppression responses after short volleys,
+    shelter arrivals, and fortification approaches.
+  type: Fix
+- message: Fixed the ammo-bearer backpack's entrenching-tool whitelist.
+  type: Fix
+time: '2026-10-10T14:28:56.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2132

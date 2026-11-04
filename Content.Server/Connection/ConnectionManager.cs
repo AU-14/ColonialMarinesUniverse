@@ -207,7 +207,7 @@ namespace Content.Server.Connection
          * TODO: Jesus H Christ what is this utter mess of a function
          * TODO: Break this apart into is constituent steps.
          */
-        private async Task<(ConnectionDenyReason, string, List<ServerBanDef>? bansHit)?> ShouldDeny(
+        private async Task<(ConnectionDenyReason, string, List<BanDef>? bansHit)?> ShouldDeny(
             NetConnectingArgs e)
         {
             // Check if banned.
@@ -228,7 +228,7 @@ namespace Content.Server.Connection
                 return (ConnectionDenyReason.NoHwid, Loc.GetString("hwid-required"), null);
             }
 
-            var bans = await _db.GetServerBansAsync(addr, userId, hwId, modernHwid, includeUnbanned: false);
+            var bans = await _db.GetBansAsync(addr, userId, hwId, modernHwid, includeUnbanned: false);
             if (bans.Count > 0)
             {
                 var firstBan = bans[0];
@@ -305,7 +305,11 @@ namespace Content.Server.Connection
 
             if ((softPlayerCount >= _cfg.GetCVar(CCVars.SoftMaxPlayers) && !adminBypass) && !wasInGame)
             {
-                return (ConnectionDenyReason.Full, Loc.GetString("soft-player-cap-full"), null);
+                // CMU14: custom notice overrides the locale string
+                var softCapNotice = _cfg.GetCVar(CCVars.SoftMaxNotice);
+                return (ConnectionDenyReason.Full,
+                    softCapNotice != string.Empty ? softCapNotice : Loc.GetString("soft-player-cap-full"),
+                    null);
             }
 
             // Checks for whitelist IF it's enabled AND the user isn't an admin. Admins are always allowed.

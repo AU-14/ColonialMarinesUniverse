@@ -3,7 +3,7 @@
   parent: BaseItem
   id: RMCMagazineBootsN160
   name: Boots! Issue No.160.
-  description: The only official UNMC magazine, the headline reads 'Corporate Liaison 'emotionally exhausted' from screwing so many people over.'
+  description: The only official USCM magazine, the headline reads 'Corporate Liaison 'emotionally exhausted' from screwing so many people over.' # CMU14: was UNMC
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Misc/boots_magazine.rsi
@@ -16,7 +16,7 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN07
   name: Boots! Issue No.7.
-  description: The only official UNMC magazine, the headline reads 'The Future Soldier!'. On the cover is a piece of sturdy-looking armor, containing a safe-looking marine.
+  description: The only official USCM magazine, the headline reads 'The Future Soldier!'. On the cover is a piece of sturdy-looking armor, containing a safe-looking marine. # CMU14: was UNMC
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-boots-07
@@ -25,7 +25,7 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN45
   name: Boots! Issue No.45.
-  description: The only official UNMC magazine, the headline reads 'Your sidearm and You!' with the subtitle 'Your best sleeping companion' right below it.
+  description: The only official USCM magazine, the headline reads 'Your sidearm and You!' with the subtitle 'Your best sleeping companion' right below it. # CMU14: was UNMC
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-boots-45
@@ -34,13 +34,13 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN54
   name: Boots! Issue No.54.
-  description: The only official UNMC magazine, the headline reads 'AEGIS strikes back against litigants in M54C-MK2 self cleaning case'.
+  description: The only official USCM magazine, the headline reads 'AEGIS strikes back against litigants in M54C-MK2 self cleaning case'. # CMU14: was UNMC
 
 - type: entity
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN55
   name: Boots! Issue No.55.
-  description: The only official UNMC magazine, the headline reads 'TEN tips to keep your UD-4 cockpit both safer and more relaxing'.
+  description: The only official USCM magazine, the headline reads 'TEN tips to keep your UD-4 cockpit both safer and more relaxing'. # CMU14: was UNMC
 
 - type: entity
   parent: RMCMagazineBootsN160
@@ -55,13 +55,13 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN70
   name: Boots! Issue No.70.
-  description: The only official UNMC magazine, the headline reads “Marine 70, The Future of Warfare.” The article then goes on to detail the plans and implementation of Marine 70, a program designed to help modernize the UNMC for 2110.
+  description: The only official USCM magazine, the headline reads “Marine 70, The Future of Warfare.” The article then goes on to detail the plans and implementation of Marine 70, a program designed to help modernize the USCM for 2110. # CMU14: was UNMC
 
 - type: entity
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN113
   name: Boots! Issue No.113.
-  description: The only official UNMC magazine, the headline reads 'Mars, heavy fighting on the Red Frontier!'. The cover depicts a group of victorious marines on Mars, as well as a small Weyland-Yutani advertisement.
+  description: The only official USCM magazine, the headline reads 'Mars, heavy fighting on the Red Frontier!'. The cover depicts a group of victorious marines on Mars, as well as a small Weyland-Yutani advertisement. # CMU14: was UNMC
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-boots-113
@@ -70,31 +70,31 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN117
   name: Boots! Issue No.117.
-  description: The only official UNMC magazine, the headline reads 'STOP CANNING'. The short paragraph further explains the dangers of marines throwing CN-20 Nerve gas into bathrooms as a prank.
+  description: The only official USCM magazine, the headline reads 'STOP CANNING'. The short paragraph further explains the dangers of marines throwing CN-20 Nerve gas into bathrooms as a prank. # CMU14: was UNMC
 
 - type: entity
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN120
   name: Boots! Issue No.120.
-  description: The only official UNMC magazine, the headline reads 'Wallace Kelly Haar, 2136-2181'.
+  description: The only official USCM magazine, the headline reads 'Wallace Kelly Haar, 2136-2181'. # CMU14: was UNMC
 
 - type: entity
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN125
   name: Boots! Issue No.125.
-  description: The only official UNMC magazine, the headline reads 'Bravo Squad… not just for FOB duty!'. Despite the title the article primarily consists of photos of barricades and diagrams on arrangements for ammo boxes.
+  description: The only official USCM magazine, the headline reads 'Bravo Squad… not just for FOB duty!'. Despite the title the article primarily consists of photos of barricades and diagrams on arrangements for ammo boxes. # CMU14: was UNMC
 
 - type: entity
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN131
   name: Boots! Issue No.131.
-  description: The only official UNMC magazine, the headline reads 'NO HOTBOXING'. The following paragraph goes into detail about how the HSDP smoke grenades are not safe for long period inhalation exposure and how hypoxia is a poor way to get high.
+  description: The only official USCM magazine, the headline reads 'NO HOTBOXING'. The following paragraph goes into detail about how the HSDP smoke grenades are not safe for long period inhalation exposure and how hypoxia is a poor way to get high. # CMU14: was UNMC
 
 - type: entity
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN150
   name: Boots! Issue No.150.
-  description: The only official UNMC magazine, the headline reads 'UPP Rations, The truth.' Its cover features a captured UPP MRE.
+  description: The only official USCM magazine, the headline reads 'UPP Rations, The truth.' Its cover features a captured UPP MRE. # CMU14: was UNMC
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-boots-150
@@ -103,14 +103,14 @@
   parent: RMCMagazineBootsN160
   id: RMCMagazineBootsN189
   name: Boots! Issue No.189.
-  description: The only official UNMC magazine, the headline reads 'Military Police Edition, those that help marines help themselves!'. As with every copy you have ever seen of Issue 189, someone has taken the time to deface it with crude language and unseemly drawings.
+  description: The only official USCM magazine, the headline reads 'Military Police Edition, those that help marines help themselves!'. As with every copy you have ever seen of Issue 189, someone has taken the time to deface it with crude language and unseemly drawings. # CMU14: was UNMC
 
-# WeYa Orrery
+# WeYu Orrery (CMU14: was WeYa)
 - type: entity
   parent: BaseItem
   id: RMCMagazineWeYaOrrery
-  name: WeYa Orrery Issue No.65.
-  description: A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a rugged, colony embedded in a cliff face, with the headline 'Disaster at Danton'
+  name: WeYu Orrery Issue No.65. # CMU14: was WeYa
+  description: A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a rugged, colony embedded in a cliff face, with the headline 'Disaster at Danton' # CMU14: was WeYa
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Misc/boots_magazine.rsi
@@ -124,8 +124,8 @@
 - type: entity
   parent: RMCMagazineWeYaOrrery
   id: RMCMagazineWeYaOrreryN34
-  name: WeYa Orrery Issue No.34.
-  description: "A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a well-dressed executive looking over a colonial bay, with the headline 'New, Refined: Fashion for your workplace'"
+  name: WeYu Orrery Issue No.34. # CMU14: was WeYa
+  description: "A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a well-dressed executive looking over a colonial bay, with the headline 'New, Refined: Fashion for your workplace'" # CMU14: was WeYa
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-orrery-34
@@ -133,8 +133,8 @@
 - type: entity
   parent: RMCMagazineWeYaOrrery
   id: RMCMagazineWeYaOrreryN175
-  name: WeYa Orrery Issue No.175.
-  description: A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a massive orbital shipyard constructing a ship, with the headline 'The Making of a Dreadnaught'
+  name: WeYu Orrery Issue No.175. # CMU14: was WeYa
+  description: A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a massive orbital shipyard constructing a ship, with the headline 'The Making of a Dreadnaught' # CMU14: was WeYa
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-orrery-175
@@ -142,8 +142,8 @@
 - type: entity
   parent: RMCMagazineWeYaOrrery
   id: RMCMagazineWeYaOrreryN184
-  name: WeYa Orrery Issue No.184.
-  description: "A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a scientist peering through a microscope, with the headline 'Special Edition: Cutting Edge'"
+  name: WeYu Orrery Issue No.184. # CMU14: was WeYa
+  description: "A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a scientist peering through a microscope, with the headline 'Special Edition: Cutting Edge'" # CMU14: was WeYa
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-orrery-184
@@ -151,8 +151,8 @@
 - type: entity
   parent: RMCMagazineWeYaOrrery
   id: RMCMagazineWeYaOrreryN202
-  name: WeYa Orrery Issue No.202.
-  description: A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a couple of friendly-looking synthetics standing against a white wall, with the headline 'Generation 3s, Defining the Future'
+  name: WeYu Orrery Issue No.202. # CMU14: was WeYa
+  description: A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a couple of friendly-looking synthetics standing against a white wall, with the headline 'Generation 3s, Defining the Future' # CMU14: was WeYa
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-orrery-202
@@ -160,8 +160,8 @@
 - type: entity
   parent: RMCMagazineWeYaOrrery
   id: RMCMagazineWeYaOrreryN217
-  name: WeYa Orrery Issue No.217.
-  description: A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a brown-haired man proudly facing the camera, carrying a PMC assault rifle. Behind him is a large hanger containing a dropship, with the headline 'SilverGuard; To Work and Protect'
+  name: WeYu Orrery Issue No.217. # CMU14: was WeYa
+  description: A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a brown-haired man proudly facing the camera, carrying a PMC assault rifle. Behind him is a large hanger containing a dropship, with the headline 'SilverGuard; To Work and Protect' # CMU14: was WeYa
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-orrery-217
@@ -169,8 +169,8 @@
 - type: entity
   parent: RMCMagazineWeYaOrrery
   id: RMCMagazineWeYaOrreryN220
-  name: WeYa Orrery Issue No.220.
-  description: A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a large cargo hauler flying above a planet, with the headline 'Tempering the Chain'
+  name: WeYu Orrery Issue No.220. # CMU14: was WeYa
+  description: A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a large cargo hauler flying above a planet, with the headline 'Tempering the Chain' # CMU14: was WeYa
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-orrery-220
@@ -178,8 +178,8 @@
 - type: entity
   parent: RMCMagazineWeYaOrrery
   id: RMCMagazineWeYaOrreryN258
-  name: WeYa Orrery Issue No.258.
-  description: A WeYa owned magazine, covering workplace gossip and corporate news. The cover shows a colony surrounded by trees on the shore of an ocean, massive mountains towering over it, with the headline 'The Creation of a Home'
+  name: WeYu Orrery Issue No.258. # CMU14: was WeYa
+  description: A WeYu owned magazine, covering workplace gossip and corporate news. The cover shows a colony surrounded by trees on the shore of an ocean, massive mountains towering over it, with the headline 'The Creation of a Home' # CMU14: was WeYa
   components:
   - type: RMCLoreExaminable
     content: rmc-lore-examinable-orrery-258

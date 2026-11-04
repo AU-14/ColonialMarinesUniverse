@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Destructible;
 using Content.Server.Destructible.Thresholds;
-using Content.Server.Destructible.Thresholds.Triggers;
 using Content.Server.NPC.HTN;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Sentry.Laptop;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.UserInterface;
@@ -52,6 +52,7 @@ public sealed partial class SentryLaptopSystem : SharedSentryLaptopSystem
         SubscribeLocalEvent<SentryLaptopComponent, SentryLaptopGlobalResetTargetingBuiMsg>(OnGlobalResetTargetingMsg);
         SubscribeLocalEvent<SentryLaptopComponent, SentryLaptopGlobalTogglePowerBuiMsg>(OnGlobalTogglePowerMsg);
         SubscribeLocalEvent<SentryLaptopComponent, SentryLaptopCloseCameraBuiMsg>(OnCloseCameraMsg);
+        SubscribeLocalEvent<SentryLaptopComponent, BoundUIClosedEvent>(OnBoundUIClosed); // CMU14
         SubscribeLocalEvent<SentryComponent, ComponentShutdown>(OnSentryShutdown);
 
         SubscribeLocalEvent<SentryLaptopWatcherComponent, ComponentShutdown>(OnWatcherShutdown);
@@ -219,19 +220,27 @@ public sealed partial class SentryLaptopSystem : SharedSentryLaptopSystem
         UpdateUI(laptop);
     }
 
+    // CMU14 method: a delayed close from another laptop cannot release the new camera.
     private void OnCloseCameraMsg(Entity<SentryLaptopComponent> laptop, ref SentryLaptopCloseCameraBuiMsg args)
     {
         var user = args.Actor;
 
-        if (!TryComp<SentryLaptopWatcherComponent>(user, out var watcher))
+        if (!TryComp<SentryLaptopWatcherComponent>(user, out var watcher) ||
+            watcher.Laptop != null && watcher.Laptop != laptop.Owner)
             return;
 
-        RemoveViewSubscription(user, watcher);
+        ClearWatcher(user, watcher);
+    }
 
-        watcher.Laptop = null;
-        watcher.CurrentSentry = null;
-        Dirty(user, watcher);
-        RemCompDeferred<SentryLaptopWatcherComponent>(user);
+    // CMU14 method: closing the laptop also releases its server-side camera subscription.
+    private void OnBoundUIClosed(Entity<SentryLaptopComponent> laptop, ref BoundUIClosedEvent args)
+    {
+        if (args.UiKey is not SentryLaptopUiKey ||
+            !TryComp<SentryLaptopWatcherComponent>(args.Actor, out var watcher) ||
+            watcher.Laptop != null && watcher.Laptop != laptop.Owner)
+            return;
+
+        ClearWatcher(args.Actor, watcher);
     }
 
     private void OnWatcherShutdown(Entity<SentryLaptopWatcherComponent> watcher, ref ComponentShutdown args)
@@ -256,6 +265,7 @@ public sealed partial class SentryLaptopSystem : SharedSentryLaptopSystem
 
     private void OnSentryShutdown(Entity<SentryComponent> sentry, ref ComponentShutdown args)
     {
+        UnlinkSentryFromLaptops(sentry);
         var sentryNet = GetNetEntity(sentry.Owner);
         var watchers = EntityQueryEnumerator<SentryLaptopWatcherComponent>();
 
@@ -352,7 +362,7 @@ public sealed partial class SentryLaptopSystem : SharedSentryLaptopSystem
         foreach (var threshold in destruct.Thresholds)
         {
             if (threshold.Trigger is DamageTrigger damageTrigger)
-                max = Math.Max(max, damageTrigger.Damage);
+                max = Math.Max(max, damageTrigger.Damage.Float());
         }
 
         return max > 0f ? max : base.GetSentryMaxHealth(sentry);

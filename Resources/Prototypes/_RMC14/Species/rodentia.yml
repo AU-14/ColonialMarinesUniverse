@@ -3,160 +3,187 @@
   name: species-name-rodentia
   roundStart: false
   prototype: CMMobRodentia
-  sprites: MobRodentiaSprites
   defaultSkinTone: "#747474"
-  markingLimits: MobRodentiaMarkingLimits
-  dollPrototype: MobRodentiaDummy
+  dollPrototype: AppearanceRodentia
   skinColoration: Hues
   maleFirstNames: names_rodentia_male
   femaleFirstNames: names_rodentia_female
   lastNames: names_rodentia_last
   naming: LastFirst
+  defaultSoundsBySex:
+  - RMCMaleRodentia
+  - RMCFemaleRodentia
+  - RMCMaleRodentia
+  voices:
+  - RMCMaleRodentia
+  - RMCFemaleRodentia
 
-- type: speciesBaseSprites
-  id: MobRodentiaSprites
-  sprites:
-    Head: MobRodentiaHead
-    Hair: MobHumanoidAnyMarking
-    FacialHair: MobHumanoidAnyMarking
-    Snout: MobHumanoidAnyMarking
-    Chest: MobRodentiaTorso
-    UndergarmentTop: MobHumanoidAnyMarking
-    UndergarmentBottom: MobHumanoidAnyMarking
-    HeadTop: MobHumanoidAnyMarking
-    HeadSide: MobHumanoidAnyMarking
-    Tail: MobHumanoidAnyMarking
-    Eyes: MobHumanoidEyes
-    LArm: MobRodentiaLArm
-    RArm: MobRodentiaRArm
-    LHand: MobRodentiaLHand
-    RHand: MobRodentiaRHand
-    LLeg: MobRodentiaLLeg
-    RLeg: MobRodentiaRLeg
-    LFoot: MobRodentiaLFoot
-    RFoot: MobRodentiaRFoot
-
-- type: markingPoints
-  id: MobRodentiaMarkingLimits
-  points:
-    Hair:
-      points: 1
+- type: markingsGroup
+  parent: Undergarments
+  id: Rodentia
+  limits:
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
       required: false
-    FacialHair:
-      points: 1
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 1
       required: false
-    Tail:
-      points: 1
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
       required: true
-      defaultMarkings: [ RodentiaTailDefault ]
-    Legs:
-      points: 4
+      default: [ RodentiaTailDefault ]
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 4
       required: false
-    Arms:
-      points: 4
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 4
       required: false
-    Snout:
-      points: 1
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 4
       required: false
-    HeadTop:
-      points: 1
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.LArm:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 4
+      required: false
+    enum.HumanoidVisualLayers.Snout:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
       required: true
-      defaultMarkings: [ RodentiaHeadTopEarDefault ]
-    HeadSide:
-      points: 1
+      default: [ RodentiaHeadTopEarDefault ]
+    enum.HumanoidVisualLayers.HeadSide:
+      limit: 1
       required: false
-    Chest:
-      points: 2
+    enum.HumanoidVisualLayers.Chest:
+      limit: 2
       required: false
-    UndergarmentBottom:
-      points: 1
+    enum.HumanoidVisualLayers.UndergarmentBottom:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUnderwearBoxersBlue ]
-    UndergarmentTop:
-      points: 1
+      default: [ RMCUnderwearBoxersBlue ]
+    enum.HumanoidVisualLayers.UndergarmentTop:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUndershirtStandard ]
+      default: [ RMCUndershirtStandard ]
 
-- type: humanoidBaseSprite
-  id: MobRodentiaHead
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: head_m
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceRodentia
+  categories: [ HideSpawnMenu ]
+  name: rodentia appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: OrganRodentiaTorso
+      Head: OrganRodentiaHead
+      ArmLeft: OrganRodentiaArmLeft
+      ArmRight: OrganRodentiaArmRight
+      HandRight: OrganRodentiaHandRight
+      HandLeft: OrganRodentiaHandLeft
+      LegLeft: OrganRodentiaLegLeft
+      LegRight: OrganRodentiaLegRight
+      FootLeft: OrganRodentiaFootLeft
+      FootRight: OrganRodentiaFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganHumanEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Rodentia
+    voice: RMCMaleRodentia
+  - type: Inventory
+    speciesId: rodentia
 
-- type: humanoidBaseSprite
-  id: MobRodentiaHeadMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: head_m
+- type: entity
+  parent: OrganBaseOrganic
+  id: OrganRodentia
+  abstract: true
+  suffix: rodentia
 
-- type: humanoidBaseSprite
-  id: MobRodentiaHeadFemale
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: head_f
+- type: entity
+  id: OrganRodentiaVisual
+  abstract: true
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: _RMC14/Mobs/Rodentia/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Rodentia
 
-- type: humanoidBaseSprite
-  id: MobRodentiaTorso
-  baseSprite:
+- type: entity
+  parent: [ OrganRodentia, OrganRodentiaVisual ]
+  id: OrganRodentiaExternal
+  abstract: true
+  components:
+  - type: Sprite
     sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: torso_m
 
-- type: humanoidBaseSprite
-  id: MobRodentiaTorsoMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: torso_m
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganRodentiaExternal ]
+  id: OrganRodentiaTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
 
-- type: humanoidBaseSprite
-  id: MobRodentiaTorsoFemale
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: torso_f
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganRodentiaExternal ]
+  id: OrganRodentiaHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Snout
+    - enum.HumanoidVisualLayers.HeadTop
+    - enum.HumanoidVisualLayers.HeadSide
+    - enum.HumanoidVisualLayers.Hair
 
-- type: humanoidBaseSprite
-  id: MobRodentiaLLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: l_leg
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganRodentiaExternal ]
+  id: OrganRodentiaArmLeft
 
-- type: humanoidBaseSprite
-  id: MobRodentiaLHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: l_hand
+- type: entity
+  parent: [ OrganBaseArmRight, OrganRodentiaExternal ]
+  id: OrganRodentiaArmRight
 
-- type: humanoidBaseSprite
-  id: MobRodentiaLArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: l_arm
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganRodentiaExternal ]
+  id: OrganRodentiaHandLeft
 
-- type: humanoidBaseSprite
-  id: MobRodentiaLFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: l_foot
+- type: entity
+  parent: [ OrganBaseHandRight, OrganRodentiaExternal ]
+  id: OrganRodentiaHandRight
 
-- type: humanoidBaseSprite
-  id: MobRodentiaRLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: r_leg
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganRodentiaExternal ]
+  id: OrganRodentiaLegLeft
 
-- type: humanoidBaseSprite
-  id: MobRodentiaRHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: r_hand
+- type: entity
+  parent: [ OrganBaseLegRight, OrganRodentiaExternal ]
+  id: OrganRodentiaLegRight
 
-- type: humanoidBaseSprite
-  id: MobRodentiaRArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: r_arm
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganRodentiaExternal ]
+  id: OrganRodentiaFootLeft
 
-- type: humanoidBaseSprite
-  id: MobRodentiaRFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Rodentia/parts.rsi
-    state: r_foot
+- type: entity
+  parent: [ OrganBaseFootRight, OrganRodentiaExternal ]
+  id: OrganRodentiaFootRight

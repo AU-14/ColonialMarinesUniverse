@@ -1,0 +1,21 @@
+<controls:SapperSiphonRigWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Insurgency.Sapper"
+    xmlns:sep="clr-namespace:Content.Client.Administration.UI.CustomControls"
+    Title="Siphon Rig - Captured Logins" MinSize="400 300">
+
+    <BoxContainer Orientation="Vertical" Margin="8">
+        <Label Text="Captured Account Data" StyleClasses="LabelBig" Margin="0 0 0 4" />
+        <!-- Header row -->
+        <BoxContainer Orientation="Horizontal">
+            <Label Text="Account #" MinSize="110 0" StyleClasses="LabelSubText" />
+            <Label Text="Name"      MinSize="160 0" StyleClasses="LabelSubText" />
+            <Label Text="PIN"       MinSize="70  0" StyleClasses="LabelSubText" />
+        </BoxContainer>
+        <sep:HSeparator Margin="0 2 0 2" />
+        <ScrollContainer VerticalExpand="True">
+            <BoxContainer Name="DataRows" Access="Public" Orientation="Vertical" />
+        </ScrollContainer>
+    </BoxContainer>
+</controls:SapperSiphonRigWindow>

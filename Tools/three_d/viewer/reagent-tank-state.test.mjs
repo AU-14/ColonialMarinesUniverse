@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {tankComposition} from './reagent-tank-state.js';
+const model={reagentTankAppearance:{vesselParts:['vessel']},parts:[{label:'body',color:'#808080'},{label:'vessel',color:'#FFFFFF'}]};
+assert.equal(tankComposition(model,{visible:false,color:'#FF0000'})[1].color,'#FFFFFFFF');
+assert.equal(tankComposition(model,{visible:true,color:'#FF0000',alpha:0})[1].color,'#FFFFFFFF');
+assert.equal(tankComposition(model,{visible:true,color:'#3366CC',alpha:128/255,spriteTint:'#80FF80'})[1].color,'#4DB273FF');
+assert.equal(tankComposition(model,{visible:true,color:'#3366CC',alpha:128/255,spriteTint:'#80FF80'})[0].color,'#408040FF');
+assert.equal(model.parts[1].color,'#FFFFFF');
+for(const alpha of [-1,2,NaN,Infinity]) assert.throws(()=>tankComposition(model,{alpha}));
+assert.throws(()=>tankComposition(model,{spriteAlpha:.5}));
+console.log('Reagent tank source-composition controls: 10 checks passed.');

@@ -10,6 +10,11 @@
     - state: bullet
       shader: unshaded
   - type: Projectile
+  - type: DamageImpactProfile
+    projectile:
+      contact: Fragment
+      penetration: Medium
+      energy: Severe
 
 - type: entity
   parent: CMPelletShotgunBase

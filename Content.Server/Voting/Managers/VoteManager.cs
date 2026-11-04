@@ -11,7 +11,7 @@ using Content.Server.Maps;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.Voting;
 using Robust.Server.Player;
@@ -472,10 +472,9 @@ namespace Content.Server.Voting.Managers
             return options.CarryoverKey ?? options.Title;
         }
 
-        private static string GetCarryoverOptionText(string text, int carryoverVotes)
-        {
-            return carryoverVotes > 0 ? $"{text} [+{carryoverVotes}]" : text;
-        }
+        // CMU14: show only the carryover that contributes to this ballot.
+        private static string GetCarryoverOptionText(string text, int effectiveVotes)
+            => effectiveVotes > 0 ? $"{text} [+{effectiveVotes}]" : text;
 
         private int GetCarryoverVotes(string? carryoverKey, string optionKey)
         {

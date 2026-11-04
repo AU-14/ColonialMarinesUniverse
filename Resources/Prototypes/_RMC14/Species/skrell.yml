@@ -1,168 +1,188 @@
-# port from Baystation12
+# Ported from Baystation 12.
 
 - type: species
   id: Skrell
   name: species-name-skrell
   roundStart: false
   prototype: RMCMobSkrell
-  sprites: MobSkrellSprites
   defaultSkinTone: "#8cd7a3"
-  markingLimits: MobSkrellMarkingLimits
-  dollPrototype: MobSkrellDummy
+  dollPrototype: AppearanceSkrell
   skinColoration: Hues
   maleFirstNames: RMCNamesSkrellFirst
   femaleFirstNames: RMCNamesSkrellFirst
   lastNames: RMCNamesSkrellLast
+  defaultSoundsBySex:
+  - RMCMaleSkrell
+  - RMCFemaleSkrell
+  - RMCMaleSkrell
+  voices:
+  - RMCMaleSkrell
+  - RMCFemaleSkrell
 
-- type: speciesBaseSprites
-  id: MobSkrellSprites
-  sprites:
-    Special: MobHumanoidAnyMarking
-    Head: MobSkrellHead
-    Hair: MobHumanoidAnyMarking
-    FacialHair: MobHumanoidAnyMarking
-    Snout: MobHumanoidAnyMarking
-    Chest: MobSkrellTorso
-    UndergarmentTop: MobHumanoidAnyMarking
-    UndergarmentBottom: MobHumanoidAnyMarking
-    Eyes: MobSkrellEyes
-    HeadTop: MobHumanoidAnyMarking
-    Tail: MobHumanoidAnyMarking
-    LArm: MobSkrellLArm
-    RArm: MobSkrellRArm
-    LHand: MobSkrellLHand
-    RHand: MobSkrellRHand
-    LLeg: MobSkrellLLeg
-    RLeg: MobSkrellRLeg
-    LFoot: MobSkrellLFoot
-    RFoot: MobSkrellRFoot
-
-- type: markingPoints
-  id: MobSkrellMarkingLimits
-  points:
-    Special: # For headdresses specifically
-      points: 1 # So you can't stack them all at once
+- type: markingsGroup
+  parent: Undergarments
+  id: Skrell
+  limits:
+    enum.HumanoidVisualLayers.Special:
+      limit: 1
       required: true
-    Hair:
-      points: 0
+    enum.HumanoidVisualLayers.Hair:
+      limit: 0
       required: false
-    Tail:
-      points: 1
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
       required: true
-    FacialHair:
-      points: 0
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 0
       required: false
-    Snout:
-      points: 1
+    enum.HumanoidVisualLayers.Snout:
+      limit: 1
       required: false
-    HeadTop:
-      points: 1
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCHairSkrellShort ]
-    Chest:
-      points: 1
+      default: [ RMCHairSkrellShort ]
+    enum.HumanoidVisualLayers.Chest:
+      limit: 1
       required: false
-    UndergarmentBottom:
-      points: 1
+    enum.HumanoidVisualLayers.UndergarmentBottom:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUnderwearBoxersBlue ]
-    UndergarmentTop:
-      points: 1
+      default: [ RMCUnderwearBoxersBlue ]
+    enum.HumanoidVisualLayers.UndergarmentTop:
+      limit: 1
       required: true
-      defaultMarkings: [ RMCUndershirtStandard ]
-    Legs:
-      points: 2
+      default: [ RMCUndershirtStandard ]
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 2
       required: false
-    Arms:
-      points: 2
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.LArm:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 2
       required: false
 
-- type: humanoidBaseSprite
-  id: MobSkrellEyes
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: eyes
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceSkrell
+  categories: [ HideSpawnMenu ]
+  name: skrell appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: OrganSkrellTorso
+      Head: OrganSkrellHead
+      ArmLeft: OrganSkrellArmLeft
+      ArmRight: OrganSkrellArmRight
+      HandRight: OrganSkrellHandRight
+      HandLeft: OrganSkrellHandLeft
+      LegLeft: OrganSkrellLegLeft
+      LegRight: OrganSkrellLegRight
+      FootLeft: OrganSkrellFootLeft
+      FootRight: OrganSkrellFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganSkrellEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+  - type: HumanoidProfile
+    species: Skrell
+    voice: RMCMaleSkrell
 
-- type: humanoidBaseSprite
-  id: MobSkrellHead
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: head_m
+- type: entity
+  parent: OrganBaseOrganic
+  id: OrganSkrell
+  abstract: true
+  suffix: skrell
 
-- type: humanoidBaseSprite
-  id: MobSkrellHeadMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: head_m
+- type: entity
+  id: OrganSkrellVisual
+  abstract: true
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: _RMC14/Mobs/Skrells/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Skrell
 
-- type: humanoidBaseSprite
-  id: MobSkrellHeadFemale
-  baseSprite:
+- type: entity
+  parent: [ OrganSkrell, OrganSkrellVisual ]
+  id: OrganSkrellExternal
+  abstract: true
+  components:
+  - type: Sprite
     sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: head_f
 
-- type: humanoidBaseSprite
-  id: MobSkrellTorso
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: torso_m
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganSkrellExternal ]
+  id: OrganSkrellTorso
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.UndergarmentTop
 
-- type: humanoidBaseSprite
-  id: MobSkrellTorsoMale
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: torso_m
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganSkrellExternal ]
+  id: OrganSkrellHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
 
-- type: humanoidBaseSprite
-  id: MobSkrellTorsoFemale
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: torso_f
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganSkrellExternal ]
+  id: OrganSkrellArmLeft
 
-- type: humanoidBaseSprite
-  id: MobSkrellLLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: l_leg
+- type: entity
+  parent: [ OrganBaseArmRight, OrganSkrellExternal ]
+  id: OrganSkrellArmRight
 
-- type: humanoidBaseSprite
-  id: MobSkrellLHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: l_hand
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganSkrellExternal ]
+  id: OrganSkrellHandLeft
 
-- type: humanoidBaseSprite
-  id: MobSkrellLArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: l_arm
+- type: entity
+  parent: [ OrganBaseHandRight, OrganSkrellExternal ]
+  id: OrganSkrellHandRight
 
-- type: humanoidBaseSprite
-  id: MobSkrellLFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: l_foot
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganSkrellExternal ]
+  id: OrganSkrellLegLeft
 
-- type: humanoidBaseSprite
-  id: MobSkrellRLeg
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: r_leg
+- type: entity
+  parent: [ OrganBaseLegRight, OrganSkrellExternal ]
+  id: OrganSkrellLegRight
 
-- type: humanoidBaseSprite
-  id: MobSkrellRHand
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: r_hand
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganSkrellExternal ]
+  id: OrganSkrellFootLeft
 
-- type: humanoidBaseSprite
-  id: MobSkrellRArm
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: r_arm
+- type: entity
+  parent: [ OrganBaseFootRight, OrganSkrellExternal ]
+  id: OrganSkrellFootRight
 
-- type: humanoidBaseSprite
-  id: MobSkrellRFoot
-  baseSprite:
-    sprite: _RMC14/Mobs/Skrells/parts.rsi
-    state: r_foot
+- type: entity
+  parent: [ OrganSkrellVisual, OrganBaseEyes, OrganHumanInternal ]
+  id: OrganSkrellEyes

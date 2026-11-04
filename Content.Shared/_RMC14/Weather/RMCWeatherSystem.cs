@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Light;
-using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.Weather;
@@ -24,7 +24,6 @@ public sealed partial class RMCWeatherSystem : EntitySystem
     [Dependency] private SharedWeatherSystem _weather = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private RMCAmbientLightSystem _rmcLight = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
@@ -51,15 +50,17 @@ public sealed partial class RMCWeatherSystem : EntitySystem
 
     }
 
-    public bool CanWeatherAffectArea(EntityUid uid, MapGridComponent grid, TileRef tileRef, RoofComponent? roofComp = null)
+    // CMU14: Accept roof coverage already resolved for the current render batch.
+    public bool CanWeatherAffectArea(EntityUid uid, MapGridComponent grid, TileRef tileRef,
+        RoofComponent? roofComp = null, bool? roofed = null)
     {
-        if (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileRef.GridIndices))
+        if (roofed ?? (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileRef.GridIndices)))
             return false;
 
         if (!_area.IsWeatherEnabled((uid, grid), tileRef.GridIndices))
             return false;
 
-        var anchoredEntities = _mapSystem.GetAnchoredEntitiesEnumerator(uid, grid, tileRef.GridIndices);
+        var anchoredEntities = _mapSystem.GetAnchoredEntities(uid, grid, tileRef.GridIndices);
 
         while (anchoredEntities.MoveNext(out var ent))
         {
@@ -93,7 +94,16 @@ public sealed partial class RMCWeatherSystem : EntitySystem
         _rmcLight.SetColor((ent, lightComp), lightningEffect, lightningDuration);
 
         var sound = ent.Comp.CurrentEvent.LightningSound;
-        _audio.PlayGlobal(_audio.ResolveSound(sound), Filter.BroadcastMap(Transform(ent).MapID), true);
+        // cmu edit start: thunder carries to every floor of the z-network, which share the ground's lightning flash
+        var thunderFilter = Filter.Empty();
+        foreach (var zMap in _zLevels.GetAllNetworkMaps(Transform(ent).MapUid ?? ent))
+        {
+            if (TryComp<MapComponent>(zMap, out var zMapComp))
+                thunderFilter.AddInMap(zMapComp.MapId);
+        }
+
+        _audio.PlayGlobal(_audio.ResolveSound(sound), thunderFilter, true);
+        // cmu edit end
     }
 
     public override void Update(float frameTime)
@@ -111,12 +121,9 @@ public sealed partial class RMCWeatherSystem : EntitySystem
             if(cycle.LastEventCooldown <= TimeSpan.Zero)
             {
                 var weatherPick = _random.Pick(cycle.WeatherEvents);
-                _proto.TryIndex(weatherPick.WeatherType, out var weatherProto);
-                var endTime = _timing.CurTime + weatherPick.Duration;
-
                 cycle.CurrentEvent = weatherPick;
                 cycle.CurrentEvent.DurationRemaining = weatherPick.Duration;
-                SetWeatherForMapOrZNetwork(uid, weatherProto, endTime);
+                SetWeatherForMapOrZNetwork(uid, weatherPick.WeatherType, weatherPick.Duration);
 
                 var minTimeVariance = (-cycle.MinTimeVariance * 0.5) + _random.Next(cycle.MinTimeVariance);
                 cycle.LastEventCooldown = weatherPick.Duration + cycle.MinTimeBetweenEvents + minTimeVariance;
@@ -142,31 +149,23 @@ public sealed partial class RMCWeatherSystem : EntitySystem
         }
     }
 
-    private void SetWeatherForMapOrZNetwork(EntityUid uid, WeatherPrototype? weatherProto, TimeSpan? endTime)
+    private void SetWeatherForMapOrZNetwork(EntityUid uid, EntProtoId? weatherProto, TimeSpan? duration)
     {
         var xform = Transform(uid);
         if (xform.MapUid is not { } mapUid)
         {
-            _weather.SetWeather(xform.MapID, weatherProto, endTime);
+            _weather.TrySetWeather(xform.MapID, weatherProto, out _, duration);
             return;
         }
 
-        if (!_zLevels.TryGetZNetwork(mapUid, out var network) ||
-            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+        // CMU14: was a network/depth walk with a separate no-network fallback; GetAllNetworkMaps
+        // returns just this map when no network exists, which covers the fallback case
+        foreach (var zMap in _zLevels.GetAllNetworkMaps(mapUid))
         {
-            _weather.SetWeather(xform.MapID, weatherProto, endTime);
-            return;
-        }
-
-        for (var depth = minDepth; depth <= maxDepth; depth++)
-        {
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var zMap) ||
-                !TryComp<MapComponent>(zMap, out var mapComp))
-            {
+            if (!TryComp<MapComponent>(zMap, out var mapComp))
                 continue;
-            }
 
-            _weather.SetWeather(mapComp.MapId, weatherProto, endTime);
+            _weather.TrySetWeather(mapComp.MapId, weatherProto, out _, duration);
         }
     }
 }

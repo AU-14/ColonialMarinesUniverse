@@ -3,9 +3,9 @@ using Robust.Shared.Player;
 
 namespace Content.Server._RMC14.Attachable;
 
-public sealed class AttachableIFFDebugSystem : EntitySystem
+public sealed partial class AttachableIFFDebugSystem : EntitySystem
 {
-    [Dependency] private readonly ISharedPlayerManager _players = default!;
+    [Dependency] private  ISharedPlayerManager _players = default!;
 
     private readonly HashSet<ICommonSession> _observers = [];
 

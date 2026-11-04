@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared._RMC14.Body;
+using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Defibrillator;
@@ -11,6 +12,10 @@ using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Damage;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
@@ -23,17 +28,28 @@ using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Timing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Medical.Scanner;
 
 public sealed partial class HealthScannerSystem : EntitySystem
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMBicaridineReagent = "CMBicaridine";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMDexalinReagent = "CMDexalin";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMDyloveneReagent = "CMDylovene";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMEpinephrineReagent = "CMEpinephrine";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMKelotaneReagent = "CMKelotane";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> InaprovalineReagent = "Inaprovaline";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> NutrimentReagent = "Nutriment";
+
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedEntityStorageSystem _entityStorage = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
+    [Dependency] private RMCReagentSystem _reagents = default!;
     [Dependency] private RMCHandsSystem _rmcHands = default!;
     [Dependency] private SharedRMCTemperatureSystem _rmcTemperature = default!;
     [Dependency] private RMCUnrevivableSystem _rmcUnrevivable = default!;
@@ -88,7 +104,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
         if (delay > TimeSpan.Zero)
         {
             var name = Loc.GetString("zzzz-the", ("ent", target));
-            _popup.PopupClient($"You start fumbling around with {name}...", target, args.User);
+            _popup.PopupEntity($"You start fumbling around with {name}...", target, args.User);
         }
 
         _doAfter.TryStartDoAfter(doAfter);
@@ -137,8 +153,8 @@ public sealed partial class HealthScannerSystem : EntitySystem
     /// <returns></returns>
     private bool CanUseHealthScannerPopup(Entity<HealthScannerComponent> scanner, EntityUid user, ref EntityUid target)
     {
-        SharedEntityStorageComponent? entityStorage = null;
-        if (HasComp<HealthScannableContainerComponent>(target) && _entityStorage.ResolveStorage(target, ref entityStorage))
+        if (HasComp<HealthScannableContainerComponent>(target) &&
+            TryComp<EntityStorageComponent>(target, out var entityStorage))
         {
             foreach (var entity in entityStorage.Contents.ContainedEntities)
             {
@@ -156,7 +172,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             !HasComp<MobStateComponent>(target) ||
             !HasComp<MobThresholdsComponent>(target))
         {
-            _popup.PopupClient("You can't analyze that!", target, user);
+            _popup.PopupEntity("You can't analyze that!", target, user);
             return false;
         }
 
@@ -166,12 +182,12 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return false;
         }
 
-        var ev = new HealthScannerAttemptTargetEvent();
+        var ev = new HealthScannerAttemptTargetEvent(Scanner: scanner.Owner); // CMU14: pass the analyzer so targets can allow it
         RaiseLocalEvent(target, ref ev);
         if (ev.Cancelled)
         {
             if (ev.Popup != null)
-                _popup.PopupClient(ev.Popup, target, user);
+                _popup.PopupEntity(ev.Popup, target, user);
 
             return false;
         }
@@ -245,18 +261,19 @@ public sealed partial class HealthScannerSystem : EntitySystem
     {
         FixedPoint2 blood = 0;
         FixedPoint2 maxBlood = 0;
-        if (_rmcBloodstream.TryGetBloodSolution(target, out var bloodstream))
-        {
-            blood = bloodstream.Volume;
-            maxBlood = bloodstream.MaxVolume;
-        }
+        _rmcBloodstream.TryGetBloodReadout(target, out blood, out maxBlood);
 
         _rmcBloodstream.TryGetChemicalSolution(target, out _, out var chemicals);
         _rmcTemperature.TryGetCurrentTemperature(target, out var temperature);
 
         var bleeding = _rmcBloodstream.IsBleeding(target);
-        var state = new HealthScannerBuiState(GetNetEntity(target), blood, maxBlood, temperature, chemicals, bleeding);
-        FillBaseMedicalReadout(target, state);
+        var readouts = BuildChemicalReadouts(chemicals, out var unknown, out var omitted);
+        var state = new HealthScannerBuiState(GetNetEntity(target), blood, maxBlood, temperature, readouts, bleeding)
+        {
+            UnknownChemicals = unknown,
+            OmittedKnownChemicals = omitted,
+        };
+        FillBaseMedicalReadout(target, state, chemicals);
 
         var buildEv = new HealthScannerBuildStateEvent(scanner, target, viewer, state);
         RaiseLocalEvent(scanner, ref buildEv);
@@ -264,16 +281,61 @@ public sealed partial class HealthScannerSystem : EntitySystem
         return state;
     }
 
-    private void FillBaseMedicalReadout(EntityUid target, HealthScannerBuiState state)
+    private List<HealthScannerChemicalReadout> BuildChemicalReadouts(Solution? chemicals, out bool unknown, out int omitted)
+    {
+        unknown = false;
+        omitted = 0;
+        if (chemicals == null || chemicals.Contents.Count == 0)
+            return [];
+
+        // Different DNA/instance-data variants are one visible chemical. Only the
+        // prototype and total quantity belong in a scanner projection.
+        var totals = new Dictionary<ProtoId<ReagentPrototype>, FixedPoint2>();
+        foreach (var chemical in chemicals.Contents)
+        {
+            if (!_reagents.TryIndex(chemical.Reagent, out var prototype) || prototype.Unknown)
+            {
+                unknown = true;
+                continue;
+            }
+
+            var id = chemical.Reagent.Prototype;
+            totals[id] = totals.GetValueOrDefault(id) + chemical.Quantity;
+        }
+
+        var readouts = new List<HealthScannerChemicalReadout>(totals.Count);
+        foreach (var (id, quantity) in totals)
+        {
+            var prototype = _reagents.Index(id);
+            readouts.Add(new HealthScannerChemicalReadout(id, quantity,
+                prototype.Overdose is { } overdose && quantity > overdose));
+        }
+
+        // Keep overdose warnings first if an unusual mixture exceeds the display bound.
+        readouts.Sort(static (left, right) =>
+        {
+            var order = right.Overdose.CompareTo(left.Overdose);
+            if (order == 0)
+                order = right.Quantity.CompareTo(left.Quantity);
+            return order != 0 ? order : string.CompareOrdinal(left.Prototype.Id, right.Prototype.Id);
+        });
+        omitted = Math.Max(0, readouts.Count - HealthScannerBuiState.MaximumChemicalReadouts);
+        if (omitted > 0)
+            readouts.RemoveRange(HealthScannerBuiState.MaximumChemicalReadouts, omitted);
+        return readouts;
+    }
+
+    private void FillBaseMedicalReadout(EntityUid target, HealthScannerBuiState state, Solution? chemicals)
     {
         if (TryComp<DamageableComponent>(target, out var damageable))
         {
-            state.Damage.Brute = damageable.DamagePerGroup.GetValueOrDefault("Brute");
-            state.Damage.Burn = damageable.DamagePerGroup.GetValueOrDefault("Burn");
-            state.Damage.Toxin = damageable.DamagePerGroup.GetValueOrDefault("Toxin");
-            state.Damage.Airloss = damageable.DamagePerGroup.GetValueOrDefault("Airloss");
-            state.Damage.Genetic = damageable.DamagePerGroup.GetValueOrDefault("Genetic");
-            state.Damage.Total = damageable.TotalDamage;
+            var damagePerGroup = _damageable.GetDamagePerGroup((target, damageable));
+            state.Damage.Brute = damagePerGroup.GetValueOrDefault("Brute");
+            state.Damage.Burn = damagePerGroup.GetValueOrDefault("Burn");
+            state.Damage.Toxin = damagePerGroup.GetValueOrDefault("Toxin");
+            state.Damage.Airloss = damagePerGroup.GetValueOrDefault("Airloss");
+            state.Damage.Genetic = damagePerGroup.GetValueOrDefault("Genetic");
+            state.Damage.Total = _damageable.GetTotalDamage((target, damageable));
         }
 
         if (TryComp<WoundedComponent>(target, out var wounded))
@@ -298,7 +360,9 @@ public sealed partial class HealthScannerSystem : EntitySystem
         }
 
         state.VictimBurst = HasComp<VictimBurstComponent>(target);
-        state.VictimInfected = HasComp<VictimInfectedComponent>(target);
+        // cmu edit start: a handheld analyzer can't see a parasite; the body scanner can
+        state.VictimInfected = false;
+        // cmu edit end
         state.HolocardXeno = TryComp<HolocardStateComponent>(target, out var holocard) &&
             holocard.HolocardStatus == HolocardStatus.Xeno;
         state.PermaDead = _mob.IsDead(target) &&
@@ -307,16 +371,20 @@ public sealed partial class HealthScannerSystem : EntitySystem
              _rmcUnrevivable.IsUnrevivable(target) ||
              HasComp<RMCDefibrillatorBlockedComponent>(target));
 
-        FillAdviceReadout(state);
+        // cmu edit start
+        if (_mob.IsDead(target) && !state.PermaDead)
+            state.CMUTimeUntilUnrevivable = _rmcUnrevivable.GetTimeUntilUnrevivable(target);
+        // cmu edit end
+
+        FillAdviceReadout(state, chemicals);
     }
 
-    private void FillAdviceReadout(HealthScannerBuiState state)
+    private void FillAdviceReadout(HealthScannerBuiState state, Solution? chemicals)
     {
         var advice = state.Advice;
         var damage = state.Damage;
         var isDead = state.MobState == MobState.Dead;
         var isCritical = state.MobState == MobState.Critical;
-        var chemicals = state.Chemicals;
 
         if (isDead)
         {
@@ -324,7 +392,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             {
                 if (state.DeadThreshold + 30 < damage.Total &&
                     chemicals != null &&
-                    !chemicals.ContainsReagent("CMEpinephrine", null))
+                    !chemicals.ContainsReagent(CMEpinephrineReagent, null))
                 {
                     advice.NeedsEpinephrine = true;
                 }
@@ -351,7 +419,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             advice.ShowBloodPack = bloodPercent < 0.85;
             advice.ShowFood = bloodPercent < 0.9 &&
                 chemicals != null &&
-                !chemicals.ContainsReagent("Nutriment", null);
+                !chemicals.ContainsReagent(NutrimentReagent, null);
         }
 
         if (damage.Airloss > 0 && !isDead)
@@ -359,21 +427,21 @@ public sealed partial class HealthScannerSystem : EntitySystem
             advice.ShowCprCrit = damage.Airloss > 10 && isCritical;
             advice.ShowDexalin = damage.Airloss > 30 &&
                 chemicals != null &&
-                !chemicals.ContainsReagent("CMDexalin", null);
+                !chemicals.ContainsReagent(CMDexalinReagent, null);
         }
 
         advice.ShowBicaridine = damage.Brute > 30 &&
             chemicals != null &&
-            !chemicals.ContainsReagent("CMBicaridine", null) &&
+            !chemicals.ContainsReagent(CMBicaridineReagent, null) &&
             !isDead;
         advice.ShowKelotane = damage.Burn > 30 &&
             chemicals != null &&
-            !chemicals.ContainsReagent("CMKelotane", null) &&
+            !chemicals.ContainsReagent(CMKelotaneReagent, null) &&
             !isDead;
         advice.ShowDylovene = damage.Toxin > 10 &&
             chemicals != null &&
-            !chemicals.ContainsReagent("CMDylovene", null) &&
-            !chemicals.ContainsReagent("Inaprovaline", null) &&
+            !chemicals.ContainsReagent(CMDyloveneReagent, null) &&
+            !chemicals.ContainsReagent(InaprovalineReagent, null) &&
             !isDead;
     }
 

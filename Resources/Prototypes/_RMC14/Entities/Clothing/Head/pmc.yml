@@ -46,6 +46,7 @@
       - state: equipped-HELMET-reptilian
       head-vulpkanin:
       - state: equipped-HELMET-vulpkanin
+    equippedPrefix: off
   - type: CMArmor
     bullet: 25
     bio: 15
@@ -70,6 +71,8 @@
     sprite: _RMC14/Objects/Clothing/Head/PMC/officer.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/PMC/officer.rsi
+  - type: HelmetAccessoryHolder # CMU14: a beret takes the hat-sized accessory overlays, the helmet ones cover it
+    isHat: true
 
 - type: entity
   parent: ArmorHelmetPMC
@@ -81,6 +84,8 @@
     sprite: _RMC14/Objects/Clothing/Head/PMC/field_officer.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/PMC/field_officer.rsi
+  - type: HelmetAccessoryHolder # CMU14: a beret takes the hat-sized accessory overlays, the helmet ones cover it
+    isHat: true
   - type: CMArmor
     bullet: 25
     bio: 15
@@ -99,7 +104,7 @@
     clothingVisuals:
       head:
       - state: equipped-HELMET
-
+    equippedPrefix: off
 - type: entity
   parent: ArmorHelmetM10
   id: ArmorHelmetPMCCommandoSurvivor
@@ -129,6 +134,7 @@
     sprite: _RMC14/Objects/Clothing/Head/PMC/commando.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/PMC/commando.rsi
+    equippedPrefix: off
   - type: CMArmor
     melee: 45
     bullet: 15
@@ -155,7 +161,7 @@
     sprite: _RMC14/Objects/Clothing/Head/PMC/commando_alt.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/PMC/commando_alt.rsi
-
+    equippedPrefix: off
 - type: entity
   parent: ArmorHelmetPMC
   id: RMCArmorHelmetPMCDark
@@ -252,6 +258,7 @@
     sprite: _RMC14/Objects/Clothing/Head/PMC/engineer.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/PMC/engineer.rsi
+    equippedPrefix: off
   - type: EyeProtection
   - type: PointLight
     color: "#c51ce4"

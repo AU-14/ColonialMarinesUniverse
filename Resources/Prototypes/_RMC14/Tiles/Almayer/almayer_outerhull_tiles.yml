@@ -1,14 +1,16 @@
-﻿- type: tile
+- type: tile
   parent: CMTileBase
   id: CMFloorOuterHull
   name: tiles-rmc-outer-hull
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull.png
+  isSpace: True # CMU14
 
 - type: tile
   parent: CMTileBase
   id: CMFloorOuterHullSouth
   name: tiles-rmc-outer-hull
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_0.png
+  isSpace: True # cmu edit: open to space like the rest of the outer hull
 
 - type: tile
   parent: CMFloorOuterHull

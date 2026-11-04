@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
@@ -25,11 +26,12 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
         _xenoQuery = GetEntityQuery<XenoComponent>();
         _pullableQuery = GetEntityQuery<PullableComponent>();
 
-        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, StartCollideEvent>(OnCollide);
+        SubscribeLocalEvent<XenoDespoilerLingeringAcidComponent, EndCollideEvent>(OnEndCollide);  // CMU14
     }
 
-    private void OnInit(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, ComponentInit args)
+    private void OnMapInit(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, MapInitEvent args)
     {
         var min = (float)comp.MinLifetime.TotalSeconds;
         var max = (float)comp.MaxLifetime.TotalSeconds;
@@ -46,8 +48,20 @@ public sealed partial class XenoDespoilerLingeringAcidSystem : EntitySystem
         if (_pullableQuery.TryComp(target, out var pull) && pull.BeingPulled)
             return;
 
+        if (!comp.Damaged.Add(target))
+            return; // CMU14
+
+        // CMU14: collision history is server-only.
+        // Dirty(uid, comp);
+
         var dmg = new DamageSpecifier();
         dmg.DamageDict["Heat"] = FixedPoint2.New(comp.CrossBurnDamage);
         _damageable.TryChangeDamage(target, dmg, ignoreResistances: false, origin: comp.Caster);
     }
+
+    private void OnEndCollide(EntityUid uid, XenoDespoilerLingeringAcidComponent comp, ref EndCollideEvent args) // CMU14
+    {
+        comp.Damaged.Remove(args.OtherEntity);
+    }
+    
 }

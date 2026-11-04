@@ -1,0 +1,28 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Scavenger specialists receive explicit complete equipment without duplicate
+    inherited weapons.
+  type: Fix
+- message: Scavenger squads use quieter contact reports and retain covering assignments.
+  type: Tweak
+- message: Scavengers retain return fire during stalled movement and shoot outward
+    over directional barricades.
+  type: Fix
+- message: Guard construction requires an order and chooses oriented, spaced positions
+    with escape routes.
+  type: Tweak
+- message: Scavengers recover compatible ammunition, known grenades and equipment
+    from nearby accessible supplies and dead bodies.
+  type: Add
+- message: Scavengers spread fire against aliens, retain brief threat memory and react
+    to visible projectiles and ground acid.
+  type: Tweak
+- message: Scavenger travel can use short obstacle detours and bounded waits for lagging
+    squad members.
+  type: Fix
+- message: Added guard facing completion and construction, scavenging, hazard and
+    navigation diagnostics.
+  type: Admin
+time: '2026-10-09T13:14:11.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2118

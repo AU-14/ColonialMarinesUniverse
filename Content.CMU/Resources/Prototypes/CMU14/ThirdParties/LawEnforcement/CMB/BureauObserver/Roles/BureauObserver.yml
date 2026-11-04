@@ -1,0 +1,88 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobCMBBureauObserver
+  roundSide: ThirdParty
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
+  roundForce: CMB
+  roundRole: CMBBureauObserver
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 1
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillFirearms: 1
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-cmb-prefix-bureau-observer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  name: cmu-cmb-name-bureau-observer
+  description: cmu-cmb-description-bureau-observer
+  playTimeTracker: CMUJobCMBBureauObserver
+  canBeAntag: false
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearCMBBureauObserver
+  icon: RMCJobIconBureauObserver
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-cmb-supervisors-bureau
+  accessGroups:
+  - aucmb
+  - Colonist
+  roleWeight: 0.25
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCMB
+  id: CMUJobCMBBureauObserver
+  name: CMB Bureau Observer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-cmb-name-bureau-observer
+    description: cmu-cmb-description-bureau-observer
+    reregister: false
+    job: CMUJobCMBBureauObserver
+    raffle:
+      settings: short
+    rules: cmu-cmb-rules-bureau-observer
+
+- type: startingGear
+  id: CMUGearCMBBureauObserver
+  equipment:
+    eyes: RMCGlassesMedicalHUDGlasses
+    mask: CMMaskSterile
+    back: RMCSatchelBureauObserverSecureFill
+    gloves: CMHandsInsulated
+    jumpsuit: CMJumpsuitLiaisonBlue
+    outerClothing: RMCArmorVest
+    belt: CMBeltMedicBagFilled
+    shoes: CMBootsBlackFilled
+    ears: RMCHeadsetDistressBureau
+    ears2: RMCFlashlightPen
+    pocket1: RMCPouchAutoinjectorFill
+    pocket2: RMCPouchGeneralLargeBureauObserverFill
+    suitstorage: RMCFlashlight
+    id: CMUIDCardCMBBureauObserver
+  inhand:
+  - CMHealthAnalyzer
+
+- type: playTimeTracker
+  id: CMUJobCMBBureauObserver

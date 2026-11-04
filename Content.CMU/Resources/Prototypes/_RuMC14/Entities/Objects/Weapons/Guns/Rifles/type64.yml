@@ -1,0 +1,69 @@
+#AP 10*20 Type 64
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: RuMCCartridgeSMG10x20AP
+  name: 10x20 AP
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBullet10x20AP
+  - type: Tag
+    tags:
+    - Cartridge
+    - RuMCCartridgeSMG10x20AP
+
+- type: entity
+  parent: RMCBulletType64
+  id: RuMCBullet10x20AP
+  name: bullet (10x20 AP)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 28 #38 RMCBulletType64
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 22
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 4
+      falloff: 6
+  - type: CMArmorPiercing
+    amount: 25
+  - type: RMCProjectileAccuracy
+    accuracy: 100
+    thresholds:
+    - range: 4
+      falloff: 10
+
+
+#Tracer 10*20 type 64
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: RuMCCartridgeSMG10x20Tracer
+  name: 10x20 Tracer
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBullet10x20Tracer
+  - type: Tag
+    tags:
+    - Cartridge
+    - RuMCCartridgeSMG10x20Tracer
+
+- type: entity
+  parent: RMCBulletType64
+  id: RuMCBullet10x20Tracer
+  name: bullet (10x20 Tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#00ff66"
+    radius: 2
+    energy: 8.0
+
+- type: Tag
+  id: RuMCCartridgeSMG10x20Tracer
+
+- type: Tag
+  id: RuMCCartridgeSMG10x20AP

@@ -297,8 +297,9 @@
       path: /Audio/Effects/gen_hit.ogg
   - type: SpawnOnTerminate
     spawn: RMCSmoke
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound: /Audio/Effects/smoke.ogg
+    positional: true
   - type: DeleteOnTrigger
 
 - type: entity

@@ -1,0 +1,108 @@
+- type: job
+  parent: RMCJobRibbonBase
+  displayWeight: 18
+  id: AU14JobCivilianHeadOfEngineering
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianHeadOfEngineering
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 2
+      RMCSkillFirearms: 2
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillPowerLoader: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-headofengineering
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: head_of_engineering
+
+  name: au14-job-name-civilianheadofengineering
+  description: au14-job-description-civilianheadofengineering
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianHeadOfEngineering
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentEngineering
+    time: 18000 # 5 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianHeadOfEngineering
+  icon: "AU14JobIconColonyHeadOfEngi"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - auadmin
+  - auengi
+  - CMCargoTech
+  - auheadsofcolony
+  access:
+# - AU14AccessColonyHeadEngineer # implicit
+  - AU14AccessColonyAdministrator
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianHeadOfEngineering
+  equipment:
+    head: RMCHardhatBlue
+    jumpsuit: CMUJumpsuitCivilianForeman
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyHeadOfEngineering
+    ears: AU14ColonyAdminHeadset
+    pocket1: AU14StampHENG
+  inhand:
+  - CMUMobilePhone
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianHeadOfEngineering
+  name: Spawn Point Head of Engineering
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianHeadOfEngineering
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianHeadOfEngineering
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianHeadOfEngineering
+  points: 7
+  groups:
+  - EngiSatchelAU14
+  - EngiJacketAU14
+  - EngiGlovesAU14
+  - EngiBeltAU14
+  - EngiPouchAU14
+  - EngiPouchRightAU14
+  - ForceStampApprovedAU14
+  - ForceSynthResetKeyAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

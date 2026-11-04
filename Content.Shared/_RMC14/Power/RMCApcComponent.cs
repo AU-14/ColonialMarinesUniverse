@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Access;
 using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Content.Shared.Tools;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -38,6 +39,11 @@ public sealed partial class RMCApcComponent : Component
 
     [DataField, AutoNetworkedField]
     public string CellContainerSlot = "rmc_apc_power_cell";
+
+    // Taking or inserting a power cell is deliberate maintenance work, not a free
+    // instant swap; saboteurs and engineers both pay the same cost. Scales with Skill.
+    [DataField, AutoNetworkedField]
+    public TimeSpan CellDelay = TimeSpan.FromSeconds(7);
 
     [DataField, AutoNetworkedField]
     public EntProtoId<PowerCellComponent>? StartingCell = "RMCPowerCellHigh";
@@ -89,6 +95,17 @@ public enum RMCApcVisualsLayers
     Layer,
     Power,
     Lock,
+}
+
+[Serializable, NetSerializable]
+public enum RMCApcSpriteLayers
+{
+    ChargeState,
+    InterfaceLock,
+    PanelLock,
+    Equipment,
+    Lighting,
+    Environment,
 }
 
 [Serializable, NetSerializable]

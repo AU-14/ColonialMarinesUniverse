@@ -11,7 +11,7 @@ public sealed partial class CCVars
     /// </summary>
     [CVarControl(AdminFlags.VarEdit)]
     public static readonly CVarDef<bool> MovementMobPushing =
-        CVarDef.Create("movement.mob_pushing", false, CVar.SERVER | CVar.REPLICATED);
+        CVarDef.Create("movement.mob_pushing", true, CVar.SERVER | CVar.REPLICATED); // CMU14: release builds need mob collision without the development preset.
 
     /// <summary>
     /// Can we push mobs not moving.
@@ -56,4 +56,12 @@ public sealed partial class CCVars
     [CVarControl(AdminFlags.VarEdit)]
     public static readonly CVarDef<float> MovementPushMassCap =
         CVarDef.Create("movement.push_mass_cap", 1.75f, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// Is crawling enabled
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit)]
+    public static readonly CVarDef<bool> MovementCrawling =
+        CVarDef.Create("movement.crawling", true, CVar.SERVER | CVar.REPLICATED);
+
 }

@@ -1,0 +1,206 @@
+- type: guideEntry
+  parent: RMC
+  id: RMCOverview
+  name: cmu-guide-entry-rules-overview
+  priority: 0
+  text: "/ServerInfo/Guidebook/_RMC14/Rules/RMCOverview.xml"
+  children:
+  - AU14RulesZeroTolerance
+  - AU14RulesGeneral
+  - AU14RulesRoleplay
+  - AU14GamemodeRulesOverview
+  - AU14YautjaHonorCode
+
+- type: guideEntry
+  parent: RMC
+  id: AU14RulesZeroTolerance
+  name: cmu-guide-entry-rules-zero-tolerance
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Rules/AU14ZeroTolerance.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14RulesGeneral
+  name: cmu-guide-entry-rules-general
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Rules/AU14GeneralRules.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14RulesRoleplay
+  name: cmu-guide-entry-rules-roleplay
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Rules/AU14RoleplayRules.xml"
+  children:
+  - AU14HighRoleplayRoles
+
+- type: guideEntry
+  parent: RMC
+  id: AU14GamemodeRulesOverview
+  name: cmu-guide-entry-rules-gamemodes
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Gamemodes/AU14GamemodeRulesOverview.xml"
+  children:
+  - AU14GamemodeRulesInsurgency
+  # - AU14GamemodeRulesForceOnForce
+  # - AU14GamemodeRulesDistressSignal
+  # - AU14GamemodeRulesColonyFall
+  # - AU14GamemodeRulesPrometheus
+
+- type: guideEntry
+  parent: RMC
+  id: AU14HighRoleplayRoles
+  name: cmu-guide-entry-rules-high-roleplay
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Rules/AU14HighRoleplayRoles.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14GamemodeRulesInsurgency
+  name: cmu-guide-entry-rules-insurgency
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Gamemodes/AU14GamemodeRulesInsurgency.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCode
+  name: cmu-guide-entry-yautja-honor-code
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCode.xml"
+  children:
+  - AU14YautjaHonorCodePrey
+  - AU14YautjaHonorCodePreyCaveats
+  - AU14YautjaHonorCodeTrophies
+  - AU14YautjaHonorCodeWeapons
+  - AU14YautjaHonorCodeHuntingGrounds
+  - AU14YautjaHonorCodePreserve
+  - AU14YautjaHonorCodeBlooded
+  - AU14YautjaHonorCodeYoungbloods
+  - AU14YautjaHonorCodeThralls
+  - AU14YautjaHonorCodeGearRecovery
+  - AU14YautjaHonorCodeLodges
+  - AU14YautjaHonorCodeHellhounds
+  - AU14YautjaHonorCodeAncients
+  - AU14YautjaHonorCodeGamemodes
+  - AU14YautjaHonorCodeSpirit
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodePrey
+  name: cmu-guide-entry-yautja-honor-code-prey
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodePrey.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodePreyCaveats
+  name: cmu-guide-entry-yautja-honor-code-prey-caveats
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodePreyCaveats.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeTrophies
+  name: cmu-guide-entry-yautja-honor-code-trophies
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeTrophies.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeWeapons
+  name: cmu-guide-entry-yautja-honor-code-weapons
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeWeapons.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeHuntingGrounds
+  name: cmu-guide-entry-yautja-honor-code-hunting-grounds
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeHuntingGrounds.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodePreserve
+  name: cmu-guide-entry-yautja-honor-code-preserve
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodePreserve.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeBlooded
+  name: cmu-guide-entry-yautja-honor-code-blooded
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeBlooded.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeYoungbloods
+  name: cmu-guide-entry-yautja-honor-code-youngbloods
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeYoungbloods.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeThralls
+  name: cmu-guide-entry-yautja-honor-code-thralls
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeThralls.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeGearRecovery
+  name: cmu-guide-entry-yautja-honor-code-gear-recovery
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeGearRecovery.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeLodges
+  name: cmu-guide-entry-yautja-honor-code-lodges
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeLodges.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeHellhounds
+  name: cmu-guide-entry-yautja-honor-code-hellhounds
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeHellhounds.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeAncients
+  name: cmu-guide-entry-yautja-honor-code-ancients
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeAncients.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeGamemodes
+  name: cmu-guide-entry-yautja-honor-code-gamemodes
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeGamemodes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14YautjaHonorCodeSpirit
+  name: cmu-guide-entry-yautja-honor-code-spirit
+  text: "/ServerInfo/Guidebook/CMU14/Rules/Yautja/AU14YautjaHonorCodeSpirit.xml"
+
+# Placeholder stubs below,
+# require actual rules
+#
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesForceOnForce
+#   name: cmu-guide-entry-rules-force-on-force
+#   priority: 7
+#   text: "/ServerInfo/Guidebook/CMU14/Rules/Gamemodes/AU14GamemodeRulesForceOnForce.xml"
+#
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesDistressSignal
+#   name: cmu-guide-entry-rules-distress-signal
+#   priority: 8
+#   text: "/ServerInfo/Guidebook/CMU14/Rules/Gamemodes/AU14GamemodeRulesDistressSignal.xml"
+               #
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesColonyFall
+#   name: cmu-guide-entry-rules-colony-fall
+#   priority: 9
+#   text: "/ServerInfo/Guidebook/CMU14/Rules/Gamemodes/AU14GamemodeRulesColonyFall.xml"
+#
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesPrometheus
+#   name: cmu-guide-entry-rules-prometheus
+#   priority: 10
+#   text: "/ServerInfo/Guidebook/CMU14/Rules/Gamemodes/AU14GamemodeRulesPrometheus.xml"

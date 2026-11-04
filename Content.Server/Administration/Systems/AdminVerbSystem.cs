@@ -2,27 +2,29 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.UI;
-using Content.Server.Disposal.Tube;
+using Content.Server.Afk;
 using Content.Server.EUI;
 using Content.Server.Ghost.Roles;
 using Content.Server.Mind;
-using Content.Server.Mind.Commands;
 using Content.Server.Prayer;
 using Content.Server.Silicons.Laws;
 using Content.Server.Station.Systems;
-using Content.Server._RMC14.Mentor;
 using Content.Shared._RMC14.Admin;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Administration;
+using Content.Shared.Administration.Systems;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Configurable;
 using Content.Shared.Database;
+using Content.Shared.Disposal.Tube;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
+using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Popups;
@@ -38,7 +40,6 @@ using Robust.Shared.Console;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Toolshed;
 using Robust.Shared.Utility;
@@ -53,10 +54,10 @@ namespace Content.Server.Administration.Systems
     {
         [Dependency] private IConGroupController _groupController = default!;
         [Dependency] private IConsoleHost _console = default!;
+        [Dependency] private IAdminLogManager _adminLogs = default!;
         [Dependency] private IAdminManager _adminManager = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private SharedMapSystem _map = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private AdminSystem _adminSystem = default!;
         [Dependency] private DisposalTubeSystem _disposalTubes = default!;
         [Dependency] private EuiManager _euiManager = default!;
@@ -73,7 +74,7 @@ namespace Content.Server.Administration.Systems
         [Dependency] private AdminFrozenSystem _freeze = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private SiliconLawSystem _siliconLawSystem = default!;
-        [Dependency] private MentorManager _mentorManager = default!;
+        [Dependency] private AfkConfirmSystem _afkConfirm = default!;
 
         // RMC14
         [Dependency] private DialogSystem _dialog = default!;
@@ -84,7 +85,10 @@ namespace Content.Server.Administration.Systems
         {
             SubscribeLocalEvent<GetVerbsEvent<Verb>>(GetVerbs);
             SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
-            SubscribeLocalEvent<SolutionContainerManagerComponent, SolutionContainerChangedEvent>(OnSolutionChanged);
+
+            // TODO: This is genuinely terrible, solutions are already networked and we shouldn't need to update the BUI like this.
+            SubscribeLocalEvent<SolutionComponent, SolutionChangedEvent>((x, ref _) => OnSolutionChanged(x.Owner));
+            SubscribeLocalEvent<SolutionManagerComponent, SolutionChangedEvent>((x, ref _) => OnSolutionChanged(x.Owner));
         }
 
         private void GetVerbs(GetVerbsEvent<Verb> ev)
@@ -96,6 +100,7 @@ namespace Content.Server.Administration.Systems
             AddAntagVerbs(ev);
         }
 
+        // Mix of Mentor & Admin verbs
         private void AddAdminVerbs(GetVerbsEvent<Verb> args)
         {
             if (!TryComp(args.User, out ActorComponent? actor))
@@ -103,13 +108,15 @@ namespace Content.Server.Administration.Systems
 
             var player = actor.PlayerSession;
 
-            if (_adminManager.IsAdmin(player))
+            // Mentors are included by _adminManager.IsAdmin() (AdminFlags.MentorHelp)
+            // They shouldn't have AdminFlags.Admin though
+            if (_adminManager.HasAdminFlag(player, AdminFlags.Admin))
             {
                 Verb mark = new();
                 mark.Text = Loc.GetString("toolshed-verb-mark");
                 mark.Message = Loc.GetString("toolshed-verb-mark-description");
                 mark.Category = VerbCategory.Admin;
-                mark.Act = () => _toolshed.InvokeCommand(player, "=> $marked", new List<EntityUid> {args.Target}, out _);
+                mark.Act = () => _toolshed.InvokeCommand(player, "=> $marked", new List<EntityUid> { args.Target }, out _);
                 mark.Impact = LogImpact.Low;
                 args.Verbs.Add(mark);
 
@@ -125,77 +132,60 @@ namespace Content.Server.Administration.Systems
                     verb.Impact = LogImpact.Low;
                     args.Verbs.Add(verb);
 
-                    // Subtle Messages
-                    Verb prayerVerb = new();
-                    prayerVerb.Text = Loc.GetString("prayer-verbs-subtle-message");
-                    prayerVerb.Category = VerbCategory.Admin;
-                    prayerVerb.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/pray.svg.png"));
-                    prayerVerb.Act = () =>
-                    {
-                        _quickDialog.OpenDialog(player, "Subtle Message", "Message", "Popup Message", (LongString message, LongString popupMessage) => // RMC - string -> LongString for increased subtle message length.
-                        {
-                            _prayerSystem.SendSubtleMessage(targetActor.PlayerSession, player, message, popupMessage == "" ? Loc.GetString("prayer-popup-subtle-default") : popupMessage);
-                        });
-                    };
-                    prayerVerb.Impact = LogImpact.Low;
-                    args.Verbs.Add(prayerVerb);
-
                     // Spawn - Like respawn but on the spot.
-                    // Mentors are excluded even if their admin data otherwise counts as IsAdmin (e.g. via
-                    // the MentorHelp flag alone) - spawning players is not part of what mentors should do.
-                    if (!_mentorManager.IsMentor(player.UserId))
+                    args.Verbs.Add(new Verb()
                     {
-                        args.Verbs.Add(new Verb()
+                        Text = Loc.GetString("admin-player-actions-spawn"),
+                        Message = Loc.GetString("admin-player-actions-spawn-message"),
+                        Category = VerbCategory.Admin,
+                        Act = () =>
                         {
-                            Text = Loc.GetString("admin-player-actions-spawn"),
-                            Category = VerbCategory.Admin,
-                            Act = () =>
+                            if (!_transformSystem.TryGetMapOrGridCoordinates(args.Target, out var coords))
                             {
-                                if (!_transformSystem.TryGetMapOrGridCoordinates(args.Target, out var coords))
-                                {
-                                    _popup.PopupEntity(Loc.GetString("admin-player-spawn-failed"), args.User, args.User);
-                                    return;
-                                }
+                                _popup.PopupEntity(Loc.GetString("admin-player-spawn-failed"), args.User, args.User);
+                                return;
+                            }
 
-                                var stationUid = _stations.GetOwningStation(args.Target);
+                            var stationUid = _stations.GetOwningStation(args.Target);
 
-                                var profile = _gameTicker.GetPlayerProfile(targetActor.PlayerSession);
-                                var mobUid = _spawning.SpawnPlayerMob(coords.Value, null, profile, stationUid);
+                            var profile = _gameTicker.GetPlayerProfile(targetActor.PlayerSession);
+                            var mobUid = _spawning.SpawnPlayerMob(coords.Value, null, profile, stationUid);
 
-                                if (_mindSystem.TryGetMind(args.Target, out var mindId, out var mindComp))
-                                    _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
+                            if (_mindSystem.TryGetMind(args.Target, out var mindId, out var mindComp))
+                                _mindSystem.TransferTo(mindId, mobUid, true, mind: mindComp);
 
-                            },
-                            ConfirmationPopup = true,
-                            Impact = LogImpact.High,
-                        });
+                        },
+                        ConfirmationPopup = true,
+                        Impact = LogImpact.High,
+                    });
 
-                        // RMC14
-                        args.Verbs.Add(new Verb
+                    // RMC14
+                    args.Verbs.Add(new Verb
+                    {
+                        Text = Loc.GetString("rmc-admin-player-actions-spawn-here-as-job"),
+                        Category = VerbCategory.Admin,
+                        Act = () =>
                         {
-                            Text = Loc.GetString("rmc-admin-player-actions-spawn-here-as-job"),
-                            Category = VerbCategory.Admin,
-                            Act = () =>
+                            var jobs = new List<DialogOption>();
+                            foreach (var job in ProtoMan.EnumerateCM<JobPrototype>())
                             {
-                                var jobs = new List<DialogOption>();
-                                foreach (var job in _prototypeManager.EnumerateCM<JobPrototype>())
-                                {
-                                    var ev = new SpawnAsJobDialogEvent(GetNetEntity(args.User), GetNetEntity(args.Target), job.ID);
-                                    var roleName = job.SpawnMenuRoleName is { } raw
-                                        ? (Loc.TryGetString(raw, out var loc) ? loc : raw)
-                                        : job.LocalizedName;
-                                    jobs.Add(new DialogOption(roleName, ev));
-                                }
+                                var ev = new SpawnAsJobDialogEvent(GetNetEntity(args.User), GetNetEntity(args.Target), job.ID);
+                                var roleName = job.SpawnMenuRoleName is { } raw
+                                    ? (Loc.TryGetString(raw, out var loc) ? loc : raw)
+                                    : job.LocalizedName;
+                                jobs.Add(new DialogOption(roleName, ev));
+                            }
 
-                                jobs.Sort((a, b) => string.Compare(a.Text, b.Text, StringComparison.Ordinal));
-                                _dialog.OpenOptions(args.User, "Choose a job", jobs);
-                            },
-                            ConfirmationPopup = true,
-                            Impact = LogImpact.High,
-                        });
-                    }
+                            jobs = jobs.OrderBy(option => option.Text, StringComparer.Ordinal)
+                                .ThenBy(option => ((SpawnAsJobDialogEvent) option.Event!).JobId.ToString(), StringComparer.Ordinal)
+                                .ToList();
+                            _dialog.OpenOptions(args.User, "Choose a job", jobs);
+                        },
+                        ConfirmationPopup = true,
+                        Impact = LogImpact.High,
+                    });
 
-                    if (TryComp(args.Target, out HumanoidAppearanceComponent? appearance))
+                    if (TryComp(args.Target, out HumanoidProfileComponent? appearance))
                     {
                         args.Verbs.Add(new Verb
                         {
@@ -215,6 +205,7 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb()
                     {
                         Text = Loc.GetString("admin-player-actions-clone"),
+                        Message = Loc.GetString("admin-player-actions-clone-message"),
                         Category = VerbCategory.Admin,
                         Act = () =>
                         {
@@ -241,6 +232,14 @@ namespace Content.Server.Administration.Systems
                         Act = () => _console.ExecuteCommand(player, $"playerpanel \"{targetActor.PlayerSession.UserId}\""),
                         Impact = LogImpact.Low
                     });
+
+                    args.Verbs.Add(new Verb
+                    {
+                        Text = Loc.GetString("admin-player-actions-check-afk"),
+                        Category = VerbCategory.Admin,
+                        Act = () => _afkConfirm.TryStartConfirmation(targetActor.PlayerSession, requireAttached: true),
+                        Impact = LogImpact.Low
+                    });
                 }
 
                 if (_mindSystem.TryGetMind(args.Target, out var mindId, out var mindComp) && mindComp.UserId != null)
@@ -265,6 +264,7 @@ namespace Content.Server.Administration.Systems
                     args.Verbs.Add(new Verb
                     {
                         Text = Loc.GetString("admin-player-actions-respawn"),
+                        Message = Loc.GetString("admin-player-actions-respawn-message"),
                         Category = VerbCategory.Admin,
                         Act = () =>
                         {
@@ -284,6 +284,31 @@ namespace Content.Server.Administration.Systems
                     });
                 }
 
+                // Player Admin Logs. this is distinct from entity logs above as it will get the logs of the _player_
+                // that last owned the mind of the entity you are right-clicking on. words.
+                // CMU14 View Logs Begin: needs the Logs flag; falls back to the attached session without mind history
+                // if (_mindSystem.TryGetLastMindOwner(args.Target, out var lastOwner))
+                Guid? lastOwner = null;
+                if (_mindSystem.TryGetLastMindOwner(args.Target, out var lastMindOwner))
+                    lastOwner = lastMindOwner.Value.UserId;
+                else if (_playerManager.TryGetSessionByEntity(args.Target, out var targetSession))
+                    lastOwner = targetSession.UserId.UserId;
+
+                if (lastOwner != null && _adminManager.HasAdminFlag(player, AdminFlags.Logs))
+                // CMU14 End
+                {
+                    args.Verbs.Add(new Verb()
+                    {
+                        Priority = -3,
+                        Text = Loc.GetString("admin-verbs-admin-logs-player"),
+                        Category = VerbCategory.Admin,
+                        Act = () =>
+                        {
+                            _adminLogs.OpenEui(player, targetPlayer: lastOwner);
+                        },
+                    });
+                }
+
                 // Freeze
                 var frozen = TryComp<AdminFrozenComponent>(args.Target, out var frozenComp);
                 var frozenAndMuted = frozenComp?.Muted ?? false;
@@ -295,7 +320,7 @@ namespace Content.Server.Administration.Systems
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
                         Text = Loc.GetString("admin-verbs-freeze"),
                         Category = VerbCategory.Admin,
-                        Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
+                        Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
                         Act = () =>
                         {
                             EnsureComp<AdminFrozenComponent>(args.Target);
@@ -312,7 +337,7 @@ namespace Content.Server.Administration.Systems
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
                         Text = Loc.GetString("admin-verbs-freeze-and-mute"),
                         Category = VerbCategory.Admin,
-                        Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
+                        Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
                         Act = () =>
                         {
                             _freeze.FreezeAndMute(args.Target);
@@ -328,7 +353,7 @@ namespace Content.Server.Administration.Systems
                         Priority = -1, // This is just so it doesn't change position in the menu between freeze/unfreeze.
                         Text = Loc.GetString("admin-verbs-unfreeze"),
                         Category = VerbCategory.Admin,
-                        Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
+                        Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/snow.svg.192dpi.png")),
                         Act = () =>
                         {
                             RemComp<AdminFrozenComponent>(args.Target);
@@ -336,7 +361,6 @@ namespace Content.Server.Administration.Systems
                         Impact = LogImpact.Medium,
                     });
                 }
-
 
                 // Admin Logs
                 if (_adminManager.HasAdminFlag(player, AdminFlags.Logs))
@@ -350,7 +374,7 @@ namespace Content.Server.Administration.Systems
                         {
                             var ui = new AdminLogsEui();
                             _euiManager.OpenEui(ui, player);
-                            ui.SetLogFilter(search:args.Target.Id.ToString());
+                            ui.SetLogFilter(search: args.Target.Id.ToString());
                         },
                         Impact = LogImpact.Low
                     };
@@ -362,12 +386,9 @@ namespace Content.Server.Administration.Systems
                 {
                     Text = Loc.GetString("admin-verbs-teleport-to"),
                     Category = VerbCategory.Admin,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/open.svg.192dpi.png")),
-                    Act = () =>
-                    {
-                        _console.ExecuteCommand(player, $"tpto {GetNetEntity(args.Target)}");
-                    },
-                    Impact = LogImpact.Low
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/open.svg.192dpi.png")),
+                    Act = () => _console.ExecuteCommand(player, $"tpto {GetNetEntity(args.Target)}"),
+                    Impact = LogImpact.Low,
                 });
 
                 // TeleportHere
@@ -375,7 +396,7 @@ namespace Content.Server.Administration.Systems
                 {
                     Text = Loc.GetString("admin-verbs-teleport-here"),
                     Category = VerbCategory.Admin,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/close.svg.192dpi.png")),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/close.svg.192dpi.png")),
                     Act = () =>
                     {
                         if (HasComp<MapGridComponent>(args.Target))
@@ -388,10 +409,8 @@ namespace Content.Server.Administration.Systems
                                     var offset = targetPhysics.LocalCenter;
                                     var rotation = _transformSystem.GetWorldRotation(args.Target);
                                     offset = rotation.RotateVec(offset);
-
                                     mapPos = mapPos.Offset(-offset);
                                 }
-
                                 _console.ExecuteCommand(player, $"tpgrid {GetNetEntity(args.Target)} {mapPos.X} {mapPos.Y} {mapPos.MapId}");
                             }
                         }
@@ -400,7 +419,7 @@ namespace Content.Server.Administration.Systems
                             _console.ExecuteCommand(player, $"tpto {args.User} {args.Target}");
                         }
                     },
-                    Impact = LogImpact.Low
+                    Impact = LogImpact.Low,
                 });
 
                 // This logic is needed to be able to modify the AI's laws through its core and eye.
@@ -423,7 +442,6 @@ namespace Content.Server.Administration.Systems
                          && TryComp(relay.Source, out lawBoundComponent))
                 {
                     target = relay.Source;
-
                 }
 
                 if (lawBoundComponent != null && target != null && _adminManager.HasAdminFlag(player, AdminFlags.Moderator))
@@ -445,6 +463,48 @@ namespace Content.Server.Administration.Systems
                         Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/Interface/Actions/actions_borg.rsi"), "state-laws"),
                     });
                 }
+
+                // open camera
+                args.Verbs.Add(new Verb()
+                {
+                    Priority = 10,
+                    Text = Loc.GetString("admin-verbs-camera"),
+                    Message = Loc.GetString("admin-verbs-camera-description"),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/vv.svg.192dpi.png")),
+                    Category = VerbCategory.Admin,
+                    Act = () =>
+                    {
+                        var ui = new AdminCameraEui(args.Target);
+                        _euiManager.OpenEui(ui, player);
+                    },
+                    Impact = LogImpact.Low
+                });
+            }
+
+            // Mentor-only verbs (admins are also mentors)
+            if (_adminManager.HasAdminFlag(player, AdminFlags.MentorHelp))
+            {
+                // Subtle Messages / Prayer (only vs players)
+                if (TryComp(args.Target, out ActorComponent? targetActor))
+                {
+                    args.Verbs.Add(new Verb
+                    {
+                        Text = Loc.GetString("prayer-verbs-subtle-message"),
+                        Category = VerbCategory.Admin,
+                        Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/pray.svg.png")),
+                        Act = () =>
+                        {
+                            _quickDialog.OpenDialog(player, "Subtle Message", "Message", "Popup Message",
+                                (LongString message, LongString popupMessage) => // RMC - string -> LongString for increased subtle message length.
+
+                                {
+                                    _prayerSystem.SendSubtleMessage(targetActor.PlayerSession, player, message,
+                                        popupMessage == "" ? Loc.GetString("prayer-popup-subtle-default") : popupMessage);
+                                });
+                        },
+                        Impact = LogImpact.Low,
+                    });
+                }
             }
         }
 
@@ -462,7 +522,7 @@ namespace Content.Server.Administration.Systems
                 {
                     Text = Loc.GetString("delete-verb-get-data-text"),
                     Category = VerbCategory.Debug,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/delete_transparent.svg.192dpi.png")),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/delete_transparent.svg.192dpi.png")),
                     Act = () => Del(args.Target),
                     Impact = LogImpact.Medium,
                     ConfirmationPopup = true
@@ -477,7 +537,7 @@ namespace Content.Server.Administration.Systems
                 {
                     Text = Loc.GetString("rejuvenate-verb-get-data-text"),
                     Category = VerbCategory.Debug,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png")),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png")),
                     Act = () => _rejuvenate.PerformRejuvenate(args.Target),
                     Impact = LogImpact.Medium
                 };
@@ -512,8 +572,8 @@ namespace Content.Server.Administration.Systems
                 {
                     Text = Loc.GetString("make-sentient-verb-get-data-text"),
                     Category = VerbCategory.Debug,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/sentient.svg.192dpi.png")),
-                    Act = () => MakeSentientCommand.MakeSentient(args.Target, EntityManager),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/sentient.svg.192dpi.png")),
+                    Act = () => _mindSystem.MakeSentient(args.Target),
                     Impact = LogImpact.Medium
                 };
                 args.Verbs.Add(verb);
@@ -541,7 +601,7 @@ namespace Content.Server.Administration.Systems
                     {
                         Text = Loc.GetString("set-outfit-verb-get-data-text"),
                         Category = VerbCategory.Debug,
-                        Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/outfit.svg.192dpi.png")),
+                        Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/outfit.svg.192dpi.png")),
                         Act = () => _euiManager.OpenEui(new SetOutfitEui(GetNetEntity(args.Target)), player),
                         Impact = LogImpact.Medium
                     };
@@ -556,7 +616,7 @@ namespace Content.Server.Administration.Systems
                 {
                     Text = Loc.GetString("in-range-unoccluded-verb-get-data-text"),
                     Category = VerbCategory.Debug,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
                     Act = () =>
                     {
 
@@ -578,8 +638,8 @@ namespace Content.Server.Administration.Systems
                 {
                     Text = Loc.GetString("tube-direction-verb-get-data-text"),
                     Category = VerbCategory.Debug,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
-                    Act = () => _disposalTubes.PopupDirections(args.Target, tube, args.User)
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/information.svg.192dpi.png")),
+                    Act = () => _disposalTubes.PopupDirections((args.Target, tube), args.User)
                 };
                 args.Verbs.Add(verb);
             }
@@ -604,7 +664,7 @@ namespace Content.Server.Administration.Systems
                 Verb verb = new()
                 {
                     Text = Loc.GetString("configure-verb-get-data-text"),
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),
                     Category = VerbCategory.Debug,
                     Act = () => _uiSystem.OpenUi(args.Target, ConfigurationUiKey.Key, actor.PlayerSession)
                 };
@@ -613,13 +673,13 @@ namespace Content.Server.Administration.Systems
 
             // Add verb to open Solution Editor
             if (_groupController.CanCommand(player, "addreagent") &&
-                HasComp<SolutionContainerManagerComponent>(args.Target))
+                (HasComp<SolutionManagerComponent>(args.Target) || HasComp<SolutionComponent>(args.Target)))
             {
                 Verb verb = new()
                 {
                     Text = Loc.GetString("edit-solutions-verb-get-data-text"),
                     Category = VerbCategory.Debug,
-                    Icon = new SpriteSpecifier.Texture(new ("/Textures/Interface/VerbIcons/spill.svg.192dpi.png")),
+                    Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/spill.svg.192dpi.png")),
                     Act = () => OpenEditSolutionsEui(player, args.Target),
                     Impact = LogImpact.Medium // maybe high depending on WHAT reagents they add...
                 };
@@ -628,13 +688,13 @@ namespace Content.Server.Administration.Systems
         }
 
         #region SolutionsEui
-        private void OnSolutionChanged(Entity<SolutionContainerManagerComponent> entity, ref SolutionContainerChangedEvent args)
+        private void OnSolutionChanged(EntityUid uid)
         {
             foreach (var list in _openSolutionUis.Values)
             {
                 foreach (var eui in list)
                 {
-                    if (eui.Target == entity.Owner)
+                    if (eui.Target == uid)
                         eui.StateDirty();
                 }
             }
@@ -649,7 +709,8 @@ namespace Content.Server.Administration.Systems
             _euiManager.OpenEui(eui, session);
             eui.StateDirty();
 
-            if (!_openSolutionUis.ContainsKey(session)) {
+            if (!_openSolutionUis.ContainsKey(session))
+            {
                 _openSolutionUis[session] = new List<EditSolutionsEui>();
             }
 
@@ -660,7 +721,7 @@ namespace Content.Server.Administration.Systems
         {
             _openSolutionUis[session].Remove(eui);
             if (_openSolutionUis[session].Count == 0)
-              _openSolutionUis.Remove(session);
+                _openSolutionUis.Remove(session);
         }
 
         private void Reset(RoundRestartCleanupEvent ev)

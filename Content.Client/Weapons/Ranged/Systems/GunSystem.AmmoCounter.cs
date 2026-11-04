@@ -14,12 +14,17 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem
 {
-    private void OnAmmoCounterCollect(EntityUid uid, AmmoCounterComponent component, ItemStatusCollectMessage args)
+    private void OnAmmoCounterCollect(Entity<AmmoCounterComponent> ent, ref ItemStatusCollectMessage args)
     {
-        RefreshControl(uid, component);
+        // cmu edit start: without an ammo counter you can't see the rounds left; energy guns keep their charge display
+        if (!CMUShowsAmmoCount(ent) && !HasComp<Content.Shared.Weapons.Ranged.Components.BatteryAmmoProviderComponent>(ent))
+            return;
+        // cmu edit end
 
-        if (component.Control != null)
-            args.Controls.Add(component.Control);
+        RefreshControl(ent);
+
+        if (ent.Comp.Control != null)
+            args.Controls.Add(ent.Comp.Control);
     }
 
     /// <summary>
@@ -27,36 +32,33 @@ public sealed partial class GunSystem
     /// </summary>
     /// <param name="uid"></param>
     /// <param name="component"></param>
-    private void RefreshControl(EntityUid uid, AmmoCounterComponent? component = null)
+    private void RefreshControl(Entity<AmmoCounterComponent> ent)
     {
-        if (!Resolve(uid, ref component, false))
-            return;
-
-        component.Control?.Orphan();
-        component.Control = null;
+        ent.Comp.Control?.Release();
+        ent.Comp.Control = null;
 
         var ev = new AmmoCounterControlEvent();
-        RaiseLocalEvent(uid, ev, false);
+        RaiseLocalEvent(ent, ev, false);
 
         // Fallback to default if none specified
         ev.Control ??= new DefaultStatusControl();
 
-        component.Control = ev.Control;
-        UpdateAmmoCount(uid, component);
+        ent.Comp.Control = ev.Control;
+        UpdateAmmoCount(ent);
     }
 
-    private void UpdateAmmoCount(EntityUid uid, AmmoCounterComponent component, int artificialIncrease = 0)
+    private void UpdateAmmoCount(Entity<AmmoCounterComponent> ent, int artificialIncrease = 0)
     {
-        if (component.Control == null)
+        if (ent.Comp.Control == null)
             return;
 
         var ev = new UpdateAmmoCounterEvent()
         {
-            Control = component.Control,
+            Control = ent.Comp.Control,
             ArtificialIncrease = artificialIncrease
         };
 
-        RaiseLocalEvent(uid, ev, false);
+        RaiseLocalEvent(ent, ev, false);
     }
 
     public override void UpdateAmmoCount(EntityUid uid, bool prediction = true, int artificialIncrease = 0)
@@ -69,7 +71,7 @@ public sealed partial class GunSystem
             return;
         }
 
-        UpdateAmmoCount(uid, clientComp, artificialIncrease);
+        UpdateAmmoCount((uid, clientComp), artificialIncrease);
     }
 
     /// <summary>
@@ -112,7 +114,12 @@ public sealed partial class GunSystem
             _bulletRender.Count = count;
             _bulletRender.Capacity = capacity;
 
-            _bulletRender.Type = capacity > 50 ? BulletRender.BulletType.Tiny : BulletRender.BulletType.Normal;
+            _bulletRender.Type = capacity switch
+            {
+                > 50 => BulletRender.BulletType.Tiny,
+                > 15 => BulletRender.BulletType.Normal,
+                _ => BulletRender.BulletType.Large
+            };
         }
     }
 
@@ -139,7 +146,7 @@ public sealed partial class GunSystem
                     }),
                     (_ammoCount = new Label
                     {
-                        StyleClasses = { StyleNano.StyleClassItemStatus },
+                        StyleClasses = { StyleClass.ItemStatus },
                         HorizontalAlignment = HAlignment.Right,
                         VerticalAlignment = VAlignment.Bottom
                     }),
@@ -155,6 +162,30 @@ public sealed partial class GunSystem
 
             _bullets.Capacity = max;
             _bullets.Count = count;
+        }
+    }
+
+    public sealed class CustomIconStatusControl : Control
+    {
+        private readonly CustomBulletRenderer _customBulletRenderer;
+
+        public CustomIconStatusControl(Texture loadedSprite, Texture spentTexture, int numberOfRows)
+        {
+            MinHeight = 15;
+            HorizontalExpand = true;
+            VerticalAlignment = VAlignment.Center;
+
+            AddChild(_customBulletRenderer = new CustomBulletRenderer(loadedSprite, spentTexture, numberOfRows)
+            {
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Bottom,
+            });
+        }
+
+        public void Update(int count, int capacity)
+        {
+            _customBulletRenderer.Capacity = capacity;
+            _customBulletRenderer.Count = count;
         }
     }
 
@@ -191,7 +222,7 @@ public sealed partial class GunSystem
                             (_noMagazineLabel = new Label
                             {
                                 Text = "No Magazine!",
-                                StyleClasses = {StyleNano.StyleClassItemStatus}
+                                StyleClasses = {StyleClass.ItemStatus}
                             })
                         }
                     },
@@ -204,7 +235,7 @@ public sealed partial class GunSystem
                         {
                             (_ammoCount = new Label
                             {
-                                StyleClasses = {StyleNano.StyleClassItemStatus},
+                                StyleClasses = {StyleClass.ItemStatus},
                                 HorizontalAlignment = HAlignment.Right,
                             }),
                             (_chamberedBullet = new TextureRect
@@ -238,7 +269,12 @@ public sealed partial class GunSystem
             _bulletRender.Count = count;
             _bulletRender.Capacity = capacity;
 
-            _bulletRender.Type = capacity > 50 ? BulletRender.BulletType.Tiny : BulletRender.BulletType.Normal;
+            _bulletRender.Type = capacity switch
+            {
+                > 50 => BulletRender.BulletType.Tiny,
+                > 15 => BulletRender.BulletType.Normal,
+                _ => BulletRender.BulletType.Large
+            };
 
             _ammoCount.Text = $"x{count:00}";
         }
@@ -249,7 +285,8 @@ public sealed partial class GunSystem
         }
     }
 
-    private sealed class RevolverStatusControl : Control
+    // CMU14: retain chamber controls and update only changed contents or the active index.
+    private sealed partial class RevolverStatusControl : Control
     {
         private readonly BoxContainer _bulletsList;
 
@@ -269,88 +306,7 @@ public sealed partial class GunSystem
 
         public void Update(int currentIndex, bool?[] bullets)
         {
-            _bulletsList.RemoveAllChildren();
-            var capacity = bullets.Length;
-
-            string texturePath;
-            if (capacity <= 20)
-            {
-                texturePath = "/Textures/Interface/ItemStatus/Bullets/normal.png";
-            }
-            else if (capacity <= 30)
-            {
-                texturePath = "/Textures/Interface/ItemStatus/Bullets/small.png";
-            }
-            else
-            {
-                texturePath = "/Textures/Interface/ItemStatus/Bullets/tiny.png";
-            }
-
-            var texture = StaticIoC.ResC.GetTexture(texturePath);
-            var spentTexture = StaticIoC.ResC.GetTexture("/Textures/Interface/ItemStatus/Bullets/empty.png");
-
-            FillBulletRow(currentIndex, bullets, _bulletsList, texture, spentTexture);
-        }
-
-        private void FillBulletRow(int currentIndex, bool?[] bullets, Control container, Texture texture, Texture emptyTexture)
-        {
-            var capacity = bullets.Length;
-            var colorA = Color.FromHex("#b68f0e");
-            var colorB = Color.FromHex("#d7df60");
-            var colorSpentA = Color.FromHex("#b50e25");
-            var colorSpentB = Color.FromHex("#d3745f");
-            var colorGoneA = Color.FromHex("#000000");
-            var colorGoneB = Color.FromHex("#222222");
-
-            var altColor = false;
-            var scale = 1.3f;
-
-            for (var i = 0; i < capacity; i++)
-            {
-                var bulletFree = bullets[i];
-                // Add a outline
-                var box = new Control()
-                {
-                    MinSize = texture.Size * scale,
-                };
-                if (i == currentIndex)
-                {
-                    box.AddChild(new TextureRect
-                    {
-                        Texture = texture,
-                        TextureScale = new Vector2(scale, scale),
-                        ModulateSelfOverride = Color.LimeGreen,
-                    });
-                }
-                Color color;
-                Texture bulletTexture = texture;
-
-                if (bulletFree.HasValue)
-                {
-                    if (bulletFree.Value)
-                    {
-                        color = altColor ? colorA : colorB;
-                    }
-                    else
-                    {
-                        color = altColor ? colorSpentA : colorSpentB;
-                        bulletTexture = emptyTexture;
-                    }
-                }
-                else
-                {
-                    color = altColor ? colorGoneA : colorGoneB;
-                }
-
-                box.AddChild(new TextureRect
-                {
-                    Stretch = TextureRect.StretchMode.KeepCentered,
-                    Texture = bulletTexture,
-                    ModulateSelfOverride = color,
-                });
-                altColor ^= true;
-                container.AddChild(box);
-            }
+            CMUUpdateChambers(currentIndex, bullets);
         }
     }
 

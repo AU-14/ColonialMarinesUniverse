@@ -169,7 +169,6 @@
     {
       "name": "photo"
     },
-
     {
       "name": "wy_letterhead"
     },
@@ -249,7 +248,7 @@
       "name": "paper_stamp-marine"
     },
     {
-      "name": "paper_stamp-provost"
+      "name": "paper_stamp-aegis"
     },
     {
       "name": "paper_stamp-provost-inspector"
@@ -267,10 +266,10 @@
       "name": "paper_stamp-tse"
     },
     {
-        "name": "paper_stamp-cca"
+      "name": "paper_stamp-cca"
     },
     {
-        "name": "paper_stamp-free-press"
+      "name": "paper_stamp-free-press"
     },
     {
       "name": "paper_stamp-sea"
@@ -391,19 +390,19 @@
       "name": "fortune"
     },
     {
-      "name": "\u002Bblue_tip"
+      "name": "+blue_tip"
     },
     {
-      "name": "\u002Bred_tip"
+      "name": "+red_tip"
     },
     {
-      "name": "\u002Bblack_tip"
+      "name": "+black_tip"
     },
     {
-      "name": "\u002Bwhite_tip"
+      "name": "+white_tip"
     },
     {
-      "name": "\u002Bgreen_tip"
+      "name": "+green_tip"
     },
     {
       "name": "pen"

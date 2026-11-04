@@ -1,7 +1,8 @@
 using System.Linq;
+using Content.Server.CMU14.Yautja;
 using Content.Server.DeviceNetwork;
 using Content.Server.DeviceNetwork.Systems;
-using Content.Server.PowerCell;
+using Content.Shared.PowerCell;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
 using Content.Shared.Medical.CrewMonitoring;
@@ -31,6 +32,9 @@ public sealed partial class CrewMonitoringConsoleSystem : EntitySystem
 
     private void OnPacketReceived(EntityUid uid, CrewMonitoringConsoleComponent component, DeviceNetworkPacketEvent args)
     {
+        if (HasComp<YautjaCrewMonitoringConsoleComponent>(uid))
+            return;
+
         var payload = args.Data;
 
         // Check command
@@ -49,6 +53,9 @@ public sealed partial class CrewMonitoringConsoleSystem : EntitySystem
 
     private void OnUIOpened(EntityUid uid, CrewMonitoringConsoleComponent component, BoundUIOpenedEvent args)
     {
+        if (HasComp<YautjaCrewMonitoringConsoleComponent>(uid))
+            return;
+
         if (!_cell.TryUseActivatableCharge(uid))
             return;
 

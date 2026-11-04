@@ -222,7 +222,8 @@ entities:
   - uid: 60
     components:
     - type: Transform
-      pos: 4.1302757,0.031710982
+      # CMU14: was at x 4.13, inside the unanchored blocker column at x 4.5 so every interaction ray hit the blocker first
+      pos: 3.85,0.031710982
       parent: 3
 - proto: VehicleSPPVanChassisArmed
   entities:

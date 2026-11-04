@@ -1,0 +1,21 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed hospital shuttles getting stuck on landing pads reserved by deleted
+    shuttles.
+  type: Fix
+- message: Fixed dragged machinery detonating tripwire traps.
+  type: Fix
+- message: Fixed ordinary dropship and gunship crashes causing premature victory while
+    Xenos are still alive.
+  type: Fix
+- message: Fixed spent casings appearing on another floor and falling onto the shooter
+    when firing across levels.
+  type: Fix
+- message: Fixed OPFOR vehicle interiors requiring GOVFOR access and using GOVFOR
+    command equipment settings.
+  type: Fix
+- message: Corrected the highest Queen title from Empress Queen to Prime Empress.
+  type: Fix
+time: '2026-09-24T00:03:13.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2007

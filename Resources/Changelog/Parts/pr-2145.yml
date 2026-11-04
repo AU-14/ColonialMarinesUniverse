@@ -1,0 +1,18 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Dropship UI now shows how much penetration an ammo has
+  type: Add
+- message: Changed Dropship UI allowing you to filter by weapon and search specific
+    items
+  type: Tweak
+- message: Insurgency gets a starting fab count of 7500
+  type: Tweak
+- message: Distress Signal gets a starting fab count of 18000
+  type: Tweak
+- message: Force on Force gets a starting fab count of 25000
+  type: Tweak
+- message: Default fab count raised to 17500 (previously 10000)
+  type: Tweak
+time: '2026-10-13T14:37:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2145

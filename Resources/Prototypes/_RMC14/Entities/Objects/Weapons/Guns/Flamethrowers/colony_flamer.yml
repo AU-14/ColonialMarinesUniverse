@@ -88,6 +88,11 @@
   - type: Tag
     tags:
     - RMCTankFlamerColony
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCBaseTankFlamer

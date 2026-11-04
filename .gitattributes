@@ -1,3 +1,4 @@
+# CMU14 file
 ###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
@@ -5,6 +6,19 @@
 *.bat text  eol=crlf
 *.cmd text  eol=crlf
 *.ps1 text  eol=crlf
+
+###############################################################################
+# Force binary assets to be treated as binary, regardless of autocrlf/text=auto
+# heuristics, so committing from a CRLF-configured client can't corrupt them.
+###############################################################################
+*.png  binary
+*.webp binary
+*.ico  binary
+*.ogg  binary
+*.wav  binary
+*.sf2  binary
+*.ttf  binary
+*.otf  binary
 
 ###############################################################################
 # Set default behavior for command prompt diff.
@@ -15,4 +29,8 @@
 # Set the merge driver for YAML map data
 # dotnet run --project ./Content.Tools "$@"
 ###############################################################################
-Resources/Maps/**.yml merge=mapping-merge-driver
+Resources/Maps/**/*.yml merge=mapping-merge-driver
+Content.CMU/Resources/Maps/**/*.yml merge=mapping-merge-driver
+
+# CMU14: Garrison model exports are binary assets.
+*.glb binary

@@ -2,6 +2,7 @@
 using Content.Shared._RMC14.Xenonids.ChargerLunge;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.Bed.Sleep; // CMU14
 using Content.Shared.Popups;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -42,6 +43,10 @@ public sealed partial class XenoChargerActionSystem : EntitySystem
     private void OnToggleCharge(Entity<XenoChargerComponent> xeno, ref XenoCursorChargingActionEvent args)
     {
         if (args.Handled)
+            return;
+
+        // CMU14: charging cannot be started or converted into a lunge while asleep.
+        if (HasComp<SleepingComponent>(xeno))
             return;
 
         if (_net.IsClient)

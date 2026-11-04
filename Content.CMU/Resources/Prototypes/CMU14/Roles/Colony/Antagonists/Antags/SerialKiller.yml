@@ -1,0 +1,90 @@
+- type: antagSpecifier
+  id: SerialKiller
+  prefRoles: [ SerialKillerRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
+  - AllSynthJobs
+  briefing:
+    text: serialkiller-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearSerialKiller
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillMeleeWeapons: 3
+  components:
+  - type: SerialKiller
+  - type: ColonyBounty
+    bounty: 2250
+    reason: Wanted for multiple homicides - suspect at large
+    recordName: Serial Killer (Unknown)
+    includePrints: true
+    includeDna: true
+    includeLanguages: true
+    capturedFaxPaper: AUPaperSerialKillerCaptured
+  mindRoles:
+  - MindRoleSerialKiller
+
+- type: entity
+  id: SerialKiller
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: SerialKillerRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:RandomAntagCount
+      proto: SerialKiller
+      range:
+        min: 1
+        max: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleSerialKiller
+  name: Serial Killer Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: SerialKillerRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+    subtype: cmu-role-subtype-serial-killer
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudmutineerleader
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: SerialKillerRole
+  name: roles-antag-serialkiller-name
+  setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
+  objective: roles-antag-serialkiller-objective
+
+- type: startingGear
+  id: AU14GearSerialKiller
+  storage:
+    back:
+    - AUPaperSerialKiller
+    - RMCLighter
+
+- type: entity
+  id: CMUActionButcherCorpse
+  name: Butcher
+  description: Carve up a human corpse you're standing next to with a knife or something sharp in hand. Take it apart limb by limb, or skin it down to nothing.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.YautjaButcherActionEvent
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Melee/Kitchen/cleaver.rsi
+      state: icon
+      map: [enum.ActionVisuals.Icon]

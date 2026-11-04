@@ -1,0 +1,50 @@
+- type: entityTable
+  id: CMUBalanceRatingWeapons
+  table: !type:AllSelector
+    children:
+    - id: WeaponLauncherM83
+    - id: RMCWeaponLauncherM5ATL
+    - id: RMCWeaponRifleSharp
+    - id: WeaponRifleM4SPRCustom
+    - id: CMM96SSniperRifle
+    - id: RMCXM43E1AntiMaterielRifle
+    - id: RMCWeaponSniperM707Vulture
+    - id: RMCWeaponShotgunMK481
+    - id: RMCWeaponFlamerSpec
+    - id: AU14WeaponXM99A
+    - id: WeaponRifleM5SPR2
+    - id: RMCWeaponFL3Flamer
+    - id: AU14WeaponShotgunSPAS12HAZOPS
+    - id: AU14WeaponFlamerM240A2HAZOPS
+    - id: AU14L64A3SniperRifle
+    - id: RMCWeaponRifleL24B
+    - id: AU14WeaponLauncherL164A3
+    - id: RMCWeaponShotgunType23
+    - id: RMCWeaponLauncherHJRA12
+    - id: RMCType88SniperRifle
+    - id: RMCWeaponFlamerSpecUPP
+
+- type: entityTable
+  id: CMUBalanceRatingXenos
+  table: !type:AllSelector
+    children:
+    - id: CMXenoDrone
+    - id: CMXenoRunner
+    - id: CMXenoSentinel
+    - id: CMXenoDefender
+    - id: CMXenoWarrior
+    - id: CMXenoSpitter
+    - id: CMXenoLurker
+    - id: CMXenoCarrier
+    - id: CMXenoReaper
+    - id: CMXenoBurrower
+    - id: CMXenoHivelord
+    - id: RMCXenoBoiler
+    - id: RMCXenoCrusher
+    - id: CMXenoPraetorian
+    - id: CMXenoRavager
+    - id: CMXenoQueen
+    - id: RMCXenoKing
+    - id: RMCXenoDespoiler
+    - id: CMXenoBull
+    - id: CMXenoWarlock

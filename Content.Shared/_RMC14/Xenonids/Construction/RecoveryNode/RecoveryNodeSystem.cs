@@ -3,6 +3,8 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -67,7 +69,7 @@ public sealed partial class RecoveryNodeSystem : EntitySystem
                 !HasComp<XenoComponent>(nearbyEntity) ||
                 !HasComp<XenoRestingComponent>(nearbyEntity) ||
                 !TryComp<DamageableComponent>(nearbyEntity, out var damageComp) ||
-                damageComp.TotalDamage <= 0 ||
+                _damageable.GetTotalDamage((nearbyEntity, damageComp)) <= 0 ||
                 !HasComp<MobStateComponent>(nearbyEntity) ||
                 _mob.IsDead(nearbyEntity))
             {

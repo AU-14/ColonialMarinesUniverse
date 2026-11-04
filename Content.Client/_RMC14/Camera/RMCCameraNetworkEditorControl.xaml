@@ -1,0 +1,62 @@
+<controls:RMCCameraNetworkEditorControl
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._RMC14.Camera"
+    xmlns:vp="clr-namespace:Content.Client.Viewport"
+    Orientation="Vertical"
+    HorizontalExpand="True"
+    VerticalExpand="True">
+    <Label Text="{Loc 'rmc-camera-editor-title'}" StyleClasses="LabelHeading" />
+    <Label Name="ErrorLabel" Access="Public" Visible="False" Modulate="#ff6666" />
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" MinWidth="260" VerticalExpand="True" Margin="0 0 8 0">
+            <Label Text="{Loc 'rmc-camera-editor-networks'}" />
+            <LineEdit Name="NetworkNameEdit" Access="Public"
+                      PlaceHolder="{Loc 'rmc-camera-editor-network-name'}" />
+            <BoxContainer Orientation="Horizontal">
+                <Button Name="CreateNetworkButton" Access="Public"
+                        Text="{Loc 'rmc-camera-editor-create'}" />
+                <Button Name="RenameNetworkButton" Access="Public"
+                        Text="{Loc 'rmc-camera-editor-rename'}" />
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal">
+                <Button Name="HideNetworkButton" Access="Public"
+                        Text="{Loc 'rmc-camera-editor-hide'}" />
+                <Button Name="DeleteNetworkButton" Access="Public"
+                        Text="{Loc 'rmc-camera-editor-delete'}" />
+                <Button Name="ConfirmDeleteNetworkButton" Access="Public"
+                        Text="{Loc 'rmc-camera-editor-delete-confirm'}" Visible="False" />
+            </BoxContainer>
+            <ScrollContainer HScrollEnabled="False" VScrollEnabled="True"
+                             HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Name="NetworkRows" Access="Public" Orientation="Vertical"
+                              HorizontalExpand="True" />
+            </ScrollContainer>
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" MinWidth="300" VerticalExpand="True" Margin="0 0 8 0">
+            <Label Text="{Loc 'rmc-camera-editor-cameras'}" />
+            <LineEdit Name="CameraSearchEdit" Access="Public"
+                      PlaceHolder="{Loc 'rmc-camera-editor-camera-search'}" />
+            <ScrollContainer HScrollEnabled="False" VScrollEnabled="True"
+                             HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Name="CameraRows" Access="Public" Orientation="Vertical"
+                              HorizontalExpand="True" />
+            </ScrollContainer>
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" MinWidth="360" VerticalExpand="True" HorizontalExpand="True">
+            <Label Text="{Loc 'rmc-camera-editor-camera-name'}" />
+            <LineEdit Name="CameraNameEdit" Access="Public" />
+            <Label Text="{Loc 'rmc-camera-editor-memberships'}" />
+            <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" MinHeight="120">
+                <BoxContainer Name="MembershipRows" Access="Public" Orientation="Vertical"
+                              HorizontalExpand="True" />
+            </ScrollContainer>
+            <Button Name="SaveCameraButton" Access="Public"
+                    Text="{Loc 'rmc-camera-editor-save-camera'}" />
+            <Label Name="PreviewLabel" Text="{Loc 'rmc-camera-editor-preview'}" />
+            <Control HorizontalExpand="True" VerticalExpand="True" Margin="0 4 0 0">
+                <vp:ScalingViewport Name="CameraPreview" Access="Public" MouseFilter="Ignore"
+                                    MinSize="360 260" HorizontalExpand="True" VerticalExpand="True" />
+            </Control>
+        </BoxContainer>
+    </BoxContainer>
+</controls:RMCCameraNetworkEditorControl>

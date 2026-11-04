@@ -1,0 +1,95 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuSiteDirector
+  name: WY site director ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuSiteDirector
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuChiefExecutive
+  name: WY chief executive ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuChiefExecutive
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuDivisionManager
+  name: WY division manager ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuDivisionManager
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuLegalSupervisor
+  name: WY legal supervisor ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuLegalSupervisor
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuLegalSpecialist
+  name: WY legal specialist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuLegalSpecialist
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuGoon
+  name: WY corporate security ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuGoon
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuGoonLeader
+  name: WY corporate security lead ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuGoonLeader
+  - type: ItemIFF
+    factions:
+    - FactionWEYU
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardWeYuLawyer
+  name: WY corporate lawyer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobWeYuLawyer
+  - type: ItemIFF
+    factions:
+    - FactionWEYU

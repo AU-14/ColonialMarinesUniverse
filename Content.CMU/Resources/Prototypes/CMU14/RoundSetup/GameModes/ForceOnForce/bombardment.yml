@@ -1,0 +1,22 @@
+- type: forceOnForceBombardment
+  id: CMUFoFBombardment
+  cooldown: 300
+  warning: 8
+  interval: 0.75
+  passes: 4
+  effectsPerInterval: 8
+  minimumDistance: 6
+  maximumDistance: 14
+
+- type: entity
+  id: CMUFoFBombardmentImpact
+  name: orbital bombardment shockwave
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: ForceOnForceBombardmentVisual
+  - type: PointLight
+    color: "#FFD8A0"
+    radius: 5
+    energy: 2
+  - type: TimedDespawn
+    lifetime: 10

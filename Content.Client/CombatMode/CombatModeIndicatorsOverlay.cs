@@ -2,7 +2,8 @@ using System.Numerics;
 using Content.Client._RMC14.Emplacements;
 using Content.Client.Hands.Systems;
 using Content.Client.Resources;
-using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.CombatMode;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Wieldable.Components;
@@ -89,6 +90,18 @@ public sealed class CombatModeIndicatorsOverlay : Overlay
         if (mousePosMap.MapId != args.MapId)
             return;
 
+        // The linked pilot HUD supplies its own direct-fire reticle. Do not
+        // draw the generic hand/melee sight over it.
+        if (_player.LocalEntity is { } pilot &&
+            _entMan.TryGetComponent(pilot, out GunshipPilotHudComponent? pilotHud) &&
+            pilotHud.Dropship != null &&
+            pilotHud.HasDirectFireWeapon &&
+            pilotHud.ViewOffset == 0 &&
+            !pilotHud.RearView)
+        {
+            return;
+        }
+
         var handEntity = _hands.GetActiveHandEntity();
         var isHandGunItem = _entMan.HasComponent<GunComponent>(handEntity);
         var isGunBolted = true;
@@ -145,7 +158,8 @@ public sealed class CombatModeIndicatorsOverlay : Overlay
             return;
 
         var lookUp = _entMan.TryGetComponent(player, out CMUZLevelViewerComponent? viewer) && viewer.LookUp;
-        var shootDown = _entMan.TryGetComponent(player, out CMUZLevelShooterComponent? shooter) && shooter.ShootDown;
+        var shootDown = _entMan.TryGetComponent(player, out CMUZLevelShooterComponent? shooter) &&
+            (shooter.ShootDown || shooter.AimDown && HasReadyGun(crosshairEntity)); // CMU14
         var indicator = ZLevelCrosshairIndicatorHelper.Get(
             lookUp && HasReadyGun(crosshairEntity),
             shootDown);

@@ -1,0 +1,7 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Changed Burning Postman and Normal Postman damage, slope, and range
+  type: Tweak
+time: '2026-10-09T14:04:22.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2084

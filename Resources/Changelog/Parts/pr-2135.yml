@@ -1,0 +1,15 @@
+author: flex5hybrid
+category: CMU
+changes:
+- message: Speech bubbles now refresh their layout correctly when moving between UI
+    scales.
+  type: Fix
+- message: Corrected the ammunition bearer pack's entrenching-tool storage whitelist.
+  type: Fix
+- message: Reduced repeated client and server work during chat, radio, treatment and
+    gameplay events.
+  type: Tweak
+- message: Added regression coverage and performance workloads for larger populations.
+  type: Code
+time: '2026-10-10T13:32:44.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2135

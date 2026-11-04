@@ -1,6 +1,6 @@
 using System;
 using System.Numerics;
-using Content.Shared._CMU14.Blackfoot;
+using Content.Shared.CMU14.Blackfoot;
 using Content.Shared.Movement.Components;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Xenonids;
@@ -12,7 +12,13 @@ namespace Content.Shared.Vehicle;
 
 public sealed partial class GridVehicleMoverSystem : EntitySystem
 {
-    private Vector2i GetInputDirection(InputMoverComponent input)
+    private readonly record struct VehicleControlInput(
+        Vector2i Direction,
+        float Throttle,
+        float Steering,
+        bool CardinalSteering = false);
+
+    private Vector2i GetInputDirection(InputMoverComponent input, EntityUid movementGrid)
     {
         var buttons = input.HeldMoveButtons;
         var dir = Vector2i.Zero;
@@ -33,25 +39,68 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 dir = new Vector2i(0, Math.Sign(dir.Y));
         }
 
-        return dir;
+        // The driver commonly lives on a separate vehicle-interior grid. Convert
+        // their view-relative input through world space into the exterior grid
+        // that the vehicle actually moves on.
+        var rotation = input.TargetRelativeRotation;
+        if (input.RelativeEntity is { } relative && TryComp(relative, out TransformComponent? relativeXform))
+            rotation += transform.GetWorldRotation(relativeXform);
+
+        rotation -= transform.GetWorldRotation(movementGrid);
+        var movementRelative = rotation.RotateVec(new Vector2(dir.X, dir.Y));
+        return Angle.FromWorldVec(movementRelative).GetCardinalDir().ToIntVec();
     }
 
-    private Vector2i GetMoverInput(EntityUid uid, GridVehicleMoverComponent mover, VehicleComponent vehicle, out bool pushing)
+    private VehicleControlInput GetMoverInput(
+        EntityUid uid,
+        GridVehicleMoverComponent mover,
+        VehicleComponent vehicle,
+        EntityUid movementGrid,
+        out bool pushing)
     {
         pushing = false;
+        if (vehicle.Operator is { } driver && !_actionBlocker.CanConsciouslyPerformAction(driver))
+        {
+            _activeXenoPushers.Remove(uid);
+            return default;
+        }
+
+        // CMU14: fighter seats and docking assists provide vehicle controls.
+        var controls = new VehicleDriveInputEvent();
+        RaiseLocalEvent(uid, ref controls);
+        if (controls.Handled)
+        {
+            _activeXenoPushers.Remove(uid);
+            return new VehicleControlInput(Vector2i.Zero,
+                Math.Clamp(controls.Throttle, -1f, 1f), Math.Clamp(controls.Steering, -1f, 1f));
+        }
+
         if (vehicle.Operator is { } op && TryComp<InputMoverComponent>(op, out var inputComp))
         {
             _activeXenoPushers.Remove(uid);
-            var inputDir = GetInputDirection(inputComp);
-            return TryGetBlackfootFlightInput(uid, mover, inputDir, out var blackfootDir)
-                ? blackfootDir
-                : inputDir;
+            var inputDir = GetInputDirection(inputComp, movementGrid);
+            if (TryGetBlackfootFlightInput(uid, mover, inputDir, out var blackfootDir))
+                return new VehicleControlInput(blackfootDir, 0f, 0f, CardinalSteering: true);
+
+            var buttons = inputComp.HeldMoveButtons;
+            var throttle = 0f;
+            var steering = 0f;
+            if ((buttons & MoveButtons.Up) != 0)
+                throttle += 1f;
+            if ((buttons & MoveButtons.Down) != 0)
+                throttle -= 1f;
+            if ((buttons & MoveButtons.Left) != 0)
+                steering += 1f;
+            if ((buttons & MoveButtons.Right) != 0)
+                steering -= 1f;
+
+            return new VehicleControlInput(inputDir, throttle, steering);
         }
 
         if (vehicle.Operator != null)
         {
             _activeXenoPushers.Remove(uid);
-            return Vector2i.Zero;
+            return default;
         }
 
         if (!TryGetActivePusher(uid, mover, out var pusher))
@@ -61,29 +110,29 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 mover.CurrentSpeed > MinVehicleSpeed)
             {
                 pushing = true;
-                return Vector2i.Zero;
+                return default;
             }
 
             _activeXenoPushers.Remove(uid);
-            return Vector2i.Zero;
+            return default;
         }
 
         pushing = true;
         if (!mover.IsPushMove && !CanPushNow(mover))
         {
             _activeXenoPushers.Remove(uid);
-            return Vector2i.Zero;
+            return default;
         }
 
         var pushDir = GetPushDirection(uid, pusher);
         if (pushDir == Vector2i.Zero)
         {
             _activeXenoPushers.Remove(uid);
-            return Vector2i.Zero;
+            return default;
         }
 
         _activeXenoPushers[uid] = pusher;
-        return pushDir;
+        return new VehicleControlInput(pushDir, 0f, 0f);
     }
 
     private bool TryGetBlackfootFlightInput(
@@ -144,7 +193,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             if (!TryComp<InputMoverComponent>(other, out var input))
                 continue;
 
-            var dir = GetInputDirection(input);
+            if (Transform(uid).GridUid is not { } movementGrid)
+                continue;
+
+            var dir = GetInputDirection(input, movementGrid);
             if (dir == Vector2i.Zero)
                 continue;
 
@@ -154,7 +206,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 continue;
 
             var inputVec = new Vector2(dir.X, dir.Y);
-            var score = Vector2.Dot(inputVec, Vector2.Normalize(toVehicle));
+            var toVehicleLocal = (-transform.GetWorldRotation(movementGrid)).RotateVec(toVehicle);
+            var score = Vector2.Dot(inputVec, Vector2.Normalize(toVehicleLocal));
             if (score <= 0f)
                 continue;
 
@@ -178,6 +231,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var delta = vehiclePos - pusherPos;
         if (delta.LengthSquared() <= 0.0001f)
             return Vector2i.Zero;
+
+        if (Transform(uid).GridUid is { } grid)
+            delta = (-transform.GetWorldRotation(grid)).RotateVec(delta);
 
         return Angle.FromWorldVec(delta).GetCardinalDir().ToIntVec();
     }

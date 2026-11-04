@@ -1,0 +1,10 @@
+<tickets:CMUTicketCloseWindow
+    xmlns="https://spacestation14.io"
+    xmlns:tickets="clr-namespace:Content.Client.CMU14.Administration.Tickets"
+    Title="{Loc cmu-ahelp-ticket-close-window-title}" MinSize="400 110">
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="8">
+        <Label Text="{Loc cmu-ahelp-ticket-close-window-prompt}" Margin="0 0 0 4" />
+        <LineEdit Name="ReasonEdit" Access="Public" HorizontalExpand="True" PlaceHolder="{Loc cmu-ahelp-ticket-close-window-placeholder}" />
+        <Button Name="ConfirmButton" Access="Public" Text="{Loc cmu-ahelp-ticket-close-window-confirm}" Disabled="True" HorizontalAlignment="Right" Margin="0 8 0 0" />
+    </BoxContainer>
+</tickets:CMUTicketCloseWindow>

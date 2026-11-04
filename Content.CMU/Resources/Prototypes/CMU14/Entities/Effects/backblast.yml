@@ -1,0 +1,24 @@
+- type: entity
+  id: CMUBackblastSmokeNear
+  name: backblast smoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _RMC14/Effects/smoke.rsi
+    state: smoke2
+  - type: TimedDespawn
+    lifetime: 1.5
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CMUBackblastSmokeNear
+  id: CMUBackblastSmokeFar
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 1

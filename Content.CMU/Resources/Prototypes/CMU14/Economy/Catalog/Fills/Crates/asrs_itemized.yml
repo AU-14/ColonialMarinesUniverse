@@ -1,0 +1,8 @@
+- type: entity
+  parent: RMCCrateBase
+  id: CMUASRSShipmentCrate
+  name: ASRS consolidated shipment crate
+  description: A requisitions crate packed to its rated weight limit from an itemized order.
+  components:
+  - type: EntityStorage
+    capacity: 32

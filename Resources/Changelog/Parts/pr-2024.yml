@@ -1,0 +1,14 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Added pie throws, banana slips, and confetti cannons that interact with
+    other lobby characters.
+  type: Add
+- message: Lobby burst fire and spray now target random crewmates with overlapping
+    dodge and tumble reactions.
+  type: Tweak
+- message: Added the global Supply Scramble lobby show with runaway carts, flying
+    crates, and a conga exit.
+  type: Add
+time: '2026-09-26T12:36:58.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2024

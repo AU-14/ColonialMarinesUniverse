@@ -9,7 +9,7 @@
 - type: entity
   parent: RMCBannerBase
   id: RMCBannerCLF
-  name: CLF flag
+  name: INSFOR flag
   description: A flag of the Colony Liberation Front. Inspires patriotism, fear, or revulsion depending on the viewer's political leanings.
   components:
   - type: Sprite
@@ -27,7 +27,7 @@
 - type: entity
   parent: RMCBannerBase
   id: RMCBannerCLFWorn
-  name: worn CLF flag
+  name: worn INSFOR flag
   description: A very worn flag of the Colony Liberation Front. Inspires patriotism, fear, or revulsion depending on the viewer's political leanings.
   components:
   - type: Sprite

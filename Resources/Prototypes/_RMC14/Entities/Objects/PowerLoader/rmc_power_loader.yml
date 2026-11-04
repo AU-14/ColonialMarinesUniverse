@@ -36,6 +36,8 @@
   - type: Physics
     bodyType: KinematicController
   - type: Clickable
+  - type: CMUZPhysics 
+  - type: CMUVehicleZTraversal 
   - type: Fixtures
     fixtures:
       fix1:
@@ -52,6 +54,7 @@
     containers:
       rmc-mech-pilot: !type:ContainerSlot
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: FootstepModifier
     footstepSoundCollection:
@@ -113,6 +116,7 @@
   - type: InputMover
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: FootstepModifier
     footstepSoundCollection:
@@ -167,6 +171,8 @@
     skills:
       all:
         RMCSkillPowerLoader: 1
+  - type: CMUVehicleZTraversal
+    canUseStairs: true
   - type: Hands
   - type: GiveHands
     hands:

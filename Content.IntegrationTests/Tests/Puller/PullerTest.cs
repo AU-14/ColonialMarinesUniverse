@@ -1,3 +1,4 @@
+using Content.IntegrationTests.Fixtures;
 using Content.Shared.Hands.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Prototypes;
@@ -9,7 +10,7 @@ namespace Content.IntegrationTests.Tests.Puller;
 #nullable enable
 
 [TestFixture]
-public sealed class PullerTest
+public sealed class PullerTest : GameTest
 {
     /// <summary>
     /// Checks that needsHands on PullerComponent is not set on mobs that don't even have hands.
@@ -17,7 +18,7 @@ public sealed class PullerTest
     [Test]
     public async Task PullerSanityTest()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var compFactory = server.ResolveDependency<IComponentFactory>();
@@ -35,11 +36,9 @@ public sealed class PullerTest
                     if (!puller.NeedsHands)
                         continue;
 
-                    Assert.That(proto.HasComponent<HandsComponent>(compFactory), $"Found puller {proto} with NeedsHand pulling but has no hands?");
+                    Assert.That(proto.HasComp<HandsComponent>(compFactory), $"Found puller {proto} with NeedsHand pulling but has no hands?");
                 }
             });
         });
-
-        await pair.CleanReturnAsync();
     }
 }

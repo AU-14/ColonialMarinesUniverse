@@ -1,0 +1,87 @@
+using System.Numerics;
+using Content.Shared.CMU14.Fighter;
+using Content.Shared.Database;
+using Robust.Shared.Spawners;
+using Robust.Shared.Map;
+
+namespace Content.Shared._RMC14.Dropship.Weapon;
+
+public abstract partial class SharedDropshipWeaponSystem
+{
+    [Dependency] private FighterAudioSystem _fighterAudio = default!;
+    /// <summary>Fighter release uses CAS payload effects without pretending its cockpit is an FTL dropship.</summary>
+    public bool TryFireFighterAmmo(Entity<DropshipAmmoComponent> ammo, Entity<FighterHardpointComponent> point,
+        EntityCoordinates coordinates, EntityUid actor, TimeSpan? strikeTravelTime = null,
+        FighterWeaponKind kind = FighterWeaponKind.Missile, Vector2 aircraftPosition = default, EntityUid? designation = null)
+    {
+        if (_net.IsClient || !coordinates.IsValid(EntityManager) || !_area.CanCAS(coordinates) ||
+            point.Comp.Ammo != ammo.Owner || ammo.Comp.RoundsPerShot <= 0 || ammo.Comp.Rounds < ammo.Comp.RoundsPerShot)
+            return false;
+
+        var time = _timing.CurTime;
+        var payload = ammo.Comp;
+        var target = payload.TargetSpread > 0
+            ? coordinates.Offset(_random.NextVector2(-payload.TargetSpread, payload.TargetSpread + 1)) : coordinates;
+        if (payload.Explosion != null && HasNonDeletableWallOnTile(target))
+            target = FindAlternateLandingTile(target, 3);
+        // Every fighter strike reserves the same visible warning window, including
+        // cannon and rockets. Preserve longer missile travel times.
+        var travel = strikeTravelTime ?? payload.TravelTime + TimeSpan.FromSeconds(DefaultMarkerDuration);
+        if (travel < FighterEffects.LaserLead) travel = FighterEffects.LaserLead;
+        var flight = new AmmoInFlightComponent
+        {
+            Target = target,
+            MarkerAt = time + travel,
+            ShotsLeft = payload.RoundsPerShot,
+            ShotsPerVolley = payload.ShotsPerVolley,
+            Damage = payload.Damage,
+            ArmorPiercing = payload.ArmorPiercing,
+            BulletSpread = payload.BulletSpread,
+            SoundTravelTime = strikeTravelTime.HasValue ? TimeSpan.Zero : payload.SoundTravelTime,
+            SoundMarker = null,
+            // The fighter reports on release and at the real dispersed impacts,
+            // rather than replaying the dropship flyby after the salvo has ended.
+            SoundGround = null,
+            SoundImpact = null,
+            SoundWarning = null,
+            MarkerWarning = false,
+            // The fighter's strike entity owns both cues. Suppress the legacy
+            // dropship marker so it cannot reveal the strike early.
+            SpawnedMarker = true,
+            ImpactEffects = new(payload.ImpactEffects),
+            Explosion = payload.Explosion,
+            Implosion = payload.Implosion,
+            Fire = payload.Fire,
+            SoundEveryShots = payload.SoundEveryShots,
+            MarkerDuration = TimeSpan.Zero,
+        };
+        var flightUid = Spawn(null, MapCoordinates.Nullspace);
+        AddComp(flightUid, flight);
+        var visual = Spawn(null, target);
+        var trace = AddComp<FighterStrikeVisualComponent>(visual);
+        AddComp<FighterPayloadVisualComponent>(flightUid).Visual = visual;
+        trace.Kind = kind;
+        var direction = aircraftPosition - _transform.ToMapCoordinates(target).Position;
+        trace.Direction = direction.LengthSquared() > .001f ? Vector2.Normalize(direction) : Vector2.UnitY;
+        trace.ImpactAt = flight.MarkerAt + flight.MarkerDuration;
+        if (TryComp(designation, out FighterLaserComponent? laser))
+        {
+            laser.Incoming = true;
+            laser.IncomingAt = trace.ImpactAt - FighterEffects.WarningLead;
+            Dirty(designation!.Value, laser);
+        }
+        trace.Volleys = (int) Math.Ceiling(payload.RoundsPerShot / (double) Math.Max(1, payload.ShotsPerVolley));
+        trace.VolleyInterval = (float) flight.ShotDelay.TotalSeconds;
+        trace.ExpiresAt = trace.ImpactAt + TimeSpan.FromSeconds(trace.Volleys * trace.VolleyInterval + .4f);
+        EnsureComp<TimedDespawnComponent>(visual).Lifetime = (float) (trace.ExpiresAt - time).TotalSeconds;
+        Dirty(visual, trace);
+        payload.Rounds -= payload.RoundsPerShot;
+        _appearance.SetData(ammo, DropshipAmmoVisuals.Fill, payload.Rounds);
+        Dirty(ammo);
+        _audio.PlayPvs(FighterAudioSystem.Release(kind, cockpit: true), point);
+        _fighterAudio.PlayGround(FighterAudioSystem.Release(kind), target, volume: kind == FighterWeaponKind.Gau ? -1 : -4);
+        _adminLog.Add(LogType.RMCDropshipWeapon, $"{ToPrettyString(actor)} fired fighter ammunition {ToPrettyString(ammo.Owner)} at {coordinates}");
+        if (payload.DeleteOnEmpty && payload.Rounds <= 0) QueueDel(ammo);
+        return true;
+    }
+}

@@ -1,0 +1,5 @@
+- type: cmuNestHealing
+  id: CMUNestHealing
+  # Living nested human hosts only; healing stops at this remaining-health fraction.
+  healPerSecond: 1
+  maxHealthFraction: 0.5

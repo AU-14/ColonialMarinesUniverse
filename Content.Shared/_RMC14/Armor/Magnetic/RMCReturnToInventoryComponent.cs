@@ -1,23 +1,23 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Armor.Magnetic;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(RMCMagneticSystem))]
 public sealed partial class RMCReturnToInventoryComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid User;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid Magnetizer;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool Returned;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? ReceivingItem;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string ReceivingContainer;
 }

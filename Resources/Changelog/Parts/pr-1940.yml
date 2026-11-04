@@ -1,0 +1,9 @@
+author: deepdarkdepths
+category: CMU
+changes:
+- message: Added a new damage based evasion mechanic for Runner.
+  type: Add
+- message: Runner has slightly more HP.
+  type: Tweak
+time: '2026-09-13T00:27:59.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1940

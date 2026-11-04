@@ -19,7 +19,7 @@ public abstract class SharedCriminalRecordsSystem : EntitySystem
 
         while (query.MoveNext(out var uid, out var identity))
         {
-            if (!Identity.Name(uid, EntityManager).Equals(name))
+            if (!Identity.Name(uid, EntityManager).Name.Equals(name, StringComparison.Ordinal))
                 continue;
 
             if (status == SecurityStatus.None)
@@ -45,6 +45,8 @@ public abstract class SharedCriminalRecordsSystem : EntitySystem
             SecurityStatus.Detained => "SecurityIconIncarcerated",
             SecurityStatus.Discharged => "SecurityIconDischarged",
             SecurityStatus.Suspected => "SecurityIconSuspected",
+            SecurityStatus.Hostile => "SecurityIconHostile",
+            SecurityStatus.Eliminated => "SecurityIconEliminated",
             _ => record.StatusIcon
         };
 

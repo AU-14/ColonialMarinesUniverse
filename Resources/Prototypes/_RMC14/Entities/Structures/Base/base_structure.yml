@@ -32,6 +32,9 @@
   - type: Corrodible
     isCorrodible: false
   - type: CMIconSmooth
+  - type: NpcFactionMember # CMU14: hostile structure, valid sentry/turret target
+    factions:
+    - RMCXeno
   - type: FixedIdentity
     name: cmu-job-name-xeno-unknown
     whitelist:
@@ -51,9 +54,6 @@
       - XenoWeedNode
   - type: RMCWallExplosionDeletable
   - type: DestroyedByExplosionType
-  - type: NpcFactionMember
-    factions:
-    - RMCXeno
   - type: RMCNightVisionVisible
     priority: -1
     transparency: 0.2
@@ -99,6 +99,8 @@
     key: walls
   - type: Occluder
   - type: Airtight
+  - type: RadiationBlocker # CMU14
+    resistance: 5
   - type: Fixtures
     fixtures:
       fix1:
@@ -121,7 +123,11 @@
   - type: Tag
     tags:
     - Wall
+  - type: ZLevelWallSupport
   - type: Clickable
+  # cmu edit start
+  - type: CMUWallLeanable
+  # cmu edit end
 
 - type: entity
   abstract: true
@@ -143,8 +149,9 @@
   description: A huge chunk of metal used to separate rooms.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: CMU14StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -192,8 +199,9 @@
     mode: SnapgridCenter
   components:
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Appearance
   - type: RadiationBlocker
     resistance: 5

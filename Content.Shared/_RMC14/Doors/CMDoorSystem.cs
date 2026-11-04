@@ -1,4 +1,5 @@
-using Content.Shared._CMU14.Doors;
+using Content.Shared.CMU14.Doors;
+using Content.Shared.CMU14.Threats.Mobs.Ape; // CMU14
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids;
@@ -145,7 +146,7 @@ public sealed partial class CMDoorSystem : EntitySystem
 
         if (!_rmcPower.IsPowered(button))
         {
-            _popup.PopupClient(Loc.GetString("rmc-machines-unpowered"), button, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-machines-unpowered"), button, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -154,7 +155,7 @@ public sealed partial class CMDoorSystem : EntitySystem
 
         if (IsAnyLinkedDoorLocked(buttonName, buttonTransform.MapID))
         {
-            _popup.PopupClient(Loc.GetString("cmu-machines-button-locked-open"), button, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-machines-button-locked-open"), button, user, PopupType.SmallCaution);
             return;
         }
 
@@ -162,19 +163,19 @@ public sealed partial class CMDoorSystem : EntitySystem
         {
             var minutesLeft = (int)(minimumTime.TotalMinutes - _gameTicker.RoundDuration().TotalMinutes);
             var timeMessage = Loc.GetString(button.Comp.NoTimeMessage, ("minutes", minutesLeft));
-            _popup.PopupClient(timeMessage, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(timeMessage, user, user, PopupType.SmallCaution);
             return;
         }
 
         if (button.Comp.Used && button.Comp.UseOnlyOnce)
         {
-            _popup.PopupClient(Loc.GetString(button.Comp.AlreadyUsedMessage), button, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString(button.Comp.AlreadyUsedMessage), button, user, PopupType.SmallCaution);
             return;
         }
 
         if (!_accessReader.IsAllowed(user, button))
         {
-            _popup.PopupClient(Loc.GetString("cm-vending-machine-access-denied"), button, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-vending-machine-access-denied"), button, user, PopupType.SmallCaution);
             DoPodDoorButtonAnimation(button, button.Comp.DeniedState);
             return;
         }
@@ -212,7 +213,7 @@ public sealed partial class CMDoorSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-door-button-pressed-self", ("button", button));
         var othersMsg = Loc.GetString("rmc-door-button-pressed-others", ("user", user), ("button", button));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
 
         DoPodDoorButtonAnimation(button, button.Comp.OnState);
 
@@ -264,9 +265,9 @@ public sealed partial class CMDoorSystem : EntitySystem
                 args.Cancelled = true;
         }
 
-        // Xenos can pry powered airlocks
-        if (HasComp<XenoComponent>(args.User) && HasComp<AirlockComponent>(ent))
-            return;
+       if (TryComp<PryingComponent>(args.User, out var pryComp) && pryComp.PryPowered
+           && HasComp<AirlockComponent>(ent))
+           return;
 
         if (_rmcPower.IsPowered(ent))
             args.Cancelled = true;
@@ -354,7 +355,7 @@ public sealed partial class CMDoorSystem : EntitySystem
 
         var adjacent = transform.Coordinates.Offset(transform.LocalRotation.GetCardinalDir());
         var position = _map.LocalToTile(transform.GridUid.Value, grid, adjacent);
-        return _map.GetAnchoredEntitiesEnumerator(transform.GridUid.Value, grid, position);
+        return _map.GetAnchoredEntities(transform.GridUid.Value, grid, position);
     }
 
     private bool TryGetPairedDoubleDoor(Entity<CMDoubleDoorComponent> ent, out Entity<CMDoubleDoorComponent> paired)

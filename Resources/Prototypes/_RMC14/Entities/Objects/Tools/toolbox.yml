@@ -44,16 +44,17 @@
   parent: [RMCToolboxEmergency, ToolboxEmergencyFilled]
   id: RMCToolboxEmergencyFilled
   components:
-  - type: StorageFill
-    contents:
-      - id: CMCrowbar
-      - id: CMRadioHandheld
-      - id: CMFireExtinguisherPortable
-      # Random lighting item orGroup
-      - id: RMCFlashlight
-        orGroup: LightingItem
-      - id: CMFlare
-        orGroup: LightingItem
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: CMCrowbar
+        - id: CMRadioHandheld
+        - id: CMFireExtinguisherPortable
+        - !type:GroupSelector
+          children:
+          - id: RMCFlashlight
+          - id: CMFlare
   suffix: RMC14, Filled
 
 - type: entity
@@ -72,18 +73,20 @@
   parent: [RMCToolboxElectrical, ToolboxElectricalFilled]
   id: RMCToolboxElectricalFilled
   components:
-  - type: StorageFill
-    contents:
-      - id: CMScrewdriver
-      - id: CMCrowbar
-      - id: CMWirecutter
-      - id: RMCCableCoil
-      - id: RMCCableCoil
-      - id: CMHandsInsulated
-        prob: 0.05
-        orGroup: GlovesOrWires
-      - id: RMCCableCoil
-        orGroup: GlovesOrWires
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: CMScrewdriver
+        - id: CMCrowbar
+        - id: CMWirecutter
+        - id: RMCCableCoil
+        - id: RMCCableCoil
+        - !type:GroupSelector
+          children:
+          - id: CMHandsInsulated
+            weight: 0.05
+          - id: RMCCableCoil
   suffix: RMC14, Filled
 
 - type: entity
@@ -102,13 +105,15 @@
   parent: [RMCToolboxMechanical, ToolboxMechanicalFilled]
   id: RMCToolboxMechanicalFilled
   components:
-  - type: StorageFill
-    contents:
-      - id: CMCrowbar
-      - id: CMWrench
-      - id: CMWelder
-      - id: CMWirecutter
-      - id: CMScrewdriver
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: CMCrowbar
+        - id: CMWrench
+        - id: CMWelder
+        - id: CMWirecutter
+        - id: CMScrewdriver
   suffix: RMC14, Filled
 
 - type: entity
@@ -145,14 +150,16 @@
   parent: RMCToolboxSyndicate
   id: RMCToolboxSyndicateFilled
   components:
-  - type: StorageFill
-    contents:
-      - id: CMCrowbar
-      - id: CMWrench
-      - id: CMWelder
-      - id: CMWirecutter
-      - id: CMScrewdriver
-      - id: RMCCableCoil
-      - id: CMMultitool
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: CMCrowbar
+        - id: CMWrench
+        - id: CMWelder
+        - id: CMWirecutter
+        - id: CMScrewdriver
+        - id: RMCCableCoil
+        - id: CMMultitool
       # - id: RMCCodeSpeakPamphlet
   suffix: RMC14, Filled

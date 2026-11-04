@@ -1,0 +1,215 @@
+# CMB tactical team, called in through the UA intel list: a team leader and three tactical deputies in Crisis
+# Intervention Unit armor and riot-visored helmets, two with MP5s and one with an HG 37-12 shotgun, carrying tear
+# gas and breaching charges. Laid out like the NSPA tactical team.
+
+- type: job
+  parent: AU14JobInvestigationCMBDeputy
+  id: CMUJobCMBTacticalLeader
+  name: cmu-job-title-cmb-tactical-leader
+  description: cmu-job-description-cmb-tactical
+  startingGear: CMUGearCMBTacticalLeader
+  spawnMenuRoleName: CMB Tactical Team Leader (Tactical Team)
+  playTimeTracker: CMUJobCMBTacticalLeader
+  chevrons:
+    Deputy:
+      entity: AU14ChevronCMBChiefDeputy
+      requirements: []
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobCMBTacticalLeader
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCMB
+  id: CMUJobCMBTacticalLeader
+  name: CMB Tactical Team Leader (Tactical Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-cmb-tactical-leader
+    description: cmu-job-description-cmb-tactical
+    reregister: false
+    job: CMUJobCMBTacticalLeader
+    raffle:
+      settings: short
+    rules: cmu-job-rules-cmb-tactical
+
+- type: job
+  parent: AU14JobInvestigationCMBDeputy
+  id: CMUJobCMBTacticalDeputy
+  name: cmu-job-title-cmb-tactical-deputy
+  description: cmu-job-description-cmb-tactical
+  startingGear: CMUGearCMBTacticalDeputy
+  spawnMenuRoleName: CMB Tactical Deputy (Tactical Team, MP5)
+  playTimeTracker: CMUJobCMBTacticalDeputy
+  chevrons:
+    Deputy:
+      entity: AU14ChevronCMBSrDeputy
+      requirements: []
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobCMBTacticalDeputy
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCMB
+  id: CMUJobCMBTacticalDeputy
+  name: CMB Tactical Deputy (Tactical Team, MP5)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-cmb-tactical-deputy
+    description: cmu-job-description-cmb-tactical
+    reregister: false
+    job: CMUJobCMBTacticalDeputy
+    raffle:
+      settings: short
+    rules: cmu-job-rules-cmb-tactical
+
+- type: job
+  parent: AU14JobInvestigationCMBDeputy
+  id: CMUJobCMBTacticalDeputyShotgun
+  name: cmu-job-title-cmb-tactical-deputy
+  description: cmu-job-description-cmb-tactical
+  startingGear: CMUGearCMBTacticalDeputyShotgun
+  spawnMenuRoleName: CMB Tactical Deputy (Tactical Team, HG 37-12)
+  playTimeTracker: CMUJobCMBTacticalDeputy
+  chevrons:
+    Deputy:
+      entity: AU14ChevronCMBSrDeputy
+      requirements: []
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicCMB
+  id: CMUJobCMBTacticalDeputyShotgun
+  name: CMB Tactical Deputy (Tactical Team, HG 37-12)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-ghost-name-cmb-tactical-deputy
+    description: cmu-job-description-cmb-tactical
+    reregister: false
+    job: CMUJobCMBTacticalDeputyShotgun
+    raffle:
+      settings: short
+    rules: cmu-job-rules-cmb-tactical
+
+- type: startingGear
+  id: CMUGearCMBTacticalBase
+  equipment:
+    eyes: CMGlassesSecurity
+    outerClothing: AU14CMBCIUArmor
+    jumpsuit: AU14CMBUniform
+    shoes: RMCBootsPMCFilled
+    head: AU14CMBCIUHelmet
+    gloves: RMCHandsVeteran
+    belt: AU14BeltHolsterPistolCMBHG45
+    pocket1: RMCPouchMagazine
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadsetOnlyCMB
+    suitstorage: WeaponSMGMP5
+  storage:
+    head:
+    - AU14HelmetGarbRiotVisor
+    pocket1:
+    - CMMagazineSMGMP5
+    - CMMagazineSMGMP5
+    - CMMagazineSMGMP5
+    back:
+    - AU14PacketGrenadeTearGasFilled
+    - RMCExplosiveBreachingCharge
+    - RMCZipties
+    - RMCZipties
+
+- type: startingGear
+  parent: CMUGearCMBTacticalBase
+  id: CMUGearCMBTacticalLeader
+  equipment:
+    id: CMUIDCardCMBTacticalLeader
+  storage:
+    back:
+    - AU14PacketGrenadeTearGasFilled
+    - RMCExplosiveBreachingCharge
+    - RMCZipties
+    - RMCZipties
+    - RMCBinoculars
+
+- type: startingGear
+  parent: CMUGearCMBTacticalBase
+  id: CMUGearCMBTacticalDeputy
+  equipment:
+    id: CMUIDCardCMBTacticalDeputy
+
+- type: startingGear
+  parent: CMUGearCMBTacticalBase
+  id: CMUGearCMBTacticalDeputyShotgun
+  equipment:
+    id: CMUIDCardCMBTacticalDeputyShotgun
+    pocket1: AU14PouchShotgunLargeBuckshot
+    suitstorage: RMCWeaponShotgunHG3712
+  storage:
+    pocket1: []
+
+- type: entity
+  parent: AU14IDCardColonyLEO
+  id: CMUIDCardCMBTacticalLeader
+  name: CMB tactical team leader ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobCMBTacticalLeader
+
+- type: entity
+  parent: AU14IDCardColonyLEO
+  id: CMUIDCardCMBTacticalDeputy
+  name: CMB tactical deputy ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobCMBTacticalDeputy
+
+- type: entity
+  parent: AU14IDCardColonyLEO
+  id: CMUIDCardCMBTacticalDeputyShotgun
+  name: CMB tactical deputy ID card
+  suffix: Shotgun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobCMBTacticalDeputyShotgun
+
+- type: partySpawn
+  id: CMUCMBTacticalTeamSpawn
+  leadersToSpawn:
+    CMUJobCMBTacticalLeader: 1
+  gruntsToSpawn:
+    CMUJobCMBTacticalDeputy: 2
+    CMUJobCMBTacticalDeputyShotgun: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUCMBTacticalTeam
+  displayName: CMB Tactical Team
+  partyspawn: CMUCMBTacticalTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 4
+  roundstart: false

@@ -1,0 +1,34 @@
+<Document>
+  # Fire and Radiation
+
+  ## Fire
+  <Box>
+    <GuideEntityEmbed Entity="CMUFireHelmet" Caption="Firefighter helmet"/>
+    <GuideEntityEmbed Entity="CMUSuitFirefighter" Caption="Firefighter suit"/>
+  </Box>
+  - Some fires spread, creeping across the floor to neighboring tiles for a while after they're lit.
+  - Firefighter gear is stocked in the Tool Storage Machine.
+
+  ### Extinguishers
+  <Box>
+    <GuideEntityEmbed Entity="CMFireExtinguisher" Caption="Fire extinguisher"/>
+    <GuideEntityEmbed Entity="CMFireExtinguisherPortable" Caption="Portable extinguisher"/>
+    <GuideEntityEmbed Entity="RMCExtinguisherCabinet" Caption="Extinguisher cabinet"/>
+  </Box>
+  - Use the extinguisher in your hand to take the safety off, then spray it at the fire. It reaches about 5 tiles. You can spray burning people to put them out.
+  - The [bold]fire extinguisher[/bold] holds 50 units of water and clips onto your belt. The [bold]portable extinguisher[/bold] holds 30, but it's small enough to fit in a bag or pouch.
+  - Refill an empty extinguisher from a water tank.
+  - Extinguishers hang in wall cabinets around the colony and ship. A firefighting crate from requisitions comes with six.
+
+  ### Fire Suppressant Grenades
+  <Box>
+    <GuideEntityEmbed Entity="CMUFireSuppressantGrenade" Caption="Fire suppressant grenade"/>
+  </Box>
+  - For fires too big to spray down. Throw one in and it snuffs out every fire in its area, including people who are burning.
+  - It leaves cold inert gas behind, so the fire doesn't relight.
+  - They're stocked in the Tool Storage Machine, and a firefighting crate comes with five.
+
+  ## Radiation
+  - Rad-shielded clothing cuts the radiation dose you take. A suit protects best with its matching shielded headgear.
+  - Examine protective gear closely to see how much it shields.
+</Document>

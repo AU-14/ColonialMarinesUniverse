@@ -1,0 +1,21 @@
+- type: entity
+  parent: [RMCMarineHelmetBase, RMCFoldableHelmetBase]
+  id: RuMCPagstHelmet
+  name: PAGST helmet
+  description: A standard M10 Pattern Helmet. The inside label, along with washing information, reads, 'The difference between an open-casket and closed-casket funeral. Wear on head for best results.'. There is a built-in camera on the right side.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/HAZOPS/pagsthelmet.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/HAZOPS/pagsthelmet.rsi
+
+- type: entity
+  parent: [RMCMarineHelmetBase, RMCFoldableHelmetBase]
+  id: RuMCPagstHelmetM17cbrn
+  name: PAGST helmet M17 CBRN
+  description: A standard M10 Pattern Helmet. The inside label, along with washing information, reads, 'The difference between an open-casket and closed-casket funeral. Wear on head for best results.'. There is a built-in camera on the right side.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/HAZOPS/pagsthelmetM17cbrn.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/HAZOPS/pagsthelmetM17cbrn.rsi

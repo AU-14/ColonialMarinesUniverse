@@ -1,0 +1,5 @@
+- files:
+  - vtol_heat.swsl
+  license: CC0-1.0
+  copyright: "Original CMU localized VTOL heat refraction shader."
+  source: "https://github.com/TheHellFireo/ColonialMarinesUniverse"

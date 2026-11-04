@@ -6,6 +6,9 @@ namespace Content.Shared._RMC14.Xenonids.Despoiler;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class XenoDespoilerAcidSprayComponent : Component
 {
+    // CMU14: server-side collision history, shared across Oozing Wounds tiles from one cast.
+    public HashSet<EntityUid> HitTargets = new();
+
     [DataField]
     public DamageSpecifier Damage = new();
 

@@ -1,0 +1,242 @@
+# The underground, built up: the concrete supports and the slab. A concrete support holds up the roof of a cave like the beams of the building overhaul
+# do (a vertical StructuralSupport), but it also holds its level: while it stands, nothing is dug down from the level above onto it or around it (NoDigBelow), as far as
+# its radius says, from the level above into its level. The reinforced one holds farther and is proof against the claws and the acid of the xenos.
+
+# What the concrete bags are in the eyes of the construction: the materials of its steps.
+- type: material
+  id: RUMCConcrete
+  stackEntity: AU14ConcreteBag
+  name: materials-au14-concrete
+  icon: { sprite: CMU14/Items/cement.rsi, state: cementbag1 }
+  color: "#c4c4bc"
+  price: 0.002
+
+- type: material
+  id: RUMCReinforcedConcrete
+  stackEntity: AU14ReinforcedConcreteBag
+  name: materials-au14-reinforced-concrete
+  icon: { sprite: CMU14/Items/reinforced_cement.rsi, state: cementbag1 }
+  color: "#a8b8cc"
+  price: 0.004
+
+# ---------------------------------------------------------------- the pillars
+- type: entity
+  parent: BaseStructure
+  id: RUMCConcretePillar
+  name: concrete support
+  description: A column of cast concrete. It holds up the roof farther than a steel beam, and while it stands nothing can be dug down from the level above into its level, over it and around it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: PlacementReplacement
+    key: walls
+  - type: Sprite
+    noRot: true
+    sprite: CMU14/Structures/concrete_pillar.rsi
+    state: pillar
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: StructuralSupport
+    isVerticalSupport: true
+    cantileverSpan: 6
+  - type: NoDigBelow
+    radius: 3
+  - type: Damageable
+    damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: ExaminableDamage
+    messages: RMCWallMessages
+  - type: RMCIntegrityExamine
+  - type: RMCWallExplosionDeletable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 2800
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          AU14ConcreteBag:
+            min: 1
+            max: 3
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: RUMCConcretePillar
+  id: RUMCReinforcedConcretePillar
+  name: reinforced concrete support
+  description: A column of concrete cast around steel rods. It holds up the roof farther than any beam, nothing can be dug down from above into its level within six tiles of it, and the claws and the acid of the xenos do nothing to it.
+  components:
+  - type: Sprite
+    state: reinforced
+  - type: StructuralSupport
+    cantileverSpan: 10
+  - type: NoDigBelow
+    radius: 6
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 6500
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          AU14ReinforcedConcreteBag:
+            min: 1
+            max: 3
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ReceiverXenoClaws
+    minimumClawStrength: ImpossiblySharp
+  - type: Corrodible
+    isCorrodible: false
+
+# ---------------------------------------------------------------- the slab
+# A slab of concrete laid on the ground: it can be walked on and it holds the ground under it and the tiles around it.
+- type: entity
+  parent: BaseStructure
+  id: RUMCConcreteSlab
+  name: concrete slab
+  description: A slab of cast concrete laid on the ground. While it lies nothing can be dug down from the level above into its level, over it and around it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    noRot: true
+    drawdepth: FloorObjects
+    sprite: CMU14/Structures/concrete_slab.rsi
+    state: slab
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: NoDigBelow
+    radius: 3
+  - type: Damageable
+    damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1200
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          AU14ConcreteBag:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# ---------------------------------------------------------------- the building
+- type: constructionGraph
+  id: RUMCSupportBeamConcreteGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: beam
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: AU14ConcreteBag
+        amount: 6
+        doAfter: 6
+  - node: beam
+    entity: RUMCConcretePillar
+
+- type: construction
+  id: RUMCSupportBeamConcrete
+  name: concrete support
+  description: A column of cast concrete. It holds up a roof farther than a steel beam does, and while it stands nothing can be dug down from above into its level over it and around it.
+  graph: RUMCSupportBeamConcreteGraph
+  startNode: start
+  targetNode: beam
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  conditions:
+  - !type:TileNotBlocked
+  - !type:ZBuildAllowed
+
+- type: constructionGraph
+  id: RUMCSupportBeamReinforcedConcreteGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: beam
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: AU14ReinforcedConcreteBag
+        amount: 6
+        doAfter: 8
+  - node: beam
+    entity: RUMCReinforcedConcretePillar
+
+- type: construction
+  id: RUMCSupportBeamReinforcedConcrete
+  name: reinforced concrete support
+  description: A column of concrete cast around steel rods. It holds a roof farther than any beam, nothing can be dug down onto its level within six tiles of it, and the xenos cannot take it.
+  graph: RUMCSupportBeamReinforcedConcreteGraph
+  startNode: start
+  targetNode: beam
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  conditions:
+  - !type:TileNotBlocked
+  - !type:ZBuildAllowed
+
+- type: constructionGraph
+  id: RUMCConcreteSlabGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: slab
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: AU14ConcreteBag
+        amount: 3
+        doAfter: 4
+  - node: slab
+    entity: RUMCConcreteSlab
+
+- type: construction
+  id: RUMCConcreteSlabBuild
+  name: concrete slab
+  description: A slab of concrete on the ground. While it lies nothing can be dug down from above into its level, over it and around it.
+  graph: RUMCConcreteSlabGraph
+  startNode: start
+  targetNode: slab
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: ZLevel
+  conditions:
+  - !type:ZBuildAllowed

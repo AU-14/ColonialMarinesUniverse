@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Atmos;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Explosion.Implosion;
 using Content.Shared.Damage;
@@ -10,7 +11,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedDropshipWeaponSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(GunshipDirectFireSystem))]
 public sealed partial class DropshipAmmoComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -78,6 +79,15 @@ public sealed partial class DropshipAmmoComponent : Component
 
     [DataField, AutoNetworkedField]
     public int SoundEveryShots = 3;
+
+    [DataField, AutoNetworkedField]
+    public int ZLevelPenetration = 0;
+
+    [DataField, AutoNetworkedField]
+    public bool ApplyEffectsOnPenetrationLevels = false;
+
+    [DataField, AutoNetworkedField]
+    public bool TargetLowestZLevel = false;
 
     [DataField, AutoNetworkedField]
     public bool DeleteOnEmpty;

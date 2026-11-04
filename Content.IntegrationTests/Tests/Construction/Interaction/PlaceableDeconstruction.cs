@@ -17,7 +17,7 @@ public sealed class PlaceableDeconstruction : InteractionTest
         AssertPrototype("TableFrame");
         await InteractUsing(Wrench);
         AssertDeleted();
-        await AssertEntityLookup((Steel, 1), (Rod, 2));
+        await AssertEntityLookup((CMSteel, 1), (CMRodMetal, 2)); // CMU14
     }
 }
 

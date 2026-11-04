@@ -21,6 +21,9 @@
   - type: RMCMesonsNonviewable
     xenoVisible: true
   - type: XenoTunnel
+  - type: NpcFactionMember # CMU14: hostile structure, valid sentry/turret target
+    factions:
+    - RMCXeno
   - type: XenoStructureMapTracked
   - type: TacticalMapTracked
   - type: TacticalMapIcon

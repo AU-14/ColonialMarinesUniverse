@@ -77,6 +77,8 @@
   blacklist:
     components:
     - BorgChassis
+    tags:
+    - SiliconEmotes
   available: false
   icon:
     sprite: _RMC14/Actions/xeno_emotes.rsi
@@ -127,6 +129,8 @@
   blacklist:
     components:
     - BorgChassis
+    tags:
+    - SiliconEmotes
   chatMessages: ["rmc-emote-bark"]
   chatTriggers:
     - bark
@@ -137,6 +141,8 @@
     - barks!
     - barked.
     - barked!
+    - barked
+    - barking
     - barking.
 
 - type: emote
@@ -153,6 +159,8 @@
   blacklist:
     components:
     - BorgChassis
+    tags:
+    - SiliconEmotes
   chatMessages: ["rmc-emote-snarl"]
   chatTriggers:
     - snarl
@@ -163,6 +171,8 @@
     - snarls!
     - snarled.
     - snarled!
+    - snarled
+    - snarling
     - snarling.
 
 - type: emote
@@ -179,6 +189,8 @@
   blacklist:
     components:
     - BorgChassis
+    tags:
+    - SiliconEmotes
   chatMessages: ["rmc-emote-whine"]
   chatTriggers:
     - whine
@@ -189,6 +201,8 @@
     - whines!
     - whined.
     - whined!
+    - whined
+    - whining
     - whining.
       
 - type: emote
@@ -355,7 +369,7 @@
     - BorgChassis
     tags:
       - WorkingJoe
-  icon: _AU14/Interface/Emotes/warcry.png
+  icon: CMU14/Interface/Emotes/warcry.png
   chatMessages: ["au14-chat-emote-msg-warcry"]
   chatTriggers:
    - shouts an inspiring cry
@@ -383,7 +397,7 @@
     - Yautja
     tags:
       - WorkingJoe
-  icon: _AU14/Interface/Emotes/corpsman.png
+  icon: CMU14/Interface/Emotes/corpsman.png
   chatMessages: ["au14-chat-emote-msg-corpsman"]
   chatTriggers:
    - screams for a corpsman

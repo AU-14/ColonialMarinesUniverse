@@ -2,14 +2,8 @@
   abstract: true
   id: RMCBaseMeleeWeapon
   components:
-  - type: MeleeDamageMultiplier
-    whitelist:
-      components:
-      - Xeno
   - type: MeleeWeapon
     angle: 0
-  - type: CMArmorPiercing
-    amount: 20
   - type: InteractedBlacklist
     blacklist:
       components:
@@ -367,6 +361,7 @@
   - type: Tag
     tags:
     - Knife
+    - RMCStraightRazor
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Melee/straight_razor.rsi
     layers:

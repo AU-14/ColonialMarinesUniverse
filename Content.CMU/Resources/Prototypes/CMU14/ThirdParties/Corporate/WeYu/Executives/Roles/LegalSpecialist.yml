@@ -1,0 +1,73 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobWeYuLegalSpecialist
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WeYuLegalSpecialist
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: exec_spec
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_goon
+  - type: Skills
+    skills:
+      RMCSkillConstruction: 1
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 1
+  - type: JobPrefix
+    prefix: cmu-weyuexec-prefix-legalspecialist
+  name: cmu-weyuexec-name-legalspecialist
+  description: cmu-weyuexec-description-legalspecialist
+  playTimeTracker: CMUJobWeYuLegalSpecialist
+  ranks:
+    RMCRankWeYaLegalSpecialist: []
+  startingGear: CMUGearWeYuLegalSpecialist
+  spawnMenuRoleName: WY Legal Specialist (event)
+  greeting: cmu-weyuexec-greeting
+  icon: CMJobIconExecSpec
+  joinNotifyCrew: false
+  supervisors: cmu-weyuexec-supervisors-sitedirector
+  accessGroups:
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: CMUJobWeYuLegalSpecialist
+  name: WY Legal Specialist
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-weyuexec-name-legalspecialist
+    description: cmu-weyuexec-description-legalspecialist
+    reregister: false
+    job: CMUJobWeYuLegalSpecialist
+    raffle:
+      settings: short
+    rules: cmu-weyuexec-rules
+
+- type: startingGear
+  id: CMUGearWeYuLegalSpecialist
+  equipment:
+    id: CMUIDCardWeYuLegalSpecialist
+    jumpsuit: CMJumpsuitLiaisonBlue
+    outerClothing: RMCJacketCorporateBlue
+    shoes: RMCShoesLaceup
+    ears: RMCHeadsetDistressWeYa
+    back: CMSatchel
+    pocket1: RMCUniversalRecorder
+    pocket2: CMClipboard
+  inhand:
+  - CMPaper
+
+- type: playTimeTracker
+  id: CMUJobWeYuLegalSpecialist

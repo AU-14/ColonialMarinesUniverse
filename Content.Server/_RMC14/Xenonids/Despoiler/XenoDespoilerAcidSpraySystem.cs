@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Stunnable;
 using Robust.Shared.Physics.Events;
@@ -34,10 +35,14 @@ public sealed partial class XenoDespoilerAcidSpraySystem : EntitySystem
         if (!_mobStateQuery.HasComp(target) || _xenoQuery.HasComp(target) || _immunityQuery.HasComp(target))
             return;
 
+        // CMU14: overlapping fixtures and delayed rings must not multiply one cast's damage.
+        if (!comp.HitTargets.Add(target))
+            return;
+
         _damageable.TryChangeDamage(target, comp.Damage, ignoreResistances: false, origin: comp.Caster);
 
         if (comp.Caster is { } caster)
-            _acid.ApplyAcid(target, caster);
+            _acid.ApplyAcid(target, caster, acidTier: comp.StunsOnEmpowered ? 2 : 1); // CMU14
 
         if (comp.StunsOnEmpowered)
         {

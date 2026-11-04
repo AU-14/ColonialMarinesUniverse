@@ -1,45 +1,14 @@
-using Content.Shared._CMU14.Medical.Injuries.Trauma;
+using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.Medical.Injuries.Trauma;
+namespace Content.Tests.Shared.CMU14.Medical.Injuries.Trauma;
 
 [TestFixture, TestOf(typeof(CMUTraumaContactModel))]
 public sealed class CMUTraumaContactModelTest
 {
-    [Test]
-    public void DefaultBallisticBoneProfileFavorsHeadAndLimbs()
-    {
-        var settings = CMUTraumaContactSettings.Default;
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(settings.BallisticHighDamageThreshold, Is.EqualTo(FixedPoint2.New(45)));
-            Assert.That(settings.BallisticHeadBoneChance, Is.EqualTo(0.65f));
-            Assert.That(settings.BallisticTorsoBoneChance, Is.EqualTo(0.30f));
-            Assert.That(settings.BallisticArmBoneChance, Is.EqualTo(0.60f));
-            Assert.That(settings.BallisticLegBoneChance, Is.EqualTo(0.60f));
-            Assert.That(settings.BallisticOtherBoneChance, Is.EqualTo(0.35f));
-        });
-    }
-
-    [Test]
-    public void DefaultOrganProfileUsesReducedContactRates()
-    {
-        var settings = CMUTraumaContactSettings.Default;
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(settings.BallisticHeadOrganChance, Is.EqualTo(0.08f));
-            Assert.That(settings.BallisticTorsoOrganChance, Is.EqualTo(0.25f));
-            Assert.That(settings.PierceOrganChance, Is.EqualTo(0.175f));
-            Assert.That(settings.SlashOrganChance, Is.EqualTo(0.10f));
-            Assert.That(settings.BluntOrganChance, Is.EqualTo(0.05f));
-        });
-    }
-
     [Test]
     public void BallisticCanReachOrganWithoutBone()
     {

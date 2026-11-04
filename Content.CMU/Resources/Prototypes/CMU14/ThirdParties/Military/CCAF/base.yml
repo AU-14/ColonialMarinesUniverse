@@ -1,0 +1,177 @@
+# Canadian Colonial Armed Forces fire team, bought through GOVFOR intel. Laid out like the FORECON kill team:
+# each member carries a different CCAF weapon and the ammunition for it.
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: CMUBaseMobSpeciesCCAF
+  abstract: true
+  suffix: CMU, UA, CCAF
+
+- type: entity
+  parent: SquadBase
+  id: CMUSquadCCAF
+  name: CCAF
+  components:
+  - type: SquadTeam
+    color: "#c8102e"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UASOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+    canSupplyDrop: false
+    group: CMUCCAF
+  - type: Tag
+    tags:
+    - CMUSquadCCAF
+
+- type: Tag
+  id: CMUSquadCCAF
+
+- type: entity
+  parent: AU14HeadsetUSArmyERT
+  id: CMUHeadsetCCAF
+  name: CCAF radio headset
+  description: Issued to Canadian Colonial Armed Forces units attached to UA operations.
+
+# ID cards
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardCCAFSectionCommander
+  name: CCAF section commander ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobCCAFSectionCommander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardCCAFRifleman
+  name: CCAF rifleman ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobCCAFRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardCCAFGrenadier
+  name: CCAF grenadier ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobCCAFGrenadier
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+# Weapons, issued with a magazine in.
+
+- type: entity
+  parent: AUWeaponRifleC10A6BR
+  id: CMUWeaponRifleC10A6BRLoaded
+  suffix: Loaded
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleC10A6BR
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleC10A6BR
+
+- type: entity
+  parent: AUWeaponRifleM75AMAS
+  id: CMUWeaponRifleM75AMASLoaded
+  suffix: Loaded
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleM75AMAS
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleM75AMAS
+  # Same slots as the M75A MAS, but the underbarrel starts empty instead of with an MK1 grenade launcher.
+  # Setting slots replaces the parent's whole list, so every slot is repeated here.
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentM54CStockCollapsible
+        whitelist:
+          tags:
+          - RMCAttachmentM54CStockCollapsible
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentBipod
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+          - RMCAttachmentMK1GrenadeLauncher
+          - RMCAttachmentLaserSight
+
+- type: entity
+  parent: AUWeaponRifleM100MGR
+  id: CMUWeaponRifleM100MGRLoaded
+  suffix: Loaded
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleM100MGR
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleM100MGR
+
+- type: playTimeTracker
+  id: CMUJobCCAFSectionCommander
+
+- type: playTimeTracker
+  id: CMUJobCCAFRifleman
+
+- type: playTimeTracker
+  id: CMUJobCCAFGrenadier

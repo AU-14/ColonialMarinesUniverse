@@ -107,7 +107,7 @@
     - CMMagazineSMGM63Ext
     - CMMagazineSMGM63Ext
     back:
-    - CMDefibrillator
+    - AU14CMDefibrillator # cmu edit: was CMDefibrillator
     - CMAdvFirstAidKitFilled
     - CMAdvFirstAidKitFilled
     - CMStunbaton

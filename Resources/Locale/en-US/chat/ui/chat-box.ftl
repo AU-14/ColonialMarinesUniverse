@@ -3,6 +3,9 @@ hud-chatbox-info-talk = {$talk-key} to talk.
 hud-chatbox-info-cycle = Click here to talk, {$cycle-key} to cycle channels.
 hud-chatbox-info-unbound = Click here to talk.
 
+chat-tab-all = ALL
+chat-tab-radio = RADIO
+
 hud-chatbox-select-name-prefixed = {$prefix} {$name}
 hud-chatbox-select-channel-Admin = Admin
 hud-chatbox-select-channel-Console = Console
@@ -49,6 +52,9 @@ hud-chatbox-split-toggle = Split
 hud-chatbox-split-tooltip = Choose a second chat tab.
 hud-chatbox-split-picker = Split into:
 hud-chatbox-split-close = Close split
+hud-chatbox-split-direction = Layout:
+hud-chatbox-split-direction-stacked = Stacked
+hud-chatbox-split-direction-side = Side by side
 hud-chatbox-tabs = Tabs:
 hud-chatbox-tabs-new-placeholder = New tab
 hud-chatbox-tabs-add = Add
@@ -70,6 +76,6 @@ hud-chatbox-display-color-whole-message = Color whole message text
 hud-chatbox-display-color-whole-message-help = Uses channel colors on every word instead of only side accents and highlighted words.
 hud-chatbox-display-legacy = Use old chat
 hud-chatbox-display-legacy-help = Shows the old scrollback panel and hides structured tabs and split chat.
-hud-chatbox-highlights-placeholder = McHands
+hud-chatbox-highlights-placeholder = @McHands
                                      "Judge"
                                      Medical

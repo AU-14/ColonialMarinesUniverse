@@ -1,0 +1,305 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/chemistry.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "pill"
+    },
+    {
+      "name": "pill1"
+    },
+    {
+      "name": "pill2"
+    },
+    {
+      "name": "pill3"
+    },
+    {
+      "name": "pill4"
+    },
+    {
+      "name": "pill5"
+    },
+    {
+      "name": "pill6"
+    },
+    {
+      "name": "pill7"
+    },
+    {
+      "name": "pill8"
+    },
+    {
+      "name": "pill9"
+    },
+    {
+      "name": "pill10"
+    },
+    {
+      "name": "pill11"
+    },
+    {
+      "name": "pill12"
+    },
+    {
+      "name": "pill13"
+    },
+    {
+      "name": "pill14"
+    },
+    {
+      "name": "pill15"
+    },
+    {
+      "name": "pill16"
+    },
+    {
+      "name": "pill17"
+    },
+    {
+      "name": "pill18"
+    },
+    {
+      "name": "pill19"
+    },
+    {
+      "name": "pill20"
+    },
+    {
+      "name": "pill21"
+    },
+    {
+      "name": "pill22"
+    },
+    {
+      "name": "solid"
+    },
+    {
+      "name": "liquid"
+    },
+    {
+      "name": "vapour"
+    },
+    {
+      "name": "beaker"
+    },
+    {
+      "name": "lid_beaker"
+    },
+    {
+      "name": "vial"
+    },
+    {
+      "name": "dropper"
+    },
+    {
+      "name": "robodropper"
+    },
+    {
+      "name": "beakerlarge"
+    },
+    {
+      "name": "lid_beakerlarge"
+    },
+    {
+      "name": "beakersilver"
+    },
+    {
+      "name": "lid_beakersilver"
+    },
+    {
+      "name": "chempuff",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "weedpuff",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "syringeproj",
+      "directions": 4
+    },
+    {
+      "name": "molten"
+    },
+    {
+      "name": "lid_vial"
+    },
+    {
+      "name": "beakerbluespace"
+    },
+    {
+      "name": "lid_beakerbluespace"
+    },
+    {
+      "name": "beakernoreact",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "lid_beakernoreact"
+    },
+    {
+      "name": "bottle-1"
+    },
+    {
+      "name": "bottle-2"
+    },
+    {
+      "name": "bottle-3"
+    },
+    {
+      "name": "bottle-4"
+    },
+    {
+      "name": "lid_bottle-1"
+    },
+    {
+      "name": "lid_bottle-2"
+    },
+    {
+      "name": "lid_bottle-3"
+    },
+    {
+      "name": "lid_bottle-4"
+    },
+    {
+      "name": "pills_open"
+    },
+    {
+      "name": "pills_closed"
+    },
+    {
+      "name": "pill_packet"
+    },
+    {
+      "name": "pill_packet_4"
+    },
+    {
+      "name": "pill_packet_3"
+    },
+    {
+      "name": "pill_packet_2"
+    },
+    {
+      "name": "pill_packet_1"
+    },
+    {
+      "name": "pill_canister"
+    },
+    {
+      "name": "pill_canister1"
+    },
+    {
+      "name": "pill_canister2"
+    },
+    {
+      "name": "pill_canister3"
+    },
+    {
+      "name": "pill_canister4"
+    },
+    {
+      "name": "pill_canister5"
+    },
+    {
+      "name": "pill_canister6"
+    },
+    {
+      "name": "pill_canister7"
+    },
+    {
+      "name": "pill_canister8"
+    },
+    {
+      "name": "pill_canister9"
+    },
+    {
+      "name": "pill_canister10"
+    },
+    {
+      "name": "pill_canister11"
+    },
+    {
+      "name": "pill_canister12"
+    },
+    {
+      "name": "fertilizer"
+    }
+  ]
+}

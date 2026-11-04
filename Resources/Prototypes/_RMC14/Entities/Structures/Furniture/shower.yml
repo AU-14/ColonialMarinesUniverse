@@ -19,6 +19,7 @@
   - type: InteractionOutline
   - type: Appearance
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -40,6 +41,7 @@
   - type: InteractionPopup
     interactDelay: 3
     successChance: 1
+    interactSuccessString: cmu-shower-interact # CMU14
     interactSuccessSound:
       path: /Audio/Ambience/Objects/drain.ogg
       params:

@@ -7,69 +7,69 @@ using Content.Shared._RMC14.Xenonids.Fruit.Events;
 
 namespace Content.Shared._RMC14.Xenonids.Fruit.Components;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 [Access(typeof(SharedXenoFruitSystem))]
 public sealed partial class XenoFruitComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    [DataField]
     public XenoFruitState State = XenoFruitState.Growing;
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan? GrowAt;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan GrowTime = TimeSpan.FromSeconds(15);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string ItemState = "fruit_lesser_item";
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string GrowingState = "fruit_lesser_immature";
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string GrownState = "fruit_lesser";
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public string EatenState = "fruit_lesser_spent";
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public SoundSpecifier HarvestSound = new SoundCollectionSpecifier("XenoResinBreak")
     {
         Params = AudioParams.Default.WithVolume(-10f)
     };
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Hive;
 
     // entity who planted the given fruit
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Planter;
 
     // Fruit harvest do-after delay
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan HarvestDelay = TimeSpan.FromSeconds(2);
 
     // Fruit consumption do-after delay
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan ConsumeDelay = TimeSpan.FromSeconds(2);
 
     // Can this fruit be consumed at full health?
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool CanConsumeAtFull = true;
 
     // Popup to display upon consumption
-    [DataField, AutoNetworkedField]
+    [DataField]
     public LocId Popup = new LocId("rmc-xeno-fruit-effect-lesser");
 
     // Color for the gardener overlay
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Color? Color;
 
     // Color for the aura overlay
-    [DataField, AutoNetworkedField]
+    [DataField]
     public Color OutlineColor;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float SpentDespawnTime = 1.0f;
 }
 

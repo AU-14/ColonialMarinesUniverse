@@ -1,0 +1,104 @@
+- type: constructionGraph
+  id: !type:CreateVariants
+    values: [ GasUnary, GasUnaryAlt1, GasUnaryAlt2 ]
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: ventpump
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+    - to: passivevent
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+    - to: ventscrubber
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+    - to: outletinjector
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 2
+        doAfter: 1
+
+  - node: ventpump
+    entity: !type:CreateVariants
+      values: [ CMVentPump, CMVentPumpAlt1, CMVentPumpAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+
+  - node: passivevent
+    entity: !type:CreateVariants
+      values: [ CMUPassiveVent, CMUPassiveVentAlt1, CMUPassiveVentAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+
+  - node: ventscrubber
+    entity: !type:CreateVariants
+      values: [ CMVentScrubber, CMVentScrubberAlt1, CMVentScrubberAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+
+  - node: outletinjector
+    entity: !type:CreateVariants
+      values: [ CMUOutletInjector, CMUOutletInjectorAlt1, CMUOutletInjectorAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1

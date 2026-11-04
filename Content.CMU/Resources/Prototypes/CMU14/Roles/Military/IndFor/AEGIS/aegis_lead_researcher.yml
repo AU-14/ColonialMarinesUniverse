@@ -1,0 +1,79 @@
+- type: job
+  parent: CMUJobBaseAegis
+  id: CMUJobAegisLeadResearcher
+  name: cmu-job-name-aegis-lead-researcher
+  description: cmu-job-description-aegis-lead-researcher
+  startingGear: CMUGearAegisLeadResearcher
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 2
+      RMCSkillIntel: 3
+      RMCSkillLeadership: 2
+      RMCSkillMedical: 3
+      RMCSkillResearch: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: cmu-job-prefix-aegis-lead-researcher
+
+- type: startingGear
+  id: CMUGearAegisLeadResearcher
+  equipment:
+    jumpsuit: CMJumpsuitResearch
+    outerClothing: RMCLabcoatVirology
+    gloves: CMHandsLatex
+    shoes: CMBootsBlackFilled
+    mask: CMMaskSterile
+    eyes: RMCGlassesReagentHUDGlasses
+    back: CMSatchelMedical
+    ears: AU14HeadsetGovforAuxiliary
+    id: CMUIDCardAegisLeadResearcher
+  storage:
+    back:
+    - CMUStampAegis
+
+# ├──[ Spawnpoint ]──────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointAegisLeadResearcher
+  name: AEGIS lead researcher spawn point
+  suffix: CMU, Job
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobAegisLeadResearcher
+  - type: Sprite
+    state: x
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidAegisLeadResearcher
+  name: AEGIS lead researcher
+  suffix: CMU, Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/aegis.rsi
+    state: keycard
+  - type: RandomHumanoidSpawner
+    settings: CMUSettingsAegisLeadResearcher
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUSettingsAegisLeadResearcher
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-aegis-lead-researcher
+    description: cmu-ghost-role-information-aegis-lead-researcher-description
+    rules: cmu-ghost-role-information-aegis-rules
+    reregister: false
+    job: CMUJobAegisLeadResearcher
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+
+- type: roleLoadout
+  id: JobCMUJobAegisLeadResearcher
+  points: 7
+  groups:
+  - AegisStampGroupCMU

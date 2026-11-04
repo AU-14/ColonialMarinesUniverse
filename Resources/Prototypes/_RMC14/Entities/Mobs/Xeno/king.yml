@@ -12,7 +12,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/King/king.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/King/king.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -21,7 +21,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      800: Critical
+      1500: Critical
       1600: Dead
   - type: Tag
     tags:
@@ -54,19 +54,24 @@
     maxPlasma: 1000
     plasmaRegenOnWeeds: 2
   - type: CMArmor
-    xenoArmor: 45
-    explosionArmor: 70
+    xenoArmor: 50
+    explosionArmor: 100
   - type: InnateCommandSpeech
   - type: XenoClaws
     clawType: VerySharp
+    armorPiercing: 100
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 50
+      types:
+        Blunt: 20
+        Slash: 20
+        Piercing: 20
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 66
+      types:
+        Blunt: 25
+        Slash: 25
+        Piercing: 25
   - type: Tackle
     stunMin: 6
     stunMax: 10
@@ -90,8 +95,8 @@
         layer:
         - BulletImpassable
   - type: MovementSpeedModifier
-    baseWalkSpeed: 1.66
-    baseSprintSpeed: 3
+    baseWalkSpeed: 2.4
+    baseSprintSpeed: 4
   - type: SlowOnPull
     slowdowns:
     - multiplier: 0.68
@@ -157,22 +162,34 @@
     id: RMCXenoKing
   - type: StunHostilesOnStep
     damage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 1.4
-  - type: XenoRankNames
+  - type: XenoRankNames # CMU14
     rankNames:
       2: rmc-xeno-mature-king
       3: rmc-xeno-mature-king
       4: rmc-xeno-mature-king
       5: rmc-xeno-mature-king
+      6: rmc-xeno-mature-king
+      7: rmc-xeno-mature-king
+      8: rmc-xeno-mature-king
+      9: rmc-xeno-mature-king
   - type: XenoRend
     damage:
-      groups:
-        Brute: 25
+      types:
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
   - type: XenoBulwarkOfTheHive
   - type: XenoDoom
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      super: true
+      ticks: 4
   - type: XenoDestroy
     structureDamage:
       types:

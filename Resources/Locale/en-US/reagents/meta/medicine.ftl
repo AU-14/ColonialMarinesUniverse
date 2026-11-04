@@ -14,10 +14,20 @@ reagent-name-bicaridine = bicaridine
 reagent-desc-bicaridine = An analgesic which is highly effective at treating brute damage. It's useful for stabilizing people who have been severely beaten, as well as treating less life-threatening injuries.
 
 reagent-name-cryoxadone = cryoxadone
-reagent-desc-cryoxadone = Required for the proper function of cryogenics. Heals all standard types of damage, but only works in temperatures under 213K. It can treat and rejuvenate plants when applied in small doses.
+reagent-desc-cryoxadone = A cryogenic medicine that treats asphyxiation and blood loss at 213K or colder. It can treat and rejuvenate plants when applied in small doses.
 
 reagent-name-doxarubixadone = doxarubixadone
-reagent-desc-doxarubixadone = A cryogenics chemical. Heals cellular damage caused by dangerous gasses and chemicals.
+reagent-desc-doxarubixadone = A cryogenic medicine that heals cellular damage and gradually repairs every attached organ at 213K or colder.
+
+reagent-name-traumoxadone = traumoxadone
+reagent-desc-traumoxadone = A cryogenic medicine that heals blunt, piercing, and slash damage and gradually closes brute wounds at 213K or colder.
+
+reagent-name-urishoxadone = urishoxadone
+reagent-desc-urishoxadone = A cryogenic medicine made with urishiol that heals poison and radiation damage at 213K or colder.
+
+reagent-name-necrosol = necrosol
+reagent-desc-necrosol = A cryogenic medicine that regenerates one missing native limb per 5 units, gradually mends all fractures, and restores 1% blood per second at 213K or colder. It does not heal general damage.
+
 
 reagent-name-dermaline = dermaline
 reagent-desc-dermaline = An advanced chemical that is more effective at treating burn damage than kelotane.
@@ -26,6 +36,7 @@ reagent-name-dexalin = dexalin
 reagent-desc-dexalin = Used for treating minor oxygen deprivation and bloodloss. A required reagent for dexalin plus.
 
 reagent-name-dexalin-plus = dexalin plus
+reagent-name-dexalin-plus-saline = dexalin plus & saline
 reagent-desc-dexalin-plus = Used in treatment of extreme cases of oxygen deprivation and bloodloss. Flushes heartbreaker toxin out of the blood stream.
 
 reagent-name-epinephrine = epinephrine
@@ -55,8 +66,12 @@ reagent-desc-phalanximine = An advanced chemical used in the treatment of cancer
 reagent-name-polypyrylium-oligomers = Polypyrylium Oligomers
 reagent-desc-polypyrylium-oligomers = A purple mixture of short polyelectrolyte chains not easily synthesized in the laboratory. Heals asphyxiation and brute damage. Stops bleeding over time.
 
+reagent-name-romerodone = romerodone
+reagent-desc-romerodone = A byproduct of centrifuging zombie blood, perhaps you could make a cure with this.
+
+
 reagent-name-ambuzol = ambuzol
-reagent-desc-ambuzol = A highly engineered substance able to halt the progression of a zombie infection.
+reagent-desc-ambuzol = A highly engineered substance able to cure the zombie infection.
 
 reagent-name-ambuzol-plus = ambuzol plus
 reagent-desc-ambuzol-plus = Further engineered with omnizine, inoculates the living against the infection.
@@ -110,9 +125,10 @@ reagent-name-saline = saline
 reagent-desc-saline = A mixture of salt and water. Commonly used to treat dehydration or low fluid presence in blood.
 
 reagent-name-lacerinol = lacerinol
-reagent-desc-lacerinol = A fairly unreactive chemical that boosts collagen sythesis to incredible levels, healing slash trauma.
+reagent-desc-lacerinol = A fairly unreactive chemical that boosts collagen synthesis to incredible levels, healing slash trauma.
 
 reagent-name-puncturase = puncturase
+reagent-name-puncturase-tranexamic = puncturase & tranexamic
 reagent-desc-puncturase = A fizzy chemical that helps rebuild trauma caused by piercing damage, leaving a slight amount of tissue damage behind.
 
 reagent-name-bruizine = bruizine
@@ -122,19 +138,20 @@ reagent-name-holywater = holy water
 reagent-desc-holywater = The cleanest and purest of waters straight from the hands of god, is known to magically heal wounds.
 
 reagent-name-pyrazine = pyrazine
+reagent-name-pyrazine-dermaline = pyrazine & dermaline
 reagent-desc-pyrazine = Efficiently heals burns from the hottest of fires. Causes massive internal bleeding when overdosed.
 
 reagent-name-insuzine = insuzine
 reagent-desc-insuzine = Rapidly repairs dead tissue caused by electrocution, but cools you slightly. Completely freezes the patient when overdosed.
 
 reagent-name-opporozidone = opporozidone
-reagent-desc-opporozidone= A difficult to synthesize cryogenic drug used to regenerate rotting tissue and brain matter.
+reagent-desc-opporozidone = A cryogenic medicine that gradually reverses rot and extends an active revival deadline in dead patients at 150K or colder. It cannot reverse permanent death or an expired revival deadline.
 
-reagent-name-necrosol = necrosol
-reagent-desc-necrosol = A necrotic substance that seems to be able to heal frozen corpses. It can treat and rejuvenate plants when applied in small doses.
+reagent-name-arcryox = arcryox
+reagent-desc-arcryox = A sickeningly blue cryogenics chemical that is able to heal extreme wounds even on the dead. It has trouble stabilizing patients however.
 
 reagent-name-aloxadone = aloxadone
-reagent-desc-aloxadone = A cryogenics chemical. Used to treat severe burns and frostbite via regeneration of the affected tissue. Works regardless of the patient being alive or dead.
+reagent-desc-aloxadone = A cryogenic medicine that heals heat, shock, cold, and caustic damage and gradually closes burn wounds at 213K or colder, even in dead patients.
 
 reagent-name-mannitol = mannitol
 reagent-desc-mannitol = Efficiently restores brain damage.
@@ -147,3 +164,6 @@ reagent-desc-potassium-iodide = Will reduce the damaging effects of radiation by
 
 reagent-name-haloperidol = haloperidol
 reagent-desc-haloperidol = Removes most stimulating and hallucinogenic drugs. Reduces druggy effects and jitteriness. Causes drowsiness.
+
+reagent-name-heparin = heparin
+reagent-desc-heparin = Commonly used as an anticoagulant medication. Causes blood to have difficulty forming clots. Can cause internal bleeding when overdosed.

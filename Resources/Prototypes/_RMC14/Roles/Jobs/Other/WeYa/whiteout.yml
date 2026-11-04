@@ -19,6 +19,7 @@
     - type: NpcFactionMember
       factions:
       - WeYa
+    - type: PyroWhitelist # CMU14
     - type: Language
       spokenLanguages:
       - English

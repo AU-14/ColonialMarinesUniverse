@@ -82,6 +82,9 @@ public sealed partial class CMDistressSignalRuleComponent : Component
     [DataField]
     public bool HijackSongPlayed;
 
+    [DataField] // CMU14
+    public bool HijackBoostsApplied;
+
     [DataField]
     public bool HijackIsHuman;
 

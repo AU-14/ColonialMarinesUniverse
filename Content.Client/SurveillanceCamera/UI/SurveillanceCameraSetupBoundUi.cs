@@ -1,5 +1,5 @@
 using Content.Shared.SurveillanceCamera;
-using Robust.Client.GameObjects;
+using Robust.Client.UserInterface;
 
 namespace Content.Client.SurveillanceCamera.UI;
 
@@ -23,17 +23,13 @@ public sealed class SurveillanceCameraSetupBoundUi : BoundUserInterface
     {
         base.Open();
 
-        _window = new();
+        _window = this.CreateWindow<SurveillanceCameraSetupWindow>();
 
         if (_type == SurveillanceCameraSetupUiKey.Router)
-        {
             _window.HideNameSelector();
-        }
 
-        _window.OpenCentered();
         _window.OnNameConfirm += SendDeviceName;
         _window.OnNetworkConfirm += SendSelectedNetwork;
-        _window.OnClose += Close;
     }
 
     private void SendSelectedNetwork(int idx)
@@ -50,23 +46,21 @@ public sealed class SurveillanceCameraSetupBoundUi : BoundUserInterface
     {
         base.UpdateState(state);
 
-        if (_window == null || state is not SurveillanceCameraSetupBoundUiState cast)
+        if (_window == null)
         {
             return;
         }
 
-        _window.UpdateState(cast.Name, cast.NameDisabled, cast.NetworkDisabled);
-        _window.LoadAvailableNetworks(cast.Network, cast.Networks);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-
-        if (disposing)
+        switch (state)
         {
-            _window?.Close();
-            _window = null;
+            case SurveillanceCameraSetupBoundUiState frequencyState:
+                _window.UpdateState(frequencyState.Name, frequencyState.NameDisabled, frequencyState.NetworkDisabled);
+                _window.LoadAvailableNetworks(frequencyState.Network, frequencyState.Networks);
+                break;
+            case SurveillanceCameraLogicalNetworkSetupBoundUiState networkState:
+                _window.UpdateState(networkState.Name, networkState.NameDisabled, networkState.NetworkDisabled);
+                _window.LoadAvailableCameraNetworks(networkState.Network, networkState.Networks);
+                break;
         }
     }
 }

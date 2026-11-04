@@ -90,6 +90,7 @@
   id: RMCCrateAegisLobby
   name: AEGIS tracking equipment crate (x3 pinpointers, x1 pamphlet)
   description: A supply crate containing AEGIS ID tracking equipment and documentation.
+  suffix: RMC
   components:
   - type: StorageFill
     contents:

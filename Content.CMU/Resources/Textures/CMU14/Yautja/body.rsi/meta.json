@@ -1,0 +1,375 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/species/r_predator.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "full",
+      "directions": 4
+    },
+    {
+      "name": "head_m",
+      "directions": 4
+    },
+    {
+      "name": "head_f",
+      "directions": 4
+    },
+    {
+      "name": "torso_m",
+      "directions": 4
+    },
+    {
+      "name": "torso_f",
+      "directions": 4
+    },
+    {
+      "name": "l_arm",
+      "directions": 4
+    },
+    {
+      "name": "r_arm",
+      "directions": 4
+    },
+    {
+      "name": "l_hand",
+      "directions": 4
+    },
+    {
+      "name": "r_hand",
+      "directions": 4
+    },
+    {
+      "name": "l_leg",
+      "directions": 4
+    },
+    {
+      "name": "r_leg",
+      "directions": 4
+    },
+    {
+      "name": "l_foot",
+      "directions": 4
+    },
+    {
+      "name": "r_foot",
+      "directions": 4
+    },
+    {
+      "name": "head_m_tan",
+      "directions": 4
+    },
+    {
+      "name": "head_f_tan",
+      "directions": 4
+    },
+    {
+      "name": "torso_m_tan",
+      "directions": 4
+    },
+    {
+      "name": "torso_f_tan",
+      "directions": 4
+    },
+    {
+      "name": "l_arm_tan",
+      "directions": 4
+    },
+    {
+      "name": "r_arm_tan",
+      "directions": 4
+    },
+    {
+      "name": "l_hand_tan",
+      "directions": 4
+    },
+    {
+      "name": "r_hand_tan",
+      "directions": 4
+    },
+    {
+      "name": "l_leg_tan",
+      "directions": 4
+    },
+    {
+      "name": "r_leg_tan",
+      "directions": 4
+    },
+    {
+      "name": "l_foot_tan",
+      "directions": 4
+    },
+    {
+      "name": "r_foot_tan",
+      "directions": 4
+    },
+    {
+      "name": "head_m_green",
+      "directions": 4
+    },
+    {
+      "name": "head_f_green",
+      "directions": 4
+    },
+    {
+      "name": "torso_m_green",
+      "directions": 4
+    },
+    {
+      "name": "torso_f_green",
+      "directions": 4
+    },
+    {
+      "name": "l_arm_green",
+      "directions": 4
+    },
+    {
+      "name": "r_arm_green",
+      "directions": 4
+    },
+    {
+      "name": "l_hand_green",
+      "directions": 4
+    },
+    {
+      "name": "r_hand_green",
+      "directions": 4
+    },
+    {
+      "name": "l_leg_green",
+      "directions": 4
+    },
+    {
+      "name": "r_leg_green",
+      "directions": 4
+    },
+    {
+      "name": "l_foot_green",
+      "directions": 4
+    },
+    {
+      "name": "r_foot_green",
+      "directions": 4
+    },
+    {
+      "name": "head_m_purple",
+      "directions": 4
+    },
+    {
+      "name": "head_f_purple",
+      "directions": 4
+    },
+    {
+      "name": "torso_m_purple",
+      "directions": 4
+    },
+    {
+      "name": "torso_f_purple",
+      "directions": 4
+    },
+    {
+      "name": "l_arm_purple",
+      "directions": 4
+    },
+    {
+      "name": "r_arm_purple",
+      "directions": 4
+    },
+    {
+      "name": "l_hand_purple",
+      "directions": 4
+    },
+    {
+      "name": "r_hand_purple",
+      "directions": 4
+    },
+    {
+      "name": "l_leg_purple",
+      "directions": 4
+    },
+    {
+      "name": "r_leg_purple",
+      "directions": 4
+    },
+    {
+      "name": "l_foot_purple",
+      "directions": 4
+    },
+    {
+      "name": "r_foot_purple",
+      "directions": 4
+    },
+    {
+      "name": "head_m_blue",
+      "directions": 4
+    },
+    {
+      "name": "head_f_blue",
+      "directions": 4
+    },
+    {
+      "name": "torso_m_blue",
+      "directions": 4
+    },
+    {
+      "name": "torso_f_blue",
+      "directions": 4
+    },
+    {
+      "name": "l_arm_blue",
+      "directions": 4
+    },
+    {
+      "name": "r_arm_blue",
+      "directions": 4
+    },
+    {
+      "name": "l_hand_blue",
+      "directions": 4
+    },
+    {
+      "name": "r_hand_blue",
+      "directions": 4
+    },
+    {
+      "name": "l_leg_blue",
+      "directions": 4
+    },
+    {
+      "name": "r_leg_blue",
+      "directions": 4
+    },
+    {
+      "name": "l_foot_blue",
+      "directions": 4
+    },
+    {
+      "name": "r_foot_blue",
+      "directions": 4
+    },
+    {
+      "name": "head_m_red",
+      "directions": 4
+    },
+    {
+      "name": "head_f_red",
+      "directions": 4
+    },
+    {
+      "name": "torso_m_red",
+      "directions": 4
+    },
+    {
+      "name": "torso_f_red",
+      "directions": 4
+    },
+    {
+      "name": "l_arm_red",
+      "directions": 4
+    },
+    {
+      "name": "r_arm_red",
+      "directions": 4
+    },
+    {
+      "name": "l_hand_red",
+      "directions": 4
+    },
+    {
+      "name": "r_hand_red",
+      "directions": 4
+    },
+    {
+      "name": "l_leg_red",
+      "directions": 4
+    },
+    {
+      "name": "r_leg_red",
+      "directions": 4
+    },
+    {
+      "name": "l_foot_red",
+      "directions": 4
+    },
+    {
+      "name": "r_foot_red",
+      "directions": 4
+    },
+    {
+      "name": "head_m_black",
+      "directions": 4
+    },
+    {
+      "name": "head_f_black",
+      "directions": 4
+    },
+    {
+      "name": "torso_m_black",
+      "directions": 4
+    },
+    {
+      "name": "torso_f_black",
+      "directions": 4
+    },
+    {
+      "name": "l_arm_black",
+      "directions": 4
+    },
+    {
+      "name": "r_arm_black",
+      "directions": 4
+    },
+    {
+      "name": "l_hand_black",
+      "directions": 4
+    },
+    {
+      "name": "r_hand_black",
+      "directions": 4
+    },
+    {
+      "name": "l_leg_black",
+      "directions": 4
+    },
+    {
+      "name": "r_leg_black",
+      "directions": 4
+    },
+    {
+      "name": "l_foot_black",
+      "directions": 4
+    },
+    {
+      "name": "r_foot_black",
+      "directions": 4
+    },
+    {
+      "name": "full_tan",
+      "directions": 4
+    },
+    {
+      "name": "full_green",
+      "directions": 4
+    },
+    {
+      "name": "full_purple",
+      "directions": 4
+    },
+    {
+      "name": "full_blue",
+      "directions": 4
+    },
+    {
+      "name": "full_red",
+      "directions": 4
+    },
+    {
+      "name": "full_black",
+      "directions": 4
+    }
+  ]
+}

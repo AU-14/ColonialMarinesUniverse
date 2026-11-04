@@ -1,0 +1,15 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentThreat
+  name:  au-job-name-threat-member
+  description: au14-department-threat-description
+  color: "#e3ce94"
+  faction: hunt
+  roles:
+  - AU14JobThreatLeader
+  - AU14JobThreatMember
+  - CMUYautjaHunter
+  - CMUYautjaAncient
+  - CMUYautjaStranded
+  departmentRadio: null
+  headOfDepartment: null

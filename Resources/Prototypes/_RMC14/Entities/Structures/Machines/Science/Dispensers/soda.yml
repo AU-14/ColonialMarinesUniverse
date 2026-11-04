@@ -4,37 +4,40 @@
   name: soda fountain
   description: A drink fabricating machine, capable of producing many sugary drinks with just one touch.
   components:
-  - type: Transform
-    anchored: false
-  - type: Anchorable
-    flags: None
+# CMU14: Inherits anchoring from parent BoozeDispenser
+# - type: Transform
+#   anchored: false
+# - type: Anchorable
+#   flags: None
   - type: Sprite
     drawdepth: SmallObjects
     sprite: _RMC14/Structures/Machines/Science/small_dispensers.rsi
     snapCardinals: true
     layers:
     - state: soda_dispenser
-  - type: StorageFill
-    contents:
-    - id: DrinkCoconutWaterJug
-    - id: DrinkCoffeeJug
-    - id: DrinkColaBottleFull
-    - id: DrinkCreamCartonXL
-    - id: DrinkDrGibbJug
-    - id: DrinkEnergyDrinkJug
-    - id: DrinkGreenTeaJug
-    - id: DrinkIceJug
-    - id: DrinkJuiceLimeCartonXL
-    - id: DrinkJuiceOrangeCartonXL
-    - id: DrinkLemonLimeJug
-    - id: DrinkRootBeerJug
-    - id: DrinkSodaWaterBottleFull
-    - id: DrinkSpaceMountainWindBottleFull
-    - id: DrinkSpaceUpBottleFull
-    - id: DrinkSugarJug
-    - id: DrinkTeaJug
-    - id: DrinkTonicWaterBottleFull
-    - id: DrinkWaterMelonJuiceJug
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: DrinkCoconutWaterJug
+        - id: DrinkCoffeeJug
+        - id: DrinkColaBottleFull
+        - id: DrinkCreamCartonXL
+        - id: DrinkDrGibbJug
+        - id: DrinkEnergyDrinkJug
+        - id: DrinkGreenTeaJug
+        - id: DrinkIceJug
+        - id: DrinkJuiceLimeCartonXL
+        - id: DrinkJuiceOrangeCartonXL
+        - id: DrinkLemonLimeJug
+        - id: DrinkRootBeerJug
+        - id: DrinkSodaWaterBottleFull
+        - id: DrinkSpaceMountainWindBottleFull
+        - id: DrinkSpaceUpBottleFull
+        - id: DrinkSugarJug
+        - id: DrinkTeaJug
+        - id: DrinkTonicWaterBottleFull
+        - id: DrinkWaterMelonJuiceJug
   - type: Machine
     board: CMCircuitboardDispenserSoda
   - type: InteractedBlacklist

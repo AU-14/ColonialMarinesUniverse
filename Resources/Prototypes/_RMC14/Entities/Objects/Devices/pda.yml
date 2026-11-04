@@ -13,11 +13,14 @@
   - type: CartridgeLoader
     uiKey: enum.PdaUiKey.Key
     notificationsEnabled: false
-    preinstalled:
-    - CrewManifestCartridge
-    - NotekeeperCartridge
-    - NewsReaderCartridge
-    - LogProbeCartridge
+  - type: EntityTableContainerFill
+    containers:
+      preinstalled-program-container: !type:AllSelector
+        children:
+        - id: CrewManifestCartridge
+        - id: NotekeeperCartridge
+        - id: NewsReaderCartridge
+        - id: LogProbeCartridge
   # Component is a copy of the component for BasePDA in Resources/Prototypes/Entities/Objects/Devices/pda.yml
   - type: UserInterface
     interfaces:

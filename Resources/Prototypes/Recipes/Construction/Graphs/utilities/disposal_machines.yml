@@ -6,7 +6,7 @@
       edges:
         - to: frame
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
     - node: frame
@@ -15,7 +15,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:DeleteEntity
           steps:
@@ -41,7 +41,7 @@
               doAfter: 1
         - to: frame_electronics
           steps:
-            - material: Plastic # No machine parts = sad julian
+            - material: RMCPlastic # CMU14: fork plastic (RMCSheetPlastic), not upstream Plastic
               amount: 2
               doAfter: 1
     - node: frame_electronics
@@ -52,7 +52,7 @@
         - to: frame_cable
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlastic
+              prototype: RMCSheetPlastic1 # CMU14: refund fork plastic
               amount: 2
           steps:
             - tool: Cutting
@@ -83,7 +83,7 @@
           conditions:
             - !type:EntityAnchored
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
     - node: disposal_unit
@@ -92,7 +92,7 @@
         - to: frame_unit
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:EmptyAllContainers
           conditions:
@@ -113,7 +113,7 @@
           conditions:
             - !type:EntityAnchored
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
     - node: mailing_unit
@@ -122,7 +122,7 @@
         - to: frame_mailing
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:EmptyAllContainers
           conditions:

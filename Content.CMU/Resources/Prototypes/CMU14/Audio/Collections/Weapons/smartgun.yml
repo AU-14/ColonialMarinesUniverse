@@ -1,0 +1,16 @@
+- type: soundCollection
+  id: AU14SmartgunFireSound
+  files:
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun1.ogg
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun2.ogg
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun3.ogg
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun4.ogg
+
+# Low ammo rattle, from cmss13 PR 13169.
+- type: soundCollection
+  id: AU14SmartgunRattleFireSound
+  files:
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun1_rattle.ogg
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun2_rattle.ogg
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun3_rattle.ogg
+  - /Audio/CMU14/Weapons/smartgun/gun_smartgun4_rattle.ogg

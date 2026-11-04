@@ -1,0 +1,1878 @@
+# Ten source-inspected loose default world models; draft limits in SOURCES_BAGS_HELMETS_CLOUD.md.
+- type: cmu3DModel
+  id: CMU3DAU14HeadHelmetRMCMedicWorldCloud
+  label: AU14HeadHelmetRMCMedic loose default
+  status: draft
+  sourcePrototypes:
+  - AU14HeadHelmetRMCMedic
+  referencePrototype: AU14HeadHelmetRMCMedic
+  referenceRsi: /Textures/CMU14/Clothing/RMC/helmets/medic.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Hollow loose helmet with a continuous polygonal brim, joined wall and pitched crown facets, separate
+    side protection and attached loose strap ends. Original corpsman cross. Roof facets/seams, rim curvature, unseen
+    back and thickness are explicit draft approximations; the contract cannot produce a smooth thin concave dome.
+    Static ground-item art only. No actor, worn, held, live state, tint, contents or animation binding. Native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: continuous joined lower shell 00
+    min: 0.0851176, 0.02228222, 0.04
+    max: 0.14453001, 0.05428222, 0.114
+    color: '#3B3535'
+    yaw: 104.316758
+  - label: continuous joined lower shell 01
+    min: 0.06348516, 0.05975888, 0.04
+    max: 0.12632898, 0.09175888, 0.114
+    color: '#3B3535'
+    yaw: 130.606016
+  - label: continuous joined lower shell 02
+    min: 0.02445867, 0.08844227, 0.04
+    max: 0.0917528, 0.12044227, 0.114
+    color: '#3B3535'
+    yaw: 152.490118
+  - label: continuous joined lower shell 03
+    min: -0.02508477, 0.10396562, 0.04
+    max: 0.04512972, 0.13596562, 0.114
+    color: '#3B3535'
+    yaw: 171.187329
+  - label: continuous joined lower shell 04
+    min: -0.07712972, 0.10396562, 0.04
+    max: -0.00691523, 0.13596562, 0.114
+    color: '#3B3535'
+    yaw: -171.187329
+  - label: continuous joined lower shell 05
+    min: -0.1237528, 0.08844227, 0.04
+    max: -0.05645867, 0.12044227, 0.114
+    color: '#3B3535'
+    yaw: -152.490118
+  - label: continuous joined lower shell 06
+    min: -0.15832898, 0.05975888, 0.04
+    max: -0.09548516, 0.09175888, 0.114
+    color: '#3B3535'
+    yaw: -130.606016
+  - label: continuous joined lower shell 07
+    min: -0.17653001, 0.02228222, 0.04
+    max: -0.1171176, 0.05428222, 0.114
+    color: '#3B3535'
+    yaw: -104.316758
+  - label: continuous joined lower shell 08
+    min: -0.17653001, -0.01828222, 0.04
+    max: -0.1171176, 0.01371778, 0.114
+    color: '#3B3535'
+    yaw: -75.683242
+  - label: continuous joined lower shell 09
+    min: -0.15832898, -0.05575888, 0.04
+    max: -0.09548516, -0.02375888, 0.114
+    color: '#3B3535'
+    yaw: -49.393984
+  - label: continuous joined lower shell 10
+    min: -0.1237528, -0.08444227, 0.04
+    max: -0.05645867, -0.05244227, 0.114
+    color: '#3B3535'
+    yaw: -27.509882
+  - label: continuous joined lower shell 11
+    min: -0.07712972, -0.09996562, 0.04
+    max: -0.00691523, -0.06796562, 0.114
+    color: '#3B3535'
+    yaw: -8.812671
+  - label: continuous joined lower shell 12
+    min: -0.02508477, -0.09996562, 0.04
+    max: 0.04512972, -0.06796562, 0.114
+    color: '#3B3535'
+    yaw: 8.812671
+  - label: continuous joined lower shell 13
+    min: 0.02445867, -0.08444227, 0.04
+    max: 0.0917528, -0.05244227, 0.114
+    color: '#3B3535'
+    yaw: 27.509882
+  - label: continuous joined lower shell 14
+    min: 0.06348516, -0.05575888, 0.04
+    max: 0.12632898, -0.02375888, 0.114
+    color: '#3B3535'
+    yaw: 49.393984
+  - label: continuous joined lower shell 15
+    min: 0.0851176, -0.01828222, 0.04
+    max: 0.14453001, 0.01371778, 0.114
+    color: '#3B3535'
+    yaw: 75.683242
+  - label: continuous dark rim 00
+    min: 0.08839273, 0.02054759, 0.034
+    max: 0.15087429, 0.05754759, 0.059
+    color: '#141217'
+    yaw: 104.30391
+  - label: continuous dark rim 01
+    min: 0.06597138, 0.05943846, 0.034
+    max: 0.13199769, 0.09643846, 0.059
+    color: '#141217'
+    yaw: 130.57951
+  - label: continuous dark rim 02
+    min: 0.02551761, 0.08920425, 0.034
+    max: 0.09614281, 0.12620425, 0.059
+    color: '#141217'
+    yaw: 152.468135
+  - label: continuous dark rim 03
+    min: -0.02584273, 0.10531337, 0.034
+    max: 0.04780109, 0.14231337, 0.059
+    color: '#141217'
+    yaw: 171.179204
+  - label: continuous dark rim 04
+    min: -0.07980109, 0.10531337, 0.034
+    max: -0.00615727, 0.14231337, 0.059
+    color: '#141217'
+    yaw: -171.179204
+  - label: continuous dark rim 05
+    min: -0.12814281, 0.08920425, 0.034
+    max: -0.05751761, 0.12620425, 0.059
+    color: '#141217'
+    yaw: -152.468135
+  - label: continuous dark rim 06
+    min: -0.16399769, 0.05943846, 0.034
+    max: -0.09797138, 0.09643846, 0.059
+    color: '#141217'
+    yaw: -130.57951
+  - label: continuous dark rim 07
+    min: -0.18287429, 0.02054759, 0.034
+    max: -0.12039273, 0.05754759, 0.059
+    color: '#141217'
+    yaw: -104.30391
+  - label: continuous dark rim 08
+    min: -0.18287429, -0.02154759, 0.034
+    max: -0.12039273, 0.01545241, 0.059
+    color: '#141217'
+    yaw: -75.69609
+  - label: continuous dark rim 09
+    min: -0.16399769, -0.06043846, 0.034
+    max: -0.09797138, -0.02343846, 0.059
+    color: '#141217'
+    yaw: -49.42049
+  - label: continuous dark rim 10
+    min: -0.12814281, -0.09020425, 0.034
+    max: -0.05751761, -0.05320425, 0.059
+    color: '#141217'
+    yaw: -27.531865
+  - label: continuous dark rim 11
+    min: -0.07980109, -0.10631337, 0.034
+    max: -0.00615727, -0.06931337, 0.059
+    color: '#141217'
+    yaw: -8.820796
+  - label: continuous dark rim 12
+    min: -0.02584273, -0.10631337, 0.034
+    max: 0.04780109, -0.06931337, 0.059
+    color: '#141217'
+    yaw: 8.820796
+  - label: continuous dark rim 13
+    min: 0.02551761, -0.09020425, 0.034
+    max: 0.09614281, -0.05320425, 0.059
+    color: '#141217'
+    yaw: 27.531865
+  - label: continuous dark rim 14
+    min: 0.06597138, -0.06043846, 0.034
+    max: 0.13199769, -0.02343846, 0.059
+    color: '#141217'
+    yaw: 49.42049
+  - label: continuous dark rim 15
+    min: 0.08839273, -0.02154759, 0.034
+    max: 0.15087429, 0.01545241, 0.059
+    color: '#141217'
+    yaw: 75.69609
+  - label: joined roof facet 00
+    min: 0.00393066, -0.022, 0.117
+    max: 0.11094934, 0.058, 0.143
+    color: '#3B3535'
+    pitch: -23.690689
+  - label: joined roof facet 01
+    min: -0.00590844, 0.00662, 0.117
+    max: 0.10111025, 0.08662, 0.143
+    color: '#3B3535'
+    yaw: 30.0
+    pitch: -23.690689
+  - label: joined roof facet 02
+    min: -0.03278934, 0.02757129, 0.117
+    max: 0.07422934, 0.10757129, 0.143
+    color: '#3B3535'
+    yaw: 60.0
+    pitch: -23.690689
+  - label: joined roof facet 03
+    min: -0.06950934, 0.03524, 0.117
+    max: 0.03750934, 0.11524, 0.143
+    color: '#3B3535'
+    yaw: 90.0
+    pitch: -23.690689
+  - label: joined roof facet 04
+    min: -0.10622934, 0.02757129, 0.117
+    max: 0.00078934, 0.10757129, 0.143
+    color: '#3B3535'
+    yaw: 120.0
+    pitch: -23.690689
+  - label: joined roof facet 05
+    min: -0.13311025, 0.00662, 0.117
+    max: -0.02609156, 0.08662, 0.143
+    color: '#3B3535'
+    yaw: 150.0
+    pitch: -23.690689
+  - label: joined roof facet 06
+    min: -0.14294934, -0.022, 0.117
+    max: -0.03593066, 0.058, 0.143
+    color: '#3B3535'
+    yaw: 180.0
+    pitch: -23.690689
+  - label: joined roof facet 07
+    min: -0.13311025, -0.05062, 0.117
+    max: -0.02609156, 0.02938, 0.143
+    color: '#3B3535'
+    yaw: 210.0
+    pitch: -23.690689
+  - label: joined roof facet 08
+    min: -0.10622934, -0.07157129, 0.117
+    max: 0.00078934, 0.00842871, 0.143
+    color: '#3B3535'
+    yaw: 240.0
+    pitch: -23.690689
+  - label: joined roof facet 09
+    min: -0.06950934, -0.07924, 0.117
+    max: 0.03750934, 0.00076, 0.143
+    color: '#3B3535'
+    yaw: 270.0
+    pitch: -23.690689
+  - label: joined roof facet 10
+    min: -0.03278934, -0.07157129, 0.117
+    max: 0.07422934, 0.00842871, 0.143
+    color: '#3B3535'
+    yaw: 300.0
+    pitch: -23.690689
+  - label: joined roof facet 11
+    min: -0.00590844, -0.05062, 0.117
+    max: 0.10111025, 0.02938, 0.143
+    color: '#3B3535'
+    yaw: 330.0
+    pitch: -23.690689
+  - label: joined center crown cap
+    min: -0.062, -0.024, 0.143
+    max: 0.03, 0.06, 0.165
+    color: '#3B3535'
+    shape: CylinderZ
+  - label: left joined side guard
+    min: -0.183, -0.038, 0.032
+    max: -0.139, 0.035, 0.116
+    color: '#3B3535'
+    shape: Ellipsoid
+  - label: left front strap anchor
+    min: -0.173, -0.081, 0.014
+    max: -0.149, -0.03, 0.058
+    color: '#141217'
+  - label: left hanging strap
+    min: -0.17, -0.114, 0.005
+    max: -0.152, -0.063, 0.029
+    color: '#4F3022'
+  - label: left turned strap end
+    min: -0.171, -0.132, 0.003
+    max: -0.134, -0.108, 0.019
+    color: '#4F3022'
+  - label: right joined side guard
+    min: 0.107, -0.038, 0.032
+    max: 0.151, 0.035, 0.116
+    color: '#3B3535'
+    shape: Ellipsoid
+  - label: right front strap anchor
+    min: 0.117, -0.081, 0.014
+    max: 0.141, -0.03, 0.058
+    color: '#141217'
+  - label: right hanging strap
+    min: 0.12, -0.114, 0.005
+    max: 0.138, -0.063, 0.029
+    color: '#4F3022'
+  - label: right turned strap end
+    min: 0.102, -0.132, 0.003
+    max: 0.139, -0.108, 0.019
+    color: '#4F3022'
+  - label: corpsman brow detail backing
+    min: -0.067, -0.101, 0.092
+    max: 0.035, -0.079, 0.163
+    color: '#3B3535'
+  - label: original red corpsman cross
+    min: -0.063, -0.108, 0.091
+    max: 0.031, -0.085, 0.168
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt000
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DAU14LACNAmmoBackpackWorldCloud
+  label: AU14LACNAmmoBackpack loose default
+  status: draft
+  sourcePrototypes:
+  - AU14LACNAmmoBackpack
+  referencePrototype: AU14LACNAmmoBackpack
+  referenceRsi: /Textures/CMU14/Clothing/LACN/Storage/lacnammopack.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: LACN ammo-bearer pack with separate grey lower bag, top olive ammunition-can volume, closed inset
+    can lid, attached tan retaining web and original yellow can marks. Empty icon and closed PNG are byte-identical;
+    open changes the lower bag panel only. Default icon is modeled; contents and later open/filled appearances remain
+    unsupported. Static ground-item art only. No actor, worn, held, live state, tint, contents or animation binding.
+    Native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: lower pack body
+    min: -0.1875, -0.290625, 0.012
+    max: 0.15625, -0.009375, 0.12
+    color: '#161B1B'
+  - label: lower pack central panel
+    min: -0.10625, -0.29375, 0.088
+    max: 0.075, -0.040625, 0.141
+    color: '#3C4542'
+  - label: original lower pack pale bands
+    min: -0.09375, -0.15625, 0.139
+    max: 0.09375, -0.09375, 0.149
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt001
+    surfaceAxis: XY
+  - label: lower pack horizontal seam
+    min: -0.10625, -0.24375, 0.135
+    max: 0.075, -0.225, 0.149
+    color: '#606864'
+  - label: left pack edge reinforcement
+    min: -0.2125, -0.30625, 0.012
+    max: -0.125, -0.00625, 0.095
+    color: '#3C4542'
+  - label: left horizontal pocket
+    min: -0.209375, -0.1625, 0.074
+    max: -0.128125, -0.0625, 0.134
+    color: '#3C4542'
+  - label: right pack edge reinforcement
+    min: 0.09375, -0.30625, 0.012
+    max: 0.190625, -0.00625, 0.095
+    color: '#3C4542'
+  - label: right horizontal pocket
+    min: 0.096875, -0.1625, 0.074
+    max: 0.1875, -0.0625, 0.134
+    color: '#3C4542'
+  - label: ammo can solid bottom
+    min: -0.225, -0.0125, 0.055
+    max: 0.2, 0.24375, 0.079
+    color: '#414522'
+  - label: ammo can left sidewall
+    min: -0.24375, -0.021875, 0.072
+    max: -0.203125, 0.23125, 0.16
+    color: '#767D43'
+  - label: ammo can right sidewall
+    min: 0.1875, -0.025, 0.072
+    max: 0.2375, 0.171875, 0.16
+    color: '#767D43'
+  - label: ammo can upper sidewall
+    min: -0.21875, 0.2125, 0.072
+    max: 0.2125, 0.246875, 0.16
+    color: '#767D43'
+  - label: ammo can lower sidewall
+    min: -0.225, -0.03125, 0.072
+    max: 0.209375, 0.0125, 0.16
+    color: '#767D43'
+  - label: closed can inset lid
+    min: -0.215625, 0.003125, 0.127
+    max: 0.196875, 0.21875, 0.169
+    color: '#767D43'
+  - label: closed can joined top rim
+    min: -0.2375, 0.21875, 0.153
+    max: 0.209375, 0.24375, 0.178
+    color: '#414522'
+  - label: source lid highlight
+    min: -0.21875, 0.18125, 0.164
+    max: 0.1875, 0.209375, 0.176
+    color: '#767D43'
+  - label: attached tan can strap 11.65
+    min: -0.1359375, -0.03125, 0.16
+    max: -0.103125, 0.240625, 0.19
+    color: '#725C3E'
+  - label: attached tan can strap 18.7
+    min: 0.084375, -0.03125, 0.16
+    max: 0.1171875, 0.240625, 0.19
+    color: '#725C3E'
+  - label: lower strap connected run 11.8
+    min: -0.13125, -0.275, 0.081
+    max: -0.1078125, -0.01875, 0.107
+    color: '#3C4542'
+  - label: lower strap connected run 18.6
+    min: 0.08125, -0.275, 0.081
+    max: 0.1046875, -0.01875, 0.107
+    color: '#3C4542'
+  - label: tan waist retaining web
+    min: -0.23125, -0.1921875, 0.105
+    max: 0.196875, -0.15625, 0.154
+    color: '#725C3E'
+  - label: original ammo yellow markings
+    min: -0.0625, 0.03125, 0.174
+    max: 0.125, 0.125, 0.184
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt002
+    surfaceAxis: XY
+  - label: web crossing attachment
+    min: -0.071875, -0.19375, 0.136
+    max: 0.03125, -0.15, 0.167
+    color: '#725C3E'
+  - label: lower bottom sewn edge
+    min: -0.125, -0.30625, 0.021
+    max: 0.1125, -0.28125, 0.072
+    color: '#3C4542'
+- type: cmu3DModel
+  id: CMU3DAU14LACNHelmetSLWorldCloud
+  label: AU14LACNHelmetSL loose default
+  status: draft
+  sourcePrototypes:
+  - AU14LACNHelmetSL
+  referencePrototype: AU14LACNHelmetSL
+  referenceRsi: /Textures/CMU14/Clothing/LACN/HelmetsHats/lacnslhelmet.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Hollow loose helmet with a continuous polygonal brim, joined wall and pitched crown facets, separate
+    side protection and attached loose strap ends. Original squad-leader front marking and tan crown band. Roof
+    facets/seams, rim curvature, unseen back and thickness are explicit draft approximations; the contract cannot
+    produce a smooth thin concave dome. Static ground-item art only. No actor, worn, held, live state, tint, contents
+    or animation binding. Native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: continuous joined lower shell 00
+    min: 0.0851176, 0.02228222, 0.04
+    max: 0.14453001, 0.05428222, 0.114
+    color: '#444741'
+    yaw: 104.316758
+  - label: continuous joined lower shell 01
+    min: 0.06348516, 0.05975888, 0.04
+    max: 0.12632898, 0.09175888, 0.114
+    color: '#444741'
+    yaw: 130.606016
+  - label: continuous joined lower shell 02
+    min: 0.02445867, 0.08844227, 0.04
+    max: 0.0917528, 0.12044227, 0.114
+    color: '#444741'
+    yaw: 152.490118
+  - label: continuous joined lower shell 03
+    min: -0.02508477, 0.10396562, 0.04
+    max: 0.04512972, 0.13596562, 0.114
+    color: '#444741'
+    yaw: 171.187329
+  - label: continuous joined lower shell 04
+    min: -0.07712972, 0.10396562, 0.04
+    max: -0.00691523, 0.13596562, 0.114
+    color: '#444741'
+    yaw: -171.187329
+  - label: continuous joined lower shell 05
+    min: -0.1237528, 0.08844227, 0.04
+    max: -0.05645867, 0.12044227, 0.114
+    color: '#444741'
+    yaw: -152.490118
+  - label: continuous joined lower shell 06
+    min: -0.15832898, 0.05975888, 0.04
+    max: -0.09548516, 0.09175888, 0.114
+    color: '#444741'
+    yaw: -130.606016
+  - label: continuous joined lower shell 07
+    min: -0.17653001, 0.02228222, 0.04
+    max: -0.1171176, 0.05428222, 0.114
+    color: '#444741'
+    yaw: -104.316758
+  - label: continuous joined lower shell 08
+    min: -0.17653001, -0.01828222, 0.04
+    max: -0.1171176, 0.01371778, 0.114
+    color: '#444741'
+    yaw: -75.683242
+  - label: continuous joined lower shell 09
+    min: -0.15832898, -0.05575888, 0.04
+    max: -0.09548516, -0.02375888, 0.114
+    color: '#444741'
+    yaw: -49.393984
+  - label: continuous joined lower shell 10
+    min: -0.1237528, -0.08444227, 0.04
+    max: -0.05645867, -0.05244227, 0.114
+    color: '#444741'
+    yaw: -27.509882
+  - label: continuous joined lower shell 11
+    min: -0.07712972, -0.09996562, 0.04
+    max: -0.00691523, -0.06796562, 0.114
+    color: '#444741'
+    yaw: -8.812671
+  - label: continuous joined lower shell 12
+    min: -0.02508477, -0.09996562, 0.04
+    max: 0.04512972, -0.06796562, 0.114
+    color: '#444741'
+    yaw: 8.812671
+  - label: continuous joined lower shell 13
+    min: 0.02445867, -0.08444227, 0.04
+    max: 0.0917528, -0.05244227, 0.114
+    color: '#444741'
+    yaw: 27.509882
+  - label: continuous joined lower shell 14
+    min: 0.06348516, -0.05575888, 0.04
+    max: 0.12632898, -0.02375888, 0.114
+    color: '#444741'
+    yaw: 49.393984
+  - label: continuous joined lower shell 15
+    min: 0.0851176, -0.01828222, 0.04
+    max: 0.14453001, 0.01371778, 0.114
+    color: '#444741'
+    yaw: 75.683242
+  - label: continuous dark rim 00
+    min: 0.08839273, 0.02054759, 0.034
+    max: 0.15087429, 0.05754759, 0.059
+    color: '#0D0E0D'
+    yaw: 104.30391
+  - label: continuous dark rim 01
+    min: 0.06597138, 0.05943846, 0.034
+    max: 0.13199769, 0.09643846, 0.059
+    color: '#0D0E0D'
+    yaw: 130.57951
+  - label: continuous dark rim 02
+    min: 0.02551761, 0.08920425, 0.034
+    max: 0.09614281, 0.12620425, 0.059
+    color: '#0D0E0D'
+    yaw: 152.468135
+  - label: continuous dark rim 03
+    min: -0.02584273, 0.10531337, 0.034
+    max: 0.04780109, 0.14231337, 0.059
+    color: '#0D0E0D'
+    yaw: 171.179204
+  - label: continuous dark rim 04
+    min: -0.07980109, 0.10531337, 0.034
+    max: -0.00615727, 0.14231337, 0.059
+    color: '#0D0E0D'
+    yaw: -171.179204
+  - label: continuous dark rim 05
+    min: -0.12814281, 0.08920425, 0.034
+    max: -0.05751761, 0.12620425, 0.059
+    color: '#0D0E0D'
+    yaw: -152.468135
+  - label: continuous dark rim 06
+    min: -0.16399769, 0.05943846, 0.034
+    max: -0.09797138, 0.09643846, 0.059
+    color: '#0D0E0D'
+    yaw: -130.57951
+  - label: continuous dark rim 07
+    min: -0.18287429, 0.02054759, 0.034
+    max: -0.12039273, 0.05754759, 0.059
+    color: '#0D0E0D'
+    yaw: -104.30391
+  - label: continuous dark rim 08
+    min: -0.18287429, -0.02154759, 0.034
+    max: -0.12039273, 0.01545241, 0.059
+    color: '#0D0E0D'
+    yaw: -75.69609
+  - label: continuous dark rim 09
+    min: -0.16399769, -0.06043846, 0.034
+    max: -0.09797138, -0.02343846, 0.059
+    color: '#0D0E0D'
+    yaw: -49.42049
+  - label: continuous dark rim 10
+    min: -0.12814281, -0.09020425, 0.034
+    max: -0.05751761, -0.05320425, 0.059
+    color: '#0D0E0D'
+    yaw: -27.531865
+  - label: continuous dark rim 11
+    min: -0.07980109, -0.10631337, 0.034
+    max: -0.00615727, -0.06931337, 0.059
+    color: '#0D0E0D'
+    yaw: -8.820796
+  - label: continuous dark rim 12
+    min: -0.02584273, -0.10631337, 0.034
+    max: 0.04780109, -0.06931337, 0.059
+    color: '#0D0E0D'
+    yaw: 8.820796
+  - label: continuous dark rim 13
+    min: 0.02551761, -0.09020425, 0.034
+    max: 0.09614281, -0.05320425, 0.059
+    color: '#0D0E0D'
+    yaw: 27.531865
+  - label: continuous dark rim 14
+    min: 0.06597138, -0.06043846, 0.034
+    max: 0.13199769, -0.02343846, 0.059
+    color: '#0D0E0D'
+    yaw: 49.42049
+  - label: continuous dark rim 15
+    min: 0.08839273, -0.02154759, 0.034
+    max: 0.15087429, 0.01545241, 0.059
+    color: '#0D0E0D'
+    yaw: 75.69609
+  - label: joined roof facet 00
+    min: 0.00393066, -0.022, 0.117
+    max: 0.11094934, 0.058, 0.143
+    color: '#444741'
+    pitch: -23.690689
+  - label: joined roof facet 01
+    min: -0.00590844, 0.00662, 0.117
+    max: 0.10111025, 0.08662, 0.143
+    color: '#B59576'
+    yaw: 30.0
+    pitch: -23.690689
+  - label: joined roof facet 02
+    min: -0.03278934, 0.02757129, 0.117
+    max: 0.07422934, 0.10757129, 0.143
+    color: '#B59576'
+    yaw: 60.0
+    pitch: -23.690689
+  - label: joined roof facet 03
+    min: -0.06950934, 0.03524, 0.117
+    max: 0.03750934, 0.11524, 0.143
+    color: '#B59576'
+    yaw: 90.0
+    pitch: -23.690689
+  - label: joined roof facet 04
+    min: -0.10622934, 0.02757129, 0.117
+    max: 0.00078934, 0.10757129, 0.143
+    color: '#B59576'
+    yaw: 120.0
+    pitch: -23.690689
+  - label: joined roof facet 05
+    min: -0.13311025, 0.00662, 0.117
+    max: -0.02609156, 0.08662, 0.143
+    color: '#B59576'
+    yaw: 150.0
+    pitch: -23.690689
+  - label: joined roof facet 06
+    min: -0.14294934, -0.022, 0.117
+    max: -0.03593066, 0.058, 0.143
+    color: '#444741'
+    yaw: 180.0
+    pitch: -23.690689
+  - label: joined roof facet 07
+    min: -0.13311025, -0.05062, 0.117
+    max: -0.02609156, 0.02938, 0.143
+    color: '#444741'
+    yaw: 210.0
+    pitch: -23.690689
+  - label: joined roof facet 08
+    min: -0.10622934, -0.07157129, 0.117
+    max: 0.00078934, 0.00842871, 0.143
+    color: '#444741'
+    yaw: 240.0
+    pitch: -23.690689
+  - label: joined roof facet 09
+    min: -0.06950934, -0.07924, 0.117
+    max: 0.03750934, 0.00076, 0.143
+    color: '#444741'
+    yaw: 270.0
+    pitch: -23.690689
+  - label: joined roof facet 10
+    min: -0.03278934, -0.07157129, 0.117
+    max: 0.07422934, 0.00842871, 0.143
+    color: '#444741'
+    yaw: 300.0
+    pitch: -23.690689
+  - label: joined roof facet 11
+    min: -0.00590844, -0.05062, 0.117
+    max: 0.10111025, 0.02938, 0.143
+    color: '#444741'
+    yaw: 330.0
+    pitch: -23.690689
+  - label: joined center crown cap
+    min: -0.062, -0.024, 0.143
+    max: 0.03, 0.06, 0.165
+    color: '#B59576'
+    shape: CylinderZ
+  - label: left joined side guard
+    min: -0.183, -0.038, 0.032
+    max: -0.139, 0.035, 0.116
+    color: '#444741'
+    shape: Ellipsoid
+  - label: left front strap anchor
+    min: -0.173, -0.081, 0.014
+    max: -0.149, -0.03, 0.058
+    color: '#0D0E0D'
+  - label: left hanging strap
+    min: -0.17, -0.114, 0.005
+    max: -0.152, -0.063, 0.029
+    color: '#444741'
+  - label: left turned strap end
+    min: -0.171, -0.132, 0.003
+    max: -0.134, -0.108, 0.019
+    color: '#444741'
+  - label: right joined side guard
+    min: 0.107, -0.038, 0.032
+    max: 0.151, 0.035, 0.116
+    color: '#444741'
+    shape: Ellipsoid
+  - label: right front strap anchor
+    min: 0.117, -0.081, 0.014
+    max: 0.141, -0.03, 0.058
+    color: '#0D0E0D'
+  - label: right hanging strap
+    min: 0.12, -0.114, 0.005
+    max: 0.138, -0.063, 0.029
+    color: '#444741'
+  - label: right turned strap end
+    min: 0.102, -0.132, 0.003
+    max: 0.139, -0.108, 0.019
+    color: '#444741'
+  - label: leader pale lower brow band
+    min: -0.121, -0.108, 0.062
+    max: 0.089, -0.086, 0.091
+    color: '#D7B897'
+  - label: leader tan crown reinforcement
+    min: -0.1, 0.016, 0.153
+    max: 0.068, 0.056, 0.174
+    color: '#B59576'
+  - label: original leader front marking
+    min: -0.081, -0.116, 0.099
+    max: 0.044, -0.085, 0.162
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt003
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DAU14SlingSatchelBlackWorldCloud
+  label: AU14SlingSatchelBlack loose default
+  status: draft
+  sourcePrototypes:
+  - AU14SlingSatchelBlack
+  referencePrototype: AU14SlingSatchelBlack
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Satchel/blackslingsatchel.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Empty icon-only satchel laid front-up: volumetric body, attached side gussets, raised mouth lips
+    around a real recessed slit, short source fastening straps and original studs. The larger raised handle from
+    filled closed/open overlays is absent in this default. A compact rear sling lies folded beneath; hidden strap
+    route and body depth inferred. Static ground-item art only. No actor, worn, held, live state, tint, contents
+    or animation binding. Native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: bag recessed continuous floor
+    min: -0.28125, -0.21875, 0.005
+    max: 0.28125, 0.15625, 0.02
+    color: '#2F2E31'
+  - label: front leather body
+    min: -0.275, -0.20625, 0.016
+    max: 0.275, 0.0, 0.09
+    color: '#424242'
+  - label: lower sewn body edge
+    min: -0.2625, -0.234375, 0.016
+    max: 0.259375, -0.190625, 0.065
+    color: '#181719'
+    shape: Ellipsoid
+  - label: left attached side gusset
+    min: -0.3046875, -0.221875, 0.013
+    max: -0.253125, 0.134375, 0.095
+    color: '#181719'
+  - label: left upper rounded corner
+    min: -0.3015625, 0.084375, 0.02
+    max: -0.25625, 0.159375, 0.091
+    color: '#424242'
+    shape: Ellipsoid
+  - label: right attached side gusset
+    min: 0.253125, -0.221875, 0.013
+    max: 0.3046875, 0.134375, 0.095
+    color: '#181719'
+  - label: right upper rounded corner
+    min: 0.25625, 0.084375, 0.02
+    max: 0.3015625, 0.159375, 0.091
+    color: '#424242'
+    shape: Ellipsoid
+  - label: upper folded body panel
+    min: -0.25, 0.0359375, 0.021
+    max: 0.25, 0.178125, 0.078
+    color: '#424242'
+  - label: rear mouth sewn edge
+    min: -0.275, 0.028125, 0.025
+    max: 0.275, 0.046875, 0.087
+    color: '#181719'
+  - label: front mouth sewn lip
+    min: -0.275, -0.0125, 0.055
+    max: 0.275, 0.00625, 0.102
+    color: '#181719'
+  - label: upper fine seam
+    min: -0.184375, 0.1625, 0.065
+    max: 0.1875, 0.18125, 0.082
+    color: '#585855'
+  - label: vertical short securing strap 9.65
+    min: -0.1984375, -0.1625, 0.079
+    max: -0.1734375, -0.015625, 0.103
+    color: '#181719'
+  - label: original strap fastener 9.65
+    min: -0.21875, -0.09375, 0.1
+    max: -0.1875, -0.0625, 0.11
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt004
+    surfaceAxis: XY
+  - label: vertical short securing strap 21.65
+    min: 0.1765625, -0.1625, 0.079
+    max: 0.2015625, -0.015625, 0.103
+    color: '#181719'
+  - label: original strap fastener 21.65
+    min: 0.15625, -0.09375, 0.1
+    max: 0.1875, -0.0625, 0.11
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt005
+    surfaceAxis: XY
+  - label: original central front stud
+    min: -0.03125, -0.0625, 0.089
+    max: 0.03125, -0.03125, 0.099
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt006
+    surfaceAxis: XY
+  - label: original upper flap stud
+    min: -0.03125, 0.125, 0.076
+    max: 0.03125, 0.15625, 0.086
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt007
+    surfaceAxis: XY
+  - label: attached folded rear sling left
+    min: -0.32990891, -0.15234375, 0.006
+    max: -0.14821609, -0.12890625, 0.023
+    color: '#181719'
+    yaw: -63.434949
+  - label: attached folded rear sling center
+    min: -0.2035, -0.23046875, 0.006
+    max: 0.194125, -0.20703125, 0.023
+    color: '#181719'
+  - label: attached folded rear sling right
+    min: 0.14133407, -0.15234375, 0.006
+    max: 0.32741593, -0.12890625, 0.023
+    color: '#181719'
+    yaw: 60.751174
+- type: cmu3DModel
+  id: CMU3DAU14TentBigFoldedSurgicalWorldCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DAU14TentBigFoldedSurgicalWorldCloud
+  label: AU14TentBigFoldedSurgical loose default
+  status: draft
+  sourcePrototypes:
+  - AU14TentBigFoldedSurgical
+  referencePrototype: AU14TentBigFoldedSurgical
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded surgical tent only: compact three-dimensional olive canvas bundle, compressed rolled sides,
+    layered fold lips and the exact blue medical cross from med_base over base_tent. Despite the prototype name
+    it explicitly uses base_tent, not big_tent. No deployed tent, deployment rig or facilities are represented.
+    Static ground-item art only. No actor, worn, held, live state, tint, contents or animation binding. Native admission,
+    saved-map fit and fidelity unverified.'
+  parts:
+  - label: folded tent lower textile bundle
+    min: -0.29375, -0.20625, 0.006
+    max: 0.33125, 0.1125, 0.112
+    color: '#605E30'
+    shape: Ellipsoid
+  - label: folded bundle rectangular core
+    min: -0.2375, -0.18125, 0.018
+    max: 0.290625, 0.1375, 0.107
+    color: '#605E30'
+  - label: upper folded canvas pad
+    min: -0.25, -0.065625, 0.079
+    max: 0.2875, 0.178125, 0.16
+    color: '#605E30'
+  - label: left compressed rolled edge
+    min: -0.3125, -0.15625, 0.028
+    max: -0.2375, 0.121875, 0.143
+    color: '#46451D'
+    shape: Ellipsoid
+  - label: right compressed rolled edge
+    min: 0.271875, -0.1875, 0.028
+    max: 0.359375, 0.1375, 0.143
+    color: '#46451D'
+    shape: Ellipsoid
+  - label: upper folded canvas rolled seam
+    min: -0.225, 0.1484375, 0.133
+    max: 0.25625, 0.184375, 0.17
+    color: '#727040'
+    shape: CylinderX
+  - label: separate folded cloth lip 0
+    min: -0.26875, -0.0875, 0.043
+    max: 0.325, -0.065625, 0.107
+    color: '#46451D'
+  - label: separate folded cloth lip 1
+    min: -0.259375, -0.140625, 0.034
+    max: 0.3125, -0.11875, 0.098
+    color: '#46451D'
+  - label: separate folded cloth lip 2
+    min: -0.25, -0.19375, 0.025
+    max: 0.3, -0.171875, 0.089
+    color: '#46451D'
+  - label: left folded top seam
+    min: -0.23125, -0.046875, 0.149
+    max: -0.209375, 0.146875, 0.166
+    color: '#727040'
+  - label: right folded top seam
+    min: 0.2375, -0.046875, 0.145
+    max: 0.2625, 0.146875, 0.164
+    color: '#727040'
+  - label: front connected closure band
+    min: -0.246875, -0.071875, 0.071
+    max: 0.303125, -0.04375, 0.124
+    color: '#302E10'
+  - label: original medical cross panel
+    min: -0.1875, 0.0, 0.161
+    max: -0.03125, 0.15625, 0.171
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt008
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DCMSatchelWorldCloud
+  label: CMSatchel loose default
+  status: draft
+  sourcePrototypes:
+  - CMSatchel
+  referencePrototype: CMSatchel
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Back/Satchels/Civilians/classic.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Empty icon-only satchel laid front-up: volumetric body, attached side gussets, raised mouth lips
+    around a real recessed slit, short source fastening straps and original studs. The larger raised handle from
+    filled closed/open overlays is absent in this default. A compact rear sling lies folded beneath; hidden strap
+    route and body depth inferred. Static ground-item art only. No actor, worn, held, live state, tint, contents
+    or animation binding. Native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: bag recessed continuous floor
+    min: -0.28125, -0.21875, 0.005
+    max: 0.28125, 0.15625, 0.02
+    color: '#4D271E'
+  - label: front leather body
+    min: -0.275, -0.20625, 0.016
+    max: 0.275, 0.0, 0.09
+    color: '#763C2E'
+  - label: lower sewn body edge
+    min: -0.2625, -0.234375, 0.016
+    max: 0.259375, -0.190625, 0.065
+    color: '#331F1B'
+    shape: Ellipsoid
+  - label: left attached side gusset
+    min: -0.3046875, -0.221875, 0.013
+    max: -0.253125, 0.134375, 0.095
+    color: '#331F1B'
+  - label: left upper rounded corner
+    min: -0.3015625, 0.084375, 0.02
+    max: -0.25625, 0.159375, 0.091
+    color: '#763C2E'
+    shape: Ellipsoid
+  - label: right attached side gusset
+    min: 0.253125, -0.221875, 0.013
+    max: 0.3046875, 0.134375, 0.095
+    color: '#331F1B'
+  - label: right upper rounded corner
+    min: 0.25625, 0.084375, 0.02
+    max: 0.3015625, 0.159375, 0.091
+    color: '#763C2E'
+    shape: Ellipsoid
+  - label: upper folded body panel
+    min: -0.25, 0.0359375, 0.021
+    max: 0.25, 0.178125, 0.078
+    color: '#763C2E'
+  - label: rear mouth sewn edge
+    min: -0.275, 0.028125, 0.025
+    max: 0.275, 0.046875, 0.087
+    color: '#331F1B'
+  - label: front mouth sewn lip
+    min: -0.275, -0.0125, 0.055
+    max: 0.275, 0.00625, 0.102
+    color: '#331F1B'
+  - label: upper fine seam
+    min: -0.184375, 0.1625, 0.065
+    max: 0.1875, 0.18125, 0.082
+    color: '#8C4736'
+  - label: vertical short securing strap 9.65
+    min: -0.1984375, -0.1625, 0.079
+    max: -0.1734375, -0.015625, 0.103
+    color: '#331F1B'
+  - label: original strap fastener 9.65
+    min: -0.21875, -0.09375, 0.1
+    max: -0.1875, -0.0625, 0.11
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt009
+    surfaceAxis: XY
+  - label: vertical short securing strap 21.65
+    min: 0.1765625, -0.1625, 0.079
+    max: 0.2015625, -0.015625, 0.103
+    color: '#331F1B'
+  - label: original strap fastener 21.65
+    min: 0.15625, -0.09375, 0.1
+    max: 0.1875, -0.0625, 0.11
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt010
+    surfaceAxis: XY
+  - label: original central front stud
+    min: -0.03125, -0.0625, 0.089
+    max: 0.03125, -0.03125, 0.099
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt011
+    surfaceAxis: XY
+  - label: original upper flap stud
+    min: -0.03125, 0.125, 0.076
+    max: 0.03125, 0.15625, 0.086
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt012
+    surfaceAxis: XY
+  - label: attached folded rear sling left
+    min: -0.32990891, -0.15234375, 0.006
+    max: -0.14821609, -0.12890625, 0.023
+    color: '#331F1B'
+    yaw: -63.434949
+  - label: attached folded rear sling center
+    min: -0.2035, -0.23046875, 0.006
+    max: 0.194125, -0.20703125, 0.023
+    color: '#331F1B'
+  - label: attached folded rear sling right
+    min: 0.14133407, -0.15234375, 0.006
+    max: 0.32741593, -0.12890625, 0.023
+    color: '#331F1B'
+    yaw: 60.751174
+- type: cmu3DModel
+  id: CMU3DClothingBackpackDebug4WorldCloud
+  label: ClothingBackpackDebug4 loose default
+  status: draft
+  sourcePrototypes:
+  - ClothingBackpackDebug4
+  referencePrototype: ClothingBackpackDebug4
+  referenceRsi: /Textures/Clothing/Back/Backpacks/backpack.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Standard grey backpack art inherited by the debug storage-grid variant: rounded physical body, closed
+    upper flap, attached side pockets, lower pouch, fastening straps and shallow inferred shoulder loops below.
+    The debug grid changes storage only; it does not change the world sprite. No worn/held appearance or open-content
+    pose is modeled. Static ground-item art only. No actor, worn, held, live state, tint, contents or animation
+    binding. Native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: rounded backpack body
+    min: -0.28125, -0.334375, 0.004
+    max: 0.25625, 0.21875, 0.158
+    color: '#858585'
+    shape: Ellipsoid
+  - label: continuous rear body core
+    min: -0.225, -0.29375, 0.01
+    max: 0.2, 0.140625, 0.115
+    color: '#5B5B5B'
+  - label: lower front pocket
+    min: -0.19375, -0.275, 0.119
+    max: 0.1875, -0.0625, 0.205
+    color: '#858585'
+    shape: Ellipsoid
+  - label: front pocket flattened panel
+    min: -0.15, -0.253125, 0.173
+    max: 0.140625, -0.09375, 0.211
+    color: '#858585'
+  - label: upper flap
+    min: -0.2125, 0.0625, 0.121
+    max: 0.18125, 0.2375, 0.207
+    color: '#787878'
+    shape: Ellipsoid
+  - label: flap connected upper hinge
+    min: -0.1875, 0.18125, 0.069
+    max: 0.15625, 0.2375, 0.163
+    color: '#5B5B5B'
+  - label: source lower flap lip
+    min: -0.13125, 0.040625, 0.165
+    max: 0.115625, 0.10625, 0.203
+    color: '#858585'
+  - label: left attached side pocket
+    min: -0.334375, -0.303125, 0.016
+    max: -0.240625, -0.075, 0.101
+    color: '#858585'
+    shape: Ellipsoid
+  - label: left side pocket web
+    min: -0.315625, -0.271875, 0.077
+    max: -0.259375, -0.103125, 0.11
+    color: '#5B5B5B'
+  - label: right attached side pocket
+    min: 0.21875, -0.303125, 0.016
+    max: 0.303125, -0.075, 0.101
+    color: '#858585'
+    shape: Ellipsoid
+  - label: right side pocket web
+    min: 0.2375, -0.271875, 0.077
+    max: 0.284375, -0.103125, 0.11
+    color: '#5B5B5B'
+  - label: front fastening strap 9.6
+    min: -0.2, -0.0625, 0.137
+    max: -0.16875, 0.09375, 0.194
+    color: '#363636'
+  - label: front strap buckle 9.6
+    min: -0.196875, -0.025, 0.189
+    max: -0.175, 0.0, 0.205
+    color: '#363636'
+  - label: front fastening strap 20.5
+    min: 0.140625, -0.0625, 0.137
+    max: 0.171875, 0.09375, 0.194
+    color: '#363636'
+  - label: front strap buckle 20.5
+    min: 0.14375, -0.025, 0.189
+    max: 0.165625, 0.0, 0.205
+    color: '#363636'
+  - label: central raised pocket tab
+    min: -0.09375, -0.109375, 0.163
+    max: 0.06875, 0.0, 0.213
+    color: '#858585'
+  - label: source pocket horizontal seam 0
+    min: -0.134375, -0.17875, 0.203
+    max: 0.128125, -0.165625, 0.218
+    color: '#787878'
+  - label: source pocket horizontal seam 1
+    min: -0.134375, -0.231875, 0.203
+    max: 0.128125, -0.21875, 0.218
+    color: '#787878'
+  - label: underside shoulder strap 0 outer
+    min: -0.3992027, -0.03359375, 0.005
+    max: -0.0289223, -0.00703125, 0.026
+    color: '#5B5B5B'
+    yaw: -98.408912
+  - label: underside shoulder strap 0 return
+    min: -0.25144007, -0.23828125, 0.005
+    max: -0.15168493, -0.21171875, 0.026
+    color: '#5B5B5B'
+    yaw: -32.619243
+  - label: underside shoulder strap 1 outer
+    min: -0.0898277, -0.03359375, 0.005
+    max: 0.2804527, -0.00703125, 0.026
+    color: '#5B5B5B'
+    yaw: -98.408912
+  - label: underside shoulder strap 1 return
+    min: 0.05793493, -0.23828125, 0.005
+    max: 0.15769007, -0.21171875, 0.026
+    color: '#5B5B5B'
+    yaw: -32.619243
+- type: cmu3DModel
+  id: CMU3DRMCArmorHelmetSPPFirefighterWorldCloud
+  label: RMCArmorHelmetSPPFirefighter loose default
+  status: draft
+  sourcePrototypes:
+  - RMCArmorHelmetSPPFirefighter
+  referencePrototype: RMCArmorHelmetSPPFirefighter
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/SPP/fire_helmet.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Hollow loose helmet with a continuous polygonal brim, joined wall and pitched crown facets, separate
+    side protection and attached loose strap ends. Original pale front and red fire-service emblem, plus short source
+    neck-shroud folds. Roof facets/seams, rim curvature, unseen back and thickness are explicit draft approximations;
+    the contract cannot produce a smooth thin concave dome. Static ground-item art only. No actor, worn, held, live
+    state, tint, contents or animation binding. Native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: continuous joined lower shell 00
+    min: 0.0851176, 0.02228222, 0.04
+    max: 0.14453001, 0.05428222, 0.114
+    color: '#CEC9C5'
+    yaw: 104.316758
+  - label: continuous joined lower shell 01
+    min: 0.06348516, 0.05975888, 0.04
+    max: 0.12632898, 0.09175888, 0.114
+    color: '#CEC9C5'
+    yaw: 130.606016
+  - label: continuous joined lower shell 02
+    min: 0.02445867, 0.08844227, 0.04
+    max: 0.0917528, 0.12044227, 0.114
+    color: '#CEC9C5'
+    yaw: 152.490118
+  - label: continuous joined lower shell 03
+    min: -0.02508477, 0.10396562, 0.04
+    max: 0.04512972, 0.13596562, 0.114
+    color: '#CEC9C5'
+    yaw: 171.187329
+  - label: continuous joined lower shell 04
+    min: -0.07712972, 0.10396562, 0.04
+    max: -0.00691523, 0.13596562, 0.114
+    color: '#CEC9C5'
+    yaw: -171.187329
+  - label: continuous joined lower shell 05
+    min: -0.1237528, 0.08844227, 0.04
+    max: -0.05645867, 0.12044227, 0.114
+    color: '#CEC9C5'
+    yaw: -152.490118
+  - label: continuous joined lower shell 06
+    min: -0.15832898, 0.05975888, 0.04
+    max: -0.09548516, 0.09175888, 0.114
+    color: '#CEC9C5'
+    yaw: -130.606016
+  - label: continuous joined lower shell 07
+    min: -0.17653001, 0.02228222, 0.04
+    max: -0.1171176, 0.05428222, 0.114
+    color: '#CEC9C5'
+    yaw: -104.316758
+  - label: continuous joined lower shell 08
+    min: -0.17653001, -0.01828222, 0.04
+    max: -0.1171176, 0.01371778, 0.114
+    color: '#CEC9C5'
+    yaw: -75.683242
+  - label: continuous joined lower shell 09
+    min: -0.15832898, -0.05575888, 0.04
+    max: -0.09548516, -0.02375888, 0.114
+    color: '#CEC9C5'
+    yaw: -49.393984
+  - label: continuous joined lower shell 10
+    min: -0.1237528, -0.08444227, 0.04
+    max: -0.05645867, -0.05244227, 0.114
+    color: '#CEC9C5'
+    yaw: -27.509882
+  - label: continuous joined lower shell 11
+    min: -0.07712972, -0.09996562, 0.04
+    max: -0.00691523, -0.06796562, 0.114
+    color: '#CEC9C5'
+    yaw: -8.812671
+  - label: continuous joined lower shell 12
+    min: -0.02508477, -0.09996562, 0.04
+    max: 0.04512972, -0.06796562, 0.114
+    color: '#CEC9C5'
+    yaw: 8.812671
+  - label: continuous joined lower shell 13
+    min: 0.02445867, -0.08444227, 0.04
+    max: 0.0917528, -0.05244227, 0.114
+    color: '#CEC9C5'
+    yaw: 27.509882
+  - label: continuous joined lower shell 14
+    min: 0.06348516, -0.05575888, 0.04
+    max: 0.12632898, -0.02375888, 0.114
+    color: '#CEC9C5'
+    yaw: 49.393984
+  - label: continuous joined lower shell 15
+    min: 0.0851176, -0.01828222, 0.04
+    max: 0.14453001, 0.01371778, 0.114
+    color: '#CEC9C5'
+    yaw: 75.683242
+  - label: continuous dark rim 00
+    min: 0.08839273, 0.02054759, 0.034
+    max: 0.15087429, 0.05754759, 0.059
+    color: '#624938'
+    yaw: 104.30391
+  - label: continuous dark rim 01
+    min: 0.06597138, 0.05943846, 0.034
+    max: 0.13199769, 0.09643846, 0.059
+    color: '#624938'
+    yaw: 130.57951
+  - label: continuous dark rim 02
+    min: 0.02551761, 0.08920425, 0.034
+    max: 0.09614281, 0.12620425, 0.059
+    color: '#624938'
+    yaw: 152.468135
+  - label: continuous dark rim 03
+    min: -0.02584273, 0.10531337, 0.034
+    max: 0.04780109, 0.14231337, 0.059
+    color: '#624938'
+    yaw: 171.179204
+  - label: continuous dark rim 04
+    min: -0.07980109, 0.10531337, 0.034
+    max: -0.00615727, 0.14231337, 0.059
+    color: '#624938'
+    yaw: -171.179204
+  - label: continuous dark rim 05
+    min: -0.12814281, 0.08920425, 0.034
+    max: -0.05751761, 0.12620425, 0.059
+    color: '#624938'
+    yaw: -152.468135
+  - label: continuous dark rim 06
+    min: -0.16399769, 0.05943846, 0.034
+    max: -0.09797138, 0.09643846, 0.059
+    color: '#624938'
+    yaw: -130.57951
+  - label: continuous dark rim 07
+    min: -0.18287429, 0.02054759, 0.034
+    max: -0.12039273, 0.05754759, 0.059
+    color: '#624938'
+    yaw: -104.30391
+  - label: continuous dark rim 08
+    min: -0.18287429, -0.02154759, 0.034
+    max: -0.12039273, 0.01545241, 0.059
+    color: '#624938'
+    yaw: -75.69609
+  - label: continuous dark rim 09
+    min: -0.16399769, -0.06043846, 0.034
+    max: -0.09797138, -0.02343846, 0.059
+    color: '#624938'
+    yaw: -49.42049
+  - label: continuous dark rim 10
+    min: -0.12814281, -0.09020425, 0.034
+    max: -0.05751761, -0.05320425, 0.059
+    color: '#624938'
+    yaw: -27.531865
+  - label: continuous dark rim 11
+    min: -0.07980109, -0.10631337, 0.034
+    max: -0.00615727, -0.06931337, 0.059
+    color: '#624938'
+    yaw: -8.820796
+  - label: continuous dark rim 12
+    min: -0.02584273, -0.10631337, 0.034
+    max: 0.04780109, -0.06931337, 0.059
+    color: '#624938'
+    yaw: 8.820796
+  - label: continuous dark rim 13
+    min: 0.02551761, -0.09020425, 0.034
+    max: 0.09614281, -0.05320425, 0.059
+    color: '#624938'
+    yaw: 27.531865
+  - label: continuous dark rim 14
+    min: 0.06597138, -0.06043846, 0.034
+    max: 0.13199769, -0.02343846, 0.059
+    color: '#624938'
+    yaw: 49.42049
+  - label: continuous dark rim 15
+    min: 0.08839273, -0.02154759, 0.034
+    max: 0.15087429, 0.01545241, 0.059
+    color: '#624938'
+    yaw: 75.69609
+  - label: joined roof facet 00
+    min: 0.00393066, -0.022, 0.117
+    max: 0.11094934, 0.058, 0.143
+    color: '#CEC9C5'
+    pitch: -23.690689
+  - label: joined roof facet 01
+    min: -0.00590844, 0.00662, 0.117
+    max: 0.10111025, 0.08662, 0.143
+    color: '#A59B94'
+    yaw: 30.0
+    pitch: -23.690689
+  - label: joined roof facet 02
+    min: -0.03278934, 0.02757129, 0.117
+    max: 0.07422934, 0.10757129, 0.143
+    color: '#A59B94'
+    yaw: 60.0
+    pitch: -23.690689
+  - label: joined roof facet 03
+    min: -0.06950934, 0.03524, 0.117
+    max: 0.03750934, 0.11524, 0.143
+    color: '#A59B94'
+    yaw: 90.0
+    pitch: -23.690689
+  - label: joined roof facet 04
+    min: -0.10622934, 0.02757129, 0.117
+    max: 0.00078934, 0.10757129, 0.143
+    color: '#A59B94'
+    yaw: 120.0
+    pitch: -23.690689
+  - label: joined roof facet 05
+    min: -0.13311025, 0.00662, 0.117
+    max: -0.02609156, 0.08662, 0.143
+    color: '#A59B94'
+    yaw: 150.0
+    pitch: -23.690689
+  - label: joined roof facet 06
+    min: -0.14294934, -0.022, 0.117
+    max: -0.03593066, 0.058, 0.143
+    color: '#CEC9C5'
+    yaw: 180.0
+    pitch: -23.690689
+  - label: joined roof facet 07
+    min: -0.13311025, -0.05062, 0.117
+    max: -0.02609156, 0.02938, 0.143
+    color: '#CEC9C5'
+    yaw: 210.0
+    pitch: -23.690689
+  - label: joined roof facet 08
+    min: -0.10622934, -0.07157129, 0.117
+    max: 0.00078934, 0.00842871, 0.143
+    color: '#CEC9C5'
+    yaw: 240.0
+    pitch: -23.690689
+  - label: joined roof facet 09
+    min: -0.06950934, -0.07924, 0.117
+    max: 0.03750934, 0.00076, 0.143
+    color: '#CEC9C5'
+    yaw: 270.0
+    pitch: -23.690689
+  - label: joined roof facet 10
+    min: -0.03278934, -0.07157129, 0.117
+    max: 0.07422934, 0.00842871, 0.143
+    color: '#CEC9C5'
+    yaw: 300.0
+    pitch: -23.690689
+  - label: joined roof facet 11
+    min: -0.00590844, -0.05062, 0.117
+    max: 0.10111025, 0.02938, 0.143
+    color: '#CEC9C5'
+    yaw: 330.0
+    pitch: -23.690689
+  - label: joined center crown cap
+    min: -0.062, -0.024, 0.143
+    max: 0.03, 0.06, 0.165
+    color: '#A59B94'
+    shape: CylinderZ
+  - label: left joined side guard
+    min: -0.183, -0.038, 0.032
+    max: -0.139, 0.035, 0.116
+    color: '#CEC9C5'
+    shape: Ellipsoid
+  - label: left front strap anchor
+    min: -0.173, -0.081, 0.014
+    max: -0.149, -0.03, 0.058
+    color: '#624938'
+  - label: left hanging strap
+    min: -0.17, -0.114, 0.005
+    max: -0.152, -0.063, 0.029
+    color: '#282626'
+  - label: left turned strap end
+    min: -0.171, -0.132, 0.003
+    max: -0.134, -0.108, 0.019
+    color: '#282626'
+  - label: right joined side guard
+    min: 0.107, -0.038, 0.032
+    max: 0.151, 0.035, 0.116
+    color: '#CEC9C5'
+    shape: Ellipsoid
+  - label: right front strap anchor
+    min: 0.117, -0.081, 0.014
+    max: 0.141, -0.03, 0.058
+    color: '#624938'
+  - label: right hanging strap
+    min: 0.12, -0.114, 0.005
+    max: 0.138, -0.063, 0.029
+    color: '#282626'
+  - label: right turned strap end
+    min: 0.102, -0.132, 0.003
+    max: 0.139, -0.108, 0.019
+    color: '#282626'
+  - label: white firefighter brow
+    min: -0.114, -0.112, 0.091
+    max: 0.082, -0.076, 0.158
+    color: '#A59B94'
+  - label: original firefighter red emblem
+    min: -0.094, -0.119, 0.092
+    max: 0.062, -0.094, 0.177
+    color: '#FFFFFF'
+    surface: CMU3DBagsHelmetsCloudArt013
+    surfaceAxis: XZ
+  - label: left heat shroud fold
+    min: -0.187, -0.049, 0.009
+    max: -0.135, 0.083, 0.058
+    color: '#282626'
+  - label: right heat shroud fold
+    min: 0.103, -0.049, 0.009
+    max: 0.155, 0.083, 0.058
+    color: '#282626'
+  - label: rear neck-shroud connected fold
+    min: -0.158, 0.077, 0.015
+    max: 0.126, 0.111, 0.049
+    color: '#282626'
+- type: cmu3DModel
+  id: CMU3DRMCHelmetGarbWireWorldCloud
+  label: RMCHelmetGarbWire loose default
+  status: draft
+  sourcePrototypes:
+  - RMCHelmetGarbWire
+  referencePrototype: RMCHelmetGarbWire
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/HelmetGarb/trimmed_barb_wire.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Loose trimmed barbed-wire loop built from two connected 3D wire turns and small filed barb nubs.
+    The helmet-mounted helmet RSI state is excluded. Source gaps remain open; wire gauge and hidden bend depth inferred.
+    Static ground-item art only. No actor, worn, held, live state, tint, contents or animation binding. Native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: trimmed wire continuous loop 00
+    min: 0.13675036, -0.03110488, 0.01
+    max: 0.19434193, 0.00189512, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 102.318775
+  - label: trimmed wire continuous loop 01
+    min: 0.11776149, 0.00768895, 0.01
+    max: 0.17857189, 0.04068895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 125.089097
+  - label: trimmed wire continuous loop 02
+    min: 0.08231935, 0.04068895, 0.01
+    max: 0.14789866, 0.07368895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 144.047572
+  - label: trimmed wire continuous loop 03
+    min: 0.03464432, 0.06466485, 0.01
+    max: 0.10457369, 0.09766485, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 159.718413
+  - label: trimmed wire continuous loop 04
+    min: -0.02010494, 0.07726973, 0.01
+    max: 0.05234603, 0.11026973, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 173.447029
+  - label: trimmed wire continuous loop 05
+    min: -0.07634603, 0.07726973, 0.01
+    max: -0.00389506, 0.11026973, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -173.447029
+  - label: trimmed wire continuous loop 06
+    min: -0.12857369, 0.06466485, 0.01
+    max: -0.05864432, 0.09766485, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -159.718413
+  - label: trimmed wire continuous loop 07
+    min: -0.17189866, 0.04068895, 0.01
+    max: -0.10631935, 0.07368895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -144.047572
+  - label: trimmed wire continuous loop 08
+    min: -0.20257189, 0.00768895, 0.01
+    max: -0.14176149, 0.04068895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -125.089097
+  - label: trimmed wire continuous loop 09
+    min: -0.21834193, -0.03110488, 0.01
+    max: -0.16075036, 0.00189512, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -102.318775
+  - label: trimmed wire continuous loop 10
+    min: -0.21834193, -0.07189512, 0.01
+    max: -0.16075036, -0.03889512, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -77.681225
+  - label: trimmed wire continuous loop 11
+    min: -0.20257189, -0.11068895, 0.01
+    max: -0.14176149, -0.07768895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -54.910903
+  - label: trimmed wire continuous loop 12
+    min: -0.17189866, -0.14368895, 0.01
+    max: -0.10631935, -0.11068895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -35.952428
+  - label: trimmed wire continuous loop 13
+    min: -0.12857369, -0.16766485, 0.01
+    max: -0.05864432, -0.13466485, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -20.281587
+  - label: trimmed wire continuous loop 14
+    min: -0.07634603, -0.18026973, 0.01
+    max: -0.00389506, -0.14726973, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -6.552971
+  - label: trimmed wire continuous loop 15
+    min: -0.02010494, -0.18026973, 0.01
+    max: 0.05234603, -0.14726973, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 6.552971
+  - label: trimmed wire continuous loop 16
+    min: 0.03464432, -0.16766485, 0.01
+    max: 0.10457369, -0.13466485, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 20.281587
+  - label: trimmed wire continuous loop 17
+    min: 0.08231935, -0.14368895, 0.01
+    max: 0.14789866, -0.11068895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 35.952428
+  - label: trimmed wire continuous loop 18
+    min: 0.11776149, -0.11068895, 0.01
+    max: 0.17857189, -0.07768895, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 54.910903
+  - label: trimmed wire continuous loop 19
+    min: 0.13675036, -0.07189512, 0.01
+    max: 0.19434193, -0.03889512, 0.042
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 77.681225
+  - label: second narrow coiled wire turn 00
+    min: 0.12466975, -0.03745898, 0.032
+    max: 0.17496091, -0.01945898, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 102.718434
+  - label: second narrow coiled wire turn 01
+    min: 0.10667811, -0.00219187, 0.032
+    max: 0.16029446, 0.01580813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 125.982417
+  - label: second narrow coiled wire turn 02
+    min: 0.07318027, 0.02780813, 0.032
+    max: 0.13167291, 0.04580813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 144.940573
+  - label: second narrow coiled wire turn 03
+    min: 0.02822589, 0.04960441, 0.032
+    max: 0.09112729, 0.06760441, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 160.324895
+  - label: second narrow coiled wire turn 04
+    min: -0.02330089, 0.06106339, 0.032
+    max: 0.04214279, 0.07906339, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 173.657778
+  - label: second narrow coiled wire turn 05
+    min: -0.07614279, 0.06106339, 0.032
+    max: -0.01069911, 0.07906339, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -173.657778
+  - label: second narrow coiled wire turn 06
+    min: -0.12512729, 0.04960441, 0.032
+    max: -0.06222589, 0.06760441, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -160.324895
+  - label: second narrow coiled wire turn 07
+    min: -0.16567291, 0.02780813, 0.032
+    max: -0.10718027, 0.04580813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -144.940573
+  - label: second narrow coiled wire turn 08
+    min: -0.19429446, -0.00219187, 0.032
+    max: -0.14067811, 0.01580813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -125.982417
+  - label: second narrow coiled wire turn 09
+    min: -0.20896091, -0.03745898, 0.032
+    max: -0.15866975, -0.01945898, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -102.718434
+  - label: second narrow coiled wire turn 10
+    min: -0.20896091, -0.07454102, 0.032
+    max: -0.15866975, -0.05654102, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -77.281566
+  - label: second narrow coiled wire turn 11
+    min: -0.19429446, -0.10980813, 0.032
+    max: -0.14067811, -0.09180813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -54.017583
+  - label: second narrow coiled wire turn 12
+    min: -0.16567291, -0.13980813, 0.032
+    max: -0.10718027, -0.12180813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -35.059427
+  - label: second narrow coiled wire turn 13
+    min: -0.12512729, -0.16160441, 0.032
+    max: -0.06222589, -0.14360441, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -19.675105
+  - label: second narrow coiled wire turn 14
+    min: -0.07614279, -0.17306339, 0.032
+    max: -0.01069911, -0.15506339, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: -6.342222
+  - label: second narrow coiled wire turn 15
+    min: -0.02330089, -0.17306339, 0.032
+    max: 0.04214279, -0.15506339, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 6.342222
+  - label: second narrow coiled wire turn 16
+    min: 0.02822589, -0.16160441, 0.032
+    max: 0.09112729, -0.14360441, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 19.675105
+  - label: second narrow coiled wire turn 17
+    min: 0.07318027, -0.13980813, 0.032
+    max: 0.13167291, -0.12180813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 35.059427
+  - label: second narrow coiled wire turn 18
+    min: 0.10667811, -0.10980813, 0.032
+    max: 0.16029446, -0.09180813, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 54.017583
+  - label: second narrow coiled wire turn 19
+    min: 0.12466975, -0.07454102, 0.032
+    max: 0.17496091, -0.05654102, 0.05
+    color: '#434343'
+    shape: CylinderX
+    yaw: 77.281566
+  - label: filed short barb 0
+    min: -0.18062119, 0.07734375, 0.026
+    max: -0.11625381, 0.09765625, 0.057
+    color: '#555555'
+    shape: CylinderX
+    yaw: 60.642246
+  - label: filed short barb 1
+    min: -0.03913476, 0.11796875, 0.026
+    max: 0.00788476, 0.13828125, 0.057
+    color: '#555555'
+    shape: CylinderX
+    yaw: 38.659808
+  - label: filed short barb 2
+    min: 0.1633552, 0.00703125, 0.026
+    max: 0.2147698, 0.02734375, 0.057
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -39.289407
+  - label: filed short barb 3
+    min: 0.15837226, -0.11796875, 0.026
+    max: 0.20100274, -0.09765625, 0.057
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: -52.125016
+  - label: filed short barb 4
+    min: -0.15412774, -0.17109375, 0.026
+    max: -0.11149726, -0.15078125, 0.057
+    color: '#9B9B9B'
+    shape: CylinderX
+    yaw: 142.125016
+- type: cmu3DModel
+  id: CMU3DRMCSatchelDemoSpecWorldCloud
+  label: RMCSatchelDemoSpec loose default
+  status: draft
+  sourcePrototypes:
+  - RMCSatchelDemoSpec
+  referencePrototype: RMCSatchelDemoSpec
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Back/Satchels/Marines/rocketpack.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Empty icon-only M22 rocket bags: twin low collapsed fabric rocket sleeves with actual shallow open
+    mouths, carrier backing, lower attached pouch and continuous webbing. Filled overlays extend the silos but are
+    not part of this empty default. Thickness, unseen carrier back and fabric folds remain inferred. Static ground-item
+    art only. No actor, worn, held, live state, tint, contents or animation binding. Native admission, saved-map
+    fit and fidelity unverified.'
+  parts:
+  - label: carrier backing
+    min: -0.196875, -0.35, 0.005
+    max: 0.15625, 0.11875, 0.024
+    color: '#453E35'
+  - label: tube 0 recessed fabric floor
+    min: -0.16875, -0.109375, 0.016
+    max: -0.053125, 0.15, 0.032
+    color: '#453E35'
+  - label: tube 0 left wall
+    min: -0.178125, -0.103125, 0.02
+    max: -0.1546875, 0.134375, 0.105
+    color: '#7A6F60'
+  - label: tube 0 right wall
+    min: -0.0640625, -0.103125, 0.02
+    max: -0.040625, 0.134375, 0.105
+    color: '#7A6F60'
+  - label: tube 0 collapsed front sleeve
+    min: -0.1609375, -0.109375, 0.039
+    max: -0.0625, 0.090625, 0.106
+    color: '#7A6F60'
+    shape: Ellipsoid
+  - label: tube 0 upper neck lip
+    min: -0.159375, 0.13125, 0.04
+    max: -0.065625, 0.15625, 0.089
+    color: '#938777'
+  - label: tube 0 mouth front lip
+    min: -0.159375, 0.0859375, 0.06
+    max: -0.0625, 0.109375, 0.106
+    color: '#938777'
+  - label: tube 0 top attachment tab
+    min: -0.1375, 0.1375, 0.031
+    max: -0.09375, 0.1796875, 0.075
+    color: '#453E35'
+  - label: tube 1 recessed fabric floor
+    min: 0.009375, -0.109375, 0.016
+    max: 0.125, 0.15, 0.032
+    color: '#453E35'
+  - label: tube 1 left wall
+    min: 0.0, -0.103125, 0.02
+    max: 0.0234375, 0.134375, 0.105
+    color: '#7A6F60'
+  - label: tube 1 right wall
+    min: 0.1140625, -0.103125, 0.02
+    max: 0.1375, 0.134375, 0.105
+    color: '#7A6F60'
+  - label: tube 1 collapsed front sleeve
+    min: 0.0171875, -0.109375, 0.039
+    max: 0.115625, 0.090625, 0.106
+    color: '#7A6F60'
+    shape: Ellipsoid
+  - label: tube 1 upper neck lip
+    min: 0.01875, 0.13125, 0.04
+    max: 0.1125, 0.15625, 0.089
+    color: '#938777'
+  - label: tube 1 mouth front lip
+    min: 0.01875, 0.0859375, 0.06
+    max: 0.115625, 0.109375, 0.106
+    color: '#938777'
+  - label: tube 1 top attachment tab
+    min: 0.040625, 0.1375, 0.031
+    max: 0.084375, 0.1796875, 0.075
+    color: '#453E35'
+  - label: lower attached satchel body
+    min: -0.184375, -0.353125, 0.012
+    max: 0.15625, -0.128125, 0.095
+    color: '#7A6F60'
+  - label: lower pocket folded flap
+    min: -0.153125, -0.278125, 0.085
+    max: 0.121875, -0.175, 0.119
+    color: '#938777'
+  - label: lower satchel recessed mouth
+    min: -0.15625, -0.171875, 0.033
+    max: 0.134375, -0.153125, 0.06
+    color: '#453E35'
+  - label: left long attached webbing
+    min: -0.228125, -0.3375, 0.024
+    max: -0.2, 0.0625, 0.113
+    color: '#453E35'
+  - label: left source web tab 0
+    min: -0.231875, 0.021875, 0.094
+    max: -0.196875, 0.04375, 0.128
+    color: '#262422'
+  - label: left source web tab 1
+    min: -0.231875, -0.0875, 0.094
+    max: -0.196875, -0.065625, 0.128
+    color: '#262422'
+  - label: left source web tab 2
+    min: -0.231875, -0.2125, 0.094
+    max: -0.196875, -0.190625, 0.128
+    color: '#262422'
+  - label: left source web tab 3
+    min: -0.231875, -0.271875, 0.094
+    max: -0.196875, -0.25, 0.128
+    color: '#262422'
+  - label: right long attached webbing
+    min: 0.15625, -0.3375, 0.024
+    max: 0.184375, 0.0625, 0.113
+    color: '#453E35'
+  - label: right source web tab 0
+    min: 0.1525, 0.021875, 0.094
+    max: 0.1875, 0.04375, 0.128
+    color: '#262422'
+  - label: right source web tab 1
+    min: 0.1525, -0.0875, 0.094
+    max: 0.1875, -0.065625, 0.128
+    color: '#262422'
+  - label: right source web tab 2
+    min: 0.1525, -0.2125, 0.094
+    max: 0.1875, -0.190625, 0.128
+    color: '#262422'
+  - label: right source web tab 3
+    min: 0.1525, -0.271875, 0.094
+    max: 0.1875, -0.25, 0.128
+    color: '#262422'
+  - label: upper lower-pocket strap
+    min: -0.215625, -0.15, 0.085
+    max: 0.18125, -0.125, 0.128
+    color: '#262422'
+  - label: lower lower-pocket strap
+    min: -0.203125, -0.325, 0.074
+    max: 0.178125, -0.3, 0.13
+    color: '#262422'
+  - label: bottom attached rolled edge
+    min: -0.15625, -0.421875, 0.009
+    max: 0.125, -0.34375, 0.052
+    color: '#453E35'
+    shape: Ellipsoid
+  - label: bottom short buckle
+    min: -0.084375, -0.40625, 0.044
+    max: 0.065625, -0.378125, 0.064
+    color: '#7A6F60'

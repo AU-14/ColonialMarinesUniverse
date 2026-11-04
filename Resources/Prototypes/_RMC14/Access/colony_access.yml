@@ -2,34 +2,42 @@
 - type: accessLevel
   id: CMAccessColonyPublic # anything on planet side that is locked and doesn't require the below accesses
   name: cm-access-colony-public
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 - type: accessLevel
   id: CMAccessColonyLogistics
   name: cm-access-colony-logistics
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 - type: accessLevel
   id: CMAccessColonyEngineering
   name: cm-access-colony-engineering
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 - type: accessLevel
   id: CMAccessColonyResearch
   name: cm-access-colony-research
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 - type: accessLevel
   id: CMAccessColonyBrig
   name: cm-access-colony-brig
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 - type: accessLevel
   id: CMAccessColonyMedbay
   name: cm-access-colony-medbay
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 - type: accessLevel
   id: CMAccessColonyCommand
   name: cm-access-colony-command
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 - type: accessLevel
   id: CMAccessColonyArmory
   name: rmc-access-colony-armory
+  accessGroup: Colony Access # cmu edit: sorted into the colony identification computer
 
 
 - type: accessLevel

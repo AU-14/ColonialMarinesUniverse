@@ -29,10 +29,12 @@ public sealed partial class HolocardContainerVisualizerSystem : VisualizerSystem
         switch (holocard)
         {
             case HolocardStatus.Urgent:
+            case HolocardStatus.Trauma:
                 state += "_holoorange";
                 break;
 
             case HolocardStatus.Emergency:
+            case HolocardStatus.OrganFailure:
                 state += "_holored";
                 break;
 

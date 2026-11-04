@@ -1,0 +1,98 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Intel tech trees are now split by faction. UA, TWE/WY, UPP and Other each
+    have their own call-ins.
+  type: Tweak
+- message: Rebalanced intel call-in costs to match what each team brings.
+  type: Tweak
+- message: Reinforcement call-ins can only be bought once per round, except CLF insurgent
+    reinforcements (up to 3).
+  type: Tweak
+- message: 'New UA call ins: USCM MP Fireteam, USCM Combat Engineer Team, USCM Plasma
+    Weapons Team, US Army Intelligence Pair, UA Colonial Guard Patrol, UA Colonial
+    Guard Platoon, CMB Tactical Team, CCAF Fire Team, LACN Commando Fireteam, LACN
+    Construction Team, LACN MASH Team and USASF SECFOR K9 Team.'
+  type: Add
+- message: 'New TWE call ins: SAS Assault Squad, IASF Paratrooper Reinforcements,
+    IASF Mortar Team, Royal Marines Combat Engineers, NSPA Tactical Team, WY Corporate
+    Security Team and WY PMC Team.'
+  type: Add
+- message: 'New UPP call ins: UPP Militsiya, Militsiya K9 Team, Territorial Defense
+    Patrol, Territorial Defense Platoon, Kommissar Detail, Sapper Team, Naval Infantry
+    RPG Team and Naval Infantry Sniper Pair.'
+  type: Add
+- message: 'New Prodigy call ins: Prodigy Security Forces Squad, Security Guard Detail,
+    Sniper Overwatch and Construction Crew.'
+  type: Add
+- message: The CMB investigation call-in is now the CMB Patrol, the Royal Paramarines
+    are now the IASF Parachute Regiment.
+  type: Tweak
+- message: Removed the KRAKEN and CMB parolee transport from the UA list.
+  type: Remove
+- message: Third parties called in by a faction aboard its ship land at that ship's
+    summoned third party pad and their shuttle leaves 60 seconds after landing.
+  type: Add
+- message: Ration crates aboard a faction's ship open full of that platoon's own rations.
+  type: Add
+- message: VAI and Prodigy now have FSR rations and WY PMCs carry PMC CFRs.
+  type: Tweak
+- message: Naloxone works on the dead.
+  type: Tweak
+- message: The colony ASRS only sells colony-legal firearms. Added a colony Glock
+    75.
+  type: Tweak
+- message: The XM43 uses its updated sprite.
+  type: Tweak
+- message: The M39 and M39B/2 are caseless.
+  type: Tweak
+- message: The requisitions stock console, objectives console and objective intel
+    window use the CRT console style.
+  type: Tweak
+- message: Added new intel tech console and fax interfaces.
+  type: Add
+- message: Added M20A AP magazines and Kramer hollow point magazines.
+  type: Add
+- message: CMB CIU uses the M20A2 instead of the M20A. CIU no-longer has M16s. CIU
+    now has kramer DMRs available alongside AP/HP mags for the M20A.
+  type: Tweak
+- message: The CMB/CIU M81 riot launcher no longer needs police training.
+  type: Tweak
+- message: The Kramer Enforcer's built in scope no longer draws a separate attachment
+    over the rifle.
+  type: Fix
+- message: Platoons deploy with the Omaha dropship instead of the Midway. The Omaha's
+    weapons rack starts empty and holds 40 weapons or ammo items.
+  type: Tweak
+- message: Day/night cycles follow each planet's day cycle setting and apply to every
+    floor of a map. Distress signal maps have no day/night cycle.
+  type: Fix
+- message: Fixed ghost roles sometimes spawning without ranks.
+  type: Fix
+- message: Fixed ghost roles frequently have duplicate names due to squads being named
+    the same as their role.
+  type: Fix
+- message: Fixed ghost roles sometimes spawning with absurd hair.
+  type: Fix
+- message: The USS Bush outer hull is zero gravity again and all its secondary requisition
+    shutters work now.
+  type: Fix
+- message: USS Bush red alert gun cabinets are now locked to MP/Command.
+  type: Tweak
+- message: SecTech vendors sell pepper spray now. SecTechs no-longer stock AP sidearms.
+  type: Tweak
+- message: Ghost role call ins spawn with their gear in hand and on them, not on the
+    floor anymore.
+  type: Fix
+- message: Admin permissions are split into separate flags with hover descriptions
+    and mentor no longer grants sandbox or other admin powers.
+  type: Admin
+- message: spawnthirdparty takes a faction and a "now" option.
+  type: Admin
+- message: Added the attachmentoffsets command which helps get the offsets for attachments
+    without having to guess.
+  type: Admin
+- message: Map files have been reorganized.
+  type: Code
+time: '2026-10-21T18:16:46.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2252

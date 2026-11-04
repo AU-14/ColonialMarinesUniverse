@@ -1,7 +1,7 @@
-using Content.Shared.Explosion.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Tag;
+using Content.Shared.Trigger.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -93,7 +93,7 @@ public sealed partial class VehicleEntranceItemSystem : EntitySystem
     private bool IsPrimedHandGrenade(EntityUid entity)
     {
         return (_tag.HasTag(entity, HandGrenadeTag) || _tag.HasTag(entity, GrenadeTag)) &&
-               HasComp<OnUseTimerTriggerComponent>(entity) &&
+               HasComp<TimerTriggerComponent>(entity) &&
                HasComp<ActiveTimerTriggerComponent>(entity);
     }
 }

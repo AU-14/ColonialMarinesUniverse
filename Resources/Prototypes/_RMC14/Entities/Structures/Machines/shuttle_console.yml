@@ -22,7 +22,7 @@
   - type: ActivatableUI
     key: enum.DropshipNavigationUiKey.Key
   - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -38,7 +38,7 @@
   suffix: Opfor
   components:
   - type: AccessReader
-    access: [ ]
+    access: [ [ "AU14AccessOpforFTL" ], [ "AU14AccessOpforPilot" ] ]
   - type: WhitelistedShuttle
     faction: opfor
     ShuttleType: Dropship
@@ -165,7 +165,7 @@
   - type: ActivatableUI
     key: enum.DropshipNavigationUiKey.Key
   - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -180,7 +180,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 - type: entity
   parent: CMBaseStructure
@@ -211,7 +211,7 @@
   - type: ActivatableUI
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -228,7 +228,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 # TODO RMC14 alamo and normandy specific names for each
 - type: entity
@@ -247,11 +247,9 @@
       enum.RMCCameraUiKey.Key:
         type: RMCCameraBui
   - type: RMCCameraComputer
-    protoIds:
-    - RMCMonitorCameraAlamo
-    - RMCFlareCAS
-    - RMCAirFlareCAS
-    - RMCLaserDesignatorTarget
+  - type: CameraNetworkReceiver
+    networks: [RMCMonitorCameraAlamo]
+    supportedSources: Rmc
   - type: ActivatableUI
     key: enum.RMCCameraUiKey.Key
 
@@ -263,11 +261,9 @@
   suffix: Normandy
   components:
   - type: RMCCameraComputer
-    protoIds:
-    - RMCMonitorCameraNormandy
-    - RMCFlareCAS
-    - RMCAirFlareCAS
-    - RMCLaserDesignatorTarget
+  - type: CameraNetworkReceiver
+    networks: [RMCMonitorCameraNormandy]
+    supportedSources: Rmc
 
 - type: entity
   parent: CMComputerDropship
@@ -281,7 +277,7 @@
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
     #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -323,7 +319,7 @@
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
     #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -345,7 +341,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 - type: entity
   parent: CMComputerDropship
@@ -360,7 +356,7 @@
     key: enum.DropshipTerminalWeaponsUi.Key
   - type: AccessReader
     #access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "AU14AccessCorporateWEYUFlight" ] ]
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"]]
   - type: ActivatableUIRequiresAccess
   - type: UserInterface
     interfaces:
@@ -511,7 +507,7 @@
   name: dropship navigation computer (govfor)
   components:
   - type: AccessReader
-    access: [ ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
   - type: WhitelistedShuttle
     faction: govfor
     ShuttleType: Dropship
@@ -552,7 +548,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
   - type: WhitelistedShuttle
     faction: govfor
     ShuttleType: Dropship
@@ -573,5 +569,5 @@
   id: CMComputerDropshipNavigationOldThirdParty
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Machines/shuttle_console.rsi
+    sprite: CMU14/Structures/Machines/shuttle_console.rsi
     state: consoleold

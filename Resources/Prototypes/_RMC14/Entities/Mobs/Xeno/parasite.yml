@@ -16,12 +16,13 @@
     raffle:
       settings: parasiteTimeRequirement
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
   - type: FiremanCarriable
     canThrow: true
     carrierWhitelist:
       components:
       - Synth
+      - Yautja # CMU14: Yautja may carry this caste too - CM-SS13's grab gate reaches MOB_SIZE_XENO (mob_grab.dm:82-89).
   - type: MobState
     allowedStates:
     - Alive
@@ -66,6 +67,7 @@
         layer:
         - SmallMobLayer
   - type: XenoAnimateMovement
+  - type: RMCMobCollision # CMU14: contact-only so leaps can touch standing mobs
   - type: XenoLeap
     knockdownTime: 1
   - type: AcidBloodSplash
@@ -79,6 +81,10 @@
     # - RMCDecalSpawnerGibsParasite # TODO
     - RMCGibEffectXenoSmall
   - type: XenoParasite
+    # CMU14: attachment timing is balance data, not a test or system constant.
+    fallOffDelay: 15
+    cmuMinHugTime: 120
+    cmuMaxHugTime: 300
   - type: InfectOnPullAttempt
   - type: Item
     size: Invalid
@@ -102,7 +108,7 @@
   - type: Clothing
     quickEquip: false
     slots: [mask]
-    sprite: _AU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
   - type: HideLayerClothing
     slots:
     - Snout
@@ -116,6 +122,7 @@
   - type: HTN
     rootTask:
       task: RMCParasiteActiveCompound
+    planCooldown: 0.1 # CMU14: replan fast enough to act inside the trap's wake window
     blackboard:
       VisionRadius: !type:Single
         3.0
@@ -123,9 +130,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: parasite
-  - type: AddAccentClothing
-    accent: ReplacementAccent
-    replacement: mumble
+  - type: RelayedReplacementAccent
+    accent: mumble
   - type: Blindfold
   - type: StandingState
     downSound: null
@@ -133,13 +139,18 @@
     stateName: parasite
   - type: RMCBuckleOffset
     offset: 0, 0
-  - type: XenoRankNames #TODO change ranks based on total hugs done
+  - type: XenoRankNames # CMU14
+  # TODO: change ranks based on total hugs done
     rankNames:
       0: rmc-xeno-young
       2: rmc-xeno-mature-parasite
       3: rmc-xeno-elder-parasite
       4: rmc-xeno-ancient-parasite
       5: rmc-xeno-prime-parasite
+      6: rmc-xeno-apex-parasite
+      7: rmc-xeno-royal-parasite
+      8: rmc-xeno-nemesis
+      9: rmc-xeno-nemesis
   - type: FixedIdentity
     name: cmu-job-name-xeno-unknown
     whitelist:

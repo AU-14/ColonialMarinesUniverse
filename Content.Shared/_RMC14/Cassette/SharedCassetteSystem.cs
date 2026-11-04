@@ -2,6 +2,7 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Clothing;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Examine;
@@ -17,8 +18,10 @@ using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Timing; // CMU14
 using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Cassette;
@@ -33,6 +36,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!; // CMU14
 
     public override void Initialize()
     {
@@ -47,13 +51,98 @@ public abstract partial class SharedCassetteSystem : EntitySystem
         SubscribeLocalEvent<CassettePlayerComponent, GetEquipmentVisualsEvent>(OnPlayerGetEquipmentVisuals, after: [typeof(ClothingSystem)]);
         SubscribeLocalEvent<CassettePlayerComponent, GotUnequippedEvent>(OnPlayerUnequipped);
         SubscribeLocalEvent<CassettePlayerComponent, ExaminedEvent>(OnPlayerExamined);
-        SubscribeLocalEvent<CassettePlayerComponent, AfterAutoHandleStateEvent>(OnPlayerState);
+        SubscribeLocalEvent<ActionComponent, EntityTerminatingEvent>(OnActionTerminating); // CMU14
         SubscribeLocalEvent<CassettePlayerComponent, EntRemovedFromContainerMessage>(OnPlayerRemovedFromContainer);
         SubscribeLocalEvent<CassettePlayerComponent, GetVerbsEvent<AlternativeVerb>>(OnPlayerGetVerbsAlternative);
+        SubscribeLocalEvent<CassettePlayerComponent, ComponentGetState>(OnPlayerGetState);
+        SubscribeLocalEvent<CassettePlayerComponent, ComponentHandleState>(OnPlayerHandleState);
 
         SubscribeLocalEvent<CassetteTapeComponent, ExaminedEvent>(OnTapeExamined);
         SubscribeLocalEvent<CassetteTapeComponent, UseInHandEvent>(OnPlayerUseInHand);
         SubscribeLocalEvent<CassetteTapeComponent, GetVerbsEvent<AlternativeVerb>>(OnTapeGetVerbsAlternative);
+    }
+
+    // CMU14: wearer deletion kills the action entities, leaving dangling refs that error on every PVS state send
+    private void OnActionTerminating(Entity<ActionComponent> ent, ref EntityTerminatingEvent args)
+    {
+        var players = EntityQueryEnumerator<CassettePlayerComponent>();
+        while (players.MoveNext(out var uid, out var comp))
+        {
+            var dirty = false;
+            if (comp.PlayPauseAction == ent)
+            {
+                comp.PlayPauseAction = null;
+                dirty = true;
+            }
+
+            if (comp.NextAction == ent)
+            {
+                comp.NextAction = null;
+                dirty = true;
+            }
+
+            if (comp.RestartAction == ent)
+            {
+                comp.RestartAction = null;
+                dirty = true;
+            }
+
+            if (dirty)
+                Dirty(uid, comp);
+        }
+    }
+
+    private void OnPlayerGetState(Entity<CassettePlayerComponent> ent, ref ComponentGetState args)
+    {
+        TryGetNetEntity(ent.Comp.PlayPauseAction, out var playPauseAction);
+        TryGetNetEntity(ent.Comp.NextAction, out var nextAction);
+        TryGetNetEntity(ent.Comp.RestartAction, out var restartAction);
+        TryGetNetEntity(ent.Comp.AudioStream, out var audioStream);
+
+        args.State = new CassettePlayerComponentState
+        {
+            PlayPauseActionId = ent.Comp.PlayPauseActionId,
+            PlayPauseAction = playPauseAction,
+            NextActionId = ent.Comp.NextActionId,
+            NextAction = nextAction,
+            RestartActionId = ent.Comp.RestartActionId,
+            RestartAction = restartAction,
+            Slots = ent.Comp.Slots,
+            ContainerId = ent.Comp.ContainerId,
+            AudioStream = audioStream,
+            State = ent.Comp.State,
+            AudioParams = ent.Comp.AudioParams,
+            Tape = ent.Comp.Tape,
+            PlayPauseSound = ent.Comp.PlayPauseSound,
+            InsertEjectSound = ent.Comp.InsertEjectSound,
+            WornSprite = ent.Comp.WornSprite,
+            MusicSprite = ent.Comp.MusicSprite,
+        };
+    }
+
+    private void OnPlayerHandleState(Entity<CassettePlayerComponent> ent, ref ComponentHandleState args)
+    {
+        if (args.Current is not CassettePlayerComponentState state)
+            return;
+
+        ent.Comp.PlayPauseActionId = state.PlayPauseActionId;
+        ent.Comp.PlayPauseAction = EnsureEntity<CassettePlayerComponent>(state.PlayPauseAction, ent);
+        ent.Comp.NextActionId = state.NextActionId;
+        ent.Comp.NextAction = EnsureEntity<CassettePlayerComponent>(state.NextAction, ent);
+        ent.Comp.RestartActionId = state.RestartActionId;
+        ent.Comp.RestartAction = EnsureEntity<CassettePlayerComponent>(state.RestartAction, ent);
+        ent.Comp.Slots = state.Slots;
+        ent.Comp.ContainerId = state.ContainerId;
+        ent.Comp.AudioStream = EnsureEntity<CassettePlayerComponent>(state.AudioStream, ent);
+        ent.Comp.State = state.State;
+        ent.Comp.AudioParams = state.AudioParams;
+        ent.Comp.Tape = state.Tape;
+        ent.Comp.PlayPauseSound = state.PlayPauseSound;
+        ent.Comp.InsertEjectSound = state.InsertEjectSound;
+        ent.Comp.WornSprite = state.WornSprite;
+        ent.Comp.MusicSprite = state.MusicSprite;
+
+        _item.VisualsChanged(ent);
     }
 
     private void OnPlayerDetached(PlayerDetachedEvent ev)
@@ -99,17 +188,19 @@ public abstract partial class SharedCassetteSystem : EntitySystem
                     ("player", ent),
                     ("current", GetCurrentSongCount(ent)),
                     ("total", total));
-                _popup.PopupClient(msg, ent, args.Performer);
+                _popup.PopupEntity(msg, ent, args.Performer);
                 break;
             }
             case AudioState.Playing:
             {
                 if (_net.IsServer)
                     _audio.SetState(ent.Comp.AudioStream, AudioState.Paused);
-                else if (tape is { Comp.Custom: true })
+                // CMU14: local playback is not rolled back with the player's predicted state.
+                // else if (tape is { Comp.Custom: true })
+                else if (_timing.IsFirstTimePredicted && tape is { Comp.Custom: true })
                     _audio.SetState(ent.Comp.CustomAudioStream, AudioState.Paused);
 
-                _popup.PopupClient(Loc.GetString("rmc-cassette-pause", ("player", ent)), ent, args.Performer);
+                _popup.PopupEntity(Loc.GetString("rmc-cassette-pause", ("player", ent)), ent, args.Performer);
                 ent.Comp.State = AudioState.Paused;
                 break;
             }
@@ -117,14 +208,16 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             {
                 if (_net.IsServer)
                     _audio.SetState(ent.Comp.AudioStream, AudioState.Playing);
-                else if (tape is { Comp.Custom: true })
+                // CMU14: local playback is not rolled back with the player's predicted state.
+                // else if (tape is { Comp.Custom: true })
+                else if (_timing.IsFirstTimePredicted && tape is { Comp.Custom: true })
                     _audio.SetState(ent.Comp.CustomAudioStream, AudioState.Playing);
 
                 var msg = Loc.GetString("rmc-cassette-resume",
                     ("player", ent),
                     ("current", GetCurrentSongCount(ent)),
                     ("total", total));
-                _popup.PopupClient(msg, ent, args.Performer);
+                _popup.PopupEntity(msg, ent, args.Performer);
                 ent.Comp.State = AudioState.Playing;
                 break;
             }
@@ -140,7 +233,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
         var msg = Loc.GetString("rmc-cassette-change",
             ("current", GetCurrentSongCount(ent)),
             ("total", GetTotalSongs(ent)));
-        _popup.PopupClient(msg, ent, args.Performer);
+        _popup.PopupEntity(msg, ent, args.Performer);
     }
 
     private void OnPlayerRestart(Entity<CassettePlayerComponent> ent, ref CassetteRestartActionEvent args)
@@ -149,7 +242,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
         var msg = Loc.GetString("rmc-cassette-restart",
             ("current", GetCurrentSongCount(ent)),
             ("total", GetTotalSongs(ent)));
-        _popup.PopupClient(msg, ent, args.Performer);
+        _popup.PopupEntity(msg, ent, args.Performer);
     }
 
     private void PlaySong(Entity<CassettePlayerComponent> player, EntityUid actor, int? tape = null)
@@ -234,7 +327,10 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             State = ent.Comp.WornSprite.RsiState,
         }));
 
-        if (ent.Comp.State == AudioState.Playing)
+        // cmu edit start: viewers can turn the music notes off
+        if (ent.Comp.State == AudioState.Playing &&
+            !_netConfig.GetCVar(Content.Shared.CCVar.CCVars.CMUHideCassetteMusicNotes))
+        // cmu edit end
         {
             args.Layers.Add(("cassette_music", new PrototypeLayerData
             {
@@ -258,11 +354,6 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             else
                 args.PushMarkup(Loc.GetString("rmc-cassette-player-examine-none"));
         }
-    }
-
-    private void OnPlayerState(Entity<CassettePlayerComponent> ent, ref AfterAutoHandleStateEvent args)
-    {
-        _item.VisualsChanged(ent);
     }
 
     private void OnPlayerRemovedFromContainer(Entity<CassettePlayerComponent> ent, ref EntRemovedFromContainerMessage args)
@@ -372,7 +463,10 @@ public abstract partial class SharedCassetteSystem : EntitySystem
     private void StopAllAudio(Entity<CassettePlayerComponent> ent)
     {
         ent.Comp.AudioStream = _audio.Stop(ent.Comp.AudioStream);
-        ent.Comp.CustomAudioStream = _audio.Stop(ent.Comp.CustomAudioStream);
+        // CMU14: Stop returns null during replay without stopping the sound. Keep its owner until we can stop it.
+        // ent.Comp.CustomAudioStream = _audio.Stop(ent.Comp.CustomAudioStream);
+        if (_timing.IsFirstTimePredicted)
+            ent.Comp.CustomAudioStream = _audio.Stop(ent.Comp.CustomAudioStream);
 
         ent.Comp.State = AudioState.Stopped;
         Dirty(ent);

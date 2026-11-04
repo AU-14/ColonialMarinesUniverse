@@ -40,15 +40,61 @@ humanoid-profile-editor-military-jobs-tab = Military Jobs
 humanoid-profile-editor-threat-jobs-tab = Threat Jobs
 humanoid-profile-editor-civilian-jobs-tab = Civilian Jobs
 humanoid-profile-editor-insurgency-tab = Insurgency
+humanoid-profile-editor-colony-jobs-tab = Colony Jobs
 humanoid-profile-editor-colony-fall-tab = Colony Fall
 humanoid-profile-editor-distress-signal-tab = Distress Signal
 humanoid-profile-editor-government-jobs-tab = Government Jobs
 humanoid-profile-editor-insurgency-jobs-tab = Insurgency Jobs
 humanoid-profile-editor-threat-roles-tab = Threat Jobs
+humanoid-profile-editor-threats-label = Threats
+humanoid-profile-editor-threat-jobs-section = Threat Jobs
+humanoid-profile-editor-threat-marker-suffix = (Marker)
+humanoid-profile-editor-threat-xeno = Xenomorph
+humanoid-profile-editor-threat-ape = Apes
+humanoid-profile-editor-threat-cultist = Cultists
+humanoid-profile-editor-threat-wendigo = Wendigo
+humanoid-profile-editor-threat-abomination = Abominations
+humanoid-profile-editor-threat-tribal = Tribals
+humanoid-profile-editor-threat-neomorph = Neomorphs
+humanoid-profile-editor-threat-badbloodclan = Bad Blood Clan
 humanoid-profile-editor-allegiance-label = Allegiance:
 humanoid-profile-editor-allegiance-none = None
 humanoid-profile-editor-origin-label = Origin:
 humanoid-profile-editor-origin-none = None
+# cmu edit start
+humanoid-profile-editor-character-description-tab = Character Records
+# cmu edit end
+humanoid-profile-editor-short-examine-label = Short Examine Text:
+humanoid-profile-editor-height-label = Height:
+humanoid-profile-editor-weight-label = Weight:
+humanoid-profile-editor-build-label = Build:
+humanoid-profile-editor-skin-tone-label = Skin Tone:
+humanoid-profile-editor-hair-color-label = Hair Color:
+humanoid-profile-editor-eye-color-label = Eye Color:
+humanoid-profile-editor-hide-meta-label = Hide Meta Information:
+humanoid-profile-editor-hide-meta-true = True
+humanoid-profile-editor-hide-meta-false = False
+humanoid-profile-editor-full-description-label = Full Character Description:
+humanoid-profile-editor-medical-record-label = Medical Record:
+humanoid-profile-editor-criminal-record-label = Criminal Record:
+humanoid-profile-editor-general-record-label = General Record:
+
+humanoid-profile-editor-short-examine-tooltip = A short line shown when someone examines your character normally. Must be under 100 characters.
+humanoid-profile-editor-age-tooltip = Your character's age.
+humanoid-profile-editor-origin-tooltip = Your character's origin. Adds relevant accents, items, languages and traits at spawn. Hidden from others if Hide Meta Information is enabled.
+humanoid-profile-editor-allegiance-tooltip = Your character's allegiance. Affects platoon/colony spawning. Hidden from others if Hide Meta Information is enabled.
+humanoid-profile-editor-pronouns-tooltip = Your character's pronouns.
+humanoid-profile-editor-height-tooltip = Your character's height, in feet'inches (4'0 up to 6'11).
+humanoid-profile-editor-weight-tooltip = Your character's weight in lbs, between 90 and 300.
+humanoid-profile-editor-build-tooltip = Your character's physical build.
+humanoid-profile-editor-skin-tone-tooltip = Automatically filled in from the skin color slider on the Appearance tab.
+humanoid-profile-editor-hair-color-tooltip = Automatically filled in from the hair color slider on the Appearance tab.
+humanoid-profile-editor-eye-color-tooltip = Automatically filled in from the eye color slider on the Appearance tab.
+humanoid-profile-editor-hide-meta-tooltip = Hides Origin, Allegiance, Medical Record, Criminal Record, and General Record from other players using Detailed Examine on your character. Never hides anything from faction roster consoles.
+humanoid-profile-editor-full-description-tooltip = A full description of your character's appearance and demeanor, shown in Detailed Examine.
+humanoid-profile-editor-medical-record-tooltip = Your character's medical record. Disability traits and drug allergies are listed automatically. Hidden from others if Hide Meta Information is enabled.
+humanoid-profile-editor-criminal-record-tooltip = Your character's criminal record. Hidden from others if Hide Meta Information is enabled.
+humanoid-profile-editor-general-record-tooltip = Your character's general record. Hidden from others if Hide Meta Information is enabled.
 humanoid-profile-editor-synthetic-title = Synthetic
 humanoid-profile-editor-synthetic-description = Whether this character is a synthetic. Synthetic characters can only be assigned to synthetic roles.
 humanoid-profile-editor-synthetic-yes-button = Yes
@@ -57,7 +103,7 @@ humanoid-profile-editor-synthetic-locked = You are not whitelisted for the synth
 humanoid-profile-editor-synthetic-locked-job = This character is not marked as synthetic.
 humanoid-profile-editor-synthetic-locked-job-non-synthetic = This character is marked as synthetic and can only take synthetic jobs.
 humanoid-profile-editor-preference-unavailable-stay-in-lobby-button = Stay in lobby if preference unavailable.
-humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button = Be default job if preference unavailable.
+humanoid-profile-editor-preference-unavailable-spawn-as-overflow-button = Be {INDEFINITE($overflowJob)} {$overflowJob} if preference unavailable.
 humanoid-profile-editor-preference-jumpsuit = Jumpsuit
 humanoid-profile-editor-preference-jumpskirt = Jumpskirt
 humanoid-profile-editor-preference-backpack = Backpack
@@ -103,3 +149,42 @@ humanoid-profile-editor-segment-flight = Vehicle Crew
 humanoid-profile-editor-segment-support = Support
 humanoid-profile-editor-segment-leader = Infantry NCO
 humanoid-profile-editor-segment-line = Line Infantry
+
+# Armor
+humanoid-profile-editor-preference-armor-random = Random
+humanoid-profile-editor-preference-armor-padded = Padded
+humanoid-profile-editor-preference-armor-padless = Padless
+humanoid-profile-editor-preference-armor-ridged = Ridged
+humanoid-profile-editor-preference-armor-carrier = Carrier
+humanoid-profile-editor-preference-armor-skull = Skull
+humanoid-profile-editor-preference-armor-smooth = Smooth
+
+humanoid-profile-editor-randomize = Randomize
+
+humanoid-profile-editor-randomize-unlocked-button = Randomize unlocked
+
+humanoid-profile-editor-randomize-name-button = Name
+
+humanoid-profile-editor-randomize-species-button = Species
+
+humanoid-profile-editor-randomize-age-button = Age
+
+humanoid-profile-editor-randomize-sex-button = Sex
+
+humanoid-profile-editor-randomize-skin-button = Skin color
+
+humanoid-profile-editor-randomize-eye-button = Eye color
+
+humanoid-profile-editor-randomize-markings-button = Markings
+
+humanoid-profile-editor-voice-label = Voice:
+
+humanoid-profile-editor-randomizer-lock-tooltip = Prevents the value from being randomized
+
+humanoid-profile-editor-voice-masculine = Masculine
+
+humanoid-profile-editor-voice-feminine = Feminine
+
+humanoid-profile-editor-voice-neutral = Neutral
+
+humanoid-profile-editor-voice-none = Unnamed Voice

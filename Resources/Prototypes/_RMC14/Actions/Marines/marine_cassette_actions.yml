@@ -13,9 +13,11 @@
   description: Starts or stops playing music.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/cassette_player.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/cassette_player.rsi
       state: walkman_playpause
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CassettePlayPauseActionEvent
 
@@ -26,9 +28,11 @@
   description: Moves to the next track.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/cassette_player.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/cassette_player.rsi
       state: walkman_next
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CassetteNextActionEvent
 
@@ -39,8 +43,10 @@
   description: Restarts the current track.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/cassette_player.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/cassette_player.rsi
       state: walkman_restart
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CassetteRestartActionEvent

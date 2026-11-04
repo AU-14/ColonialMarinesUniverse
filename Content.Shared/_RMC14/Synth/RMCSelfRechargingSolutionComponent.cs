@@ -16,7 +16,7 @@ public sealed partial class RMCSelfRechargingSolutionComponent : Component
     /// Solution to refill on the entity.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public string SolutionId = "Welder";
+    public string SolutionId = "welder";
 
     /// <summary>
     /// Reagent inserted into the target solution.
@@ -39,6 +39,6 @@ public sealed partial class RMCSelfRechargingSolutionComponent : Component
     /// <summary>
     /// Next game time when this entity should recharge.
     /// </summary>
-    [DataField]
+    [DataField(readOnly: true)]
     public TimeSpan NextRecharge;
 }

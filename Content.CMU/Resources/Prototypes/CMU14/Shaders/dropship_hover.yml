@@ -1,0 +1,4 @@
+- type: shader
+  id: CMUDropshipHoverExhaust
+  kind: source
+  path: /Textures/CMU14/Effects/Dropship/hover_exhaust.swsl

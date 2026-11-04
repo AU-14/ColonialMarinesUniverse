@@ -10,3 +10,5 @@
     sprite: _RMC14/Structures/Vehicles/hardpoints/humvee.rsi
     state: humveeturret
   - type: VehicleTurretVisual
+  - type: RMCNightVisionVisible # CMU14
+    priority: -1

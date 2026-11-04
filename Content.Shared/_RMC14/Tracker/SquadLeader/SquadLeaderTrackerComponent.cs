@@ -1,37 +1,37 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared._RMC14.Tracker.SquadLeader;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
 public sealed partial class SquadLeaderTrackerComponent : Component
 {
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan UpdateAt;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan UpdateEvery = TimeSpan.FromSeconds(1);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public FireteamData Fireteams = new();
 
     // Transient: NetEntities (players) who were granted temporary permission to edit fireteam nicknames
     // when an Overwatch console opened the SquadInfo UI bound to this tracker. This is not networked.
     public HashSet<NetEntity> TemporaryOverwatchEditors = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public ProtoId<TrackerModePrototype>? Mode;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool ManualMode;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Target;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? BattleBuddy;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public HashSet<ProtoId<TrackerModePrototype>> TrackerModes = new();
 }

@@ -34,7 +34,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_l90.ogg
+      collection: AU14SLRFireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -84,6 +84,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         startingAttachable: RMCAttachmentL90GL
         whitelist:
@@ -119,7 +120,7 @@
     - SemiAuto
     - FullAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_l90.ogg
+      collection: AU14SLRFireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -209,7 +210,7 @@
     - SemiAuto
     - FullAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_l90.ogg
+      collection: AU14SLRFireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -332,6 +333,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         startingAttachable: RMCAttachmentL90GL
         whitelist:
@@ -361,6 +363,7 @@
           tags:
           - RMCAttachmentRailFlashlight
           - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope # CMU14: standard GOVFOR scope compatibility.
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -807,6 +810,11 @@
   id: BulletRifle7x43mm
   categories: [ HideSpawnMenu ]
   components:
+  - type: DamageImpactProfile
+    projectile:
+      contact: Generic
+      penetration: Medium
+      energy: Medium
   - type: Projectile
     damage:
       types:

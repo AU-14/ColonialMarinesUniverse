@@ -1,0 +1,3544 @@
+# Source-specific forked shrubs and seed-head plants. See SOURCES_STEMMED_SHRUBS.md.
+- type: cmu3DModel
+  id: CMU3DRMCBushd1
+  label: Wild shrub bushd1
+  sourcePrototypes:
+  - RMCBushd1
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushd1
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.10395, -0.11200, 0.00700
+    max: -0.09292, -0.06800, 0.15863
+    color: '#331D0A'
+    shape: SlantedXReverse
+  - label: visible stem 0 section 1
+    min: -0.10395, -0.11008, 0.14763
+    max: -0.09292, -0.06992, 0.21488
+    color: '#291500'
+    shape: SlantedX
+  - label: stem 0 joint 1
+    min: -0.12320, -0.11008, 0.13255
+    max: -0.08305, -0.06992, 0.17270
+    color: '#291500'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.09651, -0.10815, 0.20388
+    max: -0.05974, -0.07185, 0.32738
+    color: '#423410'
+    shape: SlantedX
+  - label: stem 0 joint 2
+    min: -0.11190, -0.10815, 0.19073
+    max: -0.07560, -0.07185, 0.22703
+    color: '#423410'
+    shape: Ellipsoid
+  - label: visible stem 0 section 3
+    min: -0.06388, -0.10622, 0.31638
+    max: -0.04550, -0.07378, 0.43988
+    color: '#322204'
+    shape: SlantedX
+  - label: stem 0 joint 3
+    min: -0.07873, -0.10622, 0.30515
+    max: -0.04627, -0.07378, 0.33760
+    color: '#322204'
+    shape: Ellipsoid
+  - label: visible stem 0 section 4
+    min: -0.04825, -0.10430, 0.42888
+    max: -0.02987, -0.07570, 0.55238
+    color: '#3B290D'
+    shape: SlantedX
+  - label: stem 0 joint 4
+    min: -0.06118, -0.10430, 0.41958
+    max: -0.03257, -0.07570, 0.44817
+    color: '#3B290D'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.16176, 0.01800, 0.09137
+    max: -0.08824, 0.06200, 0.21488
+    color: '#331D0A'
+    shape: SlantedXReverse
+  - label: visible stem 1 section 1
+    min: -0.22426, 0.02185, 0.20388
+    max: -0.15074, 0.05815, 0.32738
+    color: '#291500'
+    shape: SlantedXReverse
+  - label: stem 1 joint 1
+    min: -0.17440, 0.02185, 0.19073
+    max: -0.13810, 0.05815, 0.22703
+    color: '#291500'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: -0.23305, 0.02570, 0.31638
+    max: -0.20445, 0.05430, 0.49613
+    color: '#423410'
+    shape: CylinderZ
+  - label: stem 1 joint 2
+    min: -0.23305, 0.02570, 0.30708
+    max: -0.20445, 0.05430, 0.33568
+    color: '#423410'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: 0.02849, 0.06800, 0.00700
+    max: 0.06526, 0.11200, 0.13050
+    color: '#331D0A'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.05699, 0.07057, 0.11950
+    max: 0.13051, 0.10943, 0.24300
+    color: '#291500'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.04307, 0.07057, 0.10507
+    max: 0.08193, 0.10943, 0.14393
+    color: '#291500'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.12224, 0.07313, 0.23200
+    max: 0.15901, 0.10687, 0.35550
+    color: '#423410'
+    shape: SlantedX
+  - label: stem 2 joint 2
+    min: 0.10813, 0.07313, 0.22013
+    max: 0.14187, 0.10687, 0.25387
+    color: '#423410'
+    shape: Ellipsoid
+  - label: visible stem 2 section 3
+    min: 0.14195, 0.07570, 0.34450
+    max: 0.17055, 0.10430, 0.52425
+    color: '#322204'
+    shape: CylinderZ
+  - label: stem 2 joint 3
+    min: 0.14195, 0.07570, 0.33520
+    max: 0.17055, 0.10430, 0.36380
+    color: '#322204'
+    shape: Ellipsoid
+  - label: visible stem 3 section 0
+    min: 0.04050, -0.06200, 0.11950
+    max: 0.08450, -0.01800, 0.32738
+    color: '#331D0A'
+    shape: CylinderZ
+  - label: visible stem 3 section 1
+    min: 0.02849, -0.05430, 0.31638
+    max: 0.06526, -0.02570, 0.46800
+    color: '#291500'
+    shape: SlantedXReverse
+  - label: stem 3 joint 1
+    min: 0.04820, -0.05430, 0.30708
+    max: 0.07680, -0.02570, 0.33568
+    color: '#291500'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.12075, -0.11700, 0.00500
+    max: -0.06675, -0.06300, 0.05800
+    color: '#331D0A'
+    shape: CylinderZ
+  - label: fork depth rising branch 1
+    min: -0.11130, -0.10147, 0.08737
+    max: -0.07620, 0.05147, 0.15137
+    color: '#331D0A'
+    shape: SlantedY
+  - label: rounded root base 2
+    min: 0.00425, 0.06300, 0.00500
+    max: 0.05825, 0.11700, 0.05800
+    color: '#331D0A'
+    shape: CylinderZ
+  - label: fork depth rising branch 3
+    min: 0.04495, -0.05147, 0.11550
+    max: 0.08005, 0.10147, 0.17950
+    color: '#331D0A'
+    shape: SlantedYReverse
+  - label: source leaf patch 0
+    min: -0.07487, -0.13026, 0.54950
+    max: -0.03388, -0.08674, 0.60575
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 1
+    min: -0.05347, -0.09326, 0.49325
+    max: 0.00597, -0.04974, 0.54950
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 2
+    min: -0.03669, -0.11600, 0.53772
+    max: 0.01987, -0.08000, 0.54372
+    color: '#597D13'
+    shape: SlantedX
+  - label: source leaf patch 3
+    min: -0.03539, -0.10000, 0.54638
+    max: 0.01976, -0.06400, 0.56044
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 4
+    min: -0.08203, -0.11600, 0.52734
+    max: -0.02999, -0.08000, 0.53334
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 5
+    min: 0.12762, 0.08674, 0.52138
+    max: 0.16863, 0.13026, 0.57763
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 6
+    min: 0.15074, 0.05400, 0.51825
+    max: 0.22426, 0.11000, 0.52425
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 7
+    min: 0.15887, 0.08674, 0.46513
+    max: 0.19988, 0.13026, 0.52138
+    color: '#58761D'
+    shape: SlantedY
+  - label: source leaf patch 8
+    min: -0.30377, 0.01400, 0.49013
+    max: -0.21186, 0.05000, 0.49613
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 9
+    min: -0.24618, -0.00026, 0.46044
+    max: -0.18674, 0.04326, 0.51669
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 10
+    min: -0.22289, 0.01400, 0.49013
+    max: -0.16774, 0.05000, 0.49613
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 11
+    min: -0.22358, 0.02000, 0.41278
+    max: -0.15924, 0.07600, 0.41878
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 12
+    min: -0.25597, -0.00026, 0.43544
+    max: -0.19653, 0.04326, 0.46356
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 13
+    min: 0.10524, 0.08000, 0.49013
+    max: 0.16039, 0.11600, 0.49613
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 14
+    min: 0.03689, -0.07600, 0.41873
+    max: 0.08991, -0.02000, 0.42684
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 15
+    min: 0.01424, -0.08026, 0.41356
+    max: 0.07368, -0.03674, 0.46981
+    color: '#7E9128'
+    shape: SlantedYReverse
+  - label: source leaf patch 16
+    min: 0.01888, -0.04326, 0.46356
+    max: 0.05987, 0.00026, 0.49169
+    color: '#597D13'
+    shape: SlantedY
+  - label: source leaf patch 17
+    min: -0.11514, -0.10000, 0.45464
+    max: -0.03822, -0.06400, 0.46200
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 18
+    min: -0.26976, 0.00400, 0.40575
+    max: -0.21461, 0.06000, 0.41175
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 19
+    min: -0.08993, -0.09326, 0.38544
+    max: -0.03049, -0.04974, 0.44169
+    color: '#608117'
+    shape: SlantedY
+  - label: source leaf patch 20
+    min: 0.14387, 0.08674, 0.38075
+    max: 0.18488, 0.13026, 0.43700
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 21
+    min: -0.02862, -0.13026, 0.37919
+    max: 0.01237, -0.08674, 0.40731
+    color: '#4E6F1A'
+    shape: SlantedYReverse
+  - label: source leaf patch 22
+    min: -0.11396, -0.11600, 0.35772
+    max: -0.05287, -0.08000, 0.36372
+    color: '#608117'
+    shape: SlantedXReverse
+  - label: source leaf patch 23
+    min: -0.07951, -0.09326, 0.31981
+    max: -0.02007, -0.04974, 0.37606
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 24
+    min: 0.11262, 0.04974, 0.35106
+    max: 0.15363, 0.09326, 0.37919
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 25
+    min: 0.14936, 0.08000, 0.36356
+    max: 0.24127, 0.11600, 0.36956
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 26
+    min: -0.26238, 0.03674, 0.29637
+    max: -0.22137, 0.08026, 0.35263
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 27
+    min: -0.22289, 0.03000, 0.33544
+    max: -0.16774, 0.06600, 0.34144
+    color: '#4E6F1A'
+    shape: SlantedX
+  - label: source leaf patch 28
+    min: 0.05013, -0.04326, 0.32294
+    max: 0.09112, 0.00026, 0.35106
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 29
+    min: 0.15111, 0.08000, 0.33544
+    max: 0.20734, 0.11600, 0.34619
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 30
+    min: -0.22993, -0.00026, 0.23544
+    max: -0.17049, 0.04326, 0.29169
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 31
+    min: -0.01118, -0.06000, 0.26981
+    max: 0.06847, -0.00400, 0.27581
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 32
+    min: 0.13111, 0.06400, 0.26512
+    max: 0.20896, 0.10000, 0.28001
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 33
+    min: -0.12237, -0.13026, 0.23856
+    max: -0.08138, -0.08674, 0.26669
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 34
+    min: 0.01888, -0.04326, 0.23856
+    max: 0.05987, 0.00026, 0.26669
+    color: '#4E6F1B'
+    shape: SlantedY
+  - label: source leaf patch 35
+    min: 0.09638, 0.08674, 0.23856
+    max: 0.13737, 0.13026, 0.26669
+    color: '#597D13'
+    shape: SlantedY
+  - label: source leaf patch 36
+    min: -0.24099, 0.01400, 0.18075
+    max: -0.15276, 0.05000, 0.21450
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 37
+    min: -0.18488, 0.03674, 0.15419
+    max: -0.14387, 0.08026, 0.18231
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 38
+    min: -0.10612, 0.03674, 0.09794
+    max: -0.06513, 0.08026, 0.12606
+    color: '#426717'
+    shape: SlantedY
+- type: cmu3DModel
+  id: CMU3DRMCBushd2
+  label: Wild shrub bushd2
+  sourcePrototypes:
+  - RMCBushd2
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushd2
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.09651, -0.11200, 0.00700
+    max: -0.05974, -0.06800, 0.13050
+    color: '#291500'
+    shape: SlantedXReverse
+  - label: visible stem 0 section 1
+    min: -0.11318, -0.10943, 0.11950
+    max: -0.07432, -0.07057, 0.24300
+    color: '#322204'
+    shape: CylinderZ
+  - label: stem 0 joint 1
+    min: -0.11318, -0.10943, 0.10507
+    max: -0.07432, -0.07057, 0.14393
+    color: '#322204'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.12776, -0.10687, 0.23200
+    max: -0.09099, -0.07313, 0.35550
+    color: '#3E2A15'
+    shape: SlantedXReverse
+  - label: stem 0 joint 2
+    min: -0.11062, -0.10687, 0.22013
+    max: -0.07688, -0.07313, 0.25387
+    color: '#3E2A15'
+    shape: Ellipsoid
+  - label: visible stem 0 section 3
+    min: -0.22702, -0.10430, 0.34450
+    max: -0.11673, -0.07570, 0.46800
+    color: '#423410'
+    shape: SlantedXReverse
+  - label: stem 0 joint 3
+    min: -0.13930, -0.10430, 0.33520
+    max: -0.11070, -0.07570, 0.36380
+    color: '#423410'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: 0.02849, 0.01800, 0.00700
+    max: 0.06526, 0.06200, 0.15863
+    color: '#291500'
+    shape: SlantedX
+  - label: visible stem 1 section 1
+    min: 0.05974, 0.02185, 0.14763
+    max: 0.09651, 0.05815, 0.29925
+    color: '#322204'
+    shape: SlantedX
+  - label: stem 1 joint 1
+    min: 0.04435, 0.02185, 0.13448
+    max: 0.08065, 0.05815, 0.17078
+    color: '#322204'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: 0.07945, 0.02570, 0.28825
+    max: 0.10805, 0.05430, 0.49613
+    color: '#3E2A15'
+    shape: CylinderZ
+  - label: stem 1 joint 2
+    min: 0.07945, 0.02570, 0.27895
+    max: 0.10805, 0.05430, 0.30755
+    color: '#3E2A15'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: 0.05147, 0.06800, 0.11950
+    max: 0.19853, 0.11200, 0.24300
+    color: '#291500'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.17923, 0.07570, 0.23200
+    max: 0.28952, 0.10430, 0.43988
+    color: '#322204'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.17320, 0.07570, 0.22270
+    max: 0.20180, 0.10430, 0.25130
+    color: '#322204'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.08950, -0.11700, 0.00500
+    max: -0.03550, -0.06300, 0.05800
+    color: '#291500'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: 0.00425, 0.01300, 0.00500
+    max: 0.05825, 0.06700, 0.05800
+    color: '#291500'
+    shape: CylinderZ
+  - label: fork depth rising branch 2
+    min: 0.04495, 0.03559, 0.11550
+    max: 0.08005, 0.09441, 0.17950
+    color: '#291500'
+    shape: SlantedY
+  - label: source leaf patch 0
+    min: 0.04872, -0.00026, 0.45966
+    max: 0.10816, 0.04326, 0.54403
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 1
+    min: 0.04274, 0.03000, 0.49013
+    max: 0.09789, 0.06600, 0.49613
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 2
+    min: 0.08138, 0.03674, 0.40887
+    max: 0.12237, 0.08026, 0.46513
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 3
+    min: 0.08892, 0.02000, 0.41278
+    max: 0.15326, 0.07600, 0.41878
+    color: '#597D13'
+    shape: SlantedX
+  - label: source leaf patch 4
+    min: 0.19830, 0.06400, 0.38466
+    max: 0.26264, 0.10000, 0.40575
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 5
+    min: 0.08869, 0.02000, 0.35419
+    max: 0.15610, 0.07600, 0.36019
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 6
+    min: 0.08961, 0.01400, 0.49013
+    max: 0.14476, 0.05000, 0.50419
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 7
+    min: -0.24738, -0.09326, 0.46356
+    max: -0.20637, -0.04974, 0.49169
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 8
+    min: -0.25597, -0.09326, 0.38231
+    max: -0.19653, -0.04974, 0.46669
+    color: '#597D13'
+    shape: SlantedY
+  - label: source leaf patch 9
+    min: -0.18488, -0.13026, 0.37919
+    max: -0.14387, -0.08674, 0.40731
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 10
+    min: -0.26976, -0.11600, 0.44794
+    max: -0.21461, -0.08000, 0.46200
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 11
+    min: 0.27125, 0.08859, 0.43388
+    max: 0.29125, 0.10741, 0.47606
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 12
+    min: 0.24715, 0.04974, 0.38794
+    max: 0.30660, 0.09326, 0.47231
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 13
+    min: 0.27711, 0.08000, 0.43388
+    max: 0.33226, 0.11600, 0.44794
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 14
+    min: 0.25173, 0.06400, 0.36356
+    max: 0.30054, 0.10000, 0.37956
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 15
+    min: 0.23038, 0.08000, 0.43048
+    max: 0.28363, 0.11600, 0.44794
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 16
+    min: -0.15701, -0.09326, 0.34794
+    max: -0.09757, -0.04974, 0.40419
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 17
+    min: 0.06513, 0.03674, 0.37919
+    max: 0.10612, 0.08026, 0.40731
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 18
+    min: -0.12175, -0.12600, 0.31046
+    max: -0.02053, -0.07000, 0.32981
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 19
+    min: -0.09112, -0.09326, 0.29637
+    max: -0.05013, -0.04974, 0.35263
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 20
+    min: -0.10612, -0.09326, 0.26669
+    max: -0.06513, -0.04974, 0.29481
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 21
+    min: 0.00873, 0.03000, 0.30731
+    max: 0.10064, 0.06600, 0.31331
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 22
+    min: 0.03013, 0.00400, 0.24241
+    max: 0.08669, 0.06000, 0.25106
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 23
+    min: 0.06513, 0.03674, 0.21044
+    max: 0.10612, 0.08026, 0.23856
+    color: '#597D13'
+    shape: SlantedY
+  - label: source leaf patch 24
+    min: 0.05653, -0.00026, 0.18231
+    max: 0.11597, 0.04326, 0.21044
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 25
+    min: 0.12762, 0.08674, 0.18231
+    max: 0.16863, 0.13026, 0.21044
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 26
+    min: -0.10064, -0.11600, 0.22294
+    max: -0.00873, -0.08000, 0.22894
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 27
+    min: 0.04274, 0.03000, 0.36356
+    max: 0.09789, 0.06600, 0.36956
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 28
+    min: -0.18824, -0.12600, 0.29794
+    max: -0.10894, -0.07000, 0.31310
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 29
+    min: 0.15887, 0.08674, 0.26669
+    max: 0.19988, 0.13026, 0.29481
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 30
+    min: 0.20637, 0.04974, 0.26669
+    max: 0.24738, 0.09326, 0.29481
+    color: '#53721C'
+    shape: SlantedYReverse
+  - label: source leaf patch 31
+    min: -0.23488, -0.11000, 0.23231
+    max: -0.08926, -0.05400, 0.26016
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 32
+    min: -0.16176, -0.11600, 0.22294
+    max: -0.08824, -0.08000, 0.22894
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 33
+    min: -0.17877, -0.10000, 0.19481
+    max: -0.08686, -0.06400, 0.20081
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 34
+    min: -0.21278, -0.11600, 0.19481
+    max: -0.08410, -0.08000, 0.20081
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 35
+    min: -0.09789, -0.10000, 0.18075
+    max: -0.04274, -0.06400, 0.18675
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 36
+    min: 0.01888, -0.00026, 0.15419
+    max: 0.05987, 0.04326, 0.18231
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 37
+    min: 0.13787, 0.08000, 0.16669
+    max: 0.17463, 0.11600, 0.19481
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 38
+    min: -0.19577, -0.11600, 0.13856
+    max: -0.08548, -0.08000, 0.14456
+    color: '#426717'
+    shape: SlantedXReverse
+- type: cmu3DModel
+  id: CMU3DRMCBushd3
+  label: Wild shrub bushd3
+  sourcePrototypes:
+  - RMCBushd3
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushd3
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.15901, -0.09637, 0.00700
+    max: -0.12224, -0.05238, 0.13050
+    color: '#291500'
+    shape: SlantedXReverse
+  - label: visible stem 0 section 1
+    min: -0.22426, -0.09253, 0.11950
+    max: -0.15074, -0.05623, 0.21488
+    color: '#3E2A15'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.17440, -0.09253, 0.10635
+    max: -0.13810, -0.05623, 0.14265
+    color: '#3E2A15'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.23305, -0.08868, 0.20388
+    max: -0.20445, -0.06007, 0.46800
+    color: '#3A2E08'
+    shape: CylinderZ
+  - label: stem 0 joint 2
+    min: -0.23305, -0.08868, 0.19457
+    max: -0.20445, -0.06007, 0.22318
+    color: '#3A2E08'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.15901, 0.03363, 0.11950
+    max: -0.12224, 0.07762, 0.24300
+    color: '#291500'
+    shape: SlantedX
+  - label: visible stem 1 section 1
+    min: -0.12776, 0.04133, 0.23200
+    max: -0.09099, 0.06992, 0.35550
+    color: '#3E2A15'
+    shape: SlantedX
+  - label: stem 1 joint 1
+    min: -0.13930, 0.04133, 0.22270
+    max: -0.11070, 0.06992, 0.25130
+    color: '#3E2A15'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: 0.02574, 0.05238, 0.00700
+    max: 0.09926, 0.09637, 0.10238
+    color: '#291500'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.08824, 0.05494, 0.09137
+    max: 0.16176, 0.09380, 0.24300
+    color: '#3E2A15'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.07432, 0.05494, 0.07694
+    max: 0.11318, 0.09380, 0.11581
+    color: '#3E2A15'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.13938, 0.05751, 0.23200
+    max: 0.17312, 0.09124, 0.41175
+    color: '#3A2E08'
+    shape: CylinderZ
+  - label: stem 2 joint 2
+    min: 0.13938, 0.05751, 0.22013
+    max: 0.17312, 0.09124, 0.25387
+    color: '#3A2E08'
+    shape: Ellipsoid
+  - label: visible stem 2 section 3
+    min: 0.15349, 0.06007, 0.40075
+    max: 0.19026, 0.08868, 0.49613
+    color: '#331D0A'
+    shape: SlantedX
+  - label: stem 2 joint 3
+    min: 0.14195, 0.06007, 0.39145
+    max: 0.17055, 0.08868, 0.42005
+    color: '#331D0A'
+    shape: Ellipsoid
+  - label: visible stem 3 section 0
+    min: 0.02574, -0.07762, 0.09137
+    max: 0.09926, -0.03363, 0.24300
+    color: '#291500'
+    shape: SlantedXReverse
+  - label: visible stem 3 section 1
+    min: -0.00276, -0.06993, 0.23200
+    max: 0.03401, -0.04133, 0.41175
+    color: '#3E2A15'
+    shape: SlantedXReverse
+  - label: stem 3 joint 1
+    min: 0.01695, -0.06993, 0.22270
+    max: 0.04555, -0.04133, 0.25130
+    color: '#3E2A15'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.15200, -0.10137, 0.00500
+    max: -0.09800, -0.04738, 0.05800
+    color: '#291500'
+    shape: CylinderZ
+  - label: fork depth rising branch 1
+    min: -0.17380, -0.08585, 0.11550
+    max: -0.13870, 0.06709, 0.17950
+    color: '#291500'
+    shape: SlantedY
+  - label: rounded root base 2
+    min: 0.00425, 0.04738, 0.00500
+    max: 0.05825, 0.10137, 0.05800
+    color: '#291500'
+    shape: CylinderZ
+  - label: fork depth rising branch 3
+    min: 0.07620, -0.06710, 0.08737
+    max: 0.11130, 0.08585, 0.15137
+    color: '#291500'
+    shape: SlantedYReverse
+  - label: source leaf patch 0
+    min: -0.23113, -0.11463, 0.46356
+    max: -0.19012, -0.07111, 0.49169
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 1
+    min: -0.22426, -0.08437, 0.46200
+    max: -0.15074, -0.04838, 0.47606
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 2
+    min: -0.22840, -0.10037, 0.46200
+    max: -0.09972, -0.06438, 0.47606
+    color: '#597D13'
+    shape: SlantedX
+  - label: source leaf patch 3
+    min: -0.11375, 0.05422, 0.34950
+    max: -0.07375, 0.07303, 0.43388
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 4
+    min: -0.22381, -0.11038, 0.43856
+    max: -0.15640, -0.05438, 0.44456
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 5
+    min: -0.24878, -0.07764, 0.38934
+    max: -0.18934, -0.03412, 0.47372
+    color: '#597D13'
+    shape: SlantedY
+  - label: source leaf patch 6
+    min: -0.26976, -0.10037, 0.39169
+    max: -0.21461, -0.06438, 0.39769
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 7
+    min: -0.24738, -0.07764, 0.35106
+    max: -0.20637, -0.03412, 0.37919
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 8
+    min: 0.18153, 0.07112, 0.49169
+    max: 0.24097, 0.11463, 0.51981
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 9
+    min: 0.17794, 0.05438, 0.46200
+    max: 0.22206, 0.11038, 0.47325
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 10
+    min: 0.12684, 0.07112, 0.40341
+    max: 0.18628, 0.11463, 0.48778
+    color: '#597D13'
+    shape: SlantedY
+  - label: source leaf patch 11
+    min: 0.08824, 0.06437, 0.40575
+    max: 0.16176, 0.10037, 0.41981
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 12
+    min: 0.08824, 0.03837, 0.36356
+    max: 0.16176, 0.09437, 0.36956
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 13
+    min: 0.01424, -0.05889, 0.34794
+    max: 0.07368, -0.01537, 0.40419
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 14
+    min: 0.10524, 0.04838, 0.30731
+    max: 0.16039, 0.08438, 0.31331
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 15
+    min: 0.13403, 0.03412, 0.37919
+    max: 0.19347, 0.07764, 0.40731
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 16
+    min: 0.15142, 0.03837, 0.35653
+    max: 0.21576, 0.09437, 0.36253
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 17
+    min: 0.14936, 0.06437, 0.30731
+    max: 0.24127, 0.10037, 0.31331
+    color: '#597D13'
+    shape: SlantedX
+  - label: source leaf patch 18
+    min: 0.14660, 0.04838, 0.29325
+    max: 0.27528, 0.08438, 0.29925
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 19
+    min: -0.04462, -0.05889, 0.38778
+    max: 0.02838, -0.01537, 0.44403
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 20
+    min: -0.16863, 0.05236, 0.29637
+    max: -0.12762, 0.09588, 0.35263
+    color: '#597D13'
+    shape: SlantedY
+  - label: source leaf patch 21
+    min: -0.11597, 0.01537, 0.29637
+    max: -0.05653, 0.05888, 0.35263
+    color: '#7E9128'
+    shape: SlantedYReverse
+  - label: source leaf patch 22
+    min: -0.10289, 0.02963, 0.32138
+    max: -0.04233, 0.06562, 0.33296
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 23
+    min: -0.12237, 0.05236, 0.26669
+    max: -0.08138, 0.09588, 0.29481
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 24
+    min: -0.25597, -0.11463, 0.29481
+    max: -0.19653, -0.07111, 0.32294
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 25
+    min: -0.26976, -0.08437, 0.27919
+    max: -0.21461, -0.04838, 0.28519
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 26
+    min: -0.01237, -0.05889, 0.29481
+    max: 0.02862, -0.01537, 0.32294
+    color: '#58761D'
+    shape: SlantedY
+  - label: source leaf patch 27
+    min: -0.21613, -0.11463, 0.21200
+    max: -0.17512, -0.07111, 0.26825
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 28
+    min: -0.01920, -0.08163, 0.26512
+    max: 0.02849, -0.04563, 0.27121
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 29
+    min: 0.01424, -0.05889, 0.23544
+    max: 0.07368, -0.01537, 0.29169
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 30
+    min: -0.01118, -0.09588, 0.17919
+    max: 0.04826, -0.05236, 0.23544
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 31
+    min: -0.15363, 0.05236, 0.21044
+    max: -0.11262, 0.09588, 0.23856
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 32
+    min: 0.14387, 0.07112, 0.23856
+    max: 0.18488, 0.11463, 0.26669
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 33
+    min: 0.15887, 0.03412, 0.15731
+    max: 0.19988, 0.07764, 0.24169
+    color: '#4E6F1A'
+    shape: SlantedYReverse
+  - label: source leaf patch 34
+    min: 0.13439, 0.03837, 0.17606
+    max: 0.21996, 0.09437, 0.20225
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 35
+    min: 0.12004, 0.06437, 0.13856
+    max: 0.24365, 0.10037, 0.17639
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 36
+    min: -0.14614, 0.02963, 0.16669
+    max: -0.07261, 0.06562, 0.18075
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 37
+    min: 0.10638, 0.06437, 0.11044
+    max: 0.21097, 0.10037, 0.14244
+    color: '#426717'
+    shape: SlantedXReverse
+- type: cmu3DModel
+  id: CMU3DRMCBushd4
+  label: Wild shrub bushd4
+  sourcePrototypes:
+  - RMCBushd4
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushd4
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.11575, -0.06512, 0.00700
+    max: -0.07175, -0.02113, 0.13050
+    color: '#291500'
+    shape: CylinderZ
+  - label: visible stem 0 section 1
+    min: -0.12776, -0.06128, 0.11950
+    max: -0.09099, -0.02498, 0.24300
+    color: '#3A2E08'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.11190, -0.06128, 0.10635
+    max: -0.07560, -0.02498, 0.14265
+    color: '#3A2E08'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.13930, -0.05743, 0.23200
+    max: -0.11070, -0.02882, 0.52425
+    color: '#331D0A'
+    shape: CylinderZ
+  - label: stem 0 joint 2
+    min: -0.13930, -0.05743, 0.22270
+    max: -0.11070, -0.02882, 0.25130
+    color: '#331D0A'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.22978, 0.06487, 0.09137
+    max: -0.08272, 0.10887, 0.21488
+    color: '#291500'
+    shape: SlantedXReverse
+  - label: visible stem 1 section 1
+    min: -0.28676, 0.06873, 0.20388
+    max: -0.21324, 0.10503, 0.32738
+    color: '#3A2E08'
+    shape: SlantedXReverse
+  - label: stem 1 joint 1
+    min: -0.23690, 0.06873, 0.19073
+    max: -0.20060, 0.10503, 0.22703
+    color: '#3A2E08'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: -0.29555, 0.07258, 0.31638
+    max: -0.26695, 0.10117, 0.52425
+    color: '#331D0A'
+    shape: CylinderZ
+  - label: stem 1 joint 2
+    min: -0.29555, 0.07258, 0.30708
+    max: -0.26695, 0.10117, 0.33568
+    color: '#331D0A'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: 0.10300, 0.02113, 0.00700
+    max: 0.14700, 0.06512, 0.15863
+    color: '#291500'
+    shape: CylinderZ
+  - label: visible stem 2 section 1
+    min: 0.11673, 0.02497, 0.14763
+    max: 0.22702, 0.06127, 0.29925
+    color: '#3A2E08'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.10685, 0.02497, 0.13448
+    max: 0.14315, 0.06127, 0.17078
+    color: '#3A2E08'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.21599, 0.02882, 0.28825
+    max: 0.25276, 0.05743, 0.55238
+    color: '#331D0A'
+    shape: SlantedX
+  - label: stem 2 joint 2
+    min: 0.20445, 0.02882, 0.27895
+    max: 0.23305, 0.05743, 0.30755
+    color: '#331D0A'
+    shape: Ellipsoid
+  - label: visible stem 3 section 0
+    min: 0.05699, -0.10887, 0.11950
+    max: 0.13051, -0.06488, 0.24300
+    color: '#291500'
+    shape: SlantedXReverse
+  - label: visible stem 3 section 1
+    min: 0.02849, -0.10502, 0.23200
+    max: 0.06526, -0.06872, 0.38363
+    color: '#3A2E08'
+    shape: SlantedXReverse
+  - label: stem 3 joint 1
+    min: 0.04435, -0.10502, 0.21885
+    max: 0.08065, -0.06872, 0.25515
+    color: '#3A2E08'
+    shape: Ellipsoid
+  - label: visible stem 3 section 2
+    min: -0.00276, -0.10118, 0.37263
+    max: 0.03401, -0.07258, 0.58050
+    color: '#331D0A'
+    shape: SlantedXReverse
+  - label: stem 3 joint 2
+    min: 0.01695, -0.10118, 0.36333
+    max: 0.04555, -0.07258, 0.39193
+    color: '#331D0A'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.12075, -0.07012, 0.00500
+    max: -0.06675, -0.01613, 0.05800
+    color: '#291500'
+    shape: CylinderZ
+  - label: fork depth rising branch 1
+    min: -0.11130, -0.05460, 0.08737
+    max: -0.07620, 0.09834, 0.15137
+    color: '#291500'
+    shape: SlantedY
+  - label: rounded root base 2
+    min: 0.09800, 0.01613, 0.00500
+    max: 0.15200, 0.07012, 0.05800
+    color: '#291500'
+    shape: CylinderZ
+  - label: fork depth rising branch 3
+    min: 0.10745, -0.09835, 0.11550
+    max: 0.14255, 0.05460, 0.17950
+    color: '#291500'
+    shape: SlantedYReverse
+  - label: source leaf patch 0
+    min: -0.13878, -0.08338, 0.49481
+    max: -0.07934, -0.03986, 0.57919
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 1
+    min: -0.05101, -0.09687, 0.57450
+    max: 0.00414, -0.06088, 0.60263
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 2
+    min: -0.13410, -0.04639, 0.41044
+    max: -0.07465, -0.00287, 0.49481
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 3
+    min: -0.15363, -0.08338, 0.43544
+    max: -0.11262, -0.03986, 0.46356
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 4
+    min: -0.12914, -0.06912, 0.39169
+    max: -0.07399, -0.03313, 0.39769
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 5
+    min: -0.05228, -0.09687, 0.47606
+    max: 0.01978, -0.06088, 0.48394
+    color: '#608117'
+    shape: SlantedX
+  - label: source leaf patch 6
+    min: -0.29363, 0.04661, 0.49325
+    max: -0.25262, 0.09013, 0.54950
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 7
+    min: -0.28631, 0.06687, 0.51356
+    max: -0.21890, 0.12288, 0.51956
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 8
+    min: -0.17601, -0.06912, 0.51825
+    max: -0.12086, -0.03313, 0.52425
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 9
+    min: -0.17601, -0.05312, 0.47606
+    max: -0.12086, -0.01713, 0.48206
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 10
+    min: -0.28649, 0.05088, 0.44794
+    max: -0.21664, 0.10687, 0.45394
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 11
+    min: -0.28676, 0.06687, 0.36356
+    max: -0.21324, 0.12288, 0.36956
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 12
+    min: -0.31066, 0.04661, 0.33309
+    max: -0.25122, 0.09013, 0.41747
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 13
+    min: -0.34076, 0.06687, 0.36356
+    max: -0.27642, 0.12288, 0.36956
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 14
+    min: -0.32488, 0.08361, 0.40731
+    max: -0.28387, 0.12713, 0.43544
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 15
+    min: -0.17601, -0.05312, 0.36356
+    max: -0.12086, -0.01713, 0.36956
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 16
+    min: -0.01237, -0.09014, 0.57606
+    max: 0.02862, -0.04662, 0.60419
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 17
+    min: 0.00382, -0.09014, 0.52606
+    max: 0.06326, -0.04662, 0.58231
+    color: '#7E9128'
+    shape: SlantedY
+  - label: source leaf patch 18
+    min: -0.04362, -0.12713, 0.52138
+    max: -0.00263, -0.08361, 0.57763
+    color: '#608117'
+    shape: SlantedYReverse
+  - label: source leaf patch 19
+    min: 0.21599, 0.03312, 0.54638
+    max: 0.25276, 0.06912, 0.58856
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 20
+    min: 0.24000, 0.02571, 0.54638
+    max: 0.27563, 0.04453, 0.58856
+    color: '#7E9128'
+    shape: SlantedYReverse
+  - label: source leaf patch 21
+    min: 0.25262, 0.00287, 0.52138
+    max: 0.29363, 0.04639, 0.57763
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 22
+    min: 0.17632, 0.03987, 0.52606
+    max: 0.23576, 0.08338, 0.58231
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 23
+    min: 0.24311, 0.03312, 0.54638
+    max: 0.33502, 0.06912, 0.56044
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 24
+    min: 0.00215, -0.12288, 0.51150
+    max: 0.10681, -0.06688, 0.52294
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 25
+    min: 0.13155, 0.03312, 0.49390
+    max: 0.25260, 0.06912, 0.50419
+    color: '#7E9128'
+    shape: SlantedXReverse
+  - label: source leaf patch 26
+    min: 0.14884, 0.01713, 0.46766
+    max: 0.24770, 0.05313, 0.47606
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 27
+    min: 0.19012, 0.00287, 0.46356
+    max: 0.23113, 0.04639, 0.49169
+    color: '#6B871D'
+    shape: SlantedYReverse
+  - label: source leaf patch 28
+    min: 0.01177, -0.11288, 0.45047
+    max: 0.11729, -0.07688, 0.46200
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 29
+    min: 0.23715, 0.03312, 0.48155
+    max: 0.30172, 0.06912, 0.48755
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 30
+    min: -0.00076, -0.12713, 0.40419
+    max: 0.05868, -0.08361, 0.46044
+    color: '#7E9128'
+    shape: SlantedYReverse
+  - label: source leaf patch 31
+    min: 0.02099, -0.09687, 0.41306
+    max: 0.08276, -0.06088, 0.41981
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 32
+    min: 0.02908, -0.11288, 0.36951
+    max: 0.08210, -0.07688, 0.37763
+    color: '#597D13'
+    shape: SlantedX
+  - label: source leaf patch 33
+    min: 0.00263, -0.12713, 0.37919
+    max: 0.04362, -0.08361, 0.40731
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 34
+    min: 0.23250, 0.00712, 0.43319
+    max: 0.27957, 0.06312, 0.43919
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 35
+    min: 0.22735, 0.03312, 0.41981
+    max: 0.33630, 0.06912, 0.42907
+    color: '#597D13'
+    shape: SlantedXReverse
+  - label: source leaf patch 36
+    min: 0.22361, 0.01713, 0.39169
+    max: 0.33660, 0.05313, 0.40129
+    color: '#426717'
+    shape: SlantedXReverse
+  - label: source leaf patch 37
+    min: 0.22137, 0.03987, 0.40731
+    max: 0.26238, 0.08338, 0.43544
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 38
+    min: 0.23762, 0.03987, 0.37919
+    max: 0.27863, 0.08338, 0.40731
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 39
+    min: -0.13051, -0.05312, 0.33544
+    max: -0.05699, -0.01713, 0.34144
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 40
+    min: -0.13737, -0.04639, 0.29481
+    max: -0.09638, -0.00287, 0.32294
+    color: '#4E6F1A'
+    shape: SlantedY
+  - label: source leaf patch 41
+    min: -0.27863, 0.08361, 0.23856
+    max: -0.23762, 0.12713, 0.26669
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 42
+    min: -0.23113, 0.04661, 0.23856
+    max: -0.19012, 0.09013, 0.26669
+    color: '#426717'
+    shape: SlantedYReverse
+  - label: source leaf patch 43
+    min: 0.01424, -0.09014, 0.30106
+    max: 0.07368, -0.04662, 0.35731
+    color: '#426717'
+    shape: SlantedY
+  - label: source leaf patch 44
+    min: 0.16734, 0.01713, 0.33029
+    max: 0.22786, 0.05313, 0.33629
+    color: '#4E6F1A'
+    shape: SlantedXReverse
+  - label: source leaf patch 45
+    min: 0.22137, 0.00287, 0.32294
+    max: 0.26238, 0.04639, 0.35106
+    color: '#597D13'
+    shape: SlantedYReverse
+  - label: source leaf patch 46
+    min: -0.02093, -0.11288, 0.30731
+    max: 0.04977, -0.07688, 0.31813
+    color: '#426717'
+    shape: SlantedX
+  - label: source leaf patch 47
+    min: 0.21508, 0.02313, 0.30354
+    max: 0.28098, 0.07913, 0.30954
+    color: '#7E9128'
+    shape: SlantedX
+  - label: source leaf patch 48
+    min: -0.19988, 0.04661, 0.18231
+    max: -0.15887, 0.09013, 0.21044
+    color: '#4E6F1A'
+    shape: SlantedYReverse
+- type: cmu3DModel
+  id: CMU3DStalkyBush01
+  label: Wild shrub bushh1
+  sourcePrototypes:
+  - StalkyBush01
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushh1
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.23175, -0.16592, 0.00700
+    max: -0.20575, -0.13992, 0.15863
+    color: '#48463C'
+    shape: CylinderZ
+  - label: visible stem 0 section 1
+    min: -0.23023, -0.16440, 0.14763
+    max: -0.20727, -0.14144, 0.32738
+    color: '#504F41'
+    shape: CylinderZ
+  - label: stem 0 joint 1
+    min: -0.23023, -0.16440, 0.14114
+    max: -0.20727, -0.14144, 0.16411
+    color: '#504F41'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.28676, -0.16289, 0.31638
+    max: -0.21324, -0.14295, 0.46800
+    color: '#3A3831'
+    shape: SlantedXReverse
+  - label: stem 0 joint 2
+    min: -0.22872, -0.16289, 0.31141
+    max: -0.20878, -0.14295, 0.33134
+    color: '#3A3831'
+    shape: Ellipsoid
+  - label: visible stem 0 section 3
+    min: -0.28401, -0.16137, 0.45700
+    max: -0.24724, -0.14447, 0.63675
+    color: '#2F2E27'
+    shape: SlantedX
+  - label: stem 0 joint 3
+    min: -0.28970, -0.16137, 0.45355
+    max: -0.27280, -0.14447, 0.47045
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.04425, 0.15783, 0.00700
+    max: -0.01825, 0.18383, 0.15863
+    color: '#48463C'
+    shape: CylinderZ
+  - label: visible stem 1 section 1
+    min: -0.04273, 0.15935, 0.14763
+    max: -0.01977, 0.18231, 0.32738
+    color: '#504F41'
+    shape: CylinderZ
+  - label: stem 1 joint 1
+    min: -0.04273, 0.15935, 0.14114
+    max: -0.01977, 0.18231, 0.16411
+    color: '#504F41'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: -0.03401, 0.16086, 0.31638
+    max: 0.00276, 0.18080, 0.46800
+    color: '#3A3831'
+    shape: SlantedX
+  - label: stem 1 joint 2
+    min: -0.04122, 0.16086, 0.31141
+    max: -0.02128, 0.18080, 0.33134
+    color: '#3A3831'
+    shape: Ellipsoid
+  - label: visible stem 1 section 3
+    min: -0.06801, 0.16238, 0.45700
+    max: 0.00551, 0.17928, 0.58050
+    color: '#2F2E27'
+    shape: SlantedXReverse
+  - label: stem 1 joint 3
+    min: -0.00845, 0.16238, 0.45355
+    max: 0.00845, 0.17928, 0.47045
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: 0.14325, -0.00592, 0.00700
+    max: 0.16925, 0.02008, 0.15863
+    color: '#48463C'
+    shape: CylinderZ
+  - label: visible stem 2 section 1
+    min: 0.15349, -0.00440, 0.14763
+    max: 0.19026, 0.01856, 0.29925
+    color: '#504F41'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.14477, -0.00440, 0.14114
+    max: 0.16773, 0.01856, 0.16411
+    color: '#504F41'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.17753, -0.00289, 0.28825
+    max: 0.19747, 0.01705, 0.49613
+    color: '#3A3831'
+    shape: CylinderZ
+  - label: stem 2 joint 2
+    min: 0.17753, -0.00289, 0.28328
+    max: 0.19747, 0.01705, 0.30322
+    color: '#3A3831'
+    shape: Ellipsoid
+  - label: visible stem 2 section 3
+    min: 0.17905, -0.00137, 0.48513
+    max: 0.19595, 0.01553, 0.60863
+    color: '#2F2E27'
+    shape: CylinderZ
+  - label: stem 2 joint 3
+    min: 0.17905, -0.00137, 0.48168
+    max: 0.19595, 0.01553, 0.49858
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.23575, -0.16992, 0.00500
+    max: -0.20175, -0.13592, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: -0.04825, 0.15383, 0.00500
+    max: -0.01425, 0.18783, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: rounded root base 2
+    min: 0.13925, -0.00992, 0.00500
+    max: 0.17325, 0.02408, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: source leaf patch 0
+    min: -0.07487, 0.13057, 0.57606
+    max: -0.03388, 0.17409, 0.60419
+    color: '#244713'
+    shape: SlantedYReverse
+  - label: source leaf patch 1
+    min: -0.11434, 0.16083, 0.53231
+    max: -0.04816, 0.19683, 0.55763
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 2
+    min: -0.04362, 0.16757, 0.51981
+    max: -0.00263, 0.21109, 0.54794
+    color: '#2B5016'
+    shape: SlantedY
+  - label: source leaf patch 3
+    min: -0.02794, 0.16083, 0.50137
+    max: 0.05294, 0.19683, 0.53231
+    color: '#2B5016'
+    shape: SlantedX
+  - label: source leaf patch 4
+    min: -0.07487, 0.16757, 0.49169
+    max: -0.03388, 0.21109, 0.51981
+    color: '#2B5016'
+    shape: SlantedY
+  - label: source leaf patch 5
+    min: 0.00382, 0.16757, 0.46044
+    max: 0.06326, 0.21109, 0.51669
+    color: '#36631C'
+    shape: SlantedY
+  - label: source leaf patch 6
+    min: -0.04362, 0.13057, 0.46356
+    max: -0.00263, 0.17409, 0.49169
+    color: '#36631C'
+    shape: SlantedYReverse
+  - label: source leaf patch 7
+    min: -0.04826, 0.16757, 0.39169
+    max: 0.01118, 0.21109, 0.47606
+    color: '#2B5016'
+    shape: SlantedY
+  - label: source leaf patch 8
+    min: -0.01378, 0.16757, 0.38231
+    max: 0.04566, 0.21109, 0.46669
+    color: '#3F7520'
+    shape: SlantedY
+  - label: source leaf patch 9
+    min: 0.00263, 0.13057, 0.35106
+    max: 0.04362, 0.17409, 0.37919
+    color: '#2B5016'
+    shape: SlantedYReverse
+  - label: source leaf patch 10
+    min: -0.08309, 0.14483, 0.47606
+    max: -0.01691, 0.18083, 0.50137
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 11
+    min: 0.16187, 0.00567, 0.60263
+    max: 0.19750, 0.02449, 0.67294
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 12
+    min: -0.28722, -0.19318, 0.57919
+    max: -0.22778, -0.14966, 0.66356
+    color: '#36631C'
+    shape: SlantedYReverse
+  - label: source leaf patch 13
+    min: -0.25414, -0.16292, 0.63075
+    max: -0.19899, -0.12692, 0.64481
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 14
+    min: 0.17512, 0.00382, 0.60419
+    max: 0.21613, 0.04734, 0.63231
+    color: '#2B5016'
+    shape: SlantedY
+  - label: source leaf patch 15
+    min: 0.17785, -0.00292, 0.60263
+    max: 0.30653, 0.03308, 0.61669
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 16
+    min: -0.36809, -0.17892, 0.57374
+    max: -0.25184, -0.14292, 0.58856
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 17
+    min: 0.10248, -0.00292, 0.58856
+    max: 0.19439, 0.03308, 0.59456
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 18
+    min: 0.14247, -0.03318, 0.51591
+    max: 0.20191, 0.01034, 0.60028
+    color: '#2B5016'
+    shape: SlantedYReverse
+  - label: source leaf patch 19
+    min: 0.18336, -0.00292, 0.58856
+    max: 0.23851, 0.03308, 0.59456
+    color: '#458820'
+    shape: SlantedX
+  - label: source leaf patch 20
+    min: -0.32488, -0.15618, 0.54794
+    max: -0.28387, -0.11266, 0.57606
+    color: '#36631C'
+    shape: SlantedY
+  - label: source leaf patch 21
+    min: 0.18061, -0.00292, 0.53231
+    max: 0.27252, 0.03308, 0.53831
+    color: '#376D1C'
+    shape: SlantedX
+  - label: source leaf patch 22
+    min: -0.27574, -0.17892, 0.50989
+    max: -0.23102, -0.14292, 0.51589
+    color: '#2B5016'
+    shape: SlantedX
+  - label: source leaf patch 23
+    min: -0.05987, 0.16757, 0.29481
+    max: -0.01888, 0.21109, 0.32294
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 24
+    min: -0.03814, 0.14483, 0.30731
+    max: 0.05377, 0.18083, 0.31331
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 25
+    min: 0.18336, -0.00292, 0.49013
+    max: 0.23851, 0.03308, 0.49613
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 26
+    min: -0.32488, -0.15618, 0.46356
+    max: -0.28387, -0.11266, 0.49169
+    color: '#3D801C'
+    shape: SlantedY
+  - label: source leaf patch 27
+    min: -0.03539, 0.16083, 0.27919
+    max: 0.01976, 0.19683, 0.28519
+    color: '#244413'
+    shape: SlantedX
+  - label: source leaf patch 28
+    min: -0.07487, 0.16757, 0.23856
+    max: -0.03388, 0.21109, 0.26669
+    color: '#2E5A18'
+    shape: SlantedY
+  - label: source leaf patch 29
+    min: 0.19012, 0.00382, 0.43544
+    max: 0.23113, 0.04734, 0.46356
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 30
+    min: -0.25689, -0.17892, 0.39169
+    max: -0.16498, -0.14292, 0.41981
+    color: '#3D801C'
+    shape: SlantedX
+  - label: source leaf patch 31
+    min: -0.27863, -0.15618, 0.37919
+    max: -0.23762, -0.11266, 0.40731
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 32
+    min: -0.24710, -0.17892, 0.37714
+    max: -0.19956, -0.14292, 0.39169
+    color: '#244413'
+    shape: SlantedX
+  - label: source leaf patch 33
+    min: -0.03814, 0.16083, 0.19481
+    max: 0.05377, 0.19683, 0.20081
+    color: '#3B731C'
+    shape: SlantedX
+  - label: source leaf patch 34
+    min: 0.13649, -0.01892, 0.39169
+    max: 0.19164, 0.01708, 0.39769
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 35
+    min: 0.18061, -0.00292, 0.37763
+    max: 0.27252, 0.03308, 0.38363
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 36
+    min: -0.04243, 0.13057, 0.13231
+    max: 0.01701, 0.17409, 0.18856
+    color: '#2E5A18'
+    shape: SlantedYReverse
+  - label: source leaf patch 37
+    min: -0.24738, -0.15618, 0.32294
+    max: -0.20637, -0.11266, 0.35106
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 38
+    min: 0.14387, 0.00382, 0.32294
+    max: 0.18488, 0.04734, 0.35106
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 39
+    min: -0.29697, -0.17692, 0.27919
+    max: -0.21241, -0.11292, 0.28519
+    color: '#2E5A18'
+    shape: SlantedXReverse
+  - label: source leaf patch 40
+    min: -0.22289, -0.17892, 0.30731
+    max: -0.16774, -0.14292, 0.31331
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 41
+    min: -0.05987, 0.16757, 0.09794
+    max: -0.01888, 0.21109, 0.12606
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 42
+    min: 0.18336, -0.01892, 0.30731
+    max: 0.23851, 0.01708, 0.31331
+    color: '#244413'
+    shape: SlantedX
+  - label: source leaf patch 43
+    min: -0.03539, 0.16083, 0.08231
+    max: 0.01976, 0.19683, 0.08831
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 44
+    min: 0.13691, -0.01892, 0.27162
+    max: 0.18640, 0.01708, 0.27919
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 45
+    min: -0.21613, -0.19318, 0.23856
+    max: -0.17512, -0.14966, 0.26669
+    color: '#244413'
+    shape: SlantedYReverse
+  - label: source leaf patch 46
+    min: -0.11627, 0.14483, 0.05419
+    max: -0.02436, 0.18083, 0.06019
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 47
+    min: 0.15887, 0.00382, 0.23856
+    max: 0.19988, 0.04734, 0.26669
+    color: '#2E5A18'
+    shape: SlantedY
+  - label: source leaf patch 48
+    min: 0.17407, -0.01892, 0.25106
+    max: 0.27305, 0.01708, 0.26621
+    color: '#2B5016'
+    shape: SlantedXReverse
+  - label: source leaf patch 49
+    min: 0.17117, -0.00292, 0.25106
+    max: 0.34085, 0.03308, 0.27702
+    color: '#2B5016'
+    shape: SlantedXReverse
+  - label: source leaf patch 50
+    min: -0.22564, -0.17892, 0.22294
+    max: -0.13373, -0.14292, 0.22894
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 51
+    min: -0.21613, -0.19318, 0.18231
+    max: -0.17512, -0.14966, 0.21044
+    color: '#244413'
+    shape: SlantedYReverse
+  - label: source leaf patch 52
+    min: 0.15954, -0.01892, 0.19481
+    max: 0.30801, 0.01708, 0.21753
+    color: '#3F7520'
+    shape: SlantedXReverse
+  - label: source leaf patch 53
+    min: -0.22564, -0.16292, 0.16669
+    max: -0.13373, -0.12692, 0.17269
+    color: '#244413'
+    shape: SlantedX
+  - label: source leaf patch 54
+    min: 0.15408, -0.01892, 0.15263
+    max: 0.20710, 0.01708, 0.16074
+    color: '#2E4F18'
+    shape: SlantedXReverse
+- type: cmu3DModel
+  id: CMU3DRMCBushh2
+  label: Wild shrub bushh2
+  sourcePrototypes:
+  - RMCBushh2
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushh2
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.16925, -0.09300, 0.00700
+    max: -0.14325, -0.06700, 0.13050
+    color: '#48463C'
+    shape: CylinderZ
+  - label: visible stem 0 section 1
+    min: -0.19026, -0.09148, 0.11950
+    max: -0.15349, -0.06852, 0.27113
+    color: '#444338'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.16773, -0.09148, 0.11302
+    max: -0.14477, -0.06852, 0.13598
+    color: '#444338'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.22151, -0.08997, 0.26012
+    max: -0.18474, -0.07003, 0.41175
+    color: '#504F41'
+    shape: SlantedXReverse
+  - label: stem 0 joint 2
+    min: -0.19747, -0.08997, 0.25516
+    max: -0.17753, -0.07003, 0.27509
+    color: '#504F41'
+    shape: Ellipsoid
+  - label: visible stem 0 section 3
+    min: -0.22151, -0.08845, 0.40075
+    max: -0.18474, -0.07155, 0.66487
+    color: '#2F2E27'
+    shape: SlantedX
+  - label: stem 0 joint 3
+    min: -0.22720, -0.08845, 0.39730
+    max: -0.21030, -0.07155, 0.41420
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.04425, -0.05050, 0.00700
+    max: -0.01825, -0.02450, 0.15863
+    color: '#48463C'
+    shape: CylinderZ
+  - label: visible stem 1 section 1
+    min: -0.04273, -0.04898, 0.14763
+    max: -0.01977, -0.02602, 0.32738
+    color: '#444338'
+    shape: CylinderZ
+  - label: stem 1 joint 1
+    min: -0.04273, -0.04898, 0.14114
+    max: -0.01977, -0.02602, 0.16411
+    color: '#444338'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: -0.03401, -0.04747, 0.31638
+    max: 0.00276, -0.02753, 0.49613
+    color: '#504F41'
+    shape: SlantedX
+  - label: stem 1 joint 2
+    min: -0.04122, -0.04747, 0.31141
+    max: -0.02128, -0.02753, 0.33134
+    color: '#504F41'
+    shape: Ellipsoid
+  - label: visible stem 1 section 3
+    min: -0.00845, -0.04595, 0.48513
+    max: 0.00845, -0.02905, 0.55238
+    color: '#2F2E27'
+    shape: CylinderZ
+  - label: stem 1 joint 3
+    min: -0.00845, -0.04595, 0.48168
+    max: 0.00845, -0.02905, 0.49858
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: 0.20575, 0.12950, 0.00700
+    max: 0.23175, 0.15550, 0.13050
+    color: '#48463C'
+    shape: CylinderZ
+  - label: visible stem 2 section 1
+    min: 0.21599, 0.13102, 0.11950
+    max: 0.25276, 0.15398, 0.27113
+    color: '#444338'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.20727, 0.13102, 0.11302
+    max: 0.23023, 0.15398, 0.13598
+    color: '#444338'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.18199, 0.13253, 0.26012
+    max: 0.25551, 0.15247, 0.41175
+    color: '#504F41'
+    shape: SlantedXReverse
+  - label: stem 2 joint 2
+    min: 0.24003, 0.13253, 0.25516
+    max: 0.25997, 0.15247, 0.27509
+    color: '#504F41'
+    shape: Ellipsoid
+  - label: visible stem 2 section 3
+    min: 0.17905, 0.13405, 0.40075
+    max: 0.19595, 0.15095, 0.63675
+    color: '#2F2E27'
+    shape: CylinderZ
+  - label: stem 2 joint 3
+    min: 0.17905, 0.13405, 0.39730
+    max: 0.19595, 0.15095, 0.41420
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.17325, -0.09700, 0.00500
+    max: -0.13925, -0.06300, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: -0.04825, -0.05450, 0.00500
+    max: -0.01425, -0.02050, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: rounded root base 2
+    min: 0.20175, 0.12550, 0.00500
+    max: 0.23575, 0.15950, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: source leaf patch 0
+    min: 0.17512, 0.10224, 0.63231
+    max: 0.21613, 0.14576, 0.66044
+    color: '#244713'
+    shape: SlantedYReverse
+  - label: source leaf patch 1
+    min: -0.18488, -0.08326, 0.63387
+    max: -0.14387, -0.03974, 0.69012
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 2
+    min: -0.23831, -0.10600, 0.64035
+    max: -0.18585, -0.07000, 0.64635
+    color: '#2B5016'
+    shape: SlantedXReverse
+  - label: source leaf patch 3
+    min: 0.15887, 0.10224, 0.54950
+    max: 0.19988, 0.14576, 0.60575
+    color: '#376D1C'
+    shape: SlantedYReverse
+  - label: source leaf patch 4
+    min: 0.18336, 0.11650, 0.58856
+    max: 0.23851, 0.15250, 0.59456
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 5
+    min: -0.27168, -0.09000, 0.58170
+    max: -0.19097, -0.05400, 0.58856
+    color: '#2B5016'
+    shape: SlantedXReverse
+  - label: source leaf patch 6
+    min: -0.23113, -0.12026, 0.57606
+    max: -0.19012, -0.07674, 0.60419
+    color: '#36631C'
+    shape: SlantedYReverse
+  - label: source leaf patch 7
+    min: -0.20503, -0.09000, 0.58856
+    max: -0.06784, -0.05400, 0.60022
+    color: '#3D801C'
+    shape: SlantedXReverse
+  - label: source leaf patch 8
+    min: 0.18336, 0.11650, 0.53231
+    max: 0.23851, 0.15250, 0.53831
+    color: '#3D801C'
+    shape: SlantedX
+  - label: source leaf patch 9
+    min: -0.20376, -0.10000, 0.55495
+    max: -0.15803, -0.04400, 0.56095
+    color: '#2B5016'
+    shape: SlantedX
+  - label: source leaf patch 10
+    min: -0.23113, -0.08326, 0.51981
+    max: -0.19012, -0.03974, 0.54794
+    color: '#36631C'
+    shape: SlantedY
+  - label: source leaf patch 11
+    min: -0.21613, -0.08326, 0.49169
+    max: -0.17512, -0.03974, 0.51981
+    color: '#458820'
+    shape: SlantedY
+  - label: source leaf patch 12
+    min: -0.19988, -0.12026, 0.49169
+    max: -0.15887, -0.07674, 0.51981
+    color: '#36631C'
+    shape: SlantedYReverse
+  - label: source leaf patch 13
+    min: 0.17509, 0.13250, 0.47606
+    max: 0.34053, 0.16850, 0.48206
+    color: '#33591A'
+    shape: SlantedX
+  - label: source leaf patch 14
+    min: -0.27077, -0.10600, 0.49836
+    max: -0.20217, -0.07000, 0.50436
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 15
+    min: 0.00263, -0.07776, 0.54794
+    max: 0.04362, -0.03424, 0.57606
+    color: '#2B5016'
+    shape: SlantedYReverse
+  - label: source leaf patch 16
+    min: 0.13649, 0.11650, 0.44794
+    max: 0.19164, 0.15250, 0.45394
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 17
+    min: 0.18061, 0.13250, 0.44794
+    max: 0.27252, 0.16850, 0.45394
+    color: '#244413'
+    shape: SlantedX
+  - label: source leaf patch 18
+    min: -0.21762, -0.10600, 0.47606
+    max: -0.10060, -0.07000, 0.48601
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 19
+    min: -0.02862, -0.04076, 0.51981
+    max: 0.01237, 0.00276, 0.54794
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 20
+    min: -0.00414, -0.07750, 0.50419
+    max: 0.05101, -0.01350, 0.51019
+    color: '#2B5016'
+    shape: SlantedX
+  - label: source leaf patch 21
+    min: -0.21869, -0.10000, 0.44382
+    max: -0.15682, -0.04400, 0.44982
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 22
+    min: 0.20013, 0.11650, 0.35968
+    max: 0.30472, 0.15250, 0.39169
+    color: '#33561A'
+    shape: SlantedX
+  - label: source leaf patch 23
+    min: 0.13516, 0.13250, 0.34950
+    max: 0.20805, 0.16850, 0.37181
+    color: '#3D801C'
+    shape: SlantedX
+  - label: source leaf patch 24
+    min: 0.20637, 0.10224, 0.35106
+    max: 0.24738, 0.14576, 0.37919
+    color: '#355C1C'
+    shape: SlantedYReverse
+  - label: source leaf patch 25
+    min: -0.01287, -0.04750, 0.44794
+    max: 0.08550, -0.01150, 0.46048
+    color: '#33531A'
+    shape: SlantedXReverse
+  - label: source leaf patch 26
+    min: -0.27093, -0.10600, 0.33544
+    max: -0.20023, -0.07000, 0.34625
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 27
+    min: 0.22137, 0.10224, 0.26669
+    max: 0.26238, 0.14576, 0.29481
+    color: '#36631C'
+    shape: SlantedYReverse
+  - label: source leaf patch 28
+    min: -0.33926, -0.10600, 0.30731
+    max: -0.19079, -0.07000, 0.33003
+    color: '#3D801C'
+    shape: SlantedX
+  - label: source leaf patch 29
+    min: -0.02574, -0.04750, 0.36926
+    max: 0.01898, -0.01150, 0.37526
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 30
+    min: -0.03125, -0.06350, 0.36356
+    max: 0.12078, -0.02750, 0.38295
+    color: '#2E4F18'
+    shape: SlantedXReverse
+  - label: source leaf patch 31
+    min: -0.30589, -0.09000, 0.27919
+    max: -0.18570, -0.05400, 0.29758
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 32
+    min: -0.11631, -0.06350, 0.32366
+    max: -0.02390, -0.02750, 0.33544
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 33
+    min: 0.25262, 0.10224, 0.21044
+    max: 0.29363, 0.14576, 0.23856
+    color: '#244713'
+    shape: SlantedYReverse
+  - label: source leaf patch 34
+    min: -0.23862, -0.10600, 0.25106
+    max: -0.18206, -0.07000, 0.25972
+    color: '#36641C'
+    shape: SlantedX
+  - label: source leaf patch 35
+    min: 0.22137, 0.13924, 0.18231
+    max: 0.26238, 0.18276, 0.21044
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 36
+    min: -0.17817, -0.11600, 0.20563
+    max: -0.12632, -0.06000, 0.21356
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 37
+    min: -0.05987, -0.04076, 0.26669
+    max: -0.01888, 0.00276, 0.29481
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 38
+    min: -0.03814, -0.06350, 0.19481
+    max: 0.05377, -0.02750, 0.20081
+    color: '#244113'
+    shape: SlantedX
+  - label: source leaf patch 39
+    min: -0.18488, -0.12026, 0.09794
+    max: -0.14387, -0.07674, 0.12606
+    color: '#313528'
+    shape: SlantedYReverse
+  - label: source leaf patch 40
+    min: -0.16863, -0.08326, 0.01356
+    max: -0.12762, -0.03974, 0.04169
+    color: '#323529'
+    shape: SlantedY
+- type: cmu3DModel
+  id: CMU3DRMCBushh3
+  label: Wild shrub bushh3
+  sourcePrototypes:
+  - RMCBushh3
+  - StalkyBush03
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushh3
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.19026, -0.05133, 0.00700
+    max: -0.15349, -0.02533, 0.13050
+    color: '#48463C'
+    shape: SlantedXReverse
+  - label: visible stem 0 section 1
+    min: -0.22151, -0.04981, 0.11950
+    max: -0.18474, -0.02685, 0.29925
+    color: '#2F2E27'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.19898, -0.04981, 0.11302
+    max: -0.17602, -0.02685, 0.13598
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.22872, -0.04830, 0.28825
+    max: -0.20878, -0.02836, 0.49613
+    color: '#545246'
+    shape: CylinderZ
+  - label: stem 0 joint 2
+    min: -0.22872, -0.04830, 0.28328
+    max: -0.20878, -0.02836, 0.30322
+    color: '#545246'
+    shape: Ellipsoid
+  - label: visible stem 0 section 3
+    min: -0.25276, -0.04678, 0.48513
+    max: -0.21599, -0.02988, 0.69300
+    color: '#3A3831'
+    shape: SlantedXReverse
+  - label: stem 0 joint 3
+    min: -0.22720, -0.04678, 0.48168
+    max: -0.21030, -0.02988, 0.49858
+    color: '#3A3831'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.03401, -0.04008, 0.00700
+    max: 0.00276, -0.01408, 0.13050
+    color: '#48463C'
+    shape: SlantedX
+  - label: visible stem 1 section 1
+    min: -0.01186, -0.03894, 0.11950
+    max: 0.01186, -0.01522, 0.27113
+    color: '#2F2E27'
+    shape: CylinderZ
+  - label: stem 1 joint 1
+    min: -0.01186, -0.03894, 0.11264
+    max: 0.01186, -0.01522, 0.13636
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: -0.00276, -0.03780, 0.26012
+    max: 0.03401, -0.01636, 0.43988
+    color: '#545246'
+    shape: SlantedX
+  - label: stem 1 joint 2
+    min: -0.01072, -0.03780, 0.25440
+    max: 0.01072, -0.01636, 0.27585
+    color: '#545246'
+    shape: Ellipsoid
+  - label: visible stem 1 section 3
+    min: 0.02166, -0.03667, 0.42888
+    max: 0.04084, -0.01749, 0.60863
+    color: '#3A3831'
+    shape: CylinderZ
+  - label: stem 1 joint 3
+    min: 0.02166, -0.03667, 0.42429
+    max: 0.04084, -0.01749, 0.44346
+    color: '#3A3831'
+    shape: Ellipsoid
+  - label: visible stem 1 section 4
+    min: 0.02280, -0.03553, 0.59763
+    max: 0.03970, -0.01863, 0.74925
+    color: '#404035'
+    shape: CylinderZ
+  - label: stem 1 joint 4
+    min: 0.02280, -0.03553, 0.59418
+    max: 0.03970, -0.01863, 0.61108
+    color: '#404035'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: 0.12224, 0.07742, 0.00700
+    max: 0.15901, 0.10342, 0.15863
+    color: '#48463C'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.14477, 0.07894, 0.14763
+    max: 0.16773, 0.10190, 0.35550
+    color: '#2F2E27'
+    shape: CylinderZ
+  - label: stem 2 joint 1
+    min: 0.14477, 0.07894, 0.14114
+    max: 0.16773, 0.10190, 0.16411
+    color: '#2F2E27'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.15074, 0.08045, 0.34450
+    max: 0.22426, 0.10039, 0.49613
+    color: '#545246'
+    shape: SlantedX
+  - label: stem 2 joint 2
+    min: 0.14628, 0.08045, 0.33953
+    max: 0.16622, 0.10039, 0.35947
+    color: '#545246'
+    shape: Ellipsoid
+  - label: visible stem 2 section 3
+    min: 0.21030, 0.08197, 0.48513
+    max: 0.22720, 0.09887, 0.66487
+    color: '#3A3831'
+    shape: CylinderZ
+  - label: stem 2 joint 3
+    min: 0.21030, 0.08197, 0.48168
+    max: 0.22720, 0.09887, 0.49858
+    color: '#3A3831'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.17325, -0.05533, 0.00500
+    max: -0.13925, -0.02133, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: -0.04825, -0.04408, 0.00500
+    max: -0.01425, -0.01008, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: rounded root base 2
+    min: 0.10800, 0.07342, 0.00500
+    max: 0.14200, 0.10742, 0.05800
+    color: '#48463C'
+    shape: CylinderZ
+  - label: source leaf patch 0
+    min: -0.27213, -0.07859, 0.63544
+    max: -0.19913, -0.03507, 0.71981
+    color: '#2E5A18'
+    shape: SlantedYReverse
+  - label: source leaf patch 1
+    min: 0.01787, -0.03034, 0.69169
+    max: 0.09087, 0.01318, 0.77606
+    color: '#2B5016'
+    shape: SlantedY
+  - label: source leaf patch 2
+    min: 0.02436, -0.05308, 0.74325
+    max: 0.11627, -0.01708, 0.75731
+    color: '#3E6C20'
+    shape: SlantedX
+  - label: source leaf patch 3
+    min: 0.20910, 0.08042, 0.65887
+    max: 0.33778, 0.11642, 0.70106
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 4
+    min: -0.24744, -0.07833, 0.60038
+    max: -0.09818, -0.01433, 0.61669
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 5
+    min: 0.22137, 0.08716, 0.66044
+    max: 0.26238, 0.13068, 0.68856
+    color: '#2B5016'
+    shape: SlantedY
+  - label: source leaf patch 6
+    min: 0.21278, 0.05442, 0.65419
+    max: 0.29243, 0.11042, 0.66019
+    color: '#376D1C'
+    shape: SlantedX
+  - label: source leaf patch 7
+    min: -0.27863, -0.04159, 0.60419
+    max: -0.23762, 0.00193, 0.63231
+    color: '#2B5016'
+    shape: SlantedY
+  - label: source leaf patch 8
+    min: -0.30259, -0.07833, 0.56606
+    max: -0.22641, -0.01433, 0.57439
+    color: '#36631C'
+    shape: SlantedX
+  - label: source leaf patch 9
+    min: -0.24738, -0.07859, 0.57606
+    max: -0.20637, -0.03507, 0.60419
+    color: '#2B5016'
+    shape: SlantedYReverse
+  - label: source leaf patch 10
+    min: 0.02711, -0.05308, 0.67294
+    max: 0.08226, -0.01708, 0.67894
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 11
+    min: 0.14053, 0.06642, 0.58856
+    max: 0.22509, 0.13042, 0.59456
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 12
+    min: 0.17512, 0.05016, 0.60419
+    max: 0.21613, 0.09368, 0.63231
+    color: '#33591A'
+    shape: SlantedYReverse
+  - label: source leaf patch 13
+    min: -0.23585, -0.04833, 0.54919
+    max: -0.13290, -0.01233, 0.56044
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 14
+    min: 0.21186, 0.06442, 0.58856
+    max: 0.30377, 0.10042, 0.59456
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 15
+    min: -0.21613, -0.07859, 0.51981
+    max: -0.17512, -0.03507, 0.54794
+    color: '#2B5016'
+    shape: SlantedYReverse
+  - label: source leaf patch 16
+    min: 0.01888, -0.03034, 0.60419
+    max: 0.05987, 0.01318, 0.63231
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 17
+    min: -0.26949, -0.04833, 0.50981
+    max: -0.21801, -0.01233, 0.51581
+    color: '#2B5016'
+    shape: SlantedXReverse
+  - label: source leaf patch 18
+    min: -0.22840, -0.06433, 0.49013
+    max: -0.09972, -0.02833, 0.50419
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 19
+    min: 0.13373, 0.08042, 0.53231
+    max: 0.22564, 0.11642, 0.53831
+    color: '#3D801C'
+    shape: SlantedXReverse
+  - label: source leaf patch 20
+    min: 0.20637, 0.08716, 0.51981
+    max: 0.24738, 0.13068, 0.54794
+    color: '#2E5A18'
+    shape: SlantedY
+  - label: source leaf patch 21
+    min: -0.05377, -0.03708, 0.56044
+    max: 0.03814, -0.00108, 0.56644
+    color: '#2E5A18'
+    shape: SlantedXReverse
+  - label: source leaf patch 22
+    min: -0.01237, -0.03034, 0.51981
+    max: 0.02862, 0.01318, 0.54794
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 23
+    min: 0.02436, -0.03708, 0.53231
+    max: 0.11627, -0.00108, 0.53831
+    color: '#33591A'
+    shape: SlantedX
+  - label: source leaf patch 24
+    min: 0.21186, 0.06442, 0.46200
+    max: 0.30377, 0.10042, 0.49013
+    color: '#376D1C'
+    shape: SlantedXReverse
+  - label: source leaf patch 25
+    min: -0.22289, -0.04833, 0.41981
+    max: -0.16774, -0.01233, 0.42581
+    color: '#2B5016'
+    shape: SlantedX
+  - label: source leaf patch 26
+    min: 0.01888, -0.03034, 0.49169
+    max: 0.05987, 0.01318, 0.51981
+    color: '#33591A'
+    shape: SlantedY
+  - label: source leaf patch 27
+    min: 0.01424, -0.06734, 0.44169
+    max: 0.07368, -0.02382, 0.49794
+    color: '#467424'
+    shape: SlantedYReverse
+  - label: source leaf patch 28
+    min: 0.02711, -0.05308, 0.44794
+    max: 0.08226, -0.01708, 0.45394
+    color: '#474936'
+    shape: SlantedX
+  - label: source leaf patch 29
+    min: 0.19012, 0.08716, 0.43544
+    max: 0.23113, 0.13068, 0.46356
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 30
+    min: 0.19233, 0.06442, 0.41981
+    max: 0.27157, 0.10042, 0.44406
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 31
+    min: -0.22289, -0.04833, 0.36356
+    max: -0.16774, -0.01233, 0.36956
+    color: '#2B4D16'
+    shape: SlantedX
+  - label: source leaf patch 32
+    min: -0.07613, -0.06308, 0.41487
+    max: 0.03615, -0.00708, 0.42919
+    color: '#3E6C20'
+    shape: SlantedXReverse
+  - label: source leaf patch 33
+    min: 0.12762, 0.05016, 0.37919
+    max: 0.16863, 0.09368, 0.40731
+    color: '#458820'
+    shape: SlantedYReverse
+  - label: source leaf patch 34
+    min: -0.33778, -0.06433, 0.33544
+    max: -0.20910, -0.02833, 0.34144
+    color: '#3D801C'
+    shape: SlantedXReverse
+  - label: source leaf patch 35
+    min: 0.17081, 0.08042, 0.36356
+    max: 0.30710, 0.11642, 0.40527
+    color: '#244413'
+    shape: SlantedXReverse
+  - label: source leaf patch 36
+    min: -0.26976, -0.06433, 0.30731
+    max: -0.21461, -0.02833, 0.31331
+    color: '#2E5A18'
+    shape: SlantedXReverse
+  - label: source leaf patch 37
+    min: -0.10336, -0.03708, 0.34722
+    max: 0.02482, -0.00108, 0.36356
+    color: '#2E5A18'
+    shape: SlantedXReverse
+  - label: source leaf patch 38
+    min: -0.04362, -0.03034, 0.35106
+    max: -0.00263, 0.01318, 0.37919
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 39
+    min: 0.15887, 0.05016, 0.29481
+    max: 0.19988, 0.09368, 0.32294
+    color: '#376D1C'
+    shape: SlantedYReverse
+  - label: source leaf patch 40
+    min: 0.14108, 0.06442, 0.30731
+    max: 0.34329, 0.10042, 0.31331
+    color: '#2E5A18'
+    shape: SlantedX
+  - label: source leaf patch 41
+    min: -0.24738, -0.04159, 0.23856
+    max: -0.20637, 0.00193, 0.26669
+    color: '#244713'
+    shape: SlantedY
+  - label: source leaf patch 42
+    min: -0.21507, -0.06433, 0.24080
+    max: -0.13459, -0.02833, 0.25106
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 43
+    min: 0.00919, -0.03708, 0.33544
+    max: 0.08371, -0.00108, 0.34494
+    color: '#244413'
+    shape: SlantedXReverse
+  - label: source leaf patch 44
+    min: -0.05157, -0.05308, 0.29933
+    max: 0.01103, -0.01708, 0.30731
+    color: '#244713'
+    shape: SlantedXReverse
+  - label: source leaf patch 45
+    min: 0.15887, 0.05016, 0.21044
+    max: 0.19988, 0.09368, 0.23856
+    color: '#244713'
+    shape: SlantedYReverse
+  - label: source leaf patch 46
+    min: 0.14936, 0.06442, 0.19481
+    max: 0.24127, 0.10042, 0.20081
+    color: '#244713'
+    shape: SlantedX
+  - label: source leaf patch 47
+    min: -0.00689, -0.03708, 0.22294
+    max: 0.08502, -0.00108, 0.22894
+    color: '#244413'
+    shape: SlantedX
+  - label: source leaf patch 48
+    min: -0.00914, -0.05308, 0.09638
+    max: 0.05142, -0.01708, 0.10796
+    color: '#323529'
+    shape: SlantedXReverse
+- type: cmu3DModel
+  id: CMU3DRMCBushe1
+  label: Wild shrub bushe1
+  sourcePrototypes:
+  - RMCBushe1
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushe1
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.04425, -0.09300, 0.00700
+    max: -0.01825, -0.06700, 0.21488
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: visible stem 0 section 1
+    min: -0.06526, -0.09148, 0.20388
+    max: -0.02849, -0.06852, 0.38363
+    color: '#433421'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.04273, -0.09148, 0.19739
+    max: -0.01977, -0.06852, 0.22036
+    color: '#433421'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.09651, -0.08997, 0.37263
+    max: -0.05974, -0.07003, 0.52425
+    color: '#464124'
+    shape: SlantedXReverse
+  - label: stem 0 joint 2
+    min: -0.07247, -0.08997, 0.36766
+    max: -0.05253, -0.07003, 0.38759
+    color: '#464124'
+    shape: Ellipsoid
+  - label: visible stem 0 section 3
+    min: -0.12776, -0.08845, 0.51325
+    max: -0.09099, -0.07155, 0.72113
+    color: '#3B381F'
+    shape: SlantedXReverse
+  - label: stem 0 joint 3
+    min: -0.10220, -0.08845, 0.50980
+    max: -0.08530, -0.07155, 0.52670
+    color: '#3B381F'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.03401, 0.01200, 0.00700
+    max: 0.00276, 0.03800, 0.27113
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: visible stem 1 section 1
+    min: -0.01072, 0.01428, 0.26012
+    max: 0.01072, 0.03572, 0.49613
+    color: '#433421'
+    shape: CylinderZ
+  - label: stem 1 joint 1
+    min: -0.01072, 0.01428, 0.25440
+    max: 0.01072, 0.03572, 0.27585
+    color: '#433421'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: -0.00276, 0.01655, 0.48513
+    max: 0.03401, 0.03345, 0.74925
+    color: '#464124'
+    shape: SlantedX
+  - label: stem 1 joint 2
+    min: -0.00845, 0.01655, 0.48168
+    max: 0.00845, 0.03345, 0.49858
+    color: '#464124'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: -0.03952, 0.06700, 0.00700
+    max: 0.07077, 0.09300, 0.24300
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.05178, 0.06928, 0.23200
+    max: 0.07322, 0.09072, 0.46800
+    color: '#433421'
+    shape: CylinderZ
+  - label: stem 2 joint 1
+    min: 0.05178, 0.06928, 0.22628
+    max: 0.07322, 0.09072, 0.24773
+    color: '#433421'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.05974, 0.07155, 0.45700
+    max: 0.09651, 0.08845, 0.69300
+    color: '#464124'
+    shape: SlantedX
+  - label: stem 2 joint 2
+    min: 0.05405, 0.07155, 0.45355
+    max: 0.07095, 0.08845, 0.47045
+    color: '#464124'
+    shape: Ellipsoid
+  - label: basal leaf 0
+    min: -0.35432, -0.01400, 0.02606
+    max: -0.00506, 0.06900, 0.13856
+    color: '#2A4A21'
+    shape: SlantedXReverse
+  - label: basal leaf 1
+    min: -0.30331, -0.05900, 0.02606
+    max: -0.00919, 0.01400, 0.18075
+    color: '#345326'
+    shape: SlantedXReverse
+  - label: basal leaf 2
+    min: -0.20129, -0.01400, 0.02606
+    max: -0.01746, 0.01400, 0.09638
+    color: '#4E782F'
+    shape: SlantedXReverse
+  - label: basal leaf 3
+    min: -0.18428, -0.01400, 0.02606
+    max: -0.01884, 0.06900, 0.22294
+    color: '#3F5C2B'
+    shape: SlantedXReverse
+  - label: basal leaf 4
+    min: -0.13327, -0.05900, 0.02606
+    max: -0.02298, 0.01400, 0.18075
+    color: '#1E3817'
+    shape: SlantedXReverse
+  - label: basal leaf 5
+    min: -0.06526, -0.01400, 0.02606
+    max: -0.02849, 0.01400, 0.20888
+    color: '#2A4A21'
+    shape: SlantedXReverse
+  - label: basal leaf 6
+    min: -0.04090, -0.01400, 0.02606
+    max: 0.08778, 0.06900, 0.25106
+    color: '#345326'
+    shape: SlantedX
+  - label: basal leaf 7
+    min: -0.04228, -0.05900, 0.02606
+    max: 0.10478, 0.01400, 0.12450
+    color: '#4E782F'
+    shape: SlantedX
+  - label: basal leaf 8
+    min: -0.05055, -0.01400, 0.02606
+    max: 0.20680, 0.01400, 0.19481
+    color: '#3F5C2B'
+    shape: SlantedX
+  - label: basal leaf 9
+    min: -0.05882, -0.01400, 0.02606
+    max: 0.30882, 0.06900, 0.16669
+    color: '#1E3817'
+    shape: SlantedX
+  - label: basal leaf 10
+    min: -0.05607, -0.05900, 0.02606
+    max: 0.27482, 0.01400, 0.09638
+    color: '#2A4A21'
+    shape: SlantedX
+  - label: orange seedhead detail 0
+    min: 0.03288, 0.01300, 0.73731
+    max: 0.06087, 0.03700, 0.77731
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: orange seedhead detail 1
+    min: -0.12337, -0.09200, 0.70919
+    max: -0.09538, -0.06800, 0.74919
+    color: '#91582A'
+    shape: Ellipsoid
+  - label: seedhead side twig 2
+    min: -0.01926, 0.02000, 0.69695
+    max: 0.02917, 0.03000, 0.70295
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 2
+    min: -0.02962, 0.01300, 0.68106
+    max: -0.00162, 0.03700, 0.72106
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: orange seedhead detail 3
+    min: 0.09538, 0.06800, 0.68106
+    max: 0.12337, 0.09200, 0.72106
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: seedhead side twig 4
+    min: -0.12097, -0.08500, 0.66787
+    max: -0.07465, -0.07500, 0.67388
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 4
+    min: -0.09212, -0.09200, 0.65294
+    max: -0.06413, -0.06800, 0.69294
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 5
+    min: 0.06413, 0.06800, 0.65294
+    max: 0.09212, 0.09200, 0.69294
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: seedhead side twig 6
+    min: -0.05263, 0.02000, 0.63830
+    max: 0.02404, 0.03000, 0.64481
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 6
+    min: -0.06087, 0.01300, 0.62481
+    max: -0.03288, 0.03700, 0.66481
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: orange seedhead detail 7
+    min: 0.03288, 0.01300, 0.62481
+    max: 0.06087, 0.03700, 0.66481
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: seedhead side twig 8
+    min: 0.08412, 0.07500, 0.65065
+    max: 0.14521, 0.08500, 0.65665
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 8
+    min: 0.12662, 0.06800, 0.62481
+    max: 0.15463, 0.09200, 0.66481
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: orange seedhead detail 9
+    min: -0.09212, -0.09200, 0.59669
+    max: -0.06413, -0.06800, 0.63669
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 10
+    min: 0.00162, 0.01300, 0.59669
+    max: 0.02962, 0.03700, 0.63669
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: orange seedhead detail 11
+    min: 0.06413, 0.06800, 0.56856
+    max: 0.09212, 0.09200, 0.60856
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 12
+    min: -0.12337, -0.09200, 0.54044
+    max: -0.09538, -0.06800, 0.58044
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: orange seedhead detail 13
+    min: -0.02962, 0.01300, 0.54044
+    max: -0.00162, 0.03700, 0.58044
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: seedhead side twig 14
+    min: 0.06543, 0.07500, 0.50873
+    max: 0.11294, 0.08500, 0.51473
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 14
+    min: 0.09538, 0.06800, 0.48419
+    max: 0.12337, 0.09200, 0.52419
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.04825, -0.09700, 0.00500
+    max: -0.01425, -0.06300, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: -0.04825, 0.00800, 0.00500
+    max: -0.01425, 0.04200, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: rounded root base 2
+    min: -0.04825, 0.06300, 0.00500
+    max: -0.01425, 0.09700, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: inferred front back basal leaf 0
+    min: -0.05525, -0.15779, 0.01800
+    max: -0.00725, 0.01279, 0.14500
+    color: '#2A4A21'
+    shape: SlantedYReverse
+  - label: inferred front back basal leaf 1
+    min: -0.05525, -0.01279, 0.01800
+    max: -0.00725, 0.15779, 0.14500
+    color: '#2A4A21'
+    shape: SlantedY
+- type: cmu3DModel
+  id: CMU3DRMCBushe2
+  label: Wild shrub bushe2
+  sourcePrototypes:
+  - RMCBushe2
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushe2
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.06526, -0.09300, 0.00700
+    max: -0.02849, -0.06700, 0.18675
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: visible stem 0 section 1
+    min: -0.09651, -0.09072, 0.17575
+    max: -0.05974, -0.06928, 0.43988
+    color: '#433421'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.07322, -0.09072, 0.17003
+    max: -0.05178, -0.06928, 0.19148
+    color: '#433421'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.16176, -0.08845, 0.42888
+    max: -0.08824, -0.07155, 0.72113
+    color: '#464124'
+    shape: SlantedXReverse
+  - label: stem 0 joint 2
+    min: -0.10220, -0.08845, 0.42542
+    max: -0.08530, -0.07155, 0.44233
+    color: '#464124'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.03401, 0.01200, 0.00700
+    max: 0.00276, 0.03800, 0.27113
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: visible stem 1 section 1
+    min: -0.00276, 0.01428, 0.26012
+    max: 0.03401, 0.03572, 0.49613
+    color: '#433421'
+    shape: SlantedX
+  - label: stem 1 joint 1
+    min: -0.01072, 0.01428, 0.25440
+    max: 0.01072, 0.03572, 0.27585
+    color: '#433421'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: 0.02574, 0.01655, 0.48513
+    max: 0.09926, 0.03345, 0.74925
+    color: '#464124'
+    shape: SlantedX
+  - label: stem 1 joint 2
+    min: 0.02280, 0.01655, 0.48168
+    max: 0.03970, 0.03345, 0.49858
+    color: '#464124'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: -0.03952, 0.06700, 0.00700
+    max: 0.07077, 0.09300, 0.21488
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.05974, 0.06928, 0.20388
+    max: 0.09651, 0.09072, 0.49613
+    color: '#433421'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.05178, 0.06928, 0.19815
+    max: 0.07322, 0.09072, 0.21960
+    color: '#433421'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.09099, 0.07155, 0.48513
+    max: 0.12776, 0.08845, 0.72113
+    color: '#464124'
+    shape: SlantedX
+  - label: stem 2 joint 2
+    min: 0.08530, 0.07155, 0.48168
+    max: 0.10220, 0.08845, 0.49858
+    color: '#464124'
+    shape: Ellipsoid
+  - label: basal leaf 0
+    min: -0.28631, -0.01400, 0.02606
+    max: -0.01057, 0.06900, 0.16669
+    color: '#2A4A21'
+    shape: SlantedXReverse
+  - label: basal leaf 1
+    min: -0.23529, -0.05900, 0.02606
+    max: -0.01471, 0.01400, 0.19481
+    color: '#1E3817'
+    shape: SlantedXReverse
+  - label: basal leaf 2
+    min: -0.20129, -0.01400, 0.02606
+    max: -0.01746, 0.01400, 0.09638
+    color: '#3F5C2B'
+    shape: SlantedXReverse
+  - label: basal leaf 3
+    min: -0.13327, -0.01400, 0.02606
+    max: -0.02298, 0.06900, 0.26512
+    color: '#24431C'
+    shape: SlantedXReverse
+  - label: basal leaf 4
+    min: -0.09926, -0.05900, 0.02606
+    max: -0.02574, 0.01400, 0.15263
+    color: '#337D20'
+    shape: SlantedXReverse
+  - label: basal leaf 5
+    min: -0.03196, -0.01400, 0.02606
+    max: -0.02254, 0.01400, 0.23700
+    color: '#2A4A21'
+    shape: SlantedX
+  - label: basal leaf 6
+    min: -0.04090, -0.01400, 0.02606
+    max: 0.08778, 0.06900, 0.27919
+    color: '#1E3817'
+    shape: SlantedX
+  - label: basal leaf 7
+    min: -0.04504, -0.05900, 0.02606
+    max: 0.13879, 0.01400, 0.18075
+    color: '#3F5C2B'
+    shape: SlantedX
+  - label: basal leaf 8
+    min: -0.05331, -0.01400, 0.02606
+    max: 0.24081, 0.01400, 0.16669
+    color: '#24431C'
+    shape: SlantedX
+  - label: seedhead side twig 0
+    min: -0.16039, -0.08500, 0.71513
+    max: -0.10524, -0.07500, 0.75731
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 0
+    min: -0.12337, -0.09200, 0.73731
+    max: -0.09538, -0.06800, 0.77731
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 1
+    min: 0.09538, 0.01300, 0.73731
+    max: 0.12337, 0.03700, 0.77731
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 2
+    min: -0.18588, -0.09200, 0.70919
+    max: -0.15787, -0.06800, 0.74919
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: seedhead side twig 3
+    min: 0.04323, 0.02000, 0.72092
+    max: 0.09188, 0.03000, 0.72919
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 3
+    min: 0.03288, 0.01300, 0.70919
+    max: 0.06087, 0.03700, 0.74919
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: orange seedhead detail 4
+    min: 0.12662, 0.06800, 0.70919
+    max: 0.15463, 0.09200, 0.74919
+    color: '#804620'
+    shape: Ellipsoid
+  - label: seedhead side twig 5
+    min: -0.02395, 0.02000, 0.68220
+    max: 0.08700, 0.03000, 0.70106
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 5
+    min: -0.02962, 0.01300, 0.68106
+    max: -0.00162, 0.03700, 0.72106
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 6
+    min: -0.15463, -0.09200, 0.65294
+    max: -0.12662, -0.06800, 0.69294
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: orange seedhead detail 7
+    min: 0.06413, 0.01300, 0.65294
+    max: 0.09212, 0.03700, 0.69294
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: orange seedhead detail 8
+    min: -0.12337, -0.09200, 0.62481
+    max: -0.09538, -0.06800, 0.66481
+    color: '#804620'
+    shape: Ellipsoid
+  - label: seedhead side twig 9
+    min: 0.01110, 0.02000, 0.63456
+    max: 0.07144, 0.03000, 0.64481
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 9
+    min: 0.00162, 0.01300, 0.62481
+    max: 0.02962, 0.03700, 0.66481
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: orange seedhead detail 10
+    min: 0.09538, 0.06800, 0.59669
+    max: 0.12337, 0.09200, 0.63669
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: seedhead side twig 11
+    min: -0.02161, 0.02000, 0.57500
+    max: 0.05819, 0.03000, 0.58856
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 11
+    min: -0.02962, 0.01300, 0.56856
+    max: -0.00162, 0.03700, 0.60856
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: orange seedhead detail 12
+    min: -0.15463, -0.09200, 0.54044
+    max: -0.12662, -0.06800, 0.58044
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: orange seedhead detail 13
+    min: 0.06413, 0.06800, 0.54044
+    max: 0.09212, 0.09200, 0.58044
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.04825, -0.09700, 0.00500
+    max: -0.01425, -0.06300, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: -0.04825, 0.00800, 0.00500
+    max: -0.01425, 0.04200, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: rounded root base 2
+    min: -0.04825, 0.06300, 0.00500
+    max: -0.01425, 0.09700, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: inferred front back basal leaf 0
+    min: -0.05525, -0.15779, 0.01800
+    max: -0.00725, 0.01279, 0.14500
+    color: '#2A4A21'
+    shape: SlantedYReverse
+  - label: inferred front back basal leaf 1
+    min: -0.05525, -0.01279, 0.01800
+    max: -0.00725, 0.15779, 0.14500
+    color: '#2A4A21'
+    shape: SlantedY
+- type: cmu3DModel
+  id: CMU3DRMCBushe3
+  label: Wild shrub bushe3
+  sourcePrototypes:
+  - RMCBushe3
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushe3
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.09926, -0.09300, 0.00700
+    max: -0.02574, -0.06700, 0.18675
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: visible stem 0 section 1
+    min: -0.12776, -0.09072, 0.17575
+    max: -0.09099, -0.06928, 0.38363
+    color: '#464124'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.10447, -0.09072, 0.17003
+    max: -0.08303, -0.06928, 0.19148
+    color: '#464124'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.15901, -0.08845, 0.37263
+    max: -0.12224, -0.07155, 0.66487
+    color: '#59462B'
+    shape: SlantedXReverse
+  - label: stem 0 joint 2
+    min: -0.13345, -0.08845, 0.36918
+    max: -0.11655, -0.07155, 0.38608
+    color: '#59462B'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.03401, 0.01200, 0.00700
+    max: 0.00276, 0.03800, 0.24300
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: visible stem 1 section 1
+    min: -0.00276, 0.01428, 0.23200
+    max: 0.03401, 0.03572, 0.43988
+    color: '#464124'
+    shape: SlantedX
+  - label: stem 1 joint 1
+    min: -0.01072, 0.01428, 0.22628
+    max: 0.01072, 0.03572, 0.24773
+    color: '#464124'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: -0.00276, 0.01655, 0.42888
+    max: 0.03401, 0.03345, 0.72113
+    color: '#59462B'
+    shape: SlantedXReverse
+  - label: stem 1 joint 2
+    min: 0.02280, 0.01655, 0.42542
+    max: 0.03970, 0.03345, 0.44233
+    color: '#59462B'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: -0.03952, 0.06700, 0.00700
+    max: 0.07077, 0.09300, 0.18675
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.05974, 0.06928, 0.17575
+    max: 0.09651, 0.09072, 0.38363
+    color: '#464124'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.05178, 0.06928, 0.17003
+    max: 0.07322, 0.09072, 0.19148
+    color: '#464124'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.08824, 0.07155, 0.37263
+    max: 0.16176, 0.08845, 0.58050
+    color: '#59462B'
+    shape: SlantedX
+  - label: stem 2 joint 2
+    min: 0.08530, 0.07155, 0.36918
+    max: 0.10220, 0.08845, 0.38608
+    color: '#59462B'
+    shape: Ellipsoid
+  - label: basal leaf 0
+    min: -0.28631, -0.01400, 0.02606
+    max: -0.01057, 0.06900, 0.19481
+    color: '#2A4A21'
+    shape: SlantedXReverse
+  - label: basal leaf 1
+    min: -0.23529, -0.05900, 0.02606
+    max: -0.01471, 0.01400, 0.19481
+    color: '#345326'
+    shape: SlantedXReverse
+  - label: basal leaf 2
+    min: -0.23529, -0.01400, 0.02606
+    max: -0.01471, 0.01400, 0.09638
+    color: '#2E5E20'
+    shape: SlantedXReverse
+  - label: basal leaf 3
+    min: -0.13327, -0.01400, 0.02606
+    max: -0.02298, 0.06900, 0.18075
+    color: '#386725'
+    shape: SlantedXReverse
+  - label: basal leaf 4
+    min: -0.07650, -0.04897, 0.02606
+    max: -0.01725, 0.00397, 0.26512
+    color: '#1E3817'
+    shape: SlantedYReverse
+  - label: basal leaf 5
+    min: -0.03676, -0.01400, 0.02606
+    max: 0.03676, 0.01400, 0.29325
+    color: '#2A4A21'
+    shape: SlantedX
+  - label: basal leaf 6
+    min: -0.03952, -0.01400, 0.02606
+    max: 0.07077, 0.06900, 0.20888
+    color: '#345326'
+    shape: SlantedX
+  - label: basal leaf 7
+    min: -0.04779, -0.05900, 0.02606
+    max: 0.17279, 0.01400, 0.19481
+    color: '#2E5E20'
+    shape: SlantedX
+  - label: basal leaf 8
+    min: -0.05331, -0.01400, 0.02606
+    max: 0.24081, 0.01400, 0.16669
+    color: '#386725'
+    shape: SlantedX
+  - label: orange seedhead detail 0
+    min: 0.00162, 0.01300, 0.70919
+    max: 0.02962, 0.03700, 0.74919
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 1
+    min: -0.15463, -0.09200, 0.65294
+    max: -0.12662, -0.06800, 0.69294
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: orange seedhead detail 2
+    min: -0.02962, 0.01300, 0.65294
+    max: -0.00162, 0.03700, 0.69294
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: seedhead side twig 3
+    min: -0.15820, -0.08500, 0.64077
+    max: -0.10542, -0.07500, 0.64677
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 3
+    min: -0.12337, -0.09200, 0.62481
+    max: -0.09538, -0.06800, 0.66481
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: orange seedhead detail 4
+    min: 0.00162, 0.01300, 0.62481
+    max: 0.02962, 0.03700, 0.66481
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 5
+    min: -0.18588, -0.09200, 0.59669
+    max: -0.15787, -0.06800, 0.63669
+    color: '#B36E21'
+    shape: Ellipsoid
+  - label: seedhead side twig 6
+    min: 0.00815, 0.02000, 0.61349
+    max: 0.05001, 0.03000, 0.61949
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 6
+    min: 0.03288, 0.01300, 0.59669
+    max: 0.06087, 0.03700, 0.63669
+    color: '#804620'
+    shape: Ellipsoid
+  - label: seedhead side twig 7
+    min: 0.13925, 0.07500, 0.57450
+    max: 0.15763, 0.08500, 0.61669
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 7
+    min: 0.12662, 0.06800, 0.59669
+    max: 0.15463, 0.09200, 0.63669
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: orange seedhead detail 8
+    min: -0.15463, -0.09200, 0.56856
+    max: -0.12662, -0.06800, 0.60856
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: seedhead side twig 9
+    min: -0.14810, -0.08500, 0.55724
+    max: -0.10624, -0.07500, 0.56324
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 9
+    min: -0.12337, -0.09200, 0.54044
+    max: -0.09538, -0.06800, 0.58044
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: orange seedhead detail 10
+    min: -0.02962, 0.01300, 0.54044
+    max: -0.00162, 0.03700, 0.58044
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: seedhead side twig 11
+    min: 0.01247, 0.02000, 0.55501
+    max: 0.08345, 0.03000, 0.56101
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: orange seedhead detail 11
+    min: 0.06413, 0.01300, 0.54044
+    max: 0.09212, 0.03700, 0.58044
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: orange seedhead detail 12
+    min: -0.15463, -0.09200, 0.51231
+    max: -0.12662, -0.06800, 0.55231
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 13
+    min: 0.12662, 0.06800, 0.51231
+    max: 0.15463, 0.09200, 0.55231
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 14
+    min: 0.09538, 0.06800, 0.48419
+    max: 0.12337, 0.09200, 0.52419
+    color: '#804620'
+    shape: Ellipsoid
+  - label: seedhead side twig 15
+    min: 0.07430, 0.07500, 0.46492
+    max: 0.12529, 0.08500, 0.47606
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 15
+    min: 0.06413, 0.06800, 0.45606
+    max: 0.09212, 0.09200, 0.49606
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: orange seedhead detail 16
+    min: 0.09538, 0.06800, 0.42794
+    max: 0.12337, 0.09200, 0.46794
+    color: '#B36E21'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.04825, -0.09700, 0.00500
+    max: -0.01425, -0.06300, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: -0.04825, 0.00800, 0.00500
+    max: -0.01425, 0.04200, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: rounded root base 2
+    min: -0.04825, 0.06300, 0.00500
+    max: -0.01425, 0.09700, 0.05800
+    color: '#4E3D26'
+    shape: CylinderZ
+  - label: inferred front back basal leaf 0
+    min: -0.05525, -0.15779, 0.01800
+    max: -0.00725, 0.01279, 0.14500
+    color: '#2A4A21'
+    shape: SlantedYReverse
+  - label: inferred front back basal leaf 1
+    min: -0.05525, -0.01279, 0.01800
+    max: -0.00725, 0.15779, 0.14500
+    color: '#2A4A21'
+    shape: SlantedY
+- type: cmu3DModel
+  id: CMU3DRMCBushe4
+  label: Wild shrub bushe4
+  sourcePrototypes:
+  - RMCBushe4
+  referenceRsi: Decals/Flora/flora_bushes.rsi
+  referenceState: bushe4
+  sourceDirections: 1
+  status: draft
+  description: Source-traced woody stem paths and leaf/seed positions. Original palette retained. Physical depth,
+    thickness, height and hidden construction remain inferred; static draft. See SOURCES_STEMMED_SHRUBS.md.
+  parts:
+  - label: visible stem 0 section 0
+    min: -0.06526, -0.09300, 0.00700
+    max: -0.02849, -0.06700, 0.24300
+    color: '#433421'
+    shape: SlantedXReverse
+  - label: visible stem 0 section 1
+    min: -0.09651, -0.09072, 0.23200
+    max: -0.05974, -0.06928, 0.46800
+    color: '#4E3D26'
+    shape: SlantedXReverse
+  - label: stem 0 joint 1
+    min: -0.07322, -0.09072, 0.22628
+    max: -0.05178, -0.06928, 0.24773
+    color: '#4E3D26'
+    shape: Ellipsoid
+  - label: visible stem 0 section 2
+    min: -0.16176, -0.08845, 0.45700
+    max: -0.08824, -0.07155, 0.72113
+    color: '#59462B'
+    shape: SlantedXReverse
+  - label: stem 0 joint 2
+    min: -0.10220, -0.08845, 0.45355
+    max: -0.08530, -0.07155, 0.47045
+    color: '#59462B'
+    shape: Ellipsoid
+  - label: visible stem 1 section 0
+    min: -0.03401, 0.01200, 0.00700
+    max: 0.00276, 0.03800, 0.27113
+    color: '#433421'
+    shape: SlantedX
+  - label: visible stem 1 section 1
+    min: -0.00276, 0.01428, 0.26012
+    max: 0.03401, 0.03572, 0.49613
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: stem 1 joint 1
+    min: -0.01072, 0.01428, 0.25440
+    max: 0.01072, 0.03572, 0.27585
+    color: '#4E3D26'
+    shape: Ellipsoid
+  - label: visible stem 1 section 2
+    min: 0.02574, 0.01655, 0.48513
+    max: 0.09926, 0.03345, 0.74925
+    color: '#59462B'
+    shape: SlantedX
+  - label: stem 1 joint 2
+    min: 0.02280, 0.01655, 0.48168
+    max: 0.03970, 0.03345, 0.49858
+    color: '#59462B'
+    shape: Ellipsoid
+  - label: visible stem 2 section 0
+    min: -0.03952, 0.06700, 0.00700
+    max: 0.07077, 0.09300, 0.21488
+    color: '#433421'
+    shape: SlantedX
+  - label: visible stem 2 section 1
+    min: 0.05974, 0.06928, 0.20388
+    max: 0.09651, 0.09072, 0.43988
+    color: '#4E3D26'
+    shape: SlantedX
+  - label: stem 2 joint 1
+    min: 0.05178, 0.06928, 0.19815
+    max: 0.07322, 0.09072, 0.21960
+    color: '#4E3D26'
+    shape: Ellipsoid
+  - label: visible stem 2 section 2
+    min: 0.05974, 0.07155, 0.42888
+    max: 0.09651, 0.08845, 0.63675
+    color: '#59462B'
+    shape: SlantedXReverse
+  - label: stem 2 joint 2
+    min: 0.08530, 0.07155, 0.42542
+    max: 0.10220, 0.08845, 0.44233
+    color: '#59462B'
+    shape: Ellipsoid
+  - label: basal leaf 0
+    min: -0.32031, -0.01400, 0.02606
+    max: -0.00781, 0.06900, 0.25106
+    color: '#2A4A21'
+    shape: SlantedXReverse
+  - label: basal leaf 1
+    min: -0.23529, -0.05900, 0.02606
+    max: -0.01471, 0.01400, 0.22294
+    color: '#29751C'
+    shape: SlantedXReverse
+  - label: basal leaf 2
+    min: -0.16728, -0.01400, 0.02606
+    max: -0.02022, 0.01400, 0.09638
+    color: '#2E4C20'
+    shape: SlantedXReverse
+  - label: basal leaf 3
+    min: -0.13327, -0.01400, 0.02606
+    max: -0.02298, 0.06900, 0.26512
+    color: '#24431C'
+    shape: SlantedXReverse
+  - label: basal leaf 4
+    min: -0.07650, -0.04897, 0.02606
+    max: -0.01725, 0.00397, 0.20888
+    color: '#345326'
+    shape: SlantedYReverse
+  - label: basal leaf 5
+    min: -0.03676, -0.01400, 0.02606
+    max: 0.03676, 0.01400, 0.32138
+    color: '#2A4A21'
+    shape: SlantedX
+  - label: basal leaf 6
+    min: -0.04228, -0.01400, 0.02606
+    max: 0.10478, 0.06900, 0.32138
+    color: '#29751C'
+    shape: SlantedX
+  - label: basal leaf 7
+    min: -0.05055, -0.05900, 0.02606
+    max: 0.20680, 0.01400, 0.26512
+    color: '#2E4C20'
+    shape: SlantedX
+  - label: basal leaf 8
+    min: -0.05607, -0.01400, 0.02606
+    max: 0.27482, 0.01400, 0.22294
+    color: '#24431C'
+    shape: SlantedX
+  - label: basal leaf 9
+    min: -0.05055, -0.01400, 0.02606
+    max: 0.20680, 0.06900, 0.12450
+    color: '#345326'
+    shape: SlantedX
+  - label: orange seedhead detail 0
+    min: 0.06413, 0.01300, 0.73731
+    max: 0.09212, 0.03700, 0.77731
+    color: '#804620'
+    shape: Ellipsoid
+  - label: seedhead side twig 1
+    min: -0.16039, -0.08500, 0.71513
+    max: -0.10524, -0.07500, 0.72919
+    color: '#433421'
+    shape: SlantedX
+  - label: orange seedhead detail 1
+    min: -0.12337, -0.09200, 0.70919
+    max: -0.09538, -0.06800, 0.74919
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: seedhead side twig 2
+    min: -0.02453, 0.02000, 0.70900
+    max: 0.09420, 0.03000, 0.72919
+    color: '#433421'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 2
+    min: -0.02962, 0.01300, 0.70919
+    max: -0.00162, 0.03700, 0.74919
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: orange seedhead detail 3
+    min: -0.15463, -0.09200, 0.68106
+    max: -0.12662, -0.06800, 0.72106
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: seedhead side twig 4
+    min: 0.00993, 0.02000, 0.68816
+    max: 0.08584, 0.03000, 0.70106
+    color: '#433421'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 4
+    min: 0.00162, 0.01300, 0.68106
+    max: 0.02962, 0.03700, 0.72106
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: seedhead side twig 5
+    min: 0.04381, 0.02000, 0.69411
+    max: 0.08468, 0.03000, 0.70106
+    color: '#433421'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 5
+    min: 0.03288, 0.01300, 0.68106
+    max: 0.06087, 0.03700, 0.72106
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 6
+    min: 0.09538, 0.01300, 0.68106
+    max: 0.12337, 0.03700, 0.72106
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: seedhead side twig 7
+    min: -0.14834, -0.08500, 0.66003
+    max: -0.07243, -0.07500, 0.67294
+    color: '#433421'
+    shape: SlantedX
+  - label: orange seedhead detail 7
+    min: -0.09212, -0.09200, 0.65294
+    max: -0.06413, -0.06800, 0.69294
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: orange seedhead detail 8
+    min: 0.06413, 0.01300, 0.65294
+    max: 0.09212, 0.03700, 0.69294
+    color: '#804620'
+    shape: Ellipsoid
+  - label: orange seedhead detail 9
+    min: 0.03288, 0.01300, 0.62481
+    max: 0.06087, 0.03700, 0.66481
+    color: '#AD651D'
+    shape: Ellipsoid
+  - label: orange seedhead detail 10
+    min: -0.12337, -0.09200, 0.59669
+    max: -0.09538, -0.06800, 0.63669
+    color: '#894F25'
+    shape: Ellipsoid
+  - label: seedhead side twig 11
+    min: -0.02219, 0.02000, 0.60180
+    max: 0.06539, 0.03000, 0.61669
+    color: '#433421'
+    shape: SlantedXReverse
+  - label: orange seedhead detail 11
+    min: -0.02962, 0.01300, 0.59669
+    max: -0.00162, 0.03700, 0.63669
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: orange seedhead detail 12
+    min: -0.15463, -0.09200, 0.56856
+    max: -0.12662, -0.06800, 0.60856
+    color: '#B97626'
+    shape: Ellipsoid
+  - label: orange seedhead detail 13
+    min: 0.06413, 0.06800, 0.56856
+    max: 0.09212, 0.09200, 0.60856
+    color: '#773D1C'
+    shape: Ellipsoid
+  - label: seedhead side twig 14
+    min: -0.11953, -0.08500, 0.55283
+    max: -0.07477, -0.07500, 0.56044
+    color: '#433421'
+    shape: SlantedX
+  - label: orange seedhead detail 14
+    min: -0.09212, -0.09200, 0.54044
+    max: -0.06413, -0.06800, 0.58044
+    color: '#91582A'
+    shape: Ellipsoid
+  - label: orange seedhead detail 15
+    min: 0.00162, 0.01300, 0.54044
+    max: 0.02962, 0.03700, 0.58044
+    color: '#A65C19'
+    shape: Ellipsoid
+  - label: rounded root base 0
+    min: -0.04825, -0.09700, 0.00500
+    max: -0.01425, -0.06300, 0.05800
+    color: '#433421'
+    shape: CylinderZ
+  - label: rounded root base 1
+    min: -0.04825, 0.00800, 0.00500
+    max: -0.01425, 0.04200, 0.05800
+    color: '#433421'
+    shape: CylinderZ
+  - label: rounded root base 2
+    min: -0.04825, 0.06300, 0.00500
+    max: -0.01425, 0.09700, 0.05800
+    color: '#433421'
+    shape: CylinderZ
+  - label: inferred front back basal leaf 0
+    min: -0.05525, -0.15779, 0.01800
+    max: -0.00725, 0.01279, 0.14500
+    color: '#2A4A21'
+    shape: SlantedYReverse
+  - label: inferred front back basal leaf 1
+    min: -0.05525, -0.01279, 0.01800
+    max: -0.00725, 0.15779, 0.14500
+    color: '#2A4A21'
+    shape: SlantedY

@@ -1,0 +1,12 @@
+alliance-console-title = Alliance Console
+alliance-console-faction-title = Alliance Console — { $faction }
+alliance-console-subtitle = Set the standing of third-party factions.
+alliance-console-status-neutral = Neutral
+alliance-console-status-friendly = Friendly
+alliance-console-status-hostile = Hostile
+alliance-console-crt-heading = ALLIANCE COMMAND
+alliance-console-crt-subheading = THIRD-PARTY FACTION STANDINGS
+alliance-console-crt-subheading-faction = { $faction } // THIRD-PARTY STANDINGS
+alliance-console-crt-empty = NO THIRD-PARTY FACTIONS ON RECORD
+alliance-console-crt-standing = STANDING: { $status }
+alliance-console-crt-summary = FRIENDLY { $friendly } // NEUTRAL { $neutral } // HOSTILE { $hostile }

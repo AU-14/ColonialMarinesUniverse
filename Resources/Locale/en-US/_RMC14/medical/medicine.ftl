@@ -1,4 +1,4 @@
-﻿reagent-name-cmdylovene = Dylovene
+reagent-name-cmdylovene = Dylovene
 reagent-desc-cmdylovene = General use anti-toxin, that neutralizes most toxins in the bloodstream. Commonly used in many advanced chemicals. Can be used as a mild anti-hallucinogen and to reduce tiredness.
 
 reagent-name-cmethylredoxrazine = Ethylredoxrazine
@@ -10,8 +10,8 @@ reagent-desc-cmarithrazine = A stabilized variant of dylovene. Its toxin-cleansi
 reagent-name-cmbicaridine = Bicaridine
 reagent-desc-cmbicaridine = Bicaridine is an analgesic medication and can be used to treat severe external blunt trauma and to stabilize patients. Overdosing on Bicaridine will cause caustic burns and toxins.
 
-reagent-name-cmcryoxadone = Cryoxadone
-reagent-desc-cmcryoxadone = Industrial grade cryogenic medicine. Treats most types of tissue damage. Its main limitation is that the patient's body temperature must be under 170K to metabolise correctly.
+reagent-name-cmcryoxadone = marine cryoxadone
+reagent-desc-cmcryoxadone = An older Marine cryogenic formula that treats several kinds of damage below 170K.
 
 reagent-name-cmdermaline = Dermaline
 reagent-desc-cmdermaline = Advanced medicine used to treat severe burn trauma. Enables the body to restore even the direst heat-damaged tissue. Overdosing on dermaline can cause severe internal tissue damage.
@@ -42,6 +42,8 @@ reagent-desc-cmmeralyne = Advanced analgesic medication used to treat extremely 
 
 reagent-name-cmimidazoline = Imidazoline
 reagent-desc-cmimidazoline = Used for treating non-genetic eye trauma. Generally prescribed as treatment for most cases of eye trauma instead of performing a surgical operation.
+reagent-name-cmalkysine = Alkysine
+reagent-desc-cmalkysine = A Yautja sleeper medicine used to repair damaged brain tissue.
 
 reagent-name-cmclonexadone = Clonexadone
 reagent-desc-cmclonexadone = Advanced cryogenic medicine made from cryoxadone. Treats most types of tissue damage. Requires temperatures below 170K to to metabolise correctly.

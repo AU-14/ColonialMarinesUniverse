@@ -1,8 +1,8 @@
-using Content.Shared._CMU14.Intel;
+using Content.Shared.CMU14.Intel;
 using Content.Shared._RMC14.Intel;
 using NUnit.Framework;
 
-namespace Content.Tests.Shared._CMU14.Intel;
+namespace Content.Tests.Shared.CMU14.Intel;
 
 [TestFixture]
 public sealed class ClaimableIntelConsoleComponentTest

@@ -1,0 +1,17 @@
+author: TheMaiji
+category: CMU
+changes:
+- message: Camera consoles now use logical camera subnets and can display authorized
+    cameras on a shared multi-deck map.
+  type: Add
+- message: Authorized users can manage CMU and RMC camera subnets, memberships, and
+    camera names from supported consoles.
+  type: Add
+- message: Camera power, wire, movement, removal, and MAP-wire visibility changes
+    now update console lists and map markers.
+  type: Tweak
+- message: Camera selection, names, remote-grid maps, and live feeds stay synchronized
+    after subnet and deck changes.
+  type: Fix
+time: '2026-08-31T19:30:15.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1825

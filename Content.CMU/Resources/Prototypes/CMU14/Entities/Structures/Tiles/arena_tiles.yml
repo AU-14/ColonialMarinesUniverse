@@ -1,0 +1,32 @@
+# Ported from cmss13 (cmss13-devs/cmss13 PR 11493).
+- type: tile
+  parent: CMFloorSteelSilverBase
+  id: CMUFloorArenaSouth
+  name: tiles-cmu-arena
+  sprite: /Textures/CMU14/Tiles/Arena/arena_south.png
+
+- type: tile
+  parent: CMUFloorArenaSouth
+  id: CMUFloorArenaNorth
+  sprite: /Textures/CMU14/Tiles/Arena/arena_north.png
+
+- type: tile
+  parent: CMUFloorArenaSouth
+  id: CMUFloorArenaEast
+  sprite: /Textures/CMU14/Tiles/Arena/arena_east.png
+
+- type: tile
+  parent: CMUFloorArenaSouth
+  id: CMUFloorArenaWest
+  sprite: /Textures/CMU14/Tiles/Arena/arena_west.png
+
+- type: tile
+  parent: CMFloorSteelSilverBase
+  id: CMUFloorArenaTileSmooth
+  name: tiles-cmu-arena-tile
+  sprite: /Textures/CMU14/Tiles/Arena/silver_smooth.png
+
+- type: tile
+  parent: CMUFloorArenaTileSmooth
+  id: CMUFloorArenaTileFullSmooth
+  sprite: /Textures/CMU14/Tiles/Arena/silverfull_smooth.png

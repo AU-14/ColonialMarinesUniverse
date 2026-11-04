@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Shared.Administration.Logs;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
 
 namespace Content.Server.Administration.Logs;
 
@@ -24,4 +26,8 @@ public interface IAdminLogManager : ISharedAdminLogManager
     IAsyncEnumerable<JsonDocument> CurrentRoundJson(LogFilter? filter = null);
     Task<Round> CurrentRound();
     Task<int> CountLogs(int round);
+    void OpenEui(ICommonSession admin, string? search = null, Guid? targetPlayer = null);
+
+    // CMU14: builds a line of tpto command links for arbitrary entities, header included
+    bool CreateTpLinks(string header, List<(EntityUid Entity, string Name)> entities, out string outString);
 }

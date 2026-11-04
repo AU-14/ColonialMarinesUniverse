@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Server.PowerCell;
+using Content.Server.Power.EntitySystems;
 using Content.Shared._RMC14.Visor;
 using Content.Shared.Examine;
 using Content.Shared.PowerCell;
@@ -11,6 +11,7 @@ namespace Content.Server._RMC14.Visor;
 public sealed partial class ServerVisorSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private BatterySystem _battery = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
 
     public override void Initialize()
@@ -42,7 +43,7 @@ public sealed partial class ServerVisorSystem : EntitySystem
                 {
                     if (_powerCell.TryGetBatteryFromSlot(visorEntity, out var battery))
                     {
-                        var charge = battery.CurrentCharge / battery.MaxCharge * 100;
+                        var charge = _battery.GetChargeLevel(battery.Value.AsNullable()) * 100;
                         args.PushMarkup(Loc.GetString("power-cell-component-examine-details", ("currentCharge", $"{charge:F0}")));
                     }
                     else

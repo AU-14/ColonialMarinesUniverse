@@ -10,7 +10,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.GameTicking;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
@@ -44,7 +44,10 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     private static readonly ProtoId<JobPrototype> QueenRole = "CMXenoQueen";
     private static readonly ProtoId<TagPrototype> LarvaTag = "RMCXenoLarva";
     private static readonly ProtoId<JobPrototype> LarvaRole = "CMXenoLarva";
+    private static readonly ProtoId<JobPrototype> BloodbursterRole = "CMUJobPathogenBloodburster";
+    private static readonly ProtoId<JobPrototype> PopperRole = "CMU14JobPathogenPopper";
     private static readonly TimeSpan ClaimConfirmDuration = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan ClaimRetryInterval = TimeSpan.FromSeconds(5); // CMU14
 
     private readonly Dictionary<EntityUid, LarvaQueueState> _queues = [];
     private readonly Dictionary<NetUserId, PendingLarvaQueueClaim> _pendingClaims = [];
@@ -52,7 +55,9 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     private readonly Dictionary<EntityUid, int> _pendingBurrowedLarvaClaims = [];
     private readonly List<EntityUid> _emptyQueues = [];
     private readonly List<NetUserId> _expiredClaims = [];
+    private readonly List<EntityUid> _retryHives = []; // CMU14
     private int _nextClaimId;
+    private TimeSpan _nextClaimRetry; // CMU14
 
     private EntityQuery<GhostComponent> _ghostQuery;
     private EntityQuery<HiveComponent> _hiveQuery;
@@ -101,6 +106,14 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return;
 
         var userId = actor.PlayerSession.UserId;
+        // CMU14: reject stale choices before cancelling another hive's pending offer.
+        // Existing members can still leave the queue after their hive becomes inactive.
+        if (!_hive.CMUIsHiveActive((hiveId, hiveComp)) &&
+            (!TryGetQueue(hiveId, out var existingQueue) || !existingQueue.TryGetUserStatus(userId, out _)))
+        {
+            return;
+        }
+
         var actorEntity = actor.PlayerSession.AttachedEntity ?? ent.Owner;
         var queue = QueueFor(hiveId);
 
@@ -116,7 +129,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         RemoveFromAllQueues(userId, hiveId);
 
         var wait = TimeSpan.FromSeconds(_config.GetCVar(RMCCVars.RMCLarvaQueueWaitSeconds));
-        if (HasComp<JoinXenoCooldownIgnoreComponent>(ent) || _timing.CurTime - ghost.TimeOfDeath >= wait)
+        if (HasComp<JoinXenoCooldownIgnoreComponent>(ent) || _timing.RealTime - ghost.TimeOfDeath >= wait)
         {
             queue.AddReady(userId);
             _popup.PopupEntity(
@@ -133,7 +146,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         _popup.PopupEntity(
             Loc.GetString(
                 "rmc-xeno-larva-prequeue-added",
-                ("seconds", Math.Max(0, (int) Math.Ceiling((readyAt - _timing.CurTime).TotalSeconds)))),
+                ("seconds", Math.Max(0, (int) Math.Ceiling((readyAt - _timing.RealTime).TotalSeconds)))),
             actorEntity,
             actorEntity);
     }
@@ -177,6 +190,10 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return;
 
         CancelPendingClaim(ev.Player.UserId, timedOut: false);
+
+        if (IsQueueRetainedRole(ev.Entity)) // CMU14
+            return;
+
         RemoveFromAllQueues(ev.Player.UserId);
     }
 
@@ -218,6 +235,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+        var realTime = _timing.RealTime;
         _emptyQueues.Clear();
         _expiredClaims.Clear();
 
@@ -234,7 +252,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
 
         foreach (var (hiveId, queue) in _queues)
         {
-            var promoted = queue.PromoteWaiting(time);
+            var promoted = queue.PromoteWaiting(realTime);
             if (promoted.Count > 0)
             {
                 NotifyReadyPositions(hiveId);
@@ -249,6 +267,24 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         foreach (var hiveId in _emptyQueues)
         {
             _queues.Remove(hiveId);
+        }
+
+        // CMU14: a larva that stops being reserved (infector closed the prompt, a dialog got replaced) wakes
+        // nothing up, so it sat catatonic until someone else joined the queue
+        if (time < _nextClaimRetry)
+            return;
+
+        _nextClaimRetry = time + ClaimRetryInterval;
+        _retryHives.Clear();
+        foreach (var (hiveId, queue) in _queues)
+        {
+            if (queue.ReadyCount > 0)
+                _retryHives.Add(hiveId);
+        }
+
+        foreach (var hiveId in _retryHives)
+        {
+            TryClaimNextForHive(hiveId);
         }
     }
 
@@ -318,32 +354,62 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         return false;
     }
 
-    private bool CanQueueLarva(EntityUid uid, HiveMemberComponent member, Entity<HiveComponent> hive)
+    private bool CanQueueLarva(EntityUid uid, HiveMemberComponent member, Entity<HiveComponent> hive, bool ignoreReservation = false) // CMU14
     {
         if (!CanQueueBodyCommon(uid, member, hive, out var xeno))
             return false;
 
-        if (IsReservedForParasiteClaim(uid))
+        if (!ignoreReservation && IsReservedForParasiteClaim(uid)) // CMU14
             return false;
 
-        return _tag.HasTag(uid, LarvaTag) && xeno.Role == LarvaRole;
+        if (xeno.Role == LarvaRole)
+            return _tag.HasTag(uid, LarvaTag);
+
+        return xeno.Role == BloodbursterRole;
     }
 
     private bool IsReservedForParasiteClaim(EntityUid uid)
     {
         if (!TryComp(uid, out BursterComponent? burster) ||
             !TryComp(burster.BurstFrom, out VictimInfectedComponent? infected) ||
-            infected.SpawnedLarva != uid ||
+            // CMU14: BurstFrom is available during initialization, before SpawnLarva can store its return value.
+            // infected.SpawnedLarva != uid ||
+            (infected.SpawnedLarva is { } linkedLarva && linkedLarva != uid) ||
             !(infected.InfectorWantsLarva || infected.InfectorLarvaClaimPending) ||
             infected.InfectorUser is not { } userId)
         {
             return false;
         }
 
+        // CMU14: an unanswered prompt only holds the larva while the infector can still answer it. closing it
+        // (or another dialog replacing it) left the larva reserved for nobody
         return _player.TryGetSessionById(userId, out var session) &&
                session.AttachedEntity is { } attached &&
                _ghostQuery.HasComp(attached) &&
-               _mind.TryGetMind(session, out _, out _);
+               _mind.TryGetMind(session, out _, out _) &&
+               (infected.InfectorWantsLarva || HasLarvaClaimPrompt(attached, burster.BurstFrom));
+    }
+
+    // CMU14
+    private bool HasLarvaClaimPrompt(EntityUid ghost, EntityUid victim)
+    {
+        if (!TryComp(ghost, out DialogComponent? dialog))
+            return false;
+
+        var victimNet = GetNetEntity(victim);
+        foreach (var option in dialog.Options)
+        {
+            if (option.Event is XenoParasiteLarvaClaimChoiceEvent ev && ev.Victim == victimNet)
+                return true;
+        }
+
+        return false;
+    }
+
+    // CMU14: the infector's retry must not pull a larva out from under a queue offer that's already open
+    public bool IsOfferedToQueue(EntityUid larva)
+    {
+        return _pendingEntityClaims.ContainsKey(larva);
     }
 
     private bool TryOfferAbandonedXeno(Entity<HiveComponent> hive, LarvaQueueState queue)
@@ -390,7 +456,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return false;
         }
 
-        return xeno.Role != LesserDroneRole;
+        // CMU14: xeno feedback and lifecycle.
+        return xeno.Role != LesserDroneRole && xeno.Role != PopperRole;
     }
 
     private bool TryOfferEntityClaim(EntityUid uid, Entity<HiveComponent> hive, LarvaQueueState queue)
@@ -426,6 +493,17 @@ public sealed partial class LarvaQueueSystem : EntitySystem
                 Loc.GetString("rmc-xeno-larva-queue-burrowed-larva"));
             return true;
         }
+
+        return false;
+    }
+
+    private bool IsQueueRetainedRole(EntityUid entity) // CMU14
+    {
+        if (HasComp<XenoParasiteComponent>(entity))
+            return true;
+
+        if (TryComp(entity, out XenoComponent? xeno))
+            return xeno.Role == LesserDroneRole || xeno.Role == PopperRole;
 
         return false;
     }
@@ -495,7 +573,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
 
         if (!_player.TryGetSessionById(ev.UserId, out var session) ||
             session.AttachedEntity is not { } attached ||
-            !_ghostQuery.HasComp(attached))
+            !_ghostQuery.HasComp(attached) && !IsQueueRetainedRole(attached)) // CMU14
         {
             TryClaimNextForHive(pending.Hive);
             return;
@@ -506,7 +584,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         {
             if (_hiveQuery.TryComp(pending.Hive, out var hive) &&
                 TryComp(target, out HiveMemberComponent? member) &&
-                (CanQueueLarva(target, member, (pending.Hive, hive)) ||
+                // CMU14: the offer already won the larva, an infector who ghosted since doesn't take it back
+                (CanQueueLarva(target, member, (pending.Hive, hive), ignoreReservation: true) ||
                  CanQueueAbandonedXeno(target, member, (pending.Hive, hive))))
             {
                 claimed = ClaimQueueableXeno(target, session);
@@ -685,7 +764,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         if (!_player.TryGetSessionById(userId, out session!))
             return false;
 
-        if (session.AttachedEntity is { } attached && _ghostQuery.HasComp(attached))
+        if (session.AttachedEntity is { } attached &&
+            (_ghostQuery.HasComp(attached) || IsQueueRetainedRole(attached))) // CMU14
             return true;
 
         RemoveFromAllQueues(userId);

@@ -23,21 +23,29 @@
         amount: 25
     - name: Prepared Meals
       entries:
+      # CMU14 Begin: doubled prepared meal stock, base stock sold out around hour two
       - id: CMMRE
         name: Meal Ready to Eat
-        amount: 25
+        # CMU14
+        amount: 50
       - id: CMMarinePreparedMealChicken
-        amount: 20
+        # CMU14
+        amount: 40
       - id: CMMarinePreparedMealCornbread
-        amount: 20
+        # CMU14
+        amount: 40
       - id: CMMarinePreparedMealPasta
-        amount: 20
+        # CMU14
+        amount: 40
       - id: CMMarinePreparedMealPizza
-        amount: 20
+        # CMU14
+        amount: 40
       - id: CMMarinePreparedMealPork
-        amount: 20
+        # CMU14
+        amount: 40
       - id: CMMarinePreparedMealTofu
-        amount: 20
+        amount: 40
+      # CMU14 End
       - id: CMMarineProteinBar
         amount: 50
     - name: Flasks
@@ -61,6 +69,53 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/food.rsi
     offset: 0, 0.5
+  # cmu edit start: NutriCo's own menu display, and a mess hall menu without field rations or flasks
+  - type: CMUVendOntoMachine
+  - type: CMAutomatedVendor
+    hackable: true
+    sections:
+    - name: Holiday Meals
+      holidays:
+      - FestiveSeason
+      entries:
+      - id: RMCMarinePreparedMealCookies
+        amount: 25
+      - id: RMCMarinePreparedMealGingerbread
+        amount: 25
+      - id: RMCMarinePreparedMealFruitcake
+        amount: 25
+    - name: Prepared Meals
+      entries:
+      - id: CMMarinePreparedMealChicken
+        # CMU14
+        amount: 40
+      - id: CMMarinePreparedMealCornbread
+        # CMU14
+        amount: 40
+      - id: CMMarinePreparedMealPasta
+        # CMU14
+        amount: 40
+      - id: CMMarinePreparedMealPizza
+        # CMU14
+        amount: 40
+      - id: CMMarinePreparedMealPork
+        # CMU14
+        amount: 40
+    - name: Utensils
+      entries:
+      - id: RMCForkPlastic
+        amount: 50
+      - id: RMCSpoonPlastic
+        amount: 50
+      - id: RMCKitchenKnifePlastic
+        amount: 50
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMUNutriCoFoodBui
+        interactionRange: 2.5
+  - type: CMUFoodlineVendor
+  # cmu edit end
 
 - type: entity
   parent: RMCNutriCoVendor
@@ -86,30 +141,41 @@
     sections:
     - name: Prepared Meals
       entries:
+      # CMU14 Begin: doubled prepared meal stock, base stock sold out around hour two
       - id: RMCMRESPP
         name: UPP Combat Ration
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPBanush
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPChowMein
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPCuban
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPFrankfurter
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPJiaozi
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPLuncheon
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPShrimp
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCMarinePreparedMealSPPMeatballs
         amount: 1 # parity amount is 0 but i think this is funnier
       - id: RMCMarinePreparedMealSPPWursts
-        amount: 15
+        # CMU14
+        amount: 30
       - id: RMCSurvivalRationSPP
         name: SPP Survival Ration
-        amount: 15
+        amount: 30
+      # CMU14 End
     - name: Flasks
       entries:
       - id: RMCDrinkWaterSPP

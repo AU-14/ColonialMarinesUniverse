@@ -1,9 +1,10 @@
 using Content.Server.Ghost.Roles;
+using Content.Server.Ghost.Roles.Components; // CMU14
 using Content.Shared._RMC14.Xenonids.Construction.EggMorpher;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Projectile.Parasite;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -49,6 +50,12 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
     private void OnXenoEggGhostBuiChosen(Entity<XenoEggComponent> ent, ref XenoParasiteGhostBuiMsg args)
     {
         var user = args.Actor;
+
+        if (!ent.Comp.CanSpawnGhostParasite)
+        {
+            _ui.CloseUi(ent.Owner, XenoParasiteGhostUI.Key);
+            return;
+        }
 
         if (!SharedChecks(ent, user))
             return;
@@ -105,6 +112,10 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
         if (!SharedChecks(ent, user))
             return;
 
+        // CMU14: a parasite can lose its role while the selection window is open.
+        if (!TryComp<GhostRoleComponent>(ent, out var role) || role.Taken)
+            return;
+
         if (_actor.TryGetSession(user, out var session) && session != null)
         {
             _ghostRole.GhostRoleInternalCreateMindAndTransfer(session, ent.Owner, ent.Owner);
@@ -127,7 +138,7 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
         if (HasComp<InfectionSuccessComponent>(user))
             return true;
 
-        var timeSinceDeath = _timing.CurTime - ghost.TimeOfDeath;
+        var timeSinceDeath = _timing.RealTime - ghost.TimeOfDeath;
         var requiredTime = TimeSpan.FromMinutes(3);
         if (timeSinceDeath < requiredTime)
         {

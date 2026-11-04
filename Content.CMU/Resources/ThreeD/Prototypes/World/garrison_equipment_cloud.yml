@@ -1,0 +1,2702 @@
+- type: cmu3DModel
+  id: CMU3DM4RArmorCloud
+  label: 'M4R armor: loose layered protective panels'
+  status: draft
+  sourcePrototypes:
+  - RMCArmorM4RMedium
+  referencePrototype: RMCArmorM4RMedium
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/OuterClothing/CMB/cmb_heavy_armor.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Dropped armor art study with separate chest/groin panels, shoulder
+    plates, webbing and the source-default South lamp-off composition. Base icon has
+    one direction; inherited lamp-off has four (E is transparent). This layered owner
+    is not single-layer-adapter compatible. Only this default South composition is
+    modeled; other lamp directions, lamp-on/blink, stains, accessories, contents and
+    worn art remain unsupported. Panel curvature, thickness and rear are inferred.
+  parts:
+  - label: central flexible vest backing
+    min: -0.115625, -0.1375, 0.018
+    max: 0.084375, 0.075, 0.047
+    color: '#121212'
+  - label: left raised shoulder webbing
+    min: -0.15625, 0.03125, 0.055
+    max: -0.09375, 0.21875, 0.115
+    color: '#282828'
+  - label: right raised shoulder webbing
+    min: 0.0625, 0.03125, 0.055
+    max: 0.125, 0.21875, 0.115
+    color: '#282828'
+  - label: back neck bridge leaving open neck space
+    min: -0.09375, 0.15625, 0.02
+    max: 0.0625, 0.1875, 0.057
+    color: '#3B3B3B'
+  - label: upper chest backing
+    min: -0.125, 0.0, 0.025
+    max: 0.09375, 0.125, 0.075
+    color: '#121212'
+  - label: separate chest protective plate
+    min: -0.103125, 0.04375, 0.07
+    max: 0.071875, 0.11875, 0.125
+    color: '#3B3B3B'
+    shape: Ellipsoid
+  - label: chest identity strip
+    min: -0.09375, 0.0625, 0.124
+    max: 0.0625, 0.09375, 0.132
+    color: '#FFFFFF'
+    surface: CMU3DEquipmentCloudM4ChestStripe
+    surfaceAxis: XY
+  - label: left separate convex shoulder plate
+    min: -0.2375, 0.046875, 0.025
+    max: -0.13125, 0.159375, 0.14
+    color: '#282828'
+    shape: Ellipsoid
+  - label: left pauldrons top highlight
+    min: -0.225, 0.10625, 0.132
+    max: -0.146875, 0.140625, 0.142
+    color: '#5A5A5A'
+  - label: left front fastening
+    min: -0.1375, -0.0625, 0.034
+    max: -0.084375, 0.015625, 0.075
+    color: '#3B3B3B'
+  - label: left lower strap
+    min: -0.11875, -0.125, 0.025
+    max: -0.0875, -0.0625, 0.052
+    color: '#282828'
+  - label: right separate convex shoulder plate
+    min: 0.1, 0.046875, 0.025
+    max: 0.20625, 0.159375, 0.14
+    color: '#282828'
+    shape: Ellipsoid
+  - label: right pauldrons top highlight
+    min: 0.1125, 0.10625, 0.132
+    max: 0.190625, 0.140625, 0.142
+    color: '#5A5A5A'
+  - label: right front fastening
+    min: 0.053125, -0.0625, 0.034
+    max: 0.10625, 0.015625, 0.075
+    color: '#3B3B3B'
+  - label: right lower strap
+    min: 0.05625, -0.125, 0.025
+    max: 0.0875, -0.0625, 0.052
+    color: '#282828'
+  - label: articulated abdominal plate
+    min: -0.09375, -0.0625, 0.04
+    max: 0.0625, 0.0, 0.1
+    color: '#282828'
+    shape: Ellipsoid
+  - label: abdominal center ridge
+    min: -0.0625, -0.05, 0.096
+    max: 0.03125, -0.00625, 0.106
+    color: '#5A5A5A'
+  - label: lower independent protective flap
+    min: -0.103125, -0.15625, 0.025
+    max: 0.071875, -0.09375, 0.082
+    color: '#3B3B3B'
+    shape: Ellipsoid
+  - label: lower tapered plate tip
+    min: -0.0625, -0.20625, 0.025
+    max: 0.03125, -0.146875, 0.075
+    color: '#282828'
+    shape: Ellipsoid
+  - label: groin raised ridge
+    min: -0.05625, -0.125, 0.08
+    max: 0.028125, -0.1, 0.09
+    color: '#5A5A5A'
+  - label: default South shoulder-lamp body
+    min: 0.125, 0.15625, 0.068
+    max: 0.21875, 0.28125, 0.145
+    color: '#26231C'
+  - label: lamp-off source face
+    min: 0.125, 0.15625, 0.144
+    max: 0.21875, 0.28125, 0.15
+    color: '#FFFFFF'
+    surface: CMU3DEquipmentCloudM4LampOffSouth
+    surfaceAxis: XY
+  - label: lamp attachment 1
+    min: 0.148438, 0.134437, 0.056
+    max: 0.195312, 0.162438, 0.084
+    color: '#100F0B'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 0.0
+  - label: lamp attachment 2
+    min: 0.139421, 0.10475, 0.056
+    max: 0.173079, 0.13275, 0.084
+    color: '#100F0B'
+    shape: CylinderX
+    yaw: -158.19859051364818
+    pitch: 0.0
+- type: cmu3DModel
+  id: CMU3DRiotArmorCloud
+  label: 'M5 riot armor: separate dropped armor and shin guards'
+  status: draft
+  sourcePrototypes:
+  - CMArmorRiot
+  referencePrototype: CMArmorRiot
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/OuterClothing/Armor/riot.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Clean loose icon only, with open neck yoke, distinct chest/abdominal/arm
+    plates, brown retaining straps and two source-separated shin guards. Source icon
+    one direction. Curvature, underside and physical thickness inferred. Stains, accessories,
+    all equipped appearance and animation unsupported.
+  parts:
+  - label: connected lower textile carrier
+    min: -0.125, -0.18125, 0.016
+    max: 0.09375, 0.05625, 0.043
+    color: '#1A1C17'
+  - label: upper yoke left
+    min: -0.15625, 0.03125, 0.03
+    max: -0.09375, 0.1875, 0.1
+    color: '#2A2E2A'
+  - label: upper yoke right
+    min: 0.0625, 0.03125, 0.03
+    max: 0.125, 0.1875, 0.1
+    color: '#2A2E2A'
+  - label: upper neck bridge
+    min: -0.09375, 0.146875, 0.025
+    max: 0.0625, 0.1875, 0.07
+    color: '#1A1C17'
+  - label: main chest pad
+    min: -0.13125, -0.09375, 0.026
+    max: 0.1, 0.09375, 0.095
+    color: '#2A2E2A'
+    shape: Ellipsoid
+  - label: upper chest plaque
+    min: -0.09375, 0.03125, 0.095
+    max: 0.0625, 0.0625, 0.103
+    color: '#FFFFFF'
+    surface: CMU3DEquipmentCloudRiotChestStripe
+    surfaceAxis: XY
+  - label: lower raised breast plate
+    min: -0.09375, -0.078125, 0.075
+    max: 0.0625, -0.003125, 0.115
+    color: '#394042'
+    shape: Ellipsoid
+  - label: lower breast highlight
+    min: -0.0625, -0.05, 0.112
+    max: 0.03125, -0.03125, 0.12
+    color: '#4F585D'
+  - label: abdominal flexible plate
+    min: -0.11875, -0.1875, 0.024
+    max: 0.0875, -0.115625, 0.08
+    color: '#394042'
+    shape: Ellipsoid
+  - label: -1 separate upper arm plate
+    min: -0.215625, 0.0125, 0.03
+    max: -0.14375, 0.125, 0.102
+    color: '#394042'
+    shape: Ellipsoid
+  - label: -1 separate forearm pad
+    min: -0.278125, -0.05625, 0.02
+    max: -0.20625, 0.028125, 0.072
+    color: '#2A2E2A'
+    shape: Ellipsoid
+  - label: -1 arm strap 1
+    min: -0.245011, -0.001563, 0.01
+    max: -0.164364, 0.048438, 0.06
+    color: '#1A1C17'
+    shape: CylinderX
+    yaw: -144.46232220802563
+    pitch: 0.0
+  - label: -1 brown side retaining strap
+    min: -0.13125, -0.10625, 0.084
+    max: -0.103125, 0.03125, 0.103
+    color: '#3C2810'
+  - label: -1 detached shin guard shell
+    min: -0.153125, -0.4, 0.02
+    max: -0.065625, -0.253125, 0.1
+    color: '#2A2E2A'
+    shape: Ellipsoid
+  - label: -1 shin raised ridge
+    min: -0.128125, -0.375, 0.095
+    max: -0.090625, -0.275, 0.12
+    color: '#394042'
+  - label: -1 shin webbing top
+    min: -0.15625, -0.265625, 0.02
+    max: -0.0625, -0.25, 0.055
+    color: '#11110E'
+  - label: -1 shin webbing bottom
+    min: -0.15625, -0.39375, 0.02
+    max: -0.0625, -0.378125, 0.055
+    color: '#11110E'
+  - label: 1 separate upper arm plate
+    min: 0.1125, 0.0125, 0.03
+    max: 0.184375, 0.125, 0.102
+    color: '#394042'
+    shape: Ellipsoid
+  - label: 1 separate forearm pad
+    min: 0.175, -0.05625, 0.02
+    max: 0.246875, 0.028125, 0.072
+    color: '#2A2E2A'
+    shape: Ellipsoid
+  - label: 1 arm strap 1
+    min: 0.133114, -0.001563, 0.01
+    max: 0.213761, 0.048438, 0.06
+    color: '#1A1C17'
+    shape: CylinderX
+    yaw: -35.53767779197437
+    pitch: 0.0
+  - label: 1 brown side retaining strap
+    min: 0.071875, -0.10625, 0.084
+    max: 0.1, 0.03125, 0.103
+    color: '#3C2810'
+  - label: 1 detached shin guard shell
+    min: 0.034375, -0.4, 0.02
+    max: 0.121875, -0.253125, 0.1
+    color: '#2A2E2A'
+    shape: Ellipsoid
+  - label: 1 shin raised ridge
+    min: 0.059375, -0.375, 0.095
+    max: 0.096875, -0.275, 0.12
+    color: '#394042'
+  - label: 1 shin webbing top
+    min: 0.03125, -0.265625, 0.02
+    max: 0.125, -0.25, 0.055
+    color: '#11110E'
+  - label: 1 shin webbing bottom
+    min: 0.03125, -0.39375, 0.02
+    max: 0.125, -0.378125, 0.055
+    color: '#11110E'
+  - label: brown lower retaining strap
+    min: -0.09375, -0.115625, 0.075
+    max: 0.0625, -0.09375, 0.093
+    color: '#3C2810'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: connected lower textile carrier
+          min: -0.125, -0.18125, 0.016
+          max: 0.09375, 0.05625, 0.043
+          color: '#1A1C17'
+        - label: upper yoke left
+          min: -0.15625, 0.03125, 0.03
+          max: -0.09375, 0.1875, 0.1
+          color: '#2A2E2A'
+        - label: upper yoke right
+          min: 0.0625, 0.03125, 0.03
+          max: 0.125, 0.1875, 0.1
+          color: '#2A2E2A'
+        - label: upper neck bridge
+          min: -0.09375, 0.146875, 0.025
+          max: 0.0625, 0.1875, 0.07
+          color: '#1A1C17'
+        - label: main chest pad
+          min: -0.13125, -0.09375, 0.026
+          max: 0.1, 0.09375, 0.095
+          color: '#2A2E2A'
+          shape: Ellipsoid
+        - label: upper chest plaque
+          min: -0.09375, 0.03125, 0.095
+          max: 0.0625, 0.0625, 0.103
+          color: '#FFFFFF'
+          surface: CMU3DEquipmentCloudRiotChestStripe
+          surfaceAxis: XY
+        - label: lower raised breast plate
+          min: -0.09375, -0.078125, 0.075
+          max: 0.0625, -0.003125, 0.115
+          color: '#394042'
+          shape: Ellipsoid
+        - label: lower breast highlight
+          min: -0.0625, -0.05, 0.112
+          max: 0.03125, -0.03125, 0.12
+          color: '#4F585D'
+        - label: abdominal flexible plate
+          min: -0.11875, -0.1875, 0.024
+          max: 0.0875, -0.115625, 0.08
+          color: '#394042'
+          shape: Ellipsoid
+        - label: -1 separate upper arm plate
+          min: -0.215625, 0.0125, 0.03
+          max: -0.14375, 0.125, 0.102
+          color: '#394042'
+          shape: Ellipsoid
+        - label: -1 separate forearm pad
+          min: -0.278125, -0.05625, 0.02
+          max: -0.20625, 0.028125, 0.072
+          color: '#2A2E2A'
+          shape: Ellipsoid
+        - label: -1 arm strap 1
+          min: -0.245011, -0.001563, 0.01
+          max: -0.164364, 0.048438, 0.06
+          color: '#1A1C17'
+          shape: CylinderX
+          yaw: -144.46232220802563
+          pitch: 0.0
+        - label: -1 brown side retaining strap
+          min: -0.13125, -0.10625, 0.084
+          max: -0.103125, 0.03125, 0.103
+          color: '#3C2810'
+        - label: -1 detached shin guard shell
+          min: -0.153125, -0.4, 0.02
+          max: -0.065625, -0.253125, 0.1
+          color: '#2A2E2A'
+          shape: Ellipsoid
+        - label: -1 shin raised ridge
+          min: -0.128125, -0.375, 0.095
+          max: -0.090625, -0.275, 0.12
+          color: '#394042'
+        - label: -1 shin webbing top
+          min: -0.15625, -0.265625, 0.02
+          max: -0.0625, -0.25, 0.055
+          color: '#11110E'
+        - label: -1 shin webbing bottom
+          min: -0.15625, -0.39375, 0.02
+          max: -0.0625, -0.378125, 0.055
+          color: '#11110E'
+        - label: 1 separate upper arm plate
+          min: 0.1125, 0.0125, 0.03
+          max: 0.184375, 0.125, 0.102
+          color: '#394042'
+          shape: Ellipsoid
+        - label: 1 separate forearm pad
+          min: 0.175, -0.05625, 0.02
+          max: 0.246875, 0.028125, 0.072
+          color: '#2A2E2A'
+          shape: Ellipsoid
+        - label: 1 arm strap 1
+          min: 0.133114, -0.001563, 0.01
+          max: 0.213761, 0.048438, 0.06
+          color: '#1A1C17'
+          shape: CylinderX
+          yaw: -35.53767779197437
+          pitch: 0.0
+        - label: 1 brown side retaining strap
+          min: 0.071875, -0.10625, 0.084
+          max: 0.1, 0.03125, 0.103
+          color: '#3C2810'
+        - label: 1 detached shin guard shell
+          min: 0.034375, -0.4, 0.02
+          max: 0.121875, -0.253125, 0.1
+          color: '#2A2E2A'
+          shape: Ellipsoid
+        - label: 1 shin raised ridge
+          min: 0.059375, -0.375, 0.095
+          max: 0.096875, -0.275, 0.12
+          color: '#394042'
+        - label: 1 shin webbing top
+          min: 0.03125, -0.265625, 0.02
+          max: 0.125, -0.25, 0.055
+          color: '#11110E'
+        - label: 1 shin webbing bottom
+          min: 0.03125, -0.39375, 0.02
+          max: 0.125, -0.378125, 0.055
+          color: '#11110E'
+        - label: brown lower retaining strap
+          min: -0.09375, -0.115625, 0.075
+          max: 0.0625, -0.09375, 0.093
+          color: '#3C2810'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRiotHelmetCloud
+  label: 'Riot helmet: hollow protective shell and brow bands'
+  status: draft
+  sourcePrototypes:
+  - ArmorHelmetRiot
+  referencePrototype: ArmorHelmetRiot
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/Helmets/riot.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Dropped icon with open underside, physically hollow shell rings, cap,
+    separate ear guards and original white/red brow stripes. FoldableClothing changes
+    hidden hair layers, not a second world RSI icon; no invented folded helmet or
+    actor geometry. Interior shell thickness/back inferred. Helmet accessories, worn
+    visibility and live interaction unsupported.
+  parts:
+  - label: hollow lower shell 1
+    min: 0.11514, 0.015656, 0.045
+    max: 0.185138, 0.050656, 0.108
+    color: '#2A2E2A'
+    yaw: 103.27355278679796
+  - label: hollow lower shell 2
+    min: 0.085002, 0.0754, 0.045
+    max: 0.155803, 0.1104, 0.108
+    color: '#2A2E2A'
+    yaw: 129.49651523532583
+  - label: hollow lower shell 3
+    min: 0.030923, 0.116744, 0.045
+    max: 0.102713, 0.151744, 0.108
+    color: '#2A2E2A'
+    yaw: 155.01734865655854
+  - label: hollow lower shell 4
+    min: -0.036113, 0.1315, 0.045
+    max: 0.036113, 0.1665, 0.108
+    color: '#2A2E2A'
+    yaw: 180.0
+  - label: hollow lower shell 5
+    min: -0.102713, 0.116744, 0.045
+    max: -0.030923, 0.151744, 0.108
+    color: '#2A2E2A'
+    yaw: -155.01734865655854
+  - label: hollow lower shell 6
+    min: -0.155803, 0.0754, 0.045
+    max: -0.085002, 0.1104, 0.108
+    color: '#2A2E2A'
+    yaw: -129.49651523532586
+  - label: hollow lower shell 7
+    min: -0.185138, 0.015656, 0.045
+    max: -0.11514, 0.050656, 0.108
+    color: '#2A2E2A'
+    yaw: -103.27355278679796
+  - label: hollow lower shell 8
+    min: -0.185138, -0.050656, 0.045
+    max: -0.11514, -0.015656, 0.108
+    color: '#2A2E2A'
+    yaw: -76.72644721320205
+  - label: hollow lower shell 9
+    min: -0.155803, -0.1104, 0.045
+    max: -0.085002, -0.0754, 0.108
+    color: '#2A2E2A'
+    yaw: -50.50348476467414
+  - label: hollow lower shell 10
+    min: -0.102713, -0.151744, 0.045
+    max: -0.030923, -0.116744, 0.108
+    color: '#2A2E2A'
+    yaw: -24.982651343441486
+  - label: hollow lower shell 11
+    min: -0.036113, -0.1665, 0.045
+    max: 0.036113, -0.1315, 0.108
+    color: '#2A2E2A'
+    yaw: -1.0183341092354187e-14
+  - label: hollow lower shell 12
+    min: 0.030923, -0.151744, 0.045
+    max: 0.102713, -0.116744, 0.108
+    color: '#2A2E2A'
+    yaw: 24.982651343441457
+  - label: hollow lower shell 13
+    min: 0.085002, -0.1104, 0.045
+    max: 0.155803, -0.0754, 0.108
+    color: '#2A2E2A'
+    yaw: 50.50348476467415
+  - label: hollow lower shell 14
+    min: 0.11514, -0.050656, 0.045
+    max: 0.185138, -0.015656, 0.108
+    color: '#2A2E2A'
+    yaw: 76.72644721320209
+  - label: rounded joined shell patch 0-0
+    min: 0.081252, -0.019036, 0.126
+    max: 0.199252, 0.0886, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 11.25
+    pitch: -72
+  - label: rounded joined shell patch 0-1
+    min: 0.0599, 0.03045, 0.126
+    max: 0.1779, 0.138087, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 33.75
+    pitch: -72
+  - label: rounded joined shell patch 0-2
+    min: 0.020447, 0.068326, 0.126
+    max: 0.138447, 0.175962, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 56.25
+    pitch: -72
+  - label: rounded joined shell patch 0-3
+    min: -0.031102, 0.088824, 0.126
+    max: 0.086898, 0.196461, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 78.75
+    pitch: -72
+  - label: rounded joined shell patch 0-4
+    min: -0.086898, 0.088824, 0.126
+    max: 0.031102, 0.196461, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 101.25
+    pitch: -72
+  - label: rounded joined shell patch 0-5
+    min: -0.138447, 0.068326, 0.126
+    max: -0.020447, 0.175962, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 123.74999999999999
+    pitch: -72
+  - label: rounded joined shell patch 0-6
+    min: -0.1779, 0.03045, 0.126
+    max: -0.0599, 0.138087, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 146.25
+    pitch: -72
+  - label: rounded joined shell patch 0-7
+    min: -0.199252, -0.019036, 0.126
+    max: -0.081252, 0.0886, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 168.75
+    pitch: -72
+  - label: rounded joined shell patch 0-8
+    min: -0.199252, -0.0726, 0.126
+    max: -0.081252, 0.035036, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 191.25
+    pitch: -72
+  - label: rounded joined shell patch 0-9
+    min: -0.1779, -0.122087, 0.126
+    max: -0.0599, -0.01445, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 213.75
+    pitch: -72
+  - label: rounded joined shell patch 0-10
+    min: -0.138447, -0.159962, 0.126
+    max: -0.020447, -0.052326, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 236.25
+    pitch: -72
+  - label: rounded joined shell patch 0-11
+    min: -0.086898, -0.180461, 0.126
+    max: 0.031102, -0.072824, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 258.75
+    pitch: -72
+  - label: rounded joined shell patch 0-12
+    min: -0.031102, -0.180461, 0.126
+    max: 0.086898, -0.072824, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 281.25
+    pitch: -72
+  - label: rounded joined shell patch 0-13
+    min: 0.020447, -0.159962, 0.126
+    max: 0.138447, -0.052326, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 303.75
+    pitch: -72
+  - label: rounded joined shell patch 0-14
+    min: 0.0599, -0.122087, 0.126
+    max: 0.1779, -0.01445, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 326.25
+    pitch: -72
+  - label: rounded joined shell patch 0-15
+    min: 0.081252, -0.0726, 0.126
+    max: 0.199252, 0.035036, 0.166
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 348.75
+    pitch: -72
+  - label: rounded joined shell patch 1-0
+    min: 0.047886, -0.021517, 0.205
+    max: 0.167886, 0.07872, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 11.25
+    pitch: -48
+  - label: rounded joined shell patch 1-1
+    min: 0.031462, 0.01655, 0.205
+    max: 0.151462, 0.116787, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 33.75
+    pitch: -48
+  - label: rounded joined shell patch 1-2
+    min: 0.001113, 0.045685, 0.205
+    max: 0.121113, 0.145922, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 56.25
+    pitch: -48
+  - label: rounded joined shell patch 1-3
+    min: -0.03854, 0.061452, 0.205
+    max: 0.08146, 0.161689, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 78.75
+    pitch: -48
+  - label: rounded joined shell patch 1-4
+    min: -0.08146, 0.061452, 0.205
+    max: 0.03854, 0.161689, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 101.25
+    pitch: -48
+  - label: rounded joined shell patch 1-5
+    min: -0.121113, 0.045685, 0.205
+    max: -0.001113, 0.145922, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 123.74999999999999
+    pitch: -48
+  - label: rounded joined shell patch 1-6
+    min: -0.151462, 0.01655, 0.205
+    max: -0.031462, 0.116787, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 146.25
+    pitch: -48
+  - label: rounded joined shell patch 1-7
+    min: -0.167886, -0.021517, 0.205
+    max: -0.047886, 0.07872, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 168.75
+    pitch: -48
+  - label: rounded joined shell patch 1-8
+    min: -0.167886, -0.06272, 0.205
+    max: -0.047886, 0.037517, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 191.25
+    pitch: -48
+  - label: rounded joined shell patch 1-9
+    min: -0.151462, -0.100787, 0.205
+    max: -0.031462, -0.00055, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 213.75
+    pitch: -48
+  - label: rounded joined shell patch 1-10
+    min: -0.121113, -0.129922, 0.205
+    max: -0.001113, -0.029685, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 236.25
+    pitch: -48
+  - label: rounded joined shell patch 1-11
+    min: -0.08146, -0.145689, 0.205
+    max: 0.03854, -0.045452, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 258.75
+    pitch: -48
+  - label: rounded joined shell patch 1-12
+    min: -0.03854, -0.145689, 0.205
+    max: 0.08146, -0.045452, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 281.25
+    pitch: -48
+  - label: rounded joined shell patch 1-13
+    min: 0.001113, -0.129922, 0.205
+    max: 0.121113, -0.029685, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 303.75
+    pitch: -48
+  - label: rounded joined shell patch 1-14
+    min: 0.031462, -0.100787, 0.205
+    max: 0.151462, -0.00055, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 326.25
+    pitch: -48
+  - label: rounded joined shell patch 1-15
+    min: 0.047886, -0.06272, 0.205
+    max: 0.167886, 0.037517, 0.245
+    color: '#394042'
+    shape: Ellipsoid
+    yaw: 348.75
+    pitch: -48
+  - label: rounded joined shell patch 2-0
+    min: -0.008999, -0.018438, 0.26
+    max: 0.111001, 0.053916, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 11.25
+    pitch: -20
+  - label: rounded joined shell patch 2-1
+    min: -0.016764, -0.000443, 0.26
+    max: 0.103236, 0.071911, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 33.75
+    pitch: -20
+  - label: rounded joined shell patch 2-2
+    min: -0.03111, 0.01333, 0.26
+    max: 0.08889, 0.085684, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 56.25
+    pitch: -20
+  - label: rounded joined shell patch 2-3
+    min: -0.049855, 0.020784, 0.26
+    max: 0.070145, 0.093138, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 78.75
+    pitch: -20
+  - label: rounded joined shell patch 2-4
+    min: -0.070145, 0.020784, 0.26
+    max: 0.049855, 0.093138, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 101.25
+    pitch: -20
+  - label: rounded joined shell patch 2-5
+    min: -0.08889, 0.01333, 0.26
+    max: 0.03111, 0.085684, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 123.74999999999999
+    pitch: -20
+  - label: rounded joined shell patch 2-6
+    min: -0.103236, -0.000443, 0.26
+    max: 0.016764, 0.071911, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 146.25
+    pitch: -20
+  - label: rounded joined shell patch 2-7
+    min: -0.111001, -0.018438, 0.26
+    max: 0.008999, 0.053916, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 168.75
+    pitch: -20
+  - label: rounded joined shell patch 2-8
+    min: -0.111001, -0.037916, 0.26
+    max: 0.008999, 0.034438, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 191.25
+    pitch: -20
+  - label: rounded joined shell patch 2-9
+    min: -0.103236, -0.055911, 0.26
+    max: 0.016764, 0.016443, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 213.75
+    pitch: -20
+  - label: rounded joined shell patch 2-10
+    min: -0.08889, -0.069684, 0.26
+    max: 0.03111, 0.00267, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 236.25
+    pitch: -20
+  - label: rounded joined shell patch 2-11
+    min: -0.070145, -0.077138, 0.26
+    max: 0.049855, -0.004784, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 258.75
+    pitch: -20
+  - label: rounded joined shell patch 2-12
+    min: -0.049855, -0.077138, 0.26
+    max: 0.070145, -0.004784, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 281.25
+    pitch: -20
+  - label: rounded joined shell patch 2-13
+    min: -0.03111, -0.069684, 0.26
+    max: 0.08889, 0.00267, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 303.75
+    pitch: -20
+  - label: rounded joined shell patch 2-14
+    min: -0.016764, -0.055911, 0.26
+    max: 0.103236, 0.016443, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 326.25
+    pitch: -20
+  - label: rounded joined shell patch 2-15
+    min: -0.008999, -0.037916, 0.26
+    max: 0.111001, 0.034438, 0.3
+    color: '#2A2E2A'
+    shape: Ellipsoid
+    yaw: 348.75
+    pitch: -20
+  - label: rounded closed top cap
+    min: -0.065, -0.054, 0.271
+    max: 0.065, 0.07, 0.302
+    color: '#394042'
+    shape: Ellipsoid
+  - label: inner dark liner 1
+    min: 0.083064, 0.031936, 0.041
+    max: 0.166113, 0.045936, 0.072
+    color: '#171717'
+    yaw: 108.66565417381773
+  - label: inner dark liner 2
+    min: 0.034553, 0.094936, 0.041
+    max: 0.119447, 0.108936, 0.072
+    color: '#171717'
+    yaw: 145.05369207071428
+  - label: inner dark liner 3
+    min: -0.043007, 0.119, 0.041
+    max: 0.043007, 0.133, 0.072
+    color: '#171717'
+    yaw: 180.0
+  - label: inner dark liner 4
+    min: -0.119447, 0.094936, 0.041
+    max: -0.034553, 0.108936, 0.072
+    color: '#171717'
+    yaw: -145.05369207071428
+  - label: inner dark liner 5
+    min: -0.166113, 0.031936, 0.041
+    max: -0.083064, 0.045936, 0.072
+    color: '#171717'
+    yaw: -108.66565417381774
+  - label: inner dark liner 6
+    min: -0.166113, -0.045936, 0.041
+    max: -0.083064, -0.031936, 0.072
+    color: '#171717'
+    yaw: -71.33434582618229
+  - label: inner dark liner 7
+    min: -0.119447, -0.108936, 0.041
+    max: -0.034553, -0.094936, 0.072
+    color: '#171717'
+    yaw: -34.946307929285744
+  - label: inner dark liner 8
+    min: -0.043007, -0.133, 0.041
+    max: 0.043007, -0.119, 0.072
+    color: '#171717'
+    yaw: -1.0123343949794591e-14
+  - label: inner dark liner 9
+    min: 0.034553, -0.108936, 0.041
+    max: 0.119447, -0.094936, 0.072
+    color: '#171717'
+    yaw: 34.94630792928572
+  - label: inner dark liner 10
+    min: 0.083064, -0.045936, 0.041
+    max: 0.166113, -0.031936, 0.072
+    color: '#171717'
+    yaw: 71.33434582618226
+  - label: -1 separate ear guard
+    min: -0.175, -0.08, 0.01
+    max: -0.105, 0.055, 0.127
+    color: '#2A2E2A'
+    shape: Ellipsoid
+  - label: -1 ear guard inset
+    min: -0.176, -0.062, 0.027
+    max: -0.152, 0.039, 0.104
+    color: '#1A1C17'
+    shape: Ellipsoid
+  - label: 1 separate ear guard
+    min: 0.105, -0.08, 0.01
+    max: 0.175, 0.055, 0.127
+    color: '#2A2E2A'
+    shape: Ellipsoid
+  - label: 1 ear guard inset
+    min: 0.152, -0.062, 0.027
+    max: 0.176, 0.039, 0.104
+    color: '#1A1C17'
+    shape: Ellipsoid
+  - label: front lower reinforcing ridge
+    min: -0.109, -0.173, 0.045
+    max: 0.109, -0.143, 0.08
+    color: '#394042'
+  - label: white attached curved brow segment 0
+    min: -0.100913, -0.08886, 0.215
+    max: -0.064757, -0.04886, 0.244
+    color: '#FFFFFF'
+    yaw: -47.14285714285714
+    surface: CMU3DEquipmentCloudHelmetWhiteBrow0
+    surfaceAxis: XZ
+  - label: white attached curved brow segment 1
+    min: -0.077, -0.108422, 0.215
+    max: -0.040844, -0.068422, 0.244
+    color: '#FFFFFF'
+    yaw: -31.42857142857143
+    surface: CMU3DEquipmentCloudHelmetWhiteBrow1
+    surfaceAxis: XZ
+  - label: white attached curved brow segment 2
+    min: -0.048683, -0.120777, 0.215
+    max: -0.012527, -0.080777, 0.244
+    color: '#FFFFFF'
+    yaw: -15.714285714285722
+    surface: CMU3DEquipmentCloudHelmetWhiteBrow2
+    surfaceAxis: XZ
+  - label: white attached curved brow segment 3
+    min: -0.018078, -0.125, 0.215
+    max: 0.018078, -0.085, 0.244
+    color: '#FFFFFF'
+    yaw: 0.0
+    surface: CMU3DEquipmentCloudHelmetWhiteBrow3
+    surfaceAxis: XZ
+  - label: white attached curved brow segment 4
+    min: 0.012527, -0.120777, 0.215
+    max: 0.048683, -0.080777, 0.244
+    color: '#FFFFFF'
+    yaw: 15.714285714285708
+    surface: CMU3DEquipmentCloudHelmetWhiteBrow4
+    surfaceAxis: XZ
+  - label: white attached curved brow segment 5
+    min: 0.040844, -0.108422, 0.215
+    max: 0.077, -0.068422, 0.244
+    color: '#FFFFFF'
+    yaw: 31.428571428571423
+    surface: CMU3DEquipmentCloudHelmetWhiteBrow5
+    surfaceAxis: XZ
+  - label: white attached curved brow segment 6
+    min: 0.064757, -0.08886, 0.215
+    max: 0.100913, -0.04886, 0.244
+    color: '#FFFFFF'
+    yaw: 47.14285714285714
+    surface: CMU3DEquipmentCloudHelmetWhiteBrow6
+    surfaceAxis: XZ
+  - label: red attached curved brow segment 0
+    min: -0.119205, -0.103143, 0.182
+    max: -0.077253, -0.063143, 0.214
+    color: '#FFFFFF'
+    yaw: -47.14285714285714
+    surface: CMU3DEquipmentCloudHelmetRedBrow0
+    surfaceAxis: XZ
+  - label: red attached curved brow segment 1
+    min: -0.090848, -0.126341, 0.182
+    max: -0.048896, -0.086341, 0.214
+    color: '#FFFFFF'
+    yaw: -31.42857142857143
+    surface: CMU3DEquipmentCloudHelmetRedBrow1
+    surfaceAxis: XZ
+  - label: red attached curved brow segment 2
+    min: -0.057268, -0.140992, 0.182
+    max: -0.015317, -0.100992, 0.214
+    color: '#FFFFFF'
+    yaw: -15.714285714285722
+    surface: CMU3DEquipmentCloudHelmetRedBrow2
+    surfaceAxis: XZ
+  - label: red attached curved brow segment 3
+    min: -0.020976, -0.146, 0.182
+    max: 0.020976, -0.106, 0.214
+    color: '#FFFFFF'
+    yaw: 0.0
+    surface: CMU3DEquipmentCloudHelmetRedBrow3
+    surfaceAxis: XZ
+  - label: red attached curved brow segment 4
+    min: 0.015317, -0.140992, 0.182
+    max: 0.057268, -0.100992, 0.214
+    color: '#FFFFFF'
+    yaw: 15.714285714285708
+    surface: CMU3DEquipmentCloudHelmetRedBrow4
+    surfaceAxis: XZ
+  - label: red attached curved brow segment 5
+    min: 0.048896, -0.126341, 0.182
+    max: 0.090848, -0.086341, 0.214
+    color: '#FFFFFF'
+    yaw: 31.428571428571423
+    surface: CMU3DEquipmentCloudHelmetRedBrow5
+    surfaceAxis: XZ
+  - label: red attached curved brow segment 6
+    min: 0.077253, -0.103143, 0.182
+    max: 0.119205, -0.063143, 0.214
+    color: '#FFFFFF'
+    yaw: 47.14285714285714
+    surface: CMU3DEquipmentCloudHelmetRedBrow6
+    surfaceAxis: XZ
+  - label: front upper guard plate
+    min: -0.107, -0.171, 0.108
+    max: 0.107, -0.152, 0.175
+    color: '#2A2E2A'
+  - label: front guard highlight
+    min: -0.06, -0.176, 0.133
+    max: 0.06, -0.17, 0.149
+    color: '#4F585D'
+- type: cmu3DModel
+  id: CMU3DCombatBootsCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DCombatBootsCloud
+  label: 'Combat boots: paired tall hollow collars'
+  status: draft
+  sourcePrototypes:
+  - RMCShoesCombat
+  referencePrototype: RMCShoesCombat
+  sourceDirections: 1
+  placement: surface
+  description: Empty dropped icon only. Actual CMInventorySystem hides filled for
+    empty item slots; no startingItem is inherited. Filled overlay, concealed item,
+    worn appearance and live fill selection unsupported. Two soles, toe boxes, separate
+    quarter walls, open padded collars and laces. Dimensions/depth inferred.
+  parts:
+  - label: left shaped outer sole
+    min: -0.242479, -0.168804, 0.012
+    max: -0.032479, 0.164196, 0.061
+    color: '#0B0E0C'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left solid heel
+    min: -0.168334, 0.065681, 0.012
+    max: 0.005966, 0.150681, 0.074
+    color: '#0B0E0C'
+    yaw: -27
+  - label: left separate rounded toe box
+    min: -0.273548, -0.147084, 0.05
+    max: -0.074048, -8.4e-05, 0.132
+    color: '#252827'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left shaped vamp
+    min: -0.234561, -0.099932, 0.063
+    max: -0.047661, 0.081068, 0.162
+    color: '#252827'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left toe polished highlight
+    min: -0.223059, -0.096341, 0.125
+    max: -0.130659, -0.044341, 0.135
+    color: '#404343'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left left quarter
+    min: -0.191304, 0.036244, 0.071
+    max: -0.160854, 0.152244, 0.38
+    color: '#252827'
+    yaw: -27
+  - label: left right quarter
+    min: -0.051906, -0.034783, 0.071
+    max: -0.021456, 0.081217, 0.38
+    color: '#252827'
+    yaw: -27
+  - label: left curved heel quarter 1
+    min: -0.035847, 0.055047, 0.078
+    max: -0.00012, 0.075047, 0.38
+    color: '#252827'
+    yaw: 89.94895490209962
+  - label: left curved heel quarter 2
+    min: -0.055604, 0.090929, 0.078
+    max: -0.008868, 0.110929, 0.38
+    color: '#252827'
+    yaw: 128.09306411413107
+  - label: left curved heel quarter 3
+    min: -0.095805, 0.120902, 0.078
+    max: -0.043409, 0.140902, 0.38
+    color: '#252827'
+    yaw: 153.0
+  - label: left curved heel quarter 4
+    min: -0.13919, 0.133518, 0.078
+    max: -0.092454, 0.153518, 0.38
+    color: '#252827'
+    yaw: -182.09306411413107
+  - label: left curved heel quarter 5
+    min: -0.171092, 0.123958, 0.078
+    max: -0.135365, 0.143958, 0.38
+    color: '#252827'
+    yaw: -143.94895490209962
+  - label: left dark recessed ankle cavity
+    min: -0.152185, 0.041114, 0.074
+    max: -0.038785, 0.119114, 0.079
+    color: '#0B0E0C'
+    yaw: -27
+  - label: left separate front tongue
+    min: -0.189755, -0.008458, 0.135
+    max: -0.079755, 0.014542, 0.352
+    color: '#363A36'
+    yaw: -27
+  - label: left lacing crossing 1
+    min: -0.177063, -0.015659, 0.1785
+    max: -0.107429, -0.007659, 0.1865
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846559
+  - label: left lacing crossing 2
+    min: -0.177063, -0.015659, 0.2145
+    max: -0.107429, -0.007659, 0.2225
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846537
+  - label: left lacing crossing 3
+    min: -0.177063, -0.015659, 0.2505
+    max: -0.107429, -0.007659, 0.2585
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846559
+  - label: left lacing crossing 4
+    min: -0.177063, -0.015659, 0.2865
+    max: -0.107429, -0.007659, 0.2945
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846559
+  - label: left lacing crossing 5
+    min: -0.177063, -0.015659, 0.3225
+    max: -0.107429, -0.007659, 0.3305
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846559
+  - label: left padded top rim 1
+    min: -0.051266, 0.023587, 0.362
+    max: -0.003734, 0.041587, 0.39
+    color: '#151916'
+    yaw: 77.67846667051859
+  - label: left padded top rim 2
+    min: -0.052943, 0.06833, 0.362
+    max: -0.00587, 0.08633, 0.39
+    color: '#151916'
+    yaw: 107.35064233439363
+  - label: left padded top rim 3
+    min: -0.07646, 0.105703, 0.362
+    max: -0.029851, 0.123703, 0.39
+    color: '#151916'
+    yaw: 137.67209224536364
+  - label: left padded top rim 4
+    min: -0.115686, 0.12569, 0.362
+    max: -0.069077, 0.14369, 0.39
+    color: '#151916'
+    yaw: -191.67209224536361
+  - label: left padded top rim 5
+    min: -0.160113, 0.122936, 0.362
+    max: -0.11304, 0.140936, 0.39
+    color: '#151916'
+    yaw: -161.35064233439363
+  - label: left padded top rim 6
+    min: -0.197662, 0.098179, 0.362
+    max: -0.15013, 0.116179, 0.39
+    color: '#151916'
+    yaw: -131.67846667051862
+  - label: left padded top rim 7
+    min: -0.218107, 0.058054, 0.362
+    max: -0.170575, 0.076054, 0.39
+    color: '#151916'
+    yaw: -102.32153332948141
+  - label: left padded top rim 8
+    min: -0.21597, 0.01331, 0.362
+    max: -0.168897, 0.03131, 0.39
+    color: '#151916'
+    yaw: -72.64935766560637
+  - label: left padded top rim 9
+    min: -0.19199, -0.024063, 0.362
+    max: -0.145381, -0.006063, 0.39
+    color: '#151916'
+    yaw: -42.327907754636364
+  - label: left padded top rim 10
+    min: -0.152763, -0.04405, 0.362
+    max: -0.106154, -0.02605, 0.39
+    color: '#151916'
+    yaw: -11.672092245363661
+  - label: left padded top rim 11
+    min: -0.108801, -0.041296, 0.362
+    max: -0.061728, -0.023296, 0.39
+    color: '#151916'
+    yaw: 18.649357665606367
+  - label: left padded top rim 12
+    min: -0.071711, -0.016539, 0.362
+    max: -0.024179, 0.001461, 0.39
+    color: '#151916'
+    yaw: 48.32153332948141
+  - label: right shaped outer sole
+    min: -0.010479, -0.228804, 0.012
+    max: 0.199521, 0.104196, 0.061
+    color: '#0B0E0C'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right solid heel
+    min: 0.063666, 0.005681, 0.012
+    max: 0.237966, 0.090681, 0.074
+    color: '#0B0E0C'
+    yaw: -27
+  - label: right separate rounded toe box
+    min: -0.041548, -0.207084, 0.05
+    max: 0.157952, -0.060084, 0.132
+    color: '#252827'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right shaped vamp
+    min: -0.002561, -0.159932, 0.063
+    max: 0.184339, 0.021068, 0.162
+    color: '#252827'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right toe polished highlight
+    min: 0.008941, -0.156341, 0.125
+    max: 0.101341, -0.104341, 0.135
+    color: '#404343'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right left quarter
+    min: 0.040696, -0.023756, 0.071
+    max: 0.071146, 0.092244, 0.38
+    color: '#252827'
+    yaw: -27
+  - label: right right quarter
+    min: 0.180094, -0.094783, 0.071
+    max: 0.210544, 0.021217, 0.38
+    color: '#252827'
+    yaw: -27
+  - label: right curved heel quarter 1
+    min: 0.196153, -0.004953, 0.078
+    max: 0.23188, 0.015047, 0.38
+    color: '#252827'
+    yaw: 89.94895490209962
+  - label: right curved heel quarter 2
+    min: 0.176396, 0.030929, 0.078
+    max: 0.223132, 0.050929, 0.38
+    color: '#252827'
+    yaw: 128.09306411413107
+  - label: right curved heel quarter 3
+    min: 0.136195, 0.060902, 0.078
+    max: 0.188591, 0.080902, 0.38
+    color: '#252827'
+    yaw: 153.0
+  - label: right curved heel quarter 4
+    min: 0.09281, 0.073518, 0.078
+    max: 0.139546, 0.093518, 0.38
+    color: '#252827'
+    yaw: -182.09306411413107
+  - label: right curved heel quarter 5
+    min: 0.060908, 0.063958, 0.078
+    max: 0.096635, 0.083958, 0.38
+    color: '#252827'
+    yaw: -143.94895490209962
+  - label: right dark recessed ankle cavity
+    min: 0.079815, -0.018886, 0.074
+    max: 0.193215, 0.059114, 0.079
+    color: '#0B0E0C'
+    yaw: -27
+  - label: right separate front tongue
+    min: 0.042245, -0.068458, 0.135
+    max: 0.152245, -0.045458, 0.352
+    color: '#363A36'
+    yaw: -27
+  - label: right lacing crossing 1
+    min: 0.054937, -0.075659, 0.1785
+    max: 0.124571, -0.067659, 0.1865
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846557
+  - label: right lacing crossing 2
+    min: 0.054937, -0.075659, 0.2145
+    max: 0.124571, -0.067659, 0.2225
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846535
+  - label: right lacing crossing 3
+    min: 0.054937, -0.075659, 0.2505
+    max: 0.124571, -0.067659, 0.2585
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846557
+  - label: right lacing crossing 4
+    min: 0.054937, -0.075659, 0.2865
+    max: 0.124571, -0.067659, 0.2945
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846557
+  - label: right lacing crossing 5
+    min: 0.054937, -0.075659, 0.3225
+    max: 0.124571, -0.067659, 0.3305
+    color: '#656565'
+    shape: CylinderX
+    yaw: -27.0
+    pitch: 12.439562018846557
+  - label: right padded top rim 1
+    min: 0.180734, -0.036413, 0.362
+    max: 0.228266, -0.018413, 0.39
+    color: '#151916'
+    yaw: 77.67846667051859
+  - label: right padded top rim 2
+    min: 0.179057, 0.00833, 0.362
+    max: 0.22613, 0.02633, 0.39
+    color: '#151916'
+    yaw: 107.35064233439363
+  - label: right padded top rim 3
+    min: 0.15554, 0.045703, 0.362
+    max: 0.202149, 0.063703, 0.39
+    color: '#151916'
+    yaw: 137.67209224536364
+  - label: right padded top rim 4
+    min: 0.116314, 0.06569, 0.362
+    max: 0.162923, 0.08369, 0.39
+    color: '#151916'
+    yaw: -191.67209224536361
+  - label: right padded top rim 5
+    min: 0.071887, 0.062936, 0.362
+    max: 0.11896, 0.080936, 0.39
+    color: '#151916'
+    yaw: -161.35064233439363
+  - label: right padded top rim 6
+    min: 0.034338, 0.038179, 0.362
+    max: 0.08187, 0.056179, 0.39
+    color: '#151916'
+    yaw: -131.67846667051862
+  - label: right padded top rim 7
+    min: 0.013893, -0.001946, 0.362
+    max: 0.061425, 0.016054, 0.39
+    color: '#151916'
+    yaw: -102.32153332948141
+  - label: right padded top rim 8
+    min: 0.01603, -0.04669, 0.362
+    max: 0.063103, -0.02869, 0.39
+    color: '#151916'
+    yaw: -72.64935766560637
+  - label: right padded top rim 9
+    min: 0.04001, -0.084063, 0.362
+    max: 0.086619, -0.066063, 0.39
+    color: '#151916'
+    yaw: -42.327907754636364
+  - label: right padded top rim 10
+    min: 0.079237, -0.10405, 0.362
+    max: 0.125846, -0.08605, 0.39
+    color: '#151916'
+    yaw: -11.672092245363661
+  - label: right padded top rim 11
+    min: 0.123199, -0.101296, 0.362
+    max: 0.170272, -0.083296, 0.39
+    color: '#151916'
+    yaw: 18.649357665606367
+  - label: right padded top rim 12
+    min: 0.160289, -0.076539, 0.362
+    max: 0.207821, -0.058539, 0.39
+    color: '#151916'
+    yaw: 48.32153332948141
+- type: cmu3DModel
+  id: CMU3DLaceupShoesCloud
+  label: 'Laceup and dress shoes: separate polished pair'
+  status: draft
+  sourcePrototypes:
+  - RMCShoesLaceup
+  - RMCShoesLaceupDress
+  referencePrototype: RMCShoesLaceup
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Shoes/laceup.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Both exact IDs inherit identical one-direction icon. Separate two shoe
+    volumes with soles, quarters, polished toes, laces and open leather-lined collars.
+    Concealed contents and all worn clothing unsupported. Physical thickness, hidden
+    surfaces and paired depth inferred.
+  parts:
+  - label: left shaped outer sole
+    min: -0.235479, -0.168804, 0.012
+    max: -0.039479, 0.164196, 0.061
+    color: '#14100E'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left solid heel
+    min: -0.162524, 0.065681, 0.012
+    max: 0.000156, 0.150681, 0.074
+    color: '#14100E'
+    yaw: -27
+  - label: left separate rounded toe box
+    min: -0.266898, -0.147084, 0.05
+    max: -0.080698, -8.4e-05, 0.099
+    color: '#241D1B'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left shaped vamp
+    min: -0.228331, -0.099932, 0.063
+    max: -0.053891, 0.081068, 0.126
+    color: '#241D1B'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left toe polished highlight
+    min: -0.21973, -0.096468, 0.097
+    max: -0.13349, -0.044468, 0.105
+    color: '#413936'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left left quarter
+    min: -0.185643, 0.033876, 0.071
+    max: -0.157223, 0.149876, 0.115
+    color: '#241D1B'
+    yaw: -27
+  - label: left right quarter
+    min: -0.055538, -0.032416, 0.071
+    max: -0.027118, 0.083584, 0.115
+    color: '#241D1B'
+    yaw: -27
+  - label: left curved heel quarter 1
+    min: -0.040117, 0.057344, 0.078
+    max: -0.004866, 0.077344, 0.115
+    color: '#241D1B'
+    yaw: 88.38481536483629
+  - label: left curved heel quarter 2
+    min: -0.057116, 0.092348, 0.078
+    max: -0.012927, 0.112348, 0.115
+    color: '#241D1B'
+    yaw: 126.54973576068161
+  - label: left curved heel quarter 3
+    min: -0.094059, 0.120902, 0.078
+    max: -0.045155, 0.140902, 0.115
+    color: '#241D1B'
+    yaw: 153.0
+  - label: left curved heel quarter 4
+    min: -0.13513, 0.132098, 0.078
+    max: -0.090941, 0.152098, 0.115
+    color: '#241D1B'
+    yaw: -180.5497357606816
+  - label: left curved heel quarter 5
+    min: -0.166345, 0.121661, 0.078
+    max: -0.131094, 0.141661, 0.115
+    color: '#241D1B'
+    yaw: -142.3848153648363
+  - label: left dark recessed ankle cavity
+    min: -0.148405, 0.041114, 0.074
+    max: -0.042565, 0.119114, 0.079
+    color: '#0F0C0B'
+    yaw: -27
+  - label: left leather insole visible
+    min: -0.14484, 0.03264, 0.08
+    max: -0.05884, 0.10264, 0.085
+    color: '#473422'
+    shape: Ellipsoid
+    yaw: -27
+  - label: left lace tongue
+    min: -0.172663, -0.04324, 0.106
+    max: -0.098663, 0.04576, 0.12
+    color: '#1A1411'
+    yaw: -27
+  - label: left crossed lace 1
+    min: -0.173605, -0.021005, 0.118
+    max: -0.116333, -0.013005, 0.126
+    color: '#322B28'
+    shape: CylinderX
+    yaw: -14.905242922987897
+    pitch: 0.0
+  - label: left crossed lace 2
+    min: -0.164072, -0.002294, 0.118
+    max: -0.1068, 0.005706, 0.126
+    color: '#322B28'
+    shape: CylinderX
+    yaw: -14.905242922987897
+    pitch: 0.0
+  - label: left crossed lace 3
+    min: -0.154538, 0.016417, 0.118
+    max: -0.097266, 0.024417, 0.126
+    color: '#322B28'
+    shape: CylinderX
+    yaw: -14.905242922987897
+    pitch: 0.0
+  - label: left collar binding 1
+    min: -0.067412, 0.005109, 0.108
+    max: -0.033315, 0.022109, 0.126
+    color: '#0F0C0B'
+    yaw: 39.18188040717477
+  - label: left collar binding 2
+    min: -0.048789, 0.03105, 0.108
+    max: -0.015282, 0.04805, 0.126
+    color: '#0F0C0B'
+    yaw: 70.61170949072181
+  - label: left collar binding 3
+    min: -0.047421, 0.063259, 0.108
+    max: -0.012379, 0.080259, 0.126
+    color: '#0F0C0B'
+    yaw: 101.10212506417719
+  - label: left collar binding 4
+    min: -0.06307, 0.094313, 0.108
+    max: -0.025828, 0.111313, 0.126
+    color: '#0F0C0B'
+    yaw: 128.264023083632
+  - label: left collar binding 5
+    min: -0.091446, 0.117056, 0.108
+    max: -0.053216, 0.134056, 0.126
+    color: '#0F0C0B'
+    yaw: 153.0
+  - label: left collar binding 6
+    min: -0.12574, 0.126245, 0.108
+    max: -0.088498, 0.143245, 0.126
+    color: '#0F0C0B'
+    yaw: -182.26402308363203
+  - label: left collar binding 7
+    min: -0.158315, 0.119762, 0.108
+    max: -0.123273, 0.136762, 0.126
+    color: '#0F0C0B'
+    yaw: -155.10212506417722
+  - label: left collar binding 8
+    min: -0.18235, 0.099103, 0.108
+    max: -0.148843, 0.116103, 0.126
+    color: '#0F0C0B'
+    yaw: -124.6117094907218
+  - label: left collar binding 9
+    min: -0.192858, 0.069027, 0.108
+    max: -0.158761, 0.086027, 0.126
+    color: '#0F0C0B'
+    yaw: -93.18188040717476
+  - label: right shaped outer sole
+    min: -0.003479, -0.228804, 0.012
+    max: 0.192521, 0.104196, 0.061
+    color: '#14100E'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right solid heel
+    min: 0.069476, 0.005681, 0.012
+    max: 0.232156, 0.090681, 0.074
+    color: '#14100E'
+    yaw: -27
+  - label: right separate rounded toe box
+    min: -0.034898, -0.207084, 0.05
+    max: 0.151302, -0.060084, 0.099
+    color: '#241D1B'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right shaped vamp
+    min: 0.003669, -0.159932, 0.063
+    max: 0.178109, 0.021068, 0.126
+    color: '#241D1B'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right toe polished highlight
+    min: 0.01227, -0.156468, 0.097
+    max: 0.09851, -0.104468, 0.105
+    color: '#413936'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right left quarter
+    min: 0.046357, -0.026124, 0.071
+    max: 0.074777, 0.089876, 0.115
+    color: '#241D1B'
+    yaw: -27
+  - label: right right quarter
+    min: 0.176462, -0.092416, 0.071
+    max: 0.204882, 0.023584, 0.115
+    color: '#241D1B'
+    yaw: -27
+  - label: right curved heel quarter 1
+    min: 0.191883, -0.002656, 0.078
+    max: 0.227134, 0.017344, 0.115
+    color: '#241D1B'
+    yaw: 88.38481536483629
+  - label: right curved heel quarter 2
+    min: 0.174884, 0.032348, 0.078
+    max: 0.219073, 0.052348, 0.115
+    color: '#241D1B'
+    yaw: 126.54973576068161
+  - label: right curved heel quarter 3
+    min: 0.137941, 0.060902, 0.078
+    max: 0.186845, 0.080902, 0.115
+    color: '#241D1B'
+    yaw: 153.0
+  - label: right curved heel quarter 4
+    min: 0.09687, 0.072098, 0.078
+    max: 0.141059, 0.092098, 0.115
+    color: '#241D1B'
+    yaw: -180.5497357606816
+  - label: right curved heel quarter 5
+    min: 0.065655, 0.061661, 0.078
+    max: 0.100906, 0.081661, 0.115
+    color: '#241D1B'
+    yaw: -142.3848153648363
+  - label: right dark recessed ankle cavity
+    min: 0.083595, -0.018886, 0.074
+    max: 0.189435, 0.059114, 0.079
+    color: '#0F0C0B'
+    yaw: -27
+  - label: right leather insole visible
+    min: 0.08716, -0.02736, 0.08
+    max: 0.17316, 0.04264, 0.085
+    color: '#5E452C'
+    shape: Ellipsoid
+    yaw: -27
+  - label: right lace tongue
+    min: 0.059337, -0.10324, 0.106
+    max: 0.133337, -0.01424, 0.12
+    color: '#1A1411'
+    yaw: -27
+  - label: right crossed lace 1
+    min: 0.058395, -0.081005, 0.118
+    max: 0.115667, -0.073005, 0.126
+    color: '#322B28'
+    shape: CylinderX
+    yaw: -14.905242922987904
+    pitch: 0.0
+  - label: right crossed lace 2
+    min: 0.067928, -0.062294, 0.118
+    max: 0.1252, -0.054294, 0.126
+    color: '#322B28'
+    shape: CylinderX
+    yaw: -14.905242922987904
+    pitch: 0.0
+  - label: right crossed lace 3
+    min: 0.077462, -0.043583, 0.118
+    max: 0.134734, -0.035583, 0.126
+    color: '#322B28'
+    shape: CylinderX
+    yaw: -14.905242922987895
+    pitch: 0.0
+  - label: right collar binding 1
+    min: 0.164588, -0.054891, 0.108
+    max: 0.198685, -0.037891, 0.126
+    color: '#0F0C0B'
+    yaw: 39.18188040717477
+  - label: right collar binding 2
+    min: 0.183211, -0.02895, 0.108
+    max: 0.216718, -0.01195, 0.126
+    color: '#0F0C0B'
+    yaw: 70.61170949072181
+  - label: right collar binding 3
+    min: 0.184579, 0.003259, 0.108
+    max: 0.219621, 0.020259, 0.126
+    color: '#0F0C0B'
+    yaw: 101.10212506417719
+  - label: right collar binding 4
+    min: 0.16893, 0.034313, 0.108
+    max: 0.206172, 0.051313, 0.126
+    color: '#0F0C0B'
+    yaw: 128.264023083632
+  - label: right collar binding 5
+    min: 0.140554, 0.057056, 0.108
+    max: 0.178784, 0.074056, 0.126
+    color: '#0F0C0B'
+    yaw: 153.0
+  - label: right collar binding 6
+    min: 0.10626, 0.066245, 0.108
+    max: 0.143502, 0.083245, 0.126
+    color: '#0F0C0B'
+    yaw: -182.26402308363203
+  - label: right collar binding 7
+    min: 0.073685, 0.059762, 0.108
+    max: 0.108727, 0.076762, 0.126
+    color: '#0F0C0B'
+    yaw: -155.10212506417722
+  - label: right collar binding 8
+    min: 0.04965, 0.039103, 0.108
+    max: 0.083157, 0.056103, 0.126
+    color: '#0F0C0B'
+    yaw: -124.6117094907218
+  - label: right collar binding 9
+    min: 0.039142, 0.009027, 0.108
+    max: 0.073239, 0.026027, 0.126
+    color: '#0F0C0B'
+    yaw: -93.18188040717476
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: left shaped outer sole
+          min: -0.235479, -0.168804, 0.012
+          max: -0.039479, 0.164196, 0.061
+          color: '#14100E'
+          shape: Ellipsoid
+          yaw: -27
+        - label: left solid heel
+          min: -0.162524, 0.065681, 0.012
+          max: 0.000156, 0.150681, 0.074
+          color: '#14100E'
+          yaw: -27
+        - label: left separate rounded toe box
+          min: -0.266898, -0.147084, 0.05
+          max: -0.080698, -8.4e-05, 0.099
+          color: '#241D1B'
+          shape: Ellipsoid
+          yaw: -27
+        - label: left shaped vamp
+          min: -0.228331, -0.099932, 0.063
+          max: -0.053891, 0.081068, 0.126
+          color: '#241D1B'
+          shape: Ellipsoid
+          yaw: -27
+        - label: left toe polished highlight
+          min: -0.21973, -0.096468, 0.097
+          max: -0.13349, -0.044468, 0.105
+          color: '#413936'
+          shape: Ellipsoid
+          yaw: -27
+        - label: left left quarter
+          min: -0.185643, 0.033876, 0.071
+          max: -0.157223, 0.149876, 0.115
+          color: '#241D1B'
+          yaw: -27
+        - label: left right quarter
+          min: -0.055538, -0.032416, 0.071
+          max: -0.027118, 0.083584, 0.115
+          color: '#241D1B'
+          yaw: -27
+        - label: left curved heel quarter 1
+          min: -0.040117, 0.057344, 0.078
+          max: -0.004866, 0.077344, 0.115
+          color: '#241D1B'
+          yaw: 88.38481536483629
+        - label: left curved heel quarter 2
+          min: -0.057116, 0.092348, 0.078
+          max: -0.012927, 0.112348, 0.115
+          color: '#241D1B'
+          yaw: 126.54973576068161
+        - label: left curved heel quarter 3
+          min: -0.094059, 0.120902, 0.078
+          max: -0.045155, 0.140902, 0.115
+          color: '#241D1B'
+          yaw: 153.0
+        - label: left curved heel quarter 4
+          min: -0.13513, 0.132098, 0.078
+          max: -0.090941, 0.152098, 0.115
+          color: '#241D1B'
+          yaw: -180.5497357606816
+        - label: left curved heel quarter 5
+          min: -0.166345, 0.121661, 0.078
+          max: -0.131094, 0.141661, 0.115
+          color: '#241D1B'
+          yaw: -142.3848153648363
+        - label: left dark recessed ankle cavity
+          min: -0.148405, 0.041114, 0.074
+          max: -0.042565, 0.119114, 0.079
+          color: '#0F0C0B'
+          yaw: -27
+        - label: left leather insole visible
+          min: -0.14484, 0.03264, 0.08
+          max: -0.05884, 0.10264, 0.085
+          color: '#473422'
+          shape: Ellipsoid
+          yaw: -27
+        - label: left lace tongue
+          min: -0.172663, -0.04324, 0.106
+          max: -0.098663, 0.04576, 0.12
+          color: '#1A1411'
+          yaw: -27
+        - label: left crossed lace 1
+          min: -0.173605, -0.021005, 0.118
+          max: -0.116333, -0.013005, 0.126
+          color: '#322B28'
+          shape: CylinderX
+          yaw: -14.905242922987897
+          pitch: 0.0
+        - label: left crossed lace 2
+          min: -0.164072, -0.002294, 0.118
+          max: -0.1068, 0.005706, 0.126
+          color: '#322B28'
+          shape: CylinderX
+          yaw: -14.905242922987897
+          pitch: 0.0
+        - label: left crossed lace 3
+          min: -0.154538, 0.016417, 0.118
+          max: -0.097266, 0.024417, 0.126
+          color: '#322B28'
+          shape: CylinderX
+          yaw: -14.905242922987897
+          pitch: 0.0
+        - label: left collar binding 1
+          min: -0.067412, 0.005109, 0.108
+          max: -0.033315, 0.022109, 0.126
+          color: '#0F0C0B'
+          yaw: 39.18188040717477
+        - label: left collar binding 2
+          min: -0.048789, 0.03105, 0.108
+          max: -0.015282, 0.04805, 0.126
+          color: '#0F0C0B'
+          yaw: 70.61170949072181
+        - label: left collar binding 3
+          min: -0.047421, 0.063259, 0.108
+          max: -0.012379, 0.080259, 0.126
+          color: '#0F0C0B'
+          yaw: 101.10212506417719
+        - label: left collar binding 4
+          min: -0.06307, 0.094313, 0.108
+          max: -0.025828, 0.111313, 0.126
+          color: '#0F0C0B'
+          yaw: 128.264023083632
+        - label: left collar binding 5
+          min: -0.091446, 0.117056, 0.108
+          max: -0.053216, 0.134056, 0.126
+          color: '#0F0C0B'
+          yaw: 153.0
+        - label: left collar binding 6
+          min: -0.12574, 0.126245, 0.108
+          max: -0.088498, 0.143245, 0.126
+          color: '#0F0C0B'
+          yaw: -182.26402308363203
+        - label: left collar binding 7
+          min: -0.158315, 0.119762, 0.108
+          max: -0.123273, 0.136762, 0.126
+          color: '#0F0C0B'
+          yaw: -155.10212506417722
+        - label: left collar binding 8
+          min: -0.18235, 0.099103, 0.108
+          max: -0.148843, 0.116103, 0.126
+          color: '#0F0C0B'
+          yaw: -124.6117094907218
+        - label: left collar binding 9
+          min: -0.192858, 0.069027, 0.108
+          max: -0.158761, 0.086027, 0.126
+          color: '#0F0C0B'
+          yaw: -93.18188040717476
+        - label: right shaped outer sole
+          min: -0.003479, -0.228804, 0.012
+          max: 0.192521, 0.104196, 0.061
+          color: '#14100E'
+          shape: Ellipsoid
+          yaw: -27
+        - label: right solid heel
+          min: 0.069476, 0.005681, 0.012
+          max: 0.232156, 0.090681, 0.074
+          color: '#14100E'
+          yaw: -27
+        - label: right separate rounded toe box
+          min: -0.034898, -0.207084, 0.05
+          max: 0.151302, -0.060084, 0.099
+          color: '#241D1B'
+          shape: Ellipsoid
+          yaw: -27
+        - label: right shaped vamp
+          min: 0.003669, -0.159932, 0.063
+          max: 0.178109, 0.021068, 0.126
+          color: '#241D1B'
+          shape: Ellipsoid
+          yaw: -27
+        - label: right toe polished highlight
+          min: 0.01227, -0.156468, 0.097
+          max: 0.09851, -0.104468, 0.105
+          color: '#413936'
+          shape: Ellipsoid
+          yaw: -27
+        - label: right left quarter
+          min: 0.046357, -0.026124, 0.071
+          max: 0.074777, 0.089876, 0.115
+          color: '#241D1B'
+          yaw: -27
+        - label: right right quarter
+          min: 0.176462, -0.092416, 0.071
+          max: 0.204882, 0.023584, 0.115
+          color: '#241D1B'
+          yaw: -27
+        - label: right curved heel quarter 1
+          min: 0.191883, -0.002656, 0.078
+          max: 0.227134, 0.017344, 0.115
+          color: '#241D1B'
+          yaw: 88.38481536483629
+        - label: right curved heel quarter 2
+          min: 0.174884, 0.032348, 0.078
+          max: 0.219073, 0.052348, 0.115
+          color: '#241D1B'
+          yaw: 126.54973576068161
+        - label: right curved heel quarter 3
+          min: 0.137941, 0.060902, 0.078
+          max: 0.186845, 0.080902, 0.115
+          color: '#241D1B'
+          yaw: 153.0
+        - label: right curved heel quarter 4
+          min: 0.09687, 0.072098, 0.078
+          max: 0.141059, 0.092098, 0.115
+          color: '#241D1B'
+          yaw: -180.5497357606816
+        - label: right curved heel quarter 5
+          min: 0.065655, 0.061661, 0.078
+          max: 0.100906, 0.081661, 0.115
+          color: '#241D1B'
+          yaw: -142.3848153648363
+        - label: right dark recessed ankle cavity
+          min: 0.083595, -0.018886, 0.074
+          max: 0.189435, 0.059114, 0.079
+          color: '#0F0C0B'
+          yaw: -27
+        - label: right leather insole visible
+          min: 0.08716, -0.02736, 0.08
+          max: 0.17316, 0.04264, 0.085
+          color: '#5E452C'
+          shape: Ellipsoid
+          yaw: -27
+        - label: right lace tongue
+          min: 0.059337, -0.10324, 0.106
+          max: 0.133337, -0.01424, 0.12
+          color: '#1A1411'
+          yaw: -27
+        - label: right crossed lace 1
+          min: 0.058395, -0.081005, 0.118
+          max: 0.115667, -0.073005, 0.126
+          color: '#322B28'
+          shape: CylinderX
+          yaw: -14.905242922987904
+          pitch: 0.0
+        - label: right crossed lace 2
+          min: 0.067928, -0.062294, 0.118
+          max: 0.1252, -0.054294, 0.126
+          color: '#322B28'
+          shape: CylinderX
+          yaw: -14.905242922987904
+          pitch: 0.0
+        - label: right crossed lace 3
+          min: 0.077462, -0.043583, 0.118
+          max: 0.134734, -0.035583, 0.126
+          color: '#322B28'
+          shape: CylinderX
+          yaw: -14.905242922987895
+          pitch: 0.0
+        - label: right collar binding 1
+          min: 0.164588, -0.054891, 0.108
+          max: 0.198685, -0.037891, 0.126
+          color: '#0F0C0B'
+          yaw: 39.18188040717477
+        - label: right collar binding 2
+          min: 0.183211, -0.02895, 0.108
+          max: 0.216718, -0.01195, 0.126
+          color: '#0F0C0B'
+          yaw: 70.61170949072181
+        - label: right collar binding 3
+          min: 0.184579, 0.003259, 0.108
+          max: 0.219621, 0.020259, 0.126
+          color: '#0F0C0B'
+          yaw: 101.10212506417719
+        - label: right collar binding 4
+          min: 0.16893, 0.034313, 0.108
+          max: 0.206172, 0.051313, 0.126
+          color: '#0F0C0B'
+          yaw: 128.264023083632
+        - label: right collar binding 5
+          min: 0.140554, 0.057056, 0.108
+          max: 0.178784, 0.074056, 0.126
+          color: '#0F0C0B'
+          yaw: 153.0
+        - label: right collar binding 6
+          min: 0.10626, 0.066245, 0.108
+          max: 0.143502, 0.083245, 0.126
+          color: '#0F0C0B'
+          yaw: -182.26402308363203
+        - label: right collar binding 7
+          min: 0.073685, 0.059762, 0.108
+          max: 0.108727, 0.076762, 0.126
+          color: '#0F0C0B'
+          yaw: -155.10212506417722
+        - label: right collar binding 8
+          min: 0.04965, 0.039103, 0.108
+          max: 0.083157, 0.056103, 0.126
+          color: '#0F0C0B'
+          yaw: -124.6117094907218
+        - label: right collar binding 9
+          min: 0.039142, 0.009027, 0.108
+          max: 0.073239, 0.026027, 0.126
+          color: '#0F0C0B'
+          yaw: -93.18188040717476
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DBlackShoesCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DBlackShoesCloud
+  label: 'Black shoes: paired uppers and source white sole inserts'
+  status: draft
+  sourcePrototypes:
+  - ClothingShoesColorBlack
+  referencePrototype: ClothingShoesColorBlack
+  sourceDirections: 1
+  placement: surface
+  description: 'Dropped source is icon tinted #3f3f3f plus unchanged soles-icon; worn
+    state uses a different tint and is excluded. Two physical shoe volumes with separate
+    bright toe/sole inserts. Multi-layer source composition is not a single-layer
+    spriteStates binding. Side/back and physical thickness inferred.'
+  parts:
+  - label: left shaped outer sole
+    min: -0.252893, -0.150771, 0.012
+    max: -0.056893, 0.182229, 0.061
+    color: '#626262'
+    shape: Ellipsoid
+    yaw: -65
+  - label: left solid heel
+    min: -0.123851, 0.025634, 0.012
+    max: 0.038829, 0.110634, 0.074
+    color: '#626262'
+    yaw: -65
+  - label: left separate rounded toe box
+    min: -0.320497, -0.09158, 0.05
+    max: -0.134297, 0.05542, 0.099
+    color: '#323232'
+    shape: Ellipsoid
+    yaw: -65
+  - label: left shaped vamp
+    min: -0.249363, -0.078152, 0.063
+    max: -0.074923, 0.102848, 0.126
+    color: '#323232'
+    shape: Ellipsoid
+    yaw: -65
+  - label: left toe polished highlight
+    min: -0.270815, -0.039894, 0.097
+    max: -0.184575, 0.012106, 0.105
+    color: '#3B3B3B'
+    shape: Ellipsoid
+    yaw: -65
+  - label: left left quarter
+    min: -0.137876, 0.052848, 0.071
+    max: -0.109456, 0.168848, 0.115
+    color: '#323232'
+    yaw: -65
+  - label: left right quarter
+    min: -0.076165, -0.079491, 0.071
+    max: -0.047745, 0.036509, 0.115
+    color: '#323232'
+    yaw: -65
+  - label: left curved heel quarter 1
+    min: -0.039028, -0.01018, 0.078
+    max: -0.003777, 0.00982, 0.115
+    color: '#323232'
+    yaw: 50.384815364836285
+  - label: left curved heel quarter 2
+    min: -0.03182, 0.025118, 0.078
+    max: 0.012369, 0.045118, 0.115
+    color: '#323232'
+    yaw: 88.54973576068161
+  - label: left curved heel quarter 3
+    min: -0.043852, 0.068911, 0.078
+    max: 0.005052, 0.088911, 0.115
+    color: '#323232'
+    yaw: 115.0
+  - label: left curved heel quarter 4
+    min: -0.068823, 0.104471, 0.078
+    max: -0.024634, 0.124471, 0.115
+    color: '#323232'
+    yaw: -218.5497357606816
+  - label: left curved heel quarter 5
+    min: -0.0989, 0.118215, 0.078
+    max: -0.063649, 0.138215, 0.115
+    color: '#323232'
+    yaw: -180.3848153648363
+  - label: left dark recessed ankle cavity
+    min: -0.123979, 0.015821, 0.074
+    max: -0.018139, 0.093821, 0.079
+    color: '#0B0E0C'
+    yaw: -65
+  - label: left white front sole insert
+    min: -0.374026, -0.057318, 0.036
+    max: -0.204026, -0.036318, 0.075
+    color: '#F0F0F0'
+    yaw: -65
+  - label: left white outer sole side
+    min: -0.248231, 0.008117, 0.036
+    max: -0.236231, 0.147117, 0.074
+    color: '#E8E8E8'
+    yaw: -65
+  - label: left dark ankle opening
+    min: -0.131482, 0.016461, 0.102
+    max: -0.031482, 0.083461, 0.108
+    color: '#171717'
+    shape: Ellipsoid
+    yaw: -65
+  - label: right shaped outer sole
+    min: -0.020893, -0.210771, 0.012
+    max: 0.175107, 0.122229, 0.061
+    color: '#626262'
+    shape: Ellipsoid
+    yaw: -65
+  - label: right solid heel
+    min: 0.108149, -0.034366, 0.012
+    max: 0.270829, 0.050634, 0.074
+    color: '#626262'
+    yaw: -65
+  - label: right separate rounded toe box
+    min: -0.088497, -0.15158, 0.05
+    max: 0.097703, -0.00458, 0.099
+    color: '#323232'
+    shape: Ellipsoid
+    yaw: -65
+  - label: right shaped vamp
+    min: -0.017363, -0.138152, 0.063
+    max: 0.157077, 0.042848, 0.126
+    color: '#323232'
+    shape: Ellipsoid
+    yaw: -65
+  - label: right toe polished highlight
+    min: -0.038815, -0.099894, 0.097
+    max: 0.047425, -0.047894, 0.105
+    color: '#3B3B3B'
+    shape: Ellipsoid
+    yaw: -65
+  - label: right left quarter
+    min: 0.094124, -0.007152, 0.071
+    max: 0.122544, 0.108848, 0.115
+    color: '#323232'
+    yaw: -65
+  - label: right right quarter
+    min: 0.155835, -0.139491, 0.071
+    max: 0.184255, -0.023491, 0.115
+    color: '#323232'
+    yaw: -65
+  - label: right curved heel quarter 1
+    min: 0.192972, -0.07018, 0.078
+    max: 0.228223, -0.05018, 0.115
+    color: '#323232'
+    yaw: 50.384815364836285
+  - label: right curved heel quarter 2
+    min: 0.20018, -0.034882, 0.078
+    max: 0.244369, -0.014882, 0.115
+    color: '#323232'
+    yaw: 88.54973576068161
+  - label: right curved heel quarter 3
+    min: 0.188148, 0.008911, 0.078
+    max: 0.237052, 0.028911, 0.115
+    color: '#323232'
+    yaw: 115.0
+  - label: right curved heel quarter 4
+    min: 0.163177, 0.044471, 0.078
+    max: 0.207366, 0.064471, 0.115
+    color: '#323232'
+    yaw: -218.5497357606816
+  - label: right curved heel quarter 5
+    min: 0.1331, 0.058215, 0.078
+    max: 0.168351, 0.078215, 0.115
+    color: '#323232'
+    yaw: -180.3848153648363
+  - label: right dark recessed ankle cavity
+    min: 0.108021, -0.044179, 0.074
+    max: 0.213861, 0.033821, 0.079
+    color: '#0B0E0C'
+    yaw: -65
+  - label: right white front sole insert
+    min: -0.142026, -0.117318, 0.036
+    max: 0.027974, -0.096318, 0.075
+    color: '#F0F0F0'
+    yaw: -65
+  - label: right white outer sole side
+    min: -0.016231, -0.051883, 0.036
+    max: -0.004231, 0.087117, 0.074
+    color: '#E8E8E8'
+    yaw: -65
+  - label: right dark ankle opening
+    min: 0.100518, -0.043539, 0.102
+    max: 0.200518, 0.023461, 0.108
+    color: '#171717'
+    shape: Ellipsoid
+    yaw: -65
+- type: cmu3DModel
+  id: CMU3DGenericHeadsetCloud
+  label: 'Generic headset: open band, single cup and microphone'
+  status: draft
+  sourcePrototypes:
+  - AU14CMBHeadset
+  - CMHeadsetColony
+  referencePrototype: AU14CMBHeadset
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/headsets.rsi
+  referenceState: generic_headset
+  sourceDirections: 1
+  placement: surface
+  description: Exact generic_headset shared by both requested source IDs. The AU14CMBHeadset
+    definition does not use cmb_headset. Source-proven monaural cup, open curved upper
+    band and lower microphone boom modeled as separate volumes. Hidden thickness and
+    band construction inferred; encryption key contents, equipped overlays and wearer
+    unsupported.
+  parts:
+  - label: open upper headband 1
+    min: -0.151562, 0.301437, 0.051
+    max: -0.129688, 0.345438, 0.095
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: open upper headband 2
+    min: -0.143222, 0.32175, 0.051
+    max: -0.106778, 0.36575, 0.095
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: 30.96375653207358
+    pitch: 0.0
+  - label: open upper headband 3
+    min: -0.109375, 0.331125, 0.051
+    max: -0.028125, 0.375125, 0.095
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: open upper headband 4
+    min: -0.038186, 0.30925, 0.051
+    max: 0.019436, 0.35325, 0.095
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: -49.39870535499552
+    pitch: 0.0
+  - label: open upper headband 5
+    min: -0.019314, 0.253, 0.051
+    max: 0.050564, 0.297, 0.095
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: -79.69515353123401
+    pitch: 0.0
+  - label: open upper headband 6
+    min: -0.010149, 0.179562, 0.051
+    max: 0.069524, 0.223562, 0.095
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: -78.69006752597979
+    pitch: 0.0
+  - label: open upper headband 7
+    min: 0.020248, 0.12175, 0.051
+    max: 0.057877, 0.16575, 0.095
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: -85.23635830927375
+    pitch: 0.0
+  - label: headband inner highlight 1
+    min: -0.121875, 0.320125, 0.084
+    max: -0.0375, 0.336125, 0.1
+    color: '#8B8379'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: headband inner highlight 2
+    min: -0.046921, 0.299812, 0.084
+    max: 0.006296, 0.315812, 0.1
+    color: '#8B8379'
+    shape: CylinderX
+    yaw: -49.7636416907262
+    pitch: 0.0
+  - label: headband inner highlight 3
+    min: -0.034892, 0.242, 0.084
+    max: 0.041142, 0.258, 0.1
+    color: '#8B8379'
+    shape: CylinderX
+    yaw: -80.53767779197437
+    pitch: 0.0
+  - label: single padded ear cushion
+    min: -0.079125, -0.110375, 0.016
+    max: 0.172875, 0.141625, 0.083
+    color: '#221A18'
+    shape: CylinderZ
+  - label: ear cup physical outer housing
+    min: -0.063125, -0.098375, 0.067
+    max: 0.156875, 0.129625, 0.127
+    color: '#655F57'
+    shape: CylinderZ
+  - label: central raised speaker grille
+    min: -0.030125, -0.062375, 0.124
+    max: 0.123875, 0.093625, 0.144
+    color: '#8B8379'
+    shape: CylinderZ
+  - label: grille slot 1
+    min: -0.009125, -0.032375, 0.144
+    max: 0.102875, -0.025375, 0.15
+    color: '#655F57'
+  - label: grille slot 2
+    min: -0.009125, 0.011625, 0.144
+    max: 0.102875, 0.018625, 0.15
+    color: '#655F57'
+  - label: grille slot 3
+    min: -0.009125, 0.055625, 0.144
+    max: 0.102875, 0.062625, 0.15
+    color: '#655F57'
+  - label: curved lower microphone boom 1
+    min: -0.087833, -0.118563, 0.046
+    max: -0.021542, -0.084562, 0.08
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: -135.0
+    pitch: 0.0
+  - label: curved lower microphone boom 2
+    min: -0.140625, -0.17325, 0.046
+    max: -0.0625, -0.13925, 0.08
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: -126.86989764584402
+    pitch: 0.0
+  - label: curved lower microphone boom 3
+    min: -0.177288, -0.215438, 0.046
+    max: -0.122712, -0.181437, 0.08
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: -156.3706222693432
+    pitch: 0.0
+  - label: curved lower microphone boom 4
+    min: -0.246909, -0.224813, 0.046
+    max: -0.174966, -0.190812, 0.08
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: 177.5104470780009
+    pitch: 0.0
+  - label: curved lower microphone boom 5
+    min: -0.268514, -0.209188, 0.046
+    max: -0.237736, -0.175187, 0.08
+    color: '#302E2A'
+    shape: CylinderX
+    yaw: 113.96248897457815
+    pitch: 0.0
+  - label: microphone metal upper highlight 1
+    min: -0.13441, -0.157562, 0.073
+    max: -0.06559, -0.145562, 0.085
+    color: '#8B8379'
+    shape: CylinderX
+    yaw: -129.47245984834385
+    pitch: 0.0
+  - label: microphone capsule
+    min: -0.277, -0.204125, 0.052
+    max: -0.223, -0.152125, 0.094
+    color: '#221A18'
+    shape: Ellipsoid
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    generic_headset:
+      frames:
+      - parts:
+        - label: open upper headband 1
+          min: -0.151562, 0.301437, 0.051
+          max: -0.129688, 0.345438, 0.095
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 0.0
+        - label: open upper headband 2
+          min: -0.143222, 0.32175, 0.051
+          max: -0.106778, 0.36575, 0.095
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: 30.96375653207358
+          pitch: 0.0
+        - label: open upper headband 3
+          min: -0.109375, 0.331125, 0.051
+          max: -0.028125, 0.375125, 0.095
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 0.0
+        - label: open upper headband 4
+          min: -0.038186, 0.30925, 0.051
+          max: 0.019436, 0.35325, 0.095
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: -49.39870535499552
+          pitch: 0.0
+        - label: open upper headband 5
+          min: -0.019314, 0.253, 0.051
+          max: 0.050564, 0.297, 0.095
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: -79.69515353123401
+          pitch: 0.0
+        - label: open upper headband 6
+          min: -0.010149, 0.179562, 0.051
+          max: 0.069524, 0.223562, 0.095
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: -78.69006752597979
+          pitch: 0.0
+        - label: open upper headband 7
+          min: 0.020248, 0.12175, 0.051
+          max: 0.057877, 0.16575, 0.095
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: -85.23635830927375
+          pitch: 0.0
+        - label: headband inner highlight 1
+          min: -0.121875, 0.320125, 0.084
+          max: -0.0375, 0.336125, 0.1
+          color: '#8B8379'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 0.0
+        - label: headband inner highlight 2
+          min: -0.046921, 0.299812, 0.084
+          max: 0.006296, 0.315812, 0.1
+          color: '#8B8379'
+          shape: CylinderX
+          yaw: -49.7636416907262
+          pitch: 0.0
+        - label: headband inner highlight 3
+          min: -0.034892, 0.242, 0.084
+          max: 0.041142, 0.258, 0.1
+          color: '#8B8379'
+          shape: CylinderX
+          yaw: -80.53767779197437
+          pitch: 0.0
+        - label: single padded ear cushion
+          min: -0.079125, -0.110375, 0.016
+          max: 0.172875, 0.141625, 0.083
+          color: '#221A18'
+          shape: CylinderZ
+        - label: ear cup physical outer housing
+          min: -0.063125, -0.098375, 0.067
+          max: 0.156875, 0.129625, 0.127
+          color: '#655F57'
+          shape: CylinderZ
+        - label: central raised speaker grille
+          min: -0.030125, -0.062375, 0.124
+          max: 0.123875, 0.093625, 0.144
+          color: '#8B8379'
+          shape: CylinderZ
+        - label: grille slot 1
+          min: -0.009125, -0.032375, 0.144
+          max: 0.102875, -0.025375, 0.15
+          color: '#655F57'
+        - label: grille slot 2
+          min: -0.009125, 0.011625, 0.144
+          max: 0.102875, 0.018625, 0.15
+          color: '#655F57'
+        - label: grille slot 3
+          min: -0.009125, 0.055625, 0.144
+          max: 0.102875, 0.062625, 0.15
+          color: '#655F57'
+        - label: curved lower microphone boom 1
+          min: -0.087833, -0.118563, 0.046
+          max: -0.021542, -0.084562, 0.08
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: -135.0
+          pitch: 0.0
+        - label: curved lower microphone boom 2
+          min: -0.140625, -0.17325, 0.046
+          max: -0.0625, -0.13925, 0.08
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: -126.86989764584402
+          pitch: 0.0
+        - label: curved lower microphone boom 3
+          min: -0.177288, -0.215438, 0.046
+          max: -0.122712, -0.181437, 0.08
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: -156.3706222693432
+          pitch: 0.0
+        - label: curved lower microphone boom 4
+          min: -0.246909, -0.224813, 0.046
+          max: -0.174966, -0.190812, 0.08
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: 177.5104470780009
+          pitch: 0.0
+        - label: curved lower microphone boom 5
+          min: -0.268514, -0.209188, 0.046
+          max: -0.237736, -0.175187, 0.08
+          color: '#302E2A'
+          shape: CylinderX
+          yaw: 113.96248897457815
+          pitch: 0.0
+        - label: microphone metal upper highlight 1
+          min: -0.13441, -0.157562, 0.073
+          max: -0.06559, -0.145562, 0.085
+          color: '#8B8379'
+          shape: CylinderX
+          yaw: -129.47245984834385
+          pitch: 0.0
+        - label: microphone capsule
+          min: -0.277, -0.204125, 0.052
+          max: -0.223, -0.152125, 0.094
+          color: '#221A18'
+          shape: Ellipsoid
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DDisplayMannequinCloud
+  label: 'Display mannequin: static articulated furniture form'
+  status: draft
+  sourcePrototypes:
+  - RMCMannequin
+  referencePrototype: RMCMannequin
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/mannequin.rsi
+  referenceState: mannequin
+  sourceDirections: 4
+  placement: floor
+  description: Static pale display mannequin base from all four source mannequin directions.
+    Source is a humanoid-shaped furniture object with feet, rigid segmented limbs
+    and dark eye marks; no pedestal is present. All clothing inventory slots default
+    empty. No live character body, actor rig, clothing attachments or animations are
+    created. Broad silhouette follows source; absolute scale, upright height, curved
+    volumes, joint section and hidden surfaces inferred. Empty resource-less clothing
+    layers are not treated as a supported mannequin adapter.
+  parts:
+  - label: left broad static display foot
+    min: -0.2856, -0.1508, 0.01674
+    max: -0.0392, 0.1248, 0.09021
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: left flattened foot bottom
+    min: -0.2814, -0.1456, 0.01116
+    max: -0.0434, 0.1222, 0.02883
+    color: '#9C9DA4'
+  - label: left molded lower leg
+    min: -0.434704, -0.039, 0.212505
+    max: 0.109904, 0.0884, 0.318525
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 89.70542275233296
+  - label: left knee articulation
+    min: -0.2422, -0.0663, 0.42222
+    max: -0.0826, 0.1053, 0.50406
+    color: '#BDB2B4'
+    shape: Ellipsoid
+  - label: left molded upper leg
+    min: -0.373995, -0.0546, 0.572415
+    max: 0.070307, 0.1014, 0.695175
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 87.27643697215964
+  - label: left front shin highlight
+    min: -0.196, -0.0559, 0.14043
+    max: -0.1288, -0.0442, 0.3906
+    color: '#EEEAEE'
+  - label: left pelvis ball joint
+    min: -0.21784, -0.0676, 0.74307
+    max: -0.05824, 0.1118, 0.83142
+    color: '#BDB2B4'
+    shape: Ellipsoid
+  - label: right broad static display foot
+    min: 0.0392, -0.1508, 0.01674
+    max: 0.2856, 0.1248, 0.09021
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: right flattened foot bottom
+    min: 0.0434, -0.1456, 0.01116
+    max: 0.2814, 0.1222, 0.02883
+    color: '#9C9DA4'
+  - label: right molded lower leg
+    min: -0.109904, -0.039, 0.212505
+    max: 0.434704, 0.0884, 0.318525
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 89.70542275233296
+  - label: right knee articulation
+    min: 0.0826, -0.0663, 0.42222
+    max: 0.2422, 0.1053, 0.50406
+    color: '#BDB2B4'
+    shape: Ellipsoid
+  - label: right molded upper leg
+    min: -0.070307, -0.0546, 0.572415
+    max: 0.373995, 0.1014, 0.695175
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: 180.0
+    pitch: 87.27643697215964
+  - label: right front shin highlight
+    min: 0.1288, -0.0559, 0.14043
+    max: 0.196, -0.0442, 0.3906
+    color: '#EEEAEE'
+  - label: right pelvis ball joint
+    min: 0.05824, -0.0676, 0.74307
+    max: 0.21784, 0.1118, 0.83142
+    color: '#BDB2B4'
+    shape: Ellipsoid
+  - label: molded pelvis lower shape
+    min: -0.1918, -0.104, 0.76353
+    max: 0.1918, 0.1235, 0.89838
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: waist narrow joint
+    min: -0.1512, -0.0858, 0.87885
+    max: 0.1512, 0.0988, 0.9393
+    color: '#BDB2B4'
+    shape: CylinderZ
+  - label: lower molded torso
+    min: -0.1904, -0.1157, 0.91791
+    max: 0.1904, 0.1287, 1.07415
+    color: '#E6D6D5'
+    shape: Ellipsoid
+  - label: wide shoulder torso
+    min: -0.2352, -0.1248, 1.02579
+    max: 0.2352, 0.13, 1.20063
+    color: '#E6D6D5'
+    shape: Ellipsoid
+  - label: chest face highlight
+    min: -0.1456, -0.1313, 1.07229
+    max: 0.1456, -0.1196, 1.1532
+    color: '#EEEAEE'
+    shape: Ellipsoid
+  - label: neck post
+    min: -0.0658, -0.0611, 1.18017
+    max: 0.0658, 0.0611, 1.25736
+    color: '#BDB2B4'
+    shape: CylinderZ
+  - label: display head molded cranium
+    min: -0.1372, -0.1118, 1.24713
+    max: 0.1372, 0.1144, 1.51218
+    color: '#E6D6D5'
+    shape: Ellipsoid
+  - label: front face plane
+    min: -0.1092, -0.117, 1.30386
+    max: 0.1092, -0.1014, 1.46196
+    color: '#EEEAEE'
+    shape: Ellipsoid
+  - label: short molded nose
+    min: -0.028, -0.1482, 1.34943
+    max: 0.028, -0.1131, 1.3857
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: left dark inset display eye
+    min: -0.0714, -0.1222, 1.40895
+    max: -0.0462, -0.1118, 1.42662
+    color: '#2E2F34'
+  - label: left molded ear
+    min: -0.1666, -0.0312, 1.35129
+    max: -0.1162, 0.0338, 1.40802
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: left shoulder articulation
+    min: -0.286731, -0.0546, 1.09554
+    max: -0.221469, 0.0754, 1.18854
+    color: '#BDB2B4'
+    shape: CylinderX
+    yaw: 180.0
+    pitch: -22.71441235316725
+  - label: left upper molded arm
+    min: -0.414305, -0.06045, 1.00812
+    max: -0.191895, 0.06955, 1.10112
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: -178.53119928561418
+    pitch: -75.78432655173118
+  - label: left elbow joint
+    min: -0.399, -0.0546, 0.94767
+    max: -0.2618, 0.0663, 1.00905
+    color: '#BDB2B4'
+    shape: Ellipsoid
+  - label: left lower molded arm
+    min: -0.432894, -0.05655, 0.850485
+    max: -0.229306, 0.05525, 0.930465
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: -95.19442890773482
+    pitch: -85.64391209122978
+  - label: left static hand
+    min: -0.3864, -0.0585, 0.74679
+    max: -0.2772, 0.052, 0.86025
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: left hand front face
+    min: -0.3682, -0.0611, 0.77562
+    max: -0.2954, -0.0507, 0.83328
+    color: '#EEEAEE'
+  - label: right dark inset display eye
+    min: 0.0462, -0.1222, 1.40895
+    max: 0.0714, -0.1118, 1.42662
+    color: '#2E2F34'
+  - label: right molded ear
+    min: 0.1162, -0.0312, 1.35129
+    max: 0.1666, 0.0338, 1.40802
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: right shoulder articulation
+    min: 0.221469, -0.0546, 1.09554
+    max: 0.286731, 0.0754, 1.18854
+    color: '#BDB2B4'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: -22.71441235316725
+  - label: right upper molded arm
+    min: 0.191895, -0.06045, 1.00812
+    max: 0.414305, 0.06955, 1.10112
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: -1.4688007143858255
+    pitch: -75.78432655173118
+  - label: right elbow joint
+    min: 0.2618, -0.0546, 0.94767
+    max: 0.399, 0.0663, 1.00905
+    color: '#BDB2B4'
+    shape: Ellipsoid
+  - label: right lower molded arm
+    min: 0.229306, -0.05655, 0.850485
+    max: 0.432894, 0.05525, 0.930465
+    color: '#E6D6D5'
+    shape: CylinderX
+    yaw: -84.8055710922652
+    pitch: -85.64391209122978
+  - label: right static hand
+    min: 0.2772, -0.0585, 0.74679
+    max: 0.3864, 0.052, 0.86025
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: right hand front face
+    min: 0.2954, -0.0611, 0.77562
+    max: 0.3682, -0.0507, 0.83328
+    color: '#EEEAEE'
+  - label: upper back panel
+    min: -0.1498, 0.1092, 1.05834
+    max: 0.1498, 0.1326, 1.14576
+    color: '#DEC6CD'
+    shape: Ellipsoid
+  - label: rear torso molded seam
+    min: -0.0098, 0.1274, 0.96255
+    max: 0.0098, 0.1365, 1.14762
+    color: '#BDB2B4'

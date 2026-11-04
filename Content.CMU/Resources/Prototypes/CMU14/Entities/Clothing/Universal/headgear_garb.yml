@@ -1,0 +1,35 @@
+# Caps and boonie hats with a small pocket and a garb slot, like the MP cap: holds a lighter or cigarettes, and helmet
+# garb shows on the hat (cmss13-devs/cmss13#2078).
+- type: entity
+  id: CMUHeadgearGarbStorage
+  abstract: true
+  components:
+  - type: Storage
+    maxItemSize: Tiny
+    grid:
+    - 0,0,3,1 # 2 slots
+    whitelist:
+      components:
+      - RMCLighter
+      - HelmetAccessory
+      tags:
+      - Cigarette
+      - Matchstick
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: [ ]
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - HelmetAccessory
+  - type: HelmetAccessoryHolder
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

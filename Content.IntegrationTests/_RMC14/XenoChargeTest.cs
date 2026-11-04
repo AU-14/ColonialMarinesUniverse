@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Charge.CursorCharge;
 using Content.Shared.Actions.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Robust.Shared.GameObjects;
@@ -49,7 +50,7 @@ public sealed class XenoChargeTest
                 transform.SetCoordinates(crusher, map.GridCoords.Offset(new Vector2(1, 0.5f)));
             });
 
-            await pair.RunSeconds(0.65f);
+            await pair.RunSeconds(1.3f);
 
             await server.WaitAssertion(() =>
             {
@@ -140,7 +141,8 @@ public sealed class XenoChargeTest
     [Test]
     public async Task ChargerLungeCannotDestroyUnchargeableStructure()
     {
-        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
 
         EntityUid charger = default;
         EntityUid structure = default;
@@ -190,7 +192,7 @@ public sealed class XenoChargeTest
         }
         finally
         {
-            server.Dispose();
+            await pair.CleanReturnAsync();
         }
     }
 

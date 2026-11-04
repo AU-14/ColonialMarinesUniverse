@@ -166,7 +166,7 @@ public sealed partial class AdminLogsEui : BaseEui
         ClydeWindow = _clyde.CreateWindow(new WindowCreateParameters
         {
             Maximized = false,
-            Title = "Admin Logs",
+            Title = Loc.GetString("admin-logs-title"),
             Monitor = monitor,
             Width = 1100,
             Height = 400
@@ -184,6 +184,7 @@ public sealed partial class AdminLogsEui : BaseEui
 
         LogsControl.PopOutButton.Disabled = true;
         LogsControl.PopOutButton.Visible = false;
+        CMUApplyTitle(); // CMU14: per-player log window title
     }
 
     public override void HandleState(EuiStateBase state)
@@ -197,6 +198,7 @@ public sealed partial class AdminLogsEui : BaseEui
 
         LogsControl.SetCurrentRound(s.RoundId);
         LogsControl.SetPlayers(s.Players);
+        CMUOnPlayerNames(s.Players); // CMU14: per-player log window title
         LogsControl.UpdateCount(round: s.RoundLogs);
 
         if (!FirstState)
@@ -232,6 +234,12 @@ public sealed partial class AdminLogsEui : BaseEui
                 if (setLogFilter.Search != null)
                     LogsControl.LogSearch.SetText(setLogFilter.Search);
 
+                if (setLogFilter.Players != null)
+                {
+                    LogsControl.SelectPlayers(setLogFilter.Players);
+                    CMUOnPlayersSelected(setLogFilter.Players); // CMU14: per-player log window title
+                }
+
                 if (setLogFilter.Types != null)
                     LogsControl.SetTypesSelection(setLogFilter.Types, setLogFilter.InvertTypes);
 
@@ -243,12 +251,14 @@ public sealed partial class AdminLogsEui : BaseEui
     {
         base.Opened();
 
-        LogsWindow?.OpenCentered();
+        // LogsWindow?.OpenCentered(); // CMU14
+        CMUOpenCascaded(); // CMU14: cascade log windows instead of stacking them
     }
 
     public override void Closed()
     {
         base.Closed();
+        CMUOnClosed(); // CMU14: cascade log windows
 
         if (ClydeWindow != null)
         {

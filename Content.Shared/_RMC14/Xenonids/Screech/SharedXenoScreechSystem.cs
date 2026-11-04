@@ -8,6 +8,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Jittering;
 using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
+using Content.Shared.Hands; // CMU14
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Weapons.Ranged.Components;
@@ -47,6 +48,9 @@ public sealed partial class XenoScreechSystem : EntitySystem
         SubscribeLocalEvent<ScreechScatterComponent, GunRefreshModifiersEvent>(OnScreechScatterRefresh);
         SubscribeLocalEvent<ScreechBlindComponent, ComponentStartup>(OnScreechBlindStartup);
         SubscribeLocalEvent<ScreechBlindComponent, ComponentShutdown>(OnScreechBlindShutdown);
+        // CMU14: the penalty follows the affected holder when guns change hands.
+        SubscribeLocalEvent<ScreechBlindComponent, DidEquipHandEvent>(OnScreechEquipHand);
+        SubscribeLocalEvent<ScreechBlindComponent, DidUnequipHandEvent>(OnScreechUnequipHand);
     }
 
     private void OnXenoScreechAction(Entity<XenoScreechComponent> xeno, ref XenoScreechActionEvent args)
@@ -90,7 +94,8 @@ public sealed partial class XenoScreechSystem : EntitySystem
             SpawnAttachedTo(xeno.Comp.Effect, xeno.Owner.ToCoordinates());
     }
 
-    private bool ApplyScreechEffects(EntityUid xeno, EntityUid receiver, TimeSpan slowTime, TimeSpan blindTime)
+    // CMU Related Change
+    public bool ApplyScreechEffects(EntityUid xeno, EntityUid receiver, TimeSpan slowTime, TimeSpan blindTime)
     {
         if (_mobState.IsDead(receiver))
             return false;
@@ -106,7 +111,8 @@ public sealed partial class XenoScreechSystem : EntitySystem
         return true;
     }
 
-    private void Deafen(EntityUid xeno, EntityUid receiver, TimeSpan time)
+    // CMU Related Change
+    public void Deafen(EntityUid xeno, EntityUid receiver, TimeSpan time)
     {
         if (_mobState.IsDead(receiver))
             return;
@@ -132,6 +138,19 @@ public sealed partial class XenoScreechSystem : EntitySystem
     {
         RemoveScatterFromTrackedGuns(ent.Comp);
     }
+
+    // CMU14 Begin: update ownership immediately so one holder cannot clear another's penalty later.
+    private void OnScreechEquipHand(Entity<ScreechBlindComponent> ent, ref DidEquipHandEvent args)
+    {
+        AddScatterToTrackedGuns(ent.Owner, ent.Comp);
+    }
+
+    private void OnScreechUnequipHand(Entity<ScreechBlindComponent> ent, ref DidUnequipHandEvent args)
+    {
+        if (ent.Comp.ModifiedGuns.Remove(args.Unequipped) && RemComp<ScreechScatterComponent>(args.Unequipped))
+            _gun.RefreshModifiers(args.Unequipped);
+    }
+    // CMU14 End
 
     private void AddScatterToTrackedGuns(EntityUid user, ScreechBlindComponent blind)
     {

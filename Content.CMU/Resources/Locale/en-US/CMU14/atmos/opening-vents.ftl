@@ -1,0 +1,9 @@
+cmu-opening-vent-state-open = Airway open.
+cmu-opening-vent-state-closed = Airway closed.
+cmu-opening-vent-state-locked = Airway auto-sealed: one deck is below the lockout pressure.
+cmu-opening-vent-examine = Local pressure: {$here} kPa. Connected: {$there} kPa.
+cmu-opening-vent-unlinked = Unlinked. No matching vent on the adjacent deck.
+cmu-opening-vent-open = open
+cmu-opening-vent-closed = closed
+cmu-opening-vent-toggle-state = You use the screwdriver to {$state} the vent.
+cmu-opening-vent-dir-toggled = You pry the vent to look {$direction}.

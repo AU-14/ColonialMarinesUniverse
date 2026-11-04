@@ -1,7 +1,31 @@
+// CMU14: CVarControl attribute on game.soft_max_players
+using Content.Shared.Administration;
+using Content.Shared.CCVar.CVarAccess;
 using Content.Shared.Roles;
 using Robust.Shared.Configuration;
 
 namespace Content.Shared.CCVar;
+
+/// <summary>
+/// Legacy minimum-staffing fallback modes, retained for configuration compatibility.
+/// </summary>
+public enum MinimumJobFallback : int // needs int backing because cvar
+{
+    /// <summary>
+    /// Previously selected a player who preferred another role in the target job's primary department.
+    /// </summary>
+    SameDepartment = 1,
+
+    /// <summary>
+    /// Previously selected a player from the same department, then any otherwise eligible player.
+    /// </summary>
+    AnyEligiblePlayer = 2,
+
+    /// <summary>
+    /// Leave the minimum slot empty when no player prefers the target job.
+    /// </summary>
+    None = 3,
+}
 
 public sealed partial class CCVars
 {
@@ -18,10 +42,10 @@ public sealed partial class CCVars
         GameLobbyEnabled = CVarDef.Create("game.lobbyenabled", true, CVar.ARCHIVE);
 
     /// <summary>
-    ///     Controls the duration of the lobby timer in seconds. Defaults to 2 minutes and 30 seconds.
+    ///     Controls the duration of the lobby timer in seconds. Defaults to 5 minutes.
     /// </summary>
-    public static readonly CVarDef<int>
-        GameLobbyDuration = CVarDef.Create("game.lobbyduration", 150, CVar.ARCHIVE);
+    public static readonly CVarDef<int> // CMU14
+        GameLobbyDuration = CVarDef.Create("game.lobbyduration", 300, CVar.ARCHIVE);
 
     /// <summary>
     ///     Controls if players can latejoin at all.
@@ -34,6 +58,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<float>
         GameJoinTimingWarnSeconds = CVarDef.Create("game.join_timing_warn_seconds", 5f, CVar.ARCHIVE | CVar.SERVERONLY);
+
+    /// <summary>
+    ///     Enable the [JOIN-TIMING] log output.
+    /// </summary>
+    public static readonly CVarDef<bool>
+        GameJoinTimingLogEnabled = CVarDef.Create("game.join_timing_log_enabled", false, CVar.ARCHIVE | CVar.SERVERONLY);
 
     /// <summary>
     ///     Controls the default game preset.
@@ -54,6 +84,12 @@ public sealed partial class CCVars
         GameLobbyFallbackPreset = CVarDef.Create("game.fallbackpreset", "Traitor,Extended", CVar.ARCHIVE);
 
     /// <summary>
+    ///     The preset for the game to fall back to if the selected preset could not be used, and fallback is enabled.
+    /// </summary>
+    public static readonly CVarDef<string>
+        GameTickerIgnoredPresets = CVarDef.Create("game.ignoredpresets", "", CVar.ARCHIVE);
+
+    /// <summary>
     ///     Controls if people can win the game in Suspicion or Deathmatch.
     /// </summary>
     public static readonly CVarDef<bool>
@@ -69,7 +105,7 @@ public sealed partial class CCVars
     ///     Controls the maximum number of character slots a player is allowed to have.
     /// </summary>
     public static readonly CVarDef<int>
-        GameMaxCharacterSlots = CVarDef.Create("game.maxcharacterslots", 50, CVar.ARCHIVE | CVar.SERVERONLY);
+        GameMaxCharacterSlots = CVarDef.Create("game.maxcharacterslots", 50, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
 
     /// <summary>
     ///     Controls the game map prototype to load. SS14 stores these prototypes in Prototypes/Maps.
@@ -116,6 +152,12 @@ public sealed partial class CCVars
         GameRoleTimers = CVarDef.Create("game.role_timers", true, CVar.SERVER | CVar.REPLICATED);
 
     /// <summary>
+    /// If role loadout items should be restricted based on time.
+    /// </summary>
+    public static readonly CVarDef<bool>
+        GameRoleLoadoutTimers = CVarDef.Create("game.role_loadout_timers", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
     ///     Override default role requirements using a <see cref="JobRequirementOverridePrototype"/>
     /// </summary>
     public static readonly CVarDef<string>
@@ -126,6 +168,14 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool>
         GameRoleWhitelist = CVarDef.Create("game.role_whitelist", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    ///     Legacy setting retained so existing server configurations still load. No longer used by assignment:
+    ///     minimum staffing never overrides Never job preferences.
+    /// </summary>
+    public static readonly CVarDef<MinimumJobFallback>
+        GameMinimumJobFallback = CVarDef.Create("game.minimum_job_fallback", MinimumJobFallback.None,
+            CVar.ARCHIVE | CVar.SERVERONLY);
 
     /// <summary>
     ///     Whether or not disconnecting inside of a cryopod should remove the character or just store them until they reconnect.
@@ -142,8 +192,15 @@ public sealed partial class CCVars
     public static readonly CVarDef<bool> GameDiagonalMovement =
         CVarDef.Create("game.diagonalmovement", true, CVar.ARCHIVE);
 
+    // CMU14: allow admins to adjust the pop cap mid-round via changecvar
+    [CVarControl(AdminFlags.Server)]
     public static readonly CVarDef<int> SoftMaxPlayers =
-        CVarDef.Create("game.soft_max_players", 30, CVar.SERVERONLY | CVar.ARCHIVE);
+        CVarDef.Create("game.soft_max_players", 350, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    // CMU14: optional custom soft-cap denial notice, empty falls back to soft-player-cap-full
+    [CVarControl(AdminFlags.Server)]
+    public static readonly CVarDef<string> SoftMaxNotice =
+        CVarDef.Create("game.soft_max_notice", string.Empty, CVar.SERVERONLY);
 
     /// <summary>
     ///     If a player gets denied connection to the server,
@@ -291,10 +348,10 @@ public sealed partial class CCVars
 
     /// <summary>
     /// Amount of playtime in minutes to be exempt from an IP check. 0 to search everyone. 5 hours by default.
+    /// </summary>
     /// <remarks>
     /// Trust me you want one.
-    /// </remarks>>
-    /// </summary>
+    /// </remarks>
     public static readonly CVarDef<TimeSpan> GameIPIntelExemptPlaytime =
         CVarDef.Create("game.ipintel_exempt_playtime", TimeSpan.FromHours(1), CVar.SERVERONLY);
 
@@ -311,10 +368,10 @@ public sealed partial class CCVars
         CVarDef.Create("game.ipintel_alert_admin_warn_rating", 0.80f, CVar.SERVERONLY);
 
     /// <summary>
-    ///     Make people bonk when trying to climb certain objects like tables.
+    ///     Should clumsy people bonk when trying to climb certain objects like tables?
     /// </summary>
     public static readonly CVarDef<bool> GameTableBonk =
-        CVarDef.Create("game.table_bonk", false, CVar.REPLICATED);
+        CVarDef.Create("game.table_bonk", true, CVar.REPLICATED);
 
     /// <summary>
     ///     Whether or not status icons are rendered for everyone.
@@ -344,16 +401,16 @@ public sealed partial class CCVars
 #endif
 
     /// <summary>
-    ///     Delay between station alert level changes.
+    ///     Delay between station alert level changes (in seconds).
     /// </summary>
     public static readonly CVarDef<int> GameAlertLevelChangeDelay =
         CVarDef.Create("game.alert_level_change_delay", 30, CVar.SERVERONLY);
 
     /// <summary>
     ///     The time in seconds that the server should wait before restarting the round.
-    ///     Defaults to 2 minutes.
+    ///     Defaults to 5 minutes.
     /// </summary>
-    public static readonly CVarDef<float> RoundRestartTime =
+    public static readonly CVarDef<float> RoundRestartTime = // CMU14
         CVarDef.Create("game.round_restart_time", 300f, CVar.SERVERONLY);
 
     /// <summary>
@@ -374,7 +431,7 @@ public sealed partial class CCVars
     ///     but may cause lag during round end with very high player counts.
     /// </summary>
     public static readonly CVarDef<bool> RoundEndPVSOverrides =
-        CVarDef.Create("game.round_end_pvs_overrides", true, CVar.SERVERONLY);
+        CVarDef.Create("game.round_end_pvs_overrides", false, CVar.SERVERONLY); // CMU14: avoid replicating every body's descendants to every client.
 
     /// <summary>
     ///     If true, players can place objects onto tabletop games like chess boards.
@@ -409,4 +466,40 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> GameHostnameInTitlebar =
         CVarDef.Create("game.hostname_in_titlebar", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// The maximum amount of tiles you can stack on top of each other. 0 is unlimited.
+    /// </summary>
+    /// <remarks>
+    /// Having it too high can result in "doomstacking" tiles - this messes with efficiency of explosions, deconstruction of tiles, and might result in memory problems.
+    /// </remarks>
+    public static readonly CVarDef<int> TileStackLimit =
+        CVarDef.Create("game.tile_stack_limit", 5, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// The list of jobs that will be enabled on newly created characters.
+    /// The first job will be set to High priority, subsequent ones to Medium.
+    /// </summary>
+    /// <remarks>
+    /// When setting multiple values in server config, separate them with commas, like "Captain, SecurityOfficer,Janitor"
+    /// Spaces between entries can be either used or omitted.
+    /// </remarks>
+    public static readonly CVarDef<string> NewCharacterJobs =
+        // CMU14: seed marine and colony round roles instead of the upstream passenger job.
+        // Passenger stays in the list as the joinable fallback: marine squad roles are
+        // setPreference false, so validation strips them from job preferences and a profile
+        // with nothing seedable left never joins a round.
+        CVarDef.Create("game.new_character_jobs", "AU14JobGOVFORSquadRifleman,AU14JobCivilianColonist,Passenger", CVar.REPLICATED);
+
+    /// <summary>
+    /// Determines whether wall-mounted entities are hidden when viewed from outside their facing arc.
+    /// </summary>
+    public static readonly CVarDef<bool> WallMountDirectionalVisibility =
+        CVarDef.Create("game.wallmount_directional_visibility", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
+    /// Whether wall-mounted entities fade in/out when entering or leaving the facing arc.
+    /// </summary>
+    public static readonly CVarDef<bool> WallMountFade =
+        CVarDef.Create("game.wallmount_fade", true, CVar.SERVER | CVar.REPLICATED);
 }

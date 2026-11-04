@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.ShakeStun;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -41,6 +43,9 @@ public sealed partial class CPRSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
+    // cmu edit start
+    [Dependency] private Content.Shared.CMU14.Medical.CPR.CMUCPRMaskSystem _cmuCPRMask = default!;
+    // cmu edit end
 
     // TODO RMC14 move this to a component
     private static readonly ProtoId<DamageTypePrototype> HealType = "Asphyxiation";
@@ -101,20 +106,27 @@ public sealed partial class CPRSystem : EntitySystem
         }
 
         _unrevivable.AddRevivableTime(target, CPRCooldownSeconds);
+        // cmu edit start
+        _cmuCPRMask.AddMaskBonus(target, CPRCooldownSeconds);
+        // cmu edit end
 
-        if (!TryComp(target, out DamageableComponent? damageable) ||
-            !damageable.Damage.DamageDict.TryGetValue(HealType, out damage))
+        // cmu edit start
+        if (TryComp(target, out DamageableComponent? damageable) &&
+            _damageable.GetAllDamage((target, damageable)).DamageDict.TryGetValue(HealType, out damage))
         {
-            return;
+            var heal = -FixedPoint2.Min(damage, HealAmount);
+            var healSpecifier = new DamageSpecifier();
+            healSpecifier.DamageDict.Add(HealType, heal);
+            _damageable.TryChangeDamage(target, healSpecifier, true);
         }
-
-        var heal = -FixedPoint2.Min(damage, HealAmount);
-        var healSpecifier = new DamageSpecifier();
-        healSpecifier.DamageDict.Add(HealType, heal);
-        _damageable.TryChangeDamage(target, healSpecifier, true);
+        // cmu edit end
 
         var received = EnsureComp<CPRReceivedComponent>(target);
         received.Last = _timing.CurTime;
+
+        // cmu edit start: hair and skin samples between performer and patient
+        EntityManager.System<Content.Shared.Forensics.Systems.ForensicsSystem>().CMUApplyPersonContact(performer, target);
+        // cmu edit end
 
         if (_net.IsClient)
             return;

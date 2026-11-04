@@ -1,0 +1,29 @@
+- type: entity
+  parent: RMCEffectWallXenoResin
+  id: RMCEffectCMU14XenoMyceliumWall
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCEffectWallXenoResinThick
+  id: RMCEffectCMU14XenoThickMyceliumWall
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCEffectWallXenoMembrane
+  id: RMCEffectCMU14XenoMyceliumMembrane
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCEffectWallXenoMembraneThick
+  id: RMCEffectCMU14XenoThickMyceliumMembrane
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCEffectDoorXenoResin
+  id: RMCEffectCMU14XenoMyceliumDoor
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCEffectDoorXenoResinThick
+  id: RMCEffectCMU14XenoThickMyceliumDoor
+  categories: [ HideSpawnMenu ]

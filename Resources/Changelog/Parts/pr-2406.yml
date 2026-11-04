@@ -1,0 +1,22 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Added the UPP fighter for UPP and BEAR, plus an admin-spawnable swept-wing
+    fighter.
+  type: Add
+- message: Fighters now use short takeoffs and landings that adapt to available space,
+    with new airframe effects and sounds.
+  type: Tweak
+- message: Removed fighter VTOL pads and their supply bundles.
+  type: Remove
+- message: Reworked the fighter cockpit with a larger shared camera/airspace display
+    and visible flight, weapon and mission controls.
+  type: Tweak
+- message: All fighter strikes show a laser 2.3 seconds before impact and warn 1 second
+    before impact.
+  type: Tweak
+- message: Reduced fighter camera rendering outside its panel and repeated roof lookups
+    in lighting and weather overlays.
+  type: Tweak
+time: '2026-11-01T14:55:45.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2406

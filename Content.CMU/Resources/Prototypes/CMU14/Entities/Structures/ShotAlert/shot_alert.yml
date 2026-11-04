@@ -1,0 +1,32 @@
+- type: entity
+  id: CMUColonyShotAlertSystem
+  name: colony shot alert system
+  parent: BaseStructure
+  description: An acoustic sensor array that listens for gunfire and explosions and automatically alerts the Colonial Marshal Bureau.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Sprite
+    noRot: true
+    sprite: _RMC14/Objects/Misc/Lights/trafficlights.rsi
+    offset: 0.65,0.8
+    layers:
+    - state: trafficlight
+    drawdepth: Mobs
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.1,-0.1,0.1,0.1"
+        density: 50
+        mask:
+        - MachineMask
+        layer:
+        - WallLayer
+  - type: CMUShotAlert

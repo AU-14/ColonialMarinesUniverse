@@ -1,0 +1,8 @@
+author: Kadeo64
+category: CMU
+changes:
+- message: Clearance X can now be unlocked at 40 minutes instead of being unlocked
+    at 1 hour.
+  type: Tweak
+time: '2026-10-10T21:13:24.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2144

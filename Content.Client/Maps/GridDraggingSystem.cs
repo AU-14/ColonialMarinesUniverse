@@ -16,7 +16,6 @@ public sealed partial class GridDraggingSystem : SharedGridDraggingSystem
     [Dependency] private IEyeManager _eyeManager = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private IInputManager _inputManager = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private InputSystem _inputSystem = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;

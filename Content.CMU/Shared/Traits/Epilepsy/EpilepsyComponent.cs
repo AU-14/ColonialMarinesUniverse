@@ -1,0 +1,40 @@
+using Robust.Shared.GameStates;
+
+namespace Content.Shared.CMU14.Traits.Epilepsy;
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class EpilepsyComponent : Component
+{
+    [DataField]
+    public TimeSpan IntervalMin = TimeSpan.FromMinutes(25);
+
+    [DataField]
+    public TimeSpan IntervalMax = TimeSpan.FromMinutes(30);
+
+    [DataField]
+    public float DurationMin = 30f;
+
+    [DataField]
+    public float DurationMax = 70f;
+
+    /// <summary>
+    ///     Visible radius (in tiles) while convulsing. Lower is darker.
+    /// </summary>
+    [DataField]
+    public float VisionDimRadius = 2f;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan NextSeizure;
+
+    /// <summary>
+    ///     When the current seizure ends, so a flash can't start another on top of it.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan SeizingUntil;
+
+    /// <summary>
+    ///     Anticonvulsants keep seizures away until this time. A seizure that comes due before then is put off instead.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan SuppressedUntil;
+}

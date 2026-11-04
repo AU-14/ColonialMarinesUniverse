@@ -1,0 +1,121 @@
+- type: constructionGraph
+  id: !type:CreateVariants
+    values: [ GasPipe, GasPipeAlt1, GasPipeAlt2 ]
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: half
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 1
+        doAfter: 1
+
+    - to: straight
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 1
+        doAfter: 1
+
+    - to: bend
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 1
+        doAfter: 1
+
+    - to: tjunction
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 1
+        doAfter: 1
+
+    - to: fourway
+      steps:
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
+        amount: 1
+        doAfter: 1
+
+  - node: half
+    entity: !type:CreateVariants
+      values: [ CMUGasPipeHalf, CMUGasPipeHalfAlt1, CMUGasPipeHalfAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: straight
+    entity: !type:CreateVariants
+      values: [ CMUGasPipeStraight, CMUGasPipeStraightAlt1, CMUGasPipeStraightAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: bend
+    entity: !type:CreateVariants
+      values: [ CMUGasPipeBend, CMUGasPipeBendAlt1, CMUGasPipeBendAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: tjunction
+    entity: !type:CreateVariants
+      values: [ CMUGasPipeTJunction, CMUGasPipeTJunctionAlt1, CMUGasPipeTJunctionAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: fourway
+    entity: !type:CreateVariants
+      values: [ CMUGasPipeFourway, CMUGasPipeFourwayAlt1, CMUGasPipeFourwayAlt2 ] # CMU14
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1

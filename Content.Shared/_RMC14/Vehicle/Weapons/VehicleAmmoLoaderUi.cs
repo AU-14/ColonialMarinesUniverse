@@ -58,6 +58,7 @@ public sealed class VehicleAmmoLoaderUiAmmoSlot
     public readonly bool CanLoad;
     public readonly bool CanUnload;
     public readonly bool IsReadySlot;
+    public readonly EntProtoId? DisplayPrototype; // CMU14
 
     public VehicleAmmoLoaderUiAmmoSlot(
         int slotIndex,
@@ -66,7 +67,8 @@ public sealed class VehicleAmmoLoaderUiAmmoSlot
         int capacity,
         bool canLoad,
         bool canUnload,
-        bool isReadySlot)
+        bool isReadySlot,
+        EntProtoId? displayPrototype) // CMU14
     {
         SlotIndex = slotIndex;
         Label = label;
@@ -75,6 +77,7 @@ public sealed class VehicleAmmoLoaderUiAmmoSlot
         CanLoad = canLoad;
         CanUnload = canUnload;
         IsReadySlot = isReadySlot;
+        DisplayPrototype = displayPrototype; // CMU14
     }
 }
 

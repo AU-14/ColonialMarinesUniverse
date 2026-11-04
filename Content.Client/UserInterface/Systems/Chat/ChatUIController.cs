@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Core;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.Managers;
 using Content.Client.Chat;
@@ -14,12 +14,14 @@ using Content.Client.Gameplay;
 using Content.Client.Ghost;
 using Content.Client.Mind;
 using Content.Client.Roles;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
-using Content.Shared._CMU14.Chat;
+using Content.Shared.CMU14.Chat;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Input;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
@@ -187,6 +189,8 @@ public sealed partial class ChatUIController : UIController
     public event Action<ChatSelectChannel>? SelectableChannelsChanged;
     public event Action<ChatChannel, int?>? UnreadMessageCountsUpdated;
     public event Action<ChatMessage>? MessageAdded;
+    // CMU14: let transient lobby bubbles honor moderation deletions too.
+    public event Action<MsgDeleteChatMessagesBy>? MessagesDeleted;
 
     private readonly List<MsgDeleteChatMessagesBy> _deleteMessages = new();
     private int? _deletingHistoryIndex;
@@ -234,7 +238,7 @@ public sealed partial class ChatUIController : UIController
         _input.SetInputCommand(ContentKeyFunctions.FocusAdminChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Admin)));
 
-        _input.SetInputCommand(ContentKeyFunctions.FocusAdminChat,
+        _input.SetInputCommand(CMKeyFunctions.RMCFocusMentorChat,
             InputCmdHandler.FromDelegate(_ => FocusChannel(ChatSelectChannel.Mentor)));
 
         _input.SetInputCommand(ContentKeyFunctions.FocusRadio,
@@ -290,6 +294,7 @@ public sealed partial class ChatUIController : UIController
 
     public void OnScreenUnload()
     {
+        CMUClearSpeechBubbles(); // CMU14: release owned controls before the screen is disposed.
         SetMainChat(false);
     }
 
@@ -306,19 +311,52 @@ public sealed partial class ChatUIController : UIController
         if (panel is null)
             return;
 
-        Color color;
-        if (panel.PanelOverride is StyleBoxFlat styleBoxFlat)
-            color = styleBoxFlat.BackgroundColor;
-        else if (panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
-                 && style is StyleBoxFlat propStyleBoxFlat)
-            color = propStyleBoxFlat.BackgroundColor;
-        else
-            color = StyleNano.ChatBackgroundColor;
+        SetChatWindowOpacity(panel, opacity);
+    }
 
-        panel.PanelOverride = new StyleBoxFlat
+    internal static void SetChatWindowOpacity(PanelContainer panel, float opacity)
+    {
+        // Read the base colour from the stylesheet, never from the panel's own current override.
+        // This used to check PanelOverride first, which meant each call re-read the result of the
+        // last one and multiplied alpha into it again - the log got darker every time the opacity
+        // setting was touched, and never recovered without a restart.
+        StyleBoxFlat? source = null;
+        if (panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
+            && style is StyleBoxFlat propStyleBoxFlat)
         {
-            BackgroundColor = color.WithAlpha(opacity)
+            source = propStyleBoxFlat;
+        }
+
+        // Under the CRT theme the ground is stated outright rather than looked up. This runs during
+        // startup and can fire before the style class reaches the panel, in which case the lookup
+        // above fails and the old fallback baked ChatBackgroundColor - a near-black tuned for the
+        // base theme - into a PanelOverride that then beat the class for the rest of the session.
+        // That is why the log stayed black no matter what the stylesheet said.
+        var color = StyleNano.CrtUiEnabled
+            ? CrtTerminalPalette.Surface1
+            : source?.BackgroundColor ?? StyleNano.ChatBackgroundColor;
+
+        // Opaque under the CRT theme. The surface ladder works by exact tones, and drawing Surface1
+        // at partial alpha composites it against Surface0 behind, landing on a colour that is darker
+        // than either and belongs to neither - which is why the log kept reading as black however the
+        // ladder was tuned. Translucency is a base-theme affordance; here it fights the palette.
+        var box = new StyleBoxFlat
+        {
+            BackgroundColor = StyleNano.CrtUiEnabled ? color : color.WithAlpha(opacity)
         };
+
+        // Carry the source's padding across. The override replaces the styled box wholesale, so
+        // building a bare StyleBoxFlat silently dropped whatever content margins the style class
+        // set and left the log's text flush against its own edge.
+        if (source != null)
+        {
+            box.ContentMarginLeftOverride = source.ContentMarginLeftOverride;
+            box.ContentMarginRightOverride = source.ContentMarginRightOverride;
+            box.ContentMarginTopOverride = source.ContentMarginTopOverride;
+            box.ContentMarginBottomOverride = source.ContentMarginBottomOverride;
+        }
+
+        panel.PanelOverride = box;
     }
 
     public void SetMainChat(bool setting)
@@ -570,6 +608,14 @@ public sealed partial class ChatUIController : UIController
         if (!_ent.TryGetComponent<TransformComponent>(entity, out var xform))
             return false;
 
+        // CMU14: first person projects each loaded floor directly instead of using the 2D stair portal offset.
+        if (_eye.MainViewport is Content.Client.CMU14.ThreeD.Scene.CMU3DSceneControl { FirstPerson: true } scene)
+        {
+            sameMap = xform.MapID == scene.SceneMap;
+            return scene.SceneMaps.Contains(xform.MapID);
+        }
+        // CMU14
+
         if (xform.MapID == _eye.CurrentEye.Position.MapId)
         {
             sameMap = true;
@@ -582,7 +628,10 @@ public sealed partial class ChatUIController : UIController
     public void RemoveSpeechBubble(EntityUid entityUid, SpeechBubble bubble)
     {
         bubble.OnDied -= SpeechBubbleDied;
-        bubble.Orphan();
+        // CMU14 Begin: release the control and cancel pending death callbacks.
+        // bubble.Orphan();
+        bubble.CMURetire();
+        // CMU14 End
 
         if (!_activeSpeechBubbles.TryGetValue(entityUid, out var list))
             return;
@@ -733,85 +782,10 @@ public sealed partial class ChatUIController : UIController
         }
     }
 
+    // CMU14 method: queue processing and lifetime management must also run for hidden bubbles.
     private void UpdateQueuedSpeechBubbles(FrameEventArgs delta)
     {
-        // Update queued speech bubbles.
-        if (_queuedSpeechBubbles.Count == 0 || _examine == null)
-        {
-            return;
-        }
-
-        foreach (var (entity, queueData) in _queuedSpeechBubbles.ShallowClone())
-        {
-            if (!EntityManager.EntityExists(entity))
-            {
-                _queuedSpeechBubbles.Remove(entity);
-                continue;
-            }
-
-            queueData.TimeLeft -= delta.DeltaSeconds;
-            if (queueData.TimeLeft > 0)
-            {
-                continue;
-            }
-
-            if (queueData.MessageQueue.Count == 0)
-            {
-                _queuedSpeechBubbles.Remove(entity);
-                continue;
-            }
-
-            var msg = queueData.MessageQueue.Dequeue();
-
-            queueData.TimeLeft += BubbleDelayBase + msg.Message.Message.Length * BubbleDelayFactor;
-
-            // We keep the queue around while it has 0 items. This allows us to keep the timer.
-            // When the timer hits 0 and there's no messages left, THEN we can clear it up.
-            CreateSpeechBubble(entity, msg);
-        }
-
-        var player = _player.LocalEntity;
-        var predicate = static (EntityUid uid, (EntityUid compOwner, EntityUid? attachedEntity) data)
-            => uid == data.compOwner || uid == data.attachedEntity;
-        var playerPos = player != null
-            ? _eye.CurrentEye.Position
-            : MapCoordinates.Nullspace;
-
-        var occluded = player != null && _examine.IsOccluded(player.Value);
-
-        foreach (var (ent, bubs) in _activeSpeechBubbles)
-        {
-            if (EntityManager.Deleted(ent))
-            {
-                SetBubbles(bubs, false);
-                continue;
-            }
-
-            if (ent == player)
-            {
-                SetBubbles(bubs, true);
-                continue;
-            }
-
-            if (!CanShowSpeechBubble(ent, out var sameMap))
-            {
-                SetBubbles(bubs, false);
-                continue;
-            }
-
-            var otherPos = _transform?.GetMapCoordinates(ent) ?? MapCoordinates.Nullspace;
-
-            if (sameMap && occluded && !_examine.InRangeUnOccluded(
-                    playerPos,
-                    otherPos, 0f,
-                    (ent, player), predicate))
-            {
-                SetBubbles(bubs, false);
-                continue;
-            }
-
-            SetBubbles(bubs, true);
-        }
+        CMUUpdateSpeechBubbles(delta);
     }
 
     private void SetBubbles(List<SpeechBubble> bubbles, bool visible)
@@ -835,7 +809,7 @@ public sealed partial class ChatUIController : UIController
         radioChannel = null;
         return _player.LocalEntity is EntityUid { Valid: true } uid
            && _chatSys != null
-           && _chatSys.TryProccessRadioMessage(uid, text, out _, out radioChannel, quiet: true);
+           && _chatSys.TryProcessRadioMessage(uid, text, out _, out radioChannel, quiet: true);
     }
 
     public void UpdateSelectedChannel(ChatBox box)
@@ -1058,7 +1032,8 @@ public sealed partial class ChatUIController : UIController
                 if (_ghost is not { IsGhost: true })
                     break;
 
-                AddSpeechBubble(msg, SpeechBubble.SpeechType.Say);
+                if (_ghost.GhostVisibility)
+                    AddSpeechBubble(msg, SpeechBubble.SpeechType.Say);
                 break;
 
             case ChatChannel.Emotes:
@@ -1074,6 +1049,7 @@ public sealed partial class ChatUIController : UIController
 
     public void OnDeleteChatMessagesBy(MsgDeleteChatMessagesBy msg)
     {
+        MessagesDeleted?.Invoke(msg);
         _deleteMessages.Add(msg);
         _deletingHistoryIndex = History.Count - 1;
     }

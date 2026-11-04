@@ -40,7 +40,7 @@ public sealed partial class AudioEffectSystem : EntitySystem
     // actually this problem applies for effects too
     private bool? _auxiliariesSafe = null;
 
-    private static readonly Dictionary<ProtoId<AudioPresetPrototype>, (EntityUid AuxiliaryUid, EntityUid EffectUid)> CachedEffects = new();
+    private readonly Dictionary<ProtoId<AudioPresetPrototype>, (EntityUid AuxiliaryUid, EntityUid EffectUid)> _cachedEffects = new();
 
     /// <summary>
     ///     An auxiliary with no effect; for removing effects.
@@ -70,32 +70,32 @@ public sealed partial class AudioEffectSystem : EntitySystem
 
         // get rid of all old cached entities, and replace them with new ones
         var oldPresets = new List<ProtoId<AudioPresetPrototype>>();
-        foreach (var cache in CachedEffects)
+        foreach (var cache in _cachedEffects)
         {
             oldPresets.Add(cache.Key);
 
             TryQueueDel(cache.Value.AuxiliaryUid);
             TryQueueDel(cache.Value.EffectUid);
         }
-        CachedEffects.Clear();
+        _cachedEffects.Clear();
 
         foreach (var oldPreset in oldPresets)
         {
             if (!ResolveCachedEffect(oldPreset, out var cachedAuxiliaryUid, out var cachedEffectUid))
                 continue;
 
-            CachedEffects[oldPreset] = (cachedAuxiliaryUid.Value, cachedEffectUid.Value);
+            _cachedEffects[oldPreset] = (cachedAuxiliaryUid.Value, cachedEffectUid.Value);
         }
     }
 
     private void Cleanup()
     {
-        foreach (var cache in CachedEffects)
+        foreach (var cache in _cachedEffects)
         {
             TryQueueDel(cache.Value.AuxiliaryUid);
             TryQueueDel(cache.Value.EffectUid);
         }
-        CachedEffects.Clear();
+        _cachedEffects.Clear();
 
         if (_cachedBlankAuxiliaryUid.IsValid())
             TryQueueDel(_cachedBlankAuxiliaryUid);
@@ -181,7 +181,8 @@ public sealed partial class AudioEffectSystem : EntitySystem
             return true;
 
         // resolve the cached auxiliary
-        if (!_cachedBlankAuxiliaryUid.IsValid())
+        if (!_cachedBlankAuxiliaryUid.IsValid() ||
+            !HasComp<AudioAuxiliaryComponent>(_cachedBlankAuxiliaryUid))
             _cachedBlankAuxiliaryUid = _audioSystem.CreateAuxiliary().Entity;
 
         _audioSystem.SetAuxiliary(entity, entity.Comp, _cachedBlankAuxiliaryUid);
@@ -202,12 +203,16 @@ public sealed partial class AudioEffectSystem : EntitySystem
             return false;
         }
 
-        if (CachedEffects.TryGetValue(preset, out var cached))
+        if (_cachedEffects.TryGetValue(preset, out var cached) &&
+            HasComp<AudioAuxiliaryComponent>(cached.AuxiliaryUid) &&
+            HasComp<AudioEffectComponent>(cached.EffectUid))
         {
             auxiliaryUid = cached.AuxiliaryUid;
             effectUid = cached.EffectUid;
             return true;
         }
+
+        _cachedEffects.Remove(preset);
 
         return TryCacheEffect(preset, out auxiliaryUid, out effectUid);
     }
@@ -255,6 +260,6 @@ public sealed partial class AudioEffectSystem : EntitySystem
         effectUid = effectPair.Entity;
         auxiliaryUid = auxiliaryPair.Entity;
 
-        return CachedEffects.TryAdd(preset, (auxiliaryPair.Entity, effectPair.Entity));
+        return _cachedEffects.TryAdd(preset, (auxiliaryPair.Entity, effectPair.Entity));
     }
 }

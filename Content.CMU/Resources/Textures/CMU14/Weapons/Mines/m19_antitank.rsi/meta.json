@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites by Thwomper, taken from cmss13 PR 3615 at https://github.com/LynxSolstice/cmss13/blob/4d3a126f2bda3b55dec09e996fb45434b68f92ca/icons/obj/items/weapons/grenade.dmi. Ported by troy.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "active"
+    }
+  ]
+}

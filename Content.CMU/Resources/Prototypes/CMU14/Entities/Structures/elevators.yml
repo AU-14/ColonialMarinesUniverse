@@ -1,0 +1,145 @@
+# Give each lift a unique elevatorId on its control, rails, walls, and doors. Rails are
+# directional: each fences the side of its tile that it faces. Place them on the
+# platform's edge tiles facing outward so the fence encloses the control on at least
+# three sides; the fourth may stay open. Any shape works. CMUElevatorWall and
+# CMUElevatorDoor fill their whole tile and can replace rails edge-to-edge. The control
+# has no collision and may share a rail's tile.
+# The controller must be on the platform. Players pick any linked floor from the control;
+# destinations need aligned, clear space and every level in between must be open.
+# Mobs in the way are crushed; ghosts and non-colliding entities are ignored.
+# The car spends travelTime in transit with its doors closed and bolted and its
+# CMUElevatorRetractableRail gates raised; they open again when it waits on a floor.
+# CMUElevatorLandingDoor goes on a floor beside the shaft and stays bolted unless the car
+# is waiting on that floor. It leaves
+# homeFloorTile behind on the floor it was first used from and may land on it again.
+# Put a CMUElevatorCallButton with the same elevatorId on each floor to call the lift.
+# Everything on the platform counts toward maxEntities, including container contents.
+# Anchored platform structures remain anchored after travel.
+- type: entity
+  parent: Railing
+  id: CMUElevatorRail
+  name: elevator rail
+  description: Place rails in a continuous, closed outline around an elevator platform. Rails with the same elevator ID define one movable platform.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/railing.rsi
+    offset: 0, 0.5
+    state: raised
+    noRot: true
+  - type: Icon
+    sprite: _RMC14/Structures/railing.rsi
+    state: raised
+  - type: CMUElevatorRail
+
+# Full-tile pieces: they join the platform and travel with it, and they close the
+# outline just like railings. Connect them edge-to-edge around the platform.
+- type: entity
+  parent: RMCWallElevator
+  id: CMUElevatorWall
+  description: An elevator shaft wall. Walls and doors with the same elevator ID as the control form part of the platform's outline.
+  components:
+  - type: CMUElevatorRail
+    fullTile: true
+
+- type: entity
+  parent: CMUAirlockUPPGrey
+  id: CMUElevatorDoor
+  name: elevator door
+  description: An elevator door. Walls and doors with the same elevator ID as the control form part of the platform's outline.
+  components:
+  - type: CMUElevatorRail
+    fullTile: true
+  # Self-powered so the elevator can always shut and bolt it for a trip.
+  - type: Airlock
+    powered: true
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+
+# The same door placed on a floor, outside the shaft, beside where the car stops. It is
+# not part of the car's outline; it stays closed and bolted until the car is waiting on
+# its floor.
+- type: entity
+  parent: CMUElevatorDoor
+  id: CMUElevatorLandingDoor
+  suffix: Landing
+  components:
+  - type: CMUElevatorRail
+    fullTile: true
+    landing: true
+
+# A retractable railing that acts as the gate of a railing elevator. It fences the side
+# it faces like CMUElevatorRail, is lowered while the car waits on a floor, and is
+# raised while the car is in transit.
+- type: entity
+  parent: CMRailing
+  id: CMUElevatorRetractableRail
+  name: elevator retractable railing
+  description: A retractable railing that rises while the elevator is moving.
+  suffix: Elevator
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Sprite
+    sprite: _RMC14/Structures/railing.rsi
+    offset: 0,0.5
+    layers:
+    - state: lowered
+      map: [ "enum.RequisitionsRailingLayers.Base" ]
+    noRot: true
+  - type: RequisitionsRailing
+    mode: Lowered
+  - type: CMUElevatorRail
+- type: entity
+  parent: BaseStructure
+  id: CMUElevatorControl
+  name: elevator control
+  description: Use to send the elevator to any linked floor. The control must be inside its closed rail outline.
+  placement:
+    mode: SnapgridCenter
+  components:
+  # Walk-through, so it can share a platform tile with railings and riders.
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: elevator
+    drawdepth: HighFloorObjects
+  - type: InteractionOutline
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: CMUElevator
+    # Seconds the car spends in transit with its doors shut and bolted. 0 moves instantly.
+    travelTime: 4
+    homeFloorTile: Plating
+  - type: CMUElevatorWeightLimit
+    maxEntities: 250
+
+# Place one on each floor the elevator serves, outside the shaft, with the elevator's ID.
+- type: entity
+  id: CMUElevatorCallButton
+  name: elevator call button
+  description: Calls the elevator to this floor.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Objects/door_button.rsi
+    state: doorctrl
+  - type: Clickable
+  - type: InteractionOutline
+  - type: WallMount
+    arc: 360
+  - type: CMUElevatorCallButton

@@ -1,0 +1,12 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Adds the UD-6 Mohawk Dropships
+  type: Add
+- message: Changes out the gunship in USCM and HAZOPS with the Midway
+  type: Add
+- message: Allows the queen to be able to use the ramp controls to open the ramp of
+    the Mohawks
+  type: Tweak
+time: '2026-09-21T01:37:52.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1982

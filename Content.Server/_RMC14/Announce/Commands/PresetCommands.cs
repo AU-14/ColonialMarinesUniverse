@@ -16,7 +16,8 @@ public sealed class AnnouncePresetCommand : IConsoleCommand
 {
     public string Command => "announcepreset";
     public string Description => "Send an announcement using any configured preset.";
-    public string Help => "announcepreset <presetId> \"<message>\" [--entity=<uid>] [--name=\"<speaker name>\"] [--target=All|Marines|Xenos]";
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    public string Help => "announcepreset <presetId> \"<message>\" [--entity=<uid>] [--name=\"<speaker name>\"] [--target=All|Marines|Xenos|Govfor|Opfor]";
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -24,7 +25,8 @@ public sealed class AnnouncePresetCommand : IConsoleCommand
 
         if (args.Length < 2)
         {
-            shell.WriteError("Usage: announce <presetId> \"<message>\" [--entity=<uid>] [--name=\"<speaker name>\"] [--target=All|Marines|Xenos]");
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            shell.WriteError(Help);
             return;
         }
 
@@ -58,9 +60,15 @@ public sealed class AnnouncePresetCommand : IConsoleCommand
             request.SpeakerNameOverride = name;
         }
 
-        if (options.TryGetValue("target", out var targetStr) &&
-            Enum.TryParse<AnnouncementTarget>(targetStr, true, out var target))
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        if (options.TryGetValue("target", out var targetStr))
         {
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            if (!Enum.TryParse<AnnouncementTarget>(targetStr, true, out var target) || !Enum.IsDefined(target))
+            {
+                shell.WriteError(Help);
+                return;
+            }
             request.Target = target;
         }
 
@@ -121,7 +129,8 @@ public sealed class AnnouncePresetCommand : IConsoleCommand
                         currentMessage += " " + arg;
                     }
                 }
-                else if (!inQuotes && messageParts.Count == 0)
+                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                else if (!inQuotes)
                 {
                     messageParts.Add(arg);
                 }

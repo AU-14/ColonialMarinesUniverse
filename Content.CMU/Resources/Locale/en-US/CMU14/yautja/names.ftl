@@ -1,0 +1,76 @@
+# Yautja names sourced from CMSS13 commit e97c5f08fdcfd60743481011e30ccdccc7fd7c88:
+# code/_globalvars/lists/names.dm GLOB.pred_names and GLOB.pred_last_names.
+
+cmu-name-yautja-first-1 = Nu'koir
+cmu-name-yautja-first-2 = Za-ai'stba
+cmu-name-yautja-first-3 = Au'stbep
+cmu-name-yautja-first-4 = Gihn'thill
+cmu-name-yautja-first-5 = Au'stbep
+cmu-name-yautja-first-6 = Tud'tab
+cmu-name-yautja-first-7 = Gehtu-a
+cmu-name-yautja-first-8 = U-dan'dchu
+cmu-name-yautja-first-9 = Bua'dtu
+cmu-name-yautja-first-10 = A'ytein
+cmu-name-yautja-first-11 = Yu-thwuahtou
+cmu-name-yautja-first-12 = Yon'ta
+cmu-name-yautja-first-13 = Pan'teiat
+cmu-name-yautja-first-14 = Ban'ti
+cmu-name-yautja-first-15 = Ve'thiad
+cmu-name-yautja-first-16 = Ga-aiteith
+cmu-name-yautja-first-17 = A'kah
+cmu-name-yautja-first-18 = Dachande
+cmu-name-yautja-first-19 = Bhua'tean
+cmu-name-yautja-first-20 = Nahroirh
+cmu-name-yautja-first-21 = Vateiann
+cmu-name-yautja-first-22 = A'stbath
+cmu-name-yautja-first-23 = I'ja
+cmu-name-yautja-first-24 = Hai'dtath-Bha
+cmu-name-yautja-first-25 = Zatailb
+cmu-name-yautja-first-26 = Ca'tall
+cmu-name-yautja-first-27 = A'staol
+cmu-name-yautja-first-28 = Nago-Ill
+cmu-name-yautja-first-29 = U'thath
+cmu-name-yautja-first-30 = Ahn'tha
+cmu-name-yautja-first-31 = Tocha
+cmu-name-yautja-first-32 = Ba-A'ytall
+cmu-name-yautja-first-33 = Mihn'tha
+cmu-name-yautja-first-34 = Le'pro
+
+cmu-name-yautja-last-1 = Tha'jo
+cmu-name-yautja-last-2 = Ba'ytui
+cmu-name-yautja-last-3 = Thwa'dtei
+cmu-name-yautja-last-4 = Vah'ka
+cmu-name-yautja-last-5 = A'taar
+cmu-name-yautja-last-6 = Zau'dqou
+cmu-name-yautja-last-7 = Ma'kah
+cmu-name-yautja-last-8 = Gahru
+
+# CMSS13 military caste codenames, code/modules/gear_presets/yautja.dm mcaste_names
+cmu-name-yautja-mcaste-1 = P'kya-uha
+cmu-name-yautja-mcaste-2 = K'var-de
+cmu-name-yautja-mcaste-3 = Vor'mekta
+cmu-name-yautja-mcaste-4 = Mar'cte
+cmu-name-yautja-mcaste-5 = Kuj-hade
+cmu-name-yautja-mcaste-6 = Mai-itaje
+cmu-name-yautja-mcaste-7 = Yu'var-at
+cmu-name-yautja-mcaste-8 = Kha'irat
+cmu-name-yautja-mcaste-9 = N'yaka-de
+cmu-name-yautja-mcaste-10 = Pt'mon-ad
+cmu-name-yautja-mcaste-11 = Dt'einou
+cmu-name-yautja-mcaste-12 = M'nor-itn
+cmu-name-yautja-mcaste-13 = Jal-khon'ir
+cmu-name-yautja-mcaste-14 = Nrak'ytara
+cmu-name-yautja-mcaste-15 = Hul'potl
+cmu-name-yautja-mcaste-16 = Na-ir'mon
+cmu-name-yautja-mcaste-17 = Er'mon-at
+cmu-name-yautja-mcaste-18 = Jeh'din
+cmu-name-yautja-mcaste-19 = Khal'irir
+cmu-name-yautja-mcaste-20 = Dae-sirat
+cmu-name-yautja-mcaste-21 = Mon'kal-at
+cmu-name-yautja-mcaste-22 = Yhi'ra-tem
+cmu-name-yautja-mcaste-23 = D'thelat
+cmu-name-yautja-mcaste-24 = Ir-paya
+cmu-name-yautja-mcaste-25 = An'khos-ir
+cmu-name-yautja-mcaste-26 = Vhe'talid
+cmu-name-yautja-mcaste-27 = Da'thol-ai
+cmu-name-yautja-mcaste-28 = Ve'kirad

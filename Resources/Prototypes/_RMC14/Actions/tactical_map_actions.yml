@@ -13,26 +13,32 @@
   id: RMCActionOpenTacticalMapMarine
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Structures/Machines/map_table.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Structures/Machines/map_table.rsi
       state: maptable
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   parent: RMCActionOpenTacticalMap
   id: RMCActionOpenTacticalMapXeno
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: xeno_tacmap
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   parent: RMCActionOpenTacticalMap
   id: RMCActionOpenTacticalMapGhost
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Structures/Machines/map_table.rsi
-      state: maptable
     checkCanInteract: false
     checkConsciousness: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Structures/Machines/map_table.rsi
+      state: maptable
+      map: ["enum.ActionVisuals.Icon"]

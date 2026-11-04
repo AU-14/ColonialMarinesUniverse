@@ -1,8 +1,8 @@
-using Content.Client._CMU14.ZLevels.Core;
+using Content.Client.CMU14.ZLevels.Core;
 using Content.Client.Viewport;
 using NUnit.Framework;
 
-namespace Content.Tests.Client._CMU14.ZLevels;
+namespace Content.Tests.Client.CMU14.ZLevels;
 
 [TestFixture]
 public sealed class ZLevelBlurOverlayTest

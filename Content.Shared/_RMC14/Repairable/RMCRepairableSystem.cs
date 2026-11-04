@@ -6,6 +6,8 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
@@ -49,7 +51,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
     private static readonly ProtoId<StackPrototype> WoodStack = "RMCWood";
     private static readonly EntProtoId<SkillDefinitionComponent> ConstructionSkill = "RMCSkillConstruction";
 
-    private const string SolutionWelder = "Welder";
+    private const string SolutionWelder = "welder";
     private const string ReagentWelder = "WeldingFuel";
 
     private EntityUid? _forceRepairUser;
@@ -90,7 +92,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         var user = args.User;
         if (!HasComp<BlowtorchComponent>(used))
         {
-            _popup.PopupClient(Loc.GetString("rmc-repairable-need-blowtorch"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-repairable-need-blowtorch"), user, user, PopupType.SmallCaution);
             return;
         }
 
@@ -99,18 +101,19 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         if (!TryComp(repairable, out DamageableComponent? damageable))
             return;
 
-        if (!hasReplace && damageable.TotalDamage <= FixedPoint2.Zero)
+        var totalDamage = _damageable.GetTotalDamage((repairable, damageable));
+        if (!hasReplace && totalDamage <= FixedPoint2.Zero)
         {
-            _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", repairable)),
+            _popup.PopupEntity(Loc.GetString("rmc-repairable-not-damaged", ("target", repairable)),
                 user,
                 user,
                 PopupType.SmallCaution);
             return;
         }
 
-        if (repairable.Comp.RepairableDamageLimit > 0 && damageable.TotalDamage > repairable.Comp.RepairableDamageLimit)
+        if (repairable.Comp.RepairableDamageLimit > 0 && totalDamage > repairable.Comp.RepairableDamageLimit)
         {
-            _popup.PopupClient(Loc.GetString("rmc-repairable-too-damaged", ("target", repairable)),
+            _popup.PopupEntity(Loc.GetString("rmc-repairable-too-damaged", ("target", repairable)),
                 user,
                 user,
                 PopupType.SmallCaution);
@@ -120,7 +123,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         if (repairable.Comp.SkillRequired > 0 &&
             !_skills.HasSkill(user, repairable.Comp.Skill, repairable.Comp.SkillRequired))
         {
-            _popup.PopupClient(Loc.GetString("rmc-repairable-not-trained", ("target", repairable)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-repairable-not-trained", ("target", repairable)), user, user, PopupType.SmallCaution);
             return;
         }
 
@@ -132,7 +135,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         var delay = hasReplace
             ? (float) repairable.Comp.Delay.TotalSeconds
-            : GetWeldRepairDelaySeconds(repairable, user, damageable.TotalDamage);
+            : GetWeldRepairDelaySeconds(repairable, user, _damageable.GetTotalDamage((repairable, damageable)));
         var ev = new RMCRepairableDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(delay), ev, repairable, repairable, used: args.Used)
         {
@@ -151,7 +154,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-repairable-start-self", ("target", repairable));
             var othersMsg = Loc.GetString("rmc-repairable-start-others", ("user", user), ("target", repairable));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
             _weldEffect.SpawnWeldEffect(repairable, doAfter.Delay);
         }
     }
@@ -232,7 +235,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-repairable-finish-self", ("target", repairable));
             var othersMsg = Loc.GetString("rmc-repairable-finish-others", ("user", user), ("target", repairable));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
             _audio.PlayPredicted(repairable.Comp.Sound, repairable, user);
 
             if (_net.IsServer)
@@ -260,38 +263,40 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         var repairSelfMsg = Loc.GetString("rmc-repairable-finish-self", ("target", repairable));
         var repairOthersMsg = Loc.GetString("rmc-repairable-finish-others", ("user", user), ("target", repairable));
-        _popup.PopupPredicted(repairSelfMsg, repairOthersMsg, user, user);
+        _popup.PopupEntity(repairSelfMsg, repairOthersMsg, user, user);
         _audio.PlayPredicted(repairable.Comp.Sound, repairable, user);
 
-        if (TryComp(repairable, out DamageableComponent? damageable) &&
-            damageable.TotalDamage > FixedPoint2.Zero &&
-            heal.GetTotal() != FixedPoint2.Zero)
+        if (!TryComp(repairable, out DamageableComponent? damageable))
+            return;
+
+        var totalDamage = _damageable.GetTotalDamage((repairable, damageable));
+        if (totalDamage <= FixedPoint2.Zero || heal.GetTotal() == FixedPoint2.Zero)
+            return;
+
+        if (args.Used is not { } used)
+            return;
+
+        var delay = TimeSpan.FromSeconds(GetWeldRepairDelaySeconds(repairable, args.User, totalDamage));
+        var ev = new RMCRepairableDoAfterEvent();
+        var doAfter = new DoAfterArgs(EntityManager, args.User, delay, ev, repairable, used: used)
         {
-            if (args.Used is not { } used)
-                return;
+            NeedHand = true,
+            BreakOnMove = true,
+            BlockDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
+        };
 
-            var delay = TimeSpan.FromSeconds(GetWeldRepairDelaySeconds(repairable, args.User, damageable.TotalDamage));
-            var ev = new RMCRepairableDoAfterEvent();
-            var doAfter = new DoAfterArgs(EntityManager, args.User, delay, ev, repairable, used: used)
-            {
-                NeedHand = true,
-                BreakOnMove = true,
-                BlockDuplicate = true,
-                DuplicateCondition = DuplicateConditions.SameEvent
-            };
-
-            _doAfter.TryStartDoAfter(doAfter);
-        }
+        _doAfter.TryStartDoAfter(doAfter);
     }
 
     public bool UseFuel(EntityUid tool, EntityUid user, FixedPoint2 fuelUsed, bool attempt = false)
     {
-        if (!TryComp<SolutionContainerManagerComponent>(tool, out var welderCon))
+        if (!TryComp<SolutionManagerComponent>(tool, out var welderCon))
             return false;
 
         if (!TryComp<ItemToggleComponent>(tool, out var toggle) || !toggle.Activated)
         {
-            _popup.PopupClient(Loc.GetString("welder-component-welder-not-lit-message"), user, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("welder-component-welder-not-lit-message"), user, PopupType.SmallCaution);
             return false;
         }
 
@@ -300,9 +305,12 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         if (solution.GetTotalPrototypeQuantity(ReagentWelder) == 0 || solution.GetTotalPrototypeQuantity(ReagentWelder) < fuelUsed)
         {
-            _popup.PopupClient(Loc.GetString("welder-component-no-fuel-message"), user, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("welder-component-no-fuel-message"), user, PopupType.SmallCaution);
             return false;
         }
+
+        if (attempt) // CMU14: flows bypass SharedToolSystem.UseTool, raise its attempt event so unprotected welding damages eyes
+            RaiseLocalEvent(tool, new ToolUseAttemptEvent(user, fuelUsed.Float()));
 
         if (!attempt && _net.IsServer)
         {
@@ -331,9 +339,9 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         args.Handled = true;
         if (!TryComp(repairable, out DamageableComponent? damageable) ||
-            damageable.TotalDamage <= FixedPoint2.Zero)
+            _damageable.GetTotalDamage((repairable, damageable)) <= FixedPoint2.Zero)
         {
-            _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", repairable)), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-repairable-not-damaged", ("target", repairable)), user, user, PopupType.SmallCaution);
             return;
         }
 
@@ -342,7 +350,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         if (getAmmoCountEv.Count < 4)
         {
-            _popup.PopupClient(Loc.GetString("rmc-nailgun-no-nails-message"), user, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-nailgun-no-nails-message"), user, PopupType.SmallCaution);
             return;
         }
 
@@ -350,7 +358,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         if (held == null || repairValue <= FixedPoint2.Zero)
         {
-            _popup.PopupClient(Loc.GetString("rmc-nailgun-no-material-message",  ("target", repairable)), user, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-nailgun-no-material-message",  ("target", repairable)), user, PopupType.SmallCaution);
             return;
         }
 
@@ -369,7 +377,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-repairable-start-self", ("target", repairable));
             var othersMsg = Loc.GetString("rmc-repairable-start-others", ("user", user), ("target", repairable));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 
@@ -395,7 +403,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         if (getAmmoCountEv.Count < 4)
         {
-            _popup.PopupClient(Loc.GetString("rmc-nailgun-no-nails-message"), user, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-nailgun-no-nails-message"), user, PopupType.SmallCaution);
             return;
         }
 
@@ -405,7 +413,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         var repairValue = GetRepairValue(repairable, (user, handsComp), nailgunComponent, out EntityUid? held);
         if (held == null || repairValue <= FixedPoint2.Zero)
         {
-            _popup.PopupClient(Loc.GetString("rmc-nailgun-lost-stack"), user, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-nailgun-lost-stack"), user, PopupType.SmallCaution);
             return;
         }
 
@@ -415,7 +423,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         if (TryComp(held, out StackComponent? stack))
         {
-            _stack.SetCount((EntityUid)held, stack.Count - nailgunComponent.MaterialPerRepair);
+            _stack.SetCount(((EntityUid)held, null), stack.Count - nailgunComponent.MaterialPerRepair);
         }
 
         var ammo = new List<(EntityUid? Entity, IShootable Shootable)>();
@@ -429,7 +437,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-nailgun-finish-self", ("material", held), ("target", repairable));
         var othersMsg = Loc.GetString("rmc-repairable-finish-others", ("user", user), ("material", held), ("target", repairable));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user);
         _audio.PlayPredicted(nailgunComponent.RepairSound, repairable, user);
     }
 
@@ -555,22 +563,22 @@ public sealed partial class RMCRepairableSystem : EntitySystem
 
             if (welder.Enabled)
             {
-                _popup.PopupClient(Loc.GetString("rmc-welder-component-danger"), used, args.User, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-welder-component-danger"), used, args.User, PopupType.MediumCaution);
             }
             else if (trans > 0)
             {
                 var drained = _solution.Drain(target, targetSoln.Value, trans);
                 _solution.TryAddSolution(solutionComp.Value, drained);
                 _audio.PlayPredicted(welder.WelderRefill, used, user: args.User);
-                _popup.PopupClient(Loc.GetString("welder-component-after-interact-refueled-message"), used, args.User);
+                _popup.PopupEntity(Loc.GetString("welder-component-after-interact-refueled-message"), used, args.User);
             }
             else if (welderSolution.AvailableVolume <= 0)
             {
-                _popup.PopupClient(Loc.GetString("welder-component-already-full"), used, args.User);
+                _popup.PopupEntity(Loc.GetString("welder-component-already-full"), used, args.User);
             }
             else
             {
-                _popup.PopupClient(Loc.GetString("welder-component-no-fuel-in-tank", ("owner", args.Target)), used, args.User);
+                _popup.PopupEntity(Loc.GetString("welder-component-no-fuel-in-tank", ("target", args.Target)), used, args.User); // CMU14: fluent string reads $target, not $owner
             }
 
             args.Handled = true;
@@ -584,7 +592,7 @@ public sealed partial class RMCRepairableSystem : EntitySystem
         if (!ev.Cancelled)
             return true;
 
-        _popup.PopupClient(ev.Popup, user, user, PopupType.MediumCaution);
+        _popup.PopupEntity(ev.Popup, user, user, PopupType.MediumCaution);
         return false;
     }
 }

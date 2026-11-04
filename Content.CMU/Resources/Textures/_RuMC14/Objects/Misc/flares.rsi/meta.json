@@ -1,0 +1,95 @@
+{
+  "version": 4,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "'hubaruba' from Discord",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "flare_spent"
+    },
+    {
+      "name": "flare"
+    },
+    {
+      "name": "cas_flare"
+    },
+    {
+      "name": "flare_unlit"
+    },
+    {
+      "name": "flare_flame",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "flare-on"
+    },
+    {
+      "name": "overlay"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "rsp"
+    },
+    {
+      "name": "cas_rsp"
+    },
+    {
+      "name": "rsp_open"
+    },
+    {
+      "name": "cas_overlay"
+    },
+    {
+      "name": "cas_flare_flame",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "cas_flare_spent"
+    },
+    {
+      "name": "cas_inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "cas_inhand-right",
+      "directions": 4
+    }
+  ]
+}

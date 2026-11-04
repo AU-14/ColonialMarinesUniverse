@@ -1,0 +1,36 @@
+<Document>
+  # Breaching and Demolition
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCExplosiveBreachingCharge" Caption="Breaching charge"/>
+    <GuideEntityEmbed Entity="RMCExplosivePlastic" Caption="C4"/>
+    <GuideEntityEmbed Entity="AU14Bangalore" Caption="Bangalore charge"/>  </Box>
+
+  ## Breaching Charges
+  A breaching charge is for getting through a wall [bold]fast[/bold] and going straight in. Stick it on a wall, which takes a second, and it blows three seconds later. The wall is gone, but the blast itself is tiny: you're safe standing next to it, and a spray of deadly shrapnel goes out through the hole into the room on the other side. Once it's stuck on, it can't be taken back off. You need engineering training to use one.
+
+  ## C4
+  C4 (plastic explosives) is for [bold]demolition[/bold]. Sticking it on takes five seconds, then it beeps for ten seconds before going off. It blows a hole through the wall, but it's a large explosion that hurts anyone nearby on either side, so place it and get well clear. C4 can also be stuck on creature tunnels to destroy them.
+
+  ## Breaching Charge or C4?
+  - Use a [bold]breaching charge[/bold] when you're about to go through the hole: it's quick, you can stand right beside it, and its shrapnel clears the room beyond for you.
+  - Use [bold]C4[/bold] when you want something destroyed and nobody needs to be near it: a tunnel, a position you're abandoning, or a wall you can blow from a safe distance.
+  - If you need to clear a whole area rather than one wall, neither will do; that's what the Bangalore is for.
+
+  ## Bangalore Demolition Charge
+  The Bangalore clears obstacles and breaches fortifications. Once it's placed on the ground it arms itself and goes off [bold]20 seconds[/bold] later.
+
+  [color=red]It's a far bigger blast than C4 or a breaching charge.[/color] It clears a much wider area, flattening whole stretches of barricades, wire and walls at once, and throws shrapnel in every direction. Use it to open a wide lane through a defensive line, not a single doorway, and get well clear before it goes off.
+
+  ## The Brute
+  <Box>
+    <GuideEntityEmbed Entity="RMCWeaponLauncherM6HBrute" Caption="M6H-BRUTE"/>
+    <GuideEntityEmbed Entity="RMCRocketM5510Brute" Caption="M5510 rocket"/>
+  </Box>
+  The [bold]M6H-BRUTE[/bold] is a laser-guided breaching launcher. Its M5510 rockets rip open walls and hardened structures from a distance, where a charge would mean walking up to them. Military engineers can draw it on a rig with its rockets from their gear rack's support equipment slot, instead of a sentry.
+  - It needs [bold]expert engineering training[/bold], and both hands.
+  - Aim it at your target and hold it there. The laser has to lock on for [bold]4 seconds[/bold] before you can fire.
+  - [color=red]It has a backblast.[/color] Make sure nobody is standing behind you when you fire.
+  - Loading a rocket takes 6 seconds, and it only holds one at a time.
+  - You move slowly while it's wielded.
+</Document>

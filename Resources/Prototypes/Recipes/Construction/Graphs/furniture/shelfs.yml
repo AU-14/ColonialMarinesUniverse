@@ -18,14 +18,14 @@
           completed:
             - !type:SnapToGrid {}
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 5
               doAfter: 3
         - to: ShelfGlass
           completed:
             - !type:SnapToGrid {}
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 4
               doAfter: 2
 # Reinforced
@@ -43,7 +43,7 @@
           completed:
             - !type:SnapToGrid {}
           steps:
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 5
               doAfter: 3
             - material: ReinforcedGlass
@@ -56,7 +56,7 @@
           completed:
             - !type:SnapToGrid {}
           steps:
-            - material: Plastic
+            - material: RMCPlastic # CMU14: fork plastic (RMCSheetPlastic), not upstream Plastic
               amount: 5
               doAfter: 2
             - material: ReinforcedGlass
@@ -77,10 +77,10 @@
           completed:
             - !type:SnapToGrid {}
           steps:
-            - material: MetalRod
+            - material: CMRodMetal # CMU14: fork rods (CMRodMetal), not upstream MetalRod
               amount: 2
               doAfter: 1
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 5
             - material: WoodPlank
               amount: 3
@@ -89,13 +89,13 @@
           completed:
             - !type:SnapToGrid {}
           steps:
-            - material: Plasteel
+            - material: CMPlasteel # CMU14: fork plasteel (CMSheetPlasteel), not upstream Plasteel
               amount: 2
               doAfter: 2
             - material: ReinforcedGlass
               amount: 5
               doAfter: 2
-            - material: Plastic
+            - material: RMCPlastic # CMU14: fork plastic (RMCSheetPlastic), not upstream Plastic
               amount: 5
               doAfter: 2
             - material: Cable
@@ -123,7 +123,7 @@
           completed:
             - !type:EmptyAllContainers
             - !type:GivePrototype
-                prototype: SheetSteel1
+                prototype: CMSheetMetal1 # CMU14: refund fork metal
                 amount: 5
           steps:
             - tool: Screwing
@@ -136,7 +136,7 @@
           completed:
             - !type:EmptyAllContainers
             - !type:GivePrototype
-                prototype: SheetGlass1
+                prototype: CMSheetGlass1 # CMU14: refund fork glass
                 amount: 4
           steps:
             - tool: Screwing
@@ -167,10 +167,10 @@
           completed:
             - !type:EmptyAllContainers
             - !type:GivePrototype
-                prototype: SheetPlasteel1
+                prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
                 amount: 5
             - !type:GivePrototype
-                prototype: SheetRGlass1
+                prototype: SheetRGlass1 # CMU14: refund the upstream sheet the build step consumed; the fork sheet carries CMSteel the shelf never cost
                 amount: 5
             - !type:GivePrototype
                 prototype: CableApcStack1
@@ -188,10 +188,10 @@
           completed:
             - !type:EmptyAllContainers
             - !type:GivePrototype
-                prototype: SheetPlastic1
+                prototype: RMCSheetPlastic1 # CMU14: refund fork plastic
                 amount: 5
             - !type:GivePrototype
-                prototype: SheetRGlass1
+                prototype: SheetRGlass1 # CMU14: refund the upstream sheet the build step consumed; the fork sheet carries CMSteel the shelf never cost
                 amount: 5
             - !type:GivePrototype
                 prototype: CableApcStack1
@@ -223,10 +223,10 @@
           completed:
             - !type:EmptyAllContainers
             - !type:GivePrototype
-                prototype: PartRodMetal
+                prototype: CMRodMetal # CMU14: refund fork rods
                 amount: 2
             - !type:GivePrototype
-                prototype: SheetSteel1
+                prototype: CMSheetMetal1 # CMU14: refund fork metal
                 amount: 5
             - !type:GivePrototype
                 prototype: MaterialWoodPlank1
@@ -246,13 +246,13 @@
           completed:
             - !type:EmptyAllContainers
             - !type:GivePrototype
-                prototype: SheetPlasteel1
+                prototype: CMSheetPlasteel1 # CMU14: refund fork plasteel
                 amount: 2
             - !type:GivePrototype
-                prototype: SheetPlastic1
+                prototype: RMCSheetPlastic1 # CMU14: refund fork plastic
                 amount: 5
             - !type:GivePrototype
-                prototype: SheetRGlass1
+                prototype: SheetRGlass1 # CMU14: refund the upstream sheet the build step consumed; the fork sheet carries CMSteel the shelf never cost
                 amount: 5
             - !type:GivePrototype
                 prototype: CableApcStack1

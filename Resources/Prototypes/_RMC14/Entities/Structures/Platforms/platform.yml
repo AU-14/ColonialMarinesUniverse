@@ -7,6 +7,7 @@
   - type: VehicleSmashable
   - type: Transform
     anchored: true
+    gridTraversal: false
   - type: Sprite
     sprite: _RMC14/Structures/platforms.rsi
   - type: InteractionOutline
@@ -25,6 +26,7 @@
   components:
   - type: Transform
     anchored: true
+    gridTraversal: false
   - type: Sprite
     sprite: _RMC14/Structures/platforms.rsi
   - type: InteractionOutline
@@ -36,6 +38,7 @@
   id: CMPlatformBaseDestructible
   components:
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -126,7 +129,7 @@
       fix2:
         shape:
           !type:PhysShapeAabb
-          bounds: "0.49,0.49,0.36,-0.49"
+          bounds: "0.36,-0.49,0.49,0.49"
         density: 1500
         mask:
         - TableMask
@@ -148,6 +151,7 @@
   components:
   - type: Physics
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -170,7 +174,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.49,0.49,-0.36,0.36"
+          bounds: "-0.49,0.36,-0.36,0.49"
         density: 1500
         mask:
         - TableMask
@@ -192,6 +196,7 @@
   components:
   - type: Physics
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

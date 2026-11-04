@@ -41,6 +41,11 @@ public abstract partial class SharedIgnitionSourceSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp, false))
             return;
 
+        // CMU14: FlammableSystem re-asserts ignition once per second per burning entity;
+        // skip the write so PVS is not dirtied for every already-ignited source.
+        if (ent.Comp.Ignited == ignited)
+            return;
+
         ent.Comp.Ignited = ignited;
         Dirty(ent, ent.Comp);
     }

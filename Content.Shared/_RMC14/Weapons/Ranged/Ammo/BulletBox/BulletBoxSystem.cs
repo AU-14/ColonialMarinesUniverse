@@ -5,8 +5,11 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
+using Content.Shared.Weapons.Ranged; // CMU14
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Events; // CMU14
 using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Prototypes; // CMU14
 
 namespace Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
 
@@ -14,6 +17,8 @@ public sealed partial class BulletBoxSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IComponentFactory _compFactory = default!; // CMU14
+    [Dependency] private IPrototypeManager _prototypes = default!; // CMU14
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -123,6 +128,9 @@ public sealed partial class BulletBoxSystem : EntitySystem
                 return;
 
             transfer = Math.Min(transfer, ent.Comp.Amount);
+            // CMU14: chamber the box's shell variant when filling an empty gun, so LTB AP/HE/etc shells fire as loaded
+            if (used.Comp2.Count == 0 && ent.Comp.AmmoProto is { } ammoProto)
+                _gun.SetBallisticProto((used, used.Comp2), ammoProto);
             _gun.SetBallisticUnspawned((used, used.Comp2), used.Comp2.UnspawnedCount + transfer);
             ent.Comp.Amount -= transfer;
         }
@@ -133,10 +141,28 @@ public sealed partial class BulletBoxSystem : EntitySystem
                 return;
 
             transfer = Math.Min(transfer, used.Comp2.Count);
-            _gun.SetBallisticUnspawned((used, used.Comp2), used.Comp2.UnspawnedCount - transfer);
+            // CMU14 Begin: consume both unspawned and entity-backed rounds when unloading.
+            var fromUnspawned = Math.Min(transfer, used.Comp2.UnspawnedCount);
+            if (fromUnspawned > 0)
+                _gun.SetBallisticUnspawned((used, used.Comp2), used.Comp2.UnspawnedCount - fromUnspawned);
+
+            var remaining = transfer - fromUnspawned;
+            if (remaining > 0)
+            {
+                var taken = new List<(EntityUid? Entity, IShootable Shootable)>();
+                var takeEv = new TakeAmmoEvent(remaining, taken, Transform(usedId).Coordinates, user);
+                RaiseLocalEvent(usedId, takeEv);
+                transfer = fromUnspawned + taken.Count;
+                foreach (var (round, _) in taken)
+                {
+                    if (round is { } roundId)
+                        PredictedDel(roundId);
+                }
+            }
+            // CMU14 End
             ent.Comp.Amount += transfer;
         }
-        _popup.PopupClient(Loc.GetString("rmc-bullet-box-transfer-done", ("amount", transfer), ("used", ent)), ent, user);
+        _popup.PopupEntity(Loc.GetString("rmc-bullet-box-transfer-done", ("amount", transfer), ("used", ent)), ent, user);
         Dirty(ent);
         UpdateAppearance(ent);
     }
@@ -176,7 +202,7 @@ public sealed partial class BulletBoxSystem : EntitySystem
         }
         if(popup is not null)
         {
-            _popup.PopupClient(popup, box, user);
+            _popup.PopupEntity(popup, box, user);
             return false;
         }
         return true;
@@ -227,5 +253,30 @@ public sealed partial class BulletBoxSystem : EntitySystem
         Dirty(ent);
         UpdateAppearance(ent);
         return true;
+    }
+
+    // CMU14 Method
+    /// <summary>
+    ///     Finds the ammo box prototype that chambers <paramref name="ammoProto"/>, so unloading a
+    ///     vehicle chamber hands back the same shell variant that was loaded.
+    /// </summary>
+    public EntProtoId? GetBoxForAmmo(EntProtoId? ammoProto)
+    {
+        if (ammoProto is not { } proto)
+            return null;
+
+        foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (prototype.Abstract)
+                continue;
+
+            if (!prototype.TryComp(out BulletBoxComponent? box, _compFactory))
+                continue;
+
+            if (box.AmmoProto == proto)
+                return prototype.ID;
+        }
+
+        return null;
     }
 }

@@ -10,13 +10,18 @@
   name: Warrior
   description: A beefy alien with an armored carapace.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste, matching
+    canThrow: true           # CM-SS13's grab gate (mob_grab.dm:82-89: Yautja reach MOB_SIZE_XENO, 3).
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleWarrior
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Warrior/warrior.rsi # AU14-Edit
+    sprite: CMU14/Mobs/Xenos/Warrior/warrior.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -53,6 +58,9 @@
       types:
         Blunt: 27.5
   - type: XenoFling
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      ticks: 2
   - type: XenoLunge
   - type: XenoPlasma
     plasma: 0
@@ -60,17 +68,16 @@
     plasmaRegenOnWeeds: 0
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaChitin
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -81,9 +88,6 @@
     max: 500
     evolvesTo:
     - RMCXenoCrusher
-    # CMU14
-    - CMXenoWarlock
-    # CMU14
     - CMXenoPraetorian
     strains:
     - CMXenoWarriorBulwark
@@ -95,12 +99,16 @@
     clawType: Sharp
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 48
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: Tackle
     max: 4
   - type: SlowOnPull

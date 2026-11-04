@@ -1,0 +1,83 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineRifleman
+  name: IASF parachute regiment rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineRifleman
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineTeamLeader
+  name: IASF parachute regiment team leader id card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineTeamLeader
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineCommander
+  name: IASF parachute regiment commander ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineCommander
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineAssaultEngineer
+  name: IASF parachute regiment assault engineer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineAssaultEngineer
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineMedicalTechnician
+  name: IASF parachute regiment medical technician ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineMedicalTechnician
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarinePilot
+  name: IASF parachute regiment pilot ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarinePilot
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: CMUIDCardParamarineSynthetic
+  name: IASF parachute regiment synthetic ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobParamarineSynthetic
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF

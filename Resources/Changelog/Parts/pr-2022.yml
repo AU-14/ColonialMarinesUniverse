@@ -1,0 +1,8 @@
+author: johnnny34y
+category: CMU
+changes:
+- message: HAZOPS M240A2 now has buffed range across all ammo types and an underbarrel
+    extinguisher slot
+  type: Tweak
+time: '2026-09-27T11:59:32.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2022

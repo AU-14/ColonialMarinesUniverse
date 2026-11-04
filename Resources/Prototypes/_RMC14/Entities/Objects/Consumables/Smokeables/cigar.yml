@@ -33,9 +33,9 @@
     state: burnt-icon
   - type: Smokable
     state: Burnt
-  - type: SolutionContainerManager
-    solutions:
-      smokable:
+  - type: Solution
+    id: smokable
+    solution:
         maxVol: 20
   - type: Tag
     tags:
@@ -107,9 +107,8 @@
     state: burnt-icon
   - type: Smokable
     state: Burnt
-  - type: SolutionContainerManager
-    solutions:
-      smokable:
+  - type: Solution
+    solution:
         maxVol: 20
   - type: Tag
     tags:
@@ -135,5 +134,4 @@
   - type: StorageFill
     contents:
     - id: RMCShioCigar
-
 

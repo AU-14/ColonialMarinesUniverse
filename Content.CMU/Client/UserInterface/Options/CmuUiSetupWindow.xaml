@@ -1,0 +1,17 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:ui="clr-namespace:Content.Client.Options.UI"
+               Title="{Loc 'cmu-ui-setup-title'}" MinSize="560 420" SetSize="660 720">
+    <BoxContainer Orientation="Vertical" SeparationOverride="8">
+        <ScrollContainer VerticalExpand="True" HorizontalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" SeparationOverride="10" Margin="8">
+                <RichTextLabel Name="Introduction" />
+                <ui:CmuAppearanceOptions Name="Appearance" />
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Settings" Visible="False" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <Button Name="LaterButton" Text="{Loc 'cmu-ui-setup-later'}" HorizontalExpand="True" />
+            <Button Name="SaveButton" Text="{Loc 'cmu-ui-setup-save'}" HorizontalExpand="True" />
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

@@ -1,0 +1,1155 @@
+# Deployable grenade boxes, ported from cmss13-pve#854.
+# Set one down to open it and take grenades out; each box only takes its own grenade type.
+# A box with enough grenades in it cooks off if it sits in a fire.
+
+- type: entity
+  abstract: true
+  parent: BaseStorageItem
+  id: CMUBoxGrenadeBase
+  name: grenade box
+  description: A secure box holding grenades.
+  components:
+  - type: Item
+    size: Huge
+  - type: Appearance
+  - type: DeployableItem
+  - type: FixedItemSizeStorage
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CMUGrenadeBox
+  - type: Tag
+    tags:
+    - RMCAmmoBox
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeHEDP
+  name: M40 HEDP grenade box
+  description: A secure box holding 25 M40 High-Explosive Dual-Purpose grenades. Highly explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_hedp-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m40
+      map: [ "model" ]
+    - state: stripe_hedp
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_hedp
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeHighExplosive
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMGrenadeHighExplosive
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeHEFA
+  name: M40 HEFA grenade box
+  description: A secure box holding 25 M40 High-Explosive Fragmenting-Antipersonnel grenades. Highly explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_hefa-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m40
+      map: [ "model" ]
+    - state: stripe_hefa
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_hefa
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeFrag
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMGrenadeFrag
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeM15
+  name: M15 frag grenade box
+  description: A secure box holding 25 older M15 fragmentation grenades. Highly explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_m15-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m15
+      map: [ "model" ]
+    - state: stripe_m15
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_m15
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeFragOld
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMGrenadeFragOld
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeHEAP
+  name: M38 HEAP grenade box
+  description: A secure box holding 25 M38 High-Explosive Armour-Piercing grenades. Highly explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_heap-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m38
+      map: [ "model" ]
+    - state: stripe_heap
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_heap
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeHEAP
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMUGrenadeHEAP
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeBFAB
+  name: M51A BFAB grenade box
+  description: A secure box holding 25 M51A Bounding Fragmentation Air-Burst grenades. Highly explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_bfab-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m51a
+      map: [ "model" ]
+    - state: stripe_bfab
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_bfab
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeBFAB
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMUGrenadeBFAB
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeCanister
+  name: M108 canister grenade box
+  description: A secure box holding 25 M108 canister grenades. Flammable, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_buck-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m108
+      map: [ "model" ]
+    - state: stripe_buck
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_buck
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeCanister
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMUGrenadeCanister
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeHIAM
+  name: M77 HIAM grenade box
+  description: A secure box holding 25 M77 High-explosive Incendiary Anti-Mobility grenades. Highly flammable, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_hiam-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m77
+      map: [ "model" ]
+    - state: stripe_hiam
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_hiam
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeIncendiary
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: RMCGrenadeIncendiary
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeWPSI
+  name: M60 WPSI grenade box
+  description: A secure box holding 25 M60 White-Phosphorus Smoke/Incendiary grenades. Highly flammable and explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_phos-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m60
+      map: [ "model" ]
+    - state: stripe_phos
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_phos
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeWhitePhosphorusCompound
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: RMCGrenadeWhitePhosphorusCompound
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeSmoke
+  name: M47 HSDP grenade box
+  description: A secure box holding 25 M47 High-density Smoke Dual-Purpose grenades. Flammable, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_smoke-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m47
+      map: [ "model" ]
+    - state: stripe_smoke
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_smoke
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeSmoke
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMGrenadeSmoke
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeSmokeGreen
+  name: M47-G HSDP grenade box
+  description: A secure box holding 25 M47-G green signal smoke grenades. Flammable, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_gsmoke-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m47
+      map: [ "model" ]
+    - state: stripe_gsmoke
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_gsmoke
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeSmokeGreen
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMUGrenadeSmokeGreen
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeSmokeRed
+  name: M47-R HSDP grenade box
+  description: A secure box holding 25 M47-R red signal smoke grenades. Flammable, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_rsmoke-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m47
+      map: [ "model" ]
+    - state: stripe_rsmoke
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_rsmoke
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeSmokeRed
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMUGrenadeSmokeRed
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeMFHS
+  name: M42 MFHS grenade box
+  description: A secure box holding 25 M42 Metal-Foam Hull-Sealant grenades. Flammable, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_nade
+    - state: fill_foam-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_nade_lid
+      map: [ "lid" ]
+    - state: model_m42
+      map: [ "model" ]
+    - state: stripe_foam
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_foam
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeMFHS
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: RMCGrenadeMFHS
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeTraining
+  name: M07 training grenade box
+  description: A secure box holding 25 M07 training grenades. Harmless and reusable.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_training_nade
+    - state: fill_training-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_training_nade_lid
+      map: [ "lid" ]
+    - state: model_mo7
+      map: [ "model" ]
+    - state: stripe_training
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_training
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: RMCGrenadeTraining
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: RMCGrenadeTraining
+    cookOffIntensityPerGrenade: 0
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeElectroshock
+  name: G2 electroshock grenade box
+  description: "A secure box holding 25 G2 electroshock grenades. Keep it away from sensitive electronics, and out from under your CO's bed."
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_ltl
+    - state: fill_sebb-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_ltl_lid
+      map: [ "lid" ]
+    - state: model_sebb
+      map: [ "model" ]
+    - state: stripe_sebb
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_sebb
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeElectroshock
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: CMUGrenadeElectroshock
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeAGMF
+  name: M74 AGM-F grenade box
+  description: A secure box holding 25 M74 Airburst Grenade Munition fragmentation grenades. Explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_40mm
+    - state: fill_40mm_agmf-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_40mm_lid
+      map: [ "lid" ]
+    - state: model_m74
+      map: [ "model" ]
+    - state: stripe_agmf
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_40mm_agmf
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: RMC40MMGrenadeM74AGMF
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: RMC40MMGrenadeM74AGMF
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeAGMI
+  name: M74 AGM-I grenade box
+  description: A secure box holding 25 M74 Airburst Grenade Munition incendiary grenades. Highly flammable, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_40mm
+    - state: fill_40mm_agmi-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_40mm_lid
+      map: [ "lid" ]
+    - state: model_m74
+      map: [ "model" ]
+    - state: stripe_agmi
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_40mm_agmi
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: RMC40MMGrenadeM74AGMI
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: RMC40MMGrenadeM74AGMI
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeAGMS
+  name: M74 AGM-S grenade box
+  description: A secure box holding 25 M74 Airburst Grenade Munition smoke grenades. Explosive, keep it away from flamer fuel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_uscm_40mm
+    - state: fill_40mm_agms-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_uscm_40mm_lid
+      map: [ "lid" ]
+    - state: model_m74
+      map: [ "model" ]
+    - state: stripe_agms
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_40mm_agms
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,9,9
+  - type: StorageFill
+    contents:
+    - id: RMC40MMGrenadeM74AGMS
+      amount: 25
+  - type: CMUGrenadeBox
+    grenade: RMC40MMGrenadeM74AGMS
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeType6
+  name: Type 6 grenade box
+  description: A secure box holding 12 Type 6 fragmentation grenades. Make sure the pins are in before taking them out of the box.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_upp_nade
+    - state: fill_type6-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_upp_nade_lid
+      map: [ "lid" ]
+    - state: model_type6
+      map: [ "model" ]
+    - state: stripe_type6
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_type6
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,7,5
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeHighExplosiveUPP
+      amount: 12
+  - type: CMUGrenadeBox
+    grenade: AU14GrenadeHighExplosiveUPP
+
+- type: entity
+  parent: CMUBoxGrenadeBase
+  id: CMUBoxGrenadeRDG17
+  name: RDG-17 smoke grenade box
+  description: A secure box holding 12 RDG-17 smoke grenades. Make sure the pins are in before taking them out of the box.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    layers:
+    - state: base_upp_nade
+    - state: fill_typesmoke-4
+      map: [ "enum.StorageFillLayers.Fill" ]
+    - state: base_upp_nade_lid
+      map: [ "lid" ]
+    - state: model_typesmoke
+      map: [ "model" ]
+    - state: stripe_typesmoke
+      map: [ "stripe" ]
+    - state: on_fire
+      map: [ "fire" ]
+      visible: false
+  - type: GenericVisualizer
+    visuals:
+      enum.DeployableItemVisuals.Deployed:
+        lid:
+          True: { visible: false }
+          False: { visible: true }
+        model:
+          True: { visible: false }
+          False: { visible: true }
+        stripe:
+          True: { visible: false }
+          False: { visible: true }
+      enum.CMUGrenadeBoxVisuals.CookingOff:
+        fire:
+          True: { visible: true }
+          False: { visible: false }
+  - type: StorageFillVisualizer
+    fillBaseName: fill_typesmoke
+    maxFillLevels: 5
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,7,5
+  - type: StorageFill
+    contents:
+    - id: AU14GrenadeSmokeUPP
+      amount: 12
+  - type: CMUGrenadeBox
+    grenade: AU14GrenadeSmokeUPP
+
+# Crates
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxHEDP
+  name: M40 HEDP grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeHEDP
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxHEFA
+  name: M40 HEFA grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeHEFA
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxM15
+  name: M15 frag grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeM15
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxHEAP
+  name: M38 HEAP grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeHEAP
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxBFAB
+  name: M51A BFAB grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeBFAB
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxCanister
+  name: M108 canister grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeCanister
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxHIAM
+  name: M77 HIAM grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeHIAM
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxWPSI
+  name: M60 WPSI grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeWPSI
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxSmoke
+  name: M47 HSDP smoke grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeSmoke
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxSmokeGreen
+  name: M47-G HSDP green smoke grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeSmokeGreen
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxSmokeRed
+  name: M47-R HSDP red smoke grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeSmokeRed
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxMFHS
+  name: M42 MFHS grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeMFHS
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxElectroshock
+  name: G2 electroshock grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeElectroshock
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxAGMF
+  name: M74 AGM-F 40mm frag grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeAGMF
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxAGMI
+  name: M74 AGM-I 40mm incendiary grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeAGMI
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadeBoxAGMS
+  name: M74 AGM-S 40mm smoke grenade box crate (x25)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBoxGrenadeAGMS
+
+# Flames drawn over a mortar shell or ammo box that's cooking off (cmss13-devs/cmss13#6243).
+- type: entity
+  id: CMUCookOffFireEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - state: on_fire
+      shader: unshaded
+  - type: Tag
+    tags:
+    - HideContextMenu

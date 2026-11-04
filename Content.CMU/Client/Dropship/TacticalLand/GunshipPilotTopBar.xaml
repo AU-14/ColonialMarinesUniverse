@@ -1,0 +1,40 @@
+<PanelContainer xmlns="https://spacestation14.io"
+                xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                MinSize="680 62">
+    <PanelContainer.PanelOverride>
+        <gfx:StyleBoxFlat BackgroundColor="#03090BE6"
+                          BorderColor="#40E0FFBF"
+                          BorderThickness="1"
+                          ContentMarginLeftOverride="8"
+                          ContentMarginRightOverride="8"
+                          ContentMarginTopOverride="6"
+                          ContentMarginBottomOverride="6" />
+    </PanelContainer.PanelOverride>
+    <BoxContainer Orientation="Horizontal"
+                  SeparationOverride="12"
+                  HorizontalExpand="True"
+                  VerticalExpand="True">
+        <Button Name="Navigation"
+                Text="{Loc 'cmu-gunship-open-navigation-controls'}"
+                MinSize="210 40"
+                VerticalAlignment="Center" />
+        <Label Name="ViewMode"
+               Text="{Loc 'cmu-gunship-view-pilot'}"
+               MinWidth="190"
+               FontColorOverride="#40E0FFFA"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center" />
+        <BoxContainer Orientation="Vertical"
+                      MinWidth="230"
+                      VerticalAlignment="Center">
+            <Label Name="Eta"
+                   Text="{Loc 'cmu-gunship-eta-unavailable'}"
+                   FontColorOverride="#40E0FFFA"
+                   HorizontalAlignment="Left" />
+            <Label Name="Stage"
+                   Text="{Loc 'cmu-gunship-stage-ready-label'}"
+                   FontColorOverride="#40E0FFFA"
+                   HorizontalAlignment="Left" />
+        </BoxContainer>
+    </BoxContainer>
+</PanelContainer>

@@ -1,0 +1,428 @@
+using Content.Shared.Body;
+using Content.Server.Humanoid;
+using Content.Shared.CCVar;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.Vendors;
+using Content.Shared.Clothing.Components;
+using Content.Shared.Clothing.EntitySystems;
+using Content.Shared.Dataset;
+using Content.Shared.DetailExaminable;
+using Content.Shared.Humanoid;
+using Content.Shared.Inventory;
+using Content.Shared.Item;
+using Content.Shared.Preferences;
+using Content.Shared.Random.Helpers;
+using Robust.Shared.Audio;
+using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
+using Robust.Shared.Enums;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+
+namespace Content.Server.CMU14.Yautja;
+
+public sealed partial class YautjaProfileApplySystem : EntitySystem
+{
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
+    [Dependency] private HumanoidProfileSystem _humanoid = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private ClothingSystem _clothing = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedItemSystem _items = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
+
+    private static readonly ProtoId<LocalizedDatasetPrototype> YautjaFirstName = "CMUNamesYautjaFirst";
+    private static readonly ProtoId<LocalizedDatasetPrototype> YautjaLastName = "CMUNamesYautjaLast";
+
+    private static readonly Dictionary<string, string> PostVendProfileSlots = new()
+    {
+        ["CMUYautjaClanArmor"] = "outerClothing",
+        ["CMUYautjaClanArmorScalable"] = "outerClothing",
+        ["CMUYautjaHeavyClanArmor"] = "outerClothing",
+        ["CMUYautjaMask"] = "mask",
+        ["CMUYautjaMaskScalable"] = "mask",
+        ["CMUYautjaMaskAccessory01Ebony"] = "mask",
+        ["CMUYautjaClanGreaves"] = "shoes",
+        ["CMUYautjaClanGreavesScalable"] = "shoes",
+        ["CMUYautjaCapeFull"] = "back",
+        ["CMUYautjaCapeCeremonial"] = "back",
+        ["CMUYautjaCapeThird"] = "back",
+        ["CMUYautjaCapeHalf"] = "back",
+        ["CMUYautjaCapeQuarter"] = "back",
+        ["CMUYautjaCapePoncho"] = "back",
+        ["CMUYautjaCapeDamaged"] = "back",
+        ["CMUYautjaCapeBoneFull"] = "back",
+        ["CMUYautjaCapeBoneThird"] = "back",
+        ["CMUYautjaCapeBoneCeremonial"] = "back",
+    };
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<YautjaAppliedProfileComponent, RMCAutomatedVendedUserEvent>(OnAutomatedVendorVended);
+        // CMU14: SharedVisualBodySystem stamps a species-default appearance on the body at VisualBodyComponent MapInit
+        // (SharedVisualBodySystem.Initial.cs:13, ordered after InitialBodySystem so the organs already exist). A
+        // console-spawned youngblood has its profile applied before that point, so the default overwrote the rolled tone
+        // and the body sat tan until a player took the role. Re-apply the already-selected profile right after body
+        // initialisation. The hook rides HumanoidProfileComponent because Robust permits only one subscription per
+        // component+event pair and SharedVisualBodySystem already owns VisualBodyComponent+MapInitEvent.
+        SubscribeLocalEvent<HumanoidProfileComponent, MapInitEvent>(OnHumanoidProfileMapInit, after: [typeof(Content.Server.Body.VisualBodySystem)]);
+    }
+
+    /// <summary>
+    /// Builds the humanoid profile an applied Yautja profile maps onto, including the species voice (DefaultWithSpecies
+    /// leaves the human default, which strips every Yautja emote sound).
+    /// </summary>
+    private HumanoidCharacterProfile BuildHumanoidProfile(YautjaCharacterProfile profile, YautjaComponent? yautja)
+    {
+        var humanoidProfile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja")
+            .WithName(profile.Name)
+            .WithAge(profile.Age)
+            .WithSex(profile.Sex)
+            .WithGender(profile.Gender)
+            .WithCharacterAppearance(profile.Appearance);
+
+        if (yautja != null && yautja.VocalSounds.TryGetValue(profile.Sex, out var voice))
+            humanoidProfile = humanoidProfile.WithVoice(voice);
+
+        return humanoidProfile;
+    }
+
+    private void OnHumanoidProfileMapInit(Entity<HumanoidProfileComponent> ent, ref MapInitEvent args)
+    {
+        if (!TryComp<YautjaAppliedProfileComponent>(ent.Owner, out var applied) ||
+            !TryComp<HumanoidProfileComponent>(ent.Owner, out var humanoid))
+        {
+            return;
+        }
+
+        // The stored profile is the authority: no reroll here, so an explicitly selected tone survives.
+        // Appearance only - never EnsureComp here, or this path would initialise species stats as a side effect.
+        TryComp<YautjaComponent>(ent.Owner, out var yautja);
+        var humanoidProfile = BuildHumanoidProfile(applied.Profile, yautja);
+        _humanoid.ApplyProfileTo((ent.Owner, humanoid), humanoidProfile);
+        _visualBody.ApplyProfileTo(ent.Owner, humanoidProfile);
+    }
+
+    public void ApplyProfile(
+        EntityUid uid,
+        YautjaCharacterProfile yautjaProfile,
+        YautjaRank? authoritativeRank = null,
+        YautjaProfileCapabilities? authoritativeCapabilities = null,
+        bool equipProfileGear = true)
+    {
+        if (!TryComp(uid, out HumanoidProfileComponent? humanoid))
+            return;
+
+        // A client-supplied profile is never an authority for clan rank. Ordinary
+        // spawns stay Blooded until the server passes the persisted rank explicitly.
+        var authoritativeBaseRank = authoritativeCapabilities?.Rank ??
+                                    YautjaRankManager.CanonicalHunterSpawnRank(
+                                        authoritativeRank ?? YautjaRank.Blooded);
+        var capabilities = authoritativeCapabilities ?? new YautjaProfileCapabilities(
+            authoritativeBaseRank,
+            YautjaRankResolver.CanUseUnique(authoritativeBaseRank),
+            false);
+        var profile = yautjaProfile.SanitizeForCapabilities(capabilities);
+        // A nameless profile rolls a CMSS13-style random name; the default is only a placeholder.
+        // "Неизвестно" is the pre-fix default, still present in saved profiles.
+        if (profile.Name is "Unknown" or "Неизвестно")
+            profile = profile.WithName(
+                $"{_random.Pick(_prototypes.Index(YautjaFirstName))} {_random.Pick(_prototypes.Index(YautjaLastName))}");
+        // CMU14: CM-SS13's load_race only rolls a tone when the player has not chosen one (prefs override it). The
+        // default appearance is built with Green, so an untouched profile is Green with SkinColorSelected false: that
+        // is the only case rolled from PRED_SKIN_COLOR. An explicit pick - including an explicit Green - sets the
+        // selection flag and is kept.
+        if (!profile.SkinColorSelected &&
+            profile.Appearance.SkinColor == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green))
+        {
+            profile = profile.WithSkinColor(_random.Pick(YautjaCharacterProfile.SkinColorOrder[..6]));
+        }
+
+        var rank = capabilities.ForStatus(profile.Status).Rank;
+        EnsureComp<YautjaAppliedProfileComponent>(uid).Profile = profile.Clone();
+
+        var yautja = EnsureComp<YautjaComponent>(uid);
+        yautja.ClanRank = rank;
+        yautja.SkinColorRandomized = true;
+        Dirty(uid, yautja);
+
+        var humanoidProfile = BuildHumanoidProfile(profile, yautja);
+        _humanoid.ApplyProfileTo((uid, humanoid), humanoidProfile);
+        _visualBody.ApplyProfileTo(uid, humanoidProfile);
+
+        // The profile is authoritative for player-controlled Yautja appearance.
+        // Mark the deferred randomizer complete so the next stats tick cannot
+        // replace the selected skin color.
+        yautja.RandomizeSkinColor = false;
+        yautja.SkinColorRandomized = true;
+        _meta.SetEntityName(uid, profile.Name);
+
+        EntityUid? mask = null;
+        EntityUid? bracer = null;
+        EntityUid? cape = null;
+        if (equipProfileGear)
+        {
+            ReplaceEquipped(uid, "outerClothing", profile.ArmorPrototype);
+            // CMU14: an unblooded youngblood does not wear a clan bio-mask, so only a blooded hunter gets one. Every
+            // other piece of profile gear is still applied.
+            mask = HasComp<YautjaYoungbloodComponent>(uid)
+                ? null
+                : ReplaceEquipped(uid, "mask", profile.MaskPrototype);
+            ReplaceEquipped(uid, "shoes", profile.GreavesPrototype);
+            bracer = ReplaceEquipped(uid, "gloves", profile.BracerPrototype);
+            cape = ReplaceEquipped(uid, "back", profile.CapePrototype);
+        }
+        else if (_inventory.TryGetSlotEntity(uid, "gloves", out var equippedBracer)
+                 && MetaData(equippedBracer.Value).EntityPrototype?.ID == "CMUYautjaBracer")
+        {
+            bracer = equippedBracer;
+            ApplyBracerProfileVisual(bracer.Value, profile.BracerPrototype);
+        }
+
+        if (mask != null)
+            ApplyMaskAccessory(mask.Value, profile);
+
+        if (bracer != null)
+            ApplyBracerSettings(bracer.Value, profile);
+
+        if (cape != null)
+            ApplyCapeColor(cape.Value, profile);
+
+        ApplyFlavorText(uid, profile);
+    }
+
+    private void OnAutomatedVendorVended(Entity<YautjaAppliedProfileComponent> ent, ref RMCAutomatedVendedUserEvent args)
+    {
+        if (CompOrNull<MetaDataComponent>(args.Item)?.EntityPrototype?.ID is not { } vended ||
+            !PostVendProfileSlots.TryGetValue(vended, out var slot))
+        {
+            return;
+        }
+
+        var profile = ent.Comp.Profile;
+
+        switch (vended)
+        {
+            case "CMUYautjaMaskAccessory01Ebony":
+                if (profile.MaskAccessoryPrototype is not { } prototype ||
+                    !_prototypes.HasIndex<EntityPrototype>(prototype))
+                {
+                    Del(args.Item);
+                    return;
+                }
+
+                if (_inventory.TryGetSlotEntity(ent, slot, out var mask))
+                    ApplyMaskAccessory(mask.Value, profile);
+
+                Del(args.Item);
+                return;
+            case "CMUYautjaClanArmor":
+                ReplaceVended(ent, slot, profile.ArmorPrototype, args.Item);
+                return;
+            case "CMUYautjaClanArmorScalable":
+                ApplyVendedProfileVisuals(ent, slot, profile.ArmorPrototype, args.Item);
+                return;
+            case "CMUYautjaHeavyClanArmor":
+                ApplyVendedProfileVisuals(ent, slot, HeavyArmorPrototype(profile.ArmorMaterial), args.Item);
+                return;
+            case "CMUYautjaMask":
+                ReplaceVended(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornMask))
+                    ApplyMaskAccessory(wornMask.Value, profile);
+
+                return;
+            case "CMUYautjaMaskScalable":
+                ApplyVendedProfileVisuals(ent, slot, profile.MaskPrototype, args.Item);
+                if (_inventory.TryGetSlotEntity(ent, slot, out var wornScalableMask))
+                    ApplyMaskAccessory(wornScalableMask.Value, profile);
+
+                return;
+            case "CMUYautjaClanGreaves":
+                ReplaceVended(ent, slot, profile.GreavesPrototype, args.Item);
+                return;
+            case "CMUYautjaClanGreavesScalable":
+                ApplyVendedProfileVisuals(ent, slot, profile.GreavesPrototype, args.Item);
+                return;
+            case "CMUYautjaCapeFull":
+            case "CMUYautjaCapeCeremonial":
+            case "CMUYautjaCapeThird":
+            case "CMUYautjaCapeHalf":
+            case "CMUYautjaCapeQuarter":
+            case "CMUYautjaCapePoncho":
+            case "CMUYautjaCapeDamaged":
+            case "CMUYautjaCapeBoneFull":
+            case "CMUYautjaCapeBoneThird":
+            case "CMUYautjaCapeBoneCeremonial":
+                ApplyVendedCapeColor(ent, slot, profile, args.Item);
+                return;
+            default:
+                return;
+        }
+    }
+
+    private static string HeavyArmorPrototype(YautjaGearMaterial material)
+    {
+        return material switch
+        {
+            YautjaGearMaterial.Bronze => "CMUYautjaHeavyClanArmorBronze",
+            YautjaGearMaterial.Silver => "CMUYautjaHeavyClanArmorSilver",
+            YautjaGearMaterial.Crimson => "CMUYautjaHeavyClanArmorCrimson",
+            YautjaGearMaterial.Bone => "CMUYautjaHeavyClanArmorBone",
+            _ => "CMUYautjaHeavyClanArmor",
+        };
+    }
+
+    private EntityUid? ReplaceEquipped(EntityUid uid, string slot, string prototype)
+    {
+        if (!_prototypes.HasIndex<EntityPrototype>(prototype))
+            return null;
+
+        if (_inventory.TryGetSlotEntity(uid, slot, out var equipped))
+            Del(equipped.Value);
+
+        var item = Spawn(prototype, Transform(uid).Coordinates);
+        if (_inventory.TryEquip(uid, item, slot, silent: true, force: true))
+            return item;
+
+        Del(item);
+        return null;
+    }
+
+    private void ReplaceVended(EntityUid uid, string slot, string prototype, EntityUid vended)
+    {
+        if (!_prototypes.HasIndex<EntityPrototype>(prototype))
+            return;
+
+        ReplaceEquipped(uid, slot, prototype);
+
+        if (!Deleted(vended))
+            Del(vended);
+    }
+
+    private void ApplyVendedProfileVisuals(EntityUid uid, string slot, string prototype, EntityUid vended)
+    {
+        if (!_prototypes.TryIndex<EntityPrototype>(prototype, out var visualPrototype))
+            return;
+
+        if (!_inventory.TryGetSlotEntity(uid, slot, out var equipped) ||
+            equipped.Value != vended)
+        {
+            if (!_inventory.TryEquip(uid, vended, slot, silent: true, force: true))
+                return;
+        }
+
+        if (Deleted(vended))
+            return;
+
+        CopyProfileVisuals(vended, visualPrototype);
+    }
+
+    private void ApplyVendedCapeColor(EntityUid uid, string slot, YautjaCharacterProfile profile, EntityUid vended)
+    {
+        if (!_inventory.TryGetSlotEntity(uid, slot, out var equipped) ||
+            equipped.Value != vended)
+        {
+            if (!_inventory.TryEquip(uid, vended, slot, silent: true, force: true))
+                return;
+        }
+
+        ApplyCapeColor(vended, profile);
+    }
+
+    private void ApplyCapeColor(EntityUid cape, YautjaCharacterProfile profile)
+    {
+        var capeComp = EnsureComp<YautjaCapeComponent>(cape);
+        if (!capeComp.Recolorable)
+            return;
+
+        capeComp.Color = profile.CapeColor;
+        Dirty(cape, capeComp);
+    }
+
+    private void ApplyBracerProfileVisual(EntityUid bracer, EntProtoId visualPrototype)
+    {
+        var visual = EnsureComp<YautjaBracerProfileVisualComponent>(bracer);
+        visual.VisualPrototype = visualPrototype;
+        Dirty(bracer, visual);
+    }
+
+    private void CopyProfileVisuals(EntityUid uid, EntityPrototype visualPrototype)
+    {
+        if (TryComp(uid, out ItemComponent? item) &&
+            visualPrototype.TryComp(out ItemComponent? visualItem, EntityManager.ComponentFactory))
+        {
+            _items.CopyVisuals(uid, visualItem, item);
+        }
+
+        if (TryComp(uid, out ClothingComponent? clothing) &&
+            visualPrototype.TryComp(out ClothingComponent? visualClothing, EntityManager.ComponentFactory))
+        {
+            _clothing.CopyVisuals(uid, visualClothing, clothing);
+        }
+    }
+
+    private void ApplyMaskAccessory(EntityUid mask, YautjaCharacterProfile profile)
+    {
+        if (profile.MaskAccessoryPrototype is not { } prototype ||
+            !_prototypes.HasIndex<EntityPrototype>(prototype) ||
+            !TryComp(mask, out YautjaMaskAccessoryHolderComponent? holder))
+        {
+            return;
+        }
+
+        var container = _containers.EnsureContainer<ContainerSlot>(mask, holder.ContainerId);
+        if (container.ContainedEntity is { } oldAccessory)
+            Del(oldAccessory);
+
+        var accessory = Spawn(prototype, Transform(mask).Coordinates);
+        if (!_containers.Insert(accessory, container, force: true))
+            Del(accessory);
+    }
+
+    private void ApplyBracerSettings(EntityUid bracer, YautjaCharacterProfile profile)
+    {
+        if (TryComp(bracer, out YautjaBracerComponent? bracerComp))
+        {
+            bracerComp.TranslatorType = profile.TranslatorType;
+            bracerComp.InvisibilitySound = profile.InvisibilitySound;
+            bracerComp.OwnerRank = profile.OwnerRank;
+            if (profile.InvisibilitySound == YautjaInvisibilitySound.Retro)
+            {
+                bracerComp.CloakOnSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_cloakon.wav");
+                bracerComp.CloakOffSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Equipment/pred_cloakoff.wav");
+            }
+            else
+            {
+                bracerComp.CloakOnSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/pred_cloakon_modern.ogg");
+                bracerComp.CloakOffSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/pred_cloakoff_modern.ogg");
+            }
+
+            Dirty(bracer, bracerComp);
+        }
+
+        if (!TryComp(bracer, out YautjaGearContainerComponent? gear))
+            return;
+
+        gear.GearPrototypes[YautjaGearKind.Caster] = profile.CasterPrototype;
+        if (gear.Gear.Remove(YautjaGearKind.Caster, out var oldCaster))
+            Del(oldCaster);
+
+        Dirty(bracer, gear);
+    }
+
+    private void ApplyFlavorText(EntityUid uid, YautjaCharacterProfile profile)
+    {
+        if (string.IsNullOrWhiteSpace(profile.FlavorText) ||
+            !_config.GetCVar(CCVars.FlavorText))
+        {
+            return;
+        }
+
+        EnsureComp<DetailExaminableComponent>(uid).Content = profile.FlavorText;
+    }
+}

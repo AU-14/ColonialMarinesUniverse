@@ -1,0 +1,9 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:vp="clr-namespace:Content.Client.Viewport"
+               MinSize="360 320" SetSize="520 470">
+  <BoxContainer Orientation="Vertical" SeparationOverride="6" Margin="4">
+    <vp:ScalingViewport Name="CameraViewport" MouseFilter="Ignore" HorizontalExpand="True" VerticalExpand="True" />
+    <Label Text="{Loc cmu-recon-camera-help}" />
+    <Button Name="Disconnect" Text="{Loc cmu-recon-camera-close}" />
+  </BoxContainer>
+</DefaultWindow>

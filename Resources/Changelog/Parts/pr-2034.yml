@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Gunship hover now has a hull-shaped shadow, maneuvering blue lift jets,
+    ground wash, blue lighting and quieter rocket audio.
+  type: Tweak
+- message: Fixed the hover overlay drawing exception and reversed jet artwork.
+  type: Fix
+- message: Updated Mohawk takeoff and landing sounds, with the landing cue beginning
+    at the selected recording's 15-second mark.
+  type: Tweak
+time: '2026-09-27T01:37:36.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2034
