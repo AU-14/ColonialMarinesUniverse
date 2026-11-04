@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: CMJobBase
+  displayWeight: 16
   id: AU14JobCivilianScientistBase
   name: au14-job-name-civilianscientist
   description: au14-job-description-civilianscientist

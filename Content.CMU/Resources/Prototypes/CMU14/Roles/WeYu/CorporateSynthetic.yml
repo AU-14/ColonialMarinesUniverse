@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobCivilianColonySynthetic
+  displayWeight: 20
   id: AU14JobCorporateSynthetic
   name: au14-job-name-civiliancorporatesynthetic
   description: au14-job-description-civiliancorporatesynthetic
