@@ -31,13 +31,13 @@ public sealed partial class PathogenPierceLeapComponent : Component
     public TimeSpan StrikeDelay = TimeSpan.FromSeconds(0.75);  
   
     [DataField, AutoNetworkedField]  
-    public int IgnoredCollisionGroupSmall;  
+    public int IgnoredCollisionGroupSmallm  = CollisionGroup.None;
   
     [DataField, AutoNetworkedField]  
-    public int IgnoredCollisionGroupLarge;  
+    public int IgnoredCollisionGroupLarge = CollisionGroup.None;
   
     [DataField, AutoNetworkedField]  
-    public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_pounce.ogg");
+    public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/pathogen_pounce1.ogg");
   
     [DataField, AutoNetworkedField]  
     public SoundSpecifier? HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_flesh3.ogg");
