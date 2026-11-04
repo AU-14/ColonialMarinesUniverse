@@ -27,6 +27,10 @@ public sealed partial class AntagPitySystem : EntitySystem
 {
     private const long PruneAfterSeconds = 90L * 24 * 60 * 60;
 
+    // A failed load used to leave pity dead until restart; retrying self-heals
+    // transient DB failures and keeps the error visible in the log.
+    private const int LoadRetryDelaySeconds = 60;
+
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly IServerDbManager _db = default!;
 
@@ -77,7 +81,9 @@ public sealed partial class AntagPitySystem : EntitySystem
         }
         catch (Exception e)
         {
-            Log.Error($"Failed to load antag pity state: {e}");
+            Log.Error($"Failed to load antag pity state, retrying in {LoadRetryDelaySeconds}s: {e}");
+            await Task.Delay(TimeSpan.FromSeconds(LoadRetryDelaySeconds));
+            _ = LoadFromDb();
         }
     }
 
