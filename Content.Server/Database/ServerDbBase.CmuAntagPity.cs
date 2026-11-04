@@ -21,8 +21,9 @@ public abstract partial class ServerDbBase
 
         var entries = await db.DbContext.Database
             .SqlQueryRaw<CmuAntagPityRow>(
-                "SELECT player_user_id AS \"PlayerUserId\", missed AS \"Missed\", " +
-                "last_seen AS \"LastSeen\" FROM cmu_antag_pity")
+                // CMU14: no aliases. SnakeCaseConvention expects snake_case result
+                // columns, PascalCase aliases break the row mapping.
+                "SELECT player_user_id, missed, last_seen FROM cmu_antag_pity")
             .ToListAsync();
 
         return entries.Select(row => new CmuAntagPityEntry(row.PlayerUserId, row.Missed, row.LastSeen)).ToList();
