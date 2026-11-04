@@ -43,9 +43,7 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
                 continue;  
   
             // Live damage read instead of a cached accumulator.  
-            var guardianDamage = FixedPoint2.Zero;  
-            if (TryComp<DamageableComponent>(uid, out var damageable))  
-                guardianDamage = damageable.TotalDamage;  
+            var guardianDamage = _damageable.GetTotalDamage(uid);  
   
             var remaining = incapThreshold.Value - guardianDamage;  
             if (remaining <= save.MinimumHealth)  
