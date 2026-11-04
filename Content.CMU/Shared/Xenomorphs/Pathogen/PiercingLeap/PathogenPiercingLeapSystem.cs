@@ -1,25 +1,23 @@
+using System.Linq;  
 using System.Numerics;  
-using Content.Shared._RMC14.Actions;  
-using Content.Shared._RMC14.Areas;  
-using Content.Shared._RMC14.Map;  
+using Content.Shared._RMC14.Movement;  
 using Content.Shared._RMC14.Pulling;  
 using Content.Shared._RMC14.Stun;  
 using Content.Shared._RMC14.Xenonids;  
-using Content.Shared.Actions;  
+using Content.Shared._RMC14.Xenonids.Hive;  
+using Content.Shared._RMC14.Xenonids.Plasma;  
 using Content.Shared.Coordinates;  
 using Content.Shared.Damage.Systems;  
 using Content.Shared.DoAfter;  
 using Content.Shared.Effects;  
 using Content.Shared.FixedPoint;  
-using Content.Shared.Interaction;  
-using Content.Shared.Jittering;  
-using Content.Shared.Mobs;  
 using Content.Shared.Mobs.Components;  
 using Content.Shared.Mobs.Systems;  
-using Content.Shared.Movement.Events;
-using Content.Shared.Movement.Systems;
+using Content.Shared.Movement.Pulling.Events;  
+using Content.Shared.Popups;  
+using Content.Shared.Standing;  
 using Robust.Shared.Audio.Systems;  
-using Robust.Shared.Map.Components;  
+using Robust.Shared.Map;  
 using Robust.Shared.Network;  
 using Robust.Shared.Physics;  
 using Robust.Shared.Physics.Components;  
@@ -29,43 +27,51 @@ using Robust.Shared.Timing;
   
 namespace Content.CMU.Shared.Xenomorphs.Pathogen.PierceLeap;  
   
-public sealed partial class PathogenPierceLeapSystem : EntitySystem  
+public sealed partial class PathogenPiercingLeapSystem : EntitySystem  
 {  
-    [Dependency] private readonly INetManager _net = default!;  
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;  
-    [Dependency] private readonly AreaSystem _area = default!;  
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;  
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;  
-    [Dependency] private readonly RotateToFaceSystem _rotateToFace = default!;  
-    [Dependency] private readonly SharedTransformSystem _transform = default!;  
-    [Dependency] private readonly MobStateSystem _mob = default!;  
-    [Dependency] private readonly IGameTiming _timing = default!;  
-    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;  
-    [Dependency] private readonly DamageableSystem _damage = default!;  
-    [Dependency] private readonly RMCSizeStunSystem _size = default!;  
     [Dependency] private readonly SharedAudioSystem _audio = default!;  
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;  
-    [Dependency] private readonly SharedActionsSystem _actions = default!;  
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;  
+    [Dependency] private readonly SharedBroadphaseSystem _broadphase = default!;  
     [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;  
-    [Dependency] private readonly XenoSystem _xeno = default!;  
+    [Dependency] private readonly DamageableSystem _damageable = default!;  
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;  
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;  
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;  
+    [Dependency] private readonly MobStateSystem _mobState = default!;  
+    [Dependency] private readonly INetManager _net = default!;  
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;  
+    [Dependency] private readonly SharedPopupSystem _popup = default!;  
     [Dependency] private readonly RMCPullingSystem _rmcPulling = default!;  
+    [Dependency] private readonly RMCSizeStunSystem _size = default!;  
+    [Dependency] private readonly StandingStateSystem _standing = default!;  
+    [Dependency] private readonly IGameTiming _timing = default!;  
+    [Dependency] private readonly SharedTransformSystem _transform = default!;  
+    [Dependency] private readonly XenoSystem _xeno = default!;  
+    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;  
   
-    private readonly HashSet<Entity<MobStateComponent>> _mobs = new();  
+    private EntityQuery<PhysicsComponent> _physicsQuery;  
+    private EntityQuery<FixturesComponent> _fixturesQuery;  
+  
+    private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
   
     public override void Initialize()  
     {  
+        UpdatesAfter.Add(typeof(SharedPhysicsSystem));  
+  
+        _physicsQuery = GetEntityQuery<PhysicsComponent>();  
+        _fixturesQuery = GetEntityQuery<FixturesComponent>();  
+  
         SubscribeLocalEvent<PathogenPierceLeapComponent, PathogenPierceLeapActionEvent>(OnLeapAction);  
         SubscribeLocalEvent<PathogenPierceLeapComponent, PathogenPierceLeapDoAfterEvent>(OnLeapDoAfter);  
   
-        SubscribeLocalEvent<PathogenPierceLeapingComponent, ComponentRemove>(OnLeapingRemove);  
-  
-        // Cancelling these two is what makes the leaper pass through mobs  
-        // instead of stopping on the first hit like the standard leap.  
         SubscribeLocalEvent<PathogenPierceLeapingComponent, AttemptMobCollideEvent>(OnLeapCollide);  
         SubscribeLocalEvent<PathogenPierceLeapingComponent, AttemptMobTargetCollideEvent>(OnLeapTargetCollide);  
+        SubscribeLocalEvent<PathogenPierceLeapingComponent, ComponentRemove>(OnLeapingRemove);  
+        SubscribeLocalEvent<PathogenPierceLeapingComponent, PhysicsSleepEvent>(OnLeapingPhysicsSleep);  
+        SubscribeLocalEvent<PathogenPierceLeapingComponent, StartPullAttemptEvent>(OnLeapingStartPullAttempt);  
+        SubscribeLocalEvent<PathogenPierceLeapingComponent, PullAttemptEvent>(OnLeapingPullAttempt);  
     }  
   
+    // Pass through mobs instead of stopping on the first hit like the standard leap.  
     private void OnLeapCollide(Entity<PathogenPierceLeapingComponent> xeno, ref AttemptMobCollideEvent args)  
     {  
         args.Cancelled = true;  
@@ -81,29 +87,21 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         if (args.Handled)  
             return;  
   
-        var target = _transform.ToMapCoordinates(args.Target);  
-  
-        if (target.MapId == MapId.Nullspace)  
+        if (xeno.Comp.PlasmaCost > FixedPoint2.Zero &&  
+            !_xenoPlasma.HasPlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))  
+        {  
             return;  
-  
-        if (!_interaction.InRangeUnobstructed(xeno.Owner, args.Target, xeno.Comp.Range))  
-            return;  
-  
-        if (!_area.CanLeap(xeno, target))  
-            return;  
+        }  
   
         args.Handled = true;  
   
-        _jitter.DoJitter(xeno, xeno.Comp.WindupTime, true, 80, 8, true);  
-  
-        var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.WindupTime,  
-            new PathogenPierceLeapDoAfterEvent(), xeno, xeno, args)  
+        var ev = new PathogenPierceLeapDoAfterEvent(GetNetCoordinates(args.Target));  
+        var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.WindupTime, ev, xeno)  
         {  
             BreakOnMove = true,  
             BreakOnDamage = true,  
-            BreakOnRest = true,  
-            BreakOnWeightlessMove = false,  
-            NeedHand = false,  
+            DamageThreshold = FixedPoint2.New(10),  
+            Hidden = true,  
         };  
   
         _doAfter.TryStartDoAfter(doAfter);  
@@ -111,124 +109,170 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
   
     private void OnLeapDoAfter(Entity<PathogenPierceLeapComponent> xeno, ref PathogenPierceLeapDoAfterEvent args)  
     {  
-        if (args.Cancelled || args.Handled)  
+        if (args.Handled)  
             return;  
   
-        if (args.Args.Target is not { } target)  
-            return;  
-  
-        args.Handled = true;  
-  
-        var origin = _transform.GetMoverCoordinates(xeno);  
-        var targetMap = _transform.ToMapCoordinates(target);  
-        var direction = targetMap.Position - _transform.GetMapCoordinates(xeno).Position;  
-        var length = direction.Length();  
-  
-        if (length > xeno.Comp.Range)  
+        if (args.Cancelled)  
         {  
-            direction = Vector2.Normalize(direction) * xeno.Comp.Range;  
-            length = xeno.Comp.Range;  
+            _popup.PopupEntity(Loc.GetString("cm-xeno-leap-cancelled"), xeno, xeno);  
+            return;  
         }  
   
+        if (!_physicsQuery.TryGetComponent(xeno, out var physics))  
+            return;  
+  
+        if (HasComp<PathogenPierceLeapingComponent>(xeno))  
+            return;  
+  
+        if (xeno.Comp.PlasmaCost > FixedPoint2.Zero &&  
+            !_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))  
+        {  
+            return;  
+        }  
+  
+        _rmcPulling.TryStopAllPullsFromAndOn(xeno);  
+  
+        var origin = _transform.GetMapCoordinates(xeno);  
+        var target = _transform.ToMapCoordinates(args.Coordinates);  
+        var direction = target.Position - origin.Position;  
+  
+        if (direction == Vector2.Zero ||  
+            !float.IsFinite(direction.Length() / xeno.Comp.Strength))  
+        {  
+            return;  
+        }  
+  
+        var length = direction.Length();  
+        var distance = Math.Clamp(length, 0.1f, xeno.Comp.Range.Float());  
+        direction *= distance / length;  
+  
+        var impulse = direction.Normalized() * xeno.Comp.Strength * physics.Mass;  
+  
         var leaping = EnsureComp<PathogenPierceLeapingComponent>(xeno);  
-        leaping.Origin = origin;  
-        leaping.LeapEndTime = _timing.CurTime + TimeSpan.FromSeconds(length / xeno.Comp.Strength);  
+        args.Handled = true;  
+  
         leaping.Damage = xeno.Comp.Damage;  
         leaping.StrikeDelay = xeno.Comp.StrikeDelay;  
         leaping.PathWidth = xeno.Comp.PathWidth;  
         leaping.HitEffect = xeno.Comp.HitEffect;  
         leaping.HitSound = xeno.Comp.HitSound;  
-        Dirty(xeno, leaping);  
+        leaping.TagEffect = xeno.Comp.TagEffect;  
+        leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;  
+        leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;  
   
-        _rmcPulling.TryStopAllPullsFromAndOn(xeno);  
+        leaping.Origin = _transform.GetMoverCoordinates(xeno);  
+        leaping.Destination = origin.Offset(direction);  
+        leaping.Direction = direction.Normalized();  
+        leaping.LeapEndTime = _timing.CurTime + TimeSpan.FromSeconds(direction.Length() / xeno.Comp.Strength);  
   
-        // Same launch as XenoLeap: impulse + InAir + collision mask XOR.  
-        if (TryComp<PhysicsComponent>(xeno, out var physics))  
+        _physics.ResetDynamics(xeno, physics);  
+        _physics.ApplyLinearImpulse(xeno, impulse, body: physics);  
+        _physics.SetBodyStatus(xeno, physics, BodyStatus.InAir);  
+  
+        if (_fixturesQuery.TryGetComponent(xeno, out var fixtures))  
         {  
-            var impulse = direction * xeno.Comp.Strength * physics.Mass;  
-            _physics.ApplyLinearImpulse(xeno, impulse, body: physics);  
-            _physics.SetBodyStatus(xeno, physics, BodyStatus.InAir);  
-        }  
-  
-        if (TryComp<FixturesComponent>(xeno, out var fixtures))  
-        {  
-            var collisionGroup = (int) xeno.Comp.IgnoredCollisionGroupSmall;  
+            var collisionGroup = (int) leaping.IgnoredCollisionGroupSmall;  
             if (_size.TryGetSize(xeno, out var size) && size > RMCSizes.SmallXeno)  
-                collisionGroup = (int) xeno.Comp.IgnoredCollisionGroupLarge;  
+                collisionGroup = (int) leaping.IgnoredCollisionGroupLarge;  
   
             var fixture = fixtures.Fixtures.First();  
-            _physics.SetCollisionMask(xeno, fixture.Key, fixture.Value,  
-                fixture.Value.CollisionMask ^ collisionGroup);  
+            _physics.SetCollisionMask(xeno, fixture.Key, fixture.Value, fixture.Value.CollisionMask ^ collisionGroup);  
         }  
   
-        _audio.PlayPredicted(xeno.Comp.LeapSound, xeno, xeno);  
-        _rotateToFace.TryFaceCoordinates(xeno, targetMap.Position);  
-        SetCooldown(xeno);  
+        if (xeno.Comp.LeapSound != null)  
+            _audio.PlayPredicted(xeno.Comp.LeapSound, xeno, xeno);  
     }  
   
-    // Runs every tick while airborne: collect valid targets within PathWidth  
-    // of the leaper's current position into the Tagged set.  
+    private void OnLeapingRemove(Entity<PathogenPierceLeapingComponent> ent, ref ComponentRemove args)  
+    {  
+        StopLeap(ent);  
+    }  
+  
+    private void OnLeapingPhysicsSleep(Entity<PathogenPierceLeapingComponent> ent, ref PhysicsSleepEvent args)  
+    {  
+        StopLeap(ent);  
+    }  
+  
+    private void OnLeapingStartPullAttempt(Entity<PathogenPierceLeapingComponent> ent, ref StartPullAttemptEvent args)  
+    {  
+        args.Cancel();  
+    }  
+  
+    private void OnLeapingPullAttempt(Entity<PathogenPierceLeapingComponent> ent, ref PullAttemptEvent args)  
+    {  
+        args.Cancelled = true;  
+    }  
+  
+
     private void TagTargetsInPath(Entity<PathogenPierceLeapingComponent> xeno)  
     {  
-        _mobs.Clear();  
-        _entityLookup.GetEntitiesInRange(Transform(xeno).Coordinates,  
-            xeno.Comp.PathWidth, _mobs, LookupFlags.Uncontained);  
+        _nearby.Clear();  
+        _lookup.GetEntitiesInRange(_transform.GetMoverCoordinates(xeno), xeno.Comp.PathWidth, _nearby);  
   
-        foreach (var mob in _mobs)  
+        foreach (var ent in _nearby)  
         {  
-            if (mob.Owner == xeno.Owner)  
+            if (ent.Owner == xeno.Owner)  
                 continue;  
   
-            if (xeno.Comp.Tagged.Contains(mob.Owner))  
+            if (xeno.Comp.Tagged.Contains(ent.Owner))  
                 continue;  
   
-            if (!_xeno.CanAbilityAttackTarget(xeno, mob.Owner))  
+            if (!_xeno.CanAbilityAttackTarget(xeno, ent.Owner))  
                 continue;  
   
-            xeno.Comp.Tagged.Add(mob.Owner);  
-            SpawnAttachedTo(xeno.Comp.TagEffect, mob.Owner.ToCoordinates());  
+            if (_standing.IsDown(ent.Owner))  
+                continue;  
+  
+            xeno.Comp.Tagged.Add(ent.Owner);  
+  
+            if (_net.IsServer && xeno.Comp.TagEffect != null)  
+                SpawnAttachedTo(xeno.Comp.TagEffect, ent.Owner.ToCoordinates());  
         }  
     }  
   
-    // Leap end: restore physics, then arm a delayed strike on every tagged mob.  
-    private void StopLeap(Entity<PathogenPierceLeapingComponent> xeno)  
+    private void ArmTaggedTargets(Entity<PathogenPierceLeapingComponent> xeno)  
     {  
-        if (TryComp<PhysicsComponent>(xeno, out var physics))  
+        if (!_net.IsServer)  
+            return;  
+  
+        foreach (var tagged in xeno.Comp.Tagged)  
         {  
-            _physics.SetLinearVelocity(xeno, Vector2.Zero, body: physics);  
-            _physics.SetBodyStatus(xeno, physics, BodyStatus.OnGround);  
+            if (!Exists(tagged))  
+                continue;  
+  
+            var tag = EnsureComp<PathogenPierceTaggedComponent>(tagged);  
+            if (tag.StrikeAt != null)  
+                continue;  
+  
+            tag.Damage = xeno.Comp.Damage;  
+            tag.StrikeAt = _timing.CurTime + xeno.Comp.StrikeDelay;  
+            tag.Origin = xeno.Owner;  
+            tag.HitEffect = xeno.Comp.HitEffect;  
+            tag.HitSound = xeno.Comp.HitSound;  
+            Dirty(tagged, tag);  
+        }  
+    }  
+  
+    private void StopLeap(Entity<PathogenPierceLeapingComponent> leaping)  
+    {  
+        if (_physicsQuery.TryGetComponent(leaping, out var physics))  
+        {  
+            _physics.SetLinearVelocity(leaping, Vector2.Zero, body: physics);  
+            _physics.SetBodyStatus(leaping, physics, BodyStatus.OnGround);  
         }  
   
-        if (TryComp<FixturesComponent>(xeno, out var fixtures))  
+        if (_fixturesQuery.TryGetComponent(leaping, out var fixtures))  
         {  
-            var collisionGroup = (int) xeno.Comp.IgnoredCollisionGroupSmall;  
-            if (_size.TryGetSize(xeno, out var size) && size > RMCSizes.SmallXeno)  
-                collisionGroup = (int) xeno.Comp.IgnoredCollisionGroupLarge;  
+            var collisionGroup = (int) leaping.Comp.IgnoredCollisionGroupSmall;  
+            if (_size.TryGetSize(leaping, out var size) && size > RMCSizes.SmallXeno)  
+                collisionGroup = (int) leaping.Comp.IgnoredCollisionGroupLarge;  
   
             var fixture = fixtures.Fixtures.First();  
-            _physics.SetCollisionMask(xeno, fixture.Key, fixture.Value,  
-                fixture.Value.CollisionMask | collisionGroup);  
+            _physics.SetCollisionMask(leaping, fixture.Key, fixture.Value, fixture.Value.CollisionMask | collisionGroup);  
         }  
   
-        if (_net.IsServer)  
-        {  
-            var strikeAt = _timing.CurTime + xeno.Comp.StrikeDelay;  
-            foreach (var tagged in xeno.Comp.Tagged)  
-            {  
-                if (!Exists(tagged))  
-                    continue;  
-  
-                var tag = EnsureComp<PathogenPierceTaggedComponent>(tagged);  
-                tag.Damage = xeno.Comp.Damage;  
-                tag.StrikeAt = strikeAt;  
-                tag.Origin = xeno.Owner;  
-                tag.HitEffect = xeno.Comp.HitEffect;  
-                tag.HitSound = xeno.Comp.HitSound;  
-                Dirty(tagged, tag);  
-            }  
-        }  
-  
-        RemComp<PathogenPierceLeapingComponent>(xeno);  
+        ArmTaggedTargets(leaping);  
+        RemCompDeferred<PathogenPierceLeapingComponent>(leaping);  
     }  
   
     public override void Update(float frameTime)  
@@ -238,19 +282,23 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         var leaping = EntityQueryEnumerator<PathogenPierceLeapingComponent>();  
         while (leaping.MoveNext(out var uid, out var comp))  
         {  
-            if (_mob.IsDead(uid))  
+            var ent = (uid, comp);  
+  
+            TagTargetsInPath(ent);  
+  
+            var coordinates = _transform.GetMapCoordinates(uid);  
+            if (coordinates.MapId == comp.Destination.MapId &&  
+                Vector2.Dot(coordinates.Position - comp.Destination.Position, comp.Direction) >= 0)  
             {  
-                RemCompDeferred<PathogenPierceLeapingComponent>(uid);  
+                _transform.SetMapCoordinates(uid, comp.Destination);  
+                StopLeap(ent);  
                 continue;  
             }  
   
             if (time < comp.LeapEndTime)  
-            {  
-                TagTargetsInPath((uid, comp));  
                 continue;  
-            }  
   
-            StopLeap((uid, comp));  
+            StopLeap(ent);  
         }  
   
         if (_net.IsClient)  
@@ -259,47 +307,27 @@ public sealed partial class PathogenPierceLeapSystem : EntitySystem
         var tagged = EntityQueryEnumerator<PathogenPierceTaggedComponent>();  
         while (tagged.MoveNext(out var uid, out var tag))  
         {  
-            if (time < tag.StrikeAt)  
+            if (tag.StrikeAt == null || tag.StrikeAt > time)  
                 continue;  
   
             RemCompDeferred<PathogenPierceTaggedComponent>(uid);  
   
-            var damage = _damage.TryChangeDamage(uid, tag.Damage, origin: tag.Origin);  
+            if (!Exists(uid))  
+                continue;  
+  
+            var damage = _damageable.TryChangeDamage(uid, tag.Damage, origin: tag.Origin, tool: tag.Origin);  
             if (damage?.GetTotal() > FixedPoint2.Zero)  
             {  
-                var filter = Filter.Pvs(uid, entityManager: EntityManager);  
+                var filter = Filter.Pvs(uid, entityManager: EntityManager)  
+                    .RemoveWhereAttachedEntity(o => o == tag.Origin);  
                 _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { uid }, filter);  
             }  
   
-            SpawnAttachedTo(tag.HitEffect, uid.ToCoordinates());  
-            _audio.PlayPvs(tag.HitSound, uid);  
-        }  
-    }  
+            if (tag.HitEffect != null)  
+                SpawnAttachedTo(tag.HitEffect, uid.ToCoordinates());  
   
-    private void SetCooldown(Entity<PathogenPierceLeapComponent> xeno)  
-    {  
-        foreach (var (actionId, action) in _rmcActions.GetActionsWithEvent<PathogenPierceLeapActionEvent>(xeno))  
-        {  
-            _actions.SetCooldown(actionId, xeno.Comp.Cooldown);  
-            break;  
-        }  
-    }  
-  
-    // Safety net: if the leaping comp is removed early (death, stun, admin),  
-    // restore physics and the full collision mask so the leaper isn't left  
-    // ghosting through things or floating forever.  
-    private void OnLeapingRemove(Entity<PathogenPierceLeapingComponent> xeno, ref ComponentRemove args)  
-    {  
-        if (TryComp<PhysicsComponent>(xeno, out var physics))  
-        {  
-            _physics.SetLinearVelocity(xeno, Vector2.Zero, body: physics);  
-            _physics.SetBodyStatus(xeno, physics, BodyStatus.OnGround);  
-        }  
-  
-        if (TryComp<FixturesComponent>(xeno, out var fixtures))  
-        {  
-            var fixture = fixtures.Fixtures.First();  
-            _physics.SetCollisionMask(xeno, fixture.Key, fixture.Value, -1);  
+            if (tag.HitSound != null)  
+                _audio.PlayPvs(tag.HitSound, uid);  
         }  
     }  
 }
