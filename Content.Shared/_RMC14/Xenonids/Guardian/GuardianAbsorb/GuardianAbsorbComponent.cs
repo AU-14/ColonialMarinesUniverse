@@ -1,9 +1,3 @@
-using Content.Shared.FixedPoint;  
-using Robust.Shared.GameStates;  
-using Robust.Shared.Serialization;  
-  
-namespace Content.Shared._RMC14.Xenonids.Guardian.GuardianAbsorb;  
-  
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]  
 public sealed partial class GuardianAbsorbComponent : Component  
 {  
@@ -18,10 +12,7 @@ public sealed partial class GuardianAbsorbComponent : Component
   
     [DataField, AutoNetworkedField]  
     public bool IgnoreGuardianResistances = false;  
-  
-    [DataField, AutoNetworkedField]  
-    public FixedPoint2 GuardianCachedDamage;  
-}  
+}
   
 [Serializable, NetSerializable]  
 public enum GuardianAbsorbType  
