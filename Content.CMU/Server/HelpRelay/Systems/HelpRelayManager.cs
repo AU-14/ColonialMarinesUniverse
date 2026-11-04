@@ -55,8 +55,10 @@ public sealed class HelpRelayManager : IPostInjectInit
     private ISawmill _sawmill = default!;
 
     // One Discord message per conversation, edited in place as lines arrive (the ahelp relay model).
-    // Main-thread only: created and cleared there; only the owning processor task mutates the rest.
-    private readonly Dictionary<NetUserId, HelpConversation> _conversations = new();
+    // Keys are any stable per-conversation id: ahelp keys by player id, the error relay's admin log
+    // feed by a fixed one. Main-thread only: created and cleared there; only the owning processor
+    // task mutates the rest.
+    private readonly Dictionary<Guid, HelpConversation> _conversations = new();
 
     private sealed class HelpConversation
     {
@@ -76,10 +78,12 @@ public sealed class HelpRelayManager : IPostInjectInit
     }
 
     private string _webhook = string.Empty;
+    private bool _initialized;
     private string _webhookAHelp = string.Empty;
     private string _webhookMHelp = string.Empty;
     private string _webhookBugHelp = string.Empty;
     private string _webhookNews = string.Empty;
+    private string _webhookErrors = string.Empty;
     private string _revision = string.Empty;
     private string _builtAt = string.Empty;
     private string _serverName = string.Empty;
@@ -91,15 +95,22 @@ public sealed class HelpRelayManager : IPostInjectInit
 
     /// <summary>
     /// CVar subscriptions live here, not in PostInject: unit tests build the IoC graph before
-    /// content CVars are registered, and OnValueChanged would throw for every fixture.
+    /// content CVars are registered, and OnValueChanged would throw for every fixture. Idempotent:
+    /// whichever consumer initializes first wires the cvars, so no consumer sees an empty webhook
+    /// while another system has not initialized yet.
     /// </summary>
     public void Initialize()
     {
+        if (_initialized)
+            return;
+
+        _initialized = true;
         _config.OnValueChanged(CCVars.HelpRelayWebhook, v => _webhook = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookAHelp, v => _webhookAHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookMHelp, v => _webhookMHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookBugHelp, v => _webhookBugHelp = v, true);
         _config.OnValueChanged(CCVars.HelpRelayWebhookNews, v => _webhookNews = v, true);
+        _config.OnValueChanged(CCVars.HelpRelayWebhookErrors, v => _webhookErrors = v, true);
         _config.OnValueChanged(CCVars.HelpRelayRevision, v => _revision = v, true);
         _config.OnValueChanged(CCVars.HelpRelayBuiltAt, v => _builtAt = v, true);
         _config.OnValueChanged(CCVars.AdminLogsServerName, v => _serverName = v, true);
@@ -219,8 +230,9 @@ public sealed class HelpRelayManager : IPostInjectInit
     }
 
     /// <summary>
-    /// Queues one line into the conversation's Discord message: created on first line, then edited in
-    /// place per line (the ahelp relay model). Main thread only — reads round state from entity systems.
+    /// Queues one transcript line into the conversation's Discord message: created on first line,
+    /// then edited in place per line (the ahelp relay model). Main thread only — reads round state
+    /// from entity systems.
     /// </summary>
     public void RelayConversationLine(
         HelpSource source,
@@ -229,6 +241,25 @@ public sealed class HelpRelayManager : IPostInjectInit
         bool fromStaff,
         string speaker,
         string text)
+    {
+        // No entity-system reads when the webhook is unset.
+        if (!IsEnabled(source))
+            return;
+
+        var roundTime = CurrentRunLevel() == GameRunLevel.InRound
+            ? _entMan.System<GameTicker>().RoundDuration().ToString(@"hh\:mm\:ss")
+            : null;
+        RelayConversationText(source, conversationId.UserId, username,
+            HelpRelayPayload.BuildConversationLine(speaker, fromStaff, roundTime, text));
+    }
+
+    /// <summary>
+    /// Queues one pre-formatted line into a conversation keyed by any stable id. Same lifecycle as
+    /// <see cref="RelayConversationLine"/>: the Discord message is created on first line, edited in
+    /// place, and a fresh chained message starts when the description overflows. Main thread only —
+    /// reads round state from entity systems.
+    /// </summary>
+    public void RelayConversationText(HelpSource source, Guid conversationId, string username, string line)
     {
         var url = UrlFor(source);
         if (string.IsNullOrWhiteSpace(url))
@@ -255,10 +286,7 @@ public sealed class HelpRelayManager : IPostInjectInit
             conversation.Context = GetContext();
         }
 
-        var roundTime = runLevel == GameRunLevel.InRound
-            ? _entMan.System<GameTicker>().RoundDuration().ToString(@"hh\:mm\:ss")
-            : null;
-        conversation.Pending.Enqueue(HelpRelayPayload.BuildConversationLine(speaker, fromStaff, roundTime, text));
+        conversation.Pending.Enqueue(line);
         ProcessConversation(conversation);
     }
 
@@ -381,8 +409,10 @@ public sealed class HelpRelayManager : IPostInjectInit
     {
         HelpSource.AHelp => NullIfEmpty(_webhookAHelp) ?? NullIfEmpty(_webhook),
         HelpSource.MHelp => NullIfEmpty(_webhookMHelp) ?? NullIfEmpty(_webhook),
-        // Bughelp and news post forum threads; the primary chat webhook cannot carry them, so no fallback.
+        // Bughelp and news post forum threads; the primary chat webhook cannot carry them. Errors
+        // serves its own channel by design, so none of the three falls through.
         HelpSource.News => NullIfEmpty(_webhookNews),
+        HelpSource.Errors => NullIfEmpty(_webhookErrors),
         _ => NullIfEmpty(_webhookBugHelp),
     };
 

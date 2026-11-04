@@ -28,14 +28,10 @@ public sealed class BugHelpConfigMsg : NetMessage
     public bool Enabled;
 
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
-    {
-        Enabled = buffer.ReadBoolean();
-    }
+        => Enabled = buffer.ReadBoolean();
 
     public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
-    {
-        buffer.Write(Enabled);
-    }
+        => buffer.Write(Enabled);
 }
 
 /// <summary>Server → client: open the bug report window. Player-bound, no entity.</summary>
@@ -43,13 +39,8 @@ public sealed class BugHelpOpenMsg : NetMessage
 {
     public override MsgGroups MsgGroup => MsgGroups.Core;
 
-    public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
-    {
-    }
-
-    public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
-    {
-    }
+    public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer) { }
+    public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer) { }
 }
 
 /// <summary>Client → server: staff promotes a mentor conversation into a bug report (§4.2).</summary>
@@ -60,14 +51,10 @@ public sealed class BugHelpPromoteMsg : NetMessage
     public Guid Destination;
 
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
-    {
-        Destination = buffer.ReadGuid();
-    }
+        => Destination = buffer.ReadGuid();
 
     public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
-    {
-        buffer.Write(Destination);
-    }
+        => buffer.Write(Destination);
 }
 
 /// <summary>Client → server: submit the bug report window's fields.</summary>
@@ -103,9 +90,7 @@ public sealed class BugHelpSubmitMsg : NetMessage
     }
 
     private static string? ReadOptional(NetIncomingMessage buffer)
-    {
-        return buffer.ReadBoolean() ? buffer.ReadString() : null;
-    }
+        => buffer.ReadBoolean() ? buffer.ReadString() : null;
 
     private static void WriteOptional(NetOutgoingMessage buffer, string? value)
     {

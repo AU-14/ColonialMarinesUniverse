@@ -23,7 +23,7 @@ each report opens one thread titled `[Category] BUG-R<round>-<seq> · <what happ
 ## Install tips
 
 Tag keys are category names, not tag names: `mapping:` is correct even when the forum tag is called `Map`.
-Tag IDs are invisible in the Discord client; the bot route that fetches them, plus a webhook probe that verifies them, lives in `Content.CMU/Server/HelpRelay/README.md` (Setup tips).
+Tag IDs are invisible in the Discord client; the bot route that fetches them, plus a webhook probe that verifies them, lives in `Content.CMU/Shared/HelpRelay/README.md` (Setup tips).
 
 Reporter pings need the vanilla bot (`discord.token` + `discord.guild_id`) **in the guild** - linked accounts resolve through it.
 Without it the pipeline still works; reports just post without the mention.

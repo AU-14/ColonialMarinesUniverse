@@ -1,7 +1,7 @@
 using Content.Client.CMU14.Administration;
-using Content.Client.CMU14.Administration.Tickets;
+using Content.Client.CMU14.HelpRelay.AHelp;
 using Content.Shared.Administration;
-using Content.Shared.CMU14.Administration.Tickets;
+using Content.Shared.CMU14.HelpRelay.AHelp;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Network;
 
@@ -80,9 +80,7 @@ public sealed partial class AHelpUIController : IOnSystemChanged<CMUIngameAdminC
     /// Whether the local player gets the admin AHelp window: an Adminhelp admin or an in-game admin.
     /// </summary>
     public bool CMUHasAhelp()
-    {
-        return _adminManager.HasFlag(AdminFlags.Adminhelp) || (_cmuIngameAdmin?.IngameAdmin ?? false);
-    }
+        => _adminManager.HasFlag(AdminFlags.Adminhelp) || (_cmuIngameAdmin?.IngameAdmin ?? false);
 
     public void OnSystemLoaded(CMUIngameAdminClientSystem system)
     {
@@ -112,9 +110,7 @@ public sealed partial class AdminAHelpUIHandler
     private readonly HashSet<NetUserId> _cmuFilledChannels = new();
 
     public void CMUMarkFilled(NetUserId channel)
-    {
-        _cmuFilledChannels.Add(channel);
-    }
+        => _cmuFilledChannels.Add(channel);
 
     /// <summary>
     /// Writes stored history into channels without counting it as unread. An <paramref name="authoritative"/>
@@ -147,14 +143,8 @@ public sealed partial class AdminAHelpUIHandler
                     playSound: false,
                     adminOnly: line.AdminOnly);
 
-                try
-                {
-                    panel.ReceiveLine(message, countUnread: false);
-                }
-                catch (Exception e)
-                {
-                    Logger.GetSawmill("cmu.ahelp.tickets").Warning($"Skipped unreadable AHelp history line in {channel}: {e.Message}");
-                }
+                try { panel.ReceiveLine(message, countUnread: false); }
+                catch (Exception e) { Logger.GetSawmill("cmu.ahelp.tickets").Warning($"Skipped unreadable AHelp history line in {channel}: {e.Message}"); }
             }
 
             replayed = channel;
