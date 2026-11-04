@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: CMJobBase
+  displayWeight: 22
   id: AU14JobCivilianCorporateLiaisonBase
   name: au14-job-name-civiliancorporateliaison
   description: au14-job-description-civiliancorporateliaison
