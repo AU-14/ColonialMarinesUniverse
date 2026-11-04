@@ -21,7 +21,8 @@ public sealed partial class GuardianCritSaveSystem : EntitySystem
     [Dependency] private readonly MobThresholdSystem _mobThreshold = default!;  
     [Dependency] private readonly IGameTiming _timing = default!;  
     [Dependency] private readonly INetManager _net = default!;  
-    [Dependency] private readonly SharedPopupSystem _popup = default!;  
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
   
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
   
