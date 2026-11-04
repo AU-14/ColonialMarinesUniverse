@@ -7,9 +7,10 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
-    ///     URL of the Discord webhook that receives all help relay traffic (ahelp/mhelp/bughelp)
-    ///     unless a per-source override is set. Empty disables Discord delivery for sources without
-    ///     an override; the in-game flows keep working.
+    ///     URL of the Discord webhook that receives ahelp and mhelp traffic unless a per-source
+    ///     override is set. Bughelp never uses it: bug posts need forum threads, which require
+    ///     <c>cmu.help_relay_webhook_bughelp</c>. Empty disables Discord delivery for sources
+    ///     without an override; the in-game flows keep working.
     /// </summary>
     public static readonly CVarDef<string> HelpRelayWebhook =
         CVarDef.Create("cmu.help_relay_webhook", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
@@ -45,8 +46,9 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.help_relay_webhook_mhelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
 
     /// <summary>
-    ///     URL of the Discord webhook for bug reports. Empty falls through to
-    ///     the primary webhook; both empty disables the bughelp command.
+    ///     URL of the Discord webhook for bug reports. Must be a forum-channel webhook; the
+    ///     primary chat webhook cannot carry threads, so this never falls through. Empty
+    ///     disables the bughelp command.
     /// </summary>
     public static readonly CVarDef<string> HelpRelayWebhookBugHelp =
         CVarDef.Create("cmu.help_relay_webhook_bughelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);

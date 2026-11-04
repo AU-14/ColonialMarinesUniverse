@@ -329,7 +329,8 @@ public sealed class HelpRelayManager : IPostInjectInit
     {
         HelpSource.AHelp => NullIfEmpty(_webhookAHelp) ?? NullIfEmpty(_webhook),
         HelpSource.MHelp => NullIfEmpty(_webhookMHelp) ?? NullIfEmpty(_webhook),
-        _ => NullIfEmpty(_webhookBugHelp) ?? NullIfEmpty(_webhook),
+        // Bughelp posts forum threads; the primary chat webhook cannot carry them, so no fallback.
+        _ => NullIfEmpty(_webhookBugHelp),
     };
 
     private static string? NullIfEmpty(string value) => string.IsNullOrWhiteSpace(value) ? null : value;

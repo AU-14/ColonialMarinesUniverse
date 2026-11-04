@@ -75,18 +75,17 @@ public sealed class BugHelpSystem : EntitySystem
         _net.RegisterNetMessage<BugHelpPromoteMsg>(OnBugHelpPromote);
         _net.RegisterNetMessage<BugHelpConfigMsg>();
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
-        // Either CVar can flip BugHelp's enabled state: the bughelp webhook falls through to the
-        // primary one. Deferred a tick so the relay's own handlers settle first, then the broadcast
-        // reads HelpRelayManager.IsEnabled instead of duplicating its fallback rule.
+        // Only the bughelp webhook flips BugHelp's enabled state: bug posts need forum threads,
+        // which the primary chat webhook cannot carry. The broadcast is deferred a tick so the
+        // relay's own handler settles first, then reads HelpRelayManager.IsEnabled instead of
+        // duplicating the rule.
         _config.OnValueChanged(CCVars.HelpRelayWebhookBugHelp, OnWebhookChanged, false);
-        _config.OnValueChanged(CCVars.HelpRelayWebhook, OnWebhookChanged, false);
     }
 
     public override void Shutdown()
     {
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
         _config.UnsubValueChanged(CCVars.HelpRelayWebhookBugHelp, OnWebhookChanged);
-        _config.UnsubValueChanged(CCVars.HelpRelayWebhook, OnWebhookChanged);
     }
 
     public override void Update(float frameTime)
