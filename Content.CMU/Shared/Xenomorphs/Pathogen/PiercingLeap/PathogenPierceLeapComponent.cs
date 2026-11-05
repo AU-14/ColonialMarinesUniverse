@@ -20,7 +20,7 @@ public sealed partial class PathogenPierceLeapComponent : Component
     public float Strength = 20f;  
   
     [DataField, AutoNetworkedField]  
-    public TimeSpan WindupTime = TimeSpan.FromSeconds(0.5);  
+    public TimeSpan WindupTime = TimeSpan.FromSeconds(0);  
   
     [DataField, AutoNetworkedField]  
     public TimeSpan Cooldown = TimeSpan.FromSeconds(12);  
@@ -41,7 +41,7 @@ public sealed partial class PathogenPierceLeapComponent : Component
     public CollisionGroup IgnoredCollisionGroupSmall = CollisionGroup.None;
   
     [DataField, AutoNetworkedField]  
-    public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/Pathogen/pathogen_pounce1.ogg");
+    public SoundSpecifier? LeapSound = new SoundPathSpecifier("/Audio/CMU14/Xeno/Pathogen/pathogen_pounce1.ogg");
   
     [DataField, AutoNetworkedField]  
     public SoundSpecifier? HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_flesh3.ogg");
