@@ -262,10 +262,10 @@
     event: !type:XenoLeapActionEvent
 
 - type: entity  
-  id: CMU14ActionPathogenPierceLeap  
+  id: CMU14ActionXenoPathogenPierceLeap  
   parent: ActionXenoBase  
   name: Flurry Rush  
-  description: Leap through enemies in a given direction, then strike them all after a short delay when the leap ends.
+  description: Leap through enemies in a given direction, then strike them all when the leap ends.
   components:  
   - type: Action  
     itemIconStyle: NoItem  
