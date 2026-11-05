@@ -12,10 +12,12 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared.Paper;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
@@ -32,7 +34,7 @@ public sealed class CMUYautjaExperimentTest
         var map = await pair.CreateTestMap();
         EntityUid user = default, bracer = default, screwdriver = default;
         ProtoId<CMUYautjaExperimentPrototype>[] challenge = [];
-        string clues = "";
+        Dictionary<ProtoId<CMUYautjaExperimentPrototype>, LocId> clues = new();
         string sample = "";
         await server.WaitAssertion(() =>
         {
@@ -74,7 +76,7 @@ public sealed class CMUYautjaExperimentTest
             }
             challenge = comp.RequiredExperiments.ToArray();
             Assert.That(challenge, Has.Length.EqualTo(5));
-            clues = research.ChallengeClues(comp);
+            clues = new(comp.SelectedClues);
             Assert.That(research.StartExperiment((bracer, comp), user, screwdriver), Is.True);
             Assert.That(research.StartExperiment((bracer, comp), user, screwdriver), Is.False,
                 "Two operations cannot consume the same sample well.");
@@ -88,7 +90,7 @@ public sealed class CMUYautjaExperimentTest
             Assert.That(comp.Discoveries, Is.Empty);
             Assert.That(comp.Operator, Is.Null);
             Assert.That(comp.RequiredExperiments, Is.EquivalentTo(challenge), "Picking up a bracer must not reroll its challenge.");
-            Assert.That(entities.System<CMUYautjaExperimentSystem>().ChallengeClues(comp), Is.EqualTo(clues),
+            Assert.That(comp.SelectedClues, Is.EquivalentTo(clues),
                 "An interrupted attempt must preserve the clues and cannot release a seal.");
             entities.System<SharedSolutionContainerSystem>().TryGetSolution(bracer, CMUYautjaExperimentSystem.SampleWell, out _, out var well);
             Assert.That(well!.GetTotalPrototypeQuantity("Water"), Is.EqualTo((FixedPoint2) 5));
@@ -125,6 +127,7 @@ public sealed class CMUYautjaExperimentTest
         var map = await pair.CreateTestMap();
         EntityUid user = default, bracer = default;
         var tools = new Dictionary<string, EntityUid>();
+        var initialPaperCount = 0;
         // Exercise both a challenge containing Root and one where Root must not bypass the five seals.
         var required = new[] { "CMUYautjaPlasma", "CMUYautjaDiagnostic", "CMUYautjaDecoy", "CMUYautjaContainment",
             requireRoot ? "CMUYautjaRoot" : "CMUYautjaVeil" };
@@ -134,6 +137,7 @@ public sealed class CMUYautjaExperimentTest
             user = entities.SpawnEntity("CMMobHuman", map.GridCoords);
             entities.System<SkillsSystem>().SetSkill(user, "RMCSkillResearch", 1);
             bracer = entities.SpawnEntity("CMUYautjaBracer", map.GridCoords);
+            initialPaperCount = entities.EntityQuery<PaperComponent>().Count();
             var comp = entities.GetComponent<CMUYautjaExperimentComponent>(bracer);
             comp.RequiredExperiments = required.Select(id => new ProtoId<CMUYautjaExperimentPrototype>(id)).ToHashSet();
             foreach (var (quality, prototype) in new[] { ("Screwing", "Screwdriver"), ("Pulsing", "Multitool"),
@@ -197,6 +201,8 @@ public sealed class CMUYautjaExperimentTest
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
+            Assert.That(entities.EntityQuery<PaperComponent>().Count(), Is.EqualTo(initialPaperCount),
+                "Completing discoveries and repeating procedures must not print paper notes.");
             Assert.That(entities.HasComponent<YautjaTechAuthorizedComponent>(user), Is.True);
             Assert.That(entities.HasComponent<CMUYautjaResearchOperatorComponent>(user), Is.True);
             var surgery = entities.System<CMUYautjaSurgeryAccessSystem>();
