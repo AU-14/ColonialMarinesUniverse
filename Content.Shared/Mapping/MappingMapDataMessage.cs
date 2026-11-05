@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
@@ -20,12 +20,20 @@ public sealed class MappingMapDataMessage : NetMessage
 
         var uncompressedLength = buffer.ReadVariableInt32();
         var compressedLength = buffer.ReadVariableInt32();
-        var stream = new MemoryStream(compressedLength);
+        // CMU14 Network Bounds Begin: packet lengths must not control allocations before data is read.
+        buffer.AssertAtLeastSize(compressedLength);
+        if (uncompressedLength < 0)
+            throw new InvalidOperationException("Negative uncompressed map data length.");
+
+        using var stream = new MemoryStream(compressedLength);
         buffer.ReadAlignedMemory(stream, compressedLength);
         using var decompress = new ZStdDecompressStream(stream);
-        using var decompressed = new MemoryStream(uncompressedLength);
+        using var decompressed = new MemoryStream();
 
-        decompress.CopyTo(decompressed, uncompressedLength);
+        decompress.CopyTo(decompressed);
+        if (decompressed.Length != uncompressedLength)
+            throw new InvalidOperationException("Uncompressed map data length does not match its header.");
+        // CMU14 End
         decompressed.Position = 0;
         serializer.DeserializeDirect(decompressed, out Yml);
     }
