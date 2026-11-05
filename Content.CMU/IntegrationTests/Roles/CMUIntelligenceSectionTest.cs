@@ -3,6 +3,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Access;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.Access;
@@ -17,7 +18,8 @@ namespace Content.IntegrationTests.CMU14.Roles;
 
 /// <summary>
 ///     Each Intelligence Section job admins can spawn comes with its own ID and the section
-///     radio. The Case Officer also carries a colonist cover ID under their own name.
+///     radio. The Case Officer also carries a colonist cover ID under their own name, and the
+///     section's racks serve only section jobs.
 /// </summary>
 [TestFixture]
 public sealed class CMUIntelligenceSectionTest : GameTest
@@ -47,6 +49,28 @@ public sealed class CMUIntelligenceSectionTest : GameTest
                 .Select(proto => proto.TryGetComponent<SpawnPointComponent>(out var point, factory) ? point.Job?.Id : null)
                 .ToHashSet();
             Assert.That(Jobs.Where(job => !markers.Contains(job)), Is.Empty, "every job needs a map spawn marker");
+        });
+    }
+
+    /// <summary>The section's racks serve section jobs only, and a renamed or removed item would leave an empty pick.</summary>
+    [TestCase("CMUIntelSectionClothingVendor")]
+    [TestCase("CMUIntelSISParamilitaryVendor")]
+    public async Task SectionRackServesTheSectionAndStocksRealItems(string rack)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SProtoMan.Index<EntityPrototype>(rack)
+                .TryGetComponent<CMAutomatedVendorComponent>(out var vendor, SEntMan.ComponentFactory), Is.True);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(vendor!.Jobs, Is.Not.Empty, "an open rack would arm anyone");
+                Assert.That(vendor.Jobs.Select(job => job.Id), Is.SubsetOf(Jobs));
+                foreach (var entry in vendor.Sections.SelectMany(section => section.Entries))
+                {
+                    Assert.That(SProtoMan.HasIndex<EntityPrototype>(entry.Id), Is.True, entry.Id.Id);
+                }
+            });
         });
     }
 
