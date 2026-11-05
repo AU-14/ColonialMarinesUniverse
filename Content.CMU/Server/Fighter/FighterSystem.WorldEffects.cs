@@ -10,7 +10,7 @@ public sealed partial class FighterSystem
 {
     [Dependency] private FighterAudioSystem _fighterAudio = default!;
     [Dependency] private PvsOverrideSystem _fighterPvs = default!;
-    private readonly Dictionary<EntityUid, EntityUid> _groundEngines = [];
+    private readonly Dictionary<EntityUid, (EntityUid Audio, bool Taxi)> _groundEngines = [];
 
     private void OnAircraftShutdown(Entity<FighterAircraftComponent> aircraft, ref ComponentShutdown args)
     {
@@ -21,7 +21,7 @@ public sealed partial class FighterSystem
 
     private void StopGroundEngine(EntityUid aircraft)
     {
-        if (_groundEngines.Remove(aircraft, out var sound)) _audio.Stop(sound);
+        if (_groundEngines.Remove(aircraft, out var sound)) _audio.Stop(sound.Audio);
     }
 
     private void ClearFlyby(FighterAircraftComponent aircraft)
@@ -39,8 +39,17 @@ public sealed partial class FighterSystem
                 (CompOrNull<FighterSeatComponent>(a.FrontSeat)?.Occupant != null ||
                  CompOrNull<FighterSeatComponent>(a.RearSeat)?.Occupant != null))
         {
-            if ((!_groundEngines.TryGetValue(aircraft, out var stream) || TerminatingOrDeleted(stream)) &&
-                _audio.PlayPvs(new SoundPathSpecifier("/Audio/CMU14/Fighter/jet-idle.ogg"), ground,
+            var definition = Airframe(aircraft);
+            if (!grounded.EngineRunning)
+            {
+                grounded.EngineRunning = true;
+                _fighterAudio.PlayGround(FighterAudioSystem.Engine(definition, "startup"), Transform(ground).Coordinates, 30, -8);
+            }
+            var taxi = grounded.TaxiInput != FighterInput.None;
+            if (_groundEngines.TryGetValue(aircraft, out var current) && current.Taxi != taxi)
+                StopGroundEngine(aircraft);
+            if ((!_groundEngines.TryGetValue(aircraft, out var stream) || TerminatingOrDeleted(stream.Audio)) &&
+                _audio.PlayPvs(FighterAudioSystem.Engine(definition, taxi ? "taxi" : "idle"), ground,
                     FighterAudioSystem.Exterior(18, -12).WithReferenceDistance(2.5f).WithLoop(true)) is { } idle)
             {
                 // This is the crew's own engine, inside the airframe. Surface
@@ -48,10 +57,19 @@ public sealed partial class FighterSystem
                 // distance attenuation without muffling the engine through itself.
                 idle.Component.Flags |= AudioFlags.NoOcclusion;
                 Dirty(idle.Entity, idle.Component);
-                _groundEngines[aircraft] = idle.Entity;
+                _groundEngines[aircraft] = (idle.Entity, taxi);
             }
         }
-        else StopGroundEngine(aircraft);
+        else
+        {
+            StopGroundEngine(aircraft);
+            if (a.GroundEntity is { } hull && TryComp(hull, out FighterGroundComponent? stopped) &&
+                stopped.State == FighterGroundState.Grounded && stopped.EngineRunning)
+            {
+                stopped.EngineRunning = false;
+                _fighterAudio.PlayGround(FighterAudioSystem.Engine(Airframe(aircraft), "shutdown"), Transform(hull).Coordinates, 30, -8);
+            }
+        }
 
         var airborne = FighterFlight.InAirspace(a);
         // Holding still has an engine inside the cockpit, but no jet over the battlefield.
@@ -63,12 +81,14 @@ public sealed partial class FighterSystem
         }
         if (a.Flyby is not { } uid || TerminatingOrDeleted(uid))
         {
-            uid = Spawn("CMUFighterFlyby", new EntityCoordinates(a.TerrainMap, a.Position));
+            var definition = Airframe(aircraft);
+            uid = Spawn(definition.Flyby, new EntityCoordinates(a.TerrainMap, a.Position));
+            SetAirframe(uid, definition.ID);
             a.Flyby = uid;
             // One tiny presentation entity per aircraft. Without this, the roar
             // cuts in only when its source enters the ordinary sprite PVS radius.
             _fighterPvs.AddGlobalOverride(uid);
-            a.FlybyAudio = _audio.PlayPvs(new SoundPathSpecifier("/Audio/CMU14/Fighter/jet-exterior.ogg"), uid,
+            a.FlybyAudio = _audio.PlayPvs(FighterAudioSystem.Engine(definition, "exterior"), uid,
                 FighterAudioSystem.Exterior(75, -2).WithLoop(true))?.Entity;
             if (a.FlybyAudio is { } audio) _fighterPvs.AddGlobalOverride(audio);
         }
@@ -86,19 +106,17 @@ public sealed partial class FighterSystem
     private void PlayGroundAirEffect(EntityUid aircraft, FighterEffectKind kind)
     {
         if (!TryComp(aircraft, out FighterAircraftComponent? a) || a.Flyby is not { } flyby || TerminatingOrDeleted(flyby)) return;
-        var path = kind switch
+        SoundSpecifier? sound = kind switch
         {
-            FighterEffectKind.Pass => a.Height < FighterFlight.CloudBase
-                ? "/Audio/CMU14/Fighter/jet-pass.ogg"
-                : "/Audio/CMU14/Fighter/jet-pass-high.ogg",
-            FighterEffectKind.Interceptor => "/Audio/CMU14/Fighter/missile-release.ogg",
-            FighterEffectKind.Flares => "/Audio/CMU14/Fighter/countermeasures.ogg",
-            FighterEffectKind.Hit or FighterEffectKind.Evaded => "/Audio/CMU14/Fighter/airburst.ogg",
+            FighterEffectKind.Pass => FighterAudioSystem.Engine(Airframe(aircraft), a.Height < FighterFlight.CloudBase ? "pass" : "pass-high"),
+            FighterEffectKind.Interceptor => new SoundPathSpecifier("/Audio/CMU14/Fighter/missile-release.ogg"),
+            FighterEffectKind.Flares => new SoundPathSpecifier("/Audio/CMU14/Fighter/countermeasures.ogg"),
+            FighterEffectKind.Hit or FighterEffectKind.Evaded => new SoundPathSpecifier("/Audio/CMU14/Fighter/airburst.ogg"),
             _ => null,
         };
-        if (path == null) return;
+        if (sound == null) return;
         var volume = kind == FighterEffectKind.Pass && a.Height >= FighterFlight.CloudBase ? -10 : -5;
-        _fighterAudio.PlayGround(new SoundPathSpecifier(path), Transform(flyby).Coordinates, 65, volume);
+        _fighterAudio.PlayGround(sound, Transform(flyby).Coordinates, 65, volume);
         if (kind is not (FighterEffectKind.Flares or FighterEffectKind.Hit or FighterEffectKind.Evaded)) return;
         // Leave the burst at its release point while the aircraft continues.
         var burst = Spawn("CMUFighterAirBurst", Transform(flyby).Coordinates);

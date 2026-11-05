@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.Chat.Systems;
 using Content.Shared.Chat;
 using Content.Shared.ActionBlocker;
@@ -13,7 +14,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction;
-using Content.Shared.Paper;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
@@ -46,12 +46,12 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPointLightSystem _lights = default!;
-    [Dependency] private PaperSystem _paper = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCReagentSystem _reagents = default!;
+    [Dependency] private ServerReagentGeneratorSystem _generator = default!;
     [Dependency] private SharedResearchDataTerminalSystem _research = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
@@ -66,16 +66,39 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         SubscribeLocalEvent<CMUYautjaExperimentComponent, ExaminedEvent>(OnExamine);
         SubscribeLocalEvent<CMUYautjaExperimentComponent, CMUYautjaExperimentDoAfterEvent>(OnFinished);
         SubscribeLocalEvent<CMUYautjaExperimentComponent, DoAfterAttemptEvent<CMUYautjaExperimentDoAfterEvent>>(OnAttempt);
+        Subs.BuiEvents<CMUYautjaExperimentComponent>(CMUYautjaExperimentUiKey.Key, subs =>
+        {
+            subs.Event<CMUYautjaExperimentMessage>(OnUiMessage);
+        });
+    }
+
+    private void OnUiMessage(Entity<CMUYautjaExperimentComponent> ent, ref CMUYautjaExperimentMessage args)
+    {
+        switch (args.Command)
+        {
+            case CMUYautjaExperimentCommand.Select when args.Recipe is { } recipe:
+                SelectExperiment(ent, args.Actor, recipe);
+                break;
+            case CMUYautjaExperimentCommand.Purge:
+                Purge(ent, args.Actor);
+                break;
+            case CMUYautjaExperimentCommand.Authorize:
+                Authorize(ent, args.Actor);
+                break;
+        }
     }
 
     private void OnMapInit(Entity<CMUYautjaExperimentComponent> ent, ref MapInitEvent args)
     {
-        if (ent.Comp.RequiredExperiments.Count != 0)
-            return;
-        var candidates = _prototypes.EnumeratePrototypes<CMUYautjaExperimentPrototype>()
-            .Select(recipe => new ProtoId<CMUYautjaExperimentPrototype>(recipe.ID)).ToList();
-        _random.Shuffle(candidates);
-        ent.Comp.RequiredExperiments.UnionWith(candidates.Take(CMUYautjaExperimentComponent.RequiredCount));
+        if (ent.Comp.RequiredExperiments.Count == 0)
+        {
+            var candidates = _prototypes.EnumeratePrototypes<CMUYautjaExperimentPrototype>()
+                .Select(recipe => new ProtoId<CMUYautjaExperimentPrototype>(recipe.ID)).ToList();
+            _random.Shuffle(candidates);
+            ent.Comp.RequiredExperiments.UnionWith(candidates.Take(CMUYautjaExperimentComponent.RequiredCount));
+        }
+        foreach (var id in ent.Comp.RequiredExperiments)
+            GetClue(ent.Comp, id);
     }
 
     private bool OnFloor(EntityUid uid)
@@ -99,21 +122,26 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
 
     private string Instructions(CMUYautjaExperimentPrototype recipe)
     {
-        var chemicals = string.Join(" + ", recipe.Reagents.Select(pair =>
-            $"{pair.Value}u {_reagents.Index(pair.Key).LocalizedName}"));
+        var chemicals = recipe.Reagent is { } reagent
+            ? Loc.GetString("cmu-yautja-experiment-standard-requirement", ("amount", recipe.SampleAmount),
+                ("reagent", _reagents.Index(reagent).LocalizedName))
+            : Loc.GetString("cmu-yautja-experiment-generated-requirement",
+                ("amount", recipe.SampleAmount), ("tier", recipe.MinimumTier),
+                ("property", _prototypes.Index(recipe.Property!.Value).LocalizedName), ("level", recipe.PropertyLevel));
         return Loc.GetString("cmu-yautja-experiment-instructions",
             ("name", Loc.GetString(recipe.Name)), ("tool", Loc.GetString(_prototypes.Index(recipe.Tool).ToolName)),
             ("chemicals", chemicals), ("seconds", (int) recipe.Duration.TotalSeconds), ("heat", recipe.Heat)) +
             "\n" + Loc.GetString(recipe.Lore);
     }
 
-    public string ChallengeClues(CMUYautjaExperimentComponent comp)
+    private string GetClue(CMUYautjaExperimentComponent comp, ProtoId<CMUYautjaExperimentPrototype> id)
     {
-        var index = 0;
-        return string.Join("\n", comp.RequiredExperiments.OrderBy(id => id.Id).Select(id =>
-            Loc.GetString(comp.Discoveries.Contains(id) ? "cmu-yautja-experiment-seal-open" : "cmu-yautja-experiment-seal-clue",
-                ("number", ++index), ("clue", Loc.GetString(_prototypes.Index(id).Clue)),
-                ("name", Loc.GetString(_prototypes.Index(id).Name)))));
+        if (!comp.SelectedClues.TryGetValue(id, out var clue))
+        {
+            clue = _random.Pick(_prototypes.Index(id).Clues);
+            comp.SelectedClues.Add(id, clue);
+        }
+        return Loc.GetString(clue);
     }
 
     public bool SelectExperiment(EntityUid uid, EntityUid user, ProtoId<CMUYautjaExperimentPrototype> id)
@@ -137,15 +165,6 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             Act = () => ShowGuide(ent, user),
             Priority = 2,
         });
-        foreach (var recipe in _prototypes.EnumeratePrototypes<CMUYautjaExperimentPrototype>())
-        {
-            args.Verbs.Add(new AlternativeVerb
-            {
-                Text = Loc.GetString(recipe.Name), Category = Experiments, Message = Instructions(recipe),
-                Act = () => SelectExperiment(ent, user, recipe.ID),
-                Disabled = ent.Comp.Operator != null,
-            });
-        }
         args.Verbs.Add(new AlternativeVerb
         {
             Text = Loc.GetString("cmu-yautja-experiment-purge"), Category = Experiments,
@@ -164,16 +183,11 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         args.PushText(Loc.GetString("cmu-yautja-experiment-entry"));
         if (!_skills.HasSkill(args.Examiner, ResearchSkill, 1))
             return;
-        args.PushText(Loc.GetString("cmu-yautja-experiment-status", ("count", ent.Comp.Discoveries.Count),
-            ("seals", ent.Comp.RequiredExperiments.Count(ent.Comp.Discoveries.Contains)), ("heat", ent.Comp.Heat)));
-        args.PushText(ChallengeClues(ent.Comp));
+        args.PushText(Loc.GetString("cmu-yautja-experiment-seals-short",
+            ("count", ent.Comp.RequiredExperiments.Count(ent.Comp.Discoveries.Contains))));
+        args.PushText(Loc.GetString("cmu-yautja-experiment-strain-short", ("heat", ent.Comp.Heat)));
         if (ent.Comp.Unlocked)
             args.PushText(Loc.GetString("cmu-yautja-experiment-unlocked-help"));
-        args.PushText(Instructions(_prototypes.Index(ent.Comp.Selected)));
-        if (_solutions.TryGetSolution(ent.Owner, SampleWell, out _, out var solution))
-            args.PushText(Loc.GetString("cmu-yautja-experiment-well", ("volume", solution.Volume),
-                ("contents", string.Join(", ", solution.Contents.Select(reagent =>
-                    $"{reagent.Quantity}u {_reagents.Index(reagent.Reagent.Prototype).LocalizedName}")))));
     }
 
     private void ShowGuide(Entity<CMUYautjaExperimentComponent> ent, EntityUid user)
@@ -186,17 +200,17 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
 
     private void UpdateGuide(Entity<CMUYautjaExperimentComponent> ent)
     {
-        var status = Loc.GetString("cmu-yautja-experiment-status", ("count", ent.Comp.Discoveries.Count),
-            ("seals", ent.Comp.RequiredExperiments.Count(ent.Comp.Discoveries.Contains)), ("heat", ent.Comp.Heat));
-        if (ent.Comp.Unlocked)
-            status += "\n" + Loc.GetString("cmu-yautja-experiment-unlocked-help");
-        var procedure = Instructions(_prototypes.Index(ent.Comp.Selected));
+        var seals = ent.Comp.RequiredExperiments.OrderBy(id => id.Id).Select(id =>
+            new CMUYautjaExperimentSeal(GetClue(ent.Comp, id),
+                ent.Comp.Discoveries.Contains(id) ? Loc.GetString(_prototypes.Index(id).Name) : null)).ToList();
+        var samples = Loc.GetString("cmu-yautja-experiment-samples-empty");
         if (_solutions.TryGetSolution(ent.Owner, SampleWell, out _, out var well))
-            procedure += "\n" + Loc.GetString("cmu-yautja-experiment-well", ("volume", well.Volume),
+            samples = Loc.GetString("cmu-yautja-experiment-well", ("volume", well.Volume),
                 ("contents", string.Join(", ", well.Contents.Select(reagent =>
                     $"{reagent.Quantity}u {_reagents.Index(reagent.Reagent.Prototype).LocalizedName}"))));
         _ui.SetUiState(ent.Owner, CMUYautjaExperimentUiKey.Key,
-            new CMUYautjaExperimentUiState(status, ChallengeClues(ent.Comp), procedure));
+            new CMUYautjaExperimentUiState(ent.Comp.Selected, seals, new(ent.Comp.Discoveries),
+                ent.Comp.Heat, ent.Comp.Unlocked, ent.Comp.Operator != null, samples));
     }
 
     private void OnInteract(Entity<CMUYautjaExperimentComponent> ent, ref InteractUsingEvent args)
@@ -231,8 +245,31 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
     }
 
     private bool HasReagents(EntityUid uid, CMUYautjaExperimentPrototype recipe) =>
-        _solutions.TryGetSolution(uid, SampleWell, out _, out var solution) &&
-        recipe.Reagents.All(pair => solution.GetTotalPrototypeQuantity(pair.Key) >= pair.Value);
+        FindSample(uid, recipe) != null;
+
+    private string? FindSample(EntityUid uid, CMUYautjaExperimentPrototype recipe)
+    {
+        if (!_solutions.TryGetSolution(uid, SampleWell, out _, out var solution))
+            return null;
+
+        if (recipe.Reagent is { } stock)
+            return solution.GetTotalPrototypeQuantity(stock.Id) >= recipe.SampleAmount ? stock.Id : null;
+        if (recipe.Property is not { } property)
+            return null;
+
+        // Match actual round-generated chemistry, including simulator derivatives. Stock reagents
+        // with similar effects cannot substitute, and tiny amounts cannot qualify a diluted sample.
+        foreach (var (reagent, _) in solution.Contents)
+        {
+            var id = reagent.Prototype;
+            if (_generator.ProceduralReagentData.TryGetValue(id, out var data) &&
+                _generator.IdentifiedChemicals.ContainsKey(id) && data.GenTier >= recipe.MinimumTier &&
+                data.Effects.GetValueOrDefault(property.Id) >= recipe.PropertyLevel &&
+                solution.GetTotalPrototypeQuantity(id) >= recipe.SampleAmount)
+                return id;
+        }
+        return null;
+    }
 
     public bool StartExperiment(Entity<CMUYautjaExperimentComponent> ent, EntityUid user, EntityUid tool)
     {
@@ -271,6 +308,7 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             ent.Comp.Pending = id;
         Tell(ent, "cmu-yautja-experiment-start", ("name", Loc.GetString(recipe.Name)));
         _audio.PlayPvs(recipe.Sound, ent);
+        UpdateGuide(ent);
         return true;
     }
 
@@ -297,16 +335,16 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
         ent.Comp.Operator = null;
         ent.Comp.Pending = null;
         args.Handled = true;
-        if (args.Cancelled || !CanResearch(ent, args.User) || !HasReagents(ent, _prototypes.Index(args.Experiment)))
-            return;
+        UpdateGuide(ent);
         var recipe = _prototypes.Index(args.Experiment);
+        if (args.Cancelled || !CanResearch(ent, args.User) || FindSample(ent, recipe) is not { } sample)
+            return;
         if (!_solutions.TryGetSolution(ent.Owner, SampleWell, out var well, out _))
             return;
         if (recipe.Charge < 0 && (!TryComp<YautjaBracerComponent>(ent, out var power) ||
             !_power.TryDrainPower((ent.Owner, power), args.User, -recipe.Charge, false)))
             return;
-        foreach (var (reagent, quantity) in recipe.Reagents)
-            _solutions.RemoveReagent(well.Value, reagent, quantity);
+        _solutions.RemoveReagent(well.Value, sample, recipe.SampleAmount);
         ent.Comp.Heat = Math.Max(0, ent.Comp.Heat + recipe.Heat);
         PlayExperiment(ent, ent.Comp.Heat >= 8 ? Overload : recipe.ID);
         if (args.Used is { } used && TryComp<ToolComponent>(used, out var tool))
@@ -352,10 +390,6 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             var faction = _research.GetFaction(ent);
             _research.UpdateClearance(_research.GetCredits(faction) + recipe.ResearchReward, -1, faction,
                 _research.GetSampleData(faction) + recipe.ResearchReward);
-            var note = Spawn("Paper", Transform(ent).Coordinates);
-            _paper.SetContent(note, Loc.GetString("cmu-yautja-experiment-notes", ("procedure", Instructions(recipe)),
-                ("response", Loc.GetString(recipe.Response)), ("reward", recipe.ResearchReward),
-                ("clues", ChallengeClues(ent.Comp))));
         }
         UpdateGuide(ent);
     }

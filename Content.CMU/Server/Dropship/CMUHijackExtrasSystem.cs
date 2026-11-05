@@ -1,4 +1,5 @@
 using Content.Server.GameTicking;
+using Content.Server.CMU14.RoundStatistics;
 using Content.Server.Ghost;
 using Content.Server.Mind;
 using Content.Server.Popups;
@@ -65,6 +66,7 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private RMCCameraShakeSystem _rmcCameraShake = default!;
     [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
@@ -296,6 +298,7 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
         if (ev.Handled || HasActiveDistressRule() || _gameTicker.RunLevel != GameRunLevel.InRound)
             return;
 
+        _roundStats.RecordHijackDeclined();
         _gameTicker.EndRound(Loc.GetString("cmu-distress-signal-minorxenovictory-no-hijack"));
         ev.Handled = true;
     }

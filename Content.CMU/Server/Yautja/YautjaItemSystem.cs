@@ -1274,7 +1274,8 @@ public sealed partial class YautjaItemSystem : EntitySystem
         _interaction.SetRelay(user, deployed, interactionRelay);
         if (eye != null && TryComp(user, out ActorComponent? actor) && actor.PlayerSession != null)
             _eye.SetTarget(user, deployed, eye);
-        _audio.PlayPvs(drone.Comp.DeploySound, deployed);
+        // cmss13 deploys the falcon silently, so only the pilot hears it go up
+        _audio.PlayEntity(drone.Comp.DeploySound, user, deployed);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-falcon-drone-deployed"), user, user);
     }
 

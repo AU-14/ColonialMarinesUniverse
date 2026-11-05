@@ -142,6 +142,19 @@ namespace Content.Server.NodeContainer.EntitySystems
             {
                 _nodeGroupSystem.QueueNodeRemove(node);
                 node.Deleting = true;
+
+                // CMU14 DirectLinks Begin: a removed node lets go of the cables that were joined to it by hand, so that none is left linked to a node that is gone.
+                if (node.DirectLinks.Count == 0)
+                    continue;
+
+                foreach (var linked in node.DirectLinks)
+                {
+                    linked.DirectLinks.Remove(node);
+                    _nodeGroupSystem.QueueReflood(linked);
+                }
+
+                node.DirectLinks.Clear();
+                // CMU14 End
             }
         }
 
@@ -215,8 +228,11 @@ namespace Content.Server.NodeContainer.EntitySystems
                             Loc.GetString("node-container-component-on-examine-details-mvpower"));
                         break;
                     case NodeGroupID.Apc:
+                        // CMU14: direct ports use hand-run cables, not cables laid under the machine.
                         args.PushMarkup(
-                            Loc.GetString("node-container-component-on-examine-details-apc"));
+                            Loc.GetString(node.Connection == NodeConnectorMode.Direct
+                                ? "cmu-node-examine-direct-lv"
+                                : "node-container-component-on-examine-details-apc"));
                         break;
                 }
             }

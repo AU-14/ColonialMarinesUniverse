@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -19,10 +20,15 @@ public sealed partial class CMUYautjaExperimentPrototype : IPrototype
     [IdDataField] public string ID { get; private set; } = default!;
     [DataField(required: true)] public LocId Name;
     [DataField(required: true)] public LocId Response;
-    [DataField(required: true)] public LocId Clue;
+    [DataField(required: true)] public List<LocId> Clues = new();
     [DataField(required: true)] public LocId Lore;
     [DataField(required: true)] public ProtoId<ToolQualityPrototype> Tool;
-    [DataField(required: true)] public Dictionary<ProtoId<ReagentPrototype>, FixedPoint2> Reagents = new();
+    // Choose a stock reagent or a generated property requirement, never both.
+    [DataField] public ProtoId<ReagentPrototype>? Reagent;
+    [DataField] public ProtoId<ReagentPropertyPrototype>? Property;
+    [DataField] public int PropertyLevel = 2;
+    [DataField] public int MinimumTier = 3;
+    [DataField] public FixedPoint2 SampleAmount = 5;
     [DataField] public TimeSpan Duration = TimeSpan.FromSeconds(8);
     [DataField] public int Heat = 1;
     [DataField] public int Charge;
@@ -60,6 +66,8 @@ public sealed partial class CMUYautjaExperimentComponent : Component
     [DataField] public HashSet<ProtoId<CMUYautjaExperimentPrototype>> Discoveries = new();
     // Chosen once for this device, not for its current operator. Saved with the bracer.
     [DataField] public HashSet<ProtoId<CMUYautjaExperimentPrototype>> RequiredExperiments = new();
+    // Keep each seal's wording consistent across inspections and operators.
+    [DataField] public Dictionary<ProtoId<CMUYautjaExperimentPrototype>, LocId> SelectedClues = new();
     [DataField] public int Heat;
     [DataField] public bool Unlocked;
     // Serializes access to the shared sample well; only this operation may consume its reagents.
@@ -85,9 +93,35 @@ public enum CMUYautjaExperimentUiKey : byte
 }
 
 [Serializable, NetSerializable]
-public sealed class CMUYautjaExperimentUiState(string status, string clues, string procedure) : BoundUserInterfaceState
+public sealed class CMUYautjaExperimentUiState(
+    ProtoId<CMUYautjaExperimentPrototype> selected,
+    List<CMUYautjaExperimentSeal> seals,
+    HashSet<ProtoId<CMUYautjaExperimentPrototype>> discoveries,
+    int heat, bool unlocked, bool busy, string samples) : BoundUserInterfaceState
 {
-    public readonly string Status = status;
-    public readonly string Clues = clues;
-    public readonly string Procedure = procedure;
+    public readonly ProtoId<CMUYautjaExperimentPrototype> Selected = selected;
+    public readonly List<CMUYautjaExperimentSeal> Seals = seals;
+    public readonly HashSet<ProtoId<CMUYautjaExperimentPrototype>> Discoveries = discoveries;
+    public readonly int Heat = heat;
+    public readonly bool Unlocked = unlocked;
+    public readonly bool Busy = busy;
+    public readonly string Samples = samples;
+}
+
+// Unsolved seals send their clue, never the hidden recipe ID.
+[Serializable, NetSerializable]
+public sealed record CMUYautjaExperimentSeal(string Clue, string? RecoveredName);
+
+[Serializable, NetSerializable]
+public enum CMUYautjaExperimentCommand : byte
+{
+    Select, Purge, Authorize,
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUYautjaExperimentMessage(CMUYautjaExperimentCommand command,
+    ProtoId<CMUYautjaExperimentPrototype>? recipe = null) : BoundUserInterfaceMessage
+{
+    public readonly CMUYautjaExperimentCommand Command = command;
+    public readonly ProtoId<CMUYautjaExperimentPrototype>? Recipe = recipe;
 }

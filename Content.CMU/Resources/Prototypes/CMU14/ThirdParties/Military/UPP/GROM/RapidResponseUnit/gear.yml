@@ -1,0 +1,77 @@
+- type: entity
+  parent: AU14BeltHolsterPistolUPP
+  id: AU14BeltHolsterPistolUPPRRU
+  suffix: T74, GROM, RRU
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolT74
+    - id: RMCMagazinePistolT73
+      amount: 6
+
+- type: entity
+  parent: RMCSatchelSPP
+  id: AU14UPPRRUMarksmanSatchel
+  suffix: GROM, RRU
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRadioHandheldColony
+    - id: RMCMagazineSniperType88
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: AU14MagazinePouchUPPRRUType88
+  suffix: Filled, Type88
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSniperType88
+      amount: 4
+
+- type: entity
+  parent: RMCSatchelSPP
+  id: AU14SatchelUPPRRUFullMachinegunner
+  suffix: GROM, RRU
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRadioHandheldColony
+    - id: RMCMagazineLMGQYJ72
+      amount: 2
+
+- type: entity
+  parent: AU14ShotgunShellLoadingRigUPP
+  id: AU14ShotgunShellLoadingRigUPPRRU
+  suffix: GROM, RRU
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCShellShotgunHeavySlugs
+      amount: 8
+    - id: RMCShellShotgunHeavyFlechette
+      amount: 5
+
+- type: entity
+  parent: AU14BeltSmartGunOperatorPistolUPP
+  id: AU14BeltMachinegunnerUPPRRU
+  suffix: GROM, RRU, T74
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponPistolT74
+    - id: RMCMagazinePistolT73
+      amount: 3
+    - id: RMCMagazineLMGQYJ72
+      amount: 2
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: RMCPouchMagazineUPPFull
+  suffix: Full, GROM, AG80
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleAG80
+      amount: 3

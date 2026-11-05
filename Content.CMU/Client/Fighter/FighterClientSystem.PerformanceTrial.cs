@@ -77,6 +77,7 @@ public sealed partial class FighterClientSystem
             _trial = false;
             _configuration.SetCVar(FighterTrialCVars.Enabled, false);
             Log.Info("Fighter performance trial complete; manual controls restored.");
+            CaptureTrial("performance-complete");
         }
     }
 
@@ -87,6 +88,7 @@ public sealed partial class FighterClientSystem
         var transform = EntityManager.System<SharedTransformSystem>();
         var grids = new List<Entity<MapGridComponent>>();
         var roofTiles = new HashSet<Vector2i>();
+        var roofColors = new Dictionary<Vector2i, Color>();
         var world = new Box2(aircraft.Position - new Vector2(40, 30), aircraft.Position + new Vector2(40, 30));
         foreach (var map in new[] { aircraft.TerrainMap, aircraft.ViewMap }.Distinct())
         {
@@ -99,14 +101,26 @@ public sealed partial class FighterClientSystem
                 var enumerator = maps.GetTilesIntersecting(grid, grid, world);
                 while (enumerator.MoveNext(out var tile))
                     if (!tile.Tile.IsEmpty) tiles.Add(tile.GridIndices);
+                var legacyColors = new Color?[tiles.Count];
                 var start = Stopwatch.GetTimestamp();
-                foreach (var index in tiles) roofs.GetColor((grid, grid.Comp, roof), index);
+                for (var i = 0; i < tiles.Count; i++)
+                    legacyColors[i] = roofs.GetColor((grid, grid.Comp, roof), tiles[i]);
                 var legacyMs = (Stopwatch.GetTimestamp() - start) * 1000d / Stopwatch.Frequency;
                 start = Stopwatch.GetTimestamp();
-                roofs.GetEntityRoofTiles(grid, transform.GetInvWorldMatrix(grid).TransformBox(world), roofTiles);
-                foreach (var index in tiles) roofs.GetColor((grid, grid.Comp, roof), index, roofTiles.Contains(index));
+                roofs.GetEntityRoofColors((grid, grid.Comp, roof), transform.GetInvWorldMatrix(grid).TransformBox(world), roofColors, roofTiles);
+                foreach (var index in tiles)
+                    roofs.GetColor((grid, grid.Comp, roof), index, roofTiles.Contains(index),
+                        roofColors.TryGetValue(index, out var color) ? color : null);
                 var batchMs = (Stopwatch.GetTimestamp() - start) * 1000d / Stopwatch.Frequency;
-                Log.Info($"Fighter roof benchmark: map={ToPrettyString(map)}, tiles={tiles.Count}, exact={tiles.Count(roofTiles.Contains)}, legacy_ms={legacyMs:F2}, batch_ms={batchMs:F2}.");
+                var mismatches = 0;
+                for (var i = 0; i < tiles.Count; i++)
+                {
+                    var index = tiles[i];
+                    var batched = roofs.GetColor((grid, grid.Comp, roof), index, roofTiles.Contains(index),
+                        roofColors.TryGetValue(index, out var color) ? color : null);
+                    if (batched != legacyColors[i]) mismatches++;
+                }
+                Log.Info($"Fighter roof benchmark: map={ToPrettyString(map)}, tiles={tiles.Count}, exact={tiles.Count(roofTiles.Contains)}, legacy_ms={legacyMs:F2}, batch_ms={batchMs:F2}, mismatches={mismatches}.");
             }
         }
     }

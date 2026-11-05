@@ -4,11 +4,14 @@
   id: CMUYautjaDiagnostic
   name: cmu-yautja-experiment-diagnostic
   response: cmu-yautja-experiment-diagnostic-response
-  clue: cmu-yautja-experiment-diagnostic-clue
+  clues:
+  - cmu-yautja-experiment-diagnostic-clue
+  - cmu-yautja-experiment-diagnostic-clue-2
+  - cmu-yautja-experiment-diagnostic-clue-3
+  - cmu-yautja-experiment-diagnostic-clue-4
   lore: cmu-yautja-experiment-diagnostic-lore
   tool: Screwing
-  reagents:
-    Water: 5
+  reagent: RMCEthanol
   visual: Scan
   color: "#FF6341"
   coreColor: "#FFE6A8"
@@ -34,12 +37,15 @@
   id: CMUYautjaTranslator
   name: cmu-yautja-experiment-translator
   response: cmu-yautja-experiment-translator-response
-  clue: cmu-yautja-experiment-translator-clue
+  clues:
+  - cmu-yautja-experiment-translator-clue
+  - cmu-yautja-experiment-translator-clue-2
+  - cmu-yautja-experiment-translator-clue-3
+  - cmu-yautja-experiment-translator-clue-4
   lore: cmu-yautja-experiment-translator-lore
   tool: Pulsing
-  reagents:
-    Ethanol: 3
-    Silicon: 3
+  property: Psychostimulating
+  propertyLevel: 3
   visual: Glyphs
   color: "#FF9B4A"
   coreColor: "#FFE5A8"
@@ -65,12 +71,14 @@
   id: CMUYautjaSolvent
   name: cmu-yautja-experiment-solvent
   response: cmu-yautja-experiment-solvent-response
-  clue: cmu-yautja-experiment-solvent-clue
+  clues:
+  - cmu-yautja-experiment-solvent-clue
+  - cmu-yautja-experiment-solvent-clue-2
+  - cmu-yautja-experiment-solvent-clue-3
+  - cmu-yautja-experiment-solvent-clue-4
   lore: cmu-yautja-experiment-solvent-lore
   tool: Screwing
-  reagents:
-    Ethanol: 5
-    Water: 3
+  reagent: RMCSulphuricAcid
   visual: Solvent
   color: "#BCD680"
   coreColor: "#E4F5B1"
@@ -96,12 +104,14 @@
   id: CMUYautjaCoolant
   name: cmu-yautja-experiment-coolant
   response: cmu-yautja-experiment-coolant-response
-  clue: cmu-yautja-experiment-coolant-clue
+  clues:
+  - cmu-yautja-experiment-coolant-clue
+  - cmu-yautja-experiment-coolant-clue-2
+  - cmu-yautja-experiment-coolant-clue-3
+  - cmu-yautja-experiment-coolant-clue-4
   lore: cmu-yautja-experiment-coolant-lore
   tool: Anchoring
-  reagents:
-    Cryoxadone: 3
-    Water: 5
+  reagent: Water
   visual: Coolant
   color: "#8EBBD4"
   coreColor: "#E7F8FF"
@@ -127,12 +137,14 @@
   id: CMUYautjaBridge
   name: cmu-yautja-experiment-bridge
   response: cmu-yautja-experiment-bridge-response
-  clue: cmu-yautja-experiment-bridge-clue
+  clues:
+  - cmu-yautja-experiment-bridge-clue
+  - cmu-yautja-experiment-bridge-clue-2
+  - cmu-yautja-experiment-bridge-clue-3
+  - cmu-yautja-experiment-bridge-clue-4
   lore: cmu-yautja-experiment-bridge-lore
   tool: Pulsing
-  reagents:
-    Copper: 4
-    Silicon: 2
+  reagent: RMCCopper
   visual: Bridge
   color: "#83BFFF"
   coreColor: "#E4F6FF"
@@ -158,12 +170,15 @@
   id: CMUYautjaCapacitor
   name: cmu-yautja-experiment-capacitor
   response: cmu-yautja-experiment-capacitor-response
-  clue: cmu-yautja-experiment-capacitor-clue
+  clues:
+  - cmu-yautja-experiment-capacitor-clue
+  - cmu-yautja-experiment-capacitor-clue-2
+  - cmu-yautja-experiment-capacitor-clue-3
+  - cmu-yautja-experiment-capacitor-clue-4
   lore: cmu-yautja-experiment-capacitor-lore
   tool: Anchoring
-  reagents:
-    Lithium: 4
-    Silicon: 3
+  property: Electrogenetic
+  propertyLevel: 3
   visual: Capacitor
   color: "#64ACFF"
   coreColor: "#EFFAFF"
@@ -189,12 +204,14 @@
   id: CMUYautjaPrism
   name: cmu-yautja-experiment-prism
   response: cmu-yautja-experiment-prism-response
-  clue: cmu-yautja-experiment-prism-clue
+  clues:
+  - cmu-yautja-experiment-prism-clue
+  - cmu-yautja-experiment-prism-clue-2
+  - cmu-yautja-experiment-prism-clue-3
+  - cmu-yautja-experiment-prism-clue-4
   lore: cmu-yautja-experiment-prism-lore
   tool: Screwing
-  reagents:
-    Carbon: 3
-    Silicon: 5
+  reagent: RMCSilver
   visual: Prism
   color: "#FFB16A"
   coreColor: "#FFF0CC"
@@ -220,12 +237,15 @@
   id: CMUYautjaVeil
   name: cmu-yautja-experiment-veil
   response: cmu-yautja-experiment-veil-response
-  clue: cmu-yautja-experiment-veil-clue
+  clues:
+  - cmu-yautja-experiment-veil-clue
+  - cmu-yautja-experiment-veil-clue-2
+  - cmu-yautja-experiment-veil-clue-3
+  - cmu-yautja-experiment-veil-clue-4
   lore: cmu-yautja-experiment-veil-lore
   tool: Pulsing
-  reagents:
-    Silicon: 4
-    Mercury: 2
+  property: Hypometabolic
+  propertyLevel: 2
   visual: Veil
   color: "#8DCBDF"
   coreColor: "#DDF4FF"
@@ -251,12 +271,15 @@
   id: CMUYautjaEcho
   name: cmu-yautja-experiment-echo
   response: cmu-yautja-experiment-echo-response
-  clue: cmu-yautja-experiment-echo-clue
+  clues:
+  - cmu-yautja-experiment-echo-clue
+  - cmu-yautja-experiment-echo-clue-2
+  - cmu-yautja-experiment-echo-clue-3
+  - cmu-yautja-experiment-echo-clue-4
   lore: cmu-yautja-experiment-echo-lore
   tool: Screwing
-  reagents:
-    Mercury: 2
-    Ethanol: 4
+  property: Psychostimulating
+  propertyLevel: 2
   visual: Echo
   color: "#DC8C48"
   coreColor: "#FFE0A4"
@@ -282,12 +305,15 @@
   id: CMUYautjaRadar
   name: cmu-yautja-experiment-radar-name
   response: cmu-yautja-experiment-radar-response
-  clue: cmu-yautja-experiment-radar-clue
+  clues:
+  - cmu-yautja-experiment-radar-clue
+  - cmu-yautja-experiment-radar-clue-2
+  - cmu-yautja-experiment-radar-clue-3
+  - cmu-yautja-experiment-radar-clue-4
   lore: cmu-yautja-experiment-radar-lore
   tool: Pulsing
-  reagents:
-    Copper: 3
-    Iron: 3
+  property: Focusing
+  propertyLevel: 3
   visual: Radar
   color: "#FF6847"
   coreColor: "#FFD69B"
@@ -313,12 +339,15 @@
   id: CMUYautjaBio
   name: cmu-yautja-experiment-bio
   response: cmu-yautja-experiment-bio-response
-  clue: cmu-yautja-experiment-bio-clue
+  clues:
+  - cmu-yautja-experiment-bio-clue
+  - cmu-yautja-experiment-bio-clue-2
+  - cmu-yautja-experiment-bio-clue-3
+  - cmu-yautja-experiment-bio-clue-4
   lore: cmu-yautja-experiment-bio-lore
   tool: Screwing
-  reagents:
-    CMInaprovaline: 3
-    Water: 3
+  property: Neuroinhibiting
+  propertyLevel: 2
   visual: Pulse
   color: "#B8D563"
   coreColor: "#EEFFB2"
@@ -344,12 +373,14 @@
   id: CMUYautjaCatalyst
   name: cmu-yautja-experiment-catalyst
   response: cmu-yautja-experiment-catalyst-response
-  clue: cmu-yautja-experiment-catalyst-clue
+  clues:
+  - cmu-yautja-experiment-catalyst-clue
+  - cmu-yautja-experiment-catalyst-clue-2
+  - cmu-yautja-experiment-catalyst-clue-3
+  - cmu-yautja-experiment-catalyst-clue-4
   lore: cmu-yautja-experiment-catalyst-lore
   tool: Welding
-  reagents:
-    CMInaprovaline: 5
-    Carbon: 3
+  reagent: CMBicaridine
   visual: Catalyst
   color: "#E2A55E"
   coreColor: "#FFF0B6"
@@ -376,12 +407,15 @@
   id: CMUYautjaDecoy
   name: cmu-yautja-experiment-decoy
   response: cmu-yautja-experiment-decoy-response
-  clue: cmu-yautja-experiment-decoy-clue
+  clues:
+  - cmu-yautja-experiment-decoy-clue
+  - cmu-yautja-experiment-decoy-clue-2
+  - cmu-yautja-experiment-decoy-clue-3
+  - cmu-yautja-experiment-decoy-clue-4
   lore: cmu-yautja-experiment-decoy-lore
   tool: Pulsing
-  reagents:
-    Silicon: 4
-    Phosphorus: 2
+  property: Hallucinogenic
+  propertyLevel: 2
   visual: Decoy
   color: "#70B5E4"
   coreColor: "#CEF2FF"
@@ -407,12 +441,14 @@
   id: CMUYautjaTether
   name: cmu-yautja-experiment-tether
   response: cmu-yautja-experiment-tether-response
-  clue: cmu-yautja-experiment-tether-clue
+  clues:
+  - cmu-yautja-experiment-tether-clue
+  - cmu-yautja-experiment-tether-clue-2
+  - cmu-yautja-experiment-tether-clue-3
+  - cmu-yautja-experiment-tether-clue-4
   lore: cmu-yautja-experiment-tether-lore
   tool: Anchoring
-  reagents:
-    Iron: 4
-    Copper: 4
+  reagent: CMUSiliconeOil
   visual: Tether
   color: "#F16A3B"
   coreColor: "#FFD3A0"
@@ -438,12 +474,15 @@
   id: CMUYautjaOrbit
   name: cmu-yautja-experiment-orbit
   response: cmu-yautja-experiment-orbit-response
-  clue: cmu-yautja-experiment-orbit-clue
+  clues:
+  - cmu-yautja-experiment-orbit-clue
+  - cmu-yautja-experiment-orbit-clue-2
+  - cmu-yautja-experiment-orbit-clue-3
+  - cmu-yautja-experiment-orbit-clue-4
   lore: cmu-yautja-experiment-orbit-lore
   tool: Anchoring
-  reagents:
-    Iron: 5
-    Mercury: 2
+  property: Hyperdensificating
+  propertyLevel: 1
   visual: Orbit
   color: "#EDAD60"
   coreColor: "#FFF0B8"
@@ -469,12 +508,15 @@
   id: CMUYautjaPlasma
   name: cmu-yautja-experiment-plasma
   response: cmu-yautja-experiment-plasma-response
-  clue: cmu-yautja-experiment-plasma-clue
+  clues:
+  - cmu-yautja-experiment-plasma-clue
+  - cmu-yautja-experiment-plasma-clue-2
+  - cmu-yautja-experiment-plasma-clue-3
+  - cmu-yautja-experiment-plasma-clue-4
   lore: cmu-yautja-experiment-plasma-lore
   tool: Welding
-  reagents:
-    Phosphorus: 3
-    Lithium: 4
+  property: Hyperthermic
+  propertyLevel: 3
   visual: Plasma
   color: "#FF5134"
   coreColor: "#FFF0C6"
@@ -500,12 +542,14 @@
   id: CMUYautjaFlash
   name: cmu-yautja-experiment-flash
   response: cmu-yautja-experiment-flash-response
-  clue: cmu-yautja-experiment-flash-clue
+  clues:
+  - cmu-yautja-experiment-flash-clue
+  - cmu-yautja-experiment-flash-clue-2
+  - cmu-yautja-experiment-flash-clue-3
+  - cmu-yautja-experiment-flash-clue-4
   lore: cmu-yautja-experiment-flash-lore
   tool: Screwing
-  reagents:
-    Phosphorus: 3
-    Silicon: 3
+  reagent: RMCPhosphorus
   visual: Flash
   color: "#FFE5B4"
   coreColor: "#FFFFFF"
@@ -531,12 +575,15 @@
   id: CMUYautjaStatic
   name: cmu-yautja-experiment-static
   response: cmu-yautja-experiment-static-response
-  clue: cmu-yautja-experiment-static-clue
+  clues:
+  - cmu-yautja-experiment-static-clue
+  - cmu-yautja-experiment-static-clue-2
+  - cmu-yautja-experiment-static-clue-3
+  - cmu-yautja-experiment-static-clue-4
   lore: cmu-yautja-experiment-static-lore
   tool: Pulsing
-  reagents:
-    Copper: 4
-    Mercury: 3
+  property: Disrupting
+  propertyLevel: 2
   visual: Static
   color: "#F56E3A"
   coreColor: "#FFF0B8"
@@ -562,12 +609,15 @@
   id: CMUYautjaContainment
   name: cmu-yautja-experiment-containment
   response: cmu-yautja-experiment-containment-response
-  clue: cmu-yautja-experiment-containment-clue
+  clues:
+  - cmu-yautja-experiment-containment-clue
+  - cmu-yautja-experiment-containment-clue-2
+  - cmu-yautja-experiment-containment-clue-3
+  - cmu-yautja-experiment-containment-clue-4
   lore: cmu-yautja-experiment-containment-lore
   tool: Anchoring
-  reagents:
-    Silicon: 5
-    Cryoxadone: 4
+  property: Anticorrosive
+  propertyLevel: 2
   visual: Containment
   color: "#EEA862"
   coreColor: "#FFE9B5"
@@ -593,13 +643,15 @@
   id: CMUYautjaRoot
   name: cmu-yautja-experiment-root
   response: cmu-yautja-experiment-root-response
-  clue: cmu-yautja-experiment-root-clue
+  clues:
+  - cmu-yautja-experiment-root-clue
+  - cmu-yautja-experiment-root-clue-2
+  - cmu-yautja-experiment-root-clue-3
+  - cmu-yautja-experiment-root-clue-4
   lore: cmu-yautja-experiment-root-lore
   tool: Pulsing
-  reagents:
-    CMInaprovaline: 4
-    Silicon: 4
-    Copper: 4
+  property: Neuroshielding
+  propertyLevel: 1
   visual: Root
   color: "#EE5039"
   coreColor: "#FFE2AA"

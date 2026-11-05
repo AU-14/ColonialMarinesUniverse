@@ -36,14 +36,22 @@
   - type: VehicleSupplyConsole
     vehicles:
 
-    # CMU14: fighter and portable faction-owned VTOL pad.
-    - name: Two-seat VTOL fighter
-      vehicle: CMUFighterGround
+    # CMU14: fighters launch from clear ground without a staging pad.
+    - vehicle: CMUFighterGround
       group: vehicle-fighter
-      bundle:
-      - CMUFighterLandingPadFolded
       hardpoints:
-      - CMUFighterLandingPadFolded
+      - RMCDropshipAttachmentRocketPod
+      - RMCDropshipAttachmentAmmoGAU
+      - RMCDropshipAttachmentAmmoRocketMiniMike
+      - RMCDropshipAttachmentAmmoRocketKeeper
+      - RMCDropshipAttachmentAmmoRocketWidowmaker
+      - RMCDropshipAttachmentAmmoRocketHarpoon
+      - RMCDropshipAttachmentAmmoRocketNapalm
+
+    # CMU14: UPP and BEAR use their own airframe with the shared fighter allowance.
+    - vehicle: CMUFighterGroundUPP
+      group: vehicle-fighter
+      hardpoints:
       - RMCDropshipAttachmentRocketPod
       - RMCDropshipAttachmentAmmoGAU
       - RMCDropshipAttachmentAmmoRocketMiniMike
@@ -180,6 +188,10 @@
       - VehicleSPPAPCAutocannon
       - VehicleSPPAPCHJ35Launcher
       - VehicleSPPAPCFlareLauncher
+      # CMU14: generic APC support modules; the UPP APC has no branded variants,
+      # and its support slot accepts them now that the slot compat gate is lifted
+      - RMCAPCCommsRelay
+      - RMCAPCFreightStorage
 
     # CMU14: Wolfpack MGS. Entry and option names come from the localized prototype names;
     # the hardpoint list holds only parts with art in the Wolfpack RSI.

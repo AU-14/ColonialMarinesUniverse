@@ -46,6 +46,8 @@
         amount: 20
     - name: Headgear
       entries:
+      - id: ArmorHelmetSPP
+        amount: 2
       - id: AU14UPPNavalInfantryHelmet
         amount: 40
       - id: AU14UPPPatrolCap
@@ -320,8 +322,12 @@
         amount: 1
       - id: RMCPowerCellHigh
         amount: 5
-      - id: RMCCableCoil
-        amount: 15
+      - id: CMUCableThinHVStack
+        amount: 5
+      - id: CMUCableThinMVStack
+        amount: 5
+      - id: CMUCableThinLVStack
+        amount: 5
     - name: Flares and lights
       entries:
       - id: RMCBoxFlashlights
@@ -771,7 +777,11 @@
       - id: RuMCHeadBeretMarien
         amount: 5
       - id: RuMCUPPNavalInfantryCapUshankaCommander
-        amount: 10
+        amount: 5
+      - id: CMHeadCapSPPPeaked
+        amount: 5
+      - id: RMCHeadCapSPPPolKomWhite
+        amount: 2
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
@@ -841,10 +851,6 @@
       - id: AU14ArmorSmartGunDesertCombatHarnessUPP
       - id: RuMCUPPPouchDrum
       - id: RMCScabbardMacheteSGFilled
-    - name: au14-vendor-section-headgear
-      choices: { CMHelmet: 1 }
-      entries:
-      - id: RuMCUPPNavalInfantryHeavyHelmet2
     - name: Firearm System
       choices: { CMUPlatoonMG: 1 }
       entries:
@@ -930,7 +936,7 @@
     - name: Apparel
       choices: { CMHat: 1 }
       entries:
-      - id: RuMCHeadBeretMarien
+      - id: AU14UPPPeakedSL
     - name: Squad Leader Essentials
       takeAll: CMStandard
       entries:
@@ -1220,7 +1226,11 @@
         points: 1
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
@@ -1586,7 +1596,7 @@
       - id: RuMCUPPNavalInfantryHeavyHelmet
         amount: 2
       - id: RuMCUPPNavalInfantryHeavyHelmet2
-        amount: 4
+        amount: 2
     - name: Devices
       entries:
       - id: AU14PowerCellSmartgunUPP
@@ -1781,7 +1791,11 @@
       - id: RMCPouchElectronics
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: AU14MaintenanceJack
         points: 2

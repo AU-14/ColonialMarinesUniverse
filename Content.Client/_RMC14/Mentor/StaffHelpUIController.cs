@@ -3,13 +3,14 @@ using System.Linq;
 using System.Threading;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
-using Content.Client.CMU14.BugHelp; // CMU14: bug report window, opened from the third choice card
+using Content.Client.CMU14.HelpRelay.BugHelp; // CMU14: bug report window, opened from the third choice card
+using Content.Client.CMU14.Interface; // CMU14: CRT palette, colors the mentor help intro header
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
-using Content.Shared.CMU14.BugHelp; // CMU14: promotion message from the staff window
+using Content.Shared.CMU14.HelpRelay.BugHelp; // CMU14: promotion message from the staff window
 using Content.Shared.CCVar;
 using Content.Shared.Input;
 using Robust.Client.Audio;
@@ -387,6 +388,9 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
             _net.ClientSendMessage(msg);
         };
 
+        // CMU14: the AHelp window's "before you send this" intro, retargeted at mentor help.
+        window.Messages.AddMessage(BuildMentorIntroText());
+
         if (_player.LocalUser is { } local && _messages.TryGetValue(local, out var messages))
         {
             foreach (var message in messages)
@@ -397,6 +401,15 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         }
 
         return window;
+    }
+
+    // CMU14: mentor help's mirror of AHelpUIController.BuildIntroText, same caution-colored header.
+    private static FormattedMessage BuildMentorIntroText()
+    {
+        var header = Loc.GetString("cmu-mentor-help-intro-header");
+        var body = Loc.GetString("cmu-mentor-help-intro-message");
+        return FormattedMessage.FromMarkupPermissive(
+            $"[bold][color={CrtTerminalPalette.Caution.ToHex()}]{header}[/color][/bold]\n{body}");
     }
 
     private MentorWindow CreateMentorWindow()

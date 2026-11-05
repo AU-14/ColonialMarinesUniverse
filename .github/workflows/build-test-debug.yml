@@ -23,6 +23,10 @@ jobs:
     name: Debug / left out of CI
     if: github.actor != 'PJBot'
     runs-on: ubuntu-latest
+    # CMU14: the nightly joins ci-scheduler.yml's shard pool at the lowest priority class:
+    # it fills an idle fleet instead of trampling PR shards. the environment holds it
+    # runner-less until then
+    environment: ci-shards-a
     timeout-minutes: 90
 
     steps:

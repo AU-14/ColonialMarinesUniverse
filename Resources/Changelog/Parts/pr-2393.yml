@@ -1,0 +1,36 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Remote thrall self-destruct asks the hunter to confirm instead of the thrall.
+  type: Fix
+- message: Blooded thralls lose yautja tech when their master is gone.
+  type: Fix
+- message: Thrown smart discs can't be snatched out of the air by non-yautja.
+  type: Fix
+- message: Serpent hunts are capped like cmss13, small hunts roll at most one big
+    xeno.
+  type: Tweak
+- message: Yautja can eat raw meat without getting sick.
+  type: Fix
+- message: The falcon drone no longer opens doors and deploys quietly.
+  type: Fix
+- message: Hunter ship lockers no longer trap you in the walls.
+  type: Fix
+- message: Ghosts no longer appear in the hunt journal's nearby targets.
+  type: Fix
+- message: Rending and piercing swords and war scythes look right on your back.
+  type: Fix
+- message: A yautja self-destruct no longer gibs nearby ghosts.
+  type: Fix
+- message: Hunter ship lockers no longer hold random station items.
+  type: Tweak
+- message: The hunter ship's spare gear crates are stocked with weapons, armour and
+    supplies.
+  type: Add
+- message: The bracer translator shows a typing indicator while you use it.
+  type: Tweak
+- message: 'Military Caste power armor matches cmss13: more fire resistant, as fast
+    as full hunter armor, and blocks pounces from the front.'
+  type: Tweak
+time: '2026-10-31T14:45:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2393

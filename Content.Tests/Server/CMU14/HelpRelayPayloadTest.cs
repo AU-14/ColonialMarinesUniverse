@@ -1,5 +1,5 @@
 using System;
-using Content.Server.CMU14.HelpRelay;
+using Content.Server.CMU14.HelpRelay.Systems;
 using Content.Server.GameTicking;
 using NUnit.Framework;
 
@@ -152,6 +152,35 @@ namespace Content.Tests.Server.CMU14
         }
 
         [Test]
+        public void NewsSourceCarriesFace()
+        {
+            var payload = HelpRelayPayload.Build(HelpSource.News,
+                new HelpPost { Description = "x", Author = "unknown", Context = Context() },
+                revision: null);
+
+            Assert.That(payload.Embeds[0].Author!.Name, Is.EqualTo("News · unknown"));
+            Assert.That(payload.Embeds[0].Color, Is.EqualTo(0x7CFC00));
+        }
+
+        [Test]
+        public void OmitContextFieldsLeavesOnlyExtraFields()
+        {
+            var payload = HelpRelayPayload.Build(HelpSource.News,
+                new HelpPost
+                {
+                    Description = "x",
+                    Context = Context(),
+                    OmitContextFields = true,
+                    ExtraFields = [new() { Name = "Published", Value = "00:12:34" }],
+                },
+                revision: null);
+
+            var embed = payload.Embeds[0];
+            Assert.That(embed.Fields, Has.Count.EqualTo(1));
+            Assert.That(embed.Fields[0].Name, Is.EqualTo("Published"));
+        }
+
+        [Test]
         public void ConversationLineMarksDirectionSpeakerAndRoundTime()
         {
             var player = HelpRelayPayload.BuildConversationLine("PFC Jane Doe", fromStaff: false, "00:12:34", "how do I reload?");
@@ -170,19 +199,24 @@ namespace Content.Tests.Server.CMU14
         }
 
         [Test]
-        public void ConversationPayloadCarriesTranscript()
+        public void ConversationPayloadCarriesTranscriptAndContext()
         {
             var payload = HelpRelayPayload.BuildConversationPayload(
                 HelpSource.MHelp,
                 "dev",
                 "\n:inbox_tray: **PFC Jane Doe:** hi",
                 revision: "20a11caad6",
-                server: "CMU Main");
+                context: Context());
 
             Assert.That(payload.Username, Is.EqualTo("MHelp · dev"));
             var embed = payload.Embeds[0];
             Assert.That(embed.Description, Does.Contain("PFC Jane Doe"));
             Assert.That(embed.Color, Is.EqualTo(0xE67E22));
+            Assert.That(embed.Fields, Has.Count.EqualTo(4));
+            Assert.That(embed.Fields[0].Name, Is.EqualTo("Round"));
+            Assert.That(embed.Fields[0].Value, Is.EqualTo("1234"));
+            Assert.That(embed.Fields[1].Value, Is.EqualTo("CMLowPop"));
+            Assert.That(embed.Fields[2].Value, Is.EqualTo("MapAtlas"));
             Assert.That(embed.Footer!.Text, Is.EqualTo("rev 20a11caad6 · CMU Main · CMU help relay"));
         }
 

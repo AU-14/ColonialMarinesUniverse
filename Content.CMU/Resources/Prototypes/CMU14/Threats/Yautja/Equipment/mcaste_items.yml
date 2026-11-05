@@ -139,14 +139,22 @@
     bullet: 50
     bio: 35
     explosionArmor: 40
+  # cmss13 gives it the full hunter armor's slowdown (LOWHEAVY 0.75), so it moves like our heavy clan armor.
+  # movement_compensation there only offsets wielded gun slowdown
   - type: RMCArmorSpeedTier
-    speedTier: heavy
+    speedTier: very light
   - type: ClothingSpeedModifier
-    walkModifier: 0.64
-    sprintModifier: 0.64
+    walkModifier: 0.75
+    sprintModifier: 0.75
+  # cmss13 BLOCK_KNOCKDOWN: a pounce into the front of the armor bounces off
+  - type: RMCGrantLeapProtection
   - type: YautjaTechItem
   - type: Corrodible
     isCorrodible: false
+  # cmss13 power armor inherits the full hunter armor's fire_intensity_resistance 20, not the base 10
+  - type: RMCImmuneToIgnition
+    intensityResistance: 20
+    immuneToDirectHits: false
 
 - type: entity
   parent: CMUYautjaPoweredArmor

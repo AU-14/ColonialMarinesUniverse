@@ -418,6 +418,10 @@
   id: RMCShovel
   suffix: RMC
   components:
+  - type: GuideHelp # CMU14: contextual mining and industry instructions
+    guides:
+    - CMUGuideIndustryTools
+    - CMUGuideIndustry
   - type: Sprite
     sprite: _RMC14/Objects/Tools/shovel.rsi
     state: icon

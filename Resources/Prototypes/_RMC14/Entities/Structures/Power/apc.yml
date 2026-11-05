@@ -139,6 +139,65 @@
     containers:
       rmc_apc_power_cell: !type:ContainerSlot
   - type: SpriteSetRenderOrder
+  # CMU14 Begin: the tile power stack, so a placed CMApc is a working APC on
+  # CMUMapUsesTilePower maps (MV feed in, LV supply out, battery buffer). On area
+  # power maps it idles: the wizden power writer skips carriers of RMCPowerReceiver
+  # and no functional cables exist to feed the charger, while RMCApc itself is gated
+  # off on tile power maps.
+  - type: StationAiWhitelist
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -9
+    range: 2
+    sound:
+      path: /Audio/Ambience/Objects/hdd_buzz.ogg
+  - type: ExaminableBattery
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Both
+  - type: PowerMonitoringDevice
+    group: APC
+    sourceNode: input
+    loadNode: output
+    collectionName: apc
+    sprite: Structures/Wallmounts/apc.rsi
+    state: static
+  - type: BatteryCharger
+    voltage: Medium
+  - type: PowerProvider
+    voltage: Apc
+  - type: Apc
+    voltage: Apc
+  - type: ExtensionCableProvider
+  - type: Battery
+    # no netsync: a networked battery dirties every tick against the power net
+    netsync: false
+    maxCharge: 50000
+    startingCharge: 0
+  - type: PowerNetworkBattery
+    maxSupply: 10000
+    maxChargeRate: 5000
+    supplyRampTolerance: 1000
+    supplyRampRate: 500
+  - type: Electrified
+    onHandInteract: false
+    onInteractUsing: false
+    onBump: false
+    requirePower: true
+    mediumVoltageNode: input
+    lowVoltageNode: output
+  - type: LightningTarget
+    priority: 1
+  - type: StationInfiniteBatteryTarget
+  - type: PowerGridCheckNotify
+  # CMU14 End
 
 # APC under construction
 - type: entity
@@ -179,6 +238,16 @@
   - type: Construction
     graph: CMApc
     node: apc
+  # CMU14 Begin: superseded by the CMU14 node container on CMApcBase, which adds
+  # the MV input; the Apc output here would override it and drop that feed.
+  # - type: NodeContainer # CMU14: the APC takes its power from a cable run by hand to it
+  #   examinable: true
+  #   nodes:
+  #     input:
+  #       !type:CableDeviceNode
+  #       nodeGroupID: Apc
+  #       connection: Direct
+  # CMU14 End
 
 - type: entity
   parent: CMApcBase
