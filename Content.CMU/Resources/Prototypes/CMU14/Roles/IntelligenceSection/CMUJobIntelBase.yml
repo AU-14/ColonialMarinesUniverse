@@ -1,0 +1,28 @@
+# Intelligence Section: a colony department set up like the Weyland-Yutani corporate staff.
+# Admins can spawn these jobs through "Spawn here as job"; maps can also place the spawn markers.
+
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: CMUJobIntelBase
+  roundSide: Civilian
+  roundForce: INTEL
+  setPreference: true
+  canBeAntag: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu-job-supervisors-intel-section-chief
+  accessGroups:
+  - Colonist
+  - CMUIntelligenceSection
+
+# Everyone in the section starts in the same plain outfit and picks real clothes from the section wardrobe.
+# Not abstract: startingGear passes "abstract" down to its children, which would hide every job's gear.
+- type: startingGear
+  id: CMUGearIntelBase
+  equipment:
+    jumpsuit: RMCJumpsuitCivilian
+    shoes: RMCShoesBlack
+    ears: CMUIntelSectionHeadset
+  inhand:
+  - CMUMobilePhone

@@ -47,6 +47,7 @@
     - radioWEYU
     - radioCMB
     - radioCLF
+    - CMUIntelSection
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
@@ -148,6 +149,7 @@
     - radioWEYU
     - radioCMB
     - radioCLF
+    - CMUIntelSection
 
 # ├──[ MAP SPAWNS ]──────────────────────────────────────────────────┤
 - type: entity
