@@ -232,7 +232,7 @@
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCCutter
   name: cutting machine
-  description: "Cuts rods into fasteners, glass into tubes and silicon into wafers."
+  description: "Cuts rods into fasteners and silicon into wafers. Select the glass output with the circuit setting: 0 for small beakers, 1 for large beakers, or 2 for electronics kits."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/cutter.rsi
@@ -251,6 +251,7 @@
   - type: ActivatableUIRequiresPower
   - type: RecipeMachine
     kind: cutter
+    maxCircuit: 2
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]

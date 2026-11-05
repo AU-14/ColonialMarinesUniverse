@@ -1483,6 +1483,7 @@
 - type: cmuMachineRecipe
   id: RUMCMRCutterGlassTube
   machine: cutter
+  circuit: 2
   inputs:
     CMGlass: 1
   outputs:
