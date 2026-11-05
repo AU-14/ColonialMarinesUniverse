@@ -37,6 +37,10 @@ public sealed partial class AttachableIFFSystem : EntitySystem
     private const float FallbackProjectileLifetime = 10f;
     private const float FallbackProjectileRadius = 0.1f;
 
+    // CMU14: cap the IFF lane check at view range like CM13's fire prevention did. The full 10s
+    // flight path reached across whole ships and any friendly on a clear lane blocked the shot.
+    private const float IffCheckMaxDistance = 9f;
+
     private readonly HashSet<EntProtoId<IFFFactionComponent>> _factionBuffer = new();
 
     public override void Initialize()
@@ -214,10 +218,9 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         return false;
     }
 
+    // CMU14: IffCheckMaxDistance caps this at CM13 view range
     private float GetIffCheckDistance(Entity<GunComponent> gun)
-    {
-        return gun.Comp.ProjectileSpeedModified * FallbackProjectileLifetime;
-    }
+        => MathF.Min(gun.Comp.ProjectileSpeedModified * FallbackProjectileLifetime, IffCheckMaxDistance);
 
     private float GetIffCheckRadius(Entity<GunComponent> _)
     {
