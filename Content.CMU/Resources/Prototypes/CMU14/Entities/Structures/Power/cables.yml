@@ -143,8 +143,25 @@
 # wizden coil rsi; the CablePlacer lays the CMUCableThin* structures, not the
 # thick cables their parents lay.
 
+# Coil behavior shared by all thin coils so they substitute for the deprecated
+# RMCCableCoil: synth and limb repair, ghetto surgery, pipe bomb wiring, drone
+# wires, hand-run cables between devices, and makeshift ziptie crafting.
 - type: entity
-  parent: CableHVStack
+  abstract: true
+  id: CMUCableThinStackBase
+  components:
+  - type: RMCCableCoil
+  - type: DirectCableLinker
+  - type: RMCConstructionItem
+    buildable:
+    - AU14MakeShiftZipties
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+
+- type: entity
+  parent: [CableHVStack, CMUCableThinStackBase]
   id: CMUCableThinHVStack
   name: thin HV cable coil
   suffix: Full
@@ -167,7 +184,7 @@
     count: 1
 
 - type: entity
-  parent: CableMVStack
+  parent: [CableMVStack, CMUCableThinStackBase]
   id: CMUCableThinMVStack
   name: thin MV cable coil
   suffix: Full
@@ -190,7 +207,7 @@
     count: 1
 
 - type: entity
-  parent: CableApcStack
+  parent: [CableApcStack, CMUCableThinStackBase]
   id: CMUCableThinLVStack
   name: thin LV cable coil
   suffix: Full
