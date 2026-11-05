@@ -3533,6 +3533,14 @@ public sealed partial class YautjaFlayedComponent : Component
     public EntityUid? CurrentFlayer;
 }
 
+// cmss13 gives flayed skin a stack_id of "[victim]-hide", so two people's skin never merges into one stack
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class YautjaFlayedHideComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public string Victim = string.Empty;
+}
+
 [RegisterComponent]
 public sealed partial class YautjaCleavingGlaiveComponent : Component
 {

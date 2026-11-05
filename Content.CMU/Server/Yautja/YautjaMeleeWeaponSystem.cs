@@ -661,5 +661,8 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
         var skin = Spawn(dagger.Comp.HidePrototype, coords);
         _stack.SetCount(skin, hide);
         _meta.SetEntityName(skin, Loc.GetString("cmu-yautja-ceremonial-dagger-flay-hide-name", ("name", name)));
+        var owner = EnsureComp<YautjaFlayedHideComponent>(skin);
+        owner.Victim = name;
+        Dirty(skin, owner);
     }
 }

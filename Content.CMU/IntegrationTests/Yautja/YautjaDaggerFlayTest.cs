@@ -56,10 +56,14 @@ public sealed class YautjaDaggerFlayTest : InteractionTest
 
             var skin = 0;
             var stacks = SEntMan.EntityQueryEnumerator<StackComponent, MetaDataComponent>();
-            while (stacks.MoveNext(out var stack, out var meta))
+            while (stacks.MoveNext(out var uid, out var stack, out var meta))
             {
-                if (meta.EntityPrototype?.ID == "CMUYautjaHumanHide")
-                    skin += stack.Count;
+                if (meta.EntityPrototype?.ID != "CMUYautjaHumanHide")
+                    continue;
+
+                skin += stack.Count;
+                Assert.That(SEntMan.GetComponent<YautjaFlayedHideComponent>(uid).Victim, Is.Not.Empty,
+                    "flayed skin remembers whose it was so it won't stack with anyone else's");
             }
 
             Assert.That(skin, Is.EqualTo(6), "cmss13 gives 1 + 3 + 2 pieces of human skin");
@@ -84,6 +88,36 @@ public sealed class YautjaDaggerFlayTest : InteractionTest
             }
 
             Assert.That(copies, Is.EqualTo(1), "re-adding the layer per stage mustn't stack copies");
+        });
+    }
+
+    // cmss13 stack_id is "[victim]-hide", so Alice's skin and Bob's skin stay separate stacks
+    [Test]
+    public async Task FlayedSkinOnlyStacksWithTheSameVictim()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var stacks = Server.System<SharedStackSystem>();
+            var coords = SEntMan.GetCoordinates(TargetCoords);
+            EntityUid Hide(string? victim)
+            {
+                var hide = SEntMan.SpawnEntity("CMUYautjaHumanHide", coords);
+                if (victim != null)
+                    SEntMan.EnsureComponent<YautjaFlayedHideComponent>(hide).Victim = victim;
+                return hide;
+            }
+
+            var alice = Hide("Alice");
+            Assert.That(stacks.TryMergeStacks(Hide("Bob"), alice, out _), Is.False, "different victims");
+            Assert.That(stacks.TryMergeStacks(Hide(null), alice, out _), Is.False, "plain human skin isn't anyone's");
+            Assert.That(stacks.TryMergeStacks(alice, Hide(null), out _), Is.False, "blocked from either side");
+            Assert.That(stacks.TryMergeStacks(Hide("Alice"), alice, out _), Is.True, "same victim still stacks");
+
+            var split = stacks.Split(alice, 1, coords);
+            Assert.That(split, Is.Not.Null);
+            Assert.That(SEntMan.GetComponent<YautjaFlayedHideComponent>(split!.Value).Victim, Is.EqualTo("Alice"),
+                "a split piece is still Alice's");
+            Assert.That(stacks.TryMergeStacks(split.Value, Hide("Bob"), out _), Is.False);
         });
     }
 
