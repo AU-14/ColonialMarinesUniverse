@@ -1,5 +1,6 @@
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -62,6 +63,10 @@ public sealed class YautjaDaggerFlayTest : InteractionTest
             }
 
             Assert.That(skin, Is.EqualTo(6), "cmss13 gives 1 + 3 + 2 pieces of human skin");
+
+            var text = Server.System<ExamineSystemShared>().GetExamineText(target, SPlayer).ToMarkup();
+            Assert.That(text, Does.Contain("SKIN HAS BEEN PEELED OFF"), "cmss13 MOB_FLAYED examine");
+            Assert.That(text, Does.Contain("have a face"));
         });
         await Client.WaitAssertion(() =>
         {

@@ -929,6 +929,14 @@ cmu-yautja-ceremonial-dagger-flay-skin-self = You completely flay {$victim}, pul
 cmu-yautja-ceremonial-dagger-flay-meat-name = raw {$name} steak
 cmu-yautja-ceremonial-dagger-flay-hide-name = {$name}-hide
 cmu-yautja-ceremonial-dagger-flayed-name = ???
+cmu-yautja-flayed-examine-xeno = Its outer flesh has been removed...
+cmu-yautja-flayed-examine-face = [italic]...You cannot tell anymore, {SUBJECT($target)} {CONJUGATE-BASIC($target, "don't", "doesn't")} have a face![/italic]
+cmu-yautja-flayed-examine-skin = [color=red][bold]{ GENDER($target) ->
+    [male] HIS
+    [female] HER
+    [epicene] THEIR
+   *[other] ITS
+  } SKIN HAS BEEN PEELED OFF.[/bold][/color]
 stack-cmu-yautja-human-hide = human skin
 cmu-yautja-ceremonial-dagger-limb-already-flayed = This limb has already been flayed.
 cmu-yautja-ceremonial-dagger-limb-flay-start = You start flaying the skin from {$limb}.
