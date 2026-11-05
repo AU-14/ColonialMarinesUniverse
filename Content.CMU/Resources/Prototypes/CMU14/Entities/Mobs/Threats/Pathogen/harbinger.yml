@@ -56,7 +56,7 @@
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
     - CMU14ActionXenoPathogenPierceLeap
-    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenRend
     - CMU14ActionXenoPathogenCyclone
     - CMU14ActionXenoPathogenMycotoxinInject
     - CMU14ActionXenoPathogenDevolve
@@ -67,12 +67,12 @@
     damage:
       types:
         Slash: 30
-  - type: XenoImpale
+   - type: XenoRend
     damage:
       types:
-        Blunt: 20
-        Slash: 20
-        Piercing: 20
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
