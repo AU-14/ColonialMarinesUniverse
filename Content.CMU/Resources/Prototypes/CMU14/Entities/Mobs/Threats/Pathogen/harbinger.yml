@@ -67,7 +67,7 @@
     damage:
       types:
         Slash: 30
-   - type: XenoRend
+  - type: XenoRend
     damage:
       types:
         Blunt: 8.33
