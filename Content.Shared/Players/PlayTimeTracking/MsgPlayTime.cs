@@ -1,4 +1,4 @@
-﻿using Lidgren.Network;
+using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
@@ -16,6 +16,8 @@ public sealed class MsgPlayTime : NetMessage
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {
         var count = buffer.ReadVariableInt32();
+        // CMU14: validate the minimum encoded size before allocation.
+        buffer.AssertAtLeastSize(count * (NetMessageExt.MinSizeOfString + NetMessageExt.SizeOfTimeSpan));
         Trackers.EnsureCapacity(count);
 
         for (var i = 0; i < count; i++)
