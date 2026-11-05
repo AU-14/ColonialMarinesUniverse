@@ -210,41 +210,45 @@
   name: bullet (20x102mm)
   categories: [ HideSpawnMenu ]
   components:
-  - type: FlyBySound
-    prob: 1
-    range: 4
-    sound:
-      collection: BulletMiss
-      params:
-        volume: 16
-        referenceDistance: 8
-        maxDistance: 24
-        variation: 0.05
+  # CMU14: fly-by sensors fed every graze into RMCPenetratingProjectile, decaying damage on
+  # anything near the flight path down to near zero. BUG-1003. The XM43E1 runs neither.
+  # - type: FlyBySound
+  #   prob: 1
+  #   range: 4
+  #   sound:
+  #     collection: BulletMiss
+  #     params:
+  #       volume: 16
+  #       referenceDistance: 8
+  #       maxDistance: 24
+  #       variation: 0.05
   - type: VultureProjectile
   - type: DamageImpactProfile
     projectile:
       contact: Generic
       penetration: Forced
       energy: Severe
-  - type: Fixtures
-    fixtures:
-      projectile:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.1,-0.1,0.1,0.1"
-        hard: false
-        mask:
-        - Impassable
-        - BulletImpassable
-      fly-by:
-        shape: !type:PhysShapeCircle
-          radius: 2.5
-        layer:
-        - Impassable
-        - MidImpassable
-        - HighImpassable
-        - LowImpassable
-        hard: false
+  # CMU14: the custom fly-by fixture sensed structures 2.5m off the path and the penetration
+  # system charged wall-grade damage loss for each. Inherited BaseBullet fixture kept. BUG-1003.
+  # - type: Fixtures
+  #   fixtures:
+  #     projectile:
+  #       shape:
+  #         !type:PhysShapeAabb
+  #         bounds: "-0.1,-0.1,0.1,0.1"
+  #       hard: false
+  #       mask:
+  #       - Impassable
+  #       - BulletImpassable
+  #     fly-by:
+  #       shape: !type:PhysShapeCircle
+  #         radius: 2.5
+  #       layer:
+  #       - Impassable
+  #       - MidImpassable
+  #       - HighImpassable
+  #       - LowImpassable
+  #       hard: false
   - type: Projectile
     deleteOnCollide: false
     damage:
