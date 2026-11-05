@@ -264,8 +264,8 @@
 - type: entity  
   id: CMU14ActionPathogenPierceLeap  
   parent: ActionXenoBase  
-  name: Pierce Leap  
-  description: Leap through enemies in your path, marking them for a delayed strike.  
+  name: Flurry Rush  
+  description: Leap through enemies in a given direction, then strike them all after a short delay when the leap ends.
   components:  
   - type: Action  
     itemIconStyle: NoItem  
