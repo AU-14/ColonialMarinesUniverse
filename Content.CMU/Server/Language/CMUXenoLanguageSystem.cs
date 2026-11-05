@@ -43,7 +43,7 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
         {
             var id = new ProtoId<LanguagePrototype>(proto.ID);
 
-            if (!CorruptedXenoExcludedSpoken.Contains(proto.ID))
+            if (IsQueen(ent.Owner) && !CorruptedXenoExcludedSpoken.Contains(proto.ID))
                 args.SpokenLanguages.Add(id);
 
             args.UnderstoodLanguages.Add(id);
@@ -61,7 +61,8 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
         if (!ShouldUseEnglish(ent.Owner))
         {
             args.SpokenLanguages.Remove(SharedLanguageSystem.CommonLanguage);
-            args.UnderstoodLanguages.Remove(SharedLanguageSystem.CommonLanguage);
+            if (_hive.GetHive(ent.Owner) is not { Comp.Corrupted: true })
+                args.UnderstoodLanguages.Remove(SharedLanguageSystem.CommonLanguage);
             return;
         }
 
@@ -95,7 +96,12 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
     private bool ShouldUseEnglish(EntityUid uid)
     {
         return IsHivebrokenXeno(uid) ||
-               _hive.GetHive(uid) is { Comp.Corrupted: true };
+               IsQueen(uid) && _hive.GetHive(uid) is { Comp.Corrupted: true };
+    }
+
+    private bool IsQueen(EntityUid uid)
+    {
+        return TryComp<XenoComponent>(uid, out var xeno) && xeno.Role == "CMXenoQueen";
     }
 
     private bool IsHivebrokenXeno(EntityUid uid)
