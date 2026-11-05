@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Medical.Treatment.Surgery;
 using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.CMU14.Chemistry.Research;
 using Content.Shared.CMU14.Chemistry.Reagents;
@@ -198,7 +199,15 @@ public sealed class CMUYautjaExperimentTest
             var entities = server.EntMan;
             Assert.That(entities.HasComponent<YautjaTechAuthorizedComponent>(user), Is.True);
             Assert.That(entities.HasComponent<CMUYautjaResearchOperatorComponent>(user), Is.True);
+            var surgery = entities.System<CMUYautjaSurgeryAccessSystem>();
+            Assert.That(surgery.CanOperate(user), Is.False, "Research alone does not provide the surgical interface.");
             Assert.That(entities.System<InventorySystem>().TryEquip(user, bracer, "gloves", silent: true), Is.True);
+            Assert.That(surgery.CanOperate(user), Is.True);
+            // Forced removal also bypasses the bracer lock, but must never preserve surgery access.
+            Assert.That(entities.System<InventorySystem>().TryUnequip(user, "gloves", silent: true, force: true), Is.True);
+            Assert.That(surgery.CanOperate(user), Is.False, "Removing the researched bracer removes surgery access.");
+            Assert.That(entities.System<InventorySystem>().TryEquip(user, bracer, "gloves", silent: true), Is.True);
+            Assert.That(surgery.CanOperate(user), Is.True);
             var power = entities.GetComponent<YautjaBracerComponent>(bracer);
             var cloak = new YautjaToggleCloakActionEvent { Performer = user, Action = power.ToggleCloakAction!.Value };
             entities.EventBus.RaiseLocalEvent(bracer, cloak);
