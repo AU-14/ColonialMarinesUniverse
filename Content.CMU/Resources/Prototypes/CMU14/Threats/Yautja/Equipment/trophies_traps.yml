@@ -590,25 +590,17 @@
 - type: entity
   parent: BaseItem
   id: CMUYautjaHumanHide
-  name: flayed hide
-  description: A sheet of human hide removed during Yautja butchery.
+  name: human skin
+  description: The by-product of human farming.
   components:
   - type: Sprite
-    sprite: Objects/Materials/materials.rsi
-    layers:
-    - state: hide
-      map: [ "base" ]
+    sprite: CMU14/Yautja/human_skin.rsi
+    state: icon
   - type: Stack
     stackType: CMUYautjaHumanHide
     count: 1
-    baseLayer: base
-    layerStates:
-    - hide
-    - hide_2
-    - hide_3
   - type: Item
-    sprite: Objects/Materials/materials.rsi
-    heldPrefix: hide
+    sprite: CMU14/Yautja/human_skin.rsi
     size: Small
 
 - type: entity
@@ -666,7 +658,7 @@
 - type: stack
   id: CMUYautjaHumanHide
   name: stack-cmu-yautja-human-hide
-  icon: { sprite: /Textures/Objects/Materials/materials.rsi, state: hide }
+  icon: { sprite: /Textures/CMU14/Yautja/human_skin.rsi, state: icon }
   spawn: CMUYautjaHumanHide
   maxCount: 30
 

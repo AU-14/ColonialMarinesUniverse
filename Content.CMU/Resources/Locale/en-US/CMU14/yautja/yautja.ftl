@@ -912,6 +912,7 @@ cmu-yautja-ceremonial-dagger-flay-start-others = {$user} begins to flay {$victim
 cmu-yautja-ceremonial-dagger-flay-start-self = You start flaying {$victim} with your {$dagger}...
 cmu-yautja-ceremonial-dagger-flay-first-pass-others = {$user} makes a series of cuts in {$victim}'s skin.
 cmu-yautja-ceremonial-dagger-flay-first-pass-self = You prepare the skin, cutting the flesh off in vital places.
+stack-cmu-yautja-human-hide = human skin
 cmu-yautja-ceremonial-dagger-limb-already-flayed = This limb has already been flayed.
 cmu-yautja-ceremonial-dagger-limb-flay-start = You start flaying the skin from {$limb}.
 cmu-yautja-ceremonial-dagger-limb-flay-cancel = You decide not to flay {$limb}.
