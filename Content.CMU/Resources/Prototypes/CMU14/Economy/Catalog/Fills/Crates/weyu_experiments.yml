@@ -121,6 +121,8 @@
   id: CMUCrateSecureWYRandomExp
   table: !type:GroupSelector
     children:
+    - id: CMUYautjaBracer
+      weight: 1
     - !type:AllSelector
       children:
       - id: XenoEgg

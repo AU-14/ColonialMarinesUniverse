@@ -57,8 +57,8 @@ public sealed partial class ZLevelBuildingSystem
         Entity<ZGeneratedStoneComponent> below;
         if (TryComp<CMUZLevelMapComponent>(source, out var zMap) && zMap.MapBelow is { } lower)
         {
-            if (TryGetAuthoredStationGrid(lower, coords.Position, out _) ||
-                !HasComp<ZGeneratedStoneComponent>(lower) && HasWalkableFloorAt(lower, coords.Position) ||
+            if ((!TryComp<ZGeneratedStoneComponent>(lower, out var existing) || existing.LocalizedToAuthoredLevel) &&
+                HasWalkableFloorAt(lower, coords.Position) ||
                 !EnsureStoneOnMap(lower, sourceGrid, coords.Position, out below))
                 return;
         }
