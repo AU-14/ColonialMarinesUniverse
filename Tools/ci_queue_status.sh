@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
-# CI queue status: who holds the PR fleet gate, who is waiting, for how long.
-# Read-only. usage: Tools/ci_queue_status.sh [owner/repo]   default AU-14 repo.
+# CI fleet status: live CI runs in the supersession pool, who is running, who is
+# waiting, for how long. Read-only.
+# usage: Tools/ci_queue_status.sh [owner/repo]   default AU-14 repo.
+# CMU14: there is no admission gate and no fleet queue. one live run per PR
+# (workflow-level concurrency, cancel-in-progress), everything else goes through
+# github's oldest-first runner pool. this tool only reports; it must never grow gates.
 set -euo pipefail
 
 REPO="${1:-AU-14/ColonialMarinesUniverse}"
-# rough drain per gated PR run: ~35 jobs, 20 runners, longest shard dominates
-MIN_PER_RUN=60
 
-runs=$(gh run list --repo "$REPO" --workflow ci.yml --event pull_request --limit 100 \
-  --json databaseId,status,displayTitle,headBranch,createdAt,url)
-# fleet holders: PR-event runs only. push and merge runs get unique concurrency groups
-# and never hold the fleet slot, so counting them says a staging push blocks PRs when it doesn't
-# CMU14: holders were any in-progress run, which misattributed the gate during staging churn
-holders_all=$(gh run list --repo "$REPO" --workflow ci.yml --limit 100 \
-  --json status,event,headBranch,displayTitle,createdAt,url \
-  --jq 'map(select(.status == "in_progress" and .event == "pull_request"))')
+# status-blind: concurrency-waiting runs report pending, not queued, and a
+# status-filtered list hides exactly the runs that look stuck
+runs=$(gh run list --repo "$REPO" --workflow ci.yml --limit 100 \
+  --json databaseId,status,event,headBranch,displayTitle,createdAt,url \
+  --jq 'map(select(.status != "completed")) | sort_by(.createdAt)')
 
 age() { # createdAt -> minutes
   jq -rn --argjson now "$1" --arg t "$2" \
@@ -22,43 +21,28 @@ age() { # createdAt -> minutes
 }
 now=$(date +%s)
 
-# branch names with an open PR; a waiting run without one is dead work
+# branch names with an open PR; a PR-event run without one is dead work
 open_heads=$(gh pr list --repo "$REPO" --state open --limit 100 --json headRefName --jq '.[].headRefName')
 
-echo "== PR CI queue: $REPO =="
-
-holders=$(jq -c 'sort_by(.createdAt)' <<<"$holders_all")
-hn=$(jq 'length' <<<"$holders")
-if (( hn == 0 )); then
-  if (( $(jq 'map(select(.status == "queued" or .status == "pending")) | length' <<<"$runs") > 0 )); then
-    echo "HOLDING: nothing. PR runs wait but no CI run is in progress:"
-    echo "         fleet stalled (org runner quota/capacity or platform). check githubstatus.com"
-  else
-    echo "HOLDING: (fleet idle)"
-  fi
-elif (( hn == 1 )); then
-  r=$(jq -c '.[0]' <<<"$holders")
-  echo "HOLDING: $(jq -r .headBranch <<<"$r") for $(age "$now" "$(jq -r .createdAt <<<"$r")") min  ($(jq -r .displayTitle <<<"$r" | cut -c1-50))"
-  echo "         $(jq -r .url <<<"$r")"
-else
-  echo "NOTE: $hn PR runs in progress at once. some lineages are outside the shared"
-  echo "gate (pre-merge or un-rebased ci.yml): the FIFO guarantee does not cover them."
-  while read -r r; do
-    echo "LIVE:    [$(jq -r .event <<<"$r")] $(jq -r .headBranch <<<"$r") for $(age "$now" "$(jq -r .createdAt <<<"$r")") min"
-  done < <(jq -c '.[]' <<<"$holders")
+echo "== CI fleet: $REPO =="
+n=$(jq 'length' <<<"$runs")
+echo "active runs: $n"
+if (( n == 0 )); then
+  echo "(fleet idle)"
 fi
-
-waiting=$(jq -c 'map(select(.status == "queued" or .status == "pending")) | sort_by(.createdAt)' <<<"$runs")
-n=$(jq 'length' <<<"$waiting")
-echo "WAITING: $n"
 while read -r r; do
+  [ -z "$r" ] && continue
   br=$(jq -r .headBranch <<<"$r")
+  st=$(jq -r .status <<<"$r")
+  ev=$(jq -r .event <<<"$r")
   dead=""
-  grep -qxF "$br" <<<"$open_heads" || dead="  [no open PR]"
-  echo "  $(age "$now" "$(jq -r .createdAt <<<"$r")") min  $br  ($(jq -r .displayTitle <<<"$r" | cut -c1-45))$dead"
-done < <(jq -c '.[]' <<<"$waiting")
-
-echo "rough drain for the last waiter: ~$((n * MIN_PER_RUN)) min at ~${MIN_PER_RUN} min per run"
+  if [ "$ev" = "pull_request" ]; then
+    grep -qxF "$br" <<<"$open_heads" || dead="  [no open PR]"
+  fi
+  echo "  $(age "$now" "$(jq -r .createdAt <<<"$r")") min  [$st/$ev] $br$dead"
+  echo "    $(jq -r .displayTitle <<<"$r" | cut -c1-60)"
+  echo "    $(jq -r .url <<<"$r")"
+done < <(jq -c '.[]' <<<"$runs")
 
 # CMU14: checkout health. a slow queue with slow checkouts is degraded git transfer
 # (github-side), not queue pressure, and the two need different responses. 180s splits

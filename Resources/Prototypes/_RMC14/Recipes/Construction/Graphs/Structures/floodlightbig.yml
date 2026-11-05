@@ -32,7 +32,7 @@
     edges:
     - to: finish
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV # CMU14: thin LV cable replaces the deprecated RMCCableCoil
         amount: 2
         doAfter: 2
 
