@@ -117,7 +117,7 @@ public sealed partial class CMUZLevelAimSystem : EntitySystem
 
         if (!_config.GetCVar(CMUZLevelsCVars.LookAim) ||
             _config.GetCVar(CMUZLevelsCVars.MaxRenderDepth) <= 0 ||
-            !_zLevels.IsZShotPathOpen(map, cursor.Position, cursor.Position) ||
+            !_zLevels.IsZShotPathOpen(map, cursor.Position, cursor.Position, blockRoofs: true) ||
             GetShootableUnderCursor(user, cursor) != null ||
             !TryAimAtLevel(user, map, -1, cursor, out aim, out var snapped))
         {
@@ -225,7 +225,7 @@ public sealed partial class CMUZLevelAimSystem : EntitySystem
             if (distance > bestDistance)
                 continue;
 
-            if (offset < 0 && !_zLevels.IsZShotPathOpen(map, position - shift, position - shift))
+            if (offset < 0 && !_zLevels.IsZShotPathOpen(map, position - shift, position - shift, blockRoofs: true))
                 continue;
 
             best = uid;

@@ -310,6 +310,7 @@
 - type: cmuMachineRecipe
   id: RUMCMRCutterBeaker
   machine: cutter
+  circuit: 0
   inputs:
     CMGlass: 1
   itemOutputs:
@@ -319,6 +320,7 @@
 - type: cmuMachineRecipe
   id: RUMCMRCutterBeakerLarge
   machine: cutter
+  circuit: 1
   inputs:
     CMGlass: 2
   itemOutputs:
