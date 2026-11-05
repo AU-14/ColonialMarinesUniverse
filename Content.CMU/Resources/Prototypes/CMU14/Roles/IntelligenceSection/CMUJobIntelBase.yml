@@ -11,7 +11,7 @@
   canBeAntag: false
   requireAdminNotify: false
   joinNotifyCrew: false
-  supervisors: cmu-job-supervisors-intel-section-chief
+  supervisors: cmu-job-supervisors-intel-handler
   accessGroups:
   - Colonist
   - CMUIntelligenceSection

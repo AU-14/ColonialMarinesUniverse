@@ -1,14 +1,14 @@
 cmu-department-intelligence-section = Intelligence Section
 cmu-department-intelligence-section-description = A discreet colony department that gathers information, runs field teams and keeps a small armed element.
 
-cmu-job-supervisors-intel-section-chief = the Section Chief
-cmu-job-supervisors-intel-paramilitary-officer = the Paramilitary Officer and the Section Chief
+cmu-job-supervisors-intel-handler = whoever is running the operation (the admins)
+cmu-job-supervisors-intel-paramilitary-officer = the Paramilitary Officer
 
 cmu-job-name-intel-case-officer = Case Officer
 cmu-job-description-intel-case-officer = Lead a field team for the Intelligence Section. You carry your real section ID and a colonist cover ID to blend in with the colony.
 
 cmu-job-name-intel-paramilitary-officer = Paramilitary Officer
-cmu-job-description-intel-paramilitary-officer = Lead the Intelligence Section's armed element under the Section Chief.
+cmu-job-description-intel-paramilitary-officer = Lead the Intelligence Section's armed element.
 cmu-job-prefix-intel-paramilitary-officer = INT PMO
 
 cmu-job-name-intel-paramilitary-member = Paramilitary Member
