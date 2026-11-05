@@ -228,8 +228,11 @@ namespace Content.Server.NodeContainer.EntitySystems
                             Loc.GetString("node-container-component-on-examine-details-mvpower"));
                         break;
                     case NodeGroupID.Apc:
+                        // CMU14: direct ports use hand-run cables, not cables laid under the machine.
                         args.PushMarkup(
-                            Loc.GetString("node-container-component-on-examine-details-apc"));
+                            Loc.GetString(node.Connection == NodeConnectorMode.Direct
+                                ? "cmu-node-examine-direct-lv"
+                                : "node-container-component-on-examine-details-apc"));
                         break;
                 }
             }

@@ -1078,7 +1078,7 @@
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCTannery
   name: tannery
-  description: "Tans hides in water with chrome powder into leather, and cuts leather into boots and gloves."
+  description: "Tans hides from butchered cows in water with chrome powder into leather, and cuts leather into boots and gloves."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/tannery.rsi

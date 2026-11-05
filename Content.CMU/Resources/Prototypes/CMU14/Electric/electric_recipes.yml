@@ -2520,39 +2520,14 @@
   duration: 6
 
 - type: cmuMachineRecipe
-  id: RUMCMRTanneryTanGoliathHide
-  machine: tannery
-  inputs:
-    GoliathHide: 1
-    RUMCChromePowder: 1
-  outputs:
-    RUMCLeather: 3
-  fluidInputs:
-    Water: 10
-  duration: 8
-
-- type: cmuMachineRecipe
-  id: RUMCMRTanneryTanBearHide
+  id: CMUMRTanneryTanCowHide
   machine: tannery
   inputs:
     RUMCChromePowder: 1
   itemInputs:
-    MaterialHideBear: 1
+    CMUCowHide: 1
   outputs:
     RUMCLeather: 4
-  fluidInputs:
-    Water: 10
-  duration: 8
-
-- type: cmuMachineRecipe
-  id: RUMCMRTanneryTanCorgiHide
-  machine: tannery
-  inputs:
-    RUMCChromePowder: 1
-  itemInputs:
-    MaterialHideCorgi: 1
-  outputs:
-    RUMCLeather: 2
   fluidInputs:
     Water: 10
   duration: 8
