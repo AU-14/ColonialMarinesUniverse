@@ -292,8 +292,12 @@
       amount: 1
     - id: CableApcStack
       amount: 2
-    - id: RMCCableCoil
-      amount: 2
+    - id: CMUCableThinHVStack
+      amount: 1
+    - id: CMUCableThinMVStack
+      amount: 1
+    - id: CMUCableThinLVStack
+      amount: 1
     - id: CMAPCElectronics
       amount: 2
     - id: AirAlarmElectronics
