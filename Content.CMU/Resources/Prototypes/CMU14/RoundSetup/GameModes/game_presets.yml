@@ -7,6 +7,7 @@
   maxPlayers: 65
   description: cmu-gamemode-colonyfall-desc
   burrowedLarvaEnabled: false
+  strandedYautjaEnabled: false
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 2250
   thirdPartyRatio: 0.25

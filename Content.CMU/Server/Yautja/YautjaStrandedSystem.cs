@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Gravity;
@@ -64,6 +65,7 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
     private static readonly TimeSpan StepDuplicateWindow = TimeSpan.FromMilliseconds(500);
 
     [Dependency] private AtmosphereSystem _atmos = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private GameTicker _gameTicker = default!;
@@ -130,7 +132,7 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
 
     public bool OpenStrandedSlot()
     {
-        if (_slotRound == _gameTicker.RoundId)
+        if (_slotRound == _gameTicker.RoundId || StrandedDisabledByPreset())
             return false;
 
         var slots = Math.Clamp(_config.GetCVar(YautjaStrandedCVars.Slots), 0, 10);
@@ -143,6 +145,13 @@ public sealed partial class YautjaStrandedSystem : EntitySystem
         _slotStation = station;
         Log.Info($"Opened {slots} stranded Yautja slot(s) on {ToPrettyString(station)}");
         return true;
+    }
+
+    // per-preset yaml flag, colony fall turns it off
+    private bool StrandedDisabledByPreset()
+    {
+        var preset = _gameTicker.CurrentPreset ?? _gameTicker.Preset ?? _auRound.SelectedPreset;
+        return preset is { StrandedYautjaEnabled: false };
     }
 
     private EntityUid? GetColonyStation()
