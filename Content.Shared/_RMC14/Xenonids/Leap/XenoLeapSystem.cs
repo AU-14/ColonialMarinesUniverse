@@ -19,6 +19,7 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Content.Shared._RMC14.Xenonids.Weeds;
+using Content.Shared.CMU14.Threats.Mobs; // CMU14
 using Content.Shared.ActionBlocker;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
@@ -591,7 +592,8 @@ public sealed partial class XenoLeapSystem : EntitySystem
                 _broadphase.RegenerateContacts((xeno.Owner, physics));
         }
 
-        if (!xeno.Comp.KnockdownRequiresInvisibility || HasComp<XenoActiveInvisibleComponent>(xeno))
+        var lurkerCloakedAtPounce = TryComp<CMULurkerStationaryCloakComponent>(xeno, out var lurkerCloak) && lurkerCloak.PounceFromCloak; // CMU14
+        if (!xeno.Comp.KnockdownRequiresInvisibility || HasComp<XenoActiveInvisibleComponent>(xeno) || lurkerCloakedAtPounce)
         {
             var victim = EnsureComp<LeapIncapacitatedComponent>(target);
             victim.RecoverAt = _timing.CurTime + xeno.Comp.ParalyzeTime;

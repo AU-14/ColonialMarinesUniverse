@@ -144,11 +144,14 @@
     plasmaCost: 20
     delay: 0
     moveDelayTime: 1.5
-    knockdownTime: 5
+    knockdownTime: 3 # CMU14: stationary cloaked pounce stun duration
     leapSound: /Audio/_RMC14/Xeno/alien_pounce.ogg
     knockdownRequiresInvisibility: true
     unrootOnMelee: true
   - type: XenoTurnInvisible
+  - type: CMULurkerStationaryCloak
+    invisibilityDelay: 5
+  - type: RMCNightVisionVisible
   - type: XenoCripplingStrike
     removeOnHit: true
     # CMU14 cmss13 pred slow timing

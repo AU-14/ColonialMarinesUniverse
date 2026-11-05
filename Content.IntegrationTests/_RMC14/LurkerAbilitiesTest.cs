@@ -1,9 +1,16 @@
 using System.Numerics;
+using Content.Shared._RMC14.Stealth;
+using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Crippling;
 using Content.Shared._RMC14.Xenonids.Invisibility;
+using Content.Shared.CMU14.Threats.Mobs;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.DoAfter;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Movement.Pulling.Components;
+using Content.Shared._RMC14.NightVision;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.GameObjects;
 
@@ -12,6 +19,81 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class LurkerAbilitiesTest
 {
+    [Test]
+    public async Task StationaryCloakEnablesAfterFiveSecondsAndPouncePullsTarget()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid xeno = default;
+        EntityUid marine = default;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                xeno = entMan.SpawnEntity("CMXenoLurker", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+                marine = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+
+                var leap = entMan.GetComponent<XenoLeapComponent>(xeno);
+                Assert.That(leap.KnockdownTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
+                Assert.That(entMan.GetComponent<CMULurkerStationaryCloakComponent>(xeno).FullyInvisible, Is.False);
+                Assert.That(entMan.HasComponent<RMCNightVisionVisibleComponent>(xeno), Is.True);
+            });
+
+            await pair.RunSeconds(4.9f);
+
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(server.EntMan.GetComponent<CMULurkerStationaryCloakComponent>(xeno).FullyInvisible, Is.False);
+            });
+
+            await pair.RunSeconds(0.2f);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var cloak = entMan.GetComponent<CMULurkerStationaryCloakComponent>(xeno);
+                Assert.That(cloak.FullyInvisible, Is.True);
+                Assert.That(cloak.Opacity, Is.EqualTo(0f));
+                Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(xeno), Is.True);
+
+                var target = map.GridCoords.Offset(new Vector2(2.5f, 0.5f));
+                var leap = new XenoLeapDoAfterEvent(entMan.GetNetCoordinates(target));
+                leap.DoAfter = new DoAfter(
+                    0,
+                    new DoAfterArgs(entMan, xeno, TimeSpan.Zero, leap, xeno),
+                    TimeSpan.Zero);
+                entMan.EventBus.RaiseLocalEvent(xeno, leap);
+            });
+
+            await pair.RunSeconds(0.5f);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                Assert.That(entMan.GetComponent<PullerComponent>(xeno).Pulling, Is.EqualTo(marine));
+                var incapacitated = entMan.GetComponent<LeapIncapacitatedComponent>(marine);
+                Assert.That(incapacitated.RecoverAt - server.Timing.CurTime,
+                    Is.InRange(TimeSpan.FromSeconds(2.4), TimeSpan.FromSeconds(3)));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                if (server.EntMan.EntityExists(xeno))
+                    server.EntMan.DeleteEntity(xeno);
+                if (server.EntMan.EntityExists(marine))
+                    server.EntMan.DeleteEntity(marine);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task InvisibilityToggleKeepsCooldownAfterActionPerformed()
     {

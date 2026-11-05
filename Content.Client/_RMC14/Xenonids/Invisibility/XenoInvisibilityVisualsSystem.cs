@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Xenonids.Invisibility;
+using Content.Shared.CMU14.Threats.Mobs; // CMU14
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Prototypes;
@@ -37,6 +38,9 @@ public sealed partial class XenoInvisibilityVisualsSystem : EntitySystem // CMU1
         while (invisible.MoveNext(out var uid, out var comp, out var sprite))
         {
             var opacity = _activeInvisibleQuery.HasComp(uid) ? comp.Opacity : 1;
+
+            if (TryComp<CMULurkerStationaryCloakComponent>(uid, out var stationaryCloak)) // CMU14
+                opacity = Math.Min(opacity, stationaryCloak.Opacity);
 
             if (!_sprite.TryGetPostShader(sprite, ShaderId, out var entry))
             {
