@@ -188,23 +188,29 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         }
     }
 
+    // CMU14: the lane check follows the aim line, not a spread roll: an unwielded rifle's rest
+    // spread (about 95 degrees on an M4SPR) fanned the ray wide enough to miss close friendlies
     private Vector2 GetPredictedShotDirection(Entity<GunComponent> gun, Vector2 initialDirection)
     {
-        var baseAngle = initialDirection.ToAngle();
+        return initialDirection.Normalized();
 
-        var timeSinceLastFire = (_timing.CurTime - gun.Comp.LastFire).TotalSeconds;
-        var newTheta = MathHelper.Clamp(
-            gun.Comp.CurrentAngle.Theta + gun.Comp.AngleIncreaseModified.Theta - gun.Comp.AngleDecayModified.Theta * timeSinceLastFire,
-            gun.Comp.MinAngleModified.Theta,
-            gun.Comp.MaxAngleModified.Theta);
-
-        long tick = _timing.CurTick.Value;
-        tick = tick << 32;
-        tick |= (uint) GetNetEntity(gun.Owner).Id;
-        var random = new Xoroshiro64S(tick).NextFloat(-0.5f, 0.5f);
-
-        var shotAngle = new Angle(baseAngle.Theta + newTheta * random);
-        return shotAngle.ToVec();
+        // CMU14 Begin: spread rolls belong to real shots, not the safety check
+        // var baseAngle = initialDirection.ToAngle();
+        //
+        // var timeSinceLastFire = (_timing.CurTime - gun.Comp.LastFire).TotalSeconds;
+        // var newTheta = MathHelper.Clamp(
+        //     gun.Comp.CurrentAngle.Theta + gun.Comp.AngleIncreaseModified.Theta - gun.Comp.AngleDecayModified.Theta * timeSinceLastFire,
+        //     gun.Comp.MinAngleModified.Theta,
+        //     gun.Comp.MaxAngleModified.Theta);
+        //
+        // long tick = _timing.CurTick.Value;
+        // tick = tick << 32;
+        // tick |= (uint) GetNetEntity(gun.Owner).Id;
+        // var random = new Xoroshiro64S(tick).NextFloat(-0.5f, 0.5f);
+        //
+        // var shotAngle = new Angle(baseAngle.Theta + newTheta * random);
+        // return shotAngle.ToVec();
+        // CMU14 End
     }
 
     private bool IsFriendlyEntity(EntityUid target)
