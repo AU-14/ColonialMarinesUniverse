@@ -109,9 +109,10 @@ public sealed class ErrorRelaySystem : EntitySystem, ILogHandler
         if (!_relay.IsEnabled(HelpSource.Errors))
             return;
 
-        // Upstream marks player explosions Extreme past an intensity threshold; normal rounds place
-        // enough charges to flood the feed. The in-game admin chat alert still fires from the source.
-        if (ev.Type == LogType.Explosion)
+        // Upstream marks player explosions Extreme past an intensity threshold and smite verbs
+        // declare Extreme impacts; normal rounds produce too many of both for the feed. In-game
+        // admin chat alerts still fire from the source.
+        if (ev.Type is LogType.Explosion or LogType.Verb)
             return;
 
         var message = ErrorRelayFormat.Truncate(ErrorRelayFormat.Sanitize(ev.Message), AdminLineCap);
