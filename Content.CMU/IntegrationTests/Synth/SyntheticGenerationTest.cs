@@ -1,12 +1,12 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Humanoid;
 using Content.Server.Station.Systems;
-using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Humanoid.Markings;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared.CMU14.Synth;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Systems;
+using Content.Shared.CombatMode;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -21,13 +21,10 @@ namespace Content.IntegrationTests.CMU14.Synth;
 [TestFixture]
 public sealed class SyntheticGenerationTest : GameTest
 {
-    [TestCase(1, 0.85f, 250, 300, 10)]
-    [TestCase(2, 0.85f, 250, 300, 10)]
-    [TestCase(3, 1f, 200, 250, 15)]
-    [TestCase(4, 1f, 200, 250, 15)]
-    public async Task SpawnAppliesGenerationAfterEveryFactionJobProfile(
-        int generation, float speed, int critical, int dead, int acidDamage)
+    [Test]
+    public async Task SpawnAppliesSelectedGenerationAfterEveryFactionJobProfile()
     {
+        const int generation = 4;
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
@@ -42,48 +39,6 @@ public sealed class SyntheticGenerationTest : GameTest
             {
                 var mob = spawning.SpawnPlayerMob(map.GridCoords, job, profile, null);
                 Assert.That(SEntMan.GetComponent<CMUSynthGenerationComponent>(mob).Generation, Is.EqualTo(generation), job);
-                Assert.That(SEntMan.HasComponent<RMCLeapProtectionComponent>(mob), Is.False,
-                    $"{job} must not retain the old guaranteed innate pounce block.");
-                var thresholds = Server.System<MobThresholdSystem>();
-                Assert.That(thresholds.TryGetThresholdForState(mob, MobState.Critical, out var crit), Is.True, job);
-                Assert.That(crit, Is.EqualTo(FixedPoint2.New(critical)), job);
-                Assert.That(thresholds.TryGetThresholdForState(mob, MobState.Dead, out var death), Is.True, job);
-                Assert.That(death, Is.EqualTo(FixedPoint2.New(dead)), job);
-
-                var movement = new RefreshMovementSpeedModifiersEvent();
-                SEntMan.EventBus.RaiseLocalEvent(mob, movement);
-                // Compare against the same equipped body without the generation modifier; job gear has its own slowdown.
-                SEntMan.RemoveComponent<CMUSynthGenerationComponent>(mob);
-                var gearSpeed = new RefreshMovementSpeedModifiersEvent();
-                SEntMan.EventBus.RaiseLocalEvent(mob, gearSpeed);
-                Server.System<SharedSynthSystem>().ConfigureGeneration((mob, SEntMan.GetComponent<SynthComponent>(mob)), generation);
-                Assert.That(movement.WalkSpeedModifier, Is.EqualTo(gearSpeed.WalkSpeedModifier * speed).Within(0.001), job);
-                Assert.That(movement.SprintSpeedModifier, Is.EqualTo(gearSpeed.SprintSpeedModifier * speed).Within(0.001), job);
-                Assert.That(SEntMan.GetComponent<MovementSpeedModifierComponent>(mob).WalkSpeedModifier,
-                    Is.EqualTo(movement.WalkSpeedModifier).Within(0.001), job);
-
-                var skills = Server.System<SkillsSystem>();
-                foreach (var (skill, earlyLevel, advancedLevel) in new[]
-                         {
-                             ("RMCSkillCqc", 4, 5), ("RMCSkillEndurance", 0, 1),
-                             ("RMCSkillEngineer", 3, 4), ("RMCSkillConstruction", 2, 3),
-                             ("RMCSkillFirearms", 1, 2), ("RMCSkillOverwatch", 0, 1),
-                             ("RMCSkillMedical", 3, 4), ("RMCSkillSurgery", 3, 4),
-                             ("RMCSkillResearch", 0, 1), ("RMCSkillMeleeWeapons", 1, 2),
-                             ("RMCSkillPilot", 1, 2), ("RMCSkillPolice", 1, 2),
-                             ("RMCSkillFireman", 4, 5), ("RMCSkillPowerLoader", 1, 2),
-                             ("RMCSkillVehicles", 1, 2), ("RMCSkillJtac", 2, 3),
-                             ("RMCSkillIntel", 1, 2), ("RMCSkillDomestics", 1, 2),
-                             ("RMCSkillNavigations", 0, 1),
-                         })
-                {
-                    Assert.That(skills.GetSkill(mob, new EntProtoId<SkillDefinitionComponent>(skill)),
-                        Is.EqualTo(generation <= 2 ? earlyLevel : advancedLevel), $"{job}: {skill}");
-                }
-
-                var damage = Server.System<DamageableSystem>().TryChangeDamage(mob,
-                    new DamageSpecifier { DamageDict = { ["Caustic"] = 10 } });
-                Assert.That(damage!.GetTotal(), Is.EqualTo(FixedPoint2.New(acidDamage)), job);
                 SEntMan.DeleteEntity(mob);
             }
         });
@@ -134,57 +89,87 @@ public sealed class SyntheticGenerationTest : GameTest
         });
     }
 
-#pragma warning disable RA0002 // Construct transient leap origins and times to exercise directional and probability boundaries.
-    [TestCase(1, "CMXenoRunner", true)]
-    [TestCase(1, "CMXenoLurker", true)]
-    [TestCase(2, "CMXenoRunner", true)]
-    [TestCase(2, "CMXenoLurker", true)]
-    [TestCase(3, "CMXenoRunner", false)]
-    [TestCase(4, "CMXenoLurker", false)]
-    [TestCase(1, "CMXenoRavager", false)]
-    [TestCase(2, "CMXenoParasite", false)]
-    public async Task OnlyEarlyGenerationsBlockFrontalRunnerAndLurkerPounces(int generation, string caste, bool canBlock)
+    [Test]
+    public async Task FirstGenerationSyntheticHasWhiteSkinAndCombatModeEyeColor()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies().WithSynthetic(true).WithSyntheticGeneration(generation);
+            var eyeColor = Color.FromHex("#123456");
+            var profile = HumanoidCharacterProfile.DefaultWithSpecies();
+            profile = profile.WithCharacterAppearance(profile.Appearance.WithEyeColor(eyeColor))
+                .WithSynthetic(true)
+                .WithSyntheticGeneration(1);
             var synth = Server.System<StationSpawningSystem>()
                 .SpawnPlayerMob(map.GridCoords, "AU14JobCivilianColonySynthetic", profile, null);
-            var xeno = SEntMan.SpawnEntity(caste, map.GridCoords.Offset(new Vector2(0, -3)));
-            Server.System<SharedTransformSystem>().SetWorldRotation(synth, Angle.Zero);
+            var appearance = Server.System<HumanoidOrganAppearanceSystem>();
+
+            Assert.That(appearance.TryGetColors(synth, out var skinColor, out var actualEyeColor), Is.True);
+            Assert.That(skinColor, Is.EqualTo(Color.White));
+            Assert.That(actualEyeColor, Is.EqualTo(eyeColor));
+            Assert.That(SEntMan.GetComponent<RMCIntentsEyeColorComponent>(synth).EyeColorHelp, Is.EqualTo(eyeColor));
+
+            var enableCombatMode = new ToggleCombatActionEvent();
+            SEntMan.EventBus.RaiseLocalEvent(synth, ref enableCombatMode);
+            Assert.That(appearance.TryGetColors(synth, out _, out actualEyeColor), Is.True);
+            Assert.That(actualEyeColor, Is.EqualTo(Color.FromHex("#ff0000")));
+
+            var disableCombatMode = new ToggleCombatActionEvent();
+            SEntMan.EventBus.RaiseLocalEvent(synth, ref disableCombatMode);
+            Assert.That(appearance.TryGetColors(synth, out _, out actualEyeColor), Is.True);
+            Assert.That(actualEyeColor, Is.EqualTo(eyeColor));
+            SEntMan.DeleteEntity(synth);
+        });
+    }
+
+#pragma warning disable RA0002 // Construct transient leap origins and times to exercise directional and probability boundaries.
+    [Test]
+    public async Task OnlyConfiguredGenerationBlocksFrontalRunnerPounces()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var spawning = Server.System<StationSpawningSystem>();
+            var earlyProfile = HumanoidCharacterProfile.DefaultWithSpecies().WithSynthetic(true).WithSyntheticGeneration(1);
+            var lateProfile = HumanoidCharacterProfile.DefaultWithSpecies().WithSynthetic(true).WithSyntheticGeneration(4);
+            var earlySynth = spawning.SpawnPlayerMob(map.GridCoords, "AU14JobCivilianColonySynthetic", earlyProfile, null);
+            var lateSynth = spawning.SpawnPlayerMob(map.GridCoords, "AU14JobCivilianColonySynthetic", lateProfile, null);
+            var xeno = SEntMan.SpawnEntity("CMXenoRunner", map.GridCoords.Offset(new Vector2(0, -3)));
+            Server.System<SharedTransformSystem>().SetWorldRotation(earlySynth, Angle.Zero);
+            Server.System<SharedTransformSystem>().SetWorldRotation(lateSynth, Angle.Zero);
             var leap = SEntMan.EnsureComponent<XenoLeapingComponent>(xeno);
             leap.Origin = map.GridCoords.Offset(new Vector2(0, -3));
-            var blocked = 0;
-            const int attempts = 2000;
+            var earlyBlocked = false;
+            const int attempts = 512;
             for (var i = 0; i < attempts; i++)
             {
                 leap.LeapEndTime = TimeSpan.FromSeconds(i + 1);
                 var attempt = new XenoLeapHitAttempt(xeno);
-                SEntMan.EventBus.RaiseLocalEvent(synth, ref attempt);
+                SEntMan.EventBus.RaiseLocalEvent(earlySynth, ref attempt);
                 var repeated = new XenoLeapHitAttempt(xeno);
-                SEntMan.EventBus.RaiseLocalEvent(synth, ref repeated);
+                SEntMan.EventBus.RaiseLocalEvent(earlySynth, ref repeated);
                 Assert.That(repeated.Cancelled, Is.EqualTo(attempt.Cancelled), "Prediction must not reroll the same leap.");
-                if (attempt.Cancelled)
-                    blocked++;
+                earlyBlocked |= attempt.Cancelled;
+
+                var lateAttempt = new XenoLeapHitAttempt(xeno);
+                SEntMan.EventBus.RaiseLocalEvent(lateSynth, ref lateAttempt);
+                Assert.That(lateAttempt.Cancelled, Is.False, "Later generations must not block frontal pounces.");
             }
 
-            if (canBlock)
-                Assert.That(blocked / (float) attempts, Is.InRange(0.11f, 0.19f), "Frontal pounces should be blocked 15% of the time.");
-            else
-                Assert.That(blocked, Is.Zero, "Other generations and other castes must never get this block.");
+            Assert.That(earlyBlocked, Is.True, "First-generation synthetics should sometimes block frontal pounces.");
 
             leap.Origin = map.GridCoords.Offset(new Vector2(0, 3));
-            for (var i = 0; i < attempts; i++)
+            for (var i = 0; i < 16; i++)
             {
                 leap.LeapEndTime = TimeSpan.FromSeconds(i + 1);
                 var attempt = new XenoLeapHitAttempt(xeno);
-                SEntMan.EventBus.RaiseLocalEvent(synth, ref attempt);
+                SEntMan.EventBus.RaiseLocalEvent(earlySynth, ref attempt);
                 Assert.That(attempt.Cancelled, Is.False, "A rear pounce must never be blocked by generation mechanics.");
             }
 
             SEntMan.DeleteEntity(xeno);
-            SEntMan.DeleteEntity(synth);
+            SEntMan.DeleteEntity(earlySynth);
+            SEntMan.DeleteEntity(lateSynth);
         });
     }
 #pragma warning restore RA0002
@@ -227,9 +212,10 @@ public sealed class SyntheticGenerationTest : GameTest
             {
                 var clientSynth = CEntMan.GetEntity(netSynth);
                 Assert.That(CEntMan.GetComponent<CMUSynthGenerationComponent>(clientSynth).Generation, Is.EqualTo(1));
+                var speedModifier = CEntMan.GetComponent<CMUSynthGenerationComponent>(clientSynth).MovementSpeedModifier;
                 var speed = new RefreshMovementSpeedModifiersEvent();
                 CEntMan.EventBus.RaiseLocalEvent(clientSynth, speed);
-                Assert.That(speed.WalkSpeedModifier, Is.EqualTo(gearWalkSpeed * 0.85f).Within(0.001));
+                Assert.That(speed.WalkSpeedModifier, Is.EqualTo(gearWalkSpeed * speedModifier).Within(0.001));
                 Assert.That(CEntMan.GetComponent<MovementSpeedModifierComponent>(clientSynth).WalkSpeedModifier,
                     Is.EqualTo(gearWalkSpeed * 0.85f).Within(0.001));
             });

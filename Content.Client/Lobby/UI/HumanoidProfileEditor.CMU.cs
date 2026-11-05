@@ -989,10 +989,11 @@ public sealed partial class HumanoidProfileEditor
         {
             generationSelector.AddItem(
                 Loc.GetString($"cmu-profile-editor-synthetic-generation-{generation}"),
-                generation);
+                generation - HumanoidCharacterProfile.MinSyntheticGeneration);
         }
 
-        generationSelector.SelectId(Profile?.SyntheticGeneration ?? HumanoidCharacterProfile.MinSyntheticGeneration);
+        generationSelector.SelectId((Profile?.SyntheticGeneration ?? HumanoidCharacterProfile.MinSyntheticGeneration)
+            - HumanoidCharacterProfile.MinSyntheticGeneration);
         generationRow.AddChild(generationSelector);
 
         var modelSuffixRow = new BoxContainer
@@ -1029,7 +1030,7 @@ public sealed partial class HumanoidProfileEditor
         generationSelector.OnItemSelected += args =>
         {
             generationSelector.SelectId(args.Id);
-            Profile = Profile?.WithSyntheticGeneration(args.Id);
+            Profile = Profile?.WithSyntheticGeneration(args.Id + HumanoidCharacterProfile.MinSyntheticGeneration);
             SetDirty();
             UpdateSaveButton();
         };

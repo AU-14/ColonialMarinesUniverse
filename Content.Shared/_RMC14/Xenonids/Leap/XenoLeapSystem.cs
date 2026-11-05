@@ -436,6 +436,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
         if (!TryComp(user, out RMCLeapProtectionComponent? leapProtection))
             return true;
 
+        // var stunDuration = new TimeSpan(); // CMU14
         leapProtection.ProtectionProviders.Remove(protection);
         return RefreshLeapProtection(user, leapProtection); // CMU14: also used when inherent protection changes.
     }

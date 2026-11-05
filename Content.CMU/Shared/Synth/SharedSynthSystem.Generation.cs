@@ -19,8 +19,6 @@ namespace Content.Shared._RMC14.Synth;
 public abstract partial class SharedSynthSystem
 {
     private static readonly EntProtoId<SkillPresetComponent> GenerationSkills = "AU14SkillPresetPlatoonAuxiliarySupportSynth";
-    private static readonly ProtoId<DamageModifierSetPrototype> AdvancedDamageModifier = "CMUSynthAdvanced";
-    private static readonly ProtoId<DamageModifierSetPrototype> EarlyDamageModifier = "RMCSynth";
 
     [Dependency] private IComponentFactory _generationComponentFactory = default!;
     [Dependency] private SharedDirectionalAttackBlockSystem _generationDirectionalBlock = default!;
@@ -43,22 +41,18 @@ public abstract partial class SharedSynthSystem
         if (generation < HumanoidCharacterProfile.MinSyntheticGeneration || generation > HumanoidCharacterProfile.MaxSyntheticGeneration)
             throw new ArgumentOutOfRangeException(nameof(generation), generation, "Unsupported synthetic generation.");
 
+        var generationPrototype = _prototypes.Index<CMUSynthGenerationPrototype>($"CMUSynthGeneration{generation}");
         var preferences = EnsureComp<CMUSynthGenerationComponent>(ent);
         preferences.Generation = generation;
+        preferences.MovementSpeedModifier = generationPrototype.MovementSpeedModifier;
+        preferences.FrontalLeapBlockChance = generationPrototype.FrontalLeapBlockChance;
         Dirty(ent, preferences);
 
-        var early = generation <= 2;
         _generationLeap.RemoveInherentLeapProtection(ent.Owner);
-        ent.Comp.Generation = generation switch
-        {
-            1 => "rmc-species-synth-generation-first",
-            2 => "rmc-species-synth-generation-second",
-            3 => "rmc-species-synth-generation-third",
-            _ => "cmu-species-synth-generation-fourth",
-        };
-        ent.Comp.CritThreshold = early ? 250 : 200;
-        ent.Comp.DeadThreshold = early ? 300 : 250;
-        ent.Comp.NewDamageModifier = early ? EarlyDamageModifier : AdvancedDamageModifier;
+        ent.Comp.Generation = generationPrototype.GenerationName;
+        ent.Comp.CritThreshold = generationPrototype.CritThreshold;
+        ent.Comp.DeadThreshold = generationPrototype.DeadThreshold;
+        ent.Comp.NewDamageModifier = generationPrototype.DamageModifier;
         Dirty(ent);
 
         if (TryComp<MobThresholdsComponent>(ent, out var thresholds))
@@ -82,19 +76,18 @@ public abstract partial class SharedSynthSystem
 
         _skills.RemoveAllSkills(ent.Owner);
         _skills.SetSkills(ent.Owner, preset.Skills.ToDictionary(
-            skill => skill.Key, skill => early ? Math.Max(0, skill.Value - 1) : skill.Value));
+            skill => skill.Key, skill => Math.Max(0, skill.Value + generationPrototype.SkillLevelOffset)));
         _generationMovement.RefreshMovementSpeedModifiers(ent.Owner);
     }
 
     private void OnGenerationRefreshSpeed(Entity<CMUSynthGenerationComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
-        if (ent.Comp.Generation <= 2)
-            args.ModifySpeed(0.85f, 0.85f);
+        args.ModifySpeed(ent.Comp.MovementSpeedModifier, ent.Comp.MovementSpeedModifier);
     }
 
     private void OnGenerationLeapHitAttempt(Entity<CMUSynthGenerationComponent> ent, ref XenoLeapHitAttempt args)
     {
-        if (args.Cancelled || ent.Comp.Generation > 2 ||
+        if (args.Cancelled || ent.Comp.FrontalLeapBlockChance <= 0f ||
             !TryComp<XenoComponent>(args.Leaper, out var xeno) ||
             xeno.Role.Id is not ("CMXenoLurker" or "CMXenoRunner") ||
             !TryComp<XenoLeapingComponent>(args.Leaper, out var leap) ||
@@ -106,7 +99,7 @@ public abstract partial class SharedSynthSystem
         // The replicated leap end time and network IDs give prediction the same roll as the server.
         var seed = leap.LeapEndTime.Ticks ^
             ((long) GetNetEntity(args.Leaper).Id << 32) ^ (uint) GetNetEntity(ent).Id;
-        if (new Xoroshiro64S(seed).NextFloat() >= 0.15f)
+        if (new Xoroshiro64S(seed).NextFloat() >= ent.Comp.FrontalLeapBlockChance)
             return;
 
         args.Cancelled = true;

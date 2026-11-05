@@ -9,4 +9,10 @@ public sealed partial class CMUSynthGenerationComponent : Component
 {
     [DataField, AutoNetworkedField]
     public int Generation = 1;
+
+    [DataField, AutoNetworkedField]
+    public float MovementSpeedModifier = 1f;
+
+    [DataField, AutoNetworkedField]
+    public float FrontalLeapBlockChance;
 }
