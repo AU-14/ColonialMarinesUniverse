@@ -20,13 +20,13 @@ public sealed partial class PathogenPierceLeapComponent : Component
     public float Strength = 20f;  
   
     [DataField, AutoNetworkedField]  
-    public TimeSpan WindupTime = TimeSpan.FromSeconds(0);  
+    public TimeSpan WindupTime = TimeSpan.Zero;  
   
     [DataField, AutoNetworkedField]  
     public TimeSpan Cooldown = TimeSpan.FromSeconds(12);  
     
     [DataField, AutoNetworkedField]  
-    public float PathWidth = 1.0f;  
+    public float PathWidth = 1.5f;  
   
     [DataField, AutoNetworkedField]  
     public DamageSpecifier Damage = new();  
