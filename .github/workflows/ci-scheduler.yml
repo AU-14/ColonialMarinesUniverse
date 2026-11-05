@@ -16,7 +16,8 @@ name: CI Scheduler
 #     standard work still drains), class 2 = everyone else, class 3 = the nightly full suite.
 #     FIFO within each class
 # the workflow_run and pull_request_target triggers carry the reaction time; the schedule
-# is only the backstop that guarantees progress on a quiet fleet. one shard wave is
+# is only a best-effort backstop, github drops scheduled runs under load, and the
+# liveness alarm lives in ci-watchdog.yml. one shard wave is
 # admitted per pass so the low-water arithmetic
 # stays honest; the next tick recounts from the live job list.
 #
@@ -34,7 +35,7 @@ on:
   schedule:
     # CMU14: the backstop. github coalesces schedules finer than 5 minutes, and under
     # load even 5 can stretch; the workflow_run and pull_request_target triggers above
-    # carry the real reaction time, this only guarantees progress on a quiet fleet
+    # carry the real reaction time, and liveness alarms live in ci-watchdog.yml
     - cron: '*/5 * * * *'
   workflow_run:
     workflows: [CI, Build & Test Debug]
@@ -48,10 +49,13 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # CMU14: single-flight. only the freshest evaluation matters, and a cancelled pass just
-  # re-evaluates on the next tick; approvals already granted are not undone
+  # CMU14: passes serialize. each pass recounts live fleet state when it runs, so a
+  # queued pass is never stale. cancelling in-progress let event bursts kill every
+  # pass mid-flight, leaving zero completed passes for hours. approvals already
+  # granted are not undone
   group: ci-scheduler
-  cancel-in-progress: true
+  # CMU14: commented out, passes must run to completion (see above)
+  # cancel-in-progress: true
 
 jobs:
   admit:
