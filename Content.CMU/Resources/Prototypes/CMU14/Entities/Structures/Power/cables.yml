@@ -221,6 +221,16 @@
 
 - type: entity
   parent: CMUCableThinLVStack
+  id: CMUCableThinLVStack10
+  suffix: 10
+  components:
+  - type: Sprite
+    state: coillv-10
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: CMUCableThinLVStack
   id: CMUCableThinLVStack1
   suffix: 1
   components:

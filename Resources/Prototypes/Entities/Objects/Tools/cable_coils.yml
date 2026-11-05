@@ -34,6 +34,7 @@
     guides:
     - VoltageNetworks
     - Power
+  # CMU14: CM surgery tools on the wizden coils
   - type: CMSurgeryTool
   - type: CMHemostat
   - type: CMUOrganClamp
@@ -183,6 +184,7 @@
   - type: CablePlacer
     cablePrototypeID: CableApcExtension
     blockingWireType: Apc
+  - type: RMCCableCoil # CMU14: thick LV coil serves the RMC cable actions like the thin coils
 
 - type: entity
   parent: CableApcStack

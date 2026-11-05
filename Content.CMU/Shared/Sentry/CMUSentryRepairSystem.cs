@@ -28,9 +28,10 @@ public sealed class CMUSentryRepairSystem : EntitySystem
     private static readonly ProtoId<ToolQualityPrototype> Welding = "Welding";
     private static readonly ProtoId<ToolQualityPrototype> Screwing = "Screwing";
     private static readonly ProtoId<ToolQualityPrototype> Anchoring = "Anchoring";
-    // The deprecated RMCCableCoil stays valid alongside its thin LV replacement.
+    // The deprecated RMCCableCoil stays valid alongside its thin and thick LV replacements.
     private static readonly ProtoId<StackPrototype> Cable = "RMCCable";
     private static readonly ProtoId<StackPrototype> ThinCable = "CMUThinCableLV";
+    private static readonly ProtoId<StackPrototype> ThickCable = "Cable";
     private static readonly EntProtoId<SkillDefinitionComponent> DelaySkill = "RMCSkillConstruction";
 
     private const int CableNeeded = 10;
@@ -225,7 +226,9 @@ public sealed class CMUSentryRepairSystem : EntitySystem
     private Tool? ToolOf(EntityUid used)
     {
         if (TryComp(used, out StackComponent? stack)
-            && (stack.StackTypeId == Cable || stack.StackTypeId == ThinCable))
+            && (stack.StackTypeId == Cable
+                || stack.StackTypeId == ThinCable
+                || stack.StackTypeId == ThickCable))
             return Tool.Cable;
 
         if (HasComp<MultitoolComponent>(used))

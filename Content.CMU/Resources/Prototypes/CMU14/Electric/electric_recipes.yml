@@ -3161,7 +3161,7 @@
 - type: craftRecipe
   id: RUMCCraftElectricColonyCableMV
   name: au14-craft-recipe-electriccolonycablemv
-  output: CableMVStack1
+  output: CMUCableThinMVStack
   outputCount: 10
   time: 12
   minigames: [Trace]
@@ -3176,7 +3176,7 @@
 - type: craftRecipe
   id: RUMCCraftElectricColonyCableHV
   name: au14-craft-recipe-electriccolonycablehv
-  output: CableHVStack1
+  output: CMUCableThinHVStack
   outputCount: 10
   time: 16
   minigames: [Trace, Hold]
