@@ -147,7 +147,7 @@
     edges:
     - to: finish
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV
         amount: 2
         doAfter: 2
 
@@ -256,7 +256,7 @@
     edges:
     - to: finish
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV
         amount: 2
         doAfter: 2
 
