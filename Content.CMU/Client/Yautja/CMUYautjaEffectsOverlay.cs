@@ -194,7 +194,9 @@ public partial class CMUYautjaEffectsOverlay : Overlay
         var query = _entities.EntityQueryEnumerator<CMUYautjaCasterAimComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var aim, out var xform))
         {
-            if (uid == _player.LocalEntity || xform.MapID != args.MapId || _timing.CurTime >= aim.ExpiresAt)
+            // no ExpiresAt check here: this client's clock runs ahead of the server by its lag, so the expiry was
+            // already "past" on arrival and the sight flickered. the server removes the component when it's done
+            if (uid == _player.LocalEntity || xform.MapID != args.MapId)
                 continue;
             DrawSight(args.WorldHandle, uid, aim.Caster, aim.Position, aim.StartedAt);
         }

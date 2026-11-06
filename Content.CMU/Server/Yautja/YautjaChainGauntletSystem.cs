@@ -21,6 +21,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Popups;
@@ -144,10 +145,11 @@ public sealed partial class YautjaChainGauntletSystem : EntitySystem
             return;
         }
 
+        // cmss13 only stacks on living mobs, so punching walls, tables or corpses doesn't farm a finisher
         var hasValidTarget = false;
         foreach (var hit in args.HitEntities)
         {
-            if (hit == args.User)
+            if (hit == args.User || !HasComp<MobStateComponent>(hit) || _mobState.IsDead(hit))
                 continue;
 
             hasValidTarget = true;
@@ -212,6 +214,12 @@ public sealed partial class YautjaChainGauntletSystem : EntitySystem
             TrySendChainMessage(args.User, gauntlet);
         }
 
+        _popup.PopupEntity(
+            Loc.GetString(gauntlet.DisarmFinisherMessage, ("user", args.User), ("target", target.Owner)),
+            target.Owner,
+            PopupType.LargeCaution);
+        TrySpawnSlamOverlay(target.Owner, gauntlet);
+        _audio.PlayPvs(gauntlet.HelpFinisherSound, target.Owner);
         ResetCombo(gauntletUid.Value, gauntlet);
         args.Handled = true;
     }

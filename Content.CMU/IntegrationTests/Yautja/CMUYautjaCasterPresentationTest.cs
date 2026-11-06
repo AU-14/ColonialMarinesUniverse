@@ -74,8 +74,10 @@ public sealed class CMUYautjaCasterPresentationTest
                 client.EntMan.System<CMUYautjaVisualsSystem>().FrameUpdate(0);
                 var light = client.EntMan.GetComponent<Robust.Client.GameObjects.PointLightComponent>(projectile);
                 var lethal = expected is CMUYautjaPlasmaMode.Lethal or CMUYautjaPlasmaMode.Eradicator;
-                Assert.That(lethal ? light.Color.R > light.Color.B : light.Color.B > light.Color.R,
-                    Is.True, "The actual shot must illuminate the world red for lethal modes and blue for nonlethal modes.");
+                // cmss13 caster bolts are all blue (ion, pulse1, bluespace). lethal modes are the deeper blue
+                Assert.That(light.Color.B, Is.GreaterThan(light.Color.R), "every caster shot lights the world blue");
+                Assert.That(lethal ? light.Color.G < .5f : light.Color.G > .5f, Is.True,
+                    "lethal shots are the deep blue, nonlethal ones the light cyan blue");
             });
             await server.WaitAssertion(() =>
             {

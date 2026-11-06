@@ -275,6 +275,7 @@ public sealed partial class YautjaPredatorRoundSystem
     {
         _rolledHunt = null;
         _huntReady.Clear();
+        _huntersThisRound.Clear();
         _roundStartHunters.Clear();
     }
 

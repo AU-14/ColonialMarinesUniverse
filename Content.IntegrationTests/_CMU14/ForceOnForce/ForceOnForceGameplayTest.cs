@@ -344,6 +344,24 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
+    [Test]
+    public async Task YautjaGetNoIdentificationMarker()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(viewer).Faction = "govfor";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+
+            // a sideless faction is what got preds the "?" in the first place
+            var hunter = SEntMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(hunter).Faction = "yautja";
+            Assert.That(recognition.Classify(hunter, viewer), Is.EqualTo(ForceOnForceIdentification.None));
+        });
+    }
+
     [TestCase("govfor", "opfor", "USCM", "UPP", "CMJumpsuitXOFormal", "AU14FatiguesUPP")]
     [TestCase("opfor", "govfor", "UPP", "USCM", "AU14ServiceFatiguesUPP", "AU14CamoUSCMFatigues")]
     public async Task UniformMarkerRecognizesVendorStockOnTheClient(
