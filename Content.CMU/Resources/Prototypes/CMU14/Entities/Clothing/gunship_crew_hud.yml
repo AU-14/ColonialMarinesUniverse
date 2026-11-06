@@ -1,0 +1,36 @@
+- type: entity
+  parent: RMCVisorBase
+  id: CMUVisorGunshipCrew
+  components:
+  - type: Sprite
+    state: hud_sight
+  - type: Visor
+    toggledSprite:
+      sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
+      state: hud_sight_right
+    onIcon:
+      sprite: _RMC14/Objects/Clothing/helmet_visors.rsi
+      state: hud_sight_down
+  - type: ComponentToggler
+    components:
+    - type: CMUGunshipCrewVisor
+
+- type: entity
+  parent: CMUVisorGunshipCrew
+  id: CMUVisorGunshipCrewAdvanced
+  components:
+  - type: Visor
+    skillsRequired:
+      all:
+        CMUSkillAircrew: 1
+  - type: ComponentToggler
+    components:
+    - type: CMUGunshipCrewVisor
+    - type: CMUAdvancedGunshipCrewVisor
+    - type: ShowHealthBars
+      damageContainers:
+      - Biological
+    - type: HolocardScanner
+    - type: ShowHealthIcons
+      damageContainers:
+      - Biological

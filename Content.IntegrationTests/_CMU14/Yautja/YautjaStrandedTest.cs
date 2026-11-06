@@ -3,6 +3,7 @@ using Content.Client.CMU14.Yautja.Lobby;
 using Content.Server.CMU14.Yautja;
 using Content.Server.Database;
 using Content.Server.GameTicking;
+using Content.Server.GameTicking.Presets;
 using Content.Server.Players.JobWhitelist;
 using Content.Server.Station.Systems;
 using Content.Shared.GameTicking;
@@ -184,6 +185,35 @@ public sealed class YautjaStrandedTest
 
         await server.WaitPost(() =>
             server.CfgMan.SetCVar(YautjaStrandedCVars.Chance, YautjaStrandedCVars.Chance.DefaultValue));
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ColonyFallNeverOpensTheStrandedSlot()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            InLobby = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+        var server = pair.Server;
+        var ticker = server.System<GameTicker>();
+        var stranded = server.System<YautjaStrandedSystem>();
+        var prototypes = server.ResolveDependency<IPrototypeManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(prototypes.Index<GamePresetPrototype>("ColonyFall").StrandedYautjaEnabled, Is.False);
+            Assert.That(prototypes.Index<GamePresetPrototype>("DistressSignal").StrandedYautjaEnabled, Is.True,
+                "only colony fall opts out");
+
+            // the round start roll opens the slot through this same call
+            ticker.SetGamePreset("ColonyFall");
+            Assert.That(stranded.OpenStrandedSlot(), Is.False);
+            Assert.That(stranded.StrandedSlotOpen, Is.False);
+        });
 
         await pair.CleanReturnAsync();
     }

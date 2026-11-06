@@ -64,6 +64,60 @@ public sealed class CMUSlingAttachmentTest : GameTest
         });
     }
 
+    [Test]
+    public async Task VestModeAttachesRifleToArmorAndRetrievesItFromTheOuterClothingSlot()
+    {
+        var map = await Pair.CreateTestMap();
+        NetEntity userNet = default;
+        NetEntity rifleNet = default;
+        await Server.WaitAssertion(() =>
+        {
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
+            var rifle = SEntMan.SpawnEntity("CMUWeaponShotgunOlympiets", map.GridCoords);
+            var sling = SEntMan.SpawnEntity("AU14AttachmentTwoPointSling", map.GridCoords);
+            var attachments = SEntMan.System<AttachableHolderSystem>();
+            var slings = SEntMan.System<CMUSlingSystem>();
+            var inventory = SEntMan.System<InventorySystem>();
+            var hands = SEntMan.System<SharedHandsSystem>();
+            Assert.That(attachments.Attach(
+                (rifle, SEntMan.GetComponent<AttachableHolderComponent>(rifle)), sling, user), Is.True);
+            slings.ToggleCarryMode((sling, SEntMan.GetComponent<CMUSlingComponent>(sling)), user);
+
+            Assert.That(inventory.TryEquip(user, rifle, "suitstorage"), Is.False);
+            Assert.That(inventory.TryEquip(user, rifle, "outerClothing"), Is.True,
+                "without armor, vest mode uses the outer-clothing slot");
+            Assert.That(inventory.TryUnequip(user, "outerClothing"), Is.True);
+            Assert.That(hands.TryPickupAnyHand(user, rifle), Is.True);
+
+            var vest = SEntMan.SpawnEntity("RMCArmorVest", map.GridCoords);
+            Assert.That(inventory.TryEquip(user, vest, "outerClothing"), Is.True);
+            Assert.That(slings.TryAttachToVest(vest, rifle, user), Is.True);
+            Assert.That(inventory.TryGetSlotEntity(user, "outerClothing", out var wornVest), Is.True);
+            Assert.That(wornVest, Is.EqualTo(vest));
+            Assert.That(slings.TryRetrieveFromVest(vest, user), Is.True,
+                "clicking the outer-clothing slot retrieves the attached rifle first");
+            Assert.That(hands.IsHolding(user, rifle), Is.True);
+
+            Assert.That(slings.TryAttachToVest(vest, rifle, user), Is.True);
+            Assert.That(inventory.TryUnequip(user, "outerClothing"), Is.True,
+                "armor can be removed while the rifle remains attached to it");
+            Assert.That(slings.TryRetrieveFromVest(vest, user), Is.True);
+            Assert.That(hands.IsHolding(user, rifle), Is.True);
+            userNet = SEntMan.GetNetEntity(user);
+            rifleNet = SEntMan.GetNetEntity(rifle);
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var user = CEntMan.GetEntity(userNet);
+            var rifle = CEntMan.GetEntity(rifleNet);
+            var inventory = Client.System<InventorySystem>();
+            Assert.That(inventory.CanEquip(user, rifle, "outerClothing", out _, assumeEmpty: true), Is.True);
+            Assert.That(inventory.CanEquip(user, rifle, "suitstorage", out _, assumeEmpty: true), Is.False);
+        });
+    }
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [TestPrototypes]

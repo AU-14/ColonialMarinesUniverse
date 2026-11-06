@@ -437,7 +437,7 @@ public sealed class YautjaFalconRuntimeTest
             }), Is.True);
 
             mapSystem.SetTile(lowerMap.Grid.Owner, lowerMap.Grid.Comp, new Vector2i(1, 0), lowerMap.Tile.Tile);
-            // climbs exit onto the same tile one level up and the landing check rejects unsupported ground
+            // ladders only climb onto a floor or ladder top
             mapSystem.SetTile(upperMap.Grid.Owner, upperMap.Grid.Comp, new Vector2i(1, 0), upperMap.Tile.Tile);
             var ladderCoordinates = lowerMap.GridCoords.Offset(Vector2.UnitX);
             // The ladder must have a supported landing on the destination level.
