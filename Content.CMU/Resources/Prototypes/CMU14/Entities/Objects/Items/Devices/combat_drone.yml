@@ -19,7 +19,7 @@
     - id: CMUCombatDroneAmmoBox
     - id: CMUCombatDroneAmmoBoxAP
     - id: CMWelder
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack
 
 - type: entity
   parent: BaseItem
