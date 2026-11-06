@@ -14,7 +14,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction;
-using Content.Shared.Paper;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
@@ -47,7 +46,6 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPointLightSystem _lights = default!;
-    [Dependency] private PaperSystem _paper = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -92,12 +90,15 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
 
     private void OnMapInit(Entity<CMUYautjaExperimentComponent> ent, ref MapInitEvent args)
     {
-        if (ent.Comp.RequiredExperiments.Count != 0)
-            return;
-        var candidates = _prototypes.EnumeratePrototypes<CMUYautjaExperimentPrototype>()
-            .Select(recipe => new ProtoId<CMUYautjaExperimentPrototype>(recipe.ID)).ToList();
-        _random.Shuffle(candidates);
-        ent.Comp.RequiredExperiments.UnionWith(candidates.Take(CMUYautjaExperimentComponent.RequiredCount));
+        if (ent.Comp.RequiredExperiments.Count == 0)
+        {
+            var candidates = _prototypes.EnumeratePrototypes<CMUYautjaExperimentPrototype>()
+                .Select(recipe => new ProtoId<CMUYautjaExperimentPrototype>(recipe.ID)).ToList();
+            _random.Shuffle(candidates);
+            ent.Comp.RequiredExperiments.UnionWith(candidates.Take(CMUYautjaExperimentComponent.RequiredCount));
+        }
+        foreach (var id in ent.Comp.RequiredExperiments)
+            GetClue(ent.Comp, id);
     }
 
     private bool OnFloor(EntityUid uid)
@@ -133,13 +134,14 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             "\n" + Loc.GetString(recipe.Lore);
     }
 
-    public string ChallengeClues(CMUYautjaExperimentComponent comp)
+    private string GetClue(CMUYautjaExperimentComponent comp, ProtoId<CMUYautjaExperimentPrototype> id)
     {
-        var index = 0;
-        return string.Join("\n", comp.RequiredExperiments.OrderBy(id => id.Id).Select(id =>
-            Loc.GetString(comp.Discoveries.Contains(id) ? "cmu-yautja-experiment-seal-open" : "cmu-yautja-experiment-seal-clue",
-                ("number", ++index), ("clue", Loc.GetString(_prototypes.Index(id).Clue)),
-                ("name", Loc.GetString(_prototypes.Index(id).Name)))));
+        if (!comp.SelectedClues.TryGetValue(id, out var clue))
+        {
+            clue = _random.Pick(_prototypes.Index(id).Clues);
+            comp.SelectedClues.Add(id, clue);
+        }
+        return Loc.GetString(clue);
     }
 
     public bool SelectExperiment(EntityUid uid, EntityUid user, ProtoId<CMUYautjaExperimentPrototype> id)
@@ -199,7 +201,7 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
     private void UpdateGuide(Entity<CMUYautjaExperimentComponent> ent)
     {
         var seals = ent.Comp.RequiredExperiments.OrderBy(id => id.Id).Select(id =>
-            new CMUYautjaExperimentSeal(Loc.GetString(_prototypes.Index(id).Clue),
+            new CMUYautjaExperimentSeal(GetClue(ent.Comp, id),
                 ent.Comp.Discoveries.Contains(id) ? Loc.GetString(_prototypes.Index(id).Name) : null)).ToList();
         var samples = Loc.GetString("cmu-yautja-experiment-samples-empty");
         if (_solutions.TryGetSolution(ent.Owner, SampleWell, out _, out var well))
@@ -388,10 +390,6 @@ public sealed partial class CMUYautjaExperimentSystem : EntitySystem
             var faction = _research.GetFaction(ent);
             _research.UpdateClearance(_research.GetCredits(faction) + recipe.ResearchReward, -1, faction,
                 _research.GetSampleData(faction) + recipe.ResearchReward);
-            var note = Spawn("Paper", Transform(ent).Coordinates);
-            _paper.SetContent(note, Loc.GetString("cmu-yautja-experiment-notes", ("procedure", Instructions(recipe)),
-                ("response", Loc.GetString(recipe.Response)), ("reward", recipe.ResearchReward),
-                ("clues", ChallengeClues(ent.Comp))));
         }
         UpdateGuide(ent);
     }

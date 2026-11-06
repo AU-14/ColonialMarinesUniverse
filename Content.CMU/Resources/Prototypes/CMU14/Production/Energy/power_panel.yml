@@ -1,5 +1,5 @@
 - type: entity
-  parent: BaseAPC
+  parent: CMApcBase
   id: PowerPanel
   name: electrical panel
   description: A compact distribution panel. Feed it power with a cable and it relays it to every powered device in range.
@@ -24,3 +24,5 @@
         connection: Both
   - type: ExtensionCableProvider
     transferRange: 5
+  - type: StaticPrice
+    price: 500

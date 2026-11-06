@@ -30,3 +30,6 @@ rmc-xeno-parasite-larva-claim-title = Become the larva?
 rmc-xeno-parasite-larva-claim-message = Do you want to become the larva if this host spawns one?
 rmc-xeno-parasite-larva-claim-yes = Yes
 rmc-xeno-parasite-larva-claim-no = No
+
+# CMU14
+rmc-xeno-infect-attached-self = We latch onto {THE($target)}'s face!

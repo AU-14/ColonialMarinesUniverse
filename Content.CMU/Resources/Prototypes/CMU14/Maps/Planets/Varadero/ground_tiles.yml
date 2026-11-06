@@ -1,0 +1,14 @@
+# Ground-level foundations must not deconstruct into the unmapped void below Varadero.
+# Keep the original appearances and leave upper-level floors destructible.
+- type: tile
+  parent: CMFloorAsteroidPlating
+  id: CMUVaraderoGroundAsteroidPlating
+  baseTurf: null
+  indestructible: true
+
+- type: tile
+  parent: Lattice
+  id: CMUVaraderoGroundLattice
+  baseTurf: null
+  indestructible: true
+  deconstructTools: []
