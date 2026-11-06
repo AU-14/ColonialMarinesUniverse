@@ -74,6 +74,11 @@ jobs:
                 for (const run of runs) {
                   if (!dead && run.head_sha === sha)
                     continue;
+                  // CMU14: never cancel a run newer than this synchronize; a
+                  // delayed bouncer once killed the fresh run and left the PR
+                  // with no CI at all
+                  if (Date.parse(run.created_at) > Date.parse(context.payload.pull_request.updated_at))
+                    continue;
                   // pull_requests is empty on fork PR runs, so match the head ref and
                   // repository. same branch open against two bases is fine: a push
                   // supersedes both PRs' runs, and the two bouncer runs race to cancel
