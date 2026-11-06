@@ -664,7 +664,8 @@ public sealed partial class ZCaveInSystem : EntitySystem
         var belowCoords = new MapCoordinates(worldPos, TryComp<MapComponent>(landingMap, out var landingComp) ? landingComp.MapId : belowMapComp.MapId);
         var surfaceMap = Transform(surfaceGridUid).MapUid;
 
-        // Only what would land inside something solid (a rock, a wall, a table) loses its collision; the rest keeps it.
+        // Furniture keeps its collision on open ground. Broken walls must remain inert even if
+        // another falling wall or newly generated rock reaches the landing tile later.
         var inside = _landing.LandsInsideSolid(landingMap, worldPos);
         // RUMC End
 
@@ -701,13 +702,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             RemComp<StructuralSupportComponent>(uid);
             _transform.SetMapCoordinates(uid, belowCoords);
 
-            // RUMC: only what lands inside a rock or a wall is rubble. What was here (kept), for everything that fell:
-            // RUMC was (kept): // Fallen structures are rubble: strip fixture hardness so a wall that lands inside (or later gets buried under) a cave rock can never sit there grinding
-            // RUMC was (kept): // contacts forever. That constant jitter was a physics drain that degraded server TPS (felt as ever-worsening UI lag) as the round ran on.
-            // RUMC was (kept): MakeFallenDebrisNonHard(uid);
-            // What lands inside a rock or a wall is rubble: strip fixture hardness so it can never sit there grinding contacts forever (that constant jitter was a physics drain that
-            // degraded server TPS). What lands on open floor keeps its collision.
-            if (inside)
+            if (_tag.HasTag(uid, WallTag) || inside)
                 MakeFallenDebrisNonHard(uid);
         }
 
@@ -720,7 +715,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
                 continue;
 
             _transform.SetMapCoordinates(uid, belowCoords);
-            if (inside)
+            if (_tag.HasTag(uid, WallTag) || inside)
                 MakeFallenDebrisNonHard(uid);
         }
         // RUMC End
