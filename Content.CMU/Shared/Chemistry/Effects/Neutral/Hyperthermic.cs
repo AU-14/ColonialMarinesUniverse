@@ -20,7 +20,9 @@ public sealed partial class Hyperthermic : RMCChemicalEffect
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => $"Raises body temperature by [color=yellow]{PotencyPerSecond * 2}[/color] K per tick, up to [color=yellow]{LinearLevel * 5}[/color] K above normal.\n" +
            $"Overdoses deal [color=red]{PotencyPerSecond}[/color] burn damage.\n" +
-           $"Critical overdoses deal [color=red]{PotencyPerSecond * 3}[/color] burn damage and cause heat stroke unconsciousness.";
+           $"Critical overdoses deal [color=red]{PotencyPerSecond * 3}[/color] burn damage and cause heat stroke unconsciousness.\n" +
+           $"A generated recipe for it is exothermic: synthesis warms the solution by about [color=yellow]{Potency * Content.Shared.CMU14.Chemistry.Reagents.SharedReagentGeneratorSystem.SynthesisKelvinPerLevel}[/color] K, " +
+           $"never above [color=yellow]{Content.Shared.CMU14.Chemistry.Reagents.SharedReagentGeneratorSystem.SynthesisMaxTemperature}[/color] K.";
 
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {

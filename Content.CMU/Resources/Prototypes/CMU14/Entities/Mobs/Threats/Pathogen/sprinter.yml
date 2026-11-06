@@ -118,6 +118,11 @@
     stunMin: 4
     stunMax: 4
   - type: XenoDevour
+  - type: DamageEvasion
+    damageThreshold: 120
+    damageWindow: 3
+    evasionBonus: 75
+    evasionDuration: 4
   - type: RMCSize
     size: SmallXeno
   - type: TacticalMapIcon

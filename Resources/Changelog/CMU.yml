@@ -16863,5 +16863,174 @@
   id: 975
   time: '2026-11-05T23:04:51.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2482
+- author: maertayn
+  changes:
+  - message: shard CI runs in reserved chunked waves so builds and helper jobs never
+      queue behind shard legs
+    type: Code
+  id: 976
+  time: '2026-11-06T00:05:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2483
+- author: ILoveDespoiler
+  changes:
+  - message: 'Added a brand new Leap ability onto Harbinger: "Flurry Rush" allows
+      the Harbinger to dash *through* targets, damaging them all at once after the
+      leap ends.'
+    type: Add
+  - message: Harbinger now has a new ability, Whirl, that does AoE damage at a short
+      range.
+    type: Add
+  - message: Harbinger no longer has the Impale ability.
+    type: Remove
+  id: 977
+  time: '2026-11-06T13:04:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2472
+- author: KeiKiyomi
+  changes:
+  - message: You may now attatch a disposable rocket launcher to a GOVFOR backpack,
+      wit a 2 second delay equip, and 4 second unequip. Someone can come up behind
+      you and take your dispo off as well
+    type: Add
+  id: 978
+  time: '2026-11-06T13:05:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2457
+- author: KeiKiyomi
+  changes:
+  - message: Slings can now attach rifles to a worn vest instead of into the suit
+      storage slot
+    type: Add
+  id: 979
+  time: '2026-11-06T13:05:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2461
+- author: coolbloxxie
+  changes:
+  - message: photographs and suspect photos fit in folders, clipboards, and filing
+      cabinets
+    type: Tweak
+  id: 980
+  time: '2026-11-06T13:06:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2446
+- author: rokudara-sen
+  changes:
+  - message: Ancients from the Ancient hunt slot can open the elder, adult and youngblood
+      gear racks.
+    type: Fix
+  - message: The Yautja mark menu lists nearby prey again.
+    type: Fix
+  - message: Arrows fired from the Yautja hunting bow no longer show the error sprite.
+    type: Fix
+  - message: Hovering over a cloaked Yautja, scout or ghillie sniper no longer shows
+      an outline around them.
+    type: Fix
+  - message: Non-Yautja players can no longer spawn on the hunter ship.
+    type: Fix
+  - message: Yautja melee weapons cause pain immediately, so two wielded glaive hits
+      put an unarmoured human into pain shock.
+    type: Tweak
+  - message: Armour now has a chance to blunt each Yautja blade hit, cutting its damage
+      and pain.
+    type: Tweak
+  - message: Yautja can flay dead humans with the ceremonial dagger, all the way through
+      the cmss13 stages, and the body shows it.
+    type: Add
+  - message: Human skin uses the cmss13 sprite and only stacks with skin from the
+      same victim.
+    type: Tweak
+  - message: Stranded Yautja no longer spawn in Colony Fall.
+    type: Tweak
+  id: 981
+  time: '2026-11-06T13:08:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2433
+- author: KeiKiyomi
+  changes:
+  - message: Xeno's are now slowed and have their vision hazed inside gas OBs
+    type: Fix
+  id: 982
+  time: '2026-11-06T13:08:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2432
+- author: Mensla
+  changes:
+  - message: Removed two unfitting warcries.
+    type: Remove
+  id: 983
+  time: '2026-11-06T13:11:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2442
+- author: IntelligenceOfficerArthur
+  changes:
+  - message: Admins can now spawn Intelligence Section Case Officers, Paramilitary
+      Officers and Paramilitary Members.
+    type: Admin
+  - message: Admins can now spawn Intelligence Section Case Officers, Paramilitary
+      Officers and Paramilitary Members.
+    type: Add
+  - message: For ease of making intelligence operatin!
+    type: Admin
+  id: 984
+  time: '2026-11-06T13:14:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2479
+- author: CatoChristopherMrow
+  changes:
+  - message: Large amount of gunship maintenance, including two new doorguns, alot
+      of bugfixes, new huds, and tweaks
+    type: Add
+  id: 985
+  time: '2026-11-06T13:17:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2438
+- author: KeiKiyomi
+  changes:
+  - message: IEDs can now be rigged into eligible vehicles with impact or hostile-IFF
+      proximity triggers. Rigged vehicles also detonate after taking enough damage,
+      blasting both outside and inside.
+    type: Add
+  - message: All vehicles can now be inspected for rigged explosives.
+    type: Add
+  id: 986
+  time: '2026-11-06T15:01:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2418
+- author: KeiKiyomi
+  changes:
+  - message: The Dynamic Gunship can now be exchanged for a standard Mohawk before
+      its first takeoff or flyby. The gunship waits for everyone to disembark before
+      returning to the fleet, and the Mohawk lands on its pad.
+    type: Add
+  id: 987
+  time: '2026-11-06T15:13:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2409
+- author: KeiKiyomi
+  changes:
+  - message: Gas, EMS, and smoke orbital strikes now spread outward to a 45-tile radius
+      and initially cover every connected Z-level.
+    type: Tweak
+  - message: Support clouds last 60 seconds now (from 25-30) the extra time being
+      the time it takes to fully spread to 45 tiles and then stay there for 5-7 seconds
+    type: Tweak
+  - message: Support clouds spread through doors and vertical openings, while walls,
+      floors, and roofs block their spread.
+    type: Tweak
+  id: 988
+  time: '2026-11-06T15:24:01.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2464
+- author: Scott-SS14
+  changes:
+  - message: A rechargeable CPR compressor for hands free CPR on downed patients.
+    type: Add
+  - message: CPR compressor functionality to CPR dummies.
+    type: Add
+  id: 989
+  time: '2026-11-06T15:45:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2427
+- author: ILoveDespoiler
+  changes:
+  - message: Added Grungus (Greeno Neomorphs)
+    type: Add
+  - message: Weyu will now get a delivery of TWO crates at CLX. One of eggs and one
+      with Bloodburster Injectors.
+    type: Add
+  - message: Edited the Ciph Hint document to account for two species being sent rather
+      than one.
+    type: Tweak
+  id: 990
+  time: '2026-11-06T15:46:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2408
 Name: CMU
 Order: -1

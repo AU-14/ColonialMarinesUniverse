@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Vents;
 using Content.Shared._RMC14.Xenonids.Burrow;
 using Content.Shared.CMU14.Fob;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.CMU14.Sentry;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -153,7 +154,9 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
         return TryGetMount(gun, out _, out var network) && !gun.Comp.RequiresRestart
             && !HasComp<CMUSentryBrokenComponent>(gun) && !_doAfter.IsRunning(gun.Comp.Reload)
             && _controls.HasOperationalControl(network) && _reserve.IsActive(network)
-            && _guns.GetAmmoCount(gun) > 0;
+            && _guns.GetAmmoCount(gun) > 0
+            // Early Warning: a gun an Early Warning Joe's Unwind locked out stays off until the lockout ends
+            && !HasComp<EWJoeSentryLockoutComponent>(gun);
     }
 
     private bool ValidTarget(Entity<CMUFobSupportGunComponent> gun, EntityUid target)

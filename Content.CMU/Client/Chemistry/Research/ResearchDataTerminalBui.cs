@@ -1,11 +1,17 @@
 using Content.Client._RMC14.UserInterface;
 using Content.Client.Administration.UI.CustomControls;
+using Content.Client.CMU14.Chemistry.Reagents;
 using Content.Client.UserInterface.Controls;
+using Content.Shared._RMC14.Chemistry.Effects;
+using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Research;
+using Content.Shared.Chemistry.Reagent;
 using JetBrains.Annotations;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Reflection;
 using Robust.Shared.Timing;
 using System;
 using System.Collections.Generic;
@@ -18,7 +24,16 @@ namespace Content.Client.CMU14.Chemistry.Research;
 public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [Dependency] private IGameTiming _time = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IReflectionManager _reflection = default!;
+    [Dependency] private IDynamicTypeFactory _typeFactory = default!;
+    [Dependency] private IEntitySystemManager _entSys = default!;
     private ResearchDataTerminalWindow? _window;
+
+    /// <summary>Property prototypes default to an effectively unlimited MaxLevel of 999.</summary>
+    private const int UncappedPropertyLevel = 999;
+    private Dictionary<string, Type>? _effectTypes;
+    private readonly Dictionary<string, string?> _effectTextCache = new();
 
     ResearchDataTerminalAttemptUpgradeBuiMsg UpgradeAttempt = new();
     ResearchDataTerminalPrintLastBuiMsg PrintLast = new();
@@ -59,6 +74,8 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
         _window.Credits.Text = Loc.GetString("research-data-ui-credits", ("NUM", state.Credits), ("DATA", state.SampleData));
         _window.Tabs.SetTabTitle(0, Loc.GetString("research-data-ui-manage"));
         _window.Tabs.SetTabTitle(1, Loc.GetString("research-data-ui-view"));
+        _window.Tabs.SetTabTitle(2, Loc.GetString("research-data-ui-tab-contracts"));
+        _window.Tabs.SetTabTitle(3, Loc.GetString("research-data-ui-tab-properties"));
         _window.NextUpdate = state.NextUpdate;
         _window.ReduceCooldown.Disabled = !state.Picked || state.Credits < 1 || state.NextUpdate <= _time.CurTime;
         _window.TimeLeftBar.MaxValue = (float)(state.NextUpdate - state.LastTime).TotalMilliseconds;
@@ -70,6 +87,12 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
         _window.UpgradeText.Text = xLocked
             ? Loc.GetString("research-data-ui-improve-locked", ("TIME", Math.Ceiling((state.XLockedUntil!.Value - _time.CurTime).TotalMinutes)))
             : Loc.GetString("research-data-ui-improve", ("NUM", state.UpgradeCost));
+        // FLOW-24: a locked faction (GOVFOR during Insurgency) can neither upgrade nor buy cooldown.
+        if (state.Locked)
+        {
+            _window.Upgrade.Disabled = true;
+            _window.ReduceCooldown.Disabled = true;
+        }
         StyleBoxFlat panel = new();
         panel.BackgroundColor = Color.FromHex("#0f0f00");
         panel.BorderColor = Color.FromHex("#ffbf00");
@@ -184,7 +207,17 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             //_window.DataTable.AddChild(con);
         }
 
-        foreach (var chem in state.IDs)
+        if (state.Locked)
+        {
+            // FLOW-24: the offers are replaced by the lock message; no pick buttons are shown.
+            var lockedPanel = new PanelContainer { PanelOverride = panel, HorizontalExpand = true };
+            var lockedLabel = new RichTextLabel { Margin = new Thickness(5f, 10f) };
+            lockedLabel.Text = state.LockedReason ?? Loc.GetString("research-locked-insurgency");
+            lockedPanel.AddChild(lockedLabel);
+            _window.ChemContainer.AddChild(lockedPanel);
+        }
+
+        foreach (var chem in state.IDs.Take(state.Locked ? 0 : state.IDs.Count))
         {
             BoxContainer box = new BoxContainer();
             PanelContainer panela = new PanelContainer();
@@ -214,14 +247,16 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             }
             diff.Text = Loc.GetString("research-data-ui-chem-difficulty", ("DIFF", difficulty));
             RichTextLabel desc = new RichTextLabel();
-            desc.Text = Loc.GetString("research-data-ui-chem-desc", ("RECIHINT", chem.RecipeHint), ("PROPHINT", chem.PropertyHint));
+            desc.Text = Loc.GetString("research-data-ui-chem-desc",
+                ("RECIHINT", ReagentName(chem.RecipeHint)),
+                ("PROPHINT", PropertyName(chem.PropertyHint)));
             Button button = new Button();
             button.OnPressed += _ => SendPredictedMessage(new ResearchDataTerminalPickChemBuiMsg(chem.ID));
             button.Margin = new(5, 5, 5, 5);
             RichTextLabel cont = new RichTextLabel();
             cont.Text = Loc.GetString("research-data-ui-chem-take");
             cont.HorizontalAlignment = Control.HAlignment.Left;
-            if (_time.CurTime < state.NextUpdate && state.Picked)
+            if ((_time.CurTime < state.NextUpdate && state.Picked) || state.Locked)
                 button.Disabled = true;
             name.Margin = new Thickness(5f, 10f);
             panela.AddChild(name);
@@ -238,5 +273,153 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
             box.AddChild(panelb);
             _window.ChemContainer.AddChild(box);
         }
+
+        RefreshContracts(state, panel);
+        RefreshProperties(panel);
+    }
+
+    private string ReagentName(string? id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return string.Empty;
+        return _proto.GetInstances<ReagentPrototype>().TryGetValue(id, out var reagent) ? reagent.LocalizedName : id;
+    }
+
+    private string PropertyName(string? id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return string.Empty;
+        return _proto.TryIndex<ReagentPropertyPrototype>(id, out var property) ? property.LocalizedName : id;
+    }
+
+    /// <summary>ARCH-03: every contract the faction picked, in the server's contract-paper format.</summary>
+    private void RefreshContracts(ResearchDataTerminalBuiState state, StyleBoxFlat panel)
+    {
+        if (_window is null)
+            return;
+        _window.ContractsList.RemoveAllChildren();
+        if (state.Contracts.Count == 0)
+        {
+            var empty = new RichTextLabel { Margin = new Thickness(5f) };
+            empty.Text = Loc.GetString("research-data-ui-contracts-empty");
+            _window.ContractsList.AddChild(empty);
+            return;
+        }
+        foreach (var contract in state.Contracts)
+        {
+            _window.ContractsList.AddChild(MakeEntry(
+                Loc.GetString("research-data-ui-contract-name", ("NAME", contract.Name)),
+                contract.Text,
+                panel));
+        }
+    }
+
+    /// <summary>ARCH-03: every discovered property with its description and exact effect text.</summary>
+    private void RefreshProperties(StyleBoxFlat panel)
+    {
+        if (_window is null)
+            return;
+        _window.PropertiesList.RemoveAllChildren();
+        var generator = EntMan.System<ClientReagentGeneratorSystem>();
+        var known = new List<ReagentPropertyPrototype>();
+        foreach (var id in generator.KnownProperties)
+        {
+            if (_proto.TryIndex<ReagentPropertyPrototype>(id, out var property))
+                known.Add(property);
+        }
+        if (known.Count == 0)
+        {
+            var empty = new RichTextLabel { Margin = new Thickness(5f) };
+            empty.Text = Loc.GetString("research-data-ui-properties-empty");
+            _window.PropertiesList.AddChild(empty);
+            return;
+        }
+        foreach (var property in known.OrderBy(p => p.LocalizedName))
+        {
+            _window.PropertiesList.AddChild(MakeEntry(
+                Loc.GetString("research-data-ui-property-name", ("NAME", property.LocalizedName)),
+                DescribeProperty(property),
+                panel));
+        }
+    }
+
+    private static Control MakeEntry(string title, string body, StyleBoxFlat panel)
+    {
+        var box = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical };
+        var titleLabel = new RichTextLabel { Margin = new Thickness(5f, 5f, 5f, 0f) };
+        titleLabel.Text = title;
+        var bodyLabel = new RichTextLabel { Margin = new Thickness(5f) };
+        bodyLabel.Text = body;
+        box.AddChild(titleLabel);
+        box.AddChild(bodyLabel);
+        var container = new PanelContainer
+        {
+            PanelOverride = panel,
+            HorizontalExpand = true,
+            Margin = new Thickness(0f, 0f, 0f, 5f),
+        };
+        container.AddChild(box);
+        return container;
+    }
+
+    private string DescribeProperty(ReagentPropertyPrototype property)
+    {
+        var text = Loc.GetString("research-data-ui-property-meta",
+            ("CODE", property.Code), ("RARITY", property.Rarity.ToString())) + '\n';
+        if (property.MaxLevel < UncappedPropertyLevel)
+            text += Loc.GetString("research-data-ui-property-max-level", ("LEVEL", property.MaxLevel)) + '\n';
+        text += property.LocalizedDescription + '\n';
+        if (property.IntensityPerLevel != 0 || property.DurationPerLevel != 0 || property.RangePerLevel != 0)
+        {
+            text += Loc.GetString("research-data-ui-property-fire",
+                ("INTENSITY", property.IntensityPerLevel.ToString()),
+                ("DURATION", property.DurationPerLevel.ToString()),
+                ("RADIUS", property.RangePerLevel.ToString())) + '\n';
+        }
+        var level = Math.Clamp(property.Level, 1, Math.Max(1, property.MaxLevel));
+        text += Loc.GetString("research-data-ui-property-effect", ("LEVEL", level)) + '\n';
+        text += GetEffectText(property, level) ?? Loc.GetString("research-data-ui-property-no-effect");
+        return text;
+    }
+
+    /// <summary>
+    /// The guidebook text of the property's effect at <paramref name="level"/>. Generated chemicals emit
+    /// <c>!type:{EffectName}</c> with <c>potency: level</c>, so the same effect class is built here with that potency.
+    /// </summary>
+    private string? GetEffectText(ReagentPropertyPrototype property, int level)
+    {
+        var key = $"{property.ID}:{level}";
+        if (_effectTextCache.TryGetValue(key, out var cached))
+            return cached;
+
+        string? text = null;
+        if (!string.IsNullOrEmpty(property.EffectName))
+        {
+            if (_effectTypes is null)
+            {
+                _effectTypes = new Dictionary<string, Type>();
+                foreach (var type in _reflection.GetAllChildren<RMCChemicalEffect>())
+                {
+                    _effectTypes.TryAdd(type.Name, type);
+                }
+            }
+            if (_effectTypes.TryGetValue(property.EffectName, out var effectType))
+            {
+                try
+                {
+                    var effect = (RMCChemicalEffect) _typeFactory.CreateInstance(effectType, oneOff: true, inject: false);
+                    effect.Potency = level;
+                    text = effect.EntityEffectGuidebookText(_proto, _entSys);
+                    if (string.IsNullOrWhiteSpace(text))
+                        text = null;
+                }
+                catch (Exception)
+                {
+                    text = null;
+                }
+            }
+        }
+        _effectTextCache[key] = text;
+        return text;
     }
 }

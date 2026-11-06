@@ -231,6 +231,189 @@
     },
     {
       "name": "launchable_sentry"
+    },
+    {
+      "name": "bofors_40mm_tray_0"
+    },
+    {
+      "name": "bofors_40mm_tray_1"
+    },
+    {
+      "name": "bofors_40mm_tray_2"
+    },
+    {
+      "name": "bofors_40mm_tray_3"
+    },
+    {
+      "name": "bofors_40mm_tray_ab_0"
+    },
+    {
+      "name": "bofors_40mm_tray_ab_1"
+    },
+    {
+      "name": "bofors_40mm_tray_ab_2"
+    },
+    {
+      "name": "bofors_40mm_tray_ab_3"
+    },
+    {
+      "name": "bofors_40mm_tray_ap_0"
+    },
+    {
+      "name": "bofors_40mm_tray_ap_1"
+    },
+    {
+      "name": "bofors_40mm_tray_ap_2"
+    },
+    {
+      "name": "bofors_40mm_tray_ap_3"
+    },
+    {
+      "name": "bofors_40mm_tray_ht_0"
+    },
+    {
+      "name": "bofors_40mm_tray_ht_1"
+    },
+    {
+      "name": "bofors_40mm_tray_ht_2"
+    },
+    {
+      "name": "bofors_40mm_tray_ht_3"
+    },
+    {
+      "name": "bofors_40mm_tray_in_0"
+    },
+    {
+      "name": "bofors_40mm_tray_in_1"
+    },
+    {
+      "name": "bofors_40mm_tray_in_2"
+    },
+    {
+      "name": "bofors_40mm_tray_in_3"
+    },
+    {
+      "name": "minirocket_blu_1"
+    },
+    {
+      "name": "minirocket_blu_2"
+    },
+    {
+      "name": "minirocket_blu_3"
+    },
+    {
+      "name": "minirocket_blu_4"
+    },
+    {
+      "name": "minirocket_blu_5"
+    },
+    {
+      "name": "minirocket_blu_6"
+    },
+    {
+      "name": "minirocket_ci_1"
+    },
+    {
+      "name": "minirocket_ci_2"
+    },
+    {
+      "name": "minirocket_ci_3"
+    },
+    {
+      "name": "minirocket_ci_4"
+    },
+    {
+      "name": "minirocket_ci_5"
+    },
+    {
+      "name": "minirocket_ci_6"
+    },
+    {
+      "name": "minirocket_flir_1"
+    },
+    {
+      "name": "minirocket_flir_2"
+    },
+    {
+      "name": "minirocket_flir_3"
+    },
+    {
+      "name": "minirocket_flir_4"
+    },
+    {
+      "name": "minirocket_flir_5"
+    },
+    {
+      "name": "minirocket_flir_6"
+    },
+    {
+      "name": "minirocket_heat_1"
+    },
+    {
+      "name": "minirocket_heat_2"
+    },
+    {
+      "name": "minirocket_heat_3"
+    },
+    {
+      "name": "minirocket_heat_4"
+    },
+    {
+      "name": "minirocket_heat_5"
+    },
+    {
+      "name": "minirocket_heat_6"
+    },
+    {
+      "name": "minirocket_smk_1"
+    },
+    {
+      "name": "minirocket_smk_2"
+    },
+    {
+      "name": "minirocket_smk_3"
+    },
+    {
+      "name": "minirocket_smk_4"
+    },
+    {
+      "name": "minirocket_smk_5"
+    },
+    {
+      "name": "minirocket_smk_6"
+    },
+    {
+      "name": "minirocket_wk_1"
+    },
+    {
+      "name": "minirocket_wk_2"
+    },
+    {
+      "name": "minirocket_wk_3"
+    },
+    {
+      "name": "minirocket_wk_4"
+    },
+    {
+      "name": "minirocket_wk_5"
+    },
+    {
+      "name": "minirocket_wk_6"
+    },
+    {
+      "name": "howitzer_105mm_shell_0"
+    },
+    {
+      "name": "howitzer_105mm_shell_1"
+    },
+    {
+      "name": "howitzer_105mm_shell_2"
+    },
+    {
+      "name": "howitzer_105mm_shell_3"
+    },
+    {
+      "name": "howitzer_105mm_shell_4"
     }
   ]
 }
