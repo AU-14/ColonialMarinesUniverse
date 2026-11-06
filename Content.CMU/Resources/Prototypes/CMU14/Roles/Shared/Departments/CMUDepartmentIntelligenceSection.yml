@@ -1,0 +1,12 @@
+- type: department
+  parent: CMDepartmentBase
+  id: CMUDepartmentIntelligenceSection
+  name: cmu-department-intelligence-section
+  description: cmu-department-intelligence-section-description
+  color: "#5c6f80"
+  roles:
+  - CMUJobIntelCaseOfficer
+  - CMUJobIntelParamilitaryOfficer
+  - CMUJobIntelParamilitaryMember
+  departmentRadio: null
+  faction: colonist

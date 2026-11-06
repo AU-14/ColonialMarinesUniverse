@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared._RMC14.Buckle;
+using Content.Shared._RMC14.Emplacements; // CMU14
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Standing;
 using Content.Shared._RMC14.Xenonids;
@@ -569,7 +570,9 @@ public abstract partial class SharedBuckleSystem
 
         if (user != null)
         {
-            if (!_interaction.InRangeUnobstructed(user.Value, strap.Owner, buckle.Comp.Range, popup: popup))
+            // CMU14: an operator can leave their mount even when its door offset obstructs reach.
+            var leavingWeaponMount = user.Value == buckle.Owner && HasComp<WeaponMountComponent>(strap.Owner);
+            if (!leavingWeaponMount && !_interaction.InRangeUnobstructed(user.Value, strap.Owner, buckle.Comp.Range, popup: popup))
                 return false;
 
             if (user.Value != buckle.Owner && !ActionBlocker.CanComplexInteract(user.Value))
