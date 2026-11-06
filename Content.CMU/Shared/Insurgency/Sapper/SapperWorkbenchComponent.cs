@@ -68,7 +68,7 @@ public sealed partial class SapperWorkbenchComponent : Component
     // Ingredient shorthands so the recipe table above stays readable. IconPrototype is a
     // representative entity drawn in the recipe rows and the Loose Ingredients Help panel.
     private static SapperWorkbenchItemRequirement Cable(int count) =>
-        new() { AnyCable = true, Count = count, Name = "any cable coil", IconPrototype = "RMCCableCoil" };
+        new() { AnyCable = true, Count = count, Name = "any cable coil", IconPrototype = "CMUCableThinLVStack" };
 
     private static SapperWorkbenchItemRequirement AnyElectronics() =>
         new() { AnyElectronics = true, Name = "any electronics", IconPrototype = "DoorElectronics" };

@@ -1,0 +1,11 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: New Varadero's ground foundations can no longer be broken into void.
+  type: Fix
+- message: Intact roofs block cross-level gunfire. Shooters must be within three tiles
+    of an opening in their firing direction, while nearby roofs leave open-air shots
+    usable.
+  type: Fix
+time: '2026-11-05T12:07:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2475
