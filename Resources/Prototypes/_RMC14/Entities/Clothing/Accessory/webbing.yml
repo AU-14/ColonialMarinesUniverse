@@ -656,7 +656,7 @@
     - id: CMWrench
     - id: RMCWelderIndustrial
     - id: CMCrowbar
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
     - id: CMMultitool
 
 - type: entity
@@ -733,7 +733,7 @@
     - id: CMWelder
     - id: CMCrowbar
     - id: CMWirecutter
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
     - id: CMMultitool
 
 - type: entity
@@ -1071,7 +1071,7 @@
     - id: CMWelder
     - id: CMCrowbar
     - id: CMWirecutter
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
     - id: CMMultitool
 
 - type: entity
