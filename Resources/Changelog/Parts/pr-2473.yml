@@ -1,0 +1,16 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Cow crates can now be ordered through colony requisitions, and cow hides
+    can be tanned into leather.
+  type: Add
+- message: Removed unavailable hide recipes and unrelated clothing recycling entries
+    from the industry recipe guide.
+  type: Fix
+- message: Cotton bolls can now be processed with bayonets and glass shards.
+  type: Fix
+- message: Direct power ports now explain how to connect machines to electrical panels
+    using cable coils.
+  type: Fix
+time: '2026-11-05T11:13:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2473

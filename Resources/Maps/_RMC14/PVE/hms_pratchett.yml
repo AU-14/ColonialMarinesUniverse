@@ -26593,14 +26593,14 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: RMCCableCoil
+- proto: CMUCableThinLVStack # CMU14: replaced RMCCableCoil, thin LV cable
   entities:
   - uid: 3553
     components:
     - type: Transform
       pos: -107.6101,-10.6035795
       parent: 1
-- proto: RMCCableCoil10
+- proto: CMUCableThinLVStack10 # CMU14: replaced RMCCableCoil10, thin LV cable
   entities:
   - uid: 3554
     components:

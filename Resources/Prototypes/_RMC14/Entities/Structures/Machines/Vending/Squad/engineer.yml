@@ -355,7 +355,7 @@
       - id: CMBeltUtility
         name: utility tool belt
         amount: 4
-      - id: RMCCableCoil
+      - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil, thin LV cable
         amount: 4
       - id: RMCWeldingGoggles
         amount: 2

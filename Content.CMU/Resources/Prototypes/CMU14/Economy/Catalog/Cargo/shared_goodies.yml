@@ -8,6 +8,8 @@
     categories:
     - name: Research
       entries:
+      - cost: 300
+        crate: CMUChemistryHotplateFlatpack
       - cost: 1000
         crate: RMCCrateInflatableBarriers
       - cost: 100

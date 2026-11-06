@@ -7,6 +7,7 @@ using Content.Shared.GameTicking.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components; // CMU14
 using Content.Shared.Players;
 using Robust.Server.Player;
 using Robust.Shared.Network;
@@ -42,22 +43,44 @@ public sealed partial class RespawnRuleSystem : GameRuleSystem<RespawnDeadRuleCo
         if (_station.GetStations().FirstOrNull() is not { } station)
             return;
 
-        foreach (var tracker in EntityQuery<RespawnTrackerComponent>())
+        // CMU14: delayed respawns belong to an active rule and to the death that queued them.
+        var trackers = EntityQueryEnumerator<RespawnTrackerComponent, GameRuleComponent>();
+        while (trackers.MoveNext(out var ruleUid, out var tracker, out var rule))
         {
-            foreach (var (player, time) in tracker.RespawnQueue)
+            if (!GameTicker.IsGameRuleActive(ruleUid, rule))
             {
-                if (_timing.CurTime < time)
+                tracker.RespawnQueue.Clear();
+                tracker.CMUQueuedDeaths.Clear();
+                continue;
+            }
+
+            foreach (var (player, time) in tracker.RespawnQueue.ToArray())
+            {
+                if (!tracker.CMUQueuedDeaths.TryGetValue(player, out var death) ||
+                    !TryComp<MindComponent>(death.Mind, out var queuedMind) ||
+                    queuedMind.UserId != player ||
+                    queuedMind.OwnedEntity is { } owned && owned != death.Body ||
+                    TryComp<MobStateComponent>(death.Body, out var mob) && mob.CurrentState != MobState.Dead)
+                {
+                    tracker.RespawnQueue.Remove(player);
+                    tracker.CMUQueuedDeaths.Remove(player);
+                    continue;
+                }
+
+                if (_timing.CurTime < time || !_playerManager.TryGetSessionById(player, out var session))
                     continue;
 
-                if (!_playerManager.TryGetSessionById(player, out var session))
-                    continue;
-
-                if (session.GetMind() is { } mind && TryComp<MindComponent>(mind, out var mindComp) && mindComp.OwnedEntity.HasValue)
-                    QueueDel(mindComp.OwnedEntity.Value);
-                GameTicker.MakeJoinGame(session, station, silent: true);
                 tracker.RespawnQueue.Remove(player);
+                tracker.CMUQueuedDeaths.Remove(player);
+                if (session.GetMind() != death.Mind)
+                    continue;
+
+                if (tracker.DeleteBody && !TerminatingOrDeleted(death.Body))
+                    QueueDel(death.Body);
+                GameTicker.MakeJoinGame(session, station, silent: true);
             }
         }
+        // CMU14 end
     }
 
     private void OnSuicide(SuicideEvent ev)
@@ -117,7 +140,12 @@ public sealed partial class RespawnRuleSystem : GameRuleSystem<RespawnDeadRuleCo
         var wrappedMsg = Loc.GetString("chat-manager-server-wrap-message", ("message", msg));
         _chatManager.ChatMessageToOne(ChatChannel.Server, msg, wrappedMsg, respawnTracker, false, player.Comp.PlayerSession.Channel, Color.LimeGreen);
 
+        // CMU14: retain identity instead of deleting whichever body the player owns when the timer expires.
+        if (player.Comp.PlayerSession.GetMind() is not { } mind)
+            return false;
+        respawnTracker.Comp.CMUQueuedDeaths[player.Comp.PlayerSession.UserId] = (mind, player.Owner);
         respawnTracker.Comp.RespawnQueue[player.Comp.PlayerSession.UserId] = _timing.CurTime + respawnTracker.Comp.RespawnDelay;
+        // CMU14 end
 
         return true;
     }

@@ -57,7 +57,12 @@ public sealed partial class RankChangerSystem : EntitySystem
         if (!_prototypes.TryIndex(comp.Rank, out var rankProto))
             return;
 
-        comp.PreviousRank = CompOrNull<RankComponent>(wearer)?.Rank;
+        // Snapshot only on first apply. Re-applying an already applied chevron (the accessory
+        // remove verb picks it into the hand, which fires ApplyRank again) must not replace
+        // the saved previous rank with this chevron's own rank, or the revert restores the
+        // chevron rank to itself and the rank never leaves.
+        if (!comp.Applied)
+            comp.PreviousRank = CompOrNull<RankComponent>(wearer)?.Rank;
         comp.Applied = true;
         _rank.SetRank(wearer, rankProto);
 
