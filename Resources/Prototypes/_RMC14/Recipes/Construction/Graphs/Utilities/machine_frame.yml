@@ -32,7 +32,7 @@
       conditions:
       - !type:EntityAnchored
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV # CMU14: thin LV cable replaces the deprecated RMCCableCoil
     - to: start
       completed:
       - !type:SpawnPrototype
@@ -86,7 +86,7 @@
         examineText: construction-condition-machine-container-empty
       completed:
       - !type:SpawnPrototype
-        prototype: RMCCableCoil
+        prototype: CMUCableThinLVStack1 # CMU14: returns what the frame consumed, thin LV cable
       steps:
       - tool: Cutting
         doAfter: 0.25
