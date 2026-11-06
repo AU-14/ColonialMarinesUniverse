@@ -1,0 +1,65 @@
+# Paramilitary Officer: leads the armed element. Weapons and armor come later with the sub-sections.
+- type: job
+  parent: CMUJobIntelBase
+  id: CMUJobIntelParamilitaryOfficer
+  displayWeight: 24
+  roundRole: IntelParamilitaryOfficer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillLeadership: 2
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-paramilitary-officer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+
+  name: cmu-job-name-intel-paramilitary-officer
+  description: cmu-job-description-intel-paramilitary-officer
+  playTimeTracker: CMUJobIntelParamilitaryOfficer
+  startingGear: CMUGearIntelParamilitaryOfficer
+  icon: "RMCJobIconPMCGoonLead"
+  spawnMenuRoleName: cmu-spawn-role-intel-paramilitary-officer
+  roleWeight: 0.25
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelParamilitaryOfficer
+  equipment:
+    id: CMUIDCardIntelParamilitaryOfficer
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelParamilitaryOfficer
+  name: Spawn Point Intelligence Paramilitary Officer
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelParamilitaryOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobIntelParamilitaryOfficer
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobIntelParamilitaryOfficer
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
