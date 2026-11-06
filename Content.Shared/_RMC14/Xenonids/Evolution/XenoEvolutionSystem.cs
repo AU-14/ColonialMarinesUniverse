@@ -694,8 +694,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 if (existingComp.Tier < newXenoComp.Tier)
                     continue;
 
-                if (slotCount.TryGetValue(existingComp.Role.Id, out var freeSlots) && freeSlots > 0)
-                    slotCount[existingComp.Role.Id] = freeSlots - 1;
+                var protoId = MetaData(uid).EntityPrototype?.ID;
+                if (protoId != null && slotCount.ContainsKey(protoId) && slotCount[protoId] > 0)
+                    slotCount[protoId] -= 1;
                 else
                     existing++;
             }
