@@ -63,9 +63,9 @@ public sealed class YautjaHumanMeleeTest : GameTest
         });
     }
 
-    // cmss13 two-shots a naked marine with a wielded glaive: 90 brute is 90 pain on the spot
+    // cmss13: 90 brute is 90 of a human's 200 pain (45%), moderate, still standing. horrible needs 80%
     [Test]
-    public async Task TwoGlaiveHitsPutANakedMarineInShock()
+    public async Task TwoGlaiveHitsDoNotShockANakedMarine()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -74,8 +74,23 @@ public sealed class YautjaHumanMeleeTest : GameTest
             var pain = SEntMan.GetComponent<PainShockComponent>(hit.Victim);
 
             Assert.That(hit.Damage, Is.EqualTo(90f).Within(0.5f));
-            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage).Within(1f), "pain follows what landed");
-            Assert.That(pain.Tier, Is.EqualTo(PainTier.Shock));
+            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage / 2).Within(1f), "pain is half of what landed");
+            Assert.That(pain.Tier, Is.LessThan(PainTier.Severe));
+        });
+    }
+
+    // cmss13: 135 brute is 67% (distressing), 180 is 90% (horrible, and past hard crit anyway)
+    [Test]
+    public async Task FourthGlaiveHitShocksANakedMarine()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var three = Hit("CMUYautjaWarGlaive", null, map.GridCoords, hits: 3, wield: true);
+            var four = Hit("CMUYautjaWarGlaive", null, map.GridCoords, hits: 4, wield: true);
+
+            Assert.That(SEntMan.GetComponent<PainShockComponent>(three.Victim).Tier, Is.LessThan(PainTier.Shock));
+            Assert.That(SEntMan.GetComponent<PainShockComponent>(four.Victim).Tier, Is.EqualTo(PainTier.Shock));
         });
     }
 
@@ -88,7 +103,7 @@ public sealed class YautjaHumanMeleeTest : GameTest
             var hit = Hit("CMUYautjaWarGlaive", Armor, map.GridCoords, hits: 2, wield: true, stripChance: 1f);
             var pain = SEntMan.GetComponent<PainShockComponent>(hit.Victim);
 
-            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage).Within(1f));
+            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage / 2).Within(1f));
             Assert.That(pain.Tier, Is.LessThan(PainTier.Shock));
         });
     }
