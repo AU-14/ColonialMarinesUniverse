@@ -57,12 +57,8 @@ namespace Content.Client.Construction
 
             // CMU14 Construction stock refresh Begin
             SubscribeLocalEvent<StackComponent, StackCountChangedEvent>(OnMaterialStackChanged);
-            SubscribeLocalEvent<StorageComponent, EntInsertedIntoContainerMessage>(OnStorageItemInserted);
-            SubscribeLocalEvent<StorageComponent, EntRemovedFromContainerMessage>(OnStorageItemRemoved);
-            SubscribeLocalEvent<InventoryComponent, EntInsertedIntoContainerMessage>(OnInventoryItemInserted);
-            SubscribeLocalEvent<InventoryComponent, EntRemovedFromContainerMessage>(OnInventoryItemRemoved);
-            SubscribeLocalEvent<HandsComponent, EntInsertedIntoContainerMessage>(OnHandItemInserted);
-            SubscribeLocalEvent<HandsComponent, EntRemovedFromContainerMessage>(OnHandItemRemoved);
+            SubscribeLocalEvent<EntInsertedIntoContainerMessage>(OnItemInserted);
+            SubscribeLocalEvent<EntRemovedFromContainerMessage>(OnItemRemoved);
             // CMU14 Construction stock refresh End
 
             CommandBinds.Builder
@@ -82,23 +78,20 @@ namespace Content.Client.Construction
         private void OnMaterialStackChanged(Entity<StackComponent> ent, ref StackCountChangedEvent args)
             => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
 
-        private void OnStorageItemInserted(Entity<StorageComponent> ent, ref EntInsertedIntoContainerMessage args)
-            => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+        private void OnItemInserted(EntInsertedIntoContainerMessage args)
+        {
+            if (IsMaterialStockContainer(args.Container.Owner))
+                MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+        }
 
-        private void OnStorageItemRemoved(Entity<StorageComponent> ent, ref EntRemovedFromContainerMessage args)
-            => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+        private void OnItemRemoved(EntRemovedFromContainerMessage args)
+        {
+            if (IsMaterialStockContainer(args.Container.Owner))
+                MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+        }
 
-        private void OnInventoryItemInserted(Entity<InventoryComponent> ent, ref EntInsertedIntoContainerMessage args)
-            => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
-
-        private void OnInventoryItemRemoved(Entity<InventoryComponent> ent, ref EntRemovedFromContainerMessage args)
-            => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
-
-        private void OnHandItemInserted(Entity<HandsComponent> ent, ref EntInsertedIntoContainerMessage args)
-            => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
-
-        private void OnHandItemRemoved(Entity<HandsComponent> ent, ref EntRemovedFromContainerMessage args)
-            => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+        private bool IsMaterialStockContainer(EntityUid owner)
+            => HasComp<StorageComponent>(owner) || HasComp<InventoryComponent>(owner) || HasComp<HandsComponent>(owner);
         // CMU14 Construction stock refresh End
 
         private void OnConstructionPrototypesReloaded(PrototypesReloadedEventArgs args)
