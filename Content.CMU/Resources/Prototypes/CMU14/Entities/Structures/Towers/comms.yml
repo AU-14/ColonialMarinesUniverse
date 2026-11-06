@@ -174,7 +174,7 @@
     edges:
     - to: wired
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV
         amount: 30
         doAfter: 20
 
@@ -267,7 +267,7 @@
     edges:
     - to: guyed
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV
         amount: 15
         doAfter: 25
 
