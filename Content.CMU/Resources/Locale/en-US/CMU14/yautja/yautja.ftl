@@ -1389,3 +1389,5 @@ cmu-yautja-cape-mount-remove = Unfasten cape
 cmu-yautja-cape-mount-removed = You unfasten {THE($cape)}.
 cmu-yautja-cape-mount-examine = {CAPITALIZE(THE($cape))} is fastened to it.
 cmu-yautja-cape-mount-hint = It can be fastened to clan armor to keep your back free.
+cmu-yautja-pounce-body-slam-self = {CAPITALIZE(THE($yautja))} body slams us!
+cmu-yautja-pounce-body-slam-others = {CAPITALIZE(THE($yautja))} body slams {THE($xeno)}!

@@ -637,3 +637,5 @@ cmu-yautja-cape-mount-remove = Отстегнуть плащ
 cmu-yautja-cape-mount-removed = Вы отстёгиваете {$cape}.
 cmu-yautja-cape-mount-examine = К нему пристёгнут {$cape}.
 cmu-yautja-cape-mount-hint = Его можно пристегнуть к клановой броне, чтобы освободить спину.
+cmu-yautja-pounce-body-slam-self = {$yautja} отбрасывает нас ударом тела!
+cmu-yautja-pounce-body-slam-others = {$yautja} отбрасывает {$xeno} ударом тела!
