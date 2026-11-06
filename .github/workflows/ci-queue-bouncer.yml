@@ -50,12 +50,15 @@ jobs:
               { workflow: 'labels.yml', event: 'pull_request_target' },
               { workflow: 'rsi-diff.yml', event: 'pull_request_target' },
               { workflow: 'mapchecker.yml', event: 'pull_request' },
+              { workflow: 'ci-shards.yml', event: 'workflow_run' },
             ];
             let cancelled = 0;
             for (const target of targets) {
               // supersession frees the fleet gate's slot and only ci.yml runs hold one;
               // the helpers are cheap and supersede themselves, so only cleanup touches them
-              if (!dead && target.workflow !== 'ci.yml')
+              // CMU14: waves supersede too: a synchronize wave for a fresh SHA must kill
+              // the previous SHA's in-flight wave, the serve gate only cancels same-SHA
+              if (!dead && target.workflow !== 'ci.yml' && target.workflow !== 'ci-shards.yml')
                 continue;
               // CMU14: runs waiting on a concurrency queue report status "pending",
               // not "queued"; without it supersession never sees the queue and

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using System;
+using System.Globalization;
 using System.Numerics;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.CMU14.Fluids;
@@ -191,7 +192,7 @@ public static class MachineWindowKit
         public void UpdateSteam(SteamPortComponent port)
         {
             Bar.Value = port.GaugeMoles <= 0f ? 0f : Math.Clamp(port.Moles / port.GaugeMoles, 0f, 1f);
-            Label.Text = Loc.GetString("au14-window-steam-gauge", ("moles", MathF.Round(port.Moles, 1)), ("pressure", (int) port.Pressure));
+            Label.Text = Loc.GetString("au14-window-steam-gauge", ("moles", port.Moles.ToString("0.#", CultureInfo.InvariantCulture)), ("pressure", (int) port.Pressure));
         }
     }
 }
