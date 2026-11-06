@@ -496,6 +496,8 @@
         stockReplenishDelay: 1200
     - name: Ammo
       entries:
+      - cost: 250
+        crate: CMUCrateMagazineGAU19M
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 650

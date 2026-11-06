@@ -775,7 +775,8 @@ public sealed class YautjaPredatorRoleTest
 
             var clan = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerClanSpawnPrototype);
             Assert.That(clan.TryComp<SpawnPointComponent>(out var clanSpawn, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(clanSpawn!.SpawnType, Is.EqualTo(SpawnPointType.LateJoin));
+            Assert.That(clanSpawn!.SpawnType, Is.EqualTo(SpawnPointType.Job));
+            Assert.That(clanSpawn.Job.ToString(), Is.EqualTo("CMUYautjaHunter"));
 
             var predator = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerPredatorSpawnPrototype);
             Assert.That(predator.TryComp<SpawnPointComponent>(out var predatorSpawn, server.EntMan.ComponentFactory), Is.True);

@@ -8,4 +8,12 @@ public sealed partial class YautjaHumanMeleeComponent : Component
 {
     [DataField]
     public int Penetration = 40;
+
+    // cm rolls prob(armour) per hit to blunt the edge, and then the armour counts in full. 1% per point
+    [DataField]
+    public float StripChancePerArmor = 0.01f;
+
+    // cm turns brute into pain 1:1 the moment it lands, so two wielded glaive hits put a naked marine in shock
+    [DataField]
+    public float PainPerDamage = 1f;
 }
