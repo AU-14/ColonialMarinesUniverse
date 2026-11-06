@@ -13,9 +13,12 @@ public abstract partial class SharedRMCChemistrySystem
         if (storageTransform.GridUid is { } grid && grid == dispenserTransform.GridUid)
             return true;
 
-        // Separate grids sharing a map (such as a docked dropship) keep their own supply.
+        // Only the network's map-as-grid decks share supplies. A docked grid remains independent
+        // even when the dispenser being considered is on another deck's map.
         return storageTransform.MapUid is { } storageMap
                && dispenserTransform.MapUid is { } dispenserMap
+               && storageTransform.GridUid == storageMap
+               && dispenserTransform.GridUid == dispenserMap
                && storageMap != dispenserMap && _cmuZLevels.IsSameZNetwork(storageMap, dispenserMap);
     }
 }

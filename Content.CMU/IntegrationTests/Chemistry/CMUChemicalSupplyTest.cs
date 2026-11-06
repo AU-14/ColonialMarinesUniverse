@@ -38,10 +38,11 @@ public sealed class CMUChemicalSupplyTest : GameTest
             var network = zLevels.CreateZNetwork();
             Assert.That(zLevels.TryAddMapsIntoZNetwork(network, new() { [lower] = 0, [upper] = 1 }), Is.True);
 
+            // Resolve ownership rather than whichever same-network storage was created first.
+            var isolatedSupply = SEntMan.SpawnEntity("RMCChemStorageMedbay", new EntityCoordinates(isolated, Vector2.Zero));
             var supply = SEntMan.SpawnEntity("RMCChemStorageMedbay", new EntityCoordinates(lower, Vector2.Zero));
             var lowerDispenser = SEntMan.SpawnEntity("RMCChemDispenserMedbay", new EntityCoordinates(lower, Vector2.Zero));
             var upperDispenser = SEntMan.SpawnEntity("RMCChemDispenserMedbay", new EntityCoordinates(upper, Vector2.Zero));
-            var isolatedSupply = SEntMan.SpawnEntity("RMCChemStorageMedbay", new EntityCoordinates(isolated, Vector2.Zero));
             var isolatedDispenser = SEntMan.SpawnEntity("RMCChemDispenserMedbay", new EntityCoordinates(isolated, Vector2.Zero));
             var storage = SEntMan.GetComponent<RMCChemicalStorageComponent>(supply);
             var otherStorage = SEntMan.GetComponent<RMCChemicalStorageComponent>(isolatedSupply);
@@ -50,6 +51,8 @@ public sealed class CMUChemicalSupplyTest : GameTest
             var otherComp = SEntMan.GetComponent<RMCChemicalDispenserComponent>(isolatedDispenser);
 
             chemistry.Update(0);
+            Assert.That(otherStorage.Recharge, Is.EqualTo(otherStorage.BaseRecharge + otherStorage.RechargePer),
+                "a docked supply must count only its own dispenser, even with other linked decks present");
             Assert.That(chemistry.TryGetStorage((upperDispenser, upperComp), out var selected), Is.True);
             Assert.That(selected.Owner, Is.EqualTo(supply), "the upper deck must draw from its ship's storage");
             Assert.That(chemistry.TryGetStorage((isolatedDispenser, otherComp), out selected), Is.True);
@@ -73,6 +76,19 @@ public sealed class CMUChemicalSupplyTest : GameTest
                 Assert.That(lowerComp.Energy, Is.EqualTo(storage.Recharge));
                 Assert.That(upperComp.Energy, Is.EqualTo(storage.Recharge), "upper-deck UI must receive periodic recharge");
                 Assert.That(otherComp.Energy, Is.EqualTo(isolatedEnergy));
+            });
+
+            var shipEnergy = storage.Energy;
+            chemistry.ChangeStorageEnergy((isolatedSupply, otherStorage), FixedPoint2.Zero);
+            Assert.That(upperComp.Energy, Is.EqualTo(shipEnergy),
+                "draining a docked supply must not overwrite another deck's ship display");
+            otherStorage.RechargeAt = SGameTiming.CurTime;
+            chemistry.Update(0);
+            Assert.Multiple(() =>
+            {
+                Assert.That(otherComp.Energy, Is.EqualTo(otherStorage.Recharge));
+                Assert.That(upperComp.Energy, Is.EqualTo(shipEnergy),
+                    "recharging a docked supply must not overwrite another deck's ship display");
             });
 
             SEntMan.DeleteEntity(lower);
