@@ -127,7 +127,9 @@ jobs:
             // reserve. count in-progress jobs across EVERY workflow: builds,
             // guards and labels are exactly what the reserve exists for
             let busy = 0;
-            const liveRuns = await github.paginate(github.rest.actions.listWorkflowRuns, {
+            // CMU14: repo-wide listing. the workflow-scoped call without an id
+            // renders workflows//runs and 404s, killing every wave at the census
+            const liveRuns = await github.paginate(github.rest.actions.listRepoWorkflowRuns, {
               ...context.repo, status: 'in_progress', per_page: 100,
             });
             for (const lr of liveRuns) {
