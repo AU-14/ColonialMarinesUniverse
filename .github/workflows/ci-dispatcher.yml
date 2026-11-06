@@ -11,13 +11,14 @@ on:
     # CMU14: github coalesces and drops schedules under load; the workflow_run triggers
     # carry the reaction time, this is the backstop
     - cron: '*/2 * * * *'
+  workflow_dispatch:
   workflow_run:
     workflows: [CI Shard Wave]
     types: [completed]
 
 permissions:
   actions: write
-  checks: read
+  checks: write
   contents: read
   pull-requests: read
 
@@ -35,17 +36,7 @@ jobs:
         with:
           script: |
             const repo = context.repo;
-            const fresh = Date.now() - 6 * 3600 * 1000;
-
-            // CMU14: served() helper removed; the loop below fetches each PR's
-            // checks once and derives served + finalize state from the marker
-
-            const waveInFlight = async (sha) => {
-              const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
-                ...repo, workflow_id: 'ci-shards.yml', per_page: 100,
-              });
-              return waves.some(w => w.head_sha === sha && w.status !== 'completed');
-            };
+            const fresh = Date.now() - 48 * 3600 * 1000;
 
             // open, non-draft PRs whose current head has a green CI run and no Testcases
             const open = await github.paginate(github.rest.pulls.list, {
@@ -60,14 +51,21 @@ jobs:
               const marker = checks
                 .filter(c => c.name === 'Testcases Complete')
                 .sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at))[0];
-              // CMU14: finalize pass. when the gate flags the final chunk, flip the
-              // pending marker once every real leg has settled: all green -> success,
-              // any red -> failure. red legs stay served and never reschedule.
-              // skipped legs are the unfilled matrix placeholder, not real runs
+              // CMU14: finalize. flip the marker once every leg settles,
+              // all green passes, any red fails. skipped entries are the
+              // unfilled matrix placeholder, not runs
               if (marker && marker.status === 'in_progress'
                   && marker.output?.title === 'final chunk admitted') {
-                const legs = checks.filter(c =>
-                  c.name.startsWith('Testcases /') && c.conclusion !== 'skipped');
+                // CMU14: judge the latest run per shard; re-admissions stack
+                // check runs and only the newest one carries the verdict
+                const byName = new Map();
+                for (const c of checks) {
+                  if (!c.name.startsWith('Testcases /') || c.conclusion === 'skipped') continue;
+                  const prev = byName.get(c.name);
+                  if (!prev || Date.parse(c.started_at) > Date.parse(prev.started_at))
+                    byName.set(c.name, c);
+                }
+                const legs = [...byName.values()];
                 if (legs.length > 0 && legs.every(l => l.status === 'completed' && l.conclusion !== 'cancelled')) {
                   const green = legs.every(l => l.conclusion === 'success');
                   await github.rest.checks.update({
@@ -84,8 +82,9 @@ jobs:
                 }
               }
               if (marker && marker.status === 'completed') continue;
+              // CMU14: wave runs record the default branch sha so a by-sha
+              // in-flight check never matched; announce on admission closes it
               if (Date.parse(pr.pushed_at) < fresh) continue;
-              if (await waveInFlight(pr.head.sha)) continue;
               const runs = await github.rest.actions.listWorkflowRuns({
                 ...repo, workflow_id: 'ci.yml', head_sha: pr.head.sha, per_page: 1,
               });
