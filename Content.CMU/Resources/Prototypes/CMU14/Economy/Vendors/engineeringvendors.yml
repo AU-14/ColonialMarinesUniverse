@@ -189,11 +189,11 @@
         amount: 6
     - name: Power
       entries:
-      - id: CableHVStack
+      - id: CMUCableThinHVStack
         amount: 6
-      - id: CableMVStack
+      - id: CMUCableThinMVStack
         amount: 6
-      - id: CableApcStack
+      - id: CMUCableThinLVStack
         amount: 6
       - id: CMAPCElectronics
         amount: 4

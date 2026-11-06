@@ -129857,7 +129857,7 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: RMCCableCoil
+- proto: CMUCableThinLVStack
   entities:
   - uid: 10157
     components:
@@ -129934,7 +129934,7 @@ entities:
     - type: Transform
       pos: -97.5,-67.5
       parent: 1
-- proto: RMCCableCoil1
+- proto: CMUCableThinLVStack1
   entities:
   - uid: 10172
     components:
@@ -129953,7 +129953,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -14.432734,-56.554024
       parent: 1
-- proto: RMCCableCoil10
+- proto: CMUCableThinLVStack10
   entities:
   - uid: 10175
     components:
@@ -129965,7 +129965,7 @@ entities:
     - type: Transform
       pos: -5.5,-122.5
       parent: 1
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack
   entities:
   - uid: 10177
     components:
