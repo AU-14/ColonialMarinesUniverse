@@ -694,8 +694,13 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 if (existingComp.Tier < newXenoComp.Tier)
                     continue;
 
-                if (slotCount.TryGetValue(existingComp.Role.Id, out var freeSlots) && freeSlots > 0)
-                    slotCount[existingComp.Role.Id] = freeSlots - 1;
+                // CMU14 Begin: free slots are keyed by caste entity prototype, just like the evolution target.
+                // if (slotCount.TryGetValue(existingComp.Role.Id, out var freeSlots) && freeSlots > 0)
+                //     slotCount[existingComp.Role.Id] = freeSlots - 1;
+                if (MetaData(uid).EntityPrototype is { } caste &&
+                    slotCount.TryGetValue(caste.ID, out var freeSlots) && freeSlots > 0)
+                    slotCount[caste.ID] = freeSlots - 1;
+                // CMU14 End
                 else
                     existing++;
             }
