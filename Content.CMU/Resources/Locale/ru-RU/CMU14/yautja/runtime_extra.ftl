@@ -183,6 +183,7 @@ cmu-yautja-chain-gauntlet-execution-message = {$user} хватает {$target}, 
 cmu-yautja-chain-gauntlet-guard-action-desc = Поднимите цепные перчатки и зарядите их на короткий рывок.
 cmu-yautja-chain-gauntlet-guard-action-name = Защититься
 cmu-yautja-chain-gauntlet-help-message = {$user} хватает {$target} за затылок и швыряет на землю!
+cmu-yautja-chain-gauntlet-disarm-message = {$user} наносит {$target} сокрушительный удар, отправляя в полёт!
 cmu-yautja-chain-gauntlet-start = Вы поднимаете {$item} перед лицом и начинаете бежать!
 cmu-yautja-chained-weapon-catch = Вы легко ловите {$item}.
 cmu-yautja-chained-weapon-untangle-start = {$user} начинает распутывать цепь на {$item}...

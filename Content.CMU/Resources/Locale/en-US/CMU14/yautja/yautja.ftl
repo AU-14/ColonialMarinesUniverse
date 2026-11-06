@@ -1033,6 +1033,7 @@ cmu-yautja-chain-gauntlet-chain-wrapped = You wrap {$chain} around {$item}.
 cmu-yautja-chain-gauntlet-chain-existing = This one already has chains on it!
 cmu-yautja-chain-gauntlet-help-message = {$user} grabs {$target} by the back of the head and slams them on the ground!
 cmu-yautja-chain-gauntlet-execution-message = {$user} grabs {$target} and slowly lifts them above their head before smashing them down!
+cmu-yautja-chain-gauntlet-disarm-message = {$user} hits {$target} with an extremely strong punch, sending them flying!
 cmu-yautja-cleaving-glaive-skull-denied = Why would you want to do this!?.
 cmu-yautja-cleaving-glaive-skull-existing = You already have a {$skull} mounted on {$glaive}.
 cmu-yautja-cleaving-glaive-skull-mounted = You mount {$skull} to {$glaive}.
