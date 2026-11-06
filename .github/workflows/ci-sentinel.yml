@@ -1,0 +1,74 @@
+# CMU14: dispatcher liveness sentinel. waves fire naturally from CI completions, so a
+# dead dispatcher costs priority ordering, not liveness; this only makes the degradation
+# loud: one sticky issue, refreshed hourly, while demand sits unserved. schedule-only on
+# purpose: its failures must never paint a red check on any PR
+name: CI Sentinel
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+permissions:
+  actions: read
+  checks: read
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: ci-sentinel
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    name: Dispatcher health
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const repo = context.repo;
+            const { data: dispatches } = await github.rest.actions.listWorkflowRuns({
+              ...repo, workflow_id: 'ci-dispatcher.yml', status: 'success', per_page: 1,
+            });
+            const last = dispatches.workflow_runs[0];
+            const healthy = last && Date.now() - Date.parse(last.updated_at) < 25 * 60 * 1000;
+
+            // unserved demand: green CI, no Testcases, older than 10 minutes
+            let unserved = 0;
+            const open = await github.paginate(github.rest.pulls.list, {
+              ...repo, state: 'open', per_page: 100, sort: 'updated', direction: 'desc',
+            });
+            for (const pr of open) {
+              if (pr.draft || Date.parse(pr.pushed_at) < Date.now() - 3 * 3600 * 1000) continue;
+              const checks = await github.paginate(github.rest.checks.listForRef, {
+                ...repo, ref: pr.head.sha, per_page: 100,
+              });
+              const hasCi = checks.some(c => c.name === 'Required Checks' && c.conclusion === 'success');
+              const complete = checks.some(c => c.name === 'Testcases Complete');
+              // anyLegs: mid-suite and old-lineage-inline PRs are not waiting on
+              // the dispatcher; alarm only on zero-progress suites
+              const anyLegs = checks.some(c => c.name.startsWith('Testcases /'));
+              if (hasCi && !complete && !anyLegs && Date.parse(pr.pushed_at) < Date.now() - 10 * 60 * 1000)
+                unserved++;
+            }
+
+            if (healthy || unserved === 0)
+              return;
+
+            const marker = '[ci-sentinel] dispatcher stale';
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              ...repo, state: 'open', per_page: 100,
+            });
+            const sticky = issues.find(i => i.title === marker);
+            const body = `CI Dispatcher has no successful pass in 25 minutes while ${unserved} PR(s) wait for shards. Waves still fire from CI completions; priority ordering is lost until it runs again.`;
+            if (!sticky) {
+              await github.rest.issues.create({ ...repo, title: marker, body });
+            } else {
+              const comments = await github.rest.issues.listComments({
+                ...repo, issue_number: sticky.number, per_page: 1, sort: 'created', direction: 'desc',
+              });
+              const lastComment = comments.data[0];
+              if (!lastComment || Date.now() - Date.parse(lastComment.created_at) > 3600 * 1000)
+                await github.rest.issues.createComment({ ...repo, issue_number: sticky.number, body });
+            }

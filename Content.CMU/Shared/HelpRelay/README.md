@@ -69,6 +69,9 @@ posts. AdminLogManager raises them through a CMU14-tagged hook in Add - gated at
 traffic pays nothing - and ErrorRelaySystem appends buffered groups to one persistent feed message: edited in place,
 chained to a fresh message when the description overflows, restarted at round end like every conversation. The feed
 message's webhook username is "Errors · admin log feed"; each line carries a UTC stamp and the log type.
+Explosion and verb logs are excluded: upstream grades player explosions Extreme past an intensity threshold and
+smite verbs declare Extreme impacts, which normal rounds produce in bulk; the in-game admin chat alert still
+fires from the source.
 
 Every line is scrubbed before it leaves for Discord: IP addresses, MAC addresses, hwid values and 19+ digit platform
 ids (Discord snowflakes) become `[ip]` / `[mac]` / `[hwid]` / `[id]` placeholders. Ckeys and character names pass

@@ -325,11 +325,11 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
             afterBreak = Ammo;
             Server.System<TagSystem>().AddTag(SPlayer, "InstantDoAfters");
         });
-        foreach (var tool in new[] { "CMWirecutter", "RMCWelderAdmin", "RMCCableCoil", "CMScrewdriver", "CMMultitool", "RMCWelderAdmin" })
+        foreach (var tool in new[] { "CMWirecutter", "RMCWelderAdmin", "CMUCableThinLVStack", "CMScrewdriver", "CMMultitool", "RMCWelderAdmin" })
         {
-            var item = await PlaceInHands(tool, quantity: tool == "RMCCableCoil" ? 30 : 1);
+            var item = await PlaceInHands(tool, quantity: tool == "CMUCableThinLVStack" ? 30 : 1);
             await Interact();
-            if (tool == "RMCCableCoil")
+            if (tool == "CMUCableThinLVStack")
                 await Server.WaitAssertion(() => Assert.That(SEntMan.GetComponent<StackComponent>(SEntMan.GetEntity(item)).Count,
                     Is.LessThan(30), "Repair must consume material instead of producing free hardware."));
         }
