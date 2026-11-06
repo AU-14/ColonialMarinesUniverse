@@ -45,7 +45,7 @@ jobs:
                 ...repo, ref: pr.head.sha, per_page: 100,
               });
               const hasCi = checks.some(c => c.name === 'Required Checks' && c.conclusion === 'success');
-              // CMU14: a pending marker is demand, not completion; only green counts
+              // CMU14: pending is demand, not completion
               const complete = checks.some(c => c.name === 'Testcases Complete' && c.conclusion === 'success');
               // anyLegs: mid-suite and old-lineage-inline PRs are not waiting on
               // the dispatcher; alarm only on zero-progress suites
