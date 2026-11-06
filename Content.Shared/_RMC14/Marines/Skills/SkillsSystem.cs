@@ -99,6 +99,10 @@ public sealed partial class SkillsSystem : EntitySystem
 
     private void OnSkillsStartup(Entity<SkillsComponent> ent, ref ComponentStartup args)
     {
+        // CMU14: the server sends the effective skills, including training and squad bonuses.
+        if (_net.IsClient)
+            return;
+
         if (ent.Comp.Preset is not { } presetPrototype)
             return;
 

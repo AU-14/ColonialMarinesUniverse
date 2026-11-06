@@ -9,10 +9,14 @@ using Content.Server.Atmos.Components;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.Chasm;
+using Content.Shared.CMU14.Ship;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Maps;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -41,6 +45,10 @@ public sealed class BushLifeboatLaunchTest
         var entrants = new List<EntityUid>();
         EntityUid planetMap = default;
         List<EntityUid> decks = new();
+        MapCoordinates? vacantBerth = null;
+        MapCoordinates? berthApproach = null;
+        EntityUid berthVisitor = default;
+        EntityUid berthControl = default;
 
         await server.WaitAssertion(() =>
         {
@@ -93,6 +101,44 @@ public sealed class BushLifeboatLaunchTest
                 EntityUid? passenger = open.GridUid.IsValid()
                     ? entities.SpawnEntity("CMMobHuman", maps.GridTileToLocal(grid, boatGrid, open.GridIndices))
                     : null;
+
+                // CMU14: use a real part of the berth which is open space beneath the lifeboat.
+                if (vacantBerth == null && xform.MapUid is { } berthMap
+                    && entities.TryGetComponent<MapGridComponent>(berthMap, out var shipGrid))
+                {
+                    foreach (var tile in maps.GetAllTiles(grid, boatGrid))
+                    {
+                        var world = maps.GridTileToWorld(grid, boatGrid, tile.GridIndices);
+                        var shipTile = maps.WorldToTile(berthMap, shipGrid, world.Position);
+                        if (!maps.TryGetTileRef(berthMap, shipGrid, shipTile, out var below) || below.Tile.IsEmpty
+                            || tiles[below.Tile.TypeId].ID == "Space")
+                        {
+                            vacantBerth = world;
+                            break;
+                        }
+                    }
+
+                    if (vacantBerth is { } berth)
+                    {
+                        var closest = float.MaxValue;
+                        foreach (var tile in maps.GetAllTiles(berthMap, shipGrid))
+                        {
+                            if (((ContentTileDefinition) tiles[tile.Tile.TypeId]).MapAtmosphere
+                                || maps.GetAnchoredEntities(berthMap, shipGrid, tile.GridIndices).Any())
+                            {
+                                continue;
+                            }
+
+                            var world = maps.GridTileToWorld(berthMap, shipGrid, tile.GridIndices);
+                            var distance = (world.Position - berth.Position).LengthSquared();
+                            if (distance >= closest)
+                                continue;
+
+                            closest = distance;
+                            berthApproach = world;
+                        }
+                    }
+                }
 
                 TestContext.Out.WriteLine($"lifeboat {computer} grid {grid} on {xform.MapUid}; enabled {comp.Enabled}; fuel read {evacuation.GetEvacuationProgress(grid)}; trackers {entities.EntityQuery<EvacuationProgressComponent>().Count()}; passenger {passenger}");
                 Assert.That(evacuation.IsEvacuationComplete(grid), Is.True,
@@ -149,6 +195,29 @@ public sealed class BushLifeboatLaunchTest
                 Assert.That(entities.System<DamageableSystem>().GetAllDamage((entrant, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.Zero),
                     "A vacated berth must not damage entrants that survive the initial collision.");
             }
+
+            Assert.That(vacantBerth, Is.Not.Null, "the lifeboat must leave an exposed berth to exercise this regression");
+            Assert.That(berthApproach, Is.Not.Null, "the visitor needs a nearby real ship floor to leave");
+            berthControl = entities.SpawnEntity("CMMobHuman", berthApproach!.Value);
+            berthVisitor = entities.SpawnEntity("CMMobHuman", berthApproach!.Value);
+            Assert.That(entities.System<CMUZeroGSpaceSystem>().IsOverZeroGSpace(berthVisitor), Is.False);
+            entities.System<SharedTransformSystem>().SetMapCoordinates(berthVisitor, vacantBerth!.Value);
+            Assert.That(entities.System<CMUZeroGSpaceSystem>().IsOverZeroGSpace(berthVisitor), Is.True);
+        });
+
+        await pair.RunSeconds(7);
+        await server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.Deleted(berthVisitor), Is.False, "entering the vacated berth must not delete the visitor");
+                Assert.That(entities.HasComponent<ChasmFallingComponent>(berthVisitor), Is.False,
+                    "open space beside a departed lifeboat is zero-g, not a lethal bottomless chasm");
+                Assert.That(entities.GetComponent<MobStateComponent>(berthVisitor).CurrentState, Is.Not.EqualTo(MobState.Dead),
+                    "the vacated berth must remain a playable area");
+                Assert.That(entities.GetComponent<MobStateComponent>(berthControl).CurrentState, Is.Not.EqualTo(MobState.Dead),
+                    "the adjacent approach floor must remain safe after departure");
+            });
         });
 
         await pair.CleanReturnAsync();

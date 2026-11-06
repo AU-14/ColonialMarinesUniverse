@@ -256,6 +256,7 @@
   name: bullet (10x20mm-APC)
   categories: [ HideSpawnMenu ]
   components:
+  - type: PreventCollideWithDead # CMU14: corpses must not absorb the tank minigun's following shots.
   - type: Projectile
     damage:
       types:
