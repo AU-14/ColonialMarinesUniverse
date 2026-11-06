@@ -164,6 +164,7 @@
   - type: Vapor
     active: true
     transferAmountPercentage: 0.5
+  - type: CMUThrownIgnoresBarricadeBlock # CMU14: inherited by BigVapor, FlowerVapor and every extinguisher spray
   - type: AnimationPlayer
   - type: Sprite
     sprite: Effects/chempuff.rsi

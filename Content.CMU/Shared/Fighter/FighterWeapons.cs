@@ -54,7 +54,7 @@ public sealed record FighterWeaponStatus(int Slot, FighterWeaponKind Kind, strin
 
 [Serializable, NetSerializable]
 public sealed record FighterTarget(NetEntity Id, string Name, Vector2 Position, bool CanStrike, bool Laser = false,
-    TimeSpan ExpiresAt = default, bool Incoming = false);
+    TimeSpan ExpiresAt = default, bool Incoming = false, bool Gps = false);
 
 /// <summary>A visible world designation, owned by one seat and valid only for its aircraft.</summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
@@ -104,7 +104,7 @@ public static class FighterWeapons
         if (!flare.CanStrike) return FighterFireStatus.Protected;
         if (!FighterFlight.InAttackRun(a)) return FighterFireStatus.OutsideAO;
         if (!FighterFlight.DesignationInRange(a, flare.Position)) return FighterFireStatus.OutOfRange;
-        if (FighterOptics.CloudsBlock(a, flare.Position, now)) return FighterFireStatus.Clouds;
+        if (!flare.Gps && FighterOptics.CloudsBlock(a, flare.Position, now)) return FighterFireStatus.Clouds;
         if (weapon.Kind != FighterWeaponKind.Missile)
         {
             var delta = flare.Position - a.Position;

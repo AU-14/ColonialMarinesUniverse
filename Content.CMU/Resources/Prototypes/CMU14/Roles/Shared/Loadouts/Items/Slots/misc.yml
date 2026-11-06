@@ -5,10 +5,10 @@
     - CMStampApproved
 
 - type: loadout
-  id: SynthResetKeyAU14 # WeYu
+  id: SynthResetKeyAU14 # WeYu: the corporate-tier key, which also frees River-Melded thralls (EW Joe D4)
   storage:
     back:
-    - RMCSynthResetKey
+    - CMUSynthResetKeyWeyland
 
 - type: loadout
   id: SynthResetKeySeegsonAU14

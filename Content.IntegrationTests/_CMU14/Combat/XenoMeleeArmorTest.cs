@@ -50,11 +50,15 @@ public sealed class XenoMeleeArmorTest
             var rawBody = Hit(100, origin: xeno, tool: xeno, impact: DamageImpact.MeleeSlash, ap: 100);
             var rawClaw = Hit(100, origin: xeno, tool: xeno,
                 impact: DamageImpact.MeleeSlash with { Context = DamageImpactContext.XenoClaw }, ap: 100);
+            var nonGibbingBody = Hit(100, origin: xeno, tool: xeno,
+                impact: DamageImpact.MeleeSlash with { Context = DamageImpactContext.NonGibbing }, ap: 100);
 
             Assert.That(rawBody / raw, Is.EqualTo(1.5).Within(0.02),
                 "Any melee hit on a xeno gets the xeno/melee config x1.5, whoever dealt it.");
             Assert.That(rawClaw / raw, Is.EqualTo(2.25).Within(0.03),
                 "Xeno melee on a xeno must total x2.25: XVX x1.5 on the swing times the config x1.5.");
+            Assert.That(nonGibbingBody, Is.EqualTo(rawBody).Within(0.02),
+                "Gibbing protection must not mark an ordinary body hit as a claw swing.");
 
             // CM-SS13 runs every xeno ability through apply_armoured_damage(..., ARMOR_MELEE) too, so an
             // ability that carries no Melee-delivery impact still gets the config x1.5. A xeno projectile

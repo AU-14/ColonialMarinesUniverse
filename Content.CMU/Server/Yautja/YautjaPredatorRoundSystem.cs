@@ -613,14 +613,11 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
     private EntityCoordinates? GetRandomPredatorSpawn(ProtoId<JobPrototype> job, YautjaSpawnKind kind)
     {
         var candidates = new List<EntityCoordinates>();
-        var spawnType = kind == YautjaSpawnKind.HunterShipClan
-            ? SpawnPointType.LateJoin
-            : SpawnPointType.Job;
         var query = EntityQueryEnumerator<YautjaPredatorSpawnPointComponent, SpawnPointComponent, TransformComponent>();
         while (query.MoveNext(out _, out var predatorSpawn, out var spawn, out var xform))
         {
             if (predatorSpawn.Kind != kind ||
-                spawn.SpawnType != spawnType ||
+                spawn.SpawnType != SpawnPointType.Job ||
                 spawn.Job != job)
                 continue;
 

@@ -17134,8 +17134,8 @@ public sealed class YautjaBowTest
             "CMUYautjaHumanHide",
             "",
             "",
-            "Objects/Materials/materials.rsi",
-            "hide",
+            "CMU14/Yautja/human_skin.rsi",
+            "icon",
             Cmss13ButcherOutputKind.StackSheet,
             "CMUYautjaHumanHide");
 

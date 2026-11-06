@@ -42,7 +42,11 @@ public sealed partial class VehicleTurretMuzzleSystem : EntitySystem
         EntityCoordinates baseCoords)
     {
         var offset = GetWorldOffset(uid, muzzle);
-        return offset == Vector2.Zero ? baseCoords : baseCoords.Offset(offset);
+        // CMU14 Begin: convert the world offset back into the coordinate parent's local space.
+        var origin = _transform.ToMapCoordinates(baseCoords);
+        return offset == Vector2.Zero ? baseCoords : _transform.ToCoordinates(baseCoords.EntityId,
+            new MapCoordinates(origin.Position + offset, origin.MapId));
+        // CMU14 End
     }
 
     public Vector2 GetWorldOffset(
