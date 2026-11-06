@@ -52,11 +52,6 @@
   id: VehicleCartridgeDragonFlame
   name: cartridge (DRGN flame)
   components:
-  - type: Sprite
-    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
-    layers:
-    - state: base
-      map: ["enum.AmmoVisualLayers.Base"]
   - type: CartridgeAmmo
     proto: VehicleProjectileDragonFlame
     muzzleFlash: MuzzleFlashEffectVehicleOver
@@ -204,6 +199,7 @@
   - type: CMArmorPiercing
     amount: 15
   - type: IgnorePredictionHide
+
 - type: entity
   parent: RMCBaseBullet
   id: VehicleProjectileDragonFlame
@@ -369,3 +365,4 @@
   - type: TileFireOnTrigger
     range: 2
     spawn: RMCTileFireBlue
+
