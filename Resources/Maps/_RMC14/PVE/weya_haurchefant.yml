@@ -9050,7 +9050,7 @@ entities:
     - type: Transform
       pos: 39.588844,20.361307
       parent: 1
-- proto: RMCCableCoil10
+- proto: CMUCableThinLVStack10 # CMU14: replaced RMCCableCoil10, thin LV cable
   entities:
   - uid: 2257
     components:

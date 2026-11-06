@@ -1145,7 +1145,7 @@
         - id: RMCRadioHandheldColony
         - id: CMRollerBedSpawnFolded
         - id: CMMultitool
-        - id: RMCCableCoil30
+        - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
         - id: CMHealthAnalyzer
         - id: RMCSynthResetKey
 
