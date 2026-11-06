@@ -16725,5 +16725,143 @@
   id: 967
   time: '2026-11-04T04:05:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2462
+- author: maertayn
+  changes:
+  - message: Consolidated and added new Discord relay systems in `HelpRelay`, check
+      Shared dir for the readme
+    type: Code
+  - message: Server exceptions and extreme severity are sent to Discord
+    type: Admin
+  - message: News integration for sending future press released to Discord threads
+    type: Add
+  - message: aghost/mghost keeps the body's look (BUG-1267)
+    type: Fix
+  - message: para latch lets players know if it landed (BUG-1250)
+    type: Fix
+  - message: Allow dual-support to APCs for tile power and area power, added CMU LV/MV/HV
+      cables and also to the vendors + ASRS, reparented power panels on APCs to CMApc
+      (BUG-1270)
+    type: Fix
+  id: 968
+  time: '2026-11-04T20:01:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2468
+- author: TheHellFireo
+  changes:
+  - message: Cow crates can now be ordered through colony requisitions, and cow hides
+      can be tanned into leather.
+    type: Add
+  - message: Removed unavailable hide recipes and unrelated clothing recycling entries
+      from the industry recipe guide.
+    type: Fix
+  - message: Cotton bolls can now be processed with bayonets and glass shards.
+    type: Fix
+  - message: Direct power ports now explain how to connect machines to electrical
+      panels using cable coils.
+    type: Fix
+  id: 969
+  time: '2026-11-05T11:13:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2473
+- author: TheHellFireo
+  changes:
+  - message: Cave generation now ignores area markers and seals nearby mapped terrain
+      and void with unbreakable bedrock.
+    type: Fix
+  - message: Digging previews now mark visibly occupied or blocked tiles red.
+    type: Fix
+  id: 970
+  time: '2026-11-05T11:17:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2474
+- author: TheHellFireo
+  changes:
+  - message: New Varadero's ground foundations can no longer be broken into void.
+    type: Fix
+  - message: Intact roofs block cross-level gunfire. Shooters must be within three
+      tiles of an opening in their firing direction, while nearby roofs leave open-air
+      shots usable.
+    type: Fix
+  id: 971
+  time: '2026-11-05T12:07:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2475
+- author: TheHellFireo
+  changes:
+  - message: Players can climb up beside walls underground through an opening with
+      a 15-second delay.
+    type: Add
+  - message: Vaultable surfaces inside walls no longer allow wall clipping.
+    type: Fix
+  - message: Climbing and ladder landings reject solid obstructions.
+    type: Fix
+  id: 972
+  time: '2026-11-05T12:36:32.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2476
+- author: TheHellFireo
+  changes:
+  - message: Health analyzers keep updating their open readings after being put down.
+    type: Fix
+  - message: Steam mole readouts no longer show excessive decimal digits.
+    type: Fix
+  - message: Cutters can make large beakers and electronics kits using their circuit
+      selector.
+    type: Fix
+  - message: P90s accept rail flashlights, and New Colonist no longer inherits police
+      eligibility requirements.
+    type: Fix
+  - message: Chemistry hotplates can be purchased through Research requisitions.
+    type: Add
+  - message: Narrowed the UPP fighter collision width.
+    type: Tweak
+  - message: Improved baguette storage alignment and facial hair hiding under raised
+      scarves.
+    type: Fix
+  - message: Delayed respawns no longer remove revived or replacement bodies.
+    type: Fix
+  - message: Researched Yautja surgery access requires wearing the unlocked bracer.
+    type: Fix
+  - message: Ladders reject destinations that become blocked during a climb.
+    type: Fix
+  id: 973
+  time: '2026-11-05T12:37:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2477
+- author: TheHellFireo
+  changes:
+  - message: Random Weyland-Yutani experiment crates can now contain a hunting bracer.
+    type: Add
+  - message: Every bracer procedure has four possible clue wordings, chosen once for
+      each device.
+    type: Tweak
+  - message: Bracer experiments no longer print paper notes; recovered discoveries
+      stay in the interface.
+    type: Remove
+  id: 974
+  time: '2026-11-05T12:38:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2478
+- author: maertayn
+  changes:
+  - message: Vulture sniper rounds no longer lose almost all their damage on near-misses
+      (BUG-1003)
+    type: Fix
+  - message: the B8 smart scope no longer blocks shots at friendlies beyond view range
+      (BUG-1022)
+    type: Fix
+  - message: vehicle lock popups no longer appear on the screens of players far from
+      the vehicle (BUG-1263)
+    type: Fix
+  - message: the cooking guide now lists working dough, batter and sauce recipes (BUG-1265)
+    type: Fix
+  - message: small hosts yield meat when butchered, like in CM13 (BUG-908)
+    type: Fix
+  - message: reapplying a rank chevron no longer traps the rank on revert (BUG-642)
+    type: Fix
+  - message: Wizden cable coils are now thick coils, and colony kit hands out thin
+      coils everywhere
+    type: Tweak
+  - message: the error relay admin feed no longer floods with explosion and verb logs
+    type: Admin
+  - message: CI shard waves replace the admission scheduler; no protected environments,
+      no PAT holds, priority-ordered waves
+    type: Code
+  id: 975
+  time: '2026-11-05T23:04:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2482
 Name: CMU
 Order: -1
