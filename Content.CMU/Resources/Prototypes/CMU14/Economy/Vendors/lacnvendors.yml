@@ -281,8 +281,12 @@
         amount: 1
       - id: RMCPowerCellHigh
         amount: 2
-      - id: RMCCableCoil
-        amount: 15
+      - id: CMUCableThinHVStack
+        amount: 5
+      - id: CMUCableThinMVStack
+        amount: 5
+      - id: CMUCableThinLVStack
+        amount: 5
     - name: Flares and lights
       entries:
       - id: RMCBoxFlashlights
@@ -1723,7 +1727,11 @@
         points: 1
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
@@ -1881,7 +1889,11 @@
       - id: CMULACNLogisticsVest
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: AU14MaintenanceJack
         points: 2

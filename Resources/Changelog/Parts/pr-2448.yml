@@ -1,0 +1,8 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Yautja hunt prey now spawn as CMU third parties (CLF commandos, WY PMCs,
+    RMC rapid response, freelancers) instead of the old presets.
+  type: Tweak
+time: '2026-11-03T20:04:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2448

@@ -28,13 +28,18 @@ public sealed class CMUYautjaExperimentInterfaceTest
         CMUYautjaExperimentBui ui = default!;
         CMUYautjaExperimentWindow window = default!;
         string firstClue = default!;
+        string expectedClue = default!;
         await server.WaitAssertion(() =>
         {
             user = server.EntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             bracer = server.EntMan.SpawnEntity("CMUYautjaBracerBone", map.GridCoords);
             // Switch from a short clue to a long one before opening the procedure picker.
-            server.EntMan.GetComponent<CMUYautjaExperimentComponent>(bracer).RequiredExperiments =
+            var experiment = server.EntMan.GetComponent<CMUYautjaExperimentComponent>(bracer);
+            experiment.RequiredExperiments =
                 ["CMUYautjaBio", "CMUYautjaRadar", "CMUYautjaRoot", "CMUYautjaStatic", "CMUYautjaVeil"];
+            var clue = server.ProtoMan.Index<CMUYautjaExperimentPrototype>("CMUYautjaBio").Clues[^1];
+            experiment.SelectedClues["CMUYautjaBio"] = clue;
+            expectedClue = server.ResolveDependency<Robust.Shared.Localization.ILocalizationManager>().GetString(clue);
             bracerNet = server.EntMan.GetNetEntity(bracer);
             server.EntMan.System<SkillsSystem>().SetSkill(user, "RMCSkillResearch", 1);
             server.PlayerMan.SetAttachedEntity(pair.Player!, user);
@@ -51,6 +56,8 @@ public sealed class CMUYautjaExperimentInterfaceTest
             window = client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children
                 .OfType<CMUYautjaExperimentWindow>().Single();
             firstClue = window.FindControl<RichTextLabel>("Clue").Text!;
+            Assert.That(firstClue, Is.EqualTo(expectedClue),
+                "Client inspection must show the device's saved clue variant.");
         });
         // Repeated contacts update the same inspection panel without attaching modal popups.
         foreach (var index in new[] { 0, 0, 1 })
