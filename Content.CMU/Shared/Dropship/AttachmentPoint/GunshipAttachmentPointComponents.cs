@@ -16,6 +16,8 @@ public sealed partial class GunshipHardpointAttachmentPointComponent : Component
     {
         "RMCDropshipAttachmentDoorGun",
         "CMUDropshipAttachmentDoorGunM2C",
+        "CMUDropshipAttachmentDoorGunUTESC",
+        "CMUDropshipAttachmentDoorGunGAU19M",
     };
 }
 
@@ -54,8 +56,11 @@ public sealed partial class ActiveGunshipDoorGunnerComponent : Component
 /// <summary>
 /// Tracks all occupied door-gunner mounts currently preventing this door from closing.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class GunshipDoorGunnerHeldOpenComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public bool HeldOpen;
+
     public HashSet<EntityUid> Holders = new();
 }

@@ -23,9 +23,6 @@ jobs:
     name: Debug / left out of CI
     if: github.actor != 'PJBot'
     runs-on: ubuntu-latest
-    # CMU14: decorative environment (deploy message), never protected. the nightly runs
-    # when scheduled, straight through the pool
-    environment: ci-shards-a
     timeout-minutes: 90
 
     steps:

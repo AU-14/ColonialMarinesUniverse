@@ -25,6 +25,24 @@ public sealed partial class AttachableHolderSystem
         return false;
     }
 
+    public bool HasCMUSlingCarryMode(EntityUid item, CMUSlingCarryMode mode)
+    {
+        if (!TryComp<AttachableHolderComponent>(item, out var holder))
+            return false;
+
+        foreach (var slot in holder.Slots.Keys)
+        {
+            if (TryGetAttachable((item, holder), slot, out var attachment) &&
+                TryComp(attachment.Owner, out CMUSlingComponent? sling) &&
+                sling.CarryMode == mode)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void EnsureCMUSlingSlot(Entity<AttachableHolderComponent> holder)
     {
         if (!holder.Comp.Slots.TryGetValue(CMUSlingRailSlot, out var rail) ||
