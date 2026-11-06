@@ -1,7 +1,7 @@
 # Potential for language system addition in the future
 
 - type: job
-  parent: AU14JobLEOBase
+  parent: CMJobBase
   id: AU14JobMigratingColonistJob
   roundSide: Civilian
   roundForce: COLONY
