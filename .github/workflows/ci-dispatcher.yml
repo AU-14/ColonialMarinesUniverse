@@ -37,11 +37,13 @@ jobs:
             const repo = context.repo;
             const fresh = Date.now() - 6 * 3600 * 1000;
 
+            // CMU14: chunked waves serve a suite across several runs; demand persists
+            // until the wave posts the completion marker
             const served = async (sha) => {
               const checks = await github.paginate(github.rest.checks.listForRef, {
                 ...repo, ref: sha, per_page: 100,
               });
-              return checks.some(c => c.name.startsWith('Testcases /'));
+              return checks.some(c => c.name === 'Testcases Complete');
             };
 
             const waveInFlight = async (sha) => {
@@ -65,6 +67,12 @@ jobs:
               });
               const run = runs.data.workflow_runs[0];
               if (!run || run.status !== 'completed' || run.conclusion !== 'success') continue;
+              // old-lineage runs serve their own inline shards; without this the
+              // marker never appears and this loop re-runs them forever
+              const rj = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+                ...repo, run_id: run.id, per_page: 100,
+              });
+              if (rj.some(j => j.name.startsWith('Testcases / '))) continue;
               const klass = ['OWNER', 'MEMBER', 'COLLABORATOR'].includes(pr.author_association) ? 1 : 2;
               demand.push({ pr, run, klass });
             }
