@@ -1166,7 +1166,7 @@
 
 - type: entity
   parent: ActionXenoBase
-  id: ActionXenoPathogenRend
+  id: CMU14ActionXenoPathogenRend
   name: Whirl
   description: Whirl your blades in a wide arc, hitting enemies around you.
   components:
