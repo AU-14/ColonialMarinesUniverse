@@ -19,6 +19,7 @@ using Content.Shared._RMC14.Xenonids.Construction.ResinHole;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Atmos.Components;
+using Content.Shared.BarricadeBlock; // CMU14
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -350,7 +351,9 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             {
                 var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
 
-                return _interaction.InRangeUnobstructed(owner, targetUid, radius + 0.5f, CollisionGroup.BulletImpassable) ? 1f : 0f;
+                // CMU14: partial ballistic cover can intercept a shot, but cannot prevent acquiring its target.
+                return _interaction.InRangeUnobstructed(owner, targetUid, radius + 0.5f, CollisionGroup.BulletImpassable,
+                    predicate: blocker => TryComp<BarricadeBlockComponent>(blocker, out var cover) && cover.Blocking < 100) ? 1f : 0f;
             }
             case TargetInLOSCon:
             {
