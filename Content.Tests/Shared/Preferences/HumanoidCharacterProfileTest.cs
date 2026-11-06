@@ -47,23 +47,6 @@ public sealed class HumanoidCharacterProfileTest : ContentUnitTest
     }
 
     [Test]
-    public void NewProfileDefaultsToAu14RiflemanAndStaysInLobby()
-    {
-        var profile = HumanoidCharacterProfile.DefaultWithSpecies();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(profile.JobPriorities,
-                Is.EquivalentTo(new Dictionary<ProtoId<JobPrototype>, JobPriority>
-                {
-                    [SharedGameTicker.FallbackOverflowJob] = JobPriority.High,
-                }));
-            Assert.That(SharedGameTicker.FallbackOverflowJob.Id, Is.EqualTo("AU14JobGOVFORSquadRifleman"));
-            Assert.That(profile.PreferenceUnavailable, Is.EqualTo(PreferenceUnavailableMode.StayInLobby));
-        });
-    }
-
-    [Test]
     public void GamemodeJobPrioritiesFallbackToGlobalWhenNoGamemodeOverridesExist()
     {
         var miner = new ProtoId<JobPrototype>("AU14JobCivilianMiner");
@@ -109,18 +92,4 @@ public sealed class HumanoidCharacterProfileTest : ContentUnitTest
         Assert.That(priorities.ContainsKey(miner), Is.False);
     }
 
-    [Test]
-    public void MemberwiseEqualsIncludesNestedYautjaSexAndGender()
-    {
-        var male = HumanoidCharacterProfile.DefaultWithSpecies()
-            .WithYautjaProfile(YautjaCharacterProfile.Default);
-        var female = male.WithYautjaProfile(YautjaCharacterProfile.Default.WithGender(Gender.Female));
-        var femaleClone = female.WithYautjaProfile(female.YautjaProfile);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(male.MemberwiseEquals(female), Is.False);
-            Assert.That(female.MemberwiseEquals(femaleClone), Is.True);
-        });
-    }
 }

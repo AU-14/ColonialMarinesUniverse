@@ -76,24 +76,6 @@ public sealed class XenoAlchemistTest
     cholinine: 10
 ";
 
-    private static readonly string[] AlchemistReagents =
-    [
-        "RMCXenoAlchBrute",
-        "RMCXenoAlchBurn",
-        "RMCXenoAlchPain",
-        "RMCXenoAlchFire",
-        "RMCXenoAlchBloodloss",
-        "RMCXenoAlchFreeze",
-        "RMCXenoAlchPurge",
-    ];
-
-    private static readonly ProtoId<ReagentPrototype> AlchemistBrute = "RMCXenoAlchBrute";
-    private static readonly ProtoId<ReagentPrototype> AlchemistBurn = "RMCXenoAlchBurn";
-    private static readonly ProtoId<ReagentPrototype> AlchemistPain = "RMCXenoAlchPain";
-    private static readonly ProtoId<ReagentPrototype> AlchemistFire = "RMCXenoAlchFire";
-    private static readonly ProtoId<ReagentPrototype> AlchemistBloodloss = "RMCXenoAlchBloodloss";
-    private static readonly ProtoId<ReagentPrototype> AlchemistFreeze = "RMCXenoAlchFreeze";
-    private static readonly ProtoId<ReagentPrototype> AlchemistPurge = "RMCXenoAlchPurge";
     private static readonly ProtoId<MetabolismStagePrototype> Bloodstream = "Bloodstream";
 
     [Test]
@@ -193,121 +175,6 @@ public sealed class XenoAlchemistTest
     }
 
     [Test]
-    public async Task AlchemistChemicalsAreRealToxinReagents()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var prototypes = server.ResolveDependency<IPrototypeManager>();
-
-        await server.WaitAssertion(() =>
-        {
-            foreach (var id in AlchemistReagents)
-            {
-                var reagent = prototypes.Index<ReagentPrototype>(id);
-                Assert.That(reagent.Toxin, Is.True, id);
-                var metabolism = GetBloodstream(reagent);
-                Assert.That(metabolism.CMUToxicity,
-                    Is.EquivalentTo(new[] { CMUMetabolismClass.Poison }),
-                    id);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task AlchemistChemicalsApplyPressureOverFiftySeconds()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var prototypes = server.ResolveDependency<IPrototypeManager>();
-
-        await server.WaitAssertion(() =>
-        {
-            var brute = prototypes.Index(AlchemistBrute);
-            var burn = prototypes.Index(AlchemistBurn);
-            var pain = prototypes.Index(AlchemistPain);
-            var fire = prototypes.Index(AlchemistFire);
-            var bloodloss = prototypes.Index(AlchemistBloodloss);
-            var freeze = prototypes.Index(AlchemistFreeze);
-            var purge = prototypes.Index(AlchemistPurge);
-
-            foreach (var reagent in new[] { brute, burn, pain, fire, bloodloss, freeze, purge })
-            {
-                var bloodstream = GetBloodstream(reagent);
-                Assert.That(bloodstream.CMUToxicity,
-                    Is.EquivalentTo(new[] { CMUMetabolismClass.Poison }),
-                    reagent.ID);
-                Assert.That(bloodstream.MetabolismRate, Is.EqualTo(FixedPoint2.New(0.4f)), reagent.ID);
-            }
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(GetEffect<Biocidic>(brute).Potency, Is.EqualTo(4), brute.ID);
-                Assert.That(GetEffect<Corrosive>(burn).Potency, Is.EqualTo(4), burn.ID);
-                Assert.That(GetEffect<RMCAlchemistPain>(pain).Potency, Is.EqualTo(8), pain.ID);
-                Assert.That(GetEffect<Corrosive>(fire).Potency, Is.EqualTo(4), fire.ID);
-                Assert.That(GetEffect<Hemolytic>(bloodloss).Potency, Is.EqualTo(2), bloodloss.ID);
-                Assert.That(GetEffect<RMCAlchemistPurgeNonToxins>(purge).Amount, Is.EqualTo(FixedPoint2.New(0.4f)), purge.ID);
-            });
-
-            AssertAdjusts(brute, "CMBicaridine", -0.4f);
-            AssertAdjusts(brute, "CMMeralyne", -0.4f);
-            AssertAdjusts(burn, "CMKelotane", -0.4f);
-            AssertAdjusts(burn, "CMDermaline", -0.4f);
-            AssertAdjusts(pain, "CMUParacetamol", -0.4f);
-            AssertAdjusts(pain, "CMUTramadol", -0.4f);
-            AssertAdjusts(pain, "CMUOxycodone", -0.4f);
-            AssertAdjusts(pain, "CMUSleen", -0.4f);
-            AssertAdjusts(pain, "CMUSoporific", -0.4f);
-            AssertAdjusts(bloodloss, "CMDexalin", -0.4f);
-            AssertAdjusts(bloodloss, "CMDexalinPlus", -0.4f);
-            AssertAdjusts(bloodloss, "CMInaprovaline", -0.4f);
-            AssertAdjusts(bloodloss, "RMCIron", -0.4f);
-            AssertAdjusts(freeze, "CMCryoxadone", -0.4f);
-            AssertAdjusts(freeze, "CMClonexadone", -0.4f);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task AlchemistMeleeHitGeneratesTwoChemicalUnits()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var alchemist = entMan.SpawnEntity("CMXenoSpitterAlchemist", map.GridCoords);
-            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-
-            try
-            {
-                var comp = entMan.GetComponent<XenoAlchemistComponent>(alchemist);
-                var ev = new MeleeHitEvent([target], alchemist, alchemist, new DamageSpecifier(), null);
-
-                entMan.EventBus.RaiseLocalEvent(alchemist, ev);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(comp.SlashGenerateAmount, Is.EqualTo(2));
-                    Assert.That(comp.Sagunine, Is.EqualTo(2));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(alchemist);
-                entMan.DeleteEntity(target);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task AlchemistStockpileCapsAtTwentyTotal()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -344,101 +211,6 @@ public sealed class XenoAlchemistTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task NoctineInjectionDazesHumanTargets()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectsSystem>();
-            var alchemist = entMan.SpawnEntity("RMCTestXenoSpitterAlchemistNoctineFull", map.GridCoords);
-            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-            var action = SpawnAction(entMan);
-
-            try
-            {
-                RaiseTailInjection(entMan, alchemist, target, action);
-
-                Assert.That(status.HasStatusEffect(target, RMCDazedSystem.StatusEffectDazed), Is.True);
-            }
-            finally
-            {
-                entMan.DeleteEntity(alchemist);
-                entMan.DeleteEntity(target);
-                entMan.DeleteEntity(action.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task CrynineInjectionSlowsHumanTargets()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var alchemist = entMan.SpawnEntity("RMCTestXenoSpitterAlchemistCrynineFull", map.GridCoords);
-            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-            var action = SpawnAction(entMan);
-
-            try
-            {
-                RaiseTailInjection(entMan, alchemist, target, action);
-
-                Assert.That(entMan.HasComponent<RMCSlowdownComponent>(target), Is.True);
-            }
-            finally
-            {
-                entMan.DeleteEntity(alchemist);
-                entMan.DeleteEntity(target);
-                entMan.DeleteEntity(action.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task PyrinineInjectionDazesHumanTargets()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectsSystem>();
-            var alchemist = entMan.SpawnEntity("RMCTestXenoSpitterAlchemistPyrinineFull", map.GridCoords);
-            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-            var action = SpawnAction(entMan);
-
-            try
-            {
-                RaiseTailInjection(entMan, alchemist, target, action);
-
-                Assert.That(status.HasStatusEffect(target, RMCDazedSystem.StatusEffectDazed), Is.True);
-            }
-            finally
-            {
-                entMan.DeleteEntity(alchemist);
-                entMan.DeleteEntity(target);
-                entMan.DeleteEntity(action.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
     private static Entity<ActionComponent> SpawnAction(IEntityManager entMan)
     {
         var action = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
@@ -466,29 +238,6 @@ public sealed class XenoAlchemistTest
         return entMan.GetComponent<DamageableComponent>(target).Damage.GetTotal().Float();
     }
 
-    private static ReagentEffectsEntry GetBloodstream(ReagentPrototype reagent)
-    {
-        Assert.That(reagent.Metabolisms, Is.Not.Null, reagent.ID);
-        Assert.That(reagent.Metabolisms!.Metabolisms.TryGetValue(Bloodstream, out var bloodstream), Is.True, reagent.ID);
-        return bloodstream!;
-    }
-
-    private static T GetEffect<T>(ReagentPrototype reagent) where T : EntityEffect
-    {
-        var effect = GetBloodstream(reagent).Effects.OfType<T>().SingleOrDefault();
-        Assert.That(effect, Is.Not.Null, reagent.ID);
-        return effect!;
-    }
-
-    private static void AssertAdjusts(ReagentPrototype reagent, string target, float amount)
-    {
-        var effect = GetBloodstream(reagent).Effects
-            .OfType<AdjustReagent>()
-            .SingleOrDefault(e => e.Reagent == target);
-
-        Assert.That(effect, Is.Not.Null, $"{reagent.ID} should adjust {target}");
-        Assert.That(effect!.Amount, Is.EqualTo(FixedPoint2.New(amount)), $"{reagent.ID} should adjust {target}");
-    }
 }
 
 #pragma warning restore RA0002

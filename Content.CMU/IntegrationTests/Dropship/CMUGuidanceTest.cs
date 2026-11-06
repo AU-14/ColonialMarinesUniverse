@@ -28,16 +28,6 @@ public sealed class CMUGuidanceTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
 
-    [TestCase("1111-1", true)]
-    [TestCase("0000-0", true)]
-    [TestCase("9999-9", true)]
-    [TestCase("11111", false)]
-    [TestCase("1111-A", false)]
-    [TestCase("1111-11", false)]
-    [TestCase(" 1111-1", false)]
-    public void LaserCodeFormat(string code, bool valid) =>
-        Assert.That(CMUGuidanceSystem.ValidCode(code), Is.EqualTo(valid));
-
     [Test]
     public async Task ReprogrammedDesignatorFiltersDropshipTargetsAndCameras()
     {

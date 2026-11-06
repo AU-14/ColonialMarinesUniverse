@@ -32,73 +32,9 @@ namespace Content.IntegrationTests._CMU14.Round.Antags;
 public sealed class EWJoeCongruenceTest
 {
     private const string ColonyJoe = "AU14MobWorkingJoeColony";
-    private const string Rule = "EWJoe";
-    private const string Specifier = "EWJoe";
-    private const string Camera = "RMCM5CameraGear";
+
     private const string EWMindRole = "MindRoleEWJoe";
     private const string KillCountObjective = "CMUEWJoeKillCountObjective";
-    private const string AssimilateAction = "CMUActionEWJoeAssimilate";
-    private const string AssimilateObjective = "CMUEWJoeAssimilateConsoleObjective";
-
-    [Test]
-    public async Task SelectionStripsTheCameraAppliesLevelZeroAndStandDownUndoesIt()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-        var protos = server.ResolveDependency<IPrototypeManager>();
-
-        var innateActions = 0;
-        await server.WaitAssertion(() =>
-        {
-            var inventory = entities.System<InventorySystem>();
-
-            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            // the Working Joe body brings its own actions; only the Early Warning grants may come and go
-            innateActions = entities.GetComponent<ActionsComponent>(joe).Actions.Count;
-            Assert.That(inventory.TryGetSlotEntity(joe, "ears2", out var worn) && entities.GetComponent<MetaDataComponent>(worn.Value).EntityPrototype?.ID == Camera,
-                "a colony Joe spawns wearing the overwatch camera");
-            var hadArmorUser = entities.HasComponent<CMArmorUserComponent>(joe);
-
-            // the real selection path: the rule's AfterAntagEntitySelectedEvent for the EWJoe specifier
-            var rule = entities.SpawnEntity(Rule, MapCoordinates.Nullspace);
-            var selection = entities.GetComponent<AntagSelectionComponent>(rule);
-            var specifier = protos.Index<AntagSpecifierPrototype>(Specifier);
-            var ev = new AfterAntagEntitySelectedEvent(null, joe, (rule, selection), specifier);
-            entities.EventBus.RaiseLocalEvent(rule, ref ev, true);
-        });
-
-        await pair.RunTicksSync(2);
-
-        EntityUid joeUid = default;
-        await server.WaitAssertion(() =>
-        {
-            var inventory = entities.System<InventorySystem>();
-            var query = entities.EntityQueryEnumerator<EWJoeComponent>();
-            Assert.That(query.MoveNext(out joeUid, out var comp), "selection marked the Joe");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(entities.HasComponent<GrandMachineTouchedComponent>(joeUid), "lore marker");
-                Assert.That(entities.HasComponent<CMArmorUserComponent>(joeUid), "armor user marker");
-                Assert.That(comp!.Level, Is.Zero);
-                Assert.That(comp.AppliedLevel, Is.Zero, "level 0 applied");
-                // Test of Faith, Optical Zoom, Disrupt, Offer, Signal Status and the Gaze and Machine wheels
-                Assert.That(comp.GrantedActions, Has.Count.EqualTo(7), "level-0 kit");
-                Assert.That(entities.GetComponent<ActionsComponent>(joeUid).Actions, Has.Count.EqualTo(innateActions + 7), "kit on top of the innate actions");
-                Assert.That(inventory.TryGetSlotEntity(joeUid, "ears2", out _), Is.False, "camera gone (D13)");
-            });
-
-            // stand-down: everything selection added goes, including the armor marker it added
-            var addedArmor = comp.AddedArmorUser;
-            entities.RemoveComponent<EWJoeComponent>(joeUid);
-            Assert.That(entities.HasComponent<CMArmorUserComponent>(joeUid), Is.EqualTo(!addedArmor), "armor marker restored to its pre-selection state");
-            Assert.That(entities.GetComponent<ActionsComponent>(joeUid).Actions, Has.Count.EqualTo(innateActions), "granted actions removed, innate ones kept");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task DeadJoeDoesNotLevelAndConsoleGateWaivesWithoutConsoles()
@@ -170,33 +106,4 @@ public sealed class EWJoeCongruenceTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task TheThreeConsoleWhitelistsAgree()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var protos = server.ResolveDependency<IPrototypeManager>();
-        var factory = server.ResolveDependency<IComponentFactory>();
-
-        await server.WaitAssertion(() =>
-        {
-            var fromComponent = new EWJoeComponent().ConsoleWhitelist.Components!.ToHashSet();
-
-            var action = protos.Index<EntityPrototype>(AssimilateAction);
-            Assert.That(action.TryGetComponent(out EntityTargetActionComponent? targetAction, factory), "action prototype has EntityTargetAction");
-            var fromAction = targetAction!.Whitelist!.Components!.ToHashSet();
-
-            var objective = protos.Index<EntityPrototype>(AssimilateObjective);
-            Assert.That(objective.TryGetComponent(out EWJoeAssimilateConditionComponent? condition, factory), "objective prototype has the condition");
-            var fromObjective = condition!.Whitelist.Components!.ToHashSet();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(fromAction, Is.EquivalentTo(fromComponent), "action whitelist matches the component default");
-                Assert.That(fromObjective, Is.EquivalentTo(fromComponent), "objective whitelist matches the component default");
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

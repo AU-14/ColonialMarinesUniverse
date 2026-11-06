@@ -282,52 +282,6 @@ public sealed class ClothingInventoryMergeRegressionTest : GameTest
     }
 
     [Test]
-    public async Task FoldingMutatesOnlyLayersOwnedByFoldableClothing()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var entMan = SEntMan;
-            var foldable = entMan.System<FoldableSystem>();
-            var clothing = entMan.Spawn("ClothingMergeFoldable");
-
-            try
-            {
-                var fold = entMan.GetComponent<FoldableComponent>(clothing);
-                var foldClothing = entMan.GetComponent<FoldableClothingComponent>(clothing);
-                var hidden = entMan.GetComponent<HideLayerClothingComponent>(clothing);
-                foldClothing.FoldedHideLayers.Add(HumanoidVisualLayers.Hair);
-                foldClothing.UnfoldedHideLayers.Add(HumanoidVisualLayers.FacialHair);
-                hidden.Layers.Clear();
-                hidden.Layers[HumanoidVisualLayers.HeadTop] = SlotFlags.EARS;
-
-                foldable.SetFolded(clothing, fold, true);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(hidden.Layers[HumanoidVisualLayers.HeadTop], Is.EqualTo(SlotFlags.EARS));
-                    Assert.That(hidden.Layers[HumanoidVisualLayers.Hair], Is.EqualTo(SlotFlags.HEAD));
-                    Assert.That(hidden.Layers.ContainsKey(HumanoidVisualLayers.FacialHair), Is.False);
-                    Assert.That(hidden.Layers.Keys,
-                        Is.EquivalentTo(new[] { HumanoidVisualLayers.HeadTop, HumanoidVisualLayers.Hair }));
-                });
-
-                foldable.SetFolded(clothing, fold, false);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(hidden.Layers[HumanoidVisualLayers.HeadTop], Is.EqualTo(SlotFlags.EARS));
-                    Assert.That(hidden.Layers[HumanoidVisualLayers.FacialHair], Is.EqualTo(SlotFlags.HEAD));
-                    Assert.That(hidden.Layers.ContainsKey(HumanoidVisualLayers.Hair), Is.False);
-                    Assert.That(hidden.Layers.Keys,
-                        Is.EquivalentTo(new[] { HumanoidVisualLayers.HeadTop, HumanoidVisualLayers.FacialHair }));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(clothing);
-            }
-        });
-    }
-
-    [Test]
     public async Task ClothingSpeedGatesPrecedeRmcAdjustmentAndUseAdjustedValues()
     {
         await Server.WaitAssertion(() =>

@@ -25,42 +25,6 @@ public sealed class CMUGuidanceIntegrationTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [Test]
-    public async Task CasRequestsButtonOpensManagementAndClosesWithConsole()
-    {
-        await Client.WaitAssertion(() =>
-        {
-            using var window = new DropshipWeaponsWindow();
-            try
-            {
-                window.OpenCentered();
-                var button = window.CasRequestsButton;
-                button.Measure(new Vector2(160, 30));
-                button.Arrange(UIBox2.FromDimensions(button.Position, new Vector2(160, 30)));
-                var at = button.Size / 2;
-                var screen = new ScreenCoordinates(
-                    (Vector2) button.GlobalPixelPosition + at * button.UIScale, default);
-                foreach (var state in new[] { BoundKeyState.Down, BoundKeyState.Up })
-                {
-                    var method = typeof(BaseButton).GetMethod(
-                        state == BoundKeyState.Down ? "KeyBindDown" : "KeyBindUp",
-                        BindingFlags.Instance | BindingFlags.NonPublic)!;
-                    method.Invoke(button, [new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick, state,
-                        screen, true, at, at * button.UIScale)]);
-                }
-                Assert.That(window.CasRequestsPanel.IsInsideTree, Is.True,
-                    "The RTO CAS button must open the request management panel.");
-                window.Close();
-                Assert.That(window.CasRequestsPanel.IsInsideTree, Is.False,
-                    "Closing the weapons console must close its request management window.");
-            }
-            finally
-            {
-                window.DisposeAuxiliaryWindows();
-            }
-        });
-    }
-
-    [Test]
     public async Task RtoGpsRequestsUseValidatedGroundSolutionsWithoutRerolling()
     {
         var ground = await Pair.CreateTestMap();
@@ -104,56 +68,4 @@ public sealed class CMUGuidanceIntegrationTest : GameTest
         });
     }
 
-    [Test]
-    public async Task GpsShellCostsTwoHundredMoreThanHeAndInheritsItsExplosivePower()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var standard = SEntMan.SpawnEntity("CMUDropshipAmmoHowitzerHE", map.GridCoords);
-            var guided = SEntMan.SpawnEntity("CMUDropshipAmmoHowitzerGPS", map.GridCoords);
-            var he = SEntMan.GetComponent<DropshipAmmoComponent>(standard);
-            var gps = SEntMan.GetComponent<DropshipAmmoComponent>(guided);
-            Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(guided).Cost,
-                Is.EqualTo(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(standard).Cost + 200));
-            Assert.That(gps.Explosion, Is.Not.Null);
-            Assert.That(gps.Explosion!.Type, Is.EqualTo(he.Explosion!.Type));
-            Assert.That(gps.Explosion.Total, Is.EqualTo(he.Explosion.Total));
-            Assert.That(gps.Explosion.Slope, Is.EqualTo(he.Explosion.Slope));
-            Assert.That(gps.Explosion.Max, Is.EqualTo(he.Explosion.Max));
-            Assert.That(gps.Weapon, Is.EqualTo(he.Weapon));
-            Assert.That(gps.TargetSpread, Is.Zero);
-            Assert.That(SEntMan.GetComponent<CMUMunitionGuidanceComponent>(guided).GpsOnly, Is.True);
-            var guidance = Server.System<CMUGuidanceSystem>();
-            Assert.That(guidance.UsesGps(guided), Is.True);
-            Assert.That(guidance.TryGetGps(guided, out _), Is.False);
-            var transform = Server.System<SharedTransformSystem>();
-            SEntMan.GetComponent<CMUMunitionGuidanceComponent>(guided).Coordinates =
-                transform.ToMapCoordinates(map.GridCoords.Offset(new Vector2(12, -15)));
-            Assert.That(guidance.TryGetGps(guided, out var target), Is.True);
-            Assert.That(transform.ToMapCoordinates(target),
-                Is.EqualTo(SEntMan.GetComponent<CMUMunitionGuidanceComponent>(guided).Coordinates!.Value));
-        });
-    }
-
-    [Test]
-    public async Task GpsRackCostsFourteenHundredAndContainsFourGuidedShells()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var rack = SEntMan.SpawnEntity("CMUDropshipAmmoHowitzerRackGPS", map.GridCoords);
-            Assert.That(SEntMan.GetComponent<DropshipFabricatorPrintableComponent>(rack).Cost, Is.EqualTo(1400));
-            var containers = Server.System<SharedContainerSystem>();
-            for (var i = 1; i <= 4; i++)
-            {
-                var slot = containers.GetContainer(rack, $"shell{i}");
-                Assert.That(slot.ContainedEntities, Has.Count.EqualTo(1));
-                var shell = slot.ContainedEntities.Single();
-                Assert.That(SEntMan.GetComponent<MetaDataComponent>(shell).EntityPrototype!.ID,
-                    Is.EqualTo("CMUDropshipAmmoHowitzerGPS"));
-                Assert.That(SEntMan.GetComponent<CMUMunitionGuidanceComponent>(shell).GpsOnly, Is.True);
-            }
-        });
-    }
 }

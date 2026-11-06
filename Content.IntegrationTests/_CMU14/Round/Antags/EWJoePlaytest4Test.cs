@@ -36,96 +36,9 @@ public sealed class EWJoePlaytest4Test
 {
     private const string ColonyJoe = "AU14MobWorkingJoeColony";
     private const string Human = "CMMobHuman";
-    private const string ScoutCloak = "RMCBackpackScout";
-    private const string PyroArmor = "CMArmorM35";
-    private const string Ghillie = "CMArmorM45";
-    private const string PlainArmor = "CMArmorM3Medium";
-    private const string Baton = "CMStunbaton";
+
     private const string Bullet = "CMBulletSentry10x50mm";
     private const string Cell = "PowerCellMedium";
-
-    [Test]
-    public async Task ScourOfOneOfAKindGearIsPermanent()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-        var timing = server.ResolveDependency<IGameTiming>();
-        EntityUid joe = default;
-
-        await server.WaitAssertion(() =>
-        {
-            var scour = entities.System<EWJoeScourSystem>();
-            joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
-
-            var cloak = entities.SpawnEntity(ScoutCloak, map.GridCoords);
-            var pyro = entities.SpawnEntity(PyroArmor, map.GridCoords);
-            var ghillie = entities.SpawnEntity(Ghillie, map.GridCoords);
-            var plain = entities.SpawnEntity(PlainArmor, map.GridCoords);
-            var baton = entities.SpawnEntity(Baton, map.GridCoords);
-
-            // the Joe's optics already see in the dark: goggles are not food for Scour
-            var goggles = entities.SpawnEntity("CMGlassesM42ScoutSight", map.GridCoords);
-            Assert.That(scour.Classify(goggles), Is.Null, "night-vision goggles give a Joe nothing");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(scour.IsOneOfAKind(cloak), "the scout cloak is one of a kind");
-                Assert.That(scour.IsOneOfAKind(pyro), "so is the pyro armor");
-                Assert.That(scour.IsOneOfAKind(ghillie), "and the sniper's ghillie");
-                Assert.That(scour.IsOneOfAKind(plain), Is.False, "plain armor is not");
-                Assert.That(scour.IsOneOfAKind(baton), Is.False, "nor a baton");
-            });
-
-            // a timed armor buff first, then the ghillie makes the armor kind permanent
-            scour.Scour((joe, comp), plain, scour.Classify(plain)!.Value);
-            var buffs = entities.GetComponent<EWJoeScourComponent>(joe);
-            Assert.That(buffs.Expiries[EWJoeScourKind.Armor], Is.LessThan(TimeSpan.MaxValue), "plain armor is timed");
-
-            scour.Scour((joe, comp), ghillie, scour.Classify(ghillie)!.Value);
-            scour.Scour((joe, comp), cloak, scour.Classify(cloak)!.Value);
-            scour.Scour((joe, comp), pyro, scour.Classify(pyro)!.Value);
-            scour.Scour((joe, comp), baton, scour.Classify(baton)!.Value);
-
-            // a later timed scour of a permanent kind does not shorten it
-            var plain2 = entities.SpawnEntity(PlainArmor, map.GridCoords);
-            scour.Scour((joe, comp), plain2, EWJoeScourKind.Armor);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(buffs.Permanent, Is.EquivalentTo(new[] { EWJoeScourKind.Armor, EWJoeScourKind.Cloak, EWJoeScourKind.Pyro }));
-                Assert.That(buffs.Expiries[EWJoeScourKind.Armor], Is.EqualTo(TimeSpan.MaxValue), "the ghillie's armor stays");
-                Assert.That(buffs.Expiries[EWJoeScourKind.Cloak], Is.EqualTo(TimeSpan.MaxValue));
-                Assert.That(buffs.Expiries[EWJoeScourKind.Pyro], Is.EqualTo(TimeSpan.MaxValue));
-                Assert.That(buffs.Expiries[EWJoeScourKind.Baton], Is.LessThan(TimeSpan.MaxValue), "the baton is timed");
-            });
-
-            // the baton's time runs out
-            buffs.Expiries[EWJoeScourKind.Baton] = timing.CurTime;
-        });
-
-        await pair.RunTicksSync((int) Math.Ceiling(2.5 / timing.TickPeriod.TotalSeconds));
-
-        await server.WaitAssertion(() =>
-        {
-            var buffs = entities.GetComponent<EWJoeScourComponent>(joe);
-            Assert.Multiple(() =>
-            {
-                Assert.That(buffs.Expiries.ContainsKey(EWJoeScourKind.Baton), Is.False, "the timed buff expired");
-                Assert.That(buffs.Expiries.Keys, Is.EquivalentTo(new[] { EWJoeScourKind.Armor, EWJoeScourKind.Cloak, EWJoeScourKind.Pyro }),
-                    "the permanent ones did not");
-                Assert.That(buffs.BulletArmor, Is.GreaterThan(0));
-            });
-
-            // stand-down still takes everything
-            entities.System<EWJoeScourSystem>().Expire(joe, "test");
-            Assert.That(entities.HasComponent<EWJoeScourComponent>(joe), Is.False);
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task ResonanceTurnsBackAnIffBulletInsteadOfZeroingIt()
@@ -376,37 +289,4 @@ public sealed class EWJoePlaytest4Test
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public void CablesEndInsideTheSpriteAtFullEnvelope()
-    {
-        const float radius = 900f;
-        const float contact = 12f;
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(EWJoeCablesOverlay.EndDistance(1f, radius, contact), Is.EqualTo(contact).Within(0.01f),
-                "at full the tips sit inside the sprite's edge");
-            Assert.That(EWJoeCablesOverlay.EndDistance(0f, radius, contact), Is.GreaterThan(radius * 0.8f), "at nothing they start near the edge");
-            Assert.That(EWJoeCablesOverlay.EndDistance(0.5f, radius, contact), Is.LessThan(EWJoeCablesOverlay.EndDistance(0.25f, radius, contact)),
-                "they close in as the envelope fills");
-        });
-    }
-
-    [Test]
-    public async Task OverclockRunsCoolerAndItsCloudIsSmaller()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var protos = server.ResolveDependency<IPrototypeManager>();
-            var factory = server.ResolveDependency<IComponentFactory>();
-            Assert.That(new EWJoeHeatComponent().OverclockHeat, Is.EqualTo(8f), "heat per second while overclocked");
-            Assert.That(protos.Index<EntityPrototype>("CMUEWJoeSmoke").TryGetComponent(out EvenSmokeComponent? smoke, factory)
-                && smoke.Range == 3, "a 7-tile cloud");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

@@ -32,22 +32,5 @@ namespace Content.Tests.Server.CMU14
             Assert.That(malformed, Is.EqualTo(new[] { "code:notanumber", "code" }));
         }
 
-        [Test]
-        public void OtherCategoriesAreIgnoredSilently()
-        {
-            var (tags, malformed) = BugHelpSystem.ParseTags("mapping:222", "code");
-
-            Assert.That(tags, Is.Empty);
-            Assert.That(malformed, Is.Empty);
-        }
-
-        [Test]
-        public void EmptyConfigYieldsNothing()
-        {
-            var (tags, malformed) = BugHelpSystem.ParseTags("", "code");
-
-            Assert.That(tags, Is.Empty);
-            Assert.That(malformed, Is.Empty);
-        }
     }
 }

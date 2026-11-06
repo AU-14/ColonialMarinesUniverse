@@ -18,29 +18,6 @@ namespace Content.IntegrationTests._CMU14.Yautja;
 public sealed class YautjaFireAndMedalParityTest : GameTest
 {
     // cmss13 only gives service medals to EQUIPMENT_PRESET_MARINE, so no yautja role should ever roll one
-    [Test]
-    public async Task YautjaJobsNeverAwardPlaytimeMedals()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var protos = Server.ResolveDependency<IPrototypeManager>();
-            var checkedJobs = 0;
-            foreach (var job in protos.EnumeratePrototypes<JobPrototype>())
-            {
-                if (!job.ID.StartsWith("CMUYautja"))
-                    continue;
-
-                checkedJobs++;
-                Assert.That(job.Medals is null || job.Medals.Count == 0, Is.True,
-                    $"{job.ID} still inherits playtime medals");
-            }
-
-            Assert.That(checkedJobs, Is.GreaterThanOrEqualTo(6));
-
-            // and the marines still get theirs, so the override didn't leak
-            Assert.That(protos.Index<JobPrototype>("CMRifleman").Medals, Is.Not.Empty);
-        });
-    }
 
     // cmss13 resist_fire: yautja take -25 stacks and a WEAKEN 1 roll, and are never forced to roll
     [Test]

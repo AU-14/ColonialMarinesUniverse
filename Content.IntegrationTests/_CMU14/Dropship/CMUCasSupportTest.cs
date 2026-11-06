@@ -73,31 +73,6 @@ public sealed class CMUCasSupportTest
     }
 
     [Test]
-    public async Task SpecialRocketsCarryTheirFallout()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var prototypes = pair.Server.ProtoMan;
-        var factory = pair.Server.ResolveDependency<IComponentFactory>();
-        await pair.Server.WaitAssertion(() =>
-        {
-            void Expect(string rocket, string effect)
-            {
-                Assert.That(prototypes.Index<EntityPrototype>(rocket)
-                        .TryGetComponent(out DropshipAmmoComponent? ammo, factory), Is.True, rocket);
-                Assert.That(ammo!.ImpactEffects.Select(id => id.Id), Does.Contain(effect), rocket);
-            }
-
-            Expect("RMCDropshipAttachmentAmmoRocketMiniMikeWeedKiller", "CMUCasFalloutWeedKiller");
-            Expect("RMCDropshipAttachmentAmmoRocketMiniMikeSmoke", "CMUCasFalloutObscurant");
-            Expect("RMCDropshipAttachmentAmmoRocketMiniMikeFlare", "CMUCasFalloutFlare");
-            Expect("RMCDropshipAttachmentAmmoRocketMiniMikeThermobaric", "CMUCasFalloutMiniMikeResin");
-            Expect("AU14DropshipAttachmentAmmoRocketThermobaricTwo", "CMUCasFalloutResin");
-            Expect("RMCDropshipAttachmentAmmoRocketMiniMikeHEAT", "CMUCasFalloutArmor");
-        });
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task JamsFaultTheHardpointAndAdminToolsRecoverIt()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });

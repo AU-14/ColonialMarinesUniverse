@@ -34,6 +34,7 @@ jobs:
       unit: ${{ steps.plan.outputs.unit }}
       gameplay: ${{ steps.plan.outputs.gameplay }}
       matrix: ${{ steps.plan.outputs.matrix }}
+      assets: ${{ steps.plan.outputs.assets }}
     steps:
       - uses: actions/checkout@v7
 
@@ -106,6 +107,7 @@ jobs:
         env:
           CI_EVENT: ${{ github.event_name }}
           CI_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          CI_BASE_SHA: ${{ github.event.merge_group.base_sha || github.event.before }}
         run: python3 Tools/_CMU14/ci.py plan --event "$CI_EVENT" --changes ci-changes.json
 
       - name: Share test plan
@@ -266,7 +268,8 @@ jobs:
           retention-days: 14
 
       - name: Upload unit test results
-        if: always()
+        # CMU14: green runs only need the compact observations used by the verdict.
+        if: failure() || cancelled()
         uses: actions/upload-artifact@v7
         with:
           include-hidden-files: true
@@ -279,56 +282,27 @@ jobs:
   asset-validation:
     name: Asset Validation
     needs: source-guards
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    if: needs.source-guards.outputs.assets != '' && fromJSON(needs.source-guards.outputs.assets).any
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Select asset checks
-        id: changes
-        uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            let changed = null;
-            if (context.eventName === 'pull_request') {
-              try {
-                const files = await github.paginate(github.rest.pulls.listFiles, {
-                  ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
-                });
-                if (files.length === context.payload.pull_request.changed_files)
-                  changed = files.flatMap(file => [file.filename, file.previous_filename].filter(Boolean));
-              } catch (error) {
-                core.warning(`Cannot determine asset changes; running all validators: ${error.message}`);
-              }
-            }
-            const all = changed === null || changed.some(file =>
-              file === 'RobustToolbox' || file === '.github/workflows/ci.yml' ||
-              file.startsWith('.github/Schemas/') || file.startsWith('.github/scripts/'));
-            const rga = all || changed.some(file => /attributions\.ya?ml$/.test(file));
-            const maps = all || changed.some(file => /^(Content\.CMU\/)?Resources\/Maps\//.test(file));
-            const rsi = all || changed.some(file => file.includes('.rsi/'));
-            for (const [key, value] of Object.entries({rga, maps, rsi, any: rga || maps || rsi}))
-              core.setOutput(key, String(value));
-
       - uses: actions/checkout@v7
-        if: steps.changes.outputs.any == 'true'
         with:
           # CMU14: single-level submodules: validators read RobustToolbox/Schemas at depth 1,
           # the nested engine submodules are never read here
           submodules: true
 
       - uses: actions/setup-python@v7.1.0
-        if: steps.changes.outputs.any == 'true'
         with:
           python-version: "3.13"
           cache: pip
           cache-dependency-path: .github/Schemas/*requirements.txt
 
       - name: Install asset validators
-        if: steps.changes.outputs.any == 'true'
         run: python3 -m pip install pillow jsonschema yamale -r .github/Schemas/rga_requirements.txt -r .github/Schemas/mapfile_requirements.txt
 
       - name: Validate attributions
-        if: steps.changes.outputs.rga == 'true'
+        if: fromJSON(needs.source-guards.outputs.assets).rga
         run: |
           python3 .github/scripts/validate_yamale.py \
             --schema .github/Schemas/rga.yml \
@@ -336,7 +310,7 @@ jobs:
             --validators .github/Schemas/rga_validators.py
 
       - name: Validate maps
-        if: steps.changes.outputs.maps == 'true'
+        if: fromJSON(needs.source-guards.outputs.assets).maps
         run: |
           python3 .github/scripts/validate_yamale.py \
             --schema RobustToolbox/Schemas/mapfile.yml \
@@ -344,7 +318,7 @@ jobs:
             --validators RobustToolbox/Schemas/mapfile_validators.py
 
       - name: Validate RSIs
-        if: steps.changes.outputs.rsi == 'true'
+        if: fromJSON(needs.source-guards.outputs.assets).rsi
         run: |
           # CMU14: retain upstream structural checks and recognize the existing donor-cape license.
           python3 .github/scripts/validate_cmu_rsis.py Resources/ Content.CMU/Resources/
@@ -444,7 +418,8 @@ jobs:
           retention-days: 14
 
       - name: Upload test results
-        if: always()
+        # CMU14: keep full logs and TRX artifacts for unsuccessful runs only.
+        if: failure() || cancelled()
         uses: actions/upload-artifact@v7
         with:
           include-hidden-files: true
@@ -513,7 +488,7 @@ jobs:
           else
             test "$GAMEPLAY" = false
             test "$TEST_RESULT" = skipped
-            echo "Gameplay tests intentionally skipped by the documentation-only plan."
+            echo "Gameplay tests intentionally skipped by the feature selection plan."
           fi
 
   required-checks:
@@ -531,8 +506,10 @@ jobs:
           script: |
             const results = JSON.parse(process.env.RESULTS);
             const buildExpected = results['source-guards'].outputs.build === 'false' ? 'skipped' : 'success';
+            const assets = JSON.parse(results['source-guards'].outputs.assets || '{}');
+            const expected = {build: buildExpected, 'asset-validation': assets.any ? 'success' : 'skipped'};
             const failed = Object.entries(results)
-              .filter(([name, value]) => value.result !== (name === 'build' ? buildExpected : 'success'))
+              .filter(([name, value]) => value.result !== (expected[name] || 'success'))
               .map(([name, value]) => `${name}: ${value.result}`);
             await core.summary.addHeading('CI result')
               .addRaw(failed.length ? failed.join('\n') : 'All checks selected by the test plan passed.')

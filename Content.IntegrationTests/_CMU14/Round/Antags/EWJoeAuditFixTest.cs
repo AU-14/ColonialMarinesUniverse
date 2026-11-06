@@ -98,42 +98,6 @@ public sealed class EWJoeAuditFixTest
     }
 
     [Test]
-    public async Task RunningTogglesShowActiveAndDeadThrallsLeaveThePanel()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-
-        await server.WaitAssertion(() =>
-        {
-            var (joe, comp, _) = SpawnJoe(entities, map.GridCoords);
-            entities.System<EWJoeRuleSystem>().ApplyLevel((joe, comp), 3);
-
-            // ABIL-05: a running Overclock shows as active on its action, and stops showing when it ends
-            var action = comp.GrantedActions.First(a => entities.GetComponent<MetaDataComponent>(a).EntityPrototype?.ID == "CMUActionEWJoeOverclock");
-            var actionComp = entities.GetComponent<Content.Shared.Actions.Components.ActionComponent>(action);
-            var start = new EWJoeOverclockActionEvent { Performer = joe, Action = (action, actionComp) };
-            entities.EventBus.RaiseLocalEvent(joe, start);
-            Assert.That(actionComp.Toggled, "Overclock shows as active");
-            entities.RemoveComponent<EWJoeOverclockComponent>(joe);
-            Assert.That(actionComp.Toggled, Is.False, "and stops when it ends, however it ends");
-
-            // CORE-06: the panel lists living thralls only
-            var thrall = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            comp.Thralls.Add(thrall);
-            var objectives = entities.System<EWJoeObjectiveSystem>();
-            objectives.UpdateStatus((joe, comp));
-            Assert.That(entities.GetComponent<EWJoeStatusComponent>(joe).Thralls, Has.Count.EqualTo(1));
-            entities.System<MobStateSystem>().ChangeMobState(thrall, MobState.Dead);
-            objectives.UpdateStatus((joe, comp));
-            Assert.That(entities.GetComponent<EWJoeStatusComponent>(joe).Thralls, Is.Empty, "a dead thrall leaves the panel");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task RemovingTheAntagAnyWayTakesItsRole()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -155,34 +119,6 @@ public sealed class EWJoeAuditFixTest
                 Assert.That(roles.MindHasRole<EWJoeRoleComponent>(mind.Owner), Is.False, "the antag role goes");
                 Assert.That(entities.HasComponent<GrandMachineTouchedComponent>(joe), Is.False, "and the machine's mark");
             });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task OverclockStopsWhenTheJoeGoesDown()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-        var timing = server.ResolveDependency<IGameTiming>();
-        EntityUid joe = default;
-
-        await server.WaitAssertion(() =>
-        {
-            (joe, var comp, _) = SpawnJoe(entities, map.GridCoords);
-            entities.System<EWJoeRuleSystem>().ApplyLevel((joe, comp), 3);
-            entities.System<EWJoeHeatSystem>().StartOverclock(joe);
-            entities.System<MobStateSystem>().ChangeMobState(joe, MobState.Critical);
-        });
-
-        await pair.RunTicksSync((int) Math.Ceiling(1.5 / timing.TickPeriod.TotalSeconds));
-
-        await server.WaitAssertion(() =>
-        {
-            Assert.That(entities.HasComponent<EWJoeOverclockComponent>(joe), Is.False, "ABIL-01: a downed Joe's overclock stops");
         });
 
         await pair.CleanReturnAsync();

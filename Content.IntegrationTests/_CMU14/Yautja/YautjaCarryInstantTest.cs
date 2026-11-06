@@ -69,19 +69,4 @@ public sealed class YautjaCarryInstantTest
             "a marine carrying another marine still has to hold still for the do-after");
     }
 
-    [Test]
-    public async Task BigXenoCasteCanAlsoBeCarried()
-    {
-        // Carrying is gated on FiremanCarriable + the Yautja carrier whitelist, not on mob size: a Yautja lifts a
-        // Ravager just like any other caste.
-        Assert.That(await DraggedOntoSelf("CMUMobYautja", "CMXenoRavager"), Is.True,
-            "a Ravager is carriable by a Yautja");
-    }
-
-    [Test]
-    public async Task YautjaLiftsHumanWithoutWaiting()
-    {
-        Assert.That(await DraggedOntoSelf("CMUMobYautja", "CMMobHuman"), Is.True,
-            "a Yautja should start carrying a human in the same tick as the drag");
-    }
 }

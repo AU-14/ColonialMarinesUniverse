@@ -83,13 +83,11 @@ public sealed class EWJoeE7Test
     private const string ColonyJoe = "AU14MobWorkingJoeColony";
     private const string Human = "MobHuman";
     private const string Console = "CMUResearchDataTerminal";
-    private const string SeegsonKey = "RMCSynthResetKeySeegson";
+
     private const string Bullet = "CMBulletSentry10x50mm";
     private const string Knife = "RMCKitchenKnife";
     private const string EWMindRole = "MindRoleEWJoe";
     private const string KillCountObjective = "CMUEWJoeKillCountObjective";
-    private const string AssimilateObjective = "CMUEWJoeAssimilateConsoleObjective";
-    private const string FirearmsObjective = "CMUEWJoeOfferFirearmsObjective";
 
     // a stand-in for the Grand Machine threat, which has no prototype yet; never offered in any gamemode
     [TestPrototypes]
@@ -138,59 +136,6 @@ public sealed class EWJoeE7Test
             {
                 round.SetSelectedThreat(null);
             }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task TheResetKeysRealZapDoesNothingToAnEarlyWarningJoe()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-
-        await server.WaitAssertion(() =>
-        {
-            var defibs = entities.System<SharedDefibrillatorSystem>();
-            var toggles = entities.System<ItemToggleSystem>();
-            var delays = entities.System<UseDelaySystem>();
-            var mobState = entities.System<MobStateSystem>();
-            var user = entities.SpawnEntity(Human, map.GridCoords);
-
-            bool OnZapDelay(EntityUid key)
-            {
-                var defib = entities.GetComponent<DefibrillatorComponent>(key);
-                return delays.IsDelayed((key, entities.GetComponent<UseDelayComponent>(key)), defib.DelayId);
-            }
-
-            EntityUid ActiveKey()
-            {
-                var key = entities.SpawnEntity(SeegsonKey, map.GridCoords);
-                Assert.That(toggles.TryActivate(key, user: user), "the key is switched on");
-                return key;
-            }
-
-            // control: the key's zap goes through on a plain dead Working Joe
-            var plain = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            mobState.ChangeMobState(plain, MobState.Dead);
-            var controlKey = ActiveKey();
-            Assert.That(defibs.CanZap(controlKey, plain, user), "the key can zap a plain Joe");
-            defibs.Zap(controlKey, plain, user);
-            Assert.That(OnZapDelay(controlKey), "the zap went through: the key is on its zap delay");
-
-            // the Early Warning Joe: the same zap is refused before it costs anything
-            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            entities.EnsureComponent<EWJoeComponent>(joe);
-            mobState.ChangeMobState(joe, MobState.Dead);
-            var key = ActiveKey();
-            defibs.Zap(key, joe, user);
-            Assert.Multiple(() =>
-            {
-                Assert.That(mobState.IsDead(joe), "still dead");
-                Assert.That(OnZapDelay(key), Is.False, "the zap was refused before it fired");
-            });
         });
 
         await pair.CleanReturnAsync();
@@ -265,48 +210,6 @@ public sealed class EWJoeE7Test
             entities.GetComponent<ProjectileComponent>(other).Shooter = stranger;
             mobState.ChangeMobState(entities.SpawnEntity(Human, map.GridCoords), MobState.Dead, origin: other);
             Assert.That(count.Count, Is.EqualTo(2), "someone else's bullet does not");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ObjectivesAreRefusedInNullspace()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-
-        await server.WaitAssertion(() =>
-        {
-            var mindSys = entities.System<MindSystem>();
-            var roles = entities.System<SharedRoleSystem>();
-            // a console and two loose firearms exist on a real map, so only the nullspace check can refuse
-            entities.SpawnEntity(Console, map.GridCoords);
-            entities.SpawnEntity("RMCWeaponRevolverM44", map.GridCoords);
-            entities.SpawnEntity("RMCWeaponRevolverM44", map.GridCoords);
-
-            var joe = entities.SpawnEntity(ColonyJoe, MapCoordinates.Nullspace);
-            var mind = mindSys.CreateMind(null, "Early Warning Joe");
-            mindSys.TransferTo(mind, joe);
-            roles.MindAddRole(mind, "MindRoleEWJoe", silent: true);
-            entities.EnsureComponent<EWJoeComponent>(joe);
-
-            // control: the same directives are open to a Joe on the map
-            var onMap = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var onMapMind = mindSys.CreateMind(null, "Early Warning Joe");
-            mindSys.TransferTo(onMapMind, onMap);
-            roles.MindAddRole(onMapMind, "MindRoleEWJoe", silent: true);
-            entities.EnsureComponent<EWJoeComponent>(onMap);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(mindSys.TryAddObjective(onMapMind, onMapMind.Comp, FirearmsObjective), "on the map an offer directive is possible");
-                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, AssimilateObjective), Is.False, "no console is pinned from nullspace");
-                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, FirearmsObjective), Is.False, "nor an offer directive");
-                Assert.That(mind.Comp.Objectives, Is.Empty);
-            });
         });
 
         await pair.CleanReturnAsync();

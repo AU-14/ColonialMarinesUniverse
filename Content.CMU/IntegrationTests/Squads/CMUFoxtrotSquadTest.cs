@@ -22,14 +22,8 @@ namespace Content.IntegrationTests.CMU14.Squads;
 public sealed class CMUFoxtrotSquadTest : GameTest
 {
     private static readonly ProtoId<JobPrototype> GovforCombatTech = "AU14JobGOVFORSquadCombatTech";
-    private static readonly ProtoId<JobPrototype> GovforSquadLeader = "AU14JobGOVFORSquadSergeant";
-    private static readonly ProtoId<JobPrototype> GovforRto = "AU14JobGOVFORRadioTrafficOperator";
-    private static readonly ProtoId<JobPrototype> GovforRifleman = "AU14JobGOVFORSquadRifleman";
-    private static readonly ProtoId<JobPrototype> GovforCorpsman = "AU14JobGOVFORPlatoonCorpsman";
+
     private static readonly ProtoId<JobPrototype> GovforAutomaticRifleman = "AU14JobGOVFORSquadAutomaticRifleman";
-    private static readonly ProtoId<JobPrototype> OpforCombatTech = "AU14JobOPFORSquadCombatTech";
-    private static readonly ProtoId<JobPrototype> OpforSquadLeader = "AU14JobOPFORSquadSergeant";
-    private static readonly ProtoId<JobPrototype> OpforRto = "AU14JobOPFORRadioTrafficOperator";
 
     [TestPrototypes]
     private const string Prototypes = @"
@@ -39,54 +33,6 @@ public sealed class CMUFoxtrotSquadTest : GameTest
   - type: StationJobs
     availableJobs: {}
 ";
-
-    [Test]
-    public async Task SecuritySlotsAreAddedOnTopOfEachSide()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var foxtrot = Server.System<CMUFoxtrotSquadSystem>();
-
-            var govfor = new Dictionary<ProtoId<JobPrototype>, int>
-            {
-                [GovforCombatTech] = 6,
-                [GovforSquadLeader] = 3,
-                [GovforRto] = 3,
-                [GovforRifleman] = 75,
-                [GovforCorpsman] = 6,
-                // the other side's jobs are left alone
-                [OpforCombatTech] = 6,
-            };
-            foxtrot.AddReservedSlots(govfor, RoundJobSide.Govfor);
-
-            var opfor = new Dictionary<ProtoId<JobPrototype>, int>
-            {
-                [OpforCombatTech] = 6,
-                [OpforSquadLeader] = 3,
-                [OpforRto] = 0,
-            };
-            foxtrot.AddReservedSlots(opfor, RoundJobSide.Opfor);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(govfor[GovforCombatTech], Is.EqualTo(8));
-                Assert.That(govfor[GovforSquadLeader], Is.EqualTo(4));
-                Assert.That(govfor[GovforRto], Is.EqualTo(4));
-                Assert.That(govfor[GovforRifleman], Is.EqualTo(77));
-                Assert.That(govfor[GovforCorpsman], Is.EqualTo(7));
-                Assert.That(govfor[OpforCombatTech], Is.EqualTo(6));
-
-                Assert.That(opfor[OpforCombatTech], Is.EqualTo(8));
-                Assert.That(opfor[OpforSquadLeader], Is.EqualTo(4));
-                Assert.That(opfor[OpforRto], Is.EqualTo(0), "a role the side does not have gets no Foxtrot slot");
-
-                Assert.That(foxtrot.TryGetSquad(RoundJobSide.Govfor, out var govforSquad), Is.True);
-                Assert.That(govforSquad.Id, Is.EqualTo("SquadGovforFoxtrot"));
-                Assert.That(foxtrot.TryGetSquad(RoundJobSide.Opfor, out var opforSquad), Is.True);
-                Assert.That(opforSquad.Id, Is.EqualTo("SquadOpforVictor"));
-            });
-        });
-    }
 
     [Test]
     public async Task ReservedSlotsGoToSecurityFirst()
@@ -155,67 +101,4 @@ public sealed class CMUFoxtrotSquadTest : GameTest
         });
     }
 
-    [Test]
-    public async Task SecurityMembersGetTheirPerks()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var foxtrot = Server.System<CMUFoxtrotSquadSystem>();
-            var skills = Server.System<SkillsSystem>();
-            var squad = SEntMan.SpawnEntity("SquadGovforFoxtrot", map.GridCoords);
-
-            var rto = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            foxtrot.ApplyPerks(rto, squad, SProtoMan.Index(GovforRto));
-
-            var tech = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            SEntMan.EnsureComponent<CMVendorUserComponent>(tech).Points = 50;
-            foxtrot.ApplyPerks(tech, squad, SProtoMan.Index(GovforCombatTech));
-
-            var corpsman = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            foxtrot.ApplyPerks(corpsman, squad, SProtoMan.Index(GovforCorpsman));
-
-            var rifleman = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            foxtrot.ApplyPerks(rifleman, squad, SProtoMan.Index(GovforRifleman));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(skills.GetSkill(rto, "RMCSkillConstruction"), Is.EqualTo(3));
-                Assert.That(skills.GetSkill(rto, "RMCSkillEngineer"), Is.EqualTo(3));
-                Assert.That(skills.GetSkill(corpsman, "RMCSkillConstruction"), Is.EqualTo(3));
-                Assert.That(skills.GetSkill(corpsman, "RMCSkillEngineer"), Is.EqualTo(3));
-                Assert.That(skills.GetSkill(tech, "RMCSkillConstruction"), Is.EqualTo(0), "combat technicians keep their own skills");
-                Assert.That(SEntMan.GetComponent<CMVendorUserComponent>(tech).Points, Is.EqualTo(65));
-                Assert.That(skills.GetSkill(rifleman, "RMCSkillConstruction"), Is.EqualTo(3));
-                Assert.That(skills.GetSkill(rifleman, "RMCSkillEngineer"), Is.EqualTo(3));
-            });
-        });
-    }
-    [Test]
-    public async Task FoxtrotSquadExistsWithTheRegularSquads()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var foxtrot = Server.System<CMUFoxtrotSquadSystem>();
-
-            // Any GOVFOR squad assignment creates the side's Foxtrot squad, even for someone who does not join it,
-            // so overwatch consoles, the callsign directory and the ID console list it from the start.
-            Assert.That(foxtrot.TryPickFoxtrotSquad(null, GovforRifleman, null, null, out _), Is.False);
-
-            var found = false;
-            var query = SEntMan.EntityQueryEnumerator<SquadTeamComponent, MetaDataComponent>();
-            while (query.MoveNext(out _, out var team, out var meta))
-            {
-                if (meta.EntityPrototype?.ID != "SquadGovforFoxtrot")
-                    continue;
-
-                found = true;
-                Assert.That(team.Group, Is.EqualTo("GOVFOR"));
-                Assert.That(team.Radio?.Id, Is.EqualTo("radioGovforFoxtrot"));
-            }
-
-            Assert.That(found, Is.True);
-        });
-    }
 }

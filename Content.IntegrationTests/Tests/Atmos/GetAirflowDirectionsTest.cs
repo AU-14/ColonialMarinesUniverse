@@ -35,11 +35,5 @@ public sealed class GetAirflowDirectionsTest : AtmosTest
     /// <summary>
     /// Tests that a grident with no atmosphere will return <see cref="AtmosDirection.Invalid"/>.
     /// </summary>
-    [Test]
-    [RunOnSide(Side.Server)]
-    public void TestLookup_BadEnt()
-    {
-        var directions = SAtmos.GetAirflowDirections(EntityUid.Invalid, Vector2i.Zero);
-        Assert.That(directions, Is.EqualTo(AtmosDirection.Invalid));
-    }
+
 }

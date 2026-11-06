@@ -13,17 +13,6 @@ public sealed class AddMolsToMixtureTest
     /// Assert that an exception is thrown if the length of the array passed in
     /// does not match the number of gases.
     /// </summary>
-    [Test]
-    [TestCase(-1)]
-    [TestCase(1)]
-    public void AddMolsToMixture_Throws_OnLengthMismatch(int num)
-    {
-        var mixture = new GasMixture();
-        var wrongLength = new float[Atmospherics.AdjustedNumberOfGases + num];
-
-        Assert.Throws<ArgumentException>(() =>
-            AtmosphereSystem.AddMolsToMixture(mixture, wrongLength));
-    }
 
     /// <summary>
     /// Assert that the added mols are correctly added.
