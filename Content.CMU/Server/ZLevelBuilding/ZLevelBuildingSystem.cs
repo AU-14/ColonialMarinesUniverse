@@ -3,6 +3,7 @@ using Content.Shared.Damage.Components;
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
+using Content.Shared._RMC14.Areas;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.Procedural; // RUMC: the dungeons of the depth layers
 using Content.Shared._RMC14.Entrenching; // RUMC: the shovel of the game
@@ -242,6 +243,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
         var stone = EnsureComp<ZGeneratedStoneComponent>(newMapUid);
         stone.StoneGrid = newMapUid;
+        InheritCavernFootprint(sourceGrid, newMapUid, stone);
         below = (newMapUid, stone);
         return true;
     }
@@ -265,6 +267,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
         if (TryComp<CMUZLevelMapComponent>(mapUid, out var zMapComp) && zMapComp.MapBelow is { } belowMap)
         {
+            if (IsSealedCavernTile(belowMap, worldPos))
+                return false;
+
             if ((!TryComp<ZGeneratedStoneComponent>(belowMap, out var stoneMarker) || stoneMarker.LocalizedToAuthoredLevel) &&
                 HasWalkableFloorAt(belowMap, worldPos))
             {
@@ -296,6 +301,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var landingCoords = new MapCoordinates(worldPos, belowMapComp.MapId);
         var landingTile = _map.TileIndicesFor(below.Comp.StoneGrid, belowGridComp, landingCoords);
         var sourceMapUid = GetSourceMapForStone(below.Owner); // RUMC
+
+        if (IsCavernBoundary(below.Comp, landingTile))
+            return false;
 
         EnsureChunkAt(below, below.Owner, landingTile);
         if (!singleTile)
@@ -418,11 +426,47 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var stone = EnsureComp<ZGeneratedStoneComponent>(belowMap);
         stone.StoneGrid = stoneGrid;
         stone.LocalizedToAuthoredLevel = localized;
+        InheritCavernFootprint(sourceGrid, belowMap, stone);
+        if (localized && stone.CavernFootprint == null && _gridQuery.TryComp(sourceGrid, out var sourceGridComp) &&
+            _gridQuery.TryComp(stoneGrid, out var stoneGridComp))
+        {
+            stone.CavernFootprint = new();
+            foreach (var sourceTile in _map.GetAllTiles(sourceGrid, sourceGridComp))
+            {
+                var position = _map.GridTileToWorldPos(sourceGrid, sourceGridComp, sourceTile.GridIndices);
+                var index = _map.TileIndicesFor(stoneGrid, stoneGridComp, new MapCoordinates(position, belowMapComp.MapId));
+                if ((!_map.TryGetTileRef(stoneGrid, stoneGridComp, index, out var mapped) || mapped.Tile.IsEmpty) &&
+                    !TileHasAnchored(stoneGrid, stoneGridComp, index))
+                    stone.CavernFootprint.Add(index);
+            }
+        }
+        else if (localized && stone.CavernFootprint is { } inherited && _gridQuery.TryComp(stoneGrid, out var inheritedGrid))
+        {
+            inherited.RemoveWhere(index =>
+                _map.TryGetTileRef(stoneGrid, inheritedGrid, index, out var mapped) && !mapped.Tile.IsEmpty ||
+                TileHasAnchored(stoneGrid, inheritedGrid, index));
+        }
         if (!localized)
             SetGeneratedGravity(belowMap);
         Dirty(belowMap, stone);
         below = (belowMap, stone);
         return true;
+    }
+
+    private void InheritCavernFootprint(EntityUid sourceGrid, EntityUid map, ZGeneratedStoneComponent stone)
+    {
+        if (Transform(sourceGrid).MapUid is not { } sourceMap ||
+            !TryComp<ZGeneratedStoneComponent>(sourceMap, out var source) || source.CavernFootprint is not { } footprint ||
+            !_gridQuery.TryComp(source.StoneGrid, out var sourceGridComp) ||
+            !_gridQuery.TryComp(stone.StoneGrid, out var grid) || !TryComp<MapComponent>(map, out var mapComp))
+            return;
+
+        stone.CavernFootprint = new();
+        foreach (var tile in footprint)
+        {
+            var position = _map.GridTileToWorldPos(source.StoneGrid, sourceGridComp, tile);
+            stone.CavernFootprint.Add(_map.TileIndicesFor(stone.StoneGrid, grid, new MapCoordinates(position, mapComp.MapId)));
+        }
     }
 
     private void SetGeneratedGravity(EntityUid map)
@@ -492,6 +536,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             {
                 var index = new Vector2i(origin.X + x, origin.Y + y);
 
+                if (below.Comp.CavernFootprint is { } footprint && !footprint.Contains(index))
+                    continue;
+
                 // Never overwrite pre-built / mapped content: skip tiles that already have a real floor tile or
                 // any anchored entity. This keeps existing structures on an already-mapped below level intact;
                 // only true empty space gets filled with stone.
@@ -508,6 +555,13 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                     continue;
 
                 var coords = _map.GridTileToLocal(below.Comp.StoneGrid, grid, index);
+                if (IsCavernBoundary(below.Comp, index))
+                {
+                    floors.Add((index, new Tile(floorDef.TileId)));
+                    spawns.Add(("CMUCavernBedrock", coords));
+                    below.Comp.GeneratedTiles.Add(index);
+                    continue;
+                }
                 var natural = cavern?.IsOpen(index, depth) ??
                               (caveNoise != null && caves != null && caveNoise.GetNoise(index.X, index.Y) > caves.Threshold);
                 var opening = natural && cavern != null && cavern.IsOpen(index, depth - 1);
@@ -753,6 +807,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
         if (TryComp<CMUZLevelMapComponent>(mapUid, out var zMap) && zMap.MapBelow is { } belowMap)
         {
+            if (IsSealedCavernTile(belowMap, worldPos))
+                return false;
+
             // A real, walkable authored floor below (a building floor) -> just step down onto it.
             if ((!TryComp<ZGeneratedStoneComponent>(belowMap, out var stoneMarker) || stoneMarker.LocalizedToAuthoredLevel) &&
                 HasWalkableFloorAt(belowMap, worldPos))
@@ -785,6 +842,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
         var worldPos = _transform.GetWorldPosition(digger);
         var landingCoords = new MapCoordinates(worldPos, Comp<MapComponent>(below.Owner).MapId);
         var landingTile = _map.TileIndicesFor(below.Comp.StoneGrid, belowGrid, landingCoords);
+
+        if (IsCavernBoundary(below.Comp, landingTile))
+            return false;
 
         // RUMC: the source map is kept for the dungeon; the line that was here (kept): var settings = GetSettings(GetSourceMapForStone(below.Owner));
         var settingsSourceMap = GetSourceMapForStone(below.Owner);
@@ -968,9 +1028,41 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
 
     private bool TileHasAnchored(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
     {
-        foreach (var _ in _map.GetAnchoredEntities(gridUid, grid, tile))
-            return true;
+        foreach (var entity in _map.GetAnchoredEntities(gridUid, grid, tile))
+        {
+            if (!HasComp<AreaComponent>(entity))
+                return true;
+        }
         return false;
+    }
+
+    private static bool IsCavernBoundary(ZGeneratedStoneComponent stone, Vector2i tile)
+    {
+        if (stone.CavernFootprint is not { } footprint)
+            return false;
+
+        // Include diagonals so corners cannot leave a route from the cave into protected terrain or void.
+        for (var x = -1; x <= 1; x++)
+        for (var y = -1; y <= 1; y++)
+        {
+            if (!footprint.Contains(tile + new Vector2i(x, y)))
+                return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>Whether a vertical entrance would breach a generated cave's bedrock or exterior void.</summary>
+    public bool IsSealedCavernTile(EntityUid map, Vector2 position)
+    {
+        if (!TryComp<ZGeneratedStoneComponent>(map, out var stone) || stone.CavernFootprint is not { } footprint ||
+            !_gridQuery.TryComp(stone.StoneGrid, out var grid) || !TryComp<MapComponent>(map, out var mapComp))
+            return false;
+
+        var tile = _map.TileIndicesFor(stone.StoneGrid, grid, new MapCoordinates(position, mapComp.MapId));
+        // Existing mapped floors retain ordinary vertical construction. Only empty space outside the
+        // footprint and the generated bedrock ring are sealed.
+        return footprint.Contains(tile) ? IsCavernBoundary(stone, tile) : !HasWalkableFloorAt(map, position);
     }
 
     /// <summary>An indestructible map-border wall: tagged as a wall but with no Damageable at all (the

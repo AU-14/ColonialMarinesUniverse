@@ -80,6 +80,7 @@
       rmc-aslot-rail:
         whitelist:
           tags:
+          - RMCAttachmentRailFlashlight # CMU14
           - RMCAttachmentMagneticHarness
           - RMCAttachmentS5RedDotSight
           - RMCAttachmentS5MicroRedDotSight

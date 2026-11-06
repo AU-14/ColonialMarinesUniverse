@@ -2,6 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.CartridgeLoader.Cartridges;
 using Content.Server.CartridgeLoader;
 using Content.Server.Chat.Managers;
+using Content.Server.CMU14.HelpRelay.NewsRelay; // CMU14: author identity event for the news relay
 using Content.Server.Discord;
 using Content.Server.GameTicking;
 using Content.Server.MassMedia.Components;
@@ -213,6 +214,14 @@ public sealed partial class NewsSystem : SharedNewsSystem
         };
 
         articles.Add(article.Value);
+
+        // CMU14 Begin: the news relay needs the publishing actor; articles only carry IC identity.
+        if (_station.GetOwningStation(uid) is { } cmuStation)
+        {
+            var cmuAuthored = new StationNewsAuthoredEvent(cmuStation, article.Value, actor);
+            RaiseLocalEvent(ref cmuAuthored);
+        }
+        // CMU14 End
 
         if (actor != null)
         {

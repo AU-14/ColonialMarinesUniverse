@@ -167,9 +167,21 @@ public sealed class PitDiggingToolSystem : EntitySystem
         if (!TryValidateDigTool(ent, user, target, toolOverride))
             return false;
 
+        if (!digUp)
+        {
+            _building.PrefetchDigDestination(user, target, DigDelay * comp.DigTimeMultiplier);
+            if (!TryCheckDestination(false, target, out _, out failReason))
+            {
+                _building.CancelDigPreparation(user);
+                _popup.PopupEntity(Loc.GetString(failReason), ent, user, PopupType.SmallCaution);
+                return false;
+            }
+        }
+
         // A digging tool on a power cell pays three charges for the dig before it begins; with a flat cell it does not begin.
         if (TryComp<ElectricToolComponent>(ent, out var electric) && !_cell.TryUseCharge(ent.Owner, electric.ChargePerUse * 3f, user))
         {
+            _building.CancelDigPreparation(user);
             _popup.PopupEntity(Loc.GetString("au14-tool-no-charge"), ent, user, PopupType.SmallCaution);
             return false;
         }
@@ -183,10 +195,10 @@ public sealed class PitDiggingToolSystem : EntitySystem
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
+        {
+            _building.CancelDigPreparation(user);
             return false;
-
-        if (!digUp)
-            _building.PrefetchDigDestination(user, target, DigDelay * comp.DigTimeMultiplier);
+        }
 
         _popup.PopupEntity(Loc.GetString("au14-pit-tool-dig-started"), ent, user);
 
@@ -384,6 +396,14 @@ public sealed class PitDiggingToolSystem : EntitySystem
     {
         toolOverride = null;
         failReason = string.Empty;
+
+        if (!digUp && _transform.GetMap(target) is { } source &&
+            TryComp<CMUZLevelMapComponent>(source, out var level) && level.MapBelow is { } below &&
+            _building.IsSealedCavernTile(below, _transform.ToMapCoordinates(target).Position))
+        {
+            failReason = "au14-pit-tool-wall-below";
+            return false;
+        }
 
         var destination = TryGetDestinationTile(digUp, target, out var gridUid, out var grid, out var tile)
             ? ClassifyTile(gridUid, grid, tile)
