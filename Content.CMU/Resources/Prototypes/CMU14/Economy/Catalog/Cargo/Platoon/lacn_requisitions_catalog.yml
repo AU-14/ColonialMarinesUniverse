@@ -482,6 +482,8 @@
         stockReplenishDelay: 1200
     - name: Ammo
       entries:
+      - cost: 250
+        crate: CMUCrateMagazineGAU19M
       - cost: 1200
         crate: CMUCrateKramer30mmHE
       - cost: 1600

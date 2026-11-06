@@ -64,6 +64,8 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 25
+  # can be wired into a civilian vehicle as a car bomb
+  - type: CMUVBIED
 
 - type: entity
   name: huge improvised explosive device
@@ -112,6 +114,10 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 35
+  # can be wired into a civilian vehicle as a car bomb
+  - type: CMUVBIED
+    interiorTotalIntensity: 600
+    interiorMaxIntensity: 50
 
 - type: entity
   name: improvised explosive vest
