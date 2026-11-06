@@ -237,6 +237,23 @@ cmu-yautja-mark-thrall = Thrall
 cmu-yautja-mark-student = Student
 cmu-yautja-mark-blooded = Blooded
 cmu-yautja-mark-unknown = Unknown
+cmu-yautja-mark-examine-unknown-hunter = an unknown hunter
+cmu-yautja-mark-examine-prey = [color=orange]{CAPITALIZE(THE($target))} is being hunted by {$hunter}.[/color]
+cmu-yautja-mark-examine-dishonored = [color=red]{CAPITALIZE(THE($target))} was marked as dishonorable by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-honored = [color=green]{CAPITALIZE(THE($target))} was honored by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-thrall = [color=green]{CAPITALIZE(THE($target))} was thralled by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-gear-carrier = [color=red]{CAPITALIZE(THE($target))} was marked as carrying gear by {$hunter}.[/color]
+cmu-yautja-mark-examine-student = [color=green]{CAPITALIZE(THE($target))} is being taught by {$hunter}.[/color]
+cmu-yautja-mark-examine-blooded = [color=green]{CAPITALIZE(THE($target))} was blooded by {$hunter}.[/color]
 cmu-yautja-mark-view-recent = Nearby Targets
 cmu-yautja-mark-view-history = Marked History
 cmu-yautja-mark-view-recent-detail = Recently seen targets must be nearby when you place their first mark.
