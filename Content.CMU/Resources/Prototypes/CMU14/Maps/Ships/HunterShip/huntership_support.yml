@@ -138,9 +138,10 @@
   description: Spawn marker for Hunter Ship clan/admin testing.
   suffix: Hunter Ship admin/test spawn
   components:
+  # a LateJoin marker takes any late joiner, which once put a colony administrator on the ship.
+  # the hunt finds this one by its kind instead
   - type: SpawnPoint
     job_id: CMUYautjaHunter
-    spawn_type: LateJoin
   - type: YautjaPredatorSpawnPoint
     kind: HunterShipClan
   - type: YautjaRelayDestination
