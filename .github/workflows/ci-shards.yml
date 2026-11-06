@@ -126,16 +126,21 @@ jobs:
               return;
             }
 
-            // supersede stale same-head wave runs
-            const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
-              ...context.repo, workflow_id: 'ci-shards.yml', per_page: 100,
-            });
-            for (const w of waves) {
-              if (w.status === 'completed' || w.id === context.runId) continue;
-              if (w.head_sha !== headSha) continue;
-              try { await github.rest.actions.cancelWorkflowRun({ ...context.repo, run_id: w.id }); }
-              catch (e) { core.info(`cancel ${w.id}: ${e.status}`); }
-            }
+            // CMU14: wave-run supersession removed. workflow_run run records
+            // carry the default branch's sha, not the triggering run's sha, so a
+            // master-triggered gate matched EVERY in-flight wave and cancelled
+            // them all on every merge. same-shard dedupe is the present-set (any
+            // status) plus the per-shard concurrency groups; stale master suites
+            // finish and post checks on their own dead sha, nothing reads them
+            // const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
+            //   ...context.repo, workflow_id: 'ci-shards.yml', per_page: 100,
+            // });
+            // for (const w of waves) {
+            //   if (w.status === 'completed' || w.id === context.runId) continue;
+            //   if (w.head_sha !== headSha) continue;
+            //   try { await github.rest.actions.cancelWorkflowRun({ ...context.repo, run_id: w.id }); }
+            //   catch (e) { core.info(`cancel ${w.id}: ${e.status}`); }
+            // }
 
             // reserve: admit only what starts immediately beside the helper
             // reserve. count in-progress jobs across EVERY workflow: builds,
