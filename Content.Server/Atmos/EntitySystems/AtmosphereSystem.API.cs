@@ -122,6 +122,10 @@ public partial class AtmosphereSystem
         if (!Resolve(entity.Owner, ref entity.Comp))
             return null;
 
+        // CMU14: stair openings use the lower stairwell's air, not the upper map's vacuum.
+        if (CMUTryGetStairMixture(entity, excite, out var stairMixture))
+            return stairMixture;
+
         var indices = XformSystem.GetGridTilePositionOrDefault(entity);
         return GetTileMixture(entity.Comp.GridUid, entity.Comp.MapUid, indices, excite);
     }
@@ -165,6 +169,10 @@ public partial class AtmosphereSystem
 
         if (!ignoreExposed && TryGetExposedMixture(ent, out var mixture))
             return mixture;
+
+        // CMU14: keep respiration, pressure and temperature consistent while crossing a stair opening.
+        if (CMUTryGetStairMixture(ent, excite, out var stairMixture))
+            return stairMixture;
 
         var position = XformSystem.GetGridTilePositionOrDefault((ent, ent.Comp));
         return GetTileMixture(grid, map, position, excite);
