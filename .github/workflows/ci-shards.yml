@@ -29,7 +29,6 @@ jobs:
     outputs:
       serve: ${{ steps.gate.outputs.serve }}
       chunk: ${{ steps.gate.outputs.chunk }}
-      last: ${{ steps.gate.outputs.last }}
     steps:
       - name: Decide
         id: gate
@@ -37,11 +36,81 @@ jobs:
         with:
           script: |
             const POOL = 20, RESERVE = 3, CHUNK = 6;
-            const SHARDS = [{"name":"cmu_yautja","filter":"FullyQualifiedName~CMU14.Yautja. & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest. & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest. & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest. & FullyQualifiedName!~CMU14.Yautja.YautjaHuntingGroundMapTest."},{"name":"cmu_movement","filter":"FullyQualifiedName~CMU14.Movement."},{"name":"cmu_systems","filter":"FullyQualifiedName~CMU14.ColonyEconomy. | FullyQualifiedName~CMU14.Fire. | FullyQualifiedName~CMU14.ForceOnForce. | FullyQualifiedName~CMU14.Threats. | FullyQualifiedName~CMU14.DroneOperator. | FullyQualifiedName~CMU14.Evacuation. | FullyQualifiedName~CMU14.Weapons. | FullyQualifiedName~CMU14.TacticalMap. | FullyQualifiedName~CMU14.Traits. | FullyQualifiedName~CMU14.Trigger. | FullyQualifiedName~CMU14.Minds. | FullyQualifiedName~CMU14.Construction. | FullyQualifiedName~CMU14.Light."},{"name":"cmu_vehicle_bugs","filter":"FullyQualifiedName~CMU14.Vehicle. | FullyQualifiedName~CMU14.BugReports. | FullyQualifiedName~CMU14.Xenonids. | FullyQualifiedName~CMU14.Requisitions. | FullyQualifiedName~CMU14.Radio. | FullyQualifiedName~CMU14.HunterShip. | FullyQualifiedName~CMU14.Insurgency. | FullyQualifiedName~CMU14.Nutrition."},{"name":"post_map_init","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest. & FullyQualifiedName!~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest"},{"name":"rmc","filter":"FullyQualifiedName~RMC14. & FullyQualifiedName!~RMC14.PlanetMapLoadTests."},{"name":"cmu_yautja_smoke","filter":"FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest. & Name!~Blooding & Name!~Bracer & Name!~Huntsmaster"},{"name":"cmu_camera","filter":"FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest. & (Name~Rmc | Name~Static | Name~Member | Name~Cmu)"},{"name":"mapping_station_shuttle_round","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.GameRules. | FullyQualifiedName~Content.IntegrationTests.Tests.Mapping. | FullyQualifiedName~Content.IntegrationTests.Tests.Procedural. | FullyQualifiedName~Content.IntegrationTests.Tests.Replays. | FullyQualifiedName~Content.IntegrationTests.Tests.Round. | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle. | FullyQualifiedName~Content.IntegrationTests.Tests.Station. | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles. | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm. | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable."},{"name":"cmu_yautja_maps","filter":"FullyQualifiedName~CMU14.Yautja.YautjaHuntingGroundMapTest."},{"name":"root"},{"name":"cmu_threed","filter":"FullyQualifiedName~CMU14.ThreeD."},{"name":"cmu_diagnostics","filter":"FullyQualifiedName~CMU14.Diagnostics. | FullyQualifiedName~Content.IntegrationTests.Tests.Performance."},{"name":"cmu_medical_anatomy","filter":"FullyQualifiedName~CMU14.Medical.Anatomy."},{"name":"admin_cleanup_world","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.Administration. | FullyQualifiedName~Content.IntegrationTests.Tests.Access. | FullyQualifiedName~Content.IntegrationTests.Tests.Commands. | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys. | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby. | FullyQualifiedName~Content.IntegrationTests.Tests.Roles. | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed. | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface. | FullyQualifiedName~Content.IntegrationTests.Tests.Afk. | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts. | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession. | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests. | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers. | FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup. | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable. | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible. | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking. | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork. | FullyQualifiedName~Content.IntegrationTests.Tests.Disposal. | FullyQualifiedName~Content.IntegrationTests.Tests.Doors. | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding. | FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects. | FullyQualifiedName~Content.IntegrationTests.Tests.Payload. | FullyQualifiedName~Content.IntegrationTests.Tests.Power. | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable. | FullyQualifiedName~Content.IntegrationTests.Tests.Wires. | FullyQualifiedName~Content.IntegrationTests.Tests.Containers. | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics. | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs."},{"name":"cmu_yautja_roles","filter":"FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest."},{"name":"map_loading","filter":"FullyQualifiedName~RMC14.PlanetMapLoadTests. | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest."},{"name":"cmu","filter":"FullyQualifiedName~CMU14. & FullyQualifiedName!~CMU14.ColonyEconomy. & FullyQualifiedName!~CMU14.Fire. & FullyQualifiedName!~CMU14.ForceOnForce. & FullyQualifiedName!~CMU14.ThreeD. & FullyQualifiedName!~CMU14.Threats. & FullyQualifiedName!~CMU14.DroneOperator. & FullyQualifiedName!~CMU14.Evacuation. & FullyQualifiedName!~CMU14.Weapons. & FullyQualifiedName!~CMU14.TacticalMap. & FullyQualifiedName!~CMU14.Traits. & FullyQualifiedName!~CMU14.Trigger. & FullyQualifiedName!~CMU14.Minds. & FullyQualifiedName!~CMU14.Construction. & FullyQualifiedName!~CMU14.Light. & FullyQualifiedName!~CMU14.Medical. & FullyQualifiedName!~CMU14.Chemistry. & FullyQualifiedName!~CMU14.Dropship. & FullyQualifiedName!~CMU14.Blackfoot. & FullyQualifiedName!~CMU14.Fighter. & FullyQualifiedName!~CMU14.CargoVehicle. & FullyQualifiedName!~CMU14.Maps. & FullyQualifiedName!~CMU14.ZLevels. & FullyQualifiedName!~CMU14.Camera. & FullyQualifiedName!~CMU14.Yautja. & FullyQualifiedName!~CMU14.Diagnostics. & FullyQualifiedName!~CMU14.Research. & FullyQualifiedName!~CMU14.Fob. & FullyQualifiedName!~CMU14.Movement. & FullyQualifiedName!~CMU14.Vehicle. & FullyQualifiedName!~CMU14.BugReports. & FullyQualifiedName!~CMU14.Xenonids. & FullyQualifiedName!~CMU14.Requisitions. & FullyQualifiedName!~CMU14.Radio. & FullyQualifiedName!~CMU14.HunterShip. & FullyQualifiedName!~CMU14.Insurgency. & FullyQualifiedName!~CMU14.Nutrition. & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest. & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest. & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest. & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest."},{"name":"cmu_chemistry","filter":"FullyQualifiedName~CMU14.Chemistry. | FullyQualifiedName~CMU14.Research."},{"name":"cmu_fob","filter":"FullyQualifiedName~CMU14.Fob."},{"name":"post_map_init_nongame","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest"},{"name":"cmu_yautja_smoke_blooding","filter":"FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest. & (Name~Blooding | Name~Bracer | Name~Huntsmaster)"},{"name":"cmu_spatial","filter":"(FullyQualifiedName~CMU14.ZLevels. | FullyQualifiedName~CMU14.Camera. | FullyQualifiedName~Content.IntegrationTests.CMU.) & (FullyQualifiedName!~CMU14.Camera.CameraNetworkSystemTest. | (FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest. & Name!~Rmc & Name!~Static & Name!~Member & Name!~Cmu))"},{"name":"cmu_ships","filter":"(FullyQualifiedName~CMU14.Dropship. | FullyQualifiedName~CMU14.Blackfoot. | FullyQualifiedName~CMU14.Fighter. | FullyQualifiedName~CMU14.CargoVehicle. | FullyQualifiedName~CMU14.Maps.) & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest."},{"name":"gameplay_core","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.Atmos. | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion. | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids. | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity. | FullyQualifiedName~Content.IntegrationTests.Tests.Physics. | FullyQualifiedName~Content.IntegrationTests.Tests.Decals. | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint. | FullyQualifiedName~Content.IntegrationTests.Tests.Weather. | FullyQualifiedName~Content.IntegrationTests.Tests.Actions. | FullyQualifiedName~Content.IntegrationTests.Tests.Body. | FullyQualifiedName~Content.IntegrationTests.Tests.Buckle. | FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon. | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing. | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning. | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter. | FullyQualifiedName~Content.IntegrationTests.Tests.Changeling. | FullyQualifiedName~Content.IntegrationTests.Tests.Chat. | FullyQualifiedName~Content.IntegrationTests.Tests.Clumsy. | FullyQualifiedName~Content.IntegrationTests.Tests.Examine. | FullyQualifiedName~Content.IntegrationTests.Tests.Eye. | FullyQualifiedName~Content.IntegrationTests.Tests.Gibbing. | FullyQualifiedName~Content.IntegrationTests.Tests.Humanoid. | FullyQualifiedName~Content.IntegrationTests.Tests.Identity. | FullyQualifiedName~Content.IntegrationTests.Tests.Medical. | FullyQualifiedName~Content.IntegrationTests.Tests.Nutrition. | FullyQualifiedName~Content.IntegrationTests.Tests.Paper. | FullyQualifiedName~Content.IntegrationTests.Tests.Respirator. | FullyQualifiedName~Content.IntegrationTests.Tests.Security. | FullyQualifiedName~Content.IntegrationTests.Tests.Speech. | FullyQualifiedName~Content.IntegrationTests.Tests.Stunnable. | FullyQualifiedName~Content.IntegrationTests.Tests.Zombie."},{"name":"gameplay_runtime","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.Interaction. | FullyQualifiedName~Content.IntegrationTests.Tests.Internals. | FullyQualifiedName~Content.IntegrationTests.Tests.Minds. | FullyQualifiedName~Content.IntegrationTests.Tests.Movement. | FullyQualifiedName~Content.IntegrationTests.Tests.Networking. | FullyQualifiedName~Content.IntegrationTests.Tests.NPC. | FullyQualifiedName~Content.IntegrationTests.Tests.Puller. | FullyQualifiedName~Content.IntegrationTests.Tests.Follower. | FullyQualifiedName~Content.IntegrationTests.Tests.Vehicle. | FullyQualifiedName~Content.IntegrationTests.Tests.Trigger."},{"name":"cmu_medical","filter":"FullyQualifiedName~CMU14.Medical. & FullyQualifiedName!~CMU14.Medical.Anatomy."},{"name":"items_storage_crafting","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.Storage. | FullyQualifiedName~Content.IntegrationTests.Tests.Strip. | FullyQualifiedName~Content.IntegrationTests.Tests.Tag. | FullyQualifiedName~Content.IntegrationTests.Tests.Utility. | FullyQualifiedName~Content.IntegrationTests.Tests.Vending. | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing. | FullyQualifiedName~Content.IntegrationTests._AU14 | FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry. | FullyQualifiedName~Content.IntegrationTests.Tests.Construction. | FullyQualifiedName~Content.IntegrationTests.Tests.Hands. | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe. | FullyQualifiedName~Content.IntegrationTests.Tests.Materials. | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite. | FullyQualifiedName~Content.IntegrationTests.Tests.Engineering. | FullyQualifiedName~Content.IntegrationTests.Tests.Holosign. | FullyQualifiedName~Content.IntegrationTests.Tests.Inventory. | FullyQualifiedName~Content.IntegrationTests.Tests.Items. | FullyQualifiedName~Content.IntegrationTests.Tests.Kitchen. | FullyQualifiedName~Content.IntegrationTests.Tests.Labels. | FullyQualifiedName~Content.IntegrationTests.Tests.Light. | FullyQualifiedName~Content.IntegrationTests.Tests.Markings. | FullyQualifiedName~Content.IntegrationTests.Tests.Mousetrap. | FullyQualifiedName~Content.IntegrationTests.Tests.SmartFridge. | FullyQualifiedName~Content.IntegrationTests.Tests.Stacks. | FullyQualifiedName~Content.IntegrationTests.Tests.Tools. | FullyQualifiedName~Content.IntegrationTests.Tests.Weapons."},{"name":"proto_lint_serial","filter":"FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook. | FullyQualifiedName~Content.IntegrationTests.Tests.Linter. | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences. | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests. | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization. | FullyQualifiedName~Content.IntegrationTests.Tests.Audio. | FullyQualifiedName~Content.IntegrationTests.Tests.NameIdentifier. | FullyQualifiedName~Content.IntegrationTests.Tests.Research."},{"name":"cmu_lobby_ui","filter":"FullyQualifiedName~CMU14.Round.CMUPresetVoteTest. | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest. | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest. | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest."},{"name":"cmu_yautja_weapons","filter":"FullyQualifiedName~CMU14.Yautja.YautjaBowTest."}];
+            // 31 shards, longest first: admission walks this list in order, so
+            // slow shards claim runners before quick ones. github does not
+            // promise start order within a chunk, this is only a nudge. keep
+            // new shards in rough time order and carve-outs in sync
+            const SHARDS = [
+              // CMU14: keep the largest Yautja fixtures in separate test processes.
+              {name: 'cmu_yautja', filter: 'FullyQualifiedName~CMU14.Yautja. & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest. & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest. & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest. & FullyQualifiedName!~CMU14.Yautja.YautjaHuntingGroundMapTest.'},
+              // CMU14: full-rotation map sweeps exceed the normal per-test watchdog.
+              {name: 'cmu_movement', filter: 'FullyQualifiedName~CMU14.Movement.'},
+              // CMU14: carved out into cmu_fob / cmu_movement / cmu_vehicle_bugs, keep in sync with those shards
+              {name: 'cmu_systems', filter: 'FullyQualifiedName~CMU14.ColonyEconomy. | FullyQualifiedName~CMU14.Fire. | FullyQualifiedName~CMU14.ForceOnForce. | FullyQualifiedName~CMU14.Threats. | FullyQualifiedName~CMU14.DroneOperator. | FullyQualifiedName~CMU14.Evacuation. | FullyQualifiedName~CMU14.Weapons. | FullyQualifiedName~CMU14.TacticalMap. | FullyQualifiedName~CMU14.Traits. | FullyQualifiedName~CMU14.Trigger. | FullyQualifiedName~CMU14.Minds. | FullyQualifiedName~CMU14.Construction. | FullyQualifiedName~CMU14.Light.'},
+              // CMU14: research builds a fresh pair per procgen test, about half of the old cmu shard.
+              // four workers here build them side by side instead of two in cmu
+              {name: 'cmu_vehicle_bugs', filter: 'FullyQualifiedName~CMU14.Vehicle. | FullyQualifiedName~CMU14.BugReports. | FullyQualifiedName~CMU14.Xenonids. | FullyQualifiedName~CMU14.Requisitions. | FullyQualifiedName~CMU14.Radio. | FullyQualifiedName~CMU14.HunterShip. | FullyQualifiedName~CMU14.Insurgency. | FullyQualifiedName~CMU14.Nutrition.'},
+              // CMU14: every FOB test loads a full distress-site map, CMUFobMapTest alone is 26 of them.
+              // these were the other half of the old cmu catch-all's memory aborts
+              {name: 'post_map_init', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest. & FullyQualifiedName!~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest'},
+              {name: 'rmc', filter: 'FullyQualifiedName~RMC14. & FullyQualifiedName!~RMC14.PlanetMapLoadTests.'},
+              // CMU14: the smoke fixture runs one pair at a time, so it's split by method name instead.
+              // cmu_yautja_smoke is the catch-all, keep these words in sync with its exclusions
+              {name: 'cmu_yautja_smoke', filter: 'FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest. & Name!~Blooding & Name!~Bracer & Name!~Huntsmaster'},
+              // CMU14: name exclusions bind to CameraNetworkSystemTest explicitly so the
+              // method-name split with cmu_camera stays scoped no matter how the surrounding
+              // filter evolves; no other shard covers ZLevels, keep it that way
+              {name: 'cmu_camera', filter: 'FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest. & (Name~Rmc | Name~Static | Name~Member | Name~Cmu)'},
+              {name: 'mapping_station_shuttle_round', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.GameRules. | FullyQualifiedName~Content.IntegrationTests.Tests.Mapping. | FullyQualifiedName~Content.IntegrationTests.Tests.Procedural. | FullyQualifiedName~Content.IntegrationTests.Tests.Replays. | FullyQualifiedName~Content.IntegrationTests.Tests.Round. | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle. | FullyQualifiedName~Content.IntegrationTests.Tests.Station. | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles. | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm. | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable.'},
+              // CMU14: old atmos_fluids_physics folded in, see items_storage_crafting
+              {name: 'cmu_yautja_maps', filter: 'FullyQualifiedName~CMU14.Yautja.YautjaHuntingGroundMapTest.'},
+              {name: 'root', filter: ''},
+              {name: 'cmu_threed', filter: 'FullyQualifiedName~CMU14.ThreeD.'},
+              // CMU14: every shard pays checkout (~1.5 min typical, 5-15 min when the git backend
+              // throttles the shard fan-out) plus ~2 min building its first pairs before a
+              // test runs, so the small shards are merged in pairs. old storage_misc_au14 is folded in here
+              {name: 'cmu_diagnostics', filter: 'FullyQualifiedName~CMU14.Diagnostics. | FullyQualifiedName~Content.IntegrationTests.Tests.Performance.'},
+              {name: 'cmu_medical_anatomy', filter: 'FullyQualifiedName~CMU14.Medical.Anatomy.'},
+              // CMU14: fresh lobby pairs need memory headroom after the gameplay fixtures.
+              {name: 'admin_cleanup_world', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.Administration. | FullyQualifiedName~Content.IntegrationTests.Tests.Access. | FullyQualifiedName~Content.IntegrationTests.Tests.Commands. | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys. | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby. | FullyQualifiedName~Content.IntegrationTests.Tests.Roles. | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed. | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface. | FullyQualifiedName~Content.IntegrationTests.Tests.Afk. | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts. | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession. | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests. | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers. | FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup. | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable. | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible. | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking. | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork. | FullyQualifiedName~Content.IntegrationTests.Tests.Disposal. | FullyQualifiedName~Content.IntegrationTests.Tests.Doors. | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding. | FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects. | FullyQualifiedName~Content.IntegrationTests.Tests.Payload. | FullyQualifiedName~Content.IntegrationTests.Tests.Power. | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable. | FullyQualifiedName~Content.IntegrationTests.Tests.Wires. | FullyQualifiedName~Content.IntegrationTests.Tests.Containers. | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics. | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs.'},
+              // Bulk entity/component sweeps remain in the nightly Build & Test Debug workflow.
+              {name: 'cmu_yautja_roles', filter: 'FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.'},
+              {name: 'map_loading', filter: 'FullyQualifiedName~RMC14.PlanetMapLoadTests. | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest.'},
+              // CMU14: the limb-loss soak test runs ~19 minutes by itself. in the cmu catch-all it ran
+              // beside FOB map loads and the runner died of memory mid-run, aborting both. on its own
+              // shard it cannot take other tests down (same medicine as cmu_threed)
+              {name: 'cmu', filter: 'FullyQualifiedName~CMU14. & FullyQualifiedName!~CMU14.ColonyEconomy. & FullyQualifiedName!~CMU14.Fire. & FullyQualifiedName!~CMU14.ForceOnForce. & FullyQualifiedName!~CMU14.ThreeD. & FullyQualifiedName!~CMU14.Threats. & FullyQualifiedName!~CMU14.DroneOperator. & FullyQualifiedName!~CMU14.Evacuation. & FullyQualifiedName!~CMU14.Weapons. & FullyQualifiedName!~CMU14.TacticalMap. & FullyQualifiedName!~CMU14.Traits. & FullyQualifiedName!~CMU14.Trigger. & FullyQualifiedName!~CMU14.Minds. & FullyQualifiedName!~CMU14.Construction. & FullyQualifiedName!~CMU14.Light. & FullyQualifiedName!~CMU14.Medical. & FullyQualifiedName!~CMU14.Chemistry. & FullyQualifiedName!~CMU14.Dropship. & FullyQualifiedName!~CMU14.Blackfoot. & FullyQualifiedName!~CMU14.Fighter. & FullyQualifiedName!~CMU14.CargoVehicle. & FullyQualifiedName!~CMU14.Maps. & FullyQualifiedName!~CMU14.ZLevels. & FullyQualifiedName!~CMU14.Camera. & FullyQualifiedName!~CMU14.Yautja. & FullyQualifiedName!~CMU14.Diagnostics. & FullyQualifiedName!~CMU14.Research. & FullyQualifiedName!~CMU14.Fob. & FullyQualifiedName!~CMU14.Movement. & FullyQualifiedName!~CMU14.Vehicle. & FullyQualifiedName!~CMU14.BugReports. & FullyQualifiedName!~CMU14.Xenonids. & FullyQualifiedName!~CMU14.Requisitions. & FullyQualifiedName!~CMU14.Radio. & FullyQualifiedName!~CMU14.HunterShip. & FullyQualifiedName!~CMU14.Insurgency. & FullyQualifiedName!~CMU14.Nutrition. & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest. & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest. & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest. & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest.'},
+              // CMU14: the heaviest areas of the cmu catch-all, about half its time. cmu stays the
+              // catch-all so new areas always land somewhere; keep this list and its exclusions in sync
+              {name: 'cmu_chemistry', filter: 'FullyQualifiedName~CMU14.Chemistry. | FullyQualifiedName~CMU14.Research.'},
+              // CMU14: the heavy half of the cmu catch-all (vehicle interiors, bug-repro and
+              // Xenomorph pairs). neither half may legitimately cross the 35-minute job cap;
+              // keep this list in sync with cmu's exclusions
+              {name: 'cmu_fob', filter: 'FullyQualifiedName~CMU14.Fob.'},
+              // CMU14: PostMapInitTest loads every map, two thirds of the old root_1. split by method so
+              // neither half is the slowest shard; post_map_init is the catch-all for new methods
+              {name: 'post_map_init_nongame', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.PostMapInitTest.NonGameMapsLoadableTest'},
+              {name: 'cmu_yautja_smoke_blooding', filter: 'FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest. & (Name~Blooding | Name~Bracer | Name~Huntsmaster)'},
+              {name: 'cmu_spatial', filter: '(FullyQualifiedName~CMU14.ZLevels. | FullyQualifiedName~CMU14.Camera. | FullyQualifiedName~Content.IntegrationTests.CMU.) & (FullyQualifiedName!~CMU14.Camera.CameraNetworkSystemTest. | (FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest. & Name!~Rmc & Name!~Static & Name!~Member & Name!~Cmu))'},
+              // CMU14: half of CameraNetworkSystemTest by method name, it was most of cmu_spatial.
+              // cmu_spatial runs the other half, keep these words in sync with its exclusions
+              {name: 'cmu_ships', filter: '(FullyQualifiedName~CMU14.Dropship. | FullyQualifiedName~CMU14.Blackfoot. | FullyQualifiedName~CMU14.Fighter. | FullyQualifiedName~CMU14.CargoVehicle. | FullyQualifiedName~CMU14.Maps.) & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest.'},
+              {name: 'gameplay_core', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.Atmos. | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion. | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids. | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity. | FullyQualifiedName~Content.IntegrationTests.Tests.Physics. | FullyQualifiedName~Content.IntegrationTests.Tests.Decals. | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint. | FullyQualifiedName~Content.IntegrationTests.Tests.Weather. | FullyQualifiedName~Content.IntegrationTests.Tests.Actions. | FullyQualifiedName~Content.IntegrationTests.Tests.Body. | FullyQualifiedName~Content.IntegrationTests.Tests.Buckle. | FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon. | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing. | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning. | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter. | FullyQualifiedName~Content.IntegrationTests.Tests.Changeling. | FullyQualifiedName~Content.IntegrationTests.Tests.Chat. | FullyQualifiedName~Content.IntegrationTests.Tests.Clumsy. | FullyQualifiedName~Content.IntegrationTests.Tests.Examine. | FullyQualifiedName~Content.IntegrationTests.Tests.Eye. | FullyQualifiedName~Content.IntegrationTests.Tests.Gibbing. | FullyQualifiedName~Content.IntegrationTests.Tests.Humanoid. | FullyQualifiedName~Content.IntegrationTests.Tests.Identity. | FullyQualifiedName~Content.IntegrationTests.Tests.Medical. | FullyQualifiedName~Content.IntegrationTests.Tests.Nutrition. | FullyQualifiedName~Content.IntegrationTests.Tests.Paper. | FullyQualifiedName~Content.IntegrationTests.Tests.Respirator. | FullyQualifiedName~Content.IntegrationTests.Tests.Security. | FullyQualifiedName~Content.IntegrationTests.Tests.Speech. | FullyQualifiedName~Content.IntegrationTests.Tests.Stunnable. | FullyQualifiedName~Content.IntegrationTests.Tests.Zombie.'},
+              // CMU14: walks every hunting ground map, ~11 of cmu_yautja's 17 minutes on its own
+              {name: 'gameplay_runtime', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.Interaction. | FullyQualifiedName~Content.IntegrationTests.Tests.Internals. | FullyQualifiedName~Content.IntegrationTests.Tests.Minds. | FullyQualifiedName~Content.IntegrationTests.Tests.Movement. | FullyQualifiedName~Content.IntegrationTests.Tests.Networking. | FullyQualifiedName~Content.IntegrationTests.Tests.NPC. | FullyQualifiedName~Content.IntegrationTests.Tests.Puller. | FullyQualifiedName~Content.IntegrationTests.Tests.Follower. | FullyQualifiedName~Content.IntegrationTests.Tests.Vehicle. | FullyQualifiedName~Content.IntegrationTests.Tests.Trigger.'},
+              // CMU14: the files directly in Tests/, minus PostMapInitTest which has its own shards
+              {name: 'cmu_medical', filter: 'FullyQualifiedName~CMU14.Medical. & FullyQualifiedName!~CMU14.Medical.Anatomy.'},
+              // CMU14: the 3D tests build fresh client/server pairs and load the 3D libraries, ~10 GB by the
+              // end. they were most of cmu_systems' memory, on their own they can't push the others over
+              {name: 'items_storage_crafting', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.Storage. | FullyQualifiedName~Content.IntegrationTests.Tests.Strip. | FullyQualifiedName~Content.IntegrationTests.Tests.Tag. | FullyQualifiedName~Content.IntegrationTests.Tests.Utility. | FullyQualifiedName~Content.IntegrationTests.Tests.Vending. | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing. | FullyQualifiedName~Content.IntegrationTests._AU14 | FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry. | FullyQualifiedName~Content.IntegrationTests.Tests.Construction. | FullyQualifiedName~Content.IntegrationTests.Tests.Hands. | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe. | FullyQualifiedName~Content.IntegrationTests.Tests.Materials. | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite. | FullyQualifiedName~Content.IntegrationTests.Tests.Engineering. | FullyQualifiedName~Content.IntegrationTests.Tests.Holosign. | FullyQualifiedName~Content.IntegrationTests.Tests.Inventory. | FullyQualifiedName~Content.IntegrationTests.Tests.Items. | FullyQualifiedName~Content.IntegrationTests.Tests.Kitchen. | FullyQualifiedName~Content.IntegrationTests.Tests.Labels. | FullyQualifiedName~Content.IntegrationTests.Tests.Light. | FullyQualifiedName~Content.IntegrationTests.Tests.Markings. | FullyQualifiedName~Content.IntegrationTests.Tests.Mousetrap. | FullyQualifiedName~Content.IntegrationTests.Tests.SmartFridge. | FullyQualifiedName~Content.IntegrationTests.Tests.Stacks. | FullyQualifiedName~Content.IntegrationTests.Tests.Tools. | FullyQualifiedName~Content.IntegrationTests.Tests.Weapons.'},
+              {name: 'proto_lint_serial', filter: 'FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook. | FullyQualifiedName~Content.IntegrationTests.Tests.Linter. | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences. | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests. | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization. | FullyQualifiedName~Content.IntegrationTests.Tests.Audio. | FullyQualifiedName~Content.IntegrationTests.Tests.NameIdentifier. | FullyQualifiedName~Content.IntegrationTests.Tests.Research.'},
+              {name: 'cmu_lobby_ui', filter: 'FullyQualifiedName~CMU14.Round.CMUPresetVoteTest. | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest. | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest. | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest.'},
+              // CMU14: old admin_access_ui folded in, see items_storage_crafting
+              {name: 'cmu_yautja_weapons', filter: 'FullyQualifiedName~CMU14.Yautja.YautjaBowTest.'},
+            ];
             const wr = context.payload.workflow_run;
             core.setOutput('serve', 'false');
             core.setOutput('chunk', '[]');
-            core.setOutput('last', 'false');
             if (wr.name !== 'CI' || wr.conclusion !== 'success')
               return;
             const headSha = wr.head_sha;
@@ -53,6 +122,11 @@ jobs:
               ...context.repo, run_id: wr.id, per_page: 100,
             });
             if (wrJobs.some(j => j.name.startsWith('Testcases /')))
+              return;
+
+            // CMU14: waves gate PR merges; nothing re-fires default-branch
+            // suites, and CI plus the nightly already cover them
+            if (wr.event !== 'pull_request')
               return;
 
             let pr = null;
@@ -71,18 +145,31 @@ jobs:
             const checkRuns = await github.paginate(github.rest.checks.listForRef, {
               ...context.repo, ref: headSha, per_page: 100,
             });
+            // CMU14: cancelled legs carry no verdict and go back in the pool
             const present = new Set(
-              checkRuns.filter(c => c.name.startsWith('Testcases /')).map(c => c.name.slice(11).trim())
+              checkRuns.filter(c => c.name.startsWith('Testcases /') && c.conclusion !== 'cancelled')
+                .map(c => c.name.slice(11).trim())
             );
             const missing = SHARDS.filter(s => !present.has(s.name));
-            if (missing.length === 0) {
-              // suite served; if the marker job once failed there is no other
-              // path back, so re-post it from here (chunk stays empty)
-              if (checkRuns.some(c => c.name === 'Testcases Complete'))
-                return;
-              core.setOutput('serve', 'true');
-              core.setOutput('last', 'true');
+            if (missing.length === 0)
               return;
+
+            // CMU14: pending from the first demand so the PR never reads green
+            // while it still owes a suite; the dispatcher finalize flips it
+            let markerRun = checkRuns
+              .filter(c => c.name === 'Testcases Complete')
+              .sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at))[0];
+            if (markerRun?.status === 'completed')
+              return;
+            if (!markerRun) {
+              const created = await github.rest.checks.create({
+                ...context.repo,
+                name: 'Testcases Complete',
+                head_sha: headSha,
+                status: 'in_progress',
+                output: {title: 'shard wave pending', summary: 'Suite queued or serving in chunked waves.'},
+              });
+              markerRun = created.data;
             }
 
             // yield while higher-priority unserved demand exists
@@ -107,34 +194,25 @@ jobs:
               const cs = await github.paginate(github.rest.checks.listForRef, {
                 ...context.repo, ref: other.head.sha, per_page: 100,
               });
-              if (cs.some(c => c.name === 'Testcases Complete')) continue;  // mid-suite or done
+              // CMU14: only a settled marker counts; pending is still demand
+              if (cs.some(c => c.name === 'Testcases Complete' && c.status === 'completed')) continue;
               core.info(`yielding to #${other.number} (${ok} < ${klass})`);
               return;
             }
 
-            // supersede stale same-head wave runs
-            const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
-              ...context.repo, workflow_id: 'ci-shards.yml', per_page: 100,
-            });
-            for (const w of waves) {
-              if (w.status === 'completed' || w.id === context.runId) continue;
-              if (w.head_sha !== headSha) continue;
-              try { await github.rest.actions.cancelWorkflowRun({ ...context.repo, run_id: w.id }); }
-              catch (e) { core.info(`cancel ${w.id}: ${e.status}`); }
-            }
-
-            // reserve: admit only what starts immediately beside the helper
-            // reserve. count in-progress jobs across EVERY workflow: builds,
+            // reserve: admit only what starts immediately beside the helpers,
             // guards and labels are exactly what the reserve exists for
             let busy = 0;
-            const liveRuns = await github.paginate(github.rest.actions.listWorkflowRuns, {
+            // CMU14: raw request, the bundled octokit lacks the method and runs
+            // never approach one page
+            const live = await github.request('GET /repos/{owner}/{repo}/actions/runs', {
               ...context.repo, status: 'in_progress', per_page: 100,
             });
-            for (const lr of liveRuns) {
-              const js = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+            for (const lr of live.data.workflow_runs) {
+              const jobs = await github.rest.actions.listJobsForWorkflowRun({
                 ...context.repo, run_id: lr.id, per_page: 100,
               });
-              busy += js.filter(j => j.status === 'in_progress').length;
+              busy += jobs.data.jobs.filter(j => j.status === 'in_progress').length;
             }
             const free = POOL - busy;
             const size = Math.min(CHUNK, missing.length);
@@ -144,8 +222,25 @@ jobs:
             }
 
             core.setOutput('chunk', JSON.stringify(missing.slice(0, CHUNK)));
-            core.setOutput('last', String(missing.length <= CHUNK));
             core.setOutput('serve', 'true');
+            if (missing.length <= CHUNK) {
+              await github.rest.checks.update({
+                ...context.repo,
+                check_run_id: markerRun.id,
+                output: {title: 'final chunk admitted', summary: 'Last wave admitted; marker settles when its legs finish.'},
+              });
+            }
+
+            // CMU14: announce on admission, before the legs have runners;
+            // queued legs are invisible and a second gate would re-admit
+            for (const s of missing.slice(0, CHUNK)) {
+              await github.rest.checks.create({
+                ...context.repo,
+                name: `Testcases / ${s.name}`,
+                head_sha: headSha,
+                status: 'in_progress',
+              });
+            }
 
   integration-tests:
     name: Testcases / ${{ matrix.shard.name }}
@@ -316,6 +411,38 @@ jobs:
           bash "$GITHUB_WORKSPACE/.github/scripts/report_test_failures.sh" \
             "$status" test-output.log "Testcases / ${shard}"
 
+      # CMU14: settle by name on the PR head. job check runs land on the
+      # default branch sha, invisible to the gate; always() posts the verdict
+      # even on cancellation
+      - name: Settle shard on PR head
+        if: always()
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const name = `Testcases / ${process.env.SHARD_NAME}`;
+            const conclusion = process.env.JOB_STATUS === 'success' ? 'success'
+              : process.env.JOB_STATUS === 'cancelled' ? 'cancelled' : 'failure';
+            const head = context.payload.workflow_run.head_sha;
+            const checks = await github.paginate(github.rest.checks.listForRef, {
+              ...context.repo, ref: head, per_page: 100,
+            });
+            const mine = checks.filter(c => c.name === name && c.status !== 'completed');
+            if (mine.length === 0) {
+              await github.rest.checks.create({
+                ...context.repo, name, head_sha: head,
+                status: 'completed', conclusion,
+              });
+            }
+            for (const c of mine) {
+              await github.rest.checks.update({
+                ...context.repo, check_run_id: c.id,
+                status: 'completed', conclusion,
+              });
+            }
+        env:
+          SHARD_NAME: ${{ matrix.shard.name }}
+          JOB_STATUS: ${{ job.status }}
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v7
@@ -329,21 +456,3 @@ jobs:
             !bin/Content.IntegrationTests/TestResults/**/*.dmp
           if-no-files-found: ignore
           retention-days: 3
-
-  complete:
-    name: Testcases Complete
-    needs: serve
-    if: needs.serve.outputs.serve == 'true' && needs.serve.outputs.last == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    steps:
-      - uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            await github.rest.checks.create({
-              ...context.repo,
-              name: 'Testcases Complete',
-              head_sha: context.payload.workflow_run.head_sha,
-              status: 'completed',
-              conclusion: 'success',
-            });
