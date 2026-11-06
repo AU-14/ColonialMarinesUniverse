@@ -13,8 +13,9 @@ public sealed class CMUXenoLanguageSystemTest
 {
     private static readonly ProtoId<LanguagePrototype> XenoLanguage = "Xeno";
 
-    [Test]
-    public async Task CorruptedHiveXenoKeepsXenoAndGainsEnglishOnHiveAssignment()
+    [TestCase("CMXenoDrone", false)]
+    [TestCase("CMXenoQueen", true)]
+    public async Task CorruptedHiveOnlyQueenGainsHumanSpeechOnHiveAssignment(string prototype, bool canSpeakHuman)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -24,7 +25,7 @@ public sealed class CMUXenoLanguageSystemTest
 
         await server.WaitPost(() =>
         {
-            xeno = server.EntMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            xeno = server.EntMan.SpawnEntity(prototype, map.GridCoords);
             corruptedHive = server.EntMan.SpawnEntity("CMUCorruptedHive", map.GridCoords);
         });
 
@@ -57,11 +58,12 @@ public sealed class CMUXenoLanguageSystemTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(language.CanSpeak(xeno, SharedLanguageSystem.CommonLanguage), Is.True);
+                Assert.That(language.CanSpeak(xeno, SharedLanguageSystem.CommonLanguage), Is.EqualTo(canSpeakHuman));
+                Assert.That(language.CanSpeak(xeno, "Russian"), Is.EqualTo(canSpeakHuman));
                 Assert.That(language.CanUnderstand(xeno, SharedLanguageSystem.CommonLanguage), Is.True);
                 Assert.That(language.CanSpeak(xeno, XenoLanguage), Is.True);
                 Assert.That(language.CanUnderstand(xeno, XenoLanguage), Is.True);
-                Assert.That(language.GetCurrentLanguage(xeno), Is.EqualTo(SharedLanguageSystem.CommonLanguage));
+                Assert.That(language.GetCurrentLanguage(xeno), Is.EqualTo(canSpeakHuman ? SharedLanguageSystem.CommonLanguage : XenoLanguage));
             });
         });
 

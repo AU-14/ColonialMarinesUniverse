@@ -85,6 +85,8 @@
         crate: RMCCrateSuppliesBoxes
     - name: Food and Drinks
       entries:
+      - cost: 600
+        crate: CMUCrateLivestockCow
       - cost: 380
         crate: AU14CrateBoxboxofingredients
       - cost: 390

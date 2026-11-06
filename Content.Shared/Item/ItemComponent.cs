@@ -52,7 +52,7 @@ public sealed partial class ItemComponent : Component
     /// <summary>
     /// An additional angle offset, in degrees, applied to the visual depiction of the item when displayed in the storage UI.
     /// </summary>
-    [AutoNetworkedField]
+    [DataField("cmuStoredRotation"), AutoNetworkedField] // CMU14: opt-in storage alignment without restoring disabled upstream rotations.
     public float StoredRotation = 0;
 
     /// <summary>
