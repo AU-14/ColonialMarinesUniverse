@@ -471,6 +471,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         var prototype = MetaData(ammo).EntityPrototype?.ID;
         return prototype == weapon.Comp.AmmoPrototype.Id ||
                weapon.Comp.AdditionalAmmoPrototypes.Any(additional => additional.Id == prototype);
+    }
     public bool TryGetFeedAmmo(EntityUid point, out Entity<DropshipAmmoComponent> ammo, int minimumRounds = 1)
     {
         ammo = default;
