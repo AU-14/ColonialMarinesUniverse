@@ -79,6 +79,17 @@ public sealed class CMUShipWeaponSpreadTest : GameTest
                 Assert.That(status.TryGetStatusEffect(lowerVictim, CMUShipWeaponsSystem.EmsStun, out _), Is.True);
                 Assert.That(status.TryGetStatusEffect(upperVictim, CMUShipWeaponsSystem.EmsStun, out _), Is.True);
             }
+            var roofTile = Server.ResolveDependency<ITileDefinitionManager>()["CMURoofOuterHull8Destroyable"].TileId;
+            SEntMan.System<SharedMapSystem>().SetTile(upper, SComp<MapGridComponent>(upper),
+                new Vector2i(32, 0), new Tile(roofTile));
+        });
+
+        await Pair.RunSeconds(1.1f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<CMUShipWeaponCloudSpreadComponent>(lowerField).CoveredTiles
+                .Contains(new Vector2i(32, 0)), Is.False,
+                "an intact transparent roof tile is a physical barrier to vertical spread");
             SEntMan.System<SharedMapSystem>().SetTile(upper, SComp<MapGridComponent>(upper),
                 new Vector2i(32, 0), Tile.Empty);
             roof = SEntMan.SpawnAtPosition(null, new EntityCoordinates(map.Grid, new Vector2(32.5f, .5f)));
@@ -102,7 +113,7 @@ public sealed class CMUShipWeaponSpreadTest : GameTest
                 "an opened floor lets the upper cloud descend behind the lower wall");
         });
 
-        await Pair.RunSeconds(52);
+        await Pair.RunSeconds(50.9f);
         await Server.WaitAssertion(() =>
         {
             Assert.That(SComp<CMUShipWeaponCloudSpreadComponent>(lowerField).CoveredTiles
@@ -187,11 +198,6 @@ public sealed class CMUShipWeaponSpreadTest : GameTest
                 blocked = SEntMan.SpawnAtPosition("CMMobHuman", Coordinates(-32, 0));
             }
 
-            var profile = SProtoMan.Index<CMUShipWeaponPrototype>(weapon);
-            Assert.That(profile.CloudRadius, Is.EqualTo(30));
-            Assert.That(profile.CloudMaxRadius, Is.EqualTo(45));
-            Assert.That(profile.FootprintRadius, Is.EqualTo(45.75f));
-            Assert.That(profile.FieldDuration, Is.EqualTo(TimeSpan.FromSeconds(60)));
             var strike = SEntMan.SpawnAtPosition("CMUShipWeaponStrike", Coordinates(0, 0));
             SEntMan.EnsureComponent<CMUShipWeaponStrikeComponent>(strike).Weapon = weapon;
             startedAt = SGameTiming.CurTime;

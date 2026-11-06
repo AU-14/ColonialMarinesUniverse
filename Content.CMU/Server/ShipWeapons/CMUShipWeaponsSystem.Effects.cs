@@ -9,6 +9,7 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.ShipWeapons;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -32,6 +33,7 @@ public sealed partial class CMUShipWeaponsSystem
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private ITileDefinitionManager _cloudTileDefinitions = default!;
     private readonly HashSet<Entity<DamageableComponent>> _railTargets = new();
     private readonly HashSet<Entity<IsRoofComponent>> _cloudRoofs = new();
     private readonly List<(EntityUid Field, Vector2i Tile)> _verticalCloudSpread = new();
@@ -166,7 +168,7 @@ public sealed partial class CMUShipWeaponsSystem
             var other = new MapCoordinates(cell.Position, otherMap.MapId);
             var upper = offset > 0 ? other : cell;
             var lower = offset > 0 ? cell : other;
-            if (!_ordnance.IsOpening(upper) || !IsCloudTileOpen(other))
+            if (!IsCloudFloorOpen(upper) || !IsCloudTileOpen(other))
                 continue;
 
             _cloudRoofs.Clear();
@@ -176,6 +178,17 @@ public sealed partial class CMUShipWeaponsSystem
 
             _verticalCloudSpread.Add((target, tile));
         }
+    }
+
+    private bool IsCloudFloorOpen(MapCoordinates cell)
+    {
+        if (!_map.TryFindGridAt(cell, out var gridUid, out var grid))
+            return true;
+
+        var tile = _map.WorldToTile(gridUid, grid, cell.Position);
+        // Intact roof tiles can be transparent, but clouds need a physical opening.
+        return !_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) ||
+               CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, _cloudTileDefinitions);
     }
 
     private bool TryGetCloudCoordinates(MapCoordinates cell, out EntityCoordinates coordinates)
