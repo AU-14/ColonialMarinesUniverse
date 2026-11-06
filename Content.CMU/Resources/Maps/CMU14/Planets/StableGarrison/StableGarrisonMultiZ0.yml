@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 290.0.0
+  engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/26/2026 12:01:44
-  entityCount: 61955
+  time: 11/06/2026 17:07:56
+  entityCount: 61957
 maps:
 - 1
 grids:
@@ -108347,1167 +108347,1451 @@ entities:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateEmptySandbags
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSandbagsConstructionKit
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMetalSheets
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCratePlasteelSheets
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGlassSheets
           cost: 650
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateWoodenPlanks
           cost: 100
+          cMUFactionVendorItem: False
       - name: Engineering
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateFOBTentCrate
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateElectricalMaintenance
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMechanicalMaintenance
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateInflatableBarriers
           cost: 150
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateReplacementLights
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCratePacmanParts
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSuperPacmanParts
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateFlashlights
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateHighCapacityPowerCell
           cost: 750
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateBoxFirefighting
           cost: 1000
+          cMUFactionVendorItem: False
       - name: Explosives
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesHighExplosiveUPP
           cost: 900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesIncendiaryUPP
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesSmokeUPP
           cost: 5000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCratePlasticExplosives
           cost: 4000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBreachingCharges
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesHighExplosiveBoxUPP
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesIncendiaryBoxUPP
           cost: 1300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesSmokeBoxUPP
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: CMUCrateGrenadeBoxAGMF
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: CMUCrateGrenadeBoxAGMI
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstFrag
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstIncendiary
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstSmoke
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstHornet
           cost: 1900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstStarShell
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesBatonSlug
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateExplosiveClaymoreMine
           cost: 1600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateM6HBruteRockets
           cost: 1500
+          cMUFactionVendorItem: False
       - name: Food
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateFoodMRE
           cost: 100
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateFoodIngredients
           cost: 100
+          cMUFactionVendorItem: False
       - name: Gear
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateTacticalMonocular
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateTacticalMonocularDesignator
           cost: 1700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearPackFlare
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMotionDetectors
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearPackFlareCAS
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearFulton
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearParachute
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateAttachmentSmartScope
           cost: 800
+          cMUFactionVendorItem: False
       - name: Medical
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMedicalVendor
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMedicalBloodVendor
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 480
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: CMUCrateMedicalFieldTreatments
           cost: 850
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalSurgery
           cost: 350
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 4
           entities: []
           crate: AU14CrateBoxDefibrillator
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalBodyBag
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalStasisBag
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateBoxHospitalBeds
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalPill
           cost: 650
+          cMUFactionVendorItem: False
       - name: Mortar
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarKitRMC
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellFlareRMC
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellHERMC
           cost: 650
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellIncendiaryRMC
           cost: 750
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellHEATRMC
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarMixed
           cost: 950
+          cMUFactionVendorItem: False
       - name: Supplies
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSupplyInternals
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSupplyEvacuation
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSuppliesBoxes
           cost: 75
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSupplyJanitor
           cost: 150
+          cMUFactionVendorItem: False
       - name: Vehicle Ammo
         entries:
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoLTBCannon
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoLTAAAP
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoAceAutocannon
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoDragonFlamer
           cost: 1700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoBoyarsDualCannon
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoGrenadeLauncher
           cost: 900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoSmokeLauncher
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoTowLauncher
           cost: 2200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoCupola
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoLZRNFlamer
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoFrontalCannon
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoFlareLauncher
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoRotaryCannon
           cost: 1800
+          cMUFactionVendorItem: False
       - name: Weapons
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateXM51
           cost: 850
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMK80
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateXM88
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMOU53
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateM85A1
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateAssortedKnives
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateM34
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12
           cost: 2200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateOG60
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateM5A1SLAW
           cost: 1500
+          cMUFactionVendorItem: False
       - name: Ammo
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunBreaching
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazinePistolMK80
           cost: 650
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxAmmo458
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazineSentry
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazineSentryShotgun
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazineSentryFire
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunSlugs
           cost: 300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunFlechette
           cost: 300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunBuckshot
           cost: 300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12ATRocket
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12MixedRocket
           cost: 350
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12HERocket
           cost: 150
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12EIIRocket
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineType88
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineType23Mixed
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMagazineNapthalUT
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMagazineFlamerMixed
           cost: 350
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMagazineBGel
           cost: 500
+          cMUFactionVendorItem: False
       - name: Specialist Ammo
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96S
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96SIncendiary
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96SFlak
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96SMixed
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecAMRXM43E1
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpHE
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpFLC
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpINCEN
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpMixed
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutStandard
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutINCEN
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutFLAK
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutMixed
           cost: 1500
+          cMUFactionVendorItem: False
       - name: AP Ammo
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateBoxMagazineRifleAG80AP
           cost: 850
+          cMUFactionVendorItem: False
       - name: Dropship Parts
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropShipSpotlight
           cost: 100
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropShipLZDetector
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentCoolingSystem
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentFuelEnhancer
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipTargetingSystem
           cost: 850
+          cMUFactionVendorItem: False
       - name: Dropship Munitions
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketHarpoon
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketBanshee
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoRocketBansheeHorde
           cost: 1600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketKeeper
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketWidowmaker
           cost: 4000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoRocketThermobaricTwo
           cost: 1300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoRocketWidowmakerDouble
           cost: 6500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketThermobaric
           cost: 4900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketNapalm
           cost: 4500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketMiniMike
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketMiniMikeIncendiary
           cost: 3500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoCBU607
           cost: 3500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoCBU250
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoMk102JDAM
           cost: 9000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoGBU89I
           cost: 11000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoGAU
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoGAUAP
           cost: 2500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoLaserCannon
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoLaunchableSentry
           cost: 600
+          cMUFactionVendorItem: False
   - uid: 1411
     components:
     - type: Transform
@@ -109520,1167 +109804,1451 @@ entities:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateEmptySandbags
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSandbagsConstructionKit
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMetalSheets
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCratePlasteelSheets
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGlassSheets
           cost: 650
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateWoodenPlanks
           cost: 100
+          cMUFactionVendorItem: False
       - name: Engineering
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateFOBTentCrate
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateElectricalMaintenance
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMechanicalMaintenance
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateInflatableBarriers
           cost: 150
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateReplacementLights
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCratePacmanParts
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSuperPacmanParts
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateFlashlights
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateHighCapacityPowerCell
           cost: 750
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateBoxFirefighting
           cost: 1000
+          cMUFactionVendorItem: False
       - name: Explosives
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesHighExplosiveUPP
           cost: 900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesIncendiaryUPP
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesSmokeUPP
           cost: 5000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCratePlasticExplosives
           cost: 4000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBreachingCharges
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesHighExplosiveBoxUPP
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesIncendiaryBoxUPP
           cost: 1300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateGrenadesSmokeBoxUPP
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: CMUCrateGrenadeBoxAGMF
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: CMUCrateGrenadeBoxAGMI
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstFrag
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstIncendiary
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstSmoke
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstHornet
           cost: 1900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesAirburstStarShell
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGrenadesBatonSlug
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateExplosiveClaymoreMine
           cost: 1600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateM6HBruteRockets
           cost: 1500
+          cMUFactionVendorItem: False
       - name: Food
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateFoodMRE
           cost: 100
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateFoodIngredients
           cost: 100
+          cMUFactionVendorItem: False
       - name: Gear
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateTacticalMonocular
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateTacticalMonocularDesignator
           cost: 1700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearPackFlare
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMotionDetectors
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearPackFlareCAS
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearFulton
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateGearParachute
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateAttachmentSmartScope
           cost: 800
+          cMUFactionVendorItem: False
       - name: Medical
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMedicalVendor
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMedicalBloodVendor
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 480
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: CMUCrateMedicalFieldTreatments
           cost: 850
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalSurgery
           cost: 350
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 4
           entities: []
           crate: AU14CrateBoxDefibrillator
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalBodyBag
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalStasisBag
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateBoxHospitalBeds
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMedicalPill
           cost: 650
+          cMUFactionVendorItem: False
       - name: Mortar
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarKitRMC
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellFlareRMC
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellHERMC
           cost: 650
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellIncendiaryRMC
           cost: 750
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarShellHEATRMC
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMortarMixed
           cost: 950
+          cMUFactionVendorItem: False
       - name: Supplies
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSupplyInternals
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSupplyEvacuation
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSuppliesBoxes
           cost: 75
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateSupplyJanitor
           cost: 150
+          cMUFactionVendorItem: False
       - name: Vehicle Ammo
         entries:
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoLTBCannon
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoLTAAAP
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoAceAutocannon
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoDragonFlamer
           cost: 1700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoBoyarsDualCannon
           cost: 1800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoGrenadeLauncher
           cost: 900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoSmokeLauncher
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoTowLauncher
           cost: 2200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoCupola
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoLZRNFlamer
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoFrontalCannon
           cost: 1000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoFlareLauncher
           cost: 700
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 300
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 2
           entities: []
           crate: RMCCrateVehicleAmmoRotaryCannon
           cost: 1800
+          cMUFactionVendorItem: False
       - name: Weapons
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateXM51
           cost: 850
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMK80
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateXM88
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMOU53
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateM85A1
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateAssortedKnives
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateM34
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12
           cost: 2200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateOG60
           cost: 1200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateM5A1SLAW
           cost: 1500
+          cMUFactionVendorItem: False
       - name: Ammo
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunBreaching
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazinePistolMK80
           cost: 650
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxAmmo458
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazineSentry
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazineSentryShotgun
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxMagazineSentryFire
           cost: 600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunSlugs
           cost: 300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunFlechette
           cost: 300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateBoxShellsShotgunBuckshot
           cost: 300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12ATRocket
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12MixedRocket
           cost: 350
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12HERocket
           cost: 150
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateHJRA12EIIRocket
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineType88
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineType23Mixed
           cost: 250
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMagazineNapthalUT
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMagazineFlamerMixed
           cost: 350
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCCrateMagazineBGel
           cost: 500
+          cMUFactionVendorItem: False
       - name: Specialist Ammo
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96S
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96SIncendiary
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96SFlak
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSniperM96SMixed
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecAMRXM43E1
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpHE
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpFLC
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpINCEN
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecSharpMixed
           cost: 1500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutStandard
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutINCEN
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutFLAK
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateMagazineSpecScoutMixed
           cost: 1500
+          cMUFactionVendorItem: False
       - name: AP Ammo
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14CrateBoxMagazineRifleAG80AP
           cost: 850
+          cMUFactionVendorItem: False
       - name: Dropship Parts
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropShipSpotlight
           cost: 100
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropShipLZDetector
           cost: 200
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentCoolingSystem
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentFuelEnhancer
           cost: 500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipTargetingSystem
           cost: 850
+          cMUFactionVendorItem: False
       - name: Dropship Munitions
         entries:
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketHarpoon
           cost: 400
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketBanshee
           cost: 800
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoRocketBansheeHorde
           cost: 1600
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketKeeper
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketWidowmaker
           cost: 4000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoRocketThermobaricTwo
           cost: 1300
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoRocketWidowmakerDouble
           cost: 6500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketThermobaric
           cost: 4900
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketNapalm
           cost: 4500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketMiniMike
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoRocketMiniMikeIncendiary
           cost: 3500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoCBU607
           cost: 3500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoCBU250
           cost: 3000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoMk102JDAM
           cost: 9000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: AU14DropshipAttachmentAmmoGBU89I
           cost: 11000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoGAU
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoGAUAP
           cost: 2500
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoLaserCannon
           cost: 2000
+          cMUFactionVendorItem: False
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
           startingStock: -1
+          roundLimit: 0
           name: null
           maxStock: 0
           entities: []
           crate: RMCDropshipAttachmentAmmoLaunchableSentry
           cost: 600
+          cMUFactionVendorItem: False
 - proto: CMAutolathe
   entities:
   - uid: 1412
@@ -126676,6 +127244,12 @@ entities:
     - type: Transform
       parent: 1
       pos: 265.5,-108.5
+  - uid: 12668
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: 232.5,-51.5
 - proto: CMTableWoodenGambling
   entities:
   - uid: 6491
@@ -126992,13 +127566,13 @@ entities:
       pos: 44.5,-39.5
 - proto: CMUAirtightSeal
   entities:
-  - uid: 12668
+  - uid: 12669
     components:
     - type: Transform
       parent: 1
       pos: 245.5,-155.5
       anchored: True
-  - uid: 12669
+  - uid: 13135
     components:
     - type: Transform
       parent: 1
@@ -130378,6 +130952,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         57966:
           status: Alive
@@ -130389,6 +130964,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         58042:
           status: Alive
@@ -130400,6 +130976,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         34656:
           status: Alive
@@ -130411,6 +130988,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         34657:
           status: Alive
@@ -130422,6 +131000,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         34658:
           status: Alive
@@ -130433,6 +131012,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         34659:
           status: Alive
@@ -130444,6 +131024,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         35566:
           status: Alive
@@ -130455,6 +131036,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         57870:
           status: Alive
@@ -130466,6 +131048,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background:
             sprite: /Textures/_RMC14/Interface/map_blips.rsi
             state: xeno_ruler
@@ -130479,6 +131062,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         19122:
           status: Alive
@@ -130490,6 +131074,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
         19123:
           status: Alive
@@ -130501,6 +131086,7 @@ entities:
           hiveLeader: False
           fireteamNumber: 0
           color: '#FFFFFFFF'
+          cMUFobLabel: null
           background: null
     - type: TacticalMapLines
       xenoLines: []
@@ -158989,7 +159575,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -632688.25
+      secondsUntilStateChange: -632861.75
   - uid: 13075
     components:
     - type: Transform
@@ -167877,7 +168463,7 @@ entities:
       pos: 179.5,-120.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -478870.56
+      secondsUntilStateChange: -479044.06
   - uid: 15264
     components:
     - type: Transform
@@ -434344,6 +434930,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 126.69597,-153.22952
+- proto: RUMCCitizenConsole
+  entities:
+  - uid: 13136
+    components:
+    - type: Transform
+      parent: 1
+      rot: -1.5707963267948966 rad
+      pos: 232.45464,-51.43201
 - proto: SeedExtractor
   entities:
   - uid: 84373
