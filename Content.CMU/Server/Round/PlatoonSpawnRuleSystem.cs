@@ -19,6 +19,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.CMU14.Dropship.Exchange;
 using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking.Components;
@@ -27,6 +28,7 @@ using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared._RMC14.Ladder;
+using Robust.Shared.Utility;
 
 using Content.Shared.CMU14;
 
@@ -310,6 +312,18 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 var gridMapId = _entityManager.GetComponent<TransformComponent>(grid).MapID;
                 _mapSystem.InitializeMap(gridMapId);
                 PrepareLoadedShuttleGrid(grid, faction, planetComp, DropshipDestinationComponent.DestinationType.Dropship);
+
+                // The dynamic gunship's navigation computer can trade the parked ship
+                // back for the platoon's standard Mohawk before its first takeoff.
+                if (mapId.Filename == "dynamic_gunship.yml" &&
+                    HasComp<DropshipComponent>(grid) &&
+                    TryGetPlatoonMohawkPath(platoon, out var mohawkPath))
+                {
+                    var exchange = EnsureComp<CMUDropshipMohawkExchangeComponent>(grid);
+                    exchange.Faction = faction;
+                    exchange.MohawkPath = mohawkPath;
+                }
+
                 SpawnShuttleConsoleMarkers(
                     grid,
                     faction,
@@ -356,6 +370,73 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 usedDestinations,
                 destinationRandom);
         }
+    }
+
+    private static bool TryGetPlatoonMohawkPath(PlatoonPrototype platoon, out ResPath path)
+    {
+        foreach (var candidate in platoon.CompatibleDropships)
+        {
+            if (candidate.ToString().Contains("/Dropships/Mohawk/", StringComparison.OrdinalIgnoreCase))
+            {
+                path = candidate;
+                return true;
+            }
+        }
+
+        path = default;
+        return false;
+    }
+
+    /// <summary>
+    /// Loads the replacement shuttle for a gunship-for-Mohawk exchange onto its own
+    /// initialized map without launching it, so a bad map aborts the exchange early.
+    /// </summary>
+    public bool TryLoadExchangeShuttle(ResPath path, out EntityUid map, out List<EntityUid> grids)
+    {
+        map = default;
+        grids = new List<EntityUid>();
+        if (!_mapLoader.TryLoadMap(path, out var loadedMap, out var loadedGrids))
+            return false;
+
+        map = loadedMap.Value.Owner;
+        _mapSystem.InitializeMap(loadedMap.Value.Comp.MapId);
+        foreach (var grid in loadedGrids)
+        {
+            grids.Add(grid);
+        }
+
+        return grids.Count > 0;
+    }
+
+    /// <summary>
+    /// Prepares exchange shuttle grids exactly like the round-start transports
+    /// (faction access, consoles, cameras) and flies them to the given pad.
+    /// </summary>
+    public bool TryLaunchExchangeShuttle(List<EntityUid> grids, string faction, EntityUid destination)
+    {
+        var planetComp = _auRoundSystem.GetSelectedPlanet();
+        if (planetComp == null)
+            return false;
+
+        var launched = false;
+        foreach (var grid in grids)
+        {
+            PrepareLoadedShuttleGrid(grid, faction, planetComp, DropshipDestinationComponent.DestinationType.Dropship);
+            SpawnShuttleConsoleMarkers(
+                grid,
+                faction,
+                DropshipDestinationComponent.DestinationType.Dropship,
+                "dropshipshuttlevmarker");
+
+            if (FindNavComputerOnGrid(grid) is not { } navComputer)
+                continue;
+
+            var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer);
+            if (_sharedDropshipSystem.FlyTo((navComputer, navComp), destination, null))
+                launched = true;
+        }
+
+        return launched;
     }
 
     private void PrepareLoadedShuttleGrid(
