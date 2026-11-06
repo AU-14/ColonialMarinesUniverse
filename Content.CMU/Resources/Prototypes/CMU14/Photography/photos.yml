@@ -50,6 +50,9 @@
     interfaces:
       enum.CMUPhotoUiKey.Key:
         type: CMUPhotoBui
+  - type: Tag
+    tags:
+    - Document
 
 # The camera's flash: a short burst of cold white light at the photographer that fades out at once. Bright
 # enough to light up the room for a moment, too brief to dazzle anyone. Its radius is set per shot to reach
@@ -93,3 +96,6 @@
     interfaces:
       enum.CMUSuspectPhotoUiKey.Key:
         type: CMUSuspectPhotoBui
+  - type: Tag
+    tags:
+    - Document
