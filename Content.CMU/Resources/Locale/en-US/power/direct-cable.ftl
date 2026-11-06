@@ -9,3 +9,4 @@ direct-cable-linker-success = You connect { THE($source) } to { THE($target) } w
 direct-cable-linker-disconnect-verb = Disconnect direct cable
 direct-cable-linker-disconnect-verb-needs-cutters = You need wirecutters to do this.
 direct-cable-linker-disconnected = The direct cable connections are cut.
+cmu-node-examine-direct-lv = It has a direct cable port. Use a [color=green]CMU cable coil[/color] on this device and an [color=green]electrical panel[/color] to connect power.

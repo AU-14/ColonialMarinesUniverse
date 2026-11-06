@@ -34,3 +34,26 @@
   name: stack-hv-cable
   icon: { sprite: "/Textures/Objects/Tools/cable-coils.rsi", state: coilhv-30 }
   spawn: CableHVStack1
+
+# CMU14 Begin: stack kinds for the thin CMU power cables
+- type: stack
+  parent: BaseMediumStack
+  id: CMUThinCableHV
+  name: stack-thin-hv-cable
+  icon: { sprite: "/Textures/_RMC14/Structures/Power/cables_thin.rsi", state: intactred }
+  spawn: CMUCableThinHVStack1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CMUThinCableMV
+  name: stack-thin-mv-cable
+  icon: { sprite: "/Textures/_RMC14/Structures/Power/cables_thin.rsi", state: intactyellow }
+  spawn: CMUCableThinMVStack1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CMUThinCableLV
+  name: stack-thin-lv-cable
+  icon: { sprite: "/Textures/_RMC14/Structures/Power/cables_thin.rsi", state: intactblue }
+  spawn: CMUCableThinLVStack1
+# CMU14 End
