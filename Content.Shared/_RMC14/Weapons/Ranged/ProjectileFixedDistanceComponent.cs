@@ -33,4 +33,10 @@ public sealed partial class ProjectileFixedDistanceComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool ArcProj = false;
+
+    // CMU14 Begin
+    /// <summary>The launcher whose container owners should be ignored during this flight.</summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? IgnoredWeapon;
+    // CMU14 End
 }
