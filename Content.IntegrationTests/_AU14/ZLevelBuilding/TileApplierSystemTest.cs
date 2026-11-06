@@ -343,11 +343,16 @@ public sealed class TileApplierSystemTest
             var transforms = entities.System<SharedTransformSystem>();
             var building = entities.System<ZLevelBuildingSystem>();
             var sourceMap = entities.GetComponent<TransformComponent>(map.Grid.Owner).MapUid!.Value;
-            var world = transforms.ToMapCoordinates(map.GridCoords).Position;
+            var maps = entities.System<SharedMapSystem>();
+            // CMU14: the cavern seal beds rock around the generated footprint, so the stair needs a
+            // source patch with its landing off the footprint edge
+            for (var x = 0; x < 5; x++)
+            for (var y = 0; y < 5; y++)
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
+            var world = transforms.ToMapCoordinates(new EntityCoordinates(map.Grid.Owner, 2.5f, 2.5f)).Position;
 
             Assert.That(building.EnsureNeighborLevel(sourceMap, -1, map.Grid.Owner, world, out var authoredMap, out var authoredGrid), Is.True);
             entities.EnsureComponent<BecomesStationComponent>(authoredGrid);
-            var maps = entities.System<SharedMapSystem>();
             var authoredGridComp = entities.GetComponent<MapGridComponent>(authoredGrid);
             var landingTile = maps.WorldToTile(authoredGrid, authoredGridComp, world);
             var protectedTile = landingTile + new Vector2i(2, 0);
