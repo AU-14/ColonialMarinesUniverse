@@ -54,7 +54,21 @@ namespace Content.Server.Database
             {
                 // EnsureCreated means you can't apply migrations later, fine for tests
                 if (snapshot)
+                {
                     prefsCtx.Database.EnsureCreated();
+                    // CMU14: EnsureCreated builds only the EF model, and cmu_antag_pity is raw
+                    // SQL with no entity, so pooled servers would boot without it and the pity
+                    // load would ERRO on every pair. Mirrors 20261016000000_CmuAntagPity, keep
+                    // the two schemas in sync.
+                    prefsCtx.Database.ExecuteSqlRaw("""
+                        CREATE TABLE IF NOT EXISTS cmu_antag_pity (
+                            player_user_id TEXT NOT NULL,
+                            missed integer NOT NULL DEFAULT 0,
+                            last_seen bigint NOT NULL DEFAULT 0,
+                            CONSTRAINT "PK_cmu_antag_pity" PRIMARY KEY (player_user_id)
+                        );
+                        """);
+                }
                 else
                     prefsCtx.Database.Migrate();
 
