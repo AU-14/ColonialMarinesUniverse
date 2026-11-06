@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Input;
 using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.CMU14.Xenomorphs.Swarm;
@@ -46,6 +47,7 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
         InitializeRules();
         InitializeOrders();
         InitializeBehavior();
+        InitializeCombat();
         SubscribeLocalEvent<CMUQueenSwarmComponent, MapInitEvent>(OnQueenInit);
         SubscribeLocalEvent<CMUQueenSwarmComponent, CMUSummonSwarmActionEvent>(OnSummon);
         SubscribeLocalEvent<CMUQueenSwarmComponent, CMUGuardSwarmActionEvent>(OnGuard);
@@ -359,8 +361,14 @@ public sealed partial class CMUQueenSwarmSystem : EntitySystem
 
     private bool CanAttack(EntityUid target, EntityUid hive)
     {
-        return _mobState.IsAlive(target) && !_hive.IsAllyOfHive(target, hive) &&
-               !HasComp<XenoNestedComponent>(target) && !HasComp<DevouredComponent>(target);
+        return _mobState.IsAlive(target) && !_hive.IsAllyOfHive(target, hive)
+               && !HasComp<DevouredComponent>(target) && !IsProtectedCapture(target);
+    }
+
+    private bool IsProtectedCapture(EntityUid target)
+    {
+        return HasComp<XenoNestedComponent>(target) || HasComp<VictimInfectedComponent>(target)
+               || TryComp<InfectableComponent>(target, out var infectable) && infectable.BeingInfected;
     }
 
     private bool Within(EntityUid origin, EntityUid target, float range)
