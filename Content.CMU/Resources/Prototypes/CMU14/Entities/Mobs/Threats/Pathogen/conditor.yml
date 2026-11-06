@@ -1,7 +1,7 @@
 - type: entity
   abstract: true
   parent: CMU14XenoPathogenMatureBase
-  id: CMU14XenoConditorBase # conductor hehe
+  id: CMU14XenoConditorBase
   name: Conditor
   description: A masterful cultivator of mycelium and death.
   components:
