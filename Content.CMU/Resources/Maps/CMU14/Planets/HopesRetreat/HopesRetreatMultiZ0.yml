@@ -4,8 +4,8 @@ meta:
   engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 11/04/2026 20:45:02
-  entityCount: 40221
+  time: 11/06/2026 17:04:35
+  entityCount: 40222
 maps:
 - 1
 grids:
@@ -190514,7 +190514,7 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: 65.5,-5.5
+      pos: 63.5,-3.5
   - uid: 8830
     components:
     - type: Transform
@@ -336804,6 +336804,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 119.5,-41.5
+- proto: RUMCCitizenConsole
+  entities:
+  - uid: 17102
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: 65.537415,-5.3090568
 - proto: RuMCFoodLightTinIRPTrashStew
   entities:
   - uid: 19738
