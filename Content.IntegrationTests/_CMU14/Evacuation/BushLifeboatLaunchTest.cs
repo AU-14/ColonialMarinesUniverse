@@ -5,11 +5,15 @@ using Content.Server._RMC14.Evacuation;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
+using Content.Server.Atmos.Components;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Chasm;
 using Content.Shared.CMU14.Ship;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -18,6 +22,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.IntegrationTests.CMU14.Evacuation;
 
@@ -36,6 +41,8 @@ public sealed class BushLifeboatLaunchTest
         var server = pair.Server;
         var entities = server.EntMan;
         var lifeboats = new List<(EntityUid Computer, EntityUid Grid, EntityUid? Passenger)>();
+        var vacatedBerths = new List<MapCoordinates>();
+        var entrants = new List<EntityUid>();
         EntityUid planetMap = default;
         List<EntityUid> decks = new();
         MapCoordinates? vacantBerth = null;
@@ -137,6 +144,8 @@ public sealed class BushLifeboatLaunchTest
                 Assert.That(evacuation.IsEvacuationComplete(grid), Is.True,
                     "the lifeboat must read the tank the pumps filled, not an empty duplicate");
                 lifeboats.Add((computer, grid, passenger));
+                if (passenger is { } occupant)
+                    vacatedBerths.Add(entities.System<SharedTransformSystem>().GetMapCoordinates(occupant));
             }
 
             Assert.That(lifeboats, Is.Not.Empty, "the Bush should have a lifeboat");
@@ -164,6 +173,28 @@ public sealed class BushLifeboatLaunchTest
                         Assert.That(passengerXform.MapUid, Is.Not.EqualTo(planetMap), "passengers shouldn't fall out onto the planet");
                 }
             });
+            foreach (var berth in vacatedBerths)
+            foreach (var prototype in new[] { "CMMobHuman", "CMXenoRunner" })
+            {
+                var entrant = entities.SpawnEntity(prototype, berth.Offset(new Vector2(-1, 0)));
+                // Isolate berth collision damage from the exposed dock's vacuum.
+                entities.RemoveComponent<BarotraumaComponent>(entrant);
+                entrants.Add(entrant);
+                entities.System<SharedPhysicsSystem>().SetLinearVelocity(entrant, new Vector2(2, 0));
+            }
+        });
+
+        await pair.RunTicksSync(10);
+        await server.WaitAssertion(() =>
+        {
+            foreach (var entrant in entrants)
+            {
+                Assert.That(entities.IsQueuedForDeletion(entrant) || !entities.EntityExists(entrant), Is.False,
+                    "Entering a vacated lifeboat berth must not gib or delete the entrant.");
+                var damageable = entities.GetComponent<DamageableComponent>(entrant);
+                Assert.That(entities.System<DamageableSystem>().GetAllDamage((entrant, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.Zero),
+                    "A vacated berth must not damage entrants that survive the initial collision.");
+            }
 
             Assert.That(vacantBerth, Is.Not.Null, "the lifeboat must leave an exposed berth to exercise this regression");
             Assert.That(berthApproach, Is.Not.Null, "the visitor needs a nearby real ship floor to leave");

@@ -49,8 +49,13 @@ public sealed class RecipeMachineLifecycleTest
             foreach (var (kind, _) in recipe.FluidOutputs)
                 Assert.That(fluids.GetAmount(machine, kind), Is.Zero, "Power loss must not finish the batch.");
 
-            // Another delivery occupies the output tank while the batch is suspended.
+            // Normal deliveries must leave the pending batch's product volume available.
             fluids.Add(machine, FluidKinds.Water, tank.Capacity);
+            Assert.That(tank.Capacity - tank.Total,
+                Is.EqualTo(recipe.FluidOutputs.Values.Sum()).Within(0.001f));
+
+            // A forced inventory edit can still steal reserved space. Keep the blocked-batch recovery path safe.
+            tank.Contents[FluidKinds.Water] += 1;
             power.Powered = true;
             recipes.Update(recipe.Duration);
             Assert.That(operation.Blocked, Is.True);

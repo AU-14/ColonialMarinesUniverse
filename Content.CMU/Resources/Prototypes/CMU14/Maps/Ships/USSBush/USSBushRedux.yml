@@ -9,6 +9,9 @@
   - /Maps/CMU14/Ships/USSBush/USSBushMultiZ1.yml
   - /Maps/CMU14/Ships/USSBush/USSBushMultiZ2.yml
   - /Maps/CMU14/Ships/USSBush/USSBushMultiZ3.yml
+  zLevelsComponentOverrides:
+  - type: ZBuildableMap
+    enabled: false
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

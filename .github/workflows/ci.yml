@@ -1,3 +1,4 @@
+# CMU14: one run owns planning, execution, evidence and the required verdict.
 name: CI
 
 on:
@@ -9,15 +10,12 @@ on:
     branches: [master, staging, stable]
 
 permissions:
+  actions: read
   contents: read
   pull-requests: read
 
 concurrency:
-  # CMU14: per-PR supersession. a fresh push cancels the PR's own stale run instantly and
-  # ci-queue-bouncer.yml cleans up closed/draft runs and the helper workflows. master
-  # keeps its serial group so a merge burst waits for its evidence; staging/stable pushes
-  # and merge queue runs keep per-run groups. shard capacity is arbitrated by
-  # ci-shards.yml's serve gate, never by a run-level hold
+  # CMU14: new PR revisions cancel obsolete builds and tests together.
   group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && format('ci-pr-{0}', github.event.pull_request.number) || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true }}
 
@@ -31,12 +29,97 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      build: ${{ steps.plan.outputs.build }}
+      unit: ${{ steps.plan.outputs.unit }}
+      gameplay: ${{ steps.plan.outputs.gameplay }}
+      matrix: ${{ steps.plan.outputs.matrix }}
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.13"
+
+      - name: Find previous CI evidence
+        id: history
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            await require('./.github/scripts/ci_history.js')({github, context, core});
+
+      - name: Read latest history
+        if: steps.history.outputs.latest_run != ''
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          artifact-ids: ${{ steps.history.outputs.latest_artifact }}
+          run-id: ${{ steps.history.outputs.latest_run }}
+          github-token: ${{ github.token }}
+          path: .ci/imports/latest
+          merge-multiple: true
+
+      - name: Read baseline history
+        if: steps.history.outputs.baseline_run != ''
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          artifact-ids: ${{ steps.history.outputs.baseline_artifact }}
+          run-id: ${{ steps.history.outputs.baseline_run }}
+          github-token: ${{ github.token }}
+          path: .ci/imports/baseline
+          merge-multiple: true
+
+      - name: Read trusted history
+        if: steps.history.outputs.trusted_run != ''
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          artifact-ids: ${{ steps.history.outputs.trusted_artifact }}
+          run-id: ${{ steps.history.outputs.trusted_run }}
+          github-token: ${{ github.token }}
+          path: .ci/imports/trusted
+          merge-multiple: true
+
+      - name: Read complete PR change list
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const fs = require('node:fs');
+            let changed = null;
+            if (context.eventName === 'pull_request') {
+              try {
+                const files = await github.paginate(github.rest.pulls.listFiles, {
+                  ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
+                });
+                // GitHub caps this endpoint at 3000 files. An incomplete list runs everything.
+                if (files.length === context.payload.pull_request.changed_files)
+                  changed = files.flatMap(f => [f.filename, f.previous_filename].filter(Boolean));
+              } catch (error) {
+                core.warning(`Cannot determine changed files; running the full suite: ${error.message}`);
+              }
+            }
+            fs.writeFileSync('ci-changes.json', JSON.stringify(changed));
+
+      - name: Plan test execution
+        id: plan
+        env:
+          CI_EVENT: ${{ github.event_name }}
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python3 Tools/_CMU14/ci.py plan --event "$CI_EVENT" --changes ci-changes.json
+
+      - name: Share test plan
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-plan
+          if-no-files-found: error
+          path: .ci/plan.json
+          overwrite: true
+          retention-days: 7
+
+      - name: Check CI planner and runner
+        run: python3 -m unittest discover -s Tools/_CMU14 -p 'test_*.py'
 
       - name: Check CRLF
         run: python3 Tools/check_crlf.py
@@ -85,15 +168,21 @@ jobs:
   build:
     name: Build
     needs: source-guards
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    if: needs.source-guards.outputs.build == 'true'
     runs-on: ubuntu-latest
     # CMU14: 35 covers the build plus the folded unit and lint runs
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
         with:
-          persist-credentials: true
+          persist-credentials: false
           submodules: recursive
+
+      - name: Restore test plan
+        uses: actions/download-artifact@v8.0.2
+        with:
+          name: ci-plan
+          path: .ci
 
       - uses: actions/setup-dotnet@v6.0.0
         with:
@@ -111,19 +200,31 @@ jobs:
       - name: Build once
         run: dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
 
+      # CMU14: reject cheap failures before uploading artifacts or starting gameplay jobs.
+      - name: Unit tests
+        if: needs.source-guards.outputs.unit == 'true'
+        run: python3 Tools/_CMU14/adaptive_ci.py execute --unit
+
+      - name: Run YAML Linter
+        run: timeout 12m dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
+
       - name: Upload integration test build
+        if: needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: build-integration-tests
+          overwrite: true
           path: bin/Content.IntegrationTests/
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
 
       - name: Upload runtime build
+        if: needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: build-runtime
+          overwrite: true
           path: |
             bin/Content.Client/
             bin/Content.Server/
@@ -131,20 +232,21 @@ jobs:
           retention-days: 1
           compression-level: 0
 
-      # CMU14: consumers restore the tracked tree from this artifact. one git fetch per
-      # run replaces ~38 simultaneous fetches of the same 1.4G pack, which the git
-      # backend throttled into 5-15 min checkout stalls. git archive carries tracked
-      # files only: build output stays out and tracked obj texture dirs survive
+      # CMU14: gameplay lanes share this source archive to avoid repeated checkouts.
+      # git archive retains tracked texture directories and excludes build output.
       - name: Pack source tree
+        if: needs.source-guards.outputs.gameplay == 'true'
         run: |
           git archive --format=tar.gz -o source-tree.tar.gz HEAD
           # CMU14: -o resolves inside the -C directory, so climb out for the upload root
           git -C RobustToolbox archive --format=tar.gz -o ../toolbox-resources.tar.gz HEAD -- Resources
 
       - name: Upload source tree
+        if: needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: source-tree
+          overwrite: true
           path: |
             source-tree.tar.gz
             toolbox-resources.tar.gz
@@ -152,35 +254,27 @@ jobs:
           retention-days: 1
           compression-level: 0
 
-      # CMU14: lint and unit run on the build runner before any shard can queue. a red
-      # lint or unit run fails Build, so a dead PR costs one job instead of a full
-      # shard wave, and with no separate helper jobs nothing starves behind other
-      # PRs' shard legs. the 12m step caps bound a hung run early, nothing retries
-      # the build job
-      - name: Run Content.Tests
-        run: |
-          set +e
-          timeout 12m dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal \
-            --logger "trx;LogFileName=unit-tests.trx" \
-            --results-directory bin/Content.Tests/TestResults \
-            -- NUnit.ExplicitMode=None > bin/Content.Tests/test-output.log 2>&1
-          status=$?
-          bash "$GITHUB_WORKSPACE/.github/scripts/report_test_failures.sh" \
-            "$status" bin/Content.Tests/test-output.log "Unit Tests"
-
-      - name: Run YAML Linter
-        run: timeout 12m dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
+      - name: Upload unit observations
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-observation-unit
+          path: .ci/observations/unit.json
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload unit test results
         if: always()
         uses: actions/upload-artifact@v7
         with:
+          include-hidden-files: true
           name: test-results-unit-tests
-          path: |
-            bin/Content.Tests/TestResults/
-            bin/Content.Tests/test-output.log
+          path: .ci/observations/
+          overwrite: true
           if-no-files-found: ignore
-          retention-days: 3
+          retention-days: 7
 
   asset-validation:
     name: Asset Validation
@@ -196,10 +290,15 @@ jobs:
           script: |
             let changed = null;
             if (context.eventName === 'pull_request') {
-              const files = await github.paginate(github.rest.pulls.listFiles, {
-                ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
-              });
-              changed = files.flatMap(file => [file.filename, file.previous_filename].filter(Boolean));
+              try {
+                const files = await github.paginate(github.rest.pulls.listFiles, {
+                  ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
+                });
+                if (files.length === context.payload.pull_request.changed_files)
+                  changed = files.flatMap(file => [file.filename, file.previous_filename].filter(Boolean));
+              } catch (error) {
+                core.warning(`Cannot determine asset changes; running all validators: ${error.message}`);
+              }
             }
             const all = changed === null || changed.some(file =>
               file === 'RobustToolbox' || file === '.github/workflows/ci.yml' ||
@@ -250,33 +349,193 @@ jobs:
           # CMU14: retain upstream structural checks and recognize the existing donor-cape license.
           python3 .github/scripts/validate_cmu_rsis.py Resources/ Content.CMU/Resources/
 
+  integration-tests:
+    name: Testcases / ${{ matrix.lane.label }}
+    needs: [source-guards, build]
+    if: needs.source-guards.outputs.gameplay == 'true'
+    runs-on: ubuntu-latest
+    # CMU14: at most six groups per lane, each with a 30-minute execution budget.
+    timeout-minutes: 190
+    strategy:
+      fail-fast: false
+      # CMU14: cap this run; hosted runners still share capacity across PRs.
+      max-parallel: 6
+      matrix: ${{ fromJSON(needs.source-guards.outputs.matrix) }}
+    steps:
+      # CMU14: restore the exact source tree packaged by Build for every gameplay lane.
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: source-tree
+          path: .
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: ci-plan
+          path: .ci
+
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+          rm source-tree.tar.gz toolbox-resources.tar.gz
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-integration-tests
+          path: bin/Content.IntegrationTests/
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-runtime
+          path: bin/
+
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Prepare runtime content
+        run: |
+          mkdir -p bin/Resources bin/RobustToolbox/Resources
+          cp -r Resources/* bin/Resources/
+          cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
+
+      # CMU14: the runner has 16 GB and no real headroom, a memory spike used to kill it outright
+      # ("received a shutdown signal"). with swap the spike just runs slower. goes on the /mnt scratch
+      # disk when the image has one, the root disk is small
+      - name: Add swap
+        shell: bash
+        run: |
+          echo "--- before ---"; swapon --show; free -h; df -h / /mnt 2>/dev/null || true
+          dir=/mnt
+          if ! mountpoint -q /mnt || (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) < 20 )); then
+            dir=/
+          fi
+          size=16
+          if (( $(df --output=avail -BG "$dir" | tail -1 | tr -dc 0-9) < size + 4 )); then
+            echo "::warning::not enough disk for ${size}G swap on $dir, keeping the image's swap"
+            exit 0
+          fi
+          sudo swapoff -a || true
+          sudo rm -f /mnt/swapfile /swapfile
+          sudo fallocate -l ${size}G "$dir/ci-swap"
+          sudo chmod 600 "$dir/ci-swap"
+          sudo mkswap "$dir/ci-swap"
+          sudo swapon "$dir/ci-swap"
+          echo "--- after ---"; swapon --show; free -h
+
+      - name: Run gameplay groups
+        env:
+          # CMU14: preserve the prototype-loader workaround and heap limit.
+          DOTNET_PROCESSOR_COUNT: "1"
+          DOTNET_gcServer: "1"
+          DOTNET_GCHeapHardLimitPercent: "0x50"
+          CI_LANE: ${{ matrix.lane.name }}
+        run: python3 Tools/_CMU14/adaptive_ci.py execute --lane "$CI_LANE"
+
+      - name: Upload gameplay observations
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-observation-gameplay-${{ matrix.lane.name }}
+          path: .ci/observations/*.json
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: test-results-gameplay-${{ matrix.lane.name }}
+          path: |
+            .ci/observations/
+            !.ci/observations/**/*.dmp
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 7
+
+  testcases-complete:
+    # CMU14: retain the existing required check name with a real job and working logs.
+    name: Testcases Complete
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+    needs: [source-guards, build, integration-tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        if: needs.source-guards.result == 'success'
+        with:
+          sparse-checkout: Tools/_CMU14
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8.0.2
+        if: needs.source-guards.result == 'success'
+        with:
+          name: ci-plan
+          path: .ci
+
+      - name: Gather observations
+        if: needs.source-guards.outputs.build == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          pattern: ci-observation-*
+          path: .ci/observations
+          merge-multiple: true
+
+      - name: Check completeness and record history
+        if: always() && needs.source-guards.result == 'success'
+        run: python3 Tools/_CMU14/adaptive_ci.py collect
+
+      - name: Save history for future runs
+        if: always() && needs.source-guards.outputs.build == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-history
+          path: .ci/history/history.json
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Check gameplay evidence
+        if: always()
+        env:
+          PLAN_RESULT: ${{ needs.source-guards.result }}
+          GAMEPLAY: ${{ needs.source-guards.outputs.gameplay }}
+          TEST_RESULT: ${{ needs.integration-tests.result }}
+        run: |
+          test "$PLAN_RESULT" = success
+          if [ "$GAMEPLAY" = true ]; then
+            test "$TEST_RESULT" = success
+          else
+            test "$GAMEPLAY" = false
+            test "$TEST_RESULT" = skipped
+            echo "Gameplay tests intentionally skipped by the documentation-only plan."
+          fi
+
   required-checks:
     name: Required Checks
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    needs:
-      - source-guards
-      - build
-      - asset-validation
+    needs: [source-guards, build, asset-validation, testcases-complete]
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
     steps:
       - name: Check required job results
         uses: actions/github-script@v9.0.0
+        env:
+          RESULTS: ${{ toJSON(needs) }}
         with:
           script: |
-            // CMU14: Testcases live in the CI Shard Wave workflow (base-branch
-            // triggered), so they land on the PR as their own check runs after this
-            // run completes; this aggregator covers what runs in ci.yml itself
-            const results = {
-              'Source Guards': '${{ needs.source-guards.result }}',
-              'Build': '${{ needs.build.result }}',
-              'Asset Validation': '${{ needs.asset-validation.result }}',
-            };
-
+            const results = JSON.parse(process.env.RESULTS);
+            const buildExpected = results['source-guards'].outputs.build === 'false' ? 'skipped' : 'success';
             const failed = Object.entries(results)
-              .filter(([, result]) => result !== 'success')
-              .map(([name, result]) => `${name}: ${result}`);
-
-            if (failed.length > 0) {
-              core.setFailed(`Required checks failed: ${failed.join(', ')}`);
-            }
+              .filter(([name, value]) => value.result !== (name === 'build' ? buildExpected : 'success'))
+              .map(([name, value]) => `${name}: ${value.result}`);
+            await core.summary.addHeading('CI result')
+              .addRaw(failed.length ? failed.join('\n') : 'All checks selected by the test plan passed.')
+              .write();
+            if (failed.length)
+              core.setFailed(failed.join(', '));
