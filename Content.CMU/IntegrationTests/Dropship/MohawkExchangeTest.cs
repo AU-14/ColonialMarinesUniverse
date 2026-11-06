@@ -1,15 +1,20 @@
+#pragma warning disable RA0002 // Arrange pilot credentials for the navigation authorization regression.
 using System.Linq;
 using System.Numerics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared.Access.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.Dropship.Exchange;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.util;
 using Content.Shared.CCVar;
+using Content.Shared.Shuttles.Components;
+using Content.Shared.Shuttles.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
@@ -49,6 +54,8 @@ public sealed class MohawkExchangeTest
         EntityUid pad = default;
         EntityUid originalOmaha = default;
         EntityUid passenger = default;
+        EntityUid cancelledReplacement = default;
+        EntityUid cancelledDeparture = default;
         await server.WaitAssertion(() =>
         {
             var ticker = entities.System<GameTicker>();
@@ -71,8 +78,6 @@ public sealed class MohawkExchangeTest
             var exchange = entities.QueryEntities<CMUDropshipMohawkExchangeComponent>().Single();
             gunship = exchange.Owner;
             Assert.That(exchange.Comp.Faction, Is.EqualTo("govfor"));
-            Assert.That(exchange.Comp.MohawkPath.ToString(),
-                Is.EqualTo("/Maps/CMU14/Dropships/Mohawk/omaha_deployment.yml"));
             Assert.That(entities.HasComponent<MultiDeckDropshipComponent>(gunship), Is.False,
                 "The exchange offer belongs on the dynamic gunship, not the Mohawk.");
             originalOmaha = entities.QueryEntities<MultiDeckDropshipComponent>().Single().Owner;
@@ -90,7 +95,17 @@ public sealed class MohawkExchangeTest
             // A passenger is still aboard when the pilot requests the exchange.
             passenger = entities.SpawnEntity("MobHuman", new EntityCoordinates(gunship, new Vector2(0.5f, 0.5f)));
             entities.EventBus.RaiseLocalEvent(computer, new CMUDropshipMohawkExchangeMsg { Actor = passenger });
+            Assert.That(exchange.Pending, Is.False, "A passenger without navigation access cannot request an exchange.");
+            var card = entities.SpawnEntity("CMIDCardStandardDogtag", new EntityCoordinates(gunship, new Vector2(0.5f)));
+            var access = entities.GetComponent<AccessComponent>(card);
+            access.Tags.Clear();
+            access.Tags.Add("AU14AccessGovforPilot");
+            Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(passenger, card), Is.True);
+            entities.EventBus.RaiseLocalEvent(computer, new CMUDropshipMohawkExchangeMsg { Actor = passenger });
             Assert.That(exchange.Pending, Is.True, "The navigation computer message must request the exchange.");
+            access.Tags.Clear();
+            entities.EventBus.RaiseLocalEvent(computer, new CMUDropshipMohawkExchangeMsg { Actor = passenger });
+            Assert.That(exchange.Pending, Is.True, "Revoked navigation access must prevent cancelling an exchange too.");
         });
         await pair.RunSeconds(3);
         await server.WaitAssertion(() =>
@@ -98,6 +113,33 @@ public sealed class MohawkExchangeTest
             var exchange = entities.GetComponent<CMUDropshipMohawkExchangeComponent>(gunship);
             Assert.That(exchange.Departing, Is.False, "The gunship must not take off while anyone is aboard.");
             Assert.That(entities.GetComponent<DropshipDestinationComponent>(pad).Ship, Is.EqualTo(gunship));
+            server.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.FTLStartupTime, 3f);
+            entities.DeleteEntity(passenger);
+        });
+        await pair.RunSeconds(1.1f);
+        await server.WaitAssertion(() =>
+        {
+            var exchange = entities.GetComponent<CMUDropshipMohawkExchangeComponent>(gunship);
+            Assert.That(exchange.Departing, Is.True);
+            Assert.That(entities.GetComponent<FTLComponent>(gunship).State, Is.EqualTo(FTLState.Starting));
+            cancelledReplacement = exchange.ReplacementMap!.Value;
+            cancelledDeparture = exchange.DepartureMap!.Value;
+            passenger = entities.SpawnEntity("MobHuman", new EntityCoordinates(gunship, new Vector2(0.5f)));
+        });
+        await pair.RunSeconds(3.1f);
+        await server.WaitAssertion(() =>
+        {
+            var exchange = entities.GetComponent<CMUDropshipMohawkExchangeComponent>(gunship);
+            Assert.That(exchange.Departing, Is.False, "A late boarder must cancel the departure countdown.");
+            Assert.That(exchange.Pending, Is.True, "The exchange should retry once everyone disembarks.");
+            Assert.That(entities.HasComponent<FTLComponent>(gunship), Is.False,
+                "The cancelled flight must release its countdown before a retry.");
+            Assert.That(entities.GetComponent<TransformComponent>(gunship).MapUid,
+                Is.EqualTo(entities.GetComponent<TransformComponent>(pad).MapUid), "The passenger must remain at the round's pad.");
+            Assert.That(entities.GetComponent<DropshipComponent>(gunship).Destination, Is.EqualTo(pad));
+            Assert.That(entities.GetComponent<DropshipDestinationComponent>(pad).Ship, Is.EqualTo(gunship));
+            Assert.That(entities.Deleted(cancelledReplacement), Is.True, "Cancelled replacement maps must be cleaned up.");
+            Assert.That(entities.Deleted(cancelledDeparture), Is.True, "Cancelled departure maps must be cleaned up.");
             entities.DeleteEntity(passenger);
         });
         await pair.RunSeconds(10);

@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Server.CMU14.Round;
 using Content.Server.Shuttles.Events;
+using Content.Server.Shuttles.Systems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.CMU14.Dropship.Exchange;
@@ -39,12 +40,15 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
 
     private readonly List<Entity<CMUDropshipMohawkExchangeComponent, DropshipComponent>> _readyToDepart = new();
     private readonly HashSet<EntityUid> _gridEntities = new();
+    private readonly List<EntityUid> _cancelledFlights = new();
+    private readonly List<EntityUid> _departedFlights = new();
 
     public override void Initialize()
     {
         SubscribeLocalEvent<DropshipNavigationComputerComponent, CMUDropshipMohawkExchangeMsg>(OnExchangeMsg);
         SubscribeLocalEvent<CMUDropshipMohawkExchangeComponent, FTLStartedEvent>(OnFTLStarted);
         SubscribeLocalEvent<CMUDropshipMohawkExchangeComponent, FTLCompletedEvent>(OnFTLCompleted);
+        SubscribeLocalEvent<CMUDropshipMohawkExchangeComponent, ShuttleFTLSafetyEvent>(OnFTLSafety);
     }
 
     private void OnExchangeMsg(Entity<DropshipNavigationComputerComponent> ent, ref CMUDropshipMohawkExchangeMsg args)
@@ -56,7 +60,8 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
             return;
         }
 
-        if (!exchange.Parked || exchange.Departing || dropship.Crashed)
+        if (!exchange.Parked || exchange.Departing || dropship.Crashed ||
+            !_dropship.CanUseNavigation(ent, args.Actor))
             return;
 
         // A flight already committed by the pilot is about to withdraw the offer.
@@ -81,12 +86,70 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
 
     private void OnFTLStarted(Entity<CMUDropshipMohawkExchangeComponent> ent, ref FTLStartedEvent args)
     {
+        if (ent.Comp.Departing)
+        {
+            _departedFlights.Add(ent);
+            return;
+        }
+
         // The round-start parking flight hasn't completed yet; the offer outlives it.
-        if (!ent.Comp.Parked || ent.Comp.Departing)
+        if (!ent.Comp.Parked)
             return;
 
         // Any normal takeoff or flyby permanently withdraws the offer.
         RemCompDeferred<CMUDropshipMohawkExchangeComponent>(ent);
+    }
+
+    private void LaunchReplacement(Entity<CMUDropshipMohawkExchangeComponent> ent)
+    {
+        var exchange = ent.Comp;
+        if (exchange.ExchangePad is not { } pad || exchange.ReplacementMap is not { } replacement)
+            return;
+
+        _dropship.SetDestinationShip(pad, null);
+        if (!_platoonSpawn.TryLaunchExchangeShuttle(exchange.ReplacementGrids, exchange.Faction, pad))
+        {
+            Log.Error($"Failed to launch the exchange Mohawk {exchange.MohawkPath} to {ToPrettyString(pad)}.");
+            QueueDel(replacement);
+        }
+        else
+        {
+            _marineAnnounce.AnnounceARES(ent,
+                Loc.GetString("cmu-dropship-exchange-departing", ("ship", Name(ent))),
+                faction: exchange.Faction);
+        }
+
+        exchange.ExchangePad = null;
+        exchange.ReplacementMap = null;
+        exchange.ReplacementGrids.Clear();
+    }
+
+    private void OnFTLSafety(Entity<CMUDropshipMohawkExchangeComponent> ent, ref ShuttleFTLSafetyEvent args)
+    {
+        if (args.Phase != ShuttleFTLSafetyPhase.Startup || !ent.Comp.Departing || !HasBoardedMobs(ent))
+            return;
+
+        args.Cancelled = true;
+        args.Reason = "Mohawk exchange is waiting for everyone to disembark.";
+        var exchange = ent.Comp;
+        if (exchange.ExchangePad is { } pad)
+        {
+            _dropship.SetDropshipDestination(ent, pad);
+            _dropship.SetDestinationShip(pad, ent);
+        }
+
+        if (exchange.ReplacementMap is { } replacement)
+            QueueDel(replacement);
+        if (exchange.DepartureMap is { } departure)
+            QueueDel(departure);
+
+        exchange.Departing = false;
+        exchange.Pending = true;
+        exchange.ExchangePad = null;
+        exchange.ReplacementMap = null;
+        exchange.DepartureMap = null;
+        exchange.ReplacementGrids.Clear();
+        _cancelledFlights.Add(ent);
     }
 
     private void OnFTLCompleted(Entity<CMUDropshipMohawkExchangeComponent> ent, ref FTLCompletedEvent args)
@@ -97,8 +160,7 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
             return;
         }
 
-        // Someone slipped back aboard during the departure burn; don't delete them
-        // with the hull. The ship stays stranded with the fleet instead.
+        // Keep the final deletion guard for mobs moved aboard after takeoff.
         if (HasBoardedMobs(ent.Owner))
         {
             Log.Warning($"Exchanged gunship {ToPrettyString(ent)} arrived at the fleet with mobs aboard, keeping it.");
@@ -112,6 +174,28 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
+        // FTLStarted runs inside the shuttle query; adding the replacement's
+        // FTL component there would invalidate that query's enumeration.
+        foreach (var grid in _departedFlights)
+        {
+            if (TryComp(grid, out CMUDropshipMohawkExchangeComponent? exchange) && exchange.Departing)
+                LaunchReplacement((grid, exchange));
+        }
+        _departedFlights.Clear();
+
+        // The safety gate removes FTL at the end of its tick. Refresh after
+        // that removal so the pilot gets the waiting controls, not a countdown.
+        for (var i = _cancelledFlights.Count - 1; i >= 0; i--)
+        {
+            var grid = _cancelledFlights[i];
+            if (HasComp<FTLComponent>(grid))
+                continue;
+
+            if (!TerminatingOrDeleted(grid))
+                RefreshNavigationUis(grid);
+            _cancelledFlights.RemoveAt(i);
+        }
+
         if (_timing.CurTime < _nextCheck)
             return;
 
@@ -187,19 +271,12 @@ public sealed class CMUDropshipMohawkExchangeSystem : EntitySystem
 
         exchange.Departing = true;
         exchange.DepartureMap = departureMap;
-
-        // The gunship's FlyTo freed the pad, so the Mohawk can reserve it now and
-        // arrive well after the gunship's shorter departure burn has lifted it off.
-        if (!_platoonSpawn.TryLaunchExchangeShuttle(mohawkGrids, exchange.Faction, pad))
-        {
-            Log.Error($"Failed to launch the exchange Mohawk {exchange.MohawkPath} to {ToPrettyString(pad)}.");
-            QueueDel(mohawkMap);
-            return;
-        }
-
-        _marineAnnounce.AnnounceARES(gunship,
-            Loc.GetString("cmu-dropship-exchange-departing", ("ship", Name(gunship))),
-            faction: exchange.Faction);
+        exchange.ExchangePad = pad;
+        exchange.ReplacementMap = mohawkMap;
+        exchange.ReplacementGrids = mohawkGrids;
+        // FlyTo releases the old reservation during setup. Hold it through the
+        // countdown so a cancelled departure cannot lose its occupied pad.
+        _dropship.SetDestinationShip(pad, gunship);
     }
 
     private bool HasBoardedMobs(EntityUid grid)

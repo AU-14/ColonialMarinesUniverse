@@ -36,6 +36,17 @@ public sealed partial class CMUDropshipMohawkExchangeComponent : Component
     /// <summary>Scratch map the departing gunship flies to; deleted with the gunship.</summary>
     [DataField]
     public EntityUid? DepartureMap;
+
+    /// <summary>Pad held until the gunship actually lifts off, or restored if startup is cancelled.</summary>
+    [DataField]
+    public EntityUid? ExchangePad;
+
+    /// <summary>Preloaded replacement, launched only after the gunship leaves the pad.</summary>
+    [DataField]
+    public EntityUid? ReplacementMap;
+
+    [DataField]
+    public List<EntityUid> ReplacementGrids = new();
 }
 
 [Serializable, NetSerializable]
