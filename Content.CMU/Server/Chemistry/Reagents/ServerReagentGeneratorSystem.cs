@@ -200,9 +200,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                         }
                     }
                 }
-                //TODO: reaction indicators
-                data.Info += Loc.GetString("research-report-reaction-header") +
-                    "\nDATABASE ERROR. \nWY_FTP RETURN CODE 0b1000100110\n";
+                data.Info += GetReactionIndicatorReport(chem);
                 metabRate = FixedPoint2.Max(0.01f, metabRate);
                 data.Info += '\n';
                 data.Info += chem.LocalizedDescription + "\n";
@@ -246,8 +244,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         }
         else if (chem.LocalizedDescription != "")
         {
-            data.Info += Loc.GetString("research-report-reaction-header") +
-                    "\nDATABASE ERROR. \nWY_FTP RETURN CODE 0b1000100110\n";
+            data.Info += GetReactionIndicatorReport(chem);
             data.Info += chem.LocalizedDescription + "\n";
             if (chem.Metabolisms is not null)
             {
