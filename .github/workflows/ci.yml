@@ -15,9 +15,9 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # CMU14: new PR revisions cancel obsolete builds and tests together.
+  # CMU14: new master pushes and PR revisions cancel obsolete builds and tests together.
   group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && format('ci-pr-{0}', github.event.pull_request.number) || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true }}
+  cancel-in-progress: ${{ (github.event_name == 'pull_request' && github.event.pull_request.draft != true) || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
 
 env:
   DOTNET_VERSION: 10.0.x
