@@ -2,7 +2,7 @@ name: Retry interrupted CI
 
 on:
   workflow_run:
-    workflows: [CI]
+    workflows: [CI, CI Shard Wave]
     types: [completed]
 
 permissions:
@@ -49,7 +49,7 @@ jobs:
               ...repo, run_id: run.id, attempt_number: run.run_attempt, per_page: 100,
             });
             const failed = jobs.filter(job => job.conclusion === 'failure' &&
-              job.name !== 'Required Checks');
+              job.name !== 'Required Checks' && job.name !== 'Wave Gate');
             if (failed.length === 0)
               return;
 

@@ -321,6 +321,31 @@
     amount: 2
 
 # ---------------------------------------------------------------- leather
+- type: entity
+  parent: CrateLivestock
+  id: CMUCrateLivestockCow
+  name: cow crate
+  description: A live cow for milk, meat and hides.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: MobCow
+
+- type: entity
+  parent: BaseItem
+  id: CMUCowHide
+  name: cow hide
+  description: An untanned cow hide. Process it in a tannery with water and chrome powder to make leather.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/materials.rsi
+    state: corgihide
+  - type: Item
+    size: Small
+    sprite: Objects/Materials/materials.rsi
+    heldPrefix: corgihide
+
 - type: stack
   id: RUMCLeather
   name: leather
