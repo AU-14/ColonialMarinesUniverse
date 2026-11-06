@@ -1,6 +1,10 @@
 - type: reaction
   id: CMUStabilizedMutagen
   quantized: true
+  maxTemp: 270 # only below 270 K: chill it first (chemistry chiller or ice brine)
+  conserveEnergy: false # do not self-heat past the gate
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     CMDylovene:
       amount: 10
@@ -16,6 +20,10 @@
 - type: reaction
   id: CMUStabilizedMutagenUpstream
   quantized: true
+  maxTemp: 270 # only below 270 K: chill it first (chemistry chiller or ice brine)
+  conserveEnergy: false # do not self-heat past the gate
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     CMDylovene:
       amount: 10
@@ -31,6 +39,10 @@
 - type: reaction
   id: CMUMH33
   quantized: true
+  maxTemp: 270 # only below 270 K: chill it first (chemistry chiller or ice brine)
+  conserveEnergy: false # do not self-heat past the gate
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     CMUMH32:
       amount: 15

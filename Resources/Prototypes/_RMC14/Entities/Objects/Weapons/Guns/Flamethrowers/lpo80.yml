@@ -144,6 +144,8 @@
         reagents:
         - ReagentId: RMCNapalmUT
           Quantity: 250
+  - type: RMCFlamerTank # CMU14: specialist LPO80-T tanks may fire blue fire
+    allowBlueFire: true
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: flametank_strip
@@ -175,6 +177,8 @@
         reagents:
         - ReagentId: RMCNapalmX
           Quantity: 250
+  - type: RMCFlamerTank # CMU14: specialist LPO80-T tanks may fire blue fire
+    allowBlueFire: true
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: flametank_strip
@@ -206,6 +210,8 @@
         reagents:
         - ReagentId: RMCNapalmB
           Quantity: 250
+  - type: RMCFlamerTank # CMU14: specialist LPO80-T tanks may fire blue fire
+    allowBlueFire: true
   - type: SolutionContainerVisuals
     maxFillLevels: 2
     fillBaseName: flametank_strip

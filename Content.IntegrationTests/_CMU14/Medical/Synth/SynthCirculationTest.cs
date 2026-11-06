@@ -18,6 +18,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Item.ItemToggle;
+using Content.Shared.Nutrition.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
@@ -215,15 +216,25 @@ public sealed class SynthCirculationTest
                 .GetTotalPrototypeQuantity("CMUSiliconeOil"), Is.EqualTo(FixedPoint2.New(20)));
             Assert.That(Mix(entities, map, ("RMCEthanol", 5), ("RMCOxygen", 5))
                 .GetTotalPrototypeQuantity("CMUGlycol"), Is.EqualTo(FixedPoint2.New(10)));
+            // FLOW-21: vulcanization needs 350 K, nothing forms at room temperature
             Assert.That(Mix(entities, map, ("RMCMethane", 5), ("RMCSulfur", 5), ("CMUAmmonia", 5))
+                .GetTotalPrototypeQuantity("CMUSyntheticLatex"), Is.EqualTo(FixedPoint2.Zero));
+            Assert.That(Make(entities, map, 350f, false, ("RMCMethane", 5), ("RMCSulfur", 5), ("CMUAmmonia", 5))
                 .GetTotalPrototypeQuantity("CMUSyntheticLatex"), Is.EqualTo(FixedPoint2.New(15)));
             Assert.That(Mix(entities, map, ("RMCSodium", 5), ("RMCSulphuricAcid", 5), ("RMCCarbon", 5))
                 .GetTotalPrototypeQuantity("CMUSurfactant"), Is.EqualTo(FixedPoint2.New(15)));
             Assert.That(Mix(entities, map, ("RMCSodium", 5), ("RMCPhosphorus", 5), ("RMCOxygen", 5))
                 .GetTotalPrototypeQuantity("CMUCorrosionInhibitor"), Is.EqualTo(FixedPoint2.New(15)));
 
-            var blood = Mix(entities, map, ("Water", 30), ("CMUSyntheticLatex", 20), ("CMUSiliconeOil", 20),
-                ("CMUGlycol", 10), ("CMUSurfactant", 10), ("CMUCorrosionInhibitor", 10));
+            // FLOW-21: synth blood needs a lid-closed Mix, adding the stock alone makes nothing
+            (string, int)[] bloodStock =
+            [
+                ("Water", 30), ("CMUSyntheticLatex", 20), ("CMUSiliconeOil", 20),
+                ("CMUGlycol", 10), ("CMUSurfactant", 10), ("CMUCorrosionInhibitor", 10),
+            ];
+            Assert.That(Mix(entities, map, bloodStock).GetTotalPrototypeQuantity("RMCSynthBlood"),
+                Is.EqualTo(FixedPoint2.Zero));
+            var blood = Make(entities, map, null, true, bloodStock);
             Assert.That(blood.GetTotalPrototypeQuantity("RMCSynthBlood"), Is.EqualTo(FixedPoint2.New(100)));
         });
 
@@ -265,12 +276,35 @@ public sealed class SynthCirculationTest
         Robust.UnitTesting.Pool.TestMapData map,
         params (string Reagent, int Amount)[] reagents)
     {
+        return Make(entities, map, null, false, reagents);
+    }
+
+    /// <summary>
+    /// Adds the reagents to a large beaker, then optionally heats it to <paramref name="temperature"/> and/or closes
+    /// the lid and mixes it (what the Mix verb's doafter does), for the FLOW-21 heat and CMUMix gates.
+    /// </summary>
+    private static Content.Shared.Chemistry.Components.Solution Make(
+        IEntityManager entities,
+        Robust.UnitTesting.Pool.TestMapData map,
+        float? temperature,
+        bool mix,
+        params (string Reagent, int Amount)[] reagents)
+    {
         var solutions = entities.System<SharedSolutionContainerSystem>();
         var beaker = entities.SpawnEntity("CMBeakerLarge", map.GridCoords);
         Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln, out var solution), Is.True);
         foreach (var (reagent, amount) in reagents)
         {
             Assert.That(solutions.TryAddReagent(soln!.Value, reagent, FixedPoint2.New(amount)), Is.True, reagent);
+        }
+
+        if (temperature != null)
+            solutions.SetTemperature(soln!.Value, temperature.Value);
+
+        if (mix)
+        {
+            entities.System<OpenableSystem>().SetOpen(beaker, false);
+            Assert.That(entities.System<ShakeableSystem>().TryShake(beaker), Is.True, "a closed beaker should mix");
         }
 
         return solution!;
