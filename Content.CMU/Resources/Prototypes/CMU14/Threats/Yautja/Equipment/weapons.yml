@@ -1740,7 +1740,8 @@
   components:
   - type: Sprite
     sprite: CMU14/Yautja/bow.rsi
-    state: projectile_expl
+    layers:
+    - state: projectile_expl
   - type: Projectile
     damage:
       types:
