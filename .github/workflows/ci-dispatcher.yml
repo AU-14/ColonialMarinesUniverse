@@ -37,14 +37,8 @@ jobs:
             const repo = context.repo;
             const fresh = Date.now() - 6 * 3600 * 1000;
 
-            // CMU14: chunked waves serve a suite across several runs; demand persists
-            // until the wave posts the completion marker
-            const served = async (sha) => {
-              const checks = await github.paginate(github.rest.checks.listForRef, {
-                ...repo, ref: sha, per_page: 100,
-              });
-              return checks.some(c => c.name === 'Testcases Complete');
-            };
+            // CMU14: served() helper removed; the loop below fetches each PR's
+            // checks once and derives served + finalize state from the marker
 
             const waveInFlight = async (sha) => {
               const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
@@ -59,8 +53,38 @@ jobs:
             });
             const demand = [];
             for (const pr of open) {
-              if (pr.draft || Date.parse(pr.pushed_at) < fresh) continue;
-              if (await served(pr.head.sha)) continue;
+              if (pr.draft) continue;
+              const checks = await github.paginate(github.rest.checks.listForRef, {
+                ...repo, ref: pr.head.sha, per_page: 100,
+              });
+              const marker = checks
+                .filter(c => c.name === 'Testcases Complete')
+                .sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at))[0];
+              // CMU14: finalize pass. when the gate flags the final chunk, flip the
+              // pending marker once every real leg has settled: all green -> success,
+              // any red -> failure. red legs stay served and never reschedule.
+              // skipped legs are the unfilled matrix placeholder, not real runs
+              if (marker && marker.status === 'in_progress'
+                  && marker.output?.title === 'final chunk admitted') {
+                const legs = checks.filter(c =>
+                  c.name.startsWith('Testcases /') && c.conclusion !== 'skipped');
+                if (legs.length > 0 && legs.every(l => l.status === 'completed' && l.conclusion !== 'cancelled')) {
+                  const green = legs.every(l => l.conclusion === 'success');
+                  await github.rest.checks.update({
+                    ...repo,
+                    check_run_id: marker.id,
+                    status: 'completed',
+                    conclusion: green ? 'success' : 'failure',
+                    output: {
+                      title: green ? 'suite green' : 'suite has failed shards',
+                      summary: `${legs.filter(l => l.conclusion === 'success').length}/${legs.length} shard legs green.`,
+                    },
+                  });
+                  continue;
+                }
+              }
+              if (marker && marker.status === 'completed') continue;
+              if (Date.parse(pr.pushed_at) < fresh) continue;
               if (await waveInFlight(pr.head.sha)) continue;
               const runs = await github.rest.actions.listWorkflowRuns({
                 ...repo, workflow_id: 'ci.yml', head_sha: pr.head.sha, per_page: 1,

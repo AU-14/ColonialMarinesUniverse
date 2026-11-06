@@ -29,7 +29,7 @@ jobs:
     outputs:
       serve: ${{ steps.gate.outputs.serve }}
       chunk: ${{ steps.gate.outputs.chunk }}
-      last: ${{ steps.gate.outputs.last }}
+      # CMU14: last output removed; the dispatcher finalize pass owns the marker flip
     steps:
       - name: Decide
         id: gate
@@ -75,14 +75,26 @@ jobs:
               checkRuns.filter(c => c.name.startsWith('Testcases /')).map(c => c.name.slice(11).trim())
             );
             const missing = SHARDS.filter(s => !present.has(s.name));
-            if (missing.length === 0) {
-              // suite served; if the marker job once failed there is no other
-              // path back, so re-post it from here (chunk stays empty)
-              if (checkRuns.some(c => c.name === 'Testcases Complete'))
-                return;
-              core.setOutput('serve', 'true');
-              core.setOutput('last', 'true');
+            if (missing.length === 0)
               return;
+
+            // CMU14: a PR that owes shards must never read all-green. a pending
+            // marker goes up the moment demand exists; the dispatcher finalize
+            // pass flips it terminal once the final chunk's legs settle
+            let markerRun = checkRuns
+              .filter(c => c.name === 'Testcases Complete')
+              .sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at))[0];
+            if (markerRun?.status === 'completed')
+              return;
+            if (!markerRun) {
+              const created = await github.rest.checks.create({
+                ...context.repo,
+                name: 'Testcases Complete',
+                head_sha: headSha,
+                status: 'in_progress',
+                output: {title: 'shard wave pending', summary: 'Suite queued or serving in chunked waves.'},
+              });
+              markerRun = created.data;
             }
 
             // yield while higher-priority unserved demand exists
@@ -107,27 +119,36 @@ jobs:
               const cs = await github.paginate(github.rest.checks.listForRef, {
                 ...context.repo, ref: other.head.sha, per_page: 100,
               });
-              if (cs.some(c => c.name === 'Testcases Complete')) continue;  // mid-suite or done
+              // CMU14: only a settled marker means served; a pending marker is
+              // queued or mid-suite demand this gate must still yield to
+              if (cs.some(c => c.name === 'Testcases Complete' && c.status === 'completed')) continue;
               core.info(`yielding to #${other.number} (${ok} < ${klass})`);
               return;
             }
 
-            // supersede stale same-head wave runs
-            const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
-              ...context.repo, workflow_id: 'ci-shards.yml', per_page: 100,
-            });
-            for (const w of waves) {
-              if (w.status === 'completed' || w.id === context.runId) continue;
-              if (w.head_sha !== headSha) continue;
-              try { await github.rest.actions.cancelWorkflowRun({ ...context.repo, run_id: w.id }); }
-              catch (e) { core.info(`cancel ${w.id}: ${e.status}`); }
-            }
+            // CMU14: wave-run supersession removed. workflow_run run records
+            // carry the default branch's sha, not the triggering run's sha, so a
+            // master-triggered gate matched EVERY in-flight wave and cancelled
+            // them all on every merge. same-shard dedupe is the present-set (any
+            // status) plus the per-shard concurrency groups; stale master suites
+            // finish and post checks on their own dead sha, nothing reads them
+            // const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
+            //   ...context.repo, workflow_id: 'ci-shards.yml', per_page: 100,
+            // });
+            // for (const w of waves) {
+            //   if (w.status === 'completed' || w.id === context.runId) continue;
+            //   if (w.head_sha !== headSha) continue;
+            //   try { await github.rest.actions.cancelWorkflowRun({ ...context.repo, run_id: w.id }); }
+            //   catch (e) { core.info(`cancel ${w.id}: ${e.status}`); }
+            // }
 
             // reserve: admit only what starts immediately beside the helper
             // reserve. count in-progress jobs across EVERY workflow: builds,
             // guards and labels are exactly what the reserve exists for
             let busy = 0;
-            const liveRuns = await github.paginate(github.rest.actions.listWorkflowRuns, {
+            // CMU14: repo-wide listing. the workflow-scoped call without an id
+            // renders workflows//runs and 404s, killing every wave at the census
+            const liveRuns = await github.paginate(github.rest.actions.listRepoWorkflowRuns, {
               ...context.repo, status: 'in_progress', per_page: 100,
             });
             for (const lr of liveRuns) {
@@ -144,8 +165,16 @@ jobs:
             }
 
             core.setOutput('chunk', JSON.stringify(missing.slice(0, CHUNK)));
-            core.setOutput('last', String(missing.length <= CHUNK));
             core.setOutput('serve', 'true');
+            // CMU14: flag the marker when this admission closes the suite; the
+            // dispatcher waits for these legs to settle before flipping it
+            if (missing.length <= CHUNK) {
+              await github.rest.checks.update({
+                ...context.repo,
+                check_run_id: markerRun.id,
+                output: {title: 'final chunk admitted', summary: 'Last wave admitted; marker settles when its legs finish.'},
+              });
+            }
 
   integration-tests:
     name: Testcases / ${{ matrix.shard.name }}
@@ -330,20 +359,24 @@ jobs:
           if-no-files-found: ignore
           retention-days: 3
 
-  complete:
-    name: Testcases Complete
-    needs: serve
-    if: needs.serve.outputs.serve == 'true' && needs.serve.outputs.last == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    steps:
-      - uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            await github.rest.checks.create({
-              ...context.repo,
-              name: 'Testcases Complete',
-              head_sha: context.payload.workflow_run.head_sha,
-              status: 'completed',
-              conclusion: 'success',
-            });
+  # CMU14 complete job removed: it posted success at final-chunk admission,
+  # before the last legs ran, and green even with failed shards. the gate now
+  # posts a pending marker when demand exists and flags the final admission;
+  # ci-dispatcher.yml's finalize pass flips the marker terminal once the legs settle
+  # complete:
+  #   name: Testcases Complete
+  #   needs: serve
+  #   if: needs.serve.outputs.serve == 'true' && needs.serve.outputs.last == 'true'
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 3
+  #   steps:
+  #     - uses: actions/github-script@v9.0.0
+  #       with:
+  #         script: |
+  #           await github.rest.checks.create({
+  #             ...context.repo,
+  #             name: 'Testcases Complete',
+  #             head_sha: context.payload.workflow_run.head_sha,
+  #             status: 'completed',
+  #             conclusion: 'success',
+  #           });
