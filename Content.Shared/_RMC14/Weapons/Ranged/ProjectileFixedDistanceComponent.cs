@@ -9,7 +9,8 @@ namespace Content.Shared._RMC14.Weapons.Ranged;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 // CMU14
-[Access(typeof(CMGunSystem), typeof(XenoProjectileSystem), typeof(CMUXenoWarlockSystem))]
+[Access(typeof(CMGunSystem), typeof(XenoProjectileSystem), typeof(CMUXenoWarlockSystem),
+    typeof(Content.Shared.CMU14.Dropship.DirectFire.GunshipDirectFireSystem))]
 // CMU14
 public sealed partial class ProjectileFixedDistanceComponent : Component
 {

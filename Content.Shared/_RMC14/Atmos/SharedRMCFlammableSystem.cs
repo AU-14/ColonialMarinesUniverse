@@ -1043,13 +1043,15 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         }
     }
 
-    // cmu edit start
+    // CMU14 Begin: keep spread fire synchronized with its source fire.
     /// <summary>
     /// Makes a fire that spread from another burn exactly as strong as it, with the same age and lifetime, so the
     /// whole burn dies down and goes out together.
     /// </summary>
     public void MatchTileFire(Entity<TileFireComponent> child, Entity<TileFireComponent> parent)
     {
+        if (HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(parent))
+            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(child);
         child.Comp.SpawnedAt = parent.Comp.SpawnedAt;
         child.Comp.Duration = parent.Comp.Duration;
         child.Comp.GrowthDuration = parent.Comp.GrowthDuration;
@@ -1077,7 +1079,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         }
         // CMU14 end
     }
-    // cmu edit end
+    // CMU14 End
 
     public void SetIntensityDuration(Entity<RMCIgniteOnCollideComponent?, DamageOnCollideComponent?> ent, int? intensity, int? duration)
     {
@@ -1102,7 +1104,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         }
     }
 
-    // CMU14: fire growth and synthetic resistance.
+    // CMU14 method: fire growth, synthetic resistance, and Firepenetrating fuel.
     /// <summary>
     /// Fire bypasses worn armor, but respects synthetic and Yautja heat resistance unless the fire is
     /// <paramref name="penetrating"/> (Firepenetrating fuel), in which case every resistance is ignored.
@@ -1179,7 +1181,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
         if (!wasOnFire && IsOnFire(flammableEnt) && CanFireBypassImmunity(ent, other))
             // CMU14: fire growth and synthetic resistance.
-            DamageFromFire(other, flammableEnt.Comp.Damage * ent.Comp.Intensity, penetrating: ent.Comp.FirePenetrating);
+            DamageFromFire(other, flammableEnt.Comp.Damage * ent.Comp.Intensity, penetrating: ent.Comp.FirePenetrating); // CMU14
     }
 
     private void ApplyTileEffect(Entity<SteppingOnFireComponent> ent, RMCIgniteOnCollideComponent ignite, EntityUid fireEntity)
