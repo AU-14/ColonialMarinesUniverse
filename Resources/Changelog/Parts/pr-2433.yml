@@ -1,0 +1,31 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Ancients from the Ancient hunt slot can open the elder, adult and youngblood
+    gear racks.
+  type: Fix
+- message: The Yautja mark menu lists nearby prey again.
+  type: Fix
+- message: Arrows fired from the Yautja hunting bow no longer show the error sprite.
+  type: Fix
+- message: Hovering over a cloaked Yautja, scout or ghillie sniper no longer shows
+    an outline around them.
+  type: Fix
+- message: Non-Yautja players can no longer spawn on the hunter ship.
+  type: Fix
+- message: Yautja melee weapons cause pain immediately, so two wielded glaive hits
+    put an unarmoured human into pain shock.
+  type: Tweak
+- message: Armour now has a chance to blunt each Yautja blade hit, cutting its damage
+    and pain.
+  type: Tweak
+- message: Yautja can flay dead humans with the ceremonial dagger, all the way through
+    the cmss13 stages, and the body shows it.
+  type: Add
+- message: Human skin uses the cmss13 sprite and only stacks with skin from the same
+    victim.
+  type: Tweak
+- message: Stranded Yautja no longer spawn in Colony Fall.
+  type: Tweak
+time: '2026-11-06T13:08:28.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2433
