@@ -1,0 +1,10 @@
+author: maertayn
+category: CMU
+changes:
+- message: Antag pity weighting now actually loads from the database (it silently
+    failed every server start since release)
+  type: Fix
+- message: Wey-Yu PMC ghost warp menus now order jobs by their display weight
+  type: Tweak
+time: '2026-11-04T04:05:24.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2462

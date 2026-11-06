@@ -9,7 +9,7 @@
     - id: CMWirecutter
     - id: CMWrench
     - id: CMCrowbar
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack
     - id: RMCPowerCellHigh
     - id: CMWelderSmall
     - id: CMMultitool

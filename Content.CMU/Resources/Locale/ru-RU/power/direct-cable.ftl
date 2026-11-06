@@ -9,3 +9,4 @@ direct-cable-linker-success = Вы соединяете { $source } и { $target
 direct-cable-linker-disconnect-verb = Отсоединить прямой кабель
 direct-cable-linker-disconnect-verb-needs-cutters = Для этого нужны кусачки.
 direct-cable-linker-disconnected = Прямые кабельные соединения перерезаны.
+cmu-node-examine-direct-lv = Имеет разъём для прямого подключения кабеля. Используйте [color=green]моток кабеля CMU[/color] на этом устройстве и на [color=green]электрическом щитке[/color], чтобы подключить питание.
