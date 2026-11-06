@@ -29,6 +29,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
     [Dependency] private CMUSurgerySessionSystem _sessions = default!;
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
+    [Dependency] private CMUYautjaSurgeryAccessSystem _yautjaSurgeryAccess = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
@@ -602,11 +603,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
 
     private bool IsYautjaTechUser(EntityUid user)
     {
-        return HasComp<YautjaComponent>(user)
-            || HasComp<YautjaTechAuthorizedComponent>(user)
-            || TryComp(user, out YautjaThrallComponent? thrall)
-            && thrall.Blooded
-            && thrall.TechAuthorized;
+        return _yautjaSurgeryAccess.CanOperate(user);
     }
 
     private bool ReattachHasAnyMissingSlot(EntityUid patient)

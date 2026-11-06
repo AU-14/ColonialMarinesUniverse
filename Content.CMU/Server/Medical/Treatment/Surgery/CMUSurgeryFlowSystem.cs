@@ -54,6 +54,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     [Dependency] private CMUSplintItemSystem _splints = default!;
     [Dependency] private SharedCMUSurgerySystem _surgery = default!;
     [Dependency] private WoundsSystem _wounds = default!;
+    [Dependency] private CMUYautjaSurgeryAccessSystem _yautjaSurgeryAccess = default!;
 
     private const float StepDoAfterSeconds = 2f;
     private const float PostOpCastWindowMinutes = 5f;
@@ -254,11 +255,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
     private bool IsYautjaTechUser(EntityUid user)
     {
-        return HasComp<YautjaComponent>(user)
-            || HasComp<YautjaTechAuthorizedComponent>(user)
-            || TryComp(user, out YautjaThrallComponent? thrall)
-            && thrall.Blooded
-            && thrall.TechAuthorized;
+        return _yautjaSurgeryAccess.CanOperate(user);
     }
 
     protected override void ApplyWrongToolDamage(EntityUid surgeon, EntityUid patient, EntityUid tool, string damageType, float amount)
