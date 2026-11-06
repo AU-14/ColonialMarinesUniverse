@@ -35,6 +35,20 @@
 
 - type: entity
   abstract: true
+  id: CMUBaseVeinZinc
+  components:
+  - type: OreVein
+    oreChance: 1.0
+    currentOre: RUMCOreZinc
+  - type: Sprite
+    layers:
+    - state: ore_silver
+      sprite: CMU14/Structures/ore_veins.rsi
+      color: "#c9cfd8"
+      map: [ "enum.MiningScannerVisualLayers.Overlay" ]
+
+- type: entity
+  abstract: true
   id: RUMCBaseVeinAluminum
   suffix: Aluminum
   description: An ore vein rich with aluminum.
@@ -192,6 +206,10 @@
   parent: [ RUMCBaseVeinCopper, RUMCRockWall ]
   id: RUMCRockWallCopper
   name: stone wall
+
+- type: entity
+  parent: [ CMUBaseVeinZinc, RUMCRockWall ]
+  id: CMURockWallZinc
 
 - type: entity
   parent: [ RUMCBaseVeinAluminum, RUMCRockWall ]
@@ -711,6 +729,10 @@
   parent: [ RUMCBaseVeinCopper, RUMCBlackRockWall ]
   id: RUMCBlackRockWallCopper
   name: black stone wall
+
+- type: entity
+  parent: [ CMUBaseVeinZinc, RUMCBlackRockWall ]
+  id: CMUBlackRockWallZinc
 
 - type: entity
   parent: [ RUMCBaseVeinAluminum, RUMCBlackRockWall ]

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using System;
+using System.Globalization;
 using System.Numerics;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.CMU14.Fluids;
@@ -55,9 +56,10 @@ public static class MachineWindowKit
 
         var lines = new System.Collections.Generic.List<string>();
         foreach (var (kind, amount) in tank.Contents)
-            lines.Add($"{LiquidName(entMan, kind)}: {(int) amount}");
+            lines.Add(Loc.GetString("au14-fluid-tank-examine", ("fluid", LiquidName(entMan, kind)), ("amount", Math.Round(amount, 1))));
 
-        return string.Join("\n", lines) + $"\n{(int) tank.Total}/{(int) tank.Capacity}";
+        return string.Join("\n", lines) + "\n" + Loc.GetString("cmu-fluid-tank-volume",
+            ("amount", Math.Round(tank.Total, 1)), ("capacity", tank.Capacity));
     }
 
     public static SlotView MakeSlot(IEntityManager entMan, string slotId, Color border, Action<string>? onPressed, int size = SlotSize)
@@ -190,7 +192,7 @@ public static class MachineWindowKit
         public void UpdateSteam(SteamPortComponent port)
         {
             Bar.Value = port.GaugeMoles <= 0f ? 0f : Math.Clamp(port.Moles / port.GaugeMoles, 0f, 1f);
-            Label.Text = Loc.GetString("au14-window-steam-gauge", ("moles", MathF.Round(port.Moles, 1)), ("pressure", (int) port.Pressure));
+            Label.Text = Loc.GetString("au14-window-steam-gauge", ("moles", port.Moles.ToString("0.#", CultureInfo.InvariantCulture)), ("pressure", (int) port.Pressure));
         }
     }
 }

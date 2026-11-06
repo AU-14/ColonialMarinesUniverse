@@ -2,7 +2,10 @@
 // Copyright (c) 2026 wray-git
 using System.Numerics;
 using Content.Client._RMC14.Deploy;
+using Content.Shared._RMC14.Areas;
+using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevelBuilding.Pit;
+using Content.Shared.Construction.Conditions;
 using Content.Shared.DoAfter;
 using Content.Shared.Input;
 using Content.Shared.Hands.EntitySystems;
@@ -24,6 +27,8 @@ public sealed class PitDigPreviewSystem : EntitySystem
 {
     // How far the tool reaches, in tiles; past it the square is red.
     private const float Reach = 2.2f;
+    private static readonly TileNotBlocked TileRule = new();
+    private static readonly ZBuildAllowed MapRule = new();
 
     [Dependency] private readonly IEyeManager _eye = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
@@ -122,7 +127,16 @@ public sealed class PitDigPreviewSystem : EntitySystem
         var from = _transform.GetWorldPosition(player);
 
         overlay.Box = Box2.CenteredAround(center, Vector2.One);
-        overlay.Color = (center - from).Length() <= Reach ? Color.Blue : Color.Red;
+        var location = _map.GridTileToLocal(gridUid, grid, tile);
+        var available = (center - from).Length() <= Reach &&
+                        TileRule.Condition(player, location, Direction.South) &&
+                        MapRule.Condition(player, location, Direction.South);
+        foreach (var entity in _map.GetAnchoredEntities(gridUid, grid, tile))
+        {
+            if (!HasComp<AreaComponent>(entity))
+                available = false;
+        }
+        overlay.Color = available ? Color.Blue : Color.Red;
         overlay.Visible = true;
     }
 }

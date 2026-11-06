@@ -20,7 +20,7 @@ public sealed partial class CMUYautjaExperimentPrototype : IPrototype
     [IdDataField] public string ID { get; private set; } = default!;
     [DataField(required: true)] public LocId Name;
     [DataField(required: true)] public LocId Response;
-    [DataField(required: true)] public LocId Clue;
+    [DataField(required: true)] public List<LocId> Clues = new();
     [DataField(required: true)] public LocId Lore;
     [DataField(required: true)] public ProtoId<ToolQualityPrototype> Tool;
     // Choose a stock reagent or a generated property requirement, never both.
@@ -66,6 +66,8 @@ public sealed partial class CMUYautjaExperimentComponent : Component
     [DataField] public HashSet<ProtoId<CMUYautjaExperimentPrototype>> Discoveries = new();
     // Chosen once for this device, not for its current operator. Saved with the bracer.
     [DataField] public HashSet<ProtoId<CMUYautjaExperimentPrototype>> RequiredExperiments = new();
+    // Keep each seal's wording consistent across inspections and operators.
+    [DataField] public Dictionary<ProtoId<CMUYautjaExperimentPrototype>, LocId> SelectedClues = new();
     [DataField] public int Heat;
     [DataField] public bool Unlocked;
     // Serializes access to the shared sample well; only this operation may consume its reagents.

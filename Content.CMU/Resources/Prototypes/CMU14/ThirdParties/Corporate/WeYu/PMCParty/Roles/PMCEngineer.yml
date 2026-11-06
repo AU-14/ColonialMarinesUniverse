@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 11
   id: AU14JobWYPMCPartyEngineer #m41a/2
   chevrons:
     AU14RankWeYuEnforcer:

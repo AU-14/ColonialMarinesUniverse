@@ -23,7 +23,7 @@ namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 public sealed partial class CMUZLevelShootingSystem : EntitySystem
 {
     private const float CrossZShotRange = 4f;
-    private const float CrossZOpeningSourceEdgeRangeTiles = 2f;
+    private const float CrossZOpeningSourceEdgeRangeTiles = 3f;
     private const float CrossZOpeningSourceNudge = 0.30f;
     // how far one floor counts for falloff/range, keeps buckshot from point blanking through a hole
     private const float CrossZLevelShotDistance = 3f;
@@ -273,7 +273,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         // Open air between shooter and target: nothing to shoot through, so skip the
         // opening hunt and range clamp (straight shots at hovering dropships).
         if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value,
-                fromMap.Position, toMap.Position, offset < 0 ? targetMap.Value : null))
+                fromMap.Position, toMap.Position, offset < 0 ? targetMap.Value : null, blockRoofs: true))
         {
             adjustedFromCoordinates = _transform.ToCoordinates(new MapCoordinates(fromMap.Position, map.MapId));
             adjustedToCoordinates = _transform.ToCoordinates(new MapCoordinates(toMap.Position, map.MapId));
@@ -289,7 +289,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
                 clampedTo,
                 out var opening,
                 preferOpeningAwayFromSource: true,
-                maxSourceDistanceFromOpeningEdgeTiles: CrossZOpeningSourceEdgeRangeTiles))
+                maxSourceDistanceFromOpeningEdgeTiles: CrossZOpeningSourceEdgeRangeTiles,
+                blockRoofs: true))
         {
             PopupSelf(shooter, offset > 0
                 ? "cmu-zlevel-shoot-up-blocked-floor"
@@ -342,7 +343,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         // Open air between shooter and target: nothing to shoot through, so skip the
         // opening hunt and range clamp (straight shots at hovering dropships).
         if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value,
-                fromCoordinates.Position, toCoordinates.Position, offset < 0 ? targetMap.Value : null))
+                fromCoordinates.Position, toCoordinates.Position, offset < 0 ? targetMap.Value : null, blockRoofs: true))
         {
             adjustedFromCoordinates = new MapCoordinates(fromCoordinates.Position, map.MapId);
             adjustedToCoordinates = new MapCoordinates(toCoordinates.Position, map.MapId);
@@ -358,7 +359,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
                 clampedTo,
                 out var opening,
                 preferOpeningAwayFromSource: true,
-                maxSourceDistanceFromOpeningEdgeTiles: CrossZOpeningSourceEdgeRangeTiles))
+                maxSourceDistanceFromOpeningEdgeTiles: CrossZOpeningSourceEdgeRangeTiles,
+                blockRoofs: true))
         {
             PopupSelf(shooter, offset > 0
                 ? "cmu-zlevel-shoot-up-blocked-floor"

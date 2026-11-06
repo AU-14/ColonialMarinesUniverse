@@ -1,3 +1,4 @@
+using Content.Server.Humanoid;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Blocking.Components;
 using System.Collections.Generic;
@@ -1117,6 +1118,7 @@ public sealed class YautjaMeleeWeaponTest
             var deadYautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords.Offset(new(4, 0)));
             var deadSynth = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new(5, 0)));
             var dagger = entMan.SpawnEntity("CMUYautjaCeremonialDagger", map.GridCoords);
+            var weakDagger = entMan.SpawnEntity("CMUYautjaCeremonialDagger", map.GridCoords);
 
             try
             {
@@ -1125,12 +1127,12 @@ public sealed class YautjaMeleeWeaponTest
                 foreach (var uid in new[] { deadHuman, deadXeno, deadYautja, deadSynth })
                     mobState.ChangeMobState(uid, MobState.Dead);
 
-                var alive = RaiseMeleeHit(entMan, dagger, hunter, aliveHuman);
-                var nonHuman = RaiseMeleeHit(entMan, dagger, hunter, deadXeno);
-                var weak = RaiseMeleeHit(entMan, dagger, weakTechUser, deadHuman);
-                var yautja = RaiseMeleeHit(entMan, dagger, hunter, deadYautja);
-                var synth = RaiseMeleeHit(entMan, dagger, hunter, deadSynth);
-                var started = RaiseMeleeHit(entMan, dagger, hunter, deadHuman);
+                var alive = ClickDagger(entMan, dagger, hunter, aliveHuman);
+                var nonHuman = ClickDagger(entMan, dagger, hunter, deadXeno);
+                var weak = ClickDagger(entMan, weakDagger, weakTechUser, deadHuman);
+                var yautja = ClickDagger(entMan, dagger, hunter, deadYautja);
+                var synth = ClickDagger(entMan, dagger, hunter, deadSynth);
+                var started = ClickDagger(entMan, dagger, hunter, deadHuman);
                 var daggerComp = entMan.GetComponent<YautjaCeremonialDaggerComponent>(dagger);
 
                 Assert.Multiple(() =>
@@ -1159,7 +1161,7 @@ public sealed class YautjaMeleeWeaponTest
             }
             finally
             {
-                foreach (var uid in new[] { hunter, weakTechUser, aliveHuman, deadHuman, deadXeno, deadYautja, deadSynth, dagger })
+                foreach (var uid in new[] { hunter, weakTechUser, aliveHuman, deadHuman, deadXeno, deadYautja, deadSynth, dagger, weakDagger })
                 {
                     if (!entMan.Deleted(uid))
                         entMan.DeleteEntity(uid);
@@ -1193,7 +1195,7 @@ public sealed class YautjaMeleeWeaponTest
                 dagger = entMan.SpawnEntity("CMUYautjaCeremonialDagger", map.GridCoords);
                 mobState.ChangeMobState(victim, MobState.Dead);
 
-                var started = RaiseMeleeHit(entMan, dagger, hunter, victim);
+                var started = ClickDagger(entMan, dagger, hunter, victim);
 
                 Assert.Multiple(() =>
                 {
@@ -1273,7 +1275,7 @@ public sealed class YautjaMeleeWeaponTest
 
                 partCount = partHealthBefore.Count;
 
-                var started = RaiseMeleeHit(entMan, dagger, hunter, victim);
+                var started = ClickDagger(entMan, dagger, hunter, victim);
 
                 Assert.That(started.Handled, Is.True);
             });
@@ -1290,8 +1292,8 @@ public sealed class YautjaMeleeWeaponTest
                 {
                     Assert.That(flayed.Stage, Is.EqualTo(1),
                         "CMSS13 add_flay_overlay(stage = 1) records the first prepared-skin stage after the first four-second cutting pass.");
-                    Assert.That(flayed.CurrentFlayer, Is.Null,
-                        "CMSS13 only keeps current_flayer during the active flay datum do_after; the first pass should finish before the recursive stage loop is ported.");
+                    Assert.That(flayed.CurrentFlayer, Is.EqualTo(hunter),
+                        "CMSS13 keeps current_flayer while the flay datum loops on to the scalp.");
                     Assert.That(flayed.NextStage, Is.EqualTo(YautjaFlayingStage.Scalp),
                         "CMSS13 creates the flaying datum after the first cuts with FLAY_STAGE_SCALP as the next recursive stage.");
                     Assert.That(entMan.System<DamageableSystem>().GetAllDamage((victim, damageable)).GetTotal() - damageBefore, Is.EqualTo((FixedPoint2) 15),
@@ -1357,11 +1359,17 @@ public sealed class YautjaMeleeWeaponTest
                 flayed.Stage = 1;
                 flayed.NextStage = YautjaFlayingStage.Scalp;
 
-                var scalpStage = RaiseMeleeHit(entMan, dagger, hunter, victim);
+                // no hair, no scalp, same as cmss13
+                Assert.That(entMan.System<HumanoidOrganAppearanceSystem>().TryAddMarking(victim, "HumanHairBob", Color.Green), Is.True);
+
+                var scalpStage = ClickDagger(entMan, dagger, hunter, victim);
 
                 Assert.That(scalpStage.Handled, Is.True,
                     "CMSS13 flaying datum handles a resumed dead-human flay attempt at FLAY_STAGE_SCALP.");
             });
+
+            // the scalp is a 4 second doafter now, then the loop moves on to the strip
+            await server.WaitRunTicks(130);
 
             await server.WaitAssertion(() =>
             {
@@ -1607,6 +1615,23 @@ public sealed class YautjaMeleeWeaponTest
         return hit;
     }
 
+
+    // a plain left click on the corpse with the dagger in the active hand
+    private static AfterInteractEvent ClickDagger(IEntityManager entMan, EntityUid dagger, EntityUid user, EntityUid target)
+    {
+        var hands = entMan.System<SharedHandsSystem>();
+        if (hands.GetActiveItem(user) != dagger)
+            Assert.That(hands.TryPickup(user, dagger), Is.True);
+
+        var interact = new AfterInteractEvent(
+            user,
+            dagger,
+            target,
+            entMan.GetComponent<TransformComponent>(target).Coordinates,
+            true);
+        entMan.EventBus.RaiseLocalEvent(dagger, interact);
+        return interact;
+    }
 
     private static AfterInteractEvent StartDaggerLimbFlay(
         IEntityManager entMan,
