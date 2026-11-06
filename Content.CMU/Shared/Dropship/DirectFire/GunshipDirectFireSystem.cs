@@ -280,12 +280,6 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             return;
         }
 
-        var roundsPerShot = Math.Max(1, ammo.RoundsPerShot);
-        var ammoConfig = CompOrNull<GunshipDirectFireAmmoComponent>(loadedAmmo);
-        var projectilePrototype = ammoConfig?.Projectile ?? ent.Comp.Projectile;
-        var projectilesPerShot = Math.Max(1, ammoConfig?.ProjectilesPerShot ?? 1);
-        for (var i = 0; i < args.Shots; i++)
-        var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
         // Each trajectory is checked for one feed's dispersion and friendly clearance.
         var shots = HasComp<MohawkChinGunComponent>(point) ? Math.Min(1, args.Shots) : args.Shots;
         for (var i = 0; i < shots; i++)
@@ -296,23 +290,29 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 loadedAmmo = feedAmmo.Owner;
                 ammo = feedAmmo.Comp;
             }
+
+            var roundsPerShot = Math.Max(1, ent.Comp.RoundsPerProjectile ?? ammo.RoundsPerShot);
             if (ammo.Rounds < roundsPerShot)
                 break;
 
             ammo.Rounds -= roundsPerShot;
+            var ammoConfig = CompOrNull<GunshipDirectFireAmmoComponent>(loadedAmmo);
+            var projectilePrototype = ammoConfig?.Projectile ?? ammo.DirectFireProjectile ?? ent.Comp.Projectile;
+            var projectilesPerShot = Math.Max(1, ammoConfig?.ProjectilesPerShot ?? 1);
+            var firedProjectiles = new List<EntityUid>(projectilesPerShot);
             for (var j = 0; j < projectilesPerShot; j++)
             {
                 var projectile = Spawn(projectilePrototype, args.Coordinates);
+                EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(projectile);
                 args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
+                firedProjectiles.Add(projectile);
             }
-            var projectile = Spawn(ammo.DirectFireProjectile ?? ent.Comp.Projectile, args.Coordinates);
-            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(projectile);
-            args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
             if (TryComp(point, out MohawkChinGunComponent? chin))
             {
-                EnsureComp<MohawkChinGunProjectileComponent>(projectile);
+                foreach (var projectile in firedProjectiles)
+                    EnsureComp<MohawkChinGunProjectileComponent>(projectile);
                 chin.PendingManualShot = null;
-                var iffEvent = new AmmoShotEvent { FiredProjectiles = new List<EntityUid> { projectile } };
+                var iffEvent = new AmmoShotEvent { FiredProjectiles = firedProjectiles };
                 _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: MohawkChinGunSystem.IsIffActive(chin));
                 if (_net.IsServer)
                 {
