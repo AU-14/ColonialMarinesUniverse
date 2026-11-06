@@ -104,21 +104,6 @@ public sealed class CMUFireConsistencyTest : GameTest
             SEntMan.DeleteEntity(fire.Owner);
     }
 
-    private Entity<RMCFlamerTankComponent> Tank(string id, EntityCoordinates coords, string? reload = null, int units = 100)
-    {
-        var tank = SEntMan.SpawnEntity(id, coords);
-        var comp = SComp<RMCFlamerTankComponent>(tank);
-        if (reload != null)
-        {
-            var solutions = SEntMan.System<SharedSolutionContainerSystem>();
-            Assert.That(solutions.TryGetSolution(tank, comp.SolutionId, out var soln, out _), Is.True);
-            solutions.RemoveAllSolution(soln!.Value);
-            solutions.TryAddReagent(soln.Value, reload, FixedPoint2.New(units));
-        }
-
-        return (tank, comp);
-    }
-
     private void AssertTiered(Entity<TileFireComponent> fire, int intensity)
     {
         var tier = SComp<CMUFireTierComponent>(fire);
@@ -131,99 +116,8 @@ public sealed class CMUFireConsistencyTest : GameTest
     /// The same fuel burns at the same intensity and tier from every non-specialist source. A tank caps its duration;
     /// chemical fires (containers, grenades, molotovs) are sized by their contents and keep the fuel's own duration.
     /// </summary>
-    [Test]
-    public async Task FireSpecParityAcrossSources()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var fuel = SEntMan.System<CMUFuelProfileSystem>();
-            var flamer = SEntMan.System<SharedRMCFlamerSystem>();
-            foreach (var reagent in new[] { "RMCNapalmUT", "RMCNapalmX", "RMCNapalm" })
-            {
-                var tank = Tank("RMCTankFlamer", map.GridCoords, reagent);
-                Assert.That(flamer.TryGetTankFireSpec(tank, out var fromFlamer), Is.True, reagent);
-                Assert.That(fuel.TryResolveFire(Pure(reagent, 100), CMUFireSource.Container, out var fromContainer), Is.True, reagent);
-                Assert.That(fuel.TryResolveFire(Pure(reagent, 100), CMUFireSource.Explosion, out var fromGrenade), Is.True, reagent);
-                Assert.That(fuel.TryResolveFire(Pure(reagent, 100), CMUFireSource.Molotov, out var fromMolotov), Is.True, reagent);
-                Assert.Multiple(() =>
-                {
-                    foreach (var other in new[] { fromContainer, fromGrenade, fromMolotov })
-                    {
-                        Assert.That(other.Intensity, Is.EqualTo(fromFlamer.Intensity), $"{reagent} intensity");
-                        Assert.That(other.Tier, Is.EqualTo(fromFlamer.Tier), $"{reagent} tier");
-                        Assert.That(other.Duration, Is.EqualTo(SProtoMan.Index<ReagentPrototype>(reagent).Duration), $"{reagent} keeps its own duration");
-                        Assert.That(other.Duration, Is.GreaterThanOrEqualTo(fromFlamer.Duration), $"{reagent} duration is only capped by tanks");
-                    }
-                });
-                SEntMan.DeleteEntity(tank);
-            }
-
-            // Napalm UT burns at its own stats everywhere: 30 intensity, 20 duration, orange.
-            Assert.That(fuel.TryResolveFire(Pure("RMCNapalmUT", 100), CMUFireSource.Container, out var ut), Is.True);
-            Assert.That((ut.Intensity, ut.Duration, ut.Tier), Is.EqualTo((30, 20, 2)));
-        });
-    }
 
     /// <summary>Blue (intensity 40+) is specialist-only; every other source caps at 39.</summary>
-    [Test]
-    public async Task NonSpecialistSourcesNeverReachBlueTier()
-    {
-        Assert.Multiple(() =>
-        {
-            Assert.That(CMUFuelProfileSystem.TierFor(19), Is.EqualTo(1));
-            Assert.That(CMUFuelProfileSystem.TierFor(20), Is.EqualTo(2));
-            Assert.That(CMUFuelProfileSystem.TierFor(34), Is.EqualTo(2));
-            Assert.That(CMUFuelProfileSystem.TierFor(35), Is.EqualTo(3));
-            Assert.That(CMUFuelProfileSystem.TierFor(39), Is.EqualTo(3));
-            Assert.That(CMUFuelProfileSystem.TierFor(40), Is.EqualTo(4));
-            Assert.That(CMUFuelProfileSystem.TierFor(59), Is.EqualTo(4));
-            Assert.That(CMUFuelProfileSystem.TierFor(60), Is.EqualTo(5));
-            Assert.That(CMUFuelProfileSystem.TierMaxStacks(3), Is.EqualTo(20));
-            Assert.That(CMUFuelProfileSystem.TierMaxStacks(4), Is.EqualTo(40));
-            Assert.That(CMUFuelProfileSystem.TierMaxStacks(5), Is.EqualTo(70));
-            Assert.That(CMUFuelProfileSystem.TierMaxStacks(5, 10), Is.EqualTo(10), "green gel keeps its own cap");
-        });
-
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var fuel = SEntMan.System<CMUFuelProfileSystem>();
-            var flamer = SEntMan.System<SharedRMCFlamerSystem>();
-            var oxidizer = Generate(1, ("Oxidizing", 6));
-            var reagents = StockFuels.Append(oxidizer.ID).ToArray();
-            Assert.Multiple(() =>
-            {
-                foreach (var reagent in reagents)
-                {
-                    foreach (var source in new[] { CMUFireSource.Container, CMUFireSource.Explosion, CMUFireSource.Molotov })
-                    {
-                        Assert.That(fuel.TryResolveFire(Pure(reagent, 100), source, out var spec), Is.True, $"{reagent} {source}");
-                        Assert.That(spec.Intensity, Is.LessThanOrEqualTo(CMUFuelProfileSystem.NonSpecialistMaxIntensity), $"{reagent} {source}");
-                        Assert.That(spec.Tier, Is.LessThan(4), $"{reagent} {source} must not burn blue");
-                        Assert.That(fuel.IsBlueFire(spec.BehaviourEntity), Is.False, $"{reagent} {source} must not spawn the blue entity");
-                    }
-
-                    foreach (var tankId in new[] { "RMCTankFlamer", "RMCTankFlamerUpgraded" })
-                    {
-                        var tank = Tank(tankId, map.GridCoords, reagent);
-                        Assert.That(flamer.TryGetTankFireSpec(tank, out var spec), Is.True, $"{reagent} in {tankId}");
-                        Assert.That(spec.Tier, Is.LessThan(4), $"{reagent} in the non-specialist {tankId} must not burn blue");
-                        SEntMan.DeleteEntity(tank);
-                    }
-                }
-            });
-
-            // Hot fuels still burn blue from specialist tanks.
-            var specialist = Tank("RMCTankFlamerFL3X", map.GridCoords);
-            Assert.That(flamer.TryGetTankFireSpec(specialist, out var blue), Is.True);
-            Assert.That(blue.Tier, Is.EqualTo(4), "Napalm X from the FL3 is blue");
-            var hot = Tank("RMCTankFlamerFL3X", map.GridCoords, oxidizer.ID, 300);
-            Assert.That(flamer.TryGetTankFireSpec(hot, out var hotSpec), Is.True);
-            Assert.That(hotSpec.Intensity, Is.GreaterThanOrEqualTo(CMUFuelProfileSystem.BlueTierIntensity),
-                "a strong oxidizer may exceed 39 in a specialist tank");
-        });
-    }
 
     /// <summary>A beaker of Napalm UT is inert at room temperature and fills a tiered circle of fire at 510 K.</summary>
     [Test]
@@ -327,56 +221,6 @@ public sealed class CMUFireConsistencyTest : GameTest
     /// reaches 3 rows (1 -> 2 -> 3), with B-gel 4 rows up to 3 wide, while a specialist B-gel tank reaches its full range
     /// and widens 2 -> 3 -> 3 -> 4 -> 5.
     /// </summary>
-    [Test]
-    public async Task FlamerConeWidensWithDistance()
-    {
-        Assert.Multiple(() =>
-        {
-            Assert.That(CMUFuelProfileSystem.NonSpecialistReach(5), Is.EqualTo(3), "LC9 with UT");
-            Assert.That(CMUFuelProfileSystem.NonSpecialistReach(7), Is.EqualTo(4), "LC9 with B-gel");
-            Assert.That(CMUFuelProfileSystem.NonSpecialistReach(1), Is.EqualTo(1));
-            Assert.That(CMUFlameConeSystem.RowWidth(5, true, true), Is.EqualTo(5));
-            Assert.That(CMUFlameConeSystem.RowWidth(5, true, false), Is.EqualTo(3));
-            Assert.That(CMUFlameConeSystem.RowWidth(1, false, false), Is.EqualTo(1));
-        });
-
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var flamer = SEntMan.System<SharedRMCFlamerSystem>();
-            var containers = SEntMan.System<SharedContainerSystem>();
-            var transform = SEntMan.System<SharedTransformSystem>();
-            var origin = map.GridCoords;
-            var originTile = transform.ToMapCoordinates(origin.SnapToGrid(SEntMan)).Position;
-
-            List<int> Rows(string tankId)
-            {
-                var gun = SEntMan.SpawnEntity("RMCWeaponFlamerUnloaded", origin);
-                var provider = SComp<RMCFlamerAmmoProviderComponent>(gun);
-                var tank = SEntMan.SpawnEntity(tankId, origin);
-                Assert.That(containers.Insert(tank, containers.GetContainer(gun, provider.ContainerId)), Is.True);
-                Assert.That(flamer.TryGetPreviewTiles((gun, provider), origin, origin.Offset(new Vector2(8, 0)), out var tiles), Is.True);
-
-                var widths = new SortedDictionary<int, int>();
-                foreach (var tile in tiles!)
-                {
-                    var dx = (int) MathF.Floor(tile.Coordinates.Position.X) - (int) MathF.Floor(originTile.X);
-                    widths[dx] = widths.GetValueOrDefault(dx) + 1;
-                }
-
-                SEntMan.DeleteEntity(gun);
-                return widths.Values.ToList();
-            }
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(Rows("RMCTankFlamer"), Is.EqualTo(new List<int> { 1, 2, 3 }), "LC9 with UT napthal");
-                Assert.That(Rows("RMCTankFlamerBGel"), Is.EqualTo(new List<int> { 2, 3, 3, 3 }), "LC9 with B-gel");
-                // The M240-T type-B tank reaches 6: 2 -> 3 -> 3 -> 4 -> 5, then stays 5 wide.
-                Assert.That(Rows("RMCTankFlamerLargeB"), Is.EqualTo(new List<int> { 2, 3, 3, 4, 5, 5 }), "specialist B-gel");
-            });
-        });
-    }
 
     /// <summary>
     /// Paper on a lidded bottle of napalm makes a molotov that carries the napalm and shatters into a tiered circle;

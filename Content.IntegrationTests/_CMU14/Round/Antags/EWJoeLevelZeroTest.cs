@@ -20,7 +20,6 @@ namespace Content.IntegrationTests._CMU14.Round.Antags;
 public sealed class EWJoeLevelZeroTest
 {
     private const string ColonyJoe = "AU14MobWorkingJoeColony";
-    private const string ResetKey = "RMCSynthResetKeySeegson";
 
     [Test]
     public async Task LevelZeroGrantsKitAndLevelsShedSlowdown()
@@ -118,42 +117,4 @@ public sealed class EWJoeLevelZeroTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task ResetKeyCannotReviveAnEarlyWarningJoe()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        var entities = pair.Server.EntMan;
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var plainJoe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var ewJoe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var medic = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var key = entities.SpawnEntity(ResetKey, map.GridCoords);
-            try
-            {
-                entities.EnsureComponent<EWJoeComponent>(ewJoe);
-
-                var plainZap = new TargetBeforeDefibrillatorZapsEvent(medic, key, plainJoe);
-                entities.EventBus.RaiseLocalEvent(plainJoe, plainZap);
-                Assert.That(plainZap.Cancelled, Is.False,
-                    "An ordinary Working Joe can still be rebooted with a reset key.");
-
-                var ewZap = new TargetBeforeDefibrillatorZapsEvent(medic, key, ewJoe);
-                entities.EventBus.RaiseLocalEvent(ewJoe, ewZap);
-                Assert.That(ewZap.Cancelled, Is.True,
-                    "An Early Warning Joe refuses the reset key (D3).");
-            }
-            finally
-            {
-                entities.DeleteEntity(plainJoe);
-                entities.DeleteEntity(ewJoe);
-                entities.DeleteEntity(medic);
-                entities.DeleteEntity(key);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

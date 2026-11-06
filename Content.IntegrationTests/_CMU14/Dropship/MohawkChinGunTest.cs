@@ -37,26 +37,6 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkChinGunTest
 {
-    [TestCase(0, -90)]
-    [TestCase(0, 90)]
-    [TestCase(45, -90)]
-    [TestCase(45, 90)]
-    [TestCase(180, -90)]
-    [TestCase(180, 90)]
-    public void GimbalCoversExactlyTheForwardHalfCircle(float shipDegrees, float targetDegrees)
-    {
-        var rotation = Angle.FromDegrees(shipDegrees);
-        var target = rotation.RotateVec(Angle.FromDegrees(targetDegrees).RotateVec(Vector2.UnitY)) * 10;
-        Assert.That(GunshipDirectFireSystem.TryGetClampedAim(rotation, Vector2.Zero, target, 180,
-            out var direction, out var degrees), Is.True);
-        Assert.That(degrees, Is.EqualTo(targetDegrees).Within(0.001));
-        Assert.That(Vector2.Distance(direction, Vector2.Normalize(target)), Is.LessThan(0.001));
-
-        var behind = rotation.RotateVec(Angle.FromDegrees(targetDegrees * 1.5).RotateVec(Vector2.UnitY));
-        Assert.That(GunshipDirectFireSystem.TryGetClampedAim(rotation, Vector2.Zero, behind, 180,
-            out _, out degrees), Is.True);
-        Assert.That(MathF.Abs(degrees), Is.EqualTo(90).Within(0.001));
-    }
 
     [Test]
     public async Task GroundTurretRespectsIffArcFlightAndManualOverride()

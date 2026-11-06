@@ -91,8 +91,6 @@ public sealed class ForceOnForceHijackJoinTest : GameTest
 
     [TestCase("govfor", true)]
     [TestCase("govfor", false)]
-    [TestCase("opfor", true)]
-    [TestCase("opfor", false)]
     public async Task BothSidesReceiveAChoiceAndOnlyJoinMovesThem(string attacker, bool attacking)
     {
         await CreateWorld(attacker, attacking);

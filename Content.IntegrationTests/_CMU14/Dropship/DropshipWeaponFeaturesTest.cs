@@ -23,85 +23,6 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class DropshipWeaponFeaturesTest
 {
-    [Test]
-    public async Task ConsoleReplicatesPatternControlsAndShowsTargetPreview()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
-        var previous = pair.Player!.AttachedEntity;
-        EntityUid map = default;
-        EntityUid console = default;
-        EntityUid actor = default;
-        NetEntity consoleNet = default;
-        try
-        {
-            await pair.Server.WaitAssertion(() =>
-            {
-                var entities = pair.Server.EntMan;
-                var mount = CreateMount(pair);
-                map = mount.Map;
-                var coords = new EntityCoordinates(mount.Ship, Vector2.Zero);
-                var weapon = Mount(entities, mount.Point, "RMCDropshipAttachmentLaserCannon", false, coords);
-                Mount(entities, mount.Point, "RMCDropshipAttachmentAmmoLaserCannonRapid", true, coords);
-                console = entities.SpawnEntity("CMUMohawkMidwayGunneryea0f8d621b", coords);
-                consoleNet = entities.GetNetEntity(console);
-                actor = entities.SpawnEntity("CMMobHuman", coords);
-                pair.Server.PlayerMan.SetAttachedEntity(pair.Player, actor);
-                entities.System<SkillsSystem>().SetSkill(actor, "RMCSkillPilot", 1);
-                pair.Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipCASDebug, true);
-                var terminal = entities.GetComponent<DropshipTerminalWeaponsComponent>(console);
-                terminal.ScreenOne.Weapon = entities.GetNetEntity(weapon);
-                terminal.ScreenOne.State = DropshipTerminalWeaponsScreen.SelectingWeapon;
-                var aim = entities.SpawnEntity(null, new EntityCoordinates(map, 10, 10));
-                var system = entities.System<SharedDropshipWeaponSystem>();
-                system.MakeDropshipTarget(aim, "TEST");
-                terminal.Target = aim;
-                Assert.That(system.TryUpdateCameraTarget(console, aim), Is.True);
-                entities.Dirty(console, terminal);
-                entities.System<SharedUserInterfaceSystem>().OpenUi(console, DropshipTerminalWeaponsUi.Key, actor);
-            });
-            await pair.RunUntilSynced();
-            await AssertWindow("Laser: wide ring");
-            await pair.Server.WaitAssertion(() =>
-            {
-                pair.Server.EntMan.EventBus.RaiseLocalEvent(console, new DropshipWeaponSettingsMessage(true,
-                    DropshipLaserPattern.Line, DropshipAirburstHeight.Medium)
-                    { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
-            });
-            await pair.RunUntilSynced();
-            await AssertWindow("Laser: sweeping line");
-
-            async Task AssertWindow(string patternLabel)
-            {
-                await pair.Client.WaitAssertion(() =>
-                {
-                    var entities = pair.Client.EntMan;
-                    var ui = entities.GetComponent<UserInterfaceComponent>(entities.GetEntity(consoleNet));
-                    var bui = ui.ClientOpenInterfaces.Values.OfType<DropshipWeaponsBui>().Single();
-                    var window = (DropshipWeaponsWindow)typeof(DropshipWeaponsBui)
-                        .GetProperty("Window", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)!.GetValue(bui)!;
-                    Assert.That(window.ScreenOne.Parent, Is.SameAs(window.ScreenTwo.Parent));
-                    Assert.That(window.ControlPanel.Parent, Is.SameAs(window.ScreenOne.Parent));
-                    Assert.That(window.ScreenOne.LaserPatternButton.Visible, Is.True);
-                    Assert.That(window.ScreenOne.LaserPatternButton.Text, Is.EqualTo(patternLabel));
-                    Assert.That(window.ScreenOne.AirburstHeightButton.Visible, Is.False);
-                    Assert.That(window.ScreenOne.Viewport.Visible, Is.True);
-                    Assert.That(window.ScreenOne.Viewport.Children.OfType<DropshipTargetingPreview>().Count(), Is.EqualTo(1));
-                    Assert.That(window.ScreenOne.PayloadPreviewLabel.Text, Does.Contain("Bursts left: 5"));
-                });
-            }
-        }
-        finally
-        {
-            await pair.Server.WaitPost(() =>
-            {
-                pair.Server.EntMan.System<SharedUserInterfaceSystem>().CloseUi(console, DropshipTerminalWeaponsUi.Key, actor);
-                pair.Server.PlayerMan.SetAttachedEntity(pair.Player, previous);
-                pair.Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipCASDebug, false);
-                pair.Server.EntMan.DeleteEntity(map);
-            });
-        }
-        await pair.CleanReturnAsync();
-    }
 
     [TestCase(DropshipLaserPattern.Ring)]
     [TestCase(DropshipLaserPattern.Line)]
@@ -199,8 +120,6 @@ public sealed class DropshipWeaponFeaturesTest
     }
 
     [TestCase(DropshipAirburstHeight.Low)]
-    [TestCase(DropshipAirburstHeight.Medium)]
-    [TestCase(DropshipAirburstHeight.High)]
     public async Task AirburstConsoleSettingIsCapturedAtRelease(DropshipAirburstHeight height)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });

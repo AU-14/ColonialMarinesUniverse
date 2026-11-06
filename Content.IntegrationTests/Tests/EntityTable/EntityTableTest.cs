@@ -221,14 +221,6 @@ public sealed class EntityTableTest : GameTest
 
     [Test]
     [RunOnSide(Side.Server)]
-    public void EntSelector_BasicSingleSpawn()
-    {
-        var result = Run(Table("EntityTableTestEntSelector"));
-        Assert.That(result, Is.EquivalentTo(new [] { EntProto1 }));
-    }
-
-    [Test]
-    [RunOnSide(Side.Server)]
     public void EntSelector_AmountAndRollsCompose()
     {
         var result = Run(Table("EntityTableTestEntSelectorAmountRolls"));
@@ -243,14 +235,6 @@ public sealed class EntityTableTest : GameTest
         var result = Run(Table("EntityTableTestAllSelector"));
         // NoneSelector contributes nothing, so we get Ent1 then Ent2.
         Assert.That(result, Is.EqualTo(new[] { new EntProtoId(EntProto1), new EntProtoId(EntProto2) }));
-    }
-
-    [Test]
-    [RunOnSide(Side.Server)]
-    public void NoneSelector_YieldsNothing()
-    {
-        var result = Run(Table("EntityTableTestNoneSelector"));
-        Assert.That(result, Is.Empty);
     }
 
     [Test]

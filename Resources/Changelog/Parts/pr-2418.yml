@@ -1,0 +1,11 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: IEDs can now be rigged into eligible vehicles with impact or hostile-IFF
+    proximity triggers. Rigged vehicles also detonate after taking enough damage,
+    blasting both outside and inside.
+  type: Add
+- message: All vehicles can now be inspected for rigged explosives.
+  type: Add
+time: '2026-11-06T15:01:46.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2418

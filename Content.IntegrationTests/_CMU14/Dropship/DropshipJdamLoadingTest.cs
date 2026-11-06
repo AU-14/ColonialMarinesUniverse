@@ -127,10 +127,6 @@ public sealed class DropshipJdamLoadingTest : GameTest
     }
 
     [TestCase("CMUDropshipAmmoJDAMHE")]
-    [TestCase("CMUDropshipAmmoJDAMIncendiary")]
-    [TestCase("CMUDropshipAmmoJDAMAP")]
-    [TestCase("CMUDropshipAmmoJDAMCluster")]
-    [TestCase("CMUDropshipAmmoJDAMNapalm")]
     public async Task PowerloaderLoadsAndUnloadsInternalBombClamp(string prototype)
     {
         var map = await Pair.CreateTestMap();

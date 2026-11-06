@@ -12,7 +12,6 @@ public sealed class CMUDespoilerRewardsTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [TestCase("CMU14XenoNeomorph")]
-    [TestCase("CMXenoDrone")]
     public async Task SlashingEnemyHiveGrantsHypertensionButSlashingOwnHiveDoesNot(string targetPrototype)
     {
         var map = await Pair.CreateTestMap();

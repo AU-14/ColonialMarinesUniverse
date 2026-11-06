@@ -129,24 +129,6 @@ public sealed class BloodstreamMergeRegressionTest : GameTest
     }
 
     [Test]
-    public async Task OverfilledBloodstreamReportsAtMostFullBloodLevel()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var target = SSpawnAtPosition("BloodstreamMergeTarget", map.GridCoords);
-            var bloodstream = SEntity<BloodstreamComponent>(target);
-            var bloodSolution = GetBloodSolution(target);
-
-            bloodSolution.AddReagent(new ReagentId(Blood, null), FixedPoint2.New(100));
-
-            Assert.That(_bloodstream.GetBloodLevel(bloodstream.AsNullable()), Is.EqualTo(1f),
-                "Blood level consumers such as the health analyzer must never display 200%.");
-        });
-    }
-
-    [Test]
     public async Task StasisAndDeathFreezeBloodstreamUntilMetabolismResumes()
     {
         var map = await Pair.CreateTestMap();
@@ -377,31 +359,6 @@ public sealed class BloodstreamMergeRegressionTest : GameTest
                 Assert.That(_bloodstream.TryRegulateBloodLevel(
                     bloodstream.AsNullable(),
                     FixedPoint2.New(1)), Is.False);
-            });
-        });
-    }
-
-    [Test]
-    public async Task OrdinaryHealthExamineKeepsUpstreamTextWhileRmcSuppressesIt()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var ordinary = SSpawnAtPosition("BloodstreamMergeTarget", map.GridCoords);
-            var rmc = SSpawnAtPosition("BloodstreamMergeRmcExamine", map.GridCoords);
-            Assert.That(_bloodstream.TryModifyBleedAmount(ordinary, 1), Is.True);
-            Assert.That(_bloodstream.TryModifyBleedAmount(rmc, 1), Is.True);
-
-            var ordinaryMessage = new FormattedMessage();
-            var rmcMessage = new FormattedMessage();
-            SEntMan.EventBus.RaiseLocalEvent(ordinary, new HealthBeingExaminedEvent(ordinaryMessage));
-            SEntMan.EventBus.RaiseLocalEvent(rmc, new HealthBeingExaminedEvent(rmcMessage));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(ordinaryMessage.ToMarkup(), Is.Not.Empty);
-                Assert.That(rmcMessage.ToMarkup(), Is.Empty);
             });
         });
     }

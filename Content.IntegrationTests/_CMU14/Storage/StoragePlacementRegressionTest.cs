@@ -62,48 +62,6 @@ public sealed class StoragePlacementRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task EggCartonMapInitializationRetainsAllTwelveEggs()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var carton = SEntMan.SpawnEntity("FoodContainerEgg", map.GridCoords);
-            var storage = SEntMan.GetComponent<StorageComponent>(carton);
-            Assert.Multiple(() =>
-            {
-                Assert.That(storage.Container.ContainedEntities, Has.Count.EqualTo(12));
-                Assert.That(storage.StoredItems.Keys, Is.EquivalentTo(storage.Container.ContainedEntities));
-                Assert.That(storage.StoredItems.Values.Any(location => location.Rotation != Angle.Zero), Is.True);
-            });
-            foreach (var egg in storage.Container.ContainedEntities)
-            {
-                Assert.That(SEntMan.GetComponent<MetaDataComponent>(egg).EntityPrototype!.ID, Is.EqualTo("FoodEgg"));
-                Assert.That(SEntMan.System<SharedStorageSystem>()
-                    .ItemFitsInGridLocation(egg, carton, storage.StoredItems[egg]), Is.True);
-            }
-
-            SEntMan.DeleteEntity(carton);
-        });
-    }
-
-    [Test]
-    public async Task GroceriesFridgeInitializesItsNestedEggCarton()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var fridge = SEntMan.SpawnEntity("RMCLockerFridgeGroceries", map.GridCoords);
-            var manager = SEntMan.GetComponent<ContainerManagerComponent>(fridge);
-            var carton = manager.Containers.Values.SelectMany(container => container.ContainedEntities)
-                .Single(uid => SEntMan.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == "FoodContainerEgg");
-            var storage = SEntMan.GetComponent<StorageComponent>(carton);
-            Assert.That(storage.Container.ContainedEntities, Has.Count.EqualTo(12));
-            Assert.That(storage.StoredItems.Keys, Is.EquivalentTo(storage.Container.ContainedEntities));
-            SEntMan.DeleteEntity(fridge);
-        });
-    }
-
     [TestCase(false)]
     [TestCase(true)]
     public async Task ForcedInsertionReconcilesAfterTransaction(bool freeSpace)

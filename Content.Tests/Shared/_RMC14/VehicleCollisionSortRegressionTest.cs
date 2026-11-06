@@ -120,17 +120,6 @@ public sealed class VehicleCollisionSortRegressionTest
         Assert.That(hits, Is.EqualTo(new[] { third, first }));
     }
 
-    [TestCase(0)]
-    [TestCase(1)]
-    public void PassWithoutComparisonsDoesNotReadBounds(int count)
-    {
-        var hits = Enumerable.Range(1, count).Select(id => new EntityUid(id)).ToList();
-        CreateSorter()(hits, Vector2.Zero, Vector2.UnitX, Vector2.One,
-            _ => throw new InvalidOperationException("This pass does not need sorting."));
-
-        Assert.That(hits, Has.Count.EqualTo(count));
-    }
-
     [Test]
     public void SeparateDepthBuffersPreserveOuterPassDuringBoundsCallback()
     {

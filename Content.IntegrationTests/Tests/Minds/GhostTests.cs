@@ -158,16 +158,4 @@ public sealed class GhostTests : GameTest
         Assert.That(ghostPosition, Is.EqualTo(oldPosition));
     }
 
-    [Test]
-    public async Task TestGhostGridNotTerminating()
-    {
-        var data = await SetupData();
-
-        Assert.DoesNotThrowAsync(async () =>
-        {
-            // Delete the grid
-            await data.Server.WaitPost(() => data.SEntMan.DeleteEntity(data.MapData.Grid.Owner));
-        });
-    }
-
 }

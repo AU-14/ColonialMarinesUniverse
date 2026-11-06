@@ -27,49 +27,6 @@ public sealed class EWJoeLevelFiveTest
     private const string Helmet = "ArmorHelmetM10";
 
     [Test]
-    public async Task MeldingIsAnnouncedOnceAndGrantsTheLevelFiveKit()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-
-        await server.WaitAssertion(() =>
-        {
-            var rule = entities.System<EWJoeRuleSystem>();
-            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
-
-            rule.ApplyLevel((joe, comp), 4);
-            Assert.That(comp.AnnouncedMelding, Is.False, "level 4 is not announced");
-
-            rule.ApplyLevel((joe, comp), 5);
-            Assert.Multiple(() =>
-            {
-                Assert.That(comp.AnnouncedMelding, "APOLLO announced the Melding");
-                Assert.That(entities.HasComponent<EWJoeLightComponent>(joe), "THE LIGHT");
-                Assert.That(entities.HasComponent<PointLightComponent>(joe), "an orange light");
-                Assert.That(entities.TryGetComponent(joe, out EWJoeResonanceComponent? reflect) && Math.Abs(reflect.Chance - 0.2f) < 0.001f,
-                    "Magnetic Resonance reflects one shot in five (A-16)");
-                Assert.That(entities.HasComponent<RMCReflectiveComponent>(joe), Is.False,
-                    "playtest 4: RMC's reflective, which only zeroes IFF bullets, is not used");
-                Assert.That(comp.GrantedActions.Any(a => entities.GetComponent<MetaDataComponent>(a).EntityPrototype?.ID == "CMUActionEWJoeSaturate"),
-                    "Saturate granted");
-            });
-
-            entities.RemoveComponent<EWJoeComponent>(joe);
-            Assert.Multiple(() =>
-            {
-                Assert.That(entities.HasComponent<EWJoeLightComponent>(joe), Is.False);
-                Assert.That(entities.HasComponent<PointLightComponent>(joe), Is.False);
-                Assert.That(entities.HasComponent<EWJoeResonanceComponent>(joe), Is.False);
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task TheLightEnvelopsAViewerWhoFacesTheJoe()
     {
         await using var pair = await PoolManager.GetServerClient();

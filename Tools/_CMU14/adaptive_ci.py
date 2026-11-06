@@ -16,13 +16,15 @@ import sys
 from types import SimpleNamespace
 
 from ci import run_tests, write_summary
+from ci_selection import CS_NONCODE
 
 SCHEMA = 1
 SHA = re.compile(r"^[0-9a-f]{40}$")
 FIXTURE = re.compile(r"^[A-Za-z_][\w]*(?:\.[A-Za-z_][\w]*)+$", re.ASCII)
 TOKEN = re.compile(r"[A-Za-z_][A-Za-z_0-9]*")
-POLICY = " & FullyQualifiedName!~.Localization. & FullyQualifiedName!~.WizdenContentFreeze." \
-         " & FullyQualifiedName!~.GameRules.AntagGhostRoleTest. & FullyQualifiedName!~.Power.StationPowerTests."
+RESOURCE_TOKEN = re.compile(r"[A-Za-z_][\w.-]*")
+NIGHTLY = ("Content.IntegrationTests.Tests.EntityTest.", ".Localization.", ".GameRules.AntagGhostRoleTest.")
+POLICY = "".join(" & FullyQualifiedName!~" + prefix for prefix in NIGHTLY[1:])
 
 
 def load_json(path, default=None):
@@ -99,36 +101,125 @@ def baseline_changes(source, root=Path(".")):
 def dependency_priority(files, changed):
     """Conservative lexical reverse graph: types, event types, and prototype IDs.
 
-    Reflection, generated references and dynamic resource loading make this graph
-    incomplete. Its closure may promote tests, but MUST NOT remove any selection.
+    A system's subscribed components also reach tests which exercise it through
+    events or spawned prototypes without naming the system itself. This closure
+    broadens the minimum feature selection; unknown inputs run all.
     """
     symbols = defaultdict(set)
     definitions = defaultdict(set)
     fixtures = defaultdict(set)
+    handlers = {}
     tokens = {}
+    type_names = defaultdict(set)
+    imports = {}
+    global_imports = defaultdict(set)
+    qualified = {}
+    def project(path):
+        parts = path.split("/")
+        return "Content." + parts[1] if parts[0] == "Content.CMU" else parts[0]
+    # A component change affects prototypes that use it, not unrelated entities
+    # that happen to be declared in the same YAML file.
+    nodes = {}
+    changed = set(changed)
     for path, text in files.items():
         if path.endswith(".cs"):
-            names = set(re.findall(r"\b(?:class|struct|interface|enum|record(?:\s+(?:class|struct))?)\s+(\w+)", text))
-            namespace = re.search(r"\bnamespace\s+([\w.]+)", text)
+            nodes[path] = text
+            continue
+        documents = re.split(r"(?m)(?=^-[ ]+(?:type|id):)", text)
+        for index, document in enumerate(documents):
+            node = f"{path}#{index}"
+            nodes[node] = document
+            if path in changed:
+                changed.add(node)
+    for path, text in nodes.items():
+        if path.endswith(".cs"):
+            literals = []
+            def strip_noncode(match):
+                value = match[0]
+                if not value.startswith(("//", "/*")):
+                    literals.append(value)
+                return " "
+            code = CS_NONCODE.sub(strip_noncode, text)
+            names = set(re.findall(r"\b(?:class|struct|interface|enum|record(?:\s+(?:class|struct))?)\s+(\w+)", code))
+            ns = re.search(r"\bnamespace\s+([\w.]+)", code)
+            namespace = ns[1] if ns else ""
             if namespace and path.startswith(("Content.Tests/", "Content.IntegrationTests/",
                                                "Content.CMU/Tests/", "Content.CMU/IntegrationTests/")):
-                fixtures[path] = {namespace[1] + "." + name for name in names}
+                fixtures[path] = {namespace + "." + name for name in names}
+            usings = set(re.findall(r"\busing\s+(?:static\s+)?([\w.]+)\s*;", code))
+            for i in range(len(namespace.split("."))):
+                usings.add(".".join(namespace.split(".")[:i+1]))
+            imports[path] = usings | {""}
+            global_imports[project(path)].update(re.findall(r"\bglobal\s+using\s+([\w.]+)\s*;", code))
+            for name in names:
+                type_names[name].add((namespace, "type:" + (namespace + "." if namespace else "") + name))
+            # Extension calls name the method, not its declaring class. Resolve
+            # them through namespace imports (or a using-static class import).
+            extensions = set()
+            for method in re.findall(r"\b(\w+)\s*(?:<[^();{}]+>)?\s*\(\s*(?:\[[^\]]+\]\s*)*this\s+", code):
+                symbol = "extension:" + (namespace + "." if namespace else "") + method
+                extensions.add(symbol)
+                type_names[method].add((namespace, symbol))
+                for owner in names:
+                    type_names[method].add(((namespace + "." if namespace else "") + owner, symbol))
+            owned = set(re.findall(r"\bSubscribeLocalEvent<\s*(\w+Component)\s*,", code))
+            handlers[path] = owned
+            # YAML registers components without the Component suffix.
+            aliases = {"component:" + name[:-9] for name in names if name.endswith("Component")}
+            aliases.update("component:" + name for name in re.findall(r'\[Prototype\("([\w]+)"', text))
+            names = {"type:" + (namespace + "." if namespace else "") + name for name in names} | aliases | extensions
+            tokens[path] = set(TOKEN.findall(code))
+            resources = set()
+            for literal in literals:
+                resources.update(RESOURCE_TOKEN.findall(literal))
+                tokens[path].update(TOKEN.findall(literal))
+            qualified[path] = set(RESOURCE_TOKEN.findall(code)) | resources
+            tokens[path].update(kind + name for name in resources for kind in ("prototype:", "component:"))
         else:
-            names = set(re.findall(r"^\s*(?:-\s*)?id:\s*[\"']?([A-Za-z_]\w*)", text, re.M))
+            # Nested id fields are references (e.g. crate contents), not declarations.
+            names = {"prototype:" + name for name in re.findall(
+                r"^(?:  |-[ ]+)id:[ ]*[\"']?([A-Za-z_][\w.-]*)", text, re.M)}
+            values = set(RESOURCE_TOKEN.findall(text))
+            tokens[path] = values | {kind + name for name in values for kind in ("component:", "prototype:")}
         definitions[path] = names
         for name in names:
             symbols[name].add(path)
-        tokens[path] = set(TOKEN.findall(text))
     readers = defaultdict(set)
     known_symbols = set(symbols)
     for path, names in tokens.items():
         for name in names & known_symbols:
             readers[name].add(path)
+        visible = imports.get(path, set()) | global_imports[project(path)]
+        for name in names & type_names.keys():
+            for namespace, symbol in type_names[name]:
+                if not path.endswith(".cs") or namespace in visible:
+                    readers[symbol].add(path)
+        # Fully qualified names and using aliases do not require a namespace import.
+        for token in qualified.get(path, ()):
+            while "." in token:
+                if "type:" + token in known_symbols:
+                    readers["type:" + token].add(path)
+                token = token.rsplit(".", 1)[0]
     affected = set(changed)
     pending = deque(changed)
+    # Components handled by a system connect its behavior to dynamically spawned
+    # fixtures, including when a shared dependency reaches that system indirectly.
+    # Attach these edges to the declared type so partial files share the fan-out.
+    handled = defaultdict(set)
+    for path, owned in handlers.items():
+        visible = imports[path] | global_imports[project(path)]
+        owned_symbols = {symbol for name in owned for namespace, symbol in type_names[name] if namespace in visible}
+        owned_symbols.update("component:" + name[:-9] for name in owned)
+        for declared in definitions[path]:
+            handled[declared].update(owned_symbols)
     while pending:
         path = pending.popleft()
-        for symbol in definitions[path]:
+        # A consuming test is an endpoint, not a new production change. Its local
+        # fixtures/prototypes must not pull unrelated consumers into the closure.
+        if path not in changed and fixtures[path] and re.search(r"\[(?:Test|TestCase|TestCaseSource)\b", nodes[path]):
+            continue
+        propagated = definitions[path] | {owned for declared in definitions[path] for owned in handled[declared]}
+        for symbol in propagated:
             for dependent in readers[symbol] - affected:
                 affected.add(dependent)
                 pending.append(dependent)
@@ -144,9 +235,9 @@ def source_graph_inputs(changed):
             continue
         meta, path = entry.split("\t", 1)
         mode, kind, oid, size = meta.split()
-        if kind != "blob" or not (path.startswith("Content.") or path.startswith("Resources/Prototypes/")):
-            continue
-        if Path(path).suffix not in (".cs", ".yml", ".yaml") or int(size) > 512_000:
+        source = path.startswith("Content.") and path.endswith(".cs")
+        prototype = path.startswith(("Resources/Prototypes/", "Content.CMU/Resources/Prototypes/")) and path.endswith((".yml", ".yaml"))
+        if kind != "blob" or not (source or prototype):
             continue
         entries.append((path, oid, int(size)))
     def priority(entry):
@@ -155,13 +246,13 @@ def source_graph_inputs(changed):
                 or path.startswith(("Content.Tests/", "Content.IntegrationTests/")) else 2, path)
     chosen, size = [], 0
     for entry in sorted(entries, key=priority):
-        if size + entry[2] > 64_000_000:
+        if size + entry[2] > 256_000_000:
             break
         chosen.append(entry)
         size += entry[2]
     request = "".join(oid + "\n" for _, oid, _ in chosen).encode()
     output = subprocess.run(["git", "cat-file", "--batch"], input=request, capture_output=True,
-                            check=True, timeout=20).stdout
+                            check=True, timeout=60).stdout
     files, offset = {}, 0
     for path, oid, size in chosen:
         end = output.index(b"\n", offset)
@@ -176,20 +267,23 @@ def source_graph_inputs(changed):
 
 def runtime_settings(name):
     workers, hang = 4, "5m"
-    if name.startswith("cmu_yautja_smoke") or name in ("cmu_lobby_ui", "cmu_threed", "map_loading"):
+    if name.startswith("cmu_yautja_smoke") or name in ("cmu_threed", "map_loading", "nightly_affected"):
         workers = 1
     elif name.startswith(("post_map_init", "cmu_yautja")) or name in (
-        "cmu", "cmu_systems", "cmu_spatial", "cmu_camera", "cmu_medical_anatomy", "cmu_vehicle_bugs",
-        "cmu_fob", "cmu_movement", "proto_lint_serial", "cmu_chemistry", "mapping_station_shuttle_round"
+        "cmu", "cmu_systems", "cmu_spatial", "cmu_medical_anatomy", "cmu_vehicle_bugs",
+        "cmu_fob", "cmu_movement", "proto_lint_serial", "cmu_chemistry", "cmu_research_contracts",
+        "cmu_research", "mapping_station_shuttle_round"
     ):
         workers = 2
-    if name in ("cmu_movement", "map_loading"):
+    if name in ("cmu_movement", "map_loading", "nightly_affected"):
         hang = "20m"
     return workers, hang
 
 
 def balance(shards, count=6):
     """Greedy longest-processing-time placement within priority tiers."""
+    if not shards:
+        return []
     lanes = [dict(name=f"{i + 1:02}", shards=[], seconds=0) for i in range(min(count, len(shards)))]
     maximum = math.ceil(len(shards) / len(lanes))
     for shard in sorted(shards, key=lambda s: (s["rank"], -s["seconds"], s["name"])):
@@ -225,14 +319,16 @@ def priority_fixtures(record, affected):
 def plan_run(selected, paths, event, shards):
     names = [shard.get("name", "") for shard in shards]
     if not names or len(names) != len(set(names)) or any(
-        not re.fullmatch(r"[a-z][a-z0-9_]*", name) or name == "unit" for name in names
+        not re.fullmatch(r"[a-z][a-z0-9_]*", name) or name in ("unit", "nightly_affected") for name in names
     ):
-        raise ValueError("Gameplay groups need unique safe names; unit is reserved")
+        raise ValueError("Gameplay groups need unique safe names; unit and nightly_affected are reserved")
     state = Path(os.environ.get("CMU_CI_STATE", ".ci"))
     histories = history_inputs(state)
     baseline = histories.get("baseline") or histories.get("trusted")
     notes = []
-    changed = set(paths or [])
+    valid_paths = isinstance(paths, list) and bool(paths) and all(isinstance(p, str) and p for p in paths)
+    narrow_selection = event in ("pull_request", "push", "merge_group") and valid_paths
+    changed = set(paths) if valid_paths else set()
     if baseline:
         try:
             changed.update(baseline_changes(baseline["source_sha"]))
@@ -244,6 +340,7 @@ def plan_run(selected, paths, event, shards):
             notes.append(f"Compared all changes since green baseline {baseline['source_sha'][:12]}.")
         except (OSError, ValueError, subprocess.SubprocessError):
             selected.update(build=True, unit=True, gameplay=True)
+            narrow_selection = False
             notes.append("Baseline tree unavailable: full suite selected.")
     else:
         notes.append("No usable green baseline; conservative selection and default timing estimates.")
@@ -253,15 +350,25 @@ def plan_run(selected, paths, event, shards):
     except (OSError, subprocess.SubprocessError):
         source_sha, tree = "", ""
     files = {}
+    complete_graph = False
     if changed and selected["build"]:
         try:
             files, partial = source_graph_inputs(changed)
+            complete_graph = not partial
             if partial:
                 notes.append("Dependency scan budget reached; partial hints only, full selected suite retained.")
         except (OSError, ValueError, subprocess.SubprocessError):
             notes.append("Dependency graph unavailable; full selected suite retained.")
     impacted = dependency_priority(files, changed)
-    notes.append(f"Recursive dependency hints promoted {len(impacted)} fixtures; full selected coverage retained.")
+    notes.append(f"Recursive dependencies reach {len(impacted)} fixtures.")
+    nightly = [fixture for fixture in impacted if fixture.startswith("Content.IntegrationTests.")
+               and any(prefix in fixture + "." for prefix in NIGHTLY)]
+    if selected["gameplay"] and nightly:
+        # Scheduled sweeps stay out of unrelated runs, but a changed fixture or
+        # one reached through production dependencies must not be excluded by POLICY.
+        shards.append(dict(name="nightly_affected", filter=" | ".join(
+            "FullyQualifiedName~" + fixture + "." for fixture in nightly)))
+        notes.append(f"Included {len(nightly)} affected nightly fixtures.")
     records = {}
     for kind in ("trusted", "baseline", "latest"):
         records.update(histories.get(kind, {}).get("records", {}))
@@ -279,7 +386,7 @@ def plan_run(selected, paths, event, shards):
             # execution explicitly rejects an empty filter.
             shard["filter"] = ""
         else:
-            shard["filter"] = "(" + shard["filter"] + ")" + POLICY
+            shard["filter"] = "(" + shard["filter"] + ")" + ("" if name == "nightly_affected" else POLICY)
         record = records.get(name, {})
         if not isinstance(record, dict):
             record = {}
@@ -293,10 +400,27 @@ def plan_run(selected, paths, event, shards):
         shard["rank"] = 0 if record.get("status", 0) or failed else 1 if relevant else 2
         seconds = record.get("seconds", 600)
         shard["seconds"] = min(1800, max(30, seconds)) if isinstance(seconds, (int, float)) and math.isfinite(seconds) else 600
+    # Selection happens after filters (including the root group) are expanded.
+    # A failed baseline comparison must never permit a narrowed PR plan.
+    if narrow_selection and selected["gameplay"]:
+        from ci_selection import select_shards
+        wanted = select_shards(sorted(changed), shards, files, impacted, complete_graph)
+        shards = [shard for shard in shards if shard["name"] in wanted]
+        selected["gameplay"] = bool(shards)
+        notes.append(f"Selected {len(shards)} gameplay groups for the changed features and their consumers.")
+    if not selected["gameplay"]:
+        shards = []
+    if narrow_selection and selected["unit"]:
+        from ci_selection import needs_unit
+        selected["unit"] = needs_unit(sorted(changed), files, impacted, complete_graph)
+        if not selected["unit"]:
+            notes.append("No unit-test dependencies or matching unit feature: unit shard skipped.")
     lanes = balance(shards)
     unit_record = records.get("unit", {})
     unit_priority = priority_fixtures(unit_record if isinstance(unit_record, dict) else {},
-                                     [f for f in impacted if f.startswith("Content.Tests.")])
+                                     [f for f in impacted if f.startswith(("Content.Tests.", "Content.CMU.Tests."))])
+    from ci_selection import select_assets
+    selected["assets"] = select_assets(sorted(changed) if narrow_selection else None)
     data = dict(schema=SCHEMA, source_sha=source_sha, source_tree=tree,
                 head_sha=os.environ.get("CI_HEAD_SHA", source_sha), run_id=os.environ.get("GITHUB_RUN_ID", "local"),
                 shards=shards, lanes=lanes, unit_priority=unit_priority, selected=dict(selected),
@@ -356,8 +480,6 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests):
         save_json(output / f"{name}.json", observation)
         evidence = previous.get("evidence_url", "")
         print(f"{name}: reused exact-input successful evidence {evidence}", flush=True)
-        write_summary(f"### {name}\n\nReused successful default-branch evidence: all source and environment inputs match.\n"
-                      + (f"\n[Original run]({evidence})\n" if evidence else ""))
         return 0
     priority = [f for f in priority if isinstance(f, str) and FIXTURE.fullmatch(f)][:8]
     positive = " | ".join("FullyQualifiedName~" + f + "." for f in priority)
@@ -482,8 +604,8 @@ def collect(args):
     if selected["build"] and not expected:
         issues.append("The build plan selected no test groups")
     complete = bool(expected) and not issues
-    write_summary("### Test coverage evidence\n\n| Group | Result | Executed |\n| --- | --- | ---: |\n" + "".join(rows)
-                  if expected else "### Test coverage evidence\n\nNo test groups selected.\n")
+    if issues:
+        write_summary("### Test coverage evidence\n\n| Group | Result | Executed |\n| --- | --- | ---: |\n" + "".join(rows))
     for issue in issues:
         print(f"::error::{issue}", flush=True)
     data = {key: plan.get(key) for key in ("schema", "source_sha", "source_tree", "head_sha", "run_id")}

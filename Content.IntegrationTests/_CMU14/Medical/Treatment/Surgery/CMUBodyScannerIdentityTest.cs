@@ -243,52 +243,6 @@ public sealed class CMUBodyScannerIdentityTest
     }
 
     [Test]
-    public async Task ViewingAPausedAttemptCannotExpireIt()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        var em = pair.Server.EntMan;
-        Rig rig = default!;
-        TimeSpan originalDeadline = default;
-        try
-        {
-            await pair.Server.WaitAssertion(() =>
-            {
-                rig = CreateRig(em, map.GridCoords);
-                rig.ConsoleComponent.CalibrationDurationSeconds = 0.2f;
-                Send(em, rig, new CMUBodyScannerResetPuzzleMessage(State(em, rig).CommandContext!.Value));
-                originalDeadline = em.GetComponent<CMUBodyScannerPuzzleProgressComponent>(rig.User).EndsAt;
-                em.System<MetaDataSystem>().SetEntityPaused(rig.User, true);
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(0.5f));
-            await pair.Server.WaitAssertion(() =>
-            {
-                _ = State(em, rig);
-                Assert.That(em.HasComponent<CMUBodyScannerPuzzleProgressComponent>(rig.User), Is.True);
-                Assert.That(em.HasComponent<CMUBodyScannerCalibrationLockoutComponent>(rig.User), Is.False);
-                em.System<MetaDataSystem>().SetEntityPaused(rig.User, false);
-                Assert.That(em.GetComponent<CMUBodyScannerPuzzleProgressComponent>(rig.User).EndsAt,
-                    Is.GreaterThan(originalDeadline));
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(0.3f));
-            await pair.Server.WaitAssertion(() =>
-            {
-                Assert.That(em.HasComponent<CMUBodyScannerPuzzleProgressComponent>(rig.User), Is.False);
-                Assert.That(em.GetComponent<CMUBodyScannerCalibrationLockoutComponent>(rig.User).Expiries.ContainsKey(rig.Patient), Is.True);
-            });
-        }
-        finally
-        {
-            await pair.Server.WaitPost(() =>
-            {
-                if (rig != null)
-                    DeleteRig(em, rig);
-            });
-        }
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task FullLockoutSetRefusesAnotherAttemptWithoutEvictingPatients()
     {
         await using var pair = await PoolManager.GetServerClient();

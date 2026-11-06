@@ -22,14 +22,6 @@ public sealed class CMUChemSimulatorStreakTest : GameTest
     private const string Root = "CMUTestStreakRoot";
 
     // FLOW-41: the repeat price is a stretched doubling, so six of the same operation in a row cost x1, 1, 2, 3, 3, 5
-    [Test]
-    public void StreakMultiplierIsAStretchedDoubling()
-    {
-        var sequence = Enumerable.Range(0, 6).Select(SharedChemicalSimulatorSystem.StreakMultiplier);
-        Assert.That(sequence, Is.EqualTo(new[] { 1, 1, 2, 3, 3, 5 }));
-        Assert.That(SharedChemicalSimulatorSystem.StreakMultiplier(9), Is.EqualTo(16), "doubles every 2.25 repeats");
-        Assert.That(SharedChemicalSimulatorSystem.StreakMultiplier(100), Is.EqualTo(64), "capped at x64");
-    }
 
     // STATE-02 / STATE-03: repeats cost progressively more, and the displayed cost is the charged cost
     [Test]

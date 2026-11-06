@@ -14,7 +14,6 @@ SPEC = importlib.util.spec_from_file_location("build_tile_materials", TOOLS / "b
 materials = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(materials)
 
-
 class TileMaterialTests(unittest.TestCase):
     def test_variant_order_source_metadata_and_deterministic_yaml(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -51,7 +50,6 @@ class TileMaterialTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Stale or missing"):
                 materials.write_or_check(output, b"expected\n", True)
             self.assertEqual(output.read_bytes(), b"local change\n")
-
 
 if __name__ == "__main__":
     unittest.main()

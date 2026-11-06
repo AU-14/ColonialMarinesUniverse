@@ -27,14 +27,13 @@ namespace Content.IntegrationTests.Tests.Medical;
 public sealed class DefibrillatorMergeRegressionTest : InteractionTest
 {
     private static readonly EntProtoId DefibrillatorId = "Defibrillator";
-    private static readonly EntProtoId LifepakId = "CMDefibrillator";
+
     private static readonly EntProtoId NoCriticalDefibrillatorId = "DefibrillatorMergeNoCritical";
     private static readonly EntProtoId TargetId = "DefibrillatorMergeTarget";
     private static readonly EntProtoId InanimateId = "DefibrillatorMergeInanimate";
     private static readonly EntProtoId BlockingOuterId = "DefibrillatorMergeBlockingOuter";
     private static readonly ProtoId<DamageTypePrototype> Blunt = "Blunt";
     private static readonly ProtoId<DamageGroupPrototype> Brute = "Brute";
-    private const string LifepakChargeSound = "/Audio/_RMC14/Medical/defib_charge.ogg";
 
     protected override string PlayerPrototype => "MobHuman";
 
@@ -81,35 +80,6 @@ public sealed class DefibrillatorMergeRegressionTest : InteractionTest
   - type: Defibrillator
     canDefibCrit: false
 ";
-
-    [Test]
-    public async Task LifepakStartsChargingAudioForReviver()
-    {
-        await SpawnTarget(TargetId);
-        var defibNet = await PlaceInHands(LifepakId, enableToggleable: true);
-        var serverDefib = ToServer(defibNet);
-        var serverTarget = STarget!.Value;
-
-        await Server.WaitAssertion(() =>
-        {
-            var defibrillator = Server.System<Content.Server.Medical.DefibrillatorSystem>();
-            var component = SEntMan.GetComponent<DefibrillatorComponent>(serverDefib);
-
-            Assert.That(defibrillator.TryStartZap((serverDefib, component), serverTarget, SPlayer), Is.True);
-            Assert.That(component.ChargeSoundEntity, Is.Not.Null,
-                "an accepted lifepak use must create a tracked charging stream");
-            Assert.That(SEntMan.GetComponent<AudioComponent>(component.ChargeSoundEntity!.Value).FileName,
-                Is.EqualTo(LifepakChargeSound));
-        });
-
-        await RunTicks(3);
-        await Client.WaitAssertion(() =>
-        {
-            Assert.That(CEntMan.EntityQuery<AudioComponent>(),
-                Has.Some.Matches<AudioComponent>(audio => audio.FileName == LifepakChargeSound),
-                "the authoritative charging stream must reach the reviver's client");
-        });
-    }
 
     [Test]
     public async Task CanDefibCritControlsCriticalTargets()

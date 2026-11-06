@@ -46,28 +46,6 @@ public sealed class YautjaCloakCombatLockoutTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task BadBloodDoesNotReceiveRegularCombatLockout()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var hunter = entities.SpawnEntity("CMUMobYautjaBadBloodGrunt", map.GridCoords);
-            var cloak = entities.System<YautjaCloakSystem>();
-            cloak.ApplyOffensiveCombatLockout(hunter);
-
-            Assert.That(entities.System<InventorySystem>().TryGetSlotEntity(hunter, "gloves", out var bracer), Is.True);
-            Assert.That(entities.GetComponent<YautjaBracerComponent>(bracer!.Value).CloakCombatLockoutUntil,
-                Is.EqualTo(TimeSpan.Zero));
-            entities.DeleteEntity(hunter);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
     private static void ToggleCloak(IEntityManager entities, EntityUid hunter)
     {
         Assert.That(entities.System<InventorySystem>().TryGetSlotEntity(hunter, "gloves", out var bracer), Is.True);

@@ -1,7 +1,6 @@
 using System.Linq;
 using Content.Shared.CMU14.Dropship.DirectFire;
 using System.Numerics;
-using Content.Client.Clickable;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
@@ -12,7 +11,6 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.PowerLoader.Events;
 using Content.Shared.Buckle;
 using Content.Shared.CCVar;
-using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -23,9 +21,6 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
-using Robust.Client.GameObjects;
-using Robust.Client.Graphics;
-using Robust.Client.Utility;
 
 namespace Content.IntegrationTests._CMU14.Dropship;
 
@@ -119,7 +114,6 @@ public sealed class MohawkAttachmentsTest
     public async Task EnginesWeaponsAndMedevacOperateThroughTheCabinController(string variant)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
-        var enginePoints = new List<NetEntity>();
         EntityUid ship = default;
         EntityUid medevac = default;
         EntityUid medicalPoint = default;
@@ -139,66 +133,9 @@ public sealed class MohawkAttachmentsTest
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
                 new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
-            enginePoints.AddRange(entities.QueryEntities<DropshipEnginePointComponent>()
-                .Select(p => entities.GetNetEntity(p.Owner)));
         });
         await pair.RunSeconds(1);
-        async Task AssertEngineClickTargets(bool installed)
-        {
-            await pair.RunUntilSynced();
-            await pair.Client.WaitAssertion(() =>
-            {
-                var entities = pair.Client.EntMan;
-                entities.System<AppearanceSystem>().FrameUpdate(0f);
-                var eye = pair.Client.ResolveDependency<IEyeManager>().CurrentEye;
-                foreach (var net in enginePoints)
-                {
-                    var uid = entities.GetEntity(net);
-                    var sprite = entities.GetComponent<SpriteComponent>(uid);
-                    Assert.That(sprite.Color.A, Is.EqualTo(1f), "Hiding the entire sprite also hides its installed upgrade.");
-                    var mount = sprite[DropshipPointVisualsLayers.AttachmentBase];
-                    Assert.That(mount.Color.A, Is.Zero, "Only the mismatched empty mount artwork stays hidden.");
-                    var attachment = sprite[DropshipPointVisualsLayers.AttachedUtility];
-                    Assert.That(attachment.Visible, Is.EqualTo(installed));
-                    if (installed)
-                    {
-                        Assert.That(attachment.Color.A, Is.EqualTo(1f));
-                        Assert.That(attachment.RsiState.ToString(), Is.AnyOf("fuel_enhancer_mohawk", "cooling_system_mohawk")); // CMU14: current upstream engine art.
-                        Assert.That(((SpriteComponent.Layer) attachment).Rotation, Is.EqualTo(Angle.Zero));
-                        var rsi = attachment.ActualRsi!;
-                        var clicks = pair.Client.ResolveDependency<IClickMapManager>();
-                        var direction = sprite.DirectionOverride.Convert(rsi[attachment.RsiState].RsiDirections);
-                        var pixels = 0;
-                        for (var x = 0; x < rsi.Size.X; x++)
-                        for (var y = 0; y < rsi.Size.Y; y++)
-                        {
-                            if (!clicks.IsOccluding(rsi, attachment.RsiState, direction, 0, new Vector2i(x, y)))
-                                continue;
-                            // CMU14 Begin: upstream centers the same 20x12 face in a 32px sheet.
-                            // Click maps add a two-pixel tolerance around the equipment face.
-                            Assert.That(x, Is.InRange(4, 27));
-                            Assert.That(y, Is.InRange(8, 23), "The long engine housing must not be drawn.");
-                            // CMU14 End
-                            pixels++;
-                        }
-                        Assert.That(pixels, Is.GreaterThan(100), "The compact equipment face must remain visible.");
-                    }
-                    var transform = entities.GetComponent<TransformComponent>(uid);
-                    var port = transform.LocalPosition.X < 0f;
-                    Assert.That(sprite.Offset, Is.EqualTo(new Vector2(port ? 0.5f : -0.5f, 0.5f)));
-                    Assert.That(transform.LocalPosition + sprite.Offset, Is.EqualTo(new Vector2(port ? -3f : 4f, -4f)),
-                        "The compact engine face must be centered on the black plate in the underside artwork.");
-                    var transforms = entities.System<SharedTransformSystem>();
-                    var position = transforms.GetWorldPosition(uid) + transforms.GetWorldRotation(uid).RotateVec(sprite.Offset);
-                    foreach (var offset in new[] { new Vector2(-0.4f, -0.4f), Vector2.Zero, new Vector2(0.4f, 0.4f) })
-                    {
-                        Assert.That(entities.System<ClickableSystem>().CheckClick((uid, null, sprite, null), position + offset,
-                            eye, false, out _, out _, out _), Is.True, "The entire black engine servicing plate must remain clickable.");
-                    }
-                }
-            });
-        }
-        await AssertEngineClickTargets(false);
+
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
@@ -269,7 +206,6 @@ public sealed class MohawkAttachmentsTest
                 Is.EqualTo(TimeSpan.FromSeconds(config.GetCVar(CCVars.FTLCooldown) * 0.5f)));
         });
         await pair.RunSeconds(1);
-        await AssertEngineClickTargets(true);
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;

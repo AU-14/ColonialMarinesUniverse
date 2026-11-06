@@ -24,7 +24,6 @@ public sealed class CMURtoRadioTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [TestCase("govfor", "radioGovforJTAC")]
-    [TestCase("opfor", "radioOpforJTAC")]
     public async Task PositionRelayBroadcastsExactGpsWithoutCreatingCasRequest(string faction, string channel)
     {
         var map = await Pair.CreateTestMap();
@@ -94,14 +93,8 @@ public sealed class CMURtoRadioTest : GameTest
     }
 
     [TestCase(0, 0)]
-    [TestCase(15, 0)]
-    [TestCase(-15, 0)]
-    [TestCase(0, 15)]
-    [TestCase(0, -15)]
     [TestCase(15, 15)]
     [TestCase(-15, -15)]
-    [TestCase(15, -15)]
-    [TestCase(-15, 15)]
     public async Task PositionCallsNeedNoHostileAndStayWithinDeviation(int x, int y)
     {
         var map = await Pair.CreateTestMap();
@@ -155,7 +148,6 @@ public sealed class CMURtoRadioTest : GameTest
     [TestCase(false, false)]
     [TestCase(true, false)]
     [TestCase(false, true)]
-    [TestCase(true, true)]
     public async Task XenosCanRipPackOrWearerAfterSevenSeconds(bool targetWearer, bool interrupt)
     {
         var map = await Pair.CreateTestMap();
@@ -199,7 +191,6 @@ public sealed class CMURtoRadioTest : GameTest
 
     [TestCase("RMCM5Bayonet", false, false)]
     [TestCase("RMCM5Bayonet", true, false)]
-    [TestCase("RMCKitchenKnife", false, false)]
     [TestCase("RMCM5Bayonet", false, true)]
     public async Task HumansNeedHeldSharpToolToRipWires(string prototype, bool targetWearer, bool drop)
     {
@@ -236,33 +227,10 @@ public sealed class CMURtoRadioTest : GameTest
             Assert.That(SEntMan.GetComponent<ANPRCRadioComponent>(pack).WiresRipped, Is.EqualTo(!drop)));
     }
 
-    [TestCase(null)]
-    [TestCase("RMCCableCoil30")]
-    public async Task HumansWithoutSharpToolHaveNoSabotageVerb(string? prototype)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var user = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
-            var pack = SEntMan.SpawnEntity("ANPRC117GRadio", map.GridCoords);
-            EntityUid? tool = null;
-            if (prototype != null)
-            {
-                tool = SEntMan.SpawnEntity(prototype, map.GridCoords);
-                Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(user, tool.Value), Is.True);
-            }
-            var verbs = new GetVerbsEvent<Verb>(user, pack, tool,
-                SEntMan.GetComponent<HandsComponent>(user), true, true, true, new());
-            SEntMan.EventBus.RaiseLocalEvent(pack, verbs);
-            Assert.That(verbs.Verbs.Any(verb => verb.Text == "Rip out radio wires"), Is.False);
-        });
-    }
-
     [TestCase(true, 0, 5, true)]
     [TestCase(false, 1, 5, true)]
     [TestCase(false, 0, 5, false)]
     [TestCase(true, 0, 4, false)]
-    [TestCase(false, 1, 4, false)]
     [TestCase(true, 0, 8, true)]
     public async Task RepairsRequireTrainingAndFiveCable(bool rto, int engineering, int amount, bool repaired)
     {

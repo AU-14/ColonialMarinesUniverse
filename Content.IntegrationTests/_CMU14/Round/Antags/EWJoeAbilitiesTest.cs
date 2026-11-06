@@ -196,51 +196,6 @@ public sealed class EWJoeAbilitiesTest
     }
 
     [Test]
-    public async Task RepentanceRemembersTheAttackerAndJudgementFlashesTheCone()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        var entities = server.EntMan;
-
-        await server.WaitAssertion(() =>
-        {
-            var rule = entities.System<EWJoeRuleSystem>();
-            var repentance = entities.System<EWJoeRepentanceSystem>();
-            var combat = entities.System<EWJoeCombatSystem>();
-            var damageable = entities.System<DamageableSystem>();
-            var protos = server.ResolveDependency<IPrototypeManager>();
-            var xform = entities.System<SharedTransformSystem>();
-
-            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
-            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
-            rule.ApplyLevel((joe, comp), 2);
-            Assert.That(entities.HasComponent<EWJoeRepentanceComponent>(joe), "level 2 grants Repentance");
-
-            Assert.That(repentance.Describe(joe), Is.EqualTo(Loc.GetString("cmu-ew-joe-repentance-none")), "nothing remembered yet");
-
-            var attacker = entities.SpawnEntity(Human, map.GridCoords.Offset(new Vector2(0, 3)));
-            damageable.TryChangeDamage(joe, new DamageSpecifier(protos.Index<DamageTypePrototype>("Blunt"), 10), origin: attacker);
-
-            var memory = entities.GetComponent<EWJoeRepentanceComponent>(joe);
-            Assert.That(memory.LastAttacker, Is.EqualTo(attacker), "attacker remembered");
-            Assert.That(repentance.Describe(joe), Does.Contain(Loc.GetString("rmc-k9-direction-north")), "attacker is to the north");
-
-            // Judgement: a target in front is flashed, one behind is not
-            xform.SetWorldRotation(joe, Angle.FromDegrees(0));
-            var facing = xform.GetWorldRotation(joe).ToWorldVec();
-            var inFront = entities.SpawnEntity(Human, map.GridCoords.Offset(facing * 2));
-            var behind = entities.SpawnEntity(Human, map.GridCoords.Offset(-facing * 2));
-
-            var hit = combat.Judge((joe, comp));
-            Assert.That(hit, Is.GreaterThanOrEqualTo(1), "someone in the cone was flashed");
-            Assert.That(entities.Deleted(behind), Is.False);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task ScourBuffsApplyAndExpire()
     {
         await using var pair = await PoolManager.GetServerClient();

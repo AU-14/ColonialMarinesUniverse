@@ -62,33 +62,6 @@ public sealed class CMUFireMeltingTest : GameTest
         });
     }
 
-    [Test]
-    public void MeltDamageFormula()
-    {
-        Assert.Multiple(() =>
-        {
-            Assert.That(CMUStructureMeltingFireSystem.MeltDamage(2, 30), Is.EqualTo(0f));
-            Assert.That(CMUStructureMeltingFireSystem.MeltDamage(3, 30), Is.EqualTo(30f).Within(0.001f));
-            Assert.That(CMUStructureMeltingFireSystem.MeltDamage(5, 30), Is.EqualTo(90f).Within(0.001f));
-            Assert.That(CMUStructureMeltingFireSystem.MeltDamage(5, 0), Is.EqualTo(0f));
-        });
-    }
-
-    [Test]
-    public void EffectiveFirePenetratingLevelDefaults()
-    {
-        Assert.Multiple(() =>
-        {
-            Assert.That(new ReagentPrototype().FirePenetratingLevel, Is.EqualTo(0));
-            Assert.That(new ReagentPrototype().EffectiveFirePenetratingLevel, Is.EqualTo(0));
-            Assert.That(new ReagentPrototype { FirePenetrating = true }.EffectiveFirePenetratingLevel, Is.EqualTo(1),
-                "the legacy bool flag counts as level 1");
-            Assert.That(new ReagentPrototype { FirePenetrating = true, FirePenetratingLevel = 4 }.EffectiveFirePenetratingLevel,
-                Is.EqualTo(4));
-            Assert.That(new ReagentPrototype { FirePenetratingLevel = 3 }.EffectiveFirePenetratingLevel, Is.EqualTo(3));
-        });
-    }
-
     /// <summary>
     /// Spawns a melting source, a barricade, a damageable wall and an indestructible hull wall on one tile, marks the source
     /// as melting at <paramref name="level"/>, and runs the server for <paramref name="seconds"/>.

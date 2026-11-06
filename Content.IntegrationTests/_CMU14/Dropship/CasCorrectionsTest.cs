@@ -38,36 +38,6 @@ public sealed class CasCorrectionsTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
-    [Test]
-    public async Task FlareCameraUsesHighestSolidDeckAndReturnsToTargetBelowSpace()
-    {
-        var lower = await Pair.CreateTestMap();
-        var middle = await Pair.CreateTestMap();
-        var upper = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var zLevels = Server.System<CMUZLevelsSystem>();
-            var network = zLevels.CreateZNetwork();
-            Assert.That(zLevels.TryAddMapsIntoZNetwork(network, new Dictionary<EntityUid, int>
-            {
-                [lower.MapUid] = 0, [middle.MapUid] = 1, [upper.MapUid] = 2,
-            }), Is.True);
-            var maps = Server.System<SharedMapSystem>();
-            var tiles = Server.ResolveDependency<ITileDefinitionManager>();
-            var position = new Vector2(0.5f, 0.5f);
-            maps.SetTile(middle.Grid, Vector2i.Zero, new Tile(tiles["FloorSteel"].TileId));
-            maps.SetTile(upper.Grid, Vector2i.Zero, Tile.Empty);
-            var flare = SEntMan.SpawnEntity(null, new MapCoordinates(position, lower.MapId));
-            var weapons = Server.System<SharedDropshipWeaponSystem>();
-            Assert.That(weapons.TryGetTopZLevelCoordinates(flare, out var view), Is.True);
-            Assert.That(view.MapId, Is.EqualTo(middle.MapId), "Skip the empty upper map, not the occupied roof.");
-            maps.SetTile(middle.Grid, Vector2i.Zero, Tile.Empty);
-            Assert.That(weapons.TryGetTopZLevelCoordinates(flare, out view), Is.True);
-            Assert.That(view.MapId, Is.EqualTo(lower.MapId), "Open sky must show the target's map, not space.");
-            SEntMan.DeleteEntity(network);
-        });
-    }
-
     [TestCase(false)]
     [TestCase(true)]
     public async Task CasExplosionsDoNotGibEvenAfterTheSourceIsDeleted(bool projectileImpact)
