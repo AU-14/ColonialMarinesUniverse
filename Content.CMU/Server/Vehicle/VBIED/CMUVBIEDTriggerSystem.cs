@@ -258,7 +258,7 @@ public sealed partial class CMUVBIEDTriggerSystem : EntitySystem
         _lookup.GetEntitiesInRange(coordinates, vbied.ProximityRange, _nearby);
         foreach (var target in _nearby)
         {
-            if (IsHostile(target, rigged))
+            if (IsHostile((target.Owner, target.Comp), rigged))
                 return true;
         }
 
@@ -273,6 +273,12 @@ public sealed partial class CMUVBIEDTriggerSystem : EntitySystem
             foreach (var passenger in other.Comp.Passengers)
             {
                 if (IsHostile(passenger, rigged))
+                    return true;
+            }
+
+            foreach (var xeno in other.Comp.Xenos)
+            {
+                if (IsHostile(xeno, rigged))
                     return true;
             }
         }
