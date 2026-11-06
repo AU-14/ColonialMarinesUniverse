@@ -159,6 +159,17 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             return;
         }
 
+        // CMU14: every source, including direct spawns, replaces the tile's previous flame.
+        if (_net.IsServer)
+        {
+            var fires = _rmcMap.GetAnchoredEntitiesEnumerator<TileFireComponent>(Transform(ent).Coordinates);
+            while (fires.MoveNext(out var fire))
+            {
+                if (fire != ent.Owner)
+                    QueueDel(fire);
+            }
+        }
+
         ent.Comp.SpawnedAt = _timing.CurTime;
         // CMU14: fire growth and synthetic resistance.
         if (ent.Comp.GrowthDuration > TimeSpan.Zero && TryComp(ent, out RMCIgniteOnCollideComponent? ignition))
