@@ -54950,7 +54950,7 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack
   entities:
   - uid: 2493
     components:
