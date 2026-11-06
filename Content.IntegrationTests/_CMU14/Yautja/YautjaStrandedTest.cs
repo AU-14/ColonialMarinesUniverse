@@ -148,7 +148,22 @@ public sealed class YautjaStrandedTest
             Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound));
             Assert.That(round.HuntActive, Is.False);
             Assert.That(stranded.StrandedSlotOpen, Is.False, "chance is 0, nothing should have rolled");
-            Assert.That(stranded.OpenStrandedSlot(), Is.True);
+
+            // the test round runs whatever preset the pool left (or none), stand it in for a distress signal round
+            var preset = ticker.CurrentPreset ?? ticker.Preset;
+            var enabled = preset?.StrandedYautjaEnabled ?? true;
+            if (preset != null)
+                preset.StrandedYautjaEnabled = true;
+            try
+            {
+                Assert.That(stranded.OpenStrandedSlot(), Is.True);
+            }
+            finally
+            {
+                if (preset != null)
+                    preset.StrandedYautjaEnabled = enabled;
+            }
+
             Assert.That(stranded.StrandedSlotOpen, Is.True);
         });
         await pair.RunTicksSync(10);
@@ -190,7 +205,7 @@ public sealed class YautjaStrandedTest
     }
 
     [Test]
-    public async Task ColonyFallNeverOpensTheStrandedSlot()
+    public async Task OnlyDistressSignalAndForceOnForceOpenTheStrandedSlot()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -205,14 +220,18 @@ public sealed class YautjaStrandedTest
 
         await server.WaitAssertion(() =>
         {
+            Assert.That(prototypes.Index<GamePresetPrototype>("DistressSignal").StrandedYautjaEnabled, Is.True);
+            Assert.That(prototypes.Index<GamePresetPrototype>("ForceOnForce").StrandedYautjaEnabled, Is.True);
+            Assert.That(prototypes.Index<GamePresetPrototype>("Insurgency").StrandedYautjaEnabled, Is.False);
             Assert.That(prototypes.Index<GamePresetPrototype>("ColonyFall").StrandedYautjaEnabled, Is.False);
-            Assert.That(prototypes.Index<GamePresetPrototype>("DistressSignal").StrandedYautjaEnabled, Is.True,
-                "only colony fall opts out");
 
             // the round start roll opens the slot through this same call
-            ticker.SetGamePreset("ColonyFall");
-            Assert.That(stranded.OpenStrandedSlot(), Is.False);
-            Assert.That(stranded.StrandedSlotOpen, Is.False);
+            foreach (var preset in new[] { "ColonyFall", "Insurgency" })
+            {
+                ticker.SetGamePreset(preset);
+                Assert.That(stranded.OpenStrandedSlot(), Is.False, preset);
+                Assert.That(stranded.StrandedSlotOpen, Is.False, preset);
+            }
         });
 
         await pair.CleanReturnAsync();
