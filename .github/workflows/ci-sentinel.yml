@@ -45,8 +45,11 @@ jobs:
                 ...repo, ref: pr.head.sha, per_page: 100,
               });
               const hasCi = checks.some(c => c.name === 'Required Checks' && c.conclusion === 'success');
-              const hasShards = checks.some(c => c.name.startsWith('Testcases /'));
-              if (hasCi && !hasShards && Date.parse(pr.pushed_at) < Date.now() - 10 * 60 * 1000)
+              const complete = checks.some(c => c.name === 'Testcases Complete');
+              // anyLegs: mid-suite and old-lineage-inline PRs are not waiting on
+              // the dispatcher; alarm only on zero-progress suites
+              const anyLegs = checks.some(c => c.name.startsWith('Testcases /'));
+              if (hasCi && !complete && !anyLegs && Date.parse(pr.pushed_at) < Date.now() - 10 * 60 * 1000)
                 unserved++;
             }
 
