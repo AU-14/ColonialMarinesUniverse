@@ -1,0 +1,28 @@
+author: maertayn
+category: CMU
+changes:
+- message: Vulture sniper rounds no longer lose almost all their damage on near-misses
+    (BUG-1003)
+  type: Fix
+- message: the B8 smart scope no longer blocks shots at friendlies beyond view range
+    (BUG-1022)
+  type: Fix
+- message: vehicle lock popups no longer appear on the screens of players far from
+    the vehicle (BUG-1263)
+  type: Fix
+- message: the cooking guide now lists working dough, batter and sauce recipes (BUG-1265)
+  type: Fix
+- message: small hosts yield meat when butchered, like in CM13 (BUG-908)
+  type: Fix
+- message: reapplying a rank chevron no longer traps the rank on revert (BUG-642)
+  type: Fix
+- message: Wizden cable coils are now thick coils, and colony kit hands out thin coils
+    everywhere
+  type: Tweak
+- message: the error relay admin feed no longer floods with explosion and verb logs
+  type: Admin
+- message: CI shard waves replace the admission scheduler; no protected environments,
+    no PAT holds, priority-ordered waves
+  type: Code
+time: '2026-11-05T23:04:51.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2482

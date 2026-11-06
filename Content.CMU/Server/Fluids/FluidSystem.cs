@@ -127,11 +127,13 @@ public sealed partial class FluidSystem : EntitySystem
     }
 
     // How much more of the fluid fits: the tank has room and the machine does not already keep as much of it as it wants to.
-    public float Room(FluidTankComponent tank, string kind, float? limit = null)
+    public float Room(Entity<FluidTankComponent> tank, string kind, float? limit = null)
     {
-        var room = tank.Capacity - tank.Total;
+        var ev = new CMUFluidTankRoomEvent(tank.Comp.Capacity - tank.Comp.Total);
+        RaiseLocalEvent(tank, ref ev);
+        var room = ev.Available;
         if (limit != null)
-            room = Math.Min(room, limit.Value - tank.Get(kind));
+            room = Math.Min(room, limit.Value - tank.Comp.Get(kind));
 
         return Math.Max(0f, room);
     }
@@ -142,7 +144,7 @@ public sealed partial class FluidSystem : EntitySystem
         if (amount <= 0f || !_tankQuery.TryComp(owner, out var tank))
             return 0f;
 
-        var added = Math.Min(amount, Room(tank, kind, limit));
+        var added = Math.Min(amount, Room((owner, tank), kind, limit));
         if (added <= 0f)
             return 0f;
 
@@ -516,7 +518,7 @@ public sealed partial class FluidSystem : EntitySystem
                         if (kind == null || pipe.Kind != kind)
                             continue;
 
-                        var moved = Math.Min(Math.Min(rate, pipe.Amount), Room(tank, kind, port.Limit));
+                        var moved = Math.Min(Math.Min(rate, pipe.Amount), Room((uid, tank), kind, port.Limit));
                         if (moved <= 0f)
                             continue;
 

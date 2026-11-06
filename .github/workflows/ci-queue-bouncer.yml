@@ -5,13 +5,13 @@ name: CI Queue Bouncer
 # push cancels its own stale run at dispatch); this workflow remains as insurance for
 # runs that slip past native cancellation and for cleanup nothing else does:
 # `closed` cleans up a merged or abandoned PR's runs: nothing else ever cancels
-# them, and they would each burn a build lane or shard wave admission on a PR that no
+# them, and they would each consume build or test capacity on a PR that no
 # longer exists.
 # `converted_to_draft` does the same cleanup: a run started while the PR was open keeps
 # the payload it was triggered with, so its jobs still pass any draft gate and would burn
 # runner turns on a PR whose work is now moot. cleanup spans every PR-triggered workflow
 # (ci, check-pr, labels, rsi-diff, mapchecker); supersession stays scoped to ci.yml,
-# the only workflow with gated admission worth freeing early.
+# the only workflow with expensive test work worth freeing early.
 # pull_request_target on purpose: fork PR tokens are read-only, and this script comes
 # from the base branch, never from the PR.
 
@@ -50,15 +50,11 @@ jobs:
               { workflow: 'labels.yml', event: 'pull_request_target' },
               { workflow: 'rsi-diff.yml', event: 'pull_request_target' },
               { workflow: 'mapchecker.yml', event: 'pull_request' },
-              { workflow: 'ci-shards.yml', event: 'workflow_run' },
             ];
             let cancelled = 0;
             for (const target of targets) {
-              // supersession frees the fleet gate's slot and only ci.yml runs hold one;
-              // the helpers are cheap and supersede themselves, so only cleanup touches them
-              // CMU14: waves supersede too: a synchronize wave for a fresh SHA must kill
-              // the previous SHA's in-flight wave, the serve gate only cancels same-SHA
-              if (!dead && target.workflow !== 'ci.yml' && target.workflow !== 'ci-shards.yml')
+              // CMU14: native concurrency supersedes CI; retain close/draft cleanup.
+              if (!dead && target.workflow !== 'ci.yml')
                 continue;
               // CMU14: runs waiting on a concurrency queue report status "pending",
               // not "queued"; without it supersession never sees the queue and

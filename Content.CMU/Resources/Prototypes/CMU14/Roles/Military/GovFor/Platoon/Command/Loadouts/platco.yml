@@ -3,6 +3,7 @@
 
 - type: loadout
   id: PlatCOSidearmMatebaCustomAU14
+  cost: 0
   effects:
     - !type:JobRequirementLoadoutEffect
       requirement:
@@ -14,6 +15,7 @@
 
 - type: loadout
   id: PlatCOSidearmMatebaSpecialAU14
+  cost: 0
   effects:
     - !type:JobRequirementLoadoutEffect
       requirement:
@@ -25,5 +27,42 @@
 
 - type: loadout
   id: PlatCOSidearmM48A5AU14
+  cost: 0
   equipment:
     belt:  AU14BeltPostelPistolM48A5NoSuper
+
+- type: loadout
+  id: CMUPlatCOHandcannonBelt
+  cost: 0
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 72000 # 20 hours, matching colony command's handcannon unlock.
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonFilled
+
+- type: loadout
+  id: CMUPlatCOWinterWyvernBelt
+  cost: 0
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 72000 # 20 hours, matching colony command's handcannon unlock.
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonWinterWyvernFilled
+
+- type: loadout
+  id: CMUPlatCOGoldHandcannonBelt
+  cost: 0
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatCo
+      time: 900000 # 250 hours, matching the existing CO golden handcannon reward.
+  equipment:
+    belt: AU14BeltHolsterPistolBlackHandcannonGoldFilled

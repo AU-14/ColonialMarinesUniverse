@@ -136,6 +136,7 @@ entities:
         chunkSize: 4
     - type: Shuttle
     - type: Dropship
+      maxInternalWeapons: 2
       tacticalLandFootprint: 17,24
       startupSound:
         path: /Audio/CMU14/Dropships/Mohawk/takeoff.ogg

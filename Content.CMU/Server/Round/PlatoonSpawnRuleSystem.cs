@@ -21,6 +21,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Dropship.Exchange;
 using Content.Shared.CMU14.Round;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.EntitySerialization.Systems;
@@ -50,6 +51,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private FactionSwapSystem _factionSwap = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
     [Dependency] private CameraNetworkSystem _cameraNetworks = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.platoon");
 
@@ -793,7 +795,24 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, out var grids))
             return;
 
+        // The game-map event contains the main deck; the z-level loader loads the remaining decks separately.
+        var shipGrids = new HashSet<EntityUid>(grids);
+        var shipMaps = new HashSet<EntityUid>();
         foreach (var grid in grids)
+        {
+            if (TerminatingOrDeleted(grid) || Transform(grid).MapUid is not { } map)
+                continue;
+
+            shipMaps.UnionWith(_zLevels.GetAllNetworkMaps(map));
+        }
+
+        foreach (var map in shipMaps)
+        {
+            foreach (var grid in _mapSystem.GetAllGrids(Transform(map).MapID))
+                shipGrids.Add(grid.Owner);
+        }
+
+        foreach (var grid in shipGrids)
         {
             if (TerminatingOrDeleted(grid) ||
                 TryComp<ShipFactionComponent>(grid, out var existing) && !string.IsNullOrEmpty(existing.Faction))

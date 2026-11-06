@@ -1,5 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Reaction; // CMU14
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Payload.Components;
@@ -19,6 +20,7 @@ public sealed partial class PayloadSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private ISerializationManager _serializationManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!; // CMU14
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
     [Dependency] private TagSystem _tagSystem = default!;
@@ -209,15 +211,21 @@ public sealed partial class PayloadSystem : EntitySystem
         _adminLogger.Add(LogType.ChemicalReaction,
             $"Chemical bomb payload {ToPrettyString(entity.Owner):payload} at {_transform.GetMapCoordinates(entity.Owner):location} is combining two solutions: {solStringA:solutionA} and {solStringB:solutionB}");
 
+        TryComp(entity, out ReactionMixerComponent? mixer); // CMU14: payloads mix (CMUMix-gated reactions)
+
         solutionA.MaxVolume += solutionB.MaxVolume;
-        _solutionContainerSystem.TryAddSolution(solnA.Value, solutionB);
+        // CMU14: merge without reacting, so the mixed pass below sees every reactant at once and gated
+        // reactions don't lose their reagents to ungated ones.
+        solutionA.AddSolution(solutionB, _prototypeManager);
         _solutionContainerSystem.RemoveAllSolution(solnB.Value);
+        _solutionContainerSystem.UpdateChemicals(solnA.Value, true, mixer); // CMU14: mix the merged solution once
 
         // The grenade might be a dud. Redistribute solution:
         var tmpSol = _solutionContainerSystem.SplitSolution(solnA.Value, solutionA.Volume * solutionB.MaxVolume / solutionA.MaxVolume);
         _solutionContainerSystem.TryAddSolution(solnB.Value, tmpSol);
         solutionA.MaxVolume -= solutionB.MaxVolume;
-        _solutionContainerSystem.UpdateChemicals(solnA.Value);
+        _solutionContainerSystem.UpdateChemicals(solnA.Value, true, mixer); // CMU14: pass the mixer
+        _solutionContainerSystem.UpdateChemicals(solnB.Value, true, mixer); // CMU14
 
         args.Handled = true;
     }
