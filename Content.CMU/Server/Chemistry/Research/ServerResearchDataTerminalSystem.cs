@@ -168,6 +168,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             if (TryGetCipherElevator(ent.Owner, args.Actor, out var elevator))
             {
                 elevator.Comp.Orders.Add(new RequisitionsEntry { Cost = 0, Crate = "CMUCrateSecureCipheringExperiment" });
+                elevator.Comp.Orders.Add(new RequisitionsEntry { Cost = 0, Crate = "AU14CrateSecureWeYuBloodbursting" });
                 SpawnNextToOrDrop("CMUCipherHintPaperInformDeliv", ent.Owner);
             }
             else
