@@ -110,8 +110,6 @@
   suffix: Dropship
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
-    sprite: CMU14/Objects/Weapons/Guns/HMGs/m2c.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
   - type: Sprite # CMU14: fixed pivot and independently aimed gun layers
     sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M56D/pivot.rsi
     noRot: true
