@@ -1,0 +1,102 @@
+# CMU14: wave dispatcher. the serve gate in ci-shards.yml yields to higher-priority
+# demand, and a yielded wave has no trigger of its own; this workflow re-fires it by
+# re-running the triggering CI run's Required Checks job, whose re-completion fires the
+# workflow_run trigger again. it also watches its own health via ci-sentinel.yml.
+# no PAT, no protected environments, no holds anywhere: if this workflow dies, waves
+# still fire naturally from every CI completion, only the priority ordering is lost
+name: CI Dispatcher
+
+on:
+  schedule:
+    # CMU14: github coalesces and drops schedules under load; the workflow_run triggers
+    # carry the reaction time, this is the backstop
+    - cron: '*/2 * * * *'
+  workflow_run:
+    workflows: [CI Shard Wave]
+    types: [completed]
+
+permissions:
+  actions: write
+  checks: read
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ci-dispatcher
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    name: Re-fire yielded waves
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const repo = context.repo;
+            const fresh = Date.now() - 6 * 3600 * 1000;
+
+            // CMU14: chunked waves serve a suite across several runs; demand persists
+            // until the wave posts the completion marker
+            const served = async (sha) => {
+              const checks = await github.paginate(github.rest.checks.listForRef, {
+                ...repo, ref: sha, per_page: 100,
+              });
+              return checks.some(c => c.name === 'Testcases Complete');
+            };
+
+            const waveInFlight = async (sha) => {
+              const waves = await github.paginate(github.rest.actions.listWorkflowRuns, {
+                ...repo, workflow_id: 'ci-shards.yml', per_page: 100,
+              });
+              return waves.some(w => w.head_sha === sha && w.status !== 'completed');
+            };
+
+            // open, non-draft PRs whose current head has a green CI run and no Testcases
+            const open = await github.paginate(github.rest.pulls.list, {
+              ...repo, state: 'open', per_page: 100, sort: 'updated', direction: 'desc',
+            });
+            const demand = [];
+            for (const pr of open) {
+              if (pr.draft || Date.parse(pr.pushed_at) < fresh) continue;
+              if (await served(pr.head.sha)) continue;
+              if (await waveInFlight(pr.head.sha)) continue;
+              const runs = await github.rest.actions.listWorkflowRuns({
+                ...repo, workflow_id: 'ci.yml', head_sha: pr.head.sha, per_page: 1,
+              });
+              const run = runs.data.workflow_runs[0];
+              if (!run || run.status !== 'completed' || run.conclusion !== 'success') continue;
+              // old-lineage runs serve their own inline shards; without this the
+              // marker never appears and this loop re-runs them forever
+              const rj = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+                ...repo, run_id: run.id, per_page: 100,
+              });
+              if (rj.some(j => j.name.startsWith('Testcases / '))) continue;
+              const klass = ['OWNER', 'MEMBER', 'COLLABORATOR'].includes(pr.author_association) ? 1 : 2;
+              demand.push({ pr, run, klass });
+            }
+            if (demand.length === 0)
+              return;
+            demand.sort((a, b) => a.klass - b.klass || Date.parse(a.pr.pushed_at) - Date.parse(b.pr.pushed_at));
+
+            for (const d of demand.slice(0, 2)) {
+              const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, {
+                ...repo, run_id: d.run.id, per_page: 100,
+              });
+              const handle = jobs.find(j => j.name === 'Required Checks');
+              if (!handle) {
+                core.info(`PR #${d.pr.number}: no Required Checks job to re-run`);
+                continue;
+              }
+              try {
+                await github.rest.actions.reRunJobForWorkflowRun({
+                  ...repo, run_id: d.run.id, job_id: handle.id,
+                });
+                core.info(`re-fired wave for PR #${d.pr.number} via job ${handle.id}`);
+              } catch (e) {
+                // 403/422: run no longer completed or already re-running; the next
+                // pass re-evaluates, never a wedged state
+                core.info(`PR #${d.pr.number}: rerun refused (${e.status}), skipping`);
+              }
+            }
