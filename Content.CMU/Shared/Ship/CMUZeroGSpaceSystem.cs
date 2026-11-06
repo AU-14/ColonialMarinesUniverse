@@ -177,7 +177,8 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
     /// <summary>True if these coordinates are bare space, with no floor or open-air tile at all.</summary>
     public bool IsSpaceAt(MapCoordinates coordinates)
     {
-        return GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile;
+        return (GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile)
+               && !_zLevels.TryGetStairEnvironment(coordinates, out _);
     }
 
     /// <summary>
@@ -186,7 +187,8 @@ public sealed partial class CMUZeroGSpaceSystem : EntitySystem
     /// </summary>
     public bool IsExposedToSpaceAt(MapCoordinates coordinates)
     {
-        return GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile || definition.MapAtmosphere;
+        return (GetTileAt(coordinates) is not { } definition || definition.ID == SpaceTile || definition.MapAtmosphere)
+               && !_zLevels.TryGetStairEnvironment(coordinates, out _);
     }
 
     /// <summary>The tile at these coordinates, or null if there's none there.</summary>
