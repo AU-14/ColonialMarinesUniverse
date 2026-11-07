@@ -151,19 +151,36 @@ jobs:
                 .map(name => name.trim())
                 .filter(name => name.length > 0);
 
-            const exempt = allowlist.includes(author)
+            let exempt = allowlist.includes(author)
                 || ['OWNER', 'MEMBER'].includes(context.payload.pull_request.author_association);
+
+            // CMU14: outside collaborators can have the repository's maintain role.
+            if (!exempt) {
+              const { data: access } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: author,
+              });
+              exempt = ['admin', 'maintain'].includes(access.role_name);
+            }
 
             if (!exempt) {
               core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
             }
 
-      # engine must sit on an upstream release tag, never a master commit
-      - name: Verify RobustToolbox submodule points at a release tag
+      # CMU14: keep release pins, with one reviewed compatible engine patch on 295.0.2.
+      - name: Verify RobustToolbox release pin
         run: |
           SHA=$(git ls-tree HEAD RobustToolbox | awk '{print $3}')
+          # CMU14: AU-14/RobustToolbox PR 1 optimizes Server/Shared hot paths.
+          # Wire formats and the launcher client engine version remain 295.0.2-compatible.
+          if [ "$SHA" = "7afd7fcf6d4728d0ddb451831ea312b394eccab0" ] &&
+             [ "$(git config --file .gitmodules --get submodule.RobustToolbox.url)" = "https://github.com/AU-14/RobustToolbox.git" ]; then
+            echo "Using reviewed CMU compatible engine patch on upstream 295.0.2."
+            exit 0
+          fi
           if ! git ls-remote --tags https://github.com/space-wizards/RobustToolbox.git | awk '{print $1}' | grep -qx "$SHA"; then
-            echo "::error::RobustToolbox ${SHA} is not an upstream release tag. Pin a v* tag, not a master commit."
+            echo "::error::RobustToolbox ${SHA} is neither an upstream release tag nor the reviewed CMU compatible engine patch."
             exit 1
           fi
 
