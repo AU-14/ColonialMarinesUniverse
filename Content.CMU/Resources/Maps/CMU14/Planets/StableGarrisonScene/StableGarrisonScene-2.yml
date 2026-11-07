@@ -1,10 +1,10 @@
 meta:
   format: 7
   category: Map
-  engineVersion: 289.0.0
+  engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/17/2026 01:40:21
+  time: 10/25/2026 04:29:36
   entityCount: 21813
 maps:
 - 1
@@ -457,11 +457,11 @@ entities:
   entities:
   - uid: 1
     components:
-    - type: CMU3DElevation
-      profile: CMU3DStableGarrisonReduxMinus2
     - type: MetaData
       name: Mapping Stable Garrison [-2]
     - type: Transform
+    - type: CMU3DElevation
+      profile: CMU3DStableGarrisonReduxMinus2
     - type: Map
       mapPaused: True
     - type: GridTree
@@ -713,10 +713,7 @@ entities:
           version: 7
     - type: Broadphase
     - type: Physics
-      fixedRotation: False
       canCollide: False
-      bodyType: Dynamic
-      bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
     - type: Shuttle
@@ -17431,14 +17428,14 @@ entities:
         6,-11: 218150833647452160
         7,-12: 13889313183832768640
         7,-11: 27268922933829856
-        6,-14: 72905330438176768
+        6,-14: 18446744073709551615
         6,-13: 217020518514229505
-        7,-14: 16204198715729141760
+        7,-14: 18446744073709551615
         7,-13: 9259542123278024896
-        6,-16: 4345495552
-        6,-15: 0
-        7,-16: 551911735520
-        7,-15: 0
+        6,-16: 18446744069465112576
+        6,-15: 18446744073709551615
+        7,-16: 18446744071570505952
+        7,-15: 18446744073709551615
         6,-18: 0
         6,-17: 0
         7,-18: 0
@@ -17459,26 +17456,26 @@ entities:
         8,-11: 9259400846809170695
         9,-12: 1729382256910270464
         9,-11: 18446744069363759160
-        8,-14: 1082841944888967296
+        8,-14: 18446744073709551615
         8,-13: 9187201950431526687
-        9,-14: 1745211086124056383
+        9,-14: 18446744073709551615
         9,-13: 16
-        8,-16: 18374686479671623679
-        8,-15: 13889348576384712446
+        8,-16: 18446744073709551615
+        8,-15: 18446744073709551615
         9,-16: 18446744073709551487
-        9,-15: 4557431164754722815
+        9,-15: 18446744073709551615
         10,-12: 0
         10,-11: 505248687002222592
         11,-12: 17937837315816685568
         11,-11: 18374401693224597752
-        10,-14: 0
+        10,-14: 18446744073709551615
         10,-13: 0
-        11,-14: 0
+        11,-14: 9187201950435737471
         11,-13: 0
-        10,-16: 17031360
-        10,-15: 0
-        11,-16: 247325574299647
-        11,-15: 0
+        10,-16: 18446744069431615680
+        10,-15: 18446744073709551615
+        11,-16: 9187343239718371327
+        11,-15: 9187201950435737471
         12,-10: 18446744073709551615
         12,-9: 18446744073709551615
         13,-10: 18446744073709551615
@@ -17505,8 +17502,8 @@ entities:
         5,-13: 18446744073709551615
         4,-16: 504685739204722816
         4,-15: 1705407220256519
-        5,-16: 4503599626557260033
-        5,-15: 17320844166986407711
+        5,-16: 13763000460430999809
+        5,-15: 17357014253405446047
         4,-18: 4548370671457206272
         4,-17: 67359
         5,-18: 0
@@ -19004,6 +19001,7 @@ entities:
       - 21817
       - 21818
       - 21819
+    - type: CMU3DMap
 - proto: AU14AreaGarrisonOutofBounds
   entities:
   - uid: 1757
@@ -81708,6 +81706,28 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 249.5,-81.5
+- proto: CMUGeneratorFusion
+  entities:
+  - uid: 2308
+    components:
+    - type: Transform
+      parent: 1
+      pos: 204.5,-110.5
+  - uid: 2309
+    components:
+    - type: Transform
+      parent: 1
+      pos: 204.5,-112.5
+  - uid: 2310
+    components:
+    - type: Transform
+      parent: 1
+      pos: 204.5,-111.5
+  - uid: 2311
+    components:
+    - type: Transform
+      parent: 1
+      pos: 204.5,-109.5
 - proto: CMUMonitorCameraColonyWEYU
   entities:
   - uid: 761
@@ -89709,7 +89729,7 @@ entities:
       pos: 283.5,-103.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -235868.75
+      secondsUntilStateChange: -236296.36
   - uid: 2096
     components:
     - type: Transform
@@ -89717,7 +89737,7 @@ entities:
       pos: 283.5,-102.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -241087.16
+      secondsUntilStateChange: -241514.77
   - uid: 2097
     components:
     - type: Transform
@@ -89737,7 +89757,7 @@ entities:
       pos: 280.5,-95.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -241088.02
+      secondsUntilStateChange: -241515.62
   - uid: 2100
     components:
     - type: Transform
@@ -89752,7 +89772,7 @@ entities:
       pos: 282.5,-95.5
     - type: Door
       state: Closing
-      secondsUntilStateChange: -241088.52
+      secondsUntilStateChange: -241516.12
 - proto: RMCDeskFanTan
   entities:
   - uid: 2102
@@ -90929,28 +90949,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 301.5,-114.5
-- proto: CMUGeneratorFusion
-  entities:
-  - uid: 2308
-    components:
-    - type: Transform
-      parent: 1
-      pos: 204.5,-110.5
-  - uid: 2309
-    components:
-    - type: Transform
-      parent: 1
-      pos: 204.5,-112.5
-  - uid: 2310
-    components:
-    - type: Transform
-      parent: 1
-      pos: 204.5,-111.5
-  - uid: 2311
-    components:
-    - type: Transform
-      parent: 1
-      pos: 204.5,-109.5
 - proto: RMCGrassd1
   entities:
   - uid: 2312
