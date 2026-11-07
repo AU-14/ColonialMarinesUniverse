@@ -47,10 +47,39 @@ public sealed partial class CMULooseSweepSystem : EntitySystem
     private static readonly string[] ExcludedTrashComponents = { "Paper" };
 
     private readonly List<EntityUid> _scratch = new();
+    private readonly HashSet<EntityUid> _trashCandidates = new();
     private TimeSpan _nextSweep;
 
     public override void Initialize()
-        => _nextSweep = _timing.CurTime + SweepInterval;
+    {
+        _nextSweep = _timing.CurTime + SweepInterval;
+        SubscribeLocalEvent<TagComponent, ComponentStartup>(OnTagStartup);
+        SubscribeLocalEvent<TagComponent, ComponentRemove>(OnTagRemove);
+        SubscribeLocalEvent<TagComponent, CMUTagsChangedEvent>(OnTagsChanged);
+    }
+
+    private void OnTagStartup(Entity<TagComponent> ent, ref ComponentStartup args)
+        => UpdateTrashCandidate(ent);
+
+    private void OnTagRemove(Entity<TagComponent> ent, ref ComponentRemove args)
+        => _trashCandidates.Remove(ent.Owner);
+
+    private void OnTagsChanged(Entity<TagComponent> ent, ref CMUTagsChangedEvent args)
+        => UpdateTrashCandidate(ent);
+
+    private void UpdateTrashCandidate(Entity<TagComponent> ent)
+    {
+        // Index only tag/prototype eligibility. Pauses and container membership
+        // can change independently and are checked at the normal sweep deadline.
+        if (IsTrashTagged(ent.Comp)
+            || (AdditionalTrashPrototypes.Length > 0
+                && TryComp<MetaDataComponent>(ent.Owner, out var meta)
+                && meta.EntityPrototype is { } proto
+                && ContainsId(AdditionalTrashPrototypes, proto.ID)))
+            _trashCandidates.Add(ent.Owner);
+        else
+            _trashCandidates.Remove(ent.Owner);
+    }
 
     public void CollectLooseMagazines(List<EntityUid> results, HashSet<string>? ids = null, bool all = false)
     {
@@ -170,13 +199,15 @@ public sealed partial class CMULooseSweepSystem : EntitySystem
         var trash = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.TrashDespawnTime));
         if (trash > TimeSpan.Zero)
         {
-            // Fast path: every tagged trash entity carries a TagComponent, and a
-            // metadata-only scan every few seconds is too costly on big rounds.
             _scratch.Clear();
-            var query = EntityQueryEnumerator<TagComponent, MetaDataComponent>();
-            while (query.MoveNext(out var uid, out var tags, out var meta))
+            var metadata = GetEntityQuery<MetaDataComponent>();
+            var tags = GetEntityQuery<TagComponent>();
+            foreach (var uid in _trashCandidates)
             {
-                if (IsLooseTrash(uid, meta, tags))
+                if (metadata.TryComp(uid, out var meta)
+                    && !meta.EntityPaused
+                    && tags.TryComp(uid, out var tag)
+                    && IsLooseTrash(uid, meta, tag))
                     _scratch.Add(uid);
             }
 
