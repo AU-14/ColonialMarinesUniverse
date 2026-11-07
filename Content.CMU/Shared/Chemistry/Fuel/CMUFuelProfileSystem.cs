@@ -193,8 +193,8 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
     /// <summary>Alcohol molotovs: Σ intensityMod × units must reach this, as RMC's CraftsIntoMolotov did.</summary>
     public const int MolotovMinIntensity = 10;
 
-    /// <summary>Radius of an alcohol (non-fuel) molotov, RMC's old diamond radius.</summary>
-    public const int MolotovFallbackRadius = 2;
+    /// <summary>Maximum initial radius of a thrown firebomb, including bottles filled with fuel.</summary>
+    public const int MolotovMaxRadius = 2;
 
     public const int MaxSpreadDepth = 5;
 
@@ -335,8 +335,9 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
     /// Resolves the fire <paramref name="solution"/> makes when lit by <paramref name="source"/>. Wraps
     /// <see cref="TryCompute"/> and applies the source's caps: a flamer uses <paramref name="tank"/>'s caps and, unless
     /// the tank allows blue fire, never exceeds <see cref="NonSpecialistMaxIntensity"/>; every other source is capped
-    /// at 39 intensity and sized by their contents (fuel reach up to <see cref="MaxChemicalRadius"/>). A
-    /// molotov of alcohol (no fuel stats) still burns from Σ intensityMod × units, like RMC's.
+    /// at 39 intensity. Containers and chemical grenades use their contents' reach up to
+    /// <see cref="MaxChemicalRadius"/>; thrown bottles stop at <see cref="MolotovMaxRadius"/>. An alcohol
+    /// molotov (no fuel stats) still burns from Σ intensityMod × units, like RMC's.
     /// </summary>
     public bool TryResolveFire(Solution solution,
         CMUFireSource source,
@@ -365,7 +366,7 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
         {
             intensity = alcohol;
             duration = ReferenceDuration;
-            radius = MolotovFallbackRadius;
+            radius = MolotovMaxRadius;
             behaviour = GenericFire;
             fireSpread = false;
         }
@@ -389,10 +390,9 @@ public sealed partial class CMUFuelProfileSystem : EntitySystem
         }
         else
         {
-            // Chemical fires (containers, grenades, molotovs) are sized by their contents, not their container: the
-            // fuel's own reach and duration, with the amount burning deciding how much of that reach is used
-            // (see CircleRadius). Only a sanity ceiling applies.
-            radius = Math.Min(MaxChemicalRadius, radius);
+            // Bottles have a local splash footprint; a fuel's flamethrower reach must not turn a
+            // Molotov into a room-sized chemical spill. Other chemical sources keep their fuel-sized footprint.
+            radius = Math.Min(source == CMUFireSource.Molotov ? MolotovMaxRadius : MaxChemicalRadius, radius);
             if (IsBlueFire(behaviour))
                 behaviour = GenericFire;
         }

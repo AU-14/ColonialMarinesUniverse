@@ -266,15 +266,11 @@ def source_graph_inputs(changed):
 
 
 def runtime_settings(name):
-    workers, hang = 4, "5m"
+    # Four cold pairs start eight worlds and can exhaust hosted-runner memory
+    # before a test finishes. Two workers keep setup below the inactivity limit.
+    workers, hang = 2, "5m"
     if name.startswith("cmu_yautja_smoke") or name in ("cmu_threed", "map_loading", "nightly_affected"):
         workers = 1
-    elif name.startswith(("post_map_init", "cmu_yautja")) or name in (
-        "cmu", "cmu_systems", "cmu_spatial", "cmu_medical_anatomy", "cmu_vehicle_bugs",
-        "cmu_fob", "cmu_movement", "proto_lint_serial", "cmu_chemistry", "cmu_research_contracts",
-        "cmu_research", "mapping_station_shuttle_round"
-    ):
-        workers = 2
     if name in ("cmu_movement", "map_loading", "nightly_affected"):
         hang = "20m"
     return workers, hang
@@ -500,7 +496,9 @@ def execute_group(settings, priority, previous, key, output, runner=run_tests):
         if selection:
             command += ["--filter", selection]
         if settings.get("hang"):
-            command += ["--blame-hang-timeout", settings["hang"], "--blame-hang-dump-type", "none"]
+            # DLL-mode dotnet test drops --blame-hang-dump-type and collects a
+            # full dump. Pass VSTest's complete option to retain the no-dump limit.
+            command += [f"--Blame:CollectHangDump;TestTimeout={settings['hang']};HangDumpType=none"]
         command += ["--", "NUnit.ExplicitMode=None", "NUnit.AssemblySelectLimit=10000"]
         if name != "unit":
             command += ["NUnit.MapWarningTo=Failed", f"NUnit.NumberOfTestWorkers={settings['workers']}"]

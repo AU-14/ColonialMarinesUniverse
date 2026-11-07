@@ -104,8 +104,11 @@ Generated-prototype tests retain isolated pairs. The separate process budgets
 bound their repeated startup work after the previous combined group reached its
 30-minute limit; hosted timings will determine the resulting runtime.
 
-The worker counts, prototype-loader workaround, heap limit, and isolated heavy
-fixtures remain in `adaptive_ci.py` and the gameplay environment. The test audit
+Gameplay groups use at most two NUnit workers; the existing memory-heavy groups
+remain serial. Four simultaneous cold pairs can spend nearly five minutes in
+startup and exceed the runner's physical memory before any test completes.
+The prototype-loader workaround, heap limit, and isolated heavy fixtures remain
+in `adaptive_ci.py` and the gameplay environment. The test audit
 removes UI/camera presentation, static prototype inventories, numeric balance
 mirrors, private-helper probes, duplicated scenarios and obsolete benchmarks.
 Real authority, state transitions, geometry, resource conservation and lifecycle
@@ -123,7 +126,11 @@ an aborted run fails the job. Previous TRX evidence is removed before execution.
 Unit execution has a 12-minute wall limit; each gameplay group shares one
 30-minute wall limit across its priority and remaining passes. A lane has at
 most six groups and a 190-minute job cap, including setup and uploads. Existing
-per-test hang timeouts remain in effect. Linux cancellation/timeout terminates
+per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
+`HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
+forwarding to VSTest, producing a full memory dump and exhausting runner disk.
+Sequence files and TRX diagnostics remain available without memory dumps.
+Linux cancellation/timeout terminates
 the test process group. Logs and TRX results are uploaded on failure or cancellation;
 a runner disappearing entirely can still prevent uploads.
 

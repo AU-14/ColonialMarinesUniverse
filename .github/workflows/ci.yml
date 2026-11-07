@@ -186,7 +186,7 @@ jobs:
           name: ci-plan
           path: .ci
 
-      - uses: actions/setup-dotnet@v6.0.0
+      - uses: actions/setup-dotnet@v6.1.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
@@ -363,7 +363,7 @@ jobs:
           name: build-runtime
           path: bin/
 
-      - uses: actions/setup-dotnet@v6.0.0
+      - uses: actions/setup-dotnet@v6.1.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
