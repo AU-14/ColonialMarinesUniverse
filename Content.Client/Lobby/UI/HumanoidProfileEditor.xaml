@@ -60,6 +60,8 @@
                         <BoxContainer Orientation="Vertical">
                             <Button Name="SaveButton" Text="{Loc 'humanoid-profile-editor-save-button'}"/>
                             <Button Name="ResetButton" Disabled="True" Text="{Loc 'humanoid-profile-editor-reset-button'}"/>
+                            <!-- CMU14: character-wide loadout preferences. -->
+                            <Button Name="GlobalLoadoutButton" Text="{Loc 'cmu-global-loadout-button'}"/>
                             <Button Name="ImportButton" Text="{Loc 'humanoid-profile-editor-import-button'}"/>
                             <Button Name="ExportButton" Text="{Loc 'humanoid-profile-editor-export-button'}"/>
                             <Button Name="ExportImageButton" Text="{Loc 'humanoid-profile-editor-export-image-button'}"/>
