@@ -1,0 +1,196 @@
+# Fixed snow variants used by USCM cold-weather apparel vendors.
+- type: entity
+  parent: AU14CamoM10Helmet
+  id: AU14SnowM10Helmet
+  name: Snow M10 Helmet
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/SnowHats/m10helmet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/SnowHats/m10helmet.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorM3Smooth
+  id: AU14SnowArmorM3Smooth
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/SnowArmor/uscmarmorone.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorM3Ribbed
+  id: AU14SnowArmorM3Ribbed
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/SnowArmor/uscmarmortwo.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorM3Dimpled
+  id: AU14SnowArmorM3Dimpled
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/SnowArmor/uscmarmorthree.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: CMBackpackMarine
+  id: AU14SnowBackpackMarine
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/snow-urban.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: CMSatchelMarine
+  id: AU14SnowSatchelMarine
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/standard/snow-urban.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: CMBeltMarine
+  id: AU14SnowBeltMarine
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/marine/snow-urban.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/marine/snow-urban.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: CMUBeltCombatSidearmRig
+  id: AU14SnowBeltCombatSidearmRig
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
+  - type: Clothing
+    sprite: CMU14/Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: RMCM276ShotgunShellLoadingRig
+  id: AU14SnowBeltShotgunShellLoadingRig
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/shotgun/snow-urban.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/shotgun/snow-urban.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: AU14SnowBeltHolsterPistol
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/holster_pistol/snow.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/holster_pistol/snow.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: CMBeltKnifeFilled
+  id: AU14SnowBeltKnifeFilled
+  suffix: Filled, Snow
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/knife/snow-desert-urban.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/knife/snow-desert-urban.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: RMCBeltUtilityGeneral
+  id: AU14SnowBeltUtilityGeneral
+  suffix: Snow
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/sparepouch/snow-urban.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/sparepouch/snow-urban.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorGarbBracer
+  id: AU14SnowArmorGarbBracer
+  suffix: Snow
+  components:
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorGarbThighGuards
+  id: AU14SnowArmorGarbThighGuards
+  suffix: Snow
+  components:
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorGarbShoulderPads
+  id: AU14SnowArmorGarbShoulderPads
+  suffix: Snow
+  components:
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorGarbShinGuards
+  id: AU14SnowArmorGarbShinGuards
+  suffix: Snow
+  components:
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorGarbNeckGuard
+  id: AU14SnowArmorGarbNeckGuard
+  suffix: Snow
+  components:
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoArmorGarbGroinPlate
+  id: AU14SnowArmorGarbGroinPlate
+  suffix: Snow
+  components:
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: AU14CamoKitArmor
+  id: AU14SnowKitArmor
+  suffix: Snow
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14SnowArmorGarbBracer
+    - id: AU14SnowArmorGarbThighGuards
+    - id: AU14SnowArmorGarbShoulderPads
+    - id: AU14SnowArmorGarbShinGuards
+    - id: AU14SnowArmorGarbNeckGuard
+    - id: AU14SnowArmorGarbGroinPlate
