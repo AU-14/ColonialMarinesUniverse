@@ -19,7 +19,7 @@
   - type: CMUNightVisionMalfunction
     checkInterval: 60 # seconds between cut-out rolls while worn and switched on
     malfunctionChance: 0.1 # 10% per roll
-    repairDelay: 3 # seconds of screwdriver work to fix it
+    repairDelay: 60 # seconds of screwdriver work to fix it
 
 # The glow that rides on the wearer while the goggles are working.
 - type: entity
