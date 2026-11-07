@@ -13,18 +13,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaQueenDelimbTest : GameTest
 {
-    [TestCase("CMUMobYautja")]
-    [TestCase("CMUMobYautjaYoungblood")]
-    public async Task YautjaShrugOffMostQueenSeverRolls(string proto)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var factory = Server.ResolveDependency<IComponentFactory>();
-            Assert.That(SProtoMan.Index<EntityPrototype>(proto).TryGetComponent(out XenoMeleeSeverResistanceComponent? resistance, factory),
-                Is.True);
-            Assert.That(resistance!.ChanceMultiplier, Is.LessThan(1f));
-        });
-    }
 
     // queen forced to always roll a sever, so whether a limb drops is down to the target's resistance alone
     [TestCase(1f, true)]

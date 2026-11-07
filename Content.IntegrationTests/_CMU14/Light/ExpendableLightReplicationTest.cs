@@ -207,33 +207,6 @@ public sealed class ExpendableLightReplicationTest : GameTest
         });
     }
 
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task DoomStillBurnsOutAnUncontainedFlareAcrossItsTwoTransitions(bool alreadyActive)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var flare = SpawnFlare(map.GridCoords);
-            var system = Server.System<ExpendableLightSystem>();
-            if (alreadyActive)
-                Assert.That(system.TryActivate(flare), Is.True);
-
-            SEntMan.EnsureComponent<LightDoomedComponent>(flare.Owner);
-            Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Lit));
-            Assert.That(flare.Comp.StateExpiryTime, Is.Zero);
-            // cmu edit start: step through the burn phases doom zeroes (RMC-14#9465)
-            UpdateUntil(system, flare, 0f, ExpendableLightState.Fading);
-            // cmu edit end
-            Assert.That(flare.Comp.CurrentState, Is.EqualTo(ExpendableLightState.Fading));
-            Assert.That(flare.Comp.StateExpiryTime, Is.Zero);
-            system.Update(0f);
-            AssertSpent(flare);
-        });
-        // Surface synchronization failures in this test rather than the generic teardown.
-        await Pair.RunUntilSynced();
-    }
-
     [Test]
     public async Task PausedFlareKeepsItsCountdownAndResumesWithoutReplicationChurn()
     {

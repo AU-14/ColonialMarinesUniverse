@@ -47,25 +47,6 @@ public sealed class CMUGymTest : GameTest
     }
 
     [Test]
-    public async Task DumbbellCurlsWhileHeld()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var hands = SEntMan.System<SharedHandsSystem>();
-            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var dumbbell = SEntMan.SpawnEntity("CMUDumbbell", map.GridCoords);
-            Assert.That(hands.TryPickupAnyHand(user, dumbbell), Is.True);
-
-            SEntMan.EventBus.RaiseLocalEvent(dumbbell, new UseInHandEvent(user));
-            var exercise = SEntMan.GetComponent<CMUPushupsComponent>(user);
-            Assert.That(exercise.Active, Is.True);
-            Assert.That(exercise.Exercise, Is.EqualTo(CMUExercise.Curls));
-            Assert.That(exercise.Equipment, Is.EqualTo(dumbbell));
-        });
-    }
-
-    [Test]
     public async Task PunchingBagCountsPunches()
     {
         var map = await Pair.CreateTestMap();

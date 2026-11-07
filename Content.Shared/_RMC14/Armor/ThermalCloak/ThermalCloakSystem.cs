@@ -311,6 +311,10 @@ public sealed partial class ThermalCloakSystem : EntitySystem
 
     public Entity<ThermalCloakComponent>? FindWornCloak(EntityUid player)
     {
+        // CMU14: a mob can be its own cloak (the Early Warning Joe's scoured scout cloak)
+        if (TryComp<ThermalCloakComponent>(player, out var own))
+            return (player, own);
+
         var slots = _inventory.GetSlotEnumerator(player, SlotFlags.BACK);
         while (slots.MoveNext(out var slot))
         {

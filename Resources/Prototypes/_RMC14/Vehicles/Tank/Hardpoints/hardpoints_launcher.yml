@@ -54,6 +54,7 @@
     maxIntensity: 30
     maxDuration: 20
     maxRange: 9
+    allowBlueFire: true # CMU14: vehicle flamer keeps its full reach and cone (maxIntensity 30 still keeps it off blue)
     reagentWhitelist:
     - RMCNapalmUTTank
   - type: RMCFlushableSolution

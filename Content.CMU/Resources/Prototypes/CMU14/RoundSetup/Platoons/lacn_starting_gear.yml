@@ -236,6 +236,7 @@
     gloves: CMULACNGlovesService
     shoes: CMULACNBootsWhiteFilled
   inhand:
+  - CMUKitPlatoonCommander
   - AU14TabletGovfor
   storage:
     back:
@@ -354,6 +355,7 @@
     gloves: CMULACNGlovesService
     shoes: CMULACNBootsWhiteFilled
   inhand:
+  - CMUKitPlatoonCommander
   - AU14TabletOpfor
   storage:
     back:

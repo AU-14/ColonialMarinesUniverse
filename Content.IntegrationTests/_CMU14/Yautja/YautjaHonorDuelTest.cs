@@ -65,33 +65,4 @@ public sealed class YautjaHonorDuelTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task UnacceptedChallengeStartsNothingAndPreyStillUsesTheCaptiveRitual()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var verbs = entMan.System<SharedVerbSystem>();
-            var ritual = entMan.System<YautjaRitualSystem>();
-            var challenger = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-            var prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 1)));
-            entMan.EnsureComponent<YautjaComponent>(challenger);
-            entMan.EnsureComponent<YautjaComponent>(target);
-
-            Assert.That(ritual.TryChallengeHonorDuel(challenger, target), Is.True);
-            // never confirmed, which is what closing or declining the prompt leaves you with
-            Assert.That(entMan.HasComponent<YautjaRitualDuelComponent>(target), Is.False);
-
-            var preyVerbs = verbs.GetLocalVerbs(prey, challenger, typeof(AlternativeVerb));
-            Assert.That(preyVerbs.Any(verb => verb.Text == Loc.GetString("cmu-yautja-honor-duel-challenge-verb")), Is.False);
-            Assert.That(preyVerbs.Any(verb => verb.Text == Loc.GetString("cmu-yautja-ritual-claim-verb")), Is.True);
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

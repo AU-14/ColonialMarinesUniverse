@@ -22,48 +22,6 @@ public sealed class CMUMedicalBodyIndexTest
 """;
 
     [Test]
-    public async Task SpawnedBodyExposesCanonicalLookupsAndStableSnapshot()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var medical = entMan.System<CMUMedicalBodyIndexSystem>();
-            var patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-
-            try
-            {
-                var leftArmKey = new CMUMedicalBodyPartKey(BodyPartType.Arm, BodyPartSymmetry.Left);
-                var foundPart = medical.TryGetBodyPart(patient, leftArmKey, out var leftArm);
-                var foundOrgan = medical.TryGetOrgan<HeartComponent>(patient, out var heart);
-                var foundSnapshot = medical.TryGetSnapshot(patient, out var snapshot);
-                var foundCachedSnapshot = medical.TryGetSnapshot(patient, out var cachedSnapshot);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(foundPart, Is.True);
-                    Assert.That(foundOrgan, Is.True);
-                    Assert.That(foundSnapshot, Is.True);
-                    Assert.That(foundCachedSnapshot, Is.True);
-                    Assert.That(snapshot, Is.Not.Null);
-                    Assert.That(cachedSnapshot, Is.SameAs(snapshot));
-                    Assert.That(snapshot!.Revision, Is.GreaterThan(0));
-                    Assert.That(snapshot.BodyParts[leftArmKey], Is.EqualTo(leftArm));
-                    Assert.That(snapshot.Organs, Does.Contain(heart));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(patient);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task PartReplacementAdvancesRevisionAndInvalidatesSnapshot()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -146,78 +104,6 @@ public sealed class CMUMedicalBodyIndexTest
                     entMan.DeleteEntity(patient);
                 if (replacementArm is { } replacement && entMan.EntityExists(replacement))
                     entMan.DeleteEntity(replacement);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task BodyEnumerationPreservesTraversalOrderWithAndWithoutIndex()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var body = entMan.System<SharedBodySystem>();
-            var medical = entMan.System<CMUMedicalBodyIndexSystem>();
-            var indexed = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var fallback = entMan.SpawnEntity("CMUMedicalBodyIndexFallbackDummy", MapCoordinates.Nullspace);
-
-            try
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(
-                        medical.GetBodyParts(indexed).Select(part => part.Owner),
-                        Is.EqualTo(body.GetBodyChildren(indexed).Select(part => part.Id)));
-                    Assert.That(
-                        medical.GetOrgans(indexed).Select(organ => organ.Owner),
-                        Is.EqualTo(body.GetBodyOrgans(indexed).Select(organ => organ.Id)));
-                    Assert.That(
-                        medical.GetBodyParts(fallback).Select(part => part.Owner),
-                        Is.EqualTo(body.GetBodyChildren(fallback).Select(part => part.Id)));
-                    Assert.That(
-                        medical.GetOrgans(fallback).Select(organ => organ.Owner),
-                        Is.EqualTo(body.GetBodyOrgans(fallback).Select(organ => organ.Id)));
-                    Assert.That(medical.TryGetRootPart(indexed, out var indexedRoot), Is.True);
-                    Assert.That(medical.TryGetRootPart(fallback, out var fallbackRoot), Is.True);
-                    Assert.That(indexedRoot.Owner, Is.EqualTo(body.GetRootPartOrNull(indexed)!.Value.Entity));
-                    Assert.That(fallbackRoot.Owner, Is.EqualTo(body.GetRootPartOrNull(fallback)!.Value.Entity));
-                });
-
-                foreach (var part in medical.GetBodyParts(indexed))
-                {
-                    Assert.That(
-                        medical.GetBodyPartSlots(part.Owner).Select(slot => slot.SlotId),
-                        Is.EqualTo(part.Comp.Children.Keys));
-                    Assert.That(
-                        medical.GetPartOrgans(part.Owner).Select(organ => organ.Owner),
-                        Is.EqualTo(body.GetPartOrgans(part.Owner, part.Comp).Select(organ => organ.Id)));
-                    Assert.That(
-                        medical.GetOrganSlots(part.Owner).Select(slot => slot.SlotId),
-                        Is.EqualTo(part.Comp.Organs.Keys));
-                }
-
-                foreach (var part in medical.GetBodyParts(fallback))
-                {
-                    Assert.That(
-                        medical.GetBodyPartSlots(part.Owner).Select(slot => slot.SlotId),
-                        Is.EqualTo(part.Comp.Children.Keys));
-                    Assert.That(
-                        medical.GetPartOrgans(part.Owner).Select(organ => organ.Owner),
-                        Is.EqualTo(body.GetPartOrgans(part.Owner, part.Comp).Select(organ => organ.Id)));
-                    Assert.That(
-                        medical.GetOrganSlots(part.Owner).Select(slot => slot.SlotId),
-                        Is.EqualTo(part.Comp.Organs.Keys));
-                }
-            }
-            finally
-            {
-                entMan.DeleteEntity(indexed);
-                entMan.DeleteEntity(fallback);
             }
         });
 

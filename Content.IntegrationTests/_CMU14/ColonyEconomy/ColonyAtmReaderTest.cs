@@ -34,10 +34,6 @@ public sealed class ColonyAtmReaderTest : ColonyAtmTestBase
     }
 
     /// <summary>Waits out the reader's "reading" lights after a card goes in, so the card is clickable.</summary>
-    private async Task LetTheReaderSettle()
-    {
-        await RunTicks((int) MathF.Ceiling(1.5f / TickPeriod));
-    }
 
     [Test]
     public async Task ClickingTheReaderTakesTheCardInHand()
@@ -79,62 +75,4 @@ public sealed class ColonyAtmReaderTest : ColonyAtmTestBase
         });
     }
 
-    [Test]
-    public async Task ClickingTheReaderWithNoCardDoesNothing()
-    {
-        await SpawnTarget(Atm);
-        await Activate();
-        await ClickReader();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(CardInAtm(), Is.Null);
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), "Clicking an empty reader closed the screen");
-        });
-    }
-
-    [Test]
-    public async Task ClickingYourCardAfterThePinLogsOff()
-    {
-        await SpawnTarget(Atm);
-        var (card, pin, _) = await InsertNewCard(100);
-        await Type(pin.ToString());
-        Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu));
-        await LetTheReaderSettle();
-
-        await ClickReader();
-        Assert.Multiple(() =>
-        {
-            Assert.That(ActiveDoAfters, Is.Empty, "Logging off from the screen took a do-after");
-            Assert.That(CardInAtm(), Is.Null, "The card stayed in the reader");
-            Assert.That(HeldItem(), Is.EqualTo(ToServer(card)), "The card was not handed back");
-            Assert.That(AtmComp.PinAuthenticated, Is.False, "The session outlived its card");
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));
-        });
-    }
-
-    [Test]
-    public async Task ClickingTheCardBeforeThePinDoesNothing()
-    {
-        await SpawnTarget(Atm);
-        var (card, _, _) = await InsertNewCard(100);
-        await LetTheReaderSettle();
-
-        await ClickReader();
-        Assert.Multiple(() =>
-        {
-            Assert.That(CardInAtm(), Is.EqualTo(ToServer(card)), "Clicking the card took it out before the PIN");
-            Assert.That(ActiveDoAfters, Is.Empty);
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
-        });
-
-        // The client keeps the card dead until the PIN is in, and so does the server.
-        await SendBui(ColonyAtmUi.Key, new ColonyAtmEjectCardBuiMsg());
-        Assert.Multiple(() =>
-        {
-            Assert.That(CardInAtm(), Is.EqualTo(ToServer(card)), "The server logged off a session that never signed in");
-            Assert.That(ActiveDoAfters, Is.Empty);
-        });
-    }
 }

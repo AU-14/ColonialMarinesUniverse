@@ -55,26 +55,24 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
-    - CMU14ActionXenoPathogenLeap
-    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenPierceLeap
+    - CMU14ActionXenoPathogenRend
     - CMU14ActionXenoPathogenCyclone
     - CMU14ActionXenoPathogenMycotoxinInject
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
-  - type: XenoLeap
-    delay: 0
-    knockdownTime: 0
-    range: 5
-    moveDelayTime: 0
+  - type: PathogenPierceLeap
+    range: 6
     plasmaCost: 25
-    leapSound: /Audio/CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
-    destroyObjects: true
-  - type: XenoImpale
     damage:
       types:
-        Blunt: 20
-        Slash: 20
-        Piercing: 20
+        Slash: 30
+  - type: XenoRend
+    damage:
+      types:
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4

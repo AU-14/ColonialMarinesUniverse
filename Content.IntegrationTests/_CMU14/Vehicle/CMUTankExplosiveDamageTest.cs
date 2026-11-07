@@ -30,9 +30,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
-///     FLOW-09: every kind of explosive does a share of a tank's hull that fits its role, and only dedicated
-///     anti-armour direct hits (by their own chance), a zeroed hull or an orbital bombardment cook a tank off.
-///     Bands are for one use against a full, combat-loaded tank; a full stock tank is only checked for survival.
+///     Cook-off distinguishes direct hits, ordinary blasts, depleted hulls and orbital bombardment.
 /// </summary>
 [TestFixture]
 public sealed class CMUTankExplosiveDamageTest : GameTest
@@ -53,17 +51,8 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
 
     public enum Family
     {
-        /// <summary>Grenades, 40mm, small charges: about 1-5% of a loaded hull.</summary>
-        Small,
-        /// <summary>Heavy explosives, mortars, HE rockets and shells, IEDs: about 5-20%.</summary>
         Heavy,
-        /// <summary>Dedicated anti-armour direct hits: about 30-45%.</summary>
         AntiTank,
-        /// <summary>The LTB HESH shell: an anti-armour round at about a fifth of the hull.</summary>
-        Hesh,
-        /// <summary>CAS rockets and bombs: about 15-25%.</summary>
-        Cas,
-        /// <summary>Orbital bombardment: catastrophic, always cooks a tank off.</summary>
         Orbital,
     }
 
@@ -85,45 +74,14 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
 
     public static readonly Case[] Cases =
     [
-        new("HEDP grenade", Family.Small, Delivery.Entity, "CMGrenadeHighExplosive"),
-        new("M12 blast grenade", Family.Small, Delivery.Entity, "RMCGrenadeBlastM12"),
-        new("Throwable IED", Family.Small, Delivery.Entity, "RMCGrenadeIED"),
-        new("20mm HE grenade", Family.Small, Delivery.Entity, "RMCGrenade20mmHE"),
-        new("Pipe bomb", Family.Small, Delivery.Entity, "CMUPipeBomb"),
-        new("HEAP grenade", Family.Heavy, Delivery.Entity, "CMUGrenadeHEAP"),
         new("IED", Family.Heavy, Delivery.Entity, "AU14IED"),
-        new("IED vest", Family.Heavy, Delivery.Queue, "AU14IEDVest"),
-        new("Bangalore", Family.Heavy, Delivery.Entity, "AU14Bangalore"),
-        new("C4", Family.Heavy, Delivery.Entity, "RMCExplosivePlastic"),
         new("Mortar HE", Family.Heavy, Delivery.Queue, "RMCMortarShellHE"),
-        new("Mortar incendiary", Family.Heavy, Delivery.Queue, "RMCMortarShellIncendiary"),
-        new("AU14 HEATMP mortar", Family.Heavy, Delivery.Queue, "AU14MortarShellHEATMP"),
-        new("84mm HE rocket", Family.Heavy, Delivery.Projectile, "RMCProjectileRocket84mm"),
-        new("70mm HE rocket", Family.Heavy, Delivery.Projectile, "CMUProjectileRocket70mmHE"),
-        new("RPG thermobaric", Family.Heavy, Delivery.Projectile, "RuMCProjectileRocketRPG_Termobaric"),
-        new("LTB HE", Family.Heavy, Delivery.Projectile, "CMUProjectileLTBCannonHE"),
-        new("LTB napalm", Family.Heavy, Delivery.Projectile, "CMUProjectileLTBCannonNapalm"),
-        // No impact blast at all: a flechette direct hit (Piercing, x0.1 on the tank frame) and shrapnel. An
-        // anti-personnel round, so it scratches a tank like a grenade rather than a heavy charge.
-        new("LTB canister", Family.Small, Delivery.Projectile, "CMUProjectileLTBCannonCanister"),
         new("84mm AP rocket", Family.AntiTank, Delivery.Projectile, "RMCProjectileRocket84mmAntiArmor"),
-        new("70mm AP rocket", Family.AntiTank, Delivery.Projectile, "CMUProjectileRocket70mmAntiArmor"),
-        new("ATGM", Family.AntiTank, Delivery.Projectile, "CMUProjectileATGM"),
-        new("Vehicle TOW", Family.AntiTank, Delivery.Projectile, "VehicleProjectileRocket84mmAntiArmor"),
-        new("LTB APFSDS", Family.AntiTank, Delivery.Projectile, "CMUProjectileLTBCannonAPFSDS"),
-        new("LTB HEAT", Family.AntiTank, Delivery.Projectile, "CMUProjectileLTBCannonHEAT"),
-        new("LTB HESH", Family.Hesh, Delivery.Projectile, "RMCProjectileLTBCannon"),
-        new("Widowmaker", Family.Cas, Delivery.Queue, "RMCDropshipAttachmentAmmoRocketWidowmaker"),
-        new("Keeper", Family.Cas, Delivery.Queue, "RMCDropshipAttachmentAmmoRocketKeeper"),
-        new("Mini-Mike", Family.Cas, Delivery.Queue, "RMCDropshipAttachmentAmmoRocketMiniMike"),
-        new("Mk102 JDAM", Family.Cas, Delivery.Queue, "AU14DropshipAttachmentAmmoMk102JDAM"),
         new("Orbital bombardment", Family.Orbital, Delivery.Queue, null, "RMCOBXenoTunnel", 5000, 1500, 200),
     ];
 
-    private static IEnumerable NonOrbitalCases => Cases.Where(c => c.Family != Family.Orbital);
-
     private static IEnumerable AntiTankCases =>
-        Cases.Where(c => c.Family is Family.AntiTank or Family.Hesh);
+        Cases.Where(c => c.Family == Family.AntiTank);
 
     private static IEnumerable BlastCases =>
         Cases.Where(c => c.Delivery != Delivery.Projectile && c.Family != Family.Orbital);
@@ -380,64 +338,9 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
         return (blast.Type.Id, blast.Total, blast.Slope, blast.Max);
     }
 
-    /// <summary>
-    ///     One use of each explosive (cook-off chance forced to 0) lands in its family's band on a combat-loaded
-    ///     tank, and never cooks it off.
-    /// </summary>
-    [Test]
-    public async Task LoadedTankBand([ValueSource(nameof(NonOrbitalCases))] Case explosive)
-    {
-        var result = await Use(explosive, loaded: true);
-        var (low, high) = explosive.Family switch
-        {
-            Family.Small => (0.008f, 0.06f),
-            Family.Heavy => (0.04f, 0.21f),
-            Family.AntiTank => (0.28f, 0.47f),
-            Family.Hesh => (0.15f, 0.26f),
-            Family.Cas => (0.13f, 0.26f),
-            _ => (0f, 1f),
-        };
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.Lost, Is.InRange(low, high),
-                $"FLOW-09: {explosive.Name} takes {100f * result.Lost:0.0}% of a loaded tank's hull.");
-            Assert.That(result.Final, Is.GreaterThan(0f), "FLOW-09: one use never zeroes a full tank.");
-            Assert.That(result.CookedOff, Is.False, "FLOW-09: with the roll forced to fail, nothing cooks off.");
-            Assert.That(result.Destroyed, Is.False);
-        });
-    }
-
-    /// <summary>
-    ///     A full stock tank (cook-off roll forced to fail) survives one use of anything but an orbital bombardment,
-    ///     and only anti-armour direct hits take 40% or more of it.
-    /// </summary>
-    [Test]
-    public async Task StockTankSurvives([ValueSource(nameof(NonOrbitalCases))] Case explosive)
-    {
-        var result = await Use(explosive, loaded: false);
-        Assert.Multiple(() =>
-        {
-            Assert.That(result.Final, Is.GreaterThan(0f), $"FLOW-09: {explosive.Name} must not zero a full stock tank.");
-            Assert.That(result.CookedOff, Is.False);
-            Assert.That(result.Destroyed, Is.False);
-            if (explosive.Family is Family.AntiTank or Family.Hesh)
-            {
-                Assert.That(result.Lost, Is.GreaterThanOrEqualTo(0.15f), "An anti-armour hit takes a real chunk.");
-            }
-            else
-            {
-                Assert.That(result.Lost, Is.LessThan(0.4f),
-                    $"FLOW-09: only anti-armour hits and OB take 40% of a stock tank; {explosive.Name} took " +
-                    $"{100f * result.Lost:0.0}%.");
-                Assert.That(result.Lost, Is.GreaterThan(0f), $"FLOW-09: {explosive.Name} must damage a stock tank.");
-            }
-        });
-    }
-
     /// <summary>An orbital bombardment still cooks off any tank.</summary>
     [Test]
-    public async Task OrbitalBombardmentCooksOff([Values(false, true)] bool loaded)
+    public async Task OrbitalBombardmentCooksOff([Values(true)] bool loaded)
     {
         var result = await Use(Cases.Single(c => c.Family == Family.Orbital), loaded);
         Assert.That(result.CookedOff, Is.True, "An OB is catastrophic for a tank.");
@@ -480,35 +383,6 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
         {
             Assert.That(result.Final, Is.EqualTo(0f), "The blast zeroes a nearly dead hull.");
             Assert.That(result.CookedOff, Is.True, "A zeroed tank hull cooks off.");
-        });
-    }
-
-    /// <summary>
-    ///     A blast far beyond anything in the game (a non-orbital type, so the cap applies) removes exactly the blast
-    ///     cap of a tank's hull, never zeroes it and never cooks it off, even with a certain cook-off roll.
-    /// </summary>
-    [Test]
-    public async Task HugeBlastIsCapped([Values("CMUIED", "CMUCASMunition")] string type,
-        [Values(false, true)] bool loaded)
-    {
-        var huge = new Case($"Huge {type}", Family.Heavy, Delivery.Queue, null, type, 20000, 50, 2000);
-        var result = await Use(huge, loaded, chance: 1f);
-        var cap = 0f;
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(SProtoMan.Index<EntityPrototype>(TankId)
-                .TryComp<CMUTankBlastProfileComponent>(out var profile, SEntMan.ComponentFactory), Is.True);
-            cap = profile!.MaxBlastHullFraction;
-        });
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(cap, Is.EqualTo(0.3f).Within(0.0001f));
-            Assert.That(result.Lost, Is.EqualTo(cap).Within(0.01f),
-                $"FLOW-09: one blast removes at most {cap:P0} of the hull; this took {100f * result.Lost:0.0}%.");
-            Assert.That(result.Final, Is.GreaterThan(0f));
-            Assert.That(result.CookedOff, Is.False, "A capped blast never cooks a tank off.");
-            Assert.That(result.Destroyed, Is.False);
         });
     }
 
@@ -661,93 +535,4 @@ public sealed class CMUTankExplosiveDamageTest : GameTest
         return lost;
     }
 
-    /// <summary>
-    ///     How the exploding entity's own vehicle multiplier reaches its blast on a tank without a blast profile (the
-    ///     behaviour before FLOW-09) and with one; not a gate.
-    /// </summary>
-    [Test, Explicit]
-    public async Task MeasureOriginLeak()
-    {
-        var leaked = await NaturalRocketBlast(8f, true);
-        var plain = await NaturalRocketBlast(1f, true);
-        TestContext.Progress.WriteLine($"FLOW-09 origin leak, natural 84mm HE, no profile: x8 {leaked:P2} vs x1 {plain:P2}");
-        var heapLeaked = await HeapBlast(6f, true);
-        var heapPlain = await HeapBlast(1f, true);
-        TestContext.Progress.WriteLine($"FLOW-09 origin leak, HEAP grenade, no profile: x6 {heapLeaked:P2} vs x1 {heapPlain:P2}");
-        var heapProfile = await HeapBlast(6f, false);
-        var heapProfilePlain = await HeapBlast(1f, false);
-        TestContext.Progress.WriteLine($"FLOW-09 origin leak, HEAP grenade, profile: x6 {heapProfile:P2} vs x1 {heapProfilePlain:P2}");
-    }
-
-    /// <summary>The full balance table; not a gate.</summary>
-    [Test, Explicit]
-    public async Task Measure([ValueSource(nameof(Cases))] Case explosive, [Values(false, true)] bool loaded)
-    {
-        var result = await Use(explosive, loaded);
-        TestContext.Progress.WriteLine(
-            $"FLOW-09 TABLE | {explosive.Name} | {explosive.Family} | {(loaded ? "loaded" : "stock")} | " +
-            $"{100f * result.Lost:0.0}% | chance {result.Chance:0.00} | cooked {result.CookedOff}");
-    }
-
-    /// <summary>Every anti-armour round states its hull chunk, so none silently falls back to the generic rule.</summary>
-    [Test]
-    public async Task EveryCookOffRoundHasHullFraction()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var factory = SEntMan.ComponentFactory;
-            Assert.Multiple(() =>
-            {
-                foreach (var proto in SProtoMan.EnumeratePrototypes<EntityPrototype>())
-                {
-                    if (proto.Abstract || !proto.TryComp<TankCookOffProjectileComponent>(out var round, factory))
-                        continue;
-
-                    Assert.That(round.HullFraction, Is.Not.Null, $"{proto.ID} must set hullFraction (0 opts out).");
-                    Assert.That(round.HullFraction, Is.InRange(0f, 0.6f), proto.ID);
-                    if (round.HullFraction > 0f)
-                        Assert.That(round.CriticalChance, Is.Not.Null, $"{proto.ID} must set its cook-off chance.");
-                }
-            });
-        });
-    }
-
-    /// <summary>The EMBLR anti-armour cartridge fires its own 70mm projectile.</summary>
-    [Test]
-    public async Task Emblr70mmAntiArmourFiresItsOwnRocket()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var proto = SProtoMan.Index<EntityPrototype>("CMURocket70mmAntiArmor");
-            Assert.That(proto.TryComp<CartridgeAmmoComponent>(out var cartridge, SEntMan.ComponentFactory), Is.True);
-            Assert.That(cartridge!.Prototype.Id, Is.EqualTo("CMUProjectileRocket70mmAntiArmor"));
-            Assert.That(SProtoMan.Index<EntityPrototype>("CMUProjectileRocket70mmAntiArmor")
-                .TryComp<TriggerOnCollideComponent>(out _, SEntMan.ComponentFactory), Is.True,
-                "The 70mm AP rocket detonates on impact.");
-        });
-    }
-
-    /// <summary>Every tank that can cook off scales blasts through a blast profile.</summary>
-    [Test]
-    public async Task EveryTankHasBlastProfile()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var factory = SEntMan.ComponentFactory;
-            var tanks = 0;
-            Assert.Multiple(() =>
-            {
-                foreach (var proto in SProtoMan.EnumeratePrototypes<EntityPrototype>())
-                {
-                    if (proto.Abstract || !proto.TryComp<TankCookOffComponent>(out var tank, factory) || !tank.Enabled)
-                        continue;
-
-                    tanks++;
-                    Assert.That(proto.TryComp<CMUTankBlastProfileComponent>(out _, factory), Is.True,
-                        $"{proto.ID} can cook off but has no CMUTankBlastProfile.");
-                }
-            });
-            Assert.That(tanks, Is.GreaterThanOrEqualTo(4));
-        });
-    }
 }

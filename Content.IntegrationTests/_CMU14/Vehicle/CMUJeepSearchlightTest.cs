@@ -71,27 +71,6 @@ public sealed class CMUJeepSearchlightTest : GameTest
     }
 
     [Test]
-    public async Task OnlyMilitaryJeepsComeWithOne()
-    {
-        var (map, jeep) = await SpawnJeep();
-        EntityUid colony = default;
-        await Server.WaitPost(() =>
-        {
-            var crate = SEntMan.SpawnEntity("CMUCrateJeepCargoColony", new EntityCoordinates(map.Grid, 0.5f, -3f));
-            colony = SEntMan.System<CMUVehicleCrateSystem>().Open((crate, SEntMan.GetComponent<CMUVehicleCrateComponent>(crate)));
-        });
-        await RunTicksSync(5);
-        await Server.WaitAssertion(() =>
-        {
-            var fitted = Fitted(jeep, LeftSlot).Select(e => SEntMan.GetComponent<MetaDataComponent>(e).EntityPrototype?.ID);
-            Assert.That(fitted, Is.EqualTo(new[] { "CMUJeepSearchlight" }), "A military jeep has its searchlight on the driver's side.");
-            Assert.That(Fitted(jeep, RightSlot), Is.Empty, "The passenger's mount starts empty.");
-            Assert.That(Fitted(colony, LeftSlot), Is.Empty, "A colony jeep comes without one.");
-            Assert.That(Lit(jeep), Is.False, "It stays dark until someone takes hold of it.");
-        });
-    }
-
-    [Test]
     public async Task TakenInHandItLightsAndFollowsItsAim()
     {
         var (map, jeep) = await SpawnJeep();

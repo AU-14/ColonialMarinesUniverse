@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Chemistry; // CMU14
 using Content.Shared._RMC14.Throwing;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -56,6 +57,10 @@ namespace Content.Shared.Throwing
             {
                 args.Cancelled = true;
             }
+
+            if (HasComp<CMUThrownIgnoresBarricadeBlockComponent>(uid)) // CMU14: spray vapor always touches barricades
+                return;
+
             //check for BarricadeBlock component (percentage of chance to hit/pass over)
             if (TryComp(args.OtherEntity, out BarricadeBlockComponent? BarricadeBlock))
             {

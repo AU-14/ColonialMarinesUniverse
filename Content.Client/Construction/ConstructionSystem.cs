@@ -449,12 +449,14 @@ namespace Content.Client.Construction
                 {
                     if (showPopup)
                     {
-                        var message = condition.GenerateGuideEntry()?.Localization;
-                        if (message != null)
+                        // CMU14 Begin: conditions supply arguments such as the required skill and level.
+                        var entry = condition.GenerateGuideEntry();
+                        if (entry != null)
                         {
                             // Show the reason to the user:
-                            _popupSystem.PopupCoordinates(Loc.GetString(message), loc);
+                            _popupSystem.PopupCoordinates(Loc.GetString(entry.Localization, entry.Arguments ?? []), loc);
                         }
+                        // CMU14 End
                     }
 
                     return false;

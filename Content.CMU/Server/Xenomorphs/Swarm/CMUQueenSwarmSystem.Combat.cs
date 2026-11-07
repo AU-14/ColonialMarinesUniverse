@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.CMU14.Xenomorphs.Swarm;
 using Content.Shared._RMC14.Entrenching;
+using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Physics;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
@@ -10,6 +11,24 @@ namespace Content.Server.CMU14.Xenomorphs.Swarm;
 public sealed partial class CMUQueenSwarmSystem
 {
     [Dependency] private SharedPhysicsSystem _physics = default!;
+
+    private void InitializeCombat()
+    {
+        SubscribeLocalEvent<CMUSwarmLesserComponent, MeleeHitEvent>(OnLesserMeleeHit);
+    }
+
+    private void OnLesserMeleeHit(Entity<CMUSwarmLesserComponent> ent, ref MeleeHitEvent args)
+    {
+        // A facehugger may attach after the swarm selected this target but before its attack lands.
+        foreach (var target in args.HitEntities)
+        {
+            if (!IsProtectedCapture(target))
+                continue;
+
+            args.Handled = true;
+            return;
+        }
+    }
 
     private EntityUid? SelectEnemy(EntityUid member, Dictionary<EntityUid, TimeSpan> sightings, Dictionary<EntityUid, int> assigned,
         CMUSwarmAgentComponent agent, EntityUid anchor, float leash)

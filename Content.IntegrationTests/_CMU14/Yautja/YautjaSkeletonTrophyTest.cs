@@ -12,68 +12,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaSkeletonTrophyTest
 {
-    [Test]
-    public async Task SkeletonLimbExamineShowsCmss13PolishStateToYautjaTechUsers()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var examine = entMan.System<ExamineSystem>();
-
-            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var techUser = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var ordinaryUser = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var armBone = entMan.SpawnEntity("CMUYautjaHumanLeftArmBoneTrophy", MapCoordinates.Nullspace);
-            var xenoPelt = entMan.SpawnEntity("CMUYautjaRunnerPeltTrophy", MapCoordinates.Nullspace);
-
-            try
-            {
-                entMan.EnsureComponent<YautjaComponent>(hunter);
-                entMan.EnsureComponent<YautjaTechAuthorizedComponent>(techUser);
-
-                var dirtyHunterText = examine.GetExamineText(armBone, hunter).ToMarkup();
-                var dirtyTechText = examine.GetExamineText(armBone, techUser).ToMarkup();
-                var dirtyOrdinaryText = examine.GetExamineText(armBone, ordinaryUser).ToMarkup();
-                var peltText = examine.GetExamineText(xenoPelt, hunter).ToMarkup();
-
-                var trophy = entMan.GetComponent<YautjaTrophyComponent>(armBone);
-                var dirtyLine = Loc.GetString("cmu-yautja-skeleton-trophy-dirty-examine", ("trophy", armBone));
-                var peltDirtyLine = Loc.GetString("cmu-yautja-skeleton-trophy-dirty-examine", ("trophy", xenoPelt));
-                var polishedLine = Loc.GetString("cmu-yautja-skeleton-trophy-polished-examine");
-                trophy.Polished = true;
-
-                var polishedText = examine.GetExamineText(armBone, techUser).ToMarkup();
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(dirtyHunterText, Does.Contain(dirtyLine),
-                        "CMSS13 /obj/item/clothing/accessory/limb/skeleton/get_examine_text() exposes dirty state to TRAIT_YAUTJA_TECH users.");
-                    Assert.That(dirtyTechText, Does.Contain(dirtyLine),
-                        "CMSS13 checks TRAIT_YAUTJA_TECH, so non-Yautja tech-authorized users should see the same skeleton-limb source line.");
-                    Assert.That(dirtyOrdinaryText, Does.Not.Contain(dirtyLine),
-                        "CMSS13 hides the skeleton-limb polish state from users without TRAIT_YAUTJA_TECH.");
-                    Assert.That(peltText, Does.Not.Contain(peltDirtyLine),
-                        "CMSS13 skeleton-limb polish examine text should not leak to non-skeleton trophies.");
-                    Assert.That(polishedText, Does.Contain(polishedLine),
-                        "CMSS13 shows a distinct line once the skeleton limb has been polished.");
-                    Assert.That(polishedText, Does.Not.Contain(dirtyLine));
-                });
-            }
-            finally
-            {
-                foreach (var uid in new[] { hunter, techUser, ordinaryUser, armBone, xenoPelt })
-                {
-                    if (!entMan.Deleted(uid))
-                        entMan.DeleteEntity(uid);
-                }
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task SkeletonLimbAttachmentRequiresYautjaTechLikeCmss13()

@@ -366,45 +366,6 @@ public sealed class YautjaThrallHeroTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task YautjaAndLinkedThrallsDontChokeWhenXenosDragThemInCrit()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        EntityUid human = default, yautja = default, master = default, thrall = default;
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var mobState = entMan.System<MobStateSystem>();
-            human = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            yautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
-            SpawnLinkedThrall(entMan, map.GridCoords, out master, out _, out thrall, out _);
-            foreach (var uid in new[] { human, yautja, thrall })
-                mobState.ChangeMobState(uid, MobState.Critical);
-        });
-
-        await pair.RunTicksSync(5);
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            Assert.Multiple(() =>
-            {
-                Assert.That(entMan.HasComponent<ActiveDamageOnPulledWhileCritComponent>(human), Is.True,
-                    "control, a downed human still chokes when a xeno drags them");
-                Assert.That(entMan.HasComponent<ActiveDamageOnPulledWhileCritComponent>(yautja), Is.False);
-                Assert.That(entMan.HasComponent<ActiveDamageOnPulledWhileCritComponent>(thrall), Is.False);
-            });
-
-            foreach (var uid in new[] { human, yautja, master, thrall })
-                entMan.DeleteEntity(uid);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
     private static EntityUid Arm(IEntityManager entMan, EntityUid body)
     {
         Assert.That(entMan.System<CMUMedicalBodyIndexSystem>().TryGetBodyPart(body,

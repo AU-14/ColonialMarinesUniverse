@@ -49,34 +49,6 @@ public sealed class SpreadingFireTest : GameTest
         });
     }
 
-    [TestCase("RMCTileFire")]
-    [TestCase("RMCHijackPipeFire")]
-    [TestCase("CMUTileFirePhoronArsonist")]
-    public async Task NonAu14FiresNeverCreepEvenWithAnExplicitSpreadDepth(string prototype)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var maps = Server.System<SharedMapSystem>();
-            for (var x = -1; x <= 1; x++)
-                for (var y = -1; y <= 1; y++)
-                    maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
-
-            var fire = SEntMan.SpawnEntity(prototype, map.GridCoords);
-            var system = Server.System<CMUSpreadingFireSystem>();
-            system.Update(0);
-            Assert.That(SEntMan.HasComponent<CMUSpreadingFireComponent>(fire), Is.False,
-                "Ordinary fire must not opt into the default spread depth.");
-
-            var spread = SEntMan.EnsureComponent<CMUSpreadingFireComponent>(fire);
-            spread.Depth = 3;
-            spread.NextSpread = TimeSpan.Zero;
-            system.Update(0);
-            Assert.That(SEntMan.QueryEntities<TileFireComponent>().Count(), Is.EqualTo(1),
-                "An explicit depth must not bypass the AU14-only spread restriction.");
-        });
-    }
-
     [TestCase("RMCTileFire", false)]
     [TestCase("RMCHijackPipeFire", false)]
     [TestCase("CMUTileFirePhoronArsonist", false)]

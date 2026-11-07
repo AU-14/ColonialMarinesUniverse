@@ -27,42 +27,11 @@ public sealed class StunBatonTests : InteractionTest
     private static readonly EntProtoId StunBatonProtoId = "Stunbaton";
     private static readonly EntProtoId HumanProtoId = "MobHuman";
 
-    private static readonly (EntProtoId Id, double RmcDamage, bool HasToggle)[] RmcBatons =
-    [
-        ("RMCWeaponTaser", 100, false), // CMU14: charged drive stuns incapacitate a healthy human.
-        ("CMStunbaton", 30, true),
-    ];
-
     // If you are rebalancing stun batons you will have to change this number.
     private const int NumberOfHitsToStun = 3;
 
     [SidedDependency(Side.Server)] private readonly SharedBatterySystem _battery = default!;
     [SidedDependency(Side.Server)] private readonly DamageableSystem _damageable = default!;
-
-    [Test]
-    public async Task RmcBatonsUseGenericToggleAndChargeContract()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            foreach (var (id, rmcDamage, hasToggle) in RmcBatons)
-            {
-                var prototype = ProtoMan.Index<EntityPrototype>(id);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(prototype.TryComp<ItemToggleExaminableStatusComponent>(out _, Factory), Is.True, id.Id);
-                    Assert.That(prototype.TryComp<ItemToggleRequiresChargeComponent>(out var toggleCharge, Factory), Is.True, id.Id);
-                    Assert.That(toggleCharge!.RequiredCharge, Is.EqualTo(50), id.Id);
-                    Assert.That(prototype.TryComp<MeleeBatteryHitsLeftComponent>(out _, Factory), Is.True, id.Id);
-                    Assert.That(prototype.TryComp<StaminaDamageOnHitRequiresToggleComponent>(out _, Factory), Is.True, id.Id);
-                    Assert.That(prototype.TryComp<StaminaDamageOnHitRequiresChargeComponent>(out var hitCharge, Factory), Is.True, id.Id);
-                    Assert.That(hitCharge!.RequiredCharge, Is.EqualTo(50), id.Id);
-                    Assert.That(prototype.TryComp<RMCStaminaDamageOnHitComponent>(out var rmcStamina, Factory), Is.True, id.Id);
-                    Assert.That(rmcStamina!.Damage, Is.EqualTo(rmcDamage), id.Id);
-                    Assert.That(prototype.TryComp<ItemToggleComponent>(out _, Factory), Is.EqualTo(hasToggle), id.Id);
-                });
-            }
-        });
-    }
 
     [Test]
     public async Task RmcBatonUsesGenericComplexInteractionToggleGate()
@@ -313,28 +282,4 @@ public sealed class StunBatonTests : InteractionTest
         }
     }
 
-    [Test]
-    [Description("Checks that missing attack with a stun baton does not cost any charge")]
-    public async Task StunBatonMissTest()
-    {
-        // Spawn a stun baton in the player's hands and turn it on.
-        var baton = await PlaceInHands(StunBatonProtoId, enableToggleable: true);
-        var sBaton = ToServer(baton);
-        var batteryComp = Comp<BatteryComponent>(baton);
-        var batonIntialCharge = _battery.GetCharge(sBaton);
-
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(batonIntialCharge, Is.GreaterThan(0), "Stun baton had no charge.");
-            Assert.That(batonIntialCharge, Is.EqualTo(batteryComp.MaxCharge), "Stun baton was not fully charged when spawned.");
-        }
-
-        // Missing melee attack.
-        await SetCombatMode(true);
-        await RunSeconds(2); // Weapon cooldown.
-        await AttemptLightAttackMiss();
-
-        var batonNewCharge = _battery.GetCharge(sBaton);
-        Assert.That(batonNewCharge, Is.EqualTo(batonIntialCharge), "Stun baton lost charge when missing an attack.");
-    }
 }

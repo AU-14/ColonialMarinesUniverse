@@ -54,6 +54,19 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
         if (!_mobState.IsDead(ent.Owner))
             return;
 
+        // an Early Warning Joe stays down (D3); the verb stays visible but refuses, so the player learns why
+        if (HasComp<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeComponent>(ent.Owner))
+        {
+            args.Verbs.Add(new()
+            {
+                Text = Loc.GetString("working-joe-reboot-verb"),
+                Disabled = true,
+                Message = Loc.GetString("working-joe-reboot-refused-ew"),
+                Priority = 2
+            });
+            return;
+        }
+
         if (!TryComp(ent.Owner, out DamageableComponent? damageable))
             return;
 

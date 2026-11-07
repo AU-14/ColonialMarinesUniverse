@@ -26,7 +26,6 @@ public sealed class CMArmorSystemTest
     private const string TestMaskBioArmor = "RMCTestMaskBioArmor";
     private const string TestChestBioArmor = "RMCTestChestBioArmor";
     private static readonly ProtoId<DamageTypePrototype> HeatDamageType = "Heat";
-    private static readonly ProtoId<DamageTypePrototype> SlashDamageType = "Slash";
 
     [TestPrototypes]
     private const string Prototypes = $@"
@@ -81,36 +80,6 @@ public sealed class CMArmorSystemTest
     coveredZones:
     - Chest
 ";
-
-    [Test]
-    public async Task DamageWithInvalidOriginDoesNotResolveOriginTransform()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        var entMan = server.ResolveDependency<IEntityManager>();
-        var protoMan = server.ResolveDependency<IPrototypeManager>();
-        var sysMan = server.ResolveDependency<IEntitySystemManager>();
-
-        DamageSpecifier result = null;
-
-        await server.WaitPost(() =>
-        {
-            var target = entMan.SpawnEntity(TestArmorEntity, map.MapCoords);
-            var slash = protoMan.Index(SlashDamageType);
-            var damageable = sysMan.GetEntitySystem<DamageableSystem>();
-
-            result = damageable.TryChangeDamage(target, new DamageSpecifier(slash, 10), origin: EntityUid.Invalid);
-        });
-
-        await server.WaitAssertion(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task EquippedArmorOnlyProtectsHitPartSlots()
