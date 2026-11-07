@@ -9,19 +9,51 @@
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
-  id: CMUIDCardIntelParamilitaryOfficer
-  name: intelligence paramilitary officer ID card
+  id: CMUIDCardIntelGRUSpetsnazOfficer
+  name: GRU Spetsnaz officer ID card
   components:
   - type: PresetIdCard
-    job: CMUJobIntelParamilitaryOfficer
+    job: CMUJobIntelGRUSpetsnazOfficer
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
-  id: CMUIDCardIntelParamilitaryMember
-  name: intelligence paramilitary member ID card
+  id: CMUIDCardIntelGRUSpetsnazMember
+  name: GRU Spetsnaz member ID card
   components:
   - type: PresetIdCard
-    job: CMUJobIntelParamilitaryMember
+    job: CMUJobIntelGRUSpetsnazMember
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCIASADOfficer
+  name: CIA SAD officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCIASADOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCIASADMember
+  name: CIA SAD member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCIASADMember
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelSASOfficer
+  name: SAS detachment officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelSASOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelSASMember
+  name: SAS detachment member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelSASMember
 
 # A Case Officer's cover identity: an ordinary colonist ID that gets the holder's name when they spawn.
 - type: entity

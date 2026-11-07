@@ -26,7 +26,7 @@ public sealed class CMUIntelParamilitaryGearTest : GameTest
         {
             var inventory = Server.System<InventorySystem>();
             var mob = Server.System<StationSpawningSystem>()
-                .SpawnPlayerMob(map.GridCoords, new ProtoId<JobPrototype>("CMUJobIntelParamilitaryMember"), new HumanoidCharacterProfile(), station: null);
+                .SpawnPlayerMob(map.GridCoords, new ProtoId<JobPrototype>("CMUJobIntelGRUSpetsnazMember"), new HumanoidCharacterProfile(), station: null);
             foreach (var slot in new[] { "head", "outerClothing" })
             {
                 if (inventory.TryGetSlotEntity(mob, slot, out var worn))

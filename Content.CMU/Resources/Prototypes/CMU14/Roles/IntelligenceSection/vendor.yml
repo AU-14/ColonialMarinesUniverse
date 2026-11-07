@@ -15,8 +15,12 @@
   - type: CMAutomatedVendor
     jobs:
     - CMUJobIntelCaseOfficer
-    - CMUJobIntelParamilitaryOfficer
-    - CMUJobIntelParamilitaryMember
+    - CMUJobIntelGRUSpetsnazOfficer
+    - CMUJobIntelGRUSpetsnazMember
+    - CMUJobIntelCIASADOfficer
+    - CMUJobIntelCIASADMember
+    - CMUJobIntelSASOfficer
+    - CMUJobIntelSASMember
     sections:
     - name: Foot Wear
       choices: { CMUIntelShoes: 2 }
@@ -103,22 +107,22 @@
       - id: RMCBeltUtilityGeneral
       - id: RMCPouchGeneral
 
-# SIS paramilitary rack: the Three World Empire's light kit, as carried by its backline and aircrew.
+# SAS detachment rack: the Three World Empire's light kit for the SIS's Special Air Service detachment.
 # The Royal Marines' Mk16 helmet, with ear protection alongside.
 - type: entity
   parent: ColMarTechBase
   id: CMUIntelSISParamilitaryVendor
-  name: SIS paramilitary equipment rack
-  description: An automated rack holding light Three World Empire equipment for the Intelligence Section's armed element.
-  suffix: Intelligence Section, SIS
+  name: SAS detachment equipment rack
+  description: An automated rack holding light Three World Empire equipment for the SIS's Special Air Service detachment.
+  suffix: Intelligence Section, SAS
   components:
   - type: CMUVendGunsOnSafety
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   - type: CMAutomatedVendor
     jobs:
-    - CMUJobIntelParamilitaryOfficer
-    - CMUJobIntelParamilitaryMember
+    - CMUJobIntelSASOfficer
+    - CMUJobIntelSASMember
     sections:
     - name: Armor
       choices: { CMUIntelParaArmor: 1 }
@@ -132,6 +136,16 @@
       choices: { CMUIntelParaEars: 1 }
       entries:
       - id: CMUHeadElectronicHearingProtection
+    - name: Face Cover
+      choices: { CMUIntelParaMask: 1 }
+      entries:
+      - id: RMCMaskBalaclava
+      - id: RMCMaskBalaclavaGreen
+    - name: Belt
+      choices: { CMUIntelParaBelt: 1 }
+      entries:
+      - id: AU14BeltMarineRMC
+      - id: AU14BeltHolsterPistolRMC
     - name: Personal Defense Weapon
       choices: { CMUIntelParaPrimary: 1 }
       entries:
@@ -158,22 +172,22 @@
       - id: RMCZipties
         maxPerUser: 2
 
-# CIA paramilitary rack: light Vanguard Arrow (VAIPO) contractor kit, the gear a deniable team would carry.
+# CIA SAD rack: light Vanguard Arrow (VAIPO) contractor kit, the gear a deniable team would carry.
 # No explosives on purpose; flashbangs are the only grenades.
 - type: entity
   parent: ColMarTechBase
   id: CMUIntelCIAParamilitaryVendor
-  name: CIA paramilitary equipment rack
-  description: An automated rack holding light contractor equipment for the Intelligence Section's armed element.
-  suffix: Intelligence Section, CIA
+  name: CIA SAD equipment rack
+  description: An automated rack holding light contractor equipment for the CIA's Special Activities Division team.
+  suffix: Intelligence Section, CIA SAD
   components:
   - type: CMUVendGunsOnSafety
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   - type: CMAutomatedVendor
     jobs:
-    - CMUJobIntelParamilitaryOfficer
-    - CMUJobIntelParamilitaryMember
+    - CMUJobIntelCIASADOfficer
+    - CMUJobIntelCIASADMember
     sections:
     - name: Armor
       choices: { CMUIntelParaArmor: 1 }
@@ -190,6 +204,17 @@
       choices: { CMUIntelParaEars: 1 }
       entries:
       - id: CMUHeadElectronicHearingProtection
+    - name: Face Cover
+      choices: { CMUIntelParaMask: 1 }
+      entries:
+      - id: RMCMaskBalaclava
+      - id: RMCMaskBalaclavaGreen
+      - id: CMMaskCoif
+    - name: Belt
+      choices: { CMUIntelParaBelt: 1 }
+      entries:
+      - id: CMBeltMarine
+      - id: RMCBeltHolsterPistolTSE
     - name: Primary Weapon
       choices: { CMUIntelParaPrimary: 1 }
       entries:
@@ -223,22 +248,22 @@
       - id: RMCZipties
         maxPerUser: 2
 
-# GRU paramilitary rack: a GRU Spetsnaz-style assault element in the Union of Progressive Peoples' heaviest kit.
+# GRU Spetsnaz rack: an assault element in the Union of Progressive Peoples' heaviest kit.
 # The best protection and firepower of the three agencies, paid for in speed: the UH7 slows its wearer heavily.
 - type: entity
   parent: ColMarTechBase
   id: CMUIntelGRUParamilitaryVendor
-  name: GRU paramilitary equipment rack
-  description: An automated rack holding heavy Union of Progressive Peoples assault equipment for the Intelligence Section's armed element.
-  suffix: Intelligence Section, GRU
+  name: GRU Spetsnaz equipment rack
+  description: An automated rack holding heavy Union of Progressive Peoples assault equipment for the GRU Spetsnaz team.
+  suffix: Intelligence Section, GRU Spetsnaz
   components:
   - type: CMUVendGunsOnSafety
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   - type: CMAutomatedVendor
     jobs:
-    - CMUJobIntelParamilitaryOfficer
-    - CMUJobIntelParamilitaryMember
+    - CMUJobIntelGRUSpetsnazOfficer
+    - CMUJobIntelGRUSpetsnazMember
     sections:
     # Each player can take one of each piece; the helmet will not go on without the armor.
     - name: Heavy Armor Set
@@ -250,6 +275,16 @@
       choices: { CMUIntelParaEars: 1 }
       entries:
       - id: CMUHeadElectronicHearingProtection
+    - name: Face Cover
+      choices: { CMUIntelParaMask: 1 }
+      entries:
+      - id: RMCMaskBalaclavaSPPCommando
+      - id: RMCMaskBalaclava
+    - name: Belt
+      choices: { CMUIntelParaBelt: 1 }
+      entries:
+      - id: RMCBeltSPPBrown
+      - id: RMCBeltHolsterPistolSPP
     - name: Primary Weapon
       choices: { CMUIntelParaPrimary: 1 }
       entries:
@@ -350,7 +385,7 @@
     min: 0
     doAfter: 0
 
-# The IASF paratroopers' Goshawk vest, issued to the SIS paramilitary element.
+# The IASF paratroopers' Goshawk vest, issued to the SAS detachment.
 # TODO: the name and description are placeholders until the section's own wording is decided.
 - type: entity
   parent: RMCArmorParaVest
