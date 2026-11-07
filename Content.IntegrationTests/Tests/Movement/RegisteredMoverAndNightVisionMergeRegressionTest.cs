@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Input;
 using Content.Shared.Movement.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using TransientActiveInputMoverComponent = Content.Shared.Movement.Components.ActiveInputMoverComponent;
 
 namespace Content.IntegrationTests.Tests.Movement;
