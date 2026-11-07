@@ -24,6 +24,12 @@ public sealed partial class ItemCamouflageComponent : Component
 
     [DataField, AutoNetworkedField]
     public Dictionary<CamouflageType, string>? CamoDescriptions;
+
+    /// <summary>
+    /// Optional per-item override used by scene actors and other deliberately mixed camouflage loadouts.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public CamouflageType? CamouflageOverride;
 }
 
 [Serializable, NetSerializable]
