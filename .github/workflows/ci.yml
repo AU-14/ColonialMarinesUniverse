@@ -151,8 +151,18 @@ jobs:
                 .map(name => name.trim())
                 .filter(name => name.length > 0);
 
-            const exempt = allowlist.includes(author)
+            let exempt = allowlist.includes(author)
                 || ['OWNER', 'MEMBER'].includes(context.payload.pull_request.author_association);
+
+            // CMU14: outside collaborators can have the repository's maintain role.
+            if (!exempt) {
+              const { data: access } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: author,
+              });
+              exempt = ['admin', 'maintain'].includes(access.role_name);
+            }
 
             if (!exempt) {
               core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
