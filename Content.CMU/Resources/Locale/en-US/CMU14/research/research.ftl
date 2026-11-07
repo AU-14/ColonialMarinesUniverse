@@ -123,10 +123,6 @@ research-data-ui-print = [color=#ffbf00][bold]Print[/bold][/color]
 
 ui-chem-simulator-window-name = Chemical Simulator
 
-research-sim-already-inserted = A report is already inserted.
-research-sim-refused = The simulator rejects the report: it has no chemical data.
-research-sim-refuses = {CAPITALIZE(THE($SCANNER))} refuses {THE($PAPER)}.
-
 research-sim-ui-header-status = Simulator status
 research-sim-ui-header-mode = Mode
 research-sim-ui-header-actions = Actions
@@ -163,6 +159,9 @@ research-sim-ui-price = Price of the operation: {$COST}
 research-sim-ui-selected-ref-conflict = Conflicts with the selected reference property.
 research-sim-ui-selected-targ-conflict = Conflicts with the selected target property.
 
+research-sim-already-inserted = The simulator already has data inserted.
+research-sim-refused = The simulator refuses the empty report.
+research-sim-refuses = {CAPITALIZE(THE($SCANNER))} refuses {THE($PAPER)}.
 cmu-research-reduce-cooldown = [color=#ffbf00][head=3]-60s 1CR[/head][/color]
 research-report-contract-mix-required = This synthesis only takes place once mixed: close the container's lid and use Mix.
 research-report-contract-heat-required = This synthesis only takes place when heated to at least {$TEMP} K: use a hotplate or a microwave.
