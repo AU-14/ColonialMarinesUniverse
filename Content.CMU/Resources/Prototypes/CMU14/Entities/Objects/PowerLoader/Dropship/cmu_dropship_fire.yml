@@ -5,9 +5,9 @@
   components:
   - type: TileFire
     id: CMUTileFireLaserGreen
-    duration: 10
+    duration: 30
   - type: RMCIgniteOnCollide
-    duration: 10
+    duration: 20
     maxStacks: 10
 
 - type: entity
@@ -16,9 +16,9 @@
   components:
   - type: TileFire
     id: CMUTileFireLaserBlue
-    duration: 10
+    duration: 30
   - type: RMCIgniteOnCollide
-    duration: 10
+    duration: 20
     maxStacks: 10
 
 - type: entity
@@ -27,7 +27,7 @@
   components:
   - type: TileFire
     id: CMUTileFireLaserWhite
-    duration: 15
+    duration: 45
   - type: RMCIgniteOnCollide
-    duration: 15
+    duration: 30
     maxStacks: 20
