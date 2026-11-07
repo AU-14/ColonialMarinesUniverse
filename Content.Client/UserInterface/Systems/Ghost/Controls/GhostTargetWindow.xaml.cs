@@ -747,7 +747,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.SectionThralls => 27,
                 GhostWarpGrouping.SectionAbominations => 28,
                 GhostWarpGrouping.SectionMembers => 29,
-                GhostWarpGrouping.SectionThreat => 30, // CMU14
+                GhostWarpGrouping.SectionSummoners => 30,
                 GhostWarpGrouping.SectionLine => 31,
                 GhostWarpGrouping.SectionLinePersonnel => 32,
                 GhostWarpGrouping.SectionPersonnel => 33,
@@ -888,7 +888,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.SectionAbominations => Loc.GetString("ghost-target-window-subtab-abominations"),
                 GhostWarpGrouping.SectionLeaders => Loc.GetString("ghost-target-window-subtab-leaders"),
                 GhostWarpGrouping.SectionMembers => Loc.GetString("ghost-target-window-subtab-members"),
-                GhostWarpGrouping.SectionThreat => Loc.GetString("ghost-target-window-subtab-threat"), // CMU14
+                GhostWarpGrouping.SectionSummoners => Loc.GetString("ghost-target-window-subtab-summoners"),
                 GhostWarpGrouping.SectionWarpPoints => Loc.GetString("ghost-target-window-subtab-warp-points"),
                 _ => name,
             };
@@ -914,7 +914,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
                 GhostWarpGrouping.SectionPersonnel => "Pers",
                 GhostWarpGrouping.SectionUnknownTier => "Unk",
                 GhostWarpGrouping.SectionAbominations => "Abom",
-                GhostWarpGrouping.SectionThreat => "Thr", // CMU14
+                GhostWarpGrouping.SectionSummoners => "Summ",
                 GhostWarpGrouping.SectionWarpPoints => "Warp",
                 _ => GetDisplayName(section),
             };

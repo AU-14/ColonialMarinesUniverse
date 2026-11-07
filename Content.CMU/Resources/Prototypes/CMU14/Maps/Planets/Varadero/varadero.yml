@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "New Varadero"
     mapId: CMUVaradero
-    inRotation: false
     lorePrimer: CMUPrimerPlanetVaradero
     allegiance: UA
     camouflage: Jungle

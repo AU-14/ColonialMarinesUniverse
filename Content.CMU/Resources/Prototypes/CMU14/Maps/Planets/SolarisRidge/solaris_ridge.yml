@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Solaris Ridge"
     mapId: SolarisRidge
-    inRotation: false
     lorePrimer: AU14PrimerPlanetLV1413
     allegiance: UA
     camouflage: Desert

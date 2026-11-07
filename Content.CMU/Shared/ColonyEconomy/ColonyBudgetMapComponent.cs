@@ -9,12 +9,10 @@ namespace Content.Shared.CMU14.ColonyEconomy;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ColonyBudgetMapComponent : Component
 {
-    public const float DefaultBudget = 50_000f;
-
     /// <summary>
     ///     The starting colony budget for this map.
     /// </summary>
     [DataField("budget")]
-    public float Budget = DefaultBudget;
+    public float Budget;
 }
 

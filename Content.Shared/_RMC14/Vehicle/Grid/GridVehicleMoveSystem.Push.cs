@@ -1,7 +1,6 @@
 using System;
 using System.Numerics;
 using Content.Shared.CMU14.Blackfoot;
-using Content.Shared.CMU14.SceneAnimation;
 using Content.Shared.Movement.Components;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Xenonids;
@@ -60,13 +59,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         out bool pushing)
     {
         pushing = false;
-
-        if (TryComp(uid, out CMUSceneMoverComponent? sceneMover))
-        {
-            _activeXenoPushers.Remove(uid);
-            return new VehicleControlInput(sceneMover.Direction, 1f, 0f, CardinalSteering: true);
-        }
-
         if (vehicle.Operator is { } driver && !_actionBlocker.CanConsciouslyPerformAction(driver))
         {
             _activeXenoPushers.Remove(uid);

@@ -5,22 +5,60 @@
   - type: RMCPlanetMapPrototype
     votename: "Stable Garrison Redux"
     mapId: StableGarrisonRedux
-    inRotation: true
     lorePrimer: AU14PrimerPlanetStableGarrison
     allegiance: UA
     camouflage: Jungle
     announcement: "Stable Garrison, a joint UA base and its surrounding settlement, has gone dark. A response force has been dispatched to re-establish contact."
     platoonsGovfor:
+    - LACN
+    - WEYU
     - USCM
+    - CMBCIU
+    - RMC
+    - VAIPO
     platoonsOpfor:
     - UPP
+    - ProdigySF
+    - HAZOPS
     defaultgovfor: USCM
-    defaultopfor: UPP
+    defaultopfor: ProdigySF
     govforinship: false
     opforinship: true
-    daycycleenabled: false
-    thirdpartyinterval: 9999
-    thirdparties: []
+    daycycleenabled: true
+    thirdpartyinterval: 1800
+    thirdparties:
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - NewsCrewThirdParty
+    - UPPGROM
+    - UPPGROMAlt
+    - UPPGROMAlt2
+    - USArmyTank
+    - UACGLostTeam
+    - LACNSniperteam
+    - cultistThirdParty
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - cultistThirdPartyNoQueen
+    - ProfessorVonBandolier
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - IPIE
+    - IPIESynth
+    - WYHT
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - biomorphThirdParty
+    - tribalThirdParty
+    - DrugSmuggler
+    - CMBParoleeTransport
+    - CMBParoleeTransportBig
+    - ForeignCrimeGang
+    - MigratingCivs
+    - MigratingCivsMedium
+    - MigratingCivsLarge
+    - MissionariesParty
+    - MissionariesPartyMedium
     threats:
     - XenoThreat
     - NeomorphsThreat
@@ -47,6 +85,7 @@
   mapPath: /Maps/CMU14/Planets/StableGarrison/StableGarrisonMultiZ0.yml
   mapsBelow:
   - /Maps/CMU14/Planets/StableGarrison/StableGarrisonMultiZ-1.yml
+  - /Maps/CMU14/Planets/StableGarrison/StableGarrisonMultiZ-2.yml
   mapsAbove:
   - /Maps/CMU14/Planets/StableGarrison/StableGarrisonMultiZ1.yml
   - /Maps/CMU14/Planets/StableGarrison/StableGarrisonMultiZ2.yml
@@ -58,7 +97,7 @@
   randomRotation: false
   stations:
     StableGarrisonRedux:
-      stationProto: CMUStandardGroundBase
+      stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
           mapNameTemplate: 'Stable Garrison'
