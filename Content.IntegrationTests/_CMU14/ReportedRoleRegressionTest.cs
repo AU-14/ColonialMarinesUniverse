@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared.CMU14.Threats;
-using Content.Shared.CMU14.Threats.Mobs.Threat;
+using Content.Shared.CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -41,7 +41,7 @@ public sealed class ReportedRoleRegressionTest
             Assert.That(helper.IsEliminated(human, state), Is.True);
             Assert.That(helper.IsExcludedFromVictory(human, state), Is.False,
                 "Reanimated casualties belong in the eliminated count, even when nobody controls them.");
-            entities.EnsureComponent<CMUThreatComponent>(human);
+            entities.EnsureComponent<ZombieSummonerMinionComponent>(human);
             Assert.That(helper.IsExcludedFromVictory(human, state), Is.True,
                 "Summoned reinforcements must not inflate either the survivor or casualty counts.");
         });

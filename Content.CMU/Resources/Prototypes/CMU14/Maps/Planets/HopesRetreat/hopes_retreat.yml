@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Hope's Retreat"
     mapId: hopesretreat
-    inRotation: false
     lorePrimer: CMUPrimerHopesRetreat
     allegiance: IndependentSystems
     camouflage: Desert

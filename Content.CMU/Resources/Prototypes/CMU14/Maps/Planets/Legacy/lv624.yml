@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "LV624 Green Hell"
     mapId: LV624
-    inRotation: false
     lorePrimer: AU14PrimerPlanetLV624
     allegiance: UA
     camouflage: Desert
@@ -26,6 +25,7 @@
     govforinship: true
     opforinship: true
     daycycleenabled: true
+    inRotation: false
     thirdparties:
     - WYExecutivesSurv
     - DiplomaticAttachesSurv

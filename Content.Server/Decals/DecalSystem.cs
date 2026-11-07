@@ -36,7 +36,6 @@ public sealed partial class DecalSystem : SharedDecalSystem
 #pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
         SubscribeLocalEvent<DecalGridComponent, ComponentStartup>(OnLegacyDecalGridStartup);
 #pragma warning restore CS0618
-        SubscribeLocalEvent<DeferredLegacyDecalGridMigrationEvent>(OnDeferredLegacyDecalGridMigration);
         SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSerialization);
         SubscribeLocalEvent<PostGridSplitEvent>(OnGridSplit);
     }
@@ -45,20 +44,8 @@ public sealed partial class DecalSystem : SharedDecalSystem
     private void OnLegacyDecalGridStartup(EntityUid uid, DecalGridComponent component, ComponentStartup args)
 #pragma warning restore CS0618
     {
-        // Serialized chunk entities start in the same batch as their owning grid. Defer the legacy migration until
-        // that batch has finished so GetOrCreateChunk can reuse and merge with chunks already present in mixed maps.
-        QueueLocalEvent(new DeferredLegacyDecalGridMigrationEvent(uid));
-    }
-
-    private void OnDeferredLegacyDecalGridMigration(DeferredLegacyDecalGridMigrationEvent args)
-    {
-#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
-        if (!TryComp<DecalGridComponent>(args.Grid, out var component))
-#pragma warning restore CS0618
-            return;
-
-        MigrateLegacyDecalGrid(args.Grid, component);
-        RemComp(args.Grid, component);
+        MigrateLegacyDecalGrid(uid, component);
+        RemComp(uid, component);
     }
 
     private void OnBeforeSerialization(BeforeSerializationEvent ev)
@@ -102,41 +89,9 @@ public sealed partial class DecalSystem : SharedDecalSystem
         {
             foreach (var (id, decal) in chunk.Decals)
             {
-                var target = GetOrCreateDecalChunk(uid, decal.Coordinates);
-
-                if (!target.Comp2.Decals.TryGetValue(id, out var existing))
-                {
-                    AddDecalWithId(target, id, decal);
-                    continue;
-                }
-
-                // A partially migrated map can contain both the legacy DecalGrid and newer DecalChunk data.
-                // Avoid duplicating an already-migrated decal, but allocate a fresh chunk-local id when the slot
-                // belongs to a different decal so neither source is lost.
-                if (DecalsEqual(existing, decal))
-                    continue;
-
-                if (!TryAllocateDecalId(target, out var migratedId))
-                    throw new InvalidOperationException($"Too many decals to migrate into chunk {target.Comp1.Chunk} on {ToPrettyString(uid)}.");
-
-                AddDecalWithId(target, migratedId, decal);
+                AddDecalWithId(uid, id, decal);
             }
         }
-    }
-
-    private static bool DecalsEqual(Decal left, Decal right)
-    {
-        return left.Coordinates == right.Coordinates &&
-               left.Id == right.Id &&
-               Nullable.Equals(left.Color, right.Color) &&
-               left.Angle.Equals(right.Angle) &&
-               left.ZIndex == right.ZIndex &&
-               left.Cleanable == right.Cleanable;
-    }
-
-    private sealed class DeferredLegacyDecalGridMigrationEvent(EntityUid grid) : EntityEventArgs
-    {
-        public readonly EntityUid Grid = grid;
     }
 
     private void OnGridSplit(ref PostGridSplitEvent ev)

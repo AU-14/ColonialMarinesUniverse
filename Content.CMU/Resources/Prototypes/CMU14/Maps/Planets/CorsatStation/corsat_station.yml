@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Corsat Station"
     mapId: aucorsat
-    inRotation: false
     lorePrimer: AU14PrimerPlanetCorsatStation
     allegiance: UA
     camouflage: Urban
