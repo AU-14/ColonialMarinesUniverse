@@ -30,66 +30,67 @@ namespace Content.Server.CMU14.Xenomorphs.Pathogen.Sporecaster;
 public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private IGameTiming _timing = default!;  
-    [Dependency] private IRobustRandom _random = default!;  
-    [Dependency] private SharedXenoHiveSystem _hive = default!;  
-    [Dependency] private SharedPopupSystem _popup = default!;  
-    [Dependency] private InventorySystem _inventory = default!;  
-    [Dependency] private SharedGasMaskSystem _gasMask = default!;  
-    [Dependency] private MobStateSystem _mobState = default!;  
-    [Dependency] private SharedBodySystem _body = default!;  
-    [Dependency] private Content.Shared.CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;  
-    [Dependency] private GhostRoleSystem _ghostRole = default!;   // NEW  
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedGasMaskSystem _gasMask = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private Content.Shared.CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;   // NEW
   
-    private readonly HashSet<Entity<MobStateComponent>> _nearby = new();  
+    private readonly HashSet<Entity<MobStateComponent>> _nearby = new();
   
-    public override void Initialize()  
-    {  
-        SubscribeLocalEvent<CMUPathogenSporecasterComponent, MapInitEvent>(OnMapInit);  
-        SubscribeLocalEvent<CMUPathogenSporecasterComponent, DestructionEventArgs>(OnDestruction);  
-        SubscribeLocalEvent<CMUPathogenSporecasterComponent, InteractHandEvent>(OnInteract);  
-        SubscribeLocalEvent<CMUPathogenSporecasterComponent, ExaminedEvent>(OnExamine);  
-        SubscribeLocalEvent<XenoComponent, GhostRoleSpawnerUsedEvent>(OnPopperSpawnerUsed);  
-    }  
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<CMUPathogenSporecasterComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<CMUPathogenSporecasterComponent, DestructionEventArgs>(OnDestruction);
+        SubscribeLocalEvent<CMUPathogenSporecasterComponent, InteractHandEvent>(OnInteract);
+        SubscribeLocalEvent<CMUPathogenSporecasterComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<XenoComponent, GhostRoleSpawnerUsedEvent>(OnPopperSpawnerUsed);
+        SubscribeLocalEvent<CMUPathogenPopperComponent, GhostRoleSpawnerUsedEvent>(OnPopperSpawnerUsed);
+    }
   
-    private void OnMapInit(Entity<CMUPathogenSporecasterComponent> ent, ref MapInitEvent args)  
-    {  
-        ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;  
-        Dirty(ent);  
-    }  
+    private void OnMapInit(Entity<CMUPathogenSporecasterComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;
+        Dirty(ent);
+    }
   
-    private void OnDestruction(Entity<CMUPathogenSporecasterComponent> ent, ref DestructionEventArgs args)  
-    {  
-        if (ent.Comp.StoredClouds <= 0)  
-            return;  
+    private void OnDestruction(Entity<CMUPathogenSporecasterComponent> ent, ref DestructionEventArgs args)
+    {
+        if (ent.Comp.StoredClouds <= 0)
+            return;
   
-        _popup.PopupEntity(  
-            Loc.GetString("cmu-sporecaster-destruction-release"),  
-            ent.Owner,  
-            PopupType.LargeCaution);  
+        _popup.PopupEntity(
+            Loc.GetString("cmu-sporecaster-destruction-release"),
+            ent.Owner,
+            PopupType.LargeCaution);
   
-        var coords = Transform(ent.Owner).Coordinates;  
-        for (var i = 0; i < ent.Comp.StoredClouds; i++)  
-        {  
-            if (!_random.Prob(ent.Comp.DestructionReleaseChance))  
-                continue;  
-  
-            var parasite = SpawnAtPosition(ent.Comp.ParasiteProto, coords);  
-            // Assign hive  
-            if (_hive.GetHive(ent.Owner) is { } hive)  
-                _hive.SetHive(parasite, hive);  
-        }  
-    }  
+        var coords = Transform(ent.Owner).Coordinates;
+        for (var i = 0; i < ent.Comp.StoredClouds; i++)
+        {
+            if (!_random.Prob(ent.Comp.DestructionReleaseChance))
+                continue;
+                
+            var parasite = SpawnAtPosition(ent.Comp.ParasiteProto, coords);
+            // Assign hive
+            if (_hive.GetHive(ent.Owner) is { } hive)
+                _hive.SetHive(parasite, hive);
+        }
+    }
   
     // live tracking when a ghost takes the role  
-    private void OnPopperSpawnerUsed(Entity<XenoComponent> xeno, ref GhostRoleSpawnerUsedEvent args)  
-    {  
-        if (!TryComp(args.Spawner, out CMUPathogenSporecasterComponent? caster))  
-            return;  
+    private void OnPopperSpawnerUsed(Entity<CMUPathogenPopperComponent> popper, ref GhostRoleSpawnerUsedEvent args)
+    {
+        if (!TryComp(args.Spawner, out CMUPathogenSporecasterComponent? caster))
+            return;
   
-        _hive.SetSameHive(args.Spawner, xeno.Owner);  
-        caster.LivePoppers.Add(xeno);  
-    }  
+        _hive.SetSameHive(args.Spawner, popper.Owner);
+        caster.LivePoppers.Add(popper.Owner);
+    }
   
     // Allow xenos from same hive to manually trigger a cloud  
     private void OnInteract(Entity<CMUPathogenSporecasterComponent> ent, ref InteractHandEvent args)  
