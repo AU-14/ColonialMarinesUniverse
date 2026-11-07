@@ -16,10 +16,12 @@ public sealed partial class CMUFobGunMountComponent : Component
     [ViewVariables] public EntProtoId WeaponPrototype = "CMUFobSupportGun";
 }
 
-/// <summary>The pair cannot be replaced or expanded during this network's lifetime.</summary>
+/// <summary>Platform allocations survive packing and destruction for this network's lifetime.</summary>
 [RegisterComponent, Access(typeof(CMUFobDefenseSystem))]
 public sealed partial class CMUFobDefenseNetworkComponent : Component
 {
+    public const int PlatformLimit = 3;
+
     [ViewVariables] public List<EntityUid> Mounts = new();
     [ViewVariables] public int WarnedActivation;
 }
