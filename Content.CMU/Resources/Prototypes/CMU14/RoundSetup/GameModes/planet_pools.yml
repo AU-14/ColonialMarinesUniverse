@@ -5,7 +5,6 @@
   planets:
   - AUPlanetShepherdsPride
   - CMUPlanetHopesRetreat
-  - CMUPlanetStableGarrisonRedux
 
 # Reviewed Force on Force maps with dedicated GOVFOR and OPFOR landing zones.
 - type: GamePlanetPool
@@ -18,5 +17,4 @@
   - AuPlanetChances
   - AUPlanetCorsatStation
   - AUPlanetShepherdsPride
-# - CMUPlanetStableGarrisonRedux # govfor spawns planetside
   - AUPlanetSorokyne

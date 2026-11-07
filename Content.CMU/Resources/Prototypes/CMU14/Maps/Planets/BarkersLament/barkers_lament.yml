@@ -5,6 +5,7 @@
   - type: RMCPlanetMapPrototype
     votename: "Barker's Lament"
     mapId: CMULV376BarkersLament
+    inRotation: false
     lorePrimer: AU14PrimerPlanetLament
     allegiance: UA
     camouflage: Urban
