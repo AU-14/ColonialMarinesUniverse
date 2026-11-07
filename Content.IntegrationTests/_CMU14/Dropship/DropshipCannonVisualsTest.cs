@@ -91,10 +91,17 @@ public sealed class DropshipCannonVisualsTest : GameTest
         await Server.WaitAssertion(() => SEntMan.DeleteEntity(map));
     }
 
-    [TestCase(FTLState.Travelling, false)]
-    [TestCase(FTLState.Available, false)]
-    [TestCase(FTLState.Available, true)]
-    public async Task HandLoadingAllowsInteriorWeaponPointsInFlightAndRechecksAtCompletion(FTLState state, bool takeoffDuringLoad)
+    [TestCase(FTLState.Travelling, false, false)]
+    [TestCase(FTLState.Travelling, false, true)]
+    [TestCase(FTLState.Available, false, false)]
+    [TestCase(FTLState.Available, false, true)]
+    [TestCase(FTLState.Available, true, false)]
+    [TestCase(FTLState.Available, true, true)]
+    [TestCase(FTLState.Starting, false, true)]
+    public async Task HandLoadingWorksInFlightAndRechecksAtCompletion(
+        FTLState state,
+        bool takeoffDuringLoad,
+        bool externalMount)
     {
         var map = await Pair.CreateTestMap();
         ContainerSlot slot = default!;
@@ -102,15 +109,26 @@ public sealed class DropshipCannonVisualsTest : GameTest
         {
             var ship = SEntMan.EnsureComponent<DropshipComponent>(map.Grid);
             ship.State = state;
-            var point = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", map.GridCoords);
+            var point = SEntMan.SpawnEntity(
+                externalMount ? "CMAlamoWall61" : "AU14InteriorWeaponAttachmentPoint",
+                map.GridCoords);
             var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var weapon = SEntMan.SpawnEntity("CMUDropshipAttachmentHowitzer", map.GridCoords);
             var ammo = SEntMan.SpawnEntity("CMUDropshipAmmoHowitzerHE", map.GridCoords);
-            var utility = SEntMan.GetComponent<DropshipUtilityPointComponent>(point);
             var containers = SEntMan.System<SharedContainerSystem>();
-            Assert.That(containers.Insert(weapon,
-                containers.EnsureContainer<ContainerSlot>(point, utility.UtilitySlotId)), Is.True);
-            slot = containers.EnsureContainer<ContainerSlot>(point, utility.AmmoContainerSlotId);
+            if (SEntMan.TryGetComponent<DropshipUtilityPointComponent>(point, out var utility))
+            {
+                Assert.That(containers.Insert(weapon,
+                    containers.EnsureContainer<ContainerSlot>(point, utility.UtilitySlotId)), Is.True);
+                slot = containers.EnsureContainer<ContainerSlot>(point, utility.AmmoContainerSlotId);
+            }
+            else
+            {
+                var mount = SEntMan.GetComponent<DropshipWeaponPointComponent>(point);
+                Assert.That(containers.Insert(weapon,
+                    containers.EnsureContainer<ContainerSlot>(point, mount.WeaponContainerSlotId)), Is.True);
+                slot = containers.EnsureContainer<ContainerSlot>(point, mount.AmmoContainerSlotId);
+            }
             Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(user, ammo), Is.True);
             var interaction = new InteractUsingEvent(user, ammo, point, map.GridCoords);
             SEntMan.EventBus.RaiseLocalEvent(point, interaction);
