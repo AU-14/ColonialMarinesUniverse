@@ -62,7 +62,6 @@ public sealed class RegisteredMoverAndNightVisionMergeRegressionTest : GameTest
         "CMUMobCarpInvasive",
         "CMUMobApe",
         "AU14BiomorphGrunt", // CMU14
-        "CMUZombieSummoner",
         "CMXenoBurrower",
         "RMCSynthAddComponents",
     ];

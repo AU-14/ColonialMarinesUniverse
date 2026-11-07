@@ -1,0 +1,233 @@
+- type: entity
+  id: CMUSceneMarine
+  parent: CMMobHuman
+  name: USCM scene marine
+  description: A background marine used by scene-animation markers.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+  - type: InputMover
+  - type: MobMover
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
+
+- type: entity
+  abstract: true
+  id: CMUSceneSpawnerBase
+  parent: MarkerBase
+  name: scene animation spawner
+  description: Faces the direction its scene-animation group will travel. Waves wait for the full 40-tile route to clear.
+  suffix: CMU, Scene
+  components:
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: green
+
+- type: entity
+  id: CMUSceneVehicleSpawner
+  parent: CMUSceneSpawnerBase
+  name: scene vehicle spawner (all)
+  description: Randomly spawns a full Humvee, APC, truck, or tank group in its facing direction.
+  components:
+  - type: CMUSceneSpawnMarker
+    spawnGroups:
+    - spawns: [ VehicleHumvee, VehicleHumveeMedical, VehicleHumveeTransport, VehicleHumveeARC ]
+      minSize: 2
+      maxSize: 5
+      mixPrototypes: true
+      memberClearance: 4
+    - spawns: [ VehicleAPC, VehicleAPCMed, VehicleAPCCommand ]
+      minSize: 2
+      maxSize: 4
+      mixPrototypes: true
+      apc: true
+      memberClearance: 7
+    - spawns: [ AU14VehicleCivArmoredTruck, AU14VehicleCivTruck, AU14VehicleCivVan ]
+      minSize: 2
+      maxSize: 4
+      mixPrototypes: true
+      memberClearance: 5
+    - spawns: [ VehicleTank, VehicleTankTWE ]
+      minSize: 2
+      maxSize: 4
+      mixPrototypes: false
+      tank: true
+      memberClearance: 5
+
+- type: entity
+  id: CMUSceneHumveeSpawner
+  parent: CMUSceneSpawnerBase
+  name: scene Humvee group spawner
+  components:
+  - type: CMUSceneSpawnMarker
+    spawnGroups:
+    - spawns: [ VehicleHumvee, VehicleHumveeMedical, VehicleHumveeTransport, VehicleHumveeARC ]
+      minSize: 2
+      maxSize: 5
+      mixPrototypes: true
+      memberClearance: 4
+
+- type: entity
+  id: CMUSceneAPCSpawner
+  parent: CMUSceneSpawnerBase
+  name: scene APC group spawner
+  components:
+  - type: CMUSceneSpawnMarker
+    spawnGroups:
+    - spawns: [ VehicleAPC, VehicleAPCMed, VehicleAPCCommand ]
+      minSize: 2
+      maxSize: 4
+      mixPrototypes: true
+      apc: true
+      memberClearance: 7
+
+- type: entity
+  id: CMUSceneTruckSpawner
+  parent: CMUSceneSpawnerBase
+  name: scene truck group spawner
+  components:
+  - type: CMUSceneSpawnMarker
+    spawnGroups:
+    - spawns: [ AU14VehicleCivArmoredTruck, AU14VehicleCivTruck, AU14VehicleCivVan ]
+      minSize: 2
+      maxSize: 4
+      mixPrototypes: true
+      memberClearance: 5
+
+- type: entity
+  id: CMUSceneTankSpawner
+  parent: CMUSceneSpawnerBase
+  name: scene tank group spawner
+  components:
+  - type: CMUSceneSpawnMarker
+    spawnGroups:
+    - spawns: [ VehicleTank, VehicleTankTWE ]
+      minSize: 2
+      maxSize: 4
+      mixPrototypes: false
+      tank: true
+      memberClearance: 5
+
+- type: entity
+  id: CMUSceneVehiclePropSpawner
+  parent: CMUSceneSpawnerBase
+  name: scene civilian vehicle prop spawner
+  description: Faces east or west and randomly sends civilian cars, police vehicles, vans, trucks, and semis toward a scene despawner at about 45 mph.
+  components:
+  - type: CMUSceneSpawnMarker
+    minSpawnInterval: 0.5
+    maxSpawnInterval: 1.5
+    waitForGroupClear: false
+    spawnGroups:
+    - spawns:
+      - RMCPropVehicleMonoSupronOrange
+      - RMCPropVehicleMonoSupronBlack
+      - RMCPropVehicleMonoSupronBlue
+      - RMCPropVehicleMonoSupronBrown
+      - RMCPropVehicleMonoSupronCop
+      - RMCPropVehicleMonoSupronDesatBlue
+      - RMCPropVehicleMonoSupronGreen
+      - RMCPropVehicleMonoSupronLightBlue
+      - RMCPropVehicleMonoSupronPink
+      - RMCPropVehicleMonoSupronPurple
+      - RMCPropVehicleMonoSupronRed
+      - RMCPropVehicleMonoSupronShell
+      - RMCPropVehicleMonoSupronTaxi
+      - RMCPropVehicleMonoSupronTurquoise
+      - RMCPropVehicleMonoSupronWY
+      - RMCPropVehicleAmbulance
+      - RMCPropVehicleLoaderTruckBlue
+      - RMCPropVehicleLoaderTruckBlueFilled
+      - RMCPropVehicleLoaderTruckTeal
+      - RMCPropVehicleLoaderTruckTealFilled
+      - RMCPropVehicleLoaderTruckWhite
+      - RMCPropVehicleLoaderTruckWhiteFilled
+      - RMCPropVehicleLoaderTruckBlack
+      - RMCPropVehicleLoaderTruckBlackFilled
+      - RMCPropVehicleLoaderTruckWhiteWeYa
+      - RMCPropVehicleLoaderTruckWhiteWeYaFilled
+      - RMCPropVehicleBoxVanBlueGrey
+      - RMCPropVehicleBoxVanMaintGrey
+      - RMCPropVehicleBoxVanMaintWhite
+      - RMCPropVehicleBoxVanMining
+      - RMCPropVehicleBoxVanPizza
+      - RMCPropVehicleBoxVanRed
+      - RMCPropVehicleBoxVanWhite
+      - RMCPropVehicleLongTruckBlue
+      - RMCPropVehicleLongTruckBrown
+      - RMCPropVehicleLongTruckDonk
+      - RMCPropVehicleLongTruckMining
+      - RMCPropVehicleLongTruckRed
+      - RMCPropVehicleLongTruckWeYaBlue
+      - RMCPropVehicleSmallTruckBlue
+      - RMCPropVehicleSmallTruckBlueCargo
+      - RMCPropVehicleSmallTruckBrown
+      - RMCPropVehicleSmallTruckBrownCargo
+      - RMCPropVehicleSmallTruckBrownCargoAlt
+      - RMCPropVehicleSmallTruckGarbage
+      - RMCPropVehicleSmallTruckGreen
+      - RMCPropVehicleSmallTruckMedical
+      - RMCPropVehicleSmallTruckMining
+      - RMCPropVehicleSmallTruckRed
+      minSize: 1
+      maxSize: 1
+      mixPrototypes: true
+      directMoveSpeed: 20.1168
+      horizontalOnly: true
+      maxTravelDistance: 200
+      memberClearance: 0
+
+- type: entity
+  id: CMUSceneMarineSpawner
+  parent: CMUSceneSpawnerBase
+  name: scene marine group spawner
+  description: Spawns loose groups of walking USCM marines in snow camouflage and cold-weather gear.
+  components:
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: blue
+  - type: CMUSceneSpawnMarker
+    actorLateralVariance: 0.7
+    actorLongitudinalVariance: 0.25
+    spawnGroups:
+    - spawns: [ CMUSceneMarine ]
+      minSize: 2
+      maxSize: 6
+      mixPrototypes: true
+      marine: true
+      memberClearance: 0
+
+- type: entity
+  id: CMUSceneDeleteMarker
+  parent: MarkerBase
+  name: scene entity delete marker
+  description: Deletes scene vehicles and marines that pass within its radius.
+  suffix: CMU, Scene
+  components:
+  - type: Sprite
+    sprite: Markers/cross.rsi
+    state: red
+  - type: CMUSceneDeleteMarker
+    radius: 2.5
+
+- type: entity
+  id: CMUGroundTextDecalTool
+  parent: BaseItem
+  name: ground text decal tool
+  description: Writes multiline stencil text to the ground, with adjustable spacing and graffiti-like wonkiness.
+  suffix: CMU, Scene
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/crayons.rsi
+    state: black
+  - type: Item
+    sprite: Objects/Fun/crayons.rsi
+    size: Small
+  - type: ActivatableUI
+    key: enum.CMUGroundTextDecalUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMUGroundTextDecalUiKey.Key:
+        type: CMUGroundTextDecalBui
+  - type: CMUGroundTextDecalTool

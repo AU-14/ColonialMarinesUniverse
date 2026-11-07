@@ -5,6 +5,7 @@
   - type: RMCPlanetMapPrototype
     votename: "Shepherds' Pride"
     mapId: Sheperds
+    inRotation: false
     lorePrimer: AU14PrimerPlanetShepherdsPride
     allegiance: UA
     camouflage: Jungle
