@@ -3,7 +3,7 @@
   parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoHazeBase
   name: Haze
-  description: A supportive strain of the Confluence, tending wounds and spreading spores in equal measure.
+  description: A supportive caste of the Confluence.
   components:
   - type: GhostRole
     name: cmu-job-name-pathogen-haze
@@ -65,19 +65,25 @@
     - CMU14ActionXenoPathogenPlantWeeds
     - CMU14ActionXenoPathogenChooseStructure
     - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
-    - CMU14ActionXenoPathogenApplySalve
-    - CMU14ActionXenoPathogenHealerDroneTransferPlasma
-    - CMU14ActionXenoPathogenSacrifice
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: XenoDevour
   - type: XenoHide
   - type: XenoConstruction
-    buildDelay: 1
+    buildDelay: 3
     canBuild:
+    - CMU14XenoMyceliumWall
     - CMU14XenoMyceliumMembrane
+    - CMU14XenoMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
   - type: XenoRegen
     healOffWeeds: true
     critHealMultiplier: 0.3465
@@ -113,12 +119,6 @@
     protectionBypassChance: 0.5
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
-  - type: XenoEnergy
-    alert: XenoEnergyHealer
-    max: 7500
-    gain: 0
-    gainAttack: 0
-    gainAttackDowned: 0
   - type: Fixtures
     fixtures:
       fix1:
