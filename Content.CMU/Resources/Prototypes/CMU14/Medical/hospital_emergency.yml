@@ -50,6 +50,16 @@
     access: [["AU14AccessOpforMedical"], ["AU14AccessOpforCommand"]]
 
 - type: entity
+  parent: CMUHospitalEmergencyComputerGovfor
+  id: CMUZombieHospitalEmergencyComputer
+  name: infected casualty emergency computer
+  description: Coordinates emergency dropships carrying casualties from infected attacks. Its incident feed is isolated from the standard hospital dispatch network.
+  suffix: Hospital, GOVFOR, Zombie Incidents
+  components:
+  - type: HospitalEmergencyComputer
+    incidentType: Zombie
+
+- type: entity
   parent: CMDropshipDestinationThirdPartyWhitelist
   id: AU14HospitalDropshipLandingZone
   name: hospital dropship landing zone

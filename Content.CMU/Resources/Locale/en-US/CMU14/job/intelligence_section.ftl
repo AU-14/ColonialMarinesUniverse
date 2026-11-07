@@ -22,3 +22,5 @@ cmu-spawn-role-intel-paramilitary-member = Intelligence Paramilitary Member (CMU
 cmu-access-intelligence-section = Intelligence Section
 
 cmu-radio-intel-section = Intelligence
+
+cmu-intel-gru-altyn-needs-heavy-armor = You must be wearing the UH7 GRU armor to wear this.

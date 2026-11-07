@@ -5,6 +5,7 @@
   - type: RMCPlanetMapPrototype
     votename: "Port Nereid"
     mapId: portneroid
+    inRotation: false
     lorePrimer: AU14PrimerPlanetLV327
     allegiance: UA
     camouflage: Jungle

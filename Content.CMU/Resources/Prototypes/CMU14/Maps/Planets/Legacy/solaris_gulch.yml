@@ -5,6 +5,7 @@
   - type: RMCPlanetMapPrototype
     votename: "Solaris Gulch"
     mapId: AU747
+    inRotation: false
     lorePrimer: AU14PrimerPlanetLV747
     allegiance: UA
     camouflage: Desert
@@ -25,7 +26,6 @@
     govforinship: true
     opforinship: true
     daycycleenabled: true
-    inRotation: false
     threats:
     - XenoThreat
     - NeomorphsThreat

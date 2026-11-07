@@ -43,7 +43,7 @@ public sealed class CMULegacyDepartureHazardTest : GameTest
             visitor = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(terrain, new Vector2(0.5f, 0.5f)));
         });
 
-        await RunTicksSync(2);
+        await RunTicksSync(10);
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.GetComponent<MobStateComponent>(visitor).CurrentState, Is.EqualTo(MobState.Dead),

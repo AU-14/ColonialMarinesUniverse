@@ -1,0 +1,40 @@
+- type: soundCollection
+  id: CMUThreatDocile
+  files:
+  - /Audio/CMU14/Threats/Threat/Docile/threat_docile_01.ogg
+  - /Audio/CMU14/Threats/Threat/Docile/threat_docile_02.ogg
+  - /Audio/CMU14/Threats/Threat/Docile/threat_docile_03.ogg
+  - /Audio/CMU14/Threats/Threat/Docile/threat_docile_04.ogg
+  - /Audio/CMU14/Threats/Threat/Docile/threat_docile_08.ogg
+  - /Audio/CMU14/Threats/Threat/Docile/threat_docile_09.ogg
+  - /Audio/CMU14/Threats/Threat/Docile/threat_docile_10.ogg
+
+- type: soundCollection
+  id: CMUThreatAttack
+  files:
+  - /Audio/CMU14/Threats/Threat/Attacking/threat_attack_01.ogg
+  - /Audio/CMU14/Threats/Threat/Attacking/threat_attack_02.ogg
+  - /Audio/CMU14/Threats/Threat/Attacking/threat_attack_03.ogg
+  - /Audio/CMU14/Threats/Threat/Attacking/threat_attack_04.ogg
+  - /Audio/CMU14/Threats/Threat/Attacking/threat_attack_05.ogg
+
+- type: soundCollection
+  id: CMUThreatHurt
+  files:
+  - /Audio/CMU14/Threats/Threat/Hurt/threat_hurt_01.ogg
+  - /Audio/CMU14/Threats/Threat/Hurt/threat_hurt_02.ogg
+  - /Audio/CMU14/Threats/Threat/Hurt/threat_hurt_05.ogg
+  - /Audio/CMU14/Threats/Threat/Hurt/threat_hurt_06.ogg
+  - /Audio/CMU14/Threats/Threat/Hurt/threat_hurt_07.ogg
+  - /Audio/CMU14/Threats/Threat/Hurt/threat_hurt_08.ogg
+
+- type: soundCollection
+  id: CMUThreatDeath
+  files:
+  - /Audio/CMU14/Threats/Threat/DeathGasp/threat_death_01.ogg
+  - /Audio/CMU14/Threats/Threat/DeathGasp/threat_death_02.ogg
+  - /Audio/CMU14/Threats/Threat/DeathGasp/threat_death_03.ogg
+  - /Audio/CMU14/Threats/Threat/DeathGasp/threat_death_06.ogg
+  - /Audio/CMU14/Threats/Threat/DeathGasp/threat_death_07.ogg
+  - /Audio/CMU14/Threats/Threat/DeathGasp/threat_death_08.ogg
+  - /Audio/CMU14/Threats/Threat/DeathGasp/threat_death_09.ogg

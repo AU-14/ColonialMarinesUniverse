@@ -1,0 +1,65 @@
+- type: entity
+  id: CMUThreatAcidPool
+  name: acid pool
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Effects/xeno_acid.rsi
+    drawdepth: Puddles
+    color: "#8dac37"
+    layers:
+    - state: acid2
+  - type: CMUThreatAcidPool
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: RMCSmokeAcidDeathcloud
+  id: CMUThreatBoomerAcidCloud
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCSmokeNeurotoxinShroud
+  id: CMUThreatBoomerNeurotoxinCloud
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: XenoSpitProjectile
+  id: CMUThreatSpitProjectile
+  name: acid spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 0
+  - type: ProjectileMaxRange
+    max: 8
+  - type: CMUThreatSpitProjectile
+  - type: TimedDespawn
+    lifetime: 3
+
+- type: entity
+  parent: RMCOppressorTail
+  id: CMUThreatTongueSegment
+  name: smoker tongue
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Clickable
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      tongue:
+        shape: !type:PhysShapeCircle
+          radius: 0.2
+        density: 1
+        hard: false
+        layer: [ BulletImpassable ]
+  - type: Damageable
+  - type: Injurable
+  - type: CMUThreatTongueSegment

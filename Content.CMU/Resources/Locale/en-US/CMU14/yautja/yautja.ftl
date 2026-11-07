@@ -237,6 +237,23 @@ cmu-yautja-mark-thrall = Thrall
 cmu-yautja-mark-student = Student
 cmu-yautja-mark-blooded = Blooded
 cmu-yautja-mark-unknown = Unknown
+cmu-yautja-mark-examine-unknown-hunter = an unknown hunter
+cmu-yautja-mark-examine-prey = [color=orange]{CAPITALIZE(THE($target))} is being hunted by {$hunter}.[/color]
+cmu-yautja-mark-examine-dishonored = [color=red]{CAPITALIZE(THE($target))} was marked as dishonorable by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-honored = [color=green]{CAPITALIZE(THE($target))} was honored by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-thrall = [color=green]{CAPITALIZE(THE($target))} was thralled by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-gear-carrier = [color=red]{CAPITALIZE(THE($target))} was marked as carrying gear by {$hunter}.[/color]
+cmu-yautja-mark-examine-student = [color=green]{CAPITALIZE(THE($target))} is being taught by {$hunter}.[/color]
+cmu-yautja-mark-examine-blooded = [color=green]{CAPITALIZE(THE($target))} was blooded by {$hunter}.[/color]
 cmu-yautja-mark-view-recent = Nearby Targets
 cmu-yautja-mark-view-history = Marked History
 cmu-yautja-mark-view-recent-detail = Recently seen targets must be nearby when you place their first mark.
@@ -1033,6 +1050,7 @@ cmu-yautja-chain-gauntlet-chain-wrapped = You wrap {$chain} around {$item}.
 cmu-yautja-chain-gauntlet-chain-existing = This one already has chains on it!
 cmu-yautja-chain-gauntlet-help-message = {$user} grabs {$target} by the back of the head and slams them on the ground!
 cmu-yautja-chain-gauntlet-execution-message = {$user} grabs {$target} and slowly lifts them above their head before smashing them down!
+cmu-yautja-chain-gauntlet-disarm-message = {$user} hits {$target} with an extremely strong punch, sending them flying!
 cmu-yautja-cleaving-glaive-skull-denied = Why would you want to do this!?.
 cmu-yautja-cleaving-glaive-skull-existing = You already have a {$skull} mounted on {$glaive}.
 cmu-yautja-cleaving-glaive-skull-mounted = You mount {$skull} to {$glaive}.
@@ -1371,3 +1389,14 @@ cmu-yautja-cape-mount-remove = Unfasten cape
 cmu-yautja-cape-mount-removed = You unfasten {THE($cape)}.
 cmu-yautja-cape-mount-examine = {CAPITALIZE(THE($cape))} is fastened to it.
 cmu-yautja-cape-mount-hint = It can be fastened to clan armor to keep your back free.
+cmu-yautja-pounce-body-slam-self = {CAPITALIZE(THE($yautja))} body slams us!
+cmu-yautja-pounce-body-slam-others = {CAPITALIZE(THE($yautja))} body slams {THE($xeno)}!
+ent-CMUActionYautjaJoinHunt = Join the Hunt
+    .desc = Join the ongoing hunt as a Yautja. Only once per round.
+cmu-yautja-ghost-join-hunt-title = Join the Hunt
+cmu-yautja-ghost-join-hunt-confirm = Confirm joining the hunt. You will join as a {$rank} Yautja.
+cmu-yautja-ghost-join-hunt-not-whitelisted = You are not whitelisted! You may apply on the forums to be whitelisted as a Yautja.
+cmu-yautja-ghost-join-hunt-no-hunt = There is no Hunt this round! Maybe the next one.
+cmu-yautja-ghost-join-hunt-already = You already were a Yautja! Give someone else a chance.
+cmu-yautja-ghost-join-hunt-full = There are no hunter slots left. Leaders, Councillors and Ancients do not count towards them.
+cmu-yautja-ghost-join-hunt-failed = You could not join the hunt.

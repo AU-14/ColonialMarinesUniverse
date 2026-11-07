@@ -1,0 +1,198 @@
+- type: entity
+  parent: CMMagazineRifleM54CMK1
+  id: CMU14MagazineRifleM54CMK1Rubber
+  name: M54C MK1 rubber magazine (10x24mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - CMMagazineRifleM54CMK1
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgeRifle10x24mmRubber
+    proto: RMCCartridgeRifle10x24mmRubber
+    capacity: 95
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m54cmk1.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#3b35ab"
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolM13Rubber
+  name: M13 rubber magazine (10x20mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - RMCMagazinePistolM13
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridge10x20mmRubber
+    proto: RMCCartridge10x20mmRubber
+    capacity: 40
+  - type: Sprite
+    sprite: CMU14/Weapons/Magazines/m13_old.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolSU6Rubber
+  name: SU-6 rubber magazine (.45 ACP)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - RMCMagazinePistolSU6
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMU14CartridgePistol45ACPRubber
+    proto: CMU14CartridgePistol45ACPRubber
+    capacity: 15
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/su6.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: RMCSpeedLoaderM44
+  id: CMU14SpeedLoaderM44Rubber
+  name: M44 rubber speed loader (.44)
+  components:
+  - type: Tag
+    tags:
+    - RMCMagazineRevolver
+    - RMCSpeedLoaderM44
+  - type: BallisticAmmoProvider
+    proto: CMU14CartridgeRevolver44Rubber
+    capacity: 7
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: CMU14MagazineSmartGunRubber
+  name: M56 rubber drum magazine (10x30mm)
+  components:
+  - type: Tag
+    tags:
+    - RMCMagazineSmartGun
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgeSmartGun10x30mm
+    proto: CMU14CartridgeSmartGun10x30mmRubber
+    capacity: 500
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/SmartGuns/magazine_smart_gun.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMCartridgeSmartGun10x30mm
+  id: CMU14CartridgeSmartGun10x30mmRubber
+  name: rubber cartridge (10x30mm)
+  components:
+  - type: Tag
+    tags:
+    - CMCartridgeSmartGun10x30mm
+  - type: CartridgeAmmo
+    proto: CMU14BulletSmartGun10x30mmRubber
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMBulletSmartGun10x30mm
+  id: CMU14BulletSmartGun10x30mmRubber
+  name: rubber bullet (10x30mm)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 3
+  - type: RMCStaminaDamageOnCollide
+    damage: 10
+
+- type: entity
+  parent: CMCartridgePistolBase
+  id: CMU14CartridgePistol45ACPRubber
+  name: rubber cartridge (.45 ACP)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMU14CartridgePistol45ACPRubber
+  - type: CartridgeAmmo
+    proto: CMU14BulletPistol45ACPRubber
+
+- type: entity
+  parent: CMBulletBase
+  id: CMU14BulletPistol45ACPRubber
+  name: rubber bullet (.45 ACP)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 3
+  - type: RMCStaminaDamageOnCollide
+    damage: 10
+  - type: RMCProjectileAccuracy
+    accuracy: 125
+
+- type: entity
+  parent: CMCartridgePistolBase
+  id: CMU14CartridgeRevolver44Rubber
+  name: rubber cartridge (.44)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - RMCCartridgeRevolver44
+    - CMU14CartridgeRevolver44Rubber
+  - type: CartridgeAmmo
+    proto: CMU14BulletRevolver44Rubber
+
+- type: entity
+  parent: CMBulletBase
+  id: CMU14BulletRevolver44Rubber
+  name: rubber bullet (.44)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Blunt: 3
+  - type: RMCStaminaDamageOnCollide
+    damage: 10
+  - type: RMCProjectileAccuracy
+    accuracy: 90
+
+- type: Tag
+  id: CMU14CartridgePistol45ACPRubber
+
+- type: Tag
+  id: CMU14CartridgeRevolver44Rubber

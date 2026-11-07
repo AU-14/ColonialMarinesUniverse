@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -22,6 +23,10 @@ public sealed partial class ForceOnForceUniformSystem : EntitySystem
     public ForceOnForceIdentification Classify(EntityUid target, EntityUid? viewer)
     {
         if (TryComp<MobStateComponent>(target, out var mob) && mob.CurrentState == MobState.Dead)
+            return ForceOnForceIdentification.None;
+
+        // preds carry a MarineComponent faction but never a war side, so they'd always get the "?"
+        if (HasComp<YautjaComponent>(target))
             return ForceOnForceIdentification.None;
 
         // Only FoF viewers have a uniform policy. Friendly personnel keep their normal identifiers.
