@@ -2,6 +2,7 @@ using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Input;
 using Content.Shared.Movement.Components;
+using TransientActiveInputMoverComponent = Content.Shared.Movement.Components.ActiveInputMoverComponent;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 
