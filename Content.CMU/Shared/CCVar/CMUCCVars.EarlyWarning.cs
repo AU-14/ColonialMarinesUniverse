@@ -10,5 +10,5 @@ public sealed partial class CCVars
     /// ewjoemechanics admin command.
     /// </summary>
     public static readonly CVarDef<bool> CMUEWJoeEnabled =
-        CVarDef.Create("cmu.ew_joe.enabled", true, CVar.SERVER);
+        CVarDef.Create("cmu.ew_joe.enabled", true, CVar.SERVER | CVar.ARCHIVE);
 }
