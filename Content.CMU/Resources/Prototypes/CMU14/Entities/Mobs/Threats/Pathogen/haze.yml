@@ -65,6 +65,7 @@
     - CMU14ActionXenoPathogenPlantWeeds
     - CMU14ActionXenoPathogenChooseStructure
     - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
     - CMU14ActionXenoPathogenDevolve
@@ -77,6 +78,12 @@
     - CMU14XenoMyceliumWall
     - CMU14XenoMyceliumMembrane
     - CMU14XenoMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
   - type: XenoRegen
     healOffWeeds: true
     critHealMultiplier: 0.3465
