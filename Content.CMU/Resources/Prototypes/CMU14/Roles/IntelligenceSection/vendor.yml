@@ -1,0 +1,358 @@
+# Section wardrobe: suits for the office and plain civilian clothes for cover work.
+# Only Intelligence Section jobs can use it; its picks are counted apart from the civilian wardrobe.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUIntelSectionClothingVendor
+  name: Intelligence Section Wardrobe
+  description: A wardrobe holding suits and ordinary colony clothes for the Intelligence Section.
+  suffix: Intelligence Section
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/corp_wardrobe.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    jobs:
+    - CMUJobIntelCaseOfficer
+    - CMUJobIntelParamilitaryOfficer
+    - CMUJobIntelParamilitaryMember
+    sections:
+    - name: Foot Wear
+      choices: { CMUIntelShoes: 2 }
+      entries:
+      - id: RMCShoesBlack
+      - id: RMCShoesBrown
+      - id: RMCShoesLaceup
+      - id: RMCShoesLaceupBrown
+      - id: RMCShoesLeather
+      - id: RMCBootsPMC
+      - id: CMUBoxStompers
+    - name: Business Attire
+      choices: { CMUIntelBusinessAttire: 1 }
+      entries:
+      - id: CMJumpsuitLiaisonBlack
+      - id: CMJumpsuitLiaisonBlue
+      - id: CMJumpsuitLiaisonBrown
+      - id: CMJumpsuitLiaisonCharcoal
+      - id: CMJumpsuitLiaisonCorporateFormal
+      - id: CMJumpsuitLiaisonFormal
+      - id: CMJumpsuitLiaisonBlazer
+      - id: RMCJumpsuitLiaisonBlackSuitskirt
+      - id: RMCJumpsuitLiaisonCharcoalSuitskirt
+    - name: Ties
+      choices: { CMUIntelTie: 1 }
+      entries:
+      - id: ClothingNeckTieRed
+      - id: ClothingNeckTieDet
+      - id: ClothingNeckTieSerious
+    - name: Civilian Clothes
+      choices: { CMUIntelCivilianClothes: 1 }
+      entries:
+      - id: CMJumpsuitColonist
+      - id: RMCJumpsuitCivilian
+      - id: CMJumpsuitTShirtWhite
+      - id: CMJumpsuitTShirtGray
+      - id: AU14CivilianFlannelWhite
+      - id: AU14CivilianFlannelRed
+      - id: AU14CivilianWorkwearBlue
+      - id: AU14CivilianWorkwearGreen
+    - name: Suit Jackets
+      choices: { CMUIntelSuitJacket: 1 }
+      entries:
+      - id: RMCJacketCorporateBlack
+      - id: RMCJacketCorporateBlue
+      - id: RMCJacketCorporateBrown
+      - id: RMCJacketCorporateKhaki
+    - name: Jackets
+      choices: { CMUIntelJacket: 1 }
+      entries:
+      - id: AU14CivilianTanTrenchCoat
+      - id: AU14CivilianBrownTrenchCoat
+      - id: AU14CivilianGrayTrenchCoat
+      - id: RMCJacketWindbreakerGrey
+      - id: RMCJacketWindbreakerBrown
+      - id: AU14CivilianJacketGrayPufferVest
+      - id: AU14CivilianJacketBomberJacket
+    - name: Hats
+      choices: { CMUIntelHat: 1 }
+      entries:
+      - id: AU14CivBallCapBlack
+      - id: AU14CivFedoraTan
+      - id: AU14CivFedoraBrown
+      - id: AU14CivFedoraGray
+      - id: AU14HeadCommandoBeanie
+      - id: CMUCivWorkCapTan
+    - name: Glasses
+      choices: { CMUIntelGlasses: 1 }
+      entries:
+      - id: RMCSunglasses
+      - id: RMCSunglassesBig
+      - id: RMCGlassesAviators
+      - id: RMCHipsterGlasses
+    - name: Gloves
+      choices: { CMUIntelGloves: 1 }
+      entries:
+      - id: CMHandsBrown
+      - id: CMHandsLightBrown
+    - name: Storage
+      choices: { CMUIntelStorage: 2 }
+      entries:
+      - id: CMSatchel
+      - id: AU14SlingSatchelBlack
+      - id: RMCBeltUtilityGeneral
+      - id: RMCPouchGeneral
+
+# SIS paramilitary rack: the Three World Empire's light kit, as carried by its backline and aircrew.
+# The Royal Marines' Mk16 helmet, with ear protection alongside.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUIntelSISParamilitaryVendor
+  name: SIS paramilitary equipment rack
+  description: An automated rack holding light Three World Empire equipment for the Intelligence Section's armed element.
+  suffix: Intelligence Section, SIS
+  components:
+  - type: CMUVendGunsOnSafety
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMUJobIntelParamilitaryOfficer
+    - CMUJobIntelParamilitaryMember
+    sections:
+    - name: Armor
+      choices: { CMUIntelParaArmor: 1 }
+      entries:
+      - id: CMUIntelSISParaVest
+    - name: Helmet
+      choices: { CMUIntelParaHat: 1 }
+      entries:
+      - id: AU14HeadHelmetRMC
+    - name: Hearing Protection
+      choices: { CMUIntelParaEars: 1 }
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+    - name: Personal Defense Weapon
+      choices: { CMUIntelParaPrimary: 1 }
+      entries:
+      - id: AU14WeaponSMGL90A2
+    - name: PDW Ammunition
+      entries:
+      - id: AU14MagazineSMGL90A2
+        maxPerUser: 4
+    - name: Handguns
+      choices: { CMUIntelParaSidearm: 1 }
+      entries:
+      - id: RMCWeaponPistolL54Empty
+      - id: AU14L165A1Filled
+    - name: Handgun Ammunition
+      entries:
+      - id: RMCMagazinePistolL54
+        maxPerUser: 3
+      - id: AU14MagazinePistolL165A1
+        maxPerUser: 3
+    - name: Field Supplies
+      entries:
+      - id: AU14PouchIFAKFill
+        maxPerUser: 1
+      - id: RMCZipties
+        maxPerUser: 2
+
+# CIA paramilitary rack: light Vanguard Arrow (VAIPO) contractor kit, the gear a deniable team would carry.
+# No explosives on purpose; flashbangs are the only grenades.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUIntelCIAParamilitaryVendor
+  name: CIA paramilitary equipment rack
+  description: An automated rack holding light contractor equipment for the Intelligence Section's armed element.
+  suffix: Intelligence Section, CIA
+  components:
+  - type: CMUVendGunsOnSafety
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMUJobIntelParamilitaryOfficer
+    - CMUJobIntelParamilitaryMember
+    sections:
+    - name: Armor
+      choices: { CMUIntelParaArmor: 1 }
+      entries:
+      - id: CMArmorM3VLBallistics
+    - name: Headgear
+      choices: { CMUIntelParaHat: 1 }
+      entries:
+      - id: AU14DesertM10Helmet
+      - id: AU14DesertPatrolCap
+      - id: AU14DesertBoonieHat
+      - id: AU14HeadCommandoBeanie
+    - name: Hearing Protection
+      choices: { CMUIntelParaEars: 1 }
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+    - name: Primary Weapon
+      choices: { CMUIntelParaPrimary: 1 }
+      entries:
+      - id: RMCWeaponRifleMAR30
+      - id: RMCWeaponSMGM63B2
+    - name: Primary Ammunition
+      entries:
+      - id: RMCMagazineRifleMAR40
+        maxPerUser: 4
+      - id: CMMagazineSMGM63
+        maxPerUser: 4
+    - name: Handguns
+      choices: { CMUIntelParaSidearm: 1 }
+      entries:
+      - id: CMWeaponPistolM1984Empty
+      - id: AU14WeaponPistolM48A4Empty
+    - name: Handgun Ammunition
+      entries:
+      - id: CMMagazinePistolM1984
+        maxPerUser: 3
+      - id: AU14MagazinePistolM48A4
+        maxPerUser: 3
+    - name: Grenades
+      entries:
+      - id: RMCGrenadeFlashBang
+        maxPerUser: 2
+    - name: Field Supplies
+      entries:
+      - id: AU14PouchIFAKFill
+        maxPerUser: 1
+      - id: RMCZipties
+        maxPerUser: 2
+
+# GRU paramilitary rack: a GRU Spetsnaz-style assault element in the Union of Progressive Peoples' heaviest kit.
+# The best protection and firepower of the three agencies, paid for in speed: the UH7 slows its wearer heavily.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUIntelGRUParamilitaryVendor
+  name: GRU paramilitary equipment rack
+  description: An automated rack holding heavy Union of Progressive Peoples assault equipment for the Intelligence Section's armed element.
+  suffix: Intelligence Section, GRU
+  components:
+  - type: CMUVendGunsOnSafety
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMUJobIntelParamilitaryOfficer
+    - CMUJobIntelParamilitaryMember
+    sections:
+    # Each player can take one of each piece; the helmet will not go on without the armor.
+    - name: Heavy Armor Set
+      takeAll: CMUIntelParaArmor
+      entries:
+      - id: CMUIntelGRUHeavyArmor
+      - id: CMUIntelGRUAltyn
+    - name: Hearing Protection
+      choices: { CMUIntelParaEars: 1 }
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+    - name: Primary Weapon
+      choices: { CMUIntelParaPrimary: 1 }
+      entries:
+      - id: AU14WeaponRifleAG80
+      - id: RMCWeaponSMGType64
+    - name: Primary Ammunition
+      entries:
+      - id: AU14MagazineRifleAG80
+        maxPerUser: 6
+      - id: RMCMagazineSMGType64
+        maxPerUser: 6
+    - name: Handguns
+      choices: { CMUIntelParaSidearm: 1 }
+      entries:
+      - id: RMCWeaponPistolT73
+      - id: RMCWeaponPistolT74
+    - name: Handgun Ammunition
+      entries:
+      - id: RMCMagazinePistolT73
+        maxPerUser: 3
+    - name: Grenades
+      entries:
+      - id: RMCGrenadeFlashBang
+        maxPerUser: 2
+      - id: CMGrenadeFrag
+        maxPerUser: 2
+    - name: Snatch Kit
+      entries:
+      - id: CMUIntelGRUSedativeInjector
+        maxPerUser: 2
+      - id: RMCZipties
+        maxPerUser: 4
+    - name: Field Supplies
+      entries:
+      - id: RuMCUPPPouchIFAKFill
+        maxPerUser: 1
+
+# The GRU heavy set. The UH7 carries a tag the Altyn checks for, the same way the
+# scout cloak checks for scout armor; stock UPP pieces stay unpaired.
+- type: Tag
+  id: CMUIntelGRUHeavyArmor
+
+# Same protection and weight as the stock UH7. Unlike it, it goes on without UPP fatigues,
+# so the team can wear it over whatever cover clothes they arrived in.
+- type: entity
+  parent: RMCArmorSPPHeavy
+  id: CMUIntelGRUHeavyArmor
+  name: UH7 GRU armor
+  description: >-
+    Issued to GRU spetsnaz after a year of field trials, this UH7 variant trades the standard fatigue mounts for a
+    universal harness, so it can be worn over civilian dress during covert insertions. The trial teams asked for more
+    mobility; the Union gave them a faster fit, but not a lighter plate.
+  suffix: Intelligence Section, GRU
+  components:
+  - type: RemoveComponents
+    components:
+    - type: ClothingRequireEquipped
+  - type: Tag
+    tags:
+    - WhitelistChameleon # inherited from the stock UH7; listing tags replaces the parent's
+    - CMUIntelGRUHeavyArmor
+
+- type: entity
+  parent: AU14Altyn
+  id: CMUIntelGRUAltyn
+  suffix: Intelligence Section, GRU
+  components:
+  - type: ClothingRequireEquipped
+    autoUnequip: true
+    whitelist:
+      tags:
+      - CMUIntelGRUHeavyArmor
+    denyReason: cmu-intel-gru-altyn-needs-heavy-armor
+
+# One quick jab leaves the target slow and drowsy long enough to be cuffed and carried off.
+# Chloral hydrate slows and drowses the target; it does not knock anyone out on its own.
+- type: entity
+  parent: CMAutoInjector
+  id: CMUIntelGRUSedativeInjector
+  name: sedative autoinjector
+  description: An unmarked autoinjector holding a single dose of a fast-acting sedative.
+  suffix: Intelligence Section, GRU
+  components:
+  - type: Hypospray
+    transferAmount: 10
+    injectSound: /Audio/_RMC14/Medical/air_release.ogg
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 10
+        reagents:
+        - ReagentId: ChloralHydrate
+          Quantity: 10
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+    doAfter: 0
+
+# The IASF paratroopers' Goshawk vest, issued to the SIS paramilitary element.
+# TODO: the name and description are placeholders until the section's own wording is decided.
+- type: entity
+  parent: RMCArmorParaVest
+  id: CMUIntelSISParaVest
+  suffix: Intelligence Section, SIS

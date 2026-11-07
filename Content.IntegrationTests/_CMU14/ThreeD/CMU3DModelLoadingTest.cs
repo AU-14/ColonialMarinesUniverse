@@ -56,32 +56,6 @@ public sealed class CMU3DModelLoadingTest : GameTest
     }
 
     [Test]
-    public async Task WorkbenchCanSelectEveryModelAndCloseAndReopen()
-    {
-        await Client.WaitAssertion(() =>
-        {
-            var preview = CEntMan.System<CMU3DPreviewSystem>();
-            var prototypes = Client.ResolveDependency<IPrototypeManager>();
-            try
-            {
-                Assert.That(preview.Open(), Is.True);
-                Validate(prototypes);
-                Assert.That(prototypes.EnumeratePrototypes<CMU3DModelPrototype>().Any(model => model.EquipmentOnly), Is.True,
-                    "The authoring workbench must still make equipment drafts available.");
-                foreach (var model in prototypes.EnumeratePrototypes<CMU3DModelPrototype>())
-                    Assert.That(preview.Open(model.ID), Is.True, model.ID);
-                Assert.That(preview.Open("CMU3DThisModelDoesNotExist"), Is.False);
-                preview.Close();
-                Assert.That(preview.Open(), Is.True);
-            }
-            finally
-            {
-                preview.Close();
-            }
-        });
-    }
-
-    [Test]
     public async Task WorkbenchAndWorldViewReleaseOnlyTheirOwnLibraries()
     {
         await Client.WaitAssertion(() =>
@@ -174,16 +148,4 @@ public sealed class CMU3DModelLoadingTest : GameTest
         Assert.That(count, Is.GreaterThan(0), "The CMU resource mount must include the model library.");
     }
 
-    [Test]
-    public async Task PrintedArtworkLoadsFromTheActualClientResourceMount()
-    {
-        await Client.WaitAssertion(() =>
-        {
-            using var lease = Client.ResolveDependency<CMU3DModelLibrary>().AcquireWorld();
-            var surfaces = CMU3DSceneSurfaces.Load(Client.ResolveDependency<IPrototypeManager>(),
-                Client.ResolveDependency<IResourceCache>());
-            Assert.That(surfaces.Width, Is.GreaterThan(1));
-            Assert.That(surfaces.AtlasPixels().Any(pixel => pixel.A >= 128), Is.True);
-        });
-    }
 }

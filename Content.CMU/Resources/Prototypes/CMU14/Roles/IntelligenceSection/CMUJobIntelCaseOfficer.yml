@@ -1,0 +1,65 @@
+# Case Officer: leads a team in the field. Carries their real section ID and a colonist cover ID.
+# The cover also hides the job on HUDs and on the radio: no job icon and the colonist radio prefix.
+- type: job
+  parent: CMUJobIntelBase
+  id: CMUJobIntelCaseOfficer
+  displayWeight: 28
+  roundRole: IntelCaseOfficer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillIntel: 2
+      RMCSkillLeadership: 1
+      RMCSkillPolice: 1
+      RMCSkillDomestics: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+
+  name: cmu-job-name-intel-case-officer
+  description: cmu-job-description-intel-case-officer
+  playTimeTracker: CMUJobIntelCaseOfficer
+  startingGear: CMUGearIntelCaseOfficer
+  icon: "AU14JobIconColonyColonist"
+  hasIcon: false
+  spawnMenuRoleName: cmu-spawn-role-intel-case-officer
+  roleWeight: 0.25
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelCaseOfficer
+  equipment:
+    id: CMUIDCardIntelCaseOfficer
+    pocket1: CMUIDCardIntelCover
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelCaseOfficer
+  name: Spawn Point Intelligence Case Officer
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelCaseOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobIntelCaseOfficer
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobIntelCaseOfficer
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC

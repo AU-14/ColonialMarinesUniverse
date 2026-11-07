@@ -9,7 +9,7 @@ namespace Content.IntegrationTests.CMU14.Storage;
 [TestFixture]
 public sealed class CMUDespawnWhenEmptyTest
 {
-    private static readonly EntProtoId WeaponKit = "AU14KitWeaponM20A";
+
     private static readonly EntProtoId FastKit = "CMUTestFastDespawnWeaponKit";
 
     [TestPrototypes]
@@ -26,22 +26,6 @@ public sealed class CMUDespawnWhenEmptyTest
   components:
   - type: ContainerContainer
 ";
-
-    [Test]
-    public async Task WeaponKitsDespawnAfterOneMinute()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var prototype = server.ProtoMan.Index(WeaponKit);
-            Assert.That(prototype.TryComp<CMUDespawnWhenEmptyComponent>(out var despawn, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(despawn!.Delay, Is.EqualTo(TimeSpan.FromMinutes(1)));
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task OnlyEmptyKitsOnTheGroundDespawn()

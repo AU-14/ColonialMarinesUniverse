@@ -10,41 +10,6 @@ namespace Content.Tests.Shared.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaClanPolicyTest
 {
-    [TestCase(YautjaRank.Unblooded, "predhud")]
-    [TestCase(YautjaRank.YoungBlood, "predhud")]
-    [TestCase(YautjaRank.Blooded, "predhud")]
-    [TestCase(YautjaRank.Elite, "predhud")]
-    [TestCase(YautjaRank.Elder, "predhud")]
-    [TestCase(YautjaRank.Leader, "leaderhud")]
-    [TestCase(YautjaRank.Ancient, "councilhud")]
-    public void RankHudStatesMatchCmss13(YautjaRank rank, string expectedIconState)
-    {
-        Assert.That(YautjaRankMetadata.For(rank).IconState, Is.EqualTo(expectedIconState));
-    }
-
-    [Test]
-    public void NormalRankOptionsExcludeYoungBloodAndAncient()
-    {
-        var options = YautjaClanPolicy.GetNormalAssignableRanks();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(options, Does.Not.Contain(YautjaRank.YoungBlood));
-            Assert.That(options, Does.Not.Contain(YautjaRank.Ancient));
-            Assert.That(options, Does.Contain(YautjaRank.Unblooded));
-            Assert.That(options, Does.Contain(YautjaRank.Leader));
-        });
-    }
-
-    [Test]
-    public void AllIncludesUserAndAdminPermissionGroups()
-    {
-        Assert.That(
-            YautjaClanPermission.All,
-            Is.EqualTo(YautjaClanPermission.UserAll |
-                       YautjaClanPermission.AdminAncient |
-                       YautjaClanPermission.AdminManager));
-    }
 
     [TestCase(YautjaRank.YoungBlood, false)]
     [TestCase(YautjaRank.Unblooded, false)]

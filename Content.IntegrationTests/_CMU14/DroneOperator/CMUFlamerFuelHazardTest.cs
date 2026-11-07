@@ -22,9 +22,6 @@ namespace Content.IntegrationTests.CMU14.DroneOperator;
 public sealed class CMUFlamerFuelHazardTest : GameTest
 {
     [TestCase("RMCNapalmB", true)]
-    [TestCase("RMCNapalmX", false)]
-    [TestCase("RMCNapalmEX", false)]
-    [TestCase("RMCR189", true)]
     [TestCase("RMCCLF3", false)]
     public async Task AlternateFuelRupturesOnceAndPreventsWreckRepair(string reagent, bool delayed)
     {

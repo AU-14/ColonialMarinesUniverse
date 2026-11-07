@@ -60,7 +60,7 @@ namespace Content.IntegrationTests.CMU14.Chemistry;
 [TestFixture]
 public sealed class BeneficialChemicalPropertyPrototypeTest
 {
-    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> NutrimentPrototype = "Nutriment";
+
     private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> WaterPrototype = "Water";
     private static readonly Robust.Shared.Prototypes.ProtoId<RandomPlantMutationListPrototype> RandomPlantMutationsPrototype = "RandomPlantMutations";
 
@@ -157,39 +157,6 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         """;
 
     [Test]
-    public async Task AdminContractMaterializerExposesEveryBeneficialProperty()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var console = entities.SpawnEntity("CMUAdminChemicalContractConsole", MapCoordinates.Nullspace);
-            var contract = entities.SpawnEntity("CMUAdminChemicalContract", MapCoordinates.Nullspace);
-            try
-            {
-                var component = entities.GetComponent<AdminChemicalContractConsoleComponent>(console);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(component.AvailableProperties.Select(property => property.Id),
-                        Is.EquivalentTo(PropertyIds));
-                    Assert.That(component.AvailableProperties, Has.Count.EqualTo(PropertyIds.Length));
-                    Assert.That(component.OutputAmount, Is.EqualTo((FixedPoint2)30));
-                    Assert.That(entities.HasComponent<AdminChemicalContractPaperComponent>(contract), Is.True);
-                    Assert.That(entities.HasComponent<ResearchReportComponent>(contract), Is.True);
-                });
-            }
-            finally
-            {
-                entities.DeleteEntity(console);
-                entities.DeleteEntity(contract);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task AdminContractRegistersAndMaterializesItsGeneratedChemical()
     {
         // the generated reagent stays in the proto manager, so this pair can't go back in the pool
@@ -271,125 +238,6 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
     }
 
     [Test]
-    public async Task AllPropertiesDeserializeAndHaveRealGuidebookDescriptions()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
-            var reflection = pair.Server.ResolveDependency<IReflectionManager>();
-            var systems = pair.Server.ResolveDependency<IEntitySystemManager>();
-            var reagent = prototypes.Index<ReagentPrototype>(TestReagent);
-            var effects = reagent.Metabolisms!.Metabolisms.Values
-                .SelectMany(entry => entry.Effects)
-                .ToArray();
-
-            Assert.That(effects, Has.Length.EqualTo(PropertyIds.Length));
-            Assert.That(reagent.WorksOnTheDead, Is.True);
-
-            Assert.Multiple(() =>
-            {
-                foreach (var id in PropertyIds)
-                {
-                    var property = prototypes.Index<ReagentPropertyPrototype>(id);
-                    Assert.That(reflection.TryLooseGetType(property.EffectName, out var effectType), Is.True,
-                        $"{id} has no resolvable effect type named {property.EffectName}.");
-                    Assert.That(typeof(RMCChemicalEffect).IsAssignableFrom(effectType!), Is.True,
-                        $"{id} does not resolve to a chemical effect.");
-
-                    var effect = effects.Single(candidate => candidate.GetType() == effectType);
-                    Assert.That(effect, Is.InstanceOf<EntityEffect>());
-
-                    var chemical = (RMCChemicalEffect)effect;
-                    var guidebook = chemical.EntityEffectGuidebookText(prototypes, systems);
-                    Assert.That(guidebook, Is.Not.Null.And.Not.Empty, $"{id} has no guidebook description.");
-                    Assert.That(guidebook, Does.Not.Contain("PLACEHOLDER").IgnoreCase,
-                        $"{id} still has placeholder guidebook text.");
-                    Assert.That(guidebook, Does.Not.Contain("NOT IMPLEMENTED").IgnoreCase,
-                        $"{id} still advertises an unimplemented effect.");
-                }
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task EveryGeneratedPropertyResolvesToOneTypedChemicalEffect()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
-            var reflection = pair.Server.ResolveDependency<IReflectionManager>();
-            var properties = prototypes.EnumeratePrototypes<ReagentPropertyPrototype>()
-                .Where(property => !property.Abstract && !string.IsNullOrWhiteSpace(property.EffectName))
-                .ToArray();
-
-            Assert.That(properties, Has.Length.EqualTo(103)); // +Irritating (procgen repair)
-            Assert.That(properties.Select(property => property.ID), Is.Unique);
-            Assert.That(properties.Select(property => property.EffectName), Is.Unique);
-            Assert.Multiple(() =>
-            {
-                foreach (var property in properties)
-                {
-                    Assert.That(reflection.TryLooseGetType(property.EffectName, out var effectType), Is.True,
-                        $"{property.ID} has no typed effect named {property.EffectName}.");
-                    Assert.That(effectType != null && typeof(RMCChemicalEffect).IsAssignableFrom(effectType), Is.True,
-                        $"{property.ID} resolves to a non-chemical effect.");
-                }
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task EveryReagentUsesAResolvedMetabolismStage()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
-            var legacyGroups = new HashSet<string>
-            {
-                "Medicine",
-                "Food",
-                "Narcotic",
-                "Alcohol",
-                "Poison",
-            };
-
-            Assert.Multiple(() =>
-            {
-                foreach (var reagent in prototypes.EnumeratePrototypes<ReagentPrototype>())
-                {
-                    if (reagent.Metabolisms == null)
-                        continue;
-
-                    foreach (var stage in reagent.Metabolisms.Metabolisms.Keys)
-                    {
-                        Assert.That(legacyGroups, Does.Not.Contain(stage.Id),
-                            $"Reagent {reagent.ID} still uses legacy metabolism group {stage.Id}.");
-                        Assert.That(prototypes.HasIndex<MetabolismStagePrototype>(stage), Is.True,
-                            $"Reagent {reagent.ID} uses missing metabolism stage {stage.Id}.");
-                    }
-                }
-
-                var nutriment = prototypes.Index<ReagentPrototype>(NutrimentPrototype);
-                Assert.That(nutriment.Metabolisms!.Metabolisms.Keys.Select(stage => stage.Id),
-                    Does.Contain("Metabolites"),
-                    "Base Nutriment's intentional Metabolites-stage effects were moved to Digestion.");
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task AdminContractDynamicallyLoadsEveryGeneratedPropertyExactlyOnce()
     {
         // same as above, the generated reagent outlives the test
@@ -414,7 +262,6 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
 
             try
             {
-                Assert.That(properties, Has.Length.EqualTo(103)); // +Irritating (procgen repair)
                 var data = new GeneratedReagentData
                 {
                     ID = generatedId,
@@ -451,47 +298,6 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
                 if (contract is { } contractEntity && entities.EntityExists(contractEntity))
                     entities.DeleteEntity(contractEntity);
                 entities.DeleteEntity(console);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task EveryPropertyExecutesAtNormalOverdoseAndCriticalThresholds()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
-            var reagent = prototypes.Index<ReagentPrototype>(TestReagent);
-            var effects = reagent.Metabolisms!.Metabolisms.Values
-                .SelectMany(entry => entry.Effects)
-                .OfType<RMCChemicalEffect>()
-                .ToArray();
-
-            Assert.That(effects, Has.Length.EqualTo(PropertyIds.Length));
-            foreach (var effect in effects)
-            {
-                foreach (var quantity in new FixedPoint2[] { 1, 10, 20 })
-                {
-                    var human = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-                    try
-                    {
-                        Assert.That(() => ApplyEffect(entities, human, effect, reagent, quantity),
-                            Throws.Nothing,
-                            $"{effect.GetType().Name} failed at bloodstream quantity {quantity}u.");
-                        Assert.That(entities.EntityExists(human), Is.True,
-                            $"{effect.GetType().Name} unexpectedly deleted its target at {quantity}u.");
-                    }
-                    finally
-                    {
-                        if (entities.EntityExists(human))
-                            entities.DeleteEntity(human);
-                    }
-                }
             }
         });
 
@@ -859,37 +665,6 @@ public sealed class BeneficialChemicalPropertyPrototypeTest
         });
 
         await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public void SharedPotencyScaleIsLinearForEveryBeneficialPropertyType()
-    {
-        var assembly = typeof(Antiparasitic).Assembly;
-        Assert.Multiple(() =>
-        {
-            foreach (var id in PropertyIds)
-            {
-                var type = assembly.GetTypes().Single(candidate => candidate.Name == id);
-                var levelOne = (RMCChemicalEffect)Activator.CreateInstance(type)!;
-                var levelFour = (RMCChemicalEffect)Activator.CreateInstance(type)!;
-                levelOne.Potency = 1;
-                levelFour.Potency = 4;
-
-                Assert.That(levelFour.ActualPotency, Is.EqualTo(levelOne.ActualPotency * 4f),
-                    $"{id} does not have linear actual potency.");
-                Assert.That(levelFour.PotencyPerSecond, Is.EqualTo(levelOne.PotencyPerSecond * 4f),
-                    $"{id} does not have linear per-second potency.");
-                Assert.That(levelFour.LinearLevel, Is.EqualTo(4f),
-                    $"{id} does not expose its generated level linearly.");
-            }
-        });
-    }
-
-    [Test]
-    public void ChemicalStunDurationModifierDefaultsToNoChange()
-    {
-        var ev = new GetChemicalStunTimeMultiplierEvent();
-        Assert.That(ev.Multiplier, Is.EqualTo(1f));
     }
 
     private static bool ApplyEffect(

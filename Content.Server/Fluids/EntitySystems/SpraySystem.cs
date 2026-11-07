@@ -9,6 +9,7 @@ using Content.Shared.Fluids;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Fluids.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Nutrition.EntitySystems; // CMU14
 using Content.Shared.Timing;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
@@ -39,7 +40,8 @@ public sealed partial class SpraySystem : SharedSpraySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SprayComponent, AfterInteractEvent>(OnAfterInteract);
+        // CMU14: spray bottles are also Edible drinks; clicking a mob sprays it instead of force-feeding (FLOW-20).
+        SubscribeLocalEvent<SprayComponent, AfterInteractEvent>(OnAfterInteract, before: [typeof(IngestionSystem)]);
         SubscribeLocalEvent<SprayComponent, UserActivateInWorldEvent>(OnActivateInWorld);
         Subs.CVar(_cfg, CCVars.GridImpulseMultiplier, UpdateGridMassMultiplier, true);
     }
@@ -153,8 +155,10 @@ public sealed partial class SpraySystem : SharedSpraySystem
                 .Offset((diffNorm + rotation.ToVec()).Normalized() * diffLength + quarter);
 
             var distance = (target.Position - sprayerMapPos.Position).Length();
-            if (distance > entity.Comp.SprayDistance)
-                target = sprayerMapPos.Offset(diffNorm * entity.Comp.SprayDistance);
+            // CMU14: the click distance above only picks the spawn offset below. Every puff flies the
+            // full spray distance along its own spread angle, so targets beside or past the click are
+            // still touched instead of the puff despawning at the click point (FLOW-20).
+            target = sprayerMapPos.Offset(rotation.ToVec() * entity.Comp.SprayDistance);
 
             var adjustedSolutionAmount = entity.Comp.TransferAmount / entity.Comp.VaporAmount;
 
@@ -172,9 +176,9 @@ public sealed partial class SpraySystem : SharedSpraySystem
 
             // Impulse direction is defined in world coordinates, not local coordinates.
             var impulseDirection = rotation.ToVec();
-            var time = diffLength / entity.Comp.SprayVelocity;
+            var time = entity.Comp.SprayDistance / entity.Comp.SprayVelocity; // CMU14: full range (FLOW-20)
 
-            _vapor.Start(vapor, vaporXform, impulseDirection * diffLength, entity.Comp.SprayVelocity, target, time, user);
+            _vapor.Start(vapor, vaporXform, impulseDirection * entity.Comp.SprayDistance, entity.Comp.SprayVelocity, target, time, user); // CMU14
 
             var thingGettingPushed = entity.Owner;
             if (_container.TryGetOuterContainer(entity, sprayerXform, out var container))

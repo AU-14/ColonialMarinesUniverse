@@ -30,6 +30,7 @@
   - type: InteractionOutline
   - type: Transform
     anchored: true
+    gridTraversal: false # CMU14: fixed vegetation must not transfer to passing dropship grids
   - type: Physics
   - type: Fixtures
     fixtures:

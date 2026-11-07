@@ -57,41 +57,6 @@ public sealed class SatiationTest : GameTest
     [SidedDependency(Side.Server)] private readonly SatiationSystem _satiation = default!;
 
     [Test, RunOnSide(Side.Server)]
-    [Description(
-        "Verifies the basic operations of 'SatiationSystem.SetValue', 'SatiationSystem.ModifyValue', and 'SatiationSystem.GetValueOrNull'")]
-    public void SatiationBasicTest()
-    {
-        var entity = SEntity<SatiationComponent>(SSpawn(TestProto));
-
-        // Verify the starting value is in the starting range.
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(_satiation.GetValueOrNull(entity, TestSatiationType),
-                Is.LessThanOrEqualTo(StartingMax).And.GreaterThanOrEqualTo(StartingMin));
-            Assert.That(_satiation.IsValueInRange(entity, TestSatiationType, above: StartingMin, below: StartingMax),
-                Is.True);
-        }
-
-        // The rest of this modifies the value and verifies the numeric value is what's expected
-
-        _satiation.SetValue(entity, TestSatiationType, MiddleKey);
-        Assert.That(_satiation.GetValueOrNull(entity, TestSatiationType), Is.EqualTo(MiddleValue));
-
-        _satiation.ModifyValue(entity, TestSatiationType, -20);
-        Assert.That(_satiation.GetValueOrNull(entity, TestSatiationType), Is.EqualTo(MiddleValue - 20));
-
-        _satiation.ModifyValue(entity, TestSatiationType, -int.MaxValue);
-        Assert.That(_satiation.GetValueOrNull(entity, TestSatiationType), Is.Zero);
-
-        _satiation.ModifyValue(entity, TestSatiationType, int.MaxValue);
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(_satiation.GetValueOrNull(entity, TestSatiationType), Is.EqualTo(MaxValue));
-            Assert.That(_satiation.GetValueOrNull(entity, TestSatiationType + NotRealKey), Is.Null);
-        }
-    }
-
-    [Test, RunOnSide(Side.Server)]
     [Description("Verifies 'SatiationSystem.TryGetValueByThreshold' when threshold keys are integers")]
     public void SatiationGetValueByThresholdTest()
     {

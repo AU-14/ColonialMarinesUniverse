@@ -155,6 +155,15 @@ public sealed class YautjaHuntLobbyTest
             var mob = player.AttachedEntity!.Value;
             Assert.That(server.EntMan.GetComponent<YautjaComponent>(mob).ClanRank, Is.EqualTo(YautjaRank.Ancient));
 
+            // the ancient slot is its own job, and the racks only knew the hunter one
+            var racks = server.System<YautjaGearRackAccessSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(racks.GetOpenDenial(mob, YautjaGearRackKind.Elder), Is.Null);
+                Assert.That(racks.GetOpenDenial(mob, YautjaGearRackKind.Adult), Is.Null);
+                Assert.That(racks.GetOpenDenial(mob, YautjaGearRackKind.Youngblood), Is.Null);
+            });
+
             // the overseer reaches a living pred on the hunting party net
             var sent = server.System<YautjaOverseerSystem>()
                 .SendOverseerMessage("test", YautjaOverseerNetwork.HuntingParty, "test");

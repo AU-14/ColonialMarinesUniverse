@@ -349,7 +349,8 @@ namespace Content.IntegrationTests.Tests
 
             var coords = new MapCoordinates(Vector2.Zero, mapId);
 
-            await pair.RunTicksSync(3);
+            // CMU14: Let delayed system-owned entities initialize before measuring prototype spawn/despawn effects.
+            await pair.RunTicksSync(120);
 
             // We consider only non-audio entities, as some entities will just play sounds when they spawn.
             int Count(IEntityManager ent) => ent.EntityCount - ent.Count<AudioComponent>();

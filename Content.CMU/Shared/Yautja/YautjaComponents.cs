@@ -3236,8 +3236,9 @@ public sealed partial class YautjaChainGauntletComponent : Component
     [DataField]
     public int HelpFinisherComboRequired = 5;
 
+    // cmss13 KnockDown(1) is one status unit, 2 seconds. xenos get their 2/3 from RMCStatusEffectSystem
     [DataField]
-    public TimeSpan HelpFinisherKnockdown = TimeSpan.FromSeconds(1);
+    public TimeSpan HelpFinisherKnockdown = TimeSpan.FromSeconds(2);
 
     [DataField]
     public DamageSpecifier HelpFinisherDamage = new()
@@ -3310,6 +3311,9 @@ public sealed partial class YautjaChainGauntletComponent : Component
 
     [DataField]
     public float DisarmFinisherThrowSpeed = 10f;
+
+    [DataField]
+    public LocId DisarmFinisherMessage = "cmu-yautja-chain-gauntlet-disarm-message";
 
     [DataField]
     public TimeSpan ChainPullDelay = TimeSpan.FromSeconds(0.5);
@@ -3455,6 +3459,59 @@ public sealed partial class YautjaCeremonialDaggerComponent : Component
 
     [DataField]
     public SoundSpecifier FirstPassSound = new SoundPathSpecifier("/Audio/Weapons/slash.ogg", AudioParams.Default.WithVolume(-4f));
+
+    // cmss13 numbers: 10 on the head for the scalp, then 18 and 22 on every limb
+    [DataField]
+    public DamageSpecifier ScalpDamage = new()
+    {
+        DamageDict =
+        {
+            { "Slash", 10 },
+        },
+    };
+
+    [DataField]
+    public DamageSpecifier StripDamage = new()
+    {
+        DamageDict =
+        {
+            { "Slash", 18 },
+        },
+    };
+
+    [DataField]
+    public DamageSpecifier SkinDamage = new()
+    {
+        DamageDict =
+        {
+            { "Slash", 22 },
+        },
+    };
+
+    [DataField]
+    public SoundSpecifier ScalpSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Weapons/Flaying/slashmiss.ogg", AudioParams.Default.WithVolume(-4f));
+
+    [DataField]
+    public SoundSpecifier StripSound = new SoundPathSpecifier("/Audio/Weapons/bladeslice.ogg", AudioParams.Default.WithVolume(-4f));
+
+    [DataField]
+    public SoundSpecifier SkinSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Weapons/Flaying/wristblades_hit.ogg", AudioParams.Default.WithVolume(-4f));
+
+    // human skin pieces per stage, cmss13 gives 1 + 3 + 2
+    [DataField]
+    public int ScalpHide = 1;
+
+    [DataField]
+    public int StripHide = 3;
+
+    [DataField]
+    public int SkinHide = 2;
+
+    [DataField]
+    public EntProtoId HidePrototype = "CMUYautjaHumanHide";
+
+    [DataField]
+    public EntProtoId MeatPrototype = "FoodMeatHuman";
 }
 
 [Serializable, NetSerializable]
@@ -3466,7 +3523,8 @@ public enum YautjaFlayingStage : byte
     Complete,
 }
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+// Stage is what the body overlay draws: 1 cut, 2 stripped, 3 fully flayed. severed limbs carry it at 0
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class YautjaFlayedComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -3477,6 +3535,14 @@ public sealed partial class YautjaFlayedComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityUid? CurrentFlayer;
+}
+
+// cmss13 gives flayed skin a stack_id of "[victim]-hide", so two people's skin never merges into one stack
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class YautjaFlayedHideComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public string Victim = string.Empty;
 }
 
 [RegisterComponent]

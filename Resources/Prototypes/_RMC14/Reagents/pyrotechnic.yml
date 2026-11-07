@@ -114,6 +114,7 @@
   intensity: 15
   duration: 50
   radius: 7
+  fireSpread: true # CMU14: B-gel is the spreading fuel: wider flamer cone, longer standard-tank reach, larger chemical fires
   fireEntity: RMCTileFireGreen
 
 - type: reagent

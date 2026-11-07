@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Diagnostics;
 using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Explosion.EntitySystems;
@@ -12,57 +11,6 @@ namespace Content.IntegrationTests.Tests.Performance;
 public sealed class IndependentPerformanceAuditTest : GameTest
 {
     private const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
-
-    [Test, Explicit("Independent audit: measure the cache capacity boundary in Release.")]
-    public async Task MeasureSparseAnchoredQueriesWithoutRetention()
-    {
-        var map = await Pair.CreateTestMap();
-        var observations = new List<string>();
-        await Server.WaitAssertion(() =>
-        {
-            var cache = Server.System<AnchoredTileCacheSystem>();
-            var maps = Server.System<SharedMapSystem>();
-            var clear = typeof(AnchoredTileCacheSystem).GetMethod("ClearTiles", Private)!;
-            for (var round = 0; round < 5; round++)
-            foreach (var count in round % 2 == 0 ? new[] { 4096, 4097 } : new[] { 4097, 4096 })
-            {
-                clear.Invoke(cache, null);
-                // Empty cells must never consume the snapshot cache.
-                for (var i = 0; i < count; i++) cache.Get(map.Grid, new Vector2i(i + 10, 10));
-                var total = 0;
-                double Direct()
-                {
-                    var start = Stopwatch.GetTimestamp();
-                    for (var repeat = 0; repeat < 10; repeat++)
-                    for (var i = 0; i < count; i++)
-                    {
-                        var query = maps.GetAnchoredEntities(map.Grid, map.Grid.Comp, new Vector2i(i + 10, 10));
-                        while (query.MoveNext(out _)) total++;
-                    }
-                    return Stopwatch.GetElapsedTime(start).TotalMilliseconds;
-                }
-                // Warm the direct path too; alternate which measured path runs first.
-                var direct = Direct();
-                if (round % 2 == 0) direct = Direct();
-                var misses = cache.CacheMisses;
-                var allocated = GC.GetAllocatedBytesForCurrentThread();
-                var start = Stopwatch.GetTimestamp();
-                for (var repeat = 0; repeat < 10; repeat++)
-                for (var i = 0; i < count; i++) total += cache.Get(map.Grid, new Vector2i(i + 10, 10)).Length;
-                var cached = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
-                var bytes = GC.GetAllocatedBytesForCurrentThread() - allocated;
-                var refreshes = cache.CacheMisses - misses;
-                if (round % 2 != 0) direct = Direct();
-                Assert.That(total, Is.Zero);
-                Assert.That(refreshes, Is.EqualTo(count * 10L));
-                Assert.That(cache.CachedTileCount, Is.Zero);
-                Assert.That(bytes, Is.Zero);
-                observations.Add($"AUDIT cache round={round} cells={count} lookups={count * 10} misses={refreshes} cachedMs={cached:F4} directMs={direct:F4} allocatedBytes={bytes}");
-            }
-        });
-        // Server callbacks can inherit a pooled server's older NUnit context.
-        foreach (var observation in observations) TestContext.Out.WriteLine(observation);
-    }
 
     [TestCase(false)]
     [TestCase(true)]

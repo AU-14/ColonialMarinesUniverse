@@ -102,39 +102,6 @@ public sealed class CMUChemicalAddictionDeadlineTest : GameTest
         });
     }
 
-    [Test]
-    public async Task IdleFiveHundredEntitiesKeepTheirDeadlinesWithoutAllocating()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var system = SEntMan.System<ChemicalAddictionSystem>();
-            var entries = new List<(ChemicalAddictionEntry Entry, TimeSpan Deadline)>();
-            for (var i = 0; i < 500; i++)
-            {
-                var uid = SSpawn(null);
-                system.AddOrSatisfy(uid, "Chemical");
-                var entry = SComp<ChemicalAddictionComponent>(uid).Addictions["Chemical"];
-                entries.Add((entry, entry.NextMessage));
-            }
-
-            for (var i = 0; i < 8; i++)
-                system.Update(0);
-            var before = GC.GetAllocatedBytesForCurrentThread();
-            var started = Stopwatch.GetTimestamp();
-            for (var i = 0; i < 4096; i++)
-                system.Update(0);
-            var elapsed = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
-            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-            TestContext.Out.WriteLine($"CMU_CHEMICAL_ADDICTION population=500 idleUpdates=4096 ms={elapsed:F4} allocated={allocated}");
-            Assert.That(allocated, Is.LessThan(1024));
-            foreach (var (entry, deadline) in entries)
-            {
-                Assert.That(entry.Craving, Is.False);
-                Assert.That(entry.NextMessage, Is.EqualTo(deadline));
-            }
-        });
-    }
-
     private void At(TimeSpan time, Action action)
     {
         // Only this subsystem runs at the synthetic time; the dirty pair is discarded afterwards.

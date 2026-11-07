@@ -1,0 +1,8 @@
+# D4: the only reset key that frees a River-Melded thrall. It is a normal reset key otherwise; the
+# CMUWeylandResetKey marker is what the melding system checks on the target-side defibrillation event.
+# Parent is the SMART variant so colonists without engineering skill can use it.
+- type: entity
+  parent: RMCSynthResetKeySMART
+  id: CMUSynthResetKeyWeyland
+  components:
+  - type: CMUWeylandResetKey

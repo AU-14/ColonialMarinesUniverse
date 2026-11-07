@@ -391,6 +391,14 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: cmu-vendor-advanced-gunship-crew-hud
+      choices: { CMUPlatoonAirCrewGunshipHUD: 1 }
+      entries:
+      - id: CMUVisorGunshipCrewAdvanced
+    - name: cmu-vendor-basic-gunship-crew-huds
+      entries:
+      - id: CMUVisorGunshipCrew
+        amount: 5
     - name: Fatigues
       choices: { CMUPlatoonAirCrewFatigues: 1 }
       entries:
@@ -1633,18 +1641,24 @@
       entries:
       - id: CMMagazineRifleM54CMK1
         amount: 200
+      - id: CMU14MagazineRifleM54CMK1Rubber
+        amount: 20
       - id: CMMagazineRifleM54CMK1AP
         amount: 15
       - id: CMMagazineRifleM54CMK1Tracer
         amount: 5
       - id: CMMagazineSMGM63
         amount: 200
+      - id: RMCMagazineSMGM63Rubber
+        amount: 20
       - id: CMMagazineSMGM63AP
         amount: 15
       - id: CMMagazineSMGM63Ext
         amount: 10
       - id: CMMagazineRifleM4SPR
         amount: 60
+      - id: RMCMagazineRifleM4SPRRubber
+        amount: 20
       - id: CMMagazineRifleM4SPRAP
         amount: 15
       - id: CMMagazineRifleM4SPRExt
@@ -1653,6 +1667,8 @@
         amount: 5
       - id: CMMagazineRifleM54C
         amount: 100
+      - id: RMCMagazineRifleM54CRubber
+        amount: 20
       - id: CMMagazineRifleM54CAP
         amount: 15
       - id: CMMagazineRifleM54CExt
@@ -1661,32 +1677,46 @@
         amount: 5
       - id: RMCBoxShotgunBuckshot
         amount: 20
+      - id: RMCBoxShotgunBeanbag
+        amount: 20
       - id: RMCBoxShotgunFlechette
         amount: 20
       - id: RMCBoxShotgunSlugs
         amount: 20
       - id: RMCMagazineSmartGun
         amount: 25
+      - id: CMU14MagazineSmartGunRubber
+        amount: 20
       - id: RMCPowerCellSmartgun
         amount: 10
     - name: secondary ammunition
       entries:
       - id: CMMagazinePistolM1984
         amount: 200
+      - id: RMCMagazinePistolM1984Rubber
+        amount: 20
       - id: RMCMagazinePistolM1984AP
         amount: 15
       - id: RMCMagazinePistolM1984HP
         amount: 5
       - id: CMMagazinePistolM77AP
         amount: 200
+      - id: RMCMagazinePistolM77Rubber
+        amount: 20
       - id: RMCSpeedLoaderM44
         amount: 100
+      - id: CMU14SpeedLoaderM44Rubber
+        amount: 20
       - id: RMCSpeedLoader44Marksman
         amount: 10
       - id: RMCMagazinePistolSU6
         amount: 30
+      - id: CMU14MagazinePistolSU6Rubber
+        amount: 20
       - id: RMCMagazinePistolM13
         amount: 40
+      - id: CMU14MagazinePistolM13Rubber
+        amount: 20
       - id: RMCMagazinePistolM13AP
         amount: 4
       - id: RMCMagazinePistolM13Ext

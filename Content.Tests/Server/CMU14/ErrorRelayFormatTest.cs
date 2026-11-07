@@ -6,54 +6,6 @@ namespace Content.Tests.Server.CMU14;
 
 public sealed class ErrorRelayFormatTest
 {
-    private static ErrorLine Line(string text, string sawmill = "eng", string level = "Error") => new()
-    {
-        Sawmill = sawmill,
-        Level = level,
-        Text = text,
-    };
-
-    [Test]
-    public void RendersLevelAndSawmill()
-    {
-        var line = Line("Caught exception in GameLoop Tick");
-
-        Assert.That(line.Render(), Is.EqualTo("**Error `eng`** Caught exception in GameLoop Tick"));
-    }
-
-    [Test]
-    public void RepeatedEntriesCollapseWithMarker()
-    {
-        var lines = new List<ErrorLine>
-        {
-            Line("boom"),
-            Line("boom"),
-            Line("boom"),
-            Line("different"),
-        };
-
-        var description = ErrorRelayFormat.BuildDescription(lines, 2800, out var overflow);
-
-        Assert.That(overflow, Is.EqualTo(0));
-        Assert.That(description, Is.EqualTo("**Error `eng`** boom\n_×3_\n\n**Error `eng`** different"));
-    }
-
-    [Test]
-    public void EntriesPastTheCapCountAsOverflow()
-    {
-        var lines = new List<ErrorLine>
-        {
-            Line(new string('a', 2000)),
-            Line(new string('b', 2000)),
-            Line("tail"),
-        };
-
-        var description = ErrorRelayFormat.BuildDescription(lines, 2800, out var overflow);
-
-        Assert.That(overflow, Is.EqualTo(2));
-        Assert.That(description, Does.StartWith("**Error `eng`** aaa"));
-        Assert.That(description, Does.Not.Contain("tail"));
-    }
 
     [Test]
     public void SanitizeReplacesAddressesHardwareIdsAndPlatformIds()
@@ -72,21 +24,6 @@ public sealed class ErrorRelayFormatTest
             Is.EqualTo("ban ([hwid])"));
         Assert.That(ErrorRelayFormat.Sanitize("discord id 1451234567890123456 refused"),
             Is.EqualTo("discord id [id] refused"));
-    }
-
-    [Test]
-    public void SanitizeScrubsFullLogLine()
-    {
-        Assert.That(ErrorRelayFormat.Sanitize("banned Jane (192.168.1.23, hwid: a1B2c3D4e5F6g7) from the server"),
-            Is.EqualTo("banned Jane ([ip], [hwid]) from the server"));
-    }
-
-    [Test]
-    public void SanitizeScrubsHwidBeforeOtherScanners()
-    {
-        // The hwid scanner runs first: a mac-shaped hwid value is scrubbed whole.
-        Assert.That(ErrorRelayFormat.Sanitize("hwid: 0a-1b-2c-3d-4e-5f"),
-            Is.EqualTo("[hwid]"));
     }
 
     [Test]

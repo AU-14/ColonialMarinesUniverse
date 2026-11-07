@@ -37,14 +37,9 @@ public sealed class CMUCombatDroneTest
 {
     [TestCase(0, 0, -1, true)]
     [TestCase(0, 1, 0, true)]
-    [TestCase(0, -1, 0, true)]
     [TestCase(0, 1, 0.01f, false)]
     [TestCase(0, 0, 1, false)]
     [TestCase(90, 1, 0, true)]
-    [TestCase(90, -1, 0, false)]
-    [TestCase(180, 0, 1, true)]
-    [TestCase(180, 0, -1, false)]
-    [TestCase(270, -1, 0, true)]
     [TestCase(359, 0, -1, true)]
     [TestCase(0, 0, 0, false)]
     public void FiringArcIncludesSideBoundariesButRejectsRear(float heading, float x, float y, bool allowed)

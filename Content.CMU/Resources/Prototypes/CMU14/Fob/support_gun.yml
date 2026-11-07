@@ -1,7 +1,7 @@
 - type: entity
   id: CMUFobGunMount
   name: UH-02 systems platform
-  description: A deployable support-gun platform. Two platforms may operate within the selected LZ deployment area.
+  description: A deployable support-gun platform. Three platforms may operate within the selected LZ deployment area.
   placement:
     mode: SnapgridCenter
   components:
@@ -21,6 +21,7 @@
   - type: CMUFobPresentation
     device: Platform
   - type: CMUFobGunMount
+  - type: CMUFobInstructions
   - type: Item
     size: Ginormous
   - type: PowerLoaderGrabbable
@@ -47,6 +48,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUFobInstructions
   - type: Transform
     anchored: true
   - type: Physics

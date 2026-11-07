@@ -1,4 +1,6 @@
 using System.Numerics;
+using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.CMU14.Input;
 using Content.Shared.CMU14.Yautja;
@@ -172,7 +174,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool CanAimAcrossZWithoutGun(EntityUid user)
     {
-        return HasComp<XenoComponent>(user) || HasComp<YautjaComponent>(user);
+        // CMU14: a non-yautja leaper (CMUZLeap) aims its leap at the level above or below the same way
+        return HasComp<XenoComponent>(user) || HasComp<YautjaComponent>(user) || HasComp<CMUZLeapComponent>(user);
     }
 
     private bool TryDisableShootDown(EntityUid user)
@@ -585,9 +588,18 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private int GetRequestedShotOffset(EntityUid shooter, bool requireReadyGunForLookUp = false)
     {
-        TryComp<CMUZLevelShooterComponent>(shooter, out var shooterComp);
-        if (shooterComp is { ShootDown: true })
+        // The chin turret supplies its own ground-level muzzle, independent of the operator's deck.
+        if (TryComp(shooter, out RemoteWeaponOperatorComponent? remote) &&
+            remote.SelectedWeapon is { } weapon &&
+            HasComp<GunshipDirectFireWeaponComponent>(weapon) &&
+            TryComp(weapon, out DropshipWeaponComponent? dropshipWeapon) && dropshipWeapon.GunneryOnly)
+            return 0;
+
+        if (TryComp<CMUZLevelShooterComponent>(shooter, out var shooterComp) &&
+            shooterComp.ShootDown)
+        {
             return -1;
+        }
 
         if (TryComp<CMUZLevelViewerComponent>(shooter, out var viewer) &&
             viewer.LookUp &&

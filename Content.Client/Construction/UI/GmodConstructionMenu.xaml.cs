@@ -398,8 +398,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
                     IoCManager.Resolve<IEntitySystemManager>()
                         .GetEntitySystem<SavedBuildPlacementSystem>()
                         .BeginPlacement(saved);
-                    // Close the menu so the cursor is free to choose the placement location.
-                    Close();
+                    // CMU14: leave the menu open while placement is active.
                 }
                 return;
             }
@@ -421,7 +420,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
                 IoCManager.Resolve<IEntitySystemManager>()
                     .GetEntitySystem<SavedBuildPlacementSystem>()
                     .PlaceAtOriginal(saved);
-                Close();
+                // CMU14: leave the menu open after placing a saved build.
                 return;
             }
 
@@ -1216,7 +1215,8 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     public bool UseGroupedView => true;
 
     /// <summary>The menu closes as soon as a build/placement begins.</summary>
-    public bool CloseOnConstruct => true;
+    // CMU14: keep the menu available while placing and after closing held/worn storage windows.
+    public bool CloseOnConstruct => false;
 
     // -------------------------------------------------------------------------
     // IConstructionMenuView - Button states
