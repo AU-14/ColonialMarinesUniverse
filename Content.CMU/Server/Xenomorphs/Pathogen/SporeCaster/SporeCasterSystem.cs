@@ -21,8 +21,8 @@ using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared.Examine;
 using Content.Server.Ghost.Roles;
-using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
+using Content.Shared.Ghost.Roles.Components;
 
 namespace Content.Server.CMU14.Xenomorphs.Pathogen.Sporecaster;
 
