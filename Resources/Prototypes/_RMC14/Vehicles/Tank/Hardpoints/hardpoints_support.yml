@@ -262,6 +262,8 @@
   name: artillery module
   description: An artillery support module for a tank.
   components:
+  - type: VehicleArtilleryModule
+    maxRange: 65
   - type: Sprite
     state: artillery
   - type: HardpointItem
@@ -348,6 +350,8 @@
   name: Improper artillery module
   description: An artillery support module for a tank.
   components:
+  - type: VehicleArtilleryModule
+    maxRange: 65
   - type: Sprite
     sprite: CMU14/Structures/vehicles/fv150/icons.rsi
     state: tweartillery

@@ -470,6 +470,74 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         Dirty(ent);
     }
 
+    public NightVisionSettings? CaptureSettings(EntityUid user)
+    {
+        if (!TryComp(user, out NightVisionComponent? nightVision))
+            return null;
+
+        return new NightVisionSettings(
+            nightVision.Alert,
+            nightVision.State,
+            nightVision.Overlay,
+            nightVision.Innate,
+            nightVision.SeeThroughContainers,
+            nightVision.DrawVisibleMobs,
+            nightVision.Green,
+            nightVision.Mesons,
+            nightVision.ExperimentalMesonFov,
+            nightVision.BlockScopes,
+            nightVision.OnlyHalf,
+            nightVision.Tint,
+            nightVision.NoiseStrength,
+            nightVision.VignetteStrength);
+    }
+
+    public void SetVehicleVision(EntityUid user, Color? tint, bool overlay, bool seeThroughContainers)
+    {
+        var nightVision = EnsureComp<NightVisionComponent>(user);
+        nightVision.State = NightVisionState.Full;
+        nightVision.Overlay = overlay;
+        nightVision.SeeThroughContainers = seeThroughContainers;
+        nightVision.DrawVisibleMobs = true;
+        nightVision.Green = true;
+        nightVision.Mesons = false;
+        nightVision.ExperimentalMesonFov = false;
+        nightVision.BlockScopes = false;
+        nightVision.OnlyHalf = false;
+        nightVision.Tint = tint;
+        Dirty(user, nightVision);
+        UpdateAlert((user, nightVision));
+        NightVisionChanged((user, nightVision));
+    }
+
+    public void RestoreSettings(EntityUid user, NightVisionSettings? settings)
+    {
+        if (settings is not { } previous)
+        {
+            RemComp<NightVisionComponent>(user);
+            return;
+        }
+
+        var nightVision = EnsureComp<NightVisionComponent>(user);
+        nightVision.Alert = previous.Alert;
+        nightVision.State = previous.State;
+        nightVision.Overlay = previous.Overlay;
+        nightVision.Innate = previous.Innate;
+        nightVision.SeeThroughContainers = previous.SeeThroughContainers;
+        nightVision.DrawVisibleMobs = previous.DrawVisibleMobs;
+        nightVision.Green = previous.Green;
+        nightVision.Mesons = previous.Mesons;
+        nightVision.ExperimentalMesonFov = previous.ExperimentalMesonFov;
+        nightVision.BlockScopes = previous.BlockScopes;
+        nightVision.OnlyHalf = previous.OnlyHalf;
+        nightVision.Tint = previous.Tint;
+        nightVision.NoiseStrength = previous.NoiseStrength;
+        nightVision.VignetteStrength = previous.VignetteStrength;
+        Dirty(user, nightVision);
+        UpdateAlert((user, nightVision));
+        NightVisionChanged((user, nightVision));
+    }
+
     public void SetState(Entity<NightVisionComponent?> ent, NightVisionState state)
     {
         if (!Resolve(ent, ref ent.Comp))

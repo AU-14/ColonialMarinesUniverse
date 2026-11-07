@@ -72,3 +72,27 @@
   - type: Sprite
     sprite: Objects/Tools/wrench.rsi
     state: icon
+
+- type: entity
+  id: CMUActionVehicleNightVision
+  parent: BaseAction
+  name: cmu-vehicle-vision-nvg-name
+  description: cmu-vehicle-vision-nvg-desc
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleNightVisionActionEvent
+  - type: Action
+    raiseOnUser: true
+    itemIconStyle: BigAction
+
+- type: entity
+  id: CMUActionVehicleThermalVision
+  parent: BaseAction
+  name: cmu-vehicle-vision-thermal-name
+  description: cmu-vehicle-vision-thermal-desc
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleThermalVisionActionEvent
+  - type: Action
+    raiseOnUser: true
+    itemIconStyle: BigAction

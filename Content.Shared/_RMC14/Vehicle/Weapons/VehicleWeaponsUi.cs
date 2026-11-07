@@ -98,6 +98,8 @@ public sealed class VehicleWeaponsUiState : BoundUserInterfaceState
     public readonly bool StabilizationEnabled;
     public readonly bool CanToggleAuto;
     public readonly bool AutoEnabled;
+    public readonly bool CanFireArtillery;
+    public readonly int ArtilleryMaxRange;
 
     public VehicleWeaponsUiState(
         NetEntity vehicle,
@@ -105,7 +107,9 @@ public sealed class VehicleWeaponsUiState : BoundUserInterfaceState
         bool canToggleStabilization,
         bool stabilizationEnabled,
         bool canToggleAuto,
-        bool autoEnabled)
+        bool autoEnabled,
+        bool canFireArtillery,
+        int artilleryMaxRange)
     {
         Vehicle = vehicle;
         Hardpoints = hardpoints;
@@ -113,6 +117,8 @@ public sealed class VehicleWeaponsUiState : BoundUserInterfaceState
         StabilizationEnabled = stabilizationEnabled;
         CanToggleAuto = canToggleAuto;
         AutoEnabled = autoEnabled;
+        CanFireArtillery = canFireArtillery;
+        ArtilleryMaxRange = artilleryMaxRange;
     }
 }
 
@@ -147,6 +153,13 @@ public sealed class VehicleWeaponsAutoModeMessage : BoundUserInterfaceMessage
     {
         Enabled = enabled;
     }
+}
+
+[Serializable, NetSerializable]
+public sealed class VehicleArtilleryFireMessage(int x, int y) : BoundUserInterfaceMessage
+{
+    public readonly int X = x;
+    public readonly int Y = y;
 }
 
 [Serializable, NetSerializable]

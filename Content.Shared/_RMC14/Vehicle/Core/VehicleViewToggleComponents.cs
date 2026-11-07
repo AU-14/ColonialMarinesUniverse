@@ -43,3 +43,15 @@ public sealed class VehicleViewToggledEvent : EntityEventArgs
         IsOutside = isOutside;
     }
 }
+
+public sealed class VehicleViewToggleEnabledEvent : EntityEventArgs
+{
+    public readonly EntityUid OutsideTarget;
+
+    public VehicleViewToggleEnabledEvent(EntityUid outsideTarget)
+    {
+        OutsideTarget = outsideTarget;
+    }
+}
+
+public sealed partial class VehicleViewToggleDisabledEvent : EntityEventArgs;

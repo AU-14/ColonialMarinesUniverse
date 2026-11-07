@@ -24,6 +24,7 @@ public sealed class VehicleWeaponsBoundUserInterface : BoundUserInterface
         _menu.OnSelect += mountedEntity => SendMessage(new VehicleWeaponsSelectMessage(mountedEntity));
         _menu.OnToggleStabilization += enabled => SendMessage(new VehicleWeaponsStabilizationMessage(enabled));
         _menu.OnToggleAutoTurret += enabled => SendMessage(new VehicleWeaponsAutoModeMessage(enabled));
+        _menu.OnFireArtillery += (x, y) => SendMessage(new VehicleArtilleryFireMessage(x, y));
         _menu.OpenCenteredAt(new Vector2(0.7f, 0.05f));
     }
 
@@ -56,7 +57,9 @@ public sealed class VehicleWeaponsBoundUserInterface : BoundUserInterface
             weaponsState.CanToggleStabilization,
             weaponsState.StabilizationEnabled,
             weaponsState.CanToggleAuto,
-            weaponsState.AutoEnabled);
+            weaponsState.AutoEnabled,
+            weaponsState.CanFireArtillery,
+            weaponsState.ArtilleryMaxRange);
     }
 
     protected override void ReceiveMessage(BoundUserInterfaceMessage message)

@@ -68,6 +68,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         SubscribeLocalEvent<VehicleWeaponsSeatComponent, VehicleWeaponsSelectMessage>(OnWeaponsSelect);
         SubscribeLocalEvent<VehicleWeaponsSeatComponent, VehicleWeaponsStabilizationMessage>(OnWeaponsStabilization);
         SubscribeLocalEvent<VehicleWeaponsSeatComponent, VehicleWeaponsAutoModeMessage>(OnWeaponsAutoMode);
+        SubscribeLocalEvent<VehicleWeaponsSeatComponent, VehicleArtilleryFireMessage>(OnVehicleArtilleryFire);
         SubscribeLocalEvent<VehicleWeaponsOperatorComponent, ComponentShutdown>(OnOperatorShutdown);
         SubscribeLocalEvent<VehicleWeaponsOperatorComponent, ShotAttemptedEvent>(OnOperatorShotAttempted);
         SubscribeLocalEvent<VehicleWeaponsOperatorComponent, VehicleHardpointSelectActionEvent>(OnHardpointActionSelect);

@@ -218,6 +218,18 @@ public sealed partial class VehicleWeaponsSystem
             autoEnabled = deployable.AutoTurretEnabled;
         }
 
+        var artilleryMaxRange = TryGetArtilleryModule(vehicle, hardpoints, itemSlots, out var artilleryModule)
+            ? artilleryModule.MaxRange
+            : 0;
+        var artilleryWeaponReady = operatorSelection is { } readyWeapon &&
+                                   HasComp<VehicleArtilleryWeaponComponent>(readyWeapon) &&
+                                   TryComp(readyWeapon, out GunComponent? artilleryGun) &&
+                                   _hardpoints.IsHardpointFunctional(readyWeapon) &&
+                                   _guns.CanShoot(artilleryGun);
+        var canFireArtillery = artilleryMaxRange > 0 &&
+                               canUseHardpointActions &&
+                               artilleryWeaponReady;
+
         _ui.SetUiState(seat, VehicleWeaponsUiKey.Key,
             new VehicleWeaponsUiState(
                 GetNetEntity(vehicle),
@@ -225,7 +237,9 @@ public sealed partial class VehicleWeaponsSystem
                 canToggleStabilization,
                 stabilizationEnabled,
                 canToggleAuto,
-                autoEnabled));
+                autoEnabled,
+                canFireArtillery,
+                artilleryMaxRange));
     }
 
     private VehicleWeaponsUiEntry CreateMountedSlotUiEntry(

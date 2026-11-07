@@ -46,6 +46,7 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
         UpdateActionState(toggle);
         UpdateWatching(user, toggle);
         Dirty(user, toggle);
+        RaiseLocalEvent(user, new VehicleViewToggleEnabledEvent(outsideTarget));
     }
 
     public void DisableViewToggle(EntityUid user, EntityUid source)
@@ -85,9 +86,13 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
     private void OnToggleViewShutdown(Entity<VehicleViewToggleComponent> ent, ref ComponentShutdown args)
     {
         if (ent.Comp.Action is not { } action)
+        {
+            RaiseLocalEvent(ent.Owner, new VehicleViewToggleDisabledEvent());
             return;
+        }
 
         RemoveAndDeleteToggleAction(action, ent.Owner);
+        RaiseLocalEvent(ent.Owner, new VehicleViewToggleDisabledEvent());
     }
 
     private void OnToggleViewAction(Entity<VehicleViewToggleComponent> ent, ref VehicleToggleViewActionEvent args)

@@ -4,6 +4,7 @@
   name: 86mm LTB cannon
   description: A light tank cannon hardpoint.
   components:
+  - type: VehicleArtilleryWeapon
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container
@@ -171,6 +172,7 @@
   name: 30mm AC3-E autocannon
   description: A 30mm AC3-E autocannon hardpoint.
   components:
+  - type: VehicleArtilleryWeapon
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container
@@ -248,6 +250,7 @@
   name: Improper 45mm L26A2 autocannon
   description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
   components:
+  - type: VehicleArtilleryWeapon
   - type: ContainerContainer
     containers:
       ballistic-ammo: !type:Container

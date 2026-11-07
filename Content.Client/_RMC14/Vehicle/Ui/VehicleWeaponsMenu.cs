@@ -23,6 +23,7 @@ public sealed partial class VehicleWeaponsMenu : FancyWindow
     public event Action<NetEntity?>? OnSelect;
     public event Action<bool>? OnToggleStabilization;
     public event Action<bool>? OnToggleAutoTurret;
+    public event Action<int, int>? OnFireArtillery;
 
     private readonly IEntityManager _entManager = IoCManager.Resolve<IEntityManager>();
     private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
@@ -62,6 +63,21 @@ public sealed partial class VehicleWeaponsMenu : FancyWindow
 
             OnToggleAutoTurret?.Invoke(args.Pressed);
         };
+
+        ArtilleryFireButton.OnPressed += _ =>
+        {
+            if (!int.TryParse(ArtilleryX.Text, out var x) ||
+                !int.TryParse(ArtilleryY.Text, out var y))
+            {
+                ArtilleryError.Text = Loc.GetString("cmu-vehicle-artillery-invalid-coordinates");
+                ArtilleryError.Visible = true;
+                return;
+            }
+
+            ArtilleryError.Visible = false;
+            OnFireArtillery?.Invoke(x, y);
+        };
+        ArtilleryFireButton.Text = Loc.GetString("cmu-vehicle-artillery-fire");
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
@@ -76,9 +92,17 @@ public sealed partial class VehicleWeaponsMenu : FancyWindow
         bool canToggleStabilization,
         bool stabilizationEnabled,
         bool canToggleAuto,
-        bool autoEnabled)
+        bool autoEnabled,
+        bool canFireArtillery,
+        int artilleryMaxRange)
     {
         _ = vehicle;
+
+        ArtilleryControls.Visible = artilleryMaxRange > 0;
+        ArtilleryFireButton.Disabled = !canFireArtillery;
+        ArtilleryRangeLabel.Text = artilleryMaxRange > 0
+            ? Loc.GetString("cmu-vehicle-artillery-range", ("range", artilleryMaxRange))
+            : string.Empty;
 
         _suppressStabilization = true;
         StabilizationToggle.Disabled = !canToggleStabilization;

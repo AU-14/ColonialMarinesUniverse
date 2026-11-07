@@ -47,5 +47,29 @@
                      MinSize="0 6"
                      HorizontalExpand="True"
                      Visible="False"/>
+
+        <BoxContainer Name="ArtilleryControls"
+                      Access="Public"
+                      Orientation="Vertical"
+                      SeparationOverride="2"
+                      HorizontalExpand="True"
+                      Visible="False">
+            <Label Name="ArtilleryRangeLabel"
+                   Access="Public"
+                   Text=""
+                   FontColorOverride="#C7D9ED"
+                   HorizontalExpand="True"/>
+            <BoxContainer Orientation="Horizontal" SeparationOverride="2" HorizontalExpand="True">
+                <LineEdit Name="ArtilleryX" Access="Public" PlaceHolder="X" HorizontalExpand="True"/>
+                <LineEdit Name="ArtilleryY" Access="Public" PlaceHolder="Y" HorizontalExpand="True"/>
+                <Button Name="ArtilleryFireButton" Access="Public"/>
+            </BoxContainer>
+            <Label Name="ArtilleryError"
+                   Access="Public"
+                   Text=""
+                   FontColorOverride="#F07878"
+                   HorizontalExpand="True"
+                   Visible="False"/>
+        </BoxContainer>
     </BoxContainer>
 </controls:VehicleWeaponsMenu>
