@@ -43,8 +43,9 @@ public sealed class MohawkExchangeTest
             opforfighters: 0
         """;
 
-    [Test]
-    public async Task GunshipHoldsUntilEmptyThenMohawkTakesItsPad()
+    [TestCase("USCM", "Omaha")]
+    [TestCase("ProdigySF", "Midway")]
+    public async Task GunshipHoldsUntilEmptyThenMohawkTakesItsPad(string platoonId, string expectedMohawk)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -52,7 +53,7 @@ public sealed class MohawkExchangeTest
         EntityUid gunship = default;
         EntityUid computer = default;
         EntityUid pad = default;
-        EntityUid originalOmaha = default;
+        EntityUid originalMohawk = default;
         EntityUid passenger = default;
         EntityUid cancelledReplacement = default;
         EntityUid cancelledDeparture = default;
@@ -63,7 +64,7 @@ public sealed class MohawkExchangeTest
             // Pooled worlds retain the selected platoons when entities are cleared.
             platoons.SelectedGovforPlatoon = null;
             platoons.SelectedOpforPlatoon = null;
-            platoons.SelectedGovforPlatoon = server.ProtoMan.Index<PlatoonPrototype>("USCM");
+            platoons.SelectedGovforPlatoon = server.ProtoMan.Index<PlatoonPrototype>(platoonId);
             Assert.That(entities.System<AuRoundSystem>().SetPlanet("CMUMohawkExchangePlanet"), Is.True);
             var grids = ticker.LoadGameMap(server.ProtoMan.Index<GameMapPrototype>(USSBushReduxPrototype),
                 out _, DeserializationOptions.Default with { InitializeMaps = true });
@@ -78,9 +79,12 @@ public sealed class MohawkExchangeTest
             var exchange = entities.QueryEntities<CMUDropshipMohawkExchangeComponent>().Single();
             gunship = exchange.Owner;
             Assert.That(exchange.Comp.Faction, Is.EqualTo("govfor"));
+            Assert.That(exchange.Comp.MohawkPath.ToString(),
+                Is.EqualTo($"/Maps/CMU14/Dropships/Mohawk/{expectedMohawk.ToLowerInvariant()}_deployment.yml"));
             Assert.That(entities.HasComponent<MultiDeckDropshipComponent>(gunship), Is.False,
                 "The exchange offer belongs on the dynamic gunship, not the Mohawk.");
-            originalOmaha = entities.QueryEntities<MultiDeckDropshipComponent>().Single().Owner;
+            originalMohawk = entities.QueryEntities<MultiDeckDropshipComponent>().Single().Owner;
+            Assert.That(entities.GetComponent<MetaDataComponent>(originalMohawk).EntityName, Is.EqualTo(expectedMohawk));
             computer = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .First(nav => entities.GetComponent<TransformComponent>(nav.Owner).GridUid == gunship).Owner;
         });
@@ -149,9 +153,10 @@ public sealed class MohawkExchangeTest
                 "The empty gunship must fly back to the fleet and be removed.");
             var replacement = entities.QueryEntities<MultiDeckDropshipComponent>()
                 .Select(mohawk => mohawk.Owner)
-                .Where(mohawk => mohawk != originalOmaha)
+                .Where(mohawk => mohawk != originalMohawk)
                 .ToArray();
             Assert.That(replacement, Has.Length.EqualTo(1), "The exchange must deliver exactly one Mohawk.");
+            Assert.That(entities.GetComponent<MetaDataComponent>(replacement[0]).EntityName, Is.EqualTo(expectedMohawk));
             Assert.That(entities.GetComponent<DropshipComponent>(replacement[0]).Destination, Is.EqualTo(pad),
                 "The replacement Mohawk must land on the gunship's vacated pad.");
             Assert.That(entities.GetComponent<DropshipDestinationComponent>(pad).Ship, Is.EqualTo(replacement[0]));
