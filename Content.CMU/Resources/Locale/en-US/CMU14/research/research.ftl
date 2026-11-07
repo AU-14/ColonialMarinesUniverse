@@ -165,6 +165,9 @@ research-sim-ui-selected-targ-conflict = Conflicts with the selected target prop
 
 cmu-research-reduce-cooldown = [color=#ffbf00][head=3]-60s 1CR[/head][/color]
 research-report-contract-mix-required = This synthesis only takes place once mixed: close the container's lid and use Mix.
+research-report-contract-heat-required = This synthesis only takes place when heated to at least {$TEMP} K: use a hotplate or a microwave.
+research-report-contract-cooling-required = This synthesis only takes place when cooled to {$TEMP} K or below: use ice brine or the chemistry chiller.
+research-report-contract-ignition-ceiling = This chemical is combustible: above {$TEMP} K the synthesis will not take place.
 
 # FLOW-24: GOVFOR research is locked during Insurgency
 research-locked-insurgency = [color=#ff4040][head=3]RESEARCH NETWORK OFFLINE[/head][/color] [color=#ffbf00]Government research authority is suspended in this operational zone. No contracts can be taken, and scans and simulations earn nothing.[/color]

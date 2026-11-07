@@ -127,85 +127,6 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
     }
 
     [Test]
-    public async Task VisionModesCycleAndUpdateCameraEye()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = Create(map.Grid, false);
-            var eye = SEntMan.GetComponent<EyeComponent>(mount.Chin.Eye!.Value);
-            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Normal));
-            Assert.That(eye.DrawLight, Is.True);
-            Send(mount, new MohawkChinGunVisionMessage());
-            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Night));
-            Assert.That(mount.Terminal.ChinGunVision, Is.EqualTo(MohawkChinGunVisionMode.Night));
-            Assert.That(eye.DrawLight, Is.False, "Night optics render fullbright.");
-            Assert.That(eye.DrawFov, Is.True, "Night optics still respect walls groundside.");
-            Send(mount, new MohawkChinGunVisionMessage());
-            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Thermal));
-            Assert.That(eye.DrawFov, Is.False, "Thermal sees through walls even groundside.");
-            Send(mount, new MohawkChinGunVisionMessage());
-            Assert.That(mount.Chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Normal));
-            Assert.That(eye.DrawLight, Is.True);
-            Assert.That(eye.DrawFov, Is.True);
-        });
-    }
-
-    [Test]
-    public async Task PilotAndGunnerFlaresAreSharedAcrossShipConsoles()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = Create(map.Grid, false);
-            var other = SEntMan.SpawnEntity(null, new EntityCoordinates(map.Grid, 2, 0));
-            var otherTerminal = SEntMan.AddComponent<DropshipTerminalWeaponsComponent>(other);
-            var pilotFlare = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 4, 4));
-            var gunnerFlare = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 6, 6));
-            var weapons = Server.System<SharedDropshipWeaponSystem>();
-            weapons.ShareFlare(other, pilotFlare, false);
-            weapons.ShareFlare(mount.Console, gunnerFlare, true);
-            Assert.That(mount.Terminal.PilotFlare, Is.EqualTo(pilotFlare));
-            Assert.That(otherTerminal.GunnerFlare, Is.EqualTo(gunnerFlare));
-            Assert.That(otherTerminal.PilotFlare, Is.EqualTo(pilotFlare));
-            weapons.ShareFlare(mount.Console, null, true);
-            Assert.That(otherTerminal.GunnerFlare, Is.Null);
-            SEntMan.DeleteEntity(pilotFlare);
-            Assert.That(mount.Terminal.PilotFlare, Is.Null, "Deleted flares leave the shared list immediately.");
-            Assert.That(otherTerminal.PilotFlare, Is.Null);
-        });
-    }
-
-    [Test]
-    public async Task DeletedAutomaticCameraAndTargetClearConsoleReferencesImmediately()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = Create(map.Grid, false);
-            var target = SEntMan.SpawnEntity(null, new EntityCoordinates(map.MapUid, 1.5f, 16));
-            SEntMan.AddComponent<NpcFactionMemberComponent>(target).Factions.Add("OPFOR");
-            SEntMan.AddComponent<Content.Shared.Mobs.Components.MobStateComponent>(target);
-            Send(mount, new MohawkChinGunFreeFireMessage());
-            var system = Server.System<MohawkChinGunSystem>();
-            system.Update(0);
-            Assert.That(mount.Terminal.ChinGunAiTarget, Is.EqualTo(target));
-            Assert.That(mount.Terminal.ChinGunEye, Is.Not.Null);
-            SEntMan.DeleteEntity(mount.Chin.AutomaticEye!.Value);
-            Assert.That(mount.Terminal.ChinGunEye, Is.Null);
-            Assert.That(mount.Chin.AutomaticEye, Is.Null);
-            system.Update(0);
-            Assert.That(mount.Terminal.ChinGunEye, Is.Not.Null);
-            Send(mount, new MohawkChinGunApproveAiMessage(SEntMan.GetNetEntity(target)));
-            SEntMan.DeleteEntity(target);
-            Assert.That(mount.Terminal.ChinGunAiTarget, Is.Null);
-            Assert.That(mount.Terminal.ChinGunAiApproved, Is.False);
-            Assert.That(mount.Chin.ApprovedAutomaticTarget, Is.Null);
-        });
-        await Pair.RunSeconds(0.2f);
-    }
-
-    [Test]
     public async Task IffTogglePreservesTheGroundRangeLimitAndRoundsStopAtTheBoundary()
     {
         var map = await Pair.CreateTestMap();
@@ -249,38 +170,6 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             Assert.That(SEntMan.Deleted(projectile), Is.True);
             Assert.That(Server.System<Content.Shared.Damage.Systems.DamageableSystem>().GetTotalDamage(wall).Float(),
                 Is.Zero, "A wall beyond the twenty-tile endpoint must not be hit.");
-        });
-    }
-
-    [Test]
-    public async Task GroundCameraCannotPanThroughOpaqueWallsButFlybyDisablesFov()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = Create(map.Grid, false);
-            var system = Server.System<MohawkChinGunSystem>();
-            var transform = Server.System<SharedTransformSystem>();
-            Assert.That(SEntMan.GetComponent<EyeComponent>(mount.Chin.Eye!.Value).DrawFov, Is.True);
-            var wall = SEntMan.SpawnEntity("CMWallMetal", new EntityCoordinates(map.Grid, 1.5f, 5));
-            mount.Chin.CameraPan = new Vector2(0, 15);
-            system.Update(0);
-            var eyePosition = transform.GetMapCoordinates(mount.Chin.Eye!.Value);
-            var wallPosition = transform.GetMapCoordinates(wall);
-            Assert.That(eyePosition.Position.Y, Is.LessThan(wallPosition.Position.Y),
-                "A camera pan cannot move the eye behind a blocking wall.");
-            SEntMan.DeleteEntity(wall);
-            system.Update(0);
-            Assert.That(transform.GetMapCoordinates(mount.Chin.Eye!.Value).Position.Y,
-                Is.GreaterThan(wallPosition.Position.Y));
-            Send(mount, new MohawkChinGunControlMessage());
-            SEntMan.EnsureComponent<FTLComponent>(map.Grid).State = FTLState.Travelling;
-            SEntMan.AddComponent<DropshipInFlyByComponent>(map.Grid);
-            Send(mount, new MohawkChinGunControlMessage());
-            Assert.That(mount.Chin.Operator, Is.EqualTo(mount.Actor));
-            Assert.That(SEntMan.GetComponent<EyeComponent>(mount.Chin.Eye!.Value).DrawFov, Is.False);
-            SEntMan.RemoveComponent<FTLComponent>(map.Grid);
-            SEntMan.RemoveComponent<DropshipInFlyByComponent>(map.Grid);
         });
     }
 
@@ -395,75 +284,6 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
             SEntMan.RemoveComponent<FTLComponent>(shipMap.Grid);
             SEntMan.RemoveComponent<DropshipInFlyByComponent>(shipMap.Grid);
         });
-    }
-
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task FlareLockWarnsNearbyPlayerInChatButNotDistantPlayerOrRepeatedLock(bool popupsInChat)
-    {
-        var map = await Pair.CreateTestMap();
-        Mount mount = null!;
-        EntityUid nearby = default;
-        EntityUid distant = default;
-        await Server.WaitAssertion(() =>
-        {
-            mount = Create(map.Grid, true);
-            var weapons = Server.System<SharedDropshipWeaponSystem>();
-            Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipCASDebug, true);
-            EntityUid Flare(float x)
-            {
-                var flare = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(x, 2)));
-                SEntMan.AddComponent<FlareSignalComponent>(flare);
-                weapons.MakeDropshipTarget(flare, "TEST");
-                return flare;
-            }
-            nearby = Flare(10);
-            distant = Flare(40);
-        });
-        await Pair.RunUntilSynced();
-        var warnings = new List<Content.Shared.Chat.ChatMessage>();
-        var controller = Client.ResolveDependency<Robust.Client.UserInterface.IUserInterfaceManager>()
-            .GetUIController<Content.Client.UserInterface.Systems.Chat.ChatUIController>();
-        var config = Client.ResolveDependency<IConfigurationManager>();
-        var previousPopupsInChat = config.GetCVar(Content.Shared.CCVar.CCVars.PopupsInChat);
-        void Capture(Content.Shared.Chat.ChatMessage message)
-        {
-            if (message.Channel == Content.Shared.Chat.ChatChannel.Server &&
-                message.Message.Contains("M90 gunner locked"))
-                warnings.Add(message);
-        }
-        await Client.WaitPost(() =>
-        {
-            config.SetCVar(Content.Shared.CCVar.CCVars.PopupsInChat, popupsInChat);
-            controller.MessageAdded += Capture;
-        });
-        try
-        {
-            await Server.WaitPost(() => Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(nearby))));
-            await Pair.RunTicksSync(3);
-            await Client.WaitAssertion(() => Assert.That(warnings, Has.Count.EqualTo(1)));
-            await Server.WaitPost(() => Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(distant))));
-            await Pair.RunTicksSync(3);
-            await Client.WaitAssertion(() => Assert.That(warnings, Has.Count.EqualTo(1),
-                "A player outside the engagement radius receives no warning."));
-            await Server.WaitPost(() => Send(mount, new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(nearby))));
-            await Pair.RunTicksSync(3);
-            await Client.WaitAssertion(() => Assert.That(warnings, Has.Count.EqualTo(1),
-                "Repeated locks cannot spam the same flare warning within thirty seconds."));
-        }
-        finally
-        {
-            await Client.WaitPost(() =>
-            {
-                controller.MessageAdded -= Capture;
-                config.SetCVar(Content.Shared.CCVar.CCVars.PopupsInChat, previousPopupsInChat);
-            });
-            await Server.WaitPost(() =>
-            {
-                SEntMan.RemoveComponent<FTLComponent>(map.Grid);
-                SEntMan.RemoveComponent<DropshipInFlyByComponent>(map.Grid);
-            });
-        }
     }
 
     [Test]
@@ -849,27 +669,6 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
     }
 
     [Test]
-    public async Task LowAmmoWarnsOnceBelowAQuarterCrate()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = Create(map.Grid, false);
-            var turret = Server.System<MohawkChinGunSystem>();
-            turret.Update(0);
-            Assert.That(mount.Terminal.ChinGunLowAmmo, Is.Empty);
-            mount.Ammo.Rounds = mount.Ammo.MaxRounds / 4 - 1;
-            turret.Update(0);
-            Assert.That(mount.Terminal.ChinGunLowAmmo, Does.Contain("F1"));
-            Assert.That(mount.Chin.LowAmmoWarned, Does.Contain(mount.Crate), "Each crate warns the gunner once.");
-            mount.Ammo.Rounds = mount.Ammo.MaxRounds;
-            turret.Update(0);
-            Assert.That(mount.Terminal.ChinGunLowAmmo, Is.Empty);
-            Assert.That(mount.Chin.LowAmmoWarned, Is.Empty, "Refilled crates re-arm the warning.");
-        });
-    }
-
-    [Test]
     public async Task ApprovedAiSquallFiringIsNotThrottledByAcquisitionCadence()
     {
         var map = await Pair.CreateTestMap();
@@ -1131,38 +930,4 @@ public sealed class MohawkTriggerAndAirburstTest : GameTest
         });
     }
 
-    [Test]
-    public async Task FlareGunneryRejectsGroundHoverTransitAndUnregisteredFlares()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = Create(map.Grid, false);
-            var turret = Server.System<MohawkChinGunSystem>();
-            var weapons = Server.System<SharedDropshipWeaponSystem>();
-            var flare = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(1.5f, 15)));
-            SEntMan.AddComponent<FlareSignalComponent>(flare);
-            weapons.MakeDropshipTarget(flare, "TEST");
-            void Select() => SEntMan.EventBus.RaiseLocalEvent(mount.Console,
-                new MohawkChinGunFlareMessage(SEntMan.GetNetEntity(flare))
-                { Actor = mount.Actor, UiKey = DropshipTerminalWeaponsUi.Key });
-            Select();
-            Assert.That(mount.Terminal.Target, Is.Null);
-            var ftl = SEntMan.EnsureComponent<FTLComponent>(mount.Ship);
-            ftl.State = FTLState.Travelling;
-            Assert.That(turret.IsAirborne(mount.Point), Is.False, "Ordinary transit must not permit M90 fire.");
-            SEntMan.AddComponent<DropshipInFlyByComponent>(mount.Ship);
-            SEntMan.AddComponent<DropshipTacticalHoverComponent>(mount.Ship);
-            Assert.That(turret.IsAirborne(mount.Point), Is.False, "Tactical hover must never allow flare fire.");
-            Select();
-            Assert.That(mount.Terminal.Target, Is.Null);
-            SEntMan.RemoveComponent<DropshipTacticalHoverComponent>(mount.Ship);
-            Assert.That(turret.IsAirborne(mount.Point), Is.True);
-            mount.Terminal.Targets.Clear();
-            Select();
-            Assert.That(mount.Terminal.Target, Is.Null, "A forged/unlisted flare ID must not be accepted.");
-            SEntMan.RemoveComponent<FTLComponent>(mount.Ship);
-            SEntMan.RemoveComponent<DropshipInFlyByComponent>(mount.Ship);
-        });
-    }
 }

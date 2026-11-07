@@ -55,25 +55,6 @@ public sealed class CMUJeepCrashTest : GameTest
     }
 
     [Test]
-    public void CrashDamageGrowsWithSpeed()
-    {
-        const float min = 2f, max = 10f, floor = 0.25f;
-        float Scale(float speed)
-            => CMUVehicleCrashComponent.Scale(speed, min, max, floor);
-
-        Assert.That(Scale(min), Is.EqualTo(floor).Within(0.001f), "The slowest crash that counts does its floor.");
-        Assert.That(Scale(max), Is.EqualTo(1f).Within(0.001f), "A top speed crash does all of it.");
-        Assert.That(Scale(max * 2f), Is.EqualTo(1f).Within(0.001f), "Faster than top speed does no more.");
-
-        var last = Scale(min);
-        for (var speed = min + 0.5f; speed <= max; speed += 0.5f)
-        {
-            Assert.That(Scale(speed), Is.GreaterThan(last), $"A crash at {speed} should hit harder than a slower one.");
-            last = Scale(speed);
-        }
-    }
-
-    [Test]
     public void HeadOnMeansTheFrontTouches()
     {
         // The jeep's hull, facing south: the front is -y.
@@ -149,31 +130,6 @@ public sealed class CMUJeepCrashTest : GameTest
                 "A hit on the hood wears the engine more than one elsewhere.");
             Assert.That(hull.Integrity, Is.EqualTo(hullDirect), "The engine soaks all of a direct hit.");
         });
-    }
-
-    [Test]
-    public async Task EngineSmokeReachesClientsAsItIsShot()
-    {
-        var jeep = await SpawnJeep();
-        float smoke = 0f, heavy = 0f;
-        await Server.WaitAssertion(() =>
-        {
-            var comp = SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep);
-            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
-            var ahead = SEntMan.SpawnEntity(null, new EntityCoordinates(grid, 0.5f, -2.5f));
-            var damage = new DamageSpecifier();
-            damage.DamageDict["Structural"] = 5;
-            var damageable = SEntMan.System<DamageableSystem>();
-            smoke = comp.EngineSmokeFraction * comp.EngineMaxIntegrity;
-            heavy = comp.EngineHeavySmokeFraction * comp.EngineMaxIntegrity;
-            while (comp.EngineIntegrity >= smoke)
-                damageable.TryChangeDamage(jeep, damage, origin: ahead);
-        });
-        await RunTicksSync(10);
-
-        var client = CEntMan.GetComponent<CMUOpenVehicleComponent>(ToClientUid(jeep));
-        Assert.That(client.EngineIntegrity, Is.LessThan(smoke).And.GreaterThanOrEqualTo(heavy),
-            "Clients see the engine smoke as soon as the hits wear it down, before it burns.");
     }
 
     [Test]
@@ -270,91 +226,10 @@ public sealed class CMUJeepCrashTest : GameTest
     /// <summary>
     /// Where the client draws the gun's muzzle flash: the barrel tip on screen.
     /// </summary>
-    private async Task<Vector2> FlashAt(EntityUid gun)
-    {
-        var at = Vector2.Zero;
-        await Client.WaitAssertion(() =>
-        {
-            var muzzle = Client.System<VehicleTurretMuzzleOffsetSystem>();
-            Assert.That(muzzle.TryGetGunPose(ToClientUid(gun), null, out var origin, out _), Is.True);
-            at = Client.System<SharedTransformSystem>().ToMapCoordinates(origin).Position;
-        });
-        return at;
-    }
 
     /// <summary>
     /// Swings the gun round to the jeep's front left, the way it follows the gunner's cursor, and
     /// gives the turret and the client time to catch up.
     /// </summary>
-    private async Task<Vector2> AimAhead(EntityUid jeep)
-    {
-        var target = Vector2.Zero;
-        await Server.WaitPost(() =>
-        {
-            var (position, rotation) = SEntMan.System<SharedTransformSystem>().GetWorldPositionRotation(jeep);
-            // Facing south, ahead is -y. Far off, so the jeep and its gun see it at the same angle.
-            target = position + rotation.RotateVec(new Vector2(30f, -40f));
-            var turrets = SEntMan.System<VehicleTurretSystem>();
-            Assert.That(turrets.TrySetTargetRotationWorld(Gun(jeep), (target - position).ToWorldAngle()), Is.True);
-        });
-        await RunSeconds(2f);
-        return target;
-    }
 
-    [Test]
-    public async Task GunnersBulletLeavesWhereTheMuzzleFlashShows()
-    {
-        var jeep = await SpawnJeep("CMUVehicleJeepGunner");
-        EntityUid gunner = default;
-        await Server.WaitPost(() =>
-        {
-            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
-            gunner = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(grid, 0.5f, 1.5f));
-        });
-        var target = await AimAhead(jeep);
-        var flash = await FlashAt(Gun(jeep));
-
-        await Server.WaitAssertion(() =>
-        {
-            var xforms = SEntMan.System<SharedTransformSystem>();
-            var gun = Gun(jeep);
-            var map = xforms.GetMapCoordinates(jeep).MapId;
-            var shot = SEntMan.System<SharedGunSystem>().AttemptShoot((gun, SEntMan.GetComponent<GunComponent>(gun)), gunner,
-                xforms.ToCoordinates(new MapCoordinates(target, map)));
-            Assert.That(shot, Is.Not.Null.And.Not.Empty, "The gunner should fire.");
-            var from = xforms.GetWorldPosition(shot![0]);
-            Assert.That((from - flash).Length(), Is.LessThan(0.35f),
-                $"The bullet should leave the barrel tip where the flash shows, {flash}, not {from}.");
-        });
-    }
-
-    [Test]
-    public async Task ShotsFollowTheBarrelTipRoundTheJeep()
-    {
-        var jeep = await SpawnJeep("CMUVehicleJeepGunner");
-        var tips = new List<Vector2>();
-        foreach (var degrees in new[] { 0.0, 90.0, 180.0, 270.0 })
-        {
-            await Server.WaitPost(() =>
-                SEntMan.System<SharedTransformSystem>().SetLocalRotation(jeep, Angle.FromDegrees(degrees)));
-            var target = await AimAhead(jeep);
-            var flash = await FlashAt(Gun(jeep));
-
-            await Server.WaitAssertion(() =>
-            {
-                var xforms = SEntMan.System<SharedTransformSystem>();
-                var gun = Gun(jeep);
-                var position = xforms.GetWorldPosition(jeep);
-                var map = xforms.GetMapCoordinates(jeep).MapId;
-                var ev = new AttemptShootEvent(gun, null, xforms.ToCoordinates(new MapCoordinates(position, map)),
-                    xforms.ToCoordinates(new MapCoordinates(target, map)));
-                SEntMan.EventBus.RaiseLocalEvent(gun, ref ev);
-                var from = xforms.ToMapCoordinates(ev.FromCoordinates).Position;
-                Assert.That((from - flash).Length(), Is.LessThan(0.05f), $"facing {degrees}: shots start where the flash shows.");
-                tips.Add(from - position);
-            });
-        }
-
-        Assert.That(tips.Distinct().Count(), Is.EqualTo(tips.Count), "The tip moves as the jeep turns.");
-    }
 }

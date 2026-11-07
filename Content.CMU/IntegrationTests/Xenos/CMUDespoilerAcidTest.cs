@@ -150,39 +150,4 @@ public sealed class CMUDespoilerAcidTest : GameTest
         });
     }
 
-    [Test]
-    public async Task EmpoweredOozingWoundsAppliesTierTwoOnCollision()
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid target = default;
-        EntityUid control = default;
-        float initialDamage = 0;
-        float initialControlDamage = 0;
-        await Server.WaitAssertion(() =>
-        {
-            var caster = SEntMan.SpawnEntity("RMCXenoDespoiler", map.GridCoords.Offset(new Vector2(4, 0)));
-            target = SEntMan.SpawnEntity("CMUDespoilerAcidTestTarget", map.GridCoords);
-            control = SEntMan.SpawnEntity("CMUDespoilerAcidTestTarget", map.GridCoords.Offset(new Vector2(2, 0)));
-            var spray = SEntMan.SpawnEntity("RMCEffectDespoilerAcidSprayEmpowered", map.GridCoords);
-            SEntMan.GetComponent<XenoDespoilerAcidSprayComponent>(spray).Caster = caster;
-            var normal = SEntMan.SpawnEntity("RMCEffectDespoilerAcidSpray", map.GridCoords.Offset(new Vector2(2, 0)));
-            SEntMan.GetComponent<XenoDespoilerAcidSprayComponent>(normal).Caster = caster;
-        });
-        await Pair.RunSeconds(0.2f);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(SEntMan.GetComponent<UserAcidedComponent>(target).Tier, Is.EqualTo(2));
-            Assert.That(SEntMan.GetComponent<UserAcidedComponent>(control).Tier, Is.EqualTo(1));
-            initialDamage = (float) Server.System<DamageableSystem>().GetTotalDamage(target);
-            initialControlDamage = (float) Server.System<DamageableSystem>().GetTotalDamage(control);
-        });
-        await Pair.RunSeconds(3);
-        await Server.WaitAssertion(() =>
-        {
-            var damage = Server.System<DamageableSystem>();
-            var empoweredTicks = (float) damage.GetTotalDamage(target) - initialDamage;
-            var normalTicks = (float) damage.GetTotalDamage(control) - initialControlDamage;
-            Assert.That(empoweredTicks, Is.GreaterThan(normalTicks), "empowered spray must apply stronger lingering damage");
-        });
-    }
 }

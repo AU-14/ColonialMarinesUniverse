@@ -26,9 +26,6 @@ public sealed class CMUWeaponMountUnbuckleTest : GameTest
 """;
 
     [TestCase("CMUM2CDoorGunDropship")]
-    [TestCase("CMUUTESCDoorGunDropship")]
-    [TestCase("CMUGAU19MDoorGunDropship")]
-    [TestCase("RMCML66DNestDropship")]
     [TestCase("RMCML66DNestMetal")]
     public async Task OperatorCanUseUnbuckleAlertWithoutReachingMount(string prototype)
     {

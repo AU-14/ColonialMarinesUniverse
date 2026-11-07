@@ -1,0 +1,13 @@
+author: ILoveDespoiler
+category: CMU
+changes:
+- message: Added Grungus (Greeno Neomorphs)
+  type: Add
+- message: Weyu will now get a delivery of TWO crates at CLX. One of eggs and one
+    with Bloodburster Injectors.
+  type: Add
+- message: Edited the Ciph Hint document to account for two species being sent rather
+    than one.
+  type: Tweak
+time: '2026-11-06T15:46:02.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2408

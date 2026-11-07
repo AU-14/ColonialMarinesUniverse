@@ -1,7 +1,7 @@
 name: Build & Test Debug
 
 on:
-  # The tests PR CI leaves out: bulk entity sweeps, upstream policy tests and SS14-only content.
+  # CMU14: bulk entity sweeps, dataset validation and antag role lifecycle tests.
   workflow_dispatch:
   # CMU14: nightly on master so the tests left out of PR CI still get run
   schedule:
@@ -30,7 +30,7 @@ jobs:
       with:
         submodules: recursive
 
-    - uses: actions/setup-dotnet@v6.0.0
+    - uses: actions/setup-dotnet@v6.1.0
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -67,11 +67,10 @@ jobs:
         DOTNET_gcServer: "1"
         DOTNET_GCHeapHardLimitPercent: "0x50"
       run: |
-        # CMU14: everything else already runs on every PR and merge. keep this in sync with the
-        # exclusions in ci.yml (the global filter and the root shard's EntityTest skip)
+        # CMU14: scheduled checks excluded from feature-selected PR/push groups.
+        # Keep this in sync with adaptive_ci.py POLICY and the root EntityTest skip.
         FILTER="FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest."
-        FILTER="$FILTER | FullyQualifiedName~.Localization. | FullyQualifiedName~.WizdenContentFreeze."
-        FILTER="$FILTER | FullyQualifiedName~.GameRules.AntagGhostRoleTest. | FullyQualifiedName~.Power.StationPowerTests."
+        FILTER="$FILTER | FullyQualifiedName~.Localization. | FullyQualifiedName~.GameRules.AntagGhostRoleTest."
         echo "$FILTER"
         dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-build --configuration ${{ env.CONFIGURATION }} \
           --verbosity normal --filter "$FILTER" \
@@ -80,7 +79,8 @@ jobs:
           -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.NumberOfTestWorkers=2
 
     - name: Archive test results
-      if: always()
+      # CMU14: successful nightly runs do not need a downloadable failure report.
+      if: failure() || cancelled()
       uses: actions/upload-artifact@v7
       with:
         name: nightly-test-results

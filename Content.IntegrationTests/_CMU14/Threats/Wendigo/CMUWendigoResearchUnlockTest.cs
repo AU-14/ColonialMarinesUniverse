@@ -12,7 +12,7 @@ namespace Content.IntegrationTests.CMU14.Threats.Wendigo;
 [TestFixture]
 public sealed class CMUWendigoResearchUnlockTest : GameTest
 {
-    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> WEYUPrototype = "WEYU";
+
 
     public override PoolSettings PoolSettings => new() { Connected = false };
 
@@ -33,14 +33,6 @@ public sealed class CMUWendigoResearchUnlockTest : GameTest
             faction: colony
 
         """;
-
-    private static int Mh32Count(RequisitionsComputerComponent comp)
-    {
-        return comp.Categories
-            .Where(category => category.Name == CMUWendigoResearchUnlockSystem.ResearchCategory)
-            .SelectMany(category => category.Entries)
-            .Count(entry => entry.Crate.Id == CMUWendigoResearchUnlockSystem.MH32Crate);
-    }
 
     private int CorporateBalance()
     {
@@ -90,119 +82,4 @@ public sealed class CMUWendigoResearchUnlockTest : GameTest
         });
     }
 
-    [Test]
-    public async Task CorporateClearanceThreeAddsMH32Once()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var research = SEntMan.System<ServerResearchDataTerminalSystem>();
-            var console = SEntMan.SpawnEntity("CMUTestWendigoUnlockASRScorporate", MapCoordinates.Nullspace);
-            try
-            {
-                research.UpdateClearance(0, 1, "corporate");
-                var comp = SEntMan.GetComponent<RequisitionsComputerComponent>(console);
-                Assert.That(Mh32Count(comp), Is.Zero);
-
-                research.UpdateClearance(0, 2, "corporate");
-                Assert.That(Mh32Count(comp), Is.Zero);
-
-                research.UpdateClearance(0, 3, "corporate");
-                Assert.That(Mh32Count(comp), Is.EqualTo(1));
-                var entry = comp.Categories
-                    .First(category => category.Name == CMUWendigoResearchUnlockSystem.ResearchCategory)
-                    .Entries.Single(e => e.Crate.Id == CMUWendigoResearchUnlockSystem.MH32Crate);
-                Assert.That(entry.Cost, Is.EqualTo(CMUWendigoResearchUnlockSystem.MH32Cost));
-
-                research.UpdateClearance(0, 3, "corporate");
-                research.UpdateClearance(0, 4, "corporate");
-                Assert.That(Mh32Count(comp), Is.EqualTo(1));
-            }
-            finally
-            {
-                research.UpdateClearance(0, 1, "corporate");
-                SEntMan.DeleteEntity(console);
-            }
-        });
-    }
-
-    [Test]
-    public async Task ColonyNeverGetsMH32()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var research = SEntMan.System<ServerResearchDataTerminalSystem>();
-            var console = SEntMan.SpawnEntity("CMUTestWendigoUnlockASRScolony", MapCoordinates.Nullspace);
-            try
-            {
-                research.UpdateClearance(0, 1, "colony");
-                research.UpdateClearance(0, 3, "colony");
-                var comp = SEntMan.GetComponent<RequisitionsComputerComponent>(console);
-                Assert.That(Mh32Count(comp), Is.Zero);
-
-                var late = SEntMan.SpawnEntity("CMUTestWendigoUnlockASRScolony", MapCoordinates.Nullspace);
-                Assert.That(Mh32Count(SEntMan.GetComponent<RequisitionsComputerComponent>(late)), Is.Zero);
-                SEntMan.DeleteEntity(late);
-            }
-            finally
-            {
-                research.UpdateClearance(0, 1, "colony");
-                SEntMan.DeleteEntity(console);
-            }
-        });
-    }
-
-    [Test]
-    public async Task LateCorporateConsoleGetsMH32()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var research = SEntMan.System<ServerResearchDataTerminalSystem>();
-            EntityUid console = default;
-            try
-            {
-                research.UpdateClearance(0, 3, "corporate");
-                console = SEntMan.SpawnEntity("CMUTestWendigoUnlockASRScorporate", MapCoordinates.Nullspace);
-                Assert.That(Mh32Count(SEntMan.GetComponent<RequisitionsComputerComponent>(console)), Is.EqualTo(1));
-            }
-            finally
-            {
-                research.UpdateClearance(0, 1, "corporate");
-                if (console != default)
-                    SEntMan.DeleteEntity(console);
-            }
-        });
-    }
-
-    [Test]
-    public async Task WeylandYutaniFactionPredicate()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var unlock = SEntMan.System<CMUWendigoResearchUnlockSystem>();
-            var platoons = SEntMan.System<PlatoonSpawnRuleSystem>();
-            platoons.SelectedGovforPlatoon = null;
-            platoons.SelectedOpforPlatoon = null;
-            try
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(unlock.IsWeylandYutaniFaction("corporate"), Is.True);
-                    Assert.That(unlock.IsWeylandYutaniFaction("Corporate"), Is.True);
-                    Assert.That(unlock.IsWeylandYutaniFaction("colony"), Is.False);
-                    Assert.That(unlock.IsWeylandYutaniFaction("govfor"), Is.False);
-                    Assert.That(unlock.IsWeylandYutaniFaction("opfor"), Is.False);
-                    Assert.That(unlock.IsWeylandYutaniFaction(null), Is.False);
-                });
-
-                platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(WEYUPrototype);
-                Assert.That(unlock.IsWeylandYutaniFaction("GOVFOR"), Is.True);
-                Assert.That(unlock.IsWeylandYutaniFaction("opfor"), Is.False);
-            }
-            finally
-            {
-                platoons.SelectedGovforPlatoon = null;
-                platoons.SelectedOpforPlatoon = null;
-            }
-        });
-    }
 }

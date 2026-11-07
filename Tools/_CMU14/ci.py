@@ -15,20 +15,17 @@ import sys
 import threading
 import time
 import xml.etree.ElementTree as ET
+from ci_selection import documentation
 
 
 def select_tests(event, paths):
     # An incomplete diff must never reduce coverage. Resource files (including
     # Markdown shipped as resources) and unknown paths always take the full path.
     full = dict(build=True, unit=True, gameplay=True, reason="Full suite: code, data, or unknown changes.")
-    if event != "pull_request" or not isinstance(paths, list) or not paths:
+    if event not in ("pull_request", "push", "merge_group") or not isinstance(paths, list) or not paths:
         return full
     if any(not isinstance(path, str) or not path for path in paths):
         return full
-
-    def documentation(path):
-        p = Path(path)
-        return p.suffix == ".md" and (len(p.parts) == 1 or path.startswith((".github/", "docs/")))
 
     relevant = [path for path in paths if not documentation(path)]
     if not relevant:
@@ -38,20 +35,25 @@ def select_tests(event, paths):
         return dict(build=True, unit=False, gameplay=True,
                     reason="Integration sources only: build and gameplay suite; unit inputs unchanged.")
     # Content.IntegrationTests references Content.Tests, including its helpers.
-    # Unit source changes therefore require both suites.
+    # Keep both eligible here; dependency analysis can narrow fixture-only edits.
     return full
 
 
 def plan(args):
+    from adaptive_ci import baseline_changes, plan_run
     paths = None
     if args.changes:
         try:
             paths = json.loads(Path(args.changes).read_text(encoding="utf-8"))
         except (OSError, ValueError):
             pass
+    if paths is None and args.event in ("push", "merge_group"):
+        try:
+            paths = baseline_changes(os.environ.get("CI_BASE_SHA", ""))
+        except (OSError, ValueError, subprocess.SubprocessError):
+            pass
     selected = select_tests(args.event, paths)
     shards = json.loads(Path(__file__).with_name("ci-shards.json").read_text(encoding="utf-8"))
-    from adaptive_ci import plan_run
     selected = plan_run(selected, paths, args.event, shards)
     for key, value in selected.items():
         line = f"{key}={json.dumps(value, separators=(',', ':')) if not isinstance(value, str) else value}"
@@ -261,7 +263,8 @@ def run_tests(args):
     report.append(f"\nResult: {'failed' if status else 'passed'}.\n")
     observation.update(status=status, valid=status == 0 and not observation["empty"])
     log.with_suffix(".json").write_text(json.dumps(observation), encoding="utf-8")
-    write_summary("\n".join(report))
+    if status:
+        write_summary("\n".join(report))
     return status
 
 

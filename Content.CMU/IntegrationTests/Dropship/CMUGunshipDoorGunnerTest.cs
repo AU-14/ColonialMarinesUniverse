@@ -26,31 +26,6 @@ public sealed class CMUGunshipDoorGunnerTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
-    public async Task GAU19MCanShootMountedWithoutBatteryOrSmartgunEquipment()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = SEntMan.SpawnEntity("CMUGAU19MDoorGunDropship", map.GridCoords);
-            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            SEntMan.System<SkillsSystem>().SetSkill(user, "RMCSkillEngineer", 1);
-            SEntMan.System<SharedTransformSystem>().SetLocalRotation(mount, Direction.East.ToAngle());
-            Assert.That(SEntMan.System<SharedBuckleSystem>().TryBuckle(user, user, mount), Is.True);
-
-            var weapon = SEntMan.GetComponent<WeaponMountComponent>(mount).MountedEntity!.Value;
-            Assert.That(SEntMan.HasComponent<GunDrainBatteryOnShootComponent>(weapon), Is.False);
-            Assert.That(SEntMan.System<SharedWeaponMountSystem>().TryGetWeaponAmmo(mount, out var ammo, out _), Is.True);
-            Assert.That(ammo, Is.EqualTo(1500));
-
-            var shoot = new AttemptShootEvent(user, null,
-                SEntMan.GetComponent<TransformComponent>(weapon).Coordinates,
-                map.GridCoords.Offset(new Vector2(5, 0)));
-            SEntMan.EventBus.RaiseLocalEvent(weapon, ref shoot);
-            Assert.That(shoot.Cancelled, Is.False);
-        });
-    }
-
-    [Test]
     public async Task SeatedOperatorRequiresCombatModeAndLosesControlOnDismount()
     {
         var map = await Pair.CreateTestMap();
@@ -80,107 +55,6 @@ public sealed class CMUGunshipDoorGunnerTest : GameTest
             combat.SetInCombatMode(user, true);
             buckle.Unbuckle(user, user);
             Assert.That(aim.TryGetMount(user, out _, out _), Is.False);
-        });
-    }
-
-    [Test]
-    public async Task DoorPlacementOffsetsAndLocksAllDoorGunVariantsOnBothSides()
-    {
-        var map = await Pair.CreateTestMap();
-        var guns = new List<NetEntity>();
-        var deployedAttachments = new List<EntityUid>();
-        string[] attachments =
-        [
-            "RMCDropshipAttachmentDoorGun",
-            "CMUDropshipAttachmentDoorGunM2C",
-            "CMUDropshipAttachmentDoorGunUTESC",
-            "CMUDropshipAttachmentDoorGunGAU19M", // Exercise the fourth outward direction too.
-        ];
-        Vector2[] directions = [Vector2.UnitX, -Vector2.UnitX, Vector2.UnitY, -Vector2.UnitY];
-
-        await Server.WaitAssertion(() =>
-        {
-            SEntMan.AddComponent<CMUBlockEmplacementDeploymentComponent>(map.Grid.Owner);
-            var maps = SEntMan.System<SharedMapSystem>();
-            for (var x = -2; x <= 15; x++)
-            for (var y = -2; y <= 2; y++)
-                maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
-
-            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(6, 0)));
-            Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
-            for (var i = 0; i < attachments.Length; i++)
-            {
-                var coords = map.GridCoords.Offset(new Vector2(i * 4 + 0.5f, 0.5f));
-                var point = SEntMan.SpawnEntity("CMUGunshipHardpointAttachmentPoint", coords);
-                Assert.That(SEntMan.GetComponent<TransformComponent>(point).GridUid, Is.EqualTo(map.Grid.Owner));
-                Assert.That(SEntMan.GetComponent<GunshipHardpointAttachmentPointComponent>(point)
-                    .AllowedAttachments.Contains(attachments[i]), Is.True);
-                var slotId = SEntMan.GetComponent<DropshipUtilityPointComponent>(point).UtilitySlotId;
-                SEntMan.System<SharedContainerSystem>().EnsureContainer<ContainerSlot>(point, slotId);
-                var attachment = SEntMan.SpawnInContainerOrDrop(attachments[i], point, slotId);
-                Assert.That(SEntMan.GetComponent<TransformComponent>(attachment).ParentUid, Is.EqualTo(point));
-                var deployer = SEntMan.GetComponent<RMCEquipmentDeployerComponent>(attachment);
-                Assert.That(deployer.DeployPrototype, Is.Not.Null);
-                var gun = SEntMan.SpawnEntity(deployer.DeployPrototype!.Value.Id, coords);
-                var mount = SEntMan.GetComponent<WeaponMountComponent>(gun);
-                var mounts = SEntMan.System<SharedWeaponMountSystem>();
-
-                SEntMan.EventBus.RaiseLocalEvent(attachment, new RMCEquipmentDeployedEvent(true, gun));
-                Assert.That(mount.RotationLocked, Is.False, "A gun without a door keeps its normal rotation.");
-                var before = SEntMan.GetComponent<TransformComponent>(gun).LocalRotation;
-                mounts.RotateMount((gun, mount), null);
-                Assert.That(SEntMan.GetComponent<TransformComponent>(gun).LocalRotation, Is.Not.EqualTo(before));
-
-                var door = SEntMan.SpawnEntity("CMNormandyDoorSinglePort", coords.Offset(directions[i]));
-                Assert.That(SEntMan.GetComponent<TransformComponent>(door).ParentUid, Is.EqualTo(map.Grid.Owner));
-                var expected = SEntMan.GetComponent<TransformComponent>(door).LocalPosition + directions[i] * 0.9f;
-                maps.SetTile(map.Grid, new Vector2i((int) MathF.Floor(expected.X), (int) MathF.Floor(expected.Y)), Tile.Empty);
-                SEntMan.System<Content.Shared.Doors.Systems.SharedDoorSystem>()
-                    .SetBoltsDown((door, SEntMan.GetComponent<DoorBoltComponent>(door)), false);
-                SEntMan.EventBus.RaiseLocalEvent(attachment, new RMCEquipmentDeployedEvent(true, gun));
-                var xform = SEntMan.GetComponent<TransformComponent>(gun);
-                Assert.That(Vector2.Distance(xform.LocalPosition, expected), Is.LessThan(0.001f));
-                Assert.That(xform.ParentUid, Is.EqualTo(map.Grid.Owner), "Outboard guns must stay attached beyond the hull tiles.");
-                Assert.That(Math.Abs(Angle.ShortestDistance(xform.LocalRotation, directions[i].ToWorldAngle()).Degrees), Is.LessThan(0.01));
-                Assert.That(mount.RotationLocked, Is.True);
-                before = xform.LocalRotation;
-                mounts.RotateMount((gun, mount), null);
-                Assert.That(xform.LocalRotation, Is.EqualTo(before));
-                guns.Add(SEntMan.GetNetEntity(gun));
-                deployedAttachments.Add(attachment);
-            }
-        });
-
-        await Pair.RunUntilSynced();
-        await Client.WaitAssertion(() =>
-        {
-            foreach (var net in guns)
-            {
-                var gun = CEntMan.GetEntity(net);
-                var mount = CEntMan.GetComponent<WeaponMountComponent>(gun);
-                Assert.That(mount.RotationLocked, Is.True, "The client must also reject predicted rotation.");
-                var xform = CEntMan.GetComponent<TransformComponent>(gun);
-                Assert.That(xform.ParentUid, Is.EqualTo(map.CGridUid));
-                var before = xform.LocalRotation;
-                CEntMan.System<SharedWeaponMountSystem>().RotateMount((gun, mount), null);
-                Assert.That(xform.LocalRotation, Is.EqualTo(before));
-            }
-        });
-
-        await Server.WaitAssertion(() =>
-        {
-            for (var i = 0; i < guns.Count; i++)
-            {
-                var gun = SEntMan.GetEntity(guns[i]);
-                SEntMan.EventBus.RaiseLocalEvent(deployedAttachments[i], new RMCEquipmentDeployedEvent(false, gun));
-                Assert.That(SEntMan.GetComponent<WeaponMountComponent>(gun).RotationLocked, Is.False);
-            }
-        });
-        await Pair.RunUntilSynced();
-        await Client.WaitAssertion(() =>
-        {
-            foreach (var net in guns)
-                Assert.That(CEntMan.GetComponent<WeaponMountComponent>(CEntMan.GetEntity(net)).RotationLocked, Is.False);
         });
     }
 

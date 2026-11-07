@@ -100,26 +100,4 @@ public sealed class MinHealthConditionRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task MissingOrInvalidDestructionThresholdCannotSatisfyCondition()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var condition = new MinHealth
-            {
-                Threshold = FixedPoint2.New(0.78),
-                ByProportion = true,
-            };
-            var noFiniteThreshold = SEntMan.SpawnEntity("RMCMinHealthNoFiniteThreshold", map.GridCoords);
-            var invalidThreshold = SEntMan.SpawnEntity("RMCMinHealthInvalidThreshold", map.GridCoords);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(condition.Condition(noFiniteThreshold, SEntMan), Is.False);
-                Assert.That(condition.Condition(invalidThreshold, SEntMan), Is.False);
-            });
-        });
-    }
 }

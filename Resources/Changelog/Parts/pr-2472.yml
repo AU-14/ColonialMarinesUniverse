@@ -1,0 +1,14 @@
+author: ILoveDespoiler
+category: CMU
+changes:
+- message: 'Added a brand new Leap ability onto Harbinger: "Flurry Rush" allows the
+    Harbinger to dash *through* targets, damaging them all at once after the leap
+    ends.'
+  type: Add
+- message: Harbinger now has a new ability, Whirl, that does AoE damage at a short
+    range.
+  type: Add
+- message: Harbinger no longer has the Impale ability.
+  type: Remove
+time: '2026-11-06T13:04:39.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2472

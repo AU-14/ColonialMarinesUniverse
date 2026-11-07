@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Eye;
 using Content.Shared.Damage.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.Shuttles.Components;
@@ -37,26 +38,6 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkChinGunTest
 {
-    [TestCase(0, -90)]
-    [TestCase(0, 90)]
-    [TestCase(45, -90)]
-    [TestCase(45, 90)]
-    [TestCase(180, -90)]
-    [TestCase(180, 90)]
-    public void GimbalCoversExactlyTheForwardHalfCircle(float shipDegrees, float targetDegrees)
-    {
-        var rotation = Angle.FromDegrees(shipDegrees);
-        var target = rotation.RotateVec(Angle.FromDegrees(targetDegrees).RotateVec(Vector2.UnitY)) * 10;
-        Assert.That(GunshipDirectFireSystem.TryGetClampedAim(rotation, Vector2.Zero, target, 180,
-            out var direction, out var degrees), Is.True);
-        Assert.That(degrees, Is.EqualTo(targetDegrees).Within(0.001));
-        Assert.That(Vector2.Distance(direction, Vector2.Normalize(target)), Is.LessThan(0.001));
-
-        var behind = rotation.RotateVec(Angle.FromDegrees(targetDegrees * 1.5).RotateVec(Vector2.UnitY));
-        Assert.That(GunshipDirectFireSystem.TryGetClampedAim(rotation, Vector2.Zero, behind, 180,
-            out _, out degrees), Is.True);
-        Assert.That(MathF.Abs(degrees), Is.EqualTo(90).Within(0.001));
-    }
 
     [Test]
     public async Task GroundTurretRespectsIffArcFlightAndManualOverride()
@@ -160,6 +141,17 @@ public sealed class MohawkChinGunTest
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(chin.Operator, Is.EqualTo(actor));
             Assert.That(entities.GetComponent<RemoteWeaponOperatorComponent>(actor).SelectedWeapon, Is.EqualTo(weapon));
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunVisionMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Night));
+            Assert.That(entities.GetComponent<EyeComponent>(chin.Eye!.Value).DrawLight, Is.False,
+                "Night optics must use the gun console's normal fullbright night-vision behavior.");
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunVisionMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunVisionMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Normal));
+            Assert.That(entities.GetComponent<EyeComponent>(chin.Eye.Value).DrawLight, Is.True);
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunAimMessage(
                 entities.GetNetCoordinates(new EntityCoordinates(map, -8.5f, 11)))
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });

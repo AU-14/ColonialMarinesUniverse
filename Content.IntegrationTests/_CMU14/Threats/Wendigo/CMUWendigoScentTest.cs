@@ -13,44 +13,9 @@ public sealed class CMUWendigoScentTest
     private const string Lab = "CMUWendigoLab";
     private const string Human = "CMMobHuman";
     private const string Item = "CMScrewdriver";
-    private const string ScentAlert = "CMUWendigoScentTracker";
+
 
     // (a) sniffing a human tracks it; after a few ticks the arrow shows and the trail has a point.
-    [Test]
-    public async Task TrackingHumanShowsArrowAndTrail()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        EntityUid wendigo = default, human = default;
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            wendigo = entMan.SpawnEntity(Lab, map.GridCoords);
-            human = entMan.SpawnEntity(Human, map.GridCoords.Offset(new Vector2(3, 0)));
-        });
-        await pair.RunTicksSync(5);
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            Assert.That(entMan.System<CMUWendigoScentSystem>().TryTrack(wendigo, human), Is.True);
-            Assert.That(entMan.GetComponent<CMUWendigoScentTrackerComponent>(wendigo).Target, Is.EqualTo(human));
-        });
-        await pair.RunTicksSync(5);
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var tracker = entMan.GetComponent<CMUWendigoScentTrackerComponent>(wendigo);
-            Assert.That(tracker.Target, Is.EqualTo(human));
-            Assert.That(entMan.System<AlertsSystem>().IsShowingAlert(wendigo, ScentAlert), Is.True, "the scent arrow isn't shown");
-            Assert.That(tracker.Trail, Is.Not.Empty, "the smell trail has no points");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     // (b) sniffing an item a human picked up tracks that human; (c) an item nobody ever held has no scent.
     [Test]

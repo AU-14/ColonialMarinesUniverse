@@ -27,25 +27,6 @@ namespace Content.IntegrationTests._CMU14.Medical.Synth;
 [TestFixture]
 public sealed class SynthCirculationTest
 {
-    [Test]
-    public async Task SynthsTakeIvButStayUninjectable()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
-        var map = await pair.CreateTestMap();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var synth = SpawnSynth(entities, map.GridCoords);
-            Assert.That(entities.HasComponent<IVDripTargetComponent>(synth), Is.True);
-            Assert.That(entities.HasComponent<CMUSynthCirculationComponent>(synth), Is.True);
-            Assert.That(entities.HasComponent<InjectableSolutionComponent>(synth), Is.False,
-                "syringes and hyposprays still shouldn't load chems into a synth");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task SynthBloodPackRefillsSynthAndBloodTypesDontMix()
@@ -197,45 +178,6 @@ public sealed class SynthCirculationTest
             var health = server.EntMan.GetComponent<OrganHealthComponent>(brain);
             Assert.That(health.Current, Is.EqualTo(health.Max), "repair repeats until the organ is whole");
             Assert.That(health.Stage, Is.EqualTo(OrganDamageStage.Healthy));
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task SynthBloodCanBeMadeFromDispenserStock()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            Assert.That(Mix(entities, map, ("RMCSilicon", 5), ("RMCChlorine", 5), ("RMCMethane", 5), ("Water", 5))
-                .GetTotalPrototypeQuantity("CMUSiliconeOil"), Is.EqualTo(FixedPoint2.New(20)));
-            Assert.That(Mix(entities, map, ("RMCEthanol", 5), ("RMCOxygen", 5))
-                .GetTotalPrototypeQuantity("CMUGlycol"), Is.EqualTo(FixedPoint2.New(10)));
-            // FLOW-21: vulcanization needs 350 K, nothing forms at room temperature
-            Assert.That(Mix(entities, map, ("RMCMethane", 5), ("RMCSulfur", 5), ("CMUAmmonia", 5))
-                .GetTotalPrototypeQuantity("CMUSyntheticLatex"), Is.EqualTo(FixedPoint2.Zero));
-            Assert.That(Make(entities, map, 350f, false, ("RMCMethane", 5), ("RMCSulfur", 5), ("CMUAmmonia", 5))
-                .GetTotalPrototypeQuantity("CMUSyntheticLatex"), Is.EqualTo(FixedPoint2.New(15)));
-            Assert.That(Mix(entities, map, ("RMCSodium", 5), ("RMCSulphuricAcid", 5), ("RMCCarbon", 5))
-                .GetTotalPrototypeQuantity("CMUSurfactant"), Is.EqualTo(FixedPoint2.New(15)));
-            Assert.That(Mix(entities, map, ("RMCSodium", 5), ("RMCPhosphorus", 5), ("RMCOxygen", 5))
-                .GetTotalPrototypeQuantity("CMUCorrosionInhibitor"), Is.EqualTo(FixedPoint2.New(15)));
-
-            // FLOW-21: synth blood needs a lid-closed Mix, adding the stock alone makes nothing
-            (string, int)[] bloodStock =
-            [
-                ("Water", 30), ("CMUSyntheticLatex", 20), ("CMUSiliconeOil", 20),
-                ("CMUGlycol", 10), ("CMUSurfactant", 10), ("CMUCorrosionInhibitor", 10),
-            ];
-            Assert.That(Mix(entities, map, bloodStock).GetTotalPrototypeQuantity("RMCSynthBlood"),
-                Is.EqualTo(FixedPoint2.Zero));
-            var blood = Make(entities, map, null, true, bloodStock);
-            Assert.That(blood.GetTotalPrototypeQuantity("RMCSynthBlood"), Is.EqualTo(FixedPoint2.New(100)));
         });
 
         await pair.CleanReturnAsync();

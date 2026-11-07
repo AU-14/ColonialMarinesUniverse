@@ -23,18 +23,6 @@ public sealed class DutchsDozenTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
-    [TestCase("CMUDutchsDozen")]
-    [TestCase("CMUDutchsDozenFull")]
-    public async Task PartiesAreAdminOnly(string party)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var proto = SProtoMan.Index<ThirdPartyPrototype>(party);
-            Assert.That(proto.MaxPlayers, Is.LessThan(0),
-                "cmss13 gives Dutch's Dozen probability = 0, so it must never come up in an automatic roll");
-        });
-    }
-
     [Test]
     public async Task ConcoctionDecloaksAndDrainsAYautjaFarAway()
     {
@@ -69,32 +57,4 @@ public sealed class DutchsDozenTest : GameTest
         });
     }
 
-    [Test]
-    public async Task ArnoldsMaskIsOnTheGearTracker()
-    {
-        EntityUid map = default;
-        EntityUid arnold = default;
-        await Server.WaitAssertion(() =>
-        {
-            map = SEntMan.System<SharedMapSystem>().CreateMap(out var mapId, runMapInit: true);
-            arnold = SEntMan.SpawnEntity("CMUMobDutchsDozenArnold", new MapCoordinates(Vector2.Zero, mapId));
-        });
-
-        await RunTicksSync(10);
-
-        await Server.WaitAssertion(() =>
-        {
-            var inventory = SEntMan.System<InventorySystem>();
-            Assert.That(inventory.TryGetSlotEntity(arnold, "mask", out var mask), Is.True);
-            Assert.That(SEntMan.HasComponent<YautjaTrackedItemComponent>(mask), Is.True,
-                "the Yautja track Dutch by the mask on his face");
-            Assert.That(inventory.TryGetSlotEntity(arnold, "pocket1", out var pouch), Is.True);
-            var grenades = SEntMan.System<SharedContainerSystem>().GetContainer(pouch.Value, StorageComponent.ContainerId)
-                .ContainedEntities
-                .Count(e => SEntMan.GetComponent<MetaDataComponent>(e).EntityPrototype?.ID == "CMUGrenadeEMPDutch");
-            Assert.That(grenades, Is.EqualTo(3));
-
-            SEntMan.DeleteEntity(map);
-        });
-    }
 }

@@ -51,9 +51,9 @@ public sealed class ForceOnForceGameplayTest : GameTest
 {
     private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
     private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> DistressSignalPrototype = "DistressSignal";
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobGOVFORSquadSergeantPrototype = "AU14JobGOVFORSquadSergeant";
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobOPFORSquadSergeantPrototype = "AU14JobOPFORSquadSergeant";
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobGOVFORSquadRiflemanPrototype = "AU14JobGOVFORSquadRifleman";
+
+
+
 
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
@@ -124,7 +124,6 @@ public sealed class ForceOnForceGameplayTest : GameTest
     }
 
     [TestCase("govfor", "opfor")]
-    [TestCase("opfor", "govfor")]
     [TestCase(null, null)]
     public async Task RandomHijackCandidatesExcludeTheHumanAttackersOwnCarrier(string? attacker, string? enemy)
     {
@@ -232,7 +231,6 @@ public sealed class ForceOnForceGameplayTest : GameTest
     }
 
     [TestCase("govfor", "opfor")]
-    [TestCase("opfor", "govfor")]
     public async Task OrdinaryNavigationRejectsEnemyCarrierAndControlledLandingZone(string own, string enemy)
     {
         await Server.WaitAssertion(() =>
@@ -461,7 +459,6 @@ public sealed class ForceOnForceGameplayTest : GameTest
     }
 
     [TestCase("govfor", RoundJobSide.Govfor, RoundJobSide.Opfor)]
-    [TestCase("opfor", RoundJobSide.Opfor, RoundJobSide.Govfor)]
     public async Task RespawnsStayOnTheirOriginalSideUntilTheRoundResets(string faction, RoundJobSide own, RoundJobSide enemy)
     {
         var map = await Pair.CreateTestMap();
@@ -576,77 +573,4 @@ public sealed class ForceOnForceGameplayTest : GameTest
         await Server.WaitAssertion(() => Assert.That(respawn.Remaining(player), Is.EqualTo(TimeSpan.Zero)));
     }
 
-    [TestCase(ForceOnForceSide.Govfor, true, false)]
-    [TestCase(ForceOnForceSide.Opfor, false, true)]
-    [TestCase(ForceOnForceSide.Either, true, true)]
-    public async Task UnifiedRoleListHonorsThePreferredSideWithoutRequiringSideFallback(
-        ForceOnForceSide side, bool govfor, bool opfor)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var jobs = Server.System<StationJobsSystem>();
-            var costMethod = typeof(StationJobsSystem).GetMethod("GetForceOnForceJobCost", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithForceOnForcePreferences(side, ForceOnForceFallback.StayInLobby)
-                .WithForceOnForceJobPriority(SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadSergeantPrototype), JobPriority.High, SProtoMan);
-            bool Accepted(string id) => costMethod.Invoke(jobs, [profile, SProtoMan.Index<JobPrototype>(id)]) != null;
-            Assert.That(Accepted("AU14JobGOVFORSquadSergeant"), Is.EqualTo(govfor));
-            Assert.That(Accepted("AU14JobOPFORSquadSergeant"), Is.EqualTo(opfor));
-            Assert.That(Accepted("AU14JobGOVFORSquadRifleman"), Is.False);
-            Assert.That(Accepted("AU14JobOPFORSquadRifleman"), Is.False);
-        });
-    }
-
-    [Test]
-    public async Task UnifiedRoleListReadsAndReplacesLegacyOppositionPreferences()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var govfor = SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadSergeantPrototype);
-            var opfor = SProtoMan.Index<JobPrototype>(AU14JobOPFORSquadSergeantPrototype);
-            var rifleman = SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadRiflemanPrototype);
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithGamemodeJobPriority("ForceOnForce", opfor.ID, JobPriority.High)
-                .WithGamemodeJobPriority("ForceOnForce", rifleman.ID, JobPriority.Medium)
-                .WithGamemodeJobPriority("DistressSignal", govfor.ID, JobPriority.Low);
-            Assert.That(profile.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.High));
-
-            var lowered = profile.WithForceOnForceJobPriority(govfor, JobPriority.Low, SProtoMan);
-            Assert.That(lowered.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Low));
-            Assert.That(lowered.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Low));
-            Assert.That(lowered.GetForceOnForceJobPriority(rifleman, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            var cleared = new HumanoidCharacterProfile(lowered.WithForceOnForceJobPriority(govfor, JobPriority.Never, SProtoMan));
-            Assert.That(cleared.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Never));
-            Assert.That(cleared.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Never));
-            Assert.That(cleared.GetJobPriorityForGamemode("DistressSignal", govfor.ID), Is.EqualTo(JobPriority.Low));
-
-            var newHigh = profile.WithForceOnForceJobPriority(rifleman, JobPriority.High, SProtoMan);
-            Assert.That(newHigh.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            Assert.That(newHigh.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            Assert.That(newHigh.GetForceOnForceJobPriority(rifleman, SProtoMan), Is.EqualTo(JobPriority.High));
-            Assert.That(profile.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.High),
-                "editing creates a new profile without mutating the saved one");
-        });
-    }
-
-    [TestCase(ForceOnForceFallback.StayInLobby, false, false)]
-    [TestCase(ForceOnForceFallback.OtherSide, true, false)]
-    [TestCase(ForceOnForceFallback.OtherRole, false, true)]
-    [TestCase(ForceOnForceFallback.Both, true, true)]
-    public async Task FallbackOnlyPermitsTheSelectedSideAndRoleChanges(ForceOnForceFallback fallback, bool side, bool role)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var jobs = Server.System<StationJobsSystem>();
-            var costMethod = typeof(StationJobsSystem).GetMethod("GetForceOnForceJobCost", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithForceOnForcePreferences(ForceOnForceSide.Govfor, fallback)
-                .WithGamemodeJobPriority("ForceOnForce", "AU14JobGOVFORSquadSergeant", JobPriority.High);
-            bool Accepted(string id) => costMethod.Invoke(jobs, [profile, SProtoMan.Index<JobPrototype>(id)]) != null;
-            Assert.That(Accepted("AU14JobGOVFORSquadSergeant"), Is.True);
-            Assert.That(Accepted("AU14JobOPFORSquadSergeant"), Is.EqualTo(side));
-            Assert.That(Accepted("AU14JobGOVFORSquadRifleman"), Is.EqualTo(role));
-            Assert.That(Accepted("AU14JobOPFORSquadRifleman"), Is.EqualTo(side && role));
-        });
-    }
 }

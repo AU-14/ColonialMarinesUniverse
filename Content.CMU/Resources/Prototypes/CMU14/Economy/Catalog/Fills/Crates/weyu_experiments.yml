@@ -32,13 +32,12 @@
   name: Experiment Hypospray  
   description: A Weyland-Yutani pattern hypospray loaded with a swirling black mass. The dose looks fixed.  
   components:  
-  - type: SolutionContainerManager  
-    solutions:  
-      hypospray:  
-        maxVol: 15  
-        reagents:  
-        - ReagentId: WeYuBloodbursting  
-          Quantity: 15  
+  - type: Solution
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: WeYuBloodbursting
+        Quantity: 15
   - type: Hypospray  
     onlyAffectsMobs: true  
     transferAmount: 15  

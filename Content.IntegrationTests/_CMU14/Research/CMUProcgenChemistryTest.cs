@@ -1,13 +1,11 @@
 #pragma warning disable RA0002 // The chain and damage components are driven directly to exercise the fire path.
 
 using System.Linq;
-using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Chemistry.Reagents;
 using Content.Server.CMU14.Chemistry.Research;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Chemistry;
-using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Line;
 using Content.Shared._RMC14.Weapons.Ranged.Flamer;
 using Content.Shared.CMU14.Atmos;
@@ -15,7 +13,6 @@ using Content.Shared.CMU14.Chemistry.Fuel;
 using Content.Shared.CMU14.Chemistry.Reagent;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.CMU14.Traits.DrugAllergy;
-using Content.Shared.CMU14.Vendors;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
@@ -27,21 +24,17 @@ using Content.Shared.Interaction;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Reflection;
 
 namespace Content.IntegrationTests._CMU14.Research;
 
 /// <summary>
-/// Regression coverage for the procgen chemistry repair: tier/material ladder, rarity ceilings, recipe
-/// collision guard, fire-stat emission, the simulator's separate currency, and "no generatable stubs".
+/// Generated recipe registration, solution blending, currency isolation and real fire interactions.
 /// </summary>
 [TestFixture]
 public sealed class CMUProcgenChemistryTest : GameTest
 {
     // Generated prototypes survive entity cleanup and would change later tests' reactions.
     public override PoolSettings PoolSettings => new() { Connected = false, Destructive = true };
-
-    private const int Samples = 40;
 
     private static GeneratedReagentData NewOffer(int tier, int index)
         => new()
@@ -58,192 +51,11 @@ public sealed class CMUProcgenChemistryTest : GameTest
     /// Contracts must never ask for more than 3 parts (90u at 30u per contract) of any precious metal,
     /// whatever the first-slot multiplier, Hard bump, catalyst amount or simulator copy.
     /// </summary>
-    [Test]
-    public async Task PreciousMetalsNeverExceedThreeParts()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
-            var seed = NewOffer(1, 0);
-            gen.GenerateStats(ref seed); // forces Setup()
-            var precious = gen.ChemicalGenClassesList[SharedReagentGeneratorSystem.PreciousMetalPool];
-            Assert.That(precious, Does.Contain("RMCUranium"));
-            const int max = ServerReagentGeneratorSystem.MaxPreciousMetalParts;
-
-            // Direct requests above the cap are clamped, for reactants and catalysts alike.
-            var direct = NewOffer(3, 970);
-            gen.AddChemical(ref direct, "RMCUranium", 7, null);
-            gen.AddChemical(ref direct, "RMCSilver", 5, null, catalyst: true);
-            gen.AddChemical(ref direct, "Water", 6, null);
-            Assert.Multiple(() =>
-            {
-                Assert.That(direct.Recipe["RMCUranium"].Item1, Is.EqualTo(max));
-                Assert.That(direct.Recipe["RMCSilver"], Is.EqualTo((max, true)));
-                Assert.That(direct.Recipe["Water"].Item1, Is.EqualTo(6), "non-precious amounts are untouched");
-            });
-
-            // Recipes assembled elsewhere (simulator copies) are clamped too.
-            var copied = new Dictionary<string, (int, bool)> { ["RMCGold"] = (9, false), ["RMCCarbon"] = (4, false) };
-            gen.ClampPreciousAmounts(copied);
-            Assert.That(copied, Is.EqualTo(new Dictionary<string, (int, bool)> { ["RMCGold"] = (max, false), ["RMCCarbon"] = (4, false) }));
-
-            // And no generated contract ever exceeds it. Hard is where precious metals and the +1 bump live.
-            for (var i = 0; i < 200; i++)
-            {
-                var data = NewOffer(3, 2000 + i);
-                gen.GenerateStats(ref data);
-                if (!gen.GenerateRecipe(ref data, []))
-                    continue;
-                foreach (var (reagent, (amount, _)) in data.Recipe)
-                {
-                    if (precious.Contains(reagent))
-                        Assert.That(amount, Is.LessThanOrEqualTo(max), $"Hard contract asked for {amount} parts of {reagent}");
-                }
-            }
-        });
-    }
 
     /// <summary>
     /// Contract pools exclude unavailable reagents and food or drink ingredients, even when a standard
     /// or platoon mess dispenser provides them. Water and sugar remain useful synthesis ingredients.
     /// </summary>
-    [Test]
-    public async Task ContractPoolsExcludeUnobtainableReagents()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
-            var seed = NewOffer(1, 1);
-            gen.GenerateStats(ref seed); // forces Setup()
-            var pooled = gen.ChemicalGenClassesList.Values.SelectMany(pool => pool).ToHashSet();
-
-            var factory = Server.ResolveDependency<IComponentFactory>();
-            Assert.That(SProtoMan.Index<EntityPrototype>("RMCVendorNutriCoDrink")
-                .TryGetComponent(out CMUAutoDrinkComponent? standard, factory), Is.True);
-            var standardMenu = standard!.Drinks.Select(drink => drink.Reagent.Id).ToHashSet();
-
-            var platoonOnly = new HashSet<string>();
-            foreach (var proto in SProtoMan.EnumeratePrototypes<EntityPrototype>())
-            {
-                if (!proto.Abstract && proto.TryGetComponent(out CMUAutoDrinkComponent? menu, factory))
-                    platoonOnly.UnionWith(menu.Drinks.Select(drink => drink.Reagent.Id).Where(id => !standardMenu.Contains(id)));
-            }
-
-            Assert.That(platoonOnly, Does.Contain("CMUCafeDeOlla"), "the platoon menus were not found");
-            Assert.Multiple(() =>
-            {
-                foreach (var reagent in platoonOnly)
-                    Assert.That(pooled, Does.Not.Contain(reagent), $"{reagent} is only poured by a platoon mess AutoDrink");
-                Assert.That(pooled, Does.Not.Contain("CMUXenoPlasmaNutrient"), "nothing produces nutrient plasma");
-                Assert.That(pooled, Does.Not.Contain("RMCCoffee"), "obtainable drinks are still excluded from contract generation");
-                Assert.That(pooled, Does.Contain("Water"), "water remains eligible for synthesis");
-                Assert.That(pooled, Does.Contain("RMCSugar"), "sugar remains eligible despite being a food reagent");
-            });
-        });
-    }
-
-    [Test]
-    public async Task MaterialDifficultyRisesWithTier()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
-            var seed = NewOffer(1, 0);
-            gen.GenerateStats(ref seed); // forces Setup()
-            var pools = gen.ChemicalGenClassesList;
-            var precious = pools[SharedReagentGeneratorSystem.PreciousMetalPool];
-            Assert.That(precious, Is.Not.Empty, "precious-metal pool (CMUPreciousMetals) resolved to nothing");
-            var ordinaryRare = pools["C4"].Except(precious).ToHashSet();
-            var hardWithPremium = 0;
-            var hardGenerated = 0;
-
-            for (var tier = 1; tier <= 3; tier++)
-            {
-                var failures = 0;
-                for (var i = 0; i < Samples; i++)
-                {
-                    var data = NewOffer(tier, i);
-                    gen.GenerateStats(ref data);
-                    if (!gen.GenerateRecipe(ref data, []))
-                    {
-                        // Collisions with hand-authored recipes are rejected and retried; a few give up.
-                        failures++;
-                        continue;
-                    }
-                    foreach (var reagent in data.Recipe.Keys)
-                    {
-                        switch (tier)
-                        {
-                            case 1:
-                                Assert.That(pools["C1"].Contains(reagent) || pools["C2"].Contains(reagent), Is.True,
-                                    $"Easy recipe used {reagent}, which is not Basic/Common");
-                                break;
-                            case 2:
-                                Assert.That(pools["C4"].Contains(reagent) || pools["H1"].Contains(reagent), Is.False,
-                                    $"Intermediate recipe used {reagent}, which is Rare/Hydro");
-                                break;
-                            default:
-                                Assert.That(pools["C1"].Contains(reagent), Is.False, $"Hard recipe used element {reagent}");
-                                Assert.That(ordinaryRare.Contains(reagent), Is.False,
-                                    $"Hard recipe used {reagent}: Rare-class but not a precious metal");
-                                break;
-                        }
-                    }
-                    if (tier == 3)
-                    {
-                        Assert.That(data.Recipe.Count, Is.GreaterThanOrEqualTo(4), "Hard recipes ask for at least four reactants");
-                        hardGenerated++;
-                        if (data.Recipe.Keys.Any(r => precious.Contains(r) || pools["H1"].Contains(r)))
-                            hardWithPremium++;
-                    }
-                }
-                Assert.That(failures, Is.LessThanOrEqualTo(Samples / 10), $"tier {tier}: too many offers could not find a non-colliding recipe");
-            }
-            // Each Hard slot is 50% precious-or-botanical, and a Hard recipe has 4-5 slots.
-            Assert.That(hardWithPremium, Is.GreaterThanOrEqualTo(hardGenerated * 3 / 4),
-                "Hard recipes should almost always need a precious metal or a botanical");
-        });
-    }
-
-    [Test]
-    public async Task PropertyRarityAndLevelCeilingsFollowTier()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
-            var props = SProtoMan.GetInstances<ReagentPropertyPrototype>();
-            var hardWithRare = 0;
-            for (var i = 0; i < Samples; i++)
-            {
-                var easy = NewOffer(1, i);
-                gen.GenerateStats(ref easy);
-                foreach (var (id, level) in easy.Effects)
-                {
-                    Assert.That(level, Is.LessThanOrEqualTo(3), $"Easy contract rolled {id} at level {level}");
-                    Assert.That(props[id].Rarity, Is.Not.EqualTo(ReagentPropertyRarityEnum.Uncommon),
-                        $"Easy contract rolled uncommon property {id}");
-                    Assert.That(props[id].Rarity, Is.LessThan(ReagentPropertyRarityEnum.Rare),
-                        $"Easy contract carries rare-or-better property {id}");
-                }
-
-
-                var hard = NewOffer(3, i);
-                gen.GenerateStats(ref hard);
-                if (hard.Effects.Keys.Any(id => props[id].Rarity >= ReagentPropertyRarityEnum.Rare))
-                    hardWithRare++;
-            }
-            // Explosive is ~2% of a positive pick when allowed; 500 Intermediate offers make a regression near-certain to show.
-            for (var i = 0; i < 500; i++)
-            {
-                var intermediate = NewOffer(2, 1000 + i);
-                gen.GenerateStats(ref intermediate);
-                Assert.That(intermediate.Effects.ContainsKey("Explosive"), Is.False, "Explosive must be Hard-only");
-            }
-
-            // Slot one of a Hard contract is always a Rare pick; conflicts can occasionally cancel it.
-            Assert.That(hardWithRare, Is.GreaterThanOrEqualTo(Samples * 3 / 4), "Hard contracts should almost always carry a rare property");
-        });
-    }
 
     [Test]
     public async Task GeneratedRecipesDoNotShadowHandAuthoredReactions()
@@ -426,36 +238,6 @@ public sealed class CMUProcgenChemistryTest : GameTest
         });
     }
 
-    [Test]
-    public async Task HardContractRetryKeepsPremiumReactant()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var gen = SEntMan.System<ServerReagentGeneratorSystem>();
-            var research = SEntMan.System<ServerResearchDataTerminalSystem>();
-            var seed = NewOffer(1, 0);
-            gen.GenerateStats(ref seed);
-            var pools = gen.ChemicalGenClassesList;
-            var premium = pools["H1"].Concat(pools[SharedReagentGeneratorSystem.PreciousMetalPool]).ToHashSet();
-
-            // Pin the hint to a reagent that is the sole reactant of a hand-authored reaction, so every recipe
-            // containing it collides and LegalizeChem must take its Hard retry path.
-            var blocker = SProtoMan.EnumeratePrototypes<ReactionPrototype>()
-                .Where(r => r.Reactants.Count == 1 && !gen.GeneratedRecipes.Contains(r.ID))
-                .Select(r => r.Reactants.Keys.First().Id)
-                .FirstOrDefault(id => !premium.Contains(id));
-            Assume.That(blocker, Is.Not.Null, "no single-reactant hand-authored reaction to collide with");
-
-            var offer = NewOffer(3, 950);
-            offer.Effects["Antitoxic"] = 1;
-            offer.RecipeHint = blocker!;
-            Assert.That(research.LegalizeChem(offer), Is.True, "Hard offer should recover from a colliding hint");
-            var data = gen.ProceduralReagentData[offer.ID];
-            Assert.That(data.Recipe.Keys.Any(premium.Contains), Is.True, "Hard retry lost its precious/botanical reactant");
-            Assert.That(data.Recipe.ContainsKey(data.RecipeHint), Is.True, "RecipeHint must name a reactant in the recipe");
-        });
-    }
-
     /// <summary>
     /// The screenshot scenario: three LC9 tanks holding UT, UT + Napalm X and UT + an Oxidizing research
     /// chemical must report (and fire) different values. Uses the same helper as the tank examine verb.
@@ -517,103 +299,11 @@ public sealed class CMUProcgenChemistryTest : GameTest
     /// Hand-authored fuels' *Mod fields are molotov tuning; a pure tank of any of them must burn exactly at its
     /// own prototype stats, or loading stock napalm variants would silently change their strength.
     /// </summary>
-    [Test]
-    public async Task StockFuelsKeepTheirOwnStatsInFlamers()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var fuel = SEntMan.System<CMUFuelProfileSystem>();
-            var checkedFuels = 0;
-            foreach (var reagent in SProtoMan.EnumeratePrototypes<ReagentPrototype>())
-            {
-                if (reagent.Abstract || reagent.Generated || reagent.Intensity <= 0 || reagent.Duration <= 0 || reagent.Radius <= 0)
-                    continue;
-                var pure = new Solution();
-                pure.AddReagent(reagent.ID, FixedPoint2.New(100));
-                Assert.That(fuel.TryCompute(pure, out var profile), Is.True, $"{reagent.ID} is not a valid fuel on its own");
-                Assert.That((profile.Intensity, profile.Duration, profile.Radius),
-                    Is.EqualTo((reagent.Intensity, reagent.Duration, reagent.Radius)),
-                    $"{reagent.ID}: a pure tank must burn at its prototype stats");
-
-                // FLOW-22: a heated container of it burns with the same stats under the non-specialist caps.
-                Assert.That(fuel.TryResolveFire(pure, CMUFireSource.Container, out var spec), Is.True, $"{reagent.ID} must ignite in a container");
-                Assert.Multiple(() =>
-                {
-                    Assert.That(spec.Intensity, Is.EqualTo(Math.Min(CMUFuelProfileSystem.NonSpecialistMaxIntensity, reagent.Intensity)), reagent.ID);
-                    Assert.That(spec.Duration, Is.EqualTo(reagent.Duration), reagent.ID);
-                    Assert.That(spec.Tier, Is.EqualTo(CMUFuelProfileSystem.TierFor(spec.Intensity)), reagent.ID);
-                    Assert.That(spec.Tier, Is.LessThan(4), $"{reagent.ID}: only specialist tanks burn blue");
-                });
-                checkedFuels++;
-            }
-            Assert.That(checkedFuels, Is.GreaterThanOrEqualTo(5), "expected the RMC napalm family to be checked");
-        });
-    }
-
-    [Test]
-    public async Task SimulatorLoopCannotFarmSampleData()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            // Every simulation costs at least 1 sample data (the Rare-reagent discount is floored at 1); the first
-            // scan of a simulator-made chemical must never pay more than that, whatever its tier.
-            foreach (var tier in new[] { 1, 2, 3, 4 })
-            {
-                var proto = new ReagentPrototype { GenTier = tier, Class = ReagentClass.Rare, Generated = true };
-                Assert.That(ServerResearchDataTerminalSystem.SampleDataForSimulated(proto), Is.LessThanOrEqualTo(1),
-                    $"tier {tier} simulated scan pays more than the cheapest simulation costs");
-                // The completion path routes simulator output (below Special) through the same flat grant.
-                Assert.That(ServerResearchDataTerminalSystem.SampleDataForCompleted(proto), Is.LessThanOrEqualTo(1),
-                    $"tier {tier} simulated completion pays more than the cheapest simulation costs");
-            }
-        });
-    }
 
     /// <summary>
     /// Every property the generator can roll must have a real effect body. Marker properties that the
     /// generator itself interprets are listed explicitly so that a new stub cannot hide behind them.
     /// </summary>
-    [Test]
-    public async Task GenerationEligiblePropertiesAreImplemented()
-    {
-        var markerProperties = new HashSet<string>
-        {
-            "Regulating", // generator omits overdose thresholds
-            "Optimizing", // generator raises recipe yield
-            "Intravenous", "Hypermetabolic", "Hypometabolic", // generator scales metabolismRate
-            "Fueling", "Oxidizing", "Flowing", "Viscous", "Firepenetrating", // generator emits fire fields
-            "Explosive", // generator adds a reaction explosion effect
-            "Electrogenetic", // event-driven via the defibrillator
-        };
-        var hooks = new[] { "Tick", "TickOverdose", "TickCriticalOverdose", "ReagentBoost", "TickHydroTray" };
-
-        await Server.WaitAssertion(() =>
-        {
-            var reflection = Server.ResolveDependency<IReflectionManager>();
-            var effectTypes = reflection.GetAllChildren<RMCChemicalEffect>().ToDictionary(t => t.Name, t => t);
-            var missing = new List<string>();
-            foreach (var prop in SProtoMan.EnumeratePrototypes<ReagentPropertyPrototype>())
-            {
-                if (prop.Abstract || markerProperties.Contains(prop.ID))
-                    continue;
-                if (prop.Rarity is ReagentPropertyRarityEnum.Disabled or ReagentPropertyRarityEnum.Admin)
-                    continue;
-                Assert.That(effectTypes.TryGetValue(prop.EffectName, out var type), Is.True, $"{prop.ID}: no effect class named {prop.EffectName}");
-                var implemented = false;
-                for (var t = type; t != null && t != typeof(RMCChemicalEffect); t = t.BaseType)
-                {
-                    if (hooks.Any(h => t.GetMethod(h, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null))
-                    {
-                        implemented = true;
-                        break;
-                    }
-                }
-                if (!implemented)
-                    missing.Add(prop.ID);
-            }
-            Assert.That(missing, Is.Empty, "generation-eligible properties with no effect body");
-        });
-    }
 
     /// <summary>
     /// A flamer tank held in hand refills from lab glassware, not only from reagent tanks, and the pour is

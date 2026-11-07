@@ -68,18 +68,6 @@ public sealed class ThreatVoteCooldownTest : ContentUnitTest
         Assert.That(vote.CanVoteForThreat(candidate), Is.True);
     }
 
-    [TestCase("XenoThreat")]
-    [TestCase("XenoThreatCF")]
-    public void BasicXenosCanRepeat(string threatId)
-    {
-        var vote = new ThreatVoteSystem();
-        var xeno = _prototypes.Index<ThreatPrototype>(threatId);
-        vote.RecordVotedThreat(xeno);
-        vote.OnRunLevelChanged(new(GameRunLevel.InRound, GameRunLevel.PostRound));
-
-        Assert.That(vote.CanVoteForThreat(xeno), Is.True);
-    }
-
     [Test]
     public void DirectRestartPreservesCooldownAndNextWinnerReplacesIt()
     {

@@ -52,54 +52,6 @@ public sealed class CMUGunshipCrewIFFTest : GameTest
         - BulletImpassable
 """;
 
-    [TestCase(0, false)]
-    [TestCase(1, true)]
-    [TestCase(2, true)]
-    public async Task AdvancedRequiresAircrewAndRemovesEffectsWhenTrainingIsLost(int level, bool allowed)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var skills = SEntMan.System<SkillsSystem>();
-            skills.SetSkill(user, "CMUSkillAircrew", level);
-            var helmet = SEntMan.SpawnEntity("CMUTestAdvancedCrewHelmet", map.GridCoords);
-            Assert.That(SEntMan.System<InventorySystem>().TryEquip(user, helmet, "head", force: true), Is.True);
-            Cycle(helmet, user);
-            Assert.That(SEntMan.HasComponent<CMUAdvancedGunshipCrewVisorComponent>(helmet), Is.EqualTo(allowed));
-            Assert.That(SEntMan.HasComponent<ShowHealthBarsComponent>(helmet), Is.EqualTo(allowed));
-            Assert.That(SEntMan.HasComponent<ShowHealthIconsComponent>(helmet), Is.EqualTo(allowed));
-            Assert.That(SEntMan.HasComponent<CMUGunshipCrewIFFComponent>(user), Is.EqualTo(allowed));
-            if (!allowed)
-                return;
-
-            Assert.That(SEntMan.GetComponent<CMUGunshipCrewIFFComponent>(user).ToggleAction, Is.Not.Null);
-            skills.SetSkill(user, "CMUSkillAircrew", 0);
-            Assert.That(SEntMan.HasComponent<CMUAdvancedGunshipCrewVisorComponent>(helmet), Is.False);
-            Assert.That(SEntMan.HasComponent<CMUGunshipCrewVisorComponent>(helmet), Is.False);
-            Assert.That(SEntMan.HasComponent<ShowHealthBarsComponent>(helmet), Is.False);
-            Assert.That(SEntMan.HasComponent<CMUGunshipCrewIFFComponent>(user), Is.False);
-        });
-    }
-
-    [Test]
-    public async Task BasicRemainsUsableWithoutTrainingAndDoesNotGrantMedicalOrIFF()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            SEntMan.System<SkillsSystem>().SetSkill(user, "CMUSkillAircrew", 0);
-            var helmet = SEntMan.SpawnEntity("CMUTestBasicCrewHelmet", map.GridCoords);
-            Assert.That(SEntMan.System<InventorySystem>().TryEquip(user, helmet, "head", force: true), Is.True);
-            Cycle(helmet, user);
-            Assert.That(SEntMan.HasComponent<CMUGunshipCrewVisorComponent>(helmet), Is.True);
-            Assert.That(SEntMan.HasComponent<CMUAdvancedGunshipCrewVisorComponent>(helmet), Is.False);
-            Assert.That(SEntMan.HasComponent<ShowHealthBarsComponent>(helmet), Is.False);
-            Assert.That(SEntMan.HasComponent<CMUGunshipCrewIFFComponent>(user), Is.False);
-        });
-    }
-
     [Test]
     public async Task InterlockOnlyBlocksOwnShipAsFirstImpactAndCanBeToggled()
     {

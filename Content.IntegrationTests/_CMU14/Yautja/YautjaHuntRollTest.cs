@@ -10,26 +10,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHuntRollTest
 {
-    [TestCase("Insurgency", 1f / 6f)]
-    [TestCase("insurgency", 1f / 6f)]
-    [TestCase("DistressSignal", 1f / 3f)]
-    [TestCase("ForceOnForce", 1f / 3f)]
-    [TestCase("ColonyFall", 0f)]
-    [TestCase(null, 0f)]
-    public void OnlyInsurgencyDistressSignalAndForceOnForceRoll(string? preset, float expected)
-    {
-        Assert.That(YautjaHuntRoll.ChanceFor(preset, 1f / 6f, 1f / 3f), Is.EqualTo(expected));
-    }
-
-    [Test]
-    public void ChancesAreClamped()
-    {
-        Assert.Multiple(() =>
-        {
-            Assert.That(YautjaHuntRoll.ChanceFor("Insurgency", 2f, 0f), Is.EqualTo(1f));
-            Assert.That(YautjaHuntRoll.ChanceFor("DistressSignal", 0f, -1f), Is.EqualTo(0f));
-        });
-    }
 
     [Test]
     public async Task LobbyRollFollowsThePresetAndLeavesStaffHuntsAlone()

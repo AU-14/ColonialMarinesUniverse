@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Numerics;
-using Content.Shared._RMC14.Construction;
 using Content.Shared.CMU14.Fob;
 using Content.Shared.Audio;
 using Content.Shared.Damage.Systems;
@@ -19,6 +17,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.Stunnable;
+using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
@@ -37,7 +36,6 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private CollisionWakeSystem _collisionWake = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
-    [Dependency] private RMCConstructionSystem _construction = default!;
     [Dependency] private CMUFobInteractionSystem _controls = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -143,34 +141,49 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
            && Vector2.DistanceSquared(_transform.GetWorldPosition(sensor), _transform.GetWorldPosition(target)) <= range * range;
 
     private bool CanWork(Entity<CMUFobEquipmentComponent> ent, EntityUid user, EntityUid? tool, CMUFobEquipmentDoAfterEvent ev)
+        => GetWorkFailure(ent, user, tool, ev) == null;
+
+    private string? GetWorkFailure(Entity<CMUFobEquipmentComponent> ent, EntityUid user, EntityUid? tool,
+        CMUFobEquipmentDoAfterEvent ev)
     {
-        if (!AtSite(ent, out var bank) || !_controls.CanOperate(ent, user, bank.Comp.Faction)) return false;
+        if (!_reserve.Enabled) return "cmu-fob-disabled";
+        if (!_reserve.TryGetNetwork("govfor", out var bank)) return "cmu-fob-network-required";
+        if (bank.Comp.State == CMUFobReserveState.Closed) return "cmu-fob-network-closed";
+        if (!_controls.CanOperate(ent, user, bank.Comp.Faction)) return "cmu-fob-operator-required";
         if (ev.Generator)
-            return ent.Comp.Kind == CMUFobEquipmentKind.Generator && ent.Comp.Deployed && !ent.Comp.Spent
-                && !bank.Comp.BackupUsed && _reserve.GetRemaining(bank) < bank.Comp.Capacity;
-        if (ev.Deploy == ent.Comp.Deployed || !ev.Deploy && bank.Comp.State is CMUFobReserveState.Starting or CMUFobReserveState.Active) return false;
+        {
+            if (ent.Comp.Kind != CMUFobEquipmentKind.Generator) return "cmu-fob-generator-denied";
+            if (!ent.Comp.Deployed) return "cmu-fob-generator-deploy";
+            if (ent.Comp.Spent || bank.Comp.BackupUsed) return "cmu-fob-generator-spent";
+            if (_reserve.GetRemaining(bank) >= bank.Comp.Capacity) return "cmu-fob-generator-full";
+            return AtSite(ent, out _) ? null : "cmu-fob-placement-range";
+        }
+        if (ev.Deploy == ent.Comp.Deployed) return "cmu-fob-equipment-work-denied";
+        if (!ev.Deploy && bank.Comp.State is CMUFobReserveState.Starting or CMUFobReserveState.Active)
+            return "cmu-fob-support-off-required";
+        if (tool is not { } held || !_hands.TryGetActiveItem(user, out var active) || active != held)
+            return "cmu-fob-tool-required";
+        var cutting = ent.Comp.Kind == CMUFobEquipmentKind.Fence && !ev.Deploy;
+        if (!_tools.HasQuality(held, cutting ? Cutters : Wrench))
+            return cutting ? "cmu-fob-cutters-required" : "cmu-fob-wrench-required";
         if (ev.Deploy)
         {
-            // Anchoring snaps to the tile center. Testing the dropped item's unsnapped position
-            // incorrectly rejects the next fence section beside a deployed light or fence.
-            var grid = Transform(ent).GridUid!.Value;
+            var failure = _controls.GetPlacementFailure(ent, bank, out var coordinates);
+            if (failure != null) return failure;
+            var grid = coordinates.EntityId;
             var mapGrid = Comp<MapGridComponent>(grid);
-            var tile = _map.GetTileRef(grid, mapGrid, Transform(ent).Coordinates);
+            var tile = _map.GetTileRef(grid, mapGrid, coordinates);
             var center = _map.GridTileToWorld(grid, mapGrid, tile.GridIndices);
-            if (Vector2.DistanceSquared(center.Position, _transform.GetWorldPosition(bank)) > bank.Comp.DeploymentRange * bank.Comp.DeploymentRange) return false;
-            if (!_sites.CanPlaceUtility(bank, center.Position)
-                || !_construction.CanBuildAt(Transform(ent).Coordinates, Name(ent), out _, anchoring: true)) return false;
             _obstacles.Clear();
             _lookup.GetEntitiesInRange(center, 0.35f, _obstacles);
             foreach (var obstacle in _obstacles)
             {
-                if (obstacle.Owner != ent.Owner && obstacle.Comp.CanCollide
-                    && TryComp<FixturesComponent>(obstacle, out var fixtures)
-                    && fixtures.Fixtures.Values.Any(fixture => fixture.Hard)) return false;
+                if (obstacle.Owner != ent.Owner && Transform(obstacle).Anchored
+                    && TryComp<CMUFobEquipmentComponent>(obstacle, out var equipment) && equipment.Deployed)
+                    return "cmu-fob-placement-occupied";
             }
         }
-        return tool is { } held && _hands.TryGetActiveItem(user, out var active) && active == held
-            && _tools.HasQuality(held, ent.Comp.Kind == CMUFobEquipmentKind.Fence && !ev.Deploy ? Cutters : Wrench);
+        return null;
     }
 
     public bool TryStartWork(Entity<CMUFobEquipmentComponent> ent, EntityUid user, EntityUid? tool, bool generator = false)
@@ -184,6 +197,8 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
             AttemptFrequency = AttemptFrequency.EveryTick,
         }, out ent.Comp.Work);
         if (!started) ent.Comp.Charging = false;
+        if (started && !generator && tool is { } used && TryComp<ToolComponent>(used, out var heldTool))
+            _tools.PlayToolSound(used, heldTool, user, predicted: false);
         UpdateVisuals(ent);
         return started;
     }
@@ -193,7 +208,11 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
         if (args.Handled || !_reserve.Enabled) return;
         if (!_tools.HasQuality(args.Used, Wrench) && !_tools.HasQuality(args.Used, Cutters)) return;
         args.Handled = true;
-        if (!TryStartWork(ent, args.User, args.Used))
+        var reason = _doAfter.IsRunning(ent.Comp.Work) ? "cmu-fob-equipment-busy"
+            : GetWorkFailure(ent, args.User, args.Used, new CMUFobEquipmentDoAfterEvent { Deploy = !ent.Comp.Deployed });
+        if (reason != null)
+            _popup.PopupEntity(Loc.GetString(reason), ent, args.User);
+        else if (!TryStartWork(ent, args.User, args.Used))
             _popup.PopupEntity(Loc.GetString("cmu-fob-equipment-work-denied"), ent, args.User);
     }
 
@@ -201,7 +220,11 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     {
         if (args.Handled || ent.Comp.Kind != CMUFobEquipmentKind.Generator || !_reserve.Enabled) return;
         args.Handled = true;
-        if (!TryStartWork(ent, args.User, null, true))
+        var reason = _doAfter.IsRunning(ent.Comp.Work) ? "cmu-fob-equipment-busy"
+            : GetWorkFailure(ent, args.User, null, new CMUFobEquipmentDoAfterEvent { Generator = true });
+        if (reason != null)
+            _popup.PopupEntity(Loc.GetString(reason), ent, args.User);
+        else if (!TryStartWork(ent, args.User, null, true))
             _popup.PopupEntity(Loc.GetString("cmu-fob-generator-denied"), ent, args.User);
     }
 
@@ -216,7 +239,8 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
         args.Handled = true;
         ent.Comp.Work = null;
         ent.Comp.Charging = false;
-        if (args.Cancelled || !CanWork(ent, args.User, args.Used, args) || !AtSite(ent, out var bank))
+        if (args.Cancelled || !CanWork(ent, args.User, args.Used, args)
+            || !_reserve.TryGetNetwork("govfor", out var bank))
         {
             UpdateVisuals(ent);
             return;
@@ -230,12 +254,14 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
         }
         else
         {
+            var coordinates = Transform(ent).Coordinates;
+            if (args.Deploy && _controls.GetPlacementFailure(ent, bank, out coordinates) != null) return;
             if (args.Deploy && TryComp<StackComponent>(ent, out var stack))
             {
                 // A bundle remains portable. Consume one section only after successful placement;
                 // the deployed entity retains any damage rather than laundering it through a stack.
                 if (_stack.GetCount((ent, stack)) < 1) return;
-                var section = SpawnAtPosition("CMUFobFence", Transform(ent).Coordinates);
+                var section = SpawnAtPosition("CMUFobFence", coordinates);
                 if (!_transform.AnchorEntity(section) || !_stack.TryUse((ent, stack), 1))
                 {
                     QueueDel(section);
@@ -250,15 +276,18 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
                 EnsureComp<CMUFobInstructionsComponent>(section);
                 UpdateVisuals((section, equipment));
                 _effects.Play(section, CMUFobPresentationCue.Deploy);
+                _popup.PopupEntity(Loc.GetString("cmu-fob-equipment-secured"), section, args.User);
                 return;
             }
-            if (args.Deploy && !_transform.AnchorEntity(ent)) return;
+            if (args.Deploy && !_transform.AnchorEntity((ent.Owner, Transform(ent), MetaData(ent)), coordinates)) return;
             if (!args.Deploy) _transform.Unanchor(ent);
             ent.Comp.Deployed = args.Deploy;
             ent.Comp.Network = args.Deploy ? bank.Owner : null;
             UpdateDeploymentCollision(ent);
             EnsureComp<CMUFobInstructionsComponent>(ent);
             _effects.Play(ent, args.Deploy ? CMUFobPresentationCue.Deploy : CMUFobPresentationCue.Pack);
+            _popup.PopupEntity(Loc.GetString(args.Deploy
+                ? "cmu-fob-equipment-secured" : "cmu-fob-equipment-packed"), ent, args.User);
         }
         UpdateVisuals(ent);
     }
@@ -301,7 +330,11 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     private void OnExamined(Entity<CMUFobEquipmentComponent> ent, ref ExaminedEvent args)
     {
         args.PushMarkup(Loc.GetString(!_reserve.Enabled ? "cmu-fob-disabled" : ent.Comp.Spent ? "cmu-fob-generator-spent"
-            : ent.Comp.Deployed ? "cmu-fob-equipment-deployed" : "cmu-fob-equipment-stowed"));
+            : !ent.Comp.Deployed ? "cmu-fob-equipment-stowed"
+            : ent.Comp.Kind == CMUFobEquipmentKind.Generator ? "cmu-fob-generator-ready"
+            : IsPowered(ent) ? "cmu-fob-equipment-powered" : "cmu-fob-equipment-unpowered",
+            ("tool", Loc.GetString(ent.Comp.Kind == CMUFobEquipmentKind.Fence
+                ? "cmu-fob-tool-cutters" : "cmu-fob-tool-wrench"))));
     }
 
     private void UpdateVisuals(Entity<CMUFobEquipmentComponent> ent)

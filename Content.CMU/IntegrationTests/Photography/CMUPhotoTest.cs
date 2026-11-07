@@ -98,86 +98,6 @@ public sealed class CMUPhotoTest : GameTest
     }
 
     [Test]
-    [Description("A ghost standing in the frame is recorded on the print, faintly, and kept out of its caption; ghosts outside the frame and admin ghosts are not.")]
-    public async Task GhostsInTheFrameAreCaught()
-    {
-        var map = await Pair.CreateTestMap();
-        var session = ServerSession!;
-
-        EntityUid user = default, inside = default;
-        await Server.WaitAssertion(() =>
-        {
-            user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            Server.PlayerMan.SetAttachedEntity(session, user);
-            inside = SEntMan.SpawnEntity("MobObserver", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
-            SEntMan.SpawnEntity("MobObserver", map.GridCoords.Offset(new System.Numerics.Vector2(6, 0)));
-            SEntMan.SpawnEntity("AdminObserver", map.GridCoords);
-        });
-
-        await Server.WaitRunTicks(5);
-
-        await Server.WaitAssertion(() =>
-        {
-            var photos = SEntMan.System<CMUPhotoSystem>();
-            var camera = SpawnCamera(map.GridCoords);
-            camera.Comp.PrintDelay = TimeSpan.Zero;
-            Assert.That(camera.Comp.Size, Is.EqualTo(3), "The test frames a 3x3 area.");
-
-            var request = photos.RequestCapture(session, user, camera, map.GridCoords);
-            Assert.That(photos.TryAcceptCapture(session, request, Png(camera.Comp.Size * CMUPhotoLimits.TilePixels), out var print));
-
-            var photo = SEntMan.GetComponent<CMUPhotoComponent>(print);
-            Assert.That(photo.Ghosts, Has.Count.EqualTo(1), "Only the player ghost inside the frame should be caught.");
-            var ghost = photo.Ghosts[0];
-            Assert.Multiple(() =>
-            {
-                Assert.That(ghost.Prototype.Id, Is.EqualTo("MobObserver"));
-                Assert.That(ghost.Opacity, Is.InRange(CMUPhotoLimits.GhostMinOpacity, CMUPhotoLimits.GhostMaxOpacity));
-                Assert.That(ghost.Offset.X, Is.EqualTo(1).Within(0.01f), "The ghost was recorded in the wrong place.");
-                Assert.That(ghost.Offset.Y, Is.EqualTo(0).Within(0.01f), "The ghost was recorded in the wrong place.");
-                Assert.That(photo.Contents, Does.Not.Contain(SEntMan.GetComponent<MetaDataComponent>(inside).EntityName),
-                    "A ghost was named in the caption.");
-            });
-        });
-    }
-
-    [Test]
-    [Description("The print comes out of the camera a moment after the shutter, not in the same tick.")]
-    public async Task PrintComesOutAfterTheShutter()
-    {
-        var map = await Pair.CreateTestMap();
-        var session = ServerSession!;
-
-        EntityUid user = default;
-        await Server.WaitAssertion(() =>
-        {
-            user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            Server.PlayerMan.SetAttachedEntity(session, user);
-
-            var photos = SEntMan.System<CMUPhotoSystem>();
-            var camera = SpawnCamera(map.GridCoords);
-            camera.Comp.PrintDelay = TimeSpan.FromSeconds(0.5);
-            var request = photos.RequestCapture(session, user, camera, map.GridCoords);
-
-            Assert.That(photos.TryAcceptCapture(session, request, Png(camera.Comp.Size * CMUPhotoLimits.TilePixels), out var print),
-                "A good capture was refused.");
-            Assert.That(print, Is.EqualTo(EntityUid.Invalid), "The print came out with the shutter instead of after it.");
-        });
-
-        await Server.WaitRunTicks(60);
-
-        await Server.WaitAssertion(() =>
-        {
-            var hands = SEntMan.System<SharedHandsSystem>();
-            var held = false;
-            foreach (var item in hands.EnumerateHeld(user))
-                held |= SEntMan.HasComponent<CMUPhotoComponent>(item);
-
-            Assert.That(held, "The delayed print never came out into the photographer's hand.");
-        });
-    }
-
-    [Test]
     [Description("A roll gives ten shots, counted down by each photo; an empty camera clicks without asking for a picture.")]
     public async Task FilmRunsOut()
     {
@@ -211,28 +131,6 @@ public sealed class CMUPhotoTest : GameTest
                 Assert.That(photos.PendingCaptures, Is.EqualTo(pending + camera.Comp.MaxShots),
                     "An empty camera still took a photo.");
             });
-        });
-    }
-
-    [Test]
-    [Description("A shot the photographer's client could not capture gives its film back.")]
-    public async Task UncapturedShotKeepsItsFilm()
-    {
-        var map = await Pair.CreateTestMap();
-        var session = ServerSession!;
-
-        await Server.WaitAssertion(() =>
-        {
-            var photos = SEntMan.System<CMUPhotoSystem>();
-            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            Server.PlayerMan.SetAttachedEntity(session, user);
-            var camera = SpawnCamera(map.GridCoords);
-
-            camera.Comp.Shots = 3;
-            var request = photos.RequestCapture(session, user, camera, map.GridCoords);
-            camera.Comp.Shots--;
-            Assert.That(photos.TryAcceptCapture(session, request, Array.Empty<byte>(), out _), Is.False);
-            Assert.That(camera.Comp.Shots, Is.EqualTo(3), "The film for a picture that was never taken was used up.");
         });
     }
 

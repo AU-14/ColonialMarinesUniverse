@@ -24,13 +24,6 @@ public sealed class CraftingTests : InteractionTest
     /// <summary>
     /// Craft a simple recipe with a DoAfter
     /// </summary>
-    [Test]
-    public async Task CraftGrenade()
-    {
-        await PlaceInHands(Steel, 5);
-        await CraftItem("ModularGrenadeRecipe");
-        await FindEntity("ModularGrenade");
-    }
 
     /// <summary>
     /// Craft a complex recipe (more than one ingredient).

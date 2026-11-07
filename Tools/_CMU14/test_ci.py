@@ -34,7 +34,8 @@ class CiTests(unittest.TestCase):
         self.assertFalse(integration["unit"])
         self.assertTrue(integration["build"] and integration["gameplay"])
         for event in ("push", "merge_group"):
-            self.assertTrue(select_tests(event, ["README.md"])["gameplay"])
+            self.assertFalse(select_tests(event, ["README.md"])["gameplay"])
+            self.assertTrue(select_tests(event, None)["gameplay"])
 
     def test_plan_consumes_old_rename_path_and_falls_back_on_bad_diff(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -65,7 +66,8 @@ class CiTests(unittest.TestCase):
                 "--trx", str(trx), "--timeout", str(timeout), "--heartbeat", "0.1", "--",
                 sys.executable, "-u", "-c", code,
             ], cwd=root, env=env, capture_output=True, text=True, timeout=15)
-            return result, (root / "summary.md").read_text(), (root / "test.log").read_text()
+            summary = root / "summary.md"
+            return result, summary.read_text() if summary.exists() else "", (root / "test.log").read_text()
 
     def writer(self, outcome="Completed", count=1):
         xml = TRX.format(outcome=outcome, count=count)
@@ -78,8 +80,8 @@ class CiTests(unittest.TestCase):
         self.assertIn("1 results", process.stdout)
         self.assertNotIn("engine noise", process.stdout)
         self.assertIn("engine noise", log)
-        self.assertIn("1.2s", summary)
-        self.assertIn("Passed: 1, Failed: 0, Skipped: 0", summary)
+        self.assertEqual(summary, "")
+        self.assertIn("Passed: 1, Failed: 0, Skipped: 0", process.stdout)
 
     def test_runner_rejects_false_green_evidence(self):
         scenarios = (
