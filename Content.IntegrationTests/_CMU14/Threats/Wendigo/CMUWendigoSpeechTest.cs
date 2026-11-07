@@ -37,7 +37,7 @@ public sealed class CMUWendigoSpeechTest
             Assert.That(entMan.GetComponent<OrganHealthComponent>(brain).Stage, Is.EqualTo(OrganDamageStage.Healthy));
 
             var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(subject);
-            comp.Stage = CMUWendigoSubjectStage.Fed2;
+            comp.Stage = CMUWendigoSubjectStage.Primed;
             comp.StageEndsAt = TimeSpan.Zero;
 
             var reagent = CMUWendigoTransformationSystem.StabilizedMutagen;

@@ -1,4 +1,37 @@
 - type: reaction
+  id: CMUWendigoNeuralPrimer
+  quantized: true
+  minTemp: 370
+  requiredMixerCategories:
+  - CMUMix
+  reactants:
+    CMUAlkysine:
+      amount: 5
+    RMCGold:
+      amount: 5
+    RMCSugar:
+      amount: 5
+  products:
+    CMUWendigoNeuralPrimer: 15
+
+- type: reaction
+  id: CMUWendigoTissueStabilizer
+  quantized: true
+  maxTemp: 270
+  conserveEnergy: false
+  requiredMixerCategories:
+  - CMUMix
+  reactants:
+    CMCryoxadone:
+      amount: 5
+    CMDylovene:
+      amount: 5
+    RMCPlatinum:
+      amount: 5
+  products:
+    CMUWendigoTissueStabilizer: 15
+
+- type: reaction
   id: CMUStabilizedMutagen
   quantized: true
   maxTemp: 270 # only below 270 K: chill it first (chemistry chiller or ice brine)

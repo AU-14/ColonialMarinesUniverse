@@ -97,14 +97,20 @@ public enum CMUWendigoSubjectStage : byte
     /// <summary>Fed human meat while starving; waiting 1-5 minutes.</summary>
     Fed1,
 
-    /// <summary>Fed human meat a second time; waiting 1-5 minutes.</summary>
+    /// <summary>Fed human meat a second time; waiting 1-5 minutes before neural priming.</summary>
     Fed2,
 
-    /// <summary>Injected with Stabilized Mutagen; waiting 5-10 minutes.</summary>
+    /// <summary>Neural primer administered; ready for Stabilized Mutagen.</summary>
+    Primed,
+
+    /// <summary>Injected with Stabilized Mutagen; waiting 5-10 minutes before brain treatment and a raw heart.</summary>
     Mutagen,
 
-    /// <summary>Fed human meat a final time; 5 minutes of hunger and seizures.</summary>
+    /// <summary>Fed a raw human heart; 5 minutes of hunger and seizures before tissue stabilization.</summary>
     Gestation,
+
+    /// <summary>Tissue stabilizer administered; ready for MH-32 or MH-33.</summary>
+    Stabilized,
 
     /// <summary>Injected with MH-32 or MH-33; one minute of constant seizure before turning.</summary>
     Mutating,

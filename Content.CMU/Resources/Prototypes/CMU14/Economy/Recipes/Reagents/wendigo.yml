@@ -1,5 +1,25 @@
 - type: reagent
   parent: CMReagent
+  id: CMUWendigoNeuralPrimer
+  name: reagent-name-cmu-wendigo-neural-primer
+  desc: reagent-desc-cmu-wendigo-neural-primer
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: metallic
+  color: "#ccad62"
+  unknown: true
+
+- type: reagent
+  parent: CMReagent
+  id: CMUWendigoTissueStabilizer
+  name: reagent-name-cmu-wendigo-tissue-stabilizer
+  desc: reagent-desc-cmu-wendigo-tissue-stabilizer
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#588fa0"
+  unknown: true
+
+- type: reagent
+  parent: CMReagent
   id: CMUStabilizedMutagen
   name: reagent-name-cmu-stabilized-mutagen
   desc: reagent-desc-cmu-stabilized-mutagen

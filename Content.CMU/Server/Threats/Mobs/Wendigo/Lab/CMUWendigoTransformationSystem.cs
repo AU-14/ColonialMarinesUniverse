@@ -61,7 +61,8 @@ namespace Content.Server.CMU14.Threats.Mobs.Wendigo.Lab;
 
 /// <summary>
 /// Runs the Weyland-Yutani Wendigo procedure on a human test subject:
-/// starving + human meat, human meat, Stabilized Mutagen, human meat, then MH-32 (feral) or MH-33 (tamed).
+/// starving + human meat, human meat, neural primer, Stabilized Mutagen, brain treatment and a raw human heart,
+/// tissue stabilizer, then MH-32 (feral) or MH-33 (tamed).
 /// Each input is only accepted once the previous stage's timer has finished.
 /// </summary>
 public sealed partial class CMUWendigoTransformationSystem : EntitySystem
@@ -92,6 +93,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
 
     public static readonly ProtoId<ReagentPrototype> StabilizedMutagen = "CMUStabilizedMutagen";
+    public static readonly ProtoId<ReagentPrototype> NeuralPrimer = "CMUWendigoNeuralPrimer";
+    public static readonly ProtoId<ReagentPrototype> TissueStabilizer = "CMUWendigoTissueStabilizer";
     public static readonly ProtoId<ReagentPrototype> MH32 = "CMUMH32";
     public static readonly ProtoId<ReagentPrototype> MH33 = "CMUMH33";
 
@@ -102,6 +105,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
     private static readonly EntProtoId MindRoleTamed = "MindRoleCMUWendigoLabTamed";
     private static readonly ProtoId<EmotePrototype> Cough = "Cough";
     private static readonly ProtoId<TagPrototype> MeatTag = "Meat";
+    private static readonly EntProtoId HumanHeart = "OrganHumanHeart";
+    private static readonly EntProtoId CMUHumanHeart = "CMUOrganHumanHeart";
     private static readonly SatiationValue Starving = "Starving";
     private const string HumanSpecies = "Human";
 
@@ -224,8 +229,9 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
         if (!TryComp(args.Food, out EdibleComponent? edible) || edible.Edible != IngestionSystem.Food)
             return;
 
+        var prototype = MetaData(args.Food).EntityPrototype;
         var humanMeat = _tag.HasTag(args.Food, MeatTag)
-            && CMUHumanMeat.IsHumanStock(MetaData(args.Food).EntityPrototype);
+            && (CMUHumanMeat.IsHumanStock(prototype) || IsHumanHeart(args.Food));
 
         if (humanMeat)
         {
@@ -242,7 +248,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
 
         // Before the Stabilized Mutagen stage, other food breaks the hunger cycle.
         if (TryComp(ent, out CMUWendigoSubjectComponent? subject)
-            && subject.Stage is CMUWendigoSubjectStage.Fed1 or CMUWendigoSubjectStage.Fed2)
+            && subject.Stage is CMUWendigoSubjectStage.Fed1 or CMUWendigoSubjectStage.Fed2
+                or CMUWendigoSubjectStage.Primed)
         {
             Abort((ent, subject));
         }
@@ -276,6 +283,21 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-fed-again"), eater, eater, PopupType.Medium);
                 break;
             case CMUWendigoSubjectStage.Mutagen:
+                if (!IsHumanHeart(food))
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-needs-heart"), eater, eater, PopupType.MediumCaution);
+                    AddInstability(ent, "finished ordinary human meat instead of a raw heart after mutagen");
+                    return;
+                }
+
+                if (NeedsBrainTreatment(eater))
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-needs-brain-treatment"), eater, eater,
+                        PopupType.MediumCaution);
+                    AddInstability(ent, "finished the heart before treating the mutagen-induced brain damage");
+                    return;
+                }
+
                 SetStage(ent, CMUWendigoSubjectStage.Gestation, GestationTime);
                 var now = _timing.CurTime;
                 subject.NextFlavorAt = now + _random.Next(FlavorMin, FlavorMax);
@@ -283,7 +305,7 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-gestation-start"), eater, eater, PopupType.LargeCaution);
                 break;
             default:
-                // Fed2 waits for Stabilized Mutagen, Gestation for MH-32/MH-33; meat does nothing more.
+                // The remaining stages require their corresponding injection, not more meat.
                 PopupNotReady(eater);
                 AddInstability(ent, $"finished human meat in stage {subject.Stage}, which does not take meat");
                 break;
@@ -297,6 +319,25 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-first-meal"), uid, uid, PopupType.Medium);
         _adminLog.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(uid):subject} began the Wendigo procedure by eating human meat while starving");
+    }
+
+    private bool IsHumanHeart(EntityUid food)
+    {
+        return MetaData(food).EntityPrototype?.ID is { } id && (id == HumanHeart || id == CMUHumanHeart);
+    }
+
+    /// <summary>
+    /// Mutagen damages CMU brains; medical treatment must bring that damage below Damaged before the heart feeding.
+    /// Do not require an organ procedure when organ medical is disabled.
+    /// </summary>
+    private bool NeedsBrainTreatment(EntityUid subject)
+    {
+        if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled) || !_cfg.GetCVar(CMUMedicalCCVars.OrganEnabled))
+            return false;
+
+        return !_medicalIndex.TryGetOrgan<CMUBrainComponent>(subject, out var brain)
+            || !TryComp(brain, out OrganHealthComponent? health)
+            || health.Stage.IsAtLeast(OrganDamageStage.Damaged);
     }
 
     #endregion
@@ -326,11 +367,17 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
         if (_timing.CurTime < subject.StageEndsAt)
             return false;
 
-        if (reagent == StabilizedMutagen)
+        if (reagent == NeuralPrimer)
             return subject.Stage == CMUWendigoSubjectStage.Fed2;
 
-        if (reagent == MH32 || reagent == MH33)
+        if (reagent == StabilizedMutagen)
+            return subject.Stage == CMUWendigoSubjectStage.Primed;
+
+        if (reagent == TissueStabilizer)
             return subject.Stage == CMUWendigoSubjectStage.Gestation;
+
+        if (reagent == MH32 || reagent == MH33)
+            return subject.Stage == CMUWendigoSubjectStage.Stabilized;
 
         return false;
     }
@@ -341,7 +388,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
             return;
 
         ProtoId<ReagentPrototype> reagent = args.Reagent.ID;
-        if (reagent != StabilizedMutagen && reagent != MH32 && reagent != MH33)
+        if (reagent != NeuralPrimer && reagent != StabilizedMutagen && reagent != TissueStabilizer
+            && reagent != MH32 && reagent != MH33)
             return;
 
         if (!CanAcceptReagent(ent.Comp, reagent))
@@ -356,6 +404,20 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
         {
             _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-dose-too-small"), ent, ent, PopupType.Small);
             AddInstability(ent, $"injected with {args.ReagentQuantity.Quantity}u {reagent}, under the {RequiredDose}u dose");
+            return;
+        }
+
+        if (reagent == NeuralPrimer)
+        {
+            SetStage(ent, CMUWendigoSubjectStage.Primed, TimeSpan.Zero);
+            _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-primed"), ent, ent, PopupType.Medium);
+            return;
+        }
+
+        if (reagent == TissueStabilizer)
+        {
+            SetStage(ent, CMUWendigoSubjectStage.Stabilized, TimeSpan.Zero);
+            _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-stabilized"), ent, ent, PopupType.Medium);
             return;
         }
 
@@ -725,6 +787,10 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
                 self = "cmu-wendigo-lab-ready-fed2";
                 others = "cmu-wendigo-lab-ready-fed2-others";
                 break;
+            case CMUWendigoSubjectStage.Primed:
+                self = "cmu-wendigo-lab-ready-primed";
+                others = "cmu-wendigo-lab-ready-primed-others";
+                break;
             case CMUWendigoSubjectStage.Mutagen:
                 self = "cmu-wendigo-lab-ready-mutagen";
                 others = "cmu-wendigo-lab-ready-mutagen-others";
@@ -732,6 +798,10 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
             case CMUWendigoSubjectStage.Gestation:
                 self = "cmu-wendigo-lab-ready-gestation";
                 others = "cmu-wendigo-lab-ready-gestation-others";
+                break;
+            case CMUWendigoSubjectStage.Stabilized:
+                self = "cmu-wendigo-lab-ready-stabilized";
+                others = "cmu-wendigo-lab-ready-stabilized-others";
                 break;
             default:
                 return;
@@ -774,10 +844,16 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
                 previous = CMUWendigoSubjectStage.Fed1;
                 break;
             case CMUWendigoSubjectStage.Mutagen:
+                previous = CMUWendigoSubjectStage.Primed;
+                break;
+            case CMUWendigoSubjectStage.Primed:
                 previous = CMUWendigoSubjectStage.Fed2;
                 break;
             case CMUWendigoSubjectStage.Gestation:
                 previous = CMUWendigoSubjectStage.Mutagen;
+                break;
+            case CMUWendigoSubjectStage.Stabilized:
+                previous = CMUWendigoSubjectStage.Gestation;
                 break;
             default:
                 // Nothing to fall back to from the first meal: the hunger cycle breaks.
@@ -943,7 +1019,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
             ("progress", progress),
             ("status", status),
             ("instability", subject.Instability),
-            ("max", MaxInstability));
+            ("max", MaxInstability),
+            ("next", Loc.GetString($"cmu-wendigo-lab-next-{subject.Stage.ToString().ToLowerInvariant()}")));
     }
 
     private static string FormatTime(TimeSpan time)
@@ -955,11 +1032,11 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
     }
 
     /// <summary>
-    /// Gestation is over and the subject will take MH-32 or MH-33.
+    /// Tissue stabilization is complete and the subject will take MH-32 or MH-33.
     /// </summary>
     public bool IsReadyForFinalDose(CMUWendigoSubjectComponent subject)
     {
-        return subject.Stage == CMUWendigoSubjectStage.Gestation && _timing.CurTime >= subject.StageEndsAt;
+        return subject.Stage == CMUWendigoSubjectStage.Stabilized && _timing.CurTime >= subject.StageEndsAt;
     }
 
     /// <summary>

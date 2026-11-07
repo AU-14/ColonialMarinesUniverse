@@ -138,6 +138,33 @@ public sealed class CMUReactionGatesTest : GameTest
         });
     }
 
+    [TestCase("CMUWendigoNeuralPrimer", "CMUAlkysine", "RMCGold", "RMCSugar", 370f)]
+    [TestCase("CMUWendigoTissueStabilizer", "CMCryoxadone", "CMDylovene", "RMCPlatinum", 260f)]
+    public async Task WendigoPreparationNeedsTemperatureAndMix(string product, string first, string second,
+        string third, float temperature)
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            var beaker = Fill(map, (first, 5), (second, 5), (third, 5));
+            var soln = BeakerSolution(beaker);
+            var solution = soln.Comp.Solution;
+            Close(beaker);
+            Assert.That(Shake(beaker), Is.True);
+            Assert.That(solution.GetTotalPrototypeQuantity(product), Is.EqualTo(FixedPoint2.Zero),
+                "Mixing at room temperature must not prepare the experimental compound.");
+
+            solutions.SetTemperature(soln, temperature);
+            Assert.That(solution.GetTotalPrototypeQuantity(product), Is.EqualTo(FixedPoint2.Zero),
+                "Reaching the required temperature must still require mixing.");
+            Assert.That(Shake(beaker), Is.True);
+            Assert.That(solution.GetTotalPrototypeQuantity(product), Is.EqualTo(FixedPoint2.New(15)),
+                "Mixing at the required temperature must produce an injectable dose.");
+        });
+    }
+
     [Test]
     public async Task SpaceDrugsNeedHeat()
     {

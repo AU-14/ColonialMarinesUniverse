@@ -4,6 +4,9 @@ using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.CMU14.Round.Antags.Cannibal;
+using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
@@ -114,14 +117,16 @@ public sealed class CMUWendigoTransformationTest
             Feed(subject, HumanMeat);
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2));
 
-            // Stabilized Mutagen before the second timer finishes, and an under-dose, does nothing.
-            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, CMUWendigoTransformationSystem.RequiredDose.Float());
-            Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "Early mutagen must not advance.");
+            // Neural primer before the second timer finishes, and an under-dose, does nothing.
+            Inject(subject, CMUWendigoTransformationSystem.NeuralPrimer, CMUWendigoTransformationSystem.RequiredDose.Float());
+            Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "Early primer must not advance.");
             Expire(subject);
-            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, CMUWendigoTransformationSystem.RequiredDose.Float() - 1);
+            Inject(subject, CMUWendigoTransformationSystem.NeuralPrimer, CMUWendigoTransformationSystem.RequiredDose.Float() - 1);
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "Under-dose must not advance.");
             Inject(subject, CMUWendigoTransformationSystem.MH32, CMUWendigoTransformationSystem.RequiredDose.Float());
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "MH-32 out of order must not advance.");
+            Inject(subject, CMUWendigoTransformationSystem.NeuralPrimer, CMUWendigoTransformationSystem.RequiredDose.Float());
+            Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Primed));
             Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, CMUWendigoTransformationSystem.RequiredDose.Float());
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Mutagen));
 
@@ -135,12 +140,18 @@ public sealed class CMUWendigoTransformationTest
             Expire(subject);
             Assert.That(system.IsReadyForFinalDose(subjectComp), Is.False, "An expired mutagen stage is not the final dose.");
 
-            Bite(subject, HumanMeat);
+            if (entMan.System<CMUMedicalBodyIndexSystem>().TryGetOrgan<CMUBrainComponent>(subject, out var brain))
+                entMan.System<SharedOrganHealthSystem>().HealOrgan((brain, null), subject, 100);
+
+            Bite(subject, "CMUOrganHumanHeart");
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Mutagen), "An unfinished final meal must not advance.");
-            Feed(subject, HumanMeat);
+            Feed(subject, "CMUOrganHumanHeart");
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Gestation));
             Assert.That(system.IsReadyForFinalDose(subjectComp), Is.False, "Gestation still running.");
             Expire(subject);
+            Assert.That(system.IsReadyForFinalDose(subjectComp), Is.False, "Gestation still needs tissue stabilization.");
+            Inject(subject, CMUWendigoTransformationSystem.TissueStabilizer, CMUWendigoTransformationSystem.RequiredDose.Float());
+            Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Stabilized));
             Assert.That(system.IsReadyForFinalDose(subjectComp), Is.True);
 
             // Other food before the mutagen stage aborts.
@@ -164,8 +175,106 @@ public sealed class CMUWendigoTransformationTest
                 stages.Add(comp.Stage);
             }
 
-            Assert.That(stages, Is.EquivalentTo(new[] { CMUWendigoSubjectStage.Gestation }),
-                "The aborted subject must lose its procedure state; the gestating one keeps it.");
+            Assert.That(stages, Is.EquivalentTo(new[] { CMUWendigoSubjectStage.Stabilized }),
+                "The aborted subject must lose its procedure state; the stabilized one keeps it.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PreparationInjectionsCannotBeSkipped()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            void CheckGate(CMUWendigoSubjectStage stage, string skipped, string preparation,
+                CMUWendigoSubjectStage prepared, CMUWendigoSubjectStage next)
+            {
+                var human = entMan.SpawnEntity(Human, map.GridCoords);
+                var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(human);
+                comp.Stage = stage;
+                comp.StageEndsAt = TimeSpan.Zero;
+
+                void Inject(string reagent)
+                {
+                    var proto = server.ProtoMan.Index<ReagentPrototype>(reagent);
+                    var ev = new ReactionEntityEvent(ReactionMethod.Injection,
+                        new ReagentQuantity(reagent, 15), proto, null);
+                    entMan.EventBus.RaiseLocalEvent(human, ref ev);
+                }
+
+                Inject(skipped);
+                Assert.That(comp.Stage, Is.EqualTo(stage), "Skipping preparation must not advance the procedure.");
+                Assert.That(comp.Instability, Is.EqualTo(1));
+                Inject(preparation);
+                Assert.That(comp.Stage, Is.EqualTo(prepared));
+                Inject(skipped);
+                Assert.That(comp.Stage, Is.EqualTo(next), "The same dose must work after the required preparation.");
+            }
+
+            CheckGate(CMUWendigoSubjectStage.Fed2, CMUWendigoTransformationSystem.StabilizedMutagen,
+                CMUWendigoTransformationSystem.NeuralPrimer, CMUWendigoSubjectStage.Primed,
+                CMUWendigoSubjectStage.Mutagen);
+            CheckGate(CMUWendigoSubjectStage.Gestation, CMUWendigoTransformationSystem.MH32,
+                CMUWendigoTransformationSystem.TissueStabilizer, CMUWendigoSubjectStage.Stabilized,
+                CMUWendigoSubjectStage.Mutating);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FinalFeedingRequiresBrainTreatmentAndRawHumanHeart()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            server.CfgMan.SetCVar(CMUMedicalCCVars.Enabled, true);
+            server.CfgMan.SetCVar(CMUMedicalCCVars.OrganEnabled, true);
+            var entMan = server.EntMan;
+            var human = entMan.SpawnEntity(Human, map.GridCoords);
+            var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(human);
+            comp.Stage = CMUWendigoSubjectStage.Primed;
+            comp.StageEndsAt = TimeSpan.Zero;
+            var reagent = CMUWendigoTransformationSystem.StabilizedMutagen;
+            var proto = server.ProtoMan.Index<ReagentPrototype>(reagent);
+            var injection = new ReactionEntityEvent(ReactionMethod.Injection,
+                new ReagentQuantity(reagent, 15), proto, null);
+            entMan.EventBus.RaiseLocalEvent(human, ref injection);
+            comp.StageEndsAt = TimeSpan.Zero;
+
+            void Feed(string food)
+            {
+                var item = entMan.SpawnEntity(food, map.GridCoords);
+                var bite = new IngestingEvent(item, new Solution(), false);
+                entMan.EventBus.RaiseLocalEvent(human, ref bite);
+                var finished = new FullyEatenEvent(human);
+                entMan.EventBus.RaiseLocalEvent(item, ref finished);
+            }
+
+            Feed("CMUOrganHumanHeart");
+            Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Mutagen),
+                "The heart must not advance the procedure while mutagen-induced brain damage is untreated.");
+            Assert.That(comp.Instability, Is.EqualTo(1));
+
+            Assert.That(entMan.System<CMUMedicalBodyIndexSystem>().TryGetOrgan<CMUBrainComponent>(human, out var brain), Is.True);
+            entMan.System<SharedOrganHealthSystem>().HealOrgan((brain, null), human, 100);
+            Feed(HumanMeat);
+            Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Mutagen),
+                "Ordinary meat cannot replace the final heart even after brain treatment.");
+            Assert.That(comp.Instability, Is.EqualTo(2));
+
+            Feed("CMUOrganHumanHeart");
+            Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Gestation),
+                "A treated candidate who finishes a raw human heart must progress to gestation.");
         });
 
         await pair.CleanReturnAsync();
@@ -198,7 +307,7 @@ public sealed class CMUWendigoTransformationTest
             mindSys.TransferTo(mindId, subject);
 
             var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(subject);
-            comp.Stage = CMUWendigoSubjectStage.Gestation;
+            comp.Stage = CMUWendigoSubjectStage.Stabilized;
             comp.StageEndsAt = TimeSpan.Zero;
             comp.LastInjector = scientist;
             comp.LastInjectorAt = server.Timing.CurTime;
@@ -246,8 +355,10 @@ public sealed class CMUWendigoTransformationTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task MissedWindowRelapsesAndAddsInstability()
+    [TestCase(CMUWendigoSubjectStage.Gestation, CMUWendigoSubjectStage.Mutagen)]
+    [TestCase(CMUWendigoSubjectStage.Primed, CMUWendigoSubjectStage.Fed2)]
+    [TestCase(CMUWendigoSubjectStage.Stabilized, CMUWendigoSubjectStage.Gestation)]
+    public async Task MissedWindowRelapsesAndAddsInstability(CMUWendigoSubjectStage stage, CMUWendigoSubjectStage previous)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -259,7 +370,7 @@ public sealed class CMUWendigoTransformationTest
             var entMan = server.EntMan;
             subject = entMan.SpawnEntity(Human, map.GridCoords);
             var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(subject);
-            comp.Stage = CMUWendigoSubjectStage.Gestation;
+            comp.Stage = stage;
             comp.StageEndsAt = TimeSpan.Zero;
             // Ready cue already played and the window already over.
             comp.ReadyCuePlayed = true;
@@ -271,7 +382,7 @@ public sealed class CMUWendigoTransformationTest
         await server.WaitAssertion(() =>
         {
             var comp = server.EntMan.GetComponent<CMUWendigoSubjectComponent>(subject);
-            Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Mutagen), "A missed window relapses one stage.");
+            Assert.That(comp.Stage, Is.EqualTo(previous), "A missed window relapses one stage.");
             Assert.That(comp.Instability, Is.EqualTo(1));
             Assert.That(comp.WindowEndsAt, Is.GreaterThan(server.Timing.CurTime),
                 "The relapsed stage is ready again with a fresh window.");
@@ -294,7 +405,7 @@ public sealed class CMUWendigoTransformationTest
             var system = entMan.System<CMUWendigoTransformationSystem>();
             subject = entMan.SpawnEntity(Human, map.GridCoords);
             var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(subject);
-            comp.Stage = CMUWendigoSubjectStage.Gestation;
+            comp.Stage = CMUWendigoSubjectStage.Stabilized;
             comp.StageEndsAt = TimeSpan.Zero;
 
             void Inject(string reagent, float amount)
@@ -308,7 +419,7 @@ public sealed class CMUWendigoTransformationTest
             Inject(CMUWendigoTransformationSystem.MH32, 10);
             Inject(CMUWendigoTransformationSystem.StabilizedMutagen, 15);
             Assert.That(comp.Instability, Is.EqualTo(2));
-            Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Gestation));
+            Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Stabilized));
 
             var reading = system.BuildScannerReading(comp);
             Assert.That(reading, Does.Contain("2/" + CMUWendigoTransformationSystem.MaxInstability),
@@ -349,7 +460,7 @@ public sealed class CMUWendigoTransformationTest
             mindSys.TransferTo(mindId, subject);
 
             var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(subject);
-            comp.Stage = CMUWendigoSubjectStage.Gestation;
+            comp.Stage = CMUWendigoSubjectStage.Stabilized;
             comp.StageEndsAt = TimeSpan.Zero;
             comp.Instability = CMUWendigoTransformationSystem.UnstableThreshold;
             comp.LastInjector = scientist;
@@ -393,7 +504,7 @@ public sealed class CMUWendigoTransformationTest
             mindSys.TransferTo(mindId, subject);
 
             var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(subject);
-            comp.Stage = CMUWendigoSubjectStage.Gestation;
+            comp.Stage = CMUWendigoSubjectStage.Stabilized;
             comp.StageEndsAt = TimeSpan.Zero;
 
             var reagent = CMUWendigoTransformationSystem.MH32;
@@ -431,7 +542,7 @@ public sealed class CMUWendigoTransformationTest
             var entMan = server.EntMan;
             var subject = entMan.SpawnEntity(Human, map.GridCoords);
             var comp = entMan.AddComponent<CMUWendigoSubjectComponent>(subject);
-            comp.Stage = CMUWendigoSubjectStage.Gestation;
+            comp.Stage = CMUWendigoSubjectStage.Stabilized;
             comp.StageEndsAt = TimeSpan.Zero;
 
             var reagent = CMUWendigoTransformationSystem.MH32;

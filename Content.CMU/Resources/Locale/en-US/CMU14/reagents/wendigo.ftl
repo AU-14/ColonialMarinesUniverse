@@ -4,3 +4,7 @@ reagent-name-cmu-mh32 = MH-32
 reagent-desc-cmu-mh32 = A Weyland-Yutani experimental compound that drives a prepared subject through a violent physical transformation.
 reagent-name-cmu-mh33 = MH-33
 reagent-desc-cmu-mh33 = A refined Weyland-Yutani experimental compound that leaves a transformed subject docile and bound to the one who administered it.
+reagent-name-cmu-wendigo-neural-primer = MH neural primer
+reagent-desc-cmu-wendigo-neural-primer = A Weyland-Yutani neural preparation compound. Administered after the second tissue feeding and before Stabilized Mutagen.
+reagent-name-cmu-wendigo-tissue-stabilizer = MH tissue stabilizer
+reagent-desc-cmu-wendigo-tissue-stabilizer = A Weyland-Yutani tissue preparation compound. Administered after gestation and before MH-32 or MH-33.
