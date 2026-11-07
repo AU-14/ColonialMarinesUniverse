@@ -31,14 +31,14 @@
 
 - type: rank
   id: UPP_Colonel
-  name: Colonel
-  prefix: Col.
+  name: Polkovnik
+  prefix: Polk.
   paygrade: O6
 
 - type: rank
   id: UPP_JuniorColonel
-  name: Junior Colonel
-  prefix: JCol.
+  name: Podpolkovnik
+  prefix: PodPolk.
   paygrade: O5
 
 - type: rank
@@ -55,70 +55,70 @@
 
 - type: rank
   id: UPP_SeniorLieutenant
-  name: Senior Lieutenant
+  name: Starshiy Leytenant
   prefix: SnLt.
   paygrade: O2
 
 - type: rank
   id: UPP_JuniorLieutenant
-  name: Junior Lieutenant
-  prefix: JnLt.
+  name: Leytenant 
+  prefix: Lt.
   paygrade: O1
 
 - type: rank
   id: UPP_Lieutenant
-  name: Lieutenant
+  name: Mladshiy Leytenant
   prefix: Lt.
   paygrade: O1
 
 # Warrant Officers
 - type: rank
   id: UPP_SeniorWarrantOfficer
-  name: Senior Warrant Officer
-  prefix: SnWO.
+  name: Senior Praporschik
+  prefix: SnPrapor.
   paygrade: W2
 
 - type: rank
   id: UPP_WarrantOfficer
-  name: Warrant Officer
-  prefix: WO.
+  name: Praporschik
+  prefix: Prapor.
   paygrade: W1
 
 # Enlisted
 - type: rank
   id: UPP_FirstSergeant
-  name: First Sergeant
-  prefix: 1stSgt.
+  name: Starshina
+  prefix: Stars.
   paygrade: E7
 
 - type: rank
   id: UPP_SergeantMajor
-  name: Sergeant Major
-  prefix: SgtMaj.
+  name: Stabsfeldwebel
+  prefix: StFeld.
   paygrade: E7
 
 - type: rank
-  id: UPP_SeniorSergeant
-  name: Senior Sergeant
-  prefix: SSgt.
+  id: UPP_StaffSergeant
+  name: Feldwebel
+  prefix: Feld.
   paygrade: E6
 
 - type: rank
   id: UPP_Sergeant
-  name: Sergeant
-  prefix: Sgt.
+  name: Unteroffizier
+  prefix: UnterOff.
   paygrade: E5
 
 - type: rank
   id: UPP_Corporal
-  name: Corporal
-  prefix: Corp.
+  name: Stabsgefreiter
+  prefix: StGefr.
   paygrade: E4
 
 - type: rank
-  id: UPP_Plutonowy
-  name: Plutonowy
-  prefix: Plut.
+  id: UPP_Yefreytor
+  name: Yefreytor
+  prefix: Yefr.
   paygrade: E4
 
 - type: rank
@@ -134,8 +134,8 @@
   paygrade: E2
 
 - type: rank
-  id: UPP_Private
-  name: Private
+  id: UPP_Soldat
+  name: Soldat
   prefix: Pvt.
   paygrade: E1
 
