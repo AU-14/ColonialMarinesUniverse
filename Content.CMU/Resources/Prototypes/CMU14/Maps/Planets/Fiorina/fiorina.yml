@@ -5,6 +5,7 @@
   - type: RMCPlanetMapPrototype
     votename: "Fiorina Prison"
     mapId: aufiorina
+    inRotation: false
     lorePrimer: AU14PrimerPlanetFiorina
     allegiance: UA
     camouflage: Urban
