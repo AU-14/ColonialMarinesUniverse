@@ -1,4 +1,5 @@
 <Document>
+  <CMUFobGuideText Key="cmu-fob-guide-setup" />
   <CMUFobGuideText Key="cmu-fob-guide-intro" />
   <CMUFobGuideText Key="cmu-fob-guide-reserve" />
   <CMUFobGuideText Key="cmu-fob-guide-relays" />
