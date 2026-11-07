@@ -98,24 +98,33 @@ public sealed partial class CMULooseSweepSystem : EntitySystem
         }
     }
 
-    public bool IsLooseTrash(EntityUid uid, MetaDataComponent meta)
+    public bool IsLooseTrash(EntityUid uid, MetaDataComponent meta, TagComponent? tags = null)
     {
+        // Almost every tagged entity is not trash. Reject it before container and
+        // prototype exclusion lookups, and reuse the sweep's resolved TagComponent.
+        var proto = meta.EntityPrototype;
+        if (proto == null || !ContainsId(AdditionalTrashPrototypes, proto.ID))
+        {
+            if (tags == null && !TryComp(uid, out tags))
+                return false;
+
+            if (!IsTrashTagged(tags))
+                return false;
+        }
+
         if (_containers.IsEntityInContainer(uid))
             return false;
 
-        if (meta.EntityPrototype is { } proto)
+        if (proto != null)
         {
             foreach (var excluded in ExcludedTrashComponents)
             {
                 if (proto.Components.ContainsKey(excluded))
                     return false;
             }
-
-            if (ContainsId(AdditionalTrashPrototypes, proto.ID))
-                return true;
         }
 
-        return TryComp<TagComponent>(uid, out var tags) && IsTrashTagged(tags);
+        return true;
     }
 
     public bool IsMagazinePrototype(EntityPrototype proto)
@@ -165,9 +174,9 @@ public sealed partial class CMULooseSweepSystem : EntitySystem
             // metadata-only scan every few seconds is too costly on big rounds.
             _scratch.Clear();
             var query = EntityQueryEnumerator<TagComponent, MetaDataComponent>();
-            while (query.MoveNext(out var uid, out _, out var meta))
+            while (query.MoveNext(out var uid, out var tags, out var meta))
             {
-                if (IsLooseTrash(uid, meta))
+                if (IsLooseTrash(uid, meta, tags))
                     _scratch.Add(uid);
             }
 
