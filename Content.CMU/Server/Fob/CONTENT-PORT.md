@@ -6,9 +6,9 @@ Source: [CMSS13 PR 9293](https://github.com/cmss13-devs/cmss13/pull/9293), final
 | --- | --- | --- |
 | HVT-7T high-voltage transformer | `CMUFobRelay` | Physical timer-replenishment objective at the selected colony relay sites. Original transformer and capture/overlay frames imported. |
 | UE-09 service terminal | `CMUFobControl` | Reserve controls, gun status and guide. Original deployed/off/folded art; wrench folding disables the terminal. |
-| UH-02 systems platform | `CMUFobGunMount` | Two physical platforms delivered folded. Wrench deployment and powerloader transport; relocate within the selected LZ deployment area while support is off and the gun is removed. |
+| UH-02 systems platform | `CMUFobGunMount` | Three physical platforms delivered folded. Wrench deployment and powerloader transport; relocate within the selected LZ deployment area while support is off and the gun is removed. |
 | UH-46 heavy sentry gun | `CMUFobSupportGun` | Original directional weapon art with tank-style turret movement; finite 30mm drum, 360-degree coverage, startup and acquisition warnings, repairable wreck. |
-| UH-99 smart rocket launcher | `CMUFobRocketModule`, `CMUFobRocketLauncher` | Powerloader-installed alternative on one of the same two platforms. Requires live UE-04 coverage, three-second warning, finite twelve-rocket cassette. |
+| UH-99 smart rocket launcher | `CMUFobRocketModule`, `CMUFobRocketLauncher` | Powerloader-installed alternative on one of the same three platforms. Requires live UE-04 coverage, three-second warning, finite twelve-rocket cassette. |
 | UE-92 area illuminator | `CMUFobIlluminator` | Wrench-deployed reserve-powered floodlight; powerloader transport. |
 | UE-04 grid sensor | `CMUFobSensor` | Portable sensor; wrench deployment, line-of-sight acquisition, destructible and nonblocking to movement/projectiles. |
 | UE-11 generator unit | `CMUFobGenerator` | Deploy with wrench, activate locally for an interruptible one-use reserve contribution of up to 120 seconds. The bank records consumption, so replacement units cannot repeat it. |
