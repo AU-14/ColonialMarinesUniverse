@@ -28,8 +28,10 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Melding;
 
 /// <summary>
 /// Phase E3: River-Melded conversions. Each console the Early Warning Joe assimilates schedules one
-/// conversion of a synthetic player (playtest 4: synthetics only; with none eligible the Joe is given
-/// its one respawn instead, <see cref="EWJoeRespawnSystem"/>). The victim is warned three times, then
+/// conversion of a synthetic player (playtest 4: synthetics only). With none eligible the miss becomes a
+/// meld debt that is retried on the planet network for a search window (N7); only when the window closes
+/// with debts left is the Joe given its one respawn instead, <see cref="EWJoeRespawnSystem"/>. A dead,
+/// stood-down or deleted Joe's debts are dropped. The victim is warned three times, then
 /// converted in place. Thralls are freed only by the Weyland reset key or by the Joe's death or
 /// stand-down (D4).
 /// </summary>
@@ -123,6 +125,8 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
             if (now >= melding.ConvertAt && melding.WarningsSent >= Warnings)
                 Convert(victim, melding);
         }
+
+        UpdateMeldDebts(now);
     }
 
     #region Scheduling
@@ -133,19 +137,30 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
     }
 
     /// <summary>
-    /// Picks a synthetic victim and starts the countdown. When none is eligible the Joe is given its one
-    /// respawn instead (playtest 4) and this returns false; the console still counts.
+    /// Picks a synthetic victim and starts the countdown. When none is eligible this returns false (the
+    /// console still counts) and the miss becomes a meld debt (N7): the river searches the planet
+    /// network again every <see cref="EWJoeComponent.MeldRetry"/>, and only when
+    /// <see cref="EWJoeComponent.MeldSearchWindow"/> runs out with debts left is the Joe given its one
+    /// respawn (playtest 4). A zero window grants the respawn at once.
     /// </summary>
     public bool TryStartMeld(Entity<EWJoeComponent> joe)
     {
-        if (PickMeldTarget(joe) is not { } victim)
+        var rejections = new MeldRejections();
+        if (PickMeldTarget(joe, rejections) is { } victim)
         {
-            _adminLogger.Add(LogType.Action, LogImpact.Low,
-                $"Early Warning Joe {ToPrettyString(joe):joe} found no synthetic to meld");
-            _respawn.Grant(joe);
-            return false;
+            StartMeld(joe, victim);
+            return true;
         }
 
+        var reasons = rejections.ToString();
+        _adminLogger.Add(LogType.Action, LogImpact.Low,
+            $"Early Warning Joe {ToPrettyString(joe):joe} found no synthetic to meld ({reasons})");
+        AddMeldDebt(joe);
+        return false;
+    }
+
+    private void StartMeld(Entity<EWJoeComponent> joe, EntityUid victim)
+    {
         var melding = EnsureComp<RiverMeldingComponent>(victim);
         melding.Master = joe;
         melding.StartedAt = _timing.CurTime;
@@ -154,7 +169,102 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
 
         _adminLogger.Add(LogType.Action, LogImpact.High,
             $"Early Warning Joe {ToPrettyString(joe):joe} began melding {ToPrettyString(victim):victim}");
-        return true;
+    }
+
+    /// <summary>
+    /// Records a missed meld. The first debt of a search opens the window and tells the Joe once; later
+    /// debts join the open search.
+    /// </summary>
+    private void AddMeldDebt(Entity<EWJoeComponent> joe)
+    {
+        if (joe.Comp.MeldSearchWindow <= TimeSpan.Zero)
+        {
+            _respawn.Grant(joe);
+            return;
+        }
+
+        var searching = joe.Comp.PendingMelds > 0;
+        joe.Comp.PendingMelds++;
+        if (searching)
+            return;
+
+        var now = _timing.CurTime;
+        joe.Comp.MeldSearchUntil = now + joe.Comp.MeldSearchWindow;
+        joe.Comp.NextMeldRetry = now + joe.Comp.MeldRetry;
+        _messages.Notify(joe, Loc.GetString("cmu-ew-joe-meld-searching"));
+    }
+
+    /// <summary>
+    /// Every <see cref="EWJoeComponent.MeldRetry"/>, and once more when the window closes, each open debt
+    /// looks for a synthetic. Debts still open when the window closes give the copy once between them:
+    /// <see cref="EWJoeRespawnSystem.Grant"/> never holds more than one.
+    /// </summary>
+    private void UpdateMeldDebts(TimeSpan now)
+    {
+        var debtors = new List<Entity<EWJoeComponent>>();
+        var query = EntityQueryEnumerator<EWJoeComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.PendingMelds > 0)
+                debtors.Add((uid, comp));
+        }
+
+        foreach (var joe in debtors)
+        {
+            if (TerminatingOrDeleted(joe))
+                continue;
+
+            if (_mobState.IsDead(joe))
+            {
+                ClearMeldDebts(joe, "the Joe is dead");
+                continue;
+            }
+
+            var expired = now >= joe.Comp.MeldSearchUntil;
+            if (!expired && now < joe.Comp.NextMeldRetry)
+                continue;
+
+            joe.Comp.NextMeldRetry = now + joe.Comp.MeldRetry;
+
+            // each pick re-counts from zero, so the log below describes the last, failed search only
+            var rejections = new MeldRejections();
+            while (joe.Comp.PendingMelds > 0)
+            {
+                rejections = new MeldRejections();
+                if (PickMeldTarget(joe, rejections) is not { } victim)
+                    break;
+
+                joe.Comp.PendingMelds--;
+                StartMeld(joe, victim);
+                var left = joe.Comp.PendingMelds;
+                _adminLogger.Add(LogType.Action, LogImpact.Medium,
+                    $"Early Warning Joe {ToPrettyString(joe):joe} paid a meld debt with {ToPrettyString(victim):victim}, {left} left");
+            }
+
+            if (joe.Comp.PendingMelds <= 0 || !expired)
+                continue;
+
+            var debts = joe.Comp.PendingMelds;
+            joe.Comp.PendingMelds = 0;
+            var reasons = rejections.ToString();
+            _adminLogger.Add(LogType.Action, LogImpact.Medium,
+                $"Early Warning Joe {ToPrettyString(joe):joe} found no synthetic to meld for {debts} debt(s) before its search window closed ({reasons})");
+
+            if (!_respawn.Grant(joe))
+                _messages.Notify(joe, Loc.GetString("cmu-ew-joe-meld-search-ended"));
+        }
+    }
+
+    /// <summary>Drops every open meld debt without granting the copy (death, stand-down).</summary>
+    private void ClearMeldDebts(EntityUid joe, string why)
+    {
+        if (!TryComp(joe, out EWJoeComponent? comp) || comp.PendingMelds <= 0)
+            return;
+
+        var debts = comp.PendingMelds;
+        comp.PendingMelds = 0;
+        _adminLogger.Add(LogType.Action, LogImpact.Low,
+            $"Early Warning Joe {ToPrettyString(joe):joe} dropped {debts} meld debt(s): {why}");
     }
 
     private bool StillValid(EntityUid victim, RiverMeldingComponent melding)
@@ -326,12 +436,16 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
             CancelMeld(args.Target, "victim died");
 
         if (HasComp<EWJoeComponent>(args.Target))
+        {
             FreeAll(args.Target, "the Joe died");
+            ClearMeldDebts(args.Target, "the Joe died");
+        }
     }
 
     private void OnJoeRemoved(ref EWJoeRemovedEvent args)
     {
         FreeAll(args.Joe, "the Joe stood down");
+        ClearMeldDebts(args.Joe, "the Joe stood down");
 
         if (TryComp(args.Joe, out EWJoeComponent? comp) && comp.GrantedMachineRadio && comp.ThrallRadioChannel is { } channel)
         {

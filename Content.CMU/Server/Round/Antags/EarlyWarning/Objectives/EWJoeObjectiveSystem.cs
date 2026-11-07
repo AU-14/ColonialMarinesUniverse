@@ -7,8 +7,10 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
 using Content.Shared.Mind;
@@ -19,6 +21,7 @@ using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Throwing;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -41,7 +44,6 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
-    [Dependency] private EWJoeAssimilateConditionSystem _assimilate = default!;
     [Dependency] private EWJoeCollectConditionSystem _collect = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private CounterConditionSystem _counter = default!;
@@ -49,6 +51,7 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private ObjectivesSystem _objectives = default!;
     [Dependency] private EWJoeRuleSystem _rule = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private static readonly TimeSpan EvaluateEvery = TimeSpan.FromSeconds(1);
 
@@ -61,6 +64,8 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, EWJoeLevelChangedEvent>(OnLevelChanged);
         SubscribeLocalEvent<EWJoeComponent, EWJoeRemovedEvent>(OnRemoved);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+
+        InitializeReroll();
     }
 
     private void OnLevelChanged(Entity<EWJoeComponent> ent, ref EWJoeLevelChangedEvent args)
@@ -85,6 +90,11 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
             ent.Comp.CompletedCredit.Clear();
             ent.Comp.NextOfferAttempt = TimeSpan.Zero;
         }
+
+        // ARCH-02: a new level owes no refill from the last one
+        var state = EnsureComp<EWJoeDirectiveStateComponent>(ent);
+        state.PendingRefill = false;
+        state.HoldRequirementUntil = TimeSpan.Zero;
 
         OfferObjectives(ent);
         UpdateStatus(ent);
@@ -113,6 +123,16 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
             if (names.Count > 0)
                 _messages.Notify(joe, Loc.GetString("cmu-ew-joe-level-new-abilities", ("abilities", string.Join(", ", names))));
 
+            // ARCH-06: the CQC sequences this level unlocks
+            var sequences = _proto.EnumeratePrototypes<EWJoeCqcSequencePrototype>()
+                .Where(s => s.MinLevel == level)
+                .OrderBy(s => s.ID, StringComparer.Ordinal)
+                .Select(s => Loc.GetString(s.Name))
+                .ToList();
+
+            if (sequences.Count > 0)
+                _messages.Notify(joe, Loc.GetString("cmu-ew-joe-level-new-sequences", ("sequences", string.Join(", ", sequences))));
+
             if (Loc.TryGetString($"cmu-ew-joe-level-gains-{level}", out var gains))
                 _messages.Notify(joe, gains);
         }
@@ -125,6 +145,7 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
         ent.Comp.CurrentObjectives.Clear();
         ent.Comp.CompletedCredit.Clear();
         RemComp<EWJoeStatusComponent>(ent);
+        RemComp<EWJoeDirectiveStateComponent>(ent);
     }
 
     public override void Update(float frameTime)
@@ -168,6 +189,11 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
 
         if (!_mind.TryGetMind(ent, out var mindId, out var mind))
             return;
+
+        // ARCH-02: stale directives are judged only on the planet the offer was made on
+        var mapId = Transform(ent).MapID;
+        if (mapId != MapId.Nullspace)
+            EnsureComp<EWJoeDirectiveStateComponent>(ent).OfferMap = mapId;
 
         var offered = OfferedPrototypes(ent);
 
@@ -279,27 +305,28 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
         // drop objectives that vanished (admin rmobjective, or the entity was deleted)
         ent.Comp.CurrentObjectives.RemoveAll(o => !Exists(o) || !mind.Objectives.Contains(o));
 
-        // withdraw assimilations whose console is gone or taken by someone else; they can never finish
-        foreach (var objective in ent.Comp.CurrentObjectives.ToArray())
-        {
-            if (ent.Comp.CompletedCredit.ContainsKey(objective))
-                continue;
-
-            if (!TryComp(objective, out EWJoeAssimilateConditionComponent? assimilate)
-                || _assimilate.CanStillFinish((objective, assimilate), mind.OwnedEntity))
-                continue;
-
-            Withdraw(ent, mindId, mind, objective);
-            ent.Comp.CurrentObjectives.Remove(objective);
-            // retry the forced offer now, so the level-4 gate is never waived while a console still exists
-            ent.Comp.NextOfferAttempt = TimeSpan.Zero;
-        }
+        // ARCH-02: withdraw directives that can no longer finish (a console gone, the items or the xenofauna
+        // all gone, a district that went dark without the Joe and has nowhere left to re-pin)
+        var state = EnsureComp<EWJoeDirectiveStateComponent>(ent);
+        WithdrawStale(ent, state, mindId, mind);
 
         // credit belongs to the offer it was earned in
         foreach (var credited in ent.Comp.CompletedCredit.Keys.ToArray())
         {
             if (!ent.Comp.CurrentObjectives.Contains(credited))
                 ent.Comp.CompletedCredit.Remove(credited);
+        }
+
+        // a withdrawn directive's slot is offered again after the retry delay
+        if (state.PendingRefill && hasPool && _timing.CurTime >= ent.Comp.NextOfferAttempt)
+        {
+            if (ent.Comp.CurrentObjectives.Count < ent.Comp.ObjectivesPerLevel)
+                OfferObjectives(ent);
+
+            if (ent.Comp.CurrentObjectives.Count >= ent.Comp.ObjectivesPerLevel)
+                state.PendingRefill = false;
+            else
+                ent.Comp.NextOfferAttempt = _timing.CurTime + ent.Comp.OfferRetryDelay;
         }
 
         if (ent.Comp.CurrentObjectives.Count == 0)
@@ -340,6 +367,13 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
             _messages.Notify(ent, Loc.GetString("cmu-ew-joe-objective-complete"));
             _adminLogger.Add(LogType.Mind, LogImpact.Medium,
                 $"Early Warning Joe {ToPrettyString(ent):joe} completed {ToPrettyString(objective):objective} for {credit} credit");
+        }
+
+        // a withdrawn directive must not lower the bar before its slot was offered again
+        if (_timing.CurTime < state.HoldRequirementUntil
+            && ent.Comp.CompletedCredit.Values.Sum() < ent.Comp.CreditPerLevel)
+        {
+            return;
         }
 
         if (!RequirementMet(ent, def))
@@ -431,6 +465,57 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
                 continue;
 
             Withdraw(ent, mindId, mind, objective);
+        }
+    }
+
+    /// <summary>
+    /// ARCH-02: asks every unfinished directive of the current offer whether it can still be finished
+    /// (<see cref="EWJoeObjectiveStillPossibleEvent"/>) and withdraws those that cannot. A lost console is
+    /// re-offered at once, so the level-4 gate is never waived while a console still exists; any other slot
+    /// is offered again after <see cref="EWJoeComponent.OfferRetryDelay"/>. Judged only while the Joe stands
+    /// on the planet the offer was made on.
+    /// </summary>
+    private void WithdrawStale(Entity<EWJoeComponent> ent, EWJoeDirectiveStateComponent state, EntityUid mindId, MindComponent mind)
+    {
+        if (mind.OwnedEntity is not { } owner)
+            return;
+
+        var mapId = Transform(owner).MapID;
+        if (mapId == MapId.Nullspace)
+            return;
+
+        var maps = _zLevels.GetAllNetworkMapIds(mapId);
+        if (state.OfferMap is { } offerMap && !maps.Contains(offerMap))
+            return;
+
+        foreach (var objective in ent.Comp.CurrentObjectives.ToArray())
+        {
+            if (ent.Comp.CompletedCredit.ContainsKey(objective) || _objectives.IsCompleted(objective, (mindId, mind)))
+                continue;
+
+            var ev = new EWJoeObjectiveStillPossibleEvent(mindId, mind, owner, maps);
+            RaiseLocalEvent(objective, ref ev);
+            if (ev.Possible)
+                continue;
+
+            var console = HasComp<EWJoeAssimilateConditionComponent>(objective);
+            _adminLogger.Add(LogType.Mind, LogImpact.Low,
+                $"Early Warning Joe {ToPrettyString(ent):joe} had {ToPrettyString(objective):objective} withdrawn: it can no longer be finished");
+
+            Withdraw(ent, mindId, mind, objective);
+            ent.Comp.CurrentObjectives.Remove(objective);
+            _messages.Notify(ent, Loc.GetString("cmu-ew-joe-objective-withdrawn-stale"));
+
+            if (console)
+            {
+                // retry the forced offer now, so the level-4 gate is never waived while a console still exists
+                ent.Comp.NextOfferAttempt = TimeSpan.Zero;
+                continue;
+            }
+
+            state.PendingRefill = true;
+            ent.Comp.NextOfferAttempt = _timing.CurTime + ent.Comp.OfferRetryDelay;
+            state.HoldRequirementUntil = ent.Comp.NextOfferAttempt;
         }
     }
 

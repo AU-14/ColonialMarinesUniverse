@@ -14,4 +14,11 @@ public sealed partial class EWJoeChokeComponent : Component
     /// <summary>The Choke action, shown toggled while the choke runs.</summary>
     [DataField]
     public EntityUid? Action;
+
+    /// <summary>
+    /// Review fix (FLOW-02): the hold resets the target's struggle at most once per choke, so the victim can
+    /// still break free; restarting it every tick made a choke inescapable.
+    /// </summary>
+    [DataField]
+    public bool StruggleExtended;
 }

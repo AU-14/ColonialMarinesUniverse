@@ -32,6 +32,7 @@ using Robust.Shared.Physics.Systems; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Content.Shared.CMU14.Yautja; // CMU14: YautjaComponent / YautjaBadBloodComponent for the instant-carry gate
+using Content.Shared.CMU14.Fireman; // CMU14: escape multiplier, xeno grabber and the aggressive-grabbed event (FLOW-02)
 
 namespace Content.Shared._RMC14.Fireman;
 
@@ -340,7 +341,11 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             return;
 
         var ev = new BreakFiremanCarryDoAfterEvent();
-        var doAfter = new DoAfterArgs(EntityManager, ent, ent.Comp.Delay, ev, ent);
+        // CMU14: STATE-02: FiremanCarriableComponent.BreakDelay (2 s) is never read; the struggle has always used the
+        // 3 s carry Delay. Do not switch to BreakDelay while tuning, it would make every escape faster.
+        // CMU14: FLOW-02: the grabber's CMUGrabEscapeMultiplier lengthens the struggle. Upstream passed ent.Comp.Delay:
+        // var doAfter = new DoAfterArgs(EntityManager, ent, ent.Comp.Delay, ev, ent);
+        var doAfter = new DoAfterArgs(EntityManager, ent, ent.Comp.Delay * GetGrabEscapeMultiplier(ent), ev, ent); // CMU14
         if (!_doAfter.TryStartDoAfter(doAfter))
             return;
 
@@ -461,6 +466,10 @@ public sealed partial class FiremanCarrySystem : EntitySystem
         if (ent.Comp.AggressiveGrab ||
             _timing.CurTime < ent.Comp.PullTime + grabDelay)
         {
+            // CMU14: FLOW-02: an early click used to be dropped without a word, so the window was a guess
+            if (!ent.Comp.AggressiveGrab && TryComp(ent, out PullerComponent? early) && early.Pulling is { } earlyTarget)
+                _popup.PopupEntity(Loc.GetString("cmu-pull-aggressive-not-ready"), earlyTarget, ent, PopupType.SmallCaution);
+
             return;
         }
 
@@ -470,8 +479,28 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             return;
         }
 
+        // CMU14: FLOW-02: the upgrade itself (validation, AggressiveGrab, UpdateCanMove, standing down, the xeno
+        // knockdown, effect and popups) moved unchanged into TryAggressiveGrab so the Machine Grip shares it.
+        TryAggressiveGrab(ent, pulling);
+    }
+
+    // CMU14: FLOW-02: the body of OnCarrierPullToggle after its delay check, public so a one-click grab (the Early
+    // Warning Joe's Machine Grip) runs exactly the same upgrade. The grabber must be pulling the target. Raises
+    // CMUAggressiveGrabbedEvent on the carrier (and broadcast) on success (ARCH-04).
+    // CMU14 method
+    public bool TryAggressiveGrab(Entity<CanFiremanCarryComponent> carrier, EntityUid target)
+    {
+        var ent = carrier;
+        var pulling = target;
+        if (ent.Comp.AggressiveGrab ||
+            !TryComp(ent, out PullerComponent? puller) ||
+            puller.Pulling != pulling)
+        {
+            return false;
+        }
+
         if (!ValidateAggressiveGrab(ent, pulling))
-            return;
+            return false;
 
         ent.Comp.AggressiveGrab = true;
         Dirty(ent);
@@ -498,31 +527,48 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             var msg = Loc.GetString("rmc-pull-aggressive-others", ("puller", pullerName), ("pulled", pulledName));
             _popup.PopupEntity(msg, ent, recipient, PopupType.SmallCaution);
         }
+
+        var grabbed = new CMUAggressiveGrabbedEvent(ent.Owner, pulling);
+        RaiseLocalEvent(ent.Owner, ref grabbed, broadcast: true);
+        return true;
     }
 
-    private bool ValidateAggressiveGrab(Entity<CanFiremanCarryComponent> carrier, EntityUid target)
+    // CMU14: FLOW-02: popup lets CanAggressiveGrab ask the same question silently. Upstream signature:
+    // private bool ValidateAggressiveGrab(Entity<CanFiremanCarryComponent> carrier, EntityUid target)
+    private bool ValidateAggressiveGrab(Entity<CanFiremanCarryComponent> carrier, EntityUid target, bool popup = true) // CMU14
     {
         if (HasComp<XenoComponent>(target))
         {
-            if (!TryComp(target, out FiremanCarriableComponent? carriable) ||
-                carriable.CarrierWhitelist == null ||
-                !_whitelist.IsValid(carriable.CarrierWhitelist, carrier.Owner))
+            // CMU14: FLOW-02: a CMUXenoGrabber may grab small castes too, alongside the Yautja carrier whitelist.
+            // The upstream condition is unchanged as whitelistPass.
+            var whitelistPass = TryComp(target, out FiremanCarriableComponent? carriable) &&
+                                carriable.CarrierWhitelist != null &&
+                                _whitelist.IsValid(carriable.CarrierWhitelist, carrier.Owner);
+            if (!whitelistPass && !CMUCanGrabXeno(carrier.Owner, target, out var onCooldown))
             {
-                _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-cant-grab-aggressively"), target, carrier, PopupType.MediumCaution);
+                if (popup)
+                {
+                    var refusal = onCooldown ? "cmu-pull-aggressive-xeno-cooldown" : "rmc-fireman-carry-cant-grab-aggressively";
+                    _popup.PopupEntity(Loc.GetString(refusal), target, carrier, PopupType.MediumCaution);
+                }
+
                 return false;
             }
+            // CMU14 end
         }
         else if (TryComp(target, out FiremanCarriableComponent? carriable))
         {
             if (carriable.CarrierWhitelist != null && !_whitelist.IsValid(carriable.CarrierWhitelist, carrier.Owner))
             {
-                _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-cant-grab-aggressively"), target, carrier, PopupType.MediumCaution);
+                if (popup) // CMU14
+                    _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-cant-grab-aggressively"), target, carrier, PopupType.MediumCaution);
                 return false;
             }
 
             if (carriable.CarrierWhitelist == null && !_skills.HasSkill(carrier.Owner, carriable.Skill, 1))
             {
-                _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-not-trained-grab"), target, carrier, PopupType.MediumCaution);
+                if (popup) // CMU14
+                    _popup.PopupEntity(Loc.GetString("rmc-fireman-carry-not-trained-grab"), target, carrier, PopupType.MediumCaution);
                 return false;
             }
         }

@@ -148,7 +148,8 @@
       components:
       - Item
 
-# Offer: a loose firearm an Offer directive asks for is taken in and leaves play (EWJoeOfferSystem).
+# Offer: a loose item an Offer directive asks for is taken in and leaves play; a structure a Meld directive asks
+# for is melded into the river where it stands (EWJoeOfferSystem).
 - type: entity
   id: CMUActionEWJoeOffer
   parent: ActionMarineBase
@@ -170,12 +171,17 @@
   - type: EntityTargetAction
     canTargetSelf: false
     event: !type:EWJoeOfferActionEvent
-    # a carried firearm, not a sentry, FOB gun, drone, attachment or vehicle hardpoint (EWJoeOfferSystem.IsOfferable)
+    # FLOW-14: anything some Offer directive in ew_joe.yml can want (firearms, ordnance, cameras, telecomms servers,
+    # threat structures); the server decides what this Joe's open directives want (EWJoeOfferSystem.IsOfferable).
+    # Never a sentry, FOB gun, drone, attachment or vehicle hardpoint.
     whitelist:
-      requireAll: true
+      requireAll: false
       components:
       - Gun
-      - Item
+      - Explosive
+      - SurveillanceCamera
+      - TelecomServer
+      - CMUThreatStructure
     blacklist:
       components:
       - Sentry
@@ -281,6 +287,34 @@
   - type: EntityTargetAction
     canTargetSelf: false
     event: !type:EWJoeThrowActionEvent
+    whitelist:
+      components:
+      - MobState
+
+# ECS-05: Desecrate, a targeted punch like Leg Sweep (heavy Blunt, a guaranteed fracture, a knockback
+# armed with the obstacle slam). Its numbers are on EWJoeDesecrate, granted with it at level 2.
+- type: entity
+  id: CMUActionEWJoeDesecrate
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Hands
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_crush
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeDesecrateActionEvent
     whitelist:
       components:
       - MobState

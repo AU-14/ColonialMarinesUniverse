@@ -176,6 +176,8 @@ public sealed class EWJoeMeldingTest
 
             var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+            // N7: no search window, so a miss gives the copy at once (the debt is covered by EWJoeMeldingDebtTest)
+            comp.MeldSearchWindow = TimeSpan.Zero;
 
             // an organic player is the only candidate
             var organic = entities.SpawnEntity(Human, map.GridCoords);

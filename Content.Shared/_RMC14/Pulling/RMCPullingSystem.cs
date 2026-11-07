@@ -170,6 +170,14 @@ public sealed partial class RMCPullingSystem : EntitySystem
         }
         else
         {
+            // CMU14 start: the Early Warning Joe's xeno grip may pull castes past the synthetic whitelist (T3s, not
+            // heavies); whitelisted castes above keep RMC's crest/fortify handling
+            var cmuImmune = new Content.Shared.CMU14.Fireman.CMUPullParalyzeImmuneEvent(target);
+            RaiseLocalEvent(user, ref cmuImmune);
+            if (cmuImmune.Immune)
+                return;
+            // CMU14 end
+
             // Enitity not on synths whitelist - knockback and stun but allows for synth to cancel
             if (TryComp<ParalyzeImmuneFromComponent>(user, out var immuneFromNotWL) && immuneFromNotWL.Whitelist != null)
             {

@@ -9,6 +9,8 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUThreatStructure # Purge the Nest (EW Joe)
+    weight: 3
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/hive_structures.rsi
     state: eggmorph

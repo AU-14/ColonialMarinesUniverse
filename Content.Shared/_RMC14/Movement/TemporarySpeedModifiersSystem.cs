@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Slow;
 using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Movement; // CMU14
 using Content.Shared.Clothing;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -97,6 +98,11 @@ public sealed partial class TemporarySpeedModifiersSystem : EntitySystem
             var chemical = new GetChemicalStunTimeMultiplierEvent();
             RaiseLocalEvent(entUid, ref chemical);
             var duration = modifier.Duration * MathF.Max(0f, chemical.Multiplier);
+            // CMU14 start - ARCH-12: incoming slow durations can be shortened (EW Joe Liturgy)
+            var slowDuration = new CMUGetSlowDurationMultiplierEvent();
+            RaiseLocalEvent(entUid, ref slowDuration);
+            duration *= MathF.Max(0f, slowDuration.Multiplier);
+            // CMU14 end
             if (duration <= TimeSpan.Zero)
                 continue;
 

@@ -154,6 +154,19 @@
   - type: GameRule
   - type: DistressAntagsRule
 
+# Force on Force clears the planet's jobs like Distress Signal, so it rolls the ghost-role variants
+# from its own table. EWJoeFoF spawns 1-2 Joes scaled by player count.
+- type: entity
+  id: FoFAntags
+  parent: BaseGameRule
+  name: Force on Force Antags
+  description: Randomly rolls for each Force on Force antag to be present this round.
+  components:
+  - type: GameRule
+  - type: DistressAntagsRule
+    rules:
+      EWJoeFoF: 0.35
+
 - type: entity
   id: AuVoteRule
   parent: BaseGameRule

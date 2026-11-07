@@ -54,6 +54,7 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
     [Dependency] private RotateToFaceSystem _rotate = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EWJoeXenoKitSystem _xenoKit = default!;
 
     private static readonly SoundPathSpecifier AnnounceSound = new("/Audio/Announcements/announce.ogg");
     private static readonly ProtoId<DamageTypePrototype> BrainDamageType = "Blunt";
@@ -179,8 +180,8 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
         if (victim.Owner == joe.Owner || !_mobState.IsAlive(victim, victim.Comp))
             return false;
 
-        // organics only: synthetics have no brain to burn and thralls belong to the Joe
-        if (!EWJoeTargetRules.IsOrganic(EntityManager, victim) || HasComp<RiverMeldedComponent>(victim))
+        // FLOW-12: organics and Yautja only: synthetics have no brain to burn and thralls belong to the Joe
+        if (!EWJoeTargetRules.IsLightTarget(EntityManager, victim) || HasComp<RiverMeldedComponent>(victim))
             return false;
 
         return _facing.IsFacingTarget(victim, joe) && _examine.InRangeUnOccluded(victim.Owner, joe.Owner, joe.Comp.Range);
@@ -188,7 +189,7 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 
     private void Envelop(Entity<EWJoeLightComponent> joe, Entity<EWJoeEnvelopedComponent> victim, TimeSpan now)
     {
-        _stun.TryParalyze(victim, joe.Comp.Paralyze, true);
+        _stun.TryParalyze(victim, ScaleStun(joe, victim, joe.Comp.Paralyze), true);
         // Direct: the light lands whatever the victim has in their blood
         _medical.DamageOrgan<CMUBrainComponent>(victim, joe.Comp.BrainDamage, BrainDamageType, OrganDamageSource.Direct);
 
@@ -203,6 +204,14 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("cmu-ew-joe-light-enveloped", ("target", victim.Owner)), joe, joe);
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"Early Warning Joe {ToPrettyString(joe):joe} enveloped {ToPrettyString(victim):victim} in THE LIGHT");
+    }
+
+    /// <summary>ECS-11: scales a stun by the Joe's xenofauna multiplier; unscaled when the source is not a Joe.</summary>
+    private TimeSpan ScaleStun(EntityUid joe, EntityUid target, TimeSpan duration)
+    {
+        return TryComp(joe, out EWJoeComponent? joeComp)
+            ? EWJoeTargetRules.ScaleStun(EntityManager, target, duration, joeComp.XenofaunaStunMultiplier)
+            : duration;
     }
 
     /// <summary>
@@ -376,7 +385,11 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 
     private void Strip(Entity<EWJoeComponent> joe, EntityUid target)
     {
-        _stun.TryKnockdown(target, joe.Comp.SaturateKnockdown, refresh: true, autoStand: true, drop: true);
+        var knockdown = EWJoeTargetRules.ScaleStun(EntityManager, target, joe.Comp.SaturateKnockdown, joe.Comp.XenofaunaStunMultiplier);
+        _stun.TryKnockdown(target, knockdown, refresh: true, autoStand: true, drop: true);
+
+        // 5B Saturate (xeno): xenofauna wear no helmet to tear away, so the cone dazes them and cracks their armor
+        _xenoKit.SaturateXeno(joe, target);
 
         // knockdown only drops held items on the first fall, so drop them explicitly
         foreach (var held in _hands.EnumerateHeld(target).ToArray())

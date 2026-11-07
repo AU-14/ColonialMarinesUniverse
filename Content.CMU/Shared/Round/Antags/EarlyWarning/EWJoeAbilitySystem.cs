@@ -82,8 +82,10 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
 
         // a pull or a wielded off-hand is a virtual item, not something the victim can fumble
         var held = _hands.EnumerateHeld(target).Where(i => !HasComp<VirtualItemComponent>(i)).ToList();
+        // ECS-11: per target, so xenofauna get the Joe's multiplier before RMC's own reduction
+        var stun = EWJoeTargetRules.ScaleStun(EntityManager, target, joe.Comp.TestOfFaithStun, joe.Comp.XenofaunaStunMultiplier);
         var hit = _flash.Flash(target, joe, null, (float) joe.Comp.TestOfFaithFlash.TotalMilliseconds,
-            displayPopup: false, stunDuration: joe.Comp.TestOfFaithStun);
+            displayPopup: false, stunDuration: stun);
 
         if (hit && _net.IsServer)
             Afflict(target, held, judgement);

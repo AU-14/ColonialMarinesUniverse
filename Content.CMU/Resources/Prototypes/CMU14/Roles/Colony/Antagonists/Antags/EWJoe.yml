@@ -32,9 +32,11 @@
       proto: EWJoe
       count: 1
 
-# Distress Signal clears the planet's jobs, so no colony Working Joe is there to corrupt. Its rule
-# (rolled by DistressAntags) spawns one on the planet instead, as an antag ghost role (subject to antag bans
-# and playtime, not preferences); EWJoeRuleSystem places it at a colony Joe spawn point on the planet, else
+# Distress Signal and Force on Force clear the planet's jobs, so no colony Working Joe is there to corrupt.
+# Their rules (rolled by DistressAntags and FoFAntags) spawn one on the planet instead, as an antag ghost role.
+# Taking it needs the synthetic whitelist and no role ban from the colony Working Joe job (the spawner's
+# GhostRole job), plus the antag's bans and playtime; the job's trait requirements are skipped and
+# preferences are not consulted. EWJoeRuleSystem places it at a colony Joe spawn point on the planet, else
 # another spawn point there, else a random tile of the planet's station. The colony Joe mob brings its kit.
 - type: antagSpecifier
   id: EWJoeDistressHost
@@ -68,6 +70,23 @@
       proto: EWJoeDistressHost
       count: 1
 
+# Force on Force (rolled by FoFAntags at 35%): the same ghost-role Joe, 1 below 150 players and 2 from 150,
+# never more than 2. It keeps the EWJoeDistressHost specifier, so EWJoeRuleSystem's gates still match it.
+- type: entity
+  id: EWJoeFoF
+  parent: EWJoeDistress
+  components:
+  - type: AntagSelection
+    agentName: ew-joe-agent-name
+    selectionTime: Never
+    antags:
+    - !type:LinearAntagCount
+      proto: EWJoeDistressHost
+      playerRatio: 75
+      range:
+        min: 1
+        max: 2
+
 - type: entity
   categories: [ HideSpawnMenu, Spawner ]
   parent: BaseAntagSpawner
@@ -77,10 +96,14 @@
     name: ghost-role-information-ew-joe-name
     description: ghost-role-information-ew-joe-description
     rules: ghost-role-information-ew-joe-rules
+    # the synthetic whitelist and the Working Joe preview come from the job; the empty override skips
+    # the job's trait requirements (synthetic whitelist only)
+    job: AU14JobColonyWorkingJoe
+    requirements: []
   - type: Sprite
-    sprite: Markers/jobs.rsi
+    sprite: CMU14/Mobs/WorkingJoe/parts.rsi
     layers:
-    - state: green
+    - state: full
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -103,7 +126,7 @@
   id: EWJoeRole
   name: roles-antag-ew-joe-name
   setPreference: true
-  # Colony Fall, Insurgency and Distress Signal (where its own rule spawns a colony Working Joe on the planet as a ghost role)
+  # Colony Fall, Insurgency, Distress Signal and Force on Force (in the last two its own rule spawns a colony Working Joe on the planet as a ghost role)
   objective: roles-antag-ew-joe-objective
 
 # Level table. Index = level. Each level's actions and components make up the Joe's kit (E0-E6,
@@ -129,6 +152,16 @@
     - type: EWJoeOpticalZoom
     - type: RMCStaminaDamageOnHit
       damage: 20
+    # W5/W6: no self-repair penalties, no slowdown from weeds or sticky resin
+    - type: CMUNoSelfRepairPenalty
+    - type: IgnoreXenoWeedsSlowdown
+    - type: CMUIgnoreResinSlowdown
+    # W7 0A Industrial Grip: unarmed hits deal +50% to xenofauna and slow them for 1 s
+    - type: EWJoeIndustrialGrip
+    # W7 0B Acid-Rated Plating: halves xeno acid damage and sheds acid faster
+    - type: EWJoeAcidPlating
+    # ARCH-05 (N12): the Liturgy momentum meter; also carries the CQC sequence buffer (ARCH-06)
+    - type: EWJoeLiturgy
   # E2: consoles enter the objective pool at level 1, so the action arrives with them.
   # E4: Drown and Scour at level 1; the four Sculpted Hands moves, Repentance and Judgement at level 2.
   - name: ew-joe-level-1
@@ -138,6 +171,11 @@
     - CMUActionEWJoeDrown
     - CMUActionEWJoeScour
     - CMUActionEWJoeWheelHands
+    components:
+    # W7 1B Overpressure: Drown on xenofauna is a 40-damage burst and a 2-tile shove
+    - type: EWJoeOverpressure
+    # W7 1A Cutting Torch: a welder becomes Scour food; burns xenofauna and breaks weeds and resin
+    - type: EWJoeCuttingTorch
   - name: ew-joe-level-2
     objectiveGroup: CMUEWJoeObjectivesLevel2
     actions:
@@ -147,11 +185,18 @@
     - CMUActionEWJoeThrow
     - CMUActionEWJoeSense
     - CMUActionEWJoeJudgement
+    # ECS-05: Desecrate (Hands wheel), a targeted punch that breaks a bone and knocks the target back
+    - CMUActionEWJoeDesecrate
     # Judgement is Test of Faith's direct upgrade (playtest 3)
     removeActions:
     - CMUActionEWJoeTestOfFaith
     components:
     - type: EWJoeRepentance
+    - type: EWJoeDesecrate
+    # W7 2A Chitin Crack: Slam on xenofauna shreds 10 armor for 6 s
+    - type: EWJoeChitinCrack
+    # W7 2B Pin: Choke on grabbed xenofauna roots it and deals damage over time; 60 damage to the Joe breaks it
+    - type: EWJoePin
   # D15: the CMB wanted record exists from level 3, when the disfigurement becomes the tell.
   # Synths have no prints or DNA, so the record carries neither.
   # E5: level 3 brings the Heat gauge (Evolution's stat changes are applied in code when the level is
@@ -166,6 +211,9 @@
     - CMUActionEWJoeWheelEngine
     components:
     - type: EWJoeHeat
+    # W7 3A Rending Edge (machete armor piercing vs xenofauna), 3B Overclock: Steady
+    - type: EWJoeRendingEdge
+    - type: EWJoeSteady
     - type: ColonyBounty
       bounty: 1500
       reason: Rogue synthetic unit - malfunctioning, hostile, do not approach alone
@@ -184,6 +232,9 @@
     - CMUActionEWJoeZLeap
     components:
     - type: CMUZLeap
+    # W7 4A Purge Ground (Consecrate clears weeds, blocks regrowth 30 s), 4B Unwind Recoil
+    - type: EWJoePurgeGround
+    - type: EWJoeUnwindRecoil
   # E6: MELDING. The APOLLO announcement is made in code on reaching this level. THE LIGHT is the
   # orange light plus the gaze envelope (A-14); Saturate strips and floors a cone (A-15); Magnetic
   # Resonance is passive reflection (A-16; playtest 4: a real reflection of IFF bullets too, so the CMU
@@ -192,6 +243,9 @@
     actions:
     - CMUActionEWJoeSaturate
     components:
+    # W7 5A Searing Light, 5B Saturate dazes and shreds xenofauna
+    - type: EWJoeSearingLight
+    - type: EWJoeSaturateXeno
     - type: EWJoeLight
     # THE LIGHT is orange again (playtest 5) and ripples like light off moving water instead of flashing.
     # Clients animate radius, energy and colour from EWJoeLightPulse's code defaults (8-9.5, 1.8-2.6,
@@ -334,6 +388,32 @@
   description: cmu-ew-joe-heat-alert-desc
   minSeverity: 0
   maxSeverity: 18
+
+# ---------------------------------------------------------------------------------------------
+# ARCH-05 (N12): Liturgy meter, severity = stacks (0-5; 5 = Exalted).
+- type: alertCategory
+  id: CMUEWJoeLiturgy
+
+- type: alert
+  id: CMUEWJoeLiturgy
+  category: CMUEWJoeLiturgy
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_empty
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_3
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_6
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_10
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_13
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
+    state: power_display_full
+  name: cmu-ew-joe-liturgy-alert-name
+  description: cmu-ew-joe-liturgy-alert-desc
+  minSeverity: 0
+  maxSeverity: 5
 
 # ---------------------------------------------------------------------------------------------
 # Playtest 3: one status alert per Scour buff, with the buff's remaining time as the cooldown sweep.

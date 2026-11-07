@@ -1,0 +1,65 @@
+# ARCH-06 (N13): Early Warning Joe CQC sequences (GraphAudit CqcSequences §5). Every step must land on the same
+# target, each within 1.2 s of the last (EWJoeLiturgy.maxGap). ARCH-12: sequences are free; they cost no Liturgy
+# stacks and rely only on the input. A sequence runs its effect through EWJoeCqcEffectsSystem, which calls the same
+# code as the hotbar ability; an Exalted Joe (max stacks) plays the empowered version where the effect has one.
+# requiresBlade: every Wide step must come from a blade (the machete or a Slash weapon); fists cannot wide-swing.
+# Steps: Hit, Wide, Disarm, Grab (a pull; an aggressive grab also counts), AggressiveGrab, Ability (a landed CQC
+# hotbar move). hardCc: refused on a target inside its 6 s CC-immunity window, and opens that window.
+
+- type: ewJoeCqcSequence
+  id: Rebuke
+  name: cmu-ew-joe-sequence-rebuke
+  hint: cmu-ew-joe-sequence-rebuke-hint
+  steps: [ Hit, Hit, Disarm ]
+  effect: Sweep
+  duration: 1
+  minLevel: 1
+  hardCc: true
+
+- type: ewJoeCqcSequence
+  id: Seize
+  name: cmu-ew-joe-sequence-seize
+  hint: cmu-ew-joe-sequence-seize-hint
+  steps: [ Disarm, Grab ]
+  effect: Grip
+  minLevel: 2
+
+- type: ewJoeCqcSequence
+  id: Profane
+  name: cmu-ew-joe-sequence-profane
+  hint: cmu-ew-joe-sequence-profane-hint
+  steps: [ Grab, Hit, Hit ]
+  effect: Desecrate
+  minLevel: 2
+
+- type: ewJoeCqcSequence
+  id: Penance
+  name: cmu-ew-joe-sequence-penance
+  hint: cmu-ew-joe-sequence-penance-hint
+  steps: [ Hit, Hit, Hit ]
+  effect: Slam
+  minLevel: 3
+  hardCc: true
+
+- type: ewJoeCqcSequence
+  id: Silence
+  name: cmu-ew-joe-sequence-silence
+  hint: cmu-ew-joe-sequence-silence-hint
+  steps: [ Disarm, Disarm, Hit ]
+  effect: ChokeOpen
+  minLevel: 2
+  requiresGrab: true
+
+- type: ewJoeCqcSequence
+  id: Unmaking
+  name: cmu-ew-joe-sequence-unmaking
+  hint: cmu-ew-joe-sequence-unmaking-hint
+  steps: [ Hit, Wide, Hit ]
+  effect: Unmaking
+  duration: 1
+  range: 2.5
+  coneDegrees: 90
+  dazeDuration: 4
+  minLevel: 5
+  requiresBlade: true
+  hardCc: true

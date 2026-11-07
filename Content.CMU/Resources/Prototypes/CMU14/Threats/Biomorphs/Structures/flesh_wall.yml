@@ -8,6 +8,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUThreatStructure # Purge the Nest (EW Joe)
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_wall.rsi # TODO: replace with flesh wall sprite
   - type: Icon

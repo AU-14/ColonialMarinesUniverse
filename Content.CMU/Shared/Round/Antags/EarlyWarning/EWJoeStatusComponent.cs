@@ -50,8 +50,27 @@ public sealed partial class EWJoeStatusComponent : Component
     /// <summary>Playtest 4: the Joe holds its one respawn.</summary>
     [DataField, AutoNetworkedField]
     public bool RespawnReady;
+
+    /// <summary>ARCH-02: the Joe may ask for one unfinished directive to be swapped right now.</summary>
+    [DataField, AutoNetworkedField]
+    public bool RerollReady;
 }
 
-/// <summary>One offered objective as the panel shows it.</summary>
+/// <summary>
+/// One offered objective as the panel shows it. <see cref="Slot"/> is its place in the Joe's current offer,
+/// which the reroll request names; <see cref="Rerollable"/> is false for finished and forced directives.
+/// </summary>
 [Serializable, NetSerializable]
-public readonly record struct EWJoeObjectiveEntry(string Title, string Description, float Progress, bool Completed);
+public readonly record struct EWJoeObjectiveEntry(string Title, string Description, float Progress, bool Completed,
+    int Slot = -1, bool Rerollable = false);
+
+/// <summary>
+/// ARCH-02: sent by the Joe's client from its status panel to swap the unfinished directive in
+/// <see cref="Slot"/> for another from the level's pool. The server checks the limit (once per level, or
+/// again after a cooldown while the level lasts) and that the sender is the Joe.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class EWJoeRequestDirectiveRerollEvent(int slot) : EntityEventArgs
+{
+    public readonly int Slot = slot;
+}

@@ -58,8 +58,10 @@ cmu-ew-joe-objective-offer-firearms-title = Offer {$count} firearms.
 cmu-ew-joe-objective-offer-firearms-description = Find {$count} firearms lying loose in the colony and Offer them to the Grand Machine. What is offered is gone for good.
 cmu-ew-joe-objective-collect-intel-title = Take {$count} pieces of sensitive equipment.
 cmu-ew-joe-objective-collect-intel-description = Take {$count} tracked intelligence items into your hands or onto your frame: recorders, laptops, data units. Each counts once; you need not keep it.
-cmu-ew-joe-objective-collect-disks-title = Take {$count} encrypted data disks.
-cmu-ew-joe-objective-collect-disks-description = Take {$count} encrypted intel disks into your hands or onto your frame. Each counts once; you need not keep it.
+cmu-ew-joe-objective-collect-power-cells-title = Tithe of Power: take {$count} power cells.
+cmu-ew-joe-objective-collect-power-cells-description = Take {$count} power cells into your hands or onto your frame; a cell inside a tool you carry counts. Your own cells do not. Each counts once; you need not keep it.
+cmu-ew-joe-objective-collect-id-cards-title = Strip Their Names: take {$count} ID cards.
+cmu-ew-joe-objective-collect-id-cards-description = Take {$count} identification cards from the colony into your hands or onto your frame. Your own does not count. Each counts once; you need not keep it.
 
 cmu-ew-joe-objective-assimilate-title = Assimilate the {$console} ({$area}).
 cmu-ew-joe-objective-assimilate-description = Bring the {$console} in {$area} into the signal.
@@ -142,7 +144,7 @@ cmu-ew-joe-scour-done = {CAPITALIZE($item)} is gone. Something of it stays with 
 cmu-ew-joe-scour-done-permanent = {CAPITALIZE($item)} is gone. There was only ever one of it, and now it is part of you for good.
 cmu-ew-joe-scour-expired = What you took from the colony's tools has faded.
 cmu-ew-joe-scour-taken = {CAPITALIZE(THE($item))} was taken before you could finish.
-cmu-ew-joe-offer-invalid = That is no firearm the Grand Machine would take.
+cmu-ew-joe-offer-invalid = That is nothing the Grand Machine would take.
 cmu-ew-joe-offer-unwanted = No directive asks for that offering.
 cmu-ew-joe-offer-start = You open your frame to {THE($item)}.
 cmu-ew-joe-offer-taken = {CAPITALIZE(THE($item))} must lie loose before it can be offered.
@@ -335,10 +337,10 @@ ent-CMUEWJoeKillPersonObjective = Make them stop
 cmu-ew-joe-console-lost = {CAPITALIZE(THE($console))} has been repaired. The signal no longer holds it.
 cmu-ew-joe-thrall-lost = {CAPITALIZE(THE($thrall))} has been pulled from the river.
 
-# Distress Signal directives
-cmu-ew-joe-objective-maim-xeno-title = Maim {$count} Xenofauna.
-cmu-ew-joe-objective-maim-xeno-description = Bring {$count} xenofauna down to the edge of death. Each counts once, whether your hands, your weapon or your trigger did it.
-cmu-ew-joe-objective-deliver-victims-title = Gather {$count} Xenofauna victims in {$area}.
-cmu-ew-joe-objective-deliver-victims-description = Bring {$count} bodies the xenofauna have used, burst corpses or the still-infected, into {$area}. They must lie there at the same time.
+# Xenofauna directives (non-humanoid threat life, any mode)
+cmu-ew-joe-objective-maim-xeno-title = Maim {$count} xenofauna.
+cmu-ew-joe-objective-maim-xeno-description = Bring {$count} of the colony's xenofauna, whatever its form, down to the edge of death. Each counts once, whether your hands, your weapon or your trigger did it. Facehuggers do not count.
+cmu-ew-joe-objective-deliver-victims-title = Gather {$count} xenofauna victims in {$area}.
+cmu-ew-joe-objective-deliver-victims-description = Bring {$count} bodies the xenofauna have used into {$area}: burst corpses, the infected, or the dead they cut down. They must lie there at the same time.
 ent-CMUEWJoeConsoleCorruption = crawling scripture
     .desc = Light that should not be moving.

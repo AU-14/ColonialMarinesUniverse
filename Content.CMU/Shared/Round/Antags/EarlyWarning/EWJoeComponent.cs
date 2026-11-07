@@ -60,6 +60,13 @@ public sealed partial class EWJoeComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan TestOfFaithStun = TimeSpan.FromSeconds(1.5);
 
+    /// <summary>
+    /// ECS-11: every EW Joe stun on xenofauna is multiplied by this before RMC's own xeno reduction (×0.667),
+    /// so a xeno is held for a real window instead of a split second. Routed through EWJoeTargetRules.ScaleStun.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float XenofaunaStunMultiplier = 2f;
+
     /// <summary>Disrupt: the level-0 EMP pulse. Lights, headsets and batteries respond today.</summary>
     [DataField, AutoNetworkedField]
     public float DisruptRange = 3f;
@@ -392,6 +399,95 @@ public sealed partial class EWJoeComponent : Component
     /// <summary>Random tiles tried when looking for a place to come back.</summary>
     [DataField]
     public int RespawnAttempts = 300;
+
+    // ---- N7 (FLOW-05): meld debt. An assimilation that finds no synthetic does not give the copy at
+    // once: the river keeps searching the planet network every MeldRetry for up to MeldSearchWindow.
+    // Every debt still open when the window closes gives the copy once between them (never more than
+    // one held). Server bookkeeping.
+
+    /// <summary>Assimilations still waiting for a synthetic to meld.</summary>
+    [DataField]
+    public int PendingMelds;
+
+    /// <summary>When the current search gives up and grants the copy. Set by the first debt of a search.</summary>
+    [DataField]
+    public TimeSpan MeldSearchUntil;
+
+    /// <summary>The next time the open debts look for a synthetic again.</summary>
+    [DataField]
+    public TimeSpan NextMeldRetry;
+
+    /// <summary>How long the river searches before it keeps a copy instead. Zero grants the copy at once (playtest 4 behaviour).</summary>
+    [DataField]
+    public TimeSpan MeldSearchWindow = TimeSpan.FromMinutes(5);
+
+    /// <summary>How often an open debt looks for a synthetic again.</summary>
+    [DataField]
+    public TimeSpan MeldRetry = TimeSpan.FromSeconds(15);
+
+    // ---- N5 (FLOW-02): Machine Grip. The Joe's first Ctrl-click on a valid target telegraphs and then goes
+    // straight to an aggressive grab (EWJoeMachineGripSystem). EWJoeRuleSystem applies the per-level grants below.
+
+    /// <summary>The windup between the pull and the aggressive grab; the victim breaks it by moving away.</summary>
+    [DataField]
+    public TimeSpan GripTelegraph = TimeSpan.FromSeconds(0.4);
+
+    /// <summary>
+    /// The windup against a large xeno (RMC size Big: the grabbable T3s such as the praetorian, boiler and despoiler)
+    /// is this many times <see cref="GripTelegraph"/>; the manual Ctrl-click upgrade waits just as long.
+    /// </summary>
+    [DataField]
+    public float LargeXenoGripMultiplier = 1.5f;
+
+    /// <summary>How far apart the Joe and the victim may get during the windup.</summary>
+    [DataField]
+    public float GripTelegraphRange = 1.5f;
+
+    /// <summary>
+    /// Break-free time multiplier the Joe's grabs impose, indexed by level; levels past the end use the last entry
+    /// (decided: x1.0 at L0-1, x1.5 at L2-3, x2.0 from L4).
+    /// </summary>
+    [DataField]
+    public List<float> GripEscapeMultipliers = new() { 1f, 1f, 1.5f, 1.5f, 2f };
+
+    /// <summary>
+    /// From this level the Joe can aggressively grab xenos up to tier 3 and size Big, never the heavies
+    /// (CMUXenoGrabberComponent).
+    /// </summary>
+    [DataField]
+    public int XenoGripLevel = 2;
+
+    /// <summary>An aggressive grab on a xeno is released after this long.</summary>
+    [DataField]
+    public TimeSpan XenoGripHoldCap = TimeSpan.FromSeconds(3);
+
+    /// <summary>After a xeno grab ends, no xeno can be aggressively grabbed again for this long.</summary>
+    [DataField]
+    public TimeSpan XenoGripCooldown = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// Entity prototype whose ParalyzeImmuneFrom entry is copied onto a Joe that lacks one at the xeno-grip level, so
+    /// pulling a small caste does not paralyze it. The synthetic add-list whitelists the same RMCSynthGrabbable castes.
+    /// </summary>
+    [DataField]
+    public EntProtoId XenoGripPullImmunity = "RMCSynthAddComponents";
+
+    /// <summary>The mob's own CanFiremanCarry.AggressiveGrabDelay, restored on stand-down. Server bookkeeping.</summary>
+    [DataField]
+    public TimeSpan? OriginalAggressiveGrabDelay;
+
+    /// <summary>The mob's own escape multiplier when it had one before the grants. Server bookkeeping.</summary>
+    [DataField]
+    public float? OriginalGripEscapeMultiplier;
+
+    [DataField]
+    public bool AddedGripEscapeMultiplier;
+
+    [DataField]
+    public bool AddedXenoGrabber;
+
+    [DataField]
+    public bool AddedParalyzeImmuneFrom;
 }
 
 /// <summary>

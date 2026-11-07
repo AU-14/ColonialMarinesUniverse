@@ -25,6 +25,19 @@ public sealed partial class DistressAntagsRuleSystem : GameRuleSystem<DistressAn
     protected override void Added(EntityUid uid, DistressAntagsRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
         base.Added(uid, component, gameRule, args);
+
+        // a preset with its own table in YAML (e.g. FoFAntags) rolls that instead of the Distress Signal one
+        if (component.Rules is { } rules)
+        {
+            foreach (var (rule, chance) in rules)
+            {
+                if (_random.Prob(chance))
+                    GameTicker.AddGameRule(rule.Id);
+            }
+
+            return;
+        }
+
         foreach (var (antag, chance) in AntagRulePrototypes)
         {
             if (_random.Prob(chance))

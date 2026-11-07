@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Spawning;
 using Content.Server.CMU14.Threats;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Antag.Components;
@@ -10,8 +11,12 @@ using Content.Server.Station.Systems;
 using Content.Shared.Station.Components;
 using Content.Shared.CCVar;
 using Content.Shared._RMC14.Armor;
+using Content.Shared._RMC14.Fireman;
+using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Slow;
 using Content.Shared.Actions;
+using Content.Shared.CMU14.Fireman;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Threats.GrandMachine;
 using Content.Shared.Database;
@@ -40,6 +45,12 @@ public sealed partial class EWJoeRuleComponent : Component
     /// </summary>
     [DataField]
     public bool HostOnPlanet;
+
+    /// <summary>
+    /// FLOW-07: an admin made this rule through "Make Early Warning Joe" while the ewjoemechanics switch was off.
+    /// </summary>
+    [DataField]
+    public bool AdminForced;
 }
 
 /// <summary>
@@ -60,8 +71,11 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private StationSystem _station = default!;
+    [Dependency] private CMUSafeSpawnSystem _safeSpawn = default!;
+    [Dependency] private FiremanCarrySystem _fireman = default!;
 
     public const string AntagId = "EWJoe";
 
@@ -71,10 +85,55 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
 
     private static readonly ProtoId<JobPrototype> HostJob = "AU14JobColonyWorkingJoe";
 
+    /// <summary>The department faction whose jobs' spawn points can host a Distress Signal Joe (FLOW-01 tier 2).</summary>
+    private const string ColonistFaction = "colonist";
+
+    /// <summary>FLOW-01: tier 3 tries this many random planet tiles before giving up.</summary>
+    private const int RandomTileAttempts = 50;
+
     /// <summary>
     /// The admin switch (ewjoemechanics): off, the rules roll no Joe. Joes already in the round are untouched.
     /// </summary>
     public bool Enabled { get; private set; } = true;
+
+    /// <summary>Open <see cref="AdminOverride"/> scopes.</summary>
+    private int _adminOverride;
+
+    /// <summary>
+    /// FLOW-07: the switch, or an admin's "Make Early Warning Joe" in progress. The override bypasses only the
+    /// switch; the Grand Machine stand-down (D10) still applies.
+    /// </summary>
+    private bool Active => Enabled || _adminOverride > 0;
+
+    /// <summary>
+    /// FLOW-07: while the returned scope is open, a rule added or an antag selected ignores the ewjoemechanics
+    /// switch. The admin verb's whole chain (AddGameRule, then TryInitializeAntag) runs synchronously inside it.
+    /// </summary>
+    public IDisposable AdminOverride()
+    {
+        _adminOverride++;
+        return new AdminOverrideScope(this);
+    }
+
+    private sealed class AdminOverrideScope : IDisposable
+    {
+        private readonly EWJoeRuleSystem _system;
+        private bool _disposed;
+
+        public AdminOverrideScope(EWJoeRuleSystem system)
+        {
+            _system = system;
+        }
+
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+            _system._adminOverride--;
+        }
+    }
 
     /// <summary>The Grand Machine threat prototype; the antag stands down when it is the round's threat.</summary>
     public const string GrandMachineThreatId = "GrandMachineThreat";
@@ -112,7 +171,7 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
     {
         base.Added(uid, component, gameRule, args);
 
-        if (!Enabled)
+        if (!Active)
         {
             _adminLogger.Add(LogType.AntagSelection, LogImpact.Low,
                 $"Early Warning Joe rule ended before selection: the antag is disabled (ewjoemechanics)");
@@ -122,8 +181,22 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
             return;
         }
 
+        // FLOW-07: an admin's "Make Early Warning Joe" while the switch is off
+        if (!Enabled)
+        {
+            component.AdminForced = true;
+            _adminLogger.Add(LogType.AntagSelection, LogImpact.Medium,
+                $"Early Warning Joe rule {ToPrettyString(uid):rule} added by an admin while the antag is disabled (ewjoemechanics)");
+        }
+
         if (!IsGrandMachineSelected())
             return;
+
+        if (_adminOverride > 0)
+        {
+            _adminLogger.Add(LogType.AntagSelection, LogImpact.Medium,
+                $"Admin-made Early Warning Joe refused: the Grand Machine threat is active");
+        }
 
         _adminLogger.Add(LogType.AntagSelection, LogImpact.Low,
             $"Early Warning Joe rule ended before selection: the Grand Machine threat is active");
@@ -131,45 +204,110 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         RemComp<AntagSelectionComponent>(uid);
     }
 
-    /// <summary>Where a Distress Signal rule's ghost-role colony Joe appears: on the planet, never on a ship.</summary>
+    /// <summary>
+    /// Where a Distress Signal rule's ghost-role colony Joe appears: on the planet, never on a ship. Every safe
+    /// spot is offered, so the engine's random pick has only valid options (FLOW-01); a spot another Joe
+    /// spawner already stands on is left out while any other is free, so two spawners spread out.
+    /// </summary>
     private void OnSelectLocation(Entity<EWJoeRuleComponent> ent, ref AntagSelectLocationEvent args)
     {
-        if (ent.Comp.HostOnPlanet && FindHostSpot(GameTicker.DefaultMap) is { } spot)
-            args.Coordinates.Add(spot);
+        if (!ent.Comp.HostOnPlanet)
+            return;
+
+        var spots = FindHostSpots(GameTicker.DefaultMap);
+        var free = spots.Where(spot => !HostSpawnerAt(spot)).ToList();
+        args.Coordinates.AddRange(free.Count > 0 ? free : spots);
+    }
+
+    /// <summary>Whether a Distress Signal Joe spawner already stands within a tile of <paramref name="spot"/>.</summary>
+    private bool HostSpawnerAt(MapCoordinates spot)
+    {
+        var spawners = EntityQueryEnumerator<GhostRoleAntagSpawnerComponent, TransformComponent>();
+        while (spawners.MoveNext(out var uid, out var antag, out var xform))
+        {
+            if (antag.Definition != DistressHostId || xform.MapID != spot.MapId)
+                continue;
+
+            if ((_transform.GetWorldPosition(xform) - spot.Position).Length() < 1f)
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
-    /// A colony Working Joe spawn point on <paramref name="map"/>, or failing that any job or late-join spawn
-    /// point there, or failing that a random tile of the map's station; null when there is none of those.
+    /// One safe host spot on <paramref name="map"/>, picked at random from <see cref="FindHostSpots"/>; null
+    /// when there is none.
     /// </summary>
     public MapCoordinates? FindHostSpot(MapId map)
     {
+        var spots = FindHostSpots(map);
+        return spots.Count > 0 ? (MapCoordinates?) _random.Pick(spots) : null;
+    }
+
+    /// <summary>
+    /// FLOW-01: every safe colony Working Joe spawn point on <paramref name="map"/>; failing that, every safe
+    /// colonist job or late-join spawn point on the map's station grids; failing that, one safe random tile of
+    /// the map's station (<see cref="RandomTileAttempts"/> tries). Every candidate passes
+    /// the <see cref="CMUSafeSpawnSystem"/> check. Empty when nothing is safe.
+    /// </summary>
+    public List<MapCoordinates> FindHostSpots(MapId map)
+    {
         var joes = new List<MapCoordinates>();
-        var others = new List<MapCoordinates>();
+        var colonists = new List<MapCoordinates>();
+
+        StationDataComponent? data = null;
+        var stationUid = _station.GetStationInMap(map);
+        if (stationUid is { } station)
+            TryComp(station, out data);
+
+        var colonistJobs = ColonistJobs();
         var query = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var spawn, out var xform))
         {
             if (xform.MapID != map || spawn.SpawnType == SpawnPointType.Observer)
                 continue;
 
-            (spawn.Job == HostJob ? joes : others).Add(_transform.GetMapCoordinates(uid, xform));
+            List<MapCoordinates> tier;
+            if (spawn.Job == HostJob)
+                tier = joes;
+            else if (data != null
+                     && xform.GridUid is { } grid
+                     && _station.GetOwningStation(grid) == stationUid
+                     && (spawn.SpawnType == SpawnPointType.LateJoin
+                         || spawn.Job is { } job && colonistJobs.Contains(job)))
+                tier = colonists;
+            else
+                continue;
+
+            if (_safeSpawn.IsSafeSpawnTile(xform.Coordinates))
+                tier.Add(_transform.GetMapCoordinates(uid, xform));
         }
 
         if (joes.Count > 0)
-            return _random.Pick(joes);
+            return joes;
 
-        if (others.Count > 0)
-            return _random.Pick(others);
+        if (colonists.Count > 0)
+            return colonists;
 
-        // some planets have no player spawn points at all: any floor tile of the planet's station will do
-        if (_station.GetStationInMap(map) is { } station
-            && TryComp(station, out StationDataComponent? data)
-            && TryFindRandomTileOnStation((station, data), out _, out _, out var coords))
+        // some planets have no usable player spawn points at all: any safe floor tile of the planet's station
+        if (data != null && _safeSpawn.TryFindSafeTile(data.Grids, RandomTileAttempts, out var coords))
+            return new List<MapCoordinates> { _transform.ToMapCoordinates(coords) };
+
+        return new List<MapCoordinates>();
+    }
+
+    /// <summary>Every job of a department whose faction is the colonists'.</summary>
+    private HashSet<ProtoId<JobPrototype>> ColonistJobs()
+    {
+        var jobs = new HashSet<ProtoId<JobPrototype>>();
+        foreach (var department in _proto.EnumeratePrototypes<DepartmentPrototype>())
         {
-            return _transform.ToMapCoordinates(coords);
+            if (department.Faction == ColonistFaction)
+                jobs.UnionWith(department.Roles);
         }
 
-        return null;
+        return jobs;
     }
 
     private void OnAntagSelected(Entity<EWJoeRuleComponent> ent, ref AfterAntagEntitySelectedEvent args)
@@ -179,8 +317,8 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
 
         var joe = args.EntityUid;
 
-        // a rule that selects while the antag is switched off makes nobody
-        if (!Enabled)
+        // a rule that selects while the antag is switched off makes nobody, unless an admin is making this one
+        if (!Active)
         {
             StandDown(joe);
             return;
@@ -190,8 +328,31 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         // Grand Machine was selected before this round's antag roll resolved
         if (IsGrandMachineSelected())
         {
+            if (_adminOverride > 0)
+            {
+                _adminLogger.Add(LogType.AntagSelection, LogImpact.Medium,
+                    $"Admin-made Early Warning Joe {ToPrettyString(joe):joe} stood down: the Grand Machine threat is active");
+            }
+
             StandDown(joe);
             return;
+        }
+
+        // FLOW-01 defence in depth: a Distress Signal host whose spawner stood somewhere unsafe moves to a safe
+        // spot. A player's own body (a rolled or admin-made Joe) is never moved.
+        if (ent.Comp.HostOnPlanet && !_safeSpawn.IsSafeSpawnTile(Transform(joe).Coordinates, joe))
+        {
+            if (FindHostSpot(GameTicker.DefaultMap) is { } safe)
+            {
+                _transform.SetMapCoordinates(joe, safe);
+                _adminLogger.Add(LogType.AntagSelection, LogImpact.Low,
+                    $"Early Warning Joe {ToPrettyString(joe):joe} took over on an unsafe tile and was moved to {safe.ToString()}");
+            }
+            else
+            {
+                _adminLogger.Add(LogType.AntagSelection, LogImpact.Medium,
+                    $"Early Warning Joe {ToPrettyString(joe):joe} took over on an unsafe tile and no safe spot was found");
+            }
         }
 
         var comp = EnsureComp<EWJoeComponent>(joe);
@@ -272,7 +433,8 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         RemComp<GrandMachineTouchedComponent>(ent);
     }
 
-    private bool IsGrandMachineSelected()
+    /// <summary>Whether this round's threat is the Grand Machine, under which the antag stands down (D10).</summary>
+    public bool IsGrandMachineSelected()
     {
         return _auRound.SelectedThreat?.ID == GrandMachineThreatId;
     }
@@ -327,6 +489,7 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         ent.Comp.Level = level;
         Dirty(ent, ent.Comp);
         UpdateSlowdown((ent, ent.Comp));
+        UpdateGripGrants((ent, ent.Comp));
         RecordProgress((ent, ent.Comp));
 
         var ev = new EWJoeLevelChangedEvent(ent, oldLevel, level);
@@ -412,6 +575,7 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         ent.Comp.Level = level;
         Dirty(ent, ent.Comp);
         UpdateSlowdown((ent, ent.Comp));
+        UpdateGripGrants((ent, ent.Comp));
         RecordProgress((ent, ent.Comp));
 
         var ev = new EWJoeLevelChangedEvent(ent, oldLevel, level);
@@ -516,6 +680,8 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         ent.Comp.OriginalSlowdown = null;
         ent.Comp.AppliedLevel = -1;
 
+        ClearGripGrants(ent);
+
         if (ent.Comp.AddedArmorUser)
         {
             // the armor system adds the same marker on equip and never removes it; keep it while armor is worn
@@ -544,6 +710,102 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         slowdown.Slowdown = Math.Max(0f, baseSlowdown - ent.Comp.SlowdownShedPerLevel * ent.Comp.Level);
         Dirty(ent, slowdown);
         _movementSpeed.RefreshMovementSpeedModifiers(ent.Owner);
+    }
+
+    /// <summary>
+    /// N5 (FLOW-02) Machine Grip grants for the Joe's current level: no upgrade delay from level 0, the escape
+    /// multiplier by level, and from <see cref="EWJoeComponent.XenoGripLevel"/> the small-caste xeno grab with pull
+    /// immunity. Values the mob had of its own are recorded the first time and put back by <see cref="ClearGripGrants"/>,
+    /// the way <see cref="EWJoeComponent.OriginalSlowdown"/> is.
+    /// </summary>
+    private void UpdateGripGrants(Entity<EWJoeComponent> ent)
+    {
+        if (TryComp(ent, out CanFiremanCarryComponent? carry))
+        {
+            ent.Comp.OriginalAggressiveGrabDelay ??= carry.AggressiveGrabDelay;
+            // review fix: a manual second Ctrl-click must not beat the telegraph (the decided one-click grab keeps
+            // the victim's 0.4 s window). The upgrade delay is scaled by the CQC skill, so store the telegraph
+            // divided by that multiplier: the manual upgrade unlocks exactly when the telegraph would land.
+            var skillMultiplier = _skills.GetSkillDelayMultiplier(ent.Owner, carry.Skill);
+            var delay = skillMultiplier > 0 ? ent.Comp.GripTelegraph / skillMultiplier : ent.Comp.GripTelegraph;
+            _fireman.SetAggressiveGrabDelay((ent.Owner, carry), delay);
+        }
+
+        var multipliers = ent.Comp.GripEscapeMultipliers;
+        var multiplier = multipliers.Count == 0 ? 1f : multipliers[Math.Clamp(ent.Comp.Level, 0, multipliers.Count - 1)];
+        if (TryComp(ent, out CMUGrabEscapeMultiplierComponent? escape))
+        {
+            if (!ent.Comp.AddedGripEscapeMultiplier)
+                ent.Comp.OriginalGripEscapeMultiplier ??= escape.Multiplier;
+        }
+        else
+        {
+            escape = AddComp<CMUGrabEscapeMultiplierComponent>(ent);
+            ent.Comp.AddedGripEscapeMultiplier = true;
+        }
+
+        escape.Multiplier = multiplier;
+        Dirty(ent, escape);
+
+        if (ent.Comp.Level >= ent.Comp.XenoGripLevel)
+        {
+            if (!HasComp<CMUXenoGrabberComponent>(ent))
+            {
+                AddComp<CMUXenoGrabberComponent>(ent);
+                ent.Comp.AddedXenoGrabber = true;
+            }
+
+            // a synthetic body already carries one from its add-list; only a Joe without any gets the copy
+            var immunityName = _componentFactory.GetComponentName<ParalyzeImmuneFromComponent>();
+            if (!HasComp<ParalyzeImmuneFromComponent>(ent) &&
+                _proto.TryIndex(ent.Comp.XenoGripPullImmunity, out var immunity) &&
+                immunity.Components.TryGetValue(immunityName, out var entry))
+            {
+                EntityManager.AddComponents(ent, new ComponentRegistry { [immunityName] = entry }, removeExisting: false);
+                ent.Comp.AddedParalyzeImmuneFrom = true;
+            }
+        }
+        else
+        {
+            RemoveXenoGrip(ent);
+        }
+    }
+
+    /// <summary>Undoes <see cref="UpdateGripGrants"/>: the mob's own delay and multiplier come back, the grants go.</summary>
+    private void ClearGripGrants(Entity<EWJoeComponent> ent)
+    {
+        if (ent.Comp.OriginalAggressiveGrabDelay is { } delay)
+            _fireman.SetAggressiveGrabDelay(ent.Owner, delay);
+
+        ent.Comp.OriginalAggressiveGrabDelay = null;
+
+        if (ent.Comp.AddedGripEscapeMultiplier)
+        {
+            RemComp<CMUGrabEscapeMultiplierComponent>(ent);
+        }
+        else if (ent.Comp.OriginalGripEscapeMultiplier is { } original &&
+                 TryComp(ent, out CMUGrabEscapeMultiplierComponent? escape))
+        {
+            escape.Multiplier = original;
+            Dirty(ent, escape);
+        }
+
+        ent.Comp.AddedGripEscapeMultiplier = false;
+        ent.Comp.OriginalGripEscapeMultiplier = null;
+
+        RemoveXenoGrip(ent);
+    }
+
+    private void RemoveXenoGrip(Entity<EWJoeComponent> ent)
+    {
+        if (ent.Comp.AddedXenoGrabber)
+            RemComp<CMUXenoGrabberComponent>(ent);
+
+        if (ent.Comp.AddedParalyzeImmuneFrom)
+            RemComp<ParalyzeImmuneFromComponent>(ent);
+
+        ent.Comp.AddedXenoGrabber = false;
+        ent.Comp.AddedParalyzeImmuneFrom = false;
     }
 
     /// <summary>The colony Joe wears an overwatch camera; the antag must not be watched through it (D13).</summary>

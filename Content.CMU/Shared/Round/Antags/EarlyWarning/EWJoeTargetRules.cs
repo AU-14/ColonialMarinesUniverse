@@ -34,6 +34,41 @@ public static class EWJoeTargetRules
             || entities.HasComponent<CMUDroneAndroidComponent>(uid);
     }
 
+    /// <summary>
+    /// Xenofauna: non-humanoid threat life. A xeno, or a threat-faction body without a humanoid profile
+    /// (apes, biomorphs, neomorphs, wendigo). Humanoid threats (cultists, tribals), Yautja and drone
+    /// androids are not xenofauna. The xenofauna objectives and the anti-xeno kit share this rule.
+    /// </summary>
+    public static bool IsXenofauna(IEntityManager entities, EntityUid uid)
+    {
+        if (!entities.HasComponent<XenoComponent>(uid) && !entities.HasComponent<ThreatComponent>(uid))
+            return false;
+
+        return !entities.HasComponent<HumanoidProfileComponent>(uid)
+            && !entities.HasComponent<YautjaComponent>(uid)
+            && !entities.HasComponent<CMUDroneAndroidComponent>(uid);
+    }
+
+    /// <summary>
+    /// ECS-11: an EW Joe stun duration for <paramref name="target"/>. Xenofauna that RMC's status-effect system
+    /// shortens (<see cref="XenoComponent"/>, ×0.667, applied on top of this) get <paramref name="xenofaunaMultiplier"/>
+    /// so the stun still lands. Other xenofauna (apes, threat mobs without a xeno body) take EW Joe stuns at full
+    /// length already and are left as they are. XenoComponent is networked, so the client predicts the same value.
+    /// </summary>
+    public static TimeSpan ScaleStun(IEntityManager entities, EntityUid target, TimeSpan baseTime, float xenofaunaMultiplier)
+    {
+        return entities.HasComponent<XenoComponent>(target) && IsXenofauna(entities, target)
+            ? baseTime * xenofaunaMultiplier
+            : baseTime;
+    }
+
+    /// <summary>FLOW-12: who THE LIGHT judges: organics, and Yautja, who are not people for any other purpose.</summary>
+    public static bool IsLightTarget(IEntityManager entities, EntityUid uid)
+    {
+        return IsOrganic(entities, uid)
+            || entities.HasComponent<YautjaComponent>(uid) && entities.HasComponent<HumanoidProfileComponent>(uid);
+    }
+
     /// <summary>An organic for kill credit: a humanoid that is not a synthetic.</summary>
     public static bool IsOrganic(IEntityManager entities, EntityUid uid)
     {

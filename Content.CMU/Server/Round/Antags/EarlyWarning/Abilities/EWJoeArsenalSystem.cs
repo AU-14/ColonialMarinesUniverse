@@ -1,9 +1,11 @@
 using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.CMU14.Medical.Injuries.Wounds;
+using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Server.CMU14.Surrender;
 using Content.Shared.Body.Systems;
 using Content.Server.CMU14.Yautja;
+using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Line;
 using Content.Shared._RMC14.Sentry;
@@ -80,6 +82,12 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private CMUWoundsSystem _cmuWounds = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
+    [Dependency] private EWJoeCombatSystem _combat = default!;
+    [Dependency] private EWJoeMachineGripSystem _grip = default!;
+    [Dependency] private EWJoeScourSystem _scour = default!;
+    [Dependency] private EWJoeXenoKitSystem _xenoKit = default!;
+    // ARCH-04 (N12): machete hits are raised on the machete, so they reach the Liturgy meter from here
+    [Dependency] private EWJoeLiturgySystem _liturgy = default!;
 
     private static readonly ProtoId<DamageTypePrototype> HeatDamage = "Heat";
 
@@ -102,6 +110,7 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, ExaminedEvent>(OnExamined);
 
         SubscribeLocalEvent<EWJoeMacheteComponent, MeleeHitEvent>(OnMacheteHit);
+        SubscribeLocalEvent<EWJoeMacheteComponent, CMGetArmorPiercingEvent>(OnMacheteGetArmorPiercing);
 
         SubscribeLocalEvent<EWJoeDisruptPulseEvent>(OnDisruptPulse);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
@@ -208,6 +217,22 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
         if (args.Handled)
             return;
 
+        if (ent.Comp.Joe is { } joeUid && TryComp(joeUid, out EWJoeComponent? joe) && args.IsHit)
+        {
+            // 1A: a lit Cutting Torch rides the blade too
+            _scour.ApplyCuttingTorch(joeUid, args);
+
+            // FLOW-02: cutting someone the Joe holds keeps them from struggling free
+            foreach (var target in args.HitEntities)
+            {
+                if (_combat.IsGrabbedBy((joeUid, joe), target))
+                    _grip.ExtendStruggle(target);
+            }
+
+            // ARCH-04: a blade hit (or a whiff) counts for the Liturgy meter like a fist
+            _liturgy.HandleMeleeHit(joeUid, args);
+        }
+
         var from = _transform.GetWorldPosition(args.User);
         foreach (var target in args.HitEntities)
         {
@@ -229,6 +254,19 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
             var part = _random.Pick(parts);
             _wounds.SeedInternalBleed(part, ent.Comp.BleedSource, ent.Comp.BleedRate);
         }
+    }
+
+    /// <summary>
+    /// 3A Rending Edge: the summoning Joe's blade pierces extra armor on xenofauna. The armor system asks the
+    /// tool for its piercing on every hit it resolves, per target.
+    /// </summary>
+    private void OnMacheteGetArmorPiercing(Entity<EWJoeMacheteComponent> ent, ref CMGetArmorPiercingEvent args)
+    {
+        if (ent.Comp.Joe is not { } joe || !TryComp(joe, out EWJoeRendingEdgeComponent? edge))
+            return;
+
+        if (EWJoeTargetRules.IsXenofauna(EntityManager, args.Target))
+            args.Piercing += edge.ArmorPiercing;
     }
 
     #endregion
@@ -264,6 +302,10 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
         args.Handled = true;
         var hit = Consecrate(ent, target);
         _popup.PopupEntity(Loc.GetString("cmu-ew-joe-consecrate-done", ("count", hit)), ent, ent, PopupType.Medium);
+
+        // 4A Purge Ground: the arc scorches the weeds around the Joe and keeps them off for a while
+        if (_xenoKit.TryPurgeGround(ent) > 0)
+            _popup.PopupEntity(Loc.GetString("cmu-ew-joe-xenokit-purge-done"), ent, ent);
     }
 
     /// <summary>
@@ -284,7 +326,8 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
             hit.Add(current);
             _line.TryCreateLine(source, current, joe.Comp.ConsecrateBeam.Id, out _);
             _damageable.TryChangeDamage(current, damage, origin: joe);
-            _stun.TryParalyze(current, joe.Comp.ConsecrateParalyze, true);
+            // ECS-11: xenofauna get the Joe's stun multiplier before RMC's own reduction
+            _stun.TryParalyze(current, EWJoeTargetRules.ScaleStun(EntityManager, current, joe.Comp.ConsecrateParalyze, joe.Comp.XenofaunaStunMultiplier), true);
 
             EntityUid? next = null;
             var best = float.MaxValue;
@@ -335,6 +378,9 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
         args.Handled = true;
         var (guns, sentries) = Unwind(ent);
         _popup.PopupEntity(Loc.GetString("cmu-ew-joe-unwind-done", ("guns", guns), ("sentries", sentries)), ent, ent);
+
+        // 4B Unwind Recoil: the uncoiled frame throws back part of every claw for a while
+        _xenoKit.StartUnwindRecoil(ent);
     }
 
     /// <summary>

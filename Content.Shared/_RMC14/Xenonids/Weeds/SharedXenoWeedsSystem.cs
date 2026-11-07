@@ -321,7 +321,8 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
             contactHive = _hive.GetHive(contacting);
             if (_slowResinQuery.TryComp(contacting, out var slowResin))
             {
-                if (!ignoreWeedSlowdown && (stepperHive == null || !_hive.IsMember(contacting, stepperHive.Hive)) && !_hive.IsAllyOfHive(ent, contactHive))
+                // CMU14: CMUIgnoreResinSlowdown skips sticky resin's outsider slow (always < 1). fast resin below is untouched
+                if (!ignoreWeedSlowdown && !HasComp<Content.Shared.CMU14.Xenos.CMUIgnoreResinSlowdownComponent>(ent) && (stepperHive == null || !_hive.IsMember(contacting, stepperHive.Hive)) && !_hive.IsAllyOfHive(ent, contactHive))
                 {
                     if (HasComp<RMCArmorSpeedTierUserComponent>(contacting))
                         speedResin += slowResin.OutsiderSpeedModifierArmor;

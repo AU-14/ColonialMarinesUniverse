@@ -147,8 +147,9 @@ public sealed class EWJoeConsoleTest
             Assert.That(consoles.CanAssimilate((joe, comp), bystander, out _), Is.False);
 
             // the real do-after reached the melding system: with no synthetic player on the map, the
-            // assimilation gave the Joe its respawn instead (playtest 4)
-            Assert.That(comp.RespawnReady, "assimilation through the do-after scheduled the river");
+            // river starts searching (FLOW-05) instead of granting the copy at once
+            Assert.That(comp.PendingMelds, Is.EqualTo(1), "assimilation through the do-after scheduled the river");
+            Assert.That(comp.RespawnReady, Is.False, "the copy waits for the search window");
 
             // once the ladder credits the objective, a repaired console is not the Joe's to take again
             comp.CurrentObjectives.Add(objective);

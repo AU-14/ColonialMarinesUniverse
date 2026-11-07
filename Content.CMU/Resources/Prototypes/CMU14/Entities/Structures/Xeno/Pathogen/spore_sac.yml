@@ -4,6 +4,7 @@
   name: spore sac
   description: A pulsating, fleshy sac that releases a cloud of toxic spores. Don't touch it.
   components:
+  - type: CMUThreatStructure # Purge the Nest (EW Joe)
   - type: NpcFactionMember
     factions:
     - CMU14PathogenWalker
