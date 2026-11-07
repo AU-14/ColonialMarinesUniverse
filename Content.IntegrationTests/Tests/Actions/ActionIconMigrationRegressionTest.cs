@@ -25,7 +25,6 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
     private static readonly string[] EffectiveActionRoots =
     [
         "ActionXenoBase",
-        "ActionZombieSummonerOpen",
         "ActionBiomorphSpiderLeap", // CMU14
         "ActionMarineBase",
         "ActionVehicleToggleView",
@@ -49,7 +48,6 @@ public sealed class ActionIconMigrationRegressionTest : GameTest
                 Assert.That(fields, Does.Contain(nameof(ActionComponent.BackgroundOn)));
 
                 AssertBackground("ActionXenoBase", "template_active_big");
-                AssertBackground("ActionZombieSummonerOpen", "template_active_big");
                 AssertBackground("ActionBiomorphSpiderLeap", "template_active_big"); // CMU14
                 AssertBackground("RMCActionToggleRecoil", "template_on_big");
 

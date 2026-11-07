@@ -1,0 +1,87 @@
+- type: entity
+  abstract: true
+  parent: BaseAction
+  id: ActionCMUThreatBase
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_active_big
+
+- type: entity
+  parent: ActionCMUThreatBase
+  id: ActionCMUThreatSmokerTongue
+  name: Tongue grab
+  description: Pull a victim into choking range.
+  components:
+  - type: Action
+    useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_attack
+      map: [ "enum.ActionVisuals.Icon" ]
+  - type: TargetAction
+    range: 8
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Threat.CMUSmokerTongueActionEvent
+
+- type: entity
+  parent: ActionCMUThreatBase
+  id: ActionCMUThreatBoomerVomit
+  name: Vomit
+  description: Cover nearby victims in bile.
+  components:
+  - type: Action
+    useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: regurgitate
+      map: [ "enum.ActionVisuals.Icon" ]
+  - type: TargetAction
+    range: 5
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Threat.CMUBoomerVomitActionEvent
+
+- type: entity
+  parent: ActionCMUThreatBase
+  id: ActionCMUThreatJockeyRide
+  name: Ride
+  description: Latch onto a victim and steer them away.
+  components:
+  - type: Action
+    useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: [ "enum.ActionVisuals.Icon" ]
+  - type: TargetAction
+    range: 4
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Threat.CMUJockeyRideActionEvent
+
+- type: entity
+  parent: ActionCMUThreatBase
+  id: ActionCMUThreatSpitterAcid
+  name: Acid spit
+  description: Spit a spreading pool of acid.
+  components:
+  - type: Action
+    useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: [ "enum.ActionVisuals.Icon" ]
+  - type: TargetAction
+    range: 8
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Threat.CMUSpitterAcidActionEvent

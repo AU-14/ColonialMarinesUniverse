@@ -41,7 +41,7 @@ public static class GhostWarpGrouping
     public const string SectionAbominations = "Abominations";
     public const string SectionLeaders = "Leaders";
     public const string SectionMembers = "Members";
-    public const string SectionSummoners = "Summoners";
+    public const string SectionThreat = "Threat Section"; // CMU14
     public const string SectionWarpPoints = "Warp Points";
     public const string SectionOther = "Other";
 
@@ -117,13 +117,15 @@ public static class GhostWarpGrouping
         int realDisplayWeight,
         bool isYautjaThrall = false,
         bool isYautjaAbomination = false,
-        bool isCursedSummoner = false)
+        bool isThreat = false) // CMU14
     {
         if (isWarpPoint)
             return new GhostWarpGroupingResult(TabLocations, SectionWarpPoints);
 
-        if (isCursedSummoner)
-            return new GhostWarpGroupingResult(TabCursed, SectionSummoners);
+        // CMU14 start
+        if (isThreat)
+            return new GhostWarpGroupingResult(TabCursed, SectionThreat);
+        // CMU14 end
 
         if ((isXeno || IsXenoJob(jobId)) && isCorruptedHive)
             return new GhostWarpGroupingResult(TabCorruptedHive, GetXenoSection(jobId, xenoTier));
