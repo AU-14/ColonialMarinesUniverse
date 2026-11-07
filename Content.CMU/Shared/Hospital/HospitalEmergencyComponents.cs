@@ -60,6 +60,9 @@ public readonly record struct HospitalDischargeAssessment(
 public sealed partial class HospitalEmergencyComputerComponent : Component
 {
     [DataField]
+    public HospitalEmergencyIncidentType IncidentType = HospitalEmergencyIncidentType.Standard;
+
+    [DataField]
     public ResPath ShuttlePath = new("/Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml");
 
     [DataField]
@@ -281,4 +284,10 @@ public enum HospitalPatientClothingTheme : byte
     Upp,
     Cmb,
     Nspa,
+}
+
+public enum HospitalEmergencyIncidentType : byte
+{
+    Standard,
+    Zombie,
 }
