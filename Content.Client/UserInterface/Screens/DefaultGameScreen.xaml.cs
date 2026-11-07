@@ -60,4 +60,16 @@ public sealed partial class DefaultGameScreen : InGameScreen
         SetMarginLeft(Chat, size.Y);
         SetMarginTop(Alerts, size.X);
     }
+
+    public override void SetCinematicMode(bool enabled)
+    {
+        base.SetCinematicMode(enabled);
+        TopLeft.Visible = !enabled;
+        Ghost.Visible = !enabled;
+        Inventory.Visible = !enabled;
+        Hotbar.Visible = !enabled;
+        Chat.Visible = !enabled;
+        Alerts.Visible = !enabled;
+        Actions.Visible = !enabled;
+    }
 }

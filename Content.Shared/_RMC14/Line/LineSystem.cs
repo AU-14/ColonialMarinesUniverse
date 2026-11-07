@@ -273,6 +273,7 @@ public sealed partial class LineSystem : EntitySystem
 
         var beam = Spawn(proto, beamStartPos);
         lines.Add(beam);
+        _transform.SetWorldRotation(beam, sourceAngle);
 
         var distanceLength = distanceCorrection.Length();
 
@@ -284,6 +285,7 @@ public sealed partial class LineSystem : EntitySystem
             beamStartPos = beamStartPos.Offset(calculatedDistance.Normalized());
             var newEnt = Spawn(proto, beamStartPos);
             lines.Add(newEnt);
+            _transform.SetWorldRotation(newEnt, sourceAngle);
 
             var ev = new BeamVisualizerEvent(GetNetEntity(newEnt), distanceLength, sourceAngle, shader: "shaded");
             RaiseNetworkEvent(ev);
