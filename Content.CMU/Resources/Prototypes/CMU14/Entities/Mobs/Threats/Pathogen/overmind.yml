@@ -165,11 +165,8 @@
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
-    - CMU14XenoMyceliumWall
     - CMU14XenoThickMyceliumWall
-    - CMU14XenoMyceliumMembrane
     - CMU14XenoThickMyceliumMembrane
-    - CMU14XenoMyceliumDoor
     - CMU14XenoThickMyceliumDoor
     canOrderConstruction:
     - CMU14PathogenBlightCoreConstructionNode
