@@ -19,22 +19,16 @@
     sections:
     - name: Fatigues
       entries:
-      - id: AU14SnowFatigues
+      - id: AU14CamoUSCMFatigues
         amount: 120
-    - name: Dress Uniforms
-      entries:
-      - id: RMCUniformCaseDressEnlisted
-        amount: 20
-      - id: RMCUniformCaseDressNCO
-        amount: 20
-      - id: RMCUniformCaseDressOfficer
-        amount: 20
     - name: Footwear
       entries:
       - id: CMBootsBlackFilled
         amount: 40
-      - id: RMCShoesSnow
+      - id: CMBootsBrownFilled
         amount: 40
+      - id: AU14BootsJungleFilled
+        amount: 25
     - name: Gloves
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
@@ -57,13 +51,13 @@
         amount: 2
     - name: Headgear
       entries:
-      - id: AU14SnowM10Helmet
+      - id: AU14CamoM10Helmet
         amount: 65
-      - id: AU14SnowBoonieHat
+      - id: AU14CamoBoonieHat
         amount: 40
-      - id: AU14SnowPatrolCap
+      - id: AU14CamoPatrolCap
         amount: 50
-      - id: AU14SnowFlapCap
+      - id: AU14CamoFlapCap
         amount: 30
       - id: AU14HeadCommandoBeanie
         amount: 10
@@ -77,23 +71,23 @@
         amount: 8
     - name: Armor
       entries:
-      - id: AU14SnowArmorM3Smooth
+      - id: AU14CamoArmorM3Smooth
         amount: 65
-      - id: AU14SnowArmorM3Ribbed
+      - id: AU14CamoArmorM3Ribbed
         amount: 65
-      - id: AU14SnowArmorM3Dimpled
+      - id: AU14CamoArmorM3Dimpled
         amount: 65
     - name: Armor Components
       entries:
-      - id: AU14SnowKitArmor
+      - id: AU14CamoKitArmor
         amount: 65
       - id: AU14ArmorGarbShotgunShellHolder
         amount: 8
-      - id: AU14ArmorGarbSnowPoncho
+      - id: AU14CamoArmorGarbPoncho
         amount: 65
     - name: Backpack
       entries:
-      - id: AU14SnowBackpackMarine
+      - id: CMBackpackMarine
         amount: 25
       - id: AU14IMPBackpackMarine
         amount: 40
@@ -105,28 +99,28 @@
         amount: 3
       - id: RMCBackpackAmmo
         amount: 4
-      - id: AU14SnowSatchelMarine
+      - id: CMSatchelMarine
         amount: 40
     - name: Belts
       entries:
-      - id: AU14SnowBeltMarine
+      - id: CMBeltMarine
         amount: 40
-      - id: AU14SnowBeltCombatSidearmRig
+      - id: CMUBeltCombatSidearmRig
         amount: 15
       - id: RMCBeltGrenade
         amount: 4
-      - id: AU14SnowBeltShotgunShellLoadingRig
+      - id: RMCM276ShotgunShellLoadingRig
         amount: 6
       - id: RMCBeltHolsterSMGPouch
         amount: 5
-      - id: AU14SnowBeltHolsterPistol
+      - id: RMCBeltHolsterPistol
         amount: 20
       - id: RMCBeltHolsterRevolver
         amount: 10
-      - id: AU14SnowBeltKnifeFilled
+      - id: CMBeltKnifeFilled
         name: M276 Knife Rig (Full)
         amount: 2
-      - id: AU14SnowBeltUtilityGeneral
+      - id: RMCBeltUtilityGeneral
         amount: 30
     - name: Pouches
       entries:
@@ -168,6 +162,12 @@
         amount: 20
       - id: RMCMaskScarfGray
         amount: 20
+      - id: RMCMaskScarfTan
+        amount: 20
+      - id: RMCMaskTornScarfGreen
+        amount: 20
+      - id: RMCMaskTornScarfDesert
+        amount: 20
       - id: RMCMaskTornScarfSnow
         amount: 20
       - id: RMCMaskTornScarfBlack
@@ -202,7 +202,7 @@
         amount: 25
     - name: Helmet Garb
       entries:
-      - id: AU14HelmetGarbM10SkrimSnow
+      - id: AU14CamoHelmetGarbM10Skrim
         amount: 45
       - id: AU14HelmetGarbM10RainCover
         amount: 40
@@ -2043,30 +2043,26 @@
     sections:
     - name: Softcovers
       entries:
-      - id: AU14SnowBoonieHat
+      - id: AU14CamoBoonieHat
         amount: 40
-      - id: AU14SnowPatrolCap
+      - id: AU14CamoPatrolCap
         amount: 50
-      - id: AU14SnowFlapCap
+      - id: AU14CamoFlapCap
         amount: 30
       - id: AU14HeadCommandoBeanie
         amount: 10
     - name: Fatigues
       entries:
-      - id: AU14SnowFatigues
+      - id: AU14CamoUSCMFatigues
         amount: 120
-    - name: Dress Uniforms
-      entries:
-      - id: RMCUniformCaseDressEnlisted
-        amount: 20
-      - id: RMCUniformCaseDressNCO
-        amount: 20
-      - id: RMCUniformCaseDressOfficer
-        amount: 20
     - name: Footwear
       entries:
       - id: CMBootsBlackFilled
         amount: 40
+      - id: CMBootsBrownFilled
+        amount: 40
+      - id: AU14BootsJungleFilled
+        amount: 25
     - name: Mask
       entries:
       - id: CMMaskCoif
@@ -2074,6 +2070,12 @@
       - id: RMCMaskScarfBlack
         amount: 20
       - id: RMCMaskScarfGray
+        amount: 20
+      - id: RMCMaskScarfTan
+        amount: 20
+      - id: RMCMaskTornScarfGreen
+        amount: 20
+      - id: RMCMaskTornScarfDesert
         amount: 20
       - id: RMCMaskTornScarfSnow
         amount: 20

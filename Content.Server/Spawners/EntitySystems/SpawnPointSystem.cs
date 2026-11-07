@@ -1,14 +1,11 @@
-using System.Linq;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.CMU14.Roles;
 using Content.Server.Spawners.Components;
 using Content.Server.Station.Systems;
-using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Map; // CMU14
 using Content.Shared.Maps; // CMU14
 using Content.Shared.CMU14.Round.Roles;
-using Content.Shared.CMU14.Spawners;
 using Content.Shared.CMU14;
 using Content.Shared.Roles;
 using Robust.Shared.Map;
@@ -28,7 +25,6 @@ public sealed partial class SpawnPointSystem : EntitySystem
     [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!; // CMU14
 
     public override void Initialize()
@@ -87,19 +83,6 @@ public sealed partial class SpawnPointSystem : EntitySystem
                         factionShipStations.Add(resolvedFactionShipStation);
                 }
             }
-
-            // GOVFOR uses rank-group landmarks instead of per-job landmarks wherever the map provides them.
-            // Picking the least-used marker keeps round-start and late-join arrivals evenly distributed.
-            if (isGovfor && TrySpawnAtGovforRankPoint(
-                    args,
-                    job,
-                    jobId,
-                    factionInShip,
-                    factionShipGrids,
-                    factionShipStations,
-                    allShipGrids,
-                    allShipStations))
-                return;
 
             if (factionInShip)
             {
@@ -246,98 +229,6 @@ public sealed partial class SpawnPointSystem : EntitySystem
 
         args.SpawnResult = _stationSpawning.SpawnPlayerMob(
             spawnLoc, args.Job, args.HumanoidCharacterProfile, args.Station);
-    }
-
-    private bool TrySpawnAtGovforRankPoint(
-        PlayerSpawningEvent args,
-        JobPrototype? job,
-        string? jobId,
-        bool factionInShip,
-        IReadOnlySet<EntityUid> factionShipGrids,
-        IReadOnlySet<EntityUid> factionShipStations,
-        IReadOnlySet<EntityUid> allShipGrids,
-        IReadOnlySet<EntityUid> allShipStations)
-    {
-        var group = ResolveGovforRankGroup(args, job, jobId);
-        var candidates = new List<(EntityUid Uid, CMUGovforRankSpawnPointComponent Marker, EntityCoordinates Coordinates)>();
-        var points = EntityQueryEnumerator<CMUGovforRankSpawnPointComponent, TransformComponent>();
-        while (points.MoveNext(out var uid, out var marker, out var xform))
-        {
-            if (marker.Group != group || xform.MapID == MapId.Nullspace)
-                continue;
-
-            var validLocation = factionInShip
-                ? IsOnShip(xform, factionShipGrids, factionShipStations)
-                : !IsOnShip(xform, allShipGrids, allShipStations);
-            if (validLocation)
-                candidates.Add((uid, marker, xform.Coordinates));
-        }
-
-        if (candidates.Count == 0)
-            return false;
-
-        var minimum = candidates.Min(candidate => candidate.Marker.AssignedCount);
-        var leastUsed = candidates.Where(candidate => candidate.Marker.AssignedCount == minimum).ToList();
-        var selected = _random.Pick(leastUsed);
-        args.SpawnResult = _stationSpawning.SpawnPlayerMob(
-            selected.Coordinates,
-            args.Job,
-            args.HumanoidCharacterProfile,
-            args.Station);
-
-        if (args.SpawnResult != null)
-            selected.Marker.AssignedCount++;
-        return args.SpawnResult != null;
-    }
-
-    private CMUGovforRankSpawnGroup ResolveGovforRankGroup(
-        PlayerSpawningEvent args,
-        JobPrototype? job,
-        string? jobId)
-    {
-        if (jobId != null && args.HumanoidCharacterProfile != null &&
-            _platoonSpawnRule.SelectedGovforPlatoon is { } platoon &&
-            args.HumanoidCharacterProfile.GetRankPreference(jobId, platoon.ID) is { } preferredRank &&
-            _prototype.TryIndex<RankPrototype>(preferredRank, out var preferred))
-        {
-            return IsOfficerOrWarrant(preferred)
-                ? CMUGovforRankSpawnGroup.Officer
-                : CMUGovforRankSpawnGroup.Enlisted;
-        }
-
-        if (job?.Chevrons != null)
-        {
-            foreach (var rankId in job.Chevrons.Keys)
-            {
-                if (!_prototype.TryIndex<RankPrototype>(rankId, out var rank))
-                    continue;
-
-                return IsOfficerOrWarrant(rank)
-                    ? CMUGovforRankSpawnGroup.Officer
-                    : CMUGovforRankSpawnGroup.Enlisted;
-            }
-        }
-
-        if (job?.Ranks != null)
-        {
-            foreach (var rankId in job.Ranks.Keys)
-            {
-                if (!_prototype.TryIndex<RankPrototype>(rankId, out var rank))
-                    continue;
-
-                return IsOfficerOrWarrant(rank)
-                    ? CMUGovforRankSpawnGroup.Officer
-                    : CMUGovforRankSpawnGroup.Enlisted;
-            }
-        }
-
-        return CMUGovforRankSpawnGroup.Enlisted;
-    }
-
-    private static bool IsOfficerOrWarrant(RankPrototype rank)
-    {
-        return rank.Paygrade?.StartsWith("O", StringComparison.OrdinalIgnoreCase) == true ||
-               rank.Paygrade?.StartsWith("W", StringComparison.OrdinalIgnoreCase) == true;
     }
 
     // cmu edit start: a spawn point can take jobs besides its own, like detectives at the deputy spawns

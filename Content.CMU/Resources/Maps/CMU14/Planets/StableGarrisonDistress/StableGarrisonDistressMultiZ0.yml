@@ -440,7 +440,7 @@ entities:
     - type: GridTree
     - type: OccluderTree
     - type: MapLight
-      ambientLightColor: '#000000'
+      ambientLightColor: '#02020B'
     - type: MapGrid
       chunks:
         0,0:
