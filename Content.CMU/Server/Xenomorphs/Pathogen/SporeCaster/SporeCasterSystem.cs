@@ -120,123 +120,123 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
         if (ent.Comp.StoredClouds == ent.Comp.MaxClouds - 1)
             ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;
   
-        Dirty(ent);  
-        SpawnAtPosition(ent.Comp.SporeCloudProto, Transform(ent.Owner).Coordinates);  
-    }  
+        Dirty(ent);
+        SpawnAtPosition(ent.Comp.SporeCloudProto, Transform(ent.Owner).Coordinates);
+    }
   
-    public override void Update(float frameTime)  
-    {  
-        var time = _timing.CurTime;  
-        var query = EntityQueryEnumerator<CMUPathogenSporecasterComponent>();  
+    public override void Update(float frameTime)
+    {
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<CMUPathogenSporecasterComponent>();
   
-        while (query.MoveNext(out var uid, out var caster))  
-        {  
-            // Grow stored clouds  
-            if (time >= caster.NextGrowAt && caster.StoredClouds < caster.MaxClouds)  
-            {  
-                caster.StoredClouds = Math.Min(caster.MaxClouds, caster.StoredClouds + 1);  
-                caster.NextGrowAt = time + caster.GrowInterval;  
-                Dirty(uid, caster);  
-            }  
+        while (query.MoveNext(out var uid, out var caster))
+        {
+            // Grow stored clouds
+            if (time >= caster.NextGrowAt && caster.StoredClouds < caster.MaxClouds)
+            {
+                caster.StoredClouds = Math.Min(caster.MaxClouds, caster.StoredClouds + 1);
+                caster.NextGrowAt = time + caster.GrowInterval;
+                Dirty(uid, caster);
+            }
+            
+            if (TryComp(uid, out GhostRoleMobSpawnerComponent? spawner))
+            {
+                for (var i = caster.LivePoppers.Count - 1; i >= 0; i--)
+                {
+                    var popper = caster.LivePoppers[i];
+                    if (TerminatingOrDeleted(popper) || _mobState.IsDead(popper))
+                        caster.LivePoppers.RemoveSwap(i);
+                }
   
-            if (TryComp(uid, out GhostRoleMobSpawnerComponent? spawner))  
-            {  
-                for (var i = caster.LivePoppers.Count - 1; i >= 0; i--)  
-                {  
-                    var popper = caster.LivePoppers[i];  
-                    if (TerminatingOrDeleted(popper) || _mobState.IsDead(popper))  
-                        caster.LivePoppers.RemoveSwap(i);  
-                }  
+                _ghostRole.SetCurrent((uid, spawner), caster.LivePoppers.Count);
+            }
+            
+            // Auto-release at targets
+            if (caster.StoredClouds <= 0)
+                continue;
+                
+            if (time < caster.NextAutoReleaseAt)
+                continue;
+                
+            _nearby.Clear();
+            _lookup.GetEntitiesInRange<MobStateComponent>(
+                Transform(uid).Coordinates,
+                caster.DetectionRange,
+                _nearby);
   
-                _ghostRole.SetCurrent((uid, spawner), caster.LivePoppers.Count);  
-            }  
+            foreach (var (target, _) in _nearby)
+            {
+                if (HasComp<XenoComponent>(target))
+                    continue;
+                if (HasComp<SynthComponent>(target))
+                    continue;
+                if (!HasComp<InfectableComponent>(target))
+                    continue;
+                if (HasComp<VictimInfectedComponent>(target))
+                    continue;
+                if (HasComp<CMUPathogenWalkerComponent>(target))
+                    continue;
+                if (_mobState.IsDead(target))
+                    continue;
+                if (IsProtected(target))
+                    continue;
   
-            // Auto-release at targets  
-            if (caster.StoredClouds <= 0)  
-                continue;  
+                caster.NextAutoReleaseAt = time + caster.AutoReleaseInterval;
+                Dirty(uid, caster);
+                ReleaseCloud((uid, caster));
+                break;
+            }
+        }
+    }
   
-            if (time < caster.NextAutoReleaseAt)  
-                continue;  
+    private bool IsProtected(EntityUid target)
+    {
+        if (HasOpenWound(target))
+            return false;
   
-            _nearby.Clear();  
-            _lookup.GetEntitiesInRange<MobStateComponent>(  
-                Transform(uid).Coordinates,  
-                caster.DetectionRange,  
-                _nearby);  
+        if (_gasMask.IsBreathingInternals(target))
+            return true;
   
-            foreach (var (target, _) in _nearby)  
-            {  
-                if (HasComp<XenoComponent>(target))  
-                    continue;  
-                if (HasComp<SynthComponent>(target))  
-                    continue;  
-                if (!HasComp<InfectableComponent>(target))  
-                    continue;  
-                if (HasComp<VictimInfectedComponent>(target))  
-                    continue;  
-                if (HasComp<CMUPathogenWalkerComponent>(target))  
-                    continue;  
-                if (_mobState.IsDead(target))  
-                    continue;  
-                if (IsProtected(target))  
-                    continue;  
+        MycotoxinProtectionComponent? single = null;
+        var count = 0;
   
-                caster.NextAutoReleaseAt = time + caster.AutoReleaseInterval;  
-                Dirty(uid, caster);  
-                ReleaseCloud((uid, caster));  
-                break;  
-            }  
-        }  
-    }  
+        foreach (var slot in new[] { "mask", "head" })
+        {
+            if (!_inventory.TryGetSlotEntity(target, slot, out var item))
+                continue;
   
-    private bool IsProtected(EntityUid target)  
-    {  
-        if (HasOpenWound(target))  
-            return false;  
+            if (!TryComp(item, out MycotoxinProtectionComponent? protection))
+                continue;
   
-        if (_gasMask.IsBreathingInternals(target))  
-            return true;  
+            if (protection.FullProtection)
+                return true;
   
-        MycotoxinProtectionComponent? single = null;  
-        var count = 0;  
+            count++;
+            single = protection;
+        }
   
-        foreach (var slot in new[] { "mask", "head" })  
-        {  
-            if (!_inventory.TryGetSlotEntity(target, slot, out var item))  
-                continue;  
+        if (count >= 2)
+            return true;
   
-            if (!TryComp(item, out MycotoxinProtectionComponent? protection))  
-                continue;  
+        if (count == 1 && single != null)
+            return _random.Prob(single.PartialBlockChance);
   
-            if (protection.FullProtection)  
-                return true;  
+        return false;
+    }
   
-            count++;  
-            single = protection;  
-        }  
+    private bool HasOpenWound(EntityUid target)
+    {
+        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+        {
+            if (_wounds.HasOpenWound(partUid))
+                return true;
+        }
   
-        if (count >= 2)  
-            return true;  
-  
-        if (count == 1 && single != null)  
-            return _random.Prob(single.PartialBlockChance);  
-  
-        return false;  
-    }  
-  
-    private bool HasOpenWound(EntityUid target)  
-    {  
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))  
-        {  
-            if (_wounds.HasOpenWound(partUid))  
-                return true;  
-        }  
-  
-        return false;  
-    }  
-  
-    private void OnExamine(Entity<CMUPathogenSporecasterComponent> ent, ref ExaminedEvent args)  
-    {  
+        return false;
+    }
+    
+    private void OnExamine(Entity<CMUPathogenSporecasterComponent> ent, ref ExaminedEvent args)
+    {
         if (!HasComp<XenoComponent>(args.Examiner) && !_hive.FromSameHive(ent.Owner, args.Examiner))
             return;
   
