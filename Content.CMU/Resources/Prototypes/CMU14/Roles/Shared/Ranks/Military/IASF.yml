@@ -1,140 +1,116 @@
 # Enlisted
 - type: rank
   id: IASF_SergeantMajor
-  name: Sergeant Major
-  prefix: SgtMaj.
+  name: Socho
+  prefix: Soch.
   paygrade: E7
 
 - type: rank
   id: IASF_ChiefSergeant
-  name: Chief Sergeant
-  prefix: ChSgt.
+  name: Itto-Gunso
+  prefix: ItGuns.
   paygrade: E6
 
 - type: rank
   id: IASF_FirstSergeant
-  name: First Sergeant
-  prefix: 1Sgt.
+  name: Gunso
+  prefix: Guns.
   paygrade: E5
 
 - type: rank
   id: IASF_ChiefCorporal
-  name: Chief Corporal
-  prefix: CCpl.
-  paygrade: E4
-
-- type: rank
-  id: IASF_SecondSergeant
-  name: Second Sergeant
-  prefix: 2Sgt.
+  name: Gocho
+  prefix: Goch.
   paygrade: E4
 
 - type: rank
   id: IASF_CorporalFirstClass
-  name: Corporal First Class
-  prefix: CplFC.
-  paygrade: E3
-
-- type: rank
-  id: IASF_CorporalSecondClass
-  name: Corporal Second Class
-  prefix: CplSC.
+  name: Gocho Kinmu Jotohei
+  prefix: GoKiJo.
   paygrade: E3
 
 - type: rank
   id: IASF_ChiefPrivate
-  name: Chief Private
-  prefix: ChP.
+  name: Jotohei
+  prefix: Joto.
   paygrade: E2
 
 - type: rank
-  id: IASF_PrivateFirstClass
-  name: Private First Class
-  prefix: PFC.
-  paygrade: E1
-
-- type: rank
   id: IASF_PrivateSecondClass
-  name: Private Second Class
-  prefix: PSC.
+  name: Nitohei
+  prefix: Nito.
   paygrade: E1
 
 # Warrant Officers
 - type: rank
   id: IASF_FirstWarrantOfficer
-  name: First Warrant Officer
-  prefix: 2WO.
+  name: Junsikan
+  prefix: Jun.
   paygrade: W2
 
 - type: rank
   id: IASF_SecondWarrantOfficer
-  name: Second Warrant Officer
-  prefix: 2WO.
+  name: Kafukukan
+  prefix: Kaf.
   paygrade: W1
 
 # Officers
 - type: rank
   id: IASF_GeneralOfTheArmy
-  name: General of the Army
-  prefix: Gen.
+  name: Daigensui-Rikugun_Taiso
+  prefix: DRT.
   paygrade: O10
 
 - type: rank
   id: IASF_General
-  name: General
-  prefix: Gen.
+  name: Rikugun-Taiso
+  prefix: Taiso.
   paygrade: 9
 
 - type: rank
   id: IASF_LieutenantGeneral
-  name: Lieutenant-General
-  prefix: Lt Gen.
+  name: Rikugun-Chujo
+  prefix: Chu.
   paygrade: O8
 
 - type: rank
   id: IASF_MajorGeneral
-  name: Major-General
-  prefix: GenMaj.
+  name: Rikugun-Shosho
+  prefix: Shos.
   paygrade: O7
 
 - type: rank
-  id: IASF_BrigadierGeneral
-  name: Brigadier General
-  prefix: Brig-Gen.
+  id: IASF_Colonel
+  name: Rikugun-Taisa
+  prefix: Tai.
   paygrade: O6
 
 - type: rank
-  id: IASF_Colonel
-  name: Colonel
-  prefix: Col.
+  id: IASF_LieutenantColonel
+  name: Rikugun-Chusa
+  prefix: Chus.
   paygrade: O5
 
 - type: rank
-  id: IASF_LieutenantColonel
-  name: Lieutenant Colonel
-  prefix: Lt Col.
+  id: IASF_Major
+  name: Rikugun-Shosa
+  prefix: Shos.
   paygrade: O4
 
 - type: rank
-  id: IASF_Major
-  name: Major
-  prefix: Maj.
+  id: IASF_Captain
+  name: Rikugun-tai-i
+  prefix: RikTai.
   paygrade: O3
 
 - type: rank
-  id: IASF_Captain
-  name: Captain
-  prefix: Capt.
-  paygrade: O2
-
-- type: rank
   id: IASF_FirstLieutenant
-  name: First Lieutenant
-  prefix: 1Lt.
+  name: Rikugun-Chui
+  prefix: RikChu.
   paygrade: O1
 
 - type: rank
   id: IASF_SecondLieutenant
-  name: Second Lieutenant
-  prefix: 2Lt.
-  paygrade: O1
+  name: Rikugun-shoi
+  prefix: RikSho.
+  paygrade: O2
