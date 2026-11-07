@@ -168,6 +168,30 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         new("Orbital refinery explosion. Engineering crews are inbound with crush trauma, eschars, and internal bleeding.", HospitalPatientClothingTheme.Engineering),
     };
 
+    private static readonly HospitalIncidentTemplate[] ZombieSeverityOneIncidents =
+    {
+        new("Isolated infected assault. Survivors are inbound with bites, scratches, and minor impact trauma.", HospitalPatientClothingTheme.Civilian),
+        new("A small infected pack breached a neighborhood shelter. Evacuees need bite-wound treatment and trauma screening.", HospitalPatientClothingTheme.Civilian),
+        new("Perimeter patrol encountered scattered infected. Officers have superficial mauling injuries and contaminated wounds.", HospitalPatientClothingTheme.Nspa),
+        new("Quarantine workers contained a single infected casualty. The response team is inbound with minor bite and claw injuries.", HospitalPatientClothingTheme.Biohazard),
+    };
+
+    private static readonly HospitalIncidentTemplate[] ZombieSeverityTwoIncidents =
+    {
+        new("An infected horde overran a security checkpoint. Survivors have deep bites, fractures, and internal bleeding.", HospitalPatientClothingTheme.Nspa),
+        new("Colonial Marine rescue personnel were mauled during a civilian extraction. Urgent surgery is expected.", HospitalPatientClothingTheme.Marines),
+        new("A quarantine transport suffered an infected outbreak. Biohazard personnel have extensive bite and crush trauma.", HospitalPatientClothingTheme.Biohazard),
+        new("CMB marshals engaged multiple infected inside a crowded habitation block. Severe lacerations and organ trauma are reported.", HospitalPatientClothingTheme.Cmb),
+    };
+
+    private static readonly HospitalIncidentTemplate[] ZombieSeverityThreeIncidents =
+    {
+        new("Mass infected attack. Critically mauled survivors are inbound with catastrophic blood loss and organ damage.", HospitalPatientClothingTheme.Civilian),
+        new("A defensive line collapsed under a major infected horde. Marine casualties require complete trauma reconstruction.", HospitalPatientClothingTheme.Marines),
+        new("An emergency ward was overrun by infected patients. Medical personnel have devastating bite, crush, and internal injuries.", HospitalPatientClothingTheme.Medical),
+        new("A CBRN containment team was surrounded during an infected outbreak. Multiple critical contaminated wounds are reported.", HospitalPatientClothingTheme.Biohazard),
+    };
+
     private static readonly PatientClothingProfile WorksiteClothing = new(
         new EntProtoId[] { "RMCJumpsuitBlueWorkwear", "RMCJumpsuitKhakiWorkwear", "CMJumpsuitTShirtGray", "CMJumpsuitColonist" },
         new EntProtoId[] { "CMBootsBlack", "CMBootsBrown", "RMCBootsCorporate" },
@@ -662,7 +686,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         comp.Casualties = _random.Next(comp.MinCasualties, comp.MaxCasualties + 1);
         comp.Severity = _random.Next(1, 4);
         comp.Reward = comp.Casualties * (comp.BaseRewardPerPatient + comp.SeverityRewardBonus * comp.Severity);
-        var incident = PickIncident(comp.Severity);
+        var incident = PickIncident(comp.Severity, comp.IncidentType);
         comp.IncidentReport = $"{incident.Report} One casualty is flagged VIP; unresolved VIP injuries add a ${comp.VipMissedInjuryPenalty} audit penalty.";
         comp.PatientClothingTheme = incident.ClothingTheme;
         comp.LastPayout = 0;
@@ -691,8 +715,18 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         comp.Patients.Clear();
     }
 
-    private HospitalIncidentTemplate PickIncident(int severity)
+    private HospitalIncidentTemplate PickIncident(int severity, HospitalEmergencyIncidentType incidentType)
     {
+        if (incidentType == HospitalEmergencyIncidentType.Zombie)
+        {
+            return severity switch
+            {
+                1 => _random.Pick(ZombieSeverityOneIncidents),
+                2 => _random.Pick(ZombieSeverityTwoIncidents),
+                _ => _random.Pick(ZombieSeverityThreeIncidents),
+            };
+        }
+
         return severity switch
         {
             1 => _random.Pick(SeverityOneIncidents),
@@ -926,7 +960,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             OutfitPatient(ent, patient);
             if (!IsCurrentHospitalComputer(ent) || TransportUnavailable(patient))
                 return false;
-            ApplyPatientInjuries(patient, ent.Comp.Severity);
+            ApplyPatientInjuries(patient, ent.Comp.Severity, ent.Comp.IncidentType);
             if (!IsCurrentHospitalComputer(ent) || TransportUnavailable(patient) ||
                 !TryComp<HospitalPatientComponent>(patient, out var injured) || !ReferenceEquals(injured, patientComp))
                 return false;
@@ -1052,7 +1086,10 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             QueueDel(item);
     }
 
-    private void ApplyPatientInjuries(EntityUid patient, int severity)
+    private void ApplyPatientInjuries(
+        EntityUid patient,
+        int severity,
+        HospitalEmergencyIncidentType incidentType)
     {
         var damage = new DamageSpecifier();
         var trauma = severity switch
@@ -1062,12 +1099,22 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             _ => _random.NextFloat(130f, 185f),
         };
 
-        damage.DamageDict[Blunt] = trauma * 0.52f;
-        damage.DamageDict[Slash] = trauma * 0.12f;
-        damage.DamageDict[Piercing] = trauma * 0.16f;
+        var zombieInjuries = incidentType == HospitalEmergencyIncidentType.Zombie;
+        if (zombieInjuries)
+        {
+            damage.DamageDict[Blunt] = trauma * 0.1f;
+            damage.DamageDict[Slash] = trauma * 0.62f;
+            damage.DamageDict[Piercing] = trauma * 0.28f;
+        }
+        else
+        {
+            damage.DamageDict[Blunt] = trauma * 0.52f;
+            damage.DamageDict[Slash] = trauma * 0.12f;
+            damage.DamageDict[Piercing] = trauma * 0.16f;
 
-        if (severity >= 2)
-            damage.DamageDict[Heat] = trauma * 0.2f;
+            if (severity >= 2)
+                damage.DamageDict[Heat] = trauma * 0.2f;
+        }
 
         _damage.TryChangeDamage(patient, damage, true);
 
@@ -1080,40 +1127,58 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         if (_bodyPartBuffer.Count == 0)
             return;
 
-        ApplyPatientFractures(_bodyPartBuffer, severity);
-        ApplyPatientInternalBleeds(_bodyPartBuffer, severity);
-        ApplyPatientEschars(_bodyPartBuffer, severity);
+        ApplyPatientFractures(_bodyPartBuffer, severity, zombieInjuries);
+        ApplyPatientInternalBleeds(_bodyPartBuffer, severity, zombieInjuries);
+        if (zombieInjuries)
+            ApplyZombieWoundContamination(_bodyPartBuffer, severity);
+        else
+            ApplyPatientEschars(_bodyPartBuffer, severity);
         ApplyPatientOrganInjuries(patient, severity);
     }
 
-    private void ApplyPatientFractures(IReadOnlyList<EntityUid> bodyParts, int severity)
+    private void ApplyPatientFractures(IReadOnlyList<EntityUid> bodyParts, int severity, bool zombieInjuries)
     {
         _patientBuffer.Clear();
         _patientBuffer.AddRange(bodyParts);
 
-        var fractureCount = severity switch
-        {
-            1 => PickPatientInjuryCount(_patientBuffer.Count, 2, 3),
-            2 => PickPatientInjuryCount(_patientBuffer.Count, 3, 4),
-            _ => PickPatientInjuryCount(_patientBuffer.Count, 4, 6),
-        };
+        var fractureCount = zombieInjuries
+            ? severity switch
+            {
+                1 => PickPatientInjuryCount(_patientBuffer.Count, 0, 1),
+                2 => PickPatientInjuryCount(_patientBuffer.Count, 1, 3),
+                _ => PickPatientInjuryCount(_patientBuffer.Count, 3, 5),
+            }
+            : severity switch
+            {
+                1 => PickPatientInjuryCount(_patientBuffer.Count, 2, 3),
+                2 => PickPatientInjuryCount(_patientBuffer.Count, 3, 4),
+                _ => PickPatientInjuryCount(_patientBuffer.Count, 4, 6),
+            };
 
         for (var i = 0; i < fractureCount; i++)
         {
             var part = _random.PickAndTake(_patientBuffer);
-            var fractureSeverity = severity switch
-            {
-                1 => FractureSeverity.Compound,
-                2 => _random.Prob(0.7f) ? FractureSeverity.Compound : FractureSeverity.Shattered,
-                _ => _random.Prob(0.85f) ? FractureSeverity.Shattered : FractureSeverity.Compound,
-            };
+            var fractureSeverity = zombieInjuries
+                ? severity switch
+                {
+                    1 => FractureSeverity.Simple,
+                    2 => _random.Prob(0.7f) ? FractureSeverity.Compound : FractureSeverity.Simple,
+                    _ => _random.Prob(0.7f) ? FractureSeverity.Shattered : FractureSeverity.Compound,
+                }
+                : severity switch
+                {
+                    1 => FractureSeverity.Compound,
+                    2 => _random.Prob(0.7f) ? FractureSeverity.Compound : FractureSeverity.Shattered,
+                    _ => _random.Prob(0.85f) ? FractureSeverity.Shattered : FractureSeverity.Compound,
+                };
 
             _bone.SeedFracture(part, fractureSeverity);
-            _surgicalTraits.RemoveTrait(part, CMUSurgicalTrait.ContaminatedWound);
+            if (!zombieInjuries)
+                _surgicalTraits.RemoveTrait(part, CMUSurgicalTrait.ContaminatedWound);
         }
     }
 
-    private void ApplyPatientInternalBleeds(IReadOnlyList<EntityUid> bodyParts, int severity)
+    private void ApplyPatientInternalBleeds(IReadOnlyList<EntityUid> bodyParts, int severity, bool zombieInjuries)
     {
         _patientBuffer.Clear();
         _patientBuffer.AddRange(bodyParts);
@@ -1135,7 +1200,28 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
                 _ => _random.NextFloat(0.85f, 1.25f),
             };
 
-            _wounds.SeedInternalBleed(part, "hospital shuttle internal trauma", rate);
+            var source = zombieInjuries
+                ? "infected bite and mauling trauma"
+                : "hospital shuttle internal trauma";
+            _wounds.SeedInternalBleed(part, source, rate);
+        }
+    }
+
+    private void ApplyZombieWoundContamination(IReadOnlyList<EntityUid> bodyParts, int severity)
+    {
+        _patientBuffer.Clear();
+        _patientBuffer.AddRange(bodyParts);
+        var count = severity switch
+        {
+            1 => PickPatientInjuryCount(_patientBuffer.Count, 1, 2),
+            2 => PickPatientInjuryCount(_patientBuffer.Count, 2, 4),
+            _ => PickPatientInjuryCount(_patientBuffer.Count, 4, 6),
+        };
+
+        for (var i = 0; i < count; i++)
+        {
+            var part = _random.PickAndTake(_patientBuffer);
+            _surgicalTraits.TryEnsureTrait(part, CMUSurgicalTrait.ContaminatedWound);
         }
     }
 
