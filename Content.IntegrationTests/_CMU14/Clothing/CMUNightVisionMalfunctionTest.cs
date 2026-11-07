@@ -4,6 +4,7 @@ using Content.Shared.CMU14.Clothing.NightVision;
 using Content.Shared.Inventory;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Clothing;
@@ -72,6 +73,16 @@ public sealed class CMUNightVisionMalfunctionTest : InteractionTest
         {
             var comp = SEntMan.GetComponent<CMUNightVisionMalfunctionComponent>(goggles);
             Assert.That(SEntMan.GetComponent<NightVisionItemComponent>(goggles).User, Is.EqualTo(wearer));
+            Assert.That(SEntMan.GetComponent<NightVisionComponent>(wearer).State, Is.EqualTo(NightVisionState.Half),
+                "The visor only gives half-strength night vision.");
+
+            var fullModeVerb = Loc.GetString("rmc-night-vision-mode-verb",
+                ("mode", Loc.GetString("rmc-ui-xeno-night-vision-default-full")));
+            var verbs = SEntMan.System<SharedVerbSystem>()
+                .GetLocalVerbs(goggles, wearer, typeof(AlternativeVerb), force: true);
+            Assert.That(verbs.Any(verb => verb.Text == fullModeVerb), Is.False,
+                "The wearer can't switch the visor to full night vision.");
+
             Assert.That(comp.Glow, Is.Not.Null, "The wearer glows while the goggles work.");
             Assert.That(SEntMan.GetComponent<TransformComponent>(comp.Glow!.Value).ParentUid, Is.EqualTo(wearer));
 

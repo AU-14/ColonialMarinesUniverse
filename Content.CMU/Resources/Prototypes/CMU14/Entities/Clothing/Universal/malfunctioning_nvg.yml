@@ -14,6 +14,8 @@
     enableOnEquip: false
     slotFlags: HEAD
     green: true
+    defaultState: Half # cheap optics: half-strength night vision only
+    canChangeMode: false
   - type: CMUNightVisionMalfunction
     checkInterval: 60 # seconds between cut-out rolls while worn and switched on
     malfunctionChance: 0.1 # 10% per roll
