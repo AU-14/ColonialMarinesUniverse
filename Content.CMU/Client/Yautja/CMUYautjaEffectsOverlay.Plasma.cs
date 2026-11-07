@@ -52,7 +52,7 @@ public partial class CMUYautjaEffectsOverlay
             }
             else if (bolt.Mode == CMUYautjaPlasmaMode.Eradicator)
             {
-                // A broad, unstable plasma mass trails two smaller tongues of red-hot plasma.
+                // A broad, unstable plasma mass trails two smaller tongues of plasma.
                 for (var side = -1; side <= 1; side += 2)
                     PlasmaLobe(h, at - direction * (Math.Min(9, trail) / 32) +
                         normal * (side * (3 + MathF.Sin(phase) * .5f) / 32), direction,
