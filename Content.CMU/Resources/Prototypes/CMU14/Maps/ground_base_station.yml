@@ -1,0 +1,10 @@
+- type: entity
+  id: CMUStandardGroundBase
+  parent:
+  - BaseStation
+  - BaseStationNews
+  - BaseStationJobsSpawning
+  - BaseStationRecords
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform

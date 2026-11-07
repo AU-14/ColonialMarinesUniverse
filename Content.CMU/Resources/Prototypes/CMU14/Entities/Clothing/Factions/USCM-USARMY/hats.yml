@@ -182,3 +182,39 @@
       Snow: CMU14/Clothing/JungleHats/booniehat.rsi
       Classic: CMU14/Clothing/JungleHats/booniehat.rsi
       Urban: CMU14/Clothing/JungleHats/booniehat.rsi
+
+- type: entity
+  parent: RMCBoonie
+  id: AU14SnowBoonieHat
+  name: Snow Boonie Hat
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/boonie/snow.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/boonie/snow.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: RMCHeadCapFlippable
+  id: AU14SnowPatrolCap
+  name: Snow Patrol Cap
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/cap/snow.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/cap/snow.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
+
+- type: entity
+  parent: CMHeadFlapCap
+  id: AU14SnowFlapCap
+  name: Snow Patrol Flap-Cap
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/flapcap/snow.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/flapcap/snow.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
