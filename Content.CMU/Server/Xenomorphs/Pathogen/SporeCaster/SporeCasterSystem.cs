@@ -49,7 +49,6 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, DestructionEventArgs>(OnDestruction);
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, InteractHandEvent>(OnInteract);
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, ExaminedEvent>(OnExamine);
-        SubscribeLocalEvent<XenoComponent, GhostRoleSpawnerUsedEvent>(OnPopperSpawnerUsed);
         SubscribeLocalEvent<CMUPathogenPopperComponent, GhostRoleSpawnerUsedEvent>(OnPopperSpawnerUsed);
     }
   
@@ -58,17 +57,17 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
         ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;
         Dirty(ent);
     }
-  
+    
     private void OnDestruction(Entity<CMUPathogenSporecasterComponent> ent, ref DestructionEventArgs args)
     {
         if (ent.Comp.StoredClouds <= 0)
             return;
-  
+            
         _popup.PopupEntity(
             Loc.GetString("cmu-sporecaster-destruction-release"),
             ent.Owner,
             PopupType.LargeCaution);
-  
+            
         var coords = Transform(ent.Owner).Coordinates;
         for (var i = 0; i < ent.Comp.StoredClouds; i++)
         {
@@ -93,33 +92,33 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
     }
   
     // Allow xenos from same hive to manually trigger a cloud  
-    private void OnInteract(Entity<CMUPathogenSporecasterComponent> ent, ref InteractHandEvent args)  
-    {  
-        if (!HasComp<XenoComponent>(args.User))  
-            return;  
+    private void OnInteract(Entity<CMUPathogenSporecasterComponent> ent, ref InteractHandEvent args)
+    {
+        if (!HasComp<XenoComponent>(args.User))
+            return;
   
-        if (!_hive.FromSameHive(ent.Owner, args.User))  
-            return;  
+        if (!_hive.FromSameHive(ent.Owner, args.User))
+            return;
+            
+        if (ent.Comp.StoredClouds <= 0)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("cmu-sporecaster-empty"),
+                ent.Owner, args.User, PopupType.SmallCaution);
+            return;
+        }
   
-        if (ent.Comp.StoredClouds <= 0)  
-        {  
-            _popup.PopupEntity(  
-                Loc.GetString("cmu-sporecaster-empty"),  
-                ent.Owner, args.User, PopupType.SmallCaution);  
-            return;  
-        }  
+        ReleaseCloud(ent);
+        args.Handled = true;
+    }
+    
+    private void ReleaseCloud(Entity<CMUPathogenSporecasterComponent> ent)
+    {
+        ent.Comp.StoredClouds = Math.Max(0, ent.Comp.StoredClouds - 1);
   
-        ReleaseCloud(ent);  
-        args.Handled = true;  
-    }  
-  
-    private void ReleaseCloud(Entity<CMUPathogenSporecasterComponent> ent)  
-    {  
-        ent.Comp.StoredClouds = Math.Max(0, ent.Comp.StoredClouds - 1);  
-  
-        // Reset grow timer if was full  
-        if (ent.Comp.StoredClouds == ent.Comp.MaxClouds - 1)  
-            ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;  
+        // Reset grow timer if was full
+        if (ent.Comp.StoredClouds == ent.Comp.MaxClouds - 1)
+            ent.Comp.NextGrowAt = _timing.CurTime + ent.Comp.GrowInterval;
   
         Dirty(ent);  
         SpawnAtPosition(ent.Comp.SporeCloudProto, Transform(ent.Owner).Coordinates);  
@@ -238,15 +237,15 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
   
     private void OnExamine(Entity<CMUPathogenSporecasterComponent> ent, ref ExaminedEvent args)  
     {  
-        if (!HasComp<XenoComponent>(args.Examiner) && !_hive.FromSameHive(ent.Owner, args.Examiner))  
-            return;  
+        if (!HasComp<XenoComponent>(args.Examiner) && !_hive.FromSameHive(ent.Owner, args.Examiner))
+            return;
   
-        var remaining = ent.Comp.NextGrowAt - _timing.CurTime;  
-        var seconds = (int) Math.Max(0, remaining.TotalSeconds);  
+        var remaining = ent.Comp.NextGrowAt - _timing.CurTime;
+        var seconds = (int) Math.Max(0, remaining.TotalSeconds);
   
-        args.PushMarkup(Loc.GetString("cmu-sporecaster-examine",  
-            ("current", ent.Comp.StoredClouds),  
-            ("max", ent.Comp.MaxClouds),  
-            ("seconds", seconds)));  
-    }  
+        args.PushMarkup(Loc.GetString("cmu-sporecaster-examine",
+            ("current", ent.Comp.StoredClouds),
+            ("max", ent.Comp.MaxClouds),
+            ("seconds", seconds)));
+    }
 }
