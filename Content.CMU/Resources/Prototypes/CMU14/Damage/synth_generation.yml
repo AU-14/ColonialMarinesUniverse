@@ -1,0 +1,10 @@
+- type: damageModifierSet
+  id: CMUSynthAdvanced
+  coefficients:
+    Blunt: 0.5
+    Slash: 0.5
+    Piercing: 0.5
+    Heat: 0.9
+    Shock: 0.9
+    Cold: 0.9
+    Caustic: 1.5
