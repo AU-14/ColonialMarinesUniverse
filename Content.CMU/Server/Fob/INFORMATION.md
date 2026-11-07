@@ -98,7 +98,7 @@ replacement announcements and normal missing-tower rejection. The test harness s
 missing `cmu_antag_pity` table; no FOB runtime errors were reported.
 
 ```sh
-dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --filter "FullyQualifiedName~InformationRelayOffersAnnounceLocationsOnceWithoutBypassingComms|FullyQualifiedName~InformationWarningsRespectPauseRearmAndCommsWithoutRepeating|FullyQualifiedName~InformationRelayMarkersStayPrivateAndBothDisappearOnResolution|FullyQualifiedName~ControlUiEnforcesTrainingTimersAndRechecksFactionAndReach"
+dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --filter "FullyQualifiedName~InformationRelayOffersAnnounceLocationsOnceWithoutBypassingComms|FullyQualifiedName~InformationWarningsRespectPauseRearmAndCommsWithoutRepeating|FullyQualifiedName~InformationRelayMarkersStayPrivateAndBothDisappearOnResolution|FullyQualifiedName~ControlUiAllowsUntrainedMarinesAndRechecksFactionAndReach"
 ```
 
 The unavailable-relay state, retry recovery, corrected repair/tool guidance and new supply/deployment

@@ -23,6 +23,7 @@
   - type: Injurable
     damageContainer: Inorganic
   - type: CMUFobRepairable
+  - type: CMUFobInstructions
 
 - type: entity
   parent: CMUFobDevice

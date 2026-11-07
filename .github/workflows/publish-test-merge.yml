@@ -218,7 +218,7 @@ jobs:
           du -sh Content.CMU/Resources/Audio/CMU14/Private/
           rm -rf __audio-overlay
 
-      - uses: actions/setup-dotnet@v6.0.0
+      - uses: actions/setup-dotnet@v6.1.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
