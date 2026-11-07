@@ -1,0 +1,19 @@
+# ice brine: salt melts ice and the melt pulls heat out of the whole solution.
+# a cheap way to get a beaker under 270 K for the cold-gated reactions without the chemistry chiller.
+# each unit of ice removes 150 thermal energy (every reagent has a specific heat of 1, so 15u of ice in a
+# 60u beaker drops it by roughly 37 K). it never goes below 255 K, the brine's freezing point.
+- type: reaction
+  id: CMUIceBrine
+  conserveEnergy: false
+  reactants:
+    Ice:
+      amount: 1
+    TableSalt:
+      amount: 1
+      catalyst: true
+  products:
+    Water: 1
+  effects:
+  - !type:AdjustSolutionThermalEnergy
+    delta: -150
+    minTemp: 255

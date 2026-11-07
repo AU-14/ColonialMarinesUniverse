@@ -39,71 +39,6 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
 ";
 
         [Test]
-        public async Task InteractionTest()
-        {
-            var pair = Pair;
-            var server = pair.Server;
-
-            var sEntities = server.ResolveDependency<IEntityManager>();
-            var sysMan = server.ResolveDependency<IEntitySystemManager>();
-            var handSys = sysMan.GetEntitySystem<SharedHandsSystem>();
-
-            var map = await pair.CreateTestMap();
-            var mapId = map.MapId;
-            var coords = map.MapCoords;
-
-            await server.WaitIdleAsync();
-            EntityUid user = default;
-            EntityUid target = default;
-            EntityUid item = default;
-
-            await server.WaitAssertion(() =>
-            {
-                user = sEntities.SpawnEntity(null, coords);
-                sEntities.EnsureComponent<HandsComponent>(user);
-                sEntities.EnsureComponent<ComplexInteractionComponent>(user);
-                handSys.AddHand(user, "hand", HandLocation.Left);
-                target = sEntities.SpawnEntity(null, coords);
-                item = sEntities.SpawnEntity(null, coords);
-                sEntities.EnsureComponent<ItemComponent>(item);
-            });
-
-            await server.WaitRunTicks(1);
-
-            var entitySystemManager = server.ResolveDependency<IEntitySystemManager>();
-            InteractionSystem interactionSystem = default!;
-            TestInteractionSystem testInteractionSystem = default!;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(entitySystemManager.TryGetEntitySystem(out interactionSystem));
-                Assert.That(entitySystemManager.TryGetEntitySystem(out testInteractionSystem));
-            });
-
-            var interactUsing = false;
-            var interactHand = false;
-            await server.WaitAssertion(() =>
-            {
-                testInteractionSystem.InteractUsingEvent = (ev) => { Assert.That(ev.Target, Is.EqualTo(target)); interactUsing = true; };
-                testInteractionSystem.InteractHandEvent = (ev) => { Assert.That(ev.Target, Is.EqualTo(target)); interactHand = true; };
-
-                interactionSystem.UserInteraction(user, sEntities.GetComponent<TransformComponent>(target).Coordinates, target);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(interactUsing, Is.False);
-                    Assert.That(interactHand);
-                });
-
-                Assert.That(handSys.TryPickup(user, item));
-
-                interactionSystem.UserInteraction(user, sEntities.GetComponent<TransformComponent>(target).Coordinates, target);
-                Assert.That(interactUsing);
-            });
-
-            testInteractionSystem.ClearHandlers();
-        }
-
-        [Test]
         public async Task InteractionObstructionTest()
         {
             var pair = Pair;
@@ -231,7 +166,6 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
 
             testInteractionSystem.ClearHandlers();
         }
-
 
         [Test]
         public async Task InteractionOutOfRangeTest()

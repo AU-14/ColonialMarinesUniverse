@@ -65,7 +65,8 @@ public sealed partial class CMUFobDefenseTest
             Assert.That(Ammo, Is.EqualTo(7));
             var extra = SEntMan.SpawnAtPosition("CMUFobPlatformModule", _gunCoords);
             Transform.SetCoordinates(SPlayer, _gunCoords.Offset(new Vector2(-1, 0)));
-            Assert.That(Defense.TryDeployPlatform((extra, SEntMan.GetComponent<CMUFobGunMountComponent>(extra)), SPlayer), Is.False);
+            Assert.That(Defense.TryDeployPlatform((extra, SEntMan.GetComponent<CMUFobGunMountComponent>(extra)), SPlayer), Is.True,
+                "Relocating the first platform must leave the third allocation available.");
         });
     }
 
@@ -75,7 +76,7 @@ public sealed partial class CMUFobDefenseTest
         await SetupGuns();
         NetCoordinates coords = default;
         await Server.WaitPost(() => coords = SEntMan.GetNetCoordinates(_gunCoords.Offset(new Vector2(0, 1))));
-        await SetTile(Plating, coords);
+        await SetTile("CMPlanetBeachGrassNorth", coords);
         var wrench = SEntMan.GetEntity(await PlaceInHands("CMWrench"));
         Entity<CMUFobEquipmentComponent> section = default;
         Entity<CMUFobEquipmentComponent> bundle = default;
@@ -98,8 +99,10 @@ public sealed partial class CMUFobDefenseTest
             Assert.That(Equipment.TryStartWork(bundle, SPlayer, wrench), Is.False);
             Assert.That(stack.GetCount(uid), Is.EqualTo(initial));
             site.UtilityExclusions.Clear();
+            var bystander = SEntMan.SpawnAtPosition("CMMobHuman", at);
             Assert.That(Equipment.TryStartWork(bundle, SPlayer, wrench), Is.True);
             Assert.That(stack.GetCount(uid), Is.EqualTo(initial - 1));
+            Transform.SetCoordinates(bystander, at.Offset(new Vector2(0, 4)));
             var query = SEntMan.AllEntityQueryEnumerator<CMUFobEquipmentComponent>();
             while (query.MoveNext(out var fenceUid, out var equipment))
                 if (equipment.Kind == CMUFobEquipmentKind.Fence && equipment.Deployed) section = (fenceUid, equipment);

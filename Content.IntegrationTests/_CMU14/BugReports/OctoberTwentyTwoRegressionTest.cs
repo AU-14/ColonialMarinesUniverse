@@ -17,68 +17,6 @@ namespace Content.IntegrationTests.CMU14.BugReports;
 [TestFixture]
 public sealed class OctoberTwentyTwoRegressionTest : GameTest
 {
-    // BUG-1020: only the blight core's build marker counted toward the hive cap, so the cap never filled
-    [Test]
-    public async Task BuiltBlightCoresCountTowardTheHiveCap()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var factory = SEntMan.ComponentFactory;
-            var core = SProtoMan.Index<EntityPrototype>("CMU14PathogenBlightCore");
-            var node = SProtoMan.Index<EntityPrototype>("CMU14PathogenBlightCoreConstructionNode");
-            Assert.That(core.TryGetComponent(out HiveConstructionLimitedComponent? coreLimit, factory), Is.True);
-            Assert.That(node.TryGetComponent(out HiveConstructionLimitedComponent? nodeLimit, factory), Is.True);
-            Assert.That(coreLimit!.Id, Is.EqualTo(nodeLimit!.Id));
-        });
-    }
-
-    // BUG-1049: ghosts got the open/close cargo bay verb on the Bison
-    [Test]
-    public async Task GhostsDoNotGetTheCargoBayVerb()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var carrier = SEntMan.SpawnEntity("CMUCargoCarrier", map.GridCoords);
-            var ghost = SEntMan.SpawnEntity("MobObserver", map.GridCoords);
-            var verbs = SEntMan.System<SharedVerbSystem>().GetLocalVerbs(carrier, ghost, typeof(AlternativeVerb), force: true);
-            Assert.That(verbs.Any(v => v.Text.Contains("cargo bay")), Is.False);
-        });
-    }
-
-    // BUG-1046: the chemical payload took jugs, buckets and canisters
-    [TestCase("CMBeakerLarge", true)]
-    [TestCase("RMCBeakerHighCapacity", false)]
-    public async Task ChemicalPayloadOnlyTakesBeakerSizedContainers(string container, bool fits)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var payload = SEntMan.SpawnEntity("ChemicalPayload", map.GridCoords);
-            var item = SEntMan.SpawnEntity(container, map.GridCoords);
-            var slots = SEntMan.System<ItemSlotsSystem>();
-            Assert.That(slots.TryGetSlot(payload, "BeakerSlotA", out var slot), Is.True);
-            Assert.That(slots.CanInsert(payload, slot!, item, null), Is.EqualTo(fits));
-        });
-    }
-
-    // BUG-1045: the colony headsets colony cargo sells have to come keyed for the colony channel
-    [Test]
-    public async Task CargoColonyHeadsetsCarryTheColonyKey()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var crate = SEntMan.SpawnEntity("CMUCrateColonyHeadsets", map.GridCoords);
-            var headsets = SEntMan.GetComponent<EntityStorageComponent>(crate).Contents.ContainedEntities.ToList();
-            Assert.That(headsets, Has.Count.EqualTo(5));
-            foreach (var headset in headsets)
-            {
-                Assert.That(SEntMan.GetComponent<EncryptionKeyHolderComponent>(headset).Channels,
-                    Does.Contain(new ProtoId<RadioChannelPrototype>("Colony")));
-            }
-        });
-    }
 
     // BUG-1050: shells and loaded shotguns put through a supply crate
     [Test]

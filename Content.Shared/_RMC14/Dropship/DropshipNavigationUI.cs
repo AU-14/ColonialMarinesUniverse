@@ -6,7 +6,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship;
 
 [Serializable, NetSerializable]
-public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool canTacticalLand, bool launchAlarmStatus, bool canWithdrawReturn = false, bool tacticalHoverActive = false, bool hasFirearm = false, bool firearmArmed = false, bool hasMasterAlarm = false, bool masterAlarmSilenced = false) : BoundUserInterfaceState // CMU14: firearm toggle + master alarm params
+public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, List<Destination> destinations, Dictionary<DoorLocation, bool> doorLockStatus, bool remoteControlStatus, bool canTacticalLand, bool launchAlarmStatus, bool canWithdrawReturn = false, bool tacticalHoverActive = false, bool hasFirearm = false, bool firearmArmed = false, bool hasMasterAlarm = false, bool masterAlarmSilenced = false, bool canExchangeMohawk = false, bool exchangeMohawkPending = false) : BoundUserInterfaceState // CMU14: firearm toggle + master alarm + mohawk exchange params
 {
     public readonly NetEntity? FlyBy = flyBy;
     public readonly List<Destination> Destinations = destinations;
@@ -22,6 +22,9 @@ public sealed class DropshipNavigationDestinationsBuiState(NetEntity? flyBy, Lis
     // CMU14: master alarm mute state, only shown when the ship has hull integrity alarms
     public readonly bool HasMasterAlarm = hasMasterAlarm;
     public readonly bool MasterAlarmSilenced = masterAlarmSilenced;
+    // CMU14: trade the parked dynamic gunship for the platoon's standard Mohawk
+    public readonly bool CanExchangeMohawk = canExchangeMohawk;
+    public readonly bool ExchangeMohawkPending = exchangeMohawkPending;
 }
 
 [Serializable, NetSerializable]

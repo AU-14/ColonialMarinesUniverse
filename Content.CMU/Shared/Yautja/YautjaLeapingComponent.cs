@@ -30,4 +30,9 @@ public sealed partial class YautjaLeapingComponent : Component
     /// </summary>
     public bool RiseBeforeThrow;
 
+    /// <summary>
+    /// CMU14: the leaper's throw speed, recorded at launch so the rising path does not need the leaper to
+    /// be a yautja (see <see cref="CMUZLeapComponent"/>).
+    /// </summary>
+    public float ThrowSpeed = 5f;
 }

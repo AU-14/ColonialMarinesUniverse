@@ -5,6 +5,7 @@ using Content.Server.CMU14.Dropship.Integrity;
 using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server._RMC14.Dropship;
 using Content.Shared.CMU14.Dropship.GunshipControls;
 using Content.Shared.CMU14.Dropship.TacticalLand;
@@ -59,6 +60,7 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private ZLevelBuildingSystem _zBuilding = default!;
     [Dependency] private DropshipIntegritySystem _integrity = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
@@ -185,6 +187,13 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         session.Eye = eye;
         session.InitialMap = Transform(eye).MapUid;
         Dirty(ent, session);
+
+        if (session.InitialMap is { } planet && HasComp<RMCPlanetComponent>(planet))
+        {
+            // Legacy single-level colonies need an empty flight level as well.
+            _zBuilding.EnsureNeighborLevel(planet, 1, Transform(eye).GridUid ?? planet,
+                _transform.GetWorldPosition(eye), out _, out _);
+        }
 
         if (TryComp(pilot, out EyeComponent? pilotEye))
         {
@@ -460,6 +469,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         }
 
         var allowUnmappedAir = CanHoverOverUnmappedAir(eye.Comp, xform);
+        if (allowUnmappedAir && xform.MapUid is { } sky)
+            EnsureComp<MapGridComponent>(sky);
         var footprintOffsets = GetRotatedFootprintOffsets(eye.Comp);
         var blocked = eye.Comp.BlockedTilesScratch;
         blocked.Clear();
@@ -495,11 +506,14 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
                 {
                     blockedThis = true;
                 }
-                else if (!_map.TryGetTileRef(gridUid, grid, t, out var tileRef))
+                else if (!_map.TryGetTileRef(gridUid, grid, t, out var tileRef) || tileRef.Tile.IsEmpty)
                 {
                     // Empty upper maps have no chunks. Hovering must not require an
                     // invisible floor, which would also prevent items falling through.
-                    blockedThis = !allowUnmappedAir;
+                    var world = _map.GridTileToWorld(gridUid, grid, t);
+                    blockedThis = !allowUnmappedAir || xform.MapUid is not { } airMap ||
+                                  !HasFlightWorldBelow(airMap, world.Position) ||
+                                  !_topDownOrdnance.IsOpenToSky(world);
                 }
                 else
                 {
@@ -650,13 +664,13 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
             !HasComp<RMCPlanetComponent>(initialMap) ||
             xform.MapUid is not { } map ||
             !TryComp(map, out CMUZLevelMapComponent? level) ||
-            !_zLevels.TryMapOffset(initialMap, TacticalHoverMapOffset, out var upperMap) ||
-            upperMap.Value.Owner != map)
+            !TryComp(initialMap, out CMUZLevelMapComponent? initialLevel) ||
+            level.NetworkUid != initialLevel.NetworkUid)
         {
             return false;
         }
 
-        return level.Depth == 1;
+        return level.Depth > initialLevel.Depth;
     }
 
     private IReadOnlyList<Vector2i> GetRotatedFootprintOffsets(DropshipPilotEyeComponent eye)

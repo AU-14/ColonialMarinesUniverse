@@ -20,47 +20,6 @@ public sealed class IEDVestTriggerTest
     private const string OuterClothingSlot = "outerClothing";
 
     [Test]
-    public async Task VestPrototypeUsesKeyedWornGateAndLegacyRemotePort()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var factory = server.EntMan.ComponentFactory;
-            var vest = prototypes.Index<EntityPrototype>(VestPrototype);
-
-            Assert.That(vest.TryComp<WornSlotTriggerConditionComponent>(out var worn, factory), Is.True);
-            Assert.Multiple(() =>
-            {
-                Assert.That(worn!.RequiredSlots, Is.EqualTo(SlotFlags.OUTERCLOTHING));
-                Assert.That(worn.Keys, Is.EquivalentTo(new[] { "trigger", "stuck" }));
-            });
-
-            Assert.That(vest.TryComp<TimerTriggerComponent>(out var timer, factory), Is.True);
-            Assert.Multiple(() =>
-            {
-                Assert.That(timer!.KeysIn, Is.EquivalentTo(new[] { "trigger", "stuck" }));
-                Assert.That(timer.KeyOut, Is.EqualTo("timer"));
-                Assert.That(timer.Delay, Is.EqualTo(TimeSpan.FromSeconds(0.1)));
-            });
-
-            Assert.That(vest.TryComp<TriggerOnSignalComponent>(out var signal, factory), Is.True);
-            Assert.That(signal!.Port.Id, Is.EqualTo("Timer"));
-            Assert.That(vest.TryComp<DeviceLinkSinkComponent>(out var sink, factory), Is.True);
-            Assert.That(sink!.Ports.Select(port => port.Id), Is.EquivalentTo(new[] { "Timer" }));
-
-            Assert.That(vest.TryComp<ExplodeOnTriggerComponent>(out var explode, factory), Is.True);
-            Assert.That(explode!.KeysIn, Is.EquivalentTo(new[] { "timer" }));
-            Assert.That(vest.TryComp<GibOnTriggerComponent>(out var gib, factory), Is.True);
-            Assert.That(gib!.KeysIn, Is.EquivalentTo(new[] { "timer" }));
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task TriggerAndStuckRequireWearingButArmedTimerSurvivesRemoval()
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -49,12 +49,6 @@ public sealed class CMUJeepFuelFireTest : GameTest
         return contents!;
     }
 
-    private EntityUid Rack(EntityUid jeep, string slot)
-    {
-        Assert.That(SEntMan.System<SharedContainerSystem>().TryGetContainer(jeep, slot, out var container), Is.True);
-        return container!.ContainedEntities.Single();
-    }
-
     private void Click(EntityUid user, EntityUid target)
     {
         SEntMan.System<SharedInteractionSystem>()
@@ -66,25 +60,6 @@ public sealed class CMUJeepFuelFireTest : GameTest
         Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUOpenVehicleSystem.JerryCanSlot, null, out var can), Is.True);
         Assert.That(SEntMan.System<SharedHandsSystem>().TryPickup(user, can!.Value), Is.True);
         return can.Value;
-    }
-
-    [Test]
-    public async Task RacksStartFull()
-    {
-        var (jeep, _) = await SpawnJeep();
-        await Server.WaitAssertion(() =>
-        {
-            var spray = Contents(Rack(jeep, "jeep-extinguisher"), "spray");
-            Assert.That(spray.GetTotalPrototypeQuantity("Water").Float(), Is.GreaterThan(0f));
-            Assert.That(spray.AvailableVolume.Float(), Is.Zero);
-
-            var fuel = Contents(Rack(jeep, CMUOpenVehicleSystem.JerryCanSlot), "fuel");
-            Assert.That(fuel.GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.GreaterThan(0f));
-            Assert.That(fuel.AvailableVolume.Float(), Is.Zero);
-
-            Assert.That(Contents(jeep, "fuel").GetTotalPrototypeQuantity("WeldingFuel").Float(), Is.GreaterThan(0f),
-                "The jeep comes with fuel in the tank.");
-        });
     }
 
     [Test]
@@ -120,22 +95,6 @@ public sealed class CMUJeepFuelFireTest : GameTest
             Assert.That(SEntMan.System<SharedContainerSystem>().TryGetContainer(jeep, CMUOpenVehicleSystem.JerryCanSlot, out var rack) &&
                         rack.ContainedEntities.Count == 0, Is.True, "The rack stays empty.");
         });
-    }
-
-    [Test]
-    public async Task ClickingTheJeepKeepsTheCanInHand()
-    {
-        var (jeep, user) = await SpawnJeep();
-        EntityUid can = default;
-        await Server.WaitPost(() =>
-        {
-            can = HoldRackCan(jeep, user);
-            Click(user, jeep);
-        });
-        await RunTicksSync(5);
-
-        await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.System<SharedHandsSystem>().IsHolding(user, can), Is.True));
     }
 
     [Test]

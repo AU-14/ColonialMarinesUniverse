@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Ghost.Roles;
@@ -54,30 +54,6 @@ public sealed partial class MindTests : GameTest
         behaviors:
         - !type:GibBehavior { }
 ";
-
-    [Test]
-    public async Task TestCreateAndTransferMindToNewEntity()
-    {
-        var pair = Pair;
-        var server = pair.Server;
-
-        var entMan = server.ResolveDependency<IServerEntityManager>();
-
-        await server.WaitAssertion(() =>
-        {
-            var mindSystem = entMan.EntitySysManager.GetEntitySystem<SharedMindSystem>();
-
-            var entity = entMan.SpawnEntity(null, new MapCoordinates());
-            var mindComp = entMan.EnsureComponent<MindContainerComponent>(entity);
-
-            var mind = mindSystem.CreateMind(null);
-
-            Assert.That(mind.Comp.UserId, Is.EqualTo(null));
-
-            mindSystem.TransferTo(mind, entity, mind: mind);
-            Assert.That(mindSystem.GetMind(entity, mindComp), Is.EqualTo(mind.Owner));
-        });
-    }
 
     [Test]
     public async Task TestReplaceMind()

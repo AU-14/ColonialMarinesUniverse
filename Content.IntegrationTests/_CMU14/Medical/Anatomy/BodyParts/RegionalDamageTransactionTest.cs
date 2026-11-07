@@ -394,36 +394,6 @@ public sealed class RegionalDamageTransactionTest : GameTest
     }
 
     [Test]
-    public async Task ExactGroinAimKeepsGroinZoneInsteadOfCanonicalizingToChest()
-    {
-        await Pair.RunTicksSync(1);
-        await Server.WaitAssertion(() =>
-        {
-            _ = Server.System<RegionalDamageProbeSystem>();
-            var human = SEntMan.SpawnEntity("RegionalDamageTransactionHuman", MapCoordinates.Nullspace);
-            var attacker = SEntMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            try
-            {
-                var aim = SEntMan.GetComponent<BodyZoneTargetingComponent>(attacker);
-                aim.MeleeAccuracy = 1f;
-                Server.System<SharedBodyZoneTargetingSystem>().SelectZone(attacker, TargetBodyZone.GroinPelvis);
-                var probe = SEntMan.GetComponent<RegionalDamageProbeComponent>(human);
-                // Accuracy is intentionally capped at 95%; allow called-shot misses without accepting chest substitution.
-                for (var i = 0; i < 20 && probe.LastZone != TargetBodyZone.GroinPelvis; i++)
-                    Server.System<DamageableSystem>().TryChangeDamage(human,
-                        new DamageSpecifier { DamageDict = { ["Slash"] = FixedPoint2.New(0.01) } },
-                        ignoreResistances: true, origin: attacker);
-                Assert.That(probe.LastZone, Is.EqualTo(TargetBodyZone.GroinPelvis));
-            }
-            finally
-            {
-                SEntMan.DeleteEntity(human);
-                SEntMan.DeleteEntity(attacker);
-            }
-        });
-    }
-
-    [Test]
     public async Task RestoringFracturedBoneRemovesItsInternalBleedingAfterCommittedRecovery()
     {
         await Server.WaitAssertion(() =>

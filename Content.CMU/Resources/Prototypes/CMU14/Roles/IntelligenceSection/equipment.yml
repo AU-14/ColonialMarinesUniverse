@@ -1,0 +1,58 @@
+# ├──[ ID CARDS ]────────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCaseOfficer
+  name: intelligence case officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCaseOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelParamilitaryOfficer
+  name: intelligence paramilitary officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelParamilitaryOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelParamilitaryMember
+  name: intelligence paramilitary member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelParamilitaryMember
+
+# A Case Officer's cover identity: an ordinary colonist ID that gets the holder's name when they spawn.
+- type: entity
+  parent: AU14IDCardColonyColonist
+  id: CMUIDCardIntelCover
+  suffix: Intelligence cover
+  components:
+  - type: CMUCoverIdCard
+
+# ├──[ RADIO ]───────────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14EncryptionKey
+  id: CMUEncryptionKeyIntelSection
+  name: intelligence section encryption key
+  description: An encryption key used to communicate on colony and intelligence section radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - CMUIntelSection
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14HeadsetColonist
+  id: CMUIntelSectionHeadset
+  name: colony headset
+  # Looks like an ordinary colony headset so section members can blend in.
+  description: A standard headset used to talk on the colony radio.
+  suffix: Colony, Intelligence Section
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUEncryptionKeyIntelSection

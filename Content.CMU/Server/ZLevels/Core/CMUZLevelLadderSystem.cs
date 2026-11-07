@@ -111,7 +111,8 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         StartClimb(ent, user, offset);
     }
 
-    private void StartClimb(Entity<CMUZLevelLadderComponent> ent, EntityUid user, int offset)
+    /// <summary>Starts the ordinary timed climb, including hatch and landing checks, for a nearby user.</summary>
+    public void StartClimb(Entity<CMUZLevelLadderComponent> ent, EntityUid user, int offset)
     {
         // RUMC: a hatch that is shut over the ladder is pushed open first, and the climb waits for the next try
         if (TryOpenClosedHatch(ent, user))

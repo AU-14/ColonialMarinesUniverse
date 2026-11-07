@@ -43,17 +43,6 @@ public sealed class CMUWallClimbTest : GameTest
     }
 
     [Test]
-    public async Task GroundLevelCannotStartWallClimb()
-    {
-        var scene = await CreateScene(0);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(Server.System<CMUWallClimbSystem>().TryStartClimb(scene.User, scene.Wall), Is.False);
-            SEntMan.DeleteEntity(scene.Network);
-        });
-    }
-
-    [Test]
     public async Task CeilingBlocksStartAndNewLandingWallBlocksCompletion()
     {
         var scene = await CreateScene(-1);

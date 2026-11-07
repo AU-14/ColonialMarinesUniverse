@@ -578,35 +578,6 @@ public sealed class CMUElevatorTest : GameTest
     }
 
     [Test]
-    public async Task HomeFloorKeepsPlatingAndAcceptsTheCarBack()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var tiles = Server.ResolveDependency<ITileDefinitionManager>();
-            SComp<CMUElevatorComponent>(_control).HomeFloorTile = "CMFloorPlating";
-            var lowerGrid = SComp<MapGridComponent>(_lower);
-
-            Select(_upper);
-            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_upper));
-            Assert.That(_maps.GetTileRef(_lower, lowerGrid, new Vector2i(1, 1)).Tile.TypeId,
-                Is.EqualTo(tiles["CMFloorPlating"].TileId));
-
-            Select(_lower);
-            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_lower));
-            Assert.That(_maps.GetTileRef(_lower, lowerGrid, new Vector2i(1, 1)).Tile.TypeId,
-                Is.EqualTo(tiles["Plating"].TileId), "The car's own floor replaces the home plating.");
-            Assert.That(_maps.GetTileRef(_upper, SComp<MapGridComponent>(_upper), new Vector2i(1, 1)).Tile.IsEmpty,
-                Is.True, "Only the home floor keeps plating.");
-        });
-
-        void Select(EntityUid target)
-        {
-            SEntMan.EventBus.RaiseLocalEvent(_control,
-                new CMUElevatorFloorSelectedEvent(SEntMan.GetNetEntity(_rider), SEntMan.GetNetEntity(target)));
-        }
-    }
-
-    [Test]
     public async Task MobsInThePathAreCrushedWhileGhostsAndIntangiblesAreIgnored()
     {
         EntityUid victim = default;

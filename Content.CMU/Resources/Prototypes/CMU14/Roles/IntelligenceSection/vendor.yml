@@ -1,0 +1,162 @@
+# Section wardrobe: suits for the office and plain civilian clothes for cover work.
+# Only Intelligence Section jobs can use it; its picks are counted apart from the civilian wardrobe.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUIntelSectionClothingVendor
+  name: Intelligence Section Wardrobe
+  description: A wardrobe holding suits and ordinary colony clothes for the Intelligence Section.
+  suffix: Intelligence Section
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/corp_wardrobe.rsi
+    layers:
+    - state: "base"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
+  - type: CMAutomatedVendor
+    jobs:
+    - CMUJobIntelCaseOfficer
+    - CMUJobIntelParamilitaryOfficer
+    - CMUJobIntelParamilitaryMember
+    sections:
+    - name: Foot Wear
+      choices: { CMUIntelShoes: 2 }
+      entries:
+      - id: RMCShoesBlack
+      - id: RMCShoesBrown
+      - id: RMCShoesLaceup
+      - id: RMCShoesLaceupBrown
+      - id: RMCShoesLeather
+      - id: RMCBootsPMC
+      - id: CMUBoxStompers
+    - name: Business Attire
+      choices: { CMUIntelBusinessAttire: 1 }
+      entries:
+      - id: CMJumpsuitLiaisonBlack
+      - id: CMJumpsuitLiaisonBlue
+      - id: CMJumpsuitLiaisonBrown
+      - id: CMJumpsuitLiaisonCharcoal
+      - id: CMJumpsuitLiaisonCorporateFormal
+      - id: CMJumpsuitLiaisonFormal
+      - id: CMJumpsuitLiaisonBlazer
+      - id: RMCJumpsuitLiaisonBlackSuitskirt
+      - id: RMCJumpsuitLiaisonCharcoalSuitskirt
+    - name: Ties
+      choices: { CMUIntelTie: 1 }
+      entries:
+      - id: ClothingNeckTieRed
+      - id: ClothingNeckTieDet
+      - id: ClothingNeckTieSerious
+    - name: Civilian Clothes
+      choices: { CMUIntelCivilianClothes: 1 }
+      entries:
+      - id: CMJumpsuitColonist
+      - id: RMCJumpsuitCivilian
+      - id: CMJumpsuitTShirtWhite
+      - id: CMJumpsuitTShirtGray
+      - id: AU14CivilianFlannelWhite
+      - id: AU14CivilianFlannelRed
+      - id: AU14CivilianWorkwearBlue
+      - id: AU14CivilianWorkwearGreen
+    - name: Suit Jackets
+      choices: { CMUIntelSuitJacket: 1 }
+      entries:
+      - id: RMCJacketCorporateBlack
+      - id: RMCJacketCorporateBlue
+      - id: RMCJacketCorporateBrown
+      - id: RMCJacketCorporateKhaki
+    - name: Jackets
+      choices: { CMUIntelJacket: 1 }
+      entries:
+      - id: AU14CivilianTanTrenchCoat
+      - id: AU14CivilianBrownTrenchCoat
+      - id: AU14CivilianGrayTrenchCoat
+      - id: RMCJacketWindbreakerGrey
+      - id: RMCJacketWindbreakerBrown
+      - id: AU14CivilianJacketGrayPufferVest
+      - id: AU14CivilianJacketBomberJacket
+    - name: Hats
+      choices: { CMUIntelHat: 1 }
+      entries:
+      - id: AU14CivBallCapBlack
+      - id: AU14CivFedoraTan
+      - id: AU14CivFedoraBrown
+      - id: AU14CivFedoraGray
+      - id: AU14HeadCommandoBeanie
+      - id: CMUCivWorkCapTan
+    - name: Glasses
+      choices: { CMUIntelGlasses: 1 }
+      entries:
+      - id: RMCSunglasses
+      - id: RMCSunglassesBig
+      - id: RMCGlassesAviators
+      - id: RMCHipsterGlasses
+    - name: Gloves
+      choices: { CMUIntelGloves: 1 }
+      entries:
+      - id: CMHandsBrown
+      - id: CMHandsLightBrown
+    - name: Storage
+      choices: { CMUIntelStorage: 2 }
+      entries:
+      - id: CMSatchel
+      - id: AU14SlingSatchelBlack
+      - id: RMCBeltUtilityGeneral
+      - id: RMCPouchGeneral
+
+# SIS paramilitary rack: the Three World Empire's light kit, as carried by its backline and aircrew.
+# No helmets on purpose; the element wears ear protection instead.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUIntelSISParamilitaryVendor
+  name: SIS paramilitary equipment rack
+  description: An automated rack holding light Three World Empire equipment for the Intelligence Section's armed element.
+  suffix: Intelligence Section, SIS
+  components:
+  - type: CMUVendGunsOnSafety
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMUJobIntelParamilitaryOfficer
+    - CMUJobIntelParamilitaryMember
+    sections:
+    - name: Armor
+      choices: { CMUIntelParaArmor: 1 }
+      entries:
+      - id: CMUIntelSISParaVest
+    - name: Hearing Protection
+      choices: { CMUIntelParaEars: 1 }
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+    - name: Personal Defense Weapon
+      choices: { CMUIntelParaPrimary: 1 }
+      entries:
+      - id: AU14WeaponSMGL90A2
+    - name: PDW Ammunition
+      entries:
+      - id: AU14MagazineSMGL90A2
+        maxPerUser: 4
+    - name: Handguns
+      choices: { CMUIntelParaSidearm: 1 }
+      entries:
+      - id: RMCWeaponPistolL54Empty
+      - id: AU14L165A1Filled
+    - name: Handgun Ammunition
+      entries:
+      - id: RMCMagazinePistolL54
+        maxPerUser: 3
+      - id: AU14MagazinePistolL165A1
+        maxPerUser: 3
+    - name: Field Supplies
+      entries:
+      - id: AU14PouchIFAKFill
+        maxPerUser: 1
+      - id: RMCZipties
+        maxPerUser: 2
+
+# The IASF paratroopers' Goshawk vest, issued to the SIS paramilitary element.
+# TODO: the name and description are placeholders until the section's own wording is decided.
+- type: entity
+  parent: RMCArmorParaVest
+  id: CMUIntelSISParaVest
+  suffix: Intelligence Section, SIS

@@ -6,12 +6,18 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true), AutoGenerateComponentPause]
 [Access(typeof(SharedDropshipWeaponSystem))]
 public sealed partial class DropshipWeaponComponent : Component
 {
     [DataField(required: true), AutoNetworkedField]
     public string Abbreviation = string.Empty;
+
+    [DataField, AutoNetworkedField]
+    public DropshipLaserPattern LaserPattern;
+
+    [DataField, AutoNetworkedField]
+    public DropshipAirburstHeight AirburstHeight = DropshipAirburstHeight.Medium;
 
     [DataField, AutoNetworkedField]
     public TimeSpan FireDelay = TimeSpan.FromSeconds(2);
@@ -45,6 +51,12 @@ public sealed partial class DropshipWeaponComponent : Component
 
     [DataField, AutoNetworkedField]
     public SpriteSpecifier.Rsi? AmmoAttachedSprite;
+
+    /// <summary>
+    /// Loaded artwork on crew-compartment utility mounts; the unloaded artwork is defined by DropshipAttachedSprite.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public SpriteSpecifier.Rsi? UtilityAmmoAttachedSprite;
 
     /// <summary>
     ///     Specifies the ammo threshold at which the loaded ammo sprite changes.

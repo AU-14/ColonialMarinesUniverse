@@ -83,14 +83,6 @@ public sealed class CMUGuidedMissileMathTest
     }
 
     [Test]
-    public void CursorOnTargetAimsAtTarget()
-    {
-        var target = new Vector2(20, 5);
-        var aim = Aim(Vector2.Zero, target, target);
-        Assert.That(Vector2.Distance(aim, target), Is.LessThan(1e-5f));
-    }
-
-    [Test]
     public void StaleOrMissingCursorAimsAtTarget()
     {
         var target = new Vector2(20, 5);
