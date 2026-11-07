@@ -1,22 +1,24 @@
+<!-- CMU14: CRT presentation for standard vending machines; existing selection behavior remains. -->
 <controls:FancyWindow
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
     xmlns:co="clr-namespace:Content.Client.UserInterface.Controls"
-    MinHeight="210">
-    <BoxContainer Name="MainContainer" Orientation="Vertical">
-        <LineEdit Name="SearchBar" PlaceHolder="{Loc 'vending-machine-component-search-filter'}" HorizontalExpand="True"  Margin ="4 4"/>
-        <co:SearchListContainer Name="VendingContents" VerticalExpand="True" Margin="4 4"/>
-         <!-- Footer -->
-        <BoxContainer Orientation="Vertical">
-            <PanelContainer StyleClasses="LowDivider" />
-            <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
-                <Label Text="{Loc 'vending-machine-flavor-left'}" StyleClasses="WindowFooterText" />
-                <Label Text="{Loc 'vending-machine-flavor-right'}" StyleClasses="WindowFooterText"
-                        HorizontalAlignment="Right" HorizontalExpand="True"  Margin="0 0 5 0" />
-                <TextureRect StyleClasses="NTLogoDark" Stretch="KeepAspectCentered"
-                        VerticalAlignment="Center" HorizontalAlignment="Right" SetSize="19 19"/>
-            </BoxContainer>
+    MinHeight="350">
+    <PanelContainer Name="Surface" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Name="MainContainer" Orientation="Vertical" Margin="10" SeparationOverride="8">
+            <PanelContainer Name="HeaderStrip">
+                <BoxContainer Orientation="Vertical">
+                    <Label Name="InventoryHeading" />
+                    <Label Name="StockSummary" />
+                </BoxContainer>
+            </PanelContainer>
+            <LineEdit Name="SearchBar" PlaceHolder="{Loc 'vending-machine-component-search-filter'}" HorizontalExpand="True" />
+            <Label Name="EmptyLabel" Visible="False" />
+            <co:SearchListContainer Name="VendingContents" VerticalExpand="True" HorizontalExpand="True" />
+            <PanelContainer Name="FooterStrip">
+                <Label Name="FooterText" />
+            </PanelContainer>
         </BoxContainer>
-    </BoxContainer>
+    </PanelContainer>
 </controls:FancyWindow>

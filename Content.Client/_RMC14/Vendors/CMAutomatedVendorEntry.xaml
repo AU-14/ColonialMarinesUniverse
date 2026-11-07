@@ -1,20 +1,24 @@
-﻿<cc:CMAutomatedVendorEntry
+<!-- CMU14 Begin: an equipment row with a distinct item name, stock information and dispense action. -->
+<cc:CMAutomatedVendorEntry
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client._RMC14.Vendors"
-    HorizontalExpand="True">
-    <BoxContainer Orientation="Horizontal">
-        <!-- CMU14: the vendor icon comes from the prototype's Sprite sheet, and guns.rsi is 64x32 while the
-             armour/bow/disc sheets are 32x32 - so gun rows reserved a 64px icon cell and left a gap before the
-             stock text. Bounding the cell to the 32x32 default (CM-SS13's vending32x32) scales the wide sheets
-             in and keeps every row aligned. -->
-        <LayeredTextureRect Name="Texture" Access="Public"
-                            HorizontalExpand="False" VerticalExpand="False"
-                            MinSize="32 32" MaxSize="32 32"
-                            Stretch="Scale" />
-        <Label Name="Amount" Access="Public" MinWidth="30" Align="Left" Margin="5 0 0 0" />
-        <Label Name="Stock" Access="Public" MinWidth="30" Align="Left" Margin="5 0 0 0" />
-        <Control MinWidth="5" />
-        <cc:CMAutomatedVendorPanel Name="Panel" Access="Public" />
-        <Button Text="?" Name="TooltipLabel" Access="Public" ModulateSelfOverride="#00000000" />
-    </BoxContainer>
+    xmlns:cmu="clr-namespace:Content.Client.CMU14.Vendors"
+    HorizontalExpand="True" MinHeight="72">
+    <PanelContainer Name="RowSurface" HorizontalExpand="True">
+        <cmu:CMUVendorRowLayout HorizontalExpand="True">
+            <Button Name="TooltipLabel" Access="Public" VerticalAlignment="Top">
+                <LayeredTextureRect Name="Texture" Access="Public"
+                                    HorizontalExpand="False" VerticalExpand="False"
+                                    MinSize="40 40" MaxSize="40 40" Stretch="Scale" />
+            </Button>
+            <BoxContainer Orientation="Vertical" SeparationOverride="6" HorizontalExpand="True" VerticalAlignment="Top">
+                <RichTextLabel Name="ItemTitle" HorizontalExpand="True" VerticalAlignment="Top" />
+                <RichTextLabel Name="Stock" Access="Public" HorizontalExpand="True" VerticalAlignment="Top" />
+                <Label Name="Availability" HorizontalExpand="True" VerticalAlignment="Top" ClipText="True" MinHeight="24" MaxHeight="24" />
+            </BoxContainer>
+            <cc:CMAutomatedVendorPanel Name="Panel" Access="Public"
+                HorizontalExpand="False" MinWidth="104" VerticalAlignment="Center" />
+        </cmu:CMUVendorRowLayout>
+    </PanelContainer>
 </cc:CMAutomatedVendorEntry>
+<!-- CMU14 End -->
