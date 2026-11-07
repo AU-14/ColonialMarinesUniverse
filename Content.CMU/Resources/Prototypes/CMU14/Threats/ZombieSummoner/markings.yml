@@ -1,7 +1,0 @@
-- type: marking
-  id: CMUZombieSummonerBloodyCross
-  bodyPart: Head
-  groupWhitelist: [Human]
-  sprites:
-  - sprite: CMU14/Mobs/ZombieSummoner/bloody_cross.rsi
-    state: bloody_cross

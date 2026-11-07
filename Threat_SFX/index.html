@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Threat SFX Preview</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #111315;
+      --panel: #1b1e21;
+      --panel-hover: #22262a;
+      --border: #343a40;
+      --text: #f1f3f5;
+      --muted: #9ba3aa;
+      --red: #d54b4b;
+      --green: #6ea66f;
+      --amber: #d4a74f;
+      --blue: #6797bd;
+    }
+
+    * {
+      box-sizing: border-box;
+      letter-spacing: 0;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--background);
+      color: var(--text);
+      font: 15px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      background: rgba(17, 19, 21, 0.96);
+      backdrop-filter: blur(10px);
+    }
+
+    .header-inner,
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      min-height: 68px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 720;
+      white-space: nowrap;
+    }
+
+    .summary {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-left: auto;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 7px 10px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab:hover,
+    .tab[aria-selected="true"] {
+      border-color: var(--border);
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    main {
+      padding: 30px 0 56px;
+    }
+
+    section + section {
+      margin-top: 42px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .clip-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .clip {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.8fr) minmax(220px, 1.2fr);
+      align-items: center;
+      gap: 14px;
+      min-height: 78px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      background: var(--panel);
+    }
+
+    .clip:hover,
+    .clip.playing {
+      background: var(--panel-hover);
+    }
+
+    .clip.playing {
+      border-color: var(--accent);
+    }
+
+    .clip-name {
+      overflow: hidden;
+      font-size: 14px;
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .clip-meta {
+      margin-top: 3px;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    audio {
+      display: block;
+      width: 100%;
+      height: 38px;
+      accent-color: var(--accent);
+    }
+
+    .docile { --accent: var(--green); }
+    .attacking { --accent: var(--red); }
+    .hurt { --accent: var(--amber); }
+    .death { --accent: var(--blue); }
+
+    footer {
+      padding: 18px 0 28px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    footer a {
+      color: var(--text);
+    }
+
+    @media (max-width: 900px) {
+      .header-inner {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 4px 14px;
+        padding: 12px 0;
+      }
+
+      .tabs {
+        order: 3;
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .clip-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .header-inner,
+      main {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .summary {
+        display: none;
+      }
+
+      .clip {
+        grid-template-columns: 1fr;
+        gap: 9px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>Threat SFX Preview</h1>
+      <div class="summary">25 individual vocalizations</div>
+      <nav class="tabs" aria-label="Sound categories">
+        <button class="tab" type="button" data-target="docile" aria-selected="true">Docile 7</button>
+        <button class="tab" type="button" data-target="attacking" aria-selected="false">Attacking 5</button>
+        <button class="tab" type="button" data-target="hurt" aria-selected="false">Hurt 6</button>
+        <button class="tab" type="button" data-target="death" aria-selected="false">Death 7</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="catalog"></main>
+
+  <footer>
+    License and attribution details: <a href="SOURCES.md">SOURCES.md</a>
+  </footer>
+
+  <script>
+    const categories = [
+      {
+        id: "docile",
+        title: "Docile / Idle",
+        folder: "Docile",
+        clips: [
+          ["threat_docile_01.ogg", "Threat noises and moans"],
+          ["threat_docile_02.ogg", "Threat noises and moans"],
+          ["threat_docile_03.ogg", "Threat noises and moans"],
+          ["threat_docile_04.ogg", "Threat noises and moans"],
+          ["threat_docile_08.ogg", "ThreatPackSFX"],
+          ["threat_docile_09.ogg", "ThreatPackSFX 2"],
+          ["threat_docile_10.ogg", "ThreatPackSFX 2"]
+        ]
+      },
+      {
+        id: "attacking",
+        title: "Attacking / Aggressive",
+        folder: "Attacking",
+        clips: [
+          ["threat_attack_01.ogg", "Threats Sound Pack"],
+          ["threat_attack_02.ogg", "Threats Sound Pack"],
+          ["threat_attack_03.ogg", "Threats Sound Pack"],
+          ["threat_attack_04.ogg", "Threats Sound Pack"],
+          ["threat_attack_05.ogg", "Threats Sound Pack"]
+        ]
+      },
+      {
+        id: "hurt",
+        title: "Hurt / Damaged",
+        folder: "Hurt",
+        clips: [
+          ["threat_hurt_01.ogg", "Threats Sound Pack"],
+          ["threat_hurt_02.ogg", "Threats Sound Pack"],
+          ["threat_hurt_05.ogg", "Threat Voice Effects"],
+          ["threat_hurt_06.ogg", "Threat Voice Effects"],
+          ["threat_hurt_07.ogg", "Threat Voice Effects"],
+          ["threat_hurt_08.ogg", "Threat Voice Effects"]
+        ]
+      },
+      {
+        id: "death",
+        title: "Death Gasp / Dying",
+        folder: "DeathGasp",
+        clips: [
+          ["threat_death_01.ogg", "Threats Sound Pack"],
+          ["threat_death_02.ogg", "Threats Sound Pack"],
+          ["threat_death_03.ogg", "Threats Sound Pack"],
+          ["threat_death_06.ogg", "Threat Voice Effects"],
+          ["threat_death_07.ogg", "Threat Voice Effects"],
+          ["threat_death_08.ogg", "Threat Voice Effects"],
+          ["threat_death_09.ogg", "Threat Voice Effects"]
+        ]
+      }
+    ];
+
+    const catalog = document.querySelector("#catalog");
+
+    for (const category of categories) {
+      const section = document.createElement("section");
+      section.id = category.id;
+      section.className = category.id;
+      section.innerHTML = `
+        <div class="section-heading">
+          <h2>${category.title}</h2>
+          <span class="count">${category.clips.length} clips</span>
+        </div>
+        <div class="clip-grid"></div>
+      `;
+
+      const grid = section.querySelector(".clip-grid");
+      category.clips.forEach(([filename, source]) => {
+        const extension = filename.split(".").pop();
+        const clip = document.createElement("article");
+        clip.className = "clip";
+        clip.innerHTML = `
+          <div>
+            <div class="clip-name">${filename}</div>
+            <div class="clip-meta">${source} · ${extension.toUpperCase()}</div>
+          </div>
+          <audio controls preload="metadata" src="${category.folder}/${filename}"></audio>
+        `;
+        grid.append(clip);
+      });
+
+      catalog.append(section);
+    }
+
+    const players = [...document.querySelectorAll("audio")];
+    players.forEach((player) => {
+      player.addEventListener("play", () => {
+        players.forEach((other) => {
+          if (other !== player) other.pause();
+          other.closest(".clip").classList.toggle("playing", other === player);
+        });
+      });
+      player.addEventListener("pause", () => player.closest(".clip").classList.remove("playing"));
+      player.addEventListener("ended", () => player.closest(".clip").classList.remove("playing"));
+    });
+
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((item) => item.setAttribute("aria-selected", "false"));
+        tab.setAttribute("aria-selected", "true");
+        document.querySelector(`#${tab.dataset.target}`).scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    const sections = categories.map(({ id }) => document.querySelector(`#${id}`));
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.setAttribute("aria-selected", String(tab.dataset.target === visible.target.id));
+      });
+    }, { rootMargin: "-72px 0px -55%", threshold: [0, 0.2, 0.5] });
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>

@@ -17,25 +17,25 @@
       AU14JobGOVFORPlatCo: 1
       AU14JobGOVFORAdjutant: 1
       AU14JobGOVFORadvisor: 1
-      AU14JobGOVFORPlatOp: 3
-      AU14JobGOVFOROfficerIntel: 1
+      AU14JobGOVFORPlatOp: 5
+      AU14JobGOVFOROfficerIntel: 5
       AU14JobGOVFORSquadSergeant: 3
       AU14JobGOVFORRadioTelephoneOperator: 3
-      AU14JobGOVFORRadioTrafficOperator: 3
-      AU14JobGOVFORSquadRifleman: 75
-      CMUJobGOVFORDroneOperator: 1
+      AU14JobGOVFORRadioTrafficOperator: 6
+      AU14JobGOVFORSquadRifleman: 9999
+      CMUJobGOVFORDroneOperator: 2
       AU14JobGOVFORWeaponsSpecialist: 3
-      AU14JobGOVFORSquadAutomaticRifleman: 3
-      AU14JobGOVFORSquadCombatTech: 6
-      AU14JobGOVFOREngineeringTech: 2
+      AU14JobGOVFORSquadAutomaticRifleman: 6
+      AU14JobGOVFORSquadCombatTech: 12
+      AU14JobGOVFOREngineeringTech: 4
       AU14JobGOVFOROfficerLogistics: 1
-      AU14JobGOVFORAuxTech: 2
+      AU14JobGOVFORAuxTech: 4
       AU14JobGOVFOROfficerMedical: 1
-      AU14JobGOVFORMilitaryDoctor: 3
-      AU14JobGOVFORPlatoonCorpsman: 9
-      AU14JobGOVFORNurse: 2
+      AU14JobGOVFORMilitaryDoctor: 10
+      AU14JobGOVFORPlatoonCorpsman: 20
+      AU14JobGOVFORNurse: 20
       AU14JobGOVFOROfficerMP: 1
-      AU14JobGOVFORMilitaryPoliceMan: 2
+      AU14JobGOVFORMilitaryPoliceMan: 10
       AU14JobGOVFOROfficerEngi: 1
       AU14JobGOVFORVehicleCrewman: 2
       AU14JobGOVFORVehicleCommander: 1
@@ -44,8 +44,8 @@
       AU14JobGOVFORFighterPilot: 1
       AU14JobGOVFORFighterSystemsOfficer: 1
       AU14JobGOVFORDCC: 2
-      AU14JobGOVFORAuxSupportSynth: 2
-      AU14JobGOVFORWorkingJoe: 1
+      AU14JobGOVFORAuxSupportSynth: 5
+      AU14JobGOVFORWorkingJoe: 2
 
 - type: entity
   id: AddOpfor

@@ -108,6 +108,18 @@ cmu-atm-nav-no-card = You have no card of your own
 cmu-atm-nav-pin-unknown = Reading your card...
 cmu-atm-nav-pop-out = Pop Out
 
+# Joint Base Schaefer common access scanner
+cmu-base-access-scanner-no-operator = Insert an authorized military police ID before scanning personnel.
+cmu-base-access-scanner-no-id = You have no ID card to insert.
+cmu-base-access-scanner-access-denied = Access denied. A military police ID is required.
+cmu-base-access-scanner-unknown-name = Unknown
+cmu-base-access-scanner-unknown-rank = Unknown rank
+cmu-base-access-scanner-recorded = Recorded { $name } as { $direction } Joint Base Schaefer.
+cmu-base-access-scanner-mode-set = Scanner set to record personnel { $direction } Joint Base Schaefer.
+cmu-base-access-scanner-operator-authorized = Operator { $name } authorized. Tap personnel IDs to record access.
+cmu-base-access-scanner-insert-operator = Insert a military police ID to authorize the terminal.
+cmu-base-access-scanner-in-use = Someone else is using this access terminal.
+
 # Shared console screen pieces
 cmu-economy-sales-tax = Sales tax
 cmu-economy-income-tax = Income tax

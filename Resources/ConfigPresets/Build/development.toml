@@ -6,9 +6,9 @@
 engine_version = "v290.0.0"
 
 [game]
-defaultpreset = "Insurgency"
+defaultpreset = "DistressSignal"
 # Straight in-game baby
-map = "USSBushRedux"
+map = "StableGarrisonRedux"
 lobbyenabled = false
 role_timers = false
 role_whitelist = false

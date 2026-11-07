@@ -1,5 +1,27 @@
 # CMU14: Legacy exact IDs for downstream maps; active maps use the functional parents directly.
 
+# Stable Garrison Redux still contains these two visual props from its Bosenmori-derived export.
+- type: entity
+  id: CMUBosenmoriExact3b781ecc55216067
+  parent: CMUBosenmoriExactStructureBase
+  name: fridge
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/8fcda68fcb5cb90a201f.rsi
+    state: source
+    noRot: true
+
+- type: entity
+  id: CMUBosenmoriExact42b632a5d7636cfa
+  parent: CMUBosenmoriExactStructureBase
+  name: whiteboard
+  components:
+  - type: Sprite
+    sprite: CMU14/Bosenmori/Exact/215f6888f43252c356dc.rsi
+    state: source
+    noRot: true
+    offset: 1.15625,1.1875
+
 - type: entity
   parent: RMCFlashlight
   id: CMUBosenmoriExact011bb973d1897052
