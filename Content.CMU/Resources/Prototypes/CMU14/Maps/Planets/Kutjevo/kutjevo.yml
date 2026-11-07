@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Kutjevo Biolab"
     mapId: auKutjevo
-    inRotation: false
     lorePrimer: AU14PrimerPlanetKutjevo
     allegiance: UA
     camouflage: Desert

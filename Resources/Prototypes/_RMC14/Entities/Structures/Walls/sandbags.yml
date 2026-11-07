@@ -1,10 +1,9 @@
-- type: entity
+﻿- type: entity
   parent: CMBarricadeBase
   id: CMBarricadeSandbag
   name: sandbag barricade
   description: A makeshift barricade made out of the sand from the ground. Tough to beat but easy to pierce.
   components:
-  - type: CMUThreatBarricadeTarget
   - type: BarricadeSandbag
   - type: Climbable
   - type: MeleeSound
@@ -94,7 +93,6 @@
   name: HESCO barricade
   description: A sandbag wall. Provides better protection than a makeshift sandbag barricade, but requires specialized equipment to set up.
   components:
-  - type: CMUThreatBarricadeTarget
   - type: BarricadeSandbag
   - type: Climbable
   - type: MeleeSound
