@@ -5,6 +5,7 @@ using Content.Shared.Chemistry.Components;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
+using Content.Shared.Popups;
 using Content.Shared._RMC14.Atmos;
 using Robust.Shared.Map;
 
@@ -23,14 +24,18 @@ public sealed partial class CMUSolutionTileFireSystem : EntityEffectSystem<Trans
     [Dependency] private CMUFuelProfileSystem _fuel = default!;
     [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     protected override void Effect(Entity<TransformComponent> entity, ref EntityEffectEvent<CMUSolutionTileFire> args)
     {
-        if (entity.Comp.MapID == MapId.Nullspace)
-            return;
-
         var effect = args.Effect;
         TryComp(entity, out SolutionComponent? solutionComp);
+        if (entity.Comp.MapID == MapId.Nullspace)
+        {
+            LeaveResidue(entity, solutionComp, effect, args.Scale, popup: false);
+            return;
+        }
+
         var whole = solutionComp?.Solution.Clone() ?? new Solution();
         whole.MaxVolume = FixedPoint2.MaxValue;
         if (effect.Reagent is { } reagent && args.Scale > 0)
@@ -40,7 +45,11 @@ public sealed partial class CMUSolutionTileFireSystem : EntityEffectSystem<Trans
         {
             // Not a fuel (an oxidizer on its own, say): only a legacy fixed-stat fire, if the YAML asks for one.
             if (effect.Intensity is not { } intensity || intensity <= 0)
+            {
+                // FLOW-02: too diluted to burn. The reaction already removed the reagent; show where it went.
+                LeaveResidue(entity, solutionComp, effect, args.Scale, popup: true);
                 return;
+            }
 
             var duration = effect.Duration ?? CMUFuelProfileSystem.ReferenceDuration;
             spec = CMUFuelProfileSystem.CreateSpec(Math.Min(intensity, CMUFuelProfileSystem.NonSpecialistMaxIntensity),
@@ -66,6 +75,25 @@ public sealed partial class CMUSolutionTileFireSystem : EntityEffectSystem<Trans
         {
             if (_fuel.IsFuel(quantity.Reagent.Prototype))
                 solution.RemoveReagent(quantity.Reagent, quantity.Quantity);
+        }
+    }
+
+    /// <summary>
+    /// FLOW-02: an ignition that forms no fire turns the burnt reagent into <see cref="CMUSolutionTileFire.Residue"/>
+    /// instead of deleting it silently. The residue is no fuel and no reactant of the ignition, so it cannot loop.
+    /// </summary>
+    private void LeaveResidue(Entity<TransformComponent> entity, SolutionComponent? solutionComp, CMUSolutionTileFire effect,
+        float scale, bool popup)
+    {
+        if (solutionComp == null || effect.Residue is not { } residue || scale <= 0)
+            return;
+
+        solutionComp.Solution.AddReagent(residue.Id, FixedPoint2.New(scale));
+        Dirty(entity.Owner, solutionComp);
+        if (popup)
+        {
+            _popup.PopupCoordinates(Loc.GetString("cmu-solution-ignition-fizzle"),
+                _transform.GetMoverCoordinates(entity, entity.Comp), PopupType.MediumCaution);
         }
     }
 }
