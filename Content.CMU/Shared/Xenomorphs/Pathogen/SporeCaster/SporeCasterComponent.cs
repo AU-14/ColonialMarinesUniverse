@@ -35,4 +35,10 @@ public sealed partial class CMUPathogenSporecasterComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan NextAutoReleaseAt;
+    
+    [DataField, AutoNetworkedField]
+    public TimeSpan TakeoverRegenInterval = TimeSpan.FromSeconds(30);
+  
+    [DataField, AutoNetworkedField]
+    public TimeSpan NextTakeoverRegenAt;
 }
