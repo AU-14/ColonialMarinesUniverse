@@ -93,7 +93,7 @@
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 500
+    cost: 400
 
 - type: entity
   parent: CMUDropshipAmmoBOFORSMag
@@ -132,7 +132,7 @@
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 550
+    cost: 450
 
 - type: entity
   parent: CMUDropshipAmmoBOFORSMag
@@ -172,7 +172,7 @@
     - RMCSmokeExplosionProofSmall
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 550
+    cost: 450
 
 - type: entity
   parent: CMUDropshipAmmoBOFORSMag
@@ -211,7 +211,7 @@
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 600
+    cost: 475
 
 - type: entity
   parent: CMUDropshipAmmoBOFORSMag
@@ -253,7 +253,7 @@
     - RMCEffectExplosionParticle
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 600
+    cost: 475
 
 # endregion
 
@@ -304,7 +304,7 @@
   - type: AmmoHolder
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 1500
+    cost: 1200
 
 - type: entity
   parent: CMUDropshipAmmoBOFORSTray
@@ -346,7 +346,7 @@
   description: A heavy tray holding three 20-round 40mm AP magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
   - type: DropshipFabricatorPrintable
-    cost: 1650
+    cost: 1250
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_ap_3
@@ -387,7 +387,7 @@
   description: A heavy tray holding three 20-round 40mm airburst magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
   - type: DropshipFabricatorPrintable
-    cost: 1650
+    cost: 1250
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_ab_3
@@ -428,7 +428,7 @@
   description: A heavy tray holding three 20-round 40mm HEAT magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
   - type: DropshipFabricatorPrintable
-    cost: 1800
+    cost: 1200
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_ht_3
@@ -469,7 +469,7 @@
   description: A heavy tray holding three 20-round 40mm incendiary magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
   - type: DropshipFabricatorPrintable
-    cost: 1800
+    cost: 1200
   - type: Sprite
     layers:
     - state: bofors_40mm_tray_in_3
@@ -544,7 +544,7 @@
     - AU14EffectExplosionParticleJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 700
+    cost: 350
 
 - type: entity
   parent: CMUDropshipAmmoHandLoadable
@@ -588,7 +588,7 @@
     - AU14EffectExplosionParticleJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 700
+    cost: 350
 
 - type: entity
   parent: CMUDropshipAmmoHandLoadable
@@ -628,7 +628,7 @@
     - AU14EffectExplosionParticleJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 750
+    cost: 350
 
 - type: entity
   parent: CMUDropshipAmmoHandLoadable
@@ -668,7 +668,7 @@
     - RMCSmokeExplosionProofSmall
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 700
+    cost: 350
 
 # endregion
 
@@ -755,6 +755,6 @@
           - CMUHowitzerShell
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 2800
+    cost: 1400
 
 # endregion
