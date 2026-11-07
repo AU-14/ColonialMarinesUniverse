@@ -1,0 +1,35 @@
+# Unreliable flip-down night vision goggles built on the old M1 multi-spectrum visor. While working, the wearer glows
+# faintly; every so often they cut out and need a screwdriver before they'll switch on again.
+
+- type: entity
+  parent: RMCHelmetGarbNightVisionPVE
+  id: CMUHelmetGarbNightVisionM1A1
+  name: M1A1 multi-spectrum visor
+  description: A refurbished M1 visor with working night optics bolted back in. Clip it into a helmet and pull it down to see in the dark, but its green glow gives you away, and the shoddy wiring tends to cut out. Keep a screwdriver handy.
+  components:
+  - type: CMUHelmetGarbNightVision
+  - type: NightVisionItem
+    actionId: null
+    toggleable: false
+    enableOnEquip: false
+    slotFlags: HEAD
+    green: true
+    defaultState: Half # cheap optics: half-strength night vision only
+    canChangeMode: false
+  - type: CMUNightVisionMalfunction
+    checkInterval: 60 # seconds between cut-out rolls while worn and switched on
+    malfunctionChance: 0.1 # 10% per roll
+    repairDelay: 60 # seconds of screwdriver work to fix it
+
+# The glow that rides on the wearer while the goggles are working.
+- type: entity
+  id: CMUNightVisionGlow
+  name: night vision glow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    softness: 1
+    color: "#4CFF6A"
+    castShadows: false
