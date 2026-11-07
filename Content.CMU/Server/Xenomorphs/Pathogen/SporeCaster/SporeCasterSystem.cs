@@ -20,6 +20,9 @@ using Content.Shared.Body.Systems;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared.Examine;
+using Content.Server.Ghost.Roles;
+using Content.Server.Ghost.Roles.Components;
+using Content.Server.Ghost.Roles.Events;
 
 namespace Content.Server.CMU14.Xenomorphs.Pathogen.Sporecaster;
 
@@ -44,6 +47,7 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, DestructionEventArgs>(OnDestruction);
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, InteractHandEvent>(OnInteract);
         SubscribeLocalEvent<CMUPathogenSporecasterComponent, ExaminedEvent>(OnExamine);
+        SubscribeLocalEvent<XenoComponent, GhostRoleSpawnerUsedEvent>(OnPopperSpawnerUsed);
     }
 
     private void OnMapInit(Entity<CMUPathogenSporecasterComponent> ent, ref MapInitEvent args)
@@ -122,7 +126,16 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
                 caster.NextGrowAt = time + caster.GrowInterval;
                 Dirty(uid, caster);
             }
-
+            
+            if (time >= caster.NextTakeoverRegenAt &&  
+                TryComp(uid, out GhostRoleMobSpawnerComponent? spawner) &&  
+                spawner.CurrentTakeovers > 0)  
+            {  
+                caster.NextTakeoverRegenAt = time + caster.TakeoverRegenInterval;  
+                _ghostRole.SetCurrent((uid, spawner), spawner.CurrentTakeovers - 1);  
+                Dirty(uid, caster);
+            }
+            
             // Auto-release at targets
             if (caster.StoredClouds <= 0)
                 continue;
