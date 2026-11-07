@@ -22,7 +22,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Fob;
 
-/// <summary>Two deployed, finite-ammunition defenses per bank. Every shot rechecks reserve and counterplay.</summary>
+/// <summary>Deployed, finite-ammunition defenses per bank. Every shot rechecks reserve and counterplay.</summary>
 public sealed partial class CMUFobDefenseSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
