@@ -423,7 +423,7 @@
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenSprayAcid
   name: Spray Acid (40)
-  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will coat barricades in acid and significantly strengthen acid inflicted from Charge Spit![/color]
+  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will coat barricades in acid![/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -1121,6 +1121,7 @@
   id: CMU14ActionXenoPathogenScissorCutBloodletter
   name: Ravage (25)
   description: Cuts enemies in an area in front of you, causing slight blood loss. Also slows targets.
+
 - type: entity  
   parent: ActionXenoBase  
   id: CMU14ActionXenoPathogenGuardianSweep  

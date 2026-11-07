@@ -80,6 +80,15 @@ public struct GeneratedReagentData
     /// </summary>
     [ViewVariables(VVAccess.ReadOnly)]
     public bool SubContractIsNew;
+    /// <summary>
+    /// §5 heat gate: the synthesis only runs at or above this temperature (K). 0 = no gate. Rolled once on the server
+    /// and networked, so the client rebuilds the same recipe.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float RequiredMinTemp;
+    /// <summary>§5 cooling gate: the synthesis only runs at or below this temperature (K). 0 = no gate.</summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float RequiredMaxTemp;
     // TODO: effects on mix
     public GeneratedReagentData()
     {
@@ -101,6 +110,8 @@ public struct GeneratedReagentData
         ModifiedChems = [];
         SubContractID = string.Empty;
         SubContractIsNew = false;
+        RequiredMinTemp = 0f;
+        RequiredMaxTemp = 0f;
     }
     
 }

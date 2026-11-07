@@ -1,5 +1,6 @@
 - type: reaction
   id: RMCCreateWater
+  conserveEnergy: false # CMU14: losing units must not concentrate heat into the product (FLOW-01, GraphAudit-ProcgenIgnitionHeat)
   reactants:
     RMCHydrogen:
       amount: 2
