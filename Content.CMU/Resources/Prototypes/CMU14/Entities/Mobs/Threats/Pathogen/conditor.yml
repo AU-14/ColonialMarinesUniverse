@@ -62,8 +62,6 @@
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenRegurgitate
-  - type: XenoSlowingSpit
-  - type: XenoSpit
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
