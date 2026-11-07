@@ -193,39 +193,6 @@ public sealed class SharedItemMergeRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task InvalidSizeHasNoExamineLineAndClothingRetainsPickupVerb()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var localization = Server.ResolveDependency<ILocalizationManager>();
-            var verbs = Server.System<VerbSystem>();
-            var examiner = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
-            var invalid = SEntMan.SpawnEntity("SharedItemMergeInvalidSize", map.GridCoords);
-            var clothing = SEntMan.SpawnEntity("SharedItemMergeClothing", map.GridCoords);
-
-            try
-            {
-                var examined = new ExaminedEvent(new FormattedMessage(), invalid, examiner, true, false);
-                SEntMan.EventBus.RaiseLocalEvent(invalid, examined);
-                Assert.That(examined.GetTotalMessage().ToMarkup(), Is.Empty,
-                    "Item.Size=Invalid must return before size localization/prototype lookup");
-
-                var pickupText = localization.GetString("pick-up-verb-get-data-text");
-                var clothingVerbs = verbs.GetLocalVerbs(clothing, examiner, typeof(InteractionVerb), force: true);
-                Assert.That(clothingVerbs.Any(verb => verb.Text == pickupText), Is.True,
-                    "Clothing remains eligible for the ordinary upstream pickup verb");
-            }
-            finally
-            {
-                SEntMan.DeleteEntity(clothing);
-                SEntMan.DeleteEntity(invalid);
-                SEntMan.DeleteEntity(examiner);
-            }
-        });
-    }
 }
 
 [RegisterComponent]

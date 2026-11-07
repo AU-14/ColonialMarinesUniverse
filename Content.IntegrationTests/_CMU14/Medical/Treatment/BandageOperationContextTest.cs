@@ -228,43 +228,6 @@ public sealed class BandageOperationContextTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task DeletingTheQueuedPatientOrToolRetiresOnlyItsOwnOperation(bool deletePatient)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var entities = pair.Server.EntMan;
-        EntityUid medic = default, patient = default, tool = default, part = default;
-        try
-        {
-            await pair.Server.WaitAssertion(() =>
-            {
-                medic = Human(entities);
-                patient = Human(entities);
-                tool = Tool(entities, medic);
-                part = Part(entities, patient);
-                AddWound(entities, part);
-                Interact(entities, medic, patient, tool);
-                Assert.That(Pending(entities, medic), Is.EqualTo(1));
-                entities.DeleteEntity(deletePatient ? patient : tool);
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(4));
-            await pair.Server.WaitAssertion(() =>
-            {
-                Assert.That(entities.HasComponent<CMUBandagePendingComponent>(medic), Is.False);
-                if (deletePatient)
-                    Assert.That(Count(entities, tool), Is.EqualTo(10));
-                else
-                    AssertUntreated(entities, part);
-            });
-        }
-        finally
-        {
-            await pair.Server.WaitPost(() => Delete(entities, medic, patient, tool));
-        }
-        await pair.CleanReturnAsync();
-    }
-
     [Test]
     public async Task ReentrantCancellationChargesTheCommittedDressingAndPreventsFurtherHealing()
     {

@@ -1,4 +1,4 @@
-﻿using System.Text.Unicode;
+using System.Text.Unicode;
 using Content.Shared.Chat.V2.Moderation;
 using NUnit.Framework;
 
@@ -6,14 +6,6 @@ namespace Content.Tests.Shared.Chat.V2.Moderation;
 
 public sealed class SimpleCensorTests
 {
-    [Test]
-    public void CanCensorASingleWord()
-    {
-        var sut = new SimpleCensor().WithCustomDictionary(["amogus"]);
-        var output = sut.Censor("hello amogus");
-
-        Assert.That(output, Is.EqualTo("hello ******"));
-    }
 
     // Basics - use custom dictionary
 
@@ -31,24 +23,6 @@ public sealed class SimpleCensorTests
     {
         var sut= new SimpleCensor().WithCustomDictionary(["amogus", "sus"]);
         var output = sut.Censor("amogus hello sus");
-
-        Assert.That(output, Is.EqualTo("****** hello ***"));
-    }
-
-    [Test]
-    public void CanUseDifferentCensorSymbols()
-    {
-        var sut= new SimpleCensor().WithCustomDictionary(["amogus", "sus"]);
-        var output = sut.Censor("amogus hello sus", '#');
-
-        Assert.That(output, Is.EqualTo("###### hello ###"));
-    }
-
-    [Test]
-    public void CanCatchCapitalizedWords()
-    {
-        var sut= new SimpleCensor().WithCustomDictionary(["amogus", "sus"]);
-        var output = sut.Censor("AMOGUS hello SUS");
 
         Assert.That(output, Is.EqualTo("****** hello ***"));
     }

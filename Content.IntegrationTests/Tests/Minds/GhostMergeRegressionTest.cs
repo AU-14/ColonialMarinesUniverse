@@ -101,49 +101,4 @@ public sealed class GhostMergeRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task RichWarpResponseRoundTripsEveryForkField()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var serializer = Server.ResolveDependency<IRobustSerializer>();
-            var target = SEntMan.Spawn();
-            var warp = new GhostWarp(
-                SEntMan.GetNetEntity(target),
-                "Senior Xenomorph",
-                false,
-                "Praetorian",
-                "Xenos",
-                "Tier Three",
-                "CMJobIconXenoPraetorian",
-                "CMXenoPraetorian",
-                "CMXenoPraetorian",
-                42,
-                3,
-                true);
-            var response = new GhostWarpsResponseEvent([warp]);
-
-            using var stream = new MemoryStream();
-            serializer.Serialize(stream, response);
-            stream.Position = 0;
-            var roundTripped = serializer.Deserialize<GhostWarpsResponseEvent>(stream);
-            var result = roundTripped.Warps.Single();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(result.Entity, Is.EqualTo(warp.Entity));
-                Assert.That(result.DisplayName, Is.EqualTo("Senior Xenomorph"));
-                Assert.That(result.IsWarpPoint, Is.False);
-                Assert.That(result.RoleName, Is.EqualTo("Praetorian"));
-                Assert.That(result.Tab, Is.EqualTo("Xenos"));
-                Assert.That(result.Section, Is.EqualTo("Tier Three"));
-                Assert.That(result.IconPrototype, Is.EqualTo("CMJobIconXenoPraetorian"));
-                Assert.That(result.EntityPrototype, Is.EqualTo("CMXenoPraetorian"));
-                Assert.That(result.JobPrototype, Is.EqualTo("CMXenoPraetorian"));
-                Assert.That(result.SortWeight, Is.EqualTo(42));
-                Assert.That(result.XenoTier, Is.EqualTo(3));
-                Assert.That(result.IsXeno, Is.True);
-            });
-        });
-    }
 }

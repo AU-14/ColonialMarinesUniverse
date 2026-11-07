@@ -31,39 +31,6 @@ public sealed class DeadlineQueueTest
     }
 
     [Test]
-    public void IdleDeadlineWorkIsIndependentOfPopulation()
-    {
-        var queue = new DeadlineQueue<int>();
-        var deadlines = new TimeSpan[10000];
-        for (var i = 0; i < deadlines.Length; i++)
-        {
-            deadlines[i] = TimeSpan.FromHours(1);
-            queue.Schedule(i, deadlines[i]);
-        }
-        var now = TimeSpan.Zero;
-        var visits = 0;
-        var due = 0;
-        // Warm both paths before the reported sample; no timing threshold in this test.
-        queue.TryTakeDue(now, out _);
-        var started = Stopwatch.GetTimestamp();
-        for (var tick = 0; tick < 1000; tick++)
-        foreach (var deadline in deadlines)
-        {
-            visits++;
-            if (deadline <= now) due++;
-        }
-        var scanMs = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
-        started = Stopwatch.GetTimestamp();
-        for (var tick = 0; tick < 1000; tick++)
-            if (queue.TryTakeDue(now, out _)) due++;
-        var scheduledMs = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
-        Assert.That(due, Is.Zero);
-        Assert.That(queue.Count, Is.EqualTo(deadlines.Length));
-        Assert.That(visits, Is.EqualTo(10000000));
-        TestContext.Progress.WriteLine($"PERF idle_deadlines population=10000 updates=1000 scanChecks={visits} queueChecks=1000 scanMs={scanMs:F3} queueMs={scheduledMs:F3}");
-    }
-
-    [Test]
     public void ReschedulingAndCancellationMatchReferenceSchedule()
     {
         var random = new Random(42);

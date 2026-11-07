@@ -17032,5 +17032,295 @@
   id: 990
   time: '2026-11-06T15:46:02.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2408
+- author: TheHellFireo
+  changes:
+  - message: USS Bush decks can no longer be mined downward, and departing evacuation
+      boats no longer leave invisible lethal zones.
+    type: Fix
+  - message: Gunships can hover over clear air above colony terrain, including older
+      maps.
+    type: Fix
+  - message: Free evolution slots now count castes correctly.
+    type: Fix
+  - message: Distillation towers support five separate pipe routes, and incoming fluid
+      no longer steals space reserved for an active batch's products.
+    type: Fix
+  - message: Fallen wall debris no longer grinds against other solid objects after
+      a collapse.
+    type: Fix
+  - message: Insurgent mail uses the public occupation, and retiring trade ships release
+      their landing pads. Trading help now explains item intake.
+    type: Fix
+  - message: Filing cabinets contain CM paperwork instead of upstream folders and
+      NanoTask cartridges.
+    type: Fix
+  - message: Commanding officers receive a clothing kit and can select restored handcannon
+      belt rewards using existing unlock rules.
+    type: Add
+  - message: Native fuel research reports show read-only combustion measurements.
+    type: Add
+  id: 991
+  time: '2026-11-06T18:00:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2485
+- author: Operator-Exi
+  changes:
+  - message: Some reactions now need heat, cold, or mixing. Close a container's lid
+      and use Mix from the right-click menu for foams, smoke, tear gas, napalm blends,
+      synth blood, pepper spray and hard research recipes.
+    type: Add
+  - message: Methamphetamine, fentanyl, space drugs, phenol-formaldehyde and synthetic
+      latex must be heated to form. Any heat source works, including a freshly made
+      hot chemical.
+    type: Add
+  - message: Stabilized mutagen and MH-33 must be kept cold and mixed.
+    type: Add
+  - message: Added a chemistry chiller and an ice brine reaction for cooling solutions.
+    type: Add
+  - message: Hotplate and chiller flatpacks can be ordered from every ASRS for $250
+      each.
+    type: Add
+  - message: Hard research contracts can include a sub-contract chemical, printed
+      on the same contract paper.
+    type: Add
+  - message: The research terminal has new Contracts and Properties tabs.
+    type: Add
+  - message: Any lidded bottle holding a flammable mix can be made into a molotov
+      with paper.
+    type: Add
+  - message: Stock napalm ignites when heated, and chemical grenades with fuel burst
+      into a ring of fire.
+    type: Add
+  - message: Fire-penetrating level 3 and above melts walls, barricades and doors
+      over time.
+    type: Add
+  - message: Flowing chemicals make their fire spread; Viscous chemicals stop it spreading.
+    type: Add
+  - message: Fire colour now shows intensity, from red through orange, yellow and
+      blue to white. Only specialist flamer tanks can reach blue.
+    type: Tweak
+  - message: Flamethrowers fire an arrow-shaped cone. Standard tanks reach less far
+      and stay narrower; specialist tanks get their full reach and widest cone.
+    type: Tweak
+  - message: Fires from beakers, grenades and molotovs are sized by their contents
+      and burn in a circle.
+    type: Tweak
+  - message: B-gel is now a spreading fuel with a wider flame.
+    type: Tweak
+  - message: Explosive research chemicals scale their blast with level, up to a large
+      IED, and detonate when heated instead of when made.
+    type: Tweak
+  - message: Research chemicals with Hyperthermic or Hypothermic heat or cool their
+      mixture.
+    type: Tweak
+  - message: Research contracts give 1 sample data (2 for Hard). Repeating a simulator
+      operation doubles its cost each time.
+    type: Tweak
+  - message: Napalm mixes are much weaker against xenos, generated fuels no longer
+      stack their bonuses twice, and Oxidizing maxes at level 3.
+    type: Tweak
+  - message: Chemical payloads only accept vials and beakers, including high-capacity
+      beakers.
+    type: Tweak
+  - message: GOVFOR can no longer do research during Insurgency.
+    type: Tweak
+  - message: Sprays reach anything along their path, so effects like Repairing work
+      on synths, people and barricades without clicking them directly.
+    type: Fix
+  - message: Spray vapor no longer passes over barricades, and each puff affects a
+      target only once.
+    type: Fix
+  - message: "Research contracts no longer ask for unobtainable chemicals like caf\xE9\
+      \ de olla."
+    type: Fix
+  - message: The simulator charges exactly the cost it shows.
+    type: Fix
+  - message: Contract hints show readable chemical and property names.
+    type: Fix
+  - message: Added a shared fire stat system for flamers, molotovs, grenades and chemical
+      ignition.
+    type: Code
+  id: 992
+  time: '2026-11-06T18:04:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2365
+- author: KeiKiyomi
+  changes:
+  - message: Added Green, Blue, White and Rapid Fire laser batteries, including selectable
+      wide-ring and sweeping-line patterns.
+    type: Add
+  - message: Added Weedkiller, Cluster Incendiary, Smoke, Flare, Thermobaric, HEAT
+      and White Phosphorus rockets with payload-specific effects.
+    type: Add
+  - message: Added a JDAM bomb clamp with HE, Incendiary, AP, Cluster, Buster and
+      Napalm bombs.
+    type: Add
+  - message: Added the 40mm BOFORS autocannon with adjustable airburst heights and
+      the 105mm Howitzer with multiple shell types. Both support hand-loading while
+      landed.
+    type: Add
+  - message: Added Hornet fragmentation, Lance armor-piercing and Cinder incendiary
+      GAU ammunition, plus mixed belt carriers that alternate between up to three
+      ammunition crates.
+    type: Add
+  - message: Added interior weapon mounting, fire-mission support for internal weapons
+      and console pages for up to seven weapons.
+    type: Add
+  - message: Added weapon-specific impact and dispersion previews, loadout summaries
+      and preflight warnings.
+    type: Add
+  - message: Added fire-control boot sequences, hardpoint faults, landing wear and
+      weapon jams, with multitool maintenance.
+    type: Add
+  - message: Overhauled the Mohawk M90 into a crewed triple-feed turret with a 225-degree
+      forward arc and 20-tile ground engagement range.
+    type: Add
+  - message: Added M90 calibration, IFF programming, manual aiming, AR gunnery, target
+      tracking, and Normal, Night and Thermal optics.
+    type: Add
+  - message: Added M90 airborne flare bombardment with impact previews and warnings
+      for players in the target area.
+    type: Add
+  - message: Added explicitly activated M90 AI free fire and close defense, with planet-only
+      automatic ground operation, line-of-sight checks and airborne target approval.
+    type: Add
+  - message: Added Squall, HEAP, Gale, Ember and Tempest M90 ammunition, manual and
+      automatic feed selection, and low-ammunition warnings.
+    type: Add
+  - message: Added M90 barrel heat, overheating, spent casings, turret damage and
+      staged repairs.
+    type: Add
+  - message: Added a shared pilot and gunner flare list.
+    type: Add
+  - message: Added an RTO CAS uplink with structured strike requests, target previews,
+      weapon and effect selection, remarks and battle damage assessments.
+    type: Add
+  - message: RTOs can request support on friendly flare, laser and GPS reports, or
+      call their own position with selectable offsets and radio-ranging deviation.
+    type: Add
+  - message: Pilots can accept or deny CAS requests and choose manual or automatic
+      carry-out. Only automatic carry-out requires RTO cleared-hot authorization.
+    type: Add
+  - message: RTOs can clear automatic requests hot, abort requests and broadcast their
+      current position over JTAC.
+    type: Add
+  - message: RTO laser designation improves strike accuracy near the designated point.
+    type: Add
+  - message: Added danger-close warnings and repeat-shot confirmation for console
+      strikes near living friendlies.
+    type: Add
+  - message: Xenos and players holding sharp tools can sabotage RTO radio wiring through
+      a seven-second action. RTOs or personnel with Engineering skill 1 can repair
+      it using five cable.
+    type: Add
+  - message: Added programmable laser codes to designators and aircraft receivers.
+      Designators default to 1111-1; mismatched lasers cannot be detected or locked.
+    type: Add
+  - message: Dropships and jets can individually program guided missiles and JDAMs
+      for laser or GPS guidance.
+    type: Add
+  - message: Ground rangefinder measurements generate faction-specific GPS reports
+      using planet coordinate offsets. Reports expire after five minutes and carry
+      fixed deviation of up to fifteen tiles per axis.
+    type: Add
+  - message: Programmed GPS munitions retain their target solution without a continuing
+      laser designation or active source report.
+    type: Add
+  - message: Added a GPS-guided 105mm HE shell costing twice standard HE with the
+      same explosive payload.
+    type: Add
+  - message: CAS damage no longer gibs bodies or automatically severs the head or
+      torso. Lethal damage and ordinary limb loss remain possible.
+    type: Tweak
+  - message: Dropship targeting cameras view marks from the highest connected z-level.
+    type: Fix
+  - message: Dropship weapons consoles resize to use available window space.
+    type: Fix
+  - message: Added CAS controls for boot sequences, faults, ammunition refills, repairs
+      and requests, with expanded firing, loading and maintenance logs.
+    type: Admin
+  - message: 'Note to PLAYERS: I HIGHELY RECOMMEND reading the guidebook before using
+      systems or writing feedback/bug reports, I will genuinely laugh if someone pings
+      me with a report saying "my guns wont shoot" well did you fix the hardpoint?'
+    type: Admin
+  id: 993
+  time: '2026-11-06T18:05:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2092
+- author: Operator-Exi
+  changes:
+  - message: The Early Warning Antagonist wakes. A Working Joe corrupted by The_Grand_Machine
+      arrives as a forward scout.
+    type: Add
+  - message: 'The Early Warning climbs six levels by completing the signal''s directives:
+      killing, collecting intel, offering firearms and assimilating consoles.'
+    type: Add
+  - message: Its abilities are grouped into four Signal wheels on the action bar,
+      and Signal Status shows its level and directives.
+    type: Add
+  - message: On Distress Signal, the Early Warning Joe is offered as a ghost role
+      in a colony Working Joe on the planet.
+    type: Add
+  - message: Assimilated consoles lock up and are reported by APOLLO. Colonists repair
+      them with a screwdriver, wirecutters and the corrupted core shard the Joe drops
+      when killed.
+    type: Add
+  - message: Assimilating a console converts a synthetic into a River-Melded thrall.
+      A Weyland-Yutani reset key frees them.
+    type: Add
+  - message: At its final level the Early Warning Joe gains THE LIGHT, an orange glow
+      that paralyzes those who keep looking at it.
+    type: Add
+  - message: Antagonist synthetics can finally fire guns, however they became antagonists,
+      including through reset keys. Frag out at the CLFs command at last.
+    type: Tweak
+  - message: Blood splatters now appear on stations and ships instead of being refused.
+    type: Fix
+  - message: FOB support guns respect a sentry lockout.
+    type: Fix
+  - message: Added the ewjoemechanics command to stop or allow the Early Warning Joe
+      being rolled.
+    type: Admin
+  - message: Added a shared blood-spray helper for weapon hits, and the yautja Z-level
+      leap can now be given to non-yautja mobs.
+    type: Code
+  id: 994
+  time: '2026-11-06T18:05:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2456
+- author: TheHellFireo
+  changes:
+  - message: Keep Foxtrot bonus skills consistent and show readable construction requirements.
+    type: Fix
+  - message: Explain Stimmaster use and injector choices in the research guide.
+    type: Add
+  - message: Correct Bush sentry allegiance, low-cover targeting, nested turbulence
+      and stairwell environments.
+    type: Fix
+  - message: Keep vacated lifeboat berths safe on playable zero-gravity ships.
+    type: Fix
+  - message: Correct tank grenade launches, corpse blocking and finite cabin air retention.
+    type: Fix
+  - message: Improve warrior lunges, lesser-swarm traversal and capture protection.
+    type: Fix
+  - message: Correct cross-deck chemical recharge, cargo headset keys and stacked
+      tile fires.
+    type: Fix
+  id: 995
+  time: '2026-11-06T18:05:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2502
+- author: ILoveDespoiler
+  changes:
+  - message: Harbingers Cyclone no longer hits through walls. [BUG-1255]
+    type: Fix
+  - message: Harbingers Cyclone no longer puts xeno highfive icons on top of people.
+      It applies a proper damage effect on hit.
+    type: Fix
+  id: 996
+  time: '2026-11-06T18:08:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2439
+- author: ILoveDespoiler
+  changes:
+  - message: Added the Runner evasion mechanic to Sprinter.
+    type: Add
+  id: 997
+  time: '2026-11-06T18:08:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2443
 Name: CMU
 Order: -1

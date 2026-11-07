@@ -28,10 +28,6 @@
     "filter": "FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest. & Name!~Blooding & Name!~Bracer & Name!~Huntsmaster"
   },
   {
-    "name": "cmu_camera",
-    "filter": "FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest. & (Name~Rmc | Name~Static | Name~Member | Name~Cmu)"
-  },
-  {
     "name": "mapping_station_shuttle_round",
     "filter": "FullyQualifiedName~Content.IntegrationTests.Tests.GameRules. | FullyQualifiedName~Content.IntegrationTests.Tests.Mapping. | FullyQualifiedName~Content.IntegrationTests.Tests.Procedural. | FullyQualifiedName~Content.IntegrationTests.Tests.Replays. | FullyQualifiedName~Content.IntegrationTests.Tests.Round. | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle. | FullyQualifiedName~Content.IntegrationTests.Tests.Station. | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles. | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm. | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable."
   },
@@ -69,11 +65,19 @@
   },
   {
     "name": "cmu",
-    "filter": "FullyQualifiedName~CMU14. & FullyQualifiedName!~CMU14.ColonyEconomy. & FullyQualifiedName!~CMU14.Fire. & FullyQualifiedName!~CMU14.ForceOnForce. & FullyQualifiedName!~CMU14.ThreeD. & FullyQualifiedName!~CMU14.Threats. & FullyQualifiedName!~CMU14.DroneOperator. & FullyQualifiedName!~CMU14.Evacuation. & FullyQualifiedName!~CMU14.Weapons. & FullyQualifiedName!~CMU14.TacticalMap. & FullyQualifiedName!~CMU14.Traits. & FullyQualifiedName!~CMU14.Trigger. & FullyQualifiedName!~CMU14.Minds. & FullyQualifiedName!~CMU14.Construction. & FullyQualifiedName!~CMU14.Light. & FullyQualifiedName!~CMU14.Medical. & FullyQualifiedName!~CMU14.Chemistry. & FullyQualifiedName!~CMU14.Dropship. & FullyQualifiedName!~CMU14.Blackfoot. & FullyQualifiedName!~CMU14.Fighter. & FullyQualifiedName!~CMU14.CargoVehicle. & FullyQualifiedName!~CMU14.Maps. & FullyQualifiedName!~CMU14.ZLevels. & FullyQualifiedName!~CMU14.Camera. & FullyQualifiedName!~CMU14.Yautja. & FullyQualifiedName!~CMU14.Diagnostics. & FullyQualifiedName!~CMU14.Research. & FullyQualifiedName!~CMU14.Fob. & FullyQualifiedName!~CMU14.Movement. & FullyQualifiedName!~CMU14.Vehicle. & FullyQualifiedName!~CMU14.BugReports. & FullyQualifiedName!~CMU14.Xenonids. & FullyQualifiedName!~CMU14.Requisitions. & FullyQualifiedName!~CMU14.Radio. & FullyQualifiedName!~CMU14.HunterShip. & FullyQualifiedName!~CMU14.Insurgency. & FullyQualifiedName!~CMU14.Nutrition. & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest. & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest. & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest. & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest."
+    "filter": "FullyQualifiedName~CMU14. & FullyQualifiedName!~CMU14.ColonyEconomy. & FullyQualifiedName!~CMU14.Fire. & FullyQualifiedName!~CMU14.ForceOnForce. & FullyQualifiedName!~CMU14.ThreeD. & FullyQualifiedName!~CMU14.Threats. & FullyQualifiedName!~CMU14.DroneOperator. & FullyQualifiedName!~CMU14.Evacuation. & FullyQualifiedName!~CMU14.Weapons. & FullyQualifiedName!~CMU14.TacticalMap. & FullyQualifiedName!~CMU14.Traits. & FullyQualifiedName!~CMU14.Trigger. & FullyQualifiedName!~CMU14.Minds. & FullyQualifiedName!~CMU14.Construction. & FullyQualifiedName!~CMU14.Light. & FullyQualifiedName!~CMU14.Medical. & FullyQualifiedName!~CMU14.Chemistry. & FullyQualifiedName!~CMU14.Dropship. & FullyQualifiedName!~CMU14.Blackfoot. & FullyQualifiedName!~CMU14.Fighter. & FullyQualifiedName!~CMU14.CargoVehicle. & FullyQualifiedName!~CMU14.Maps. & FullyQualifiedName!~CMU14.ZLevels. & FullyQualifiedName!~CMU14.Yautja. & FullyQualifiedName!~CMU14.Diagnostics. & FullyQualifiedName!~CMU14.Research. & FullyQualifiedName!~CMU14.Fob. & FullyQualifiedName!~CMU14.Movement. & FullyQualifiedName!~CMU14.Vehicle. & FullyQualifiedName!~CMU14.BugReports. & FullyQualifiedName!~CMU14.Xenonids. & FullyQualifiedName!~CMU14.Requisitions. & FullyQualifiedName!~CMU14.Radio. & FullyQualifiedName!~CMU14.HunterShip. & FullyQualifiedName!~CMU14.Insurgency. & FullyQualifiedName!~CMU14.Nutrition."
   },
   {
     "name": "cmu_chemistry",
-    "filter": "FullyQualifiedName~CMU14.Chemistry. | FullyQualifiedName~CMU14.Research."
+    "filter": "FullyQualifiedName~CMU14.Chemistry."
+  },
+  {
+    "name": "cmu_research_contracts",
+    "filter": "FullyQualifiedName~CMU14.Research.CMUProcgenChemistryTest. | FullyQualifiedName~CMU14.Research.CMUNestedContractTest."
+  },
+  {
+    "name": "cmu_research",
+    "filter": "FullyQualifiedName~CMU14.Research. & FullyQualifiedName!~CMU14.Research.CMUProcgenChemistryTest. & FullyQualifiedName!~CMU14.Research.CMUNestedContractTest."
   },
   {
     "name": "cmu_fob",
@@ -89,7 +93,7 @@
   },
   {
     "name": "cmu_spatial",
-    "filter": "(FullyQualifiedName~CMU14.ZLevels. | FullyQualifiedName~CMU14.Camera. | FullyQualifiedName~Content.IntegrationTests.CMU.) & (FullyQualifiedName!~CMU14.Camera.CameraNetworkSystemTest. | (FullyQualifiedName~CMU14.Camera.CameraNetworkSystemTest. & Name!~Rmc & Name!~Static & Name!~Member & Name!~Cmu))"
+    "filter": "FullyQualifiedName~CMU14.ZLevels. | FullyQualifiedName~Content.IntegrationTests.CMU."
   },
   {
     "name": "cmu_ships",
@@ -114,10 +118,6 @@
   {
     "name": "proto_lint_serial",
     "filter": "FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook. | FullyQualifiedName~Content.IntegrationTests.Tests.Linter. | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences. | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests. | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization. | FullyQualifiedName~Content.IntegrationTests.Tests.Audio. | FullyQualifiedName~Content.IntegrationTests.Tests.NameIdentifier. | FullyQualifiedName~Content.IntegrationTests.Tests.Research."
-  },
-  {
-    "name": "cmu_lobby_ui",
-    "filter": "FullyQualifiedName~CMU14.Round.CMUPresetVoteTest. | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest. | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest. | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest."
   },
   {
     "name": "cmu_yautja_weapons",

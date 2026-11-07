@@ -14,6 +14,6 @@ The three exact thin cladding types `CMCatwalk`, `CMCatwalkPrison` and `RMCCatwa
 
 Platforms, pallets, cardboard and wire rails remain present. The cardboard/pallet stack at Redux surface UID12468 requires a separate reviewed composition; a ladder painted over a decorative sprite does not prove a physical hole through its inferred cartons. A local aperture does not reveal the remote map, prove a return endpoint or introduce a climb animation. Physical ladder height, recess depth and opening dimensions remain explicitly inferred draft choices.
 
-Focused verification lives in `CMU3DSlabOpeningTest.cs`, `CMU3DSlabAdmissionTest.cs`, `tests/test_slab_openings.py` and `viewer/viewer.test.mjs`. These check union coverage, rotated grids, fallback/budget behavior, source-state rejection, real export voids, source metadata and unstretched floor artwork. They are offline checks. The user-requested look-around was subsequently relaunched, but interactive acceptance of the new ladder assets remains separate.
+Shared exporter format and file safety checks remain in the Python suite. Aperture appearance and placement can be inspected in the offline viewer.
 
 Five ladder assemblies are installed at 37 Redux and three classic placements. The saved scenes apply all 40 bounded apertures and clip the three eligible neighboring grates. The Down2 pallet/carton assembly remains deferred; it and unsupported hatch appearances retain their source fallback.

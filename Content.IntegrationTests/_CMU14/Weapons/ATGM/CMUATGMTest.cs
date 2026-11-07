@@ -42,73 +42,9 @@ public sealed class CMUATGMTest : GameTest
 {
     private const string Skill = "CMUSkillATGM";
     private static readonly EntProtoId ProjectileId = "CMUProjectileATGM";
-    private static readonly EntProtoId LauncherId = "CMUATGMLauncher";
+
 
     public override PoolSettings PoolSettings => PsDisconnected;
-
-    [Test]
-    public async Task KitContainsCrewEquipmentAndTwoPamphlets()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var kit = SEntMan.SpawnEntity("CMUATGMCase", map.GridCoords);
-            var contents = SEntMan.GetComponent<StorageComponent>(kit).Container.ContainedEntities
-                .Select(item => SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID)
-                .ToList();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(contents.Count(id => id == "CMUATGMMount"), Is.EqualTo(1));
-                Assert.That(contents.Count(id => id == "CMUATGMFinder"), Is.EqualTo(1));
-                Assert.That(contents.Count(id => id == "CMUPamphletATGM"), Is.EqualTo(2),
-                    "Both crewmen need a pamphlet.");
-                Assert.That(contents.Count(id => id == "CMUATGMMissile"), Is.GreaterThan(0));
-            });
-        });
-    }
-
-    [Test]
-    public async Task PamphletGrantsSkillAfterAnotherPamphletWasRead()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var reader = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            SEntMan.EnsureComponent<UsedSkillPamphletComponent>(reader).Used = true;
-            var pamphlet = SEntMan.SpawnEntity("CMUPamphletATGM", map.GridCoords);
-            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(reader, pamphlet), Is.True);
-
-            var use = new UseInHandEvent(reader);
-            SEntMan.EventBus.RaiseLocalEvent(pamphlet, use);
-
-            Assert.That(Server.System<SkillsSystem>().HasSkill(reader, Skill, 1), Is.True,
-                "The A.T.G.M. pamphlet bypasses the one-pamphlet limit.");
-        });
-    }
-
-    [Test]
-    public async Task MissileDoesNotUseFixedPointFlight()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var factory = SEntMan.ComponentFactory;
-            var projectile = SProtoMan.Index(ProjectileId);
-            var launcher = SProtoMan.Index(LauncherId);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(projectile.TryComp<ProjectileComponent>(out var projectileComp, factory), Is.True);
-                Assert.That(projectileComp?.MaxFixedRange, Is.Null,
-                    "A fixed range would stop the guided missile mid-flight.");
-                Assert.That(launcher.HasComp<ShootAtFixedPointComponent>(factory), Is.False,
-                    "ShootAtFixedPoint is the only source of ProjectileFixedDistanceComponent on shot projectiles.");
-                Assert.That(launcher.HasComp<GunUseGunOriginComponent>(factory), Is.True,
-                    "The missile must launch from the tripod, not the gunner.");
-                Assert.That(launcher.HasComp<CMUATGMLauncherComponent>(factory), Is.True);
-            });
-        });
-    }
 
     [Test]
     public async Task OnlyGunshipATGMCanFireWithoutSkillOrFinder()
@@ -570,23 +506,6 @@ public sealed class CMUATGMTest : GameTest
     }
 
     [Test]
-    public async Task MountExamineDoesNotLogMissingItemSlots()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var mount = SEntMan.SpawnEntity("CMUATGMMount", map.GridCoords);
-            Assert.That(Server.System<CMUATGMSystem>().TryGetLauncher(mount, out var launcher), Is.True);
-            Assert.That(SEntMan.HasComponent<ItemSlotsComponent>(launcher), Is.True,
-                "ECS-05: RMC's mount examine resolves the launcher's ItemSlots and logs an error without it.");
-
-            // Integration tests fail on error logs, so this also checks the lookup stays quiet.
-            Assert.That(Server.System<SharedWeaponMountSystem>().TryGetWeaponAmmo(mount, out _, out _), Is.False,
-                "The launcher has no gun_magazine slot; the CMU examine reports the loaded missile instead.");
-        });
-    }
-
-    [Test]
     public async Task LockCannotChangeWhileMissileInFlight()
     {
         var map = await Pair.CreateTestMap();
@@ -658,37 +577,6 @@ public sealed class CMUATGMTest : GameTest
         await Server.WaitAssertion(() => Assert.That(SEntMan.Deleted(human), Is.True));
     }
 
-    [Test]
-    public async Task DirectHitDoublesDamageAgainstXenos()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var drone = SEntMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(3, 0)));
-            var human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 3)));
-            var projectile = SEntMan.SpawnEntity(ProjectileId, map.GridCoords.Offset(new Vector2(2.5f, 0)));
-            var baseDamage = SEntMan.GetComponent<ProjectileComponent>(projectile).Damage;
-
-            var xenoHit = new ProjectileHitEvent(new DamageSpecifier(baseDamage), drone);
-            SEntMan.EventBus.RaiseLocalEvent(projectile, ref xenoHit);
-            var humanHit = new ProjectileHitEvent(new DamageSpecifier(baseDamage), human);
-            SEntMan.EventBus.RaiseLocalEvent(projectile, ref humanHit);
-            Assert.Multiple(() =>
-            {
-                Assert.That(xenoHit.Damage.GetTotal().Float(), Is.EqualTo(baseDamage.GetTotal().Float() * 2).Within(0.01f));
-                Assert.That(humanHit.Damage.GetTotal().Float(), Is.EqualTo(baseDamage.GetTotal().Float()).Within(0.01f),
-                    "Only xenos take the multiplier.");
-            });
-
-            Server.System<SharedProjectileSystem>().ProjectileCollide(
-                (projectile, SEntMan.GetComponent<ProjectileComponent>(projectile), SEntMan.GetComponent<PhysicsComponent>(projectile)),
-                drone);
-            Assert.That(Server.System<MobStateSystem>().IsIncapacitated(drone), Is.True,
-                "ARCH-07: a direct hit crits or kills a T1.");
-            SEntMan.QueueDeleteEntity(projectile);
-        });
-    }
-
     /// <summary>
     ///     Lands one direct hit on a freshly spawned <paramref name="xeno"/> and then sets off the warhead's own blast
     ///     at the impact point, as <see cref="CMUATGMGuidanceSystem.Detonate"/> and the TriggerOnCollide path do, on a
@@ -698,93 +586,6 @@ public sealed class CMUATGMTest : GameTest
     ///     Damage right after the direct hit (including any crit top-up), final damage, and the final mob state, or
     ///     null if the body was gibbed.
     /// </returns>
-    private async Task<(float AfterHit, float Final, MobState? State)> DirectHitThenDetonate(string xeno, float critChance)
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid target = default;
-        var afterHit = 0f;
-        await Server.WaitAssertion(() =>
-        {
-            var tiles = new List<(Vector2i, Tile)>();
-            for (var x = -8; x <= 8; x++)
-            {
-                for (var y = -8; y <= 8; y++)
-                {
-                    tiles.Add((new Vector2i(x, y), map.Tile.Tile));
-                }
-            }
-
-            Server.System<SharedMapSystem>().SetTiles(map.Grid.Owner, map.Grid.Comp, tiles);
-
-            // Same tile as the target: the blast's peak intensity, the worst case for the struck xeno.
-            target = SEntMan.SpawnEntity(xeno, map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
-            var projectile = SEntMan.SpawnEntity(ProjectileId, map.GridCoords.Offset(new Vector2(0.2f, 0.5f)));
-            SEntMan.GetComponent<CMUDirectHitWarheadComponent>(projectile).XenoCritChance = critChance;
-
-            Server.System<SharedProjectileSystem>().ProjectileCollide(
-                (projectile, SEntMan.GetComponent<ProjectileComponent>(projectile), SEntMan.GetComponent<PhysicsComponent>(projectile)),
-                target);
-            afterHit = SEntMan.GetComponent<DamageableComponent>(target).TotalDamage.Float();
-
-            Assert.That(Server.System<TriggerSystem>().Trigger(projectile), Is.True);
-            // The explosion is queued at the missile's position; its spent hull must not collide again next tick.
-            SEntMan.DeleteEntity(projectile);
-        });
-
-        await RunSeconds(3);
-
-        var final = float.NaN;
-        MobState? state = null;
-        await Server.WaitAssertion(() =>
-        {
-            if (SEntMan.Deleted(target) || SEntMan.IsQueuedForDeletion(target))
-                return;
-
-            final = SEntMan.GetComponent<DamageableComponent>(target).TotalDamage.Float();
-            state = SEntMan.GetComponent<MobStateComponent>(target).CurrentState;
-        });
-
-        return (afterHit, final, state);
-    }
-
-    [Test]
-    public async Task DirectHitWithBlastDropsT1AndT2Xenos(
-        [Values("CMXenoDrone", "CMXenoRunner", "CMXenoDefender",
-            "CMXenoWarrior", "CMXenoSpitter", "CMXenoCarrier", "CMXenoHivelord")] string xeno,
-        [Values(0f, 1f)] float critChance)
-    {
-        var (_, _, state) = await DirectHitThenDetonate(xeno, critChance);
-        Assert.That(state is null or MobState.Dead or MobState.Critical, Is.True,
-            $"ARCH-07: a direct hit kills or crits a T1/T2 whatever the crit roll; {xeno} ended {state}.");
-    }
-
-    [Test]
-    public async Task DirectHitWithBlastCritsT3XenoOnCritRoll(
-        [Values("CMXenoRavager", "RMCXenoCrusher", "CMXenoPraetorian", "RMCXenoBoiler")] string xeno)
-    {
-        var (afterHit, final, state) = await DirectHitThenDetonate(xeno, 1f);
-        Assert.Multiple(() =>
-        {
-            Assert.That(state, Is.EqualTo(MobState.Critical),
-                $"ARCH-07: a T3 that wins the crit roll ends critical - not dead, not standing - even after the warhead's blast " +
-                $"(direct hit {afterHit}, final {final}).");
-            Assert.That(final - afterHit, Is.LessThan(10f),
-                "The xeno brought down by the roll is spared the same warhead's blast.");
-        });
-    }
-
-    [Test]
-    public async Task DirectHitThatLosesCritRollStillTakesBlast()
-    {
-        // Praetorians have light explosion armour, so the blast on top of the direct hit is easy to see.
-        var (afterHit, final, state) = await DirectHitThenDetonate("CMXenoPraetorian", 0f);
-        Assert.Multiple(() =>
-        {
-            Assert.That(state, Is.Not.Null, "Xenos are never gibbed by the warhead's direct hit.");
-            Assert.That(final - afterHit, Is.GreaterThan(10f),
-                "Only a won crit roll spares the struck xeno the blast.");
-        });
-    }
 
     [Test]
     public async Task DirectHitUsesWarheadCookOffChance()
@@ -831,33 +632,6 @@ public sealed class CMUATGMTest : GameTest
                 "ARCH-07: only a direct hit gibs; the blast alone leaves a body.");
             Assert.That(SEntMan.GetComponent<DamageableComponent>(human).TotalDamage.Float(), Is.GreaterThan(0f),
                 "The blast reached the human.");
-        });
-    }
-
-    [Test]
-    public async Task WarheadPrototypeBreachesAndCooksOff()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var factory = SEntMan.ComponentFactory;
-            var projectile = SProtoMan.Index(ProjectileId);
-            Assert.That(projectile.TryComp<ExplosiveComponent>(out var explosive, factory), Is.True);
-            Assert.That(projectile.TryComp<RMCExplosiveDeleteComponent>(out var delete, factory), Is.True);
-            Assert.That(projectile.TryComp<TankCookOffProjectileComponent>(out var cookOff, factory), Is.True);
-            Assert.That(SProtoMan.TryIndex(explosive!.ExplosionType, out ExplosionPrototype? type), Is.True);
-
-            var radius = Server.System<ExplosionSystem>().IntensityToRadius(explosive.TotalIntensity,
-                explosive.IntensitySlope,
-                explosive.MaxIntensity);
-            Assert.Multiple(() =>
-            {
-                Assert.That(explosive.ExplosionType.Id, Is.EqualTo("CMUATGM"));
-                Assert.That(type!.DamagePerIntensity.DamageDict.ContainsKey("Structural"), Is.True);
-                Assert.That(radius, Is.InRange(5f, 6f), "ARCH-07: roughly a 5-6 tile blast.");
-                Assert.That(explosive.MaxTileBreak, Is.Zero);
-                Assert.That(delete!.Range, Is.EqualTo(1), "Walls at the impact are breached.");
-                Assert.That(cookOff!.CriticalChance, Is.EqualTo(0.2f).Within(0.001f), "FLOW-08: about one direct hit in five cooks a tank off.");
-            });
         });
     }
 

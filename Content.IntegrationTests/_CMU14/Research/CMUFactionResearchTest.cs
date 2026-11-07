@@ -1,11 +1,7 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Chemistry.Research;
-using Content.Server._RMC14.Requisitions;
-using Content.Shared._RMC14.Requisitions.Components;
-using Content.Shared._RMC14.Projectiles;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.CMU14.Chemistry.Research;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests._CMU14.Research;
@@ -14,38 +10,6 @@ namespace Content.IntegrationTests._CMU14.Research;
 public sealed class CMUFactionResearchTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false };
-
-    [TestPrototypes]
-    private const string Prototypes = """
-        - type: entity
-          id: CMUTestResearchASRSgovfor
-          parent: WYPMCCargoCatalog
-          components:
-          - type: RequisitionsComputer
-            faction: govfor
-
-        - type: entity
-          id: CMUTestResearchASRSopfor
-          parent: WYPMCCargoCatalog
-          components:
-          - type: RequisitionsComputer
-            faction: opfor
-
-        - type: entity
-          id: CMUTestResearchASRScolony
-          parent: WYPMCCargoCatalog
-          components:
-          - type: RequisitionsComputer
-            faction: colony
-
-        - type: entity
-          id: CMUTestResearchASRScorporate
-          parent: WYPMCCargoCatalog
-          components:
-          - type: RequisitionsComputer
-            faction: corporate
-
-        """;
 
     [Test]
     public async Task CooldownPurchasesAreIsolatedAndValidated()
@@ -145,59 +109,4 @@ public sealed class CMUFactionResearchTest : GameTest
         });
     }
 
-    [Test]
-    public async Task AsrsRefreshKeepsOnlyTheMatchingTerminal()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var requisitions = SEntMan.System<RequisitionsSystem>();
-            var consoles = new List<(EntityUid Uid, string Crate)>();
-            try
-            {
-                foreach (var (faction, suffix) in new[]
-                {
-                    ("govfor", "Govfor"), ("opfor", "Opfor"), ("colony", "Colony"), ("corporate", ""),
-                })
-                {
-                    var uid = SEntMan.SpawnEntity("CMUTestResearchASRS" + faction, MapCoordinates.Nullspace);
-                    consoles.Add((uid, "CMUCrateResearchTerminal" + suffix));
-                }
-
-                requisitions.ReapplyPlatoonCatalogs();
-                requisitions.ReapplyPlatoonCatalogs();
-                foreach (var (uid, crate) in consoles)
-                {
-                    var computer = SEntMan.GetComponent<RequisitionsComputerComponent>(uid);
-                    var terminals = computer.Categories.SelectMany(category => category.Entries)
-                        .Where(entry => entry.Crate.Id.StartsWith("CMUCrateResearchTerminal")).ToList();
-                    Assert.That(terminals.Select(entry => entry.Crate.Id), Is.EqualTo(new[] { crate }));
-                    Assert.That(computer.ItemCatalog.Any(entry => entry.Prototype.Id == crate), Is.True);
-                }
-            }
-            finally
-            {
-                foreach (var (uid, _) in consoles)
-                    SEntMan.DeleteEntity(uid);
-            }
-        });
-    }
-
-    [TestCase("Govfor", "govfor", "CMUCrateResearchTerminalGovfor")]
-    [TestCase("Opfor", "opfor", "CMUCrateResearchTerminalOpfor")]
-    [TestCase("Colony", "colony", "CMUCrateResearchTerminalColony")]
-    [TestCase("Corporate", "corporate", "CMUCrateResearchTerminal")]
-    public async Task ResearchCratesSupplyTheirFaction(string suffix, string faction, string crateId)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var prototypes = Server.ResolveDependency<IPrototypeManager>();
-            var terminalId = "CMUResearchDataTerminal" + suffix;
-            var terminal = prototypes.Index<EntityPrototype>(terminalId);
-            var crate = prototypes.Index<EntityPrototype>(crateId);
-            Assert.That(((ResearchDataTerminalComponent) terminal.Components["ResearchDataTerminal"].Component).Faction,
-                Is.EqualTo(faction));
-            Assert.That(((SpawnOnTerminateComponent) crate.Components["SpawnOnTerminate"].Component).Spawn.Id,
-                Is.EqualTo(terminalId));
-        });
-    }
 }

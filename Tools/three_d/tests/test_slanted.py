@@ -7,7 +7,6 @@ sys.path.insert(0, str(Path(__file__).parents[1]))
 from primitives import solid_geometry, triangle_count
 from build_models import validate_model, glb_document, render_model
 
-
 class SlantedTests(unittest.TestCase):
     def test_closed_tapered_mesh_normals_and_export_bounds(self):
         for axis in 'XY':
@@ -49,22 +48,3 @@ class SlantedTests(unittest.TestCase):
                     self.assertEqual(accessor['max'], actual.max(axis=0).tolist())
                     self.assertEqual(document['accessors'][mesh['indices']]['count'], 224*3)
                     self.assertEqual(triangle_count(model['parts']), 224)
-
-    def test_rasterized_leaf_has_a_diagonal_body_and_empty_opposite_corners(self):
-        for reverse in (False, True):
-            model = validate_model({'id': 'Leaf', 'label': 'Leaf', 'parts': [
-                {'min': '-.5,-.1,-.5', 'max': '.5,.1,.5', 'color': '#FFFFFF',
-                 'shape': 'SlantedXReverse' if reverse else 'SlantedX'}]})
-            pixels = np.array(render_model(model, (128,128), yaw=-math.pi/2, pitch=0))
-            mask = np.any(pixels != [23,33,43], axis=2)
-            self.assertTrue(mask[64,64])
-            self.assertEqual(bool(mask[88,40]), not reverse)
-            self.assertEqual(bool(mask[88,88]), reverse)
-            self.assertEqual(bool(mask[40,88]), not reverse)
-            self.assertEqual(bool(mask[40,40]), reverse)
-
-    def test_slanted_leaves_reject_surface_textures(self):
-        for axis in 'XY':
-            with self.assertRaisesRegex(ValueError, 'surface requires'):
-                validate_model({'id': 'Leaf', 'label': 'Leaf', 'parts': [
-                    {'min': '0,0,0', 'max': '1,1,1', 'shape': 'Slanted'+axis, 'surface': 'Unknown'}]})

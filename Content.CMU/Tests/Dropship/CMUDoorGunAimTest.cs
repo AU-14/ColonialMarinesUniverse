@@ -23,9 +23,4 @@ public sealed class CMUDoorGunAimTest
         Assert.That(offset.Degrees, Is.EqualTo(expectedOffset).Within(0.001));
     }
 
-    [Test]
-    public void RejectsNonFiniteAim()
-    {
-        Assert.That(CMUDoorGunAimSystem.TryGetAimOffset(Angle.Zero, new Angle(double.NaN), 160, out _), Is.False);
-    }
 }

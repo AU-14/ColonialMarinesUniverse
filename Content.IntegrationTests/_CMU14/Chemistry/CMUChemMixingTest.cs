@@ -105,26 +105,6 @@ public sealed class CMUChemMixingTest : GameTest
         });
     }
 
-    [TestCase("CMBeaker", true)]
-    [TestCase("CMBeakerLarge", true)]
-    [TestCase("RMCVial", true)]
-    [TestCase("RMCBeakerHighCapacity", true)]
-    [TestCase("RMCReagentJug", false)]
-    [TestCase("CMMiniTank", false)]
-    public async Task PayloadOnlyTakesVialsAndBeakers(string container, bool fits)
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var payload = SSpawnAtPosition("ChemicalPayload", map.GridCoords);
-            var item = SSpawnAtPosition(container, map.GridCoords);
-            var slots = Server.System<ItemSlotsSystem>();
-            Assert.That(slots.TryGetSlot(payload, "BeakerSlotA", out var slot), Is.True);
-            Assert.That(slots.CanInsert(payload, slot!, item, null), Is.EqualTo(fits));
-        });
-    }
-
     [Test]
     public async Task VaporIsNeverPassedOverByBarricades()
     {

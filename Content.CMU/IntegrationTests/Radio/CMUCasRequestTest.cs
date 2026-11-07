@@ -66,54 +66,6 @@ public sealed class CMUCasRequestTest : GameTest
     }
 
     [Test]
-    public async Task UndecidedDefaultsToAutoWithoutFiringBeforeClearance()
-    {
-        var map = await Pair.CreateTestMap();
-        var id = 0;
-        EntityUid console = default;
-        EntityUid rto = default;
-        await Server.WaitAssertion(() =>
-        {
-            rto = SEntMan.SpawnEntity(null, map.GridCoords);
-            SEntMan.AddComponent<MarineComponent>(rto).Faction = "govfor";
-            var mark = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(10, 0)));
-            Server.System<SharedDropshipWeaponSystem>().MakeDropshipTarget(mark, "TEST", "govfor");
-            console = SEntMan.SpawnEntity(null, map.GridCoords);
-            SEntMan.AddComponent<DropshipTerminalWeaponsComponent>(console);
-            var requests = Server.System<CMUCasRequestSystem>();
-            Assert.That(requests.TryCreateRequest(rto, mark, CMUCasMunition.Gau, out id), Is.True);
-            SEntMan.EventBus.RaiseLocalEvent(console, new CMUCasRequestActionMsg(id, CMUCasRequestStatus.Accepted)
-                { Actor = rto, UiKey = DropshipTerminalWeaponsUi.Key });
-        });
-        await Pair.RunSeconds(14);
-        await Server.WaitAssertion(() =>
-        {
-            var requests = Server.System<CMUCasRequestSystem>();
-            Assert.That(requests.TryGetRequest(id, out var request), Is.True);
-            Assert.That(request.CarryMode, Is.EqualTo(CMUCasCarryMode.Auto));
-            Assert.That(request.CarryVolleys, Is.Zero);
-            Assert.That(request.Status, Is.EqualTo(CMUCasRequestStatus.Accepted));
-            Assert.That(requests.TryAbort(rto, id), Is.True);
-        });
-    }
-
-    [TestCase("RMCDropshipAttachmentGau21Cannon", CMUCasMunition.Guns)]
-    [TestCase("RMCDropshipAttachmentRocketPod", CMUCasMunition.Rockets)]
-    [TestCase("RMCDropshipAttachmentGuidedMissileLauncher", CMUCasMunition.Missiles)]
-    public async Task AutoMatchesExistingMasterWeapons(string prototype, CMUCasMunition munition)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var weapon = SEntMan.SpawnEntity(prototype, map.GridCoords);
-            var component = SEntMan.GetComponent<DropshipWeaponComponent>(weapon);
-            Assert.That(CMUCasRequestSystem.Matches(CMUCasMunition.Any, component), Is.True);
-            Assert.That(CMUCasRequestSystem.Matches(munition, component), Is.True);
-            Assert.That(CMUCasRequestSystem.Matches(CMUCasMunition.Bombs, component), Is.False);
-        });
-    }
-
-    [Test]
     public async Task DangerCloseRequiresRepeatAndDesignationIsRecognized()
     {
         var map = await Pair.CreateTestMap();

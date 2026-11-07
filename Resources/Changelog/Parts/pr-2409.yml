@@ -1,0 +1,9 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: The Dynamic Gunship can now be exchanged for a standard Mohawk before its
+    first takeoff or flyby. The gunship waits for everyone to disembark before returning
+    to the fleet, and the Mohawk lands on its pad.
+  type: Add
+time: '2026-11-06T15:13:23.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2409

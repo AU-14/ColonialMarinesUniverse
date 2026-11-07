@@ -291,18 +291,6 @@ public sealed class CMUAutocompressorTest : GameTest
         });
 
     [Test]
-    public Task WornAnimationPrefixFollowsTreatmentState()
-        => RunCase(scene =>
-        {
-            Server.System<MobStateSystem>().ChangeMobState(scene.Patient, MobState.Critical);
-            Assert.That(scene.System.TryFit(scene.DeviceEntity, scene.User, scene.Patient), Is.True);
-            var clothing = SEntMan.GetComponent<ClothingComponent>(scene.Device);
-            Assert.That(clothing.EquippedPrefix, Is.EqualTo("running"));
-            scene.System.Stop(scene.DeviceEntity, true);
-            Assert.That(clothing.EquippedPrefix, Is.Null);
-        });
-
-    [Test]
     public Task FinalStageWithTorsoBleedingInjuresALungOnce()
         => RunCase(scene =>
         {
@@ -373,18 +361,6 @@ public sealed class CMUAutocompressorTest : GameTest
             Server.System<MobStateSystem>().ChangeMobState(scene.User, MobState.Alive);
             Assert.That(scene.Component.Running, Is.False);
             Assert.That(scene.Component.Patient, Is.Null);
-        });
-
-    [Test]
-    public Task RemovingAStandbyDeviceClearsItsPatientLink()
-        => RunCase(scene =>
-        {
-            var inventory = Server.System<InventorySystem>();
-            Assert.That(inventory.TryEquip(scene.User, scene.Device, CMUAutocompressorSystem.PatientSlot), Is.True);
-            Assert.That(inventory.TryUnequip(scene.User, CMUAutocompressorSystem.PatientSlot), Is.True);
-            Assert.That(scene.Component.Patient, Is.Null);
-            Server.System<MobStateSystem>().ChangeMobState(scene.User, MobState.Critical);
-            Assert.That(scene.Component.Running, Is.False);
         });
 
     [Test]

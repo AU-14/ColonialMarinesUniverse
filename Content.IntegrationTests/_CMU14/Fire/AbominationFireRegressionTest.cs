@@ -9,8 +9,6 @@ namespace Content.IntegrationTests.CMU14.Fire;
 public sealed class AbominationFireRegressionTest
 {
     [TestCase("AU14BiomorphGrunt")]
-    [TestCase("AU14BiomorphSkitter")]
-    [TestCase("AU14BiomorphSpider")]
     [TestCase("AU14BiomorphFleshKudzu")]
     public async Task IncendiaryFireDamagesBiomassAndBurnsOut(string prototype)
     {

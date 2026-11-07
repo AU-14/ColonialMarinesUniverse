@@ -10,12 +10,115 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
+from ci_selection import select_assets, select_shards
 
-from adaptive_ci import (artifact_fingerprint, balance, baseline_changes, collect, dependency_priority,
+from adaptive_ci import (artifact_fingerprint, balance, baseline_changes, collect, dependency_priority, plan_run,
                          execute_group, fingerprint, history_inputs, priority_fixtures, reusable, save_json)
 
 
 class AdaptiveCiTests(unittest.TestCase):
+    def test_asset_selection_skips_code_and_broadens_for_validator_changes_or_missing_diff(self):
+        self.assertEqual(select_assets(["Content.Shared/Example.cs"]),
+                         dict(rga=False, maps=False, rsi=False, any=False))
+        self.assertEqual(select_assets(["Content.CMU/Resources/Maps/CMU14/example.yml"]),
+                         dict(rga=False, maps=True, rsi=False, any=True))
+        for paths in (None, [".github/Schemas/mapfile_requirements.txt"], ["RobustToolbox"]):
+            self.assertTrue(all(select_assets(paths).values()))
+
+    def test_plan_schedules_only_selected_groups_and_unit_fixture_changes_skip_gameplay(self):
+        feature = "Content.CMU/Shared/Yautja/WeaponSystem.cs"
+        unit = "Content.Tests/Shared/WeaponTest.cs"
+        files = {feature: "class WeaponSystem {}",
+                 unit: "namespace Content.Tests.Shared; class WeaponTest { [Test] void Example() {} }"}
+        for event in ("pull_request", "push", "merge_group"):
+            for path, expected in ((feature, ["yautja"]), (unit, [])):
+                with self.subTest(event=event, path=path), tempfile.TemporaryDirectory() as directory, \
+                        patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
+                        patch("adaptive_ci.history_inputs", return_value={}), \
+                        patch("adaptive_ci.git", return_value="a" * 40), \
+                        patch("adaptive_ci.source_graph_inputs", return_value=(files, False)):
+                    result = plan_run(dict(build=True, unit=True, gameplay=True, reason=""), [path], event,
+                                      [dict(name="yautja", filter="FullyQualifiedName~CMU14.Yautja."),
+                                       dict(name="medical", filter="FullyQualifiedName~CMU14.Medical.")])
+                    plan = json.loads((Path(directory) / "plan.json").read_text())
+                    self.assertEqual([s["name"] for s in plan["shards"]], expected)
+                    self.assertEqual([g for lane in plan["lanes"] for g in lane["shards"]], expected)
+                    self.assertEqual(result["gameplay"], bool(expected))
+                    self.assertEqual(plan["selected"]["gameplay"], bool(expected))
+                    self.assertEqual(result["unit"], path == unit)
+                    self.assertEqual(len(result["matrix"]["lane"]), len(expected))
+
+    def test_feature_selection_honors_exclusions_and_includes_shared_consumers(self):
+        shards = [dict(name="yautja", filter="FullyQualifiedName~CMU14.Yautja."),
+                  dict(name="medical", filter="FullyQualifiedName~CMU14.Medical."),
+                  dict(name="other", filter="FullyQualifiedName~CMU14. & FullyQualifiedName!~CMU14.Yautja. & FullyQualifiedName!~CMU14.Medical.")]
+        path = "Content.CMU/Shared/Yautja/SharedItemSystem.cs"
+        files = {path: "class SharedItemSystem {}"}
+        self.assertEqual(select_shards([path], shards, files, [], True), {"yautja"})
+        self.assertEqual(select_shards([path], shards, files,
+                         ["Content.IntegrationTests.CMU14.Medical.TreatmentTest"], True), {"yautja", "medical"})
+        for paths, source, complete in (([path], files, False), ([path], {}, True),
+                                      (["Content.Shared/EntitySystem.cs"], {}, True),
+                                      (["Resources/Prototypes/items.yml"], {}, True)):
+            self.assertEqual(select_shards(paths, shards, source, [], complete), {"yautja", "medical", "other"})
+
+    def test_affected_nightly_fixtures_run_without_policy_exclusion_or_unrelated_sweeps(self):
+        from ci import select_tests
+        shared = "Content.Shared/Storage/SharedRules.cs"
+        unrelated = "Content.Shared/Storage/OtherRules.cs"
+        unit = "Content.Tests/Shared/IndependentTest.cs"
+        fixtures = {
+            "Content.IntegrationTests/Tests/EntityTest.cs": "Content.IntegrationTests.Tests.EntityTest",
+            "Content.IntegrationTests/Tests/Localization/LocalizedDatasetPrototypeTest.cs":
+                "Content.IntegrationTests.Tests.Localization.LocalizedDatasetPrototypeTest",
+            "Content.IntegrationTests/Tests/GameRules/AntagGhostRoleTest.cs":
+                "Content.IntegrationTests.Tests.GameRules.AntagGhostRoleTest",
+        }
+        files = {shared: "namespace Shared; class SharedRules {}",
+                 unrelated: "namespace Shared; class OtherRules {}",
+                 unit: "namespace Content.Tests.Shared; class IndependentTest { [Test] void Example() {} }"}
+        for path, fixture in fixtures.items():
+            namespace, name = fixture.rsplit(".", 1)
+            files[path] = (f"using Shared; namespace {namespace}; class {name} "
+                           "{ [Test] void Example() { SharedRules rules; } }")
+        scenarios = [(path, False, [fixture], {"nightly_affected"}) for path, fixture in fixtures.items()]
+        scenarios += [(shared, False, sorted(fixtures.values()), {"storage", "nightly_affected"}),
+                      (unrelated, False, [], {"storage"}), (unit, False, [], set()),
+                      ("README.md", False, [], set()),
+                      (next(iter(fixtures)), True, [next(iter(fixtures.values()))],
+                       {"storage", "round", "nightly_affected"})]
+        for path, partial, expected, groups in scenarios:
+            with self.subTest(path=path, partial=partial), tempfile.TemporaryDirectory() as directory, \
+                    patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
+                    patch("adaptive_ci.history_inputs", return_value={}), \
+                    patch("adaptive_ci.git", return_value="a" * 40), \
+                    patch("adaptive_ci.source_graph_inputs", return_value=(files, partial)):
+                result = plan_run(select_tests("pull_request", [path]), [path], "pull_request",
+                                  [dict(name="storage", filter="FullyQualifiedName~Content.IntegrationTests.Tests.Storage."),
+                                   dict(name="round", filter="FullyQualifiedName~Content.IntegrationTests.Tests.GameRules.")])
+                plan = json.loads((Path(directory) / "plan.json").read_text())
+                self.assertEqual({s["name"] for s in plan["shards"]}, groups)
+                self.assertEqual({g for lane in plan["lanes"] for g in lane["shards"]}, groups)
+                self.assertEqual(result["gameplay"], bool(groups))
+                if expected:
+                    nightly = next(s for s in plan["shards"] if s["name"] == "nightly_affected")
+                    self.assertEqual(nightly["filter"], "(" + " | ".join(
+                        "FullyQualifiedName~" + fixture + "." for fixture in expected) + ")")
+                    self.assertEqual((nightly["workers"], nightly["hang"]), (1, "20m"))
+
+    def test_integration_fixture_selection_retains_name_split_shards_and_shared_helpers_run_all(self):
+        shards = [dict(name="a", filter="FullyQualifiedName~Tests.FeatureTest. & Name~One"),
+                  dict(name="b", filter="FullyQualifiedName~Tests.FeatureTest. & Name!~One"),
+                  dict(name="other", filter="FullyQualifiedName~Tests.OtherTest.")]
+        path = "Content.IntegrationTests/Tests/FeatureTest.cs"
+        files = {path: ('// namespace Wrong; class OtherTest {}\n'
+                        'namespace Tests; class FeatureTest { [Test] public void One() { '
+                        'var prose = "class OtherTest {}"; } /* class OtherTest {} */ }')}
+        self.assertEqual(select_shards([path], shards, files, [], True), {"a", "b"})
+        self.assertEqual(select_shards([path], shards, files, [], False), {"a", "b", "other"})
+        self.assertEqual(select_shards(["Content.IntegrationTests/PoolManager.cs"], shards, {}, [], True),
+                         {"a", "b", "other"})
+
     def test_baseline_includes_intermediate_failed_revision_and_deletions(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -36,16 +139,41 @@ class AdaptiveCiTests(unittest.TestCase):
     def test_dependency_closure_follows_types_events_and_prototype_parents_through_cycles(self):
         files = {
             "Content.Shared/Event.cs": "class WoundEvent {}",
-            "Content.Shared/Helper.cs": "class MedicalHelper { WoundEvent ev; MedicalSystem owner; }",
+            "Content.Shared/Helper.cs": "using Helpers; class MedicalHelper { WoundEvent ev; MedicalSystem owner; void Run() { ev.IsUsable(); } }",
+            "Content.Shared/Extensions.cs": "namespace Helpers; static class Rules { public static bool IsUsable<T>(this T value) => true; }",
             "Content.Shared/System.cs": "class MedicalSystem { MedicalHelper helper; }",
             "Content.IntegrationTests/MedicalTest.cs": "namespace Tests; class MedicalTest { MedicalSystem system; }",
             "Resources/Prototypes/base.yml": "- type: entity\n  id: ParentItem\n",
             "Resources/Prototypes/child.yml": "- type: entity\n  id: ChildItem\n  parent: ParentItem\n",
             "Content.Tests/PrototypeTest.cs": 'namespace Tests; class PrototypeTest { string id = "ChildItem"; }',
-            "Content.Tests/UnrelatedTest.cs": "namespace Tests; class UnrelatedTest {}",
+            "Content.Tests/UnrelatedTest.cs": "namespace Tests; class UnrelatedTest { void Run() { value.IsUsable(); } }",
         }
         self.assertEqual(dependency_priority(files, ["Content.Shared/Event.cs"]), ["Tests.MedicalTest"])
+        self.assertEqual(dependency_priority(files, ["Content.Shared/Extensions.cs"]), ["Tests.MedicalTest"])
         self.assertEqual(dependency_priority(files, ["Resources/Prototypes/base.yml"]), ["Tests.PrototypeTest"])
+
+    def test_system_change_reaches_tests_using_spawned_components_without_naming_the_system(self):
+        path = "Content.CMU/Shared/Fob/CrateSystem.cs"
+        files = {path: "class CrateSystem { SharedRules rules; SubscribeLocalEvent<CrateComponent, OpenEvent>(OnOpen); }",
+                 "Content.Shared/Storage/SharedRules.cs": "class SharedRules {}",
+                 "Content.CMU/Shared/Fob/CrateComponent.cs": "class CrateComponent {}",
+                 "Resources/Prototypes/crate.yml": "- type: entity\n  id: MyCrate\n  components:\n  - type: Crate\n",
+                 "Content.IntegrationTests/CrateTest.cs": 'namespace Tests; class CrateTest { Spawn("MyCrate"); }',
+                 "Content.IntegrationTests/UnrelatedTest.cs": "namespace Tests; class UnrelatedTest {}"}
+        self.assertEqual(dependency_priority(files, [path]), ["Tests.CrateTest"])
+        self.assertEqual(dependency_priority(files, ["Content.Shared/Storage/SharedRules.cs"]), ["Tests.CrateTest"])
+
+    def test_dependency_graph_does_not_confuse_comments_nested_ids_or_other_namespaces_with_types(self):
+        path = "Content.CMU/Shared/Fob/CrateSystem.cs"
+        files = {
+            path: 'namespace Feature; class CrateSystem { SubscribeLocalEvent<CrateComponent, OpenEvent>(OnOpen); }',
+            "Content.CMU/Shared/Fob/CrateComponent.cs": 'namespace Feature; class CrateComponent {}',
+            "Resources/Prototypes/crates.yml": '- type: entity\n  id: Crate\n  components:\n  - type: Crate\n    items:\n    - id: Welder\n- type: entity\n  id: OtherCrate\n',
+            "Content.Server.Database/Model.cs": 'namespace Database; class Server { string role = "Crate"; } // record the incident',
+            "Content.IntegrationTests/CrateTest.cs": 'namespace Tests; class CrateTest { [Test] void Example() { Spawn("Crate"); } }',
+            "Content.IntegrationTests/OtherTest.cs": 'namespace Tests; class OtherTest { [Test] void Example() { Server.Run(); Spawn("Welder"); Spawn("OtherCrate"); } }',
+        }
+        self.assertEqual(dependency_priority(files, [path]), ["Tests.CrateTest"])
 
     def test_balancing_keeps_every_group_once_and_prioritizes_previous_failures(self):
         shards = [dict(name=f"g{i}", seconds=seconds, rank=0 if i == 3 else 2)
@@ -179,7 +307,9 @@ class AdaptiveCiTests(unittest.TestCase):
                 history = json.loads((state / "history/history.json").read_text())
                 self.assertEqual(history["records"]["gameplay"]["status"], 1)
                 save_json(state / "observations/gameplay.json", self.result())
+                (state / "summary.md").unlink()
                 self.assertEqual(collect(SimpleNamespace(state=directory)), 0)
+                self.assertFalse((state / "summary.md").exists())
 
 
 if __name__ == "__main__":

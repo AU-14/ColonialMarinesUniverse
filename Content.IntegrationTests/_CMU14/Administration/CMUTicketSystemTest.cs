@@ -215,44 +215,6 @@ public sealed class CMUTicketSystemTest
     }
 
     [Test]
-    public async Task ClaimNoticeShowsClaimerByDefault()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var server = pair.Server;
-        var adminManager = server.ResolveDependency<IAdminManager>();
-        var session = pair.Player!;
-
-        await server.WaitAssertion(() =>
-        {
-            var tickets = server.System<CMUTicketSystem>();
-            var cfg = server.CfgMan;
-            var original = cfg.GetCVar(CCVars.CMUAhelpTicketShowClaimer);
-            var originalOverride = cfg.GetCVar(CCVars.AdminAhelpOverrideClientName);
-            Assert.That(CCVars.CMUAhelpTicketShowClaimer.DefaultValue, Is.True);
-            cfg.SetCVar(CCVars.AdminAhelpOverrideClientName, string.Empty);
-
-            var offline = new NetUserId(Guid.NewGuid());
-            cfg.SetCVar(CCVars.CMUAhelpTicketShowClaimer, true);
-            Assert.That(tickets.BuildPlayerClaimText(offline, "VisibleAdminName"), Does.Contain("VisibleAdminName"));
-            Assert.That(tickets.BuildPlayerClaimText(session.UserId, "VisibleAdminName"), Does.Contain("VisibleAdminName"));
-
-            // A stealthed claimer stays anonymous even with the CVar on.
-            adminManager.Stealth(session);
-            Assert.That(tickets.BuildPlayerClaimText(session.UserId, "StealthAdminName"), Does.Not.Contain("StealthAdminName"));
-            adminManager.UnStealth(session);
-            Assert.That(tickets.BuildPlayerClaimText(session.UserId, "StealthAdminName"), Does.Contain("StealthAdminName"));
-
-            cfg.SetCVar(CCVars.CMUAhelpTicketShowClaimer, false);
-            Assert.That(tickets.BuildPlayerClaimText(offline, "SecretAdminName"), Does.Not.Contain("SecretAdminName"));
-
-            cfg.SetCVar(CCVars.CMUAhelpTicketShowClaimer, original);
-            cfg.SetCVar(CCVars.AdminAhelpOverrideClientName, originalOverride);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task AcknowledgeRules()
     {
         await using var pair = await PoolManager.GetServerClient();

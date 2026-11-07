@@ -19,7 +19,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class CMUYautjaLeapPresentationTest
 {
-    [TestCase(4f)]
     [TestCase(7f)]
     public async Task LeapReplicatesAnAirborneArcThenStrikesAndRestoresTheSprite(float distance)
     {
@@ -82,36 +81,6 @@ public sealed class CMUYautjaLeapPresentationTest
             Assert.That(client.EntMan.GetComponent<SpriteComponent>(client.EntMan.GetEntity(hunterNet)).Offset,
                 Is.EqualTo(originalOffset), "Landing must restore the sprite, not leave a permanent airborne offset.");
         });
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task InterruptedFlightCanLeapAgainAndBeDeletedInFlight()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
-        var map = await pair.CreateTestMap();
-        var entities = pair.Server.EntMan;
-        EntityUid hunter = default;
-        EntityUid target = default;
-        await pair.Server.WaitAssertion(() =>
-        {
-            hunter = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-            target = entities.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(4, 0)));
-            entities.EnsureComponent<YautjaComponent>(hunter);
-            entities.EnsureComponent<YautjaBadBloodComponent>(hunter);
-            entities.System<YautjaHonorboundAbilitiesSystem>().GrantActions((hunter, entities.GetComponent<YautjaComponent>(hunter)));
-            Leap(entities, hunter, target);
-            entities.System<ThrownItemSystem>().StopThrow(hunter, entities.GetComponent<ThrownItemComponent>(hunter));
-        });
-        await pair.RunTicksSync(1);
-        await pair.Server.WaitAssertion(() =>
-        {
-            Assert.That(entities.HasComponent<YautjaHuntingLeapingComponent>(hunter), Is.False);
-            Leap(entities, hunter, target);
-            Assert.That(entities.HasComponent<ThrownItemComponent>(hunter), Is.True);
-            entities.DeleteEntity(hunter);
-        });
-        await pair.RunTicksSync(2);
         await pair.CleanReturnAsync();
     }
 

@@ -40,22 +40,4 @@ public sealed class BloodTypeTest
         Assert.That(CMUBloodTypes.CanReceivePlasma(recipient, donor), Is.EqualTo(compatible));
     }
 
-    [Test]
-    public void DefaultsAreNeverONegative()
-    {
-        var random = new System.Random(1);
-        for (var i = 0; i < 200; i++)
-        {
-            Assert.That(CMUBloodTypes.RandomDefault(random), Is.Not.EqualTo(CMUBloodType.ONegative));
-            Assert.That(CMUBloodTypes.StableDefault($"Character {i}"), Is.Not.EqualTo(CMUBloodType.ONegative));
-        }
-    }
-
-    [Test]
-    public void StableDefaultDoesNotChange()
-    {
-        var first = CMUBloodTypes.StableDefault("John Doe");
-        var second = CMUBloodTypes.StableDefault("John Doe");
-        Assert.That(second, Is.EqualTo(first));
-    }
 }

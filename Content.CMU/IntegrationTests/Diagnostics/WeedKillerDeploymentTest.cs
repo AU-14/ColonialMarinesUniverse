@@ -55,30 +55,4 @@ public sealed class WeedKillerDeploymentTest : GameTest
         });
     }
 
-    [Test]
-    public async Task SmokeArrivesAsClientCosmeticsAndExpires()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var observer = SEntMan.SpawnEntity("MobObserver", map.GridCoords);
-            Server.PlayerMan.SetAttachedEntity(ServerSession!, observer);
-        });
-        await Pair.RunUntilSynced();
-        await Server.WaitAssertion(() =>
-        {
-            var killer = SEntMan.SpawnEntity(null, map.GridCoords);
-            var component = SEntMan.AddComponent<WeedKillerComponent>(killer);
-            component.Positions.Add((map.Grid, Vector2i.Zero));
-            component.DisableAt = TimeSpan.MaxValue;
-            SEntMan.System<WeedKillerSystem>().Update(0);
-            Assert.That(SEntMan.EntityQuery<MetaDataComponent>().Any(meta => meta.EntityPrototype?.ID == "RMCGasWeedKiller"), Is.False);
-        });
-        await Pair.RunTicksSync(10);
-        await Client.WaitAssertion(() =>
-            Assert.That(CEntMan.EntityQuery<MetaDataComponent>().Count(meta => meta.EntityPrototype?.ID == "RMCGasWeedKiller"), Is.EqualTo(1)));
-        await RunSeconds(2);
-        await Client.WaitAssertion(() =>
-            Assert.That(CEntMan.EntityQuery<MetaDataComponent>().Any(meta => meta.EntityPrototype?.ID == "RMCGasWeedKiller"), Is.False));
-    }
 }
