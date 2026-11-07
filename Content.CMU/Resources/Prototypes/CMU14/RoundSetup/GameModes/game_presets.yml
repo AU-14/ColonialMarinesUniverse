@@ -3,11 +3,10 @@
   alias:
   - colonyfall
   name: cmu-gamemode-colonyfall-name
-  showInVote: true
+  showInVote: false
   maxPlayers: 65
   description: cmu-gamemode-colonyfall-desc
   burrowedLarvaEnabled: false
-  strandedYautjaEnabled: false
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 2250
   thirdPartyRatio: 0.25
@@ -26,26 +25,11 @@
   showInVote: true
   description: cmu-gamemode-distresssignal-desc
   requiresGovforVote: true
+  strandedYautjaEnabled: true
   thirdPartyForceShuttle: true
   dropshipFabricatorStartingPoints: 18000
   supportedPlanets:
-# - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
-# - CMUPlanetStableGarrisonDistress # govfor spawns planetside
-# - AUPlanetShepherdsPride # lot of forests/chokes
-  - CMUPlanetHopesRetreat
-  - AUPlanetBosenmoriBasho
-# - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
-  - AUPlanetLV327 # Port Nereid
-  - AUPlanetSorokyne
-# - AUPlanetCorsatStation # temporarily removed
-  - CMUPlanetSolarisRidge
-  - CMUPlanetFortMcNeil
-  - AUPlanetTrijent
-# - AuPlanetKutjevo # temporarily removed
-  - AuPlanetShivasSnowball
-# - AuPlanetChances # temporarily removed
-  - CMUPlanetLV624
-  - CMUPlanetVaradero
+  - CMUPlanetStableGarrisonRedux
   rules:
   - AuVoteRule
   - PlatoonSpawn
@@ -59,7 +43,7 @@
   alias:
   - insurgency
   name: cmu-gamemode-insurgency-name
-  showInVote: true
+  showInVote: false
   description: cmu-gamemode-insurgency-desc
   minPlayers: 30
   burrowedLarvaEnabled: false
@@ -85,12 +69,13 @@
   alias:
   - forceonforce
   name: cmu-gamemode-forceonforce-name
-  showInVote: true
+  showInVote: false
   description: cmu-gamemode-forceonforce-desc
   minPlayers: 100
   burrowedLarvaEnabled: false
   requiresOpforVote: true
   requiresGovforVote: true
+  strandedYautjaEnabled: true
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 1800
   thirdPartyRatio: 0.10

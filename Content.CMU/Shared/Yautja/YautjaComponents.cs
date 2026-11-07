@@ -3236,8 +3236,9 @@ public sealed partial class YautjaChainGauntletComponent : Component
     [DataField]
     public int HelpFinisherComboRequired = 5;
 
+    // cmss13 KnockDown(1) is one status unit, 2 seconds. xenos get their 2/3 from RMCStatusEffectSystem
     [DataField]
-    public TimeSpan HelpFinisherKnockdown = TimeSpan.FromSeconds(1);
+    public TimeSpan HelpFinisherKnockdown = TimeSpan.FromSeconds(2);
 
     [DataField]
     public DamageSpecifier HelpFinisherDamage = new()
@@ -3310,6 +3311,9 @@ public sealed partial class YautjaChainGauntletComponent : Component
 
     [DataField]
     public float DisarmFinisherThrowSpeed = 10f;
+
+    [DataField]
+    public LocId DisarmFinisherMessage = "cmu-yautja-chain-gauntlet-disarm-message";
 
     [DataField]
     public TimeSpan ChainPullDelay = TimeSpan.FromSeconds(0.5);

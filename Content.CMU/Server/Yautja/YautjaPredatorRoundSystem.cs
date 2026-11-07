@@ -140,6 +140,7 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnGameRunLevelChanged);
         InitializeLobby();
+        InitializeGhostJoin();
 
         Subs.CVar(_configuration,
             YautjaPredatorRoundCVars.HunterSlots,

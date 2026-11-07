@@ -1,0 +1,23 @@
+- type: entity
+  id: CMUMilitaryClock
+  name: military clock
+  description: A wall-mounted clock synchronized to Joint Base Schaefer military time.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/status_display.rsi
+    drawdepth: WallMountedItems
+    layers:
+    - state: frame
+    - map: [ "enum.RMCAlertLevelDisplayVisualLayers.HourTens" ]
+    - map: [ "enum.RMCAlertLevelDisplayVisualLayers.HourOnes" ]
+    - map: [ "enum.RMCAlertLevelDisplayVisualLayers.Separator" ]
+    - map: [ "enum.RMCAlertLevelDisplayVisualLayers.MinuteTens" ]
+    - map: [ "enum.RMCAlertLevelDisplayVisualLayers.MinuteOnes" ]
+  - type: Appearance
+  - type: CMUMilitaryClock
+  - type: WallMount
+    arc: 360

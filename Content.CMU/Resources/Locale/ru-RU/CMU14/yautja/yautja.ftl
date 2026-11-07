@@ -308,6 +308,23 @@ cmu-yautja-mark-thrall = Раб
 cmu-yautja-mark-student = Ученик
 cmu-yautja-mark-blooded = Окровавленный
 cmu-yautja-mark-unknown = Неизвестно
+cmu-yautja-mark-examine-unknown-hunter = неизвестный охотник
+cmu-yautja-mark-examine-prey = [color=orange]На {$target} охотится {$hunter}.[/color]
+cmu-yautja-mark-examine-dishonored = [color=red]{$hunter} отметил(а) {$target} как бесчестного{ $hasReason ->
+    [yes] {" "}за «{$reason}».
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-honored = [color=green]{$hunter} почтил(а) {$target}{ $hasReason ->
+    [yes] {" "}за «{$reason}».
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-thrall = [color=green]{$hunter} сделал(а) {$target} траллом{ $hasReason ->
+    [yes] {" "}за «{$reason}».
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-gear-carrier = [color=red]{$hunter} отметил(а) {$target} как носителя снаряжения.[/color]
+cmu-yautja-mark-examine-student = [color=green]{$target} обучается у {$hunter}.[/color]
+cmu-yautja-mark-examine-blooded = [color=green]{$hunter} посвятил(а) {$target} кровью.[/color]
 
 cmu-yautja-recall-none = Ни один ваш умный диск не отвечает на зов.
 cmu-yautja-recall-success = {$item} рывком возвращается к вам.
@@ -620,3 +637,14 @@ cmu-yautja-cape-mount-remove = Отстегнуть плащ
 cmu-yautja-cape-mount-removed = Вы отстёгиваете {$cape}.
 cmu-yautja-cape-mount-examine = К нему пристёгнут {$cape}.
 cmu-yautja-cape-mount-hint = Его можно пристегнуть к клановой броне, чтобы освободить спину.
+cmu-yautja-pounce-body-slam-self = {$yautja} отбрасывает нас ударом тела!
+cmu-yautja-pounce-body-slam-others = {$yautja} отбрасывает {$xeno} ударом тела!
+ent-CMUActionYautjaJoinHunt = Присоединиться к охоте
+    .desc = Присоединиться к идущей охоте в роли яутжи. Только раз за раунд.
+cmu-yautja-ghost-join-hunt-title = Присоединиться к охоте
+cmu-yautja-ghost-join-hunt-confirm = Подтвердите вступление в охоту. Вы присоединитесь как яутжа ранга «{$rank}».
+cmu-yautja-ghost-join-hunt-not-whitelisted = Вы не в вайтлисте! Подать заявку на вайтлист яутжи можно на форуме.
+cmu-yautja-ghost-join-hunt-no-hunt = В этом раунде нет охоты! Может, в следующем.
+cmu-yautja-ghost-join-hunt-already = Вы уже были яутжей! Дайте шанс другим.
+cmu-yautja-ghost-join-hunt-full = Свободных мест охотников нет. Лидеры, советники и древние в лимит не входят.
+cmu-yautja-ghost-join-hunt-failed = Не удалось присоединиться к охоте.

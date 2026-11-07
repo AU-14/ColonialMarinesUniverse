@@ -6,6 +6,8 @@ using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared.Actions;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Blocking;
+using Content.Shared.Blocking.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
@@ -34,6 +36,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private BlockingSystem _blocking = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedCombatModeSystem _combatMode = default!;
@@ -495,6 +498,19 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
         }
 
+        // cmss13 bracer_shield is a riot shield, attack_self raises and lowers it. retracting goes through the
+        // bracer like every other attachment
+        if (TryComp(ent.Owner, out BlockingComponent? blocking))
+        {
+            if (blocking.IsRaised)
+                _blocking.LowerShield((ent.Owner, blocking), args.User);
+            else
+                _blocking.RaiseShield((ent.Owner, blocking), args.User);
+
+            args.Handled = true;
+            return;
+        }
+
         RetractDeployedInstalledAttachments((bracer, bracerComp), args.User);
         args.Handled = true;
     }
@@ -650,6 +666,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearShutdown(Entity<YautjaStoredGearComponent> ent, ref ComponentShutdown args)
     {
+        ReleaseDestroyedAttachedWeapon(ent);
+
         if (!TerminatingOrDeleted(ent.Owner) ||
             ent.Comp.AttachedWeapon is not { } attached ||
             TerminatingOrDeleted(attached))
@@ -659,6 +677,31 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
         QueueDel(attached);
         ent.Comp.AttachedWeapon = null;
+    }
+
+    // the bracer shield can be broken in hand. the holder kept pointing at the dead shield and stayed "deployed",
+    // so every toggle said it wasn't held and removing the attachment said to retract it first, forever
+    private void ReleaseDestroyedAttachedWeapon(Entity<YautjaStoredGearComponent> ent)
+    {
+        if (!TerminatingOrDeleted(ent.Owner) ||
+            ent.Comp.AttachmentHolder is not { } holder ||
+            TerminatingOrDeleted(holder) ||
+            !TryComp(holder, out YautjaStoredGearComponent? holderStored) ||
+            holderStored.AttachedWeapon != ent.Owner)
+        {
+            return;
+        }
+
+        holderStored.AttachedWeapon = null;
+        if (holderStored.Bracer is { } bracer &&
+            !TerminatingOrDeleted(bracer) &&
+            TryComp(bracer, out YautjaGearContainerComponent? bracerComp))
+        {
+            SetGearState((bracer, bracerComp), holder, holderStored.Kind, false);
+            return;
+        }
+
+        holderStored.Deployed = false;
     }
 
     private void OnStoredGearUnequippedHand(Entity<YautjaStoredGearComponent> ent, ref GotUnequippedHandEvent args)
