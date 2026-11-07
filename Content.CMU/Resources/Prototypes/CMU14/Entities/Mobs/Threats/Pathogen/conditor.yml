@@ -5,11 +5,6 @@
   name: Conditor
   description: A masterful cultivator of mycelium and death.
   components:
-  - type: FiremanCarriable
-    canThrow: true
-    carrierWhitelist:
-      components:
-      - Yautja
   - type: GhostRole
     name: cmu-job-name-pathogen-conditor
   - type: Sprite
@@ -59,11 +54,10 @@
     - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenTailStab
     - CMU14ActionXenoPathogenPlantWeeds
-    - CMU14ActionXenoPathogenSpit
+    - CMU14ActionXenoPathogenSpitPraetorian
+    - CMU14ActionXenoPathogenSprayAcid
     - CMU14ActionXenoPathogenChooseStructure
     - CMU14ActionXenoPathogenSecreteStructure
-    - CMU14ActionXenoPathogenSlowingSpit
-    - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenDirectSporeInfect
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenOrderConstruction
@@ -73,11 +67,8 @@
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
-    - CMU14XenoMyceliumWall
     - CMU14XenoThickMyceliumWall
-    - CMU14XenoMyceliumMembrane
     - CMU14XenoThickMyceliumMembrane
-    - CMU14XenoMyceliumDoor
     - CMU14XenoThickMyceliumDoor
     canOrderConstruction:
     - CMU14PathogenBlightCoreConstructionNode
@@ -85,6 +76,7 @@
     - CMU14PathogenPlasmaTreeConstructionNode
     - CMU14PathogenRecoveryNodeConstructionNode
     - CMU14PathogenSporecasterConstructionNode
+    canUpgrade: true
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -129,6 +121,13 @@
         Blunt: 11.66
         Slash: 11.67
         Piercing: 11.67
+  - type: XenoSprayAcid  
+    acid: XenoAcidSprayStrong  
+    barricadeDamage:  
+      types:  
+        Heat: 5
+  - type: XenoSpit  
+    projectileId: XenoSpitProjectilePraetorian
   - type: RMCSize
     size: Big
   - type: CMArmor
