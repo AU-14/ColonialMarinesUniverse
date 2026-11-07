@@ -87,6 +87,9 @@
     damage:
       types:
         Slash: 36
+  - type: RemoveComponents
+    components:
+    - type: Deathgasp
 
 - type: entity
   abstract: true
