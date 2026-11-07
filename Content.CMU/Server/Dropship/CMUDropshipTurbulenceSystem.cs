@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Synth;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
@@ -291,6 +292,7 @@ public sealed class CMUDropshipTurbulenceSystem : EntitySystem
             if (!_mobState.IsAlive(mob) ||
                 _standing.IsDown(mob) ||
                 TryComp(mob, out BuckleComponent? buckle) && buckle.Buckled ||
+                HasComp<XenoNestedComponent>(mob) ||
                 HasComp<CMUWallLeaningComponent>(mob) ||
                 IsAircrew(mob))
             {

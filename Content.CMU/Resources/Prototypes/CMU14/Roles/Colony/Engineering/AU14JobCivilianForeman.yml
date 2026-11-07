@@ -68,6 +68,7 @@
     id: AU14IDCardColonyForeman
     ears: AU14ColonyAdminHeadset
     pocket1: AU14StampFore
+    pocket2: CMStampApproved # signs off requisition invoices and order slips
   inhand:
   - CMUMobilePhone
 

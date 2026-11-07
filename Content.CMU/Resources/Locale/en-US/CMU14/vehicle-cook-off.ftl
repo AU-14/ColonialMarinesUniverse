@@ -3,3 +3,5 @@ cmu-vehicle-wreck-unrepairable = The vehicle's frame has been destroyed beyond r
 cmu-tank-cook-off-entry-blocked = The tank's ammunition is cooking off. You cannot enter the wreck.
 cmu-vehicle-totaled-unrepairable = The orbital strike wrecked it. The vehicle is beyond repair.
 cmu-vehicle-totaled-entry-blocked = The hull is gutted. There is nothing left in there to crew.
+cmu-hardpoint-incompatible = {CAPITALIZE(THE($item))} does not fit this mount.
+

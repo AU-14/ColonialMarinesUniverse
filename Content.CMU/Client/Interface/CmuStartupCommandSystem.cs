@@ -20,7 +20,7 @@ namespace Content.Client.CMU14.Interface;
 ///     The case that prompted it: the lobby only exists before a round starts, and the dev config
 ///     boots straight into a running round, so the lobby UI could not be looked at at all. The
 ///     server has had a <c>golobby</c> command the whole time; there was simply no way to reach it.
-///     <c>--cvar cmu.startup_command=golobby</c> closes that.
+///     <c>--cvar cmu.startup_command=golobby confirm</c> closes that.
 ///     </para>
 ///     <para>
 ///     Deliberately not ARCHIVE. An archived value would sit in a player's config running a command

@@ -69,6 +69,10 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             // Get objectives
             foreach (var objective in mind.Objectives)
             {
+                // CMU14: the Early Warning Joe's ladder has its own panel (CharacterInfoSystem.EarlyWarning.cs)
+                if (CMUHideObjective(entity, objective))
+                    continue;
+
                 var info = _objectives.GetInfo(objective, mindId, mind);
                 if (info == null)
                     continue;

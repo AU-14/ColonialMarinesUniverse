@@ -47,11 +47,13 @@
     - radioWEYU
     - radioCMB
     - radioCLF
+    - CMUIntelSection
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - CMURadioGovforMedical
     - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
@@ -60,6 +62,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - CMURadioOpforMedical
     - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
@@ -88,6 +91,7 @@
     - radioGovforCharlie
     - radioGovforCommand
     - radioGovforIntel
+    - CMURadioGovforMedical
     - radioGovforFoxtrot
     - radioGovforJTAC
     - radioGovforMILP
@@ -106,6 +110,7 @@
     - radioOpforCharlie
     - radioOpforCommand
     - radioOpforIntel
+    - CMURadioOpforMedical
     - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP
@@ -144,6 +149,7 @@
     - radioWEYU
     - radioCMB
     - radioCLF
+    - CMUIntelSection
 
 # ├──[ MAP SPAWNS ]──────────────────────────────────────────────────┤
 - type: entity

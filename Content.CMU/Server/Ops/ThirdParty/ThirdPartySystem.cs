@@ -6,10 +6,12 @@ using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
 using Content.Server.Chat.Systems;
+using Content.Shared.Chat;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
 using Content.Server.CMU14.Roles; // CMU14
 using Content.Server.Preferences.Managers;
+using Content.Shared.CMU14.ForceOnForce;
 using Content.Shared.CMU14.Threats;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.CrashLand;
@@ -52,6 +54,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private Content.Server.Chat.Managers.IChatManager _chatManager = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IServerPreferencesManager _preferences = default!;
@@ -60,6 +63,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private SurvivorSupplementSystem _survivorSupplement = default!; // CMU14
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
@@ -140,7 +144,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             // The ghost-menu entry alone never reaches players who do not open it.
             if (!string.IsNullOrWhiteSpace(party.AnnounceInbound))
-                _chat.DispatchGlobalAnnouncement(party.AnnounceInbound, string.Empty, false,
+                _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceInbound), string.Empty, false,
                     colorOverride: Color.DarkOrange);
         }
 
@@ -221,10 +225,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
         var assignments = roundStart && assignedJobs != null
             ? assignedJobs.Where(pair => pair.Value.Item1 == ThirdPartyLeaderJobId || pair.Value.Item1 == ThirdPartyMemberJobId).ToDictionary()
             : new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
-        var id = _forceInterest.QueueForce(party.DisplayName ?? party.ID,
+        var id = _forceInterest.QueueDeployment(party.DisplayName ?? party.ID,
             _forceInterest.GetPlayableBodies(bodies),
-            interested => SpawnThirdPartyNow(party, spawnProto, roundStart,
-                assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary(), overrideDropship, summoningFaction),
+            interested => SpawnThirdPartySteps(party, spawnProto, roundStart,
+                assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary(), overrideDropship, summoningFaction).GetEnumerator(),
             ready, assignments.Keys);
         _queuedParties.Add(id, party);
         return id;
@@ -234,23 +238,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship,
         string? summoningFaction = null)
     {
-        var spawned = SpawnThirdPartyNowInner(party, spawnProto, roundStart, assignedJobs, overrideDropship, summoningFaction);
-        if (spawned)
-            _auRoundSystem.MarkThirdPartySpawned(party);
+        foreach (var step in SpawnThirdPartySteps(party, spawnProto, roundStart, assignedJobs, overrideDropship, summoningFaction))
+        {
+            if (step == ForceDeploymentStep.Completed)
+                return true;
+        }
 
-        return spawned;
+        return false;
     }
 
-    private bool SpawnThirdPartyNowInner(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+    private IEnumerable<ForceDeploymentStep> SpawnThirdPartySteps(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship,
         string? summoningFaction = null)
     {
         const float SpawnTogetherRadius = 8f;
+        using var preparation = new ShuttlePreparation(_mapLoader);
         _sawmill.Debug($"[ThirdPartySystem] Spawning third party: ({party.ID})");
         if (spawnProto == null)
         {
             _sawmill.Error($"[ThirdPartySystem] Spawn called with null spawnProto for party ({party.ID})!");
-            return false;
+            yield break;
         }
 
         // Determine entry method. If overrideDropship is provided, it takes precedence (true => shuttle, false =>
@@ -258,6 +265,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
         string? entryMethod = overrideDropship.HasValue
             ? overrideDropship.Value ? "shuttle" : "ground"
             : string.IsNullOrWhiteSpace(party.EntryMethod) ? "ground" : party.EntryMethod;
+        // Presets can force shuttle entry; ground spawn puts parties inside enemy lines unprepared.
+        // Admin overrides keep precedence.
+        var groundEntryForbidden = _auRoundSystem.SelectedPreset is { ThirdPartyForceShuttle: true };
+        if (groundEntryForbidden
+            && !overrideDropship.HasValue
+            && string.Equals(entryMethod, "ground", StringComparison.OrdinalIgnoreCase))
+            entryMethod = "shuttle";
         _sawmill.Debug($"[ThirdPartySystem] Entry method: {entryMethod} (overrideDropship={overrideDropship})");
         if (_sawmill.Level <= LogLevel.Debug)
         {
@@ -285,8 +299,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
             // Reinforcements spawn aboard their shuttle even while all landing zones are occupied.
             // The navigation console resolves available destinations when the crew launches.
             DeserializationOptions deserializationOpts = DeserializationOptions.Default with { InitializeMaps = true };
-            if (!TryLoadDropshipGrid(party.dropshippath, deserializationOpts, out mainGridUid))
-                return false;
+            if (!TryLoadDropshipGrid(party.dropshippath, deserializationOpts, preparation, out mainGridUid))
+                yield break;
 
             _sawmill.Debug($"[ThirdPartySystem] Dropship grid initialized: {mainGridUid}");
 
@@ -302,7 +316,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             catch (Exception ex)
             {
                 _sawmill.Error($"[ThirdPartySystem] Failed to spawn return destination entity at {dropshipMapCoordinates}: {ex}");
-                return false;
+                yield break;
             }
 
             var returnDestinationComp = EnsureComp<ThirdPartyDropshipReturnDestinationComponent>(returnDestination);
@@ -701,7 +715,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         if (!ValidateMarkerPool("leader", leaderReq, leaderMarkers, unsafeLeaderMarkers) ||
             !ValidateMarkerPool("member", gruntReq, gruntMarkers, unsafeGruntMarkers) ||
             !ValidateMarkerPool("entity", entityReq, entityMarkers, unsafeEntityMarkers))
-            return false;
+            yield break;
 
         List<EntityUid> reusableLeaderMarkers = leaderMarkers.ToList();
         List<EntityUid> reusableGruntMarkers = gruntMarkers.ToList();
@@ -713,6 +727,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
         _sawmill.Debug(
             $"[ThirdPartySystem] Final marker pools for third party ({party.ID}): leaders={leaderMarkers.Count} safe/{unsafeLeaderMarkers.Count} nearby, grunts={gruntMarkers.Count} safe/{unsafeGruntMarkers.Count} nearby, entities={entityMarkers.Count} safe/{unsafeEntityMarkers.Count} nearby, useDropship={useDropship}, parachuteMode={parachuteMode}.");
 
+        // Finish preparation before creating bodies. The force scheduler resumes one body per tick.
+        preparation.Accepted = true;
+        yield return ForceDeploymentStep.Prepared;
+
         // Spawn leaders
         _sawmill.Debug("[ThirdPartySystem] Spawning leaders...");
         foreach ((string protoId, int count) in leaderBodies)
@@ -723,6 +741,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     reusableUnsafeLeaderMarkers, spawnedLeaders, parachuteMode, useDropship, "leader",
                     !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn leader {protoId}");
+
+                yield return ForceDeploymentStep.Spawned;
             }
         }
 
@@ -736,6 +756,21 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     reusableUnsafeGruntMarkers, spawnedGrunts, parachuteMode, useDropship, "grunt",
                     !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn grunt {protoId}");
+
+                yield return ForceDeploymentStep.Spawned;
+            }
+        }
+
+        // In Force on Force a party whose allegiance matches exactly one side's platoon is part
+        // of that side: identification treats its members as teammates of it.
+        var alignedSide = ResolveFoFAlignedSide(party);
+        if (alignedSide != null)
+        {
+            foreach (var mob in spawnedLeaders.Concat(spawnedGrunts))
+            {
+                var side = _entityManager.EnsureComponent<ForceOnForceSideComponent>(mob);
+                side.Side = alignedSide;
+                _entityManager.Dirty(mob, side);
             }
         }
 
@@ -749,6 +784,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     reusableUnsafeEntityMarkers, spawnedEnts, parachuteMode, useDropship, "ent",
                     !roundStart, ref lastUsedMarker))
                     _sawmill.Warning($"[ThirdPartySystem] Failed to spawn entity {protoId}");
+
+                yield return ForceDeploymentStep.Spawned;
             }
         }
 
@@ -819,15 +856,29 @@ public sealed partial class ThirdPartySystem : EntitySystem
             AssignMinds(memberPlayers, spawnedGrunts, ThirdPartyMemberJobId.Id, "member");
         }
 
-        if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
+        if (!string.IsNullOrWhiteSpace(party.AnnounceArrival) && party.AnnounceArrivalTitle is { } arrivalTitle)
         {
-            _chat.DispatchGlobalAnnouncement(party.AnnounceArrival, string.Empty, false,
+            var arrival = LocalizeAnnouncement(party.AnnounceArrival);
+            var wrapped = Loc.GetString("cmu-third-party-titled-arrival",
+                ("title", FormattedMessage.EscapeText(Loc.GetString(arrivalTitle))),
+                ("message", FormattedMessage.EscapeText(arrival)));
+            _chatManager.ChatMessageToAll(ChatChannel.Radio, arrival, wrapped, default, false, true, Color.DarkOrange);
+            _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
+        }
+        else if (!string.IsNullOrWhiteSpace(party.AnnounceArrival))
+        {
+            _chat.DispatchGlobalAnnouncement(LocalizeAnnouncement(party.AnnounceArrival), string.Empty, false,
                 colorOverride: Color.DarkOrange);
             _sawmill.Info($"[ThirdPartySystem] Announced arrival for third party ({party.ID}): {party.AnnounceArrival}");
         }
 
-        return true;
+        _auRoundSystem.MarkThirdPartySpawned(party);
+        yield return ForceDeploymentStep.Completed;
     }
+
+    // announcements are raw English on most parties, a loc id is used when one exists
+    private string LocalizeAnnouncement(string announcement)
+        => Loc.TryGetString(announcement, out var localized) ? localized : announcement;
 
     private static IReadOnlyDictionary<string, int> GetSpawnBodies(
         ThreatMarkerType markerType,
@@ -844,7 +895,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
         => (transform.GridUid.HasValue && transform.GridUid.Value == gridUid) ||
             transform.ParentUid == gridUid;
 
-    private bool TryLoadDropshipGrid(ResPath path, DeserializationOptions options, out EntityUid gridUid)
+    private bool TryLoadDropshipGrid(ResPath path, DeserializationOptions options,
+        ShuttlePreparation preparation, out EntityUid gridUid)
     {
         gridUid = EntityUid.Invalid;
         var loadOptions = new MapLoadOptions
@@ -858,13 +910,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return false;
         }
 
+        preparation.Result = result;
         gridUid = result.Grids.FirstOrDefault();
         if (gridUid != EntityUid.Invalid)
             return true;
 
-        _mapLoader.Delete(result);
         _sawmill.Error($"[ThirdPartySystem] No grids found in dropship map or grid: {path}");
         return false;
+    }
+
+    /// <summary>Failed preparation owns the entire load, including generated maps and grid children.</summary>
+    private sealed class ShuttlePreparation(MapLoaderSystem loader) : IDisposable
+    {
+        public LoadResult? Result;
+        public bool Accepted;
+
+        public void Dispose()
+        {
+            if (!Accepted && Result != null)
+                loader.Delete(Result);
+        }
     }
 
     private string GetPlayerCharacterName(ICommonSession player, EntityUid? mind, string fallback)
@@ -979,6 +1044,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
         }
     }
 
+    // A party fights for the side whose platoon shares its allegiance. When both sides rolled
+    // platoons of that allegiance the tie stays unaligned and shows the question mark to both.
+    private string? ResolveFoFAlignedSide(ThirdPartyPrototype party)
+    {
+        var ticker = _entityManager.System<GameTicker>();
+        var preset = ticker.CurrentPreset?.ID ?? ticker.Preset?.ID;
+        if (!string.Equals(preset, "ForceOnForce", StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        if (party.Allegiance is not { } allegiance)
+            return null;
+
+        var govfor = _platoons.SelectedGovforPlatoon?.Allegiance == allegiance;
+        var opfor = _platoons.SelectedOpforPlatoon?.Allegiance == allegiance;
+        if (govfor == opfor)
+            return null;
+
+        return govfor ? "govfor" : "opfor";
+    }
+
     private bool TrySpawnAtMarker(string protoId,
         List<EntityUid> markerPool,
         List<EntityUid> unsafeMarkerPool,
@@ -1033,7 +1118,14 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return false;
         }
 
-        EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
+        if (!TryComp(marker, out TransformComponent? markerTransform))
+        {
+            selectionPool.Remove(marker);
+            _sawmill.Warning($"[ThirdPartySystem] Skipping deleted {label} marker {marker}.");
+            return false;
+        }
+
+        EntityCoordinates coords = markerTransform.Coordinates;
         try
         {
             using var cost = _performance.MeasureOperation("third-party-body-spawn", protoId);

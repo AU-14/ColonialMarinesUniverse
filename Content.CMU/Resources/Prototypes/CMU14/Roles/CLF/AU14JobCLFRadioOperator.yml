@@ -54,6 +54,11 @@
     traits:
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - NoEnglish
   ranks:
     RMCRankCivilian: []

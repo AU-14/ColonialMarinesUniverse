@@ -383,7 +383,8 @@ public abstract partial class SharedStunSystem
             return false;
 
         _popup.PopupEntity(Loc.GetString("knockdown-component-stand-no-room"), entity, entity, PopupType.SmallCaution);
-        SetAutoStand(entity.Owner);
+        // CMU14: retain the stand request so recovery resumes once the obstruction is gone.
+        // SetAutoStand(entity.Owner);
         return true;
 
     }

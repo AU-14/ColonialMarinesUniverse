@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/2eda215ec73ecbcfa4e2c3b0d51b47e68a5b7fe7/icons/turf/walls/hunter/hunter_temple_deco_3.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ancient_stone"
+    },
+    {
+      "name": "ancient_stone0",
+      "directions": 4
+    },
+    {
+      "name": "ancient_stone1",
+      "directions": 4
+    },
+    {
+      "name": "ancient_stone2",
+      "directions": 4
+    },
+    {
+      "name": "ancient_stone3",
+      "directions": 4
+    },
+    {
+      "name": "ancient_stone4",
+      "directions": 4
+    },
+    {
+      "name": "ancient_stone5",
+      "directions": 4
+    },
+    {
+      "name": "ancient_stone6",
+      "directions": 4
+    },
+    {
+      "name": "ancient_stone7",
+      "directions": 4
+    }
+  ]
+}

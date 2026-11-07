@@ -11,7 +11,7 @@
   - MobDamageable
   id: AU14MobK9
   name: Synthetic K9
-  description: "An Interdyne-produced synthetic dog. Standard model without special harness gear."
+  description: "A Hyperdyne-produced synthetic dog. Standard model without special harness gear."
   components:
   - type: RandomMetadata
     nameSegments:
@@ -143,7 +143,7 @@
   components:
   - type: GhostRole
     name: Synthetic K9
-    description: An Interdyne-produced synthetic dog. Standard model without special harness gear.
+    description: A Hyperdyne-produced synthetic dog. Standard model without special harness gear.
     raffle:
       settings: short
 
@@ -152,7 +152,7 @@
   parent: AU14MobK9
   id: AU14MobK9BagMedic
   name: Search and Rescue K9
-  description: "An Interdyne-produced synthetic dog in a harness for carrying medical supplies."
+  description: "A Hyperdyne-produced synthetic dog in a harness for carrying medical supplies."
   suffix: "S&R"
   components:
   - type: Sprite
@@ -240,7 +240,7 @@
     allowSpeech: true
     allowMovement: true
     name: Search and Rescue K9
-    description: An Interdyne-produced synthetic dog in a harness for carrying medical supplies.
+    description: A Hyperdyne-produced synthetic dog in a harness for carrying medical supplies.
     raffle:
       settings: short
   - type: NpcFactionMember
@@ -252,7 +252,7 @@
   parent: AU14MobK9
   id: AU14MobK9Bag
   name: Synthetic K9
-  description: "An Interdyne-produced synthetic dog. Standard model without special harness gear."
+  description: "A Hyperdyne-produced synthetic dog. Standard model without special harness gear."
   suffix: Backpack
   components:
   - type: Sprite
@@ -292,7 +292,7 @@
   components:
   - type: GhostRole
     name: Synthetic K9
-    description: An Interdyne-produced synthetic dog. Standard model without special harness gear.
+    description: A Hyperdyne-produced synthetic dog. Standard model without special harness gear.
     raffle:
       settings: short
 
@@ -301,7 +301,7 @@
   parent: AU14MobK9
   id: AU14MobK9MP
   name: Military Police K9
-  description: "An Interdyne-produced synthetic dog in a military police harness."
+  description: "A Hyperdyne-produced synthetic dog in a military police harness."
   suffix: MP
   components:
   - type: Sprite
@@ -326,7 +326,7 @@
   components:
   - type: GhostRole
     name: Military Police K9
-    description: An Interdyne-produced synthetic dog in a military police harness.
+    description: A Hyperdyne-produced synthetic dog in a military police harness.
     raffle:
       settings: short
 
@@ -338,7 +338,7 @@
   components:
   - type: GhostRole
     name: Synthetic K9
-    description: An Interdyne-produced synthetic dog. Standard model without special harness gear.
+    description: A Hyperdyne-produced synthetic dog. Standard model without special harness gear.
     raffle:
       settings: short
   - type: NpcFactionMember
@@ -352,7 +352,7 @@
   components:
   - type: GhostRole
     name: Search and Rescue K9
-    description: An Interdyne-produced synthetic dog in a harness for carrying medical supplies.
+    description: A Hyperdyne-produced synthetic dog in a harness for carrying medical supplies.
     raffle:
       settings: short
   - type: NpcFactionMember
@@ -366,7 +366,7 @@
   components:
   - type: GhostRole
     name: Military Police K9
-    description: An Interdyne-produced synthetic dog in a military police harness.
+    description: A Hyperdyne-produced synthetic dog in a military police harness.
     raffle:
       settings: short
   - type: NpcFactionMember

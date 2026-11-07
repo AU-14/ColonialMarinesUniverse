@@ -69,15 +69,9 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.Duty is CMUSquadDuty.Medic or CMUSquadDuty.RearGuard or CMUSquadDuty.Recover ||
             agent.Home is not { } home || !_transform.InRange(home, heard, agent.LeashRange))
             return false;
-        if (_transform.InRange(Transform(uid).Coordinates, heard, 3))
-        {
-            agent.HeardPoint = null;
-            _steering.Unregister(uid);
-            agent.State = CMUExpeditionAgentState.Watch;
-            return false;
-        }
-        Decision(agent, "investigate-sound", "uncertain-location-no-shot-permission");
-        InvestigateContact(uid, agent, heard, now);
-        return true;
+        if (SearchContact(uid, agent, heard, agent.HeardAt, now, sound: true))
+            return true;
+        agent.HeardPoint = null;
+        return false;
     }
 }

@@ -1,0 +1,39 @@
+- type: entity
+  parent: [BaseItem, RMCPowerCellSlotUnremovable]
+  id: CMUAutocompressor
+  name: CPR compressor
+  description: A battery-powered chest compressor that maintains CPR on an unconscious human. Requires medical training to fit and a clear outer-clothing slot. Supports resuscitation; does not replace a defibrillator or treatment of injuries.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Medical/autocompressor.rsi
+    layers:
+    - state: idle
+      map: ["enum.CMUAutocompressorLayers.Device"]
+    - state: battery-high
+      map: ["enum.CMUAutocompressorLayers.Battery"]
+  - type: Item
+    size: Normal
+  - type: Clothing
+    sprite: CMU14/Objects/Medical/autocompressor.rsi
+    slots:
+    - OUTERCLOTHING
+    quickEquip: false
+    equipDelay: 4
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUAutocompressorVisuals.Running:
+        CMUAutocompressorLayers.Device:
+          True: {state: running}
+          False: {state: idle}
+      enum.CMUAutocompressorVisuals.Battery:
+        CMUAutocompressorLayers.Battery:
+          Empty: {visible: false}
+          Low: {state: battery-low, visible: true}
+          Medium: {state: battery-medium, visible: true}
+          High: {state: battery-high, visible: true}
+  - type: CMUAutocompressor
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno

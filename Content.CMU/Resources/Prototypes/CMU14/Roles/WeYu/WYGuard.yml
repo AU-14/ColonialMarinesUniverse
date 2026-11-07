@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   abstract: true
+  displayWeight: 14
   id: AU14JobWYGuardBase
   name: au14-job-name-wyguard
   description: au14-job-description-wyguard
@@ -72,6 +73,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   spawnMenuRoleName: au14-spawn-role-name-wy-corporate-goon

@@ -168,16 +168,16 @@ public sealed partial class ChatSystem
 
     private bool IsUnconsciousForWhisper(EntityUid source) =>
         !_mobStateSystem.IsDead(source)
-        && (_mobStateSystem.IsCritical(source)
-            || HasComp<SleepingComponent>(source)
-            || HasComp<RMCUnconsciousComponent>(source));
+        // CMU14
+        && (_mobStateSystem.IsCritical(source) || HasComp<SleepingComponent>(source) || HasComp<RMCUnconsciousComponent>(source))
+            && TryComp<SpeechComponent>(source, out var speech) && speech.Enabled
+            && (!TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted);
 
     private bool CanWhisperInCrit(EntityUid source) =>
         _critWhisperEnabled
         && IsUnconsciousForWhisper(source)
-        && TryComp<SpeechComponent>(source, out var speech) && speech.Enabled
-        && !HasMuteOtherThanKnockout(source)
-        && (!TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted);
+        // CMU14
+        && !HasMuteOtherThanKnockout(source);
 
     // Knockouts mute normal speech; any other mute still blocks whispering.
     private bool HasMuteOtherThanKnockout(EntityUid source)
@@ -556,6 +556,10 @@ public sealed partial class ChatSystem
             var listenerMessage = listener == source
                 ? speakerMessage
                 : _language.ObfuscateMessageForListener(listener, speakerMessage, language, source);
+            // cmu edit start: hard of hearing
+            if (listener != source)
+                listenerMessage = CMUApplyHearingLoss(listener, data.Range, listenerMessage);
+            // cmu edit end
             var useEmoteSpeechBubble = visibleLanguage && !canUnderstand;
             var listenerName = FormattedMessage.EscapeText(GetSpeakerNameForListener(
                 source,

@@ -189,7 +189,7 @@
   - type: Storage
     grid:
     - 0,0,3,1
-    maxItemSize: Small
+    maxItemSize: Tiny # Candy storage must be smaller than the ration pack that contains it.
   - type: FixedItemSizeStorage
   - type: StorageFill
     contents:

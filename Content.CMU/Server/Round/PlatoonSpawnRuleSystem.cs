@@ -1,13 +1,16 @@
 using System.Linq;
+using Content.Server.Camera;
 using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.Ops.ForceOnForce;
 using Content.Shared.CMU14.Dropship.MultiDeck;
+using Content.Shared.Camera;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.CMU14.Callsigns;
 using Content.Server.CMU14.VendorMarker;
+using Robust.Shared.Log;
 using Robust.Shared.Prototypes;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Maps;
@@ -16,7 +19,9 @@ using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Rules;
+using Content.Shared.CMU14.Dropship.Exchange;
 using Content.Shared.CMU14.Round;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking.Components;
 using Robust.Shared.EntitySerialization.Systems;
@@ -24,6 +29,7 @@ using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared._RMC14.Ladder;
+using Robust.Shared.Utility;
 
 using Content.Shared.CMU14;
 
@@ -44,6 +50,21 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private FactionSwapSystem _factionSwap = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
+    [Dependency] private CameraNetworkSystem _cameraNetworks = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+
+    private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.platoon");
+
+    // Mohawk fit camera network seeds. Loaded dropships get a Govfor/Opfor
+    // variant appended so opposing factions' transports never share a network.
+    private static readonly HashSet<ProtoId<CameraNetworkPrototype>> DropshipCameraNetworkSeeds =
+        new() { "CMUMohawkOmaha", "CMUMohawkMidway" };
+
+    private static readonly Dictionary<string, string> ShipFactionCameraSuffixes = new()
+    {
+        ["govfor"] = "Govfor",
+        ["opfor"] = "Opfor",
+    };
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
@@ -101,6 +122,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         // Each side gets its platoon's intel list however the platoon was picked (vote, planet default or admin),
         // not only when it won a vote.
         ApplyPlatoonTechTrees();
+
+        // --- SHIP FACTION TAGGING ---
+        // Ships load as faction-less game maps, and every shipside system (hospital
+        // emergency console, faction terminals, requisition markers, the
+        // summoned-third-party pad) keys off ShipFactionComponent. Tag the round's
+        // voted ships now that the votes have concluded.
+        TagShipFaction("govfor");
+        TagShipFaction("opfor");
 
         // --- SHIP VENDOR MARKER LOGIC ---
         if ((planetComp.GovforInShip || planetComp.OpforInShip))
@@ -285,6 +314,18 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 var gridMapId = _entityManager.GetComponent<TransformComponent>(grid).MapID;
                 _mapSystem.InitializeMap(gridMapId);
                 PrepareLoadedShuttleGrid(grid, faction, planetComp, DropshipDestinationComponent.DestinationType.Dropship);
+
+                // The dynamic gunship's navigation computer can trade the parked ship
+                // back for the platoon's standard Mohawk before its first takeoff.
+                if (mapId.Filename == "dynamic_gunship.yml" &&
+                    HasComp<DropshipComponent>(grid) &&
+                    TryGetPlatoonMohawkPath(platoon, out var mohawkPath))
+                {
+                    var exchange = EnsureComp<CMUDropshipMohawkExchangeComponent>(grid);
+                    exchange.Faction = faction;
+                    exchange.MohawkPath = mohawkPath;
+                }
+
                 SpawnShuttleConsoleMarkers(
                     grid,
                     faction,
@@ -333,6 +374,73 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         }
     }
 
+    private static bool TryGetPlatoonMohawkPath(PlatoonPrototype platoon, out ResPath path)
+    {
+        foreach (var candidate in platoon.CompatibleDropships)
+        {
+            if (candidate.ToString().Contains("/Dropships/Mohawk/", StringComparison.OrdinalIgnoreCase))
+            {
+                path = candidate;
+                return true;
+            }
+        }
+
+        path = default;
+        return false;
+    }
+
+    /// <summary>
+    /// Loads the replacement shuttle for a gunship-for-Mohawk exchange onto its own
+    /// initialized map without launching it, so a bad map aborts the exchange early.
+    /// </summary>
+    public bool TryLoadExchangeShuttle(ResPath path, out EntityUid map, out List<EntityUid> grids)
+    {
+        map = default;
+        grids = new List<EntityUid>();
+        if (!_mapLoader.TryLoadMap(path, out var loadedMap, out var loadedGrids))
+            return false;
+
+        map = loadedMap.Value.Owner;
+        _mapSystem.InitializeMap(loadedMap.Value.Comp.MapId);
+        foreach (var grid in loadedGrids)
+        {
+            grids.Add(grid);
+        }
+
+        return grids.Count > 0;
+    }
+
+    /// <summary>
+    /// Prepares exchange shuttle grids exactly like the round-start transports
+    /// (faction access, consoles, cameras) and flies them to the given pad.
+    /// </summary>
+    public bool TryLaunchExchangeShuttle(List<EntityUid> grids, string faction, EntityUid destination)
+    {
+        var planetComp = _auRoundSystem.GetSelectedPlanet();
+        if (planetComp == null)
+            return false;
+
+        var launched = false;
+        foreach (var grid in grids)
+        {
+            PrepareLoadedShuttleGrid(grid, faction, planetComp, DropshipDestinationComponent.DestinationType.Dropship);
+            SpawnShuttleConsoleMarkers(
+                grid,
+                faction,
+                DropshipDestinationComponent.DestinationType.Dropship,
+                "dropshipshuttlevmarker");
+
+            if (FindNavComputerOnGrid(grid) is not { } navComputer)
+                continue;
+
+            var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer);
+            if (_sharedDropshipSystem.FlyTo((navComputer, navComp), destination, null))
+                launched = true;
+        }
+
+        return launched;
+    }
+
     private void PrepareLoadedShuttleGrid(
         EntityUid grid,
         string faction,
@@ -350,6 +458,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             shipFaction.Faction = faction;
             Dirty(grid, shipFaction);
         }
+
+        SplitShipCameraNetworks(grid, faction);
 
         // Single-deck gunships also contain prebuilt controls and pilot seats. Reassign
         // these before the initial flight, just like consoles created from markers.
@@ -397,6 +507,37 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
         if (faction == "opfor" && planetComp.OpforInShip)
             OffsetLaddersOnGrid(grid, 100);
+    }
+
+    // Split a ship's Mohawk camera networks by faction so it never sees the enemy
+    // transport's cameras; unknown factions log and skip, which leaks nothing cross-faction.
+    private void SplitShipCameraNetworks(EntityUid grid, string faction)
+    {
+        if (!ShipFactionCameraSuffixes.TryGetValue(faction, out var suffix))
+        {
+            _sawmill.Error("Unknown ship faction {Faction}, leaving camera networks on the shared Mohawk seeds", faction);
+            return;
+        }
+
+        var children = Transform(grid).ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            if (TryComp<CameraNetworkMemberComponent>(child, out var member))
+                _cameraNetworks.SetMemberNetworks(child, FactionDropshipCameraNetworks(member.Networks, suffix));
+            if (TryComp<CameraNetworkReceiverComponent>(child, out var receiver))
+                _cameraNetworks.SetReceiverNetworks(child, FactionDropshipCameraNetworks(receiver.Networks, suffix));
+        }
+    }
+
+    private static HashSet<ProtoId<CameraNetworkPrototype>> FactionDropshipCameraNetworks(
+        HashSet<ProtoId<CameraNetworkPrototype>> networks,
+        string suffix)
+    {
+        var result = new HashSet<ProtoId<CameraNetworkPrototype>>();
+        foreach (var network in networks)
+            result.Add(DropshipCameraNetworkSeeds.Contains(network) ? $"{network}{suffix}" : network);
+
+        return result;
     }
 
     private void SpawnShuttleConsoleMarkers(
@@ -639,6 +780,50 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
         vendorProtoId = default;
         return false;
+    }
+
+    /// <summary>
+    ///     Tags the round's voted ship for one side with its faction, using the grids
+    ///     its game map loaded with. Ships have no faction of their own; shipside
+    ///     systems resolve everything through ShipFactionComponent.
+    /// </summary>
+    private void TagShipFaction(string faction)
+    {
+        var shipId = faction == "govfor"
+            ? _auRoundSystem.ResolveGovforShip(null)
+            : _auRoundSystem.ResolveOpforShip(null);
+        if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, out var grids))
+            return;
+
+        // The game-map event contains the main deck; the z-level loader loads the remaining decks separately.
+        var shipGrids = new HashSet<EntityUid>(grids);
+        var shipMaps = new HashSet<EntityUid>();
+        foreach (var grid in grids)
+        {
+            if (TerminatingOrDeleted(grid) || Transform(grid).MapUid is not { } map)
+                continue;
+
+            shipMaps.UnionWith(_zLevels.GetAllNetworkMaps(map));
+        }
+
+        foreach (var map in shipMaps)
+        {
+            foreach (var grid in _mapSystem.GetAllGrids(Transform(map).MapID))
+                shipGrids.Add(grid.Owner);
+        }
+
+        foreach (var grid in shipGrids)
+        {
+            if (TerminatingOrDeleted(grid) ||
+                TryComp<ShipFactionComponent>(grid, out var existing) && !string.IsNullOrEmpty(existing.Faction))
+                continue;
+
+            var shipFaction = EnsureComp<ShipFactionComponent>(grid);
+            shipFaction.Faction = faction;
+            Dirty(grid, shipFaction);
+
+            SplitShipCameraNetworks(grid, faction);
+        }
     }
 
     private bool TrySpawnFactionTerminal(PlatoonMarkerClass markerClass, string faction, TransformComponent transform)

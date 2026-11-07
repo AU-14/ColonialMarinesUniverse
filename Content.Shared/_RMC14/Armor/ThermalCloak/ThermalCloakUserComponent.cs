@@ -18,7 +18,7 @@ public sealed partial class ThermalCloakUserComponent : Component
     [DataField, AutoNetworkedField]
     public float LerpSpeed;
 
-    // CMU14: rain exposure sets this via YautjaCloakSystem. ThermalCloakSystem flickers opacity toward visible while it is set.
-    [DataField]
+    // CMU14: replicated rain exposure drives the subtle optical interference shader.
+    [DataField, AutoNetworkedField]
     public bool Malfunction;
 }

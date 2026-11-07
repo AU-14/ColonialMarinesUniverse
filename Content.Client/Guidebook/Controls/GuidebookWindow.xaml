@@ -11,7 +11,14 @@
             <!-- Guide select -->
             <BoxContainer Orientation="Horizontal" Name="TreeBox">
                 <PanelContainer StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
-                    <fancyTree:FancyTree Name="Tree" VerticalExpand="True" HorizontalExpand="True" Access="Public" Margin="4"/>
+                    <!-- CMU14: history controls share the guide tree's CRT panel. -->
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="4">
+                        <BoxContainer Orientation="Horizontal" Margin="0 0 0 4">
+                            <Button Name="BackButton" Text="◀" ToolTip="{Loc 'cmu-guidebook-history-back'}" Disabled="True"/>
+                            <Button Name="ForwardButton" Text="▶" ToolTip="{Loc 'cmu-guidebook-history-forward'}" Disabled="True"/>
+                        </BoxContainer>
+                        <fancyTree:FancyTree Name="Tree" VerticalExpand="True" HorizontalExpand="True" Access="Public"/>
+                    </BoxContainer>
                 </PanelContainer>
                 <cc:VSeparator StyleClasses="LowDivider" Margin="4 0"/>
             </BoxContainer>

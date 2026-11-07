@@ -1,0 +1,11 @@
+light_mode unshaded;
+
+uniform highp float height;
+uniform highp float pitch;
+
+void fragment() {
+    // Match the original one-pixel rectangles, including fractional scanline pitch.
+    highp float row = UV.y * height;
+    highp float line = 1.0 - step(1.0, mod(row, pitch));
+    COLOR = vec4(1.0, 1.0, 1.0, line);
+}

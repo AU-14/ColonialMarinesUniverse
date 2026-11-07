@@ -14,6 +14,9 @@
   id: CMUYautjaMedicompItem
 
 - type: Tag
+  id: CMUYautjaCeremonialDagger
+
+- type: Tag
   id: CMUYautjaDuellingKnife
 
 - type: Tag

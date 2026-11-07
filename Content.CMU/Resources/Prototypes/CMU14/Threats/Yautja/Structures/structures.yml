@@ -238,8 +238,30 @@
       sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hunter_armor_prop_4"
 
+# cmss13 /obj/structure/prop/hunter/trophy_display: a dense, climbable table you set prizes on, they land where you click
 - type: entity
   parent: CMUYautjaStructureBase
+  id: CMUYautjaTrophyRackBase
+  abstract: true
+  components:
+    - type: PlaceableSurface
+    - type: Climbable
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.45,-0.45,0.45,0.45"
+          density: 55
+          mask:
+            - TableMask
+          layer:
+            - TableLayer
+
+- type: entity
+  parent: CMUYautjaTrophyRackBase
   id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorBottomLeft
   name: yautja pred trophy vendor bottom left
   description: An ancient Yautja hunting-ground structure.
@@ -254,7 +276,7 @@
       state: "pred_trophy_vendor_bottom_left"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaTrophyRackBase
   id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopLeft
   name: yautja pred trophy vendor top left
   description: An ancient Yautja hunting-ground structure.
@@ -269,7 +291,7 @@
       state: "pred_trophy_vendor_top_left"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaTrophyRackBase
   id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorCenter
   name: yautja pred trophy vendor center
   description: An ancient Yautja hunting-ground structure.
@@ -284,7 +306,7 @@
       state: "pred_trophy_vendor_center"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaTrophyRackBase
   id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopCenter
   name: yautja pred trophy vendor top center
   description: An ancient Yautja hunting-ground structure.
@@ -299,7 +321,7 @@
       state: "pred_trophy_vendor_top_center"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaTrophyRackBase
   id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorBottomRight
   name: yautja pred trophy vendor bottom right
   description: An ancient Yautja hunting-ground structure.
@@ -314,7 +336,7 @@
       state: "pred_trophy_vendor_bottom_right"
 
 - type: entity
-  parent: CMUYautjaStructureBase
+  parent: CMUYautjaTrophyRackBase
   id: CMUYautjaStructureN32x32HunterPropsPredTrophyVendorTopRight
   name: yautja pred trophy vendor top right
   description: An ancient Yautja hunting-ground structure.
@@ -4013,7 +4035,7 @@
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureYautjaMachinesDispenser
   name: Chemical dispenser
-  description: A complex machine for mixing elements into chemicals. A Wey-Yu product.
+  description: A hunter-built machine that draws elements from its reserves and blends them into chemicals.
   components:
     - type: Sprite
       sprite: CMU14/Yautja/Structures/yautja_machines.rsi
@@ -5057,6 +5079,10 @@
       sprite: CMU14/Yautja/Structures/yautja_machines.rsi
       state: "console_shuttle"
     - type: YautjaShuttleConsole
+    - type: AccessReader
+      access:
+        - [ "CMUAccessYautjaLeader" ]
+        - [ "CMUAccessYautjaAncient" ]
     - type: WhitelistedShuttle
       faction: yautja
       ShuttleType: Dropship

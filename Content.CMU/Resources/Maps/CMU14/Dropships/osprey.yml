@@ -176,7 +176,7 @@ entities:
       arrivalSound: !type:SoundPathSpecifier
         path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
     - type: ImplicitRoof
-- proto: CMUAirFillerVent
+- proto: CMULifeSupportVent
   entities:
   - uid: 201
     components:

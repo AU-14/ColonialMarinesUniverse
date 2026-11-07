@@ -25,7 +25,7 @@ public sealed partial class FighterSystem
     [Dependency] private SharedInteractionSystem _groundInteraction = default!;
     [Dependency] private ObjectiveControlSystem _objectives = default!;
     [Dependency] private FixtureSystem _groundFixtures = default!;
-    private readonly HashSet<EntityUid> _groundBlockers = [];
+    private readonly HashSet<FixtureProxy> _groundBlockers = [];
     private readonly HashSet<FixtureProxy> _exitFixtures = [];
 
     private void InitializeGround()
@@ -62,7 +62,7 @@ public sealed partial class FighterSystem
         // Ship-side delivery still flies over the active battlefield, not the carrier map.
         if (_objectives.GetPlanetMapId() is { } planet && planet != MapId.Nullspace && _map.MapExists(planet))
             terrain = _map.GetMap(planet);
-        var aircraft = CreateAircraft(terrain, _transform.GetWorldPosition(ground));
+        var aircraft = CreateAircraft(terrain, _transform.GetWorldPosition(ground), Airframe(ground).ID);
         aircraft.Comp.GroundEntity = ground;
         ground.Comp.Aircraft = aircraft;
         ground.Comp.FrontSeat = aircraft.Comp.FrontSeat;
@@ -173,13 +173,14 @@ public sealed partial class FighterSystem
 
     private void MoveFighterCrew(Entity<FighterGroundComponent> ground, Entity<FighterAircraftComponent> aircraft, bool toGround)
     {
+        var definition = Airframe(aircraft);
         foreach (var uid in new[] { aircraft.Comp.FrontSeat, aircraft.Comp.RearSeat, aircraft.Comp.Canopy })
         {
             if (uid is not { } part || TerminatingOrDeleted(part)) continue;
             if (TryComp(part, out FighterSeatComponent? seat) && seat.Occupant is { } crew)
                 _crewPulling.TryStopAllPullsFromAndOn(crew);
-            var position = part == aircraft.Comp.FrontSeat ? new Vector2(.5f, 4.2f) :
-                part == aircraft.Comp.RearSeat ? new Vector2(.5f, 2.1f) : new Vector2(.5f, 0);
+            var position = new Vector2(.5f, 0) + (part == aircraft.Comp.FrontSeat ? definition.PilotOffset :
+                part == aircraft.Comp.RearSeat ? definition.ObserverOffset : Vector2.Zero);
             if (toGround) position = -(position - new Vector2(.5f, 0)) * FighterGroundComponent.AttachmentScale;
             _transform.SetCoordinates(part, new EntityCoordinates(toGround ? ground.Owner : aircraft.Owner, position));
             _transform.SetLocalRotation(part, toGround ? Angle.Zero : new Angle(Math.PI));
@@ -289,9 +290,16 @@ public sealed partial class FighterSystem
             _popup.PopupEntity(Loc.GetString("cmu-fighter-takeoff-blocked"), seat.Owner, user);
             return false;
         }
+        var distance = FindGroundRoll(hull, coordinates, Airframe(hull).TakeoffRoll, false);
+        if (distance < .25f)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-fighter-takeoff-blocked"), seat.Owner, user);
+            return false;
+        }
         ground.LaunchCoordinates = coordinates;
-        ground.TaxiPad = null;
         ground.LaunchRotation = _transform.GetWorldRotation(hull);
+        ground.TransitionStart = coordinates;
+        ground.TransitionDistance = distance;
         _groundPhysics.SetLinearVelocity(hull, Vector2.Zero);
         _groundPhysics.SetBodyType(hull, BodyType.Static);
         SetGroundState((hull, ground), aircraft, FighterGroundState.TakingOff, ground.TakeoffTime);
@@ -323,7 +331,6 @@ public sealed partial class FighterSystem
     {
         ground.Comp.State = aircraft.Comp.GroundState = state;
         SetWingFixtures(ground, state != FighterGroundState.Grounded);
-        ground.Comp.TaxiPad = null;
         StopTaxi(ground);
         UpdateTaxiOperator(ground, aircraft);
         if (state is FighterGroundState.Grounded or FighterGroundState.TakingOff)
@@ -354,16 +361,16 @@ public sealed partial class FighterSystem
     private void MoveFighterMounts(Entity<FighterGroundComponent> ground, Entity<FighterAircraftComponent> aircraft, bool toGround)
     {
         if (!TryComp(aircraft, out FighterWeaponsComponent? weapons)) return;
+        var definition = Airframe(aircraft);
         for (var i = 0; i < weapons.Hardpoints.Count; i++)
         {
             if (TerminatingOrDeleted(weapons.Hardpoints[i])) continue;
             var cannon = i == FighterWeaponsComponent.GauSlot;
-            var x = cannon ? .5f : .5f + (i < 3 ? -1 : 1) * (2.5f + i % 3 * 1.8f);
-            var position = new Vector2(x, cannon ? 5.5f : -1.5f - i % 3 * .7f);
+            var position = new Vector2(.5f, 0) + (cannon ? definition.GauOffset : definition.PylonOffsets[i]);
             if (toGround)
             {
                 position = -(position - new Vector2(.5f, 0)) * FighterGroundComponent.AttachmentScale;
-                if (!cannon && ground.Comp.State == FighterGroundState.Grounded)
+                if (!cannon && definition.FoldWings && ground.Comp.State == FighterGroundState.Grounded)
                     position.X = (i < 3 ? 1 : -1) * (.48f + i % 3 * .065f) * FighterGroundComponent.SizeMultiplier;
             }
             _transform.SetCoordinates(weapons.Hardpoints[i], new EntityCoordinates(toGround ? ground.Owner : aircraft.Owner, position));
@@ -424,8 +431,10 @@ public sealed partial class FighterSystem
                 Dirty(aircraft);
                 return;
             }
-            _transform.SetCoordinates(hull, launchCoordinates);
             _transform.SetWorldRotation(hull, component.LaunchRotation);
+            component.TransitionDistance = FindGroundRoll(hull, launchCoordinates, Airframe(hull).LandingRoll, true);
+            component.TransitionStart = launchCoordinates.Offset(GroundRollOffset(launchCoordinates, component.LaunchRotation, -component.TransitionDistance));
+            _transform.SetCoordinates(hull, component.TransitionStart.Value);
             MoveFighterCrew(ground, aircraft, true);
             MoveFighterMounts(ground, aircraft, true);
             SetGroundState(ground, aircraft, FighterGroundState.Landing, component.LandingTime);
@@ -434,15 +443,21 @@ public sealed partial class FighterSystem
         if (a.GroundState is not (FighterGroundState.TakingOff or FighterGroundState.Landing)) return;
         var duration = Math.Max(.01, (component.EndsAt - component.StartedAt).TotalSeconds);
         var progress = (float) Math.Clamp((now - component.StartedAt).TotalSeconds / duration, 0, 1);
+        var clear = MoveGroundRoll(ground, progress);
+        if (clear && a.GroundState == FighterGroundState.Landing && !component.TouchdownPlayed && now >= component.TouchdownAt)
+        {
+            component.TouchdownPlayed = true;
+            _fighterAudio.PlayGround(FighterAudioSystem.Engine(Airframe(hull), "touchdown"), Transform(hull).Coordinates, 35, -2);
+        }
         a.Position = _transform.GetWorldPosition(hull);
         a.Heading = (float) (Math.PI - component.LaunchRotation.Theta);
-        a.Height = FighterVtol.Lift(progress, a.GroundState == FighterGroundState.Landing) * 100;
+        a.Height = CMUFighterTransition.Lift(progress, a.GroundState == FighterGroundState.Landing, Airframe(hull)) * 100;
         a.Altitude = FighterAltitude.Low;
         a.Speed = 0;
-        if (now < component.EndsAt) return;
+        if (now < component.EndsAt && clear) return;
         if (a.GroundState == FighterGroundState.TakingOff)
         {
-            if (!HasCombatPilot(a) || !GroundSiteClear(hull, Transform(hull).Coordinates))
+            if (!clear || !HasCombatPilot(a) || !GroundSiteClear(hull, Transform(hull).Coordinates))
             {
                 FinishVtolEffects(ground, FighterVtolOutcome.Aborted);
                 SetGroundState(ground, aircraft, FighterGroundState.Grounded);
@@ -459,7 +474,7 @@ public sealed partial class FighterSystem
             a.Speed = a.TargetSpeed;
             SetGroundState(ground, aircraft, FighterGroundState.Airborne);
         }
-        else if (component.LaunchCoordinates is { } landingCoordinates && GroundSiteClear(hull, landingCoordinates))
+        else if (clear && component.LaunchCoordinates is { } landingCoordinates && GroundSiteClear(hull, landingCoordinates))
         {
             FinishVtolEffects(ground, FighterVtolOutcome.Touchdown);
             a.Height = a.Speed = 0;
@@ -521,10 +536,11 @@ public sealed partial class FighterSystem
         while (lifts.MoveNext(out var liftUid, out var lift, out var liftTransform))
             if (liftTransform.MapID == world.MapId && Vector2.DistanceSquared(_transform.GetWorldPosition(liftUid), world.Position) <= lift.Radius * lift.Radius &&
                 (lift.Mode != VehicleSupplyLiftMode.Raised || lift.Busy)) return false;
-        for (var x = -2; x <= 2; x++)
-        for (var y = -3; y <= 3; y++)
+        // Wings may overhang a deck or uneven ground. Only the central running
+        // gear needs support; the actual fixture shapes still check obstacles.
+        for (var y = -1; y <= 1; y++)
         {
-            var point = world.Position + rotation.RotateVec(new Vector2(x, y * .85f) * FighterGroundComponent.SizeMultiplier);
+            var point = world.Position + rotation.RotateVec(new Vector2(0, y * 1.5f));
             if (!HasGroundTile(map, point)) return false;
             var upper = map;
             while (TryComp(upper, out CMUZLevelMapComponent? level) && level.MapAbove is { } above)
@@ -535,34 +551,51 @@ public sealed partial class FighterSystem
             _areas.CanOrbitalBombard(new EntityCoordinates(map, point), out var roofed);
             if (roofed) return false;
         }
+        if (!TryComp(hull, out FixturesComponent? hullFixtures)) return false;
+        var definition = Airframe(hull);
         _groundBlockers.Clear();
-        var c = (float) Math.Abs(Math.Cos(rotation.Theta));
-        var s = (float) Math.Abs(Math.Sin(rotation.Theta));
-        var extent = new Vector2(c * 2.2f + s * 2.8f, s * 2.2f + c * 2.8f) * FighterGroundComponent.SizeMultiplier;
-        _groundLookup.GetEntitiesIntersecting(world.MapId, new Box2(world.Position - extent, world.Position + extent),
-            _groundBlockers, LookupFlags.Uncontained);
-        foreach (var entity in _groundBlockers)
+        var transform = new Robust.Shared.Physics.Transform(world.Position, rotation);
+        const CollisionGroup mask = CollisionGroup.Impassable | CollisionGroup.MidImpassable |
+            CollisionGroup.HighImpassable | CollisionGroup.LowImpassable | CollisionGroup.BarricadeImpassable |
+            CollisionGroup.MobLayer | CollisionGroup.LargeMobLayer;
+        var query = new FixtureQueryArgs(new QueryFilter
         {
+            LayerBits = -1,
+            MaskBits = -1,
+            Flags = QueryFlags.Dynamic | QueryFlags.Static | QueryFlags.Sensors,
+        });
+        foreach (var (id, fixture) in hullFixtures.Fixtures)
+        {
+            if (Array.IndexOf(definition.FoldedWingFixtures, id) >= 0 ||
+                !fixture.Hard && Array.IndexOf(definition.ExtendedWingFixtures, id) < 0) continue;
+            for (var child = 0; child < fixture.Shape.ChildCount; child++)
+                _groundLookup.GetFixturesIntersecting(world.MapId, fixture.Shape, child, transform, _groundBlockers, query);
+        }
+        foreach (var blocker in _groundBlockers)
+        {
+            var entity = blocker.Entity;
             if (entity == hull || Transform(entity).ParentUid == hull || IsGroundCrew(hull, entity)) continue;
-            // Characters use soft fixtures. Include those and prone bodies as well as hard obstacles.
-            if (HasComp<MobStateComponent>(entity)) return false;
-            if (!TryComp(entity, out FixturesComponent? fixtures) || !TryComp(entity, out PhysicsComponent? body) || !body.CanCollide) continue;
-            foreach (var fixture in fixtures.Fixtures.Values)
-                if (fixture.Hard && (fixture.CollisionLayer & (int) (CollisionGroup.Impassable | CollisionGroup.MidImpassable |
-                    CollisionGroup.HighImpassable | CollisionGroup.MobLayer | CollisionGroup.MobMask)) != 0) return false;
+            if (HasComp<MobStateComponent>(entity) || blocker.Body.CanCollide && blocker.Fixture.Hard &&
+                (blocker.Fixture.CollisionLayer & (int) mask) != 0) return false;
         }
         return true;
     }
 
     private void SetWingFixtures(Entity<FighterGroundComponent> ground, bool extended)
     {
+        var definition = Airframe(ground);
+        extended |= !definition.FoldWings;
         const int layer = (int) CollisionGroup.LargeMobLayer;
         const int mask = (int) (CollisionGroup.Impassable | CollisionGroup.MidImpassable | CollisionGroup.HighImpassable |
             CollisionGroup.LowImpassable | CollisionGroup.BarricadeImpassable | CollisionGroup.LargeMobLayer);
-        foreach (var id in new[] { "wings", "foldedWings" })
+        foreach (var id in definition.ExtendedWingFixtures)
+            SetWingFixture(id, extended);
+        foreach (var id in definition.FoldedWingFixtures)
+            SetWingFixture(id, !extended);
+
+        void SetWingFixture(string id, bool active)
         {
-            if (_groundFixtures.GetFixtureOrNull(ground, id) is not { } fixture) continue;
-            var active = id == "wings" ? extended : !extended;
+            if (_groundFixtures.GetFixtureOrNull(ground, id) is not { } fixture) return;
             _groundPhysics.SetHard(ground, fixture, active);
             _groundPhysics.SetCollisionLayer(ground, id, fixture, active ? layer : 0);
             _groundPhysics.SetCollisionMask(ground, id, fixture, active ? mask : 0);

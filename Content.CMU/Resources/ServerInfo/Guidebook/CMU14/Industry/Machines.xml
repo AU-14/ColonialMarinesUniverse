@@ -1,0 +1,38 @@
+<Document>
+  # Machines: load, set, collect
+
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Make equipment" link="CMUGuideIndustryRecipes"]
+
+  ## The common controls — OOC
+  Place the machine and supply its [textlink="power" link="CMUGuideIndustryElectric"] or [textlink="steam" link="CMUGuideIndustrySteam"]. Click it with an empty hand to open the window.
+
+  [bold]Read its recipe list → hold ingredient → click input slot → set circuit → collect output.[/bold] Recipes run automatically when the listed items, fluids and catalysts are available. Use the circuit +/- buttons where a recipe requests a number. An empty hand retrieves a slot's contents. Keep output slots and fluid outlets clear.
+
+  ## Which machine do I need?
+  <Box>
+    <GuideEntityEmbed Entity="RUMCWiremill" Caption="WIRE"/>
+    <GuideEntityEmbed Entity="RUMCLathe" Caption="PARTS"/>
+    <GuideEntityEmbed Entity="RUMCElectricAssembler" Caption="ASSEMBLE"/>
+  </Box>
+  - [bold]Wiremill / bender:[/bold] ingots to wire or sheets. Lathe, cutter and extruder make rods, bolts and other shaped parts.
+  - [bold]Polarizer / circuit assembler / assembler / fabricator:[/bold] magnets, circuits, components and finished equipment. The fabricator has extra input slots for complex builds.
+  - [bold]Ore washer / thermal centrifuge / magnetic separator:[/bold] improve ore/powder recovery. Sifter preserves gems; autoclave grows them from powder.
+  - [bold]Electric smelter:[/bold] load metal and set its temperature high enough. Blast furnace and arc furnace handle their listed high-heat recipes.
+  - [bold]Extractor / pyrolysis oven:[/bold] resin, rubber and coke. Mixer, reactor, chemical bath, centrifuge and electrolyzer process fluids and mixtures.
+  - [bold]Compressor / fluid solidifier:[/bold] compress solids or turn molten fluids into usable material. Galvanic bath coats metal.
+  - [bold]Laser engraver / jeweler's bench:[/bold] chips and jewelry. Fit the recipe's lens/catalyst; reusable catalysts stay in the machine.
+  - [bold]Concrete mixer:[/bold] supply water plus the listed dust/sand; add rods for reinforced concrete. Use the resulting bags to build.
+  - [bold]Fertilizer mixer / automatic growing tray:[/bold] pipe the prepared fertilizer to the powered tray.
+  - [bold]Cannery / sewing machine / tannery / pharmaceutical machine:[/bold] food, clothing, leather and medical supplies. Check recipes before choosing inputs.
+  - [bold]Leather supply:[/bold] order a cow crate from colony requisitions under Food and Drinks. Butcher a dead cow for its hide, then tan it with water and chrome powder. Cotton bolls can be sliced with a knife or glass shard for fiber; weave the fiber by hand or in a sewing machine for cloth.
+  - [bold]Recycler:[/bold] consumes an item to recover some of its material. Check what you are inserting.
+
+  ## Blueprint assembly bench
+  <GuideEntityEmbed Entity="RUMCAssemblyBlueprint" Caption="PROGRAM → INSERT → MATCH LAYOUT"/>
+  Activate the blueprint in hand and choose a recipe. Insert it and a charged cell into the assembly machine. Match the ingredient positions in its nine-slot layout, not just the total amount. Speed/efficiency modules go in upgrade slots.
+
+  ## Automate after one successful batch
+  Enable [bold]Auto input / Auto output[/bold] where available and place supply/output containers or conveyors within reach. Set filters to restrict items; [bold]no filters selected means all allowed[/bold]. Place belt tiles from a belt stack and check their direction before feeding them.
+
+  [textlink="Food and trade" link="CMUGuideIndustryProducts"]
+</Document>

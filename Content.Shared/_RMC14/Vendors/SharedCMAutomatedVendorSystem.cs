@@ -29,6 +29,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
 using Content.Shared.Mind;
+using Robust.Shared.Map;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
@@ -60,6 +61,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedJobSystem _job = default!;
@@ -87,6 +89,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private readonly Dictionary<EntProtoId, CMVendorEntry> _entries = new();
     private readonly List<CMVendorEntry> _boxEntries = new();
+    private readonly HashSet<Entity<CMAutomatedVendorComponent>> _vendors = new();
 
     public override void Initialize()
     {
@@ -807,6 +810,87 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         }
     }
 
+    // cmu edit start: orders filled outside the vendor's own menu, like requisition slips
+    /// <summary>
+    ///     Hands out one of this entry straight from the vendor's stock, taking it off the count the same way the menu
+    ///     does. Ignores points, choices and job limits: the order was approved elsewhere. Server only.
+    ///     With <paramref name="dropAt"/> the item is set down there instead of handed over.
+    /// </summary>
+    public bool TryVendFromStock(Entity<CMAutomatedVendorComponent> vendor, EntityUid actor, int sectionIndex, int entryIndex,
+        Robust.Shared.Map.EntityCoordinates? dropAt = null)
+    {
+        if (_net.IsClient ||
+            sectionIndex < 0 || sectionIndex >= vendor.Comp.Sections.Count ||
+            entryIndex < 0 || entryIndex >= vendor.Comp.Sections[sectionIndex].Entries.Count)
+        {
+            return false;
+        }
+
+        var entry = vendor.Comp.Sections[sectionIndex].Entries[entryIndex];
+        if (entry.Amount is <= 0 || !_prototypes.TryIndex(entry.Id, out var entity))
+            return false;
+
+        if (entry.Amount != null)
+        {
+            var stock = entry;
+            if (entry.Box is { } box)
+            {
+                foreach (var stockSection in vendor.Comp.Sections)
+                {
+                    foreach (var stockEntry in stockSection.Entries)
+                    {
+                        if (stockEntry.Id == box)
+                            stock = stockEntry;
+                    }
+                }
+            }
+
+            // entries are records, so compare references, not values
+            stock.Amount -= ReferenceEquals(stock, entry) ? 1 : GetBoxRemoveAmount(entry);
+
+            Dirty(vendor);
+            AmountUpdated(vendor, stock);
+        }
+
+        var min = vendor.Comp.MinOffset;
+        var max = vendor.Comp.MaxOffset;
+        for (var i = 0; i < entry.Spawn; i++)
+        {
+            var offset = _random.NextVector2Box(min.X, min.Y, max.X, max.Y);
+            var toVend = entity.TryComp(out CMVendorBundleComponent? bundle, _compFactory)
+                ? bundle.Bundle
+                // a list collection expression compiles to CollectionsMarshal.SetCount, which the client sandbox rejects
+                : new List<EntProtoId> { entry.Id };
+            foreach (var item in toVend)
+            {
+                if (dropAt is not { } drop)
+                {
+                    Vend(vendor, actor, item, offset, entry.ReplaceSlot);
+                    continue;
+                }
+
+                // A little scatter so a full order doesn't land in one stack.
+                var spawned = Spawn(item, drop.Offset(_random.NextVector2Box(-0.3f, -0.3f, 0.3f, 0.3f)));
+                var vendedEv = new Content.Shared.CMU14.Vendors.CMUVendorVendedItemEvent(actor, spawned);
+                RaiseLocalEvent(vendor, ref vendedEv);
+            }
+        }
+
+        // CMU14: orders bypass the menu, so carry the menu's user-component grants over too.
+        ApplyVendUserChanges(entry.Id, actor);
+
+        return true;
+    }
+    // cmu edit end
+
+    // CMU14 method
+    private void ApplyVendUserChanges(EntProtoId toVend, EntityUid actor)
+    {
+        if (_prototypes.Index(toVend).TryComp(out CMChangeUserOnVendComponent? change, _compFactory)
+                && change.AddComponents != null)
+            EntityManager.AddComponents(actor, change.AddComponents);
+    }
+
     private void Vend(EntityUid vendor, EntityUid player, EntProtoId toVend, Vector2 offset, SlotFlags? replaceSlot = null)
     {
         if (_prototypes.Index(toVend).TryComp(out CMVendorMapToSquadComponent? mapTo, _compFactory))
@@ -900,6 +984,11 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
         var ev = new RMCAutomatedVendedUserEvent(spawn);
         RaiseLocalEvent(player, ref ev);
+
+        // cmu edit start: let the vendor itself react to what it handed out
+        var vendorEv = new Content.Shared.CMU14.Vendors.CMUVendorVendedItemEvent(player, spawn);
+        RaiseLocalEvent(vendor, ref vendorEv);
+        // cmu edit end
 
         _adminLog.Add(LogType.RMCVend,
             $"{ToPrettyString(player)} vended {ToPrettyString(spawn)} from vendor {ToPrettyString(vendor)}");
@@ -997,6 +1086,54 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         user.Comp.ExtraPoints ??= new Dictionary<string, int>();
         user.Comp.ExtraPoints[key] = points;
         Dirty(user);
+    }
+
+    public bool TryTakeStockedItem(EntityCoordinates coords, float range, EntProtoId prototype, out EntityUid item)
+    {
+        item = default;
+
+        _vendors.Clear();
+        _entityLookup.GetEntitiesInRange(coords, range, _vendors);
+        foreach (var vendor in _vendors)
+        {
+            foreach (var section in vendor.Comp.Sections)
+            {
+                foreach (var entry in section.Entries)
+                {
+                    if (entry.Id != prototype || entry.Amount is not { } amount || amount <= 0)
+                        continue;
+
+                    entry.Amount = amount - 1;
+                    AmountUpdated(vendor, entry);
+                    Dirty(vendor);
+
+                    item = Spawn(prototype, coords);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public int GetStockedAmount(EntityCoordinates coords, float range, EntProtoId prototype)
+    {
+        var total = 0;
+        _vendors.Clear();
+        _entityLookup.GetEntitiesInRange(coords, range, _vendors);
+        foreach (var vendor in _vendors)
+        {
+            foreach (var section in vendor.Comp.Sections)
+            {
+                foreach (var entry in section.Entries)
+                {
+                    if (entry.Id == prototype && entry.Amount is { } amount)
+                        total += amount;
+                }
+            }
+        }
+
+        return total;
     }
 
     public void AmountUpdated(Entity<CMAutomatedVendorComponent> vendor, CMVendorEntry entry)

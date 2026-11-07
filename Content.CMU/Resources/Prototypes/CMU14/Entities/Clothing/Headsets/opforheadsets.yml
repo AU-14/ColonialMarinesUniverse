@@ -3,7 +3,11 @@
   parent: AU14EncryptionKey
   id: AU14EncryptionKeyOpfor
   name: OPFOR encryption key
-  description: An encryption key used to communicate on the OPFOR channel, it is automatically assigned the right channel.
+  description: An encryption key automatically assigned an OPFOR squad channel, with access to OPFOR medical.
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMURadioOpforMedical
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -69,6 +73,16 @@
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
+  id: CMUEncryptionKeyOpforMedical
+  name: OPFOR medical encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMURadioOpforMedical
+    defaultChannel: CMURadioOpforMedical
+
+- type: entity
+  parent: AU14EncryptionKeyOpfor
   id: AU14EncryptionKeyOpforVictor
   name: OPFOR Victor encryption key
   description: An encryption key used to communicate on the OPFOR Victor channel.
@@ -110,6 +124,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
     trackerModes:
@@ -131,6 +146,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforCommand
       - AU14EncryptionKeyOpforBravo
       - AU14EncryptionKeyOpforCharlie
@@ -151,6 +167,7 @@
     containers:
       key_slots: # no command key, SLs talk to command through the RTO's manpack
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforJTAC
 
 - type: entity
@@ -163,6 +180,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforJTAC
       - AU14EncryptionKeyOpforIntel
 
@@ -176,6 +194,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforJTAC
 
 - type: entity
@@ -188,6 +207,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforIntel
 
 - type: entity
@@ -200,6 +220,7 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforJTAC
       - AU14EncryptionKeyOpforIntel
 
@@ -213,11 +234,42 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforCommandOnly
       - AU14EncryptionKeyOpforIntel
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
     defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: AU14HeadsetOpforAuxiliary
+  id: CMUHeadsetOpforDoctor
+  name: OPFOR medical headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommandOnly
+      - AU14EncryptionKeyOpforIntel
+      - CMUEncryptionKeyOpforMedical
+
+- type: entity
+  parent: AU14HeadsetOpforCommand
+  id: CMUHeadsetOpforMedicalCommand
+  name: OPFOR medical command headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforCommand
+      - AU14EncryptionKeyOpforBravo
+      - AU14EncryptionKeyOpforCharlie
+      - AU14EncryptionKeyOpforIntel
+      - AU14EncryptionKeyOpforJTAC
+      - AU14EncryptionKeyOpforMILP
+      - CMUEncryptionKeyOpforMedical
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -229,12 +281,26 @@
     containers:
       key_slots:
       - AU14EncryptionKeyOpfor
+      - CMUEncryptionKeyOpforMedical
       - AU14EncryptionKeyOpforCommand
 #     - AU14EncryptionKeyOpforCommandOnly
       - AU14EncryptionKeyOpforMILP
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
     defaultChannel: radioOpforCommand
+
+- type: entity
+  parent: CMHeadsetHighCommand
+  id: CMUHeadsetOpforHighCommand
+  name: OPFOR high command headset
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyCommon
+      - RMCEncryptionKeySeniorCommand
+      - RMCEncryptionKeyHighCommand
+      - CMUEncryptionKeyOpforMedical
 
 - type: entity
   parent: RMCBaseUniformAccessory
@@ -268,6 +334,7 @@
     - radioOpforBravo
     - radioOpforCommand
     - radioOpforIntel
+    - CMURadioOpforMedical
     - radioOpforVictor
     - radioOpforJTAC
     - radioOpforMILP

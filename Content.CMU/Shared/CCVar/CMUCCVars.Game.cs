@@ -13,11 +13,34 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.fof.unidentified_marker_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
+    /// Server-wide switch for FoF identification markers above heads. Replicated so admins can
+    /// disable the whole system mid-round; the per-client preference still applies on top.
+    /// </summary>
+    public static readonly CVarDef<bool> ForceOnForceIdentificationMarkersEnabled =
+        CVarDef.Create("cmu.fof.identification_markers_enabled", true, CVar.SERVER | CVar.REPLICATED);
+
+    /// <summary>
     /// Whether each round start rewrites the server name to "name | gamemode day Playtest". Off leaves game.hostname as set.
     /// </summary>
     public static readonly CVarDef<bool> CMUHostnameRoundSuffix =
         CVarDef.Create("cmu.game.hostname_round_suffix", false, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Force on Force round time limit in minutes; 0 uses the FoFTimeLimitRule prototype value.
+    /// </summary>
+    public static readonly CVarDef<int> FoFTimeLimitMinutes =
+        CVarDef.Create("cmu.fof.time_limit_minutes", 0, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Hotspot hold-ticks one force needs to win Force on Force outright; 0 disables win-by-holding.
+    /// </summary>
+    public static readonly CVarDef<int> FoFHotspotTicksToWin =
+        CVarDef.Create("cmu.fof.hotspot_ticks_to_win", 0, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Master switch for the evac destruct show: MU/TH/UR narration, sirens, the Delta alert and the scuttle itself.
+    /// Off, evacuation still runs but no self-destruct sequence ever arms.
+    /// </summary>
     public static readonly CVarDef<bool> EnableEvacSfx =
         CVarDef.Create("cmu.game.enable_evac_sfx", false, CVar.SERVERONLY | CVar.ARCHIVE);
 
@@ -46,6 +69,21 @@ public sealed partial class CCVars
     public static readonly CVarDef<float> SpentCasingDespawnTime =
         CVarDef.Create("cmu.game.spent_casing_despawn_time", 300f, CVar.SERVERONLY | CVar.ARCHIVE);
 
+    /// <summary>
+    /// Seconds a loose, empty, detachable magazine lies on the ground before the loose sweep
+    /// despawns it. Long fuse on purpose: rounds run 2h+ and spent mags are battlefield texture;
+    /// the sweep only fights entity bloat late-round. Zero disables. Loaded magazines are never touched.
+    /// </summary>
+    public static readonly CVarDef<float> LooseMagazineDespawnTime =
+        CVarDef.Create("cmu.game.loose_magazine_despawn_time", 1800f, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Seconds a loose trash-tagged entity lies on the ground before the loose sweep despawns
+    /// it. Zero disables the trash sweep. Papers are excluded, matching nuke:trash.
+    /// </summary>
+    public static readonly CVarDef<float> TrashDespawnTime =
+        CVarDef.Create("cmu.game.trash_despawn_time", 3600f, CVar.SERVERONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> HoldRoundEnd =
         CVarDef.Create("cmu.game.hold_round_end", false, CVar.SERVERONLY);
 
@@ -55,4 +93,23 @@ public sealed partial class CCVars
     [CVarControl(AdminFlags.VarEdit, min: 0, max: 255)]
     public static readonly CVarDef<int> FoFMaxGap =
         CVarDef.Create("cmu.game.fof_max_force_balance_gap", 3, CVar.SERVERONLY);
+
+    /// <summary>
+    /// MREs aboard the warship stay sealed while the mess hall is serving: unconditionally for the first ten
+    /// minutes of the round, then only while the mess has food to serve. A hijacked dropship still overrides it.
+    /// </summary>
+    [CVarControl(AdminFlags.VarEdit)]
+    public static readonly CVarDef<bool> ShipMreLock =
+        CVarDef.Create("cmu.game.ship_mre_lock", true, CVar.ARCHIVE | CVar.REPLICATED | CVar.SERVER);
+
+    /// <summary>
+    /// The preset an admin locked the gamemode vote to, empty when unlocked. Archived so the lock survives
+    /// server restarts and round recycling.
+    /// </summary>
+    public static readonly CVarDef<string> GamemodeLockPreset =
+        CVarDef.Create("cmu.game.gamemode_lock_preset", "", CVar.SERVER | CVar.ARCHIVE);
+
+    /// <summary>How many more rounds the gamemode vote lock covers, counting the next one. Zero means until cleared.</summary>
+    public static readonly CVarDef<int> GamemodeLockRounds =
+        CVarDef.Create("cmu.game.gamemode_lock_rounds", 0, CVar.SERVER | CVar.ARCHIVE);
 }

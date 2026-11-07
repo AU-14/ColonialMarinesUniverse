@@ -65,8 +65,12 @@ namespace Content.Server.Atmos.EntitySystems
                 return false;
             }
 
-            var message = new AtmosDebugOverlayDisableMessage();
-            RaiseNetworkEvent(message, observer.Channel);
+            // CMU14: the channel is already gone when a disconnect triggers this, sending would just log an error
+            if (observer.Channel.IsConnected)
+            {
+                var message = new AtmosDebugOverlayDisableMessage();
+                RaiseNetworkEvent(message, observer.Channel);
+            }
 
             return true;
         }

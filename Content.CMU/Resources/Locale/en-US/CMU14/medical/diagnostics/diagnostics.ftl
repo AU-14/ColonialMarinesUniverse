@@ -28,6 +28,7 @@ cmu-medical-stethoscope-no-heart           = There is no heart in the patient's 
 cmu-medical-stethoscope-lungs-precise      = Lungs: { $stage }.
 cmu-medical-stethoscope-lungs-qualitative  = Lungs sound { $description }.
 cmu-medical-stethoscope-no-lungs           = There are no lungs in the patient's chest.
+cmu-medical-stethoscope-raspy-breathing    = You hear raspy breathing.
 
 cmu-medical-scanner-section-head           = Head
 cmu-medical-scanner-section-torso          = Torso

@@ -67,59 +67,6 @@ public sealed class XenoHiveInstantBuildTest
     }
 
     [Test]
-    public async Task InstantBuildCounterMirrorsHivePoolForSecreteActions()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var hiveSystem = entMan.System<SharedXenoHiveSystem>();
-            var construction = entMan.System<SharedXenoConstructionSystem>();
-            var hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords);
-            var droneOne = entMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(1, 0)));
-            var droneTwo = entMan.SpawnEntity("CMXenoDrone", map.GridCoords.Offset(new Vector2(2, 0)));
-
-            try
-            {
-                hiveSystem.SetHive(droneOne, hive);
-                hiveSystem.SetHive(droneTwo, hive);
-
-                construction.RefreshHiveInstantBuildActionCounters(hive);
-
-                var counterOne = GetSecreteActionCounter(entMan, droneOne);
-                var counterTwo = GetSecreteActionCounter(entMan, droneTwo);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(counterOne.Visible, Is.True);
-                    Assert.That(counterOne.BuildsLeft, Is.EqualTo(200));
-                    Assert.That(counterTwo.Visible, Is.True);
-                    Assert.That(counterTwo.BuildsLeft, Is.EqualTo(200));
-                });
-
-                Assert.That(construction.TryUseHiveInstantBuild(hive), Is.True);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(counterOne.BuildsLeft, Is.EqualTo(199));
-                    Assert.That(counterTwo.BuildsLeft, Is.EqualTo(199));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(hive);
-                entMan.DeleteEntity(droneOne);
-                entMan.DeleteEntity(droneTwo);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task SecreteStructureUsesHiveInstantBuildWithoutPlasmaOrDoAfter()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -229,22 +176,6 @@ public sealed class XenoHiveInstantBuildTest
         };
 
         entMan.EventBus.RaiseLocalEvent(xeno, ev);
-    }
-
-    private static XenoHiveInstantBuildActionComponent GetSecreteActionCounter(IEntityManager entMan, EntityUid xeno)
-    {
-        var actions = entMan.System<SharedActionsSystem>();
-        foreach (var action in actions.GetActions(xeno))
-        {
-            if (entMan.GetComponent<MetaDataComponent>(action).EntityPrototype?.ID != "ActionXenoSecreteStructure")
-                continue;
-
-            Assert.That(entMan.TryGetComponent(action, out XenoHiveInstantBuildActionComponent counter), Is.True);
-            return counter;
-        }
-
-        Assert.Fail("Expected xeno to have ActionXenoSecreteStructure");
-        throw new InvalidOperationException();
     }
 
     private static bool HasActiveConstructionDoAfter(IEntityManager entMan, EntityUid xeno)

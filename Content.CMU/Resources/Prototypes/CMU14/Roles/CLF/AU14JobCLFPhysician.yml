@@ -53,6 +53,11 @@
     traits:
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: AU14GearCLFPhysician
@@ -69,6 +74,7 @@
 - type: startingGear
   id: AU14GearCLFPhysician
   equipment:
+    ears: CMUHeadsetColonyMedical
     ears2: RMCFlashlightPen
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFPhysician

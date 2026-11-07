@@ -81,8 +81,18 @@
     sprite: CMU14/Clothing/UPP/helmets/type79.rsi
   - type: Clothing
     sprite: CMU14/Clothing/UPP/helmets/type79.rsi
-     - type: CMArmor
+  - type: CMArmor
     melee: 25
     bullet: 25
     bio: 5
     explosionArmor: 20
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14UPPPilot
+  name: ZSh-7A
+  description: A standard Soviet and Russian fighter pilot flight helmet developed in the late 1980s, Still issued to UPP pilots today.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi

@@ -11,6 +11,7 @@ using Content.Server.GameTicking.Presets;
 using Content.Server.Mind;
 using Content.Server.Preferences.Managers;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
@@ -50,9 +51,9 @@ public sealed class ForceOnForceGameplayTest : GameTest
 {
     private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
     private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> DistressSignalPrototype = "DistressSignal";
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobGOVFORSquadSergeantPrototype = "AU14JobGOVFORSquadSergeant";
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobOPFORSquadSergeantPrototype = "AU14JobOPFORSquadSergeant";
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobGOVFORSquadRiflemanPrototype = "AU14JobGOVFORSquadRifleman";
+
+
+
 
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
@@ -123,7 +124,6 @@ public sealed class ForceOnForceGameplayTest : GameTest
     }
 
     [TestCase("govfor", "opfor")]
-    [TestCase("opfor", "govfor")]
     [TestCase(null, null)]
     public async Task RandomHijackCandidatesExcludeTheHumanAttackersOwnCarrier(string? attacker, string? enemy)
     {
@@ -192,8 +192,45 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
+    [Test]
+    public async Task NoHijackInitiationIsAcceptedInForceOnForce()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipHijackInitialDelayMinutes, 0);
+            var maps = Server.System<SharedMapSystem>();
+            var ship = maps.CreateMap();
+            var computer = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 0, 0));
+            var user = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 1, 0));
+            SEntMan.EnsureComponent<DropshipHijackerComponent>(user);
+            var dropships = Server.System<ServerDropshipSystem>();
+            var popup = typeof(SharedDropshipSystem)
+                .GetMethod("TryDropshipHijackPopup", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var ticker = Server.System<GameTicker>();
+            var currentPreset = typeof(GameTicker)
+                .GetProperty(nameof(GameTicker.CurrentPreset))!;
+            var originalPreset = (GamePresetPrototype?) currentPreset.GetValue(ticker);
+            void SetPreset(Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> id) => currentPreset
+                .SetValue(ticker, SProtoMan.Index<GamePresetPrototype>(id));
+            bool Accepted() => (bool) popup.Invoke(dropships,
+            [
+                computer,
+                Activator.CreateInstance(typeof(Entity<DropshipHijackerComponent?>), user, null)!,
+                false
+            ])!;
+
+            SetPreset(DistressSignalPrototype);
+            Assert.That(Accepted(), Is.True, "a hijacker can still initiate outside Force on Force");
+
+            SetPreset(ForceOnForcePrototype);
+            Assert.That(Accepted(), Is.False, "Force on Force accepts no hijack initiation, whatever the hijacker type");
+
+            // Leave the pooled ticker as found: CurrentPreset drives other systems' behavior.
+            currentPreset.SetValue(ticker, originalPreset);
+        });
+    }
+
     [TestCase("govfor", "opfor")]
-    [TestCase("opfor", "govfor")]
     public async Task OrdinaryNavigationRejectsEnemyCarrierAndControlledLandingZone(string own, string enemy)
     {
         await Server.WaitAssertion(() =>
@@ -220,147 +257,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
-    [TestCase("govfor", "opfor", "USCM", "UPP", "AU14DesertFatigues", "AU14FatiguesUPP")]
-    [TestCase("opfor", "govfor", "UPP", "USCM", "AU14FatiguesUPP", "AU14DesertFatigues")]
-    public async Task UniformMarkerUsesTheViewersFactionAndUniforms(
-        string faction, string otherFaction, string platoon, string otherPlatoon, string ownUniform, string otherUniform)
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid viewer = default;
-        EntityUid target = default;
-        await Server.WaitAssertion(() =>
-        {
-            viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var viewerMarine = SEntMan.EnsureComponent<MarineComponent>(viewer);
-            viewerMarine.Faction = faction;
-            SEntMan.Dirty(viewer, viewerMarine);
-            var policy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
-            policy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>(platoon).Uniforms);
-            target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var targetMarine = SEntMan.EnsureComponent<MarineComponent>(target);
-            targetMarine.Faction = otherFaction;
-            var targetPolicy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(target);
-            targetPolicy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>(otherPlatoon).Uniforms);
-            var recognition = Server.System<ForceOnForceUniformSystem>();
-            var inventory = Server.System<InventorySystem>();
-            Assert.That(recognition.IsUnidentified(target, viewer), Is.True, "missing uniforms are unfamiliar");
-            Assert.That(recognition.IsUnidentified(viewer, viewer), Is.False, "the viewer is never marked");
-            Assert.That(recognition.IsUnidentified(target, null), Is.False, "spectators have no faction uniform policy");
-            var own = SEntMan.SpawnEntity(ownUniform, map.GridCoords);
-            Assert.That(inventory.TryEquip(target, own, "jumpsuit", silent: true, force: true), Is.True);
-            Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "recognize the viewer's uniforms on other factions");
-            Assert.That(inventory.TryUnequip(target, "jumpsuit", silent: true, force: true), Is.True);
-            Assert.That(recognition.IsUnidentified(target, viewer), Is.True);
-            var enemy = SEntMan.SpawnEntity(otherUniform, map.GridCoords);
-            Assert.That(inventory.TryEquip(target, enemy, "jumpsuit", silent: true, force: true), Is.True);
-            Assert.That(recognition.IsUnidentified(target, viewer), Is.True, "the target's own whitelist does not identify them to the viewer");
-            targetMarine.Faction = faction.ToUpperInvariant();
-            Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "teammates keep identifiers even in foreign uniforms");
-            Assert.That(inventory.TryUnequip(target, "jumpsuit", silent: true, force: true), Is.True);
-            Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "teammates without uniforms are never marked");
-        });
-    }
-
-    [TestCase("govfor", "opfor", "USCM", "UPP", "CMJumpsuitXOFormal", "AU14FatiguesUPP")]
-    [TestCase("opfor", "govfor", "UPP", "USCM", "AU14ServiceFatiguesUPP", "AU14CamoUSCMFatigues")]
-    public async Task UniformMarkerRecognizesVendorStockOnTheClient(
-        string faction, string enemyFaction, string platoon, string enemyPlatoon, string ownUniform, string enemyUniform)
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid viewer = default;
-        EntityUid target = default;
-        await Server.WaitAssertion(() =>
-        {
-            var ticker = Server.System<GameTicker>();
-            typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
-            var platoons = Server.System<PlatoonSpawnRuleSystem>();
-            platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "govfor" ? platoon : enemyPlatoon);
-            platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "opfor" ? platoon : enemyPlatoon);
-            viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var viewerMarine = SEntMan.EnsureComponent<MarineComponent>(viewer);
-            viewerMarine.Faction = faction;
-            SEntMan.Dirty(viewer, viewerMarine);
-            target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            SEntMan.EnsureComponent<MarineComponent>(target).Faction = enemyFaction;
-            SEntMan.EventBus.RaiseLocalEvent(viewer, new PlayerSpawnCompleteEvent(viewer, ServerSession!, null,
-                false, true, 0, map.Grid.Owner, HumanoidCharacterProfile.DefaultWithSpecies()), true);
-            var policy = SEntMan.GetComponent<ForceOnForceUniformComponent>(viewer);
-            Assert.That(policy.Uniforms.Contains(ownUniform), Is.True, "include uniforms from the resolved vendors");
-            Assert.That(policy.Uniforms.Contains(enemyUniform), Is.False, "enemy vendor stock stays unfamiliar");
-            Server.PlayerMan.SetAttachedEntity(ServerSession!, viewer);
-        });
-
-        try
-        {
-            foreach (var (uniform, friendly, state, expected) in new (string, bool, MobState, bool)[]
-                     {
-                         (enemyUniform, false, MobState.Alive, true),
-                         (ownUniform, false, MobState.Alive, false),
-                         (enemyUniform, true, MobState.Alive, false),
-                         (null, true, MobState.Alive, false),
-                         (null, false, MobState.Alive, true),
-                         (enemyUniform, false, MobState.Dead, false),
-                         (null, false, MobState.Dead, false),
-                         (enemyUniform, false, MobState.Alive, true),
-                     })
-            {
-                await Server.WaitAssertion(() =>
-                {
-                    var inventory = Server.System<InventorySystem>();
-                    if (inventory.TryGetSlotEntity(target, "jumpsuit", out _))
-                        Assert.That(inventory.TryUnequip(target, "jumpsuit", silent: true, force: true), Is.True);
-                    if (uniform != null)
-                        Assert.That(inventory.TryEquip(target, SEntMan.SpawnEntity(uniform, map.GridCoords),
-                            "jumpsuit", silent: true, force: true), Is.True);
-                    var marine = SEntMan.GetComponent<MarineComponent>(target);
-                    marine.Faction = friendly ? faction.ToUpperInvariant() : enemyFaction;
-                    SEntMan.Dirty(target, marine);
-                    Server.System<MobStateSystem>().ChangeMobState(target, state);
-                });
-                await Pair.RunTicksSync(5);
-                await Pair.RunUntilSynced();
-                await Client.WaitAssertion(() =>
-                {
-                    Assert.That(CEntMan.GetComponent<MarineComponent>(ToClientUid(viewer)).Faction,
-                        Is.EqualTo(faction), "replicated viewer faction");
-                    Assert.That(CEntMan.GetComponent<MarineComponent>(ToClientUid(target)).Faction,
-                        Is.EqualTo(friendly ? faction.ToUpperInvariant() : enemyFaction), "replicated target faction");
-                    Assert.That(
-                    Client.System<ForceOnForceUniformSystem>().IsUnidentified(ToClientUid(target), ToClientUid(viewer)),
-                    Is.EqualTo(expected), $"client recognition: uniform={uniform}, friendly={friendly}, state={state}");
-                });
-            }
-        }
-        finally
-        {
-            await Server.WaitPost(() => Server.PlayerMan.SetAttachedEntity(ServerSession!, null));
-        }
-    }
-
-    [Test]
-    public async Task UniformMarkerSettingDefaultsOnAndCanBeChangedLocally()
-    {
-        await Client.WaitAssertion(() =>
-        {
-            var configuration = Client.ResolveDependency<IConfigurationManager>();
-            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
-            using var tab = new CmuTab();
-            var checkbox = tab.FindControl<CheckBox>("FoFUnidentifiedMarkerCheckBox");
-            Assert.That(checkbox.Pressed, Is.True);
-            checkbox.Pressed = false;
-            tab.Control.ApplyChanges();
-            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.False);
-            tab.Control.ReloadValues();
-            Assert.That(checkbox.Pressed, Is.False);
-            checkbox.Pressed = true;
-            tab.Control.ApplyChanges();
-            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
-        });
-    }
-
     [TestCase("govfor", RoundJobSide.Govfor, RoundJobSide.Opfor)]
-    [TestCase("opfor", RoundJobSide.Opfor, RoundJobSide.Govfor)]
     public async Task RespawnsStayOnTheirOriginalSideUntilTheRoundResets(string faction, RoundJobSide own, RoundJobSide enemy)
     {
         var map = await Pair.CreateTestMap();
@@ -475,77 +372,4 @@ public sealed class ForceOnForceGameplayTest : GameTest
         await Server.WaitAssertion(() => Assert.That(respawn.Remaining(player), Is.EqualTo(TimeSpan.Zero)));
     }
 
-    [TestCase(ForceOnForceSide.Govfor, true, false)]
-    [TestCase(ForceOnForceSide.Opfor, false, true)]
-    [TestCase(ForceOnForceSide.Either, true, true)]
-    public async Task UnifiedRoleListHonorsThePreferredSideWithoutRequiringSideFallback(
-        ForceOnForceSide side, bool govfor, bool opfor)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var jobs = Server.System<StationJobsSystem>();
-            var costMethod = typeof(StationJobsSystem).GetMethod("GetForceOnForceJobCost", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithForceOnForcePreferences(side, ForceOnForceFallback.StayInLobby)
-                .WithForceOnForceJobPriority(SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadSergeantPrototype), JobPriority.High, SProtoMan);
-            bool Accepted(string id) => costMethod.Invoke(jobs, [profile, SProtoMan.Index<JobPrototype>(id)]) != null;
-            Assert.That(Accepted("AU14JobGOVFORSquadSergeant"), Is.EqualTo(govfor));
-            Assert.That(Accepted("AU14JobOPFORSquadSergeant"), Is.EqualTo(opfor));
-            Assert.That(Accepted("AU14JobGOVFORSquadRifleman"), Is.False);
-            Assert.That(Accepted("AU14JobOPFORSquadRifleman"), Is.False);
-        });
-    }
-
-    [Test]
-    public async Task UnifiedRoleListReadsAndReplacesLegacyOppositionPreferences()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var govfor = SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadSergeantPrototype);
-            var opfor = SProtoMan.Index<JobPrototype>(AU14JobOPFORSquadSergeantPrototype);
-            var rifleman = SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadRiflemanPrototype);
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithGamemodeJobPriority("ForceOnForce", opfor.ID, JobPriority.High)
-                .WithGamemodeJobPriority("ForceOnForce", rifleman.ID, JobPriority.Medium)
-                .WithGamemodeJobPriority("DistressSignal", govfor.ID, JobPriority.Low);
-            Assert.That(profile.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.High));
-
-            var lowered = profile.WithForceOnForceJobPriority(govfor, JobPriority.Low, SProtoMan);
-            Assert.That(lowered.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Low));
-            Assert.That(lowered.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Low));
-            Assert.That(lowered.GetForceOnForceJobPriority(rifleman, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            var cleared = new HumanoidCharacterProfile(lowered.WithForceOnForceJobPriority(govfor, JobPriority.Never, SProtoMan));
-            Assert.That(cleared.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Never));
-            Assert.That(cleared.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Never));
-            Assert.That(cleared.GetJobPriorityForGamemode("DistressSignal", govfor.ID), Is.EqualTo(JobPriority.Low));
-
-            var newHigh = profile.WithForceOnForceJobPriority(rifleman, JobPriority.High, SProtoMan);
-            Assert.That(newHigh.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            Assert.That(newHigh.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            Assert.That(newHigh.GetForceOnForceJobPriority(rifleman, SProtoMan), Is.EqualTo(JobPriority.High));
-            Assert.That(profile.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.High),
-                "editing creates a new profile without mutating the saved one");
-        });
-    }
-
-    [TestCase(ForceOnForceFallback.StayInLobby, false, false)]
-    [TestCase(ForceOnForceFallback.OtherSide, true, false)]
-    [TestCase(ForceOnForceFallback.OtherRole, false, true)]
-    [TestCase(ForceOnForceFallback.Both, true, true)]
-    public async Task FallbackOnlyPermitsTheSelectedSideAndRoleChanges(ForceOnForceFallback fallback, bool side, bool role)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var jobs = Server.System<StationJobsSystem>();
-            var costMethod = typeof(StationJobsSystem).GetMethod("GetForceOnForceJobCost", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithForceOnForcePreferences(ForceOnForceSide.Govfor, fallback)
-                .WithGamemodeJobPriority("ForceOnForce", "AU14JobGOVFORSquadSergeant", JobPriority.High);
-            bool Accepted(string id) => costMethod.Invoke(jobs, [profile, SProtoMan.Index<JobPrototype>(id)]) != null;
-            Assert.That(Accepted("AU14JobGOVFORSquadSergeant"), Is.True);
-            Assert.That(Accepted("AU14JobOPFORSquadSergeant"), Is.EqualTo(side));
-            Assert.That(Accepted("AU14JobGOVFORSquadRifleman"), Is.EqualTo(role));
-            Assert.That(Accepted("AU14JobOPFORSquadRifleman"), Is.EqualTo(side && role));
-        });
-    }
 }

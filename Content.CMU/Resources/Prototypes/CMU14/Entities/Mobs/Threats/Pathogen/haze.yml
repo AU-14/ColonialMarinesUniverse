@@ -3,7 +3,7 @@
   parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoHazeBase
   name: Haze
-  description: A supportive strain of the Confluence, tending wounds and spreading spores in equal measure.
+  description: A supportive caste of the Confluence.
   components:
   - type: GhostRole
     name: cmu-job-name-pathogen-haze
@@ -33,6 +33,24 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 300
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 300
+  - type: SolutionRegeneration
+    generated:
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenHaze
     tier: 1
@@ -47,19 +65,25 @@
     - CMU14ActionXenoPathogenPlantWeeds
     - CMU14ActionXenoPathogenChooseStructure
     - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
-    - CMU14ActionXenoPathogenApplySalve
-    - CMU14ActionXenoPathogenHealerDroneTransferPlasma
-    - CMU14ActionXenoPathogenSacrifice
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: XenoDevour
   - type: XenoHide
   - type: XenoConstruction
-    buildDelay: 1
+    buildDelay: 3
     canBuild:
+    - CMU14XenoMyceliumWall
     - CMU14XenoMyceliumMembrane
+    - CMU14XenoMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
   - type: XenoRegen
     healOffWeeds: true
     critHealMultiplier: 0.3465
@@ -92,14 +116,9 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 0.5
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
-  - type: XenoEnergy
-    alert: XenoEnergyHealer
-    max: 7500
-    gain: 0
-    gainAttack: 0
-    gainAttackDowned: 0
   - type: Fixtures
     fixtures:
       fix1:

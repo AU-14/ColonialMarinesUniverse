@@ -9,6 +9,9 @@ public sealed partial class XenoClawsComponent : Component
 {
     [DataField, AutoNetworkedField]
     public XenoClawType ClawType = XenoClawType.Normal;
+
+    [DataField, AutoNetworkedField]
+    public int ArmorPiercing = 0; // CMU14 adding ability for xenos to have AP
 }
 
 [Flags]

@@ -42,7 +42,12 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
         {
             if (!tabs.TryGetValue(phone.Category, out var tab))
             {
-                tab = new BoxContainer { Orientation = LayoutOrientation.Vertical };
+                tab = new BoxContainer
+                {
+                    Orientation = LayoutOrientation.Vertical,
+                    HorizontalExpand = true,
+                    VerticalExpand = true, // CMU14: give the phone list a bounded viewport
+                };
                 tabs[phone.Category] = tab;
 
                 var scroll = new ScrollContainer
@@ -50,6 +55,8 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
                     HScrollEnabled = false,
                     VScrollEnabled = true,
                     VerticalExpand = true,
+                    VScrollBarHidden = false, // CMU14: keep long phone lists draggable
+                    ReserveScrollbarSpace = true,
                 };
 
                 var category = new BoxContainer { Orientation = LayoutOrientation.Vertical };

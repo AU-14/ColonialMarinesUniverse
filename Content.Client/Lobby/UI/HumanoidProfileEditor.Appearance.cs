@@ -213,6 +213,8 @@ public sealed partial class HumanoidProfileEditor
         Profile = Profile?.WithSpecies(newSpecies);
         OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
         _markingsModel.OrganData = _markingManager.GetMarkingData(newSpecies);
+        if (Profile is not null)
+            _markingsModel.Markings = Profile.Appearance.Markings; // CMU14: apply the build overlay after a species change.
         _markingsModel.ValidateMarkings();
         // In case there's job restrictions for the species
         RefreshJobs();
@@ -254,6 +256,8 @@ public sealed partial class HumanoidProfileEditor
         UpdateGenderControls();
         UpdateVoiceControls();
         _markingsModel.SetOrganSexes(newSex);
+        if (Profile is not null)
+            _markingsModel.Markings = Profile.Appearance.Markings; // CMU14: use the matching male or female build overlay.
         ReloadPreview();
     }
 

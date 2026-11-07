@@ -3,3 +3,4 @@ au14-trait-epilepsy-desc = You suffer from a neurological disorder that causes s
 au14-epilepsy-seizure = Your muscles seize up violently and you collapse in convulsions!
 au14-epilepsy-seizure-others = {CAPITALIZE(THE($user))} collapses and starts convulsing violently!
 au14-epilepsy-examine-seizing = [color=red]{CAPITALIZE(SUBJECT($user))} {CONJUGATE-BE($user)} having a seizure, convulsing uncontrollably![/color]
+au14-epilepsy-seizure-ends = The convulsions ease off and your muscles finally relax.

@@ -1,0 +1,64 @@
+# Paramilitary Member: rank and file of the armed element. Weapons and armor come later with the sub-sections.
+- type: job
+  parent: CMUJobIntelBase
+  id: CMUJobIntelParamilitaryMember
+  displayWeight: 22
+  roundRole: IntelParamilitaryMember
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillPolice: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-intel-paramilitary-member
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+
+  name: cmu-job-name-intel-paramilitary-member
+  description: cmu-job-description-intel-paramilitary-member
+  supervisors: cmu-job-supervisors-intel-paramilitary-officer
+  playTimeTracker: CMUJobIntelParamilitaryMember
+  startingGear: CMUGearIntelParamilitaryMember
+  icon: "RMCJobIconPMCGoonStandard"
+  spawnMenuRoleName: cmu-spawn-role-intel-paramilitary-member
+  roleWeight: 0.25
+
+- type: startingGear
+  parent: CMUGearIntelBase
+  id: CMUGearIntelParamilitaryMember
+  equipment:
+    id: CMUIDCardIntelParamilitaryMember
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointIntelParamilitaryMember
+  name: Spawn Point Intelligence Paramilitary Member
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobIntelParamilitaryMember
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMUJobIntelParamilitaryMember
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMUJobIntelParamilitaryMember
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC

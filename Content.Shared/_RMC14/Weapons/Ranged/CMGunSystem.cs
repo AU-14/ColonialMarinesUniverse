@@ -109,7 +109,9 @@ public sealed partial class CMGunSystem : EntitySystem
 
         SubscribeLocalEvent<RMCExtraProjectilesDamageModsComponent, AmmoShotEvent>(OnExtraProjectilesShot);
 
-        SubscribeLocalEvent<RMCWeaponAccuracyComponent, ExaminedEvent>(OnWeaponAccuracyExamined);
+        // cmu edit start: listed under the weapon stats examine verb instead (CMUWeaponStatsSystem)
+        // SubscribeLocalEvent<RMCWeaponAccuracyComponent, ExaminedEvent>(OnWeaponAccuracyExamined);
+        // cmu edit end
         SubscribeLocalEvent<RMCWeaponAccuracyComponent, GunRefreshModifiersEvent>(OnWeaponAccuracyRefreshModifiers);
         SubscribeLocalEvent<RMCWeaponAccuracyComponent, AmmoShotEvent>(OnWeaponAccuracyShot);
 
@@ -178,7 +180,7 @@ public sealed partial class CMGunSystem : EntitySystem
     private void OnShootAtFixedPointShot(Entity<ShootAtFixedPointComponent> ent, ref AmmoShotEvent args)
     {
         if (!TryComp(ent, out GunComponent? gun) ||
-            gun.ShootCoordinates is not { } target)
+            (args.TargetCoordinates ?? gun.ShootCoordinates) is not { } target) // CMU14: preserve the final barrel-constrained aim.
         {
             return;
         }
@@ -239,6 +241,11 @@ public sealed partial class CMGunSystem : EntitySystem
             // and will trigger the OnEventToStopProjectile function once the PFD Component is deleted at that time. See Update()
             var comp = EnsureComp<ProjectileFixedDistanceComponent>(projectile);
 
+            // CMU14 Begin: launcher grenades are thrown items and do not run ProjectileComponent's owner filter.
+            if (HasComp<GunIgnoreContainerOwnerCollisionComponent>(ent))
+                comp.IgnoredWeapon = ent.Owner;
+            // CMU14 End
+
             // Check if the arcing should be disabled.
             var ev = new BeforeArcEvent();
             RaiseLocalEvent(projectile, ref ev);
@@ -265,6 +272,21 @@ public sealed partial class CMGunSystem : EntitySystem
     /// </summary>
     private void OnCollisionCheckArc(Entity<ProjectileFixedDistanceComponent> ent, ref PreventCollideEvent args)
     {
+        // CMU14 Begin
+        if (ent.Comp.IgnoredWeapon is { } current)
+        {
+            while (_container.TryGetContainingContainer((current, null), out var container))
+            {
+                if (args.OtherEntity == container.Owner)
+                {
+                    args.Cancelled = true;
+                    return;
+                }
+
+                current = container.Owner;
+            }
+        }
+        // CMU14 End
         if (ent.Comp.ArcProj && (args.OtherFixture.CollisionLayer & _blockArcCollisionGroup) == 0)
             args.Cancelled = true;
     }
@@ -486,24 +508,33 @@ public sealed partial class CMGunSystem : EntitySystem
             return;
         }
 
-        var userDelay = EnsureComp<UserPointblankCooldownComponent>(user);
-        if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs)
-            return;
+        //var userDelay = EnsureComp<UserPointblankCooldownComponent>(user); cmu14
+        //if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs) cmu14
+            //return; cmu14
 
         var session = CompOrNull<ActorComponent>(user)?.PlayerSession;
         if (gunComp.Target.Value == user.Owner)
         {
-            if (gunComp.SelectedMode == SelectiveFire.FullAuto)
-                return;
+            // CMU14: the damage-yourself option is explicit consent, including full-auto self-shots;
+            // without it the old refusals stand
+            var consented = session != null &&
+                _netConfig.GetClientCVar(session.Channel, RMCCVars.RMCDamageYourself);
 
-            if (session != null &&
-                !_netConfig.GetClientCVar(session.Channel, RMCCVars.RMCDamageYourself))
-            {
+            if (!consented &&
+                (session != null || gunComp.SelectedMode == SelectiveFire.FullAuto))
                 return;
-            }
         }
 
         if (!_interaction.InRangeUnobstructed(gun.Owner, gunComp.Target.Value, gun.Comp.Range, user: user))
+            return;
+
+        // CMU14 Begin: point blank shots are far more accurate. This runs before the point blank cooldown so a
+        // follow-up shot that can't get the guaranteed hit still lands most of its pellets.
+        ApplyPointBlankAccuracy(gun, args.FiredProjectiles);
+        // CMU14 End
+
+        var userDelay = EnsureComp<UserPointblankCooldownComponent>(user);
+        if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs)
             return;
 
         foreach (var projectile in args.FiredProjectiles)
@@ -536,6 +567,23 @@ public sealed partial class CMGunSystem : EntitySystem
         //Can't melee right after a PB
         melee.NextAttack = userDelay.LastPBAt + userDelay.TimeBetweenPBs;
         Dirty(gun, melee);
+    }
+
+    // CMU14 method: point blank shots trade pellets scattering past the target for hitting it.
+    private void ApplyPointBlankAccuracy(Entity<GunPointBlankComponent> gun, List<EntityUid> projectiles)
+    {
+        var multiplier = gun.Comp.AccuracyMultiplier;
+        if (multiplier <= 1)
+            return;
+
+        foreach (var projectile in projectiles)
+        {
+            if (!TryComp(projectile, out RMCProjectileAccuracyComponent? accuracy))
+                continue;
+
+            accuracy.Accuracy *= multiplier;
+            Dirty<RMCProjectileAccuracyComponent>((projectile, accuracy));
+        }
     }
 
     private void OnRecoilSkilledRefreshModifiers(Entity<GunSkilledRecoilComponent> ent, ref GunRefreshModifiersEvent args)

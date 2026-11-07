@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Radio;
 using Content.Server.Construction;
 using Content.Server.Construction.Components;
 using Content.Server.Stack;
@@ -40,6 +41,7 @@ namespace Content.Server.CMU14.Construction;
 /// </summary>
 public sealed partial class AU14MastAssemblySystem : EntitySystem
 {
+    [Dependency] private ANPRCRangeSystem _range = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private TagSystem _tags = default!;
@@ -265,6 +267,7 @@ public sealed partial class AU14MastAssemblySystem : EntitySystem
                 anchor.Channels.Add(channel);
             }
         }
+        _range.RefreshAnchorChannels((ent.Owner, anchor));
     }
 
     private void OnKeyExamined(Entity<AU14MastKeyComponent> ent, ref ExaminedEvent args)

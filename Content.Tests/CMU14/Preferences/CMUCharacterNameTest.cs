@@ -16,5 +16,17 @@ public sealed class CMUCharacterNameTest
     {
         Assert.That(CMUCharacterName.StripNickname(name), Is.EqualTo(expected));
     }
+
+    [TestCase("  John  Smith ", "John Smith")]
+    [TestCase("John a.w 'Ace' Smith", "John Smith")]
+    [TestCase("John O'Neil", "John O'Neil")]
+    [TestCase("John 'Unclosed Smith", "John 'Unclosed Smith")]
+    [TestCase("A.W. 'Ace'", "A.W. 'Ace'")]
+    [TestCase("", "")]
+    [TestCase("   ", "   ")]
+    public void StripNicknamePreservesNormalizationAndFallbacks(string name, string expected)
+    {
+        Assert.That(CMUCharacterName.StripNickname(name), Is.EqualTo(expected));
+    }
 }
 // cmu edit end

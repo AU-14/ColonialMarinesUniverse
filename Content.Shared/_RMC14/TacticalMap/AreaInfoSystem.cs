@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.ZLevels.Ordnance;
+using Content.Shared.CMU14.ZLevels.Core.Components; // CMU14
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Alert;
@@ -22,7 +23,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IConfigurationManager _config = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
+    // [Dependency] private IEntityManager _entityManager = default!; // CMU14: AreaSystem owns roof queries.
     [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ProfManager _prof = default!;
@@ -200,14 +201,18 @@ public sealed partial class AreaInfoSystem : EntitySystem
             CMUTopDownOrdnanceKind.Mortar,
             out var mortarFire);
 
-        var (hasHiveCoreProtection, hasPylonProtection) = GetRoofingProtection(coordinates);
-        var canCAS = _area.CanCAS(coordinates);
+        // CMU14 Roofing Begin: share one live roof pass across local permission checks.
+        var roofing = GetRoofingInfo(coordinates);
+        var hasHiveCoreProtection = roofing.HiveCore;
+        var hasPylonProtection = roofing.Pylon;
+        var permissions = area.Value.Comp;
+        var canCAS = permissions.CAS && !roofing.BlocksCAS;
         var canSupplyDrop = _area.CanSupplyDrop(mapCoordinates);
-        var canMortarPlacement = _area.CanMortarPlacement(coordinates);
-        var canLase = _area.CanLase(coordinates);
-        // CMU14: display the same roof permissions checked when these actions are used.
-        var canMedevac = _area.CanMedevac(coordinates);
-        var canParadrop = _area.CanParadrop(coordinates);
+        var canMortarPlacement = permissions.MortarPlacement && !roofing.BlocksMortarPlacement;
+        var canLase = permissions.Lasing && !roofing.BlocksLase;
+        var canMedevac = permissions.Medevac && !roofing.BlocksMedevac;
+        var canParadrop = permissions.Paradropping && !roofing.BlocksParadrop;
+        // CMU14 End
 
         // Determine ceiling level based on effective protection (including roofing entities)
         // Note: severityToUse is offset by +1 because roofnull is at index 0 (for "no area" case)
@@ -239,6 +244,16 @@ public sealed partial class AreaInfoSystem : EntitySystem
             severityToUse = (short)1;
         }
 
+        // CMU14 Begin: physical ceilings can collapse independently of an area's support restrictions.
+        bool? openToSky = HasComp<CMUZLevelMapComponent>(_transform.GetMap(ent.Owner))
+            ? _topDownOrdnance.IsOpenToSky(mapCoordinates)
+            : null;
+        if (openToSky == true)
+            severityToUse = 1;
+        else if (openToSky == false && ceilingLevel == 0)
+            severityToUse = 2;
+        // CMU14 End
+
         // Read permissions every time, but only rebuild text when its inputs change.
         var restrictionState = new AreaInfoRestrictionState(
             ceilingLevel, hasHiveCoreProtection, hasPylonProtection,
@@ -246,7 +261,7 @@ public sealed partial class AreaInfoSystem : EntitySystem
             canMortarFire, mortarFire is { Redirected: true }, canMortarPlacement, canLase,
             // CMU14: area.Value.Comp.Medevac, area.Value.Comp.Paradropping, area.Value.Comp.NoTunnel,
             canMedevac, canParadrop, area.Value.Comp.NoTunnel,
-            area.Value.Comp.Unweedable, area.Value.Comp.ResinAllowed);
+            area.Value.Comp.Unweedable, area.Value.Comp.ResinAllowed, openToSky); // CMU14
         if (ent.Comp.LastRestrictionState == restrictionState && ent.Comp.LastRestrictionText is { } cachedRestrictions)
             return (areaProto.Name, severityToUse, cachedRestrictions);
 
@@ -310,7 +325,12 @@ public sealed partial class AreaInfoSystem : EntitySystem
         else if (hasPylonProtection)
             protectionSource = "\nProtection: Hive Pylon";
 
-        var restrictionsStr = $"\nCeiling level: {ceilingLevel}{protectionSource}";
+        // CMU14 Begin: describe actual cover separately from unchanged area permissions.
+        var restrictionsStr = openToSky is { } open
+            ? "\n" + Loc.GetString(open ? "cmu-area-roof-open" : "cmu-area-roof-covered") +
+              "\n" + Loc.GetString("cmu-area-protection-level", ("level", ceilingLevel)) + protectionSource
+            : $"\nCeiling level: {ceilingLevel}{protectionSource}";
+        // CMU14 End
 
         if (allowedActions.Count > 0)
         {
@@ -336,33 +356,16 @@ public sealed partial class AreaInfoSystem : EntitySystem
             : label;
     }
 
-    private (bool HiveCore, bool Pylon) GetRoofingProtection(EntityCoordinates coordinates)
+    // CMU14 method: retain roof-scan diagnostics for the combined permission pass.
+    private CMUAreaInfoRoofing GetRoofingInfo(EntityCoordinates coordinates)
     {
-        var hiveCore = false;
-        var pylon = false;
-        var scanned = 0;
-        var matched = 0;
-        var roofs = EntityQueryEnumerator<RoofingEntityComponent>();
-        while (roofs.MoveNext(out var uid, out var roof))
-        {
-            scanned++;
-            var isCore = !hiveCore && !roof.CanOrbitalBombard && roof.Range > 10;
-            var isPylon = !pylon && roof.CanOrbitalBombard && !roof.CanCAS && roof.Range < 10;
-            if (!isCore && !isPylon) continue;
-            matched++;
-            if (!coordinates.TryDistance(_entityManager, uid.ToCoordinates(), out var distance) || !(distance <= roof.Range))
-                continue;
-            hiveCore |= isCore;
-            pylon |= isPylon;
-            if (hiveCore && pylon) break;
-        }
-
+        var roofing = _area.CMUGetAreaInfoRoofing(coordinates);
         if (_prof.IsEnabled)
         {
-            _prof.WriteValue("AreaInfoSystem Roofing Entities Scanned", scanned);
-            _prof.WriteValue("AreaInfoSystem Roofing Predicate Matches", matched);
+            _prof.WriteValue("AreaInfoSystem Roofing Entities Scanned", roofing.EntitiesScanned);
+            _prof.WriteValue("AreaInfoSystem Roofing Predicate Matches", roofing.ProtectionCandidates);
         }
-        return (hiveCore, pylon);
+        return roofing;
     }
 
     public override void Update(float frameTime)

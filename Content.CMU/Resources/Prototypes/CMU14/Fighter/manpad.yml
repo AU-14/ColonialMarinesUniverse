@@ -3,7 +3,7 @@
   id: CMUFighterManpad
   name: EMBLR MANPAD
   suffix: Operator IFF
-  description: A shoulder-fired anti-air launcher. Load an EMBLR 70mm rocket, wield it with both hands and use Aim at airspace to intercept hostile aircraft crossing your sector. Lowering or dropping it cancels the lock. Reload after each launch.
+  description: A shoulder-fired anti-air launcher. Load an EMBLR 70mm rocket, wield it with both hands and use Scan high altitude to intercept hostile aircraft crossing your sector. Lowering or dropping it cancels the lock. Reload after each launch. Use Scan low altitude to lock onto a gunship or a Blackfoot.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/UPP/emblr/emblr_icon.rsi
@@ -35,6 +35,12 @@
     soundInsert:
       path: /Audio/_RMC14/Weapons/Guns/Cock/m5_ammo.ogg
   - type: FighterManpad
+  - type: CMUManpadLowAltitude
+    lockTime: 3
+    lockRange: 15
+    missileFlightTime: 3
+  - type: Gun
+    showExamineText: false
 
 - type: entity
   parent: CMUFighterManpad
@@ -65,13 +71,13 @@
 - type: entity
   parent: ActionMarineToggleable
   id: CMUActionManpadAim
-  name: Aim at airspace
+  name: Scan high altitude
   description: Raise the wielded MANPAD to cover your current sector. Automatically acquire and fire at hostile aircraft. Toggle again to lower it and cancel acquisition.
   components:
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/marine_sniper_actions.rsi
-      state: sniper_aim
+      state: elevation_up
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:FighterManpadAimActionEvent

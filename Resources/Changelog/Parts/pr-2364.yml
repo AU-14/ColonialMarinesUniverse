@@ -1,0 +1,7 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Colony jeep kits only show up once, and only on the colony ASRS console.
+  type: Fix
+time: '2026-10-30T11:10:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2364

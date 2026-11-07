@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Weapons.Melee; // CMU14
 using System.Linq;
 using System.Text;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -7,6 +8,7 @@ using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Slowing;
+using Content.Shared._RMC14.Xenonids.ClawSharpness; // cmu14 
 using Content.Shared.Alert;
 using Content.Shared.Armor;
 using Content.Shared.Body.Part;
@@ -240,12 +242,16 @@ public sealed partial class CMArmorSystem : EntitySystem
 
         using (args.PushGroup(nameof(CMArmorSystem), -10))
         {
+            TryComp<XenoClawsComponent>(ent, out var claws); // CMU14 test
+
+            
             var armorRatings = new[]
             {
                 ("rmc-examine-armor-xeno", ent.Comp.XenoArmor),
                 ("rmc-examine-armor-xeno-frontal", ent.Comp.FrontalArmor),
                 ("rmc-examine-armor-xeno-side", ent.Comp.SideArmor),
                 ("rmc-examine-armor-xeno-explosion", ent.Comp.ExplosionArmor),
+                ("rmc-examine-armor-xeno-piercing", claws?.ArmorPiercing ?? 0), // CMU14 AP displayed on examine, test
             };
 
             var examine = new StringBuilder();
@@ -352,7 +358,50 @@ public sealed partial class CMArmorSystem : EntitySystem
         var immuneToAP = TryComp<CMArmorComponent>(ent, out var armorComp) && armorComp.ImmuneToAP;
         if (HasComp<XenoComponent>(ent))
         {
-            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
+            // CMU14 XenoClawSlash Begin: a claw swing marked by XenoSystem applies the XVX slash
+            // multiplier per target, and only to xenos - a swing that catches a marine and a xeno must
+            // not boost the marine.
+            if ((args.Impact.Context & DamageImpactContext.XenoClaw) != 0)
+                args.Damage = args.Damage * XenoSystem.XENO_SLASH_DAMAGE_MULT;
+            // CMU14 End
+            // CMU14 XenoMeleeArmor Begin: CM-SS13's xeno combat configuration. Anything melee-type on a
+            // xeno deals x1.5 (GLOB.xeno_melee.damage_initial_multiplier): the item attack path, the claw
+            // swing and every xeno ability, which all route through apply_armoured_damage(..., ARMOR_MELEE).
+            // Xeno projectiles take GLOB.xeno_ranged instead, so a non-Melee impact is only counted when
+            // the attack is a body attack (tool == origin) - and only when it deals damage, because
+            // DamageModifyEvent also carries heals and Fury/Soak heal with origin: xeno, tool: xeno. The
+            // flat 20 penetration is the item-attack path only, and a xeno's own body attack ignores three
+            // quarters of the victim's armour (XVX_ARMOR_EFFECTIVEMULT).
+            var armorEffectiveness = 1f;
+            var hasOwnMultiplier = HasComp<MeleeDamageMultiplierComponent>(args.Origin);
+            var bodyAttackFromXeno = HasComp<XenoComponent>(args.Origin) &&
+                                     args.Tool == args.Origin &&
+                                     args.Damage.AnyPositive();
+            // Any melee hit on a xeno gets the x1.5, including a bare-handed punch from a non-xeno. The flat 20
+            // penetration below stays item-attack only, and the xeno armour bypass stays xeno-body-attack only, so a
+            // punch is boosted but does not strip armour.
+            var meleeAttack = args.Impact.Delivery == DamageImpactDelivery.Melee;
+
+            if (!hasOwnMultiplier && (meleeAttack || bodyAttackFromXeno))
+            {
+                args.Damage = args.Damage * 1.5f;
+
+                if (args.Tool is { } meleeTool && meleeTool != args.Origin)
+                {
+                    // CMU14: the local armorPiercing is what the xeno armour subtraction below consumes - writing
+                    // to args.ArmorPiercing here would be too late, since the local was seeded from it earlier.
+                    armorPiercing += 20;
+                }
+                else if (HasComp<XenoComponent>(args.Origin))
+                {
+                    armorEffectiveness = 0.25f;
+                }
+            }
+
+            // CMU14: upstream line is ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
+            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier * armorEffectiveness);
+            // CMU14 End
+
             if (!immuneToAP)
                 ev.XenoArmor -= armorPiercing;
         }

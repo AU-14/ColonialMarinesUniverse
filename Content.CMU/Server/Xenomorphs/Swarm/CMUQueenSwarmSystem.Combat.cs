@@ -1,5 +1,7 @@
 using System.Numerics;
+using Content.Shared.CMU14.Xenomorphs.Swarm;
 using Content.Shared._RMC14.Entrenching;
+using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Physics;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
@@ -10,13 +12,37 @@ public sealed partial class CMUQueenSwarmSystem
 {
     [Dependency] private SharedPhysicsSystem _physics = default!;
 
-    private EntityUid? SelectEnemy(EntityUid member, Dictionary<EntityUid, TimeSpan> sightings, Dictionary<EntityUid, int> assigned)
+    private void InitializeCombat()
+    {
+        SubscribeLocalEvent<CMUSwarmLesserComponent, MeleeHitEvent>(OnLesserMeleeHit);
+    }
+
+    private void OnLesserMeleeHit(Entity<CMUSwarmLesserComponent> ent, ref MeleeHitEvent args)
+    {
+        // A facehugger may attach after the swarm selected this target but before its attack lands.
+        foreach (var target in args.HitEntities)
+        {
+            if (!IsProtectedCapture(target))
+                continue;
+
+            args.Handled = true;
+            return;
+        }
+    }
+
+    private EntityUid? SelectEnemy(EntityUid member, Dictionary<EntityUid, TimeSpan> sightings, Dictionary<EntityUid, int> assigned,
+        CMUSwarmAgentComponent agent, EntityUid anchor, float leash)
     {
         EntityUid? target = null;
         var bestScore = float.MaxValue;
         foreach (var hostile in sightings.Keys)
         {
             if (!Transform(member).Coordinates.TryDistance(EntityManager, _transform, Transform(hostile).Coordinates, out var distance))
+                continue;
+            if (distance > leash || agent.Aggression == CMUSwarmAggression.Defensive && distance > 3 ||
+                !Within(anchor, hostile, leash) && agent.Order?.Kind != CMUSwarmOrderKind.Idle)
+                continue;
+            if (agent.Order?.Kind == CMUSwarmOrderKind.Idle && agent.Home is { } home && !Reached(hostile, home, leash))
                 continue;
             // Each committed lesser makes another nearby enemy more attractive,
             // while distance still discourages running past a much closer threat.

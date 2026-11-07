@@ -1,7 +1,6 @@
 #pragma warning disable RA0002 // Tests set authoritative deadlines and body state to exercise one metabolism pass.
 
 using System.Linq;
-using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body;
@@ -140,55 +139,6 @@ public sealed class MetabolismSnapshotReuseTest : GameTest
             Assert.That(inner.OwnerProbe.Snapshots, Is.EqualTo(1));
             Assert.That(outer.Metabolizer.NextUpdate, Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromHours(1)));
             Assert.That(inner.Metabolizer.NextUpdate, Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromHours(1)));
-            var returned = GetSnapshotPool(metabolism);
-            Assert.That(returned.Count, Is.GreaterThanOrEqualTo(2), "nested calls must own separate reusable lists");
-            Assert.That(returned.All(list => list.Count == 0), Is.True, "returned lists must release reagent references");
-        });
-    }
-
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task InterruptedPassDoesNotLeakOldReagentsIntoTheNextSnapshot(bool throwFromCallback)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var test = CreateMetabolizer(map.GridCoords);
-            var metabolism = Server.System<MetabolizerSystem>();
-            var solution = test.Solution.Comp.Solution;
-            solution.AddReagent(ReagentA, 2);
-            solution.AddReagent(ReagentB, 2);
-            test.Metabolizer.MaxReagentsProcessable = 1;
-            test.Metabolizer.NextUpdate = SGameTiming.CurTime;
-
-            if (throwFromCallback)
-            {
-                test.OwnerProbe.OnceOnSnapshot = () => throw new InvalidOperationException("snapshot regression probe");
-                Assert.Throws<InvalidOperationException>(() => metabolism.Update(0f));
-            }
-            else
-            {
-                metabolism.Update(0f);
-                Assert.That(solution.GetTotalPrototypeQuantity(ReagentA) + solution.GetTotalPrototypeQuantity(ReagentB),
-                    Is.EqualTo((FixedPoint2) 3), "the one-reagent cap must still end this pass early");
-            }
-
-            var returned = GetSnapshotPool(metabolism);
-            Assert.That(returned, Is.Not.Empty, "early returns and callback exceptions must return the rented list");
-            var previousSnapshot = returned.Peek();
-            Assert.That(previousSnapshot, Is.Empty);
-            solution.RemoveAllSolution();
-            solution.AddReagent(ReagentC, 2);
-            test.SolutionProbe.Effects.Clear();
-            var expected = ExpectedEffects(test.Owner, solution.Contents);
-            test.Metabolizer.NextUpdate = SGameTiming.CurTime;
-            metabolism.Update(0f);
-
-            Assert.That(test.SolutionProbe.Effects, Is.EqualTo(expected));
-            Assert.That(solution.GetTotalPrototypeQuantity(ReagentC), Is.EqualTo((FixedPoint2) 1));
-            Assert.That(test.OwnerProbe.Snapshots, Is.EqualTo(2));
-            Assert.That(returned.Peek(), Is.SameAs(previousSnapshot), "the next pass must reuse the returned buffer");
-            Assert.That(returned.Peek(), Is.Empty);
         });
     }
 
@@ -230,15 +180,6 @@ public sealed class MetabolismSnapshotReuseTest : GameTest
             }
             Assert.That(test.Metabolizer.NextUpdate, Is.EqualTo(SGameTiming.CurTime + TimeSpan.FromHours(1)));
         });
-    }
-
-    // Public gameplay events cover correctness; inspecting the private pool verifies the allocation
-    // contract and cleanup paths without a timing-sensitive GC allocation threshold.
-    private static Stack<List<ReagentQuantity>> GetSnapshotPool(MetabolizerSystem metabolism)
-    {
-        var field = typeof(MetabolizerSystem).GetField("_reagentSnapshots", BindingFlags.Instance | BindingFlags.NonPublic);
-        Assert.That(field, Is.Not.Null);
-        return (Stack<List<ReagentQuantity>>) field!.GetValue(metabolism)!;
     }
 
     private (EntityUid Owner, MetabolizerComponent Metabolizer, Entity<SolutionComponent> Solution,

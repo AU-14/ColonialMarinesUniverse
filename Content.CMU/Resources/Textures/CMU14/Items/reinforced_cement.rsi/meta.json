@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "New sprites by lopz_174 (the concrete bag), darkened copy for the reinforced concrete bag",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "cementbag1"
+    },
+    {
+      "name": "cementbag2"
+    },
+    {
+      "name": "cementbag3"
+    },
+    {
+      "name": "cementbag4"
+    }
+  ]
+}

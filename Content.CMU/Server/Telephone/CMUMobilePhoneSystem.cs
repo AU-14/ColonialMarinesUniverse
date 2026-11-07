@@ -8,16 +8,20 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
+using Content.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Telephone;
 
 public sealed partial class CMUMobilePhoneSystem : EntitySystem
 {
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private QuickDialogSystem _quickDialog = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCTelephoneSystem _telephone = default!;
     [Dependency] private SharedToolSystem _tool = default!;
 
@@ -28,6 +32,22 @@ public sealed partial class CMUMobilePhoneSystem : EntitySystem
         SubscribeLocalEvent<CMUMobilePhoneComponent, GotEquippedHandEvent>(OnEquippedHand);
         SubscribeLocalEvent<CMUMobilePhoneComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<CMUMobilePhoneComponent, UseInHandEvent>(OnUseInHand);
+        SubscribeLocalEvent<RMCTelephoneRingEvent>(OnTelephoneRing);
+    }
+
+    private void OnTelephoneRing(ref RMCTelephoneRingEvent args)
+    {
+        if (!TryComp(args.Receiving, out CMUMobilePhoneComponent? mobile) ||
+            !TryComp(args.Receiving, out RotaryPhoneComponent? phone))
+            return;
+
+        // Select both outcomes on every call so a prank never becomes the phone's normal ringtone.
+        var sound = _random.Prob(mobile.PrankRingtoneChance) ? mobile.PrankRingtone : phone.ReceivingSound;
+        if (sound == null)
+            return;
+
+        _ambientSound.SetSound(args.Receiving, sound);
+        _ambientSound.SetVolume(args.Receiving, sound.Params.Volume);
     }
 
     private void OnEquippedHand(Entity<CMUMobilePhoneComponent> ent, ref GotEquippedHandEvent args)

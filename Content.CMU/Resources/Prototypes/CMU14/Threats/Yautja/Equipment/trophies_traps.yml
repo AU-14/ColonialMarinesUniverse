@@ -5,9 +5,12 @@
   components:
   - type: Item
     size: Small
+  # cmss13 only draws the skull and hand bones on the wearer. without a playerSprite the accessory
+  # falls back to an "equipped" state these RSIs don't have and shows the error sprite
   - type: UniformAccessory
     category: Decor
     limit: 99
+    hidden: true
   - type: YautjaTrophy
 
 - type: entity
@@ -16,6 +19,11 @@
   name: skull
   description: A bone that appears to be of human origin.
   components:
+  - type: UniformAccessory
+    hidden: false
+    playerSprite:
+      sprite: CMU14/Yautja/trophies_worn.rsi
+      state: skull
   - type: Sprite
     sprite: CMU14/Yautja/yautja_items.rsi
     state: skull2
@@ -58,6 +66,11 @@
   name: hand bone
   description: A bone that appears to be of human origin.
   components:
+  - type: UniformAccessory
+    hidden: false
+    playerSprite:
+      sprite: CMU14/Yautja/trophies_worn.rsi
+      state: l_hand
   - type: Sprite
     sprite: CMU14/Yautja/yautja_items.rsi
     state: l_hand
@@ -72,6 +85,11 @@
   name: hand bone
   description: A bone that appears to be of human origin.
   components:
+  - type: UniformAccessory
+    hidden: false
+    playerSprite:
+      sprite: CMU14/Yautja/trophies_worn.rsi
+      state: r_hand
   - type: Sprite
     sprite: CMU14/Yautja/yautja_items.rsi
     state: r_hand
@@ -363,6 +381,15 @@
     state: drone_skull
 
 - type: entity
+  parent: CMUYautjaXenoSkullTrophy
+  id: CMUYautjaAbominationSkullTrophy
+  name: Abomination skull
+  description: Skull of a mysterious hybrid xenomorph, a horror on the field.
+  components:
+  - type: Sprite
+    state: predalien_skull
+
+- type: entity
   parent: CMUYautjaXenoPeltTrophy
   id: CMUYautjaQueenPeltTrophy
   name: Queen pelt
@@ -552,27 +579,28 @@
     state: larva_pelt
 
 - type: entity
-  parent: BaseItem
-  id: CMUYautjaHumanHide
-  name: flayed hide
-  description: A sheet of human hide removed during Yautja butchery.
+  parent: CMUYautjaXenoPeltTrophy
+  id: CMUYautjaAbominationPeltTrophy
+  name: Abomination pelt
+  description: The pelt of a mysterious hybrid xenomorph, a horror on the field.
   components:
   - type: Sprite
-    sprite: Objects/Materials/materials.rsi
-    layers:
-    - state: hide
-      map: [ "base" ]
+    state: predalien_pelt
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanHide
+  name: human skin
+  description: The by-product of human farming.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/human_skin.rsi
+    state: icon
   - type: Stack
     stackType: CMUYautjaHumanHide
     count: 1
-    baseLayer: base
-    layerStates:
-    - hide
-    - hide_2
-    - hide_3
   - type: Item
-    sprite: Objects/Materials/materials.rsi
-    heldPrefix: hide
+    sprite: CMU14/Yautja/human_skin.rsi
     size: Small
 
 - type: entity
@@ -630,7 +658,7 @@
 - type: stack
   id: CMUYautjaHumanHide
   name: stack-cmu-yautja-human-hide
-  icon: { sprite: /Textures/Objects/Materials/materials.rsi, state: hide }
+  icon: { sprite: /Textures/CMU14/Yautja/human_skin.rsi, state: icon }
   spawn: CMUYautjaHumanHide
   maxCount: 30
 
@@ -701,7 +729,6 @@
     blocksXenoHeal: true
     forceXenoHelpEmote: true
     forceHumanPainEmote: true
-    xenoInterferenceDuration: 100
     preyTrackingDuration: 300
   - type: StepTrigger
     active: false
@@ -739,3 +766,58 @@
         density: 30
         mask:
         - ItemMask
+
+# cmss13 /obj/item/stack/yautja_rope, hangs a dead human from the ceiling
+- type: stack
+  id: CMUYautjaRope
+  name: strange rope
+  icon: { sprite: _RMC14/Objects/Power/coil.rsi, state: coil3 }
+  spawn: CMUYautjaRope
+  maxCount: 8
+
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaRope
+  name: strange rope
+  description: This unassuming rope seems to be covered in markings depicting strange humanoid forms.
+  suffix: Yautja
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Power/coil.rsi
+    state: coil3
+    layers:
+    - map: ["base"]
+      state: coil3
+      color: "#D2B48C"
+  # cmss13 draws the rope with the cable coil icon tinted tan, inhands included
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Power/coil.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+        color: "#D2B48C"
+      right:
+      - state: inhand-right
+        color: "#D2B48C"
+  - type: Stack
+    stackType: CMUYautjaRope
+    count: 8
+    baseLayer: base
+    layerStates:
+    - coil1
+    - coil2
+    - coil3
+  - type: Appearance
+  - type: MeleeWeapon
+    attackRate: 0.7 # cmss13 attack_speed 1.4 SECONDS
+    damage:
+      types:
+        Blunt: 2
+  - type: YautjaRope
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false

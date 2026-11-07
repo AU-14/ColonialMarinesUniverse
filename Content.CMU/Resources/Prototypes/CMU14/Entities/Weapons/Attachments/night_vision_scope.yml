@@ -19,8 +19,8 @@
     actionDesc: Look through the 1.5x optic with a night vision filter.
   - type: Scope
     zoomLevels:
-    - zoom: 1.5
-      offset: 13
+    - zoom: 1
+      offset: 10
       allowMovement: true
       doAfter: 0
   - type: NightVisionItem

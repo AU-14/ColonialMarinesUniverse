@@ -53,6 +53,18 @@ public sealed partial class HardpointSystem
                 parts.Add(item);
         }
 
+        // Protected modules must not absorb the whole damage budget or keep the hull alive forever.
+        // Keep their protection while vulnerable parts survive; once only protected parts remain,
+        // further hull hits consume their integrity directly.
+        var routedDamage = args.Damage;
+        var vulnerableParts = parts.FindAll(part => GetRoutedDamageAmount(part, routedDamage) > 0f);
+        if (parts.Count > 0 && vulnerableParts.Count == 0)
+        {
+            ApplyHullChunk(ent.Owner, Comp<HardpointIntegrityComponent>(ent.Owner), totalDamage);
+            args.Damage = ScaleDamage(args.Damage, ent.Comp.FrameDamageFractionWhileIntact);
+            return;
+        }
+
         if (parts.Count > 0)
         {
             var failureDamage = totalDamage;
@@ -67,6 +79,9 @@ public sealed partial class HardpointSystem
             }
             else
             {
+                // CMU14: filter protected targets only for direct hits. Blasts split their budget before
+                // module protection; excluding immune parts first increases every other part's share.
+                parts = vulnerableParts;
                 var primary = SelectDamageHardpoint(ent.Owner, parts, args.Origin);
                 var spillover = parts.Count > 1 ? Math.Clamp(ent.Comp.DamageSpilloverFraction, 0f, 1f) : 0f;
                 ApplyRoutedDamage(ent.Owner, primary, ScaleDamage(args.Damage, 1f - spillover));

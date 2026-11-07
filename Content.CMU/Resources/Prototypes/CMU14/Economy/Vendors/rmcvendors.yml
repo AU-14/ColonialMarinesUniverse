@@ -347,8 +347,12 @@
         amount: 1
       - id: RMCPowerCellHigh
         amount: 2
-      - id: RMCCableCoil
-        amount: 15
+      - id: CMUCableThinHVStack
+        amount: 5
+      - id: CMUCableThinMVStack
+        amount: 5
+      - id: CMUCableThinLVStack
+        amount: 5
     - name: Flares and lights
       entries:
       - id: RMCBoxFlashlights
@@ -426,6 +430,10 @@
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
@@ -576,6 +584,14 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: cmu-vendor-advanced-gunship-crew-hud
+      choices: { CMUPlatoonAirCrewGunshipHUD: 1 }
+      entries:
+      - id: CMUVisorGunshipCrewAdvanced
+    - name: cmu-vendor-basic-gunship-crew-huds
+      entries:
+      - id: CMUVisorGunshipCrew
+        amount: 5
     - name: Fatigues
       choices: { CMUPlatoonAirCrewFatigues: 1 }
       entries:
@@ -1057,8 +1073,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -1068,31 +1085,40 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponL23
-      - id: AU14KitWeaponL90A2
+      - id: RMCWeaponRifleL24
+      - id: AU14WeaponSMGL90A2oldnoattachments
     - name: Rifle Ammunition
       entries:
       - id: RMCMagazineRifleL24
-        amount: 60
+        amount: 120
       - id: AU14MagazineSMGL90A2
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponL54
-      - id: AU14KitWeaponL165A1
+      - id: RMCWeaponPistolL54Empty
+      - id: AU14L165A1Filled
     - name: Handgun Ammunition
       entries:
       - id: RMCMagazinePistolL54
-        amount: 60
+        amount: 120
       - id: AU14MagazinePistolL165A1
-        amount: 60
-    - name: Attachments
-      choices: { CMUAttachmentsVendor: 1 }
+        amount: 120
+    - name: Unrestricted Attachments
       entries:
+      - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
       - id: AU14AttachmentTwoPointSling
+        maxPerUser: 1
 
 # TODO: Proper RMC RTOs
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: RMCMagazineRifleL24AP
+      - id: AU14MagazineSMGL90A2AP
+      - id: RMCMagazineRifleL24Extended
+      - id: AU14MagazineSMGL90A2extended
 - type: entity
   parent: ColMarTechBase
   id: AU14RMCRTOVendor
@@ -1127,6 +1153,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: Weapons Specialist Sets
@@ -1180,6 +1207,7 @@
 
     Aircrew protocol: select a set of fatigues, the essential medical equipment and storage kit.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: Sprite
@@ -1285,7 +1313,11 @@
         points: 1
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
@@ -1352,6 +1384,7 @@
   name: royal marines automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
@@ -1762,7 +1795,11 @@
       - id: RMCPouchElectronics
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: AU14MaintenanceJack
         points: 2

@@ -42,6 +42,10 @@ public sealed partial class VehicleWeaponsMenu : FancyWindow
         RobustXamlLoader.Load(this);
         ApplyWindowChromeStyle();
         ContentsContainer.Margin = new Thickness(0f);
+        // CMU14 Begin: the cooldown owns its style boxes for the window's lifetime.
+        CooldownBar.ForegroundStyleBoxOverride = _cmuCooldownForeground;
+        CooldownBar.BackgroundStyleBoxOverride = _cmuCooldownBackground;
+        // CMU14 End
 
         StabilizationToggle.OnToggled += args =>
         {
@@ -279,6 +283,7 @@ public sealed partial class VehicleWeaponsMenu : FancyWindow
         UpdateCooldownDisplay();
     }
 
+    // CMU14 method: animate the bar continuously; only format changes to displayed text.
     private void UpdateCooldownDisplay()
     {
         if (!_hasSelectedCooldown)
@@ -298,35 +303,21 @@ public sealed partial class VehicleWeaponsMenu : FancyWindow
         CooldownLabel.Visible = true;
         CooldownBar.Visible = true;
         CooldownBar.Value = ratio;
+        CMUUpdateCooldownText(remaining);
 
         if (remaining > 0.001f)
         {
-            CooldownLabel.Text = Loc.GetString("rmc-vehicle-weapons-ui-cooldown-recharging", ("seconds", remaining.ToString("0.0")));
-            CooldownLabel.FontColorOverride = flashing ? Color.FromHex("#E1786A") : Color.FromHex("#D6C45A");
-
-            CooldownBar.ForegroundStyleBoxOverride = new StyleBoxFlat
-            {
-                BackgroundColor = flashing ? Color.FromHex("#E1786A") : Color.FromHex("#D6C45A")
-            };
+            CooldownLabel.FontColorOverride = flashing ? CMUCooldownFlashColor : CMUCooldownChargingColor;
+            _cmuCooldownForeground.BackgroundColor = flashing ? CMUCooldownFlashColor : CMUCooldownChargingColor;
         }
         else
         {
-            CooldownLabel.Text = Loc.GetString("rmc-vehicle-weapons-ui-cooldown-ready");
-            CooldownLabel.FontColorOverride = Color.FromHex("#53D188");
-
-            CooldownBar.ForegroundStyleBoxOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#53D188")
-            };
+            CooldownLabel.FontColorOverride = CMUCooldownReadyColor;
+            _cmuCooldownForeground.BackgroundColor = CMUCooldownReadyColor;
         }
 
-        CooldownBar.BackgroundStyleBoxOverride = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex("#1E2B3B")
-        };
-
         if (AmmoCounter.Visible)
-            AmmoCounter.FontColorOverride = flashing ? Color.FromHex("#E1786A") : Color.FromHex("#C7D9ED");
+            AmmoCounter.FontColorOverride = flashing ? CMUCooldownFlashColor : CMUCooldownAmmoColor;
     }
 
     private static bool HasAmmoDisplayData(VehicleWeaponsUiEntry selected)

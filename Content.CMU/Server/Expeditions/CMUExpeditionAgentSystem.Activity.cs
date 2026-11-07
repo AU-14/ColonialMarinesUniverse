@@ -6,6 +6,7 @@ public sealed partial class CMUExpeditionAgentSystem
     // transient work. Persistent orders and observed contacts belong to the caller.
     private void CancelAgentActivity(EntityUid uid, CMUExpeditionAgentComponent agent, string reason)
     {
+        ResetContactSearch(agent);
         agent.ReturningHome = false;
         agent.SmokeEscapeDestination = null;
         agent.SmokeWithdrawalDestination = null;

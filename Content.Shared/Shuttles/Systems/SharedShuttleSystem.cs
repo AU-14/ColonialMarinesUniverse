@@ -183,6 +183,15 @@ public abstract partial class SharedShuttleSystem : EntitySystem
     /// </summary>
     public bool FTLFree(EntityUid shuttleUid, EntityCoordinates coordinates, Angle angle, List<ShuttleExclusionObject>? exclusionZones)
     {
+        // CMU14 Begin: validate before transforming the destination.
+        if (!coordinates.IsValid(EntityManager) || !double.IsFinite(angle.Theta) ||
+            !Maps.TryGetMap(XformSystem.GetMapId(coordinates), out _))
+        {
+            Log.Error($"Found invalid FTL destination with coordinates {coordinates} and angle {angle} for shuttle {shuttleUid}");
+            return false;
+        }
+        // CMU14 End
+
         if (!_physicsQuery.TryGetComponent(shuttleUid, out var shuttlePhysics) ||
             !TryComp(shuttleUid, out TransformComponent? shuttleXform))
         {

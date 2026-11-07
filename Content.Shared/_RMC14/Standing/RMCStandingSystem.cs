@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Input;
+using Content.Shared._RMC14.Wheelchair; // CMU14
 using Content.Shared.ActionBlocker;
 using Content.Shared.Body;
 using Content.Shared.Body.Components;
@@ -26,6 +27,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private SharedStunSystem _stun = default!; // CMU14: resume knockdown recovery when leaving rest
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -160,7 +162,11 @@ public sealed partial class RMCStandingSystem : EntitySystem
             return true;
 
         if (TryComp<BuckleComponent>(drop, out var buckle) && buckle.Buckled)
-            return true;
+        {
+            // CMU14: a wheelchair pilot acts freely while driving the chair; other straps keep you restrained
+            if (!TryComp(buckle.BuckledTo, out WheelchairComponent? _))
+                return true;
+        }
 
         if (HasComp<KnockedDownComponent>(drop) ||
             HasComp<StunnedComponent>(drop) ||
@@ -235,6 +241,9 @@ public sealed partial class RMCStandingSystem : EntitySystem
         Dirty(rest);
 
         if (!resting)
+        {
+            _stun.SetAutoStand(rest.Owner, true); // CMU14: a stand request also resumes timed knockdown recovery
             _standing.Stand(rest);
+        }
     }
 }

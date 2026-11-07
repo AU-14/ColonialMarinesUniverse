@@ -41,7 +41,7 @@
     canRotateWithoutTool: true
     mountOnDeploy: false
     mountExclusionAreaSize: 0
-    barricadeExclusionAreaSize: 2
+    barricadeExclusionAreaSize: 0
     assembleDelay: 3
     undeploySound: null
     acidableWhileUndeployed: true
@@ -56,6 +56,7 @@
   name: Kramer autocannon
   description: The top half of a Kramer 30mm autocannon. It is not much use without a tripod.
   components:
+  - type: CMUAmmoCounter
   - type: MagazineVisuals
     magState: mag
     steps: 5

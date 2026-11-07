@@ -1,8 +1,8 @@
-﻿using Content.Client.UserInterface.Controls;
+using Content.Client.UserInterface.Controls;
 
 namespace Content.Client.UserInterface.Systems.Inventory.Controls;
 
-public sealed class ItemSlotButtonContainer : ItemSlotUIContainer<SlotControl>
+public sealed partial class ItemSlotButtonContainer : ItemSlotUIContainer<SlotControl> // CMU14: control-owned layout cache.
 {
     private readonly InventoryUIController _inventoryController;
     private string _slotGroup = "";

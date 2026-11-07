@@ -6,6 +6,9 @@
   description: The actual firearm in the Support Gun System. Essentially a heavy, mobile machinegun.
   suffix: PVE
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Wieldable
   - type: Item
     size: Huge

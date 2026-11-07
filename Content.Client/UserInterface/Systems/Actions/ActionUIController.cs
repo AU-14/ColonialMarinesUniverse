@@ -269,8 +269,9 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         if (_actions.Contains(action))
             return;
 
-        // CMU14: swarm commands are selected from their single menu action.
-        if (IsSwarmMenuCommand(action))
+        // CMU14: swarm commands are selected from their single menu action; Early Warning Joe abilities from
+        // their Signal wheel.
+        if (IsSwarmMenuCommand(action) || IsSignalWheelAction(action))
             return;
 
         _actions.Add(action);
@@ -830,6 +831,10 @@ public sealed partial class ActionUIController : UIController, IOnStateChanged<G
         foreach (var (action, _) in actions)
         {
             if (EntityManager.HasComponent<VehicleHardpointActionComponent>(action))
+                continue;
+
+            // CMU14: Early Warning Joe abilities live in their Signal wheel
+            if (IsSignalWheelAction(action))
                 continue;
 
             if (!_actions.Contains(action))

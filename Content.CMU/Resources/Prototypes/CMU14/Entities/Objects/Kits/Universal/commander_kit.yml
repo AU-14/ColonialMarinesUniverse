@@ -1,0 +1,19 @@
+- type: entity
+  parent: AU14KitPlatoonOfficer
+  id: CMUKitPlatoonCommander
+  name: commanding officer kit
+  description: A commanding officer's service clothing, headwear, and combat armor.
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,7
+  - type: StorageFill
+    contents:
+    - id: CMJumpsuitCOService
+    - id: CMHeadCapPeakedService
+    - id: CMHeadBeretCO
+    - id: RMCCoatService
+    - id: RMCArmorVestCommandingOfficer
+    - id: RMCArmorM3CO
+    - id: CMArmorHelmetM11CCO

@@ -7,6 +7,8 @@ namespace Content.Shared.CMU14.Xenomorphs.Swarm;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class CMUQueenSwarmComponent : Component
 {
+    public const int MaxLivingMembers = 20;
+
     /// <summary>Null follows the round mode (Distress Signal only); admins can override this per queen through VV.</summary>
     [DataField]
     public bool? Enabled;
@@ -16,6 +18,7 @@ public sealed partial class CMUQueenSwarmComponent : Component
     [DataField] public EntProtoId SummonAction = "CMUActionSummonSwarm";
     [DataField] public EntProtoId GuardAction = "CMUActionGuardSwarm";
     [DataField] public EntProtoId FollowAction = "CMUActionFollowSwarm";
+    [DataField] public EntProtoId PlaceAction = "CMUActionPlaceSwarmOrder";
 }
 
 [RegisterComponent, NetworkedComponent]

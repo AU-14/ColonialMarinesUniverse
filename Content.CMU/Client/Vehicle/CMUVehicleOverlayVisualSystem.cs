@@ -184,7 +184,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
             return;
 
         _sprite.LayerMapTryGet((vehicle, sprite), VehicleWheelLayers.Wheels, out var wheels, false);
-        for (var i = 0; i < sprite.AllLayers.Count(); i++)
+        for (var i = 0; i < sprite.LayerData.Count; i++)
         {
             _sprite.LayerSetOffset((vehicle, sprite), i, i == wheels ? Vector2.Zero : lift);
         }
@@ -225,7 +225,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
             // heading. Pick the gun's frame from its aim on the vehicle's drawn frame instead, and
             // turn it back the same way, so it sits in the body's perspective at any heading.
             var gun = (frame.Direction.ToAngle() + aim).GetDir();
-            for (var i = 0; i < sprite.AllLayers.Count(); i++)
+            for (var i = 0; i < sprite.LayerData.Count; i++)
             {
                 _sprite.LayerSetOffset((uid, sprite), i, offset);
 
@@ -255,7 +255,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         var slideOffset = counter.RotateVec((slide + lift) / PixelsPerMeter);
         var groundOffset = counter.RotateVec(slide / PixelsPerMeter);
         _sprite.LayerMapTryGet(ent.AsNullable(), "wheels", out var wheels, false);
-        for (var i = 0; i < sprite.AllLayers.Count(); i++)
+        for (var i = 0; i < sprite.LayerData.Count; i++)
         {
             _sprite.LayerSetRenderingStrategy(ent.AsNullable(), i, LayerRenderingStrategy.Default);
             _sprite.LayerSetOffset(ent.AsNullable(), i, i == wheels ? groundOffset : slideOffset);

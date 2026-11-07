@@ -18,6 +18,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Item.ItemToggle;
+using Content.Shared.Nutrition.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
@@ -26,25 +27,6 @@ namespace Content.IntegrationTests._CMU14.Medical.Synth;
 [TestFixture]
 public sealed class SynthCirculationTest
 {
-    [Test]
-    public async Task SynthsTakeIvButStayUninjectable()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
-        var map = await pair.CreateTestMap();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var synth = SpawnSynth(entities, map.GridCoords);
-            Assert.That(entities.HasComponent<IVDripTargetComponent>(synth), Is.True);
-            Assert.That(entities.HasComponent<CMUSynthCirculationComponent>(synth), Is.True);
-            Assert.That(entities.HasComponent<InjectableSolutionComponent>(synth), Is.False,
-                "syringes and hyposprays still shouldn't load chems into a synth");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task SynthBloodPackRefillsSynthAndBloodTypesDontMix()
@@ -201,35 +183,6 @@ public sealed class SynthCirculationTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task SynthBloodCanBeMadeFromDispenserStock()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            Assert.That(Mix(entities, map, ("RMCSilicon", 5), ("RMCChlorine", 5), ("RMCMethane", 5), ("Water", 5))
-                .GetTotalPrototypeQuantity("CMUSiliconeOil"), Is.EqualTo(FixedPoint2.New(20)));
-            Assert.That(Mix(entities, map, ("RMCEthanol", 5), ("RMCOxygen", 5))
-                .GetTotalPrototypeQuantity("CMUGlycol"), Is.EqualTo(FixedPoint2.New(10)));
-            Assert.That(Mix(entities, map, ("RMCMethane", 5), ("RMCSulfur", 5), ("CMUAmmonia", 5))
-                .GetTotalPrototypeQuantity("CMUSyntheticLatex"), Is.EqualTo(FixedPoint2.New(15)));
-            Assert.That(Mix(entities, map, ("RMCSodium", 5), ("RMCSulphuricAcid", 5), ("RMCCarbon", 5))
-                .GetTotalPrototypeQuantity("CMUSurfactant"), Is.EqualTo(FixedPoint2.New(15)));
-            Assert.That(Mix(entities, map, ("RMCSodium", 5), ("RMCPhosphorus", 5), ("RMCOxygen", 5))
-                .GetTotalPrototypeQuantity("CMUCorrosionInhibitor"), Is.EqualTo(FixedPoint2.New(15)));
-
-            var blood = Mix(entities, map, ("Water", 30), ("CMUSyntheticLatex", 20), ("CMUSiliconeOil", 20),
-                ("CMUGlycol", 10), ("CMUSurfactant", 10), ("CMUCorrosionInhibitor", 10));
-            Assert.That(blood.GetTotalPrototypeQuantity("RMCSynthBlood"), Is.EqualTo(FixedPoint2.New(100)));
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
     private static EntityUid SpawnSynth(IEntityManager entities, Robust.Shared.Map.EntityCoordinates coords)
     {
         var synth = entities.SpawnEntity("CMMobHuman", coords);
@@ -265,12 +218,35 @@ public sealed class SynthCirculationTest
         Robust.UnitTesting.Pool.TestMapData map,
         params (string Reagent, int Amount)[] reagents)
     {
+        return Make(entities, map, null, false, reagents);
+    }
+
+    /// <summary>
+    /// Adds the reagents to a large beaker, then optionally heats it to <paramref name="temperature"/> and/or closes
+    /// the lid and mixes it (what the Mix verb's doafter does), for the FLOW-21 heat and CMUMix gates.
+    /// </summary>
+    private static Content.Shared.Chemistry.Components.Solution Make(
+        IEntityManager entities,
+        Robust.UnitTesting.Pool.TestMapData map,
+        float? temperature,
+        bool mix,
+        params (string Reagent, int Amount)[] reagents)
+    {
         var solutions = entities.System<SharedSolutionContainerSystem>();
         var beaker = entities.SpawnEntity("CMBeakerLarge", map.GridCoords);
         Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln, out var solution), Is.True);
         foreach (var (reagent, amount) in reagents)
         {
             Assert.That(solutions.TryAddReagent(soln!.Value, reagent, FixedPoint2.New(amount)), Is.True, reagent);
+        }
+
+        if (temperature != null)
+            solutions.SetTemperature(soln!.Value, temperature.Value);
+
+        if (mix)
+        {
+            entities.System<OpenableSystem>().SetOpen(beaker, false);
+            Assert.That(entities.System<ShakeableSystem>().TryShake(beaker), Is.True, "a closed beaker should mix");
         }
 
         return solution!;

@@ -95,8 +95,10 @@ public sealed class LarvaQueueJoinXenoUiTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task LarvaQueueOffersLarvaInsteadOfGhostedAdult()
+    // CMU14: bloodbursters use the same queue-only claim path.
+    [TestCase("CMXenoLarva")]
+    [TestCase("CMU14XenoBloodburster")]
+    public async Task LarvaQueueOffersLarvaInsteadOfGhostedAdult(string prototype)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -126,7 +128,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
             runner = entMan.SpawnEntity("CMXenoRunner", map.GridCoords.Offset(new Vector2(2, 0)));
             hiveSystem.SetHive(runner, hive);
-            larva = entMan.SpawnEntity("CMXenoLarva", map.GridCoords.Offset(new Vector2(3, 0)));
+            larva = entMan.SpawnEntity(prototype, map.GridCoords.Offset(new Vector2(3, 0)));
             hiveSystem.SetHive(larva, hive);
             larvaName = entMan.GetComponent<MetaDataComponent>(larva).EntityName;
 
@@ -218,135 +220,6 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(player.AttachedEntity, Is.EqualTo(runner));
             Assert.That(mind.TryGetMind(player.UserId, out _, out var mindComp), Is.True);
             Assert.That(mindComp!.CurrentEntity, Is.EqualTo(runner));
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task LarvaQueueOffersGhostedQueenWhenNoLarvaAvailable()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            Dirty = true,
-            DummyTicker = false,
-        });
-
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        var entMan = server.EntMan;
-        var hiveSystem = entMan.System<SharedXenoHiveSystem>();
-        var mind = entMan.System<MindSystem>();
-        var player = server.PlayerMan.Sessions.Single();
-
-        EntityUid ghost = default;
-        EntityUid hive = default;
-        EntityUid queen = default;
-        NetEntity ghostNet = default;
-        string queenName = string.Empty;
-        await server.WaitAssertion(() =>
-        {
-            ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
-            BypassRoundstartDelay(entMan, ghost);
-            hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
-            queen = entMan.SpawnEntity("CMXenoQueen", map.GridCoords.Offset(new Vector2(2, 0)));
-            hiveSystem.SetHive(queen, hive);
-            queenName = entMan.GetComponent<MetaDataComponent>(queen).EntityName;
-
-            var mindId = mind.CreateMind(player.UserId, "Queen");
-            mind.TransferTo(mindId, queen);
-            mind.TransferTo(mindId, ghost);
-            mind.SetUserId(mindId, player.UserId);
-            ghostNet = entMan.GetNetEntity(ghost);
-
-            entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
-        });
-
-        await pair.RunTicksSync(5);
-
-        await server.WaitAssertion(() =>
-        {
-            Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
-            AssertConfirmDialog(entMan, ghost, queenName);
-        });
-
-        await ConfirmDialog(pair, ghostNet);
-        await pair.RunTicksSync(5);
-
-        await server.WaitAssertion(() =>
-        {
-            Assert.That(player.AttachedEntity, Is.EqualTo(queen));
-            Assert.That(mind.TryGetMind(player.UserId, out _, out var mindComp), Is.True);
-            Assert.That(mindComp!.CurrentEntity, Is.EqualTo(queen));
-        });
-
-        await server.WaitAssertion(() =>
-        {
-            var hives = entMan.EntityQueryEnumerator<HiveComponent>();
-            while (hives.MoveNext(out var hiveUid, out var hiveComp))
-            {
-                // Prevent pair recycling from serializing a hive that points at the deleted test queen.
-                if (hiveComp.CurrentQueen == queen)
-                    hiveSystem.SetHiveQueen(hiveUid, (hiveUid, hiveComp));
-            }
-        });
-        await pair.RunTicksSync(1);
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task LarvaQueueDoesNotOfferGhostedLesserDrone()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            Dirty = true,
-            DummyTicker = false,
-        });
-
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        var entMan = server.EntMan;
-        var hiveSystem = entMan.System<SharedXenoHiveSystem>();
-        var mind = entMan.System<MindSystem>();
-        var player = server.PlayerMan.Sessions.Single();
-
-        EntityUid ghost = default;
-        EntityUid hive = default;
-        EntityUid lesser = default;
-        await server.WaitAssertion(() =>
-        {
-            ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
-            BypassRoundstartDelay(entMan, ghost);
-            hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
-            lesser = entMan.SpawnEntity("CMXenoLesserDrone", map.GridCoords.Offset(new Vector2(2, 0)));
-            hiveSystem.SetHive(lesser, hive);
-
-            var mindId = mind.CreateMind(player.UserId, "Lesser Drone");
-            mind.TransferTo(mindId, lesser);
-            mind.TransferTo(mindId, ghost);
-            mind.SetUserId(mindId, player.UserId);
-
-            entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
-        });
-
-        await pair.RunTicksSync(5);
-
-        await server.WaitAssertion(() =>
-        {
-            Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
-            Assert.That(entMan.HasComponent<AbandonedXenoQueueableComponent>(lesser), Is.False);
-            Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
-
-            OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
         });
 
         await pair.CleanReturnAsync();
@@ -658,6 +531,9 @@ public sealed class LarvaQueueJoinXenoUiTest
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
             // CMU14: real rounds assign this hive during xeno initialization, before SpawnLarva returns.
             entMan.System<CMDistressSignalRuleSystem>().TheHive = hive;
+            // CMU14: an active hive is required to queue before a new larva bursts.
+            var drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);
@@ -669,6 +545,11 @@ public sealed class LarvaQueueJoinXenoUiTest
             mind.SetUserId(infectorMind, infector.UserId);
 
             entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
+            // CMU14: priority is only exercised when a competing player is actually in the queue.
+            var queues = new GetLarvaQueueStatusEvent(player.UserId);
+            entMan.EventBus.RaiseEvent(EventSource.Local, queues);
+            Assert.That(queues.Queues.TryGetValue(hive, out var queued), Is.True);
+            Assert.That(queued.Position, Is.EqualTo(1));
         });
 
         await pair.RunTicksSync(5);
@@ -784,6 +665,9 @@ public sealed class LarvaQueueJoinXenoUiTest
         {
             ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
             hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
+            // CMU14: keep the hive active so only the round-start delay blocks enrollment.
+            var drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);
@@ -1108,8 +992,9 @@ public sealed class LarvaQueueJoinXenoUiTest
         await pair.CleanReturnAsync();
     }
 
+    // CMU14: exercise active-hive filtering through the UI and queue events.
     [Test]
-    public async Task JoinXenoUiShowsJoinOrLeaveWithQueuePosition()
+    public async Task JoinXenoUiHidesInactiveHivesAndRetainsQueuedHivesUntilLeaving()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -1127,6 +1012,7 @@ public sealed class LarvaQueueJoinXenoUiTest
 
         EntityUid ghost = default;
         EntityUid hive = default;
+        EntityUid drone = default;
 
         await server.WaitAssertion(() =>
         {
@@ -1142,6 +1028,18 @@ public sealed class LarvaQueueJoinXenoUiTest
             OpenJoinXenoUi(entMan, ghost);
 
             var state = GetJoinXenoState(entMan, ghost);
+            Assert.That(state.Entries.Any(e => e.Hive == entMan.GetNetEntity(hive)), Is.False,
+                "Empty setup hives must not appear in Join as Xeno.");
+
+            entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
+            var queues = new GetLarvaQueueStatusEvent(player.UserId);
+            entMan.EventBus.RaiseEvent(EventSource.Local, queues);
+            Assert.That(queues.Queues.ContainsKey(hive), Is.False, "A stale window cannot enroll in an inactive hive.");
+
+            drone = entMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            entMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
+            OpenJoinXenoUi(entMan, ghost);
+            state = GetJoinXenoState(entMan, ghost);
             var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
             Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued));
             Assert.That(entry.Position, Is.EqualTo(0));
@@ -1156,6 +1054,23 @@ public sealed class LarvaQueueJoinXenoUiTest
             var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
             Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
             Assert.That(entry.Position, Is.EqualTo(1));
+
+            var mobStates = entMan.System<Content.Shared.Mobs.Systems.MobStateSystem>();
+            mobStates.ChangeMobState(drone, Content.Shared.Mobs.MobState.Dead);
+            OpenJoinXenoUi(entMan, ghost);
+            entry = GetJoinXenoState(entMan, ghost).Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
+            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued),
+                "The queued player must still be able to leave after the last member dies.");
+
+            entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
+            OpenJoinXenoUi(entMan, ghost);
+            Assert.That(GetJoinXenoState(entMan, ghost).Entries.Any(e => e.Hive == entMan.GetNetEntity(hive)), Is.False);
+
+            mobStates.ChangeMobState(drone, Content.Shared.Mobs.MobState.Alive);
+            OpenJoinXenoUi(entMan, ghost);
+            entry = GetJoinXenoState(entMan, ghost).Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
+            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued),
+                "Reviving the last member must make the hive available again.");
         });
 
         await pair.CleanReturnAsync();
@@ -1187,11 +1102,6 @@ public sealed class LarvaQueueJoinXenoUiTest
     private static async Task ConfirmDialog(TestPair pair, NetEntity ghostNet)
     {
         await ChooseDialogOption(pair, ghostNet, 0);
-    }
-
-    private static async Task DeclineDialog(TestPair pair, NetEntity ghostNet)
-    {
-        await ChooseDialogOption(pair, ghostNet, 1);
     }
 
     private static async Task ChooseDialogOption(TestPair pair, NetEntity ghostNet, int option)

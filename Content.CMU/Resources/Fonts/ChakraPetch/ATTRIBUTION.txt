@@ -1,0 +1,4 @@
+Chakra Petch by Cadson Demak.
+Source: https://github.com/google/fonts/tree/main/ofl/chakrapetch
+License: SIL Open Font License 1.1 (see OFL.txt).
+Used unmodified for the Yautja clan hall.

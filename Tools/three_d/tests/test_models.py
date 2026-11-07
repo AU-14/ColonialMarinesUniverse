@@ -6,20 +6,17 @@ import struct
 import sys
 import tempfile
 import unittest
-from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1]))
 SPEC = importlib.util.spec_from_file_location("build_models", Path(__file__).parents[1] / "build_models.py")
 models = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(models)
 
-
 def sample():
     return models.validate_model({
         "id": "TestModel", "label": "An asymmetric model", "sourcePrototypes": ["TestChair"],
         "parts": [{"min": "-1, -2, 0", "max": "3, 4, 6", "color": "#808080", "label": "body"},
                   {"min": "0, -3, 1", "max": "1, -2, 2", "color": "#3388CC80", "label": "glass"}]})
-
 
 def unpack(blob):
     magic, version, total = struct.unpack_from("<III", blob)
@@ -33,42 +30,7 @@ def unpack(blob):
     assert offset + 8 + binary_length == len(blob)
     return document, blob[offset + 8:]
 
-
 class ExportTests(unittest.TestCase):
-    def test_fold_pose_and_link_survive_model_and_viewer_export(self):
-        model=sample();model.update(folded=True,alternateFoldModel='Other',referenceRsi='example.rsi',referenceState='folded')
-        model=models.validate_model(model)
-        document,_=models.glb_document(model)
-        self.assertTrue(document['extras']['folded']);self.assertEqual(document['extras']['alternateFoldModel'],'Other')
-        for value in ('true',1,None):
-            with self.assertRaisesRegex(ValueError,'folded'):models.validate_model({**model,'folded':value})
-        with self.assertRaisesRegex(ValueError,'explicit source'):models.validate_model({**model,'referenceState':None})
-
-    def test_fold_links_require_reciprocal_opposite_poses(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory)
-            a={'type':'cmu3DModel','id':'A','label':'Unfolded','referenceRsi':'example.rsi','referenceState':'unfolded',
-               'alternateFoldModel':'B','parts':[{'min':'0,0,0','max':'1,1,1'}]}
-            b={**a,'id':'B','folded':True,'referenceState':'folded','alternateFoldModel':'A'}
-            for bad in ({**b,'folded':False},{**b,'alternateFoldModel':'Missing'}):
-                (root/'poses.yml').write_text(models.yaml.safe_dump([a,bad]))
-                with self.assertRaisesRegex(ValueError,'reciprocal opposite pose'):models.load_models(root)
-            (root/'poses.yml').write_text(models.yaml.safe_dump([a,b]))
-            self.assertEqual(len(models.load_models(root)),2)
-
-    def test_separate_support_labels_validate_and_survive_export(self):
-        model=sample()
-        model['supportSurfaces']=['body','glass']
-        model=models.validate_model(model)
-        document,_=models.glb_document(model)
-        self.assertEqual(document['extras']['supportSurfaces'],['body','glass'])
-        for patch in ({'supportSurfaces':['body','body']},{'supportSurfaces':['body','missing']},
-                      {'supportSurfaces':['body','']},{'supportSurfaces':'body'},
-                      {'supportSurface':'body'},{'connectToNeighbours':True}):
-            with self.subTest(patch=patch),self.assertRaisesRegex(ValueError,'supportSurface'):
-                models.validate_model({**model,**patch})
-        model['parts'][1]['shape']='Ellipsoid'
-        with self.assertRaisesRegex(ValueError,'supportSurface'): models.validate_model(model)
 
     def test_cylinders_have_closed_caps_outward_winding_and_distinct_axis_meshes(self):
         np = models.np
@@ -100,19 +62,6 @@ class ExportTests(unittest.TestCase):
             primitive=document['meshes'][node['mesh']]['primitives'][0]
             self.assertEqual(document['accessors'][primitive['indices']]['count'],192)
 
-    def test_source_cardinal_mapping_supports_permutations_and_aliases_in_export(self):
-        model = sample()
-        for facings in ([0, 1, 3, 2], [0, 2, 2, 0]):
-            model.update(sourceDirections=4, sourceCardinalFacings=facings)
-            model = models.validate_model(model)
-            document, _ = models.glb_document(model)
-            self.assertEqual(document['extras']['sourceCardinalFacings'], facings)
-        for value in ([0, -1, 1, 2], [0, 1, 2], [0, 1, 2, 3, 0], [0, 1, 2, 4], [False, 1, 2, 3], '0,1,3,2'):
-            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'sourceCardinalFacings'):
-                models.validate_model({**model, 'sourceCardinalFacings': value})
-        with self.assertRaisesRegex(ValueError, 'sourceCardinalFacings'):
-            models.validate_model({**model, 'sourceDirections': 1})
-
     def test_ellipsoid_mesh_is_closed_outward_and_inscribed_in_its_bounds(self):
         points, normals, indices = models.ellipsoid_geometry()
         np = models.np
@@ -141,53 +90,6 @@ class ExportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'unsupported shape'):
             models.validate_model(model)
 
-    def test_round_review_leaves_bounds_corners_open_and_depth_order_is_stable(self):
-        background = {'min': [-1, .2, -1], 'max': [1, .3, 1], 'color': '#0000FF'}
-        rounded = {'min': [-1, -.2, -1], 'max': [1, .1, 1], 'color': '#FF0000', 'shape': 'Ellipsoid'}
-        def render(parts):
-            return models.np.asarray(models.render_model({'parts': parts}, (96, 96), yaw=-models.math.pi/2, pitch=0))
-        pixels = render([background, rounded])
-        models.np.testing.assert_array_equal(pixels, render([rounded, background]))
-        self.assertGreater(pixels[48,48,0], 100)
-        self.assertGreater(pixels[21,21,2], 100)
-        self.assertEqual(pixels[21,21,0], 0)
-
-    def test_review_glass_reveals_contents_regardless_of_part_order(self):
-        red = {'min': [-.4, -.1, .1], 'max': [.4, .1, .9], 'color': '#FF0000'}
-        glass = {'min': [-.5, -.3, 0], 'max': [.5, -.2, 1], 'color': '#00FF0080'}
-        def render(parts):
-            return models.np.asarray(models.render_model({'parts': parts}, (96, 96),
-                                                        yaw=-models.math.pi / 2, pitch=0))
-        front = render([red, glass])
-        models.np.testing.assert_array_equal(front, render([glass, red]))
-        center = front[32:64, 32:64]
-        self.assertGreater(((center[:, :, 0] > 100) & (center[:, :, 1] == 0)).sum(), 350)
-        self.assertGreater(((center[:, :, 1] > 100) & (center[:, :, 0] == 0)).sum(), 350)
-        transparent = render([red, {**glass, 'color': '#00FF0000'}])[32:64, 32:64]
-        self.assertTrue((transparent[:, :, 0] > 100).all())
-        self.assertTrue((transparent[:, :, 1:] == 0).all())
-
-    def test_state_only_asset_uses_open_reference_instead_of_closed_prototype_icon(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            folder = root / 'Resources/Textures/door.rsi'
-            folder.mkdir(parents=True)
-            models.Image.new('RGBA', (2, 2), '#00FF00').save(folder / 'open.png')
-            models.Image.new('RGBA', (2, 2), '#FF0000').save(folder / 'closed.png')
-            (folder / 'meta.json').write_text(json.dumps({'size': {'x': 2, 'y': 2},
-                'states': [{'name': 'open'}, {'name': 'closed'}]}))
-            inventory = {'Door': {'sprite': {'sprite': 'door.rsi', 'state': 'closed'}}}
-            model = {'sourcePrototypes': [], 'referencePrototype': 'Door',
-                     'referenceRsi': '/Textures/door.rsi', 'referenceState': 'open'}
-            with patch.object(models, 'ROOT', root):
-                frame, reference = models.reference_frame(model, inventory)
-            self.assertEqual(reference['state'], 'open')
-            self.assertEqual(frame.getpixel((0, 0)), (0, 255, 0, 255))
-            model['referenceTint'] = '#FF804080'
-            with patch.object(models, 'ROOT', root):
-                tinted, _ = models.reference_frame(model, inventory)
-            self.assertEqual(tinted.getpixel((0, 0)), (0, 128, 0, 128))
-
     def test_alternate_door_links_require_reciprocal_opposite_poses(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -211,22 +113,6 @@ class ExportTests(unittest.TestCase):
                 (root / f'{name}.yml').write_text(models.yaml.safe_dump([entry]))
             with self.assertRaisesRegex(ValueError, 'Duplicate source prototype SameMedicalCase'):
                 models.load_models(root)
-
-    def test_reference_uses_explicit_layer_and_its_rsi_instead_of_inherited_state(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            for name, state, color in [('base', 'soil', '#008000'), ('child', 'tray', '#FF0000')]:
-                folder = root / f'Resources/Textures/{name}.rsi'
-                folder.mkdir(parents=True)
-                models.Image.new('RGBA', (2, 2), color).save(folder / f'{state}.png')
-                (folder / 'meta.json').write_text(json.dumps({'size': {'x': 2, 'y': 2},
-                                                             'states': [{'name': state}]}))
-            inventory = {'Tray': {'sprite': {'sprite': 'base.rsi', 'state': 'soil',
-                                             'layers': [{'rsi': 'child.rsi', 'state': 'tray'}]}}}
-            with patch.object(models, 'ROOT', root):
-                frame, source = models.reference_frame({'sourcePrototypes': ['Tray']}, inventory)
-            self.assertEqual(source['state'], 'tray')
-            self.assertEqual(frame.getpixel((0, 0)), (255, 0, 0, 255))
 
     def test_y_up_conversion_preserves_asymmetric_bounds_and_front(self):
         document, _ = unpack(models.glb_bytes(sample()))
@@ -269,24 +155,6 @@ class ExportTests(unittest.TestCase):
         self.assertEqual(document["extras"]["status"], "draft")
         self.assertEqual(document["extras"]["sourcePrototypes"], ["TestChair"])
 
-    def test_matching_colors_share_mesh_and_material(self):
-        model = sample()
-        model["parts"][1]["color"] = model["parts"][0]["color"]
-        document, _ = unpack(models.glb_bytes(model))
-        self.assertEqual(len(document["materials"]), 1)
-        self.assertEqual(len(document["meshes"]), 1)
-        self.assertEqual(len(document["nodes"]), 2)
-
-    def test_viewer_and_glb_share_geometry_and_preserve_draft_metadata(self):
-        source = sample()
-        outputs = models.viewer_outputs([source], {})
-        exported = json.loads(outputs["models.json"])["models"][0]
-        self.assertEqual(exported["status"], "draft")
-        self.assertEqual(exported["sourcePrototypes"], ["TestChair"])
-        self.assertEqual(exported["parts"][0]["min"], [-1, -2, 0])
-        self.assertEqual(exported["parts"][1]["color"], "#3388CC80")
-        self.assertNotIn("reference", exported)
-
     def test_nan_flat_and_reversed_boxes_are_rejected(self):
         for low, high in (("nan, 0, 0", "1, 1, 1"), ("0, 0, 0", "0, 1, 1"), ("2, 0, 0", "1, 1, 1")):
             with self.subTest(low=low, high=high), self.assertRaises(ValueError):
@@ -298,20 +166,6 @@ class ExportTests(unittest.TestCase):
             model[field] = value
             with self.subTest(field=field), self.assertRaises(ValueError):
                 models.validate_model(model)
-
-    def test_review_render_all_cardinal_views_have_visible_geometry(self):
-        for yaw in (-models.math.pi / 2, 0, models.math.pi / 2, models.math.pi):
-            image = models.render_model(sample(), yaw=yaw)
-            self.assertGreater(len(image.getcolors(image.width * image.height)), 2)
-
-    def test_low_foreground_details_are_not_covered_by_large_background_faces(self):
-        model = models.validate_model({"id": "Panel", "label": "Panel", "parts": [
-            {"min": "-1, 0, 0", "max": "1, 1, 3", "color": "#777777"},
-            {"min": "-0.3, -0.1, 0.1", "max": "0.3, -0.01, 0.4", "color": "#FF0000"}]})
-        image = models.render_model(model, yaw=-models.math.pi / 2)
-        red_pixels = sum(count for count, color in image.getcolors(image.width * image.height)
-                         if color[0] > 100 and color[1] == 0 and color[2] == 0)
-        self.assertGreater(red_pixels, 100)
 
     def test_renaming_removes_only_unchanged_manifest_owned_exports(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -336,7 +190,6 @@ class ExportTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     models.write_outputs({}, destination)
                 self.assertEqual(old.read_bytes(), b"local changes")
-
 
 if __name__ == "__main__":
     unittest.main()

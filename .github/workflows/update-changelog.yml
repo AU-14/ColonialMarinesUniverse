@@ -53,7 +53,7 @@ jobs:
         run: Tools/update_changelog.py Resources/Changelog/CMU.yml
           Resources/Changelog/Parts --category ${{ inputs.category || 'CMU' }}
 
-      - uses: stefanzweifel/git-auto-commit-action@v7.2.0
+      - uses: stefanzweifel/git-auto-commit-action@v7.2.1
         id: auto-commit
         with:
           commit_message: "Auto-update changelog [skip ci]"

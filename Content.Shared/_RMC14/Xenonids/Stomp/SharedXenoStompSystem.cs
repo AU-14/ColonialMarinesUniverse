@@ -4,6 +4,7 @@ using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -45,6 +46,7 @@ public sealed partial class XenoStompSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
@@ -195,7 +197,11 @@ public sealed partial class XenoStompSystem : EntitySystem
                 _stun.TryParalyze(receiver, xeno.Comp.DebuffsHurtXenosMore ? _xeno.TryApplyXenoDebuffMultiplier(receiver, xeno.Comp.ParalyzeTime)
                     : xeno.Comp.ParalyzeTime, true);
 
-            if (xeno.Comp.Slows)
+            // CMU14: cmss13 Crush only superslows preds on the charger's own tile
+            var yautjaSlow = xeno.Comp.YautjaSlowUnder != null && _yautjaSlow.SameTile(xeno, receiver)
+                ? xeno.Comp.YautjaSlowUnder
+                : xeno.Comp.YautjaSlow;
+            if (xeno.Comp.Slows && !_yautjaSlow.TryApply(receiver, yautjaSlow))
                 _slow.TrySuperSlowdown(receiver, xeno.Comp.SlowTime, true);
 
             if (xeno.Comp.KnocksBack)
@@ -309,7 +315,7 @@ public sealed partial class XenoStompSystem : EntitySystem
                 ? _xeno.TryApplyXenoDebuffMultiplier(ent, xeno.Comp.ParalyzeTime)
                 : xeno.Comp.ParalyzeTime, true);
 
-            if (xeno.Comp.Slows)
+            if (xeno.Comp.Slows && !_yautjaSlow.TryApply(ent, xeno.Comp.YautjaSlow)) // CMU14
                 _slow.TrySuperSlowdown(ent, xeno.Comp.SlowTime, true);
 
             if (xeno.Comp.KnockBackDistance > 0)

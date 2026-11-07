@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Fireman;
+using Content.Shared.Hands;
 using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Throwing;
 
@@ -13,12 +14,30 @@ public sealed partial class YautjaCarryThrowSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaComponent, BeforeThrowEvent>(OnBeforeThrow, before: [typeof(FiremanCarrySystem)]);
+        SubscribeLocalEvent<YautjaComponent, DidEquipHandEvent>(OnDidEquipHand);
+    }
+
+    private void OnDidEquipHand(Entity<YautjaComponent> ent, ref DidEquipHandEvent args)
+    {
+        // ThrowHeldItem clamps to the held thing's ItemThrowRange before anyone else sees the throw, so the cap rides
+        // on the carry's virtual item. without it a body flew the full 14 tile item range, wherever the cursor was
+        if (!TryComp(args.Equipped, out VirtualItemComponent? virtualItem) ||
+            !HasComp<FiremanCarriableComponent>(virtualItem.BlockingEntity))
+            return;
+
+        EnsureComp<ItemThrowRangeComponent>(args.Equipped).Range = ent.Comp.CarriedThrowRange;
     }
 
     private void OnBeforeThrow(Entity<YautjaComponent> ent, ref BeforeThrowEvent args)
     {
         if (args.Cancelled)
             return;
+
+        // CMU14: a Yautja throws harder. This is baseThrowSpeed, which ThrowingSystem feeds into its compensateFriction
+        // formula, so the object reaches the target sooner while still stopping on it (the formula solves for the
+        // distance). A human's throw is untouched - this handler only runs for a Yautja thrower.
+        if (ent.Comp.ThrowSpeedMultiplier > 1f)
+            args.ThrowSpeed *= ent.Comp.ThrowSpeedMultiplier;
 
         // the carried mob is held as a virtual item, same unwrap fireman carry does
         var carried = TryComp(args.ItemUid, out VirtualItemComponent? virtualItem)

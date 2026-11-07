@@ -159,6 +159,8 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         if (!deferInstantTreatment)
             delay += ResolveBandageDelay(args.User, patient, targetPart, used, treater, out fumblingDelay);
 
+        delay *= Content.Shared.CMU14.Traits.Conditions.CMUFearOfBloodComponent.GetTreatmentMultiplier(EntityManager, args.User);
+
         if (fumblingDelay > TimeSpan.Zero)
             _popup.PopupEntity(Loc.GetString("cm-wounds-start-fumbling", ("name", used)), patient, args.User);
 

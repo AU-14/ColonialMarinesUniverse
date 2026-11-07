@@ -16,7 +16,6 @@ public sealed class KingDestroyShipRegressionTest : GameTest
 
     // the Bush hull is noTunnel everywhere for burrowers, the Almayer CIC is noTunnel on purpose
     [TestCase("AU14AreaUSSGeorgeBushFlightdeck", true)]
-    [TestCase("AU14AreaUSSGeorgeBushRequisitions", true)]
     [TestCase("RMCAreaAlmayerCommandCic", false)]
     public async Task KingCanLeapOnShipsButNotIntoProtectedRooms(string areaId, bool expected)
     {

@@ -12,6 +12,7 @@ public sealed class FactionRosterConsoleBoundUserInterface(EntityUid owner, Enum
         base.Open();
         _window = this.CreateWindow<FactionRosterConsoleWindow>();
         _window.OnRefresh += () => SendMessage(new FactionRosterConsoleRefreshBuiMsg());
+        _window.OnPrint += name => SendMessage(new FactionRosterConsolePrintBuiMsg(name));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

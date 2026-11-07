@@ -309,6 +309,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.FiringAtSuppression = false;
         if (agent.Target is not { } target || !CombatTargetAlive(target) ||
             !AcceptOrderedContact(uid, agent, target) || !Visible(uid, target, agent.FireRange) ||
+            agent.ContactFromRadio && !RecognizedContact(agent, target, _timing.CurTime) ||
             !TryComp(target, out TransformComponent? transform))
         {
             // A guessed flash position is unsuitable for blast weapons or homing entity locks.

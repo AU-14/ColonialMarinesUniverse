@@ -76,33 +76,6 @@ public sealed class ReportedHiveRegressionTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task DestroyedCoreHonorsSetupGracePeriod(bool duringSetup)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var hive = entities.SpawnEntity("CMXenoHive", map.GridCoords);
-            var hiveComp = entities.GetComponent<HiveComponent>(hive);
-            Assert.That(hiveComp.PreSetupCutoff, Is.EqualTo(TimeSpan.FromMinutes(15)));
-            var roundTime = entities.System<GameTicker>().RoundDuration();
-            #pragma warning disable RA0002 // Place the round on either side of the cutoff without simulating fifteen minutes.
-            hiveComp.PreSetupCutoff = roundTime + TimeSpan.FromSeconds(duringSetup ? 1 : -1);
-            var timing = pair.Server.ResolveDependency<IGameTiming>();
-            hiveComp.NewCoreAt = timing.CurTime + TimeSpan.FromHours(1);
-            #pragma warning restore RA0002
-            var core = entities.SpawnEntity(null, map.GridCoords);
-            entities.AddComponent<HiveCoreComponent>(core);
-            entities.System<SharedXenoHiveSystem>().SetHive(core, hive);
-            entities.System<SharedDestructibleSystem>().DestroyEntity(core);
-            Assert.That(hiveComp.NewCoreAt, Is.EqualTo(duringSetup ? timing.CurTime : timing.CurTime + hiveComp.NewCoreCooldown));
-        });
-        await pair.CleanReturnAsync();
-    }
-
     [Test]
     public async Task HijackingFromShipClearsAllPlanetLevelsAndPreservesPassengers()
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared.Damage;
 using Content.Shared.Explosion;
 using Robust.Shared.Prototypes;
@@ -9,6 +10,12 @@ namespace Content.Shared._RMC14.Vehicle;
 
 public sealed partial class HardpointSystem
 {
+    private void CMUMarkPermanentWreck(EntityUid vehicle, HardpointIntegrityComponent frame, float previous)
+    {
+        if (previous > 0f && frame.Integrity <= 0f && HasComp<CMUVehiclePermanentWreckComponent>(vehicle))
+            frame.DestroyedBeyondRepair = true;
+    }
+
     /// <summary>
     ///     Handles a single catastrophic hit (after hull armour, before it is split among the modules).
     ///     Tanks that can cook off take a heavy hull chunk instead of being wrecked outright; every other vehicle

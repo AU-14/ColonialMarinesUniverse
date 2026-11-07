@@ -157,7 +157,7 @@ public sealed partial class CMUForensicsExtrasSystem : EntitySystem
         return Loc.GetString("cmu-forensics-death-minutes", ("minutes", minutes));
     }
 
-    private List<string> FindRecordMatches(ForensicScannerComponent scanner)
+    public List<string> FindRecordMatches(ForensicScannerComponent scanner)
     {
         var matches = new List<string>();
         if (_universalRecords.GetRecords() is not { } station)

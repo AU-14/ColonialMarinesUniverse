@@ -27,7 +27,7 @@
 
   name: au14-job-name-civiliancmbdeputy
   description: au14-job-description-civiliancmbdeputy
-  setPreference: false
+  setPreference: true
   canBeAntag: false
   requirements:
   - !type:OverallPlaytimeRequirement
@@ -38,6 +38,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
@@ -99,5 +104,8 @@
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianCMBDeputy
+  - type: CMUSpawnPointExtraJobs
+    jobs:
+    - AU14JobCivilianCMBDetective
   - type: Sprite
     state: syn_spawn

@@ -165,7 +165,7 @@ public sealed partial class RMCAdminEui : BaseEui
             specialistSkills,
             points,
             extraPoints
-        );
+        ) { CMUDetails = CreateCMUDetails() }; // CMU14
     }
 
     public override void HandleMessage(EuiMessageBase msg)
@@ -173,6 +173,9 @@ public sealed partial class RMCAdminEui : BaseEui
         base.HandleMessage(msg);
 
         if (!HasPermission())
+            return;
+
+        if (HandleCMUMessage(msg)) // CMU14
             return;
 
         switch (msg)

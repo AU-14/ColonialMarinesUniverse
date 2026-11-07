@@ -28,10 +28,10 @@ public sealed partial class YautjaClanInfoSystem : EntitySystem
 
         args.Verbs.Add(new Verb
         {
-            Text = Loc.GetString("cmu-yautja-clan-info-verb"),
+            Text = Loc.GetString("cmu-yautja-hall-verb"),
             Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/CMU14/Yautja/rank_icons.rsi"), "blooded"),
             Impact = LogImpact.Low,
-            Act = () => _eui.OpenEui(new YautjaClanInfoEui(), actor.PlayerSession),
+            Act = () => _eui.OpenEui(new YautjaClanHallEui(), actor.PlayerSession),
         });
     }
 }

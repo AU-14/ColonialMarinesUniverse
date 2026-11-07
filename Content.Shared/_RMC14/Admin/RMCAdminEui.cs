@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.TacticalMap;
+using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.Eui;
 using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Prototypes;
@@ -50,6 +50,7 @@ public sealed class RMCAdminEuiTargetState(
     Dictionary<string, int> extraPoints
 ) : RMCAdminEuiState(hives, squads, xenos, marines, tacticalMapHistory, tacticalMapLines, factions)
 {
+    public Content.Shared.CMU14.Administration.CMUAdminTargetDetails? CMUDetails; // CMU14
     public readonly List<(string Name, bool Present)> SpecialistSkills = specialistSkills;
     public readonly int Points = points;
     public readonly Dictionary<string, int> ExtraPoints = extraPoints;

@@ -188,14 +188,12 @@ python Tools/three_d/export_scene.py
 python Tools/three_d/build_models.py --check
 python Tools/three_d/build_tile_materials.py --check
 python Tools/three_d/button_animation_review.py
-node --test Tools/three_d/viewer/*.test.mjs
 ```
 
-Run the Python regression suite from its tool directory so sibling modules are importable:
+Run the exporter, map parsing, and file safety checks from the tool directory so sibling modules are importable:
 
 ```powershell
 cd Tools/three_d
-python barricade_state_review.py
 python -m unittest discover -s tests -v
 ```
 

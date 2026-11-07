@@ -174,7 +174,7 @@
     edges:
     - to: wired
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV
         amount: 30
         doAfter: 20
 
@@ -267,7 +267,7 @@
     edges:
     - to: guyed
       steps:
-      - material: RMCCable
+      - material: CMUThinCableLV
         amount: 15
         doAfter: 25
 
@@ -401,6 +401,7 @@
       - radioGovforCharlie
       - radioGovforCommand
       - radioGovforIntel
+      - CMURadioGovforMedical
       - radioGovforFoxtrot
       - radioGovforJTAC
       - radioGovforMILP
@@ -410,6 +411,7 @@
       - radioOpforCharlie
       - radioOpforCommand
       - radioOpforIntel
+      - CMURadioOpforMedical
       - radioOpforVictor
       - radioOpforJTAC
       - radioOpforMILP

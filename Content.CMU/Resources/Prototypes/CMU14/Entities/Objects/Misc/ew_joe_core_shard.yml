@@ -1,0 +1,12 @@
+# The part a dead Early Warning Joe drops once (phase E2). Parented on BaseItem, not BaseElectronics,
+# so smelting and sapper inputs do not accept it. Sprite is a placeholder until the GM set exists.
+- type: entity
+  parent: BaseItem
+  id: CMUEWJoeCoreShard
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/module.rsi
+    state: mainboard
+  - type: Item
+    size: Small
+  - type: EWJoeCoreShard

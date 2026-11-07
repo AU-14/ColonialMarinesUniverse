@@ -18,7 +18,8 @@ public sealed class FactionRosterEntryWindow : DefaultWindow
     private readonly RosterFonts _fonts = new();
     private readonly BoxContainer _body;
 
-    public FactionRosterEntryWindow(FactionRosterEntry entry)
+    /// <param name="onPrint">Prints the file; left out where the window can't print, like from a records console.</param>
+    public FactionRosterEntryWindow(FactionRosterEntry entry, Action? onPrint = null)
     {
         Title = entry.Name;
         MinSize = new Vector2(440, 480);
@@ -35,7 +36,23 @@ public sealed class FactionRosterEntryWindow : DefaultWindow
             _fonts.Small, CrtTerminalPalette.Accent);
         job.ClipText = true;
         titles.AddChild(job);
-        header.AddChild(titles);
+        var headerRow = RosterUi.Row();
+        headerRow.AddChild(titles);
+        if (onPrint != null)
+        {
+            var print = new Button
+            {
+                Text = Loc.GetString("faction-roster-dossier-print"),
+                VerticalAlignment = VAlignment.Center,
+                MinWidth = 90,
+            };
+            CmuButtonStyles.Apply(print, CmuButtonStyles.Variant.Neutral);
+            print.Label.FontOverride = _fonts.Small;
+            print.OnPressed += _ => onPrint();
+            headerRow.AddChild(print);
+        }
+
+        header.AddChild(headerRow);
         root.AddChild(header);
 
         var scroll = new ScrollContainer { VerticalExpand = true, HScrollEnabled = false };

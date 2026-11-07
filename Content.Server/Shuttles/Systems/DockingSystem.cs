@@ -95,25 +95,11 @@ public sealed partial class DockingSystem : SharedDockingSystem
     {
         if (!args.Anchored)
         {
+            RememberCmuDockTransfer(entity); // CMU14: grid transfers unanchor and reanchor within one tick.
             Undock(entity);
         }
-    }
-
-    [SubscribeLocalEvent]
-    private void OnDockingReAnchor(Entity<DockingComponent> entity, ref ReAnchorEvent args)
-    {
-        var uid = entity.Owner;
-        var component = entity.Comp;
-
-        if (!component.Docked)
-            return;
-
-        var otherDock = component.DockedWith;
-        var other = Comp<DockingComponent>(otherDock!.Value);
-
-        Undock(entity);
-        Dock((uid, component), (otherDock.Value, other));
-        _console.RefreshShuttleConsoles();
+        else
+            RestoreCmuDockTransfer(entity); // CMU14
     }
 
     [SubscribeLocalEvent]

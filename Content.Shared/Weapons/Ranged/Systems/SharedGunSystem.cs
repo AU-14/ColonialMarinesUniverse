@@ -151,6 +151,14 @@ public abstract partial class SharedGunSystem : EntitySystem
         Subs.CVar(_config, RMCCVars.RMCGunPrediction, v => GunPrediction = v, true);
     }
 
+    // CMU14 Begin
+    public void SetNextFire(Entity<GunComponent> gun, TimeSpan nextFire)
+    {
+        gun.Comp.NextFire = nextFire;
+        DirtyField(gun.AsNullable(), nameof(GunComponent.NextFire));
+    }
+    // CMU14 End
+
     private void OnMapInit(Entity<GunComponent> gun, ref MapInitEvent args)
     {
 #if DEBUG
@@ -161,6 +169,11 @@ public abstract partial class SharedGunSystem : EntitySystem
 #endif
 
         RefreshModifiers((gun, gun));
+
+        // cmu edit start: serial numbers and firing-pin signatures are given out here
+        var cmuMapInit = new Content.Shared.CMU14.Weapons.SerialNumber.CMUGunMapInitEvent();
+        RaiseLocalEvent(gun, ref cmuMapInit);
+        // cmu edit end
     }
 
     private void OnGunMelee(Entity<GunComponent> ent, ref MeleeHitEvent args)
@@ -432,7 +445,12 @@ public abstract partial class SharedGunSystem : EntitySystem
         {
             if (attemptEv.Message != null)
             {
-                PopupSystem.PopupEntity(attemptEv.Message, gun, user);
+                // CMU14: contained mounted weapons may be outside the client's PVS;
+                // anchor lockout messages to the operator so they arrive immediately.
+                var popupAnchor = TryComp(gun, out MountableWeaponComponent? mountable) && mountable.MountedTo != null
+                    ? user
+                    : gun.Owner;
+                PopupSystem.PopupEntity(attemptEv.Message, popupAnchor, user);
             }
             gun.Comp.BurstActivated = false;
             gun.Comp.BurstShotsCount = 0;
@@ -629,10 +647,12 @@ public abstract partial class SharedGunSystem : EntitySystem
         return new Angle(direction.Theta + spread);
     }
 
+    // CMU14: apply content admission to local prediction and ordinary maps too.
     protected void PlayGunshotSound(SoundSpecifier? sound, EntityUid gun, EntityUid? user)
     {
-        if (!_zLevels.PlayPredictedDirectlyAcrossZ(sound, gun, user))
-            Audio.PlayPredicted(sound, gun, user);
+        if (!_zLevels.PlayPredictedDirectlyAcrossZ(sound, gun, user) &&
+            !_zLevels.PlayPredictedThroughOpenings(sound, gun, user))
+            _cmuAudioBudget.PlayPredicted(sound, gun, user);
     }
 
     public abstract List<EntityUid>? Shoot(
@@ -732,7 +752,9 @@ public abstract partial class SharedGunSystem : EntitySystem
         {
             var audioParams = cartridge.EjectSound?.Params ?? AudioParams.Default;
             audioParams = audioParams.AddVolume(-1f).WithVariation(SharedContentAudioSystem.DefaultVariation);
-            Audio.PlayPvs(cartridge.EjectSound, entity, audioParams);
+            // CMU14
+            // Audio.PlayPvs(cartridge.EjectSound, entity, audioParams);
+            PlayCMUTransientSound(cartridge.EjectSound, entity, audioParams);
         }
 
         if (TryComp<CartridgeAmmoComponent>(entity, out var spent) && spent.Spent) // CMU14

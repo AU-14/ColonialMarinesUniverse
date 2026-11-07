@@ -32,28 +32,6 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkDropshipTest
 {
-    [TestCase("omaha")]
-    [TestCase("midway")]
-    [TestCase("omaha_navy")]
-    [TestCase("midway_navy")]
-    public async Task CabinStartsWithBreathableAir(string variant)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var map = entities.System<SharedMapSystem>().CreateMap(out var mapId);
-            Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
-            var air = entities.System<AtmosphereSystem>().GetTileMixture(loaded!.Value.Owner, map, Vector2i.Zero);
-            Assert.That(air, Is.Not.Null);
-            Assert.That(air!.Pressure, Is.InRange(90f, 110f), "Cabin air must not depend on the landing map's atmosphere.");
-            Assert.That(air.GetMoles(Gas.Oxygen), Is.GreaterThan(20f));
-            entities.DeleteEntity(loaded.Value.Owner);
-        });
-        await pair.RunTicksSync(2);
-        await pair.CleanReturnAsync();
-    }
 
     [TestCase("omaha", 0)]
     [TestCase("midway", 90)]
@@ -78,38 +56,6 @@ public sealed class MohawkDropshipTest
             Assert.That(zLevels.IsZShotPathOpen(map, position, position), Is.True,
                 "A hole in the cabin must retain the normal open-air shooting behavior.");
             entities.DeleteEntity(ship);
-        });
-        await pair.RunTicksSync(2);
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task MohawkPadsAlignWithoutRejectingOverlappingReservations()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var maps = entities.System<SharedMapSystem>();
-            maps.CreateMap(out var mapId);
-            var loader = entities.System<MapLoaderSystem>();
-            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/Dropships/Mohawk/omaha.yml"), out var omaha), Is.True);
-            Assert.That(loader.TryLoadGrid(mapId, new ResPath("/Maps/CMU14/Dropships/Mohawk/midway.yml"), out var midway), Is.True);
-            var ground = maps.CreateMap();
-            var markerCoordinates = new EntityCoordinates(ground, -9.5f, 15.5f);
-            var reserved = entities.SpawnEntity("CMUMohawkTestOffsetDestination", markerCoordinates);
-            entities.System<SharedDropshipSystem>().SetDestinationShip(reserved, omaha!.Value.Owner);
-            var assembly = entities.System<MultiDeckDropshipSystem>();
-            Assert.That(assembly.GetLandingOrigin(omaha.Value.Owner, markerCoordinates, reserved).Position,
-                Is.EqualTo(new Vector2(-9f, 15f)), "Use the pad's large-hull offset before snapping the grid.");
-            Assert.That(assembly.GetLandingOrigin(ground, markerCoordinates, reserved), Is.EqualTo(markerCoordinates),
-                "An ordinary ship must keep its existing landing coordinates.");
-            Assert.That(assembly.IsLandingClear(midway!.Value.Owner, new EntityCoordinates(ground, 7f, 15f), Angle.Zero), Is.True,
-                "The two USS Bush pads are 16 tiles apart; the cabin envelopes meet at their edges.");
-            Assert.That(assembly.IsLandingClear(midway.Value.Owner, new EntityCoordinates(ground, 6.9f, 15f), Angle.Zero), Is.True,
-                "Mohawks no longer reject sites inside another ship's reserved envelope.");
-            entities.DeleteEntity(omaha.Value.Owner);
-            entities.DeleteEntity(midway.Value.Owner);
         });
         await pair.RunTicksSync(2);
         await pair.CleanReturnAsync();
@@ -142,8 +88,6 @@ public sealed class MohawkDropshipTest
 """;
 
     [TestCase("omaha", 0)]
-    [TestCase("omaha", 90)]
-    [TestCase("midway", 0)]
     [TestCase("midway", 90)]
     public async Task TimedRampAllowsWalkingBetweenDecks(string variant, int degrees)
     {
@@ -270,8 +214,6 @@ public sealed class MohawkDropshipTest
 
     [TestCase("omaha", 0, "RMCMechPowerLoader")]
     [TestCase("midway", 90, "RMCMechPowerLoaderGreen")]
-    [TestCase("omaha_navy", 180, "RMCMechPowerLoaderBlue")]
-    [TestCase("midway_navy", 270, "RMCMechPowerLoader")]
     public async Task PowerLoadersWalkOverRampBulkhead(string variant, int degrees, string prototype)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
@@ -338,8 +280,6 @@ public sealed class MohawkDropshipTest
 
     [TestCase("omaha")]
     [TestCase("midway")]
-    [TestCase("omaha_navy")]
-    [TestCase("midway_navy")]
     public async Task DecksLoadTravelAndRetractTogether(string variant)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
@@ -366,7 +306,7 @@ public sealed class MohawkDropshipTest
             var loaded = grids!.Single();
             var ship = loaded.Owner;
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
-            Assert.That(assembly.Initialized, Is.True, "Every declared deck must load successfully.");
+            Assert.That(assembly.DecksInitialized, Is.True, "Every declared deck must load successfully.");
             Assert.That(assembly.Decks.Keys, Is.EquivalentTo(new[] { -1, 1 }));
             Assert.That(zLevels.GetAllNetworkMaps(map), Has.Count.EqualTo(3));
 

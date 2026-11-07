@@ -148,7 +148,7 @@
   name: Octanis Complex - Unregistered Tunnel
   components:
   - type: Sprite
-    state: smuggler_tunnel
+    state: unregistered_tunnel
   - type: Area
     minimapColor: '#714401CC'
 
@@ -206,6 +206,16 @@
   parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCResearchEast
   name: Octanis Complex Research - East
+  components:
+  - type: Sprite
+    state: oc_research_east
+  - type: Area
+    minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCResearchWest
+  name: Octanis Complex Research - West
   components:
   - type: Sprite
     state: oc_research_east
@@ -427,14 +437,74 @@
 - type: entity
   parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatOCStarportTerminal
-  name: Octanis Complex Starport - Terminal
+  name: Octanis Complex Starport - Passenger Terminal
   components:
   - type: Sprite
     state: oc_starport_terminal
   - type: Area
     minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCCargoTerminalWarehouses
+  name: Octanis Complex Cargo Terminal - Warehouses
+  components:
+  - type: Sprite
+    state: oc_cargoterminal_warehouses
+  - type: Area
+    minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaRetreatIndoors
+  id: CMUAreaRetreatOCCargoTerminalLogisticsOffice
+  name: Octanis Complex Cargo Terminal - Logistics Office
+  components:
+  - type: Sprite
+    state: oc_cargoterminal_logisticsoffice
+  - type: Area
+    minimapColor: '#573e19'
 
 # Octanis Complex - "Outdoor" Areas
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCCargoTerminalNorth
+  name: Octanis Complex Cargo Terminal - North
+  components:
+  - type: Sprite
+    state: oc_cargoterminal_north
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCCargoTerminalSouth
+  name: Octanis Complex Cargo Terminal - South
+  components:
+  - type: Sprite
+    state: oc_cargoterminal_south
+  - type: Area
+    minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCCargoTerminalEast
+  name: Octanis Complex Cargo Terminal - East
+  components:
+  - type: Sprite
+    state: oc_cargoterminal_east
+  - type: Area
+    minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaRetreatOutdoors
+  id: CMUAreaRetreatOCCargoTerminalWest
+  name: Octanis Complex Cargo Terminal - West
+  components:
+  - type: Sprite
+    state: oc_cargoterminal_west
+  - type: Area
+    minimapColor: '#573e19'
 
 - type: entity
   parent: CMUAreaRetreatOutdoors
@@ -595,7 +665,7 @@
 - type: entity
   parent: CMUAreaRetreatIndoors
   id: CMUAreaRetreatHRDormsColonyRecreationCenter
-  name: Hope's Retreat - Colony Recreation Center
+  name: Hope's Retreat - The Ware House Bar
   components:
   - type: Sprite
     state: hr_dorms_recreationcenter

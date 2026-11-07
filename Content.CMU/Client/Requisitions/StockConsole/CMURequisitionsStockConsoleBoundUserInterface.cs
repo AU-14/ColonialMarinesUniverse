@@ -12,6 +12,14 @@ public sealed class CMURequisitionsStockConsoleBoundUserInterface(EntityUid owne
         base.Open();
         _window = this.CreateWindow<CMURequisitionsStockConsoleWindow>();
         _window.OnRefresh += () => SendMessage(new CMURequisitionsStockConsoleRefreshBuiMsg());
+        _window.OnPrintSlip += lines => SendMessage(new CMURequisitionsStockConsolePrintSlipBuiMsg(lines));
+    }
+
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+        if (message is CMURequisitionsStockConsoleSlipLimitBuiMsg limit)
+            _window?.SetMaxSlipItems(limit.MaxSlipItems);
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

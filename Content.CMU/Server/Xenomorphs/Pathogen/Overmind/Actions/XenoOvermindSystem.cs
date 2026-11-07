@@ -5,6 +5,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Eye;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Mobs.Systems;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Dynamics;
@@ -42,6 +43,7 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
     [Dependency] private QueenEyeSystem _queenEye = default!;
     [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
 
     private static readonly ProtoId<TagPrototype> DoorBumpOpenerTag = "DoorBumpOpener";
     private static readonly EntProtoId EyeProto = "CMU14XenoOvermindEye";
@@ -196,8 +198,10 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
             return;
         }
 
-        Log.Debug($"EnsurePathogenHive: CMUPathogenHive not found for {ToPrettyString(uid)}, retrying next tick");
-        Timer.Spawn(0, () => EnsurePathogenHive(uid));
+        // a 0 ms timer re-ran every tick for as long as no pathogen hive existed (admin spawns, rounds without one)
+        // and spun test threads forever. keep retrying, just slowly
+        Log.Debug($"EnsurePathogenHive: CMUPathogenHive not found for {ToPrettyString(uid)}, retrying");
+        Timer.Spawn(TimeSpan.FromSeconds(1), () => EnsurePathogenHive(uid));
     }
 
     private void OnChangeForm(Entity<CMUXenoOvermindComponent> ent, ref CMUXenoOvermindChangeFormActionEvent args)
@@ -349,6 +353,9 @@ public sealed partial class CMUXenoOvermindSystem : EntitySystem
             return;
 
         if (TerminatingOrDeleted(overmind))
+            return;
+
+        if (_mobState.IsDead(overmind))
             return;
 
         // If a blight core now exists in the hive, cancel warnings

@@ -31,4 +31,10 @@ public sealed partial class EpilepsyComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan SeizingUntil;
+
+    /// <summary>
+    ///     Anticonvulsants keep seizures away until this time. A seizure that comes due before then is put off instead.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan SuppressedUntil;
 }

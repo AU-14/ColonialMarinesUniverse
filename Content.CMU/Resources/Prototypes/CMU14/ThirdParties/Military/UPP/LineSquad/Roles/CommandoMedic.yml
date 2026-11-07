@@ -18,6 +18,8 @@
     skills:
       RMCSkillEndurance: 2
       RMCSkillFirearms: 3
+      RMCSkillFireman: 1
+      RMCSkillEngineer: 1
       RMCSkillMedical: 3
       RMCSkillSurgery: 2
   - type: JobPrefix

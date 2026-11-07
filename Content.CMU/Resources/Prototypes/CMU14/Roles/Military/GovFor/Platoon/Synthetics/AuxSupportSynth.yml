@@ -82,6 +82,7 @@
         RMCSkillIntel: 2
         RMCSkillDomestics: 2
         RMCSkillNavigations: 1
+        CMUSkillATGM: 1
     UPP:
     - type: Skills
       skills:
@@ -104,6 +105,7 @@
         RMCSkillIntel: 2
         RMCSkillDomestics: 2
         RMCSkillNavigations: 1
+        CMUSkillATGM: 1
 
   requirements:
   - !type:TraitsRequirement
@@ -113,6 +115,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
@@ -249,6 +257,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - CMUBadLeg
   ranks:
     RMC_WarrantOfficer1:
@@ -280,6 +294,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - CMUBadLeg
   ranks:
     UPP_SeniorWarrantOfficer:

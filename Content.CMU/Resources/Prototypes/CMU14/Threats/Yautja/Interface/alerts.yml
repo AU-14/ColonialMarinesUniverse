@@ -1,5 +1,6 @@
 - type: alert
   id: CMUYautjaPower
+  clickEvent: !type:YautjaSelfDestructAlertEvent
   category: Plasma
   icons:
   - sprite: /Textures/CMU14/Yautja/hud_yautja.rsi

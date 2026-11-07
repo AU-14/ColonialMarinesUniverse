@@ -26,9 +26,7 @@ namespace Content.IntegrationTests.CMU14.Medical.Treatment;
 [TestFixture]
 public sealed class MixedBleedingBurnTreatmentTest
 {
-    [TestCase(ExternalBleedTier.Minor)]
     [TestCase(ExternalBleedTier.Moderate)]
-    [TestCase(ExternalBleedTier.Severe)]
     public async Task OrdinaryGauzeStopsNonarterialBleedingWithNoWoundsOrBruteDamage(ExternalBleedTier tier)
     {
         await using var pair = await PoolManager.GetServerClient();

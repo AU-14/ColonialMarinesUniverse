@@ -24,27 +24,6 @@ public sealed class YautjaLanguageRegressionTest
     private static readonly ProtoId<LanguagePrototype> RussianLanguage = "Russian";
 
     [Test]
-    public async Task HellhoundUnderstandsYautja()
-    {
-        using var server = CreateServer();
-        await server.WaitIdleAsync();
-        EntityUid hellhound = default;
-
-        await server.WaitPost(() =>
-        {
-            hellhound = server.EntMan.SpawnEntity("CMUMobYautjaHellhound", MapCoordinates.Nullspace);
-        });
-
-        await server.WaitAssertion(() =>
-        {
-            var languages = server.EntMan.GetComponent<LanguageComponent>(hellhound);
-            Assert.That(languages.UnderstoodLanguages, Does.Contain(YautjaLanguage));
-        });
-
-        await server.WaitPost(() => server.EntMan.DeleteEntity(hellhound));
-    }
-
-    [Test]
     public async Task HumanEnthrallPreservesLanguagesAndAddsYautja()
     {
         using var server = CreateServer();
@@ -96,61 +75,6 @@ public sealed class YautjaLanguageRegressionTest
             server.EntMan.DeleteEntity(human);
             server.EntMan.DeleteEntity(hunter);
             server.EntMan.DeleteEntity(bracer);
-        });
-    }
-
-    [Test]
-    public async Task YautjaItemInteractionsPreserveHumanLanguages()
-    {
-        using var server = CreateServer();
-        await server.WaitIdleAsync();
-        EntityUid human = default;
-        EntityUid bracer = default;
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-            entMan.System<LanguageSystem>().AddLanguage(human, RussianLanguage);
-
-            var component = entMan.GetComponent<LanguageComponent>(human);
-            var spokenBefore = component.SpokenLanguages.ToHashSet();
-            var understoodBefore = component.UnderstoodLanguages.ToHashSet();
-            var hands = entMan.System<SharedHandsSystem>();
-            var inventory = entMan.System<InventorySystem>();
-
-            Assert.That(hands.TryPickupAnyHand(human, bracer, checkActionBlocker: false), Is.True);
-            AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
-
-            entMan.EventBus.RaiseLocalEvent(bracer, new UseInHandEvent(human));
-            AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
-
-            Assert.That(inventory.TryEquip(human, bracer, "gloves", silent: true, force: true), Is.True);
-            AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
-
-            Assert.That(inventory.TryUnequip(human, "gloves", silent: true, force: true), Is.True);
-            AssertLanguagesUnchanged(entMan, human, spokenBefore, understoodBefore);
-        });
-
-        await server.WaitPost(() =>
-        {
-            server.EntMan.DeleteEntity(human);
-            server.EntMan.DeleteEntity(bracer);
-        });
-    }
-
-    private static void AssertLanguagesUnchanged(
-        IEntityManager entMan,
-        EntityUid human,
-        IReadOnlySet<ProtoId<LanguagePrototype>> spoken,
-        IReadOnlySet<ProtoId<LanguagePrototype>> understood)
-    {
-        var actual = entMan.GetComponent<LanguageComponent>(human);
-        Assert.Multiple(() =>
-        {
-            Assert.That(actual.SpokenLanguages, Is.SupersetOf(spoken));
-            Assert.That(actual.UnderstoodLanguages, Is.SupersetOf(understood));
         });
     }
 

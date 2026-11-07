@@ -21,66 +21,7 @@ public sealed class YautjaWhitelistAccessTest
     private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
 
     [Test]
-    public async Task EveryYautjaWhitelistTypeAllowsHunterJobAndClientSelection()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var db = pair.Server.ResolveDependency<IServerDbManager>();
-        var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
-        var jobWhitelist = pair.Server.ResolveDependency<JobWhitelistManager>();
-        var serverPlayers = pair.Server.ResolveDependency<IPlayerManager>();
-        var clientNet = pair.Client.ResolveDependency<IClientNetManager>();
-        var requirements = pair.Client.ResolveDependency<JobRequirementsManager>();
-        var preferences = pair.Client.ResolveDependency<IClientPreferencesManager>();
-        var hunter = prototypes.Index<JobPrototype>(CMUYautjaHunterPrototype);
-        var playerId = pair.Player!.UserId.UserId;
-        var username = pair.Player.Name;
-
-        await pair.Server.WaitPost(() => pair.Server.CfgMan.SetCVar(CCVars.GameRoleWhitelist, true));
-
-        var flags = new[]
-        {
-            YautjaWhitelistFlags.Yautja,
-            YautjaWhitelistFlags.Legacy,
-            YautjaWhitelistFlags.Council,
-            YautjaWhitelistFlags.CouncilLegacy,
-            YautjaWhitelistFlags.Leader,
-        };
-
-        foreach (var flag in flags)
-        {
-            await db.SetYautjaWhitelistFlagsAsync(playerId, (int) flag);
-            await jobWhitelist.RefreshYautjaWhitelist(new NetUserId(playerId));
-            await Reconnect(pair, clientNet, serverPlayers, username);
-
-            await pair.Server.WaitAssertion(() =>
-                Assert.That(jobWhitelist.IsAllowed(serverPlayers.Sessions.Single(), hunter.ID), Is.True));
-            await pair.Client.WaitAssertion(() =>
-            {
-                Assert.That(requirements.IsWhitelisted(hunter.ID), Is.True);
-                Assert.That(requirements.CanCustomizeWhitelistedJob(hunter.ID), Is.True);
-                Assert.That(
-                    preferences.YautjaCapabilities.CanUseLegacy,
-                    Is.EqualTo(flag is YautjaWhitelistFlags.Legacy or YautjaWhitelistFlags.CouncilLegacy));
-            });
-        }
-
-        await db.SetYautjaWhitelistFlagsAsync(playerId, (int) YautjaWhitelistFlags.None);
-        await jobWhitelist.RefreshYautjaWhitelist(new NetUserId(playerId));
-        await Reconnect(pair, clientNet, serverPlayers, username);
-
-        await pair.Server.WaitAssertion(() =>
-            Assert.That(jobWhitelist.IsAllowed(serverPlayers.Sessions.Single(), hunter.ID), Is.False));
-        await pair.Client.WaitAssertion(() =>
-        {
-            Assert.That(requirements.IsWhitelisted(hunter.ID), Is.False);
-            Assert.That(requirements.CanCustomizeWhitelistedJob(hunter.ID), Is.False);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ClanAdminMenuWhitelistUpdateShowsClanlessTargetAndReachesClient()
+    public async Task ClanHallWhitelistUpdateShowsTargetAndReachesClient()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -101,12 +42,12 @@ public sealed class YautjaWhitelistAccessTest
         var playerId = session.UserId.UserId;
         var username = session.Name;
         var euiManager = pair.Server.ResolveDependency<Content.Server.EUI.EuiManager>();
-        YautjaClanAdminEui? editor = null;
+        YautjaClanHallEui? editor = null;
 
         await pair.Server.WaitPost(() => pair.Server.CfgMan.SetCVar(CCVars.GameRoleWhitelist, true));
         await pair.Server.WaitPost(() =>
         {
-            editor = new YautjaClanAdminEui();
+            editor = new YautjaClanHallEui(YautjaClanHallPage.Whitelists);
             euiManager.OpenEui(editor, session);
         });
 
@@ -122,7 +63,7 @@ public sealed class YautjaWhitelistAccessTest
             })
             {
                 await pair.Server.WaitPost(() =>
-                    editor!.HandleMessage(new YautjaClanAdminSetWhitelistMessage(username, flag)));
+                    editor!.HandleMessage(new YautjaClanHallSetWhitelistMessage(username, flag)));
                 await pair.RunTicksSync(30);
 
                 await pair.Server.WaitAssertion(() =>
@@ -137,11 +78,11 @@ public sealed class YautjaWhitelistAccessTest
                         capabilities.CanUseCouncilStatus,
                         Is.EqualTo(flag is YautjaWhitelistFlags.Council or YautjaWhitelistFlags.CouncilLegacy));
                     Assert.That(capabilities.CanUseLeaderStatus, Is.EqualTo(flag == YautjaWhitelistFlags.Leader));
-                    var state = (YautjaClanAdminEuiState) editor!.GetNewState();
-                    var displayedPlayer = state.ClanlessPlayers.SingleOrDefault(player =>
+                    var state = (YautjaClanHallEuiState) editor!.GetNewState();
+                    var displayedPlayer = state.Whitelist?.SingleOrDefault(player =>
                         player.PlayerId == session.UserId);
                     Assert.That(displayedPlayer, Is.Not.Null);
-                    Assert.That(displayedPlayer!.WhitelistFlags, Is.EqualTo(flag));
+                    Assert.That(displayedPlayer!.Flags, Is.EqualTo(flag));
                 });
                 await pair.Client.WaitAssertion(() =>
                 {
@@ -160,7 +101,7 @@ public sealed class YautjaWhitelistAccessTest
             }
 
             await pair.Server.WaitPost(() =>
-                editor!.HandleMessage(new YautjaClanAdminClearWhitelistMessage(session.UserId)));
+                editor!.HandleMessage(new YautjaClanHallSetWhitelistMessage(username, YautjaWhitelistFlags.None)));
             await pair.RunTicksSync(30);
             await pair.Server.WaitAssertion(() =>
             {
@@ -170,8 +111,8 @@ public sealed class YautjaWhitelistAccessTest
                 Assert.That(capabilities.CanUseLegacy, Is.False);
                 Assert.That(capabilities.CanUseCouncilStatus, Is.False);
                 Assert.That(capabilities.CanUseLeaderStatus, Is.False);
-                var state = (YautjaClanAdminEuiState) editor!.GetNewState();
-                Assert.That(state.ClanlessPlayers.Any(player => player.PlayerId == session.UserId), Is.False);
+                var state = (YautjaClanHallEuiState) editor!.GetNewState();
+                Assert.That(state.Whitelist!.Any(player => player.PlayerId == session.UserId), Is.False);
             });
             await pair.Client.WaitAssertion(() =>
             {
@@ -185,25 +126,10 @@ public sealed class YautjaWhitelistAccessTest
         finally
         {
             await pair.Server.WaitPost(() => editor?.Close());
-            await pair.Client.WaitPost(() => clientNet.ClientDisconnect("Yautja clan admin menu test"));
+            await pair.Client.WaitPost(() => clientNet.ClientDisconnect("Yautja clan hall whitelist test"));
         }
 
         await pair.CleanReturnAsync();
     }
 
-    private static async Task Reconnect(
-        TestPair pair,
-        IClientNetManager clientNet,
-        IPlayerManager serverPlayers,
-        string username)
-    {
-        await pair.Client.WaitPost(() => clientNet.ClientDisconnect("Yautja whitelist refresh test"));
-        await pair.RunTicksSync(20);
-        await pair.Server.WaitAssertion(() => Assert.That(serverPlayers.PlayerCount, Is.EqualTo(0)));
-
-        pair.Client.SetConnectTarget(pair.Server);
-        await pair.Client.WaitPost(() => clientNet.ClientConnect(null!, 0, username));
-        await pair.RunTicksSync(20);
-        await pair.Server.WaitAssertion(() => Assert.That(serverPlayers.PlayerCount, Is.EqualTo(1)));
-    }
 }

@@ -1,17 +1,17 @@
 - type: entity
   parent: CMBeakerLarge
   id: CMULargeBeakerCryoxadone
-  name: large beaker of cryoxadone
+  name: cmu-large-beaker-marine-cryoxadone
   suffix: CMU, Filled
   components:
   - type: Label
-    currentLabel: reagent-name-cryoxadone
+    currentLabel: reagent-name-cmcryoxadone
   - type: Solution
     id: beaker
     solution:
       maxVol: 120
       reagents:
-      - ReagentId: Cryoxadone
+      - ReagentId: CMCryoxadone
         Quantity: 120
 
 - type: entity

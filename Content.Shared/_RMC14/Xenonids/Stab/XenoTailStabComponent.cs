@@ -24,6 +24,9 @@ public sealed partial class XenoTailStabComponent : Component
     public DamageSpecifier TailDamage = new();
 
     [DataField, AutoNetworkedField]
+    public FixedPoint2 Bloodloss = FixedPoint2.Zero; // CMU14
+
+    [DataField, AutoNetworkedField]
     public SoundSpecifier SoundHit = new SoundCollectionSpecifier("XenoBite")
     {
         Params = AudioParams.Default.WithVariation(0.15f).WithVolume(-3),

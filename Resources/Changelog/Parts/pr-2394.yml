@@ -1,0 +1,10 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The hunting bracer window is redesigned with tabs, live states and a tracker
+    scope.
+  type: Tweak
+- message: The bracer gear tracker finds gear on other levels of the same area.
+  type: Fix
+time: '2026-10-31T14:45:31.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2394

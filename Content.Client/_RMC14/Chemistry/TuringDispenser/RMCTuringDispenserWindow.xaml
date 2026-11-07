@@ -1,0 +1,143 @@
+<controls:RMCTuringDispenserWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._RMC14.Chemistry.TuringDispenser"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:ui="clr-namespace:Content.Client.CMU14.UI"
+    Title="Turing Dispenser" MinSize="560 600">
+    <PanelContainer>
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat BackgroundColor="#252832" />
+        </PanelContainer.PanelOverride>
+        <TextureRect TexturePath="/Textures/CMU14/Interface/Backgrounds/bg-weyland.png"
+                     Stretch="KeepAspectCovered" CanShrink="True" MouseFilter="Ignore" />
+        <ScrollContainer HScrollEnabled="False" VScrollEnabled="True">
+            <BoxContainer Orientation="Horizontal" Margin="4">
+                <!-- Left column: controls -->
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 2 0">
+                    <PanelContainer Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="Turing Dispenser Controls" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="1">
+                                <ProgressBar Name="EnergyBar" Access="Public" HorizontalExpand="True" SetHeight="20">
+                                    <Label Name="EnergyLabel" Access="Public" Align="Right" Margin="0 0 4 0"
+                                           VerticalAlignment="Center" />
+                                </ProgressBar>
+                                <PanelContainer Name="StatusPanel" Access="Public" Margin="0 2 0 0">
+                                    <Label Name="StatusLabel" Access="Public" Margin="5 1" />
+                                </PanelContainer>
+                                <ui:CMUMachineButton Name="ClearMemoryButton" Access="Public" HorizontalExpand="True" Margin="0 2 0 0" />
+                                <ui:CMUMachineButton Name="RunProgramButton" Access="Public" HorizontalExpand="True" />
+                                <PanelContainer Name="BoxAlertPanel" Access="Public" Margin="0 3 0 0">
+                                    <Label Name="BoxStatusLabel" Access="Public" Margin="5 1" />
+                                </PanelContainer>
+                                <ui:CMUMachineButton Name="SaveToMemoryButton" Access="Public" HorizontalExpand="True" Margin="0 2 0 0" />
+                                <ui:CMUMachineButton Name="EjectBoxButton" Access="Public" HorizontalExpand="True" />
+                                <PanelContainer Name="BeakerAlertPanel" Access="Public" Margin="0 3 0 0">
+                                    <Label Name="BeakerStatusLabel" Access="Public" Margin="5 1" />
+                                </PanelContainer>
+                                <ui:CMUMachineButton Name="DisposeBeakerButton" Access="Public" HorizontalExpand="True" Margin="0 2 0 0" />
+                                <ui:CMUMachineButton Name="EjectBeakerButton" Access="Public" HorizontalExpand="True" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="Settings" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="1">
+                                <BoxContainer Orientation="Horizontal">
+                                    <Label Text="Program multiplier:" HorizontalExpand="True" FontColorOverride="#7D8EA6"
+                                           VerticalAlignment="Center" />
+                                    <Control Name="MultiplierContainer" Access="Public" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Horizontal">
+                                    <Label Text="Program cycles:" HorizontalExpand="True" FontColorOverride="#7D8EA6"
+                                           VerticalAlignment="Center" />
+                                    <Control Name="CyclesContainer" Access="Public" />
+                                </BoxContainer>
+                                <ui:CMUMachineButton Name="AutoRunButton" Access="Public" HorizontalExpand="True" Margin="0 3 0 0" />
+                                <ui:CMUMachineButton Name="SmartLinkButton" Access="Public" HorizontalExpand="True" />
+                                <ui:CMUMachineButton Name="OutputModeButton" Access="Public" HorizontalExpand="True" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <!-- Right column: programs -->
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="2 0 0 0">
+                    <PanelContainer Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="Memory Program" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="1">
+                                <PanelContainer Name="MemoryEmptyPanel" Access="Public">
+                                    <Label Name="MemoryEmptyLabel" Access="Public" Text="Nothing saved to memory!" Margin="5 1" />
+                                </PanelContainer>
+                                <BoxContainer Name="MemoryProgramContainer" Access="Public" Orientation="Vertical" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer Margin="0 0 0 4">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="Box Program" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Orientation="Vertical" Margin="6 4 6 5" SeparationOverride="1">
+                                <PanelContainer Name="BoxEmptyPanel" Access="Public">
+                                    <Label Name="BoxEmptyLabel" Access="Public" Text="No box loaded!" Margin="5 1" />
+                                </PanelContainer>
+                                <BoxContainer Name="BoxProgramContainer" Access="Public" Orientation="Vertical" />
+                            </BoxContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <PanelContainer>
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat BackgroundColor="#00000054" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical">
+                            <Label Text="Output Beaker" StyleClasses="LabelKeyText" FontColorOverride="#FFFFFF" Margin="6 3" />
+                            <PanelContainer MinHeight="2">
+                                <PanelContainer.PanelOverride>
+                                    <graphics:StyleBoxFlat BackgroundColor="#000000" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Name="BeakerSelectorContainer" Access="Public" Orientation="Vertical"
+                                          Margin="6 4 6 5" SeparationOverride="1" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </ScrollContainer>
+    </PanelContainer>
+</controls:RMCTuringDispenserWindow>

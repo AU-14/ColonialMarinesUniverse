@@ -21,6 +21,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Timing; // CMU14
 using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Cassette;
@@ -35,6 +36,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!; // CMU14
 
     public override void Initialize()
     {
@@ -193,7 +195,9 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             {
                 if (_net.IsServer)
                     _audio.SetState(ent.Comp.AudioStream, AudioState.Paused);
-                else if (tape is { Comp.Custom: true })
+                // CMU14: local playback is not rolled back with the player's predicted state.
+                // else if (tape is { Comp.Custom: true })
+                else if (_timing.IsFirstTimePredicted && tape is { Comp.Custom: true })
                     _audio.SetState(ent.Comp.CustomAudioStream, AudioState.Paused);
 
                 _popup.PopupEntity(Loc.GetString("rmc-cassette-pause", ("player", ent)), ent, args.Performer);
@@ -204,7 +208,9 @@ public abstract partial class SharedCassetteSystem : EntitySystem
             {
                 if (_net.IsServer)
                     _audio.SetState(ent.Comp.AudioStream, AudioState.Playing);
-                else if (tape is { Comp.Custom: true })
+                // CMU14: local playback is not rolled back with the player's predicted state.
+                // else if (tape is { Comp.Custom: true })
+                else if (_timing.IsFirstTimePredicted && tape is { Comp.Custom: true })
                     _audio.SetState(ent.Comp.CustomAudioStream, AudioState.Playing);
 
                 var msg = Loc.GetString("rmc-cassette-resume",
@@ -457,7 +463,10 @@ public abstract partial class SharedCassetteSystem : EntitySystem
     private void StopAllAudio(Entity<CassettePlayerComponent> ent)
     {
         ent.Comp.AudioStream = _audio.Stop(ent.Comp.AudioStream);
-        ent.Comp.CustomAudioStream = _audio.Stop(ent.Comp.CustomAudioStream);
+        // CMU14: Stop returns null during replay without stopping the sound. Keep its owner until we can stop it.
+        // ent.Comp.CustomAudioStream = _audio.Stop(ent.Comp.CustomAudioStream);
+        if (_timing.IsFirstTimePredicted)
+            ent.Comp.CustomAudioStream = _audio.Stop(ent.Comp.CustomAudioStream);
 
         ent.Comp.State = AudioState.Stopped;
         Dirty(ent);

@@ -302,3 +302,45 @@
     - id: CMUWeaponPistolM77Colony
     - id: CMUMagazinePistolM77Colony
       amount: 6
+
+# ---- Nailgun ----
+# The nails themselves are pricey, so the colony ASRS sells a version with cheap construction nails.
+# Priced so the colony crates can't be sold back for more than they cost (CMURequisitionsSellPriceTest).
+
+- type: entity
+  parent: RMCCartridge7x45mm
+  id: CMUCartridge7x45mmColony
+  name: construction nail (7x45mm)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: StaticPrice
+    price: 0.25
+
+- type: entity
+  parent: RMCMagazineSMGNailgun
+  id: CMUMagazineSMGNailgunColony
+  name: nailgun magazine (7x45mm)
+  suffix: Colony
+  description: "A large magazine of construction-grade nails, sold for colony use."
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMUCartridge7x45mmColony
+
+- type: entity
+  parent: WeaponNailgun
+  id: CMUWeaponNailgunColony
+  suffix: Colony, Filled
+  components:
+  - type: StaticPrice
+    price: 250
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMUMagazineSMGNailgunColony
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineSMGNailgun

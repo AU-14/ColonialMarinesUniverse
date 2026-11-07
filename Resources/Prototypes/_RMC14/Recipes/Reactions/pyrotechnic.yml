@@ -1,5 +1,6 @@
 - type: reaction
   id: RMCNapalm
+  conserveEnergy: false # CMU14 fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
   priority: 10
   reactants:
     Water:
@@ -36,6 +37,7 @@
 
 - type: reaction
   id: RMCCLF3
+  conserveEnergy: false # CMU14: losing units must not concentrate heat into the product (FLOW-01, GraphAudit-ProcgenIgnitionHeat)
   priority: 10
   reactants:
     Water:
@@ -68,6 +70,9 @@
 
 - type: reaction
   id: RMCNapalmHighCombustion
+  conserveEnergy: false # CMU14 fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1
@@ -78,6 +83,9 @@
 
 - type: reaction
   id: RMCNapalmSticky
+  conserveEnergy: false # CMU14 fuel synthesis must not self-heat past its 500 K ignition (fuel_ignition.yml)
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCNapalm:
       amount: 1
@@ -88,6 +96,7 @@
 
 - type: reaction
   id: RMCMethane
+  conserveEnergy: false # CMU14: losing units must not concentrate heat into the product (FLOW-01, GraphAudit-ProcgenIgnitionHeat)
   reactants:
     RMCHydrogen:
       amount: 4

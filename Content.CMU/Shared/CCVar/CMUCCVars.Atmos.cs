@@ -31,10 +31,11 @@ public sealed partial class CCVars
     /// <summary>
     /// Master switch for the day-night temperature driver
     /// (CMUDayNightAtmosphereComponent on the map entity). Maps without the
-    /// component are never affected.
+    /// component are never affected. Default off: the driver needs slow,
+    /// observed testing on a live server before it runs by default.
     /// </summary>
     public static readonly CVarDef<bool> CMUDayNightAtmosTemp =
-        CVarDef.Create("cmu.atmos.day_night_temp", true, CVar.SERVERONLY);
+        CVarDef.Create("cmu.atmos.day_night_temp", false, CVar.SERVERONLY);
 
     /// <summary>
     /// Client preference: show temperatures in Fahrenheit instead of Celsius.

@@ -207,6 +207,19 @@ public sealed partial class CMUExpeditionAgentSystem
     private SquadPlan? PlanFor(CMUExpeditionAgentComponent agent) =>
         agent.SquadRoot is { } root && _squadPlans.TryGetValue(root, out var plan) ? plan : null;
 
+    private void RemoveFromSquadPlan(Entity<CMUExpeditionAgentComponent> ent)
+    {
+        if (PlanFor(ent.Comp) is not { } plan)
+            return;
+
+        // Other members continue using the cached plan until its next one-second refresh.
+        plan.Members.Remove(ent.Owner);
+        if (plan.Leader == ent.Owner)
+            plan.Leader = null;
+        if (plan.Runner == ent.Owner)
+            plan.Runner = null;
+    }
+
     private bool FollowSquadDuty(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
         if (agent.HoldPosition || agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null || agent.FlareItem != null ||

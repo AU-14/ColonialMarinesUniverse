@@ -594,8 +594,12 @@ public sealed partial class XenoTunnelSystem : EntitySystem
     private bool CanTravelBetween(EntityUid source, EntityUid destination)
     {
         // Floors in one battlefield share tunnels; unrelated maps still cannot be reached.
-        return Transform(destination).MapUid is { } map &&
-            _zLevels.IsSameZNetwork(Transform(source).MapUid, map) &&
+        return !TerminatingOrDeleted(source) &&
+            !TerminatingOrDeleted(destination) &&
+            TryComp(source, out TransformComponent? sourceTransform) &&
+            TryComp(destination, out TransformComponent? destinationTransform) &&
+            destinationTransform.MapUid is { } map &&
+            _zLevels.IsSameZNetwork(sourceTransform.MapUid, map) &&
             _hive.FromSameHive(source, destination);
     }
 
@@ -628,6 +632,11 @@ public sealed partial class XenoTunnelSystem : EntitySystem
 
     private void GetAllAvailableTunnels(Entity<XenoTunnelComponent> destinationXenoTunnel, ref OpenBoundInterfaceMessage args)
     {
+        // CMU14: distant hive entries may be unresolved on clients. Only the server can build the
+        // complete destination list; predicting it would also overwrite the authoritative UI state.
+        if (_net.IsClient || !Equals(args.UiKey, SelectDestinationTunnelUI.Key))
+            return;
+
         var hive = _hive.GetHive(destinationXenoTunnel.Owner);
         if (!TryComp(hive, out HiveComponent? hiveComp))
             return;

@@ -12,7 +12,7 @@
     position: Stand
     buckleSound: /Audio/_RMC14/Weapons/Guns/Reload/hpr_reload.ogg
     unbuckleSound: /Audio/_RMC14/Weapons/Guns/Reload/hpr_unload.ogg
-    buckledAlertType: null
+    buckledAlertType: Buckled # CMU14: allow dismounting through the standard buckle alert.
     buckleOffset: "0,0.5"
   - type: WeaponMount
   - type: Fixtures
@@ -94,40 +94,40 @@
   suffix: Dropship
   categories: [ HideSpawnMenu ]
   components:
+  - type: Sprite # CMU14: fixed pivot and independently aimed gun layers
+    sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M56D/pivot.rsi
+    noRot: true
+    granularLayersRendering: true
+    layers:
+    - state: mount
+      renderingStrategy: NoRotation
+    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M56D/gun.rsi
+      state: gun
+      renderingStrategy: NoRotation
+      rotation: 0
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M56D/gun.rsi
+      state: ammo
+      renderingStrategy: NoRotation
+      rotation: 0
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+    - sprite: CMU14/Objects/Weapons/Guns/DoorGuns/M56D/gun.rsi
+      state: heat
+      renderingStrategy: NoRotation
+      rotation: 0
+      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
+      visible: false
+  - type: CMUDoorGunVisual # CMU14: shared cursor-driven door-gun visuals
+  - type: Transform # CMU14: an outboard door gun must remain attached beyond the hull tiles
+    gridTraversal: false
   - type: Fixtures # CMU14
     fixtures: {}
   - type: Physics # CMU14: empty fixtures make init disable collision; declared so saves match
     canCollide: false
   - type: WeaponMount
-    occupiedDrawDepth: Overdoors
-    emptyDrawDepth: Overdoors
-
-- type: entity
-  parent: RMCML66DNestDropship
-  id: CMUM2CDoorGunDropship
-  name: M2C heavy machine gun
-  suffix: Dropship
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    sprite: CMU14/Objects/Weapons/Guns/HMGs/m2c.rsi # cmu edit: was _RMC14/Objects/Weapons/Guns/HMGs/m2c.rsi
-    layers:
-    - state: m2c
-      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
-      visible: false
-    - state: m2c_magazine
-      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
-      visible: false
-    - state: m2c_overheat
-      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
-      visible: false
-  - type: WeaponMount
-    fixedWeaponPrototype: CMUMachineGunM2CDropshipLoaded
-    isWeaponSecured: true
-    isWeaponLocked: true
-    canRotateWithoutTool: true
-    mountExclusionAreaSize: 0
-    barricadeExclusionAreaSize: 0
+    fixedWeaponPrototype: CMUMachineGunM56DDropshipLoaded # CMU14: door-gun-specific firing interlock.
     occupiedDrawDepth: Overdoors
     emptyDrawDepth: Overdoors
 
@@ -302,7 +302,9 @@
     canRotateWithoutTool: true
     mountOnDeploy: false
     mountExclusionAreaSize: 0
-    barricadeExclusionAreaSize: 2
+    # CMU14: allow emplacements beside barricades.
+    # barricadeExclusionAreaSize: 2
+    barricadeExclusionAreaSize: 0
     assembleDelay: 3
     undeploySound: null
     acidableWhileUndeployed: true

@@ -45,11 +45,11 @@ public sealed partial class YautjaBracerAttachmentSystem : EntitySystem
         return false;
     }
 
+    // no Shield here, the cmss13 bracer shield is a riot shield subtype and never counted for the paired speed
     private static bool IsBracerAttachment(YautjaGearKind kind)
     {
         return kind is YautjaGearKind.WristBlades
             or YautjaGearKind.Scimitar
-            or YautjaGearKind.Shield
             or YautjaGearKind.ChainGauntlet;
     }
 }

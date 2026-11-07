@@ -1,0 +1,11 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Radio direction finding no longer marks anyone on the tactical map. Talking
+    on the radio doesn't reveal you on its own anymore
+  type: Tweak
+- message: A fixed enemy net only gives a rough compass bearing in chat, from manpacks
+    only, at most every 30 seconds. BURST traffic gives no bearing
+  type: Tweak
+time: '2026-10-23T20:16:34.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2267

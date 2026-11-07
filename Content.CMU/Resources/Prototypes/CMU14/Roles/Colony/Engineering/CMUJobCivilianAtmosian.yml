@@ -65,8 +65,8 @@
     - CMSheetMetal50
     - SprayPainter # TODO: add more styles (currently CMU canisters)
     - SprayPainterAmmo
-    - RMCCableCoil
-    - RMCCableCoil
+    - CMUCableThinLVStack
+    - CMUCableThinLVStack
     - CMAPCElectronics
     - ClothingOuterVestTank
     - CMUFireHelmet

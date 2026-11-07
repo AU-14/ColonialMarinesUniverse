@@ -6,6 +6,7 @@
   parent: VehicleAPCBase
   id: CMUVehicleAPCWolfpack
   components:
+  - type: CMUVehiclePermanentWreck
   - type: HardpointState
   - type: ContainerContainer
     containers:

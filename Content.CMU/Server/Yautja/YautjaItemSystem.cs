@@ -1224,7 +1224,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
         if (!_actionBlocker.CanConsciouslyPerformAction(user))
             return;
 
-        if (!HasComp<HumanoidProfileComponent>(user) || !CanUseYautjaTech(user))
+        if (!HasComp<HumanoidProfileComponent>(user))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-falcon-drone-denied"), user, user, PopupType.SmallCaution);
             return;
@@ -1266,13 +1266,16 @@ public sealed partial class YautjaItemSystem : EntitySystem
         _actions.AddAction(user, ref controller.RecallAction, controller.RecallActionId);
 
         _transform.AttachToGridOrMap(deployed);
+        EntityManager.System<CMUYautjaEffectsSystem>().Motion(deployed, CMUYautjaEffect.FalconDeploy,
+            CMUYautjaPresentation.FalconDuration, user);
         EnsureComp<InputMoverComponent>(deployed);
         _mover.SetRelay(user, deployed);
         var interactionRelay = EnsureComp<InteractionRelayComponent>(user);
         _interaction.SetRelay(user, deployed, interactionRelay);
         if (eye != null && TryComp(user, out ActorComponent? actor) && actor.PlayerSession != null)
             _eye.SetTarget(user, deployed, eye);
-        _audio.PlayPvs(drone.Comp.DeploySound, deployed);
+        // cmss13 deploys the falcon silently, so only the pilot hears it go up
+        _audio.PlayEntity(drone.Comp.DeploySound, user, deployed);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-falcon-drone-deployed"), user, user);
     }
 
@@ -1301,6 +1304,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
             return;
 
         args.Handled = true;
+        EntityManager.System<CMUYautjaEffectsSystem>().Recall(CMUYautjaEffect.FalconRecall, ent.Comp.Drone, ent);
         CleanupFalconController(ent.Owner, ent.Comp, deleteDrone: true, restoreEye: true);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-falcon-drone-recalled"), args.Performer, args.Performer);
     }

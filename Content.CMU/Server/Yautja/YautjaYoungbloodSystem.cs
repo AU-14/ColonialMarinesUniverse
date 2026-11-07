@@ -211,10 +211,8 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         if (_prototype.TryIndex<JobPrototype>(YoungbloodJob, out var job))
             _stationSpawning.EquipStartingGear(ent.Owner, job.StartingGear, raiseEvent: false);
 
-        var mask = Spawn("CMUYautjaMask", Transform(ent).Coordinates);
-        if (!_inventory.TryEquip(ent.Owner, mask, "mask", silent: true, force: true))
-            QueueDel(mask);
-
+        // CMU14: youngbloods are unblooded and wear no clan mask, so none is spawned here. A mask equipped later must
+        // come from the player, not from spawn initialisation.
         var yautja = EnsureComp<YautjaComponent>(ent.Owner);
         yautja.ClanRank = YautjaRank.YoungBlood;
         Dirty(ent.Owner, yautja);

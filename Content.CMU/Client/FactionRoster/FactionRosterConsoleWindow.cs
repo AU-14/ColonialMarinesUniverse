@@ -28,6 +28,7 @@ public sealed class FactionRosterConsoleWindow : DefaultWindow
     private List<FactionRosterEntry> _entries = new();
 
     public event Action? OnRefresh;
+    public event Action<string>? OnPrint;
 
     public FactionRosterConsoleWindow()
     {
@@ -186,7 +187,7 @@ public sealed class FactionRosterConsoleWindow : DefaultWindow
 
     private void OpenEntry(FactionRosterEntry entry)
     {
-        var window = new FactionRosterEntryWindow(entry);
+        var window = new FactionRosterEntryWindow(entry, () => OnPrint?.Invoke(entry.Name));
         _openEntryWindows.Add(window);
         window.OnClose += () => _openEntryWindows.Remove(window);
         window.OpenCentered();
@@ -250,7 +251,7 @@ internal static class RosterUi
     /// <summary>The screen again, through the tube. Reading surface, so no roll bar or grain.</summary>
     public static Control Tube(PanelContainer screen)
     {
-        var tube = new Control { HorizontalExpand = true, VerticalExpand = true };
+        var tube = new CrtScreenContainer { HorizontalExpand = true, VerticalExpand = true };
         tube.AddChild(screen);
         tube.AddChild(new CrtScreenControl
         {

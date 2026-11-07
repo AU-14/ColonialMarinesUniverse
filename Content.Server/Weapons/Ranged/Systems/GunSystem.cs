@@ -84,6 +84,15 @@ public sealed partial class GunSystem : SharedGunSystem
             ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
             : new EntityCoordinates(_map.GetMapOrInvalid(fromMap.MapId), fromMap.Position);
 
+        // CMU14 Begin: a map removed during firing cannot host a projectile.
+        if (!fromEnt.EntityId.Valid)
+        {
+            Log.Warning($"Tried to fire gun {ToPrettyString(gun)} at entity coordinates with an invalid EntityUid.");
+            userImpulse = false;
+            return null;
+        }
+        // CMU14 End
+
         toMap = fromMap.Position + angle.ToVec() * mapDirection.Length();
         mapDirection = toMap - fromMap.Position;
         var gunVelocity = Physics.GetMapLinearVelocity(fromEnt);
@@ -111,6 +120,7 @@ public sealed partial class GunSystem : SharedGunSystem
                         RaiseLocalEvent(cartridgeUid, new AmmoShotEvent
                         {
                             FiredProjectiles = shotProjectiles,
+                            TargetCoordinates = toCoordinates, // CMU14
                         });
 
                         SetCartridgeSpent(cartridgeUid, cartridge, true);
@@ -170,6 +180,7 @@ public sealed partial class GunSystem : SharedGunSystem
         RaiseLocalEvent(gun, new AmmoShotEvent
         {
             FiredProjectiles = shotProjectiles,
+            TargetCoordinates = toCoordinates, // CMU14
         });
 
         Logs.Add(
@@ -327,7 +338,9 @@ public sealed partial class GunSystem : SharedGunSystem
                 rangedSound.SoundTypes?.TryGetValue(type, out var damageSoundType) == true)
             {
                 var soundParams = damageSoundType?.Params ?? AudioParams.Default;
-                Audio.PlayPvs(
+                // CMU14: audience and budget admission before creating impact audio.
+                // Audio.PlayPvs(
+                PlayCMUTransientSound(
                     damageSoundType,
                     otherEntity,
                     soundParams.WithVariation(DamagePitchVariation));
@@ -337,7 +350,9 @@ public sealed partial class GunSystem : SharedGunSystem
                      rangedSound.SoundGroups?.TryGetValue(type, out var damageSoundGroup) == true)
             {
                 var soundParams = damageSoundGroup?.Params ?? AudioParams.Default;
-                Audio.PlayPvs(
+                // CMU14
+                // Audio.PlayPvs(
+                PlayCMUTransientSound(
                     damageSoundGroup,
                     otherEntity,
                     soundParams.WithVariation(DamagePitchVariation));
@@ -346,6 +361,7 @@ public sealed partial class GunSystem : SharedGunSystem
         }
 
         if (!playedSound && weaponSound != null)
-            Audio.PlayPvs(weaponSound, otherEntity);
+            // CMU14: Audio.PlayPvs(weaponSound, otherEntity);
+            PlayCMUTransientSound(weaponSound, otherEntity);
     }
 }

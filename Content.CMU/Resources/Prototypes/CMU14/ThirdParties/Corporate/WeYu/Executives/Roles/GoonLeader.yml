@@ -73,7 +73,7 @@
     ears: RMCHeadsetDistressGoonLeader
     jumpsuit: RMCJumpsuitVeteranPMCCorporateLead
     outerClothing: CMArmorM4PMCCorporateLead
-    gloves: RMCHandsVeteranPMC
+    gloves: CMUHandsVeteranPMC
     head: ArmorHelmetPMCCorporateLead
     shoes: RMCBootsPMCFilled
     back: RMCSatchelLightpack

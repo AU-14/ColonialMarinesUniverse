@@ -82,7 +82,7 @@
   mapName: Fiorina Prison
   mapPath: /Maps/CMU14/Planets/Fiorina/fiorina.yml
   minPlayers: 0
-  maxPlayers: 200
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:

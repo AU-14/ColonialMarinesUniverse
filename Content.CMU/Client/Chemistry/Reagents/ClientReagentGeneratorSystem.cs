@@ -34,26 +34,53 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
     private void OnRecieveData(SendReagentDataEvent args)
     {
         _sawmill.Info("Recieved reagent data from server.");
+        // ARCH-02: a nested contract's recipe names another generated chemical, and CreateRecipe indexes every
+        // reactant. Load in dependency order: each pass loads the entries whose reactants are all loaded,
+        // until a pass makes no progress.
+        var pending = new List<GeneratedReagentData>();
         foreach (var reagent in args.Reagents)
         {
             if (!_generatedReagents.Contains(reagent.Key))
+                pending.Add(reagent.Value);
+        }
+        var progress = true;
+        while (pending.Count > 0 && progress)
+        {
+            progress = false;
+            var deferred = new List<GeneratedReagentData>();
+            foreach (var data in pending)
             {
-                CreateReagent(reagent.Value);
-                _generatedReagents.Add(reagent.Key);
-                _generatedRecipes.Add(reagent.Key);
+                if (!ReactantsLoaded(data))
+                {
+                    deferred.Add(data);
+                    continue;
+                }
+                CreateReagent(data);
+                _generatedReagents.Add(data.ID);
+                _generatedRecipes.Add(data.ID);
+                progress = true;
             }
+            pending = deferred;
+        }
+        foreach (var data in pending)
+        {
+            _sawmill.Error($"Could not load generated reagent {data.ID}: its recipe needs a reagent that does not exist.");
         }
         //another foreach because the client lowkey deserves it
-        foreach (var generatedReagent in _generatedReagents)
+        // Copy: entries are removed while walking the set.
+        foreach (var generatedReagent in new List<string>(_generatedReagents))
         {
             if (!args.Reagents.ContainsKey(generatedReagent))
             {
-                if (_generatedRecipes.Contains(generatedReagent))
+                // The ignition and uranium-alternative reactions belong to the reagent and go with it.
+                foreach (var recipe in new[] { generatedReagent, IgnitionRecipeId(generatedReagent), $"CMUGeneratedUraniumAlternative{generatedReagent}" })
                 {
+                    if (!_generatedRecipes.Contains(recipe) || !RecipeYamls.TryGetValue(recipe, out var recipeYaml))
+                        continue;
                     //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
-                    //_protoMan.TryDelete<ReactionPrototype>(generatedReagent);
-                    _protoMan.RemoveString(RecipeYamls[generatedReagent]);
-                    _generatedRecipes.Remove(generatedReagent);
+                    //_protoMan.TryDelete<ReactionPrototype>(recipe);
+                    _protoMan.RemoveString(recipeYaml);
+                    _generatedRecipes.Remove(recipe);
                 }
                 //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
                 //_protoMan.TryDelete<ReagentPrototype>(generatedReagent);
@@ -68,6 +95,18 @@ public sealed partial class ClientReagentGeneratorSystem : SharedReagentGenerato
         _unfoldedConflicts = args.Conflicts;
         _unfoldedCombinations = args.Combinations;
     }
+    private bool ReactantsLoaded(GeneratedReagentData data)
+    {
+        // Re-fetched per check: the instance dictionary is a snapshot replaced by every load.
+        var reagents = _protoMan.GetInstances<ReagentPrototype>();
+        foreach (var reactant in data.Recipe.Keys)
+        {
+            if (!reagents.ContainsKey(reactant))
+                return false;
+        }
+        return true;
+    }
+
     private void OnPropertySync(SyncKnownPropertiesEvent args)
     {
         KnownProperties.Clear();

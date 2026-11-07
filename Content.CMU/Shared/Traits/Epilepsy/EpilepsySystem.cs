@@ -4,6 +4,7 @@ using Content.Shared.Flash;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Jittering;
 using Content.Shared.Popups;
+using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -25,6 +26,7 @@ public sealed partial class EpilepsySystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     public override void Initialize()
     {
@@ -62,8 +64,13 @@ public sealed partial class EpilepsySystem : EntitySystem
     /// </summary>
     public bool TryFlashSeizure(Entity<EpilepsyComponent?> ent, float chance = FlashSeizureChance)
     {
-        if (_net.IsClient || !Resolve(ent, ref ent.Comp, false) || _timing.CurTime < ent.Comp.SeizingUntil)
+        if (_net.IsClient ||
+            !Resolve(ent, ref ent.Comp, false) ||
+            _timing.CurTime < ent.Comp.SeizingUntil ||
+            _timing.CurTime < ent.Comp.SuppressedUntil)
+        {
             return false;
+        }
 
         if (!_random.Prob(chance))
             return false;
@@ -91,8 +98,34 @@ public sealed partial class EpilepsySystem : EntitySystem
             if (time < comp.NextSeizure)
                 continue;
 
+            // Medicated: the seizure that was due is skipped and the clock starts over.
+            if (time < comp.SuppressedUntil)
+            {
+                ScheduleNext((uid, comp));
+                continue;
+            }
+
             Seize((uid, comp));
         }
+    }
+
+    /// <summary>
+    ///     Cuts a seizure short: the convulsions, the collapse and the darkness all end now.
+    /// </summary>
+    public bool TryEndSeizure(Entity<EpilepsyComponent> ent)
+    {
+        var time = _timing.CurTime;
+        if (time >= ent.Comp.SeizingUntil)
+            return false;
+
+        ent.Comp.SeizingUntil = time;
+        Dirty(ent);
+
+        _stun.TryClearStunAndKnockdown(ent);
+        _statusEffects.TryRemoveStatusEffect(ent, "Jitter");
+        RemCompDeferred<ScreechBlindComponent>(ent);
+        _popup.PopupEntity(Loc.GetString("au14-epilepsy-seizure-ends"), ent, ent, PopupType.Medium);
+        return true;
     }
 
     private void Seize(Entity<EpilepsyComponent> ent)

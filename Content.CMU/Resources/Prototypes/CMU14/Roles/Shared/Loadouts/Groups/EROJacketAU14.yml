@@ -1,4 +1,5 @@
 - type: loadoutGroup
+  parent: CivJacketAU14
   id: EROJacketAU14
   name: au14-loadout-group-civilian-jacket
   minLimit: 1

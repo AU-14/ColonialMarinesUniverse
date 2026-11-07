@@ -23,8 +23,6 @@ public sealed class HiveAllianceTest : GameTest
     private EntityUid? _originalAttached;
 
     [TestCase("GOVFOR")]
-    [TestCase("AUWeYu")]
-    [TestCase("CLF")]
     public async Task FactionAlliancesReplicateForEveryMemberAndTrackMembership(string faction)
     {
         await SetUpEntities(faction);

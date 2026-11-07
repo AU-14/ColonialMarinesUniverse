@@ -127,6 +127,11 @@
   description: A very-heavy combination crowbar, wrench, screwdriver, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. Incredibly hefty, though.
   suffix: CMU, Synth
   components:
+  - type: Tag
+    tags:
+    - Wrench
+    - Crowbar
+    - MaintenanceJack
   - type: RMCSynthItemRestriction
   - type: WhitelistPickupBy
     whitelist:

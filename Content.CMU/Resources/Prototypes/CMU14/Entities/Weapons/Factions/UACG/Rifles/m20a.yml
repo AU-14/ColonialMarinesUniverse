@@ -5,6 +5,7 @@
   description: More commonly known as the Harrington Rifle, a past designation of the USCMC and the phased out predecessor of the M41A Pulse Rifle. More commonly seen in the hands of territorial guard or in colony armories for emergencies.
   suffix: Filled
   components:
+  - type: CMUAmmoCounter
   - type: Sprite
     sprite: CMU14/Weapons/Guns/UACG/m20a38x32.rsi
     layers:

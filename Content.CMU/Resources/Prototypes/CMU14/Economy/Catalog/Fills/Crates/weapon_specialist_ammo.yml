@@ -1,5 +1,35 @@
 - type: entity
   parent: RMCCrateAmmo
+  id: CMUCrateMagazineSVAROG
+  name: SVAROG Magazine (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMcMagazineSniperRifleSVAROG
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateMagazineSVAROGIncen
+  name: SVAROG Magazine Incendiary (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMcMagazineSniperRifleSVAROGIncendiary
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateMagazineSVAROGFlak
+  name: SVAROG Magazine Flak (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMcMagazineSniperRifleSVAROGFlak
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
   id: AU14CrateMagazineL64A3
   name: L64A3 DMR Squash-Head Magazine Crate (x5)
   components:

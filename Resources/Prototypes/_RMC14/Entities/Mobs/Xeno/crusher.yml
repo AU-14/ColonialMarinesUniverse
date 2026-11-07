@@ -11,6 +11,11 @@
   name: Crusher
   description: A huge alien with an enormous armored crest.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleCrusher
@@ -50,6 +55,9 @@
   - type: XenoDevour
   - type: XenoStomp
     directional: true
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 1
     directionalRange: 4
     directionalAngle: 90
     paralyzeTime: 1
@@ -110,6 +118,9 @@
         Piercing: 16
   - type: XenoMeleeSlow
     slowTime: 2
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 3.5
   - type: Tackle
     chance: 0.25
   - type: MovementSpeedModifier
@@ -178,6 +189,9 @@
     heal: 120
   - type: CrusherShield
   - type: XenoCharge
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      effect: 3.5
     chargeWindupSound:
       path: /Audio/_RMC14/Xeno/crusher_windup_sound.ogg
     damage:
@@ -243,8 +257,20 @@
     hasAltFling: true
     paralyzeTime: 1
     slowTime: 8
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow:
+      ticks: 8
+  # CMU14 charger has its own cmss13 delegate, its slashes don't slow preds
+  - type: XenoMeleeSlow
+    slowTime: 2
+    yautjaSlow: {}
   - type: XenoStomp
     directional: false
+    # CMU14 cmss13 pred slow timing
+    yautjaSlow: {}
+    yautjaSlowUnder:
+      super: true
+      effect: 1
     plasmaCost: 25
     knocksBack: true
     knockbackPower: 2

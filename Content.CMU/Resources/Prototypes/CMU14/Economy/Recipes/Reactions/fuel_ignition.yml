@@ -1,0 +1,150 @@
+# CMU14 FLOW-22: stock flamer fuels ignite when heated, like generated fuels' {ID}Ignition reactions.
+# The fire is the Container fire spec of the whole reacting solution (CMUSolutionTileFire adds the burnt fuel back),
+# a circle of sqrt(units) radius: the same intensity and duration the fuel has in a non-specialist flamer.
+# minTemp 500 K is far above room temperature and above every hand-authored synthesis that makes these fuels.
+# Priority -2 sits below hand-authored (>= 0) and generated (-1) reactions, so a heated mixing or synthesis
+# reaction always takes its reactants first. conserveEnergy: false keeps burning from heating what is left.
+# RMCCLF3 and RMCMethane are not fuels on their own (negative duration/intensity) and get no reaction.
+
+- type: reaction
+  id: RMCNapalmIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalm:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalm
+
+- type: reaction
+  id: RMCNapalmStickyIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmSticky:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmSticky
+
+- type: reaction
+  id: RMCNapalmHighCombustionIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmHighCombustion:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmHighCombustion
+
+- type: reaction
+  id: RMCNapalmUTIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmUT:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmUT
+
+- type: reaction
+  id: RMCNapalmUTTankIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmUTTank:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmUTTank
+
+- type: reaction
+  id: RMCBGelIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCBGel:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCBGel
+
+- type: reaction
+  id: RMCNapalmXIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmX:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmX
+
+- type: reaction
+  id: RMCNapalmBIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmB:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmB
+
+- type: reaction
+  id: RMCNapalmEIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmE:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmE
+
+- type: reaction
+  id: RMCNapalmEXIgnition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCNapalmEX:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCNapalmEX
+
+- type: reaction
+  id: RMCR189Ignition
+  priority: -2
+  minTemp: 500
+  conserveEnergy: false
+  impact: High
+  reactants:
+    RMCR189:
+      amount: 1
+  effects:
+  - !type:CMUSolutionTileFire
+    reagent: RMCR189

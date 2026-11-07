@@ -29,9 +29,13 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
     public const float PartialSignalRange = 45f;
 
     private const float StationaryVelocityThresholdSquared = 0.01f;
+    private readonly Dictionary<ProtoId<RadioChannelPrototype>, HashSet<EntityUid>> _channelAnchors = new();
+    private readonly Dictionary<EntityUid, HashSet<ProtoId<RadioChannelPrototype>>> _anchorChannels = new();
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<ANPRCRelayAnchorComponent, ComponentStartup>(OnAnchorStartup);
+        SubscribeLocalEvent<ANPRCRelayAnchorComponent, ComponentShutdown>(OnAnchorShutdown);
         SubscribeLocalEvent<RadioSendAttemptEvent>(
             OnSendAttempt,
             after: [typeof(RMCTelephoneSystem), typeof(JammerSystem)]);
@@ -39,6 +43,38 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
         SubscribeLocalEvent<RadioReceiveAttemptEvent>(
             OnReceiveAttempt,
             after: [typeof(RMCTelephoneSystem), typeof(JammerSystem)]);
+    }
+
+    private void OnAnchorStartup(Entity<ANPRCRelayAnchorComponent> ent, ref ComponentStartup args) => RefreshAnchorChannels(ent);
+
+    private void OnAnchorShutdown(Entity<ANPRCRelayAnchorComponent> ent, ref ComponentShutdown args) => RemoveAnchorChannels(ent);
+
+    private void RemoveAnchorChannels(EntityUid uid)
+    {
+        if (!_anchorChannels.Remove(uid, out var channels))
+            return;
+        foreach (var channel in channels)
+        {
+            var anchors = _channelAnchors[channel];
+            anchors.Remove(uid);
+            if (anchors.Count == 0)
+                _channelAnchors.Remove(channel);
+        }
+    }
+
+    /// <summary>Publish channel changes after configuring a pack, keying a mast, or changing a tap.</summary>
+    public void RefreshAnchorChannels(Entity<ANPRCRelayAnchorComponent> ent)
+    {
+        RemoveAnchorChannels(ent);
+        if (ent.Comp.LifeStage >= ComponentLifeStage.Stopping || TerminatingOrDeleted(ent))
+            return;
+        _anchorChannels[ent] = new(ent.Comp.Channels);
+        foreach (var channel in ent.Comp.Channels)
+        {
+            if (!_channelAnchors.TryGetValue(channel, out var anchors))
+                _channelAnchors[channel] = anchors = new();
+            anchors.Add(ent);
+        }
     }
 
     private void OnSendAttempt(ref RadioSendAttemptEvent args)
@@ -201,10 +237,15 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
 
         var bestTier = ANPRCRangeTier.OutOfRange;
         var bestQuality = 0f;
-        var query = EntityQueryEnumerator<ANPRCRelayAnchorComponent, TransformComponent>();
-
-        while (query.MoveNext(out var anchorUid, out var anchor, out var anchorXform))
+        quality = 0f;
+        if (!_channelAnchors.TryGetValue(channel, out var candidates))
+            return bestTier;
+        foreach (var anchorUid in candidates)
         {
+            // Membership is indexed, but position, power, range and topology remain live.
+            if (!TryComp(anchorUid, out ANPRCRelayAnchorComponent? anchor) ||
+                !TryComp(anchorUid, out TransformComponent? anchorXform))
+                continue;
             if (!InVerticalReach(anchorXform.MapID, entityMap, anchor.LevelReach))
                 continue;
 

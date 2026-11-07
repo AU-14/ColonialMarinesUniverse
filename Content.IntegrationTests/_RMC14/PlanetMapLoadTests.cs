@@ -64,7 +64,7 @@ public sealed class PlanetMapLoadTests
                 Assert.That(server.EntMan.Count<RMCPlanetComponent>(), Is.EqualTo(1));
             });
 
-            await pair.WaitCommand("golobby");
+            await pair.WaitCommand("golobby confirm"); // CMU14: golobby requires confirm now
             await PoolManager.WaitUntil(server, () => ticker.RunLevel == GameRunLevel.PreRoundLobby);
         }
 

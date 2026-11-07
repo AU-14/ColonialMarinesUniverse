@@ -47,6 +47,7 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
     private TimeSpan _lastReport;
     private TimeSpan _nextInventory;
     private long _excludeThroughFrame;
+    private long _lastWallFrame;
     private double _spikeMs;
     private double _wallTotal;
     private double _wallMax;
@@ -57,6 +58,17 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
     private int _sessionFrames;
     private int _sessionSpikes;
     private double _sessionWorstMs;
+    private int _rawWallCount;
+    private int _rawSpikes;
+    private int _rawExcludedFrames;
+    private int _rawUnfocusedFrames;
+    private double _rawWallTotal;
+    private double _rawWallMax;
+    private long _rawWallMaxFrame;
+    private bool _rawWallMaxExcluded;
+    private int _sessionRawFrames;
+    private int _sessionRawSpikes;
+    private double _sessionRawWorstMs;
     private double _readerMs;
     private double _readerMaxMs;
     private long _readerBytes;
@@ -123,6 +135,9 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
             _spikeMs = spikeMs;
             _sessionFrames = _sessionSpikes = 0;
             _sessionWorstMs = 0;
+            _sessionRawFrames = _sessionRawSpikes = 0;
+            _sessionRawWorstMs = 0;
+            _lastWallFrame = (long) _timing.CurFrame - 1;
             _inventoryBaseline = null;
             ResetWindow();
             _lastNetwork = _network.Statistics;
@@ -138,7 +153,7 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
             text.AppendLine("When allocationRatePartial=True, bytesPerSecond is a lower bound from retained frames; missing frames must not be interpreted as zero allocation.");
             text.AppendLine("Frame work excludes the engine sleep/FPS limiter but may include GPU/driver waits. Wall frame time includes waiting. GC counters are collection counts, not GC pause durations.");
             text.AppendLine("GPU utilization/VRAM, process heap/RSS, background-thread allocations and call stacks are unavailable through this content capture. It identifies instrumented scopes, not individual methods inside them.");
-            text.AppendLine("Reports every 5s; inventory every 15s. Worst work and allocation frames are preserved per window. Report/start/stop frames are excluded; per-frame reader overhead is reported separately. Profiling itself still has overhead.");
+            text.AppendLine("Reports every 5s; inventory every 15s. Worst work and allocation frames are preserved per window. wall/profile exclude diagnostic frames; raw-wall retains all observed completed intervals, including diagnostics. Per-frame reader overhead is reported separately. Profiling itself still has overhead.");
             text.AppendLine($"limits: eventsPerFrame={CMUClientProfileReader.MaxEventsPerFrame} scopePaths={CMUClientProfileReader.MaxScopes} wallSamples=4096 profileLogEntries={_profiler.Buffer.LogBuffer.Length}; data loss/truncation is reported explicitly.");
             AppendSettings(text);
             AppendContext(text, "start");
@@ -169,7 +184,7 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         try
         {
             CaptureReport(reason, inventory: true);
-            Write($"capture-end reason={reason} elapsedSeconds={F((_timing.RealTime - _started).TotalSeconds)} measuredFrames={_sessionFrames} spikes={_sessionSpikes} worstWallMs={F(_sessionWorstMs)}");
+            Write($"capture-end reason={reason} elapsedSeconds={F((_timing.RealTime - _started).TotalSeconds)} measuredFrames={_sessionFrames} spikes={_sessionSpikes} worstWallMs={F(_sessionWorstMs)} rawFrames={_sessionRawFrames} rawSpikes={_sessionRawSpikes} rawWorstWallMs={F(_sessionRawWorstMs)}");
         }
         finally
         {
@@ -204,6 +219,7 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
             var worst = _reader.WorstWork;
             var completedFrame = (long) _timing.CurFrame - 1;
             var wallMs = _timing.RealFrameTime.TotalMilliseconds;
+            var newWallFrame = completedFrame > _lastWallFrame;
             _reader.Read(_profiler, _excludeThroughFrame,
                 completedFrame > _excludeThroughFrame && wallMs > _wallMax ? completedFrame : -1);
             if (_reader.WorstWork != worst)
@@ -217,7 +233,28 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
             _readerBytes += probe.ElapsedAlloc;
 
             // CurFrame increments in Render, after FrameUpdate. RealFrameTime belongs to the previous loop.
-            if (completedFrame > _excludeThroughFrame)
+            // Keep excluded intervals too: a short report can share its frame with an unrelated long stall.
+            if (newWallFrame)
+            {
+                _lastWallFrame = completedFrame;
+                var excluded = completedFrame <= _excludeThroughFrame;
+                _rawWallCount++;
+                _rawWallTotal += wallMs;
+                if (wallMs > _rawWallMax)
+                {
+                    _rawWallMax = wallMs;
+                    _rawWallMaxFrame = completedFrame;
+                    _rawWallMaxExcluded = excluded;
+                }
+                if (wallMs >= _spikeMs)
+                    _rawSpikes++;
+                if (excluded)
+                    _rawExcludedFrames++;
+                if (!_clyde.IsFocused)
+                    _rawUnfocusedFrames++;
+            }
+
+            if (newWallFrame && completedFrame > _excludeThroughFrame)
             {
                 var ms = wallMs;
                 _wallCount++;
@@ -261,6 +298,7 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         _wallFrames.Sort();
         text.AppendLine($"REPORT reason={reason} elapsed={F((now - _started).TotalSeconds)} windowSeconds={F(elapsed)} utc={DateTime.UtcNow:O}");
         text.AppendLine($"wall: frames={_wallCount} fps={F(_wallTotal > 0 ? _wallCount * 1000 / _wallTotal : 0)} meanMs={F(_wallCount > 0 ? _wallTotal / _wallCount : 0)} p50Ms={F(Percentile(0.50))} p95Ms={F(Percentile(0.95))} p99Ms={F(Percentile(0.99))} maxMs={F(_wallMax)} maxFrame={_wallMaxFrame} spikes={_spikes} thresholdMs={F(_spikeMs)} unfocusedFrames={_unfocusedFrames} percentileSamples={_wallFrames.Count} omittedPercentileSamples={_wallCount - _wallFrames.Count}");
+        text.AppendLine($"raw-wall: frames={_rawWallCount} fps={F(_rawWallTotal > 0 ? _rawWallCount * 1000 / _rawWallTotal : 0)} meanMs={F(_rawWallCount > 0 ? _rawWallTotal / _rawWallCount : 0)} maxMs={F(_rawWallMax)} maxFrame={_rawWallMaxFrame} maxFrameExcluded={_rawWallMaxExcluded} spikes={_rawSpikes} diagnosticFrames={_rawExcludedFrames} unfocusedFrames={_rawUnfocusedFrames}");
         var lostFrames = _reader.LostFrames - _lastLostFrames;
         var partialAllocations = lostFrames > 0 || _reader.InvalidFrames > _lastInvalidFrames;
         text.AppendLine($"profile: enabled={_profiler.IsEnabled} frames={_reader.Frames} meanWorkMs={F(_reader.Frames > 0 ? _reader.TotalWorkMs / _reader.Frames : 0)} allocatedBytes={_reader.TotalAllocatedBytes} bytesPerSecond={F(_reader.TotalAllocatedBytes / elapsed)} allocationRatePartial={partialAllocations} lostFramesWindow={lostFrames} lostFramesTotal={_reader.LostFrames} oversizedFramesTotal={_reader.OversizedFrames} invalidFramesTotal={_reader.InvalidFrames} droppedScopeEventsTotal={_reader.DroppedScopeEvents} excludedDiagnosticFramesTotal={_reader.ExcludedFrames} profileLogEntries={_profiler.Buffer.LogBuffer.Length}");
@@ -283,6 +321,9 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         _sessionFrames += _wallCount;
         _sessionSpikes += _spikes;
         _sessionWorstMs = Math.Max(_sessionWorstMs, _wallMax);
+        _sessionRawFrames += _rawWallCount;
+        _sessionRawSpikes += _rawSpikes;
+        _sessionRawWorstMs = Math.Max(_sessionRawWorstMs, _rawWallMax);
         _lastReport = now;
         _lastNetwork = net;
         ResetWindow();
@@ -297,6 +338,10 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         _wallCount = _spikes = _unfocusedFrames = 0;
         _wallTotal = _wallMax = _readerMs = _readerMaxMs = 0;
         _wallMaxFrame = _readerBytes = _created = _deleted = _addedComponents = _removedComponents = 0;
+        _rawWallCount = _rawSpikes = _rawExcludedFrames = _rawUnfocusedFrames = 0;
+        _rawWallTotal = _rawWallMax = 0;
+        _rawWallMaxFrame = 0;
+        _rawWallMaxExcluded = false;
         _worstContext = "";
     }
 

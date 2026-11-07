@@ -34,6 +34,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
     private readonly Dictionary<EntityUid, Atlas> _atlases = new();
     private readonly Dictionary<(EntityUid Network, string Faction), List<CMUReconOrder>> _orders = new();
     private readonly Dictionary<string, CMUReconMaterial> _kinds = new();
+    private readonly List<Atlas> _activeAtlases = new();
     private TimeSpan _nextSend;
     private int _generation;
     private int _atlasId;
@@ -99,6 +100,8 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
         public bool ReuseGeometry;
         public int[] ChunkOrder = [];
         public CMUReconContactsMessage? LastContacts;
+        public readonly List<CMUReconContact> ContactBuffer = new();
+        public readonly HashSet<int> ContactIds = new();
         public EntityUid? CameraTarget;
         public EntityUid? Camera;
     }
@@ -516,12 +519,16 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
         base.Update(frameTime);
         // Finish each initial survey even if its window closes. Reopening must not trigger a rescan.
         // Completed geometry remains available until the map is removed, independently of client caches.
-        var active = _atlases.Values.Where(a => a.Maps.Any(m => m is { } uid && !TerminatingOrDeleted(uid)) &&
-            (a.Pending.Count > 0 || a.WorkId >= 0)).ToArray();
+        _activeAtlases.Clear();
+        foreach (var atlas in _atlases.Values)
+            if ((atlas.Pending.Count > 0 || atlas.WorkId >= 0) &&
+                atlas.Maps.Any(m => m is { } uid && !TerminatingOrDeleted(uid)))
+                _activeAtlases.Add(atlas);
+        var active = _activeAtlases;
         var timer = Stopwatch.StartNew();
-        for (var work = 0; active.Length > 0 && work < 128 && timer.Elapsed.TotalMilliseconds < 2; work++)
+        for (var work = 0; active.Count > 0 && work < 128 && timer.Elapsed.TotalMilliseconds < 2; work++)
         {
-            _workCursor %= active.Length;
+            _workCursor %= active.Count;
             var atlas = active[_workCursor++];
             if (atlas.WorkId >= 0)
                 Rebuild(atlas, atlas.WorkId, timer);
@@ -546,7 +553,8 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
                 orders.Where((order, index) => order.Id != survey.SentOrders[index]).Any();
             if (ordersChanged) survey.SentOrders = orders.Select(order => order.Id).ToArray();
             var canOrder = CanOrder(key.Console, key.Actor);
-            if (patch.Chunks.Length == 0 && patch.Surfaces.Length == 0 && !ordersChanged && survey.SentCanOrder == canOrder) continue;
+            if (patch == null && !ordersChanged && survey.SentCanOrder == canOrder) continue;
+            patch ??= EmptyGeometryPatch(survey);
             survey.SentCanOrder = canOrder;
             survey.SentLayer = patch.Layer = survey.Layer;
             survey.SentLayers = patch.AvailableLayers = layers;

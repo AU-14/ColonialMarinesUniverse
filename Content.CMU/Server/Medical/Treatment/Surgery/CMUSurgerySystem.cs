@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -163,27 +164,16 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         if (!isCurrent() || !HasComp<CMUHumanMedicalComponent>(body)
             || !TryFindPartSlot(body, type, symmetry, out var rootPart, out var slotId)
             || rootPart != expectedAnchor || slotId != expectedSlot
-            || !TryComp<InitialBodyComponent>(body, out var initialBody)
-            || !TryGetInitialBodyCategory(type, symmetry, out var category))
+            || !TryComp<InitialBodyComponent>(body, out var initialBody))
         {
             return false;
         }
 
-        EntProtoId<OrganComponent>? prototype = null;
-        foreach (var (initialCategory, initialPrototype) in initialBody.Organs)
-        {
-            if (initialCategory != category)
-                continue;
-
-            prototype = initialPrototype;
-            break;
-        }
-
-        if (prototype is null)
-            return false;
-
-        var limb = Spawn(prototype.Value, new EntityCoordinates(body, default));
-        if (!isCurrent() || !TryFindPartSlot(body, type, symmetry, out var currentAnchor, out var currentSlot)
+        // Build the detached subtree first: a regenerated leg must bring its foot,
+        // and an arm its hand, from this patient's species rather than human defaults.
+        var generated = new List<EntityUid>();
+        if (!TrySpawnRegeneratedPart(body, type, symmetry, initialBody, generated, out var limb)
+            || !isCurrent() || !TryFindPartSlot(body, type, symmetry, out var currentAnchor, out var currentSlot)
             || currentAnchor != expectedAnchor || currentSlot != expectedSlot
             || !TryComp<BodyPartComponent>(limb, out var limbPart)
             || limbPart.PartType != type
@@ -191,7 +181,8 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
             || !CanPatientAcceptLimb(body, limb)
             || !Body.AttachPart(rootPart, slotId, limb))
         {
-            QueueDel(limb);
+            foreach (var part in generated)
+                QueueDel(part);
             return false;
         }
 
@@ -215,6 +206,44 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         if (!IsAttachedHere())
             return false;
         TryClearMissingLimbStatus(body, type, symmetry);
+        return true;
+    }
+
+    private bool TrySpawnRegeneratedPart(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry,
+        InitialBodyComponent initialBody, List<EntityUid> generated, out EntityUid part)
+    {
+        part = default;
+        if (!TryGetInitialBodyCategory(type, symmetry, out var category))
+            return false;
+
+        EntProtoId<OrganComponent>? prototype = null;
+        foreach (var (initialCategory, initialPrototype) in initialBody.Organs)
+        {
+            if (initialCategory != category)
+                continue;
+
+            prototype = initialPrototype;
+            break;
+        }
+
+        if (prototype is null)
+            return false;
+
+        part = Spawn(prototype.Value, new EntityCoordinates(body, default));
+        generated.Add(part);
+        if (!TryComp<BodyPartComponent>(part, out var anatomy)
+            || anatomy.PartType != type || anatomy.Symmetry != symmetry
+            || !CanPatientAcceptLimb(body, part))
+            return false;
+
+        foreach (var slot in MedicalIndex.GetBodyPartSlots(part))
+        {
+            if (!CMUBodyPartSlots.TryGetSymmetry(slot.SlotId, symmetry, out var childSymmetry)
+                || !TrySpawnRegeneratedPart(body, slot.Type, childSymmetry, initialBody, generated, out var child)
+                || !Body.AttachPart(part, slot.SlotId, child))
+                return false;
+        }
+
         return true;
     }
 

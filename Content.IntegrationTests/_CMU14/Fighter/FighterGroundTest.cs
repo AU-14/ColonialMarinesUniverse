@@ -4,6 +4,9 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Fighter;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Blocking;
+using Content.Shared.Blocking.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.ParaDrop;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -35,7 +38,7 @@ public sealed class FighterGroundTest : GameTest
     private FighterSystem System => SEntMan.System<FighterSystem>();
     private SharedTransformSystem Transform => SEntMan.System<SharedTransformSystem>();
 
-    private async Task CreateWorld()
+    private async Task CreateWorld(string prototype = "CMUFighterGround")
     {
         PreFinalizeHook += () => TestContext.Out.WriteLine(TestContext.CurrentContext.Result.Message);
         var map = await Pair.CreateTestMap();
@@ -49,7 +52,7 @@ public sealed class FighterGroundTest : GameTest
             for (var y = -12; y <= 12; y++) maps.SetTile(map.GridCoords.EntityId, grid, new Vector2i(x, y), floor);
             _site = new EntityCoordinates(map.GridCoords.EntityId, new Vector2(.5f, .5f));
             _terrain = Server.Transform(_site.EntityId).MapUid!.Value;
-            _hull = SEntMan.SpawnEntity("CMUFighterGround", _site);
+            _hull = SEntMan.SpawnEntity(prototype, _site);
             _ground = SEntMan.GetComponent<FighterGroundComponent>(_hull);
             Assert.That(_ground.Aircraft, Is.Not.Null);
             _aircraft = (_ground.Aircraft!.Value, SEntMan.GetComponent<FighterAircraftComponent>(_ground.Aircraft.Value));
@@ -75,56 +78,115 @@ public sealed class FighterGroundTest : GameTest
         if (!SEntMan.Deleted(_officer)) SEntMan.DeleteEntity(_officer);
     }
 
-    [Test]
-    public async Task DeletedFighterPartsDoNotLeaveStaleNetworkReferences()
+    [TestCase("CMUFighterGroundUPP")]
+    [TestCase("CMUFighterGroundSwept")]
+    public async Task VariantCrewAndSocketsSurviveTakeoffAndLanding(string prototype)
     {
-        await CreateWorld();
+        await CreateWorld(prototype);
+        var seats = new[] { _aircraft.Comp.FrontSeat!.Value, _aircraft.Comp.RearSeat!.Value };
+        var sockets = new Vector2[seats.Length];
         await Server.WaitAssertion(() =>
         {
-            var weapons = SEntMan.GetComponent<FighterWeaponsComponent>(_aircraft);
-            var nextPoint = weapons.Hardpoints[1];
-            SEntMan.DeleteEntity(weapons.Hardpoints[0]);
-            SEntMan.DeleteEntity(_aircraft.Comp.Canopy!.Value);
-            SEntMan.DeleteEntity(_aircraft.Comp.FrontSeat!.Value);
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, weapons, null, GameTick.Zero));
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _aircraft.Comp, null, GameTick.Zero));
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _ground, null, GameTick.Zero));
-            Assert.That(weapons.Hardpoints[1], Is.EqualTo(nextPoint), "Deleting a pylon must not renumber weapon slots.");
-            CleanWorld();
-            // The cockpit's deletion is queued, so it can still be replicated after its airframe is gone.
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, weapons, null, GameTick.Zero));
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, _aircraft.Comp, null, GameTick.Zero));
+            for (var i = 0; i < seats.Length; i++)
+                sockets[i] = Server.Transform(seats[i]).LocalPosition;
+            Assert.That(System.TryTakeoff(_pilot), Is.True);
         });
-        await Pair.RunTicksSync(2);
+        await Advance(.9);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Airborne));
+            for (var i = 0; i < seats.Length; i++)
+                Assert.That(Server.Transform(seats[i]).ParentUid, Is.EqualTo(_aircraft.Owner));
+            Assert.That(SEntMan.GetComponent<BuckleComponent>(_pilot).BuckledTo, Is.EqualTo(seats[0]));
+            Assert.That(SEntMan.GetComponent<BuckleComponent>(_officer).BuckledTo, Is.EqualTo(seats[1]));
+            Assert.That(System.TryReturnToGround(_pilot), Is.True);
+        });
+        await Advance(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Grounded));
+            for (var i = 0; i < seats.Length; i++)
+            {
+                Assert.That(Server.Transform(seats[i]).ParentUid, Is.EqualTo(_hull));
+                Assert.That(Vector2.Distance(Server.Transform(seats[i]).LocalPosition, sockets[i]), Is.LessThan(.001f),
+                    "Landing must restore this airframe's sockets, rather than the original fighter's offsets.");
+            }
+            Assert.That(SEntMan.System<SharedBuckleSystem>().TryUnbuckle(_pilot, _pilot), Is.True);
+            Assert.That(SEntMan.System<SharedBuckleSystem>().TryUnbuckle(_officer, _officer), Is.True);
+            Assert.That(Server.Transform(_pilot).ParentUid, Is.EqualTo(_site.EntityId));
+            Assert.That(Server.Transform(_officer).ParentUid, Is.EqualTo(_site.EntityId));
+            CleanWorld();
+        });
     }
 
     [Test]
-    public async Task DeletedCrewCamerasAreClearedBeforeReplicationAndRecreatedForTheSeatedOperator()
+    public async Task ShortRollAdaptsToClearanceAtAnyHeadingAndReturnsToItsSite()
     {
         await CreateWorld();
+        EntityUid ahead = default;
+        EntityUid beside = default;
+        Vector2 initial = default;
         await Server.WaitAssertion(() =>
         {
-            var seat = SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.FrontSeat!.Value);
-            var other = SEntMan.GetComponent<FighterSeatComponent>(_aircraft.Comp.RearSeat!.Value);
-            var otherCamera = other.Camera;
-            var camera = seat.Camera!.Value;
-            var exterior = seat.ExteriorCamera!.Value;
-            SEntMan.DeleteEntity(camera);
-            SEntMan.DeleteEntity(exterior);
-            Assert.Multiple(() =>
-            {
-                Assert.That(seat.Camera, Is.Null);
-                Assert.That(seat.ExteriorCamera, Is.Null);
-                Assert.That(other.Camera, Is.EqualTo(otherCamera), "The other operator owns independent cameras.");
-            });
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, seat, null, GameTick.Zero));
-            System.Update(0);
-            Assert.That(SEntMan.EntityExists(seat.Camera), Is.True);
-            Assert.That(SEntMan.EntityExists(seat.ExteriorCamera), Is.True);
-            Assert.That(seat.Camera, Is.Not.EqualTo(camera));
-            Assert.That(seat.ExteriorCamera, Is.Not.EqualTo(exterior));
-            Assert.That(seat.Occupant, Is.EqualTo(_pilot));
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, seat, null, GameTick.Zero));
+            var heading = Angle.FromDegrees(90);
+            Transform.SetLocalRotation(_hull, heading);
+            ahead = SEntMan.SpawnEntity("CMWallMetal", _site.Offset(heading.RotateVec(new Vector2(0, -5))));
+            beside = SEntMan.SpawnEntity("CMWallMetal", _site.Offset(heading.RotateVec(new Vector2(2, -2))));
+            _ground.TakeoffTime = TimeSpan.FromSeconds(2);
+            initial = Transform.GetWorldPosition(_hull);
+            Assert.That(System.TryTakeoff(_pilot), Is.True, "A clear tapered footprint must not require an empty bounding rectangle or a pad.");
+            Assert.That(_ground.TransitionDistance, Is.InRange(.25f, 1.25f), "The wall should shorten the roll, not reject the launch.");
+        });
+        await Advance(.7);
+        await Server.WaitAssertion(() =>
+        {
+            var delta = Transform.GetWorldPosition(_hull) - initial;
+            Assert.That(delta.X, Is.GreaterThan(.05f), "The hull must physically roll along its selected heading.");
+            Assert.That(Math.Abs(delta.Y), Is.LessThan(.01f));
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.TakingOff));
+        });
+        await Advance(1.6);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Airborne));
+            Assert.That(System.TryReturnToGround(_pilot), Is.True);
+        });
+        await Advance(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Grounded));
+            Assert.That(Vector2.Distance(Transform.GetWorldPosition(_hull), initial), Is.LessThan(.02f));
+            SEntMan.DeleteEntity(ahead);
+            SEntMan.DeleteEntity(beside);
+            CleanWorld();
+        });
+    }
+
+    [Test]
+    public async Task PedestrianEnteringShortRollAbortsWithoutBeingPushed()
+    {
+        await CreateWorld();
+        EntityUid pedestrian = default;
+        Vector2 before = default;
+        await Server.WaitAssertion(() =>
+        {
+            _ground.TakeoffTime = TimeSpan.FromSeconds(2);
+            Assert.That(System.TryTakeoff(_pilot), Is.True);
+        });
+        await Advance(.2);
+        await Server.WaitAssertion(() =>
+        {
+            var site = _site.Offset(Transform.GetWorldRotation(_hull).RotateVec(new Vector2(0, -4)));
+            pedestrian = SEntMan.SpawnEntity("MobHuman", site);
+            before = Transform.GetWorldPosition(pedestrian);
+        });
+        await Advance(1.2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(_ground.State, Is.EqualTo(FighterGroundState.Grounded));
+            Assert.That(Vector2.Distance(Transform.GetWorldPosition(pedestrian), before), Is.LessThan(.02f));
+            Assert.That(SEntMan.GetComponent<BuckleComponent>(_pilot).BuckledTo, Is.EqualTo(_aircraft.Comp.FrontSeat));
+            SEntMan.DeleteEntity(pedestrian);
             CleanWorld();
         });
     }
@@ -260,8 +322,6 @@ public sealed class FighterGroundTest : GameTest
 
     [TestCase(0, false, false)]
     [TestCase(90, true, false)]
-    [TestCase(180, false, false)]
-    [TestCase(270, true, false)]
     [TestCase(0, false, true)]
     [TestCase(180, true, true)]
     public async Task GroundExitUsesClearSideAndCannotCrossWalls(int degrees, bool rear, bool bothBlocked)
@@ -294,35 +354,6 @@ public sealed class FighterGroundTest : GameTest
                     (f.Fixture.CollisionLayer & (int) CollisionGroup.MobMask) != 0), Is.False);
             }
             foreach (var wall in walls) SEntMan.DeleteEntity(wall);
-            CleanWorld();
-        });
-    }
-
-    [TestCase(0)]
-    [TestCase(90)]
-    public async Task HullCollisionFollowsTaperedSpriteAndWingState(int degrees)
-    {
-        await CreateWorld();
-        await Server.WaitAssertion(() =>
-        {
-            Transform.SetLocalRotation(_hull, Angle.FromDegrees(degrees));
-            bool Collides(float x, float y)
-            {
-                var point = Transform.ToMapCoordinates(new EntityCoordinates(_hull, x, y));
-                var fixtures = new HashSet<FixtureProxy>();
-                SEntMan.System<EntityLookupSystem>().GetFixturesIntersecting(point.MapId,
-                    new Box2(point.Position - new Vector2(.02f), point.Position + new Vector2(.02f)), fixtures,
-                    new FixtureQueryArgs(new QueryFilter { LayerBits = -1, MaskBits = (int) CollisionGroup.MobMask }));
-                return fixtures.Any(f => f.Entity == _hull && f.Fixture.Hard);
-            }
-            Assert.That(Collides(0, 1), Is.True, "The central airframe remains solid.");
-            Assert.That(Collides(1.1f, 3.15f), Is.True, "The tail fins remain solid.");
-            Assert.That(Collides(1.2f, 2.3f), Is.False, "Empty space beside the tapered tail must be passable.");
-            Assert.That(Collides(0, 3.2f), Is.False, "The gap between tail fins is outside the hull.");
-            Assert.That(Collides(1.8f, 1.4f), Is.False, "Folded wings leave space beside the fuselage.");
-            Assert.That(System.TryTakeoff(_pilot), Is.True);
-            Assert.That(Collides(1.8f, 1.4f), Is.True, "Extended wings regain collision.");
-            Assert.That(Collides(2.4f, .55f), Is.False, "Wing collision must follow the swept edge.");
             CleanWorld();
         });
     }

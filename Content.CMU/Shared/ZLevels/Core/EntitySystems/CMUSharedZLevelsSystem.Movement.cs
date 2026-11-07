@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.CMU14.Dropship.MultiDeck;
@@ -59,6 +60,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
+    private EntityQuery<CMUZLevelFallThroughComponent> _fallThroughQuery; // RUMC: things that let a falling body through the tile they stand on (a hatch, a grate)
     private EntityQuery<CMUVehicleZTraversalComponent> _vehicleTraversalQuery;
     private EntityQuery<DropshipDeckComponent> _dropshipDeckQuery;
     private readonly List<Entity<MapGridComponent>> _movementDeckCandidates = new();
@@ -91,6 +93,7 @@ public abstract partial class CMUSharedZLevelsSystem
         InitializeZPhysicsPresentation();
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
         _highgroundQuery = GetEntityQuery<CMUZLevelHighGroundComponent>();
+        _fallThroughQuery = GetEntityQuery<CMUZLevelFallThroughComponent>(); // RUMC
         _vehicleTraversalQuery = GetEntityQuery<CMUVehicleZTraversalComponent>();
         _dropshipDeckQuery = GetEntityQuery<DropshipDeckComponent>();
         Subs.CVar(_configuration, CMUZLevelsCVars.DebugFalling, value => _debugFalling = value, true);
@@ -190,6 +193,16 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void OnFallDamage(Entity<DamageableComponent> ent, ref CMUZLevelHitEvent args)
     {
+        // CMU14: a Yautja descent is a controlled landing - CM-SS13 gives the species no fall damage from dropping a
+        // level, so this returns before both the knockdown and the Blunt damage. YautjaComponent is the species marker
+        // (CMUMobYautja, and a youngblood gains it when the role is taken); plain humans keep normal fall damage.
+        if (HasComp<YautjaComponent>(ent.Owner))
+            return;
+
+        // CMU14: a CMUZLeap leaper (the Early Warning Joe) lands a dropped level like a yautja
+        if (TryComp(ent.Owner, out CMUZLeapComponent? zLeap) && zLeap.IgnoreFallDamage)
+            return;
+
         var knockdownTime = MathF.Min(args.ImpactPower * 0.25f, 5f);
         _stun.TryKnockdown(ent.Owner, TimeSpan.FromSeconds(knockdownTime), true);
 
@@ -209,7 +222,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// </summary>
     private void OnFallAreaImpact(Entity<PhysicsComponent> ent, ref CMUZLevelHitEvent args)
     {
-        if (_vehicleTraversalQuery.HasComp(ent.Owner))
+        if (_vehicleTraversalQuery.HasComp(ent.Owner) || !HasSolidFallImpact(ent.Owner))
             return;
 
         _fallImpactVictims.Clear();
@@ -228,6 +241,21 @@ public abstract partial class CMUSharedZLevelsSystem
 
             _damage.TryChangeDamage(victim, new DamageSpecifier(damageType, damageAmount));
         }
+    }
+
+    private bool HasSolidFallImpact(EntityUid uid)
+    {
+        if (!TryComp<FixturesComponent>(uid, out var fixtures))
+            return false;
+
+        // Sensors can contribute mass without representing anything that can crush a body.
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            if (fixture.Hard)
+                return true;
+        }
+
+        return false;
     }
 
     private bool IsBuckledTo(EntityUid victim, EntityUid strap)
@@ -1055,11 +1083,25 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!Resolve(target, ref target.Comp, false))
             return 0; //maybe in future: simpler distance calculation for entities without zPhysComp?
 
+        return QueryGroundDistance(target.Owner, mapUid, worldPos, target.Comp.LocalPosition, target.Comp.Velocity,
+            out stickyGround, maxFloors);
+    }
+
+    private float QueryGroundDistance(
+        EntityUid target,
+        EntityUid? mapUid,
+        Vector2 worldPos,
+        float localPosition,
+        float velocity,
+        out bool stickyGround,
+        int maxFloors)
+    {
+        stickyGround = false;
         if (mapUid is not { } resolvedMap ||
             !_zMapQuery.TryComp(resolvedMap, out var zMapComp))
         {
             if (_debugFalling)
-                DebugLogFalling(target.Owner, "distance-no-z-map", $"inputMap={mapUid} sampleWorld={worldPos}");
+                DebugLogFalling(target, "distance-no-z-map", $"inputMap={mapUid} sampleWorld={worldPos}");
             return 0;
         }
         //Select current map by default
@@ -1077,7 +1119,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 {
                     if (_debugFalling)
                         DebugLogFalling(
-                            target.Owner,
+                            target,
                             "distance-map-down-missing",
                             $"floor={floor} checkingMap={checkingMap.Owner} sampleWorld={worldPos}");
                     break;
@@ -1095,6 +1137,8 @@ public abstract partial class CMUSharedZLevelsSystem
 
             if (TryGetHighGroundDistance(
                     target,
+                    localPosition,
+                    velocity,
                     checkingGridUid,
                     checkingGrid,
                     checkingTile,
@@ -1108,7 +1152,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
                 if (_debugFalling)
                     DebugLogFalling(
-                        target.Owner,
+                        target,
                         "distance-highground-hit",
                         $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} distance={highGroundDistance:F3} sticky={stickyGround}");
                 return highGroundDistance;
@@ -1122,11 +1166,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 // The wall's top is a flat walkable surface, not an airborne contact. Mark it sticky just like
                 // flat high-ground so horizontal movement cannot leave the entity in the frictionless/sliding
                 // state while it is standing over an opening.
-                stickyGround = target.Comp.Velocity <= 0.01f && target.Comp.Velocity > -4f;
-                var wallTopDistance = target.Comp.LocalPosition + floor - 1;
+                stickyGround = velocity <= 0.01f && velocity > -4f;
+                var wallTopDistance = localPosition + floor - 1;
                 if (_debugFalling)
                     DebugLogFalling(
-                        target.Owner,
+                        target,
                         "distance-wall-top-hit",
                         $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} distance={wallTopDistance:F3}");
                 return wallTopDistance;
@@ -1136,32 +1180,34 @@ public abstract partial class CMUSharedZLevelsSystem
             var tileFound = _map.TryGetTileRef(checkingGridUid, checkingGrid, checkingTile, out var tileRef);
             var tileEmpty = !tileFound || CMUZLevelOpeningCache.IsFallThroughTile(tileRef.Tile, TilDefMan);
             var tileType = _debugFalling && tileFound ? tileRef.Tile.TypeId.ToString() : "none";
+            // RUMC: a tile with something on it that lets a body through is not the ground; the condition that was here (kept): if (tileFound && !tileEmpty)
             if (tileFound &&
-                !tileEmpty)
+                !tileEmpty &&
+                !HasFallThroughAt(checkingGridUid, checkingGrid, checkingTile))
             {
                 if (profiling)
                     _profileZDistanceTileHits++;
 
                 if (_debugFalling)
                     DebugLogFalling(
-                        target.Owner,
+                        target,
                         "distance-tile-hit",
-                        $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileType={tileType} distance={target.Comp.LocalPosition + floor:F3}");
-                return target.Comp.LocalPosition + floor;
+                        $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileType={tileType} distance={localPosition + floor:F3}");
+                return localPosition + floor;
             }
 
             if (_debugFalling)
                 DebugLogFalling(
-                    target.Owner,
+                    target,
                     "distance-tile-miss",
-                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileFound={tileFound} tileEmpty={tileEmpty} tileType={tileType} local={target.Comp.LocalPosition:F3}");
+                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileFound={tileFound} tileEmpty={tileEmpty} tileType={tileType} local={localPosition:F3}");
         }
 
         if (profiling)
             _profileZDistanceMisses++;
 
         if (_debugFalling)
-            DebugLogFalling(target.Owner, "distance-miss", $"sampleWorld={worldPos} maxFloors={maxFloors}");
+            DebugLogFalling(target, "distance-miss", $"sampleWorld={worldPos} maxFloors={maxFloors}");
         return maxFloors;
     }
 
@@ -1213,8 +1259,23 @@ public abstract partial class CMUSharedZLevelsSystem
         return false;
     }
 
+    // RUMC method: whether something that lets a falling body through is anchored on the tile
+    private bool HasFallThroughAt(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
+    {
+        var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        while (query.MoveNext(out var anchored))
+        {
+            if (_fallThroughQuery.HasComp(anchored.Value))
+                return true;
+        }
+
+        return false;
+    }
+
     private bool TryGetHighGroundDistance(
-        Entity<CMUZPhysicsComponent?> target,
+        EntityUid target,
+        float localPosition,
+        float velocity,
         EntityUid checkingGridUid,
         MapGridComponent checkingGrid,
         Vector2i checkingTile,
@@ -1226,6 +1287,8 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!Prof.IsEnabled)
             return TryGetHighGroundDistanceCore(
                 target,
+                localPosition,
+                velocity,
                 checkingGridUid,
                 checkingGrid,
                 checkingTile,
@@ -1237,6 +1300,8 @@ public abstract partial class CMUSharedZLevelsSystem
         using var profile = Prof.Group("CMU Z HighGroundDistance");
         return TryGetHighGroundDistanceCore(
             target,
+            localPosition,
+            velocity,
             checkingGridUid,
             checkingGrid,
             checkingTile,
@@ -1254,7 +1319,9 @@ public abstract partial class CMUSharedZLevelsSystem
     }
 
     private bool TryGetHighGroundDistanceCore(
-        Entity<CMUZPhysicsComponent?> target,
+        EntityUid target,
+        float localPosition,
+        float velocity,
         EntityUid checkingGridUid,
         MapGridComponent checkingGrid,
         Vector2i checkingTile,
@@ -1307,7 +1374,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (profiling)
                         _profileZHighGroundCandidates++;
 
-                    var candidateDistance = GetHighGroundDistance(target.Comp!, heightComp, t, floor);
+                    var candidateDistance = GetHighGroundDistance(localPosition, heightComp, t, floor);
                     var score = MathF.Abs(candidateDistance);
 
                     if (!ShouldReplaceHighGroundCandidate(isCurrentTile, score, found, bestIsCurrentTile, bestScore))
@@ -1320,7 +1387,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     bestScore = score;
                     bestIsCurrentTile = isCurrentTile;
                     bestDistance = candidateDistance;
-                    bestSticky = ShouldUseStickyGround(isCurrentTile, target.Comp!.Velocity, heightComp);
+                    bestSticky = ShouldUseStickyGround(isCurrentTile, velocity, heightComp);
                 }
             }
         }
@@ -1504,7 +1571,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (!ShouldUseSweptStickyHighGround(heightComp, oldT, newT, target.Comp.Velocity))
                         continue;
 
-                    var candidateDistance = GetHighGroundDistance(target.Comp, heightComp, sampleT, 0);
+                    var candidateDistance = GetHighGroundDistance(target.Comp.LocalPosition, heightComp, sampleT, 0);
                     var candidateSnappedLocalPosition = target.Comp.LocalPosition - candidateDistance;
                     if (!ShouldUseSweptStickyMoveSnap(candidateSnappedLocalPosition, bestSnappedLocalPosition) ||
                         (found && candidateSnappedLocalPosition <= bestLocalPosition + 0.001f))
@@ -1677,7 +1744,7 @@ public abstract partial class CMUSharedZLevelsSystem
     }
 
     private float GetHighGroundDistance(
-        CMUZPhysicsComponent zPhysics,
+        float localPosition,
         CMUZLevelHighGroundComponent heightComp,
         float t,
         int floor)
@@ -1686,7 +1753,7 @@ public abstract partial class CMUSharedZLevelsSystem
 
         var curve = heightComp.HeightCurve;
         if (curve.Count == 1)
-            return zPhysics.LocalPosition + floor - curve[0];
+            return localPosition + floor - curve[0];
 
         var step = 1f / (curve.Count - 1);
         var index = (int)(t / step);
@@ -1695,7 +1762,7 @@ public abstract partial class CMUSharedZLevelsSystem
         var y0 = curve[Math.Clamp(index, 0, curve.Count - 1)];
         var y1 = curve[Math.Clamp(index + 1, 0, curve.Count - 1)];
 
-        return zPhysics.LocalPosition + floor - MathHelper.Lerp(y0, y1, frac);
+        return localPosition + floor - MathHelper.Lerp(y0, y1, frac);
     }
 
     /// <summary>

@@ -22,6 +22,17 @@ namespace Content.Server._RMC14.Rules
         [Dependency] private AuRoundSystem _round = default!; // CMU14
         [Dependency] private GameTicker _gameTicker = default!;
 
+        // cmu edit start: the CMB roles players pick, standing in for the generic law enforcement ones
+        private static readonly HashSet<string> CMBJobs =
+            ["AU14JobCivilianCMBMarshal", "AU14JobCivilianCMBDeputy", "AU14JobCivilianCMBDetective"];
+
+        private static readonly Dictionary<string, string[]> CMBAliases = new()
+        {
+            ["AU14JobLEOLeaderBase"] = ["AU14JobCivilianCMBMarshal"],
+            ["AU14JobLEOBase"] = ["AU14JobCivilianCMBDeputy", "AU14JobCivilianCMBDetective"],
+        };
+        // cmu edit end
+
         public override void Initialize()
         {
             base.Initialize();
@@ -43,8 +54,22 @@ namespace Content.Server._RMC14.Rules
 
             var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
 
-            // The mapping is override -> overriden (key -> value).
+            // cmu edit start: players pick the CMB roles rather than the generic ones. On a planet whose law
+            // enforcement isn't the CMB, those picks become that planet's force, the way the generic picks do.
+            var overrides = new List<(string Override, string Overriden)>();
             foreach (var (overrideJob, overridenJob) in planetComp.ColonyJobOverrides)
+            {
+                overrides.Add((overrideJob, overridenJob));
+                if (CMBJobs.Contains(overridenJob) || !CMBAliases.TryGetValue(overrideJob, out var aliases))
+                    continue;
+
+                foreach (var alias in aliases)
+                    overrides.Add((alias, overridenJob));
+            }
+            // cmu edit end
+
+            // The mapping is override -> overriden (key -> value).
+            foreach (var (overrideJob, overridenJob) in overrides) // cmu edit: includes the CMB picks
             {
                 // Iterate a stable list of users to avoid modifying the collection while iterating.
                 var users = profiles.Keys.ToList();

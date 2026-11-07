@@ -162,6 +162,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         InitializePhone();
         InitializeExpert();
+        InitializeDamage();
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -322,7 +323,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         if (TryComp(ent.Owner, out RTORelayComponent? relay))
         {
-            relay.Active = true;
+            relay.Active = !ent.Comp.WiresRipped;
             Dirty(ent.Owner, relay);
         }
 
@@ -514,6 +515,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
             anchor.Channels.Add(channel);
         }
+        _range.RefreshAnchorChannels((ent.Owner, anchor));
     }
 
     public void StartPlant(Entity<ANPRCRadioComponent> ent, EntityUid user)

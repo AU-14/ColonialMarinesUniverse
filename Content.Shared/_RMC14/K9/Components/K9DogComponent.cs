@@ -134,5 +134,11 @@ public sealed partial class K9DogComponent : Component
     [DataField]
     public LocId? GrabEscapeMessage;
 
+    /// <summary>
+    /// The arm grab can latch onto xenomorphs. Hunting beasts only.
+    /// </summary>
+    [DataField]
+    public bool CanGrabXenos;
+
     // CMU14 End
 }

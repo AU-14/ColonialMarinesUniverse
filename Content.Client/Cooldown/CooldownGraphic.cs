@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
@@ -29,7 +29,7 @@ namespace Content.Client.Cooldown
 
         protected override void Draw(DrawingHandleScreen handle)
         {
-            Span<float> x = new float[10];
+            // Span<float> x = new float[10]; // CMU14: unused allocation on every cooldown draw.
             Color color;
 
             var lerp = 1f - MathF.Abs(Progress); // for future bikeshedding purposes

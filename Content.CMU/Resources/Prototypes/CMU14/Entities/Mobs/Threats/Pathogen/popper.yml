@@ -5,6 +5,7 @@
   name: Popper
   description: A crawling bag of spores. What nightmare are you living in?
   components:
+  - type: CMUPathogenPopper
   - type: GhostRole
     name: cmu-job-name-pathogen-popper
   - type: Sprite
@@ -19,6 +20,24 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:  
+      maxVol: 600
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 300
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 300
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenPopper
     tier: 0
@@ -105,10 +124,12 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 0.2
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
   # popper still counts toward victory, so the kill objective needs its own minion flag
   - type: CMUObjectiveMinion
+  - type: CMUXenoZJump
 
 - type: entity
   parent: CMU14XenoPopperBase

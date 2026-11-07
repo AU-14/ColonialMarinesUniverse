@@ -414,7 +414,7 @@ namespace Content.Client.Lobby.UI
         /// </summary>
         public void SetProfile(HumanoidCharacterProfile? profile, int? slot)
         {
-            Profile = profile?.Clone();
+            Profile = profile is null ? null : profile.WithBuild(profile.Build); // CMU14: sync older saved appearances with records Build.
             CharacterSlot = slot;
             IsDirty = false;
             JobOverride = null;

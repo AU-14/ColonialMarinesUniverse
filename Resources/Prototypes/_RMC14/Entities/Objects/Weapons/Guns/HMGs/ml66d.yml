@@ -4,6 +4,9 @@
   name: M56D heavy machine gun
   description: The top half of a M56D heavy machine gun post. However it ain't much use without the tripod.
   components:
+  # cmu edit start: built-in ammo counter
+  - type: CMUAmmoCounter
+  # cmu edit end
   - type: Item
     size: Huge
   - type: AmmoCounter

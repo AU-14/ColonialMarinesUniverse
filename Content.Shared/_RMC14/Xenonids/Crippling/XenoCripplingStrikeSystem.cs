@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Aura;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -16,6 +17,7 @@ namespace Content.Shared._RMC14.Xenonids.Crippling;
 public sealed partial class XenoCripplingStrikeSystem : EntitySystem
 {
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -98,7 +100,9 @@ public sealed partial class XenoCripplingStrikeSystem : EntitySystem
 
             Dirty(entity, victim);
 
-            _slow.TrySlowdown(entity, _xeno.TryApplyXenoDebuffMultiplier(entity, xeno.Comp.SlowDuration), ignoreDurationModifier: true);
+            // CMU14: preds get cmss13's lurker superslow / berserker slow timing
+            if (!_yautjaSlow.TryApply(entity, CompOrNull<XenoCripplingStrikeComponent>(xeno)?.YautjaSlow))
+                _slow.TrySlowdown(entity, _xeno.TryApplyXenoDebuffMultiplier(entity, xeno.Comp.SlowDuration), ignoreDurationModifier: true);
 
             var message = Loc.GetString(xeno.Comp.HitText, ("target", entity));
 

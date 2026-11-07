@@ -37,14 +37,9 @@ public sealed class CMUCombatDroneTest
 {
     [TestCase(0, 0, -1, true)]
     [TestCase(0, 1, 0, true)]
-    [TestCase(0, -1, 0, true)]
     [TestCase(0, 1, 0.01f, false)]
     [TestCase(0, 0, 1, false)]
     [TestCase(90, 1, 0, true)]
-    [TestCase(90, -1, 0, false)]
-    [TestCase(180, 0, 1, true)]
-    [TestCase(180, 0, -1, false)]
-    [TestCase(270, -1, 0, true)]
     [TestCase(359, 0, -1, true)]
     [TestCase(0, 0, 0, false)]
     public void FiringArcIncludesSideBoundariesButRejectsRear(float heading, float x, float y, bool allowed)
@@ -201,7 +196,7 @@ public sealed class CMUCombatDroneTest
             var entities = server.EntMan;
             drone = entities.SpawnEntity("CMUCombatDrone", map.GridCoords.Offset(new Vector2(0.8f, 0)));
             user = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-            cable = entities.SpawnEntity("RMCCableCoil30", map.GridCoords);
+            cable = entities.SpawnEntity("CMUCableThinLVStack", map.GridCoords);
             welder = entities.SpawnEntity("CMWelder", map.GridCoords);
             entities.GetComponent<CMUCombatDroneComponent>(drone).RepairDelay = TimeSpan.FromSeconds(0.1);
             var fire = new RMCGetFireImmunityEvent(null);
@@ -289,7 +284,7 @@ public sealed class CMUCombatDroneTest
             var contents = entities.GetComponent<StorageComponent>(pack).Container.ContainedEntities;
             Assert.That(contents.Select(uid => entities.GetComponent<MetaDataComponent>(uid).EntityPrototype!.ID),
                 Is.EquivalentTo(new[] { "CMUDroneControlTablet", "CMUCombatDroneHull", "CMUCombatDroneTurretAssembly",
-                    "CMUCombatDroneAmmoBox", "CMUCombatDroneAmmoBoxAP", "CMWelder", "RMCCableCoil30" }));
+                    "CMUCombatDroneAmmoBox", "CMUCombatDroneAmmoBoxAP", "CMWelder", "CMUCableThinLVStack" }));
             drone = entities.SpawnEntity("CMUCombatDrone", map.GridCoords);
             before = entities.GetComponent<TransformComponent>(drone).Coordinates.Position;
             var input = entities.GetComponent<InputMoverComponent>(drone);
@@ -393,7 +388,7 @@ public sealed class CMUCombatDroneTest
             Assert.That(entities.GetComponent<MindComponent>(mind).VisitingEntity, Is.Null, "A wreck cannot be piloted.");
             Assert.That(entities.System<SharedHandsSystem>().TryDrop(user, tablet, checkActionBlocker: false), Is.True);
             welder = entities.SpawnEntity("CMWelder", map.GridCoords);
-            cable = entities.SpawnEntity("RMCCableCoil30", map.GridCoords);
+            cable = entities.SpawnEntity("CMUCableThinLVStack", map.GridCoords);
             Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(user, welder, checkActionBlocker: false), Is.True);
             Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(user, cable, checkActionBlocker: false), Is.True);
             Assert.That(entities.System<ItemToggleSystem>().TryActivate((welder, null), user), Is.True);

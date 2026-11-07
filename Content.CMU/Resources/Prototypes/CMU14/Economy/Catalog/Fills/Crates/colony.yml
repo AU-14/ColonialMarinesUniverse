@@ -206,9 +206,9 @@
   components:
   - type: StorageFill
     contents:
-    - id: WeaponNailgun
+    - id: CMUWeaponNailgunColony
       amount: 1
-    - id: RMCMagazineSMGNailgun
+    - id: CMUMagazineSMGNailgunColony
       amount: 3
 
 - type: entity
@@ -218,7 +218,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineSMGNailgun
+    - id: CMUMagazineSMGNailgunColony
       amount: 6
 
 #guns and ammo (non-magazine-fed / no colony variant needed)

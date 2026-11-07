@@ -6,6 +6,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUVehicleStickyResin # CMU14
   - type: InteractionOutline
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_door.rsi
@@ -114,6 +115,8 @@
   name: thick resin door
   description: A thick resin door, which is more durable.
   components:
+  - type: CMUVehicleStickyResin # CMU14
+    chance: 0.6
   - type: VehicleReinforcedObstacle
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_door.rsi

@@ -476,10 +476,6 @@ cmu-yautja-profile-skin-color-red = red
 
 cmu-yautja-profile-skin-color-black = black
 
-cmu-yautja-profile-skin-color-gray = gray
-
-cmu-yautja-profile-skin-color-white = white
-
 cmu-yautja-profile-eye-color-black = black
 
 cmu-yautja-profile-eye-color-gold = gold
@@ -593,3 +589,112 @@ cmu-yautja-profile-unique-ronin-armor = Ronin unique armor
 cmu-yautja-profile-unique-ronin-mask = Ronin unique mask
 
 cmu-yautja-profile-unique-ronin-greaves = Ronin unique greaves
+
+# Sets, bracers and bone capes by DimDim from cmss13 PR #12174.
+cmu-yautja-profile-legacy-shadow = Shadow
+
+cmu-yautja-profile-legacy-knight = Knight
+
+cmu-yautja-profile-legacy-seeker = Seeker
+
+cmu-yautja-profile-legacy-serpent = Serpent
+
+cmu-yautja-profile-unique-seeker-initiate = Seeker Initiate
+
+cmu-yautja-profile-unique-seeker-adept = Seeker Adept
+
+cmu-yautja-profile-unique-defender = Defender
+
+cmu-yautja-profile-unique-warrior = Warrior
+
+cmu-yautja-profile-unique-praetorian = Praetorian
+
+cmu-yautja-profile-legacy-shadow-armor = Shadow legacy armor
+
+cmu-yautja-profile-legacy-shadow-mask = Shadow legacy mask
+
+cmu-yautja-profile-legacy-shadow-greaves = Shadow legacy greaves
+
+cmu-yautja-profile-legacy-shadow-bracer = Shadow legacy bracer
+
+cmu-yautja-profile-legacy-knight-armor = Knight legacy armor
+
+cmu-yautja-profile-legacy-knight-mask = Knight legacy mask
+
+cmu-yautja-profile-legacy-knight-greaves = Knight legacy greaves
+
+cmu-yautja-profile-legacy-knight-bracer = Knight legacy bracer
+
+cmu-yautja-profile-legacy-seeker-armor = Seeker legacy armor
+
+cmu-yautja-profile-legacy-seeker-mask = Seeker legacy mask
+
+cmu-yautja-profile-legacy-seeker-greaves = Seeker legacy greaves
+
+cmu-yautja-profile-legacy-seeker-bracer = Seeker legacy bracer
+
+cmu-yautja-profile-legacy-serpent-armor = Serpent legacy armor
+
+cmu-yautja-profile-legacy-serpent-mask = Serpent legacy mask
+
+cmu-yautja-profile-legacy-serpent-greaves = Serpent legacy greaves
+
+cmu-yautja-profile-legacy-serpent-bracer = Serpent legacy bracer
+
+cmu-yautja-profile-unique-seeker-initiate-armor = Seeker Initiate unique armor
+
+cmu-yautja-profile-unique-seeker-initiate-mask = Seeker Initiate unique mask
+
+cmu-yautja-profile-unique-seeker-initiate-greaves = Seeker Initiate unique greaves
+
+cmu-yautja-profile-unique-seeker-adept-armor = Seeker Adept unique armor
+
+cmu-yautja-profile-unique-seeker-adept-mask = Seeker Adept unique mask
+
+cmu-yautja-profile-unique-seeker-adept-greaves = Seeker Adept unique greaves
+
+cmu-yautja-profile-unique-defender-armor = Defender unique armor
+
+cmu-yautja-profile-unique-defender-mask = Defender unique mask
+
+cmu-yautja-profile-unique-defender-greaves = Defender unique greaves
+
+cmu-yautja-profile-unique-warrior-armor = Warrior unique armor
+
+cmu-yautja-profile-unique-warrior-mask = Warrior unique mask
+
+cmu-yautja-profile-unique-warrior-greaves = Warrior unique greaves
+
+cmu-yautja-profile-unique-praetorian-armor = Praetorian unique armor
+
+cmu-yautja-profile-unique-praetorian-mask = Praetorian unique mask
+
+cmu-yautja-profile-unique-praetorian-greaves = Praetorian unique greaves
+
+cmu-yautja-profile-bracer-shadow-legacy = shadow legacy bracers
+
+cmu-yautja-profile-bracer-material-shadow = shadow
+
+cmu-yautja-profile-bracer-knight-legacy = knight legacy bracers
+
+cmu-yautja-profile-bracer-material-knight = knight
+
+cmu-yautja-profile-bracer-seeker-legacy = seeker legacy bracers
+
+cmu-yautja-profile-bracer-material-seeker = seeker
+
+cmu-yautja-profile-bracer-serpent-legacy = serpent legacy bracers
+
+cmu-yautja-profile-bracer-material-serpent = serpent
+
+cmu-yautja-profile-bracer-xenobone-elite = xenobone elite bracers
+
+cmu-yautja-profile-bracer-material-xenobone = xenobone
+
+cmu-yautja-profile-material-group-elite = ELITE
+
+cmu-yautja-profile-cape-bone-full = bone cape
+
+cmu-yautja-profile-cape-bone-third = bone third cape
+
+cmu-yautja-profile-cape-bone-ceremonial = ceremonial bone cape
