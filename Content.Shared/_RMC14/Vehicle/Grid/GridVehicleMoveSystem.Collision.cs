@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.Destruction;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.SceneAnimation;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.Containers.ItemSlots;
@@ -232,6 +233,13 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 // CMU14: crew strapped into an open vehicle hang off it and sit inside its hull.
                 if (CMUIsAboard(other, uid))
                     continue;
+
+                if (TryComp(uid, out CMUSceneMoverComponent? sceneMover) &&
+                    (HasComp<CMUSceneMoverComponent>(other) ||
+                     sceneMover.IgnoreMobCollisions && HasComp<MobStateComponent>(other)))
+                {
+                    continue;
+                }
 
                 if (ignoredEntities != null && ignoredEntities.Contains(other))
                     continue;
