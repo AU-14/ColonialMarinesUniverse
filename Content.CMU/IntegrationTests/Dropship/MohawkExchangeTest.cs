@@ -43,9 +43,12 @@ public sealed class MohawkExchangeTest
             opforfighters: 0
         """;
 
-    [TestCase("USCM", "Omaha")]
-    [TestCase("ProdigySF", "Midway")]
-    public async Task GunshipHoldsUntilEmptyThenMohawkTakesItsPad(string platoonId, string expectedMohawk)
+    [TestCase("USCM", "Omaha", "Midway")]
+    [TestCase("ProdigySF", "Midway", "Midway")]
+    public async Task GunshipHoldsUntilEmptyThenMohawkTakesItsPad(
+        string platoonId,
+        string startingMohawk,
+        string expectedMohawk)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -84,7 +87,7 @@ public sealed class MohawkExchangeTest
             Assert.That(entities.HasComponent<MultiDeckDropshipComponent>(gunship), Is.False,
                 "The exchange offer belongs on the dynamic gunship, not the Mohawk.");
             originalMohawk = entities.QueryEntities<MultiDeckDropshipComponent>().Single().Owner;
-            Assert.That(entities.GetComponent<MetaDataComponent>(originalMohawk).EntityName, Is.EqualTo(expectedMohawk));
+            Assert.That(entities.GetComponent<MetaDataComponent>(originalMohawk).EntityName, Is.EqualTo(startingMohawk));
             computer = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .First(nav => entities.GetComponent<TransformComponent>(nav.Owner).GridUid == gunship).Owner;
         });
