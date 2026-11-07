@@ -5,6 +5,7 @@
   name: Popper
   description: A crawling bag of spores. What nightmare are you living in?
   components:
+  - type: CMUPathogenPopper
   - type: GhostRole
     name: cmu-job-name-pathogen-popper
   - type: Sprite

@@ -1,4 +1,6 @@
 @echo off
 REM CMU14
-dotnet run --project Content.Client --configuration Tools
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0Tools\build-and-run.ps1" -Project Content.Client
+set "exitCode=%errorlevel%"
 pause
+exit /b %exitCode%

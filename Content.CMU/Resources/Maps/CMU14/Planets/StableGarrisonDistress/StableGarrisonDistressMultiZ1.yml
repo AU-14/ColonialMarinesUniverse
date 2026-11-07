@@ -472,7 +472,7 @@ entities:
     - type: GridTree
     - type: OccluderTree
     - type: MapLight
-      ambientLightColor: '#02020B'
+      ambientLightColor: '#000000'
     - type: MapGrid
       chunks:
         0,0:

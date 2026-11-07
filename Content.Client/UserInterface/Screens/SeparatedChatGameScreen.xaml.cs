@@ -130,6 +130,18 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         ApplyPendingChatSplitFraction();
     }
 
+    public override void SetCinematicMode(bool enabled)
+    {
+        base.SetCinematicMode(enabled);
+        Ghost.Visible = !enabled;
+        Inventory.Visible = !enabled;
+        Hotbar.Visible = !enabled;
+        TopLeftContainer.Visible = !enabled;
+        Alerts.Visible = !enabled;
+        Actions.Visible = !enabled;
+        SeparatedChatPanel.Visible = !enabled;
+    }
+
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);

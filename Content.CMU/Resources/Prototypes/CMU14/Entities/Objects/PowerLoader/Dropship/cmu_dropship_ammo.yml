@@ -373,7 +373,7 @@
   description: A heavy rack holding four PGU-46/B 105mm high-explosive anti-tank shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
   components:
   - type: DropshipFabricatorPrintable
-    cost: 3000
+    cost: 1400
   - type: ItemSlots
     slots:
       shell1:

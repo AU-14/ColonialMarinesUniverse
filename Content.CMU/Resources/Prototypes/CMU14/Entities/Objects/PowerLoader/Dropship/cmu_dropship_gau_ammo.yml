@@ -10,7 +10,7 @@
     targetSpread: 4
     bulletSpread: 5
     armorPiercing: 5
-    zLevelPenetration: 0
+    zLevelPenetration: 1
     damage:
       types:
         Piercing: 15
@@ -20,7 +20,7 @@
       slope: 8
       max: 4
   - type: RMCGenericExamine
-    message: Fragmentation rounds cannot penetrate overhead cover.
+    message: It can penetrate 1 z-levels.
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 500
@@ -61,7 +61,7 @@
     targetSpread: 3
     bulletSpread: 4
     armorPiercing: 5
-    zLevelPenetration: 0
+    zLevelPenetration: 1
     damage:
       types:
         Piercing: 15
@@ -71,7 +71,7 @@
       range: 0
       cardinalRange: 0
   - type: RMCGenericExamine
-    message: Incendiary rounds cannot penetrate overhead cover.
+    message: It can penetrate 1 z-levels.
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 550
