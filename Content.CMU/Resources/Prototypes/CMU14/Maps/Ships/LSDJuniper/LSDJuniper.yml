@@ -1,0 +1,22 @@
+- type: gameMap
+  id: LSDJuniperMap
+  mapName: LSD Juniper
+  mapPath: /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper0.yml
+  mapsBelow:
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper-1.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper-2.yml
+  mapsAbove:
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper1.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper2.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper3.yml
+  - /Maps/CMU14/Ships/JuniperMultiZ/LSD_Juniper3.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    LSDJuniperMap:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Landing Ship Dock Juniper'
