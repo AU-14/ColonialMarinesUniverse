@@ -1,6 +1,6 @@
-# FOGO-ATGM - two-man, wire-guided anti-tank missile emplacement.
-# The gunner straps into the deployed tripod and fires; a second crewman holding the linked
-# finder lases a target for the missile to home on and bends its path with their cursor
+# FOGO-ATGM - cursor-guided anti-tank missile emplacement.
+# The gunner straps into the deployed tripod, fires, and guides the missile with their cursor.
+# A linked finder can optionally lase a target for the missile to home on.
 # (see Content.CMU/*/Weapons/ATGM).
 
 - type: entity
@@ -128,9 +128,6 @@
   - type: IgnorePredictionHide
   # Launch from the tripod rather than from the strapped gunner (ARCH-03).
   - type: GunUseGunOrigin
-  - type: GunRequiresSkills
-    skills:
-      CMUSkillATGM: 1
   - type: GunSkilledRecoil
     setRecoil: 0
     skills:
@@ -286,7 +283,7 @@
     - Binoculars
     - CMUATGMFinder
   - type: CMUATGMFinder
-  # Laser and lock reticle while the spotter holds a lock (SharedRMCTargetingSystem).
+  # Laser and lock reticle while a finder user holds an optional target lock (SharedRMCTargetingSystem).
   - type: TargetingLaser
     laserState: laser_beam_spotter
     laserAlpha: 1
@@ -337,7 +334,7 @@
   parent: RMCCaseBase
   id: CMUATGMCase
   name: MGM-120B FOGO-ATGM kit
-  description: Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This Wire Guided ATGM has served as a staple for the local Neroid military forces ever since. This hardened case holds a complete team kit - the launcher, its finder, a missile bag, three missiles and two crew pamphlets.
+  description: Forward Observer Guided Operation Antitank Guided Missile. Built by the ISCS and distributed amongst the sector to fight against the growing number of long range vehicle heavy insurgencies. This wire-guided ATGM has served as a staple for the local Neroid military forces ever since. This hardened case holds a complete kit - the launcher, an optional targeting finder, a missile bag, three missiles and crew pamphlets.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_case.rsi

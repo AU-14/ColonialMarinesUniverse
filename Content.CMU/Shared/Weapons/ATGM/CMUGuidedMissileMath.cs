@@ -64,18 +64,18 @@ public static class CMUGuidedMissileMath
     }
 
     /// <summary>
-    ///     The point a locked-on missile steers toward. It homes on <paramref name="target"/>, and the spotter's
+    ///     The point a locked-on missile steers toward. It homes on <paramref name="target"/>, and the gunner's
     ///     <paramref name="cursor"/> may pull the aim point away from it to bend the flight path around cover.
     /// </summary>
     /// <remarks>
     ///     The pull is limited to <c>R = min(maxSteerOffset, steerPerDistance * |missile - target|)</c>, so the
-    ///     spotter has most authority far from the target and none at impact. Inside
+    ///     gunner has most authority far from the target and none at impact. Inside
     ///     <paramref name="terminalDistance"/> the pull is gone entirely, fading in linearly over the following
     ///     <paramref name="fadeDistance"/>, so the missile always converges on the target.
     /// </remarks>
     /// <param name="missile">The missile's world position.</param>
     /// <param name="target">The (lead-adjusted) target world position.</param>
-    /// <param name="cursor">The spotter's latest fresh cursor, or null when there is none or it is stale.</param>
+    /// <param name="cursor">The gunner's latest fresh cursor, or null when there is none or it is stale.</param>
     public static Vector2 ComputeAimPoint(
         Vector2 missile,
         Vector2 target,

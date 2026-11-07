@@ -11,7 +11,7 @@ using Robust.Shared.Timing;
 namespace Content.Client.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     Streams the local spotter's cursor to the server while they guide an A.T.G.M. missile.
+///     Streams the local shooter's cursor to the server while they guide an A.T.G.M. missile.
 ///     Throttled and delta-gated, with a heartbeat so the server's latest point stays fresh (a locked missile
 ///     ignores a stale cursor) and an update lost in transit is re-sent; the server validates every update.
 /// </summary>
@@ -75,7 +75,8 @@ public sealed partial class CMUATGMGuidanceInputSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUGuidedMissileComponent>();
         while (query.MoveNext(out _, out var missile))
         {
-            if (missile.Guider == local && _hands.IsHolding(local, missile.Finder))
+            if (missile.Guider == local &&
+                (missile.GuidanceFinder is not { } finder || _hands.IsHolding(local, finder)))
                 return true;
         }
 

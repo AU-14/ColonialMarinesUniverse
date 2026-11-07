@@ -5,7 +5,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     Sent by a guiding spotter's client with their current cursor position. The server resolves the
+///     Sent by a guiding gunner's client with their current cursor position. The server resolves the
 ///     guider from the sending session; nothing in this message identifies an entity to act on.
 /// </summary>
 [Serializable, NetSerializable]

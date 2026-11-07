@@ -1,0 +1,253 @@
+# Gunship hardpoint weapons, their hardpoint-only ammunition and the MAR-15 ammunition rack.
+# Hardpoint ammo drops the ground weapon's magazine tag, so it only fits the dropship variants of each gun.
+# The rack sits on a gunship utility attachment point and feeds racked magazines into empty hardpoint weapons
+# on the same grid (see Content.CMU/*/Dropship/AttachmentPoint).
+
+# Ammunition
+
+- type: entity
+  parent: RMCMagazineML66DLarge
+  id: CMUMagazineML66DGunship
+  name: M56D gunship drum magazine (10x28mm)
+  description: A box of 1500, 10x28mm caseless tungsten rounds packed for hardpoint use. Only fits an M56D door gun deployed from a dropship hardpoint.
+  components:
+  - type: Tag
+    tags:
+    - CMUGunshipMagazineML66D
+    - CMUGunshipHardpointMagazine
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 150
+
+- type: entity
+  parent: RMCMagazineM2C
+  id: CMUMagazineM2CGunship
+  name: M2C Gunship Ammunition Box (10x28mm tungsten rounds)
+  description: A box of 125, 10x28mm caseless tungsten rounds packed for hardpoint use. Only fits an M2C deployed from a gunship hardpoint.
+  components:
+  - type: Tag
+    tags:
+    - CMUGunshipMagazineM2C
+    - CMUGunshipHardpointMagazine
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 50
+
+- type: entity
+  parent: AU14MagazineMk86Frag
+  id: CMUMagazineMk86FragGunship
+  name: Mk86 Gunship Ammunition Box (AGM-F 40mm frag grenade)
+  description: A box of 15, AGM-F 40mm frag grenade rounds packed for hardpoint use. Only fits a Mk86 deployed from a gunship hardpoint.
+  components:
+  - type: Tag
+    tags:
+    - CMUGunshipMagazineMk86
+    - CMUGunshipHardpointMagazine
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 100
+
+- type: entity
+  parent: CMUATGMMissile
+  id: CMUATGMMissileGunship
+  name: FOGO-ATGM gunship missile
+  description: A sealed launch tube holding a wire-guided anti-tank missile, packed for hardpoint use. Only fits a FOGO-ATGM deployed from a gunship hardpoint. Don't stand near the target.
+  components:
+  - type: Tag
+    tags:
+    - CMUGunshipATGMMissile
+    - CMUGunshipHardpointMagazine
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 200
+
+# Fixed weapons
+
+- type: entity
+  parent: RMCSmartGunMountedStatic
+  id: CMUSmartGunMountedDropship
+  categories: [ HideSpawnMenu ]
+  suffix: Dropship
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineML66DLarge
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineML66DLarge
+          - CMUGunshipMagazineML66D
+  - type: GunshipHardpointAutoload
+
+- type: entity
+  parent: AU14AGLMK86
+  id: CMUAGLMK86DropshipLoaded
+  categories: [ HideSpawnMenu ]
+  suffix: Dropship, Loaded
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineMk86Frag
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14Mk86Magazine
+          - CMUGunshipMagazineMk86
+  - type: GunshipHardpointAutoload
+
+- type: entity
+  parent: CMUATGMLauncher
+  id: CMUATGMLauncherDropship
+  categories: [ HideSpawnMenu ]
+  suffix: Dropship
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUATGMMissile
+      - CMUGunshipATGMMissile
+  - type: GunshipHardpointAutoload
+    reloadDelay: 3
+
+# Deployed mounts
+
+- type: entity
+  parent: CMUM2CDoorGunDropship
+  id: CMUMk86DoorGunDropship
+  categories: [ HideSpawnMenu ]
+  name: Mk86 automatic grenade launcher
+  suffix: Dropship
+  description: A Mk86 automatic grenade launcher bolted to a gunship hardpoint, lobbing 40mm grenades out of the open door.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/mk86.rsi
+    layers:
+    - state: m2c
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - state: m2c_magazine
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+    - state: m2c_overheat
+      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
+      visible: false
+  - type: WeaponMount
+    fixedWeaponPrototype: CMUAGLMK86DropshipLoaded
+
+- type: entity
+  parent: CMUM2CDoorGunDropship
+  id: CMUATGMMountDropship
+  categories: [ HideSpawnMenu ]
+  name: MGM-120B FOGO-ATGM
+  suffix: Dropship
+  description: A FOGO-ATGM launcher rigged to a gunship hardpoint. The gunner fires and guides the missile with their cursor; a linked finder is optional for target locks.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/USCM/ATGM/atgm_mount.rsi
+    layers:
+    - state: empty
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - state: loaded
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+  - type: WeaponMount
+    fixedWeaponPrototype: CMUATGMLauncherDropship
+  # The equipment deployer drops the launcher at the hardpoint without anchoring it.
+  - type: CMUATGMMount
+    requireAnchored: false
+
+# Hardpoint systems
+
+- type: entity
+  parent: CMUDropshipAttachmentDoorGunM2C
+  id: CMUDropshipAttachmentDoorGunMk86
+  name: MTU-4D Mk86 Door Gunner Hardpoint System
+  description: A box that deploys a crew-served Mk86 automatic grenade launcher. Fits on gunship hardpoint attachment points.
+  components:
+  - type: DropshipFabricatorPrintable
+    cost: 600
+  - type: RMCEquipmentDeployer
+    deployPrototype: CMUMk86DoorGunDropship
+
+- type: entity
+  parent: CMUDropshipAttachmentDoorGunM2C
+  id: CMUDropshipAttachmentDoorGunATGM
+  name: MTU-7 FOGO-ATGM Door Gunner Hardpoint System
+  description: A box that deploys a crew-served FOGO-ATGM wire-guided missile launcher. The gunner guides missiles with their cursor; a linked finder is optional for target locks. Fits on gunship hardpoint attachment points.
+  components:
+  - type: DropshipFabricatorPrintable
+    cost: 700
+  - type: RMCEquipmentDeployer
+    deployPrototype: CMUATGMMountDropship
+
+- type: entity
+  parent: RMCDropshipAttachmentUtility
+  id: CMUDropshipAttachmentAmmoRack
+  name: MAR-15 hardpoint ammunition rack
+  description: A ready rack that holds up to fifteen gunship hardpoint magazines and feeds them into the gunship's hardpoint weapons as they run dry. Fits on gunship utility attachment points.
+  components:
+  - type: Sprite
+    layers:
+    - state: launch_bay
+  - type: DropshipFabricatorPrintable
+    cost: 300
+  - type: DropshipAttachedSprite
+    sprite:
+      sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+      state: launch_bay_deployed
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - CMUGunshipUtilityAttachmentPoint
+  # FixedItemSizeStorage gives every magazine a 2x2 slot: 10x6 holds fifteen.
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,9,5
+    whitelist:
+      tags:
+      - CMUGunshipHardpointMagazine
+  - type: FixedItemSizeStorage
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:EmptyAllContainersBehaviour
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: GunshipAmmoRack
+
+- type: Tag
+  id: CMUGunshipHardpointMagazine
+
+- type: Tag
+  id: CMUGunshipMagazineML66D
+
+- type: Tag
+  id: CMUGunshipMagazineM2C
+
+- type: Tag
+  id: CMUGunshipMagazineMk86
+
+- type: Tag
+  id: CMUGunshipATGMMissile
