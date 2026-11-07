@@ -1,34 +1,35 @@
-using Content.Shared.CMU14.Xenomorphs.Pathogen.Sporecaster;  
-using Content.Shared.CMU14.GasMask;  
-using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;  
-using Content.Shared._RMC14.Xenonids;  
-using Content.Shared._RMC14.Xenonids.Hive;  
-using Content.Shared._RMC14.Synth;  
-using Content.Shared._RMC14.Xenonids.Parasite;  
-using Content.Shared.Destructible;  
-using Content.Shared.Inventory;  
-using Content.Shared.Mobs.Components;  
-using Content.Shared.Mobs.Systems;  
-using Content.Shared.Popups;  
-using Robust.Shared.Map;  
-using Robust.Shared.Physics;  
-using Robust.Shared.Prototypes;  
-using Robust.Shared.Random;  
-using Robust.Shared.Timing;  
-using Content.Shared.Interaction;  
-using Content.Shared.Body.Systems;  
-using Content.Shared.CMU14.Medical.Injuries.Wounds;  
-using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;  
-using Content.Shared.Examine;  
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Sporecaster;
+using Content.Shared.CMU14.GasMask;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Synth;
+using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Destructible;
+using Content.Shared.Inventory;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
+using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+using Content.Shared.Interaction;
+using Content.Shared.Body.Systems;
+using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
+using Content.Shared.Examine;
 using Content.Server.Ghost.Roles;
 using Content.Shared.Ghost;
-using Content.Shared.Ghost.Roles.Components;  
+using Content.Shared.Ghost.Roles.Components;
   
-namespace Content.Server.CMU14.Xenomorphs.Pathogen.Sporecaster;  
+namespace Content.Server.CMU14.Xenomorphs.Pathogen.Sporecaster;
   
-public sealed partial class CMUPathogenSporecasterSystem : EntitySystem  
-{  
-    [Dependency] private EntityLookupSystem _lookup = default!;  
+public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
+{
+    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IGameTiming _timing = default!;  
     [Dependency] private IRobustRandom _random = default!;  
     [Dependency] private SharedXenoHiveSystem _hive = default!;  
