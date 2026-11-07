@@ -1,0 +1,9 @@
+- files: [threat_hurt_01.ogg, threat_hurt_02.ogg]
+  license: CC0-1.0
+  copyright: "Zombies Sound Pack by artisticdude (Ben). CMU edits: source WAV files converted to OGG and renamed."
+  source: https://opengameart.org/content/zombies-sound-pack
+
+- files: [threat_hurt_05.ogg, threat_hurt_06.ogg, threat_hurt_07.ogg, threat_hurt_08.ogg]
+  license: CC0-1.0
+  copyright: "Zombie / Skeleton / Monster Voice Effects by ArcadeParty. CMU edits: source WAV files converted to OGG and renamed."
+  source: https://opengameart.org/content/zombie-skeleton-monster-voice-effects
