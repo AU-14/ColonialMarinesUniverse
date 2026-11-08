@@ -108,10 +108,10 @@
   - type: Appearance
   - type: HelmetAccessory
     rsi:
-      sprite: CMU14/Clothing/UPP/helmets/altyn.rsi
+      sprite: CMU14/Clothing/UPP/helmets/blackaltyn.rsi
       state: equipped-HELMET
     toggledRsi:
-      sprite: CMU14/Clothing/UPP/helmets/altyn.rsi
+      sprite: CMU14/Clothing/UPP/helmets/blackaltyn.rsi
       state: helmet-down
   - type: CMArmor
     melee: 35
