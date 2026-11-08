@@ -1225,6 +1225,25 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         {
             if ((inventorySlot.SlotFlags & slotFlags) != 0 || _tagSystem.HasTag(containedEntity, RipOffOnInfectionTag))
             {
+                // CMU14: Worn protection can block indefinitely or for a configured number of infection attempts.
+                if (TryComp(containedEntity, out CMUFacehuggerProtectionComponent? facehuggerProtection) &&
+                    (facehuggerProtection.Infinite || facehuggerProtection.Uses < facehuggerProtection.MaxUses))
+                {
+                    if (!facehuggerProtection.Infinite)
+                    {
+                        facehuggerProtection.Uses++;
+                        Dirty(containedEntity, facehuggerProtection);
+                    }
+
+                    if (_net.IsServer && doPopup)
+                    {
+                        var popupMessage = Loc.GetString("rmc-xeno-infect-fail", ("target", victim), ("clothing", containedEntity));
+                        _popup.PopupEntity(popupMessage, victim, PopupType.SmallCaution);
+                    }
+
+                    return false;
+                }
+
                 TryComp(containedEntity, out ParasiteResistanceComponent? resistance);
 
                 if (resistance != null && resistance.Count < resistance.MaxCount)
