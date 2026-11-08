@@ -38,6 +38,9 @@ public sealed partial class SentryComponent : Component
     public int SkillLevel = 2;
 
     [DataField, AutoNetworkedField]
+    public float? PrimaryLZDeploymentRange;
+
+    [DataField, AutoNetworkedField]
     public SoundSpecifier? MagazineSwapSound = new SoundPathSpecifier("/Audio/_RMC14/Weapons/unload.ogg");
 
     [DataField, AutoNetworkedField]

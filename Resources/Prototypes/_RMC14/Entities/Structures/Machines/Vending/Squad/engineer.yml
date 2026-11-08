@@ -22,10 +22,10 @@
       choices:  { CMHandheldDefense : 1 }
       entries:
     #    CMJIMAPlantedFlag
-      - id: RMCSentry
+      - id: RMCSentryVendor
         recommended: true
       - id: RMCTesla
-      - id: RMCSentryFire
+      - id: RMCSentryFireVendor
       - id: RMCM271A2BruteLauncherRigFilled
         name: M6H-BRUTE Breaching Launcher
     - name: Handheld Defense Upgrade

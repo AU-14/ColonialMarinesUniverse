@@ -541,6 +541,20 @@
 
 - type: entity
   parent: RMCSentry
+  id: RMCSentryVendor
+  components:
+  - type: Sentry
+    primaryLZDeploymentRange: 35
+
+- type: entity
+  parent: RMCSentryFire
+  id: RMCSentryFireVendor
+  components:
+  - type: Sentry
+    primaryLZDeploymentRange: 35
+
+- type: entity
+  parent: RMCSentry
   id: RMCSentrySniperFire
   # cmu edit start: no UA/UN prefix on sentry names
   name: 60-FP plasma sentry

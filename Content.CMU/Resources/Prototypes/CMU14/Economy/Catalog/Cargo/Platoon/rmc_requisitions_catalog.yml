@@ -9,10 +9,10 @@
       entries:
       - cost: 3000
         crate: AU14CaseSentry
-        maxStock: 15
+        maxStock: 2
       - cost: 3500
         crate: AU14CaseSentryFlamer
-        maxStock: 15
+        maxStock: 2
       - cost: 1000
         crate: RMCEngineeringUpgrade
         maxStock: 15

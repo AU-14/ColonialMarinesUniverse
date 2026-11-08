@@ -1,4 +1,5 @@
 ﻿rmc-sentry-need-open-area = You need a clear, open area to build a {$sentry}, something is blocking the way in front of you!
+rmc-sentry-deploy-too-far-from-primary-lz = This turret can only be built within {$range} tiles of a primary landing zone.
 rmc-sentry-on = {CAPITALIZE(THE($sentry))} hums to life and emits several beeps.
 rmc-sentry-off = {CAPITALIZE(THE($sentry))} powers down and goes silent.
 rmc-sentry-magazine-invalid = {CAPITALIZE(THE($item))} isn't a valid sentry magazine!

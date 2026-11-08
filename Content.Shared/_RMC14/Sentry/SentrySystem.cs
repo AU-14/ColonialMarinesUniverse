@@ -2,7 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._RMC14.Interaction;
 using Content.Shared.CMU14.Sentry; // cmu edit
+using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Map;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.NPC;
 using Content.Shared._RMC14.Tools;
@@ -450,11 +452,16 @@ public sealed partial class SentrySystem : EntitySystem
 
         var coordinates = _transform.GetMapCoordinates(oldSentry);
         var rotation = _transform.GetWorldRotation(oldSentry);
+        var primaryLZDeploymentRange = oldSentry.Comp.PrimaryLZDeploymentRange;
 
         QueueDel(item);
         QueueDel(oldSentry);
 
         var newSentry = Spawn(upgrade, coordinates, rotation: rotation);
+        var newSentryComp = Comp<SentryComponent>(newSentry);
+        newSentryComp.PrimaryLZDeploymentRange = primaryLZDeploymentRange;
+        Dirty(newSentry, newSentryComp);
+
         var ev = new SentryUpgradedEvent(oldSentry, newSentry, user);
         RaiseLocalEvent(newSentry, ref ev);
     }
@@ -526,6 +533,39 @@ public sealed partial class SentrySystem : EntitySystem
 
         var direction = rotation.GetCardinalDir();
         coordinates = coordinates.Offset(direction.ToVec());
+
+        if (sentry.Comp.PrimaryLZDeploymentRange is { } range)
+        {
+            var deployCoordinates = _transform.GetMapCoordinates(user);
+            deployCoordinates = new MapCoordinates(deployCoordinates.Position + direction.ToVec(), deployCoordinates.MapId);
+
+            string? userFaction = TryComp<MarineComponent>(user, out var marine) ? marine.Faction : null;
+            var nearPrimaryLZ = false;
+            var primaryLzQuery = EntityQueryEnumerator<PrimaryLandingZoneComponent, TransformComponent>();
+            while (primaryLzQuery.MoveNext(out var lz, out var primaryLz, out var lzXform))
+            {
+                if (!string.IsNullOrWhiteSpace(primaryLz.Faction) &&
+                    !string.Equals(primaryLz.Faction, userFaction, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var lzCoordinates = _transform.GetMapCoordinates(lz, lzXform);
+                if (deployCoordinates.InRange(lzCoordinates, range))
+                {
+                    nearPrimaryLZ = true;
+                    break;
+                }
+            }
+
+            if (!nearPrimaryLZ)
+            {
+                var msg = Loc.GetString("rmc-sentry-deploy-too-far-from-primary-lz", ("range", range));
+                _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);
+                return false;
+            }
+        }
+
         // CMU14: allow deploying against barricades while preserving other obstruction checks.
         // if (!_rmcMap.CanBuildOn(coordinates))
         if (!_rmcMap.CanDeployWeaponOn(coordinates))
