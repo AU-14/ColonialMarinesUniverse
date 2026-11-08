@@ -979,3 +979,17 @@
     - sprite: CMU14/Yautja/actions.rsi
       state: mark_for_hunt_framed
       map: [enum.ActionVisuals.Icon]
+
+# cmss13 observer "Join the Hunt", handed to whitelisted ghosts while a hunt is on
+- type: entity
+  id: CMUActionYautjaJoinHunt
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/mask.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:YautjaJoinHuntActionEvent

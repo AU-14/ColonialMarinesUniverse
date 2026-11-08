@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Text;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Server.CMU14.WorldMarket; // CMU14: initialize round-owned state before measuring entity leaks.
 using Content.Shared.CMU14.DroneOperator;
 using Robust.Shared;
 using Robust.Shared.Audio.Components;
@@ -345,11 +346,14 @@ namespace Content.IntegrationTests.Tests
             await server.WaitPost(() =>
             {
                 mapSys.CreateMap(out mapId);
+                // CMU14: The first admin console creates market state that intentionally survives its deletion.
+                server.System<WorldMarketSystem>().EnsureMarket();
             });
 
             var coords = new MapCoordinates(Vector2.Zero, mapId);
 
-            await pair.RunTicksSync(3);
+            // CMU14: Let delayed system-owned entities initialize before measuring prototype spawn/despawn effects.
+            await pair.RunTicksSync(120);
 
             // We consider only non-audio entities, as some entities will just play sounds when they spawn.
             int Count(IEntityManager ent) => ent.EntityCount - ent.Count<AudioComponent>();
