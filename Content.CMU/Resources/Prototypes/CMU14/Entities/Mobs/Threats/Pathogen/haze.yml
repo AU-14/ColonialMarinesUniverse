@@ -8,7 +8,7 @@
   - type: GhostRole
     name: cmu-job-name-pathogen-haze
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/Haze/haze.rsi #remeber organize rsi folder
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Haze/haze.rsi
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -202,7 +202,7 @@
   suffix: Healer
   components:
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/Haze/haze_healer.rsi # remember add sprites
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Haze/haze_healer.rsi
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -245,6 +245,11 @@
     gain: 0
     gainAttack: 0
     gainAttackDowned: 0
+  - type: XenoConstruction
+    canOrderConstruction:
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
   - type: XenoSalveVisuals
   - type: XenoHidden 
   - type: MobThresholds
