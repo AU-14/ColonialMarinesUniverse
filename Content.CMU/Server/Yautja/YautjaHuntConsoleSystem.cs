@@ -377,7 +377,16 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         var tierCounts = new int[option.Tiers.Count];
         for (var i = 0; i < count; i++)
         {
-            var spawned = TrySpawnPrey(ent.Comp, option, coordinates, blooding, tierCounts);
+            // cmss13 picks a spawn landmark per ert member, so prey come in scattered over the preserve instead of
+            // as one clump on the first marker. the 5s reuse window keeps picks off the markers already taken
+            var memberCoordinates = coordinates;
+            if (i > 0 &&
+                TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out var picked, out _, false))
+            {
+                memberCoordinates = picked;
+            }
+
+            var spawned = TrySpawnPrey(ent.Comp, option, memberCoordinates, blooding, tierCounts);
             if (spawned == null)
                 continue;
 

@@ -10,10 +10,12 @@ internal readonly record struct CMUYautjaPlasmaAppearance(Color Glow, Color Shel
         Color.FromHex("#42B8FF"), Color.FromHex("#8ADFFF"), Color.FromHex("#E8FBFF"), 7, 2, 10, .65f);
     private static readonly CMUYautjaPlasmaAppearance Immobilizer = new(
         Color.FromHex("#298DFF"), Color.FromHex("#66C7FF"), Color.FromHex("#E0F6FF"), 10, 3, 16, .9f);
+    // cmss13 lethal is pulse1 and the eradicator bluespace, both blue like the bolt sprites and lights in yaml.
+    // deeper/more violet than the stun modes so you can still tell them apart
     private static readonly CMUYautjaPlasmaAppearance Lethal = new(
-        Color.FromHex("#FF392C"), Color.FromHex("#FF7962"), Color.FromHex("#FFF2DD"), 13, 2.5f, 22, 1);
+        Color.FromHex("#2E6BFF"), Color.FromHex("#5C9BFF"), Color.FromHex("#E6F0FF"), 13, 2.5f, 22, 1);
     private static readonly CMUYautjaPlasmaAppearance Eradicator = new(
-        Color.FromHex("#FF241A"), Color.FromHex("#FF5C3B"), Color.FromHex("#FFE3B0"), 17, 5, 28, 1.5f);
+        Color.FromHex("#3D45FF"), Color.FromHex("#7A84FF"), Color.FromHex("#ECEEFF"), 17, 5, 28, 1.5f);
 
     public static CMUYautjaPlasmaAppearance For(CMUYautjaPlasmaMode mode) => mode switch
     {

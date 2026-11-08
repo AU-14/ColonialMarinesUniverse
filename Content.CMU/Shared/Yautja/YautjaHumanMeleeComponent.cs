@@ -13,7 +13,8 @@ public sealed partial class YautjaHumanMeleeComponent : Component
     [DataField]
     public float StripChancePerArmor = 0.01f;
 
-    // cm turns brute into pain 1:1 the moment it lands, so two wielded glaive hits put a naked marine in shock
+    // cm adds brute to pain 1:1, but a human's pain is out of 200 (horrible at 80%) and ours is out of 100,
+    // so it's half per point here. a naked marine shocks on the 4th wielded glaive hit, not the 2nd
     [DataField]
-    public float PainPerDamage = 1f;
+    public float PainPerDamage = 0.5f;
 }

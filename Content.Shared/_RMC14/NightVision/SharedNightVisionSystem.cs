@@ -142,6 +142,9 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         if (!args.CanAccess || !args.CanInteract)
             return;
 
+        if (!ent.Comp.CanChangeMode) // CMU14: optics locked to their default state
+            return;
+
         if (ent.Comp.User != null && ent.Comp.User != args.User)
             return;
 

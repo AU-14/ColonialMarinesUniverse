@@ -1,9 +1,10 @@
 # Component source for CMULifeSupportComponent. Values mirror the disabled blocks
 # in Resources/Prototypes/_RMC14/Entities/Mobs/Species/base.yml so dev tests match
-# the eventual species flip. Playtest toggle: the cmulifesupport command.
+# the eventual species flip. Hidden from the spawn menu because it is a bundle,
+# not a complete mob. Playtest toggle: the cmulifesupport command.
 - type: entity
-  abstract: true
   id: CMUMobLifeSupport
+  categories: [HideSpawnMenu]
   save: false
   components:
   - type: TemperatureDamage

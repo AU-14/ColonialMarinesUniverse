@@ -59,6 +59,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        InitializeGenerations(); // CMU14: shared generation speed and pounce mechanics.
 
         SubscribeLocalEvent<SynthComponent, ComponentStartup>(OnSynthStartup);
         SubscribeLocalEvent<SynthComponent, ComponentShutdown>(OnShutdown);
