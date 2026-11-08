@@ -97,6 +97,7 @@
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
+    
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14AltynCustom
