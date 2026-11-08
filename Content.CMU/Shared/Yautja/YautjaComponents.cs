@@ -3229,6 +3229,14 @@ public sealed partial class YautjaChainGauntletComponent : Component
     [DataField, AutoNetworkedField]
     public bool HasChain;
 
+    // the wrapped whip lives in here so unwrapping hands back the same whip
+    [DataField]
+    public string ChainContainerId = "chain_gauntlet_chain";
+
+    // only used when HasChain was set without a whip in the slot (mapped/admin gauntlets)
+    [DataField]
+    public EntProtoId ChainPrototype = "CMUYautjaChainwhip";
+
     [DataField, AutoNetworkedField]
     public int ComboCounter;
 
