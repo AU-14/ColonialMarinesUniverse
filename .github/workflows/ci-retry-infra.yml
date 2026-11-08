@@ -50,7 +50,7 @@ jobs:
               ...repo, run_id: run.id, attempt_number: run.run_attempt, per_page: 100,
             });
             const failed = jobs.filter(job => job.conclusion === 'failure' &&
-              job.name !== 'Required Checks' && job.name !== 'Testcases Complete');
+              job.name !== 'Required Checks');
             if (failed.length === 0)
               return;
 

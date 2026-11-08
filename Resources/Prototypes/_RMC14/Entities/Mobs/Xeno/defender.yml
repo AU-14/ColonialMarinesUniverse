@@ -188,6 +188,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-steelcrest-name
+    baseCaste: CMXenoDefender # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-steelcrest-description
     popup: rmc-xeno-steelcrest-popup
   - type: MeleeWeapon

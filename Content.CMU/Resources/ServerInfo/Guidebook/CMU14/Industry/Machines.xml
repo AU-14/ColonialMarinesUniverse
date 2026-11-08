@@ -34,5 +34,12 @@
   ## Automate after one successful batch
   Enable [bold]Auto input / Auto output[/bold] where available and place supply/output containers or conveyors within reach. Set filters to restrict items; [bold]no filters selected means all allowed[/bold]. Place belt tiles from a belt stack and check their direction before feeding them.
 
+  <GuideEntityEmbed Entity="CMUInserterArm" Caption="MACHINE → ARM → BELT"/>
+  Craft an [bold]inserter arm[/bold] from an automation kit, a drive kit and steel. It takes one item or stack from the tile behind it and transfers it to a machine input, container or belt on the tile in front. It can extract machine outputs even when the machine has no automatic input/output controls. Rotate it with the right-click menu and examine it to check its transfer direction. A full destination stops the transfer; ingredients and molds stay in the source machine. Arms work without electrical power, like the conveyor belts.
+
+  Keep both hands free to carry the crafted arm, or right-click a placed arm and choose [bold]Pick up[/bold]. While holding it, click a clear floor tile within reach to place it. Use [bold]Rotate[/bold] in the right-click menu for quarter turns; it can be rotated while anchored.
+
+  The item rides visibly in the claw during the swing. If the destination fills before delivery, the arm keeps holding the item and retries. Stopping the arm pauses its motion without dropping the item. Right-click to release a held item before picking the arm up. Turning the arm during a cycle changes the direction of its next pickup.
+
   [textlink="Food and trade" link="CMUGuideIndustryProducts"]
 </Document>

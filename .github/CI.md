@@ -1,9 +1,9 @@
 # CMU CI
 
 `workflows/ci.yml` owns the PR build, unit tests, YAML lint, asset validation,
-and gameplay jobs in one run. `Required Checks` waits for the complete result.
-`Testcases Complete` remains available as a required check, backed by a real
-job. Every gameplay check links directly to its own steps and logs. New PR
+and gameplay jobs in one run. `Required Checks` collects test evidence and waits
+for the complete result; there is no separate `Testcases Complete` job.
+Every gameplay check links directly to its own steps and logs. New PR
 revisions cancel the previous revision's run.
 
 The [2026-11-06 test audit](CI-test-audit-2026-11-06.md) records the removal
@@ -87,8 +87,9 @@ Without history, the first run uses default timing estimates.
 ## Execution and evidence
 
 The build runner compiles the YAML linter project and its dependencies once.
-Unit tests and YAML lint finish before build/source artifacts are uploaded.
-Gameplay jobs use those artifacts instead of fetching and compiling again.
+YAML lint finishes before build/source artifacts are uploaded. Unit tests then
+run on their own runner in parallel with the gameplay lanes. Both use those
+artifacts instead of fetching and compiling again.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
 root selector is derived from top-level integration test files as before.
 The planner assigns selected groups to at most six lanes using previous durations.
@@ -155,9 +156,9 @@ and antag takeover tests nightly and on manual dispatch. Fixed map power budgets
 and the upstream recipe-count freeze were removed. Publishing, map rendering/checking, RSI previews, and packaging
 keep their dedicated workflows.
 
-The required check names are retained for migration. After this change lands,
-new PR revisions use the unified run; existing revisions may still show legacy
-placeholder checks. Actual hosted execution must be checked on the first PR
+Use `Required Checks` as the aggregate required check; remove any branch rule
+that still requires the retired `Testcases Complete` name. New PR revisions use
+the updated job graph. Actual hosted execution must be checked on the first PR
 run, including documentation skips, failures, and cancellation. No runtime
 speedup is claimed without timing measurements.
 
