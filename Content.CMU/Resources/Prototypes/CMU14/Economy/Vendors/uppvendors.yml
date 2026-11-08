@@ -1872,7 +1872,5 @@
     - name: Utilities
       entries:
       - id: RMCExplosivePlastic
-        points: 4
-      - id: RMCPackFlareCAS
-        points: 4
+      - id: RMCExplosivePlastic
 
