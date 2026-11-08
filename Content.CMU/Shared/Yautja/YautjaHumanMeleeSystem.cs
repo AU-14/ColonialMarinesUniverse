@@ -67,11 +67,13 @@ public sealed partial class YautjaHumanMeleeSystem : EntitySystem
         var armor = new CMGetArmorEvent(args.TargetSlots, TargetPart: args.TargetPart, TargetZone: args.TargetZone);
         RaiseLocalEvent(ent, ref armor);
         var meleeArmor = (int) (armor.Melee * armor.ArmorModifier);
+        var stripChance = Math.Clamp(meleeArmor * melee.StripChancePerArmor, 0f, 1f);
         if (meleeArmor > 0 &&
-            SharedRandomExtensions.PredictedProb(_timing,
-                Math.Min(1f, meleeArmor * melee.StripChancePerArmor),
-                GetNetEntity(ent),
-                GetNetEntity(tool)))
+            (stripChance >= 1f ||
+             stripChance > 0f && SharedRandomExtensions.PredictedProb(_timing,
+                 stripChance,
+                 GetNetEntity(ent),
+                 GetNetEntity(tool))))
         {
             return;
         }
