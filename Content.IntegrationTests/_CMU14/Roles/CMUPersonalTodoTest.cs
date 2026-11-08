@@ -52,7 +52,7 @@ public sealed class CMUPersonalTodoTest
             {
                 Assert.That(content, Does.Contain("Casey Test"));
                 Assert.That(content, Does.Contain("(O1) Second Lieutenant"));
-                Assert.That(content, Does.Contain($"Account PIN: {pin:D4}"));
+                Assert.That(content, Does.Contain($"[bold]Account PIN:[/bold] {pin:D4}"));
                 Assert.That(content, Does.Contain("Uniform of the Day:"));
                 Assert.That(content, Does.Contain("Deposit money at an ATM."));
                 Assert.That(checkboxCount, Is.InRange(5, 7));

@@ -45,6 +45,8 @@
   components:
   - type: Sprite
     sprite: CMU14/Clothing/snowfatigues.rsi
+  - type: ItemCamouflage
+    camouflageOverride: Snow
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
