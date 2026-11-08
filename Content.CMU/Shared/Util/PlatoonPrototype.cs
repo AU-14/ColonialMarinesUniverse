@@ -57,6 +57,9 @@ public sealed partial class PlatoonPrototype : IPrototype
     [DataField("lorePrimer")]
     public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }
 
+    [DataField]
+    public bool AlwaysKnowsThreat { get; private set; }
+
     [DataField("reqlist", required: false)]
     public string Reqlist { get; private set; } = string.Empty;
 

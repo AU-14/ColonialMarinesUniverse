@@ -165,6 +165,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         // Keep one deterministic knowledge line for the whole round.
         EnsureRoundKnowledgeLine(selectedThreat);
+        var alwaysKnowsThreat = !isThreatRole && PlatoonAlwaysKnowsThreat(jobId);
 
         switch (presetId)
         {
@@ -189,7 +190,8 @@ public sealed partial class CharacterInfoSystem : EntitySystem
                 }
                 else
                 {
-                    AddRoundKnowledgeLine(lines);
+                    if (!alwaysKnowsThreat)
+                        AddRoundKnowledgeLine(lines);
                 }
                 break;
             case "forceonforce":
@@ -200,6 +202,9 @@ public sealed partial class CharacterInfoSystem : EntitySystem
                 AddMapSentence(lines, selectedPlanet);
                 break;
         }
+
+        if (alwaysKnowsThreat)
+            AddMostDetailedThreatKnowledgeLine(lines, selectedThreat);
 
         // Keep output concise and stable.
         lines.RemoveAll(string.IsNullOrWhiteSpace);
@@ -250,6 +255,42 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     {
         if (!string.IsNullOrWhiteSpace(_roundKnowledgeLine))
             lines.Add(_roundKnowledgeLine);
+    }
+
+    private bool PlatoonAlwaysKnowsThreat(string? jobId)
+    {
+        if (string.IsNullOrWhiteSpace(jobId) || !_jobs.TryGetDepartment(jobId, out var department) ||
+            department.Faction is not { } faction)
+        {
+            return false;
+        }
+
+        var platoon = faction.Equals("govfor", StringComparison.OrdinalIgnoreCase)
+            ? _platoons.SelectedGovforPlatoon
+            : faction.Equals("opfor", StringComparison.OrdinalIgnoreCase)
+                ? _platoons.SelectedOpforPlatoon
+                : null;
+
+        return platoon?.AlwaysKnowsThreat == true;
+    }
+
+    private void AddMostDetailedThreatKnowledgeLine(List<string> lines, ThreatPrototype? selectedThreat)
+    {
+        if (selectedThreat?.LorePrimer is not { } primerId ||
+            !_prototypes.TryIndex(primerId, out LorePrimerPrototype? primer) ||
+            primer.KnowledgeLevels is not { Count: > 0 } knowledgeLevels)
+        {
+            return;
+        }
+
+        var mostDetailedLine = knowledgeLevels
+            .Where(kv => !string.IsNullOrWhiteSpace(kv.Key))
+            .OrderByDescending(kv => kv.Value)
+            .Select(kv => kv.Key)
+            .FirstOrDefault();
+
+        if (!string.IsNullOrWhiteSpace(mostDetailedLine))
+            lines.Add(mostDetailedLine);
     }
 
     private void AddInsurgencyPlatoonLine(List<string> lines, string? jobId)

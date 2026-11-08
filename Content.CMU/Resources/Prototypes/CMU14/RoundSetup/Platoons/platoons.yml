@@ -1666,6 +1666,7 @@
   - VehicleBlackfootTransport
   name: cmu-platoon-hazops-name
   lorePrimer: AU14PrimerPlatoonHAZOPS
+  alwaysKnowsThreat: true
   Allegiance: UA
   languages:
     - English
