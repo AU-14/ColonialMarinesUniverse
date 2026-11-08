@@ -305,7 +305,7 @@
     thresholds:
       0: Alive
       200: Critical
-      400: Dead
+      275: Dead
   - type: MobStateActions
     actions:
       # cmu edit start: no ghost button while in crit

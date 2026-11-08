@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Numerics;
 using Content.Client.Clickable;
-using Content.Shared.CMU14.Access;
 using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -62,9 +61,6 @@ public sealed partial class ColonyAtmWindow
     private AtmSprite _ledActivity = default!;
 
     private ColonyAtmBuiState? _state;
-    private bool _accessTerminal;
-    private bool _accessAuthorized;
-    private bool _accessFault;
     private bool _cardIn;
     private TimeSpan? _seenDispense;
     private TimeSpan? _seenDeposit;
@@ -187,7 +183,6 @@ public sealed partial class ColonyAtmWindow
 
     private void UpdateHardware(ColonyAtmBuiState s)
     {
-        _accessTerminal = false;
         var previous = _state;
         _state = s;
 
@@ -258,34 +253,6 @@ public sealed partial class ColonyAtmWindow
         UpdateLights();
     }
 
-    private void UpdateAccessHardware(CMUBaseAccessScannerBuiState state)
-    {
-        _state = null;
-        _accessTerminal = true;
-        _accessAuthorized = state.Authorized;
-        _accessFault = state.CardInserted && !state.Authorized;
-
-        if (state.CardInserted && !_cardIn)
-        {
-            _cardIn = true;
-            var recent = Recent(state.CardInsertedAt);
-            _card.Insert(state.CardPrototype, animate: recent);
-            if (recent)
-                _reading = ReadSeconds;
-        }
-        else if (!state.CardInserted && _cardIn)
-        {
-            _cardIn = false;
-            _card.Eject();
-        }
-
-        BtnCash.Visible = false;
-        _cash.Show(null);
-        _skimmer.Show(null);
-        _activity = ActivitySeconds;
-        UpdateLights();
-    }
-
     /// <summary>The bills are lifted out of the tray.</summary>
     private void LiftCash()
     {
@@ -350,24 +317,6 @@ public sealed partial class ColonyAtmWindow
     {
         var booting = _boot is BootPhase.Logo or BootPhase.Console;
         _ledPower.Show(_boot == BootPhase.PowerOn ? "off" : booting ? "green" : "green_pulse");
-
-        if (_accessTerminal)
-        {
-            _ledActivity.Show(_boot == BootPhase.PowerOn ? "off"
-                : booting ? "amber_busy"
-                : _accessFault ? "red_blink"
-                : _activity > 0f ? "amber_blink"
-                : "amber_idle");
-            _readerLights.Show(!_cardIn ? "lights_ready"
-                : _accessFault ? "lights_locked"
-                : _reading > 0f ? "lights_reading"
-                : _accessAuthorized ? "lights_ok"
-                : "lights_wait");
-            BtnReader.Click = !_cardIn ? ReaderMode.Insert
-                : _reading <= 0f ? ReaderMode.LogOff
-                : ReaderMode.None;
-            return;
-        }
 
         if (_state is not { } s)
         {

@@ -10,40 +10,6 @@ namespace Content.Shared.Vehicle;
 
 public sealed partial class VehicleRideSurfaceSystem
 {
-    /// <summary>
-    /// Places an entity directly onto a vehicle ride surface. Intended for server-authored scene actors
-    /// that begin on the vehicle rather than completing the normal climb interaction.
-    /// </summary>
-    public bool TryPlaceRider(EntityUid riderUid, EntityUid vehicle, Vector2 localPosition)
-    {
-        if (!TryComp(vehicle, out VehicleRideSurfaceComponent? surface))
-            return false;
-
-        var current = GetRideSurfaceTransform(Transform(vehicle));
-        if (current.MapId == MapId.Nullspace || !Contains(surface, localPosition, 0f))
-            return false;
-
-        if (!CanRide(vehicle, surface, riderUid, current.MapId, out var riderXform))
-            return false;
-
-        var targetPosition = LocalToWorld(localPosition, current);
-        _transform.SetMapCoordinates((riderUid, riderXform), new MapCoordinates(targetPosition, current.MapId));
-
-        var rider = EnsureComp<VehicleRideSurfaceRiderComponent>(riderUid);
-        if (rider.Vehicle != vehicle)
-            UntrackRider(riderUid, rider.Vehicle);
-
-        rider.Vehicle = vehicle;
-        rider.LocalPosition = localPosition;
-        rider.ClimbDownDoAfter = null;
-        rider.ClimbDownFromEdge = false;
-        rider.ClimbDownCompleting = false;
-        rider.EdgeClimbDownAt = null;
-        Dirty(riderUid, rider);
-        TrackRider(vehicle, riderUid);
-        return true;
-    }
-
     private void OnGetAltVerbs(Entity<VehicleRideSurfaceComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanInteract || args.Using != null)

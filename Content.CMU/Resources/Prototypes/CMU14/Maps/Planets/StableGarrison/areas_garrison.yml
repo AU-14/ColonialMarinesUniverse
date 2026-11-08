@@ -49,21 +49,6 @@
     weatherEnabled: false
 
 - type: entity
-  parent: RMCAreaProtectionTwo
-  id: AU14AreaGarrisonProtectionTwo
-  name: Garrison - Protection 2
-  abstract: true
-  components:
-  - type: Sprite
-    sprite: _RMC14/Areas/areas_kutjevo.rsi
-    state: base_ico
-  - type: Area
-    buildSpecial: true
-    powerNet: ground
-    minimapColor: '#573e19'
-    weatherEnabled: false
-
-- type: entity
   parent: AU14AreaGarrison
   id: AU14AreaGarrisonCaves
   name: Garrison - Caves
@@ -190,7 +175,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: AU14AreaGarrisonProtectionTwo
+  parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonCIC
   name: Joint Base Schaefer - CIC
   components:
@@ -200,7 +185,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: AU14AreaGarrisonProtectionTwo
+  parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonFrontGate
   name: Joint Base Schaefer - Front Gate
   components:
@@ -230,7 +215,7 @@
     minimapColor: '#573e19'
 
 - type: entity
-  parent: AU14AreaGarrisonProtectionTwo
+  parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonMotorPool
   name: Joint Base Schaefer - Motor Pool
   components:
@@ -238,111 +223,6 @@
     state: foremans
   - type: Area
     minimapColor: '#573e19'
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonLogistics
-  name: Joint Base Schaefer - Logistics
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonBriefing
-  name: Joint Base Schaefer - Briefing
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonArmory
-  name: Joint Base Schaefer - Armory
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonGym
-  name: Joint Base Schaefer - Gym
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonPool
-  name: Joint Base Schaefer - Pool
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonRunningTrack
-  name: Joint Base Schaefer - Running Track
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonOfficerHousing
-  name: Joint Base Schaefer - Officer Housing
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonEnlistedTownhouses
-  name: Joint Base Schaefer - Enlisted Townhouses
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonPostExchange
-  name: Joint Base Schaefer - Post Exchange
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonBarberShop
-  name: Joint Base Schaefer - Barber Shop
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonDryCleaners
-  name: Joint Base Schaefer - Dry Cleaners
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonMilitaryPoliceOffice
-  name: Joint Base Schaefer - Military Police Office
-
-- type: entity
-  parent: AU14AreaGarrisonProtectionTwo
-  id: AU14AreaStableGarrisonMadiganMarineMedicalCenter
-  name: Joint Base Schaefer - Madigan Marine Medical Center
-
-- type: entity
-  parent: AU14AreaGarrisonOutdoors
-  id: AU14AreaStableGarrisonSouthBase
-  name: Joint Base Schaefer
-  components:
-  - type: Sprite
-    state: ext
-  - type: Area
-    minimapColor: '#016f6f'
-
-- type: entity
-  parent: AU14AreaGarrisonOutdoors
-  id: AU14AreaStableGarrisonNorthBase
-  name: Joint Base Schaefer - North Base
-  components:
-  - type: Sprite
-    state: ext
-  - type: Area
-    minimapColor: '#016f6f'
-
-- type: entity
-  parent: AU14AreaGarrisonOutdoors
-  id: AU14AreaGarrisonNorthernAlbacetrie
-  name: Northern Albacetrie
-  components:
-  - type: Sprite
-    state: ext
-  - type: Area
-    minimapColor: '#016f6f'
-
-- type: entity
-  parent: AU14AreaGarrisonOutdoors
-  id: AU14AreaGarrisonSouthernAlbacetrie
-  name: Southern Albacetrie
-  components:
-  - type: Sprite
-    state: ext
-  - type: Area
-    minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors

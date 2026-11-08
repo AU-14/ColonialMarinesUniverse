@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Chances Claim"
     mapId: auchances
-    inRotation: false
     lorePrimer: AU14PrimerPlanetChances
     allegiance: UA
     camouflage: Urban

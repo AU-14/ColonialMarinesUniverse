@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Fort McNeil"
     mapId: cmufortmcneil
-    inRotation: false
     lorePrimer: CMUPrimerPlanetFortMcNeil
     allegiance: UA
     camouflage: Urban
