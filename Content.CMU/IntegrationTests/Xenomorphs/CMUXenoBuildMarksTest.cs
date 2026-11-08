@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions.Components;
 using Content.Shared.Eye;
+using Content.Shared.GameTicking;
 using Robust.Server.GameStates;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -80,6 +81,9 @@ public sealed class CMUXenoBuildMarksTest
             var areaGrid = entities.EnsureComponent<AreaGridComponent>(map.Grid.Owner);
             entities.System<AreaSystem>().ReplaceArea(areaGrid, mapSystem.CoordinatesToTile(map.Grid.Owner, map.Grid.Comp, target), "CMUTestBuildMarkArea");
             hive = entities.SpawnEntity(hiveId, map.GridCoords);
+            // Pooled servers may already be past the normal instant-build window.
+            entities.GetComponent<HiveComponent>(hive).InstantBuildDuration =
+                entities.System<SharedGameTicker>().RoundDuration() + TimeSpan.FromMinutes(1);
             if (!instant)
             {
                 while (construction.TryUseHiveInstantBuild(hive))
