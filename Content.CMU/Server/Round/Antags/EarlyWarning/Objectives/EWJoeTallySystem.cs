@@ -16,11 +16,12 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 
 /// <summary>
 /// ARCH-03 batch 2 counter directives (<see cref="EWJoeTallyConditionComponent"/>): Bear Witness (distinct
-/// Judgement or Test of Faith victims). ARCH-11 moved Blind the Watch, Silence the Colony and Purge the Nest to
+/// Judgement or Test of Faith victims, at most <see cref="EWJoeTallyConditionComponent.MaxPerCast"/> per cast,
+/// RB-33). ARCH-11 moved Blind the Watch, Silence the Colony and Purge the Nest to
 /// the Offer action (<c>EWJoeOfferSystem</c>, Meld or consume). This system also stamps
 /// <see cref="CMULastDamagedByComponent"/> on the power entities that feed an area (APCs, reactors, portable
 /// generators) for Darken a District, from their damage, before the destructible thresholds run so the killing
-/// blow is stamped too.
+/// blow is stamped too. RB-38: that stamp is now Darken's only attribution (<see cref="LastJoeHit"/>).
 /// </summary>
 public sealed class EWJoeTallySystem : EntitySystem
 {
@@ -84,6 +85,7 @@ public sealed class EWJoeTallySystem : EntitySystem
         ent.Comp.Target = _random.Next(min, max + 1);
         ent.Comp.Count = 0;
         ent.Comp.Counted.Clear();
+        ent.Comp.CastCredits = 0;
     }
 
     private void OnAfterAssign(Entity<EWJoeTallyConditionComponent> ent, ref ObjectiveAfterAssignEvent args)
@@ -164,21 +166,43 @@ public sealed class EWJoeTallySystem : EntitySystem
         Credit((ent, comp), EWJoeTallyKind.Witness, args.Target, 1);
     }
 
-    /// <summary>Adds <paramref name="weight"/> to every unfinished directive of <paramref name="kind"/> that has not counted <paramref name="target"/>.</summary>
+    /// <summary>
+    /// Adds <paramref name="weight"/> to every unfinished directive of <paramref name="kind"/> that has not counted
+    /// <paramref name="target"/>. RB-33: a directive with <see cref="EWJoeTallyConditionComponent.MaxPerCast"/>
+    /// counts at most that many targets per cast. A cast (Test of Faith, a Judgement cone) flashes everyone it
+    /// reaches inside one action handler, so every credit of one cast lands in the same server tick; a target
+    /// past the cap is not marked counted and can still count on a later cast.
+    /// </summary>
     public void Credit(Entity<EWJoeComponent> joe, EWJoeTallyKind kind, EntityUid target, int weight)
     {
+        var tick = _timing.CurTick;
         foreach (var objective in joe.Comp.CurrentObjectives)
         {
             if (joe.Comp.CompletedCredit.ContainsKey(objective)
                 || !TryComp(objective, out EWJoeTallyConditionComponent? tally)
                 || tally.Kind != kind
-                || tally.Count >= tally.Target)
+                || tally.Count >= tally.Target
+                || tally.Counted.Contains(target))
             {
                 continue;
             }
 
-            if (tally.Counted.Add(target))
-                tally.Count += weight;
+            if (tally.MaxPerCast > 0)
+            {
+                if (tally.CastTick != tick)
+                {
+                    tally.CastTick = tick;
+                    tally.CastCredits = 0;
+                }
+
+                if (tally.CastCredits >= tally.MaxPerCast)
+                    continue;
+
+                tally.CastCredits++;
+            }
+
+            tally.Counted.Add(target);
+            tally.Count += weight;
         }
     }
 

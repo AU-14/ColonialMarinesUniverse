@@ -156,7 +156,7 @@
     - type: CMUNoSelfRepairPenalty
     - type: IgnoreXenoWeedsSlowdown
     - type: CMUIgnoreResinSlowdown
-    # W7 0A Industrial Grip: unarmed hits deal +50% to xenofauna and slow them for 1 s
+    # W7 0A Industrial Grip: unarmed hits deal +15% to xenofauna (rebalance RB-08) and slow them for 1 s
     - type: EWJoeIndustrialGrip
     # W7 0B Acid-Rated Plating: halves xeno acid damage and sheds acid faster
     - type: EWJoeAcidPlating
@@ -238,7 +238,8 @@
   # E6: MELDING. The APOLLO announcement is made in code on reaching this level. THE LIGHT is the
   # orange light plus the gaze envelope (A-14); Saturate strips and floors a cone (A-15); Magnetic
   # Resonance is passive reflection (A-16; playtest 4: a real reflection of IFF bullets too, so the CMU
-  # component replaces RMCReflective, which only zeroes IFF bullets).
+  # component replaces RMCReflective, which only zeroes IFF bullets). Rebalance RB-06: 10%, frontal 120°
+  # only (EWJoeResonance.frontalArc), and a reflected bullet keeps its IFF.
   - name: ew-joe-level-5
     actions:
     - CMUActionEWJoeSaturate
@@ -257,7 +258,7 @@
       color: "#ff8a00"
     - type: EWJoeLightPulse
     - type: EWJoeResonance
-      chance: 0.2
+      chance: 0.1
       angle: 60
       reflectionMultiplier: 0.5
       accuracy: 100

@@ -12,3 +12,6 @@ cmu-ew-joe-xenokit-purge-done = The ground around you is scorched clean of weeds
 
 # 4B Unwind Recoil
 cmu-ew-joe-xenokit-recoil-start = Your frame uncoils, ready to throw back every blow.
+
+# 3B Overclock (RB-28): the per-activation cap
+cmu-ew-joe-xenokit-overclock-capped = Your governor cuts in and throttles the overclock back. The venting stops.

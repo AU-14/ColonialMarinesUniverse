@@ -19,7 +19,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
-/// Force on Force rolls the Early Warning Joe at 35% from its own table (FoFAntags), and the rolled rule offers
+/// Force on Force rolls the Early Warning Joe at 25% from its own table (FoFAntags), and the rolled rule offers
 /// 1-2 ghost-role Joes scaled by player count, never more than 2 (ARCH-01). The ghost role is gated by the
 /// synthetic whitelist only and previews a Working Joe (COUPLING-01).
 /// </summary>
@@ -57,10 +57,18 @@ public sealed class EWJoeFoFRollTest
 
         await server.WaitAssertion(() =>
         {
-            // the preset carries the roller, and the roller's table is the 35% Joe
+            // the preset carries the roller, and the roller's table is the 25% Joe (rebalance)
             Assert.That(protos.Index<GamePresetPrototype>(FoFPreset).Rules, Does.Contain(new EntProtoId(FoFRoller)));
             Assert.That(protos.Index<EntityPrototype>(FoFRoller).TryGetComponent(out DistressAntagsRuleComponent? roller, entities.ComponentFactory));
-            Assert.That(roller!.Rules, Is.EquivalentTo(new Dictionary<EntProtoId, float> { [FoFRule] = 0.35f }));
+            Assert.That(roller!.Rules, Is.EquivalentTo(new Dictionary<EntProtoId, float> { [FoFRule] = 0.25f }));
+
+            // every Early Warning Joe roll is 25%, and (RB-41) the colony demand boost never raises it
+            Assert.Multiple(() =>
+            {
+                Assert.That(ColonyAntagsRuleSystem.AntagRulePrototypes[EWJoeRuleSystem.AntagId], Is.EqualTo(0.25f), "Colony Fall roll");
+                Assert.That(ColonyAntagsRuleSystem.DemandExemptRules, Does.Contain(EWJoeRuleSystem.AntagId), "25% is a hard ceiling");
+                Assert.That(DistressAntagsRuleSystem.AntagRulePrototypes[EWJoeRuleSystem.DistressAntagId], Is.EqualTo(0.25f), "Distress Signal roll");
+            });
 
             // the rolled rule is the planet ghost-role Joe on the Distress host specifier, so the rule system's gates match it
             var rule = protos.Index<EntityPrototype>(FoFRule);

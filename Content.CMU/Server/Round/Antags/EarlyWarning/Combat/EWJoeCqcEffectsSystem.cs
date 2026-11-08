@@ -8,7 +8,6 @@ using Content.Shared.Examine;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
-using Content.Shared.Stunnable;
 
 namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 
@@ -25,10 +24,10 @@ public sealed class EWJoeCqcEffectsSystem : EntitySystem
     [Dependency] private RMCDazedSystem _dazed = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private FiremanCarrySystem _fireman = default!;
+    [Dependency] private EWJoeLiturgySystem _liturgy = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     public delegate bool CqcEffect(Entity<EWJoeComponent> joe, EntityUid target, EWJoeCqcSequencePrototype sequence, bool empowered);
@@ -151,7 +150,7 @@ public sealed class EWJoeCqcEffectsSystem : EntitySystem
     /// <summary>
     /// Unmaking: a Saturate-lite. Everyone alive in a short cone towards the target and in the Joe's line of sight
     /// is dazed, and the target is knocked down. River-Melded thralls are spared, as Saturate spares them. Nothing
-    /// is stripped. The knockdown is scaled for xenofauna (ECS-11).
+    /// is stripped. The knockdown is scaled for xenofauna (ECS-11) and goes through the CC window (RB-13).
     /// </summary>
     private bool Unmaking(Entity<EWJoeComponent> joe, EntityUid target, EWJoeCqcSequencePrototype sequence, bool empowered)
     {
@@ -184,8 +183,8 @@ public sealed class EWJoeCqcEffectsSystem : EntitySystem
 
         // the target is always caught, even standing just outside the reach
         _dazed.TryDaze(target, sequence.DazeDuration, refresh: true);
-        var knockdown = EWJoeTargetRules.ScaleStun(EntityManager, target, sequence.Duration ?? TimeSpan.FromSeconds(1), joe.Comp.XenofaunaStunMultiplier);
-        _stun.TryKnockdown(target, knockdown);
+        // RB-13: the knockdown is hard CC, scaled for xenofauna (ECS-11) and for the target's window
+        _liturgy.ApplyHardCc(joe, target, sequence.Duration ?? TimeSpan.FromSeconds(1), EWJoeHardCcKind.Knockdown);
         _popup.PopupEntity(Loc.GetString("cmu-ew-joe-liturgy-unmaking", ("target", target)), target, PopupType.LargeCaution);
         return true;
     }

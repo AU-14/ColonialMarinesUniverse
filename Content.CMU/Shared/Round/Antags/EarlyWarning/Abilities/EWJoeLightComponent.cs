@@ -14,8 +14,9 @@ public sealed partial class EWJoeLightComponent : Component
     [DataField]
     public float Range = 7f;
 
+    /// <summary>Gaze time that fills the envelope; the telegraph (rebalance RB-22: 5 s).</summary>
     [DataField]
-    public TimeSpan FillTime = TimeSpan.FromSeconds(4);
+    public TimeSpan FillTime = TimeSpan.FromSeconds(5);
 
     [DataField]
     public TimeSpan DecayTime = TimeSpan.FromSeconds(2);
@@ -23,14 +24,16 @@ public sealed partial class EWJoeLightComponent : Component
     [DataField]
     public TimeSpan TickInterval = TimeSpan.FromSeconds(0.25);
 
+    /// <summary>Paralyze when the envelope fills (rebalance RB-22: 2.5 s, inside the area-CC norm).</summary>
     [DataField]
-    public TimeSpan Paralyze = TimeSpan.FromSeconds(4);
+    public TimeSpan Paralyze = TimeSpan.FromSeconds(2.5);
 
     [DataField]
     public float BrainDamage = 8f;
 
+    /// <summary>How long a filled envelope leaves its victim immune (rebalance RB-22: 20 s).</summary>
     [DataField]
-    public TimeSpan Immunity = TimeSpan.FromSeconds(10);
+    public TimeSpan Immunity = TimeSpan.FromSeconds(20);
 
     [DataField]
     public TimeSpan NextTick;

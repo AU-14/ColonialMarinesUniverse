@@ -63,6 +63,9 @@ public sealed class EWJoeCqcSequenceTest
                 // ARCH-12: free sequences would hand out the empower for nothing; max stacks does that now
                 Assert.That(protos.EnumeratePrototypes<EWJoeCqcSequencePrototype>().Any(s => s.ID == "Exaltation"), Is.False, "Exaltation is retired");
                 Assert.That(effects.Has("Empower"), Is.False, "and so is its effect");
+
+                // RB-15: Profane's obstacle paralyze is hard CC, so the sequence is gated like the others
+                Assert.That(protos.Index<EWJoeCqcSequencePrototype>("Profane").HardCc, "Profane is hard CC");
             });
         });
 
@@ -157,6 +160,9 @@ public sealed class EWJoeCqcSequenceTest
             Assert.That(liturgy.Buffer, Is.Empty, "the first Rebuke fires");
             Assert.That(liturgy.Stacks, Is.EqualTo(3), "and spends nothing");
             Assert.That(system.IsCcImmune(joe, victim), "and opens the CC-immunity window");
+
+            // RB-14's shared cooldown would also refuse it; lift it so this checks the window alone
+            liturgy.NextSequence = TimeSpan.Zero;
 
             // the same sequence within 6 s: the steps stay in the buffer and the Exalted reached is kept
             system.Register(joe, EWJoeCqcInput.Hit, victim);
@@ -279,6 +285,7 @@ public sealed class EWJoeCqcSequenceTest
             // the input that fills the meter does not empower its own sequence: max stacks empower the NEXT move
             var second = entities.SpawnEntity(Human, map.GridCoords);
             system.Break((joe, liturgy));
+            liturgy.NextSequence = TimeSpan.Zero; // RB-14's cooldown is covered by EWJoeCcWindowTest
             system.Register(joe, EWJoeCqcInput.Ability, other); // two stacks: Hit, Hit brings four, Disarm the fifth
             system.Register(joe, EWJoeCqcInput.Hit, second);
             system.Register(joe, EWJoeCqcInput.Hit, second);

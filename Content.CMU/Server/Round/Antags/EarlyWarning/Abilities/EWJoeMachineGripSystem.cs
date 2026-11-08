@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Marines.Skills;
@@ -45,13 +46,44 @@ public sealed class EWJoeMachineGripSystem : EntitySystem
         SubscribeLocalEvent<CMUXenoGrabberComponent, CMUAggressiveGrabbedEvent>(OnXenoGrabbed);
     }
 
+    /// <summary>RB-18 (FLOW-17): how many times one hold may restart the victim's struggle, all sources together.</summary>
+    public const int StruggleRestartsPerHold = 1;
+
     /// <summary>
     /// A hold restarts the struggle: when <paramref name="victim"/> is mid break-free do-after it starts over at full
-    /// length. Choke ticks and machete hits call this.
+    /// length. Choke ticks and machete hits call this. RB-18 (FLOW-17): at most <see cref="StruggleRestartsPerHold"/>
+    /// restart per hold, shared by every caller; a call that finds the victim not struggling spends nothing.
+    /// Returns whether the struggle was restarted.
     /// </summary>
-    public void ExtendStruggle(EntityUid victim)
+    public bool ExtendStruggle(EntityUid victim)
     {
-        _fireman.RestartBreakFree(victim);
+        var held = EnsureComp<EWJoeHeldComponent>(victim);
+        if (held.StruggleRestarts >= StruggleRestartsPerHold)
+            return false;
+
+        if (!_fireman.RestartBreakFree(victim))
+            return false;
+
+        held.StruggleRestarts++;
+        return true;
+    }
+
+    /// <summary>RB-18: how many struggle restarts the current hold on <paramref name="victim"/> has used.</summary>
+    public int StruggleRestarts(EntityUid victim)
+    {
+        return TryComp(victim, out EWJoeHeldComponent? held) ? held.StruggleRestarts : 0;
+    }
+
+    /// <summary>RB-17: a choke has already knocked <paramref name="victim"/> out in the current hold.</summary>
+    public bool ChokeKnockedOut(EntityUid victim)
+    {
+        return TryComp(victim, out EWJoeHeldComponent? held) && held.ChokeKnockedOut;
+    }
+
+    /// <summary>RB-17: records the one choke knockout of the current hold on <paramref name="victim"/>.</summary>
+    public void MarkChokeKnockedOut(EntityUid victim)
+    {
+        EnsureComp<EWJoeHeldComponent>(victim).ChokeKnockedOut = true;
     }
 
     private void OnPullStarted(Entity<EWJoeComponent> ent, ref PullStartedMessage args)
@@ -60,6 +92,10 @@ public sealed class EWJoeMachineGripSystem : EntitySystem
             return;
 
         var target = args.PulledUid;
+
+        // RB-17/RB-18: a new pull is a new hold (an aggressive grab only ever upgrades a running pull)
+        RemComp<EWJoeHeldComponent>(target);
+
         if (!HasComp<MobStateComponent>(target) ||
             !TryComp(ent, out CanFiremanCarryComponent? carry) ||
             !_fireman.CanAggressiveGrab((ent.Owner, carry), target))

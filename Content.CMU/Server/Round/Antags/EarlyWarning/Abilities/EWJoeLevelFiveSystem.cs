@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Systems;
 using Content.Server.CMU14.Chat;
+using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared._RMC14.Barricade;
 using Content.Shared.CMU14.Chemistry.Effects;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
@@ -52,9 +53,10 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RotateToFaceSystem _rotate = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private EWJoeXenoKitSystem _xenoKit = default!;
+    // RB-13: THE LIGHT's paralyze and Saturate's knockdown are hard CC through the shared window
+    [Dependency] private EWJoeLiturgySystem _liturgy = default!;
 
     private static readonly SoundPathSpecifier AnnounceSound = new("/Audio/Announcements/announce.ogg");
     private static readonly ProtoId<DamageTypePrototype> BrainDamageType = "Blunt";
@@ -189,7 +191,8 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 
     private void Envelop(Entity<EWJoeLightComponent> joe, Entity<EWJoeEnvelopedComponent> victim, TimeSpan now)
     {
-        _stun.TryParalyze(victim, ScaleStun(joe, victim, joe.Comp.Paralyze), true);
+        // ECS-11 + RB-13: scaled for xenofauna (when the source is a Joe), then the CC window
+        _liturgy.ApplyHardCc(joe, victim, joe.Comp.Paralyze, EWJoeHardCcKind.Paralyze);
         // Direct: the light lands whatever the victim has in their blood
         _medical.DamageOrgan<CMUBrainComponent>(victim, joe.Comp.BrainDamage, BrainDamageType, OrganDamageSource.Direct);
 
@@ -204,14 +207,6 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("cmu-ew-joe-light-enveloped", ("target", victim.Owner)), joe, joe);
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"Early Warning Joe {ToPrettyString(joe):joe} enveloped {ToPrettyString(victim):victim} in THE LIGHT");
-    }
-
-    /// <summary>ECS-11: scales a stun by the Joe's xenofauna multiplier; unscaled when the source is not a Joe.</summary>
-    private TimeSpan ScaleStun(EntityUid joe, EntityUid target, TimeSpan duration)
-    {
-        return TryComp(joe, out EWJoeComponent? joeComp)
-            ? EWJoeTargetRules.ScaleStun(EntityManager, target, duration, joeComp.XenofaunaStunMultiplier)
-            : duration;
     }
 
     /// <summary>
@@ -385,8 +380,8 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 
     private void Strip(Entity<EWJoeComponent> joe, EntityUid target)
     {
-        var knockdown = EWJoeTargetRules.ScaleStun(EntityManager, target, joe.Comp.SaturateKnockdown, joe.Comp.XenofaunaStunMultiplier);
-        _stun.TryKnockdown(target, knockdown, refresh: true, autoStand: true, drop: true);
+        // ECS-11 + RB-13: scaled for xenofauna, then the CC window; refreshed, standing back up, dropping what is held
+        _liturgy.ApplyHardCc(joe, target, joe.Comp.SaturateKnockdown, EWJoeHardCcKind.Knockdown);
 
         // 5B Saturate (xeno): xenofauna wear no helmet to tear away, so the cone dazes them and cracks their armor
         _xenoKit.SaturateXeno(joe, target);

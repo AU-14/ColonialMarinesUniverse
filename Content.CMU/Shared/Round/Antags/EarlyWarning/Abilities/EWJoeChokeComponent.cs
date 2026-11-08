@@ -16,9 +16,15 @@ public sealed partial class EWJoeChokeComponent : Component
     public EntityUid? Action;
 
     /// <summary>
-    /// Review fix (FLOW-02): the hold resets the target's struggle at most once per choke, so the victim can
-    /// still break free; restarting it every tick made a choke inescapable.
+    /// RB-17: the choke has knocked <see cref="Target"/> out (RMC stamina below its knockout tier) once in this hold.
+    /// From then on a choke tick never drains stamina below <see cref="StaminaFloorAfterKnockout"/>. Reset per hold:
+    /// a new grab starts clean, and a choke released and restarted inside the same hold keeps it.
+    /// The struggle restart is shared by every source and tracked by <c>EWJoeMachineGripSystem</c> (RB-18).
     /// </summary>
     [DataField]
-    public bool StruggleExtended;
+    public bool KnockedOut;
+
+    /// <summary>RB-17: after the one knockout, choke ticks stop at this much stamina (RMC knocks out below 10).</summary>
+    [DataField]
+    public double StaminaFloorAfterKnockout = 10;
 }

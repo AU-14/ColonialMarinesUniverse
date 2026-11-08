@@ -125,7 +125,8 @@
 # where the job-based Joe rolls. The CMUIntelDisk tag stays; storage fills use it.
 
 # Tithe of Power: power cells the Joe takes. Its own tools' cells are spent at assignment, so only what it
-# takes afterwards counts (EWJoeCollectFreshOnly).
+# takes afterwards counts (EWJoeCollectFreshOnly). RB-34: 3-5, and only cells it holds count (requireHeld), so
+# they must still be on its frame when the directive completes.
 - type: entity
   parent: CMUEWJoeBaseCollectObjective
   id: CMUEWJoeCollectPowerCellsObjective
@@ -135,8 +136,9 @@
       sprite: _RMC14/Objects/Power/cells.rsi
       state: cell
   - type: EWJoeCollectCondition
-    min: 2
-    max: 3
+    min: 3
+    max: 5
+    requireHeld: true
     title: cmu-ew-joe-objective-collect-power-cells-title
     description: cmu-ew-joe-objective-collect-power-cells-description
     whitelist:
@@ -145,6 +147,7 @@
   - type: EWJoeCollectFreshOnly
 
 # Strip Their Names: ID cards the Joe takes. Its own ID card is spent at assignment (EWJoeCollectFreshOnly).
+# RB-34: 3-5, held when the directive completes (requireHeld).
 - type: entity
   parent: CMUEWJoeBaseCollectObjective
   id: CMUEWJoeCollectIdCardsObjective
@@ -154,8 +157,9 @@
       sprite: _RMC14/Objects/CMIDs/id.rsi
       state: plain
   - type: EWJoeCollectCondition
-    min: 1
-    max: 2
+    min: 3
+    max: 5
+    requireHeld: true
     title: cmu-ew-joe-objective-collect-id-cards-title
     description: cmu-ew-joe-objective-collect-id-cards-description
     whitelist:
@@ -189,8 +193,9 @@
 # Xenofauna directives: xenofauna is non-humanoid threat life (EWJoeTargetRules.IsXenofauna), whatever the
 # round's threat is. Any mode can offer them, Colony Fall included (the Joe rolls in Colony Fall and
 # Insurgency through the job and in Distress Signal through EWJoeDistress). EWJoeRequiresXenofauna refuses
-# them unless living xenofauna is on the Joe's planet or the selected threat is flagged xenofauna, so
-# humanoid-threat rounds, Insurgency and FoF never offer them and the pools below can list them everywhere.
+# them unless living xenofauna is on the Joe's planet (RB-37: a threat merely flagged xenofauna that has not
+# spawned no longer opens them), so humanoid-threat rounds, Insurgency and FoF never offer them and the pools
+# below can list them everywhere.
 # Maim N xenofauna: each xenofauna body the Joe brings down to critical (or kills outright) counts once;
 # xeno parasites do not. Two counts by level (ECS-04): 2-3 here for levels 2+, 1-2 in the early variant.
 - type: entity
@@ -290,7 +295,8 @@
       - Explosive
 
 # Blind the Watch (ARCH-11, a Meld directive): security cameras the Joe Offers. A camera is not taken in but
-# melded into the river where it hangs: lit orange and switched off for good (EWJoeMeldedStructureSystem).
+# melded into the river where it hangs: lit orange and switched off until a welder burns the meld out (RB-30,
+# EWJoeMeldedStructureSystem). RB-35: 2-4 cameras.
 - type: entity
   parent: CMUEWJoeBaseObjective
   id: CMUEWJoeBlindTheWatchObjective
@@ -303,8 +309,8 @@
       state: camera
   - type: EWJoeOfferCondition
     meld: true
-    min: 1
-    max: 2
+    min: 2
+    max: 4
     title: cmu-ew-joe-objective-blind-watch-title
     description: cmu-ew-joe-objective-blind-watch-description
     whitelist:
@@ -312,7 +318,8 @@
       - SurveillanceCamera
 
 # Silence the Colony (ARCH-11, a Meld directive): telecomms servers the Joe Offers. Colony servers cannot be
-# destroyed (FLOW-13); a melded one glows orange and is no longer a server (TelecomServer removed).
+# destroyed (FLOW-13); a melded one glows orange and is no longer a server (TelecomServer removed) until a
+# welder burns the meld out (RB-30).
 - type: entity
   parent: CMUEWJoeBaseObjective
   id: CMUEWJoeSilenceColonyObjective
@@ -352,9 +359,11 @@
 
 # Purge the Nest (§6a, ARCH-11): whatever the round's threat builds (CMUThreatStructure: xeno resin, eggs and
 # hive structures, pathogen structures and mycelium, biomorph flesh nests and walls), Offered and consumed like
-# items (anchored structures allowed: defaultFilter off), by weight (cores count 3; kudzu, weight 0, never).
-# Refused while the planet holds less than the minimum, so it waits for the threat to build. No gate on the
-# threat's kind: an ape or wendigo round simply has nothing to count.
+# items (anchored structures allowed: defaultFilter off), by weight (a flesh nest counts 3; kudzu, weight 0,
+# never). RB-31: hive, overmind and blight cores are blacklisted: never offered, never counted as available.
+# Offering a structure takes 6 s (EWJoeOfferSystem.StructureOfferDelay). Refused while the planet holds less
+# than the minimum, so it waits for the threat to build. No gate on the threat's kind: an ape or wendigo round
+# simply has nothing to count.
 - type: entity
   parent: CMUEWJoeBaseObjective
   id: CMUEWJoePurgeNestObjective
@@ -375,9 +384,14 @@
     whitelist:
       components:
       - CMUThreatStructure
+    blacklist:
+      components:
+      - HiveCore
+      - CMUBlightCore
 
 # Bear Witness: distinct living victims of the Joe's Test of Faith or Judgement. Refused unless six living
-# organic people stand on the planet (a near-empty colony has no crowd to judge).
+# organic people stand on the planet (a near-empty colony has no crowd to judge). RB-33: 4-6 people, and one
+# cast counts at most two of them (maxPerCast).
 - type: entity
   parent: CMUEWJoeBaseObjective
   id: CMUEWJoeBearWitnessObjective
@@ -391,8 +405,9 @@
   - type: EWJoeTallyCondition
     kind: Witness
     minPopulation: 6
-    min: 2
-    max: 3
+    maxPerCast: 2
+    min: 4
+    max: 6
     title: cmu-ew-joe-objective-bear-witness-title
     description: cmu-ew-joe-objective-bear-witness-description
 
@@ -513,7 +528,7 @@
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel0
   weights:
-    CMUEWJoeObjectiveGroupXenoEarly: 1 # refused unless xenofauna is present or expected
+    CMUEWJoeObjectiveGroupXenoEarly: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
     CMUEWJoeObjectiveGroupCollectEarly: 1
     CMUEWJoeObjectiveGroupSilenceEarly: 0.5
@@ -522,7 +537,7 @@
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel1
   weights:
-    CMUEWJoeObjectiveGroupXenoEarlyPurge: 1 # refused unless xenofauna is present or expected
+    CMUEWJoeObjectiveGroupXenoEarlyPurge: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
     CMUEWJoeObjectiveGroupCollect: 1
     CMUEWJoeObjectiveGroupConsole: 0.5
@@ -532,7 +547,7 @@
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel2
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # refused unless xenofauna is present or expected
+    CMUEWJoeObjectiveGroupXeno: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
     CMUEWJoeObjectiveGroupCollect: 1
     CMUEWJoeObjectiveGroupConsoleLate: 1
@@ -542,7 +557,7 @@
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel3
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # refused unless xenofauna is present or expected
+    CMUEWJoeObjectiveGroupXeno: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
     CMUEWJoeObjectiveGroupCollectLate: 0.5
     CMUEWJoeObjectiveGroupConsoleLate: 1
@@ -552,7 +567,7 @@
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel4
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # refused unless xenofauna is present or expected
+    CMUEWJoeObjectiveGroupXeno: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKillLate: 1
     CMUEWJoeObjectiveGroupCollectFinal: 0.5
     CMUEWJoeObjectiveGroupConsoleLate: 1

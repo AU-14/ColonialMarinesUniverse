@@ -154,11 +154,14 @@ public sealed class EWJoeMachineGripTest
 
         EntityUid joe = default, victim = default;
         TimeSpan firstStart = default;
+        var multiplier = 1f;
         await server.WaitAssertion(() =>
         {
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             var comp = entities.EnsureComponent<EWJoeComponent>(joe);
             entities.System<EWJoeRuleSystem>().ApplyLevel((joe, comp), 2);
+            // RB-19: the level table's value (x1.25 at level 2), read from the component so tuning does not break this
+            multiplier = comp.GripEscapeMultipliers[2];
 
             Assert.Multiple(() =>
             {
@@ -167,8 +170,9 @@ public sealed class EWJoeMachineGripTest
                 var skill = entities.System<Content.Shared._RMC14.Marines.Skills.SkillsSystem>().GetSkillDelayMultiplier(joe, carry.Skill);
                 Assert.That(carry.AggressiveGrabDelay * skill, Is.EqualTo(comp.GripTelegraph),
                     "a second click cannot beat the 0.4 s telegraph");
-                Assert.That(entities.GetComponent<CMUGrabEscapeMultiplierComponent>(joe).Multiplier, Is.EqualTo(1.5f),
-                    "x1.5 at level 2");
+                Assert.That(multiplier, Is.EqualTo(1.25f), "x1.25 at level 2 (RB-19)");
+                Assert.That(entities.GetComponent<CMUGrabEscapeMultiplierComponent>(joe).Multiplier, Is.EqualTo(multiplier),
+                    "the level's escape multiplier is applied");
             });
 
             victim = entities.SpawnEntity(Human, EWJoeTestHelpers.TileEast(entities, map, 1));
@@ -190,7 +194,7 @@ public sealed class EWJoeMachineGripTest
             var carriable = entities.GetComponent<FiremanCarriableComponent>(victim);
             Assert.That(carriable.BreakingFree, "the victim started to struggle");
             var struggle = Struggle(entities, victim);
-            Assert.That(struggle.Args.Delay, Is.EqualTo(carriable.Delay * 1.5f), "the struggle takes x1.5 at level 2");
+            Assert.That(struggle.Args.Delay, Is.EqualTo(carriable.Delay * multiplier), "the struggle takes the level's multiplier");
             firstStart = struggle.StartTime;
         });
 
@@ -198,13 +202,20 @@ public sealed class EWJoeMachineGripTest
 
         await server.WaitAssertion(() =>
         {
-            entities.System<EWJoeMachineGripSystem>().ExtendStruggle(victim);
+            var grip = entities.System<EWJoeMachineGripSystem>();
+            Assert.That(grip.ExtendStruggle(victim), "the hold restarted the struggle");
 
             var carriable = entities.GetComponent<FiremanCarriableComponent>(victim);
             Assert.That(carriable.BreakingFree, "still struggling after the restart");
             var struggle = Struggle(entities, victim);
             Assert.That(struggle.StartTime, Is.GreaterThan(firstStart), "the struggle started over");
-            Assert.That(struggle.Args.Delay, Is.EqualTo(carriable.Delay * 1.5f), "at full length");
+            Assert.That(struggle.Args.Delay, Is.EqualTo(carriable.Delay * multiplier), "at full length");
+
+            // RB-18 (FLOW-17): one restart per hold, whoever asks
+            var restarted = struggle.StartTime;
+            Assert.That(grip.ExtendStruggle(victim), Is.False, "a second restart in the same hold is refused");
+            Assert.That(Struggle(entities, victim).StartTime, Is.EqualTo(restarted), "and the struggle keeps running");
+            Assert.That(grip.StruggleRestarts(victim), Is.EqualTo(EWJoeMachineGripSystem.StruggleRestartsPerHold));
 
             entities.GetComponent<InputMoverComponent>(victim).HeldMoveButtons = MoveButtons.None;
         });

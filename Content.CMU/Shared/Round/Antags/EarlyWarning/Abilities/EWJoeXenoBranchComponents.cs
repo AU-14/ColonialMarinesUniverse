@@ -16,9 +16,12 @@ namespace Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 [RegisterComponent]
 public sealed partial class EWJoeIndustrialGripComponent : Component
 {
-    /// <summary>Extra damage against xenofauna, as a fraction of the punch's base damage (0.5 = +50%).</summary>
+    /// <summary>
+    /// Extra damage against xenofauna, as a fraction of the punch's base damage (rebalance RB-08: 0.15 = +15%;
+    /// the fist already has the melee bonus against xenos).
+    /// </summary>
     [DataField]
-    public float BonusMultiplier = 0.5f;
+    public float BonusMultiplier = 0.15f;
 
     [DataField]
     public TimeSpan Slow = TimeSpan.FromSeconds(1);

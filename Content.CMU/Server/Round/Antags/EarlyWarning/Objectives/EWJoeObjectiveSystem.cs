@@ -1,6 +1,8 @@
 using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Threats;
+using Content.Server.GameTicking;
 using Content.Server.Objectives;
 using Content.Server.Objectives.Systems;
 using Content.Shared._RMC14.Synth;
@@ -32,7 +34,7 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 /// <summary>
 /// Drives the Early Warning Joe's objective ladder on the upstream per-mind objective pipeline:
 /// each level offers three objectives from the level table's pool, two completions advance the level
-/// (D8), a completion made before Colony Fall's threat is selected counts double (A-17), level 4 cannot
+/// (D8), a completion made before Colony Fall's threat has arrived counts double (A-17, RB-36), level 4 cannot
 /// be left without a finished console assimilation (D8), and the unfinished leftover is withdrawn on
 /// advance. Also attributes organic kills to the "murder N" counter.
 /// </summary>
@@ -51,6 +53,8 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private ObjectivesSystem _objectives = default!;
     [Dependency] private EWJoeRuleSystem _rule = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private ThreatSystem _threats = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private static readonly TimeSpan EvaluateEvery = TimeSpan.FromSeconds(1);
@@ -424,8 +428,9 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
     }
 
     /// <summary>
-    /// A-17: in Colony Fall, work done before the threat is selected counts double, because the mode's
-    /// colonist-only window is short and the threat ends most rounds before level 5.
+    /// A-17: in Colony Fall, work done before the threat arrives counts double, because the mode's
+    /// colonist-only window is short and the threat ends most rounds before level 5. RB-36: the window lasts
+    /// until the threat has actually spawned (<see cref="ThreatHasArrived"/>), not merely until the vote picks it.
     /// </summary>
     public int CreditFor(EWJoeComponent comp)
     {
@@ -440,7 +445,38 @@ public sealed partial class EWJoeObjectiveSystem : EntitySystem
 
     public bool IsPreThreatWindow(EWJoeComponent comp)
     {
-        return _auRound.SelectedPreset?.ID == comp.PreThreatPreset && _auRound.SelectedThreat == null;
+        return _auRound.SelectedPreset?.ID == comp.PreThreatPreset && !ThreatHasArrived();
+    }
+
+    /// <summary>
+    /// RB-36: whether the round's selected threat has spawned. Colony Fall schedules the spawn 600-1200 s after
+    /// the vote (<see cref="ThreatSystem.SpawnThreatFromVote"/>) and starts the threat's win-condition rules in
+    /// the same callback that spawns its bodies, so an added win-condition rule is the arrival signal. A threat
+    /// with no win-condition rule falls back on its scheduled spawn time: arrived once it is no longer pending.
+    /// </summary>
+    public bool ThreatHasArrived()
+    {
+        if (_auRound.SelectedThreat is not { } threat)
+            return false;
+
+        if (threat.WinConditions.Count > 0)
+        {
+            foreach (var rule in threat.WinConditions)
+            {
+                if (_ticker.IsGameRuleAdded(rule))
+                    return true;
+            }
+
+            return false;
+        }
+
+        foreach (var pending in _threats.PendingThreatSpawnsForDebug)
+        {
+            if (pending.ThreatId == threat.ID)
+                return false;
+        }
+
+        return true;
     }
 
     private bool TryGetLevel(Entity<EWJoeComponent> ent, out EWJoeLevelDef def)

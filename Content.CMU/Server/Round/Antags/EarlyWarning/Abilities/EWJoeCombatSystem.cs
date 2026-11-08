@@ -82,7 +82,7 @@ public sealed partial class EWJoeCombatSystem : EntitySystem
     [Dependency] private RMCStaminaSystem _stamina = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private CMUSurrenderSystem _surrender = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
+    // RB-13: knockdowns and paralyzes go through EWJoeLiturgySystem.ApplyHardCc, not the stun system directly
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TagSystem _tag = default!;
@@ -179,16 +179,39 @@ public sealed partial class EWJoeCombatSystem : EntitySystem
             if (HasComp<EWJoePinningComponent>(joe))
                 PinTick((joe, comp), choke.Target);
             else
-                _stamina.DoStaminaDamage(choke.Target, comp.ChokeStaminaPerSecond);
+                ChokeTick((joe, comp), choke);
 
-            // FLOW-02: the hold resets the body's struggle against the grip, once per choke (review fix)
-            if (!choke.StruggleExtended
-                && TryComp(choke.Target, out FiremanCarriableComponent? carriable)
-                && carriable.BreakingFree)
-            {
+            // FLOW-02: the hold resets the body's struggle against the grip. RB-18 (FLOW-17): at most once per hold,
+            // shared with every other source (machete hits); the grip system keeps the count.
+            if (TryComp(choke.Target, out FiremanCarriableComponent? carriable) && carriable.BreakingFree)
                 _grip.ExtendStruggle(choke.Target);
-                choke.StruggleExtended = true;
-            }
+        }
+    }
+
+    /// <summary>
+    /// One second of a choke: drains <see cref="EWJoeComponent.ChokeStaminaPerSecond"/>. RB-17: the choke knocks the
+    /// victim out at most once per hold. Once RMC's stamina has reached its knockout tier during the hold, later ticks
+    /// stop at <see cref="EWJoeChokeComponent.StaminaFloorAfterKnockout"/>, so RMC's own regeneration can lift the
+    /// victim out of the knockout and the choke cannot push it back in.
+    /// </summary>
+    private void ChokeTick(Entity<EWJoeComponent> joe, EWJoeChokeComponent choke)
+    {
+        var target = choke.Target;
+        if (!TryComp(target, out RMCStaminaComponent? stamina))
+            return;
+
+        var amount = joe.Comp.ChokeStaminaPerSecond;
+        if (choke.KnockedOut)
+            amount = Math.Min(amount, stamina.Current - choke.StaminaFloorAfterKnockout);
+
+        if (amount > 0)
+            _stamina.DoStaminaDamage((target, stamina), amount);
+
+        // RMC knocks out at the last tier (stamina below 10); the level is set by DoStaminaDamage and RMC's own tick
+        if (!choke.KnockedOut && stamina.TierThresholds.Length > 0 && stamina.Level >= stamina.TierThresholds.Length - 1)
+        {
+            choke.KnockedOut = true;
+            _grip.MarkChokeKnockedOut(target);
         }
     }
 

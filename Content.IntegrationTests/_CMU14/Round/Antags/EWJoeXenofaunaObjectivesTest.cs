@@ -21,8 +21,8 @@ namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
 /// N8 (FLOW-03, FLOW-04, ECS-04, ARCH-03 batch 1): the Early Warning Joe's xenofauna directives follow any
-/// non-humanoid threat life rather than the Distress Signal preset. They are refused until xenofauna lives on
-/// the planet (or the round's threat is flagged xenofauna), the maim counter credits a non-xeno xenofauna
+/// non-humanoid threat life rather than the Distress Signal preset. They are refused until living xenofauna is
+/// on the planet (RB-37: a selected threat flagged xenofauna is not enough), the maim counter credits a non-xeno xenofauna
 /// body, xenofauna kills make victims, and every pool the level table walks resolves to real prototypes.
 /// </summary>
 [TestFixture]
@@ -81,9 +81,10 @@ public sealed class EWJoeXenofaunaObjectivesTest
                 auRound.SetSelectedThreat(protos.Index<ThreatPrototype>(HumanoidThreat));
                 Assert.That(mindSys.TryAddObjective(mind, mind.Comp, MaimObjective), Is.False, "a cultist round alone does not open it");
 
-                // a flagged threat opens it before any body has spawned
+                // RB-37: a flagged threat that has not spawned no longer opens it (no 10-20 min stall)
                 auRound.SetSelectedThreat(protos.Index<ThreatPrototype>(FlaggedThreat));
-                Assert.That(xenoObjectives.XenofaunaExpected(joe), "the ape threat is flagged xenofauna");
+                Assert.That(xenoObjectives.XenofaunaExpected(joe), Is.False, "the ape threat is flagged xenofauna, but none lives here yet");
+                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, MaimObjective), Is.False, "a selected ape threat alone does not open it");
                 auRound.SetSelectedThreat(null);
 
                 // a facehugger alone is not enough

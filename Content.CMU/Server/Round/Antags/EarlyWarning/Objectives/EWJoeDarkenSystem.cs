@@ -12,8 +12,9 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 
 /// <summary>
 /// ARCH-03 N7 "Darken a District" (Objectives report §6a): pins a powered area, runs the
-/// Armed → Dark → Complete state machine at 1 Hz, attributes the blackout to the Joe (presence in the area,
-/// or a recent hit on an APC, reactor or generator feeding it, read from <c>CMULastDamagedByComponent</c>),
+/// Armed → Dark → Complete state machine at 1 Hz, attributes the blackout to the Joe (RB-38: only its own recent
+/// hit on an APC, reactor or generator feeding the area, read from <c>CMULastDamagedByComponent</c>; standing in
+/// the district is not enough),
 /// and re-pins or gives up on a blackout the Joe did not cause. RMC raises no power-changed event (only the
 /// protected <c>PowerUpdated</c> override), so the lighting channel is polled.
 /// </summary>
@@ -21,7 +22,6 @@ public sealed class EWJoeDarkenSystem : EntitySystem
 {
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private AreaSystem _area = default!;
     [Dependency] private EWJoeMessageSystem _messages = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedMindSystem _mind = default!;
@@ -76,7 +76,6 @@ public sealed class EWJoeDarkenSystem : EntitySystem
         ent.Comp.Owner = owner;
         ent.Comp.MindId = args.MindId;
         ent.Comp.State = EWJoeDarkenState.Armed;
-        ent.Comp.JoeInAreaAt = null;
         ent.Comp.Exhausted = false;
     }
 
@@ -151,9 +150,6 @@ public sealed class EWJoeDarkenSystem : EntitySystem
             return;
         }
 
-        if (InArea(joe, area))
-            ent.Comp.JoeInAreaAt = now;
-
         var powered = IsPowered(area);
         switch (ent.Comp.State)
         {
@@ -191,16 +187,12 @@ public sealed class EWJoeDarkenSystem : EntitySystem
     }
 
     /// <summary>
-    /// The Joe caused the blackout: it was in the area within the window, or within the window it hit an APC
-    /// of the area, or a reactor or portable generator on the area's power network (area power is fed per
-    /// z-network; there are no cables on area-power maps).
+    /// The Joe caused the blackout: within the window it hit an APC of the area, or a reactor or portable
+    /// generator on the area's power network (area power is fed per z-network; there are no cables on area-power
+    /// maps). RB-38: being in the district when the lights went out no longer counts.
     /// </summary>
-    private bool CausedByJoe(EWJoeDarkenConditionComponent comp, EntityUid joe, EntityUid area)
+    public bool CausedByJoe(EWJoeDarkenConditionComponent comp, EntityUid joe, EntityUid area)
     {
-        var now = _timing.CurTime;
-        if (comp.JoeInAreaAt is { } seen && now - seen <= comp.AttributionWindow)
-            return true;
-
         var maps = new HashSet<MapId>();
         var apcs = EntityQueryEnumerator<RMCApcComponent, TransformComponent>();
         while (apcs.MoveNext(out var uid, out var apc, out var xform))
@@ -257,7 +249,6 @@ public sealed class EWJoeDarkenSystem : EntitySystem
         ent.Comp.Area = area;
         ent.Comp.AreaName = name;
         ent.Comp.State = EWJoeDarkenState.Armed;
-        ent.Comp.JoeInAreaAt = null;
         Rename(ent);
         _messages.Notify(joe, Loc.GetString("cmu-ew-joe-darken-repinned", ("area", name)));
     }
@@ -298,11 +289,6 @@ public sealed class EWJoeDarkenSystem : EntitySystem
     public bool IsPowered(EntityUid area)
     {
         return PoweredOverride?.Invoke(area) ?? _power.IsAreaPowered(area, RMCPowerChannel.Lighting);
-    }
-
-    private bool InArea(EntityUid uid, EntityUid area)
-    {
-        return _area.TryGetArea(uid, out var found, out _) && found.Value.Owner == area;
     }
 
     /// <summary>Areas already pinned by the mind's other Darken directives.</summary>

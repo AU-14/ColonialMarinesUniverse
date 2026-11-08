@@ -39,9 +39,16 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public ProtoId<EWJoeLevelsPrototype> LevelTable = "CMUEWJoeLevels";
 
-    /// <summary>Melee and bullet armor added per level (Sculpted Form).</summary>
+    /// <summary>Bullet armor added per level (Sculpted Form; rebalance RB-01: +4, 20 at level 5).</summary>
     [DataField, AutoNetworkedField]
-    public int ArmorPerLevel = 5;
+    public int BulletArmorPerLevel = 4;
+
+    /// <summary>
+    /// Melee armor added per level (Sculpted Form; rebalance RB-02: +2, 10 at level 5). Scales slower than
+    /// <see cref="BulletArmorPerLevel"/> so xeno claws keep up with the Joe at even tier.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int MeleeArmorPerLevel = 2;
 
     /// <summary>The innate slowdown the Joe starts with; shed by <see cref="SlowdownShedPerLevel"/> each level.</summary>
     [DataField, AutoNetworkedField]
@@ -63,9 +70,10 @@ public sealed partial class EWJoeComponent : Component
     /// <summary>
     /// ECS-11: every EW Joe stun on xenofauna is multiplied by this before RMC's own xeno reduction (×0.667),
     /// so a xeno is held for a real window instead of a split second. Routed through EWJoeTargetRules.ScaleStun.
+    /// Rebalance RB-16: 1.5, so after RMC's reduction a xeno is held about as long as a human (≈1.0×).
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float XenofaunaStunMultiplier = 2f;
+    public float XenofaunaStunMultiplier = 1.5f;
 
     /// <summary>Disrupt: the level-0 EMP pulse. Lights, headsets and batteries respond today.</summary>
     [DataField, AutoNetworkedField]
@@ -247,20 +255,35 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public TimeSpan OfferDelay = TimeSpan.FromSeconds(3);
 
+    /// <summary>How long a timed Scour buff lasts (baton, radio). Body armor has its own, shorter window.</summary>
     [DataField]
     public TimeSpan ScourDuration = TimeSpan.FromMinutes(5);
 
+    /// <summary>How long the digested body armor's bullet armor lasts (rebalance RB-03: 3 min).</summary>
     [DataField]
-    public int ScourBulletArmor = 10;
+    public TimeSpan ScourArmorDuration = TimeSpan.FromMinutes(3);
+
+    /// <summary>Bullet armor from digested body armor (rebalance RB-03: +5).</summary>
+    [DataField]
+    public int ScourBulletArmor = 5;
 
     [DataField]
     public double ScourPunchStamina = 15;
 
+    /// <summary>Fuel-can self-repair per second (rebalance RB-04: 2, so 90 over the window).</summary>
     [DataField]
-    public float ScourRepairPerSecond = 5f;
+    public float ScourRepairPerSecond = 2f;
 
+    /// <summary>The fuel-can self-repair window (rebalance RB-04: 45 s).</summary>
     [DataField]
-    public TimeSpan ScourRepairDuration = TimeSpan.FromSeconds(60);
+    public TimeSpan ScourRepairDuration = TimeSpan.FromSeconds(45);
+
+    /// <summary>
+    /// Rebalance RB-04: the fuel-can self-repair stops for this long after the Joe takes damage. The pause does
+    /// not extend the repair window.
+    /// </summary>
+    [DataField]
+    public TimeSpan ScourRepairDamagePause = TimeSpan.FromSeconds(5);
 
     [DataField]
     public List<ProtoId<RadioChannelPrototype>> ScourRadioChannels = new() { "Colony", "radioCMB" };
@@ -286,8 +309,9 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public EntProtoId MachetePrototype = "CMUEWJoeMachete";
 
+    /// <summary>Heat paid per Consecrate (rebalance RB-20: 30).</summary>
     [DataField]
-    public float ConsecrateHeat = 25f;
+    public float ConsecrateHeat = 30f;
 
     /// <summary>Targets in the chain, the clicked one included.</summary>
     [DataField]
@@ -296,21 +320,31 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public float ConsecrateJumpRange = 3f;
 
-    /// <summary>Raw Heat per target; armor applies (A-12: ~18 through M3).</summary>
+    /// <summary>
+    /// Raw Heat per target in the chain (rebalance RB-11: 40). The rebalance audit (RB-11) found that M3 armor
+    /// does not reduce it; the old "~18 through M3" note was wrong.
+    /// </summary>
     [DataField]
-    public int ConsecrateDamage = 60;
+    public int ConsecrateDamage = 40;
 
+    /// <summary>Paralyze per target in the chain (rebalance RB-20: 1.5 s).</summary>
     [DataField]
-    public TimeSpan ConsecrateParalyze = TimeSpan.FromSeconds(3);
+    public TimeSpan ConsecrateParalyze = TimeSpan.FromSeconds(1.5);
 
     [DataField]
     public EntProtoId ConsecrateBeam = "EffectTeslaBeam";
 
+    /// <summary>Unwind's reach, guns and sentries alike (rebalance RB-23: 4 tiles).</summary>
     [DataField]
-    public float UnwindRange = 6f;
+    public float UnwindRange = 4f;
 
+    /// <summary>How long Unwind holds a sentry off (rebalance RB-23: 6 s).</summary>
     [DataField]
-    public TimeSpan UnwindSentryLockout = TimeSpan.FromSeconds(10);
+    public TimeSpan UnwindSentryLockout = TimeSpan.FromSeconds(6);
+
+    /// <summary>Heat paid per Unwind (rebalance RB-23: 20; it was free).</summary>
+    [DataField]
+    public float UnwindHeat = 20f;
 
     /// <summary>Racking the jammed chamber clear takes this long (A-13: 2 s).</summary>
     [DataField]
@@ -445,10 +479,10 @@ public sealed partial class EWJoeComponent : Component
 
     /// <summary>
     /// Break-free time multiplier the Joe's grabs impose, indexed by level; levels past the end use the last entry
-    /// (decided: x1.0 at L0-1, x1.5 at L2-3, x2.0 from L4).
+    /// (rebalance RB-19: x1.0 at L0-1, x1.25 at L2-3, x1.5 from L4).
     /// </summary>
     [DataField]
-    public List<float> GripEscapeMultipliers = new() { 1f, 1f, 1.5f, 1.5f, 2f };
+    public List<float> GripEscapeMultipliers = new() { 1f, 1f, 1.25f, 1.25f, 1.5f };
 
     /// <summary>
     /// From this level the Joe can aggressively grab xenos up to tier 3 and size Big, never the heavies

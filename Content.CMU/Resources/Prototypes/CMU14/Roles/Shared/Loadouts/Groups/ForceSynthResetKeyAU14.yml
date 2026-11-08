@@ -11,3 +11,14 @@
   - SynthResetKeyProdigyAU14
   - SynthResetKeyNovarisAU14
   - SynthResetKeyHyperdyneAU14
+
+# EW Joe rebalance RB-40: the platoon commander (Distress Signal and Force on Force, both sides) always
+# carries the Weyland key, the one that frees a River-Melded thrall, so the cure is not only on the aux
+# synth the river prefers to take.
+- type: loadoutGroup
+  id: CMUForceWeylandResetKeyCommand
+  name: cmu-loadout-group-weyland-reset-key
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - SynthResetKeyAU14

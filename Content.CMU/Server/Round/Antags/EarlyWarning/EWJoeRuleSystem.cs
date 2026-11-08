@@ -2,7 +2,9 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Round.Antags.ColonyBounty;
 using Content.Server.CMU14.Spawning;
+using Content.Server.CMU14.Systems;
 using Content.Server.CMU14.Threats;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Antag.Components;
@@ -17,13 +19,19 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Slow;
 using Content.Shared.Actions;
 using Content.Shared.CMU14.Fireman;
+using Content.Shared.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Threats.GrandMachine;
 using Content.Shared.Database;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Mind;
+using Content.Shared.Humanoid;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Paper;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Configuration;
@@ -76,6 +84,8 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
     [Dependency] private StationSystem _station = default!;
     [Dependency] private CMUSafeSpawnSystem _safeSpawn = default!;
     [Dependency] private FiremanCarrySystem _fireman = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private WantedSystem _wanted = default!;
 
     public const string AntagId = "EWJoe";
 
@@ -491,9 +501,79 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
         UpdateSlowdown((ent, ent.Comp));
         UpdateGripGrants((ent, ent.Comp));
         RecordProgress((ent, ent.Comp));
+        TrySendLineupFax((ent, ent.Comp));
 
         var ev = new EWJoeLevelChangedEvent(ent, oldLevel, level);
         RaiseLocalEvent(ent, ref ev, broadcast: true);
+    }
+
+    /// <summary>Names on the RB-39 line-up besides the Joe's own.</summary>
+    public const int LineupDecoys = 4;
+
+    /// <summary>
+    /// Rebalance RB-39: the level that gives the Joe its CMB wanted record (level 3, the ColonyBounty grant)
+    /// also faxes the marshals a line-up, once per Joe: its name shuffled among up to
+    /// <see cref="LineupDecoys"/> other living humanoids on its map, synthetics (colony synths, Working Joes)
+    /// first, then colonists. Modelled on the RunawaySynth fugitive fax. Returns true when a fax was sent.
+    /// </summary>
+    public bool TrySendLineupFax(Entity<EWJoeComponent> ent)
+    {
+        if (!TryComp(ent, out ColonyBountyComponent? bounty) || HasComp<EWJoeLineupFaxedComponent>(ent))
+            return false;
+
+        EnsureComp<EWJoeLineupFaxedComponent>(ent);
+
+        var mapId = Transform(ent).MapID;
+        var synths = new List<EntityUid>();
+        var others = new List<EntityUid>();
+        var query = EntityQueryEnumerator<HumanoidProfileComponent, MobStateComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var mob, out var xform))
+        {
+            if (uid == ent.Owner || xform.MapID != mapId || _mobState.IsDead(uid, mob) || HasComp<EWJoeComponent>(uid))
+                continue;
+
+            if (HasComp<SynthComponent>(uid))
+                synths.Add(uid);
+            else
+                others.Add(uid);
+        }
+
+        _random.Shuffle(synths);
+        _random.Shuffle(others);
+
+        var names = new List<string> { MetaData(ent).EntityName };
+        foreach (var uid in synths.Concat(others))
+        {
+            if (names.Count > LineupDecoys)
+                break;
+
+            names.Add(MetaData(uid).EntityName);
+        }
+
+        _random.Shuffle(names);
+
+        var listText = "";
+        for (var i = 0; i < names.Count; i++)
+            listText += $"  {i + 1}. {names[i]}\n";
+
+        var title = Loc.GetString("cmu-ew-joe-lineup-fax-title");
+        var sent = _wanted.SendFaxToGroup(
+            ColonyCmbFax.MarshalBureauFaxGroup,
+            title,
+            ColonyCmbFax.Build(title,
+                Loc.GetString("cmu-ew-joe-lineup-fax-body", ("bounty", bounty.Bounty)),
+                $"[bold]{Loc.GetString("cmu-ew-joe-lineup-fax-list")}[/bold]\n{listText}\n"),
+            "paper_stamp-cmb",
+            new List<StampDisplayInfo>
+            {
+                new() { StampedColor = Color.FromHex("#b0901b"), StampedName = "CMB" },
+            },
+            ColonyCmbFax.CmbPaperPrototype,
+            "Colony Administrator");
+
+        _adminLogger.Add(LogType.Action, LogImpact.Medium,
+            $"Early Warning Joe {ToPrettyString(ent):joe} reached its wanted level; CMB line-up fax of {names.Count} names sent: {sent}");
+        return sent;
     }
 
     /// <summary>
@@ -819,3 +899,7 @@ public sealed partial class EWJoeRuleSystem : GameRuleSystem<EWJoeRuleComponent>
             QueueDel(camera.Value);
     }
 }
+
+/// <summary>Rebalance RB-39: the Joe's CMB line-up fax has gone out; it is sent once per Joe. Server only.</summary>
+[RegisterComponent]
+public sealed partial class EWJoeLineupFaxedComponent : Component;

@@ -42,24 +42,39 @@ public sealed partial class EWJoeCuttingTorchComponent : Component
     public TimeSpan ActiveUntil;
 }
 
-/// <summary>3A Rending Edge (level 3): the machete pierces this much more armor on xenofauna.</summary>
+/// <summary>
+/// 3A Rending Edge (level 3): the machete pierces this much more armor on xenofauna. RB-10: +10 (was +20),
+/// so a despoiler or a queen keeps some of its armor.
+/// </summary>
 [RegisterComponent]
 public sealed partial class EWJoeRendingEdgeComponent : Component
 {
     [DataField]
-    public int ArmorPiercing = 20;
+    public int ArmorPiercing = 10;
 }
 
 /// <summary>
-/// 3B Overclock: Steady (level 3): while Overclock runs the Joe cannot be pounced (xeno leap) or lunged,
-/// and knockdowns are refused while living xenofauna are within <see cref="XenoProximity"/> (tail sweep,
-/// trip and lash carry no source, so a nearby xenofauna is the tell).
+/// 3B Overclock: Steady (level 3): while Overclock runs the Joe cannot be pounced (xeno leap) or lunged.
+/// FLOW-18 / RB-27: a knockdown (and so a paralyze, which goes through the same attempt event) is refused
+/// only when living xenofauna damaged the Joe within <see cref="XenoHitWindow"/>. The attempt event carries
+/// no source, so the xeno hit that lands with it on the same tick is the tell; batons, flashbangs, slugs and
+/// explosions from anyone else still floor the Joe. Tail trip, tail lash and an undamaging tail sweep deal no
+/// damage, so a knockdown is also refused while a living xenofauna within <see cref="SweepAttributionRange"/>
+/// is mid tail attack (RMC's XenoSweepingComponent, added by all three just before their paralyze).
 /// </summary>
 [RegisterComponent]
 public sealed partial class EWJoeSteadyComponent : Component
 {
     [DataField]
-    public float XenoProximity = 3f;
+    public TimeSpan XenoHitWindow = TimeSpan.FromSeconds(0.25);
+
+    /// <summary>How far a xenofauna mid tail sweep, trip or lash counts as the source of a knockdown.</summary>
+    [DataField]
+    public float SweepAttributionRange = 3f;
+
+    /// <summary>When living xenofauna last dealt the Joe damage; null if never. Server bookkeeping.</summary>
+    [DataField]
+    public TimeSpan? LastXenoHit;
 }
 
 /// <summary>

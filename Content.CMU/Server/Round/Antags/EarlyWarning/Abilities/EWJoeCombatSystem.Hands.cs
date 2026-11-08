@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared.Actions.Components;
 using Content.Shared.Climbing.Components;
@@ -45,9 +46,9 @@ public sealed partial class EWJoeCombatSystem
     /// </summary>
     public void Sweep(Entity<EWJoeComponent> joe, EntityUid target, TimeSpan? duration = null)
     {
-        // ECS-11: xenofauna get the Joe's stun multiplier before RMC's own reduction
-        var knockdown = EWJoeTargetRules.ScaleStun(EntityManager, target, duration ?? joe.Comp.SweepKnockdown, joe.Comp.XenofaunaStunMultiplier);
-        _stun.TryKnockdown(target, knockdown);
+        // ECS-11 + RB-13: xenofauna get the Joe's stun multiplier before RMC's own reduction, and a target inside
+        // its CC window takes half
+        _liturgy.ApplyHardCc(joe, target, duration ?? joe.Comp.SweepKnockdown, EWJoeHardCcKind.Knockdown);
         _popup.PopupEntity(Loc.GetString("cmu-ew-joe-sweep-done", ("target", target)), target, joe);
     }
 
@@ -110,14 +111,12 @@ public sealed partial class EWJoeCombatSystem
             amount *= liturgy.EmpoweredSlamDamageMultiplier;
         }
 
-        // ECS-11: xenofauna get the Joe's stun multiplier before RMC's own reduction
-        paralyze = EWJoeTargetRules.ScaleStun(EntityManager, victim, paralyze, joe.Comp.XenofaunaStunMultiplier);
-
         // the control effect must not depend on the physics contact: a victim already knocked down
         // (Leg Sweep, the grab itself) has no MidImpassable in its mask and slides over tables and
         // railings without a ThrowDoHitEvent, so paralyze and slow are applied here and the RMC
-        // bonus only stacks on a real impact
-        _stun.TryParalyze(victim, paralyze, true);
+        // bonus only stacks on a real impact. ECS-11 + RB-13: scaled for xenofauna, then the CC window;
+        // the armed bonus uses the same scaled paralyze
+        _liturgy.ApplyHardCc(joe, victim, paralyze, EWJoeHardCcKind.Paralyze, out paralyze);
         _slow.TrySlowdown(victim, joe.Comp.SlamSlow);
         _obstacleSlam.ApplyBonuses(victim, paralyze, joe.Comp.SlamSlow);
         var damage = new DamageSpecifier(_proto.Index(Blunt), amount);
@@ -176,7 +175,8 @@ public sealed partial class EWJoeCombatSystem
     private void BeginChoke(Entity<EWJoeComponent> joe, EntityUid target, Entity<ActionComponent>? action)
     {
         var choke = EnsureComp<EWJoeChokeComponent>(joe);
-        choke.StruggleExtended = false;
+        // RB-17: per hold, not per choke: a choke released and restarted on the same hold keeps its one knockout
+        choke.KnockedOut = _grip.ChokeKnockedOut(target);
         choke.Target = target;
         // ABIL-05: the wheel shows a running choke as active
         if (action is { } act && Exists(act))
@@ -240,8 +240,8 @@ public sealed partial class EWJoeCombatSystem
         _throwing.TryThrow(target, direction.Normalized() * joe.Comp.ThrowDistance, joe.Comp.ThrowSpeed, user: joe, compensateFriction: true);
         if (empowered && TryComp(joe, out EWJoeLiturgyComponent? liturgy))
         {
-            // ECS-11: xenofauna get the Joe's stun multiplier before RMC's own reduction
-            var paralyze = EWJoeTargetRules.ScaleStun(EntityManager, target, liturgy.EmpoweredThrowSlamParalyze, joe.Comp.XenofaunaStunMultiplier);
+            // ECS-11 + RB-13: scaled for xenofauna, then the CC window, which opens as the slam is armed
+            var paralyze = _liturgy.TakeHardCc(joe, target, liturgy.EmpoweredThrowSlamParalyze);
             _obstacleSlam.ApplyBonuses(target, paralyze, liturgy.EmpoweredThrowSlamSlow);
         }
 

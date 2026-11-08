@@ -28,7 +28,8 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 /// takes in gear, and the item leaves play. Each offering ticks every unfinished Offer directive it fits.
 /// ARCH-11: a Meld directive's offering (a camera, a telecomms server) is not taken in but melded into the
 /// river where it stands (<see cref="EWJoeMeldedStructureSystem"/>); a structure directive with the default
-/// filter off (Purge the Nest) consumes anchored threat structures like items.
+/// filter off (Purge the Nest) consumes anchored threat structures like items. RB-31: a structure takes
+/// <see cref="StructureOfferDelay"/> to offer, an item the Joe's own <see cref="EWJoeComponent.OfferDelay"/>.
 /// Also rolls, titles and scores <see cref="EWJoeOfferConditionComponent"/> objectives.
 /// </summary>
 public sealed partial class EWJoeOfferSystem : EntitySystem
@@ -46,6 +47,9 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+
+    /// <summary>RB-31: the Offer do-after on a structure (items keep the Joe's own, shorter delay).</summary>
+    public static readonly TimeSpan StructureOfferDelay = TimeSpan.FromSeconds(6);
 
     public override void Initialize()
     {
@@ -73,7 +77,7 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
 
         args.Handled = true;
 
-        var doAfter = new DoAfterArgs(EntityManager, ent, ent.Comp.OfferDelay, new EWJoeOfferDoAfterEvent(), ent, item)
+        var doAfter = new DoAfterArgs(EntityManager, ent, OfferDelayFor(ent.Comp, item), new EWJoeOfferDoAfterEvent(), ent, item)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
@@ -83,6 +87,25 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
 
         if (_doAfter.TryStartDoAfter(doAfter))
             _popup.PopupEntity(Loc.GetString("cmu-ew-joe-offer-start", ("item", item)), ent, ent);
+    }
+
+    /// <summary>
+    /// RB-31: how long offering <paramref name="item"/> takes. A loose item takes the Joe's
+    /// <see cref="EWJoeComponent.OfferDelay"/>; a structure (anchored, or no item at all: a wall camera, a
+    /// server, a resin wall) takes <see cref="StructureOfferDelay"/>, so one Offer cannot strip a nest in passing.
+    /// </summary>
+    public TimeSpan OfferDelayFor(EWJoeComponent joe, EntityUid item)
+    {
+        if (!IsStructure(item))
+            return joe.OfferDelay;
+
+        return joe.OfferDelay > StructureOfferDelay ? joe.OfferDelay : StructureOfferDelay;
+    }
+
+    /// <summary>Anchored down, or not a carried thing at all.</summary>
+    public bool IsStructure(EntityUid item)
+    {
+        return Transform(item).Anchored || !HasComp<ItemComponent>(item);
     }
 
     private void OnOfferDoAfter(Entity<EWJoeComponent> ent, ref EWJoeOfferDoAfterEvent args)
@@ -152,6 +175,10 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
         if (!Exists(item) || HasComp<EWJoeMeldedStructureComponent>(item))
             return false;
 
+        // a repaired structure is fair game for a new directive, never again for the one it counted for
+        if (offer.Meld && offer.MeldCounted.Contains(item))
+            return false;
+
         if (UsesDefaultFilter(offer) && !IsOfferable(item))
             return false;
 
@@ -216,7 +243,8 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
 
     /// <summary>
     /// What <paramref name="item"/> is worth to <paramref name="offer"/>: 1, or its threat structure weight
-    /// (cores 3, spreading growth 0) when the directive is weighted.
+    /// (a flesh nest 3, spreading growth 0) when the directive is weighted. RB-31: hive, overmind and blight
+    /// cores are not on this scale at all; Purge the Nest blacklists them (ew_joe.yml).
     /// </summary>
     public int Weight(EntityUid item, EWJoeOfferConditionComponent offer)
     {
@@ -241,6 +269,8 @@ public sealed partial class EWJoeOfferSystem : EntitySystem
         {
             offer.Offered += Weight(item, offer);
             meld |= offer.Meld;
+            if (offer.Meld)
+                offer.MeldCounted.Add(item);
         }
 
         var itemName = Name(item);

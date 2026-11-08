@@ -61,8 +61,10 @@ public sealed class EWJoeXenofaunaStunTest
                 Assert.That(scaled, Is.GreaterThan(unscaled), "the multiplier holds the drone longer");
                 Assert.That(scaled.TotalSeconds, Is.EqualTo(unscaled.TotalSeconds * comp.XenofaunaStunMultiplier).Within(0.01),
                     "by exactly the Joe's xenofauna multiplier");
-                Assert.That(scaled, Is.GreaterThanOrEqualTo(baseTime * 1.3),
-                    "after RMC's xeno reduction the drone is still down about 1.3x the base sweep");
+                Assert.That(comp.XenofaunaStunMultiplier, Is.EqualTo(1.5f), "RB-16: the xenofauna multiplier is 1.5");
+                // RB-16: 1.5 x RMC's 0.667 is about 1.0, so a xeno is held about as long as a human
+                Assert.That(scaled.TotalSeconds, Is.EqualTo(baseTime.TotalSeconds).Within(0.05),
+                    "after RMC's xeno reduction the drone is down about 1.0x the base sweep");
                 Assert.That(DownFor(entities, human, now), Is.EqualTo(DownFor(entities, plainHuman, now)),
                     "humans are not xenofauna and are not scaled");
             });

@@ -97,6 +97,8 @@ public sealed partial class EWJoeScourSystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, EWJoeScourDoAfterEvent>(OnScourDoAfter);
         SubscribeLocalEvent<EWJoeComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<EWJoeScourComponent, ComponentShutdown>(OnScourShutdown);
+        // RB-04: on the buff component, not EWJoeComponent (EWJoeRepentanceSystem already listens there)
+        SubscribeLocalEvent<EWJoeScourComponent, DamageChangedEvent>(OnScourDamaged);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
     }
@@ -121,9 +123,10 @@ public sealed partial class EWJoeScourSystem : EntitySystem
                     expired.Add((uid, kind));
             }
 
-            // ABIL-12: a dead Joe is not mended
+            // ABIL-12: a dead Joe is not mended; RB-04: nor one hurt in the last few seconds
             if (scour.Expiries.TryGetValue(EWJoeScourKind.Fuel, out var repairUntil)
-                && now < repairUntil && now >= scour.NextRepairTick && !_mobState.IsDead(uid))
+                && now < repairUntil && now >= scour.NextRepairTick && now >= scour.RepairPausedUntil
+                && !_mobState.IsDead(uid))
             {
                 scour.NextRepairTick = now + TimeSpan.FromSeconds(1);
                 _damageable.HealEvenly(uid, -joe.ScourRepairPerSecond, origin: uid); // negative heals
@@ -278,7 +281,12 @@ public sealed partial class EWJoeScourSystem : EntitySystem
         var permanent = IsOneOfAKind(item) || scour.Permanent.Contains(kind);
         var until = permanent
             ? TimeSpan.MaxValue
-            : now + (kind == EWJoeScourKind.Fuel ? joe.Comp.ScourRepairDuration : joe.Comp.ScourDuration);
+            : now + kind switch
+            {
+                EWJoeScourKind.Fuel => joe.Comp.ScourRepairDuration,
+                EWJoeScourKind.Armor => joe.Comp.ScourArmorDuration, // RB-03
+                _ => joe.Comp.ScourDuration,
+            };
         var granted = true;
 
         switch (kind)
@@ -488,6 +496,18 @@ public sealed partial class EWJoeScourSystem : EntitySystem
         {
             RemoveKind(ent, kind);
         }
+    }
+
+    /// <summary>
+    /// RB-04: taking damage pauses the fuel self-repair for <see cref="EWJoeComponent.ScourRepairDamagePause"/>.
+    /// The repair's own heals lower damage, so they never pause it. The pause does not extend the window.
+    /// </summary>
+    private void OnScourDamaged(Entity<EWJoeScourComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased || !TryComp(ent, out EWJoeComponent? joe))
+            return;
+
+        ent.Comp.RepairPausedUntil = _timing.CurTime + joe.ScourRepairDamagePause;
     }
 
     private void OnJoeRemoved(ref EWJoeRemovedEvent args)

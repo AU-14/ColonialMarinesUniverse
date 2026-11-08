@@ -76,7 +76,6 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMUGunSafetySystem _safety = default!;
     [Dependency] private SentrySystem _sentry = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private CMUSurrenderSystem _surrender = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
@@ -222,7 +221,8 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
             // 1A: a lit Cutting Torch rides the blade too
             _scour.ApplyCuttingTorch(joeUid, args);
 
-            // FLOW-02: cutting someone the Joe holds keeps them from struggling free
+            // FLOW-02: cutting someone the Joe holds restarts their struggle. RB-18 (FLOW-17): at most once per hold,
+            // shared with the choke, so a held victim always gets a full escape attempt
             foreach (var target in args.HitEntities)
             {
                 if (_combat.IsGrabbedBy((joeUid, joe), target))
@@ -326,8 +326,9 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
             hit.Add(current);
             _line.TryCreateLine(source, current, joe.Comp.ConsecrateBeam.Id, out _);
             _damageable.TryChangeDamage(current, damage, origin: joe);
-            // ECS-11: xenofauna get the Joe's stun multiplier before RMC's own reduction
-            _stun.TryParalyze(current, EWJoeTargetRules.ScaleStun(EntityManager, current, joe.Comp.ConsecrateParalyze, joe.Comp.XenofaunaStunMultiplier), true);
+            // ECS-11 + RB-13: xenofauna get the Joe's stun multiplier before RMC's own reduction; a body inside its
+            // CC window takes half
+            _liturgy.ApplyHardCc(joe, current, joe.Comp.ConsecrateParalyze, EWJoeHardCcKind.Paralyze);
 
             EntityUid? next = null;
             var best = float.MaxValue;
@@ -373,6 +374,10 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
     private void OnUnwind(Entity<EWJoeComponent> ent, ref EWJoeUnwindActionEvent args)
     {
         if (args.Handled)
+            return;
+
+        // RB-23: Unwind costs heat, like Consecrate
+        if (!_heat.TrySpendHeat(ent, ent.Comp.UnwindHeat))
             return;
 
         args.Handled = true;

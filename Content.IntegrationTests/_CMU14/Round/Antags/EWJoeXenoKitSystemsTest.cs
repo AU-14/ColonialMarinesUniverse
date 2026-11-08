@@ -1,3 +1,5 @@
+using Content.Shared.Actions.Components;
+using Content.Shared.Actions;
 using System.Collections.Generic;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared._RMC14.Armor;
@@ -5,6 +7,7 @@ using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared._RMC14.Xenonids.Lunge;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
+using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
@@ -177,20 +180,36 @@ public sealed class EWJoeXenoKitSystemsTest
         await pair.CleanReturnAsync();
     }
 
+    /// <summary>
+    /// FLOW-18 / RB-27: Steady refuses the pounce and the lunge outright, but a knockdown or paralyze only
+    /// right after living xenofauna damaged the Joe or while a nearby one is mid tail attack
+    /// (XenoSweepingComponent). A living drone beside it is no longer enough.
+    /// </summary>
     [Test]
-    public async Task OverclockSteadyRefusesPounceLungeAndXenoKnockdown()
+    public async Task OverclockSteadyRefusesPounceLungeAndXenoHitKnockdownOnly()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         var entities = server.EntMan;
+        var timing = server.ResolveDependency<IGameTiming>();
 
+        EntityUid joe = default;
         await server.WaitAssertion(() =>
         {
             var kit = entities.System<EWJoeXenoKitSystem>();
-            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var stun = entities.System<SharedStunSystem>();
+            var damageable = entities.System<DamageableSystem>();
+            var protos = server.ResolveDependency<IPrototypeManager>();
+            var claw = new DamageSpecifier(protos.Index<DamageTypePrototype>("Slash"), 5);
+
+            joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
             entities.EnsureComponent<EWJoeSteadyComponent>(joe);
+            var floored = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            entities.EnsureComponent<EWJoeComponent>(floored);
+            entities.EnsureComponent<EWJoeSteadyComponent>(floored);
+            entities.EnsureComponent<EWJoeOverclockComponent>(floored);
             var human = entities.SpawnEntity(Human, EWJoeTestHelpers.TileEast(entities, map, -1));
             var xeno = entities.SpawnEntity(Xeno, EWJoeTestHelpers.TileEast(entities, map, 1));
 
@@ -200,25 +219,115 @@ public sealed class EWJoeXenoKitSystemsTest
 
             entities.EnsureComponent<EWJoeOverclockComponent>(joe);
             Assert.That(kit.IsSteady(joe), "Overclock is running with Steady");
+            Assert.That(kit.IsSteady(floored), "the second Joe is Steady too");
 
             var leap = new XenoLeapHitAttempt(xeno);
             entities.EventBus.RaiseLocalEvent(joe, ref leap);
             var lunge = new XenoLungeHitAttempt(xeno);
             entities.EventBus.RaiseLocalEvent(joe, ref lunge);
-            var knockdown = new KnockDownAttemptEvent(true, true, TimeSpan.FromSeconds(2));
-            entities.EventBus.RaiseLocalEvent(joe, ref knockdown);
+
+            // a living drone stands beside both Joes; only a person has hit this one
+            damageable.TryChangeDamage(floored, claw, origin: human, tool: human);
+            var otherKnockdown = stun.TryKnockdown(floored, TimeSpan.FromSeconds(2));
+
+            // the drone's own hit is the tell: the knockdown and paralyze that come with it are refused
+            damageable.TryChangeDamage(joe, claw, origin: xeno, tool: xeno);
+            var xenoKnockdown = stun.TryKnockdown(joe, TimeSpan.FromSeconds(2));
+            var xenoParalyze = stun.TryParalyze(joe, TimeSpan.FromSeconds(2), true);
+
+            // a tail trip or lash deals no damage: the drone mid tail attack is the tell instead
+            var swept = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            entities.EnsureComponent<EWJoeComponent>(swept);
+            entities.EnsureComponent<EWJoeSteadyComponent>(swept);
+            entities.EnsureComponent<EWJoeOverclockComponent>(swept);
+            entities.EnsureComponent<XenoSweepingComponent>(xeno);
+            var sweepKnockdown = stun.TryKnockdown(swept, TimeSpan.FromSeconds(2));
+            entities.RemoveComponent<XenoSweepingComponent>(xeno);
+            var afterSweepKnockdown = stun.TryKnockdown(swept, TimeSpan.FromSeconds(2));
 
             Assert.Multiple(() =>
             {
                 Assert.That(leap.Cancelled, "the pounce is refused");
                 Assert.That(lunge.Cancelled, "the lunge is refused");
-                Assert.That(knockdown.Cancelled, "a knockdown beside a xeno is refused");
+                Assert.That(otherKnockdown, "a non-xeno knockdown beside a living drone still floors a Steady Joe");
+                Assert.That(xenoKnockdown, Is.False, "a knockdown right after the drone's hit is refused");
+                Assert.That(xenoParalyze, Is.False, "and so is a paralyze");
+                Assert.That(sweepKnockdown, Is.False, "a knockdown while the drone is mid tail attack is refused");
+                Assert.That(afterSweepKnockdown, "once the drone stops sweeping, with no xeno hit, the knockdown lands");
             });
+        });
 
-            // with only a person nearby, Steady has no reason to refuse a knockdown
-            entities.DeleteEntity(xeno);
-            Assert.That(kit.XenofaunaNear(joe, entities.GetComponent<EWJoeSteadyComponent>(joe).XenoProximity), Is.False,
-                "the human is not xenofauna");
+        // past the 0.25 s hit window the drone's old hit no longer covers the Joe
+        await pair.RunTicksSync((int) Math.Ceiling(0.5 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.System<EWJoeXenoKitSystem>().IsSteady(joe), "still Overclocked");
+            Assert.That(entities.System<SharedStunSystem>().TryKnockdown(joe, TimeSpan.FromSeconds(2)),
+                "a knockdown after the window lands");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>RB-28: one Overclock activation ends by itself at its 15 s cap, taking Steady with it.</summary>
+    [Test]
+    public async Task OverclockEndsAtItsCap()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+        var timing = server.ResolveDependency<IGameTiming>();
+
+        EntityUid joe = default, quitter = default;
+        EntityUid? joeAction = null, quitterAction = null;
+        var cap = TimeSpan.Zero;
+        await server.WaitAssertion(() =>
+        {
+            var actions = entities.System<SharedActionsSystem>();
+            joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            entities.EnsureComponent<EWJoeSteadyComponent>(joe);
+            var overclock = entities.EnsureComponent<EWJoeOverclockComponent>(joe);
+            cap = overclock.MaxDuration;
+            Assert.That(cap, Is.EqualTo(TimeSpan.FromSeconds(15)));
+            joeAction = actions.AddAction(joe, "CMUActionEWJoeOverclock");
+            overclock.Action = joeAction;
+
+            // a second Joe that switches it off by hand after a few seconds
+            quitter = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            quitterAction = actions.AddAction(quitter, "CMUActionEWJoeOverclock");
+            entities.EnsureComponent<EWJoeOverclockComponent>(quitter).Action = quitterAction;
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling(3 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            // RB-28: toggling off by hand recharges for as long as it ran, so off-and-on cannot keep it up
+            entities.RemoveComponent<EWJoeOverclockComponent>(quitter);
+            var cooldown = entities.GetComponent<ActionComponent>(quitterAction!.Value).Cooldown;
+            Assert.That(cooldown, Is.Not.Null, "a manual stop starts a recharge");
+            Assert.That((cooldown!.Value.End - timing.CurTime).TotalSeconds, Is.EqualTo(3).Within(0.5), "as long as it ran");
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling((cap.TotalSeconds - 4) / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.HasComponent<EWJoeOverclockComponent>(joe), "still running just short of the cap");
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling(2 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.HasComponent<EWJoeOverclockComponent>(joe), Is.False, "the cap throttled it back");
+            Assert.That(entities.System<EWJoeXenoKitSystem>().IsSteady(joe), Is.False, "and Steady with it");
+            var cooldown = entities.GetComponent<ActionComponent>(joeAction!.Value).Cooldown;
+            Assert.That(cooldown, Is.Not.Null, "the cap starts a recharge");
+            Assert.That((cooldown!.Value.End - timing.CurTime).TotalSeconds, Is.GreaterThan(cap.TotalSeconds - 2),
+                "of the full run, so it cannot be switched straight back on");
         });
 
         await pair.CleanReturnAsync();

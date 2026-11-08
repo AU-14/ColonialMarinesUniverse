@@ -1,3 +1,5 @@
+using Robust.Shared.Timing;
+
 namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 
 /// <summary>
@@ -47,6 +49,21 @@ public sealed partial class EWJoeTallyConditionComponent : Component
     /// </summary>
     [DataField]
     public int MinPopulation;
+
+    /// <summary>
+    /// RB-33, Witness only: at most this many people counted per cast of Test of Faith or Judgement (0: no cap).
+    /// A cast flashes its whole cone in one tick, so the cap is kept per server tick (<see cref="CastTick"/>).
+    /// </summary>
+    [DataField]
+    public int MaxPerCast;
+
+    /// <summary>The tick of the cast last credited. Server bookkeeping.</summary>
+    [ViewVariables]
+    public GameTick CastTick;
+
+    /// <summary>How many that cast has counted so far. Server bookkeeping.</summary>
+    [ViewVariables]
+    public int CastCredits;
 
     /// <summary>Title locale id; receives "count".</summary>
     [DataField(required: true)]

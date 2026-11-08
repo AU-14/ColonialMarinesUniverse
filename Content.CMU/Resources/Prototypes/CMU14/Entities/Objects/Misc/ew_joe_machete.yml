@@ -9,7 +9,8 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 55
+        # rebalance RB-09: 45 (was 55); its value is armor piercing and bleed
+        Slash: 45
   - type: Unremoveable
     deleteOnDrop: true
   - type: EWJoeMachete

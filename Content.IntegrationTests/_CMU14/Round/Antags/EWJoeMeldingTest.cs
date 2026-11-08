@@ -214,6 +214,7 @@ public sealed class EWJoeMeldingTest
                 Is.EquivalentTo(new[] { entities.GetComponent<MetaDataComponent>(synth).EntityName }), "the panel lists the thrall");
 
             comp.RespawnReady = false;
+            Assert.That(respawn.Grant((joe, comp)), Is.False, "RB-05: a copy once given is not given again this round");
             entities.System<MobStateSystem>().ChangeMobState(joe, MobState.Dead);
             Assert.That(entities.HasComponent<RiverMeldedComponent>(synth), Is.False, "freed on the Joe's death");
             Assert.That(comp.Thralls, Is.Empty);

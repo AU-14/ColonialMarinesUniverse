@@ -6,6 +6,7 @@ using Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared.Database;
 using Content.Shared.Popups;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 
@@ -31,6 +32,7 @@ public sealed class EWJoeCqcSequenceSystem : EntitySystem
     [Dependency] private EWJoeCqcEffectsSystem _effects = default!;
     [Dependency] private EWJoeLiturgySystem _liturgy = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     /// <summary>Every sequence, longest first, then by id so equal lengths match in a stable order.</summary>
     private readonly List<EWJoeCqcSequencePrototype> _sequences = new();
@@ -103,6 +105,10 @@ public sealed class EWJoeCqcSequenceSystem : EntitySystem
         if (buffer.Count == 0 || EWJoeLiturgySystem.CurrentTarget(liturgy.Comp) is not { } target)
             return false;
 
+        // RB-14: one shared cooldown after any sequence fires; the input is kept in the buffer meanwhile
+        if (_timing.CurTime < liturgy.Comp.NextSequence)
+            return false;
+
         foreach (var sequence in _sequences)
         {
             if (sequence.Steps.Count == 0 ||
@@ -146,16 +152,24 @@ public sealed class EWJoeCqcSequenceSystem : EntitySystem
         var empowered = _effects.UsesEmpowered(sequence.Effect) &&
                         _liturgy.CanConsumeEmpowered(joe, target, sequence.HardCc);
 
+        // RB-14: the cooldown starts before the effect, so an input the effect raises (Seize's grab) cannot chain a
+        // second sequence; a sequence that did not land gives it back
+        var previousNext = liturgy.Comp.NextSequence;
+        liturgy.Comp.NextSequence = _timing.CurTime + liturgy.Comp.SequenceCooldown;
+
         if (!_effects.TryApply(sequence.Effect, joe, target, sequence, empowered))
         {
             // nothing happened: the steps are kept for another sequence
+            liturgy.Comp.NextSequence = previousNext;
             buffer.Clear();
             buffer.AddRange(saved);
             return false;
         }
 
+        // eligibility (the CC-immunity rule) was settled before the effect; the effect's own hard CC has just
+        // opened the target's window (RB-13), so checking it again here would refuse the spend
         if (empowered)
-            _liturgy.TryConsumeEmpowered(joe, target, sequence.HardCc, sequence.ID);
+            _liturgy.TryConsumeEmpowered(joe, target, ccBonus: false, sequence.ID);
 
         if (sequence.HardCc)
             _liturgy.RecordHardCc((liturgy.Owner, liturgy.Comp), target);

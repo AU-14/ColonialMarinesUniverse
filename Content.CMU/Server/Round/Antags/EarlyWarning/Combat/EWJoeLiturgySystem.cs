@@ -52,6 +52,8 @@ public sealed class EWJoeLiturgySystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private EWJoeCqcSequenceSystem _sequences = default!;
+    // RB-13: every hard CC from a Joe goes through ApplyHardCc
+    [Dependency] private SharedStunSystem _stun = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Slash = "Slash";
 
@@ -73,6 +75,8 @@ public sealed class EWJoeLiturgySystem : EntitySystem
         SubscribeLocalEvent<MobStateComponent, PullStartedMessage>(OnPullStarted, after: [typeof(FiremanCarrySystem)]);
         SubscribeLocalEvent<EWJoeLiturgyComponent, CMUAggressiveGrabbedEvent>(OnAggressiveGrabbed);
         SubscribeLocalEvent<EWJoeLiturgyComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<EWJoeLiturgyComponent, EWJoeFlashStunEvent>(OnFlashStun);
+        SubscribeLocalEvent<EWJoeLiturgyComponent, EWJoeFlashStunLandedEvent>(OnFlashStunLanded);
         // ARCH-04: the pair is free; TransformComponent belongs to the Yautja gauntlet and the tackle
         // components to RMC. Handled is left alone so both still resolve the disarm.
         SubscribeLocalEvent<MobStateComponent, CMDisarmEvent>(OnDisarm);
@@ -397,6 +401,74 @@ public sealed class EWJoeLiturgySystem : EntitySystem
         joe.Comp.CcImmuneUntil[target] = _timing.CurTime + joe.Comp.CcImmunity;
     }
 
+    /// <summary>
+    /// RB-13: how long a hard CC (knockdown or paralyze) of <paramref name="duration"/> from <paramref name="joe"/>
+    /// lasts on <paramref name="target"/>, without applying it or opening the window. The xenofauna scaling
+    /// (<see cref="EWJoeTargetRules.ScaleStun"/>, the Joe's <see cref="EWJoeComponent.XenofaunaStunMultiplier"/>) comes
+    /// first, then, inside the target's window, <see cref="EWJoeLiturgyComponent.CcWindowMultiplier"/>. A source
+    /// without <see cref="EWJoeComponent"/> is not scaled for xenofauna; one without the meter has no window.
+    /// </summary>
+    /// <summary>RB-13: a Test of Faith or Judgement flash stun obeys the CC window like every other hard CC.</summary>
+    private void OnFlashStun(Entity<EWJoeLiturgyComponent> ent, ref EWJoeFlashStunEvent args)
+    {
+        args.Duration = HardCcDuration(ent, args.Target, args.Duration);
+        args.Handled = true;
+    }
+
+    private void OnFlashStunLanded(Entity<EWJoeLiturgyComponent> ent, ref EWJoeFlashStunLandedEvent args)
+    {
+        RecordHardCc((ent.Owner, ent.Comp), args.Target);
+    }
+
+    public TimeSpan HardCcDuration(EntityUid joe, EntityUid target, TimeSpan duration)
+    {
+        if (TryComp(joe, out EWJoeComponent? ewJoe))
+            duration = EWJoeTargetRules.ScaleStun(EntityManager, target, duration, ewJoe.XenofaunaStunMultiplier);
+
+        if (TryComp(joe, out EWJoeLiturgyComponent? liturgy) && IsCcImmune((joe, liturgy), target))
+            duration *= Math.Clamp(liturgy.CcWindowMultiplier, 0f, 1f);
+
+        return duration;
+    }
+
+    /// <summary>
+    /// RB-13: <see cref="HardCcDuration"/>, then opens (or refreshes) the target's window. For a hard CC another system
+    /// applies later, such as the RMC obstacle-slam paralyze armed for a flight: the window opens when it is armed.
+    /// </summary>
+    public TimeSpan TakeHardCc(EntityUid joe, EntityUid target, TimeSpan duration)
+    {
+        duration = HardCcDuration(joe, target, duration);
+        RecordHardCc(joe, target);
+        return duration;
+    }
+
+    /// <summary>
+    /// RB-13: the one way an Early Warning Joe applies a hard CC (knockdown or paralyze) to a target, from any source:
+    /// the hotbar, Consecrate, Saturate, THE LIGHT and every CQC sequence. Scales <paramref name="duration"/> by
+    /// <see cref="HardCcDuration"/> (xenofauna first, then half inside the window), applies it with refresh, and when it
+    /// lands opens or refreshes the target's window. <paramref name="applied"/> is the duration used.
+    /// </summary>
+    public bool ApplyHardCc(EntityUid joe, EntityUid target, TimeSpan duration, EWJoeHardCcKind kind, out TimeSpan applied)
+    {
+        applied = HardCcDuration(joe, target, duration);
+        var landed = kind switch
+        {
+            EWJoeHardCcKind.Knockdown => _stun.TryKnockdown(target, applied, refresh: true, autoStand: true, drop: true),
+            _ => _stun.TryParalyze(target, applied, true),
+        };
+
+        if (landed)
+            RecordHardCc(joe, target);
+
+        return landed;
+    }
+
+    /// <inheritdoc cref="ApplyHardCc(EntityUid, EntityUid, TimeSpan, EWJoeHardCcKind, out TimeSpan)"/>
+    public bool ApplyHardCc(EntityUid joe, EntityUid target, TimeSpan duration, EWJoeHardCcKind kind)
+    {
+        return ApplyHardCc(joe, target, duration, kind, out _);
+    }
+
     #endregion
 
     #region Buffer
@@ -465,4 +537,11 @@ public sealed class EWJoeLiturgySystem : EntitySystem
             }
         }
     }
+}
+
+/// <summary>RB-13: the two hard CCs the window governs. Flashes, dazes, slows and roots are not hard CC.</summary>
+public enum EWJoeHardCcKind : byte
+{
+    Knockdown,
+    Paralyze,
 }

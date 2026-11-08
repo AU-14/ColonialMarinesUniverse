@@ -16,7 +16,9 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 /// Rolls, titles and scores <see cref="EWJoeCollectConditionComponent"/> objectives. An item counts once
 /// the Joe has taken it in hand or equipped it (remembered on the condition) or while it is anywhere in
 /// the Joe's container tree; an item that satisfied an earlier, credited collect objective never counts
-/// again (<see cref="EWJoeComponent.SpentCollectibles"/>).
+/// again (<see cref="EWJoeComponent.SpentCollectibles"/>). RB-34: a directive with
+/// <see cref="EWJoeCollectConditionComponent.RequireHeld"/> counts only what the Joe carries right now, so the
+/// items must still be held when the ladder sees it complete (it is credited, and its items spent, at once).
 /// </summary>
 public sealed partial class EWJoeCollectConditionSystem : EntitySystem
 {
@@ -167,7 +169,8 @@ public sealed partial class EWJoeCollectConditionSystem : EntitySystem
 
         foreach (var objective in mind.Objectives)
         {
-            if (!TryComp(objective, out EWJoeCollectConditionComponent? collect) || collect.Credited)
+            // RB-34: a held-only directive counts what is carried now, not what was ever picked up
+            if (!TryComp(objective, out EWJoeCollectConditionComponent? collect) || collect.Credited || collect.RequireHeld)
                 continue;
 
             if (_whitelist.IsWhitelistPass(collect.Whitelist, item))
@@ -178,13 +181,14 @@ public sealed partial class EWJoeCollectConditionSystem : EntitySystem
     /// <summary>
     /// The distinct items counting toward the objective right now: remembered acquisitions that still
     /// exist plus whatever is in the owner's container tree, minus items spent on earlier objectives.
+    /// RB-34: a <see cref="EWJoeCollectConditionComponent.RequireHeld"/> directive counts the container tree only.
     /// </summary>
     public HashSet<EntityUid> Counting(EntityUid owner, EWJoeCollectConditionComponent collect)
     {
         var spent = CompOrNull<EWJoeComponent>(owner)?.SpentCollectibles;
 
         collect.Obtained.RemoveWhere(uid => !Exists(uid));
-        var counted = new HashSet<EntityUid>(collect.Obtained);
+        var counted = collect.RequireHeld ? new HashSet<EntityUid>() : new HashSet<EntityUid>(collect.Obtained);
         counted.UnionWith(HeldMatching(owner, collect.Whitelist));
 
         if (spent != null)

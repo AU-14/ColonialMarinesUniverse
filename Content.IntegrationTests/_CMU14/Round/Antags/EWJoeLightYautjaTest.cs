@@ -46,7 +46,8 @@ public sealed class EWJoeLightYautjaTest
             });
         });
 
-        await pair.RunTicksSync((int) Math.Ceiling(4.75 / timing.TickPeriod.TotalSeconds));
+        // RB-22: the envelope fills over 5 s
+        await pair.RunTicksSync((int) Math.Ceiling(5.75 / timing.TickPeriod.TotalSeconds));
 
         await server.WaitAssertion(() =>
         {

@@ -11,6 +11,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
@@ -212,6 +213,7 @@ public sealed class EWJoeAbilitiesTest
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             var comp = entities.EnsureComponent<EWJoeComponent>(joe);
             comp.ScourDuration = TimeSpan.FromSeconds(3);
+            comp.ScourArmorDuration = TimeSpan.FromSeconds(3);
 
             var baton = entities.SpawnEntity(Baton, map.GridCoords);
             var armor = entities.SpawnEntity(Armor, map.GridCoords);
@@ -243,7 +245,8 @@ public sealed class EWJoeAbilitiesTest
             // the armor bonus reaches the shared armor event
             var ev = new CMGetArmorEvent();
             entities.EventBus.RaiseLocalEvent(joe, ref ev);
-            Assert.That(ev.Bullet, Is.EqualTo(comp.Level * comp.ArmorPerLevel + comp.ScourBulletArmor), "bullet armor includes the Scour bonus");
+            Assert.That(ev.Bullet, Is.EqualTo(comp.Level * comp.BulletArmorPerLevel + comp.ScourBulletArmor), "bullet armor includes the Scour bonus");
+            Assert.That(comp.ScourBulletArmor, Is.EqualTo(5), "RB-03: digested armor gives +5 bullet armor");
         });
 
         await pair.RunTicksSync((int) Math.Ceiling(4.5 / timing.TickPeriod.TotalSeconds));
@@ -254,7 +257,80 @@ public sealed class EWJoeAbilitiesTest
             Assert.That(entities.HasComponent<EWJoeScourComponent>(joe), Is.False, "buff expired");
             var ev = new CMGetArmorEvent();
             entities.EventBus.RaiseLocalEvent(joe, ref ev);
-            Assert.That(ev.Bullet, Is.EqualTo(comp.Level * comp.ArmorPerLevel), "bonus gone");
+            Assert.That(ev.Bullet, Is.EqualTo(comp.Level * comp.BulletArmorPerLevel), "bonus gone");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Rebalance RB-04: a fuel can mends the Joe at 2 HP/s for 45 s, and the repair stops for 5 s after the
+    /// Joe takes damage. The pause does not extend the window.
+    /// </summary>
+    [Test]
+    public async Task FuelScourRepairPausesAfterDamage()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+        var timing = server.ResolveDependency<IGameTiming>();
+        var protos = server.ResolveDependency<IPrototypeManager>();
+
+        EntityUid joe = default;
+        FixedPoint2 hurt = default;
+        await server.WaitAssertion(() =>
+        {
+            var scourSys = entities.System<EWJoeScourSystem>();
+            var damageable = entities.System<DamageableSystem>();
+            joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(comp.ScourRepairPerSecond, Is.EqualTo(2f), "RB-04: 2 HP/s");
+                Assert.That(comp.ScourRepairDuration, Is.EqualTo(TimeSpan.FromSeconds(45)), "RB-04: for 45 s");
+                Assert.That(comp.ScourRepairDamagePause, Is.EqualTo(TimeSpan.FromSeconds(5)), "RB-04: paused 5 s by damage");
+                Assert.That(comp.ScourArmorDuration, Is.EqualTo(TimeSpan.FromMinutes(3)), "RB-03: body armor lasts 3 min");
+                Assert.That(comp.ScourDuration, Is.EqualTo(TimeSpan.FromMinutes(5)), "baton and radio keep 5 min");
+            });
+
+            // hurt before the buff exists, so this damage does not pause anything
+            damageable.TryChangeDamage(joe, new DamageSpecifier(protos.Index<DamageTypePrototype>("Blunt"), 60));
+            scourSys.Scour((joe, comp), entities.SpawnEntity(FuelCan, map.GridCoords), EWJoeScourKind.Fuel);
+            hurt = damageable.GetTotalDamage(joe);
+            Assert.That(hurt, Is.GreaterThan(FixedPoint2.Zero), "the Joe is hurt");
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling(2.5 / timing.TickPeriod.TotalSeconds));
+
+        FixedPoint2 paused = default;
+        await server.WaitAssertion(() =>
+        {
+            var damageable = entities.System<DamageableSystem>();
+            Assert.That(damageable.GetTotalDamage(joe), Is.LessThan(hurt), "the fuel mends the Joe");
+
+            // a fresh hit pauses the repair
+            damageable.TryChangeDamage(joe, new DamageSpecifier(protos.Index<DamageTypePrototype>("Blunt"), 10));
+            paused = damageable.GetTotalDamage(joe);
+            Assert.That(entities.GetComponent<EWJoeScourComponent>(joe).RepairPausedUntil, Is.GreaterThan(timing.CurTime),
+                "damage pushes the pause forward");
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling(3 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.System<DamageableSystem>().GetTotalDamage(joe), Is.EqualTo(paused),
+                "no repair while paused");
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling(3.5 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.System<DamageableSystem>().GetTotalDamage(joe), Is.LessThan(paused),
+                "the repair resumes once the pause is over");
         });
 
         await pair.CleanReturnAsync();

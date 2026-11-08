@@ -26,8 +26,9 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 /// <summary>
 /// The Early Warning Joe's xenofauna directives: maim N xenofauna, and gather N of the xenofauna's victims
 /// in a pinned area. Xenofauna is non-humanoid threat life (<see cref="EWJoeTargetRules.IsXenofauna"/>), so
-/// these follow whatever such threat the round has, in any mode. Both are refused unless xenofauna lives on
-/// the Joe's planet or the round's threat is flagged as xenofauna (<see cref="EWJoeRequiresXenofaunaComponent"/>).
+/// these follow whatever such threat the round has, in any mode. Both are refused unless living xenofauna is on
+/// the Joe's planet (<see cref="EWJoeRequiresXenofaunaComponent"/>; RB-37: a selected threat that is merely
+/// flagged xenofauna, but has not spawned, no longer opens them, so they cannot stall 10-20 minutes waiting).
 /// </summary>
 public sealed partial class EWJoeXenoObjectiveSystem : EntitySystem
 {
@@ -87,15 +88,12 @@ public sealed partial class EWJoeXenoObjectiveSystem : EntitySystem
     }
 
     /// <summary>
-    /// Whether the owner's round has xenofauna for these directives: the selected threat is flagged
-    /// <see cref="ThreatPrototype.Xenofauna"/> (saves a scan before it has spawned), or a living xenofauna
-    /// body stands on the owner's planet z-network.
+    /// Whether the owner's round has xenofauna for these directives: a living xenofauna body stands on the
+    /// owner's planet z-network. RB-37: the selected threat's <see cref="ThreatPrototype.Xenofauna"/> flag no
+    /// longer counts on its own.
     /// </summary>
     public bool XenofaunaExpected(EntityUid owner)
     {
-        if (_auRound.SelectedThreat is { Xenofauna: true })
-            return true;
-
         var mapId = Transform(owner).MapID;
         if (mapId == MapId.Nullspace)
             return false;
@@ -144,9 +142,10 @@ public sealed partial class EWJoeXenoObjectiveSystem : EntitySystem
     }
 
     /// <summary>
-    /// ARCH-02: a xenofauna directive stays possible while living xenofauna is on the planet. Before any has
-    /// been seen, a flagged threat that has not spawned yet keeps it open; once seen and all gone, it is
-    /// withdrawn. A gather directive also stays possible while enough victims already lie on the planet.
+    /// ARCH-02: a xenofauna directive stays possible while living xenofauna is on the planet; once it is all
+    /// gone, it is withdrawn (RB-37: it was only offered with xenofauna alive, so there is no waiting on a
+    /// threat that has not spawned). A gather directive also stays possible while enough victims already lie on
+    /// the planet.
     /// </summary>
     private void OnRequiresXenofaunaStillPossible(Entity<EWJoeRequiresXenofaunaComponent> ent, ref EWJoeObjectiveStillPossibleEvent args)
     {
@@ -155,9 +154,6 @@ public sealed partial class EWJoeXenoObjectiveSystem : EntitySystem
             ent.Comp.SeenLiving = true;
             return;
         }
-
-        if (!ent.Comp.SeenLiving && _auRound.SelectedThreat is { Xenofauna: true })
-            return;
 
         if (TryComp(ent, out EWJoeDeliverVictimsConditionComponent? deliver) && CountVictimsOn(args.Maps) >= deliver.Count)
             return;

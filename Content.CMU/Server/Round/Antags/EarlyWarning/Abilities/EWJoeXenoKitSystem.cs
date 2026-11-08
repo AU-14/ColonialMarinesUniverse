@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Xenonids.Pheromones;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared._RMC14.Xenonids.Spray;
+using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
@@ -54,6 +55,7 @@ public sealed class EWJoeXenoKitSystem : EntitySystem
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
     private readonly HashSet<Entity<XenoWeedsComponent>> _weeds = new();
+    private readonly HashSet<Entity<XenoSweepingComponent>> _sweeping = new();
     private readonly List<EntityUid> _expired = new();
 
     public override void Initialize()
@@ -68,6 +70,7 @@ public sealed class EWJoeXenoKitSystem : EntitySystem
         SubscribeLocalEvent<EWJoeSteadyComponent, XenoLeapHitAttempt>(OnSteadyLeapHit);
         SubscribeLocalEvent<EWJoeSteadyComponent, XenoLungeHitAttempt>(OnSteadyLungeHit);
         SubscribeLocalEvent<EWJoeSteadyComponent, KnockDownAttemptEvent>(OnSteadyKnockdownAttempt);
+        SubscribeLocalEvent<EWJoeSteadyComponent, DamageChangedEvent>(OnSteadyDamageChanged);
 
         SubscribeLocalEvent<EWJoeUnwindRecoilComponent, DamageDealtEvent>(OnRecoilDamageDealt);
     }
@@ -180,20 +183,46 @@ public sealed class EWJoeXenoKitSystem : EntitySystem
             args.Cancelled = true;
     }
 
+    /// <summary>FLOW-18: records the last damage living xenofauna dealt the Joe, the tell for a xeno knockdown.</summary>
+    private void OnSteadyDamageChanged(Entity<EWJoeSteadyComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased || args.Origin is not { } origin || origin == ent.Owner || !Exists(origin))
+            return;
+
+        if (!EWJoeTargetRules.IsXenofauna(EntityManager, origin) || !_mobState.IsAlive(origin))
+            return;
+
+        ent.Comp.LastXenoHit = _timing.CurTime;
+    }
+
+    /// <summary>
+    /// FLOW-18 / RB-27: the attempt event carries no source, so a knockdown (or paralyze) is refused only
+    /// while Steady and within the hit window of the last xeno damage. Leap and lunge are refused above.
+    /// </summary>
     private void OnSteadyKnockdownAttempt(Entity<EWJoeSteadyComponent> ent, ref KnockDownAttemptEvent args)
     {
-        if (!args.Cancelled && IsSteady(ent) && XenofaunaNear(ent, ent.Comp.XenoProximity))
+        if (!args.Cancelled && IsSteady(ent) && (XenoHitRecently(ent) || XenoSweepingNear(ent)))
             args.Cancelled = true;
     }
 
-    /// <summary>A living xenofauna is within <paramref name="range"/> of <paramref name="uid"/>.</summary>
-    public bool XenofaunaNear(EntityUid uid, float range)
+    /// <summary>Living xenofauna damaged the Joe within <see cref="EWJoeSteadyComponent.XenoHitWindow"/>.</summary>
+    public bool XenoHitRecently(Entity<EWJoeSteadyComponent> ent)
     {
-        _mobs.Clear();
-        _lookup.GetEntitiesInRange(Transform(uid).Coordinates, range, _mobs, LookupFlags.Uncontained);
-        foreach (var mob in _mobs)
+        return ent.Comp.LastXenoHit is { } hit && _timing.CurTime - hit <= ent.Comp.XenoHitWindow;
+    }
+
+    /// <summary>
+    /// A living xenofauna within <see cref="EWJoeSteadyComponent.SweepAttributionRange"/> is mid tail sweep,
+    /// trip or lash: RMC adds <see cref="XenoSweepingComponent"/> right before those paralyze, and trip and lash
+    /// deal no damage for the hit window to see.
+    /// </summary>
+    public bool XenoSweepingNear(Entity<EWJoeSteadyComponent> ent)
+    {
+        _sweeping.Clear();
+        _lookup.GetEntitiesInRange(Transform(ent).Coordinates, ent.Comp.SweepAttributionRange, _sweeping, LookupFlags.Uncontained);
+        foreach (var xeno in _sweeping)
         {
-            if (mob.Owner != uid && _mobState.IsAlive(mob, mob.Comp) && EWJoeTargetRules.IsXenofauna(EntityManager, mob))
+            if (xeno.Owner != ent.Owner && _mobState.IsAlive(xeno) && EWJoeTargetRules.IsXenofauna(EntityManager, xeno))
                 return true;
         }
 

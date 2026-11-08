@@ -66,8 +66,9 @@ public sealed partial class EWJoeCombatSystem
 
         if (KnockBackFromJoe(joe, target, desecrate.KnockbackDistance, desecrate.KnockbackSpeed))
         {
-            // ECS-11: xenofauna get the Joe's stun multiplier before RMC's own reduction
-            var paralyze = EWJoeTargetRules.ScaleStun(EntityManager, target, desecrate.SlamParalyze, joe.Comp.XenofaunaStunMultiplier);
+            // ECS-11 + RB-13/RB-15: the obstacle paralyze is hard CC: scaled for xenofauna, then the CC window,
+            // which opens as the slam is armed
+            var paralyze = _liturgy.TakeHardCc(joe, target, desecrate.SlamParalyze);
             _obstacleSlam.ApplyBonuses(target, paralyze, desecrate.SlamSlow);
         }
 

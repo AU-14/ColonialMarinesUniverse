@@ -19,7 +19,7 @@ public sealed partial class DistressAntagsRuleSystem : GameRuleSystem<DistressAn
         { "RunawaySynth", 0.25f },
         { "Replicant", 0.15f },
         // its own rule: Distress Signal clears the planet's jobs, so it brings its own colony Working Joe
-        { EWJoeRuleSystem.DistressAntagId, 0.35f },
+        { EWJoeRuleSystem.DistressAntagId, 0.25f },
     };
 
     protected override void Added(EntityUid uid, DistressAntagsRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)

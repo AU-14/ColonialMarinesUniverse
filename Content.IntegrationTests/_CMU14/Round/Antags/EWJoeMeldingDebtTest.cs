@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Melding;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind;
@@ -231,6 +232,64 @@ public sealed class EWJoeMeldingDebtTest
                 Assert.That(comp.Respawns, Is.Zero, "granted, not spent");
                 Assert.That(entities.TryGetComponent(doomed, out EWJoeComponent? doomedComp) && doomedComp.RespawnReady, Is.False,
                     "the dead Joe's dropped debt gave nothing");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Rebalance RB-05 (decision 3): the copy is given at most once per round. Once granted, a spent copy
+    /// is not earned back by a later empty search window, and neither is one taken away by hand.
+    /// </summary>
+    [Test]
+    public async Task TheCopyIsGivenAtMostOncePerRound()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+
+        EntityUid joe = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var melding = entities.System<EWJoeMeldingSystem>();
+            var respawn = entities.System<EWJoeRespawnSystem>();
+
+            joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+            comp.MeldSearchWindow = TimeSpan.Zero;
+
+            Assert.That(respawn.HasSpentGrant((joe, comp)), Is.False, "nothing given yet");
+            Assert.That(melding.TryStartMeld((joe, comp)), Is.False);
+            Assert.That(comp.RespawnReady, "the first empty river gives the copy");
+            Assert.That(respawn.HasSpentGrant((joe, comp)), "and it is remembered");
+
+            // the copy goes (spent or taken away); the river does not give another
+            comp.RespawnReady = false;
+            entities.System<AlertsSystem>().ClearAlert(joe, RespawnAlert); // as spending it would
+            Assert.That(melding.TryStartMeld((joe, comp)), Is.False);
+            Assert.That(comp.RespawnReady, Is.False, "a second empty river gives nothing");
+            Assert.That(respawn.Grant((joe, comp)), Is.False, "nor does a direct grant");
+
+            // the search-window path refuses the same way
+            comp.MeldRetry = TimeSpan.FromSeconds(1);
+            comp.MeldSearchWindow = TimeSpan.FromSeconds(2);
+            Assert.That(melding.TryStartMeld((joe, comp)), Is.False);
+            Assert.That(comp.PendingMelds, Is.EqualTo(1));
+        });
+
+        await pair.RunSeconds(4);
+
+        await server.WaitAssertion(() =>
+        {
+            var comp = entities.GetComponent<EWJoeComponent>(joe);
+            Assert.Multiple(() =>
+            {
+                Assert.That(comp.PendingMelds, Is.Zero, "the window closed");
+                Assert.That(comp.RespawnReady, Is.False, "and gave no second copy");
+                Assert.That(entities.System<AlertsSystem>().IsShowingAlert(joe, RespawnAlert), Is.False);
             });
         });
 

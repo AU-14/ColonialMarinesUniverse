@@ -408,7 +408,7 @@
   - type: InstantAction
     event: !type:EWJoeMacheteActionEvent
 
-# A-18: one Consecrate per 8 s by cooldown, so heat is the limiter rather than spam.
+# A-18: heat is the main limiter. Rebalance RB-20: one Consecrate per 16 s by cooldown (was 8).
 - type: entity
   id: CMUActionEWJoeConsecrate
   parent: ActionMarineBase
@@ -418,7 +418,7 @@
     group: Engine
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 8
+    useDelay: 16
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
@@ -435,6 +435,7 @@
       components:
       - MobState
 
+# Rebalance RB-23: 45 s cooldown (was 25) and 20 heat (EWJoeComponent.UnwindHeat).
 - type: entity
   id: CMUActionEWJoeUnwind
   parent: ActionMarineBase
@@ -444,7 +445,7 @@
     group: Machine
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 25
+    useDelay: 45
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
@@ -503,9 +504,10 @@
   - type: EWJoeDropsSurrender
   - type: EWJoeAbilityGroup
     group: Engine
+  # rebalance RB-21: 15 s (was 12)
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 12
+    useDelay: 15
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi

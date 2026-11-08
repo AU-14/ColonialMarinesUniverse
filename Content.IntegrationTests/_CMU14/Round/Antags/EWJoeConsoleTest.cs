@@ -336,14 +336,21 @@ public sealed class EWJoeConsoleTest
             entities.RemoveComponent<EWJoeComponent>(joe2);
             Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1), "stand-down with a corrupted console drops the shard");
 
-            // --- death drops once
+            // --- death drops once: RB-32, one shard per console the Joe still holds (five here)
             mobState.ChangeMobState(joe, MobState.Dead);
-            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(2), "one shard on death");
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5), "one shard per assimilated console on death");
             Assert.That(comp.ShardDropped, Is.True);
 
             mobState.ChangeMobState(joe, MobState.Alive);
             mobState.ChangeMobState(joe, MobState.Dead);
-            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(2), "no second shard after a revive");
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5), "no further shards after a revive");
+
+            // --- a Joe that holds no console still drops a single shard
+            var joe3 = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var comp3 = entities.EnsureComponent<EWJoeComponent>(joe3);
+            Assert.That(consoles.CountAssimilatedBy(joe3), Is.Zero);
+            Assert.That(consoles.TryDropShard((joe3, comp3), "test"), Is.True);
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5 + 1), "never fewer than one shard");
         });
 
         await pair.CleanReturnAsync();

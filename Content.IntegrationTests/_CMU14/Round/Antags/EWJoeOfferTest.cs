@@ -94,6 +94,10 @@ public sealed class EWJoeOfferTest
             Assert.Multiple(() =>
             {
                 Assert.That(offering.IsOfferable(second), "a loose revolver is an offering");
+                // RB-31: an item keeps the short offering; only structures take the long one
+                Assert.That(offering.OfferDelayFor(entities.GetComponent<EWJoeComponent>(joe), second),
+                    Is.EqualTo(entities.GetComponent<EWJoeComponent>(joe).OfferDelay), "an item takes the Joe's own delay");
+                Assert.That(EWJoeOfferSystem.StructureOfferDelay, Is.EqualTo(TimeSpan.FromSeconds(6)));
                 Assert.That(offering.IsOfferable(entities.SpawnEntity(Sentry, coords)), Is.False, "a sentry is not");
                 Assert.That(offering.IsOfferable(entities.SpawnEntity(Drone, coords)), Is.False, "a combat drone is not");
                 Assert.That(offering.IsOfferable(entities.SpawnEntity(Attachment, coords)), Is.False, "an underbarrel attachment is not");

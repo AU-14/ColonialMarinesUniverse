@@ -8,7 +8,11 @@ using Content.Server.SurveillanceCamera;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Power;
 using Content.Shared.Actions.Components;
+using Content.Shared.CMU14.DamageTracking;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
+using Content.Shared.Item.ItemToggle;
 using Content.Shared.Mind;
 using Content.Shared.Radio.Components;
 using Content.Shared.Roles;
@@ -49,6 +53,10 @@ public sealed class EWJoeObjectivesBatch2Test
     private const string TelecomServer = "CMTelecomServer";
     private const string ResinWall = "WallXenoResin";
     private const string FleshNest = "AU14BiomorphFleshNest";
+    private const string HiveCore = "HiveCoreXeno";
+    private const string Welder = "CMWelder";
+    private const string Human = "CMMobHuman";
+    private const string BearWitnessObjective = "CMUEWJoeBearWitnessObjective";
     private const string Sentry = "RMCSentry";
     private const string CollectGunsObjective = "CMUEWJoeTestBatch2CollectGunsObjective";
     private const string DarkenObjective = "CMUEWJoeTestBatch2DarkenObjective";
@@ -291,7 +299,7 @@ public sealed class EWJoeObjectivesBatch2Test
     [Test]
     public async Task PurgeTheNestConsumesThreatStructuresByWeight()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
         var entities = server.EntMan;
@@ -305,13 +313,24 @@ public sealed class EWJoeObjectivesBatch2Test
             Assert.That(objectives.TryCreateObjective(mind, PurgeObjective, out _), Is.False,
                 "no threat structures on the planet (an ape round): refused");
 
+            // lay the floor first as one contiguous strip: a lone tile would be split onto its own grid by the
+            // engine's grid splitting when the next tile goes down, un-anchoring what stands on it
+            for (var x = 2; x <= 7; x++)
+                EWJoeTestHelpers.TileEast(entities, map, x);
+
+            // RB-31: a hive core (weight 3, the old minimum on its own) is excluded altogether
+            var core = entities.SpawnEntity(HiveCore, EWJoeTestHelpers.TileEast(entities, map, 7));
+            Assert.That(objectives.TryCreateObjective(mind, PurgeObjective, out _), Is.False,
+                "a lone hive core does not count toward the target: still refused");
+
             var resin = entities.SpawnEntity(ResinWall, EWJoeTestHelpers.TileEast(entities, map, 2));
             var mycelium = entities.SpawnEntity("CMU14XenoMyceliumWall", EWJoeTestHelpers.TileEast(entities, map, 3));
             var flesh = entities.SpawnEntity("AU14BiomorphFleshWall", EWJoeTestHelpers.TileEast(entities, map, 4));
 
             var purge = Assign(entities, mind, comp, PurgeObjective);
             var offer = entities.GetComponent<EWJoeOfferConditionComponent>(purge);
-            Assert.That(offer.Target, Is.EqualTo(3), "three weighted structures exist, so three are asked for");
+            // with the core counted, six would be available and the roll would run 3-5
+            Assert.That(offer.Target, Is.EqualTo(3), "three weighted structures exist (the core not among them), so three are asked for");
 
             Assert.Multiple(() =>
             {
@@ -321,6 +340,18 @@ public sealed class EWJoeObjectivesBatch2Test
                 Assert.That(offering.IsOfferable(flesh, offer), "and biomorph flesh");
                 Assert.That(offering.IsOfferable(entities.SpawnEntity(Revolver, EWJoeTestHelpers.TileEast(entities, map, 5)), offer),
                     Is.False, "a firearm is no threat structure");
+                Assert.That(offering.IsOfferable(core, offer), Is.False, "a hive core can never be offered");
+                Assert.That(offering.OpenOffers(joe, core), Is.Empty, "no directive wants it");
+                Assert.That(offering.OfferDelayFor(comp, resin), Is.EqualTo(EWJoeOfferSystem.StructureOfferDelay),
+                    "an anchored structure takes the long offering");
+            });
+
+            // offering it directly does nothing
+            offering.Offer((joe, comp), core);
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.Deleted(core) || entities.IsQueuedForDeletion(core), Is.False, "the core stands");
+                Assert.That(offer.Offered, Is.Zero, "and nothing was counted");
             });
 
             // consumed like an item, not melded
@@ -332,7 +363,7 @@ public sealed class EWJoeObjectivesBatch2Test
                 Assert.That(offer.Offered, Is.EqualTo(1), "xeno resin counts one");
             });
 
-            // a core is worth three
+            // a flesh nest (not a core) is still worth three
             var nest = entities.SpawnEntity(FleshNest, EWJoeTestHelpers.TileEast(entities, map, 6));
             Assert.That(offering.Weight(nest, offer), Is.EqualTo(3));
             offering.Offer((joe, comp), nest);
@@ -368,6 +399,10 @@ public sealed class EWJoeObjectivesBatch2Test
             camera = entities.SpawnEntity(Camera, map.GridCoords.Offset(new System.Numerics.Vector2(1f, 0f)));
             spare = entities.SpawnEntity(Camera, map.GridCoords.Offset(new System.Numerics.Vector2(1f, 0f)));
             objective = Assign(entities, mind, comp, BlindObjective);
+
+            // RB-35: Blind the Watch asks for 2-4 cameras
+            Assert.That(entities.GetComponent<EWJoeOfferConditionComponent>(objective).Min, Is.EqualTo(2));
+            Assert.That(entities.GetComponent<EWJoeOfferConditionComponent>(objective).Max, Is.EqualTo(4));
             // both cameras are asked for, so the directive is still open after the first
             entities.GetComponent<EWJoeOfferConditionComponent>(objective).Target = 2;
 
@@ -376,8 +411,16 @@ public sealed class EWJoeObjectivesBatch2Test
             Assert.That(offer.Handled, "a camera is no item, but a Meld directive wants it: the offering starts");
         });
 
-        // the three-second take-in
+        // RB-31: a structure's offering takes six seconds, not an item's three
         await pair.RunTicksSync((int) Math.Ceiling(3.5 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.HasComponent<EWJoeMeldedStructureComponent>(camera), Is.False, "not melded after three and a half seconds");
+            Assert.That(entities.GetComponent<EWJoeOfferConditionComponent>(objective).Offered, Is.Zero, "nor counted");
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling(3 / timing.TickPeriod.TotalSeconds));
 
         await server.WaitAssertion(() =>
         {
@@ -418,6 +461,55 @@ public sealed class EWJoeObjectivesBatch2Test
             Assert.That(offering.OpenOffers(joe, shipCamera), Is.Empty, "a ship's camera does not finish a planet directive");
             Assert.That(offering.OpenOffers(joe, spare), Is.Not.Empty, "while one on the planet does");
             entities.DeleteEntity(shipMapUid);
+
+            // the Joe cannot burn out its own meld (no repair-and-re-offer farm)
+            var joeWelder = entities.SpawnEntity(Welder, map.GridCoords);
+            var joeInteraction = new InteractUsingEvent(joe, joeWelder, camera, entities.GetComponent<TransformComponent>(camera).Coordinates);
+            entities.EventBus.RaiseLocalEvent(camera, joeInteraction);
+            Assert.That(joeInteraction.Handled, Is.False, "the Joe's own welder does not start a repair");
+            entities.DeleteEntity(joeWelder);
+
+            // RB-30: someone with a lit welder burns the meld out
+            // a tile east, beside the camera and clear of the Joe (two bodies on one spot push apart and break the do-after)
+            var repairerCoords = EWJoeTestHelpers.TileEast(entities, map, 1);
+            var repairer = entities.SpawnEntity(Human, repairerCoords);
+            var welder = entities.SpawnEntity(Welder, repairerCoords);
+            Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(repairer, welder, checkActionBlocker: false), "the welder is in hand");
+            Assert.That(entities.System<ItemToggleSystem>().TryActivate((welder, null), repairer), "and lit");
+            var interaction = new InteractUsingEvent(repairer, welder, camera, entities.GetComponent<TransformComponent>(camera).Coordinates);
+            entities.EventBus.RaiseLocalEvent(camera, interaction);
+            Assert.That(interaction.Handled, "a lit welder starts the repair");
+        });
+
+        // the repair is a ten-second burn: not done halfway
+        await pair.RunTicksSync((int) Math.Ceiling(5 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.HasComponent<EWJoeMeldedStructureComponent>(camera), "still melded five seconds in");
+        });
+
+        await pair.RunTicksSync((int) Math.Ceiling(5.5 / timing.TickPeriod.TotalSeconds));
+
+        await server.WaitAssertion(() =>
+        {
+            var offering = entities.System<EWJoeOfferSystem>();
+            var condition = entities.GetComponent<EWJoeOfferConditionComponent>(objective);
+            var lights = entities.System<SharedPointLightSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.HasComponent<EWJoeMeldedStructureComponent>(camera), Is.False, "the meld is burned out");
+                Assert.That(entities.GetComponent<SurveillanceCameraComponent>(camera).Active, "the camera watches again");
+                Assert.That(!lights.TryGetLight(camera, out var light) || !light.Enabled || light.Color != EWJoeMeldedStructureSystem.MeldColor,
+                    "the river's light is gone");
+                Assert.That(offering.IsOfferable(camera, condition), Is.False,
+                    "a repaired camera never counts twice for the directive it already counted for");
+            });
+
+            // and it watches for good: nothing still refuses it
+            entities.System<SurveillanceCameraSystem>().SetActive(camera, false);
+            entities.System<SurveillanceCameraSystem>().SetActive(camera, true);
+            Assert.That(entities.GetComponent<SurveillanceCameraComponent>(camera).Active, "a repaired camera can be switched back on");
         });
 
         await pair.CleanReturnAsync();
@@ -470,6 +562,79 @@ public sealed class EWJoeObjectivesBatch2Test
                 Assert.That(light!.Enabled, "still lit");
                 Assert.That(light.Color, Is.EqualTo(EWJoeMeldedStructureSystem.MeldColor), "in the river's orange");
             });
+
+            // RB-30: the repair (the welder's do-after skipped) makes it a server again, in its own light
+            var melded = entities.GetComponent<EWJoeMeldedStructureComponent>(telecom);
+            Assert.That(melded.WasTelecomServer, "the meld remembered it was a server");
+            Assert.That(melded.HadLight, "and that it had a light of its own");
+            var ownColor = melded.LightColor;
+            entities.System<EWJoeMeldedStructureSystem>().Repair((telecom, melded));
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.HasComponent<EWJoeMeldedStructureComponent>(telecom), Is.False, "the marker is gone");
+                Assert.That(entities.HasComponent<TelecomServerComponent>(telecom), "a server the radio counts again");
+                Assert.That(light.Color, Is.EqualTo(ownColor), "its own light is back");
+                Assert.That(light.Color, Is.Not.EqualTo(EWJoeMeldedStructureSystem.MeldColor));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>RB-33: Bear Witness asks for 4-6 people and one cast counts at most two of them.</summary>
+    [Test]
+    public async Task BearWitnessCountsAtMostTwoPerCast()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+
+        EntityUid joe = default, objective = default;
+        var witnesses = new List<EntityUid>();
+        await server.WaitAssertion(() =>
+        {
+            (joe, var mind, var comp) = SpawnJoe(entities, map.GridCoords);
+            for (var i = 0; i < 6; i++)
+                witnesses.Add(entities.SpawnEntity(Human, EWJoeTestHelpers.TileEast(entities, map, 2)));
+
+            objective = Assign(entities, mind, comp, BearWitnessObjective);
+            var tally = entities.GetComponent<EWJoeTallyConditionComponent>(objective);
+            Assert.Multiple(() =>
+            {
+                Assert.That(tally.Target, Is.InRange(4, 6), "four to six people");
+                Assert.That(tally.MaxPerCast, Is.EqualTo(2));
+            });
+            tally.Target = 4;
+
+            // one cast's cone reaches three people: two count
+            var tallies = entities.System<EWJoeTallySystem>();
+            for (var i = 0; i < 3; i++)
+                tallies.Credit((joe, comp), EWJoeTallyKind.Witness, witnesses[i], 1);
+            Assert.Multiple(() =>
+            {
+                Assert.That(tally.Count, Is.EqualTo(2), "a cast counts at most two");
+                Assert.That(tally.Counted, Does.Not.Contain(witnesses[2]), "the third is not spent");
+            });
+        });
+
+        // the next cast is a later tick
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var comp = entities.GetComponent<EWJoeComponent>(joe);
+            var tally = entities.GetComponent<EWJoeTallyConditionComponent>(objective);
+            var tallies = entities.System<EWJoeTallySystem>();
+
+            // the same two again, then the third: only the third is new
+            for (var i = 0; i < 3; i++)
+                tallies.Credit((joe, comp), EWJoeTallyKind.Witness, witnesses[i], 1);
+            Assert.That(tally.Count, Is.EqualTo(3), "repeats do not use up the cast, and the one left out counts now");
+
+            tallies.Credit((joe, comp), EWJoeTallyKind.Witness, witnesses[3], 1);
+            tallies.Credit((joe, comp), EWJoeTallyKind.Witness, witnesses[4], 1);
+            Assert.That(tally.Count, Is.EqualTo(4), "the second of this cast finishes the directive; nothing counts past it");
         });
 
         await pair.CleanReturnAsync();
@@ -548,12 +713,21 @@ public sealed class EWJoeObjectivesBatch2Test
                 // armed while lit; the Joe stands inside it
                 darken.Poll((objective, condition));
                 Assert.That(condition.State, Is.EqualTo(EWJoeDarkenState.Armed));
-                Assert.That(condition.JoeInAreaAt, Is.Not.Null, "the Joe is seen in the district");
+
+                // RB-38: standing in the district is not the Joe's work; its own hit on the district's APC is
+                Assert.That(darken.CausedByJoe(condition, joe, lit.Value), Is.False, "presence alone no longer counts");
+                var stamp = entities.EnsureComponent<CMULastDamagedByComponent>(apcLit);
+                stamp.Origin = joe;
+                stamp.At = timing.CurTime;
+                Assert.That(darken.CausedByJoe(condition, joe, lit.Value), "the Joe hit the APC that feeds it");
+                stamp.Origin = apcDark;
+                Assert.That(darken.CausedByJoe(condition, joe, lit.Value), Is.False, "something else's hit does not count");
+                stamp.Origin = joe;
 
                 // the Joe's blackout starts the timer
                 powered.Clear();
                 darken.Poll((objective, condition));
-                Assert.That(condition.State, Is.EqualTo(EWJoeDarkenState.Dark), "a blackout with the Joe inside is its work");
+                Assert.That(condition.State, Is.EqualTo(EWJoeDarkenState.Dark), "a blackout after the Joe's own hit is its work");
                 Assert.That(objectives.IsCompleted(objective, mind), Is.False, "darkness alone does not finish it");
 
                 // the light returning resets it

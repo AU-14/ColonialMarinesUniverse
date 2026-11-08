@@ -165,7 +165,7 @@
   - type: GameRule
   - type: DistressAntagsRule
     rules:
-      EWJoeFoF: 0.35
+      EWJoeFoF: 0.25
 
 - type: entity
   id: AuVoteRule

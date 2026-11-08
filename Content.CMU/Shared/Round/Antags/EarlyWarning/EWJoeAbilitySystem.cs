@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Barricade;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared.Emp;
 using Content.Shared.Examine;
 using Content.Shared.Flash;
@@ -55,14 +56,13 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
     }
 
     /// <summary>
-    /// Sculpted Form: flat melee and bullet armor that grows with level (balance A-4), plus the bullet
-    /// bonus of a digested body armor while Scour lasts (E4, A-6).
+    /// Sculpted Form: flat melee and bullet armor that grows with level (balance A-4; rebalance RB-01/RB-02
+    /// scale them separately), plus the bullet bonus of a digested body armor while Scour lasts (E4, A-6).
     /// </summary>
     private void OnGetArmor(Entity<EWJoeComponent> ent, ref CMGetArmorEvent args)
     {
-        var bonus = ent.Comp.Level * ent.Comp.ArmorPerLevel;
-        args.Melee += bonus;
-        args.Bullet += bonus;
+        args.Melee += ent.Comp.Level * ent.Comp.MeleeArmorPerLevel;
+        args.Bullet += ent.Comp.Level * ent.Comp.BulletArmorPerLevel;
 
         if (TryComp(ent, out EWJoeScourComponent? scour))
             args.Bullet += scour.BulletArmor;
@@ -83,12 +83,22 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
         // a pull or a wielded off-hand is a virtual item, not something the victim can fumble
         var held = _hands.EnumerateHeld(target).Where(i => !HasComp<VirtualItemComponent>(i)).ToList();
         // ECS-11: per target, so xenofauna get the Joe's multiplier before RMC's own reduction
-        var stun = EWJoeTargetRules.ScaleStun(EntityManager, target, joe.Comp.TestOfFaithStun, joe.Comp.XenofaunaStunMultiplier);
+        // RB-13: the server's Liturgy meter applies the CC window (half inside it) on top of that scaling
+        var stunEv = new EWJoeFlashStunEvent(target, joe.Comp.TestOfFaithStun);
+        RaiseLocalEvent(joe, ref stunEv);
+        var stun = stunEv.Handled
+            ? stunEv.Duration
+            : EWJoeTargetRules.ScaleStun(EntityManager, target, joe.Comp.TestOfFaithStun, joe.Comp.XenofaunaStunMultiplier);
         var hit = _flash.Flash(target, joe, null, (float) joe.Comp.TestOfFaithFlash.TotalMilliseconds,
             displayPopup: false, stunDuration: stun);
 
         if (hit && _net.IsServer)
+        {
+            // the flash's stun is a hard CC: it opens the target's window for the Joe's next one
+            var landed = new EWJoeFlashStunLandedEvent(target);
+            RaiseLocalEvent(joe, ref landed);
             Afflict(target, held, judgement);
+        }
 
         return hit;
     }

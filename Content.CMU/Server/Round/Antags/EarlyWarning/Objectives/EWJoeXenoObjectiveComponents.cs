@@ -5,9 +5,9 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 /// <summary>
 /// An Early Warning Joe objective that needs xenofauna (non-humanoid threat life, see
 /// <c>EWJoeTargetRules.IsXenofauna</c>) to exist. Refused on assignment unless a living xenofauna body is on
-/// the owner's planet z-network, or the round's selected threat is flagged <c>xenofauna</c>. Humanoid-threat
-/// rounds, Insurgency, FoF and Colony Fall before its threat is picked therefore refuse it, and the ladder's
-/// pool walk simply moves on.
+/// the owner's planet z-network (RB-37: a selected threat flagged <c>xenofauna</c> that has not spawned does not
+/// count). Humanoid-threat rounds, Insurgency, FoF and Colony Fall before its threat arrives therefore refuse
+/// it, and the ladder's pool walk simply moves on.
 /// ARCH-02: once living xenofauna has been seen on the planet for this directive, the directive is withdrawn
 /// when none is left (a gather directive also keeps going while enough victims lie on the planet).
 /// </summary>

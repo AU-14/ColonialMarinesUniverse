@@ -5,6 +5,7 @@
 # requiresBlade: every Wide step must come from a blade (the machete or a Slash weapon); fists cannot wide-swing.
 # Steps: Hit, Wide, Disarm, Grab (a pull; an aggressive grab also counts), AggressiveGrab, Ability (a landed CQC
 # hotbar move). hardCc: refused on a target inside its 6 s CC-immunity window, and opens that window.
+# RB-14: after any sequence fires, none can fire for 4 s (EWJoeLiturgy.sequenceCooldown); inputs still buffer.
 
 - type: ewJoeCqcSequence
   id: Rebuke
@@ -31,6 +32,7 @@
   steps: [ Grab, Hit, Hit ]
   effect: Desecrate
   minLevel: 2
+  hardCc: true # RB-15: its obstacle paralyze counts as hard CC
 
 - type: ewJoeCqcSequence
   id: Penance

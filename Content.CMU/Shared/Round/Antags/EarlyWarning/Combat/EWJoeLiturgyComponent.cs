@@ -128,15 +128,33 @@ public sealed partial class EWJoeLiturgyComponent : Component
 
     // ---- guardrails (FLOW-06) ----
 
-    /// <summary>After a hard CC on a target, sequences cannot hard-CC it and hotbar CC on it is not empowered.</summary>
+    /// <summary>
+    /// After a hard CC on a target, sequences cannot hard-CC it and hotbar CC on it is not empowered. RB-13: every
+    /// hard CC (knockdown or paralyze) from this Joe, from any source, opens or refreshes the window.
+    /// </summary>
     [DataField]
     public TimeSpan CcImmunity = TimeSpan.FromSeconds(6);
+
+    /// <summary>
+    /// RB-13: a hard CC from this Joe on a target inside its <see cref="CcImmunity"/> window lasts this fraction of
+    /// its duration. Applied after the xenofauna stun scaling.
+    /// </summary>
+    [DataField]
+    public float CcWindowMultiplier = 0.5f;
 
     /// <summary>Per target, when its CC immunity ends. Server state.</summary>
     [ViewVariables]
     public Dictionary<EntityUid, TimeSpan> CcImmuneUntil = new();
 
     // ---- sequences (ARCH-06) ----
+
+    /// <summary>RB-14: after any sequence fires, no sequence can fire for this long. Inputs still build the buffer.</summary>
+    [DataField]
+    public TimeSpan SequenceCooldown = TimeSpan.FromSeconds(4);
+
+    /// <summary>RB-14: when the next sequence may fire. Server state.</summary>
+    [ViewVariables]
+    public TimeSpan NextSequence;
 
     [DataField]
     public int BufferCap = 4;

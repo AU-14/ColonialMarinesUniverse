@@ -141,7 +141,7 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
     /// console still counts) and the miss becomes a meld debt (N7): the river searches the planet
     /// network again every <see cref="EWJoeComponent.MeldRetry"/>, and only when
     /// <see cref="EWJoeComponent.MeldSearchWindow"/> runs out with debts left is the Joe given its one
-    /// respawn (playtest 4). A zero window grants the respawn at once.
+    /// respawn (playtest 4; at most once per round since RB-05). A zero window grants the respawn at once.
     /// </summary>
     public bool TryStartMeld(Entity<EWJoeComponent> joe)
     {
@@ -250,8 +250,9 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
             _adminLogger.Add(LogType.Action, LogImpact.Medium,
                 $"Early Warning Joe {ToPrettyString(joe):joe} found no synthetic to meld for {debts} debt(s) before its search window closed ({reasons})");
 
+            // RB-05: a copy already held says so; one already given this round is not given again
             if (!_respawn.Grant(joe))
-                _messages.Notify(joe, Loc.GetString("cmu-ew-joe-meld-search-ended"));
+                _messages.Notify(joe, Loc.GetString(joe.Comp.RespawnReady ? "cmu-ew-joe-meld-search-ended" : "cmu-ew-joe-meld-search-ended-spent"));
         }
     }
 

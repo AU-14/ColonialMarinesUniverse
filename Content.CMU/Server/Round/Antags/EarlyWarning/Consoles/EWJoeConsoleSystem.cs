@@ -25,7 +25,7 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Consoles;
 /// whitelisted console; completion marks it (<see cref="EWJoeAssimilatedConsoleComponent"/>),
 /// closes and locks its UI, applies the per-console effect, announces it to the colony and raises
 /// <see cref="EWJoeConsoleAssimilatedEvent"/> for later phases. Colonists repair it in three steps
-/// (screwdriver, wirecutters, core shard); the shard drops once from the dead Joe.
+/// (screwdriver, wirecutters, core shard); the dead Joe drops one shard per console it still holds (RB-32).
 /// </summary>
 public sealed partial class EWJoeConsoleSystem : EntitySystem
 {
@@ -390,21 +390,17 @@ public sealed partial class EWJoeConsoleSystem : EntitySystem
     /// </summary>
     private void OnJoeRemoved(ref EWJoeRemovedEvent args)
     {
-        if (!TryComp(args.Joe, out EWJoeComponent? comp))
+        if (!TryComp(args.Joe, out EWJoeComponent? comp) || CountAssimilatedBy(args.Joe) == 0)
             return;
 
-        var query = EntityQueryEnumerator<EWJoeAssimilatedConsoleComponent>();
-        while (query.MoveNext(out _, out var marker))
-        {
-            if (marker.AssimilatedBy == args.Joe)
-            {
-                TryDropShard((args.Joe, comp), "stood down");
-                return;
-            }
-        }
+        TryDropShard((args.Joe, comp), "stood down");
     }
 
-    /// <summary>Spawns the core shard at the Joe's position once per Joe. False if it already dropped or has no position.</summary>
+    /// <summary>
+    /// Spawns the core shards at the Joe's position, once per Joe. CMU14 rebalance RB-32: one shard for each
+    /// console this Joe still holds assimilated (never fewer than one), so every assimilation can be undone;
+    /// each repair still consumes its shard. False if they already dropped or the Joe has no position.
+    /// </summary>
     public bool TryDropShard(Entity<EWJoeComponent> ent, string why)
     {
         if (ent.Comp.ShardDropped)
@@ -415,12 +411,30 @@ public sealed partial class EWJoeConsoleSystem : EntitySystem
             return false;
 
         ent.Comp.ShardDropped = true;
-        // SpawnAtPosition resolves to map coordinates, so a Joe inside a container drops the shard on the floor
-        var shard = SpawnAtPosition(ent.Comp.CoreShardPrototype, xform.Coordinates);
+        var count = Math.Max(1, CountAssimilatedBy(ent));
+        for (var i = 0; i < count; i++)
+        {
+            // SpawnAtPosition resolves to map coordinates, so a Joe inside a container drops the shard on the floor
+            SpawnAtPosition(ent.Comp.CoreShardPrototype, xform.Coordinates);
+        }
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
-            $"Early Warning Joe {ToPrettyString(ent):joe} {why} and dropped {ToPrettyString(shard):shard}");
+            $"Early Warning Joe {ToPrettyString(ent):joe} {why} and dropped {count} core shard(s)");
         return true;
+    }
+
+    /// <summary>Consoles still carrying an assimilation marker that names <paramref name="joe"/>.</summary>
+    public int CountAssimilatedBy(EntityUid joe)
+    {
+        var count = 0;
+        var query = EntityQueryEnumerator<EWJoeAssimilatedConsoleComponent>();
+        while (query.MoveNext(out _, out var marker))
+        {
+            if (marker.AssimilatedBy == joe)
+                count++;
+        }
+
+        return count;
     }
 
     #endregion

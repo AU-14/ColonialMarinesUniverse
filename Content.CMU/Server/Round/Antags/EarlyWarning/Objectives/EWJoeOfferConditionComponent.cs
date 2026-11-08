@@ -39,8 +39,9 @@ public sealed partial class EWJoeOfferConditionComponent : Component
     public bool Meld;
 
     /// <summary>
-    /// Each offering counts its <c>CMUThreatStructureComponent.Weight</c> (cores 3) rather than 1. Things of
-    /// weight zero (spreading growth) are not wanted at all.
+    /// Each offering counts its <c>CMUThreatStructureComponent.Weight</c> (a flesh nest 3) rather than 1. Things
+    /// of weight zero (spreading growth) are not wanted at all. RB-31: hive, overmind and blight cores are kept
+    /// out by Purge the Nest's <see cref="Blacklist"/>, so they are neither offerable nor counted as available.
     /// </summary>
     [DataField]
     public bool Weighted;
@@ -66,6 +67,13 @@ public sealed partial class EWJoeOfferConditionComponent : Component
     /// </summary>
     [DataField]
     public MapId? OfferMap;
+
+    /// <summary>
+    /// Structures this Meld directive has already counted. A colonist's weld repair (RB-30) takes the meld off, but
+    /// the same camera or server never counts for the same directive twice.
+    /// </summary>
+    [ViewVariables]
+    public HashSet<EntityUid> MeldCounted = new();
 
     /// <summary>Title locale id; receives "count".</summary>
     [DataField(required: true)]
