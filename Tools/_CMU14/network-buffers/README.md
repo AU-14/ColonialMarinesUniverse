@@ -43,6 +43,23 @@ measures managed-message queue age or identifies a blocking call. The Lidgren
 thread drains the socket before the game thread dispatches its managed queue.
 Keep those two sources of input delay distinct when interpreting the results.
 
+## Receive during outgoing bursts
+
+The CMU engine enables nonblocking socket reads between completed connection
+heartbeats after 32 outgoing packets. This lets queued inputs and ACKs reach the
+managed receive queue while the server is still sending other players' states.
+A single connection can exceed the interval. All reads share the original
+whole-heartbeat packet and byte limits, and client peers keep their original
+receive schedule. The server also dispatches queued messages between additional
+simulation catch-up ticks.
+
+`net.receive_interleave_packets` controls the server's sent-packet interval at
+socket creation. Set it to `0` in the instance configuration and restart during
+maintenance to disable interleaving; the default is `32`. This is independent of
+`net.receivebuffersize` and does not enlarge the kernel queue. Measure socket
+drops and TPS at comparable load after deployment before attributing a change
+in rubberbanding to either setting.
+
 ## Apply during planned maintenance
 
 1. Record the current host `net.core.rmem_max`, the instance's existing
