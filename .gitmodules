@@ -1,7 +1,8 @@
 [submodule "RobustToolbox"]
 	path = RobustToolbox
-	url = https://github.com/space-wizards/RobustToolbox.git
-	branch = master
+	# CMU14: server-only performance fixes on the existing 295.0.2 client protocol.
+	url = https://github.com/AU-14/RobustToolbox.git
+	branch = cmu-295.0.2
 [submodule "RSI.NET"]
 	path = RSI.NET
 	url = https://github.com/space-wizards/RSI.NET.git
