@@ -66,7 +66,7 @@ public sealed partial class PathfindingSystem
                 modifier += 0.5f;
             }
             // Door we can force open one way or another
-            else if (isDoor && isAccess && (request.Flags & PathFlags.Prying) != 0x0)
+            else if (isDoor && (request.Flags & PathFlags.Prying) != 0x0) // CMU14: pry shutters and other non-access doors too.
             {
                 modifier += 10f;
             }

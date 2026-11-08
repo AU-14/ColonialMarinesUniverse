@@ -105,7 +105,7 @@
     attackRate: 1.2
     damage:
       types:
-        Slash: 30
+        Slash: 15
 
 - type: entity
   parent: CMUThreatCommon
@@ -124,6 +124,8 @@
   parent: CMUThreatHumanBase
   id: CMUThreatSpecialBase
   components:
+  - type: CMUThreat
+    attackSound: null
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -252,6 +254,8 @@
   - type: CMUThreat
     kind: Jockey
     eyeColor: "#ff8c00"
+    attackSound: null
+  - type: HideHealthBar
   - type: CMUJockeyThreat
     range: 4
     leapStrength: 22
@@ -330,7 +334,7 @@
     attackRate: 1.5
     damage:
       types:
-        Slash: 75
+        Slash: 37.5
   - type: MovementSpeedModifier
     baseWalkSpeed: 2
     baseSprintSpeed: 6

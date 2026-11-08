@@ -1,6 +1,8 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Humanoid;
+using Content.Server.NPC;
+using Content.Server.NPC.HTN;
 using Content.Server._RMC14.Atmos;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Atmos.Components;
@@ -12,6 +14,8 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Prying.Components;
+using Content.Shared.Overlays;
+using Content.Shared.SSDIndicator;
 using Content.Shared.Weapons.Melee;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
@@ -39,17 +43,17 @@ public sealed class ThreatPrototypeTest : GameTest
         ("CMUThreatWitch", "#ffffff"),
     ];
 
-    private static readonly (string Prototype, int Damage)[] CasteMeleeDamage =
+    private static readonly (string Prototype, float Damage)[] CasteMeleeDamage =
     [
-        ("CMUThreatCommon", 30),
-        ("CMUThreatCommonPolice", 30),
-        ("CMUThreatHunter", 36),
-        ("CMUThreatSmoker", 36),
-        ("CMUThreatBoomer", 36),
-        ("CMUThreatScreamer", 36),
-        ("CMUThreatJockey", 36),
-        ("CMUThreatSpitter", 36),
-        ("CMUThreatWitch", 75),
+        ("CMUThreatCommon", 15),
+        ("CMUThreatCommonPolice", 15),
+        ("CMUThreatHunter", 18),
+        ("CMUThreatSmoker", 18),
+        ("CMUThreatBoomer", 18),
+        ("CMUThreatScreamer", 18),
+        ("CMUThreatJockey", 18),
+        ("CMUThreatSpitter", 18),
+        ("CMUThreatWitch", 37.5f),
     ];
 
     [TestCaseSource(nameof(Castes))]
@@ -61,7 +65,17 @@ public sealed class ThreatPrototypeTest : GameTest
             var uid = SEntMan.SpawnEntity(test.Prototype, map.GridCoords);
             Assert.That(SEntMan.HasComponent<CMUThreatComponent>(uid), Is.True);
             Assert.That(SEntMan.HasComponent<PryingComponent>(uid), Is.True);
+            Assert.That(SEntMan.HasComponent<SSDIndicatorComponent>(uid), Is.False);
             Assert.That(SEntMan.HasComponent<PointLightComponent>(uid), Is.False);
+
+            var prying = SEntMan.GetComponent<PryingComponent>(uid);
+            Assert.That(prying.PryPowered, Is.True);
+            Assert.That(prying.Force, Is.True);
+
+            var blackboard = SEntMan.GetComponent<HTNComponent>(uid).Blackboard;
+            Assert.That(blackboard.GetValue<bool>(NPCBlackboard.NavPry), Is.True);
+            Assert.That(blackboard.GetValue<bool>(NPCBlackboard.NavSmash), Is.True);
+            Assert.That(blackboard.GetValue<bool>(NPCBlackboard.NavClimb), Is.True);
 
             var appearance = Server.System<HumanoidOrganAppearanceSystem>();
             Assert.That(appearance.TryGetColors(uid, out _, out var eyes), Is.True);
@@ -99,6 +113,27 @@ public sealed class ThreatPrototypeTest : GameTest
             AssertCollection(threat.AttackSound, "CMUThreatAttack", 5, prototypes);
             AssertCollection(threat.HurtSound, "CMUThreatHurt", 6, prototypes);
             AssertCollection(threat.DeathSound, "CMUThreatDeath", 7, prototypes);
+        });
+    }
+
+    [Test]
+    public async Task SpecialThreatsDoNotUseGenericAttackVocalsAndJockeyHidesHealthBar()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var (prototype, _) in Castes)
+            {
+                var uid = SEntMan.SpawnEntity(prototype, map.GridCoords);
+                var threat = SEntMan.GetComponent<CMUThreatComponent>(uid);
+                if (threat.Kind == CMUThreatKind.Common)
+                    Assert.That(threat.AttackSound, Is.Not.Null);
+                else
+                    Assert.That(threat.AttackSound, Is.Null, $"{prototype} still has an attack vocal");
+            }
+
+            var jockey = SEntMan.SpawnEntity("CMUThreatJockey", map.GridCoords);
+            Assert.That(SEntMan.HasComponent<HideHealthBarComponent>(jockey), Is.True);
         });
     }
 
@@ -200,7 +235,7 @@ public sealed class ThreatPrototypeTest : GameTest
     }
 
     [TestCaseSource(nameof(CasteMeleeDamage))]
-    public async Task ThreatMeleeUsesBladeSoundsAndBypassesArmor((string Prototype, int Damage) test)
+    public async Task ThreatMeleeUsesBladeSoundsAndBypassesArmor((string Prototype, float Damage) test)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
@@ -329,6 +364,32 @@ public sealed class ThreatPrototypeTest : GameTest
             var component = SEntMan.GetComponent<CMUThreatComponent>(threat);
             Assert.That(component.CurrentTarget, Is.EqualTo(destructibleLight));
             Assert.That(component.CurrentTarget, Is.Not.EqualTo(invincibleLight));
+        });
+    }
+
+    [Test]
+    public async Task ThreatPrioritizesHumanOverNearbyBarricadeAndLight()
+    {
+        var map = await CreateOpenTestMap();
+        EntityUid threat = default;
+        EntityUid human = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            threat = SEntMan.SpawnEntity("CMUThreatCommon", new EntityCoordinates(map.Grid, 0, 0));
+            var barricade = SEntMan.SpawnEntity("CMBarricadeMetal", new EntityCoordinates(map.Grid, 2, 2));
+            var light = SEntMan.SpawnEntity("AlwaysPoweredWallLight", new EntityCoordinates(map.Grid, 2, -2));
+            human = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(map.Grid, 6, 0));
+
+            Assert.That(SEntMan.HasComponent<CMUThreatBarricadeTargetComponent>(barricade), Is.True);
+            Assert.That(SEntMan.HasComponent<CMUThreatLightTargetComponent>(light), Is.True);
+        });
+
+        await Pair.RunSeconds(1f);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<CMUThreatComponent>(threat).CurrentTarget, Is.EqualTo(human));
         });
     }
 

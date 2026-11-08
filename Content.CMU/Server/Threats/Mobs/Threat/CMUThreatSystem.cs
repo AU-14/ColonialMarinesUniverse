@@ -18,6 +18,8 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
+using Content.Shared.SSDIndicator;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.ActionBlocker;
@@ -78,6 +80,7 @@ public sealed partial class CMUThreatSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
     [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -88,15 +91,16 @@ public sealed partial class CMUThreatSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUThreatComponent, MapInitEvent>(OnMapInit,
-            after: [typeof(RandomHumanoidAppearanceSystem)]);
-        SubscribeLocalEvent<CMUThreatComponent, PlayerDetachedEvent>(OnPlayerDetached);
+            after: [typeof(RandomHumanoidAppearanceSystem), typeof(SSDIndicatorSystem)]);
+        SubscribeLocalEvent<CMUThreatComponent, PlayerDetachedEvent>(OnPlayerDetached,
+            after: [typeof(SSDIndicatorSystem)]);
         SubscribeLocalEvent<CMUThreatComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<CMUThreatComponent, DamageChangedEvent>(OnThreatDamaged,
             after: [typeof(MobThresholdSystem)]);
         SubscribeLocalEvent<CMUThreatComponent, MeleeHitEvent>(OnThreatMeleeHit);
         SubscribeLocalEvent<MobStateChangedEvent>(OnPotentialTargetStateChanged);
         SubscribeLocalEvent<CMUThreatRallyPointComponent, MapInitEvent>(OnRallyPointMapInit,
-            after: [typeof(RandomHumanoidAppearanceSystem)]);
+            after: [typeof(RandomHumanoidAppearanceSystem), typeof(SSDIndicatorSystem)]);
         SubscribeLocalEvent<CMUThreatComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CMUThreatPinComponent, ComponentShutdown>(OnPinShutdown);
         SubscribeLocalEvent<CMUThreatPinComponent, RefreshMovementSpeedModifiersEvent>(OnPinRefreshSpeed);
@@ -160,6 +164,7 @@ public sealed partial class CMUThreatSystem : EntitySystem
 
     private void OnMapInit(Entity<CMUThreatComponent> ent, ref MapInitEvent args)
     {
+        RemoveSsdMarker(ent);
         ConfigureAiMover(ent);
         _appearance.TrySetEyeColor(ent.Owner, ent.Comp.EyeColor);
         ent.Comp.NextAiUpdate = _timing.CurTime + TimeSpan.FromSeconds(_random.NextFloat(0f, ent.Comp.AiUpdateInterval));
@@ -190,7 +195,14 @@ public sealed partial class CMUThreatSystem : EntitySystem
 
     private void OnPlayerDetached(Entity<CMUThreatComponent> ent, ref PlayerDetachedEvent args)
     {
+        RemoveSsdMarker(ent);
         ConfigureAiMover(ent);
+    }
+
+    private void RemoveSsdMarker(EntityUid uid)
+    {
+        RemComp<SSDIndicatorComponent>(uid);
+        _statusEffects.TryRemoveStatusEffect(uid, SSDIndicatorSystem.StatusEffectSSDSleeping);
     }
 
     private void ConfigureAiMover(EntityUid uid)

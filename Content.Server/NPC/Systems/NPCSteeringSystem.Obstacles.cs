@@ -94,9 +94,9 @@ public sealed partial class NPCSteeringSystem
                     // if (!door.BumpOpen && (component.Flags & PathFlags.Interact) != 0x0)
                     if ((!door.BumpOpen || IsSwarmLesser(uid)) && (component.Flags & PathFlags.Interact) != 0x0)
                     {
-                        if (door.State != DoorState.Opening)
+                        if (door.State != DoorState.Opening &&
+                            _interaction.InteractionActivate(uid, ent)) // CMU14: fall through to prying when activation cannot open the door.
                         {
-                            _interaction.InteractionActivate(uid, ent);
                             return SteeringObstacleStatus.Continuing;
                         }
                     }

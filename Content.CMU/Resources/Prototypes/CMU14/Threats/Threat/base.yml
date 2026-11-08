@@ -47,6 +47,10 @@
         true
       NavPry: !type:Bool
         true
+      NavSmash: !type:Bool
+        true
+      NavClimb: !type:Bool
+        true
       MeleeRange: !type:Single
         1.45
       RallyRange: !type:Single
@@ -69,7 +73,7 @@
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 36
+        Slash: 18
   - type: DamageImpactProfile
     melee:
       contact: Stab
@@ -89,7 +93,7 @@
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 36
+        Slash: 18
 
 - type: entity
   abstract: true
@@ -104,4 +108,4 @@
       path: /Audio/Weapons/bladeslice.ogg
     damage:
       types:
-        Slash: 36
+        Slash: 18

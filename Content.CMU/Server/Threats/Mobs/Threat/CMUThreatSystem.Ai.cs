@@ -119,6 +119,21 @@ public sealed partial class CMUThreatSystem
             }
         }
 
+        var assigned = threat.CurrentTarget is { } current &&
+                       IsValidCombatTarget(uid, current) &&
+                       TryDistance(uid, current, out var assignedDistance) &&
+                       assignedDistance <= threat.PursuitRadius
+            ? current
+            : (EntityUid?) null;
+
+        // Living victims always take priority. NavSmash lets the threat destroy any
+        // barricade or window that actually blocks its route to that victim.
+        var victim = biled ?? closest ?? (assigned is { } assignedTarget && IsValidVictim(uid, assignedTarget)
+            ? assignedTarget
+            : null);
+        if (victim != null)
+            return victim;
+
         foreach (var candidate in _lookup.GetEntitiesInRange<CMUThreatBarricadeTargetComponent>(origin,
                      threat.DetectionRadius))
         {
@@ -143,13 +158,7 @@ public sealed partial class CMUThreatSystem
             closest = candidate;
         }
 
-        var assigned = threat.CurrentTarget is { } current &&
-                       IsValidCombatTarget(uid, current) &&
-                       TryDistance(uid, current, out var assignedDistance) &&
-                       assignedDistance <= threat.PursuitRadius
-            ? current
-            : (EntityUid?) null;
-        return biled ?? closest ?? assigned;
+        return closest ?? assigned;
     }
 
     private int CountNearbySurvivors(EntityUid center, Vector2 centerPosition, float radius)
