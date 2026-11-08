@@ -47,6 +47,11 @@ cmu.server-performance
 [CMU-PERF]
 ```
 
+Memory samples use `allocationRateStatus=observed` when the approximate process counter advances.
+`no-counter-progress`, `counter-reset`, `clock-reset`, and `initial-sample` report an unavailable process
+rate, rather than zero. `mainThreadAllocatedBytesPerSecond` independently measures allocations on the
+game thread; it does not include PVS workers. Sampling never requests precise allocation counts or forces a GC.
+
 The principal records are:
 
 | Record | Meaning |
