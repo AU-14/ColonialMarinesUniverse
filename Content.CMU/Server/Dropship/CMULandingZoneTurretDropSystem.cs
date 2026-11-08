@@ -3,7 +3,6 @@ using Content.Server._RMC14.NPC.HTN;
 using Content.Server._RMC14.Spawners;
 using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.Fob;
-using Content.Server.GameTicking;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Utility.Systems;
 using Content.Shared._RMC14.Rules;
@@ -26,7 +25,7 @@ public sealed partial class CMULandingZoneTurretComponent : Component;
 
 /// <summary>
 /// The first friendly Distress Signal landing orbital-drops a capped battery of gauss turrets around the LZ.
-/// They hold the LZ until the one-hour mark, or for a fixed window when the first landing is later than that.
+/// They hold the LZ for 15 minutes after the landing.
 /// </summary>
 public sealed partial class CMULandingZoneTurretDropSystem : EntitySystem
 {
@@ -36,14 +35,12 @@ public sealed partial class CMULandingZoneTurretDropSystem : EntitySystem
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
     [Dependency] private SharedRMCOrbitalDeployerSystem _orbital = default!;
     [Dependency] private SharedSentryTargetingSystem _sentry = default!;
-    [Dependency] private GameTicker _ticker = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
 
     public static readonly EntProtoId TurretPrototype = "RMCTurretGaussSpaceborne";
     public const int MaxTurrets = 6;
-    public static readonly TimeSpan DespawnMark = TimeSpan.FromHours(1);
-    public static readonly TimeSpan LateLifetime = TimeSpan.FromMinutes(25);
+    public static readonly TimeSpan TurretLifetime = TimeSpan.FromMinutes(15);
 
     private const float ExistingTurretRange = 20f;
     private const float HullPadding = 2f;
@@ -97,8 +94,6 @@ public sealed partial class CMULandingZoneTurretDropSystem : EntitySystem
             ? _transform.GetWorldMatrix(ship).TransformBox(shipGrid.LocalAABB).Enlarged(HullPadding)
             : new Box2(center, center);
 
-        var elapsed = _ticker.RoundDuration();
-        var lifetime = elapsed < DespawnMark ? DespawnMark - elapsed : LateLifetime;
         _dropships.TryGetGridFaction(ship, out var faction);
         var marineFaction = GetMarineFaction();
 
@@ -112,7 +107,7 @@ public sealed partial class CMULandingZoneTurretDropSystem : EntitySystem
             RemComp<TimedDespawnOnLandingComponent>(turret);
             RemComp<WakeNPCOnDropshipLandingComponent>(turret);
             EnsureComp<CMULandingZoneTurretComponent>(turret);
-            EnsureComp<TimedDespawnComponent>(turret).Lifetime = (float) lifetime.TotalSeconds;
+            EnsureComp<TimedDespawnComponent>(turret).Lifetime = (float) TurretLifetime.TotalSeconds;
 
             _gunIFF.SetUserFaction(turret, marineFaction);
             if (faction != null)
