@@ -130,7 +130,7 @@
         showEnts: False
         occludes: True
   - type: Sprite
-    sprite: CMU14/Objects/Clothing/UPP/type08.rsi
+    sprite: CMU14/Clothing/UPP/jumpsuits/type08.rsi
   - type: Storage
     maxItemSize: Small
     grid:
