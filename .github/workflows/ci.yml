@@ -1,4 +1,4 @@
-# CMU14: one run owns planning, execution, evidence and the required verdict.
+# CMU14: validate YAML before parallel unit/gameplay execution and a shared verdict.
 name: CI
 
 on:
@@ -151,40 +151,51 @@ jobs:
                 .map(name => name.trim())
                 .filter(name => name.length > 0);
 
-            const exempt = allowlist.includes(author)
+            let exempt = allowlist.includes(author)
                 || ['OWNER', 'MEMBER'].includes(context.payload.pull_request.author_association);
+
+            // CMU14: outside collaborators can have the repository's maintain role.
+            if (!exempt) {
+              const { data: access } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: author,
+              });
+              exempt = ['admin', 'maintain'].includes(access.role_name);
+            }
 
             if (!exempt) {
               core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
             }
 
-      # engine must sit on an upstream release tag, never a master commit
-      - name: Verify RobustToolbox submodule points at a release tag
+      # CMU14: keep release pins, with one reviewed compatible engine patch on 295.0.2.
+      - name: Verify RobustToolbox release pin
         run: |
           SHA=$(git ls-tree HEAD RobustToolbox | awk '{print $3}')
+          # CMU14: AU-14/RobustToolbox PR 1 optimizes Server/Shared hot paths.
+          # Wire formats and the launcher client engine version remain 295.0.2-compatible.
+          if [ "$SHA" = "39d9fc13559cdc7fa1c6ef1e09c7d1d1e88cb950" ] &&
+             [ "$(git config --file .gitmodules --get submodule.RobustToolbox.url)" = "https://github.com/AU-14/RobustToolbox.git" ]; then
+            echo "Using reviewed CMU compatible engine patch on upstream 295.0.2."
+            exit 0
+          fi
           if ! git ls-remote --tags https://github.com/space-wizards/RobustToolbox.git | awk '{print $1}' | grep -qx "$SHA"; then
-            echo "::error::RobustToolbox ${SHA} is not an upstream release tag. Pin a v* tag, not a master commit."
+            echo "::error::RobustToolbox ${SHA} is neither an upstream release tag nor the reviewed CMU compatible engine patch."
             exit 1
           fi
 
   build:
-    name: Build
+    name: Build & YAML
     needs: source-guards
     if: needs.source-guards.outputs.build == 'true'
     runs-on: ubuntu-latest
-    # CMU14: 35 covers the build plus the folded unit and lint runs
+    # CMU14: compile once and validate YAML before starting either test runner.
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
           submodules: recursive
-
-      - name: Restore test plan
-        uses: actions/download-artifact@v8.0.2
-        with:
-          name: ci-plan
-          path: .ci
 
       - uses: actions/setup-dotnet@v6.1.0
         with:
@@ -202,13 +213,19 @@ jobs:
       - name: Build once
         run: dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
 
-      # CMU14: reject cheap failures before uploading artifacts or starting gameplay jobs.
-      - name: Unit tests
-        if: needs.source-guards.outputs.unit == 'true'
-        run: python3 Tools/_CMU14/adaptive_ci.py execute --unit
-
       - name: Run YAML Linter
         run: timeout 12m dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
+
+      - name: Upload unit test build
+        if: needs.source-guards.outputs.unit == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-unit-tests
+          overwrite: true
+          path: bin/Content.Tests/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
 
       - name: Upload integration test build
         if: needs.source-guards.outputs.gameplay == 'true'
@@ -222,7 +239,7 @@ jobs:
           compression-level: 0
 
       - name: Upload runtime build
-        if: needs.source-guards.outputs.gameplay == 'true'
+        if: needs.source-guards.outputs.unit == 'true' || needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: build-runtime
@@ -234,17 +251,17 @@ jobs:
           retention-days: 1
           compression-level: 0
 
-      # CMU14: gameplay lanes share this source archive to avoid repeated checkouts.
+      # CMU14: unit tests and gameplay lanes share this archive to avoid repeated checkouts.
       # git archive retains tracked texture directories and excludes build output.
       - name: Pack source tree
-        if: needs.source-guards.outputs.gameplay == 'true'
+        if: needs.source-guards.outputs.unit == 'true' || needs.source-guards.outputs.gameplay == 'true'
         run: |
           git archive --format=tar.gz -o source-tree.tar.gz HEAD
           # CMU14: -o resolves inside the -C directory, so climb out for the upload root
           git -C RobustToolbox archive --format=tar.gz -o ../toolbox-resources.tar.gz HEAD -- Resources
 
       - name: Upload source tree
-        if: needs.source-guards.outputs.gameplay == 'true'
+        if: needs.source-guards.outputs.unit == 'true' || needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: source-tree
@@ -255,6 +272,46 @@ jobs:
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
+
+  unit-tests:
+    name: Unit Tests
+    needs: [source-guards, build]
+    if: needs.source-guards.outputs.unit == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: source-tree
+          path: .
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: ci-plan
+          path: .ci
+
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+          rm source-tree.tar.gz toolbox-resources.tar.gz
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-unit-tests
+          path: bin/Content.Tests/
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-runtime
+          path: bin/
+
+      - uses: actions/setup-dotnet@v6.1.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Unit tests
+        run: python3 Tools/_CMU14/adaptive_ci.py execute --unit
 
       - name: Upload unit observations
         if: always()
@@ -431,11 +488,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  testcases-complete:
-    # CMU14: retain the existing required check name with a real job and working logs.
-    name: Testcases Complete
+  required-checks:
+    name: Required Checks
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    needs: [source-guards, build, integration-tests]
+    needs: [source-guards, build, unit-tests, integration-tests, asset-validation]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -475,39 +531,22 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
-      - name: Check gameplay evidence
-        if: always()
-        env:
-          PLAN_RESULT: ${{ needs.source-guards.result }}
-          GAMEPLAY: ${{ needs.source-guards.outputs.gameplay }}
-          TEST_RESULT: ${{ needs.integration-tests.result }}
-        run: |
-          test "$PLAN_RESULT" = success
-          if [ "$GAMEPLAY" = true ]; then
-            test "$TEST_RESULT" = success
-          else
-            test "$GAMEPLAY" = false
-            test "$TEST_RESULT" = skipped
-            echo "Gameplay tests intentionally skipped by the feature selection plan."
-          fi
-
-  required-checks:
-    name: Required Checks
-    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    needs: [source-guards, build, asset-validation, testcases-complete]
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
       - name: Check required job results
+        if: always()
         uses: actions/github-script@v9.0.0
         env:
           RESULTS: ${{ toJSON(needs) }}
         with:
           script: |
             const results = JSON.parse(process.env.RESULTS);
-            const buildExpected = results['source-guards'].outputs.build === 'false' ? 'skipped' : 'success';
-            const assets = JSON.parse(results['source-guards'].outputs.assets || '{}');
-            const expected = {build: buildExpected, 'asset-validation': assets.any ? 'success' : 'skipped'};
+            const selected = results['source-guards'].outputs;
+            const assets = JSON.parse(selected.assets || '{}');
+            const expected = {
+              build: selected.build === 'false' ? 'skipped' : 'success',
+              'unit-tests': selected.unit === 'false' ? 'skipped' : 'success',
+              'integration-tests': selected.gameplay === 'false' ? 'skipped' : 'success',
+              'asset-validation': assets.any ? 'success' : 'skipped',
+            };
             const failed = Object.entries(results)
               .filter(([name, value]) => value.result !== (expected[name] || 'success'))
               .map(([name, value]) => `${name}: ${value.result}`);

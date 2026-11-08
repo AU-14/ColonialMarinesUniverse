@@ -1,0 +1,22 @@
+author: ILoveDespoiler
+category: CMU
+changes:
+- message: Haze can now build at a level similar to a Drone.
+  type: Add
+- message: Conditor can now upgrade regular mycelium to thick mycelium.
+  type: Add
+- message: Conditor no longer has Slowing Spit and Paralyze Strike, they now have
+    Praetorial-level Acid Spit and Boiler-level Acid Spray.
+  type: Tweak
+- message: Conditor and Overmind can no longer build regular Mycelium sturctures,
+    only thick ones.
+  type: Remove
+- message: Removed Haze healing abilites.
+  type: Remove
+- message: Roots Tentacle Sweep now properly knocks targets down.
+  type: Fix
+- message: Sporecasters now regenerate Popper ghostroles over time. There can still
+    only be a max of 3 per Sporecaster.
+  type: Tweak
+time: '2026-11-07T20:33:40.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2506

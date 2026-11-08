@@ -236,6 +236,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-acider-name
+    baseCaste: CMXenoRunner # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-acider-description
     popup: rmc-xeno-acider-popup
   - type: CMArmor

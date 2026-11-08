@@ -1,0 +1,7 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Fixed dropship exchanging, getting a Midway instead of OMaa
+  type: Fix
+time: '2026-11-07T20:45:51.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2505

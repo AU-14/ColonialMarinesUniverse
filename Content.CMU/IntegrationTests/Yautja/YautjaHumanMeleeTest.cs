@@ -1,4 +1,6 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Body.Part;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage.Systems;
@@ -118,6 +120,8 @@ public sealed class YautjaHumanMeleeTest : GameTest
         string victimProto = "CMMobHuman")
     {
         var hunter = SSpawnAtPosition("CMUMobYautja", coords);
+        // Forced torso hits must bypass called-shot accuracy to exercise body armour consistently.
+        SEntMan.RemoveComponent<BodyZoneTargetingComponent>(hunter);
         var victim = SSpawnAtPosition(victimProto, coords);
         if (armorProto != null)
         {
@@ -141,6 +145,7 @@ public sealed class YautjaHumanMeleeTest : GameTest
             // picking a weapon up starts its swing cooldown
             comp.NextAttack = TimeSpan.Zero;
             SEntMan.RemoveComponent<RMCMeleeUserCooldownComponent>(hunter);
+            Server.System<SharedHitLocationSystem>().SetForcedHit(victim, BodyPartType.Torso);
             Assert.That(melee.AttemptLightAttack(hunter, used, comp, victim, requireCombatMode: false), Is.True);
         }
 
