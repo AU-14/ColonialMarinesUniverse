@@ -273,6 +273,9 @@ cmu-yautja-hunt-escape-console-title = Заслонки заповедника
 cmu-yautja-hunt-prey-ghost-description = Войдите в охотничьи угодья яутжа в качестве сюжетной добычи.
 cmu-yautja-hunt-prey-ghost-name = Добыча охоты
 cmu-yautja-hunt-prey-ghost-rules = Вы — сюжетная добыча в охоте яутжа. Следуйте указаниям ведущих и поддерживайте интерес охоты.
+cmu-yautja-prey-optics-jammed-examine = [color=#a0a0a0]В линзы выжжены странные символы. Ночное видение мертво.[/color]
+cmu-yautja-prey-optics-jammed-dead = Вы пробуете {$item}, но ночное видение остаётся чёрным, по нему ползут странные символы. Что-то его выжгло.
+cmu-yautja-prey-optics-jammed-arrival = Ваша оптика ночного видения мигает и гаснет, оставляя лишь странные символы. Что-то здесь не хочет, чтобы вы видели в темноте.
 cmu-yautja-hunt-teleporter-denied = Лучше не пытайтесь этим пользоваться: можно потерять половину тела!
 cmu-yautja-hunt-teleporter-no-destination = У ретранслятора охотничьих угодий нет настроенных направлений.
 cmu-yautja-hunt-teleporter-ship-confirm-message = Высадиться в охотничьих угодьях?

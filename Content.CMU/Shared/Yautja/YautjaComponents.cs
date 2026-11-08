@@ -2087,6 +2087,14 @@ public sealed partial class YautjaHuntConsoleComponent : Component
     [DataField]
     public List<YautjaHuntCallOption> BloodingCallOptions = GetDefaultBloodingCallOptions();
 
+    // prey keep their party kits but irradiated rounds get swapped for the plain ones, wherever they're stashed
+    [DataField]
+    public Dictionary<EntProtoId, EntProtoId> PreyAmmoReplacements = new()
+    {
+        ["RMCMagazineSmartGunirradiated"] = "RMCMagazineSmartGun",
+        ["RMCCartridgeSmartGun10x30mmirradiated"] = "CMCartridgeSmartGun10x30mm",
+    };
+
     private static List<YautjaHuntingGroundDestination> GetDefaultHuntingGroundDestinations()
     {
         return new List<YautjaHuntingGroundDestination>

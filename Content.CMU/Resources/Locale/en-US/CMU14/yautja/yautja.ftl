@@ -598,6 +598,9 @@ cmu-yautja-hunt-console-blooding-broadcast = {$hunter} has awakened {$hunt} for 
 cmu-yautja-hunt-prey-ghost-name = Hunted Prey
 cmu-yautja-hunt-prey-ghost-description = Enter the Yautja hunting ground as event prey.
 cmu-yautja-hunt-prey-ghost-rules = You are event prey in a Yautja hunt. Follow staff direction and keep the hunt interesting.
+cmu-yautja-prey-optics-jammed-examine = [color=#a0a0a0]Strange glyphs are burned into the lenses. Its night vision is dead.[/color]
+cmu-yautja-prey-optics-jammed-dead = You try {THE($item)}, but the night vision stays black, crawling with strange glyphs. Something fried it.
+cmu-yautja-prey-optics-jammed-arrival = Your night vision optics flicker and die, leaving only strange glyphs behind. Something out here doesn't want you seeing in the dark.
 cmu-yautja-youngblood-ghost-name = Youngblood Yautja
 cmu-yautja-youngblood-ghost-description = Join the hunt as a youngblood Yautja undergoing blooding.
 cmu-yautja-youngblood-ghost-rules = You are a youngblood Yautja. Follow senior hunters and staff direction during the hunt.
