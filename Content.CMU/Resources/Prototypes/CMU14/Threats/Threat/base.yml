@@ -14,7 +14,6 @@
   id: CMUThreatMixin
   components:
   - type: CMUThreat
-  - type: ThreatImmune
   - type: RandomHumanoidAppearance
     randomizeName: false
   - type: RandomHumanoidAppearanceWhitelisted
