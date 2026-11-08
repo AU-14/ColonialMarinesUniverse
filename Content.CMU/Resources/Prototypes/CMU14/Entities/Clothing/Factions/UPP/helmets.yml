@@ -97,7 +97,6 @@
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
-  
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14AltynCustom
@@ -113,7 +112,7 @@
   - type: ToggleClothing
     action: AU14ActionToggleAltynVisor
   - type: ParasiteResistance
-    maxCount: 3
+    maxCount: 6
   - type: RMCItemToggleClothingVisuals
   - type: GenericVisualizer
     visuals:
