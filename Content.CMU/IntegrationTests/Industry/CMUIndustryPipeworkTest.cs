@@ -35,6 +35,13 @@ public sealed class CMUIndustryPipeworkTest : GameTest
           components:
           - type: RequisitionsAccount
             faction: colony
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryUnassignedAccount
+          components:
+          - type: RequisitionsAccount
+            faction: unassigned
         """;
 
     [Test]
@@ -194,6 +201,41 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(one, Is.GreaterThan(0));
             Server.System<SharedStackSystem>().SetCount(kit, 3);
             Assert.That(pricing.GetPrice(kit), Is.EqualTo(one * 3));
+        });
+    }
+
+    [Test]
+    public async Task DefaultAsrsCreditsCrudeOilToItsSharedAccountOnly()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var accountUid = SEntMan.SpawnEntity("CMUTestIndustryUnassignedAccount", MapCoordinates.Nullspace);
+            var account = SComp<RequisitionsAccountComponent>(accountUid);
+            var otherUid = SEntMan.SpawnEntity("CMUTestIndustryAccount", MapCoordinates.Nullspace);
+            var other = SComp<RequisitionsAccountComponent>(otherUid);
+            var balance = account.Balance;
+            var otherBalance = other.Balance;
+            var elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            var lift = SComp<RequisitionsElevatorComponent>(elevator);
+            lift.Mode = RequisitionsElevatorMode.Lowering;
+            lift.NextMode = RequisitionsElevatorMode.Lowered;
+            lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
+            lift.LowerDelay = TimeSpan.Zero;
+            lift.LoweringSound = null;
+            var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            var fluids = Server.System<FluidSystem>();
+            fluids.Add(barrel, "RUMCCrudeOil", SComp<FluidTankComponent>(barrel).Capacity);
+            var value = (int) Math.Round(Server.System<PricingSystem>().GetPrice(barrel));
+            Assert.That(value, Is.GreaterThan(0), "A full crude-oil barrel must have export value.");
+
+            Server.System<RequisitionsSystem>().Update(0.1f);
+
+            Assert.That(account.Balance, Is.EqualTo(balance + value), "The default platform must credit its normalized account.");
+            Assert.That(other.Balance, Is.EqualTo(otherBalance), "The sale must not pay another faction.");
+            Assert.That(SEntMan.IsQueuedForDeletion(barrel), Is.True);
+            SEntMan.DeleteEntity(accountUid);
+            SEntMan.DeleteEntity(otherUid);
         });
     }
 
