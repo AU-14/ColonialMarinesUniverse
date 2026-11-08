@@ -1,0 +1,14 @@
+author: Operator-Exi
+category: CMU
+changes:
+- message: CLF3, Methane, the RMCCreateWater steps no longer preserve temperature
+    through mixing, leading to 700k solutions.
+  type: Fix
+- message: Chemical contracts at intermediate and above can now roll Heating or Cooling
+    requirements.
+  type: Tweak
+- message: Chemmaster properly transfers reagent temperatures. Empty buffers reset
+    to room temp.
+  type: Fix
+time: '2026-11-07T20:32:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2512
