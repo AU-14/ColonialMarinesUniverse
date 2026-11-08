@@ -10,6 +10,39 @@ Validate it at comparable player load. A larger queue can absorb bursts but
 cannot fix a receiver that remains slower than the incoming stream or a server
 whose simulation exceeds its tick budget.
 
+## Profile the live game socket
+
+`profile-game-socket.py` runs on the Linux host with Python 3, `cmu-perf`,
+`nsenter`, and `ss` available. It needs permission to read the game's `/proc`
+entries and enter its network namespace. It discovers the current game PID
+through `cmu-perf status`; do not pass a PID copied from an earlier capture.
+
+```sh
+python3 profile-game-socket.py --seconds 90 --interval-ms 50 > socket-profile.json
+```
+
+Sampling is bounded to 5-120 seconds at intervals of 50-1000 milliseconds.
+The script reads socket receive/transmit queues and drops, IPv4 UDP namespace
+counters, and scheduling totals for the main and Lidgren threads. It records
+`ss` socket memory limits before and after. It does not attach a managed
+profiler, change socket options, read packet payloads, or record peer addresses.
+Capture output belongs in private diagnostic storage, never in a commit.
+
+Use `complete`, process start ticks, socket inode, and actual sample intervals
+before comparing counters. The capture stops if the process or socket changes.
+`readMs` and `samplerCpuMs` record sampler overhead; missed slots are skipped.
+The thread names are Linux's truncated names, so IPv4 and IPv6 Lidgren threads
+may have identical labels and must be distinguished by TID.
+
+Socket drops are specific to the owned game socket. `udp` counters cover its
+whole network namespace; their packet rate is not an exact per-socket rate.
+Queue bytes include kernel packet-memory accounting, not just payload bytes.
+Low sampled queue occupancy does not rule out bursts between samples.
+Scheduling counters separate CPU execution from runnable waiting; neither
+measures managed-message queue age or identifies a blocking call. The Lidgren
+thread drains the socket before the game thread dispatches its managed queue.
+Keep those two sources of input delay distinct when interpreting the results.
+
 ## Apply during planned maintenance
 
 1. Record the current host `net.core.rmem_max`, the instance's existing
