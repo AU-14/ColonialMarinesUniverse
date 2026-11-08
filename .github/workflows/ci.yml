@@ -174,7 +174,7 @@ jobs:
           SHA=$(git ls-tree HEAD RobustToolbox | awk '{print $3}')
           # CMU14: AU-14/RobustToolbox patches optimize Server/Shared hot paths and input draining.
           # Wire formats and the launcher client engine version remain 295.0.2-compatible.
-          if [ "$SHA" = "9a8a6472b850d649d68048e34a8c278b2ea14ede" ] &&
+          if [ "$SHA" = "7eb4a703594a12ad0b5e76d0c36e0411a37028ad" ] &&
              [ "$(git config --file .gitmodules --get submodule.RobustToolbox.url)" = "https://github.com/AU-14/RobustToolbox.git" ]; then
             echo "Using reviewed CMU compatible engine patch on upstream 295.0.2."
             exit 0
