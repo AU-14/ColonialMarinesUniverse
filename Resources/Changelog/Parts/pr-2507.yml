@@ -1,0 +1,9 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Fixed NVGs on M90 Camera
+  type: Fix
+- message: Fixed in flight hand reloading
+  type: Fix
+time: '2026-11-07T20:33:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2507

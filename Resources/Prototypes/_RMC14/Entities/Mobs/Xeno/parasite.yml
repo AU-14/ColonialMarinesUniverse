@@ -186,6 +186,7 @@
     - ActionXenoZoom
   - type: XenoStrain
     name: rmc-xeno-watcher-name
+    baseCaste: CMXenoParasite # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-watcher-description
     popup: rmc-xeno-watcher-popup
   - type: XenoZoom
