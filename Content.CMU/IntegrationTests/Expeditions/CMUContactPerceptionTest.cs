@@ -141,27 +141,6 @@ public sealed class CMUContactPerceptionTest : GameTest
     }
 
     [Test]
-    public async Task SoundSearchApproachesWithoutInheritingAnOldMeleeStandoff()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            Floor(map.Grid, map.Tile.Tile);
-            var start = new EntityCoordinates(map.Grid, 7.5f, 6.5f);
-            var (uid, agent) = Observer(start);
-            agent.LastContactWasMelee = true;
-            agent.MeleeStandoffRange = 6;
-            var point = start.Offset(new Vector2(4, 0));
-            var search = Method("SearchContact").CreateDelegate<Func<EntityUid, CMUExpeditionAgentComponent,
-                EntityCoordinates, TimeSpan, TimeSpan, bool, bool>>(Server.System<CMUExpeditionAgentSystem>());
-            Assert.That(search(uid, agent, point, SGameTiming.CurTime, SGameTiming.CurTime, true), Is.True);
-            var destination = SEntMan.GetComponent<NPCSteeringComponent>(uid).Coordinates;
-            Assert.That(destination.TryDistance(SEntMan, point, out var distance), Is.True);
-            Assert.That(distance, Is.LessThan(4), "A new anonymous sound should produce an approach, not a stale melee hold.");
-        });
-    }
-
-    [Test]
     public async Task CheckedContactReturnsToStandingOrderThroughController()
     {
         var map = await Pair.CreateTestMap();

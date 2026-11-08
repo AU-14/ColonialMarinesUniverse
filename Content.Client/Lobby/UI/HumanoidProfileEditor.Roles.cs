@@ -5,6 +5,7 @@ using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Marines.Roles.Chevrons;
+using Content.Shared.CMU14.Round; // CMU14
 using Content.Shared.CMU14.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Prototypes;
@@ -39,6 +40,10 @@ public sealed partial class HumanoidProfileEditor
     private readonly List<(string Gamemode, string Id, RequirementsSelector Selector)> _antagPreferences = new();
     private readonly Dictionary<string, BoxContainer> _jobCategories;
 
+    // CMU14: FoF only assigns the AddColonist roster. Null means the prototype
+    // was unreadable and the colony tab falls back to every colonist role.
+    private HashSet<ProtoId<JobPrototype>>? _fofColonyJobs;
+
     private void UpdateJobPriorities()
     {
         foreach (var (gamemode, jobId, selector) in _jobPriorities)
@@ -66,6 +71,14 @@ public sealed partial class HumanoidProfileEditor
 
     private void OpenLoadout(JobPrototype jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
     {
+        OpenLoadout(jobProto, roleLoadout, roleLoadoutProto, LoadoutSystem.GetJobPrototype(jobProto.ID),
+            Loc.GetString("loadout-window-title-loadout", ("job", jobProto.LocalizedName)));
+    }
+
+    // CMU14: the global loadout uses the same editor without selecting a preview job.
+    private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto,
+        string concreteKey, string title)
+    {
         _loadoutWindow?.Release();
         _loadoutWindow = null;
         var collection = IoCManager.Instance;
@@ -78,13 +91,12 @@ public sealed partial class HumanoidProfileEditor
 
         _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, session, collection)
         {
-            Title = Loc.GetString("loadout-window-title-loadout", ("job", jobProto.LocalizedName)),
+            Title = title,
         };
 
         _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
         _loadoutWindow.OpenCenteredLeft();
 
-        var concreteKey = LoadoutSystem.GetJobPrototype(jobProto.ID);
         _loadoutWindow.OnNameChanged += name =>
         {
             roleLoadout.EntityName = name;
@@ -125,6 +137,7 @@ public sealed partial class HumanoidProfileEditor
 
         _jobCategories.Clear();
         _jobPriorities.Clear();
+        LoadFoFColonyJobs(); // CMU14
 
         var departments = _prototypeManager.EnumeratePrototypes<DepartmentPrototype>()
             .Where(department => !department.EditorHidden)
@@ -175,6 +188,22 @@ public sealed partial class HumanoidProfileEditor
             CrtLobbyTheme.Apply(list);
 
         UpdateJobPriorities();
+    }
+
+    // CMU14 method: FoF colony whitelist read from the AddColonist rule so the tab follows the YAML.
+    private void LoadFoFColonyJobs()
+    {
+        _fofColonyJobs = null;
+        if (!_prototypeManager.TryIndex<EntityPrototype>("AddColonist", out var proto)
+            || !proto.Components.TryGetValue(_componentFactory.GetComponentName<AddColonistRuleComponent>(), out var entry)
+            || entry.Component is not AddColonistRuleComponent rule)
+        {
+            _sawmill.Warning("AddColonist rule prototype unreadable, FoF colony tab shows every colonist role");
+            return;
+        }
+
+        _fofColonyJobs = new HashSet<ProtoId<JobPrototype>>(rule.Jobs.Keys);
+        _fofColonyJobs.UnionWith(rule.RandomJobs);
     }
 
     private void AddJobSelector(
@@ -434,11 +463,13 @@ public sealed partial class HumanoidProfileEditor
                 GamemodeInsurgency,
                 $"insurgency-civilian-{department.ID}",
                 title);
-            yield return (
-                FoFColonyJobList,
-                GamemodeForceOnForce,
-                $"fof-colony-{department.ID}",
-                title);
+            // CMU14: FoF only assigns the AddColonist roster, hide roles it can never grant.
+            if (_fofColonyJobs == null || _fofColonyJobs.Contains(job.ID))
+                yield return (
+                    FoFColonyJobList,
+                    GamemodeForceOnForce,
+                    $"fof-colony-{department.ID}",
+                    title);
             yield return (
                 ColonyCivilianJobList,
                 GamemodeColonyFall,

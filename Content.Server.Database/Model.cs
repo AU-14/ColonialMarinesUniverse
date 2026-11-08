@@ -153,6 +153,16 @@ namespace Content.Server.Database
             modelBuilder.Entity<Profile>()
                 .Property(p => p.HelmetFlavorText)
                 .HasDefaultValue(string.Empty);
+
+            // CMU14 Synthetic Profile Fields Begin
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.SyntheticGeneration)
+                .HasDefaultValue(1);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.SyntheticModelSuffix)
+                .HasDefaultValue(string.Empty);
+            // CMU14 End
             // cmu edit end
 
             modelBuilder.Entity<Profile>()
@@ -698,6 +708,8 @@ namespace Content.Server.Database
         public string Religion { get; set; } = string.Empty;
         public string ArmorFlavorText { get; set; } = string.Empty;
         public string HelmetFlavorText { get; set; } = string.Empty;
+        public int SyntheticGeneration { get; set; } = 1; // CMU14
+        public string SyntheticModelSuffix { get; set; } = string.Empty; // CMU14
         // cmu edit end
         public bool HideMetaInformation { get; set; }
     }
@@ -858,6 +870,11 @@ namespace Content.Server.Database
         public List<AdminLogPlayer> AdminLogs { get; set; } = null!;
 
         public DateTime? LastReadRules { get; set; }
+
+        // CMU14: opted out of the playtime leaderboard. Explicit column name: the snake-case
+        // convention splits this acronym differently than the shipped migration.
+        [Column("cmu_playtime_hidden")]
+        public bool CMUPlaytimeHidden { get; set; }
 
         public List<AdminNote> AdminNotesReceived { get; set; } = null!;
         public List<AdminNote> AdminNotesCreated { get; set; } = null!;

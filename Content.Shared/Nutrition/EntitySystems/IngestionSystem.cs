@@ -127,6 +127,10 @@ public sealed partial class IngestionSystem : EntitySystem
         if (HasComp<OrganComponent>(entity))
             return;
 
+        // CMU14 (FLOW-20): a spray bottle clicked on someone sprays them (server SpraySystem); don't predict a force-feed.
+        if (HasComp<Content.Shared.Fluids.Components.SprayComponent>(entity))
+            return;
+
         args.Handled = TryIngest(args.User, args.Target.Value, entity);
     }
 

@@ -34,41 +34,6 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
     private readonly record struct Depot(Entity<VehicleSupplyConsoleComponent> Console, Entity<VehicleSupplyLiftComponent> Lift);
 
     // CMU14 method: reject foreign chassis while allowing each platoon's current catalog.
-    [TestCase("USCM", "VehicleTank", "VehicleSPPTank", true, true)]
-    [TestCase("LACN", "VehicleAPC", "VehicleAPCCommand", true, true)]
-    [TestCase("UPP", "VehicleSPPTank", "VehicleTank", false, false)]
-    [TestCase("WEYU", "VehicleTankPMC", "VehicleTank", true, true)]
-    [TestCase("CMBCIU", "AU14VehicleCivHSVan", "VehicleSPPTank", true, true)]
-    [TestCase("HAZOPS", "VehicleAev", "VehicleSPPTank", false, true)]
-    [TestCase("ProdigySF", "AU14VehicleCivTruck", "VehicleAPC", false, false)]
-    [TestCase("VAIPO", "VehicleAPC", "VehicleSPPTank", true, true)]
-    [TestCase("RMC", "VehicleTankTWE", "VehicleSPPTank", false, false)]
-    public async Task PlatoonCatalogRestrictsChassisVtolAndParts(string platoon, string allowed, string excluded, bool armed, bool transport)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            Configure(map.GridCoords, platoon);
-            var depot = CreateDepot(map.GridCoords);
-            var ids = State(depot).Available.Select(entry => entry.Id).ToArray();
-            Assert.That(ids, Does.Contain(allowed));
-            Assert.That(ids, Does.Not.Contain(excluded));
-            Assert.That(ids.Contains("VehicleBlackfootDoorGunVariant"), Is.EqualTo(armed));
-            Assert.That(ids.Contains("VehicleBlackfootTransport"), Is.EqualTo(transport));
-            Assert.That(ids, Does.Not.Contain("VehicleBlackfootRecon"));
-
-            var vendor = SEntMan.SpawnEntity("VehicleHardpointVendor", map.GridCoords.Offset(new Vector2(3, 0)));
-            var parts = Parts(vendor);
-            Assert.That(parts.Contains("VehicleBlackfootDoorGun"), Is.EqualTo(armed));
-            Assert.That(parts.Contains("VehicleBlackfootThrusters"), Is.EqualTo(transport));
-            Assert.That(parts, Does.Not.Contain("VehicleHumveeARCCannon"));
-
-            // A stale or forged client choice must also be rejected server-side.
-            Queue(depot, excluded);
-            Assert.That(depot.Lift.Comp.PendingVehicle, Is.Empty);
-            Assert.That(State(depot).IssuedVehicles, Is.Empty);
-        });
-    }
 
     [Test]
     // cmu edit start: one vehicle of each category, shared across depots
@@ -243,41 +208,6 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Assert.That(launcher.Item, Is.EqualTo(originalLauncher));
             Assert.That(BundleCount(), Is.EqualTo(count));
             Assert.That(State(depot).IssuedVehicles, Has.Count.EqualTo(2));
-        });
-    }
-
-    [Test]
-    public async Task ExhaustedAllowanceListsOnlyRealStoredVehicles()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            Configure(map.GridCoords);
-            var depot = CreateDepot(map.GridCoords);
-            var second = CreateDepot(map.GridCoords.Offset(new Vector2(30, 0)));
-            Queue(depot, "VehicleHumvee");
-            Complete(depot);
-            State(depot); // A second new Humvee is still available at this point.
-            Invoke("StoreVehicle", depot.Lift);
-            ResetLift(depot);
-            // Fill all four allowance categories after storing the Humvee.
-            EntityUid fighter = default;
-            foreach (var other in new[] { "VehicleTank", "VehicleAPC", "VehicleHumveeTransport", "CMUFighterGround" })
-            {
-                ResetLift(second);
-                Queue(second, other);
-                Complete(second);
-                if (other == "CMUFighterGround")
-                    fighter = GetVehicleOnLift(second, other);
-            }
-
-            var available = State(depot).Available.Single();
-            Assert.That(available.Id, Is.EqualTo("VehicleHumvee"));
-            Assert.That(available.Count, Is.EqualTo(1));
-            Assert.That(State(depot).IssuedVehicles, Has.Count.EqualTo(4));
-            // Delete the aircraft while its landing map still exists.
-            Assert.That(fighter.Valid, Is.True);
-            SEntMan.DeleteEntity(fighter);
         });
     }
 

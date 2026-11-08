@@ -199,6 +199,10 @@ public abstract partial class CMUSharedZLevelsSystem
         if (HasComp<YautjaComponent>(ent.Owner))
             return;
 
+        // CMU14: a CMUZLeap leaper (the Early Warning Joe) lands a dropped level like a yautja
+        if (TryComp(ent.Owner, out CMUZLeapComponent? zLeap) && zLeap.IgnoreFallDamage)
+            return;
+
         var knockdownTime = MathF.Min(args.ImpactPower * 0.25f, 5f);
         _stun.TryKnockdown(ent.Owner, TimeSpan.FromSeconds(knockdownTime), true);
 

@@ -1,0 +1,33 @@
+# CAS batteries use separate lifetimes and ignition caps from flamethrowers.
+- type: entity
+  parent: RMCTileFireGreen
+  id: CMUTileFireLaserGreen
+  components:
+  - type: TileFire
+    id: CMUTileFireLaserGreen
+    duration: 30
+  - type: RMCIgniteOnCollide
+    duration: 20
+    maxStacks: 10
+
+- type: entity
+  parent: RMCTileFireBlue
+  id: CMUTileFireLaserBlue
+  components:
+  - type: TileFire
+    id: CMUTileFireLaserBlue
+    duration: 30
+  - type: RMCIgniteOnCollide
+    duration: 20
+    maxStacks: 10
+
+- type: entity
+  parent: RMCTileFireOB
+  id: CMUTileFireLaserWhite
+  components:
+  - type: TileFire
+    id: CMUTileFireLaserWhite
+    duration: 45
+  - type: RMCIgniteOnCollide
+    duration: 30
+    maxStacks: 20

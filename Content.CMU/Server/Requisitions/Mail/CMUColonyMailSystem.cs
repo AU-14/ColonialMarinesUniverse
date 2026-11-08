@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind.Components;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Paper;
 using Content.Shared.ParcelWrap.Components;
@@ -239,7 +240,10 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
                 continue;
             }
 
-            found.Add((uid, job.LocalizedName));
+            var title = HasComp<CLFMemberComponent>(uid)
+                ? Loc.GetString("faction-roster-console-colonist-job")
+                : job.LocalizedName;
+            found.Add((uid, title));
         }
 
         return found;

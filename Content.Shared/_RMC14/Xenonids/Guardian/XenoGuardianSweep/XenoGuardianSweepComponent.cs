@@ -1,32 +1,35 @@
-using Content.Shared.Chat.Prototypes;  
-using Content.Shared.Damage;  
-using Robust.Shared.Audio;  
-using Robust.Shared.GameStates;  
-using Robust.Shared.Prototypes; 
+using Content.Shared.Chat.Prototypes;
+using Content.Shared.Damage;
+using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Xenonids.Guardian.XenoGuardianSweep;
   
-[RegisterComponent, NetworkedComponent]  
-public sealed partial class XenoGuardianSweepComponent : Component  
+[RegisterComponent, NetworkedComponent]
+public sealed partial class XenoGuardianSweepComponent : Component
 {  
-    [DataField]  
-    public DamageSpecifier Damage = new();  
-  
-    [DataField]  
-    public float Range = 1.5f;  
-  
-    [DataField]  
-    public EntProtoId Effect = "CMEffectPunch";  
+    [DataField]
+    public DamageSpecifier Damage = new();
   
     [DataField]
-    public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");  
+    public float Range = 1.5f;
   
-    [DataField]  
-    public ProtoId<EmotePrototype> HissEmote = "Hiss";  
+    [DataField]
+    public EntProtoId Effect = "CMEffectPunch";
   
-    [DataField]  
-    public TimeSpan SlowDuration = TimeSpan.FromSeconds(5);  
+    [DataField]
+    public SoundSpecifier HitSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");
   
+    [DataField]
+    public ProtoId<EmotePrototype> HissEmote = "Hiss";
+  
+    [DataField]
+    public TimeSpan SlowDuration = TimeSpan.FromSeconds(5);
+  
+    [DataField]
+    public float KnockBackDistance = 2f;
+
     [DataField]  
-    public float KnockBackDistance = 2f;  
+    public TimeSpan ParalyzeTime = TimeSpan.FromSeconds(3);
 }

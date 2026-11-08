@@ -364,7 +364,7 @@ public sealed partial class VehicleSystem : EntitySystem
         // CMU14: Opfor twins swap in first, purges shared
         CaptureInteriorFaction(ent);
         var swapEv = new VehicleInteriorLoadedEvent(ent.Owner, mapUid, interiorGrid, ent.Comp.InteriorFaction);
-        RaiseLocalEvent(ent.Owner, ref swapEv);
+        RaiseLocalEvent(ent.Owner, ref swapEv, broadcast: true); // CMU14: cabin atmosphere initialization also observes the completed load.
         ConfigureInteriorFaction(ent, mapId);
 
         ProtectInteriorEntities(mapId);

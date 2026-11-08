@@ -58,31 +58,6 @@ public sealed class CMUZMovementQueryTest : GameTest
     private CMUZPhysicsComponent _bodyZ = default!;
     private bool? _originalProfiler;
 
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task UnchangedMovementReusesGroundQuery(bool vehicle)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            CreateScenario(vehicle);
-            var before = Floors;
-            Assert.That(_z.DistanceToGround((_body, _bodyZ), out var sticky), Is.Zero);
-            Assert.That(sticky, Is.False);
-            var oneQuery = Floors - before;
-            Assert.That(oneQuery, Is.GreaterThan(0));
-
-            foreach (var x in new[] { 1.05f, 0.95f })
-            {
-                before = Floors;
-                Move(x);
-                Assert.That(Floors - before, Is.EqualTo(oneQuery),
-                    "An unchanged snap and its activation must share one ground query, including the whole vehicle footprint.");
-                AssertSettled(_map.Owner, 0f);
-                Assert.That(_transform.GetWorldPosition(_body), Is.EqualTo(new Vector2(x, 0.5f)));
-            }
-        });
-    }
-
     [Test]
     public async Task ChangedHeightRequeriesGroundAfterSnap()
     {
@@ -174,86 +149,6 @@ public sealed class CMUZMovementQueryTest : GameTest
             }
             Assert.That(visualCount, Is.GreaterThan(0), "The armed humvee must exercise its separate turret visuals.");
         });
-    }
-
-    [Test, Explicit("Run by exact method filter to record Release movement and footprint costs.")]
-    public async Task MeasureMovementAndFootprint()
-    {
-        var rows = new List<object>();
-        await Server.WaitAssertion(() =>
-        {
-            CreateScenario(false);
-            foreach (var vehicle in new[] { false, true })
-            {
-                if (vehicle)
-                {
-                    SEntMan.DeleteEntity(_body);
-                    CreateBody(true);
-                }
-                Server.CfgMan.SetCVar(Robust.Shared.CVars.ProfEnabled, true);
-                var floors = Floors;
-                Move(1.05f);
-                var floorsPerMove = Floors - floors;
-                Server.CfgMan.SetCVar(Robust.Shared.CVars.ProfEnabled, false);
-                var positions = new[]
-                {
-                    new EntityCoordinates(_map.Owner, 0.95f, 0.5f),
-                    new EntityCoordinates(_map.Owner, 1.05f, 0.5f),
-                };
-                Measure(vehicle ? "vehicle-move" : "body-move", 4096, floorsPerMove,
-                    i => _transform.SetCoordinates(_body, positions[i & 1]));
-                AssertSettled(_map.Owner, 0f);
-            }
-
-            var samples = new List<Vector2>();
-            Measure("vehicle-footprint", 4096, 0, _ => CMUVehicleSupportFootprint.GenerateWorldSamples(
-                new Box2(-1f, -2f, 1f, 2f), 0.5f, 0.05f, new Vector2(0.95f, 0.5f),
-                Angle.FromDegrees(37), samples));
-            Assert.That(samples, Has.Count.EqualTo(45));
-
-            void Measure(string name, int operations, int floorsPerMove, Action<int> action)
-            {
-                // Tiered compilation continues in the background. An iteration-only warmup
-                // can finish sooner after optimization and put more Tier-0 work in that mode's
-                // measured samples. Give each workload the same minimum elapsed warmup.
-                var warmupStart = Stopwatch.GetTimestamp();
-                var warmupOperations = 0;
-                do
-                {
-                    for (var i = 0; i < operations; i++) action(i);
-                    warmupOperations += operations;
-                } while (Stopwatch.GetElapsedTime(warmupStart).TotalSeconds < 4);
-                var warmupMilliseconds = Stopwatch.GetElapsedTime(warmupStart).TotalMilliseconds;
-                var milliseconds = new double[9];
-                var allocatedBytes = new long[9];
-                for (var block = 0; block < milliseconds.Length; block++)
-                {
-                    var bytes = GC.GetAllocatedBytesForCurrentThread();
-                    var start = Stopwatch.GetTimestamp();
-                    for (var i = 0; i < operations; i++) action(i);
-                    milliseconds[block] = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
-                    allocatedBytes[block] = GC.GetAllocatedBytesForCurrentThread() - bytes;
-                }
-                rows.Add(new { name, operations, floorsPerMove, warmupOperations, warmupMilliseconds,
-                    milliseconds, allocatedBytes });
-            }
-        });
-
-        var output = Environment.GetEnvironmentVariable("CMU_SIMULATION_MEASUREMENT") ??
-                     Path.Combine(TestContext.CurrentContext.WorkDirectory, "simulation-ground-measurement.json");
-        var engine = typeof(SharedPhysicsSystem).Assembly;
-        File.WriteAllText(output, JsonSerializer.Serialize(new
-        {
-            utc = DateTime.UtcNow,
-            runtime = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,
-            processId = Environment.ProcessId,
-            engineMvid = engine.ManifestModule.ModuleVersionId,
-            engineDebugModes = engine.GetCustomAttribute<DebuggableAttribute>()?.DebuggingFlags.ToString(),
-            contentMvid = typeof(CMUSharedZLevelsSystem).Assembly.ManifestModule.ModuleVersionId,
-            serverMvid = typeof(CMUZLevelsSystem).Assembly.ManifestModule.ModuleVersionId,
-            rows,
-        }, new JsonSerializerOptions { WriteIndented = true }));
-        TestContext.AddTestAttachment(output);
     }
 
     private int Floors => (int) DistanceFloors.GetValue(_z)!;

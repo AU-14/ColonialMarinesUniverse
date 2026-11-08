@@ -1,3 +1,4 @@
+# CMU14: one retry for runner shutdowns; tests and execution timeouts need attention.
 name: Retry interrupted CI
 
 on:
@@ -14,7 +15,7 @@ concurrency:
 
 jobs:
   retry:
-    if: github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.run_attempt < 3
+    if: github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.run_attempt < 2
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -30,7 +31,7 @@ jobs:
               ...repo, run_id: triggered.id,
             });
             if (run.status !== 'completed' || run.conclusion !== 'failure' ||
-                run.run_attempt !== triggered.run_attempt || run.run_attempt >= 3) {
+                run.run_attempt !== triggered.run_attempt || run.run_attempt >= 2) {
               core.info('Run has already changed or exhausted its retries.');
               return;
             }
@@ -49,7 +50,7 @@ jobs:
               ...repo, run_id: run.id, attempt_number: run.run_attempt, per_page: 100,
             });
             const failed = jobs.filter(job => job.conclusion === 'failure' &&
-              job.name !== 'Required Checks');
+              job.name !== 'Required Checks' && job.name !== 'Testcases Complete');
             if (failed.length === 0)
               return;
 
@@ -64,7 +65,8 @@ jobs:
               });
               const log = typeof data === 'string' ? data : Buffer.from(data).toString('utf8');
               const shutdown = /Z\s+##\[error\]The runner has received a shutdown signal\./m;
-              const testFailure = /Z\s+Failed .+ \[|Failed!\s+-\s+Failed:\s+[1-9]/m;
+              // CMU14: test timeouts are actionable failures, never infrastructure retries.
+              const testFailure = /Z\s+(?:\|\s*)?Failed .+ \[|Failed:\s*[1-9]/m;
               if (!shutdown.test(log) || testFailure.test(log)) {
                 core.info('A test failed or the runner-shutdown signature is absent.');
                 return;

@@ -19,6 +19,7 @@
         layer: [MidImpassable]
         mask: [MidImpassable]
   - type: Appearance
+  - type: CMUFobInstructions
   - type: CMUFobPresentation
   - type: Damageable
   - type: Injurable
@@ -248,7 +249,7 @@
   - type: StorageFill
     contents:
     - id: CMUFobPlatformModule
-      amount: 2
+      amount: 3
     - id: CMUFobHeavyModule
       amount: 2
     - id: CMUFobRocketModule
@@ -271,7 +272,9 @@
     - id: CMWirecutter
     - id: CMWelder
     - id: CMMultitool
-    - id: RMCCableCoil
+    - id: CMUCableThinHVStack
+    - id: CMUCableThinMVStack
+    - id: CMUCableThinLVStack
 
 - type: entity
   parent: CMUFobCrateBase

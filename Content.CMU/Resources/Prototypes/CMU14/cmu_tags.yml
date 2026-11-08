@@ -8,6 +8,9 @@
   id: CMUYautjaToolbelt
 
 - type: Tag
+  id: CMUYautjaHarpoon
+
+- type: Tag
   id: CMUYautjaHerbalMedicine
 
 - type: Tag

@@ -51,9 +51,13 @@
     - Slicing
   - type: Sprite
     state: spike
+  # cmss13 harpoon is SIZE_MEDIUM, which is what lets it ride in the medium-max hunting pouch
   - type: Item
     heldPrefix: harpoon
-    size: Large
+    size: Normal
+  - type: Tag
+    tags:
+    - CMUYautjaHarpoon
   - type: MeleeWeapon
     damage:
       types:
@@ -1390,6 +1394,7 @@
     maxRange: 8
     maxIntensity: 70
     ignoreReagentRange: true
+    allowBlueFire: true # specialist weapon: full CMSS13 tank range and its own intensity cap
   - type: RMCSolutionTransferWhitelist
     popup: rmc-solution-transfer-whitelist-failed-not-reagent-tank
     targetWhitelist:
@@ -1740,7 +1745,8 @@
   components:
   - type: Sprite
     sprite: CMU14/Yautja/bow.rsi
-    state: projectile_expl
+    layers:
+    - state: projectile_expl
   - type: Projectile
     damage:
       types:

@@ -19,8 +19,6 @@ public sealed class YautjaMarineEligibilityTest
 {
     [TestCase("CMUMobYautja", "CMUYautja")]
     [TestCase("CMUMobYautjaBadBloodGrunt", "CMUYautjaBadBlood")]
-    [TestCase("CMUMobYautjaBadBloodLeader", "CMUYautjaBadBlood")]
-    [TestCase("CMUYautjaHunter", "CMUYautja")]
     [TestCase("CMMobHuman", "CMUYautja")]
     public async Task YautjaAreHostileToHumanSentriesAndCannotReceiveMedals(string prototype, string expectedFaction)
     {

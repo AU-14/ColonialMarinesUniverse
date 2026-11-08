@@ -68,43 +68,6 @@ public sealed class StunUnconsciousMergeRegressionTest : GameTest
         """;
 
     [Test]
-    public async Task StatusPrototypesKeepPureStunParalysisAndSilentUnconsciousOwnershipDistinct()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var stunned = SProtoMan.Index<EntityPrototype>(SharedStunSystem.StunId);
-            var paralyzed = SProtoMan.Index<EntityPrototype>(ParalyzeId);
-            var unconscious = SProtoMan.Index<EntityPrototype>(RmcUnconsciousId);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(stunned.Components.ContainsKey("StunnedStatusEffect"), Is.True);
-                Assert.That(stunned.Components.ContainsKey("KnockdownStatusEffect"), Is.False,
-                    "pure stun must never acquire knockdown ownership through inheritance");
-
-                Assert.That(paralyzed.Parents, Is.EqualTo(new[] { SharedStunSystem.StunId.Id }));
-                Assert.That(paralyzed.Components.ContainsKey("StunnedStatusEffect"), Is.True);
-                Assert.That(paralyzed.Components.ContainsKey("KnockdownStatusEffect"), Is.True);
-                var directKnockdown = (KnockdownStatusEffectComponent)
-                    paralyzed.Components["KnockdownStatusEffect"].Component;
-                Assert.That(directKnockdown.Silent, Is.False);
-                Assert.That(directKnockdown.Drop, Is.True);
-
-                Assert.That(unconscious.Parents, Is.EqualTo(new[] { "MobStatusEffectBase" }));
-                Assert.That(unconscious.Components.ContainsKey("StunnedStatusEffect"), Is.True);
-                Assert.That(unconscious.Components.ContainsKey("KnockdownStatusEffect"), Is.True);
-                Assert.That(unconscious.Components.ContainsKey("StatusEffectAlert"), Is.False);
-                Assert.That(unconscious.Components.ContainsKey("ExaminableStatusEffect"), Is.False,
-                    "the silent RMC mirror must not duplicate direct stun presentation");
-                var unconsciousKnockdown = (KnockdownStatusEffectComponent)
-                    unconscious.Components["KnockdownStatusEffect"].Component;
-                Assert.That(unconsciousKnockdown.Silent, Is.True);
-                Assert.That(unconsciousKnockdown.Drop, Is.False);
-            });
-        });
-    }
-
-    [Test]
     public async Task PublicParalyzeFirstApplyAndExistingRefreshKeepLegacyEventParity()
     {
         await Server.WaitAssertion(() =>

@@ -10,8 +10,9 @@ public sealed partial class CMUSwarmTraversalComponent : Component
     public bool Crossing;
     public TimeSpan ProgressDeadline;
     public Vector2 LastPosition;
+    public TimeSpan NextUse;
     public readonly Dictionary<EntityUid, TimeSpan> FailedStairs = new();
 }
 
 public readonly record struct CMUSwarmStairRoute(EntityUid Stair, EntityUid FromMap, EntityUid ToMap,
-    Vector2 Approach, Vector2 Exit);
+    Vector2 Approach, Vector2 Exit, int? LadderOffset = null);

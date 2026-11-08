@@ -710,12 +710,8 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
                 _transform.SetMapCoordinates(ent, new MapCoordinates(worldPos + offset, landingMapId));
                 _throwing.TryThrow(ent, offset, baseThrowSpeed: 4f);
 
-                // RUMC was (kept): // Fallen structures are rubble: strip fixture hardness so they can never grind against rocks the cave later generates (or gets buried under) at the same
-                // RUMC was (kept): // spot. That constant jitter of a solid wall stuck inside a solid rock was a physics-contact drain that degraded server TPS (felt as ever-worsening UI lag).
-                // RUMC was (kept): MakeFallenDebrisNonHard(ent);
-                // What lands inside something solid (a rock the cave generates there, a wall) is rubble: strip fixture hardness so it can never grind against it (that constant
-                // jitter was a physics drain that degraded server TPS). What lands on open floor keeps its collision.
-                if (_landing.LandsInsideSolid(landingMap, worldPos + offset))
+                // Broken walls remain inert when later debris or generated rock reaches their landing spot.
+                if (_tag.HasTag(ent, WallTag) || _landing.LandsInsideSolid(landingMap, worldPos + offset))
                     MakeFallenDebrisNonHard(ent);
                 // RUMC End
             }
@@ -735,7 +731,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
                 var landingMap = _landing.FindLandingMap(belowMap.Value, worldPos + offset);
                 var landingMapId = TryComp<MapComponent>(landingMap, out var landingComp) ? landingComp.MapId : belowMapComp.MapId;
                 _transform.SetMapCoordinates(ent, new MapCoordinates(worldPos + offset, landingMapId));
-                if (_landing.LandsInsideSolid(landingMap, worldPos + offset))
+                if (_tag.HasTag(ent, WallTag) || _landing.LandsInsideSolid(landingMap, worldPos + offset))
                     MakeFallenDebrisNonHard(ent);
             }
         }

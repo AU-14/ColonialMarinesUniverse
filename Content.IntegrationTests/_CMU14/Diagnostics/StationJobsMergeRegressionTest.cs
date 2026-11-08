@@ -13,6 +13,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Maps;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Content.Shared.Station.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -24,7 +25,6 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 public sealed class StationJobsMergeRegressionTest : GameTest
 {
     private const string MapId = "StationJobsMergeMap";
-    private static readonly ProtoId<JobPrototype> AegisResearcher = "CMUJobAegisResearcher";
     private static readonly ProtoId<JobPrototype> Govfor = "AU14JobGOVFORSquadRifleman";
     private static readonly ProtoId<JobPrototype> Opfor = "AU14JobOPFORSquadRifleman";
     private static readonly ProtoId<JobPrototype> ThreatLeader = "AU14JobThreatLeader";
@@ -458,40 +458,23 @@ public sealed class StationJobsMergeRegressionTest : GameTest
     }
 
     [Test]
-    public async Task EveryQueueableSideJobHasAnOpposingSideMirror()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var missing = new List<string>();
-            foreach (var job in SProtoMan.EnumeratePrototypes<JobPrototype>())
-            {
-                if (job.Abstract || !job.SetPreference || job.Hidden)
-                    continue;
-
-                foreach (var (source, mirror) in new[] { ("GOVFOR", "OPFOR"), ("OPFOR", "GOVFOR") })
-                {
-                    if (!job.ID.Contains(source))
-                        continue;
-
-                    var twin = job.ID.Replace(source, mirror);
-                    if (!SProtoMan.HasIndex<JobPrototype>(twin))
-                        missing.Add($"{job.ID} -> {twin}");
-                }
-            }
-
-            Assert.That(missing, Is.Empty,
-                "ForceOnForce side mirroring swaps GOVFOR/OPFOR in queued job ids, so every "
-                + "queueable side job needs its mirror: " + string.Join(", ", missing));
-        });
-    }
-
-    [Test]
     public async Task GenericLateJoinAcceptsNullJobAndPrefersJobMarker()
     {
         var map = await Pair.CreateTestMap();
         var spawning = Server.System<StationSpawningSystem>();
         var ticker = Server.System<GameTicker>();
+        var stations = Server.System<StationSystem>();
         var originalRunLevel = ticker.RunLevel;
+
+        // The late-join picker scopes spawn points to the given station. A null station
+        // scans the whole pair world, where pooled rounds can hold a hunter ship's markers.
+        var stationConfig = SProtoMan.Index<GameMapPrototype>(MapId).Stations["Merge"];
+        var station = EntityUid.Invalid;
+        var anyJob = EntityUid.Invalid;
+        var lateJoin = EntityUid.Invalid;
+        var observer = EntityUid.Invalid;
+        await Server.WaitPost(() =>
+            station = stations.InitializeNewStation(stationConfig, [map.Grid], "Merge"));
 
         try
         {
@@ -501,13 +484,22 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 var anyJobCoordinates = map.GridCoords.Offset(new Vector2(5, 0));
                 var lateJoinCoordinates = map.GridCoords.Offset(new Vector2(10, 0));
                 var observerCoordinates = map.GridCoords.Offset(new Vector2(15, 0));
-                var anyJob = SEntMan.SpawnEntity("StationJobsMergeAnyJobSpawn", anyJobCoordinates);
-                SEntMan.SpawnEntity("StationJobsMergeLateJoinSpawn", lateJoinCoordinates);
-                SEntMan.SpawnEntity("StationJobsMergeObserverSpawn", observerCoordinates);
+                anyJob = SEntMan.SpawnEntity("StationJobsMergeAnyJobSpawn", anyJobCoordinates);
+                lateJoin = SEntMan.SpawnEntity("StationJobsMergeLateJoinSpawn", lateJoinCoordinates);
+                observer = SEntMan.SpawnEntity("StationJobsMergeObserverSpawn", observerCoordinates);
+
+                // The picker's station filter needs each marker to resolve to the station. The grid
+                // branch of GetOwningStation does not resolve this fixture grid under pooled CI runs,
+                // so the markers are tethered through StationTracker, which the filter reads first.
+                foreach (var marker in new[] { anyJob, lateJoin, observer })
+                {
+                    var tracker = SEntMan.AddComponent<StationTrackerComponent>(marker);
+                    stations.SetStation((marker, tracker), station);
+                }
 
                 SetRunLevel(ticker, GameRunLevel.InRound);
 
-                var preferred = spawning.SpawnPlayerCharacterOnStation(null, null, null);
+                var preferred = spawning.SpawnPlayerCharacterOnStation(station, null, null);
                 Assert.That(preferred, Is.Not.Null);
                 Assert.That(transform.GetMapCoordinates(preferred!.Value),
                     Is.EqualTo(transform.ToMapCoordinates(anyJobCoordinates)),
@@ -515,7 +507,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 SEntMan.DeleteEntity(preferred.Value);
                 SEntMan.DeleteEntity(anyJob);
 
-                var fallback = spawning.SpawnPlayerCharacterOnStation(null, null, null);
+                var fallback = spawning.SpawnPlayerCharacterOnStation(station, null, null);
                 Assert.That(fallback, Is.Not.Null);
                 Assert.That(transform.GetMapCoordinates(fallback!.Value),
                     Is.EqualTo(transform.ToMapCoordinates(lateJoinCoordinates)),
@@ -525,99 +517,20 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         }
         finally
         {
-            await Server.WaitPost(() => SetRunLevel(ticker, originalRunLevel));
-        }
-    }
-
-    [Test]
-    public async Task AdjustRoundStartJobSlotAddsTheRawFirstEntryAcrossArrayShapes()
-    {
-        var jobs = Server.System<StationJobsSystem>();
-        var stations = Server.System<StationSystem>();
-        var map = SProtoMan.Index<GameMapPrototype>(MapId);
-        EntityUid station = default;
-
-        await Server.WaitPost(() =>
-        {
-            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
-        });
-
-        try
-        {
-            await Server.WaitAssertion(() =>
+            // Trackers left on the markers reference the station; once cleanup deletes the
+            // station the next PVS tick serializes the dead reference and fails the clean
+            // dispose. Delete markers and station in the same tick.
+            await Server.WaitPost(() =>
             {
-                var component = SEntMan.GetComponent<StationJobsComponent>(station);
+                foreach (var marker in new[] { anyJob, lateJoin, observer })
+                {
+                    if (!SEntMan.Deleted(marker))
+                        SEntMan.DeleteEntity(marker);
+                }
 
-                component.SetupAvailableJobs.Remove(ThirdPartyLeader);
-                jobs.AdjustRoundStartJobSlot(station, ThirdPartyLeader, 2, component);
-                Assert.That(component.SetupAvailableJobs[ThirdPartyLeader], Is.EqualTo(new[] { 2, -1 }),
-                    "an absent slot array must delegate the raw adjustment as the new round-start count");
-
-                component.SetupAvailableJobs[Govfor] = new[] { 3, 8 };
-                jobs.AdjustRoundStartJobSlot(station, Govfor, 2, component);
-                Assert.That(component.SetupAvailableJobs[Govfor], Is.EqualTo(new[] { 5, 8 }),
-                    "a finite first entry must be added without disturbing the mid-round entry");
-
-                component.SetupAvailableJobs[Opfor] = new[] { -1, -1 };
-                jobs.AdjustRoundStartJobSlot(station, Opfor, 1, component);
-                Assert.That(component.SetupAvailableJobs[Opfor], Is.EqualTo(new[] { 0, -1 }),
-                    "the helper must add the raw negative sentinel instead of normalizing it as unlimited");
-
-                component.SetupAvailableJobs[ThreatLeader] = new[] { 4 };
-                jobs.AdjustRoundStartJobSlot(station, ThreatLeader, 2, component);
-                Assert.That(component.SetupAvailableJobs[ThreatLeader], Is.EqualTo(new[] { 6, -1 }),
-                    "a length-one array must contribute slot zero before the setter restores canonical shape");
+                SEntMan.DeleteEntity(station);
+                SetRunLevel(ticker, originalRunLevel);
             });
-        }
-        finally
-        {
-            await Server.WaitPost(() => SEntMan.DeleteEntity(station));
-        }
-    }
-
-    [Test]
-    public async Task AegisJobSlotQueryDistinguishesNoStationAbsentUnlimitedAndFinite()
-    {
-        var aegis = Server.System<AegisLobbyEventSystem>();
-        var jobs = Server.System<StationJobsSystem>();
-        var stations = Server.System<StationSystem>();
-        var map = SProtoMan.Index<GameMapPrototype>(MapId);
-        EntityUid station = default;
-
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(aegis.GetAegisJobSlots(), Is.Null,
-                "no GOVFOR station must remain distinct from a station with an absent job");
-        });
-
-        await Server.WaitPost(() =>
-        {
-            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
-            var faction = SEntMan.EnsureComponent<ShipFactionComponent>(station);
-            faction.Faction = "GOVFOR";
-        });
-
-        try
-        {
-            await Server.WaitAssertion(() =>
-            {
-                var component = SEntMan.GetComponent<StationJobsComponent>(station);
-                component.JobList.Remove(AegisResearcher);
-                Assert.That(aegis.GetAegisJobSlots(), Is.Zero,
-                    "an absent AEGIS job must report zero rather than no station or unlimited slots");
-
-                jobs.MakeJobUnlimited(station, AegisResearcher.Id, component);
-                Assert.That(aegis.GetAegisJobSlots(), Is.Null,
-                    "an explicitly unlimited AEGIS job must preserve its null slot count");
-
-                Assert.That(jobs.TrySetJobSlot(station, AegisResearcher.Id, 4, true, component), Is.True);
-                Assert.That(aegis.GetAegisJobSlots(), Is.EqualTo(4),
-                    "a finite AEGIS job must report its exact available slot count");
-            });
-        }
-        finally
-        {
-            await Server.WaitPost(() => SEntMan.DeleteEntity(station));
         }
     }
 

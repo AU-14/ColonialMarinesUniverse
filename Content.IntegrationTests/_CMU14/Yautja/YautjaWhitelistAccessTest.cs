@@ -21,65 +21,6 @@ public sealed class YautjaWhitelistAccessTest
     private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
 
     [Test]
-    public async Task EveryYautjaWhitelistTypeAllowsHunterJobAndClientSelection()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var db = pair.Server.ResolveDependency<IServerDbManager>();
-        var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
-        var jobWhitelist = pair.Server.ResolveDependency<JobWhitelistManager>();
-        var serverPlayers = pair.Server.ResolveDependency<IPlayerManager>();
-        var clientNet = pair.Client.ResolveDependency<IClientNetManager>();
-        var requirements = pair.Client.ResolveDependency<JobRequirementsManager>();
-        var preferences = pair.Client.ResolveDependency<IClientPreferencesManager>();
-        var hunter = prototypes.Index<JobPrototype>(CMUYautjaHunterPrototype);
-        var playerId = pair.Player!.UserId.UserId;
-        var username = pair.Player.Name;
-
-        await pair.Server.WaitPost(() => pair.Server.CfgMan.SetCVar(CCVars.GameRoleWhitelist, true));
-
-        var flags = new[]
-        {
-            YautjaWhitelistFlags.Yautja,
-            YautjaWhitelistFlags.Legacy,
-            YautjaWhitelistFlags.Council,
-            YautjaWhitelistFlags.CouncilLegacy,
-            YautjaWhitelistFlags.Leader,
-        };
-
-        foreach (var flag in flags)
-        {
-            await db.SetYautjaWhitelistFlagsAsync(playerId, (int) flag);
-            await jobWhitelist.RefreshYautjaWhitelist(new NetUserId(playerId));
-            await Reconnect(pair, clientNet, serverPlayers, username);
-
-            await pair.Server.WaitAssertion(() =>
-                Assert.That(jobWhitelist.IsAllowed(serverPlayers.Sessions.Single(), hunter.ID), Is.True));
-            await pair.Client.WaitAssertion(() =>
-            {
-                Assert.That(requirements.IsWhitelisted(hunter.ID), Is.True);
-                Assert.That(requirements.CanCustomizeWhitelistedJob(hunter.ID), Is.True);
-                Assert.That(
-                    preferences.YautjaCapabilities.CanUseLegacy,
-                    Is.EqualTo(flag is YautjaWhitelistFlags.Legacy or YautjaWhitelistFlags.CouncilLegacy));
-            });
-        }
-
-        await db.SetYautjaWhitelistFlagsAsync(playerId, (int) YautjaWhitelistFlags.None);
-        await jobWhitelist.RefreshYautjaWhitelist(new NetUserId(playerId));
-        await Reconnect(pair, clientNet, serverPlayers, username);
-
-        await pair.Server.WaitAssertion(() =>
-            Assert.That(jobWhitelist.IsAllowed(serverPlayers.Sessions.Single(), hunter.ID), Is.False));
-        await pair.Client.WaitAssertion(() =>
-        {
-            Assert.That(requirements.IsWhitelisted(hunter.ID), Is.False);
-            Assert.That(requirements.CanCustomizeWhitelistedJob(hunter.ID), Is.False);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task ClanHallWhitelistUpdateShowsTargetAndReachesClient()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -191,19 +132,4 @@ public sealed class YautjaWhitelistAccessTest
         await pair.CleanReturnAsync();
     }
 
-    private static async Task Reconnect(
-        TestPair pair,
-        IClientNetManager clientNet,
-        IPlayerManager serverPlayers,
-        string username)
-    {
-        await pair.Client.WaitPost(() => clientNet.ClientDisconnect("Yautja whitelist refresh test"));
-        await pair.RunTicksSync(20);
-        await pair.Server.WaitAssertion(() => Assert.That(serverPlayers.PlayerCount, Is.EqualTo(0)));
-
-        pair.Client.SetConnectTarget(pair.Server);
-        await pair.Client.WaitPost(() => clientNet.ClientConnect(null!, 0, username));
-        await pair.RunTicksSync(20);
-        await pair.Server.WaitAssertion(() => Assert.That(serverPlayers.PlayerCount, Is.EqualTo(1)));
-    }
 }

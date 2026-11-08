@@ -315,8 +315,12 @@
         amount: 1
       - id: RMCPowerCellHigh
         amount: 5
-      - id: RMCCableCoil
-        amount: 15
+      - id: CMUCableThinHVStack
+        amount: 5
+      - id: CMUCableThinMVStack
+        amount: 5
+      - id: CMUCableThinLVStack
+        amount: 5
     - name: au14-vendor-section-flares-lights
       entries:
       - id: RMCBoxFlashlights
@@ -521,6 +525,14 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: cmu-vendor-advanced-gunship-crew-hud
+      choices: { CMUPlatoonAirCrewGunshipHUD: 1 }
+      entries:
+      - id: CMUVisorGunshipCrewAdvanced
+    - name: cmu-vendor-basic-gunship-crew-huds
+      entries:
+      - id: CMUVisorGunshipCrew
+        amount: 5
     - name: au14-vendor-section-fatigues
       choices: { CMUPlatoonAirCrewFatigues: 1 }
       entries:

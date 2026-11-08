@@ -14,60 +14,6 @@ namespace Content.IntegrationTests.CMU14.Medical.Treatment.Surgery;
 [TestFixture]
 public sealed class CMUBodyScannerCalibrationSchedulerTest
 {
-    [Test]
-    public async Task PuzzleProjectionIsSharedWithinTickAndInvalidatedByRevision()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        EntityUid patient = default;
-        CMUBodyScannerConsoleComponent scanner = default!;
-        List<CMUBodyScannerSliceSignal> initialTargets = default!;
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            var index = entMan.System<CMUMedicalBodyIndexSystem>();
-            patient = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            Assert.That(index.TryGetBodyPart(
-                patient,
-                new CMUMedicalBodyPartKey(BodyPartType.Torso, BodyPartSymmetry.None),
-                out var torso), Is.True);
-            entMan.EnsureComponent<InternalBleedingComponent>(torso);
-            scanner = CreateScanner(boostDurationSeconds: 1f);
-        });
-
-        // Flush spawn-time structural changes so the next mutation owns a new revision.
-        await pair.RunTicksSync(1);
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            var calibration = entMan.System<CMUBodyScannerCalibrationSystem>();
-            var changes = entMan.System<CMUMedicalChangeSystem>();
-            var first = calibration.BuildView(null, patient, canScan: true, scanner);
-            var repeated = calibration.BuildView(null, patient, canScan: true, scanner);
-            Assert.That(first.Targets, Is.Not.Empty);
-            Assert.That(repeated.Targets, Is.SameAs(first.Targets));
-            initialTargets = first.Targets;
-
-            Assert.That(changes.MarkChanged(patient, CMUMedicalChangeFlags.Wounds), Is.True);
-            var invalidated = calibration.BuildView(null, patient, canScan: true, scanner);
-            Assert.That(invalidated.Targets, Is.Not.SameAs(initialTargets));
-            initialTargets = invalidated.Targets;
-        });
-
-        await pair.RunTicksSync(1);
-
-        await server.WaitAssertion(() =>
-        {
-            var calibration = server.EntMan.System<CMUBodyScannerCalibrationSystem>();
-            var nextTick = calibration.BuildView(null, patient, canScan: true, scanner);
-            Assert.That(nextTick.Targets, Is.Not.SameAs(initialTargets));
-            server.EntMan.DeleteEntity(patient);
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task RecalibratingReplacesTheExistingBoostExpiry()

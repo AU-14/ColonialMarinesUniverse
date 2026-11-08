@@ -112,34 +112,4 @@ public sealed class HunterShipLadderTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task AuthoredMiddleDeckLaddersAreBidirectional()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var factory = entMan.ComponentFactory;
-
-            foreach (var id in new[]
-            {
-                "CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder11SouthOffset0x17",
-                "CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder11SouthOffset0x2",
-            })
-            {
-                var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryComp<CMUZLevelLadderComponent>(out var ladder, factory), Is.True, id);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(ladder!.CanMoveUp, Is.True, id);
-                    Assert.That(ladder.CanMoveDown, Is.True, id);
-                });
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

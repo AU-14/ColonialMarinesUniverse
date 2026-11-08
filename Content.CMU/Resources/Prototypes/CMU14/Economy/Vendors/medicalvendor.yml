@@ -141,6 +141,8 @@
         amount: 3
       - id: CMUDefibrillatorCompact
         amount: 1
+      - id: CMUAutocompressor
+        amount: 4
       - id: AU14CMDefibrillator
         amount: 10
       - id: CMHealthAnalyzer
@@ -148,6 +150,8 @@
       - id: RMCVial
         amount: 35
       - id: CMUChemistryHotplateFlatpack
+        amount: 3
+      - id: CMUChemistryChillerFlatpack
         amount: 3
       - id: CMMaskGasMedical
         amount: 6
@@ -355,6 +359,8 @@
       entries:
       - id: CMHealthAnalyzer
         amount: 3
+      - id: CMUAutocompressor
+        amount: 4
       - id: AU14CMDefibrillator
         amount: 1
       - id: CMUBloodCooler

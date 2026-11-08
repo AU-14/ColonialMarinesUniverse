@@ -34,6 +34,7 @@
     guides:
     - VoltageNetworks
     - Power
+  # CMU14: CM surgery tools on the wizden coils
   - type: CMSurgeryTool
   - type: CMHemostat
   - type: CMUOrganClamp
@@ -51,7 +52,7 @@
 - type: entity
   id: CableHVStack
   parent: CableStack
-  name: HV cable coil
+  name: thick HV cable coil # CMU14: was HV cable coil, contrasts the CMU thin coils
   suffix: Full
   description: HV cables for connecting engines to heavy duty machinery, SMESes, and substations.
   components:
@@ -105,7 +106,7 @@
 - type: entity
   parent: [SolutionCompositeCable, CableStack]
   id: CableMVStack
-  name: MV cable coil
+  name: thick MV cable coil # CMU14: was MV cable coil, contrasts the CMU thin coils
   suffix: Full
   description: MV cables for connecting substations to APCs, and also powering a select few things like emitters.
   components:
@@ -163,7 +164,7 @@
 - type: entity
   parent: [SolutionCompositeCable, CableStack]
   id: CableApcStack
-  name: LV cable coil
+  name: thick LV cable coil # CMU14: was LV cable coil, contrasts the CMU thin coils
   description: Low-Voltage stack of wires for connecting APCs to machines and other purposes.
   suffix: Full
   components:
@@ -183,6 +184,7 @@
   - type: CablePlacer
     cablePrototypeID: CableApcExtension
     blockingWireType: Apc
+  - type: RMCCableCoil # CMU14: thick LV coil serves the RMC cable actions like the thin coils
 
 - type: entity
   parent: CableApcStack

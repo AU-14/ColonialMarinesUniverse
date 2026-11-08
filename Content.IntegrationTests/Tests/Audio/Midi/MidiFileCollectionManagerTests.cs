@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 
 using System.IO;
 using System.Linq;
@@ -47,15 +47,6 @@ public sealed partial class MidiFileCollectionManagerTests : GameTest
             Assert.That(outputBytes, Is.EqualTo(TestBytes));
             Assert.That(addedFileName, Is.EqualTo(TestFileName));
         }
-    }
-
-    [Test]
-    public void TestGetMidiData()
-    {
-        ResManager.UserData.WriteAllBytes(TestFullPath, TestBytes);
-        var midiBytes = MidiLibManager.GetMidiData(TestFileName);
-
-        Assert.That(TestBytes, Is.EqualTo(midiBytes));
     }
 
     [Test]

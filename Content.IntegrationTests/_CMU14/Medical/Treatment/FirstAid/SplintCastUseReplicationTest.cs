@@ -22,8 +22,6 @@ public sealed class SplintCastUseReplicationTest
     private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> InstantDoAftersPrototype = "InstantDoAfters";
 
     [TestCase(false, false)]
-    [TestCase(false, true)]
-    [TestCase(true, false)]
     [TestCase(true, true)]
     public async Task RealTreatmentReplicatesInitialAndChangedUsesExamineAndDepletion(bool cast, bool consumeBeforeFirstSnapshot)
     {

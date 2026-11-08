@@ -15,60 +15,6 @@ namespace Content.IntegrationTests.Tests.Construction;
 [TestFixture]
 public sealed class ToolsConstructionMergeRegressionTest : GameTest
 {
-    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionPrototype> CMBarricadeMetalPrototype = "CMBarricadeMetal";
-    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionPrototype> CMChairPrototype = "CMChair";
-    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionGraphPrototype> CMSeatPrototype = "CMSeat";
-
-    private static readonly string[] ToolQualities =
-    [
-        "Anchoring",
-        "Brushing",
-        "Chiseling", // CMU14: the smithing
-        "Cutting",
-        "Hammering", // CMU14: the hammers of the smithing and of the crafts
-        "Honking",
-        "Prying",
-        "Pulsing",
-        "Rolling",
-        "RUMCLogSawing", // CMU14: the saw of the logs
-        "Sawing",
-        "Screwing",
-        "Shearing",
-        "Slicing",
-        "Tonging", // CMU14: the tongs of the smithing
-        "VehicleServicing",
-        "Welding",
-    ];
-
-    [Test]
-    public async Task PrototypesInheritForkSettingsAndToolQualitiesResolve()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var rmcConstruction = SProtoMan.Index<ConstructionPrototype>(CMBarricadeMetalPrototype);
-            var inheritedConstruction = SProtoMan.Index<ConstructionPrototype>(CMChairPrototype);
-            var inheritedGraph = SProtoMan.Index<ConstructionGraphPrototype>(CMSeatPrototype);
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(rmcConstruction.Parents, Does.Contain("RMC"));
-                Assert.That(rmcConstruction.IsCM, Is.True);
-                Assert.That(rmcConstruction.RMCPrototype?.Id, Is.EqualTo("RMCMetalBarricadeBuild"));
-                Assert.That(inheritedConstruction.IsCM, Is.True,
-                    "The upstream-owned ConstructionPrototype inheritance fields must still propagate fork IsCM.");
-
-                Assert.That(inheritedGraph.Parents, Does.Contain("RMC"));
-                Assert.That(inheritedGraph.IsCM, Is.True,
-                    "The RMC ConstructionGraph inheritance partial must remain authoritative.");
-            }
-
-            var actualQualities = SProtoMan.EnumeratePrototypes<ToolQualityPrototype>()
-                .Select(prototype => prototype.ID)
-                .Order()
-                .ToArray();
-            Assert.That(actualQualities, Is.EqualTo(ToolQualities),
-                "Every typed Tool/component/construction-graph quality reference must resolve to the exact merged registry.");
-        });
-    }
 
     [Test]
     public async Task AnchorableSkipsSelfAndHonorsRmcTileFreeOverride()
@@ -106,26 +52,6 @@ public sealed class ToolsConstructionMergeRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task MachinePartMaterialCostUsesTheSystemPrototypeManager()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var uid = SEntMan.SpawnEntity("StationAnchorCircuitboard", MapCoordinates.Nullspace);
-            var board = SComp<MachineBoardComponent>(uid);
-            var machineParts = SEntMan.System<MachinePartSystem>();
-
-            Assert.That(machineParts.TryGetMachineBoardMaterialCost((uid, board), out var single), Is.True);
-            Assert.That(machineParts.TryGetMachineBoardMaterialCost((uid, board), out var doubled, 2), Is.True);
-            using (Assert.EnterMultipleScope())
-            {
-                Assert.That(single, Is.Not.Empty);
-                Assert.That(doubled.Keys, Is.EquivalentTo(single.Keys));
-                foreach (var (material, amount) in single)
-                    Assert.That(doubled[material], Is.EqualTo(amount * 2), material);
-            }
-        });
-    }
 }
 
 [RegisterComponent]

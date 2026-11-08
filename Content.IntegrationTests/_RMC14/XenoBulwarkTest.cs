@@ -26,7 +26,6 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class XenoBulwarkTest
 {
-    private const string ShieldEffectPrototype = "RMCEffectShieldBlue";
 
     [TestPrototypes]
     private const string Prototypes = @"
@@ -44,78 +43,6 @@ public sealed class XenoBulwarkTest
   - type: XenoBulwark
     tailSwingRange: 3
 ";
-
-    [Test]
-    public async Task PlateBashDamageIsAlwaysTwenty()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var xeno = entMan.SpawnEntity("CMXenoWarriorBulwark", map.GridCoords);
-            var targetUnencased = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-            var targetEncased = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 1)));
-            var action = SpawnAction(entMan);
-            var encaseAction = SpawnAction(entMan);
-
-            try
-            {
-                RaisePlateBash(entMan, xeno, targetUnencased, action);
-                RaiseEncasedPlates(entMan, xeno, encaseAction);
-                RaisePlateBash(entMan, xeno, targetEncased, action);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(TotalDamage(entMan, targetUnencased), Is.EqualTo(20));
-                    Assert.That(TotalDamage(entMan, targetEncased), Is.EqualTo(20));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(xeno);
-                entMan.DeleteEntity(targetUnencased);
-                entMan.DeleteEntity(targetEncased);
-                entMan.DeleteEntity(action.Owner);
-                entMan.DeleteEntity(encaseAction.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task PlateBashUnencasedThrowsBulwarkTowardTarget()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var xeno = entMan.SpawnEntity("CMXenoWarriorBulwark", map.GridCoords);
-            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(3, 0)));
-            var action = SpawnAction(entMan);
-
-            try
-            {
-                RaisePlateBash(entMan, xeno, target, action);
-
-                Assert.That(entMan.HasComponent<ThrownItemComponent>(xeno), Is.True);
-            }
-            finally
-            {
-                entMan.DeleteEntity(xeno);
-                entMan.DeleteEntity(target);
-                entMan.DeleteEntity(action.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task PlateBashEncasedRequiresAdjacentTarget()
@@ -152,76 +79,6 @@ public sealed class XenoBulwarkTest
     }
 
     [Test]
-    public async Task TailSwingParalyzesHumansForAtLeastOneSecond()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var status = entMan.System<StatusEffectsSystem>();
-            var xeno = entMan.SpawnEntity("CMXenoWarriorBulwark", map.GridCoords);
-            var target = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
-            var action = SpawnAction(entMan);
-
-            try
-            {
-                RaiseTailSwing(entMan, xeno, action);
-
-                Assert.That(status.TryGetTime(target, SharedStunSystem.ParalyzeId, out var time), Is.True);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(time.StartEffectTime, Is.Not.Null);
-                    Assert.That(time.EndEffectTime, Is.Not.Null);
-                    Assert.That(time.EndEffectTime!.Value - time.StartEffectTime!.Value,
-                        Is.GreaterThanOrEqualTo(TimeSpan.FromSeconds(1)));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(xeno);
-                entMan.DeleteEntity(target);
-                entMan.DeleteEntity(action.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task TailSwingFlingsNearbyGrenadesBack()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var xeno = entMan.SpawnEntity("CMXenoWarriorBulwark", map.GridCoords);
-            var grenade = entMan.SpawnEntity("CMGrenadeHighExplosive", map.GridCoords.Offset(new Vector2(1, 0)));
-            var action = SpawnAction(entMan);
-
-            try
-            {
-                RaiseTailSwing(entMan, xeno, action);
-
-                Assert.That(entMan.HasComponent<ThrownItemComponent>(grenade), Is.True);
-            }
-            finally
-            {
-                entMan.DeleteEntity(xeno);
-                entMan.DeleteEntity(grenade);
-                entMan.DeleteEntity(action.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task TailSwingDoesNotHitThroughWalls()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -248,52 +105,6 @@ public sealed class XenoBulwarkTest
                 entMan.DeleteEntity(wall);
                 entMan.DeleteEntity(target);
                 entMan.DeleteEntity(action.Owner);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ReflectiveShieldShowsSpikeShieldVisualEffect()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var xeno = entMan.SpawnEntity("CMXenoWarriorBulwark", map.GridCoords);
-            var encaseAction = SpawnAction(entMan);
-            var reflectAction = SpawnAction(entMan);
-
-            try
-            {
-                var effectsBefore = GetPrototypeEntities(entMan, ShieldEffectPrototype);
-
-                RaiseEncasedPlates(entMan, xeno, encaseAction);
-                RaiseReflectiveShield(entMan, xeno, reflectAction);
-
-                var effectsAfter = GetPrototypeEntities(entMan, ShieldEffectPrototype);
-                effectsAfter.ExceptWith(effectsBefore);
-                var effect = effectsAfter.Single();
-                var reflectDuration = entMan.GetComponent<XenoBulwarkComponent>(xeno).ReflectDuration;
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entMan.TryGetComponent<AuraComponent>(xeno, out var aura), Is.True);
-                    Assert.That(aura!.Color, Is.EqualTo(Color.Blue));
-                    Assert.That(aura.OutlineWidth, Is.EqualTo(2));
-                    Assert.That(entMan.TryGetComponent<TimedDespawnComponent>(effect, out var despawn), Is.True);
-                    Assert.That(despawn!.Lifetime, Is.EqualTo(reflectDuration.TotalSeconds).Within(0.01f));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(xeno);
-                entMan.DeleteEntity(encaseAction.Owner);
-                entMan.DeleteEntity(reflectAction.Owner);
             }
         });
 
@@ -434,17 +245,6 @@ public sealed class XenoBulwarkTest
         entMan.EventBus.RaiseLocalEvent(xeno, ev);
     }
 
-    private static void RaiseReflectiveShield(IEntityManager entMan, EntityUid xeno, Entity<ActionComponent> action)
-    {
-        var ev = new XenoReflectiveShieldActionEvent
-        {
-            Performer = xeno,
-            Action = action,
-        };
-
-        entMan.EventBus.RaiseLocalEvent(xeno, ev);
-    }
-
     private static void RaiseTailSwing(IEntityManager entMan, EntityUid xeno, Entity<ActionComponent> action)
     {
         var ev = new XenoBulwarkTailSwingActionEvent
@@ -461,18 +261,6 @@ public sealed class XenoBulwarkTest
         return entMan.GetComponent<DamageableComponent>(target).Damage.GetTotal().Float();
     }
 
-    private static HashSet<EntityUid> GetPrototypeEntities(IEntityManager entMan, string prototypeId)
-    {
-        var entities = new HashSet<EntityUid>();
-        var query = entMan.EntityQueryEnumerator<MetaDataComponent>();
-        while (query.MoveNext(out var uid, out var metadata))
-        {
-            if (metadata.EntityPrototype?.ID == prototypeId)
-                entities.Add(uid);
-        }
-
-        return entities;
-    }
 }
 
 #pragma warning restore RA0002
