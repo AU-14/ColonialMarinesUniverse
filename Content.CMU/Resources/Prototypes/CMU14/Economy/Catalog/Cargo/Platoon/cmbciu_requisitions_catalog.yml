@@ -5,6 +5,17 @@
   components:
   - type: RequisitionsComputer
     categories:
+    - name: Sentries
+      entries:
+      - cost: 3000
+        crate: AU14CaseSentry
+        maxStock: 15
+      - cost: 3500
+        crate: AU14CaseSentryFlamer
+        maxStock: 15
+      - cost: 1000
+        crate: RMCEngineeringUpgrade
+        maxStock: 15
     - name: Materials
       entries:
       - cost: 250

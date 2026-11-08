@@ -1605,6 +1605,14 @@
       sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
       state: vend
     sections:
+    - name: Sentry equipment
+      entries:
+      - id: AU14CaseSentryFlamer
+        amount: 5
+      - id: AU14CaseSentry
+        amount: 5
+      - id: RMCEngineeringUpgrade
+        amount: 5
     - name: Standard issue primaries
       entries:
       - id: RMCWeaponRifleM54CMK1Unloaded
