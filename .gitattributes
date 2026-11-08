@@ -32,5 +32,9 @@
 Resources/Maps/**/*.yml merge=mapping-merge-driver
 Content.CMU/Resources/Maps/**/*.yml merge=mapping-merge-driver
 
+# Stable Garrison's serialized map layers are too large for GitHub to render as text diffs.
+# Keep them as YAML at runtime, but omit multi-million-line patches from pull request metadata.
+Content.CMU/Resources/Maps/CMU14/Planets/StableGarrison/StableGarrisonMultiZ*.yml -diff
+
 # CMU14: Garrison model exports are binary assets.
 *.glb binary
