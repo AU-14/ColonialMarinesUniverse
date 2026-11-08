@@ -5,7 +5,10 @@ normal player load. Socket drops can discard movement inputs and acknowledgement
 before the game can process them. Check the game's socket, not only cumulative
 container-wide UDP counters.
 
-The profile requests 4 MiB per game receive socket as an initial tuning value.
+The CMU server requests 4 MiB per game receive socket by default. Explicit
+instance settings and command-line overrides still take precedence, and client
+defaults are unchanged. The profile below provides the matching host ceiling
+and an explicit instance setting.
 Validate it at comparable player load. A larger queue can absorb bursts but
 cannot fix a receiver that remains slower than the incoming stream or a server
 whose simulation exceeds its tick budget.
@@ -45,9 +48,12 @@ Keep those two sources of input delay distinct when interpreting the results.
 
 ## Receive during outgoing bursts
 
-The CMU engine enables nonblocking socket reads between completed connection
-heartbeats after 32 outgoing packets. This lets queued inputs and ACKs reach the
-managed receive queue while the server is still sending other players' states.
+The CMU engine enables a nonblocking socket read before outgoing heartbeat work,
+then reads between completed connection heartbeats after 32 outgoing packets.
+Reading first lets already-queued ACKs retire reliable messages before a resend
+scan, avoiding unnecessary retransmission. Enabled peers process incoming ACKs
+every heartbeat while preserving outgoing ACK coalescing. Interleaving lets inputs and ACKs
+reach the managed receive queue while the server is still sending other players' states.
 A single connection can exceed the interval. All reads share the original
 whole-heartbeat packet and byte limits, and client peers keep their original
 receive schedule. The server also dispatches queued messages between additional
@@ -56,8 +62,8 @@ simulation catch-up ticks.
 `net.receive_interleave_packets` controls the server's sent-packet interval at
 socket creation. Set it to `0` in the instance configuration and restart during
 maintenance to disable interleaving; the default is `32`. This is independent of
-`net.receivebuffersize` and does not enlarge the kernel queue. Measure socket
-drops and TPS at comparable load after deployment before attributing a change
+`net.receivebuffersize`. The receive schedule does not enlarge the kernel queue.
+Measure socket drops and TPS at comparable load after deployment before attributing a change
 in rubberbanding to either setting.
 
 ## Apply during planned maintenance
@@ -79,6 +85,9 @@ in rubberbanding to either setting.
    namespace to check the bound game port. Linux reports doubled socket-buffer
    accounting, so a successful 4 MiB request normally appears as `rb8388608`.
    A smaller value indicates a cap or an unapplied configuration.
+   Server startup also logs requested and OS-reported receive-buffer bytes for
+   each bound address family. The Linux host's default `rmem_max` can still cap
+   a larger application request; changing the game default alone is insufficient.
 6. Compare the same socket inode's drop counter over a representative interval
    with no profiler attached. Record connected/attached players, packet rate,
    TPS, frame stalls, and client state-buffer behavior. A new socket resets its
