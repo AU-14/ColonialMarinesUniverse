@@ -86,6 +86,7 @@
     bullet: 25
     bio: 5
     explosionArmor: 20
+  
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14UPPPilot
@@ -96,12 +97,12 @@
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
-
+  
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14AltynCustom
   name: Altyn-R2M Custom
-  description: An old earth design initially created for special forces and internal security to use in close quarters combat. Still worn by UPP forces after more than a century. This one has been custom painted in black and white paint.
+  description: An old earth design initially created for special forces and internal security to use in close quarters combat. Still worn by UPP forces after more than a century. This one has been custom painted with black and white paint.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/UPP/helmets/blackaltyn.rsi
