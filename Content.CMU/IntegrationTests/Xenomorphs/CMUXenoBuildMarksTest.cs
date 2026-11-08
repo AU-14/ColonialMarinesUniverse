@@ -82,8 +82,10 @@ public sealed class CMUXenoBuildMarksTest
             entities.System<AreaSystem>().ReplaceArea(areaGrid, mapSystem.CoordinatesToTile(map.Grid.Owner, map.Grid.Comp, target), "CMUTestBuildMarkArea");
             hive = entities.SpawnEntity(hiveId, map.GridCoords);
             // Pooled servers may already be past the normal instant-build window.
+#pragma warning disable RA0002 // Test setup extends the instant-build window on the isolated hive.
             entities.GetComponent<HiveComponent>(hive).InstantBuildDuration =
                 entities.System<SharedGameTicker>().RoundDuration() + TimeSpan.FromMinutes(1);
+#pragma warning restore RA0002
             if (!instant)
             {
                 while (construction.TryUseHiveInstantBuild(hive))
