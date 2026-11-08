@@ -269,9 +269,9 @@ def runtime_settings(name):
     # Four cold pairs start eight worlds and can exhaust hosted-runner memory
     # before a test finishes. Two workers keep setup below the inactivity limit.
     workers, hang = 2, "5m"
-    if name.startswith("cmu_yautja_smoke") or name in ("cmu_threed", "map_loading", "nightly_affected"):
+    if name.startswith(("cmu_yautja_smoke", "nightly_affected")) or name in ("cmu_threed", "map_loading"):
         workers = 1
-    if name in ("cmu_movement", "map_loading", "nightly_affected"):
+    if name.startswith("nightly_affected") or name in ("cmu_movement", "map_loading"):
         hang = "20m"
     return workers, hang
 
@@ -315,7 +315,8 @@ def priority_fixtures(record, affected):
 def plan_run(selected, paths, event, shards):
     names = [shard.get("name", "") for shard in shards]
     if not names or len(names) != len(set(names)) or any(
-        not re.fullmatch(r"[a-z][a-z0-9_]*", name) or name in ("unit", "nightly_affected") for name in names
+        not re.fullmatch(r"[a-z][a-z0-9_]*", name) or name == "unit" or name.startswith("nightly_affected")
+        for name in names
     ):
         raise ValueError("Gameplay groups need unique safe names; unit and nightly_affected are reserved")
     state = Path(os.environ.get("CMU_CI_STATE", ".ci"))
@@ -362,8 +363,19 @@ def plan_run(selected, paths, event, shards):
     if selected["gameplay"] and nightly:
         # Scheduled sweeps stay out of unrelated runs, but a changed fixture or
         # one reached through production dependencies must not be excluded by POLICY.
-        shards.append(dict(name="nightly_affected", filter=" | ".join(
-            "FullyQualifiedName~" + fixture + "." for fixture in nightly)))
+        selection = " | ".join("FullyQualifiedName~" + fixture + "." for fixture in nightly)
+        entity_fixture = "Content.IntegrationTests.Tests.EntityTest"
+        if entity_fixture in nightly:
+            # Each bulk entity sweep needs its own budget; together with other
+            # nightly fixtures they exceed the 30-minute group timeout.
+            selection = "(" + selection + ")"
+            for suffix, method in (("maps", "SpawnAndDeleteAllEntitiesOnDifferentMaps"),
+                                   ("dirty", "SpawnAndDirtyAllEntities"),
+                                   ("count", "SpawnAndDeleteEntityCountTest")):
+                shards.append(dict(name="nightly_affected_entity_" + suffix,
+                                   filter=f"FullyQualifiedName~{entity_fixture}. & Name={method}"))
+                selection += f" & FullyQualifiedName!={entity_fixture}.{method}"
+        shards.append(dict(name="nightly_affected", filter=selection))
         notes.append(f"Included {len(nightly)} affected nightly fixtures.")
     records = {}
     for kind in ("trusted", "baseline", "latest"):
@@ -382,7 +394,7 @@ def plan_run(selected, paths, event, shards):
             # execution explicitly rejects an empty filter.
             shard["filter"] = ""
         else:
-            shard["filter"] = "(" + shard["filter"] + ")" + ("" if name == "nightly_affected" else POLICY)
+            shard["filter"] = "(" + shard["filter"] + ")" + ("" if name.startswith("nightly_affected") else POLICY)
         record = records.get(name, {})
         if not isinstance(record, dict):
             record = {}
