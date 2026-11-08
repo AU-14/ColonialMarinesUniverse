@@ -1,9 +1,0 @@
-- type: entity
-  parent: Vmarker
-  id: CMUThreatRallyPoint
-  name: threat rally point
-  description: Calls nearby threat to this location.
-  components:
-  - type: CMUThreatRallyPoint
-    radius: 50
-    arrivalRadius: 2

@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Raijin Hydroelectric"
     mapId: AUTrijentMap
-    inRotation: false
     lorePrimer: AU14PrimerPlanetTrijent
     allegiance: TWE
     camouflage: Desert

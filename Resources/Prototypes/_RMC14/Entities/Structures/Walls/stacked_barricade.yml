@@ -4,7 +4,6 @@
   name: metal Barricades
   description: Two metal barricades stacked ontop of eachother to make a makeshift wall.
   components:
-  - type: CMUThreatBarricadeTarget
   - type: Rotatable
   - type: Appearance
   - type: Fixtures

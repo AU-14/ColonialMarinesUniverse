@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Shivas' Snowball"
     mapId: auShivas
-    inRotation: false
     lorePrimer: AU14PrimerPlanetShivasSnowball
     allegiance: UA
     camouflage: Snow

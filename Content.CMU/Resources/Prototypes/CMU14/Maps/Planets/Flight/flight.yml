@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Flight"
     mapId: Flight
-    inRotation: false
     lorePrimer: AU14PrimerPlanetFlight
     allegiance: UA
     camouflage: Urban

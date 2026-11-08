@@ -5,7 +5,6 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.ZLevels.Vehicles;
-using Content.Shared.CMU14.SceneAnimation;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
@@ -13,7 +12,6 @@ using Content.Shared.Destructible;
 using Content.Shared.Doors.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Standing;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.Stunnable;
@@ -358,14 +356,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
         if (args.OtherEntity == ent.Owner)
             return;
-
-        if (TryComp(ent.Owner, out CMUSceneMoverComponent? sceneMover) &&
-            (HasComp<CMUSceneMoverComponent>(args.OtherEntity) ||
-             sceneMover.IgnoreMobCollisions && HasComp<MobStateComponent>(args.OtherEntity)))
-        {
-            args.Cancelled = true;
-            return;
-        }
 
         if (TryComp(args.OtherEntity, out VehicleRideSurfaceRiderComponent? rider) && rider.Vehicle == ent.Owner)
         {

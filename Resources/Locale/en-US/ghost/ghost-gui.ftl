@@ -61,8 +61,7 @@ ghost-target-window-subtab-thralls = Thralls
 ghost-target-window-subtab-abominations = Abominations
 ghost-target-window-subtab-leaders = Leaders
 ghost-target-window-subtab-members = Members
-# CMU14
-ghost-target-window-subtab-threat = Threat
+ghost-target-window-subtab-summoners = Summoners
 ghost-target-window-subtab-warp-points = Warp Points
 
 ghost-roles-window-title = Threats and Third Parties
