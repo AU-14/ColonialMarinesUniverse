@@ -1,0 +1,8 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Construction recipes now show materials stored in held or worn backpacks,
+    and the construction menu stays open while placing builds.
+  type: Tweak
+time: '2026-11-07T20:45:30.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2504

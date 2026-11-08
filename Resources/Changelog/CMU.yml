@@ -17499,5 +17499,35 @@
   id: 1011
   time: '2026-11-08T13:27:58.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2517
+- author: TheHellFireo
+  changes:
+  - message: Xenos can destrain through the evolution menu, with a 30-minute cooldown
+      after each successful use.
+    type: Add
+  id: 1012
+  time: '2026-11-08T15:35:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2539
+- author: TheHellFireo
+  changes:
+  - message: Fixed RMC Actions sometimes selecting a hiveless xeno variant under a
+      normal caste button.
+    type: Admin
+  id: 1013
+  time: '2026-11-08T15:57:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2540
+- author: TheHellFireo
+  changes:
+  - message: Added craftable inserter arms with moving joints, flexible cables and
+      visible carried items for factory assembly lines.
+    type: Add
+  - message: Electrolyzers now separate their products into dedicated outlets instead
+      of pumping out input water.
+    type: Fix
+  - message: Default ASRS platforms now pay the shared account for exports, including
+      oil barrels.
+    type: Fix
+  id: 1014
+  time: '2026-11-08T16:00:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2538
 Name: CMU
 Order: -1

@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Strain;
 using Content.Shared.CMU14.Administration;
+using Content.Shared.CMU14.Hiveless;
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared.Eui;
 using Content.Shared.Prototypes;
@@ -52,8 +53,11 @@ public sealed partial class RMCAdminEui
             if (proto.Abstract)
                 continue;
 
+            // Hiveless variants share caste names and must not replace normal transform choices.
             if (proto.TryComp(out XenoComponent? xeno, _compFactory) &&
-                !proto.HasComp<XenoHiddenComponent>(_compFactory) && !proto.HasComp<XenoStrainComponent>(_compFactory))
+                !proto.HasComp<XenoHiddenComponent>(_compFactory) &&
+                !proto.HasComp<XenoStrainComponent>(_compFactory) &&
+                !proto.HasComp<HivelessComponent>(_compFactory))
             {
                 var category = proto.HasComp<CMUPathogenHiveMemberComponent>(_compFactory) ? 1 : 0;
                 // Variants such as Gambler inherit their caste's name and must survive deduplication.

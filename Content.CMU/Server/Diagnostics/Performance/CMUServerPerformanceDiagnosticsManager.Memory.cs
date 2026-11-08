@@ -1,3 +1,4 @@
+using System.Globalization;
 using Content.Server.CMU14.ZLevels.Core;
 
 namespace Content.Server.CMU14.Diagnostics.Performance;
@@ -18,10 +19,15 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager
             $"fragmentedBytesAtLastGc={memory.FragmentedBytesAtLastGc} committedBytesAtLastGc={memory.CommittedBytesAtLastGc} ",
             $"memoryLoadBytesAtLastGc={memory.MemoryLoadBytesAtLastGc} availableMemoryBytes={memory.AvailableMemoryBytes} ",
             $"gcIndex={memory.GcIndex} totalAllocatedBytes={memory.TotalAllocatedBytes} ",
-            $"processAllocatedBytesPerSecond={memory.AllocatedBytesPerSecond:F0} ",
+            $"processAllocatedBytesPerSecond={FormatAllocationRate(memory.AllocatedBytesPerSecond)} ",
+            $"allocationRateStatus={memory.AllocationRateStatus} ",
+            $"mainThreadAllocatedBytesPerSecond={FormatAllocationRate(memory.MainThreadAllocatedBytesPerSecond)} ",
             $"gen0Collections={memory.Gen0Collections} gen1Collections={memory.Gen1Collections} gen2Collections={memory.Gen2Collections} ",
             $"threadPoolThreads={memory.ThreadPoolThreads} threadPoolPending={memory.ThreadPoolPending}");
     }
+
+    private static string FormatAllocationRate(double? rate) =>
+        rate?.ToString("F0", CultureInfo.InvariantCulture) ?? "unavailable";
 
     private string DescribePvsRetention()
     {
