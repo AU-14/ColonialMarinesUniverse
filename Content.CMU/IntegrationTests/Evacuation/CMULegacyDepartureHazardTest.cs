@@ -46,7 +46,7 @@ public sealed class CMULegacyDepartureHazardTest : GameTest
             var query = SEntMan.EntityQueryEnumerator<MetaDataComponent, TransformComponent, DamageOnCollideComponent>();
             while (query.MoveNext(out _, out var metadata, out var transform, out _))
             {
-                if (!metadata.Deleted && metadata.EntityPrototype?.ID == "FloorDeathEntity" && transform.MapID == mapId)
+                if (!metadata.Deleted && metadata.EntityPrototype?.ID == "FloorDeathEntity" && transform.MapUid == map)
                     hazards++;
             }
 

@@ -60,7 +60,6 @@
   parent: StructureHealthMachineFlimsy
   id: BaseLightHousingDestructible
   components:
-  - type: CMUThreatLightTarget
   - type: Damageable
     damageModifierSet: SteelMod
   - type: Destructible

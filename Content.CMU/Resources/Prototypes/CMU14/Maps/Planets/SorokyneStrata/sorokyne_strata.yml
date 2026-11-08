@@ -5,7 +5,6 @@
   - type: RMCPlanetMapPrototype
     votename: "Sorokyne Strata"
     mapId: au14sorokyne
-    inRotation: false
     lorePrimer: AU14PrimerPlanetSorokyne
     allegiance: UPP
     camouflage: Jungle

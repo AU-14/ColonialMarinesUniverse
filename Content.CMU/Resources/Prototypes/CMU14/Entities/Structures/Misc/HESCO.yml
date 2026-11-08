@@ -32,7 +32,6 @@
   name: HESCO wall
   description: A fully raised and packed HESCO wall. Solid enough to stop bullets and block sight entirely.
   components:
-  - type: CMUThreatBarricadeTarget
   - type: Transform
     anchored: true
   - type: InteractionOutline

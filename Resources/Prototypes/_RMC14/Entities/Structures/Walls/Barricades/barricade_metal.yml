@@ -7,7 +7,6 @@
   name: metal barricade
   description: A sturdy and easily assembled barricade made of metal plates, often used for quick fortifications. Use a blowtorch to repair.
   components:
-  - type: CMUThreatBarricadeTarget
   - type: VehicleSmashable
     minDestroyWeightClass: Light
     minContinueWeightClass: Medium
@@ -433,7 +432,6 @@
   name: folding metal barricade
   description: A folding metal barricade weaker than the non-folding counterpart. Able to be opened and closed at a moment's notice. Repair with a welder.
   components:
-  - type: CMUThreatBarricadeTarget
   - type: VehicleSmashable
     requiredVehicleTag: VehicleHeavy
   - type: Anchorable

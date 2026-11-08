@@ -7,8 +7,6 @@
     votename: "Stable Garrison"
     mapId: StableGarrisonReduxDistress
     announcement: "A distress signal has been received from Stable Garrison. A response force has been dispatched to investigate."
-    govforinship: false
-    opforinship: false
     daycycleenabled: false
     inRotation: false
     threats:
@@ -18,8 +16,6 @@
 - type: gameMap
   id: StableGarrisonReduxDistress
   mapName: Stable Garrison Distress
-  zLevelsComponentOverrides:
-  - type: CMU3DMap
   allegiance: UA
   mapPath: /Maps/CMU14/Planets/StableGarrisonDistress/StableGarrisonDistressMultiZ0.yml
   mapsAbove:
@@ -33,7 +29,7 @@
   randomRotation: false
   stations:
     StableGarrisonRedux:
-      stationProto: CMUStandardGroundBase
+      stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
           mapNameTemplate: 'Stable Garrison Distress'

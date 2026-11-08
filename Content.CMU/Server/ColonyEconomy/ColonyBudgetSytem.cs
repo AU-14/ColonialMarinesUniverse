@@ -5,7 +5,7 @@ namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed class ColonyBudgetSystem : EntitySystem
 {
-    private float _budget = ColonyBudgetMapComponent.DefaultBudget;
+    private float _budget;
 
     public override void Initialize()
     {

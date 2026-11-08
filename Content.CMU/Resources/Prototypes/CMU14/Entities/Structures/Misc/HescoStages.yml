@@ -20,7 +20,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: CMUThreatBarricadeTarget
   - type: Transform
     anchored: true
   - type: Clickable
@@ -68,7 +67,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: CMUThreatBarricadeTarget
   - type: Transform
     anchored: true
   - type: Clickable
@@ -130,7 +128,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: CMUThreatBarricadeTarget
   - type: Transform
     anchored: true
   - type: Clickable
@@ -192,7 +189,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: CMUThreatBarricadeTarget
   - type: Transform
     anchored: true
   - type: Clickable
@@ -265,7 +261,6 @@
   placement:
     mode: SnapgridCenter
   components:
-  - type: CMUThreatBarricadeTarget
   - type: Transform
     anchored: true
   - type: Clickable

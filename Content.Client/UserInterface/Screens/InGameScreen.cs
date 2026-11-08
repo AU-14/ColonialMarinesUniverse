@@ -13,11 +13,6 @@ public abstract class InGameScreen : UIScreen
     public Action<Vector2>? OnChatResized;
 
     public abstract ChatBox ChatBox { get; }
-    public bool CinematicMode { get; protected set; }
 
     public abstract void SetChatSize(Vector2 size);
-    public virtual void SetCinematicMode(bool enabled)
-    {
-        CinematicMode = enabled;
-    }
 }

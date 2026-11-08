@@ -88,31 +88,16 @@ public sealed partial class ItemCamouflageSystem : EntitySystem
             if (TerminatingOrDeleted(ent))
                 continue;
 
-            ApplyCamouflage(ent, ent.Comp.CamouflageOverride ?? CurrentMapCamouflage);
+            _appearance.SetData(ent, ItemCamouflageVisuals.Camo, CurrentMapCamouflage);
+
+            if (ent.Comp.CamoNames != null && ent.Comp.CamoNames.TryGetValue(CurrentMapCamouflage, out var camoName))
+                _metaData.SetEntityName(ent, camoName);
+
+            if (ent.Comp.CamoDescriptions != null && ent.Comp.CamoDescriptions.TryGetValue(CurrentMapCamouflage, out var camoDescription))
+                _metaData.SetEntityDescription(ent, camoDescription);
+
+            if (ent.Comp.States != null && ent.Comp.States.TryGetValue(CurrentMapCamouflage, out var camoState))
+                _item.SetHeldPrefix(ent, camoState);
         }
-    }
-
-    public void SetCamouflage(Entity<ItemCamouflageComponent?> ent, CamouflageType camouflage)
-    {
-        if (!Resolve(ent, ref ent.Comp, false))
-            return;
-
-        ent.Comp.CamouflageOverride = camouflage;
-        Dirty(ent);
-        ApplyCamouflage((ent.Owner, ent.Comp), camouflage);
-    }
-
-    private void ApplyCamouflage(Entity<ItemCamouflageComponent> ent, CamouflageType camouflage)
-    {
-        _appearance.SetData(ent, ItemCamouflageVisuals.Camo, camouflage);
-
-        if (ent.Comp.CamoNames != null && ent.Comp.CamoNames.TryGetValue(camouflage, out var camoName))
-            _metaData.SetEntityName(ent, camoName);
-
-        if (ent.Comp.CamoDescriptions != null && ent.Comp.CamoDescriptions.TryGetValue(camouflage, out var camoDescription))
-            _metaData.SetEntityDescription(ent, camoDescription);
-
-        if (ent.Comp.States != null && ent.Comp.States.TryGetValue(camouflage, out var camoState))
-            _item.SetHeldPrefix(ent, camoState);
     }
 }
