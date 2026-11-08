@@ -145,7 +145,15 @@ public sealed partial class ZLevelBuildingSystem
             Dirty(level);
         }
 
-        return new CMUCavernField(world.Seed, caverns);
+        // The recipe is fixed at first use. Chunk and column queries share its bounded geometry caches.
+        if (world.Sampler == null || world.SamplerSeed != world.Seed || world.SamplerSettings != caverns)
+        {
+            world.Sampler = new CMUCavernField(world.Seed, caverns);
+            world.SamplerSeed = world.Seed;
+            world.SamplerSettings = caverns;
+        }
+
+        return world.Sampler;
     }
 
     private List<Entity<ZGeneratedStoneComponent>> GetCavernColumn(Entity<ZGeneratedStoneComponent> level, Vector2i tile)
