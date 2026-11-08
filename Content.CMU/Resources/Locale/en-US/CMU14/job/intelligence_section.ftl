@@ -45,4 +45,32 @@ cmu-access-intelligence-section = Intelligence Section
 
 cmu-radio-intel-section = Intelligence
 
-cmu-intel-gru-altyn-needs-heavy-armor = You must be wearing the UH7 GRU armor to wear this.
+reagent-name-cmu-intel-gru-sedative = Sedative
+reagent-desc-cmu-intel-gru-sedative = A fast-acting sedative that keeps its target asleep until it leaves the blood.
+
+cmu-intel-briefcase-locked = {CAPITALIZE(THE($briefcase))} is locked. You need its key in hand to open it.
+cmu-intel-briefcase-wrong-key = This key doesn't fit {THE($briefcase)}.
+cmu-intel-briefcase-cuff-gone = The cuff on {THE($briefcase)} has been cut off.
+cmu-intel-briefcase-hold-to-cuff = Hold {THE($briefcase)} in your hand to cuff it on.
+cmu-intel-briefcase-cuffed = You cuff {THE($briefcase)} to your wrist.
+cmu-intel-briefcase-uncuffed = {CAPITALIZE(THE($briefcase))} comes free of your wrist.
+cmu-intel-briefcase-uncuffed-others = {CAPITALIZE(THE($user))} unlocks the cuff on {THE($briefcase)}.
+cmu-intel-briefcase-cut-start-self = You start cutting through the cuff on {THE($briefcase)}.
+cmu-intel-briefcase-cut-start-others = {CAPITALIZE(THE($user))} starts cutting the briefcase cuff on {THE($wearer)}'s wrist.
+cmu-intel-briefcase-cut-self = The cuff on {THE($briefcase)} is cut through.
+cmu-intel-briefcase-cut-others = {CAPITALIZE(THE($user))} cuts {THE($briefcase)} free of {THE($wearer)}'s wrist.
+cmu-intel-briefcase-examine-cuffed = It is cuffed to {THE($wearer)}'s wrist.
+cmu-intel-briefcase-examine-cut = Its cuff has been cut off.
+cmu-intel-briefcase-examine-free = Its cuff hangs open.
+cmu-intel-briefcase-examine-wearer = {CAPITALIZE(SUBJECT($wearer))} {CONJUGATE-HAVE($wearer)} a briefcase cuffed to {POSS-ADJ($wearer)} wrist.
+cmu-intel-briefcase-verb-unlock = Unlock briefcase cuff
+cmu-intel-briefcase-verb-cut = Cut briefcase cuff
+
+cmu-intel-briefcase-key-verb-swallow = Swallow
+cmu-intel-briefcase-key-mouth-blocked = Your mouth is covered.
+cmu-intel-briefcase-key-swallow-start = You try to swallow {THE($key)}.
+cmu-intel-briefcase-key-swallow-start-others = {CAPITALIZE(THE($user))} puts something in {POSS-ADJ($user)} mouth.
+cmu-intel-briefcase-key-swallowed = You swallow {THE($key)}.
+cmu-intel-briefcase-key-swallowed-others = {CAPITALIZE(THE($user))} swallows something.
+cmu-intel-swallowed-vomit-self = Something hard comes back up!
+cmu-intel-swallowed-vomit-others = Something comes up with {THE($user)}'s vomit.

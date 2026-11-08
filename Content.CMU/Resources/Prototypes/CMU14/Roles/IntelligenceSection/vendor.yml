@@ -136,23 +136,41 @@
       choices: { CMUIntelParaEars: 1 }
       entries:
       - id: CMUHeadElectronicHearingProtection
+    # Two picks, so a balaclava can be worn under the L22 or swapped for it.
     - name: Face Cover
-      choices: { CMUIntelParaMask: 1 }
+      choices: { CMUIntelParaMask: 2 }
       entries:
       - id: RMCMaskBalaclava
       - id: RMCMaskBalaclavaGreen
+      - id: CMU14MaskGasSAS
+    - name: Goggles
+      choices: { CMUIntelParaEyes: 1 }
+      entries:
+      - id: RMCGogglesBallistic
+      - id: RMCGogglesBallisticBlack
+    # Clips into the Mk16 helmet.
+    - name: Night Vision
+      choices: { CMUIntelParaNightVision: 1 }
+      entries:
+      - id: CMUHelmetGarbNightVisionM1A1
     - name: Belt
       choices: { CMUIntelParaBelt: 1 }
       entries:
       - id: AU14BeltMarineRMC
       - id: AU14BeltHolsterPistolRMC
-    - name: Personal Defense Weapon
+    - name: Primary Weapon
       choices: { CMUIntelParaPrimary: 1 }
       entries:
       - id: AU14WeaponSMGL90A2
-    - name: PDW Ammunition
+      - id: RMCWeaponRifleL83A2
+      - id: CMU14WeaponSMGMP5SD
+    - name: Primary Ammunition
       entries:
       - id: AU14MagazineSMGL90A2
+        maxPerUser: 4
+      - id: RMCMagazineRifleL83A2
+        maxPerUser: 4
+      - id: CMMagazineSMGMP5
         maxPerUser: 4
     - name: Handguns
       choices: { CMUIntelParaSidearm: 1 }
@@ -210,6 +228,19 @@
       - id: RMCMaskBalaclava
       - id: RMCMaskBalaclavaGreen
       - id: CMMaskCoif
+    - name: Eyewear
+      choices: { CMUIntelParaEyes: 1 }
+      entries:
+      - id: AU14GogglesM1A1Ballistic
+      - id: AU14GogglesM1A1DarkBallistic
+      - id: AU14GogglesM1A1PolarizedBallistic
+      - id: RMCSunglasses
+    - name: Gloves
+      choices: { CMUIntelParaGloves: 1 }
+      entries:
+      - id: RMCHandsCombat
+      - id: AU14PVEHandsFingerlessBlackGloves
+      - id: RMCHandsBrownMarine
     - name: Belt
       choices: { CMUIntelParaBelt: 1 }
       entries:
@@ -220,11 +251,14 @@
       entries:
       - id: RMCWeaponRifleMAR30
       - id: RMCWeaponSMGM63B2
+      - id: CMU14WeaponRifleXM4RA1SOPMODFilled
     - name: Primary Ammunition
       entries:
       - id: RMCMagazineRifleMAR40
         maxPerUser: 4
       - id: CMMagazineSMGM63
+        maxPerUser: 4
+      - id: CMMagazineRifleM4SPR
         maxPerUser: 4
     - name: Handguns
       choices: { CMUIntelParaSidearm: 1 }
@@ -241,9 +275,23 @@
       entries:
       - id: RMCGrenadeFlashBang
         maxPerUser: 2
+    # Black out a target's radios before a snatch. It cuts the team's own outgoing radio too.
+    - name: Comms Denial
+      entries:
+      - id: AU14RadioJammer
+        maxPerUser: 1
+    # Plant the beacon at the safehouse, strap a fulton to a person or crate, and it is pulled back to the beacon.
+    - name: Extraction
+      entries:
+      - id: FultonBeacon
+        maxPerUser: 1
+      - id: Fulton1
+        maxPerUser: 2
     - name: Field Supplies
       entries:
       - id: AU14PouchIFAKFill
+        maxPerUser: 1
+      - id: AU14PouchFlareFilledRMC
         maxPerUser: 1
       - id: RMCZipties
         maxPerUser: 2
@@ -265,12 +313,11 @@
     - CMUJobIntelGRUSpetsnazOfficer
     - CMUJobIntelGRUSpetsnazMember
     sections:
-    # Each player can take one of each piece; the helmet will not go on without the armor.
-    - name: Heavy Armor Set
-      takeAll: CMUIntelParaArmor
+    # The Altyn comes built into the armor, like a pressure suit's helmet.
+    - name: Heavy Armor
+      choices: { CMUIntelParaArmor: 1 }
       entries:
       - id: CMUIntelGRUHeavyArmor
-      - id: CMUIntelGRUAltyn
     - name: Hearing Protection
       choices: { CMUIntelParaEars: 1 }
       entries:
@@ -288,11 +335,11 @@
     - name: Primary Weapon
       choices: { CMUIntelParaPrimary: 1 }
       entries:
-      - id: AU14WeaponRifleAG80
+      - id: RMCWeaponRifleAK4047
       - id: RMCWeaponSMGType64
     - name: Primary Ammunition
       entries:
-      - id: AU14MagazineRifleAG80
+      - id: RMCMagazineRifleAK4047
         maxPerUser: 6
       - id: RMCMagazineSMGType64
         maxPerUser: 6
@@ -322,13 +369,10 @@
       - id: RuMCUPPPouchIFAKFill
         maxPerUser: 1
 
-# The GRU heavy set. The UH7 carries a tag the Altyn checks for, the same way the
-# scout cloak checks for scout armor; stock UPP pieces stay unpaired.
-- type: Tag
-  id: CMUIntelGRUHeavyArmor
-
 # Same protection and weight as the stock UH7. Unlike it, it goes on without UPP fatigues,
 # so the team can wear it over whatever cover clothes they arrived in.
+# Its Altyn stays stowed in the armor and is raised or lowered with the armor's helmet action,
+# the way a pressure suit's helmet is. Taking the armor off pulls the Altyn back in.
 - type: entity
   parent: RMCArmorSPPHeavy
   id: CMUIntelGRUHeavyArmor
@@ -342,25 +386,39 @@
   - type: RemoveComponents
     components:
     - type: ClothingRequireEquipped
-  - type: Tag
-    tags:
-    - WhitelistChameleon # inherited from the stock UH7; listing tags replaces the parent's
-    - CMUIntelGRUHeavyArmor
+  - type: ToggleableClothing
+    clothingPrototype: CMUIntelGRUAltyn
+    action: ActionToggleSuitPiece
 
 - type: entity
   parent: AU14Altyn
   id: CMUIntelGRUAltyn
+  categories: [ HideSpawnMenu ]
   suffix: Intelligence Section, GRU
-  components:
-  - type: ClothingRequireEquipped
-    autoUnequip: true
-    whitelist:
-      tags:
-      - CMUIntelGRUHeavyArmor
-    denyReason: cmu-intel-gru-altyn-needs-heavy-armor
+  description: An old earth design initially created for special forces and internal security to use in close quarters combat. This one is clipped to a UH7 GRU armor's harness and stows on its back when not worn.
 
-# One quick jab leaves the target slow and drowsy long enough to be cuffed and carried off.
-# Chloral hydrate slows and drowses the target; it does not knock anyone out on its own.
+# The GRU snatch sedative. It keeps the target asleep for as long as any of it is in the blood:
+# a 10u dose wears off after about 40 seconds. It does no damage, so a second dose only lengthens the sleep.
+- type: reagent
+  parent: CMReagent
+  id: CMUIntelGRUSedative
+  name: reagent-name-cmu-intel-gru-sedative
+  desc: reagent-desc-cmu-intel-gru-sedative
+  physicalDesc: reagent-physical-desc-nondescript
+  color: "#3B3B7A"
+  flavor: bitter
+  unknown: true
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.25
+      effects:
+      - !type:GenericStatusEffect
+        key: Unconscious
+        component: RMCUnconscious
+        type: Update
+        time: 3
+
+# One jab puts the target to sleep long enough to be cuffed and carried off.
 - type: entity
   parent: CMAutoInjector
   id: CMUIntelGRUSedativeInjector
@@ -376,7 +434,7 @@
       pen:
         maxVol: 10
         reagents:
-        - ReagentId: ChloralHydrate
+        - ReagentId: CMUIntelGRUSedative
           Quantity: 10
   - type: SolutionContainerVisuals
     maxFillLevels: 1

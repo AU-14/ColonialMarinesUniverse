@@ -1,7 +1,11 @@
-using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.Stun;
+using Content.Shared.Body.Systems;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Clothing.Components;
+using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Preferences;
@@ -9,11 +13,13 @@ using Content.Shared.Roles;
 using Content.Shared.Tag;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.CMU14.Roles;
 
 /// <summary>
-///     The GRU armor goes on without UPP fatigues, and the GRU Altyn only goes on over that armor.
+///     The GRU armor goes on without UPP fatigues and carries its own Altyn, raised and lowered like a pressure
+///     suit's helmet. The GRU sedative puts its target to sleep.
 /// </summary>
 [TestFixture]
 public sealed class CMUIntelParamilitaryGearTest : GameTest
@@ -34,12 +40,11 @@ public sealed class CMUIntelParamilitaryGearTest : GameTest
             }
 
             var coords = SEntMan.GetComponent<TransformComponent>(mob).Coordinates;
-            var altyn = SEntMan.SpawnEntity("CMUIntelGRUAltyn", coords);
             var armor = SEntMan.SpawnEntity("CMUIntelGRUHeavyArmor", coords);
             var stockArmor = SEntMan.SpawnEntity("RMCArmorSPPHeavy", coords);
 
-            // A freshly spawned test mob fails unrelated equip checks, so items go on by force and each
-            // item's own wear rule is asked directly through the event a real equip raises.
+            // A freshly spawned test mob fails unrelated equip checks, so the armor goes on by force and its
+            // own wear rule is asked directly through the event a real equip raises.
             bool Allowed(EntityUid item, string slot)
             {
                 Assert.That(inventory.TryGetSlot(mob, slot, out var definition), Is.True);
@@ -48,28 +53,82 @@ public sealed class CMUIntelParamilitaryGearTest : GameTest
                 return !attempt.Cancelled;
             }
 
-            bool AltynAllowed() => Allowed(altyn, "head");
-
             // The section spawns in civilian clothes, not UPP fatigues.
             Assert.That(Allowed(stockArmor, "outerClothing"), Is.False, "stock UH7 should still need UPP fatigues");
             Assert.That(Allowed(armor, "outerClothing"), Is.True, "the GRU armor must go on over civilian clothes");
 
-            Assert.That(AltynAllowed(), Is.False, "the Altyn went on without armor");
-            Assert.That(inventory.TryEquip(mob, stockArmor, "outerClothing", silent: true, force: true), Is.True);
-            Assert.That(AltynAllowed(), Is.False, "stock UH7 must not unlock the Altyn");
+            // The armor keeps the stock UH7's tags.
+            Assert.That(SComp<TagComponent>(armor).Tags, Is.SupersetOf(SComp<TagComponent>(stockArmor).Tags.ToList()));
 
-            Assert.That(inventory.TryUnequip(mob, "outerClothing", silent: true, force: true), Is.True);
+            // The Altyn arrives stowed inside the armor.
+            var toggle = SComp<ToggleableClothingComponent>(armor);
+            Assert.That(toggle.ClothingUid, Is.Not.Null, "the GRU armor spawned without its Altyn");
+            var altyn = toggle.ClothingUid!.Value;
+            Assert.That(SComp<MetaDataComponent>(altyn).EntityPrototype?.ID, Is.EqualTo("CMUIntelGRUAltyn"));
+            Assert.That(toggle.Container?.ContainedEntity, Is.EqualTo(altyn), "the Altyn should start stowed in the armor");
+
             Assert.That(inventory.TryEquip(mob, armor, "outerClothing", silent: true, force: true), Is.True);
-            Assert.That(AltynAllowed(), Is.True, "the Altyn must go on over the GRU armor");
+            Assert.That(Allowed(altyn, "head"), Is.True, "nothing should stop the Altyn going on over the GRU armor");
 
-            // Listing the pairing tag replaces the inherited ones, so check none were lost.
-            var stockTags = SEntMan.TryGetComponent<TagComponent>(stockArmor, out var stock)
-                ? stock.Tags.ToHashSet()
-                : new HashSet<ProtoId<TagPrototype>>();
-            Assert.That(SComp<TagComponent>(armor).Tags, Is.SupersetOf(stockTags), "the pairing tag replaced the armor's own tags");
+            // Raising the helmet puts the Altyn on the head; lowering it stows it again.
+            SEntMan.EventBus.RaiseLocalEvent(armor, new ToggleClothingEvent { Performer = mob });
+            Assert.That(inventory.TryGetSlotEntity(mob, "head", out var head), Is.True, "raising the helmet put nothing on the head");
+            Assert.That(head, Is.EqualTo(altyn));
+
+            SEntMan.EventBus.RaiseLocalEvent(armor, new ToggleClothingEvent { Performer = mob });
+            Assert.That(inventory.TryGetSlotEntity(mob, "head", out _), Is.False, "lowering the helmet left it on the head");
+            Assert.That(toggle.Container?.ContainedEntity, Is.EqualTo(altyn));
+
+            // Taking the armor off with the Altyn up pulls the Altyn back into it.
+            SEntMan.EventBus.RaiseLocalEvent(armor, new ToggleClothingEvent { Performer = mob });
+            Assert.That(inventory.TryGetSlotEntity(mob, "head", out _), Is.True);
+            Assert.That(inventory.TryUnequip(mob, "outerClothing", silent: true, force: true), Is.True);
+            Assert.That(inventory.TryGetSlotEntity(mob, "head", out _), Is.False, "the Altyn stayed on after the armor came off");
+            Assert.That(toggle.Container?.ContainedEntity, Is.EqualTo(altyn));
 
             SEntMan.DeleteEntity(stockArmor);
             SEntMan.DeleteEntity(mob);
         });
+    }
+
+    [Test]
+    public async Task GruSedativePutsTheTargetToSleep()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid target = default;
+        await Server.WaitAssertion(() =>
+        {
+            // Give the injector's full dose straight to the blood.
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            var injector = SEntMan.SpawnEntity("CMUIntelGRUSedativeInjector", map.GridCoords);
+            Assert.That(solutions.TryGetSolution(injector, "pen", out _, out var pen), Is.True);
+            Assert.That(pen!.ContainsReagent("CMUIntelGRUSedative", null), Is.True, "the injector should hold the GRU sedative");
+
+            // The mob every player species spawns as.
+            target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Assert.That(Server.System<BloodstreamSystem>().TryAddToBloodstream(target, pen.Clone()), Is.True);
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(target), Is.False);
+            SEntMan.DeleteEntity(injector);
+        });
+
+        await RunSeconds(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(target), Is.True,
+                "the sedative should knock the target out, not just make them yawn");
+        });
+
+        // A 10u dose wears off after about 40 seconds.
+        await RunSeconds(50);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(target), Is.False, "the target never woke up");
+            SEntMan.DeleteEntity(target);
+        });
+    }
+
+    private Task RunSeconds(int seconds)
+    {
+        return RunTicksSync(seconds * Server.ResolveDependency<IGameTiming>().TickRate);
     }
 }
