@@ -259,6 +259,10 @@ public sealed partial class CMUThreatSystem
         htn.Blackboard.Remove<EntityCoordinates>(RallyCoordinatesKey);
         htn.Blackboard.Remove<PathResultEvent>(RallyPathfindKey);
         var steering = _steering.Register(uid, new EntityCoordinates(rallyPoint, System.Numerics.Vector2.Zero));
+        // Register reuses the existing steering component. A failed combat path leaves that component in
+        // NoPath, which otherwise makes the steering system ignore the new rally destination entirely.
+        steering.Status = SteeringStatus.Moving;
+        steering.FailedPathCount = 0;
         if (TryComp(rallyPoint, out CMUThreatRallyPointComponent? rally))
             steering.Range = rally.ArrivalRadius;
         StopMover(uid);
