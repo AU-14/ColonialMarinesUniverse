@@ -31,9 +31,11 @@
     noRot: true
     visible: false
   - type: Visibility
-    layer: 8192 # Xeno build mark
+    layer: 16 # CMU14: XenoBuildMark, without changing existing visibility layers.
   - type: XenoBuildMark
     states:
+      CMU14XenoMyceliumDoor: door # CMU14
+      CMU14XenoThickMyceliumDoor: door # CMU14
       DoorXenoResin: door
       DoorXenoResinThick: door
       XenoStickyResin: sticky

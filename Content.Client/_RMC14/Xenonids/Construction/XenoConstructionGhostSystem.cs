@@ -1,17 +1,15 @@
-using Robust.Shared.Timing;
-using Content.Shared.Tag;
-using Content.Shared.Interaction;
-using Content.Shared.Coordinates.Helpers;
-using Content.Shared.Actions;
-using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Client._RMC14.Movement;
-using System.Linq;
 using Content.Client.IconSmoothing;
 using Content.Client.UserInterface.Systems.Actions;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Construction.BuildMark;
 using Content.Shared._RMC14.Xenonids.Construction.Events;
+using Content.Shared._RMC14.Xenonids.Eye;
+using Content.Shared.Actions;
+using Content.Shared.Coordinates.Helpers;
 using Content.Shared.DoAfter;
+using Content.Shared.Interaction;
+using Content.Shared.Tag;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -22,7 +20,10 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using System.Linq;
 
 namespace Content.Client._RMC14.Xenonids.Construction;
 
@@ -35,7 +36,6 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly IPlayerManager _playerManager = default!;
     [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
@@ -113,7 +113,7 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
             if (!coords.IsValid(EntityManager))
                 return false;
 
-            if (!IsValidConstructionLocation(player.Value, coords))
+            if (!_xenoConstruction.CanOrderConstructionPopup((player.Value, construction), coords, construction.OrderConstructionChoice, false)) // CMU14
                 return false;
 
             var netCoords = GetNetCoordinates(coords);
@@ -296,7 +296,7 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
         if (!coords.IsValid(EntityManager))
             return null;
 
-        var snapped = coords.SnapToGrid(EntityManager, _mapManager);
+        var snapped = coords.SnapToGrid(EntityManager);
 
         if (_transform.GetGrid(snapped) is not { } gridId ||
             !TryComp(gridId, out MapGridComponent? grid))
@@ -475,7 +475,7 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
         }
 
         if (TryComp(_currentGhost.Value, out SpriteComponent? sprite))
-            sprite.Color = GetGhostColor(player.Value, coords, _buildMark.IsSecreting(player.Value));
+            _sprite.SetColor((_currentGhost.Value, sprite), GetGhostColor(player.Value, coords, _buildMark.IsSecreting(player.Value))); // CMU14
     }
 
     private bool IsMouseOverViewport()

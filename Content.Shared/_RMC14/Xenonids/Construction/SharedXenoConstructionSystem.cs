@@ -65,12 +65,7 @@ namespace Content.Shared._RMC14.Xenonids.Construction;
 
 public sealed partial class SharedXenoConstructionSystem : EntitySystem
 {
-
-
-
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
-
-
     [Dependency] private readonly XenoBuildMarkSystem _buildMark = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private AreaSystem _area = default!;
@@ -555,7 +550,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
         if (!_buildMark.CanMark(choice))
         {
-            if (CanSecreteOnTilePopup(xeno, choice, args.Target, true, true))
+            if (CanSecreteOnTilePopup(xeno, choice, args.Target, true, true, checkPlasma: !CanUseHiveInstantBuild(xeno)))
                 args.Handled = StartSecrete(xeno, choice, args.Target);
 
             return;
@@ -568,7 +563,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             if (!secreting &&
                 ownMark.Comp.Structure is { } markStructure &&
                 xeno.Comp.CanBuild.Contains(markStructure) &&
-                CanSecreteOnTilePopup(xeno, markStructure, args.Target, true, true, false) &&
+                CanSecreteOnTilePopup(xeno, markStructure, args.Target, true, true, false, checkPlasma: !CanUseHiveInstantBuild(xeno)) &&
                 StartSecrete(xeno, markStructure, args.Target))
             {
                 return;
@@ -578,7 +573,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return;
         }
 
-        var result = CheckSecreteOnTile(xeno, choice, args.Target, true, true, true, true);
+        var result = CheckSecreteOnTile(xeno, choice, args.Target, true, true, true, true, checkPlasma: !CanUseHiveInstantBuild(xeno));
         if (result == XenoSecreteTileResult.Blocked)
             return;
 
@@ -603,7 +598,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         AdjustForTarget(xeno, target, false);
         return xeno.Comp.CanBuild.Contains(choice) &&
                _actionBlocker.CanInteract(xeno, null) &&
-               CanSecreteOnTilePopup(xeno, choice, target, true, true, false) &&
+               CanSecreteOnTilePopup(xeno, choice, target, true, true, false, checkPlasma: !CanUseHiveInstantBuild(xeno)) &&
                CanAttemptSecrete(xeno, target) &&
                StartSecrete(xeno, choice, target);
     }
@@ -616,6 +611,12 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         var upgraded = GetResinUpgradeTarget(structure);
         if (xeno.Comp.CanBuild.Contains(upgraded))
             return upgraded;
+
+        // CMU14: neomorph evolution changes mycelium structures to their configured thick variants.
+        if (_prototype.TryIndex(structure, out var proto) &&
+            proto.TryComp(out XenoStructureUpgradeableComponent? upgrade, _compFactory) &&
+            upgrade.To is { } variant && xeno.Comp.CanBuild.Contains(variant))
+            return variant;
 
         return null;
     }
@@ -758,7 +759,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                IsHiveInstantBuildActive(hive);
     }
 
-    private bool CanUseHiveInstantBuild(EntityUid user)
+    public bool CanUseHiveInstantBuild(EntityUid user) // CMU14: also used by automatic marked construction.
     {
         var hive = _hive.GetHive(user);
         return hive is { } hiveEnt &&
@@ -1266,7 +1267,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             if (_buildMark.TryGetOwnMark(args.User, target, out _))
                 return;
 
-            if (CheckSecreteOnTile((args.User, construction), construction.BuildChoice, target, true, ent.Comp.CheckWeeds, true, true) == XenoSecreteTileResult.Blocked)
+            if (CheckSecreteOnTile((args.User, construction), construction.BuildChoice, target, true, ent.Comp.CheckWeeds, true, true, checkPlasma: !CanUseHiveInstantBuild(args.User)) == XenoSecreteTileResult.Blocked)
                 args.Invalid = true;
 
             return;

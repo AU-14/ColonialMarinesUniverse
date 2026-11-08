@@ -23,7 +23,6 @@ public sealed class XenoBuildMarkSystem : EntitySystem
 {
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private readonly IComponentFactory _compFactory = default!;
-    [Dependency] private readonly IMapManager _map = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IPrototypeManager _prototype = default!;
@@ -126,6 +125,7 @@ public sealed class XenoBuildMarkSystem : EntitySystem
     public bool CanMark(EntProtoId structure)
     {
         return _prototype.TryIndex(structure, out var proto) &&
+               !proto.HasComponent<Content.Shared.CMU14.Xenos.XenoOpenSpaceConstructionComponent>(_compFactory) && // CMU14: floor patches build without weeds.
                !proto.HasComponent<DesignNodeComponent>(_compFactory) &&
                !proto.HasComponent<DesignerDeleteDesignNodeComponent>(_compFactory) &&
                !proto.HasComponent<DesignerRemoteThickenResinComponent>(_compFactory);
@@ -177,7 +177,7 @@ public sealed class XenoBuildMarkSystem : EntitySystem
 
     public void PlaceMark(EntityUid xeno, EntityCoordinates coordinates, EntProtoId structure, bool busy)
     {
-        var snapped = coordinates.SnapToGrid(EntityManager, _map);
+        var snapped = coordinates.SnapToGrid(EntityManager);
         var markId = PredictedSpawnAtPosition(MarkId, snapped);
         var mark = EnsureComp<XenoBuildMarkComponent>(markId);
 
@@ -282,7 +282,7 @@ public sealed class XenoBuildMarkSystem : EntitySystem
 
     private bool CanAffordAnyCandidate(EntityUid xeno)
     {
-        if (HasComp<QueenBuildingBoostComponent>(xeno))
+        if (HasComp<QueenBuildingBoostComponent>(xeno) || _xenoConstruction.CanUseHiveInstantBuild(xeno)) // CMU14
             return true;
 
         TryComp(xeno, out XenoPlasmaComponent? plasma);
@@ -397,7 +397,7 @@ public sealed class XenoBuildMarkSystem : EntitySystem
         }
 
         var time = _timing.CurTime;
-        var tile = _transform.GetMoverCoordinates(uid).SnapToGrid(EntityManager, _map);
+        var tile = _transform.GetMoverCoordinates(uid).SnapToGrid(EntityManager);
         var retry = !tile.Equals(marker.LastTile) || time >= marker.NextRetry;
         marker.LastTile = tile;
         if (retry)
