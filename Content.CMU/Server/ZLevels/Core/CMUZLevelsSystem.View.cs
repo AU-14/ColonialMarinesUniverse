@@ -1168,7 +1168,8 @@ public sealed partial class CMUZLevelsSystem
                 _probeOpeningGrids,
                 _map,
                 _transform,
-                TilDefMan);
+                TilDefMan,
+                maxOpenings: MaxProbeOpeningLosChecks + 1);
         }
         else
         {
@@ -1180,7 +1181,8 @@ public sealed partial class CMUZLevelsSystem
                 _probeOpeningGrids,
                 _map,
                 _transform,
-                TilDefMan);
+                TilDefMan,
+                maxOpenings: MaxProbeOpeningLosChecks + 1);
         }
 
         if (Prof.IsEnabled)
@@ -1189,8 +1191,8 @@ public sealed partial class CMUZLevelsSystem
         if (_probeOpeningCandidates.Count == 0)
             return false;
 
-        // An unchecked aperture already keeps the subscription alive. Once over the LOS budget,
-        // no result from the checked apertures can change that decision, so skip their raycasts.
+        // One aperture beyond the LOS budget already keeps the subscription alive. Stop enumerating
+        // there: neither additional candidates nor raycasts can change that conservative decision.
         if (_probeOpeningCandidates.Count > MaxProbeOpeningLosChecks)
             return true;
 
