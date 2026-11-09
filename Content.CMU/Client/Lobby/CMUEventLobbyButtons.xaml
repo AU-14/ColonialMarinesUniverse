@@ -1,0 +1,6 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              Orientation="Vertical" SeparationOverride="5" HorizontalExpand="True">
+    <Button Name="CodeButton" Access="Public" Text="{Loc 'cmu-event-code-title'}" MinHeight="28" Visible="False" />
+    <Button Name="SetupButton" Access="Public" Text="{Loc 'cmu-event-setup-title'}" MinHeight="28" Visible="False" />
+</BoxContainer>

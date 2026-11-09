@@ -220,6 +220,13 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         bool checkRequirements,
         [NotNullWhen(false)] out FormattedMessage? reason)
     {
+        // CMU14 Begin: reflect the server's per-player event invitations in both job pickers.
+        if (_entManager.System<Content.Client.CMU14.Lobby.CMUEventAccessSystem>().IsLocked(job.ID))
+        {
+            reason = FormattedMessage.FromUnformatted(Loc.GetString("cmu-event-job-locked"));
+            return false;
+        }
+        // CMU14 End
         // Check the player's bans
         if (_jobBans.Contains(job.ID))
         {

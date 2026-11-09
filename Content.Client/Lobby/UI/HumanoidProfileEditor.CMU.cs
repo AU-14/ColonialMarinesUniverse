@@ -202,7 +202,7 @@ public sealed partial class HumanoidProfileEditor
 
         RefreshThreatPreferences();
         // CMU14: Force on Force roles, hijacking, announcements and identification.
-        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        UpdateEventSideControls(); // CMU14
         FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         InitializeNamedItems();
         CrtLobbyTheme.Apply(this);
@@ -372,7 +372,7 @@ public sealed partial class HumanoidProfileEditor
     private void UpdateCmuControls()
     {
         // CMU14: Force on Force roles, hijacking, announcements and identification.
-        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        UpdateEventSideControls(); // CMU14
         FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         MarkPreviewJobsDirty();
         UpdateRegulationHairPickers();
@@ -537,7 +537,8 @@ public sealed partial class HumanoidProfileEditor
         var previousSignature = _previewJobSignature;
         _previewJobs.Clear();
         if (Profile != null)
-            _previewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(Profile, _prototypeManager));
+            _previewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(EventProfile()!, _prototypeManager)
+                .Where(entry => !EventAccess.IsLocked(entry.Job.ID))); // CMU14
 
         _previewJobSignature = LobbyHighJobPreview.GetSignature(_previewJobs);
         _previewJobsDirty = false;

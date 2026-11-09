@@ -160,6 +160,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         InitializeMetrics();
         _pvsMetrics = new(Prometheus.Metrics.DefaultFactory, _timing.RealTime);
         InitializePhysicsMetrics();
+        InitializePerformanceWindow();
 
         if (_enabled)
         {
@@ -226,6 +227,9 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             ResetEpoch("round-change");
         }
 
+        if (_windowEnabled && now >= _windowNextReport)
+            WritePerformanceWindow(now);
+
         double stallThreshold = GetStallThreshold();
         bool hardStall = stallThreshold > 0 &&
                          _timing.RealFrameTime.TotalMilliseconds >= stallThreshold;
@@ -243,6 +247,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _config.UnsubValueChanged(CCVars.CMUServerPerformanceDiagnosticsEnabled, SetEnabled);
         _config.UnsubValueChanged(CCVars.CMUServerPerformanceLogEnabled, SetLogEnabled);
         _config.UnsubValueChanged(CVars.ProfEnabled, OnProfilerEnabledChanged);
+        ShutdownPerformanceWindow();
         UnhookEntityEvents();
         if (_profilerEnabledByDiagnostics && _profiler.IsEnabled)
             SetProfilerCVar(false);
@@ -269,7 +274,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             $"tick={observation.Tick} targetTps={observation.TargetTps:F2} achievedTps={observation.AchievedTps:F2} ",
             $"fps={observation.AverageFps:F2} frameMs={observation.FrameMilliseconds:F2} ",
             $"entities={observation.EntityCount} components={observation.ComponentCount} ",
-            $"players={observation.Players} profiler={_profiler.IsEnabled} metrics={_config.GetCVar(CVars.MetricsEnabled)} ",
+            $"players={observation.Players} profiler={_profiler.IsEnabled} metrics={_config.GetCVar(CVars.MetricsEnabled)} windowEnabled={_windowEnabled} ",
             $"profilerEventCapacity={_profiler.Buffer.LogBuffer.Length} profilerIndexCapacity={_profiler.Buffer.IndexBuffer.Length} ",
             $"churnIncidents={_config.GetCVar(CCVars.CMUServerPerformanceChurnIncidents)} capturePhase=input-post-engine ") + DescribeMemory() + " " + DescribeDiagnosticsCost();
     }
@@ -999,6 +1004,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _operations.Clear();
         _pvsMetrics.Reset(now);
         _physicsMetrics.Reset(now);
+        ResetPerformanceWindow(now, true);
         _lastRuntimeSample = default;
         _churnBaseline = _churn.Snapshot();
         _lastMessageBandwidth = new(_netManager.MessageBandwidthUsage);
@@ -1057,6 +1063,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             _profilerEnabledByDiagnostics = false;
             _sawmill.Info("[CMU-PERF] diagnostics-disabled");
         }
+        RefreshPerformanceWindowEnabled(enabled);
     }
 
     private void SetLogEnabled(bool enabled)
@@ -1324,6 +1331,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             return;
 
         _churn.ComponentAdded(args.ComponentType.Name);
+        ObserveWindowProjectile(args);
         _componentAddCounter?.Add(1);
     }
 

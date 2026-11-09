@@ -165,12 +165,76 @@ process, and count/sum reads are not atomic; test servers should use isolated re
 ```text
 cmuperf status
 cmuperf report
+cmuperf window
 cmuperf reset
 ```
 
 - `status` prints the latest scalar observation and active incident.
 - `report` writes a bounded profiler/ECS/network report immediately, even during the automatic detail cooldown.
 - `reset` re-anchors rate windows and healthy baselines without retaining entity IDs.
+- `window` writes and starts a new opt-in performance window, without running a full-world census or parsing the profiler ring.
+
+## Continuous performance windows
+
+After deploying this version, enable continuous telemetry from the server admin console:
+
+```text
+> cvar cmu.server_performance.window_enabled true
+> cmuperf status
+```
+
+The performance monitor (`cmu.server_performance.enabled`) and log output
+(`cmu.server_performance.log_enabled`) must also be enabled. They normally already are.
+Continuous mode defaults off and is deliberately not archived; it cannot silently remain enabled
+after a restart. The default window is five seconds. To reduce output, set
+`cmu.server_performance.window_interval` to 10 or more (clamped to 5–60 seconds).
+The new mode does not enable an HTTP metrics endpoint or change gameplay, physics,
+state delivery, or client prediction.
+
+```text
+> cmuperf window
+> cvar cmu.server_performance.window_enabled false
+```
+
+Each scheduled window emits 13 bounded records, without player names, IDs, coordinates,
+packet contents, or full-world scans. Group its records by `windowId`; the summary also
+links to the current `incidentId`:
+
+- `performance-window`: round/phase, tick interval, attached and moving players, held movement input,
+  player contact edges and maximum contacts, busiest 8×8 world-unit cell, connected-session
+  ping percentiles, ACK lag and time since ACK progress, initial/manual versus recovery
+  full-state requests, gunfire broadcasts, projectile component additions, network byte and
+  packet deltas, GC pause delta, and the existing cached memory observation.
+- Three `tick-window` records: timers/tasks/simulation, post-tick/state-send, and their
+  combined duration **for the same tick**. They retain every completed observed phase in
+  fixed-size histograms; separate catch-up ticks remain separate. Counts, averages, maximum,
+  worst tick and over-budget count accompany p95/p99 **bucket upper bounds**. `>1000` is the
+  overflow bucket, not a 1,000 ms cap. Missing observations stay unavailable.
+- Eight `pvs-window` records: independent deltas of the existing PVS stage timers.
+  Manual `cmuperf pvs` and incident reports do not drain the continuous window, or vice versa.
+- `window-report-cost`: elapsed reporting time and number of sessions inspected, so the
+  instrumentation's own cost remains visible.
+
+Movement, contacts and density are a snapshot at the end of the window; they are not
+window peaks. Moving means body-relative linear speed above 0.1 world units/second.
+Player contact edges are broadphase contact lists, not confirmed touching pairs; contacts
+between two player bodies count twice. An 8×8 cell is a coarse density indicator, affected
+by cell boundaries and not equivalent to screen visibility. Gunfire counts existing
+successful gunfire broadcasts, not every projectile in a shotgun or every damage hit.
+Projectile additions measure component churn, not the number currently in flight.
+
+ACKs prove receipt, not successful state application or rendering. Ping and ACK lag are
+snapshots over connected sessions; these cannot by themselves identify UDP packet loss.
+Use the existing bounded Linux `Tools/_CMU14/network-buffers/profile-game-socket.py`
+capture to measure socket receive backlog and kernel drops alongside these windows.
+Existing `cmu.client_state` health reports supply client application evidence without
+adding a client message or requiring a new client.
+
+Module timing excludes frame sleep and input, but is wall time including GC and scheduling,
+not CPU time. PVS stages overlap the post-tick phase and one another; do not sum them.
+PVS counters are process-wide and their count/sum reads are not atomic. Memory samples
+include their age and counter availability. Toggle, round reset, and monitor disable/re-enable
+start fresh windows; disconnected sessions are released immediately.
 
 Existing deeper tools remain available:
 
@@ -191,13 +255,15 @@ all retained frames since capture started, so prefer a finite frame count during
 
 ## Configuration
 
-All automatic-monitor CVars are server-only and archived. In the table, the first row is the full name and every following suffix is under the same `cmu.server_performance.*` prefix.
+All automatic-monitor CVars are server-only. They are archived except for the opt-in window settings. In the table, the first row is the full name and every following suffix is under the same `cmu.server_performance.*` prefix.
 
 | CVar | Default | Effect |
 | --- | ---: | --- |
 | `cmu.server_performance.enabled` | `true` | Master switch. |
 | `churn_incidents` | `false` | Enable standalone ECS growth/churn incidents and automatic ECS rankings. |
 | `log_enabled` | `true` | Write diagnostic logs; does not control metrics or collection. |
+| `window_enabled` | `false` | Emit continuous aggregate windows; runtime-only, requires the monitor. |
+| `window_interval` | `5` s | Continuous window cadence, clamped to 5–60 seconds; runtime-only. |
 | `sample_interval` | `1` s | Full observation cadence; hard stalls are still checked every frame. |
 | `warmup` | `30` s | Suppresses rate/growth triggers after startup or a new round. Hard stalls/allocation/network remain active. |
 | `heartbeat_interval` | `60` s | Log heartbeat in every incident state; `0` disables it. |

@@ -45,6 +45,12 @@ public sealed partial class CMUServerPerformanceCommand : IConsoleCommand
                 else
                     shell.WriteError(Loc.GetString("cmu-cmd-server-perf-reset-unavailable"));
                 break;
+            case "window":
+                if (_diagnostics.CaptureWindowReport())
+                    shell.WriteLine(Loc.GetString("cmu-cmd-server-perf-window-written"));
+                else
+                    shell.WriteError(Loc.GetString("cmu-cmd-server-perf-window-unavailable"));
+                break;
             default:
                 shell.WriteError(Help);
                 break;
@@ -54,7 +60,7 @@ public sealed partial class CMUServerPerformanceCommand : IConsoleCommand
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         return args.Length == 1
-            ? CompletionResult.FromOptions(["status", "report", "pvs", "physics", "reset"])
+            ? CompletionResult.FromOptions(["status", "report", "pvs", "physics", "window", "reset"])
             : CompletionResult.Empty;
     }
 }
