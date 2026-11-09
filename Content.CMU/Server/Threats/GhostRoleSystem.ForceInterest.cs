@@ -1,4 +1,5 @@
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.CMU14.Threats;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
 using Robust.Shared.Player;
@@ -9,6 +10,25 @@ namespace Content.Server.Ghost.Roles;
 
 public sealed partial class GhostRoleSystem
 {
+    /// <summary>Hides a staged body until the deployment has assigned its volunteers.</summary>
+    internal void HoldForceRole(EntityUid body)
+    {
+        EnsureComp<PendingForceRoleComponent>(body);
+        if (TryComp<GhostRoleComponent>(body, out var role))
+            UnregisterGhostRole((body, role));
+    }
+
+    internal void ReleaseForceRole(EntityUid body)
+    {
+        RemComp<PendingForceRoleComponent>(body);
+        if (TryComp<GhostRoleComponent>(body, out var role)
+            && role.LifeStage == ComponentLifeStage.Running
+            && !IsControlledGhostRole(body))
+            RegisterGhostRole((body, role));
+    }
+
+    private bool IsPendingForceRole(EntityUid body) => HasComp<PendingForceRoleComponent>(body);
+
     // the force only takes people who pass this later, so the threat vote has to hold the same people
     public bool CanPlayForceJob(ICommonSession player, ProtoId<JobPrototype> job)
     {

@@ -1,0 +1,30 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: USS Bush decks can no longer be mined downward, and departing evacuation
+    boats no longer leave invisible lethal zones.
+  type: Fix
+- message: Gunships can hover over clear air above colony terrain, including older
+    maps.
+  type: Fix
+- message: Free evolution slots now count castes correctly.
+  type: Fix
+- message: Distillation towers support five separate pipe routes, and incoming fluid
+    no longer steals space reserved for an active batch's products.
+  type: Fix
+- message: Fallen wall debris no longer grinds against other solid objects after a
+    collapse.
+  type: Fix
+- message: Insurgent mail uses the public occupation, and retiring trade ships release
+    their landing pads. Trading help now explains item intake.
+  type: Fix
+- message: Filing cabinets contain CM paperwork instead of upstream folders and NanoTask
+    cartridges.
+  type: Fix
+- message: Commanding officers receive a clothing kit and can select restored handcannon
+    belt rewards using existing unlock rules.
+  type: Add
+- message: Native fuel research reports show read-only combustion measurements.
+  type: Add
+time: '2026-11-06T18:00:30.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2485

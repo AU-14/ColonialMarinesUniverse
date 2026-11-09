@@ -33,3 +33,12 @@ au14-autoports-input-on = Turn on the automatic input
 au14-autoports-input-off = Turn off the automatic input
 au14-autoports-output-on = Turn on the automatic output
 au14-autoports-output-off = Turn off the automatic output
+
+ent-CMUInserterArm = inserter arm
+    .desc = Moves items from behind it into machines, containers or conveyor belts in front. Right-click to rotate, stop or pick it up. Examine it to check the transfer direction.
+cmu-craft-inserter-arm = Inserter arm
+cmu-inserter-disable = Stop the inserter
+cmu-inserter-enable = Start the inserter
+cmu-inserter-direction = Transfers items to the { $side }, taking them from the opposite tile.
+cmu-inserter-busy = Wait for the arm to finish, or release its held item first.
+cmu-inserter-release = Release the held item
