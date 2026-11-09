@@ -132,6 +132,13 @@ which loss mechanism occurred in every old incident. A larger buffer cannot reco
 8. Correlate the incident window with external heap/RSS, GC pause, CPU, and thread-pool metrics.
 9. If memory continues rising, take two dumps several minutes apart under comparable load and compare surviving type/root growth.
 
+`profile-sample category=physics-time` retains the recorded `PreSolve`, `Broadphase`, `Collide`,
+`Generate Manifolds`, `Build Islands`, `Solve Islands`, and `PostSolve` groups even when larger parent
+scopes occupy the general engine ranking. These are inclusive sampled scopes: manifold generation is
+inside collision processing, and island solving includes updating body transforms and movement events.
+Their calls count physics substeps across the retained frames, not whole game ticks. Missing groups
+are unobserved, not zero cost. This uses the existing bounded profile read without another capture or census.
+
 Use `phase-window` to distinguish a long simulation tick from a long post-tick/state-send interval when the
 profiler has no finer PVS scope. `post-tick-and-state-send` includes content post-tick callbacks and game-state
 generation/serialization/sending; it does not separate those substeps or identify GC pauses. Pair it with
