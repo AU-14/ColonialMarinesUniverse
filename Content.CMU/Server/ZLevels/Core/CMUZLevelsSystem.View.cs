@@ -356,6 +356,14 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnViewerParentChange(Entity<CMUZLevelViewerComponent> ent, ref EntParentChangedMessage args)
     {
+        if (args.OldMapId == args.Transform.MapUid)
+        {
+            // Reparenting on the same map does not invalidate existing probe maps.
+            // Keep their subscriptions while budgeted discovery refreshes visibility.
+            QueueProbeRefresh(ent.Owner);
+            return;
+        }
+
         // Parent changes are also raised while an entire grid is recursively
         // transferred between maps. Updating immediately can add/remove probe
         // eyes while that transform hierarchy is still being enumerated,
