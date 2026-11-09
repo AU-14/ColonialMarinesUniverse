@@ -78,7 +78,6 @@
     Pilot: AU14UPPAirCrewWeaponsVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUPP
     ReqVend: AU14UPPRequisitionVendor
-    RadioTelephoneOperator: AU14UPPFireTeamLeaderVendor
     EngiEquipment: AU14EngineeringStaffVendor
     VehicleCrew: AU14VehicleCrewmanVendorUPP
 
