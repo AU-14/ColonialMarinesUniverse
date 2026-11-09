@@ -254,6 +254,13 @@ public sealed class PitDiggingToolSystem : EntitySystem
         toolOverride = null;
         failReason = "au14-pit-tool-no-tile";
 
+        // This check also runs when the do-after finishes, so changing the CVar cancels pending excavations.
+        if (!_building.CanDigDown)
+        {
+            failReason = "cmu-dig-down-disabled";
+            return false;
+        }
+
         if (_transform.GetGrid(coords) is not { } gridUid || !_gridQuery.TryComp(gridUid, out var grid))
             return false;
 
