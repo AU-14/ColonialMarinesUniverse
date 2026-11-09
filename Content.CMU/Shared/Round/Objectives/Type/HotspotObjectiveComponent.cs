@@ -1,7 +1,9 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Round.Objectives.Type;
 
+[Serializable, NetSerializable]
 public enum HotspotVisuals : byte
 {
     ZoneColor,
