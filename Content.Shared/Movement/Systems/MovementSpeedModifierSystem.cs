@@ -116,10 +116,22 @@ namespace Content.Shared.Movement.Systems
                 return;
             }
 
-            ent.Comp.WeightlessAcceleration = ev.WeightlessAcceleration * ev.WeightlessAccelerationMod;
-            ent.Comp.WeightlessModifier = ev.WeightlessModifier * ev.WeightlessModifierMod;
-            ent.Comp.WeightlessFriction = _airDamping * ev.WeightlessFriction * ev.WeightlessFrictionMod;
-            ent.Comp.WeightlessFrictionNoInput = _airDamping * ev.WeightlessFrictionNoInput * ev.WeightlessFrictionNoInputMod;
+            // CMU14 Begin: compare the published values after scaling to avoid replicating unchanged modifiers.
+            var acceleration = ev.WeightlessAcceleration * ev.WeightlessAccelerationMod;
+            var modifier = ev.WeightlessModifier * ev.WeightlessModifierMod;
+            var friction = _airDamping * ev.WeightlessFriction * ev.WeightlessFrictionMod;
+            var frictionNoInput = _airDamping * ev.WeightlessFrictionNoInput * ev.WeightlessFrictionNoInputMod;
+            if (acceleration.Equals(ent.Comp.WeightlessAcceleration)
+                && modifier.Equals(ent.Comp.WeightlessModifier)
+                && friction.Equals(ent.Comp.WeightlessFriction)
+                && frictionNoInput.Equals(ent.Comp.WeightlessFrictionNoInput))
+                return;
+
+            ent.Comp.WeightlessAcceleration = acceleration;
+            ent.Comp.WeightlessModifier = modifier;
+            ent.Comp.WeightlessFriction = friction;
+            ent.Comp.WeightlessFrictionNoInput = frictionNoInput;
+            // CMU14 End
             Dirty(ent);
         }
 
@@ -208,8 +220,17 @@ namespace Content.Shared.Movement.Systems
                 && MathHelper.CloseTo(ev.Acceleration, ent.Comp.Acceleration))
                 return;
 
-            ent.Comp.Friction = _frictionModifier * ev.Friction;
-            ent.Comp.FrictionNoInput = _frictionModifier * ev.FrictionNoInput;
+            // CMU14 Begin: the stored friction already includes the tile multiplier.
+            var friction = _frictionModifier * ev.Friction;
+            var frictionNoInput = _frictionModifier * ev.FrictionNoInput;
+            if (friction.Equals(ent.Comp.Friction)
+                && frictionNoInput.Equals(ent.Comp.FrictionNoInput)
+                && ev.Acceleration.Equals(ent.Comp.Acceleration))
+                return;
+
+            ent.Comp.Friction = friction;
+            ent.Comp.FrictionNoInput = frictionNoInput;
+            // CMU14 End
             ent.Comp.Acceleration = ev.Acceleration;
 
             Dirty(ent);
