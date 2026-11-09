@@ -132,6 +132,7 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshJobs()
     {
+        UpdateEventSideControls(); // CMU14
         foreach (var list in GetGamemodeJobLists())
             list.ReleaseChildren();
 
@@ -152,6 +153,7 @@ public sealed partial class HumanoidProfileEditor
             ("humanoid-profile-editor-job-priority-high-button", (int) JobPriority.High),
         };
 
+        var added = new HashSet<(BoxContainer Target, string Job)>(); // CMU14: a job may belong to several departments.
         foreach (var department in departments)
         {
             var departmentName = Loc.GetString(department.Name);
@@ -171,6 +173,8 @@ public sealed partial class HumanoidProfileEditor
                 foreach (var (target, gamemode, sectionKey, sectionTitle) in
                          GetJobSections(department, job, departmentName))
                 {
+                    if (!added.Add((target, job.ID))) // CMU14
+                        continue;
                     AddJobSelector(
                         target,
                         gamemode,
@@ -184,6 +188,7 @@ public sealed partial class HumanoidProfileEditor
             }
         }
 
+        AddForceOnForceJobSelectors(items); // CMU14: one row per shared role, using the eligible side.
         foreach (var list in GetGamemodeJobLists())
             CrtLobbyTheme.Apply(list);
 
@@ -424,7 +429,8 @@ public sealed partial class HumanoidProfileEditor
         if (department.Faction == "govfor")
         {
             var (key, title) = GetMilitaryJobSegment(job);
-            yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
+            // CMU14: FoF rows are built once from both sides by AddForceOnForceJobSelectors.
+            // yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
             yield return (
                 InsurgencyGovernmentJobList,
                 GamemodeInsurgency,
