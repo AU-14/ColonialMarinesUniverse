@@ -826,6 +826,11 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             .OrderByDescending(row => row.TotalAllocatedBytes)
             .Take(Math.Min(top, 5)));
 
+        // Parent scopes otherwise crowd the individual physics stages out of the top-five engine rows.
+        LogProfileRows("physics-time", profile.Samples.Where(row => !row.EntitySystem && row.Name is
+            "PreSolve" or "Broadphase" or "Collide" or "Generate Manifolds" or
+            "Build Islands" or "Solve Islands" or "PostSolve"));
+
         var gcCounters = profile.Counters.Where(row => row.Name is "Gen 0 Count" or "Gen 1 Count" or "Gen 2 Count");
         foreach (CMUPerformanceProfileCounter counter in gcCounters.Concat(profile.Counters
                      .Except(gcCounters)

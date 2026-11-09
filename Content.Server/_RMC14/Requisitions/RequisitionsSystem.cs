@@ -674,7 +674,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         if (rewards > 0)
         {
-            ChangeBudget(rewards, elevator.Comp.Faction);
+            // CMU14: Credit the resolved account, including default platforms mapped to "unassigned".
+            // ChangeBudget(rewards, elevator.Comp.Faction);
+            ChangeBudget(rewards, account.Comp.Faction);
             if (elevator.Comp.Faction != "colony")
             {
                 SendUIFeedback(Loc.GetString("requisition-paperwork-reward-message", ("amount", rewards)));

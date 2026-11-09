@@ -239,6 +239,7 @@
     maxRemoteConstructDistance: 11
   - type: XenoStrain
     name: rmc-xeno-resin-whisperer-name
+    baseCaste: CMXenoHivelord # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-resin-whisperer-description
     popup: rmc-xeno-resin-whisperer-popup
   - type: XenoHidden
@@ -328,6 +329,7 @@
   - type: XenoZoom
   - type: XenoStrain
     name: rmc-xeno-designer-name
+    baseCaste: CMXenoHivelord # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-designer-description
     popup: rmc-xeno-designer-popup
   - type: XenoHidden

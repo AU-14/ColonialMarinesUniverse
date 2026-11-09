@@ -356,6 +356,14 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnViewerParentChange(Entity<CMUZLevelViewerComponent> ent, ref EntParentChangedMessage args)
     {
+        if (args.OldMapId == args.Transform.MapUid)
+        {
+            // Reparenting on the same map does not invalidate existing probe maps.
+            // Keep their subscriptions while budgeted discovery refreshes visibility.
+            QueueProbeRefresh(ent.Owner);
+            return;
+        }
+
         // Parent changes are also raised while an entire grid is recursively
         // transferred between maps. Updating immediately can add/remove probe
         // eyes while that transform hierarchy is still being enumerated,
@@ -1181,6 +1189,11 @@ public sealed partial class CMUZLevelsSystem
         if (_probeOpeningCandidates.Count == 0)
             return false;
 
+        // An unchecked aperture already keeps the subscription alive. Once over the LOS budget,
+        // no result from the checked apertures can change that decision, so skip their raycasts.
+        if (_probeOpeningCandidates.Count > MaxProbeOpeningLosChecks)
+            return true;
+
         if (Prof.IsEnabled)
         {
             using var profile = Prof.Group("CMU Z PVS VisibleOpeningSort");
@@ -1203,9 +1216,7 @@ public sealed partial class CMUZLevelsSystem
                 return true;
         }
 
-        // Unchecked apertures may still be visible. Keep their probe subscription when the
-        // point-sample budget is exhausted; false is reserved for the existing fully checked policy.
-        return checkCount < _probeOpeningCandidates.Count;
+        return false;
     }
 
     private bool HasZOpeningNear(EntityUid map, Vector2 globalPos)
