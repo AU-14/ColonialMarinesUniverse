@@ -11,6 +11,7 @@ internal sealed class CMUPerformancePhaseTracker
     private string? _previous;
     private TimeSpan _started;
     private uint _tick;
+    public event Action<Phase, TimeSpan>? PhaseCompleted;
 
     public void Mark(ModUpdateLevel level, TimeSpan now, uint tick)
     {
@@ -47,6 +48,7 @@ internal sealed class CMUPerformancePhaseTracker
                 Math.Max(row.MaxMs, ms), ms >= row.MaxMs ? _tick : row.WorstTick);
             if (ms >= _frameWorst.MaxMs)
                 _frameWorst = new Phase(_previous, 1, ms, ms, _tick);
+            PhaseCompleted?.Invoke(new Phase(_previous, 1, ms, ms, _tick), _started);
         }
         _previous = next;
         _started = now;

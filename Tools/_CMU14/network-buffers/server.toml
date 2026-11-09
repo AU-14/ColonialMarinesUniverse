@@ -1,0 +1,4 @@
+# Merge into the existing instance configuration's [net] section.
+# Applied when the game opens its sockets; requires a planned server restart.
+[net]
+receivebuffersize = 4194304
