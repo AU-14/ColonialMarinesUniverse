@@ -47,6 +47,11 @@ cmu.server-performance
 [CMU-PERF]
 ```
 
+Memory samples use `allocationRateStatus=observed` when the approximate process counter advances.
+`no-counter-progress`, `counter-reset`, `clock-reset`, and `initial-sample` report an unavailable process
+rate, rather than zero. `mainThreadAllocatedBytesPerSecond` independently measures allocations on the
+game thread; it does not include PVS workers. Sampling never requests precise allocation counts or forces a GC.
+
 The principal records are:
 
 | Record | Meaning |
@@ -126,6 +131,13 @@ which loss mechanism occurred in every old incident. A larger buffer cannot reco
 7. Inspect send/receive rates. Message-type attribution is decoded **inbound** traffic only; the engine does not expose per-type outbound totals through this API.
 8. Correlate the incident window with external heap/RSS, GC pause, CPU, and thread-pool metrics.
 9. If memory continues rising, take two dumps several minutes apart under comparable load and compare surviving type/root growth.
+
+`profile-sample category=physics-time` retains the recorded `PreSolve`, `Broadphase`, `Collide`,
+`Generate Manifolds`, `Build Islands`, `Solve Islands`, and `PostSolve` groups even when larger parent
+scopes occupy the general engine ranking. These are inclusive sampled scopes: manifold generation is
+inside collision processing, and island solving includes updating body transforms and movement events.
+Their calls count physics substeps across the retained frames, not whole game ticks. Missing groups
+are unobserved, not zero cost. This uses the existing bounded profile read without another capture or census.
 
 Use `phase-window` to distinguish a long simulation tick from a long post-tick/state-send interval when the
 profiler has no finer PVS scope. `post-tick-and-state-send` includes content post-tick callbacks and game-state
