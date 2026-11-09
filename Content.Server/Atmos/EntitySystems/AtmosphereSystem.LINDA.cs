@@ -118,9 +118,13 @@ namespace Content.Server.Atmos.EntitySystems
         {
             if (tile.Air != null)
             {
-                // TODO ATMOS: This is an extremely large hotspot in LINDA, accounting for 1/5th of its time.
-                // Please make GasMixture a struct or use a FauxGasMixture with an InlineArray to handle copying this sanely.
-                tile.AirArchived = new GasMixture(tile.Air);
+                // CMU14 Begin: retain independent archive storage between cycles. Tile construction
+                // can share immutable air with its initial archive, which must be detached first.
+                if (tile.AirArchived is not { Immutable: false } archive || ReferenceEquals(archive, tile.Air))
+                    tile.AirArchived = new GasMixture(tile.Air);
+                else
+                    archive.CopyFrom(tile.Air);
+                // CMU14 End
             }
             tile.ArchivedCycle = fireCount;
         }

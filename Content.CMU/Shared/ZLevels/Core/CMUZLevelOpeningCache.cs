@@ -190,6 +190,9 @@ public sealed class CMUZLevelOpeningCache
         return foundOpening;
     }
 
+    /// <summary>
+    /// Appends up to <paramref name="maxOpenings"/> matching centers in enumeration order, not distance order.
+    /// </summary>
     public void FindOpeningCentersNear(
         MapId mapId,
         Vector2 sourcePosition,
@@ -199,10 +202,11 @@ public sealed class CMUZLevelOpeningCache
         SharedMapSystem map,
         SharedTransformSystem transform,
         ITileDefinitionManager tileDefinition,
-        bool edgeOnly = true)
+        bool edgeOnly = true,
+        int maxOpenings = int.MaxValue)
     {
         FindOpeningsNear(mapId, sourcePosition, searchRadius, openings, null, gridScratch,
-            map, transform, tileDefinition, edgeOnly);
+            map, transform, tileDefinition, edgeOnly, maxOpenings);
     }
 
     /// <summary>
@@ -221,7 +225,7 @@ public sealed class CMUZLevelOpeningCache
         bool edgeOnly = true)
     {
         FindOpeningsNear(mapId, sourcePosition, searchRadius, null, portals, gridScratch,
-            map, transform, tileDefinition, edgeOnly);
+            map, transform, tileDefinition, edgeOnly, int.MaxValue);
     }
 
     private void FindOpeningsNear(
@@ -234,10 +238,15 @@ public sealed class CMUZLevelOpeningCache
         SharedMapSystem map,
         SharedTransformSystem transform,
         ITileDefinitionManager tileDefinition,
-        bool edgeOnly)
+        bool edgeOnly,
+        int maxOpenings)
     {
-        var searchBounds = Box2.CenteredAround(sourcePosition, new Vector2(searchRadius * 2f, searchRadius * 2f));
         gridScratch.Clear();
+        if (maxOpenings <= 0)
+            return;
+
+        var addedOpenings = 0;
+        var searchBounds = Box2.CenteredAround(sourcePosition, new Vector2(searchRadius * 2f, searchRadius * 2f));
         map.FindGridsIntersecting(mapId, searchBounds, ref gridScratch, approx: true, includeMap: true);
 
         if (gridScratch.Count == 0)
@@ -288,12 +297,6 @@ public sealed class CMUZLevelOpeningCache
                         tileStartX, tileEndX, tileStartY, tileEndY, cached, map, tileDefinition);
                     while (openings.MoveNext(out var openingTile))
                     {
-                        if (edgeOnly &&
-                            !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
-                        {
-                            continue;
-                        }
-
                         var center = Vector2.Transform(
                             new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f) * tileSize,
                             gridWorldMatrix);
@@ -301,9 +304,17 @@ public sealed class CMUZLevelOpeningCache
                         if (distanceSquared > searchRadiusSquared)
                             continue;
 
+                        if (edgeOnly &&
+                            !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
+                        {
+                            continue;
+                        }
+
                         var distance = MathF.Sqrt(distanceSquared);
                         centers?.Add((center, distance));
                         portals?.Add(new CMUZOpeningPortal(grid.Owner, openingTile, center, distance));
+                        if (++addedOpenings >= maxOpenings)
+                            return;
                     }
                 }
             }
@@ -695,18 +706,18 @@ public sealed class CMUZLevelOpeningCache
         ref float bestDistanceSquared,
         ref Vector2 bestOpeningCenter)
     {
-        if (edgeOnly &&
-            !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
-        {
-            return;
-        }
-
         var center = Vector2.Transform(
             new Vector2(openingTile.X + 0.5f, openingTile.Y + 0.5f) * tileSize,
             gridWorldMatrix);
         var distanceSquared = Vector2.DistanceSquared(sourcePosition, center);
         if (distanceSquared > searchRadiusSquared ||
             distanceSquared >= bestDistanceSquared)
+        {
+            return;
+        }
+
+        if (edgeOnly &&
+            !IsOpeningEdgeTile(grid, openingTile, localSourcePosition, sourceInsideOpening, map, tileDefinition))
         {
             return;
         }

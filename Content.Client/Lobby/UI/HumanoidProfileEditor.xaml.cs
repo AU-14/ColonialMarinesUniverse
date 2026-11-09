@@ -138,7 +138,7 @@ namespace Content.Client.Lobby.UI
             _requirements = requirements;
             _controller = UserInterfaceManager.GetUIController<LobbyUIController>();
             _sprite = _entManager.System<SpriteSystem>();
-            _requirements.Updated += RefreshYautjaTab;
+            _requirements.Updated += RefreshRoleRequirements; // CMU14: refresh every role when event access changes.
 
             _maxNameLength = _cfgManager.GetCVar(CCVars.MaxNameLength);
             _allowFlavorText = _cfgManager.GetCVar(CCVars.FlavorText);
@@ -475,7 +475,7 @@ namespace Content.Client.Lobby.UI
         [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
         protected override void Dispose(bool disposing)
         {
-            _requirements.Updated -= RefreshYautjaTab;
+            _requirements.Updated -= RefreshRoleRequirements; // CMU14
             base.Dispose(disposing);
             if (!disposing)
                 return;

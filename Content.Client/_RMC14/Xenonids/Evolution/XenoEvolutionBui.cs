@@ -52,6 +52,7 @@ public sealed partial class XenoEvolutionBui : BoundUserInterface
             }
         }
 
+        AddDestrain(); // CMU14: allow strains to return to their base caste.
         _window.StrainsLabel.Visible = _window.StrainsContainer.ChildCount > 0;
         Refresh();
     }
