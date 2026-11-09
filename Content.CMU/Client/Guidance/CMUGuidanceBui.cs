@@ -57,6 +57,28 @@ public sealed class CMUGuidanceBui(EntityUid owner, Enum key) : BoundUserInterfa
             coordinates.AddChild(new Label { Text = Loc.GetString("cmu-guidance-gps-y") });
             coordinates.AddChild(y);
             _body.AddChild(coordinates);
+            CMUGuidanceReport? selected = null;
+            if (settings.Reports.Count > 0)
+            {
+                var reports = new OptionButton { HorizontalExpand = true };
+                reports.AddItem(Loc.GetString("cmu-guidance-report-none"), -1);
+                for (var i = 0; i < settings.Reports.Count; i++)
+                {
+                    var report = settings.Reports[i];
+                    reports.AddItem(Loc.GetString("cmu-guidance-report-entry", ("observer", report.Observer),
+                        ("map", report.Map), ("x", report.X), ("y", report.Y)), i);
+                }
+                reports.OnItemSelected += args =>
+                {
+                    reports.SelectId(args.Id);
+                    selected = args.Id >= 0 ? settings.Reports[args.Id] : null;
+                    if (selected == null)
+                        return;
+                    x.Value = selected.X;
+                    y.Value = selected.Y;
+                };
+                _body.AddChild(reports);
+            }
             if (ammo.Map != null)
                 _body.AddChild(new Label
                 {
@@ -66,6 +88,12 @@ public sealed class CMUGuidanceBui(EntityUid owner, Enum key) : BoundUserInterfa
             var apply = new Button { Text = Loc.GetString("cmu-guidance-program") };
             apply.OnPressed += _ =>
             {
+                // An untouched report autofill goes by ID so the server applies the report's GPS deviation.
+                if (selected != null && x.Value == selected.X && y.Value == selected.Y)
+                {
+                    SendMessage(new CMUProgramGpsMessage(ammo.Id, (CMUGuidanceMode) mode.SelectedId, selected.Id));
+                    return;
+                }
                 SendMessage(new CMUProgramGpsMessage(ammo.Id, (CMUGuidanceMode) mode.SelectedId, null,
                     new Vector2i(x.Value, y.Value)));
             };
