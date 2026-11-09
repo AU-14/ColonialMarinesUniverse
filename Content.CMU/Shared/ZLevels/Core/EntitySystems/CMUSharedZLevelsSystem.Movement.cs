@@ -1247,7 +1247,7 @@ public abstract partial class CMUSharedZLevelsSystem
         // surface to the terrain floor when both grids occupy the same tile.
         _movementDeckCandidates.Clear();
         var candidates = _movementDeckCandidates;
-        _map.FindGridsIntersecting(mapUid, Box2.CenteredAround(worldPosition, new Vector2(0.01f)), ref candidates);
+        FindMovementDecks(mapUid, Box2.CenteredAround(worldPosition, new Vector2(0.01f)), ref candidates);
         foreach (var candidate in _movementDeckCandidates)
         {
             if (_dropshipDeckQuery.HasComp(candidate.Owner) &&
@@ -1271,6 +1271,12 @@ public abstract partial class CMUSharedZLevelsSystem
 
         gridUid = default;
         return false;
+    }
+
+    // Keep the deployed client's engine API unchanged; the server can filter before exact geometry tests.
+    protected virtual void FindMovementDecks(EntityUid mapUid, Box2 bounds, ref List<Entity<MapGridComponent>> candidates)
+    {
+        _map.FindGridsIntersecting(mapUid, bounds, ref candidates);
     }
 
     private bool HasWallAt(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
