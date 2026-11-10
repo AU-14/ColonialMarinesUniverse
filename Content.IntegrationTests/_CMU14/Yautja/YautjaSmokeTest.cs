@@ -2028,7 +2028,10 @@ public sealed class YautjaSmokeTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(wrap.Handled, Is.True);
-                    Assert.That(entMan.Deleted(chainwhip) || entMan.IsQueuedForDeletion(chainwhip), Is.True);
+                    var containers = entMan.System<SharedContainerSystem>();
+                    Assert.That(containers.TryGetContainingContainer(chainwhip, out var container), Is.True);
+                    Assert.That(container!.Owner, Is.EqualTo(gauntlet));
+                    Assert.That(container.ID, Is.EqualTo(entMan.GetComponent<YautjaChainGauntletComponent>(gauntlet).ChainContainerId));
                 });
 
                 Assert.That(hands.TryPickupAnyHand(hunter, extraChainwhip), Is.True);
@@ -2039,6 +2042,7 @@ public sealed class YautjaSmokeTest
                 {
                     Assert.That(repeat.Handled, Is.True);
                     Assert.That(entMan.Deleted(extraChainwhip) || entMan.IsQueuedForDeletion(extraChainwhip), Is.False);
+                    Assert.That(hands.IsHolding(hunter, extraChainwhip), Is.True);
                 });
             }
             finally
