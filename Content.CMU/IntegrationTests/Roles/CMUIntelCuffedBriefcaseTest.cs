@@ -29,6 +29,36 @@ public sealed class CMUIntelCuffedBriefcaseTest : GameTest
     private EntityUid _briefcase;
     private EntityUid _key;
 
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task DeletingPairedItemClearsSurvivingLink(bool deleteBriefcase)
+    {
+        await SpawnOfficer();
+
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.DeleteEntity(deleteBriefcase ? _briefcase : _key);
+
+            if (deleteBriefcase)
+            {
+                Assert.That(SComp<CMUBriefcaseKeyComponent>(_key).Briefcase, Is.Null,
+                    "the surviving key must not serialize a deleted briefcase");
+                Assert.That(SEntMan.HasComponent<CMUCuffedBriefcaseWearerComponent>(_officer), Is.False,
+                    "the officer must no longer be linked to the deleted briefcase");
+            }
+            else
+            {
+                Assert.That(SComp<CMUCuffedBriefcaseComponent>(_briefcase).Key, Is.Null,
+                    "the surviving briefcase must not serialize a deleted key");
+                Assert.That(SComp<CMUCuffedBriefcaseComponent>(_briefcase).CuffedTo, Is.EqualTo(_officer),
+                    "destroying the key must not unlock the cuff");
+            }
+        });
+
+        // Exercise state serialization after the deletion, which previously logged a missing metadata error.
+        await RunTicksSync(10);
+    }
+
     [Test]
     public async Task CaseOfficerBriefcaseCuffsUnlocksAndCuts()
     {

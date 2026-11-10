@@ -15,6 +15,8 @@ public sealed class CMUActiveHiveTest : GameTest
             var hives = SEntMan.System<SharedXenoHiveSystem>();
             var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
             var hiveEntity = (hive, SEntMan.GetComponent<HiveComponent>(hive));
+            // Round presets can disable the bank; this test covers spawn-point availability.
+            hives.SetBurrowedLarvaEnabled(hiveEntity, true);
             hives.ChangeBurrowedLarva(hiveEntity, 1);
             Assert.That(hives.CMUIsHiveActive(hiveEntity), Is.False, "An unreachable larva bank is not a playable hive.");
 
