@@ -130,7 +130,8 @@ jobs:
 
           if ! git diff --quiet "${{ steps.pr.outputs.base_sha }}" -- .github/workflows; then
             echo "::notice::Test merge includes workflow file changes; restoring .github/workflows to base before creating the test merge patch."
-            git checkout "${{ steps.pr.outputs.base_sha }}" -- .github/workflows
+            # CMU14: Remove added workflow files too, matching private source preparation.
+            git restore --source "${{ steps.pr.outputs.base_sha }}" --staged --worktree .github/workflows
           fi
 
           pull_list="$(echo "$PRS_JSON" | jq -r 'map("#" + (.number | tostring)) | join(", ")')"

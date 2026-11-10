@@ -61,7 +61,7 @@ def receive_package(artifact_path, output, expected):
         if archive.getinfo("manifest.json").file_size > 16384:
             raise PackageError("Invalid package receipt size")
         receipt = json.loads(archive.read("manifest.json"))
-        if any(receipt.get(key) != value for key, value in expected.items()):
+        if not isinstance(receipt, dict) or any(receipt.get(key) != value for key, value in expected.items()):
             raise PackageError("Package receipt does not match the requested build")
         info = archive.getinfo(name)
         if (receipt.get("package") != name or receipt.get("size") != info.file_size
@@ -112,7 +112,7 @@ def request_package(args):
         raise PackageError("Invalid test-merge request")
     heads = []
     for pull in pulls:
-        if (type(pull.get("number")) is not int or pull["number"] < 1
+        if (not isinstance(pull, dict) or type(pull.get("number")) is not int or pull["number"] < 1
                 or not re.fullmatch(r"[0-9a-f]{40}", pull.get("head_sha", ""))):
             raise PackageError("Invalid test-merge PR reference")
         heads.append({"number": pull["number"], "head_sha": pull["head_sha"]})
