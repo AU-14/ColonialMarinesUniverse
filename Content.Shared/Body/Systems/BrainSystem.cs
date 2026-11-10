@@ -4,6 +4,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Pointing;
+using Content.Shared._RMC14.Synth;
 
 namespace Content.Shared.Body.Systems;
 
@@ -30,6 +31,9 @@ public sealed partial class BrainSystem : EntitySystem
 
         var ghostOnMove = EnsureComp<GhostOnMoveComponent>(newEntity);
         ghostOnMove.MustBeDead = HasComp<MobStateComponent>(newEntity); // Don't ghost living players out of their bodies.
+
+        if (HasComp<SynthComponent>(oldEntity) && HasComp<BrainComponent>(newEntity))
+            return;
 
         if (!_mindSystem.TryGetMind(oldEntity, out var mindId, out var mind))
             return;

@@ -138,6 +138,7 @@
   - type: ThermalRegulator
   - type: Temperature
   - type: Stamina
+  - type: EmoteOnDamage
   - type: DamageForceSay
   - type: DamageMobState
   - type: Dna

@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Linq;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
@@ -177,6 +178,7 @@ public sealed partial class SharedBodySystem : EntitySystem
         if (_timing.ApplyingState ||
             TerminatingOrDeleted(body.Owner) ||
             !part.Comp.IsVital ||
+            HasComp<SynthComponent>(body.Owner) ||
             !Resolve(body, ref body.Comp, false))
             return;
 

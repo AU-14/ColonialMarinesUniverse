@@ -15,6 +15,19 @@
         prob: 0.1
 
 - type: entity
+  parent: RMCVial
+  name: Royal Plasma Vial
+  id: CMURoyalPlasmaVial
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: CMUXenoPlasmaRoyal
+            Quantity: 30
+
+- type: entity
   id: CMUCrateSecureCipheringExperiment
   parent: RMCCrateSecureWeYa
   name: secure Weyland-Yutani crate
@@ -24,7 +37,9 @@
   - type: StorageFill
     contents:
       - id: XenoEgg
-        amount: 2
+        amount: 1
+      - id: CMURoyalPlasmaVial
+        amount: 1
 
 - type: entity  
   parent: Hypospray  

@@ -9,19 +9,51 @@
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
-  id: CMUIDCardIntelParamilitaryOfficer
-  name: intelligence paramilitary officer ID card
+  id: CMUIDCardIntelGRUSpetsnazOfficer
+  name: GRU Spetsnaz officer ID card
   components:
   - type: PresetIdCard
-    job: CMUJobIntelParamilitaryOfficer
+    job: CMUJobIntelGRUSpetsnazOfficer
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
-  id: CMUIDCardIntelParamilitaryMember
-  name: intelligence paramilitary member ID card
+  id: CMUIDCardIntelGRUSpetsnazMember
+  name: GRU Spetsnaz member ID card
   components:
   - type: PresetIdCard
-    job: CMUJobIntelParamilitaryMember
+    job: CMUJobIntelGRUSpetsnazMember
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCIASADOfficer
+  name: CIA SAD officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCIASADOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCIASADMember
+  name: CIA SAD member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCIASADMember
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelSASOfficer
+  name: SAS detachment officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelSASOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelSASMember
+  name: SAS detachment member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelSASMember
 
 # A Case Officer's cover identity: an ordinary colonist ID that gets the holder's name when they spawn.
 - type: entity
@@ -56,3 +88,33 @@
     containers:
       key_slots:
       - CMUEncryptionKeyIntelSection
+
+# ├──[ CASE OFFICER BRIEFCASE ]──────────────────────────────────────┤
+# Cuffed to its holder's wrist. Only its own key uncuffs it, only someone holding that key can open it,
+# and wire cutters cut the cuff in 30 seconds. Spawns empty, for whatever the officer has to carry.
+- type: entity
+  parent: RMCBriefcase
+  id: CMUIntelCuffedBriefcase
+  name: cuffed briefcase
+  description: A hard-shelled briefcase with a steel cuff on a short chain. It only opens for whoever holds its key.
+  suffix: Intelligence Section
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/Briefcases/suit.rsi
+    state: icon
+  - type: CMUCuffedBriefcase
+
+# The key to one cuffed briefcase; it fits no other.
+- type: entity
+  parent: BaseItem
+  id: CMUIntelBriefcaseKey
+  name: briefcase key
+  description: A small steel key for a cuffed briefcase. Small enough to swallow if you had to.
+  suffix: Intelligence Section
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/vehicle_key.rsi
+    state: key
+  - type: Item
+    size: Tiny
+  - type: CMUBriefcaseKey

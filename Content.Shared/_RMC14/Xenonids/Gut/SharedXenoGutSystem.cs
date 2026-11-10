@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Gibbing;
 using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
 using Content.Shared.Body;
@@ -108,8 +109,15 @@ public sealed partial class SharedXenoGutSystem : EntitySystem
         args.Handled = true;
         if (_net.IsServer)
         {
-            _rmcGib.ScatterInventoryItems(target);
-            _bodySystem.GibBody(target, true, body);
+            var gibAttempt = new XenoGibTargetAttemptEvent(xeno.Owner, target);
+            RaiseLocalEvent(target, ref gibAttempt);
+
+            if (!gibAttempt.Handled)
+            {
+                _rmcGib.ScatterInventoryItems(target);
+                _bodySystem.GibBody(target, true, body);
+            }
+
             _audio.PlayPvs(xeno.Comp.Sound, xeno);
         }
 
