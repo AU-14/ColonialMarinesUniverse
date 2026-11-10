@@ -1,25 +1,34 @@
 <Document>
 	# Executions
 
-	Executions may be sanctioned only by a Commanding Officer. The XO and an Acting Commanding Officer are not permitted to sanction executions.
-	The Commanding Officer holds the right to sanction executions on members of the military who they deem that their life and existence is a threat to their unit and operation.
+    # Authorization
+    Executions, not to be confused with [textlink="Battlefield Executions" link="AU14UCMJBattlefieldExecutions"] may be authorized by the Commanding Officer (Whitelisted CO), Acting Commanding Officer (aCO) or Chief Military Police (CMP). The CMP's execution authority cannot be transfered to other Military Police.
+	
+	The authorization hierarchy is as follows:
+	 - High Command (HighComm): HighComm may authorize executions in the absence of the CO, aCO, and CMP upon faxed request, and can also veto any execution order issued by the CO, aCO, or CMP.
+	 - Commanding Officer (CO): The CO holds final authority over all execution orders. Orders issued by the CO are final and cannot be appealed or vetoed.
+	 - Acting Commanding Officer (aCO): The aCO may only authorize executions in the absence of the CO or when delegated authority by the CO. Orders issued by the aCO in absence of a CO, need to be approved by the CMP if present.
+	 - Chief Military Police (CMP): The CMP may authorize executions in the absence of both the CO and XO, or when delegated authority by either. The aCO must approve of the execution in tangent with the CMP.
+	All Execution orders must be respected unless overturned by someone holding superior authority within this hierarchy, OR if the aCO and CMP do not come to a unanimous decision on the execution order. If the CO is present, they have final say in the matter.
 
-	Commanding Officer ordered executions must be upheld and followed through with, the Commanding Officer may permit members of the military police to carry out executions.
-	Commanding Officer ordered executions do not offer any chance of appeal or alternative punishment, if the Commanding Officer has ordered it, it must be fulfilled.
+	# Capital Offenses and Sentencing
+	Only individuals who have been convicted of capital offenses, as defined in the [textlink="Criminal Code" link="AU14UCMJCriminalCode"], may be sentenced to execution.
 
-	Criminals charged with a capital offense and are ordered to be executed by a Commanding Officer must be given a chance to return to the ship/installation, in the event they refuse a execution can be done in the field by any military member.
-	Criminals to be executed must be permitted a final meal of choice within reason and given chance to pray if they are religious, after which they must be given the option of firing squad or lethal injection.
+    # Execution Methods
+	The Commanding Officer may authorize the use of the following execution methods, based on the circumstances and available resources:
+	 - Firing Squad: A group of trained personnel, including at least one Military Police member where possible.
+	 - Lethal Injection: Administered by a trained medical professional, such as a Doctor or Nurse, using a fatal overdose of chemicals.
+	Individuals sentenced to execution must be afforded:
+		- A final meal of their choice, within reason
+		- An opportunity to pray or observe any religious or spiritual practices they wish to perform, within reason.
+		- A choice between the available approved execution methods, where circumstances permit. If the individual refuses to choose, the person who gave the order may select the method of execution.
+		- The right to appeal the conviction and sentence, if applicable, through the established military justice channels.
 
-	Firing squads consist of atleast two members at minimum, with one member minimum being a military police member.
-	Lethal Injection consists of one trained medical professional such as a Doctor or Nurse, administering a fatal overdose of chemicals.
-
-	After a execution has been performed it is required to have a report sent to the provost offices, the report should list:
+    After an execution has been performed it is required to have a report sent to the provost offices, the report should list:
 		- Personnel executed
 		- Crime
 		- Last meal
-		- Execution methods
-		- Name and rank of the personnel who permitted the execution
-		- any relevant information
-
-	[italic]OOC Note: Executions are a round removal tool only to be utilized by HRP Whitelisted Commanding Officers as a last resort means to put a end to users who have commited egregious actions and will likely continue to do so. It is a power normally only granted to administrators to perform and such should not be violated. Explotiing executions for personal gain or metagruding reasons will result in admin intervention and punishment. [/italaic]
+		- Execution methods and name and rank of personnel used to carry out the execution
+		- Name and rank of the personnel who authorized the execution
+		- Any relevant additional information
 </Document>
