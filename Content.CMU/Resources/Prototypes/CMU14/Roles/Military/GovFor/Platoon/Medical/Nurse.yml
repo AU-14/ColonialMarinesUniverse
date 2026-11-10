@@ -90,6 +90,7 @@
     ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
     neck: ClothingNeckStethoscope
+    inhand: NurseArmbandCMU
 
 - type: startingGear
   id: AU14GearGOVFORNurseDummy
@@ -126,6 +127,7 @@
   points: 7
   groups:
   - GOVFORNurseEquipmentAU14
+  - GOVFORNurseUniformAU14
   - EyewearRMCPVE
   - MasksRMCPVE
   - HeadwearRMCPVE
@@ -163,6 +165,7 @@
     ears: AU14HeadsetOpforAuxiliary
     ears2: RMCM5CameraGear
     neck: ClothingNeckStethoscope
+    inhand: CMUNurseArmband
 
 - type: startingGear
   id: AU14GearOPFORNurseDummy

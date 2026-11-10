@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: GOVFORNurseUniformAU14
+  name: au14-loadout-group-govfornurse-uniform
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ScrubsOliveRMC
+  - ScrubsGreyRMC
+  - ScrubsLightBlueRMC
+  - ScrubsPurpleRMC
+# Aux Tech
