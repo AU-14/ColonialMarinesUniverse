@@ -1,0 +1,9 @@
+- type: loadout
+  id: ScrubsOliveNurseAU14
+  equipment:
+    jumpsuit: RMCScrubsOliveNurse
+
+- type: loadout
+  id: ScrubsLightBlueNurseAU14
+  equipment:
+    jumpsuit: RMCScrubsLightBlueArmband

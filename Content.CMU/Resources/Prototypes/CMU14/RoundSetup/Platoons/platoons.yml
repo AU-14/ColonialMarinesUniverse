@@ -62,6 +62,12 @@
     RMCScrubsOliveNurse: CMULACNMedicalScrubs
     RMCScrubsOlive: CMULACNSurgicalScrubs
     AU14ScrubsGreenDoctorSurgical: CMULACNSurgicalScrubs
+    RMCScrubsGrey: CMULACNSurgicalScrubs
+    CMScrubsGreen: CMULACNSurgicalScrubs
+    CMScrubsBlue: CMULACNSurgicalScrubs
+    RMCScrubsLightBlue: CMULACNMedicalScrubs
+    RMCScrubsLightBlueArmband: CMULACNMedicalScrubs
+    CMScrubsPurple: CMULACNMedicalScrubs
   # Support roles spawn in the full LACN set their equipment racks hand out (see lacn_starting_gear.yml).
   startingGearJobOverrides:
     AU14JobGOVFOREngineeringTech: CMUGearLACNGOVFOREngineeringTech

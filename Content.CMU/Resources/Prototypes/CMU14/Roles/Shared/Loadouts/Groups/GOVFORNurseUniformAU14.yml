@@ -4,8 +4,5 @@
   minLimit: 1
   maxLimit: 1
   loadouts:
-  - ScrubsOliveRMC
-  - ScrubsGreyRMC
-  - ScrubsLightBlueRMC
-  - ScrubsPurpleRMC
-# Aux Tech
+  - ScrubsOliveNurseAU14
+  - ScrubsLightBlueNurseAU14
