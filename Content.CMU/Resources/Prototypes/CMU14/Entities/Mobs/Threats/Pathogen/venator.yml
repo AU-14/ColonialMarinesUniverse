@@ -46,7 +46,7 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
-    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenGrapple
     - CMU14ActionXenoPathogenAbduct
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenScissorCut
@@ -62,7 +62,7 @@
   - type: XenoDevour
   - type: XenoTailSeize
   - type: XenoAbduct
-  - type: XenoImpale
+  - type: XenoFling
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
