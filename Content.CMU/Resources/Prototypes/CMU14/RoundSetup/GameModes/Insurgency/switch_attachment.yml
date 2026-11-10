@@ -32,6 +32,6 @@
     modifiers:
     - conditions:
         activeOnly: true
-      scatterFlat: 10
-      recoilFlat: 2
+      scatterFlat: 5
+      recoilFlat: 1
   - type: GunSwitch

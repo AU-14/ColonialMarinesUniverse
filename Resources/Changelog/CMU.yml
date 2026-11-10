@@ -17529,5 +17529,117 @@
   id: 1014
   time: '2026-11-08T16:00:25.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2538
+- author: TheHellFireo
+  changes:
+  - message: Reduce avoidable server allocation during gameplay and round cleanup.
+    type: Fix
+  - message: Correct the Charger strain's return-to-caste prototype reference.
+    type: Fix
+  - message: Report unavailable allocation measurements accurately.
+    type: Code
+  id: 1015
+  time: '2026-11-08T19:08:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2543
+- author: TheHellFireo
+  changes:
+  - message: Keep Z-level visibility probes stable when changing parents on the same
+      map.
+    type: Fix
+  - message: Reduce delays processing server inputs during network send bursts and
+      simulation catch-up.
+    type: Fix
+  id: 1016
+  time: '2026-11-09T03:47:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2545
+- author: TheHellFireo
+  changes:
+  - message: Reduce server tick overhead and incoming packet delays, and prevent stale
+      NPC melee targets from interrupting AI updates.
+    type: Fix
+  id: 1017
+  time: '2026-11-09T03:48:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2547
+- author: KeiKiyomi
+  changes:
+  - message: Added pill recipe sheets and a machine that loads listed chemicals and
+      produces the formulation in a beaker.
+    type: Add
+  id: 1018
+  time: '2026-11-10T10:52:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2559
+- author: Kadeo64
+  changes:
+  - message: Double eggs in clearance X crate removed. We-Yu has seen fit to actually
+      look over the corpses of the Queens they've killed for these eggs, too.
+    type: Tweak
+  id: 1019
+  time: '2026-11-10T10:54:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2557
+- author: ILoveDespoiler
+  changes:
+  - message: Added a brand new Neomorph Strain, the Healer Haze. Sprites by Miyugi!
+    type: Add
+  - message: Adjusted some stats of regular Haze.
+    type: Tweak
+  id: 1020
+  time: '2026-11-10T10:54:46.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2546
+- author: KeiKiyomi
+  changes:
+  - message: Synths can still speak while decapped
+    type: Add
+  - message: Synths can now survive being delimbed
+    type: Tweak
+  - message: Queen and King gib now only rip off a synths legs (like in the movie)
+      but their legs cannot be reattatched ever again.
+    type: Tweak
+  - message: Synths no longer scream when they get hurt, only when they get gibbed
+    type: Tweak
+  id: 1021
+  time: '2026-11-10T10:55:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2544
+- author: rokudara-sen
+  changes:
+  - message: Yautja hunt prey no longer spawn with irradiated ammo or working night
+      vision. Their optics are fried and tell them so.
+    type: Fix
+  - message: The hunter ship now stocks working hunting traps and strange rope.
+    type: Fix
+  - message: Players whose job has no spawn point on the map now spawn at a sensible
+      fallback instead of a random leftover spawner.
+    type: Fix
+  - message: Chain whips can be unwrapped from the chain gauntlet, and right click
+      with the gauntlet shoves so the throw finisher works.
+    type: Fix
+  id: 1022
+  time: '2026-11-10T10:56:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2537
+- author: IntelligenceOfficerArthur
+  changes:
+  - message: 'The paramilitary element is now three teams: GRU Spetsnaz, CIA SAD and
+      the SAS, each with its own equipment rack.'
+    type: Add
+  - message: The CIA SAD rack now has a radio jammer, a Fulton extraction kit and
+      a flare pouch.
+    type: Add
+  - message: The SAS can pick the L83A2 or the MP5SD6, the CIA the XM4RA1 SOPMOD,
+      and the GRU now carries the AK-4047.
+    type: Add
+  - message: The SAS rack has balaclavas, the L22 gas mask, goggles and the M1A1 visor;
+      the CIA rack has goggles and gloves.
+    type: Add
+  - message: The Case Officer now carries a briefcase cuffed to his wrist. Only its
+      key unlocks it, wire cutters can cut it off, and the key can be swallowed.
+    type: Add
+  - message: The GRU Altyn now deploys from the UH7 GRU armor like a hardsuit helmet.
+    type: Fix
+  - message: The GRU sedative now actually puts targets to sleep.
+    type: Fix
+  - message: The M1A1 multi-spectrum visor whites out and blinds its wearer for 10
+      seconds near a lit flare.
+    type: Tweak
+  id: 1023
+  time: '2026-11-10T10:57:27.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2548
 Name: CMU
 Order: -1
