@@ -1,0 +1,82 @@
+cmu-chem-synth-title = Chemical synthesizer
+cmu-chem-synth-inputs = Reactants
+cmu-chem-synth-output = Product
+cmu-chem-synth-waste = Waste
+cmu-chem-synth-program-slot = Report
+cmu-chem-synth-sample-slot = Sample
+cmu-chem-synth-program-from-sample = Program from sample
+cmu-chem-synth-tank = Tank
+cmu-chem-synth-status = Status
+cmu-chem-synth-batches = Batches
+cmu-chem-synth-start = Start
+cmu-chem-synth-stop = Stop
+
+cmu-chem-synth-program = Program: {$name}
+cmu-chem-synth-program-none = none
+cmu-chem-synth-stage = Stage: {$stage}
+cmu-chem-synth-temperature = Chamber: {$current} K (target {$target} K)
+cmu-chem-synth-temperature-idle = Chamber: {$current} K
+
+cmu-chem-synth-stage-idle = idle
+cmu-chem-synth-stage-metering = metering
+cmu-chem-synth-stage-conditioning = conditioning
+cmu-chem-synth-stage-reacting = reacting
+cmu-chem-synth-stage-output = output
+cmu-chem-synth-stage-fault = fault
+
+cmu-chem-synth-fault-no-program = No program. Insert a research report or program from a sample.
+cmu-chem-synth-fault-no-recipe = The report's chemical has no known recipe.
+cmu-chem-synth-fault-bad-report = The report has no readable chemical data.
+cmu-chem-synth-fault-partial-report = The report is partial; a full report is needed.
+cmu-chem-synth-fault-hidden-ingredient = The recipe has an unidentified ingredient.
+cmu-chem-synth-fault-non-reagent = The recipe needs something that is not a reagent.
+cmu-chem-synth-fault-unresearched = This chemical must be researched before it can be synthesized.
+cmu-chem-synth-fault-missing-input = Not enough reactants in the input beakers.
+cmu-chem-synth-fault-too-large = The batch does not fit in the chamber.
+cmu-chem-synth-fault-side-reaction = Another reaction would run in the chamber; aborted.
+cmu-chem-synth-fault-no-band = The reaction has no safe temperature band.
+cmu-chem-synth-fault-overheat = The chamber overheated and was vented!
+cmu-chem-synth-fault-reaction-failed = The reaction did not run; the chamber was emptied to waste.
+cmu-chem-synth-fault-output-blocked = Waiting for room in the output beaker.
+cmu-chem-synth-fault-no-chamber = The reaction chamber is missing.
+cmu-chem-synth-fault-unsupported-mixing = This reaction needs a mixing method the synthesizer lacks.
+cmu-chem-synth-fault-conditioning-timeout = The chamber could not reach the reaction temperature; the chamber was emptied to waste.
+cmu-chem-synth-fault-invalid-report = The report is incomplete or invalid; a complete report is needed.
+cmu-chem-synth-fault-no-sample = No sample. Insert a vial of the chemical.
+cmu-chem-synth-fault-sample-invalid = The sample could not be identified.
+cmu-chem-synth-fault-sample-insufficient = The sample is too small; a full 30u vial is needed.
+cmu-chem-synth-fault-sample-contaminated = The sample is contaminated; it must hold a single chemical.
+cmu-chem-synth-fault-sample-clearance = Insufficient research clearance to identify this sample.
+cmu-chem-synth-fault-research-locked = Research is locked for this faction.
+cmu-chem-synth-fault-plan-missing-input = Cannot plan a chain: no way to get {$reagent}.
+cmu-chem-synth-fault-plan-too-deep = Cannot plan a chain: {$reagent} needs more than {$max} steps.
+cmu-chem-synth-fault-plan-buffer-full = Cannot plan a chain: {$reagent} would overflow the intermediate buffer.
+cmu-chem-synth-fault-plan-cycle = Cannot plan a chain: {$reagent} would have to be made from itself.
+cmu-chem-synth-fault-plan-invalid = The chain plan no longer matches the known recipes; the chamber and buffer were emptied to waste.
+cmu-chem-synth-fault-chain-locked = The chain planner needs a higher research clearance.
+
+cmu-chem-synth-plan = Chain plan
+cmu-chem-synth-plan-step = {$index}. {$name} × {$batches}
+cmu-chem-synth-plan-none = No chain (single step).
+cmu-chem-synth-stage-step = Stage: {$stage} (step {$step}/{$steps})
+cmu-chem-synth-chain-on = Chain: on
+cmu-chem-synth-chain-off = Chain: off
+cmu-chem-synth-buffer = Buffer: {$contents}
+cmu-chem-synth-buffer-empty = empty
+cmu-chem-synth-buffer-entry = {$name} {$amount}u
+
+cmu-chem-synth-continuous = Run continuously
+cmu-chem-synth-batches-max = Max batches
+cmu-chem-synth-stage-waiting = waiting
+cmu-chem-synth-waiting = Waiting for reactants. It starts again when they arrive.
+cmu-chem-synth-waiting-reagent = Waiting for reactants: needs {$reagent}. It starts again when they arrive.
+cmu-chem-synth-run-batches = Running {$run} of at most {$max} batches.
+cmu-chem-synth-verb-start = Start synthesizer
+cmu-chem-synth-verb-stop = Stop synthesizer
+cmu-chem-synth-examine-waiting = It is [color=yellow]waiting for reactants[/color].
+cmu-chem-synth-examine-continuous = It is set to run continuously.
+
+au14-fluid-port-reagent_in_1 = reactant inlet 1
+au14-fluid-port-reagent_in_2 = reactant inlet 2
+au14-fluid-port-reagent_in_3 = reactant inlet 3
+au14-fluid-port-product_out = product outlet

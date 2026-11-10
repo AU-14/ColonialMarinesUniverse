@@ -806,7 +806,8 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         foreach (var id in list)
         {
             var prop = props[id];
-            // Volatile combustibles (Explosive) detonate on synthesis; keep them to Hard contracts.
+            // Volatile combustibles (Explosive) detonate once heated to their ignition point or set off in a chem
+            // grenade; keep them to Hard contracts.
             if (tier < 3 && prop.Volatile && prop.Category.HasFlag(ReagentPropertyTypeEnum.Combustible))
                 continue;
             var weight = prop.Rarity == ReagentPropertyRarityEnum.Uncommon ? uncommonWeight : 1f;

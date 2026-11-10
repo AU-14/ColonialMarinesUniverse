@@ -978,6 +978,18 @@
       section: Machineboards
       name: Gas Crystallizer Board
       price: 60
+    - id: CMUChemSynthesizerMachineCircuitboard # CMU14 (ARCH-01)
+      section: Machineboards
+      name: Chemical Synthesizer Board
+      price: 60
+    - id: CMUTrayArmHarvesterMachineCircuitboard # CMU14 (ARCH-01)
+      section: Machineboards
+      name: Harvester Arm Board
+      price: 35
+    - id: CMUTrayArmPlanterMachineCircuitboard # CMU14 (ARCH-01)
+      section: Machineboards
+      name: Planter Arm Board
+      price: 35
     - id: CMUPipeRiserMachineCircuitboard
       name: Pipe Riser Board
       price: 40

@@ -1,5 +1,5 @@
 ent-RUMCAutoHydroponicsTray = automatic hydroponics tray
-    .desc = A hydroponics tray with a pump and a tank of its own. Give it water and fertilizer, and power, plant a seed once, and it waters and feeds the plant, harvests it when it is ripe and plants the same one again.
+    .desc = A hydroponics tray with a pump and a tank of its own. Give it water and fertilizer, and power, plant a seed once, and it waters and feeds the plant, harvests it when it is ripe and plants the next seed packet from its seed slot.
 ent-RUMCElectricWelder = electric welder
     .desc = A welding tool that runs on a power cell instead of fuel. Put a charged cell in it and weld. Mind your eyes.
 
@@ -8,6 +8,8 @@ au14-craft-recipe-buildelectricwelder = Electric welder
 
 au14-autotray-examine-powered = It is fed by its own tank: { $water } of water and { $fertilizer } of fertilizer left.
 au14-autotray-examine-unpowered = It has no power, so it feeds nobody. The tank holds { $water } of water and { $fertilizer } of fertilizer.
+au14-autotray-verb-load-seed = Load seed for replanting
+au14-autotray-verb-take-seed = Take out the replanting seed
 
 ent-RUMCCharger = charger
     .desc = Charges the power cell set in it much faster than the old recharger, as long as it has power.
