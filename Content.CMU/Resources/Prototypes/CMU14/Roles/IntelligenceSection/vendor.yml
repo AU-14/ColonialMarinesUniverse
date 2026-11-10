@@ -389,6 +389,12 @@
   - type: ToggleableClothing
     clothingPrototype: CMUIntelGRUAltyn
     action: ActionToggleSuitPiece
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+      toggleable-clothing: !type:ContainerSlot
+        ent: null
 
 - type: entity
   parent: AU14Altyn
