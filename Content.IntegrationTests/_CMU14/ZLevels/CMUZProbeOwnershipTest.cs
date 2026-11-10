@@ -28,6 +28,51 @@ public sealed class CMUZProbeOwnershipTest : GameTest
     private const int RefreshTicks = 20;
 
     [Test]
+    public async Task SameMapReparentKeepsProbesButParentMapTransferRetargetsThem()
+    {
+        try
+        {
+            await CreateScenario();
+            await SubscribeCamera();
+            EntityUid[] originalEyes = [];
+            var parent = EntityUid.Invalid;
+            var upper = EntityUid.Invalid;
+            await Server.WaitAssertion(() =>
+            {
+                var eyes = AssertLiveProbes().Eyes;
+                originalEyes = eyes.ToArray();
+                upper = SComp<TransformComponent>(_camera).MapUid!.Value;
+                parent = SEntMan.SpawnEntity(null, new EntityCoordinates(upper, Vector2.Zero));
+                Server.System<SharedTransformSystem>().SetParent(_camera, parent);
+            });
+            await Pair.RunTicksSync(RefreshTicks);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(AssertLiveProbes().Eyes, Is.EquivalentTo(originalEyes),
+                    "Changing parent on the same map must not discard valid visibility subscriptions.");
+                // Transfer the parent, so the viewer receives the recursive map-change event.
+                Server.System<SharedTransformSystem>().SetParent(parent, _lower);
+            });
+            await Pair.RunTicksSync(RefreshTicks);
+            await Server.WaitAssertion(() =>
+            {
+                AssertOldProbesRemoved(originalEyes);
+                var eyes = SComp<CMUZLevelViewerComponent>(_camera).Eyes;
+                Assert.That(eyes, Is.Not.Empty, "The open upper floor must remain visible from below.");
+                foreach (var eye in eyes)
+                {
+                    Assert.That(SComp<TransformComponent>(eye).MapUid, Is.EqualTo(upper));
+                    Assert.That(ServerSession!.ViewSubscriptions, Does.Contain(eye));
+                }
+            });
+        }
+        finally
+        {
+            await CleanupScenario();
+        }
+    }
+
+    [Test]
     public async Task SubscriberComponentShutdownRemovesOwnedViewerAndProbeSubscriptions()
     {
         try

@@ -1,0 +1,49 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               Title="{Loc 'cmu-event-setup-title'}" MinSize="620 720">
+    <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="12">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <CheckBox Name="EnabledToggle" Access="Public" Text="{Loc 'cmu-event-setup-enabled'}" HorizontalExpand="True" />
+            <Button Name="RefreshButton" Access="Public" Text="{Loc 'cmu-event-setup-refresh'}" />
+        </BoxContainer>
+        <RichTextLabel Text="{Loc 'cmu-event-setup-toggle-help'}" MaxWidth="600" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <Label Text="{Loc 'cmu-event-setup-side'}" />
+            <OptionButton Name="SidePicker" Access="Public" HorizontalExpand="True" />
+        </BoxContainer>
+        <TabContainer Name="Tabs" Access="Public" VerticalExpand="True">
+            <ScrollContainer HScrollEnabled="False">
+                <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="8">
+                    <Label Text="{Loc 'cmu-event-setup-groups'}" />
+                    <OptionButton Name="GroupPicker" Access="Public" />
+                    <LineEdit Name="GroupName" Access="Public" PlaceHolder="{Loc 'cmu-event-setup-group-name'}" />
+                    <LineEdit Name="Code" Access="Public" PlaceHolder="{Loc 'cmu-event-code-placeholder'}" />
+                    <CheckBox Name="WholeSide" Access="Public" Text="{Loc 'cmu-event-setup-whole-side'}" Pressed="True" />
+                    <LineEdit Name="AccessSearch" Access="Public" PlaceHolder="{Loc 'cmu-event-setup-search'}" />
+                    <ItemList Name="AccessRoles" Access="Public" SelectMode="Multiple" MinHeight="170" />
+                    <Label Name="AccessSelection" Access="Public" />
+                    <RichTextLabel Text="{Loc 'cmu-event-setup-code-help'}" MaxWidth="560" />
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                        <Button Name="SaveGroup" Access="Public" Text="{Loc 'cmu-event-setup-save'}" HorizontalExpand="True" />
+                        <Button Name="RemoveGroup" Access="Public" Text="{Loc 'cmu-event-setup-remove'}" />
+                    </BoxContainer>
+                </BoxContainer>
+            </ScrollContainer>
+            <ScrollContainer HScrollEnabled="False">
+                <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="8">
+                    <RichTextLabel Name="SlotHelp" Access="Public" MaxWidth="560" />
+                    <LineEdit Name="SlotSearch" Access="Public" PlaceHolder="{Loc 'cmu-event-setup-search'}" />
+                    <ItemList Name="SlotRoles" Access="Public" MinHeight="170" />
+                    <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                        <OptionButton Name="SlotOperation" Access="Public" HorizontalExpand="True" />
+                        <SpinBox Name="Amount" Access="Public" Value="1" MinWidth="110" />
+                        <Button Name="ApplySlots" Access="Public" Text="{Loc 'cmu-event-setup-apply'}" />
+                    </BoxContainer>
+                    <Button Name="ClearPending" Access="Public" Text="{Loc 'cmu-event-setup-clear'}" />
+                    <RichTextLabel Name="SlotSummary" Access="Public" MaxWidth="560" />
+                </BoxContainer>
+            </ScrollContainer>
+        </TabContainer>
+        <RichTextLabel Name="Feedback" Access="Public" MaxWidth="600" />
+    </BoxContainer>
+</DefaultWindow>
