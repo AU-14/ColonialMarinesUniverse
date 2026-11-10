@@ -90,7 +90,6 @@
     ears: AU14HeadsetGovforAuxiliary
     ears2: RMCM5CameraGear
     neck: ClothingNeckStethoscope
-    inhand: NurseArmbandCMU
 
 - type: startingGear
   id: AU14GearGOVFORNurseDummy
@@ -165,7 +164,6 @@
     ears: AU14HeadsetOpforAuxiliary
     ears2: RMCM5CameraGear
     neck: ClothingNeckStethoscope
-    inhand: CMUNurseArmband
 
 - type: startingGear
   id: AU14GearOPFORNurseDummy
