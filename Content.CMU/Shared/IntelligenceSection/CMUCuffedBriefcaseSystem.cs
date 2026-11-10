@@ -40,6 +40,7 @@ public sealed partial class CMUCuffedBriefcaseSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, MapInitEvent>(OnBriefcaseMapInit);
+        SubscribeLocalEvent<CMUCuffedBriefcaseComponent, ComponentShutdown>(OnBriefcaseShutdown);
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, GotEquippedHandEvent>(OnBriefcasePickedUp);
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, GotUnequippedHandEvent>(OnBriefcaseLeftHand);
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, InteractUsingEvent>(OnBriefcaseInteractUsing,
@@ -56,6 +57,7 @@ public sealed partial class CMUCuffedBriefcaseSystem : EntitySystem
         SubscribeLocalEvent<CMUCuffedBriefcaseWearerComponent, ExaminedEvent>(OnWearerExamined);
 
         SubscribeLocalEvent<CMUBriefcaseKeyComponent, GetVerbsEvent<InteractionVerb>>(OnKeyVerbs);
+        SubscribeLocalEvent<CMUBriefcaseKeyComponent, ComponentShutdown>(OnKeyShutdown);
         SubscribeLocalEvent<CMUBriefcaseKeyComponent, CMUBriefcaseKeySwallowDoAfterEvent>(OnSwallowDoAfter);
 
         SubscribeLocalEvent<CMUSwallowedItemsComponent, TryVomitEvent>(OnSwallowerVomit);
@@ -63,6 +65,26 @@ public sealed partial class CMUCuffedBriefcaseSystem : EntitySystem
     }
 
     #region Briefcase
+
+    private void OnBriefcaseShutdown(Entity<CMUCuffedBriefcaseComponent> ent, ref ComponentShutdown args)
+    {
+        // Client PVS removal must not change the authoritative links.
+        if (_net.IsClient)
+            return;
+
+        if (ent.Comp.Key is { } key && !TerminatingOrDeleted(key) &&
+            TryComp(key, out CMUBriefcaseKeyComponent? keyComp) && keyComp.Briefcase == ent.Owner)
+        {
+            keyComp.Briefcase = null;
+            Dirty(key, keyComp);
+        }
+
+        if (ent.Comp.CuffedTo is { } wearer && !TerminatingOrDeleted(wearer) &&
+            TryComp(wearer, out CMUCuffedBriefcaseWearerComponent? wearerComp) && wearerComp.Briefcase == ent.Owner)
+        {
+            RemComp<CMUCuffedBriefcaseWearerComponent>(wearer);
+        }
+    }
 
     private void OnBriefcaseMapInit(Entity<CMUCuffedBriefcaseComponent> ent, ref MapInitEvent args)
     {
@@ -246,6 +268,18 @@ public sealed partial class CMUCuffedBriefcaseSystem : EntitySystem
     #endregion
 
     #region Key
+
+    private void OnKeyShutdown(Entity<CMUBriefcaseKeyComponent> ent, ref ComponentShutdown args)
+    {
+        if (_net.IsClient || ent.Comp.Briefcase is not { } briefcase || TerminatingOrDeleted(briefcase) ||
+            !TryComp(briefcase, out CMUCuffedBriefcaseComponent? comp) || comp.Key != ent.Owner)
+        {
+            return;
+        }
+
+        comp.Key = null;
+        Dirty(briefcase, comp);
+    }
 
     private void OnKeyVerbs(Entity<CMUBriefcaseKeyComponent> ent, ref GetVerbsEvent<InteractionVerb> args)
     {
