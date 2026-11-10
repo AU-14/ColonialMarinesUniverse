@@ -1,0 +1,14 @@
+- type: entity
+  parent: VehicleTankRERE700
+  id: CMUVehicleTankCoaxMachineGun
+  name: RE700 coaxial machine gun
+  description: A tank-mounted machine gun controlled by the driver.
+  components:
+  - type: RemoveComponents
+    components:
+    - type: VehicleTurretAttachment
+  - type: HardpointItem
+    hardpointType: Support
+    slotType: SupportAttachment
+  - type: GunFireArc
+    arc: 145

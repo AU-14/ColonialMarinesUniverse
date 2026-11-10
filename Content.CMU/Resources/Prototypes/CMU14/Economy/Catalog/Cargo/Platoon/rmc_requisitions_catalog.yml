@@ -330,6 +330,10 @@
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1900
+        crate: CMUCrateVehiclePartCoaxMachineGun
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
         crate: CMUCrateVehiclePartAuxL98
         maxStock: 2
         stockReplenishDelay: 300

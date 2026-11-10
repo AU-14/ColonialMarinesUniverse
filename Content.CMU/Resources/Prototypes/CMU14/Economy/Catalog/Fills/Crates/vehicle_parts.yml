@@ -159,6 +159,17 @@
     - id: VehicleTankRERE700
       amount: 1
 
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateVehiclePartCoaxMachineGun
+  name: RE700 coaxial machine gun
+  description: A tank-mounted machine gun controlled by the driver.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUVehicleTankCoaxMachineGun
+      amount: 1
+
 ### WEAPONS #SECONDARY TWE ###
 
 - type: entity
