@@ -20,6 +20,8 @@
           bounds: "-0.49,-0.49,0.49,0.49"
         layer:
         - BulletImpassable
+        mask:
+        - BulletImpassable
         density: 200
       pathogen_core:
         shape:
@@ -44,7 +46,13 @@
       state: hive_weed0
     - state: pathogen_core
     drawdepth: FloorObjects
+  - type: Clickable
+  - type: InteractionOutline
+  - type: RequireProjectileTarget
+  - type: Appearance
   - type: Damageable
+    damageContainer: StructuralXeno
+    damageModifierSet: Resin
   - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
