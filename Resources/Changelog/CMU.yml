@@ -17712,5 +17712,95 @@
   id: 1026
   time: '2026-11-11T06:43:49.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2575
+- author: rokudara-sen
+  changes:
+  - message: UNISC Lead Enforcer can give orders.
+    type: Fix
+  - message: The Three World Empire is no longer called the Third World Empire.
+    type: Fix
+  - message: Ambassador mercenaries get their own names.
+    type: Fix
+  - message: Rubber M41A magazines use the M41A name.
+    type: Fix
+  - message: Penetrating research fire burns fire-immune xenos.
+    type: Fix
+  - message: The corrupted Overmind can speak human languages.
+    type: Fix
+  - message: The colony Basira-Armstrong can take a sling.
+    type: Fix
+  - message: Pathogen weeds grow their own wall weeds.
+    type: Fix
+  - message: Weeds grow over windows and window frames.
+    type: Add
+  - message: Sand can be crafted without construction skill.
+    type: Fix
+  - message: Criminal records no longer reveal CLF members.
+    type: Fix
+  - message: Built doors keep the access set on their circuit.
+    type: Fix
+  - message: Retractable ladders deploy up through a dug pit.
+    type: Fix
+  - message: FOB crates can't be opened on the landing area.
+    type: Fix
+  - message: GOVFOR no longer spawns on the OPFOR ship when both use the same ship.
+    type: Fix
+  - message: Xenos can't enter vents through barricades.
+    type: Fix
+  - message: Trade ships accept metal, wood, glass and plastic sheets.
+    type: Fix
+  - message: The trade shuttle popup shows the real sale value.
+    type: Fix
+  - message: Rifles on vests look right and can be taken off again.
+    type: Fix
+  - message: Chemical bloodbursters can be taken by players in the larva queue.
+    type: Fix
+  - message: Vehicle drivers aren't hurt by their own shells.
+    type: Fix
+  id: 1027
+  time: '2026-11-11T11:34:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2564
+- author: rokudara-sen
+  changes:
+  - message: Test merges stack. Label a PR Test Merge or type its number once and
+      it stays on until removed, tracked with TM labels.
+    type: Code
+  id: 1028
+  time: '2026-11-11T13:43:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2578
+- author: rokudara-sen
+  changes:
+  - message: The Clan Leader whitelist only leads your own clan. Ancient comes from
+      the Council whitelists only.
+    type: Tweak
+  - message: Lobby pred sets are split into Ancient sets and Leader sets.
+    type: Tweak
+  - message: Dead Yautja can't be revived.
+    type: Tweak
+  - message: Dual plasma cannons gib humans they hit.
+    type: Tweak
+  - message: The plasma caster aim laser is always red.
+    type: Tweak
+  - message: The plasma caster immobilizer no longer stuns its shooter.
+    type: Fix
+  - message: Serpents on the Yautja preserve have their own hive and no longer take
+      the main hive's slots.
+    type: Fix
+  - message: The We-Yu research bracer only appears on hunt rounds, rarely, and hides
+      from the pred tracker for the first hour.
+    type: Tweak
+  id: 1029
+  time: '2026-11-11T13:44:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2576
+- author: rokudara-sen
+  changes:
+  - message: Radio direction finding is turned off in Insurgency.
+    type: Tweak
+  - message: The CLF Radio Operator can now order a COMSEC recrypto.
+    type: Tweak
+  - message: Every INSFOR faction can now buy COMSEC fill cards from its points vendor.
+    type: Fix
+  id: 1030
+  time: '2026-11-11T14:27:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2581
 Name: CMU
 Order: -1
