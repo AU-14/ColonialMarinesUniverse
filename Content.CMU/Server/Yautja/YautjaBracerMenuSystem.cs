@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.CMU14.Xenonids.Hive;
 using Content.Server.EUI;
+using Content.Server.GameTicking;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
@@ -32,6 +33,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
 
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -407,9 +409,11 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         return string.Equals(powerNet, expected, StringComparison.OrdinalIgnoreCase);
     }
 
-    private bool ShouldHideFromTracker(EntityUid uid)
+    public bool ShouldHideFromTracker(EntityUid uid)
     {
-        return IsStoredInsideYautjaGearContainer(uid) || IsOnYautja(uid) || IsAboardYautjaShip(uid);
+        return IsStoredInsideYautjaGearContainer(uid) || IsOnYautja(uid) || IsAboardYautjaShip(uid) ||
+               TryComp<YautjaTrackerHiddenUntilComponent>(uid, out var hidden) &&
+               _gameTicker.RoundDuration() < hidden.RoundTime;
     }
 
     /// <summary>
