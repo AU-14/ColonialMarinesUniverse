@@ -34,21 +34,11 @@ public sealed partial class YautjaClanManager
     {
         var id = new NetUserId(row.PlayerUserId);
         var flags = (YautjaWhitelistFlags) row.WhitelistFlags;
-        if (flags.HasFlag(YautjaWhitelistFlags.Leader) ||
-            flags.HasFlag(YautjaWhitelistFlags.Council) ||
-            flags.HasFlag(YautjaWhitelistFlags.CouncilLegacy))
-        {
+        if (IsWhitelistRanked(flags))
             return ToSnapshot(id, ResolveSpecial(flags, false, row.ClanId, row.Honor, row.IsLegacy));
-        }
 
         var rank = SanitizeStoredRank(row.Rank);
-        var permissions = !row.IsLegacy && TryReadPermissions(row.Permissions, out var stored)
-            ? stored
-            : PermissionsForRank(rank);
-        if (rank == YautjaRank.Leader)
-            permissions = PermissionsForRank(YautjaRank.Leader);
-
-        return new(id, row.ClanId, rank, permissions, row.IsLegacy, row.Honor);
+        return new(id, row.ClanId, rank, StoredPermissions(row.IsLegacy, row.Permissions, rank), row.IsLegacy, row.Honor);
     }
 
     private static YautjaClanMutationResult Done(params NetUserId[] affected)
@@ -113,9 +103,8 @@ public sealed partial class YautjaClanManager
 
     private async Task<YautjaClanMutationResult> PlaceMember(YautjaClanMemberSnapshot target, int? clanId)
     {
-        var keepAncient = target.Rank == YautjaRank.Ancient ||
-                          YautjaClanPolicy.HasPermission(target.Permissions, YautjaClanPermission.AdminAncient);
-        var rank = keepAncient ? YautjaRank.Ancient : RankOutsideClan(target);
+        // whitelisted Leaders/Ancients keep their rank from the flags, the stored one doesn't matter for them
+        var rank = RankOutsideClan(target);
         if (!await _db.UpsertYautjaClanMemberAsync(new YautjaClanMemberRecord(
                 target.PlayerId.UserId,
                 clanId,
@@ -128,27 +117,6 @@ public sealed partial class YautjaClanManager
         }
 
         return Done(target.PlayerId);
-    }
-
-    public async Task<YautjaClanMutationResult> HallSetAncient(YautjaClanHallActor actor, NetUserId targetId, bool enabled)
-    {
-        var target = await ResolveSnapshot(targetId);
-        if (!YautjaClanHallPolicy.CanSetAncient(actor, target))
-            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-ancient");
-
-        var rank = enabled ? YautjaRank.Ancient : YautjaRank.Blooded;
-        if (!await _db.UpsertYautjaClanMemberAsync(new YautjaClanMemberRecord(
-                targetId.UserId,
-                target.ClanId,
-                (int) rank,
-                (int) PermissionsForRank(rank),
-                target.Honor,
-                false)))
-        {
-            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-clan-gone");
-        }
-
-        return Finish(Done(targetId));
     }
 
     public async Task<YautjaClanMutationResult> HallPurge(YautjaClanHallActor actor, NetUserId targetId)
