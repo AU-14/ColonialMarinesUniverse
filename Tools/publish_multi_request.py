@@ -3,16 +3,17 @@
 import argparse
 import concurrent.futures
 # CMU14: bounded upload recovery with response-aware streaming.
+import http.client
 import json
 import os
 import subprocess
 import tempfile
 import time
+import urllib.error
+import urllib.request
 import zipfile
 from pathlib import Path
 from typing import Iterable
-
-import requests
 
 PUBLISH_TOKEN = os.environ.get("PUBLISH_TOKEN", "")  # CMU14: read-only checks need no secret.
 VERSION = os.environ.get("PUBLISH_VERSION") or os.environ["GITHUB_SHA"]
@@ -20,17 +21,23 @@ VERSION = os.environ.get("PUBLISH_VERSION") or os.environ["GITHUB_SHA"]
 RELEASE_DIR = "release"
 # CMU14: avoid competing uploads into the same CDN publish transaction.
 DEFAULT_UPLOAD_WORKERS = 1
-REQUEST_TIMEOUT = (30, 120)
+REQUEST_TIMEOUT = 120
 REQUIRED_PACKAGES = {"SS14.Client.zip", "SS14.Server_linux-x64.zip", "SS14.Server_win-x64.zip"}
 TRANSIENT_HTTP = {408, 429, 500, 502, 503, 504}
 TRANSIENT_CURL = {5, 6, 7, 18, 28, 35, 52, 55, 56, 92}
 
 
 # CMU14: distinguish recoverable transport failures from permission/configuration failures.
-class UploadError(RuntimeError):
+class PublishError(RuntimeError):
     def __init__(self, message: str, retryable: bool):
         super().__init__(message)
         self.retryable = retryable
+
+
+# CMU14: never forward the publish credential through a redirect.
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
 
 
 #
@@ -102,9 +109,8 @@ def main():
 
 # CMU14: checking an existing release must not leave an in-progress upload behind.
 def check_published(fork_id: str) -> bool:
-    response = requests.get(f"{ROBUST_CDN_URL}fork/{fork_id}/manifest", timeout=REQUEST_TIMEOUT)
-    response.raise_for_status()
-    return VERSION in response.json()["builds"]
+    _, body = cdn_request(f"fork/{fork_id}/manifest")
+    return VERSION in json.loads(body)["builds"]
 
 
 # CMU14: interrupted uploads leave partial files that reject per-file retries.
@@ -116,40 +122,48 @@ def publish_release(files: list[str], fork_id: str, upload_workers: int, attempt
             publish_files(files, fork_id, upload_workers)
             finish_publish(fork_id)
             return
-        except (UploadError, requests.RequestException) as error:
-            if isinstance(error, UploadError):
-                retryable = error.retryable
-            elif isinstance(error, requests.HTTPError):
-                retryable = error.response is not None and error.response.status_code in TRANSIENT_HTTP
-            else:
-                retryable = isinstance(error, (requests.ConnectionError, requests.Timeout))
-            if not retryable or attempt == attempts:
+        except PublishError as error:
+            if not error.retryable or attempt == attempts:
                 raise
             print(f"Publish attempt {attempt} failed: {error}. Restarting upload using the same packages.", flush=True)
             time.sleep(attempt)
 
 
+# CMU14: standard-library JSON requests keep publishing tests dependency-free in CI.
+def cdn_request(path: str, data: dict | None = None, *, allow_conflict: bool = False) -> tuple[int, str]:
+    headers = {"Content-Type": "application/json"}
+    if data is not None:
+        if not PUBLISH_TOKEN:
+            raise RuntimeError("PUBLISH_TOKEN is not configured")
+        headers["Authorization"] = f"Bearer {PUBLISH_TOKEN}"
+    request = urllib.request.Request(
+        ROBUST_CDN_URL + path, data=json.dumps(data).encode() if data is not None else None, headers=headers,
+    )
+    try:
+        with urllib.request.build_opener(NoRedirect).open(request, timeout=REQUEST_TIMEOUT) as response:
+            return response.status, response.read().decode("utf-8")
+    except urllib.error.HTTPError as error:
+        with error:
+            body = error.read().decode("utf-8", errors="replace")
+        if allow_conflict and error.code == 409:
+            return error.code, body
+        raise PublishError(f"CDN HTTP {error.code}: {body[:500]}", error.code in TRANSIENT_HTTP) from None
+    except (urllib.error.URLError, OSError, http.client.HTTPException) as error:
+        raise PublishError(f"CDN connection failed: {error}", True) from None
+
+
+# CMU14: start resets incomplete uploads; completed releases are never replaced.
 def start_publish(fork_id: str) -> bool:
-    session = create_session()
     print(f"Starting publish on Robust.Cdn for version {VERSION}")
 
     data = {
         "version": VERSION,
         "engineVersion": get_engine_version(),
     }
-    headers = {"Content-Type": "application/json"}
-
-    resp = session.post(
-        f"{ROBUST_CDN_URL}fork/{fork_id}/publish/start", json=data, headers=headers, timeout=REQUEST_TIMEOUT  # CMU14
-    )
-    if resp.status_code == 409:
-        try:
-            msg = resp.json()
-        except Exception:
-            msg = resp.text
-        print(f"Version {VERSION} already published (CDN: {msg}), skipping...")
+    status, body = cdn_request(f"fork/{fork_id}/publish/start", data, allow_conflict=True)
+    if status == 409:
+        print(f"Version {VERSION} already published (CDN: {body}), skipping...")
         return False
-    resp.raise_for_status()
     print("Publish successfully started.")
     return True
 
@@ -176,25 +190,12 @@ def publish_files(files: Iterable[str], fork_id: str, upload_workers: int):
     print("Successfully pushed files.")
 
 
+# CMU14: finish only follows successful uploads of every required package.
 def finish_publish(fork_id: str):
-    session = create_session()
     print(f"Finishing publish on Robust.Cdn for version {VERSION}")
     data = {"version": VERSION}
-    headers = {"Content-Type": "application/json"}
-    resp = session.post(
-        f"{ROBUST_CDN_URL}fork/{fork_id}/publish/finish", json=data, headers=headers, timeout=REQUEST_TIMEOUT  # CMU14
-    )
-    resp.raise_for_status()
+    cdn_request(f"fork/{fork_id}/publish/finish", data)
     print("SUCCESS!")
-
-
-def create_session() -> requests.Session:
-    # CMU14: fail before making a mutation request when CI credentials are absent.
-    if not PUBLISH_TOKEN:
-        raise RuntimeError("PUBLISH_TOKEN is not configured")
-    session = requests.Session()
-    session.headers.update({"Authorization": f"Bearer {PUBLISH_TOKEN}"})
-    return session
 
 
 def set_github_output(name: str, value: str):
@@ -239,7 +240,7 @@ def publish_file(file: str, fork_id: str):
         body = response_path.read_text(encoding="utf-8", errors="replace")[:500] if response_path.exists() else ""
         retryable = (status in TRANSIENT_HTTP or result.returncode in TRANSIENT_CURL
                      or (status == 409 and "File already published" in body))
-        raise UploadError(
+        raise PublishError(
             f"Upload {os.path.basename(file)} failed: HTTP {status}, curl {result.returncode}. "
             f"{body} {result.stderr.strip()[:500]}", retryable,
         )

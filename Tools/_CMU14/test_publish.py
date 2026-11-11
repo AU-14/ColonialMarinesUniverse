@@ -34,6 +34,8 @@ class PublishTests(unittest.TestCase):
         self.disconnects = 0
         self.upload_status = 204
         self.published = False
+        self.redirect_start = False
+        self.redirect_followed = False
         owner = self
 
         class Handler(BaseHTTPRequestHandler):
@@ -58,6 +60,8 @@ class PublishTests(unittest.TestCase):
                 return super().handle_expect_100()
 
             def do_GET(self):
+                if self.path == "/redirect-target":
+                    owner.redirect_followed = True
                 builds = {"test-version": {}} if owner.published else {}
                 self.respond(200, json.dumps({"builds": builds}).encode())
 
@@ -68,6 +72,12 @@ class PublishTests(unittest.TestCase):
                 length = int(self.headers.get("Content-Length", 0))
                 if self.path.endswith("/start"):
                     self.rfile.read(length)
+                    if owner.redirect_start:
+                        self.send_response(302)
+                        self.send_header("Location", "/redirect-target")
+                        self.send_header("Content-Length", "0")
+                        self.end_headers()
+                        return
                     if owner.published:
                         self.respond(409, b"Version already exists")
                         return
@@ -132,14 +142,14 @@ class PublishTests(unittest.TestCase):
 
     def test_permanent_upload_failure_never_restarts_or_finalizes(self):
         self.upload_status = 403
-        with self.assertRaisesRegex(publisher.UploadError, "HTTP 403"):
+        with self.assertRaisesRegex(publisher.PublishError, "HTTP 403"):
             self.run_publish()
         self.assertEqual(self.starts, 1)
         self.assertEqual(self.finishes, 0)
 
     def test_retry_limit_never_finalizes_partial_release(self):
         self.upload_status = 503
-        with self.assertRaisesRegex(publisher.UploadError, "HTTP 503"):
+        with self.assertRaisesRegex(publisher.PublishError, "HTTP 503"):
             self.run_publish()
         self.assertEqual(self.starts, 3)
         self.assertEqual(self.finishes, 0)
@@ -178,6 +188,14 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(self.starts, 0)
         self.assertEqual(self.upload_attempts, [])
         self.assertEqual(self.finishes, 0)
+
+    def test_publish_credentials_are_not_forwarded_through_redirects(self):
+        self.redirect_start = True
+        with self.assertRaisesRegex(publisher.PublishError, "HTTP 302"):
+            self.run_publish()
+        self.assertFalse(self.redirect_followed)
+        self.assertEqual(self.starts, 0)
+        self.assertEqual(self.upload_attempts, [])
 
 
 if __name__ == "__main__":
