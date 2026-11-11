@@ -76,9 +76,6 @@ public sealed partial class SapperWorkbenchComponent : Component
     private static SapperWorkbenchItemRequirement ThinLvCable(int count) =>
         new() { StackType = "CMUThinCableLV", Count = count, Name = "thin LV cable coil", IconPrototype = "CMUCableThinLVStack10" };
 
-    private static SapperWorkbenchItemRequirement ThickLvCable(int count) =>
-        new() { StackType = "Cable", Count = count, Name = "thick LV cable coil", IconPrototype = "CableApcStack10" };
-
     private static SapperWorkbenchItemRequirement MetalRods(int count) =>
         new() { StackType = "CMRodMetal", Count = count, Name = "metal rods", IconPrototype = "CMRodMetal10" };
 
