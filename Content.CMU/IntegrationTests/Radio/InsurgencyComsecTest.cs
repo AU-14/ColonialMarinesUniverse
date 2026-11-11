@@ -25,6 +25,7 @@ public sealed class InsurgencyComsecTest
     private static readonly EntProtoId ClfCard = "ANPRCFillCardCLF";
     private static readonly ProtoId<JobPrototype> CellLeader = "AU14JobCLFCellLeader";
     private static readonly ProtoId<JobPrototype> RadioOperator = "AU14JobCLFRadioOperator";
+    private static readonly ProtoId<JobPrototype> Guerilla = "AU14JobCLFGuerilla";
 
     [Test]
     public async Task CellLeaderRecryptosAndTheCellComesBackOnTheNewKey()
@@ -41,16 +42,23 @@ public sealed class InsurgencyComsecTest
 
             var (leader, leaderPack) = SpawnOperator(server, testMap.GridCoords, CellLeader);
             var (rto, rtoPack) = SpawnOperator(server, testMap.GridCoords, RadioOperator);
+            var (guerilla, guerillaPack) = SpawnOperator(server, testMap.GridCoords, Guerilla);
 
-            // the job grants it at round join, SpawnPlayerMob doesn't apply roundComponents
-            entities.EnsureComponent<ANPRCCryptoAuthorityComponent>(leader);
+            // both command jobs carry the authority. the job grants it at round join, SpawnPlayerMob
+            // doesn't apply roundComponents, so it's copied over here
+            foreach (var (mob, job) in new[] { (leader, CellLeader), (rto, RadioOperator) })
+            {
+                Assert.That(server.ProtoMan.Index(job).RoundComponents.ContainsKey("ANPRCCryptoAuthority"), Is.True,
+                    $"{job} can order a recrypto");
+                entities.EnsureComponent<ANPRCCryptoAuthorityComponent>(mob);
+            }
 
             Assert.That(crypto.GetFillFaction(leaderPack), Is.EqualTo("clf"), "the cell's sets ship filled");
             Assert.That(crypto.IsFillStale(rtoPack), Is.False);
 
-            // an operator can't supersede the cell's key on their own
-            ui.OpenUi(rtoPack, ANPRCRadioUI.Key, rto);
-            ui.RaiseUiMessage(rtoPack, ANPRCRadioUI.Key, new ANPRCCryptoRecryptoMsg { Actor = rto });
+            // a rank and file member can't supersede the cell's key
+            ui.OpenUi(guerillaPack, ANPRCRadioUI.Key, guerilla);
+            ui.RaiseUiMessage(guerillaPack, ANPRCRadioUI.Key, new ANPRCCryptoRecryptoMsg { Actor = guerilla });
             Assert.That(crypto.IsFillStale(leaderPack), Is.False, "no authority, no recrypto");
 
             ui.OpenUi(leaderPack, ANPRCRadioUI.Key, leader);
@@ -60,6 +68,7 @@ public sealed class InsurgencyComsecTest
             {
                 Assert.That(crypto.IsFillStale(leaderPack), Is.False, "the ordering set holds the new key");
                 Assert.That(crypto.IsFillStale(rtoPack), Is.True, "every other cell card is superseded");
+                Assert.That(crypto.IsFillStale(guerillaPack), Is.True);
             });
 
             // a card fresh off the rack is cut on the current key
