@@ -14,32 +14,38 @@ public sealed partial class CMUEventLobbyButtons : BoxContainer
     [Dependency] private IClientConsoleHost _console = default!;
     [Dependency] private IEntityManager _entities = default!;
 
+    private CMUEventAccessSystem? _eventAccess;
+
     public CMUEventLobbyButtons()
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-        CodeButton.OnPressed += _ => _entities.System<CMUEventAccessSystem>().OpenCodeWindow();
+        CodeButton.OnPressed += _ => _eventAccess?.OpenCodeWindow();
         SetupButton.OnPressed += _ => _console.ExecuteCommand("eventsetup");
     }
 
     protected override void EnteredTree()
     {
         base.EnteredTree();
+        _eventAccess = _entities.System<CMUEventAccessSystem>();
         _admins.AdminStatusUpdated += Refresh;
-        _entities.System<CMUEventAccessSystem>().Updated += Refresh;
+        _eventAccess.Updated += Refresh;
         Refresh();
     }
 
     protected override void ExitedTree()
     {
         _admins.AdminStatusUpdated -= Refresh;
-        _entities.System<CMUEventAccessSystem>().Updated -= Refresh;
+        // Entity systems may already be unregistered when the lobby leaves the tree.
+        if (_eventAccess != null)
+            _eventAccess.Updated -= Refresh;
+        _eventAccess = null;
         base.ExitedTree();
     }
 
     private void Refresh()
     {
-        CodeButton.Visible = _entities.System<CMUEventAccessSystem>().Enabled;
+        CodeButton.Visible = _eventAccess?.Enabled == true;
         SetupButton.Visible = _admins.HasFlag(AdminFlags.Admin);
         Visible = CodeButton.Visible || SetupButton.Visible;
     }

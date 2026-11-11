@@ -6,3 +6,4 @@ cmu-medical-reattach-attach-failed = The limb could not be attached.
 cmu-medical-reattach-success = The limb is reattached.
 cmu-medical-reattach-wrong-side = That limb is the wrong side.
 cmu-medical-reattach-requires-robotic-limb = This patient can only accept robotic limbs.
+cmu-medical-reattach-torso-damaged = The synth's torso is too damaged to reattach its legs.
