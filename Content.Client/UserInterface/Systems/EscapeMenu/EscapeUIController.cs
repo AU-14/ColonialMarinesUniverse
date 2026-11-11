@@ -136,6 +136,14 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
             _options.OpenWindow();
         };
 
+        // cmu edit start: observers can edit their characters while waiting for the next round
+        _escapeWindow.CharacterSetupButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            UIManager.GetUIController<Content.Client.Lobby.LobbyUIController>().OpenInGameCharacterSetup();
+        };
+        // cmu edit end
+
         _escapeWindow.QuitButton.OnPressed += _ =>
         {
             CloseEscapeWindow();
@@ -212,6 +220,11 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
     private void EscapeWindowOnOpen()
     {
         ActivateButton();
+        // cmu edit start: only ghosts (or bodiless players) get character setup in game
+        if (_escapeWindow != null)
+            _escapeWindow.CharacterSetupButton.Visible =
+                UIManager.GetUIController<Content.Client.Lobby.LobbyUIController>().CanOpenInGameCharacterSetup();
+        // cmu edit end
         _roundStatusRefreshTimer = 0f;
         UpdateEscapeStatus();
     }

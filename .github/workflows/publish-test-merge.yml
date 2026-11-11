@@ -120,15 +120,18 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B test-merge-source "${{ steps.pr.outputs.base_sha }}"
 
-          echo "$PRS_JSON" | jq -r '.[].number' | while read -r pr_number; do
+          # CMU14: Use the validated PR heads so private builds reproduce the same tree.
+          echo "$PRS_JSON" | jq -r '.[] | [.number, .head_sha] | @tsv' | while read -r pr_number head_sha; do
             echo "Merging PR #$pr_number"
             git fetch --no-tags origin "pull/${pr_number}/head:refs/remotes/origin/test-merge-pr-${pr_number}"
-            git merge --no-ff --no-edit "refs/remotes/origin/test-merge-pr-${pr_number}"
+            test "$(git rev-parse "refs/remotes/origin/test-merge-pr-${pr_number}")" = "$head_sha"
+            git merge --no-ff --no-edit "$head_sha"
           done
 
           if ! git diff --quiet "${{ steps.pr.outputs.base_sha }}" -- .github/workflows; then
             echo "::notice::Test merge includes workflow file changes; restoring .github/workflows to base before creating the test merge patch."
-            git checkout "${{ steps.pr.outputs.base_sha }}" -- .github/workflows
+            # CMU14: Remove added workflow files too, matching private source preparation.
+            git restore --source "${{ steps.pr.outputs.base_sha }}" --staged --worktree .github/workflows
           fi
 
           pull_list="$(echo "$PRS_JSON" | jq -r 'map("#" + (.number | tostring)) | join(", ")')"
@@ -156,7 +159,7 @@ jobs:
     name: Package ${{ matrix.name }}
     if: always() && needs.prepare.result == 'success'
     runs-on: blacksmith-4vcpu-ubuntu-2404
-    timeout-minutes: 20
+    timeout-minutes: 60
     needs: prepare
     strategy:
       fail-fast: false
@@ -166,9 +169,11 @@ jobs:
             command: client
             restore: dotnet restore
           - name: server-win-x64
+            platform: win-x64
             command: server --platform win-x64
             restore: dotnet restore --runtime win-x64 /p:TargetOs=Windows
           - name: server-linux-x64
+            platform: linux-x64
             command: server --platform linux-x64
             restore: dotnet restore --runtime linux-x64 /p:TargetOs=Linux
 
@@ -185,6 +190,7 @@ jobs:
           path: .test-merge
 
       - name: Apply test merge patch
+        if: matrix.name == 'client'
         shell: bash
         run: |
           set -euo pipefail
@@ -196,12 +202,13 @@ jobs:
           fi
 
       - name: Checkout submodules
+        if: matrix.name == 'client'
         run: |
           git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --recursive --depth=1
 
       - name: Checkout ColonialMarinesAudio
-        if: ${{ env.AUDIO_REPO_TOKEN != '' }}
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
         uses: actions/checkout@v7
         with:
           repository: AU-14/ColonialMarinesAudio
@@ -209,7 +216,7 @@ jobs:
           path: __audio-overlay
 
       - name: Rsync CMAudio into Resources
-        if: ${{ env.AUDIO_REPO_TOKEN != '' }}
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
         run: |
           mkdir -p Content.CMU/Resources/Audio/CMU14/Private/
           rsync -a --delete \
@@ -219,6 +226,7 @@ jobs:
           rm -rf __audio-overlay
 
       - uses: actions/setup-dotnet@v6.1.0
+        if: matrix.name == 'client'
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
@@ -229,13 +237,38 @@ jobs:
             **/packages.lock.json
 
       - name: Restore dependencies
+        if: matrix.name == 'client'
         run: ${{ matrix.restore }}
 
       - name: Build Packaging
+        if: matrix.name == 'client'
         run: dotnet build Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-restore /m
 
       - name: Package ${{ matrix.name }}
+        if: matrix.name == 'client'
         run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build --no-restore -- ${{ matrix.command }} --no-restore
+
+      - name: Checkout publish tooling
+        if: matrix.name != 'client'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          path: .publish-tooling
+          sparse-checkout: Tools
+          persist-credentials: false
+
+      # CMU14: Server source and detailed logs remain in the private build repository.
+      - name: Request verified server package
+        if: matrix.name != 'client'
+        env:
+          CMU_PRIVATE_BUILD_TOKEN: ${{ secrets.CMU_PRIVATE_BUILD_TOKEN }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.base_sha }}
+          PLATFORM: ${{ matrix.platform }}
+          CMU_TEST_MERGE_PRS: ${{ needs.prepare.outputs.prs_json }}
+        run: |
+          audio_args=()
+          if [ -n "$AUDIO_REPO_TOKEN" ]; then audio_args+=(--require-audio); fi
+          python3 .publish-tooling/Tools/request_private_package.py --source-sha "$SOURCE_SHA" --platform "$PLATFORM" --patch .test-merge/test-merge.patch "${audio_args[@]}"
 
       - name: Upload ${{ matrix.name }} package
         uses: actions/upload-artifact@v7

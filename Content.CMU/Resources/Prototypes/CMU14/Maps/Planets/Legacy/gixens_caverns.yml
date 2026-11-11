@@ -2,6 +2,8 @@
   id: AUPlanetGixensCaverns
   name: Gixens Caverns
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Gixens Caverns"
     mapId: GixensCaverns
@@ -11,7 +13,6 @@
     announcement: "All contact has been lost with the subterranean settlement of Gixens Caverns. A response force has been dispatched into the depths."
     platoonsGovfor:
     - LACN
-    - ProdigySF
     - HAZOPS
     - VAIPO
     - RMC

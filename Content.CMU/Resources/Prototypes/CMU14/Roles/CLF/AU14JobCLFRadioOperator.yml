@@ -60,7 +60,6 @@
     - CMUHardOfHearing
     - CMUClaustrophobic
     - CMUFearOfBlood
-    - NoEnglish
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFRadioOperator
