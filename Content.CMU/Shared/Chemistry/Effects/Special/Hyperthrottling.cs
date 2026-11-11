@@ -3,6 +3,8 @@
 /// free software and would prefer this code be shared freely without restrictions.
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Language.Prototypes;
+using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
@@ -17,6 +19,9 @@ namespace Content.Shared.CMU14.Chemistry.Effects.Special;
 /// </summary>
 public sealed partial class Hyperthrottling : RMCChemicalEffect
 {
+    private static readonly ProtoId<DamageTypePrototype> ShockType = "Shock";
+    private static readonly EntProtoId Unconscious = "StatusEffectCMUUnconscious";
+
     /// <summary>Seconds the grant lasts past the last metabolism tick. Ticks run once a second.</summary>
     [DataField]
     public float LingerSeconds = 6f;
@@ -26,8 +31,19 @@ public sealed partial class Hyperthrottling : RMCChemicalEffect
     public List<ProtoId<LanguagePrototype>> ExcludedLanguages = new();
 
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
-        => "Allows the user to [color=green]speak and understand every language[/color], including alien tongues.";
+        => "Allows the user to [color=green]speak and understand every language[/color], including alien tongues.\n" +
+           $"Overdoses deal [color=red]{PotencyPerSecond}[/color] brain damage.\n" +
+           $"Critical overdoses deal [color=red]{PotencyPerSecond * 3}[/color] brain damage and cause unconsciousness.";
 
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
         => system.LanguageGrant.Apply(args.TargetEntity, TimeSpan.FromSeconds(LingerSeconds), ExcludedLanguages);
+
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
+        => system.ChemicalMedical.DamageOrgan<CMUBrainComponent>(args.TargetEntity, potency, ShockType);
+
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
+    {
+        system.ChemicalMedical.DamageOrgan<CMUBrainComponent>(args.TargetEntity, potency * 3f, ShockType);
+        system.StatusEffects.TrySetStatusEffectDuration(args.TargetEntity, Unconscious, TimeSpan.FromSeconds(3));
+    }
 }

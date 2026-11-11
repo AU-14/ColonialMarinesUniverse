@@ -126,6 +126,7 @@
   equipment:
     id: AU14IDCardGOVFOROfficerMedical
     ears: CMUHeadsetGovforMedicalCommand
+    jumpsuit: CMJumpsuitCMO
   inhand:
     - AU14KitJOMedicalOfficerKit
 
@@ -134,6 +135,7 @@
   equipment:
     id: AU14IDCardOPFOROfficerMedical
     ears: CMUHeadsetOpforMedicalCommand
+    jumpsuit: CMJumpsuitCMO
   inhand:
     - AU14KitJOMedicalOfficerKit
 
@@ -155,7 +157,7 @@
   id: AU14GearGOVFOROfficerMedicalDummy
   equipment:
     shoes: CMBootsBlack
-    head: CMHeadCapPeakedFormal
+    head: CMHeadCapCMO
     jumpsuit: CMJumpsuitCMO
     ears: CMUHeadsetGovforMedicalCommand
 
@@ -163,7 +165,7 @@
   id: AU14GearOPFOROfficerMedicalDummy
   equipment:
     shoes: CMBootsBlack
-    head: CMHeadCapPeakedFormal
+    head: CMHeadCapCMO
     jumpsuit: CMJumpsuitCMO
     ears: CMUHeadsetOpforMedicalCommand
 
