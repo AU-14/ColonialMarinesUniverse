@@ -434,7 +434,9 @@ public sealed partial class SapperWorkbenchSystem : EntitySystem
         {
             return HasComp<MachineBoardComponent>(uid) ||
                    HasComp<ComputerBoardComponent>(uid) ||
-                   HasComp<DoorElectronicsComponent>(uid);
+                   HasComp<DoorElectronicsComponent>(uid) ||
+                   // BaseElectronics boards (air alarm, mailing unit, APC...) carry only Circuitboard.
+                   HasComp<CircuitboardComponent>(uid);
         }
 
         if (req.AnyPowerCell)

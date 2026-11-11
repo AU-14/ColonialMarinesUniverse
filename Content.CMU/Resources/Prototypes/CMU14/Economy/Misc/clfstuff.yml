@@ -321,6 +321,9 @@
       - id: AU14IEDLarge
         amount: 3
         points: 15
+      - id: CMULungeMine
+        amount: 2
+        points: 20
     - name: Protective Equipment
       entries:
       - id: CMUArmorProdigyFlakVestAlt
