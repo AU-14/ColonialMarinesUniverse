@@ -1754,6 +1754,15 @@ public sealed partial class YautjaTrackedItemComponent : Component;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class YautjaUntrackedItemComponent : Component;
 
+// stolen tech (the We-Yu research bracer) stays off the bracer tracker until this far into the round,
+// so the corp gets a real window to work on it before every pred comes knocking
+[RegisterComponent]
+public sealed partial class YautjaTrackerHiddenUntilComponent : Component
+{
+    [DataField]
+    public TimeSpan RoundTime = TimeSpan.FromHours(1);
+}
+
 [ByRefEvent]
 public record struct YautjaTechMisusedEvent(EntityUid User, EntityUid Item, YautjaTechMisuseKind Kind);
 
@@ -3696,6 +3705,10 @@ public sealed partial class YautjaCasterImmobilizerProjectileComponent : Compone
 
 [RegisterComponent]
 public sealed partial class YautjaCasterSingleLethalProjectileComponent : Component;
+
+// cmss13 plasma lance: ishuman_strict gets ex_act(300) on top of the blast, which gibs. synths aren't strict humans
+[RegisterComponent]
+public sealed partial class YautjaGibHumansOnHitComponent : Component;
 
 [RegisterComponent]
 public sealed partial class YautjaCasterEradicatorProjectileComponent : Component

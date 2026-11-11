@@ -71,3 +71,14 @@
     lateJoinGainLarva: false
     hiveColor: "#8080ff" #they are blue for an amazing reason
     hiveUIColor: "#4d4d99"
+
+# serpents on the yautja preserve, kept out of the prime hive's slots and larva queue
+- type: entity
+  id: CMUYautjaPreserveHive
+  name: Preserve Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#c8a060"
+    hiveUIColor: "#7a6038"
