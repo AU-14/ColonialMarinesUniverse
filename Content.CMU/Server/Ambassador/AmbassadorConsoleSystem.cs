@@ -470,7 +470,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                 if (!_worldMarket.TrySpendPoints(comp.FactionName, _worldMarket.OfferCost(comp.FactionName, offer)))
                     return;
 
-                _thirdParty.SpawnThirdParty(party, spawn, false);
+                _thirdParty.SpawnThirdParty(party, spawn, false, caller: new ThirdPartyCaller(Name(msg.Actor), comp.FactionName, comp.Languages, msg.Actor, uid));
                 break;
 
             case MotherOfferGroup.Food:
@@ -671,7 +671,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false, caller: new ThirdPartyCaller(Name(msg.Actor), comp.FactionName, comp.Languages, msg.Actor, uid));
 
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);

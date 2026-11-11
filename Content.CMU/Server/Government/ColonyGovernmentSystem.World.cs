@@ -368,6 +368,9 @@ public sealed partial class ColonyGovernmentSystem
             QueueDel(item);
         }
 
+        // quote what this load really adds: every unit drops the city's price, counting what's already aboard,
+        // so the old "price now for a piece" overstated big stacks
+        var before = Appraise(comp, city, false);
         var name = MetaData(user).EntityName;
         var line = comp.Shipment.FirstOrDefault(l => l.Good == good.ID && l.Owner == user);
         if (line == null)
@@ -375,7 +378,8 @@ public sealed partial class ColonyGovernmentSystem
         else
             line.Amount += amount;
 
-        _popup.PopupEntity(Loc.GetString("rumc-world-intake-taken", ("amount", amount), ("good", Loc.GetString(good.Name)), ("price", SellPriceNow(comp, good, city))), console, user);
+        var added = Appraise(comp, city, false) - before;
+        _popup.PopupEntity(Loc.GetString("rumc-world-intake-taken", ("amount", amount), ("good", Loc.GetString(good.Name)), ("sum", added), ("price", added / Math.Max(1, amount))), console, user);
         Refresh();
     }
 
