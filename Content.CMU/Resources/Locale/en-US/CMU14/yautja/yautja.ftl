@@ -591,6 +591,7 @@ cmu-yautja-hunt-console-blooding-message = Available youngblood groups to awaken
 cmu-yautja-hunt-console-blooding-cancelled = You choose not to awaken any youngbloods.
 cmu-yautja-hunt-console-cooldown = You may begin another hunt in: {$time}.
 cmu-yautja-hunt-console-spawn-failed = The hunting preserve cannot awaken any suitable prey.
+cmu-yautja-preserve-hive-name = Preserve Hive
 cmu-yautja-hunt-console-hunt-ground-started = A hunting-ground prey call has been opened.
 cmu-yautja-hunt-console-blooding-started = A youngblood blooding call has been opened.
 cmu-yautja-hunt-console-hunt-ground-broadcast = {$hunter} has chosen to hunt {$hunt} in the hunting grounds.
