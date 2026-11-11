@@ -9,6 +9,8 @@
 
 - type: thirdParty
   id: Migrant_UPP
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
   announceAsSurvivors: true
   partyspawn: RuMCMigrantSpawn
   whitelistedGamemodes:

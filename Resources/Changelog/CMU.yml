@@ -17641,5 +17641,76 @@
   id: 1023
   time: '2026-11-10T10:57:27.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2548
+- author: TheHellFireo
+  changes:
+  - message: Reduce server work in short ray queries, crowded-player visibility searches
+      and physics bookkeeping.
+    type: Code
+  - message: Prevent stale briefcase links and lobby shutdown errors.
+    type: Fix
+  id: 1024
+  time: '2026-11-10T19:07:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2567
+- author: ILoveDespoiler
+  changes:
+  - message: Fixed HEAP being in regular govfor vendors
+    type: Fix
+  id: 1025
+  time: '2026-11-11T06:32:05.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2570
+- author: troytroy400
+  changes:
+  - message: You can now edit your character from the escape menu while ghosted.
+    type: Add
+  - message: English is now a language trait you pick like any other, instead of a
+      language everyone gets for free.
+    type: Add
+  - message: Each colony now has its own default language.
+    type: Add
+  - message: Colony, corporate and CLF characters, including CLF reinforcements, now
+      default to the colony's language.
+    type: Add
+  - message: Platoons now have a default language. On Insurgency, the GOVFOR CO, XO,
+      staff officers, intel officers, fireteam leaders and squad leaders can speak
+      the colony's language.
+    type: Add
+  - message: Ambassadors now speak their allegiance's languages as well as the colony's.
+    type: Add
+  - message: Civilian third parties now speak the colony's language. Migrants also
+      speak the language of the faction that called them.
+    type: Add
+  - message: New ambassador call-ins. Embassy Staff (all ambassadors), Trade Delegation
+      (CCA, ICSC), Labor Union Organizers (CCA, UPP), Archaeology Team (UA, TWE) and
+      FEMA Disaster Response Team (UA).
+    type: Add
+  - message: Add more mainly unused call-ins for ambassador/corporate. UPP gets the
+      Militsiya patrol. UA gets the CMB patrol and CMB Tactical Team. TWE gets the
+      NSPA Tactical Team. ICSC gets Missionaries, Returning Civilians and a TV News
+      Crew. CCA gets Missionaries. Every ambassador except corporate can now call
+      in Migrants.
+    type: Add
+  - message: Colony administration can now call in a TV News Crew, CMB Parolee Transport,
+      Working Joes and Migrants. Corporate can call in WY Executives, WY Corporate
+      Security and Working Joes.
+    type: Add
+  - message: Third parties are now told who called them in and for which faction.
+    type: Add
+  - message: Removed the Prodigy Security Forces platoon. Prodigy can no longer be
+      picked as a character allegiance.
+    type: Remove
+  - message: Removed GROM, VAIPO, VAISP, RMC RRT, SAS, WY PMC, BEAR and the Liquidators
+      call-ins from the ambassador/corporate consoles.
+    type: Remove
+  - message: BEAR and SAS no longer spawns at random.
+    type: Tweak
+  - message: Ambassador consoles now start with 1000 and no longer generate money
+      on their own. City income, mission rewards and cash still add to them.
+    type: Tweak
+  - message: Console call-ins are now admin-logged and announced to admins, with who
+      called them, for which faction and from which console.
+    type: Admin
+  id: 1026
+  time: '2026-11-11T06:43:49.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2575
 Name: CMU
 Order: -1

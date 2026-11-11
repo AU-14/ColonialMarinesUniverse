@@ -64,6 +64,7 @@
 
 - type: thirdParty
   id: TimeSharesSalesman
+  speaksColonyLanguage: true
   partyspawn: TimeSharesSalesmanSpawn
   entrymethod: shuttle
   weight: 5

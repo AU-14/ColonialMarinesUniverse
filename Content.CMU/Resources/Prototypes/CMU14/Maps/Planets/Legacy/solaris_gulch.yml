@@ -2,6 +2,8 @@
   id: AUPlanetLV747
   name: Solaris Gulch
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Solaris Gulch"
     mapId: AU747
@@ -18,7 +20,6 @@
     - HAZOPS
     platoonsOpfor:
     - UPP
-    - ProdigySF
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: VAIPO
