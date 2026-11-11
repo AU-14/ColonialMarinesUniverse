@@ -9,8 +9,10 @@ cm-job-description-liaison = Be the direct line of communication between the col
 cm-job-prefix-liaison = CL
 CMJobLiaison = Corporate Liaison
 
-rmc-job-name-synth = UNMC Synthetic
-rmc-job-description-synth = Support and assist the UNMC Departments and Personnel.
+# cmu edit start: lore names
+rmc-job-name-synth = USCM Synthetic
+rmc-job-description-synth = Support and assist the USCM Departments and Personnel.
+# cmu edit end
 rmc-job-prefix-synth = SYN
 RMCJobSynthetic = Synthetic
 

@@ -107,17 +107,17 @@ public sealed partial class SpawnPointSystem : EntitySystem
                         fallback.Add(xform.Coordinates);
                 }
 
-                if (preferred.Count == 0 && fallback.Count == 0)
+                if (preferred.Count > 0 || fallback.Count > 0) // CMU14: no ship markers falls through to the fallbacks below
                 {
-                    Log.Error($"[SpawnPointSystem] No spawn points found on ship for faction " +
-                              $"{(isGovfor ? "govfor" : "opfor")} — player cannot spawn!");
-                    return;
+                    var loc = preferred.Count > 0 ? _random.Pick(preferred) : _random.Pick(fallback);
+                    args.SpawnResult = _stationSpawning.SpawnPlayerMob(
+                        loc, args.Job, args.HumanoidCharacterProfile, args.Station);
+                    return; // hard return — never touches planet logic
                 }
 
-                var loc = preferred.Count > 0 ? _random.Pick(preferred) : _random.Pick(fallback);
-                args.SpawnResult = _stationSpawning.SpawnPlayerMob(
-                    loc, args.Job, args.HumanoidCharacterProfile, args.Station);
-                return; // hard return — never touches planet logic
+                // CMU14: spawning somewhere beats not spawning at all
+                Log.Warning($"[SpawnPointSystem] No spawn points found on ship for faction " +
+                          $"{(isGovfor ? "govfor" : "opfor")}, falling back to any spawn point.");
             }
             else
             {
@@ -171,7 +171,8 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 possiblePositions.Add(xform.Coordinates);
             }
             else if (spawnPoint.SpawnType == SpawnPointType.Job &&
-                     (args.Job == null || spawnPoint.Job == null || spawnPoint.Job == args.Job))
+                     (args.Job == null || spawnPoint.Job == null || spawnPoint.Job == args.Job ||
+                      CMUTakesJob(uid, args.Job))) // cmu edit: spawn points that take extra jobs
             {
                 if (isLateJoin)
                     preferredPositions.Add(xform.Coordinates);
@@ -180,32 +181,15 @@ public sealed partial class SpawnPointSystem : EntitySystem
             }
         }
 
-        // CMU14: civilian jobs can be assigned through the ship's job list even though
-        // their dedicated spawn marker belongs to the colony or orbital station.
-        // Prefer that job's marker before falling back to an unrelated spawn point.
-        if (side == RoundJobSide.Civilian && args.Job != null &&
-            preferredPositions.Count == 0 && possiblePositions.Count == 0)
-        {
-            var civilianPoints = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
-            while (civilianPoints.MoveNext(out _, out var spawnPoint, out var xform))
-            {
-                if (spawnPoint.SpawnType == SpawnPointType.Job && spawnPoint.Job == args.Job &&
-                    xform.MapID != MapId.Nullspace)
-                    possiblePositions.Add(xform.Coordinates);
-            }
-        }
-
-        // Last resort: any spawn point.
+        // CMU14: the job's marker isn't on this station, walk the fallback chain instead of
+        // grabbing whatever spawner the query hands back first
         if (preferredPositions.Count == 0 && possiblePositions.Count == 0)
         {
-            // Ok we've still not returned, but we need to put them /somewhere/.
-            // TODO: Refactor gameticker spawning code so we don't have to do this!
-            var points2 = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
+            CMUCollectFallbackSpawns(args.Job, args.Station, possiblePositions);
 
-            if (points2.MoveNext(out _, out var xform))
+            if (possiblePositions.Count > 0)
             {
-                Log.Error($"Unable to pick a valid spawn point, picking random spawner as a backup.\nRunLevel: {_gameTicker.RunLevel} Station: {ToPrettyString(args.Station)} Job: {args.Job}");
-                possiblePositions.Add(xform.Coordinates);
+                Log.Warning($"No spawn point for job {args.Job} on station {ToPrettyString(args.Station)}, using a fallback spawn point.");
             }
             else
             {
@@ -228,6 +212,15 @@ public sealed partial class SpawnPointSystem : EntitySystem
         args.SpawnResult = _stationSpawning.SpawnPlayerMob(
             spawnLoc, args.Job, args.HumanoidCharacterProfile, args.Station);
     }
+
+    // cmu edit start: a spawn point can take jobs besides its own, like detectives at the deputy spawns
+    private bool CMUTakesJob(EntityUid spawnPoint, Robust.Shared.Prototypes.ProtoId<Content.Shared.Roles.JobPrototype>? job)
+    {
+        return job != null &&
+               TryComp(spawnPoint, out Content.Shared.CMU14.Spawners.CMUSpawnPointExtraJobsComponent? extra) &&
+               extra.Jobs.Contains(job.Value);
+    }
+    // cmu edit end
 
     // CMU14 method: last ditch spawn for stations with no spawn points. Walks outward from
     // the middle of the largest grid's bounding box to the first tile nothing blocks.

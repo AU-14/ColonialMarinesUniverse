@@ -68,6 +68,9 @@
   - type: OverwatchConsole
     canOrbitalBombardment: true
     group: GOVFOR
+    # cmu edit start: shows the ship's IX-50 MGAD status
+    showAntiAirStatus: true
+    # cmu edit end
   - type: AU14CallsignConsole
     faction: govfor
   # child UserInterface overrides replace the whole interfaces dict, so the
@@ -102,6 +105,9 @@
   - type: OverwatchConsole
     canOrbitalBombardment: true
     group: OPFOR
+    # cmu edit start: shows the ship's IX-50 MGAD status
+    showAntiAirStatus: true
+    # cmu edit end
   - type: TacticalMapComputer
     faction: opfor
   - type: AU14CallsignConsole

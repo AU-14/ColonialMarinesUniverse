@@ -43,12 +43,14 @@
         whitelist:
           tags:
           - Stunbaton
+          - CMUAttachmentNightVisionScope # CMU14
           components:
           - PowerCell
           - BatteryAmmoProvider
           - Defibrillator
           - Visor
           - PortableDialysis
+          - CMUAutocompressor # CMU14: rechargeable chest compressor
           # SmartGun Battery
   - type: ItemMapper
     sprite: _RMC14/Structures/Power/recharger.rsi

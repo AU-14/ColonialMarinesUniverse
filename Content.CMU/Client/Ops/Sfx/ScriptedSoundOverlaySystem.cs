@@ -14,6 +14,7 @@ namespace Content.Client.CMU14.Ops.Sfx;
 
 public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
 {
+    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IOverlayManager _overlay = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPlayerManager _plyMan = default!;
@@ -87,8 +88,8 @@ public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
         if (player == null || ev.AnchorCoords is null)
             return;
 
-        var anchorCoords = EntityManager.GetCoordinates(ev.AnchorCoords.Value);
-        var anchorMapEntity = anchorCoords.GetMapUid(EntityManager);
+        var anchorCoords = GetCoordinates(ev.AnchorCoords.Value);
+        var anchorMapEntity = _transform.GetMap(anchorCoords);
         var playerMapUid = Transform(player.Value).MapUid;
         if (anchorMapEntity == null || playerMapUid == null)
             return;

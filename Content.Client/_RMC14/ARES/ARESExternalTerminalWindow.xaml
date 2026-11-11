@@ -7,8 +7,9 @@
     MinSize="900 600">
     <Control Name="LoginScreen" Access="Public">
         <BoxContainer Orientation="Vertical" VerticalAlignment="Center">
+            <!-- CMU14: APOLLO is a Seegson system -->
             <RichTextLabel Text="[font size= 20]APOLLO Interface" HorizontalAlignment="Center"/>
-            <RichTextLabel Text="[font size= 15]We-Yu Management" HorizontalAlignment="Center"/>
+            <RichTextLabel Text="[font size= 15]Seegson Management" HorizontalAlignment="Center"/>
             <Control SetHeight="30"/>
             <RichTextLabel Text="[font size= 15]Version 6.6.6" HorizontalAlignment="Center"/>
             <Control SetHeight="30"/>

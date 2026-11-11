@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Chemistry;
@@ -24,6 +25,8 @@ namespace Content.Shared._RMC14.Xenonids.Spray;
 
 public sealed partial class XenoSprayAcidSystem : EntitySystem
 {
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private VehicleWheelSystem _vehicleWheels = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -166,6 +169,25 @@ public sealed partial class XenoSprayAcidSystem : EntitySystem
         Dirty(target, comp);
     }
 
+    private void TryAcidVehicleWheels(EntityUid splatter)
+    {
+        if (!TryComp(splatter, out DamageOnCollideComponent? onCollide))
+            return;
+
+        var damage = _onCollide.GetCollideDamage((splatter, onCollide)).GetTotal().Float();
+        if (damage <= 0f)
+            return;
+
+        var splatterMap = _transform.GetMapId(splatter);
+        var splatterAabb = _lookup.GetWorldAABB(splatter);
+        var vehicles = new HashSet<Entity<VehicleWheelSlotsComponent>>();
+        _lookup.GetEntitiesIntersecting(splatterMap, splatterAabb, vehicles);
+        foreach (var vehicle in vehicles)
+        {
+            _vehicleWheels.DamageWheels(vehicle, damage);
+        }
+    }
+
     public void CreateLine(EntityUid user, EntityCoordinates start, EntityCoordinates end, TimeSpan delay, float range, EntProtoId acid, bool ignoreBlocker = true)
     {
         var tiles = _line.DrawLine(start, end, delay, range, out var blocker);
@@ -206,6 +228,8 @@ public sealed partial class XenoSprayAcidSystem : EntitySystem
                 _hive.SetSameHive(uid, spawned);
                 splatter.Xeno = uid;
                 Dirty(spawned, splatter);
+
+                TryAcidVehicleWheels(spawned);
 
                 if (_xenoSprayAcidQuery.TryComp(uid, out var xenoSprayAcid))
                 {

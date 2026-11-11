@@ -10,6 +10,10 @@ namespace Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 [Access(typeof(XenoSpitSystem), typeof(XenoAcidBlastSystem))]
 public sealed partial class UserAcidedComponent : Component
 {
+    // CMU14: acid strength is independent of remaining tail-stab bonuses.
+    [DataField, AutoNetworkedField]
+    public int Tier = 1;
+
     [DataField, AutoNetworkedField]
     public DamageSpecifier Damage = new();
 

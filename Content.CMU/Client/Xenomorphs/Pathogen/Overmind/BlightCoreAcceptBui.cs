@@ -6,7 +6,7 @@ namespace Content.Client.CMU14.Xenomorphs.Pathogen.Overmind;
 
 public sealed partial class BlightCoreAcceptBui : BoundUserInterface
 {
-    [Dependency] private  Robust.Client.Player.IPlayerManager _player = default!;
+    [Dependency] private Robust.Client.Player.IPlayerManager _player = default!;
 
     private BlightCoreAcceptWindow? _window;
     
@@ -50,6 +50,6 @@ public sealed partial class BlightCoreAcceptBui : BoundUserInterface
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        _window?.Dispose();
+        _window?.Release();
     }
 }

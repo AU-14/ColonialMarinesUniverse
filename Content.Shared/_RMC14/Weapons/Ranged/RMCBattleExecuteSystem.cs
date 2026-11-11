@@ -94,7 +94,7 @@ public sealed partial class RMCBattleExecuteSystem : EntitySystem
         if (_mobState.IsDead(target) && _unrevivable.IsUnrevivable(target))
         {
             var cancelledMessage = $"You decide to not Execute {Name(target)}, as they are already far beyond revival.";
-            _popup.PopupClient(cancelledMessage, user, PopupType.MediumCaution);
+            _popup.PopupSelf(cancelledMessage, user, PopupType.MediumCaution);
             return;
         }
 
@@ -110,7 +110,7 @@ public sealed partial class RMCBattleExecuteSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-execute-start-self", ("target", Name(target)), ("gun", Name(handHeldItem)));
         var othersMsg = Loc.GetString("rmc-execute-start-others", ("user", Name(user)), ("target", Name(target)), ("gun", Name(handHeldItem)));
-        _popup.PopupPredicted(selfMsg, othersMsg, user, user, PopupType.LargeCaution);
+        _popup.PopupEntity(selfMsg, othersMsg, user, user, PopupType.LargeCaution);
     }
 
     private void ExecuteDoAfter(Entity<MarineComponent> ent, ref RMCBattleExecuteEvent args)
@@ -124,7 +124,7 @@ public sealed partial class RMCBattleExecuteSystem : EntitySystem
                 LogImpact.High,
                 $"{ToPrettyString(user)}'s Execution of {ToPrettyString(target)} was cancelled.");
             var cancelledMessage = $"You decide to not Execute {Name(target)}.";
-            _popup.PopupClient(cancelledMessage, user, PopupType.MediumCaution);
+            _popup.PopupSelf(cancelledMessage, user, PopupType.MediumCaution);
             return;
         }
 
@@ -185,7 +185,7 @@ public sealed partial class RMCBattleExecuteSystem : EntitySystem
             _audio.PlayPredicted(gun.SoundGunshotModified, args.Used.Value, user);
 
         var popupMessage = $"{Name(target)} WAS EXECUTED BY {Name(user)}!";
-        _popup.PopupPredicted(popupMessage, target, user, PopupType.LargeCaution);
+        _popup.PopupBroadcast(popupMessage, target, user, PopupType.LargeCaution);
 
         var chatMsg = $"[bold][font size=24][color=red]\n{Name(target)} WAS EXECUTED BY {Name(user)}!\n[/color][/font][/bold]";
         var coordinates = _transform.GetMapCoordinates(target);

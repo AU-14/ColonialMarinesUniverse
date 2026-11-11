@@ -1,4 +1,5 @@
 using Content.Shared.Jittering;
+using Content.Shared.GameTicking;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -39,11 +40,29 @@ public sealed partial class ChemicalAddictionSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
+    private TimeSpan _nextUpdate;
+
     public override void Initialize()
     {
         base.Initialize();
         SubscribeLocalEvent<ChemicalAddictionComponent, CureChemicalAddictionEvent>(OnCure);
+        SubscribeLocalEvent<ChemicalAddictionComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<ChemicalAddictionComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<ChemicalAddictionComponent, EntityUnpausedEvent>(OnUnpaused);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
     }
+
+    private void OnStartup(Entity<ChemicalAddictionComponent> ent, ref ComponentStartup args)
+        => _nextUpdate = TimeSpan.Zero;
+
+    private void OnShutdown(Entity<ChemicalAddictionComponent> ent, ref ComponentShutdown args)
+        => _nextUpdate = TimeSpan.Zero;
+
+    private void OnUnpaused(Entity<ChemicalAddictionComponent> ent, ref EntityUnpausedEvent args)
+        => _nextUpdate = TimeSpan.Zero;
+
+    private void OnRoundRestart(RoundRestartCleanupEvent args)
+        => _nextUpdate = TimeSpan.Zero;
 
     public void AddOrSatisfy(EntityUid target, string reagent)
     {
@@ -58,6 +77,8 @@ public sealed partial class ChemicalAddictionSystem : EntitySystem
         entry.LastDose = _timing.CurTime;
         entry.NextMessage = entry.LastDose + CravingDelay;
         entry.Craving = false;
+        if (entry.NextMessage < _nextUpdate)
+            _nextUpdate = entry.NextMessage;
 
         if (wasCraving)
             _popup.PopupEntity(Loc.GetString("cmu-chemical-addiction-satisfied", ("chemical", reagent)), target, target);
@@ -79,6 +100,12 @@ public sealed partial class ChemicalAddictionSystem : EntitySystem
             return;
 
         var now = _timing.CurTime;
+        if (now < _nextUpdate)
+            return;
+
+        // All doses enter through AddOrSatisfy. Lifecycle events invalidate this gate for loaded
+        // entries and unpaused entities, so idle ticks do not scan minutes-long withdrawal timers.
+        _nextUpdate = TimeSpan.MaxValue;
         var query = EntityQueryEnumerator<ChemicalAddictionComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
@@ -86,7 +113,12 @@ public sealed partial class ChemicalAddictionSystem : EntitySystem
             {
                 var elapsed = now - entry.LastDose;
                 if (elapsed < CravingDelay)
+                {
+                    var onsetAt = entry.LastDose + CravingDelay;
+                    if (onsetAt < _nextUpdate)
+                        _nextUpdate = onsetAt;
                     continue;
+                }
 
                 if (!entry.Craving)
                 {
@@ -103,6 +135,9 @@ public sealed partial class ChemicalAddictionSystem : EntitySystem
                     if (elapsed >= ShakeDelay)
                         _jitter.DoJitter(uid, TimeSpan.FromSeconds(4), true, 8, 4);
                 }
+
+                if (entry.NextMessage < _nextUpdate)
+                    _nextUpdate = entry.NextMessage;
             }
 
         }

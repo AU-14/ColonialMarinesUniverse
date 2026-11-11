@@ -2,6 +2,8 @@ using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Body.Systems;
+using Content.Shared.Body.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -37,6 +39,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     private static readonly ProtoId<DamageTypePrototype> LethalDamageType = "Asphyxiation";
     private static readonly ProtoId<StatusEffectPrototype> Unconsciousness = "Unconscious";
@@ -66,7 +69,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
         };
 
         var selfMsg = Loc.GetString("rmc-xeno-headbite-self", ("xeno", xeno.Owner), ("target", target));
-        _popup.PopupClient(selfMsg, xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(selfMsg, xeno, xeno, PopupType.Medium);
 
         var othersMsg = Loc.GetString("rmc-xeno-headbite-others", ("xeno", xeno.Owner), ("target", target));
         _popup.PopupEntity(othersMsg, xeno, Filter.PvsExcept(xeno), true, PopupType.MediumCaution);
@@ -103,6 +106,9 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
             _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
         }
 
+        if (xeno.Comp.Bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(target, out var bloodstream))
+            _bloodstream.TryModifyBloodLevel((target, bloodstream), -xeno.Comp.Bloodloss);
+
         if (_mobThresholds.TryGetDeadThreshold(target, out var mobThreshold) && TryComp<DamageableComponent>(target, out var damageable))
         {
             var lethalAmountOfDamage = mobThreshold.Value - _damage.GetTotalDamage((target, damageable));
@@ -112,7 +118,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
         }
 
         var selfMsg = Loc.GetString("rmc-xeno-headbite-hit-self", ("xeno", xeno.Owner), ("target", target));
-        _popup.PopupClient(selfMsg, xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(selfMsg, xeno, xeno, PopupType.Medium);
 
         var othersMsg = Loc.GetString("rmc-xeno-headbite-hit-others", ("xeno", xeno.Owner), ("target", target));
         _popup.PopupEntity(othersMsg, xeno, Filter.PvsExcept(xeno), true, PopupType.MediumCaution);
@@ -123,7 +129,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
         if (!_mobState.IsCritical(target) && !_status.HasStatusEffect(target, "Unconscious"))
         {
             var failMsg = Loc.GetString("rmc-xeno-headbite-warning");
-            _popup.PopupClient(failMsg, xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(failMsg, xeno, xeno, PopupType.SmallCaution);
             return false;
         }
 
@@ -132,7 +138,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
             if (TryComp<VictimInfectedComponent>(target, out var victim) && _hive.IsMember(xeno, victim.Hive))
             {
                 var failMsg = Loc.GetString("rmc-xeno-headbite-warning-larva");
-                _popup.PopupClient(failMsg, xeno, xeno, PopupType.SmallCaution);
+                _popup.PopupEntity(failMsg, xeno, xeno, PopupType.SmallCaution);
                 return false;
             }
         }

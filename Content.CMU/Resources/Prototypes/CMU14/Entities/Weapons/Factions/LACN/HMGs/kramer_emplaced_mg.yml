@@ -41,7 +41,7 @@
     canRotateWithoutTool: true
     mountOnDeploy: false
     mountExclusionAreaSize: 0
-    barricadeExclusionAreaSize: 2
+    barricadeExclusionAreaSize: 0
     assembleDelay: 3
     undeploySound: null
     acidableWhileUndeployed: true
@@ -56,6 +56,7 @@
   name: Kramer emplaced machine gun
   description: The top half of a Kramer emplaced machine gun. It is not much use without its tripod.
   components:
+  - type: CMUAmmoCounter
   - type: Sprite
     sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplacedicon.rsi
     layers:

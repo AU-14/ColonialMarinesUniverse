@@ -603,7 +603,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         // Validate every referenced prototype exists BEFORE writing — an invalid material/tool produces
         // a recipe that silently fails to build ("not enough materials" / no steps shown). Refuse and
         // tell the admin exactly what's wrong instead of generating a broken entry.
-        var isItemRecipe = proto.TryGetComponent<ItemComponent>(out _, _componentFactory);
+        var isItemRecipe = proto.TryComp<ItemComponent>(out _, _componentFactory);
         if (!ValidateSteps(steps, isItemRecipe, out var invalidReason))
         {
             PopupTo(session, Loc.GetString("construction-menu-verb-invalid", ("reason", invalidReason)), PopupType.MediumCaution);
@@ -951,7 +951,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         stackType = string.Empty;
 
         if (!_prototype.TryIndex<EntityPrototype>(protoId, out var proto) ||
-            !proto.TryGetComponent<StackComponent>(out var stack, _componentFactory))
+            !proto.TryComp<StackComponent>(out var stack, _componentFactory))
             return false;
 
         if (string.IsNullOrWhiteSpace(stack.StackTypeId))
@@ -1119,7 +1119,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
                 reason = "unreadable header";
             else if (string.IsNullOrEmpty(info.Entity) || !_prototype.TryIndex<EntityPrototype>(info.Entity, out var entProto))
                 reason = $"missing entity '{info?.Entity}'";
-            else if (!ValidateSteps(info.Steps, entProto.TryGetComponent<ItemComponent>(out _, _componentFactory), out var stepReason))
+            else if (!ValidateSteps(info.Steps, entProto.TryComp<ItemComponent>(out _, _componentFactory), out var stepReason))
                 reason = stepReason;
             else if (!ValidateDeconstructSteps(info.DeconstructSteps, out var deconstructReason))
                 reason = deconstructReason;
@@ -1261,7 +1261,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         }
 
         // An item builds in-hand; everything else is placed as a structure ghost.
-        var isItem = proto.TryGetComponent<ItemComponent>(out _, _componentFactory);
+        var isItem = proto.TryComp<ItemComponent>(out _, _componentFactory);
         var midEntityId = $"AU14CustomEntityMid_{entryKey}";
 
         var sb = new StringBuilder();

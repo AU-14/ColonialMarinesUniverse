@@ -69,7 +69,7 @@ public sealed partial class WeatherRemoveCommand : LocalizedEntityCommands
             var opts = new List<CompletionOption>();
             foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
             {
-                if (!proto.HasComponent<WeatherStatusEffectComponent>(_compFactory))
+                if (!proto.HasComp<WeatherStatusEffectComponent>(_compFactory))
                     continue;
 
                 opts.Add(new CompletionOption(proto.ID, proto.Name));

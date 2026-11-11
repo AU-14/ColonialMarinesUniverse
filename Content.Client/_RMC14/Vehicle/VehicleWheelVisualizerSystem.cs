@@ -93,7 +93,7 @@ public sealed partial class VehicleWheelVisualizerSystem : VisualizerSystem<Vehi
         if (destroyed)
             brightness = 1f;
 
-        var targetState = destroyed ? "wheels_1" : "wheels_0";
+        var targetState = destroyed ? "wheels_1" : CMUIntactState(uid, sprite, layer); // CMU14: road tyres have their own art
 
         if (_sprite.LayerGetRsiState((uid, sprite), layer) != targetState)
         {

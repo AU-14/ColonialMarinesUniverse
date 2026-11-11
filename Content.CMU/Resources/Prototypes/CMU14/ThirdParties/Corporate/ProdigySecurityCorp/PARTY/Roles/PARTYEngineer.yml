@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTYPartyContractorBase
   id: AU14JobPARTYPartyEngineer #m41a/2
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
   roundSide: ThirdParty
   roundProfiles:
   - AU14RoundJobProfileThirdParty
@@ -16,7 +20,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Prodigy Yankee Combat Engineer
+  name: Combat Engineer
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTYPartyEngineerTracker
   ranks:
@@ -75,7 +79,7 @@
     #- AU14Tourniquet
     # no need, pouch already has 6 slots and is filled with med supplies
     back:
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14PacketGrenadeFragM12Filled
     - CMSheetMetal50

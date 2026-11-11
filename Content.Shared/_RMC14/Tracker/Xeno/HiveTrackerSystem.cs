@@ -278,7 +278,7 @@ public sealed partial class HiveTrackerSystem : EntitySystem
                     continue;
 
                 var trackingComponent = _factory.GetComponent(trackerMode.Component).GetType();
-                if (EntityManager.TryGetComponent(trackableUid, trackingComponent, out _))
+                if (TryComp(trackableUid, trackingComponent, out _))
                 {
                     SetTarget((uid, tracker), trackableUid);
                     if(tracker.Target != null)

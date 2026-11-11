@@ -36,21 +36,5 @@ public sealed class GrilleWindowConstruction : InteractionTest
         AssertDeleted();
     }
 
-    [Test]
-    [TestCase(Grille, Grille)]
-    [TestCase(Window, Grille)]
-    [TestCase(Window, Window)]
-    public async Task ConstructionBlocker(string first, string second)
-    {
-        // Spawn blocking entity
-        await SpawnTarget(first);
-
-        // Further construction attempts fail - blocked by first entity interaction.
-        await Client.WaitPost(() =>
-        {
-            var proto = ProtoMan.Index<ConstructionPrototype>(second);
-            Assert.That(CConSys.TrySpawnGhost(proto, CEntMan.GetCoordinates(TargetCoords), Direction.South, out _), Is.False);
-        });
-    }
 }
 

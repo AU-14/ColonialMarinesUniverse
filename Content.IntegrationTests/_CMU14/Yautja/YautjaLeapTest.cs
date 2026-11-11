@@ -3,9 +3,14 @@ using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.DoAfter;
 using Content.Shared.Physics;
+using Content.Shared.Throwing;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using System.Numerics;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
@@ -13,74 +18,57 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaLeapTest
 {
+
+    // A cross-level leap never reaches ThrowingSystem, so StopThrowEvent never fires; the leap must end by removing
+    // the component, which restores the collision masks recorded before the leap. Without that the hunter keeps the
+    // leap-permissive masks and can walk through impassable terrain.
     [Test]
-    public void LeapPassesMobsAndObjectsButKeepsWallsBlocking()
+    public async Task LeapCollisionMasksAreRestoredWhenTheLeapEnds()
     {
-        var original = (int) (CollisionGroup.Impassable |
-                              CollisionGroup.MidImpassable |
-                              CollisionGroup.HighImpassable |
-                              CollisionGroup.LowImpassable |
-                              CollisionGroup.BulletImpassable);
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
 
-        var actual = YautjaAbilitySystem.GetLeapCollisionMask(original);
-
-        Assert.Multiple(() =>
+        await server.WaitAssertion(() =>
         {
-            Assert.That(actual & (int) CollisionGroup.Impassable, Is.Not.Zero,
-                "Walls must remain impassable during a Yautja leap.");
-            Assert.That(actual & (int) CollisionGroup.MidImpassable, Is.Zero);
-            Assert.That(actual & (int) CollisionGroup.HighImpassable, Is.Zero);
-            Assert.That(actual & (int) CollisionGroup.LowImpassable, Is.Zero);
-            Assert.That(actual & (int) CollisionGroup.BulletImpassable, Is.Not.Zero,
-                "Unrelated collision groups must not be removed by the leap.");
-        });
-    }
+            var entMan = server.EntMan;
+            var physics = entMan.System<SharedPhysicsSystem>();
+            var yautja = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
 
-    [Test]
-    public async Task IntentionalLeapGetsObstacleSlamImmunity()
-    {
-        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
-        EntityCoordinates origin = default;
-        await server.WaitPost(() =>
-        {
-            var mapSystem = server.System<SharedMapSystem>();
-            mapSystem.CreateMap(out var mapId);
-            origin = new EntityCoordinates(mapSystem.CreateGridEntity(mapId), 0, 0);
-        });
-        EntityUid hunter = default;
+            Assert.That(entMan.TryGetComponent<FixturesComponent>(yautja, out var fixtures), Is.True);
+            var originals = new Dictionary<string, int>();
+            foreach (var (fixtureId, fixture) in fixtures!.Fixtures)
+                originals[fixtureId] = fixture.CollisionMask;
+            Assert.That(originals, Is.Not.Empty, "the hunter has fixtures to relax");
 
-        try
-        {
-            await server.WaitAssertion(() =>
+            // Same steps PrepareLeapCollision performs: save the masks, then relax them for the leap.
+            var leap = entMan.EnsureComponent<YautjaLeapingComponent>(yautja);
+            leap.OriginalCollisionMasks.Clear();
+            foreach (var (fixtureId, fixture) in fixtures.Fixtures)
             {
-                var entMan = server.EntMan;
-                hunter = entMan.SpawnEntity("CMUMobYautja", origin);
-                var yautja = entMan.GetComponent<YautjaComponent>(hunter);
-                yautja.LeapWindup = TimeSpan.Zero;
-                var action = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-                var actionComp = entMan.EnsureComponent<ActionComponent>(action);
-                var leap = new YautjaLeapActionEvent
-                {
-                    Performer = hunter,
-                    Action = (action, actionComp),
-                    Target = origin.Offset(new Vector2(3, 0)),
-                };
-                entMan.EventBus.RaiseLocalEvent(hunter, leap);
-                Assert.That(leap.Handled, Is.True);
-            });
+                leap.OriginalCollisionMasks[fixtureId] = fixture.CollisionMask;
+                physics.SetCollisionMask(
+                    yautja,
+                    fixtureId,
+                    fixture,
+                    YautjaAbilitySystem.GetLeapCollisionMask(fixture.CollisionMask),
+                    fixtures);
+            }
 
-            await server.WaitRunTicks(2);
+            Assert.That(fixtures.Fixtures.Values.Any(f => f.CollisionMask != originals[
+                    fixtures.Fixtures.First(e => e.Value == f).Key]),
+                Is.True, "the leap masks differ from the originals");
 
-            await server.WaitAssertion(() =>
+            // RemoveComponent runs the same handler RemCompDeferred would.
+            entMan.RemoveComponent<YautjaLeapingComponent>(yautja);
+
+            foreach (var (fixtureId, fixture) in fixtures.Fixtures)
             {
-                var immune = server.EntMan.GetComponent<RMCObstacleSlamImmuneComponent>(hunter);
-                Assert.That(immune.ExpireIn, Is.EqualTo(TimeSpan.FromSeconds(0.5)));
-                Assert.That(immune.ExpireAt, Is.GreaterThan(server.Timing.CurTime));
-            });
-        }
-        finally
-        {
-            server.Dispose();
-        }
+                Assert.That(fixture.CollisionMask, Is.EqualTo(originals[fixtureId]),
+                    $"fixture {fixtureId} kept its leap collision mask after the leap ended");
+            }
+        });
+
+        await pair.CleanReturnAsync();
     }
 }

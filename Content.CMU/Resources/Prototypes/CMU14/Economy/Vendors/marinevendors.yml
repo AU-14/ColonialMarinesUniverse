@@ -23,11 +23,11 @@
         amount: 120
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 40
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 25
     - name: Gloves
       entries:
@@ -35,10 +35,6 @@
         amount: 40
       - id: CMHandsBrown
         amount: 20
-      - id: AU14PVEHandsFingerlessBlackGloves
-        amount: 20
-      - id: AU14PVEHandsFingerlessBrownGloves
-        amount: 10
     - name: Webbings
       entries:
       - id: AU14WebbingMagazine
@@ -245,6 +241,10 @@
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
@@ -262,15 +262,20 @@
         name: first-aid pouch (pills)
     - name: Medical Headgear
       entries:
-      - id: AU14DesertM10CorpsmanHelmet
+      - id: AU14CamoM10CorpsmanHelmet
         amount: 9
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
       - id: CMBeltMedicBag
+        recommended: true
+      - id: CMBeltMedical
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
+      - id: CMUSalineBag
+        amount: 3
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -386,6 +391,14 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: cmu-vendor-advanced-gunship-crew-hud
+      choices: { CMUPlatoonAirCrewGunshipHUD: 1 }
+      entries:
+      - id: CMUVisorGunshipCrewAdvanced
+    - name: cmu-vendor-basic-gunship-crew-huds
+      entries:
+      - id: CMUVisorGunshipCrew
+        amount: 5
     - name: Fatigues
       choices: { CMUPlatoonAirCrewFatigues: 1 }
       entries:
@@ -399,12 +412,11 @@
     - name: Footwear
       choices: { CMUPlatoonAirCrewFootwear: 1 }
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
     - name: Gloves
       choices: { CMUPlatoonAirCrewGloves: 1 }
       entries:
       - id: AU14PVEHandsInsulatedBlackMarine
-      - id: AU14PVEHandsFingerlessBlackGloves
     - name: Headgear
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
@@ -598,11 +610,11 @@
         amount: 10
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 5
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 5
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 5
     - name: Headgear
       entries:
@@ -629,8 +641,10 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
-      - id: ANPRC117GRadioFilled
+      - id: ANPRC117GRadioIssued
         amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
       - id: ANPRCMastAntenna
         amount: 1
       - id: RMCExplosiveBreachingCharge
@@ -668,6 +682,13 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSquadAutomaticRifleman
+    - AU14JobGOVFORSquadAutomaticRiflemanRMC
+    - AU14JobGOVFORSquadAutomaticRiflemanUPP
+    - AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+    - AU14JobOPFORSquadAutomaticRifleman
     sections:
     - name: Essential Equipment
       takeAll: CMUAREssentialEquipment
@@ -704,6 +725,14 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    # only the role that uses this vendor
+    jobs:
+    - AU14JobGOVFORSectionSergeant
+    - AU14JobGOVFORSectionSergeantCMBCIU
+    - AU14JobGOVFORSectionSergeantRMC
+    - AU14JobGOVFORSectionSergeantUPP
+    - AU14JobGOVFORSectionSergeantWYPMC
+    - AU14JobOPFORSectionSergeant
     sections:
     - name: Helmets and Hats
       choices: { CMHat: 1 }
@@ -738,6 +767,11 @@
     - AU14JobGOVFORSquadSergeantUPP
     - AU14JobGOVFORSquadSergeantWYPMC
     sections:
+    - name: cmu-vendor-section-sl-scopes
+      choices: { CMUSquadLeaderScope: 1 }
+      entries:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+      - id: CMUAttachmentNightVisionScope
     - name: Helmets and Hats
       choices: { CMHat: 2 }
       entries:
@@ -757,7 +791,7 @@
         recommended: true
     - name: Footwear
       entries:
-      - id: AU14SpikeBoots
+      - id: CMUSpikeBootsFilled
         points: 8
         recommended: true
     - name: Utilities
@@ -832,8 +866,9 @@
     Standard issue across the frontier where threats can appear without warning.
     Engineered to arm personnel in seconds following cryogenic hypersleep or emergency mobilization.
 
-    For immediate combat readiness: select a primary weapon kit and a sidearm.
+    For immediate combat readiness: select a primary weapon and a sidearm.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
@@ -843,30 +878,38 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM41AMK1
-      - id: AU14KitWeaponM39
+      - id: RMCWeaponRifleM54CMK1Unloaded
+      - id: WeaponSMGM63
     - name: Rifle Ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
-        amount: 60
+        amount: 120
       - id: CMMagazineSMGM63
-        amount: 60
+        amount: 120
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
-      - id: AU14KitWeaponM4A3
-      - id: AU14KitWeaponMod88
+      - id: CMWeaponPistolM1984Empty
+      - id: RMCWeaponPistolM77Empty
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
-        amount: 60
+        amount: 120
       - id: CMMagazinePistolM77AP
-        amount: 60
-    - name: Attachments
-      choices: { CMUAttachmentsVendor: 1 }
+        amount: 120
+    - name: Unrestricted Attachments
       entries:
       - id: RMCAttachmentRailFlashlight
+        maxPerUser: 1
       - id: AU14AttachmentTwoPointSling
+        maxPerUser: 1
+    - name: Special Ammunition
+      choices: { CMUSpecialAmmo: 2 }
+      entries:
+      - id: CMMagazineRifleM54CMK1AP
+      - id: CMMagazineSMGM63AP
+      - id: RMCMagazinePistolM1984AP
+      - id: CMMagazineSMGM63Ext
 
 - type: entity
   parent: AU14SpecVend
@@ -879,6 +922,7 @@
 
     Special weapons protocol: one weapon system of choice with a full ammunition loadout and explosives.
   components:
+  - type: CMUVendGunsOnSafety
   - type: CMAutomatedVendor
     sections:
     - name: Weapons Specialist Sets
@@ -957,6 +1001,8 @@
         amount: 60
       - id: RMCBoxMRE
         amount: 10
+      - id: CMCanteen
+        amount: 60
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
@@ -983,6 +1029,8 @@
         amount: 20
     - name: Tools
       entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
       - id: CMEntrenchingTool
         recommended: true
         amount: 30
@@ -1037,8 +1085,12 @@
         amount: 1
       - id: RMCPowerCellHigh
         amount: 2
-      - id: RMCCableCoil
-        amount: 15
+      - id: CMUCableThinHVStack
+        amount: 5
+      - id: CMUCableThinMVStack
+        amount: 5
+      - id: CMUCableThinLVStack
+        amount: 5
     - name: Flares and lights
       entries:
       - id: RMCBoxFlashlights
@@ -1055,14 +1107,20 @@
         amount: 8
     - name: Gas Mask
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
         amount: 40
-      - id: CMMaskPrescriptionGas
+      - id: CMUMaskGasBlack
+        amount: 40
+      - id: CMUMaskPrescriptionGas
+        amount: 10
+      - id: CMUMaskPrescriptionGasBlack
         amount: 10
       - id: CMUGasMaskFilter
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: Hearing Protection
       entries:
       - id: CMUHeadElectronicHearingProtection
@@ -1128,6 +1186,7 @@
   name: aircrew weapons rack
   description: An automated rack hooked up to a small storage of weapons.
   components:
+  - type: CMUVendGunsOnSafety
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: Sprite
@@ -1195,10 +1254,12 @@
       - id: AU14BeltUtilityCombatFilled
         name: M276 pattern combat toolbelt rig (filled)
         recommended: true
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
@@ -1235,7 +1296,11 @@
         points: 1
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
@@ -1274,6 +1339,12 @@
         points: 4
     - name: Explosives
       entries:
+      - id: RMCExplosiveClaymoreMine
+        points: 5
+      - id: AU14ExplosiveClaymoreMineIncendiary
+        points: 6
+      - id: CMUExplosiveAntitankMineM19
+        points: 10
       - id: RMCExplosivePlastic
         points: 4
       - id: AU14Bangalore
@@ -1282,7 +1353,7 @@
       - id: RMCExplosiveBreachingCharge
         points: 5
       - id: RMCPacketGrenadeMetalFoamFilled
-        points: 8
+        points: 5
       - id: RMCRocketM5510Brute
         points: 4
     - name: Utilities
@@ -1329,6 +1400,8 @@
       entries:
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
@@ -1421,8 +1494,9 @@
     state: firstaid
   - type: CMVendorBundle
     bundle:
-    - RMCVisorMedicalAdvanced
+    - CMUVisorMedicalSquad
     - RMCGlassesMedicalHUDGlasses
+    - CMUBloodCooler
     - AU14CMDefibrillator
     - CMHealthAnalyzer
     - RMCFlashlightPen
@@ -1459,7 +1533,9 @@
       - id: RMCBoxZiptie
       - id: AU14GuidebookLawMarine
       - id: AU14GuidebookSOP
-      - id: AU14Scissors
+      - id: CMUScissorsRegulation
+      - id: CMUPepperSpray
+      - id: CMUPepperSprayAntidote
     - name: Uniform
       choices: { AU14Uniform: 1 }
       entries:
@@ -1467,8 +1543,8 @@
     - name: Footwear
       choices: { AU14FootWear: 1 }
       entries:
-      - id: CMBootsBlack
-      - id: CMBootsBrown
+      - id: CMBootsBlackFilled
+      - id: CMBootsBrownFilled
     - name: Hat
       choices: { CMHat: 2 }
       entries:
@@ -1515,6 +1591,8 @@
   name: USCM automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMUVendGunsOnSafety
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
   - type: Sprite
@@ -1555,22 +1633,32 @@
         amount: 5
       - id: RMCML66DCase
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
+      - id: RMCGunCasePistolM13
+        amount: 4
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
         amount: 200
+      - id: CMU14MagazineRifleM54CMK1Rubber
+        amount: 20
       - id: CMMagazineRifleM54CMK1AP
         amount: 15
       - id: CMMagazineRifleM54CMK1Tracer
         amount: 5
       - id: CMMagazineSMGM63
         amount: 200
+      - id: RMCMagazineSMGM63Rubber
+        amount: 20
       - id: CMMagazineSMGM63AP
         amount: 15
       - id: CMMagazineSMGM63Ext
         amount: 10
       - id: CMMagazineRifleM4SPR
         amount: 60
+      - id: RMCMagazineRifleM4SPRRubber
+        amount: 20
       - id: CMMagazineRifleM4SPRAP
         amount: 15
       - id: CMMagazineRifleM4SPRExt
@@ -1579,6 +1667,8 @@
         amount: 5
       - id: CMMagazineRifleM54C
         amount: 100
+      - id: RMCMagazineRifleM54CRubber
+        amount: 20
       - id: CMMagazineRifleM54CAP
         amount: 15
       - id: CMMagazineRifleM54CExt
@@ -1587,28 +1677,54 @@
         amount: 5
       - id: RMCBoxShotgunBuckshot
         amount: 20
+      - id: RMCBoxShotgunBeanbag
+        amount: 20
       - id: RMCBoxShotgunFlechette
         amount: 20
       - id: RMCBoxShotgunSlugs
         amount: 20
       - id: RMCMagazineSmartGun
         amount: 25
+      - id: CMU14MagazineSmartGunRubber
+        amount: 20
       - id: RMCPowerCellSmartgun
         amount: 10
     - name: secondary ammunition
       entries:
       - id: CMMagazinePistolM1984
         amount: 200
+      - id: RMCMagazinePistolM1984Rubber
+        amount: 20
       - id: RMCMagazinePistolM1984AP
         amount: 15
       - id: RMCMagazinePistolM1984HP
         amount: 5
       - id: CMMagazinePistolM77AP
         amount: 200
+      - id: RMCMagazinePistolM77Rubber
+        amount: 20
       - id: RMCSpeedLoaderM44
         amount: 100
+      - id: CMU14SpeedLoaderM44Rubber
+        amount: 20
       - id: RMCSpeedLoader44Marksman
         amount: 10
+      - id: RMCMagazinePistolSU6
+        amount: 30
+      - id: CMU14MagazinePistolSU6Rubber
+        amount: 20
+      - id: RMCMagazinePistolM13
+        amount: 40
+      - id: CMU14MagazinePistolM13Rubber
+        amount: 20
+      - id: RMCMagazinePistolM13AP
+        amount: 4
+      - id: RMCMagazinePistolM13Ext
+        amount: 4
+      - id: RMCMagazinePistolM13Drum
+        amount: 2
+      - id: RMCMagazinePistolM13DrumAP
+        amount: 1
     - name: Magazine Boxes
       entries:
       - id: CMUBoxMagazineRifleM54CMK1
@@ -1633,6 +1749,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: CMPacketGrenadeHighExplosiveFilled
         amount: 6
       - id: RMCPacketGrenadeIncendiaryFilled
@@ -1645,10 +1763,16 @@
         amount: 3
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
-      - id: RMCBoxClaymoreMineFilled
-        amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
+      - id: CMUPacketGrenadeBFABFilled
+        amount: 2
+      - id: CMUPacketGrenadeCanisterFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeGreenFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeRedFilled
+        amount: 2
+      - id: CMUPacketGrenadeElectroshockFilled
+        amount: 2
       - id: AU14PacketGrenadeTearGasFilled
         amount: 2
       - id: AU14PacketGrenadeTearGasFilledAirburst
@@ -1673,6 +1797,14 @@
         amount: 12
       - id: AU14Bangalore
         amount: 2
+    - name: Mines
+      entries:
+      - id: RMCBoxClaymoreMineFilled
+        amount: 3
+      - id: AU14BoxClaymoreMineIncendiaryFilled
+        amount: 1
+      - id: CMUExplosiveAntitankMineM19
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
@@ -1681,6 +1813,8 @@
         amount: 3
     - name: Rail Attachments
       entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
       - id: RMCAttachmentTwoPointSling
         amount: 50
       - id: RMCAttachmentRailFlashlight
@@ -1729,6 +1863,12 @@
         amount: 10
       - id: RMCPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: Devices
       entries:
       - id: RMCIntelDetector
@@ -1741,12 +1881,26 @@
         amount: 4
       - id: MineDetector
         amount: 2
-    - name: RTO Packs
-      entries:
-      - id: AU14BackpackRTOPackJungle
+      - id: CMUDeployableZLevelLadder
         amount: 2
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
+    - name: Protective Equipment
+      entries:
+      - id: CMUMaskGas
+        amount: 30
+      - id: CMUMaskGasBlack
+        amount: 30
+      - id: CMUGasMaskFilter
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
+    - name: Radio Equipment
+      entries:
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: Materials
       entries:
       - id: CMSheetMetal
@@ -1757,6 +1911,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum
@@ -1790,7 +1946,7 @@
 
 - type: entity
   parent: ColMarTechBase
-  id: AU14USCMVehicleCrewmanVendor
+  id: AU14VehicleCrewmanVendorUSCM
   name: vehicle crewman vendor
   description: >-
     An automated dispenser rack, hooked up to a small storage of support gear for vehicle crew.
@@ -1804,10 +1960,74 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORVehicleCommander
+    - AU14JobOPFORVehicleCommander
+    - AU14JobGOVFORVehicleCrewman
+    - AU14JobOPFORVehicleCrewman
     sections:
-    - name: Servicing Tools # placeholder
+    - name: Essential Equipment
+      takeAll: CMUAREssentialEquipment
       entries:
+      - id: RMCLaserDesignator
       - id: AU14MaintenanceJack
+      - id: RMCWelderPVE
+      - id: RMCPouchTools
+    - name: Tool Storage
+      choices: { CMUCTToolStorage: 1 }
+      entries:
+      - id: AU14BeltUtilityCombatFilled
+        name: M276 pattern combat toolbelt rig (filled)
+        recommended: true
+      - id: AU14BeltUtilityFilled
+        name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
+    - name: Engineering Storage Bag
+      choices: { CMUPouchesCTBag: 1 }
+      entries:
+      - id: CMBackpackWelder
+        recommended: true
+      - id: RMCSatchelWelderChestrig
+      - id: RMCSatchelWelder
+    - name: Engineering Storage Pouch
+      choices: { CMUPouchesCT: 2 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchEngineerKit
+      - id: RMCPouchElectronics
+    - name: Engineering Supplies
+      entries:
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
+        points: 1
+      - id: AU14MaintenanceJack
+        points: 2
+      - id: RMCES11MobileFuelCanister
+        points: 4
+      - id: RMCEngineerKit
+        points: 2
+    - name: Explosives
+      entries:
+      - id: RMCExplosivePlastic
+        points: 4
+      - id: AU14Bangalore
+        points: 6
+        recommended: true
+      - id: RMCExplosiveBreachingCharge
+        points: 5
+    - name: Utilities
+      entries:
+      - id: RMCOuterClothingExternalWebbingBlack
+        points: 5
+      - id: RMCOuterClothingExternalWebbing
+        points: 5
 
 - type: entity
   parent: ColMarTechBase
@@ -1837,11 +2057,11 @@
         amount: 120
     - name: Footwear
       entries:
-      - id: CMBootsBlack
+      - id: CMBootsBlackFilled
         amount: 40
-      - id: CMBootsBrown
+      - id: CMBootsBrownFilled
         amount: 40
-      - id: AU14BootsJungle
+      - id: AU14BootsJungleFilled
         amount: 25
     - name: Mask
       entries:

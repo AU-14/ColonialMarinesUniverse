@@ -1,0 +1,8 @@
+- type: cmu3DSurface
+  id: CMU3DFieldGearCloudFoamFullCountStrip
+  texture: /Textures/CMU14/ThreeD/field_gear_cloud/FoamFullCountStrip.png
+  atlasIndex: 2583
+- type: cmu3DSurface
+  id: CMU3DFieldGearCloudScopeRedBracketDetail
+  texture: /Textures/CMU14/ThreeD/field_gear_cloud/ScopeRedBracketDetail.png
+  atlasIndex: 2584

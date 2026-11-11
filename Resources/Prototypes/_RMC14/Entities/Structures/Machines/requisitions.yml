@@ -106,7 +106,7 @@
     - OrderSender
   - type: GuideHelp
     guides:
-    - Cargo
+    - RMCRequisitions # CMU14: the base SS14 Cargo guide does not match CMU; link the requisitions guide
   - type: CargoSellBlacklist
   - type: ApcPowerReceiver
     powerLoad: 0
@@ -139,7 +139,7 @@
   - type: RMCMesonsNonviewable
 
 - type: entity
-  parent: CMASRSConsole
+  parent: [ CMASRSConsole, CMUASRSVehicleGoodies ] # cmu edit: vehicle tabs, which the colony ASRS doesn't get
   id: CMASRSConsolePowered
   suffix: Powered
   components:
@@ -184,7 +184,7 @@
           !type:PhysShapeAabb
           bounds: "-2.3,-2.3,2.3,2.3"
         layer:
-        - MidImpassable
+        - WallLayer
         mask:
         - ItemMask
         density: 1000
@@ -256,7 +256,7 @@
   - type: CargoSellBlacklist
 
 - type: entity
-  parent: [ CMASRSConsole ]
+  parent: [ CMASRSConsole, CMUASRSVehicleGoodies ] # cmu edit: vehicle tabs, which the colony ASRS doesn't get
   id: CMASRSConsoleGovfor
   name: ASRS console (Govfor)
   components:
@@ -276,7 +276,7 @@
     faction: govfor
 
 - type: entity
-  parent: [ CMASRSConsole ]
+  parent: [ CMASRSConsole, CMUASRSVehicleGoodies ] # cmu edit: vehicle tabs, which the colony ASRS doesn't get
   id: CMASRSConsoleOpfor
   name: ASRS console (Opfor)
   components:
@@ -312,7 +312,7 @@
     faction: opfor
 
 - type: entity
-  parent: [ CMASRSConsole ]
+  parent: [ CMASRSConsole, CMUASRSColonyJeepKits ]
   id: CMASRSConsoleColony
   name: ASRS console (Colony)
   components:

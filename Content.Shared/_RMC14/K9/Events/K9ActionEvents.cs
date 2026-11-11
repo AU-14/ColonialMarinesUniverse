@@ -48,3 +48,11 @@ public sealed class K9MasterRequestConfirmEvent : EntityEventArgs
         MarineNet = marineNet;
     }
 }
+
+/// <summary>
+/// Raised on a dog when its master bond is set or cleared, so mirrors like the hellhound's
+/// YautjaOwner can follow the K9 bond of record.
+/// </summary>
+// CMU14 event
+[ByRefEvent]
+public readonly record struct K9BondChangedEvent(EntityUid? Master, bool HandlerBonded);

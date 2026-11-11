@@ -1,0 +1,18 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed repeated errors from deleted combat targets, gibbing, ghost warps,
+    parasite selection and thrown-item containers.
+  type: Fix
+- message: Fixed an expedition weapon-event registration error that prevented server
+    startup.
+  type: Fix
+- message: Fixed interrupted dropship travel loops and unnecessary broadcasts of departure
+    sounds.
+  type: Fix
+- message: Limited flare burn ambience through the existing nearby-sound budget.
+  type: Fix
+- message: Reduced the cost of periodic client performance inventories.
+  type: Admin
+time: '2026-10-09T18:47:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2122

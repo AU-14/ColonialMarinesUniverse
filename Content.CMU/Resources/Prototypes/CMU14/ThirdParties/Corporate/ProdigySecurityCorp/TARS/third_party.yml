@@ -12,10 +12,11 @@
 
 - type: thirdParty
   id: ProdigyTARSParty
+  allegiance: Prodigy
   partyspawn: ProdigyTARSSpawn
   entrymethod: ground
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 4
+  ghostsNeeded: 4
   roundstart: false

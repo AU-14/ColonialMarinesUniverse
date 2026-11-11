@@ -126,11 +126,19 @@ namespace Content.Client.Gameplay
 
         public EntityUid? GetClickedEntity(MapCoordinates coordinates, IEye? eye)
         {
+            // CMU14: preserve the entity selected by the visible 3D ray, including wall occlusion.
+            // A missed 3D pick falls through to the 2D sprite pick instead of killing the click.
+            if (_entityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().TryFirstPersonAim(out var aim, out var target)
+                && aim == coordinates
+                && target is not null)
+                return target;
             if (eye == null)
                 return null;
 
-            var first = GetClickableEntities(coordinates, eye).FirstOrDefault();
-            return first.IsValid() ? first : null;
+            // CMU14: hover needs only the topmost hit, without allocating and sorting a complete result list.
+            // var first = GetClickableEntities(coordinates, eye).FirstOrDefault();
+            // return first.IsValid() ? first : null;
+            return CMUGetTopmostClickable(coordinates, eye);
         }
 
         public IEnumerable<EntityUid> GetClickableEntities(EntityCoordinates coordinates, bool excludeFaded = true)
@@ -146,6 +154,12 @@ namespace Content.Client.Gameplay
 
         public IEnumerable<EntityUid> GetClickableEntities(MapCoordinates coordinates, IEye? eye, bool excludeFaded = true, bool ignoreInteractionTransparency = false)
         {
+            // CMU14: use the same source entity as first-person rendering and aiming.
+            // A missed 3D pick falls through to the 2D sprite pick instead of returning nothing.
+            if (_entityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().TryFirstPersonAim(out var aim, out var target)
+                && aim == coordinates
+                && target is { } firstPersonEntity)
+                return new[] { firstPersonEntity };
             /*
              * TODO:
              * 1. Stuff like MeleeWeaponSystem need an easy way to hook into viewport specific entities / entities under mouse
@@ -240,7 +254,14 @@ namespace Content.Client.Gameplay
                 }
                 else
                 {
-                    if (vp is ScalingViewport svp)
+                    // CMU14: resolve perspective input through the visible scene.
+                    // A missed 3D pick falls back to the 2D pick so the click is not dropped.
+                    if (vp is CMU14.ThreeD.Scene.CMU3DSceneControl scene && scene.FirstPerson)
+                    {
+                        scene.Aim(kArgs.PointerLocation.Position, out entityToClick);
+                        entityToClick ??= GetClickedEntity(mousePosWorld);
+                    }
+                    else if (vp is ScalingViewport svp)
                     {
                         entityToClick = GetClickedEntity(mousePosWorld, svp.Eye);
                     }

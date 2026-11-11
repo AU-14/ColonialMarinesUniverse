@@ -33,3 +33,4 @@
       components:
       - Xeno
   - type: RemoveOnlyStorage
+  - type: CMUDespawnWhenEmpty # CMU14: clean up emptied kits left on the ground

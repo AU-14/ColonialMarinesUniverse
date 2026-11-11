@@ -1,6 +1,11 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 13
   id: AU14JobWYPMCPartyLeader #m41a/2
+  chevrons:
+    AU14RankWeYuEnforcerLead:
+      entity: AU14ChevronWeYuEnforcerLead
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartyLeader
@@ -76,7 +81,7 @@
     mask: RMCMaskCoifPMC
     eyes: RMCGlassesMedicalHUDGlasses
     head: ArmorHelmetPMCFieldOfficer
-    gloves: RMCHandsVeteranPMC
+    gloves: CMUHandsVeteranPMC
     belt: RMCMK80BeltPMCFilled
     pocket1: RMCPouchMagazineLargePMC
     pocket2: AU14PouchIFAKFill
@@ -92,7 +97,7 @@
     back:
     - CMSurgicalLine
     - CMSynthGraft
-    - RMCMREWeYa
+    - RMCMREWeYaPMC
     - RMCRangefinder
     - CMStunbaton
     - RMCHandcuffs

@@ -8,7 +8,7 @@
     job: RuMCUPPBEARCommander
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - AUUpp
 
 - type: entity
   parent: CMIDCardBase
@@ -20,7 +20,7 @@
     job: RuMCUPPBEARMachinegunner
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - AUUpp
 
 - type: entity
   parent: CMIDCardBase
@@ -32,7 +32,7 @@
     job: RuMCUPPBEARRifleman
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - AUUpp
 
 - type: entity
   parent: CMIDCardBase
@@ -44,7 +44,7 @@
     job: RuMCUPPBEARGrenader
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - AUUpp
 
 - type: entity
   parent: CMIDCardBase
@@ -56,4 +56,4 @@
     job: RuMCUPPBEARMedic
   - type: ItemIFF
     factions:
-    - GOVFOR
+    - AUUpp

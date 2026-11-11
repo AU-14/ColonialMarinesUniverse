@@ -27,3 +27,6 @@
 
 - type: Tag
   id: AU14MastAntennaHead
+
+- type: Tag
+  id: CMUPressArmor

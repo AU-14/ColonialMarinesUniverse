@@ -11,6 +11,11 @@
   name: Boiler
   description: A huge, grotesque xenonid covered in glowing, oozing acid slime.
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste, matching
+    canThrow: true           # CM-SS13's grab gate (mob_grab.dm:82-89: Yautja reach MOB_SIZE_XENO, 3).
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleBoiler
@@ -240,6 +245,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-trapper-name
+    baseCaste: CMXenoBoiler # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-trapper-description
     popup: rmc-xeno-trapper-popup
   - type: CMArmor

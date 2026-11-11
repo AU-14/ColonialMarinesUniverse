@@ -69,7 +69,7 @@
   equipment:
     head: RMCHelmetWelding
     mask: RMCCombatUtilityKnifeA
-    ears: RMCHeadsetDistressCLF
+    ears: AU14HeadsetCLF
     jumpsuit: RMCJumpsuitCLFWebbingBuckshot
     outerClothing: RMCCoatMilitia
     gloves: CMHandsInsulated

@@ -1,4 +1,4 @@
-﻿using Content.Server.NodeContainer.EntitySystems;
+using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Server.Power.Nodes;
@@ -45,13 +45,13 @@ public sealed partial class PowerSwitchableSystem : SharedPowerSwitchableSystem
             switch (voltage)
             {
                 case SwitchableVoltage.HV:
-                    supplier.Voltage = Voltage.High;
+                    supplier.SetVoltage(uid, Voltage.High);
                     break;
                 case SwitchableVoltage.MV:
-                    supplier.Voltage = Voltage.Medium;
+                    supplier.SetVoltage(uid, Voltage.Medium);
                     break;
                 case SwitchableVoltage.LV:
-                    supplier.Voltage = Voltage.Apc;
+                    supplier.SetVoltage(uid, Voltage.Apc);
                     break;
             }
         }

@@ -11,11 +11,13 @@ emplacement-mount-need-hands-free = You need both hands free to grab the handles
 
 mountable-weapon-no-free-hands = You need both hands free to operate the weapon.
 
-emplacement-mount-RMCSmartGunMounted-name = ML66D mount
-emplacement-mount-RMCSmartGunMounted-description = A foldable mount for the ML66D, provides stability to the ML66D.
+# cmu edit start: the ML66D is the M56D
+emplacement-mount-RMCSmartGunMounted-name = M56D mount
+emplacement-mount-RMCSmartGunMounted-description = A foldable mount for the M56D, provides stability to the M56D.
 emplacement-mount-RMCSmartGunMounted-description-mounted = A deployable, heavy machine gun. It fires specialized tungsten rounds for increased armor penetration.
-emplacement-mount-RMCSmartGunMountedLoaded-name = ML66D mount
-emplacement-mount-RMCSmartGunMountedLoaded-description = A foldable mount for the ML66D, provides stability to the ML66D.
+emplacement-mount-RMCSmartGunMountedLoaded-name = M56D mount
+emplacement-mount-RMCSmartGunMountedLoaded-description = A foldable mount for the M56D, provides stability to the M56D.
+# cmu edit end
 emplacement-mount-RMCSmartGunMountedLoaded-description-mounted = A deployable, heavy machine gun. It fires specialized tungsten rounds for increased armor penetration.
 
 emplacement-mount-RMCMachineGunM2C-description = The disassembled M2C HMG, with its telescopic tripods folded up and unable to fire.

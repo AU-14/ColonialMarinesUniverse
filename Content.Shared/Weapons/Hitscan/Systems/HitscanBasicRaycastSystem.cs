@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.CMU14.Weapons.Hitscan; // CMU14: opt-in fixture raycasts.
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
@@ -16,6 +17,7 @@ namespace Content.Shared.Weapons.Hitscan.Systems;
 
 public sealed partial class HitscanBasicRaycastSystem : EntitySystem
 {
+    [Dependency] private CMUFixtureHitscanSystem _cmuHitscan = default!; // CMU14
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private ISharedAdminLogManager _log = default!;
@@ -35,7 +37,11 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
         var shooter = args.Shooter ?? args.Gun;
         var mapCords = _transform.ToMapCoordinates(args.FromCoordinates);
         var ray = new CollisionRay(mapCords.Position, args.ShotDirection, (int) ent.Comp.CollisionMask);
-        var rayCastResults = _physics.IntersectRay(mapCords.MapId, ray, ent.Comp.MaxDistance, shooter, false);
+        // CMU14 Begin: only opted-in weapons use the fixture geometry policy.
+        var rayCastResults = HasComp<CMUFixtureHitscanComponent>(ent)
+            ? _cmuHitscan.Cast(mapCords.MapId, ray, ent.Comp.MaxDistance, shooter)
+            : _physics.IntersectRay(mapCords.MapId, ray, ent.Comp.MaxDistance, shooter, false);
+        // CMU14 End
 
         var target = args.Target;
         // If you are in a container, use the raycast result

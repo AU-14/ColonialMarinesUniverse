@@ -25,9 +25,10 @@ public sealed partial class RMCStatusEffectSystem : EntitySystem
 
     private void OnSkillsStatusEffectTime(Entity<SkillsComponent> ent, ref RMCStatusEffectTimeEvent args)
     {
-        if (HasComp<YautjaComponent>(ent.Owner))
-            return;
-
+        // CMU14: CM-SS13 applies the skill term to everyone, Yautja included -
+        // life_helpers.dm:177-183 does "final_reduction = (1 - skill_resistance) / species.stun_reduction"
+        // (and the same for knock_down_reduction), so a high-Endurance hunter shrugs stuns and knockdowns off
+        // faster than the bare 1.5 divisor. The old Yautja early-return here made them take longer stuns.
         if (args.Key != Knockdown && args.Key != Stun && args.Key != Unconscious)
             return;
 
@@ -51,9 +52,6 @@ public sealed partial class RMCStatusEffectSystem : EntitySystem
     private void OnStunResistanceStatusEffectTime(Entity<RMCStunResistanceComponent> ent, ref RMCStatusEffectTimeEvent args)
     {
         if (args.Key != Knockdown && args.Key != Stun && args.Key != Unconscious)
-            return;
-
-        if (args.Key == Unconscious && HasComp<YautjaComponent>(ent.Owner))
             return;
 
         args.Duration /= ent.Comp.Resistance;

@@ -89,13 +89,13 @@ public sealed partial class XenoVenatorSystem : EntitySystem
 
         if (_timing.CurTime < xeno.Comp.StoreAcidLockedUntil)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-venator-store-acid-locked"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-venator-store-acid-locked"), xeno, xeno);
             return;
         }
 
         if (xeno.Comp.AcidCharges >= xeno.Comp.MaxAcidCharges)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-venator-store-acid-full"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-venator-store-acid-full"), xeno, xeno);
             return;
         }
 
@@ -106,7 +106,7 @@ public sealed partial class XenoVenatorSystem : EntitySystem
         xeno.Comp.AcidCharges++;
         Dirty(xeno);
         _armor.UpdateArmorValue((xeno, null));
-        _popup.PopupClient(Loc.GetString("cm-xeno-venator-store-acid", ("charges", xeno.Comp.AcidCharges)), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-venator-store-acid", ("charges", xeno.Comp.AcidCharges)), xeno, xeno);
     }
 
     private void OnSpitAction(Entity<XenoVenatorComponent> xeno, ref XenoVenatorSpitActionEvent args)

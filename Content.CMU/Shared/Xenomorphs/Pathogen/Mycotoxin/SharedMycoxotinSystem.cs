@@ -107,6 +107,10 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         if (HasOpenWound(target))
             return ProtectionResult.None;
 
+        // Internals block inhaled spores outright; Partial means this tick is blocked.
+        if (_gasMask.IsBreathingInternals(target))
+            return ProtectionResult.Partial;
+
         foreach (var slot in new[] { "mask", "head" })
         {
             if (!_inventory.TryGetSlotEntity(target, slot, out var item))
@@ -192,7 +196,7 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
                         break;
                 }
 
-                Expose(victim, injector);
+                Expose(victim, uid, injector);
             }
         }
 
@@ -206,14 +210,14 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         }
     }
 
-    private void Expose(EntityUid victim, MycotoxinInjectorComponent injector)
+    private void Expose(EntityUid victim, EntityUid source, MycotoxinInjectorComponent injector)
     {
         var isNew = !HasComp<MycotoxinExposureComponent>(victim);
         var exposure = EnsureComp<MycotoxinExposureComponent>(victim);
         if (isNew)
         {
             exposure.EmbryoSpawn = injector.EmbryoSpawn;
-            exposure.SourceHive = _hive.GetHive(injector.Owner)?.Owner;
+            exposure.SourceHive = _hive.GetHive(source)?.Owner;
             exposure.StrongEffects = injector.StrongExposureEffects;
             OnFirstExposure(victim, injector.StrongExposureEffects);
         }

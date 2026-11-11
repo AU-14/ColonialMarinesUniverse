@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.GasMask;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -22,6 +23,7 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
     [Dependency] private SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedGasMaskSystem _gasMask = default!;
 
     public override void Initialize()
     {
@@ -97,6 +99,9 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
     /// </summary>
     private bool IsProtected(EntityUid target)
     {
+        if (_gasMask.IsBreathingInternals(target))
+            return true;
+
         MycotoxinProtectionComponent? single = null;
         var protectiveItemCount = 0;
 

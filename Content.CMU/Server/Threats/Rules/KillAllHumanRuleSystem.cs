@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
@@ -37,6 +38,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         base.Initialize();
 
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUAdriftChangedEvent>(OnAdriftChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
         SubscribeLocalEvent<GotEquippedEvent>(OnGotEquipped);
         SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
@@ -83,6 +85,8 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
     private bool IsInArrestArea(EntityUid uid)
         => _area.TryGetArea(uid, out Entity<AreaComponent>? area, out _)
             && area.Value.Comp.CountAsArrestedForEndConditions;
+
+    private void OnAdriftChanged(ref CMUAdriftChangedEvent ev) => CheckVictoryCondition();
 
     private void CheckVictoryCondition()
     {

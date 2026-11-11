@@ -1,0 +1,120 @@
+# ├──[ ID CARDS ]────────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCaseOfficer
+  name: intelligence case officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCaseOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelGRUSpetsnazOfficer
+  name: GRU Spetsnaz officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelGRUSpetsnazOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelGRUSpetsnazMember
+  name: GRU Spetsnaz member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelGRUSpetsnazMember
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCIASADOfficer
+  name: CIA SAD officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCIASADOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelCIASADMember
+  name: CIA SAD member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelCIASADMember
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelSASOfficer
+  name: SAS detachment officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelSASOfficer
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardIntelSASMember
+  name: SAS detachment member ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobIntelSASMember
+
+# A Case Officer's cover identity: an ordinary colonist ID that gets the holder's name when they spawn.
+- type: entity
+  parent: AU14IDCardColonyColonist
+  id: CMUIDCardIntelCover
+  suffix: Intelligence cover
+  components:
+  - type: CMUCoverIdCard
+
+# ├──[ RADIO ]───────────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14EncryptionKey
+  id: CMUEncryptionKeyIntelSection
+  name: intelligence section encryption key
+  description: An encryption key used to communicate on colony and intelligence section radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - CMUIntelSection
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14HeadsetColonist
+  id: CMUIntelSectionHeadset
+  name: colony headset
+  # Looks like an ordinary colony headset so section members can blend in.
+  description: A standard headset used to talk on the colony radio.
+  suffix: Colony, Intelligence Section
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMUEncryptionKeyIntelSection
+
+# ├──[ CASE OFFICER BRIEFCASE ]──────────────────────────────────────┤
+# Cuffed to its holder's wrist. Only its own key uncuffs it, only someone holding that key can open it,
+# and wire cutters cut the cuff in 30 seconds. Spawns empty, for whatever the officer has to carry.
+- type: entity
+  parent: RMCBriefcase
+  id: CMUIntelCuffedBriefcase
+  name: cuffed briefcase
+  description: A hard-shelled briefcase with a steel cuff on a short chain. It only opens for whoever holds its key.
+  suffix: Intelligence Section
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/Briefcases/suit.rsi
+    state: icon
+  - type: CMUCuffedBriefcase
+
+# The key to one cuffed briefcase; it fits no other.
+- type: entity
+  parent: BaseItem
+  id: CMUIntelBriefcaseKey
+  name: briefcase key
+  description: A small steel key for a cuffed briefcase. Small enough to swallow if you had to.
+  suffix: Intelligence Section
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/vehicle_key.rsi
+    state: key
+  - type: Item
+    size: Tiny
+  - type: CMUBriefcaseKey

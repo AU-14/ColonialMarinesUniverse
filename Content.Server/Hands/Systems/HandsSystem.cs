@@ -164,6 +164,10 @@ namespace Content.Server.Hands.Systems
             var maxThrowRange = TryComp(throwEnt, out ItemThrowRangeComponent? itemRange)
                 ? itemRange.Range
                 : hands.ThrowRange;
+            // cmu edit start: the weak throw trait
+            if (TryComp(player, out Content.Shared.CMU14.Traits.Conditions.CMUWeakThrowComponent? weakThrow))
+                maxThrowRange *= weakThrow.RangeMultiplier;
+            // cmu edit end
             var distance = Math.Clamp(length, minDistance, maxThrowRange);
             direction *= distance / length;
 

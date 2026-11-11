@@ -1,0 +1,8 @@
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateCombatDroneAmmo
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUCombatDroneAmmoBox
+      amount: 2

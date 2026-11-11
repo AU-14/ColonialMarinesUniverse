@@ -165,7 +165,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (!_examine.InRangeUnOccluded(user, coordinates, rangefinder.Comp.Range))
         {
             msg = Loc.GetString("rmc-laser-designator-out-of-range");
-            _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
             return;
         }
 
@@ -180,7 +180,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (!HasComp<RMCPlanetComponent>(grid))
         {
             msg = Loc.GetString("rmc-laser-designator-not-surface");
-            _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
             return;
         }
 
@@ -193,7 +193,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (HasComp<ActiveLaserDesignatorComponent>(rangefinder))
         {
             msg = Loc.GetString("rmc-laser-designator-already-targeting");
-            _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
             return;
         }
 
@@ -203,9 +203,18 @@ public sealed partial class RangefinderSystem : EntitySystem
                 (rangefinder.Comp.Mode == Designator && !_area.CanLase(coordinates)))
             {
                 msg = Loc.GetString("rmc-laser-designator-not-cas");
-                _popup.PopupClient(msg, coordinates, user, PopupType.SmallCaution);
+                _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
                 return;
             }
+        }
+
+        // CMU14: smoke fallout from CAS rockets scatters the designator beam.
+        if (rangefinder.Comp.Mode == Designator &&
+            EntityManager.System<Content.Shared.CMU14.Dropship.Cas.CMUCasFalloutSystem>().IsObscured(_transform.ToMapCoordinates(coordinates)))
+        {
+            msg = Loc.GetString("cmu-cas-fallout-designator-obscured");
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.SmallCaution);
+            return;
         }
 
         TryTarget(rangefinder, args.User, delay, coordinates);
@@ -229,7 +238,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (rangefinder.Comp.Mode == Designator)
         {
             var msg = Loc.GetString("rmc-laser-designator-acquired");
-            _popup.PopupClient(msg, coords, user, PopupType.Medium);
+            _popup.PopupCoordinates(msg, coords, user, PopupType.Medium);
         }
 
         _audio.PlayPredicted(rangefinder.Comp.AcquireSound, rangefinder, user);
@@ -262,6 +271,9 @@ public sealed partial class RangefinderSystem : EntitySystem
             rangefinder.Comp.LastCoords = mapCoords;
 
             Dirty(rangefinder);
+            // CMU14 Begin
+            EntityManager.System<Content.Shared.CMU14.Guidance.CMUGuidanceSystem>().RecordGroundReport(rangefinder, user);
+            // CMU14 End
 
             _ui.OpenUi(rangefinder.Owner, RangefinderUiKey.Key, args.User);
             return;
@@ -288,6 +300,9 @@ public sealed partial class RangefinderSystem : EntitySystem
 
         _dropshipWeapon.MakeDropshipTarget(targetEnt, abbreviation, creatorFaction);
         _metaData.SetEntityName(targetEnt, name);
+        // CMU14: a lase from an RTO tightens CAS strikes on the spot.
+        if (HasComp<Content.Shared.CMU14.Radio.WearingANPRCComponent>(user))
+            EnsureComp<Content.Shared.CMU14.Dropship.Cas.CMUCasRtoDesignationComponent>(targetEnt);
     }
 
     private void OnRangefinderExamined(Entity<RangefinderComponent> rangefinder, ref ExaminedEvent args)
@@ -303,6 +318,9 @@ public sealed partial class RangefinderSystem : EntitySystem
 
             if (comp.CanDesignate)
             {
+                // CMU14: designator programming is independent of its mode.
+                args.PushText(Loc.GetString("cmu-guidance-code-examine",
+                    ("code", EntityManager.System<Content.Shared.CMU14.Guidance.CMUGuidanceSystem>().GetCode(rangefinder))));
                 switch (comp.Mode)
                 {
                     case RangefinderMode.Rangefinder:
@@ -424,7 +442,7 @@ public sealed partial class RangefinderSystem : EntitySystem
         if (_doAfter.TryStartDoAfter(doAfter))
         {
             var msg = Loc.GetString("rmc-laser-designator-start");
-            _popup.PopupClient(msg, coordinates, user, PopupType.Medium);
+            _popup.PopupCoordinates(msg, coordinates, user, PopupType.Medium);
             _audio.PlayPredicted(rangefinder.Comp.TargetSound, rangefinder, user);
 
             rangefinder.Comp.DoAfter = ev.DoAfter;

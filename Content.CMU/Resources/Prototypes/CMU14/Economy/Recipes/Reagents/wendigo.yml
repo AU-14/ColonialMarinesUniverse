@@ -1,0 +1,29 @@
+- type: reagent
+  parent: CMReagent
+  id: CMUStabilizedMutagen
+  name: reagent-name-cmu-stabilized-mutagen
+  desc: reagent-desc-cmu-stabilized-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: bitter
+  color: "#3fa7b8"
+  unknown: true
+
+- type: reagent
+  parent: CMReagent
+  id: CMUMH32
+  name: reagent-name-cmu-mh32
+  desc: reagent-desc-cmu-mh32
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#7a4a5e"
+  unknown: true
+
+- type: reagent
+  parent: CMReagent
+  id: CMUMH33
+  name: reagent-name-cmu-mh33
+  desc: reagent-desc-cmu-mh33
+  physicalDesc: reagent-physical-desc-viscous
+  flavor: bitter
+  color: "#4a3a6e"
+  unknown: true

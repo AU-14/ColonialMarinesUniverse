@@ -16,9 +16,10 @@ namespace Content.Client.Administration.UI.Tabs
             IoCManager.InjectDependencies(this);
 
             StartRound.OnPressed += _ => _console.ExecuteCommand("startround");
-            EndRound.OnPressed += _ => _console.ExecuteCommand("endround");
-            RestartRound.OnPressed += _ => _console.ExecuteCommand("restartround");
-            RestartRoundNow.OnPressed += _ => _console.ExecuteCommand("restartroundnow");
+            // CMU14: round commands require a confirm argument now
+            EndRound.OnPressed += _ => _console.ExecuteCommand("endround confirm");
+            RestartRound.OnPressed += _ => _console.ExecuteCommand("restartround confirm");
+            RestartRoundNow.OnPressed += _ => _console.ExecuteCommand("restartroundnow confirm");
         }
     }
 }

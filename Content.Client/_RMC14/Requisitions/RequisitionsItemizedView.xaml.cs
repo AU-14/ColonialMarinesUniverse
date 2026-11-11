@@ -1,6 +1,7 @@
+using Content.Client.CMU14.Requisitions; // CMU14
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.ControlExtensions;
@@ -25,6 +26,8 @@ public sealed partial class RequisitionsItemizedView : Control
     private float _checkoutSequence;
     private float _bootSequence;
     private float _idleTime;
+    private Vector2 _lastMouse; // CMU14
+    private float _scanTime; // CMU14
     private float _receiptReveal;
     private string _receipt = string.Empty;
     private RequisitionsLayoutRefs _layout = default!;
@@ -374,6 +377,7 @@ public sealed partial class RequisitionsItemizedView : Control
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        RequisitionsIconCache.NewFrame(); // CMU14: rows below fill their icons from this frame's budget
         if (_bootSequence > 0)
         {
             _bootSequence += args.DeltaSeconds;
@@ -394,6 +398,14 @@ public sealed partial class RequisitionsItemizedView : Control
             }
         }
 
+        // CMU14: reading the catalogue is activity too, only buttons used to count so the standby screen popped over it
+        var mouse = UserInterfaceManager.MousePositionScaled.Position;
+        if (mouse != _lastMouse)
+        {
+            _lastMouse = mouse;
+            NotifyActivity();
+        }
+
         _idleTime += args.DeltaSeconds;
         if (_idleTime > 38f && _checkoutSequence <= 0)
         {
@@ -401,7 +413,8 @@ public sealed partial class RequisitionsItemizedView : Control
             _idleLabel.Text = Loc.GetString("cmu-asrs-idle", ("position", (int) (_idleTime * 7) % 100));
         }
 
-        var scanY = 5f + (_idleTime * 31f) % 84f;
+        _scanTime += args.DeltaSeconds; // CMU14: own clock, mouse moves reset the idle one
+        var scanY = 5f + (_scanTime * 31f) % 84f;
         LayoutContainer.SetPosition(PreviewScanLine, new Vector2(0, scanY));
 
         if (_checkoutSequence <= 0)

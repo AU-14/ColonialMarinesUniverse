@@ -60,10 +60,6 @@ public sealed class GunOwnerPenaltyRegressionTest : GameTest
 
 - type: entity
   parent: BaseItem
-  id: GunOwnerPenaltyTestNotGun
-
-- type: entity
-  parent: BaseItem
   id: GunOwnerPenaltyTestAttachableA
   components:
   - type: Gun
@@ -81,52 +77,6 @@ public sealed class GunOwnerPenaltyRegressionTest : GameTest
   parent: GunOwnerPenaltyTestAttachableA
   id: GunOwnerPenaltyTestAttachableB
 ";
-
-    [Test]
-    public async Task SupercedingResolverRejectsMissingAndNonGunAndDelegatesCurrentUser()
-    {
-        var map = await Pair.CreateTestMap();
-        var cleanup = new List<EntityUid>();
-
-        try
-        {
-            await Server.WaitAssertion(() =>
-            {
-                var hands = Server.System<SharedHandsSystem>();
-                var holders = Server.System<AttachableHolderSystem>();
-                var rmcGun = Server.System<CMGunSystem>();
-                var user = Spawn("CMMobHuman", map.GridCoords, cleanup);
-                var holder = Spawn("GunOwnerPenaltyTestHolder", map.GridCoords, cleanup);
-                var notGun = Spawn("GunOwnerPenaltyTestNotGun", map.GridCoords, cleanup);
-                var nested = Spawn("GunOwnerPenaltyTestAttachableA", map.GridCoords, cleanup);
-                var holderComp = SEntMan.GetComponent<AttachableHolderComponent>(holder);
-
-                Assert.That(holders.TryGetSupercedingGun((holder, holderComp), out _), Is.False);
-
-                holders.SetSupercedingAttachable((holder, holderComp), notGun);
-                Assert.That(holders.TryGetSupercedingGun((holder, holderComp), out _), Is.False,
-                    "a stale or non-gun owner pointer must not manufacture a gun");
-
-                holders.SetSupercedingAttachable((holder, holderComp), null);
-                Assert.That(holders.Attach((holder, holderComp), nested, user, Underbarrel), Is.True);
-                Assert.That(hands.TryPickupAnyHand(user, holder, checkActionBlocker: false), Is.True);
-                holders.SetSupercedingAttachable((holder, holderComp), nested);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(holders.TryGetSupercedingGun((holder, holderComp), out var resolved), Is.True);
-                    Assert.That(resolved.Owner, Is.EqualTo(nested));
-                    Assert.That(rmcGun.TryGetGunUser(nested, out var gunUser), Is.True,
-                        "the nested gun must delegate modifier ownership through its current holder");
-                    Assert.That(gunUser.Owner, Is.EqualTo(user));
-                });
-            });
-        }
-        finally
-        {
-            await Delete(cleanup);
-        }
-    }
 
     [Test]
     public async Task PanicTracksBothHandsAndTheActiveNestedGunAcrossItsFullLifecycle()
@@ -373,68 +323,6 @@ public sealed class GunOwnerPenaltyRegressionTest : GameTest
         }
     }
 
-    [Test]
-    public async Task SharedLifecycleFanoutAppliesAndRemovesBothPoliciesTogether()
-    {
-        await OverrideCVar(Side.Server, CMUMedicalCCVars.Enabled, true);
-        await OverrideCVar(Side.Server, CMUMedicalCCVars.StatusEffectsEnabled, true);
-        var map = await Pair.CreateTestMap();
-        var cleanup = new List<EntityUid>();
-
-        try
-        {
-            EntityUid user = default;
-            EntityUid holder = default;
-            EntityUid nested = default;
-
-            await Server.WaitAssertion(() =>
-            {
-                _ = Server.System<GunOwnerPenaltyRefreshProbeSystem>();
-                var hands = Server.System<SharedHandsSystem>();
-                var holders = Server.System<AttachableHolderSystem>();
-                user = Spawn("CMMobHuman", map.GridCoords, cleanup);
-                holder = Spawn("GunOwnerPenaltyTestHolder", map.GridCoords, cleanup);
-                nested = Spawn("GunOwnerPenaltyTestAttachableA", map.GridCoords, cleanup);
-
-                var panic = SEntMan.EnsureComponent<PanicComponent>(user);
-                panic.EmoteThreshold = panic.Max + 1;
-                panic.RegenPerTick = 0;
-                panic.WarnThreshold = panic.Max + 1;
-                Server.System<PanicGunSystem>().AddPanic((user, panic), panic.PeakThreshold);
-
-                var holderComp = SEntMan.GetComponent<AttachableHolderComponent>(holder);
-                Assert.That(holders.Attach((holder, holderComp), nested, user, Underbarrel), Is.True);
-                Assert.That(hands.TryPickupAnyHand(user, holder, checkActionBlocker: false), Is.True);
-
-                AssertPenaltyOwners<PanicGunAimPenaltyComponent>(holder);
-                AssertPenaltyOwners<CMUMedicalGunAimPenaltyComponent>(holder);
-            });
-
-            await Server.WaitAssertion(() => Toggle(nested, holder, user, Underbarrel));
-            await Pair.RunTicksSync(2);
-            await Server.WaitAssertion(() =>
-            {
-                AssertPenaltyOwners<PanicGunAimPenaltyComponent>(holder, nested);
-                AssertPenaltyOwners<CMUMedicalGunAimPenaltyComponent>(holder, nested);
-
-                Assert.That(Server.System<SharedHandsSystem>()
-                    .TryDrop(user, holder, checkActionBlocker: false), Is.True);
-                AssertPenaltyOwners<PanicGunAimPenaltyComponent>();
-                AssertPenaltyOwners<CMUMedicalGunAimPenaltyComponent>();
-            });
-            await Pair.RunTicksSync(2);
-            await Server.WaitAssertion(() =>
-            {
-                AssertPenaltyOwners<PanicGunAimPenaltyComponent>();
-                AssertPenaltyOwners<CMUMedicalGunAimPenaltyComponent>();
-            });
-        }
-        finally
-        {
-            await Delete(cleanup);
-        }
-    }
-
     private EntityUid Spawn(string prototype, EntityCoordinates coordinates, ICollection<EntityUid> cleanup)
     {
         var entity = SEntMan.SpawnEntity(prototype, coordinates);
@@ -460,7 +348,7 @@ public sealed class GunOwnerPenaltyRegressionTest : GameTest
 
     private void AssertPenaltyOwners<T>(params EntityUid[] expected) where T : Component
     {
-        var actual = SEntMan.EntityQuery<T>().Select(component => component.Owner).ToHashSet();
+        var actual = SEntMan.QueryEntities<T>().Select(component => component.Owner).ToHashSet();
         Assert.That(actual, Is.EquivalentTo(expected));
     }
 

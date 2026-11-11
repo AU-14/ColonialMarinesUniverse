@@ -76,6 +76,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
@@ -84,6 +90,9 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:

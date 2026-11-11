@@ -108,6 +108,15 @@ public sealed partial class VehicleSystem : EntitySystem
         args.Cancel();
     }
 
+    // CMU14: unmanned grid vehicles must own their movement from map init; the generic
+    // mover otherwise asserts on their Dynamic body before any operator boards.
+    [SubscribeLocalEvent]
+    private void OnVehicleMapInit(Entity<VehicleComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.MovementKind != VehicleMovementKind.Standard)
+            EnsureComp<GridVehicleMoverComponent>(ent.Owner);
+    }
+
     [SubscribeLocalEvent]
     private void OnVehicleShutdown(Entity<VehicleComponent> ent, ref ComponentShutdown args)
     {

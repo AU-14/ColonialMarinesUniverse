@@ -89,12 +89,6 @@ public sealed partial class VehicleSupplyLiftComponent : Component
     public readonly List<EntProtoId> PendingBundle = new();
 
     [NonSerialized]
-    public EntityUid? ActiveVehicle;
-
-    [NonSerialized]
-    public string ActiveVehicleId = string.Empty;
-
-    [NonSerialized]
     public readonly HashSet<string> Deployed = new();
 
     [NonSerialized]

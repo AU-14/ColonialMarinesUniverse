@@ -28,6 +28,7 @@ public sealed partial class CMUItemStainSystem : EntitySystem
 
         SubscribeLocalEvent<CMUItemStainComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CMUItemStainComponent, CMUCleaningEligibilityEvent>(OnCleaningEligibility);
+        SubscribeLocalEvent<InventoryComponent, CMUCleaningEligibilityEvent>(OnWearerCleaningEligibility);
     }
 
     private void OnExamined(Entity<CMUItemStainComponent> ent, ref ExaminedEvent args)
@@ -49,6 +50,31 @@ public sealed partial class CMUItemStainSystem : EntitySystem
         args.CanClean = true;
         if (args.DistanceThreshold <= 0f)
             args.DistanceThreshold = DefaultCleaningDistance;
+    }
+
+    private void OnWearerCleaningEligibility(Entity<InventoryComponent> ent, ref CMUCleaningEligibilityEvent args)
+    {
+        var bodySlot = _inventory.TryGetSlotEntity(ent, OuterClothingSlot, out _)
+            ? OuterClothingSlot
+            : JumpsuitSlot;
+        if (!HasStainedSlot(ent, bodySlot) &&
+            !HasStainedSlot(ent, HeadSlot) &&
+            !HasStainedSlot(ent, MaskSlot) &&
+            !HasStainedSlot(ent, GlovesSlot) &&
+            !HasStainedSlot(ent, ShoesSlot))
+        {
+            return;
+        }
+
+        args.CanClean = true;
+        if (args.DistanceThreshold <= 0f)
+            args.DistanceThreshold = DefaultCleaningDistance;
+    }
+
+    private bool HasStainedSlot(EntityUid wearer, string slot)
+    {
+        return _inventory.TryGetSlotEntity(wearer, slot, out var item) &&
+            TryComp<CMUItemStainComponent>(item, out var stain) && stain.Color != null;
     }
 
     /// <summary>

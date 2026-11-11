@@ -7,6 +7,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Item;
 using Robust.Shared.Prototypes;
@@ -36,6 +37,9 @@ public sealed partial class CMUItemStainDamageSystem : EntitySystem
 
     private void OnBodyPartDamaged(ref BodyPartDamagedEvent args)
     {
+        if (args.Impact.Delivery == DamageImpactDelivery.Environment)
+            return;
+
         if (!_prototypes.TryIndex(BruteGroup, out var bruteGroup) ||
             !args.Delta.TryGetDamageInGroup(bruteGroup, out var brute) ||
             brute <= 0)

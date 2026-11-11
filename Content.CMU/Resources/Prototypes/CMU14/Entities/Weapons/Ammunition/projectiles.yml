@@ -5,6 +5,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: TankCookOffProjectile # CMU14
+    criticalChance: 0.2
+    hullFraction: 0.4
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
@@ -39,6 +41,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: TankCookOffProjectile # CMU14
+    criticalChance: 0.15
+    hullFraction: 0.3
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
@@ -73,6 +77,10 @@
   name: LTB HE cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  # Not an anti-armour round: opts out of the HESH parent's hull chunk and cook-off roll.
+  - type: TankCookOffProjectile
+    criticalChance: 0
+    hullFraction: 0
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
@@ -105,6 +113,10 @@
   name: LTB canister cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  # Not an anti-armour round: opts out of the HESH parent's hull chunk and cook-off roll.
+  - type: TankCookOffProjectile
+    criticalChance: 0
+    hullFraction: 0
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
@@ -136,6 +148,10 @@
   name: LTB napalm cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  # Not an anti-armour round: opts out of the HESH parent's hull chunk and cook-off roll.
+  - type: TankCookOffProjectile
+    criticalChance: 0
+    hullFraction: 0
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container

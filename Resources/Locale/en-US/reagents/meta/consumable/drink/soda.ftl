@@ -1,4 +1,6 @@
+# cmu edit start
 reagent-name-cola = coca-cola
+# cmu edit end
 reagent-desc-cola = A sweet, carbonated soft drink.
 
 reagent-name-shirley-temple = Shirley Temple
@@ -7,10 +9,14 @@ reagent-desc-shirley-temple = A favorite amongst younger members of the crew.
 reagent-name-changeling-sting = Changeling Sting
 reagent-desc-changeling-sting = A mildly alcoholic soda. You take a tiny sip and feel a burning sensation...
 
-reagent-name-dr-gibb = Dr. Pepper
+# cmu edit start
+reagent-name-dr-gibb = dr. pepper
+# cmu edit end
 reagent-desc-dr-gibb = A delicious blend of 42 different flavours.
 
+# cmu edit start
 reagent-name-energy-drink = monster energy
+# cmu edit end
 reagent-desc-energy-drink = A dose of energy! Nanotrasen is not responsible if you grow avian appendages.
 
 reagent-name-grape-soda = grape soda
@@ -19,10 +25,14 @@ reagent-desc-grape-soda = It's Graaaaaape!
 reagent-name-ice-cream = ice cream
 reagent-desc-ice-cream = It was either this or the microwave, and nobody wants ice cream soup!
 
-reagent-name-lemon-lime = Smite
+# cmu edit start
+reagent-name-lemon-lime = sprite
+# cmu edit end
 reagent-desc-lemon-lime = Tangy lime and lemon soda.
 
-reagent-name-lemon-lime-cranberry = Smite Cranberry
+# cmu edit start
+reagent-name-lemon-lime-cranberry = sprite cranberry
+# cmu edit end
 reagent-desc-lemon-lime-cranberry = Tart cranberry, Christmas, and a hint of lemon and lime.
 
 reagent-name-pwr-game = PWR Game
@@ -41,10 +51,14 @@ reagent-name-roy-rogers = Roy Rogers
 reagent-desc-roy-rogers = Solid proof that there IS something known as too sweet.
 
 # RMC14
-reagent-name-space-mountain-wind = sprite
+# cmu edit start
+reagent-name-space-mountain-wind = mountain dew
+# cmu edit end
 reagent-desc-space-mountain-wind = Blows right through you like a solar wind.
 
+# cmu edit start
 reagent-name-space-up = seven-up
+# cmu edit end
 reagent-desc-space-up = Tastes like a hull breach in your mouth.
 
 reagent-name-starkist = Starkist

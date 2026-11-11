@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Queens can summon 15 AI lessers every six minutes and command them to guard
+    a marker or escort a hive member, in both body and eye mode.
+  type: Add
+time: '2026-10-15T16:33:48.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2184

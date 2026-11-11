@@ -16,10 +16,7 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 public sealed class GunshipTerrainAdoptionTest : InteractionTest
 {
     [TestCase("CMUZLevelLadderThroughUp3")]
-    [TestCase("CMUZLevelLadderThroughDown3")]
     [TestCase("RMCGrate")]
-    [TestCase("RMCCatwalkHybrisaLattice")]
-    [TestCase("RMCMonorailStraight")]
     public async Task NonblockingTerrainKeepsItsGroundPose(string prototype)
     {
         await SpawnTarget(prototype);

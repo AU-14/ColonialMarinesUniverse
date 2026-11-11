@@ -1,0 +1,349 @@
+- type: stack
+  id: RUMCIronPowder
+  name: iron powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: iron }
+  spawn: RUMCIronPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCIronPowderItem
+  name: iron powder
+  description: Finely ground iron dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: iron
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCIronPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCAluminumPowder
+  name: aluminum powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: aluminum }
+  spawn: RUMCAluminumPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCAluminumPowderItem
+  name: aluminum powder
+  description: Finely ground aluminum dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: aluminum
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCAluminumPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCChromePowder
+  name: chromium powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: chrome }
+  spawn: RUMCChromePowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCChromePowderItem
+  name: chromium powder
+  description: Finely ground chromium dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: chrome
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCChromePowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCCobaltPowder
+  name: cobalt powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: cobalt }
+  spawn: RUMCCobaltPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCCobaltPowderItem
+  name: cobalt powder
+  description: Finely ground cobalt dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: cobalt
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCCobaltPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCCopperPowder
+  name: copper powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: cuprum }
+  spawn: RUMCCopperPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCCopperPowderItem
+  name: copper powder
+  description: Finely ground copper dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: cuprum
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCCopperPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCGoldPowder
+  name: gold powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: gold }
+  spawn: RUMCGoldPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCGoldPowderItem
+  name: gold powder
+  description: Finely ground gold dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: gold
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCGoldPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCLeadPowder
+  name: lead powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: lead }
+  spawn: RUMCLeadPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCLeadPowderItem
+  name: lead powder
+  description: Finely ground lead dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: lead
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCLeadPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCPlastitanPowder
+  name: plastitan powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: plastitan }
+  spawn: RUMCPlastitanPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPlastitanPowderItem
+  name: plastitan powder
+  description: Finely ground plastitan dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: plastitan
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCPlastitanPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCSilverPowder
+  name: silver powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: silver }
+  spawn: RUMCSilverPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCSilverPowderItem
+  name: silver powder
+  description: Finely ground silver dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: silver
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCSilverPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCTitaniumPowder
+  name: titanium powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: titanium }
+  spawn: RUMCTitaniumPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTitaniumPowderItem
+  name: titanium powder
+  description: Finely ground titanium dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: titanium
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCTitaniumPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCTungstenPowder
+  name: tungsten powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: tungsten }
+  spawn: RUMCTungstenPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCTungstenPowderItem
+  name: tungsten powder
+  description: Finely ground tungsten dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: tungsten
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCTungstenPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCWeaponSteelPowder
+  name: weapon-grade steel powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: weapon_steel }
+  spawn: RUMCWeaponSteelPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCWeaponSteelPowderItem
+  name: weapon-grade steel powder
+  description: Finely ground weapon-grade steel dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: weapon_steel
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCWeaponSteelPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCPlatinumPowder
+  name: platinum powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: platinum }
+  spawn: RUMCPlatinumPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCPlatinumPowderItem
+  name: platinum powder
+  description: Finely ground platinum dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: platinum
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCPlatinumPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal
+
+- type: stack
+  id: RUMCUraniumPowder
+  name: uranium powder
+  icon: { sprite: CMU14/Objects/Materials/powder.rsi, state: uranium }
+  spawn: RUMCUraniumPowderItem
+  maxCount: 30
+
+- type: entity
+  parent: BaseItem
+  id: RUMCUraniumPowderItem
+  name: uranium powder
+  description: Finely ground uranium dust.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Materials/powder.rsi
+    state: uranium
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: RUMCUraniumPowder
+    count: 1
+  - type: Tag
+    tags:
+    - Metal

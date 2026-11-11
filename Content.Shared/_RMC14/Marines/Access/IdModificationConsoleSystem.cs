@@ -228,7 +228,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
             if (!_prototype.TryIndex(ent.Comp.Access, out var accessPrototype) || accessPrototype.Name == null)
                 return;
 
-            _popup.PopupClient($"This id is missing the {Loc.GetString(accessPrototype.Name)}",
+            _popup.PopupSelf($"This id is missing the {Loc.GetString(accessPrototype.Name)}",
                 args.Actor,
                 PopupType.MediumCaution);
         }
@@ -498,8 +498,13 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
         //         groupListHidden.Add(accessGroup);
         // }
 
-        ent.Comp.JobGroups = groupGroups;
-        ent.Comp.JobList = groupList;
+        // cmu edit start: a console that lists its jobs in YAML keeps that list, so spawning it doesn't reorder or
+        // replace what the prototype set
+        if (ent.Comp.JobGroups.Count == 0)
+            ent.Comp.JobGroups = groupGroups;
+        if (ent.Comp.JobList.Count == 0)
+            ent.Comp.JobList = groupList;
+        // cmu edit end
     }
 
     private void OnTerminalAssignSquadMsg(Entity<IdModificationConsoleComponent> ent, ref IdModificationConsoleAssignSquadMsg args)

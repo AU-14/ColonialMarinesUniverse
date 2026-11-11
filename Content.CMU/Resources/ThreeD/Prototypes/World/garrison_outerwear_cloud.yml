@@ -1,0 +1,3848 @@
+# Source-inspected civilian dropped clothing drafts. See SOURCES_OUTERWEAR_CLOUD.md.
+- type: cmu3DModel
+  id: CMU3DCivilianTanTrenchCoatWorldCloud
+  label: tantrenchcoat dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianTanTrenchCoat
+  referencePrototype: AU14CivilianTanTrenchCoat
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/tantrenchcoat.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Long trench cut: turned collar, diagonal lapels, separate belted waist, long split front tails and
+    sloping cuffed sleeves. Source-shaped face-up dropped/world prop only, one static icon direction. Physical cloth
+    depth and underside are inferred. No actor, worn, held, stain, accessory, Foldable or animation mapping. Default
+    white tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.1953125, 0.018
+    color: '#38291F'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#82715E'
+  - label: left connected shoulder yoke
+    min: -0.1670843, 0.09375, 0.009
+    max: -0.0547907, 0.1828125, 0.041
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -111.20923
+  - label: right connected shoulder yoke
+    min: 0.0235407, 0.09375, 0.009
+    max: 0.1358343, 0.1828125, 0.041
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -68.79077
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#38291F'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#38291F'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#5E5240'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#5E5240'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#5E5240'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#5E5240'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#38291F'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#38291F'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#5E5240'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#5E5240'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#5E5240'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#5E5240'
+  - label: left chest cloth face
+    min: -0.1425, -0.078125, 0.009
+    max: -0.025625, 0.115625, 0.036000000000000004
+    color: '#82715E'
+  - label: left chest side fold left
+    min: -0.15, -0.0765625, 0.008
+    max: -0.13125, 0.1140625, 0.046
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: left chest side fold right
+    min: -0.036875, -0.0765625, 0.008
+    max: -0.018125, 0.1140625, 0.046
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: left chest upper folded edge
+    min: -0.14375, 0.103125, 0.007
+    max: -0.024375, 0.121875, 0.04
+    color: '#41382D'
+    shape: Ellipsoid
+  - label: left chest lower folded edge
+    min: -0.14375, -0.084375, 0.007
+    max: -0.024375, -0.065625, 0.04
+    color: '#41382D'
+    shape: Ellipsoid
+  - label: left long skirt cloth face
+    min: -0.1425, -0.2296875, 0.009
+    max: -0.025625, -0.0859375, 0.028999999999999998
+    color: '#82715E'
+  - label: left long skirt side fold left
+    min: -0.15, -0.228125, 0.008
+    max: -0.13125, -0.0875, 0.03899999999999999
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: left long skirt side fold right
+    min: -0.036875, -0.228125, 0.008
+    max: -0.018125, -0.0875, 0.03899999999999999
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: left long skirt upper folded edge
+    min: -0.14375, -0.0984375, 0.007
+    max: -0.024375, -0.0796875, 0.032999999999999995
+    color: '#38291F'
+    shape: Ellipsoid
+  - label: left long skirt lower folded edge
+    min: -0.14375, -0.2359375, 0.007
+    max: -0.024375, -0.2171875, 0.032999999999999995
+    color: '#38291F'
+    shape: Ellipsoid
+  - label: left lower skirt continuous backing
+    min: -0.125, -0.271875, 0.005
+    max: -0.0275, -0.2125, 0.018
+    color: '#82715E'
+  - label: left tapering lower skirt
+    min: -0.13125, -0.265625, 0.01
+    max: -0.0275, -0.2265625, 0.031
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: left rolled hem
+    min: -0.11875, -0.2984375, 0.008
+    max: -0.0290625, -0.253125, 0.022
+    color: '#38291F'
+    shape: Ellipsoid
+  - label: left long folded ridge
+    min: -0.1606413, -0.1815625, 0.029
+    max: -0.0106087, -0.1684375, 0.039
+    color: '#94816B'
+    shape: Ellipsoid
+    yaw: -91.19349
+  - label: right chest cloth face
+    min: -0.005, -0.078125, 0.009
+    max: 0.11125, 0.115625, 0.036000000000000004
+    color: '#82715E'
+  - label: right chest side fold left
+    min: -0.0125, -0.0765625, 0.008
+    max: 0.00625, 0.1140625, 0.046
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: right chest side fold right
+    min: 0.1, -0.0765625, 0.008
+    max: 0.11875, 0.1140625, 0.046
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: right chest upper folded edge
+    min: -0.00625, 0.103125, 0.007
+    max: 0.1125, 0.121875, 0.04
+    color: '#41382D'
+    shape: Ellipsoid
+  - label: right chest lower folded edge
+    min: -0.00625, -0.084375, 0.007
+    max: 0.1125, -0.065625, 0.04
+    color: '#41382D'
+    shape: Ellipsoid
+  - label: right long skirt cloth face
+    min: -0.005, -0.2296875, 0.009
+    max: 0.11125, -0.0859375, 0.028999999999999998
+    color: '#82715E'
+  - label: right long skirt side fold left
+    min: -0.0125, -0.228125, 0.008
+    max: 0.00625, -0.0875, 0.03899999999999999
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: right long skirt side fold right
+    min: 0.1, -0.228125, 0.008
+    max: 0.11875, -0.0875, 0.03899999999999999
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: right long skirt upper folded edge
+    min: -0.00625, -0.0984375, 0.007
+    max: 0.1125, -0.0796875, 0.032999999999999995
+    color: '#38291F'
+    shape: Ellipsoid
+  - label: right long skirt lower folded edge
+    min: -0.00625, -0.2359375, 0.007
+    max: 0.1125, -0.2171875, 0.032999999999999995
+    color: '#38291F'
+    shape: Ellipsoid
+  - label: right lower skirt continuous backing
+    min: 0.0125, -0.271875, 0.005
+    max: 0.109375, -0.2125, 0.018
+    color: '#82715E'
+  - label: right tapering lower skirt
+    min: 0.00625, -0.265625, 0.01
+    max: 0.109375, -0.2265625, 0.031
+    color: '#82715E'
+    shape: Ellipsoid
+  - label: right rolled hem
+    min: 0.01875, -0.2984375, 0.008
+    max: 0.1078125, -0.253125, 0.022
+    color: '#38291F'
+    shape: Ellipsoid
+  - label: right long folded ridge
+    min: -0.0234538, -0.1815625, 0.029
+    max: 0.1265788, -0.1684375, 0.039
+    color: '#94816B'
+    shape: Ellipsoid
+    yaw: -91.19349
+  - label: rear collar roll
+    min: -0.09375, 0.21375, 0.025
+    max: 0.0625, 0.245625, 0.087
+    color: '#5E5240'
+    shape: Ellipsoid
+  - label: left standing collar
+    min: -0.1243919, 0.1742188, 0.025
+    max: -0.0537331, 0.2117188, 0.082
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -71.96571
+  - label: right standing collar
+    min: 0.0224831, 0.1742188, 0.025
+    max: 0.0931419, 0.2117188, 0.082
+    color: '#5E5240'
+    shape: Ellipsoid
+    yaw: -108.03429
+  - label: left collar inner shadow
+    min: -0.0941265, 0.1796875, 0.02
+    max: -0.0402485, 0.19375, 0.06
+    color: '#38291F'
+    shape: Ellipsoid
+    yaw: -73.1416
+  - label: right collar inner shadow
+    min: 0.0089985, 0.1796875, 0.02
+    max: 0.0628765, 0.19375, 0.06
+    color: '#38291F'
+    shape: Ellipsoid
+    yaw: -106.8584
+  - label: left broad folded lapel
+    min: -0.157347, 0.0460938, 0.032
+    max: -0.0004655, 0.0976562, 0.053
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -56.78475
+  - label: right broad folded lapel
+    min: -0.0319964, 0.0460938, 0.032
+    max: 0.1257464, 0.0976562, 0.053
+    color: '#82715E'
+    shape: Ellipsoid
+    yaw: -123.69007
+  - label: left inset lapel crease
+    min: -0.1338134, 0.0567188, 0.049
+    max: -0.0224366, 0.0635938, 0.055
+    color: '#41382D'
+    shape: Ellipsoid
+    yaw: -55.86406
+  - label: right inset lapel crease
+    min: -0.0088134, 0.0567188, 0.049
+    max: 0.1025634, 0.0635938, 0.055
+    color: '#41382D'
+    shape: Ellipsoid
+    yaw: -124.13594
+  - label: waist belt
+    min: -0.1421875, -0.0921875, 0.047
+    max: 0.1109375, -0.059375, 0.065
+    color: '#82715E'
+  - label: belt loop
+    min: -0.11875, -0.096875, 0.066
+    max: -0.10625, -0.053125, 0.077
+    color: '#82715E'
+  - label: belt loop
+    min: 0.0734375, -0.096875, 0.066
+    max: 0.0859375, -0.053125, 0.077
+    color: '#82715E'
+  - label: belt buckle dark backing
+    min: -0.0625, -0.09375, 0.067
+    max: 0.0171875, -0.0625, 0.08
+    color: '#757575'
+  - label: original two-pixel belt fastener
+    min: -0.0625, -0.09375, 0.081
+    max: 0.0, -0.0625, 0.083
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt000
+    surfaceAxis: XY
+  - label: slanted inset pocket 1
+    min: -0.1296609, -0.1426563, 0.047
+    max: -0.0609641, -0.1339063, 0.052
+    color: '#41382D'
+    shape: CylinderX
+    yaw: -17.19854
+  - label: slanted inset pocket 2
+    min: 0.0297141, -0.1426563, 0.047
+    max: 0.0984109, -0.1339063, 0.052
+    color: '#41382D'
+    shape: CylinderX
+    yaw: 17.19854
+- type: cmu3DModel
+  id: CMU3DCivilianBrownTrenchCoatWorldCloud
+  label: browntrenchcoat dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianBrownTrenchCoat
+  referencePrototype: AU14CivilianBrownTrenchCoat
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/browntrenchcoat.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Long trench cut: turned collar, diagonal lapels, separate belted waist, long split front tails and
+    sloping cuffed sleeves. Source-shaped face-up dropped/world prop only, one static icon direction. Physical cloth
+    depth and underside are inferred. No actor, worn, held, stain, accessory, Foldable or animation mapping. Default
+    white tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.1953125, 0.018
+    color: '#241C10'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#463624'
+  - label: left connected shoulder yoke
+    min: -0.1670843, 0.09375, 0.009
+    max: -0.0547907, 0.1828125, 0.041
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -111.20923
+  - label: right connected shoulder yoke
+    min: 0.0235407, 0.09375, 0.009
+    max: 0.1358343, 0.1828125, 0.041
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -68.79077
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#241C10'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#241C10'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#342918'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#342918'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#342918'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#342918'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#241C10'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#241C10'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#342918'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#342918'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#342918'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#342918'
+  - label: left chest cloth face
+    min: -0.1425, -0.078125, 0.009
+    max: -0.025625, 0.115625, 0.036000000000000004
+    color: '#463624'
+  - label: left chest side fold left
+    min: -0.15, -0.0765625, 0.008
+    max: -0.13125, 0.1140625, 0.046
+    color: '#463624'
+    shape: Ellipsoid
+  - label: left chest side fold right
+    min: -0.036875, -0.0765625, 0.008
+    max: -0.018125, 0.1140625, 0.046
+    color: '#463624'
+    shape: Ellipsoid
+  - label: left chest upper folded edge
+    min: -0.14375, 0.103125, 0.007
+    max: -0.024375, 0.121875, 0.04
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: left chest lower folded edge
+    min: -0.14375, -0.084375, 0.007
+    max: -0.024375, -0.065625, 0.04
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: left long skirt cloth face
+    min: -0.1425, -0.2296875, 0.009
+    max: -0.025625, -0.0859375, 0.028999999999999998
+    color: '#463624'
+  - label: left long skirt side fold left
+    min: -0.15, -0.228125, 0.008
+    max: -0.13125, -0.0875, 0.03899999999999999
+    color: '#463624'
+    shape: Ellipsoid
+  - label: left long skirt side fold right
+    min: -0.036875, -0.228125, 0.008
+    max: -0.018125, -0.0875, 0.03899999999999999
+    color: '#463624'
+    shape: Ellipsoid
+  - label: left long skirt upper folded edge
+    min: -0.14375, -0.0984375, 0.007
+    max: -0.024375, -0.0796875, 0.032999999999999995
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: left long skirt lower folded edge
+    min: -0.14375, -0.2359375, 0.007
+    max: -0.024375, -0.2171875, 0.032999999999999995
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: left lower skirt continuous backing
+    min: -0.125, -0.271875, 0.005
+    max: -0.0275, -0.2125, 0.018
+    color: '#463624'
+  - label: left tapering lower skirt
+    min: -0.13125, -0.265625, 0.01
+    max: -0.0275, -0.2265625, 0.031
+    color: '#463624'
+    shape: Ellipsoid
+  - label: left rolled hem
+    min: -0.11875, -0.2984375, 0.008
+    max: -0.0290625, -0.253125, 0.022
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: left long folded ridge
+    min: -0.1606413, -0.1815625, 0.029
+    max: -0.0106087, -0.1684375, 0.039
+    color: '#57432D'
+    shape: Ellipsoid
+    yaw: -91.19349
+  - label: right chest cloth face
+    min: -0.005, -0.078125, 0.009
+    max: 0.11125, 0.115625, 0.036000000000000004
+    color: '#463624'
+  - label: right chest side fold left
+    min: -0.0125, -0.0765625, 0.008
+    max: 0.00625, 0.1140625, 0.046
+    color: '#463624'
+    shape: Ellipsoid
+  - label: right chest side fold right
+    min: 0.1, -0.0765625, 0.008
+    max: 0.11875, 0.1140625, 0.046
+    color: '#463624'
+    shape: Ellipsoid
+  - label: right chest upper folded edge
+    min: -0.00625, 0.103125, 0.007
+    max: 0.1125, 0.121875, 0.04
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: right chest lower folded edge
+    min: -0.00625, -0.084375, 0.007
+    max: 0.1125, -0.065625, 0.04
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: right long skirt cloth face
+    min: -0.005, -0.2296875, 0.009
+    max: 0.11125, -0.0859375, 0.028999999999999998
+    color: '#463624'
+  - label: right long skirt side fold left
+    min: -0.0125, -0.228125, 0.008
+    max: 0.00625, -0.0875, 0.03899999999999999
+    color: '#463624'
+    shape: Ellipsoid
+  - label: right long skirt side fold right
+    min: 0.1, -0.228125, 0.008
+    max: 0.11875, -0.0875, 0.03899999999999999
+    color: '#463624'
+    shape: Ellipsoid
+  - label: right long skirt upper folded edge
+    min: -0.00625, -0.0984375, 0.007
+    max: 0.1125, -0.0796875, 0.032999999999999995
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: right long skirt lower folded edge
+    min: -0.00625, -0.2359375, 0.007
+    max: 0.1125, -0.2171875, 0.032999999999999995
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: right lower skirt continuous backing
+    min: 0.0125, -0.271875, 0.005
+    max: 0.109375, -0.2125, 0.018
+    color: '#463624'
+  - label: right tapering lower skirt
+    min: 0.00625, -0.265625, 0.01
+    max: 0.109375, -0.2265625, 0.031
+    color: '#463624'
+    shape: Ellipsoid
+  - label: right rolled hem
+    min: 0.01875, -0.2984375, 0.008
+    max: 0.1078125, -0.253125, 0.022
+    color: '#241C10'
+    shape: Ellipsoid
+  - label: right long folded ridge
+    min: -0.0234538, -0.1815625, 0.029
+    max: 0.1265788, -0.1684375, 0.039
+    color: '#57432D'
+    shape: Ellipsoid
+    yaw: -91.19349
+  - label: rear collar roll
+    min: -0.09375, 0.21375, 0.025
+    max: 0.0625, 0.245625, 0.087
+    color: '#463624'
+    shape: Ellipsoid
+  - label: left standing collar
+    min: -0.1243919, 0.1742188, 0.025
+    max: -0.0537331, 0.2117188, 0.082
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -71.96571
+  - label: right standing collar
+    min: 0.0224831, 0.1742188, 0.025
+    max: 0.0931419, 0.2117188, 0.082
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -108.03429
+  - label: left collar inner shadow
+    min: -0.0941265, 0.1796875, 0.02
+    max: -0.0402485, 0.19375, 0.06
+    color: '#241C10'
+    shape: Ellipsoid
+    yaw: -73.1416
+  - label: right collar inner shadow
+    min: 0.0089985, 0.1796875, 0.02
+    max: 0.0628765, 0.19375, 0.06
+    color: '#241C10'
+    shape: Ellipsoid
+    yaw: -106.8584
+  - label: left broad folded lapel
+    min: -0.157347, 0.0460938, 0.032
+    max: -0.0004655, 0.0976562, 0.053
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -56.78475
+  - label: right broad folded lapel
+    min: -0.0319964, 0.0460938, 0.032
+    max: 0.1257464, 0.0976562, 0.053
+    color: '#463624'
+    shape: Ellipsoid
+    yaw: -123.69007
+  - label: left inset lapel crease
+    min: -0.1338134, 0.0567188, 0.049
+    max: -0.0224366, 0.0635938, 0.055
+    color: '#241C10'
+    shape: Ellipsoid
+    yaw: -55.86406
+  - label: right inset lapel crease
+    min: -0.0088134, 0.0567188, 0.049
+    max: 0.1025634, 0.0635938, 0.055
+    color: '#241C10'
+    shape: Ellipsoid
+    yaw: -124.13594
+  - label: waist belt
+    min: -0.1421875, -0.0921875, 0.047
+    max: 0.1109375, -0.059375, 0.065
+    color: '#463624'
+  - label: belt loop
+    min: -0.11875, -0.096875, 0.066
+    max: -0.10625, -0.053125, 0.077
+    color: '#463624'
+  - label: belt loop
+    min: 0.0734375, -0.096875, 0.066
+    max: 0.0859375, -0.053125, 0.077
+    color: '#463624'
+  - label: belt buckle dark backing
+    min: -0.0625, -0.09375, 0.067
+    max: 0.0171875, -0.0625, 0.08
+    color: '#342918'
+  - label: original two-pixel belt fastener
+    min: -0.0625, -0.09375, 0.081
+    max: 0.0, -0.0625, 0.083
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt001
+    surfaceAxis: XY
+  - label: slanted inset pocket 1
+    min: -0.1296609, -0.1426563, 0.047
+    max: -0.0609641, -0.1339063, 0.052
+    color: '#241C10'
+    shape: CylinderX
+    yaw: -17.19854
+  - label: slanted inset pocket 2
+    min: 0.0297141, -0.1426563, 0.047
+    max: 0.0984109, -0.1339063, 0.052
+    color: '#241C10'
+    shape: CylinderX
+    yaw: 17.19854
+- type: cmu3DModel
+  id: CMU3DCivilianJacketBomberJacketWorldCloud
+  label: bomberjacket dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketBomberJacket
+  referencePrototype: AU14CivilianJacketBomberJacket
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/bomberjacket.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Short bomber cut: cream shearling collar, tall twin cream closure facings, ribbed cream hem/cuffs
+    and dark plum-brown body. Source-shaped face-up dropped/world prop only, one static icon direction. Physical
+    cloth depth and underside are inferred. No actor, worn, held, stain, accessory, Foldable or animation mapping.
+    Default white tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.175, 0.018
+    color: '#201D1E'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#382D31'
+  - label: left connected shoulder yoke
+    min: -0.1577604, 0.0835937, 0.009
+    max: -0.0641146, 0.1726563, 0.041
+    color: '#382D31'
+    shape: Ellipsoid
+    yaw: -115.70995
+  - label: right connected shoulder yoke
+    min: 0.0328646, 0.0835937, 0.009
+    max: 0.1265104, 0.1726563, 0.041
+    color: '#382D31'
+    shape: Ellipsoid
+    yaw: -64.29005
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#201D1E'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#382D31'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#382D31'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#594F57'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#201D1E'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#C8BFAE'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#C8BFAE'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#C8BFAE'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#C8BFAE'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#201D1E'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#382D31'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#382D31'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#594F57'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#201D1E'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#C8BFAE'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#C8BFAE'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#C8BFAE'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#C8BFAE'
+  - label: left short bomber front cloth face
+    min: -0.1425, -0.1375, 0.009
+    max: -0.02625, 0.11875, 0.045
+    color: '#382D31'
+  - label: left short bomber front side fold left
+    min: -0.15, -0.1359375, 0.008
+    max: -0.13125, 0.1171875, 0.05499999999999999
+    color: '#382D31'
+    shape: Ellipsoid
+  - label: left short bomber front side fold right
+    min: -0.0375, -0.1359375, 0.008
+    max: -0.01875, 0.1171875, 0.05499999999999999
+    color: '#382D31'
+    shape: Ellipsoid
+  - label: left short bomber front upper folded edge
+    min: -0.14375, 0.10625, 0.007
+    max: -0.025, 0.125, 0.048999999999999995
+    color: '#201D1E'
+    shape: Ellipsoid
+  - label: left short bomber front lower folded edge
+    min: -0.14375, -0.14375, 0.007
+    max: -0.025, -0.125, 0.048999999999999995
+    color: '#201D1E'
+    shape: Ellipsoid
+  - label: left soft chest fold
+    min: -0.1828125, -0.009375, 0.042
+    max: 0.0140625, 0.00625, 0.051
+    color: '#594F57'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: left fleece hem
+    min: -0.15, -0.16875, 0.013
+    max: -0.01875, -0.128125, 0.045
+    color: '#C8BFAE'
+    shape: Ellipsoid
+  - label: hem rib 0-0
+    min: -0.13125, -0.16875, 0.03
+    max: -0.1259375, -0.14375, 0.048
+    color: '#A29376'
+  - label: hem rib 0-1
+    min: -0.10625, -0.16875, 0.03
+    max: -0.1009375, -0.14375, 0.048
+    color: '#A29376'
+  - label: hem rib 0-2
+    min: -0.08125, -0.16875, 0.03
+    max: -0.0759375, -0.14375, 0.048
+    color: '#A29376'
+  - label: right short bomber front cloth face
+    min: -0.005, -0.1375, 0.009
+    max: 0.11125, 0.11875, 0.045
+    color: '#382D31'
+  - label: right short bomber front side fold left
+    min: -0.0125, -0.1359375, 0.008
+    max: 0.00625, 0.1171875, 0.05499999999999999
+    color: '#382D31'
+    shape: Ellipsoid
+  - label: right short bomber front side fold right
+    min: 0.1, -0.1359375, 0.008
+    max: 0.11875, 0.1171875, 0.05499999999999999
+    color: '#382D31'
+    shape: Ellipsoid
+  - label: right short bomber front upper folded edge
+    min: -0.00625, 0.10625, 0.007
+    max: 0.1125, 0.125, 0.048999999999999995
+    color: '#201D1E'
+    shape: Ellipsoid
+  - label: right short bomber front lower folded edge
+    min: -0.00625, -0.14375, 0.007
+    max: 0.1125, -0.125, 0.048999999999999995
+    color: '#201D1E'
+    shape: Ellipsoid
+  - label: right soft chest fold
+    min: -0.0453125, -0.009375, 0.042
+    max: 0.1515625, 0.00625, 0.051
+    color: '#594F57'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: right fleece hem
+    min: -0.0125, -0.16875, 0.013
+    max: 0.11875, -0.128125, 0.045
+    color: '#C8BFAE'
+    shape: Ellipsoid
+  - label: hem rib 1-0
+    min: 0.00625, -0.16875, 0.03
+    max: 0.0115625, -0.14375, 0.048
+    color: '#A29376'
+  - label: hem rib 1-1
+    min: 0.03125, -0.16875, 0.03
+    max: 0.0365625, -0.14375, 0.048
+    color: '#A29376'
+  - label: hem rib 1-2
+    min: 0.05625, -0.16875, 0.03
+    max: 0.0615625, -0.14375, 0.048
+    color: '#A29376'
+  - label: rear collar roll
+    min: -0.09375, 0.18875, 0.025
+    max: 0.0625, 0.220625, 0.087
+    color: '#C8BFAE'
+    shape: Ellipsoid
+  - label: left standing collar
+    min: -0.1243919, 0.1492188, 0.025
+    max: -0.0537331, 0.1867187, 0.082
+    color: '#382D31'
+    shape: Ellipsoid
+    yaw: -71.96571
+  - label: right standing collar
+    min: 0.0224831, 0.1492188, 0.025
+    max: 0.0931419, 0.1867187, 0.082
+    color: '#C8BFAE'
+    shape: Ellipsoid
+    yaw: -108.03429
+  - label: left collar inner shadow
+    min: -0.0941265, 0.1546875, 0.02
+    max: -0.0402485, 0.16875, 0.06
+    color: '#594F57'
+    shape: Ellipsoid
+    yaw: -73.1416
+  - label: right collar inner shadow
+    min: 0.0089985, 0.1546875, 0.02
+    max: 0.0628765, 0.16875, 0.06
+    color: '#594F57'
+    shape: Ellipsoid
+    yaw: -106.8584
+  - label: fleece left zipper facing
+    min: -0.05625, -0.15, 0.051
+    max: -0.028125, 0.125, 0.073
+    color: '#C8BFAE'
+  - label: fleece right zipper facing
+    min: -0.003125, -0.15, 0.051
+    max: 0.025, 0.125, 0.073
+    color: '#C8BFAE'
+  - label: central dark zipper channel
+    min: -0.03125, -0.16875, 0.019
+    max: 0.0, 0.121875, 0.053
+    color: '#201D1E'
+  - label: original narrow central closure
+    min: -0.03125, -0.125, 0.054
+    max: 0.0, 0.09375, 0.056
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt002
+    surfaceAxis: XY
+  - label: slanted bomber pocket 0
+    min: -0.1299838, -0.0601563, 0.062
+    max: -0.0637662, -0.0492187, 0.069
+    color: '#0D0C0D'
+    shape: CylinderX
+    yaw: -19.29005
+  - label: slanted bomber pocket 1
+    min: 0.0325162, -0.0601563, 0.062
+    max: 0.0987338, -0.0492187, 0.069
+    color: '#0D0C0D'
+    shape: CylinderX
+    yaw: -19.29005
+- type: cmu3DModel
+  id: CMU3DCivilianJacketGrayPufferJacketWorldCloud
+  label: graypufferjacket dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketGrayPufferJacket
+  referencePrototype: AU14CivilianJacketGrayPufferJacket
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/graypufferjacket.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Short quilted puffer: five separately rounded front channels per side, three sleeve channels, dark
+    broad centre placket and compact elastic hem. Source-shaped face-up dropped/world prop only, one static icon
+    direction. Physical cloth depth and underside are inferred. No actor, worn, held, stain, accessory, Foldable
+    or animation mapping. Default white tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.18125, 0.018
+    color: '#11110E'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#2B3333'
+  - label: left connected shoulder yoke
+    min: -0.1605945, 0.0867187, 0.009
+    max: -0.0612805, 0.1757812, 0.041
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -114.14554
+  - label: right connected shoulder yoke
+    min: 0.0300305, 0.0867187, 0.009
+    max: 0.1293445, 0.1757812, 0.041
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -65.85446
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#11110E'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left stuffed sleeve channel 1
+    min: -0.1682981, 0.0942188, 0.046
+    max: -0.1160769, 0.1260938, 0.072
+    color: '#49585F'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left stuffed sleeve channel 2
+    min: -0.2011106, 0.0614062, 0.046
+    max: -0.1488894, 0.0932812, 0.072
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left stuffed sleeve channel 3
+    min: -0.2323606, 0.0285938, 0.046
+    max: -0.1801394, 0.0604688, 0.072
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#11110E'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#1A1C17'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#1A1C17'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#1A1C17'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#1A1C17'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#11110E'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right stuffed sleeve channel 1
+    min: 0.0848269, 0.0942188, 0.046
+    max: 0.1370481, 0.1260938, 0.072
+    color: '#49585F'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right stuffed sleeve channel 2
+    min: 0.1176394, 0.0614062, 0.046
+    max: 0.1698606, 0.0932812, 0.072
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right stuffed sleeve channel 3
+    min: 0.1488894, 0.0285938, 0.046
+    max: 0.2011106, 0.0604688, 0.072
+    color: '#2B3333'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#11110E'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#1A1C17'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#1A1C17'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#1A1C17'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#1A1C17'
+  - label: left puffer lining cloth face
+    min: -0.1440625, -0.115625, 0.009
+    max: -0.060625, 0.13125, 0.018000000000000002
+    color: '#2B3333'
+  - label: left puffer lining side fold left
+    min: -0.1515625, -0.1140625, 0.008
+    max: -0.1328125, 0.1296875, 0.028
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: left puffer lining side fold right
+    min: -0.071875, -0.1140625, 0.008
+    max: -0.053125, 0.1296875, 0.028
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: left puffer lining upper folded edge
+    min: -0.1453125, 0.11875, 0.007
+    max: -0.059375, 0.1375, 0.022
+    color: '#11110E'
+    shape: Ellipsoid
+  - label: left puffer lining lower folded edge
+    min: -0.1453125, -0.121875, 0.007
+    max: -0.059375, -0.103125, 0.022
+    color: '#11110E'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 1
+    min: -0.1546875, 0.09375, 0.022
+    max: -0.05, 0.140625, 0.06
+    color: '#49585F'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 2
+    min: -0.1546875, 0.0375, 0.022
+    max: -0.05, 0.084375, 0.06
+    color: '#3E4A4E'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 3
+    min: -0.1546875, -0.01875, 0.022
+    max: -0.05, 0.028125, 0.06
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 4
+    min: -0.1546875, -0.078125, 0.022
+    max: -0.05, -0.028125, 0.06
+    color: '#3E4A4E'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 5
+    min: -0.1546875, -0.1125, 0.022
+    max: -0.05, -0.084375, 0.054
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: left front facing seam
+    min: -0.1804687, 0.004375, 0.033
+    max: 0.0507812, 0.014375, 0.06
+    color: '#11110E'
+    shape: CylinderX
+    yaw: -90.0
+  - label: right puffer lining cloth face
+    min: 0.029375, -0.115625, 0.009
+    max: 0.1128125, 0.13125, 0.018000000000000002
+    color: '#2B3333'
+  - label: right puffer lining side fold left
+    min: 0.021875, -0.1140625, 0.008
+    max: 0.040625, 0.1296875, 0.028
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: right puffer lining side fold right
+    min: 0.1015625, -0.1140625, 0.008
+    max: 0.1203125, 0.1296875, 0.028
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: right puffer lining upper folded edge
+    min: 0.028125, 0.11875, 0.007
+    max: 0.1140625, 0.1375, 0.022
+    color: '#11110E'
+    shape: Ellipsoid
+  - label: right puffer lining lower folded edge
+    min: 0.028125, -0.121875, 0.007
+    max: 0.1140625, -0.103125, 0.022
+    color: '#11110E'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 1
+    min: 0.01875, 0.09375, 0.022
+    max: 0.1234375, 0.140625, 0.06
+    color: '#49585F'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 2
+    min: 0.01875, 0.0375, 0.022
+    max: 0.1234375, 0.084375, 0.06
+    color: '#3E4A4E'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 3
+    min: 0.01875, -0.01875, 0.022
+    max: 0.1234375, 0.028125, 0.06
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 4
+    min: 0.01875, -0.078125, 0.022
+    max: 0.1234375, -0.028125, 0.06
+    color: '#3E4A4E'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 5
+    min: 0.01875, -0.1125, 0.022
+    max: 0.1234375, -0.084375, 0.054
+    color: '#2B3333'
+    shape: Ellipsoid
+  - label: right front facing seam
+    min: -0.0820312, 0.004375, 0.033
+    max: 0.1492187, 0.014375, 0.06
+    color: '#11110E'
+    shape: CylinderX
+    yaw: -90.0
+  - label: broad left centre placket
+    min: -0.053125, -0.134375, 0.013
+    max: -0.01875, 0.178125, 0.055
+    color: '#171717'
+  - label: broad right centre placket
+    min: -0.0125, -0.134375, 0.013
+    max: 0.021875, 0.178125, 0.055
+    color: '#171717'
+  - label: central closure gap
+    min: -0.01875, -0.134375, 0.01
+    max: -0.0125, 0.178125, 0.039
+    color: '#11110E'
+  - label: short dark elastic bottom hem
+    min: -0.125, -0.1484375, 0.008
+    max: 0.09375, -0.115625, 0.035
+    color: '#11110E'
+    shape: Ellipsoid
+  - label: rear collar roll
+    min: -0.09375, 0.18875, 0.025
+    max: 0.0625, 0.220625, 0.087
+    color: '#11110E'
+    shape: Ellipsoid
+  - label: left standing collar
+    min: -0.1243919, 0.1492188, 0.025
+    max: -0.0537331, 0.1867187, 0.082
+    color: '#11110E'
+    shape: Ellipsoid
+    yaw: -71.96571
+  - label: right standing collar
+    min: 0.0224831, 0.1492188, 0.025
+    max: 0.0931419, 0.1867187, 0.082
+    color: '#11110E'
+    shape: Ellipsoid
+    yaw: -108.03429
+  - label: left collar inner shadow
+    min: -0.0941265, 0.1546875, 0.02
+    max: -0.0402485, 0.16875, 0.06
+    color: '#11110E'
+    shape: Ellipsoid
+    yaw: -73.1416
+  - label: right collar inner shadow
+    min: 0.0089985, 0.1546875, 0.02
+    max: 0.0628765, 0.16875, 0.06
+    color: '#11110E'
+    shape: Ellipsoid
+    yaw: -106.8584
+- type: cmu3DModel
+  id: CMU3DCivilianJacketKhakiPufferJacketWorldCloud
+  label: khakipufferjacket dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketKhakiPufferJacket
+  referencePrototype: AU14CivilianJacketKhakiPufferJacket
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/kahkipufferjacket.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Short quilted puffer: five separately rounded front channels per side, three sleeve channels, dark
+    broad centre placket and compact elastic hem. Source-shaped face-up dropped/world prop only, one static icon
+    direction. Physical cloth depth and underside are inferred. No actor, worn, held, stain, accessory, Foldable
+    or animation mapping. Default white tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.18125, 0.018
+    color: '#1C1815'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#836742'
+  - label: left connected shoulder yoke
+    min: -0.1605945, 0.0867187, 0.009
+    max: -0.0612805, 0.1757812, 0.041
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -114.14554
+  - label: right connected shoulder yoke
+    min: 0.0300305, 0.0867187, 0.009
+    max: 0.1293445, 0.1757812, 0.041
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -65.85446
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left stuffed sleeve channel 1
+    min: -0.1682981, 0.0942188, 0.046
+    max: -0.1160769, 0.1260938, 0.072
+    color: '#B19468'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left stuffed sleeve channel 2
+    min: -0.2011106, 0.0614062, 0.046
+    max: -0.1488894, 0.0932812, 0.072
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left stuffed sleeve channel 3
+    min: -0.2323606, 0.0285938, 0.046
+    max: -0.1801394, 0.0604688, 0.072
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#1C1815'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#382F27'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#382F27'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#382F27'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#382F27'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right stuffed sleeve channel 1
+    min: 0.0848269, 0.0942188, 0.046
+    max: 0.1370481, 0.1260938, 0.072
+    color: '#B19468'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right stuffed sleeve channel 2
+    min: 0.1176394, 0.0614062, 0.046
+    max: 0.1698606, 0.0932812, 0.072
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right stuffed sleeve channel 3
+    min: 0.1488894, 0.0285938, 0.046
+    max: 0.2011106, 0.0604688, 0.072
+    color: '#836742'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#1C1815'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#382F27'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#382F27'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#382F27'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#382F27'
+  - label: left puffer lining cloth face
+    min: -0.1440625, -0.115625, 0.009
+    max: -0.060625, 0.13125, 0.018000000000000002
+    color: '#836742'
+  - label: left puffer lining side fold left
+    min: -0.1515625, -0.1140625, 0.008
+    max: -0.1328125, 0.1296875, 0.028
+    color: '#836742'
+    shape: Ellipsoid
+  - label: left puffer lining side fold right
+    min: -0.071875, -0.1140625, 0.008
+    max: -0.053125, 0.1296875, 0.028
+    color: '#836742'
+    shape: Ellipsoid
+  - label: left puffer lining upper folded edge
+    min: -0.1453125, 0.11875, 0.007
+    max: -0.059375, 0.1375, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: left puffer lining lower folded edge
+    min: -0.1453125, -0.121875, 0.007
+    max: -0.059375, -0.103125, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 1
+    min: -0.1546875, 0.09375, 0.022
+    max: -0.05, 0.140625, 0.06
+    color: '#B19468'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 2
+    min: -0.1546875, 0.0375, 0.022
+    max: -0.05, 0.084375, 0.06
+    color: '#A1835C'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 3
+    min: -0.1546875, -0.01875, 0.022
+    max: -0.05, 0.028125, 0.06
+    color: '#836742'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 4
+    min: -0.1546875, -0.078125, 0.022
+    max: -0.05, -0.028125, 0.06
+    color: '#A1835C'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 5
+    min: -0.1546875, -0.1125, 0.022
+    max: -0.05, -0.084375, 0.054
+    color: '#836742'
+    shape: Ellipsoid
+  - label: left front facing seam
+    min: -0.1804687, 0.004375, 0.033
+    max: 0.0507812, 0.014375, 0.06
+    color: '#1C1815'
+    shape: CylinderX
+    yaw: -90.0
+  - label: right puffer lining cloth face
+    min: 0.029375, -0.115625, 0.009
+    max: 0.1128125, 0.13125, 0.018000000000000002
+    color: '#836742'
+  - label: right puffer lining side fold left
+    min: 0.021875, -0.1140625, 0.008
+    max: 0.040625, 0.1296875, 0.028
+    color: '#836742'
+    shape: Ellipsoid
+  - label: right puffer lining side fold right
+    min: 0.1015625, -0.1140625, 0.008
+    max: 0.1203125, 0.1296875, 0.028
+    color: '#836742'
+    shape: Ellipsoid
+  - label: right puffer lining upper folded edge
+    min: 0.028125, 0.11875, 0.007
+    max: 0.1140625, 0.1375, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: right puffer lining lower folded edge
+    min: 0.028125, -0.121875, 0.007
+    max: 0.1140625, -0.103125, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 1
+    min: 0.01875, 0.09375, 0.022
+    max: 0.1234375, 0.140625, 0.06
+    color: '#B19468'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 2
+    min: 0.01875, 0.0375, 0.022
+    max: 0.1234375, 0.084375, 0.06
+    color: '#A1835C'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 3
+    min: 0.01875, -0.01875, 0.022
+    max: 0.1234375, 0.028125, 0.06
+    color: '#836742'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 4
+    min: 0.01875, -0.078125, 0.022
+    max: 0.1234375, -0.028125, 0.06
+    color: '#A1835C'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 5
+    min: 0.01875, -0.1125, 0.022
+    max: 0.1234375, -0.084375, 0.054
+    color: '#836742'
+    shape: Ellipsoid
+  - label: right front facing seam
+    min: -0.0820312, 0.004375, 0.033
+    max: 0.1492187, 0.014375, 0.06
+    color: '#1C1815'
+    shape: CylinderX
+    yaw: -90.0
+  - label: broad left centre placket
+    min: -0.053125, -0.134375, 0.013
+    max: -0.01875, 0.178125, 0.055
+    color: '#2F271C'
+  - label: broad right centre placket
+    min: -0.0125, -0.134375, 0.013
+    max: 0.021875, 0.178125, 0.055
+    color: '#2F271C'
+  - label: central closure gap
+    min: -0.01875, -0.134375, 0.01
+    max: -0.0125, 0.178125, 0.039
+    color: '#251E16'
+  - label: short dark elastic bottom hem
+    min: -0.125, -0.1484375, 0.008
+    max: 0.09375, -0.115625, 0.035
+    color: '#251E16'
+    shape: Ellipsoid
+  - label: rear collar roll
+    min: -0.09375, 0.18875, 0.025
+    max: 0.0625, 0.220625, 0.087
+    color: '#251E16'
+    shape: Ellipsoid
+  - label: left standing collar
+    min: -0.1243919, 0.1492188, 0.025
+    max: -0.0537331, 0.1867187, 0.082
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -71.96571
+  - label: right standing collar
+    min: 0.0224831, 0.1492188, 0.025
+    max: 0.0931419, 0.1867187, 0.082
+    color: '#251E16'
+    shape: Ellipsoid
+    yaw: -108.03429
+  - label: left collar inner shadow
+    min: -0.0941265, 0.1546875, 0.02
+    max: -0.0402485, 0.16875, 0.06
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -73.1416
+  - label: right collar inner shadow
+    min: 0.0089985, 0.1546875, 0.02
+    max: 0.0628765, 0.16875, 0.06
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -106.8584
+- type: cmu3DModel
+  id: CMU3DCivilianJacketOrangePufferJacketWorldCloud
+  label: orangepufferjacket dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketOrangePufferJacket
+  referencePrototype: AU14CivilianJacketOrangePufferJacket
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/orangepufferjacket.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Short quilted puffer: five separately rounded front channels per side, three sleeve channels, dark
+    broad centre placket and compact elastic hem. Source-shaped face-up dropped/world prop only, one static icon
+    direction. Physical cloth depth and underside are inferred. No actor, worn, held, stain, accessory, Foldable
+    or animation mapping. Default white tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.18125, 0.018
+    color: '#1C1815'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#5A3520'
+  - label: left connected shoulder yoke
+    min: -0.1605945, 0.0867187, 0.009
+    max: -0.0612805, 0.1757812, 0.041
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -114.14554
+  - label: right connected shoulder yoke
+    min: 0.0300305, 0.0867187, 0.009
+    max: 0.1293445, 0.1757812, 0.041
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -65.85446
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left stuffed sleeve channel 1
+    min: -0.1682981, 0.0942188, 0.046
+    max: -0.1160769, 0.1260938, 0.072
+    color: '#975832'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left stuffed sleeve channel 2
+    min: -0.2011106, 0.0614062, 0.046
+    max: -0.1488894, 0.0932812, 0.072
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left stuffed sleeve channel 3
+    min: -0.2323606, 0.0285938, 0.046
+    max: -0.1801394, 0.0604688, 0.072
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -38.92754
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#1C1815'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#382F27'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#382F27'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#382F27'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#382F27'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right stuffed sleeve channel 1
+    min: 0.0848269, 0.0942188, 0.046
+    max: 0.1370481, 0.1260938, 0.072
+    color: '#975832'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right stuffed sleeve channel 2
+    min: 0.1176394, 0.0614062, 0.046
+    max: 0.1698606, 0.0932812, 0.072
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right stuffed sleeve channel 3
+    min: 0.1488894, 0.0285938, 0.046
+    max: 0.2011106, 0.0604688, 0.072
+    color: '#5A3520'
+    shape: Ellipsoid
+    yaw: -141.07246
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#1C1815'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#382F27'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#382F27'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#382F27'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#382F27'
+  - label: left puffer lining cloth face
+    min: -0.1440625, -0.115625, 0.009
+    max: -0.060625, 0.13125, 0.018000000000000002
+    color: '#5A3520'
+  - label: left puffer lining side fold left
+    min: -0.1515625, -0.1140625, 0.008
+    max: -0.1328125, 0.1296875, 0.028
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: left puffer lining side fold right
+    min: -0.071875, -0.1140625, 0.008
+    max: -0.053125, 0.1296875, 0.028
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: left puffer lining upper folded edge
+    min: -0.1453125, 0.11875, 0.007
+    max: -0.059375, 0.1375, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: left puffer lining lower folded edge
+    min: -0.1453125, -0.121875, 0.007
+    max: -0.059375, -0.103125, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 1
+    min: -0.1546875, 0.09375, 0.022
+    max: -0.05, 0.140625, 0.06
+    color: '#975832'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 2
+    min: -0.1546875, 0.0375, 0.022
+    max: -0.05, 0.084375, 0.06
+    color: '#804C2D'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 3
+    min: -0.1546875, -0.01875, 0.022
+    max: -0.05, 0.028125, 0.06
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 4
+    min: -0.1546875, -0.078125, 0.022
+    max: -0.05, -0.028125, 0.06
+    color: '#804C2D'
+    shape: Ellipsoid
+  - label: left inflated stitched channel 5
+    min: -0.1546875, -0.1125, 0.022
+    max: -0.05, -0.084375, 0.054
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: left front facing seam
+    min: -0.1804687, 0.004375, 0.033
+    max: 0.0507812, 0.014375, 0.06
+    color: '#1C1815'
+    shape: CylinderX
+    yaw: -90.0
+  - label: right puffer lining cloth face
+    min: 0.029375, -0.115625, 0.009
+    max: 0.1128125, 0.13125, 0.018000000000000002
+    color: '#5A3520'
+  - label: right puffer lining side fold left
+    min: 0.021875, -0.1140625, 0.008
+    max: 0.040625, 0.1296875, 0.028
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: right puffer lining side fold right
+    min: 0.1015625, -0.1140625, 0.008
+    max: 0.1203125, 0.1296875, 0.028
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: right puffer lining upper folded edge
+    min: 0.028125, 0.11875, 0.007
+    max: 0.1140625, 0.1375, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: right puffer lining lower folded edge
+    min: 0.028125, -0.121875, 0.007
+    max: 0.1140625, -0.103125, 0.022
+    color: '#1C1815'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 1
+    min: 0.01875, 0.09375, 0.022
+    max: 0.1234375, 0.140625, 0.06
+    color: '#975832'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 2
+    min: 0.01875, 0.0375, 0.022
+    max: 0.1234375, 0.084375, 0.06
+    color: '#804C2D'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 3
+    min: 0.01875, -0.01875, 0.022
+    max: 0.1234375, 0.028125, 0.06
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 4
+    min: 0.01875, -0.078125, 0.022
+    max: 0.1234375, -0.028125, 0.06
+    color: '#804C2D'
+    shape: Ellipsoid
+  - label: right inflated stitched channel 5
+    min: 0.01875, -0.1125, 0.022
+    max: 0.1234375, -0.084375, 0.054
+    color: '#5A3520'
+    shape: Ellipsoid
+  - label: right front facing seam
+    min: -0.0820312, 0.004375, 0.033
+    max: 0.1492187, 0.014375, 0.06
+    color: '#1C1815'
+    shape: CylinderX
+    yaw: -90.0
+  - label: broad left centre placket
+    min: -0.053125, -0.134375, 0.013
+    max: -0.01875, 0.178125, 0.055
+    color: '#2F271C'
+  - label: broad right centre placket
+    min: -0.0125, -0.134375, 0.013
+    max: 0.021875, 0.178125, 0.055
+    color: '#2F271C'
+  - label: central closure gap
+    min: -0.01875, -0.134375, 0.01
+    max: -0.0125, 0.178125, 0.039
+    color: '#251E16'
+  - label: short dark elastic bottom hem
+    min: -0.125, -0.1484375, 0.008
+    max: 0.09375, -0.115625, 0.035
+    color: '#251E16'
+    shape: Ellipsoid
+  - label: rear collar roll
+    min: -0.09375, 0.18875, 0.025
+    max: 0.0625, 0.220625, 0.087
+    color: '#251E16'
+    shape: Ellipsoid
+  - label: left standing collar
+    min: -0.1243919, 0.1492188, 0.025
+    max: -0.0537331, 0.1867187, 0.082
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -71.96571
+  - label: right standing collar
+    min: 0.0224831, 0.1492188, 0.025
+    max: 0.0931419, 0.1867187, 0.082
+    color: '#251E16'
+    shape: Ellipsoid
+    yaw: -108.03429
+  - label: left collar inner shadow
+    min: -0.0941265, 0.1546875, 0.02
+    max: -0.0402485, 0.16875, 0.06
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -73.1416
+  - label: right collar inner shadow
+    min: 0.0089985, 0.1546875, 0.02
+    max: 0.0628765, 0.16875, 0.06
+    color: '#1C1815'
+    shape: Ellipsoid
+    yaw: -106.8584
+- type: cmu3DModel
+  id: CMU3DCivilianJacketBlueParkaWorldCloud
+  label: blueparka dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketBlueParka
+  referencePrototype: AU14CivilianJacketBlueParka
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/blueparka.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Long parka cut: continuous low ochre fur band on folded V-shaped cloth backing, shaped front panels,
+    gathered waist and two raised lower patch pockets with original small stitching crops. Source-shaped face-up
+    dropped/world prop only, one static icon direction. Physical cloth depth and underside are inferred. No actor,
+    worn, held, stain, accessory, Foldable or animation mapping. Default white tint only; saved-map fit, native
+    admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.175, 0.018
+    color: '#344663'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#344663'
+  - label: left connected shoulder yoke
+    min: -0.1577604, 0.0835937, 0.009
+    max: -0.0641146, 0.1726563, 0.041
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -115.70995
+  - label: right connected shoulder yoke
+    min: 0.0328646, 0.0835937, 0.009
+    max: 0.1265104, 0.1726563, 0.041
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -64.29005
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#344663'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#202B3D'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#202B3D'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#202B3D'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#202B3D'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#344663'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#202B3D'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#202B3D'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#202B3D'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#202B3D'
+  - label: left long parka front cloth face
+    min: -0.164375, -0.20625, 0.009
+    max: -0.0278125, 0.115625, 0.042
+    color: '#344663'
+  - label: left long parka front side fold left
+    min: -0.171875, -0.2046875, 0.008
+    max: -0.153125, 0.1140625, 0.052000000000000005
+    color: '#344663'
+    shape: Ellipsoid
+  - label: left long parka front side fold right
+    min: -0.0390625, -0.2046875, 0.008
+    max: -0.0203125, 0.1140625, 0.052000000000000005
+    color: '#344663'
+    shape: Ellipsoid
+  - label: left long parka front upper folded edge
+    min: -0.165625, 0.103125, 0.007
+    max: -0.0265625, 0.121875, 0.046
+    color: '#344663'
+    shape: Ellipsoid
+  - label: left long parka front lower folded edge
+    min: -0.165625, -0.2125, 0.007
+    max: -0.0265625, -0.19375, 0.046
+    color: '#344663'
+    shape: Ellipsoid
+  - label: left chest relief fold
+    min: -0.1757812, 0.0179688, 0.034
+    max: -0.0164062, 0.0351563, 0.041
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: left bottom turn-up
+    min: -0.159375, -0.2390625, 0.007
+    max: -0.0203125, -0.203125, 0.036
+    color: '#344663'
+    shape: Ellipsoid
+  - label: left patch pocket folded sides
+    min: -0.128125, -0.171875, 0.046
+    max: -0.0296875, -0.078125, 0.068
+    color: '#263349'
+  - label: left patch pocket bag
+    min: -0.124375, -0.1890625, 0.057
+    max: -0.0334375, -0.08125, 0.08
+    color: '#344663'
+    shape: Ellipsoid
+  - label: left woven pocket face
+    min: -0.1265625, -0.1890625, 0.064
+    max: -0.03125, -0.09375, 0.092
+    color: '#344663'
+  - label: left pocket upper flap
+    min: -0.130625, -0.1078125, 0.073
+    max: -0.0271875, -0.075, 0.091
+    color: '#344663'
+    shape: Ellipsoid
+  - label: left original pocket stitching
+    min: -0.125, -0.1875, 0.092
+    max: -0.03125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt003
+    surfaceAxis: XY
+  - label: right long parka front cloth face
+    min: -0.0034375, -0.20625, 0.009
+    max: 0.133125, 0.115625, 0.042
+    color: '#344663'
+  - label: right long parka front side fold left
+    min: -0.0109375, -0.2046875, 0.008
+    max: 0.0078125, 0.1140625, 0.052000000000000005
+    color: '#344663'
+    shape: Ellipsoid
+  - label: right long parka front side fold right
+    min: 0.121875, -0.2046875, 0.008
+    max: 0.140625, 0.1140625, 0.052000000000000005
+    color: '#344663'
+    shape: Ellipsoid
+  - label: right long parka front upper folded edge
+    min: -0.0046875, 0.103125, 0.007
+    max: 0.134375, 0.121875, 0.046
+    color: '#344663'
+    shape: Ellipsoid
+  - label: right long parka front lower folded edge
+    min: -0.0046875, -0.2125, 0.007
+    max: 0.134375, -0.19375, 0.046
+    color: '#344663'
+    shape: Ellipsoid
+  - label: right chest relief fold
+    min: -0.0148438, 0.0179688, 0.034
+    max: 0.1445312, 0.0351563, 0.041
+    color: '#344663'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: right bottom turn-up
+    min: 0.0015625, -0.2390625, 0.007
+    max: 0.140625, -0.203125, 0.036
+    color: '#344663'
+    shape: Ellipsoid
+  - label: right patch pocket folded sides
+    min: 0.01875, -0.171875, 0.046
+    max: 0.1265625, -0.078125, 0.068
+    color: '#263349'
+  - label: right patch pocket bag
+    min: 0.0225, -0.1890625, 0.057
+    max: 0.1228125, -0.08125, 0.08
+    color: '#344663'
+    shape: Ellipsoid
+  - label: right woven pocket face
+    min: 0.0203125, -0.1890625, 0.064
+    max: 0.125, -0.09375, 0.092
+    color: '#344663'
+  - label: right pocket upper flap
+    min: 0.01625, -0.1078125, 0.073
+    max: 0.1290625, -0.075, 0.091
+    color: '#344663'
+    shape: Ellipsoid
+  - label: right original pocket stitching
+    min: 0.03125, -0.1875, 0.092
+    max: 0.125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt004
+    surfaceAxis: XY
+  - label: left narrow front closure
+    min: -0.03125, -0.221875, 0.03
+    max: -0.018125, 0.125, 0.068
+    color: '#202B3D'
+  - label: right narrow front closure
+    min: -0.013125, -0.221875, 0.03
+    max: 0.0, 0.125, 0.068
+    color: '#3E5375'
+  - label: waist gathered seam
+    min: -0.159375, -0.0628125, 0.048
+    max: 0.128125, -0.0528125, 0.057
+    color: '#344663'
+    shape: CylinderX
+  - label: left continuous collar cloth backing
+    min: -0.1132978, 0.1465625, 0.008
+    max: -0.0023272, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -32.34744
+  - label: left continuous low fur collar band
+    min: -0.1132978, 0.1425, 0.01
+    max: -0.0023272, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left flattened fur highlight
+    min: -0.0816233, 0.1583281, 0.032
+    max: -0.0405642, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left collar sewn inside edge
+    min: -0.1132978, 0.149375, 0.019
+    max: -0.0023272, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -32.34744
+  - label: right continuous collar cloth backing
+    min: -0.0289228, 0.1465625, 0.008
+    max: 0.0820478, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -147.65256
+  - label: right continuous low fur collar band
+    min: -0.0289228, 0.1425, 0.01
+    max: 0.0820478, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right flattened fur highlight
+    min: 0.0093142, 0.1583281, 0.032
+    max: 0.0503733, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right collar sewn inside edge
+    min: -0.0289228, 0.149375, 0.019
+    max: 0.0820478, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -147.65256
+- type: cmu3DModel
+  id: CMU3DCivilianJacketYellowParkaWorldCloud
+  label: yellowparka dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketYellowParka
+  referencePrototype: AU14CivilianJacketYellowParka
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/yellowparka.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Long parka cut: continuous low ochre fur band on folded V-shaped cloth backing, shaped front panels,
+    gathered waist and two raised lower patch pockets with original small stitching crops. Source-shaped face-up
+    dropped/world prop only, one static icon direction. Physical cloth depth and underside are inferred. No actor,
+    worn, held, stain, accessory, Foldable or animation mapping. Default white tint only; saved-map fit, native
+    admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.175, 0.018
+    color: '#887126'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#887126'
+  - label: left connected shoulder yoke
+    min: -0.1577604, 0.0835937, 0.009
+    max: -0.0641146, 0.1726563, 0.041
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -115.70995
+  - label: right connected shoulder yoke
+    min: 0.0328646, 0.0835937, 0.009
+    max: 0.1265104, 0.1726563, 0.041
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -64.29005
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#887126'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#534417'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#534417'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#534417'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#534417'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#887126'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#534417'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#534417'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#534417'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#534417'
+  - label: left long parka front cloth face
+    min: -0.164375, -0.20625, 0.009
+    max: -0.0278125, 0.115625, 0.042
+    color: '#887126'
+  - label: left long parka front side fold left
+    min: -0.171875, -0.2046875, 0.008
+    max: -0.153125, 0.1140625, 0.052000000000000005
+    color: '#887126'
+    shape: Ellipsoid
+  - label: left long parka front side fold right
+    min: -0.0390625, -0.2046875, 0.008
+    max: -0.0203125, 0.1140625, 0.052000000000000005
+    color: '#887126'
+    shape: Ellipsoid
+  - label: left long parka front upper folded edge
+    min: -0.165625, 0.103125, 0.007
+    max: -0.0265625, 0.121875, 0.046
+    color: '#887126'
+    shape: Ellipsoid
+  - label: left long parka front lower folded edge
+    min: -0.165625, -0.2125, 0.007
+    max: -0.0265625, -0.19375, 0.046
+    color: '#887126'
+    shape: Ellipsoid
+  - label: left chest relief fold
+    min: -0.1757812, 0.0179688, 0.034
+    max: -0.0164062, 0.0351563, 0.041
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: left bottom turn-up
+    min: -0.159375, -0.2390625, 0.007
+    max: -0.0203125, -0.203125, 0.036
+    color: '#887126'
+    shape: Ellipsoid
+  - label: left patch pocket folded sides
+    min: -0.128125, -0.171875, 0.046
+    max: -0.0296875, -0.078125, 0.068
+    color: '#64561C'
+  - label: left patch pocket bag
+    min: -0.124375, -0.1890625, 0.057
+    max: -0.0334375, -0.08125, 0.08
+    color: '#887126'
+    shape: Ellipsoid
+  - label: left woven pocket face
+    min: -0.1265625, -0.1890625, 0.064
+    max: -0.03125, -0.09375, 0.092
+    color: '#887126'
+  - label: left pocket upper flap
+    min: -0.130625, -0.1078125, 0.073
+    max: -0.0271875, -0.075, 0.091
+    color: '#887126'
+    shape: Ellipsoid
+  - label: left original pocket stitching
+    min: -0.125, -0.1875, 0.092
+    max: -0.03125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt005
+    surfaceAxis: XY
+  - label: right long parka front cloth face
+    min: -0.0034375, -0.20625, 0.009
+    max: 0.133125, 0.115625, 0.042
+    color: '#887126'
+  - label: right long parka front side fold left
+    min: -0.0109375, -0.2046875, 0.008
+    max: 0.0078125, 0.1140625, 0.052000000000000005
+    color: '#887126'
+    shape: Ellipsoid
+  - label: right long parka front side fold right
+    min: 0.121875, -0.2046875, 0.008
+    max: 0.140625, 0.1140625, 0.052000000000000005
+    color: '#887126'
+    shape: Ellipsoid
+  - label: right long parka front upper folded edge
+    min: -0.0046875, 0.103125, 0.007
+    max: 0.134375, 0.121875, 0.046
+    color: '#887126'
+    shape: Ellipsoid
+  - label: right long parka front lower folded edge
+    min: -0.0046875, -0.2125, 0.007
+    max: 0.134375, -0.19375, 0.046
+    color: '#887126'
+    shape: Ellipsoid
+  - label: right chest relief fold
+    min: -0.0148438, 0.0179688, 0.034
+    max: 0.1445312, 0.0351563, 0.041
+    color: '#887126'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: right bottom turn-up
+    min: 0.0015625, -0.2390625, 0.007
+    max: 0.140625, -0.203125, 0.036
+    color: '#887126'
+    shape: Ellipsoid
+  - label: right patch pocket folded sides
+    min: 0.01875, -0.171875, 0.046
+    max: 0.1265625, -0.078125, 0.068
+    color: '#64561C'
+  - label: right patch pocket bag
+    min: 0.0225, -0.1890625, 0.057
+    max: 0.1228125, -0.08125, 0.08
+    color: '#887126'
+    shape: Ellipsoid
+  - label: right woven pocket face
+    min: 0.0203125, -0.1890625, 0.064
+    max: 0.125, -0.09375, 0.092
+    color: '#887126'
+  - label: right pocket upper flap
+    min: 0.01625, -0.1078125, 0.073
+    max: 0.1290625, -0.075, 0.091
+    color: '#887126'
+    shape: Ellipsoid
+  - label: right original pocket stitching
+    min: 0.03125, -0.1875, 0.092
+    max: 0.125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt006
+    surfaceAxis: XY
+  - label: left narrow front closure
+    min: -0.03125, -0.221875, 0.03
+    max: -0.018125, 0.125, 0.068
+    color: '#534417'
+  - label: right narrow front closure
+    min: -0.013125, -0.221875, 0.03
+    max: 0.0, 0.125, 0.068
+    color: '#A1892E'
+  - label: waist gathered seam
+    min: -0.159375, -0.0628125, 0.048
+    max: 0.128125, -0.0528125, 0.057
+    color: '#887126'
+    shape: CylinderX
+  - label: left continuous collar cloth backing
+    min: -0.1132978, 0.1465625, 0.008
+    max: -0.0023272, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -32.34744
+  - label: left continuous low fur collar band
+    min: -0.1132978, 0.1425, 0.01
+    max: -0.0023272, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left flattened fur highlight
+    min: -0.0816233, 0.1583281, 0.032
+    max: -0.0405642, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left collar sewn inside edge
+    min: -0.1132978, 0.149375, 0.019
+    max: -0.0023272, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -32.34744
+  - label: right continuous collar cloth backing
+    min: -0.0289228, 0.1465625, 0.008
+    max: 0.0820478, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -147.65256
+  - label: right continuous low fur collar band
+    min: -0.0289228, 0.1425, 0.01
+    max: 0.0820478, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right flattened fur highlight
+    min: 0.0093142, 0.1583281, 0.032
+    max: 0.0503733, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right collar sewn inside edge
+    min: -0.0289228, 0.149375, 0.019
+    max: 0.0820478, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -147.65256
+- type: cmu3DModel
+  id: CMU3DCivilianJacketGreenParkaWorldCloud
+  label: greenparka dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketGreenParka
+  referencePrototype: AU14CivilianJacketGreenParka
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/greenparka.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Long parka cut: continuous low ochre fur band on folded V-shaped cloth backing, shaped front panels,
+    gathered waist and two raised lower patch pockets with original small stitching crops. Source-shaped face-up
+    dropped/world prop only, one static icon direction. Physical cloth depth and underside are inferred. No actor,
+    worn, held, stain, accessory, Foldable or animation mapping. Default white tint only; saved-map fit, native
+    admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.175, 0.018
+    color: '#434F3E'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#434F3E'
+  - label: left connected shoulder yoke
+    min: -0.1577604, 0.0835937, 0.009
+    max: -0.0641146, 0.1726563, 0.041
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -115.70995
+  - label: right connected shoulder yoke
+    min: 0.0328646, 0.0835937, 0.009
+    max: 0.1265104, 0.1726563, 0.041
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -64.29005
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#434F3E'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#2A3026'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#2A3026'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#2A3026'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#2A3026'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#434F3E'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#2A3026'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#2A3026'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#2A3026'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#2A3026'
+  - label: left long parka front cloth face
+    min: -0.164375, -0.20625, 0.009
+    max: -0.0278125, 0.115625, 0.042
+    color: '#434F3E'
+  - label: left long parka front side fold left
+    min: -0.171875, -0.2046875, 0.008
+    max: -0.153125, 0.1140625, 0.052000000000000005
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: left long parka front side fold right
+    min: -0.0390625, -0.2046875, 0.008
+    max: -0.0203125, 0.1140625, 0.052000000000000005
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: left long parka front upper folded edge
+    min: -0.165625, 0.103125, 0.007
+    max: -0.0265625, 0.121875, 0.046
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: left long parka front lower folded edge
+    min: -0.165625, -0.2125, 0.007
+    max: -0.0265625, -0.19375, 0.046
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: left chest relief fold
+    min: -0.1757812, 0.0179688, 0.034
+    max: -0.0164062, 0.0351563, 0.041
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: left bottom turn-up
+    min: -0.159375, -0.2390625, 0.007
+    max: -0.0203125, -0.203125, 0.036
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: left patch pocket folded sides
+    min: -0.128125, -0.171875, 0.046
+    max: -0.0296875, -0.078125, 0.068
+    color: '#313A2D'
+  - label: left patch pocket bag
+    min: -0.124375, -0.1890625, 0.057
+    max: -0.0334375, -0.08125, 0.08
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: left woven pocket face
+    min: -0.1265625, -0.1890625, 0.064
+    max: -0.03125, -0.09375, 0.092
+    color: '#434F3E'
+  - label: left pocket upper flap
+    min: -0.130625, -0.1078125, 0.073
+    max: -0.0271875, -0.075, 0.091
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: left original pocket stitching
+    min: -0.125, -0.1875, 0.092
+    max: -0.03125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt007
+    surfaceAxis: XY
+  - label: right long parka front cloth face
+    min: -0.0034375, -0.20625, 0.009
+    max: 0.133125, 0.115625, 0.042
+    color: '#434F3E'
+  - label: right long parka front side fold left
+    min: -0.0109375, -0.2046875, 0.008
+    max: 0.0078125, 0.1140625, 0.052000000000000005
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: right long parka front side fold right
+    min: 0.121875, -0.2046875, 0.008
+    max: 0.140625, 0.1140625, 0.052000000000000005
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: right long parka front upper folded edge
+    min: -0.0046875, 0.103125, 0.007
+    max: 0.134375, 0.121875, 0.046
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: right long parka front lower folded edge
+    min: -0.0046875, -0.2125, 0.007
+    max: 0.134375, -0.19375, 0.046
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: right chest relief fold
+    min: -0.0148438, 0.0179688, 0.034
+    max: 0.1445312, 0.0351563, 0.041
+    color: '#434F3E'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: right bottom turn-up
+    min: 0.0015625, -0.2390625, 0.007
+    max: 0.140625, -0.203125, 0.036
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: right patch pocket folded sides
+    min: 0.01875, -0.171875, 0.046
+    max: 0.1265625, -0.078125, 0.068
+    color: '#313A2D'
+  - label: right patch pocket bag
+    min: 0.0225, -0.1890625, 0.057
+    max: 0.1228125, -0.08125, 0.08
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: right woven pocket face
+    min: 0.0203125, -0.1890625, 0.064
+    max: 0.125, -0.09375, 0.092
+    color: '#434F3E'
+  - label: right pocket upper flap
+    min: 0.01625, -0.1078125, 0.073
+    max: 0.1290625, -0.075, 0.091
+    color: '#434F3E'
+    shape: Ellipsoid
+  - label: right original pocket stitching
+    min: 0.03125, -0.1875, 0.092
+    max: 0.125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt008
+    surfaceAxis: XY
+  - label: left narrow front closure
+    min: -0.03125, -0.221875, 0.03
+    max: -0.018125, 0.125, 0.068
+    color: '#2A3026'
+  - label: right narrow front closure
+    min: -0.013125, -0.221875, 0.03
+    max: 0.0, 0.125, 0.068
+    color: '#505D4A'
+  - label: waist gathered seam
+    min: -0.159375, -0.0628125, 0.048
+    max: 0.128125, -0.0528125, 0.057
+    color: '#434F3E'
+    shape: CylinderX
+  - label: left continuous collar cloth backing
+    min: -0.1132978, 0.1465625, 0.008
+    max: -0.0023272, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -32.34744
+  - label: left continuous low fur collar band
+    min: -0.1132978, 0.1425, 0.01
+    max: -0.0023272, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left flattened fur highlight
+    min: -0.0816233, 0.1583281, 0.032
+    max: -0.0405642, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left collar sewn inside edge
+    min: -0.1132978, 0.149375, 0.019
+    max: -0.0023272, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -32.34744
+  - label: right continuous collar cloth backing
+    min: -0.0289228, 0.1465625, 0.008
+    max: 0.0820478, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -147.65256
+  - label: right continuous low fur collar band
+    min: -0.0289228, 0.1425, 0.01
+    max: 0.0820478, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right flattened fur highlight
+    min: 0.0093142, 0.1583281, 0.032
+    max: 0.0503733, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right collar sewn inside edge
+    min: -0.0289228, 0.149375, 0.019
+    max: 0.0820478, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -147.65256
+- type: cmu3DModel
+  id: CMU3DCivilianJacketRedParkaWorldCloud
+  label: redparka dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketRedParka
+  referencePrototype: AU14CivilianJacketRedParka
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/redparka.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Long parka cut: continuous low ochre fur band on folded V-shaped cloth backing, shaped front panels,
+    gathered waist and two raised lower patch pockets with original small stitching crops. Source-shaped face-up
+    dropped/world prop only, one static icon direction. Physical cloth depth and underside are inferred. No actor,
+    worn, held, stain, accessory, Foldable or animation mapping. Default white tint only; saved-map fit, native
+    admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.175, 0.018
+    color: '#6E3135'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#6E3135'
+  - label: left connected shoulder yoke
+    min: -0.1577604, 0.0835937, 0.009
+    max: -0.0641146, 0.1726563, 0.041
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -115.70995
+  - label: right connected shoulder yoke
+    min: 0.0328646, 0.0835937, 0.009
+    max: 0.1265104, 0.1726563, 0.041
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -64.29005
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#6E3135'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#431E21'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#431E21'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#431E21'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#431E21'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#6E3135'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#431E21'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#431E21'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#431E21'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#431E21'
+  - label: left long parka front cloth face
+    min: -0.164375, -0.20625, 0.009
+    max: -0.0278125, 0.115625, 0.042
+    color: '#6E3135'
+  - label: left long parka front side fold left
+    min: -0.171875, -0.2046875, 0.008
+    max: -0.153125, 0.1140625, 0.052000000000000005
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: left long parka front side fold right
+    min: -0.0390625, -0.2046875, 0.008
+    max: -0.0203125, 0.1140625, 0.052000000000000005
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: left long parka front upper folded edge
+    min: -0.165625, 0.103125, 0.007
+    max: -0.0265625, 0.121875, 0.046
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: left long parka front lower folded edge
+    min: -0.165625, -0.2125, 0.007
+    max: -0.0265625, -0.19375, 0.046
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: left chest relief fold
+    min: -0.1757812, 0.0179688, 0.034
+    max: -0.0164062, 0.0351563, 0.041
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: left bottom turn-up
+    min: -0.159375, -0.2390625, 0.007
+    max: -0.0203125, -0.203125, 0.036
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: left patch pocket folded sides
+    min: -0.128125, -0.171875, 0.046
+    max: -0.0296875, -0.078125, 0.068
+    color: '#512425'
+  - label: left patch pocket bag
+    min: -0.124375, -0.1890625, 0.057
+    max: -0.0334375, -0.08125, 0.08
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: left woven pocket face
+    min: -0.1265625, -0.1890625, 0.064
+    max: -0.03125, -0.09375, 0.092
+    color: '#6E3135'
+  - label: left pocket upper flap
+    min: -0.130625, -0.1078125, 0.073
+    max: -0.0271875, -0.075, 0.091
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: left original pocket stitching
+    min: -0.125, -0.1875, 0.092
+    max: -0.03125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt009
+    surfaceAxis: XY
+  - label: right long parka front cloth face
+    min: -0.0034375, -0.20625, 0.009
+    max: 0.133125, 0.115625, 0.042
+    color: '#6E3135'
+  - label: right long parka front side fold left
+    min: -0.0109375, -0.2046875, 0.008
+    max: 0.0078125, 0.1140625, 0.052000000000000005
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: right long parka front side fold right
+    min: 0.121875, -0.2046875, 0.008
+    max: 0.140625, 0.1140625, 0.052000000000000005
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: right long parka front upper folded edge
+    min: -0.0046875, 0.103125, 0.007
+    max: 0.134375, 0.121875, 0.046
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: right long parka front lower folded edge
+    min: -0.0046875, -0.2125, 0.007
+    max: 0.134375, -0.19375, 0.046
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: right chest relief fold
+    min: -0.0148438, 0.0179688, 0.034
+    max: 0.1445312, 0.0351563, 0.041
+    color: '#6E3135'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: right bottom turn-up
+    min: 0.0015625, -0.2390625, 0.007
+    max: 0.140625, -0.203125, 0.036
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: right patch pocket folded sides
+    min: 0.01875, -0.171875, 0.046
+    max: 0.1265625, -0.078125, 0.068
+    color: '#512425'
+  - label: right patch pocket bag
+    min: 0.0225, -0.1890625, 0.057
+    max: 0.1228125, -0.08125, 0.08
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: right woven pocket face
+    min: 0.0203125, -0.1890625, 0.064
+    max: 0.125, -0.09375, 0.092
+    color: '#6E3135'
+  - label: right pocket upper flap
+    min: 0.01625, -0.1078125, 0.073
+    max: 0.1290625, -0.075, 0.091
+    color: '#6E3135'
+    shape: Ellipsoid
+  - label: right original pocket stitching
+    min: 0.03125, -0.1875, 0.092
+    max: 0.125, -0.09375, 0.094
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt010
+    surfaceAxis: XY
+  - label: left narrow front closure
+    min: -0.03125, -0.221875, 0.03
+    max: -0.018125, 0.125, 0.068
+    color: '#431E21'
+  - label: right narrow front closure
+    min: -0.013125, -0.221875, 0.03
+    max: 0.0, 0.125, 0.068
+    color: '#823A3D'
+  - label: waist gathered seam
+    min: -0.159375, -0.0628125, 0.048
+    max: 0.128125, -0.0528125, 0.057
+    color: '#6E3135'
+    shape: CylinderX
+  - label: left continuous collar cloth backing
+    min: -0.1132978, 0.1465625, 0.008
+    max: -0.0023272, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -32.34744
+  - label: left continuous low fur collar band
+    min: -0.1132978, 0.1425, 0.01
+    max: -0.0023272, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left flattened fur highlight
+    min: -0.0816233, 0.1583281, 0.032
+    max: -0.0405642, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -32.34744
+  - label: left collar sewn inside edge
+    min: -0.1132978, 0.149375, 0.019
+    max: -0.0023272, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -32.34744
+  - label: right continuous collar cloth backing
+    min: -0.0289228, 0.1465625, 0.008
+    max: 0.0820478, 0.1878125, 0.035
+    color: '#514A2D'
+    yaw: -147.65256
+  - label: right continuous low fur collar band
+    min: -0.0289228, 0.1425, 0.01
+    max: 0.0820478, 0.191875, 0.052
+    color: '#8C7F4E'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right flattened fur highlight
+    min: 0.0093142, 0.1583281, 0.032
+    max: 0.0503733, 0.1802031, 0.056
+    color: '#A5975C'
+    shape: Ellipsoid
+    yaw: -147.65256
+  - label: right collar sewn inside edge
+    min: -0.0289228, 0.149375, 0.019
+    max: 0.0820478, 0.15875, 0.042
+    color: '#332E1C'
+    shape: CylinderX
+    yaw: -147.65256
+- type: cmu3DModel
+  id: CMU3DCivilianJacketGrayPufferVestWorldCloud
+  label: graypuffervest dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketGrayPufferVest
+  referencePrototype: AU14CivilianJacketGrayPufferVest
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/graypuffervest.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Narrow sleeveless open vest: independent front edges, angled shoulder strips, bound armholes and
+    four flattened joined quilt bands per side; open centre retained apart from a narrow inferred folded rear-waist
+    connecting seam. Source-shaped face-up dropped/world prop only, one static icon direction. Physical cloth depth
+    and underside are inferred. No actor, worn, held, stain, accessory, Foldable or animation mapping. Default white
+    tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: inferred folded rear waist connection
+    min: -0.14375, -0.1015625, 0.002
+    max: 0.1125, -0.0921875, 0.012
+    color: '#13171B'
+  - label: left sleeveless open front cloth face
+    min: -0.1471875, -0.1140625, 0.009
+    max: -0.0434375, 0.115625, 0.021000000000000005
+    color: '#313538'
+  - label: left sleeveless open front side fold left
+    min: -0.1546875, -0.1125, 0.008
+    max: -0.1359375, 0.1140625, 0.031000000000000003
+    color: '#313538'
+    shape: Ellipsoid
+  - label: left sleeveless open front side fold right
+    min: -0.0546875, -0.1125, 0.008
+    max: -0.0359375, 0.1140625, 0.031000000000000003
+    color: '#313538'
+    shape: Ellipsoid
+  - label: left sleeveless open front upper folded edge
+    min: -0.1484375, 0.103125, 0.007
+    max: -0.0421875, 0.121875, 0.025
+    color: '#13171B'
+    shape: Ellipsoid
+  - label: left sleeveless open front lower folded edge
+    min: -0.1484375, -0.1203125, 0.007
+    max: -0.0421875, -0.1015625, 0.025
+    color: '#13171B'
+    shape: Ellipsoid
+  - label: left joined quilt band 1
+    min: -0.150625, 0.063125, 0.01
+    max: -0.04, 0.115625, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: left quilted shallow highlight 1
+    min: -0.1359375, 0.0840625, 0.033
+    max: -0.0546875, 0.0959375, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: left joined quilt band 2
+    min: -0.150625, 0.000625, 0.01
+    max: -0.04, 0.053125, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: left quilted shallow highlight 2
+    min: -0.1359375, 0.0215625, 0.033
+    max: -0.0546875, 0.0334375, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: left joined quilt band 3
+    min: -0.150625, -0.061875, 0.01
+    max: -0.04, -0.009375, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: left quilted shallow highlight 3
+    min: -0.1359375, -0.0409375, 0.033
+    max: -0.0546875, -0.0290625, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: left joined quilt band 4
+    min: -0.150625, -0.124375, 0.01
+    max: -0.04, -0.071875, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: left quilted shallow highlight 4
+    min: -0.1359375, -0.1034375, 0.033
+    max: -0.0546875, -0.0915625, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: left bound armhole edge
+    min: -0.20375, 0.11875, 0.024
+    max: -0.094375, 0.134375, 0.058
+    color: '#13171B'
+    shape: CylinderX
+    yaw: -90.0
+  - label: left bound centre open edge
+    min: -0.1601562, -0.0028125, 0.02
+    max: 0.0757813, 0.010625, 0.06
+    color: '#13171B'
+    shape: CylinderX
+    yaw: -90.0
+  - label: left continuous shoulder underfold
+    min: -0.1375, 0.090625, 0.006
+    max: -0.06875, 0.159375, 0.022
+    color: '#313538'
+  - label: left sloping shoulder front
+    min: -0.1439125, 0.1320312, 0.018
+    max: -0.0498375, 0.1851562, 0.065
+    color: '#434648'
+    shape: Ellipsoid
+    yaw: -57.89374
+  - label: left collar binding
+    min: -0.1439125, 0.1507812, 0.053
+    max: -0.0498375, 0.1664062, 0.075
+    color: '#13171B'
+    shape: Ellipsoid
+    yaw: -57.89374
+  - label: left short bound hem
+    min: -0.1546875, -0.1234375, 0.008
+    max: -0.0359375, -0.096875, 0.037
+    color: '#13171B'
+    shape: Ellipsoid
+  - label: right sleeveless open front cloth face
+    min: 0.0121875, -0.1140625, 0.009
+    max: 0.1159375, 0.115625, 0.021000000000000005
+    color: '#313538'
+  - label: right sleeveless open front side fold left
+    min: 0.0046875, -0.1125, 0.008
+    max: 0.0234375, 0.1140625, 0.031000000000000003
+    color: '#313538'
+    shape: Ellipsoid
+  - label: right sleeveless open front side fold right
+    min: 0.1046875, -0.1125, 0.008
+    max: 0.1234375, 0.1140625, 0.031000000000000003
+    color: '#313538'
+    shape: Ellipsoid
+  - label: right sleeveless open front upper folded edge
+    min: 0.0109375, 0.103125, 0.007
+    max: 0.1171875, 0.121875, 0.025
+    color: '#13171B'
+    shape: Ellipsoid
+  - label: right sleeveless open front lower folded edge
+    min: 0.0109375, -0.1203125, 0.007
+    max: 0.1171875, -0.1015625, 0.025
+    color: '#13171B'
+    shape: Ellipsoid
+  - label: right joined quilt band 1
+    min: 0.00875, 0.063125, 0.01
+    max: 0.119375, 0.115625, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: right quilted shallow highlight 1
+    min: 0.0234375, 0.0840625, 0.033
+    max: 0.1046875, 0.0959375, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: right joined quilt band 2
+    min: 0.00875, 0.000625, 0.01
+    max: 0.119375, 0.053125, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: right quilted shallow highlight 2
+    min: 0.0234375, 0.0215625, 0.033
+    max: 0.1046875, 0.0334375, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: right joined quilt band 3
+    min: 0.00875, -0.061875, 0.01
+    max: 0.119375, -0.009375, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: right quilted shallow highlight 3
+    min: 0.0234375, -0.0409375, 0.033
+    max: 0.1046875, -0.0290625, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: right joined quilt band 4
+    min: 0.00875, -0.124375, 0.01
+    max: 0.119375, -0.071875, 0.043
+    color: '#434648'
+    shape: CylinderX
+  - label: right quilted shallow highlight 4
+    min: 0.0234375, -0.1034375, 0.033
+    max: 0.1046875, -0.0915625, 0.042
+    color: '#5C6369'
+    shape: CylinderX
+  - label: right bound armhole edge
+    min: 0.063125, 0.11875, 0.024
+    max: 0.1725, 0.134375, 0.058
+    color: '#13171B'
+    shape: CylinderX
+    yaw: -90.0
+  - label: right bound centre open edge
+    min: -0.1070313, -0.0028125, 0.02
+    max: 0.1289062, 0.010625, 0.06
+    color: '#13171B'
+    shape: CylinderX
+    yaw: -90.0
+  - label: right continuous shoulder underfold
+    min: 0.0375, 0.090625, 0.006
+    max: 0.10625, 0.159375, 0.022
+    color: '#313538'
+  - label: right sloping shoulder front
+    min: 0.0185875, 0.1320312, 0.018
+    max: 0.1126625, 0.1851562, 0.065
+    color: '#434648'
+    shape: Ellipsoid
+    yaw: -122.10626
+  - label: right collar binding
+    min: 0.0185875, 0.1507812, 0.053
+    max: 0.1126625, 0.1664062, 0.075
+    color: '#13171B'
+    shape: Ellipsoid
+    yaw: -122.10626
+  - label: right short bound hem
+    min: 0.0046875, -0.1234375, 0.008
+    max: 0.1234375, -0.096875, 0.037
+    color: '#13171B'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DCivilianJacketTanPufferVestWorldCloud
+  label: tanpuffervest dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketTanPufferVest
+  referencePrototype: AU14CivilianJacketTanPufferVest
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/tanpuffervest.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Narrow sleeveless open vest: independent front edges, angled shoulder strips, bound armholes and
+    four flattened joined quilt bands per side; open centre retained apart from a narrow inferred folded rear-waist
+    connecting seam. Source-shaped face-up dropped/world prop only, one static icon direction. Physical cloth depth
+    and underside are inferred. No actor, worn, held, stain, accessory, Foldable or animation mapping. Default white
+    tint only; saved-map fit, native admission and fidelity remain unverified.'
+  parts:
+  - label: inferred folded rear waist connection
+    min: -0.14375, -0.1015625, 0.002
+    max: 0.1125, -0.0921875, 0.012
+    color: '#342E27'
+  - label: left sleeveless open front cloth face
+    min: -0.1471875, -0.1140625, 0.009
+    max: -0.0434375, 0.115625, 0.021000000000000005
+    color: '#836742'
+  - label: left sleeveless open front side fold left
+    min: -0.1546875, -0.1125, 0.008
+    max: -0.1359375, 0.1140625, 0.031000000000000003
+    color: '#836742'
+    shape: Ellipsoid
+  - label: left sleeveless open front side fold right
+    min: -0.0546875, -0.1125, 0.008
+    max: -0.0359375, 0.1140625, 0.031000000000000003
+    color: '#836742'
+    shape: Ellipsoid
+  - label: left sleeveless open front upper folded edge
+    min: -0.1484375, 0.103125, 0.007
+    max: -0.0421875, 0.121875, 0.025
+    color: '#342E27'
+    shape: Ellipsoid
+  - label: left sleeveless open front lower folded edge
+    min: -0.1484375, -0.1203125, 0.007
+    max: -0.0421875, -0.1015625, 0.025
+    color: '#342E27'
+    shape: Ellipsoid
+  - label: left joined quilt band 1
+    min: -0.150625, 0.063125, 0.01
+    max: -0.04, 0.115625, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: left quilted shallow highlight 1
+    min: -0.1359375, 0.0840625, 0.033
+    max: -0.0546875, 0.0959375, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: left joined quilt band 2
+    min: -0.150625, 0.000625, 0.01
+    max: -0.04, 0.053125, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: left quilted shallow highlight 2
+    min: -0.1359375, 0.0215625, 0.033
+    max: -0.0546875, 0.0334375, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: left joined quilt band 3
+    min: -0.150625, -0.061875, 0.01
+    max: -0.04, -0.009375, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: left quilted shallow highlight 3
+    min: -0.1359375, -0.0409375, 0.033
+    max: -0.0546875, -0.0290625, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: left joined quilt band 4
+    min: -0.150625, -0.124375, 0.01
+    max: -0.04, -0.071875, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: left quilted shallow highlight 4
+    min: -0.1359375, -0.1034375, 0.033
+    max: -0.0546875, -0.0915625, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: left bound armhole edge
+    min: -0.20375, 0.11875, 0.024
+    max: -0.094375, 0.134375, 0.058
+    color: '#342E27'
+    shape: CylinderX
+    yaw: -90.0
+  - label: left bound centre open edge
+    min: -0.1601562, -0.0028125, 0.02
+    max: 0.0757813, 0.010625, 0.06
+    color: '#342E27'
+    shape: CylinderX
+    yaw: -90.0
+  - label: left continuous shoulder underfold
+    min: -0.1375, 0.090625, 0.006
+    max: -0.06875, 0.159375, 0.022
+    color: '#836742'
+  - label: left sloping shoulder front
+    min: -0.1439125, 0.1320312, 0.018
+    max: -0.0498375, 0.1851562, 0.065
+    color: '#A1835C'
+    shape: Ellipsoid
+    yaw: -57.89374
+  - label: left collar binding
+    min: -0.1439125, 0.1507812, 0.053
+    max: -0.0498375, 0.1664062, 0.075
+    color: '#342E27'
+    shape: Ellipsoid
+    yaw: -57.89374
+  - label: left short bound hem
+    min: -0.1546875, -0.1234375, 0.008
+    max: -0.0359375, -0.096875, 0.037
+    color: '#342E27'
+    shape: Ellipsoid
+  - label: right sleeveless open front cloth face
+    min: 0.0121875, -0.1140625, 0.009
+    max: 0.1159375, 0.115625, 0.021000000000000005
+    color: '#836742'
+  - label: right sleeveless open front side fold left
+    min: 0.0046875, -0.1125, 0.008
+    max: 0.0234375, 0.1140625, 0.031000000000000003
+    color: '#836742'
+    shape: Ellipsoid
+  - label: right sleeveless open front side fold right
+    min: 0.1046875, -0.1125, 0.008
+    max: 0.1234375, 0.1140625, 0.031000000000000003
+    color: '#836742'
+    shape: Ellipsoid
+  - label: right sleeveless open front upper folded edge
+    min: 0.0109375, 0.103125, 0.007
+    max: 0.1171875, 0.121875, 0.025
+    color: '#342E27'
+    shape: Ellipsoid
+  - label: right sleeveless open front lower folded edge
+    min: 0.0109375, -0.1203125, 0.007
+    max: 0.1171875, -0.1015625, 0.025
+    color: '#342E27'
+    shape: Ellipsoid
+  - label: right joined quilt band 1
+    min: 0.00875, 0.063125, 0.01
+    max: 0.119375, 0.115625, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: right quilted shallow highlight 1
+    min: 0.0234375, 0.0840625, 0.033
+    max: 0.1046875, 0.0959375, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: right joined quilt band 2
+    min: 0.00875, 0.000625, 0.01
+    max: 0.119375, 0.053125, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: right quilted shallow highlight 2
+    min: 0.0234375, 0.0215625, 0.033
+    max: 0.1046875, 0.0334375, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: right joined quilt band 3
+    min: 0.00875, -0.061875, 0.01
+    max: 0.119375, -0.009375, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: right quilted shallow highlight 3
+    min: 0.0234375, -0.0409375, 0.033
+    max: 0.1046875, -0.0290625, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: right joined quilt band 4
+    min: 0.00875, -0.124375, 0.01
+    max: 0.119375, -0.071875, 0.043
+    color: '#A1835C'
+    shape: CylinderX
+  - label: right quilted shallow highlight 4
+    min: 0.0234375, -0.1034375, 0.033
+    max: 0.1046875, -0.0915625, 0.042
+    color: '#CCAF83'
+    shape: CylinderX
+  - label: right bound armhole edge
+    min: 0.063125, 0.11875, 0.024
+    max: 0.1725, 0.134375, 0.058
+    color: '#342E27'
+    shape: CylinderX
+    yaw: -90.0
+  - label: right bound centre open edge
+    min: -0.1070313, -0.0028125, 0.02
+    max: 0.1289062, 0.010625, 0.06
+    color: '#342E27'
+    shape: CylinderX
+    yaw: -90.0
+  - label: right continuous shoulder underfold
+    min: 0.0375, 0.090625, 0.006
+    max: 0.10625, 0.159375, 0.022
+    color: '#836742'
+  - label: right sloping shoulder front
+    min: 0.0185875, 0.1320312, 0.018
+    max: 0.1126625, 0.1851562, 0.065
+    color: '#A1835C'
+    shape: Ellipsoid
+    yaw: -122.10626
+  - label: right collar binding
+    min: 0.0185875, 0.1507812, 0.053
+    max: 0.1126625, 0.1664062, 0.075
+    color: '#342E27'
+    shape: Ellipsoid
+    yaw: -122.10626
+  - label: right short bound hem
+    min: 0.0046875, -0.1234375, 0.008
+    max: 0.1234375, -0.096875, 0.037
+    color: '#342E27'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DCivilianJacketSnowSuitWorldCloud
+  label: snowsuit dropped cloth
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianJacketSnowSuit
+  referencePrototype: AU14CivilianJacketSnowSuit
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Jacket/snowsuit.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'White snow jacket cut: grey double waist bindings, pale filled body, flared insulated lower skirt,
+    turned neck collar and darker cuffs. This prototype is a jacket, not trousers or an actor suit. Source-shaped
+    face-up dropped/world prop only, one static icon direction. Physical cloth depth and underside are inferred.
+    No actor, worn, held, stain, accessory, Foldable or animation mapping. Default white tint only; saved-map fit,
+    native admission and fidelity remain unverified.'
+  parts:
+  - label: recessed source-visible neck lining
+    min: -0.109375, 0.0625, 0.006
+    max: 0.078125, 0.175, 0.018
+    color: '#242424'
+  - label: neck to chest rear cloth bridge
+    min: -0.125, 0.084375, 0.003
+    max: 0.09375, 0.140625, 0.011
+    color: '#D5CCC3'
+  - label: left connected shoulder yoke
+    min: -0.1577604, 0.0835937, 0.009
+    max: -0.0641146, 0.1726563, 0.041
+    color: '#D5CCC3'
+    shape: Ellipsoid
+    yaw: -115.70995
+  - label: right connected shoulder yoke
+    min: 0.0328646, 0.0835937, 0.009
+    max: 0.1265104, 0.1726563, 0.041
+    color: '#D5CCC3'
+    shape: Ellipsoid
+    yaw: -64.29005
+  - label: left sleeve underside
+    min: -0.2389559, 0.0148438, 0.007
+    max: -0.1016691, 0.1132812, 0.026
+    color: '#242424'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left soft upper sleeve
+    min: -0.2389559, 0.0171875, 0.018
+    max: -0.1016691, 0.1109375, 0.06
+    color: '#D5CCC3'
+    shape: Ellipsoid
+    yaw: -131.30861
+  - label: left outward forearm fold
+    min: -0.2634134, -0.0289063, 0.02
+    max: -0.1662741, 0.0476562, 0.051
+    color: '#D5CCC3'
+    shape: Ellipsoid
+    yaw: -115.74071
+  - label: left longitudinal sleeve ridge
+    min: -0.2412508, 0.054375, 0.038
+    max: -0.1118742, 0.0675, 0.047
+    color: '#897B7B'
+    shape: Ellipsoid
+    yaw: -127.14669
+  - label: left cuff backing
+    min: -0.27125, -0.05, 0.009
+    max: -0.1975, -0.0203125, 0.022
+    color: '#242424'
+  - label: left cuff outer top fold
+    min: -0.27125, -0.0328125, 0.03
+    max: -0.1975, -0.02125, 0.06
+    color: '#454138'
+  - label: left cuff outer bottom fold
+    min: -0.27125, -0.053125, 0.018
+    max: -0.1975, -0.0421875, 0.047
+    color: '#454138'
+  - label: left cuff side 0
+    min: -0.27125, -0.04375, 0.022
+    max: -0.2634375, -0.0325, 0.053
+    color: '#454138'
+  - label: left cuff side 1
+    min: -0.2053125, -0.04375, 0.022
+    max: -0.1975, -0.0325, 0.053
+    color: '#454138'
+  - label: right sleeve underside
+    min: 0.0704191, 0.0148438, 0.007
+    max: 0.2077059, 0.1132812, 0.026
+    color: '#242424'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right soft upper sleeve
+    min: 0.0704191, 0.0171875, 0.018
+    max: 0.2077059, 0.1109375, 0.06
+    color: '#D5CCC3'
+    shape: Ellipsoid
+    yaw: -48.69139
+  - label: right outward forearm fold
+    min: 0.1350241, -0.0289063, 0.02
+    max: 0.2321634, 0.0476562, 0.051
+    color: '#D5CCC3'
+    shape: Ellipsoid
+    yaw: -64.25929
+  - label: right longitudinal sleeve ridge
+    min: 0.0806242, 0.054375, 0.038
+    max: 0.2100008, 0.0675, 0.047
+    color: '#897B7B'
+    shape: Ellipsoid
+    yaw: -52.85331
+  - label: right cuff backing
+    min: 0.16625, -0.05, 0.009
+    max: 0.24, -0.0203125, 0.022
+    color: '#242424'
+  - label: right cuff outer top fold
+    min: 0.16625, -0.0328125, 0.03
+    max: 0.24, -0.02125, 0.06
+    color: '#454138'
+  - label: right cuff outer bottom fold
+    min: 0.16625, -0.053125, 0.018
+    max: 0.24, -0.0421875, 0.047
+    color: '#454138'
+  - label: right cuff side 0
+    min: 0.16625, -0.04375, 0.022
+    max: 0.1740625, -0.0325, 0.053
+    color: '#454138'
+  - label: right cuff side 1
+    min: 0.2321875, -0.04375, 0.022
+    max: 0.24, -0.0325, 0.053
+    color: '#454138'
+  - label: left white insulated upper cloth face
+    min: -0.1440625, -0.1, 0.009
+    max: -0.0278125, 0.1109375, 0.053000000000000005
+    color: '#D5CCC3'
+  - label: left white insulated upper side fold left
+    min: -0.1515625, -0.0984375, 0.008
+    max: -0.1328125, 0.109375, 0.063
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: left white insulated upper side fold right
+    min: -0.0390625, -0.0984375, 0.008
+    max: -0.0203125, 0.109375, 0.063
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: left white insulated upper upper folded edge
+    min: -0.1453125, 0.0984375, 0.007
+    max: -0.0265625, 0.1171875, 0.057
+    color: '#242424'
+    shape: Ellipsoid
+  - label: left white insulated upper lower folded edge
+    min: -0.1453125, -0.10625, 0.007
+    max: -0.0265625, -0.0875, 0.057
+    color: '#242424'
+    shape: Ellipsoid
+  - label: left flared lower skirt cloth face
+    min: -0.158125, -0.2078125, 0.009
+    max: -0.0184375, -0.103125, 0.047
+    color: '#D5CCC3'
+  - label: left flared lower skirt side fold left
+    min: -0.165625, -0.20625, 0.008
+    max: -0.146875, -0.1046875, 0.056999999999999995
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: left flared lower skirt side fold right
+    min: -0.0296875, -0.20625, 0.008
+    max: -0.0109375, -0.1046875, 0.056999999999999995
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: left flared lower skirt upper folded edge
+    min: -0.159375, -0.115625, 0.007
+    max: -0.0171875, -0.096875, 0.051
+    color: '#242424'
+    shape: Ellipsoid
+  - label: left flared lower skirt lower folded edge
+    min: -0.159375, -0.2140625, 0.007
+    max: -0.0171875, -0.1953125, 0.051
+    color: '#242424'
+    shape: Ellipsoid
+  - label: left pale chest highlight
+    min: -0.15625, -0.0085937, 0.049
+    max: -0.015625, 0.0117188, 0.058
+    color: '#E8E3DE'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: left dark lower binding
+    min: -0.1609375, -0.234375, 0.009
+    max: -0.0109375, -0.1984375, 0.034
+    color: '#454138'
+    shape: Ellipsoid
+  - label: left snow skirt padded channel
+    min: -0.1546875, -0.1875, 0.038
+    max: -0.0203125, -0.140625, 0.08
+    color: '#E8E3DE'
+    shape: Ellipsoid
+  - label: right white insulated upper cloth face
+    min: -0.0034375, -0.1, 0.009
+    max: 0.1128125, 0.1109375, 0.053000000000000005
+    color: '#D5CCC3'
+  - label: right white insulated upper side fold left
+    min: -0.0109375, -0.0984375, 0.008
+    max: 0.0078125, 0.109375, 0.063
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: right white insulated upper side fold right
+    min: 0.1015625, -0.0984375, 0.008
+    max: 0.1203125, 0.109375, 0.063
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: right white insulated upper upper folded edge
+    min: -0.0046875, 0.0984375, 0.007
+    max: 0.1140625, 0.1171875, 0.057
+    color: '#242424'
+    shape: Ellipsoid
+  - label: right white insulated upper lower folded edge
+    min: -0.0046875, -0.10625, 0.007
+    max: 0.1140625, -0.0875, 0.057
+    color: '#242424'
+    shape: Ellipsoid
+  - label: right flared lower skirt cloth face
+    min: -0.0175, -0.2078125, 0.009
+    max: 0.1221875, -0.103125, 0.047
+    color: '#D5CCC3'
+  - label: right flared lower skirt side fold left
+    min: -0.025, -0.20625, 0.008
+    max: -0.00625, -0.1046875, 0.056999999999999995
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: right flared lower skirt side fold right
+    min: 0.1109375, -0.20625, 0.008
+    max: 0.1296875, -0.1046875, 0.056999999999999995
+    color: '#D5CCC3'
+    shape: Ellipsoid
+  - label: right flared lower skirt upper folded edge
+    min: -0.01875, -0.115625, 0.007
+    max: 0.1234375, -0.096875, 0.051
+    color: '#242424'
+    shape: Ellipsoid
+  - label: right flared lower skirt lower folded edge
+    min: -0.01875, -0.2140625, 0.007
+    max: 0.1234375, -0.1953125, 0.051
+    color: '#242424'
+    shape: Ellipsoid
+  - label: right pale chest highlight
+    min: -0.015625, -0.0085937, 0.049
+    max: 0.125, 0.0117188, 0.058
+    color: '#E8E3DE'
+    shape: Ellipsoid
+    yaw: -90.0
+  - label: right dark lower binding
+    min: -0.0203125, -0.234375, 0.009
+    max: 0.1296875, -0.1984375, 0.034
+    color: '#454138'
+    shape: Ellipsoid
+  - label: right snow skirt padded channel
+    min: -0.0140625, -0.1875, 0.038
+    max: 0.1203125, -0.140625, 0.08
+    color: '#E8E3DE'
+    shape: Ellipsoid
+  - label: snow jacket continuous waist underfold
+    min: -0.140625, -0.15625, 0.003
+    max: 0.109375, -0.08125, 0.02
+    color: '#D5CCC3'
+  - label: left collar underlying attachment
+    min: -0.1140625, 0.134375, 0.003
+    max: -0.0734375, 0.1953125, 0.045
+    color: '#897B7B'
+  - label: right collar underlying attachment
+    min: 0.0421875, 0.134375, 0.003
+    max: 0.0828125, 0.1953125, 0.045
+    color: '#897B7B'
+  - label: dark rear collar lip
+    min: -0.125, 0.165625, 0.009
+    max: -0.0625, 0.2125, 0.044
+    color: '#454138'
+    shape: Ellipsoid
+  - label: dark rear collar lip right
+    min: 0.03125, 0.165625, 0.009
+    max: 0.09375, 0.2125, 0.044
+    color: '#454138'
+    shape: Ellipsoid
+  - label: left folded snow collar
+    min: -0.1270639, 0.11875, 0.055
+    max: -0.0291861, 0.159375, 0.095
+    color: '#242424'
+    shape: Ellipsoid
+    yaw: -16.69924
+  - label: right folded snow collar
+    min: -0.0020639, 0.11875, 0.055
+    max: 0.0958139, 0.159375, 0.095
+    color: '#242424'
+    shape: Ellipsoid
+    yaw: -163.30076
+  - label: grey central closure
+    min: -0.0296875, -0.109375, 0.05
+    max: -0.0015625, 0.1125, 0.079
+    color: '#A69D97'
+  - label: grey waist belt
+    min: -0.14375, -0.096875, 0.064
+    max: 0.1125, -0.065625, 0.083
+    color: '#897B7B'
+  - label: white lower belt
+    min: -0.153125, -0.15, 0.062
+    max: 0.121875, -0.1125, 0.083
+    color: '#454138'
+  - label: original belt clasp
+    min: -0.0625, -0.15625, 0.084
+    max: 0.03125, -0.125, 0.08600000000000001
+    color: '#FFFFFF'
+    surface: CMU3DOuterwearCloudArt011
+    surfaceAxis: XY
+  - label: belt keeper 0
+    min: -0.134375, -0.15625, 0.085
+    max: -0.1203125, -0.103125, 0.1
+    color: '#635C59'
+  - label: belt keeper 1
+    min: 0.084375, -0.15625, 0.085
+    max: 0.0984375, -0.103125, 0.1
+    color: '#635C59'

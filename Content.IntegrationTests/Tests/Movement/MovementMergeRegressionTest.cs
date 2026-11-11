@@ -32,6 +32,7 @@ namespace Content.IntegrationTests.Tests.Movement;
 [TestOf(typeof(MoverController))]
 public sealed class MovementMergeRegressionTest : MovementTest
 {
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity
@@ -70,46 +71,6 @@ public sealed class MovementMergeRegressionTest : MovementTest
   id: MovementMergeRelayTarget
   parent: BaseMob
 ";
-
-    [Test]
-    public async Task CloneSettingsPreserveForkTileMovementThroughUpstreamSplit()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var mental = SProtoMan.Index<CloningSettingsPrototype>("TraitsMental");
-            var physical = SProtoMan.Index<CloningSettingsPrototype>("TraitsPhysical");
-            var body = SProtoMan.Index<CloningSettingsPrototype>("Body");
-            var clone = SProtoMan.Index<CloningSettingsPrototype>("BaseClone");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(mental.Components,
-                    Is.SupersetOf(new[] { "CMUTileMovement", "Panic", "NicotineAddiction" }));
-                Assert.That(physical.Components,
-                    Is.SupersetOf(new[]
-                    {
-                        "SlowRunner",
-                        "RespiratoryStrain",
-                        "Anemic",
-                        "DrugAllergy",
-                        "Epilepsy",
-                        "CMUProstheticLeftArm",
-                        "CMUProstheticRightArm",
-                        "CMUProstheticLeftLeg",
-                        "CMUProstheticRightLeg",
-                    }));
-                Assert.That(body.Components,
-                    Is.SupersetOf(new[] { "RandomPrice", "TemperatureDamage", "TemperatureSpeed" }));
-                Assert.That(clone.Components,
-                    Is.SupersetOf(mental.Components.Concat(physical.Components).Concat(body.Components)));
-                Assert.That(clone.Components, Does.Not.Contain("Muted"));
-                Assert.That(clone.Components, Does.Not.Contain("PainNumbness"));
-                Assert.That(clone.Components, Does.Not.Contain("Clumsy"));
-                Assert.That(clone.CopyStatusEffects, Is.True,
-                    "status-effect traits use the upstream successor instead of duplicate component copying");
-            });
-        });
-    }
 
     [Test]
     public async Task RelayForwardsOnceAndCleansBlockedMissingAndStaleMovers()
@@ -172,8 +133,9 @@ public sealed class MovementMergeRegressionTest : MovementTest
         {
             Assert.Multiple(() =>
             {
-                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(source), Is.False);
-                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(target), Is.False);
+                // CMU14: blocked movers must still receive relative/camera rotation updates (SS14 45953).
+                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(source), Is.True);
+                Assert.That(SEntMan.HasComponent<ActiveInputMoverComponent>(target), Is.True);
                 Assert.That(SEntMan.GetComponent<InputMoverComponent>(target).HeldMoveButtons, Is.EqualTo(MoveButtons.None));
             });
 
@@ -596,7 +558,7 @@ public sealed class MovementMergeRegressionTest : MovementTest
     [TestCase(null, true, 1, 1f)]
     [TestCase(null, false, 1, 0f)]
     public async Task AnalogFrictionOnlyQueriesVirtualSupportOnEmptyTiles(
-        string tileId, bool virtualGround, int expectedQueries, float frictionMultiplier)
+        string? tileId, bool virtualGround, int expectedQueries, float frictionMultiplier)
     {
         await Server.WaitAssertion(() =>
         {

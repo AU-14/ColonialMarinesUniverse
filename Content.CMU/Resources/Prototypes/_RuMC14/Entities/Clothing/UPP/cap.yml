@@ -9,3 +9,55 @@
   - type: Clothing
     sprite: _RuMC14/Clothing/UPP/cap/kommisar.rsi
   - type: Appearance
+
+- type: entity
+  parent: RMCHeadCapFlippable
+  id: RuMCUPPNavalInfantryCapUshanka
+  name: UPP combat ushanka
+  description: The ushanka, made of thick fabric and durable synthetic fur, can withstand hits from small caliber bullets and shrapnel.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka.rsi
+  - type: Foldable
+    unfoldVerbText: fold-strap-verb
+    foldVerbText: fold-unstrap-verb
+  - type: ItemCamouflage
+    camouflageVariations:
+      classic: _RuMC14/Clothing/UPP/cap/ushanka.rsi
+  # desc says it stops small arms and shrapnel, so give it the rmc ushanka armor like the officer one
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 15
+    explosionArmor: 10
+  - type: CMUItemStain
+    wornStates:
+      head: booniehat_blood
+
+- type: entity
+  parent: RuMCUPPNavalInfantryCapUshanka
+  id: RuMCUPPNavalInfantryCapUshankaCommander
+  name: UPP combat ushanka
+  description: The officer’s Ushanka, made of thick fabric and durable, rare fur, can withstand hits from bullets and shrapnel.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka_com.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka_com.rsi
+  - type: Foldable
+    unfoldVerbText: fold-strap-verb
+    foldVerbText: fold-unstrap-verb
+  - type: ItemCamouflage
+    camouflageVariations:
+      classic: _RuMC14/Clothing/UPP/cap/ushanka_com.rsi
+  # desc promises it stops bullets, so it has to actually do it. same numbers as the rmc ushanka
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 15
+    explosionArmor: 10
+  - type: CMUItemStain
+    wornStates:
+      head: booniehat_blood

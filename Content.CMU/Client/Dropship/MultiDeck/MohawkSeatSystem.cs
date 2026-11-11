@@ -9,7 +9,7 @@ using Robust.Client.Graphics;
 namespace Content.Client.CMU14.Dropship.MultiDeck;
 
 /// <summary>Applies the source seats' pixel offsets without placing passengers inside nearby walls.</summary>
-public sealed class MohawkSeatSystem : EntitySystem
+public sealed partial class MohawkSeatSystem : EntitySystem
 {
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SpriteSystem _sprite = default!;

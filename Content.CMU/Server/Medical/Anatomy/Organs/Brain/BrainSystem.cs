@@ -2,11 +2,13 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
 using Content.Shared.CMU14.Medical.Injuries.Vision;
 using Content.Shared._RMC14.Medical.HUD.Systems;
+using Content.Shared.Bed.Sleep;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Standing;
+using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -19,6 +21,7 @@ public sealed partial class BrainSystem : SharedBrainSystem
     [Dependency] private HolocardSystem _holocard = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SleepingSystem _sleeping = default!;
     [Dependency] private SharedStunSystem _stun = default!;
 
     private static readonly EntProtoId ForcedSleeping = "StatusEffectForcedSleeping";
@@ -36,7 +39,9 @@ public sealed partial class BrainSystem : SharedBrainSystem
     /// </summary>
     protected override void ApplyPermadeath(EntityUid body)
     {
-        Status.TrySetStatusEffectDuration(body, ForcedSleeping, duration: null);
+        var hadForcedSleep = Status.HasStatusEffect(body, ForcedSleeping);
+        if (Status.TrySetStatusEffectDuration(body, ForcedSleeping, out var effect, duration: null) && !hadForcedSleep)
+            EnsureComp<CMUBrainlessSleepComponent>(body).Effect = effect;
 
         _holocard.SetBrainRemovalAssessment(body, true);
 
@@ -45,6 +50,24 @@ public sealed partial class BrainSystem : SharedBrainSystem
         {
             _mobState.ChangeMobState(body, MobState.Dead, mobState);
         }
+    }
+
+    // brain removal is reversible now, but its sleep had no end and also re-sleeps on revive,
+    // so a patient who got a brain back and was defibbed stayed asleep and prone forever
+    protected override void ClearPermadeath(EntityUid body)
+    {
+        if (!TryComp<CMUBrainlessSleepComponent>(body, out var brainless))
+            return;
+
+        var effect = brainless.Effect;
+        RemComp<CMUBrainlessSleepComponent>(body);
+        if (effect is not { } uid || TerminatingOrDeleted(uid) ||
+            !TryComp<StatusEffectComponent>(uid, out var status) || status.AppliedTo != body)
+            return;
+
+        // not QueueDel, TryWaking would still see the forced sleep and refuse
+        Del(uid);
+        _sleeping.TryWaking((body, null));
     }
 
     protected override void ApplyDisorientation(

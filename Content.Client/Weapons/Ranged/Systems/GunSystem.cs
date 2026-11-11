@@ -39,6 +39,7 @@ using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -150,6 +151,10 @@ public sealed partial class GunSystem : SharedGunSystem
                 continue;
 
             var ent = Spawn(HitscanProto, coords);
+            // CMU14: the stretched travel sprite follows the shot axis only in an active 3D view.
+            if (EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().IsOpen)
+                EnsureComp<CMU14.ThreeD.Scene.CMU3DCombatVisualComponent>(ent).AlongTrajectory = a.Distance != 1;
+            // CMU14
             var sprite = Comp<SpriteComponent>(ent);
 
             var xform = Transform(ent);
@@ -233,6 +238,10 @@ public sealed partial class GunSystem : SharedGunSystem
             _fireInputHandled = true;
 
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
+        // CMU14: use the perspective ray for captured and released aiming.
+        var firstPerson = EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>()
+            .TryFirstPersonAim(out var firstPersonAim, out var firstPersonTarget);
+        if (firstPerson) mousePos = firstPersonAim;
 
         if (mousePos.MapId == MapId.Nullspace)
         {
@@ -242,14 +251,18 @@ public sealed partial class GunSystem : SharedGunSystem
             return;
         }
 
-        // Define target coordinates relative to the user or gun so network latency on moving grids
-        // does not distort the requested target location.
+        // CMU14: Keep aim on the moving grid without depending on the shooter's facing.
         var coordinateEntity = HasComp<GunUseGunOriginComponent>(gun.Owner) ? gun.Owner : entity;
-        var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos);
+        // var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos); // CMU14
+        // CMU14: cross-z shots aim at what you see on that level, not the raw cursor spot
+        var zAim = mousePos;
+        var crossZ = !firstPerson &&
+            EntityManager.System<CMU14.ZLevels.Core.CMUZLevelAimSystem>().TryGetCrossZAim(entity, mousePos, out zAim);
+        var coordinates = GetAimCoordinates(TransformSystem, coordinateEntity, zAim); // CMU14
 
-        var target = GetBestTarget(_eyeManager.CurrentEye, mousePos);
-        if (_state.CurrentState is GameplayStateBase screen)
-            target = GetNetEntity(screen.GetClickedEntity(mousePos)) ?? target;
+        // CMU14: preserve special aim paths; only search the fallback when no eligible cursor hit exists.
+        var target = crossZ ? null : firstPerson ? GetNetEntity(firstPersonTarget)
+            : CMUGetCursorTarget(_state.CurrentState as GameplayStateBase, _eyeManager.CurrentEye, mousePos);
 
         if (_player.LocalSession is not { } session)
             return;
@@ -343,6 +356,7 @@ public sealed partial class GunSystem : SharedGunSystem
             switch (shootable)
             {
                 case CartridgeAmmoComponent cartridge:
+                    var caseless = cartridge.DeleteOnSpawn || HasComp<Content.Shared.CMU14.Weapons.Caseless.CMUCaselessGunComponent>(gun); // cmu edit
                     if (!cartridge.Spent)
                     {
                         if (predictProjectiles)
@@ -357,7 +371,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
                             SetCartridgeSpent(ent.Value, cartridge, true);
 
-                            if (cartridge.DeleteOnSpawn && IsClientSide(ent.Value))
+                            if (caseless && IsClientSide(ent.Value)) // cmu edit
                                 Del(ent.Value);
                         }
                         else
@@ -374,7 +388,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
                     Recoil(user, mapDirection, gun.Comp.CameraRecoilScalarModified);
 
-                    if (!cartridge.DeleteOnSpawn &&
+                    if (!caseless && // cmu edit
                         !Containers.IsEntityInContainer(ent!.Value))
                     {
                         EjectCartridge(ent.Value, angle, ejectCoordinates: Transform(gun).Coordinates); // CMU14
@@ -546,6 +560,10 @@ public sealed partial class GunSystem : SharedGunSystem
         }
 
         var ent = Spawn(message.Prototype, coordinates);
+        // CMU14: ordinary 2D effects do not need 3D presentation components.
+        if (EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().IsOpen)
+            EnsureComp<CMU14.ThreeD.Scene.CMU3DCombatVisualComponent>(ent);
+        // CMU14
         TransformSystem.SetWorldRotationNoLerp(ent, message.Angle);
 
         // CMU14: anchor UGV flashes to the independently aimed, elevated barrel sprite.
@@ -657,36 +675,10 @@ public sealed partial class GunSystem : SharedGunSystem
     }
 
     /// <remarks>We use our own sorting algorithm separate from the default for smarter configurability.</remarks>
+    // CMU14: select the same ordered winner without allocating and sorting a candidate list.
     private NetEntity? GetBestTarget(IEye eye, MapCoordinates coordinates)
     {
-        // Find all the entities intersecting our click
-        var entities = _spriteTree.QueryAabb(coordinates.MapId, Box2.CenteredAround(coordinates.Position, new Vector2(1, 1)));
-
-        // Check the entities against whether or not we can click them
-        var foundEntities = new List<(EntityUid, bool, bool, int, uint, float, float)>(entities.Count);
-
-        foreach (var entity in entities)
-        {
-            // Don't add the target if we can't shoot the target!
-            if (!CheckFixtures(entity.Uid))
-                continue;
-
-            var entry = CheckTarget((entity.Uid, entity.Component, entity.Transform), eye, coordinates);
-            foundEntities.Add(entry);
-        }
-
-        if (foundEntities.Count == 0)
-            return null;
-
-        // Do drawdepth & y-sorting. First index is the top-most sprite (opposite of normal render order).
-        foundEntities.Sort(_comparer);
-        var (target, alive, occluded, _, _, _, _) = foundEntities.FirstOrDefault();
-
-        // Prevents us from just selecting a random target nearby our cursor. It must either be alive, or our cursor must be on top of it!
-        if (!occluded && !alive)
-            return null;
-
-        return GetNetEntity(target);
+        return CMUGetBestTarget(eye, coordinates);
     }
 
     private (EntityUid, bool, bool, int, uint, float, float) CheckTarget(Entity<SpriteComponent, TransformComponent> target, IEye eye, MapCoordinates coordinates)
@@ -766,6 +758,10 @@ public sealed partial class GunSystem : SharedGunSystem
 
     private bool CheckFixtures(Entity<FixturesComponent?> entity)
     {
+        // CMU14: disabled collision must not hide a shootable target beneath the sprite.
+        if (!TryComp<PhysicsComponent>(entity, out var body) || !body.CanCollide)
+            return false;
+
         if (!Resolve(entity, ref entity.Comp, false))
             return false;
 

@@ -1,5 +1,8 @@
+using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Coordinates.Helpers;
+using Content.Shared.Interaction;
+using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared._RMC14.Actions;
 using Content.Shared.DoAfter;
@@ -21,6 +24,9 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override void Initialize()
     {
@@ -36,7 +42,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         if (!args.Target.TryDistance(EntityManager, _transform.GetMoverCoordinates(xeno), out var dist)
             || dist > xeno.Comp.Range)
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-spore-sac-too-far"),
                 xeno,
                 xeno);
@@ -44,11 +50,18 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
             return;
         }
 
+        var coords = args.Target.SnapToGrid(EntityManager);
+        if (!CanPlaceAt(xeno, coords))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-spore-sac-blocked"), xeno, xeno);
+            return;
+        }
+
         if (!_rmcActions.TryUseAction(args))
             return;
 
         xeno.Comp.PlacedSacs.RemoveAll(s => Deleted(s));
-        xeno.Comp.PendingCoords = args.Target.SnapToGrid(EntityManager);
+        xeno.Comp.PendingCoords = coords;
 
         args.Handled = true;
 
@@ -79,11 +92,19 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
 
         if (xeno.Comp.PlacedSacs.Count >= xeno.Comp.MaxSacs)
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-spore-sac-max"),
                 xeno,
                 xeno);
 
+            return;
+        }
+
+        // something could have been built on the tile during the doafter
+        if (xeno.Comp.PendingCoords is { } pending && !CanPlaceAt(xeno, pending))
+        {
+            xeno.Comp.PendingCoords = null;
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-spore-sac-blocked"), xeno, xeno);
             return;
         }
 
@@ -107,10 +128,25 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
             xeno.Comp.PlacedSacs.Add(sac);
         }
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu-xeno-spore-sac-place-self"),
             Loc.GetString("cmu-xeno-spore-sac-place-others", ("xeno", xeno.Owner)),
             xeno,
             xeno);
+    }
+
+    /// <summary>
+    /// Needs a real floor tile with nothing solid on it, and a clear line from the popper to it,
+    /// so no sacs through walls, windows, cades or out into space.
+    /// </summary>
+    private bool CanPlaceAt(Entity<CMUXenoSporeSacComponent> xeno, EntityCoordinates coords)
+    {
+        if (!_turf.TryGetTileRef(coords, out var tile) || tile.Value.Tile.IsEmpty)
+            return false;
+
+        if (_rmcMap.IsTileBlocked(coords))
+            return false;
+
+        return _interaction.InRangeUnobstructed(xeno.Owner, coords, xeno.Comp.Range);
     }
 }

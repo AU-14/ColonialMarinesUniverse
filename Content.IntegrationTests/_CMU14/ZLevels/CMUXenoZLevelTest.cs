@@ -7,6 +7,8 @@ using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
@@ -51,6 +53,35 @@ public sealed class CMUXenoZLevelTest : GameTest
         foreach (var map in new[] { _sky, _upper, _lower, _unrelated, _network })
             await Pair.DeleteEntityTreeLeafFirst(map);
         _xeno = default;
+    }
+
+    [Test]
+    public async Task QueenEyeCannotFallOrCrushMarines()
+    {
+        EntityUid marine = default;
+        await Server.WaitAssertion(() =>
+        {
+            _maps.SetTile(_upper, SEntMan.GetComponent<MapGridComponent>(_upper), Vector2i.Zero, Tile.Empty);
+            marine = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(_lower, new Vector2(0.5f)));
+            _xeno = SEntMan.SpawnEntity("RMCQueenEye", new EntityCoordinates(_upper, new Vector2(0.5f)));
+        });
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<TransformComponent>(_xeno).MapUid, Is.EqualTo(_upper),
+                "The observer eye must not fall through an opening.");
+            Assert.That(SEntMan.HasComponent<CMUZFallingComponent>(_xeno), Is.False);
+            SEntMan.System<SharedTransformSystem>().SetCoordinates(_xeno,
+                new EntityCoordinates(_lower, new Vector2(0.5f)));
+            var damage = SEntMan.System<DamageableSystem>();
+            var before = damage.GetTotalDamage(marine);
+            SEntMan.EventBus.RaiseLocalEvent(_xeno, new CMUZLevelHitEvent(10));
+            Assert.That(damage.GetTotalDamage(marine), Is.EqualTo(before), "A sensor-only impact cannot crush nearby bodies.");
+
+            var weight = SEntMan.SpawnEntity("Wrench", new EntityCoordinates(_lower, new Vector2(0.5f)));
+            SEntMan.EventBus.RaiseLocalEvent(weight, new CMUZLevelHitEvent(10));
+            Assert.That(damage.GetTotalDamage(marine), Is.GreaterThan(before), "Solid falling objects must still cause impact damage.");
+        });
     }
 
     [TestCase("same")]
@@ -156,8 +187,8 @@ public sealed class CMUXenoZLevelTest : GameTest
         await Pair.RunSeconds(6);
         await Server.WaitAssertion(() =>
         {
-            var clouds = SEntMan.EntityQuery<EvenSmokeComponent, TransformComponent>()
-                .Where(e => e.Item2.MapUid == map).ToArray();
+            var clouds = SEntMan.QueryEntities<EvenSmokeComponent, TransformComponent>()
+                .Where(e => e.Item2.Comp.MapUid == map).ToArray();
             var positions = clouds.Select(e => SEntMan.System<SharedTransformSystem>().GetMapCoordinates(e.Item1.Owner).Position).ToArray();
             Assert.That(positions.Length, Is.EqualTo(1 + 2 * range * (range + 1)));
             Assert.That(positions.Distinct().Count(), Is.EqualTo(positions.Length), "Converging gas fronts must not create duplicate clouds.");
@@ -188,9 +219,9 @@ public sealed class CMUXenoZLevelTest : GameTest
         {
             var transform = SEntMan.System<SharedTransformSystem>();
             var map = gridless ? _sky : _upper;
-            var clouds = SEntMan.EntityQuery<EvenSmokeComponent, TransformComponent>().ToArray();
-            Assert.That(clouds.Where(e => e.Item2.MapUid == map).All(e => transform.GetWorldPosition(e.Item2).X < 1), Is.True);
-            Assert.That(clouds.Count(e => e.Item2.MapUid == _unrelated), Is.EqualTo(1));
+            var clouds = SEntMan.QueryEntities<EvenSmokeComponent, TransformComponent>().ToArray();
+            Assert.That(clouds.Where(e => e.Item2.Comp.MapUid == map).All(e => transform.GetWorldPosition(e.Item2.Comp).X < 1), Is.True);
+            Assert.That(clouds.Count(e => e.Item2.Comp.MapUid == _unrelated), Is.EqualTo(1));
         });
     }
 }

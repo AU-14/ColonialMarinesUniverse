@@ -1,6 +1,5 @@
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.CMU14.ZLevels.Core;
-using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Atmos;
@@ -10,17 +9,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUDayNightAtmosphereSystem : EntitySystem
+public sealed partial class CMUDayNightAtmosphereSystem : EntitySystem
 {
     // Cadence between mixture updates. Relaxation smooths the steps further,
     // so this only bounds overlay refresh traffic, not smoothness.
     private const float UpdateIntervalSeconds = 30f;
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly CMUNetworkMapAtmosphereSystem _networkAtmos = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private CMUNetworkMapAtmosphereSystem _networkAtmos = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<MapAtmosphereComponent> _mapAtmosQuery = default!;
     private EntityQuery<CMUDayNightAtmosphereComponent> _dayNightQuery = default!;
@@ -44,12 +43,12 @@ public sealed class CMUDayNightAtmosphereSystem : EntitySystem
         }
 
         // One clock per network: a duplicate component would fight this one
-        // every beat, so the first to init keeps it (see Initialized).
+        // every beat, so the first to init keeps it (see CycleStarted).
         foreach (var member in _zLevels.GetAllNetworkMaps(ent.Owner))
         {
             if (member != ent.Owner
                 && _dayNightQuery.TryComp(member, out var other)
-                && other.Initialized)
+                && other.CycleStarted)
             {
                 Log.Warning($"Day-night atmosphere on {ToPrettyString(ent.Owner)} duplicates the one on {ToPrettyString(member)}; removing it.");
                 RemCompDeferred<CMUDayNightAtmosphereComponent>(ent.Owner);
@@ -81,26 +80,26 @@ public sealed class CMUDayNightAtmosphereSystem : EntitySystem
             if (!_dayNightQuery.TryComp(map, out var comp))
                 continue;
 
-            CaptureBaselines(map, comp, members);
+            CaptureMembers(map, comp, members);
         }
     }
 
     private void StartCycle(Entity<CMUDayNightAtmosphereComponent> ent)
     {
         // Inheritance before capture, so gap decks already carry the base
-        // declaration when baselines are taken. Idempotent either way.
+        // declaration when members are captured. Idempotent either way.
         if (_zLevels.TryGetZNetwork(ent.Owner, out var network))
             _networkAtmos.EnsureNetworkInherited(network.Value);
 
-        CaptureBaselines(ent.Owner, ent.Comp, _zLevels.GetAllNetworkMaps(ent.Owner));
+        CaptureMembers(ent.Owner, ent.Comp, _zLevels.GetAllNetworkMaps(ent.Owner));
         ent.Comp.CycleStart = _timing.CurTime + ent.Comp.PhaseOffset;
         ent.Comp.NextUpdate = _timing.CurTime;
-        ent.Comp.Initialized = true;
+        ent.Comp.CycleStarted = true;
     }
 
-    private void CaptureBaselines(EntityUid owner, CMUDayNightAtmosphereComponent comp, List<EntityUid> members)
+    private void CaptureMembers(EntityUid owner, CMUDayNightAtmosphereComponent comp, List<EntityUid> members)
     {
-        comp.Baselines.Clear();
+        comp.Members.Clear();
         foreach (var member in members)
         {
             if (TerminatingOrDeleted(member)
@@ -110,10 +109,10 @@ public sealed class CMUDayNightAtmosphereSystem : EntitySystem
 
             // A space member keeps its flag and its vacuum mixture; writing a
             // cycling temperature into it only churns every grid's map tiles.
-            comp.Baselines[member] = new GasMixture(mapAtmos.Mixture);
+            comp.Members.Add(member);
         }
 
-        if (comp.Baselines.Count == 0)
+        if (comp.Members.Count == 0)
             Log.Warning($"Day-night atmosphere on {ToPrettyString(owner)} found no non-space member map with a MapAtmosphere.");
     }
 
@@ -125,7 +124,7 @@ public sealed class CMUDayNightAtmosphereSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUDayNightAtmosphereComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (comp.Baselines.Count == 0)
+            if (comp.Members.Count == 0)
                 continue;
 
             var now = _timing.CurTime;
@@ -143,15 +142,12 @@ public sealed class CMUDayNightAtmosphereSystem : EntitySystem
             var amplitude = (comp.DayTemperature - comp.NightTemperature) * 0.5f;
             var temperature = average + amplitude * MathF.Sin(2f * MathF.PI * frac);
 
-            foreach (var (map, baseline) in comp.Baselines)
+            foreach (var map in comp.Members)
             {
                 if (TerminatingOrDeleted(map))
                     continue;
 
-                _atmosphere.SetMapGasMixture(map, new GasMixture(baseline)
-                {
-                    Temperature = temperature,
-                });
+                _atmosphere.SetMapGasTemperature(map, temperature);
             }
         }
     }

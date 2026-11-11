@@ -351,7 +351,7 @@ public sealed partial class CMUBalanceRatingSystem : EntitySystem
     private IEnumerable<string> GetPresetPlanetIds(GamePresetPrototype preset)
         => GamePlanetPoolPrototype.ExpandPlanetIds(_prototypes, preset.PlanetPool, preset.SupportedPlanets);
 
-    private static string GetMapTargetName(
+    private string GetMapTargetName(
         EntityPrototype planetPrototype,
         RMCPlanetMapPrototypeComponent planet,
         GamePresetPrototype preset)
@@ -359,7 +359,7 @@ public sealed partial class CMUBalanceRatingSystem : EntitySystem
         var planetName = string.IsNullOrWhiteSpace(planet.VoteName)
             ? planetPrototype.Name
             : planet.VoteName;
-        return $"{planetName} — {preset.ModeTitle}";
+        return $"{planetName} — {Loc.GetString(preset.ModeTitle)}";
     }
 
     private void OnGameRunLevelChanged(GameRunLevelChangedEvent ev)

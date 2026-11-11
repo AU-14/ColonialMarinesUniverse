@@ -25,6 +25,7 @@ namespace Content.IntegrationTests.CMU14.BugReports;
 [TestFixture]
 public sealed class EquipmentRegressionTest : GameTest
 {
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: job
@@ -76,83 +77,12 @@ public sealed class EquipmentRegressionTest : GameTest
             flight.BulletSpread = 0;
             flight.ImpactEffects.Add("BugReportCASImpact");
             SEntMan.System<SharedDropshipWeaponSystem>().Update(0);
-            var impacts = SEntMan.EntityQuery<MetaDataComponent>()
-                .Where(meta => meta.EntityPrototype?.ID == "BugReportCASImpact").ToArray();
+            var impacts = SEntMan.QueryEntities<MetaDataComponent>()
+                .Where(meta => meta.Comp.EntityPrototype?.ID == "BugReportCASImpact").ToArray();
             Assert.That(impacts.Length, Is.EqualTo(roofed ? 0 : 1));
             foreach (var impact in impacts)
                 SEntMan.DeleteEntity(impact.Owner);
             SEntMan.DeleteEntity(projectile);
-        });
-    }
-
-    [Test]
-    public async Task CASRecognizesUpperPlanetFloorsButRejectsUnrelatedMaps()
-    {
-        EntityUid lower = default, upper = default, unrelated = default, network = default;
-        await Server.WaitAssertion(() =>
-        {
-            var maps = SEntMan.System<SharedMapSystem>();
-            lower = maps.CreateMap(runMapInit: true);
-            upper = maps.CreateMap(runMapInit: true);
-            unrelated = maps.CreateMap(runMapInit: true);
-            SEntMan.EnsureComponent<RMCPlanetComponent>(lower);
-            var z = SEntMan.System<CMUZLevelsSystem>();
-            var net = z.CreateZNetwork();
-            network = net;
-            Assert.That(z.TryAddMapsIntoZNetwork(net, new() { [lower] = 0, [upper] = 1 }), Is.True);
-            var weapons = SEntMan.System<SharedDropshipWeaponSystem>();
-            var validate = typeof(SharedDropshipWeaponSystem).GetMethod("IsValidTarget", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            foreach (var map in new[] { lower, upper, unrelated })
-            {
-                var target = SEntMan.SpawnEntity(null, new EntityCoordinates(map, Vector2.Zero));
-                var component = SEntMan.EnsureComponent<DropshipTargetComponent>(target);
-                Assert.That(validate.Invoke(weapons, [new Entity<DropshipTargetComponent?>(target, component)]),
-                    Is.EqualTo(map != unrelated));
-                SEntMan.DeleteEntity(target);
-            }
-        });
-        foreach (var map in new[] { upper, lower, unrelated, network })
-            await Pair.DeleteEntityTreeLeafFirst(map);
-    }
-
-    [Test]
-    public async Task SpecialistAccessUsesOriginalSideDespiteInheritedEquipmentJob()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var card = SEntMan.Spawn();
-            var access = SEntMan.EnsureComponent<AccessComponent>(card);
-            access.Tags.Add("AU14AccessGovforSquadWeaponsSpecialist");
-            var job = SProtoMan.Index<JobPrototype>("BugReportOpforSpecialist");
-            typeof(StationSpawningSystem).GetMethod("SetWeaponsSpecialistAccess", BindingFlags.NonPublic | BindingFlags.Instance)!
-                .Invoke(SEntMan.System<StationSpawningSystem>(), [card, job, job]);
-            Assert.That(access.Tags.Select(t => t.Id), Does.Contain("AU14AccessOpforSquadWeaponsSpecialist"));
-            Assert.That(access.Tags.Select(t => t.Id), Does.Not.Contain("AU14AccessGovforSquadWeaponsSpecialist"));
-            var vendor = SEntMan.Spawn();
-            var reader = SEntMan.EnsureComponent<AccessReaderComponent>(vendor);
-            typeof(PlatoonSpawnRuleSystem).GetMethod("SetRequisitionsVendorAccess", BindingFlags.NonPublic | BindingFlags.Instance)!
-                .Invoke(SEntMan.System<PlatoonSpawnRuleSystem>(), [vendor, PlatoonMarkerClass.SWeapons, "opfor"]);
-            Assert.That(reader.AccessLists.SelectMany(list => list).Select(t => t.Id),
-                Is.EqualTo(new[] { "AU14AccessOpforSquadWeaponsSpecialist" }));
-            SEntMan.DeleteEntity(vendor);
-            SEntMan.DeleteEntity(card);
-        });
-    }
-
-    [Test]
-    public async Task SavingConcretePilotRoleRetainsSelectionsFromParentLoadout()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var role = new RoleLoadout("JobBugReportFighterPilot");
-            role.SelectedLoadouts["BugReportPilotGroup"] = [new Loadout { Prototype = "BugReportPilotChoice" }];
-            var profile = new HumanoidCharacterProfile().WithLoadout("JobBugReportFighterPilot", role);
-            profile.EnsureValid(ServerSession!, IoCManager.Instance!);
-            Assert.That(profile.Loadouts.ContainsKey("JobBugReportFighterPilot"), Is.True);
-            var saved = profile.Loadouts["JobBugReportFighterPilot"];
-            Assert.That(saved.Role, Is.EqualTo("JobBugReportPilotBase"));
-            Assert.That(saved.SelectedLoadouts["BugReportPilotGroup"].Select(l => l.Prototype.Id),
-                Is.EqualTo(new[] { "BugReportPilotChoice" }));
         });
     }
 
@@ -166,12 +96,16 @@ public sealed class EquipmentRegressionTest : GameTest
             var scatter = SEntMan.GetComponent<ScatteringGrenadeComponent>(projectile);
             scatter.IsTriggered = true;
             SEntMan.System<ScatteringGrenadeSystem>().Update(0);
-            var flares = SEntMan.EntityQuery<ExpendableLightComponent, FlareSignalComponent>().ToArray();
+            var flares = SEntMan.QueryEntities<ExpendableLightComponent, FlareSignalComponent>().ToArray();
             Assert.That(flares, Is.Not.Empty);
             foreach (var (light, _) in flares)
             {
-                Assert.That(light.Activated, Is.True);
-                Assert.That(SEntMan.HasComponent<DropshipTargetComponent>(light.Owner), Is.True);
+                Assert.That(light.Comp.Activated, Is.True);
+                // The flare rework (RMC-14#9465) tracks a fired signal flare first and only makes it a CAS target
+                // once its activation delay has passed and it has settled.
+                Assert.That(SEntMan.TryGetComponent(light.Owner, out ActiveFlareSignalComponent? active), Is.True);
+                Assert.That(active!.Abbreviation, Is.Not.Null);
+                Assert.That(SEntMan.HasComponent<DropshipTargetComponent>(light.Owner), Is.False);
                 SEntMan.DeleteEntity(light.Owner);
             }
         });

@@ -1,0 +1,4 @@
+- files: ["can_open1.ogg", "can_open2.ogg", "can_opened.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13 (cmss13-devs/cmss13#7895)"
+  source: "https://github.com/cmss13-devs/cmss13/tree/aefb9575f85df13fe574f4947c61218afa2c81a7/sound/items"

@@ -10,8 +10,12 @@
     board: CMUGeneratorPortableDragonMachineCircuitboard
   - type: SolidFuelGeneratorAdapter
     fuelMaterial: CMPhoron
+    multiplier: 0.0005 # One fuel unit per 2,000-material CM phoron sheet.
+  - type: CMUSolidFuelStorage
   - type: MaterialStorage
     materialWhiteList: [ CMPhoron ]
+    storageLimit: 60000 # Thirty sheets, matching the inherited fuel-unit capacity.
+    insertOnInteract: false # CMUSolidFuelStorage inserts only the sheets that fit.
 
 - type: entity
   parent: CMBaseMachineCircuitboard

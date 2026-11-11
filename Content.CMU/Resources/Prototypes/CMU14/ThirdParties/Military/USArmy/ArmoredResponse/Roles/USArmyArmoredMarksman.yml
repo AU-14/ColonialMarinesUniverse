@@ -100,6 +100,12 @@
     suitstorage: WeaponRifleM4SPRCustom
   storage:
     back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - RMCFlashlight
+    - CMPacketGrenadeFragFilled
+    - RMCMagazineRifleM4SPRA19
+    - RMCMagazineRifleM4SPRA19
     - RMCMagazineRifleM4SPRA19
     - RMCMagazineRifleM4SPRA19
     - RMCMagazineRifleM4SPRA19

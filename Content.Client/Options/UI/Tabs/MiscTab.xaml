@@ -3,7 +3,7 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:ui="clr-namespace:Content.Client.Options.UI"
               xmlns:s="clr-namespace:Content.Client.Stylesheets"
-              xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
+              xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
             <BoxContainer Orientation="Vertical" Margin="10 8 10 8" SeparationOverride="2" VerticalExpand="True">
@@ -49,10 +49,7 @@
                     <CheckBox Name="StaticStorageUI" Text="{Loc 'ui-options-static-storage-ui'}" />
                 </cmu:CmuOptionSection>
 
-                <cmu:CmuOptionSection Title="{Loc 'ui-options-general-area-echo'}"> <!-- Mono -->
-                    <CheckBox Name="AreaEchoCheckBox" Text="{Loc 'ui-options-area-echo-enabled'}" /> <!-- Mono -->
-                    <CheckBox Name="AreaEchoHighResolutionCheckBox" Text="{Loc 'ui-options-area-echo-highres'}" /> <!-- Mono -->
-                </cmu:CmuOptionSection>
+                <!-- cmu edit: area echo options moved to the CMU tab -->
                 <!-- <CheckBox Name="ToggleWalk" Text="{Loc 'ui-options-hotkey-toggle-walk'}" /> -->
             </BoxContainer>
         </ScrollContainer>

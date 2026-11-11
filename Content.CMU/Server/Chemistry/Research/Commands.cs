@@ -121,3 +121,31 @@ internal sealed partial class SetTerminalPoints : LocalizedEntityCommands
         _term.UpdateClearance(points, clearance);
     }
 }
+
+[AdminCommand(Shared.Administration.AdminFlags.Admin)]
+internal sealed partial class SetSampleData : LocalizedEntityCommands
+{
+    [Dependency] private SharedResearchDataTerminalSystem _term = default!;
+    public override string Command => "research:setsampledata";
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        if (args.Length < 1 || args.Length > 2)
+        {
+            shell.WriteError("research:setsampledata <amount> [faction]");
+            return;
+        }
+        if (!int.TryParse(args[0], out var amount) || amount < 0)
+        {
+            shell.WriteError("research:setsampledata: amount must be a non-negative integer.");
+            return;
+        }
+        var faction = args.Length == 2 ? args[1].ToLowerInvariant() : "corporate";
+        if (faction is not ("corporate" or "govfor" or "opfor" or "colony"))
+        {
+            shell.WriteError("research:setsampledata: faction must be corporate, govfor, opfor or colony.");
+            return;
+        }
+        _term.UpdateSampleData(amount, faction);
+        shell.WriteLine($"{faction} sample data: {_term.GetSampleData(faction)}");
+    }
+}

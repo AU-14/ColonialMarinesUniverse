@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: AU14JobHRTPartyMedic
+  chevrons:
+    AU14RankPrDEnforcer:
+      entity: AU14ChevronPrDEnforcer
+      requirements: []
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: HRTPartyMedic
@@ -23,7 +27,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Prodigy Hazard Combat Lifesaver
+  name: Hazard Lifesaver
   description: au14-prodigyhazard-description
   playTimeTracker: AU14JobHRTPartyMedicTracker
   ranks:

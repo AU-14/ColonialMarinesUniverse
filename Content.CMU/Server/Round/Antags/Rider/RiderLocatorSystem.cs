@@ -8,14 +8,16 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Round.Antags.Rider;
 
-public sealed class RiderLocatorSystem : EntitySystem
+public sealed partial class RiderLocatorSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly EntityManager _entities = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderLocatorPrototype = "ActionRiderLocator";
+
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private EntityManager _entities = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(1);
     private TimeSpan _nextRefresh;
@@ -43,7 +45,7 @@ public sealed class RiderLocatorSystem : EntitySystem
     }
 
     private void OnMapInit(Entity<RiderLocatorComponent> ent, ref MapInitEvent args)
-        => _actions.AddAction(ent, "ActionRiderLocator");
+        => _actions.AddAction(ent, ActionRiderLocatorPrototype);
 
     private void OnAction(Entity<RiderLocatorComponent> ent, ref RiderLocatorActionEvent args)
     {

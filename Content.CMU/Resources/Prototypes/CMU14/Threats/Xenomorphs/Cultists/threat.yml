@@ -3,9 +3,9 @@
   lorePrimer: AU14PrimerThreatCultist
   roundstartspawns: cultistPartyThreat
   thirdpartyinterval: 9100
-  whitelistedgamemodes:
+  whitelistedGamemodes:
   - ColonyFall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - DistressSignal
   winconditions:
     - KillAllColonistRule
@@ -57,7 +57,7 @@
 - type: thirdParty
   id: cultistThirdParty
   partyspawn: cultistParty
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - DistressSignal
@@ -65,13 +65,13 @@
   weight: 3
   minplayers: 70
   maxplayers: 200
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false
 
 - type: thirdParty
   id: cultistThirdPartyNoQueen
   partyspawn: cultistPartyNoQueen
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - DistressSignal
@@ -79,7 +79,7 @@
   weight: 15
   minplayers: 35
   maxplayers: 200
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: true
 
 - type: lorePrimer

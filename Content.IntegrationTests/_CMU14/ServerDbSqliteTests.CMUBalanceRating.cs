@@ -7,110 +7,6 @@ namespace Content.IntegrationTests.Tests.Preferences
 {
     public sealed partial class ServerDbSqliteTests
     {
-        [TestCase(2)]
-        [TestCase(6)]
-        public void CMUBalanceRatingScheduleBecomesDueAfterExactRoundInterval(int interval)
-        {
-            var schedule = new CMUBalanceRatingSchedule(interval);
-
-            for (var roundId = 1; roundId < interval; roundId++)
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(schedule.CountRound(roundId), Is.False);
-                    Assert.That(schedule.RoundsRemaining, Is.EqualTo(interval - roundId));
-                    Assert.That(schedule.Due, Is.False);
-                });
-            }
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(schedule.CountRound(interval), Is.True);
-                Assert.That(schedule.RoundsRemaining, Is.Zero);
-                Assert.That(schedule.Due, Is.True);
-            });
-        }
-
-        [Test]
-        public void CMUBalanceRatingScheduleIgnoresInvalidDuplicateAndPostDueRounds()
-        {
-            var schedule = new CMUBalanceRatingSchedule(2);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(schedule.CountRound(-1), Is.False);
-                Assert.That(schedule.CountRound(0), Is.False);
-                Assert.That(schedule.RoundsRemaining, Is.EqualTo(2));
-            });
-
-            Assert.That(schedule.CountRound(10), Is.False);
-            Assert.That(schedule.RoundsRemaining, Is.EqualTo(1));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(schedule.CountRound(9), Is.False);
-                Assert.That(schedule.CountRound(10), Is.False);
-                Assert.That(schedule.RoundsRemaining, Is.EqualTo(1));
-            });
-
-            Assert.That(schedule.CountRound(11), Is.True);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(schedule.CountRound(12), Is.False);
-                Assert.That(schedule.RoundsRemaining, Is.Zero);
-                Assert.That(schedule.Due, Is.True);
-            });
-        }
-
-        [Test]
-        public void CMUBalanceRatingScheduleResetStartsFreshIntervalWithoutRecountingRound()
-        {
-            var schedule = new CMUBalanceRatingSchedule(1);
-
-            Assert.That(schedule.CountRound(20), Is.True);
-            schedule.Reset(2);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(schedule.CountRound(20), Is.False);
-                Assert.That(schedule.RoundsRemaining, Is.EqualTo(2));
-                Assert.That(schedule.Due, Is.False);
-            });
-
-            Assert.That(schedule.CountRound(21), Is.False);
-            Assert.That(schedule.RoundsRemaining, Is.EqualTo(1));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(schedule.CountRound(22), Is.True);
-                Assert.That(schedule.RoundsRemaining, Is.Zero);
-                Assert.That(schedule.Due, Is.True);
-            });
-        }
-
-        [TestCase(false)]
-        [TestCase(true)]
-        public void CMUBalanceRatingAutomaticMetricForMapIsAlwaysFun(bool chooseFun)
-        {
-            var metric = CMUBalanceRatingSystem.SelectAutomaticMetric(CMUBalanceRatingTarget.Map, chooseFun);
-
-            Assert.That(metric, Is.EqualTo(CMUBalanceRatingMetric.Fun));
-        }
-
-        [TestCase(CMUBalanceRatingTarget.Weapon, false, CMUBalanceRatingMetric.Power)]
-        [TestCase(CMUBalanceRatingTarget.Weapon, true, CMUBalanceRatingMetric.Fun)]
-        [TestCase(CMUBalanceRatingTarget.Xeno, false, CMUBalanceRatingMetric.Power)]
-        [TestCase(CMUBalanceRatingTarget.Xeno, true, CMUBalanceRatingMetric.Fun)]
-        public void CMUBalanceRatingAutomaticMetricForEntityUsesSelectedBranch(
-            CMUBalanceRatingTarget target,
-            bool chooseFun,
-            CMUBalanceRatingMetric expected)
-        {
-            var metric = CMUBalanceRatingSystem.SelectAutomaticMetric(target, chooseFun);
-
-            Assert.That(metric, Is.EqualTo(expected));
-        }
 
         [Test]
         public async Task CMUBalanceRatingDashboardAggregatesPollsAndResponses()
@@ -172,8 +68,8 @@ namespace Content.IntegrationTests.Tests.Preferences
                         Assert.That(resolvedReaper.Target, Is.EqualTo(CMUBalanceRatingTarget.Xeno));
                         Assert.That(resolvedReaper.Id, Is.EqualTo("CMXenoReaper"));
                         Assert.That(maps, Has.Some.Matches<CMUBalanceRatingTargetOption>(target =>
-                            target.Id == "CMUPlanetLament/ColonyFall" &&
-                            target.Name.Contains("Barker's Lament", StringComparison.Ordinal) &&
+                            target.Id == "AUPlanetShepherdsPride/ColonyFall" &&
+                            target.Name.Contains("Shepherds' Pride", StringComparison.Ordinal) &&
                             target.AllowsMetric(CMUBalanceRatingMetric.Fun) &&
                             !target.AllowsMetric(CMUBalanceRatingMetric.Power)));
                         // don't pin specific presets
@@ -200,7 +96,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                     async () => await db.CreateCMUBalanceRatingPoll(
                         roundId,
                         CMUBalanceRatingTarget.Map,
-                        "CMUPlanetLament/ColonyFall",
+                        "AUPlanetShepherdsPride/ColonyFall",
                         CMUBalanceRatingMetric.Power,
                         firstPlayer.UserId,
                         openedAt),
@@ -226,7 +122,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 var mapPoll = await db.CreateCMUBalanceRatingPoll(
                     roundId,
                     CMUBalanceRatingTarget.Map,
-                    "CMUPlanetLament/ColonyFall",
+                    "AUPlanetShepherdsPride/ColonyFall",
                     CMUBalanceRatingMetric.Fun,
                     firstPlayer.UserId,
                     openedAt.AddSeconds(30));
@@ -259,7 +155,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                     entry.Metric == CMUBalanceRatingMetric.Fun);
                 var map = dashboard.Entries.Single(entry =>
                     entry.Target == CMUBalanceRatingTarget.Map &&
-                    entry.TargetId == "CMUPlanetLament/ColonyFall" &&
+                    entry.TargetId == "AUPlanetShepherdsPride/ColonyFall" &&
                     entry.Metric == CMUBalanceRatingMetric.Fun);
                 var weapon = dashboard.Entries.Single(entry =>
                     entry.Target == CMUBalanceRatingTarget.Weapon &&

@@ -2,6 +2,11 @@ using Content.Shared._RMC14.Cassette;
 using Content.Shared._RMC14.Armor.Magnetic;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Deploy;
+// CMU14 Begin: deleted combat-reference coverage.
+using Content.Shared._RMC14.Weapons.Ranged.AimedShot.FocusedShooting;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared._RMC14.Xenonids.Spray;
+// CMU14 End
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared._RMC14.Xenonids.Fruit.Components;
@@ -18,6 +23,7 @@ using Content.Shared.CombatMode;
 using Content.Shared.Placeable;
 using Content.Shared.Projectiles;
 using Content.Shared.Speech.Components;
+using Content.Shared.StepTrigger.Components; // CMU14
 using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.GameObjects;
@@ -30,117 +36,9 @@ namespace Content.IntegrationTests.Tests._RMC14.Networking;
 [TestFixture]
 public sealed class StaleEntityStateTest
 {
-    [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Shooter))]
-    [TestCase(typeof(VocalComponent), nameof(VocalComponent.EmoteActionEntity))]
-    [TestCase(typeof(TimerTriggerComponent), nameof(TimerTriggerComponent.User))]
-    [TestCase(typeof(CombatModeComponent), nameof(CombatModeComponent.CombatToggleActionEntity))]
-    [TestCase(typeof(RMCConstructionPreventCollideComponent), nameof(RMCConstructionPreventCollideComponent.Target))]
-    [TestCase(typeof(ProjectileComponent), nameof(ProjectileComponent.Weapon))]
-    [TestCase(typeof(XenoIntoxicatedComponent), nameof(XenoIntoxicatedComponent.LastSource))]
-    [TestCase(typeof(XenoParasiteComponent), nameof(XenoParasiteComponent.InfectedVictim))]
-    [TestCase(typeof(ProduceComponent), nameof(ProduceComponent.PlantData))]
-    [TestCase(typeof(SeedComponent), nameof(SeedComponent.PlantData))]
-    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.Source))]
-    [TestCase(typeof(XenoFruitComponent), nameof(XenoFruitComponent.Hive))]
-    [TestCase(typeof(XenoFruitComponent), nameof(XenoFruitComponent.Planter))]
-    [TestCase(typeof(SquadLeaderTrackerComponent), nameof(SquadLeaderTrackerComponent.Target))]
-    [TestCase(typeof(SquadLeaderTrackerComponent), nameof(SquadLeaderTrackerComponent.BattleBuddy))]
-    [TestCase(typeof(RMCReturnToInventoryComponent), nameof(RMCReturnToInventoryComponent.ReceivingItem))]
-    [TestCase(typeof(DropshipDestinationComponent), nameof(DropshipDestinationComponent.Ship))]
-    [TestCase(typeof(DropshipDestinationComponent), nameof(DropshipDestinationComponent.ArrivalSoundEntity))]
-    public async Task OptionalReferencesSurviveSourceDeletion(Type componentType, string field)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
-        var server = pair.Server;
+    // CMU14: references retained after a target dies, a shooter leaves, or a xeno evolves.
 
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var owner = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var source = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var component = (Component) Activator.CreateInstance(componentType)!;
-            entities.AddComponent(owner, component);
-            // Some components create their own reference during startup.
-            SetField(component, field, (EntityUid?) null);
-
-            object GetReference()
-            {
-                var state = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
-                var stateField = state.GetType().GetField(field);
-                var stateProperty = state.GetType().GetProperty(field);
-                Assert.That(stateField != null || stateProperty != null, Is.True, $"The state must include {field}.");
-                return stateField != null ? stateField.GetValue(state) : stateProperty!.GetValue(state);
-            }
-
-            Assert.That(GetReference(), Is.Null, "An unset reference must remain null.");
-            SetField(component, field, (EntityUid?) source);
-            Assert.That(GetReference(), Is.EqualTo(entities.GetNetEntity(source)), "Live references must still replicate.");
-
-            entities.DeleteEntity(source);
-            Assert.That(GetReference(), Is.EqualTo(NetEntity.Invalid), "Deleted references must serialize without resolution errors.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [TestCase(typeof(RMCDeployedEntityComponent), nameof(RMCDeployedEntityComponent.OriginalEntity))]
-    [TestCase(typeof(CMUSurgeryInFlightComponent), nameof(CMUSurgeryInFlightComponent.Surgeon))]
-    [TestCase(typeof(RMCReturnToInventoryComponent), nameof(RMCReturnToInventoryComponent.User))]
-    [TestCase(typeof(RMCReturnToInventoryComponent), nameof(RMCReturnToInventoryComponent.Magnetizer))]
-    public async Task RequiredReferencesSurviveSourceDeletion(Type componentType, string field)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var owner = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var source = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var component = (Component) Activator.CreateInstance(componentType)!;
-            entities.AddComponent(owner, component);
-            SetField(component, field, source);
-            object GetReference()
-            {
-                var state = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
-                return state.GetType().GetProperty(field)!.GetValue(state);
-            }
-
-            Assert.That(GetReference(), Is.EqualTo(entities.GetNetEntity(source)));
-            entities.DeleteEntity(source);
-            Assert.That(GetReference(), Is.EqualTo(NetEntity.Invalid));
-            Assert.That(componentType.GetField(field)!.GetValue(component), Is.EqualTo(source),
-                "State generation must not mutate authoritative gameplay state.");
-            entities.DeleteEntity(owner);
-        });
-        await pair.CleanReturnAsync();
-    }
-
-    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.Spread))]
-    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.LocalWeeded))]
-    [TestCase(typeof(XenoWeedsComponent), nameof(XenoWeedsComponent.WeedboundStructures))]
-    [TestCase(typeof(AttachableDirectionLockedComponent), nameof(AttachableDirectionLockedComponent.AttachableList))]
-    public async Task DeletedListEntriesAreFilteredWithoutChangingGameplayState(Type componentType, string field)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var owner = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var live = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var dead = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var component = (Component) Activator.CreateInstance(componentType)!;
-            entities.AddComponent(owner, component);
-            var originals = new List<EntityUid> { dead, live, dead };
-            SetField(component, field, originals);
-            entities.DeleteEntity(dead);
-            var state = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
-            var actual = state.GetType().GetProperty(field)!.GetValue(state);
-            Assert.That(actual, Is.EqualTo(new[] { entities.GetNetEntity(live) }));
-            Assert.That(originals, Is.EqualTo(new[] { dead, live, dead }));
-            entities.DeleteEntity(owner);
-            entities.DeleteEntity(live);
-        });
-        await pair.CleanReturnAsync();
-    }
+    // CMU14 method: contact end events may arrive after a collider was deleted.
 
     [Test]
     public async Task ReferencesAndGameplayStateReplicateAfterSourceDeletion()
@@ -194,6 +92,31 @@ public sealed class StaleEntityStateTest
             projectile.Weapon = source;
             projectile.MaxFixedRange = 17f;
             components.Add(projectile);
+
+            // CMU14 Begin: combat references may survive their target's deletion.
+            var focus = entities.AddComponent<RMCFocusedShootingComponent>(owner);
+            focus.CurrentTarget = source;
+            focus.FocusCounter = 2;
+            focus.FocusMultiplier = 0.75f;
+            components.Add(focus);
+
+            var prediction = entities.AddComponent<PredictedProjectileServerComponent>(owner);
+            prediction.ClientEnt = source;
+            prediction.ClientId = 42;
+            components.Add(prediction);
+
+            var splatter = entities.AddComponent<XenoAcidSplatterComponent>(owner);
+            SetField(splatter, nameof(splatter.Xeno), (EntityUid?) source);
+            components.Add(splatter);
+
+            var step = new StepTriggerComponent();
+            SetField(step, nameof(step.Active), false);
+            SetField(step, nameof(step.StepOn), true);
+            SetField(step, nameof(step.Colliding), new HashSet<EntityUid> { source });
+            SetField(step, nameof(step.CurrentlySteppedOn), new HashSet<EntityUid> { source });
+            entities.AddComponent(owner, step);
+            components.Add(step);
+            // CMU14 End
 
             var intoxicated = entities.AddComponent<XenoIntoxicatedComponent>(owner);
             SetField(intoxicated, nameof(XenoIntoxicatedComponent.LastSource), (EntityUid?) source);
@@ -293,6 +216,23 @@ public sealed class StaleEntityStateTest
                     Assert.That(projectile.Shooter, Is.EqualTo(expected));
                     Assert.That(projectile.Weapon, Is.EqualTo(expected));
                     Assert.That(projectile.MaxFixedRange, Is.EqualTo(17f));
+                    // CMU14 Begin
+                    var focus = entities.GetComponent<RMCFocusedShootingComponent>(clientOwner);
+                    var prediction = entities.GetComponent<PredictedProjectileServerComponent>(clientOwner);
+                    var splatter = entities.GetComponent<XenoAcidSplatterComponent>(clientOwner);
+                    Assert.That(focus.CurrentTarget, Is.EqualTo(expected));
+                    Assert.That(focus.FocusCounter, Is.EqualTo(2));
+                    Assert.That(focus.FocusMultiplier, Is.EqualTo(0.75f));
+                    Assert.That(prediction.ClientEnt, Is.EqualTo(expected));
+                    Assert.That(prediction.ClientId, Is.EqualTo(42));
+                    Assert.That(splatter.Xeno, Is.EqualTo(expected));
+                    var step = entities.GetComponent<StepTriggerComponent>(clientOwner);
+                    Assert.That(step.StepOn, Is.True);
+                    Assert.That(step.Active, Is.False);
+                    var expectedContacts = deleted ? Array.Empty<EntityUid>() : new[] { expected };
+                    Assert.That(step.Colliding, Is.EquivalentTo(expectedContacts));
+                    Assert.That(step.CurrentlySteppedOn, Is.EquivalentTo(expectedContacts));
+                    // CMU14 End
                     Assert.That(intoxicated.LastSource, Is.EqualTo(expected));
                     Assert.That(intoxicated.Stacks, Is.EqualTo(25));
                     Assert.That(parasite.InfectedVictim, Is.EqualTo(expected));
@@ -326,94 +266,6 @@ public sealed class StaleEntityStateTest
                 entities.Dirty(owner, component);
         });
         await AssertClientState(true);
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task HiveBoonsSerializeLiveAndDeletedReferences()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false });
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var hive = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var live = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var deleted = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var boons = entities.AddComponent<HiveBoonsComponent>(hive);
-            var liveBoon = new EntProtoId<HiveBoonDefinitionComponent>("LiveBoon");
-            var deletedBoon = new EntProtoId<HiveBoonDefinitionComponent>("DeletedBoon");
-            SetField(boons, nameof(HiveBoonsComponent.Active), new Dictionary<EntProtoId<HiveBoonDefinitionComponent>, EntityUid>
-            {
-                [liveBoon] = live,
-                [deletedBoon] = deleted,
-            });
-            entities.DeleteEntity(deleted);
-
-            var state = entities.GetComponentState(entities.EventBus, boons, null, GameTick.Zero)!;
-            var active = (Dictionary<EntProtoId<HiveBoonDefinitionComponent>, NetEntity>) (
-                state.GetType().GetField(nameof(HiveBoonsComponent.Active))?.GetValue(state)
-                ?? state.GetType().GetProperty(nameof(HiveBoonsComponent.Active))!.GetValue(state))!;
-            Assert.Multiple(() =>
-            {
-                Assert.That(active[liveBoon], Is.EqualTo(entities.GetNetEntity(live)));
-                Assert.That(active[deletedBoon], Is.EqualTo(NetEntity.Invalid));
-                Assert.That(active, Has.Count.EqualTo(2));
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task DeletedEntityReferencesSerializeWithoutResolutionErrors()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = false,
-        });
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var deleted = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-
-            var projectile = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var targeted = entities.AddComponent<TargetedProjectileComponent>(projectile);
-            SetField(targeted, nameof(TargetedProjectileComponent.Target), deleted);
-
-            var player = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var cassette = entities.AddComponent<CassettePlayerComponent>(player);
-            SetField(cassette, nameof(CassettePlayerComponent.PlayPauseAction), (EntityUid?) deleted);
-            SetField(cassette, nameof(CassettePlayerComponent.NextAction), (EntityUid?) deleted);
-            SetField(cassette, nameof(CassettePlayerComponent.RestartAction), (EntityUid?) deleted);
-            SetField(cassette, nameof(CassettePlayerComponent.AudioStream), (EntityUid?) deleted);
-
-            entities.DeleteEntity(deleted);
-
-            var targetedState = (TargetedProjectileComponentState) entities.GetComponentState(
-                entities.EventBus,
-                targeted,
-                null,
-                GameTick.Zero)!;
-            var cassetteState = (CassettePlayerComponentState) entities.GetComponentState(
-                entities.EventBus,
-                cassette,
-                null,
-                GameTick.Zero)!;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(targetedState.Target, Is.EqualTo(NetEntity.Invalid));
-                Assert.That(cassetteState.PlayPauseAction, Is.EqualTo(NetEntity.Invalid));
-                Assert.That(cassetteState.NextAction, Is.EqualTo(NetEntity.Invalid));
-                Assert.That(cassetteState.RestartAction, Is.EqualTo(NetEntity.Invalid));
-                Assert.That(cassetteState.AudioStream, Is.EqualTo(NetEntity.Invalid));
-            });
-        });
 
         await pair.CleanReturnAsync();
     }

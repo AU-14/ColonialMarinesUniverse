@@ -1,0 +1,221 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPDriedCodSlice
+  name: "dried cod slice"
+  description: "A dried and salted slice of cod, perfect snack for a sip of cold beer."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: driedfish
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CMUFishMeat
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPDriedTaran
+  name: "dried taran"
+  description: "A dried and salted whole rutilus heckelii fish, perfect snack for a sip of cold beer."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: driedfish_2
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CMUFishMeat
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPMashedPotatoes
+  name: "mashed potatoes"
+  description: "Really soft and gentle garnish, small portion intended to be combined with something else."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: mashed_potatoes
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 12
+      reagents:
+      - ReagentId: CMUPotato
+        Quantity: 4
+      - ReagentId: Milk
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPRiceBall
+  name: "rice ball"
+  description: "Cooked rice in a form of a ball, has a slighly buttery taste, doesn't fall apart, surprisingly."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: riceball
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Rice
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPBirdMilk
+  name: "bird milk"
+  description: "Bird milk or also known as ptasie mleczko, is a popular candy in Slavic parts of Eastern Europe, a small bar of creamy marshmallow like candy covered in a layer of chocolate."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: bird_milk
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Sugar
+        Quantity: 4
+      - ReagentId: Cream
+        Quantity: 3
+      - ReagentId: CocoaPowder
+        Quantity: 3
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPToffees
+  name: "toffees"
+  description: "A hard candy made out of condensed milk and sugar, caramelized together."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: toffees
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Sugar
+        Quantity: 6
+      - ReagentId: Milk
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPHematogenBar
+  name: "hematogen bar"
+  description: "A bar of candy, origin of which tracks back to Soviet Union times. The bar is claimed to have blood regenerating and blood circulation improving properties, the bar itself is made out of: cow blood, condensed milk, honey and ascorbic acid."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: hematogen
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 27
+      reagents:
+      - ReagentId: Iron
+        Quantity: 8
+      - ReagentId: Sugar
+        Quantity: 3
+      - ReagentId: Blood
+        Quantity: 4
+      - ReagentId: Milk
+        Quantity: 4
+      - ReagentId: CMUHoney
+        Quantity: 3
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPDarkChocolateBar
+  name: "dark chocolate bar"
+  description: "56% coco true dark chocolate, rich in flavor, classic, combines well with hot drinks and other snacks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: dark_chocolate
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CocoaPowder
+        Quantity: 8
+      - ReagentId: Sugar
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPChocolateRiceCandies
+  name: "chocolate rice candies"
+  description: "An assortment of rice candies covered in white chocolate, smooth on the outside, crunchy on the inside."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: rice_candies
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CocoaPowder
+        Quantity: 4
+      - ReagentId: Rice
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUPPIRPArmyBiscuits
+  name: "IRP army biscuits"
+  description: "Also known as army galets. An oven baked, crunchy and salty biscuits, can be combined with some spread or eaten on themselves."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_upp.rsi
+    state: biscuits_package
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 1

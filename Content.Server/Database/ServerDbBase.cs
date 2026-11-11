@@ -18,7 +18,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.RoundStatistics;
-using Content.Shared.Administration.Logs;
+
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
@@ -423,6 +423,15 @@ namespace Content.Server.Database
             profile.Height = humanoid.Height;
             profile.Weight = humanoid.Weight;
             profile.Build = humanoid.Build.ToString();
+            profile.BloodType = humanoid.BloodType.ToString(); // CMU14
+            // cmu edit start
+            profile.FoxtrotSquadOptIn = humanoid.FoxtrotSquadOptIn;
+            profile.Religion = humanoid.Religion.Id;
+            profile.ArmorFlavorText = humanoid.ArmorFlavorText;
+            profile.HelmetFlavorText = humanoid.HelmetFlavorText;
+            profile.SyntheticGeneration = humanoid.SyntheticGeneration; // CMU14
+            profile.SyntheticModelSuffix = humanoid.SyntheticModelSuffix; // CMU14
+            // cmu edit end
             profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
                 ? null
@@ -1180,44 +1189,35 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await db.DbContext.SaveChangesAsync();
         }
 
+        // CMU14 method: scoped statistics and a paginated archive.
         public async Task<CMURoundStatisticsDashboard> GetCMURoundStatisticsDashboard(
-            int recentRounds,
+            CMURoundStatisticsQuery query,
             CancellationToken cancel = default)
         {
             await using var db = await GetDb();
 
-            var records = (await db.DbContext.CMURoundOutcomes
-                    .AsNoTracking()
+            var now = DateTime.UtcNow;
+            DateTime? from = query.Period switch
+            {
+                CMURoundStatisticsPeriod.OneWeek => now.AddDays(-7),
+                CMURoundStatisticsPeriod.TwoWeeks => now.AddDays(-14),
+                CMURoundStatisticsPeriod.ThreeMonths => now.AddMonths(-3),
+                CMURoundStatisticsPeriod.SixMonths => now.AddMonths(-6),
+                CMURoundStatisticsPeriod.OneYear => now.AddYears(-1),
+                CMURoundStatisticsPeriod.AllTime => null,
+                _ => now.AddMonths(-1),
+            };
+            var outcomes = db.DbContext.CMURoundOutcomes.AsNoTracking();
+            if (from is { } start)
+                outcomes = outcomes.Where(outcome => outcome.RecordedAt >= start);
+
+            var records = (await outcomes
                     .OrderByDescending(outcome => outcome.RecordedAt)
                     .ToListAsync(cancel))
                 .Select(MakeCMURoundOutcomeRecord)
                 .ToList();
 
-            var modes = new List<CMURoundModeStatistics>
-            {
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.DistressSignal,
-                    "Distress Signal",
-                    "Xeno",
-                    "Govfor"),
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.Insurgency,
-                    "Insurgency",
-                    "Govfor",
-                    "CLF"),
-                BuildModeStatistics(
-                    records,
-                    CMURoundStatisticsPreset.ColonyFall,
-                    "Colony Fall",
-                    "Colonists",
-                    "Threat"),
-            };
-
-            return new CMURoundStatisticsDashboard(
-                modes,
-                records.Take(Math.Max(0, recentRounds)).ToList());
+            return BuildCMURoundStatisticsDashboard(records, query);
         }
 
         // CMU14 method: flat playtime rows for the cmuleaderboard panel
@@ -1241,6 +1241,64 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .ToList();
         }
 
+        // CMU14 method: everyone currently opted out of the playtime leaderboard
+        public async Task<List<Guid>> GetCMUPlaytimeHiddenPlayers(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            return await db.DbContext.Player
+                .AsNoTracking()
+                .Where(player => player.CMUPlaytimeHidden)
+                .Select(player => player.UserId)
+                .ToListAsync(cancel);
+        }
+
+        // CMU14 method
+        public async Task<bool> GetCMUPlaytimeHidden(NetUserId player, CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+
+            var hidden = await db.DbContext.Player
+                .AsNoTracking()
+                .Where(p => p.UserId == player)
+                .Select(p => (bool?) p.CMUPlaytimeHidden)
+                .SingleOrDefaultAsync(cancel);
+
+            return hidden ?? false;
+        }
+
+        // CMU14 method
+        public async Task SetCMUPlaytimeHidden(NetUserId player, bool hidden)
+        {
+            await using var db = await GetDb();
+
+            var dbPlayer = await db.DbContext.Player
+                .Where(p => p.UserId == player)
+                .SingleOrDefaultAsync();
+
+            if (dbPlayer == null)
+                return;
+
+            dbPlayer.CMUPlaytimeHidden = hidden;
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        // CMU14 method: everyone with an active server ban
+        public async Task<List<Guid>> GetCMUPlaytimeBannedPlayers(CancellationToken cancel = default)
+        {
+            await using var db = await GetDb(cancel);
+            var now = DateTime.UtcNow;
+
+            return await db.DbContext.BanPlayer
+                .AsNoTracking()
+                .Where(bp => bp.Ban!.Type == BanType.Server
+                    && bp.Ban.Unban == null
+                    && (bp.Ban.ExpirationTime == null || bp.Ban.ExpirationTime.Value > now))
+                .Select(bp => bp.UserId)
+                .Distinct()
+                .ToListAsync(cancel);
+        }
+
         private CMURoundOutcomeRecord MakeCMURoundOutcomeRecord(CMURoundOutcome outcome)
         {
             var preset = Enum.TryParse(outcome.PresetId, out CMURoundStatisticsPreset parsedPreset)
@@ -1252,6 +1310,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             var result = Enum.TryParse(outcome.Outcome, out CMURoundStatisticsOutcome parsedOutcome)
                 ? parsedOutcome
                 : CMURoundStatisticsOutcome.Unknown;
+
+            // CMU14: rounds ended by the hive collapse rule used to record as marine major, reclassify by source
+            if (result == CMURoundStatisticsOutcome.MarineMajorXenoWipe
+                && outcome.Source == "HiveCollapseRule")
+                result = CMURoundStatisticsOutcome.MarineMinorHiveCollapse;
 
             return new CMURoundOutcomeRecord(
                 outcome.RoundId,
@@ -1490,13 +1553,18 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 : source.Trim();
         }
 
+        // CMU14 method: retain useful population detail on busy servers.
         private static List<CMURoundPlayerCountBandBreakdown> BuildPlayerCountBands(List<CMURoundOutcomeRecord> records)
         {
             return new List<CMURoundPlayerCountBandBreakdown>
             {
                 BuildPlayerCountBand(records, "0-59", 0, 59),
                 BuildPlayerCountBand(records, "60-99", 60, 99),
-                BuildPlayerCountBand(records, "100+", 100, int.MaxValue),
+                BuildPlayerCountBand(records, "100-149", 100, 149),
+                BuildPlayerCountBand(records, "150-199", 150, 199),
+                BuildPlayerCountBand(records, "200-249", 200, 249),
+                BuildPlayerCountBand(records, "250-299", 250, 299),
+                BuildPlayerCountBand(records, "300+", 300, int.MaxValue),
             }
                 .Where(band => band.Total > 0)
                 .ToList();
@@ -1530,6 +1598,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Xeno,
                 CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Govfor,
                 CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Colonists,
+                CMURoundStatisticsPreset.ForceOnForce => record.Winner == CMURoundStatisticsWinner.Govfor, // CMU14
                 _ => false,
             };
         }
@@ -1541,6 +1610,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 CMURoundStatisticsPreset.DistressSignal => record.Winner == CMURoundStatisticsWinner.Govfor,
                 CMURoundStatisticsPreset.Insurgency => record.Winner == CMURoundStatisticsWinner.Clf,
                 CMURoundStatisticsPreset.ColonyFall => record.Winner == CMURoundStatisticsWinner.Threat,
+                CMURoundStatisticsPreset.ForceOnForce => record.Winner == CMURoundStatisticsWinner.Opfor, // CMU14
                 _ => false,
             };
         }
@@ -1605,44 +1675,8 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return new ServerRecord(server.Id, server.Name);
         }
 
-        public async Task AddAdminLogs(List<AdminLog> logs)
-        {
-            const int maxRetryAttempts = 5;
-            var initialRetryDelay = TimeSpan.FromSeconds(5);
-
-            DebugTools.Assert(logs.All(x => x.RoundId > 0), "Adding logs with invalid round ids.");
-
-            var attempt = 0;
-            var retryDelay = initialRetryDelay;
-
-            while (attempt < maxRetryAttempts)
-            {
-                try
-                {
-                    await using var db = await GetDb();
-                    db.DbContext.AdminLog.AddRange(logs);
-                    await db.DbContext.SaveChangesAsync();
-                    _opsLog.Debug($"Successfully saved {logs.Count} admin logs.");
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    attempt += 1;
-                    _opsLog.Error($"Attempt {attempt} failed to save logs: {ex}");
-
-                    if (attempt >= maxRetryAttempts)
-                    {
-                        _opsLog.Error($"Max retry attempts reached. Failed to save {logs.Count} admin logs.");
-                        throw;
-                    }
-
-                    _opsLog.Warning($"Retrying in {retryDelay.TotalSeconds} seconds...");
-                    await Task.Delay(retryDelay);
-
-                    retryDelay *= 2;
-                }
-            }
-        }
+        // CMU14 method: reconcile an ambiguously committed batch before replaying it.
+        public Task AddAdminLogs(List<AdminLog> logs) => SaveAdminLogsIdempotently(logs);
 
         protected abstract IQueryable<AdminLog> StartAdminLogsQuery(ServerDbContext db, LogFilter? filter = null);
 
@@ -2441,6 +2475,66 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             await using var db = await GetDb(cancel);
             return await db.DbContext.RMCLinkedAccounts.AnyAsync(l => l.PlayerId == player, cancel);
 
+        }
+
+        // CMU14 method
+        public async Task<ulong?> GetLinkedDiscordId(Guid player, CancellationToken cancel)
+        {
+            await using var db = await GetDb(cancel);
+            var link = await db.DbContext.RMCLinkedAccounts.FirstOrDefaultAsync(l => l.PlayerId == player, cancel);
+            return link?.DiscordId;
+        }
+
+        // CMU14 method: completes a lobby-code link posted in the Discord link channel.
+        // Single transaction: validates the code, consumes it (single-use, throwaway), rebinding the
+        // Discord account if it was already linked to another player, and logs the attempt.
+        public async Task<DiscordLinkResult> LinkDiscordAccountByCode(Guid code, ulong discordId)
+        {
+            await using var db = await GetDb();
+            var linking = await db.DbContext.RMCLinkingCodes
+                .Include(l => l.Player)
+                .FirstOrDefaultAsync(l => l.Code == code);
+            if (linking == null)
+                return new DiscordLinkResult(DiscordLinkStatus.UnknownCode, default, string.Empty);
+
+            // CMU14: 15-minute window. Codes are minted live in the lobby and used within minutes,
+            // so a day-old code only extends the interception window.
+            if (linking.CreationTime < DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15)))
+            {
+                db.DbContext.RMCLinkingCodes.Remove(linking);
+                await db.DbContext.SaveChangesAsync();
+                return new DiscordLinkResult(DiscordLinkStatus.ExpiredCode, linking.PlayerId, linking.Player.LastSeenUserName);
+            }
+
+            var discord = await db.DbContext.RMCDiscordAccounts
+                .Include(d => d.LinkedAccount)
+                .FirstOrDefaultAsync(d => d.Id == discordId);
+            discord ??= db.DbContext.RMCDiscordAccounts.Add(new RMCDiscordAccount { Id = discordId }).Entity;
+
+            // The Discord account was bound to a different player before: unbind it (the old
+            // Content.DiscordBot semantics) so a re-link can't leave two rows on one Discord id.
+            if (discord.LinkedAccount is { } stale && stale.PlayerId != linking.PlayerId)
+                db.DbContext.RMCLinkedAccounts.Remove(stale);
+
+            var linked = await db.DbContext.RMCLinkedAccounts
+                .FirstOrDefaultAsync(l => l.PlayerId == linking.PlayerId);
+            if (linked == null)
+                linked = db.DbContext.RMCLinkedAccounts.Add(new RMCLinkedAccount { PlayerId = linking.PlayerId }).Entity;
+
+            linked.DiscordId = discordId;
+            discord.LinkedAccount = linked;
+
+            db.DbContext.RMCLinkedAccountLogs.Add(new RMCLinkedAccountLogs
+            {
+                PlayerId = linking.PlayerId,
+                DiscordId = discordId,
+                At = DateTime.UtcNow,
+            });
+
+            db.DbContext.RMCLinkingCodes.Remove(linking);
+            await db.DbContext.SaveChangesAsync();
+
+            return new DiscordLinkResult(DiscordLinkStatus.Success, linking.PlayerId, linking.Player.LastSeenUserName);
         }
 
         public async Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel)

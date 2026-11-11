@@ -44,6 +44,7 @@
   - type: GasMaskFilter
     neurotoxinResist: true
     neurotoxinDamageMultiplier: 2.5 # 4 seconds
+    orbitalGasProtectionSeconds: 15
     chemicalIrritantDamageMultiplier: 1.75 # 2 complete CN20 gas clouds and some extra
     baseIntegrity: 100
   - type: Sprite
@@ -60,6 +61,7 @@
   - type: GasMaskFilter
     neurotoxinResist: true
     neurotoxinDamageMultiplier: 1.25 # 8 seconds
+    orbitalGasProtectionSeconds: 15
     chemicalIrritantDamageMultiplier: 1 # 4-ish CN20 gas clouds
     baseIntegrity: 100
   - type: Sprite

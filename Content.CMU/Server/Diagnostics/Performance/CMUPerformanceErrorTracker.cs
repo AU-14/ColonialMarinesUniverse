@@ -51,6 +51,15 @@ internal sealed class CMUPerformanceErrorTracker : ILogHandler
         }
     }
 
+    /// <summary>Keep exception details on the prefixed line so filtering CMU-PERF records does not discard the stack.</summary>
+    internal static string FormatSample(Source source)
+    {
+        var sample = CMURecentServerErrors.Format(new(0, source.Sawmill, source.Last))
+            .Replace("\r", "\\r", StringComparison.Ordinal)
+            .Replace("\n", "\\n", StringComparison.Ordinal);
+        return sample.Length <= 2048 ? sample : sample[..2048] + " [truncated; see original error]";
+    }
+
     internal readonly record struct Source(string Sawmill, long Count, DateTimeOffset FirstAt, LogEvent Last);
     internal sealed record Snapshot(long Total, long Overflow, Source[] Sources);
 }

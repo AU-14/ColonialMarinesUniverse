@@ -258,7 +258,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateBoxMagazineSentryFire
-  name: 42-FM sentry flamer ammunition (x2)
+  name: 45-FM sentry flamer ammunition (x2) #CMU14 change, upstream name is 42-FM, changed to the CM13-facing 45-FM, as thats what we have for the actual turret.
   components:
   - type: StorageFill
     contents:

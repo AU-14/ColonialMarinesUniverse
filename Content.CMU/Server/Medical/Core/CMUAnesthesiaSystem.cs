@@ -7,7 +7,7 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
-using Content.Shared.CMU14.Medical.Core;
+
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;

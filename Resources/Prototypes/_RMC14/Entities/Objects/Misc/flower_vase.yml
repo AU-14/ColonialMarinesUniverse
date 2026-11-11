@@ -20,7 +20,7 @@
         - !type:PlaySoundBehavior
           sound:
             collection: GlassBreak
-        - !type:SpillBehavior { }
+        # CMU14: no solution to spill, SpillBehavior just logged an error when it broke
         - !type:SpawnEntitiesBehavior
           spawn:
             ShardGlass:

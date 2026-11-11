@@ -1,0 +1,820 @@
+# Generated from cmss13 PR 7895's DM code.
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMBonelessPorkRibs
+  name: "boneless pork ribs"
+  description: "You can't even taste processed meat taste under all those spices!"
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: boneless_pork_ribs
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 25
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 14
+      - ReagentId: TableSalt
+        Quantity: 2
+      - ReagentId: Blackpepper
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMGrilledChicken
+  name: "grilled chicken"
+  description: "Doesn't actually tastes like grilled one, but do you really expect that luxury here?"
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: grilled_chicken
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 21
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 14
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMPizzaSquare
+  name: "pizza square"
+  description: "An American classic, been added and removed from the menu about 27 times at this point, still loved despite being cheap parody of a real thing."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: pizza_square
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 25
+      reagents:
+      - ReagentId: CMUCheese
+        Quantity: 4
+      - ReagentId: CMUMeatProtein
+        Quantity: 3
+      - ReagentId: CMUBread
+        Quantity: 5
+      - ReagentId: CMUVegetable
+        Quantity: 2
+      - ReagentId: JuiceTomato
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMChickenTender
+  name: "chicken tender"
+  description: "Really tasty and has nice crumbs texture, but makes you wish for some good chicken wings..."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: chicken_tender
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 21
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 10
+      - ReagentId: CMUBread
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMPepperoniPizzaSquare
+  name: "pepperoni pizza square"
+  description: "A newer addition to the timeless MRE classic, very similar."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: pepperoni_square
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 25
+      reagents:
+      - ReagentId: CMUCheese
+        Quantity: 3
+      - ReagentId: CMUMeatProtein
+        Quantity: 5
+      - ReagentId: CMUBread
+        Quantity: 6
+      - ReagentId: JuiceTomato
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMMeatSpaghetti
+  name: "meat spaghetti"
+  description: "Spaghetti with some cooked meat chunks, all covered in a tomato sauce."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: spaghetti_chunks
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 25
+      reagents:
+      - ReagentId: CMUNoodles
+        Quantity: 8
+      - ReagentId: CMUMeatProtein
+        Quantity: 6
+      - ReagentId: JuiceTomato
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMChiliConCarne
+  name: "chili con carne"
+  description: "Spicy minced meat dish, there is no limit on adding chili in there, having some milk in near proximity is recommended."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: chili_con_carne
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 29
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 10
+      - ReagentId: Hotsauce
+        Quantity: 6
+      - ReagentId: CMUVegetable
+        Quantity: 4
+      - ReagentId: JuiceTomato
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMNoodleSoup
+  name: "noodle soup"
+  description: "Very nourishing noodle soup with vegetables and a chicken flavor, will keep you warm for a long time if heated."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: noodle_soup
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 24
+      reagents:
+      - ReagentId: CMUNoodles
+        Quantity: 9
+      - ReagentId: CMUVegetable
+        Quantity: 4
+      - ReagentId: Water
+        Quantity: 5
+      - ReagentId: CMUMeatProtein
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMGrilledChickenBreast
+  name: "grilled chicken breast"
+  description: "Very plain grilled chicken meat, simple but yet very classic taste."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: grilled_chicken_breast
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 21
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 14
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMFeijoada
+  name: "feijoada"
+  description: "A Brazillian dish filled with black beans, different kinds of meat, vegetables and spices, very nourishing and rich in flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: brazilian-style_feijoada
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 23
+      reagents:
+      - ReagentId: CMUVegetable
+        Quantity: 7
+      - ReagentId: CMUMeatProtein
+        Quantity: 5
+      - ReagentId: JuiceTomato
+        Quantity: 4
+      - ReagentId: CMUPlantMatter
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMCracker
+  name: "cracker"
+  description: "Crumbs easily but it's the most satisfying part."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: cracker
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 13
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 6
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMMashedPotatoes
+  name: "mashed potatoes"
+  description: "Really soft and gentle, goes well with a main dish."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: mashed_potatoes
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 17
+      reagents:
+      - ReagentId: CMUPotato
+        Quantity: 6
+      - ReagentId: CMUVegetable
+        Quantity: 3
+      - ReagentId: Milk
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMRisotto
+  name: "risotto"
+  description: "A bit more exotic, but Italian cuisine never dissapoints."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: risotto
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 13
+      reagents:
+      - ReagentId: TableSalt
+        Quantity: 1
+      - ReagentId: Rice
+        Quantity: 4
+      - ReagentId: RMCCornoil
+        Quantity: 1
+      - ReagentId: CMUVegetable
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMRiceOnigiri
+  name: "rice onigiri"
+  description: "Cooked rice in a form of a triangle, covered in a seaweed at the bottom, doesn't fall apart, surprisingly."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: rice_onigiri
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 12
+      reagents:
+      - ReagentId: Rice
+        Quantity: 5
+      - ReagentId: CMUPlantMatter
+        Quantity: 1
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMCornbread
+  name: "cornbread"
+  description: "Almost universally hated, very dry and simple taste of it really gets old fast. Requisitions probably has ass-load of it in the back. Nobody eats that shit."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: cornbread
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 12
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 4
+      - ReagentId: RMCCornoil
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMMarinatedKale
+  name: "marinated kale"
+  description: "A sort of cabbage, marinated in spices, still has a lot of moist and crunch to it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: kale
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMUPlantMatter
+        Quantity: 6
+      - ReagentId: Blackpepper
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMTortillas
+  name: "tortillas"
+  description: "A kind of flat bread, goes well with adding other things onto it."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: tortillas
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 6
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMCinnamonAppleSlices
+  name: "cinnamon apple slices"
+  description: "A bit gooey pieces of apple in cinnamon sauce, a bit sticky but tasty."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: cinnamon_apple_slices
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CMUFruit
+        Quantity: 3
+      - ReagentId: Sugar
+        Quantity: 3
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMBoiledRice
+  name: "boiled rice"
+  description: "A packet of plain boiled rice, a bit boring but would go well with additives."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: rice
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: Rice
+        Quantity: 6
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMBiscuits
+  name: "biscuits"
+  description: "An assortment of biscuits, go well with adding other things onto them."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: biscuits
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 11
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 6
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMBiscuit
+  name: "biscuit"
+  description: "Reminds you of a cracker, but has a lot more different grains in it, which gives it more unique texture and flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: biscuit
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMMeatballs
+  name: "meatballs"
+  description: "You can even taste muscle fibers, despite it being a cooked minced meat."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: meatballs
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 12
+      reagents:
+      - ReagentId: CMUMeatProtein
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
+      - ReagentId: Blackpepper
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMPretzels
+  name: "pretzels"
+  description: "Really salty and crunchy, thirst provoking."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: pretzels
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 13
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 4
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMSushi
+  name: "sushi"
+  description: "You kinda highly doubt that raw fish wouldn't go bad in here, it barely smells like one... is it even fish?..."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: sushi
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 13
+      reagents:
+      - ReagentId: CMUFishMeat
+        Quantity: 2
+      - ReagentId: CMUPlantMatter
+        Quantity: 2
+      - ReagentId: RMCSoysauce
+        Quantity: 2
+      - ReagentId: RMCSoyMilk
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMPeanuts
+  name: "peanuts"
+  description: "Some crunchy salted peanuts, easy to get addicted to."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: peanuts
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUNuts
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMSpicedApples
+  name: "spiced apples"
+  description: "A bit dry pieces of apple in cinnamon spice, makes your mouth water, but still tasty."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: spiced_apples
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 9
+      reagents:
+      - ReagentId: CMUFruit
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMChocolateBrownie
+  name: "chocolate brownie"
+  description: "Coco filled cake base with a chocolate frosting on top, has a deep chocolate flavor."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: chocolate_brownie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: CocoaPowder
+        Quantity: 2
+      - ReagentId: RMCSprinkles
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMSugarCookie
+  name: "sugar cookie"
+  description: "Baked cookie frosted with a caramelized sugar."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: sugar_cookie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 9
+      reagents:
+      - ReagentId: Sugar
+        Quantity: 2
+      - ReagentId: CMUBread
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMCocoBar
+  name: "coco bar"
+  description: "Good old milk chocolate bar, goes well with hot drinks."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: coco_bar
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 14
+      reagents:
+      - ReagentId: CocoaPowder
+        Quantity: 5
+      - ReagentId: Milk
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 2
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMFlan
+  name: "flan"
+  description: "A soft milky biscuit pie."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: flan
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 13
+      reagents:
+      - ReagentId: Milk
+        Quantity: 1
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 2
+      - ReagentId: Egg
+        Quantity: 3
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMHoneyFlan
+  name: "honey flan"
+  description: "A soft milky biscuit pie, covered in honey topping."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: honey_flan
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMUHoney
+        Quantity: 3
+      - ReagentId: Milk
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 2
+      - ReagentId: Egg
+        Quantity: 3
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMLemonPie
+  name: "lemon pie"
+  description: "A creamy pie with a milky lemon filling and a thick crust."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: lemon_pie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 16
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: JuiceLemon
+        Quantity: 5
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 1
+      - ReagentId: Egg
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMKeyLimePie
+  name: "key lime pie"
+  description: "A creamy pie with a milky lime filling and a thick crust."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: key_lime_pie
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 16
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: JuiceLime
+        Quantity: 5
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 1
+      - ReagentId: Egg
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMBrigadeiroBalls
+  name: "brigadeiro balls"
+  description: "A traditional Brazillian dessert, made out of condensed milk, cocoa and butter, very soft and sugary in taste."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: brigadeiro_balls
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: Sugar
+        Quantity: 3
+      - ReagentId: CocoaPowder
+        Quantity: 4
+      - ReagentId: Egg
+        Quantity: 1
+
+- type: entity
+  parent: CMUMREFoodBase
+  id: CMUMREFoodUSCMStrawberryToasterPastry
+  name: "strawberry toaster pastry"
+  description: "A crunchy biscuit with a strawberry jam inside it, with a frosting on top."
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Consumable/MRE/mre_uscm.rsi
+    state: strawberry_toaster_pastry
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMUBread
+        Quantity: 2
+      - ReagentId: JuiceBerry
+        Quantity: 3
+      - ReagentId: Cream
+        Quantity: 2
+      - ReagentId: RMCSprinkles
+        Quantity: 2
+      - ReagentId: Egg
+        Quantity: 1

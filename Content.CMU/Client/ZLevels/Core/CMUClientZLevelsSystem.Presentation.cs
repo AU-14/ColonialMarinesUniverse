@@ -76,9 +76,19 @@ public sealed partial class CMUClientZLevelsSystem
         if (_renderingPresentation)
             throw new InvalidOperationException("World viewport renders must not be nested.");
 
+        var placementMode = _placement.CurrentMode;
+        var hidePlacement = placementMode != null && viewport.Eye is { } renderEye &&
+            (!TryComp(placementMode.MouseCoords.EntityId, out TransformComponent? placementTransform) ||
+                placementTransform.MapID != renderEye.Position.MapId);
+
         _renderingPresentation = true;
         try
         {
+            // Placement caches cursor coordinates between frames. Other floors must not use
+            // those coordinates with the main viewport's temporarily changed map.
+            if (hidePlacement)
+                _placement.CurrentMode = null;
+
             if (_config.GetCVar(CMUZLevelsCVars.Enabled) && viewport.Eye is { } eye)
             {
                 foreach (var (uid, _) in _presentationCandidates)
@@ -101,6 +111,9 @@ public sealed partial class CMUClientZLevelsSystem
         }
         finally
         {
+            if (hidePlacement)
+                _placement.CurrentMode = placementMode;
+
             foreach (var state in _spritePresentation)
             {
                 if (state.Sprite.Deleted)

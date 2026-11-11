@@ -37,6 +37,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
     private readonly int AddValue = 3;
     private readonly int MultAnomalous = 5;
     private readonly int MultRare = 3;
+    // x64 is as expensive as a repeat streak gets
+    private const int MaxStreakMultiplier = 64;
+    // the price doubles every 2.25 repeats: x1, 1, 2, 3, 3, 5, 6, 9, 12, 16...
+    private const double StreakDoublingRepeats = 2.25;
     public override void Initialize()
     {
         base.Initialize();
@@ -85,14 +89,12 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             if (targetCon.Count == 0 && reportComp.Data is not null)
             {
                 _con.Insert(args.Used, targetCon);
-                ent.Comp.Ready = CheckReady(ent);
             }
             else if ((ent.Comp.Mode == ChemSimulatorMode.Relate || ent.Comp.Mode == ChemSimulatorMode.Add) &&
                 referenceCon.Count == 0 && reportComp.Data is not null)
             {
                 ent.Comp.TargetProperty = null;
                 _con.Insert(args.Used, referenceCon);
-                ent.Comp.Ready = CheckReady(ent);
             }
             else
             {
@@ -110,6 +112,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             return;
         }
         UpdatePropertyCosts(ent);
+        ent.Comp.Ready = CheckReady(ent);
         ent.Comp.InsertTimeRemaining = ent.Comp.InsertTime;
         if (_net.IsClient)
             return;
@@ -201,7 +204,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             }
             if (ent.Comp.TargetProperty is not null && ent.Comp.Mode != ChemSimulatorMode.Add)
             {
-                if (ent.Comp.PropertyCosts[ent.Comp.TargetProperty] > _dat.GetCredits(_dat.GetFaction(ent.Owner)))
+                if (ent.Comp.PropertyCosts[ent.Comp.TargetProperty] > _dat.GetSampleData(_dat.GetFaction(ent.Owner)))
                 {
                     ent.Comp.StatusBar = Loc.GetString("research-sim-status-insufficient-funds");
                     Dirty(ent);
@@ -307,7 +310,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                         }
                         if (properties[ent.Comp.ReferenceProperty].Category.HasFlag(ReagentPropertyTypeEnum.Unadjustable))
                         {
-                            ent.Comp.StatusBar = Loc.GetString("reseach-sim-status-reference-unadjustable");
+                            ent.Comp.StatusBar = Loc.GetString("research-sim-status-reference-unadjustable");
                             Dirty(ent);
                             return false;
                         }
@@ -326,7 +329,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                     }
                     if (ent.Comp.Mode == ChemSimulatorMode.Add)
                     {
-                        if (ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] > _dat.GetCredits(_dat.GetFaction(ent.Owner)))
+                        if (ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] > _dat.GetSampleData(_dat.GetFaction(ent.Owner)))
                         {
                             ent.Comp.StatusBar = Loc.GetString("research-sim-status-insufficient-funds");
                             Dirty(ent);
@@ -344,7 +347,10 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
         }
         if (ent.Comp.Stage == ChemSimulatorStage.Off)
         {
-            ent.Comp.StatusBar = Loc.GetString("research-sim-status-ready");
+            // warn before they pay, a conflicting insert silently eats properties otherwise
+            ent.Comp.StatusBar = TryGetConflictWarning(ent, out var conflictWarning)
+                ? conflictWarning
+                : Loc.GetString("research-sim-status-ready");
         }
         Dirty(ent);
         return true;
@@ -454,8 +460,72 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                     ent.Comp.PropertyCosts[prop.Key] = Math.Max(ent.Comp.PropertyCosts[prop.Key] - 2, 1);
                 }
             }
+            ApplyRecipeDiscountAndStreak(ent);
         }
 
+    }
+
+    /// <summary>
+    /// Final cost adjustments, so the displayed cost is exactly what the server charges:
+    /// a Rare-or-better recipe pick takes one off (never free), then repeating the last paid
+    /// operation multiplies the price by <see cref="StreakMultiplier"/>.
+    /// </summary>
+    private void ApplyRecipeDiscountAndStreak(Entity<ChemSimulatorComponent> ent)
+    {
+        var discount = ent.Comp.PickedRecipeChem is not null &&
+            _protoman.GetInstances<ReagentPrototype>().TryGetValue(ent.Comp.PickedRecipeChem, out var picked) &&
+            picked.Class >= ReagentClass.Rare;
+        var key = GetOperationKey(ent);
+        var multiplier = key is not null && key == ent.Comp.LastOperation
+            ? StreakMultiplier(ent.Comp.OperationStreak)
+            : 1;
+        if (!discount && multiplier == 1)
+            return;
+        foreach (var prop in new List<string>(ent.Comp.PropertyCosts.Keys))
+        {
+            long cost = ent.Comp.PropertyCosts[prop];
+            if (discount)
+                cost = Math.Max(1, cost - 1); // never free: see ServerResearchDataTerminalSystem.SampleDataForSimulated
+            cost *= multiplier;
+            ent.Comp.PropertyCosts[prop] = (int)Math.Min(cost, int.MaxValue);
+        }
+    }
+
+    /// <summary>
+    /// The price multiplier after <paramref name="repeats"/> paid runs of the same operation in a row:
+    /// a stretched doubling, so six runs in a row cost x1, 1, 2, 3, 3, 5, capped at <see cref="MaxStreakMultiplier"/>.
+    /// </summary>
+    public static int StreakMultiplier(int repeats)
+    {
+        if (repeats <= 0)
+            return 1;
+        var multiplier = Math.Round(Math.Pow(2, repeats / StreakDoublingRepeats));
+        return (int) Math.Min(multiplier, MaxStreakMultiplier);
+    }
+
+    /// <summary>
+    /// Identifies an operation for repeat pricing: the root of the target's simulator lineage plus the mode,
+    /// so editing a simulated child the same way still counts as a repeat. Null without a usable target.
+    /// </summary>
+    public string? GetOperationKey(Entity<ChemSimulatorComponent> ent)
+    {
+        if (!_con.TryGetContainer(ent.Owner, "target", out var targetCon) || targetCon.Count == 0 ||
+            !TryComp<ResearchReportComponent>(targetCon.ContainedEntities[0], out var targcomp) ||
+            targcomp.Data is null || !targcomp.Completed)
+            return null;
+        var data = targcomp.Data.Value;
+        var root = string.IsNullOrEmpty(data.OriginalID) ? data.ID : data.OriginalID;
+        if (string.IsNullOrEmpty(root))
+            return null;
+        return root + ":" + ent.Comp.Mode;
+    }
+
+    /// <summary>
+    /// Recomputes <see cref="ChemSimulatorComponent.PropertyCosts"/> from the inserted reports, pick and streak.
+    /// </summary>
+    public void RefreshCosts(Entity<ChemSimulatorComponent> ent)
+    {
+        UpdatePropertyCosts(ent);
     }
     #region User Interface
     private void OnBuiOpened(Entity<ChemSimulatorComponent> ent, ref BoundUIOpenedEvent args)
@@ -500,7 +570,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             statusBar: ent.Comp.StatusBar,
             targprop: ent.Comp.TargetProperty,
             refprop: ent.Comp.ReferenceProperty,
-            credits: _dat.GetCredits(_dat.GetFaction(ent.Owner)),
+            sampleData: _dat.GetSampleData(_dat.GetFaction(ent.Owner)),
             overdose: ent.Comp.Overdose,
             recipePicked: ent.Comp.PickedRecipeChem,
             recipeOptions: ent.Comp.RecipeChemOptions,

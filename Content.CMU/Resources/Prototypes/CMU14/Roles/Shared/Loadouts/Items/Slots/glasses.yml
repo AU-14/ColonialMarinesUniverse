@@ -6,12 +6,14 @@
 
 - type: loadout
   id: GlassesSecurityHUDGlassesAU14
+  cost: 3
   storage:
     back:
     - RMCGlassesHUDSecurity
 
 - type: loadout
   id: GlassesReagentHUDGlassesAU14
+  cost: 3
   storage:
     back:
     - RMCGlassesReagentHUDGlasses

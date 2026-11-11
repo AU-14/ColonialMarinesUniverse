@@ -12,13 +12,31 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      230: Critical
-      330: Dead
+      270: Critical
+      360: Dead
     stateAlertDict:
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:  
+      maxVol: 600  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 300  
+      - ReagentId: CMUPathogenSporoplasmCatecholamine  
+        Quantity: 300  
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 1  
+      - ReagentId: CMUPathogenSporoplasmCatecholamine  
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenSprinter
     tier: 1
@@ -100,6 +118,11 @@
     stunMin: 4
     stunMax: 4
   - type: XenoDevour
+  - type: DamageEvasion
+    damageThreshold: 120
+    damageWindow: 3
+    evasionBonus: 75
+    evasionDuration: 4
   - type: RMCSize
     size: SmallXeno
   - type: TacticalMapIcon
@@ -120,6 +143,7 @@
     name: cmu-job-name-pathogen-sprinter
   - type: Speech
     speechSounds: Pathogen
+  - type: CMUXenoZJump
  
 - type: entity
   parent: CMU14XenoSprinterBase

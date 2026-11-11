@@ -140,6 +140,8 @@
 - type: reagent
   parent: CMUXenoPlasma
   id: CMUXenoPlasmaNutrient
+  # Nothing produces this plasma yet; keep it out of research contract pools until something does.
+  flags: NoGeneration
   name: reagent-name-nutrient-plasma
   desc: reagent-desc-nutrient-plasma
   color: "#2fbe88"

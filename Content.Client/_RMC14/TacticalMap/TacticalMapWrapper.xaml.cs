@@ -780,7 +780,7 @@ public sealed partial class TacticalMapWrapper : Control
         CooldownBar.MinValue = (float)LastUpdateAt.TotalSeconds;
         CooldownBar.MaxValue = (float)NextUpdateAt.TotalSeconds;
         CooldownBar.Value = (float)(LastUpdateAt.TotalSeconds + NextUpdateAt.TotalSeconds - time.CurTime.TotalSeconds);
-        CooldownLabel.Text = Loc.GetString("ui-tactical-map-cooldown-seconds", ("seconds", (int)cooldown.TotalSeconds));
+        CMUUpdateCooldownText((int) cooldown.TotalSeconds); // CMU14: only localize visible second changes.
     }
 
     private bool IsInQueenEyeMode()
@@ -942,7 +942,7 @@ public sealed partial class TacticalMapWrapper : Control
         SquadObjectivesContainer.Visible = true;
 
         // Clear existing labels
-        SquadObjectivesBox.DisposeAllChildren();
+        SquadObjectivesBox.ReleaseChildren();
 
         // Create a label for each objective type
         foreach (SquadObjectiveType objectiveType in Enum.GetValues<SquadObjectiveType>())

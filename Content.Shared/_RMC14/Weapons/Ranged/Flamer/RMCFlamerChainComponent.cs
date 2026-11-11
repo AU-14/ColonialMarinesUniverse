@@ -22,6 +22,26 @@ public sealed partial class RMCFlamerChainComponent : Component
     [DataField, AutoNetworkedField]
     public ProtoId<ReagentPrototype> Reagent = "RMCNapalmUT";
 
+    // CMU14 start - fire sizing from the blended fuel profile; 0 falls back to the reagent's own stats.
+    [DataField, AutoNetworkedField]
+    public int Intensity;
+
+    [DataField, AutoNetworkedField]
+    public int Duration;
+
+    /// <summary>Blend carries enough Firepenetrating fuel for its fires to ignore heat resistance.</summary>
+    [DataField, AutoNetworkedField]
+    public bool FirePenetrating;
+
+    /// <summary>FLOW-22: Firepenetrating level of the blend (structure melting from 3); the bool counts as 1.</summary>
+    [DataField, AutoNetworkedField]
+    public int PenetrationLevel;
+
+    /// <summary>FLOW-22: tile creep rule of the blend, see <c>CMUFireSpec.SpreadDepth</c>.</summary>
+    [DataField, AutoNetworkedField]
+    public int SpreadDepth;
+    // CMU14 end
+
     [DataField, AutoNetworkedField]
     public int MaxIntensity = 20;
 

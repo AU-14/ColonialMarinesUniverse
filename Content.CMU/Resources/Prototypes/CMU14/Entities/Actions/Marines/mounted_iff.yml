@@ -1,0 +1,17 @@
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionMountedIFF
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/iff_toggle_actions.rsi
+      state: iff_toggle_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/iff_toggle_actions.rsi
+      state: iff_toggle_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  - type: InstantAction
+    event: !type:CMUToggleMountedIFFActionEvent

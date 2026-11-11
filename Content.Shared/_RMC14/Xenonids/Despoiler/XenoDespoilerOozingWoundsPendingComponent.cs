@@ -11,6 +11,7 @@ public sealed partial class XenoDespoilerOozingWoundsPendingComponent : Componen
 
 public struct XenoDespoilerOozingWoundsPendingTile
 {
+    public required HashSet<EntityUid> HitTargets; // CMU14: shared by every delayed tile of one cast.
     public TimeSpan SpawnAt;
     public EntityCoordinates Tile;
     public EntProtoId SprayProto;

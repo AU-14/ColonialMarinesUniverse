@@ -24,6 +24,7 @@ public static partial class PoolManager
         (CCVars.HolidaysEnabled.Name,         "false"),
         (CCVars.GameMap.Name,                 TestMap),
         (CCVars.AdminLogsQueueSendDelay.Name, "0"),
+        (CCVars.DropshipJamChance.Name,       "0"), // CMU14: random CAS stoppages would make weapon tests flaky
         (CCVars.NPCMaxUpdates.Name,           "999999"),
         (CCVars.GameRoleTimers.Name,          "false"),
         (CCVars.GameRoleLoadoutTimers.Name,   "false"),
@@ -45,5 +46,7 @@ public static partial class PoolManager
         (CMUBalanceRatingCVars.AutomaticEnabled.Name, "false"),
         // Tests that exercise automatic hunts opt in; pooled round restarts must not load extra maps.
         (YautjaPredatorRoundCVars.RandomEnabled.Name, "false"),
+        // CMU14: perf heartbeats flood pooled test logs (~1k lines a shard) and no test reads them
+        (CCVars.CMUServerPerformanceHeartbeatInterval.Name, "0"),
     };
 }

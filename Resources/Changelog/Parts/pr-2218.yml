@@ -1,0 +1,117 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Auto ignore incompatible traits option.
+  type: Add
+- message: Regulation barber's scissors for MPs and advisors. They only offer regulation
+    haircuts and the regulation colour list.
+  type: Add
+- message: Setting to vault over ledges and railings by walking into them.
+  type: Add
+- message: Setting for tile movement only while walking.
+  type: Add
+- message: Setting to stay down when resting, so others can't shake you up while you're
+    lying down for RP purposes.
+  type: Add
+- message: Sleeping darkens your screen properly now.
+  type: Add
+- message: Desk and wall phones can now be relabelled with a screwdriver.
+  type: Add
+- message: Health scanners show an allergic reaction while it's happening.
+  type: Add
+- message: You can now pick a specific drug allergy in the new Drug Allergy trait
+    section or take the Random Drug Allergy like before.
+  type: Add
+- message: Added new traits Fear of Heights, Fear of Water, Can't Swim, Clumsy, Heavy
+    Sleeper, Slow Thinker, and Mute.
+  type: Add
+- message: Iron Teeth and Clumsy are in a new Quirks trait section.
+  type: Add
+- message: Combat gloves can now be cut into fingerless gloves with a knife or wirecutters.
+  type: Add
+- message: Added Pepper spray and pepper spray antidote. Pepper spray burns the eyes,
+    tints and blurs your vision, builds up pain and slows you with each spray. Clicking
+    away from a person sprays a 2 tile cloud that hits anyone in it. Both refill from
+    chemistry. Gas masks block it, face coverings halve it, police training gives
+    increased tolerance, splashing water in your eyes helps wash it out. Corporate
+    liaison, colony and corporate administrator, deputy administrator and all ambassadors
+    spawn with pepper spray. Pepper spray can also be found in Law Enforcement vendors.
+  type: Add
+- message: Portable press fax machine for the journalist (ported from CM-SS13).
+  type: Add
+- message: Overwatch camera feeds have a night vision toggle.
+  type: Add
+- message: Motion detectors ping for movement on the level above or below, though
+    do not show a blip.
+  type: Add
+- message: You can look up through grates and can no-longer look up through destroyable
+    roofs.
+  type: Fix
+- message: Someone leaning against a wall can give others a boost up to the level
+    above via a verb.
+  type: Add
+- message: Fire extinguisher spray washes away despoiler lingering acid.
+  type: Add
+- message: Boonie hats and caps now have the same storage as helmets and a visual
+    garb slot (ported from CM-SS13).
+  type: Add
+- message: Added open air attmos tile for mappers.
+  type: Add
+- message: Platoons can now swap starting gear for their own versions. LACN engineers,
+    logistics, nurses and doctors now spawn in their proper gear and CMB CIU, Prodigy,
+    WY PMC and UPP now spawn with their own satchels.
+  type: Add
+- message: FOB security squads get two rifleman slots.
+  type: Tweak
+- message: LACN NV-2 aircrew goggles now work.
+  type: Tweak
+- message: GOVFOR/OPFOR can now pull up four vehicles from their platoon's list. One
+    tank, one VTOL/APC/armed light vehicle, one unarmed support vehicle and one fighter.
+  type: Tweak
+- message: Ambassadors can now only call in 3 third parties at most, at least 30 minutes
+    apart. Call-ins now cost more across all ambassadors.
+  type: Tweak
+- message: CLF reinforcements can be bought 3 times at most now.
+  type: Tweak
+- message: Colony and corporate administrator call-ins cost 10% more and are limited
+    to 3 per round, atleast 20 minutes apart.
+  type: Tweak
+- message: Regular sized and bigger xenos aren't affected by dropship turbulence anymore.
+  type: Tweak
+- message: Rail flashlights are now free in the equipment vendor.
+  type: Tweak
+- message: Fingerless gloves are no longer sold in vendors as you can now turn normal
+    gloves into them with a knife.
+  type: Tweak
+- message: Everyone paid into a bank account sees their account number and PIN in
+    the character menu, in any game mode.
+  type: Tweak
+- message: Cassette pouches are now tiny and fit in helmets.
+  type: Tweak
+- message: Automatic rifleman and special weapons vendors now only open for the role
+    that uses them.
+  type: Tweak
+- message: HAZOPS gas masks, filters and oxygen are moved to the equipment vendor
+    like other platoons.
+  type: Tweak
+- message: Evidence marker boxes now fit in satchels and only hold evidence markers.
+  type: Tweak
+- message: HEDP and HEFA grenades no longer detonate on impact.
+  type: Tweak
+- message: Overwatch camera feeds have a much lighter VHS effect.
+  type: Tweak
+- message: Popups copied to chat only include ones you can see, show in italics like
+    emotes and now skip most unnecessary information pop-ups.
+  type: Tweak
+- message: Combat hearing protection counts ear protection worn on either ear.
+  type: Fix
+- message: Polyglot's description explains what it does. Language Impairment is in
+    the Languages section and gives a language point now.
+  type: Tweak
+- message: You can't lay tiles over open air on upper levels to build bridges anymore.
+  type: Fix
+- message: The vehicle lift is no longer a chasm that swallows vehicles the second
+    they spawn.
+  type: Fix
+time: '2026-10-18T13:54:52.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2218

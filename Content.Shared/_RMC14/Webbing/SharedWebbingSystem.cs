@@ -215,7 +215,7 @@ public abstract partial class SharedWebbingSystem : EntitySystem
                 handled = true;
 
                 if (user != null)
-                    _popup.PopupClient(Loc.GetString("rmc-webbing-cannot-in-storage"), user, PopupType.LargeCaution);
+                    _popup.PopupSelf(Loc.GetString("rmc-webbing-cannot-in-storage"), user, PopupType.LargeCaution);
 
                 return false;
             }
@@ -230,7 +230,7 @@ public abstract partial class SharedWebbingSystem : EntitySystem
                         handled = true;
 
                         if (user != null)
-                            _popup.PopupClient(Loc.GetString("rmc-webbing-cannot-wear-with-webbing"), webbing, user, PopupType.SmallCaution);
+                            _popup.PopupEntity(Loc.GetString("rmc-webbing-cannot-wear-with-webbing"), webbing, user, PopupType.SmallCaution);
                         return false;
                     }
                 }

@@ -8,6 +8,7 @@ using Content.Shared.Audio;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Fighter;
+using Content.Shared.CMU14.ThreeD;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
@@ -16,6 +17,7 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Fighter;
@@ -41,6 +43,8 @@ public sealed partial class FighterSystem : EntitySystem
         SubscribeLocalEvent<FighterSeatComponent, StrappedEvent>(OnStrapped);
         SubscribeLocalEvent<FighterSeatComponent, UnstrappedEvent>(OnUnstrapped);
         SubscribeLocalEvent<FighterSeatComponent, ComponentShutdown>(OnSeatShutdown);
+        SubscribeLocalEvent<CMUFighterCameraOwnerComponent, EntityTerminatingEvent>(OnCameraTerminating);
+        SubscribeLocalEvent<CMUFighterPartOwnerComponent, EntityTerminatingEvent>(OnPartTerminating);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnFighterRoundCleanup);
@@ -60,12 +64,28 @@ public sealed partial class FighterSystem : EntitySystem
         SubscribeLocalEvent<FighterAircraftComponent, ComponentShutdown>(OnAircraftShutdown);
     }
 
-    public Entity<FighterAircraftComponent> CreateAircraft(EntityUid terrain, Vector2 home)
+    private CMUFighterAirframePrototype Airframe(EntityUid entity) =>
+        ProtoMan.Index(CompOrNull<CMUFighterAppearanceComponent>(entity)?.Airframe ?? CMUFighterAirframePrototype.Default);
+
+    private void SetAirframe(EntityUid entity, ProtoId<CMUFighterAirframePrototype> airframe)
     {
+        var appearance = EnsureComp<CMUFighterAppearanceComponent>(entity);
+        appearance.Airframe = airframe;
+        Dirty(entity, appearance);
+    }
+
+    public Entity<FighterAircraftComponent> CreateAircraft(EntityUid terrain, Vector2 home,
+        ProtoId<CMUFighterAirframePrototype>? airframe = null)
+    {
+        var definition = ProtoMan.Index(airframe ?? CMUFighterAirframePrototype.Default);
         // A station's largest grid can be a roof level. Always locate the ground map first.
         while (TryComp(terrain, out CMUZLevelMapComponent? upper) && upper.Depth > 0 && upper.MapBelow is { } below)
             terrain = below;
         var cockpitMap = _map.CreateMap(out var cockpitId, runMapInit: true);
+        AddComp<CMU3DVehicleCabinComponent>(cockpitMap);
+        // The cockpit's terrain association is fixed for its lifetime.
+        if (HasComp<CMU3DMapComponent>(terrain))
+            AddComp<CMU3DMapComponent>(cockpitMap);
         var backdrop = EnsureComp<ParallaxComponent>(cockpitMap);
         backdrop.Parallax = "CMUFighterEmpty";
         Dirty(cockpitMap, backdrop);
@@ -74,9 +94,10 @@ public sealed partial class FighterSystem : EntitySystem
         atmosphere.SetMoles(Gas.Nitrogen, 82.10312f);
         _atmos.SetMapAtmosphere(cockpitMap, false, atmosphere);
         var grid = _map.CreateGridEntity(cockpitId);
+        SetAirframe(grid, definition.ID);
         var floor = new Tile(_tiles["RMCFloorVehicleInteriorDarkSterile"].TileId);
         for (var x = -7; x <= 7; x++)
-        for (var y = -5; y <= 6; y++)
+        for (var y = -5; y <= Math.Max(6, (int) Math.Ceiling(definition.PilotOffset.Y) + 1); y++)
             _map.SetTile(grid.Owner, grid.Comp, new Vector2i(x, y), floor);
 
         var aircraft = AddComp<FighterAircraftComponent>(grid);
@@ -90,13 +111,18 @@ public sealed partial class FighterSystem : EntitySystem
         aircraft.Exit = aircraft.Home - new Vector2(0, aircraft.Battlefield.Height / 2 + 12);
         // Spawn coordinates override prototype rotation, so orient every physical part explicitly.
         var forward = new Angle(Math.PI);
-        aircraft.Hull = SpawnAttachedTo("CMUFighterHull", new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
-        aircraft.Canopy = SpawnAttachedTo("CMUFighterCanopy", new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
+        aircraft.Hull = SpawnAttachedTo(definition.Hull, new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
+        aircraft.Canopy = SpawnAttachedTo(definition.Canopy, new EntityCoordinates(grid, new Vector2(.5f, 0)), rotation: forward);
         SpawnAttachedTo("AU14VehicleRadioSet", new EntityCoordinates(grid, new Vector2(1.5f, 3.5f)));
         // Scale the narrow canopy and its seats together to fit ordinary crew,
         // without changing the players' own sprite scale.
-        aircraft.FrontSeat = SpawnAttachedTo("CMUFighterPilotSeat", new EntityCoordinates(grid, new Vector2(.5f, 4.2f)), rotation: forward);
-        aircraft.RearSeat = SpawnAttachedTo("CMUFighterObserverSeat", new EntityCoordinates(grid, new Vector2(.5f, 2.1f)), rotation: forward);
+        aircraft.FrontSeat = SpawnAttachedTo(definition.PilotSeat, new EntityCoordinates(grid, new Vector2(.5f, 0) + definition.PilotOffset), rotation: forward);
+        aircraft.RearSeat = SpawnAttachedTo(definition.ObserverSeat, new EntityCoordinates(grid, new Vector2(.5f, 0) + definition.ObserverOffset), rotation: forward);
+        foreach (var part in new[] { aircraft.Hull.Value, aircraft.Canopy.Value, aircraft.FrontSeat.Value, aircraft.RearSeat.Value })
+        {
+            AddComp<CMUFighterPartOwnerComponent>(part).Aircraft = grid;
+            SetAirframe(part, definition.ID);
+        }
         foreach (var seat in new[] { aircraft.FrontSeat.Value, aircraft.RearSeat.Value })
         {
             var component = Comp<FighterSeatComponent>(seat);
@@ -148,18 +174,9 @@ public sealed partial class FighterSystem : EntitySystem
         seat.Comp.Input = FighterInput.None;
         seat.Comp.SensorFocus = null;
         seat.Comp.LastInput = _timing.CurTime;
-        var camera = Spawn("CMUFighterCamera", Transform(seat).Coordinates);
-        seat.Comp.Camera = camera;
-        _zLevels.EnsureZLevelViewer(camera);
-        var exterior = Spawn("CMUFighterCamera", Transform(seat).Coordinates);
-        seat.Comp.ExteriorCamera = exterior;
-        _zLevels.EnsureZLevelViewer(exterior);
+        EnsureSeatCameras(seat);
         if (TryComp(args.Buckle.Owner, out ActorComponent? actor))
-        {
             _views.AddViewSubscriber(aircraftUid, actor.PlayerSession);
-            _views.AddViewSubscriber(camera, actor.PlayerSession);
-            _views.AddViewSubscriber(exterior, actor.PlayerSession);
-        }
         UpdateCamera(seat, aircraft);
         if (aircraft.GroundEntity is { } ground && TryComp(ground, out FighterGroundComponent? groundComp))
             UpdateTaxiOperator((ground, groundComp), (aircraftUid, aircraft));
@@ -172,12 +189,17 @@ public sealed partial class FighterSystem : EntitySystem
         ExitGroundSeat(seat, args.Buckle.Owner);
         ClearSeat(seat);
     }
-    private void OnSeatShutdown(Entity<FighterSeatComponent> seat, ref ComponentShutdown args) => ClearSeat(seat);
+    private void OnSeatShutdown(Entity<FighterSeatComponent> seat, ref ComponentShutdown args)
+    {
+        _seatNetworkState.Remove(seat);
+        ClearSeat(seat);
+    }
 
     private void OnPlayerAttached(PlayerAttachedEvent ev)
     {
         if (!TryGetSeat(ev.Entity, out var seat, out _, requireConscious: false))
             return;
+        EnsureSeatCameras(seat);
         if (seat.Comp.Camera is { } camera) _views.AddViewSubscriber(camera, ev.Player);
         if (seat.Comp.Aircraft is { } aircraft) _views.AddViewSubscriber(aircraft, ev.Player);
         if (seat.Comp.ExteriorCamera is { } exterior) _views.AddViewSubscriber(exterior, ev.Player);
@@ -270,8 +292,8 @@ public sealed partial class FighterSystem : EntitySystem
         var player = seat.Comp.Occupant!.Value;
         switch (ev.Command)
         {
-            case FighterCommand.FormUp:
-                TryFormUp(player);
+            case FighterCommand.ProgramGuidance:
+                EntityManager.System<Content.Shared.CMU14.Guidance.CMUGuidanceSystem>().Open(seat, player);
                 break;
             case FighterCommand.ConfirmEject:
                 TryConfirmEjection(player);
@@ -445,10 +467,10 @@ public sealed partial class FighterSystem : EntitySystem
                         UpdateLaser((seat, component), (uid, aircraft), weapons);
                         UpdateQueuedFire((seat, component), (uid, aircraft), weapons);
                     }
-                    Dirty(seat, component);
+                    DirtySeatChanges((seat, component));
                 }
             }
-            Dirty(uid, aircraft);
+            DirtyAircraftChanges((uid, aircraft));
         }
         UpdateAirCombat();
         UpdateFighterSpectators();
@@ -460,6 +482,7 @@ public sealed partial class FighterSystem : EntitySystem
 
     private void UpdateCamera(Entity<FighterSeatComponent> seat, FighterAircraftComponent aircraft)
     {
+        EnsureSeatCameras(seat);
         if (seat.Comp.Camera is not { } camera || TerminatingOrDeleted(camera))
             return;
         if (FighterFlight.GroundScene(aircraft) && aircraft.GroundEntity is { } ground && Transform(ground).MapUid != null)

@@ -1,0 +1,2569 @@
+[
+  {
+    "level": -2,
+    "elevation": {
+      "profiles": 1,
+      "elevatedTiles": 1550,
+      "elevatedEntities": 1760,
+      "fittedStairTiles": 51
+    },
+    "heightCounts": {
+      "0.0": 3163,
+      "-0.39": 1196,
+      "0.39": 226,
+      "0.78": 9,
+      "-0.78": 55,
+      "-0.13": 5,
+      "-0.26": 5,
+      "0.325": 6,
+      "0.26": 6,
+      "-0.0975": 8,
+      "-0.195": 8,
+      "-0.2925": 8,
+      "0.065": 6,
+      "0.13": 6,
+      "0.195": 6
+    },
+    "stairIssues": {},
+    "thresholdRamps": [],
+    "nonExactStructuralPrototypes": {
+      "CMUFogWallLamentWaterfallMist": 11
+    },
+    "unresolvedStairs": [],
+    "conflictingLinks": []
+  },
+  {
+    "level": -1,
+    "elevation": {
+      "profiles": 1,
+      "elevatedTiles": 1451,
+      "elevatedEntities": 2064,
+      "fittedStairTiles": 29
+    },
+    "heightCounts": {
+      "0.0": 4359,
+      "0.39": 183,
+      "-0.39": 1193,
+      "-0.78": 63,
+      "-0.52": 5,
+      "-0.65": 7
+    },
+    "stairIssues": {
+      "same region at both ends": 2,
+      "multi-Z transition": 3
+    },
+    "thresholdRamps": [],
+    "nonExactStructuralPrototypes": {
+      "CMUFogWallLamentWaterfallMist": 22
+    },
+    "unresolvedStairs": [
+      {
+        "id": 8335,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          180,
+          -104
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 11,
+        "high": 11,
+        "before": [],
+        "after": [],
+        "issue": "same region at both ends"
+      },
+      {
+        "id": 8336,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          181,
+          -104
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 11,
+        "high": 11,
+        "before": [],
+        "after": [],
+        "issue": "same region at both ends"
+      },
+      {
+        "id": 10261,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          270,
+          -62
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 61,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 12443,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          270,
+          -63
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 61,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 12444,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          270,
+          -64
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 61,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      }
+    ],
+    "conflictingLinks": []
+  },
+  {
+    "level": 0,
+    "elevation": {
+      "profiles": 1,
+      "elevatedTiles": 17908,
+      "elevatedEntities": 12113,
+      "fittedStairTiles": 171
+    },
+    "heightCounts": {
+      "-0.39": 7645,
+      "0.0": 27875,
+      "0.39": 8279,
+      "0.78": 1803,
+      "1.17": 82,
+      "1.56": 38,
+      "-0.78": 28,
+      "0.585": 7,
+      "0.195": 8,
+      "0.0975": 4,
+      "0.2925": 4,
+      "-0.13": 4,
+      "-0.26": 6
+    },
+    "stairIssues": {
+      "multi-Z transition": 52,
+      "blocked landing": 24
+    },
+    "thresholdRamps": [
+      {
+        "door": 1328,
+        "tile": [
+          247,
+          -123
+        ],
+        "bottom": 0.0,
+        "top": 0.39
+      },
+      {
+        "door": 2794,
+        "tile": [
+          234,
+          -50
+        ],
+        "bottom": 0.0,
+        "top": 0.39
+      },
+      {
+        "door": 2814,
+        "tile": [
+          278,
+          -113
+        ],
+        "bottom": 0.0,
+        "top": 0.39
+      },
+      {
+        "door": 2848,
+        "tile": [
+          52,
+          -23
+        ],
+        "bottom": 0.0,
+        "top": 0.39
+      },
+      {
+        "door": 2849,
+        "tile": [
+          52,
+          -24
+        ],
+        "bottom": 0.0,
+        "top": 0.39
+      },
+      {
+        "door": 2866,
+        "tile": [
+          204,
+          -66
+        ],
+        "bottom": 0.0,
+        "top": 0.39
+      },
+      {
+        "door": 2868,
+        "tile": [
+          204,
+          -67
+        ],
+        "bottom": 0.0,
+        "top": 0.39
+      }
+    ],
+    "nonExactStructuralPrototypes": {
+      "RMCAirlockHybrisaPersonal": 1
+    },
+    "unresolvedStairs": [
+      {
+        "id": 364,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          219,
+          -93
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 365,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          219,
+          -94
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 396,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          221,
+          -93
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 213,
+        "high": null,
+        "before": [
+          [
+            222,
+            -93
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 399,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          221,
+          -92
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 213,
+        "high": null,
+        "before": [
+          [
+            222,
+            -92
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 427,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          168,
+          -82
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 162,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 429,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          168,
+          -81
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 162,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 442,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          219,
+          -92
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 444,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          221,
+          -94
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 213,
+        "high": null,
+        "before": [
+          [
+            222,
+            -94
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 446,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          222,
+          -94
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 213,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            221,
+            -94
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 447,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          222,
+          -93
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 213,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            221,
+            -93
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 448,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          222,
+          -92
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 213,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            221,
+            -92
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 1209,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          283,
+          -103
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 308,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            282,
+            -103
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 1210,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          282,
+          -101
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 308,
+        "high": null,
+        "before": [
+          [
+            283,
+            -101
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 1211,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          282,
+          -103
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 308,
+        "high": null,
+        "before": [
+          [
+            283,
+            -103
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 1403,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          283,
+          -101
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 308,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            282,
+            -101
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 1405,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          283,
+          -102
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 308,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            282,
+            -102
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 2915,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          175,
+          -160
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 152,
+        "high": null,
+        "before": [
+          [
+            174,
+            -160
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 4142,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          282,
+          -102
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 308,
+        "high": null,
+        "before": [
+          [
+            283,
+            -102
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 6382,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          231,
+          -129
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 6642,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          174,
+          -158
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 152,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            175,
+            -158
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 6644,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          175,
+          -158
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 152,
+        "high": null,
+        "before": [
+          [
+            174,
+            -158
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 12390,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          174,
+          -159
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 152,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            175,
+            -159
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 12399,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          175,
+          -159
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 152,
+        "high": null,
+        "before": [
+          [
+            174,
+            -159
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 12400,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          174,
+          -160
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 152,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            175,
+            -160
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13122,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          182,
+          -111
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13123,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          180,
+          -114
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            180,
+            -113
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13124,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          181,
+          -112
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [
+          [
+            181,
+            -113
+          ],
+          [
+            181,
+            -114
+          ]
+        ],
+        "after": [
+          [
+            181,
+            -111
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13125,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          182,
+          -114
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            182,
+            -113
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13126,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          182,
+          -113
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [
+          [
+            182,
+            -114
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13138,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          180,
+          -111
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13139,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          180,
+          -112
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [
+          [
+            180,
+            -113
+          ],
+          [
+            180,
+            -114
+          ]
+        ],
+        "after": [
+          [
+            180,
+            -111
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13140,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          181,
+          -111
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13141,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          182,
+          -112
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [
+          [
+            182,
+            -113
+          ],
+          [
+            182,
+            -114
+          ]
+        ],
+        "after": [
+          [
+            182,
+            -111
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13142,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          181,
+          -114
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            181,
+            -113
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13143,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          181,
+          -113
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [
+          [
+            181,
+            -114
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 13144,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          180,
+          -113
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 163,
+        "high": null,
+        "before": [
+          [
+            180,
+            -114
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 14103,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          228,
+          -128
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 215,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            229,
+            -128
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 14106,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          228,
+          -129
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 215,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            229,
+            -129
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 14108,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          230,
+          -128
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 215,
+        "high": null,
+        "before": [
+          [
+            229,
+            -128
+          ],
+          [
+            228,
+            -128
+          ]
+        ],
+        "after": [
+          [
+            231,
+            -128
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 14111,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          231,
+          -128
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 14113,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          229,
+          -128
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 215,
+        "high": null,
+        "before": [
+          [
+            228,
+            -128
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 14114,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          229,
+          -129
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 215,
+        "high": null,
+        "before": [
+          [
+            228,
+            -129
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 14175,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          230,
+          -129
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 215,
+        "high": null,
+        "before": [
+          [
+            229,
+            -129
+          ],
+          [
+            228,
+            -129
+          ]
+        ],
+        "after": [
+          [
+            231,
+            -129
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 16716,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          155,
+          -147
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 1,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16740,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          200,
+          -75
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 188,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            200,
+            -74
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 16741,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          200,
+          -74
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 188,
+        "high": null,
+        "before": [
+          [
+            200,
+            -75
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 16742,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          201,
+          -72
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 16743,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          201,
+          -75
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 188,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            201,
+            -74
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 16745,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          201,
+          -74
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": 188,
+        "high": null,
+        "before": [
+          [
+            201,
+            -75
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 16747,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          200,
+          -72
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 16762,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          235,
+          -51
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 240,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16767,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          240,
+          -67
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": 1,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16781,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          202,
+          -145
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 1,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16800,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          46,
+          -179
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            45,
+            -179
+          ],
+          [
+            44,
+            -179
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16808,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          46,
+          -178
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            45,
+            -178
+          ],
+          [
+            44,
+            -178
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16809,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          44,
+          -179
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            45,
+            -179
+          ],
+          [
+            46,
+            -179
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16810,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          45,
+          -178
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            46,
+            -178
+          ]
+        ],
+        "after": [
+          [
+            44,
+            -178
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16811,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          46,
+          -177
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            45,
+            -177
+          ],
+          [
+            44,
+            -177
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16812,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          44,
+          -178
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            45,
+            -178
+          ],
+          [
+            46,
+            -178
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16813,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          45,
+          -179
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            46,
+            -179
+          ]
+        ],
+        "after": [
+          [
+            44,
+            -179
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16814,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          45,
+          -177
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            46,
+            -177
+          ]
+        ],
+        "after": [
+          [
+            44,
+            -177
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16815,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          44,
+          -177
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            45,
+            -177
+          ],
+          [
+            46,
+            -177
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16820,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          167,
+          -78
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 156,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 16821,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          167,
+          -77
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 156,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 21495,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          68,
+          -24
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 80,
+        "high": null,
+        "before": [
+          [
+            67,
+            -24
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 21496,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          67,
+          -25
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 80,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            68,
+            -25
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 21498,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          68,
+          -23
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 80,
+        "high": null,
+        "before": [
+          [
+            67,
+            -23
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 36442,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          70,
+          -24
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 37456,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          70,
+          -25
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 37516,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          67,
+          -23
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 80,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            68,
+            -23
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 37518,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          67,
+          -24
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 80,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            68,
+            -24
+          ]
+        ],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 37519,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          68,
+          -25
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": 80,
+        "high": null,
+        "before": [
+          [
+            67,
+            -25
+          ]
+        ],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 37520,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          70,
+          -23
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [],
+        "issue": "multi-Z transition"
+      },
+      {
+        "id": 84867,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          272,
+          -62
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 284,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 84868,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          272,
+          -63
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 284,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 84869,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          272,
+          -64
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 284,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      }
+    ],
+    "conflictingLinks": [
+      {
+        "lowRegion": 52,
+        "highRegion": 54,
+        "requestedRise": 0.0,
+        "resolvedRise": 0.39,
+        "votes": 0.02
+      },
+      {
+        "lowRegion": 188,
+        "highRegion": 194,
+        "requestedRise": 0.0,
+        "resolvedRise": 0.39,
+        "votes": 0.02
+      },
+      {
+        "lowRegion": 194,
+        "highRegion": 241,
+        "requestedRise": 0.0,
+        "resolvedRise": -0.39,
+        "votes": 0.01
+      },
+      {
+        "lowRegion": 249,
+        "highRegion": 255,
+        "requestedRise": 0.0,
+        "resolvedRise": 0.39,
+        "votes": 0.01
+      },
+      {
+        "lowRegion": 283,
+        "highRegion": 300,
+        "requestedRise": 0.0,
+        "resolvedRise": 0.39,
+        "votes": 0.01
+      }
+    ]
+  },
+  {
+    "level": 1,
+    "elevation": {
+      "profiles": 1,
+      "elevatedTiles": 277,
+      "elevatedEntities": 376,
+      "fittedStairTiles": 14
+    },
+    "heightCounts": {
+      "0.0": 9259,
+      "-0.39": 250,
+      "-0.78": 17,
+      "-0.195": 7,
+      "-0.585": 3
+    },
+    "stairIssues": {
+      "blocked landing": 27
+    },
+    "thresholdRamps": [],
+    "nonExactStructuralPrototypes": {},
+    "unresolvedStairs": [
+      {
+        "id": 32,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          220,
+          -94
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": 106,
+        "before": [],
+        "after": [
+          [
+            219,
+            -94
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 33,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          220,
+          -93
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": 106,
+        "before": [],
+        "after": [
+          [
+            219,
+            -93
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 34,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          219,
+          -93
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": 106,
+        "before": [
+          [
+            220,
+            -93
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 35,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          219,
+          -94
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": 106,
+        "before": [
+          [
+            220,
+            -94
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 36,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          220,
+          -92
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": 106,
+        "before": [],
+        "after": [
+          [
+            219,
+            -92
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 37,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          219,
+          -92
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": 106,
+        "before": [
+          [
+            220,
+            -92
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 44,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          70,
+          -24
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 1,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 45,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          70,
+          -25
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 1,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 46,
+        "prototype": "AU14FlightStairs",
+        "tile": [
+          70,
+          -23
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 1,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 2730,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          231,
+          -129
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 109,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 2731,
+        "prototype": "RMCAlmayerStairs",
+        "tile": [
+          231,
+          -128
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 109,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 2732,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          182,
+          -111
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": 79,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 2733,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          180,
+          -111
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": 79,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 2734,
+        "prototype": "RMCAlmayerStairsTop",
+        "tile": [
+          181,
+          -111
+        ],
+        "direction": [
+          0,
+          1
+        ],
+        "low": null,
+        "high": 79,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4254,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          177,
+          -158
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 78,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4255,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          177,
+          -160
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 78,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4259,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          46,
+          -179
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            45,
+            -179
+          ],
+          [
+            44,
+            -179
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4260,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          46,
+          -178
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            45,
+            -178
+          ],
+          [
+            44,
+            -178
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4261,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          44,
+          -179
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            45,
+            -179
+          ],
+          [
+            46,
+            -179
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4262,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          45,
+          -178
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            46,
+            -178
+          ]
+        ],
+        "after": [
+          [
+            44,
+            -178
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4263,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          46,
+          -177
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [],
+        "after": [
+          [
+            45,
+            -177
+          ],
+          [
+            44,
+            -177
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4264,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          44,
+          -178
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            45,
+            -178
+          ],
+          [
+            46,
+            -178
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4265,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          45,
+          -179
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            46,
+            -179
+          ]
+        ],
+        "after": [
+          [
+            44,
+            -179
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4266,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          45,
+          -177
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            46,
+            -177
+          ]
+        ],
+        "after": [
+          [
+            44,
+            -177
+          ]
+        ],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4267,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          44,
+          -177
+        ],
+        "direction": [
+          -1,
+          0
+        ],
+        "low": null,
+        "high": null,
+        "before": [
+          [
+            45,
+            -177
+          ],
+          [
+            46,
+            -177
+          ]
+        ],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4271,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          177,
+          -159
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 78,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      },
+      {
+        "id": 4272,
+        "prototype": "RMCHybrisaStairs",
+        "tile": [
+          168,
+          -79
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "low": null,
+        "high": 72,
+        "before": [],
+        "after": [],
+        "issue": "blocked landing"
+      }
+    ],
+    "conflictingLinks": []
+  },
+  {
+    "level": 2,
+    "elevation": {
+      "profiles": 1,
+      "elevatedTiles": 399,
+      "elevatedEntities": 245,
+      "fittedStairTiles": 0
+    },
+    "heightCounts": {
+      "0.0": 4694,
+      "0.39": 382,
+      "-0.39": 17
+    },
+    "stairIssues": {},
+    "thresholdRamps": [],
+    "nonExactStructuralPrototypes": {},
+    "unresolvedStairs": [],
+    "conflictingLinks": []
+  },
+  {
+    "level": 3,
+    "elevation": {
+      "profiles": 1,
+      "elevatedTiles": 0,
+      "elevatedEntities": 0,
+      "fittedStairTiles": 0
+    },
+    "heightCounts": {
+      "0.0": 25
+    },
+    "stairIssues": {},
+    "thresholdRamps": [],
+    "nonExactStructuralPrototypes": {},
+    "unresolvedStairs": [],
+    "conflictingLinks": []
+  },
+  {
+    "level": 4,
+    "elevation": {
+      "profiles": 1,
+      "elevatedTiles": 0,
+      "elevatedEntities": 0,
+      "fittedStairTiles": 0
+    },
+    "heightCounts": {
+      "0.0": 25
+    },
+    "stairIssues": {},
+    "thresholdRamps": [],
+    "nonExactStructuralPrototypes": {},
+    "unresolvedStairs": [],
+    "conflictingLinks": []
+  }
+]

@@ -42,3 +42,24 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUToggleZLevelLookUpAction
+
+# Zero-g aboard a ship: push off through open space to the deck above or below.
+- type: entity
+  parent: CMUActionZLevelUp
+  id: CMUActionZeroGUp
+  name: Float up
+  description: Push off and float up through open space to the deck above.
+  components:
+  - type: Action
+    checkCanInteract: false
+    useDelay: 5
+
+- type: entity
+  parent: CMUActionZLevelDown
+  id: CMUActionZeroGDown
+  name: Float down
+  description: Push off and float down through open space to the deck below.
+  components:
+  - type: Action
+    checkCanInteract: false
+    useDelay: 5

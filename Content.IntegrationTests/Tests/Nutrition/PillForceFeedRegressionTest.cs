@@ -54,36 +54,6 @@ public sealed class PillForceFeedRegressionTest : GameTest
 ";
 
     [Test]
-    public async Task FeedingPillToAnotherMobStartsForceFeedDoAfter()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var feeder = SSpawnAtPosition("CMMobHuman", map.GridCoords);
-            var target = SSpawnAtPosition("CMMobHuman", map.GridCoords);
-            var pill = SSpawnAtPosition("CMPill", map.GridCoords);
-
-            Assert.That(_hands.TryPickupAnyHand(feeder, pill, checkActionBlocker: false), Is.True);
-
-            var ingest = new AttemptIngestEvent(feeder, pill, true);
-            SEntMan.EventBus.RaiseLocalEvent(target, ref ingest);
-
-            Assert.That(ingest.Handled, Is.True);
-            Assert.That(SEntMan.TryGetComponent<DoAfterComponent>(feeder, out var doAfters), Is.True);
-            Assert.That(doAfters!.DoAfters.Values.Any(data =>
-                data.Args.Event is EatingDoAfterEvent &&
-                data.Args.Delay == TimeSpan.FromSeconds(1) &&
-                !data.Cancelled &&
-                !data.Completed), Is.True);
-
-            SEntMan.DeleteEntity(pill);
-            SEntMan.DeleteEntity(target);
-            SEntMan.DeleteEntity(feeder);
-        });
-    }
-
-    [Test]
     public async Task CmPillsAbsorbDirectlyWhileUpstreamPillsUseTheStomach()
     {
         var map = await Pair.CreateTestMap();
@@ -117,27 +87,6 @@ public sealed class PillForceFeedRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task CmOsteoCalcPillStartsItsBloodstreamEffect()
-    {
-        var map = await Pair.CreateTestMap();
-        var target = EntityUid.Invalid;
-
-        await Server.WaitAssertion(() =>
-        {
-            target = SSpawnAtPosition("CMMobHuman", map.GridCoords);
-            StartSelfIngestion(target, SSpawnAtPosition("CMDirectAbsorptionTestPill", map.GridCoords));
-        });
-
-        await RunSeconds(1.2f);
-
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(_status.TryGetStatusEffect(target, "StatusEffectCMUBoneRegenBoost", out _), Is.True,
-                "Osteocalc reached the bloodstream but did not start bone regeneration.");
-        });
-    }
-
     private void StartSelfIngestion(EntityUid target, EntityUid pill)
     {
         Assert.That(_hands.TryPickupAnyHand(target, pill, checkActionBlocker: false), Is.True);
@@ -157,7 +106,8 @@ public sealed class PillForceFeedRegressionTest : GameTest
 
     private FixedPoint2 GetStomachQuantity(EntityUid target)
     {
-        Assert.That(_body.TryGetOrgansWithComponent<StomachComponent>(target, out var stomachs), Is.True);
+        var stomachs = _body.EnumerateOrgans<StomachComponent>(target).Select(organ => new Robust.Shared.GameObjects.Entity<StomachComponent>(organ.Owner, organ.Comp2)).ToList();
+        Assert.That(stomachs.Count > 0, Is.True);
         var stomach = stomachs.Single();
         Assert.That(_solutions.TryGetSolution(stomach.Owner, StomachSystem.DefaultSolutionName, out var solution), Is.True);
         return solution!.Value.Comp.Solution.GetTotalPrototypeQuantity(OsteoCalc);

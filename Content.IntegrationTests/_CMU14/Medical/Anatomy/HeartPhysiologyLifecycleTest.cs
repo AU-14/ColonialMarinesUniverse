@@ -20,6 +20,7 @@ using Robust.Shared.Timing;
 namespace Content.IntegrationTests.CMU14.Medical.Anatomy;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public sealed class HeartPhysiologyLifecycleTest
 {
     [Test]

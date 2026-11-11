@@ -35,7 +35,7 @@ public sealed class JoinXenoBui : BoundUserInterface
 
         _window = EnsureWindow();
         _entries.Clear();
-        _window.HiveContainer.DisposeAllChildren();
+        _window.HiveContainer.ReleaseChildren();
 
         foreach (var entry in joinXenoState.Entries)
         {

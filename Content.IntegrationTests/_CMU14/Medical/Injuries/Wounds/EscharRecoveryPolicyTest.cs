@@ -27,6 +27,8 @@ namespace Content.IntegrationTests.CMU14.Medical.Injuries.Wounds;
 [TestFixture]
 public sealed class EscharRecoveryPolicyTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> InstantDoAftersPrototype = "InstantDoAfters";
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task FieldDressingRecoversBurnTissueWhileOnlyCommittedDebridementRemovesEschar(bool cancelFirst)
@@ -59,7 +61,7 @@ public sealed class EscharRecoveryPolicyTest
                 var treater = entities.GetComponent<WoundTreaterComponent>(kit);
                 treater.InstantWoundTreatment = false;
                 treater.InstantWoundTreatmentSkills.Clear();
-                entities.System<TagSystem>().AddTag(medic, "InstantDoAfters");
+                entities.System<TagSystem>().AddTag(medic, InstantDoAftersPrototype);
                 for (var attempt = 0; attempt < 6 && ledger.GetEntries(wounds).Any(row => !row.Wound.Treated); attempt++)
                 {
                     var interaction = new AfterInteractEvent(medic, kit, patient, default, true);
@@ -72,7 +74,7 @@ public sealed class EscharRecoveryPolicyTest
                 healthAfterDressing = health.Current;
                 damageAfterDressing = BurnDamage(entities, patient);
                 Assert.That(damageAfterDressing, Is.GreaterThan(FixedPoint2.Zero));
-                entities.System<TagSystem>().RemoveTag(medic, "InstantDoAfters");
+                entities.System<TagSystem>().RemoveTag(medic, InstantDoAftersPrototype);
                 Assert.That(entities.System<SharedHandsSystem>().TryDrop(medic, kit), Is.True);
             });
             await pair.RunTicksSync(pair.SecondsToTicks(6));

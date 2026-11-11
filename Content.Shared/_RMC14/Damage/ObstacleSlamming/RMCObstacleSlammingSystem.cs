@@ -111,7 +111,7 @@ public sealed partial class RMCObstacleSlammingSystem : EntitySystem
             SpawnAttachedTo(ent.Comp.HitEffect, user.ToCoordinates());
 
         var selfMessage = Loc.GetString("rmc-obstacle-slam-self", ("ent", user), ("object", Identity.Name(obstacle, EntityManager, user)));
-        _popup.PopupClient(selfMessage, user, user, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMessage, user, user, PopupType.MediumCaution);
 
         var others = Filter.PvsExcept(user).Recipients;
         foreach (var other in others)

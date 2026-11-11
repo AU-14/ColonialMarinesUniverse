@@ -40,7 +40,9 @@ rmc-job-description-spp-responder = "You are acting on behalf of UPP Regional Co
 
 #TSE fax responder
 rmc-job-name-tse-responder = TWE Communications Officer
-rmc-job-description-tse-responder = "You are acting on behalf of TSE Regional Command to respond to faxes sent to TWE Command."
+# cmu edit start: lore names
+rmc-job-description-tse-responder = "You are acting on behalf of TWE Regional Command to respond to faxes sent to TWE Command."
+# cmu edit end
 
 #CMB fax responder
 rmc-job-name-cmb-responder = CMB Communications Officer

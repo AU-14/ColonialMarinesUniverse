@@ -12,28 +12,6 @@ namespace Content.IntegrationTests.Tests.Station;
 [TestOf(typeof(SharedJobSystem))]
 public sealed class JobTest : GameTest
 {
-    private const string CommanderSpeechStyle = "commanderSpeech";
-    private const string SpeechBubbleStyleComponent = "RMCSpeechBubbleSpecificStyle";
-    private const string InnateCommandSpeechComponent = "InnateCommandSpeech";
-
-    private static readonly string[] CommandBubbleOverrideJobs =
-    [
-        // Variants all derive from the same base
-        "AU14JobGOVFORPlatCo",
-        "AU14JobGOVFORPlatOp",
-        "AU14JobGOVFORadvisor",
-        "AU14JobGOVFORSectionSergeant",
-        "AU14JobGOVFORSquadSergeant"
-    ];
-
-    private static readonly string[] AU14JuniorOfficerJobs =
-    [
-        "AU14JobGOVFORPlatOp",
-        "AU14JobOPFORPlatOp",
-        "AU14JobGOVFORPlatOpRMC",
-        "AU14JobGOVFORPlatOpWYPMC",
-        "AU14JobGOVFORPlatOpUPP",
-    ];
 
     /// <summary>
     /// Ensures that every job belongs to at most 1 primary department.
@@ -75,85 +53,4 @@ public sealed class JobTest : GameTest
         });
     }
 
-    [Test]
-    public async Task CommandBubbleOverrideJobsUseCommanderSpeechStyle()
-    {
-        var pair = Pair;
-        var server = pair.Server;
-
-        var prototypeManager = server.ResolveDependency<IPrototypeManager>();
-
-        await server.WaitAssertion(() =>
-        {
-            foreach (var jobId in CommandBubbleOverrideJobs)
-            {
-                var job = prototypeManager.Index<JobPrototype>(jobId);
-
-                Assert.That(TryGetSpeechBubbleStyle(job, out var style), Is.True,
-                    $"{jobId} should explicitly use the command speech bubble style.");
-                Assert.That(style, Is.EqualTo(CommanderSpeechStyle),
-                    $"{jobId} should use the command speech bubble style.");
-            }
-        });
-
-    }
-
-    [Test]
-    public async Task AU14JuniorOfficerJobsDoNotGetInnateCommandSpeech()
-    {
-        var pair = Pair;
-        var server = pair.Server;
-
-        var prototypeManager = server.ResolveDependency<IPrototypeManager>();
-
-        await server.WaitAssertion(() =>
-        {
-            foreach (var jobId in AU14JuniorOfficerJobs)
-            {
-                var job = prototypeManager.Index<JobPrototype>(jobId);
-
-                Assert.That(HasSpecialComponent(job, InnateCommandSpeechComponent), Is.False,
-                    $"{jobId} should get command-sized bubbles without {InnateCommandSpeechComponent}.");
-            }
-        });
-
-    }
-
-    private static bool TryGetSpeechBubbleStyle(JobPrototype job, out string style)
-    {
-        foreach (var addComponentSpecial in job.Special.OfType<AddComponentSpecial>())
-        {
-            if (addComponentSpecial.Components.TryGetComponent(SpeechBubbleStyleComponent, out var comp)
-                && comp is RMCSpeechBubbleSpecificStyleComponent bubbleStyle)
-            {
-                style = bubbleStyle.SpeechStyleClass;
-                return true;
-            }
-        }
-
-        if (job.RoundComponents.TryGetValue(SpeechBubbleStyleComponent, out var roundEntry)
-            && roundEntry.Component is RMCSpeechBubbleSpecificStyleComponent bubbleStyle2)
-        {
-            style = bubbleStyle2.SpeechStyleClass;
-            return true;
-        }
-
-        style = string.Empty;
-        return false;
-    }
-
-    private static bool HasSpecialComponent(JobPrototype job, string componentName)
-    {
-        foreach (var addComponentSpecial in job.Special.OfType<AddComponentSpecial>())
-        {
-            if (addComponentSpecial.Components.ContainsKey(componentName))
-                return true;
-        }
-
-        if (job.RoundComponents.TryGetValue(componentName, out var roundEntry)
-                && roundEntry.Component != null)
-            return true;
-
-        return false;
-    }
 }

@@ -7,10 +7,10 @@ using Robust.Shared.Random;
 
 namespace Content.Shared._RMC14.Barricade;
 
-public sealed class DirectionalBulletBlockerSystem : EntitySystem
+public sealed partial class DirectionalBulletBlockerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

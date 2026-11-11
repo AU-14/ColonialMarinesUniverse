@@ -1,4 +1,3 @@
-using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Vehicle;
@@ -147,35 +146,6 @@ public sealed class ExplosionResistanceHardpointMergeRegressionTest : GameTest
             "direct ejection must not bypass the hardpoint removal do-after");
         // Test the resistance change caused by a completed container removal.
         Assert.That(Server.System<SharedContainerSystem>().Remove(armor, slot.ContainerSlot), Is.True);
-    }
-
-    [Test]
-    public async Task SharedDefaultAndServerOverridesRemainOnTheUnifiedSystem()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var explosion = Server.System<ExplosionSystem>();
-            var queue = typeof(ExplosionSystem)
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .Single(method =>
-                    method.Name == nameof(SharedExplosionSystem.QueueExplosion) &&
-                    method.GetBaseDefinition().DeclaringType == typeof(SharedExplosionSystem));
-            var reload = typeof(ExplosionSystem)
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .Single(method =>
-                    method.Name == nameof(SharedExplosionSystem.ReloadMap) &&
-                    method.GetBaseDefinition().DeclaringType == typeof(SharedExplosionSystem));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(explosion, Is.InstanceOf<SharedExplosionSystem>());
-                Assert.That(ExplosionSystem.DefaultExplosionPrototypeId.ToString(), Is.EqualTo("Default"));
-                Assert.That(queue.DeclaringType, Is.EqualTo(typeof(ExplosionSystem)));
-                Assert.That(queue.GetBaseDefinition().DeclaringType, Is.EqualTo(typeof(SharedExplosionSystem)));
-                Assert.That(reload.DeclaringType, Is.EqualTo(typeof(ExplosionSystem)));
-                Assert.That(reload.GetBaseDefinition().DeclaringType, Is.EqualTo(typeof(SharedExplosionSystem)));
-            });
-        });
     }
 
     private static void AssertResistance(

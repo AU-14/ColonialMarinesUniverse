@@ -11,6 +11,8 @@ namespace Content.IntegrationTests.Tests.Alerts;
 [TestOf(typeof(AlertsSystem))]
 public sealed class AlertsMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<AlertPrototype> HiveTrackerPrototype = "HiveTracker";
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity
@@ -44,7 +46,7 @@ public sealed class AlertsMergeRegressionTest : GameTest
             {
                 var alerts = Server.EntMan.System<AlertsSystem>();
                 alerts.ShowAlert(player, "HiveTracker", severity: 1, dynamicMessage: "first message");
-                var key = Server.ProtoMan.Index<AlertPrototype>("HiveTracker").AlertKey;
+                var key = Server.ProtoMan.Index<AlertPrototype>(HiveTrackerPrototype).AlertKey;
                 Assert.That(alerts.TryGetAlertState(player, key, out var state), Is.True);
                 Assert.That(state.DynamicMessage, Is.EqualTo("first message"));
 
@@ -60,7 +62,7 @@ public sealed class AlertsMergeRegressionTest : GameTest
                 _ = Client.System<AlertsMergeProbeSystem>();
                 var clientPlayer = CEntMan.GetEntity(playerNet);
                 var alerts = Client.System<ClientAlertsSystem>();
-                var key = Client.ProtoMan.Index<AlertPrototype>("HiveTracker").AlertKey;
+                var key = Client.ProtoMan.Index<AlertPrototype>(HiveTrackerPrototype).AlertKey;
                 Assert.That(alerts.TryGetAlertState(clientPlayer, key, out var state), Is.True);
                 Assert.That(state.DynamicMessage, Is.EqualTo("replacement message"),
                     "the replacement dynamic message must be present in the owner-only client state");
@@ -80,7 +82,7 @@ public sealed class AlertsMergeRegressionTest : GameTest
                 var alerts = Client.System<ClientAlertsSystem>();
                 var probe = CEntMan.GetComponent<AlertsMergeProbeComponent>(clientPlayer);
                 probe.Reset();
-                var key = Client.ProtoMan.Index<AlertPrototype>("HiveTracker").AlertKey;
+                var key = Client.ProtoMan.Index<AlertPrototype>(HiveTrackerPrototype).AlertKey;
                 Assert.That(alerts.TryGetAlertState(clientPlayer, key, out _), Is.False);
 
                 alerts.AlertClicked("HiveTracker");

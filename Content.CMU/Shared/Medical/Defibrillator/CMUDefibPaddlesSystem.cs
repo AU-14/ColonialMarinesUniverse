@@ -6,7 +6,7 @@ namespace Content.Shared.CMU14.Medical.Defibrillator;
 /// Takes the paddles off the unit when it starts charging and docks them again once the shock is delivered or the
 /// charge is abandoned.
 /// </summary>
-public sealed class CMUDefibPaddlesSystem : EntitySystem
+public sealed partial class CMUDefibPaddlesSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
 

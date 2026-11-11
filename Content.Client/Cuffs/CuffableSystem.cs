@@ -23,7 +23,10 @@ public sealed partial class CuffableSystem : SharedCuffableSystem
 
     private void OnCuffableShutdown(EntityUid uid, CuffableComponent component, ComponentShutdown args)
     {
-        if (TryComp<SpriteComponent>(uid, out var sprite))
+        // CMU14: non-humanoid captives have no humanoid cuff overlay.
+        // if (TryComp<SpriteComponent>(uid, out var sprite))
+        if (TryComp<SpriteComponent>(uid, out var sprite) &&
+            _sprite.LayerMapTryGet((uid, sprite), HumanoidVisualLayers.Handcuffs, out _, logMissing: false))
             _sprite.LayerSetVisible((uid, sprite), HumanoidVisualLayers.Handcuffs, false);
     }
 
@@ -39,6 +42,9 @@ public sealed partial class CuffableSystem : SharedCuffableSystem
         RaiseLocalEvent(uid, ref ev);
 
         if (!TryComp<SpriteComponent>(uid, out var sprite))
+            return;
+        // CMU14: cuff state and action blocking also apply to bodies without this overlay.
+        if (!_sprite.LayerMapTryGet((uid, sprite), HumanoidVisualLayers.Handcuffs, out _, logMissing: false))
             return;
         var cuffed = cuffState.NumHandsCuffed > 0;
         _sprite.LayerSetVisible((uid, sprite), HumanoidVisualLayers.Handcuffs, cuffed);

@@ -14,7 +14,7 @@ namespace Content.Shared.CMU14.Medical.Monitor;
 /// Dragging a patient monitor onto a patient attaches its leads, like an IV stand. The server does the attaching
 /// and keeps the readouts; this half only tells the client what can be dragged where.
 /// </summary>
-public abstract class SharedCMUPatientMonitorSystem : EntitySystem
+public abstract partial class SharedCMUPatientMonitorSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -83,7 +83,7 @@ public abstract class SharedCMUPatientMonitorSystem : EntitySystem
 
         args.Cancel();
         if (!args.Silent)
-            _popup.PopupClient(Loc.GetString("cmu-monitor-ui-no-skill"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-monitor-ui-no-skill"), ent, args.User);
     }
 
     private void OnToggleOnAttempt(Entity<CMUPatientMonitorComponent> ent, ref ItemToggleActivateAttemptEvent args)

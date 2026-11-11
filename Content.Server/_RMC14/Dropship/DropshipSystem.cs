@@ -2,6 +2,9 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.CMU14.Dropship.TacticalLand;
 using Content.Server.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
+using Content.Shared.CMU14.Dropship.Exchange; // CMU14
+using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Server._RMC14.GameStates;
@@ -145,7 +148,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             {
                 subs.Event<DropshipLockdownMsg>(OnDropshipNavigationLockdownMsg);
                 subs.Event<DropshipRemoteControlToggleMsg>(OnDropshipRemoteControlToggleMsg);
+                subs.Event<GunshipFirearmToggleMsg>(OnGunshipFirearmToggleMsg); // CMU14
                 subs.Event<DropshipLaunchAlarmToggleMsg>(OnDropshipLaunchAlarmToggleMsg);
+                subs.Event<DropshipMasterAlarmToggleMsg>(OnDropshipMasterAlarmToggleMsg); // CMU14
                 subs.Event<DropshipWithdrawReturnMsg>(OnDropshipWithdrawReturn);
             });
 
@@ -212,7 +217,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                     }
                 }
 
-                _alertLevelSystem.Set(RMCAlertLevels.Red, ent.Owner, false, false);
+                // CMU14: scope the alert to the destination ship, the dropship is mid-transit here
+                var destMap = ent.Comp.Destination is { } destination ? Transform(destination).MapUid : null; // CMU14
+                _alertLevelSystem.Set(RMCAlertLevels.Red, ent.Owner, false, false, destMap); // CMU14
 
                 // CMU14: (opt-in) only shuttles whose nav computer declares a faction announce
                 if (victimFaction != null)
@@ -407,6 +414,31 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         RefreshUI();
     }
 
+    // CMU14 method: gunship pilot firearm fire-control toggle
+    private void OnGunshipFirearmToggleMsg(Entity<DropshipNavigationComputerComponent> ent, ref GunshipFirearmToggleMsg args)
+    {
+        if (!TryComp(ent, out GunshipControlsComponent? gunship))
+            return;
+
+        gunship.Armed = !gunship.Armed;
+        // CMU14: the component carries no auto state, clients read the toggle from the BUI refresh
+        // Dirty(ent, gunship);
+        RefreshUI();
+    }
+
+    // CMU14 method: mute-only toggle for the automatic damage alarms, same flag as the gunship pilot action.
+    private void OnDropshipMasterAlarmToggleMsg(Entity<DropshipNavigationComputerComponent> ent, ref DropshipMasterAlarmToggleMsg args)
+    {
+        if (!TryGetGridDropship(ent, out var dropship)
+            || !TryComp(dropship, out DropshipIntegrityComponent? integrity))
+            return;
+
+        integrity.MasterAlarmSilenced = !integrity.MasterAlarmSilenced;
+        Dirty(dropship, integrity);
+        _tacticalLand.UpdateGunshipAlarmAudio((dropship.Owner, integrity));
+        RefreshUI();
+    }
+
     private void OnNavigationLockout(Entity<DropshipNavigationComputerComponent> ent, ref DropshipLockoutDoAfterEvent args)
     {
         ent.Comp.LockedOutUntil = _timing.CurTime + ent.Comp.LockoutDuration;
@@ -552,7 +584,19 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             return false;
         }
 
-        if (!hijack && !CanLandAt(computer, destination))
+        // cmu edit start: summoned third parties are held to their faction's ship pad
+        var summonedRule = hijack || Transform(computer.Owner).GridUid is not { } summonedGrid
+            ? null
+            : SummonedThirdPartyDestinationRule(summonedGrid, destination);
+        if (summonedRule == false)
+        {
+            if (user is { } summonedPilot)
+                _popup.PopupEntity(Loc.GetString("cmu-summoned-third-party-wrong-destination"), computer, summonedPilot);
+            return false;
+        }
+        // cmu edit end
+
+        if (!hijack && summonedRule != true && !CanLandAt(computer, destination)) // cmu edit
         {
             if (user is { } pilot)
                 _popup.PopupEntity(Loc.GetString("cmu-fof-dropship-wrong-faction"), computer, pilot);
@@ -587,7 +631,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         }
 
         var dropshipId = Transform(computer).GridUid;
-        if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
+        // CMU14: if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
+        if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp) ||
+            HasComp<MapComponent>(dropshipId)) // CMU14: saved terrain can have Shuttle, but cannot fly.
         {
             Log.Warning($"Tried to launch {ToPrettyString(computer)} outside of a shuttle.");
             return false;
@@ -852,9 +898,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
                 var generalQuartersText = Loc.GetString("rmc-announcement-general-quarters");
                 var gqFaction = victimFaction; // capture for closure
+                var gqMap = Transform(destination).MapUid; // CMU14: hijack victim's ship, the dropship is mid-transit
                 Timer.Spawn(TimeSpan.FromSeconds(10), () =>
                 {
-                    _alertLevelSystem.Set(RMCAlertLevels.Red, dropshipId.Value, false, false);
+                    // CMU14: timers outlive the round, a restart inside these 10s leaves a deleted ship and map here
+                    if (TerminatingOrDeleted(dropshipId.Value) || gqMap is { } gq && TerminatingOrDeleted(gq))
+                        return;
+
+                    _alertLevelSystem.Set(RMCAlertLevels.Red, dropshipId.Value, false, false, gqMap); // CMU14
                     _marineAnnounce.AnnounceARESStaging(dropshipId.Value, generalQuartersText, dropship.GeneralQuartersSound, null, gqFaction);
                 });
             }
@@ -890,6 +941,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
         var doorLockStatus = GetDoorLockStatus(grid);
         var tacticalHoverActive = HasComp<DropshipTacticalHoverComponent>(grid);
+        TryComp(computer, out GunshipControlsComponent? gunshipControls); // CMU14: firearm toggle state
+        TryComp(grid, out DropshipIntegrityComponent? shipIntegrity); // CMU14: master alarm mute state
+        TryComp(grid, out CMUDropshipMohawkExchangeComponent? mohawkExchange); // CMU14: gunship-for-mohawk exchange offer
 
         if (tacticalHoverActive ||
             !TryComp(grid, out FTLComponent? ftl) ||
@@ -911,8 +965,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
             while (query.MoveNext(out var uid, out var comp))
             {
+                // cmu edit start: summoned third parties are held to their faction's ship pad
+                var summonedRule = SummonedThirdPartyDestinationRule(grid, uid);
+                if (summonedRule == false)
+                    continue;
+                // cmu edit end
+
                 // CMU14: Force on Force roles, hijacking, announcements and identification.
-                if (!CanLandAt(computer, uid))
+                if (summonedRule != true && !CanLandAt(computer, uid)) // cmu edit
                     continue;
 
                 if (HasComp<Content.Shared.CMU14.Dropship.TacticalLand.EphemeralDropshipDestinationComponent>(uid))
@@ -966,6 +1026,10 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             }
 
             var canTacticalLand = computer.Comp.CanTacticalLand || IsStrictThirdPartyFaction(whitelistedFaction);
+            // cmu edit start: a summoned shuttle held to its faction's ship can't pick its own landing site
+            if (GetSummonedThirdPartyShipFaction(grid) != null)
+                canTacticalLand = false;
+            // cmu edit end
 
             var canWithdrawReturn = false;
             if (whitelistedFaction != null && _withdrawConsole.IsWithdrawReturnUnlocked(whitelistedFaction))
@@ -975,7 +1039,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                                     (HasComp<RMCPlanetComponent>(gridXform.MapUid.Value) || HasComp<RMCPlanetComponent>(grid));
             }
 
-            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, tacticalHoverActive);
+            // CMU14: the exchange is only offered while parked on the round-start pad
+            var canExchangeMohawk = mohawkExchange is { Parked: true, Departing: false } && !tacticalHoverActive;
+            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, tacticalHoverActive, gunshipControls != null, gunshipControls?.Armed ?? false, shipIntegrity != null, shipIntegrity?.MasterAlarmSilenced ?? false, canExchangeMohawk, mohawkExchange?.Pending ?? false); // CMU14: firearm + alarm + exchange state
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;
         }
@@ -993,7 +1059,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 departureName = Name(departureUid);
         }
 
-        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus);
+        var travelState = new DropshipNavigationTravellingBuiState(ftl.State, ftl.StateTime, destinationName, departureName, doorLockStatus, computer.Comp.RemoteControl, computer.Comp.LaunchAlarmStatus, shipIntegrity != null, shipIntegrity?.MasterAlarmSilenced ?? false); // CMU14: alarm state
         _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, travelState);
     }
 
@@ -1063,12 +1129,12 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             HasComp<ThirdPartyDropshipReturnDestinationComponent>(destination) ||
             HasComp<ThirdPartyDropshipReturnedComponent>(dropship))
         {
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
             return;
         }
 
         autoReturn.LastActivity = _timing.CurTime;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
     }
 
     private void RecordThirdPartyAutoReturnActivity(EntityUid dropship)
@@ -1080,7 +1146,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         }
 
         autoReturn.LastActivity = _timing.CurTime;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
     }
 
     private void ResetThirdPartyAutoReturnCountdown(EntityUid dropship)
@@ -1091,12 +1157,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         autoReturn.LastActivity = _timing.CurTime;
         autoReturn.ReturnAt = null;
         autoReturn.NextWarningAt = TimeSpan.Zero;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
     }
 
     protected override bool IsShuttle(EntityUid dropship)
     {
-        return HasComp<ShuttleComponent>(dropship);
+        // CMU14: planet maps may retain Shuttle from their saved grid physics.
+        // return HasComp<ShuttleComponent>(dropship);
+        return HasComp<ShuttleComponent>(dropship) && !HasComp<MapComponent>(dropship);
     }
 
     protected override bool IsInFTL(EntityUid dropship)
@@ -1156,7 +1224,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 {
                     autoReturn.ReturnAt = null;
                     autoReturn.NextWarningAt = TimeSpan.Zero;
-                    Dirty(uid, autoReturn);
+                    // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
                 }
 
                 continue;
@@ -1165,7 +1233,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             if (autoReturn.LastActivity == TimeSpan.Zero)
             {
                 autoReturn.LastActivity = time;
-                Dirty(uid, autoReturn);
+                // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
             }
 
             if (autoReturn.ReturnAt is not { } returnAt)
@@ -1176,7 +1244,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 returnAt = time + autoReturn.ReturnDelay;
                 autoReturn.ReturnAt = returnAt;
                 autoReturn.NextWarningAt = time;
-                Dirty(uid, autoReturn);
+                // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
 
                 LockAllDocks(uid);
                 RefreshUI();
@@ -1186,7 +1254,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             {
                 _popup.PopupEntity(ThirdPartyAutoReturnAnnouncement, uid, PopupType.LargeCaution);
                 autoReturn.NextWarningAt = time + autoReturn.WarningInterval;
-                Dirty(uid, autoReturn);
+                // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
             }
 
             if (time >= returnAt)
@@ -1201,7 +1269,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         {
             Log.Warning($"Third party dropship {ToPrettyString(dropship)} has no valid deep space return destination.");
             autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
             return;
         }
 
@@ -1209,19 +1277,19 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         {
             Log.Warning($"Third party dropship {ToPrettyString(dropship)} has no navigation computer for automatic return.");
             autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
             return;
         }
 
         autoReturn.ReturnAt = null;
         autoReturn.NextWarningAt = TimeSpan.Zero;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
 
         _popup.PopupEntity("Automatic return to deep space commencing.", dropship, PopupType.LargeCaution);
         if (!FlyTo(computer, autoReturn.ReturnDestination, null))
         {
             autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
         }
     }
 
@@ -1241,12 +1309,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         return false;
     }
 
+    // CMU14 method: door callbacks can create or reparent dropship children.
     private void LockAllDocks(EntityUid dropship)
     {
         // CMU14 Begin: retract boarding devices with the ordinary door controls.
         var controls = new DropshipDoorControlEvent(DoorLocation.None, true);
         RaiseLocalEvent(dropship, ref controls);
         // CMU14 End
+        var docks = new List<EntityUid>();
         var enumerator = Transform(dropship).ChildEnumerator;
         while (enumerator.MoveNext(out var child))
         {
@@ -1256,7 +1326,13 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 continue;
             }
 
-            LockDoor(child);
+            docks.Add(child);
+        }
+
+        foreach (var dock in docks)
+        {
+            if (!TerminatingOrDeleted(dock))
+                LockDoor(dock);
         }
     }
 
@@ -1666,6 +1742,10 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     private void OnWithdrawHijackLock(ref WithdrawFactionHijackLockEvent ev)
     {
+        // CMU14: the FOB pilot keeps boarding/hijacking contested, including stale withdrawal events.
+        if (!_withdrawConsole.IsProtectedWithdrawalAllowed())
+            return;
+
         var query = EntityQueryEnumerator<DropshipNavigationComputerComponent, WhitelistedShuttleComponent>();
         while (query.MoveNext(out var uid, out var nav, out var ws))
         {

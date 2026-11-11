@@ -55,10 +55,10 @@ public sealed partial class XenoReaperComponent : Component
     public EntProtoId FleshBloomPrototype = "XenoFleshBloom";
 
     [DataField, AutoNetworkedField]
-    public EntProtoId FleshBloomTelegraphPrototype = "RMCEffectReaperFleshBloomTelegraph";
+    public EntProtoId FleshBloomTelegraphPrototype = "CMUEffectFleshBloomTelegraph"; // CMU14: crawling tendril
 
     [DataField, AutoNetworkedField]
-    public TimeSpan FleshBloomDelay = TimeSpan.FromSeconds(2);
+    public TimeSpan FleshBloomDelay = TimeSpan.FromSeconds(3); // CMU14: slow vascular crawl before the accelerating enclosure
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier FleshBloomSound = new SoundCollectionSpecifier("XenoResinBreak");

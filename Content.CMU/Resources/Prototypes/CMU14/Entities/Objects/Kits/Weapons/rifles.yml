@@ -46,6 +46,30 @@
   
 - type: entity
   parent: RMCKitBase
+  id: CMUKitWeaponM20A2
+  name: M20A2 rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,11,3 # 12 slots
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponRifleM20A2
+        amount: 1
+      - id: AU14MagazineRifleM20A
+        amount: 9
+      - id: CMUMagazineRifleM20AAP
+        amount: 1
+
+- type: entity
+  parent: RMCKitBase
   id: AU14KitWeaponMar40
   name: MAR-40 battle rifle case
   components:
@@ -180,7 +204,7 @@
   - type: Storage
     maxItemSize: Ginormous
     grid:
-    - 0,0,9,3
+    - 0,0,9,4
   - type: Sprite
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: Icon
@@ -188,6 +212,10 @@
   - type: StorageFill
     contents:
       - id: AU14WeaponRifleKramerAR
+        amount: 1
+      - id: CMULACNAttachmentKramerStock
+        amount: 1
+      - id: CMULACNAttachmentKarbineStock
         amount: 1
       - id: AU14WeaponRifleKramerMagazineAP
         amount: 1

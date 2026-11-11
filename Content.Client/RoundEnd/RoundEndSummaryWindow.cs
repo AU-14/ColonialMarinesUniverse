@@ -133,10 +133,15 @@ public sealed partial class RoundEndSummaryWindow : DefaultWindow
 
             if (summaryStats.OddityStats.Length > 0)
             {
-                roundEndSummaryContainer.AddChild(MakeStatSection(
-                    "round-end-summary-window-oddities-title",
-                    "round-end-summary-window-oddities-subtitle",
-                    summaryStats.OddityStats));
+                // CMU14: a 0-count oddity is noise, only list oddities that happened
+                var oddities = summaryStats.OddityStats.Where(stat => stat.Value > 0).ToArray();
+                if (oddities.Length > 0)
+                {
+                    roundEndSummaryContainer.AddChild(MakeStatSection(
+                        "round-end-summary-window-oddities-title",
+                        "round-end-summary-window-oddities-subtitle",
+                        oddities));
+                }
             }
         }
 

@@ -18,11 +18,15 @@
     - CMMultitool
     - RMCFlashlight
     - FoodDonkpocket
-    - CMGrenadeSmoke
+    # cmu edit start: no smoke grenades or marine uniforms in random crates
+    # - CMGrenadeSmoke
+    # cmu edit end
     - DoorElectronics
     - CMWirecutter
     - CMBootsBlackFilled
-    - RMCJumpsuitMarinePatch
+    # cmu edit start
+    # - RMCJumpsuitMarinePatch
+    # cmu edit end
 
 #TODO RMC14: Igniter
 
@@ -381,7 +385,7 @@
     spawn:
     - id: RMCPortableGenerator
       amount: 1
-    - id: RMCCableCoil10
+    - id: CMUCableThinLVStack10 # CMU14: replaces RMCCableCoil10, thin LV cable
       amount: 1
     - id: CMSheetPhoron15
       amount: 1

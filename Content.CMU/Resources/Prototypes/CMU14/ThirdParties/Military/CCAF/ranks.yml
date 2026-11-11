@@ -1,0 +1,74 @@
+# CCAF ranks. The chevrons borrow the US Army insignia sprites until CCAF ones are drawn.
+
+- type: entity
+  parent: RMCArmbandBase
+  id: CMUChevronCCAFBase
+  abstract: true
+  suffix: CCAF Chevron
+  description: Canadian Colonial Armed Forces rank insignia.
+
+- type: rank
+  id: CMURankCCAFPrivate
+  name: Private
+  prefix: Pte.
+  paygrade: E2
+
+- type: entity
+  parent: CMUChevronCCAFBase
+  id: CMUChevronCCAFPrivate
+  name: private chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae2
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae2
+  - type: RankChanger
+    rank: CMURankCCAFPrivate
+    override: true
+
+- type: rank
+  id: CMURankCCAFCorporal
+  name: Corporal
+  prefix: Cpl.
+  paygrade: E4
+
+- type: entity
+  parent: CMUChevronCCAFBase
+  id: CMUChevronCCAFCorporal
+  name: corporal chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae4
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae4
+  - type: RankChanger
+    rank: CMURankCCAFCorporal
+    override: true
+
+- type: rank
+  id: CMURankCCAFSergeant
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E5
+
+- type: entity
+  parent: CMUChevronCCAFBase
+  id: CMUChevronCCAFSergeant
+  name: sergeant chevron
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+    state: ranks_ae5
+  - type: UniformAccessory
+    playerSprite:
+      sprite: CMU14/Clothing/Accessory/Chevrons/usarmy.rsi
+      state: equipped-ranks_ae5
+  - type: RankChanger
+    rank: CMURankCCAFSergeant
+    override: true

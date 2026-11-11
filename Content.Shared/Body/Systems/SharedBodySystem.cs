@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Linq;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
@@ -177,6 +178,7 @@ public sealed partial class SharedBodySystem : EntitySystem
         if (_timing.ApplyingState ||
             TerminatingOrDeleted(body.Owner) ||
             !part.Comp.IsVital ||
+            HasComp<SynthComponent>(body.Owner) ||
             !Resolve(body, ref body.Comp, false))
             return;
 
@@ -224,6 +226,10 @@ public sealed partial class SharedBodySystem : EntitySystem
         Angle splatCone = default,
         SoundSpecifier? gibSoundOverride = null)
     {
+        // CMU14 Begin
+        if (_gibbing.GibbingSuppressed)
+            return new();
+        // CMU14 End
         if (!Resolve(bodyId, ref body, false))
             return new();
 

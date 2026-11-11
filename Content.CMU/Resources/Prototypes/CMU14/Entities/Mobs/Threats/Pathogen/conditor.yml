@@ -1,7 +1,7 @@
 - type: entity
   abstract: true
   parent: CMU14XenoPathogenMatureBase
-  id: CMU14XenoConditorBase # conductor hehe
+  id: CMU14XenoConditorBase
   name: Conditor
   description: A masterful cultivator of mycelium and death.
   components:
@@ -19,6 +19,28 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood
+    solution:  
+      maxVol: 600
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmPhero
+        Quantity: 200
+      - ReagentId: CMUPathogenSporoplasmNeuro
+        Quantity: 200
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenMycohemolymph  
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmPhero
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmNeuro
+        Quantity: 1
   - type: XenoDevour
   - type: Xeno
     role: CMU14JobPathogenConditor
@@ -32,24 +54,19 @@
     - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenTailStab
     - CMU14ActionXenoPathogenPlantWeeds
-    - CMU14ActionXenoPathogenSpit
+    - CMU14ActionXenoPathogenSpitPraetorian
+    - CMU14ActionXenoPathogenSprayAcid
     - CMU14ActionXenoPathogenChooseStructure
     - CMU14ActionXenoPathogenSecreteStructure
-    - CMU14ActionXenoPathogenSlowingSpit
-    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenDirectSporeInfect
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenRegurgitate
-  - type: XenoSlowingSpit
-  - type: XenoSpit
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
-    - CMU14XenoMyceliumWall
     - CMU14XenoThickMyceliumWall
-    - CMU14XenoMyceliumMembrane
     - CMU14XenoThickMyceliumMembrane
-    - CMU14XenoMyceliumDoor
     - CMU14XenoThickMyceliumDoor
     canOrderConstruction:
     - CMU14PathogenBlightCoreConstructionNode
@@ -57,6 +74,7 @@
     - CMU14PathogenPlasmaTreeConstructionNode
     - CMU14PathogenRecoveryNodeConstructionNode
     - CMU14PathogenSporecasterConstructionNode
+    canUpgrade: true
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -101,6 +119,13 @@
         Blunt: 11.66
         Slash: 11.67
         Piercing: 11.67
+  - type: XenoSprayAcid  
+    acid: XenoAcidSprayStrong  
+    barricadeDamage:  
+      types:  
+        Heat: 5
+  - type: XenoSpit  
+    projectileId: XenoSpitProjectilePraetorian
   - type: RMCSize
     size: Big
   - type: CMArmor
@@ -112,6 +137,10 @@
     chance: 0.3
     stunMin: 3
     stunMax: 4
+  - type: CMUXenoDirectSporeInfect
+    plasmaCost: 50
+    embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 0.9
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi

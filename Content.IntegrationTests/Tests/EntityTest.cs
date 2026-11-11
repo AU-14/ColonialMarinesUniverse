@@ -4,7 +4,9 @@ using System.Numerics;
 using System.Text;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Server.CMU14.WorldMarket; // CMU14: initialize round-owned state before measuring entity leaks.
 using Content.Shared.CMU14.DroneOperator;
+using Content.Shared.CMU14.IntelligenceSection; // CMU14: verify the paired key that intentionally survives its case.
 using Robust.Shared;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Configuration;
@@ -345,11 +347,14 @@ namespace Content.IntegrationTests.Tests
             await server.WaitPost(() =>
             {
                 mapSys.CreateMap(out mapId);
+                // CMU14: The first admin console creates market state that intentionally survives its deletion.
+                server.System<WorldMarketSystem>().EnsureMarket();
             });
 
             var coords = new MapCoordinates(Vector2.Zero, mapId);
 
-            await pair.RunTicksSync(3);
+            // CMU14: Let delayed system-owned entities initialize before measuring prototype spawn/despawn effects.
+            await pair.RunTicksSync(120);
 
             // We consider only non-audio entities, as some entities will just play sounds when they spawn.
             int Count(IEntityManager ent) => ent.EntityCount - ent.Count<AudioComponent>();
@@ -365,11 +370,15 @@ namespace Content.IntegrationTests.Tests
                     var clientEntities = new HashSet<EntityUid>(Entities(client.EntMan));
                     EntityUid uid = default;
                     EntProtoId? ruinedCore = null;
+                    EntityUid? briefcaseKey = null; // CMU14: a briefcase deliberately spawns a separate key.
                     await server.WaitPost(() =>
                     {
                         uid = server.EntMan.SpawnEntity(protoId, coords);
                         if (server.EntMan.TryGetComponent<CMUDroneAndroidComponent>(uid, out var drone))
                             ruinedCore = drone.RuinedCorePrototype;
+                        // CMU14: Track only this briefcase's paired key, leaving other spawned entities subject to leak checks.
+                        if (server.EntMan.TryGetComponent<CMUCuffedBriefcaseComponent>(uid, out var briefcase))
+                            briefcaseKey = briefcase.Key;
                     });
                     await pair.RunTicksSync(3);
 
@@ -399,6 +408,17 @@ namespace Content.IntegrationTests.Tests
                     await pair.RunTicksSync(3);
                     if (ruinedCore is { } corePrototype)
                         await DeleteExpectedDroneCore(pair, corePrototype, serverEntities, clientEntities);
+                    // CMU14 Begin: the loose key survives deletion, but its replicated backlink must be cleared.
+                    if (briefcaseKey is { } key)
+                    {
+                        await server.WaitAssertion(() =>
+                        {
+                            Assert.That(server.EntMan.GetComponent<CMUBriefcaseKeyComponent>(key).Briefcase, Is.Null);
+                            server.EntMan.DeleteEntity(key);
+                        });
+                        await pair.RunTicksSync(3);
+                    }
+                    // CMU14 End
                     await CleanupTransientEntities(pair, serverEntities);
 
                     // Check that the number of entities has gone back to the original value.

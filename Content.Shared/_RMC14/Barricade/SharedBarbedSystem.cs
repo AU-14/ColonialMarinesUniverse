@@ -73,15 +73,18 @@ public abstract partial class SharedBarbedSystem : EntitySystem
             return;
 
         _damageableSystem.TryChangeDamage(args.User, barbed.Comp.ThornsDamage, origin: barbed, tool: barbed, impact: DamageImpact.SnaggingContact);
-        _popupSystem.PopupClient(Loc.GetString("barbed-wire-damage"), barbed, args.User, PopupType.SmallCaution);
+        _popupSystem.PopupEntity(Loc.GetString("barbed-wire-damage"), barbed, args.User, PopupType.SmallCaution);
     }
 
     private void OnInteractUsing(Entity<BarbedComponent> ent, ref InteractUsingEvent args)
     {
+        if (args.Handled) // CMU14: respect earlier handlers, such as wet concrete refusing wire
+            return;
+
         if (_xenoAcid.IsMelted(ent))
         {
             var failPopup = Loc.GetString("rmc-construction-melted");
-            _popupSystem.PopupClient(failPopup, ent, args.User, PopupType.SmallCaution);
+            _popupSystem.PopupEntity(failPopup, ent, args.User, PopupType.SmallCaution);
 
             args.Handled = true;
             return;
@@ -103,7 +106,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
             if (_doAfterSystem.TryStartDoAfter(barbDoAfter))
             {
                 args.Handled = true;
-                _popupSystem.PopupClient(Loc.GetString("barbed-wire-slot-wiring"), ent, args.User);
+                _popupSystem.PopupEntity(Loc.GetString("barbed-wire-slot-wiring"), ent, args.User);
             }
 
             return;
@@ -112,7 +115,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
         if (ent.Comp.IsBarbed && HasComp<BarbedWireComponent>(args.Used))
         {
             args.Handled = true;
-            _popupSystem.PopupClient(Loc.GetString("barbed-wire-slot-insert-full"), ent, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("barbed-wire-slot-insert-full"), ent, args.User);
             return;
         }
 
@@ -123,7 +126,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
             return;
 
         args.Handled = true;
-        _popupSystem.PopupClient(Loc.GetString("barbed-wire-cutting-action-begin"), ent, args.User);
+        _popupSystem.PopupEntity(Loc.GetString("barbed-wire-cutting-action-begin"), ent, args.User);
         var cutDoAfter = new DoAfterArgs(EntityManager, args.User, ent.Comp.CutTime, new CutBarbedDoAfterEvent(), ent, used: args.Used)
         {
             BreakOnMove = true,
@@ -159,7 +162,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
         UpdateBarricade(barbed, true);
 
         _audio.PlayPredicted(barbed.Comp.BarbSound, barbed.Owner, args.User);
-        _popupSystem.PopupClient(Loc.GetString("barbed-wire-slot-insert-success"), barbed.Owner, args.User);
+        _popupSystem.PopupEntity(Loc.GetString("barbed-wire-slot-insert-success"), barbed.Owner, args.User);
     }
 
     private void WireCutterOnDoAfter(Entity<BarbedComponent> barbed, ref CutBarbedDoAfterEvent args)
@@ -174,7 +177,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
         UpdateBarricade(barbed, true);
 
         _audio.PlayPredicted(barbed.Comp.CutSound, barbed.Owner, args.User);
-        _popupSystem.PopupClient(Loc.GetString("barbed-wire-cutting-action-finish"), barbed.Owner, args.User);
+        _popupSystem.PopupEntity(Loc.GetString("barbed-wire-cutting-action-finish"), barbed.Owner, args.User);
 
         if (_netManager.IsClient)
             return;
@@ -193,7 +196,7 @@ public abstract partial class SharedBarbedSystem : EntitySystem
         if (barbed.Comp.IsBarbed)
         {
             args.Cancelled = true;
-            _popupSystem.PopupClient(Loc.GetString("barbed-wire-cant-climb"), barbed.Owner, args.User);
+            _popupSystem.PopupEntity(Loc.GetString("barbed-wire-cant-climb"), barbed.Owner, args.User);
         }
     }
 

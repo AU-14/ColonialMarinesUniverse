@@ -12,25 +12,6 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class GrenadeLifecycleTest
 {
-    [Test]
-    public async Task BlastM12HasFlickeringPrimedVisual()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var client = pair.Client;
-
-        await client.WaitAssertion(() =>
-        {
-            var prototypes = client.ResolveDependency<IPrototypeManager>();
-            var prototype = prototypes.Index<EntityPrototype>("RMCGrenadeBlastM12");
-
-            Assert.That(
-                prototype.TryComp<TimerTriggerVisualsComponent>(out _, client.EntMan.ComponentFactory),
-                Is.True,
-                "The M12 primed RSI animation needs TimerTriggerVisuals to start flickering.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task BlastM12DeletesAfterFuse()

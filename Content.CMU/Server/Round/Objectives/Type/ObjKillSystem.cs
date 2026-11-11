@@ -6,6 +6,7 @@ using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Server.CMU14.Round.Objectives.Components;
 using Content.Shared._RMC14.Synth;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
@@ -231,6 +232,9 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
             if (killComp.RequireFactionKill && !IsKillerInFaction(origin, factionToCredit.ToLowerInvariant()))
                 continue;
 
+            if (killComp.IgnoreMinions && IsMinion(uid))
+                continue;
+
             if (!comp.CreditedObjectives.Add(objectiveUid))
                 continue;
 
@@ -248,6 +252,15 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
 
         if (HasComp<ArrestMarkedForComponent>(uid) && objectivesToRemove.Any(o => TryComp(o, out KillObjectiveComponent? k) && k.CountArrest))
             RemComp<ArrestMarkedForComponent>(uid);
+    }
+
+    private bool IsMinion(EntityUid uid)
+    {
+        if (HasComp<CMUObjectiveMinionComponent>(uid))
+            return true;
+
+        // lesser drones, swarm lessers and huggers (runner huggers too) all inherit this off their bases
+        return TryComp(uid, out XenoComponent? xeno) && !xeno.ContributesToVictory;
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared._RMC14.Attachable.Events;
 using Content.Shared._RMC14.Emplacements;
+using Content.Shared._RMC14.NightVision; // CMU14
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared.Actions;
 using Content.Shared.Camera;
@@ -12,6 +13,7 @@ using Content.Shared.Item;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
+using Content.Shared.PowerCell; // CMU14
 using Content.Shared.Toggleable;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -33,7 +35,9 @@ public abstract partial class SharedScopeSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedItemSystem _item = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedNightVisionSystem _nightVision = default!; // CMU14
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!; // CMU14
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -53,6 +57,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         SubscribeLocalEvent<ScopeComponent, ActivateInWorldEvent>(OnActivateInWorld);
         SubscribeLocalEvent<ScopeComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<ScopeComponent, ScopeDoAfterEvent>(OnScopeDoAfter);
+        SubscribeLocalEvent<ScopeComponent, PowerCellSlotEmptyEvent>(OnScopePowerEmpty); // CMU14
 
         SubscribeLocalEvent<GunScopingComponent, GotUnequippedHandEvent>(OnGunUnequip);
         SubscribeLocalEvent<GunScopingComponent, HandDeselectedEvent>(OnGunDeselectHand);
@@ -136,7 +141,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
         var zoomLevel = GetCurrentZoomLevel(scope);
         if (zoomLevel.Name != null)
-            _popup.PopupClient(Loc.GetString("rcm-action-popup-scope-cycle-zoom", ("zoom", zoomLevel.Name)), args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("rcm-action-popup-scope-cycle-zoom", ("zoom", zoomLevel.Name)), args.Performer, args.Performer);
 
         Dirty(scope);
     }
@@ -214,7 +219,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         if (scope.Comp.Attachment && !TryGetActiveEntity(scope, out ent))
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-must-attach", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
@@ -224,21 +229,21 @@ public abstract partial class SharedScopeSystem : EntitySystem
             !IsMountedVultureSpotterScope(scope))
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-hold", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
         if (_pulling.IsPulled(user))
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-not-pulled", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
         if (_container.IsEntityInContainer(user) && !scope.Comp.CanUseInsideContainer)
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-not-contained", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
@@ -247,14 +252,14 @@ public abstract partial class SharedScopeSystem : EntitySystem
             !wieldable.Wielded)
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-wield", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
         if (HasComp<OverwatchWatchingComponent>(user))
         {
             var msgError = Loc.GetString("rmc-action-popup-scoping-user-cannot-view-cameras", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
@@ -319,7 +324,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         if (scope.Comp.ScopePopup != null)
         {
             var msgUser = Loc.GetString(scope.Comp.ScopePopup, ("scope", scope.Owner));
-            _popup.PopupClient(msgUser, user, user);
+            _popup.PopupEntity(msgUser, user, user);
         }
 
         _actionsSystem.SetToggled(scope.Comp.ScopingToggleActionEntity, true);
@@ -328,6 +333,14 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
         var ev = new ScopedEvent(user, scope);
         RaiseLocalEvent(user, ref ev);
+
+        // CMU14: apply scope optics after worn visors have been deactivated.
+        if (TryComp<NightVisionItemComponent>(scope, out var nightVision) &&
+            _powerCell.HasDrawCharge(scope.Owner, user))
+        {
+            _nightVision.EnableNightVisionItem((scope, nightVision), user);
+            _powerCell.SetDrawEnabled(scope.Owner, nightVision.User == user);
+        }
     }
 
     public virtual bool Unscope(Entity<ScopeComponent> scope)
@@ -359,15 +372,43 @@ public abstract partial class SharedScopeSystem : EntitySystem
         scope.Comp.ScopingDirection = null;
         Dirty(scope);
 
+        // CMU14: restore the user's vision when leaving a night-vision scope.
+        DisableScopeNightVision(scope);
+
         if (scope.Comp.UnScopePopup != null)
         {
             var msgUser = Loc.GetString(scope.Comp.UnScopePopup, ("scope", scope.Owner));
-            _popup.PopupClient(msgUser, user, user);
+            _popup.PopupEntity(msgUser, user, user);
         }
 
         _actionsSystem.SetToggled(scope.Comp.ScopingToggleActionEntity, false);
         _contentEye.ResetZoom(user);
         return true;
+    }
+
+    // CMU14: battery depletion disables night vision without interrupting optical zoom.
+    private void OnScopePowerEmpty(Entity<ScopeComponent> scope, ref PowerCellSlotEmptyEvent args)
+    {
+        if (_net.IsClient ||
+            !TryComp<NightVisionItemComponent>(scope, out var nightVision) ||
+            nightVision.User is not { } user)
+        {
+            return;
+        }
+
+        DisableScopeNightVision(scope);
+        _popup.PopupEntity(Loc.GetString("cmu-night-vision-scope-battery-empty"), scope, user, PopupType.SmallCaution);
+    }
+
+    // CMU14 method
+    private void DisableScopeNightVision(Entity<ScopeComponent> scope)
+    {
+        if (!TryComp<NightVisionItemComponent>(scope, out var nightVision))
+            return;
+
+        _powerCell.SetDrawEnabled(scope.Owner, false);
+        if (nightVision.User is { } user)
+            _nightVision.DisableNightVisionItem((scope, nightVision), user);
     }
 
     private void UnscopeGun(Entity<GunScopingComponent> gun)

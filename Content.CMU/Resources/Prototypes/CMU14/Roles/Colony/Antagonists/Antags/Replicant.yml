@@ -65,6 +65,11 @@
     antagPrototype: ReplicantRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-replicant
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: synth
 
 - type: antag
   parent: CMUAntagColonyBase

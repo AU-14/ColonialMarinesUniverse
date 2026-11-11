@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.CMU14.Fighter;
 using Robust.Client.Graphics;
+using Robust.Shared.Map.Components;
 
 namespace Content.Client.CMU14.Fighter;
 
@@ -18,6 +19,7 @@ public sealed partial class FighterStrikeOverlay
             if (!args.WorldAABB.Enlarged(40).Contains(origin)) continue;
             var age = (float) (now - launch.StartedAt).TotalSeconds;
             var direction = launch.TubeDirection;
+            var destination = launch.Launched ? ResolveDestination(launch) : null;
             var side = new Vector2(-direction.Y, direction.X);
             if (!launch.Launched)
             {
@@ -37,7 +39,7 @@ public sealed partial class FighterStrikeOverlay
             // The booster blooms after the missile clears the shoulder tube, then turns into the climb.
             if (age is >= .1f and < .65f)
             {
-                var booster = AscentPoint(origin, direction, launch.Direction, age);
+                var booster = AscentPoint(launch, destination, origin, direction, age);
                 var flash = MathF.Sin((age - .1f) / .55f * MathF.PI);
                 _particles.Mote(booster, new Vector2(2 + flash * 2), Blast.WithAlpha(flash));
                 _particles.Mote(booster, new Vector2(.8f), Color.White.WithAlpha(flash));
@@ -86,19 +88,20 @@ public sealed partial class FighterStrikeOverlay
             // The missile grows as it climbs toward the viewer; its exhaust stays behind and disperses.
             for (var i = 0; i < 40; i++)
             {
-                var emittedAt = i / 40f * FighterManpadVisualComponent.AscentSeconds;
+                var emittedAt = i / 40f * launch.FlightSeconds;
                 var smokeAge = age - emittedAt;
                 if (smokeAge < 0 || smokeAge > 6) continue;
-                var point = AscentPoint(origin, direction, launch.Direction, emittedAt) + new Vector2(.22f, .35f) * smokeAge +
-                    side * MathF.Sin(i * 1.7f + smokeAge) * smokeAge * .2f;
+                var point = AscentPoint(launch, destination, origin, direction, emittedAt)
+                    + new Vector2(.22f, .35f) * smokeAge
+                    + side * MathF.Sin(i * 1.7f + smokeAge) * smokeAge * .2f;
                 var size = .2f + emittedAt * .26f + smokeAge * .42f;
                 _particles.Mote(point, new Vector2(size, size * 1.3f),
                     Exhaust.WithAlpha((1 - smokeAge / 6) * .72f), smoke: true, seed: i);
             }
-            if (age >= FighterManpadVisualComponent.AscentSeconds) continue;
-            var progress = age / FighterManpadVisualComponent.AscentSeconds;
-            var missile = AscentPoint(origin, direction, launch.Direction, age);
-            var behind = AscentPoint(origin, direction, launch.Direction, Math.Max(0, age - .12f));
+            if (age >= launch.FlightSeconds) continue;
+            var progress = age / launch.FlightSeconds;
+            var missile = AscentPoint(launch, destination, origin, direction, age);
+            var behind = AscentPoint(launch, destination, origin, direction, Math.Max(0, age - .12f));
             var fade = Math.Min(1, (1 - progress) * 5);
             var width = .15f + progress * .6f;
             _particles.Mote(missile, new Vector2(width * 4), Blast.WithAlpha(fade * .9f));
@@ -144,9 +147,36 @@ public sealed partial class FighterStrikeOverlay
         }
     }
 
-    private static Vector2 AscentPoint(Vector2 origin, Vector2 tubeDirection, Vector2 targetDirection, float seconds)
+    private Vector2? ResolveDestination(FighterManpadVisualComponent launch)
     {
-        var t = seconds / FighterManpadVisualComponent.AscentSeconds;
-        return origin + tubeDirection * (2 * t * (2 - t)) + targetDirection * (14 * t * t) + Vector2.UnitY * (12 * t * t);
+        if (launch.Target is not { } target || !entities.TryGetComponent(target, out TransformComponent? xform))
+            return launch.Destination;
+
+        var local = entities.TryGetComponent(target, out MapGridComponent? grid)
+            ? grid.LocalAABB.Center
+            : Vector2.Zero;
+        return Vector2.Transform(local, _transform.GetWorldMatrix(xform));
+    }
+
+    private static Vector2 AscentPoint(
+        FighterManpadVisualComponent launch,
+        Vector2? destination,
+        Vector2 origin,
+        Vector2 tubeDirection,
+        float seconds)
+    {
+        var t = seconds / launch.FlightSeconds;
+        if (destination is { } end)
+        {
+            var arrival = Math.Clamp(t, 0, 1);
+            arrival *= arrival;
+            var kick = Math.Min(seconds / .4f, 1);
+            return origin + tubeDirection * (2 * kick * (2 - kick)) * (1 - arrival) + (end - origin) * arrival;
+        }
+
+        return origin
+            + tubeDirection * (2 * t * (2 - t))
+            + launch.Direction * (14 * t * t)
+            + Vector2.UnitY * (12 * t * t);
     }
 }

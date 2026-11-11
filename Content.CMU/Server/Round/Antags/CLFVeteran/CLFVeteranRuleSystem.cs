@@ -15,8 +15,8 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
     private const string ClfFaxGroup = "clf";
     private const string ClfPaperPrototype = "CMUPaperCLF";
 
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
-    [Dependency] private readonly FaxSystem _fax = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
+    [Dependency] private FaxSystem _fax = default!;
 
     private EntityUid? _veteranUid = null;
 
@@ -47,7 +47,7 @@ public sealed partial class CLFVeteranRuleSystem : GameRuleSystem<CLFVeteranRule
 
     private void OnCLFFaxReceiverInit(EntityUid uid, CLFFaxReceiverComponent comp, ComponentInit args)
     {
-        if (_veteranUid == null || !EntityManager.EntityExists(_veteranUid.Value))
+        if (_veteranUid == null || !Exists(_veteranUid.Value))
             return;
 
         if (!TryComp(uid, out FaxMachineComponent? faxComp))

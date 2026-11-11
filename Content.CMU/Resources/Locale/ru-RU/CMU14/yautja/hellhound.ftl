@@ -2,6 +2,7 @@ cmu-yautja-sleeping-hellhound-denied = Вы не собираетесь подх
 cmu-yautja-sleeping-hellhound-confirm-title = Призвать адскую гончую
 cmu-yautja-sleeping-hellhound-confirm-message = Разбудить адскую гончую?
 cmu-yautja-sleeping-hellhound-woken = {$hellhound} просыпается с голодным рыком.
+cmu-yautja-sleeping-hellhound-pack-full = Вы уже ведёте за собой полную стаю гончих.
 cmu-yautja-hellhound-ghost-name = Адская гончая
 cmu-yautja-hellhound-ghost-description = Пробудитесь как охотничий зверь яутжа и служите охоте.
 cmu-yautja-hellhound-ghost-rules = Вы охотничий зверь яутжа. Подчиняйтесь своим яутжа-хозяевам и не гриферьте вне указаний администрации или ивента.

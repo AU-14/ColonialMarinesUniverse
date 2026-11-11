@@ -18,6 +18,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Round.Antags;
 
@@ -27,8 +28,9 @@ namespace Content.Server.CMU14.Round.Antags;
 /// </summary>
 public sealed partial class ColonyAntagSummarySystem : EntitySystem
 {
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
     {
@@ -40,7 +42,7 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
         var lines = new List<string>();
         var petitionCovered = false;
 
-        var rules = EntityManager.AllEntityQueryEnumerator<AntagSelectionComponent>();
+        var rules = AllEntityQuery<AntagSelectionComponent>();
         while (rules.MoveNext(out var ruleUid, out _))
         {
             if (MetaData(ruleUid).EntityPrototype is not { } proto
@@ -62,13 +64,15 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 
                 string detail;
                 if (mindComp?.OwnedEntity is { } strikeBody
-                    && EntityManager.HasComponent<StrikeOrganizerComponent>(strikeBody)
+                    && HasComp<StrikeOrganizerComponent>(strikeBody)
                     && BestPetition() is { } petition)
                 {
                     petitionCovered = true;
                     detail = Loc.GetString("cmu-summary-detail-strike",
                         ("count", petition.count), ("goal", petition.goal));
                 }
+                else if (EarlyWarningDetail(mind) is { } ewDetail)
+                    detail = ewDetail;
                 else
                     detail = DetailFor(mindComp?.OwnedEntity);
 
@@ -82,7 +86,7 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
 
         if (!petitionCovered)
         {
-            var petitions = EntityManager.AllEntityQueryEnumerator<StrikePetitionComponent>();
+            var petitions = AllEntityQuery<StrikePetitionComponent>();
             while (petitions.MoveNext(out _, out var petition))
             {
                 lines.Add(Loc.GetString("cmu-summary-petition",
@@ -99,27 +103,67 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
             args.AddLine(line);
     }
 
+    /// <summary>
+    /// CMU14 (Early Warning Joe, CORE-04): the Joe's record lives on its mind role, so it survives a gibbed
+    /// body and reports the highest level reached rather than the level a respawn left it at.
+    /// </summary>
+    private string? EarlyWarningDetail(EntityUid mind)
+    {
+        if (!_role.MindHasRole<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeRoleComponent>(mind, out var role)
+            || !role.Value.Comp2.Recorded)
+        {
+            return null;
+        }
+
+        var record = role.Value.Comp2;
+        var levelName = string.Empty;
+        if (_proto.TryIndex<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeLevelsPrototype>("CMUEWJoeLevels", out var table)
+            && record.HighestLevel < table.Levels.Count)
+        {
+            levelName = Loc.GetString(table.Levels[record.HighestLevel].Name);
+        }
+
+        return Loc.GetString("cmu-summary-detail-ew-joe",
+            ("level", record.HighestLevel),
+            ("levelName", levelName),
+            ("thralls", record.ThrallsMade),
+            ("consoles", record.ConsolesAssimilated));
+    }
+
     private string DetailFor(EntityUid? body)
     {
         if (body == null)
             return Loc.GetString("cmu-summary-detail-none");
 
-        if (EntityManager.TryGetComponent<ArsonistComponent>(body, out var arsonist)
+        if (TryComp<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeComponent>(body, out var ewJoe))
+        {
+            var levelName = string.Empty;
+            if (_proto.TryIndex(ewJoe.LevelTable, out var table) && ewJoe.Level < table.Levels.Count)
+                levelName = Loc.GetString(table.Levels[ewJoe.Level].Name);
+
+            return Loc.GetString("cmu-summary-detail-ew-joe",
+                ("level", ewJoe.Level),
+                ("levelName", levelName),
+                ("thralls", ewJoe.ThrallsMade),
+                ("consoles", ewJoe.ConsolesAssimilated));
+        }
+
+        if (TryComp<ArsonistComponent>(body, out var arsonist)
             && arsonist.FiresCount > 0)
             return Loc.GetString("cmu-summary-detail-arsonist", ("count", arsonist.FiresCount));
 
-        if (EntityManager.TryGetComponent<CorporateAgentComponent>(body, out var agent))
+        if (TryComp<CorporateAgentComponent>(body, out var agent))
             return agent.Completed
                 ? Loc.GetString("cmu-summary-detail-agent-complete", ("corporation", agent.Corporation))
                 : Loc.GetString("cmu-summary-detail-agent-failed", ("corporation", agent.Corporation));
 
-        if (EntityManager.TryGetComponent<ReplicantComponent>(body, out var replicant))
+        if (TryComp<ReplicantComponent>(body, out var replicant))
             return replicant.Transformed
                 ? Loc.GetString("cmu-summary-detail-replicant-replaced", ("target", replicant.TargetName ?? string.Empty))
                 : Loc.GetString("cmu-summary-detail-replicant-never");
 
         if (body is { } riderBody
-            && EntityManager.TryGetComponent<RiderComponent>(riderBody, out var rider))
+            && TryComp<RiderComponent>(riderBody, out var rider))
         {
             var win = EntityManager.System<RiderSystem>().EvaluateWin((riderBody, rider));
             var key = rider.Flavor switch
@@ -141,21 +185,21 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
                 ("minutes", (int) rider.TotalRideTime.TotalMinutes));
         }
 
-        if (EntityManager.TryGetComponent<CLFSaboteurComponent>(body, out var saboteur)
+        if (TryComp<CLFSaboteurComponent>(body, out var saboteur)
             && saboteur.Count > 0)
             return Loc.GetString("cmu-summary-detail-saboteur", ("count", saboteur.Count));
 
-        if (EntityManager.TryGetComponent<CannibalComponent>(body, out var cannibal)
+        if (TryComp<CannibalComponent>(body, out var cannibal)
             && cannibal.MealsEaten > 0)
             return Loc.GetString("cmu-summary-detail-cannibal", ("count", cannibal.MealsEaten));
 
-        if (EntityManager.TryGetComponent<BountyHunterComponent>(body, out var hunter))
+        if (TryComp<BountyHunterComponent>(body, out var hunter))
             return Loc.GetString("cmu-summary-detail-hunter", ("count", hunter.TargetCount));
 
-        if (EntityManager.TryGetComponent<VigilanteComponent>(body, out var vigilante))
+        if (TryComp<VigilanteComponent>(body, out var vigilante))
             return Loc.GetString("cmu-summary-detail-vigilante", ("count", vigilante.TargetCount));
 
-        if (EntityManager.TryGetComponent<ColonyBountyComponent>(body, out var bounty))
+        if (TryComp<ColonyBountyComponent>(body, out var bounty))
         {
             if (bounty.Paid)
                 return bounty.Captured
@@ -174,7 +218,7 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
     private (int count, int goal)? BestPetition()
     {
         (int count, int goal)? best = null;
-        var petitions = EntityManager.AllEntityQueryEnumerator<StrikePetitionComponent>();
+        var petitions = AllEntityQuery<StrikePetitionComponent>();
         while (petitions.MoveNext(out _, out var petition))
         {
             if (best == null || petition.Signatures.Count > best.Value.count)
@@ -184,6 +228,6 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
     }
 
     private bool IsDead(EntityUid body)
-        => EntityManager.TryGetComponent<MobStateComponent>(body, out var mob)
+        => TryComp<MobStateComponent>(body, out var mob)
             && mob.CurrentState is MobState.Dead or MobState.Invalid;
 }

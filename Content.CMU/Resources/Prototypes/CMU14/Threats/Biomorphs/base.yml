@@ -27,6 +27,11 @@
   name: biomorph
   components:
   - type: Biomorph
+  - type: FiremanCarriable
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: Spottable
   - type: RMCSize
     size: Xeno

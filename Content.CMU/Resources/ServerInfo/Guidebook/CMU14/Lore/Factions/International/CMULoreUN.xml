@@ -1,0 +1,33 @@
+<Document>
+  # United Nations
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/UNHeader.png" MaxHeight="128"/>
+
+  The [bold]United Nations[/bold] (UN) is the oldest international body in human space, bringing together the nations of Earth and their colonies. It stands above the rivalries of the great powers, and is neutral to every nation, corporation and movement.
+
+  - It oversees the [textlink="Geneva Conventions of 12th August 2106" link="AU14UCMJGENCON"], which bind the UN and every signatory at all times, in peace and in war. Any member may be called on for military or humanitarian aid when it is needed.
+  - Critics accuse it of corruption, pointing to the influence [textlink="Weyland-Yutani" link="CMUGuideLoreWY"] has within it.
+
+  ## Original Core Members
+  When humanity first went to the stars, the UN was led by its core members: the United States, the European Union, Russia, India, Japan, the Central Confederation of Africa and Latin America.
+
+  Most of these have since been absorbed into the great powers of today.
+
+  ## Current Members
+  Today every major nation in human space holds a seat:
+  - the [textlink="United Americas" link="CMUGuideLoreUA"]
+  - the [textlink="Three World Empire" link="CMUGuideLoreTWE"]
+  - the [textlink="Union of Progressive Peoples" link="CMUGuideLoreUPP"]
+  - the [textlink="Central Confederation of Africa" link="CMUGuideLoreCCA"]
+  - the [textlink="Independent Core System Colonies" link="CMUGuideLoreICSC"]
+
+  ## Organizations
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearUNISCRifleman" Caption="UNISC"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearICRCDoctor" Caption="ICRC"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearCMBInvestigationRightsObserver" Caption="IHRO"/>
+  </Box>
+  - [textlink="United Nations Interstellar Settlement Corps" link="CMUGuideLoreUNISC"] (UNISC): the UN branch that protects humanity's settlements, best known for its peacekeepers.
+  - [textlink="International Committee of the Red Cross" link="CMUGuideLoreICRC"] (ICRC): an independent humanitarian organization backed by the UN.
+  - [textlink="Interstellar Human Rights Organization" link="CMUGuideLoreIHRO"] (IHRO): an independent watchdog that documents human rights abuses on the frontier.
+</Document>

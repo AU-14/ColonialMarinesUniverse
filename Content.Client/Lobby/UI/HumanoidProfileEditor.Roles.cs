@@ -5,9 +5,11 @@ using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Marines.Roles.Chevrons;
+using Content.Shared.CMU14.Round; // CMU14
 using Content.Shared.CMU14.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Rules; // CMU14
 using Content.Shared.CMU14.util;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
@@ -38,6 +40,10 @@ public sealed partial class HumanoidProfileEditor
     private readonly List<(string Gamemode, string Id, RequirementsSelector Selector)> _antagPreferences = new();
     private readonly Dictionary<string, BoxContainer> _jobCategories;
 
+    // CMU14: FoF only assigns the AddColonist roster. Null means the prototype
+    // was unreadable and the colony tab falls back to every colonist role.
+    private HashSet<ProtoId<JobPrototype>>? _fofColonyJobs;
+
     private void UpdateJobPriorities()
     {
         foreach (var (gamemode, jobId, selector) in _jobPriorities)
@@ -60,12 +66,20 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshLoadouts()
     {
-        _loadoutWindow?.Dispose();
+        _loadoutWindow?.Release();
     }
 
     private void OpenLoadout(JobPrototype jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto)
     {
-        _loadoutWindow?.Dispose();
+        OpenLoadout(jobProto, roleLoadout, roleLoadoutProto, LoadoutSystem.GetJobPrototype(jobProto.ID),
+            Loc.GetString("loadout-window-title-loadout", ("job", jobProto.LocalizedName)));
+    }
+
+    // CMU14: the global loadout uses the same editor without selecting a preview job.
+    private void OpenLoadout(JobPrototype? jobProto, RoleLoadout roleLoadout, RoleLoadoutPrototype roleLoadoutProto,
+        string concreteKey, string title)
+    {
+        _loadoutWindow?.Release();
         _loadoutWindow = null;
         var collection = IoCManager.Instance;
 
@@ -77,13 +91,12 @@ public sealed partial class HumanoidProfileEditor
 
         _loadoutWindow = new LoadoutWindow(Profile, roleLoadout, roleLoadoutProto, session, collection)
         {
-            Title = Loc.GetString("loadout-window-title-loadout", ("job", jobProto.LocalizedName)),
+            Title = title,
         };
 
         _loadoutWindow.RefreshLoadouts(roleLoadout, session, collection);
         _loadoutWindow.OpenCenteredLeft();
 
-        var concreteKey = LoadoutSystem.GetJobPrototype(jobProto.ID);
         _loadoutWindow.OnNameChanged += name =>
         {
             roleLoadout.EntityName = name;
@@ -119,11 +132,13 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshJobs()
     {
+        UpdateEventSideControls(); // CMU14
         foreach (var list in GetGamemodeJobLists())
-            list.DisposeAllChildren();
+            list.ReleaseChildren();
 
         _jobCategories.Clear();
         _jobPriorities.Clear();
+        LoadFoFColonyJobs(); // CMU14
 
         var departments = _prototypeManager.EnumeratePrototypes<DepartmentPrototype>()
             .Where(department => !department.EditorHidden)
@@ -138,6 +153,7 @@ public sealed partial class HumanoidProfileEditor
             ("humanoid-profile-editor-job-priority-high-button", (int) JobPriority.High),
         };
 
+        var added = new HashSet<(BoxContainer Target, string Job)>(); // CMU14: a job may belong to several departments.
         foreach (var department in departments)
         {
             var departmentName = Loc.GetString(department.Name);
@@ -157,6 +173,8 @@ public sealed partial class HumanoidProfileEditor
                 foreach (var (target, gamemode, sectionKey, sectionTitle) in
                          GetJobSections(department, job, departmentName))
                 {
+                    if (!added.Add((target, job.ID))) // CMU14
+                        continue;
                     AddJobSelector(
                         target,
                         gamemode,
@@ -170,10 +188,27 @@ public sealed partial class HumanoidProfileEditor
             }
         }
 
+        AddForceOnForceJobSelectors(items); // CMU14: one row per shared role, using the eligible side.
         foreach (var list in GetGamemodeJobLists())
             CrtLobbyTheme.Apply(list);
 
         UpdateJobPriorities();
+    }
+
+    // CMU14 method: FoF colony whitelist read from the AddColonist rule so the tab follows the YAML.
+    private void LoadFoFColonyJobs()
+    {
+        _fofColonyJobs = null;
+        if (!_prototypeManager.TryIndex<EntityPrototype>("AddColonist", out var proto)
+            || !proto.Components.TryGetValue(_componentFactory.GetComponentName<AddColonistRuleComponent>(), out var entry)
+            || entry.Component is not AddColonistRuleComponent rule)
+        {
+            _sawmill.Warning("AddColonist rule prototype unreadable, FoF colony tab shows every colonist role");
+            return;
+        }
+
+        _fofColonyJobs = new HashSet<ProtoId<JobPrototype>>(rule.Jobs.Keys);
+        _fofColonyJobs.UnionWith(rule.RandomJobs);
     }
 
     private void AddJobSelector(
@@ -321,6 +356,7 @@ public sealed partial class HumanoidProfileEditor
     {
         // CMU14: shared FoF role priorities.
         yield return FoFJobList;
+        yield return FoFColonyJobList;
         yield return InsurgencyGovernmentJobList;
         yield return InsurgencyInsurgentJobList;
         yield return InsurgencyCivilianJobList;
@@ -389,27 +425,22 @@ public sealed partial class HumanoidProfileEditor
         JobPrototype job,
         string departmentName)
     {
-        // CMU14: shared FoF role priorities.
+        // CMU14: one govfor guard feeds the FoF, Insurgency and Distress Signal military lists.
         if (department.Faction == "govfor")
         {
             var (key, title) = GetMilitaryJobSegment(job);
-            // CMU14: faction gameplay fixes.
-            yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
-        }
-
-        if (department.Faction == "govfor")
-        {
-            var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
+            // CMU14: FoF rows are built once from both sides by AddForceOnForceJobSelectors.
+            // yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
             yield return (
                 InsurgencyGovernmentJobList,
                 GamemodeInsurgency,
-                $"insurgency-govfor-{segmentKey}",
-                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                $"insurgency-govfor-{key}",
+                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", title)));
             yield return (
                 DistressGovernmentJobList,
                 GamemodeDistressSignal,
-                $"distress-govfor-{segmentKey}",
-                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", segmentTitle)));
+                $"distress-govfor-{key}",
+                Loc.GetString("humanoid-profile-editor-government-forces-label", ("segmentTitle", title)));
             yield break;
         }
 
@@ -438,6 +469,13 @@ public sealed partial class HumanoidProfileEditor
                 GamemodeInsurgency,
                 $"insurgency-civilian-{department.ID}",
                 title);
+            // CMU14: FoF only assigns the AddColonist roster, hide roles it can never grant.
+            if (_fofColonyJobs == null || _fofColonyJobs.Contains(job.ID))
+                yield return (
+                    FoFColonyJobList,
+                    GamemodeForceOnForce,
+                    $"fof-colony-{department.ID}",
+                    title);
             yield return (
                 ColonyCivilianJobList,
                 GamemodeColonyFall,
@@ -572,9 +610,9 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshAntags()
     {
-        InsurgencyAntagList.DisposeAllChildren();
-        ColonyAntagList.DisposeAllChildren();
-        DistressAntagList.DisposeAllChildren();
+        InsurgencyAntagList.ReleaseChildren();
+        ColonyAntagList.ReleaseChildren();
+        DistressAntagList.ReleaseChildren();
         _antagPreferences.Clear();
 
         PopulateAntagPreferences(InsurgencyAntagList, GamemodeInsurgency);
@@ -591,7 +629,9 @@ public sealed partial class HumanoidProfileEditor
         };
 
         var antagsByCategory = _prototypeManager.EnumerateCM<AntagPrototype>()
-            .Where(antag => antag.SetPreference)
+            // CMU14: an antag blacklisted for this gamemode is hidden from its preference tab.
+            .Where(antag => antag.SetPreference
+                && !antag.BlacklistedGamemodes.Contains(gamemode, StringComparer.OrdinalIgnoreCase))
             .GroupBy(antag => string.IsNullOrEmpty(antag.Category)
                 ? Loc.GetString("humanoid-profile-editor-antag-category-uncategorized")
                 : Loc.GetString(antag.Category))
@@ -698,8 +738,20 @@ public sealed partial class HumanoidProfileEditor
     private PlatoonRankPreferenceJobEntry? BuildRankPreferenceJobEntry(JobPrototype job)
     {
         var platoonOptions = new List<PlatoonRankOptions>();
+
+        // CMU14: only platoons a planet can actually vote in, shelved ones like BEAR stay hidden
+        var playable = new HashSet<ProtoId<PlatoonPrototype>>();
+        foreach (var planet in _entManager.System<RMCPlanetSystem>().GetAllPlanets())
+        {
+            playable.UnionWith(planet.Comp.PlatoonsGovfor);
+            playable.UnionWith(planet.Comp.PlatoonsOpfor);
+        }
+
         foreach (var platoon in _prototypeManager.EnumeratePrototypes<PlatoonPrototype>())
         {
+            if (!playable.Contains(platoon.ID))
+                continue;
+
             var chevronMap = ResolveChevronMapForPlatoon(job, platoon);
             if (chevronMap == null || chevronMap.Count == 0)
                 continue;
@@ -725,7 +777,7 @@ public sealed partial class HumanoidProfileEditor
 
             platoonOptions.Add(new PlatoonRankOptions(
                 platoon.ID,
-                platoon.Name,
+                Loc.GetString(platoon.Name), // CMU14: Hardcode localization
                 platoon.PlatoonPatch,
                 ranks));
         }

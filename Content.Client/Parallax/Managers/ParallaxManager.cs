@@ -68,6 +68,9 @@ public sealed partial class ParallaxManager : IParallaxManager
     {
         _sawmill.Level = LogLevel.Info;
         await LoadParallaxByName("Default");
+        // cmu edit start: also load the CM13 starfield used as the fallback for maps without a parallax
+        await LoadParallaxByName("CMUParallaxSpace");
+        // cmu edit end
     }
 
     public async Task LoadParallaxByName(string name)

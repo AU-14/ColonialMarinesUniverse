@@ -1,0 +1,9 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Rail flashlights are now more useful. They have the same stats as armor
+    lights with a larger radius, the downside being the light is directional. Rail
+    lights can also now be used inside helmets, just like in CM13.
+  type: Tweak
+time: '2026-10-11T16:10:32.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2156

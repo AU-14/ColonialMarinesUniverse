@@ -1,0 +1,459 @@
+{
+  "note": "Pixel offsets (x right, y up) of each sprite centre from the vehicle origin, per RSI direction. Draw riders far to near: larger depth first. Facing north the crate is in front of the riders, otherwise behind them.",
+  "riders": {
+    "cargo": {
+      "driver": {
+        "S": {
+          "px": [
+            10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            -10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            6
+          ],
+          "depth": 10.0
+        },
+        "W": {
+          "px": [
+            8,
+            -8
+          ],
+          "depth": -10.0
+        }
+      },
+      "passenger": {
+        "S": {
+          "px": [
+            -10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            -8
+          ],
+          "depth": -10.0
+        },
+        "W": {
+          "px": [
+            8,
+            6
+          ],
+          "depth": 10.0
+        }
+      }
+    },
+    "gunner": {
+      "driver": {
+        "S": {
+          "px": [
+            10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            -10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            6
+          ],
+          "depth": 10.0
+        },
+        "W": {
+          "px": [
+            8,
+            -8
+          ],
+          "depth": -10.0
+        }
+      },
+      "passenger": {
+        "S": {
+          "px": [
+            -10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            -8
+          ],
+          "depth": -10.0
+        },
+        "W": {
+          "px": [
+            8,
+            6
+          ],
+          "depth": 10.0
+        }
+      },
+      "gunner": {
+        "S": {
+          "px": [
+            0,
+            30
+          ],
+          "depth": 23.0
+        },
+        "N": {
+          "px": [
+            0,
+            -15
+          ],
+          "depth": -23.0
+        },
+        "E": {
+          "px": [
+            -29,
+            11
+          ],
+          "depth": -0.0
+        },
+        "W": {
+          "px": [
+            29,
+            11
+          ],
+          "depth": 0.0
+        }
+      }
+    },
+    "transport": {
+      "driver": {
+        "S": {
+          "px": [
+            10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            -10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            6
+          ],
+          "depth": 10.0
+        },
+        "W": {
+          "px": [
+            8,
+            -8
+          ],
+          "depth": -10.0
+        }
+      },
+      "passenger": {
+        "S": {
+          "px": [
+            -10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            -8
+          ],
+          "depth": -10.0
+        },
+        "W": {
+          "px": [
+            8,
+            6
+          ],
+          "depth": 10.0
+        }
+      },
+      "rear_left": {
+        "S": {
+          "px": [
+            10,
+            26
+          ],
+          "depth": 23.5
+        },
+        "N": {
+          "px": [
+            -10,
+            -19
+          ],
+          "depth": -23.5
+        },
+        "E": {
+          "px": [
+            -29,
+            8
+          ],
+          "depth": 10.0
+        },
+        "W": {
+          "px": [
+            29,
+            -4
+          ],
+          "depth": -10.0
+        }
+      },
+      "rear_right": {
+        "S": {
+          "px": [
+            -10,
+            26
+          ],
+          "depth": 23.5
+        },
+        "N": {
+          "px": [
+            10,
+            -19
+          ],
+          "depth": -23.5
+        },
+        "E": {
+          "px": [
+            -29,
+            -4
+          ],
+          "depth": -10.0
+        },
+        "W": {
+          "px": [
+            29,
+            8
+          ],
+          "depth": 10.0
+        }
+      }
+    },
+    "medical": {
+      "driver": {
+        "S": {
+          "px": [
+            10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            -10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            6
+          ],
+          "depth": 10.0
+        },
+        "W": {
+          "px": [
+            8,
+            -8
+          ],
+          "depth": -10.0
+        }
+      },
+      "passenger": {
+        "S": {
+          "px": [
+            -10,
+            7
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            10,
+            -4
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            -8
+          ],
+          "depth": -10.0
+        },
+        "W": {
+          "px": [
+            8,
+            6
+          ],
+          "depth": 10.0
+        }
+      },
+      "bed": {
+        "S": {
+          "px": [
+            0,
+            23
+          ],
+          "depth": 22.5
+        },
+        "N": {
+          "px": [
+            0,
+            -21
+          ],
+          "depth": -22.5
+        },
+        "E": {
+          "px": [
+            -28,
+            -1
+          ],
+          "depth": -0.0
+        },
+        "W": {
+          "px": [
+            28,
+            -1
+          ],
+          "depth": 0.0
+        }
+      }
+    }
+  },
+  "mgturret_pixel_offsets": {
+    "S": [
+      0,
+      24
+    ],
+    "N": [
+      0,
+      -8
+    ],
+    "E": [
+      -20,
+      18
+    ],
+    "W": [
+      20,
+      18
+    ]
+  },
+  "mgturret_muzzle_px": {
+    "along": 21,
+    "up": 2
+  },
+  "overlay_slide_note": "Overlay-entity states (*overlay*, lights, signals, brake, smoke) are stored slid down by overlay_slide_px rows per direction, and mgturret_* by mgturret_slide_px rows; draw them that many pixels higher.",
+  "overlay_slide_px": {
+    "S": 1,
+    "N": 0,
+    "E": 13,
+    "W": 12
+  },
+  "mgturret_slide_px": 0,
+  "cargo_crate_offsets": {
+    "S": [
+      0,
+      29
+    ],
+    "N": [
+      0,
+      -13
+    ],
+    "E": [
+      -27,
+      7
+    ],
+    "W": [
+      27,
+      7
+    ]
+  },
+  "headlight_lamp_anchor_px": {
+    "driver": {
+      "S": [
+        14,
+        -37
+      ],
+      "N": [
+        -14,
+        33
+      ],
+      "E": [
+        39,
+        6
+      ],
+      "W": [
+        -39,
+        -12
+      ]
+    },
+    "passenger": {
+      "S": [
+        -14,
+        -37
+      ],
+      "N": [
+        14,
+        33
+      ],
+      "E": [
+        39,
+        -12
+      ],
+      "W": [
+        -39,
+        6
+      ]
+    }
+  }
+}

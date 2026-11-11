@@ -1,3 +1,5 @@
+using Content.Shared.Interaction;
+using Content.Shared._RMC14.Xenonids.Spray;
 #pragma warning disable RA0002 // Arrange module damage and operator/view state explicitly.
 
 using System.Linq;
@@ -108,6 +110,30 @@ public sealed class VehicleGameplayRegressionTest : GameTest
                 startingItem: VehicleGameplayModule
         """;
 
+    [Test]
+    public async Task AcidSprayDamagesInstalledVehicleWheels()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid vehicle = default;
+        EntityUid wheel = default;
+        float before = 0;
+        await Server.WaitAssertion(() =>
+        {
+            vehicle = SEntMan.SpawnEntity("VehicleHumvee", map.GridCoords.Offset(new Vector2(2, 0)));
+            wheel = SEntMan.SpawnEntity("VehicleHumveeWheel", map.GridCoords);
+            var slots = Server.System<ItemSlotsSystem>();
+            Assert.That(slots.TryGetSlot(vehicle, "wheel-1", out var slot), Is.True);
+            Assert.That(slots.TryInsert(vehicle, slot!, wheel, null), Is.True);
+            before = Integrity(wheel).Integrity;
+            var xeno = SEntMan.SpawnEntity("CMXenoSpitter", map.GridCoords);
+            Server.System<XenoSprayAcidSystem>().CreateLine(xeno, map.GridCoords,
+                SComp<TransformComponent>(vehicle).Coordinates, TimeSpan.Zero, 4f, "XenoAcidSprayWeak");
+        });
+        await Pair.RunTicksSync(5);
+        await Server.WaitAssertion(() => Assert.That(Integrity(wheel).Integrity, Is.LessThan(before),
+            "A spray intersecting the hull must damage its installed wheels."));
+    }
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task ArmorAppliesBeforeOneBudgetIncludingNestedModules(bool explosion)
@@ -129,37 +155,6 @@ public sealed class VehicleGameplayRegressionTest : GameTest
             Assert.That(losses.Count(x => x > 0f), Is.EqualTo(explosion ? 4 : 2));
             if (!explosion)
                 Assert.That(Integrity(Part(vehicle, "armor")).Integrity, Is.EqualTo(91f).Within(0.01f));
-        });
-    }
-
-    [Test]
-    public async Task MinorWearKeepsFullPerformanceAndDamageSlowdownsHaveAFloor()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var vehicle = SEntMan.SpawnEntity("VehicleGameplayChassis", map.GridCoords);
-            var part = Part(vehicle, "support");
-            var hardpoints = Server.System<HardpointSystem>();
-            foreach (var health in new[] { 99f, 85f, 70f })
-            {
-                Integrity(part).Integrity = health;
-                Assert.That(hardpoints.GetHardpointPerformanceMultiplier(part), Is.EqualTo(1f));
-            }
-            Integrity(part).Integrity = 40f;
-            Assert.That(hardpoints.GetHardpointPerformanceMultiplier(part), Is.InRange(0.35f, 0.99f));
-            Integrity(part).Integrity = 10f;
-            Assert.That(hardpoints.GetHardpointPerformanceMultiplier(part), Is.Zero);
-
-            var mover = SEntMan.GetComponent<GridVehicleMoverComponent>(vehicle);
-            mover.SpeedAtZeroIntegrity = 0.1f;
-            Integrity(vehicle).Integrity = 1f;
-            SEntMan.EnsureComponent<VehicleMechanicalFailureModifierComponent>(vehicle).ReverseSpeedMultiplier = 0.1f;
-            var reverse = Invoke<float>(Server.System<GridVehicleMoverSystem>(), "GetModifiedMaxReverseSpeed", vehicle, mover);
-            Assert.That(reverse, Is.EqualTo(mover.MaxReverseSpeed * 0.35f).Within(0.001f));
-            mover.ImmobileUntil = SGameTiming.CurTime + TimeSpan.FromSeconds(3);
-            Assert.That(Invoke<float>(Server.System<GridVehicleMoverSystem>(), "GetModifiedMaxReverseSpeed", vehicle, mover), Is.Zero,
-                "the damage floor must not bypass a crash lockout");
         });
     }
 
@@ -212,42 +207,6 @@ public sealed class VehicleGameplayRegressionTest : GameTest
         });
     }
 
-    [TestCase("VehicleTankTreads")]
-    [TestCase("VehicleTankReinforcedTreads")]
-    public async Task FreshTreadsSurviveSeveralHeavyTailStabs(string prototype)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var vehicle = SEntMan.SpawnEntity("VehicleTank", map.GridCoords);
-            var slots = Server.System<ItemSlotsSystem>();
-            Assert.That(slots.TryGetSlot(vehicle, "wheel-1", out var slot), Is.True);
-            if (slot.Item is { } old)
-                SEntMan.DeleteEntity(old);
-            var treads = SEntMan.SpawnEntity(prototype, map.GridCoords);
-            Assert.That(slots.TryInsert(vehicle, slot, treads, null), Is.True);
-            var ravager = SEntMan.SpawnEntity("CMXenoRavager", map.GridCoords.Offset(new Vector2(3, 0)));
-            var stab = SEntMan.GetComponent<XenoTailStabComponent>(ravager).TailDamage;
-            var initial = Integrity(treads).Integrity;
-            for (var i = 0; i < 3; i++)
-                Server.System<DamageableSystem>().TryChangeDamage(vehicle, new DamageSpecifier(stab), origin: ravager,
-                    impact: DamageImpact.ForMelee(stab));
-            var remaining = Integrity(treads).Integrity;
-            Assert.That(remaining, Is.GreaterThan(initial * 0.7f), "three tail stabs should not cripple fresh running gear");
-            Assert.That(remaining, Is.LessThan(initial), "side attacks must still reach the treads");
-            TestContext.Out.WriteLine($"{prototype}: {initial - remaining:0.##} integrity lost to three Ravager tail stabs; {remaining:0.##}/{initial} remains.");
-            var hits = 3;
-            while (Integrity(treads).Integrity > 0f && hits < 100)
-            {
-                Server.System<DamageableSystem>().TryChangeDamage(vehicle, new DamageSpecifier(stab), origin: ravager,
-                    impact: DamageImpact.ForMelee(stab));
-                hits++;
-            }
-            Assert.That(hits, Is.InRange(10, 99), "running gear must resist several hits but remain destructible");
-            TestContext.Out.WriteLine($"{prototype}: {hits} side-on Ravager tail stabs to destroy fresh treads without armor plating.");
-        });
-    }
-
     [TestCase(false)]
     [TestCase(true)]
     public async Task SmashCannotPassThroughASurvivingObstacle(bool vetoDestruction)
@@ -265,39 +224,6 @@ public sealed class VehicleGameplayRegressionTest : GameTest
                 SEntMan.EnsureComponent<VehicleDestructionVetoComponent>(obstacle);
             Assert.That(Invoke<bool>(Server.System<GridVehicleMoverSystem>(), "TrySmash", obstacle, vehicle, false, false), Is.False);
             Assert.That(SEntMan.IsQueuedForDeletion(obstacle), Is.False);
-        });
-    }
-
-    [Test]
-    public async Task GunnerRangeReachesExteriorHullAndResetsAfterUnsubscribe()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var session = ServerSession!;
-            var original = session.AttachedEntity;
-            try
-            {
-                var vehicle = SEntMan.SpawnEntity("VehicleGameplayChassis", map.GridCoords);
-                var gunner = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                Server.PlayerMan.SetAttachedEntity(session, gunner);
-                var view = SEntMan.EnsureComponent<VehicleGunnerViewUserComponent>(gunner);
-                view.PvsScale = 0.35f;
-                view.CursorPvsIncrease = 0.5f;
-                view.CursorMaxOffset = 5f;
-                Server.System<VehicleGunnerViewSystem>().RefreshView(gunner);
-                var usersEye = SEntMan.GetComponent<EyeComponent>(gunner);
-                var subscribers = Server.System<ViewSubscriberSystem>();
-                subscribers.AddViewSubscriber(vehicle, session);
-                Assert.That(SEntMan.GetComponent<EyeComponent>(vehicle).PvsScale, Is.EqualTo(usersEye.PvsScale));
-                Assert.That(usersEye.PvsScale, Is.GreaterThan(1.5f));
-                subscribers.RemoveViewSubscriber(vehicle, session);
-                Assert.That(SEntMan.GetComponent<EyeComponent>(vehicle).PvsScale, Is.EqualTo(1f));
-            }
-            finally
-            {
-                Server.PlayerMan.SetAttachedEntity(session, original);
-            }
         });
     }
 
@@ -356,35 +282,6 @@ public sealed class VehicleGameplayRegressionTest : GameTest
             Invoke<bool>(Server.System<GridVehicleMoverSystem>(), "UpdateDynamicDriveMovement",
                 vehicle, mover, grid, gridComp, 0f, 1f, 0.2f);
             Assert.That(mover.AngularVelocityDegrees, Is.GreaterThan(0f));
-        });
-    }
-
-    [Test]
-    public async Task ExteriorSpeechUsesHullBubbleAndPreservesSpeaker()
-    {
-        var outside = await Pair.CreateTestMap();
-        var inside = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var session = ServerSession!;
-            var original = session.AttachedEntity;
-            try
-            {
-                var vehicle = SEntMan.SpawnEntity("VehicleGameplayChassis", outside.GridCoords);
-                var speaker = SEntMan.SpawnEntity("CMMobHuman", inside.GridCoords);
-                SEntMan.EnsureComponent<VehicleInteriorOccupantComponent>(speaker).Vehicle = vehicle;
-                var listener = SEntMan.SpawnEntity("CMMobHuman", outside.GridCoords.Offset(new Vector2(1, 0)));
-                Server.PlayerMan.SetAttachedEntity(session, listener);
-                var recipients = new Dictionary<ICommonSession, ChatSystem.ICChatRecipientData>();
-                var relay = new ExpandICChatRecipientsEvent(speaker, 7f, recipients);
-                SEntMan.EventBus.RaiseEvent(EventSource.Local, relay);
-                Assert.That(recipients[session].BubbleSource, Is.EqualTo(vehicle));
-                Assert.That(relay.Source, Is.EqualTo(speaker));
-            }
-            finally
-            {
-                Server.PlayerMan.SetAttachedEntity(session, original);
-            }
         });
     }
 

@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.CMU14.Radio;
 using Content.Shared.Clothing;
@@ -19,6 +20,7 @@ namespace Content.Server.CMU14.Radio;
 public sealed partial class AccessoryHeadsetSystem : EntitySystem
 {
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedMarineSystem _marine = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private RankChangerSystem _rankChanger = default!;
     [Dependency] private RankSystem _rank = default!;
@@ -183,6 +185,10 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
             Dirty(target, wearerComp);
         }
 
+        // an earpiece standing in for a headset gives the same rank/role icons one would
+        if (TryComp(ent, out GrantMarineIconsComponent? icons))
+            _marine.GiveMarineHud(target, icons.Factions, icons.BypassFactionIcons);
+
         Dirty(ent);
     }
 
@@ -226,6 +232,12 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
 
         // Remove default channel component
         RemCompDeferred<AccessoryRadioWearerComponent>(target.Value);
+
+        if (HasComp<GrantMarineIconsComponent>(ent) &&
+            !_inventory.TryGetInventoryEntity<GrantMarineIconsComponent>(target.Value, out _))
+        {
+            RemCompDeferred<ShowMarineIconsComponent>(target.Value);
+        }
 
         ClearTracking(ent);
     }

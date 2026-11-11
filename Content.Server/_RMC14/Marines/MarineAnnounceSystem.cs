@@ -133,6 +133,9 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
             var targetFaction = ResolveAnnouncementFaction(faction);
             filter = Filter.Empty().AddWhereAttachedEntity(e =>
             {
+                if (IsCMUAnnouncementExcluded(e)) // CMU14
+                    return false;
+
                 if (TryComp<MarineComponent>(e, out var marine))
                     return IsMarineAnnouncementRecipient(marine.Faction, targetFaction);
 
@@ -253,6 +256,9 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         var targetFaction = ResolveAnnouncementFaction(faction);
         return Filter.Empty().AddWhereAttachedEntity(e =>
         {
+            if (IsCMUAnnouncementExcluded(e)) // CMU14
+                return false;
+
             if (TryComp<MarineComponent>(e, out var marine))
                 return IsMarineAnnouncementRecipient(marine.Faction, targetFaction);
 
@@ -343,6 +349,7 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
             RMCAlertLevels.Green => Color.LawnGreen,
             RMCAlertLevels.Blue => Color.DodgerBlue,
             RMCAlertLevels.Red => Color.Red,
+            RMCAlertLevels.Black => Color.DimGray, // CMU14: darkened ship
             RMCAlertLevels.Delta => Color.DarkRed,
             _ => Color.White
         };
@@ -352,6 +359,7 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
             RMCAlertLevels.Green => null,
             RMCAlertLevels.Blue => "bluealert",
             RMCAlertLevels.Red => "redalert",
+            RMCAlertLevels.Black => "redalert", // CMU14: darkened ship rides the red decal
             RMCAlertLevels.Delta => "evac",
             _ => "default"
         };

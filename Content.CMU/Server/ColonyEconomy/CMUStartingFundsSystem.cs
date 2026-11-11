@@ -11,7 +11,7 @@ namespace Content.Server.CMU14.ColonyEconomy;
 /// <summary>
 /// Credits every spawning character's ID card account with starting money based on their job's pay tier.
 /// </summary>
-public sealed class CMUStartingFundsSystem : EntitySystem
+public sealed partial class CMUStartingFundsSystem : EntitySystem
 {
     [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -32,6 +32,10 @@ public sealed class CMUStartingFundsSystem : EntitySystem
 
         idCard.Comp.AccountBalance += _random.Next(tier.Min, tier.Max + 1);
         Dirty(idCard);
+
+        // Anyone paid into an account gets their banking details in their character notes.
+        if (tier.Max > 0)
+            EnsureComp<CMUBankAccountHolderComponent>(args.Mob);
     }
 
     private CMUStartingFundsPrototype? GetTier(string jobId)

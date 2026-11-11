@@ -24,6 +24,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager
 
     private void ObserveRuntime(TimeSpan now)
     {
+        using var cost = _runtimeCost.Measure();
         _memory.Sample(now);
         var pause = GC.GetTotalPauseDuration();
         _runtimeWindowMs = _lastRuntimeSample == default ? 0 : (now - _lastRuntimeSample).TotalMilliseconds;
@@ -36,9 +37,12 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager
     {
         // Manual reports can reuse an older scalar observation. Age operations at emission time.
         var now = _timing.RealTime;
+        // A lifecycle frame can contain several long stages. Keep earlier stages from the
+        // measured runtime window instead of dropping everything but its final two seconds.
+        var retention = TimeSpan.FromMilliseconds(Math.Max(2000, _runtimeWindowMs));
         while (_operations.TryDequeue(out var operation))
         {
-            if (now - operation.Completed > TimeSpan.FromSeconds(2))
+            if (now - operation.Completed > retention)
                 continue;
             _sawmill.Warning(Invariant(
                 $"[CMU-PERF] operation incidentId={_activeIncidentId} name={SanitizeName(operation.Name)} ",

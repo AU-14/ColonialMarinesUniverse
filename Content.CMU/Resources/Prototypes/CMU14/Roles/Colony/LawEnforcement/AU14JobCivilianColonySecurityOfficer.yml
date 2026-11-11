@@ -29,7 +29,7 @@
       sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
       state: weya_goon_standard
 
-  name: au14-job-name-colonysecurityofficer
+  name: cmu-job-title-colony-security-officer
   description: au14-job-description-colonysecurityofficer
   setPreference: false
   canBeAntag: false

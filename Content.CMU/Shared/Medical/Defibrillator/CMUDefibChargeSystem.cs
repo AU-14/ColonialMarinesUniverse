@@ -30,7 +30,7 @@ namespace Content.Shared.CMU14.Medical.Defibrillator;
 /// More energy heals more on a revival shock, making it more likely to bring someone back, but burns the chest;
 /// less energy is gentler and less effective. AEDs pick their energy automatically and can't be tuned.
 /// </summary>
-public sealed class CMUDefibChargeSystem : EntitySystem
+public sealed partial class CMUDefibChargeSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBodySystem _body = default!;
@@ -42,6 +42,7 @@ public sealed class CMUDefibChargeSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private SharedCMURoboticLimbSystem _roboticLimbs = default!;
     [Dependency] private SharedRottingSystem _rotting = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -142,7 +143,8 @@ public sealed class CMUDefibChargeSystem : EntitySystem
         }
 
         var damage = _damageable.GetAllDamage(target);
-        var total = damage.GetTotal();
+        var protectedDamage = _roboticLimbs.GetProtectedDefibDamage(target);
+        var total = damage.GetTotal() - protectedDamage.GetTotal();
 
         foreach (var setting in Settings)
         {
@@ -150,7 +152,9 @@ public sealed class CMUDefibChargeSystem : EntitySystem
             foreach (var (type, amount) in heal.DamageDict)
             {
                 if (amount < FixedPoint2.Zero)
-                    after -= FixedPoint2.Min(damage.DamageDict.GetValueOrDefault(type), -amount * setting.HealMultiplier);
+                    after -= FixedPoint2.Min(
+                        damage.DamageDict.GetValueOrDefault(type) - protectedDamage.DamageDict.GetValueOrDefault(type),
+                        -amount * setting.HealMultiplier);
                 else if (setting.Joules > NoBurnJoules)
                     after += amount;
             }
@@ -230,7 +234,7 @@ public sealed class CMUDefibChargeSystem : EntitySystem
 
         if (!_skills.HasAllSkills(user, AdjustSkill))
         {
-            _popup.PopupClient(Loc.GetString("cmu-defib-charge-no-skill"), defib, user);
+            _popup.PopupEntity(Loc.GetString("cmu-defib-charge-no-skill"), defib, user);
             return;
         }
 
@@ -251,7 +255,7 @@ public sealed class CMUDefibChargeSystem : EntitySystem
         Dirty(defib, charge);
 
         _audio.PlayPredicted(AdjustSound, defib, user);
-        _popup.PopupClient(Loc.GetString("cmu-defib-charge-set", ("joules", joules)), defib, user);
+        _popup.PopupEntity(Loc.GetString("cmu-defib-charge-set", ("joules", joules)), defib, user);
     }
 
     private void OnExamined(Entity<DefibrillatorComponent> ent, ref ExaminedEvent args)

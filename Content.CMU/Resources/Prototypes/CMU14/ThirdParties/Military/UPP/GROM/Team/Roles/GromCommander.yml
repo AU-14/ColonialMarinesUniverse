@@ -55,7 +55,7 @@
     UPP_Captain:
       entity: AU14ChevronUPPNICaptain
       requirements: []
-  spawnMenuRoleName: UPP GROM Commander (Survivor)
+  spawnMenuRoleName: UPP GROM Commander
   startingGear: AU14GearUPPGROMCommander
   greeting: au14-uppgrom-greeting
   icon: "AU14JobIconUPPGROMCommander"
@@ -89,14 +89,14 @@
   id: AU14GearUPPGROMCommander
   equipment:
     id: AU14IDCardUPPGROMCommander
-    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    outerClothing: CMUUPPArmorFullMinimalistic
     jumpsuit: AU14FatiguesUPPGROM
     shoes: RMCBootsSPPFilled
-    head: CMHeadCapSPPBeret
+    head: RuMCHeadBeretMarien
     belt: AU14BeltMedicalUPPFull
-    pocket1: RMCPouchCommandFull
-    pocket2: AU14PouchIFAKFill
-    back: RMCSatchelSPPFull
+    pocket1: CMUUPPPouchMagazineUPPFull
+    pocket2: RuMCUPPPouchIFAKFill
+    back: CMUUPPNavalInfantrySatchelFull
     ears: RMCHeadsetGROM
     suitstorage: AU14WeaponRifleAG80Filled
 

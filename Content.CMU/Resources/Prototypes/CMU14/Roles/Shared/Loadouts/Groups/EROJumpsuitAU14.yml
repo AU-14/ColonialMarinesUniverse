@@ -1,4 +1,5 @@
 - type: loadoutGroup
+  parent: CivJumpsuitAU14
   id: EROJumpsuitAU14
   name: au14-loadout-group-civilian-jumpsuit
   minLimit: 1

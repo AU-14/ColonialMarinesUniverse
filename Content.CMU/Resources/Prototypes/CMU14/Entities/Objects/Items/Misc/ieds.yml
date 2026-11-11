@@ -52,8 +52,11 @@
   - type: DeviceLinkSink
     ports:
     - Timer
+  # built to cripple light vehicles, credit the blast against hulls like a rocket
+  - type: VehicleDamageMultiplier
+    multiplier: 12
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1400
     intensitySlope: 1.5
     maxIntensity: 80
@@ -61,6 +64,8 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 25
+  # can be wired into a civilian vehicle as a car bomb
+  - type: CMUVBIED
 
 - type: entity
   name: huge improvised explosive device
@@ -97,8 +102,11 @@
   - type: DeviceLinkSink
     ports:
     - Timer
+  # built to cripple light vehicles, credit the blast against hulls like a rocket
+  - type: VehicleDamageMultiplier
+    multiplier: 12
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1800
     intensitySlope: 1.5
     maxIntensity: 100
@@ -106,6 +114,10 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 35
+  # can be wired into a civilian vehicle as a car bomb
+  - type: CMUVBIED
+    interiorTotalIntensity: 600
+    interiorMaxIntensity: 50
 
 - type: entity
   name: improvised explosive vest
@@ -150,7 +162,7 @@
     ports:
     - Timer
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1500
     intensitySlope: 10
     maxIntensity: 100

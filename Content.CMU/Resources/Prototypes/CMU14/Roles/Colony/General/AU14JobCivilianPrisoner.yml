@@ -39,6 +39,7 @@
   equipment:
     jumpsuit: AU14CivilianPrisonJumpsuit
     shoes: RMCShoesBlack
+    id: AU14IDCardColonyPrisoner
 
 - type: entity
   parent: CMSpawnPointJobBase

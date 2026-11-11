@@ -25,7 +25,9 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers; // CMU14
 using Robust.Shared.Map;
+using Robust.Shared.Network; // CMU14
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
@@ -47,6 +49,8 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private UseDelaySystem _useDelaySystem = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private INetManager _net = default!; // CMU14
+    [Dependency] private SharedContainerSystem _containers = default!; // CMU14
 
     private const string AttachableToggleUseDelayId = "RMCAttachableToggle";
 
@@ -239,7 +243,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
             if (holderUid == null)
                 return;
 
-            _popupSystem.PopupClient(
+            _popupSystem.PopupEntity(
                 Loc.GetString("rmc-attachable-shoot-fail-not-wielded", ("holder", holderUid), ("attachable", attachable)),
                 args.User,
                 args.User);
@@ -266,7 +270,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
 
         args.Cancelled = true;
 
-        _popupSystem.PopupClient(gun.Comp.Message, args.User, args.User);
+        _popupSystem.PopupEntity(gun.Comp.Message, args.User, args.User);
     }
 
 /*    private void OnUniqueAction(Entity<AttachableToggleableComponent> attachable, ref UniqueActionEvent args)
@@ -472,7 +476,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         if (attachable.Comp.HeldOnlyActivate && !attachable.Comp.Active && (userUid == null || !_handsSystem.IsHolding(userUid.Value, args.Holder, out _)))
         {
             if (!silent)
-                _popupSystem.PopupClient(
+                _popupSystem.PopupEntity(
                     Loc.GetString("rmc-attachable-activation-fail-not-held", ("holder", args.Holder), ("attachable", attachable)),
                     args.User,
                     args.User);
@@ -482,7 +486,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         if (attachable.Comp.UserOnly && userUid != args.User)
         {
             if (!silent)
-                _popupSystem.PopupClient(
+                _popupSystem.PopupEntity(
                     Loc.GetString("rmc-attachable-activation-fail-not-owned", ("holder", args.Holder), ("attachable", attachable)),
                     args.User,
                     args.User);
@@ -492,7 +496,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         if (!attachable.Comp.Active && attachable.Comp.WieldedOnly && (!TryComp(args.Holder, out WieldableComponent? wieldableComponent) || !wieldableComponent.Wielded))
         {
             if (!silent)
-                _popupSystem.PopupClient(
+                _popupSystem.PopupEntity(
                     Loc.GetString("rmc-attachable-activation-fail-not-wielded", ("holder", args.Holder), ("attachable", attachable)),
                     args.User,
                     args.User);
@@ -651,7 +655,7 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         _actionsSystem.StartUseDelay(attachable.Comp.Action);
 
         if (attachable.Comp.ShowTogglePopup && userUid != null)
-            _popupSystem.PopupClient(popupText, userUid.Value, userUid.Value);
+            _popupSystem.PopupEntity(popupText, userUid.Value, userUid.Value);
 
         _audioSystem.PlayPredicted(
             attachable.Comp.Active ? attachable.Comp.ActivateSound : attachable.Comp.DeactivateSound,
@@ -766,6 +770,19 @@ public sealed partial class AttachableToggleableSystem : EntitySystem
         }
 
         var exists = ent.Comp.Action != null;
+        // CMU14 Begin: a stale action reference must be repaired by the server.
+        if (ent.Comp.Action is { } pending && Exists(pending) &&
+            (!_containers.TryGetContainingContainer(pending, out var container) ||
+                container != actionsContainerComponent.Container))
+        {
+            if (_net.IsServer)
+            {
+                ent.Comp.Action = null;
+                Dirty(ent);
+            }
+            return;
+        }
+        // CMU14 End
         _actionContainerSystem.EnsureAction(ent, ref ent.Comp.Action, ent.Comp.ActionId, actionsContainerComponent);
 
         if (ent.Comp.Action is not { } actionId)

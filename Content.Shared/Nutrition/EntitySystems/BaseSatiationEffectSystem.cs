@@ -73,7 +73,7 @@ public abstract partial class BaseSatiationEffectSystem<TComp, T> : EntitySystem
         var comp = EnsureComp<SatiationComponent>(entity);
         foreach (var type in GetThresholds(entity.Comp).Keys)
         {
-            UpdateSatiation(entity, comp, type);
+            UpdateSatiation(entity, comp, type, initializing: true); // CMU14: initialize dependent projections too.
         }
     }
 
@@ -90,7 +90,8 @@ public abstract partial class BaseSatiationEffectSystem<TComp, T> : EntitySystem
     /// <summary>
     /// Updates the maintained <typeparamref name="T"/> based on the entity's satiation.
     /// </summary>
-    private void UpdateSatiation(Entity<TComp> entity, SatiationComponent comp, ProtoId<SatiationTypePrototype> type)
+    private void UpdateSatiation(Entity<TComp> entity, SatiationComponent comp, ProtoId<SatiationTypePrototype> type,
+        bool initializing = false) // CMU14: map initialization must refresh even a default-valued effect.
     {
         if (!GetThresholds(entity.Comp).TryGetValue(type, out var thresholds))
             return;
@@ -105,21 +106,30 @@ public abstract partial class BaseSatiationEffectSystem<TComp, T> : EntitySystem
             out var nextLowerThreshold
         );
 
-        thresholds.Current = gotThreshold ? result ?? DefaultValue() : DefaultValue();
-        thresholds.ProjectedThresholdChangeTime = _satiation.GetTimeToBound(
+        // CMU14 Begin: feeding within one threshold must not dirty unchanged effects or refresh all movement consumers.
+        var current = gotThreshold ? result ?? DefaultValue() : DefaultValue();
+        var valueChanged = !EqualityComparer<T>.Default.Equals(thresholds.Current, current);
+        var projectedTime = _satiation.GetTimeToBound(
             satiation,
             type,
             nextHigherThreshold,
             nextLowerThreshold
         );
 
-        Dirty(entity);
+        var deadlineChanged = thresholds.ProjectedThresholdChangeTime != projectedTime;
+        thresholds.Current = current;
+        thresholds.ProjectedThresholdChangeTime = projectedTime;
 
-        AfterSatiationUpdate(entity);
+        if (initializing || valueChanged || deadlineChanged)
+            Dirty(entity);
+
+        if (initializing || valueChanged)
+            AfterSatiationUpdate(entity);
+        // CMU14 End
     }
 
     /// <summary>
-    /// This function is called after <see cref="UpdateSatiation"/> completes its work maintaining <typeparamref name="T"/>.
+    /// CMU14: Called on initialization and when the maintained value changes.
     /// </summary>
     protected virtual void AfterSatiationUpdate(Entity<TComp> entity) { }
 }

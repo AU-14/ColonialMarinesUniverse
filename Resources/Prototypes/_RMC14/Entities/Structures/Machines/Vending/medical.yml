@@ -129,7 +129,7 @@
 #        amount: 4
     - name: Medical utilities
       entries:
-      - id: CMDefibrillator
+      - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator
         amount: 3
       - id: CMSurgicalLine
         amount: 2
@@ -157,7 +157,7 @@
     access: [["CMAccessMedical"]]
 
 - type: entity
-  parent: CMVendorMedical
+  parent: CMVendorMedicalAllAccess # CMU14: was CMVendorMedical, whose CMAccessMedical lock shut civilian colonists out of the PVE vendor
   id: RMCVendorMedicalPVE
   suffix: PVE
   components:

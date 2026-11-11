@@ -94,8 +94,7 @@ public sealed partial class TacticalMapSystem
     public (EntityUid GridId, int Key)? CreateFactionIntelBlip(
         EntityUid source,
         string sourceFactionLower,
-        string viewerFactionUpper,
-        bool snapshot = false)
+        string viewerFactionUpper)
     {
         if (!_transformQuery.TryComp(source, out var xform) ||
             xform.GridUid is not { } gridId ||
@@ -118,7 +117,7 @@ public sealed partial class TacticalMapSystem
 
         var key = _nextIntelBlipKey--;
 
-        if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out var snapshotBlips))
+        if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out _))
             return null;
 
         // live dict only: DF fixes are realtime SIGINT for the ops consoles (tacmap
@@ -127,11 +126,6 @@ public sealed partial class TacticalMapSystem
         // up still captures it, which is fine - that update reflects current intel
         live[key] = blip;
         _intelBlipGrids[key] = gridId;
-
-        // a fix an RTO took on a net they broke out themselves is short-lived and theirs to act on,
-        // so it goes on the map every tacmap on the side draws, not only the ops consoles
-        if (snapshot)
-            snapshotBlips[key] = blip;
 
         tacticalMap.MapDirty = true;
         return (gridId, key);

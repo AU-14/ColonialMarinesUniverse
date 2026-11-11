@@ -5,6 +5,8 @@
   whitelist:
     components:
     - Xeno
+    tags: # Wendigos are not xenos
+    - Wendigo
   blacklist:
     components:
     - BorgChassis

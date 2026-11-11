@@ -1,0 +1,47 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Pixel-art military jeep drawn for CMU",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "tires"
+        },
+        {
+            "name": "road_tires"
+        },
+        {
+            "name": "mgturret"
+        },
+        {
+            "name": "windshield"
+        },
+        {
+            "name": "searchlight"
+        },
+        {
+            "name": "engine"
+        },
+        {
+            "name": "headlight"
+        },
+        {
+            "name": "turn_signal"
+        },
+        {
+            "name": "taillight"
+        },
+        {
+            "name": "hood"
+        },
+        {
+            "name": "door"
+        },
+        {
+            "name": "tailgate"
+        }
+    ]
+}

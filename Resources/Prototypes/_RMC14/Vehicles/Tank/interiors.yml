@@ -6,6 +6,9 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: Tag
+    tags:
+    - HideContextMenu
   - type: Transform
     anchored: true
   - type: Sprite
@@ -21,6 +24,9 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: Tag
+    tags:
+    - HideContextMenu
   - type: Transform
     anchored: true
   - type: Physics
@@ -41,6 +47,7 @@
   - type: Physics
     bodyType: Static
     canCollide: true
+  - type: Airtight # CMU14: the physical cabin hull must retain its finite air supply.
   - type: Occluder
   - type: Fixtures
     fixtures:
@@ -268,6 +275,7 @@
     components:
     - type: Fixtures
     - type: Occluder
+    - type: Tag
   - type: Transform
     anchored: false
   - type: Physics

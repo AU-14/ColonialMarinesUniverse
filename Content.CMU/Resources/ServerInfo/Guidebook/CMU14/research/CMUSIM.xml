@@ -9,7 +9,7 @@ To use this machine, you insert papers dispensed by the [textlink="XRF Scanner" 
 Any paper deemed "incomplete" will not be accepted. Incomplete papers include any chemical paper that does not have a recipe on it.
 This means that special [textlink="Hydroponics" link="CMUBotany"] chemicals cannot be used in the synthesis simulator.
 
-Making your own chemicals is not cheap, however. You will need to discover the properties of the chemicals and obtain credits using the [textlink="XRF Scanner" link="CMUXRF"].
+Making your own chemicals is not cheap, however. You will need to discover the properties of the chemicals and obtain [bold]sample data[/bold] using the [textlink="XRF Scanner" link="CMUXRF"]. Sample data is separate from the research credits that buy clearance: every first scan of a contract chemical awards both, and scanning a chemical you simulated yourself awards sample data only.
 
 There are four modes on the synthesis simulator.
 

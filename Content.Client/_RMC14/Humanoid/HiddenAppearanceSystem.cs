@@ -14,7 +14,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Humanoid;
 
-public sealed class HiddenAppearanceSystem : EntitySystem
+public sealed partial class HiddenAppearanceSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;

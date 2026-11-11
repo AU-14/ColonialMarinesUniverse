@@ -18,6 +18,9 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
     [Dependency] private CameraSessionSystem _cameraSessions = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private UserInterfaceSystem _userInterface = default!;
+    // cmu edit start: televisions keep one channel for everyone
+    [Dependency] private Content.Server.CMU14.Camera.Television.CMUTelevisionSystem _cmuTelevision = default!;
+    // cmu edit end
 
     private EntityQuery<ActorComponent> _actorQuery;
 
@@ -56,9 +59,18 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
         EntityUid actor,
         EntityUid camera)
     {
-        return TryGetSession(computer, actor, out var session)
-            && CanSelectCamera(computer, camera, session.ActiveNetwork)
-            && _cameraSessions.SelectCamera(session.Id, camera);
+        // cmu edit start: televisions keep one channel for everyone, changed only from next to the set
+        if (!_cmuTelevision.CanPressButtons(computer, actor)
+            || !TryGetSession(computer, actor, out var session)
+            || !CanSelectCamera(computer, camera, session.ActiveNetwork)
+            || !_cameraSessions.SelectCamera(session.Id, camera))
+        {
+            return false;
+        }
+
+        _cmuTelevision.ChannelChanged(computer, session);
+        return true;
+        // cmu edit end
     }
 
     private bool CanSelectCamera(
@@ -92,11 +104,22 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
         Entity<RMCCameraComputerComponent> computer,
         RMCCameraSessionNetworkBuiMsg args)
     {
+        // cmu edit start: television buttons only work from next to the set
+        if (!_cmuTelevision.CanPressButtons(computer, args.Actor))
+        {
+            RefreshFor(computer, args.Actor);
+            return;
+        }
+        // cmu edit end
+
         if (TryGetSession(computer, args.Actor, out var session)
             && TryGetEntity(args.Network, out var network)
             && network is { } networkUid)
         {
-            _cameraSessions.SelectNetwork(session.Id, networkUid);
+            // cmu edit start: televisions keep one channel for everyone
+            if (_cameraSessions.SelectNetwork(session.Id, networkUid))
+                _cmuTelevision.ChannelChanged(computer, session);
+            // cmu edit end
         }
     }
 
@@ -293,6 +316,10 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
                 _cameraSessions.SelectNetwork(session.Id, first);
         }
 
+        // cmu edit start: televisions keep one channel for everyone
+        _cmuTelevision.Apply(computer, session);
+        // cmu edit end
+
         SendSessionSnapshot(computer, actor, session);
     }
 
@@ -315,8 +342,18 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
 
     protected override void DisconnectFor(Entity<RMCCameraComputerComponent> computer, EntityUid actor)
     {
+        // cmu edit start: television buttons only work from next to the set
+        if (!_cmuTelevision.CanPressButtons(computer, actor))
+            return;
+        // cmu edit end
+
         if (TryGetSession(computer, actor, out var session))
+        {
             _cameraSessions.SelectCamera(session.Id, null);
+            // cmu edit start: televisions keep one channel for everyone
+            _cmuTelevision.ChannelChanged(computer, session);
+            // cmu edit end
+        }
     }
 
     protected override void SelectRelativeCamera(
@@ -324,6 +361,11 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
         EntityUid actor,
         int offset)
     {
+        // cmu edit start: television buttons only work from next to the set
+        if (!_cmuTelevision.CanPressButtons(computer, actor))
+            return;
+        // cmu edit end
+
         if (!TryGetSession(computer, actor, out var session)
             || session.ActiveNetwork is not { } activeNetwork)
         {
@@ -345,7 +387,10 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
         else if (index >= cameras.Count)
             index = 0;
 
-        _cameraSessions.SelectCamera(session.Id, cameras[index]);
+        // cmu edit start: televisions keep one channel for everyone
+        if (_cameraSessions.SelectCamera(session.Id, cameras[index]))
+            _cmuTelevision.ChannelChanged(computer, session);
+        // cmu edit end
     }
 
     private bool TryGetSession(

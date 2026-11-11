@@ -154,7 +154,7 @@ public sealed partial class YautjaHealthShardSystem : EntitySystem
         var user = args.User;
         var target = args.Target ?? user;
 
-        _hands.TryDrop((user, null), ent.Owner, checkActionBlocker: false, doDropInteraction: false);
+        _hands.TryDrop((user, null), ent.Owner, checkActionBlocker: true, doDropInteraction: false);
         Del(ent.Owner);
         _virtualItem.DeleteInHandsMatching(user, ent.Owner);
 

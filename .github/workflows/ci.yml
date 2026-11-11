@@ -1,3 +1,4 @@
+# CMU14: validate YAML before parallel unit/gameplay execution and a shared verdict.
 name: CI
 
 on:
@@ -9,12 +10,14 @@ on:
     branches: [master, staging, stable]
 
 permissions:
+  actions: read
   contents: read
   pull-requests: read
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # CMU14: new master pushes and PR revisions cancel obsolete builds and tests together.
+  group: ${{ github.event_name == 'pull_request' && github.event.pull_request.draft != true && format('ci-pr-{0}', github.event.pull_request.number) || ((github.event_name == 'push' && github.ref == 'refs/heads/master') && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id)) }}
+  cancel-in-progress: ${{ (github.event_name == 'pull_request' && github.event.pull_request.draft != true) || (github.event_name == 'push' && github.ref == 'refs/heads/master') }}
 
 env:
   DOTNET_VERSION: 10.0.x
@@ -26,12 +29,99 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      build: ${{ steps.plan.outputs.build }}
+      unit: ${{ steps.plan.outputs.unit }}
+      gameplay: ${{ steps.plan.outputs.gameplay }}
+      matrix: ${{ steps.plan.outputs.matrix }}
+      assets: ${{ steps.plan.outputs.assets }}
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v7.0.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.13"
+
+      - name: Find previous CI evidence
+        id: history
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            await require('./.github/scripts/ci_history.js')({github, context, core});
+
+      - name: Read latest history
+        if: steps.history.outputs.latest_run != ''
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          artifact-ids: ${{ steps.history.outputs.latest_artifact }}
+          run-id: ${{ steps.history.outputs.latest_run }}
+          github-token: ${{ github.token }}
+          path: .ci/imports/latest
+          merge-multiple: true
+
+      - name: Read baseline history
+        if: steps.history.outputs.baseline_run != ''
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          artifact-ids: ${{ steps.history.outputs.baseline_artifact }}
+          run-id: ${{ steps.history.outputs.baseline_run }}
+          github-token: ${{ github.token }}
+          path: .ci/imports/baseline
+          merge-multiple: true
+
+      - name: Read trusted history
+        if: steps.history.outputs.trusted_run != ''
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          artifact-ids: ${{ steps.history.outputs.trusted_artifact }}
+          run-id: ${{ steps.history.outputs.trusted_run }}
+          github-token: ${{ github.token }}
+          path: .ci/imports/trusted
+          merge-multiple: true
+
+      - name: Read complete PR change list
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const fs = require('node:fs');
+            let changed = null;
+            if (context.eventName === 'pull_request') {
+              try {
+                const files = await github.paginate(github.rest.pulls.listFiles, {
+                  ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
+                });
+                // GitHub caps this endpoint at 3000 files. An incomplete list runs everything.
+                if (files.length === context.payload.pull_request.changed_files)
+                  changed = files.flatMap(f => [f.filename, f.previous_filename].filter(Boolean));
+              } catch (error) {
+                core.warning(`Cannot determine changed files; running the full suite: ${error.message}`);
+              }
+            }
+            fs.writeFileSync('ci-changes.json', JSON.stringify(changed));
+
+      - name: Plan test execution
+        id: plan
+        env:
+          CI_EVENT: ${{ github.event_name }}
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          CI_BASE_SHA: ${{ github.event.merge_group.base_sha || github.event.before }}
+        run: python3 Tools/_CMU14/ci.py plan --event "$CI_EVENT" --changes ci-changes.json
+
+      - name: Share test plan
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-plan
+          if-no-files-found: error
+          path: .ci/plan.json
+          overwrite: true
+          retention-days: 7
+
+      - name: Check CI planner and runner
+        run: python3 -m unittest discover -s Tools/_CMU14 -p 'test_*.py'
 
       - name: Check CRLF
         run: python3 Tools/check_crlf.py
@@ -39,6 +129,8 @@ jobs:
       - name: Reject RobustToolbox submodule updates in PRs
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v9.0.0
+        env:
+          SUBMODULE_EXEMPT_USERS: "maertayn"
         with:
           script: |
             const files = await github.paginate(github.rest.pulls.listFiles, {
@@ -48,22 +140,64 @@ jobs:
               per_page: 100,
             });
 
-            if (files.some(file => file.filename === 'RobustToolbox')) {
+            if (!files.some(file => file.filename === 'RobustToolbox')) {
+              return;
+            }
+
+            const author = context.payload.pull_request.user.login;
+
+            const allowlist = (process.env.SUBMODULE_EXEMPT_USERS ?? '')
+                .split(',')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+
+            let exempt = allowlist.includes(author)
+                || ['OWNER', 'MEMBER'].includes(context.payload.pull_request.author_association);
+
+            // CMU14: outside collaborators can have the repository's maintain role.
+            if (!exempt) {
+              const { data: access } = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: author,
+              });
+              exempt = ['admin', 'maintain'].includes(access.role_name);
+            }
+
+            if (!exempt) {
               core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
             }
 
+      # CMU14: keep release pins, with one reviewed compatible engine patch on 295.0.2.
+      - name: Verify RobustToolbox release pin
+        run: |
+          SHA=$(git ls-tree HEAD RobustToolbox | awk '{print $3}')
+          # CMU14: AU-14/RobustToolbox patches optimize Server/Shared hot paths and input draining.
+          # Wire formats and the launcher client engine version remain 295.0.2-compatible.
+          if [ "$SHA" = "3bb523bfe8991f675dd30037cb9437ed1da02c0a" ] &&
+             [ "$(git config --file .gitmodules --get submodule.RobustToolbox.url)" = "https://github.com/AU-14/RobustToolbox.git" ]; then
+            echo "Using reviewed CMU compatible engine patch on upstream 295.0.2."
+            exit 0
+          fi
+          if ! git ls-remote --tags https://github.com/space-wizards/RobustToolbox.git | awk '{print $1}' | grep -qx "$SHA"; then
+            echo "::error::RobustToolbox ${SHA} is neither an upstream release tag nor the reviewed CMU compatible engine patch."
+            exit 1
+          fi
+
   build:
-    name: Build
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    name: Build & YAML
+    needs: source-guards
+    if: needs.source-guards.outputs.build == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    # CMU14: compile once and validate YAML before starting either test runner.
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
         with:
-          persist-credentials: true
+          persist-credentials: false
           submodules: recursive
 
-      - uses: actions/setup-dotnet@v6.0.0
+      - uses: actions/setup-dotnet@v6.1.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
@@ -74,514 +208,219 @@ jobs:
             **/packages.lock.json
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Content.YAMLLinter/Content.YAMLLinter.csproj
 
       - name: Build once
-        run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
+        run: dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
 
-      - name: Upload Content.Tests build
+      - name: Run YAML Linter
+        run: timeout 12m dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
+
+      - name: Upload unit test build
+        if: needs.source-guards.outputs.unit == 'true'
         uses: actions/upload-artifact@v7
         with:
-          name: build-content-tests
+          name: build-unit-tests
+          overwrite: true
           path: bin/Content.Tests/
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
-
-      - name: Upload YAML linter build
-        uses: actions/upload-artifact@v7
-        with:
-          name: build-yaml-linter
-          path: bin/Content.YAMLLinter/
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
 
       - name: Upload integration test build
+        if: needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
           name: build-integration-tests
+          overwrite: true
           path: bin/Content.IntegrationTests/
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
 
-      - name: Upload client runtime build
+      - name: Upload runtime build
+        if: needs.source-guards.outputs.unit == 'true' || needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
-          name: build-content-client
-          path: bin/Content.Client/
+          name: build-runtime
+          overwrite: true
+          path: |
+            bin/Content.Client/
+            bin/Content.Server/
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
 
-      - name: Upload server runtime build
+      # CMU14: unit tests and gameplay lanes share this archive to avoid repeated checkouts.
+      # git archive retains tracked texture directories and excludes build output.
+      - name: Pack source tree
+        if: needs.source-guards.outputs.unit == 'true' || needs.source-guards.outputs.gameplay == 'true'
+        run: |
+          git archive --format=tar.gz -o source-tree.tar.gz HEAD
+          # CMU14: -o resolves inside the -C directory, so climb out for the upload root
+          git -C RobustToolbox archive --format=tar.gz -o ../toolbox-resources.tar.gz HEAD -- Resources
+
+      - name: Upload source tree
+        if: needs.source-guards.outputs.unit == 'true' || needs.source-guards.outputs.gameplay == 'true'
         uses: actions/upload-artifact@v7
         with:
-          name: build-content-server
-          path: bin/Content.Server/
+          name: source-tree
+          overwrite: true
+          path: |
+            source-tree.tar.gz
+            toolbox-resources.tar.gz
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
 
-  content-tests:
-    name: Content.Tests
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: true
-          submodules: recursive
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-tests
-          path: bin/Content.Tests/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-client
-          path: bin/Content.Client/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-server
-          path: bin/Content.Server/
-
-      - uses: actions/setup-dotnet@v6.0.0
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Run Content.Tests
-        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0
-
-  yaml-linter:
-    name: YAML Linter
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: true
-          submodules: recursive
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-yaml-linter
-          path: bin/Content.YAMLLinter/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-client
-          path: bin/Content.Client/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-server
-          path: bin/Content.Server/
-
-      - uses: actions/setup-dotnet@v6.0.0
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Run YAML Linter
-        run: dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
-
-  schema-validators:
-    name: Schema Validators
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+  unit-tests:
+    name: Unit Tests
+    needs: [source-guards, build]
+    if: needs.source-guards.outputs.unit == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Check if schema validation is needed
-        id: schema_changes
-        uses: actions/github-script@v9.0.0
+      - uses: actions/download-artifact@v8.0.2
         with:
-          script: |
-            if (context.eventName !== 'pull_request') {
-              core.setOutput('run_rga', 'true');
-              core.setOutput('run_map', 'true');
-              return;
-            }
+          name: source-tree
+          path: .
 
-            const files = await github.paginate(github.rest.pulls.listFiles, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-            const changed = files.map(file => file.filename);
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: ci-plan
+          path: .ci
 
-            const runRga = changed.some(file =>
-              /attributions\.ya?ml$/.test(file) ||
-              file === '.github/Schemas/rga.yml' ||
-              file === '.github/Schemas/rga_validators.py' ||
-              file === '.github/Schemas/rga_requirements.txt' ||
-              file === '.github/scripts/validate_yamale.py');
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+          rm source-tree.tar.gz toolbox-resources.tar.gz
 
-            const runMap = changed.some(file =>
-              file.startsWith('Resources/Maps/') ||
-              file === 'RobustToolbox' ||
-              file === '.github/Schemas/mapfile_requirements.txt' ||
-              file === '.github/scripts/validate_yamale.py');
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-unit-tests
+          path: bin/Content.Tests/
 
-            core.setOutput('run_rga', runRga ? 'true' : 'false');
-            core.setOutput('run_map', runMap ? 'true' : 'false');
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-runtime
+          path: bin/
 
+      - uses: actions/setup-dotnet@v6.1.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Unit tests
+        run: python3 Tools/_CMU14/adaptive_ci.py execute --unit
+
+      - name: Upload unit observations
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-observation-unit
+          path: .ci/observations/unit.json
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload unit test results
+        # CMU14: green runs only need the compact observations used by the verdict.
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: test-results-unit-tests
+          path: .ci/observations/
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 7
+
+  asset-validation:
+    name: Asset Validation
+    needs: source-guards
+    if: needs.source-guards.outputs.assets != '' && fromJSON(needs.source-guards.outputs.assets).any
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
       - uses: actions/checkout@v7
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
         with:
-          persist-credentials: true
-          submodules: recursive
+          # CMU14: single-level submodules: validators read RobustToolbox/Schemas at depth 1,
+          # the nested engine submodules are never read here
+          submodules: true
 
-      - uses: actions/setup-python@v7.0.0
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.13"
           cache: pip
-          cache-dependency-path: |
-            .github/Schemas/rga_requirements.txt
-            .github/Schemas/mapfile_requirements.txt
+          cache-dependency-path: .github/Schemas/*requirements.txt
 
-      - name: Install schema validator dependencies
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
-        run: |
-          python3 -m pip install yamale -r .github/Schemas/rga_requirements.txt -r .github/Schemas/mapfile_requirements.txt
+      - name: Install asset validators
+        run: python3 -m pip install pillow jsonschema yamale -r .github/Schemas/rga_requirements.txt -r .github/Schemas/mapfile_requirements.txt
 
-      - name: Validate RGA schemas
-        if: steps.schema_changes.outputs.run_rga == 'true'
+      - name: Validate attributions
+        if: fromJSON(needs.source-guards.outputs.assets).rga
         run: |
           python3 .github/scripts/validate_yamale.py \
             --schema .github/Schemas/rga.yml \
             --path-pattern '.*attributions.ya?ml$' \
             --validators .github/Schemas/rga_validators.py
 
-      - name: Validate map schemas
-        if: steps.schema_changes.outputs.run_map == 'true'
+      - name: Validate maps
+        if: fromJSON(needs.source-guards.outputs.assets).maps
         run: |
           python3 .github/scripts/validate_yamale.py \
             --schema RobustToolbox/Schemas/mapfile.yml \
             --path-pattern '.*Resources/Maps/.*' \
             --validators RobustToolbox/Schemas/mapfile_validators.py
 
-      - name: Skip schema validation
-        if: steps.schema_changes.outputs.run_rga != 'true' && steps.schema_changes.outputs.run_map != 'true'
-        run: echo "No schema-validated files changed."
-
-  rsi-validator:
-    name: RSI Validator
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Check if RSI validation is needed
-        id: rsi_changes
-        uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            if (context.eventName !== 'pull_request') {
-              core.setOutput('run', 'true');
-              return;
-            }
-
-            const files = await github.paginate(github.rest.pulls.listFiles, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-
-            core.setOutput('run', files.some(file => file.filename.includes('.rsi/')) ? 'true' : 'false');
-
-      - uses: actions/checkout@v7
-        if: steps.rsi_changes.outputs.run == 'true'
-        with:
-          persist-credentials: true
-          submodules: recursive
-
-      - uses: actions/setup-python@v7.0.0
-        if: steps.rsi_changes.outputs.run == 'true'
-        with:
-          python-version: "3.13"
-
-      - name: Install RSI validator dependencies
-        if: steps.rsi_changes.outputs.run == 'true'
-        run: python3 -m pip install pillow jsonschema
-
       - name: Validate RSIs
-        if: steps.rsi_changes.outputs.run == 'true'
-        run: python3 RobustToolbox/Schemas/validate_rsis.py Resources/
-
-      - name: Skip RSI validation
-        if: steps.rsi_changes.outputs.run != 'true'
-        run: echo "No RSI files changed."
-
-  required-checks:
-    name: Required Checks
-    if: (failure() || success()) && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    needs:
-      - source-guards
-      - build
-      - content-tests
-      - yaml-linter
-      - schema-validators
-      - rsi-validator
-      - integration-tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Check required job results
-        uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            const results = {
-              'Source Guards': '${{ needs.source-guards.result }}',
-              'Build': '${{ needs.build.result }}',
-              'Content.Tests': '${{ needs.content-tests.result }}',
-              'YAML Linter': '${{ needs.yaml-linter.result }}',
-              'Schema Validators': '${{ needs.schema-validators.result }}',
-              'RSI Validator': '${{ needs.rsi-validator.result }}',
-              'Content.IntegrationTests': '${{ needs.integration-tests.result }}',
-            };
-
-            const failed = Object.entries(results)
-              .filter(([, result]) => result !== 'success')
-              .map(([name, result]) => `${name}: ${result}`);
-
-            if (failed.length > 0) {
-              core.setFailed(`Required checks failed: ${failed.join(', ')}`);
-            }
+        if: fromJSON(needs.source-guards.outputs.assets).rsi
+        run: |
+          # CMU14: retain upstream structural checks and recognize the existing donor-cape license.
+          python3 .github/scripts/validate_cmu_rsis.py Resources/ Content.CMU/Resources/
 
   integration-tests:
-    name: Testcases / ${{ matrix.shard.name }}
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    needs: build
+    name: Testcases / ${{ matrix.lane.label }}
+    needs: [source-guards, build]
+    if: needs.source-guards.outputs.gameplay == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # CMU14: at most six groups per lane, each with a 30-minute execution budget.
+    timeout-minutes: 190
     strategy:
       fail-fast: false
-      matrix:
-        shard:
-          - name: root_1
-            root_group: 0
-            root_groups: 2
-          - name: root_2
-            root_group: 1
-            root_groups: 2
-          # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
-          - name: admin_access_ui
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Administration
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Access
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed
-              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Afk.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers.
-          - name: atmos_fluids_physics
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Decals.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Weather.
-          - name: mapping_station_shuttle_round
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.GameRules
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Mapping
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Procedural
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Replays
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Round
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Station
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.WizdenContentFreeze.
-          - name: cleanup_entities_world
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Disposal
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Doors
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding
-              | FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Payload
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Power
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Wires
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Containers.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs.
-          - name: gameplay_core
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Actions
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Body
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Buckle
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Changeling.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Chat.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Clumsy.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Examine.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Eye.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Gibbing.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Humanoid.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Identity.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Medical.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Nutrition.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Paper.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Respirator.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Security.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Speech.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Stunnable.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Zombie.
-          - name: gameplay_runtime
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Interaction
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Internals
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Minds
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Movement
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Networking
-              | FullyQualifiedName~Content.IntegrationTests.Tests.NPC
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Puller
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Follower.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Vehicle.
-          - name: items_storage_crafting
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Construction
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Hands
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Materials
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Engineering.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Holosign.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Inventory.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Items.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Kitchen.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Labels.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Light.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Markings.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Mousetrap.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.SmartFridge.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Stacks.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Tools.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Weapons.
-          - name: storage_crafting_misc
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Storage
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Strip
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Tag
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Utility
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Vending
-              | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing.
-          - name: proto_lint_locale_serial
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Linter
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Localization
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences
-              | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Audio.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.NameIdentifier.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Research.
-          - name: rmc
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests._RMC14
-              | FullyQualifiedName~Content.IntegrationTests.Tests._RMC14.
-          - name: cmu
-            # Both namespace spellings are in use. Medical and chemistry need their
-            # own processes; matching only _CMU14 leaves them all in this shard.
-            filter: >-
-              (FullyQualifiedName~Content.IntegrationTests._CMU14.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.)
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Camera.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Chemistry.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Yautja.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Yautja.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.ZLevels.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.ZLevels.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Diagnostics.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Diagnostics.
-          - name: cmu_2
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Camera.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Camera.
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Yautja.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Yautja.
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.ZLevels.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.ZLevels.
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Diagnostics.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Diagnostics.
-          - name: cmu_chemistry
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Chemistry.
-          - name: cmu_medical_anatomy
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Anatomy.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Anatomy.
-          - name: cmu_medical_treatment
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Treatment.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Treatment.
-          - name: cmu_medical
-            filter: >-
-              (FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.)
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Anatomy.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Anatomy.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Treatment.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Treatment.
-          - name: au14
-            filter: FullyQualifiedName~Content.IntegrationTests._AU14
+      # CMU14: cap this run; hosted runners still share capacity across PRs.
+      max-parallel: 6
+      matrix: ${{ fromJSON(needs.source-guards.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v7
+      # CMU14: restore the exact source tree packaged by Build for every gameplay lane.
+      - uses: actions/download-artifact@v8.0.2
         with:
-          persist-credentials: true
-          submodules: recursive
+          name: source-tree
+          path: .
 
-      - uses: actions/download-artifact@v8.0.1
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: ci-plan
+          path: .ci
+
+      - name: Restore source tree
+        run: |
+          tar -xzf source-tree.tar.gz
+          tar -xzf toolbox-resources.tar.gz -C RobustToolbox
+          rm source-tree.tar.gz toolbox-resources.tar.gz
+
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: build-integration-tests
           path: bin/Content.IntegrationTests/
 
-      - uses: actions/download-artifact@v8.0.1
+      - uses: actions/download-artifact@v8.0.2
         with:
-          name: build-content-client
-          path: bin/Content.Client/
+          name: build-runtime
+          path: bin/
 
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-server
-          path: bin/Content.Server/
-
-      - uses: actions/setup-dotnet@v6.0.0
+      - uses: actions/setup-dotnet@v6.1.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -591,60 +430,128 @@ jobs:
           cp -r Resources/* bin/Resources/
           cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
 
-      - name: Run ${{ matrix.shard.name }}
+      # CMU14: the runner has 16 GB and no real headroom, a memory spike used to kill it outright
+      # ("received a shutdown signal"). with swap the spike just runs slower. goes on the /mnt scratch
+      # disk when the image has one, the root disk is small
+      - name: Add swap
         shell: bash
-        env:
-          # RT v290's parallel YAML loader mutates the variant dictionary without
-          # synchronization. A single PLINQ worker avoids losing prototypes during
-          # startup (e.g. GasOutletInjector in PushKindInheritance).
-          # Keep this test-process workaround until the engine loader is fixed.
-          DOTNET_PROCESSOR_COUNT: "1"
         run: |
-          export DOTNET_gcServer=1
-          shard="${{ matrix.shard.name }}"
-
-          if [[ "$shard" == root_* ]]; then
-            root_group='${{ matrix.shard.root_group }}'
-            root_groups='${{ matrix.shard.root_groups }}'
-            shopt -s nullglob
-            files=(Content.IntegrationTests/Tests/*.cs)
-            if [ ${#files[@]} -eq 0 ]; then
-              echo "::error::$shard shard: no test files found in Content.IntegrationTests/Tests!"
-              exit 1
-            fi
-            FILTER=""
-            for i in "${!files[@]}"; do
-              f="${files[$i]}"
-              base=$(basename "$f" .cs)
-              if [[ "$base" == "EntityTest" ]] || (( i % root_groups != root_group )); then
-                continue
-              fi
-              FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base"
-            done
-            if [ -z "$FILTER" ]; then
-              echo "::error::$shard shard: no test files assigned!"
-              exit 1
-            fi
-          else
-            FILTER='${{ matrix.shard.filter }}'
+          echo "--- before ---"; swapon --show; free -h; df -h / /mnt 2>/dev/null || true
+          dir=/mnt
+          if ! mountpoint -q /mnt || (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) < 20 )); then
+            dir=/
           fi
+          size=16
+          if (( $(df --output=avail -BG "$dir" | tail -1 | tr -dc 0-9) < size + 4 )); then
+            echo "::warning::not enough disk for ${size}G swap on $dir, keeping the image's swap"
+            exit 0
+          fi
+          sudo swapoff -a || true
+          sudo rm -f /mnt/swapfile /swapfile
+          sudo fallocate -l ${size}G "$dir/ci-swap"
+          sudo chmod 600 "$dir/ci-swap"
+          sudo mkswap "$dir/ci-swap"
+          sudo swapon "$dir/ci-swap"
+          echo "--- after ---"; swapon --show; free -h
 
-          echo "--- $shard shard filter ---"
-          echo "$FILTER"
-          cd bin/Content.IntegrationTests || exit 1
-          # Runner shutdowns are retried by ci-retry-infra.yml; test failures need attention.
-          # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
-          dotnet test Content.IntegrationTests.dll \
-            --verbosity normal --filter "$FILTER" \
-            --blame-hang-timeout 5m --blame-hang-dump-type none \
-            --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
-            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000
+      - name: Run gameplay groups
+        env:
+          # CMU14: preserve the prototype-loader workaround and heap limit.
+          DOTNET_PROCESSOR_COUNT: "1"
+          DOTNET_gcServer: "1"
+          DOTNET_GCHeapHardLimitPercent: "0x50"
+          CI_LANE: ${{ matrix.lane.name }}
+        run: python3 Tools/_CMU14/adaptive_ci.py execute --lane "$CI_LANE"
 
-      - name: Upload test diagnostics
+      - name: Upload gameplay observations
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-observation-gameplay-${{ matrix.lane.name }}
+          path: .ci/observations/*.json
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload test results
+        # CMU14: keep full logs and TRX artifacts for unsuccessful runs only.
         if: failure() || cancelled()
         uses: actions/upload-artifact@v7
         with:
-          name: integration-test-results-${{ matrix.shard.name }}
-          path: bin/Content.IntegrationTests/TestResults/
+          include-hidden-files: true
+          name: test-results-gameplay-${{ matrix.lane.name }}
+          path: |
+            .ci/observations/
+            !.ci/observations/**/*.dmp
+          overwrite: true
           if-no-files-found: ignore
           retention-days: 7
+
+  required-checks:
+    name: Required Checks
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+    needs: [source-guards, build, unit-tests, integration-tests, asset-validation]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        if: needs.source-guards.result == 'success'
+        with:
+          sparse-checkout: Tools/_CMU14
+          persist-credentials: false
+
+      - uses: actions/download-artifact@v8.0.2
+        if: needs.source-guards.result == 'success'
+        with:
+          name: ci-plan
+          path: .ci
+
+      - name: Gather observations
+        if: needs.source-guards.outputs.build == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@v8.0.2
+        with:
+          pattern: ci-observation-*
+          path: .ci/observations
+          merge-multiple: true
+
+      - name: Check completeness and record history
+        if: always() && needs.source-guards.result == 'success'
+        run: python3 Tools/_CMU14/adaptive_ci.py collect
+
+      - name: Save history for future runs
+        if: always() && needs.source-guards.outputs.build == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          include-hidden-files: true
+          name: ci-history
+          path: .ci/history/history.json
+          overwrite: true
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Check required job results
+        if: always()
+        uses: actions/github-script@v9.0.0
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        with:
+          script: |
+            const results = JSON.parse(process.env.RESULTS);
+            const selected = results['source-guards'].outputs;
+            const assets = JSON.parse(selected.assets || '{}');
+            const expected = {
+              build: selected.build === 'false' ? 'skipped' : 'success',
+              'unit-tests': selected.unit === 'false' ? 'skipped' : 'success',
+              'integration-tests': selected.gameplay === 'false' ? 'skipped' : 'success',
+              'asset-validation': assets.any ? 'success' : 'skipped',
+            };
+            const failed = Object.entries(results)
+              .filter(([name, value]) => value.result !== (expected[name] || 'success'))
+              .map(([name, value]) => `${name}: ${value.result}`);
+            await core.summary.addHeading('CI result')
+              .addRaw(failed.length ? failed.join('\n') : 'All checks selected by the test plan passed.')
+              .write();
+            if (failed.length)
+              core.setFailed(failed.join(', '));

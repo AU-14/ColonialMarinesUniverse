@@ -25,12 +25,27 @@ public sealed partial class XenoParasiteComponent : Component
 
     /// <summary>
     ///     How long it takes for the parasite to fall off the victim's mask, finishing the infecting process.
+    ///     CMU14: used for nested hosts; other hosts use CMUMinHugTime through CMUMaxHugTime.
     /// </summary>
     [DataField]
     public TimeSpan FallOffDelay = TimeSpan.FromSeconds(15);
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan? FallOffAt;
+
+    // cmu edit start: a parasite holds on for two to five minutes; after two, shakes and pats can knock it loose
+    [DataField("cmuMinHugTime")]
+    public TimeSpan CMUMinHugTime = TimeSpan.FromMinutes(2);
+
+    [DataField("cmuMaxHugTime")]
+    public TimeSpan CMUMaxHugTime = TimeSpan.FromMinutes(5);
+
+    [DataField("cmuShakeOffChance")]
+    public float CMUShakeOffChance = 0.25f;
+
+    [DataField("cmuAttachedAt", customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan? CMUAttachedAt;
+    // cmu edit end
 
     [DataField]
     public bool FellOff;

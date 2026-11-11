@@ -1,0 +1,103 @@
+{
+  "models": 1676,
+  "defaultParts": 55478,
+  "primitiveTopology": {
+    "Box": {
+      "instances": 38526,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 1.0
+    },
+    "Ellipsoid": {
+      "instances": 4637,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.4908245486389092
+    },
+    "CylinderX": {
+      "instances": 4766,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.7653668647301792
+    },
+    "CylinderZ": {
+      "instances": 1861,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.7653668647301792
+    },
+    "WedgeYReverse": {
+      "instances": 399,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.49999999999999994
+    },
+    "WedgeY": {
+      "instances": 448,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.49999999999999994
+    },
+    "CylinderY": {
+      "instances": 810,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.7653668647301792
+    },
+    "Foliage": {
+      "instances": 834,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.029341661044469745
+    },
+    "SlantedX": {
+      "instances": 1118,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.2585578748929892
+    },
+    "SlantedY": {
+      "instances": 523,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.2585578748929892
+    },
+    "SlantedXReverse": {
+      "instances": 1019,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.25855787489298926
+    },
+    "SlantedYReverse": {
+      "instances": 537,
+      "boundaryOrNonmanifoldEdges": 0,
+      "windingMismatches": 0,
+      "degenerateTriangles": 0,
+      "signedUnitVolume": 0.25855787489298926
+    }
+  },
+  "limits": [
+    "Topology audit is per solid part, not a Boolean union of overlapping construction solids.",
+    "Closed meshes do not establish sprite fidelity, working animation, live visibility, or acceptance of inferred backs/interiors."
+  ],
+  "nonzeroVolumeModels": 1676,
+  "visualReview": "127 representative assemblies selected across authoring files, source/front/back/underside; plus focused ice refinement. This is not exhaustive artistic approval.",
+  "gltfValidation": {
+    "validator": "2.0.0-dev.3.10",
+    "models": 1676,
+    "errors": 0,
+    "warnings": 0,
+    "failures": []
+  }
+}

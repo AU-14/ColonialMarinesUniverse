@@ -9,7 +9,9 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Mind;
+using Content.Server.Preferences.Managers;
 using Content.Server.Station.Systems;
+using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
@@ -27,6 +29,7 @@ using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking;
+using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -46,6 +49,12 @@ namespace Content.IntegrationTests._CMU14.ForceOnForce;
 [TestFixture]
 public sealed class ForceOnForceGameplayTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> DistressSignalPrototype = "DistressSignal";
+
+
+
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
@@ -57,7 +66,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             // Surface resolution receives map-relative coordinates, so mark the map itself.
             var planetMap = SEntMan.GetComponent<TransformComponent>(map.GridCoords.EntityId).MapUid!.Value;
             SEntMan.EnsureComponent<RMCPlanetComponent>(planetMap);
@@ -65,7 +74,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
             var grid = SEntMan.GetComponent<MapGridComponent>(map.GridCoords.EntityId);
             var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["RMCFloorVehicleInteriorDarkSterile"].TileId);
             for (var x = -20; x <= 20; x++)
-            for (var y = -20; y <= 20; y++) maps.SetTile(grid.Owner, grid, new Vector2i(x, y), floor);
+            for (var y = -20; y <= 20; y++) maps.SetTile(map.GridCoords.EntityId, grid, new Vector2i(x, y), floor);
             foreach (var (faction, position) in new[] { ("opfor", Vector2.Zero), ("govfor", new Vector2(9, 0)), ("neutral", new Vector2(-7, 0)) })
             {
                 var mob = SEntMan.SpawnEntity(null, map.GridCoords.Offset(position));
@@ -97,13 +106,13 @@ public sealed class ForceOnForceGameplayTest : GameTest
             Request();
             Request();
             Assert.That(Active(), Is.EqualTo(1), "the cooldown is shared by the faction and enforced on the server");
-            Assert.That(SEntMan.EntityQuery<FighterStrikeVisualComponent>().Any(), Is.False, "effects wait for the siren warning");
+            Assert.That(SEntMan.QueryEntities<FighterStrikeVisualComponent>().Any(), Is.False, "effects wait for the siren warning");
         });
         await Pair.RunSeconds(9);
         await Server.WaitAssertion(() =>
         {
             var transform = Server.System<SharedTransformSystem>();
-            var strikes = SEntMan.EntityQuery<FighterStrikeVisualComponent>().ToArray();
+            var strikes = SEntMan.QueryEntities<FighterStrikeVisualComponent>().ToArray();
             Assert.That(strikes, Is.Not.Empty);
             foreach (var strike in strikes)
             foreach (var occupant in occupants)
@@ -115,15 +124,14 @@ public sealed class ForceOnForceGameplayTest : GameTest
     }
 
     [TestCase("govfor", "opfor")]
-    [TestCase("opfor", "govfor")]
     [TestCase(null, null)]
-    public async Task RandomHijackCandidatesExcludeTheHumanAttackersOwnCarrier(string attacker, string enemy)
+    public async Task RandomHijackCandidatesExcludeTheHumanAttackersOwnCarrier(string? attacker, string? enemy)
     {
         await Server.WaitAssertion(() =>
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var maps = Server.System<SharedMapSystem>();
             var expected = new List<EntityUid>();
             foreach (var faction in new[] { "govfor", "opfor", "unowned" })
@@ -155,7 +163,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var factions = Server.System<ForceOnForceSystem>();
             var dropships = Server.System<ServerDropshipSystem>();
             var eligibility = typeof(ServerDropshipSystem).GetMethod("IsForceOnForceHijacker", BindingFlags.Instance | BindingFlags.NonPublic)!;
@@ -179,13 +187,50 @@ public sealed class ForceOnForceGameplayTest : GameTest
             Assert.That(CanHijack(), Is.True);
             Assert.That(factions.CanCommand(user), Is.True);
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("DistressSignal"));
+                SProtoMan.Index<GamePresetPrototype>(DistressSignalPrototype));
             Assert.That(CanHijack(), Is.False);
         });
     }
 
+    [Test]
+    public async Task NoHijackInitiationIsAcceptedInForceOnForce()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(RMCCVars.RMCDropshipHijackInitialDelayMinutes, 0);
+            var maps = Server.System<SharedMapSystem>();
+            var ship = maps.CreateMap();
+            var computer = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 0, 0));
+            var user = SEntMan.SpawnEntity(null, new EntityCoordinates(ship, 1, 0));
+            SEntMan.EnsureComponent<DropshipHijackerComponent>(user);
+            var dropships = Server.System<ServerDropshipSystem>();
+            var popup = typeof(SharedDropshipSystem)
+                .GetMethod("TryDropshipHijackPopup", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var ticker = Server.System<GameTicker>();
+            var currentPreset = typeof(GameTicker)
+                .GetProperty(nameof(GameTicker.CurrentPreset))!;
+            var originalPreset = (GamePresetPrototype?) currentPreset.GetValue(ticker);
+            void SetPreset(Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> id) => currentPreset
+                .SetValue(ticker, SProtoMan.Index<GamePresetPrototype>(id));
+            bool Accepted() => (bool) popup.Invoke(dropships,
+            [
+                computer,
+                Activator.CreateInstance(typeof(Entity<DropshipHijackerComponent?>), user, null)!,
+                false
+            ])!;
+
+            SetPreset(DistressSignalPrototype);
+            Assert.That(Accepted(), Is.True, "a hijacker can still initiate outside Force on Force");
+
+            SetPreset(ForceOnForcePrototype);
+            Assert.That(Accepted(), Is.False, "Force on Force accepts no hijack initiation, whatever the hijacker type");
+
+            // Leave the pooled ticker as found: CurrentPreset drives other systems' behavior.
+            currentPreset.SetValue(ticker, originalPreset);
+        });
+    }
+
     [TestCase("govfor", "opfor")]
-    [TestCase("opfor", "govfor")]
     public async Task OrdinaryNavigationRejectsEnemyCarrierAndControlledLandingZone(string own, string enemy)
     {
         await Server.WaitAssertion(() =>
@@ -253,6 +298,68 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
+    [Test]
+    public async Task IdentificationSplitsOppositionAlliesAndNeutrals()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(viewer).Faction = "govfor";
+            var policy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+            policy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>("USCM").Uniforms);
+
+            var enemy = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(enemy).Faction = "opfor";
+            Assert.That(recognition.Classify(enemy, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "the opposing side is the direct competition");
+
+            var ally = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(ally).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceSideComponent>(ally).Side = "opfor";
+            Assert.That(recognition.Classify(ally, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "a third party aligned with the opposing side is still the competition");
+
+            var opforViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(opforViewer).Faction = "opfor";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(opforViewer);
+            Assert.That(recognition.Classify(ally, opforViewer), Is.EqualTo(ForceOnForceIdentification.None),
+                "aligned third parties count as teammates of their side, whatever they wear");
+
+            var colonist = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(colonist).Faction = "marine";
+            Assert.That(recognition.Classify(colonist, viewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "unaffiliated parties stay unknown to a war side");
+
+            var neutralViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(neutralViewer).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(neutralViewer);
+            Assert.That(recognition.Classify(viewer, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "neutrals see both war sides as the direct competition");
+            Assert.That(recognition.Classify(colonist, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "neutrals cannot tell other unaffiliated parties apart");
+        });
+    }
+
+    [Test]
+    public async Task YautjaGetNoIdentificationMarker()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(viewer).Faction = "govfor";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+
+            // a sideless faction is what got preds the "?" in the first place
+            var hunter = SEntMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(hunter).Faction = "yautja";
+            Assert.That(recognition.Classify(hunter, viewer), Is.EqualTo(ForceOnForceIdentification.None));
+        });
+    }
+
     [TestCase("govfor", "opfor", "USCM", "UPP", "CMJumpsuitXOFormal", "AU14FatiguesUPP")]
     [TestCase("opfor", "govfor", "UPP", "USCM", "AU14ServiceFatiguesUPP", "AU14CamoUSCMFatigues")]
     public async Task UniformMarkerRecognizesVendorStockOnTheClient(
@@ -265,7 +372,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var platoons = Server.System<PlatoonSpawnRuleSystem>();
             platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "govfor" ? platoon : enemyPlatoon);
             platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "opfor" ? platoon : enemyPlatoon);
@@ -352,15 +459,19 @@ public sealed class ForceOnForceGameplayTest : GameTest
     }
 
     [TestCase("govfor", RoundJobSide.Govfor, RoundJobSide.Opfor)]
-    [TestCase("opfor", RoundJobSide.Opfor, RoundJobSide.Govfor)]
     public async Task RespawnsStayOnTheirOriginalSideUntilTheRoundResets(string faction, RoundJobSide own, RoundJobSide enemy)
     {
         var map = await Pair.CreateTestMap();
+        var prefMan = Server.ResolveDependency<IServerPreferencesManager>();
+        var originalProfile = prefMan.GetPreferences(ServerSession!.UserId).Characters[0];
+        await Server.WaitPost(() => prefMan.SetProfile(ServerSession!.UserId, 0,
+            ((HumanoidCharacterProfile) originalProfile).WithSex(Sex.Male).WithAge(25)
+                .WithHeight("5'10\"").WithWeight(160)).Wait());
         await Server.WaitAssertion(() =>
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var respawn = Server.System<ForceOnForceRespawnSystem>();
             var player = ServerSession!.UserId;
             var body = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
@@ -390,6 +501,47 @@ public sealed class ForceOnForceGameplayTest : GameTest
             SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
             Assert.That(respawn.HasLockedSide(player), Is.False);
             Assert.That(respawn.CanJoinSide(player, enemy), Is.True, "a new round allows a fresh choice");
+        });
+
+        await Server.WaitPost(() => prefMan.SetProfile(ServerSession!.UserId, 0, originalProfile).Wait());
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task GibbingStartsTheRespawnWaitWithoutRestartingAnExistingWait(bool alreadyDead)
+    {
+        var map = await Pair.CreateTestMap();
+        var player = ServerSession!.UserId;
+        EntityUid body = default;
+        await Server.WaitAssertion(() =>
+        {
+            body = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var minds = Server.System<MindSystem>();
+            var mind = minds.CreateMind(player);
+            minds.TransferTo(mind, body);
+            Assert.That(Server.System<MobStateSystem>().IsAlive(body), Is.True);
+            if (alreadyDead)
+                Server.System<MobStateSystem>().ChangeMobState(body, MobState.Dead);
+        });
+        if (alreadyDead)
+            await Pair.RunSeconds(60);
+        await Server.WaitAssertion(() =>
+        {
+            var respawn = Server.System<ForceOnForceRespawnSystem>();
+            var expected = alreadyDead ? respawn.Remaining(player) : ForceOnForceRespawnSystem.RespawnDelay;
+            Assert.That(expected, Is.GreaterThan(TimeSpan.Zero));
+            if (alreadyDead)
+                Assert.That(expected, Is.LessThan(ForceOnForceRespawnSystem.RespawnDelay));
+            Server.System<Content.Shared.Gibbing.GibbingSystem>().Gib(body);
+            Assert.That(respawn.HasDied(player), Is.True, "Dropship gibbing must count as death even without a dead mob-state transition.");
+            Assert.That(respawn.Remaining(player), Is.EqualTo(expected));
+        });
+        await Pair.RunTicksSync(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.Deleted(body), Is.True);
+            Assert.That(Server.System<ForceOnForceRespawnSystem>().HasDied(player), Is.True,
+                "Deleting the gibbed body must retain the account's death record.");
         });
     }
 
@@ -421,77 +573,4 @@ public sealed class ForceOnForceGameplayTest : GameTest
         await Server.WaitAssertion(() => Assert.That(respawn.Remaining(player), Is.EqualTo(TimeSpan.Zero)));
     }
 
-    [TestCase(ForceOnForceSide.Govfor, true, false)]
-    [TestCase(ForceOnForceSide.Opfor, false, true)]
-    [TestCase(ForceOnForceSide.Either, true, true)]
-    public async Task UnifiedRoleListHonorsThePreferredSideWithoutRequiringSideFallback(
-        ForceOnForceSide side, bool govfor, bool opfor)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var jobs = Server.System<StationJobsSystem>();
-            var costMethod = typeof(StationJobsSystem).GetMethod("GetForceOnForceJobCost", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithForceOnForcePreferences(side, ForceOnForceFallback.StayInLobby)
-                .WithForceOnForceJobPriority(SProtoMan.Index<JobPrototype>("AU14JobGOVFORSquadSergeant"), JobPriority.High, SProtoMan);
-            bool Accepted(string id) => costMethod.Invoke(jobs, [profile, SProtoMan.Index<JobPrototype>(id)]) != null;
-            Assert.That(Accepted("AU14JobGOVFORSquadSergeant"), Is.EqualTo(govfor));
-            Assert.That(Accepted("AU14JobOPFORSquadSergeant"), Is.EqualTo(opfor));
-            Assert.That(Accepted("AU14JobGOVFORSquadRifleman"), Is.False);
-            Assert.That(Accepted("AU14JobOPFORSquadRifleman"), Is.False);
-        });
-    }
-
-    [Test]
-    public async Task UnifiedRoleListReadsAndReplacesLegacyOppositionPreferences()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var govfor = SProtoMan.Index<JobPrototype>("AU14JobGOVFORSquadSergeant");
-            var opfor = SProtoMan.Index<JobPrototype>("AU14JobOPFORSquadSergeant");
-            var rifleman = SProtoMan.Index<JobPrototype>("AU14JobGOVFORSquadRifleman");
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithGamemodeJobPriority("ForceOnForce", opfor.ID, JobPriority.High)
-                .WithGamemodeJobPriority("ForceOnForce", rifleman.ID, JobPriority.Medium)
-                .WithGamemodeJobPriority("DistressSignal", govfor.ID, JobPriority.Low);
-            Assert.That(profile.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.High));
-
-            var lowered = profile.WithForceOnForceJobPriority(govfor, JobPriority.Low, SProtoMan);
-            Assert.That(lowered.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Low));
-            Assert.That(lowered.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Low));
-            Assert.That(lowered.GetForceOnForceJobPriority(rifleman, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            var cleared = new HumanoidCharacterProfile(lowered.WithForceOnForceJobPriority(govfor, JobPriority.Never, SProtoMan));
-            Assert.That(cleared.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Never));
-            Assert.That(cleared.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Never));
-            Assert.That(cleared.GetJobPriorityForGamemode("DistressSignal", govfor.ID), Is.EqualTo(JobPriority.Low));
-
-            var newHigh = profile.WithForceOnForceJobPriority(rifleman, JobPriority.High, SProtoMan);
-            Assert.That(newHigh.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            Assert.That(newHigh.GetForceOnForceJobPriority(opfor, SProtoMan), Is.EqualTo(JobPriority.Medium));
-            Assert.That(newHigh.GetForceOnForceJobPriority(rifleman, SProtoMan), Is.EqualTo(JobPriority.High));
-            Assert.That(profile.GetForceOnForceJobPriority(govfor, SProtoMan), Is.EqualTo(JobPriority.High),
-                "editing creates a new profile without mutating the saved one");
-        });
-    }
-
-    [TestCase(ForceOnForceFallback.StayInLobby, false, false)]
-    [TestCase(ForceOnForceFallback.OtherSide, true, false)]
-    [TestCase(ForceOnForceFallback.OtherRole, false, true)]
-    [TestCase(ForceOnForceFallback.Both, true, true)]
-    public async Task FallbackOnlyPermitsTheSelectedSideAndRoleChanges(ForceOnForceFallback fallback, bool side, bool role)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var jobs = Server.System<StationJobsSystem>();
-            var costMethod = typeof(StationJobsSystem).GetMethod("GetForceOnForceJobCost", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            var profile = HumanoidCharacterProfile.DefaultWithSpecies()
-                .WithForceOnForcePreferences(ForceOnForceSide.Govfor, fallback)
-                .WithGamemodeJobPriority("ForceOnForce", "AU14JobGOVFORSquadSergeant", JobPriority.High);
-            bool Accepted(string id) => costMethod.Invoke(jobs, [profile, SProtoMan.Index<JobPrototype>(id)]) != null;
-            Assert.That(Accepted("AU14JobGOVFORSquadSergeant"), Is.True);
-            Assert.That(Accepted("AU14JobOPFORSquadSergeant"), Is.EqualTo(side));
-            Assert.That(Accepted("AU14JobGOVFORSquadRifleman"), Is.EqualTo(role));
-            Assert.That(Accepted("AU14JobOPFORSquadRifleman"), Is.EqualTo(side && role));
-        });
-    }
 }

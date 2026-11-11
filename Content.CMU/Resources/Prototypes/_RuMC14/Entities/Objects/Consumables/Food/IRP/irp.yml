@@ -3,7 +3,7 @@
   parent: BaseItem
   id: RuMCIRPComponentBase
   name: IRP component
-  description: Базовый прототип для всех продуктов, что входят в состав стандартного IRP UPP.
+  description: A component of the standard UPP individual ration pack.
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi

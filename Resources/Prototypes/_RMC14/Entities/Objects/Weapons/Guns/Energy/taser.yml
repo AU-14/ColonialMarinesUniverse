@@ -65,7 +65,7 @@
   - type: StaminaDamageOnHitRequiresCharge
     requiredCharge: 50
   - type: RMCStaminaDamageOnHit
-    damage: 15
+    damage: 100 # CMU14: a charged drive stun incapacitates a healthy human.
   - type: MeleeRequiresSkill
     skills:
       RMCSkillPolice: 2

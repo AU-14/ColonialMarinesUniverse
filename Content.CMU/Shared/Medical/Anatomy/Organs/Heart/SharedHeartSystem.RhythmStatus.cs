@@ -44,7 +44,7 @@ public abstract partial class SharedHeartSystem
         // Configuration is a rare boundary and must include paused patients and
         // patients whose last heart has been removed since the previous projection.
         var patients = new List<EntityUid>();
-        var query = EntityManager.AllEntityQueryEnumerator<BodyComponent>();
+        var query = AllEntityQuery<BodyComponent>();
         while (query.MoveNext(out var uid, out _))
             patients.Add(uid);
         foreach (var patient in patients)

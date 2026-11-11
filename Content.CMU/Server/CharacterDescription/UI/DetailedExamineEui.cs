@@ -61,6 +61,9 @@ public sealed partial class DetailedExamineEui : BaseEui
                 if (desc.Origin is { } origin && _prototypeManager.TryIndex(origin, out var originProto))
                     state.Origin = Loc.GetString(originProto.Name);
 
+                if (_prototypeManager.TryIndex(desc.Religion, out var religionProto))
+                    state.Religion = Loc.GetString(religionProto.Name);
+
                 if (desc.Allegiance is { } allegiance && _prototypeManager.TryIndex(allegiance, out var allegianceProto))
                     state.Allegiance = Loc.GetString(allegianceProto.Name);
             }

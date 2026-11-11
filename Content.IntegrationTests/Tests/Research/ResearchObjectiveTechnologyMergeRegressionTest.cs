@@ -13,6 +13,11 @@ namespace Content.IntegrationTests.Tests.Research;
 [TestOf(typeof(SharedResearchSystem))]
 public sealed class ResearchObjectiveTechnologyMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<TechnologyPrototype> ResearchObjectiveMergeTargetPrototype = "ResearchObjectiveMergeTarget";
+    private static readonly Robust.Shared.Prototypes.ProtoId<TechnologyPrototype> ResearchObjectiveMergeHiddenPrototype = "ResearchObjectiveMergeHidden";
+    private static readonly Robust.Shared.Prototypes.ProtoId<TechnologyPrototype> ResearchObjectiveMergeTierLockedPrototype = "ResearchObjectiveMergeTierLocked";
+    private static readonly Robust.Shared.Prototypes.ProtoId<TechnologyPrototype> ResearchObjectiveMergePrerequisitePrototype = "ResearchObjectiveMergePrerequisite";
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: techDiscipline
@@ -125,10 +130,10 @@ public sealed class ResearchObjectiveTechnologyMergeRegressionTest : GameTest
             try
             {
                 var component = SEntMan.GetComponent<TechnologyDatabaseComponent>(database);
-                var target = Server.ProtoMan.Index<TechnologyPrototype>("ResearchObjectiveMergeTarget");
-                var hidden = Server.ProtoMan.Index<TechnologyPrototype>("ResearchObjectiveMergeHidden");
-                var tierLocked = Server.ProtoMan.Index<TechnologyPrototype>("ResearchObjectiveMergeTierLocked");
-                var prerequisite = Server.ProtoMan.Index<TechnologyPrototype>("ResearchObjectiveMergePrerequisite");
+                var target = Server.ProtoMan.Index<TechnologyPrototype>(ResearchObjectiveMergeTargetPrototype);
+                var hidden = Server.ProtoMan.Index<TechnologyPrototype>(ResearchObjectiveMergeHiddenPrototype);
+                var tierLocked = Server.ProtoMan.Index<TechnologyPrototype>(ResearchObjectiveMergeTierLockedPrototype);
+                var prerequisite = Server.ProtoMan.Index<TechnologyPrototype>(ResearchObjectiveMergePrerequisitePrototype);
 
                 Assert.That(system.IsTechnologyAvailable(component, target), Is.True,
                     "empty and unrelated objective unlock lists must not gate ordinary availability");

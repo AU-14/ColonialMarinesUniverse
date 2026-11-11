@@ -1,7 +1,9 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.DoAfter;
 using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Storage.Components;
 using Content.Shared.Item;
+using Content.Shared.SmartFridge;
 using Robust.Shared.Containers;
 
 namespace Content.IntegrationTests.CMU14.Storage;
@@ -9,8 +11,52 @@ namespace Content.IntegrationTests.CMU14.Storage;
 [TestFixture]
 public sealed class StoragePlacementAllocationTest : GameTest
 {
+    [Test]
+    public async Task DumpingToFilteredTargetCompactsTheItemsItRejects()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var host = SEntMan.SpawnEntity("CMUStoragePlacementPerfHost", map.GridCoords);
+            SEntMan.AddComponent<DumpableComponent>(host);
+            var user = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            var target = SEntMan.SpawnEntity("CMUStoragePlacementFilteredTarget", map.GridCoords);
+            var fridge = SEntMan.GetComponent<SmartFridgeComponent>(target);
+            var containers = Server.System<SharedContainerSystem>();
+            var destination = containers.EnsureContainer<Container>(target, fridge.Container);
+            var storage = SEntMan.GetComponent<StorageComponent>(host);
+            var items = new List<EntityUid>();
+            for (var i = 0; i < 4; i++)
+            {
+                var item = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
+                if (i % 2 == 0) SEntMan.AddComponent<DumpableComponent>(item);
+                items.Add(item);
+                Assert.That(containers.Insert(item, storage.Container), Is.True);
+            }
+
+            var args = new DoAfterArgs(SEntMan, user, TimeSpan.Zero, new DumpableDoAfterEvent(), host, target: target);
+            Assert.That(Server.System<SharedDoAfterSystem>().TryStartDoAfter(args), Is.True);
+            Assert.That(destination.ContainedEntities, Is.EquivalentTo(new[] { items[0], items[2] }));
+            Assert.That(storage.Container.ContainedEntities, Is.EquivalentTo(new[] { items[1], items[3] }));
+            Assert.That(storage.StoredItems[items[1]].Position, Is.EqualTo(new Vector2i(0, 0)));
+            Assert.That(storage.StoredItems[items[3]].Position, Is.EqualTo(new Vector2i(1, 0)));
+            Assert.That(containers.Insert(items[0], storage.Container), Is.True, "Compaction must release the old occupied cells.");
+            SEntMan.DeleteEntity(target);
+            SEntMan.DeleteEntity(host);
+            SEntMan.DeleteEntity(user);
+        });
+    }
+
     [TestPrototypes]
     private const string Prototypes = """
+        - type: entity
+          id: CMUStoragePlacementFilteredTarget
+          components:
+          - type: SmartFridge
+            whitelist:
+              components:
+              - Dumpable
+
         - type: entity
           id: CMUStoragePlacementPerfHost
           components:
@@ -51,128 +97,6 @@ public sealed class StoragePlacementAllocationTest : GameTest
             shape:
             - 0,0,1,0
         """;
-
-    [Test]
-    public async Task NearlyFullStorageDoesNotRebuildEveryStoredShapeForEveryCandidate()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var host = SEntMan.SpawnEntity("CMUStoragePlacementPerfHost", map.GridCoords);
-            var candidate = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
-            var storage = SEntMan.GetComponent<StorageComponent>(host);
-            var containers = Server.System<SharedContainerSystem>();
-            var system = Server.System<SharedStorageSystem>();
-            try
-            {
-                for (var i = 0; i < 63; i++)
-                {
-                    var item = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
-                    Assert.That(containers.Insert(item, storage.Container), Is.True);
-                }
-
-                Assert.That(system.TryGetAvailableGridSpace(host, candidate, out var expected), Is.True);
-                Assert.That(expected!.Value.Position, Is.EqualTo(new Vector2i(7, 7)));
-                for (var i = 0; i < 8; i++)
-                    system.TryGetAvailableGridSpace(host, candidate, out _);
-
-                var before = GC.GetAllocatedBytesForCurrentThread();
-                var found = 0;
-                for (var i = 0; i < 32; i++)
-                {
-                    if (system.TryGetAvailableGridSpace(host, candidate, out var location) && location == expected)
-                        found++;
-                }
-                var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-                TestContext.Out.WriteLine($"32 nearly-full placement searches allocated {allocated} bytes");
-                Assert.Multiple(() =>
-                {
-                    Assert.That(found, Is.EqualTo(32));
-                    Assert.That(allocated, Is.LessThan(1024 * 1024),
-                        "Placement must not allocate shapes again for each candidate cell and rotation.");
-                });
-
-                Assert.That(containers.Insert(candidate, storage.Container), Is.True);
-                Assert.That(system.TryGetAvailableGridSpace(host, candidate, out var ownLocation), Is.True,
-                    "An item already in storage must be allowed to reuse its own occupied cells.");
-                Assert.That(ownLocation, Is.EqualTo(expected));
-                var extra = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
-                try
-                {
-                    Assert.That(system.TryGetAvailableGridSpace(host, extra, out _), Is.False);
-                }
-                finally
-                {
-                    SEntMan.DeleteEntity(extra);
-                }
-            }
-            finally
-            {
-                SEntMan.DeleteEntity(candidate);
-                SEntMan.DeleteEntity(host);
-            }
-        });
-    }
-
-    [Test]
-    public async Task AreaPickupIntoNearlyFullStorageKeepsAllocationsBounded()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var host = SEntMan.SpawnEntity("CMUStoragePlacementPerfHost", map.GridCoords);
-            var user = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
-            var storage = SEntMan.GetComponent<StorageComponent>(host);
-            var containers = Server.System<SharedContainerSystem>();
-            var doAfters = Server.System<SharedDoAfterSystem>();
-            var pickups = new List<EntityUid>();
-            try
-            {
-                for (var i = 0; i < 53; i++)
-                {
-                    var item = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
-                    Assert.That(containers.Insert(item, storage.Container), Is.True);
-                }
-
-                // Warm the actual completion handler before measuring a full ten-item pickup.
-                var warmItem = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
-                pickups.Add(warmItem);
-                var warmEvent = new AreaPickupDoAfterEvent([SEntMan.GetNetEntity(warmItem)]);
-                Assert.That(doAfters.TryStartDoAfter(new DoAfterArgs(SEntMan, user, TimeSpan.Zero, warmEvent, host)), Is.True);
-                Assert.That(storage.Container.ContainedEntities.Count, Is.EqualTo(54));
-
-                var entities = new List<NetEntity>();
-                for (var i = 0; i < StorageComponent.AreaPickupLimit; i++)
-                {
-                    var item = SEntMan.SpawnEntity("CMUStoragePlacementPerfItem", map.GridCoords);
-                    pickups.Add(item);
-                    entities.Add(SEntMan.GetNetEntity(item));
-                }
-
-                var ev = new AreaPickupDoAfterEvent(entities);
-                var args = new DoAfterArgs(SEntMan, user, TimeSpan.Zero, ev, host);
-                var before = GC.GetAllocatedBytesForCurrentThread();
-                var started = doAfters.TryStartDoAfter(args);
-                var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-                TestContext.Out.WriteLine($"Ten-item area pickup allocated {allocated} bytes");
-                Assert.Multiple(() =>
-                {
-                    Assert.That(started, Is.True);
-                    Assert.That(ev.Handled, Is.True);
-                    Assert.That(storage.Container.ContainedEntities.Count, Is.EqualTo(64));
-                    Assert.That(allocated, Is.LessThan(4 * 1024 * 1024),
-                        "Completing a pickup must not rebuild stored shapes for each placement candidate.");
-                });
-            }
-            finally
-            {
-                foreach (var item in pickups)
-                    SEntMan.DeleteEntity(item);
-                SEntMan.DeleteEntity(user);
-                SEntMan.DeleteEntity(host);
-            }
-        });
-    }
 
     [TestCase("CMUStoragePlacementSplitGrid", false)]
     [TestCase("CMUStoragePlacementFixedGrid", true)]

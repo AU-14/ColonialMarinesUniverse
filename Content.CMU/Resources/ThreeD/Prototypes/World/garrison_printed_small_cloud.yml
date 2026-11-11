@@ -1,0 +1,3074 @@
+# Source-specific physical prop drafts; see SOURCES_PRINTED_SMALL_CLOUD.md
+- type: cmu3DModel
+  id: CMU3DCigarPrintedSmallCloud
+  label: Unlit rolled cigar
+  status: draft
+  sourcePrototypes:
+  - Cigar
+  referencePrototype: Cigar
+  referenceRsi: /Textures/Objects/Consumable/Smokeables/Cigars/cigar.rsi
+  referenceState: unlit-icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Single unlit world source only. Cylindrical wrapper, tapered cap and raised gold band. Lit ember, smoke
+    and burning progression are unsupported. Physical depth and unseen construction inferred. All draft; no native,
+    map-fit or fidelity approval.
+  parts:
+  - label: rolled tobacco body segment 0
+    min: -0.220693, -0.209, 0.0075
+    max: -0.142557, -0.136, 0.0805
+    color: '#84603C'
+    shape: CylinderX
+    yaw: 44.74074
+  - label: rolled tobacco body segment 1
+    min: -0.2060847, -0.085375, 0.0005
+    max: 0.1064597, 0.001625, 0.0875
+    color: '#5A4129'
+    shape: CylinderX
+    yaw: 44.74074
+  - label: rolled tobacco body segment 2
+    min: 0.0456933, 0.0574062, 0.0075
+    max: 0.1287129, 0.1304063, 0.0805
+    color: '#5A4129'
+    shape: CylinderX
+    yaw: 44.74074
+  - label: rolled tobacco body segment 3
+    min: 0.1082671, 0.1022187, 0.0145
+    max: 0.1424516, 0.1612187, 0.0735
+    color: '#513A24'
+    shape: CylinderX
+    yaw: 44.74074
+  - label: fine wrapper seam 0
+    min: -0.1695649, -0.139875, 0.07625
+    max: -0.1243101, -0.136375, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: fine wrapper seam 1
+    min: -0.1140649, -0.084875, 0.07625
+    max: -0.0688101, -0.081375, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: fine wrapper seam 2
+    min: -0.0377524, -0.00925, 0.07625
+    max: 0.0075024, -0.00575, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: fine wrapper seam 3
+    min: 0.0350913, 0.0629375, 0.07625
+    max: 0.0803462, 0.0664375, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: raised golden paper band
+    min: -0.0378763, -0.03875, -0.001
+    max: 0.0353763, 0.05125, 0.089
+    color: '#E69213'
+    shape: CylinderX
+    yaw: 44.74074
+  - label: gold band highlighted middle
+    min: -0.0134588, -0.04025, -0.0025
+    max: 0.0109588, 0.05275, 0.0905
+    color: '#FAB650'
+    shape: CylinderX
+    yaw: 44.74074
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    unlit-icon:
+      frames:
+      - parts:
+        - label: rolled tobacco body segment 0
+          min: -0.220693, -0.209, 0.0075
+          max: -0.142557, -0.136, 0.0805
+          color: '#84603C'
+          shape: CylinderX
+          yaw: 44.74074
+        - label: rolled tobacco body segment 1
+          min: -0.2060847, -0.085375, 0.0005
+          max: 0.1064597, 0.001625, 0.0875
+          color: '#5A4129'
+          shape: CylinderX
+          yaw: 44.74074
+        - label: rolled tobacco body segment 2
+          min: 0.0456933, 0.0574062, 0.0075
+          max: 0.1287129, 0.1304063, 0.0805
+          color: '#5A4129'
+          shape: CylinderX
+          yaw: 44.74074
+        - label: rolled tobacco body segment 3
+          min: 0.1082671, 0.1022187, 0.0145
+          max: 0.1424516, 0.1612187, 0.0735
+          color: '#513A24'
+          shape: CylinderX
+          yaw: 44.74074
+        - label: fine wrapper seam 0
+          min: -0.1695649, -0.139875, 0.07625
+          max: -0.1243101, -0.136375, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: fine wrapper seam 1
+          min: -0.1140649, -0.084875, 0.07625
+          max: -0.0688101, -0.081375, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: fine wrapper seam 2
+          min: -0.0377524, -0.00925, 0.07625
+          max: 0.0075024, -0.00575, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: fine wrapper seam 3
+          min: 0.0350913, 0.0629375, 0.07625
+          max: 0.0803462, 0.0664375, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: raised golden paper band
+          min: -0.0378763, -0.03875, -0.001
+          max: 0.0353763, 0.05125, 0.089
+          color: '#E69213'
+          shape: CylinderX
+          yaw: 44.74074
+        - label: gold band highlighted middle
+          min: -0.0134588, -0.04025, -0.0025
+          max: 0.0109588, 0.05275, 0.0905
+          color: '#FAB650'
+          shape: CylinderX
+          yaw: 44.74074
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCigarSpentPrintedSmallCloud
+  label: Spent cigar and loose ash
+  status: draft
+  sourcePrototypes:
+  - CigarSpent
+  referencePrototype: CigarSpent
+  referenceRsi: /Textures/Objects/Consumable/Smokeables/Cigars/cigar.rsi
+  referenceState: burnt-icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual Burnt prototype state. Short rolled body, charred end and separate source-position ash flakes.
+    No active glow or smoke. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity
+    approval.
+  parts:
+  - label: rolled tobacco body segment 0
+    min: -0.078637, -0.0825, 0.0075
+    max: -0.031613, -0.0095, 0.0805
+    color: '#84603C'
+    shape: CylinderX
+    yaw: 44.56921
+  - label: rolled tobacco body segment 1
+    min: -0.0696104, -0.011125, 0.0005
+    max: 0.1184854, 0.075875, 0.0875
+    color: '#513A24'
+    shape: CylinderX
+    yaw: 44.56921
+  - label: rolled tobacco body segment 2
+    min: 0.0821592, 0.0773437, 0.0075
+    max: 0.1321221, 0.1503437, 0.0805
+    color: '#513A24'
+    shape: CylinderX
+    yaw: 44.56921
+  - label: rolled tobacco body segment 3
+    min: 0.1198854, 0.1070312, 0.0145
+    max: 0.1404584, 0.1660312, 0.0735
+    color: '#513A24'
+    shape: CylinderX
+    yaw: 44.56921
+  - label: fine wrapper seam 0
+    min: -0.0568149, -0.027125, 0.07625
+    max: -0.0115601, -0.023625, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: fine wrapper seam 1
+    min: -0.0233149, 0.005875, 0.07625
+    max: 0.0219399, 0.009375, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: fine wrapper seam 2
+    min: 0.0227476, 0.05125, 0.07625
+    max: 0.0680024, 0.05475, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: fine wrapper seam 3
+    min: 0.0667163, 0.0945625, 0.07625
+    max: 0.1119712, 0.0980625, 0.07975
+    color: '#84603C'
+    shape: CylinderX
+    yaw: -45.0
+  - label: raised golden paper band
+    min: -0.0185425, -0.03325, -0.001
+    max: 0.0255425, 0.05675, 0.089
+    color: '#E69213'
+    shape: CylinderX
+    yaw: 44.56921
+  - label: gold band highlighted middle
+    min: -0.0038475, -0.03475, -0.0025
+    max: 0.0108475, 0.05825, 0.0905
+    color: '#FAB650'
+    shape: CylinderX
+    yaw: 44.56921
+  - label: charred extinguished tip
+    min: 0.0647365, 0.0763281, 0.007
+    max: 0.1484979, 0.1503281, 0.081
+    color: '#171717'
+    shape: CylinderX
+    yaw: 44.56921
+  - label: loose cooled ash flake 0
+    min: -0.251925, -0.119275, 0.004
+    max: -0.216825, -0.099475, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+  - label: loose cooled ash flake 1
+    min: -0.20235, -0.108975, 0.004
+    max: -0.17265, -0.084775, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 19
+  - label: loose cooled ash flake 2
+    min: -0.15455, -0.0882, 0.004
+    max: -0.13295, -0.0618, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 38
+  - label: loose cooled ash flake 3
+    min: -0.145175, -0.143175, 0.004
+    max: -0.123575, -0.125575, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 57
+  - label: loose cooled ash flake 4
+    min: -0.1858, -0.179575, 0.004
+    max: -0.1642, -0.164175, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 76
+  - label: loose cooled ash flake 5
+    min: -0.095675, -0.211925, 0.004
+    max: -0.060575, -0.194325, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 95
+  - label: loose cooled ash flake 6
+    min: -0.05455, -0.183975, 0.004
+    max: -0.03295, -0.159775, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 114
+  - label: loose cooled ash flake 7
+    min: -0.0108, -0.16615, 0.004
+    max: 0.0108, -0.14635, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 133
+  - label: loose cooled ash flake 8
+    min: 0.034725, -0.147575, 0.004
+    max: 0.059025, -0.121175, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 152
+  - label: loose cooled ash flake 9
+    min: 0.054825, -0.106775, 0.004
+    max: 0.076425, -0.086975, 0.022
+    color: '#8A8A8A'
+    shape: Ellipsoid
+    yaw: 171
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    burnt-icon:
+      frames:
+      - parts:
+        - label: rolled tobacco body segment 0
+          min: -0.078637, -0.0825, 0.0075
+          max: -0.031613, -0.0095, 0.0805
+          color: '#84603C'
+          shape: CylinderX
+          yaw: 44.56921
+        - label: rolled tobacco body segment 1
+          min: -0.0696104, -0.011125, 0.0005
+          max: 0.1184854, 0.075875, 0.0875
+          color: '#513A24'
+          shape: CylinderX
+          yaw: 44.56921
+        - label: rolled tobacco body segment 2
+          min: 0.0821592, 0.0773437, 0.0075
+          max: 0.1321221, 0.1503437, 0.0805
+          color: '#513A24'
+          shape: CylinderX
+          yaw: 44.56921
+        - label: rolled tobacco body segment 3
+          min: 0.1198854, 0.1070312, 0.0145
+          max: 0.1404584, 0.1660312, 0.0735
+          color: '#513A24'
+          shape: CylinderX
+          yaw: 44.56921
+        - label: fine wrapper seam 0
+          min: -0.0568149, -0.027125, 0.07625
+          max: -0.0115601, -0.023625, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: fine wrapper seam 1
+          min: -0.0233149, 0.005875, 0.07625
+          max: 0.0219399, 0.009375, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: fine wrapper seam 2
+          min: 0.0227476, 0.05125, 0.07625
+          max: 0.0680024, 0.05475, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: fine wrapper seam 3
+          min: 0.0667163, 0.0945625, 0.07625
+          max: 0.1119712, 0.0980625, 0.07975
+          color: '#84603C'
+          shape: CylinderX
+          yaw: -45.0
+        - label: raised golden paper band
+          min: -0.0185425, -0.03325, -0.001
+          max: 0.0255425, 0.05675, 0.089
+          color: '#E69213'
+          shape: CylinderX
+          yaw: 44.56921
+        - label: gold band highlighted middle
+          min: -0.0038475, -0.03475, -0.0025
+          max: 0.0108475, 0.05825, 0.0905
+          color: '#FAB650'
+          shape: CylinderX
+          yaw: 44.56921
+        - label: charred extinguished tip
+          min: 0.0647365, 0.0763281, 0.007
+          max: 0.1484979, 0.1503281, 0.081
+          color: '#171717'
+          shape: CylinderX
+          yaw: 44.56921
+        - label: loose cooled ash flake 0
+          min: -0.251925, -0.119275, 0.004
+          max: -0.216825, -0.099475, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+        - label: loose cooled ash flake 1
+          min: -0.20235, -0.108975, 0.004
+          max: -0.17265, -0.084775, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 19
+        - label: loose cooled ash flake 2
+          min: -0.15455, -0.0882, 0.004
+          max: -0.13295, -0.0618, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 38
+        - label: loose cooled ash flake 3
+          min: -0.145175, -0.143175, 0.004
+          max: -0.123575, -0.125575, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 57
+        - label: loose cooled ash flake 4
+          min: -0.1858, -0.179575, 0.004
+          max: -0.1642, -0.164175, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 76
+        - label: loose cooled ash flake 5
+          min: -0.095675, -0.211925, 0.004
+          max: -0.060575, -0.194325, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 95
+        - label: loose cooled ash flake 6
+          min: -0.05455, -0.183975, 0.004
+          max: -0.03295, -0.159775, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 114
+        - label: loose cooled ash flake 7
+          min: -0.0108, -0.16615, 0.004
+          max: 0.0108, -0.14635, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 133
+        - label: loose cooled ash flake 8
+          min: 0.034725, -0.147575, 0.004
+          max: 0.059025, -0.121175, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 152
+        - label: loose cooled ash flake 9
+          min: 0.054825, -0.106775, 0.004
+          max: 0.076425, -0.086975, 0.022
+          color: '#8A8A8A'
+          shape: Ellipsoid
+          yaw: 171
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCCigarettePrintedSmallCloud
+  label: Unfiltered rolled cigarette
+  status: draft
+  sourcePrototypes:
+  - RMCCigarette
+  referencePrototype: RMCCigarette
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigarettes/unfiltered_roll.rsi
+  referenceState: unlit-icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Source horizontal white roll with no orange filter. True circular cross-section and end cap; source
+    is almost featureless white. Lit/burnt transition, smoke and held/equipped forms unsupported. Physical depth and
+    unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: rolled unfiltered paper tube
+    min: -0.15625, -0.1875, 0.0
+    max: 0.125, -0.125, 0.0625
+    color: '#F3F3F3'
+    shape: CylinderX
+  - label: tobacco cut end
+    min: -0.1555, -0.18025, 0.00725
+    max: -0.1525, -0.13225, 0.05525
+    color: '#F3F3F3'
+    shape: CylinderX
+  - label: paper end lip
+    min: 0.119, -0.18475, 0.00275
+    max: 0.125, -0.12775, 0.05975
+    color: '#F3F3F3'
+    shape: CylinderX
+  - label: longitudinal paper seam
+    min: -0.145, -0.182, 0.046
+    max: 0.122, -0.18, 0.048
+    color: '#F3F3F3'
+    shape: CylinderX
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    unlit-icon:
+      frames:
+      - parts:
+        - label: rolled unfiltered paper tube
+          min: -0.15625, -0.1875, 0.0
+          max: 0.125, -0.125, 0.0625
+          color: '#F3F3F3'
+          shape: CylinderX
+        - label: tobacco cut end
+          min: -0.1555, -0.18025, 0.00725
+          max: -0.1525, -0.13225, 0.05525
+          color: '#F3F3F3'
+          shape: CylinderX
+        - label: paper end lip
+          min: 0.119, -0.18475, 0.00275
+          max: 0.125, -0.12775, 0.05975
+          color: '#F3F3F3'
+          shape: CylinderX
+        - label: longitudinal paper seam
+          min: -0.145, -0.182, 0.046
+          max: 0.122, -0.18, 0.048
+          color: '#F3F3F3'
+          shape: CylinderX
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCigaretteSpentPrintedSmallCloud
+  label: Spent filter cigarette
+  status: draft
+  sourcePrototypes:
+  - CigaretteSpent
+  referencePrototype: CigaretteSpent
+  referenceRsi: /Textures/Objects/Consumable/Smokeables/Cigarettes/cigarette.rsi
+  referenceState: burnt-icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual Burnt source is a five-pixel white collar and ochre filter stub. Circular rolled filter, short
+    paper collar and extinguished grey end, without invented long tobacco body. Physical depth and unseen construction
+    inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: remaining filter plug
+    min: 0.015625, -0.1875, 0.0
+    max: 0.109375, -0.125, 0.0625
+    color: '#C98D5D'
+    shape: CylinderX
+  - label: short white paper collar
+    min: -0.014, -0.1875, 0.0
+    max: 0.02, -0.125, 0.0625
+    color: '#F3F3F3'
+    shape: CylinderX
+  - label: cooled grey cut end
+    min: -0.021, -0.18325, 0.00425
+    max: -0.013, -0.12925, 0.05825
+    color: '#9F6C43'
+    shape: CylinderX
+  - label: filter fleck 0
+    min: 0.031, -0.177, 0.053
+    max: 0.037, -0.171, 0.055
+    color: '#C98D5D'
+  - label: filter fleck 1
+    min: 0.049, -0.177, 0.053
+    max: 0.055, -0.171, 0.055
+    color: '#C98D5D'
+  - label: filter fleck 2
+    min: 0.067, -0.177, 0.053
+    max: 0.073, -0.171, 0.055
+    color: '#C98D5D'
+  - label: filter fleck 3
+    min: 0.085, -0.177, 0.053
+    max: 0.091, -0.171, 0.055
+    color: '#C98D5D'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    burnt-icon:
+      frames:
+      - parts:
+        - label: remaining filter plug
+          min: 0.015625, -0.1875, 0.0
+          max: 0.109375, -0.125, 0.0625
+          color: '#C98D5D'
+          shape: CylinderX
+        - label: short white paper collar
+          min: -0.014, -0.1875, 0.0
+          max: 0.02, -0.125, 0.0625
+          color: '#F3F3F3'
+          shape: CylinderX
+        - label: cooled grey cut end
+          min: -0.021, -0.18325, 0.00425
+          max: -0.013, -0.12925, 0.05825
+          color: '#9F6C43'
+          shape: CylinderX
+        - label: filter fleck 0
+          min: 0.031, -0.177, 0.053
+          max: 0.037, -0.171, 0.055
+          color: '#C98D5D'
+        - label: filter fleck 1
+          min: 0.049, -0.177, 0.053
+          max: 0.055, -0.171, 0.055
+          color: '#C98D5D'
+        - label: filter fleck 2
+          min: 0.067, -0.177, 0.053
+          max: 0.073, -0.171, 0.055
+          color: '#C98D5D'
+        - label: filter fleck 3
+          min: 0.085, -0.177, 0.053
+          max: 0.091, -0.171, 0.055
+          color: '#C98D5D'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCAshtrayPrintedSmallCloud
+  label: Hollow notched plastic ashtray
+  status: draft
+  sourcePrototypes:
+  - RMCAshtray
+  referencePrototype: RMCAshtray
+  referenceRsi: /Textures/_RMC14/Objects/Decoration/ashtray.rsi
+  referenceState: icon-0
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Default empty basin. Inspected source StorageFillVisualizer owns icon-0/icon-1/icon-2 on its sole visible
+    layer; existing source-state adapter supplies the three stable representative fills. Live item identities, pouring,
+    debris and breakage are unsupported. Physical depth and unseen construction inferred. All draft; no native, map-fit
+    or fidelity approval.
+  parts:
+  - label: recessed closed ashtray floor
+    min: -0.095375, -0.036875, 0.0035
+    max: 0.126625, 0.068125, 0.0325
+    color: '#404040'
+    shape: CylinderZ
+  - label: separate shallow bowl wall 0
+    min: 0.1121375, 0.0288573, 0.0115
+    max: 0.1434741, 0.0518573, 0.0725
+    color: '#000000'
+    yaw: 127.89075
+  - label: notched rolled rim 0
+    min: 0.1121375, 0.0283573, 0.069
+    max: 0.1434741, 0.0523573, 0.085
+    color: '#808080'
+    yaw: 127.89075
+  - label: separate shallow bowl wall 1
+    min: 0.0813421, 0.0498244, 0.0115
+    max: 0.1216269, 0.0728244, 0.0725
+    color: '#000000'
+    yaw: 151.9755
+  - label: notched rolled rim 1
+    min: 0.0813421, 0.0493244, 0.069
+    max: 0.1216269, 0.0733244, 0.085
+    color: '#808080'
+    yaw: 151.9755
+  - label: separate shallow bowl wall 2
+    min: 0.0383024, 0.0638341, 0.0115
+    max: 0.0858812, 0.0868341, 0.0725
+    color: '#000000'
+    yaw: 167.56698
+  - label: notched rolled rim 2
+    min: 0.0383024, 0.0633341, 0.069
+    max: 0.0858812, 0.0873341, 0.085
+    color: '#808080'
+    yaw: 167.56698
+  - label: separate shallow bowl wall 3
+    min: -0.0095206, 0.0687537, 0.0115
+    max: 0.0407706, 0.0917537, 0.0725
+    color: '#000000'
+    yaw: -180.0
+  - label: notched rolled rim 3
+    min: -0.0095206, 0.0682537, 0.051
+    max: 0.0407706, 0.0922537, 0.067
+    color: '#808080'
+    yaw: -180.0
+  - label: separate shallow bowl wall 4
+    min: -0.0546312, 0.0638341, 0.0115
+    max: -0.0070524, 0.0868341, 0.0725
+    color: '#000000'
+    yaw: -167.56698
+  - label: notched rolled rim 4
+    min: -0.0546312, 0.0633341, 0.069
+    max: -0.0070524, 0.0873341, 0.085
+    color: '#808080'
+    yaw: -167.56698
+  - label: separate shallow bowl wall 5
+    min: -0.0903769, 0.0498244, 0.0115
+    max: -0.0500921, 0.0728244, 0.0725
+    color: '#000000'
+    yaw: -151.9755
+  - label: notched rolled rim 5
+    min: -0.0903769, 0.0493244, 0.069
+    max: -0.0500921, 0.0733244, 0.085
+    color: '#808080'
+    yaw: -151.9755
+  - label: separate shallow bowl wall 6
+    min: -0.1122241, 0.0288573, 0.0115
+    max: -0.0808875, 0.0518573, 0.0725
+    color: '#000000'
+    yaw: -127.89075
+  - label: notched rolled rim 6
+    min: -0.1122241, 0.0283573, 0.069
+    max: -0.0808875, 0.0523573, 0.085
+    color: '#808080'
+    yaw: -127.89075
+  - label: separate shallow bowl wall 7
+    min: -0.1191826, 0.004125, 0.0115
+    max: -0.0924147, 0.027125, 0.0725
+    color: '#000000'
+    yaw: -90.0
+  - label: notched rolled rim 7
+    min: -0.1191826, 0.003625, 0.069
+    max: -0.0924147, 0.027625, 0.085
+    color: '#808080'
+    yaw: -90.0
+  - label: separate shallow bowl wall 8
+    min: -0.1122241, -0.0206073, 0.0115
+    max: -0.0808875, 0.0023927, 0.0725
+    color: '#000000'
+    yaw: -52.10925
+  - label: notched rolled rim 8
+    min: -0.1122241, -0.0211073, 0.069
+    max: -0.0808875, 0.0028927, 0.085
+    color: '#808080'
+    yaw: -52.10925
+  - label: separate shallow bowl wall 9
+    min: -0.0903769, -0.0415744, 0.0115
+    max: -0.0500921, -0.0185744, 0.0725
+    color: '#000000'
+    yaw: -28.0245
+  - label: notched rolled rim 9
+    min: -0.0903769, -0.0420744, 0.069
+    max: -0.0500921, -0.0180744, 0.085
+    color: '#808080'
+    yaw: -28.0245
+  - label: separate shallow bowl wall 10
+    min: -0.0546312, -0.0555841, 0.0115
+    max: -0.0070524, -0.0325841, 0.0725
+    color: '#000000'
+    yaw: -12.43302
+  - label: notched rolled rim 10
+    min: -0.0546312, -0.0560841, 0.069
+    max: -0.0070524, -0.0320841, 0.085
+    color: '#808080'
+    yaw: -12.43302
+  - label: separate shallow bowl wall 11
+    min: -0.0095206, -0.0605037, 0.0115
+    max: 0.0407706, -0.0375037, 0.0725
+    color: '#000000'
+    yaw: -0.0
+  - label: notched rolled rim 11
+    min: -0.0095206, -0.0610037, 0.051
+    max: 0.0407706, -0.0370037, 0.067
+    color: '#808080'
+    yaw: -0.0
+  - label: separate shallow bowl wall 12
+    min: 0.0383024, -0.0555841, 0.0115
+    max: 0.0858812, -0.0325841, 0.0725
+    color: '#000000'
+    yaw: 12.43302
+  - label: notched rolled rim 12
+    min: 0.0383024, -0.0560841, 0.069
+    max: 0.0858812, -0.0320841, 0.085
+    color: '#808080'
+    yaw: 12.43302
+  - label: separate shallow bowl wall 13
+    min: 0.0813421, -0.0415744, 0.0115
+    max: 0.1216269, -0.0185744, 0.0725
+    color: '#000000'
+    yaw: 28.0245
+  - label: notched rolled rim 13
+    min: 0.0813421, -0.0420744, 0.069
+    max: 0.1216269, -0.0180744, 0.085
+    color: '#808080'
+    yaw: 28.0245
+  - label: separate shallow bowl wall 14
+    min: 0.1121375, -0.0206073, 0.0115
+    max: 0.1434741, 0.0023927, 0.0725
+    color: '#000000'
+    yaw: 52.10925
+  - label: notched rolled rim 14
+    min: 0.1121375, -0.0211073, 0.069
+    max: 0.1434741, 0.0028927, 0.085
+    color: '#808080'
+    yaw: 52.10925
+  - label: separate shallow bowl wall 15
+    min: 0.1236647, 0.004125, 0.0115
+    max: 0.1504326, 0.027125, 0.0725
+    color: '#000000'
+    yaw: 90.0
+  - label: notched rolled rim 15
+    min: 0.1236647, 0.003625, 0.069
+    max: 0.1504326, 0.027625, 0.085
+    color: '#808080'
+    yaw: 90.0
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon-0:
+      frames:
+      - parts:
+        - label: recessed closed ashtray floor
+          min: -0.095375, -0.036875, 0.0035
+          max: 0.126625, 0.068125, 0.0325
+          color: '#404040'
+          shape: CylinderZ
+        - label: separate shallow bowl wall 0
+          min: 0.1121375, 0.0288573, 0.0115
+          max: 0.1434741, 0.0518573, 0.0725
+          color: '#000000'
+          yaw: 127.89075
+        - label: notched rolled rim 0
+          min: 0.1121375, 0.0283573, 0.069
+          max: 0.1434741, 0.0523573, 0.085
+          color: '#808080'
+          yaw: 127.89075
+        - label: separate shallow bowl wall 1
+          min: 0.0813421, 0.0498244, 0.0115
+          max: 0.1216269, 0.0728244, 0.0725
+          color: '#000000'
+          yaw: 151.9755
+        - label: notched rolled rim 1
+          min: 0.0813421, 0.0493244, 0.069
+          max: 0.1216269, 0.0733244, 0.085
+          color: '#808080'
+          yaw: 151.9755
+        - label: separate shallow bowl wall 2
+          min: 0.0383024, 0.0638341, 0.0115
+          max: 0.0858812, 0.0868341, 0.0725
+          color: '#000000'
+          yaw: 167.56698
+        - label: notched rolled rim 2
+          min: 0.0383024, 0.0633341, 0.069
+          max: 0.0858812, 0.0873341, 0.085
+          color: '#808080'
+          yaw: 167.56698
+        - label: separate shallow bowl wall 3
+          min: -0.0095206, 0.0687537, 0.0115
+          max: 0.0407706, 0.0917537, 0.0725
+          color: '#000000'
+          yaw: -180.0
+        - label: notched rolled rim 3
+          min: -0.0095206, 0.0682537, 0.051
+          max: 0.0407706, 0.0922537, 0.067
+          color: '#808080'
+          yaw: -180.0
+        - label: separate shallow bowl wall 4
+          min: -0.0546312, 0.0638341, 0.0115
+          max: -0.0070524, 0.0868341, 0.0725
+          color: '#000000'
+          yaw: -167.56698
+        - label: notched rolled rim 4
+          min: -0.0546312, 0.0633341, 0.069
+          max: -0.0070524, 0.0873341, 0.085
+          color: '#808080'
+          yaw: -167.56698
+        - label: separate shallow bowl wall 5
+          min: -0.0903769, 0.0498244, 0.0115
+          max: -0.0500921, 0.0728244, 0.0725
+          color: '#000000'
+          yaw: -151.9755
+        - label: notched rolled rim 5
+          min: -0.0903769, 0.0493244, 0.069
+          max: -0.0500921, 0.0733244, 0.085
+          color: '#808080'
+          yaw: -151.9755
+        - label: separate shallow bowl wall 6
+          min: -0.1122241, 0.0288573, 0.0115
+          max: -0.0808875, 0.0518573, 0.0725
+          color: '#000000'
+          yaw: -127.89075
+        - label: notched rolled rim 6
+          min: -0.1122241, 0.0283573, 0.069
+          max: -0.0808875, 0.0523573, 0.085
+          color: '#808080'
+          yaw: -127.89075
+        - label: separate shallow bowl wall 7
+          min: -0.1191826, 0.004125, 0.0115
+          max: -0.0924147, 0.027125, 0.0725
+          color: '#000000'
+          yaw: -90.0
+        - label: notched rolled rim 7
+          min: -0.1191826, 0.003625, 0.069
+          max: -0.0924147, 0.027625, 0.085
+          color: '#808080'
+          yaw: -90.0
+        - label: separate shallow bowl wall 8
+          min: -0.1122241, -0.0206073, 0.0115
+          max: -0.0808875, 0.0023927, 0.0725
+          color: '#000000'
+          yaw: -52.10925
+        - label: notched rolled rim 8
+          min: -0.1122241, -0.0211073, 0.069
+          max: -0.0808875, 0.0028927, 0.085
+          color: '#808080'
+          yaw: -52.10925
+        - label: separate shallow bowl wall 9
+          min: -0.0903769, -0.0415744, 0.0115
+          max: -0.0500921, -0.0185744, 0.0725
+          color: '#000000'
+          yaw: -28.0245
+        - label: notched rolled rim 9
+          min: -0.0903769, -0.0420744, 0.069
+          max: -0.0500921, -0.0180744, 0.085
+          color: '#808080'
+          yaw: -28.0245
+        - label: separate shallow bowl wall 10
+          min: -0.0546312, -0.0555841, 0.0115
+          max: -0.0070524, -0.0325841, 0.0725
+          color: '#000000'
+          yaw: -12.43302
+        - label: notched rolled rim 10
+          min: -0.0546312, -0.0560841, 0.069
+          max: -0.0070524, -0.0320841, 0.085
+          color: '#808080'
+          yaw: -12.43302
+        - label: separate shallow bowl wall 11
+          min: -0.0095206, -0.0605037, 0.0115
+          max: 0.0407706, -0.0375037, 0.0725
+          color: '#000000'
+          yaw: -0.0
+        - label: notched rolled rim 11
+          min: -0.0095206, -0.0610037, 0.051
+          max: 0.0407706, -0.0370037, 0.067
+          color: '#808080'
+          yaw: -0.0
+        - label: separate shallow bowl wall 12
+          min: 0.0383024, -0.0555841, 0.0115
+          max: 0.0858812, -0.0325841, 0.0725
+          color: '#000000'
+          yaw: 12.43302
+        - label: notched rolled rim 12
+          min: 0.0383024, -0.0560841, 0.069
+          max: 0.0858812, -0.0320841, 0.085
+          color: '#808080'
+          yaw: 12.43302
+        - label: separate shallow bowl wall 13
+          min: 0.0813421, -0.0415744, 0.0115
+          max: 0.1216269, -0.0185744, 0.0725
+          color: '#000000'
+          yaw: 28.0245
+        - label: notched rolled rim 13
+          min: 0.0813421, -0.0420744, 0.069
+          max: 0.1216269, -0.0180744, 0.085
+          color: '#808080'
+          yaw: 28.0245
+        - label: separate shallow bowl wall 14
+          min: 0.1121375, -0.0206073, 0.0115
+          max: 0.1434741, 0.0023927, 0.0725
+          color: '#000000'
+          yaw: 52.10925
+        - label: notched rolled rim 14
+          min: 0.1121375, -0.0211073, 0.069
+          max: 0.1434741, 0.0028927, 0.085
+          color: '#808080'
+          yaw: 52.10925
+        - label: separate shallow bowl wall 15
+          min: 0.1236647, 0.004125, 0.0115
+          max: 0.1504326, 0.027125, 0.0725
+          color: '#000000'
+          yaw: 90.0
+        - label: notched rolled rim 15
+          min: 0.1236647, 0.003625, 0.069
+          max: 0.1504326, 0.027625, 0.085
+          color: '#808080'
+          yaw: 90.0
+      delays:
+      - 1
+    icon-1:
+      frames:
+      - parts:
+        - label: recessed closed ashtray floor
+          min: -0.095375, -0.036875, 0.0035
+          max: 0.126625, 0.068125, 0.0325
+          color: '#404040'
+          shape: CylinderZ
+        - label: separate shallow bowl wall 0
+          min: 0.1121375, 0.0288573, 0.0115
+          max: 0.1434741, 0.0518573, 0.0725
+          color: '#000000'
+          yaw: 127.89075
+        - label: notched rolled rim 0
+          min: 0.1121375, 0.0283573, 0.069
+          max: 0.1434741, 0.0523573, 0.085
+          color: '#808080'
+          yaw: 127.89075
+        - label: separate shallow bowl wall 1
+          min: 0.0813421, 0.0498244, 0.0115
+          max: 0.1216269, 0.0728244, 0.0725
+          color: '#000000'
+          yaw: 151.9755
+        - label: notched rolled rim 1
+          min: 0.0813421, 0.0493244, 0.069
+          max: 0.1216269, 0.0733244, 0.085
+          color: '#808080'
+          yaw: 151.9755
+        - label: separate shallow bowl wall 2
+          min: 0.0383024, 0.0638341, 0.0115
+          max: 0.0858812, 0.0868341, 0.0725
+          color: '#000000'
+          yaw: 167.56698
+        - label: notched rolled rim 2
+          min: 0.0383024, 0.0633341, 0.069
+          max: 0.0858812, 0.0873341, 0.085
+          color: '#808080'
+          yaw: 167.56698
+        - label: separate shallow bowl wall 3
+          min: -0.0095206, 0.0687537, 0.0115
+          max: 0.0407706, 0.0917537, 0.0725
+          color: '#000000'
+          yaw: -180.0
+        - label: notched rolled rim 3
+          min: -0.0095206, 0.0682537, 0.051
+          max: 0.0407706, 0.0922537, 0.067
+          color: '#808080'
+          yaw: -180.0
+        - label: separate shallow bowl wall 4
+          min: -0.0546312, 0.0638341, 0.0115
+          max: -0.0070524, 0.0868341, 0.0725
+          color: '#000000'
+          yaw: -167.56698
+        - label: notched rolled rim 4
+          min: -0.0546312, 0.0633341, 0.069
+          max: -0.0070524, 0.0873341, 0.085
+          color: '#808080'
+          yaw: -167.56698
+        - label: separate shallow bowl wall 5
+          min: -0.0903769, 0.0498244, 0.0115
+          max: -0.0500921, 0.0728244, 0.0725
+          color: '#000000'
+          yaw: -151.9755
+        - label: notched rolled rim 5
+          min: -0.0903769, 0.0493244, 0.069
+          max: -0.0500921, 0.0733244, 0.085
+          color: '#808080'
+          yaw: -151.9755
+        - label: separate shallow bowl wall 6
+          min: -0.1122241, 0.0288573, 0.0115
+          max: -0.0808875, 0.0518573, 0.0725
+          color: '#000000'
+          yaw: -127.89075
+        - label: notched rolled rim 6
+          min: -0.1122241, 0.0283573, 0.069
+          max: -0.0808875, 0.0523573, 0.085
+          color: '#808080'
+          yaw: -127.89075
+        - label: separate shallow bowl wall 7
+          min: -0.1191826, 0.004125, 0.0115
+          max: -0.0924147, 0.027125, 0.0725
+          color: '#000000'
+          yaw: -90.0
+        - label: notched rolled rim 7
+          min: -0.1191826, 0.003625, 0.069
+          max: -0.0924147, 0.027625, 0.085
+          color: '#808080'
+          yaw: -90.0
+        - label: separate shallow bowl wall 8
+          min: -0.1122241, -0.0206073, 0.0115
+          max: -0.0808875, 0.0023927, 0.0725
+          color: '#000000'
+          yaw: -52.10925
+        - label: notched rolled rim 8
+          min: -0.1122241, -0.0211073, 0.069
+          max: -0.0808875, 0.0028927, 0.085
+          color: '#808080'
+          yaw: -52.10925
+        - label: separate shallow bowl wall 9
+          min: -0.0903769, -0.0415744, 0.0115
+          max: -0.0500921, -0.0185744, 0.0725
+          color: '#000000'
+          yaw: -28.0245
+        - label: notched rolled rim 9
+          min: -0.0903769, -0.0420744, 0.069
+          max: -0.0500921, -0.0180744, 0.085
+          color: '#808080'
+          yaw: -28.0245
+        - label: separate shallow bowl wall 10
+          min: -0.0546312, -0.0555841, 0.0115
+          max: -0.0070524, -0.0325841, 0.0725
+          color: '#000000'
+          yaw: -12.43302
+        - label: notched rolled rim 10
+          min: -0.0546312, -0.0560841, 0.069
+          max: -0.0070524, -0.0320841, 0.085
+          color: '#808080'
+          yaw: -12.43302
+        - label: separate shallow bowl wall 11
+          min: -0.0095206, -0.0605037, 0.0115
+          max: 0.0407706, -0.0375037, 0.0725
+          color: '#000000'
+          yaw: -0.0
+        - label: notched rolled rim 11
+          min: -0.0095206, -0.0610037, 0.051
+          max: 0.0407706, -0.0370037, 0.067
+          color: '#808080'
+          yaw: -0.0
+        - label: separate shallow bowl wall 12
+          min: 0.0383024, -0.0555841, 0.0115
+          max: 0.0858812, -0.0325841, 0.0725
+          color: '#000000'
+          yaw: 12.43302
+        - label: notched rolled rim 12
+          min: 0.0383024, -0.0560841, 0.069
+          max: 0.0858812, -0.0320841, 0.085
+          color: '#808080'
+          yaw: 12.43302
+        - label: separate shallow bowl wall 13
+          min: 0.0813421, -0.0415744, 0.0115
+          max: 0.1216269, -0.0185744, 0.0725
+          color: '#000000'
+          yaw: 28.0245
+        - label: notched rolled rim 13
+          min: 0.0813421, -0.0420744, 0.069
+          max: 0.1216269, -0.0180744, 0.085
+          color: '#808080'
+          yaw: 28.0245
+        - label: separate shallow bowl wall 14
+          min: 0.1121375, -0.0206073, 0.0115
+          max: 0.1434741, 0.0023927, 0.0725
+          color: '#000000'
+          yaw: 52.10925
+        - label: notched rolled rim 14
+          min: 0.1121375, -0.0211073, 0.069
+          max: 0.1434741, 0.0028927, 0.085
+          color: '#808080'
+          yaw: 52.10925
+        - label: separate shallow bowl wall 15
+          min: 0.1236647, 0.004125, 0.0115
+          max: 0.1504326, 0.027125, 0.0725
+          color: '#000000'
+          yaw: 90.0
+        - label: notched rolled rim 15
+          min: 0.1236647, 0.003625, 0.069
+          max: 0.1504326, 0.027625, 0.085
+          color: '#808080'
+          yaw: 90.0
+        - label: source fill stub white 0
+          min: -0.077375, 0.016625, 0.037
+          max: -0.011375, 0.042625, 0.063
+          color: '#FFFFFF'
+          shape: CylinderX
+          yaw: -9
+        - label: source fill stub filter 0
+          min: -0.094375, 0.016625, 0.037
+          max: -0.072375, 0.042625, 0.063
+          color: '#A67839'
+          shape: CylinderX
+          yaw: -9
+        - label: cooled ash sediment 0
+          min: -0.070875, -0.013875, 0.0315
+          max: -0.045875, 0.001125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 1
+          min: -0.018875, -0.013875, 0.0315
+          max: 0.006125, 0.001125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 2
+          min: 0.033125, -0.013875, 0.0315
+          max: 0.058125, 0.001125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 3
+          min: -0.070875, 0.005125, 0.0315
+          max: -0.045875, 0.020125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+      delays:
+      - 1
+    icon-2:
+      frames:
+      - parts:
+        - label: recessed closed ashtray floor
+          min: -0.095375, -0.036875, 0.0035
+          max: 0.126625, 0.068125, 0.0325
+          color: '#404040'
+          shape: CylinderZ
+        - label: separate shallow bowl wall 0
+          min: 0.1121375, 0.0288573, 0.0115
+          max: 0.1434741, 0.0518573, 0.0725
+          color: '#000000'
+          yaw: 127.89075
+        - label: notched rolled rim 0
+          min: 0.1121375, 0.0283573, 0.069
+          max: 0.1434741, 0.0523573, 0.085
+          color: '#808080'
+          yaw: 127.89075
+        - label: separate shallow bowl wall 1
+          min: 0.0813421, 0.0498244, 0.0115
+          max: 0.1216269, 0.0728244, 0.0725
+          color: '#000000'
+          yaw: 151.9755
+        - label: notched rolled rim 1
+          min: 0.0813421, 0.0493244, 0.069
+          max: 0.1216269, 0.0733244, 0.085
+          color: '#808080'
+          yaw: 151.9755
+        - label: separate shallow bowl wall 2
+          min: 0.0383024, 0.0638341, 0.0115
+          max: 0.0858812, 0.0868341, 0.0725
+          color: '#000000'
+          yaw: 167.56698
+        - label: notched rolled rim 2
+          min: 0.0383024, 0.0633341, 0.069
+          max: 0.0858812, 0.0873341, 0.085
+          color: '#808080'
+          yaw: 167.56698
+        - label: separate shallow bowl wall 3
+          min: -0.0095206, 0.0687537, 0.0115
+          max: 0.0407706, 0.0917537, 0.0725
+          color: '#000000'
+          yaw: -180.0
+        - label: notched rolled rim 3
+          min: -0.0095206, 0.0682537, 0.051
+          max: 0.0407706, 0.0922537, 0.067
+          color: '#808080'
+          yaw: -180.0
+        - label: separate shallow bowl wall 4
+          min: -0.0546312, 0.0638341, 0.0115
+          max: -0.0070524, 0.0868341, 0.0725
+          color: '#000000'
+          yaw: -167.56698
+        - label: notched rolled rim 4
+          min: -0.0546312, 0.0633341, 0.069
+          max: -0.0070524, 0.0873341, 0.085
+          color: '#808080'
+          yaw: -167.56698
+        - label: separate shallow bowl wall 5
+          min: -0.0903769, 0.0498244, 0.0115
+          max: -0.0500921, 0.0728244, 0.0725
+          color: '#000000'
+          yaw: -151.9755
+        - label: notched rolled rim 5
+          min: -0.0903769, 0.0493244, 0.069
+          max: -0.0500921, 0.0733244, 0.085
+          color: '#808080'
+          yaw: -151.9755
+        - label: separate shallow bowl wall 6
+          min: -0.1122241, 0.0288573, 0.0115
+          max: -0.0808875, 0.0518573, 0.0725
+          color: '#000000'
+          yaw: -127.89075
+        - label: notched rolled rim 6
+          min: -0.1122241, 0.0283573, 0.069
+          max: -0.0808875, 0.0523573, 0.085
+          color: '#808080'
+          yaw: -127.89075
+        - label: separate shallow bowl wall 7
+          min: -0.1191826, 0.004125, 0.0115
+          max: -0.0924147, 0.027125, 0.0725
+          color: '#000000'
+          yaw: -90.0
+        - label: notched rolled rim 7
+          min: -0.1191826, 0.003625, 0.069
+          max: -0.0924147, 0.027625, 0.085
+          color: '#808080'
+          yaw: -90.0
+        - label: separate shallow bowl wall 8
+          min: -0.1122241, -0.0206073, 0.0115
+          max: -0.0808875, 0.0023927, 0.0725
+          color: '#000000'
+          yaw: -52.10925
+        - label: notched rolled rim 8
+          min: -0.1122241, -0.0211073, 0.069
+          max: -0.0808875, 0.0028927, 0.085
+          color: '#808080'
+          yaw: -52.10925
+        - label: separate shallow bowl wall 9
+          min: -0.0903769, -0.0415744, 0.0115
+          max: -0.0500921, -0.0185744, 0.0725
+          color: '#000000'
+          yaw: -28.0245
+        - label: notched rolled rim 9
+          min: -0.0903769, -0.0420744, 0.069
+          max: -0.0500921, -0.0180744, 0.085
+          color: '#808080'
+          yaw: -28.0245
+        - label: separate shallow bowl wall 10
+          min: -0.0546312, -0.0555841, 0.0115
+          max: -0.0070524, -0.0325841, 0.0725
+          color: '#000000'
+          yaw: -12.43302
+        - label: notched rolled rim 10
+          min: -0.0546312, -0.0560841, 0.069
+          max: -0.0070524, -0.0320841, 0.085
+          color: '#808080'
+          yaw: -12.43302
+        - label: separate shallow bowl wall 11
+          min: -0.0095206, -0.0605037, 0.0115
+          max: 0.0407706, -0.0375037, 0.0725
+          color: '#000000'
+          yaw: -0.0
+        - label: notched rolled rim 11
+          min: -0.0095206, -0.0610037, 0.051
+          max: 0.0407706, -0.0370037, 0.067
+          color: '#808080'
+          yaw: -0.0
+        - label: separate shallow bowl wall 12
+          min: 0.0383024, -0.0555841, 0.0115
+          max: 0.0858812, -0.0325841, 0.0725
+          color: '#000000'
+          yaw: 12.43302
+        - label: notched rolled rim 12
+          min: 0.0383024, -0.0560841, 0.069
+          max: 0.0858812, -0.0320841, 0.085
+          color: '#808080'
+          yaw: 12.43302
+        - label: separate shallow bowl wall 13
+          min: 0.0813421, -0.0415744, 0.0115
+          max: 0.1216269, -0.0185744, 0.0725
+          color: '#000000'
+          yaw: 28.0245
+        - label: notched rolled rim 13
+          min: 0.0813421, -0.0420744, 0.069
+          max: 0.1216269, -0.0180744, 0.085
+          color: '#808080'
+          yaw: 28.0245
+        - label: separate shallow bowl wall 14
+          min: 0.1121375, -0.0206073, 0.0115
+          max: 0.1434741, 0.0023927, 0.0725
+          color: '#000000'
+          yaw: 52.10925
+        - label: notched rolled rim 14
+          min: 0.1121375, -0.0211073, 0.069
+          max: 0.1434741, 0.0028927, 0.085
+          color: '#808080'
+          yaw: 52.10925
+        - label: separate shallow bowl wall 15
+          min: 0.1236647, 0.004125, 0.0115
+          max: 0.1504326, 0.027125, 0.0725
+          color: '#000000'
+          yaw: 90.0
+        - label: notched rolled rim 15
+          min: 0.1236647, 0.003625, 0.069
+          max: 0.1504326, 0.027625, 0.085
+          color: '#808080'
+          yaw: 90.0
+        - label: source fill stub white 0
+          min: -0.077375, 0.016625, 0.037
+          max: -0.011375, 0.042625, 0.063
+          color: '#FFFFFF'
+          shape: CylinderX
+          yaw: -9
+        - label: source fill stub filter 0
+          min: -0.094375, 0.016625, 0.037
+          max: -0.072375, 0.042625, 0.063
+          color: '#A67839'
+          shape: CylinderX
+          yaw: -9
+        - label: source fill stub white 1
+          min: 0.017625, -0.000375, 0.037
+          max: 0.083625, 0.025625, 0.063
+          color: '#FFFFFF'
+          shape: CylinderX
+          yaw: 18
+        - label: source fill stub filter 1
+          min: 0.000625, -0.000375, 0.037
+          max: 0.022625, 0.025625, 0.063
+          color: '#A67839'
+          shape: CylinderX
+          yaw: 18
+        - label: source fill stub white 2
+          min: 0.057625, 0.022625, 0.037
+          max: 0.123625, 0.048625, 0.063
+          color: '#FFFFFF'
+          shape: CylinderX
+          yaw: -4
+        - label: source fill stub filter 2
+          min: 0.040625, 0.022625, 0.037
+          max: 0.062625, 0.048625, 0.063
+          color: '#A67839'
+          shape: CylinderX
+          yaw: -4
+        - label: cooled ash sediment 0
+          min: -0.070875, -0.013875, 0.0315
+          max: -0.045875, 0.001125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 1
+          min: -0.018875, -0.013875, 0.0315
+          max: 0.006125, 0.001125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 2
+          min: 0.033125, -0.013875, 0.0315
+          max: 0.058125, 0.001125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 3
+          min: -0.070875, 0.005125, 0.0315
+          max: -0.045875, 0.020125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 4
+          min: -0.018875, 0.005125, 0.0315
+          max: 0.006125, 0.020125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 5
+          min: 0.033125, 0.005125, 0.0315
+          max: 0.058125, 0.020125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 6
+          min: -0.070875, 0.024125, 0.0315
+          max: -0.045875, 0.039125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 7
+          min: -0.018875, 0.024125, 0.0315
+          max: 0.006125, 0.039125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+        - label: cooled ash sediment 8
+          min: 0.033125, 0.024125, 0.0315
+          max: 0.058125, 0.039125, 0.0385
+          color: '#808080'
+          shape: Ellipsoid
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCMCigarettePackLuckySlothsMiniPrintedSmallCloud
+  label: Lucky mini packet
+  status: draft
+  sourcePrototypes:
+  - CMCigarettePackLuckySlothsMini
+  referencePrototype: CMCigarettePackLuckySlothsMini
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigarettes/lucky_sloths_4.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual closed UI default; initial contents hidden by inherited Storage.HideStackVisualsWhenClosed=true.
+    Separate shell panels and folding printed lid. 4 source-filled rolls exist in storage. Existing one-visible-layer
+    closed adapter rejects unsupported open/layer/count compositions. Physical depth and unseen construction inferred.
+    All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: carton back panel
+    min: -0.09375, -0.28125, 0.0
+    max: 0.09375, 0.15625, 0.009
+    color: '#C3BAAA'
+  - label: left folded side panel
+    min: -0.09375, -0.28125, 0.0
+    max: -0.08475, 0.15625, 0.06
+    color: '#9D8974'
+  - label: right folded side panel
+    min: 0.08475, -0.28125, 0.0
+    max: 0.09375, 0.15625, 0.06
+    color: '#9D8974'
+  - label: lower end fold
+    min: -0.08475, -0.28125, 0.0
+    max: 0.08475, -0.27225, 0.06
+    color: '#C3BAAA'
+  - label: printed main carton panel
+    min: -0.09375, -0.28125, 0.0515
+    max: 0.09375, 0.03125, 0.0605
+    color: '#C3BAAA'
+  - label: original lower printed carton face
+    min: -0.09375, -0.28125, 0.06125
+    max: 0.09375, 0.03125, 0.06275
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt00
+    surfaceAxis: XY
+  - label: separate folded upper lid
+    min: -0.09375, 0.03125, 0.0545
+    max: 0.09375, 0.15625, 0.0675
+    color: '#C3BAAA'
+  - label: original upper lid print
+    min: -0.09375, 0.03125, 0.06825
+    max: 0.09375, 0.15625, 0.06975
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt01
+    surfaceAxis: XY
+  - label: closed mouth tuck
+    min: -0.08475, 0.14725, 0.0
+    max: 0.08475, 0.15625, 0.06
+    color: '#C3BAAA'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    closed:
+      frames:
+      - parts:
+        - label: carton back panel
+          min: -0.09375, -0.28125, 0.0
+          max: 0.09375, 0.15625, 0.009
+          color: '#C3BAAA'
+        - label: left folded side panel
+          min: -0.09375, -0.28125, 0.0
+          max: -0.08475, 0.15625, 0.06
+          color: '#9D8974'
+        - label: right folded side panel
+          min: 0.08475, -0.28125, 0.0
+          max: 0.09375, 0.15625, 0.06
+          color: '#9D8974'
+        - label: lower end fold
+          min: -0.08475, -0.28125, 0.0
+          max: 0.08475, -0.27225, 0.06
+          color: '#C3BAAA'
+        - label: printed main carton panel
+          min: -0.09375, -0.28125, 0.0515
+          max: 0.09375, 0.03125, 0.0605
+          color: '#C3BAAA'
+        - label: original lower printed carton face
+          min: -0.09375, -0.28125, 0.06125
+          max: 0.09375, 0.03125, 0.06275
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt00
+          surfaceAxis: XY
+        - label: separate folded upper lid
+          min: -0.09375, 0.03125, 0.0545
+          max: 0.09375, 0.15625, 0.0675
+          color: '#C3BAAA'
+        - label: original upper lid print
+          min: -0.09375, 0.03125, 0.06825
+          max: 0.09375, 0.15625, 0.06975
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt01
+          surfaceAxis: XY
+        - label: closed mouth tuck
+          min: -0.08475, 0.14725, 0.0
+          max: 0.08475, 0.15625, 0.06
+          color: '#C3BAAA'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCMCigarettePackLuckySlothsMiniPrintedSmallCloudOpenEmptyStudy
+  label: Lucky mini packet open empty study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMCigarettePackLuckySlothsMini
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigarettes/lucky_sloths_4.rsi
+  referenceState: open
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound physical empty open construction study from exact composed layers. No dynamic storage-state
+    binding. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: carton back panel
+    min: -0.09375, -0.28125, 0.0
+    max: 0.09375, 0.15625, 0.009
+    color: '#C3BAAA'
+  - label: left folded side panel
+    min: -0.09375, -0.28125, 0.0
+    max: -0.08475, 0.15625, 0.06
+    color: '#9D8974'
+  - label: right folded side panel
+    min: 0.08475, -0.28125, 0.0
+    max: 0.09375, 0.15625, 0.06
+    color: '#9D8974'
+  - label: lower end fold
+    min: -0.08475, -0.28125, 0.0
+    max: 0.08475, -0.27225, 0.06
+    color: '#C3BAAA'
+  - label: printed main carton panel
+    min: -0.09375, -0.28125, 0.0515
+    max: 0.09375, 0.03125, 0.0605
+    color: '#C3BAAA'
+  - label: original lower printed carton face
+    min: -0.09375, -0.28125, 0.06125
+    max: 0.09375, 0.03125, 0.06275
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt00
+    surfaceAxis: XY
+  - label: raised upright carton flap
+    min: -0.09375, 0.15125, 0.06
+    max: 0.09375, 0.16125, 0.3
+    color: '#C3BAAA'
+  - label: original open inner flap
+    min: -0.09375, 0.14925, 0.06
+    max: 0.09375, 0.15125, 0.3
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt02
+    surfaceAxis: XZ
+  - label: folded side dust flap
+    min: -0.09375, 0.12025, 0.0605
+    max: -0.07575, 0.15625, 0.0955
+    color: '#9D8974'
+    yaw: 12
+  - label: folded side dust flap
+    min: 0.07575, 0.12025, 0.0605
+    max: 0.09375, 0.15625, 0.0955
+    color: '#9D8974'
+    yaw: -12
+- type: cmu3DModel
+  id: CMU3DCMCigarettePackLuckySlothsMiniPrintedSmallCloudOpenFullStudy
+  label: Lucky mini packet open full study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMCigarettePackLuckySlothsMini
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigarettes/lucky_sloths_4.rsi
+  referenceState: open
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound physical full open construction study from exact composed layers. No dynamic storage-state
+    binding. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: carton back panel
+    min: -0.09375, -0.28125, 0.0
+    max: 0.09375, 0.15625, 0.009
+    color: '#C3BAAA'
+  - label: left folded side panel
+    min: -0.09375, -0.28125, 0.0
+    max: -0.08475, 0.15625, 0.06
+    color: '#9D8974'
+  - label: right folded side panel
+    min: 0.08475, -0.28125, 0.0
+    max: 0.09375, 0.15625, 0.06
+    color: '#9D8974'
+  - label: lower end fold
+    min: -0.08475, -0.28125, 0.0
+    max: 0.08475, -0.27225, 0.06
+    color: '#C3BAAA'
+  - label: printed main carton panel
+    min: -0.09375, -0.28125, 0.0515
+    max: 0.09375, 0.03125, 0.0605
+    color: '#C3BAAA'
+  - label: original lower printed carton face
+    min: -0.09375, -0.28125, 0.06125
+    max: 0.09375, 0.03125, 0.06275
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt00
+    surfaceAxis: XY
+  - label: raised upright carton flap
+    min: -0.09375, 0.15125, 0.06
+    max: 0.09375, 0.16125, 0.3
+    color: '#C3BAAA'
+  - label: original open inner flap
+    min: -0.09375, 0.14925, 0.06
+    max: 0.09375, 0.15125, 0.3
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt02
+    surfaceAxis: XZ
+  - label: folded side dust flap
+    min: -0.09375, 0.12025, 0.0605
+    max: -0.07575, 0.15625, 0.0955
+    color: '#9D8974'
+    yaw: 12
+  - label: folded side dust flap
+    min: 0.07575, 0.12025, 0.0605
+    max: 0.09375, 0.15625, 0.0955
+    color: '#9D8974'
+    yaw: -12
+  - label: source full roll 1
+    min: -0.0693125, -0.26325, 0.012
+    max: -0.0413125, 0.15125, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+  - label: roll end 1
+    min: -0.0693125, 0.14625, 0.012
+    max: -0.0413125, 0.15425, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+  - label: source full roll 2
+    min: -0.0324375, -0.26325, 0.012
+    max: -0.0044375, 0.15125, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+  - label: roll end 2
+    min: -0.0324375, 0.14625, 0.012
+    max: -0.0044375, 0.15425, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+  - label: source full roll 3
+    min: 0.0044375, -0.26325, 0.012
+    max: 0.0324375, 0.15125, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+  - label: roll end 3
+    min: 0.0044375, 0.14625, 0.012
+    max: 0.0324375, 0.15425, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+  - label: source full roll 4
+    min: 0.0413125, -0.26325, 0.012
+    max: 0.0693125, 0.15125, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+  - label: roll end 4
+    min: 0.0413125, 0.14625, 0.012
+    max: 0.0693125, 0.15425, 0.04
+    color: '#C5C5C5'
+    shape: CylinderY
+- type: cmu3DModel
+  id: CMU3DRMCCigarettePackExecutiveSelectPrintedSmallCloud
+  label: Executive Select packet
+  status: draft
+  sourcePrototypes:
+  - RMCCigarettePackExecutiveSelect
+  referencePrototype: RMCCigarettePackExecutiveSelect
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigarettes/executive_select.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Actual closed UI default; initial contents hidden by inherited Storage.HideStackVisualsWhenClosed=true.
+    Separate shell panels and folding printed lid. 20 source-filled rolls exist in storage. Existing one-visible-layer
+    closed adapter rejects unsupported open/layer/count compositions. Physical depth and unseen construction inferred.
+    All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: carton back panel
+    min: -0.1875, -0.28125, 0.0
+    max: 0.1875, 0.21875, 0.009
+    color: '#27453A'
+  - label: left folded side panel
+    min: -0.1875, -0.28125, 0.0
+    max: -0.1785, 0.21875, 0.095
+    color: '#2C2C2C'
+  - label: right folded side panel
+    min: 0.1785, -0.28125, 0.0
+    max: 0.1875, 0.21875, 0.095
+    color: '#2C2C2C'
+  - label: lower end fold
+    min: -0.1785, -0.28125, 0.0
+    max: 0.1785, -0.27225, 0.095
+    color: '#27453A'
+  - label: printed main carton panel
+    min: -0.1875, -0.28125, 0.0865
+    max: 0.1875, 0.03125, 0.0955
+    color: '#27453A'
+  - label: original lower printed carton face
+    min: -0.1875, -0.28125, 0.09625
+    max: 0.1875, 0.03125, 0.09775
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt03
+    surfaceAxis: XY
+  - label: separate folded upper lid
+    min: -0.1875, 0.03125, 0.0895
+    max: 0.1875, 0.21875, 0.1025
+    color: '#27453A'
+  - label: original upper lid print
+    min: -0.1875, 0.03125, 0.10325
+    max: 0.1875, 0.21875, 0.10475
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt04
+    surfaceAxis: XY
+  - label: closed mouth tuck
+    min: -0.1785, 0.20975, 0.0
+    max: 0.1785, 0.21875, 0.095
+    color: '#27453A'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    closed:
+      frames:
+      - parts:
+        - label: carton back panel
+          min: -0.1875, -0.28125, 0.0
+          max: 0.1875, 0.21875, 0.009
+          color: '#27453A'
+        - label: left folded side panel
+          min: -0.1875, -0.28125, 0.0
+          max: -0.1785, 0.21875, 0.095
+          color: '#2C2C2C'
+        - label: right folded side panel
+          min: 0.1785, -0.28125, 0.0
+          max: 0.1875, 0.21875, 0.095
+          color: '#2C2C2C'
+        - label: lower end fold
+          min: -0.1785, -0.28125, 0.0
+          max: 0.1785, -0.27225, 0.095
+          color: '#27453A'
+        - label: printed main carton panel
+          min: -0.1875, -0.28125, 0.0865
+          max: 0.1875, 0.03125, 0.0955
+          color: '#27453A'
+        - label: original lower printed carton face
+          min: -0.1875, -0.28125, 0.09625
+          max: 0.1875, 0.03125, 0.09775
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt03
+          surfaceAxis: XY
+        - label: separate folded upper lid
+          min: -0.1875, 0.03125, 0.0895
+          max: 0.1875, 0.21875, 0.1025
+          color: '#27453A'
+        - label: original upper lid print
+          min: -0.1875, 0.03125, 0.10325
+          max: 0.1875, 0.21875, 0.10475
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt04
+          surfaceAxis: XY
+        - label: closed mouth tuck
+          min: -0.1785, 0.20975, 0.0
+          max: 0.1785, 0.21875, 0.095
+          color: '#27453A'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCCigarettePackExecutiveSelectPrintedSmallCloudOpenEmptyStudy
+  label: Executive Select packet open empty study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCCigarettePackExecutiveSelect
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigarettes/executive_select.rsi
+  referenceState: open
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound physical empty open construction study from exact composed layers. No dynamic storage-state
+    binding. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: carton back panel
+    min: -0.1875, -0.28125, 0.0
+    max: 0.1875, 0.21875, 0.009
+    color: '#27453A'
+  - label: left folded side panel
+    min: -0.1875, -0.28125, 0.0
+    max: -0.1785, 0.21875, 0.095
+    color: '#243530'
+  - label: right folded side panel
+    min: 0.1785, -0.28125, 0.0
+    max: 0.1875, 0.21875, 0.095
+    color: '#243530'
+  - label: lower end fold
+    min: -0.1785, -0.28125, 0.0
+    max: 0.1785, -0.27225, 0.095
+    color: '#27453A'
+  - label: printed main carton panel
+    min: -0.1875, -0.28125, 0.0865
+    max: 0.1875, 0.03125, 0.0955
+    color: '#27453A'
+  - label: original lower printed carton face
+    min: -0.1875, -0.28125, 0.09625
+    max: 0.1875, 0.03125, 0.09775
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt03
+    surfaceAxis: XY
+  - label: raised upright carton flap
+    min: -0.1875, 0.21375, 0.095
+    max: 0.1875, 0.22375, 0.415
+    color: '#27453A'
+  - label: original open inner flap
+    min: -0.1875, 0.21175, 0.095
+    max: 0.1875, 0.21375, 0.415
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt05
+    surfaceAxis: XZ
+  - label: folded side dust flap
+    min: -0.1875, 0.18275, 0.0955
+    max: -0.1695, 0.21875, 0.1305
+    color: '#243530'
+    yaw: 12
+  - label: folded side dust flap
+    min: 0.1695, 0.18275, 0.0955
+    max: 0.1875, 0.21875, 0.1305
+    color: '#243530'
+    yaw: -12
+- type: cmu3DModel
+  id: CMU3DRMCCigarettePackExecutiveSelectPrintedSmallCloudOpenFullStudy
+  label: Executive Select packet open full study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCCigarettePackExecutiveSelect
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigarettes/executive_select.rsi
+  referenceState: open
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound physical full open construction study from exact composed layers. No dynamic storage-state
+    binding. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: carton back panel
+    min: -0.1875, -0.28125, 0.0
+    max: 0.1875, 0.21875, 0.009
+    color: '#27453A'
+  - label: left folded side panel
+    min: -0.1875, -0.28125, 0.0
+    max: -0.1785, 0.21875, 0.095
+    color: '#323232'
+  - label: right folded side panel
+    min: 0.1785, -0.28125, 0.0
+    max: 0.1875, 0.21875, 0.095
+    color: '#323232'
+  - label: lower end fold
+    min: -0.1785, -0.28125, 0.0
+    max: 0.1785, -0.27225, 0.095
+    color: '#27453A'
+  - label: printed main carton panel
+    min: -0.1875, -0.28125, 0.0865
+    max: 0.1875, 0.03125, 0.0955
+    color: '#27453A'
+  - label: original lower printed carton face
+    min: -0.1875, -0.28125, 0.09625
+    max: 0.1875, 0.03125, 0.09775
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt03
+    surfaceAxis: XY
+  - label: raised upright carton flap
+    min: -0.1875, 0.21375, 0.095
+    max: 0.1875, 0.22375, 0.415
+    color: '#27453A'
+  - label: original open inner flap
+    min: -0.1875, 0.21175, 0.095
+    max: 0.1875, 0.21375, 0.415
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt05
+    surfaceAxis: XZ
+  - label: folded side dust flap
+    min: -0.1875, 0.18275, 0.0955
+    max: -0.1695, 0.21875, 0.1305
+    color: '#323232'
+    yaw: 12
+  - label: folded side dust flap
+    min: 0.1695, 0.18275, 0.0955
+    max: 0.1875, 0.21875, 0.1305
+    color: '#323232'
+    yaw: -12
+  - label: source full roll 1
+    min: -0.1415, -0.26325, 0.0185
+    max: -0.1265, 0.21375, 0.0335
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 1
+    min: -0.1415, 0.20875, 0.0185
+    max: -0.1265, 0.21675, 0.0335
+    color: '#5D8AE1'
+    shape: CylinderY
+  - label: source full roll 2
+    min: -0.0745, -0.26325, 0.0185
+    max: -0.0595, 0.21375, 0.0335
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 2
+    min: -0.0745, 0.20875, 0.0185
+    max: -0.0595, 0.21675, 0.0335
+    color: '#5D8AE1'
+    shape: CylinderY
+  - label: source full roll 3
+    min: -0.0075, -0.26325, 0.0185
+    max: 0.0075, 0.21375, 0.0335
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 3
+    min: -0.0075, 0.20875, 0.0185
+    max: 0.0075, 0.21675, 0.0335
+    color: '#5D8AE1'
+    shape: CylinderY
+  - label: source full roll 4
+    min: 0.0595, -0.26325, 0.0185
+    max: 0.0745, 0.21375, 0.0335
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 4
+    min: 0.0595, 0.20875, 0.0185
+    max: 0.0745, 0.21675, 0.0335
+    color: '#5D8AE1'
+    shape: CylinderY
+  - label: source full roll 5
+    min: 0.1265, -0.26325, 0.0185
+    max: 0.1415, 0.21375, 0.0335
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 5
+    min: 0.1265, 0.20875, 0.0185
+    max: 0.1415, 0.21675, 0.0335
+    color: '#5D8AE1'
+    shape: CylinderY
+  - label: source full roll 6
+    min: -0.1415, -0.26325, 0.0365
+    max: -0.1265, 0.21375, 0.0515
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 6
+    min: -0.1415, 0.20875, 0.0365
+    max: -0.1265, 0.21675, 0.0515
+    color: '#5DA4E1'
+    shape: CylinderY
+  - label: source full roll 7
+    min: -0.0745, -0.26325, 0.0365
+    max: -0.0595, 0.21375, 0.0515
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 7
+    min: -0.0745, 0.20875, 0.0365
+    max: -0.0595, 0.21675, 0.0515
+    color: '#5DA4E1'
+    shape: CylinderY
+  - label: source full roll 8
+    min: -0.0075, -0.26325, 0.0365
+    max: 0.0075, 0.21375, 0.0515
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 8
+    min: -0.0075, 0.20875, 0.0365
+    max: 0.0075, 0.21675, 0.0515
+    color: '#5DA4E1'
+    shape: CylinderY
+  - label: source full roll 9
+    min: 0.0595, -0.26325, 0.0365
+    max: 0.0745, 0.21375, 0.0515
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 9
+    min: 0.0595, 0.20875, 0.0365
+    max: 0.0745, 0.21675, 0.0515
+    color: '#5DA4E1'
+    shape: CylinderY
+  - label: source full roll 10
+    min: 0.1265, -0.26325, 0.0365
+    max: 0.1415, 0.21375, 0.0515
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 10
+    min: 0.1265, 0.20875, 0.0365
+    max: 0.1415, 0.21675, 0.0515
+    color: '#5DA4E1'
+    shape: CylinderY
+  - label: source full roll 11
+    min: -0.1415, -0.26325, 0.0545
+    max: -0.1265, 0.21375, 0.0695
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 11
+    min: -0.1415, 0.20875, 0.0545
+    max: -0.1265, 0.21675, 0.0695
+    color: '#5DB0E1'
+    shape: CylinderY
+  - label: source full roll 12
+    min: -0.0745, -0.26325, 0.0545
+    max: -0.0595, 0.21375, 0.0695
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 12
+    min: -0.0745, 0.20875, 0.0545
+    max: -0.0595, 0.21675, 0.0695
+    color: '#5DB0E1'
+    shape: CylinderY
+  - label: source full roll 13
+    min: -0.0075, -0.26325, 0.0545
+    max: 0.0075, 0.21375, 0.0695
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 13
+    min: -0.0075, 0.20875, 0.0545
+    max: 0.0075, 0.21675, 0.0695
+    color: '#5DB0E1'
+    shape: CylinderY
+  - label: source full roll 14
+    min: 0.0595, -0.26325, 0.0545
+    max: 0.0745, 0.21375, 0.0695
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 14
+    min: 0.0595, 0.20875, 0.0545
+    max: 0.0745, 0.21675, 0.0695
+    color: '#5DB0E1'
+    shape: CylinderY
+  - label: source full roll 15
+    min: 0.1265, -0.26325, 0.0545
+    max: 0.1415, 0.21375, 0.0695
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 15
+    min: 0.1265, 0.20875, 0.0545
+    max: 0.1415, 0.21675, 0.0695
+    color: '#5DB0E1'
+    shape: CylinderY
+  - label: source full roll 16
+    min: -0.1415, -0.26325, 0.0725
+    max: -0.1265, 0.21375, 0.0875
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 16
+    min: -0.1415, 0.20875, 0.0725
+    max: -0.1265, 0.21675, 0.0875
+    color: '#5DCAE1'
+    shape: CylinderY
+  - label: source full roll 17
+    min: -0.0745, -0.26325, 0.0725
+    max: -0.0595, 0.21375, 0.0875
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 17
+    min: -0.0745, 0.20875, 0.0725
+    max: -0.0595, 0.21675, 0.0875
+    color: '#5DCAE1'
+    shape: CylinderY
+  - label: source full roll 18
+    min: -0.0075, -0.26325, 0.0725
+    max: 0.0075, 0.21375, 0.0875
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 18
+    min: -0.0075, 0.20875, 0.0725
+    max: 0.0075, 0.21675, 0.0875
+    color: '#5DCAE1'
+    shape: CylinderY
+  - label: source full roll 19
+    min: 0.0595, -0.26325, 0.0725
+    max: 0.0745, 0.21375, 0.0875
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 19
+    min: 0.0595, 0.20875, 0.0725
+    max: 0.0745, 0.21675, 0.0875
+    color: '#5DCAE1'
+    shape: CylinderY
+  - label: source full roll 20
+    min: 0.1265, -0.26325, 0.0725
+    max: 0.1415, 0.21375, 0.0875
+    color: '#616161'
+    shape: CylinderY
+  - label: roll end 20
+    min: 0.1265, 0.20875, 0.0725
+    max: 0.1415, 0.21675, 0.0875
+    color: '#5DCAE1'
+    shape: CylinderY
+- type: cmu3DModel
+  id: CMU3DRMCCigarCasePrintedSmallCloud
+  label: Closed decorated cigar case
+  status: draft
+  sourcePrototypes:
+  - RMCCigarCase
+  referencePrototype: RMCCigarCase
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigars/cigar_case.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Closed default with a hollow framed body under a separate shallow lid, brass hinges and clasp. Seven
+    initial contents are hidden while closed. Existing one-visible-layer closed adapter rejects unsupported open/count
+    compositions. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: case bottom panel
+    min: -0.3125, -0.20325, 0.0
+    max: 0.3125, 0.14075, 0.022
+    color: '#4C3B26'
+  - label: left case wall
+    min: -0.3125, -0.20325, 0.0
+    max: -0.2885, 0.14075, 0.08
+    color: '#6A5741'
+  - label: right case wall
+    min: 0.2885, -0.20325, 0.0
+    max: 0.3125, 0.14075, 0.08
+    color: '#6A5741'
+  - label: front case wall
+    min: -0.2885, -0.20325, 0.0
+    max: 0.2885, -0.17925, 0.08
+    color: '#4C3B26'
+  - label: rear case wall
+    min: -0.2885, 0.11675, 0.0
+    max: 0.2885, 0.14075, 0.08
+    color: '#4C3B26'
+  - label: recessed cedar liner
+    min: -0.2885, -0.17925, 0.0175
+    max: 0.2885, 0.11675, 0.0305
+    color: '#4C3B26'
+  - label: small cylindrical hinge
+    min: -0.2425, 0.12875, 0.067
+    max: -0.1775, 0.15275, 0.091
+    color: '#9A7006'
+    shape: CylinderX
+  - label: small cylindrical hinge
+    min: 0.1775, 0.12875, 0.067
+    max: 0.2425, 0.15275, 0.091
+    color: '#9A7006'
+    shape: CylinderX
+  - label: separate shallow case lid
+    min: -0.3125, -0.20325, 0.08
+    max: 0.3125, 0.14075, 0.106
+    color: '#6A5741'
+  - label: original brown lid decoration
+    min: -0.3125, -0.20325, 0.10625
+    max: 0.3125, 0.14075, 0.10775
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt06
+    surfaceAxis: XY
+  - label: original lower edge and gold clasp
+    min: -0.3125, -0.205, 0.011125
+    max: 0.3125, -0.2035, 0.104875
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt07
+    surfaceAxis: XZ
+  - label: front brass latch
+    min: -0.0275, -0.22175, 0.046
+    max: 0.0275, -0.20875, 0.084
+    color: '#9A7006'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    closed:
+      frames:
+      - parts:
+        - label: case bottom panel
+          min: -0.3125, -0.20325, 0.0
+          max: 0.3125, 0.14075, 0.022
+          color: '#4C3B26'
+        - label: left case wall
+          min: -0.3125, -0.20325, 0.0
+          max: -0.2885, 0.14075, 0.08
+          color: '#6A5741'
+        - label: right case wall
+          min: 0.2885, -0.20325, 0.0
+          max: 0.3125, 0.14075, 0.08
+          color: '#6A5741'
+        - label: front case wall
+          min: -0.2885, -0.20325, 0.0
+          max: 0.2885, -0.17925, 0.08
+          color: '#4C3B26'
+        - label: rear case wall
+          min: -0.2885, 0.11675, 0.0
+          max: 0.2885, 0.14075, 0.08
+          color: '#4C3B26'
+        - label: recessed cedar liner
+          min: -0.2885, -0.17925, 0.0175
+          max: 0.2885, 0.11675, 0.0305
+          color: '#4C3B26'
+        - label: small cylindrical hinge
+          min: -0.2425, 0.12875, 0.067
+          max: -0.1775, 0.15275, 0.091
+          color: '#9A7006'
+          shape: CylinderX
+        - label: small cylindrical hinge
+          min: 0.1775, 0.12875, 0.067
+          max: 0.2425, 0.15275, 0.091
+          color: '#9A7006'
+          shape: CylinderX
+        - label: separate shallow case lid
+          min: -0.3125, -0.20325, 0.08
+          max: 0.3125, 0.14075, 0.106
+          color: '#6A5741'
+        - label: original brown lid decoration
+          min: -0.3125, -0.20325, 0.10625
+          max: 0.3125, 0.14075, 0.10775
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt06
+          surfaceAxis: XY
+        - label: original lower edge and gold clasp
+          min: -0.3125, -0.205, 0.011125
+          max: 0.3125, -0.2035, 0.104875
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt07
+          surfaceAxis: XZ
+        - label: front brass latch
+          min: -0.0275, -0.22175, 0.046
+          max: 0.0275, -0.20875, 0.084
+          color: '#9A7006'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCCigarCasePrintedSmallCloudOpenEmptyStudy
+  label: Cigar case open empty study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCCigarCase
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigars/cigar_case.rsi
+  referenceState: open
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound open construction study with actual cedar cavity and raised lid. No invisible contents invented.
+    Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: case bottom panel
+    min: -0.3125, -0.20325, 0.0
+    max: 0.3125, 0.14075, 0.022
+    color: '#423321'
+  - label: left case wall
+    min: -0.3125, -0.20325, 0.0
+    max: -0.2885, 0.14075, 0.08
+    color: '#6A5741'
+  - label: right case wall
+    min: 0.2885, -0.20325, 0.0
+    max: 0.3125, 0.14075, 0.08
+    color: '#6A5741'
+  - label: front case wall
+    min: -0.2885, -0.20325, 0.0
+    max: 0.2885, -0.17925, 0.08
+    color: '#4C3B27'
+  - label: rear case wall
+    min: -0.2885, 0.11675, 0.0
+    max: 0.2885, 0.14075, 0.08
+    color: '#4C3B27'
+  - label: recessed cedar liner
+    min: -0.2885, -0.17925, 0.0175
+    max: 0.2885, 0.11675, 0.0305
+    color: '#4C3B27'
+  - label: small cylindrical hinge
+    min: -0.2425, 0.12875, 0.067
+    max: -0.1775, 0.15275, 0.091
+    color: '#9A7007'
+    shape: CylinderX
+  - label: small cylindrical hinge
+    min: 0.1775, 0.12875, 0.067
+    max: 0.2425, 0.15275, 0.091
+    color: '#9A7007'
+    shape: CylinderX
+  - label: raised physical open lid
+    min: -0.3125, 0.13025, 0.076
+    max: 0.3125, 0.15125, 0.42
+    color: '#4C3B27'
+  - label: original inside lid field
+    min: -0.3125, 0.128, 0.076
+    max: 0.3125, 0.1295, 0.42
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt08
+    surfaceAxis: XZ
+  - label: front brass latch
+    min: -0.0275, -0.22175, 0.046
+    max: 0.0275, -0.20875, 0.084
+    color: '#9A7007'
+- type: cmu3DModel
+  id: CMU3DRMCCigarCasePrintedSmallCloudOpenFullStudy
+  label: Cigar case open full study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCCigarCase
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Cigars/cigar_case.rsi
+  referenceState: open
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound open construction study with actual cedar cavity and raised lid. Seven distinct cigar cylinders
+    and paper bands. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: case bottom panel
+    min: -0.3125, -0.20325, 0.0
+    max: 0.3125, 0.14075, 0.022
+    color: '#423321'
+  - label: left case wall
+    min: -0.3125, -0.20325, 0.0
+    max: -0.2885, 0.14075, 0.08
+    color: '#6A5741'
+  - label: right case wall
+    min: 0.2885, -0.20325, 0.0
+    max: 0.3125, 0.14075, 0.08
+    color: '#6A5741'
+  - label: front case wall
+    min: -0.2885, -0.20325, 0.0
+    max: 0.2885, -0.17925, 0.08
+    color: '#4C3B26'
+  - label: rear case wall
+    min: -0.2885, 0.11675, 0.0
+    max: 0.2885, 0.14075, 0.08
+    color: '#4C3B26'
+  - label: recessed cedar liner
+    min: -0.2885, -0.17925, 0.0175
+    max: 0.2885, 0.11675, 0.0305
+    color: '#4C3B26'
+  - label: small cylindrical hinge
+    min: -0.2425, 0.12875, 0.067
+    max: -0.1775, 0.15275, 0.091
+    color: '#9E6917'
+    shape: CylinderX
+  - label: small cylindrical hinge
+    min: 0.1775, 0.12875, 0.067
+    max: 0.2425, 0.15275, 0.091
+    color: '#9E6917'
+    shape: CylinderX
+  - label: raised physical open lid
+    min: -0.3125, 0.13025, 0.076
+    max: 0.3125, 0.15125, 0.42
+    color: '#4C3B26'
+  - label: original inside lid field
+    min: -0.3125, 0.128, 0.076
+    max: 0.3125, 0.1295, 0.42
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt08
+    surfaceAxis: XZ
+  - label: stored cylindrical cigar 0
+    min: -0.261, -0.16025, 0.03
+    max: -0.211, 0.09775, 0.08
+    color: '#704024'
+    shape: CylinderY
+  - label: stored cigar gold band 0
+    min: -0.2625, -0.11725, 0.0285
+    max: -0.2095, -0.09125, 0.0815
+    color: '#9E6917'
+    shape: CylinderY
+  - label: stored cylindrical cigar 1
+    min: -0.182, -0.16025, 0.03
+    max: -0.132, 0.09775, 0.08
+    color: '#704024'
+    shape: CylinderY
+  - label: stored cigar gold band 1
+    min: -0.1835, -0.11725, 0.0285
+    max: -0.1305, -0.09125, 0.0815
+    color: '#9E6917'
+    shape: CylinderY
+  - label: stored cylindrical cigar 2
+    min: -0.103, -0.16025, 0.03
+    max: -0.053, 0.09775, 0.08
+    color: '#704024'
+    shape: CylinderY
+  - label: stored cigar gold band 2
+    min: -0.1045, -0.11725, 0.0285
+    max: -0.0515, -0.09125, 0.0815
+    color: '#9E6917'
+    shape: CylinderY
+  - label: stored cylindrical cigar 3
+    min: -0.024, -0.16025, 0.03
+    max: 0.026, 0.09775, 0.08
+    color: '#704024'
+    shape: CylinderY
+  - label: stored cigar gold band 3
+    min: -0.0255, -0.11725, 0.0285
+    max: 0.0275, -0.09125, 0.0815
+    color: '#9E6917'
+    shape: CylinderY
+  - label: stored cylindrical cigar 4
+    min: 0.055, -0.16025, 0.03
+    max: 0.105, 0.09775, 0.08
+    color: '#704024'
+    shape: CylinderY
+  - label: stored cigar gold band 4
+    min: 0.0535, -0.11725, 0.0285
+    max: 0.1065, -0.09125, 0.0815
+    color: '#9E6917'
+    shape: CylinderY
+  - label: stored cylindrical cigar 5
+    min: 0.134, -0.16025, 0.03
+    max: 0.184, 0.09775, 0.08
+    color: '#704024'
+    shape: CylinderY
+  - label: stored cigar gold band 5
+    min: 0.1325, -0.11725, 0.0285
+    max: 0.1855, -0.09125, 0.0815
+    color: '#9E6917'
+    shape: CylinderY
+  - label: stored cylindrical cigar 6
+    min: 0.213, -0.16025, 0.03
+    max: 0.263, 0.09775, 0.08
+    color: '#704024'
+    shape: CylinderY
+  - label: stored cigar gold band 6
+    min: 0.2115, -0.11725, 0.0285
+    max: 0.2645, -0.09125, 0.0815
+    color: '#9E6917'
+    shape: CylinderY
+  - label: front brass latch
+    min: -0.0275, -0.22175, 0.046
+    max: 0.0275, -0.20875, 0.084
+    color: '#9E6917'
+- type: cmu3DModel
+  id: CMU3DRMCMagazineBootsN113PrintedSmallCloud
+  label: Boots magazine shared cover
+  status: draft
+  sourcePrototypes:
+  - RMCMagazineBootsN113
+  - RMCMagazineBootsN131
+  referencePrototype: RMCMagazineBootsN113
+  referenceRsi: /Textures/_RMC14/Objects/Misc/boots_magazine.rsi
+  referenceState: icon-1
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Both exact source prototypes intentionally use icon-1. Printed front cover, back, folded spine, thin
+    paper leaves and staples. No fabricated issue-specific graphics or readable inside pages. Physical depth and unseen
+    construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: thin magazine rear cover
+    min: -0.25, -0.28125, 0.0
+    max: 0.21875, 0.25, 0.006
+    color: '#2D4A52'
+  - label: paper leaves
+    min: -0.2335, -0.27175, 0.0055
+    max: 0.21825, 0.2405, 0.0205
+    color: '#D8D8D8'
+  - label: individual leaf edge 0
+    min: -0.232, -0.27175, 0.00625
+    max: 0.22075, 0.2405, 0.00775
+    color: '#ABAD92'
+  - label: individual leaf edge 1
+    min: -0.232, -0.27175, 0.01025
+    max: 0.22075, 0.2405, 0.01175
+    color: '#ABAD92'
+  - label: individual leaf edge 2
+    min: -0.232, -0.27175, 0.01425
+    max: 0.22075, 0.2405, 0.01575
+    color: '#ABAD92'
+  - label: individual leaf edge 3
+    min: -0.232, -0.27175, 0.01825
+    max: 0.22075, 0.2405, 0.01975
+    color: '#ABAD92'
+  - label: thin printed front cover
+    min: -0.25, -0.28125, 0.0225
+    max: 0.21875, 0.25, 0.0275
+    color: '#3F6D7B'
+  - label: original Boots printed cover
+    min: -0.25, -0.28125, 0.02725
+    max: 0.21875, 0.25, 0.02875
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt09
+    surfaceAxis: XY
+  - label: folded magazine spine
+    min: -0.25, -0.28125, 0.001
+    max: -0.238, 0.25, 0.029
+    color: '#2D4A52'
+  - label: small physical staple
+    min: -0.253, -0.163, 0.0265
+    max: -0.235, -0.137, 0.0295
+    color: '#DACCB6'
+  - label: small physical staple
+    min: -0.253, 0.107, 0.0265
+    max: -0.235, 0.133, 0.0295
+    color: '#DACCB6'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon-1:
+      frames:
+      - parts:
+        - label: thin magazine rear cover
+          min: -0.25, -0.28125, 0.0
+          max: 0.21875, 0.25, 0.006
+          color: '#2D4A52'
+        - label: paper leaves
+          min: -0.2335, -0.27175, 0.0055
+          max: 0.21825, 0.2405, 0.0205
+          color: '#D8D8D8'
+        - label: individual leaf edge 0
+          min: -0.232, -0.27175, 0.00625
+          max: 0.22075, 0.2405, 0.00775
+          color: '#ABAD92'
+        - label: individual leaf edge 1
+          min: -0.232, -0.27175, 0.01025
+          max: 0.22075, 0.2405, 0.01175
+          color: '#ABAD92'
+        - label: individual leaf edge 2
+          min: -0.232, -0.27175, 0.01425
+          max: 0.22075, 0.2405, 0.01575
+          color: '#ABAD92'
+        - label: individual leaf edge 3
+          min: -0.232, -0.27175, 0.01825
+          max: 0.22075, 0.2405, 0.01975
+          color: '#ABAD92'
+        - label: thin printed front cover
+          min: -0.25, -0.28125, 0.0225
+          max: 0.21875, 0.25, 0.0275
+          color: '#3F6D7B'
+        - label: original Boots printed cover
+          min: -0.25, -0.28125, 0.02725
+          max: 0.21875, 0.25, 0.02875
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt09
+          surfaceAxis: XY
+        - label: folded magazine spine
+          min: -0.25, -0.28125, 0.001
+          max: -0.238, 0.25, 0.029
+          color: '#2D4A52'
+        - label: small physical staple
+          min: -0.253, -0.163, 0.0265
+          max: -0.235, -0.137, 0.0295
+          color: '#DACCB6'
+        - label: small physical staple
+          min: -0.253, 0.107, 0.0265
+          max: -0.235, 0.133, 0.0295
+          color: '#DACCB6'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCMMatchBookPrintedSmallCloud
+  label: Closed folded paper matchbook
+  status: draft
+  sourcePrototypes:
+  - CMMatchBook
+  referencePrototype: CMMatchBook
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Matchboxes/matchbook.rsi
+  referenceState: mpacket
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: GenericVisualizer hides openLayer on closed bag state, even though mpacket0 omits visible=false in
+    YAML. Actual default is mpacket only. Six paper matches are hidden until open. Open/count/burning selection unsupported.
+    Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: paper matchbook backing
+    min: -0.125, -0.1875, 0.0
+    max: 0.125, 0.09375, 0.01
+    color: '#9D8974'
+  - label: lower folded retaining strip
+    min: -0.125, -0.187, 0.005
+    max: 0.125, -0.147, 0.033
+    color: '#776451'
+  - label: closed folded front cover
+    min: -0.125, -0.1875, 0.0345
+    max: 0.125, 0.09375, 0.0415
+    color: '#C3BAAA'
+  - label: original closed matchbook print
+    min: -0.125, -0.1875, 0.04225
+    max: 0.125, 0.09375, 0.04375
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt10
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DCMMatchBookPrintedSmallCloudOpenEmptyStudy
+  label: Matchbook open empty study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMMatchBook
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Matchboxes/matchbook.rsi
+  referenceState: mpacket0
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound open folded-paper study. Empty fold and exposed striker stripe. Physical depth and unseen construction
+    inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: paper matchbook backing
+    min: -0.125, -0.1875, 0.0
+    max: 0.125, 0.09375, 0.01
+    color: '#9D8974'
+  - label: lower folded retaining strip
+    min: -0.125, -0.187, 0.005
+    max: 0.125, -0.147, 0.033
+    color: '#776451'
+  - label: open matchbook cover upright
+    min: -0.125, 0.088, 0.015
+    max: 0.125, 0.096, 0.265
+    color: '#C3BAAA'
+  - label: original open inside matchbook cover
+    min: -0.125, 0.08525, 0.015
+    max: 0.125, 0.08675, 0.265
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt11
+    surfaceAxis: XZ
+  - label: original lower striker stripe
+    min: -0.125, -0.1875, 0.03525
+    max: 0.125, -0.09375, 0.03675
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt12
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DCMMatchBookPrintedSmallCloudOpenFullStudy
+  label: Matchbook open full study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMMatchBook
+  referenceRsi: /Textures/_RMC14/Objects/Consumable/Smokeables/Matchboxes/matchbook.rsi
+  referenceState: mpacket0
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound open folded-paper study. Six physical paper stems and red heads match all six source layers.
+    Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval.
+  parts:
+  - label: paper matchbook backing
+    min: -0.125, -0.1875, 0.0
+    max: 0.125, 0.09375, 0.01
+    color: '#9D8974'
+  - label: lower folded retaining strip
+    min: -0.125, -0.187, 0.005
+    max: 0.125, -0.147, 0.033
+    color: '#776451'
+  - label: open matchbook cover upright
+    min: -0.125, 0.088, 0.015
+    max: 0.125, 0.096, 0.265
+    color: '#C3BAAA'
+  - label: original open inside matchbook cover
+    min: -0.125, 0.08525, 0.015
+    max: 0.125, 0.08675, 0.265
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt11
+    surfaceAxis: XZ
+  - label: original lower striker stripe
+    min: -0.125, -0.1875, 0.03525
+    max: 0.125, -0.09375, 0.03675
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt12
+    surfaceAxis: XY
+  - label: paper match stem 0
+    min: -0.0875, -0.1075, 0.016
+    max: -0.0705, 0.0435, 0.026
+    color: '#8D763F'
+  - label: red match head 0
+    min: -0.09, 0.0225, 0.0205
+    max: -0.068, 0.0495, 0.0375
+    color: '#9A1B1B'
+    shape: Ellipsoid
+  - label: paper match stem 1
+    min: -0.0555, -0.1075, 0.016
+    max: -0.0385, 0.0435, 0.026
+    color: '#8D763F'
+  - label: red match head 1
+    min: -0.058, 0.0225, 0.0205
+    max: -0.036, 0.0495, 0.0375
+    color: '#9A1B1B'
+    shape: Ellipsoid
+  - label: paper match stem 2
+    min: -0.0235, -0.1075, 0.016
+    max: -0.0065, 0.0435, 0.026
+    color: '#8D763F'
+  - label: red match head 2
+    min: -0.026, 0.0225, 0.0205
+    max: -0.004, 0.0495, 0.0375
+    color: '#9A1B1B'
+    shape: Ellipsoid
+  - label: paper match stem 3
+    min: 0.0085, -0.1075, 0.016
+    max: 0.0255, 0.0435, 0.026
+    color: '#8D763F'
+  - label: red match head 3
+    min: 0.006, 0.0225, 0.0205
+    max: 0.028, 0.0495, 0.0375
+    color: '#9A1B1B'
+    shape: Ellipsoid
+  - label: paper match stem 4
+    min: 0.0405, -0.1075, 0.016
+    max: 0.0575, 0.0435, 0.026
+    color: '#8D763F'
+  - label: red match head 4
+    min: 0.038, 0.0225, 0.0205
+    max: 0.06, 0.0495, 0.0375
+    color: '#9A1B1B'
+    shape: Ellipsoid
+  - label: paper match stem 5
+    min: 0.0725, -0.1075, 0.016
+    max: 0.0895, 0.0435, 0.026
+    color: '#8D763F'
+  - label: red match head 5
+    min: 0.07, 0.0225, 0.0205
+    max: 0.092, 0.0495, 0.0375
+    color: '#9A1B1B'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DBookHowToCookForFortySpacemanPrintedSmallCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DBookHowToCookForFortySpacemanPrintedSmallCloud
+  label: Red apple guidebook
+  status: draft
+  sourcePrototypes:
+  - BookHowToCookForFortySpaceman
+  referencePrototype: BookHowToCookForFortySpaceman
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Four original source layers: paper, cover_base with #e22541 tint, decor_wingette and icon_apple. Separate
+    hard covers, cloth spine and multiple page leaves preserve printed art. GuideHelp reading UI and page-turning
+    are not 3D states. Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity
+    approval.'
+  parts:
+  - label: rigid rear cover
+    min: -0.25, -0.34375, 0.0
+    max: 0.25, 0.3125, 0.016
+    color: '#BA1E35'
+  - label: cream bound page block
+    min: -0.2095, -0.3075, 0.015
+    max: 0.2255, 0.2875, 0.063
+    color: '#F7E19F'
+  - label: individual visible page edge 0
+    min: -0.2065, -0.3065, 0.01815
+    max: 0.2265, 0.2865, 0.01985
+    color: '#FFFFCC'
+  - label: individual visible page edge 1
+    min: -0.2065, -0.3065, 0.02515
+    max: 0.2265, 0.2865, 0.02685
+    color: '#FFFFCC'
+  - label: individual visible page edge 2
+    min: -0.2065, -0.3065, 0.03215
+    max: 0.2265, 0.2865, 0.03385
+    color: '#FFFFCC'
+  - label: individual visible page edge 3
+    min: -0.2065, -0.3065, 0.03915
+    max: 0.2265, 0.2865, 0.04085
+    color: '#FFFFCC'
+  - label: individual visible page edge 4
+    min: -0.2065, -0.3065, 0.04615
+    max: 0.2265, 0.2865, 0.04785
+    color: '#FFFFCC'
+  - label: individual visible page edge 5
+    min: -0.2065, -0.3065, 0.05315
+    max: 0.2265, 0.2865, 0.05485
+    color: '#FFFFCC'
+  - label: red cloth hardback spine
+    min: -0.247, -0.338, 0.0065
+    max: -0.213, 0.308, 0.0835
+    color: '#BA1E35'
+  - label: rigid front cover
+    min: -0.25, -0.34375, 0.069
+    max: 0.25, 0.3125, 0.083
+    color: '#D8233E'
+  - label: original exposed paper artwork
+    min: -0.1875, -0.3125, 0.08275
+    max: 0.21875, 0.28125, 0.08425
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt13
+    surfaceAxis: XY
+  - label: original tinted full cover construction
+    min: -0.25, -0.34375, 0.08425
+    max: 0.25, 0.3125, 0.08575
+    color: '#E22541'
+    surface: CMU3DPrintedSmallCloudArt14
+    surfaceAxis: XY
+  - label: original wingette inset
+    min: -0.15625, -0.25, 0.08625
+    max: 0.125, 0.1875, 0.08775
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt15
+    surfaceAxis: XY
+  - label: original apple cover illustration
+    min: -0.125, -0.21875, 0.08825
+    max: 0.09375, 0.0, 0.08975
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt16
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCPlayingCardDeckPrintedSmallCloud
+  label: Checkered playing-card carton
+  status: draft
+  sourcePrototypes:
+  - RMCPlayingCardDeck
+  referencePrototype: RMCPlayingCardDeck
+  referenceRsi: /Textures/_RMC14/Objects/Fun/playing_cards.rsi
+  referenceState: deck
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: "Actual PlayingCardDeck default has 52 cards and source state deck. Client selects deck_open for 1\u2013\
+    51 and deck_empty for zero. Existing single-layer adapter supports those three coarse visual states only; open\
+    \ card stack is representative, exact remaining count, shuffle motions, individual cards and hands/UI unsupported.\
+    \ Physical depth and unseen construction inferred. All draft; no native, map-fit or fidelity approval."
+  parts:
+  - label: card carton back
+    min: -0.1875, -0.25, 0.0
+    max: 0.1875, 0.25, 0.009
+    color: '#C4BBAB'
+  - label: carton left folded side
+    min: -0.1875, -0.25, 0.0
+    max: -0.1785, 0.25, 0.092
+    color: '#9E8A74'
+  - label: carton right folded side
+    min: 0.1785, -0.25, 0.0
+    max: 0.1875, 0.25, 0.092
+    color: '#9E8A74'
+  - label: carton closed bottom fold
+    min: -0.1875, -0.25, 0.0
+    max: 0.1875, -0.241, 0.092
+    color: '#9E8A74'
+  - label: carton printed front wall
+    min: -0.1875, -0.25, 0.084
+    max: 0.1875, 0.13, 0.092
+    color: '#D3D1BE'
+  - label: original checkered card carton face
+    min: -0.1875, -0.21625, 0.09325
+    max: 0.1875, 0.09625, 0.09475
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt17
+    surfaceAxis: XY
+  - label: separate closed tuck flap
+    min: -0.1875, 0.099, 0.087
+    max: 0.1875, 0.249, 0.099
+    color: '#D3D1BE'
+  - label: original closed tuck printing
+    min: -0.1875, 0.099, 0.09925
+    max: 0.1875, 0.249, 0.10075
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt18
+    surfaceAxis: XY
+  - label: closed upper end fold
+    min: -0.1875, 0.241, 0.0
+    max: 0.1875, 0.25, 0.092
+    color: '#C4BBAB'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    deck:
+      frames:
+      - parts:
+        - label: card carton back
+          min: -0.1875, -0.25, 0.0
+          max: 0.1875, 0.25, 0.009
+          color: '#C4BBAB'
+        - label: carton left folded side
+          min: -0.1875, -0.25, 0.0
+          max: -0.1785, 0.25, 0.092
+          color: '#9E8A74'
+        - label: carton right folded side
+          min: 0.1785, -0.25, 0.0
+          max: 0.1875, 0.25, 0.092
+          color: '#9E8A74'
+        - label: carton closed bottom fold
+          min: -0.1875, -0.25, 0.0
+          max: 0.1875, -0.241, 0.092
+          color: '#9E8A74'
+        - label: carton printed front wall
+          min: -0.1875, -0.25, 0.084
+          max: 0.1875, 0.13, 0.092
+          color: '#D3D1BE'
+        - label: original checkered card carton face
+          min: -0.1875, -0.21625, 0.09325
+          max: 0.1875, 0.09625, 0.09475
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt17
+          surfaceAxis: XY
+        - label: separate closed tuck flap
+          min: -0.1875, 0.099, 0.087
+          max: 0.1875, 0.249, 0.099
+          color: '#D3D1BE'
+        - label: original closed tuck printing
+          min: -0.1875, 0.099, 0.09925
+          max: 0.1875, 0.249, 0.10075
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt18
+          surfaceAxis: XY
+        - label: closed upper end fold
+          min: -0.1875, 0.241, 0.0
+          max: 0.1875, 0.25, 0.092
+          color: '#C4BBAB'
+      delays:
+      - 1
+    deck_open:
+      frames:
+      - parts:
+        - label: card carton back
+          min: -0.1875, -0.25, 0.0
+          max: 0.1875, 0.25, 0.009
+          color: '#C4BBAB'
+        - label: carton left folded side
+          min: -0.1875, -0.25, 0.0
+          max: -0.1785, 0.25, 0.092
+          color: '#9E8A74'
+        - label: carton right folded side
+          min: 0.1785, -0.25, 0.0
+          max: 0.1875, 0.25, 0.092
+          color: '#9E8A74'
+        - label: carton closed bottom fold
+          min: -0.1875, -0.25, 0.0
+          max: 0.1875, -0.241, 0.092
+          color: '#ACACAC'
+        - label: carton printed front wall
+          min: -0.1875, -0.25, 0.084
+          max: 0.1875, 0.13, 0.092
+          color: '#D3D1BE'
+        - label: original checkered card carton face
+          min: -0.1875, -0.21625, 0.09325
+          max: 0.1875, 0.09625, 0.09475
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt19
+          surfaceAxis: XY
+        - label: upright open carton flap
+          min: -0.1875, 0.245, 0.092
+          max: 0.1875, 0.255, 0.256
+          color: '#C4BBAB'
+        - label: original red inside tuck flap
+          min: -0.1875, 0.24325, 0.092
+          max: 0.1875, 0.24475, 0.256
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt20
+          surfaceAxis: XZ
+        - label: representative card leaf 0
+          min: -0.1505, -0.087, 0.0225
+          max: 0.1505, 0.241, 0.0255
+          color: '#CCCCCC'
+        - label: representative card leaf 1
+          min: -0.1505, -0.087, 0.0285
+          max: 0.1505, 0.241, 0.0315
+          color: '#CCCCCC'
+        - label: representative card leaf 2
+          min: -0.1505, -0.087, 0.0345
+          max: 0.1505, 0.241, 0.0375
+          color: '#CCCCCC'
+        - label: representative card leaf 3
+          min: -0.1505, -0.087, 0.0405
+          max: 0.1505, 0.241, 0.0435
+          color: '#CCCCCC'
+        - label: representative card leaf 4
+          min: -0.1505, -0.087, 0.0465
+          max: 0.1505, 0.241, 0.0495
+          color: '#CCCCCC'
+        - label: representative card leaf 5
+          min: -0.1505, -0.087, 0.0525
+          max: 0.1505, 0.241, 0.0555
+          color: '#CCCCCC'
+        - label: representative card leaf 6
+          min: -0.1505, -0.087, 0.0585
+          max: 0.1505, 0.241, 0.0615
+          color: '#CCCCCC'
+        - label: source visible top card mark
+          min: -0.09375, 0.1125, 0.06425
+          max: 0.09375, 0.2375, 0.06575
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt21
+          surfaceAxis: XY
+      delays:
+      - 1
+    deck_empty:
+      frames:
+      - parts:
+        - label: card carton back
+          min: -0.1875, -0.25, 0.0
+          max: 0.1875, 0.25, 0.009
+          color: '#C4BBAB'
+        - label: carton left folded side
+          min: -0.1875, -0.25, 0.0
+          max: -0.1785, 0.25, 0.092
+          color: '#9E8A74'
+        - label: carton right folded side
+          min: 0.1785, -0.25, 0.0
+          max: 0.1875, 0.25, 0.092
+          color: '#9E8A74'
+        - label: carton closed bottom fold
+          min: -0.1875, -0.25, 0.0
+          max: 0.1875, -0.241, 0.092
+          color: '#9E8A74'
+        - label: carton printed front wall
+          min: -0.1875, -0.25, 0.084
+          max: 0.1875, 0.13, 0.092
+          color: '#D3D1BE'
+        - label: original checkered card carton face
+          min: -0.1875, -0.21625, 0.09325
+          max: 0.1875, 0.09625, 0.09475
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt22
+          surfaceAxis: XY
+        - label: upright open carton flap
+          min: -0.1875, 0.245, 0.092
+          max: 0.1875, 0.255, 0.256
+          color: '#C4BBAB'
+        - label: original red inside tuck flap
+          min: -0.1875, 0.24325, 0.092
+          max: 0.1875, 0.24475, 0.256
+          color: '#FFFFFF'
+          surface: CMU3DPrintedSmallCloudArt23
+          surfaceAxis: XZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DBoxFolderBasePrintedSmallCloud
+  label: Folded document folder shell
+  status: draft
+  sourcePrototypes:
+  - BoxFolderBase
+  referencePrototype: BoxFolderBase
+  referenceRsi: /Textures/Objects/Misc/folders.rsi
+  referenceState: folder-base
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: "Exact base folder shell with original two printed layers and a real gap between thin front/back leaves.\
+    \ EntityTableContainerFill randomly creates 0\u20135 documents; no fixed initial paper count is claimed. ItemMapper\
+    \ paper overlay and changing contents unsupported. Physical depth and unseen construction inferred. All draft;\
+    \ no native, map-fit or fidelity approval."
+  parts:
+  - label: thin folder back leaf
+    min: -0.21875, -0.21875, 0.0
+    max: 0.1875, 0.21875, 0.006
+    color: '#8E8E8E'
+  - label: folded folder spine
+    min: -0.2205, -0.21875, 0.0005
+    max: -0.2075, 0.21875, 0.0255
+    color: '#8F8F8F'
+  - label: raised top folder leaf
+    min: -0.21875, -0.21875, 0.0205
+    max: 0.1875, 0.21875, 0.0255
+    color: '#FFFFFF'
+  - label: original white folder color layer
+    min: -0.21875, -0.21875, 0.02625
+    max: 0.1875, 0.21875, 0.02775
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt24
+    surfaceAxis: XY
+  - label: original folder border and label
+    min: -0.21875, -0.21875, 0.02825
+    max: 0.1875, 0.21875, 0.02975
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt25
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DBoxFolderBasePrintedSmallCloudPaperStudy
+  label: Folder paper overlay study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: BoxFolderBase
+  referenceRsi: /Textures/Objects/Misc/folders.rsi
+  referenceState: folder-base
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Unbound optional ItemMapper document-overlay study with representative paper leaves. Not asserted as
+    the random default or exact live document count. Physical depth and unseen construction inferred. All draft; no
+    native, map-fit or fidelity approval.
+  parts:
+  - label: thin folder back leaf
+    min: -0.21875, -0.21875, 0.0
+    max: 0.1875, 0.21875, 0.006
+    color: '#8E8E8E'
+  - label: folded folder spine
+    min: -0.2205, -0.21875, 0.0005
+    max: -0.2075, 0.21875, 0.0255
+    color: '#8F8F8F'
+  - label: raised top folder leaf
+    min: -0.21875, -0.21875, 0.0205
+    max: 0.1875, 0.21875, 0.0255
+    color: '#FFFFFF'
+  - label: original white folder color layer
+    min: -0.21875, -0.21875, 0.02625
+    max: 0.1875, 0.21875, 0.02775
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt24
+    surfaceAxis: XY
+  - label: original folder border and label
+    min: -0.21875, -0.21875, 0.02825
+    max: 0.1875, 0.21875, 0.02975
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt25
+    surfaceAxis: XY
+  - label: example inserted paper 0
+    min: -0.20375, -0.18375, 0.007
+    max: 0.1845, 0.22775, 0.009
+    color: '#FFFFFF'
+  - label: example inserted paper 1
+    min: -0.20375, -0.18375, 0.011
+    max: 0.1845, 0.22775, 0.013
+    color: '#FFFFFF'
+  - label: example inserted paper 2
+    min: -0.20375, -0.18375, 0.015
+    max: 0.1845, 0.22775, 0.017
+    color: '#FFFFFF'
+  - label: original optional document overlay
+    min: -0.21875, -0.21875, 0.03025
+    max: 0.1875, 0.21875, 0.03175
+    color: '#FFFFFF'
+    surface: CMU3DPrintedSmallCloudArt26
+    surfaceAxis: XY

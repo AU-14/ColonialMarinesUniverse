@@ -30,7 +30,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Medical.Monitor;
 
-public sealed class CMUPatientMonitorSystem : SharedCMUPatientMonitorSystem
+public sealed partial class CMUPatientMonitorSystem : SharedCMUPatientMonitorSystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBatterySystem _battery = default!;

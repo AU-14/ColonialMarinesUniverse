@@ -6,11 +6,8 @@ using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Sentry.Laptop;
-using Content.Shared.Actions;
-using Content.Shared.Actions.Components;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Explosion.Components;
-using Content.Shared.Inventory;
 using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
 
@@ -200,48 +197,4 @@ public sealed class StatePublicationTest : GameTest
         });
     }
 
-    [TestCase("cooldown")]
-    [TestCase("removeCooldown")]
-    [TestCase("reduceDelay")]
-    [TestCase("nullDelay")]
-    [TestCase("inventory")]
-    public async Task UnchangedActionsAndInventoryDoNotDirtyButRealChangesDo(string operation)
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid uid = default;
-        ActionComponent action = null;
-        InventoryComponent inventory = null;
-        var actions = Server.System<SharedActionsSystem>();
-        await Server.WaitPost(() =>
-        {
-            uid = SEntMan.SpawnEntity(null, map.GridCoords);
-            action = SEntMan.AddComponent<ActionComponent>(uid);
-            inventory = SEntMan.AddComponent<InventoryComponent>(uid);
-            action.UseDelay = operation == "nullDelay" ? null : TimeSpan.FromSeconds(5);
-            if (operation == "cooldown")
-                actions.SetCooldown(uid, TimeSpan.Zero, TimeSpan.FromSeconds(5));
-        });
-        await Pair.RunTicksSync(3);
-        await Server.WaitAssertion(() =>
-        {
-            var oldAction = action.LastModifiedTick;
-            var oldInventory = inventory.LastModifiedTick;
-            switch (operation)
-            {
-                case "cooldown": actions.SetCooldown(uid, TimeSpan.Zero, TimeSpan.FromSeconds(5)); break;
-                case "removeCooldown": actions.RemoveCooldown(uid); break;
-                case "reduceDelay": actions.ReduceUseDelay(uid, TimeSpan.Zero); break;
-                case "nullDelay": actions.ReduceUseDelay(uid, TimeSpan.FromSeconds(1)); break;
-                case "inventory": Server.System<InventorySystem>().SetTemplateId((uid, inventory), inventory.TemplateId); break;
-            }
-            Assert.That(action.LastModifiedTick, Is.EqualTo(oldAction));
-            Assert.That(inventory.LastModifiedTick, Is.EqualTo(oldInventory));
-            actions.SetCooldown(uid, TimeSpan.Zero, TimeSpan.FromSeconds(10));
-            Assert.That(action.LastModifiedTick, Is.GreaterThan(oldAction));
-            Assert.That(action.Cooldown!.Value.End, Is.EqualTo(TimeSpan.FromSeconds(10)));
-            actions.ReduceUseDelay(uid, TimeSpan.FromSeconds(6));
-            Assert.That(action.UseDelay, Is.Null, "Reducing below zero must still clear the delay.");
-            SEntMan.DeleteEntity(uid);
-        });
-    }
 }

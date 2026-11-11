@@ -14,7 +14,7 @@ namespace Content.Server.CMU14.Botany;
 /// <summary>
 /// Preserves CMU's bulk plant-bag interaction on the shared Nubotany seed extractor.
 /// </summary>
-public sealed class CMUSeedExtractorSystem : EntitySystem
+public sealed partial class CMUSeedExtractorSystem : EntitySystem
 {
     [Dependency] private BotanySystem _botany = default!;
     [Dependency] private IRobustRandom _random = default!;

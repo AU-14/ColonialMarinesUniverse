@@ -85,7 +85,7 @@ public sealed partial class RMCPassiveStealthSystem : EntitySystem
         if (!ent.Comp.Enabled.Value && !_whitelist.IsValid(ent.Comp.Whitelist, args.User))
         {
             var popup = Loc.GetString("rmc-skills-cant-use", ("item", ent.Owner));
-            _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return;
         }

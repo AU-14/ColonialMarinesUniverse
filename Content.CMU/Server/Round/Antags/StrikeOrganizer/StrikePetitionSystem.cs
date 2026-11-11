@@ -13,9 +13,9 @@ namespace Content.Server.CMU14.Round.Antags.StrikeOrganizer;
 
 public sealed partial class StrikePetitionSystem : EntitySystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SuspectDescriptionSystem _suspectDescription = default!;
-    [Dependency] private readonly WantedSystem _wanted = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SuspectDescriptionSystem _suspectDescription = default!;
+    [Dependency] private WantedSystem _wanted = default!;
 
     public override void Initialize()
     {
@@ -32,7 +32,7 @@ public sealed partial class StrikePetitionSystem : EntitySystem
             return;
 
         var current = ent.Owner;
-        while (EntityManager.TryGetComponent(current, out TransformComponent? xform) && xform.ParentUid.IsValid())
+        while (TryComp(current, out TransformComponent? xform) && xform.ParentUid.IsValid())
         {
             current = xform.ParentUid;
             if (HasComp<StrikeOrganizerComponent>(current))

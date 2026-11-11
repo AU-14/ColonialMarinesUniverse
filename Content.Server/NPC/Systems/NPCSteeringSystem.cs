@@ -388,7 +388,9 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         CollisionAvoidance(uid, offsetRot, worldPos, agentRadius, layer, mask, xform, danger);
         DebugTools.Assert(!float.IsNaN(danger[0]));
 
-        Separation(uid, offsetRot, worldPos, agentRadius, layer, mask, body, xform, danger);
+        // CMU14: soft swarm spacing also supplies movement when members have arrived.
+        // Separation(uid, offsetRot, worldPos, agentRadius, layer, mask, body, xform, danger);
+        Separation(uid, offsetRot, worldPos, agentRadius, layer, mask, body, xform, interest, danger);
 
         // Blend last and current tick
         Blend(steering, frameTime, interest, danger);
@@ -456,6 +458,10 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
         steering.PathfindToken = new CancellationTokenSource();
 
         var flags = _pathfindingSystem.GetFlags(uid);
+
+        // CMU14: hive-controlled swarms have steering capabilities but no HTN blackboard.
+        if (IsSwarmLesser(uid))
+            flags = steering.Flags;
 
         var result = await _pathfindingSystem.GetPathSafe(
             uid,

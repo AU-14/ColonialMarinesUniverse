@@ -6,14 +6,18 @@
   suffix: Filled
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/mp27.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#9599)
+    sprite: CMU14/Weapons/SMGs/mp27_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/mp27.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#9599)
+    sprite: CMU14/Weapons/SMGs/mp27_old.rsi
+#cmu edit end
   - type: Gun
     shotsPerBurst: 2
     soundGunshot:
@@ -96,9 +100,11 @@
           - RMCAttachmentExtinguisher
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-barrel: 0.840, 0.02
-      rmc-aslot-rail: 0.06, 0.09
-      rmc-aslot-underbarrel: 0.465, -0.31
+#cmu edit start: pre-resprite sprites (reverts RMC-14#9599)
+      rmc-aslot-barrel: 0.840, 0.03
+      rmc-aslot-rail: 0.1, 0.1
+      rmc-aslot-underbarrel: 0.59, -0.24
+#cmu edit end
   - type: GunDamageModifier
     multiplier: 1
 
@@ -120,7 +126,9 @@
     proto: RMCCartridge46x30mm
     capacity: 30
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mp27.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#9599)
+    sprite: CMU14/Weapons/Magazines/mp27_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -151,7 +159,9 @@
     proto: RMCCartridge46x30mm
     capacity: 40
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/mp27extend.rsi
+#cmu edit start: pre-resprite sprites (reverts RMC-14#9599)
+    sprite: CMU14/Weapons/Magazines/mp27extend_old.rsi
+#cmu edit end
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]

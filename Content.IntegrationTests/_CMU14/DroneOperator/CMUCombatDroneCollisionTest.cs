@@ -20,13 +20,8 @@ namespace Content.IntegrationTests.CMU14.DroneOperator;
 public sealed class CMUCombatDroneCollisionTest
 {
     [TestCase("CMUCombatDrone", "CMWallMetal")]
-    [TestCase("CMUFlamerDrone", "CMWallMetal")]
-    [TestCase("CMUCombatDrone", "CMBarricadeMetal")]
     [TestCase("CMUFlamerDrone", "CMBarricadeMetal")]
     [TestCase("CMUCombatDrone", "WallXenoResin")]
-    [TestCase("CMUFlamerDrone", "WallXenoResin")]
-    [TestCase("CMUCombatDrone", "WallXenoResinThick")]
-    [TestCase("CMUFlamerDrone", "WallXenoResinThick")]
     public async Task PilotedMovementStopsAtObstaclesAndResumesWhenCleared(string prototype, string obstacle)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });

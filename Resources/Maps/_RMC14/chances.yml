@@ -82897,7 +82897,7 @@ entities:
     - type: Transform
       pos: 13.5,4.5
       parent: 1
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack # CMU14: replaced RMCCableCoil30, thin LV cable
   entities:
   - uid: 7363
     components:

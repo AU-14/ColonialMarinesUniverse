@@ -6,6 +6,7 @@ using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
@@ -16,6 +17,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 
@@ -24,6 +26,7 @@ namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 public abstract partial class SharedCMUTourniquetSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager Cfg = default!;
+    [Dependency] private INetConfigurationManager _netCfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected SharedAudioSystem Audio = default!;
@@ -35,6 +38,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
     [Dependency] protected SharedHandsSystem Hands = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
     [Dependency] protected SharedCMUSplintItemSystem Splints = default!;
+    [Dependency] protected SharedCMUOpenStumpSystem Stumps = default!;
     private const float TourniquetScanInterval = 0.5f;
     private float _tourniquetScanAccumulator;
 
@@ -75,19 +79,53 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             return;
         }
 
-        if (!TryFindTourniquetTargetPart(args.User, target, out var part, out var alreadyOn))
+        CMUStump? stump = null;
+        EntityUid part;
+        var alreadyOn = false;
+        // CMU14: with targeted healing on, the tourniquet only goes on the selected limb, like bandages and kits.
+        if (IsTargetedHealingEnabled(args.User))
         {
-            return;
+            if (!TryFindSelectedTourniquetSite(args.User, target, out part, out stump, out alreadyOn))
+            {
+                Popup.PopupClient(Loc.GetString("cmu-medical-tourniquet-no-selected-limb"), target, args.User, PopupType.SmallCaution);
+                args.Handled = true;
+                return;
+            }
+        }
+        // CMU14: a limb that needs a tourniquet takes priority over where the user is aiming.
+        else if (TryFindNeededTourniquetSite(args.User, target, out var neededPart, out var neededStump))
+        {
+            part = neededPart;
+            stump = neededStump;
+        }
+        else if (TryFindAimedStump(args.User, target, out var stumpParent, out var aimedStump))
+        {
+            part = stumpParent;
+            stump = aimedStump;
+            alreadyOn = aimedStump.Clamped;
+        }
+        else if (!TryFindTourniquetTargetPart(args.User, target, out part, out alreadyOn))
+        {
+            if (!Stumps.TryFindUnclampedStump(target, out var openParent, out var openStump))
+                return;
+
+            part = openParent;
+            stump = openStump;
         }
 
         if (alreadyOn)
         {
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-already-on"), target, args.User, PopupType.SmallCaution);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-already-on"), target, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return;
         }
 
-        var applyEv = new CMUTourniquetApplyDoAfterEvent { PreSelectedPart = GetNetEntity(part) };
+        var applyEv = new CMUTourniquetApplyDoAfterEvent
+        {
+            PreSelectedPart = GetNetEntity(part),
+            StumpType = stump?.Type,
+            StumpSymmetry = stump?.Symmetry ?? default,
+        };
         var applyDo = new DoAfterArgs(EntityManager, args.User, ent.Comp.ApplyDelay,
             applyEv, ent.Owner, target: target, used: ent.Owner)
         {
@@ -98,7 +136,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         };
         var applyStarted = DoAfter.TryStartDoAfter(applyDo);
         if (applyStarted)
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-applying"), target, args.User);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-applying"), target, args.User);
         args.Handled = true;
     }
 
@@ -120,15 +158,48 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             return;
         }
 
+        if (args.StumpType is { } stumpType)
+        {
+            if (!Stumps.TryFindStump(target, stumpType, args.StumpSymmetry, out var stumpParent, out var stump) ||
+                stump.Clamped)
+            {
+                return;
+            }
+
+            Stumps.SetClamped(stumpParent, stump, true, ent.Comp.RefundOnRemove);
+            if (ent.Comp.ApplySound is not null)
+                Audio.PlayPredicted(ent.Comp.ApplySound, stumpParent, null);
+            if (ent.Comp.ConsumedOnApply && Net.IsServer)
+                QueueDel(ent.Owner);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-applied-stump"), target, args.User);
+            return;
+        }
+
         var freshApply = !HasComp<CMUTourniquetComponent>(part);
         var ok = ApplyTourniquetToPart(ent, part);
         if (ok && freshApply)
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-applied"), target, args.User);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-applied"), target, args.User);
     }
 
     private void OnPatientGetAltVerbs(Entity<CMUHumanMedicalComponent> patient, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (IsLayerEnabled()
+            && args.CanInteract
+            && args.CanAccess
+            && FindClampedStump(args.User, patient.Owner, out var clampedParent, out var clampedStump))
+        {
+            var stumpUser = args.User;
+            var stumpPatient = patient.Owner;
+            var stumpType = clampedStump.Type;
+            var stumpSymmetry = clampedStump.Symmetry;
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("cmu-medical-tourniquet-verb-remove-stump"),
+                Act = () => StartVerbRemoveDoAfter(stumpUser, stumpPatient, clampedParent, stumpType, stumpSymmetry),
+                Priority = 1,
+            });
+        }
+        else if (IsLayerEnabled()
             && args.CanInteract
             && args.CanAccess
             && FindTourniquettedLimb(args.User, patient.Owner, out var part))
@@ -144,12 +215,17 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             args.Verbs.Add(verb);
         }
 
-        Splints.AddCastRemoveVerb(patient, ref args);
+        Splints.AddSupportRemoveVerbs(patient, ref args);
     }
 
-    private void StartVerbRemoveDoAfter(EntityUid user, EntityUid patient, EntityUid part)
+    private void StartVerbRemoveDoAfter(EntityUid user, EntityUid patient, EntityUid part, BodyPartType? stumpType = null, BodyPartSymmetry stumpSymmetry = default)
     {
-        var removeEv = new CMUTourniquetVerbRemoveDoAfterEvent { PreSelectedPart = GetNetEntity(part) };
+        var removeEv = new CMUTourniquetVerbRemoveDoAfterEvent
+        {
+            PreSelectedPart = GetNetEntity(part),
+            StumpType = stumpType,
+            StumpSymmetry = stumpSymmetry,
+        };
         var removeDo = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(1.0),
             removeEv, patient, target: patient)
         {
@@ -157,7 +233,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         };
         var started = DoAfter.TryStartDoAfter(removeDo);
         if (started)
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-removing"), patient, user);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-removing"), patient, user);
     }
 
     private void OnVerbRemoveDoAfter(Entity<CMUHumanMedicalComponent> patient, ref CMUTourniquetVerbRemoveDoAfterEvent args)
@@ -168,6 +244,26 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             return;
         if (!ResolvePart(patient.Owner, args.PreSelectedPart, out var part))
             return;
+
+        if (args.StumpType is { } stumpType)
+        {
+            if (!Stumps.TryFindStump(patient.Owner, stumpType, args.StumpSymmetry, out var stumpParent, out var stump) ||
+                !stump.Clamped)
+            {
+                return;
+            }
+
+            var stumpRefund = stump.ClampRefund;
+            Stumps.SetClamped(stumpParent, stump, false, null);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-removed"), patient.Owner, args.User);
+            if (Net.IsServer && stumpRefund is { } stumpProto)
+            {
+                var refunded = Spawn(stumpProto, Transform(args.User).Coordinates);
+                Hands.TryPickupAnyHand(args.User, refunded);
+            }
+            return;
+        }
+
         if (!TryComp<CMUTourniquetComponent>(part, out var tq))
             return;
 
@@ -176,7 +272,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         if (HasComp<CMUNecroticComponent>(part))
             RemComp<CMUNecroticComponent>(part);
 
-        Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-removed"), patient.Owner, args.User);
+        Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-removed"), patient.Owner, args.User);
 
         if (Net.IsServer && refundProto is { } proto)
         {
@@ -287,12 +383,160 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
                 continue;
             if (HasComp<CMURoboticLimbComponent>(id))
                 continue;
-            if (HasComp<BodyPartWoundComponent>(id) || HasComp<InternalBleedingComponent>(id))
+            if (HasComp<BodyPartWoundComponent>(id)) // CMU14: internal bleeding isn't visible, so it can't pick the limb
             {
                 part = id;
                 alreadyOn = false;
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /// <summary>CMU14: whether the user wants treatments kept to the body part they've selected.</summary>
+    private bool IsTargetedHealingEnabled(EntityUid user)
+    {
+        if (Net.IsClient)
+            return Cfg.GetCVar(CMUMedicalCCVars.TargetedHealingEnabled);
+
+        return TryComp<ActorComponent>(user, out var actor) &&
+               _netCfg.GetClientCVar(actor.PlayerSession.Channel, CMUMedicalCCVars.TargetedHealingEnabled);
+    }
+
+    /// <summary>
+    /// CMU14: the tourniquet site on the body part the user has selected: the stump of a missing limb there, or the arm
+    /// or leg the part belongs to.
+    /// </summary>
+    private bool TryFindSelectedTourniquetSite(
+        EntityUid user,
+        EntityUid patient,
+        out EntityUid part,
+        out CMUStump? stump,
+        out bool alreadyOn)
+    {
+        part = default;
+        stump = null;
+        alreadyOn = false;
+        if (!TryComp<BodyZoneTargetingComponent>(user, out var aim))
+            return false;
+
+        var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
+        if (Stumps.TryFindStump(patient, partType, symmetry, out var stumpParent, out var selectedStump))
+        {
+            part = stumpParent;
+            stump = selectedStump;
+            alreadyOn = selectedStump.Clamped;
+            return true;
+        }
+
+        foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
+        {
+            if (partComp.PartType != partType || partComp.Symmetry != symmetry)
+                continue;
+
+            if (!TryGetTourniquetLimb(id, out var limb))
+                return false;
+
+            part = limb;
+            alreadyOn = HasComp<CMUTourniquetComponent>(limb);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// CMU14: the limb that needs a tourniquet most: an open stump, then an arterial bleed, then a severe bleed. Only
+    /// visible bleeding counts. Between two of the same kind, the one the user is aiming at wins.
+    /// </summary>
+    private bool TryFindNeededTourniquetSite(EntityUid user, EntityUid patient, out EntityUid part, out CMUStump? stump)
+    {
+        part = default;
+        stump = null;
+
+        (BodyPartType Type, BodyPartSymmetry Symmetry)? aimedAt = null;
+        if (TryComp<BodyZoneTargetingComponent>(user, out var aim) && aim.LastSelectedAt > TimeSpan.Zero)
+            aimedAt = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
+
+        bool IsAimed(BodyPartType type, BodyPartSymmetry symmetry)
+            => aimedAt is { } aimed && aimed.Type == type && aimed.Symmetry == symmetry;
+
+        var bestScore = -1;
+        foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
+        {
+            if (Wounds.IsBloodFlowOccluded(id))
+                continue;
+
+            if (TryComp<CMUOpenStumpComponent>(id, out var stumps))
+            {
+                foreach (var open in stumps.Stumps)
+                {
+                    if (open.Clamped)
+                        continue;
+
+                    var score = NeedScore(StumpNeed, IsAimed(open.Type, open.Symmetry));
+                    if (score <= bestScore)
+                        continue;
+
+                    bestScore = score;
+                    part = id;
+                    stump = open;
+                }
+            }
+
+            if (!TryComp<BodyPartWoundComponent>(id, out var wounds) ||
+                wounds.ExternalBleeding < ExternalBleedTier.Severe ||
+                !TryGetTourniquetLimb(id, out var limb))
+            {
+                continue;
+            }
+
+            var limbComp = Comp<BodyPartComponent>(limb);
+            var aimedLimb = IsAimed(partComp.PartType, partComp.Symmetry) || IsAimed(limbComp.PartType, limbComp.Symmetry);
+            var need = wounds.ExternalBleeding == ExternalBleedTier.Arterial ? ArterialNeed : SevereNeed;
+            var woundScore = NeedScore(need, aimedLimb);
+            if (woundScore <= bestScore)
+                continue;
+
+            bestScore = woundScore;
+            part = limb;
+            stump = null;
+        }
+
+        return bestScore >= 0;
+    }
+
+    private const int StumpNeed = 3;
+    private const int ArterialNeed = 2;
+    private const int SevereNeed = 1;
+
+    private static int NeedScore(int need, bool aimed)
+        => need * 10 + (aimed ? 1 : 0);
+
+    /// <summary>
+    /// CMU14: the arm or leg a tourniquet goes on to stop bleeding from this part: the part itself, or the limb a
+    /// hand or foot hangs off.
+    /// </summary>
+    private bool TryGetTourniquetLimb(EntityUid part, out EntityUid limb)
+    {
+        limb = default;
+        var current = part;
+        while (TryComp<BodyPartComponent>(current, out var site))
+        {
+            if (IsTourniquetable(site.PartType))
+            {
+                if (HasComp<CMURoboticLimbComponent>(current))
+                    return false;
+
+                limb = current;
+                return true;
+            }
+
+            if (!TryComp<ChildOrganComponent>(current, out var child) || child.Parent is not { } parent)
+                return false;
+
+            current = parent;
         }
 
         return false;
@@ -328,6 +572,45 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             }
         }
 
+        return false;
+    }
+
+    /// <summary>The stump of the missing limb the user is aiming at, if there is one.</summary>
+    private bool TryFindAimedStump(EntityUid user, EntityUid patient, out EntityUid parentPart, out CMUStump stump)
+    {
+        parentPart = default;
+        stump = default!;
+        if (!TryComp<BodyZoneTargetingComponent>(user, out var aim) || aim.LastSelectedAt <= TimeSpan.Zero)
+            return false;
+
+        var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
+        return symmetry is { } side && Stumps.TryFindStump(patient, partType, side, out parentPart, out stump);
+    }
+
+    /// <summary>A stump with a tourniquet on it: the aimed one, or any when the user isn't aiming.</summary>
+    private bool FindClampedStump(EntityUid user, EntityUid patient, out EntityUid parentPart, out CMUStump stump)
+    {
+        if (TryComp<BodyZoneTargetingComponent>(user, out var aim) && aim.LastSelectedAt > TimeSpan.Zero)
+            return TryFindAimedStump(user, patient, out parentPart, out stump) && stump.Clamped;
+
+        foreach (var (partUid, _) in MedicalIndex.GetBodyParts(patient))
+        {
+            if (!TryComp<CMUOpenStumpComponent>(partUid, out var comp))
+                continue;
+
+            foreach (var candidate in comp.Stumps)
+            {
+                if (!candidate.Clamped)
+                    continue;
+
+                parentPart = partUid;
+                stump = candidate;
+                return true;
+            }
+        }
+
+        parentPart = default;
+        stump = default!;
         return false;
     }
 
@@ -386,6 +669,13 @@ public sealed partial class CMUTourniquetApplyDoAfterEvent : SimpleDoAfterEvent
 {
     [DataField]
     public NetEntity? PreSelectedPart;
+
+    /// <summary>Set when the tourniquet goes on the stump of this missing limb instead of a limb.</summary>
+    [DataField]
+    public BodyPartType? StumpType;
+
+    [DataField]
+    public BodyPartSymmetry StumpSymmetry;
 }
 
 [Serializable, NetSerializable]
@@ -393,4 +683,10 @@ public sealed partial class CMUTourniquetVerbRemoveDoAfterEvent : SimpleDoAfterE
 {
     [DataField]
     public NetEntity? PreSelectedPart;
+
+    [DataField]
+    public BodyPartType? StumpType;
+
+    [DataField]
+    public BodyPartSymmetry StumpSymmetry;
 }

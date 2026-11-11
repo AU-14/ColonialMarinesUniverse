@@ -1,8 +1,8 @@
 - type: entity
   parent: RMCCigarettePackLuckySloths
   id: RuMCCigaretteStolica
-  name: "пачка сигарет 'СТОЛИЦА'"
-  description: "Пачка сигарет с узнаваемым красно-белым дизайном. Ароматный, но крепкий табак. Предпочтительный выбор городских жителей и офицеров, ценящих стабильность и порядок. Говорят, их курили ещё до войны."
+  name: "'Stolitsa' cigarette pack"
+  description: "A pack of cigarettes in the familiar red-and-white design. Fragrant but strong tobacco. The pick of city dwellers and officers who value stability and order. They say people were smoking these before the war."
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Smokeables/Cigarettes/stolica.rsi
@@ -10,8 +10,8 @@
 - type: entity
   parent: RMCCigarettePackLuckySloths
   id: RuMCCigaretteSouz
-  name: "пачка сигарет 'СОЮЗ'"
-  description: "Классические сигареты с мягким, сбалансированным вкусом. Символ единства и общей цели. Их предпочитают те, кто верит в общее дело и не боится трудностей. Часто встречаются в пайках полевых подразделений."
+  name: "'Soyuz' cigarette pack"
+  description: "Classic cigarettes with a mild, balanced taste. A symbol of unity and common purpose, favoured by those who believe in the cause and don't shy from hardship. Often found in field unit rations."
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Smokeables/Cigarettes/souz.rsi
@@ -20,8 +20,8 @@
 - type: entity
   parent: RMCTarbackCase
   id: RuMCCigaretPackBelomor
-  name: "коробка сигар 'Беломор'"
-  description: "Классика для любителей - дорогие сигары с импортным табаком."
+  name: "'Belomor' cigar box"
+  description: "A connoisseur's classic - expensive cigars rolled from imported tobacco."
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Smokeables/Cigars/belomor.rsi

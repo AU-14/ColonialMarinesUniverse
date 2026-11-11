@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Medical.Monitor;
 
-public sealed class CMUPatientMonitorSystem : SharedCMUPatientMonitorSystem
+public sealed partial class CMUPatientMonitorSystem : SharedCMUPatientMonitorSystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private IOverlayManager _overlay = default!;

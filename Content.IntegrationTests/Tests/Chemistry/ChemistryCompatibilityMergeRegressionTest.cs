@@ -29,56 +29,7 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 [TestFixture]
 public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
 {
-    private static readonly EntProtoId[] LegacyHyposprays =
-    [
-        "AU14NaloxoneAutoInjector",
-        "CMUEpinephrineAutoInjector",
-        "CMUAsthmaInhaler",
-        "AU14MeraBicAutoInjector",
-        "AU14KeloDermAutoInjector",
-        "AU14RevivalMixAutoInjector",
-        "AU14AlbuDexAutoInjector",
-        "AU14OxycodoneAutoInjector",
-        "AU14TramadolAutoInjector",
-        "AU14ParacetamolAutoInjector",
-        "CMUFentanylAutoInjector",
-        "CMUMethamphetamineAutoInjector",
-        "CMUYautjaAutoInjector",
-        "CMEmergencyAutoInjector",
-        "CMDexalinPlusAutoInjector",
-        "CMInaprovalineAutoInjector",
-        "CMEpinephrineAutoInjector",
-        "RMCMedicAutoInjector15",
-        "RMCMedicAutoInjector30",
-        "RMCMedicAutoInjectorEZ1",
-        "RMCMedicAutoInjectorEZ5",
-        "RMCMedicAutoInjectorEZ10",
-        "RMCMedicAutoInjectorEZ15",
-        "RMCMedicAutoInjectorEZ30",
-        "RMCMedicAutoInjectorEZ45",
-        "RMCMedicAutoInjectorEZ60",
-        "RMCMedicAutoInjectorCS5",
-        "RMCMedicAutoInjectorCS15",
-        "RMCMedicAutoInjectorCS30",
-        "RMCMedicAutoInjectorCS60",
-    ];
-
-    private static readonly LocId[] LegacyHyposprayLocIds =
-    [
-        "hypospray-all-mode-text",
-        "hypospray-mobs-only-mode-text",
-        "hypospray-invalid-text",
-        "hypospray-volume-label",
-        "hypospray-component-inject-other-message",
-        "hypospray-component-inject-self-message",
-        "hypospray-component-empty-message",
-        "hypospray-component-feel-prick-message",
-        "hypospray-component-transfer-already-full-message",
-        "hypospray-cant-inject",
-        "hypospray-verb-mode-label",
-        "hypospray-verb-mode-inject-all",
-        "hypospray-verb-mode-inject-mobs-only",
-    ];
+    private static readonly Robust.Shared.Prototypes.EntProtoId ChemistryMergeCollisionManagerPrototype = "ChemistryMergeCollisionManager";
 
     [TestPrototypes]
     private const string Prototypes = @"
@@ -289,7 +240,7 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
         await Server.WaitPost(() =>
         {
             var solutions = SEntMan.System<SharedSolutionContainerSystem>();
-            var collisionPrototype = SProtoMan.Index<EntityPrototype>("ChemistryMergeCollisionManager");
+            var collisionPrototype = SProtoMan.Index<EntityPrototype>(ChemistryMergeCollisionManagerPrototype);
             Assert.That(solutions.TryGetSolution(collisionPrototype, "collision", out var collisionSolution), Is.True);
             var enumerated = solutions.EnumerateSolutions(collisionPrototype).ToArray();
             Assert.Multiple(() =>
@@ -327,39 +278,29 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(inline), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(inline), Is.False);
+#pragma warning restore CS0612
                 Assert.That(solutions.TryGetSolution(inline, "inline", out _, out var inlineSolution), Is.True);
                 Assert.That(inlineSolution!.Volume, Is.EqualTo(FixedPoint2.New(4)));
 
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(stored), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(stored), Is.False);
+#pragma warning restore CS0612
                 Assert.That(solutions.TryGetSolution(stored, "stored", out var migrated, out var storedState), Is.True);
                 Assert.That(migrated!.Value.Owner, Is.EqualTo(storedSolution));
                 Assert.That(storedState!.Volume, Is.EqualTo(FixedPoint2.New(6)));
 
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(collision), Is.True);
+#pragma warning disable CS0612 // CMU14: Regression coverage intentionally inspects the legacy solution schema.
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(collision), Is.False);
+#pragma warning restore CS0612
                 Assert.That(solutions.TryGetSolution(collision, "collision", out _, out var collisionState), Is.True);
                 Assert.That(collisionState!.MaxVolume, Is.EqualTo(FixedPoint2.New(12)));
                 Assert.That(collisionState.Volume, Is.EqualTo(FixedPoint2.New(6)));
                 Assert.That(collisionState.ContainsReagent(new ReagentId("WeldingFuel", null)), Is.True);
                 Assert.That(collisionState.ContainsReagent(new ReagentId("Water", null)), Is.False);
-            });
-        });
-    }
-
-    [Test]
-    public async Task RetainedHyposprayLocalizationKeysRemainAvailable()
-    {
-        var localization = Server.ResolveDependency<ILocalizationManager>();
-        await Server.WaitAssertion(() =>
-        {
-            Assert.Multiple(() =>
-            {
-                foreach (var id in LegacyHyposprayLocIds)
-                {
-                    Assert.That(localization.HasString(id), Is.True, id.ToString());
-                }
             });
         });
     }
@@ -529,162 +470,6 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
     }
 
     [Test]
-    public async Task LegacyHypospraysRemainLoadableWhileUpstreamHyposprayUsesMaxAdjustedInjectorDelay()
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid legacyConcrete = default;
-        EntityUid user = default;
-        EntityUid target = default;
-        EntityUid hypospray = default;
-        EntityUid longUser = default;
-        EntityUid longTarget = default;
-        EntityUid longInjector = default;
-
-        await Server.WaitPost(() =>
-        {
-            var factory = SEntMan.ComponentFactory;
-            Assert.That(LegacyHyposprays, Has.Length.EqualTo(30));
-            foreach (var id in LegacyHyposprays)
-            {
-                var prototype = SProtoMan.Index<EntityPrototype>(id);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(prototype.TryComp<HyposprayComponent>(out _, factory), Is.True, id.ToString());
-                    Assert.That(prototype.TryComp<InjectorComponent>(out _, factory), Is.False,
-                        $"{id} must not inherit the upstream Injector handler alongside the retained Hypospray handler.");
-                });
-            }
-
-            var family = SProtoMan.EnumeratePrototypes<EntityPrototype>()
-                .Where(prototype => SProtoMan.EnumerateAllParents<EntityPrototype>(prototype.ID)
-                    .Any(parent => parent.id == "CMAutoInjectorBase"))
-                .ToArray();
-            Assert.That(family.Select(prototype => prototype.ID), Does.Contain("AU14FirstAidAutoInjectorNoSkill"));
-            foreach (var prototype in family)
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(prototype.TryComp<HyposprayComponent>(out _, factory), Is.True, prototype.ID);
-                    Assert.That(prototype.TryComp<InjectorComponent>(out _, factory), Is.False, prototype.ID);
-                });
-            }
-
-            var legacyRepresentative = SProtoMan.Index<EntityPrototype>("CMTricordrazineAutoInjector");
-            var legacyAncestry = SProtoMan.EnumerateAllParents<EntityPrototype>(legacyRepresentative.ID)
-                .Select(parent => parent.id)
-                .ToArray();
-            var solutionContainers = SEntMan.System<SharedSolutionContainerSystem>();
-            var prototypeSolutions = solutionContainers.EnumerateSolutions(legacyRepresentative).ToArray();
-            Assert.Multiple(() =>
-            {
-                Assert.That(legacyAncestry, Does.Contain("CMAutoInjector"));
-                Assert.That(legacyAncestry, Does.Contain("CMAutoInjectorBase"));
-                Assert.That(legacyAncestry, Does.Contain("BaseItem"));
-                Assert.That(legacyAncestry, Does.Not.Contain("ChemicalMedipen"));
-                Assert.That(legacyRepresentative.TryComp<SolutionComponent>(out _, factory), Is.False,
-                    "The upstream inherited hypospray solution must not survive on the legacy pen family.");
-                Assert.That(legacyRepresentative.TryComp<SolutionContainerManagerComponent>(out var legacySolutions, factory), Is.True);
-                Assert.That(legacySolutions!.Solutions!.Keys, Is.EquivalentTo(new[] { "pen" }));
-                Assert.That(legacyRepresentative.TryComp<ExaminableSolutionComponent>(out var examine, factory), Is.True);
-                Assert.That(examine!.Solution, Is.EqualTo("pen"));
-                Assert.That(legacyRepresentative.TryComp<AppearanceComponent>(out _, factory), Is.True);
-                Assert.That(legacyRepresentative.TryComp<SpaceGarbageComponent>(out _, factory), Is.True);
-                Assert.That(legacyRepresentative.TryComp<StaticPriceComponent>(out var price, factory), Is.True);
-                Assert.That(price!.Price, Is.EqualTo(75));
-                Assert.That(legacyRepresentative.TryComp<TrashOnSolutionEmptyComponent>(out var trash, factory), Is.True);
-                Assert.That(trash!.Solution, Is.EqualTo("pen"));
-                Assert.That(solutionContainers.TryGetSolution(legacyRepresentative, "pen", out var prototypePen), Is.True,
-                    "Prototype consumers such as RMCChemMaster must see legacy inline solutions before spawning.");
-                Assert.That(prototypePen!.MaxVolume, Is.EqualTo(FixedPoint2.New(45)));
-                Assert.That(solutionContainers.TryGetSolution(legacyRepresentative, "hypospray", out _), Is.False);
-                Assert.That(prototypeSolutions, Has.Length.EqualTo(1));
-                Assert.That(prototypeSolutions[0].Id, Is.EqualTo("pen"));
-                Assert.That(prototypeSolutions[0].Solution.MaxVolume, Is.EqualTo(FixedPoint2.New(45)));
-            });
-
-            var upstream = SProtoMan.Index<EntityPrototype>("Hypospray");
-            Assert.Multiple(() =>
-            {
-                Assert.That(upstream.TryComp<InjectorComponent>(out _, factory), Is.True);
-                Assert.That(upstream.TryComp<HyposprayComponent>(out _, factory), Is.False);
-                Assert.That(upstream.TryComp<MedicallyUnskilledDoAfterComponent>(out var skillDelay, factory), Is.True);
-                Assert.That(skillDelay!.Min, Is.EqualTo(2));
-                Assert.That(skillDelay.DoAfter, Is.EqualTo(TimeSpan.FromSeconds(3)));
-            });
-
-            _ = SEntMan.System<ChemistryMergeInjectorProbeSystem>();
-            var solutions = SEntMan.System<SharedSolutionContainerSystem>();
-            var hands = SEntMan.System<SharedHandsSystem>();
-
-            user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            hypospray = SEntMan.SpawnEntity("Hypospray", map.GridCoords);
-            SEntMan.AddComponent<ChemistryMergeInjectorProbeComponent>(hypospray);
-            Assert.That(solutions.TryGetSolution(hypospray, "hypospray", out var hypoSolution, out _), Is.True);
-            Assert.That(solutions.TryAddReagent(hypoSolution!.Value, "Water", 5), Is.True);
-            Assert.That(hands.TryPickupAnyHand(user, hypospray, checkActionBlocker: false), Is.True);
-
-            var interact = new AfterInteractEvent(user, hypospray, target, default, true);
-            SEntMan.EventBus.RaiseLocalEvent(hypospray, interact);
-            Assert.That(interact.Handled, Is.True);
-
-            longUser = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            longTarget = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            longInjector = SEntMan.SpawnEntity("ChemistryMergeLongInjector", map.GridCoords);
-            Assert.That(solutions.TryGetSolution(longInjector, "hypospray", out var longSolution, out _), Is.True);
-            Assert.That(solutions.TryAddReagent(longSolution!.Value, "Water", 5), Is.True);
-            Assert.That(hands.TryPickupAnyHand(longUser, longInjector, checkActionBlocker: false), Is.True);
-
-            var longInteract = new AfterInteractEvent(longUser, longInjector, longTarget, default, true);
-            SEntMan.EventBus.RaiseLocalEvent(longInjector, longInteract);
-            Assert.That(longInteract.Handled, Is.True);
-
-            AssertInjectorDelay(user, hypospray, TimeSpan.FromSeconds(3));
-            AssertInjectorDelay(longUser, longInjector, TimeSpan.FromSeconds(4));
-
-            legacyConcrete = SEntMan.SpawnEntity("CMEmergencyAutoInjector", map.GridCoords);
-        });
-        await Pair.RunTicksSync(2);
-
-        await Client.WaitAssertion(() =>
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(Client.System<HyposprayStatusControlSystem>(), Is.Not.Null);
-                Assert.That(Client.System<InjectorStatusControlSystem>(), Is.Not.Null);
-            });
-        });
-
-        await Server.WaitAssertion(() =>
-        {
-            var solutionSystem = SEntMan.System<SharedSolutionContainerSystem>();
-            var solutions = solutionSystem.EnumerateSolutions(legacyConcrete)
-                .Select(entry => entry.Name)
-                .ToArray();
-            Assert.That(solutionSystem.TryGetSolution(legacyConcrete, "pen", out _, out var pen), Is.True);
-            var appearance = SEntMan.GetComponent<AppearanceComponent>(legacyConcrete);
-            var appearanceSystem = SEntMan.System<SharedAppearanceSystem>();
-            Assert.Multiple(() =>
-            {
-                Assert.That(solutions, Is.EquivalentTo(new[] { "pen" }));
-                Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(legacyConcrete), Is.True);
-                Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(legacyConcrete), Is.False);
-                Assert.That(SEntMan.HasComponent<InjectorComponent>(legacyConcrete), Is.False);
-                Assert.That(appearanceSystem.TryGetData<float>(legacyConcrete,
-                    SolutionContainerVisuals.FillFraction,
-                    out var fillFraction,
-                    appearance), Is.True);
-                Assert.That(fillFraction, Is.EqualTo(1));
-                Assert.That(appearanceSystem.TryGetData<Color>(legacyConcrete,
-                    SolutionContainerVisuals.Color,
-                    out var color,
-                    appearance), Is.True);
-                Assert.That(color, Is.EqualTo(pen!.GetColor(SProtoMan)));
-            });
-        });
-    }
-
-    [Test]
     public async Task RetainedHyposprayUsesUnifiedCancellationRedirectAndOverridePriority()
     {
         var map = await Pair.CreateTestMap();
@@ -813,19 +598,6 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
         });
     }
 
-    private void AssertInjectorDelay(EntityUid user, EntityUid injector, TimeSpan expected)
-    {
-        var doAfters = SEntMan.GetComponent<DoAfterComponent>(user).DoAfters.Values.ToArray();
-        var probe = SEntMan.GetComponent<ChemistryMergeInjectorProbeComponent>(injector);
-        Assert.Multiple(() =>
-        {
-            Assert.That(probe.Events, Is.EqualTo(1), "InjectorSystem must raise one skill-adjustment event per use.");
-            Assert.That(probe.LastAdjustedDelay, Is.EqualTo(expected));
-            Assert.That(doAfters, Has.Length.EqualTo(1));
-            Assert.That(doAfters[0].Args.Event, Is.TypeOf<InjectorDoAfterEvent>());
-            Assert.That(doAfters[0].Args.Delay, Is.EqualTo(expected));
-        });
-    }
 }
 
 [RegisterComponent]

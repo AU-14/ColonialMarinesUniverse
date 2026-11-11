@@ -44,12 +44,19 @@
     antagPrototype: StrikeOrganizerRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-strike-organizer
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: colonist
 
 - type: antag
   parent: CMUAntagColonyBase
   id: StrikeOrganizerRole
   name: roles-antag-strikeorganizer-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-strikeorganizer-objective
 
 - type: startingGear

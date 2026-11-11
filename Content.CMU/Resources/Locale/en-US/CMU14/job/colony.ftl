@@ -171,6 +171,8 @@ au14-job-name-civilianpapofficer = PAP Officer
 au14-job-description-civilianpapofficer = You're an Officer of the UPP People's Armed Police. Provide the colony with rule of law and execute arrests and warrants.
 au14-job-prefix-civilianpapofficer = PAP
 
+au14-job-description-informalmsscollaborator = You're an informal collaborator for the Ministry of Space Security. Secretly monitor the colony, report subversive activity, and assist your handler with denunciations.
+
 au14-job-name-civilianheadofservice = Head of Service
 au14-job-description-civilianheadofservice = Ensure stores and services are stocked, kitchens are manned and the colony stays clean. Coordinate with your department and the foreman to ensure the colony's needs are met.
 au14-job-prefix-headofservice = HOS
@@ -267,3 +269,6 @@ cmu14-job-prefix-lawyer = LAWR
 cmu14-job-name-ppo = PPO
 cmu14-job-description-ppo = Personal Protection Officer, you are here to protect the VIP.
 cmu14-job-prefix-ppo = PPO
+au14-job-name-civiliancmbdetective = CMB Detective
+au14-job-description-civiliancmbdetective = You're the Colonial Marshal Bureau's detective. Work crime scenes with your forensic scanner and camera, match evidence against the colony's records and firearm registry, and build the case the Marshal and deputies act on.
+au14-job-prefix-cmbdetective = CMBDET

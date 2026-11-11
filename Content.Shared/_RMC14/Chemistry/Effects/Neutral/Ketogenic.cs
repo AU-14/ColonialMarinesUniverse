@@ -17,13 +17,14 @@ public sealed partial class Ketogenic : RMCChemicalEffect
 {
     private static readonly ProtoId<DamageTypePrototype> PoisonType = "Poison";
     private static readonly ProtoId<StatusEffectPrototype> Unconscious = "Unconscious";
+    private const int CriticalOverdoseUnconsciousSeconds = 10; // CMU14: single source for the guidebook text and the effect
 
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
         return $"Removes [color=red]{PotencyPerSecond * 5}[/color] nutrients, causing hunger over time.\n" +
                $"Increases alcohol metabolism rate by [color=green]{PotencyPerSecond}[/color] units.\n" +
                $"Overdoses cause [color=red]{PotencyPerSecond * 5}[/color] nutrition loss, [color=red]{PotencyPerSecond}[/color] toxin damage, and a [color=red]{ActualPotency * 2.5}%[/color] chance of vomiting.\n" +
-               $"Critical overdoses will knock you unconscious for [color=red]10[/color] seconds";
+               $"Critical overdoses will knock you unconscious for [color=red]{CriticalOverdoseUnconsciousSeconds}[/color] seconds"; // CMU14
     }
 
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
@@ -64,7 +65,7 @@ public sealed partial class Ketogenic : RMCChemicalEffect
         status.TryAddStatusEffect<RMCUnconsciousComponent>(
             args.TargetEntity,
             Unconscious,
-            TimeSpan.FromSeconds(40),
+            TimeSpan.FromSeconds(CriticalOverdoseUnconsciousSeconds), // CMU14: was 40, guidebook promised 10
             true
         );
     }

@@ -28,6 +28,7 @@
     carrierWhitelist:
       components:
       - Synth
+      - Yautja # CMU14: Yautja may carry this caste too - CM-SS13's grab gate reaches MOB_SIZE_XENO (mob_grab.dm:82-89).
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -235,6 +236,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-acider-name
+    baseCaste: CMXenoRunner # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-acider-description
     popup: rmc-xeno-acider-popup
   - type: CMArmor

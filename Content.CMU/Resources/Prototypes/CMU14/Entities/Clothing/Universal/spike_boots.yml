@@ -23,3 +23,14 @@
     walkModifier: 0.9
     sprintModifier: 0.9
   - type: SpikeBoots
+
+# Keeps the spike boots' own slot, which also takes sidearms.
+- type: entity
+  parent: AU14SpikeBoots
+  id: CMUSpikeBootsFilled
+  suffix: Filled
+  components:
+  - type: ContainerFill
+    containers:
+      item:
+      - RMCM5Bayonet

@@ -9,7 +9,7 @@
     xmlns:lineup="clr-namespace:Content.Client.CMU14.Lobby"
     xmlns:info="clr-namespace:Content.Client.Info"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets"
-    xmlns:cmu="clr-namespace:Content.Client._CMU14.Interface">
+    xmlns:cmu="clr-namespace:Content.Client.CMU14.Interface">
     <!-- Background -->
     <TextureRect Access="Public" VerticalExpand="True" HorizontalExpand="True" Name="Background"
                  Stretch="KeepAspectCovered" />
@@ -59,6 +59,8 @@
                                             StyleClasses="ButtonBig" HorizontalExpand="True"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.Row}"
                                             Visible="False" />
+                                    <!-- CMU14: available before readying and during late join. -->
+                                    <lineup:CMUEventLobbyButtons />
                                     <!-- A rule, not just a gap. Ready/Join and Observe are ranked
                                          rather than equal, and off-theme two stacked buttons of the
                                          same fill read as one control without something between
@@ -124,7 +126,8 @@
                      target captures the subtree at its origin, so any offset between the two
                      shows up as the shaded copy sitting a few pixels off its original. Padding
                      therefore goes on the rows inside, never on Content itself. -->
-                <Control Name="LobbyCrtScreen" HorizontalExpand="True">
+                <!-- CMU14: capture the live content once through its CRT sibling. -->
+                <cmu:CrtScreenContainer Name="LobbyCrtScreen" HorizontalExpand="True">
                     <Control Name="LobbyCrtContent" HorizontalExpand="True">
                         <PanelContainer Name="LobbyCrtBacking" HorizontalExpand="True"
                                         VerticalExpand="True" />
@@ -179,6 +182,11 @@
                                               SeparationOverride="1" HorizontalExpand="True">
                                     <Button Name="AHelpButton" Access="Public" Text="{Loc 'ui-lobby-ahelp-button'}"
                                             StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True" />
+                                    <!-- CMU14 Lobby Admin Begin: admin menu toggle, shown by AdminUIController -->
+                                    <Button Name="AdminButton" Access="Public" Text="{Loc 'cmu-lobby-admin-button'}"
+                                            StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True"
+                                            Visible="False" />
+                                    <!-- CMU14 End -->
                                     <vote:VoteCallMenuButton Name="CallVoteButton" StyleClasses="CrtCommandCell"
                                                              HorizontalExpand="True" VerticalExpand="True" />
                                     <Button Name="OptionsButton" Access="Public" StyleClasses="CrtCommandCell"
@@ -230,7 +238,7 @@
                     </Control>
                     <cmu:CrtScreenControl Name="LobbyCrt" HorizontalExpand="True"
                                           VerticalExpand="True" />
-                </Control>
+                </cmu:CrtScreenContainer>
                     <!-- Scanlines over the chat, as an overlay rather than a shader pass. The full
                          pass has to capture its source to a texture, and capturing a live scrolling
                          subtree means its clipping and scroll offsets have to survive a re-entrant

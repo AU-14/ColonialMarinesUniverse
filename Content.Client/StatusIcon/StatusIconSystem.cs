@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Overlays; // CMU14: retain recently visible HUD entries across cache overflow.
 using Content.Shared._RMC14.Stealth;
 using Content.Shared.CCVar;
 using Content.Shared.Ghost.Components;
@@ -30,7 +31,7 @@ public sealed partial class StatusIconSystem : SharedStatusIconSystem
     private static readonly TimeSpan IconCacheLifetime = TimeSpan.FromSeconds(0.25);
     private const int MaxCachedIconEntities = 512;
 
-    private readonly Dictionary<EntityUid, CachedStatusIcons> _iconCache = new();
+    private readonly CMUOverlayCache<EntityUid, CachedStatusIcons> _iconCache = new(MaxCachedIconEntities); // CMU14: bounded per-entry eviction.
 
     private sealed class CachedStatusIcons
     {
@@ -95,11 +96,9 @@ public sealed partial class StatusIconSystem : SharedStatusIconSystem
 
         if (cached is null)
         {
-            if (_iconCache.Count > MaxCachedIconEntities)
-                _iconCache.Clear();
-
+            // CMU14: preserve other entities' current snapshots when a new entity enters view.
             cached = new CachedStatusIcons();
-            _iconCache[uid] = cached;
+            _iconCache.Set(uid, cached);
         }
 
         cached.Icons.Clear();

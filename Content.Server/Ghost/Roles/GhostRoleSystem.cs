@@ -73,6 +73,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
     private readonly Dictionary<ICommonSession, MakeGhostRoleEui> _openMakeGhostRoleUis = new();
 
     private static readonly ProtoId<JobPrototype> XenoLarvaRole = "CMXenoLarva";
+    private static readonly ProtoId<JobPrototype> CmuBloodbursterRole = "CMUJobPathogenBloodburster"; // CMU14
 
     [ViewVariables]
     public IReadOnlyCollection<Entity<GhostRoleComponent>> GhostRoles => _ghostRoles.Values;
@@ -305,7 +306,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         return player.AttachedEntity is not { } entity || HasComp<GhostComponent>(entity);
     }
 
-    private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role)
+    private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role, bool explicitRequest = false) // CMU14
     {
         if (!CanRequestGhostRole(player))
             return false;
@@ -329,7 +330,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!IsRoleAllowed(player, jobs, antags, role.Comp.Requirements))
             return false;
 
-        var attempt = new GhostRoleRequestAttemptEvent(player, role.Owner, role.Comp);
+        var attempt = new GhostRoleRequestAttemptEvent(player, role.Owner, role.Comp, ExplicitRequest: explicitRequest); // CMU14
         RaiseLocalEvent(role.Owner, ref attempt);
         return !attempt.Cancelled;
     }
@@ -390,6 +391,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         //     return;
         // }
         if (role.Comp.Taken
+            || IsPendingForceRole(role.Owner) // CMU14: staged force bodies still have reserved assignments.
             || MetaData(role.Owner).EntityPaused
             || IsBlockedXenoGhostRole(role.Owner))
         {
@@ -561,7 +563,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
-        if (!CanRequestGhostRole(player, roleEnt))
+        if (!CanRequestGhostRole(player, roleEnt, explicitRequest: true)) // CMU14: report custom eligibility denials only on a request.
             return;
         if (roleEnt.Comp.RaffleConfig is not null)
         {
@@ -1016,10 +1018,11 @@ public sealed partial class GhostRoleSystem : EntitySystem
                TryComp(uid, out MindContainerComponent? mind) && mind.HasMind;
     }
 
+    // CMU14: queue-only castes keep GhostRole for mind transfer, but cannot enter the raffle.
     private bool IsBlockedXenoGhostRole(EntityUid uid)
     {
         return TryComp(uid, out XenoComponent? xeno) &&
-               xeno.Role == XenoLarvaRole;
+               (xeno.Role == XenoLarvaRole || xeno.Role == CmuBloodbursterRole);
     }
 
     private void OnTakeoverTakeRole(EntityUid uid, GhostTakeoverAvailableComponent component, ref TakeGhostRoleEvent args)

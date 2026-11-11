@@ -11,9 +11,14 @@
       state: spp_pvt
   - type: Skills
     skills:
-      RMCSkillEndurance: 3
+      RMCSkillEndurance: 4
       RMCSkillFirearms: 3
-      RMCSkillCqc: 2
+      RMCSkillCqc: 3
+      RMCSkillFireman: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+      RMCSkillMedical: 2
+      RMCSkillMeleeWeapons: 1
       RMCSkillPolice: 1
   - type: JobPrefix
     prefix: cmu-raider-prefix
@@ -54,19 +59,30 @@
 - type: startingGear
   id: CMUGearRaider
   equipment:
-    head: RMCArmorHelmetMARSOC
+    head: CMUArmorHelmetRaider
     mask: RMCMaskBalaclavaMARSOC
-    ears: RMCHeadsetMARSOC
-    jumpsuit: CMUJumpsuitRaiderWebbingBuckshot
-    outerClothing: CMUArmorRaiderXM40
+    ears: CMUHeadsetRaider
+    jumpsuit: CMUJumpsuitRaider
+    outerClothing: CMUArmorRaider
     gloves: CMHandsBlackMarine
     shoes: CMBootsBlackFilled
-    suitstorage: CMUWeaponRifleXM40Raider
+    suitstorage: CMUWeaponRifleM54CMK1Raider
     id: CMUIDCardRaider
-    belt: RMCWeaponShotgunXM38Filled
+    belt: RMCBeltMarineMK1
     back: CMUSatchelRaider
-    pocket1: RMCPouchMedicalSocMarineRaiderFill
-    pocket2: RMCPouchToolsSocMarineRaiderFill
+    pocket1: CMUPouchMedicalRaiderFill
+    pocket2: RMCPouchFlareFilled
+  storage:
+    back:
+    - CMCrowbar
+    - CMScrewdriver
+    - CMWirecutter
+    - CMMultitool
+    - CMMagazineRifleM54CMK1
+    - CMMagazineRifleM54CMK1
+    - CMGrenadeHighExplosive
+    - CMGrenadeHighExplosive
+    - CMMRE
 
 - type: playTimeTracker
   id: CMUJobRaider

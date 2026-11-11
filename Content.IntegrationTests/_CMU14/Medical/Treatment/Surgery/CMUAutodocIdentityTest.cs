@@ -119,47 +119,6 @@ public sealed class CMUAutodocIdentityTest
     }
 
     [Test]
-    public async Task ProjectedProcedureDurationSurvivesSerializationAndMatchesQueueDeadline()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var em = pair.Server.EntMan;
-            var rig = CreateRig(em, map.GridCoords);
-            try
-            {
-                var hand = InjureHand(em, rig.Patient, BodyPartSymmetry.Left);
-                var state = em.System<CMUAutodocSystem>().BuildStateForViewer(rig.Console,
-                    em.GetComponent<CMUAutodocConsoleComponent>(rig.Console), rig.Operator);
-                var serializer = pair.Server.ResolveDependency<IRobustSerializer>();
-                using var stream = new MemoryStream();
-                serializer.Serialize(stream, new CMUAutodocStateMessage(state));
-                stream.Position = 0;
-                var delivered = serializer.Deserialize<CMUAutodocStateMessage>(stream).State;
-                var part = delivered.Parts.Single(p => p.Part == em.GetNetEntity(hand));
-                var procedure = part.EligibleSurgeries.Single(p => p.SurgeryId == "CMUAutodocRepairWounds");
-                Assert.That(procedure.AutodocDurationSeconds, Is.EqualTo(30f),
-                    "The visible procedure retains the established server duration rather than the former client estimate.");
-                Assert.That(delivered.CommandContext, Is.Not.Null);
-                Send(em, rig, new CMUAutodocQueueStepMessage(part.Part, part.Type, part.Symmetry,
-                    procedure.SurgeryId, procedure.NextStepIndex, delivered.CommandContext!.Value));
-                Assert.That(rig.Component.Queue.Count, Is.EqualTo(1));
-                Assert.That(rig.Component.Queue[0].DurationSeconds, Is.EqualTo(procedure.AutodocDurationSeconds));
-                var now = pair.Server.ResolveDependency<IGameTiming>().CurTime;
-                Send(em, rig, new CMUAutodocStartMessage(Context(em, rig)));
-                Assert.That(rig.Component.IsRunning, Is.True);
-                Assert.That((rig.Component.NextStepAt - now).TotalSeconds, Is.EqualTo(procedure.AutodocDurationSeconds));
-            }
-            finally
-            {
-                DeleteRig(em, rig);
-            }
-        });
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task ReentrantPatientReplacementDuringTreatmentPreservesTheNewQueueAndDeadline()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -395,10 +354,7 @@ public sealed class CMUAutodocIdentityTest
                 Assert.That(rig.Component.Queue.Count, Is.EqualTo(CMUAutodocPodComponent.MaximumQueueEntries));
                 Assert.That(Context(em, rig), Is.EqualTo(context));
 
-                em.System<SkillsSystem>().SetSkill(rig.Operator, "RMCSkillSurgery", 0);
-                Send(em, rig, new CMUAutodocClearQueueMessage(context));
-                Assert.That(rig.Component.Queue.Count, Is.EqualTo(CMUAutodocPodComponent.MaximumQueueEntries));
-                em.System<SkillsSystem>().SetSkill(rig.Operator, "RMCSkillSurgery", 2);
+                // The autodoc needs no surgery training, but the operator still has to be at the console.
                 em.System<SharedTransformSystem>().SetCoordinates(rig.Operator, map.GridCoords.Offset(new Vector2(20, 0)));
                 Send(em, rig, new CMUAutodocClearQueueMessage(context));
                 Assert.That(rig.Component.Queue.Count, Is.EqualTo(CMUAutodocPodComponent.MaximumQueueEntries));

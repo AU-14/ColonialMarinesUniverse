@@ -44,12 +44,19 @@
     antagPrototype: VigilanteRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-vigilante
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: cmb_dep
 
 - type: antag
   parent: CMUAntagColonyBase
   id: VigilanteRole
   name: cmu-antag-vigilante-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: cmu-antag-vigilante-objective
 
 - type: startingGear

@@ -32,14 +32,14 @@ public sealed partial class ColonyBountySystem : EntitySystem
 {
     [Dependency] private Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem _universalRecords = default!;
     [Dependency] private Content.Server.CMU14.CriminalRecords.CMUColonyRecordsSystem _colonyRecords = default!;
-    [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
-    [Dependency] private readonly CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
-    [Dependency] private readonly CriminalRecordsSystem _criminalRecords = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly ColonyBudgetSystem _colonyBudget = default!;
-    [Dependency] private readonly SuspectDescriptionSystem _suspectDescription = default!;
-    [Dependency] private readonly WantedSystem _wanted = default!;
+    [Dependency] private StationRecordsSystem _stationRecords = default!;
+    [Dependency] private CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
+    [Dependency] private CriminalRecordsSystem _criminalRecords = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
+    [Dependency] private SuspectDescriptionSystem _suspectDescription = default!;
+    [Dependency] private WantedSystem _wanted = default!;
 
     // Evidence scans already logged to a record; rescanning the same item must not spam the history
     private readonly HashSet<(uint Record, EntityUid Item)> _loggedEvidence = new();
@@ -55,7 +55,7 @@ public sealed partial class ColonyBountySystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        var enumerator = EntityManager.AllEntityQueryEnumerator<ColonyBountyComponent>();
+        var enumerator = AllEntityQuery<ColonyBountyComponent>();
         while (enumerator.MoveNext(out var uid, out var comp))
         {
             // Registration runs on the first update after spawn so runtime-added bounties

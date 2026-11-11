@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Door control animation studies · Garrison Redux</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #0d171d; color: #dfe9e7; }
+    body { max-width: 1320px; margin: auto; padding: 24px; }
+    h1 { font-size: 25px; margin-bottom: 8px; } h2 { font-size: 18px; }
+    p { color: #b4c6c7; line-height: 1.6; max-width: 1000px; }
+    a { color: #8ee1c8; } .badge { color: #ffd092; font-size: 13px; letter-spacing: .06em; }
+    .controls { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; padding: 18px; background: #192931; border-radius: 10px; }
+    button, select { padding: 9px 13px; border: 1px solid #48616a; border-radius: 5px; background: #253a43; color: inherit; }
+    button { cursor: pointer; } button:disabled { opacity: .5; cursor: default; }
+    label { display: flex; align-items: center; gap: 9px; } input[type=range] { width: 230px; }
+    .studies { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    article { background: #17262d; padding: 18px; border: 1px solid #2c434b; border-radius: 10px; }
+    .views { display: grid; grid-template-columns: 150px 1fr; gap: 10px; align-items: center; }
+    .source { width: 144px; height: 144px; image-rendering: pixelated; background: #0d171d; }
+    .model { display: block; width: 100%; height: 320px; touch-action: none; border: 1px solid #30484f; border-radius: 6px; }
+    .caption { font-size: 13px; color: #a6bdc1; } output { font-variant-numeric: tabular-nums; min-width: 65px; }
+    #error { color: #ffb3a0; white-space: pre-wrap; } .frame { min-height: 24px; font-size: 13px; color: #aad4c8; }
+    @media(max-width:900px) { .studies { grid-template-columns: 1fr; } .views { grid-template-columns: 130px 1fr; } .source { width: 120px; height: 120px; } }
+  </style>
+</head>
+<body>
+  <div class="badge">STABLE GARRISON REDUX · ANIMATION STUDIES</div>
+  <h1>Door controls: source and 3D motion</h1>
+  <p>Original sprite pixels form shallow 3D solids. The two control models now include these frame states and four export clips, with a native preview adapter that reads the game's sprite layers. Depth and rear construction remain inferred, and interactive native playback review is unfinished.</p>
+  <div class="controls">
+    <label>Sequence <select id="sequence" aria-label="Animation sequence">
+      <option value="Press">Successful press</option><option value="Denied">Access denied</option>
+      <option value="doorctrl">Idle source pose</option><option value="doorctrl0">Resource: doorctrl0</option>
+      <option value="doorctrl1">Resource: full press strip</option><option value="doorctrl-denied">Resource: denied strip</option>
+      <option value="doorctrl-p">Resource: power overlay alone</option><option value="doorctrl-open">Resource: open pose</option>
+    </select></label>
+    <button id="play" disabled>Play</button><button id="reset" disabled>Reset</button>
+    <label><input id="power" type="checkbox" checked> Powered</label>
+    <label>Time <input id="time" type="range" min="0" max="1.25" step="0.001" value="0" aria-label="Animation time"></label>
+    <output id="clock">0.000 s</output>
+  </div>
+  <p id="behavior" class="caption">Press and denied sequences last 1.25 seconds, restart their source strip at 0.5 seconds, and return to idle. Repeated Play presses are ignored while running.</p>
+  <div id="error" role="alert" hidden></div><div id="studies" class="studies"></div>
+  <p class="caption">Drag a 3D view to rotate it; scroll to zoom. The power checkbox can be changed during a clip. Full resource strips are separate from the shorter gameplay sequence. Mechanical articulation, material emission, remaining wall fits and native runtime review remain unfinished.</p>
+  <p><a href="./">Return to the Redux map</a> · <a href="../generated/state-inventory.json">Full state inventory</a> · <a href="../generated/button-animation-study/study.json">Timing and source evidence</a></p>
+  <script type="module" src="./button-animation.js"></script>
+</body>
+</html>

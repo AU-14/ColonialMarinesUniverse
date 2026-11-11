@@ -1,42 +1,74 @@
-﻿rmc-ghost-role-information-rcm-rules = You are a [color=yellow][bold]Royal Crown Marine[/bold][/color]. You are friendly to the UNMC.
+﻿# cmu edit start: lore names
+rmc-ghost-role-information-rcm-rules = You are a [color=yellow][bold]Royal Crown Marine[/bold][/color]. You are friendly to the USCM.
                                              You don't remember any of your previous life, and you don't remember anything you learned as a ghost.
                                              You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.
                                              You are absolutely [color=red]NOT[/color] allowed to remember, say, the name, appearance, etc. of your previous character.
+# cmu edit end
 
 rmc-ghost-role-information-rcm-description = Ensure the survival of the UNS ship, eliminate any hostiles, and assist the crew in any way possible.
 
-rmc-ghost-name-rcm-sgo = Royal Crown Marines Smart Gun Operator (Friendly)
+# cmu edit start: lore names
+rmc-ghost-name-rcm-sgo = Royal Marines Commando Smart Gun Operator (Friendly)
+# cmu edit end
 rmc-job-name-rcm-sgo = Smart Gun Operator
-rmc-job-prefix-rcm-sgo = RCM SGO
+# cmu edit start: lore names
+rmc-job-prefix-rcm-sgo = RMC SGO
+# cmu edit end
 
-rmc-ghost-name-rcm-commando = Royal Crown Marines Rifleman (Friendly)
+# cmu edit start: lore names
+rmc-ghost-name-rcm-commando = Royal Marines Commando Rifleman (Friendly)
+# cmu edit end
 rmc-job-name-rcm-commando = Rifleman
-rmc-job-prefix-rcm-commando = RCM RFN
+# cmu edit start: lore names
+rmc-job-prefix-rcm-commando = RMC RFN
+# cmu edit end
 
-rmc-ghost-name-rcm-marksman = Royal Crown Marines Marksman (Friendly)
+# cmu edit start: lore names
+rmc-ghost-name-rcm-marksman = Royal Marines Commando Marksman (Friendly)
+# cmu edit end
 rmc-job-name-rcm-marksman = Marksman
-rmc-job-prefix-rcm-marksman = RCM MKSMN
+# cmu edit start: lore names
+rmc-job-prefix-rcm-marksman = RMC MKSMN
+# cmu edit end
 
-rmc-ghost-name-rcm-breacher = Royal Crown Marines Breacher (Friendly)
+# cmu edit start: lore names
+rmc-ghost-name-rcm-breacher = Royal Marines Commando Breacher (Friendly)
+# cmu edit end
 rmc-job-name-rcm-breacher = Breacher
-rmc-job-prefix-rcm-breacher = RCM BRCH
+# cmu edit start: lore names
+rmc-job-prefix-rcm-breacher = RMC BRCH
+# cmu edit end
 
-rmc-ghost-name-rcm-medic = Royal Crown Marines Medical Technician (Friendly)
+# cmu edit start: lore names
+rmc-ghost-name-rcm-medic = Royal Marines Commando Medical Technician (Friendly)
+# cmu edit end
 rmc-job-name-rcm-medic = Medical Technician
-rmc-job-prefix-rcm-medic = RCM MED
+# cmu edit start: lore names
+rmc-job-prefix-rcm-medic = RMC MED
+# cmu edit end
 
-rmc-ghost-name-rcm-teamlead = Royal Crown Marines Team Leader (Friendly)
+# cmu edit start: lore names
+rmc-ghost-name-rcm-teamlead = Royal Marines Commando Team Leader (Friendly)
+# cmu edit end
 rmc-job-name-rcm-teamlead = Team Leader
-rmc-job-prefix-rcm-teamlead = RCM TL
+# cmu edit start: lore names
+rmc-job-prefix-rcm-teamlead = RMC TL
+# cmu edit end
 
 rmc-job-name-rcm-lieutenant = Lieutenant
-rmc-job-prefix-rcm-lieutenant = RCM LT
+# cmu edit start: lore names
+rmc-job-prefix-rcm-lieutenant = RMC LT
+# cmu edit end
 
 rmc-job-name-rcm-captain = Captain
-rmc-job-prefix-rcm-captain = RCM CAPT
+# cmu edit start: lore names
+rmc-job-prefix-rcm-captain = RMC CAPT
+# cmu edit end
 
 rmc-job-name-rcm-major = Major
-rmc-job-prefix-rcm-major = RCM MAJ
+# cmu edit start: lore names
+rmc-job-prefix-rcm-major = RMC MAJ
+# cmu edit end
 
 rmc-job-name-rcm-pve-rifleman = Rifleman
 rmc-job-prefix-rcm-pve-rifleman = RM

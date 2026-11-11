@@ -1,0 +1,197 @@
+- type: cmu3DModel
+  id: CMU3DDresserCloud
+  label: Wooden four-drawer dresser
+  status: draft
+  sourcePrototypes:
+  - Dresser
+  referencePrototype: Dresser
+  referenceRsi: /Textures/Structures/Furniture/furniture.rsi
+  referenceState: dresser
+  sourceDirections: 1
+  supportSurface: top central flat
+  description: 'Source-inspected brown wooden dresser with paired upper drawers, two
+    wide lower drawers, six brass knobs, four feet and stepped top molding. Width
+    is the original 27/32 tile source silhouette; physical depth and rear are inferred.
+    Static intact pose only. Source directions: one; saved snapCardinals behavior
+    unchanged. Draft requires full saved-map contact and native admission review.'
+  parts:
+  - label: lower cabinet floor
+    min: -0.375, -0.206, 0.0625
+    max: 0.375, 0.218, 0.104
+    color: '#482818'
+  - label: rear timber panel
+    min: -0.375, 0.19, 0.09
+    max: 0.375, 0.218, 0.718
+    color: '#683820'
+  - label: left cabinet side
+    min: -0.40625, -0.21875, 0.0625
+    max: -0.34375, 0.21875, 0.71875
+    color: '#784020'
+  - label: right cabinet side
+    min: 0.34375, -0.21875, 0.0625
+    max: 0.40625, 0.21875, 0.71875
+    color: '#683820'
+  - label: timber foot
+    min: -0.39, -0.199, 0
+    max: -0.328, -0.149, 0.11
+    color: '#382010'
+  - label: timber foot
+    min: -0.39, 0.149, 0
+    max: -0.328, 0.199, 0.11
+    color: '#382010'
+  - label: timber foot
+    min: 0.328, -0.199, 0
+    max: 0.39, -0.149, 0.11
+    color: '#382010'
+  - label: timber foot
+    min: 0.328, 0.149, 0
+    max: 0.39, 0.199, 0.11
+    color: '#382010'
+  - label: front stile
+    min: -0.375, -0.2375, 0.09375
+    max: -0.34375, -0.2125, 0.704
+    color: '#804820'
+  - label: front stile
+    min: 0.34375, -0.2375, 0.09375
+    max: 0.375, -0.2125, 0.704
+    color: '#804820'
+  - label: dark front recess
+    min: -0.34375, -0.219, 0.104
+    max: 0.34375, -0.199, 0.69
+    color: '#382010'
+  - label: drawer 1-1 body
+    min: -0.328125, -0.232, 0.109375
+    max: 0.328125, 0.13, 0.273438
+    color: '#603818'
+  - label: drawer 1-1 inset front
+    min: -0.304125, -0.242, 0.130375
+    max: 0.304125, -0.231, 0.252375
+    color: '#784020'
+  - label: drawer 1-1 upper lip
+    min: -0.322125, -0.251, 0.246375
+    max: 0.322125, -0.23, 0.273375
+    color: '#804828'
+  - label: drawer 1-1 lower lip
+    min: -0.319125, -0.251, 0.111375
+    max: 0.319125, -0.23, 0.134375
+    color: '#683820'
+  - label: drawer 1-1 brass base 0
+    min: -0.225125, -0.258, 0.184375
+    max: -0.181125, -0.239, 0.226375
+    color: '#976939'
+  - label: drawer 1-1 brass knob 0
+    min: -0.21875, -0.272, 0.194375
+    max: -0.1875, -0.256, 0.225625
+    color: '#E8A515'
+  - label: drawer 1-1 brass base 1
+    min: 0.181125, -0.258, 0.184375
+    max: 0.225125, -0.239, 0.226375
+    color: '#976939'
+  - label: drawer 1-1 brass knob 1
+    min: 0.1875, -0.272, 0.194375
+    max: 0.21875, -0.256, 0.225625
+    color: '#E8A515'
+  - label: drawer 2-1 body
+    min: -0.328125, -0.232, 0.296875
+    max: 0.328125, 0.13, 0.460938
+    color: '#603818'
+  - label: drawer 2-1 inset front
+    min: -0.304125, -0.242, 0.317875
+    max: 0.304125, -0.231, 0.439875
+    color: '#784020'
+  - label: drawer 2-1 upper lip
+    min: -0.322125, -0.251, 0.433875
+    max: 0.322125, -0.23, 0.460875
+    color: '#804828'
+  - label: drawer 2-1 lower lip
+    min: -0.319125, -0.251, 0.298875
+    max: 0.319125, -0.23, 0.321875
+    color: '#683820'
+  - label: drawer 2-1 brass base 0
+    min: -0.225125, -0.258, 0.371875
+    max: -0.181125, -0.239, 0.413875
+    color: '#976939'
+  - label: drawer 2-1 brass knob 0
+    min: -0.21875, -0.272, 0.381875
+    max: -0.1875, -0.256, 0.413125
+    color: '#E8A515'
+  - label: drawer 2-1 brass base 1
+    min: 0.181125, -0.258, 0.371875
+    max: 0.225125, -0.239, 0.413875
+    color: '#976939'
+  - label: drawer 2-1 brass knob 1
+    min: 0.1875, -0.272, 0.381875
+    max: 0.21875, -0.256, 0.413125
+    color: '#E8A515'
+  - label: drawer 3-1 body
+    min: -0.328125, -0.232, 0.484375
+    max: -0.017, 0.13, 0.648438
+    color: '#603818'
+  - label: drawer 3-1 inset front
+    min: -0.304125, -0.242, 0.505375
+    max: -0.041, -0.231, 0.627375
+    color: '#784020'
+  - label: drawer 3-1 upper lip
+    min: -0.322125, -0.251, 0.621375
+    max: -0.023, -0.23, 0.648375
+    color: '#804828'
+  - label: drawer 3-1 lower lip
+    min: -0.319125, -0.251, 0.486375
+    max: -0.026, -0.23, 0.509375
+    color: '#683820'
+  - label: drawer 3-1 brass base 0
+    min: -0.194562, -0.258, 0.559375
+    max: -0.150563, -0.239, 0.601375
+    color: '#976939'
+  - label: drawer 3-1 brass knob 0
+    min: -0.188188, -0.272, 0.569375
+    max: -0.156938, -0.256, 0.600625
+    color: '#E8A515'
+  - label: drawer 3-2 body
+    min: 0.017, -0.232, 0.484375
+    max: 0.328125, 0.13, 0.648438
+    color: '#603818'
+  - label: drawer 3-2 inset front
+    min: 0.041, -0.242, 0.505375
+    max: 0.304125, -0.231, 0.627375
+    color: '#784020'
+  - label: drawer 3-2 upper lip
+    min: 0.023, -0.251, 0.621375
+    max: 0.322125, -0.23, 0.648375
+    color: '#804828'
+  - label: drawer 3-2 lower lip
+    min: 0.026, -0.251, 0.486375
+    max: 0.319125, -0.23, 0.509375
+    color: '#683820'
+  - label: drawer 3-2 brass base 0
+    min: 0.150563, -0.258, 0.559375
+    max: 0.194562, -0.239, 0.601375
+    color: '#976939'
+  - label: drawer 3-2 brass knob 0
+    min: 0.156938, -0.272, 0.569375
+    max: 0.188188, -0.256, 0.600625
+    color: '#E8A515'
+  - label: top lower molding
+    min: -0.40625, -0.25, 0.6875
+    max: 0.40625, 0.25, 0.734375
+    color: '#5E351C'
+  - label: top central flat
+    min: -0.40625, -0.21875, 0.734375
+    max: 0.40625, 0.21875, 0.78125
+    color: '#804820'
+  - label: top front beveled lip
+    min: -0.375, -0.25, 0.734375
+    max: 0.375, -0.21875, 0.773438
+    color: '#784020'
+  - label: top rear beveled lip
+    min: -0.375, 0.21875, 0.734375
+    max: 0.375, 0.25, 0.773438
+    color: '#603818'
+  - label: top left rounded step
+    min: -0.421875, -0.171875, 0.734375
+    max: -0.40625, 0.171875, 0.765625
+    color: '#784020'
+  - label: top right rounded step
+    min: 0.40625, -0.171875, 0.734375
+    max: 0.421875, 0.171875, 0.765625
+    color: '#683820'

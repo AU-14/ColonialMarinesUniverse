@@ -14,10 +14,10 @@
   announceAsSurvivors: true
   partyspawn: CLFCommandoSpawnIntel
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_clf_shuttle.yml
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 

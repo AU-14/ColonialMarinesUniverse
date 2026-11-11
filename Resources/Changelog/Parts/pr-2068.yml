@@ -1,0 +1,14 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Cannibals can carve corpses with their starting kitchen knife using right-click
+    Slice.
+  type: Fix
+- message: Butchering requires the right-click Slice verb.
+  type: Tweak
+- message: We-Yu experiment crates keep their eggs when the round starts.
+  type: Fix
+- message: Blood puddles leave visible footprints and drag trails again.
+  type: Fix
+time: '2026-10-01T21:21:43.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2068

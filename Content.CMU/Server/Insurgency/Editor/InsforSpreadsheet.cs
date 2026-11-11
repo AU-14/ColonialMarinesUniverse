@@ -100,12 +100,12 @@ public static class InsforSpreadsheet
         }
 
         foreach (var p in protos.EnumeratePrototypes<PlatoonPrototype>()
-                     .OrderBy(p => p.Name, StringComparer.InvariantCultureIgnoreCase))
+                     .Select(p => (Proto: p, Name: string.IsNullOrWhiteSpace(p.Name) ? p.ID : Loc.GetString(p.Name)))
+                     .OrderBy(x => x.Name, StringComparer.InvariantCultureIgnoreCase))
         {
-            var name = string.IsNullOrWhiteSpace(p.Name) ? p.ID : p.Name;
-            var d = Disp(name, p.ID);
-            c.Platoons.Add((d, p.ID));
-            c.PlatoonDisp[p.ID] = d;
+            var d = Disp(p.Name, p.Proto.ID);
+            c.Platoons.Add((d, p.Proto.ID));
+            c.PlatoonDisp[p.Proto.ID] = d;
         }
 
         return c;

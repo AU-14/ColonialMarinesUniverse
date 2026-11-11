@@ -24,6 +24,7 @@ namespace Content.Client.Crayon.UI
             _menu = this.CreateWindowCenteredLeft<CrayonWindow>();
             _menu.OnColorSelected += SelectColor;
             _menu.OnSelected += Select;
+            _menu.OnCustomSelected += SelectCustom; // CMU14
             PopulateCrayons();
         }
 

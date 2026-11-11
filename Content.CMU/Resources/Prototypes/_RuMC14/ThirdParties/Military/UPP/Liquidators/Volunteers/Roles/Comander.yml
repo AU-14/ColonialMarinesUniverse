@@ -34,6 +34,7 @@
   - type: MarineOrders
   - type: RMCTrackable
   - type: RMCPointing
+  - type: PyroWhitelist
   - type: Language
     spokenLanguages:
     - Polish
@@ -108,7 +109,7 @@
     allowSpeech: true
     allowMovement: true
     name: Liquidator Comander
-    description: Вы член группы ликвидаторов UPP! Ваша задача выжечь дотла всю биологическую угрозу на колонии, ни шагу назад!
+    description: You are part of a UPP liquidator team! Your job is to burn every biological threat on the colony to the ground. Not one step back!
     job: RuMCUPPLiquidatorComander
     raffle:
       settings: short
@@ -124,13 +125,12 @@
     head: RMCHardhatOrange
     belt: AU14BeltUtilityFilled
     pocket1: AU14PouchIFAKFill
-    pocket2: AU14PouchIFAKFill
+    # Two hands carry the spare tanks, so the CBRN kit rides in a pocket.
+    pocket2: AU14CBRNKitUPP
     back: RMCBackpackBroilerUPP
     ears: RuMCHeadsetLiquidator
     suitstorage: RMCWeaponFlamerSpecUPP
   inhand:
-    - AU14CBRNKitUPP
-    - RuMCTankFlamerRLargeUPP
     - RuMCTankFlamerRLargeUPP
 
 - type: jobIcon

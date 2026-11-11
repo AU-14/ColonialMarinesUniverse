@@ -17,6 +17,7 @@ public sealed partial class DumpableSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private SharedStorageSystem _storage = default!; // CMU14
 
     [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!;
 
@@ -130,6 +131,7 @@ public sealed partial class DumpableSystem : EntitySystem
 
         // TODO: Remove OrderBy when this issue is fixed in RT https://github.com/space-wizards/RobustToolbox/issues/6241
         var dumpQueue = new Queue<EntityUid>(storage.Container.ContainedEntities.OrderBy(e => GetNetEntity(e)));
+        using var repacking = _storage.DeferRepacking((uid, storage)); // CMU14: keep partial dumps compact without repacking each removal.
 
         var evt = new DumpEvent(dumpQueue, args.Args.User, false, false);
         RaiseLocalEvent(target, ref evt);

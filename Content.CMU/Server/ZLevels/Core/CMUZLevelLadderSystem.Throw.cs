@@ -47,7 +47,7 @@ public sealed partial class CMUZLevelLadderSystem
             return;
 
         var direction = ThrowDirection(offset);
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu-zlevel-ladder-throw-start-self", ("item", item), ("direction", direction)),
             Loc.GetString("cmu-zlevel-ladder-throw-start-others", ("user", user), ("item", item), ("direction", direction)),
             user,

@@ -12,9 +12,9 @@
   id: BadBloodClanThreat
   lorePrimer: AU14PrimerThreatBadBlood
   roundstartspawns: badBloodClanParty
-  whitelistedgamemodes:
+  whitelistedGamemodes:
   - DistressSignal
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - ColonyFall
   jobScaling: DefaultDistressScale
   spawnExtraVoteMembers: false

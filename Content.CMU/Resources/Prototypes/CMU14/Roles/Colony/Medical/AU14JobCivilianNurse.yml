@@ -8,12 +8,12 @@
   roundComponents:
   - type: Skills
     skills:
-      RMCSkillFireman: 1
+      RMCSkillFireman: 2
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
-      RMCSkillMedical: 2
-      RMCSkillSurgery: 1
-      RMCSkillFirearms: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillFirearms: 1
   - type: JobPrefix
     prefix: au14-job-prefix-nurse
   - type: TacticalMapIcon
@@ -64,8 +64,11 @@
   groups:
   - MedBackpackAU14
   - MedJumpsuitAU14
+  - CivJumpsuitAU14
   - MedHatsAU14
+  - CivHatsAU14
   - MedJacketAU14
+  - CivJacketAU14
   - MedGlovesAU14
   - CivFootwearAU14
   - MedMaskAU14

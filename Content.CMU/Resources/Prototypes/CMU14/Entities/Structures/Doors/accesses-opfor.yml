@@ -242,3 +242,36 @@
   components:
   - type: AccessReader
     access: [["AU14AccessOpfor"]]
+
+# Kitchen, for the mess technicians.
+- type: entity
+  parent: CMAirlockOpforLocked
+  id: CMAirlockOpforLockedKitchen
+  suffix: Kitchen, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]
+
+- type: entity
+  parent: CMAirlockOpforGlassLocked
+  id: CMAirlockOpforGlassLockedKitchen
+  suffix: Kitchen, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]
+
+- type: entity
+  parent: CMDoubleDoorOpforLocked
+  id: CMDoubleDoorOpforLockedKitchen
+  suffix: Kitchen, Opfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]
+
+- type: entity
+  parent: CMDoubleDoorOpforGlassLocked
+  id: CMDoubleDoorOpforGlassLockedKitchen
+  suffix: Kitchen, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["CMUAccessKitchen"]]

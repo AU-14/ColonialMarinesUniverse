@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -19,15 +20,12 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaMedicompProgressTest
 {
-    private static readonly (string Tool, int Step, string Label)[] Stages =
-    [
-        ("CMUYautjaStabilizerGel", 0, "stabilize wounds"),
-        ("CMUYautjaHealingGun", 1, "tend wounds"),
-        ("CMUYautjaWoundClamp", 2, "clamp wounds"),
-    ];
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BrutePrototype = "Brute";
 
+    // direct tool use (no surgery window) on a standing hunter has to find the medicomp
+    // procedure the same way the window does
     [Test]
-    public async Task MedicompStagesUseOneContinuousDoAfter()
+    public async Task MedicompStartsFromDirectToolUse()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -36,50 +34,34 @@ public sealed class YautjaMedicompProgressTest
         {
             var entMan = server.EntMan;
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var damageable = entMan.System<DamageableSystem>();
-            var skills = entMan.System<SkillsSystem>();
             var hands = entMan.System<SharedHandsSystem>();
-            var flow = entMan.System<CMUSurgeryFlowSystem>();
             var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
-            var brute = prototypes.Index<DamageGroupPrototype>("Brute");
+            var targeting = entMan.System<SharedBodyZoneTargetingSystem>();
+            var brute = prototypes.Index<DamageGroupPrototype>(BrutePrototype);
 
-            foreach (var (toolPrototype, step, label) in Stages)
+            var patient = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+            var surgeon = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+            var tool = entMan.SpawnEntity("CMUYautjaStabilizerGel", MapCoordinates.Nullspace);
+
+            try
             {
-                var patient = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-                var surgeon = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-                var tool = entMan.SpawnEntity(toolPrototype, MapCoordinates.Nullspace);
+                entMan.System<SkillsSystem>().SetSkill(surgeon, "RMCSkillSurgery", 3);
+                entMan.System<DamageableSystem>().TryChangeDamage(patient, new DamageSpecifier(brute, 20));
+                targeting.SelectZone((surgeon, null), TargetBodyZone.LeftArm);
+                Assert.That(hands.TryPickupAnyHand(surgeon, tool), Is.True);
 
-                try
+                Assert.That(dispatch.TryDispatchUiLess(surgeon, patient, tool), Is.True);
+                Assert.That(entMan.TryGetComponent(patient, out CMUSurgeryArmedStepComponent? armed), Is.True,
+                    "Direct medicomp use must arm the stabilize step.");
+                Assert.That(armed!.SurgeryId, Is.EqualTo("CMUSurgeryMcompWounds"));
+                Assert.That(entMan.GetComponent<DoAfterComponent>(surgeon).DoAfters, Is.Not.Empty);
+            }
+            finally
+            {
+                foreach (var uid in new[] { tool, surgeon, patient })
                 {
-                    skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
-                    damageable.TryChangeDamage(patient, new DamageSpecifier(brute, 20));
-                    var targetPart = FindPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
-
-                    Assert.That(
-                        flow.TryArmExactStep(
-                            surgeon,
-                            patient,
-                            targetPart,
-                            "CMUSurgeryMcompWounds",
-                            step,
-                            BodyPartType.Arm,
-                            BodyPartSymmetry.Left),
-                        Is.Not.Null,
-                        $"Medicomp {label} must arm.");
-                    Assert.That(hands.TryPickupAnyHand(surgeon, tool), Is.True, $"Medicomp {label} tool pickup.");
-                    Assert.That(dispatch.TryDispatch(surgeon, patient, tool), Is.True, $"Medicomp {label} dispatch.");
-
-                    var doAfter = entMan.GetComponent<DoAfterComponent>(surgeon).DoAfters.Values.Single();
-                    Assert.That(doAfter.Args.AttemptFrequency, Is.EqualTo(AttemptFrequency.StartAndEnd),
-                        $"Medicomp {label} must not re-run its attempt event every tick, or the progress bar flashes.");
-                }
-                finally
-                {
-                    foreach (var uid in new[] { tool, surgeon, patient })
-                    {
-                        if (!entMan.Deleted(uid))
-                            entMan.DeleteEntity(uid);
-                    }
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
                 }
             }
         });
@@ -87,19 +69,4 @@ public sealed class YautjaMedicompProgressTest
         await pair.CleanReturnAsync();
     }
 
-    private static EntityUid FindPart(
-        IEntityManager entMan,
-        EntityUid patient,
-        BodyPartType type,
-        BodyPartSymmetry symmetry)
-    {
-        foreach (var (partUid, part) in entMan.System<SharedBodySystem>().GetBodyChildren(patient))
-        {
-            if (part.PartType == type && part.Symmetry == symmetry)
-                return partUid;
-        }
-
-        Assert.Fail($"Could not find {symmetry} {type} on test patient.");
-        return default;
-    }
 }

@@ -39,16 +39,16 @@
     - SABRE ACTUAL
     - DAGGER ACTUAL
     - PIKE 6
+    - HALBERD ACTUAL
     - SUNRAY
     - OVERLORD
     - DUSTOFF
-    dfReportFactions:
-    - OPFOR
-    - CLF
     # loaded by the panel's quick setup alongside the wearer's own squad net
     standardNets:
     - label: CMD
       channel: radioGovforCommand
+    - label: ATC
+      channel: radioGovforJTAC
   - type: ANPRCCryptoSlot
   - type: PowerCellSlot
     cellSlotId: cell_slot
@@ -93,6 +93,7 @@
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
+    - radioGovforFoxtrot
   - type: UserInterface
     interfaces:
       enum.ANPRCRadioUI.Key:
@@ -100,9 +101,13 @@
       enum.AU14CallsignConsoleUI.Key:
         type: AU14CallsignConsoleBui
       enum.RMCTelephoneUiKey.Key:
-        type: RMCTelephoneBui
+        type: CMUTelephoneBui
       enum.StorageUiKey.Key:
         type: StorageBoundUserInterface
+      enum.CMUCasCallUi.Key:
+        type: CMUCasCallBui
+  # CAS uplink: the wearer files 9-line close air support requests to the faction's dropships
+  - type: CMUCasUplink
   # the set is a phone on the RMC exchange, on the same handset it uses for the net. its
   # side is the fill card's, set by ANPRCRadioSystem.Phone - not whoever is wearing it
   - type: RotaryPhone
@@ -147,16 +152,17 @@
     - ANVIL
     - HAMMER
     - RELAY 1
-    dfReportFactions:
-    - GOVFOR
     standardNets:
     - label: CMD
       channel: radioOpforCommand
+    - label: ORBT
+      channel: radioOpforJTAC
   - type: RTORelay
     bridgedChannels:
     - radioOpforAlpha
     - radioOpforBravo
     - radioOpforCharlie
+    - radioOpforVictor
 
 - type: entity
   parent: ANPRC117GRadio
@@ -175,8 +181,6 @@
     - MAGPIE
     - LONGSHOT
     - COURIER
-    dfReportFactions:
-    - GOVFOR
     standardNets:
     - label: CELL
       channel: radioCLF
@@ -224,6 +228,22 @@
       fill_card:
       - ANPRCFillCardOPFOR
 
+# vendor and requisitions stock, set and card both keyed to the side of the ship it turns
+# up on, or of the first marine to pick it up (ANPRCSideKeyingSystem). reads GOVFOR until then
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioIssued
+  suffix: Issue, keys to side
+  components:
+  - type: ANPRCSideKeyed
+    variants:
+      govfor: ANPRC117GRadioFilled
+      opfor: ANPRC117GRadioOPFORFilled
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardIssued
+
 - type: entity
   parent: ANPRC117GRadioCLF
   id: ANPRC117GRadioCLFFilled
@@ -269,8 +289,6 @@
     - BASE
     - FIREBRAND
     - MAGPIE
-    dfReportFactions:
-    - GOVFOR
     # a fixed station on a long watch, not a manpack working the net: the old flat 1 charge a second
     # while relaying, so a high-capacity cell holds the safehouse for well over two hours
     idleChargePerSecond: 0.5
@@ -325,8 +343,6 @@
     operatorFaction: clf
     requiredSlot: none
     relayOnly: true
-    dfReportFactions:
-    - GOVFOR
     # a cache relay is left alone for hours and has no POWER SAVE to reach for. keep it on the
     # old flat rate, so a high-capacity cell lasts well over two hours
     idleChargePerSecond: 0.5
@@ -398,3 +414,42 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ANPRCPhoneActionEvent
+
+- type: entity
+  id: CMUActionCasUplink
+  name: CAS uplink
+  description: Open the close air support uplink. Call a dropship onto a flare, a laser spot, or an offset from your position.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Devices/binoculars.rsi
+      state: designator_r
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUCasUplinkActionEvent
+
+# Fixed position called by the RTO over the radio.
+- type: entity
+  id: CMUCasRadioMark
+  name: radio mark
+  description: A grid reference called up the net. There is nothing here but the aircrew's attention.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/cas_flares.rsi
+    state: flare_flame
+    color: "#FF6A6A"
+    scale: 0.5, 0.5
+  - type: PointLight
+    color: "#FF6A6A"
+    radius: 1.5
+    energy: 0.8
+  - type: TimedDespawn
+    lifetime: 300
+  - type: RMCStaticZoomLevel
+  - type: Eye
+    zoom: 0.5, 0.5
+    drawFov: false

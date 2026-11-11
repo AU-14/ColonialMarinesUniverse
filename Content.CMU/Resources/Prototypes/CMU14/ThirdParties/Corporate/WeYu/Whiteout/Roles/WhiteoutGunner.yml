@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobPMCWhiteoutGunner
+  chevrons:
+    AU14RankWeYuEnforcerSenior:
+      entity: AU14ChevronWeYuEnforcerSenior
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: PMCWhiteoutGunner
@@ -26,7 +30,7 @@
     - Japanese
     currentLanguage: English
     defaultLanguage: English
-  name: cmu-whiteout-name-gunner
+  name: cmu-job-title-whiteout-gunner
   description: cmu-whiteout-description
   playTimeTracker: CMUJobPMCWhiteoutGunner
   ranks:

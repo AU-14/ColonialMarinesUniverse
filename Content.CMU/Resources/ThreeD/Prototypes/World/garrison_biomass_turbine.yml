@@ -1,0 +1,327 @@
+# Source-guided static turbine core. Separate struts and border keep their own entities.
+- type: cmu3DModel
+  id: CMU3DBiomassTurbine
+  label: Biomass power turbine core
+  status: draft
+  sourcePrototypes:
+  - RMCPropTurbine
+  referencePrototype: RMCPropTurbine
+  referenceRsi: _RMC14/Structures/Props/biomass_turbine.rsi
+  referenceState: biomass_turbine
+  sourceDirections: 1
+  useEntityRotation: true
+  description: 'Long axial turbine with curved bearing housings, a hollow segmented south intake and source-pixel
+    rotor recessed .190 tiles behind the front lip, paired source-pixel top service grilles, central metallic conduit,
+    red/brown collars and original badge. Side lugs at local Y +/-1.0 and Z .45-.62 meet separately saved support
+    entities without joining the empty gap between supports. Core remains inside its original 1x3 collider. 1.036-tile
+    height, elevation, concealed construction and pipe depth are inferred. Static saved biomass_turbine pose only:
+    the unused biomass_turbine-on resource has three .1-second frames, but no active machinery state or animation
+    is implemented here. Original source design and pixel crops are CC-BY-SA-3.0, cmss13 commit 0525b5ada7da1afcd9b260e76d5fea01500d9c8d
+    icons/obj/structures/props/industrial/biomass_turbine.dmi.'
+  parts:
+  - label: long axial dark turbine casing
+    min: -0.4350000, -1.1600000, 0.0450000
+    max: 0.4350000, 1.2000000, 0.9150000
+    color: '#151515'
+    shape: CylinderY
+  - label: rear metallic bearing housing
+    min: -0.4480000, 0.7400000, 0.0350000
+    max: 0.4480000, 1.2000000, 0.9250000
+    color: '#3D3D3D'
+    shape: CylinderY
+  - label: rounded rear end head
+    min: -0.4380000, 1.1200000, 0.0400000
+    max: 0.4380000, 1.4900000, 0.9200000
+    color: '#5B5B5B'
+    shape: Ellipsoid
+  - label: front metallic bearing housing
+    min: -0.4520000, -1.2500000, 0.0280000
+    max: 0.4520000, -0.6500000, 0.9320000
+    color: '#3D3D3D'
+    shape: CylinderY
+  - label: south intake hollow casing segment 1
+    min: 0.2709421, -1.4870000, 0.4325000
+    max: 0.5040579, -1.2000000, 0.5275000
+    color: '#5B5B5B'
+    pitch: -90.0
+  - label: south intake hollow casing segment 2
+    min: 0.2190269, -1.4870000, 0.6262500
+    max: 0.4521427, -1.2000000, 0.7212500
+    color: '#5B5B5B'
+    pitch: -60.0
+  - label: south intake hollow casing segment 3
+    min: 0.0771921, -1.4870000, 0.7680848
+    max: 0.3103079, -1.2000000, 0.8630848
+    color: '#5B5B5B'
+    pitch: -30.0
+  - label: south intake hollow casing segment 4
+    min: -0.1165579, -1.4870000, 0.8200000
+    max: 0.1165579, -1.2000000, 0.9150000
+    color: '#5B5B5B'
+    pitch: 0.0
+  - label: south intake hollow casing segment 5
+    min: -0.3103079, -1.4870000, 0.7680848
+    max: -0.0771921, -1.2000000, 0.8630848
+    color: '#5B5B5B'
+    pitch: 30.0
+  - label: south intake hollow casing segment 6
+    min: -0.4521427, -1.4870000, 0.6262500
+    max: -0.2190269, -1.2000000, 0.7212500
+    color: '#5B5B5B'
+    pitch: 60.0
+  - label: south intake hollow casing segment 7
+    min: -0.5040579, -1.4870000, 0.4325000
+    max: -0.2709421, -1.2000000, 0.5275000
+    color: '#5B5B5B'
+    pitch: -90.0
+  - label: south intake hollow casing segment 8
+    min: -0.4521427, -1.4870000, 0.2387500
+    max: -0.2190269, -1.2000000, 0.3337500
+    color: '#5B5B5B'
+    pitch: -60.0
+  - label: south intake hollow casing segment 9
+    min: -0.3103079, -1.4870000, 0.0969152
+    max: -0.0771921, -1.2000000, 0.1919152
+    color: '#5B5B5B'
+    pitch: -30.0
+  - label: south intake hollow casing segment 10
+    min: -0.1165579, -1.4870000, 0.0450000
+    max: 0.1165579, -1.2000000, 0.1400000
+    color: '#5B5B5B'
+    pitch: 0.0
+  - label: south intake hollow casing segment 11
+    min: 0.0771921, -1.4870000, 0.0969152
+    max: 0.3103079, -1.2000000, 0.1919152
+    color: '#5B5B5B'
+    pitch: 30.0
+  - label: south intake hollow casing segment 12
+    min: 0.2190269, -1.4870000, 0.2387500
+    max: 0.4521427, -1.2000000, 0.3337500
+    color: '#5B5B5B'
+    pitch: 60.0
+  - label: south intake annular steel lip segment 1
+    min: 0.2709421, -1.4950000, 0.4325000
+    max: 0.5040579, -1.4800000, 0.5275000
+    color: '#898989'
+    pitch: -90.0
+  - label: south intake annular steel lip segment 2
+    min: 0.2190269, -1.4950000, 0.6262500
+    max: 0.4521427, -1.4800000, 0.7212500
+    color: '#898989'
+    pitch: -60.0
+  - label: south intake annular steel lip segment 3
+    min: 0.0771921, -1.4950000, 0.7680848
+    max: 0.3103079, -1.4800000, 0.8630848
+    color: '#898989'
+    pitch: -30.0
+  - label: south intake annular steel lip segment 4
+    min: -0.1165579, -1.4950000, 0.8200000
+    max: 0.1165579, -1.4800000, 0.9150000
+    color: '#898989'
+    pitch: 0.0
+  - label: south intake annular steel lip segment 5
+    min: -0.3103079, -1.4950000, 0.7680848
+    max: -0.0771921, -1.4800000, 0.8630848
+    color: '#898989'
+    pitch: 30.0
+  - label: south intake annular steel lip segment 6
+    min: -0.4521427, -1.4950000, 0.6262500
+    max: -0.2190269, -1.4800000, 0.7212500
+    color: '#898989'
+    pitch: 60.0
+  - label: south intake annular steel lip segment 7
+    min: -0.5040579, -1.4950000, 0.4325000
+    max: -0.2709421, -1.4800000, 0.5275000
+    color: '#898989'
+    pitch: -90.0
+  - label: south intake annular steel lip segment 8
+    min: -0.4521427, -1.4950000, 0.2387500
+    max: -0.2190269, -1.4800000, 0.3337500
+    color: '#898989'
+    pitch: -60.0
+  - label: south intake annular steel lip segment 9
+    min: -0.3103079, -1.4950000, 0.0969152
+    max: -0.0771921, -1.4800000, 0.1919152
+    color: '#898989'
+    pitch: -30.0
+  - label: south intake annular steel lip segment 10
+    min: -0.1165579, -1.4950000, 0.0450000
+    max: 0.1165579, -1.4800000, 0.1400000
+    color: '#898989'
+    pitch: 0.0
+  - label: south intake annular steel lip segment 11
+    min: 0.0771921, -1.4950000, 0.0969152
+    max: 0.3103079, -1.4800000, 0.1919152
+    color: '#898989'
+    pitch: 30.0
+  - label: south intake annular steel lip segment 12
+    min: 0.2190269, -1.4950000, 0.2387500
+    max: 0.4521427, -1.4800000, 0.3337500
+    color: '#898989'
+    pitch: 60.0
+  - label: south intake dark recessed backing
+    min: -0.3400000, -1.3010000, 0.1400000
+    max: 0.3400000, -1.2850000, 0.8200000
+    color: '#131313'
+    shape: CylinderY
+  - label: original intake rotor pixels
+    min: -0.2800000, -1.3050000, 0.3050000
+    max: 0.2800000, -1.3020000, 0.6550000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassTurbineIntake
+    surfaceAxis: XZ
+  - label: rear burgundy casing collar
+    min: -0.4530000, 0.6500000, 0.0270000
+    max: 0.4530000, 0.7500000, 0.9330000
+    color: '#661E25'
+    shape: CylinderY
+  - label: front burgundy casing collar
+    min: -0.4570000, -0.6200000, 0.0230000
+    max: 0.4570000, -0.4900000, 0.9370000
+    color: '#661E25'
+    shape: CylinderY
+  - label: rear brown bearing shoulder
+    min: -0.4260000, 0.7600000, 0.0540000
+    max: 0.4260000, 0.8800000, 0.9060000
+    color: '#735A4D'
+    shape: CylinderY
+  - label: front brown bearing shoulder
+    min: -0.4300000, -0.7500000, 0.0500000
+    max: 0.4300000, -0.6300000, 0.9100000
+    color: '#735A4D'
+    shape: CylinderY
+  - label: left recessed vent-bank plinth
+    min: -0.2850000, -0.1250000, 0.7950000
+    max: -0.0750000, 0.6450000, 0.9300000
+    color: '#4F2B24'
+  - label: right recessed vent-bank plinth
+    min: 0.0750000, -0.1250000, 0.7950000
+    max: 0.2850000, 0.6450000, 0.9300000
+    color: '#4F2B24'
+  - label: original left service grille
+    min: -0.2710000, -0.1050000, 0.9320000
+    max: -0.0830000, 0.6150000, 0.9360000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassTurbineLeftVent
+    surfaceAxis: XY
+  - label: original right service grille
+    min: 0.0830000, -0.1050000, 0.9320000
+    max: 0.2710000, 0.6150000, 0.9360000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassTurbineRightVent
+    surfaceAxis: XY
+  - label: central metallic conduit
+    min: -0.0660000, -0.2400000, 0.8750000
+    max: 0.0660000, 0.6800000, 1.0070000
+    color: '#898989'
+    shape: CylinderY
+  - label: central conduit blue-grey underpipe
+    min: -0.0710000, -0.2200000, 0.8340000
+    max: 0.0710000, 0.6500000, 0.9760000
+    color: '#243137'
+    shape: CylinderY
+  - label: central upper conduit clamp
+    min: -0.0830000, 0.3450000, 0.9580000
+    max: 0.0830000, 0.4080000, 1.0180000
+    color: '#661E25'
+  - label: central lower conduit clamp
+    min: -0.0830000, 0.0950000, 0.9580000
+    max: 0.0830000, 0.1580000, 1.0180000
+    color: '#661E25'
+  - label: front bearing top block
+    min: -0.2130000, -0.9000000, 0.7700000
+    max: 0.2130000, -0.4700000, 0.9430000
+    color: '#3D3D3D'
+  - label: original battered bearing pixels
+    min: -0.1875000, -0.8300000, 0.9440000
+    max: 0.1875000, -0.5175000, 0.9480000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassTurbineBearing
+    surfaceAxis: XY
+  - label: front warning badge mounting pad
+    min: -0.1150000, -1.2670000, 0.8750000
+    max: 0.1150000, -1.0920000, 0.9530000
+    color: '#616161'
+  - label: original red and yellow warning badge
+    min: -0.0937500, -1.2420000, 0.9540000
+    max: 0.0937500, -1.1170000, 0.9580000
+    color: '#FFFFFF'
+    surface: CMU3DBiomassTurbineBadge
+    surfaceAxis: XY
+  - label: rear top bearing block
+    min: -0.1900000, 0.8650000, 0.7570000
+    max: 0.1900000, 1.2620000, 0.9550000
+    color: '#7D7D7D'
+  - label: rear visible shaft nose
+    min: -0.0680000, 1.1700000, 0.9000000
+    max: 0.0680000, 1.4050000, 1.0360000
+    color: '#B6B6B6'
+    shape: CylinderY
+  - label: long exposed side service line
+    min: -0.3860000, -0.4300000, 0.6650000
+    max: -0.3340000, 0.6200000, 0.7170000
+    color: '#7D7D7D'
+    shape: CylinderY
+  - label: dark side-line socket
+    min: -0.3990000, -0.4650000, 0.6510000
+    max: -0.3210000, -0.3920000, 0.7290000
+    color: '#243137'
+    shape: CylinderY
+  - label: long exposed side service line
+    min: 0.3340000, -0.4300000, 0.6650000
+    max: 0.3860000, 0.6200000, 0.7170000
+    color: '#7D7D7D'
+    shape: CylinderY
+  - label: dark side-line socket
+    min: 0.3210000, -0.4650000, 0.6510000
+    max: 0.3990000, -0.3920000, 0.7290000
+    color: '#243137'
+    shape: CylinderY
+  - label: side lug matching separate support entity
+    min: -0.4900000, -1.1000000, 0.4500000
+    max: -0.3780000, -0.9000000, 0.6200000
+    color: '#5B5B5B'
+  - label: low bearing pedestal foot
+    min: -0.3650000, -1.1200000, 0.0000000
+    max: -0.2950000, -0.8800000, 0.1700000
+    color: '#151515'
+  - label: side lug matching separate support entity
+    min: 0.3780000, -1.1000000, 0.4500000
+    max: 0.4900000, -0.9000000, 0.6200000
+    color: '#5B5B5B'
+  - label: low bearing pedestal foot
+    min: 0.2950000, -1.1200000, 0.0000000
+    max: 0.3650000, -0.8800000, 0.1700000
+    color: '#151515'
+  - label: side lug matching separate support entity
+    min: -0.4900000, 0.9000000, 0.4500000
+    max: -0.3780000, 1.1000000, 0.6200000
+    color: '#5B5B5B'
+  - label: low bearing pedestal foot
+    min: -0.3650000, 0.8800000, 0.0000000
+    max: -0.2950000, 1.1200000, 0.1700000
+    color: '#151515'
+  - label: side lug matching separate support entity
+    min: 0.3780000, 0.9000000, 0.4500000
+    max: 0.4900000, 1.1000000, 0.6200000
+    color: '#5B5B5B'
+  - label: low bearing pedestal foot
+    min: 0.2950000, 0.8800000, 0.0000000
+    max: 0.3650000, 1.1200000, 0.1700000
+    color: '#151515'
+  - label: rear brown oxidized top patch
+    min: -0.1700000, 1.0160000, 0.9550000
+    max: -0.0900000, 1.1670000, 0.9610000
+    color: '#4F2B24'
+  - label: rear bearing rust patch
+    min: 0.0750000, 0.9250000, 0.9550000
+    max: 0.1800000, 1.0650000, 0.9610000
+    color: '#43220C'
+  - label: front right bearing patina
+    min: 0.4440000, -0.9700000, 0.4350000
+    max: 0.4580000, -0.8300000, 0.6400000
+    color: '#3D1E09'
+  - label: front left bearing patina
+    min: -0.4580000, -1.0200000, 0.4350000
+    max: -0.4440000, -0.8800000, 0.5900000
+    color: '#43220C'

@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Projectiles;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged;
@@ -27,6 +28,7 @@ public sealed partial class AttachableIFFSystem : EntitySystem
 {
     [Dependency] private AttachableHolderSystem _holder = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -34,6 +36,10 @@ public sealed partial class AttachableIFFSystem : EntitySystem
 
     private const float FallbackProjectileLifetime = 10f;
     private const float FallbackProjectileRadius = 0.1f;
+
+    // CMU14: cap the IFF lane check at view range like CM13's fire prevention did. The full 10s
+    // flight path reached across whole ships and any friendly on a clear lane blocked the shot.
+    private const float IffCheckMaxDistance = 9f;
 
     private readonly HashSet<EntProtoId<IFFFactionComponent>> _factionBuffer = new();
 
@@ -92,7 +98,7 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         CheckPreventFriendlyFire(ent.Owner, ref args);
     }
 
-    private void CheckPreventFriendlyFire(EntityUid weapon, ref AttemptShootEvent args)
+    public void CheckPreventFriendlyFire(EntityUid weapon, ref AttemptShootEvent args) // CMU14: public for squad optic IFF
     {
         if (args.Cancelled ||
             args.ToCoordinates is not { } toCoordinates ||
@@ -164,7 +170,8 @@ public sealed partial class AttachableIFFSystem : EntitySystem
                     hasHit = true;
                     hitPosition = hit.HitPos;
 
-                    if (IsFriendlyEntity(hit.HitEntity))
+                    // CMU14: downed friendlies lie under the shot line and must not block firing
+                    if (IsFriendlyEntity(hit.HitEntity) && !_mobState.IsIncapacitated(hit.HitEntity))
                     {
                         return true;
                     }
@@ -181,23 +188,29 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         }
     }
 
+    // CMU14: the lane check follows the aim line, not a spread roll: an unwielded rifle's rest
+    // spread (about 95 degrees on an M4SPR) fanned the ray wide enough to miss close friendlies
     private Vector2 GetPredictedShotDirection(Entity<GunComponent> gun, Vector2 initialDirection)
     {
-        var baseAngle = initialDirection.ToAngle();
+        return initialDirection.Normalized();
 
-        var timeSinceLastFire = (_timing.CurTime - gun.Comp.LastFire).TotalSeconds;
-        var newTheta = MathHelper.Clamp(
-            gun.Comp.CurrentAngle.Theta + gun.Comp.AngleIncreaseModified.Theta - gun.Comp.AngleDecayModified.Theta * timeSinceLastFire,
-            gun.Comp.MinAngleModified.Theta,
-            gun.Comp.MaxAngleModified.Theta);
-
-        long tick = _timing.CurTick.Value;
-        tick = tick << 32;
-        tick |= (uint) GetNetEntity(gun.Owner).Id;
-        var random = new Xoroshiro64S(tick).NextFloat(-0.5f, 0.5f);
-
-        var shotAngle = new Angle(baseAngle.Theta + newTheta * random);
-        return shotAngle.ToVec();
+        // CMU14 Begin: spread rolls belong to real shots, not the safety check
+        // var baseAngle = initialDirection.ToAngle();
+        //
+        // var timeSinceLastFire = (_timing.CurTime - gun.Comp.LastFire).TotalSeconds;
+        // var newTheta = MathHelper.Clamp(
+        //     gun.Comp.CurrentAngle.Theta + gun.Comp.AngleIncreaseModified.Theta - gun.Comp.AngleDecayModified.Theta * timeSinceLastFire,
+        //     gun.Comp.MinAngleModified.Theta,
+        //     gun.Comp.MaxAngleModified.Theta);
+        //
+        // long tick = _timing.CurTick.Value;
+        // tick = tick << 32;
+        // tick |= (uint) GetNetEntity(gun.Owner).Id;
+        // var random = new Xoroshiro64S(tick).NextFloat(-0.5f, 0.5f);
+        //
+        // var shotAngle = new Angle(baseAngle.Theta + newTheta * random);
+        // return shotAngle.ToVec();
+        // CMU14 End
     }
 
     private bool IsFriendlyEntity(EntityUid target)
@@ -211,10 +224,9 @@ public sealed partial class AttachableIFFSystem : EntitySystem
         return false;
     }
 
+    // CMU14: IffCheckMaxDistance caps this at CM13 view range
     private float GetIffCheckDistance(Entity<GunComponent> gun)
-    {
-        return gun.Comp.ProjectileSpeedModified * FallbackProjectileLifetime;
-    }
+        => MathF.Min(gun.Comp.ProjectileSpeedModified * FallbackProjectileLifetime, IffCheckMaxDistance);
 
     private float GetIffCheckRadius(Entity<GunComponent> _)
     {

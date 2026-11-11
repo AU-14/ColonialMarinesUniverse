@@ -1,0 +1,2736 @@
+- type: cmu3DModel
+  id: CMU3DInheritedClosetsBioCloud
+  label: Bio source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMClosetBio
+  referencePrototype: CMClosetBio
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/bio.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#8C4213'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#8C4213'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#5A2A0C'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#8C4213'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#5A2A0C'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#5A2A0C'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#8C4213'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#5A2A0C'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#5A2A0C'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#A34D16'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#8C4213'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#5A2A0C'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#8C4213'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#A34D16'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#A34D16'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#A34D16'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#A34D16'
+  - label: original L3 hazard-level lettering
+    min: -0.109375, -0.329, 1.067125
+    max: 0.109375, -0.327, 1.223375
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt000
+    surfaceAxis: XZ
+  - label: original biohazard symbol
+    min: -0.140625, -0.329, 0.349625
+    max: 0.140625, -0.327, 0.630875
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt001
+    surfaceAxis: XZ
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#5A2A0C'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#4A230A'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#5A2A0C'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#5A2A0C'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedClosetsBioJanitorCloud
+  label: Bio Janitor source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMClosetBioJanitor
+  referencePrototype: CMClosetBioJanitor
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/bio_janitor.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#8A288E'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#8A288E'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#5F2E61'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#8A288E'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#5F2E61'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#5F2E61'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#8A288E'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#5F2E61'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#5F2E61'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#A630AA'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#8A288E'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#5F2E61'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#8A288E'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#A630AA'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#A630AA'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#A630AA'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#A630AA'
+  - label: original L3 hazard-level lettering
+    min: -0.109375, -0.329, 1.067125
+    max: 0.109375, -0.327, 1.223375
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt002
+    surfaceAxis: XZ
+  - label: original biohazard symbol
+    min: -0.140625, -0.329, 0.349625
+    max: 0.140625, -0.327, 0.630875
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt003
+    surfaceAxis: XZ
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#5F2E61'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#2A2926'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#5F2E61'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#5F2E61'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedClosetsBioScientistCloud
+  label: Bio Scientist source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMClosetBioScientist
+  - CMClosetBioScientistFilled
+  referencePrototype: CMClosetBioScientist
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/bio_scientist.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel upper purple
+    min: -0.25, 0.255, 0.82
+    max: 0.25, 0.29, 1.7
+    color: '#8A288E'
+  - label: full-depth side wall -1 upper purple
+    min: -0.25, -0.29, 0.82
+    max: -0.218, 0.29, 1.7
+    color: '#8A288E'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#5F2E61'
+  - label: full-depth side wall 1 upper purple
+    min: 0.218, -0.29, 0.82
+    max: 0.25, 0.29, 1.7
+    color: '#8A288E'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#5F2E61'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#5F2E61'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#8A288E'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#5F2E61'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#5F2E61'
+  - label: rear structural panel lower orange
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 0.82
+    color: '#8C4213'
+  - label: full-depth side wall -1 lower orange
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 0.82
+    color: '#8C4213'
+  - label: full-depth side wall 1 lower orange
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 0.82
+    color: '#8C4213'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#A630AA'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#8A288E'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#5F2E61'
+  - label: purple upper door
+    min: -0.205, -0.327, 0.82
+    max: 0.205, -0.307, 1.44
+    color: '#8A288E'
+  - label: orange lower door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 0.82
+    color: '#8C4213'
+  - label: lower orange door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 0.82
+    color: '#A34D16'
+  - label: upper purple door molding -1
+    min: -0.227, -0.338, 0.82
+    max: -0.205, -0.316, 1.465
+    color: '#A630AA'
+  - label: lower orange door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 0.82
+    color: '#A34D16'
+  - label: upper purple door molding 1
+    min: 0.205, -0.338, 0.82
+    max: 0.227, -0.316, 1.465
+    color: '#A630AA'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#A34D16'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#A630AA'
+  - label: original L3 hazard-level lettering
+    min: -0.109375, -0.329, 1.067125
+    max: 0.109375, -0.327, 1.223375
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt002
+    surfaceAxis: XZ
+  - label: original biohazard symbol
+    min: -0.140625, -0.329, 0.349625
+    max: 0.140625, -0.327, 0.630875
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt001
+    surfaceAxis: XZ
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#5F2E61'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#2A2926'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#5F2E61'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#5F2E61'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedClosetsToolclosetCloud
+  label: Toolcloset source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMClosetTool
+  - CMClosetToolFilled
+  referencePrototype: CMClosetTool
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/toolcloset.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#AA8234'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#72551E'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#72551E'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#72551E'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#72551E'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#72551E'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#D8AA46'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#AA8234'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#72551E'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#AA8234'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#D8AA46'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#D8AA46'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#D8AA46'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#D8AA46'
+  - label: original departmental identity emblem
+    min: -0.109375, -0.333, 1.035875
+    max: 0.109375, -0.327, 1.254625
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt004
+    surfaceAxis: XZ
+  - label: recessed ventilation slot 0.265
+    min: -0.151, -0.332, 0.265
+    max: 0.125, -0.327, 0.3
+    color: '#72551E'
+  - label: vent upper lip 0.265
+    min: -0.151, -0.338, 0.3
+    max: 0.125, -0.327, 0.32
+    color: '#D8AA46'
+  - label: recessed ventilation slot 0.375
+    min: -0.151, -0.332, 0.375
+    max: 0.125, -0.327, 0.41
+    color: '#72551E'
+  - label: vent upper lip 0.375
+    min: -0.151, -0.338, 0.41
+    max: 0.125, -0.327, 0.43
+    color: '#D8AA46'
+  - label: recessed ventilation slot 0.485
+    min: -0.151, -0.332, 0.485
+    max: 0.125, -0.327, 0.52
+    color: '#72551E'
+  - label: vent upper lip 0.485
+    min: -0.151, -0.338, 0.52
+    max: 0.125, -0.327, 0.54
+    color: '#D8AA46'
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#72551E'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#191919'
+  - label: green nonlocking latch
+    min: 0.164, -0.37, 0.865
+    max: 0.215, -0.355, 0.91
+    color: '#99CC33'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#72551E'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#72551E'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedLockersEngineerElectricCloud
+  label: Engineer Electric source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMLockerEngineerElectrical
+  referencePrototype: CMLockerEngineerElectrical
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Lockers/engineer_electric.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#AA8234'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#72551E'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#72551E'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#72551E'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#72551E'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#72551E'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#D8AA46'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#AA8234'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#72551E'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#AA8234'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#D8AA46'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#D8AA46'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#D8AA46'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#D8AA46'
+  - label: original departmental identity emblem
+    min: -0.109375, -0.333, 1.035875
+    max: 0.109375, -0.327, 1.254625
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt005
+    surfaceAxis: XZ
+  - label: recessed ventilation slot 0.265
+    min: -0.151, -0.332, 0.265
+    max: 0.125, -0.327, 0.3
+    color: '#72551E'
+  - label: vent upper lip 0.265
+    min: -0.151, -0.338, 0.3
+    max: 0.125, -0.327, 0.32
+    color: '#D8AA46'
+  - label: recessed ventilation slot 0.375
+    min: -0.151, -0.332, 0.375
+    max: 0.125, -0.327, 0.41
+    color: '#72551E'
+  - label: vent upper lip 0.375
+    min: -0.151, -0.338, 0.41
+    max: 0.125, -0.327, 0.43
+    color: '#D8AA46'
+  - label: recessed ventilation slot 0.485
+    min: -0.151, -0.332, 0.485
+    max: 0.125, -0.327, 0.52
+    color: '#72551E'
+  - label: vent upper lip 0.485
+    min: -0.151, -0.338, 0.52
+    max: 0.125, -0.327, 0.54
+    color: '#D8AA46'
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#72551E'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#191919'
+  - label: lock indicator dark housing
+    min: 0.16, -0.364, 0.89
+    max: 0.222, -0.344, 0.943
+    color: '#2A2926'
+  - label: source default red lock indicator
+    min: 0.193, -0.367, 0.905
+    max: 0.22, -0.363, 0.938
+    color: '#DC2D38'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#72551E'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#72551E'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedLockersEngineerWelderCloud
+  label: Engineer Welder source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMLockerEngineerWelder
+  referencePrototype: CMLockerEngineerWelder
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Lockers/engineer_welder.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#AA8234'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#72551E'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#72551E'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#72551E'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#AA8234'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#72551E'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#72551E'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#D8AA46'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#AA8234'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#72551E'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#AA8234'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#D8AA46'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#D8AA46'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#D8AA46'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#D8AA46'
+  - label: original departmental identity emblem
+    min: -0.109375, -0.333, 1.035875
+    max: 0.109375, -0.327, 1.254625
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt006
+    surfaceAxis: XZ
+  - label: recessed ventilation slot 0.265
+    min: -0.151, -0.332, 0.265
+    max: 0.125, -0.327, 0.3
+    color: '#72551E'
+  - label: vent upper lip 0.265
+    min: -0.151, -0.338, 0.3
+    max: 0.125, -0.327, 0.32
+    color: '#D8AA46'
+  - label: recessed ventilation slot 0.375
+    min: -0.151, -0.332, 0.375
+    max: 0.125, -0.327, 0.41
+    color: '#72551E'
+  - label: vent upper lip 0.375
+    min: -0.151, -0.338, 0.41
+    max: 0.125, -0.327, 0.43
+    color: '#D8AA46'
+  - label: recessed ventilation slot 0.485
+    min: -0.151, -0.332, 0.485
+    max: 0.125, -0.327, 0.52
+    color: '#72551E'
+  - label: vent upper lip 0.485
+    min: -0.151, -0.338, 0.52
+    max: 0.125, -0.327, 0.54
+    color: '#D8AA46'
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#72551E'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#191919'
+  - label: lock indicator dark housing
+    min: 0.16, -0.364, 0.89
+    max: 0.222, -0.344, 0.943
+    color: '#2A2926'
+  - label: source default red lock indicator
+    min: 0.193, -0.367, 0.905
+    max: 0.22, -0.363, 0.938
+    color: '#DC2D38'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#72551E'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#72551E'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedLockersMedicalCloud
+  label: Medical source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMLockerMedical
+  referencePrototype: CMLockerMedical
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Lockers/medical.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#426A58'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#426A58'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#384640'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#426A58'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#384640'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#384640'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#426A58'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#384640'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#384640'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#4E806A'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#426A58'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#384640'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#426A58'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#4E806A'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#4E806A'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#4E806A'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#4E806A'
+  - label: source-width identity panel side frame
+    min: -0.171875, -0.331, 1.004625
+    max: 0.171875, -0.327, 1.285875
+    color: '#3D3D3D'
+  - label: original departmental identity emblem
+    min: -0.140625, -0.333, 1.004625
+    max: 0.140625, -0.331, 1.285875
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt007
+    surfaceAxis: XZ
+  - label: recessed ventilation slot 0.265
+    min: -0.151, -0.332, 0.265
+    max: 0.125, -0.327, 0.3
+    color: '#384640'
+  - label: vent upper lip 0.265
+    min: -0.151, -0.338, 0.3
+    max: 0.125, -0.327, 0.32
+    color: '#4E806A'
+  - label: recessed ventilation slot 0.375
+    min: -0.151, -0.332, 0.375
+    max: 0.125, -0.327, 0.41
+    color: '#384640'
+  - label: vent upper lip 0.375
+    min: -0.151, -0.338, 0.41
+    max: 0.125, -0.327, 0.43
+    color: '#4E806A'
+  - label: recessed ventilation slot 0.485
+    min: -0.151, -0.332, 0.485
+    max: 0.125, -0.327, 0.52
+    color: '#384640'
+  - label: vent upper lip 0.485
+    min: -0.151, -0.338, 0.52
+    max: 0.125, -0.327, 0.54
+    color: '#4E806A'
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#384640'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#191919'
+  - label: lock indicator dark housing
+    min: 0.16, -0.364, 0.89
+    max: 0.222, -0.344, 0.943
+    color: '#2A2926'
+  - label: source default red lock indicator
+    min: 0.193, -0.367, 0.905
+    max: 0.22, -0.363, 0.938
+    color: '#DC2D38'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#384640'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#384640'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedLockersMedicalWhiteCloud
+  label: Medical White source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMLockerMedicalWhite
+  referencePrototype: CMLockerMedicalWhite
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Lockers/medical_white.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#D2D0CA'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#D2D0CA'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#82807A'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#D2D0CA'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#82807A'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#82807A'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#D2D0CA'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#82807A'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#82807A'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#E2E0DC'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#D2D0CA'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#82807A'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#D2D0CA'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#E2E0DC'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#E2E0DC'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#E2E0DC'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#E2E0DC'
+  - label: source-width identity panel side frame
+    min: -0.171875, -0.331, 1.004625
+    max: 0.171875, -0.327, 1.285875
+    color: '#23392F'
+  - label: original departmental identity emblem
+    min: -0.140625, -0.333, 1.004625
+    max: 0.140625, -0.331, 1.285875
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt008
+    surfaceAxis: XZ
+  - label: recessed ventilation slot 0.265
+    min: -0.151, -0.332, 0.265
+    max: 0.125, -0.327, 0.3
+    color: '#82807A'
+  - label: vent upper lip 0.265
+    min: -0.151, -0.338, 0.3
+    max: 0.125, -0.327, 0.32
+    color: '#E2E0DC'
+  - label: recessed ventilation slot 0.375
+    min: -0.151, -0.332, 0.375
+    max: 0.125, -0.327, 0.41
+    color: '#82807A'
+  - label: vent upper lip 0.375
+    min: -0.151, -0.338, 0.41
+    max: 0.125, -0.327, 0.43
+    color: '#E2E0DC'
+  - label: recessed ventilation slot 0.485
+    min: -0.151, -0.332, 0.485
+    max: 0.125, -0.327, 0.52
+    color: '#82807A'
+  - label: vent upper lip 0.485
+    min: -0.151, -0.338, 0.52
+    max: 0.125, -0.327, 0.54
+    color: '#E2E0DC'
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#82807A'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#191919'
+  - label: lock indicator dark housing
+    min: 0.16, -0.364, 0.89
+    max: 0.222, -0.344, 0.943
+    color: '#2A2926'
+  - label: source default red lock indicator
+    min: 0.193, -0.367, 0.905
+    max: 0.22, -0.363, 0.938
+    color: '#DC2D38'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#82807A'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#82807A'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedLockersPoliceCloud
+  label: Police source-specific storage cabinet
+  status: draft
+  sourcePrototypes:
+  - CMLockerPolice
+  referencePrototype: CMLockerPolice
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Lockers/police.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth five-panel shell, interior shelves, separate closed
+    door, header, hinge barrels, attached latch, raised moldings and original small
+    identity graphics. Source distinguishes this color/identity family from the inherited
+    generic gray cabinet. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.25, 0.255, 0.06
+    max: 0.25, 0.29, 1.7
+    color: '#743C3C'
+  - label: full-depth side wall -1
+    min: -0.25, -0.29, 0.04
+    max: -0.218, 0.29, 1.7
+    color: '#743C3C'
+  - label: grounded cabinet foot -1
+    min: -0.245, -0.265, 0
+    max: -0.223, 0.265, 0.075
+    color: '#543636'
+  - label: full-depth side wall 1
+    min: 0.218, -0.29, 0.04
+    max: 0.25, 0.29, 1.7
+    color: '#743C3C'
+  - label: grounded cabinet foot 1
+    min: 0.223, -0.265, 0
+    max: 0.245, 0.265, 0.075
+    color: '#543636'
+  - label: bottom pan
+    min: -0.25, -0.29, 0.035
+    max: 0.25, 0.29, 0.075
+    color: '#543636'
+  - label: top structural cap
+    min: -0.25, -0.29, 1.66
+    max: 0.25, 0.29, 1.7
+    color: '#743C3C'
+  - label: interior shelf 0.58
+    min: -0.223, -0.271, 0.58
+    max: 0.223, 0.261, 0.605
+    color: '#543636'
+  - label: interior shelf 1.09
+    min: -0.223, -0.271, 1.09
+    max: 0.223, 0.261, 1.115
+    color: '#543636'
+  - label: header front band
+    min: -0.25, -0.308, 1.48
+    max: 0.25, -0.29, 1.67
+    color: '#B34444'
+  - label: header inset field
+    min: -0.216, -0.315, 1.525
+    max: 0.216, -0.308, 1.64
+    color: '#743C3C'
+  - label: door shadow gasket
+    min: -0.22, -0.308, 0.1
+    max: 0.22, -0.286, 1.465
+    color: '#543636'
+  - label: separate closed steel door
+    min: -0.205, -0.327, 0.13
+    max: 0.205, -0.307, 1.44
+    color: '#743C3C'
+  - label: raised vertical door molding -1
+    min: -0.227, -0.338, 0.1
+    max: -0.205, -0.316, 1.465
+    color: '#B34444'
+  - label: raised vertical door molding 1
+    min: 0.205, -0.338, 0.1
+    max: 0.227, -0.316, 1.465
+    color: '#B34444'
+  - label: raised horizontal door molding 0.105
+    min: -0.224, -0.339, 0.105
+    max: 0.224, -0.316, 0.131
+    color: '#B34444'
+  - label: raised horizontal door molding 1.44
+    min: -0.224, -0.339, 1.44
+    max: 0.224, -0.316, 1.466
+    color: '#B34444'
+  - label: source-width identity panel side frame
+    min: -0.171875, -0.331, 1.004625
+    max: 0.171875, -0.327, 1.285875
+    color: '#3D3D3D'
+  - label: original departmental identity emblem
+    min: -0.140625, -0.333, 1.004625
+    max: 0.140625, -0.331, 1.285875
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt009
+    surfaceAxis: XZ
+  - label: recessed ventilation slot 0.265
+    min: -0.151, -0.332, 0.265
+    max: 0.125, -0.327, 0.3
+    color: '#543636'
+  - label: vent upper lip 0.265
+    min: -0.151, -0.338, 0.3
+    max: 0.125, -0.327, 0.32
+    color: '#B34444'
+  - label: recessed ventilation slot 0.375
+    min: -0.151, -0.332, 0.375
+    max: 0.125, -0.327, 0.41
+    color: '#543636'
+  - label: vent upper lip 0.375
+    min: -0.151, -0.338, 0.41
+    max: 0.125, -0.327, 0.43
+    color: '#B34444'
+  - label: recessed ventilation slot 0.485
+    min: -0.151, -0.332, 0.485
+    max: 0.125, -0.327, 0.52
+    color: '#543636'
+  - label: vent upper lip 0.485
+    min: -0.151, -0.338, 0.52
+    max: 0.125, -0.327, 0.54
+    color: '#B34444'
+  - label: door handle mount
+    min: 0.16, -0.35, 0.79
+    max: 0.217, -0.326, 0.88
+    color: '#543636'
+  - label: vertical door grip
+    min: 0.18, -0.366, 0.79
+    max: 0.202, -0.338, 0.9
+    color: '#191919'
+  - label: lock indicator dark housing
+    min: 0.16, -0.364, 0.89
+    max: 0.222, -0.344, 0.943
+    color: '#2A2926'
+  - label: source default red lock indicator
+    min: 0.193, -0.367, 0.905
+    max: 0.22, -0.363, 0.938
+    color: '#DC2D38'
+  - label: side hinge barrel 0.31
+    min: -0.244, -0.316, 0.31
+    max: -0.216, -0.278, 0.412
+    color: '#543636'
+    shape: CylinderZ
+  - label: side hinge barrel 1.22
+    min: -0.244, -0.316, 1.22
+    max: -0.216, -0.278, 1.322
+    color: '#543636'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedLockersGunCabinetCloud
+  label: Gray mesh-front gun storage cabinet
+  status: draft
+  sourcePrototypes:
+  - RMCLockerGunBase
+  - RMCLockerGunStorageBrig
+  - RMCLockerGunStorageCommand
+  referencePrototype: RMCLockerGunBase
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Lockers/gun_cabinet.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Wider gun-cabinet silhouette replaces narrow solid locker. Twenty-six
+    crossing mesh strands and four door-frame rails border real apertures into a recessed
+    empty shelf cavity. No opaque mesh backing and no invented firearms. Default closed/locked
+    source composition only; open, welding, labels, fill changes and transitions remain
+    unsupported. Physical depth, side/rear construction and height are inferred. No
+    native, saved-map, gameplay or fidelity approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: rear structural panel
+    min: -0.34, 0.245, 0.06
+    max: 0.34, 0.28, 1.7
+    color: '#4A4D52'
+  - label: full-depth side wall -1
+    min: -0.34, -0.28, 0.04
+    max: -0.308, 0.28, 1.7
+    color: '#4A4D52'
+  - label: grounded cabinet foot -1
+    min: -0.335, -0.255, 0
+    max: -0.313, 0.255, 0.075
+    color: '#2A2926'
+  - label: full-depth side wall 1
+    min: 0.308, -0.28, 0.04
+    max: 0.34, 0.28, 1.7
+    color: '#4A4D52'
+  - label: grounded cabinet foot 1
+    min: 0.313, -0.255, 0
+    max: 0.335, 0.255, 0.075
+    color: '#2A2926'
+  - label: bottom pan
+    min: -0.34, -0.28, 0.035
+    max: 0.34, 0.28, 0.075
+    color: '#2A2926'
+  - label: top structural cap
+    min: -0.34, -0.28, 1.66
+    max: 0.34, 0.28, 1.7
+    color: '#4A4D52'
+  - label: interior shelf 0.58
+    min: -0.313, -0.261, 0.58
+    max: 0.313, 0.251, 0.605
+    color: '#2A2926'
+  - label: interior shelf 1.09
+    min: -0.313, -0.261, 1.09
+    max: 0.313, 0.251, 1.115
+    color: '#2A2926'
+  - label: blue-gray header
+    min: -0.34, -0.302, 1.49
+    max: 0.34, -0.28, 1.68
+    color: '#4F5867'
+  - label: outer vertical face stile -0.308
+    min: -0.333, -0.335, 0.085
+    max: -0.283, -0.274, 1.49
+    color: '#3D3D3D'
+  - label: outer vertical face stile 0.308
+    min: 0.283, -0.335, 0.085
+    max: 0.333, -0.274, 1.49
+    color: '#3D3D3D'
+  - label: outer horizontal face rail 0.085
+    min: -0.332, -0.335, 0.085
+    max: 0.332, -0.275, 0.145
+    color: '#4A4D52'
+  - label: outer horizontal face rail 1.44
+    min: -0.332, -0.335, 1.44
+    max: 0.332, -0.275, 1.5
+    color: '#4A4D52'
+  - label: mesh door vertical frame -0.254
+    min: -0.272, -0.356, 0.19
+    max: -0.236, -0.331, 1.405
+    color: '#828282'
+  - label: mesh door vertical frame 0.244
+    min: 0.226, -0.356, 0.19
+    max: 0.262, -0.331, 1.405
+    color: '#828282'
+  - label: mesh door horizontal frame 0.19
+    min: -0.27, -0.356, 0.19
+    max: 0.262, -0.331, 0.223
+    color: '#828282'
+  - label: mesh door horizontal frame 1.37
+    min: -0.27, -0.356, 1.37
+    max: 0.262, -0.331, 1.403
+    color: '#828282'
+  - label: mesh vertical strand 0
+    min: -0.239, -0.35, 0.223
+    max: -0.225, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh vertical strand 1
+    min: -0.174, -0.35, 0.223
+    max: -0.16, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh vertical strand 2
+    min: -0.109, -0.35, 0.223
+    max: -0.095, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh vertical strand 3
+    min: -0.044, -0.35, 0.223
+    max: -0.03, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh vertical strand 4
+    min: 0.021, -0.35, 0.223
+    max: 0.035, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh vertical strand 5
+    min: 0.086, -0.35, 0.223
+    max: 0.1, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh vertical strand 6
+    min: 0.151, -0.35, 0.223
+    max: 0.165, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh vertical strand 7
+    min: 0.216, -0.35, 0.223
+    max: 0.23, -0.337, 1.37
+    color: '#5E5E5E'
+  - label: mesh horizontal strand 0
+    min: -0.25, -0.354, 0.235
+    max: 0.25, -0.341, 0.247
+    color: '#828282'
+  - label: mesh horizontal strand 1
+    min: -0.25, -0.354, 0.3
+    max: 0.25, -0.341, 0.312
+    color: '#828282'
+  - label: mesh horizontal strand 2
+    min: -0.25, -0.354, 0.365
+    max: 0.25, -0.341, 0.377
+    color: '#828282'
+  - label: mesh horizontal strand 3
+    min: -0.25, -0.354, 0.43
+    max: 0.25, -0.341, 0.442
+    color: '#828282'
+  - label: mesh horizontal strand 4
+    min: -0.25, -0.354, 0.495
+    max: 0.25, -0.341, 0.507
+    color: '#828282'
+  - label: mesh horizontal strand 5
+    min: -0.25, -0.354, 0.56
+    max: 0.25, -0.341, 0.572
+    color: '#828282'
+  - label: mesh horizontal strand 6
+    min: -0.25, -0.354, 0.625
+    max: 0.25, -0.341, 0.637
+    color: '#828282'
+  - label: mesh horizontal strand 7
+    min: -0.25, -0.354, 0.69
+    max: 0.25, -0.341, 0.702
+    color: '#828282'
+  - label: mesh horizontal strand 8
+    min: -0.25, -0.354, 0.755
+    max: 0.25, -0.341, 0.767
+    color: '#828282'
+  - label: mesh horizontal strand 9
+    min: -0.25, -0.354, 0.82
+    max: 0.25, -0.341, 0.832
+    color: '#828282'
+  - label: mesh horizontal strand 10
+    min: -0.25, -0.354, 0.885
+    max: 0.25, -0.341, 0.897
+    color: '#828282'
+  - label: mesh horizontal strand 11
+    min: -0.25, -0.354, 0.95
+    max: 0.25, -0.341, 0.962
+    color: '#828282'
+  - label: mesh horizontal strand 12
+    min: -0.25, -0.354, 1.015
+    max: 0.25, -0.341, 1.027
+    color: '#828282'
+  - label: mesh horizontal strand 13
+    min: -0.25, -0.354, 1.08
+    max: 0.25, -0.341, 1.092
+    color: '#828282'
+  - label: mesh horizontal strand 14
+    min: -0.25, -0.354, 1.145
+    max: 0.25, -0.341, 1.157
+    color: '#828282'
+  - label: mesh horizontal strand 15
+    min: -0.25, -0.354, 1.21
+    max: 0.25, -0.341, 1.222
+    color: '#828282'
+  - label: mesh horizontal strand 16
+    min: -0.25, -0.354, 1.275
+    max: 0.25, -0.341, 1.287
+    color: '#828282'
+  - label: mesh horizontal strand 17
+    min: -0.25, -0.354, 1.34
+    max: 0.25, -0.341, 1.352
+    color: '#828282'
+  - label: handle root
+    min: 0.257, -0.364, 0.75
+    max: 0.325, -0.315, 0.95
+    color: '#2A2926'
+  - label: raised handle grip
+    min: 0.294, -0.39, 0.78
+    max: 0.317, -0.353, 0.92
+    color: '#3D3D3D'
+  - label: red lock indicator
+    min: 0.307, -0.364, 0.98
+    max: 0.333, -0.325, 1.04
+    color: '#F62401'
+  - label: door hinge 0.29
+    min: -0.33, -0.344, 0.29
+    max: -0.255, -0.305, 0.4
+    color: '#5E5E5E'
+    shape: CylinderZ
+  - label: door hinge 1.23
+    min: -0.33, -0.344, 1.23
+    max: -0.255, -0.305, 1.34
+    color: '#5E5E5E'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DInheritedCratesPlasticCloud
+  label: Plastic source-specific crate
+  status: draft
+  sourcePrototypes:
+  - AU14CrateBoxboxofingredients
+  - AU14CrateFoodMRERMC
+  - RMCCrateFoodIngredients
+  referencePrototype: AU14CrateBoxboxofingredients
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/plastic.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#77766F'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#BEBEBE'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#BEBEBE'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#BEBEBE'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#BEBEBE'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#77766F'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#D5D2CB'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#77766F'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#77766F'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#77766F'
+    shape: CylinderX
+  - label: molded lid transverse divider -0.145
+    min: -0.155, -0.338, 0.555
+    max: -0.135, 0.336, 0.572
+    color: '#77766F'
+  - label: molded lid transverse divider 0.145
+    min: 0.135, -0.338, 0.555
+    max: 0.155, 0.336, 0.572
+    color: '#77766F'
+  - label: pale lid side border -1
+    min: -0.4285, -0.335, 0.555
+    max: -0.3945, 0.335, 0.58
+    color: '#F0EBE0'
+  - label: pale lid side border 1
+    min: 0.3945, -0.335, 0.555
+    max: 0.4285, 0.335, 0.58
+    color: '#F0EBE0'
+  - label: latch upper mount -0.31
+    min: -0.338, -0.368, 0.477
+    max: -0.282, -0.336, 0.526
+    color: '#F0EBE0'
+  - label: latch tongue -0.31
+    min: -0.328, -0.383, 0.408
+    max: -0.292, -0.353, 0.509
+    color: '#F0EBE0'
+  - label: latch upper mount 0.31
+    min: 0.282, -0.368, 0.477
+    max: 0.338, -0.336, 0.526
+    color: '#F0EBE0'
+  - label: latch tongue 0.31
+    min: 0.292, -0.383, 0.408
+    max: 0.328, -0.353, 0.509
+    color: '#F0EBE0'
+  - label: carry grip root -0.11
+    min: -0.124, -0.392, 0.381
+    max: -0.096, -0.341, 0.419
+    color: '#77766F'
+  - label: carry grip root 0.11
+    min: 0.096, -0.392, 0.381
+    max: 0.124, -0.341, 0.419
+    color: '#77766F'
+  - label: open front carry grip crossbar
+    min: -0.116, -0.416, 0.386
+    max: 0.116, -0.386, 0.414
+    color: '#77766F'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesSecureWeYaCloud
+  label: Secure We Ya source-specific crate
+  status: draft
+  sourcePrototypes:
+  - AU14CrateSecureWeYuDrugs
+  - CMUCrateSecureWYRandomExp
+  referencePrototype: AU14CrateSecureWeYuDrugs
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/secure_we_ya.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#0C0B0B'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#171715'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#171715'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#171715'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#171715'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#0C0B0B'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#34322F'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#0C0B0B'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#0C0B0B'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#0C0B0B'
+    shape: CylinderX
+  - label: paired silver retaining strap 0.205
+    min: 0.192, -0.353, 0.551
+    max: 0.218, 0.353, 0.573
+    color: '#92929C'
+  - label: paired silver front strap return 0.205
+    min: 0.192, -0.364, 0.01
+    max: 0.218, -0.337, 0.567
+    color: '#92929C'
+  - label: paired silver retaining strap 0.272
+    min: 0.259, -0.353, 0.551
+    max: 0.285, 0.353, 0.573
+    color: '#92929C'
+  - label: paired silver front strap return 0.272
+    min: 0.259, -0.364, 0.01
+    max: 0.285, -0.337, 0.567
+    color: '#92929C'
+  - label: latch upper mount -0.31
+    min: -0.338, -0.368, 0.477
+    max: -0.282, -0.336, 0.526
+    color: '#292725'
+  - label: latch tongue -0.31
+    min: -0.328, -0.383, 0.408
+    max: -0.292, -0.353, 0.509
+    color: '#292725'
+  - label: latch upper mount 0.31
+    min: 0.282, -0.368, 0.477
+    max: 0.338, -0.336, 0.526
+    color: '#292725'
+  - label: latch tongue 0.31
+    min: 0.292, -0.383, 0.408
+    max: 0.328, -0.353, 0.509
+    color: '#292725'
+  - label: left brass latch identity
+    min: -0.317, -0.387, 0.463
+    max: -0.293, -0.382, 0.506
+    color: '#CA6400'
+  - label: right brass latch identity
+    min: 0.293, -0.387, 0.463
+    max: 0.317, -0.382, 0.506
+    color: '#CA6400'
+  - label: yellow lower front strip
+    min: -0.37, -0.348, 0.07
+    max: -0.215, -0.345, 0.092
+    color: '#E5BD00'
+  - label: inset lock housing
+    min: -0.111, -0.375, 0.14
+    max: 0.111, -0.344, 0.24
+    color: '#52504B'
+  - label: lock slot
+    min: -0.08, -0.378, 0.181
+    max: 0.08, -0.375, 0.212
+    color: '#171715'
+  - label: default locked red diode
+    min: -0.044, -0.381, 0.187
+    max: -0.022, -0.377, 0.211
+    color: '#FF0000'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesSecureMedicalCloud
+  label: Secure Medical source-specific crate
+  status: draft
+  sourcePrototypes:
+  - CMCrateSecureSurgery
+  referencePrototype: CMCrateSecureSurgery
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/secure_medical.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#666860'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#9C9992'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#9C9992'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#9C9992'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#9C9992'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#666860'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#B3AFA8'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#666860'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#666860'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#666860'
+    shape: CylinderX
+  - label: green front restraint -0.33
+    min: -0.365, -0.354, 0.012
+    max: -0.295, -0.338, 0.49
+    color: '#51826C'
+  - label: green front restraint 0.33
+    min: 0.295, -0.354, 0.012
+    max: 0.365, -0.338, 0.49
+    color: '#51826C'
+  - label: original medical-cross lid label
+    min: -0.376, -0.034, 0.554
+    max: -0.185, 0.196, 0.559
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt010
+    surfaceAxis: XY
+  - label: original surgical lid field markings
+    min: 0.12, -0.033, 0.554
+    max: 0.37, 0.196, 0.559
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt011
+    surfaceAxis: XY
+  - label: latch upper mount -0.31
+    min: -0.338, -0.368, 0.477
+    max: -0.282, -0.336, 0.526
+    color: '#B3AFA8'
+  - label: latch tongue -0.31
+    min: -0.328, -0.383, 0.408
+    max: -0.292, -0.353, 0.509
+    color: '#B3AFA8'
+  - label: latch upper mount 0.31
+    min: 0.282, -0.368, 0.477
+    max: 0.338, -0.336, 0.526
+    color: '#B3AFA8'
+  - label: latch tongue 0.31
+    min: 0.292, -0.383, 0.408
+    max: 0.328, -0.353, 0.509
+    color: '#B3AFA8'
+  - label: source lower green left field
+    min: -0.375, -0.356, 0.03125
+    max: -0.21875, -0.344, 0.1875
+    color: '#416957'
+  - label: source lower green right field
+    min: 0.21875, -0.356, 0.03125
+    max: 0.375, -0.344, 0.1875
+    color: '#416957'
+  - label: source row27 pale left square 1
+    min: -0.34375, -0.358, 0.0625
+    max: -0.3125, -0.356, 0.09375
+    color: '#8C8A84'
+  - label: source row27 pale left square 2
+    min: -0.28125, -0.358, 0.0625
+    max: -0.25, -0.356, 0.09375
+    color: '#8C8A84'
+  - label: source row27 pale right dash
+    min: 0.25, -0.358, 0.0625
+    max: 0.34375, -0.356, 0.09375
+    color: '#8C8A84'
+  - label: inset lock housing
+    min: -0.111, -0.375, 0.16
+    max: 0.111, -0.344, 0.26
+    color: '#5D5C57'
+  - label: lock slot
+    min: -0.08, -0.378, 0.201
+    max: 0.08, -0.375, 0.232
+    color: '#292825'
+  - label: default locked red diode
+    min: -0.044, -0.381, 0.207
+    max: -0.022, -0.377, 0.231
+    color: '#FF0000'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesConstructionCloud
+  label: Construction source-specific crate
+  status: draft
+  sourcePrototypes:
+  - RMCCrateElectricalMaintenance
+  referencePrototype: RMCCrateElectricalMaintenance
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/construction.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#0C0B0B'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#171715'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#171715'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#171715'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#171715'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#0C0B0B'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#34322F'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#0C0B0B'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#0C0B0B'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#0C0B0B'
+    shape: CylinderX
+  - label: raised inset lid surround
+    min: -0.371, -0.245, 0.55
+    max: 0.371, 0.245, 0.575
+    color: '#9A9997'
+  - label: original hazard-stripe lid insert
+    min: -0.313, -0.162, 0.574
+    max: 0.313, 0.151, 0.578
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt012
+    surfaceAxis: XY
+  - label: latch upper mount -0.29
+    min: -0.318, -0.368, 0.477
+    max: -0.262, -0.336, 0.526
+    color: '#34322F'
+  - label: latch tongue -0.29
+    min: -0.308, -0.383, 0.408
+    max: -0.272, -0.353, 0.509
+    color: '#34322F'
+  - label: latch upper mount 0.29
+    min: 0.262, -0.368, 0.477
+    max: 0.318, -0.336, 0.526
+    color: '#34322F'
+  - label: latch tongue 0.29
+    min: 0.272, -0.383, 0.408
+    max: 0.308, -0.353, 0.509
+    color: '#34322F'
+  - label: front gold marking 0.18
+    min: 0.18, -0.348, 0.075
+    max: 0.215, -0.345, 0.13
+    color: '#C39405'
+  - label: front gold marking 0.245
+    min: 0.245, -0.348, 0.075
+    max: 0.28, -0.345, 0.13
+    color: '#C39405'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesFreezerCloud
+  label: Freezer source-specific crate
+  status: draft
+  sourcePrototypes:
+  - RMCCrateFreezer
+  referencePrototype: RMCCrateFreezer
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/freezer.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#77766F'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#AFADA6'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#AFADA6'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#AFADA6'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#AFADA6'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#77766F'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#D5D2CB'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#77766F'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#77766F'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#77766F'
+    shape: CylinderX
+  - label: pale lid raised rim -1
+    min: -0.4155, -0.335, 0.555
+    max: 0.4155, -0.311, 0.572
+    color: '#DEDBD3'
+  - label: pale lid raised rim 1
+    min: -0.4155, 0.311, 0.555
+    max: 0.4155, 0.335, 0.572
+    color: '#DEDBD3'
+  - label: latch upper mount -0.31
+    min: -0.338, -0.368, 0.477
+    max: -0.282, -0.336, 0.526
+    color: '#C0BDB6'
+  - label: latch tongue -0.31
+    min: -0.328, -0.383, 0.408
+    max: -0.292, -0.353, 0.509
+    color: '#C0BDB6'
+  - label: latch upper mount 0.31
+    min: 0.282, -0.368, 0.477
+    max: 0.338, -0.336, 0.526
+    color: '#C0BDB6'
+  - label: latch tongue 0.31
+    min: 0.292, -0.383, 0.408
+    max: 0.328, -0.353, 0.509
+    color: '#C0BDB6'
+  - label: original blue snowflake insignia
+    min: 0.155, -0.348, 0.05
+    max: 0.342, -0.345, 0.237
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt013
+    surfaceAxis: XZ
+  - label: front cooling vent -0.33 0.12
+    min: -0.348, -0.349, 0.12
+    max: -0.312, -0.345, 0.147
+    color: '#4B4944'
+  - label: front cooling vent -0.33 0.19
+    min: -0.348, -0.349, 0.19
+    max: -0.312, -0.345, 0.217
+    color: '#4B4944'
+  - label: front cooling vent -0.33 0.26
+    min: -0.348, -0.349, 0.26
+    max: -0.312, -0.345, 0.287
+    color: '#4B4944'
+  - label: front cooling vent -0.25 0.12
+    min: -0.268, -0.349, 0.12
+    max: -0.232, -0.345, 0.147
+    color: '#4B4944'
+  - label: front cooling vent -0.25 0.19
+    min: -0.268, -0.349, 0.19
+    max: -0.232, -0.345, 0.217
+    color: '#4B4944'
+  - label: front cooling vent -0.25 0.26
+    min: -0.268, -0.349, 0.26
+    max: -0.232, -0.345, 0.287
+    color: '#4B4944'
+  - label: front cooling vent -0.17 0.12
+    min: -0.188, -0.349, 0.12
+    max: -0.152, -0.345, 0.147
+    color: '#4B4944'
+  - label: front cooling vent -0.17 0.19
+    min: -0.188, -0.349, 0.19
+    max: -0.152, -0.345, 0.217
+    color: '#4B4944'
+  - label: front cooling vent -0.17 0.26
+    min: -0.188, -0.349, 0.26
+    max: -0.152, -0.345, 0.287
+    color: '#4B4944'
+  - label: carry grip root -0.09
+    min: -0.104, -0.392, 0.391
+    max: -0.076, -0.341, 0.429
+    color: '#77766F'
+  - label: carry grip root 0.09
+    min: 0.076, -0.392, 0.391
+    max: 0.104, -0.341, 0.429
+    color: '#77766F'
+  - label: open front carry grip crossbar
+    min: -0.096, -0.416, 0.396
+    max: 0.096, -0.386, 0.424
+    color: '#77766F'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesMinecartCloud
+  label: Four-wheel minecart with physical sparse lid grille
+  status: draft
+  sourcePrototypes:
+  - RMCCrateMinecart
+  referencePrototype: RMCCrateMinecart
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/minecart.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Hollow full-depth tub and four cylindrical wheels replace the stationary
+    solid crate. The closed source has sparse upper ribs rather than an opaque lid;
+    through-gaps remain real. The open overlay is blank and is not promoted to runtime
+    state support. Default closed/locked source composition only; open, welding, labels,
+    fill changes and transitions remain unsupported. Physical depth, side/rear construction
+    and height are inferred. No native, saved-map, gameplay or fidelity approval.
+    See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.395, -0.32, 0.13
+    max: 0.395, 0.32, 0.164
+    color: '#333333'
+  - label: rear structural wall
+    min: -0.395, 0.29, 0.15
+    max: 0.395, 0.32, 0.62
+    color: '#4D4D4D'
+  - label: front structural wall
+    min: -0.395, -0.32, 0.15
+    max: 0.395, -0.289, 0.62
+    color: '#4D4D4D'
+  - label: side structural wall -1
+    min: -0.395, -0.32, 0.15
+    max: -0.363, 0.32, 0.62
+    color: '#4D4D4D'
+  - label: side structural wall 1
+    min: 0.363, -0.32, 0.15
+    max: 0.395, 0.32, 0.62
+    color: '#4D4D4D'
+  - label: empty inner floor
+    min: -0.369, -0.292, 0.16
+    max: 0.369, 0.292, 0.173
+    color: '#333333'
+  - label: full axle -0.215
+    min: -0.43, -0.234, 0.104
+    max: 0.43, -0.196, 0.142
+    color: '#333333'
+    shape: CylinderX
+  - label: axle suspension lug -1 -0.215
+    min: -0.404, -0.257, 0.108
+    max: -0.334, -0.173, 0.225
+    color: '#333333'
+  - label: ground-contact wheel -1 -0.215
+    min: -0.41, -0.291, 0
+    max: -0.328, -0.139, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap -1 -0.215
+    min: -0.414, -0.24, 0.051
+    max: -0.324, -0.19, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: axle suspension lug 1 -0.215
+    min: 0.334, -0.257, 0.108
+    max: 0.404, -0.173, 0.225
+    color: '#333333'
+  - label: ground-contact wheel 1 -0.215
+    min: 0.328, -0.291, 0
+    max: 0.41, -0.139, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap 1 -0.215
+    min: 0.324, -0.24, 0.051
+    max: 0.414, -0.19, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: full axle 0.215
+    min: -0.43, 0.196, 0.104
+    max: 0.43, 0.234, 0.142
+    color: '#333333'
+    shape: CylinderX
+  - label: axle suspension lug -1 0.215
+    min: -0.404, 0.173, 0.108
+    max: -0.334, 0.257, 0.225
+    color: '#333333'
+  - label: ground-contact wheel -1 0.215
+    min: -0.41, 0.139, 0
+    max: -0.328, 0.291, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap -1 0.215
+    min: -0.414, 0.19, 0.051
+    max: -0.324, 0.24, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: axle suspension lug 1 0.215
+    min: 0.334, 0.173, 0.108
+    max: 0.404, 0.257, 0.225
+    color: '#333333'
+  - label: ground-contact wheel 1 0.215
+    min: 0.328, 0.139, 0
+    max: 0.41, 0.291, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap 1 0.215
+    min: 0.324, 0.19, 0.051
+    max: 0.414, 0.24, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: upper lateral rim -1
+    min: -0.399, -0.32, 0.59
+    max: -0.365, 0.32, 0.644
+    color: '#777777'
+  - label: upper end rim -1
+    min: -0.395, -0.326, 0.59
+    max: 0.395, -0.29, 0.644
+    color: '#4D4D4D'
+  - label: upper lateral rim 1
+    min: 0.365, -0.32, 0.59
+    max: 0.399, 0.32, 0.644
+    color: '#777777'
+  - label: upper end rim 1
+    min: -0.395, 0.29, 0.59
+    max: 0.395, 0.326, 0.644
+    color: '#4D4D4D'
+  - label: closed-pose physical top grate rib 0
+    min: -0.376, -0.169, 0.601
+    max: 0.376, -0.131, 0.631
+    color: '#777777'
+  - label: closed-pose physical top grate rib 1
+    min: -0.376, -0.019, 0.601
+    max: 0.376, 0.019, 0.631
+    color: '#777777'
+  - label: closed-pose physical top grate rib 2
+    min: -0.376, 0.131, 0.601
+    max: 0.376, 0.169, 0.631
+    color: '#777777'
+  - label: front inset pale trim
+    min: -0.34, -0.334, 0.22
+    max: 0.34, -0.319, 0.37
+    color: '#BEBAB1'
+  - label: original front slot pattern
+    min: -0.312, -0.337, 0.247
+    max: 0.312, -0.334, 0.34
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt014
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DInheritedCratesSecureAmmoCloud
+  label: Secure Ammo source-specific crate
+  status: draft
+  sourcePrototypes:
+  - RMCCrateSecureAmmo
+  referencePrototype: RMCCrateSecureAmmo
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/secure_ammo.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#343819'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#545930'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#545930'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#545930'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#545930'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#343819'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#666C3C'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#343819'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#343819'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#343819'
+    shape: CylinderX
+  - label: olive lid retaining strap -0.32
+    min: -0.35, -0.351, 0.547
+    max: -0.29, 0.353, 0.605
+    color: '#767D43'
+  - label: olive front strap return -0.32
+    min: -0.35, -0.367, 0.19
+    max: -0.29, -0.339, 0.592
+    color: '#414522'
+  - label: olive lid retaining strap 0.32
+    min: 0.29, -0.351, 0.547
+    max: 0.35, 0.353, 0.605
+    color: '#767D43'
+  - label: olive front strap return 0.32
+    min: 0.29, -0.367, 0.19
+    max: 0.35, -0.339, 0.592
+    color: '#414522'
+  - label: original ammunition lid identifier
+    min: -0.22, -0.045, 0.554
+    max: 0.092, 0.205, 0.558
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt015
+    surfaceAxis: XY
+  - label: original three pale front ammunition marks
+    min: 0.188, -0.347, 0.061
+    max: 0.345, -0.345, 0.123
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt016
+    surfaceAxis: XZ
+  - label: inset lock housing
+    min: -0.111, -0.375, 0.195
+    max: 0.111, -0.344, 0.295
+    color: '#545930'
+  - label: lock slot
+    min: -0.08, -0.378, 0.236
+    max: 0.08, -0.375, 0.267
+    color: '#2C2C22'
+  - label: default locked red diode
+    min: -0.044, -0.381, 0.242
+    max: -0.022, -0.377, 0.266
+    color: '#FF0000'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesSupplyCloud
+  label: Supply source-specific crate
+  status: draft
+  sourcePrototypes:
+  - RMCCrateSuppliesBoxes
+  - RMCCrateSupply
+  - RMCCrateSupplyJanitor
+  referencePrototype: RMCCrateSuppliesBoxes
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/supply.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#53311B'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#7D5132'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#7D5132'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#7D5132'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#7D5132'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#53311B'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#B97644'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#53311B'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#53311B'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#53311B'
+    shape: CylinderX
+  - label: raised lid wood plank 0
+    min: -0.4175, -0.331, 0.555
+    max: 0.4175, -0.209, 0.566
+    color: '#B97644'
+  - label: raised lid wood plank 1
+    min: -0.4175, -0.199, 0.555
+    max: 0.4175, -0.077, 0.566
+    color: '#915B36'
+  - label: raised lid wood plank 2
+    min: -0.4175, -0.067, 0.555
+    max: 0.4175, 0.055, 0.566
+    color: '#B97644'
+  - label: raised lid wood plank 3
+    min: -0.4175, 0.065, 0.555
+    max: 0.4175, 0.187, 0.566
+    color: '#915B36'
+  - label: raised lid wood plank 4
+    min: -0.4175, 0.197, 0.555
+    max: 0.4175, 0.319, 0.566
+    color: '#B97644'
+  - label: front plank 0
+    min: -0.413, -0.356, 0.024
+    max: -0.317, -0.344, 0.465
+    color: '#684228'
+  - label: front plank 1
+    min: -0.308, -0.356, 0.024
+    max: -0.212, -0.344, 0.465
+    color: '#7D5132'
+  - label: front plank 2
+    min: -0.203, -0.356, 0.024
+    max: -0.107, -0.344, 0.465
+    color: '#684228'
+  - label: front plank 3
+    min: -0.098, -0.356, 0.024
+    max: -0.002, -0.344, 0.465
+    color: '#7D5132'
+  - label: front plank 4
+    min: 0.007, -0.356, 0.024
+    max: 0.103, -0.344, 0.465
+    color: '#684228'
+  - label: front plank 5
+    min: 0.112, -0.356, 0.024
+    max: 0.208, -0.344, 0.465
+    color: '#7D5132'
+  - label: front plank 6
+    min: 0.217, -0.356, 0.024
+    max: 0.313, -0.344, 0.465
+    color: '#684228'
+  - label: front plank 7
+    min: 0.322, -0.356, 0.024
+    max: 0.418, -0.344, 0.465
+    color: '#7D5132'
+  - label: lid cross batten -0.3
+    min: -0.337, -0.353, 0.559
+    max: -0.263, 0.353, 0.6
+    color: '#B97644'
+  - label: front batten return -0.3
+    min: -0.337, -0.369, 0.014
+    max: -0.263, -0.333, 0.58
+    color: '#915B36'
+  - label: lid cross batten 0.3
+    min: 0.263, -0.353, 0.559
+    max: 0.337, 0.353, 0.6
+    color: '#B97644'
+  - label: front batten return 0.3
+    min: 0.263, -0.369, 0.014
+    max: 0.337, -0.333, 0.58
+    color: '#915B36'
+  - label: original recessed supply pictogram
+    min: -0.205, -0.025, 0.565
+    max: -0.018, 0.175, 0.57
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt017
+    surfaceAxis: XY
+  - label: latch upper mount 0
+    min: -0.028, -0.368, 0.477
+    max: 0.028, -0.336, 0.526
+    color: '#454545'
+  - label: latch tongue 0
+    min: -0.018, -0.383, 0.408
+    max: 0.018, -0.353, 0.509
+    color: '#454545'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesWeaponsCloud
+  label: Weapons source-specific crate
+  status: draft
+  sourcePrototypes:
+  - RMCCrateWeapons
+  referencePrototype: RMCCrateWeapons
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/weapons.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Separate structural pan, four walls, independent closed lid and attached
+    hinges. Distinct source material, ribs, clasps and identity details correct the
+    evidenced inherited-family mismatch. Interior remains empty and no hidden StorageFill
+    contents are invented. Default closed/locked source composition only; open, welding,
+    labels, fill changes and transitions remain unsupported. Physical depth, side/rear
+    construction and height are inferred. No native, saved-map, gameplay or fidelity
+    approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.4375, -0.345, 0
+    max: 0.4375, 0.345, 0.034
+    color: '#0C0B0B'
+  - label: rear structural wall
+    min: -0.4375, 0.315, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#171715'
+  - label: front structural wall
+    min: -0.4375, -0.345, 0.02
+    max: 0.4375, -0.314, 0.49
+    color: '#171715'
+  - label: side structural wall -1
+    min: -0.4375, -0.345, 0.02
+    max: -0.4055, 0.345, 0.49
+    color: '#171715'
+  - label: side structural wall 1
+    min: 0.4055, -0.345, 0.02
+    max: 0.4375, 0.345, 0.49
+    color: '#171715'
+  - label: empty inner floor
+    min: -0.4115, -0.317, 0.03
+    max: 0.4115, 0.317, 0.043
+    color: '#0C0B0B'
+  - label: separate solid closed lid
+    min: -0.4375, -0.345, 0.485
+    max: 0.4375, 0.345, 0.555
+    color: '#34322F'
+  - label: front lid gasket
+    min: -0.4375, -0.354, 0.476
+    max: 0.4375, -0.335, 0.492
+    color: '#0C0B0B'
+  - label: rear lid hinge -0.2625
+    min: -0.3225, 0.336, 0.463
+    max: -0.2025, 0.376, 0.514
+    color: '#0C0B0B'
+    shape: CylinderX
+  - label: rear lid hinge 0.2625
+    min: 0.2025, 0.336, 0.463
+    max: 0.3225, 0.376, 0.514
+    color: '#0C0B0B'
+    shape: CylinderX
+  - label: original rifle silhouette lid insert
+    min: -0.376, -0.17, 0.554
+    max: -0.095, 0.18, 0.558
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt018
+    surfaceAxis: XY
+  - label: original ammunition panel lid insert
+    min: 0.062, -0.17, 0.554
+    max: 0.376, 0.18, 0.558
+    color: '#FFFFFF'
+    surface: CMU3DInheritedStorageCloudArt019
+    surfaceAxis: XY
+  - label: latch upper mount -0.29
+    min: -0.318, -0.368, 0.477
+    max: -0.262, -0.336, 0.526
+    color: '#34322F'
+  - label: latch tongue -0.29
+    min: -0.308, -0.383, 0.408
+    max: -0.272, -0.353, 0.509
+    color: '#34322F'
+  - label: latch upper mount 0.29
+    min: 0.262, -0.368, 0.477
+    max: 0.318, -0.336, 0.526
+    color: '#34322F'
+  - label: latch tongue 0.29
+    min: 0.272, -0.383, 0.408
+    max: 0.308, -0.353, 0.509
+    color: '#34322F'
+  - label: front pale ammunition tick 0.15
+    min: 0.15, -0.348, 0.043
+    max: 0.168, -0.345, 0.073
+    color: '#C6B29E'
+  - label: front pale ammunition tick 0.22
+    min: 0.22, -0.348, 0.043
+    max: 0.238, -0.345, 0.073
+    color: '#C6B29E'
+  - label: front pale ammunition tick 0.32
+    min: 0.32, -0.348, 0.043
+    max: 0.36, -0.345, 0.073
+    color: '#C6B29E'
+- type: cmu3DModel
+  id: CMU3DInheritedCratesTrashCartCloud
+  label: Green corrugated four-wheel trash cart
+  status: draft
+  sourcePrototypes:
+  - RMCTrashCart
+  referencePrototype: RMCTrashCart
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Crates/trash_cart.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: floor
+  description: Original asymmetric side push handle, separate closed green lid, corrugated
+    tub, axles and four grounded wheels replace the stationary inherited crate. Default
+    closed/locked source composition only; open, welding, labels, fill changes and
+    transitions remain unsupported. Physical depth, side/rear construction and height
+    are inferred. No native, saved-map, gameplay or fidelity approval. See SOURCES_INHERITED_STORAGE_CLOUD.md.
+  parts:
+  - label: bottom structural pan
+    min: -0.375, -0.32, 0.13
+    max: 0.375, 0.32, 0.164
+    color: '#1C360D'
+  - label: rear structural wall
+    min: -0.375, 0.29, 0.15
+    max: 0.375, 0.32, 0.62
+    color: '#56703C'
+  - label: front structural wall
+    min: -0.375, -0.32, 0.15
+    max: 0.375, -0.289, 0.62
+    color: '#56703C'
+  - label: side structural wall -1
+    min: -0.375, -0.32, 0.15
+    max: -0.343, 0.32, 0.62
+    color: '#56703C'
+  - label: side structural wall 1
+    min: 0.343, -0.32, 0.15
+    max: 0.375, 0.32, 0.62
+    color: '#56703C'
+  - label: empty inner floor
+    min: -0.349, -0.292, 0.16
+    max: 0.349, 0.292, 0.173
+    color: '#1C360D'
+  - label: full axle -0.215
+    min: -0.41, -0.234, 0.104
+    max: 0.41, -0.196, 0.142
+    color: '#333333'
+    shape: CylinderX
+  - label: axle suspension lug -1 -0.215
+    min: -0.384, -0.257, 0.108
+    max: -0.314, -0.173, 0.225
+    color: '#333333'
+  - label: ground-contact wheel -1 -0.215
+    min: -0.39, -0.291, 0
+    max: -0.308, -0.139, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap -1 -0.215
+    min: -0.394, -0.24, 0.051
+    max: -0.304, -0.19, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: axle suspension lug 1 -0.215
+    min: 0.314, -0.257, 0.108
+    max: 0.384, -0.173, 0.225
+    color: '#333333'
+  - label: ground-contact wheel 1 -0.215
+    min: 0.308, -0.291, 0
+    max: 0.39, -0.139, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap 1 -0.215
+    min: 0.304, -0.24, 0.051
+    max: 0.394, -0.19, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: full axle 0.215
+    min: -0.41, 0.196, 0.104
+    max: 0.41, 0.234, 0.142
+    color: '#333333'
+    shape: CylinderX
+  - label: axle suspension lug -1 0.215
+    min: -0.384, 0.173, 0.108
+    max: -0.314, 0.257, 0.225
+    color: '#333333'
+  - label: ground-contact wheel -1 0.215
+    min: -0.39, 0.139, 0
+    max: -0.308, 0.291, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap -1 0.215
+    min: -0.394, 0.19, 0.051
+    max: -0.304, 0.24, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: axle suspension lug 1 0.215
+    min: 0.314, 0.173, 0.108
+    max: 0.384, 0.257, 0.225
+    color: '#333333'
+  - label: ground-contact wheel 1 0.215
+    min: 0.308, 0.139, 0
+    max: 0.39, 0.291, 0.152
+    color: '#171717'
+    shape: CylinderX
+  - label: wheel axle cap 1 0.215
+    min: 0.304, 0.19, 0.051
+    max: 0.394, 0.24, 0.101
+    color: '#777777'
+    shape: CylinderX
+  - label: closed structural green lid
+    min: -0.382, -0.327, 0.613
+    max: 0.382, 0.327, 0.663
+    color: '#56703C'
+  - label: green lid front edge
+    min: -0.382, -0.34, 0.61
+    max: 0.382, -0.314, 0.639
+    color: '#99C36E'
+  - label: front molded vertical reinforcing rib 0
+    min: -0.331, -0.34, 0.155
+    max: -0.309, -0.313, 0.535
+    color: '#37552D'
+  - label: rear molded vertical reinforcing rib 0
+    min: -0.331, 0.313, 0.155
+    max: -0.309, 0.34, 0.535
+    color: '#37552D'
+  - label: front molded vertical reinforcing rib 1
+    min: -0.227, -0.34, 0.155
+    max: -0.205, -0.313, 0.535
+    color: '#37552D'
+  - label: rear molded vertical reinforcing rib 1
+    min: -0.227, 0.313, 0.155
+    max: -0.205, 0.34, 0.535
+    color: '#37552D'
+  - label: front molded vertical reinforcing rib 2
+    min: -0.123, -0.34, 0.155
+    max: -0.101, -0.313, 0.535
+    color: '#37552D'
+  - label: rear molded vertical reinforcing rib 2
+    min: -0.123, 0.313, 0.155
+    max: -0.101, 0.34, 0.535
+    color: '#37552D'
+  - label: front molded vertical reinforcing rib 3
+    min: -0.019, -0.34, 0.155
+    max: 0.003, -0.313, 0.535
+    color: '#37552D'
+  - label: rear molded vertical reinforcing rib 3
+    min: -0.019, 0.313, 0.155
+    max: 0.003, 0.34, 0.535
+    color: '#37552D'
+  - label: front molded vertical reinforcing rib 4
+    min: 0.085, -0.34, 0.155
+    max: 0.107, -0.313, 0.535
+    color: '#37552D'
+  - label: rear molded vertical reinforcing rib 4
+    min: 0.085, 0.313, 0.155
+    max: 0.107, 0.34, 0.535
+    color: '#37552D'
+  - label: front molded vertical reinforcing rib 5
+    min: 0.189, -0.34, 0.155
+    max: 0.211, -0.313, 0.535
+    color: '#37552D'
+  - label: rear molded vertical reinforcing rib 5
+    min: 0.189, 0.313, 0.155
+    max: 0.211, 0.34, 0.535
+    color: '#37552D'
+  - label: front molded vertical reinforcing rib 6
+    min: 0.293, -0.34, 0.155
+    max: 0.315, -0.313, 0.535
+    color: '#37552D'
+  - label: rear molded vertical reinforcing rib 6
+    min: 0.293, 0.313, 0.155
+    max: 0.315, 0.34, 0.535
+    color: '#37552D'
+  - label: side push-handle return -0.19
+    min: -0.495, -0.207, 0.57
+    max: -0.368, -0.173, 0.606
+    color: '#333333'
+  - label: side push-handle return 0.16
+    min: -0.495, 0.143, 0.57
+    max: -0.368, 0.177, 0.606
+    color: '#333333'
+  - label: side push-handle crossbar
+    min: -0.505, -0.207, 0.57
+    max: -0.471, 0.178, 0.606
+    color: '#777777'
+  - label: rear lid hinge -0.22499999999999998
+    min: -0.285, 0.311, 0.593
+    max: -0.165, 0.351, 0.644
+    color: '#37552D'
+    shape: CylinderX
+  - label: rear lid hinge 0.22499999999999998
+    min: 0.165, 0.311, 0.593
+    max: 0.285, 0.351, 0.644
+    color: '#37552D'
+    shape: CylinderX

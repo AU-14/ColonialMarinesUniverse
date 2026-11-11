@@ -4,7 +4,7 @@
   name: PMC BEAR
   components:
   - type: SquadTeam
-    color: "#1f0e0f"
+    color: "#b23a3a"
     blacklistedSquadArmor:
     - Helmet
     - Goggles
@@ -29,7 +29,7 @@
   name: Liquidators
   components:
   - type: SquadTeam
-    color: "#1f0e0f"
+    color: "#b23a3a"
     blacklistedSquadArmor:
     - Helmet
     - Goggles

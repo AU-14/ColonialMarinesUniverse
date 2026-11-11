@@ -228,7 +228,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMMaskGas
+    - id: CMUMaskGas
       amount: 4
     - id: CMUGasMaskFilter
       amount: 4
@@ -282,17 +282,15 @@
   parent: RMCCrateConstruction
   id: CMUCrateEngineeringWiring
   name: power and alarm wiring crate
-  description: A crate that contains HV, MV and APC cable coils, two colony-spec cable coils, power control modules and alarm, firelock and atmos computer electronics.
+  description: A crate that contains thin HV, MV and APC cable coils, power control modules and alarm, firelock and atmos computer electronics.
   components:
   - type: StorageFill
     contents:
-    - id: CableHVStack
+    - id: CMUCableThinHVStack
       amount: 1
-    - id: CableMVStack
+    - id: CMUCableThinMVStack
       amount: 1
-    - id: CableApcStack
-      amount: 2
-    - id: RMCCableCoil
+    - id: CMUCableThinLVStack
       amount: 2
     - id: CMAPCElectronics
       amount: 2
@@ -344,7 +342,7 @@
       amount: 1
     - id: CMSheetPhoron
       amount: 1
-    - id: CableApcStack
+    - id: CMUCableThinLVStack
       amount: 2
     - id: CMAPCElectronics
       amount: 1
@@ -370,3 +368,13 @@
     contents:
     - id: CMUHeadElectronicHearingProtection
       amount: 10
+
+- type: entity
+  parent: RMCCrateSupply
+  id: CMUCrateSupplyFieldOxygen
+  name: high-capacity oxygen tanks crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUFieldGasTankOxygenFilled
+      amount: 5

@@ -42,10 +42,19 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NonResuscitable
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:

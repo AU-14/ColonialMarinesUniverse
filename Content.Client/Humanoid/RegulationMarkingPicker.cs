@@ -18,7 +18,7 @@ namespace Content.Client.Humanoid;
 /// A narrow organ-layer picker for the separate CMU regulation appearance fields.
 /// Normal profile markings continue to use <see cref="MarkingsViewModel"/>.
 /// </summary>
-public sealed class RegulationMarkingPicker : BoxContainer
+public sealed partial class RegulationMarkingPicker : BoxContainer
 {
     [Dependency] private MarkingManager _markingManager = default!;
     [Dependency] private IEntityManager _entityManager = default!;

@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.CMU14.Inventory; // CMU14
 using Content.Client.Examine;
 using Content.Client.Hands.Systems;
 using Content.Client.Interaction;
@@ -10,6 +11,7 @@ using Content.Client.UserInterface.Systems.Info;
 using Content.Client.UserInterface.Systems.Storage.Controls;
 using Content.Client.Verbs.UI;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Input; // CMU14
 using Content.Shared.Input;
 using Content.Shared.Interaction;
 using Content.Shared.Pointing;
@@ -290,6 +292,13 @@ public sealed partial class StorageUIController : UIController, IOnSystemChanged
             _pointing.TryPointAtEntity(EntityManager.GetNetEntity(control.Entity));
             args.Handle();
         }
+        // cmu edit start: the open storage keybind opens storage nested inside this one
+        else if (args.Function == CMUKeyFunctions.CMUOpenWornStorage &&
+                 EntityManager.System<CMUOpenStorageKeySystem>().TryOpenStorage(control.Entity))
+        {
+            args.Handle();
+        }
+        // cmu edit end
 
         window.FlagDirty();
     }

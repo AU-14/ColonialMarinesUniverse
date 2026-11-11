@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Dropship;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Shared._RMC14.Dropship;
@@ -21,6 +22,19 @@ namespace Content.Server.CMU14.Hospital;
 
 public sealed partial class HospitalEmergencySystem
 {
+    private void OnHospitalLandingPermission(Entity<HospitalTransportShuttleComponent> ent,
+        ref CMUDropshipLandingPermissionEvent args)
+    {
+        if (!TryGetTransportLease(ent, out var lease) || lease.Comp.Retiring ||
+            !TryGetTransportController(lease, out _) || !IsOriginalHospitalMap(lease.Comp) ||
+            args.Destination != lease.Comp.HospitalDestination || TransportUnavailable(args.Destination) ||
+            !HasComp<HospitalDropshipLandingZoneComponent>(args.Destination) ||
+            Transform(args.Destination).MapUid != lease.Comp.HospitalMap)
+            return;
+
+        args.Allowed = true;
+    }
+
     private bool TransportUnavailable(EntityUid uid)
         => TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid);
 
@@ -110,7 +124,7 @@ public sealed partial class HospitalEmergencySystem
             interruptedDropship.Destination == destination && TryComp<FTLComponent>(ship, out var incomplete) &&
             incomplete.State == FTLState.Starting &&
             (TransportUnavailable(incomplete.TargetCoordinates.EntityId) ||
-             !TryComp<TransformComponent>(incomplete.TargetCoordinates.EntityId, out _)))
+             !TryComp(incomplete.TargetCoordinates.EntityId, out TransformComponent? _)))
         {
             var startupStream = incomplete.StartupStream;
             RemComp<FTLComponent>(ship);
@@ -125,7 +139,7 @@ public sealed partial class HospitalEmergencySystem
             Transform(destination).MapUid == mapUid && dropship.Destination == destination &&
             TryComp<FTLComponent>(ship, out var ftl) && ftl.State == FTLState.Starting &&
             !TransportUnavailable(ftl.TargetCoordinates.EntityId) &&
-            TryComp<TransformComponent>(ftl.TargetCoordinates.EntityId, out _) &&
+            TryComp(ftl.TargetCoordinates.EntityId, out TransformComponent? _) &&
             _transform.ToMapCoordinates(ftl.TargetCoordinates).MapId == destinationPosition.MapId &&
             (_transform.ToMapCoordinates(ftl.TargetCoordinates).Position - destinationPosition.Position).LengthSquared() < 0.0001f)
         {
@@ -203,9 +217,23 @@ public sealed partial class HospitalEmergencySystem
 
     private bool HasProtectedTransportContent(HospitalTransportLeaseComponent lease, bool offShuttleOnly = false)
     {
-        var query = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
-        while (query.MoveNext(out var uid, out var transform))
+        // everything that can match sits under the shuttle grid or one of the leased maps, so walk
+        // those subtrees instead of the whole world. this retries every 2s while a lease is stuck
+        var pending = new Stack<EntityUid>();
+        var seen = new HashSet<EntityUid>();
+        pending.Push(lease.Shuttle);
+        foreach (var map in lease.Maps.Keys)
+            pending.Push(map);
+
+        while (pending.TryPop(out var uid))
         {
+            if (!seen.Add(uid) || !TryComp(uid, out TransformComponent? transform))
+                continue;
+
+            var children = transform.ChildEnumerator;
+            while (children.MoveNext(out var child))
+                pending.Push(child);
+
             var onShuttle = uid != lease.Shuttle &&
                 (transform.GridUid == lease.Shuttle || transform.ParentUid == lease.Shuttle);
             var onOwnedMap = transform.MapUid is { } map && lease.Maps.ContainsKey(map);
@@ -226,7 +254,7 @@ public sealed partial class HospitalEmergencySystem
 
     private bool PendingTransportRetirement(EntityUid uid)
     {
-        while (TryComp<TransformComponent>(uid, out var transform))
+        while (TryComp(uid, out TransformComponent? transform))
         {
             if (TransportUnavailable(uid))
                 return true;

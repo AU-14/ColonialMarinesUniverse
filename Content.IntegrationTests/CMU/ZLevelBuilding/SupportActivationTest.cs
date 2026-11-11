@@ -92,7 +92,7 @@ public sealed class SupportActivationTest
             var entities = server.EntMan;
             Assert.That(entities.HasComponent<CMUZFallingComponent>(body), Is.False);
             Assert.That(entities.GetComponent<TransformComponent>(body).MapUid, Is.EqualTo(upper));
-            entities.System<SharedPhysicsSystem>().SetAwake(body, entities.GetComponent<PhysicsComponent>(body), false);
+            entities.System<SharedPhysicsSystem>().SetAwake((body, entities.GetComponent<PhysicsComponent>(body)), false);
             Assert.That(entities.GetComponent<PhysicsComponent>(body).Awake, Is.False);
             if (unanchor)
                 entities.System<SharedTransformSystem>().Unanchor(support);
@@ -135,7 +135,7 @@ public sealed class SupportActivationTest
             var entities = server.EntMan;
             Assert.That(entities.GetComponent<CMUZPhysicsComponent>(body).LocalPosition, Is.EqualTo(0.25f).Within(0.01));
             Assert.That(entities.HasComponent<CMUZFallingComponent>(body), Is.False);
-            entities.System<SharedPhysicsSystem>().SetAwake(body, entities.GetComponent<PhysicsComponent>(body), false);
+            entities.System<SharedPhysicsSystem>().SetAwake((body, entities.GetComponent<PhysicsComponent>(body)), false);
             entities.RemoveComponent<CMUZLevelHighGroundComponent>(support);
         });
         await pair.RunTicksSync(5);
@@ -178,7 +178,7 @@ public sealed class SupportActivationTest
             Assert.That(entities.HasComponent<CMUZFallingComponent>(vehicle), Is.False);
             Assert.That(entities.GetComponent<TransformComponent>(vehicle).MapUid, Is.EqualTo(upper));
             Assert.That(entities.System<SharedTransformSystem>().GetWorldPosition(vehicle).X, Is.GreaterThan(2));
-            entities.System<SharedPhysicsSystem>().SetAwake(vehicle, entities.GetComponent<PhysicsComponent>(vehicle), false);
+            entities.System<SharedPhysicsSystem>().SetAwake((vehicle, entities.GetComponent<PhysicsComponent>(vehicle)), false);
             entities.DeleteEntity(wall);
         });
         await pair.RunTicksSync(5);

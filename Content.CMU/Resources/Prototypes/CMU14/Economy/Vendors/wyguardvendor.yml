@@ -11,6 +11,10 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: Rail Attachments
+      entries:
+      - id: CMUAttachmentNightVisionScope
+        amount: 3
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -118,4 +122,3 @@
         amount: 1
       - id: RMCMagazineRifleSSG45AP
         amount: 3
-

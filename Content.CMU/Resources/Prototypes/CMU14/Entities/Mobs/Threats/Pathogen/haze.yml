@@ -3,12 +3,12 @@
   parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoHazeBase
   name: Haze
-  description: A supportive strain of the Confluence, tending wounds and spreading spores in equal measure.
+  description: A supportive caste of the Confluence.
   components:
   - type: GhostRole
     name: cmu-job-name-pathogen-haze
   - type: Sprite
-    sprite: CMU14/Mobs/Xenonids/Pathogen/haze.rsi
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Haze/haze.rsi
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -33,6 +33,24 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 300
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 300
+  - type: SolutionRegeneration
+    generated:
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmSpore
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenHaze
     tier: 1
@@ -47,19 +65,25 @@
     - CMU14ActionXenoPathogenPlantWeeds
     - CMU14ActionXenoPathogenChooseStructure
     - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
-    - CMU14ActionXenoPathogenApplySalve
-    - CMU14ActionXenoPathogenHealerDroneTransferPlasma
-    - CMU14ActionXenoPathogenSacrifice
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
   - type: XenoDevour
   - type: XenoHide
   - type: XenoConstruction
-    buildDelay: 1
+    buildDelay: 2
     canBuild:
+    - CMU14XenoMyceliumWall
     - CMU14XenoMyceliumMembrane
+    - CMU14XenoMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
   - type: XenoRegen
     healOffWeeds: true
     critHealMultiplier: 0.3465
@@ -71,8 +95,7 @@
     plasmaRegenOnWeeds: 4.5
     plasmaTransferDelay: 1.5
   - type: XenoPheromones
-    pheromonesMultiplier: 3
-    pheroSuffix: strong
+    pheromonesMultiplier: 2
   - type: XenoEvolution
     actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: true
@@ -81,6 +104,8 @@
     evolvesTo:
     - CMU14XenoNeomorph
     - CMU14XenoBlight
+    strains:
+    - CMU14XenoHazeHealer
   - type: XenoDevolve
     devolvesTo:
     - CMU14XenoBloodburster
@@ -92,14 +117,9 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
+    protectionBypassChance: 0.5
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
-  - type: XenoEnergy
-    alert: XenoEnergyHealer
-    max: 7500
-    gain: 0
-    gainAttack: 0
-    gainAttackDowned: 0
   - type: Fixtures
     fixtures:
       fix1:
@@ -127,9 +147,15 @@
     attackRate: 1.5
     damage:
       types:
-        Blunt: 6.66
-        Slash: 6.67
-        Piercing: 6.67
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
+  - type: XenoTailStab
+    tailDamage:
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: CMArmor
     explosionArmor: 10
   - type: Tackle
@@ -169,3 +195,104 @@
   - type: RMCSpawnEntitiesOnGib
     entities:
     - CMU14GibEffectPathogenHaze
+
+- type: entity
+  parent: CMU14XenoHazeBase
+  id: CMU14XenoHazeHealer
+  suffix: Healer
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/Xenonids/Pathogen/Haze/haze_healer.rsi
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.XenoHealerVisualLayers.Goop" ]
+      visible: false  
+    - map: [ "enum.RMCDamageVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "enum.RMCShieldVisuals.Base" ]
+      sprite: _RMC14/Effects/xeno_shields.rsi
+      visible: false
+  - type: Xeno
+    role: CMU14JobPathogenHaze
+    tier: 1
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenHide
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenPlantWeeds
+    - CMU14ActionXenoPathogenOrderConstruction
+    - CMU14ActionXenoPathogenApplySalve
+    - CMU14ActionXenoPathogenTransferPlasma
+    - CMU14ActionXenoPathogenSacrifice
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoStrain
+    name: cmu-xeno-haze-healer-name
+    description: cmu-xeno-haze-healer-description
+    popup: cmu-xeno-haze-healer-popup
+  - type: XenoEnergy
+    alert: XenoEnergyHealer
+    max: 7500
+    gain: 0
+    gainAttack: 0
+    gainAttackDowned: 0
+  - type: XenoConstruction
+    canOrderConstruction:
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+  - type: XenoSalveVisuals
+  - type: XenoHidden 
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      400: Critical
+      550: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
+  - type: XenoTailStab
+    tailDamage:
+      types:
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.25
+    stunMin: 3
+    stunMax: 4
+  - type: XenoPlasma
+    plasma: 1000
+    maxPlasma: 1000
+    plasmaRegenOnWeeds: 4.5
+    plasmaTransferDelay: 1.5
+  - type: XenoPheromones
+    pheromonesMultiplier: 3
+    pheroSuffix: strong
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 5
+  - type: VentCrawler
+    ventCrawlIcon: haze
+  - type: RMCActionOrder
+    id: CMU14XenoHazeHealer

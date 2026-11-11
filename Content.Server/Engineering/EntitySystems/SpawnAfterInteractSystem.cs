@@ -1,12 +1,14 @@
 using Content.Server.Engineering.Components;
 using Content.Server.Stack;
 using Content.Shared.Coordinates.Helpers;
+using Content.Shared.CMU14.Engineering;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Stacks;
 using JetBrains.Annotations;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
 namespace Content.Server.Engineering.EntitySystems
@@ -25,44 +27,48 @@ namespace Content.Server.Engineering.EntitySystems
             base.Initialize();
 
             SubscribeLocalEvent<SpawnAfterInteractComponent, AfterInteractEvent>(HandleAfterInteract);
+            SubscribeLocalEvent<SpawnAfterInteractComponent, CMUSpawnAfterInteractDoAfterEvent>(OnSpawnDoAfter); // CMU14
         }
 
-        private async void HandleAfterInteract(EntityUid uid, SpawnAfterInteractComponent component, AfterInteractEvent args)
+        // CMU14: Complete delayed placement through a do-after event so its lifetime follows the item.
+        private void HandleAfterInteract(EntityUid uid, SpawnAfterInteractComponent component, AfterInteractEvent args)
         {
             if (!args.CanReach && !component.IgnoreDistance)
                 return;
             if (string.IsNullOrEmpty(component.Prototype))
                 return;
 
-            var gridUid = _transform.GetGrid(args.ClickLocation);
-            if (!TryComp<MapGridComponent>(gridUid, out var grid))
-                return;
-            if (!_maps.TryGetTileRef(gridUid.Value, grid, args.ClickLocation, out var tileRef))
-                return;
-
-            bool IsTileClear()
-            {
-                // CMU14: WallLayer covers the inflatables themselves, which otherwise stack on one tile.
-                return tileRef.Tile.IsEmpty == false
-                    && !_turfSystem.IsTileBlocked(tileRef, CollisionGroup.MobMask | CollisionGroup.WallLayer);
-            }
-
-            if (!IsTileClear())
+            if (!TryGetClearTile(args.ClickLocation, out _, out _))
                 return;
 
             if (component.DoAfterTime > 0)
             {
-                var doAfterArgs = new DoAfterArgs(EntityManager, args.User, component.DoAfterTime, new AwaitedDoAfterEvent(), null)
+                var doAfterArgs = new DoAfterArgs(EntityManager, args.User, component.DoAfterTime,
+                    new CMUSpawnAfterInteractDoAfterEvent(GetNetCoordinates(args.ClickLocation)), uid)
                 {
                     BreakOnMove = true,
                 };
-                var result = await _doAfterSystem.WaitDoAfter(doAfterArgs);
-
-                if (result != DoAfterStatus.Finished)
-                    return;
+                _doAfterSystem.TryStartDoAfter(doAfterArgs);
+                return;
             }
 
-            if (component.Deleted || !IsTileClear())
+            CompletePlacement(uid, component, args.ClickLocation);
+        }
+
+        // CMU14
+        private void OnSpawnDoAfter(Entity<SpawnAfterInteractComponent> ent, ref CMUSpawnAfterInteractDoAfterEvent args)
+        {
+            if (args.Cancelled || args.Handled)
+                return;
+
+            CompletePlacement(ent, ent.Comp, GetCoordinates(args.Coordinates));
+            args.Handled = true;
+        }
+
+        // CMU14: Recheck occupancy on completion; another placement may have finished during the delay.
+        private void CompletePlacement(EntityUid uid, SpawnAfterInteractComponent component, EntityCoordinates coordinates)
+        {
+            if (component.Deleted || !TryGetClearTile(coordinates, out _, out var grid))
                 return;
 
             if (TryComp<StackComponent>(uid, out var stackComp)
@@ -71,10 +77,24 @@ namespace Content.Server.Engineering.EntitySystems
                 return;
             }
 
-            Spawn(component.Prototype, args.ClickLocation.SnapToGrid(grid));
+            Spawn(component.Prototype, coordinates.SnapToGrid(grid));
 
             if (component.RemoveOnInteract && stackComp == null)
                 TryQueueDel(uid);
+        }
+
+        // CMU14: WallLayer covers the inflatables themselves, which otherwise stack on one tile.
+        private bool TryGetClearTile(EntityCoordinates coordinates, out EntityUid gridUid, out MapGridComponent grid)
+        {
+            gridUid = default;
+            grid = default!;
+            if (_transform.GetGrid(coordinates) is not { } uid || !TryComp(uid, out MapGridComponent? component) ||
+                !_maps.TryGetTileRef(uid, component, coordinates, out var tile))
+                return false;
+
+            gridUid = uid;
+            grid = component;
+            return !tile.Tile.IsEmpty && !_turfSystem.IsTileBlocked(tile, CollisionGroup.MobMask | CollisionGroup.WallLayer);
         }
     }
 }

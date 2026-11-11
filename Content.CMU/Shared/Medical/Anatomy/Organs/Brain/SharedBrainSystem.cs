@@ -3,6 +3,7 @@ using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Body.Events;
 using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -67,6 +68,7 @@ public abstract partial class SharedBrainSystem : EntitySystem
         if (TryComp<OrganHealthComponent>(ent.Owner, out var health))
             UpdateActionSpeed(ent, health.Stage);
         ReconcileSpeechImpairment(args.Body);
+        ClearPermadeath(args.Body);
     }
 
     private void OnBrainRemovedFromBody(Entity<CMUBrainComponent> ent, ref OrganRemovedFromBodyEvent args)
@@ -75,6 +77,9 @@ public abstract partial class SharedBrainSystem : EntitySystem
             return;
 
         ReconcileSpeechImpairment(args.OldBody);
+        if (HasComp<SynthComponent>(args.OldBody))
+            return;
+
         if (!_medicalEnabled || !_organEnabled)
             return;
 
@@ -217,6 +222,10 @@ public abstract partial class SharedBrainSystem : EntitySystem
     }
 
     protected virtual void ApplyPermadeath(EntityUid body)
+    {
+    }
+
+    protected virtual void ClearPermadeath(EntityUid body)
     {
     }
 

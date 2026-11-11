@@ -1,5 +1,3 @@
-using Content.Shared.Atmos;
-
 namespace Content.Shared.CMU14.Atmos;
 
 /// <summary>
@@ -31,10 +29,10 @@ public sealed partial class CMUDayNightAtmosphereComponent : Component
     [DataField]
     public TimeSpan PhaseOffset;
 
-    // Server runtime, not serialized. One baseline per non-space network
-    // member that declares a MapAtmosphere; keys are map entities.
+    // Server runtime, not serialized. Non-space network members that declare
+    // a MapAtmosphere and so receive the cycle.
     [ViewVariables]
-    public readonly Dictionary<EntityUid, GasMixture> Baselines = new();
+    public readonly HashSet<EntityUid> Members = new();
 
     [ViewVariables]
     public TimeSpan CycleStart;
@@ -47,5 +45,5 @@ public sealed partial class CMUDayNightAtmosphereComponent : Component
     // queries until the flush, and two same-frame MapInits would both see
     // each other and strip themselves, leaving the network with no driver.
     [ViewVariables]
-    public bool Initialized;
+    public bool CycleStarted;
 }

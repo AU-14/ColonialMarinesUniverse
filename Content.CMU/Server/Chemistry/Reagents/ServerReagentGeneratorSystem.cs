@@ -12,6 +12,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.Paper;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Content.Shared.Random.Helpers;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Sequence;
@@ -108,6 +109,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             }
             DebugTools.Assert(_generatedReagents.Count == 0);
         }
+        // STATE-01: the YAML sources are only needed to unload this round's prototypes.
+        ChemYamls.Clear();
+        RecipeYamls.Clear();
         ProceduralReagentData.Clear();
         KnownProperties.Clear();
         var props = _protoMan.EnumeratePrototypes<ReagentPropertyPrototype>();
@@ -184,7 +188,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                         metabRate = metab.MetabolismRate;
                         foreach (var effect in metab.Effects)
                         {
-                            if (props.TryGetValue(effect.GetType().Name, out var prop))
+                            if (TryGetPropertyForEffect(effect, out var prop))
                             {
                                 var ef = effect as RMCChemicalEffect;
                                 int num = -1;
@@ -196,9 +200,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                         }
                     }
                 }
-                //TODO: reaction indicators
-                data.Info += Loc.GetString("research-report-reaction-header") +
-                    "\nDATABASE ERROR. \nWY_FTP RETURN CODE 0b1000100110\n";
+                data.Info += GetReactionIndicatorReport(chem);
                 metabRate = FixedPoint2.Max(0.01f, metabRate);
                 data.Info += '\n';
                 data.Info += chem.LocalizedDescription + "\n";
@@ -209,7 +211,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                     {
                         foreach (var effect in metab.Effects)
                         {
-                            if (props.TryGetValue(effect.GetType().Name, out var prop) && effect is RMCChemicalEffect ef)
+                            if (TryGetPropertyForEffect(effect, out var prop) && effect is RMCChemicalEffect ef)
                             {
                                 fx += $"[bold]{prop.LocalizedName} Level {ef.Potency}[/bold]\n";
                                 fx += $"{prop.LocalizedDescription}\n";
@@ -242,8 +244,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         }
         else if (chem.LocalizedDescription != "")
         {
-            data.Info += Loc.GetString("research-report-reaction-header") +
-                    "\nDATABASE ERROR. \nWY_FTP RETURN CODE 0b1000100110\n";
+            data.Info += GetReactionIndicatorReport(chem);
             data.Info += chem.LocalizedDescription + "\n";
             if (chem.Metabolisms is not null)
             {
@@ -252,7 +253,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 {
                     foreach (var effect in metab.Effects)
                     {
-                        if (props.TryGetValue(effect.GetType().Name, out var prop) && effect is RMCChemicalEffect ef)
+                        if (TryGetPropertyForEffect(effect, out var prop) && effect is RMCChemicalEffect ef)
                         {
                             fx += $"[bold]{prop.LocalizedName} Level {ef.Potency}[/bold]\n";
                             fx += $"{prop.LocalizedDescription}\n";
@@ -271,7 +272,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                     metabRate = metab.MetabolismRate;
                     foreach (var effect in metab.Effects)
                     {
-                        if (props.TryGetValue(effect.GetType().Name, out var prop))
+                        if (TryGetPropertyForEffect(effect, out var prop))
                         {
                             properties.Add(prop);
                         }
@@ -345,6 +346,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                     }
                 }
             }
+            // CMU14: a generated synthesis states its Mix, heat/cooling gate and ignition ceiling, as on contracts.
+            if (ProceduralReagentData.TryGetValue(reagentID, out var generated) || ReagentData.TryGetValue(reagentID, out generated))
+                data.Info += ProcessRequirementsText(generated);
         }
         else if (ChemicalGenClassesList["C1"].Contains(reagentID))
         {
@@ -403,48 +407,49 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 break;
         }
 
+        // Hard contracts ask for more of the first reagent and one more reactant overall.
+        if (data.GenTier >= 3)
+            modifier++;
         int failedAttempts = 0;
-        int desiredChems = _random.Next(3, Math.Max(Math.Min(data.GenTier * 2, 4), 3) + 1);
-        HashSet<string> toAdd = requiredReagents;
+        int desiredChems = data.GenTier switch
+        {
+            <= 1 => 3,
+            2 => _random.Next(3, 5),
+            _ => _random.Next(4, 6),
+        };
+        // Copy: the loop drains this set, and a retry must re-add the required hint reagent.
+        HashSet<string> toAdd = new(requiredReagents);
         for (int i = 1; i <= desiredChems; i++)
         {
-            if (i >= 2)
-            {
-                modifier = 1;
-            }
-
+            // Only the first slot carries the rolled amount; later slots are 1u. Keep `modifier` intact so a
+            // collision retry (which restarts at i = 1) rolls the same first-slot amount again.
+            var amount = i == 1 ? modifier : 1;
             if (toAdd.Count > 0)
             {
-                foreach (var iter in toAdd)
-                {
-                    if (i == 1)
-                    {
-                        AddChemical(ref data, iter, modifier, null);
-                    }
-                    else
-                    {
-                        AddChemical(ref data, iter, 1, null);
-                    }
-                    toAdd.Remove(iter);
-                }
+                var iter = toAdd.First();
+                AddChemical(ref data, iter, amount, null);
+                toAdd.Remove(iter);
             }
             else
             {
-                AddChemical(ref data, string.Empty, modifier, null);
+                AddChemical(ref data, string.Empty, amount, null);
             }
             if (i == desiredChems && (IsDuplicate(ref data, out _) || IsAllMedicine(ref data)))
             {
                 data.Recipe.Clear();
-                if (failedAttempts > 10)
+                if (failedAttempts >= 10)
                     return false;
                 i = 0;
-                toAdd = requiredReagents;
+                toAdd = new HashSet<string>(requiredReagents);
                 failedAttempts++;
             }
         }
         if (_random.Prob(0.2f) && data.GenTier >= 2)
         {
-            AddChemical(ref data, string.Empty, 5, null, true);
+            var catalyst = AddChemical(ref data, string.Empty, 5, null, true);
+            // A catalyst can complete an existing reaction's reactant set; drop it rather than collide.
+            if (catalyst != bool.FalseString && IsDuplicate(ref data, out _))
+                data.Recipe.Remove(catalyst);
         }
         // TODO: reaction indicators
         return true;
@@ -475,29 +480,29 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 {
                     chemid = _random.Pick(ChemicalGenClassesList["C"]);
                 }
+                // Material difficulty rises monotonically with tier: Easy is elements and basics,
+                // Intermediate adds uncommon medicines, Hard is where precious metals and botanicals live.
                 else if (useTier == 1)
                 {
-                    if (roll <= 60)
-                        chemid = _random.Pick(ChemicalGenClassesList["C1"]);
-                    else if (roll <= 80)
-                        chemid = _random.Pick(ChemicalGenClassesList["C2"]);
-                    else
-                        chemid = _random.Pick(ChemicalGenClassesList["C1"]);
+                    chemid = _random.Pick(ChemicalGenClassesList[roll <= 85 ? "C1" : "C2"]);
                 }
                 else if (useTier == 2)
                 {
-                    if (roll <= 50)
+                    if (roll <= 15)
+                        chemid = _random.Pick(ChemicalGenClassesList["C1"]);
+                    else if (roll <= 65)
                         chemid = _random.Pick(ChemicalGenClassesList["C2"]);
-                    else if (roll <= 75)
-                        chemid = _random.Pick(ChemicalGenClassesList["C3"]);
                     else
-                        chemid = _random.Pick(ChemicalGenClassesList["C4"]);
+                        chemid = _random.Pick(ChemicalGenClassesList["C3"]);
                 }
                 else if (useTier == 3)
                 {
-                    List<string> cls = new List<string> { "C1", "C2" };
-                    if (roll <= 80)
-                        chemid = _random.Pick(ChemicalGenClassesList[_random.Pick(cls)]);
+                    if (roll <= 20)
+                        chemid = _random.Pick(ChemicalGenClassesList["C2"]);
+                    else if (roll <= 50)
+                        chemid = _random.Pick(ChemicalGenClassesList["C3"]);
+                    else if (roll <= 80 && ChemicalGenClassesList[PreciousMetalPool].Count > 0)
+                        chemid = _random.Pick(ChemicalGenClassesList[PreciousMetalPool]);
                     else
                         chemid = _random.Pick(ChemicalGenClassesList["H1"]);
                 }
@@ -533,11 +538,50 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             }
             // catalyst check unnecessary
 
+            // Precious metals and nested contract chemicals are the scarce part of a contract: never ask for more
+            // than a few parts of one, whatever the first-slot multiplier, Hard bump or catalyst amount rolled.
+            if (IsCappedReagent(chemid))
+                mod = Math.Min(mod, MaxPreciousMetalParts);
+
             (int, bool) compmod = (mod, catalyst);
             data.Recipe.TryAdd(chemid, compmod);
 
         }
         return chemid;
+    }
+
+    /// <summary>
+    /// Most parts of any one capped reagent (a CMUPreciousMetals metal or a TAU contract chemical) a procgen
+    /// recipe may require.
+    /// </summary>
+    public const int MaxPreciousMetalParts = 3;
+
+    /// <summary>Gen-class key for the pool of registered contract chemicals.</summary>
+    public const string ContractChemicalPool = "TAU";
+
+    public bool IsPreciousMetal(string reagent)
+        => ChemicalGenClassesList.TryGetValue(PreciousMetalPool, out var precious) && precious.Contains(reagent);
+
+    /// <summary>
+    /// True for reagents a recipe may only ask a few parts of (<see cref="MaxPreciousMetalParts"/>): precious
+    /// metals, and contract chemicals (TAU) used as a nested reactant of another contract.
+    /// </summary>
+    public bool IsCappedReagent(string reagent)
+        => IsPreciousMetal(reagent) ||
+           ChemicalGenClassesList.TryGetValue(ContractChemicalPool, out var contracts) && contracts.Contains(reagent);
+
+    /// <summary>
+    /// Caps every capped reactant or catalyst (see <see cref="IsCappedReagent"/>) in <paramref name="recipe"/> at
+    /// <see cref="MaxPreciousMetalParts"/>. For recipes assembled outside <see cref="AddChemical"/>,
+    /// such as simulator output copied from a parent or stock reaction.
+    /// </summary>
+    public void ClampPreciousAmounts(Dictionary<string, (int, bool)> recipe)
+    {
+        foreach (var (reagent, (amount, catalyst)) in recipe.ToList())
+        {
+            if (amount > MaxPreciousMetalParts && IsCappedReagent(reagent))
+                recipe[reagent] = (MaxPreciousMetalParts, catalyst);
+        }
     }
 
 
@@ -563,7 +607,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 {
                     if (data.GenTier > 2)
                         GenValue = AddProperty(ref data, null, null, 0, "rare");
-                    else if (data.GenTier > 1 && _random.Prob((20) / 100))
+                    else if (data.GenTier > 1 && _random.Prob(0.2f))
                     {
                         GenValue = AddProperty(ref data, null, null, 0, "rare", true);
                         specificProperty = "negative";
@@ -610,7 +654,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         data.CriticalOverdose = data.Overdose + 5;
         for (int i = 1; i <= _random.Next(1, 4); i++)
         {
-            if (_random.Prob((20 + 2 * data.GenTier) / 100))
+            if (_random.Prob((20 + 2 * data.GenTier) / 100f))
                 data.CriticalOverdose += 5;
         }
         int ired = _random.Next(0, 256);
@@ -655,24 +699,25 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             else
                 level = 8;
 
-            level = Math.Min(level, data.GenTier + 3);
+            // Level ceilings: Easy 3, Intermediate 5, Hard 6.
+            level = Math.Min(level, data.GenTier == 1 ? 3 : data.GenTier + 3);
         }
 
         if (myProperty is not null)
-            return Convert.ToInt32(InsertProperty(ref data, myProperty, level));
+            return Convert.ToInt32(InsertProperty(ref data, myProperty, level, data.GenTier <= 1));
 
         string property = string.Empty;
         int roll = _random.Next(1, 101);
         if (typeToAdd != "none")
-            property = _random.Pick<string>(_propertiesList[typeToAdd]);
+            property = PickProperty(typeToAdd, data.GenTier);
         else if (valueOffset > 0)
-            property = _random.Pick<string>(_propertiesList["positive"]);
+            property = PickProperty("positive", data.GenTier);
         else if (valueOffset < 0)
         {
             if (roll <= data.GenTier * 10)
-                property = _random.Pick<string>(_propertiesList["negative"]);
+                property = PickProperty("negative", data.GenTier);
             else
-                property = _random.Pick<string>(_propertiesList["neutral"]);
+                property = PickProperty("neutral", data.GenTier);
         }
         else
         {
@@ -680,35 +725,35 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             {
                 case 1:
                     if (roll <= 40)
-                        property = _random.Pick(_propertiesList["negative"]);
+                        property = PickProperty("negative", data.GenTier);
                     else if (roll <= 50)
-                        property = _random.Pick(_propertiesList["neutral"]);
+                        property = PickProperty("neutral", data.GenTier);
                     else
-                        property = _random.Pick(_propertiesList["positive"]);
+                        property = PickProperty("positive", data.GenTier);
                     break;
                 case 2:
                     if (roll <= 35)
-                        property = _random.Pick(_propertiesList["negative"]);
+                        property = PickProperty("negative", data.GenTier);
                     else if (roll <= 45)
-                        property = _random.Pick(_propertiesList["neutral"]);
+                        property = PickProperty("neutral", data.GenTier);
                     else
-                        property = _random.Pick(_propertiesList["positive"]);
+                        property = PickProperty("positive", data.GenTier);
                     break;
                 case 3:
                     if (roll <= 15)
-                        property = _random.Pick(_propertiesList["negative"]);
+                        property = PickProperty("negative", data.GenTier);
                     else if (roll <= 25)
-                        property = _random.Pick(_propertiesList["neutral"]);
+                        property = PickProperty("neutral", data.GenTier);
                     else
-                        property = _random.Pick(_propertiesList["positive"]);
+                        property = PickProperty("positive", data.GenTier);
                     break;
                 default:
                     if (roll <= 10)
-                        property = _random.Pick(_propertiesList["negative"]);
+                        property = PickProperty("negative", data.GenTier);
                     else if (roll <= 15)
-                        property = _random.Pick(_propertiesList["neutral"]);
+                        property = PickProperty("neutral", data.GenTier);
                     else
-                        property = _random.Pick(_propertiesList["positive"]);
+                        property = PickProperty("positive", data.GenTier);
                     break;
             }
         }
@@ -720,17 +765,17 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             {
                 checks++;
                 if (_propertiesList["negative"].Contains(property))
-                    property = _random.Pick(_propertiesList["negative"]);
+                    property = PickProperty("negative", data.GenTier);
                 else if (_propertiesList["neutral"].Contains(property))
-                    property = _random.Pick(_propertiesList["neutral"]);
+                    property = PickProperty("neutral", data.GenTier);
                 else
-                    property = _random.Pick(_propertiesList["positive"]);
+                    property = PickProperty("positive", data.GenTier);
             }
         }
 
         if (properties[property].Rarity == ReagentPropertyRarityEnum.Disabled ||
             properties[property].Rarity == ReagentPropertyRarityEnum.Admin)
-            return AddProperty(ref data, myProperty, myLevel, valueOffset, typeToAdd, track, depth++);
+            return AddProperty(ref data, myProperty, myLevel, valueOffset, typeToAdd, track, depth + 1);
         if (level > properties[property].MaxLevel)
             level = Math.Min(level, properties[property].MaxLevel);
 
@@ -743,8 +788,32 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         else
             value = level;
 
-        InsertProperty(ref data, property, level);
+        InsertProperty(ref data, property, level, data.GenTier <= 1);
         return value;
+    }
+    /// <summary>
+    /// Rarity-weighted pick from a property bucket. Easy contracts only see Common properties, Intermediate
+    /// sees Uncommon at half weight, Hard and above see them at full weight. The "rare" bucket is uniform.
+    /// </summary>
+    private string PickProperty(string bucket, int tier)
+    {
+        var list = _propertiesList[bucket];
+        if (bucket == "rare" || list.Count == 0)
+            return _random.Pick(list);
+        var props = _protoMan.GetInstances<ReagentPropertyPrototype>();
+        var uncommonWeight = tier switch { <= 1 => 0f, 2 => 0.5f, _ => 1f };
+        var weights = new Dictionary<string, float>();
+        foreach (var id in list)
+        {
+            var prop = props[id];
+            // Volatile combustibles (Explosive) detonate on synthesis; keep them to Hard contracts.
+            if (tier < 3 && prop.Volatile && prop.Category.HasFlag(ReagentPropertyTypeEnum.Combustible))
+                continue;
+            var weight = prop.Rarity == ReagentPropertyRarityEnum.Uncommon ? uncommonWeight : 1f;
+            if (weight > 0f)
+                weights[id] = weight;
+        }
+        return weights.Count == 0 ? _random.Pick(list) : _random.Pick(weights);
     }
     #endregion
     #region Name Generation
@@ -781,7 +850,10 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
     }
     #endregion
     #region Helpers
-    public bool InsertProperty(ref GeneratedReagentData data, string property, int level)
+    /// <param name="lockRareCombinations">Contract generation passes true for Easy contracts so that common
+    /// properties cannot combine into a Rare-or-better one. The simulator leaves it false: crafting
+    /// combinations from scanned chemicals is its purpose.</param>
+    public bool InsertProperty(ref GeneratedReagentData data, string property, int level, bool lockRareCombinations = false)
     {
         var props = _protoMan.GetInstances<ReagentPropertyPrototype>();
         KeyValuePair<string, int>? match = null;
@@ -797,6 +869,10 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 foreach (var kvp in _unfoldedCombinations)
                 {
                     if (!kvp.Value.Contains(prop.Key) || !kvp.Value.Contains(property))
+                        continue;
+                    // Rare and better properties are locked away from Easy contracts, including via combinations
+                    // of common properties (e.g. Psychostimulating + Hallucinogenic -> Hyperthrottling).
+                    if (lockRareCombinations && props[kvp.Key].Rarity >= ReagentPropertyRarityEnum.Rare)
                         continue;
                     int pieces = 0;
                     foreach (var idx in kvp.Value)
@@ -822,14 +898,16 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                     }
                 }
                 // conflicts
+                // only the property that actually conflicts gets cancelled, checking the whole dict
+                // here used to eat whichever property happened to be iterated first
                 foreach (var list in _unfoldedConflicts)
                 {
-                    if (list[0] == toUse && data.Effects.ContainsKey(list[1]))
+                    if (list[0] == toUse && list[1] == prop.Key)
                     {
                         match = prop;
                         break;
                     }
-                    else if (data.Effects.ContainsKey(list[0]) && list[1] == toUse)
+                    else if (list[0] == prop.Key && list[1] == toUse)
                     {
                         match = prop;
                         break;
@@ -914,6 +992,10 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.RecipeHint = B.RecipeHint;
         A.RecipeYield = B.RecipeYield;
         A.ScanPointYield = B.ScanPointYield;
+        A.SubContractID = B.SubContractID ?? string.Empty;
+        A.SubContractIsNew = B.SubContractIsNew;
+        A.RequiredMinTemp = B.RequiredMinTemp;
+        A.RequiredMaxTemp = B.RequiredMaxTemp;
         return;
     }
 
@@ -973,9 +1055,86 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.RecipeHint = other.RecipeHint;
         A.RecipeYield = other.RecipeYield;
         A.ScanPointYield = other.ScanPointYield;
+        A.SubContractID = other.SubContractID ?? string.Empty;
+        A.SubContractIsNew = other.SubContractIsNew;
+        A.RequiredMinTemp = other.RequiredMinTemp;
+        A.RequiredMaxTemp = other.RequiredMaxTemp;
         return;
     }
 
+
+    #region Contract temperature gates
+    /// <summary>
+    /// The conditions a generated synthesis needs on top of its reagents, one line each: the lid-closed Mix (Hard),
+    /// the §5 heat or cooling gate, and the FLOW-01 ceiling an ignitable chemical must stay under. Matches CreateRecipe.
+    /// </summary>
+    public string ProcessRequirementsText(GeneratedReagentData data)
+    {
+        var text = string.Empty;
+        if (data.GenTier >= MixGatedGenTier)
+            text += Loc.GetString("research-report-contract-mix-required") + '\n';
+
+        GetSynthesisTemperatureBand(data, out var minTemp, out var maxTemp);
+        if (minTemp > 0)
+            text += Loc.GetString("research-report-contract-heat-required", ("TEMP", (int) minTemp)) + '\n';
+        if (data.RequiredMaxTemp > 0)
+            text += Loc.GetString("research-report-contract-cooling-required", ("TEMP", (int) data.RequiredMaxTemp)) + '\n';
+        else if (float.IsFinite(maxTemp))
+            text += Loc.GetString("research-report-contract-ignition-ceiling", ("TEMP", (int) maxTemp)) + '\n';
+        return text;
+    }
+
+    /// <summary>§5: chance of a heat gate and of a cooling gate, by contract tier (Easy never gets one).</summary>
+    public static (float Heat, float Cool) TemperatureGateChances(int genTier) => genTier switch
+    {
+        <= 1 => (0f, 0f),
+        2 => (0.15f, 0.10f),
+        _ => (0.25f, 0.20f),
+    };
+
+    /// <summary>
+    /// §5: occasionally gives an Intermediate or Hard contract a heat or a cooling requirement. Call after
+    /// <see cref="GenerateStats"/>: a self-heating (Hyperthermic) synthesis would climb out of a cooling gate and a
+    /// self-cooling (Hypothermic) one would fall out of a heat gate, so the roll swaps to the gate that suits it.
+    /// Ignitable chemicals get a lower heat gate so a hotplate overshoot does not reach their ignition point.
+    /// </summary>
+    public void RollTemperatureGate(ref GeneratedReagentData data)
+    {
+        data.RequiredMinTemp = 0f;
+        data.RequiredMaxTemp = 0f;
+        var (heatChance, coolChance) = TemperatureGateChances(data.GenTier);
+        var roll = _random.NextFloat();
+        bool heat;
+        if (roll < heatChance)
+            heat = true;
+        else if (roll < heatChance + coolChance)
+            heat = false;
+        else
+            return;
+
+        var net = NetSynthesisHeat(data.Effects);
+        if (heat && net < 0)
+            heat = false;
+        else if (!heat && net > 0)
+            heat = true;
+
+        if (heat)
+        {
+            var max = IgnitionLevel(data.Effects) > 0 ? HeatGateMaxIgnitable : HeatGateMax;
+            data.RequiredMinTemp = PickStep(HeatGateMin, max);
+        }
+        else
+        {
+            data.RequiredMaxTemp = PickStep(CoolGateMin, CoolGateMax);
+        }
+    }
+
+    private float PickStep(float min, float max)
+    {
+        var steps = (int) MathF.Round((max - min) / GateStep);
+        return min + GateStep * _random.Next(0, steps + 1);
+    }
+    #endregion
 
     private Dictionary<string, List<string>> UnfoldCombinations()
     {
@@ -1126,7 +1285,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         var reagents = _protoMan.GetInstances<ReagentPrototype>();
         foreach (var ingredient in data.Recipe)
         {
-            if (!reagents[ingredient.Key].Flags.HasFlag(ReagentFlags.Medical))
+            // A nested contract chemical is not registered until just before its parent; unknown reagents are
+            // generated chemicals, which are never Medical.
+            if (!reagents.TryGetValue(ingredient.Key, out var reagent) || !reagent.Flags.HasFlag(ReagentFlags.Medical))
                 return false;
         }
         return true;

@@ -173,7 +173,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: AU14BoxHEDPUPP
+    - id: CMUBoxGrenadeType6
 
 - type: entity
   parent: RMCCrateExplosives
@@ -193,5 +193,5 @@
   components:
   - type: StorageFill
     contents:
-    - id: AU14BoxSmokeUPP
+    - id: CMUBoxGrenadeRDG17
       amount: 1

@@ -54,7 +54,7 @@ public sealed partial class XenoSoakSystem : EntitySystem
 
         Dirty(xeno.Owner, soak);
 
-        _popup.PopupPredicted(Loc.GetString("rmc-xeno-soak-self"), Loc.GetString("rmc-xeno-soak-others", ("xeno", xeno)), xeno, xeno, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-soak-self"), Loc.GetString("rmc-xeno-soak-others", ("xeno", xeno)), xeno, xeno, PopupType.MediumCaution);
         _aura.GiveAura(xeno, soak.SoakColor, xeno.Comp.Duration);
     }
 

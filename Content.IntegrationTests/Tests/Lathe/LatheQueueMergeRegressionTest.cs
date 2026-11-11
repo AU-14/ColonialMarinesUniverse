@@ -287,6 +287,34 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
         });
     }
 
+    // CMU14: a new same-recipe batch must retain the previously paid in-flight item on power loss.
+    [Test]
+    public async Task PowerLossPreservesItemAheadOfNewSameRecipeBatch()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var lathe = SEntMan.SpawnEntity("LatheMergeMachine", map.GridCoords);
+            var component = SEntMan.GetComponent<LatheComponent>(lathe);
+            var recipe = SProtoMan.Index<LatheRecipePrototype>(Recipe);
+            Power(lathe, true);
+            Assert.That(_lathe.TryAddToQueue(lathe, recipe, 1, component), Is.True);
+            Assert.That(_lathe.TryStartProducing(lathe, component), Is.True);
+            Assert.That(_lathe.TryAddToQueue(lathe, recipe, 2, component), Is.True);
+
+            Power(lathe, false);
+            var lostPower = new PowerChangedEvent(false, 0);
+            SEntMan.EventBus.RaiseLocalEvent(lathe, ref lostPower);
+            Assert.That(Pending(component), Is.EqualTo(3));
+            Assert.That(Material(lathe, "CMSteel"), Is.EqualTo(85));
+
+            var user = SEntMan.SpawnEntity(null, map.GridCoords);
+            var delete = new LatheDeleteRequestMessage(0) { Actor = user };
+            _lathe.OnLatheDeleteRequestMessage(lathe, component, ref delete);
+            Assert.That(Material(lathe, "CMSteel"), Is.EqualTo(100), "Cancelling all three paid items returns their original cost once.");
+        });
+    }
+
     private void Queue(EntityUid lathe, EntityUid user, string recipe, int quantity)
     {
         var message = new LatheQueueRecipeMessage(recipe, quantity) { Actor = user };

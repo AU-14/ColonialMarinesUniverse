@@ -105,7 +105,7 @@ public sealed partial class SharpSystem : EntitySystem
             "rmc-sharp-toggle-delay",
             ("gun", ent.Owner),
             ("seconds", ent.Comp.CurrentDelay.TotalSeconds));
-        _popup.PopupClient(msg, args.UserUid, args.UserUid, PopupType.Medium);
+        _popup.PopupEntity(msg, args.UserUid, args.UserUid, PopupType.Medium);
 
         args.Handled = true;
     }

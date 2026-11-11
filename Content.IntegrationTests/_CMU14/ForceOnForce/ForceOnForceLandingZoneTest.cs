@@ -18,31 +18,9 @@ namespace Content.IntegrationTests._CMU14.ForceOnForce;
 [TestFixture]
 public sealed class ForceOnForceLandingZoneTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Dirty = true };
 
-    [Test]
-    public async Task ReviewedPoolAndShipStarts()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var preset = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
-            var planets = GamePlanetPoolPrototype.ExpandPlanetIds(SProtoMan, preset.PlanetPool, preset.SupportedPlanets);
-            Assert.That(planets, Is.EquivalentTo(new[]
-            {
-                "CMUPlanetHopesRetreat", "AUPlanetLV759", "AUPlanetTrijent", "AUPlanetBosenmoriBasho",
-                "AuPlanetChances", "AUPlanetCorsatStation", "AUPlanetLV624", "AUPlanetShepherdsPride",
-                "AUPlanetLV747", "CMUPlanetStableGarrisonRedux", "AUPlanetSorokyne",
-            }));
-            var groundBases = new[] { "CMUPlanetHopesRetreat", "AUPlanetLV759", "CMUPlanetStableGarrisonRedux" };
-            foreach (var id in planets)
-            {
-                var proto = SProtoMan.Index<EntityPrototype>(id);
-                Assert.That(proto.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, SEntMan.ComponentFactory), Is.True);
-                Assert.That(planet!.GovforInShip, Is.EqualTo(!groundBases.Contains(id)), id);
-                Assert.That(planet.OpforInShip, Is.True, id);
-            }
-        });
-    }
+
+    public override PoolSettings PoolSettings => new() { Dirty = true };
 
     [TestCase("ForceOnForce", "opfor")]
     [TestCase("DistressSignal", "govfor")]

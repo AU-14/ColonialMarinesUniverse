@@ -11,10 +11,11 @@
 
 - type: thirdParty
   id: ProdigyExtractionParty
+  allegiance: Prodigy
   partyspawn: ProdigyExtractionSpawn
   entrymethod: shuttle
   weight: 10
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false

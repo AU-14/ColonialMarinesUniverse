@@ -10,8 +10,13 @@
     - id: CMWelder
     - id: CMCrowbar
     - id: CMWirecutter
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
     - id: CMMultitool
+    # CMU14 Begin: the hand saw, the hammer and the shovel in the belt of the toolkit
+    - id: RUMCHandSaw
+    - id: RUMCHammer
+    - id: AU14ToolShovel
+    # CMU14 End
 
 - type: entity
   parent: CMBeltUtilityCombat
@@ -80,7 +85,7 @@
       amount: 1
     - id: CMTraumaKit10
       amount: 1
-    - id: CMDefibrillator
+    - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator
       amount: 1
     - id: CMHealthAnalyzer
       amount: 1

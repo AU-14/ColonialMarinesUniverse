@@ -1,6 +1,7 @@
 using Content.Server.Administration;
 using Content.Server.EUI;
 using Content.Shared.Administration;
+using Content.Shared.CMU14.Yautja;
 using Robust.Shared.Console;
 
 namespace Content.Server.CMU14.Yautja;
@@ -20,6 +21,7 @@ public sealed partial class YautjaClanAdminCommand : LocalizedCommands
             return;
         }
 
-        _eui.OpenEui(new YautjaClanAdminEui(), player);
+        // old name, kept for muscle memory. opens the clan hall on the matching page
+        _eui.OpenEui(new YautjaClanHallEui(YautjaClanHallPage.Whitelists), player);
     }
 }

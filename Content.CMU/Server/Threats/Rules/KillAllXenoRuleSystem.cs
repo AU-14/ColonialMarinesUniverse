@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.RoundStatistics;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
@@ -5,6 +6,8 @@ using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
@@ -26,13 +29,17 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
 
     private static readonly ProtoId<JobPrototype> LesserDroneRole = "CMXenoLesserDrone";
+    private static readonly TimeSpan CheckEvery = TimeSpan.FromSeconds(5);
     private const string DefaultWinMsg = "The threat has been eliminated!";
+
+    private TimeSpan _nextCheck;
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<CMUAdriftChangedEvent>(OnAdriftChanged);
         SubscribeLocalEvent<EvacuationLaunchedEvent>(OnEvacuationLaunched);
     }
 
@@ -50,6 +57,26 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         if (ev.NewMobState != MobState.Dead)
             return;
 
+        // Lab-made Wendigos never decide the round.
+        if (HasComp<CMUWendigoLabMadeComponent>(ev.Target))
+            return;
+
+        CheckVictoryCondition();
+    }
+
+    private void OnAdriftChanged(ref CMUAdriftChangedEvent ev) => CheckVictoryCondition();
+
+    // gibs and deletes take a xeno out without it ever going Dead, so the death hook alone left
+    // the round hanging after the last one got gibbed
+    protected override void ActiveTick(EntityUid uid, KillAllXenoRuleComponent component, GameRuleComponent gameRule,
+        float frameTime)
+    {
+        base.ActiveTick(uid, component, gameRule, frameTime);
+
+        if (Timing.CurTime < _nextCheck)
+            return;
+
+        _nextCheck = Timing.CurTime + CheckEvery;
         CheckVictoryCondition();
     }
 
@@ -69,6 +96,14 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         EntityQueryEnumerator<MobStateComponent> query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
+            // Lab-made Wendigos contribute to no counter.
+            if (_entMan.HasComponent<CMUWendigoLabMadeComponent>(uid))
+                continue;
+
+            // Adrift in space outside the ship: left out until they get back aboard.
+            if (_threatRuleHelper.IsAdrift(uid))
+                continue;
+
             // Planet-side survivors stop counting after the hijack lands; the endgame is ship-side.
             if (hijackLanded &&
                 mobState.CurrentState != MobState.Dead &&
@@ -77,8 +112,9 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
                 continue;
             }
 
-            if (_entMan.TryGetComponent(uid, out XenoComponent? xeno)
-                && xeno.Role != LesserDroneRole)
+            // Natural Wendigos are pack mobs, not xenos, but they are the threat this rule ends on.
+            if ((_entMan.TryGetComponent(uid, out XenoComponent? xeno) && xeno.Role != LesserDroneRole)
+                || _entMan.HasComponent<CMUWendigoPackComponent>(uid))
             {
                 totalXeno++;
                 if (mobState.CurrentState == MobState.Dead || _threatRuleHelper.IsEvacuated(uid))

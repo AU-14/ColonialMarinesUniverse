@@ -23,6 +23,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
+using Content.Shared.StatusEffectNew; // CMU14: use the actual roll paralysis deadline.
 using Content.Shared.Temperature;
 using Content.Shared.Throwing;
 using Content.Shared.Timing;
@@ -43,6 +44,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private ActionBlockerSystem _actionBlockerSystem = default!;
         [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private StunSystem _stunSystem = default!;
+        [Dependency] private StatusEffectsSystem _statusEffects = default!; // CMU14
         [Dependency] private TemperatureSystem _temperatureSystem = default!;
         [Dependency] private SharedIgnitionSourceSystem _ignitionSourceSystem = default!;
         [Dependency] private DamageableSystem _damageableSystem = default!;
@@ -93,7 +95,8 @@ namespace Content.Server.Atmos.EntitySystems
             SubscribeLocalEvent<FlammableComponent, MapInitEvent>(OnMapInit);
             // CMU14: components gained mid-cycle join the live snapshot without waiting for a rebuild.
             SubscribeLocalEvent<FlammableComponent, ComponentInit>(OnFlammableInit);
-            SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing);
+            // CMU14: a lit welder on a damaged cade is a repair, not a lighter. without the order the cade just caught fire
+            SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing, after: [typeof(Content.Shared._RMC14.Repairable.RMCRepairableSystem)]);
             SubscribeLocalEvent<FlammableComponent, StartCollideEvent>(OnCollide);
             SubscribeLocalEvent<FlammableComponent, IsHotEvent>(OnIsHot);
             SubscribeLocalEvent<FlammableComponent, TileFireEvent>(OnTileFire);
@@ -312,7 +315,7 @@ namespace Content.Server.Atmos.EntitySystems
             if (!CanWaterExtinguish(uid, flammable) || !_rmcWater.IsInWater(uid))
                 return false;
 
-            Extinguish(uid, flammable);
+            TryExtinguish((uid, flammable));
             return true;
         }
 
@@ -511,13 +514,24 @@ namespace Content.Server.Atmos.EntitySystems
             if (!Resolve(uid, ref flammable))
                 return false;
 
+            // CMU14: allow another roll as soon as its deadline passes, without waiting for the fire tick.
+            if (flammable.ResistCompleteTime <= _timing.CurTime)
+                flammable.ResistCompleteTime = null;
+
             if (!flammable.OnFire || flammable.Resisting || !_actionBlockerSystem.CanInteract(uid, null))
                 return false;
 
             flammable.ResistCompleteTime = _timing.CurTime + flammable.ResistTime;
 
             _popup.PopupEntity(Loc.GetString("flammable-component-resist-message"), uid, uid);
-            _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
+            // CMU14: stun resistance shortens the roll, so its lockout must use the resulting duration too.
+            // _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
+            if (_stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime) &&
+                _statusEffects.TryGetTime(uid, StunSystem.ParalyzeId, out var paralysis) &&
+                paralysis.EndEffectTime is { } endTime)
+            {
+                flammable.ResistCompleteTime = endTime;
+            }
             // CMU14: RMC rolls take their stacks off on the press itself; the window only
             // suppresses the fade so a long pin cannot regrow what the roll removed.
             if (TryComp<OnFireComponent>(uid, out var rmcFire))
@@ -630,6 +644,13 @@ namespace Content.Server.Atmos.EntitySystems
                 if (!flammable.OnFire)
                     continue;
 
+                // CMU14: anything burning on uncovered water is put out without needing to resist.
+                if (CanWaterExtinguish(uid, flammable) && _rmcWater.IsOnWater(uid))
+                {
+                    TryExtinguish((uid, flammable));
+                    continue;
+                }
+
                 if (flammable.FireStacks <= 0)
                 {
                     TryExtinguish((uid, flammable));
@@ -693,7 +714,7 @@ namespace Content.Server.Atmos.EntitySystems
             }
 
             var damage = HasComp<XenoComponent>(uid)
-                ? rmcFire.Intensity * (flammable.FireStacks / rmcFire.Duration * 0.2 + 0.8) * protectionMultiplier * flammable.Damage / 2
+                ? XenoBurnTickScale(rmcFire.Intensity, flammable.FireStacks, rmcFire.Duration) * protectionMultiplier * flammable.Damage / 2 // CMU14
                 : rmcFire.Intensity / 5f * flammable.Damage;
 
             if (_steppingOnFireQuery.HasComp(uid))
@@ -711,6 +732,22 @@ namespace Content.Server.Atmos.EntitySystems
             // CMU14: fire growth and synthetic resistance.
             _rmcFlammable.DamageFromFire(uid, damage, interruptsDoAfters: false, origin: uid);
         }
+
+        // CMU14 start
+        /// <summary>
+        /// Smallest fire duration the xeno burn tick divides by. The RMC formula scales with
+        /// <c>stacks / duration</c>, so a very short-burning fuel (procgen Oxidizing blends reach a duration of 2)
+        /// multiplied xeno burn damage several times over instead of simply burning out sooner. Napalm UT is 20,
+        /// so stock fuels at or above this floor are unaffected.
+        /// </summary>
+        public const int MinBurnTickDuration = 10;
+
+        /// <summary>The scalar part of the xeno burn tick, before protection and the flammable's damage.</summary>
+        internal static double XenoBurnTickScale(int intensity, float fireStacks, int duration)
+        {
+            return intensity * (fireStacks / Math.Max(duration, MinBurnTickDuration) * 0.2 + 0.8);
+        }
+        // CMU14 end
 
         // CMU14 method
         private void WarnInvalidFire(EntityUid uid, FlammableComponent flammable, string stage, float value)

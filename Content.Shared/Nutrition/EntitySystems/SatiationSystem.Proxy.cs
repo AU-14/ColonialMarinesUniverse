@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.CMU14.Nutrition; // CMU14: allocation-free threshold selection.
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.Prototypes;
 using Content.Shared.Random.Helpers;
@@ -150,6 +151,7 @@ public abstract partial class SatiationSystem
     /// the specified satiation is higher than all thresholds, or the given entity does not have a satiation of the
     /// given type.
     /// </returns>
+    // CMU14 method: preserve inclusive bounds and stable ties without a sorted temporary sequence.
     public bool TryGetValueByThreshold<T>(
         Entity<SatiationComponent> entity,
         [ForbidLiteral] ProtoId<SatiationTypePrototype> type,
@@ -159,8 +161,7 @@ public abstract partial class SatiationSystem
         out int? nextLowerThreshold
     )
     {
-        if (GetValueOrNull(entity, type) is not { } currentValue ||
-            GetAndResolveSatiationOfType(entity, type) is not var (_, proto))
+        if (GetAndResolveSatiationOfType(entity, type) is not var (satiation, proto))
         {
             result = default;
             nextHigherThreshold = null;
@@ -168,54 +169,8 @@ public abstract partial class SatiationSystem
             return false;
         }
 
-        using var valuesByDescendingThreshold = valuesByThreshold
-            // Resolve keys to threshold integers, discarding any keys which cannot be resolved.
-            .Select(it => proto.GetValueOrNull(it.Key) is { } value ? ((int, T)?)(value, it.Value) : null)
-            .OfType<(int, T)>()
-            // Order by descending threshold.
-            .OrderByDescending(it => it.Item1)
-            .GetEnumerator();
-        if (!valuesByDescendingThreshold.MoveNext())
-        {
-            // `values` is empty, so there are no values to return.
-            result = default;
-            nextHigherThreshold = null;
-            nextLowerThreshold = null;
-            return false;
-        }
-
-        if (currentValue > valuesByDescendingThreshold.Current.Item1)
-        {
-            // `currentSatiation` is higher than all thresholds, so we have neither a value nor a higher threshold, but
-            // we can return the next lower threshold.
-            result = default;
-            nextHigherThreshold = null;
-            nextLowerThreshold = valuesByDescendingThreshold.Current.Item1;
-            return false;
-        }
-
-        var nextHigher = valuesByDescendingThreshold.Current;
-        while (valuesByDescendingThreshold.MoveNext())
-        {
-            var nextLower = valuesByDescendingThreshold.Current;
-            if (currentValue > nextLower.Item1)
-            {
-                // The current value is below `nextHigher` and above `nextLower`, so `nextHigher` is the correct threshold.
-                result = nextHigher.Item2;
-                nextHigherThreshold = nextHigher.Item1;
-                nextLowerThreshold = nextLower.Item1;
-                return true;
-            }
-
-            // Loop, setting `nextLower` to the next iteration's `nextHigher`
-            nextHigher = nextLower;
-        }
-
-        // We've run out of thresholds below.
-        result = nextHigher.Item2;
-        nextHigherThreshold = nextHigher.Item1;
-        nextLowerThreshold = null;
-        return true;
+        return CMUSatiationThresholdLookup.TryGetValue(proto, CalculateCurrentValue(satiation, proto),
+            valuesByThreshold, out result, out nextHigherThreshold, out nextLowerThreshold);
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ namespace Content.Shared.CMU14.Input;
 [KeyFunctions]
 public sealed class CMUKeyFunctions
 {
+    public static readonly BoundKeyFunction CMUToggleFirstPersonMouse = "CMUToggleFirstPersonMouse";
     public static readonly BoundKeyFunction CMUCycleBodyZoneTarget = "CMUCycleBodyZoneTarget";
     public static readonly BoundKeyFunction CMUCycleBodyZoneTargetReverse = "CMUCycleBodyZoneTargetReverse";
     public static readonly BoundKeyFunction CMUTargetBodyZoneHead = "CMUTargetBodyZoneHead";
@@ -16,6 +17,7 @@ public sealed class CMUKeyFunctions
     public static readonly BoundKeyFunction CMUInspectInjuries = "CMUInspectInjuries";
     public static readonly BoundKeyFunction CMUOpenMedicalCraftingMenu = "CMUOpenMedicalCraftingMenu";
     public static readonly BoundKeyFunction CMUToggleShootDownZLevel = "CMUToggleShootDownZLevel";
+    public static readonly BoundKeyFunction CMUOpenWornStorage = "CMUOpenWornStorage";
 
     public static readonly BoundKeyFunction CMUGunshipForward = "CMUGunshipForward";
     public static readonly BoundKeyFunction CMUGunshipBack = "CMUGunshipBack";

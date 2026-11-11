@@ -1,0 +1,36 @@
+- type: entity
+  abstract: true
+  parent: CMUMohawkLight
+  id: CMUMohawkDoubleLight
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/obj/items/lighting.rsi
+    layers:
+    - state: ptube1
+      map: ["enum.PoweredLightLayers.Base"]
+  - type: PoweredLightVisuals
+    spriteStateMap:
+      Empty: ptube-empty
+      Off: ptube0
+      On: ptube1
+      Broken: ptube-broken
+      Burned: ptube-burned
+
+- type: entity
+  abstract: true
+  parent: CMUMohawkDoubleLight
+  id: CMUMohawkDoubleBlueLight
+  components:
+  - type: Sprite
+    layers:
+    - state: bptube1
+      map: ["enum.PoweredLightLayers.Base"]
+  - type: PointLight
+    color: '#D2E3EC'
+  - type: PoweredLightVisuals
+    spriteStateMap:
+      Empty: bptube-empty
+      Off: bptube0
+      On: bptube1
+      Broken: bptube-broken
+      Burned: bptube-burned

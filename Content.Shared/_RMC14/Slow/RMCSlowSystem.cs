@@ -1,6 +1,5 @@
 using Content.Shared._RMC14.Movement;
 using Content.Shared.CMU14.Chemistry.Effects;
-using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Rejuvenate;
@@ -48,18 +47,15 @@ public sealed partial class RMCSlowSystem : EntitySystem
         SubscribeLocalEvent<RMCSpeciesSlowdownModifierComponent, StatusEffectEndedEvent>(OnModifierEffectEnd);
     }
 
-    public bool TrySlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
+    public bool TrySlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false, bool ignoreImmunity = false)
     {
-        // CMU Related Change
-        if (IsRegularYautja(ent))
-            return false;
-
-        if (!TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow))
+        TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow);
+        if (slow == null && !ignoreImmunity)
             return false;
 
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
-        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * MathF.Max(0f, chemical.Multiplier);
+        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow?.DurationMultiplier ?? 1) * MathF.Max(0f, chemical.Multiplier);
         var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSlowdownComponent>(ent);
@@ -74,21 +70,18 @@ public sealed partial class RMCSlowSystem : EntitySystem
         return true;
     }
 
-    public bool TrySuperSlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
+    public bool TrySuperSlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false, bool ignoreImmunity = false)
     {
-        // CMU Related Change
-        if (IsRegularYautja(ent))
-            return false;
-
         if (_timing.ApplyingState)
             return false;
 
-        if (!TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow))
+        TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow);
+        if (slow == null && !ignoreImmunity)
             return false;
 
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
-        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * MathF.Max(0f, chemical.Multiplier);
+        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow?.DurationMultiplier ?? 1) * MathF.Max(0f, chemical.Multiplier);
         var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSuperSlowdownComponent>(ent);
@@ -105,10 +98,6 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     public bool TryRoot(EntityUid ent, TimeSpan duration, bool refresh = true, bool applyChemical = false)
     {
-        // CMU Related Change
-        if (IsRegularYautja(ent))
-            return false;
-
         var adjustedDuration = duration;
         if (applyChemical)
         {
@@ -132,12 +121,6 @@ public sealed partial class RMCSlowSystem : EntitySystem
         Dirty(ent, slowdown);
 
         return true;
-    }
-
-    // CMU Related Change
-    private bool IsRegularYautja(EntityUid ent)
-    {
-        return HasComp<YautjaComponent>(ent) && !HasComp<YautjaBadBloodComponent>(ent);
     }
 
     private void OnAdded<T>(Entity<T> ent, ref ComponentStartup args) where T : IComponent

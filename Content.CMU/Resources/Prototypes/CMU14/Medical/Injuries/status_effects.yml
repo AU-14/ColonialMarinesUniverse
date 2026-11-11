@@ -357,6 +357,21 @@
     innerAlpha: 0
     color: "#000000"
 
+# Soporific's take on the opioid haze: twice as blurry, with a heavy dark vignette closing in from the edges.
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUSoporificHaze
+  name: soporific haze
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RMCDazed
+    visionReduction: 0.3
+    outerFadeStart: 0.35
+    outerFadeEnd: 1.0
+    alpha: 0.85
+    innerAlpha: 0
+    color: "#000000"
+
 - type: entity
   parent: MobStatusEffectBase
   id: StatusEffectCMUFentanylHaze

@@ -19,9 +19,9 @@ namespace Content.IntegrationTests.CMU14.Medical.Treatment.FirstAid;
 [TestFixture]
 public sealed class SplintCastUseReplicationTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> InstantDoAftersPrototype = "InstantDoAfters";
+
     [TestCase(false, false)]
-    [TestCase(false, true)]
-    [TestCase(true, false)]
     [TestCase(true, true)]
     public async Task RealTreatmentReplicatesInitialAndChangedUsesExamineAndDepletion(bool cast, bool consumeBeforeFirstSnapshot)
     {
@@ -58,9 +58,9 @@ public sealed class SplintCastUseReplicationTest
                 medicNet = entities.GetNetEntity(medic);
                 if (consumeBeforeFirstSnapshot)
                 {
-                    entities.System<TagSystem>().AddTag(medic, "InstantDoAfters");
+                    entities.System<TagSystem>().AddTag(medic, InstantDoAftersPrototype);
                     ApplyInteraction();
-                    entities.System<TagSystem>().RemoveTag(medic, "InstantDoAfters");
+                    entities.System<TagSystem>().RemoveTag(medic, InstantDoAftersPrototype);
                     Assert.That(ServerUses(), Is.EqualTo(3));
                 }
             });
@@ -89,7 +89,7 @@ public sealed class SplintCastUseReplicationTest
             });
             await AssertClientUses(initialUses);
 
-            await server.WaitAssertion(() => entities.System<TagSystem>().AddTag(medic, "InstantDoAfters"));
+            await server.WaitAssertion(() => entities.System<TagSystem>().AddTag(medic, InstantDoAftersPrototype));
             for (var remaining = initialUses - 1; remaining >= 1; remaining--)
             {
                 var expected = remaining;

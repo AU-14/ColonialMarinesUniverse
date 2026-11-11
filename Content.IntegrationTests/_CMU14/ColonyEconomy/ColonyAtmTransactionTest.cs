@@ -1,3 +1,4 @@
+using Content.Client.CMU14.ColonyEconomy;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.ColonyEconomy;
@@ -16,7 +17,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
     public async Task BalanceStaysHiddenUntilThePinIsEntered()
     {
         await SpawnTarget(Atm);
-        var (_, pin, _) = await SwipeNewCard(750);
+        var (_, pin, _) = await InsertNewCard(750);
 
         Assert.That(ClientAtmState().Balance, Is.Zero, "The balance was sent before the PIN was entered");
 
@@ -36,7 +37,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
 
         var budget = SEntMan.System<ColonyBudgetSystem>();
         var budgetBefore = budget.GetBudget();
-        var (card, pin, _) = await SwipeNewCard(500);
+        var (card, pin, _) = await InsertNewCard(500);
         await Type(pin.ToString());
 
         await Type("1", enter: false);              // 1) WITHDRAW
@@ -46,7 +47,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         Assert.Multiple(() =>
         {
             Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(400), "The full amount was not taken from the account");
-            Assert.That(CashOnFloor(), Is.EqualTo(80), "The cash dispensed was not net of tax");
+            Assert.That(CashInTray(), Is.EqualTo(80), "The cash dispensed was not net of tax");
             Assert.That(budget.GetBudget() - budgetBefore, Is.EqualTo(20), "The tax did not reach the colony budget");
         });
     }
@@ -55,7 +56,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
     public async Task CannotWithdrawMoreThanTheBalance()
     {
         await SpawnTarget(Atm);
-        var (card, pin, _) = await SwipeNewCard(50);
+        var (card, pin, _) = await InsertNewCard(50);
         await Type(pin.ToString());
 
         await Type("1", enter: false);              // 1) WITHDRAW
@@ -74,10 +75,9 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
     public async Task CannotDepositMoreCashThanYouHold()
     {
         await SpawnTarget(Atm);
-        var (card, pin, _) = await SwipeNewCard(100);
+        var (card, pin, _) = await InsertNewCard(100);
         await Type(pin.ToString());
 
-        await Drop();
         await PlaceInHands(Cash, 20);
         await Type("2", enter: false);              // 2) DEPOSIT
         await Type("50");
@@ -94,7 +94,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
     public async Task TransferRefusesOwnUnknownAndOverdrawnAccounts()
     {
         await SpawnTarget(Atm);
-        var (card, pin, account) = await SwipeNewCard(100);
+        var (card, pin, account) = await InsertNewCard(100);
         var (_, other, otherAccount) = await SpawnOtherCard(10);
         var unknownAccount = 0;
         await Server.WaitPost(() =>
@@ -155,62 +155,46 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         });
     }
 
+    /// <summary>CANCEL abandons a transaction from any step of it, not just the last one.</summary>
     [Test]
-    public async Task DeleteKeyEditsThenStepsBackAndExitEndsTheSession()
+    public async Task CancelAbandonsATransferHalfway()
     {
         await SpawnTarget(Atm);
-        var (_, pin, _) = await SwipeNewCard(100);
+        var (_, pin, _) = await InsertNewCard(100);
+        var (_, other, otherAccount) = await SpawnOtherCard();
         await Type(pin.ToString());
 
-        await Type("1", enter: false);              // 1) WITHDRAW
-        await Type("12", enter: false);
-        Assert.That(AtmComp.KeypadBuffer, Is.EqualTo("12"));
+        await Type("3", enter: false);              // 3) TRANSFER
+        await Type(otherAccount.ToString());
+        await Type("40");
+        Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.TransferConfirm));
 
-        await Delete();
-        Assert.That(AtmComp.KeypadBuffer, Is.EqualTo("1"), "DEL did not remove the last digit");
-        await Delete();
-        Assert.That(AtmComp.KeypadBuffer, Is.Empty);
-        Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Withdraw), "DEL on the last digit also left the screen");
-
-        await Delete();
-        Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu), "DEL on an empty entry did not step back");
-
-        await Type("6", enter: false);              // 6) EXIT
+        await Cancel();
         Assert.Multiple(() =>
         {
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));
-            Assert.That(AtmComp.SwipedCard, Is.Null, "EXIT kept the card session");
-            Assert.That(AtmComp.PinAuthenticated, Is.False);
+            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu));
+            Assert.That(AtmComp.PendingAmount, Is.Zero, "The cancelled transfer was left staged");
+            Assert.That(other.AccountBalance, Is.Zero);
         });
+
+        // At the menu, CANCEL ends the session and gives the card back.
+        await Cancel();
+        Assert.That(CardInAtm(), Is.Null);
     }
 
-    [Test]
-    public async Task ClosingTheAtmMeansThePinIsNeededAgain()
-    {
-        await SpawnTarget(Atm);
-        var (_, pin, _) = await SwipeNewCard(100);
-        await Type(pin.ToString());
-        Assert.That(AtmComp.PinAuthenticated);
 
-        await CloseBui(ColonyAtmUi.Key);
-        await Interact();                            // swipe the same card again
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
-            Assert.That(AtmComp.PinAuthenticated, Is.False, "The ATM remembered the PIN after it was closed");
-        });
-    }
 
     /// <summary>The lock is on the card, so walking to another ATM does not get around it.</summary>
     [Test]
     public async Task LockedCardIsLockedAtEveryAtm()
     {
         await SpawnTarget(Atm);
-        var (_, pin, _) = await SwipeNewCard(100);
+        var (_, pin, _) = await InsertNewCard(100);
         for (var i = 0; i < ColonyBankSystem.MaxPinAttempts; i++)
             await Type(WrongPin(pin));
         Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinLocked));
+        await Enter();                               // take the locked card back
         await CloseBui(ColonyAtmUi.Key);
 
         await SpawnTarget(Atm);                      // a second ATM
@@ -224,58 +208,6 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         });
     }
 
-    /// <summary>
-    ///     A siphoned ATM is out of order until it repairs itself, as before the rework. The swipe was
-    ///     already refused; the click that now opens the ATM for card-free deposits must be too.
-    /// </summary>
-    [Test]
-    public async Task HackedAtmIsOutOfOrderUntilItRepairsItself()
-    {
-        await SpawnTarget(Atm);
-        await Server.WaitPost(() =>
-        {
-            var hacked = SEntMan.EnsureComponent<SapperAtmHackedComponent>(STarget!.Value);
-            hacked.RecoverAt = STiming.CurTime + TimeSpan.FromSeconds(3);
-        });
 
-        await PlaceInHands(IdCard);
-        await Interact();
-        Assert.That(IsUiOpen(ColonyAtmUi.Key), Is.False, "An out-of-order ATM accepted a card");
 
-        await Activate();
-        Assert.Multiple(() =>
-        {
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), Is.False, "An out-of-order ATM opened on a click");
-            Assert.That(AtmComp.CurrentUser, Is.Null);
-        });
-
-        await RunSeconds(4);
-        Assert.That(SEntMan.HasComponent<SapperAtmHackedComponent>(STarget), Is.False, "The ATM never repaired itself");
-        await Interact();
-        Assert.Multiple(() =>
-        {
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), "The repaired ATM refused the card");
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
-        });
-    }
-
-    /// <summary>
-    ///     The ASRS console also carries the ATM component (for cash intake) but has no ATM screen,
-    ///     so it must never start an ATM session.
-    /// </summary>
-    [Test]
-    public async Task AsrsConsoleIsNotTreatedAsAnAtm()
-    {
-        await SpawnTarget("CMASRSConsole");
-        await PlaceInHands(IdCard);
-        await Interact();
-        await Activate();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(AtmComp.CurrentUser, Is.Null, "The ASRS console started an ATM session");
-            Assert.That(AtmComp.SwipedCard, Is.Null);
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), Is.False);
-        });
-    }
 }

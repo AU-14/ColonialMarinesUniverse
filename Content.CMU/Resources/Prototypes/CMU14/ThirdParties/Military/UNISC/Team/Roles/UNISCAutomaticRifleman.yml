@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: AU14JobUNISCAutomaticRifleman
   icon: AU14JobIconUSArmyHeavyGunner
@@ -28,7 +28,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: United Nations Interstellar Space Corps Automatic Rifleman
+  name: Automatic Rifleman
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCAutomaticRifleman
   ranks:

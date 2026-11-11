@@ -1,4 +1,4 @@
-﻿using Content.Shared.Actions;
+using Content.Shared.Actions;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
@@ -26,6 +26,9 @@ public sealed partial class XenoCorrosiveAcidEvent : EntityTargetActionEvent
 
     [DataField]
     public float ExpendableLightDps = 2.5f;
+
+    [DataField]
+    public float? VehicleDamage;
 
     [DataField]
     public float ApplyTimeMultiplier = 1;

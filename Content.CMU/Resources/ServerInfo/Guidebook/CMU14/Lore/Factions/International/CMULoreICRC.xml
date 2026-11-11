@@ -1,0 +1,26 @@
+<Document>
+  # International Committee of the Red Cross
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearICRCDoctor" Caption="Doctor"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearICRCNurse" Caption="Nurse"/>
+  </Box>
+
+  The [bold]International Committee of the Red Cross[/bold] (ICRC) is the oldest and largest humanitarian organization in human space. Independent and strictly neutral, it brings medical aid, vaccines and relief to anyone in need, whatever their nation, allegiance or side in a conflict.
+
+  ## The Organization
+  - The ICRC is backed by the [textlink="United Nations" link="CMUGuideLoreUN"], which funds much of its work, grants it access to member territory and gives it a voice in the UN's humanitarian efforts.
+  - It has offices, hospitals and supply depots on Earth and in the Core Systems, and relief ships that carry its staff out to the frontier.
+  - Most of its people are doctors, nurses and aid workers. It keeps no army of its own, and relies on its neutrality, its emblem and the Conventions for protection.
+  - Its [bold]relief missions[/bold] travel from colony to colony, vaccinating colonists, treating the sick and wounded, and bringing aid to settlements too small or too remote for anyone else to bother with.
+  - In war zones it cares for the wounded on all sides, visits prisoners of war, helps trace missing people and works alongside [textlink="UNISC" link="CMUGuideLoreUNISC"] peacekeepers to shelter civilians caught up in the fighting.
+
+  ## The Red Cross
+  - The ICRC's emblem, the [bold]red cross[/bold], is the protective emblem of the [textlink="Geneva Conventions of 12th August 2106" link="AU14UCMJGENCON"]. It can be worn as an armband, on a vest or painted on a vehicle or ship.
+  - Under the Conventions, medical personnel marked with the cross are non-combatants and must not be attacked, unless they take part in fighting beyond self-defense or abuse the cross for hostile ends.
+  - Misusing the emblem to infiltrate, deceive or launch false flag attacks is a grave breach of the Conventions.
+
+  ## On the Frontier
+  - Most colonists welcome the ICRC, and on some isolated worlds a relief mission is the only real medical care they will see for years.
+  - Not everyone trusts it. Governments and corporations sometimes accuse it of meddling, and in the worst conflicts even the red cross is no guarantee of safety.
+</Document>

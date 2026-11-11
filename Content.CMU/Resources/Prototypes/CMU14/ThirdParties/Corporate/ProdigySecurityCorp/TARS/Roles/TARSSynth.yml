@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobTARSPartyContractorBase
   id: AU14JobProdigyTARSPartySynth
+  chevrons:
+    AU14RankPrDSynth1:
+      entity: AU14ChevronPrDSynth1
+      requirements: []
   isSynthetic: true
   roundSide: ThirdParty
   roundForce: PSC
@@ -54,7 +58,7 @@
         Blunt: 35
   - type: Synth
 
-  name: Prodigy TARS Support Synthetic
+  name: Support Synthetic
   description: au14-prodigyrescue-description
   playTimeTracker: AU14JobProdigyTARSPartySynthTracker
   whitelisted: true

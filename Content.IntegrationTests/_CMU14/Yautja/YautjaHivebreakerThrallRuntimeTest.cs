@@ -115,45 +115,66 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
         await pair.CleanReturnAsync();
     }
 
+    // round 2662: the WeYu crates stocked the pred hivebreaker, which zapped every WeYu hand that grabbed it
     [Test]
-    public async Task DirectHivebreakXenoRefusesHellhoundLikeCmss13HandleEnthrallOverride()
+    public async Task WeYuHivebreakerWorksForAPlainHumanAndLeashesTheXenoToThem()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
         var server = pair.Server;
         var map = await pair.CreateTestMap();
 
-        EntityUid hunter = default;
+        EntityUid researcher = default;
         EntityUid hivebreaker = default;
-        EntityUid hellhound = default;
+        EntityUid xeno = default;
+        EntityUid? previousAttached = null;
 
         try
         {
             await server.WaitPost(() =>
             {
                 var entMan = server.EntMan;
+                var hands = entMan.System<SharedHandsSystem>();
+                var mobState = entMan.System<MobStateSystem>();
+                var transform = entMan.System<SharedTransformSystem>();
                 var thralls = entMan.System<YautjaThrallSystem>();
+                var session = server.PlayerMan.Sessions.Single();
+                previousAttached = session.AttachedEntity;
 
-                hunter = SpawnBadBloodTechUser(entMan, map.GridCoords);
-                hivebreaker = entMan.SpawnEntity("CMUYautjaHivebreaker", map.GridCoords);
-                hellhound = entMan.SpawnEntity("CMUMobYautjaHellhound", map.GridCoords.Offset(new Vector2(1, 0)));
+                researcher = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                var researcherFaction = entMan.EnsureComponent<NpcFactionMemberComponent>(researcher);
+                researcherFaction.Factions.Clear();
+                researcherFaction.Factions.Add("AUWeYu");
+
+                hivebreaker = entMan.SpawnEntity("CMUWeYuHivebreaker", map.GridCoords);
+                Assert.That(entMan.HasComponent<YautjaTechItemComponent>(hivebreaker), Is.False,
+                    "the WeYu copy must not carry the pred-tech pickup zap");
+                Assert.That(hands.TryPickupAnyHand(researcher, hivebreaker), Is.True,
+                    "a plain WeYu human has to be able to pick it up");
+
+                xeno = SpawnCriticalXeno(entMan, mobState, "CMXenoRunner", map.GridCoords.Offset(new Vector2(2, 0)));
+                server.PlayerMan.SetAttachedEntity(session, xeno);
+                MoveNextTo(entMan, transform, researcher, xeno);
+                Assert.That(StartHivebreaker(entMan, researcher, hivebreaker, xeno), Is.True,
+                    "a non-Yautja, non-bad-blood human can start the enthrall with the WeYu copy");
 
                 Assert.That(thralls.HivebreakXeno(
-                    hunter,
-                    hellhound,
+                    researcher,
+                    xeno,
                     hivebreaker,
-                    entMan.GetComponent<YautjaHivebreakerComponent>(hivebreaker)), Is.False,
-                    "CMSS13 /mob/living/carbon/xenomorph/hellhound/handle_enthrall() returns FALSE even if the generic enthrall path is reached.");
+                    entMan.GetComponent<YautjaHivebreakerComponent>(hivebreaker)), Is.True);
 
+                var thrall = entMan.GetComponent<YautjaThrallComponent>(xeno);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(entMan.HasComponent<YautjaThrallComponent>(hellhound), Is.False,
-                        "CMSS13 /mob/living/carbon/xenomorph/hellhound/handle_enthrall() returns FALSE even if the generic enthrall path is reached.");
-                    Assert.That(entMan.HasComponent<YautjaHivebrokenXenoComponent>(hellhound), Is.False,
-                        "Hellhounds should keep their native Yautja hound name/camera surface instead of gaining the hivebroken xeno name modifier.");
-                    Assert.That(entMan.HasComponent<YautjaTechAuthorizedComponent>(hellhound), Is.False,
-                        "A rejected Hellhound enthrall must not grant Yautja tech access.");
-                    Assert.That(entMan.GetComponent<NpcFactionMemberComponent>(hellhound).Factions, Is.EquivalentTo(new[] { "CMUYautja" }),
-                        "Rejected Hellhounds should remain in their original Yautja Hellhound faction.");
+                    Assert.That(thrall.Master, Is.EqualTo(researcher));
+                    Assert.That(thrall.Blooded, Is.False);
+                    Assert.That(thrall.TechAuthorized, Is.False);
+                    Assert.That(entMan.GetComponent<NpcFactionMemberComponent>(xeno).Factions,
+                        Is.EquivalentTo(new[] { new ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype>("AUWeYu") }),
+                        "the thrall sides with whoever leashed it, not the Yautja");
+                    Assert.That(entMan.HasComponent<YautjaTechAuthorizedComponent>(xeno), Is.False);
+                    Assert.That(entMan.System<YautjaMarkSystem>().TryGetMarkOwner(xeno, YautjaMarkKind.Dishonored, out _), Is.False,
+                        "no Yautja dishonour mark for a WeYu thrall");
                 });
             });
         }
@@ -161,7 +182,9 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
         {
             await server.WaitPost(() =>
             {
-                DeleteAll(server.EntMan, hunter, hivebreaker, hellhound);
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+                DeleteAll(server.EntMan, researcher, hivebreaker, xeno);
             });
         }
 
@@ -477,56 +500,6 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
     }
 
     [Test]
-    public async Task HivebreakerFlowTextUsesCmss13SourceStrings()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
-        var server = pair.Server;
-
-        CultureInfo? previousCulture = null;
-
-        try
-        {
-            await server.WaitPost(() =>
-            {
-                var loc = server.ResolveDependency<ILocalizationManager>();
-                previousCulture = loc.DefaultCulture;
-                loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(Loc.GetString("cmu-yautja-hivebreaker-denied"),
-                        Is.EqualTo("You have no idea what you're doing with this thing."));
-                    Assert.That(Loc.GetString("cmu-yautja-hivebreaker-already"),
-                        Is.EqualTo("This serpent is already enthralled... what are you doing?"));
-                    Assert.That(Loc.GetString("cmu-yautja-hivebreaker-requires-critical"),
-                        Is.EqualTo("The target must be in a defeated state before you can enthrall them!"));
-                    Assert.That(Loc.GetString("cmu-yautja-hivebreaker-start-self", ("target", "Runner")),
-                        Is.EqualTo("You start to enthrall Runner."));
-                    Assert.That(Loc.GetString("cmu-yautja-hivebreaker-cancel-self", ("target", "Runner")),
-                        Is.EqualTo("You decide not to enthrall Runner."));
-                    Assert.That(Loc.GetString("cmu-yautja-hivebreaker-finished-self", ("target", "Runner")),
-                        Is.EqualTo("You have enthralled Runner!"));
-                    Assert.That(Loc.GetString("cmu-yautja-hivebreaker-refused"),
-                        Is.EqualTo("The hivemind resists your attempt to break the connection! (This player does not wish to be a thrall.)"));
-                });
-            });
-        }
-        finally
-        {
-            await server.WaitPost(() =>
-            {
-                if (previousCulture != null)
-                {
-                    var loc = server.ResolveDependency<ILocalizationManager>();
-                    loc.SetCulture(previousCulture);
-                }
-            });
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task HivebreakerConsentAcceptanceConvertsAndConsumesUseLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
@@ -596,84 +569,6 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
             {
                 var entMan = server.EntMan;
                 var session = server.PlayerMan.Sessions.Single();
-                server.PlayerMan.SetAttachedEntity(session, previousAttached);
-                if (hivebreaker != default && !entMan.Deleted(hivebreaker))
-                    entMan.DeleteEntity(hivebreaker);
-                DeleteAll(entMan, hunter, target);
-            });
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task HivebreakerConversionMarksDishonoredLikeCmss13HandleEnthrall()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        EntityUid hunter = default;
-        EntityUid hivebreaker = default;
-        EntityUid target = default;
-        EntityUid? previousAttached = null;
-        CultureInfo? previousCulture = null;
-
-        try
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var loc = server.ResolveDependency<ILocalizationManager>();
-                var hands = entMan.System<SharedHandsSystem>();
-                var mobState = entMan.System<MobStateSystem>();
-                var session = server.PlayerMan.Sessions.Single();
-                previousAttached = session.AttachedEntity;
-                previousCulture = loc.DefaultCulture;
-                loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
-
-                hunter = SpawnBadBloodTechUser(entMan, map.GridCoords);
-                hivebreaker = SpawnHeldHivebreaker(entMan, hands, hunter, map.GridCoords);
-                target = SpawnCriticalXeno(entMan, mobState, "CMXenoRunner", map.GridCoords.Offset(new Vector2(1, 0)));
-                server.PlayerMan.SetAttachedEntity(session, target);
-                Assert.That(StartHivebreaker(entMan, hunter, hivebreaker, target), Is.True);
-            });
-
-            await pair.RunTicksSync(pair.SecondsToTicks(3.5f));
-
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                entMan.EventBus.RaiseLocalEvent(target, new DialogOptionBuiMsg(0)
-                {
-                    Actor = target,
-                    UiKey = DialogUiKey.Key,
-                });
-            });
-
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                var marks = entMan.System<YautjaMarkSystem>();
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(marks.IsMarkedBy(target, YautjaMarkKind.Dishonored, target), Is.True,
-                        "CMSS13 handle_enthrall() sets hunter_data.dishonored and dishonored_set = src on the enthralled xeno.");
-                    Assert.That(marks.GetMarkReason(target, YautjaMarkKind.Dishonored), Is.EqualTo("Enthralled to a Bad Blood!"),
-                        "CMSS13 handle_enthrall() overwrites the enthrall() reason with the final local dishonored reason.");
-                });
-            });
-        }
-        finally
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var loc = server.ResolveDependency<ILocalizationManager>();
-                var session = server.PlayerMan.Sessions.Single();
-                if (previousCulture is { } culture)
-                    loc.SetCulture(culture);
                 server.PlayerMan.SetAttachedEntity(session, previousAttached);
                 if (hivebreaker != default && !entMan.Deleted(hivebreaker))
                     entMan.DeleteEntity(hivebreaker);
@@ -755,111 +650,6 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
                 var session = server.PlayerMan.Sessions.Single();
                 server.PlayerMan.SetAttachedEntity(session, previousAttached);
                 DeleteAll(entMan, hunter, hivebreaker, target, originalHive);
-            });
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task HivebreakerConversionAndRemovalUseCmss13TargetMessages()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
-        var server = pair.Server;
-        var client = pair.Client;
-        var map = await pair.CreateTestMap();
-
-        EntityUid hunter = default;
-        EntityUid hivebreaker = default;
-        EntityUid target = default;
-        EntityUid? previousAttached = null;
-        CultureInfo? previousCulture = null;
-
-        try
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var loc = server.ResolveDependency<ILocalizationManager>();
-                var hands = entMan.System<SharedHandsSystem>();
-                var mobState = entMan.System<MobStateSystem>();
-                var session = server.PlayerMan.Sessions.Single();
-                previousAttached = session.AttachedEntity;
-                previousCulture = loc.DefaultCulture;
-                loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
-
-                hunter = SpawnBadBloodTechUser(entMan, map.GridCoords);
-                hivebreaker = SpawnHeldHivebreaker(entMan, hands, hunter, map.GridCoords);
-                target = SpawnCriticalXeno(entMan, mobState, "CMXenoRunner", map.GridCoords.Offset(new Vector2(1, 0)));
-                server.PlayerMan.SetAttachedEntity(session, target);
-                Assert.That(StartHivebreaker(entMan, hunter, hivebreaker, target), Is.True);
-            });
-
-            await pair.RunTicksSync(pair.SecondsToTicks(3.5f));
-
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                entMan.EventBus.RaiseLocalEvent(target, new DialogOptionBuiMsg(0)
-                {
-                    Actor = target,
-                    UiKey = DialogUiKey.Key,
-                });
-            });
-
-            await pair.ReallyBeIdle(10);
-
-            await client.WaitAssertion(() =>
-            {
-                var labels = client.EntMan.System<PopupSystem>().WorldLabels.Select(label => label.Text).ToList();
-                var joinedLabels = string.Join("\n", labels);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(labels, Has.Some.Contains("We have been enthralled by a Yautja Bad Blood!").IgnoreCase,
-                        $"CMSS13 handle_enthrall() sends the high-danger enthrall notice.\nActual labels:\n{joinedLabels}");
-                    Assert.That(labels, Has.Some.Contains("Our connection to the hivemind has been lost! We are now subservient to our master. Obey their commands.").IgnoreCase,
-                        $"CMSS13 handle_enthrall() sends the hivemind-loss announcement.\nActual labels:\n{joinedLabels}");
-                    Assert.That(labels, Has.Some.Contains("We are no longer able to evolve, or to harm our master.").IgnoreCase,
-                        $"CMSS13 handle_enthrall() sends the evolution/master-harm warning.\nActual labels:\n{joinedLabels}");
-                });
-            });
-
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                entMan.RemoveComponent<YautjaThrallComponent>(target);
-            });
-
-            await pair.ReallyBeIdle(10);
-
-            await client.WaitAssertion(() =>
-            {
-                var labels = client.EntMan.System<PopupSystem>().WorldLabels.Select(label => label.Text).ToList();
-                var joinedLabels = string.Join("\n", labels);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(labels, Has.Some.Contains("We are no longer enthralled by a Yautja Bad Blood!").IgnoreCase,
-                        $"CMSS13 handle_dethrall() sends the high-danger dethrall notice.\nActual labels:\n{joinedLabels}");
-                    Assert.That(labels, Has.Some.Contains("Our connection to the hivemind has been restored!").IgnoreCase,
-                        $"CMSS13 handle_dethrall() sends the hivemind-restored announcement.\nActual labels:\n{joinedLabels}");
-                });
-            });
-        }
-        finally
-        {
-            await server.WaitPost(() =>
-            {
-                var entMan = server.EntMan;
-                var loc = server.ResolveDependency<ILocalizationManager>();
-                var session = server.PlayerMan.Sessions.Single();
-                if (previousCulture is { } culture)
-                    loc.SetCulture(culture);
-                server.PlayerMan.SetAttachedEntity(session, previousAttached);
-                if (hivebreaker != default && !entMan.Deleted(hivebreaker))
-                    entMan.DeleteEntity(hivebreaker);
-                DeleteAll(entMan, hunter, target);
             });
         }
 

@@ -58,6 +58,8 @@
   - type: CMUBlightCore
   - type: HiveCore
   - type: HiveMember
+  - type: HiveConstructionLimited # built cores count toward the hive cap, not just the nodes
+    id: CMU14PathogenBlightCore
   - type: UserInterface
     interfaces:
       enum.BlightCoreUiKey.Accept:

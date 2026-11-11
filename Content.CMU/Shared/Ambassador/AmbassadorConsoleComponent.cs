@@ -19,11 +19,17 @@ public sealed partial class AmbassadorConsoleComponent : Component
     [DataField("budget")]
     public float Budget = 0f;
 
+    // RUMC: the part of the account that cannot be taken out as cash: only what is above it can be withdrawn.
+    public const float WithdrawFloorDefault = 10000f;
+
+    [DataField("withdrawFloor")]
+    public float WithdrawFloor = WithdrawFloorDefault;
+
     /// <summary>
     /// How much money is added each replenish tick.
     /// </summary>
     [DataField("replenishAmount")]
-    public float ReplenishAmount = 10f;
+    public float ReplenishAmount = 2f; // RUMC: was 10, the incomes of the ambassadors are cut
 
     /// <summary>
     /// How often (in seconds) budget replenishes.
@@ -145,4 +151,21 @@ public sealed partial class AmbassadorConsoleComponent : Component
     /// Set of third party IDs that have already been called and cannot be called again.
     /// </summary>
     public HashSet<string> CalledParties = new();
+
+    /// <summary>
+    /// How many third parties a faction can call in per round.
+    /// </summary>
+    [DataField("maxCallIns")]
+    public int MaxCallIns = 3;
+
+    /// <summary>
+    /// How long a faction has to wait after one call-in before the next.
+    /// </summary>
+    [DataField("callInCooldown")]
+    public TimeSpan CallInCooldown = TimeSpan.FromMinutes(30);
+
+    /// <summary>
+    /// When the faction can next call in a third party.
+    /// </summary>
+    public TimeSpan NextCallInAt;
 }

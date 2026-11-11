@@ -1,0 +1,11 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Reduced the rendering cost of bottles, tableware and other props in 3D
+    mode.
+  type: Fix
+- message: Added Redux 3D models for infrastructure, vehicles, vehicle interiors and
+    xeno hive structures.
+  type: Add
+time: '2026-10-09T13:54:55.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2114

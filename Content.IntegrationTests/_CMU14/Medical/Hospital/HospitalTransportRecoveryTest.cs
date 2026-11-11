@@ -19,7 +19,7 @@ namespace Content.IntegrationTests.CMU14.Medical.Hospital;
 [TestFixture]
 public sealed class HospitalTransportRecoveryTest
 {
-    [Test, Category("HospitalTransport"), Timeout(240000)]
+    [Test, Category("HospitalTransport"), CancelAfter(240000)]
     public async Task ConsoleLossPreservesNonmanifestPeopleAndOffersARealReturnAfterTheyBoard()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -174,7 +174,7 @@ public sealed class HospitalTransportRecoveryTest
             var total = 0;
             var query = entities.EntityQueryEnumerator<StackComponent, MetaDataComponent, TransformComponent>();
             while (query.MoveNext(out _, out var stack, out var metadata, out var transform))
-                if (metadata.EntityPrototype?.ID == hospital.CashPrototype.Id && transform.MapUid == map.MapUid)
+                if (metadata.EntityPrototype?.ID == "RMCSpaceCash" && transform.MapUid == map.MapUid)
                     total += stack.Count;
             return total;
         }
@@ -192,7 +192,7 @@ public sealed class HospitalTransportRecoveryTest
         }
     }
 
-    [TestCase(false), TestCase(true), Category("HospitalTransport"), Timeout(120000)]
+    [TestCase(false), TestCase(true), Category("HospitalTransport"), CancelAfter(120000)]
     public async Task AnActualArrivalCannotCommitAgainstAChangedDestinationOrLandingPosition(bool displaceShuttle)
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -1,0 +1,84 @@
+- type: cmuReligion
+  id: CMUAtheist
+  name: cmu-religion-atheist
+  order: 0
+
+- type: cmuReligion
+  id: CMUAgnostic
+  name: cmu-religion-agnostic
+  order: 1
+  holyBook: CMUHolyBookReflections
+
+- type: cmuReligion
+  id: CMUCatholic
+  name: cmu-religion-catholic
+  order: 2
+
+- type: cmuReligion
+  id: CMUProtestant
+  name: cmu-religion-protestant
+  order: 3
+
+- type: cmuReligion
+  id: CMUOrthodox
+  name: cmu-religion-orthodox
+  order: 4
+
+- type: cmuReligion
+  id: CMULatterDaySaints
+  name: cmu-religion-latter-day-saints
+  order: 5
+
+- type: cmuReligion
+  id: CMUIslam
+  name: cmu-religion-islam
+  order: 6
+  holyBook: CMUHolyBookQuran
+
+- type: cmuReligion
+  id: CMUJudaism
+  name: cmu-religion-judaism
+  order: 7
+  holyBook: CMUHolyBookTanakh
+
+- type: cmuReligion
+  id: CMUHinduism
+  name: cmu-religion-hinduism
+  order: 8
+  holyBook: CMUHolyBookBhagavadGita
+
+- type: cmuReligion
+  id: CMUBuddhism
+  name: cmu-religion-buddhism
+  order: 9
+  holyBook: CMUHolyBookDhammapada
+
+- type: cmuReligion
+  id: CMUSikhism
+  name: cmu-religion-sikhism
+  order: 10
+  holyBook: CMUHolyBookGuruGranthSahib
+
+- type: cmuReligion
+  id: CMUShinto
+  name: cmu-religion-shinto
+  order: 11
+  holyBook: CMUHolyBookKojiki
+
+- type: cmuReligion
+  id: CMUTaoism
+  name: cmu-religion-taoism
+  order: 12
+  holyBook: CMUHolyBookTaoTeChing
+
+- type: cmuReligion
+  id: CMUPagan
+  name: cmu-religion-pagan
+  order: 13
+  holyBook: CMUHolyBookPagan
+
+- type: cmuReligion
+  id: CMUOtherFaith
+  name: cmu-religion-other
+  order: 14
+  holyBook: CMUHolyBookOther

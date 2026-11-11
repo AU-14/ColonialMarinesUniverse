@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Reanimation now has one ten-minute cooldown shared by all Reapers, including
+    newly spawned Reapers.
+  type: Tweak
+time: '2026-10-23T20:18:40.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2270

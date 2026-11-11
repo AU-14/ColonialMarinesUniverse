@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Access.Systems;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Station.Systems;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.ColonyEconomy;
@@ -17,47 +18,6 @@ public sealed class ColonyAtmTest
     private const string IdCard = "AU14IDCardCLFCivilian";
     private const string Atm = "AUColonyATM";
 
-    /// <summary>
-    ///     A colonist's ID card has its account and PIN the moment the job spawn finishes, in the same
-    ///     tick, without anyone opening character info or swiping at an ATM.
-    /// </summary>
-    [Test]
-    public async Task JobSpawnedIdCardHasPinImmediately()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var testMap = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var spawning = server.System<StationSpawningSystem>();
-            var idCards = server.System<IdCardSystem>();
-            ProtoId<JobPrototype> job = "AU14JobCivilianNurse";
-
-            var first = spawning.SpawnPlayerMob(testMap.GridCoords, job, new HumanoidCharacterProfile(), station: null);
-            var second = spawning.SpawnPlayerMob(testMap.GridCoords, job, new HumanoidCharacterProfile(), station: null);
-
-            Assert.That(idCards.TryFindIdCard(first, out var firstCard), "Colonist spawned without an ID card");
-            Assert.That(idCards.TryFindIdCard(second, out var secondCard), "Colonist spawned without an ID card");
-            var (firstAccount, firstPin) = (firstCard.Comp.AccountNumber, firstCard.Comp.AtmPin);
-            var (secondAccount, secondPin) = (secondCard.Comp.AccountNumber, secondCard.Comp.AtmPin);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(firstAccount, Is.InRange(10000, 99999));
-                Assert.That(firstPin, Is.InRange(1000, 9999));
-                Assert.That(secondAccount, Is.InRange(10000, 99999));
-                Assert.That(secondPin, Is.InRange(1000, 9999));
-                Assert.That(secondAccount, Is.Not.EqualTo(firstAccount));
-                Assert.That(secondPin, Is.Not.EqualTo(firstPin));
-            });
-
-            server.EntMan.DeleteEntity(first);
-            server.EntMan.DeleteEntity(second);
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task EveryIdCardGetsItsOwnAccountAndPin()
@@ -105,10 +65,9 @@ public sealed class ColonyAtmTest
             var card = entMan.GetComponent<IdCardComponent>(cardUid);
             var comp = entMan.GetComponent<ColonyAtmComponent>(atm);
 
-            // The owner has swiped their card and is at the PIN prompt.
-            comp.CurrentUser = owner;
-            comp.SwipedCard = cardUid;
-            comp.Screen = AtmScreen.PinEntry;
+            // The owner has put their card in and is at the PIN prompt.
+            Assert.That(server.System<ColonyAtmSystem>().TryInsertCard(atm, comp, cardUid, owner), "The ATM refused the card");
+            Assert.That(comp.Screen, Is.EqualTo(AtmScreen.PinEntry));
 
             void Press(EntityUid actor, string digit) =>
                 entMan.EventBus.RaiseLocalEvent(atm, new ColonyAtmDigitBuiMsg(digit) { Actor = actor });

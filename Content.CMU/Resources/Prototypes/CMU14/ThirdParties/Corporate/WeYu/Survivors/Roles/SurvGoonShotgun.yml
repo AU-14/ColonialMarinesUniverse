@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobWYGuardBase
   id: AU14JobWYSurvGoonShotgun
+  chevrons:
+    AU14RankWYSecurityOfficer:
+      entity: AU14ChevronWYSecurityOfficer
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYSurvGoonShotgun

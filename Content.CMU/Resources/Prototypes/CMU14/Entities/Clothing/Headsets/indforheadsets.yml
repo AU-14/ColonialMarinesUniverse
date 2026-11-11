@@ -36,9 +36,11 @@
     - radioGovforAlpha
     - radioGovforBravo
     - radioGovforCharlie
+    - radioGovforFoxtrot
     - radioOpforAlpha
     - radioOpforBravo
     - radioOpforCharlie
+    - radioOpforVictor
   - type: RMCHeadset
     radioTextIncrease: 3
   - type: GrantSquadLeaderTracker

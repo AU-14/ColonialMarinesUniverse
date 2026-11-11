@@ -47,6 +47,7 @@ cm-xeno-requires-more-plasma = {CAPITALIZE(THE($construction))} requires {$plasm
 cm-xeno-construction-plasma-left = A {$construction} construction is designated here. It requires [color=cyan]{$plasma}[/color] more plasma.
 cm-xeno-cant-reach-there = You can't reach there!
 cm-xeno-cant-build-in-self = You can't build structures that close!
+rmc-xeno-build-mark-cleared = We clear the psychic mark from that location.
 rmc-xeno-construction-unique-exists = There's already a {$choice} built!
 rmc-xeno-construction-hive-limit-met = We have reached the limit of {$choice} the hive can support!
 rmc-xeno-construction-requires-hive-weeds = {$choice} must be built on hive weeds!
@@ -65,8 +66,11 @@ cm-xeno-evolution-failed-cannot-support = The Hive cannot support this caste yet
 cm-xeno-evolution-failed-hive-full = The hive cannot support another Tier {$tier}, wait for either more aliens to be born or someone to die.
 rmc-xeno-evolution-devolve-title = De-Evolve To
 rmc-xeno-evolution-devolve = You devolve to {$xeno}!
-rmc-xeno-evolution-cant-evolve-damaged = We must be at full health to evolve.
-rmc-xeno-evolution-cant-strain-damaged = We must be at full health to take a strain.
+# CMU14: evolution health requirement reduced from full health to half health.
+# rmc-xeno-evolution-cant-evolve-damaged = We must be at full health to evolve.
+# rmc-xeno-evolution-cant-strain-damaged = We must be at full health to take a strain.
+rmc-xeno-evolution-cant-evolve-damaged = We must have at least 50% health to evolve.
+rmc-xeno-evolution-cant-strain-damaged = We must have at least 50% health to take a strain.
 rmc-xeno-evolution-cant-devolve-damaged = We are too weak to deevolve, we must regain our health first.
 rmc-xeno-evolution-cant-evolve-recent-queen-death-minutes = We must wait about {$minutes} minutes and {$seconds} seconds for the hive to recover from the previous Queen's death.
 rmc-xeno-evolution-cant-evolve-recent-queen-death-seconds = We must wait about {$seconds} seconds for the hive to recover from the previous Queen's death.
@@ -102,6 +106,7 @@ cm-xeno-fortify-cant-headbutt = We can't headbutt while fortifying!
 cm-xeno-fortify-cant-rest = We can't rest while fortifying!
 cm-xeno-fortify-cant-tail-sweep = We can't tail sweep while fortifying!
 cm-xeno-fortify-cant-toggle-crest = We can't lower our crest while fortifying!
+cm-xeno-fortify-cant-vehicle = The vehicle blocks us from foritifying
 
 # Headbutt
 rmc-xeno-headbutt-too-far = We can't headbutt from this distance with our crest lowered!
@@ -468,3 +473,12 @@ rmc-doomed-fail = It's not working...
 # Destroy
 rmc-destroy-cant-reach = We don't have a clear path to that location!
 rmc-destroy-cant-area = We can't leap to that area!
+
+# Root (Pathogen)
+rmc-xeno-guardian-link-self = We cannot link to ourself!  
+rmc-xeno-guardian-link-dead = {$target} is already dead!  
+rmc-xeno-guardian-link-see-fail = We can't see that target clearly enough!  
+rmc-xeno-guardian-link-start-self = We link ourselves to {$target}, ready to absorb their wounds!  
+rmc-xeno-guardian-link-start-target = {$user} links itself to us, ready to absorb our wounds!
+rmc-xeno-guardian-absorbing-damage = The Confluence shields {$target} from harm!
+

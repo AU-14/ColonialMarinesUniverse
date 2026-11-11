@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using System.Numerics;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Materials;
@@ -133,7 +134,7 @@ namespace Content.Server.Medical.BiomassReclaimer
         private void OnInit(EntityUid uid, ActiveBiomassReclaimerComponent component, ComponentInit args)
         {
             _jitteringSystem.AddJitter(uid, -10, 100);
-            _sharedAudioSystem.PlayPvs("/Audio/Machines/reclaimer_startup.ogg", uid);
+            _sharedAudioSystem.PlayPvs(new ResolvedPathSpecifier("/Audio/Machines/reclaimer_startup.ogg"), uid);
             _ambientSoundSystem.SetAmbience(uid, true);
         }
 

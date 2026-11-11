@@ -116,10 +116,22 @@ namespace Content.Shared.Movement.Systems
                 return;
             }
 
-            ent.Comp.WeightlessAcceleration = ev.WeightlessAcceleration * ev.WeightlessAccelerationMod;
-            ent.Comp.WeightlessModifier = ev.WeightlessModifier * ev.WeightlessModifierMod;
-            ent.Comp.WeightlessFriction = _airDamping * ev.WeightlessFriction * ev.WeightlessFrictionMod;
-            ent.Comp.WeightlessFrictionNoInput = _airDamping * ev.WeightlessFrictionNoInput * ev.WeightlessFrictionNoInputMod;
+            // CMU14 Begin: compare the published values after scaling to avoid replicating unchanged modifiers.
+            var acceleration = ev.WeightlessAcceleration * ev.WeightlessAccelerationMod;
+            var modifier = ev.WeightlessModifier * ev.WeightlessModifierMod;
+            var friction = _airDamping * ev.WeightlessFriction * ev.WeightlessFrictionMod;
+            var frictionNoInput = _airDamping * ev.WeightlessFrictionNoInput * ev.WeightlessFrictionNoInputMod;
+            if (acceleration.Equals(ent.Comp.WeightlessAcceleration)
+                && modifier.Equals(ent.Comp.WeightlessModifier)
+                && friction.Equals(ent.Comp.WeightlessFriction)
+                && frictionNoInput.Equals(ent.Comp.WeightlessFrictionNoInput))
+                return;
+
+            ent.Comp.WeightlessAcceleration = acceleration;
+            ent.Comp.WeightlessModifier = modifier;
+            ent.Comp.WeightlessFriction = friction;
+            ent.Comp.WeightlessFrictionNoInput = frictionNoInput;
+            // CMU14 End
             Dirty(ent);
         }
 
@@ -149,6 +161,16 @@ namespace Content.Shared.Movement.Systems
                     sprint = rest.RestingSpeed / ev.SprintSpeedModifier;
 
                 ev.ModifySpeed(walk, sprint);
+            }
+
+            // CMU14: absolute caps apply after every multiplier, so they clamp rather than stack with slowdowns.
+            if (ev.SpeedCap is { } cap)
+            {
+                if (ent.Comp.BaseWalkSpeed > 0f && ev.WalkSpeedModifier * ent.Comp.BaseWalkSpeed > cap)
+                    ev.ModifySpeed(cap / (ev.WalkSpeedModifier * ent.Comp.BaseWalkSpeed), 1f);
+
+                if (ent.Comp.BaseSprintSpeed > 0f && ev.SprintSpeedModifier * ent.Comp.BaseSprintSpeed > cap)
+                    ev.ModifySpeed(1f, cap / (ev.SprintSpeedModifier * ent.Comp.BaseSprintSpeed));
             }
 
             if (MathHelper.CloseTo(ev.WalkSpeedModifier, ent.Comp.WalkSpeedModifier) &&
@@ -198,8 +220,17 @@ namespace Content.Shared.Movement.Systems
                 && MathHelper.CloseTo(ev.Acceleration, ent.Comp.Acceleration))
                 return;
 
-            ent.Comp.Friction = _frictionModifier * ev.Friction;
-            ent.Comp.FrictionNoInput = _frictionModifier * ev.FrictionNoInput;
+            // CMU14 Begin: the stored friction already includes the tile multiplier.
+            var friction = _frictionModifier * ev.Friction;
+            var frictionNoInput = _frictionModifier * ev.FrictionNoInput;
+            if (friction.Equals(ent.Comp.Friction)
+                && frictionNoInput.Equals(ent.Comp.FrictionNoInput)
+                && ev.Acceleration.Equals(ent.Comp.Acceleration))
+                return;
+
+            ent.Comp.Friction = friction;
+            ent.Comp.FrictionNoInput = frictionNoInput;
+            // CMU14 End
             ent.Comp.Acceleration = ev.Acceleration;
 
             Dirty(ent);
@@ -239,6 +270,18 @@ namespace Content.Shared.Movement.Systems
         {
             ModifySpeed(mod, mod);
         }
+
+        // CMU14 Begin
+        /// <summary>
+        ///     Lowest absolute speed cap requested, in tiles per second. Applied after all multipliers.
+        /// </summary>
+        public float? SpeedCap { get; private set; }
+
+        public void CapSpeed(float max)
+        {
+            SpeedCap = SpeedCap is { } current ? MathF.Min(current, max) : max;
+        }
+        // CMU14 End
     }
 
     [ByRefEvent]

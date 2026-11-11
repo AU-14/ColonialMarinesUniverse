@@ -1,0 +1,12 @@
+- type: loadout
+  id: CompactNailgunSynthAU14
+  cost: 10
+  inhand:
+  - RMCNailgunCompact
+
+- type: loadout
+  id: NailgunMagazineSynthAU14
+  cost: 2
+  maxSelections: 3
+  inhand:
+  - RMCMagazineSMGNailgun

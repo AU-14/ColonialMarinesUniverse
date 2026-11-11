@@ -14,8 +14,8 @@
   canBeAntag: false
   displayWeight: 7
   accessGroups:
-  - AU14GovforCommand
-  - aulegacygroupcommand
+  - AU14GovforCommandNoLogistics
+  - aulegacygroupcommandnologistics
 
 - type: job
   abstract: true
@@ -57,14 +57,9 @@
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govforintelCMBCIU
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
-  - !type:TotalDepartmentsTimeRequirement
-    group: CMUDepartmentsMilitary
-    time: 18000 # 5 hours
   - !type:RoleTimeRequirement
     role: AU14JobGOVFORRadioTelephoneOperator
-    time: 18000 # 5 hours
+    time: 7200 # 2 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -75,6 +70,12 @@
     - FrontalLisp
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
+    - CMUWeakThrow
     - NoEnglish
     - CMUProstheticLeftArm
     - CMUProstheticRightArm
@@ -83,6 +84,9 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
+    - CMUBadLeg
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -113,8 +117,8 @@
   startingGear: AU14GearOPFOROfficerIntel
   dummyStartingGear: AU14GearOPFOROfficerIntelDummy
   accessGroups:
-  - AU14OpforCommand
-  - aulegacygroupcommand
+  - AU14OpforCommandNoLogistics
+  - aulegacygroupcommandnologistics
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
   useLoadoutOfJob: AU14JobGOVFOROfficerIntel
@@ -123,7 +127,7 @@
   id: AU14GearGOVFOROfficerIntel
   equipment:
     id: AU14IDCardGOVFOROfficerIntel
-    ears: AU14HeadsetGovforCommand
+    ears: AU14GOVFORIOHeadset
   inhand:
     - AU14KitJOIntelligenceOfficer
 
@@ -131,7 +135,7 @@
   id: AU14GearOPFOROfficerIntel
   equipment:
     id: AU14IDCardOPFOROfficerIntel
-    ears: AU14HeadsetOpforCommand
+    ears: AU14OPFORIOHeadset
   inhand:
     - AU14KitJOIntelligenceOfficer
 
@@ -156,7 +160,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetGovforCommand
+    ears: AU14GOVFORIOHeadset
 
 - type: startingGear
   id: AU14GearOPFOROfficerIntelDummy
@@ -164,7 +168,7 @@
     shoes: CMBootsBlack
     head: CMHeadCapPeakedFormal
     jumpsuit: CMJumpsuitXOFormal
-    ears: AU14HeadsetOpforCommand
+    ears: AU14OPFORIOHeadset
 
 # ├──[ Spawnpoints ]─────────────────────────────────────────────────┤
 - type: entity
@@ -209,14 +213,9 @@
   id: AU14JobGOVFOROfficerIntelUPP
   roundForce: UPP
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
-  - !type:TotalDepartmentsTimeRequirement
-    group: CMUDepartmentsMilitary
-    time: 18000 # 5 hours
   - !type:RoleTimeRequirement
     role: AU14JobGOVFORRadioTelephoneOperator
-    time: 18000 # 5 hours
+    time: 7200 # 2 hours
   name: Intelligence Officer
   spawnMenuRoleName: Intelligence Officer (UPP)
   ranks:
@@ -231,14 +230,9 @@
   id: AU14JobGOVFOROfficerIntelWYPMC
   roundForce: WYPMC
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
-  - !type:TotalDepartmentsTimeRequirement
-    group: CMUDepartmentsMilitary
-    time: 18000 # 5 hours
   - !type:RoleTimeRequirement
     role: AU14JobGOVFORRadioTelephoneOperator
-    time: 18000 # 5 hours
+    time: 7200 # 2 hours
   name: PMC Intelligence Analyst
   spawnMenuRoleName: Intelligence Officer (WYPMC)
   ranks:

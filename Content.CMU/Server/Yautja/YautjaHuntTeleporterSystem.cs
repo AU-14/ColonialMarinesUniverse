@@ -1,3 +1,4 @@
+using Content.Shared.Ghost.Components;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared.Popups;
@@ -31,12 +32,12 @@ public sealed partial class YautjaHuntTeleporterSystem : EntitySystem
 
     private void OnStepTriggerAttempt(Entity<YautjaHuntTeleporterComponent> ent, ref StepTriggerAttemptEvent args)
     {
-        args.Continue = true;
+        args.Continue = !HasComp<GhostComponent>(args.Tripper);
     }
 
     private void OnStepTriggeredOn(Entity<YautjaHuntTeleporterComponent> ent, ref StepTriggeredOnEvent args)
     {
-        if (!TryConsumeStep(args.Tripper, ent.Comp.Kind))
+        if (HasComp<GhostComponent>(args.Tripper) || !TryConsumeStep(args.Tripper, ent.Comp.Kind))
             return;
 
         if (!CanUseTeleporter(args.Tripper, ent.Comp, true))
@@ -117,6 +118,9 @@ public sealed partial class YautjaHuntTeleporterSystem : EntitySystem
 
     private bool CanUseTeleporter(EntityUid user, YautjaHuntTeleporterComponent teleporter, bool popup)
     {
+        if (HasComp<GhostComponent>(user))
+            return false;
+
         var yautja = HasComp<YautjaComponent>(user);
         var youngblood = HasComp<YautjaYoungbloodComponent>(user);
         var techAuthorized = HasComp<YautjaTechAuthorizedComponent>(user);

@@ -1,7 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobUACGRiflemanBase
-  name: au-14-job-name-uacg-rifleman
+  name: cmu-job-title-uacg-rifleman
   description: au14-uacg-description
   playTimeTracker: AU14JobUACGRifleman
   basePlaytimeTracker: true
@@ -29,7 +29,7 @@
   - type: JobPrefix
     prefix: au-14-job-prefix-uacg-rifleman
 
-  name: au-14-job-name-uacg-rifleman
+  name: cmu-job-title-uacg-rifleman
   description: au14-uacg-description
   ranks:
     RMCRankCivilian: []

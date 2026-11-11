@@ -5,13 +5,13 @@ cmu-fof-respawn-wait = You can respawn in {$seconds} seconds. The wait is five m
 cmu-fof-dropship-wrong-faction = This dropship is not cleared to land at the other faction's destination.
 cmu-dropship-navigation-access-denied = You are not authorized to use this dropship's navigation controls.
 cmu-fof-hijack-no-destination = No assault vectors are available on the enemy ship.
+cmu-fof-hijack-disabled = Hijacking is disabled in this operation. Both forces require their ships.
 cmu-dropship-hijack-initiate = Initiate hijack
 cmu-dropship-hijack-random-header = A valid destination will be selected automatically when you initiate the hijack.
 cmu-dropship-hijack-no-destinations = No valid hijack destinations are currently available.
 cmu-fof-hostile-boarders = WARNING: {$count} hostile personnel detected aboard {$name}. Security teams, intercept the dropship on arrival.
 cmu-fof-tab = Force on Force
 cmu-fof-side-full = This side currently has more players. Choose the other side or wait for teams to balance.
-cmu-fof-roles = Roles
 cmu-fof-preferred-side = Preferred side:
 cmu-fof-fallback-label = If unavailable:
 cmu-fof-side-either = Either side
@@ -42,3 +42,6 @@ cmu-fof-hijack-join = Join — teleport me
 cmu-fof-hijack-stay = Stay here
 cmu-fof-hijack-join-unavailable = Transport is no longer available. You have stayed where you are.
 cmu-fof-launch-preparing = An enemy dropship is preparing to launch to a landing zone. ETA: 3 minutes. Request your launch within this window to depart at the same time.
+
+# Admin Command Tablet
+cmu-admin-tablet-faction-switch = Switch to {$faction}

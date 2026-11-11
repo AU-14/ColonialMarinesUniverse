@@ -78,7 +78,7 @@ public sealed partial class XenoBombardSystem : EntitySystem
         {
             _rmcActions.DisableSharedCooldownEvents(args.Action.Owner, ent);
             var selfMessage = Loc.GetString("rmc-glob-start-self");
-            _popup.PopupClient(selfMessage, ent, ent);
+            _popup.PopupEntity(selfMessage, ent, ent);
 
             var othersMessage = Loc.GetString("rmc-glob-start-others", ("user", ent));
             _popup.PopupEntity(othersMessage, ent, Filter.PvsExcept(ent), true, PopupType.MediumCaution);
@@ -130,7 +130,7 @@ public sealed partial class XenoBombardSystem : EntitySystem
         _rmcActions.ActivateSharedCooldown(action, ent);
 
         var selfMessage = Loc.GetString("rmc-glob-shoot-self");
-        _popup.PopupClient(selfMessage, ent, ent);
+        _popup.PopupEntity(selfMessage, ent, ent);
 
         var othersMessage = Loc.GetString("rmc-glob-shoot-others", ("user", ent));
         _popup.PopupEntity(othersMessage, ent, Filter.PvsExcept(ent), true, PopupType.MediumCaution);

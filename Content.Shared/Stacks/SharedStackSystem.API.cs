@@ -138,6 +138,9 @@ public abstract partial class SharedStackSystem
         if (IsAcidicStack(donor.Owner) || IsAcidicStack(recipient.Owner))
             return false;
 
+        if (CMUMergeBlocked(donor.Owner, recipient.Owner)) // CMU14: per-victim flayed skin stacks
+            return false;
+
         // The most we can transfer
         transferred = Math.Min(donor.Comp.Count, GetAvailableSpace(recipient.Comp));
         if (transferred <= 0)

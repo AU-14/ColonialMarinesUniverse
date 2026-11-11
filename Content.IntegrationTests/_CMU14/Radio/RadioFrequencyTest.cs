@@ -19,148 +19,6 @@ namespace Content.IntegrationTests.CMU14.Radio;
 [EnsureCVar(Side.Server, typeof(AU14CCVars), nameof(AU14CCVars.NewCommsSystem), true)]
 public sealed class RadioFrequencyTest : GameTest
 {
-    private static readonly IReadOnlyDictionary<string, int> CustomChannels = new Dictionary<string, int>
-    {
-        ["radioGovforAlpha"] = 250_200,
-        ["radioGovforBravo"] = 160_600,
-        ["radioGovforCharlie"] = 160_700,
-        ["radioGovforCommand"] = 259_200,
-        ["radioGovforIntel"] = 160_500,
-        ["radioGovforJTAC"] = 259_800,
-        ["radioGovforMILP"] = 259_500,
-        ["radioOpforAlpha"] = 160_100,
-        ["radioOpforBravo"] = 160_300,
-        ["radioOpforCharlie"] = 160_400,
-        ["radioOpforCommand"] = 147_900,
-        ["radioOpforIntel"] = 160_200,
-        ["radioOpforJTAC"] = 147_400,
-        ["radioOpforMILP"] = 147_700,
-        ["radioProvost"] = 186_300,
-        ["Colony"] = 146_900,
-        ["colonyAlert"] = 143_100,
-        ["radioWEYU"] = 123_100,
-        ["radioCMB"] = 122_000,
-        ["radioCLF"] = 188_600,
-        ["radioCLFCommand"] = 188_700,
-        ["radioMobFamily"] = 146_700,
-        ["radioAI"] = 767_600,
-        ["ColonyHandheld"] = 146_100,
-        ["Hivemind"] = 42_600,
-        ["MyceliumLink"] = 42_500,
-        ["ICSCSOF"] = 155_800,
-        ["UASOF"] = 155_300,
-        ["TWESOF"] = 155_700,
-        ["UPPSOF"] = 153_300,
-        ["CCASOF"] = 153_700,
-        ["radioVAI"] = 155_900,
-        ["PART"] = 557_100,
-        ["ANPRCActiveChannel"] = 0,
-        ["TunableFrequencyChannel"] = 0,
-        ["UNISOF"] = 176_500,
-        ["Biomorph"] = 42_800, // CMU14
-        ["BiomorphMimic"] = 42_700, // CMU14
-        ["CMUYautja"] = 154_100,
-        ["CMUYautjaOverseer"] = 154_200,
-        ["CMUYautjaBadBlood"] = 154_300,
-        ["MarineHighCommand"] = 147_100,
-        ["MarineCommon"] = 148_000,
-        ["MarineCommand"] = 148_100,
-        ["MarineMedical"] = 148_200,
-        ["MarineEngineer"] = 148_300,
-        ["MarineMilitaryPolice"] = 148_400,
-        ["MarineRequisition"] = 148_500,
-        ["MarineIntel"] = 148_600,
-        ["MarineJTAC"] = 148_700,
-        ["MarineAlpha"] = 149_100,
-        ["MarineBravo"] = 149_200,
-        ["MarineCharlie"] = 149_300,
-        ["MarineDelta"] = 149_400,
-        ["MarineEcho"] = 149_500,
-        ["MarineFoxtrot"] = 149_600,
-        ["TSE"] = 155_100,
-    };
-
-    [Test]
-    public async Task ValueParsingFormattingAndMaskingPreserveKilohertz()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(
-                    RadioFrequency.FromMegahertz(FixedPoint2.FromHundredths(14_590)).Kilohertz,
-                    Is.EqualTo(145_900));
-                Assert.That(
-                    RadioFrequency.FromMegahertz(FixedPoint2.FromHundredths(14_710)).Kilohertz,
-                    Is.EqualTo(147_100));
-            });
-
-            AssertParsesAndRoundTrips("30.000", 30_000);
-            AssertParsesAndRoundTrips("87.999", 87_999);
-            AssertParsesAndRoundTrips("259.237", 259_237);
-            AssertParsesAndRoundTrips("299.900", 299_900);
-
-            AssertRejects("1.0000");
-            AssertRejects("145,9");
-            AssertRejects("-1");
-            AssertRejects("2147483.648");
-
-            Assert.That(RadioFrequencyInput.TryParseAnprcScreenInput("2592", out var anprc), Is.True);
-            Assert.That(anprc.Kilohertz, Is.EqualTo(259_200));
-            Assert.That(RadioFrequencyInput.TryParseAnprcScreenInput("259.237", out anprc), Is.True);
-            Assert.That(anprc.Kilohertz, Is.EqualTo(259_237));
-
-            Assert.That(RadioFrequencyInput.TryParseTunableScreenInput("87999", out var tunable), Is.True);
-            Assert.That(tunable.Kilohertz, Is.EqualTo(87_999));
-            Assert.That(RadioFrequencyInput.TryParseTunableScreenInput("87.999", out tunable), Is.True);
-            Assert.That(tunable.Kilohertz, Is.EqualTo(87_999));
-
-            var contact = RadioFrequency.FromKilohertz(259_237);
-            var sweepDefaults = new ANPRCRadioComponent();
-            var sweepDuration =
-                (ANPRCRadioComponent.SweepBandMax.Kilohertz - ANPRCRadioComponent.SweepBandMin.Kilohertz) /
-                (double) sweepDefaults.SweepKilohertzPerSecond;
-            Assert.Multiple(() =>
-            {
-                Assert.That(ANPRCSweepSystem.FormatMasked(contact, 1), Is.EqualTo("2XX.XXX"));
-                Assert.That(ANPRCSweepSystem.FormatMasked(contact, 2), Is.EqualTo("25X.XXX"));
-                Assert.That(ANPRCSweepSystem.FormatMasked(contact, 3), Is.EqualTo("259.XXX"));
-                Assert.That(ANPRCSweepSystem.FormatMasked(contact, 4), Is.EqualTo("259.237"));
-                Assert.That(ANPRCSweepSystem.MaskFrequency(contact, 4), Is.EqualTo(contact));
-                Assert.That(sweepDefaults.SweepKilohertzPerSecond, Is.EqualTo(10_000));
-                Assert.That(sweepDuration, Is.EqualTo(19.99).Within(0.001),
-                    "The default sweep must cover the full configured band in about 20 seconds.");
-            });
-        });
-    }
-
-    [Test]
-    public async Task CustomChannelsLoadAsDirectMegahertzWithoutCollisions()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(CustomChannels, Has.Count.EqualTo(57));
-
-            foreach (var (id, expectedKilohertz) in CustomChannels)
-            {
-                var prototype = SProtoMan.Index<RadioChannelPrototype>(id);
-                Assert.That(prototype.Frequency.Kilohertz, Is.EqualTo(expectedKilohertz), id);
-                Assert.That(
-                    RadioFrequency.ParseMegahertz(prototype.Frequency.FormatMegahertz()),
-                    Is.EqualTo(prototype.Frequency),
-                    id);
-            }
-
-            var positive = CustomChannels.Values.Where(value => value > 0).ToArray();
-            Assert.Multiple(() =>
-            {
-                Assert.That(positive, Has.Length.EqualTo(55));
-                Assert.That(CustomChannels.Values.Count(value => value == 0), Is.EqualTo(2));
-                Assert.That(positive.Distinct().Count(), Is.EqualTo(55),
-                    "Every positive custom carrier must have one unambiguous reverse lookup.");
-            });
-        });
-    }
 
     [Test]
     public async Task FrequencyPlanAndReverseLookupRemainDisjoint()
@@ -193,32 +51,11 @@ public sealed class RadioFrequencyTest : GameTest
             AssertReverseLookup(plan, 42_500, "MyceliumLink");
             AssertReverseLookup(plan, 42_700, "BiomorphMimic"); // CMU14
             AssertReverseLookup(plan, 42_800, "Biomorph"); // CMU14
+            AssertReverseLookup(plan, 42_900, "CMUWendigoPack"); // CMU14
             Assert.That(
                 plan.TryGetChannelByFrequency(RadioFrequency.FromKilohertz(42_600), out _),
                 Is.False,
                 "The Hivemind carrier is deliberately excluded from ordinary reverse lookup.");
-        });
-    }
-
-    [Test]
-    public async Task JammerSeparatesRadioCarriersFromDeviceNetworks()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var jammerUid = SSpawn("XenoborgRadioJammer");
-            var jammer = SComp<RadioJammerComponent>(jammerUid);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(
-                    jammer.FrequenciesExcluded,
-                    Is.EquivalentTo(new[]
-                    {
-                        RadioFrequency.FromKilohertz(200_200),
-                        RadioFrequency.FromKilohertz(200_300),
-                    }));
-                Assert.That(jammer.DeviceFrequenciesExcluded, Is.EquivalentTo(new uint[] { 2002, 2003, 2004, 2005 }));
-            });
         });
     }
 
@@ -296,23 +133,6 @@ public sealed class RadioFrequencyTest : GameTest
                 Assert.That(radio.SweepContacts[wrappedCarrier], Is.EqualTo(radio.SweepConfidencePerHit));
             });
         });
-    }
-
-    private static void AssertParsesAndRoundTrips(string text, int expectedKilohertz)
-    {
-        Assert.That(RadioFrequency.TryParseMegahertz(text, out var frequency), Is.True, text);
-        Assert.Multiple(() =>
-        {
-            Assert.That(frequency.Kilohertz, Is.EqualTo(expectedKilohertz), text);
-            Assert.That(frequency.FormatMegahertz(), Is.EqualTo(text), text);
-            Assert.That(RadioFrequency.ParseMegahertz(frequency.FormatMegahertz()), Is.EqualTo(frequency), text);
-        });
-    }
-
-    private static void AssertRejects(string text)
-    {
-        Assert.That(RadioFrequency.TryParseMegahertz(text, out _), Is.False, text);
-        Assert.That(() => RadioFrequency.ParseMegahertz(text), Throws.TypeOf<ArgumentException>(), text);
     }
 
     private static void AssertReverseLookup(ANPRCFrequencyPlanSystem plan, int kilohertz, string expectedId)

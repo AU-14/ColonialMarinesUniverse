@@ -101,7 +101,7 @@ namespace Content.Server.Afk
 
             TimeSpan timeOut;
 
-            if (_adminManager.IsAdmin(player))
+            if (_adminManager.HasAdminFlag(player, Content.Shared.Administration.AdminFlags.Staff)) // cmu edit
             {
                 timeOut = _adminAfkTime;
             }

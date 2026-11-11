@@ -8,10 +8,10 @@ au14-trait-no-english-name = Forget English Language
 au14-trait-no-english-desc = Sho?
 
 au14-trait-no-language-learning-name = Language Impairment
-au14-trait-no-language-learning-desc = You are unable to learn new languages.
+au14-trait-no-language-learning-desc = You can't pick up new languages during a round. Gives you one more language point to spend on languages you already know.
 
 au14-trait-polyglot-name = Polyglot
-au14-trait-polyglot-desc = Languages just come to you naturally, last time you sneezed you discombobulated a verb in a dialect you've never even heard.
+au14-trait-polyglot-desc = Languages just come to you naturally. Gives you one more language point, so you can pick an extra language.
 
 au14-trait-sign-name = Sign Language
 au14-trait-sign-desc = You can speak and understand sign language.
@@ -53,8 +53,8 @@ au14-trait-korean-language-name = Korean Language
 au14-trait-korean-language-desc = You can speak and understand Korean. You instinctively know when to bow and when to use honorifics.
 
 # ├──[ Alternative tongues ]──────────────────────────────────────┤
-au14-trait-portuguese-language-name = Portuguese Language
-au14-trait-portuguese-language-desc = You can speak and understand Portuguese. It’s not Spanish, and you will correct anyone who implies otherwise, usually with an extended nasal sigh and a short history lesson.
+au14-trait-portuguese-language-name = Brazilian Portuguese Language
+au14-trait-portuguese-language-desc = You can speak and understand Brazilian Portuguese. It’s not Spanish, and you will correct anyone who implies otherwise, usually with an extended nasal sigh and a short history lesson.
 
 au14-trait-legalese-language-name = Legalese Language
 au14-trait-legalese-language-desc = You can speak and understand Legalese. Every sentence you utter now requires three sub clauses, a disclaimer, and a binding arbitration clause.
@@ -64,9 +64,6 @@ au14-trait-afrikaans-language-desc = You can speak and understand Afrikaans. Dut
 
 au14-trait-albanian-language-name = Albanian Language
 au14-trait-albanian-language-desc = You can speak and understand Albanian. You are now prepared for one of Europe's most unique languages.
-
-au14-trait-brazilian-language-name = Brazilian Language
-au14-trait-brazilian-language-desc = You can speak and understand Brazilian.
 
 au14-trait-czech-language-name = Czech Language
 au14-trait-czech-language-desc = You can speak and understand Czech. You can finally order a beer with complete confidence.
@@ -140,9 +137,51 @@ trait-cmu-prosthetic-left-leg-desc = Your left leg has been replaced with a robo
 trait-cmu-prosthetic-right-leg-name = Right leg prosthesis
 trait-cmu-prosthetic-right-leg-desc = Your right leg has been replaced with a robotic prosthesis.
 
-trait-cmu-tile-movement-name = Tile Movement
-trait-cmu-tile-movement-desc = You move from tile to tile instead of walking freely, just like the forebears who came before you.
+cmu-ui-options-movement = Movement
+cmu-ui-options-tile-movement = Tile movement
+cmu-ui-options-tile-movement-tooltip = Move from tile to tile instead of walking freely, just like the forebears who came before you.
+cmu-ui-options-tile-movement-walk-only = Tile movement while walking
+cmu-ui-options-tile-movement-walk-only-tooltip = Move from tile to tile while walking, and freely while running. Tile movement above overrides this.
 
 cmu-trait-category-drinking = Alcohol Tolerance
+cmu-trait-category-addictions = Addictions
+cmu-trait-category-phobias = Fears and Phobias
 cmu-trait-heavyweight-name = Heavyweight drunk
 cmu-trait-heavyweight-desc = This is someone that can hold their liquor.
+
+cmu-trait-opiate-receptor-deficiency-name = Opiate Receptor Deficiency
+cmu-trait-opiate-receptor-deficiency-desc = Due to overuse of opiates or a genetic fluke, basic painkillers (up to tramadol) work much less well on you.
+
+cmu-trait-bad-leg-name = Bad Leg
+cmu-trait-bad-leg-desc = Your leg suffered an undetermined wound a long time ago that never fully healed. Walking around without a cane will eventually make you fall over in pain, but you start with one. Not available to GOVFOR, OPFOR or law enforcement, and can't be taken with a prosthetic leg.
+
+cmu-trait-iron-teeth-name = Iron Teeth
+cmu-trait-iron-teeth-desc = You've got iron teeth, or really good dental insurance. Items in your face slot, such as knives, won't fall out when you go down.
+
+cmu-bad-leg-warning = Your bad leg is starting to ache.
+cmu-bad-leg-warning-severe = Your bad leg is throbbing. It won't hold out much longer without a cane!
+cmu-bad-leg-give-out = Your bad leg gives out and you collapse in pain!
+cmu-bad-leg-give-out-others = {CAPITALIZE(THE($user))} stumbles as their leg gives out.
+
+cmu-mouth-item-falls-out = {CAPITALIZE(THE($item))} falls out of {THE($user)}'s mouth.
+
+cmu-trait-motion-sick-name = Motion Sick
+cmu-trait-motion-sick-desc = Riding in a flying dropship, being inside or on top of a moving vehicle, or floating in zero-g for more than half a minute leaves you dizzy and queasy, and now and then you'll lose your lunch. Puking only makes it worse. Not available to flight crew, vehicle crewmen or vehicle commanders.
+
+cmu-motion-sick-queasy-1 = Your stomach turns over with the motion.
+cmu-motion-sick-queasy-2 = You swallow hard as your guts lurch.
+cmu-motion-sick-queasy-3 = The rocking makes your head swim.
+cmu-motion-sick-queasy-4 = A cold sweat breaks out on your forehead.
+cmu-motion-sick-queasy-5 = You fix your eyes on one spot, but the world keeps swaying.
+cmu-motion-sick-queasy-6 = Your mouth fills with spit and you feel awful.
+cmu-motion-sick-zero-g-1 = With no up or down, your stomach doesn't know which way to turn.
+cmu-motion-sick-zero-g-2 = Your insides drift around as much as you do.
+cmu-motion-sick-zero-g-3 = The slow tumble makes your head swim.
+cmu-motion-sick-zero-g-4 = You'd give anything for a floor under your feet right now.
+cmu-motion-sick-worse-1 = You can't hold it in any longer!
+cmu-motion-sick-worse-2 = Your stomach gives up on you!
+cmu-motion-sick-worse-3 = That's it, you're going to be sick!
+cmu-motion-sick-worse-4 = Your lunch comes back up, and your head spins worse than before.
+
+cmu-trait-auto-ignore-name = Auto ignore incompatible traits
+cmu-trait-auto-ignore-desc = When you join a job that doesn't allow some of your traits, those traits are left off for that round instead of keeping you out of the job.

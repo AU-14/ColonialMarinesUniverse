@@ -31,6 +31,9 @@ public sealed partial class MortarShellComponent : Component
     public bool CreatesZLevelOpening;
 
     [DataField, AutoNetworkedField]
+    public int ZLevelPenetration = 0;
+
+    [DataField, AutoNetworkedField]
     public ProtoId<ContentTileDefinition>? CarveOpeningTile = ContentTileDefinition.SpaceID;
 
     [DataField, AutoNetworkedField]

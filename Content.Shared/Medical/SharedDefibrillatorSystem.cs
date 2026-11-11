@@ -307,7 +307,7 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
                 if (HasComp<MindContainerComponent>(target))
                     _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-no-mind"), InGameICChatType.Speak, true); //target can host a mind but doesn't
                 else
-                    _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-not-living"), InGameICChatType.Speak, true); //target couldn't have hosted a mind
+                    _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString(HasComp<Content.Shared.CMU14.SynthRepairer.SynthRepairerComponent>(ent) ? "cmu-synth-reset-key-no-response" : "defibrillator-not-living"), InGameICChatType.Speak, true); //target couldn't have hosted a mind // CMU14: reset keys are built for machines, "inanimate" reads wrong
             }
         }
 

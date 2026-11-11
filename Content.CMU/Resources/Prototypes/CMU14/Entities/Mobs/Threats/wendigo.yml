@@ -1,17 +1,191 @@
+# Natural Wendigo (ColonyFall threat). Not a xeno: built on CMUWendigoBase like the lab-made ones, with the same
+# hide, claws, armor piercing, utility and pack, but no human blood, so it stays untreatable. It cannot speak at all;
+# emotes and voice mimicry still work.
 - type: entity
-  abstract: false
-  parent:
-  - CMXenoDeveloped
-  - CMXenoFlammable
-  - RMCXenoCommendationReceiver
-  - RMCXenoMobCollision
+  parent: CMUWendigoBase
   id: AU14Wendigo
-  name: Wendigo
-  description: A tall, pale creature that looks uncannily human. Its back is branded "Weyland-Yutani".
   components:
   - type: GhostRole
     name: Wendigo
+  - type: Speech
+    enabled: false
+  - type: CMUWendigoJob
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.2
+  - type: ActionGrant
+    actions:
+    - ActionXenoWatch
+    - ActionXenoPunch
+    - ActionCMUWendigoPunchSwing
+    - ActionXenoPounce
+    - ActionXenoHeadbite
+    - ActionCMUWendigoClawedSweep
+    - ActionApeLimbRip
+    - ActionXenoRest
+    - ActionCMUWendigoScent
+    - ActionWendigoDoom
+
+- type: entity
+  parent: ActionXenoDoom
+  id: ActionWendigoDoom
+  name: Screech
+  description: A terrifying screech that turns off lights, slows and dazes nearby hostiles.
+  components:
+  - type: XenoActionPlasma
+    cost: 0
+
+- type: speechVerb
+  id: AU14WendigoSpeech
+  name: chat-speech-verb-name-default
+  speechVerbStrings:
+  - Growl
+# Job of the natural Wendigo's mind (CMUWendigoJob), so Wendigo playtime is tracked. A hidden threat job, not a xeno
+# one; the IDs keep their old names so playtime already recorded under them carries over.
+- type: job
+  parent: AUThreatJobBase
+  id: CMXenoWendigo
+  name: Wendigo
+  supervisors: cm-job-supervisors-nobody
+  icon: "AU14JobIconThreatLeader"
+  setPreference: false
+  hidden: true
+  playTimeTracker: CMJobXenoWendigo
+- type: playTimeTracker
+  id: CMJobXenoWendigo
+
+- type: entity
+  id: ActionWendigoVoice
+  name: Voice Mimicry
+  parent: ActionXenoBase
+  components:
+  - type: Action
+    itemIconStyle: NoItem
   - type: Sprite
+    layers:
+    - texture: /Textures/Interface/Actions/scream.png
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:WendigoVoiceActionEvent {}
+
+# Wendigo base, shared by the natural (AU14Wendigo) and the lab-made Wendigos. Not xenos: no xeno prototype parents
+# and no XenoComponent, so they have no hive, hivemind, queen, xeno tactical map or xeno faction. The base keeps the
+# xeno body mechanics they still need (movement, fixtures, claws, abilities) copied from _RMC14 base_xeno.yml, minus
+# everything hive- or XenoComponent-bound. Pack chat, allies, death announcements and watch come from CMUWendigoPack.
+- type: entity
+  abstract: true
+  id: CMUWendigoBase
+  save: false
+  name: Wendigo
+  description: A tall, pale creature that looks uncannily human. Its back is branded "Weyland-Yutani".
+  components:
+  # Body and damage (from CMXenoBase).
+  - type: ZombieImmune
+  - type: BodyZoneTargeting
+    meleeAccuracy: 0.5
+    headAccuracyMultiplier: 0.6
+    torsoAccuracyMultiplier: 0.75
+  - type: BlockEntityStorage
+    whitelist:
+      components:
+      - EntityStorage
+  - type: Damageable
+  - type: DamageOverlay
+  - type: Injurable
+    damageContainer: Xeno
+  - type: Destructible
+    thresholds: []
+  - type: RMCMedicalExamine
+    simple: true
+  - type: YautjaTrophySource
+    countsAsXeno: true # Yautja hunt, butcher and trophy every Wendigo like a xeno
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1500: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: MobStateActions
+    actions:
+      Critical:
+      - CMActionGhost
+      Dead:
+      - CMActionGhost
+  # English. Lab-made Wendigos also get the base human languages from CMUWendigoTransformationSystem.OnLabMadeLanguages.
+  - type: Language
+    spokenLanguages:
+    - English
+    understoodLanguages:
+    - English
+    currentLanguage: English
+    defaultLanguage: English
+  - type: Deathgasp
+    prototype: CMXenoDeathGasp
+  - type: SoundOnDeath
+    sound:
+      collection: WendigoDeath
+      params:
+        volume: -4
+  - type: RMCHealthExaminable
+    speciesType: Xeno
+  - type: RMCDefibrillatorBlocked
+    popup: defibrillator-xeno
+    showOnExamine: false
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 6
+    baseSprintSpeed: 7
+  - type: Climbing
+  - type: Insulated
+  - type: Input
+    context: "xenonid"
+  - type: Clickable
+  - type: InteractionOutline
+  - type: InputMover
+  - type: LagCompensation
+  - type: MobMover
+  - type: Emoting
+  - type: Actions
+  - type: Alerts
+  - type: AreaInfo
+  - type: Appearance
+  - type: DoAfter
+  - type: Examiner
+  - type: Eye
+  - type: ContentEye
+  - type: CameraRecoil
+  - type: MindContainer
+  - type: MindExaminable
+  - type: StatusIcon
+  - type: RotationVisuals
+    defaultRotation: 0
+    horizontalRotation: 0
+  - type: Reactive
+    groups:
+      Flammable: [ Touch ]
+      Extinguish: [ Touch ]
+  - type: FireVisuals
+    sprite: _RMC14/Mobs/Effects/on_fire_xeno.rsi
+    normalState: simple_onfire
+    lightEnergyPerStack: 0.2
+    lightRadiusPerStack: 0.1
+    maxLightRadius: 2
+    maxLightEnergy: 8
+  - type: RMCFireColor
+  - type: Flammable
+    fireSpread: false
+    canResistFire: true
+    damage:
+      types:
+        Heat: 1
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
     sprite: CMU14/Mobs/MiscMob/wendigo.rsi
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -26,32 +200,255 @@
         BaseUnshaded: wendigo_glowmask
       Dead:
         Base: dead
+  - type: Spottable
+  - type: Physics
+    bodyType: KinematicController
+  - type: CMUZPhysics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 185
+        mask:
+        - MobMask
+        - BarricadeImpassable
+        - BarbedBarricade
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.40
+        density: 0
+        layer:
+        - BulletImpassable
+  - type: MobCollision
+    minimumSpeedModifier: 0.25
+  - type: RMCMobCollision
+  - type: RMCMobCollisionMass
+  - type: CMSurgeryTarget
+  - type: RMCGibOnDeath
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - RMCDecalSpawnerGibsDrone
+    - RMCGibEffectXenoSmall
+  - type: Body
+    requiredLegs: 0
+  - type: InitialBody
+    organs:
+      Head: RMCHeadXeno
+      Heart: RMCOrganXenoHeart
+      Stomach: CMUOrganWendigoStomach
+    relationships:
+      Head: [ Heart, Stomach ]
+  - type: VehicleDamageMultiplier
+  - type: XenoRegen
+    standHealingMultiplier: 0.3
+  - type: UserInterface
+    interfaces:
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
+      enum.XenoWatchUIKey.Key:
+        type: XenoWatchBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.WendigoVoiceUiKey.Key:
+        type: WendigoVoiceBui
+  - type: TypingIndicator
+    proto: alien
+  - type: MovedByPressure
+  - type: NoSlip
+  - type: RMCSize
+    size: Big
+  - type: Pullable
   - type: Speech
     speechVerb: AU14WendigoSpeech
     allowedEmotes: [ "Growl", "Hiss", "XenoRoar", "XenoHelp", "WendigoBreathing" ]
-  - type: MobState
-    allowedStates:
-    - Alive
-    - Dead
-  - type: MobThresholds
-    thresholds:
-      0: Alive
-      1500: Dead
-  - type: Xeno
-    unlockAt: 99999 #never unlock naturally
-    role: CMXenoWendigo
+  - type: Vocal
     emoteSounds: Wendigo
-    actionIds:
-    - ActionXenoWatch
-    - ActionXenoPunch
-    - ActionXenoPounce
-    - ActionXenoHeadbite
-    - ActionWendigoDoom
-    tier: 99
-    hudOffset: -0.15,0.25
-  - type: BurrowedLarvaSpawnBlocked
-  - type: XenoRegen
-    standHealingMultiplier: 0.3
+  - type: EmoteCooldown
+  - type: GhostOnMove
+    mustBeDead: true
+  - type: DropHeldOnIncapacitate
+  - type: NightVision
+    alert: XenoNightVision
+    overlay: true
+  - type: ParalyzeOnPullAttemptImmune
+  - type: InfectOnPullAttemptImmune
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Wendigo
+    description: cm-xeno-description
+    raffle:
+      settings: short
+    rules: cm-xeno-rules
+  - type: StatusEffects
+    allowed:
+    - Stun
+    - KnockedDown
+    - SlowedDown
+    - Muted
+    - Dazed
+    - Blinded
+    - Unconscious
+    - TemporaryBlindness
+    - Deaf
+    - YautjaInterference
+  - type: ImmuneToClothingRequiredStepTrigger
+  - type: StandingState
+  - type: Undisposable
+  - type: ShortExamine
+  - type: DamageMobState
+    critDamage:
+      types:
+        Blunt: 0.41
+        Slash: 0.42
+        Piercing: 0.42
+  - type: ComplexInteraction
+  - type: UserLimitHits
+  - type: MovementIgnoreGravity
+  - type: DisableConstruction
+  - type: ExplosionResistance
+    damageCoefficient: 2
+  - type: RMCNightVisionVisible
+  - type: CrashLandable
+  - type: UserBlacklistActivatableUI
+    keys:
+    - enum.VendingMachineUiKey.Key
+    - enum.PaperUiKey.Key
+    - enum.RMCCameraUiKey.Key
+  - type: RMCActiveInputMover
+  - type: RequireProjectileTarget
+    active: false
+  - type: MotionDetectorTracked
+  - type: Evasion
+  - type: RMCWeaponAccuracy
+  - type: StunOnExplosionReceived
+    weak: true
+  - type: MobGibbedByExplosionType
+  - type: TileFirePatter
+    removeDuration: 3.75
+  - type: CanBeFirePatted
+  - type: FirePatter
+    stacks: -5
+  - type: BlockIdExamine
+  - type: NoStunOnExit
+  - type: RMCSpeciesSlowdownModifier
+    slowModifier: 0.75
+    superSlowModifier: 1.5
+    durationMultiplier: 0.666
+  - type: RMCCanBeFultoned
+  - type: CriticalGraceTime
+  - type: RMCObstacleSlamming
+  - type: RMCObstacleSlamCauserImmune
+  - type: Buckle
+    buckleDelay: 0
+    clickUnbuckle: false
+  - type: BuckleWhitelist
+    whitelist:
+      tags:
+      - CMRollerBed
+  - type: RMCBuckleDrawDepth
+    buckleDepth: Mobs
+  - type: RMCBuckleOffset
+    offset: 0, 0.5
+  - type: RMCArmorModifier
+  - type: Blindable
+  - type: RMCMesonsNonviewable
+    xenoVisible: true
+  - type: CommendationReceiver
+  # Hands, pulling and handling (from CMXenoDeveloped / CMXenoPuller / CMXenoPrying).
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - Wendigo
+  - type: Hands
+    examineShowEmpty: false
+  - type: GiveHands
+    hands:
+    - name: Right Hand
+      location: Right
+    - name: Left Hand
+      location: Left
+  - type: WhitelistPickup
+    whitelist:
+      components:
+      - XenoFruit
+      - Edible
+  - type: Cuffable
+    cuffsWhitelist:
+      components:
+      - CMUXenoRestraints
+  - type: ParalyzeOnPullAttempt
+  - type: RMCHandEmotes
+  - type: Prying
+    pryPowered: true
+    speedModifier: 2.7
+    useSound: null
+  # Drags items, bodies and structures with no slowdown.
+  - type: Puller
+    needsHands: false
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
+  - type: CMUNoPullSlowdown
+  - type: CanFiremanCarry
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillCqc: 1
+  - type: CMULargeObjectGrabber
+  # Faction: its own NPC/IFF faction, hostile to xenos (parent THREAT).
+  - type: NpcFactionMember
+    factions:
+    - CMUWendigo
+  - type: UserIFF
+    factions:
+    - FactionWendigo
+  - type: CMUWendigoPack
+  # Combat (from CMXenoMelee plus the Wendigo kit).
+  - type: CombatMode
+    canDisarm: true
+    disarmFailChance: 0
+  - type: MeleeWeapon
+    autoAttack: true
+    widePrimary: true
+    altDisarm: true
+    angle: 0
+    soundHit:
+      collection: RCMXenoClaw
+    animation: RMCWeaponArcXenoClaw
+    damage:
+      types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
+    soundSwing:
+      path: /Audio/_RMC14/Weapons/alien_claw_swipe.ogg
+      params:
+        variation: 0.1
+        volume: -5
+  - type: MeleeDamageMultiplier # 1.5x damage against xenos
+    whitelist:
+      components:
+      - Xeno
+  - type: Tackle
+    max: 4
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: CMArmorPiercing
+    amount: 15
+  # Ballistic-resistant hide. Non-xenos use melee/bullet/bio armor, not xenoArmor.
+  - type: CMArmor
+    melee: 25
+    bullet: 35
+    bio: 20
+    explosionArmor: 40
   - type: XenoHeavy
   - type: XenoPunch
     damage:
@@ -66,21 +463,6 @@
     unrootOnMelee: true
     leapSound:
       collection: WendigoLeap
-  - type: XenoPlasma
-    plasma: 0
-    maxPlasma: 0
-    plasmaRegenOnWeeds: 0
-  - type: CMArmor
-    xenoArmor: 25
-    explosionArmor: 40
-  - type: XenoClaws
-    clawType: Sharp
-  - type: MeleeWeapon
-    damage:
-      types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
   - type: XenoHeadbite
     damage:
       types:
@@ -98,81 +480,114 @@
     sound:
       collection: WendigoDoom
     slowTime: 0
-  - type: MovementSpeedModifier
-    baseWalkSpeed: 6
-    baseSprintSpeed: 7
-  - type: Tackle
-    max: 4
-  - type: SlowOnPull
-    slowdowns:
-    - multiplier: 0.6
-      whitelist:
-        components:
-        - Marine
-    - multiplier: 0.6
-      whitelist:
-        components:
-        - XenoLight
-    - multiplier: 0.4
-      whitelist:
-        components:
-        - XenoHeavy
   - type: XenoLifesteal
-  - type: TacticalMapIcon
-    icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: warrior
-  - type: IntelRecoverCorpseObjectiveOnDeath
-    value: 0.2
-  - type: SoundOnDeath
-    sound:
-      collection: WendigoDeath
-      params:
-        volume: -4
-  - type: RMCSize
-    size: Big
   - type: WendigoVoice
-  - type: UserInterface
-    interfaces:
-      enum.WendigoVoiceUiKey.Key:
-        type: WendigoVoiceBui
-  - type: Tag
-    tags:
-    - Wendigo
+  - type: CMUWendigoPounce
+  - type: CMUWendigoPunchSwing
+  - type: CMUClawedSweep
+  - type: CMUWendigoRest
+  - type: CMUWendigoScentTracker
+  - type: CMUWendigoBrokenSpeechAccent # words break up as it speaks
+  # Eats and drinks, heals on human flesh, butchers and rips limbs from bodies like the ape.
+  - type: CMUWendigoFleshHeal
+  - type: Tool
+    qualities:
+    - Slicing
+    speedModifier: 2
+  - type: ApeLimbRip
+
+# Lab-made Wendigos: the Wendigo base plus human blood and a metabolising heart, so Weyland-Yutani scientists can
+# treat them with kits, sutures and medicine. Natural Wendigos stay untreatable.
+- type: entity
+  abstract: true
+  parent: CMUWendigoBase
+  id: CMUWendigoLabBase
+  save: false
+  components:
+  # Same blood as RMC humans (_RMC14/Entities/Mobs/Species/base.yml), treatable with kits and sutures.
+  - type: SolutionManager
+  - type: InjectableSolution
+    solution: bloodstream
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 560
+    maxBleedAmount: 50
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0.15
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.5
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    damageBleedModifiers: CMBloodlossHuman
+  - type: Woundable
+  - type: InitialBody
+    organs:
+      Head: RMCHeadXeno
+      Heart: CMUOrganWendigoHeart
+      Stomach: CMUOrganWendigoStomach
+    relationships:
+      Head: [ Heart, Stomach ]
+
+# Lab-made Wendigo from a cannibal: full strength and the area screech.
+- type: entity
+  parent: CMUWendigoLabBase
+  id: CMUWendigoLab
+  components:
+  - type: ActionGrant
+    actions:
+    - ActionXenoWatch
+    - ActionXenoPunch
+    - ActionCMUWendigoPunchSwing
+    - ActionXenoPounce
+    - ActionXenoHeadbite
+    - ActionCMUWendigoClawedSweep
+    - ActionApeLimbRip
+    - ActionXenoRest
+    - ActionCMUWendigoScent
+    - ActionWendigoDoom
 
 - type: entity
-  parent: ActionXenoDoom
-  id: ActionWendigoDoom
-  name: Screech
-  description: A terrifying screech that turns off lights, slows and dazes nearby hostiles.
+  parent: RMCOrganXenoHeart
+  id: CMUOrganWendigoHeart
+  name: wendigo heart
+  description: A swollen, too-human heart that still pumps whatever is fed into it.
+  categories: [ HideSpawnMenu ]
   components:
-  - type: XenoActionPlasma
-    cost: 0
+  - type: Metabolizer
+    maxReagents: 2
+    stages: [ Bloodstream ]
 
-- type: speechVerb
-  id: AU14WendigoSpeech
-  name: chat-speech-verb-name-default
-  speechVerbStrings:
-  - Growl
-- type: job
-  parent: CMJobXenoBase
-  id: CMXenoWendigo
-  name: Wendigo
-  playTimeTracker: CMJobXenoWendigo
-- type: playTimeTracker
-  id: CMJobXenoWendigo
-  isXeno: true
-
+# Lab-made Wendigo from a non-cannibal: about 20% less health, the same damage, and no area screech.
+# Parents the base, not CMUWendigoLab: ActionGrant lists append down the inheritance chain.
 - type: entity
-  id: ActionWendigoVoice
-  name: Voice Mimicry
-  parent: ActionXenoBase
+  parent: CMUWendigoLabBase
+  id: CMUWendigoLesser
   components:
-  - type: Action
-    itemIconStyle: NoItem
-  - type: Sprite
-    layers:
-    - texture: /Textures/Interface/Actions/scream.png
-      map: ["enum.ActionVisuals.Icon"]
-  - type: InstantAction
-    event: !type:WendigoVoiceActionEvent {}
+  - type: GhostRole
+    name: Lesser Wendigo
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1200: Dead
+  - type: CMArmorPiercing
+    amount: 12
+  - type: ActionGrant
+    actions:
+    - ActionXenoWatch
+    - ActionXenoPunch
+    - ActionCMUWendigoPunchSwing
+    - ActionXenoPounce
+    - ActionXenoHeadbite
+    - ActionCMUWendigoClawedSweep
+    - ActionApeLimbRip
+    - ActionXenoRest
+    - ActionCMUWendigoScent
+
+# Wendigo pack NPC faction: hostile to everything THREAT is hostile to, xenos included.
+- type: npcFaction
+  parent: THREAT
+  id: CMUWendigo

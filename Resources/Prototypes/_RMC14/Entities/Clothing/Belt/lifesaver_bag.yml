@@ -1,84 +1,86 @@
-- type: entity
-  parent: CMBeltMedical
-  id: CMBeltMedicBag
-  name: M276 pattern lifesaver bag # TODO: differentiate from medical storage rig
-  description: The M276 is standard load-bearing equipment. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
-  - type: Clothing
-    sprite: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
-  - type: Storage
-    maxItemSize: Small
-    grid:
-    - 0,0,13,5 # 21 slots
-    whitelist:
-      tags:
-      - DiscreteHealthAnalyzer
-      - Dropper
-      - GlassBeaker
-      - Bottle
-      - PillPacket
-      - PillCanister
-      - Syringe
-      - CMSurgicalLine
-      - CMSynthGraft
-      - Brutepack
-      - CMBloodPack
-      - Gauze
-      - Ointment
-      - CMOintment
-      - CMTraumaKit
-      - CMBurnKit
-      - CMAutoInjector
-      - CMRollerItem
-      - BodyBag
-      - RMCGlovesLatex
-      - SterileMask
-      - Hypospray
-      - CigPack
-      - RMCPenlight
-      - Flare
-      # New Med
-      # - CMRetractor
-      # - CMHemostat
-      # - CMBoneSaw
-      # - CMCautery
-      # - CMSurgicalDrill
-      # - RMCScalpel
-      # - CMBoneSetter
-      # - CMBoneGel
-      - CMUBoneGraft
-      - CMUCastItem
-      - CMUOrganClamp
-      - CMUSplintItem
-      # cmu edit start
-      - CMUCPRMask
-      # cmu edit end
-      components:
-      - CMSurgeryTool # catch-all for above commented out NewMed tags
-      - Hypospray
-      - Defibrillator
-      - Pill
-      - RMCHandLabeler
-      - RMCStethoscope
-      - RMCLighter
-  - type: FixedItemSizeStorage
-  - type: IgnoreContentsSize
-    items:
-      tags:
-      - PillCanister
-      - PillPacket
-  - type: ItemCamouflage
-    camouflageVariations:
-      Jungle: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
-      Snow: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
-      Desert: _RMC14/Objects/Clothing/Belt/medicbag/desert.rsi
-      Urban: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
-      Classic: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
-  - type: Tag
-    tags:
-    - RMCBeltMedical
+# You're probably looking for: Content.CMU/Resources/Prototypes/CMU14/Entities/Clothing/Universal/medical_storage.yml
+# CMU14: moved to Content.CMU/Resources/Prototypes/CMU14/Entities/Clothing/Universal/medical_storage.yml, do not restore
+# - type: entity
+#   parent: CMBeltMedical
+#   id: CMBeltMedicBag
+#   name: M276 pattern lifesaver bag # TODO: differentiate from medical storage rig
+#   description: The M276 is standard load-bearing equipment. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
+#   components:
+#   - type: Sprite
+#     sprite: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+#   - type: Clothing
+#     sprite: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+#   - type: Storage
+#     maxItemSize: Small
+#     grid:
+#     - 0,0,13,5 # 21 slots
+#     whitelist:
+#       tags:
+#       - DiscreteHealthAnalyzer
+#       - Dropper
+#       - GlassBeaker
+#       - Bottle
+#       - PillPacket
+#       - PillCanister
+#       - Syringe
+#       - CMSurgicalLine
+#       - CMSynthGraft
+#       - Brutepack
+#       - CMBloodPack
+#       - Gauze
+#       - Ointment
+#       - CMOintment
+#       - CMTraumaKit
+#       - CMBurnKit
+#       - CMAutoInjector
+#       - CMRollerItem
+#       - BodyBag
+#       - RMCGlovesLatex
+#       - SterileMask
+#       - Hypospray
+#       - CigPack
+#       - RMCPenlight
+#       - Flare
+#       # New Med
+#       # - CMRetractor
+#       # - CMHemostat
+#       # - CMBoneSaw
+#       # - CMCautery
+#       # - CMSurgicalDrill
+#       # - RMCScalpel
+#       # - CMBoneSetter
+#       # - CMBoneGel
+#       - CMUBoneGraft
+#       - CMUCastItem
+#       - CMUOrganClamp
+#       - CMUSplintItem
+#       # cmu edit start
+#       - CMUCPRMask
+#       # cmu edit end
+#       components:
+#       - CMSurgeryTool # catch-all for above commented out NewMed tags
+#       - Hypospray
+#       - Defibrillator
+#       - Pill
+#       - RMCHandLabeler
+#       - RMCStethoscope
+#       - RMCLighter
+#   - type: FixedItemSizeStorage
+#   - type: IgnoreContentsSize
+#     items:
+#       tags:
+#       - PillCanister
+#       - PillPacket
+#   - type: ItemCamouflage
+#     camouflageVariations:
+#       Jungle: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+#       Snow: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
+#       Desert: _RMC14/Objects/Clothing/Belt/medicbag/desert.rsi
+#       Urban: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
+#       Classic: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+#   - type: Tag
+#     tags:
+#     - RMCBeltMedical
 
 - type: entity
   parent: CMBeltMedicBag

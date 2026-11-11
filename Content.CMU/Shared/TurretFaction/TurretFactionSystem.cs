@@ -28,7 +28,7 @@ public sealed partial class TurretFactionSystem : EntitySystem
     private void OnInteractUsing(Entity<SentryTargetingComponent> ent, ref InteractUsingEvent args)
     {
         // SentrySystem handles entities with SentryComponent.
-        if (HasComp<SentryComponent>(ent))
+        if (HasComp<SentryComponent>(ent) || HasComp<Content.Shared.CMU14.Dropship.DirectFire.MohawkChinGunComponent>(ent))
             return;
 
         if (!HasComp<MultitoolComponent>(args.Used))
@@ -62,7 +62,7 @@ public sealed partial class TurretFactionSystem : EntitySystem
             _rmcNpc.WakeNPC(ent.Owner);
 
         var msg = Loc.GetString("rmc-sentry-faction-assigned", ("sentry", ent.Owner));
-        _popup.PopupPredicted(msg, msg, ent.Owner, args.User);
+        _popup.PopupEntity(msg, msg, ent.Owner, args.User);
     }
 
     private void OnClearFactionDoAfter(Entity<SentryTargetingComponent> ent, ref TurretClearFactionDoAfterEvent args)
@@ -80,7 +80,7 @@ public sealed partial class TurretFactionSystem : EntitySystem
         }
 
         var msg = Loc.GetString("rmc-sentry-faction-cleared", ("sentry", ent.Owner));
-        _popup.PopupPredicted(msg, msg, ent.Owner, args.User);
+        _popup.PopupEntity(msg, msg, ent.Owner, args.User);
     }
 
     // Sets NpcFactionMember to match the turret's assigned factions.

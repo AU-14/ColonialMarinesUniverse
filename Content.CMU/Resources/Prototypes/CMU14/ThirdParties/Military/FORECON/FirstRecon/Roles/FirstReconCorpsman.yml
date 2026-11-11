@@ -43,7 +43,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: au14-job-name-forecon-corpsman
+  name: cmu-job-title-forecon-corpsman
   description: au14-job-description-forecon-firstrecon
   ranks:
     RMCRankCivilian: []

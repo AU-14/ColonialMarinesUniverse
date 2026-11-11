@@ -48,6 +48,20 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
         return HasComp<UnrevivableComponent>(uid);
     }
 
+    /// <summary>
+    /// Reverses elapsed time in an active revival countdown. Permanent death and
+    /// expired deadlines cannot be reversed, even before the next expiry scan.
+    /// </summary>
+    public void ReverseRevivalTimer(EntityUid uid, TimeSpan time)
+    {
+        if (_net.IsClient || time <= TimeSpan.Zero || IsUnrevivable(uid) ||
+            !TryComp<RMCRevivableComponent>(uid, out var revivable) ||
+            revivable.UnrevivableAt is not { } deadline || deadline <= _timing.CurTime)
+            return;
+
+        AddRevivableTime(uid, time);
+    }
+
     // cmu edit start
     public TimeSpan? GetTimeUntilUnrevivable(EntityUid uid)
     {
@@ -63,7 +77,7 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
     }
     // cmu edit end
 
-    public void MakeUnrevivable(Entity<RMCRevivableComponent?> ent, bool killLarva = true)
+    public void MakeUnrevivable(Entity<RMCRevivableComponent?> ent, bool killLarva = true, bool fromRevivalTimer = false)
     {
         if (!Resolve(ent.Owner, ref ent.Comp, false))
             return;
@@ -72,6 +86,8 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
         unrevivable.Analyzable = false;
         unrevivable.Cloneable = false;
         unrevivable.ReasonMessage = ent.Comp.UnrevivableReasonMessage;
+        unrevivable.FromRevivalTimer = fromRevivalTimer;
+        Dirty(ent.Owner, unrevivable);
 
         ent.Comp.KillLarva = killLarva;
         Dirty(ent);
@@ -124,7 +140,7 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
             if (_timing.CurTime < deadline)
                 continue;
 
-            MakeUnrevivable((uid, revivable));
+            MakeUnrevivable((uid, revivable), fromRevivalTimer: true);
         }
     }
 }

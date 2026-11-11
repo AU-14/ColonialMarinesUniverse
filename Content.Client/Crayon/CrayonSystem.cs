@@ -43,7 +43,7 @@ public sealed partial class CrayonSystem : SharedCrayonSystem
 
             _label.SetMarkup(Robust.Shared.Localization.Loc.GetString("crayon-drawing-label",
                 ("color", _crayon.Comp.Color),
-                ("state", _crayon.Comp.SelectedState),
+                ("state", CMUState(_crayon)), // CMU14: a picked custom symbol draws instead
                 ("charges", _charges.GetCurrentCharges(_crayon.Owner)),
                 ("capacity", _capacity)));
         }

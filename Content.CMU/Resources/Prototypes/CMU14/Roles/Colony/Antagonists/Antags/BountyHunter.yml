@@ -46,12 +46,19 @@
     antagPrototype: BountyHunterRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-bounty-hunter
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: free_rfn
 
 - type: antag
   parent: CMUAntagColonyBase
   id: BountyHunterRole
   name: cmu-antag-bounty-hunter-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: cmu-antag-bounty-hunter-objective
 
 - type: startingGear

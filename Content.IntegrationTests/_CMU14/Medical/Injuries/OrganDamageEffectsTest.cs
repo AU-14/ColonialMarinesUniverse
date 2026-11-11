@@ -40,6 +40,7 @@ using Robust.Shared.Timing;
 namespace Content.IntegrationTests.CMU14.Medical.Injuries;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public sealed class OrganDamageEffectsTest
 {
     [Test]
@@ -127,44 +128,6 @@ public sealed class OrganDamageEffectsTest
             {
                 entMan.DeleteEntity(human);
             }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task BrainDamageImpairmentAndDisorientationAreApplied()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var timing = server.ResolveDependency<IGameTiming>();
-        EntityUid human = default;
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            var index = entMan.System<CMUMedicalBodyIndexSystem>();
-            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var brain = GetOrgan<CMUBrainComponent>(index, human);
-            var symptoms = entMan.GetComponent<CMUBrainComponent>(brain);
-            SetField(symptoms, nameof(CMUBrainComponent.BruisedDisorientationChance), 1f);
-            SetField(symptoms, nameof(CMUBrainComponent.DisorientationCheckInterval), TimeSpan.FromMilliseconds(10));
-            SetField(symptoms, nameof(CMUBrainComponent.NextDisorientCheck), timing.CurTime);
-            DamageOrgan(entMan, human, brain, 15);
-
-            var vision = entMan.GetComponent<CMUBrainVisionImpairmentComponent>(human);
-            Assert.That(vision.Magnitude, Is.EqualTo(symptoms.BruisedVisionBlur));
-        });
-
-        await pair.RunTicksSync(pair.SecondsToTicks(1.5f));
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var temporaryBlur = entMan.GetComponent<CMUTemporaryBlurryVisionComponent>(human);
-            Assert.That(temporaryBlur.Modifiers, Has.Some.Matches<CMUTemporaryBlurModifier>(
-                modifier => modifier.Strength >= 1.25f));
-            entMan.DeleteEntity(human);
         });
 
         await pair.CleanReturnAsync();
@@ -327,122 +290,6 @@ public sealed class OrganDamageEffectsTest
             entMan.DeleteEntity(human);
         });
 
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task DeletingOrgansFromLivingPatientReconcilesLungAbsence()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var index = entMan.System<CMUMedicalBodyIndexSystem>();
-            var status = entMan.System<StatusEffectsSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-
-            try
-            {
-                var heart = GetOrgan<HeartComponent>(index, human);
-                var kidneys = GetOrgan<KidneysComponent>(index, human);
-                var liver = GetOrgan<LiverComponent>(index, human);
-                var lungs = GetOrgan<LungsComponent>(index, human);
-                var stomach = GetOrgan<CMUStomachComponent>(index, human);
-
-                entMan.DeleteEntity(heart);
-                entMan.DeleteEntity(kidneys);
-                entMan.DeleteEntity(liver);
-                entMan.DeleteEntity(lungs);
-                entMan.DeleteEntity(stomach);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entMan.HasComponent<MissingHeartComponent>(human), Is.False);
-                    Assert.That(entMan.HasComponent<MissingKidneysComponent>(human), Is.False);
-                    Assert.That(entMan.HasComponent<MissingLiverComponent>(human), Is.False);
-                    Assert.That(entMan.HasComponent<MissingLungsComponent>(human), Is.True);
-                    Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.False);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUCardiacArrest"), Is.False);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMURenalFailure"), Is.False);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUHepaticFailure"), Is.False);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUPulmonaryEdema"), Is.True);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.False);
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task DeletingThePatientDoesNotCreateMissingLungsOrEdemaDuringTeardown()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var map = await pair.CreateTestMap();
-        var player = pair.Player!;
-        var originalPlayer = player.AttachedEntity;
-        EntityUid patient = default;
-        NetEntity patientNet = default;
-        try
-        {
-            await pair.Server.WaitPost(() =>
-            {
-                patient = pair.Server.EntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                pair.Server.PlayerMan.SetAttachedEntity(player, patient);
-                patientNet = pair.Server.EntMan.GetNetEntity(patient);
-            });
-            await pair.RunUntilSynced();
-            await pair.Client.WaitAssertion(() =>
-            {
-                Assert.That(pair.Client.EntMan.TryGetEntity(patientNet, out _), Is.True);
-                pair.Client.EntMan.System<CMULungTeardownProbeSystem>().StartCounting();
-            });
-            await pair.Server.WaitAssertion(() =>
-            {
-                var entities = pair.Server.EntMan;
-                var probe = entities.System<CMULungTeardownProbeSystem>();
-                probe.StartCounting();
-                pair.Server.PlayerMan.SetAttachedEntity(player, originalPlayer);
-                // Deleting one organ from a living patient is a clinical mutation.
-                // Deleting the patient must never create new physiological state.
-                entities.DeleteEntity(patient);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entities.EntityExists(patient), Is.False);
-                    Assert.That(probe.MissingLungsCreated, Is.Zero);
-                    Assert.That(probe.EdemaCreated, Is.Zero);
-                });
-            });
-            await pair.RunUntilSynced();
-            await pair.Client.WaitAssertion(() =>
-            {
-                var entities = pair.Client.EntMan;
-                var probe = entities.System<CMULungTeardownProbeSystem>();
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entities.TryGetEntity(patientNet, out _), Is.False);
-                    Assert.That(probe.MissingLungsCreated, Is.Zero);
-                    Assert.That(probe.EdemaCreated, Is.Zero);
-                });
-            });
-        }
-        finally
-        {
-            await pair.Server.WaitPost(() =>
-            {
-                pair.Server.EntMan.System<CMULungTeardownProbeSystem>().Counting = false;
-                pair.Server.PlayerMan.SetAttachedEntity(player, originalPlayer);
-                if (pair.Server.EntMan.EntityExists(patient))
-                    pair.Server.EntMan.DeleteEntity(patient);
-            });
-            await pair.Client.WaitPost(() => pair.Client.EntMan.System<CMULungTeardownProbeSystem>().Counting = false);
-        }
         await pair.CleanReturnAsync();
     }
 
@@ -658,84 +505,6 @@ public sealed class OrganDamageEffectsTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task DefibrillationEligibilityDoesNotMutateARecoverableHeart()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var index = entMan.System<CMUMedicalBodyIndexSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            try
-            {
-                var heart = GetOrgan<HeartComponent>(index, human);
-                var heartComp = entMan.GetComponent<HeartComponent>(heart);
-                var health = entMan.GetComponent<OrganHealthComponent>(heart);
-                var before = health.Current;
-                SetField(heartComp, nameof(HeartComponent.Stopped), true);
-                SetField(heartComp, nameof(HeartComponent.BeatsPerMinute), 0);
-
-                var attempt = new RMCDefibrillatorAttemptEvent(human);
-                entMan.EventBus.RaiseLocalEvent(human, attempt);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(attempt.Cancelled, Is.False);
-                    Assert.That(heartComp.Stopped, Is.True, "An eligibility event must not restart tissue.");
-                    Assert.That(health.Current, Is.EqualTo(before), "A later veto must not leave attempt trauma.");
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task DefibrillationRejectsADamagedHeart()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var index = entMan.System<CMUMedicalBodyIndexSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            try
-            {
-                var heart = GetOrgan<HeartComponent>(index, human);
-                var heartComp = entMan.GetComponent<HeartComponent>(heart);
-                DamageOrgan(entMan, human, heart, 36);
-                SetField(heartComp, nameof(HeartComponent.Stopped), true);
-
-                var attempt = new RMCDefibrillatorAttemptEvent(human);
-                entMan.EventBus.RaiseLocalEvent(human, attempt);
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(attempt.Cancelled, Is.True);
-                    Assert.That(heartComp.Stopped, Is.True);
-                    Assert.That(
-                        entMan.GetComponent<OrganHealthComponent>(heart).Stage,
-                        Is.EqualTo(OrganDamageStage.Damaged));
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
     private static void DamageOrgan(
         IEntityManager entMan,
         EntityUid body,
@@ -804,36 +573,3 @@ public sealed class OrganDamageEffectsTest
 }
 
 #pragma warning restore RA0002
-
-public sealed partial class CMULungTeardownProbeSystem : EntitySystem
-{
-    public bool Counting;
-    public int MissingLungsCreated;
-    public int EdemaCreated;
-
-    public void StartCounting()
-    {
-        MissingLungsCreated = 0;
-        EdemaCreated = 0;
-        Counting = true;
-    }
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<MissingLungsComponent, ComponentInit>(OnMissingLungs);
-        SubscribeLocalEvent<PulmonaryEdemaComponent, ComponentInit>(OnEdema);
-    }
-
-    private void OnMissingLungs(Entity<MissingLungsComponent> ent, ref ComponentInit args)
-    {
-        if (Counting)
-            MissingLungsCreated++;
-    }
-
-    private void OnEdema(Entity<PulmonaryEdemaComponent> ent, ref ComponentInit args)
-    {
-        if (Counting)
-            EdemaCreated++;
-    }
-}

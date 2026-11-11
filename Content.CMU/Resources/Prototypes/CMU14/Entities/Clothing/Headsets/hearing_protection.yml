@@ -3,3 +3,7 @@
   id: CMUHeadElectronicHearingProtection
   name: electronic hearing protection
   description: Over-ear electronic hearing protection. It lets quiet sounds and voices through while clamping down on gunfire and explosions. Can be worn on its own or clipped onto a helmet.
+  components:
+  # A crate of ten costs 110 on requisitions; the headset's inherited price let it sell back for more.
+  - type: StaticPrice
+    price: 3

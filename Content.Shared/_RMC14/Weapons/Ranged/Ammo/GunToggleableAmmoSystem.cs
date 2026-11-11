@@ -84,7 +84,7 @@ public sealed partial class GunToggleableAmmoSystem : EntitySystem
 
         var setting = ent.Comp.Settings[settingIndex];
         var popup = Loc.GetString("rmc-toggleable-ammo-firing", ("ammo", Loc.GetString(setting.Name)));
-        _popup.PopupClient(popup, user, user, PopupType.Large);
+        _popup.PopupEntity(popup, user, user, PopupType.Large);
 
         _audio.PlayPredicted(ent.Comp.ToggleSound, ent, user);
 

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -27,8 +27,8 @@ public sealed partial class RemoveDamage : EntityEffectBase<RemoveDamage>
 public sealed partial class RemoveDamageEntityEffectSystem
     : EntityEffectSystem<DamageableComponent, RemoveDamage>
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
 
     protected override void Effect(Entity<DamageableComponent> entity, ref EntityEffectEvent<RemoveDamage> args)
     {

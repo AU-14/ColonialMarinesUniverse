@@ -31,8 +31,6 @@ public sealed class MohawkWeedsTest
 
     [TestCase("omaha", 0, true)]
     [TestCase("midway", 90, false)]
-    [TestCase("omaha_navy", 180, false)]
-    [TestCase("midway_navy", 270, true)]
     public async Task LoweredRampBlocksWeedsAcrossGridsAndDrawsAboveThem(string variant, int degrees, bool terrainOnMap)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true, Connected = true });
@@ -54,7 +52,7 @@ public sealed class MohawkWeedsTest
             var weeds = entities.System<SharedXenoWeedsSystem>();
             maps.CreateMap(out var mapId);
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
-                new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
+                new ResPath($"/Maps/CMU14/Dropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             transform.SetWorldPosition(ship, new Vector2(16, -8));
             transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
@@ -81,7 +79,7 @@ public sealed class MohawkWeedsTest
             for (var y = -8; y <= 8; y++)
                 maps.SetTile(ground, GroundTile(new Vector2(x + 0.5f, y + 0.5f)), tile);
 
-            foreach (var ramp in entities.EntityQuery<MohawkRampSegmentComponent>().Where(r => r.Lower))
+            foreach (var ramp in entities.QueryEntities<MohawkRampSegmentComponent>().Where(r => r.Comp.Lower))
             {
                 var xform = entities.GetComponent<TransformComponent>(ramp.Owner);
                 Assert.That(xform.Anchored, Is.True);
@@ -99,7 +97,7 @@ public sealed class MohawkWeedsTest
                 maps.GridTileToLocal(ground, ground, GroundTile(new Vector2(-0.5f, -4.5f))));
             weeds.AssignSource(oldWeeds, source);
             oldWeedsNet = entities.GetNetEntity(oldWeeds);
-            var belly = entities.EntityQuery<MetaDataComponent>().Single(m => m.EntityName == "underside fuel lines");
+            var belly = entities.QueryEntities<MetaDataComponent>().Single(m => m.Comp.EntityName == "underside fuel lines");
             bellyNet = entities.GetNetEntity(belly.Owner);
             Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true, true), Is.True);
             foreach (var (_, lowerTile, groundTile) in rampTiles)

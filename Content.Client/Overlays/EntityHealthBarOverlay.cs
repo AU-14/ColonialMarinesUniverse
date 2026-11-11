@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.CMU14.Overlays; // CMU14: retain recently visible HUD entries across cache overflow.
 using Content.Client.StatusIcon;
 using Content.Client.UserInterface.Systems;
 using Content.Shared._RMC14.CrashLand;
@@ -43,7 +44,7 @@ public sealed class EntityHealthBarOverlay : Overlay
     private readonly EntityQuery<ParaDroppingComponent> _paraDroppingQuery;
     private readonly EntityQuery<HideHealthBarComponent> _hideHealthBarQuery;
     private readonly HashSet<Entity<MobThresholdsComponent>> _healthCandidates = new();
-    private readonly Dictionary<EntityUid, CachedHealthProgress> _progressCache = new();
+    private readonly CMUOverlayCache<EntityUid, CachedHealthProgress> _progressCache = new(MaxCachedHealthEntities); // CMU14: bounded per-entry eviction.
 
     private static readonly TimeSpan HealthProgressCacheLifetime = TimeSpan.FromSeconds(0.25);
     private const int MaxCachedHealthEntities = 512;
@@ -204,11 +205,9 @@ public sealed class EntityHealthBarOverlay : Overlay
 
         if (cached is null)
         {
-            if (_progressCache.Count >= MaxCachedHealthEntities)
-                _progressCache.Clear();
-
+            // CMU14: evict one entity, keeping the remaining crowd's progress snapshots.
             cached = new CachedHealthProgress();
-            _progressCache[uid] = cached;
+            _progressCache.Set(uid, cached);
         }
 
         cached.Expires = now + HealthProgressCacheLifetime;

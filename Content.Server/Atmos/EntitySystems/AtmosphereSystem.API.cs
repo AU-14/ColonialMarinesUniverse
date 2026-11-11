@@ -100,6 +100,14 @@ public partial class AtmosphereSystem
     }
 
     /// <summary>
+    ///     Checks whether the grid atmosphere tracks a tile at the given indices.
+    /// </summary>
+    [PublicAPI] // CMU14 Method
+    public bool HasTileAtmosphere(Entity<GridAtmosphereComponent?> entity, Vector2i tile)
+        => _gridAtmosQuery.Resolve(entity.Owner, ref entity.Comp, false)
+            && entity.Comp.Tiles.ContainsKey(tile);
+
+    /// <summary>
     /// Gets the gas mixture for a specific tile that an entity is on.
     /// </summary>
     /// <param name="entity">The entity to get the tile mixture for.</param>
@@ -113,6 +121,10 @@ public partial class AtmosphereSystem
     {
         if (!Resolve(entity.Owner, ref entity.Comp))
             return null;
+
+        // CMU14: stair openings use the lower stairwell's air, not the upper map's vacuum.
+        if (CMUTryGetStairMixture(entity, excite, out var stairMixture))
+            return stairMixture;
 
         var indices = XformSystem.GetGridTilePositionOrDefault(entity);
         return GetTileMixture(entity.Comp.GridUid, entity.Comp.MapUid, indices, excite);
@@ -157,6 +169,10 @@ public partial class AtmosphereSystem
 
         if (!ignoreExposed && TryGetExposedMixture(ent, out var mixture))
             return mixture;
+
+        // CMU14: keep respiration, pressure and temperature consistent while crossing a stair opening.
+        if (CMUTryGetStairMixture(ent, excite, out var stairMixture))
+            return stairMixture;
 
         var position = XformSystem.GetGridTilePositionOrDefault((ent, ent.Comp));
         return GetTileMixture(grid, map, position, excite);
@@ -255,6 +271,11 @@ public partial class AtmosphereSystem
 
             return tile.Air;
         }
+
+        // cmu edit start: a deck with no air of its own shares the air of the grid it's over
+        if (grid is { } borrowing && CMUTryGetBorrowedMixture(borrowing.Owner, gridTile, excite, out var borrowed))
+            return borrowed;
+        // cmu edit end
 
         if (map is { } mapEnt && _mapAtmosQuery.Resolve(mapEnt, ref mapEnt.Comp, false))
             return mapEnt.Comp.Mixture;

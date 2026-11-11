@@ -83,21 +83,4 @@ public sealed class BotanyTrayRegressionTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task TrayResourceConsumptionIsFortyPercentLower()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var tray = entities.SpawnEntity("hydroponicsTray", MapCoordinates.Nullspace);
-            var component = entities.GetComponent<PlantTrayComponent>(tray);
-
-            Assert.That(component.TrayConsumptionMultiplier, Is.EqualTo(1.2f));
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

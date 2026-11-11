@@ -1,0 +1,216 @@
+using Content.Client._RMC14.Attachable.Components;
+using Content.IntegrationTests.Fixtures;
+using Content.Shared._RMC14.Attachable.Components;
+using Content.Shared._RMC14.Attachable.Systems;
+using Content.Shared.CMU14.Attachable;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
+using Content.Shared.Whitelist;
+using Robust.Client.GameObjects;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
+
+namespace Content.IntegrationTests.CMU14.Attachable;
+
+[TestFixture]
+public sealed class CMUSlingAttachmentTest : GameTest
+{
+    private const string Rail = "rmc-aslot-rail";
+    private const string Underbarrel = "rmc-aslot-underbarrel";
+
+    [Test]
+    public async Task SlingSupportsManualShoulderEquipWithoutArmorOnlyWhileAttached()
+    {
+        var map = await Pair.CreateTestMap();
+        NetEntity rifleNet = default;
+        NetEntity userNet = default;
+        await Server.WaitAssertion(() =>
+        {
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
+            var rifle = SEntMan.SpawnEntity("CMUWeaponShotgunOlympiets", map.GridCoords);
+            var sling = SEntMan.SpawnEntity("AU14AttachmentTwoPointSling", map.GridCoords);
+            var attachments = Server.System<AttachableHolderSystem>();
+            var inventory = Server.System<InventorySystem>();
+            var holder = SEntMan.GetComponent<AttachableHolderComponent>(rifle);
+            Assert.That(inventory.TryEquip(user, rifle, "suitstorage"), Is.False);
+            Assert.That(attachments.Attach((rifle, holder), sling, user), Is.True);
+            Assert.That(inventory.TryEquip(user, rifle, "suitstorage"), Is.True);
+
+            var other = SEntMan.SpawnEntity("CMUWeaponShotgunOlympiets", map.GridCoords);
+            var otherSling = SEntMan.SpawnEntity("AU14AttachmentTwoPointSling", map.GridCoords);
+            Assert.That(attachments.Attach((other, SEntMan.GetComponent<AttachableHolderComponent>(other)), otherSling, user), Is.True);
+            Assert.That(inventory.TryEquip(user, other, "suitstorage"), Is.False, "a sling must not bypass an occupied slot");
+            Assert.That(inventory.TryUnequip(user, "suitstorage"), Is.True);
+            Assert.That(attachments.Detach((rifle, holder), sling, user), Is.True);
+            Assert.That(inventory.TryEquip(user, rifle, "suitstorage"), Is.False);
+
+            var harness = SEntMan.SpawnEntity("RMCAttachmentMagneticHarness", map.GridCoords);
+            Assert.That(attachments.Attach((rifle, holder), harness, user, Rail), Is.True);
+            Assert.That(inventory.TryEquip(user, rifle, "suitstorage"), Is.False, "magnetic harnesses must still require armor");
+            Assert.That(inventory.TryEquip(user, other, "suitstorage"), Is.True);
+            rifleNet = SEntMan.GetNetEntity(other);
+            userNet = SEntMan.GetNetEntity(user);
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var inventory = Client.System<InventorySystem>();
+            var user = CEntMan.GetEntity(userNet);
+            var rifle = CEntMan.GetEntity(rifleNet);
+            Assert.That(inventory.CanEquip(user, rifle, "suitstorage", out _, assumeEmpty: true), Is.True,
+                "the client must allow the same manual equip as the server");
+        });
+    }
+
+    [Test]
+    public async Task VestModeAttachesRifleToArmorAndRetrievesItFromTheOuterClothingSlot()
+    {
+        var map = await Pair.CreateTestMap();
+        NetEntity userNet = default;
+        NetEntity rifleNet = default;
+        await Server.WaitAssertion(() =>
+        {
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
+            var rifle = SEntMan.SpawnEntity("CMUWeaponShotgunOlympiets", map.GridCoords);
+            var sling = SEntMan.SpawnEntity("AU14AttachmentTwoPointSling", map.GridCoords);
+            var attachments = SEntMan.System<AttachableHolderSystem>();
+            var slings = SEntMan.System<CMUSlingSystem>();
+            var inventory = SEntMan.System<InventorySystem>();
+            var hands = SEntMan.System<SharedHandsSystem>();
+            Assert.That(attachments.Attach(
+                (rifle, SEntMan.GetComponent<AttachableHolderComponent>(rifle)), sling, user), Is.True);
+            slings.ToggleCarryMode((sling, SEntMan.GetComponent<CMUSlingComponent>(sling)), user);
+
+            Assert.That(inventory.TryEquip(user, rifle, "suitstorage"), Is.False);
+            Assert.That(inventory.TryEquip(user, rifle, "outerClothing"), Is.True,
+                "without armor, vest mode uses the outer-clothing slot");
+            Assert.That(inventory.TryUnequip(user, "outerClothing"), Is.True);
+            Assert.That(hands.TryPickupAnyHand(user, rifle), Is.True);
+
+            var vest = SEntMan.SpawnEntity("RMCArmorVest", map.GridCoords);
+            Assert.That(inventory.TryEquip(user, vest, "outerClothing"), Is.True);
+            Assert.That(slings.TryAttachToVest(vest, rifle, user), Is.True);
+            Assert.That(inventory.TryGetSlotEntity(user, "outerClothing", out var wornVest), Is.True);
+            Assert.That(wornVest, Is.EqualTo(vest));
+            Assert.That(slings.TryRetrieveFromVest(vest, user), Is.True,
+                "clicking the outer-clothing slot retrieves the attached rifle first");
+            Assert.That(hands.IsHolding(user, rifle), Is.True);
+
+            Assert.That(slings.TryAttachToVest(vest, rifle, user), Is.True);
+            Assert.That(inventory.TryUnequip(user, "outerClothing"), Is.True,
+                "armor can be removed while the rifle remains attached to it");
+            Assert.That(slings.TryRetrieveFromVest(vest, user), Is.True);
+            Assert.That(hands.IsHolding(user, rifle), Is.True);
+            userNet = SEntMan.GetNetEntity(user);
+            rifleNet = SEntMan.GetNetEntity(rifle);
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var user = CEntMan.GetEntity(userNet);
+            var rifle = CEntMan.GetEntity(rifleNet);
+            var inventory = Client.System<InventorySystem>();
+            Assert.That(inventory.CanEquip(user, rifle, "outerClothing", out _, assumeEmpty: true), Is.True);
+            Assert.That(inventory.CanEquip(user, rifle, "suitstorage", out _, assumeEmpty: true), Is.False);
+        });
+    }
+
+    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    [TestPrototypes]
+    private const string Prototypes = """
+    - type: entity
+      parent: RMCWeaponRifleM54C
+      id: CMUTestSlingRifle
+      components:
+      - type: AttachableHolder
+        slots:
+          rmc-aslot-rail:
+            whitelist:
+              tags:
+              - RMCAttachmentMagneticHarness
+              - RMCAttachmentRailFlashlight
+          rmc-aslot-underbarrel:
+            whitelist:
+              tags:
+              - RMCAttachmentBipod
+      - type: AttachableHolderVisuals
+        offsets:
+          rmc-aslot-rail: 0.25, 0.125
+          rmc-aslot-underbarrel: -0.25, -0.125
+
+    """;
+
+    [TestCase("AU14AttachmentTwoPointSling")]
+    [TestCase("RMCAttachmentTwoPointSling")]
+    public async Task DefaultSlingCoexistsWithRailAndUnderbarrelAttachments(string slingPrototype)
+    {
+        var map = await Pair.CreateTestMap();
+        NetEntity rifleNet = default;
+        await Server.WaitAssertion(() =>
+        {
+            var rifle = SEntMan.SpawnEntity("CMUTestSlingRifle", map.GridCoords);
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
+            var holder = SEntMan.GetComponent<AttachableHolderComponent>(rifle);
+            var system = SEntMan.System<AttachableHolderSystem>();
+            var rail = SEntMan.SpawnEntity("RMCAttachmentRailFlashlight", map.GridCoords);
+            var underbarrel = SEntMan.SpawnEntity("RMCAttachmentBipod", map.GridCoords);
+            var sling = SEntMan.SpawnEntity(slingPrototype, map.GridCoords);
+            Assert.That(system.Attach((rifle, holder), rail, user, Rail), Is.True);
+            Assert.That(system.Attach((rifle, holder), underbarrel, user, Underbarrel), Is.True);
+            Assert.That(system.Attach((rifle, holder), sling, user), Is.True);
+            Assert.That(system.TryGetAttachable(rifle, AttachableHolderSystem.CMUSlingSlot, out var mounted), Is.True);
+            Assert.That(mounted.Owner, Is.EqualTo(sling));
+            Assert.That(system.TryGetAttachable(rifle, Rail, out var mountedRail), Is.True);
+            Assert.That(mountedRail.Owner, Is.EqualTo(rail));
+            Assert.That(system.TryGetAttachable(rifle, Underbarrel, out var mountedUnderbarrel), Is.True);
+            Assert.That(mountedUnderbarrel.Owner, Is.EqualTo(underbarrel));
+            Assert.That(system.Attach((rifle, holder), rail, user, AttachableHolderSystem.CMUSlingSlot), Is.False);
+            rifleNet = SEntMan.GetNetEntity(rifle);
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var rifle = CEntMan.GetEntity(rifleNet);
+            var sprites = CEntMan.System<SpriteSystem>();
+            var sprite = CEntMan.GetComponent<SpriteComponent>(rifle);
+            var offsets = CEntMan.GetComponent<AttachableHolderVisualsComponent>(rifle).Offsets;
+            Assert.That(sprites.LayerMapTryGet((rifle, sprite), AttachableHolderSystem.CMUSlingSlot, out var layer, false), Is.True);
+            Assert.That(sprites.TryGetLayer((rifle, sprite), layer, out var slingLayer, false), Is.True);
+            Assert.That(slingLayer!.Offset, Is.EqualTo(offsets[Rail]));
+        });
+    }
+
+    [Test]
+    public async Task InteractiveAttachmentDefaultsToTheSlingSlot()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid rifle = default;
+        EntityUid sling = default;
+        var ticks = 0;
+        await Server.WaitAssertion(() =>
+        {
+            rifle = SEntMan.SpawnEntity("CMUTestSlingRifle", map.GridCoords);
+            sling = SEntMan.SpawnEntity("AU14AttachmentTwoPointSling", map.GridCoords);
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var hands = SEntMan.System<SharedHandsSystem>();
+            Assert.That(hands.TryPickupAnyHand(user, rifle), Is.True);
+            Assert.That(hands.TryPickupAnyHand(user, sling), Is.True);
+            ticks = (int) Math.Ceiling(SEntMan.GetComponent<AttachableComponent>(sling).AttachDoAfter * SGameTiming.TickRate) + 2;
+            SEntMan.System<AttachableHolderSystem>().StartAttach(
+                (rifle, SEntMan.GetComponent<AttachableHolderComponent>(rifle)), sling, user);
+        });
+        await Pair.RunTicksSync(ticks);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.System<AttachableHolderSystem>()
+                .TryGetAttachable(rifle, AttachableHolderSystem.CMUSlingSlot, out var mounted), Is.True);
+            Assert.That(mounted.Owner, Is.EqualTo(sling));
+        });
+    }
+
+}

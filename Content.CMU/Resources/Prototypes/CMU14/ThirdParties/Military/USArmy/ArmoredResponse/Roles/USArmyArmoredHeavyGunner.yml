@@ -93,9 +93,18 @@
     belt: RMCBeltSmartGunOperatorPistol
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchIFAKFill
+    back: AU14MolleSatchel
     ears: AU14HeadsetUSArmyERT
     suitstorage: RMCSmartGun
   storage:
+    back:
+    - CMMRE
+    - RMCBinocularsPVE
+    - RMCFlashlight
+    - CMPacketGrenadeFragFilled
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
     belt:
     - RMCMK80
     - CMMagazinePistolMK80

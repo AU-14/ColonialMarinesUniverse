@@ -528,7 +528,7 @@ public sealed partial class BlackfootDeployableSupportComponent : Component
     public Vector2 Offset;
 
     [DataField]
-    public string DeployPopup = "The Blackfoot support assembly is deployed.";
+    public LocId DeployPopup = "cmu-blackfoot-support-deployed";
 
     [DataField]
     public ProtoId<ToolQualityPrototype> DeployTool = "Anchoring";
@@ -537,7 +537,7 @@ public sealed partial class BlackfootDeployableSupportComponent : Component
     public float DeployDelay = 2f;
 
     [DataField]
-    public string ToolPopup = "Use a wrench to assemble the Blackfoot support equipment.";
+    public LocId ToolPopup = "cmu-blackfoot-support-deploy-hint";
 
     [DataField]
     public bool RequireClearFootprint;
@@ -592,16 +592,16 @@ public sealed partial class BlackfootPackableSupportComponent : Component
     public float FinalDelay = 2f;
 
     [DataField]
-    public string ToolPopup = "Use a wrench, then a screwdriver, then a wrench again to pack this Blackfoot support equipment.";
+    public LocId ToolPopup = "cmu-blackfoot-support-pack-hint";
 
     [DataField]
-    public string InitialPopup = "The anchor bolts are loosened.";
+    public LocId InitialPopup = "cmu-blackfoot-support-anchors-loosened";
 
     [DataField]
-    public string PanelPopup = "The service panel is opened.";
+    public LocId PanelPopup = "cmu-blackfoot-support-panel-opened";
 
     [DataField]
-    public string PackedPopup = "The Blackfoot support equipment is packed up.";
+    public LocId PackedPopup = "cmu-blackfoot-support-packed";
 }
 
 [Serializable, NetSerializable]

@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Damage;
@@ -69,6 +70,7 @@ public sealed partial class CMGunSystem : EntitySystem
     [Dependency] private INetConfigurationManager _netConfig = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedProjectileSystem _projectile = default!;
@@ -107,7 +109,9 @@ public sealed partial class CMGunSystem : EntitySystem
 
         SubscribeLocalEvent<RMCExtraProjectilesDamageModsComponent, AmmoShotEvent>(OnExtraProjectilesShot);
 
-        SubscribeLocalEvent<RMCWeaponAccuracyComponent, ExaminedEvent>(OnWeaponAccuracyExamined);
+        // cmu edit start: listed under the weapon stats examine verb instead (CMUWeaponStatsSystem)
+        // SubscribeLocalEvent<RMCWeaponAccuracyComponent, ExaminedEvent>(OnWeaponAccuracyExamined);
+        // cmu edit end
         SubscribeLocalEvent<RMCWeaponAccuracyComponent, GunRefreshModifiersEvent>(OnWeaponAccuracyRefreshModifiers);
         SubscribeLocalEvent<RMCWeaponAccuracyComponent, AmmoShotEvent>(OnWeaponAccuracyShot);
 
@@ -176,7 +180,7 @@ public sealed partial class CMGunSystem : EntitySystem
     private void OnShootAtFixedPointShot(Entity<ShootAtFixedPointComponent> ent, ref AmmoShotEvent args)
     {
         if (!TryComp(ent, out GunComponent? gun) ||
-            gun.ShootCoordinates is not { } target)
+            (args.TargetCoordinates ?? gun.ShootCoordinates) is not { } target) // CMU14: preserve the final barrel-constrained aim.
         {
             return;
         }
@@ -186,6 +190,9 @@ public sealed partial class CMGunSystem : EntitySystem
         if (args.FiredProjectiles.Count > 0)
             from = _transform.GetMapCoordinates(args.FiredProjectiles[0]);
         var to = _transform.ToMapCoordinates(target);
+        // CMU14: cross-z shots start on the other level but the click stays on yours, aim at the same spot over there
+        if (from.MapId != to.MapId && args.FiredProjectiles.Count > 0 && _zLevels.IsSameZNetwork(from.MapId, to.MapId))
+            to = new MapCoordinates(to.Position, from.MapId);
         // Must be same map.
         if (from.MapId != to.MapId)
             return;
@@ -234,6 +241,11 @@ public sealed partial class CMGunSystem : EntitySystem
             // and will trigger the OnEventToStopProjectile function once the PFD Component is deleted at that time. See Update()
             var comp = EnsureComp<ProjectileFixedDistanceComponent>(projectile);
 
+            // CMU14 Begin: launcher grenades are thrown items and do not run ProjectileComponent's owner filter.
+            if (HasComp<GunIgnoreContainerOwnerCollisionComponent>(ent))
+                comp.IgnoredWeapon = ent.Owner;
+            // CMU14 End
+
             // Check if the arcing should be disabled.
             var ev = new BeforeArcEvent();
             RaiseLocalEvent(projectile, ref ev);
@@ -260,6 +272,21 @@ public sealed partial class CMGunSystem : EntitySystem
     /// </summary>
     private void OnCollisionCheckArc(Entity<ProjectileFixedDistanceComponent> ent, ref PreventCollideEvent args)
     {
+        // CMU14 Begin
+        if (ent.Comp.IgnoredWeapon is { } current)
+        {
+            while (_container.TryGetContainingContainer((current, null), out var container))
+            {
+                if (args.OtherEntity == container.Owner)
+                {
+                    args.Cancelled = true;
+                    return;
+                }
+
+                current = container.Owner;
+            }
+        }
+        // CMU14 End
         if (ent.Comp.ArcProj && (args.OtherFixture.CollisionLayer & _blockArcCollisionGroup) == 0)
             args.Cancelled = true;
     }
@@ -392,7 +419,7 @@ public sealed partial class CMGunSystem : EntitySystem
         args.Cancelled = true;
 
         var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-        _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnGunUnskilledPenaltyRefresh(Entity<GunUnskilledPenaltyComponent> ent, ref GunRefreshModifiersEvent args)
@@ -481,24 +508,33 @@ public sealed partial class CMGunSystem : EntitySystem
             return;
         }
 
-        var userDelay = EnsureComp<UserPointblankCooldownComponent>(user);
-        if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs)
-            return;
+        //var userDelay = EnsureComp<UserPointblankCooldownComponent>(user); cmu14
+        //if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs) cmu14
+            //return; cmu14
 
         var session = CompOrNull<ActorComponent>(user)?.PlayerSession;
         if (gunComp.Target.Value == user.Owner)
         {
-            if (gunComp.SelectedMode == SelectiveFire.FullAuto)
-                return;
+            // CMU14: the damage-yourself option is explicit consent, including full-auto self-shots;
+            // without it the old refusals stand
+            var consented = session != null &&
+                _netConfig.GetClientCVar(session.Channel, RMCCVars.RMCDamageYourself);
 
-            if (session != null &&
-                !_netConfig.GetClientCVar(session.Channel, RMCCVars.RMCDamageYourself))
-            {
+            if (!consented &&
+                (session != null || gunComp.SelectedMode == SelectiveFire.FullAuto))
                 return;
-            }
         }
 
         if (!_interaction.InRangeUnobstructed(gun.Owner, gunComp.Target.Value, gun.Comp.Range, user: user))
+            return;
+
+        // CMU14 Begin: point blank shots are far more accurate. This runs before the point blank cooldown so a
+        // follow-up shot that can't get the guaranteed hit still lands most of its pellets.
+        ApplyPointBlankAccuracy(gun, args.FiredProjectiles);
+        // CMU14 End
+
+        var userDelay = EnsureComp<UserPointblankCooldownComponent>(user);
+        if (_timing.CurTime < userDelay.LastPBAt + userDelay.TimeBetweenPBs)
             return;
 
         foreach (var projectile in args.FiredProjectiles)
@@ -531,6 +567,23 @@ public sealed partial class CMGunSystem : EntitySystem
         //Can't melee right after a PB
         melee.NextAttack = userDelay.LastPBAt + userDelay.TimeBetweenPBs;
         Dirty(gun, melee);
+    }
+
+    // CMU14 method: point blank shots trade pellets scattering past the target for hitting it.
+    private void ApplyPointBlankAccuracy(Entity<GunPointBlankComponent> gun, List<EntityUid> projectiles)
+    {
+        var multiplier = gun.Comp.AccuracyMultiplier;
+        if (multiplier <= 1)
+            return;
+
+        foreach (var projectile in projectiles)
+        {
+            if (!TryComp(projectile, out RMCProjectileAccuracyComponent? accuracy))
+                continue;
+
+            accuracy.Accuracy *= multiplier;
+            Dirty<RMCProjectileAccuracyComponent>((projectile, accuracy));
+        }
     }
 
     private void OnRecoilSkilledRefreshModifiers(Entity<GunSkilledRecoilComponent> ent, ref GunRefreshModifiersEvent args)
@@ -566,7 +619,7 @@ public sealed partial class CMGunSystem : EntitySystem
         args.Cancelled = true;
 
         var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-        _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnRequireEquippedAttemptShoot(Entity<GunRequireEquippedComponent> ent, ref AttemptShootEvent args)
@@ -648,7 +701,7 @@ public sealed partial class CMGunSystem : EntitySystem
                 return true;
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-shoot-harness-required"), user, user, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-shoot-harness-required"), user, user, PopupType.MediumCaution);
         return false;
     }
 
@@ -671,7 +724,7 @@ public sealed partial class CMGunSystem : EntitySystem
             if (time < comp.FlyEndTime)
                 continue;
 
-            if (comp.TargetCoordinates is { } targetCoords)
+            if (comp.TargetCoordinates is { } targetCoords && !IsSnapBlocked(uid, targetCoords)) // CMU14
                 _transform.SetMapCoordinates(uid, targetCoords);
 
             StopProjectile((uid, comp));
@@ -686,6 +739,25 @@ public sealed partial class CMGunSystem : EntitySystem
         }
     }
 
+    // CMU14 Begin
+    // a launched grenade that bounced off a wall used to get teleported to the clicked spot behind it,
+    // so it looked like it vanished and then blew up out of sight
+    private bool IsSnapBlocked(EntityUid uid, MapCoordinates target)
+    {
+        var current = _transform.GetMapCoordinates(uid);
+        if (current.MapId != target.MapId)
+            return false;
+
+        var direction = target.Position - current.Position;
+        var length = direction.Length();
+        if (length < 0.01f)
+            return false;
+
+        var ray = new CollisionRay(current.Position, direction / length, _blockArcCollisionGroup);
+        return _physics.IntersectRay(current.MapId, ray, length, uid).Any();
+    }
+    // CMU14 End
+
     // RMC revolver cylinder spin default unique action
     private void OnRevolverUniqueAction(Entity<RevolverAmmoProviderComponent> gun, ref UniqueActionEvent args)
     {
@@ -698,7 +770,7 @@ public sealed partial class CMGunSystem : EntitySystem
 
         _audio.PlayPredicted(gun.Comp.SoundSpin, gun.Owner, args.UserUid);
         var popup = Loc.GetString("rmc-revolver-spin", ("gun", args.UserUid));
-        _popup.PopupClient(popup, args.UserUid, args.UserUid, PopupType.SmallCaution);
+        _popup.PopupEntity(popup, args.UserUid, args.UserUid, PopupType.SmallCaution);
 
         Dirty(gun);
     }
@@ -890,28 +962,28 @@ public sealed partial class CMGunSystem : EntitySystem
         if (_whitelist.IsWhitelistFailOrNull(ballisticAmmoProvider.Whitelist, ammo.Owner))
         {
             var failMismatchPopup = Loc.GetString("rmc-assisted-reload-fail-mismatch", ("ammo", ammo.Owner), ("weapon", reloadReceiver.Weapon));
-            _popup.PopupClient(failMismatchPopup, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failMismatchPopup, user, user, PopupType.SmallCaution);
             return;
         }
 
         if (!IsBehindTarget(user, target))
         {
             var failAnglePopup = Loc.GetString("rmc-assisted-reload-fail-angle", ("target", target));
-            _popup.PopupClient(failAnglePopup, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failAnglePopup, user, user, PopupType.SmallCaution);
             return;
         }
 
         if (!_gun.TryAmmoInsert(reloadReceiver.Weapon.Value, ballisticAmmoProvider, ammo.Owner, user, reloadReceiver.Weapon.Value, ammo.Comp.InsertDelay))
         {
             var failFullPopup = Loc.GetString("rmc-assisted-reload-fail-full", ("target", target), ("weapon", reloadReceiver.Weapon));
-            _popup.PopupClient(failFullPopup, user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failFullPopup, user, user, PopupType.SmallCaution);
             return;
         }
 
         var userPopup = Loc.GetString("rmc-assisted-reload-start-user", ("target", target), ("weapon", reloadReceiver.Weapon));
         var targetPopup = Loc.GetString("rmc-assisted-reload-start-target", ("reloader", user), ("weapon", reloadReceiver.Weapon), ("ammo", ammo.Owner));
 
-        _popup.PopupClient(userPopup, user, user);
+        _popup.PopupEntity(userPopup, user, user);
         _popup.PopupEntity(targetPopup, target, target);
     }
 

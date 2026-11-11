@@ -1,0 +1,19 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Added Night vision scopes with a 5 minute battery life and 1.5x zoom
+  type: Add
+- message: Added Night Vision to integrated sniper scopes (infinite battery life since
+    they cant be removed)
+  type: Add
+- message: Added crates of 3 Night Vision scopes to ASRS for 2500
+  type: Add
+- message: 3 Added Night Vision Scopes to all factions
+  type: Add
+- message: SLs can pick 1.5x NVG scope or 2x scopes from the vendors
+  type: Add
+- message: NVG scopes are hidden for GOVFOR on Insurgency, still available to CLF
+    freely.
+  type: Tweak
+time: '2026-10-22T00:26:02.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2206

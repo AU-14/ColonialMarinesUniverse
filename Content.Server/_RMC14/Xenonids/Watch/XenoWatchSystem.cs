@@ -44,6 +44,8 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
         SubscribeLocalEvent<XenoWatchingComponent, PlayerDetachedEvent>(OnWatcherDetached);
 
         SubscribeLocalEvent<ExpandICChatRecipientsEvent>(OnExpandRecipients);
+
+        InitializeCMUWendigoPack(); // CMU14
     }
 
     private void OnWatchedRemove<T>(Entity<XenoWatchedComponent> ent, ref T args)
@@ -167,13 +169,16 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
     {
         base.Watch(watcher, toWatch);
 
-        if (!HasQueenPopup(watcher))
+        // CMU14: Wendigo pack members watch each other without a hive or queen.
+        var cmuPackWatch = IsCMUWendigoPackWatch(watcher, toWatch);
+
+        if (!cmuPackWatch && !HasQueenPopup(watcher)) // CMU14
             return;
 
         if (watcher.Owner == toWatch.Owner)
             return;
 
-        if (!_hive.FromSameHive((watcher, watcher.Comp1), toWatch))
+        if (!cmuPackWatch && !_hive.FromSameHive((watcher, watcher.Comp1), toWatch)) // CMU14
             return;
 
         if (!Resolve(watcher, ref watcher.Comp2, false))

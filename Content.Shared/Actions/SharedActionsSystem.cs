@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Movement;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
@@ -42,6 +43,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
     // RMC14
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
 
     [Dependency] private EntityQuery<ActionComponent> _actionQuery = default!;
     [Dependency] private EntityQuery<ActionsComponent> _actionsQuery = default!;
@@ -520,7 +522,10 @@ public abstract partial class SharedActionsSystem : EntitySystem
         // even if we don't check for obstructions, we may still need to check the range.
         var xform = Transform(user);
         if (xform.MapID != _transform.GetMapId(coords))
-            return false;
+        {
+            // CMU14: unlimited range actions reach the other floors, like the queen healing through her eye
+            return comp.Range <= 0 && xform.MapUid is { } userMap && _zLevels.IsSameZNetwork(_transform.GetMap(coords), userMap);
+        }
 
         if (comp.Range <= 0)
             return true;

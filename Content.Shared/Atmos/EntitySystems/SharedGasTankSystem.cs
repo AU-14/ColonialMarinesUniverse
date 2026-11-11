@@ -190,18 +190,9 @@ public abstract partial class SharedGasTankSystem : GasMaxPressureSystem<GasTank
             return true;
         }
 
-        // Yeah I have no clue what this actually does, I appreciate the lack of comments on the original function
-        if (_containers.TryGetContainingContainer((ent.Owner, Transform(ent.Owner)), out var container))
-        {
-            if (TryComp<InternalsComponent>(container.Owner, out var containerInternalsComp))
-            {
-                internalsUid = container.Owner;
-                internalsComp = containerInternalsComp;
-                return true;
-            }
-        }
-
-        return false;
+        // cmu edit start: look through any storage the tank is in (satchels, pouches) for whoever is carrying it
+        return CMUTryGetCarrierInternals(ent.Owner, out internalsUid, out internalsComp);
+        // cmu edit end
     }
 
     public bool DisconnectFromInternals(Entity<GasTankComponent> ent, EntityUid? user = null, bool forced = false)

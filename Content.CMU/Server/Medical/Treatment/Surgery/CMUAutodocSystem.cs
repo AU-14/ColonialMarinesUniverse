@@ -9,7 +9,6 @@ using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Chemistry.Reagent;
-using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -50,7 +49,6 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private CMUSurgeryRulebookSystem _rulebook = default!;
     [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
-    [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private RMCReagentSystem _reagents = default!;
     [Dependency] private SharedRMCBloodstreamSystem _rmcBloodstream = default!;
@@ -59,7 +57,6 @@ public sealed partial class CMUAutodocSystem : EntitySystem
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
-    private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
     private const string AutodocLimbRegenerationId = "CMUAutodocRegenerateLimb";
     private const string AutodocLimbRegenerationCategory = "limb_regeneration";
     private const string AutodocWoundRepairId = "CMUAutodocRepairWounds";
@@ -635,9 +632,10 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         }
     }
 
+    // CMU14: anyone can run the autodoc, no surgery training needed.
     private bool CanControl(EntityUid user)
     {
-        return user.IsValid() && !TerminatingOrDeleted(user) && _skills.HasSkill(user, SurgerySkill, 2);
+        return user.IsValid() && !TerminatingOrDeleted(user);
     }
 
     private List<CMUSurgeryPartEntry> BuildAutodocPartEntries(EntityUid patient, EntityUid viewer)

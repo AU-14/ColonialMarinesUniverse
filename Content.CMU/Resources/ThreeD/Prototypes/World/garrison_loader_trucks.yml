@@ -1,0 +1,1817 @@
+# Heavy-loader truck drafts. See SOURCES_LOADER_TRUCKS.md.
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleLoaderTruckBlackFilled
+  label: Heavy loader BlackFilled
+  sourcePrototypes:
+  - RMCPropVehicleLoaderTruckBlackFilled
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: armored_truck_wy_black_loaded
+  sourceDirections: 1
+  yawOffset: -90
+  groundOffset: 0.78125, 0
+  status: draft
+  description: Source-specific heavy loader with sloped cab with an open front guard and sampled glass color, four
+    cylindrical wheels, open access ladders and security panels plus separate roof device. First static frame; padded
+    source framing and facing retained. Physical width/height and hidden construction are inferred. See SOURCES_LOADER_TRUCKS.md.
+  parts:
+  - label: central ladder chassis
+    min: -0.33500, -1.25000, 0.23000
+    max: 0.33500, 1.25000, 0.38200
+    color: '#222424'
+  - label: chassis rail -1
+    min: -0.37000, -1.21875, 0.31100
+    max: -0.32500, 1.21875, 0.42200
+    color: '#313333'
+  - label: chassis rail 1
+    min: 0.32500, -1.21875, 0.31100
+    max: 0.37000, 1.21875, 0.42200
+    color: '#313333'
+  - label: axle 1
+    min: -0.44400, -0.91663, 0.24200
+    max: 0.44400, -0.86462, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.45700, -1.14962, 0.01000
+    max: -0.35900, -0.63162, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 -1
+    min: -0.46900, -1.07262, 0.08700
+    max: -0.45800, -0.70863, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 -1
+    min: -0.47600, -1.00562, 0.15400
+    max: -0.47000, -0.77563, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.48600, -0.94563, 0.21400
+    max: -0.47700, -0.83562, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.35900, -1.14962, 0.01000
+    max: 0.45700, -0.63162, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 1
+    min: 0.45800, -1.07262, 0.08700
+    max: 0.46900, -0.70863, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 1
+    min: 0.47000, -1.00562, 0.15400
+    max: 0.47600, -0.77563, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.47700, -0.94563, 0.21400
+    max: 0.48600, -0.83562, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.44400, 0.70837, 0.24200
+    max: 0.44400, 0.76038, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.45700, 0.47537, 0.01000
+    max: -0.35900, 0.99338, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 -1
+    min: -0.46900, 0.55238, 0.08700
+    max: -0.45800, 0.91637, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 -1
+    min: -0.47600, 0.61938, 0.15400
+    max: -0.47000, 0.84937, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.48600, 0.67937, 0.21400
+    max: -0.47700, 0.78938, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.35900, 0.47537, 0.01000
+    max: 0.45700, 0.99338, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 1
+    min: 0.45800, 0.55238, 0.08700
+    max: 0.46900, 0.91637, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 1
+    min: 0.47000, 0.61938, 0.15400
+    max: 0.47600, 0.84937, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.47700, 0.67937, 0.21400
+    max: 0.48600, 0.78938, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: cab floor
+    min: -0.40400, -1.18750, 0.38100
+    max: 0.40400, -0.28125, 0.42600
+    color: '#343939'
+  - label: raked hood
+    min: -0.43500, -1.18750, 0.49100
+    max: 0.43500, -0.60938, 0.94600
+    color: '#8E8E8E'
+    shape: WedgeY
+  - label: sloped windshield frame
+    min: -0.43100, -0.87500, 0.71000
+    max: 0.43100, -0.58125, 1.14200
+    color: '#777777'
+    shape: WedgeY
+  - label: sloped windshield
+    min: -0.38900, -0.87500, 0.75300
+    max: 0.38900, -0.59375, 1.12100
+    color: '#364141'
+    shape: WedgeY
+  - label: cab rear wall
+    min: -0.43600, -0.31250, 0.42100
+    max: 0.43600, -0.27500, 1.15300
+    color: '#8E8E8E'
+  - label: cab roof
+    min: -0.44300, -0.62500, 1.13000
+    max: 0.44300, -0.28125, 1.17000
+    color: '#8E8E8E'
+  - label: original cab roof hatch
+    min: -0.42700, -0.60938, 1.17100
+    max: 0.42700, -0.29688, 1.17700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabRoof
+    surfaceAxis: XY
+  - label: cab rear side -1
+    min: -0.43800, -0.62500, 0.42300
+    max: -0.41000, -0.28125, 1.13700
+    color: '#8E8E8E'
+  - label: original cab door -1
+    min: -0.44400, -0.62500, 0.42800
+    max: -0.43900, -0.28125, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side -1
+    min: -0.44100, -1.18750, 0.44000
+    max: -0.43600, -0.62500, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtBlackFilledHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm -1
+    min: -0.47000, -0.62500, 0.88000
+    max: -0.44200, -0.59375, 0.90900
+    color: '#777777'
+  - label: mirror -1
+    min: -0.48400, -0.65625, 0.84200
+    max: -0.44500, -0.57500, 0.94000
+    color: '#777777'
+  - label: ladder stile -1 24
+    min: -0.48600, -0.53125, 0.13000
+    max: -0.46000, -0.51406, 0.43300
+    color: '#777777'
+  - label: ladder stile -1 29
+    min: -0.48600, -0.37500, 0.13000
+    max: -0.46000, -0.35781, 0.43300
+    color: '#777777'
+  - label: ladder rung -1 0.2
+    min: -0.48600, -0.53125, 0.20000
+    max: -0.46000, -0.35781, 0.22700
+    color: '#777777'
+  - label: ladder rung -1 0.33
+    min: -0.48600, -0.53125, 0.33000
+    max: -0.46000, -0.35781, 0.35700
+    color: '#777777'
+  - label: cab rear side 1
+    min: 0.41000, -0.62500, 0.42300
+    max: 0.43800, -0.28125, 1.13700
+    color: '#8E8E8E'
+  - label: original cab door 1
+    min: 0.43900, -0.62500, 0.42800
+    max: 0.44400, -0.28125, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side 1
+    min: 0.43600, -1.18750, 0.44000
+    max: 0.44100, -0.62500, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtBlackFilledHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm 1
+    min: 0.44200, -0.62500, 0.88000
+    max: 0.47000, -0.59375, 0.90900
+    color: '#777777'
+  - label: mirror 1
+    min: 0.44500, -0.65625, 0.84200
+    max: 0.48400, -0.57500, 0.94000
+    color: '#777777'
+  - label: ladder stile 1 24
+    min: 0.46000, -0.53125, 0.13000
+    max: 0.48600, -0.51406, 0.43300
+    color: '#777777'
+  - label: ladder stile 1 29
+    min: 0.46000, -0.37500, 0.13000
+    max: 0.48600, -0.35781, 0.43300
+    color: '#777777'
+  - label: ladder rung 1 0.2
+    min: 0.46000, -0.53125, 0.20000
+    max: 0.48600, -0.35781, 0.22700
+    color: '#777777'
+  - label: ladder rung 1 0.33
+    min: 0.46000, -0.53125, 0.33000
+    max: 0.48600, -0.35781, 0.35700
+    color: '#777777'
+  - label: seat cushion
+    min: -0.31000, -0.53125, 0.43000
+    max: -0.09000, -0.37500, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: -0.31000, -0.40625, 0.48000
+    max: -0.09000, -0.34375, 0.88000
+    color: '#354141'
+  - label: seat cushion
+    min: 0.07500, -0.53125, 0.43000
+    max: 0.29500, -0.37500, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: 0.07500, -0.40625, 0.48000
+    max: 0.29500, -0.34375, 0.88000
+    color: '#354141'
+  - label: dashboard
+    min: -0.39000, -0.65625, 0.72000
+    max: 0.39000, -0.59375, 0.83000
+    color: '#273335'
+  - label: front bumper
+    min: -0.46300, -1.26875, 0.32000
+    max: 0.46300, -1.20938, 0.45400
+    color: '#3B3C3C'
+  - label: front guard grille
+    min: -0.30300, -1.27500, 0.53100
+    max: 0.30300, -1.26250, 0.76800
+    color: '#202828'
+  - label: headlamp
+    min: -0.36300, -1.27812, 0.77100
+    max: -0.25100, -1.26250, 0.83400
+    color: '#849593'
+  - label: headlamp
+    min: 0.25100, -1.27812, 0.77100
+    max: 0.36300, -1.26250, 0.83400
+    color: '#849593'
+  - label: wheel gap skirt -1 0
+    min: -0.43700, -1.25000, 0.36000
+    max: -0.40800, -1.15625, 0.54700
+    color: '#8E8E8E'
+  - label: wheel gap skirt -1 1
+    min: -0.43700, -0.62500, 0.36000
+    max: -0.40800, 0.43750, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt -1 2
+    min: -0.43700, 1.03125, 0.36000
+    max: -0.40800, 1.25000, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge -1
+    min: -0.43700, -0.62500, 0.53000
+    max: -0.40800, 1.25000, 0.56000
+    color: '#414343'
+  - label: wheel gap skirt 1 0
+    min: 0.40800, -1.25000, 0.36000
+    max: 0.43700, -1.15625, 0.54700
+    color: '#8E8E8E'
+  - label: wheel gap skirt 1 1
+    min: 0.40800, -0.62500, 0.36000
+    max: 0.43700, 0.43750, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt 1 2
+    min: 0.40800, 1.03125, 0.36000
+    max: 0.43700, 1.25000, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge 1
+    min: 0.40800, -0.62500, 0.53000
+    max: 0.43700, 1.25000, 0.56000
+    color: '#414343'
+  - label: rear bumper
+    min: -0.45600, 1.24375, 0.34000
+    max: 0.45600, 1.28125, 0.43500
+    color: '#333535'
+  - label: rear lamp
+    min: -0.38900, 1.28125, 0.47200
+    max: -0.34400, 1.28750, 0.52600
+    color: '#870B0B'
+  - label: rear lamp
+    min: 0.34400, 1.28125, 0.47200
+    max: 0.38900, 1.28750, 0.52600
+    color: '#870B0B'
+  - label: security cargo enclosure
+    min: -0.43300, -0.25000, 0.55300
+    max: 0.43300, 1.25000, 1.06900
+    color: '#292B2B'
+  - label: original security panel -1
+    min: -0.44000, -0.21875, 0.59000
+    max: -0.43400, 1.25000, 1.04000
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledSecurityPanel
+    surfaceAxis: YZ
+    surfaceFlipU: false
+  - label: original security panel 1
+    min: 0.43400, -0.21875, 0.59000
+    max: 0.44000, 1.25000, 1.04000
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledSecurityPanel
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: recessed equipment deck
+    min: -0.39700, -0.15625, 1.07000
+    max: 0.39700, 1.15625, 1.07900
+    color: '#171919'
+  - label: raised deck edge -1
+    min: -0.44200, -0.21875, 1.06000
+    max: -0.39000, 1.21875, 1.18200
+    color: '#464A4A'
+  - label: raised deck edge 1
+    min: 0.39000, -0.21875, 1.06000
+    max: 0.44200, 1.21875, 1.18200
+    color: '#464A4A'
+  - label: deck end frame 0
+    min: -0.44100, -0.21875, 1.06500
+    max: 0.44100, -0.15625, 1.18300
+    color: '#454949'
+  - label: deck end frame 1
+    min: -0.44100, 1.15625, 1.06500
+    max: 0.44100, 1.21875, 1.18300
+    color: '#454949'
+  - label: recessed deck rib
+    min: -0.30000, -0.09375, 1.08000
+    max: -0.25000, 1.12500, 1.11500
+    color: '#222626'
+  - label: recessed deck rib
+    min: 0.25000, -0.09375, 1.08000
+    max: 0.30000, 1.12500, 1.11500
+    color: '#222626'
+  - label: roof device plinth
+    min: -0.23400, 0.56700, 1.07900
+    max: 0.23400, 0.93300, 1.12300
+    color: '#5A5E5E'
+  - label: roof device body
+    min: -0.19200, 0.60100, 1.12400
+    max: 0.19200, 0.89900, 1.34600
+    color: '#292E2E'
+  - label: device side frame
+    min: -0.21100, 0.58100, 1.12000
+    max: -0.18300, 0.91900, 1.37000
+    color: '#6C7070'
+  - label: device side frame
+    min: 0.18300, 0.58100, 1.12000
+    max: 0.21100, 0.91900, 1.37000
+    color: '#6C7070'
+  - label: device face frame
+    min: -0.20500, 0.57900, 1.12500
+    max: 0.20500, 0.59900, 1.15300
+    color: '#707474'
+  - label: device face frame
+    min: -0.20500, 0.57900, 1.34200
+    max: 0.20500, 0.59900, 1.37000
+    color: '#707474'
+  - label: device grille vertical
+    min: -0.13500, 0.57500, 1.15700
+    max: -0.10500, 0.60000, 1.33400
+    color: '#525858'
+  - label: device grille vertical
+    min: -0.04500, 0.57500, 1.15700
+    max: -0.01500, 0.60000, 1.33400
+    color: '#525858'
+  - label: device grille vertical
+    min: 0.04500, 0.57500, 1.15700
+    max: 0.07500, 0.60000, 1.33400
+    color: '#525858'
+  - label: device grille vertical
+    min: 0.13500, 0.57500, 1.15700
+    max: 0.16500, 0.60000, 1.33400
+    color: '#525858'
+  - label: device grille crossbar
+    min: -0.18500, 0.57300, 1.23800
+    max: 0.18500, 0.60100, 1.26700
+    color: '#646A6A'
+  - label: device antenna mast
+    min: -0.21500, 0.60500, 1.32200
+    max: -0.18900, 0.63300, 1.48500
+    color: '#272E2E'
+  - label: source green indicator
+    min: -0.21500, 0.60000, 1.32400
+    max: -0.18900, 0.63800, 1.35300
+    color: '#00D975'
+  - label: source green indicator
+    min: -0.21500, 0.60000, 1.48500
+    max: -0.18900, 0.63800, 1.51400
+    color: '#00D975'
+  - label: device antenna mast
+    min: 0.18900, 0.60500, 1.32200
+    max: 0.21500, 0.63300, 1.48500
+    color: '#272E2E'
+  - label: source green indicator
+    min: 0.18900, 0.60000, 1.32400
+    max: 0.21500, 0.63800, 1.35300
+    color: '#00D975'
+  - label: source green indicator
+    min: 0.18900, 0.60000, 1.48500
+    max: 0.21500, 0.63800, 1.51400
+    color: '#00D975'
+  - label: front guard upright -1
+    min: -0.43400, -1.26875, 0.42900
+    max: -0.40300, -1.24375, 0.94600
+    color: '#454747'
+  - label: front guard upright 1
+    min: 0.40300, -1.26875, 0.42900
+    max: 0.43400, -1.24375, 0.94600
+    color: '#454747'
+  - label: front guard crossbar 0
+    min: -0.43100, -1.26875, 0.44900
+    max: 0.43100, -1.24375, 0.47800
+    color: '#454747'
+  - label: front guard crossbar 1
+    min: -0.43100, -1.26875, 0.79100
+    max: 0.43100, -1.24375, 0.82000
+    color: '#454747'
+  - label: front guard crossbar 2
+    min: -0.43100, -1.26875, 0.91800
+    max: 0.43100, -1.24375, 0.94700
+    color: '#454747'
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleLoaderTruckBlueFilled
+  label: Heavy loader BlueFilled
+  sourcePrototypes:
+  - RMCPropVehicleLoaderTruckBlueFilled
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: armored_truck_blue_loaded
+  sourceDirections: 1
+  yawOffset: -90
+  groundOffset: 0.78125, 0
+  status: draft
+  description: Source-specific heavy loader with sloped cab with an open front guard and sampled glass color, four
+    cylindrical wheels, open access ladders and two separate strapped cases. First static frame; padded source framing
+    and facing retained. Physical width/height and hidden construction are inferred. See SOURCES_LOADER_TRUCKS.md.
+  parts:
+  - label: central ladder chassis
+    min: -0.33500, -1.25000, 0.23000
+    max: 0.33500, 1.25000, 0.38200
+    color: '#222424'
+  - label: chassis rail -1
+    min: -0.37000, -1.21875, 0.31100
+    max: -0.32500, 1.21875, 0.42200
+    color: '#313333'
+  - label: chassis rail 1
+    min: 0.32500, -1.21875, 0.31100
+    max: 0.37000, 1.21875, 0.42200
+    color: '#313333'
+  - label: axle 1
+    min: -0.44400, -0.91663, 0.24200
+    max: 0.44400, -0.86462, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.45700, -1.14962, 0.01000
+    max: -0.35900, -0.63162, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 -1
+    min: -0.46900, -1.07262, 0.08700
+    max: -0.45800, -0.70863, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 -1
+    min: -0.47600, -1.00562, 0.15400
+    max: -0.47000, -0.77563, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.48600, -0.94563, 0.21400
+    max: -0.47700, -0.83562, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.35900, -1.14962, 0.01000
+    max: 0.45700, -0.63162, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 1
+    min: 0.45800, -1.07262, 0.08700
+    max: 0.46900, -0.70863, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 1
+    min: 0.47000, -1.00562, 0.15400
+    max: 0.47600, -0.77563, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.47700, -0.94563, 0.21400
+    max: 0.48600, -0.83562, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.44400, 0.70837, 0.24200
+    max: 0.44400, 0.76038, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.45700, 0.47537, 0.01000
+    max: -0.35900, 0.99338, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 -1
+    min: -0.46900, 0.55238, 0.08700
+    max: -0.45800, 0.91637, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 -1
+    min: -0.47600, 0.61938, 0.15400
+    max: -0.47000, 0.84937, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.48600, 0.67937, 0.21400
+    max: -0.47700, 0.78938, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.35900, 0.47537, 0.01000
+    max: 0.45700, 0.99338, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 1
+    min: 0.45800, 0.55238, 0.08700
+    max: 0.46900, 0.91637, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 1
+    min: 0.47000, 0.61938, 0.15400
+    max: 0.47600, 0.84937, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.47700, 0.67937, 0.21400
+    max: 0.48600, 0.78938, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: cab floor
+    min: -0.40400, -1.18750, 0.38100
+    max: 0.40400, -0.28125, 0.42600
+    color: '#343939'
+  - label: raked hood
+    min: -0.43500, -1.18750, 0.49100
+    max: 0.43500, -0.60938, 0.94600
+    color: '#3D4B59'
+    shape: WedgeY
+  - label: sloped windshield frame
+    min: -0.43100, -0.87500, 0.71000
+    max: 0.43100, -0.58125, 1.14200
+    color: '#323E4A'
+    shape: WedgeY
+  - label: sloped windshield
+    min: -0.38900, -0.87500, 0.75300
+    max: 0.38900, -0.59375, 1.12100
+    color: '#364141'
+    shape: WedgeY
+  - label: cab rear wall
+    min: -0.43600, -0.31250, 0.42100
+    max: 0.43600, -0.27500, 1.15300
+    color: '#3D4B59'
+  - label: cab roof
+    min: -0.44300, -0.62500, 1.13000
+    max: 0.44300, -0.28125, 1.17000
+    color: '#3D4B59'
+  - label: original cab roof hatch
+    min: -0.42700, -0.60938, 1.17100
+    max: 0.42700, -0.29688, 1.17700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledCabRoof
+    surfaceAxis: XY
+  - label: cab rear side -1
+    min: -0.43800, -0.62500, 0.42300
+    max: -0.41000, -0.28125, 1.13700
+    color: '#3D4B59'
+  - label: original cab door -1
+    min: -0.44400, -0.62500, 0.42800
+    max: -0.43900, -0.28125, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side -1
+    min: -0.44100, -1.18750, 0.44000
+    max: -0.43600, -0.62500, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtBlueFilledHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm -1
+    min: -0.47000, -0.62500, 0.88000
+    max: -0.44200, -0.59375, 0.90900
+    color: '#323E4A'
+  - label: mirror -1
+    min: -0.48400, -0.65625, 0.84200
+    max: -0.44500, -0.57500, 0.94000
+    color: '#323E4A'
+  - label: ladder stile -1 24
+    min: -0.48600, -0.53125, 0.13000
+    max: -0.46000, -0.51406, 0.43300
+    color: '#323E4A'
+  - label: ladder stile -1 29
+    min: -0.48600, -0.37500, 0.13000
+    max: -0.46000, -0.35781, 0.43300
+    color: '#323E4A'
+  - label: ladder rung -1 0.2
+    min: -0.48600, -0.53125, 0.20000
+    max: -0.46000, -0.35781, 0.22700
+    color: '#323E4A'
+  - label: ladder rung -1 0.33
+    min: -0.48600, -0.53125, 0.33000
+    max: -0.46000, -0.35781, 0.35700
+    color: '#323E4A'
+  - label: cab rear side 1
+    min: 0.41000, -0.62500, 0.42300
+    max: 0.43800, -0.28125, 1.13700
+    color: '#3D4B59'
+  - label: original cab door 1
+    min: 0.43900, -0.62500, 0.42800
+    max: 0.44400, -0.28125, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side 1
+    min: 0.43600, -1.18750, 0.44000
+    max: 0.44100, -0.62500, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtBlueFilledHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm 1
+    min: 0.44200, -0.62500, 0.88000
+    max: 0.47000, -0.59375, 0.90900
+    color: '#323E4A'
+  - label: mirror 1
+    min: 0.44500, -0.65625, 0.84200
+    max: 0.48400, -0.57500, 0.94000
+    color: '#323E4A'
+  - label: ladder stile 1 24
+    min: 0.46000, -0.53125, 0.13000
+    max: 0.48600, -0.51406, 0.43300
+    color: '#323E4A'
+  - label: ladder stile 1 29
+    min: 0.46000, -0.37500, 0.13000
+    max: 0.48600, -0.35781, 0.43300
+    color: '#323E4A'
+  - label: ladder rung 1 0.2
+    min: 0.46000, -0.53125, 0.20000
+    max: 0.48600, -0.35781, 0.22700
+    color: '#323E4A'
+  - label: ladder rung 1 0.33
+    min: 0.46000, -0.53125, 0.33000
+    max: 0.48600, -0.35781, 0.35700
+    color: '#323E4A'
+  - label: seat cushion
+    min: -0.31000, -0.53125, 0.43000
+    max: -0.09000, -0.37500, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: -0.31000, -0.40625, 0.48000
+    max: -0.09000, -0.34375, 0.88000
+    color: '#354141'
+  - label: seat cushion
+    min: 0.07500, -0.53125, 0.43000
+    max: 0.29500, -0.37500, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: 0.07500, -0.40625, 0.48000
+    max: 0.29500, -0.34375, 0.88000
+    color: '#354141'
+  - label: dashboard
+    min: -0.39000, -0.65625, 0.72000
+    max: 0.39000, -0.59375, 0.83000
+    color: '#273335'
+  - label: front bumper
+    min: -0.46300, -1.26875, 0.32000
+    max: 0.46300, -1.20938, 0.45400
+    color: '#3B3C3C'
+  - label: front guard grille
+    min: -0.30300, -1.27500, 0.53100
+    max: 0.30300, -1.26250, 0.76800
+    color: '#202828'
+  - label: headlamp
+    min: -0.36300, -1.27812, 0.77100
+    max: -0.25100, -1.26250, 0.83400
+    color: '#849593'
+  - label: headlamp
+    min: 0.25100, -1.27812, 0.77100
+    max: 0.36300, -1.26250, 0.83400
+    color: '#849593'
+  - label: wheel gap skirt -1 0
+    min: -0.43700, -1.25000, 0.36000
+    max: -0.40800, -1.15625, 0.54700
+    color: '#3D4B59'
+  - label: wheel gap skirt -1 1
+    min: -0.43700, -0.62500, 0.36000
+    max: -0.40800, 0.43750, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt -1 2
+    min: -0.43700, 1.03125, 0.36000
+    max: -0.40800, 1.25000, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge -1
+    min: -0.43700, -0.62500, 0.53000
+    max: -0.40800, 1.25000, 0.56000
+    color: '#414343'
+  - label: wheel gap skirt 1 0
+    min: 0.40800, -1.25000, 0.36000
+    max: 0.43700, -1.15625, 0.54700
+    color: '#3D4B59'
+  - label: wheel gap skirt 1 1
+    min: 0.40800, -0.62500, 0.36000
+    max: 0.43700, 0.43750, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt 1 2
+    min: 0.40800, 1.03125, 0.36000
+    max: 0.43700, 1.25000, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge 1
+    min: 0.40800, -0.62500, 0.53000
+    max: 0.43700, 1.25000, 0.56000
+    color: '#414343'
+  - label: rear bumper
+    min: -0.45600, 1.24375, 0.34000
+    max: 0.45600, 1.28125, 0.43500
+    color: '#333535'
+  - label: rear lamp
+    min: -0.38900, 1.28125, 0.47200
+    max: -0.34400, 1.28750, 0.52600
+    color: '#870B0B'
+  - label: rear lamp
+    min: 0.34400, 1.28125, 0.47200
+    max: 0.38900, 1.28750, 0.52600
+    color: '#870B0B'
+  - label: recessed cargo bed
+    min: -0.42000, -0.25000, 0.54200
+    max: 0.42000, 1.21875, 0.59100
+    color: '#454444'
+  - label: cargo side panel -1
+    min: -0.44300, -0.25000, 0.54800
+    max: -0.41800, 1.23438, 0.82100
+    color: '#454444'
+  - label: original cargo panel -1
+    min: -0.44900, -0.25000, 0.55500
+    max: -0.44400, 1.21875, 0.79700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledBedSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bed upper rail -1
+    min: -0.44900, -0.25000, 0.81800
+    max: -0.44400, 1.23438, 0.84700
+    color: '#454444'
+  - label: cargo side panel 1
+    min: 0.41800, -0.25000, 0.54800
+    max: 0.44300, 1.23438, 0.82100
+    color: '#454444'
+  - label: original cargo panel 1
+    min: 0.44400, -0.25000, 0.55500
+    max: 0.44900, 1.21875, 0.79700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledBedSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bed upper rail 1
+    min: 0.44400, -0.25000, 0.81800
+    max: 0.44900, 1.23438, 0.84700
+    color: '#454444'
+  - label: bed front board
+    min: -0.44400, -0.26562, 0.54900
+    max: 0.44400, -0.23438, 0.83000
+    color: '#454444'
+  - label: rear tailgate
+    min: -0.44400, 1.20938, 0.54900
+    max: 0.44400, 1.24063, 0.83000
+    color: '#454444'
+  - label: strapped cargo core 0
+    min: -0.38100, -0.21875, 0.59400
+    max: 0.38100, 0.43750, 1.21800
+    color: '#625857'
+  - label: original load roof 0
+    min: -0.38200, -0.21875, 1.21900
+    max: 0.38200, 0.43750, 1.22500
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledLoadRoof0
+    surfaceAxis: XY
+  - label: original load side 0 -1
+    min: -0.38700, -0.21875, 0.82300
+    max: -0.38200, 0.43750, 1.21800
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledLoadSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original load side 0 1
+    min: 0.38200, -0.21875, 0.82300
+    max: 0.38700, 0.43750, 1.21800
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledLoadSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: strapped cargo core 1
+    min: -0.38100, 0.46875, 0.59400
+    max: 0.38100, 1.18750, 1.21800
+    color: '#625857'
+  - label: original load roof 1
+    min: -0.38200, 0.46875, 1.21900
+    max: 0.38200, 1.18750, 1.22500
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledLoadRoof1
+    surfaceAxis: XY
+  - label: original load side 1 -1
+    min: -0.38700, 0.46875, 0.82300
+    max: -0.38200, 1.18750, 1.21800
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledLoadSide1
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original load side 1 1
+    min: 0.38200, 0.46875, 0.82300
+    max: 0.38700, 1.18750, 1.21800
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlueFilledLoadSide1
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: raised retaining strap 0
+    min: -0.39000, -0.03125, 1.22600
+    max: 0.39000, 0.01562, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 0 -1
+    min: -0.39700, -0.03125, 0.82700
+    max: -0.38800, 0.01562, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 0 1
+    min: 0.38800, -0.03125, 0.82700
+    max: 0.39700, 0.01562, 1.23900
+    color: '#7F6E6B'
+  - label: raised retaining strap 1
+    min: -0.39000, 0.28125, 1.22600
+    max: 0.39000, 0.32812, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 1 -1
+    min: -0.39700, 0.28125, 0.82700
+    max: -0.38800, 0.32812, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 1 1
+    min: 0.38800, 0.28125, 0.82700
+    max: 0.39700, 0.32812, 1.23900
+    color: '#7F6E6B'
+  - label: raised retaining strap 2
+    min: -0.39000, 0.56250, 1.22600
+    max: 0.39000, 0.60938, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 2 -1
+    min: -0.39700, 0.56250, 0.82700
+    max: -0.38800, 0.60938, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 2 1
+    min: 0.38800, 0.56250, 0.82700
+    max: 0.39700, 0.60938, 1.23900
+    color: '#7F6E6B'
+  - label: raised retaining strap 3
+    min: -0.39000, 0.84375, 1.22600
+    max: 0.39000, 0.89062, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 3 -1
+    min: -0.39700, 0.84375, 0.82700
+    max: -0.38800, 0.89062, 1.23900
+    color: '#7F6E6B'
+  - label: retaining strap drop 3 1
+    min: 0.38800, 0.84375, 0.82700
+    max: 0.39700, 0.89062, 1.23900
+    color: '#7F6E6B'
+  - label: front guard upright -1
+    min: -0.43400, -1.26875, 0.42900
+    max: -0.40300, -1.24375, 0.94600
+    color: '#454747'
+  - label: front guard upright 1
+    min: 0.40300, -1.26875, 0.42900
+    max: 0.43400, -1.24375, 0.94600
+    color: '#454747'
+  - label: front guard crossbar 0
+    min: -0.43100, -1.26875, 0.44900
+    max: 0.43100, -1.24375, 0.47800
+    color: '#454747'
+  - label: front guard crossbar 1
+    min: -0.43100, -1.26875, 0.79100
+    max: 0.43100, -1.24375, 0.82000
+    color: '#454747'
+  - label: front guard crossbar 2
+    min: -0.43100, -1.26875, 0.91800
+    max: 0.43100, -1.24375, 0.94700
+    color: '#454747'
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleLoaderTruckWhiteF
+  label: Heavy loader WhiteF
+  sourcePrototypes:
+  - RMCPropVehicleLoaderTruckWhiteF
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: armored_truck_white_f
+  sourceDirections: 1
+  yawOffset: 90
+  groundOffset: 0.765625, 0
+  status: draft
+  description: Source-specific heavy loader with sloped cab with an open front guard and sampled glass color, four
+    cylindrical wheels, open access ladders and a recessed ribbed empty bed. First static frame; padded source framing
+    and facing retained. Physical width/height and hidden construction are inferred. See SOURCES_LOADER_TRUCKS.md.
+  parts:
+  - label: central ladder chassis
+    min: -0.33500, -1.23438, 0.23000
+    max: 0.33500, 1.26562, 0.38200
+    color: '#222424'
+  - label: chassis rail -1
+    min: -0.37000, -1.20312, 0.31100
+    max: -0.32500, 1.23438, 0.42200
+    color: '#313333'
+  - label: chassis rail 1
+    min: 0.32500, -1.20312, 0.31100
+    max: 0.37000, 1.23438, 0.42200
+    color: '#313333'
+  - label: axle 1
+    min: -0.44400, -0.90100, 0.24200
+    max: 0.44400, -0.84900, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.45700, -1.13400, 0.01000
+    max: -0.35900, -0.61600, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 -1
+    min: -0.46900, -1.05700, 0.08700
+    max: -0.45800, -0.69300, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 -1
+    min: -0.47600, -0.99000, 0.15400
+    max: -0.47000, -0.76000, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.48600, -0.93000, 0.21400
+    max: -0.47700, -0.82000, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.35900, -1.13400, 0.01000
+    max: 0.45700, -0.61600, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 1
+    min: 0.45800, -1.05700, 0.08700
+    max: 0.46900, -0.69300, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 1
+    min: 0.47000, -0.99000, 0.15400
+    max: 0.47600, -0.76000, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.47700, -0.93000, 0.21400
+    max: 0.48600, -0.82000, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.44400, 0.72400, 0.24200
+    max: 0.44400, 0.77600, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.45700, 0.49100, 0.01000
+    max: -0.35900, 1.00900, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 -1
+    min: -0.46900, 0.56800, 0.08700
+    max: -0.45800, 0.93200, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 -1
+    min: -0.47600, 0.63500, 0.15400
+    max: -0.47000, 0.86500, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.48600, 0.69500, 0.21400
+    max: -0.47700, 0.80500, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.35900, 0.49100, 0.01000
+    max: 0.45700, 1.00900, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 1
+    min: 0.45800, 0.56800, 0.08700
+    max: 0.46900, 0.93200, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 1
+    min: 0.47000, 0.63500, 0.15400
+    max: 0.47600, 0.86500, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.47700, 0.69500, 0.21400
+    max: 0.48600, 0.80500, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: cab floor
+    min: -0.40400, -1.17188, 0.38100
+    max: 0.40400, -0.26562, 0.42600
+    color: '#343939'
+  - label: raked hood
+    min: -0.43500, -1.17188, 0.49100
+    max: 0.43500, -0.59375, 0.94600
+    color: '#8E8E8E'
+    shape: WedgeY
+  - label: sloped windshield frame
+    min: -0.43100, -0.85938, 0.71000
+    max: 0.43100, -0.56563, 1.14200
+    color: '#777777'
+    shape: WedgeY
+  - label: sloped windshield
+    min: -0.38900, -0.85938, 0.75300
+    max: 0.38900, -0.57812, 1.12100
+    color: '#364141'
+    shape: WedgeY
+  - label: cab rear wall
+    min: -0.43600, -0.29688, 0.42100
+    max: 0.43600, -0.25937, 1.15300
+    color: '#8E8E8E'
+  - label: cab roof
+    min: -0.44300, -0.60938, 1.13000
+    max: 0.44300, -0.26562, 1.17000
+    color: '#8E8E8E'
+  - label: original cab roof hatch
+    min: -0.42700, -0.59375, 1.17100
+    max: 0.42700, -0.28125, 1.17700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabRoof
+    surfaceAxis: XY
+  - label: cab rear side -1
+    min: -0.43800, -0.60938, 0.42300
+    max: -0.41000, -0.26562, 1.13700
+    color: '#8E8E8E'
+  - label: original cab door -1
+    min: -0.44400, -0.60938, 0.42800
+    max: -0.43900, -0.26562, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side -1
+    min: -0.44100, -1.17188, 0.44000
+    max: -0.43600, -0.60938, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtWhiteFHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm -1
+    min: -0.47000, -0.60938, 0.88000
+    max: -0.44200, -0.57812, 0.90900
+    color: '#777777'
+  - label: mirror -1
+    min: -0.48400, -0.64062, 0.84200
+    max: -0.44500, -0.55937, 0.94000
+    color: '#777777'
+  - label: ladder stile -1 24
+    min: -0.48600, -0.51562, 0.13000
+    max: -0.46000, -0.49844, 0.43300
+    color: '#777777'
+  - label: ladder stile -1 29
+    min: -0.48600, -0.35938, 0.13000
+    max: -0.46000, -0.34219, 0.43300
+    color: '#777777'
+  - label: ladder rung -1 0.2
+    min: -0.48600, -0.51562, 0.20000
+    max: -0.46000, -0.34219, 0.22700
+    color: '#777777'
+  - label: ladder rung -1 0.33
+    min: -0.48600, -0.51562, 0.33000
+    max: -0.46000, -0.34219, 0.35700
+    color: '#777777'
+  - label: cab rear side 1
+    min: 0.41000, -0.60938, 0.42300
+    max: 0.43800, -0.26562, 1.13700
+    color: '#8E8E8E'
+  - label: original cab door 1
+    min: 0.43900, -0.60938, 0.42800
+    max: 0.44400, -0.26562, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side 1
+    min: 0.43600, -1.17188, 0.44000
+    max: 0.44100, -0.60938, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtWhiteFHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm 1
+    min: 0.44200, -0.60938, 0.88000
+    max: 0.47000, -0.57812, 0.90900
+    color: '#777777'
+  - label: mirror 1
+    min: 0.44500, -0.64062, 0.84200
+    max: 0.48400, -0.55937, 0.94000
+    color: '#777777'
+  - label: ladder stile 1 24
+    min: 0.46000, -0.51562, 0.13000
+    max: 0.48600, -0.49844, 0.43300
+    color: '#777777'
+  - label: ladder stile 1 29
+    min: 0.46000, -0.35938, 0.13000
+    max: 0.48600, -0.34219, 0.43300
+    color: '#777777'
+  - label: ladder rung 1 0.2
+    min: 0.46000, -0.51562, 0.20000
+    max: 0.48600, -0.34219, 0.22700
+    color: '#777777'
+  - label: ladder rung 1 0.33
+    min: 0.46000, -0.51562, 0.33000
+    max: 0.48600, -0.34219, 0.35700
+    color: '#777777'
+  - label: seat cushion
+    min: -0.31000, -0.51562, 0.43000
+    max: -0.09000, -0.35938, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: -0.31000, -0.39062, 0.48000
+    max: -0.09000, -0.32812, 0.88000
+    color: '#354141'
+  - label: seat cushion
+    min: 0.07500, -0.51562, 0.43000
+    max: 0.29500, -0.35938, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: 0.07500, -0.39062, 0.48000
+    max: 0.29500, -0.32812, 0.88000
+    color: '#354141'
+  - label: dashboard
+    min: -0.39000, -0.64062, 0.72000
+    max: 0.39000, -0.57812, 0.83000
+    color: '#273335'
+  - label: front bumper
+    min: -0.46300, -1.25313, 0.32000
+    max: 0.46300, -1.19375, 0.45400
+    color: '#3B3C3C'
+  - label: front guard grille
+    min: -0.30300, -1.25937, 0.53100
+    max: 0.30300, -1.24687, 0.76800
+    color: '#202828'
+  - label: headlamp
+    min: -0.36300, -1.26250, 0.77100
+    max: -0.25100, -1.24687, 0.83400
+    color: '#849593'
+  - label: headlamp
+    min: 0.25100, -1.26250, 0.77100
+    max: 0.36300, -1.24687, 0.83400
+    color: '#849593'
+  - label: wheel gap skirt -1 0
+    min: -0.43700, -1.23438, 0.36000
+    max: -0.40800, -1.14062, 0.54700
+    color: '#8E8E8E'
+  - label: wheel gap skirt -1 1
+    min: -0.43700, -0.60938, 0.36000
+    max: -0.40800, 0.45312, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt -1 2
+    min: -0.43700, 1.04688, 0.36000
+    max: -0.40800, 1.26562, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge -1
+    min: -0.43700, -0.60938, 0.53000
+    max: -0.40800, 1.26562, 0.56000
+    color: '#414343'
+  - label: wheel gap skirt 1 0
+    min: 0.40800, -1.23438, 0.36000
+    max: 0.43700, -1.14062, 0.54700
+    color: '#8E8E8E'
+  - label: wheel gap skirt 1 1
+    min: 0.40800, -0.60938, 0.36000
+    max: 0.43700, 0.45312, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt 1 2
+    min: 0.40800, 1.04688, 0.36000
+    max: 0.43700, 1.26562, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge 1
+    min: 0.40800, -0.60938, 0.53000
+    max: 0.43700, 1.26562, 0.56000
+    color: '#414343'
+  - label: rear bumper
+    min: -0.45600, 1.25937, 0.34000
+    max: 0.45600, 1.29688, 0.43500
+    color: '#333535'
+  - label: rear lamp
+    min: -0.38900, 1.29688, 0.47200
+    max: -0.34400, 1.30313, 0.52600
+    color: '#870B0B'
+  - label: rear lamp
+    min: 0.34400, 1.29688, 0.47200
+    max: 0.38900, 1.30313, 0.52600
+    color: '#870B0B'
+  - label: recessed cargo bed
+    min: -0.42000, -0.23438, 0.54200
+    max: 0.42000, 1.23438, 0.59100
+    color: '#606060'
+  - label: cargo side panel -1
+    min: -0.44300, -0.23438, 0.54800
+    max: -0.41800, 1.25000, 0.82100
+    color: '#606060'
+  - label: original cargo panel -1
+    min: -0.44900, -0.23438, 0.55500
+    max: -0.44400, 1.23438, 0.79700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFBedSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bed upper rail -1
+    min: -0.44900, -0.23438, 0.81800
+    max: -0.44400, 1.25000, 0.84700
+    color: '#606060'
+  - label: cargo side panel 1
+    min: 0.41800, -0.23438, 0.54800
+    max: 0.44300, 1.25000, 0.82100
+    color: '#606060'
+  - label: original cargo panel 1
+    min: 0.44400, -0.23438, 0.55500
+    max: 0.44900, 1.23438, 0.79700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFBedSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bed upper rail 1
+    min: 0.44400, -0.23438, 0.81800
+    max: 0.44900, 1.25000, 0.84700
+    color: '#606060'
+  - label: bed front board
+    min: -0.44400, -0.25000, 0.54900
+    max: 0.44400, -0.21875, 0.83000
+    color: '#606060'
+  - label: rear tailgate
+    min: -0.44400, 1.22500, 0.54900
+    max: 0.44400, 1.25625, 0.83000
+    color: '#606060'
+  - label: original ribbed bed floor
+    min: -0.41300, -0.20312, 0.59200
+    max: 0.41300, 1.22500, 0.59800
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFBedFloor
+    surfaceAxis: XY
+  - label: raised bed floor rib 0
+    min: -0.40000, -0.14062, 0.59900
+    max: 0.40000, -0.12750, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 1
+    min: -0.40000, -0.01562, 0.59900
+    max: 0.40000, -0.00250, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 2
+    min: -0.40000, 0.10938, 0.59900
+    max: 0.40000, 0.12250, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 3
+    min: -0.40000, 0.23438, 0.59900
+    max: 0.40000, 0.24750, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 4
+    min: -0.40000, 0.35938, 0.59900
+    max: 0.40000, 0.37250, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 5
+    min: -0.40000, 0.48438, 0.59900
+    max: 0.40000, 0.49750, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 6
+    min: -0.40000, 0.60938, 0.59900
+    max: 0.40000, 0.62250, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 7
+    min: -0.40000, 0.73438, 0.59900
+    max: 0.40000, 0.74750, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 8
+    min: -0.40000, 0.85938, 0.59900
+    max: 0.40000, 0.87250, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 9
+    min: -0.40000, 0.98438, 0.59900
+    max: 0.40000, 0.99750, 0.61200
+    color: '#606060'
+  - label: raised bed floor rib 10
+    min: -0.40000, 1.10938, 0.59900
+    max: 0.40000, 1.12250, 0.61200
+    color: '#606060'
+  - label: original bed inner wall -1
+    min: -0.41500, -0.20312, 0.62000
+    max: -0.40500, 1.22500, 0.81000
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFInnerWall
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original bed inner wall 1
+    min: 0.40500, -0.20312, 0.62000
+    max: 0.41500, 1.22500, 0.81000
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFInnerWall
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: front guard upright -1
+    min: -0.43400, -1.25313, 0.42900
+    max: -0.40300, -1.22812, 0.94600
+    color: '#454747'
+  - label: front guard upright 1
+    min: 0.40300, -1.25313, 0.42900
+    max: 0.43400, -1.22812, 0.94600
+    color: '#454747'
+  - label: front guard crossbar 0
+    min: -0.43100, -1.25313, 0.44900
+    max: 0.43100, -1.22812, 0.47800
+    color: '#454747'
+  - label: front guard crossbar 1
+    min: -0.43100, -1.25313, 0.79100
+    max: 0.43100, -1.22812, 0.82000
+    color: '#454747'
+  - label: front guard crossbar 2
+    min: -0.43100, -1.25313, 0.91800
+    max: 0.43100, -1.22812, 0.94700
+    color: '#454747'
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleLoaderTruckWhiteFilled
+  label: Heavy loader WhiteFilled
+  sourcePrototypes:
+  - RMCPropVehicleLoaderTruckWhiteFilled
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: armored_truck_white_loaded
+  sourceDirections: 1
+  yawOffset: -90
+  groundOffset: 0.78125, 0
+  status: draft
+  description: Source-specific heavy loader with sloped cab with an open front guard and sampled glass color, four
+    cylindrical wheels, open access ladders and a strapped green wrapped load. First static frame; padded source
+    framing and facing retained. Physical width/height and hidden construction are inferred. See SOURCES_LOADER_TRUCKS.md.
+  parts:
+  - label: central ladder chassis
+    min: -0.33500, -1.25000, 0.23000
+    max: 0.33500, 1.25000, 0.38200
+    color: '#222424'
+  - label: chassis rail -1
+    min: -0.37000, -1.21875, 0.31100
+    max: -0.32500, 1.21875, 0.42200
+    color: '#313333'
+  - label: chassis rail 1
+    min: 0.32500, -1.21875, 0.31100
+    max: 0.37000, 1.21875, 0.42200
+    color: '#313333'
+  - label: axle 1
+    min: -0.44400, -0.91663, 0.24200
+    max: 0.44400, -0.86462, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.45700, -1.14962, 0.01000
+    max: -0.35900, -0.63162, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 -1
+    min: -0.46900, -1.07262, 0.08700
+    max: -0.45800, -0.70863, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 -1
+    min: -0.47600, -1.00562, 0.15400
+    max: -0.47000, -0.77563, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.48600, -0.94563, 0.21400
+    max: -0.47700, -0.83562, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.35900, -1.14962, 0.01000
+    max: 0.45700, -0.63162, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 1 1
+    min: 0.45800, -1.07262, 0.08700
+    max: 0.46900, -0.70863, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 1 1
+    min: 0.47000, -1.00562, 0.15400
+    max: 0.47600, -0.77563, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.47700, -0.94563, 0.21400
+    max: 0.48600, -0.83562, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.44400, 0.70837, 0.24200
+    max: 0.44400, 0.76038, 0.29400
+    color: '#282929'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.45700, 0.47537, 0.01000
+    max: -0.35900, 0.99338, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 -1
+    min: -0.46900, 0.55238, 0.08700
+    max: -0.45800, 0.91637, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 -1
+    min: -0.47600, 0.61938, 0.15400
+    max: -0.47000, 0.84937, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.48600, 0.67937, 0.21400
+    max: -0.47700, 0.78938, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.35900, 0.47537, 0.01000
+    max: 0.45700, 0.99338, 0.52800
+    color: '#161717'
+    shape: CylinderX
+  - label: outer rim 2 1
+    min: 0.45800, 0.55238, 0.08700
+    max: 0.46900, 0.91637, 0.45100
+    color: '#242625'
+    shape: CylinderX
+  - label: inner rim 2 1
+    min: 0.47000, 0.61938, 0.15400
+    max: 0.47600, 0.84937, 0.38400
+    color: '#161717'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.47700, 0.67937, 0.21400
+    max: 0.48600, 0.78938, 0.32400
+    color: '#111211'
+    shape: CylinderX
+  - label: cab floor
+    min: -0.40400, -1.18750, 0.38100
+    max: 0.40400, -0.28125, 0.42600
+    color: '#343939'
+  - label: raked hood
+    min: -0.43500, -1.18750, 0.49100
+    max: 0.43500, -0.60938, 0.94600
+    color: '#8E8E8E'
+    shape: WedgeY
+  - label: sloped windshield frame
+    min: -0.43100, -0.87500, 0.71000
+    max: 0.43100, -0.58125, 1.14200
+    color: '#777777'
+    shape: WedgeY
+  - label: sloped windshield
+    min: -0.38900, -0.87500, 0.75300
+    max: 0.38900, -0.59375, 1.12100
+    color: '#364141'
+    shape: WedgeY
+  - label: cab rear wall
+    min: -0.43600, -0.31250, 0.42100
+    max: 0.43600, -0.27500, 1.15300
+    color: '#8E8E8E'
+  - label: cab roof
+    min: -0.44300, -0.62500, 1.13000
+    max: 0.44300, -0.28125, 1.17000
+    color: '#8E8E8E'
+  - label: original cab roof hatch
+    min: -0.42700, -0.60938, 1.17100
+    max: 0.42700, -0.29688, 1.17700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabRoof
+    surfaceAxis: XY
+  - label: cab rear side -1
+    min: -0.43800, -0.62500, 0.42300
+    max: -0.41000, -0.28125, 1.13700
+    color: '#8E8E8E'
+  - label: original cab door -1
+    min: -0.44400, -0.62500, 0.42800
+    max: -0.43900, -0.28125, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side -1
+    min: -0.44100, -1.18750, 0.44000
+    max: -0.43600, -0.62500, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtWhiteFHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm -1
+    min: -0.47000, -0.62500, 0.88000
+    max: -0.44200, -0.59375, 0.90900
+    color: '#777777'
+  - label: mirror -1
+    min: -0.48400, -0.65625, 0.84200
+    max: -0.44500, -0.57500, 0.94000
+    color: '#777777'
+  - label: ladder stile -1 24
+    min: -0.48600, -0.53125, 0.13000
+    max: -0.46000, -0.51406, 0.43300
+    color: '#777777'
+  - label: ladder stile -1 29
+    min: -0.48600, -0.37500, 0.13000
+    max: -0.46000, -0.35781, 0.43300
+    color: '#777777'
+  - label: ladder rung -1 0.2
+    min: -0.48600, -0.53125, 0.20000
+    max: -0.46000, -0.35781, 0.22700
+    color: '#777777'
+  - label: ladder rung -1 0.33
+    min: -0.48600, -0.53125, 0.33000
+    max: -0.46000, -0.35781, 0.35700
+    color: '#777777'
+  - label: cab rear side 1
+    min: 0.41000, -0.62500, 0.42300
+    max: 0.43800, -0.28125, 1.13700
+    color: '#8E8E8E'
+  - label: original cab door 1
+    min: 0.43900, -0.62500, 0.42800
+    max: 0.44400, -0.28125, 1.10300
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtBlackFilledCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original sloped hood side 1
+    min: 0.43600, -1.18750, 0.44000
+    max: 0.44100, -0.62500, 0.95400
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLoaderTruckArtWhiteFHoodSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: mirror arm 1
+    min: 0.44200, -0.62500, 0.88000
+    max: 0.47000, -0.59375, 0.90900
+    color: '#777777'
+  - label: mirror 1
+    min: 0.44500, -0.65625, 0.84200
+    max: 0.48400, -0.57500, 0.94000
+    color: '#777777'
+  - label: ladder stile 1 24
+    min: 0.46000, -0.53125, 0.13000
+    max: 0.48600, -0.51406, 0.43300
+    color: '#777777'
+  - label: ladder stile 1 29
+    min: 0.46000, -0.37500, 0.13000
+    max: 0.48600, -0.35781, 0.43300
+    color: '#777777'
+  - label: ladder rung 1 0.2
+    min: 0.46000, -0.53125, 0.20000
+    max: 0.48600, -0.35781, 0.22700
+    color: '#777777'
+  - label: ladder rung 1 0.33
+    min: 0.46000, -0.53125, 0.33000
+    max: 0.48600, -0.35781, 0.35700
+    color: '#777777'
+  - label: seat cushion
+    min: -0.31000, -0.53125, 0.43000
+    max: -0.09000, -0.37500, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: -0.31000, -0.40625, 0.48000
+    max: -0.09000, -0.34375, 0.88000
+    color: '#354141'
+  - label: seat cushion
+    min: 0.07500, -0.53125, 0.43000
+    max: 0.29500, -0.37500, 0.50000
+    color: '#263333'
+  - label: seat back
+    min: 0.07500, -0.40625, 0.48000
+    max: 0.29500, -0.34375, 0.88000
+    color: '#354141'
+  - label: dashboard
+    min: -0.39000, -0.65625, 0.72000
+    max: 0.39000, -0.59375, 0.83000
+    color: '#273335'
+  - label: front bumper
+    min: -0.46300, -1.26875, 0.32000
+    max: 0.46300, -1.20938, 0.45400
+    color: '#3B3C3C'
+  - label: front guard grille
+    min: -0.30300, -1.27500, 0.53100
+    max: 0.30300, -1.26250, 0.76800
+    color: '#202828'
+  - label: headlamp
+    min: -0.36300, -1.27812, 0.77100
+    max: -0.25100, -1.26250, 0.83400
+    color: '#849593'
+  - label: headlamp
+    min: 0.25100, -1.27812, 0.77100
+    max: 0.36300, -1.26250, 0.83400
+    color: '#849593'
+  - label: wheel gap skirt -1 0
+    min: -0.43700, -1.25000, 0.36000
+    max: -0.40800, -1.15625, 0.54700
+    color: '#8E8E8E'
+  - label: wheel gap skirt -1 1
+    min: -0.43700, -0.62500, 0.36000
+    max: -0.40800, 0.43750, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt -1 2
+    min: -0.43700, 1.03125, 0.36000
+    max: -0.40800, 1.25000, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge -1
+    min: -0.43700, -0.62500, 0.53000
+    max: -0.40800, 1.25000, 0.56000
+    color: '#414343'
+  - label: wheel gap skirt 1 0
+    min: 0.40800, -1.25000, 0.36000
+    max: 0.43700, -1.15625, 0.54700
+    color: '#8E8E8E'
+  - label: wheel gap skirt 1 1
+    min: 0.40800, -0.62500, 0.36000
+    max: 0.43700, 0.43750, 0.54700
+    color: '#292C2C'
+  - label: wheel gap skirt 1 2
+    min: 0.40800, 1.03125, 0.36000
+    max: 0.43700, 1.25000, 0.54700
+    color: '#292C2C'
+  - label: continuous chassis edge 1
+    min: 0.40800, -0.62500, 0.53000
+    max: 0.43700, 1.25000, 0.56000
+    color: '#414343'
+  - label: rear bumper
+    min: -0.45600, 1.24375, 0.34000
+    max: 0.45600, 1.28125, 0.43500
+    color: '#333535'
+  - label: rear lamp
+    min: -0.38900, 1.28125, 0.47200
+    max: -0.34400, 1.28750, 0.52600
+    color: '#870B0B'
+  - label: rear lamp
+    min: 0.34400, 1.28125, 0.47200
+    max: 0.38900, 1.28750, 0.52600
+    color: '#870B0B'
+  - label: recessed cargo bed
+    min: -0.42000, -0.25000, 0.54200
+    max: 0.42000, 1.21875, 0.59100
+    color: '#606060'
+  - label: cargo side panel -1
+    min: -0.44300, -0.25000, 0.54800
+    max: -0.41800, 1.23438, 0.82100
+    color: '#606060'
+  - label: original cargo panel -1
+    min: -0.44900, -0.25000, 0.55500
+    max: -0.44400, 1.21875, 0.79700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFBedSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bed upper rail -1
+    min: -0.44900, -0.25000, 0.81800
+    max: -0.44400, 1.23438, 0.84700
+    color: '#606060'
+  - label: cargo side panel 1
+    min: 0.41800, -0.25000, 0.54800
+    max: 0.44300, 1.23438, 0.82100
+    color: '#606060'
+  - label: original cargo panel 1
+    min: 0.44400, -0.25000, 0.55500
+    max: 0.44900, 1.21875, 0.79700
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFBedSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bed upper rail 1
+    min: 0.44400, -0.25000, 0.81800
+    max: 0.44900, 1.23438, 0.84700
+    color: '#606060'
+  - label: bed front board
+    min: -0.44400, -0.26562, 0.54900
+    max: 0.44400, -0.23438, 0.83000
+    color: '#606060'
+  - label: rear tailgate
+    min: -0.44400, 1.20938, 0.54900
+    max: 0.44400, 1.24063, 0.83000
+    color: '#606060'
+  - label: strapped cargo core 0
+    min: -0.38100, -0.21875, 0.59400
+    max: 0.38100, 1.18750, 1.24500
+    color: '#2C332E'
+  - label: original load roof 0
+    min: -0.38200, -0.21875, 1.24600
+    max: 0.38200, 1.18750, 1.25200
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFilledLoadRoof0
+    surfaceAxis: XY
+  - label: original load side 0 -1
+    min: -0.38700, -0.21875, 0.82300
+    max: -0.38200, 1.18750, 1.24500
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFilledLoadSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original load side 0 1
+    min: 0.38200, -0.21875, 0.82300
+    max: 0.38700, 1.18750, 1.24500
+    color: '#FFFFFF'
+    surface: CMU3DLoaderTruckArtWhiteFilledLoadSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: raised retaining strap 0
+    min: -0.39000, -0.03125, 1.25300
+    max: 0.39000, 0.01562, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 0 -1
+    min: -0.39700, -0.03125, 0.82700
+    max: -0.38800, 0.01562, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 0 1
+    min: 0.38800, -0.03125, 0.82700
+    max: 0.39700, 0.01562, 1.26600
+    color: '#4C574F'
+  - label: raised retaining strap 1
+    min: -0.39000, 0.28125, 1.25300
+    max: 0.39000, 0.32812, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 1 -1
+    min: -0.39700, 0.28125, 0.82700
+    max: -0.38800, 0.32812, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 1 1
+    min: 0.38800, 0.28125, 0.82700
+    max: 0.39700, 0.32812, 1.26600
+    color: '#4C574F'
+  - label: raised retaining strap 2
+    min: -0.39000, 0.56250, 1.25300
+    max: 0.39000, 0.60938, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 2 -1
+    min: -0.39700, 0.56250, 0.82700
+    max: -0.38800, 0.60938, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 2 1
+    min: 0.38800, 0.56250, 0.82700
+    max: 0.39700, 0.60938, 1.26600
+    color: '#4C574F'
+  - label: raised retaining strap 3
+    min: -0.39000, 0.84375, 1.25300
+    max: 0.39000, 0.89062, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 3 -1
+    min: -0.39700, 0.84375, 0.82700
+    max: -0.38800, 0.89062, 1.26600
+    color: '#4C574F'
+  - label: retaining strap drop 3 1
+    min: 0.38800, 0.84375, 0.82700
+    max: 0.39700, 0.89062, 1.26600
+    color: '#4C574F'
+  - label: front guard upright -1
+    min: -0.43400, -1.26875, 0.42900
+    max: -0.40300, -1.24375, 0.94600
+    color: '#454747'
+  - label: front guard upright 1
+    min: 0.40300, -1.26875, 0.42900
+    max: 0.43400, -1.24375, 0.94600
+    color: '#454747'
+  - label: front guard crossbar 0
+    min: -0.43100, -1.26875, 0.44900
+    max: 0.43100, -1.24375, 0.47800
+    color: '#454747'
+  - label: front guard crossbar 1
+    min: -0.43100, -1.26875, 0.79100
+    max: 0.43100, -1.24375, 0.82000
+    color: '#454747'
+  - label: front guard crossbar 2
+    min: -0.43100, -1.26875, 0.91800
+    max: 0.43100, -1.24375, 0.94700
+    color: '#454747'

@@ -92,11 +92,17 @@ public abstract partial class SharedChatSystem : EntitySystem
         // RMC14
         var channelDict = new Dictionary<string, RadioChannelPrototype>();
         var prefixSet = new HashSet<char>();
+        // cmu edit start
+        var channelsByKey = new Dictionary<string, List<RadioChannelPrototype>>();
+        // cmu edit end
 
         foreach (var radioChannel in ProtoMan.EnumeratePrototypes<RadioChannelPrototype>())
         {
             var keyCode = char.ToLowerInvariant(radioChannel.KeyCode);
             channelDict[$"{radioChannel.RadioPrefix}{keyCode}"] = radioChannel;
+            // cmu edit start
+            channelsByKey.GetOrNew($"{radioChannel.RadioPrefix}{keyCode}").Add(radioChannel);
+            // cmu edit end
 
             prefixSet.Add(radioChannel.RadioPrefix);
 
@@ -104,10 +110,16 @@ public abstract partial class SharedChatSystem : EntitySystem
             {
                 channelDict[$"{RadioChannelAltPrefix}{keyCode}"] = radioChannel;
                 prefixSet.Add(RadioChannelAltPrefix);
+                // cmu edit start
+                channelsByKey.GetOrNew($"{RadioChannelAltPrefix}{keyCode}").Add(radioChannel);
+                // cmu edit end
             }
         }
 
         _channelLookup = channelDict.ToFrozenDictionary();
+        // cmu edit start
+        CMUCacheSharedRadioKeys(channelsByKey);
+        // cmu edit end
         _validPrefixes = prefixSet.ToFrozenSet();
         // RMC14
     }
@@ -236,6 +248,10 @@ public abstract partial class SharedChatSystem : EntitySystem
         var lookupKey = $"{prefix}{char.ToLowerInvariant(channelKey)}";
 
         var foundChannel = _channelLookup.TryGetValue(lookupKey, out channel);
+        // cmu edit start: a key several channels share goes to the one the speaker can use
+        if (foundChannel && channel != null)
+            channel = CMUResolveSharedRadioKey(source, lookupKey, channel);
+        // cmu edit end
 
         output = SanitizeMessageCapital(input[2..].TrimStart());
 

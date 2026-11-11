@@ -1,0 +1,20 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Gas OB now does 1 brain and lung damage every 3 seconds (max of 10 lung
+    and brain damage per OB)
+  type: Add
+- message: EMS OB now does 5 burn damage a second, max of 50 burn for humanoids, max
+    of 150 for xenos
+  type: Add
+- message: Gas OB now is blocked for half its duration by WY and CBRN filters (15
+    seconds) but only for 5 seconds by standard filters
+  type: Tweak
+- message: EMS cloud now lasts 30 seconds (from 20)
+  type: Tweak
+- message: EMS stun now lasts 35 seconds (from 25)
+  type: Tweak
+- message: Added screen blur and slowness support for Gas OBs, currently disabled
+  type: Code
+time: '2026-10-22T21:11:17.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2251

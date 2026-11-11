@@ -70,7 +70,11 @@
         mask:
         - FullTileMask
         layer:
-        - WallLayer
+        # CMU14: Low cover must use the layers disabled by native vaulting.
+        # - WallLayer
+        - TableLayer
+        - BarricadeImpassable
+        # CMU14 end
         - BulletImpassable
   - type: BarricadeBlock
     bidirectional: true

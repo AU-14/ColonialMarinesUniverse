@@ -135,6 +135,13 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     [DataField]
     public string? RoundRole { get; private set; }
 
+    // CMU14: distinct jobs can share a round role family without sharing their roll preference.
+    /// <summary>
+    /// Cross-side Force on Force preference key. Defaults to <see cref="RoundRole"/>.
+    /// </summary>
+    [DataField]
+    public string? ForceOnForcePreferenceRole { get; private set; }
+
     /// <summary>
     /// Reusable role profiles applied before <see cref="RoundComponents"/>.
     /// Use this for faction/family defaults so individual job files only need their unique overlays.

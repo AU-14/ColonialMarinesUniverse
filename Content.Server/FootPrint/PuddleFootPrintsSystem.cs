@@ -4,7 +4,12 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Fluids;
 using Content.Shared.Fluids.Components;
 using Content.Shared.FootPrint;
-using Content.Shared.StepTrigger.Systems;
+// using Content.Shared.StepTrigger.Systems; // CMU14: staining does not depend on slipping.
+// CMU14 start
+using Content.Shared.Gravity;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Events;
+// CMU14 end
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.FootPrint;
@@ -15,37 +20,40 @@ public sealed partial class PuddleFootPrintsSystem : EntitySystem
 
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
+    [Dependency] private SharedGravitySystem _gravity = default!; // CMU14
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<PuddleFootPrintsComponent, StepTriggerAttemptEvent>(OnStepTriggerAttempt);
-        SubscribeLocalEvent<PuddleFootPrintsComponent, StepTriggeredOffEvent>(OnStepTrigger);
+        // CMU14: even a non-slippery puddle stains grounded feet and dragged bodies.
+        // SubscribeLocalEvent<PuddleFootPrintsComponent, StepTriggerAttemptEvent>(OnStepTriggerAttempt);
+        // SubscribeLocalEvent<PuddleFootPrintsComponent, StepTriggeredOffEvent>(OnStepTrigger);
+        SubscribeLocalEvent<PuddleFootPrintsComponent, StartCollideEvent>(OnStartCollide);
     }
 
-    private void OnStepTriggerAttempt(EntityUid uid, PuddleFootPrintsComponent component, ref StepTriggerAttemptEvent args)
+    // CMU14 start: use floor contact independently of the puddle's slip activation threshold.
+    private void OnStartCollide(EntityUid uid, PuddleFootPrintsComponent component, ref StartCollideEvent args)
     {
-        args.Continue |= HasComp<FootPrintsComponent>(args.Tripper);
-    }
+        if (!args.OtherFixture.Hard || args.OtherBody.BodyStatus == BodyStatus.InAir ||
+            _gravity.IsWeightless(args.OtherEntity))
+            return;
 
-    private void OnStepTrigger(EntityUid uid, PuddleFootPrintsComponent component, ref StepTriggeredOffEvent args)
-    {
         if (!TryComp<AppearanceComponent>(uid, out var appearance)
             || !TryComp<PuddleComponent>(uid, out var puddle)
-            || !TryComp<FootPrintsComponent>(args.Tripper, out var tripper)
+            || !TryComp<FootPrintsComponent>(args.OtherEntity, out var tripper)
             || !_solutionContainer.ResolveSolution(uid, puddle.SolutionName, ref puddle.Solution, out var solutions))
             return;
 
         if (solutions.Contents.Count <= 0)
             return;
 
-        CMUUpdateShoeStain(args.Tripper, solutions); // CMU14
+        CMUUpdateShoeStain(args.OtherEntity, solutions);
 
         if (!TryGetFootprintReagent(solutions, out var totalSolutionQuantity, out var waterQuantity, out var reagentToTransfer))
             return;
 
         if (waterQuantity > totalSolutionQuantity * component.OffPercent / 100f ||
-            !component.ActivatedEntities.Add(args.Tripper))
+            !component.ActivatedEntities.Add(args.OtherEntity))
         {
             return;
         }
@@ -58,6 +66,7 @@ public sealed partial class PuddleFootPrintsSystem : EntitySystem
 
         _solutionContainer.RemoveEachReagent(puddle.Solution.Value, 1);
     }
+    // CMU14 end
 
     private static bool TryGetFootprintReagent(
         Solution solution,

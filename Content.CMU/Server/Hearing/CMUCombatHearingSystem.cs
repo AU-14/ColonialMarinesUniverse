@@ -14,17 +14,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Hearing;
 
-public sealed class CMUCombatHearingSystem : EntitySystem
+public sealed partial class CMUCombatHearingSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedDeafnessSystem _deafness = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDeafnessSystem _deafness = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly TimeSpan UpdateInterval = TimeSpan.FromSeconds(1);
     private const float GunLookupRange = 12f;
@@ -209,20 +209,25 @@ public sealed class CMUCombatHearingSystem : EntitySystem
         return _mobState.IsAlive(uid) && !HasComp<SynthComponent>(uid) && !IsProtected(uid);
     }
 
+    private static readonly string[] EarSlots = ["ears", "ears2"];
+
     private bool IsProtected(EntityUid uid)
     {
         if (_deafness.HasEarProtection(uid))
             return true;
 
-        // Pens, tools and cigarettes tucked behind an ear don't count, only real headsets.
-        if (_inventory.TryGetSlotEntity(uid, "ears", out var ears) && HasComp<HeadsetComponent>(ears))
-            return true;
+        // Pens, tools and cigarettes tucked behind an ear don't count, only real headsets, on either ear.
+        foreach (var earSlot in EarSlots)
+        {
+            if (_inventory.TryGetSlotEntity(uid, earSlot, out var ears) && HasComp<HeadsetComponent>(ears))
+                return true;
+        }
 
         if (_inventory.TryGetContainerSlotEnumerator(uid, out var slots))
         {
             while (slots.NextItem(out var item, out var slot))
             {
-                if (slot.Name is not ("ears" or "head"))
+                if (slot.Name is not ("ears" or "ears2" or "head"))
                     continue;
 
                 if (HasComp<CMUCombatEarProtectionComponent>(item))

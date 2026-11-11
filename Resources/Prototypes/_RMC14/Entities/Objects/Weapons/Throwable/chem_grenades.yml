@@ -207,8 +207,10 @@
 - type: entity
   parent: RMCGrenadeCustomMetalFoam
   id: RMCGrenadeMFHS
-  name: M40 Metal Foam Grenade
-  description: Creates a field of liquid metal that quickly solidfies into foamed metal that acts like a temporary wall, said metal foam is easy to destroy.
+  # cmu edit start - cmss13-pve#854 rename
+  name: M42 MFHS grenade
+  description: A Metal-Foam Hull-Sealant grenade, first made for emergency hull repairs but since put to plenty of other uses in the field. Built on the same hull as the M40 HEDP, it releases liquid metal that quickly hardens into a flimsy temporary wall.
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40mfhs.rsi

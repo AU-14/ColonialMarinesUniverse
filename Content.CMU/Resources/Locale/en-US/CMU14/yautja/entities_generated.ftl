@@ -57,6 +57,9 @@ ent-CMUYautjaAncientAlienMesh = ancient alien mesh suit
 ent-CMUYautjaThrallChainshirt = alien mesh suit
     .desc = A strange alloy weave in the form of a vest. It feels cold with an alien weight. It has been adapted for human physiology.
 
+ent-CMUYautjaThrallClothSuit = alien fiberweave suit
+    .desc = A lightweight one-piece suit woven from an unfamiliar alien fibre, adapted for humans, who are bound to Yautja clans.
+
 ent-CMUYautjaAncientAlienGreaves = ancient alien greaves
     .desc = Greaves made from scraps of cloth and a strange alloy. They feel cold with an alien weight.
 
@@ -254,11 +257,11 @@ ent-CMUYautjaHealingGun = healing gun
 ent-CMUYautjaAlienHealthAnalyzer = alien health analyzer
     .desc = A bio-scanner tuned for alien physiology and battlefield triage.
 
-ent-CMUYautjaAutoInjector = yautja autoinjector
-    .desc = An alien autoinjector loaded with a strong trauma and burn treatment cocktail.
+ent-CMUYautjaAutoInjector = unusual crystal
+    .desc = A strange glowing crystal with a spike at one end.
 
-ent-CMUYautjaThrallAutoInjector = yautja autoinjector
-    .desc = An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
+ent-CMUYautjaThrallAutoInjector = orange unusual crystal
+    .desc = A strange glowing crystal with a spike at one end.
 
 ent-CMUYautjaHerbalCase = herbs case
     .desc = A small case packed with Yautja trauma poultices and burn salves.
@@ -313,21 +316,6 @@ ent-CMUYautjaBadBloodArmorCommandoAltBundle = Commando Armor (Alt)
 
 ent-CMUYautjaBadBloodArmorEmissaryBundle = Emissary Armor
     .desc = Contains the emissary armor issued to a Bad Blood hunter.
-
-ent-CMUYautjaThrallArmorEbonyBundle = Ebony
-    .desc = Contains the ebony armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorSilverBundle = Silver
-    .desc = Contains the silver armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorGoldBundle = Gold
-    .desc = Contains the gold armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorCrimsonBundle = Crimson
-    .desc = Contains the crimson armor issued to a Yautja thrall.
-
-ent-CMUYautjaThrallArmorBoneBundle = Bone
-    .desc = Contains the bone armor issued to a Yautja thrall.
 
 ent-CMUYautjaBloodedThrallEquipmentBundle = Blooded Equipment
     .desc = Contains the equipment issued to a blooded Yautja thrall.
@@ -447,6 +435,9 @@ ent-CMUYautjaRelayBeacon = relay beacon
 ent-CMUYautjaSimpleRelayBeacon = simple relay beacon
     .desc = A device covered in sacred text. It whirrs and beeps every couple of seconds.
 
+ent-CMUYautjaYoungbloodRelayBeacon = youngblood relay beacon
+    .desc = A device covered in sacred text, attuned to young hunters. It whirrs and beeps every couple of seconds.
+
 ent-CMUYautjaFalconDrone = falcon drone
     .desc = An agile drone used by Yautja to survey the hunting grounds.
 
@@ -497,6 +488,9 @@ ent-CMUYautjaHoundObservationPadInternalCamera = Hellhound Observation Interface
 
 ent-CMUYautjaHivebreaker = hivebreaker
     .desc = A device used by fallen Yautja to break a Xenomorph Hivemind and enthrall a serpent.
+
+ent-CMUWeYuHivebreaker = salvaged hivebreaker
+    .desc = A recovered Yautja hivebreaker, its alien interlocks cut out and rewired by Weyland-Yutani. Breaks a serpent's link to the Hivemind and binds it to whoever holds the device.
 
 ent-CMUYautjaTemporaryLandingZoneFolded = temporary landing zone
     .desc = PLACEHOLDER
@@ -989,6 +983,9 @@ ent-CMUYautjaRunnerSkullTrophy = Runner skull
 ent-CMUYautjaDroneSkullTrophy = Drone skull
     .desc = Skull of a weak but essential xenomorph, a hive worker.
 
+ent-CMUYautjaAbominationSkullTrophy = Abomination skull
+    .desc = Skull of a mysterious hybrid xenomorph, a horror on the field.
+
 ent-CMUYautjaQueenPeltTrophy = Queen pelt
     .desc = The pelt of a prime hive ruler, mother to many.
 
@@ -1052,8 +1049,11 @@ ent-CMUYautjaDronePeltTrophy = Drone pelt
 ent-CMUYautjaLarvaPeltTrophy = Larva pelt
     .desc = The hide of a juvenile Xenomorph, a grim trophy from a fledgling that never reached its full potential.
 
-ent-CMUYautjaHumanHide = flayed hide
-    .desc = A sheet of human hide removed during Yautja butchery.
+ent-CMUYautjaAbominationPeltTrophy = Abomination pelt
+    .desc = The pelt of a mysterious hybrid xenomorph, a horror on the field.
+
+ent-CMUYautjaHumanHide = human skin
+    .desc = The by-product of human farming.
 
 ent-CMUYautjaHumanSpine = skull
     .desc = A bone that appears to be of human origin.
@@ -1190,7 +1190,7 @@ ent-CMUYautjaSnareArrow = snare arrow
     .desc = A bow launched snare.
 
 ent-CMUYautjaQuiverStrap = quiver strap
-    .desc = A strap that can hold a bow with a quiver for arrows.
+    .desc = A strap that holds up to eight bows and arrows in total, with room for one hunting bow and seven arrows.
 
 ent-CMUYautjaArrowProjectile = arrow
 
@@ -1991,7 +1991,7 @@ ent-CMUYautjaStructureYautjaMachinesMixer1Nopower = yautja mixer1 nopower
     .desc = An ancient Yautja hunting-ground structure.
 
 ent-CMUYautjaStructureYautjaMachinesDispenser = Chemical dispenser
-    .desc = A complex machine for mixing elements into chemicals. A Wey-Yu product.
+    .desc = A hunter-built machine that draws elements from its reserves and blends them into chemicals.
 
 ent-CMUYautjaStructureYautjaMachinesBeaker1 = yautja +beaker1
     .desc = An ancient Yautja hunting-ground structure.
@@ -2216,3 +2216,82 @@ ent-CMUHunterShipYautjaVendorDinnerware = dinnerplate dispenser
     .desc = A kitchen and restaurant equipment vendor.
 
 ent-CMUSkillPresetYautjaWarrior = Yautja Warrior
+
+ent-CMUYautjaArmorLegacyShadow = shadow legacy clan armor
+
+ent-CMUYautjaGreavesLegacyShadow = shadow legacy clan greaves
+
+ent-CMUYautjaMaskLegacyShadow = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorLegacyKnight = knight legacy clan armor
+
+ent-CMUYautjaGreavesLegacyKnight = knight legacy clan greaves
+
+ent-CMUYautjaMaskLegacyKnight = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorLegacySeeker = seeker legacy clan armor
+
+ent-CMUYautjaGreavesLegacySeeker = seeker legacy clan greaves
+
+ent-CMUYautjaMaskLegacySeeker = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorLegacySerpent = serpent legacy clan armor
+
+ent-CMUYautjaGreavesLegacySerpent = serpent legacy clan greaves
+
+ent-CMUYautjaMaskLegacySerpent = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueSeekerInitiate = seeker initiate unique clan armor
+
+ent-CMUYautjaGreavesUniqueSeekerInitiate = seeker initiate unique clan greaves
+
+ent-CMUYautjaMaskUniqueSeekerInitiate = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueSeekerAdept = seeker adept unique clan armor
+
+ent-CMUYautjaGreavesUniqueSeekerAdept = seeker adept unique clan greaves
+
+ent-CMUYautjaMaskUniqueSeekerAdept = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueDefender = defender xenobone unique clan armor
+
+ent-CMUYautjaGreavesUniqueDefender = defender xenobone unique clan greaves
+
+ent-CMUYautjaMaskUniqueDefender = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniqueWarrior = warrior xenobone unique clan armor
+
+ent-CMUYautjaGreavesUniqueWarrior = warrior xenobone unique clan greaves
+
+ent-CMUYautjaMaskUniqueWarrior = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaArmorUniquePraetorian = praetorian xenobone unique clan armor
+
+ent-CMUYautjaGreavesUniquePraetorian = praetorian xenobone unique clan greaves
+
+ent-CMUYautjaMaskUniquePraetorian = clan mask
+    .desc = A beautifully designed metallic face mask, both ornate and functional.
+
+ent-CMUYautjaBracerLegacyShadow = shadow legacy bracers
+
+ent-CMUYautjaBracerLegacyKnight = knight legacy bracers
+
+ent-CMUYautjaBracerLegacySeeker = seeker legacy bracers
+
+ent-CMUYautjaBracerLegacySerpent = serpent legacy bracers
+
+ent-CMUYautjaBracerXenobone = xenobone elite bracers
+
+ent-CMUYautjaCapeBoneFull = yautja bone cape
+
+ent-CMUYautjaCapeBoneThird = yautja bone third-cape
+
+ent-CMUYautjaCapeBoneCeremonial = yautja ceremonial bone cape

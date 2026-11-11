@@ -1,5 +1,5 @@
 - type: entity
-  parent: CMMRE
+  parent: RMCMRETSE
   id: AU14MRETWERMC
   name: RMC ration pack
   description: An Operation Ration Pack. Uses similar to USCM MRE format, but utilizes expensive preserving materials and methods and not less expensive meals from TWE cuisine.
@@ -8,7 +8,7 @@
     sprite: _RMC14/Objects/Consumable/Food/mre_tse.rsi
 
 - type: entity
-  parent: RMCSurvivalRationSPP
+  parent: RMCMRESPP
   id: AU14MREUPP
   name: UPP ration pack
   description: An Individual Meal Ration, mainly composed of a selection of canned food, despite being heavier, it has proven to be a lot more reliable.
@@ -46,7 +46,7 @@
     startingItem: AU14MRETWERMC
 
 - type: entity
-  parent: AU14MRETWERMC
+  parent: CMMRE
   id: CMUMRELACN
   name: LACN ration pack
   description: A Latin American Colonial Navy field ration. It has a long shelf life and a hearty selection of meals.

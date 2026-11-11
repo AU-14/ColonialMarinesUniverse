@@ -58,12 +58,19 @@
     antagPrototype: CLFVeteranRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-clf-veteran
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: clf_mil
 
 - type: antag
   parent: CMUAntagColonyBase
   id: CLFVeteranRole
   name: roles-antag-clfveteran-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-clfveteran-objective
 
 - type: startingGear

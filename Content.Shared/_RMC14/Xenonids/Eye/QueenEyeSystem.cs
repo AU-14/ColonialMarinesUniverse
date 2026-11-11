@@ -156,6 +156,11 @@ public sealed partial class QueenEyeSystem : EntitySystem
             return;
 
         _xenoWatch.SetWatching(eye, args.Watching);
+
+        // CMU14: changing the camera target unsubscribes the queen eye, but the client still
+        // needs its watch state and movement relay while watching another xeno.
+        if (_net.IsServer && TryComp(ent, out ActorComponent? actor))
+            _viewSubscriber.AddViewSubscriber(eye, actor.PlayerSession);
     }
 
     private void OnQueenEyeActionUnwatch(Entity<QueenEyeActionComponent> ent, ref XenoUnwatchEvent args)

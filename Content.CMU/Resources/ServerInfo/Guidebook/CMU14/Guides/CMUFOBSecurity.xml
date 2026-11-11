@@ -1,0 +1,16 @@
+<Document>
+  # FOB Security Squad
+
+  [bold]Foxtrot[/bold] (GOVFOR) and [bold]Victor[/bold] (OPFOR) are small security squads whose job is to build and secure the FOB.
+
+  ## Joining
+  - Turn on [bold]FOB SECURITY SQUAD[/bold] in the character menu.
+  - If you join as a [bold]Squad Leader, RTO, Combat Technician, Corpsman or Rifleman[/bold] and the squad has room for that role, you are put in it. If it's full, you join a regular squad as normal.
+  - The squad has its own slots on top of the regular ones: 1 Squad Leader, 1 RTO, 2 Combat Technicians, 1 Corpsman and 2 Riflemen.
+  - If those reserved slots are the only ones left for your role, joining asks whether you want to join the security squad.
+
+  ## What's Different
+  - Its Squad Leader, RTO, Corpsman and Riflemen get construction and engineering skill 3 so they can help build. Combat Technicians keep their normal skills.
+  - Its Combat Technicians get 15 extra vendor points for building materials.
+  - It has its own radio channel and callsign, and shows up on overwatch like any other squad. GOVFOR's Foxtrot channel is on [bold]:f[/bold] and OPFOR's Victor channel on [bold]:v[/bold].
+</Document>

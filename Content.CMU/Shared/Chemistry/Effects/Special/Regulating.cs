@@ -6,12 +6,12 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Chemistry.Effects.Special;
 
+/// <summary>
+/// Marker property. The reagent generator omits overdose thresholds from any reagent carrying it
+/// (see <c>SharedReagentGeneratorSystem.CreateReagent</c>), so no overdose tick can ever fire.
+/// </summary>
 public sealed partial class Regulating : RMCChemicalEffect
 {
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
-    {
-        return $"" +
-               $"Overdoses\n" +
-               $"Critical overdoses";
-    }
+        => "This chemical regulates its own metabolism and [color=green]cannot overdose[/color].";
 }

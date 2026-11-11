@@ -9,7 +9,7 @@ namespace Content.Client.CMU14.Medical.Monitor;
 /// <summary>
 /// Draws the lead wires from a patient monitor to its patient, like an IV line.
 /// </summary>
-public sealed class CMUMonitorLeadsOverlay : Overlay
+public sealed partial class CMUMonitorLeadsOverlay : Overlay
 {
     private static readonly Color LeadColor = Color.FromHex("#C8C8C8");
 

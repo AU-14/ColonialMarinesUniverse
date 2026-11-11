@@ -63,7 +63,7 @@ public sealed partial class XenoDancerSystem : EntitySystem
         if (_net.IsServer || IsClientSide(args.ProjUid))
             QueueDel(args.ProjUid);
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-dancer-projectile-dodge"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-dancer-projectile-dodge"), xeno, xeno);
     }
 
     private void OnMeleeHit(Entity<XenoDancerReworkComponent> xeno, ref MeleeHitEvent args)
@@ -174,7 +174,7 @@ public sealed partial class XenoDancerSystem : EntitySystem
         }
 
         if (maxTargets > 0)
-            _popup.PopupClient(Loc.GetString("cm-xeno-dancer-yellow-spread-self"), dancer, dancer);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-dancer-yellow-spread-self"), dancer, dancer);
 
         _yellowSpreadTargets.Clear();
         _nearbyTargets.Clear();

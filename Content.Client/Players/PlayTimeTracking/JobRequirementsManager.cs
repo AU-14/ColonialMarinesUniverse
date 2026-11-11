@@ -220,6 +220,13 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         bool checkRequirements,
         [NotNullWhen(false)] out FormattedMessage? reason)
     {
+        // CMU14 Begin: reflect the server's per-player event invitations in both job pickers.
+        if (_entManager.System<Content.Client.CMU14.Lobby.CMUEventAccessSystem>().IsLocked(job.ID))
+        {
+            reason = FormattedMessage.FromUnformatted(Loc.GetString("cmu-event-job-locked"));
+            return false;
+        }
+        // CMU14 End
         // Check the player's bans
         if (_jobBans.Contains(job.ID))
         {
@@ -231,15 +238,26 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
         if (!CheckWhitelist(job, out reason))
             return false;
 
-        if (!checkRequirements || _rmcPlayTime.IsExcluded(job.ID))
+        // cmu edit start: list every unmet requirement, physical standards and playtime alike, one per line.
+        // Physical standards describe the character, so they apply even without role timers.
+        var unmet = new List<string>();
+        if (!Content.Shared.CMU14.Roles.CMUMilitaryHeightRequirement.Check(job, _entManager.ComponentFactory, profile, out var standardsReason))
+            unmet.Add(standardsReason.ToMarkup());
+
+        if (checkRequirements && !_rmcPlayTime.IsExcluded(job.ID))
+        {
+            // Check other role requirements
+            var reqs = _entManager.System<SharedRoleSystem>().GetRoleRequirements(job);
+            if (!CheckRoleRequirements(reqs, profile, out var requirementsReason))
+                unmet.Add(requirementsReason.ToMarkup());
+        }
+
+        if (unmet.Count == 0)
             return true;
 
-        // Check other role requirements
-        var reqs = _entManager.System<SharedRoleSystem>().GetRoleRequirements(job);
-        if (!CheckRoleRequirements(reqs, profile, out reason))
-            return false;
-
-        return true;
+        reason = FormattedMessage.FromMarkupOrThrow(string.Join('\n', unmet));
+        return false;
+        // cmu edit end
     }
 
     /// <summary>

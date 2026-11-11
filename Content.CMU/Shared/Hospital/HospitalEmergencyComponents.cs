@@ -60,7 +60,7 @@ public readonly record struct HospitalDischargeAssessment(
 public sealed partial class HospitalEmergencyComputerComponent : Component
 {
     [DataField]
-    public ResPath ShuttlePath = new("/Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml");
+    public ResPath ShuttlePath = new("/Maps/CMU14/Dropships/rmc_ert_pmc_shuttle.yml");
 
     [DataField]
     public EntProtoId PatientPrototype = "AU14HospitalPatient";
@@ -68,8 +68,9 @@ public sealed partial class HospitalEmergencyComputerComponent : Component
     [DataField]
     public EntProtoId ReturnDestinationPrototype = "CMDropshipDestinationThirdPartyReturn";
 
+    /// <summary>ASRS faction receiving treatment payments; null deposits into the colony budget.</summary>
     [DataField]
-    public EntProtoId CashPrototype = "RMCSpaceCash";
+    public string? RequisitionsFaction;
 
     [DataField]
     public int MinCasualties = 3;

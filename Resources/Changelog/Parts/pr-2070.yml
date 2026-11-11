@@ -1,0 +1,17 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed duplicate ambient sounds exceeding their per-sound playback limit.
+  type: Fix
+- message: Fixed placement-preview errors while rendering other Z levels.
+  type: Fix
+- message: Fixed missing Area Info alert localization.
+  type: Fix
+- message: Fixed Hunter Ship food initialization and unwanted repair baseline data
+    in untouched map prototypes.
+  type: Fix
+- message: Reduced decoded memory for selected CMU voices and added audio inventories
+    to client performance captures.
+  type: Code
+time: '2026-10-02T14:59:28.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2070

@@ -115,7 +115,7 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
             _window.InProgressPanel.Visible = false;
             _window.HintPanel.Visible = true;
             _window.InProgressActionRailPanel.Visible = false;
-            _window.InProgressChoiceContainer.DisposeAllChildren();
+            _window.InProgressChoiceContainer.ReleaseChildren();
             return;
         }
 
@@ -189,7 +189,7 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         if (_window is null)
             return;
 
-        _window.InProgressChoiceContainer.DisposeAllChildren();
+        _window.InProgressChoiceContainer.ReleaseChildren();
         if (inFlight is null || !TryGetInFlightPart(state, inFlight, out var part))
         {
             _window.InProgressActionRailPanel.Visible = true;
@@ -393,8 +393,8 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
 
         EnsureSelectedPart(state);
 
-        _window.PartListContainer.DisposeAllChildren();
-        _window.ProcedureListContainer.DisposeAllChildren();
+        _window.PartListContainer.ReleaseChildren();
+        _window.ProcedureListContainer.ReleaseChildren();
 
         if (state.Parts.Count == 0)
         {
@@ -733,7 +733,7 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         return category switch
         {
             "fracture" => Color.FromHex("#E6C76C"),
-            "bleed" => Danger,
+            "bleed" or "stump" => Danger,
             "burn" => Warning,
             "remove_organ" or "transplant" or "suture" or "head_organ" => Color.FromHex("#A98DCE"),
             "amputation" => Danger,
@@ -749,7 +749,7 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         return category switch
         {
             "close_up" => Color.FromHex("#282318").WithAlpha(0.94f),
-            "bleed" => Color.FromHex("#25191B").WithAlpha(0.94f),
+            "bleed" or "stump" => Color.FromHex("#25191B").WithAlpha(0.94f),
             "burn" => Color.FromHex("#251D17").WithAlpha(0.94f),
             "fracture" => Color.FromHex("#252217").WithAlpha(0.94f),
             "remove_organ" or "amputation" => Color.FromHex("#251819").WithAlpha(0.94f),

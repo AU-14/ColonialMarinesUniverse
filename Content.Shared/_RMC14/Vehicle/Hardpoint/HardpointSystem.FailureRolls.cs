@@ -1,4 +1,4 @@
-using Content.Shared.Containers.ItemSlots;
+// using Content.Shared.Containers.ItemSlots; // CMU14: no vehicle-wide fault count.
 using Robust.Shared.Timing;
 using Robust.Shared.Random;
 
@@ -8,26 +8,17 @@ public sealed partial class HardpointSystem
 {
     [Dependency] private IGameTiming _timing = default!;
 
-    private bool TryRollFailure(EntityUid vehicle, HardpointIntegrityComponent damagedPart, float amount)
+    // CMU14 method: retain the shared roll cooldown; each part enforces its own fault limit.
+    private bool TryRollFailure(EntityUid vehicle, Entity<HardpointIntegrityComponent> damagedPart, float amount)
     {
-        var chance = VehicleFailureRules.GetChance(damagedPart, amount);
-        if (chance <= 0f || !TryComp(vehicle, out HardpointIntegrityComponent? frame) ||
-            _timing.CurTime < frame.NextFailureRoll)
+        // A saturated part must not consume the shared interval and block another part.
+        if (TryComp(damagedPart, out VehicleHardpointFailureComponent? failures) &&
+            failures.ActiveFailures.Count >= failures.MaxActiveFailures)
             return false;
 
-        var active = CountFailures(vehicle);
-        if (TryComp(vehicle, out HardpointSlotsComponent? slots) &&
-            TryComp(vehicle, out ItemSlotsComponent? itemSlots))
-        {
-            var visited = new HashSet<EntityUid> { vehicle };
-            foreach (var mounted in _topology.GetMountedSlots(vehicle, slots, itemSlots))
-            {
-                if (mounted.Item is { } item && visited.Add(item))
-                    active += CountFailures(item);
-            }
-        }
-
-        if (active >= frame.MaxVehicleFailures)
+        var chance = VehicleFailureRules.GetChance(damagedPart.Comp, amount);
+        if (chance <= 0f || !TryComp(vehicle, out HardpointIntegrityComponent? frame) ||
+            _timing.CurTime < frame.NextFailureRoll)
             return false;
 
         // Consume the interval on a failed roll too. A single impact that damages
@@ -36,8 +27,9 @@ public sealed partial class HardpointSystem
         return _random.Prob(chance);
     }
 
-    private int CountFailures(EntityUid uid)
-    {
-        return TryComp(uid, out VehicleHardpointFailureComponent? failures) ? failures.ActiveFailures.Count : 0;
-    }
+    // CMU14: CountFailures was only used by the removed vehicle-wide cap.
+    // private int CountFailures(EntityUid uid)
+    // {
+    //     return TryComp(uid, out VehicleHardpointFailureComponent? failures) ? failures.ActiveFailures.Count : 0;
+    // }
 }

@@ -12,7 +12,9 @@ using Robust.Shared.Serialization.Markdown.Validation;
 using Robust.Shared.Serialization.Markdown.Value;
 using Robust.Shared.Serialization.TypeSerializers.Interfaces;
 using Robust.Shared.Utility;
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
 using static Content.Shared.Decals.DecalGridComponent;
+#pragma warning restore CS0618
 
 namespace Content.Shared.Decals
 {

@@ -22,8 +22,12 @@
     prefix: au14-job-prefix-iasf
   - type: Language
     spokenLanguages:
+    - English
+    - Japanese
     - Indonesian
     understoodLanguages:
+    - English
+    - Japanese
     - Indonesian
     currentLanguage: Indonesian
     defaultLanguage: Indonesian

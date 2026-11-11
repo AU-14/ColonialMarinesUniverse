@@ -352,9 +352,9 @@ public sealed class BodyPartSeveranceTest
 
     private static EntityUid FindDetachedCarrier(IEntityManager entMan, EntityUid expectedRoot)
     {
-        foreach (var metadata in entMan.EntityQuery<MetaDataComponent>())
+        foreach (var metadata in entMan.QueryEntities<MetaDataComponent>())
         {
-            if (metadata.EntityPrototype?.ID != "DetachedBody")
+            if (metadata.Comp.EntityPrototype?.ID != "DetachedBody")
                 continue;
 
             var carrier = metadata.Owner;

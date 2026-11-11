@@ -82,7 +82,8 @@ namespace Content.Client.UserInterface.Systems.Alerts.Controls
                 HorizontalAlignment = HAlignment.Left
             };
 
-            SetupIcon();
+            // CMU14: EnteredTree creates the icon with the latest severity when it becomes visible.
+            // SetupIcon();
 
             Children.Add(_icon);
             _cooldownGraphic = new CooldownGraphic

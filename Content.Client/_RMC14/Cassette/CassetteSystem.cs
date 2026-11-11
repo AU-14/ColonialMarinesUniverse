@@ -10,7 +10,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Prototypes;
+// using Robust.Shared.Prototypes; // CMU14: cassette songs load on demand.
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -20,12 +20,12 @@ public sealed partial class CassetteSystem : SharedCassetteSystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IAudioManager _audioManager = default!;
-    [Dependency] private IComponentFactory _compFactory = default!;
+    // [Dependency] private IComponentFactory _compFactory = default!; // CMU14
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IFileDialogManager _dialogs = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
+    // [Dependency] private IPrototypeManager _prototype = default!; // CMU14
     [Dependency] private IResourceCache _resourceCache = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -37,9 +37,13 @@ public sealed partial class CassetteSystem : SharedCassetteSystem
         base.Initialize();
 
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<CassettePlayerComponent, ComponentRemove>(OnPlayerRemoved); // CMU14
 
         Subs.CVar(_config, RMCCVars.VolumeGainCassettes, SetGain, true);
 
+        // CMU14 Begin: AudioSystem loads songs when played. Preloading every tape retains
+        // the entire decoded music library in native audio buffers for the client's lifetime.
+        /*
         try
         {
             foreach (var entity in _prototype.EnumeratePrototypes<EntityPrototype>())
@@ -58,7 +62,42 @@ public sealed partial class CassetteSystem : SharedCassetteSystem
         {
             Log.Error($"Error preloading cassette songs:\n{e}");
         }
+        */
+        // CMU14 End
     }
+
+    // CMU14: reconcile local audio after state application and prediction replay have finished.
+    // Applying an intermediate rollback state directly would stop a freshly predicted track.
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+
+        var players = EntityQueryEnumerator<CassettePlayerComponent>();
+        while (players.MoveNext(out var uid, out var player))
+        {
+            if (player.CustomAudioStream == null)
+                continue;
+
+            if (player.State == AudioState.Stopped)
+                StopCustomTrack((uid, player));
+            else
+                _audio.SetState(player.CustomAudioStream, player.State);
+        }
+    }
+
+    private void OnPlayerRemoved(Entity<CassettePlayerComponent> ent, ref ComponentRemove args)
+    {
+        StopCustomTrack(ent);
+    }
+
+    private void StopCustomTrack(Entity<CassettePlayerComponent> player)
+    {
+        // This entity is client-owned. Authoritative removal must also clean it up during state application.
+        if (player.Comp.CustomAudioStream is { } stream && IsClientSide(stream))
+            QueueDel(stream);
+        player.Comp.CustomAudioStream = null;
+    }
+    // CMU14 end
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.DisplacementMap;
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.DisplacementMap;
@@ -90,8 +91,21 @@ public sealed partial class VisualBodySystem : SharedVisualBodySystem
         if (!_sprite.LayerMapTryGet(target, ent.Comp.Layer, out var index, true))
             return;
 
+        // CMU14: a Yautja body part draws CM-SS13's pre-coloured variant for the organ's own layer, with no tint and no
+        // greyscale, so the imported red/blue/... artwork is what appears. The state is chosen before the layer data is
+        // applied, which avoids anything reselecting the plain base state afterwards.
+        // Keyed on the organ's own sheet so the lobby preview dummy (species doll, no YautjaComponent) is covered too.
+        if (YautjaBodyVariants.IsBodyRsi(ent.Comp.Data.RsiPath) &&
+            YautjaVariantStateFor(ent, TryComp<HumanoidProfileComponent>(target, out var yautjaProfile) ? yautjaProfile.Sex : Sex.Male) is { } yautjaState)
+        {
+            ent.Comp.Data.State = yautjaState;
+            ent.Comp.Data.Color = Color.White;
+            ent.Comp.Data.Shader = null;
+        }
+
         _sprite.LayerSetData(target, index, ent.Comp.Data);
-        ApplyYautjaSkinShader(target, index, ent.Comp.Profile.SkinColor, ent.Comp.Data.Color ?? Color.White, ent.Comp.Layer.Equals(HumanoidVisualLayers.Eyes));
+        ApplyYautjaSkinShader(target, index, ent.Comp.Profile.SkinColor, ent.Comp.Data.Color ?? Color.White,
+            ent.Comp.Layer.Equals(HumanoidVisualLayers.Eyes), organRsi: ent.Comp.Data.RsiPath);
 
         var displacement = ent.Comp.Displacement;
         if (displacement != null && ProtoMan.Resolve(displacement, out var displacementProto))

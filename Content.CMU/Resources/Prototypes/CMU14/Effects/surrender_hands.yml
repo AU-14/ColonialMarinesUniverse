@@ -1,0 +1,16 @@
+- type: entity
+  parent: RMCEffectEmoteBase
+  id: CMUEffectSurrenderHands
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 3
+  - type: Sprite
+    sprite: CMU14/Effects/surrender_hands.rsi
+    layers:
+    - state: left
+      rotation: -135
+      offset: -0.23125, 0
+    - state: right
+      rotation: 135
+      offset: 0.16875, 0

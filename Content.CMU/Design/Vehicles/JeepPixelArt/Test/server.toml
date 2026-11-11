@@ -1,0 +1,40 @@
+[net]
+bindto = "127.0.0.1"
+port = 1222
+upnp = false
+
+[status]
+enabled = true
+bind = "127.0.0.1:1222"
+
+[hub]
+advertise = false
+
+[auth]
+allowlocal = true
+
+[console]
+loginlocal = true
+
+[game]
+hostname = "CMU Jeep Test"
+lobbyenabled = false
+map = "StableGarrisonRedux"
+defaultpreset = "Sandbox"
+role_timers = false
+role_whitelist = false
+
+# Content.CMU/Server/Vehicle/Jeep/CMUJeepDevCVars.cs: every joining player spawns as a colonist
+# (Stable Garrison has no Passenger slot) and gets the jeep crates dropped by parachute, CLF jeep drop
+# flares and a test kit on open ground beside them, starting at midday.
+[cmu.jeep]
+dev_kit = true
+dev_kit_crates = true
+dev_job = "AU14JobCivilianColonist"
+dev_daylight = true
+
+[events]
+enabled = false
+
+[log]
+enabled = true

@@ -45,6 +45,28 @@
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Webbing/LACNgrenadewebbing.rsi
     state: webbing
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,15,1 # 8 grenades of size 2x2.
+    whitelist:
+      tags:
+      - Grenade
+  - type: Webbing
+    components:
+    - type: Storage
+      maxItemSize: Normal
+      grid:
+      - 0,0,15,1 # 8 grenades of size 2x2.
+      whitelist:
+        tags:
+        - Grenade
+    - type: RMCStorageEjectHand
+      state: Open
+    - type: ExplosionResistance
+      damageCoefficient: 0
+      worn: false
+    - type: StoreAfterFailedInteract
 
 - type: entity
   parent: CMWebbingBase

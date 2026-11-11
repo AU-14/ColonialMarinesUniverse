@@ -1,4 +1,4 @@
-﻿using Content.Client._RMC14.UserInterface;
+using Content.Client._RMC14.UserInterface;
 using Content.Client.UserInterface.ControlExtensions;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared.Mobs;
@@ -264,6 +264,10 @@ public sealed partial class OverwatchSquadView : Control
                 FireteamsButton.ModulateSelfOverride = Color.FromHex("#404040");
                 break;
         }
+
+        // cmu edit start
+        CMUOnTabShown();
+        // cmu edit end
     }
 
     public void ApplySquadInfoVisibilityState()
@@ -285,19 +289,16 @@ public sealed partial class OverwatchSquadView : Control
         }
     }
 
+    // CMU14 method: update labels at displayed precision while keeping confirmation rules live.
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
 
-        CrateStatus.Text = HasCrate
-            ? "[color=green][bold] \\[ CRATE LOADED \\][/bold][/color]"
-            : "[color=red][bold] \\[ NO CRATE LOADED \\][/bold][/color]";
-
         var time = IoCManager.Resolve<IGameTiming>().CurTime;
         var supplyTimeLeft = NextLaunchAt - time;
+        CMUUpdateSupplyStatus(supplyTimeLeft);
         if (supplyTimeLeft > TimeSpan.Zero)
         {
-            CrateStatus.Text = Loc.GetString("rmc-overwatch-console-cooldown", ("seconds", (int)supplyTimeLeft.TotalSeconds));
             LaunchButton.Disabled = true;
         }
         else if (!LaunchButton.IsConfirming)
@@ -306,19 +307,16 @@ public sealed partial class OverwatchSquadView : Control
         }
 
         var orbitalTimeLeft = NextOrbitalAt - time;
+        CMUUpdateOrbitalStatus(orbitalTimeLeft);
         if (orbitalTimeLeft > TimeSpan.Zero)
         {
-            OrbitalStatus.Text = Loc.GetString("rmc-overwatch-console-cooldown", ("seconds", (int)orbitalTimeLeft.TotalSeconds));
             OrbitalFireButton.Disabled = true;
         }
         else
         {
-            OrbitalStatus.Text = HasOrbital
-                ? "[color=green][bold] \\[ READY \\][/bold][/color]"
-                : "[color=red][bold] \\[ NOT READY \\][/bold][/color]";
             // Setting Disabled also cancels ConfirmButton's pending confirmation.
-            if (!OrbitalFireButton.IsConfirming)
-                OrbitalFireButton.Disabled = false;
+            if (!OrbitalFireButton.IsConfirming || CMUShipWeaponDepleted) // CMU14: cancel stale confirmations on depletion.
+                OrbitalFireButton.Disabled = CMUShipWeaponDepleted; // CMU14: exhausted ship weapons cannot fire.
         }
     }
 }

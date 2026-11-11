@@ -1,5 +1,17 @@
+# Flanged pulse rifle sounds from cmss13-pve PR 675.
 - type: soundCollection
   id: AU14M41FireSound
+  files:
+  - /Audio/CMU14/Weapons/m41/gun_m41a_1f.ogg
+  - /Audio/CMU14/Weapons/m41/gun_m41a_2f.ogg
+  - /Audio/CMU14/Weapons/m41/gun_m41a_3f.ogg
+  - /Audio/CMU14/Weapons/m41/gun_m41a_4f.ogg
+  - /Audio/CMU14/Weapons/m41/gun_m41a_5f.ogg
+  - /Audio/CMU14/Weapons/m41/gun_m41a_6f.ogg
+
+# The old pulse sounds, kept for the M20A.
+- type: soundCollection
+  id: AU14M41OldFireSound
   files:
   - /Audio/CMU14/Weapons/m41/gun_m41a_1.ogg
   - /Audio/CMU14/Weapons/m41/gun_m41a_2.ogg

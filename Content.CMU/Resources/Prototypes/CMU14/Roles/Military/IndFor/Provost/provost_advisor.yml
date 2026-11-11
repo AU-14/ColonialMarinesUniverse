@@ -1,7 +1,7 @@
 - type: job
   parent: CMUJobMilitaryBaseProvost
   id: CMUJobINDFORProvostAdvisor
-  name: cmu-job-name-corp-provost-advisor
+  name: cmu-job-name-corp-provost-advisor-title
   description: cmu-ghost-role-information-provost-description
   icon: CMUJobIconProvostAdvisor
   startingGear: CMUGearProvostAdvisor

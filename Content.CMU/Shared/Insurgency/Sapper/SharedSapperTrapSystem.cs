@@ -28,16 +28,16 @@ namespace Content.Shared.CMU14.Insurgency.Sapper;
 /// </summary>
 public abstract partial class SharedSapperTrapSystem : EntitySystem
 {
-    [Dependency] private   CollisionWakeSystem _collisionWake = default!;
-    [Dependency] private   SharedContainerSystem _container = default!;
-    [Dependency] private   SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private   SharedHandsSystem _hands = default!;
-    [Dependency] private   SharedPhysicsSystem _physics = default!;
-    [Dependency] private   SharedPopupSystem _popup = default!;
-    [Dependency] private   SharedToolSystem _tool = default!;
-    [Dependency] private   RMCMapSystem _rmcMap = default!;
+    [Dependency] private CollisionWakeSystem _collisionWake = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
 
-    [Dependency] private   INetManager _net = default!;
+    [Dependency] private INetManager _net = default!;
 
     [Dependency] protected SharedTransformSystem Transforms = default!;
     [Dependency] protected IGameTiming Timing = default!;
@@ -127,7 +127,7 @@ public abstract partial class SharedSapperTrapSystem : EntitySystem
         if (_net.IsServer)
             ScheduleArming(ent, ent.Comp.ArmsAt.Value);
 
-        _popup.PopupClient(Loc.GetString("insfor-sapper-trap-deployed"), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("insfor-sapper-trap-deployed"), ent, args.User);
     }
 
     /// <summary>Server hook for scheduling the one arming transition without scanning every trap each tick.</summary>
@@ -140,13 +140,13 @@ public abstract partial class SharedSapperTrapSystem : EntitySystem
         // Only a trained sapper knows how to set these up.
         if (!HasComp<SapperComponent>(user))
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-trap-unskilled"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-trap-unskilled"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         if (_container.IsEntityInContainer(user))
         {
-            _popup.PopupClient(Loc.GetString("insfor-sapper-trap-deploy-container"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("insfor-sapper-trap-deploy-container"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -160,7 +160,7 @@ public abstract partial class SharedSapperTrapSystem : EntitySystem
 
             if (HasComp<SapperTrapComponent>(anchored))
             {
-                _popup.PopupClient(Loc.GetString("insfor-sapper-trap-deploy-occupied"), user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("insfor-sapper-trap-deploy-occupied"), user, user, PopupType.SmallCaution);
                 return false;
             }
         }
@@ -215,7 +215,7 @@ public abstract partial class SharedSapperTrapSystem : EntitySystem
         if (TryComp(args.User, out HandsComponent? hands))
             _hands.TryPickupAnyHand(args.User, ent, handsComp: hands);
 
-        _popup.PopupClient(Loc.GetString("insfor-sapper-trap-disarmed"), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("insfor-sapper-trap-disarmed"), ent, args.User);
     }
 
     // ----- who can trip it ------------------------------------------------

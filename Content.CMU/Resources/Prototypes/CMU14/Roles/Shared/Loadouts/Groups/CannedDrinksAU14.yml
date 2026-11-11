@@ -2,7 +2,7 @@
   id: CannedDrinksAU14
   name: rmc-loadout-group-canned-drinks
   minLimit: 0
-  maxLimit: 14
+  maxLimit: 1
   loadouts:
   - BottledWaterRMC
   - GrapeJuiceRMC

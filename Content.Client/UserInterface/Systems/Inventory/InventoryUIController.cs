@@ -12,6 +12,8 @@ using Content.Client.UserInterface.Systems.Inventory.Controls;
 using Content.Client.UserInterface.Systems.Inventory.Widgets;
 using Content.Client.UserInterface.Systems.Inventory.Windows;
 using Content.Shared._RMC14.Storage;
+using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Inventory;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Input;
 using Content.Shared.Inventory.VirtualItem;
@@ -20,6 +22,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
@@ -32,6 +35,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>, IOnSystemChanged<WebbingSystem>, IOnSystemChanged<UniformAccessorySystem>
 {
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IConfigurationManager _cfg = default!; // CMU14
 
     [UISystemDependency] private readonly ClientInventorySystem _inventorySystem = default!;
     [UISystemDependency] private readonly HandsSystem _handsSystem = default!;
@@ -159,46 +163,10 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         if (_inventoryHotbar == null)
             return;
 
-        var clothing = clientInv.SlotData.Where(p => !p.Value.HasSlotGroup).ToList();
-
+        // CMU14: retain spacer controls and ordering until the slot topology changes.
+        var hasClothing = _inventoryHotbar.CMUUpdateClothingLayout(clientInv);
         if (_inventoryButton != null)
-            _inventoryButton.Visible = clothing.Count != 0;
-        if (clothing.Count == 0)
-            return;
-
-        foreach (var child in new List<Control>(_inventoryHotbar.Children))
-        {
-            if (child is not SlotControl)
-                _inventoryHotbar.RemoveChild(child);
-        }
-
-        var maxWidth = clothing.Max(p => p.Value.ButtonOffset.X) + 1;
-        var maxIndex = clothing.Select(p => GetIndex(p.Value.ButtonOffset)).Max();
-
-        _inventoryHotbar.MaxColumns = maxWidth;
-        _inventoryHotbar.Columns = maxWidth;
-
-        for (var i = 0; i <= maxIndex; i++)
-        {
-            var index = i;
-            if (clothing.FirstOrNull(p => GetIndex(p.Value.ButtonOffset) == index) is { } pair)
-            {
-                if (_inventoryHotbar.TryGetButton(pair.Key, out var slot))
-                    slot.SetPositionLast();
-            }
-            else
-            {
-                _inventoryHotbar.AddChild(new Control
-                {
-                    MinSize = new Vector2(64, 64)
-                });
-            }
-        }
-
-        int GetIndex(Vector2i position)
-        {
-            return position.Y * maxWidth + position.X;
-        }
+            _inventoryButton.Visible = hasClothing;
     }
 
     private void UpdateStrippingWindow(InventorySlotsComponent? clientInv)
@@ -276,6 +244,20 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     {
         var slot = control.SlotName;
 
+        // CMU14 Begin: open worn storage by key, or by an empty-handed click when the player opts in
+        if (args.Function == CMUKeyFunctions.CMUOpenWornStorage ||
+            (args.Function == EngineKeyFunctions.UIClick &&
+             _cfg.GetCVar(CMUInventoryCVars.ClickOpensWornStorage) &&
+             _handsSystem.GetActiveHandEntity() == null))
+        {
+            if (TryOpenWornStorage(slot))
+            {
+                args.Handle();
+                return;
+            }
+        }
+        // CMU14 End
+
         if (args.Function == EngineKeyFunctions.UIClick)
         {
             _inventorySystem.UIInventoryActivate(control.SlotName);
@@ -317,6 +299,20 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         args.Handle();
     }
 
+    // CMU14 method
+    private bool TryOpenWornStorage(string slot)
+    {
+        if (_playerUid is not { } player ||
+            !_inventorySystem.TryGetSlotEntity(player, slot, out var item) ||
+            !_entities.HasComponent<StorageComponent>(item.Value))
+        {
+            return false;
+        }
+
+        _inventorySystem.UIInventoryStorageActivate(slot);
+        return true;
+    }
+
     private void StoragePressed(GUIBoundKeyEventArgs args, SlotControl control)
     {
         _inventorySystem.UIInventoryStorageActivate(control.SlotName);
@@ -343,7 +339,9 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         }
 
         // Set green / red overlay at 50% transparency
-        var hoverEntity = _entities.SpawnEntity("hoverentity", MapCoordinates.Nullspace);
+        // CMU14: reuse the slot-owned preview while refreshing sprite and insertion eligibility.
+        // var hoverEntity = _entities.SpawnEntity("hoverentity", MapCoordinates.Nullspace);
+        var hoverEntity = control.CMUGetHoverEntity();
         var hoverSprite = _entities.GetComponent<SpriteComponent>(hoverEntity);
         var fits = _inventorySystem.CanEquip(player.Value, held.Value, control.SlotName, out _, slotDef, containerSlot: container);
 

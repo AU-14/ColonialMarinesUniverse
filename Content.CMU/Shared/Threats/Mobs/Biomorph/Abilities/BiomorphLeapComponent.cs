@@ -12,7 +12,7 @@ namespace Content.Shared.CMU14.Threats.Mobs.Biomorph.Abilities;
 ///     toward the target tile and, while AbominationLeapingComponent is alive,
 ///     the entity knocks down + damages mobs it collides with.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class BiomorphLeapComponent : Component
 {
     /// <summary>Damage applied to mobs hit by the leap.</summary>

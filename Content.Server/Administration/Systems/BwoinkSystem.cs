@@ -91,6 +91,10 @@ namespace Content.Server.Administration.Systems
             Subs.CVar(_config, CCVars.DiscordOnCallWebhook, OnCallChanged, true);
 
             Subs.CVar(_config, CCVars.DiscordAHelpWebhook, OnWebhookChanged, true);
+            // CMU14: re-resolve the effective ahelp webhook when the CMU override changes; the
+            // upstream subscription above only fires for its own cvar.
+            Subs.CVar(_config, CCVars.HelpRelayWebhookAHelp,
+                _ => OnWebhookChanged(_config.GetCVar(CCVars.DiscordAHelpWebhook)), true);
             Subs.CVar(_config, CCVars.DiscordAHelpFooterIcon, OnFooterIconChanged, true);
             Subs.CVar(_config, CCVars.DiscordAHelpAvatar, OnAvatarChanged, true);
             Subs.CVar(_config, CVars.GameHostName, OnServerNameChanged, true);
@@ -262,6 +266,7 @@ namespace Content.Server.Administration.Systems
             {
                 RaiseNetworkEvent(bwoinkMessage, admin);
             }
+            _cmuTickets.RecordSystemLine(session.UserId, bwoinkMessage); // CMU14: keep connect/leave lines in ticket history
 
             // Enqueue the message for Discord relay
             if (_webhookUrl != string.Empty)
@@ -320,7 +325,7 @@ namespace Content.Server.Administration.Systems
             _typingUpdateTimestamps[args.SenderSession.UserId] = (_timing.RealTime, msg.Typing);
 
             // Non-admins can only ever type on their own ahelp, guard against fake messages
-            var isAdmin = _adminManager.GetAdminData(args.SenderSession)?.HasFlag(AdminFlags.Adminhelp) ?? false;
+            var isAdmin = CMUAhelpAdminData(args.SenderSession)?.HasFlag(AdminFlags.Adminhelp) ?? false; // CMU14: in-game admins
             var channel = isAdmin ? msg.Channel : args.SenderSession.UserId;
             var update = new BwoinkPlayerTypingUpdated(channel, args.SenderSession.Name, msg.Typing);
 
@@ -340,6 +345,12 @@ namespace Content.Server.Administration.Systems
 
         private async void OnWebhookChanged(string url)
         {
+            // CMU14: the CMU override wins when set, so ops can split ahelp onto its own channel
+            // without touching upstream's discord_ahelp_webhook.
+            var cmuOverride = _config.GetCVar(CCVars.HelpRelayWebhookAHelp);
+            if (!string.IsNullOrWhiteSpace(cmuOverride))
+                url = cmuOverride;
+
             _webhookUrl = url;
 
             RaiseNetworkEvent(new BwoinkDiscordRelayUpdated(!string.IsNullOrWhiteSpace(url)));
@@ -705,7 +716,7 @@ namespace Content.Server.Administration.Systems
             // TODO: Sanitize text?
             // Confirm that this person is actually allowed to send a message here.
             var personalChannel = senderSession.UserId == message.UserId;
-            var senderAdmin = _adminManager.GetAdminData(senderSession);
+            var senderAdmin = CMUAhelpAdminData(senderSession); // CMU14: in-game admins
             var senderAHelpAdmin = senderAdmin?.HasFlag(AdminFlags.Adminhelp) ?? false;
             var authorized = personalChannel && !message.AdminOnly || senderAHelpAdmin;
             if (!authorized)
@@ -724,6 +735,7 @@ namespace Content.Server.Administration.Systems
 
             var admins = GetTargetAdmins();
             var adminMsg = await FormatFullMessageForRecipient(forAdmin: true, senderAdmin, senderSession, message);
+            _cmuTickets.OnMessageAccepted(message.UserId, senderSession, adminMsg); // CMU14: AHelp tickets open/record before admins see the line
 
             // Notify all admins
             foreach (var channel in admins)
@@ -780,8 +792,8 @@ namespace Content.Server.Administration.Systems
 
         private IList<INetChannel> GetNonAfkAdmins()
         {
-            return _adminManager.ActiveAdmins
-                .Where(p => (_adminManager.GetAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false) &&
+            return CMUAhelpAdmins() // CMU14: in-game admins
+                .Where(p => (CMUAhelpAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false) &&
                             !_afkManager.IsAfk(p))
                 .Select(p => p.Channel)
                 .ToList();
@@ -789,8 +801,8 @@ namespace Content.Server.Administration.Systems
 
         private IList<INetChannel> GetTargetAdmins()
         {
-            return _adminManager.ActiveAdmins
-                .Where(p => _adminManager.GetAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false)
+            return CMUAhelpAdmins() // CMU14: in-game admins
+                .Where(p => CMUAhelpAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false)
                 .Select(p => p.Channel)
                 .ToList();
         }

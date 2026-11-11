@@ -8,3 +8,17 @@
     - id: AU14WeaponPistolM48A4Tactical
     - id: AU14MagazinePistolM48A4
       amount: 6
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: CMUBeltMedicBagVAI
+  name: VAI lifesaver bag
+  suffix: CMU
+  description: VAI lifesaver bag is the standard load-bearing equipment of the VAI private contractors. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
+
+- type: entity
+  parent: CMBeltMedical
+  id: CMUBeltMedicalVAI
+  name: VAI medical storage rig
+  suffix: CMU
+  description: VAI storage rig is the standard load-bearing equipment of VAI private contractors. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.

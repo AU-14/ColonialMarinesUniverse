@@ -175,7 +175,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMDefibrillator # "Upgraded" defib used. TODO RMC14 upgraded/advanced defibs
+    - id: AU14CMDefibrillator # cmu edit: was CMDefibrillator; "Upgraded" defib used. TODO RMC14 upgraded/advanced defibs
     - id: RMCSynthResetKey
     - id: RMCNailgunCompact
     - id: CMFireExtinguisherPortable

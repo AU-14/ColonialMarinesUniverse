@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
-using Content.Shared.CMU14.Yautja;
+
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Systems;
@@ -32,7 +32,6 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private StandingStateSystem _standing = default!;
-    [Dependency] private YautjaAcidResponseSystem _yautjaAcid = default!;
 
     private EntityQuery<CollideChainComponent> _collideChainQuery;
     private EntityQuery<DamageOnCollideComponent> _damageOnCollideQuery;
@@ -151,7 +150,11 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         if (_hive.FromSameHive(ent.Owner, other))
             return;
 
-        if (ent.Comp.Fire && HasComp<RMCImmuneToFireTileDamageComponent>(other))
+        // CMU14: tile-fire immunity honors its bypass whitelist here too, matching
+        // SharedRMCFlammableSystem.CanFireBypassImmunity (AU-14 PR #2296 scope).
+        if (ent.Comp.Fire &&
+            TryComp<RMCImmuneToFireTileDamageComponent>(other, out var tileFireImmunity) &&
+            !_whitelist.IsWhitelistPass(tileFireImmunity.BypassWhitelist, ent.Owner))
             return;
 
         if (HasComp<UncloakOnHitComponent>(ent.Owner))
@@ -168,7 +171,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
             var ignoreResistances = ent.Comp.IgnoreResistances
                 && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
-            _damageable.TryChangeDamage(other, damage, ignoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
+            _damageable.TryChangeDamage(other, damage, ignoreResistances, origin: ent, armorPiercing: ent.Comp.ArmorPenetration); // CMU14: retain the colliding projectile as damage origin.
             DoEmote(ent, other);
             didEmote = true;
         }
@@ -179,7 +182,7 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
             var ignoreResistances = ent.Comp.IgnoreResistances
                 && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
-            _damageable.TryChangeDamage(other, damage, ignoreResistances);
+            _damageable.TryChangeDamage(other, damage, ignoreResistances, origin: ent); // CMU14: retain the colliding projectile as damage origin.
         }
 
         // CMU14: the damage above can delete the target outright, and everything after
@@ -189,19 +192,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
         _xenoSpit.SetAcidCombo(other, ent.Comp.AcidComboDuration, ent.Comp.AcidComboDamage, ent.Comp.AcidComboParalyze, ent.Comp.AcidComboResists);
 
-        // CMU Related Change
-        // Skip paralysis for Yautja when it's acidic damage
         if (ent.Comp.Paralyze > TimeSpan.Zero && !_standing.IsDown(other) && (!_size.TryGetSize(other, out var size) || size < RMCSizes.Big))
         {
-            // Yautja are immune to acid-imposed paralysis, but vulnerable to other paralyze sources
-            if (ent.Comp.Acidic && _yautjaAcid.ShouldSkipAcidMoveEffects(other))
-            {
-                // Skip paralysis for acid damage on Yautja
-            }
-            else
-            {
-                _stun.TryParalyze(other, ent.Comp.Paralyze, true);
-            }
+            _stun.TryParalyze(other, ent.Comp.Paralyze, true); // CMU14: yautja acid paralysis exemption removed (CM-SS13 parity)
 
             if (!didEmote)
                 DoEmote(ent, other);
@@ -243,6 +236,10 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             return;
 
         ent.Comp.Chain = chain;
+        // CMU14 Begin: propagate non-gibbing damage through collision chains.
+        if (HasComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(chain))
+            EnsureComp<Content.Shared.Gibbing.NonGibbingDamageComponent>(ent);
+        // CMU14 End
         Dirty(ent);
     }
 
@@ -296,4 +293,10 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         if (comp.Chain is { } chain && TerminatingOrDeleted(chain))
             comp.Chain = null;
     }
+    // CMU14 method: expose collision damage to CAS payload handling.
+    public DamageSpecifier GetCollideDamage(Entity<DamageOnCollideComponent> ent)
+    {
+        return ent.Comp.Damage;
+    }
+
 }

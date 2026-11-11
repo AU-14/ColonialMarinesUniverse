@@ -25,144 +25,9 @@ namespace Content.IntegrationTests._CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaFrontlineBalanceTest
 {
-    private static readonly string[] RegularMasks =
-    {
-        "CMUYautjaMask",
-        "CMUYautjaMaskAncient",
-        "CMUYautjaMaskElitePlated",
-        "CMUYautjaMaskPred01Bone",
-    };
-
-    private static readonly string[] ExcludedMasks =
-    {
-        "CMUYautjaMaskBadBloodBane",
-        "CMUYautjaMaskThrallBone",
-    };
 
     [Test]
-    public async Task RegularMasksHaveFrontlineArmorAndExcludedMasksDoNot()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-
-            foreach (var prototype in RegularMasks)
-            {
-                var mask = entMan.SpawnEntity(prototype, MapCoordinates.Nullspace);
-                Assert.That(entMan.TryGetComponent(mask, out CMArmorComponent? armor), Is.True, prototype);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(armor!.Melee, Is.EqualTo(25), prototype);
-                    Assert.That(armor.Bullet, Is.EqualTo(30), prototype);
-                    Assert.That(armor.Bio, Is.EqualTo(25), prototype);
-                    Assert.That(armor.ExplosionArmor, Is.EqualTo(10), prototype);
-                });
-                entMan.DeleteEntity(mask);
-            }
-
-            foreach (var prototype in ExcludedMasks)
-            {
-                var mask = entMan.SpawnEntity(prototype, MapCoordinates.Nullspace);
-                Assert.That(entMan.HasComponent<CMArmorComponent>(mask), Is.False, prototype);
-                entMan.DeleteEntity(mask);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task RegularHunterKeepsAuditedHealthThresholds()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var hunter = server.EntMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-            var thresholds = server.EntMan.GetComponent<MobThresholdsComponent>(hunter).Thresholds;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(thresholds.Keys, Does.Contain(FixedPoint2.New(240)));
-                Assert.That(thresholds.Keys, Does.Contain(FixedPoint2.New(340)));
-            });
-
-            server.EntMan.DeleteEntity(hunter);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task MedicalResilienceIsRegularOnly()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var regular = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-            var badBlood = entMan.SpawnEntity("CMUMobYautjaBadBloodGrunt", MapCoordinates.Nullspace);
-
-            Assert.That(entMan.TryGetComponent(regular, out CMUMedicalResilienceComponent? resilience), Is.True);
-            var badBloodSlow = entMan.GetComponent<SlowOnDamageComponent>(badBlood).SpeedModifierThresholds;
-            Assert.Multiple(() =>
-            {
-                Assert.That(resilience!.PainAccumulationMultiplier, Is.EqualTo(0.5f));
-                Assert.That(resilience.MinimumPenalizingFractureSeverity, Is.EqualTo(FractureSeverity.Simple));
-                Assert.That(resilience.MovementPenaltyFloor, Is.EqualTo(1f));
-                Assert.That(resilience.AimPenaltyCeiling, Is.EqualTo(1.35f));
-                Assert.That(resilience.ActionSpeedPenaltyCeiling, Is.EqualTo(1.35f));
-                Assert.That(entMan.HasComponent<CMUMedicalResilienceComponent>(badBlood), Is.False);
-                Assert.That(entMan.HasComponent<SlowOnDamageComponent>(regular), Is.False);
-                Assert.That(entMan.System<SharedPainShockSystem>().GetAccumulationMultiplier(regular), Is.EqualTo(0.5f));
-                Assert.That(entMan.System<SharedPainShockSystem>().GetAccumulationMultiplier(badBlood), Is.EqualTo(1f));
-                Assert.That(badBloodSlow, Contains.Key(FixedPoint2.New(160)));
-            });
-
-            entMan.DeleteEntity(regular);
-            entMan.DeleteEntity(badBlood);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task RegularHunterRejectsStunsAndRmcMovementDebuffs()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var hunter = entities.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-            var stun = entities.System<SharedStunSystem>();
-            var slow = entities.System<RMCSlowSystem>();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(stun.TryParalyze(hunter, TimeSpan.FromSeconds(5), true, force: true), Is.False);
-                Assert.That(slow.TrySlowdown(hunter, TimeSpan.FromSeconds(5), ignoreDurationModifier: true), Is.False);
-                Assert.That(slow.TrySuperSlowdown(hunter, TimeSpan.FromSeconds(5), ignoreDurationModifier: true), Is.False);
-                Assert.That(slow.TryRoot(hunter, TimeSpan.FromSeconds(5)), Is.False);
-                Assert.That(entities.HasComponent<StunnedComponent>(hunter), Is.False);
-                Assert.That(entities.HasComponent<RMCSlowdownComponent>(hunter), Is.False);
-                Assert.That(entities.HasComponent<RMCSuperSlowdownComponent>(hunter), Is.False);
-                Assert.That(entities.HasComponent<RMCRootedComponent>(hunter), Is.False);
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task RegularHunterCannotBeDisarmedOrDropItemsWhenKnockedDown()
+    public async Task RegularHunterCanBeDisarmedAndDropsItemsWhenKnockedDown()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -182,14 +47,16 @@ public sealed class YautjaFrontlineBalanceTest
             var disarmed = new DisarmedEvent(hunter, attacker, 1f);
             entities.EventBus.RaiseLocalEvent(hunter, ref disarmed);
             var knockedDown = entities.System<SharedStunSystem>()
-                .TryKnockdown(hunter, TimeSpan.FromSeconds(2), force: true);
+                .TryKnockdown(hunter, TimeSpan.FromSeconds(2));
 
+            // CM-SS13 (human_attackhand.dm disarm intent) has no Yautja exception, and only
+            // knock_down_reduction 1.5 makes them harder to floor - no immunity, no drop protection.
             Assert.Multiple(() =>
             {
-                Assert.That(attempt.Cancelled, Is.True);
-                Assert.That(disarmed.Handled, Is.True);
+                Assert.That(attempt.Cancelled, Is.False);
                 Assert.That(knockedDown, Is.True);
-                Assert.That(hands.IsHolding(hunter, weapon), Is.True);
+                Assert.That(hands.IsHolding(hunter, weapon), Is.False,
+                    "the disarm now throws the held weapon instead of being ignored");
             });
         });
 

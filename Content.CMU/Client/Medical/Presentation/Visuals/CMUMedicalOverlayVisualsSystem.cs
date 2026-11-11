@@ -5,7 +5,9 @@ using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Presentation.Visuals;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Humanoid;
+using Robust.Shared.Prototypes;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Configuration;
@@ -26,6 +28,7 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
     private const int VariantCount = 4;
 
     private static readonly Color BruteDamageColor = Color.FromHex("#FF0000");
+    private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ResPath BruteDamageOverlays = new("Mobs/Effects/brute_damage.rsi");
     private static readonly ResPath BurnDamageOverlays = new("Mobs/Effects/burn_damage.rsi");
     private static readonly ResPath TreatmentOverlays = new("CMU14/Mobs/Medical/treatment_overlays.rsi");
@@ -178,12 +181,13 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
 
         if (TryComp<CMUMedicalOverlayVisualsComponent>(body, out var medicalVisuals))
         {
+            var bruteColor = GetBruteDamageColor(body);
             foreach (var part in medicalVisuals.Parts)
             {
                 if (!_sprite.LayerMapTryGet(bodySprite.AsNullable(), part.Layer, out _, false))
                     continue;
 
-                AddDamageOverlays(part);
+                AddDamageOverlays(part, bruteColor);
                 AddTreatmentOverlays(part);
             }
         }
@@ -192,7 +196,23 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
         ApplyDesiredOverlays(bodySprite);
     }
 
-    private void AddDamageOverlays(CMUMedicalOverlayPartVisual part)
+    // follow the body's own brute colour, SynthSystem (white) and YautjaDamageVisualsSystem (green)
+    // recolour it. hardcoded red here made every synth bleed red
+    private Color GetBruteDamageColor(EntityUid body)
+    {
+        if (TryComp<DamageVisualsComponent>(body, out var damageVisuals) &&
+            damageVisuals.DamageOverlayGroups is { } groups &&
+            groups.TryGetValue(BruteGroup, out var brute) &&
+            brute.Color is { } hex &&
+            Color.TryFromHex(hex, out var color))
+        {
+            return color;
+        }
+
+        return BruteDamageColor;
+    }
+
+    private void AddDamageOverlays(CMUMedicalOverlayPartVisual part, Color bruteColor)
     {
         foreach (var kind in DamageOverlayOrder)
         {
@@ -205,6 +225,9 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
 
             if (!TryGetDamageOverlayState(part.Layer, kind, level, out var rsi, out var state, out var color))
                 continue;
+
+            if (kind == DamageOverlayKind.Brute)
+                color = bruteColor;
 
             AddDesiredOverlay(DamageOverlayKey(part.Layer, kind), rsi, state, color);
         }

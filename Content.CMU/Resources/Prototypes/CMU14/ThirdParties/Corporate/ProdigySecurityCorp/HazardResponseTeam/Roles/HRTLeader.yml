@@ -27,7 +27,7 @@
       state: synth
   - type: MarineOrders
 
-  name: Prodigy Hazard Leader
+  name: Hazard Leader
   description: au14-prodigyhazard-description
   playTimeTracker: AU14JobHRTPartyLeaderTracker
   ranks:
@@ -90,7 +90,7 @@
     back:
     - CMSurgicalLine
     - CMSynthGraft
-    - CMMRE
+    - CMUMREFSR
     - RMCLaserDesignatorPVE
     - CMStunbaton
     - RMCHandcuffs

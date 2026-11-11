@@ -1,0 +1,60 @@
+# The subsidies for starting a business (see ColonySubsidy.cs). A player applies at the console of the people for a grant or for a loan; the mayor approves. The whole sum is held out of the budget, a part is
+# paid at once, and the rest in tranches as the stages of the plan are done: pieces delivered to the orders of the city (deliver), rents of the premises paid (rent), deals sealed by the notary (deals). The shares of
+# the stages and the share paid at once make up a hundred.
+
+- type: colonyBusiness
+  id: RUMCBusinessStall
+  name: rumc-business-stall-name
+  description: rumc-business-stall-desc
+  zone: Trade
+  grantAmount: 800
+  loanAmount: 1600
+  upfrontPercent: 30
+  deadlineSeconds: 1800
+  stages:
+  - kind: Deals
+    target: 2
+    percent: 30
+  - kind: Deliver
+    target: 15
+    percent: 40
+
+- type: colonyBusiness
+  id: RUMCBusinessShop
+  name: rumc-business-shop-name
+  description: rumc-business-shop-desc
+  zone: Trade
+  grantAmount: 2000
+  loanAmount: 4000
+  upfrontPercent: 30
+  deadlineSeconds: 2400
+  stages:
+  - kind: Rent
+    target: 2
+    percent: 20
+  - kind: Deals
+    target: 3
+    percent: 20
+  - kind: Deliver
+    target: 30
+    percent: 30
+
+- type: colonyBusiness
+  id: RUMCBusinessWorkshop
+  name: rumc-business-workshop-name
+  description: rumc-business-workshop-desc
+  zone: Production
+  grantAmount: 3000
+  loanAmount: 6000
+  upfrontPercent: 30
+  deadlineSeconds: 3000
+  stages:
+  - kind: Rent
+    target: 3
+    percent: 20
+  - kind: Deliver
+    target: 60
+    percent: 25
+  - kind: Deals
+    target: 5
+    percent: 25

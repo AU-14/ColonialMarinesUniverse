@@ -17,4 +17,5 @@ public readonly record struct AreaInfoRestrictionState(
     bool Paradropping,
     bool NoTunnel,
     bool Unweedable,
-    bool ResinAllowed);
+    bool ResinAllowed,
+    bool? OpenToSky = null); // CMU14: roof geometry participates in presentation invalidation.

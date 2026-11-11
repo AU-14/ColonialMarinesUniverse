@@ -106,7 +106,7 @@ public abstract partial class SharedContentEyeSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } player)
             return;
 
-        if (!HasComp<GhostComponent>(player) && !_admin.IsAdmin(player))
+        if (!HasComp<GhostComponent>(player) && !_admin.HasAdminFlag(player, AdminFlags.FreeZoom)) // cmu edit
             return;
 
         if (TryComp<EyeComponent>(player, out var eyeComp))

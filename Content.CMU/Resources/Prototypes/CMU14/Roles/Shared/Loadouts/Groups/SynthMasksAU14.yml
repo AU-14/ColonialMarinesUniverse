@@ -2,6 +2,7 @@
   id: SynthMasksAU14
   name: rmc-loadout-group-masks
   minLimit: 0
+  maxLimit: 3
   loadouts:
   - MaskSterileAU14
   - MaskScarfRedRMC

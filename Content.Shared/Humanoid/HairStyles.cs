@@ -122,6 +122,7 @@ namespace Content.Shared.Humanoid
             "RMCHumanHairShavedBalding",
             "HumanHairShavedpart",
             "RMCHumanHairShort",
+            "RMCHumanHairShortbangs",
             "HumanHairE",
             "HumanHairF",
             "RMCHumanHairLong",

@@ -203,6 +203,9 @@ public sealed partial class SimpleRadialMenu : RadialMenu
         var scale = Vector2.One;
 
         var texture = sprites.Frame0(spriteSpecifier);
+        if (CreateCMUSurrenderIcon(spriteSpecifier, texture) is { } surrenderIcon) // CMU14
+            return surrenderIcon;
+
         if (texture.Width <= 32)
         {
             scale *= 2;

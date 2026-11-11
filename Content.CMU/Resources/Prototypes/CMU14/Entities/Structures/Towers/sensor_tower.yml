@@ -3,7 +3,18 @@
   parent: RMCSensorTower
   id: AU14SensorTower
   name: SA-2X experimental sensor-array tower
-# TODO: Govfor/Opfor ownership
+  components:
+  - type: TacticalMapAlwaysVisible
+    visibleToMarines: true
+    visibleToOpfor: true
+    visibleToGovfor: true
+    visibleToClf: true
+    visibleToXenos: true
+    visibleAsXenoStructure: true
+  - type: DestroyOnPreset
+    presets:
+    - ForceOnForce
+    - Insurgency
 
 - type: entity
   parent: AU14SensorTower

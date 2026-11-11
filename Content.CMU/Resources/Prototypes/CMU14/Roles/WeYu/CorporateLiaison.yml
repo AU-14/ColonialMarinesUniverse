@@ -1,6 +1,7 @@
 - type: job
   abstract: true
   parent: CMJobBase
+  displayWeight: 22
   id: AU14JobCivilianCorporateLiaisonBase
   name: au14-job-name-civiliancorporateliaison
   description: au14-job-description-civiliancorporateliaison
@@ -16,12 +17,20 @@
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentCorporate
     time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateLiaison
   roundComponents:
   - type: Skills
     skills:
+      RMCSkillResearch: 1
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
@@ -92,6 +101,7 @@
     ears: AU14ColonyWeylandHeadset
     ears2: RMCM5CameraGear
     pocket1: AU14StampLiaison
+    pocket2: CMUPepperSpray
   inhand:
   - RMCPortableVendorCorporate
   - CMUMobilePhone

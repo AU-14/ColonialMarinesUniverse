@@ -234,4 +234,10 @@ public sealed partial class CMUDroneControlSessionComponent : Component
     public EntityUid MindId;
     public EntityUid? EndControlAction;
     public TimeSpan NextLeashWarning;
+
+    // what the drone borrowed from its operator for this session, so it can be handed back on exit
+    public bool AddedLanguageComponent;
+    public List<string> LentSpoken = new();
+    public List<string> LentUnderstood = new();
+    public string? DroneLanguageBefore;
 }

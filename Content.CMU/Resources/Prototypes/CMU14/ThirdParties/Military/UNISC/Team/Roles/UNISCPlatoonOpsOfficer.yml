@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: AU14JobUNISCPltOpsOff
   icon: AU14JobIconPlatCo
@@ -31,7 +31,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: UNISC Platoon Operations Officer
+  name: Platoon Ops Officer
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCPltOpsOff
   ranks:

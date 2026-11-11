@@ -14,6 +14,8 @@ namespace Content.IntegrationTests.Tests.Follower;
 [TestOf(typeof(FollowerSystem))]
 public sealed class FollowerMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> NotGhostnadoWarpablePrototype = "NotGhostnadoWarpable";
+
     public override PoolSettings PoolSettings => new()
     {
         Connected = true,
@@ -63,7 +65,7 @@ public sealed class FollowerMergeRegressionTest : GameTest
                 Assert.That(followSystem.GetRandomGhostFollowed(), Is.EqualTo(second));
             });
 
-            tagSystem.AddTag(second, "NotGhostnadoWarpable");
+            tagSystem.AddTag(second, NotGhostnadoWarpablePrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(followSystem.GetRandomGhostFollowed(), Is.Null,

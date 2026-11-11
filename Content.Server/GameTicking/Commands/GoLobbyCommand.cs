@@ -17,10 +17,18 @@ namespace Content.Server.GameTicking.Commands
 
         public override void Execute(IConsoleShell shell, string argStr, string[] args)
         {
-            GamePresetPrototype? preset = null;
-            var presetName = string.Join(" ", args);
+            // CMU14: golobby restarts the round for everyone; require an explicit confirm argument
+            if (args.Length == 0
+                || !args[0].Equals("confirm", StringComparison.OrdinalIgnoreCase))
+            {
+                shell.WriteLine(Loc.GetString("cmu-cmd-golobby-needs-confirm"));
+                return;
+            }
 
-            if (args.Length > 0)
+            GamePresetPrototype? preset = null;
+            var presetName = string.Join(" ", args[1..]); // CMU14: confirm takes the first argument
+
+            if (args.Length > 1) // CMU14: preset name shifted behind confirm
             {
                 if (!_gameTicker.TryFindGamePreset(presetName, out preset))
                 {

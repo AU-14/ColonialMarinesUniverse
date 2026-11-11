@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 10
   id: AU14JobWYPMCPartyContractorBase
   name: au14-job-name-wypmc-contractor
   description: au14-pmcparty-description
@@ -10,6 +11,10 @@
 - type: job
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractor #m41a/2
+  chevrons:
+    AU14RankWeYuOperator:
+      entity: AU14ChevronWeYuOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartyContractor
@@ -48,6 +53,10 @@
 - type: job
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractorM39B2
+  chevrons:
+    AU14RankWeYuOperator:
+      entity: AU14ChevronWeYuOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartyContractorM39B2
@@ -88,6 +97,10 @@
 - type: job
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractorNSG23
+  chevrons:
+    AU14RankWeYuOperator:
+      entity: AU14ChevronWeYuOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartyContractorNSG23
@@ -128,6 +141,10 @@
 - type: job
   parent: AU14JobWYPMCPartyContractorBase
   id: AU14JobWYPMCPartyContractorM42A # m42a
+  chevrons:
+    AU14RankWeYuOperator:
+      entity: AU14ChevronWeYuOperator
+      requirements: []
   roundSide: ThirdParty
   roundForce: WY
   roundRole: WYPMCPartyContractorM42A
@@ -268,7 +285,7 @@
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
     back:
-    - RMCMREWeYa
+    - RMCMREWeYaPMC
     - CMCanteen
     - CMMagazineRifleM54CAP
     - CMMagazineRifleM54CAP
@@ -289,7 +306,7 @@
     - CMMagazineSMGM63AP
     - CMMagazineSMGM63AP
     back:
-    - RMCMREWeYa
+    - RMCMREWeYaPMC
     - CMCanteen
     - CMMagazineSMGM63AP
     - CMMagazineSMGM63AP
@@ -309,7 +326,7 @@
     - RMCMagazineRifleSSG45AP
     - RMCMagazineRifleSSG45AP
     back:
-    - RMCMREWeYa
+    - RMCMREWeYaPMC
     - CMCanteen
     - RMCMagazineRifleSSG45AP
     - RMCMagazineRifleSSG45AP
@@ -331,7 +348,7 @@
     - CMMagazineSniperM96S
     - CMMagazineSniperM96S
     back:
-    - RMCMREWeYa
+    - RMCMREWeYaPMC
     - CMCanteen
     - CMMagazineSniperM96S
     - CMMagazineSniperM96S

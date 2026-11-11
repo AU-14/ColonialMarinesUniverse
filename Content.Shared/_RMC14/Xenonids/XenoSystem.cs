@@ -253,6 +253,12 @@ public sealed partial class XenoSystem : EntitySystem
 
     private void OnXenoHealthScannerAttemptTarget(Entity<XenoComponent> ent, ref HealthScannerAttemptTargetEvent args)
     {
+        // CMU14: yautja analyzers are built to read xeno physiology
+        if (args.Scanner is { } scannerUid
+            && TryComp<HealthScannerComponent>(scannerUid, out var scannerComp)
+            && scannerComp.AllowXenoTargets)
+            return;
+
         args.Popup = "The scanner can't make sense of this creature.";
         args.Cancelled = true;
     }
@@ -357,6 +363,11 @@ public sealed partial class XenoSystem : EntitySystem
 
     private void OnXenoMeleeHit(Entity<XenoComponent> xeno, ref MeleeHitEvent args)
     {
+        // CMU14 XenoClawSlash: mark the swing so CMArmorSystem can apply the XVX slash multiplier per target -
+        // a swing that catches a marine and a xeno must not boost the marine.
+        if (args.IsHit)
+            args.Impact = args.Impact with { Context = args.Impact.Context | DamageImpactContext.XenoClaw };
+
         foreach (var hit in args.HitEntities)
         {
             if (!TryComp<EntityStorageComponent>(hit, out var storage))

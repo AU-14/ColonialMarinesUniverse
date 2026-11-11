@@ -71,7 +71,7 @@ public sealed partial class RMCUpgradeSystem : EntitySystem
         if (!_skills.HasSkill(user, ent.Comp.Skill, ent.Comp.SkillAmountRequired))
         {
             var failPopup = Loc.GetString("rmc-construction-failure", ("ent", ent));
-            _popup.PopupClient(failPopup, ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failPopup, ent, user, PopupType.SmallCaution);
 
             args.Handled = true;
             return;
@@ -80,7 +80,7 @@ public sealed partial class RMCUpgradeSystem : EntitySystem
         if (_xenoAcid.IsMelted(ent))
         {
             var failPopup = Loc.GetString("rmc-construction-melted");
-            _popup.PopupClient(failPopup, ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(failPopup, ent, user, PopupType.SmallCaution);
 
             args.Handled = true;
             return;
@@ -117,7 +117,7 @@ public sealed partial class RMCUpgradeSystem : EntitySystem
             var materialStack = Spawn(stackProto.Spawn, coordinates);
             if (TryComp<StackComponent>(materialStack, out var stack))
             {
-                _stack.SetCount(materialStack, upgradeComp.Amount, stack);
+                _stack.SetCount((materialStack, stack), upgradeComp.Amount);
             }
         }
 
@@ -155,7 +155,7 @@ public sealed partial class RMCUpgradeSystem : EntitySystem
                 if (!_stack.TryUse((upgradeItem.Value, stack), upgradeComp.Amount))
                 {
                     var failPopup = Loc.GetString(upgradeComp.FailurePopup, ("ent", ent));
-                    _popup.PopupClient(failPopup, ent, user, PopupType.SmallCaution);
+                    _popup.PopupEntity(failPopup, ent, user, PopupType.SmallCaution);
                     return;
                 }
             }

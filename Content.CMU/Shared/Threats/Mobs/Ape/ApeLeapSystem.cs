@@ -175,7 +175,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         if (args.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-leap-cancelled"), ape, ape);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-leap-cancelled"), ape, ape);
             return;
         }
 

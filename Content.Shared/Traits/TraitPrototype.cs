@@ -43,7 +43,8 @@ public sealed partial class TraitPrototype : IPrototype
     /// NOTE: When implementing a new trait, it's preferable to add it as a status effect instead if possible.
     /// </summary>
     [DataField]
-    [Obsolete("Use JobSpecial instead.")]
+    // CMU14: Existing trait prototypes still apply component registries alongside JobSpecials.
+    // [Obsolete("Use JobSpecial instead.")]
     public ComponentRegistry Components { get; private set; } = new();
 
     /// <summary>

@@ -60,7 +60,7 @@ public sealed partial class RMCSuicideSystem : EntitySystem
                 var time = _timing.CurTime;
                 if (time < ent.Comp.LastAttempt + ent.Comp.Cooldown)
                 {
-                    _popup.PopupClient(Loc.GetString("rmc-suicide-fumble-self"), user, user, PopupType.SmallCaution);
+                    _popup.PopupEntity(Loc.GetString("rmc-suicide-fumble-self"), user, user, PopupType.SmallCaution);
                     return;
                 }
 
@@ -80,7 +80,7 @@ public sealed partial class RMCSuicideSystem : EntitySystem
                     _admin.Add(LogType.RMCSuicide, LogImpact.High, $"{ToPrettyString(user)} started to suicide.");
                     var selfMsg = Loc.GetString("rmc-suicide-start-self");
                     var othersMsg = Loc.GetString("rmc-suicide-start-others", ("user", user));
-                    _popup.PopupPredicted(selfMsg, othersMsg, user, user, PopupType.LargeCaution);
+                    _popup.PopupEntity(selfMsg, othersMsg, user, user, PopupType.LargeCaution);
                 }
             },
         });
@@ -94,7 +94,7 @@ public sealed partial class RMCSuicideSystem : EntitySystem
             _admin.Add(LogType.RMCSuicide, LogImpact.High, $"{ToPrettyString(user)}'s suicide was cancelled.");
             var selfMsg = Loc.GetString("rmc-suicide-cancel-self");
             var othersMsg = Loc.GetString("rmc-suicide-cancel-others", ("user", user));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user, PopupType.MediumCaution);
             return;
         }
 

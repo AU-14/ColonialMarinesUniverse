@@ -13,7 +13,7 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 ///     rest - not "appropriately quiet," actually unnoticed. A dim rectangle only ever answers "how
 ///     bright," and the fill had already been through several rounds of that; what it never had was a
 ///     *shape* that says "control" independent of colour. The caps borrow the same bracket idea as the
-///     sidebar's corner ticks (<see cref="Content.Client._CMU14.Interface.CrtTerminalPalette"/>'s
+///     sidebar's corner ticks (<see cref="Content.Client.CMU14.Interface.CrtTerminalPalette"/>'s
 ///     consumers), so the scrollbar reads as the same instrument rather than a different control that
 ///     happens to share a palette.
 /// </remarks>

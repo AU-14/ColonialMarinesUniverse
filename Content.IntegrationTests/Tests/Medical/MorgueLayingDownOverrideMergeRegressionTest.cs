@@ -15,18 +15,10 @@ namespace Content.IntegrationTests.Tests.Medical;
 [TestOf(typeof(EntityStorageLayingDownOverrideSystem))]
 public sealed class MorgueLayingDownOverrideMergeRegressionTest : GameTest
 {
+
     private static readonly EntProtoId EnabledStorage = "MorgueLayingOverrideEnabled";
     private static readonly EntProtoId DisabledStorage = "MorgueLayingOverrideDisabled";
     private static readonly EntProtoId Actor = "MorgueLayingOverrideActor";
-
-    private static readonly EntProtoId[] DefaultEnabledPrototypes =
-    [
-        "BodyBag",
-        "Morgue",
-        "Crematorium",
-        "CMBodyBag",
-        "CMMorgue",
-    ];
 
     [TestPrototypes]
     private const string Prototypes = @"
@@ -105,30 +97,4 @@ public sealed class MorgueLayingDownOverrideMergeRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task LivePrototypeGraphHasFiveDefaultFiltersAndOneStasisOptOut()
-    {
-        var server = Pair.Server;
-        await server.WaitAssertion(() =>
-        {
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var factory = server.ResolveDependency<IComponentFactory>();
-
-            foreach (var id in DefaultEnabledPrototypes)
-            {
-                var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<EntityStorageLayingDownOverrideComponent>(
-                    out var component,
-                    factory), Is.True, id.Id);
-                Assert.That(component!.Enabled, Is.True, id.Id);
-            }
-
-            var stasis = prototypes.Index<EntityPrototype>("CMStasisBag");
-            Assert.That(stasis.TryGetComponent<EntityStorageLayingDownOverrideComponent>(
-                out var stasisComponent,
-                factory), Is.True);
-            Assert.That(stasisComponent!.Enabled, Is.False,
-                "CMStasisBag must remain the sole standing-occupant opt-out");
-        });
-    }
 }

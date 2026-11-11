@@ -70,6 +70,7 @@
   id: AU14TileFire
   suffix: AU14, 15s
   components:
+  - type: CMUAllowFireSpread # CMU14: only AU14 fires may ignite additional tiles.
   - type: TileFire
     id: AU14TileFire
     duration: 145
@@ -374,6 +375,16 @@
   - type: RMCIgniteOnCollide
     maxStacks: 25
     intensity: 25
+
+- type: entity
+  parent: RMCTileFireLaser
+  id: RMCTileFireMiniMikePhosphorus # CMU14
+  components:
+  - type: TileFire
+    duration: 30
+  - type: RMCIgniteOnCollide
+    maxStacks: 30
+    intensity: 15
 
 #Forever fires for pve
 

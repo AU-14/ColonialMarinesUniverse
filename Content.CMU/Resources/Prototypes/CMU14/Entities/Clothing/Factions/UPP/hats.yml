@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UPPBoonie
   name: UPP boonie
   description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
@@ -10,7 +10,7 @@
     sprite: CMU14/Clothing/UPP/hats/uppboonie.rsi
 
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
   id: AU14UPPPatrolCap
   name: UPP UL2 patrol cap
   description: UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above.
@@ -51,3 +51,35 @@
     - Snout
   - type: MycotoxinProtection
     fullProtection: false
+  
+- type: entity
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
+  id: AU14UPPPeakedSL
+  name: UPP UL3 Peaked Serzhant Cap
+  description: UPP Peaked cap given to entrusted NCOs of the Party. The NCOs rank is shown in gold on the front.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/hats/upppeakedsl.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/hats/upppeakedsl.rsi
+  - type: CMArmor
+    melee: 20
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  
+- type: entity
+  parent: [ClothingHeadBase, CMUHeadgearGarbStorage]
+  id: AU14UPPPeakedFTL
+  name: UPP UL3 Peaked Junior NCO Cap
+  description: UPP Peaked cap given to Junior NCOs of the Party. The NCOs rank is shown in gold on the front.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/hats/upppeakedftl.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/hats/upppeakedftl.rsi
+  - type: CMArmor
+    melee: 20
+    bullet: 20
+    bio: 20
+    explosionArmor: 10

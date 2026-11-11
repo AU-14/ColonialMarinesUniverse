@@ -263,7 +263,7 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
 
         // Set faction-specific starting balance (for DistressSignal)
         if (account.Comp.Faction == "govfor" || account.Comp.Faction == "opfor")
-            account.Comp.Balance = 200000;
+            account.Comp.Balance = 300000;
         else
             account.Comp.Balance = Starting; // fallback: RMCCVars.RMCRequisitionsStartingBalance
 
@@ -273,6 +273,7 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _purchasesMap = null;
+        _roundPurchases.Clear(); // CMU14: replacing consoles never resets faction-wide purchase limits.
     }
 
     public void CreateSpecialDelivery(EntProtoId proto, string faction = "") // CMU14

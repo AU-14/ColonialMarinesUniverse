@@ -180,7 +180,7 @@ public sealed class PainTimingLifecycleTest
         Assert.That(once, Is.Not.EqualTo(target), "The test must cross boundaries without hiding differences at the cap.");
     }
 
-    [Test, Timeout(10000)]
+    [Test, CancelAfter(10000)]
     public void DeterministicProfileCombinationsPreserveBoundsAndFractionalPartitionInvariance()
     {
         var random = new Random(0xC0FFEE);

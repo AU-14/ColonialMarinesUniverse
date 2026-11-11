@@ -25,4 +25,16 @@ public sealed partial class EpilepsyComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan NextSeizure;
+
+    /// <summary>
+    ///     When the current seizure ends, so a flash can't start another on top of it.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan SeizingUntil;
+
+    /// <summary>
+    ///     Anticonvulsants keep seizures away until this time. A seizure that comes due before then is put off instead.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan SuppressedUntil;
 }

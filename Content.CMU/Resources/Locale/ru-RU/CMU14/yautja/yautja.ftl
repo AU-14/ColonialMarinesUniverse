@@ -31,39 +31,6 @@ cmu-yautja-lobby-status = Статус
 cmu-yautja-lobby-status-normal = Обычный
 cmu-yautja-lobby-status-council = Совет
 cmu-yautja-lobby-status-leader = Лидер
-cmu-yautja-clan-admin-whitelist-legacy = Legacy
-cmu-yautja-clan-admin-whitelist-council-legacy = Council legacy
-
-cmu-yautja-clan-info-verb = Информация о клане
-cmu-yautja-clan-info-title = Информация о клане
-cmu-yautja-clan-info-initialize = Инициализировать
-cmu-yautja-clan-info-refresh = Обновить
-cmu-yautja-clan-info-members = Члены клана
-cmu-yautja-clan-info-no-clan = Клан не назначен
-cmu-yautja-clan-info-no-description = Описание клана отсутствует.
-cmu-yautja-clan-info-clan = Клан: {$clan} | Честь: {$honor}
-cmu-yautja-clan-info-viewer = Ваш ранг: {$rank} | Права: {$permissions}
-cmu-yautja-clan-info-member = {$name} — {$rank} | Честь: {$honor} | {$online}
-cmu-yautja-clan-info-apply-rank = Назначить ранг
-cmu-yautja-clan-info-make-ancient = Сделать Древним
-cmu-yautja-clan-info-demote-ancient = Снять статус Древнего
-cmu-yautja-clan-info-rank-updated = Ранг клана обновлён.
-cmu-yautja-clan-info-ancient-updated = Статус Древнего обновлён.
-cmu-yautja-clan-info-action-denied = Действие клана запрещено.
-cmu-yautja-clan-info-remove-member = Исключить из клана
-cmu-yautja-clan-info-member-moved = Членство в клане обновлено.
-cmu-yautja-clan-info-save-description = Сохранить описание
-cmu-yautja-clan-info-save-appearance = Сохранить имя/цвет
-cmu-yautja-clan-info-save-honor = Сохранить честь
-cmu-yautja-clan-info-delete-clan = Удалить клан
-cmu-yautja-clan-info-move-member = Переместить
-cmu-yautja-clan-info-purge-member = Очистить профиль
-cmu-yautja-clan-info-description-updated = Описание клана обновлено.
-cmu-yautja-clan-info-appearance-updated = Имя и цвет клана обновлены.
-cmu-yautja-clan-info-honor-updated = Честь клана обновлена.
-cmu-yautja-clan-info-member-purged = Профиль охотника очищен.
-cmu-yautja-clan-info-clan-deleted = Клан деактивирован.
-
 cmu-yautja-rank-badblood = Отступник
 cmu-yautja-crew-monitor-area-unknown = Неизвестная зона
 
@@ -99,11 +66,9 @@ cmu-yautja-bracer-locked = Наруч привязан к своему носи�
 cmu-yautja-bracer-locked-now = Вы блокируете наруч.
 cmu-yautja-bracer-unlocked-now = Вы разблокируете наруч.
 cmu-yautja-bracer-must-be-worn = Чтобы использовать эту функцию, охотничий наруч должен быть надет.
-cmu-yautja-translator-prompt = Переводчик наруча ждёт ваше сообщение.
 cmu-yautja-translator-window-title = Переводчик
 cmu-yautja-translator-placeholder = Введите переводимую трансляцию...
 cmu-yautja-translator-send = Транслировать
-cmu-yautja-translator-send-detail = Передать через ближайшие динамики переводчика.
 cmu-yautja-translator-power = Энергия {$charge} / {$max} - цена {$cost}
 cmu-yautja-translator-limit = {$count} / {$max}
 cmu-yautja-translator-speaker = переводчик
@@ -111,7 +76,6 @@ cmu-yautja-translator-verb = транслирует
 cmu-yautja-translator-popup = Переводчик передаёт: "{$message}"
 cmu-yautja-translator-chat = [color=#ff4d4d]Переводчик передаёт:[/color] "{$message}"
 cmu-yautja-bracer-menu-command-unavailable = Эта функция наруча недоступна.
-cmu-yautja-bracer-menu-command-cooldown = Эта функция наруча всё ещё перезаряжается.
 cmu-yautja-bracer-unlock-dead-verb = Разблокировать наруч мёртвого охотника
 cmu-yautja-bracer-lock-dead-verb = Заблокировать наруч мёртвого охотника
 cmu-yautja-bracer-id-deployed = Встроенный ID-чип выдвигается на место.
@@ -119,9 +83,6 @@ cmu-yautja-bracer-id-retracted = Встроенный ID-чип убираетс
 cmu-yautja-bracer-id-slot-blocked = Ваш слот ID заблокирован.
 cmu-yautja-bracer-id-failed = Встроенный ID-чип не смог развернуться.
 cmu-yautja-bracer-fabricator-cooldown = Фабрикатор наруча всё ещё перезаряжается.
-cmu-yautja-bracer-crystal-created = Наруч выращивает {$item}.
-cmu-yautja-bracer-human-crystal-created = Наруч выращивает {$item}.
-cmu-yautja-bracer-healing-capsule-created = Наруч печатает {$item}.
 cmu-yautja-bracer-healing-disabled = Синтез лечебных капсул наручем отключён.
 cmu-yautja-tech-random-works = Вы случайно запускаете функцию наруча.
 cmu-yautja-tech-random-function = Чужие элементы управления неверно считывают ваше касание.
@@ -195,21 +156,25 @@ cmu-yautja-action-voice-death-laugh = Голос: предсмертный см�
 cmu-yautja-action-voice-death-laugh-desc = Воспроизвести предсмертный смех яутжа.
 
 cmu-yautja-mark-window-title = Охотничьи метки
-cmu-yautja-mark-window-subtitle = Ближайшая добыча и обозначения чести в радиусе наруча.
-cmu-yautja-mark-section-command = Команда метки
-cmu-yautja-mark-section-targets = Доступные цели
-cmu-yautja-mark-refresh = Обновить
-cmu-yautja-mark-refresh-detail = Просканировать ближайшие цели.
-cmu-yautja-mark-apply = Применить
-cmu-yautja-mark-apply-detail = Пометить выбранную цель.
-cmu-yautja-mark-remove = Удалить
-cmu-yautja-mark-remove-detail = Очистить выбранную метку.
+cmu-yautja-mark-ui-targets = Цели
+cmu-yautja-mark-ui-dossier = Досье
+cmu-yautja-mark-ui-marks = Метки
+cmu-yautja-mark-ui-yours = Ваши метки
+cmu-yautja-mark-ui-designate = Назначить
+cmu-yautja-mark-ui-mark = Пометить
+cmu-yautja-mark-ui-change = Изменить
+cmu-yautja-mark-ui-remove = Снять
+cmu-yautja-mark-ui-in-reach = В досягаемости
+cmu-yautja-mark-ui-out-of-reach = Потеряна
+cmu-yautja-mark-ui-more = +{$count}
+cmu-yautja-mark-ui-pick-target = Выберите цель из списка.
+cmu-yautja-mark-ui-blocked-has = {$target} уже носит метку «{$kind}».
+cmu-yautja-mark-ui-blocked-reason = Для метки «{$kind}» нужна причина.
+cmu-yautja-mark-ui-ready = Готово: пометить {$target} как «{$kind}».
 cmu-yautja-mark-reason-placeholder = Необязательная причина
 cmu-yautja-mark-none = без метки
 cmu-yautja-mark-no-targets = В радиусе наруча нет подходящих целей.
 cmu-yautja-mark-target-summary = Целей в радиусе: {$count}.
-cmu-yautja-mark-target-detail = {$type} / {$marks}
-cmu-yautja-mark-selection = Выбрано: {$target}
 cmu-yautja-mark-selection-none = Цель не выбрана.
 cmu-yautja-target-xeno = ксено
 cmu-yautja-target-humanoid = гуманоид
@@ -248,21 +213,10 @@ cmu-yautja-thrall-bracer-unlocked-now = Вы разблокируете нару
 cmu-yautja-thrall-self-destruct-armed = Вы запустили таймер. Он подвёл вас.
 cmu-yautja-thrall-self-destruct-target = Ваш наруч раба начинает смертельный отсчёт!
 cmu-yautja-thrall-self-destruct-warning = Самоуничтожение наруча раба: {$seconds} секунд.
-cmu-yautja-thrall-self-destruct-cancelled = Вы отменяете самоуничтожение наруча раба {$target}.
 
 cmu-yautja-bracer-menu-title = Охотничий наруч
-cmu-yautja-bracer-menu-header = // ОХОТНИЧИЙ НАРУЧ //
-cmu-yautja-bracer-menu-subheader = Системы охотника, полевой фабрикатор и телеметрия потерянных технологий.
-cmu-yautja-bracer-menu-section-status = Состояние ядра
-cmu-yautja-bracer-menu-section-functions = Функции наруча
-cmu-yautja-bracer-menu-section-fabricator = Полевой фабрикатор
-cmu-yautja-bracer-menu-hunt-controls = Управление охотой
 cmu-yautja-bracer-menu-power = ЭНЕРГИЯ
-cmu-yautja-bracer-menu-lock = БЛОКИРОВКА
-cmu-yautja-bracer-menu-id = ID
-cmu-yautja-bracer-menu-destruct = САМОУНИЧТОЖЕНИЕ
 cmu-yautja-bracer-menu-thrall = РАБ
-cmu-yautja-bracer-menu-thrall-lock = БЛОКИРОВКА РАБА
 cmu-yautja-bracer-menu-power-value = {$charge} / {$max}
 cmu-yautja-bracer-menu-state-locked = ЗАБЛОКИРОВАНО
 cmu-yautja-bracer-menu-state-open = ОТКРЫТО
@@ -270,19 +224,10 @@ cmu-yautja-bracer-menu-state-deployed = РАЗВЁРНУТО
 cmu-yautja-bracer-menu-state-stowed = УБРАНО
 cmu-yautja-bracer-menu-state-armed = АКТИВИРОВАНО
 cmu-yautja-bracer-menu-state-standby = ОЖИДАНИЕ
-cmu-yautja-bracer-menu-state-no-signal = НЕТ СИГНАЛА
 cmu-yautja-bracer-menu-state-linked = СВЯЗАНО
 cmu-yautja-bracer-menu-state-unlinked = НЕ СВЯЗАНО
-cmu-yautja-bracer-menu-state-ready = ГОТОВО
-cmu-yautja-bracer-menu-thrall-none = НЕТ
-cmu-yautja-bracer-menu-thrall-linked = {$name} / СВЯЗАН
-cmu-yautja-bracer-menu-thrall-unlinked = {$name} / НЕ СВЯЗАН
 cmu-yautja-bracer-menu-marks = Метки
-cmu-yautja-bracer-menu-marks-detail = Установить охотничьи метки.
 cmu-yautja-bracer-menu-translator = Переводчик
-cmu-yautja-bracer-menu-translator-detail = Открыть ввод переводимой трансляции.
-cmu-yautja-bracer-menu-refresh = Обновить
-cmu-yautja-bracer-menu-refresh-detail = Принудительно обновить сканер.
 cmu-yautja-bracer-menu-toggle-lock = Блокировать
 cmu-yautja-bracer-menu-unlock = Разблокировать
 cmu-yautja-bracer-menu-toggle-id = ID-чип
@@ -303,29 +248,57 @@ cmu-yautja-bracer-menu-human-crystal-detail = Вырастить стабили�
 cmu-yautja-bracer-menu-capsule = Капсула
 cmu-yautja-bracer-menu-capsule-detail = Напечатать экстренное лекарство.
 cmu-yautja-bracer-menu-link-thrall = Связать раба
-cmu-yautja-bracer-menu-link-thrall-detail = Привязать наруч.
 cmu-yautja-bracer-menu-thrall-message = Передача
-cmu-yautja-bracer-menu-thrall-message-detail = Отправить по связи.
 cmu-yautja-bracer-menu-stun-thrall = Оглушить раба
-cmu-yautja-bracer-menu-stun-thrall-detail = Дистанционный разряд.
 cmu-yautja-bracer-menu-toggle-thrall-lock = Блокировка раба
-cmu-yautja-bracer-menu-toggle-thrall-lock-detail = Заблокировать наруч.
 cmu-yautja-bracer-menu-thrall-destruct = Уничтожить раба
-cmu-yautja-bracer-menu-thrall-destruct-detail = Связанный наруч.
-cmu-yautja-bracer-menu-cancel-thrall-destruct = Отменить уничтожение
 cmu-yautja-bracer-menu-tracker = ПОТЕРЯННЫЕ ТЕХНОЛОГИИ
-cmu-yautja-bracer-menu-tracker-core = ЯДРО
 cmu-yautja-bracer-menu-add-tracked-item = Добавить предмет
-cmu-yautja-bracer-menu-add-tracked-item-detail = Отслеживать предмет в активной руке.
 cmu-yautja-bracer-menu-remove-tracked-item = Удалить предмет
-cmu-yautja-bracer-menu-remove-tracked-item-detail = Перестать отслеживать предмет в активной руке.
-cmu-yautja-bracer-menu-tracker-summary = Отслеживается незаявленных сигналов: {$count}. Автообновление включено.
-cmu-yautja-bracer-menu-tracker-summary-grouped = Незаявленных сигналов: {$count} в локациях: {$locations}. Автообновление включено.
 cmu-yautja-bracer-menu-tracker-empty = На этой карте не найдено незаявленных технологий яутжа.
-cmu-yautja-bracer-menu-tracker-entry = {$direction} {$distance}м {$bearing}град :: {$name}
 cmu-yautja-bracer-menu-tracker-entry-detail = {$distance}м / азимут {$bearing}град
-cmu-yautja-bracer-menu-tracker-group = сигналов: {$count}
-cmu-yautja-bracer-menu-tracker-group-detail = {$distance}м / азимут {$bearing}град / {$signals}
+cmu-yautja-tracker-unknown-area = Неизвестно
+
+cmu-yautja-bracer-ui-tab-hunt = Охота
+cmu-yautja-bracer-ui-tab-thrall = Раб
+cmu-yautja-bracer-ui-tab-fabricator = Фабрикатор
+cmu-yautja-bracer-ui-tab-bracer = Наруч
+cmu-yautja-bracer-ui-marks-detail = Нанести или просмотреть охотничьи метки.
+cmu-yautja-bracer-ui-translator-detail = Передать сообщение, понятное добыче.
+cmu-yautja-bracer-ui-youngblood-detail = Дистанционно казнить молодого охотника, нарушившего кодекс чести.
+cmu-yautja-bracer-ui-link-detail = Связать свой наруч с наручем раба.
+cmu-yautja-bracer-ui-message-detail = Отправить сообщение на наруч раба.
+cmu-yautja-bracer-ui-thrall-lock-detail = Заблокировать или разблокировать наруч раба.
+cmu-yautja-bracer-ui-stun-detail = Ударить раба током через его наруч.
+cmu-yautja-bracer-ui-thrall-destruct-detail = Взорвать наруч раба. После подтверждения отмена невозможна.
+cmu-yautja-bracer-ui-no-thrall = Нет раба
+cmu-yautja-bracer-ui-fabricator-hint = Предмет появится в активной руке. Освободите её заранее.
+cmu-yautja-bracer-ui-lock-detail = Заблокированный наруч невозможно снять.
+cmu-yautja-bracer-ui-id-detail = Выдвинуть или убрать ID-чип наруча.
+cmu-yautja-bracer-ui-destruct-detail = Перед запуском потребуется подтверждение.
+cmu-yautja-bracer-ui-shown = Видно
+cmu-yautja-bracer-ui-hidden = Скрыто
+cmu-yautja-bracer-ui-on = Вкл.
+cmu-yautja-bracer-ui-off = Выкл.
+cmu-yautja-bracer-ui-blast-big = Большой
+cmu-yautja-bracer-ui-blast-small = Малый
+cmu-yautja-bracer-ui-id-tag = ID {$state}
+cmu-yautja-bracer-ui-core-armed = Ядро активировано {$time}
+cmu-yautja-bracer-ui-core-standby = Ядро в режиме ожидания
+cmu-yautja-bracer-ui-cost = {$cost} ед. энергии
+cmu-yautja-bracer-ui-offline = Недоступно
+cmu-yautja-bracer-ui-cycling = Подготовка {$time}
+cmu-yautja-bracer-ui-low-power = Нужно {$cost} ед. энергии
+cmu-yautja-bracer-ui-tracker-summary = Сигналов: {$count}
+cmu-yautja-bracer-ui-tracker-group = Сигналов: {$count}, {$names}
+cmu-yautja-bracer-ui-tracker-hand = Предмет в активной руке
+cmu-yautja-bracer-ui-nearest = Ближайший сигнал: {$distance} м, {$direction}, {$area}
+cmu-yautja-bracer-ui-nearest-none = Сигналов нет
+cmu-yautja-bracer-ui-bucket-grounds = Угодья
+cmu-yautja-bracer-ui-bucket-orbit = Орбита
+cmu-yautja-bracer-ui-bucket-low-orbit = Низ. орб.
+cmu-yautja-bracer-ui-bucket-fallen = Погибшие
+cmu-yautja-bracer-ui-bucket-tech = Техника
 
 cmu-yautja-mark-prey = Добыча
 cmu-yautja-mark-honored = Почётный
@@ -335,6 +308,23 @@ cmu-yautja-mark-thrall = Раб
 cmu-yautja-mark-student = Ученик
 cmu-yautja-mark-blooded = Окровавленный
 cmu-yautja-mark-unknown = Неизвестно
+cmu-yautja-mark-examine-unknown-hunter = неизвестный охотник
+cmu-yautja-mark-examine-prey = [color=orange]На {$target} охотится {$hunter}.[/color]
+cmu-yautja-mark-examine-dishonored = [color=red]{$hunter} отметил(а) {$target} как бесчестного{ $hasReason ->
+    [yes] {" "}за «{$reason}».
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-honored = [color=green]{$hunter} почтил(а) {$target}{ $hasReason ->
+    [yes] {" "}за «{$reason}».
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-thrall = [color=green]{$hunter} сделал(а) {$target} траллом{ $hasReason ->
+    [yes] {" "}за «{$reason}».
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-gear-carrier = [color=red]{$hunter} отметил(а) {$target} как носителя снаряжения.[/color]
+cmu-yautja-mark-examine-student = [color=green]{$target} обучается у {$hunter}.[/color]
+cmu-yautja-mark-examine-blooded = [color=green]{$hunter} посвятил(а) {$target} кровью.[/color]
 
 cmu-yautja-recall-none = Ни один ваш умный диск не отвечает на зов.
 cmu-yautja-recall-success = {$item} рывком возвращается к вам.
@@ -344,7 +334,6 @@ cmu-yautja-disc-owner-denied = Умный диск настроен на дру�
 cmu-yautja-disc-stolen-activated = Украденный умный диск отвергает ваше касание и нападает на вас!
 cmu-yautja-disc-stolen-active = Активный умный диск вырывается из вашей руки.
 cmu-yautja-caster-mode-set = Режим плазменного кастера установлен: {$mode}.
-cmu-yautja-caster-mode-next = Плазменный кастер переключается в режим: {$mode}.
 cmu-yautja-caster-examine-mode = Текущий режим плазменного кастера: {$mode}. Цена энергии: {$power}.
 cmu-yautja-caster-mode-stun = оглушающие заряды
 cmu-yautja-caster-mode-immobilizer = плазменные иммобилизаторы
@@ -384,6 +373,7 @@ cmu-yautja-butcher-stage-complete = Вы завершаете этап разд�
 cmu-yautja-butcher-finished = Вы заканчиваете разделывать {$target}.
 cmu-yautja-butcher-part-finished = Вы заканчиваете отделять часть от {$target}.
 cmu-yautja-butcher-part-missing = У жертвы нет этой части тела.
+cmu-yautja-butcher-part-failed = Эта часть не поддаётся.
 cmu-yautja-butcher-already-finished = Этот труп уже разделан.
 cmu-yautja-prey-claim-complete = {$hunter} завершает охоту на {$target} и забирает {$kind}.
 cmu-yautja-trophy-target-alive = Добыча ещё жива.
@@ -396,6 +386,9 @@ cmu-yautja-trophy-harvest-finished-others = {$hunter} вырывает {$trophy}
 cmu-yautja-polish-denied = Вы не понимаете этот ритуальный инструмент.
 cmu-yautja-polish-already = Этот трофей уже отполирован.
 cmu-yautja-polish-finished = Вы полируете {$trophy}.
+cmu-yautja-polish-not-bone = На {$trophy} нет кости, которую можно отполировать.
+cmu-yautja-rag-wipe-start = Вы начинаете стирать кровь с {$target}.
+cmu-yautja-rag-wiped = Вы начисто вытираете {$target}.
 cmu-yautja-trophy-source-unknown = неизвестная добыча
 cmu-yautja-trophy-polished-yes = отполирован
 cmu-yautja-trophy-polished-no = не отполирован
@@ -425,8 +418,8 @@ cmu-yautja-ritual-examine-captive = Заявлен как ритуальная �
 cmu-yautja-ritual-examine-duel = Связан активной ритуальной дуэлью с {$hunter}.
 cmu-yautja-self-destruct-armed = Таймер запущен. Пусть путь в великие охотничьи угодья будет быстрым.
 cmu-yautja-self-destruct-warning = Самоуничтожение наруча: {$seconds} секунд.
-cmu-yautja-self-destruct-cancelled = Самоуничтожение наруча отменено.
 cmu-yautja-self-destruct-dead = Наруч не отвечает мёртвому охотнику.
+cmu-yautja-vitals-failing = Жизненные показатели падают, вы недолго продержитесь на ногах!
 cmu-yautja-trap-arm-failed = Здесь нельзя установить ловушку.
 cmu-yautja-trap-armed = Вы взводите охотничью ловушку.
 cmu-yautja-trap-disarmed = {$trap} обезврежена.
@@ -506,8 +499,6 @@ cmu-yautja-abomination-action-toggle-frenzy-desc = Переключить дик
 
 # Missing entries synced from en-US
 
-cmu-yautja-bracer-hunting-trap-created = Наруч печатает {$item}.
-
 cmu-yautja-bracer-menu-hunting-trap = Охотничья ловушка
 
 cmu-yautja-bracer-menu-hunting-trap-detail = Распечатайте охотничью ловушку.
@@ -564,9 +555,6 @@ ent-CMUActionYautjaStunThrall = Оглушить Тралла
 
 ent-CMUActionYautjaSelfDestructThrall = Тралл Самоуничтожение
     .desc = Активируйте или отмените самоуничтожение связанного с вами наруча раба.
-
-ent-CMUActionYautjaRecall = Вызов диска
-    .desc = Вспомните ближайший смарт-диск под рукой.
 
 ent-CMUActionYautjaSelfDestruct = Наруч самоуничтожения
     .desc = Активируйте или отмените отложенный заряд самоуничтожения наручей.
@@ -636,3 +624,27 @@ cmu-yautja-hunt-call-elite-mixed-larger = Элитные смешанные фр
 cmu-yautja-power-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
 cmu-yautja-spike-launcher-examine-spikes = Текущий боезапас: [bold]{$count}/{$capacity}[/bold] шипов.
 cmu-yautja-plasma-weapon-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
+
+ent-CMUActionYautjaLeap = прыжок
+    .desc = Быстро прыгнуть в ближайшее место.
+
+cmu-yautja-lobby-cape-color = Цвет плаща
+cmu-yautja-lobby-cape-color-help = Красит ткань каждого вашего плаща: при появлении и из стойки снаряжения.
+cmu-yautja-lobby-cape-color-fixed = Костяные плащи сохраняют свой цвет.
+cmu-yautja-cape-mount-occupied = К {$armor} уже пристёгнут плащ.
+cmu-yautja-cape-mount-attached = Вы пристёгиваете {$cape} к {$armor}.
+cmu-yautja-cape-mount-remove = Отстегнуть плащ
+cmu-yautja-cape-mount-removed = Вы отстёгиваете {$cape}.
+cmu-yautja-cape-mount-examine = К нему пристёгнут {$cape}.
+cmu-yautja-cape-mount-hint = Его можно пристегнуть к клановой броне, чтобы освободить спину.
+cmu-yautja-pounce-body-slam-self = {$yautja} отбрасывает нас ударом тела!
+cmu-yautja-pounce-body-slam-others = {$yautja} отбрасывает {$xeno} ударом тела!
+ent-CMUActionYautjaJoinHunt = Присоединиться к охоте
+    .desc = Присоединиться к идущей охоте в роли яутжи. Только раз за раунд.
+cmu-yautja-ghost-join-hunt-title = Присоединиться к охоте
+cmu-yautja-ghost-join-hunt-confirm = Подтвердите вступление в охоту. Вы присоединитесь как яутжа ранга «{$rank}».
+cmu-yautja-ghost-join-hunt-not-whitelisted = Вы не в вайтлисте! Подать заявку на вайтлист яутжи можно на форуме.
+cmu-yautja-ghost-join-hunt-no-hunt = В этом раунде нет охоты! Может, в следующем.
+cmu-yautja-ghost-join-hunt-already = Вы уже были яутжей! Дайте шанс другим.
+cmu-yautja-ghost-join-hunt-full = Свободных мест охотников нет. Лидеры, советники и древние в лимит не входят.
+cmu-yautja-ghost-join-hunt-failed = Не удалось присоединиться к охоте.

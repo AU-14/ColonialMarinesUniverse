@@ -39,7 +39,7 @@ public sealed partial class SkillPamphletSystem : EntitySystem
             TryComp(args.User, out UsedSkillPamphletComponent? used) &&
             used.Used)
         {
-            _popup.PopupClient(Loc.GetString("rmc-pamphlets-limit-reached"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-pamphlets-limit-reached"), ent, args.User);
             return;
         }
 
@@ -48,7 +48,7 @@ public sealed partial class SkillPamphletSystem : EntitySystem
         {
             if (_whitelist.IsWhitelistFail(whitelist.Restrictions, args.User))
             {
-                _popup.PopupClient(Loc.GetString(whitelist.Popup), ent, args.User);
+                _popup.PopupEntity(Loc.GetString(whitelist.Popup), ent, args.User);
                 return;
             }
         }
@@ -71,7 +71,7 @@ public sealed partial class SkillPamphletSystem : EntitySystem
         if (failed)
         {
             if (popup != null)
-                _popup.PopupClient(Loc.GetString(popup), ent, args.User);
+                _popup.PopupEntity(Loc.GetString(popup), ent, args.User);
 
             return;
         }
@@ -110,7 +110,7 @@ public sealed partial class SkillPamphletSystem : EntitySystem
 
         if (ent.Comp.GaveSkill || gaveLanguage || ent.Comp.BypassSkill)
         {
-            _popup.PopupClient(Loc.GetString("rmc-pamphlets-reading"), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-pamphlets-reading"), args.User, args.User);
 
             var usedSkillComp = EnsureComp<UsedSkillPamphletComponent>(args.User);
             if (ent.Comp.GiveIcon != null)
@@ -146,7 +146,7 @@ public sealed partial class SkillPamphletSystem : EntitySystem
             return;
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-pamphlets-already-know"), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("rmc-pamphlets-already-know"), ent, args.User);
     }
 
     private void OnGetMarineIcon(Entity<UsedSkillPamphletComponent> ent, ref GetMarineIconEvent args)

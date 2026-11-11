@@ -149,7 +149,7 @@ cmu-reagent-property-desc-oxidizing = The chemical is oxidizing, increasing the 
 cmu-reagent-property-name-flowing = Flowing
 cmu-reagent-property-desc-flowing = The chemical is the opposite of viscous, and it tends to spill everywhere. This could probably be used to expand the radius of a chemical fire.
 cmu-reagent-property-name-explosive = Explosive
-cmu-reagent-property-desc-explosive = The chemical is highly explosive. Do not ignite. Careful when handling, sensitivity is based off the OD threshold, which can lead to spontaneous detonation.
+cmu-reagent-property-desc-explosive = The chemical is highly explosive. It detonates once heated past its ignition temperature; higher levels detonate cooler and with a larger blast.
 cmu-reagent-property-name-photosensitive = Photosensitive
 cmu-reagent-property-desc-photosensitive = Reacts with any amount of light. Can be useful to create light-sensitive objects. Not safe to administer. Supercharges photosynthesis, treated plants are able to be harvested repeatedly.
 cmu-reagent-property-name-crystallization = Crystallization
@@ -205,3 +205,6 @@ cmu-reagent-property-name-duration = Duration
 cmu-reagent-property-desc-duration = Controls the duration of a fire, using unknown means.
 cmu-reagent-property-name-encephaloprasive = Encephaloprasive
 cmu-reagent-property-desc-encephaloprasive = Drastically increases the amplitude of Gamma and Beta brain waves, allowing the host to broadcast their mind.
+
+cmu-reagent-property-name-irritating = Irritating
+cmu-reagent-property-desc-irritating = Inflames mucous membranes on contact, causing coughing, tearing and temporary blindness. Blocked by gas masks and internals. The active ingredient of tear gas.

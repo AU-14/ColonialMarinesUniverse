@@ -21,7 +21,7 @@ public sealed partial class TemporaryBlurryVision : EntityEffectBase<TemporaryBl
 public sealed partial class TemporaryBlurryVisionEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, TemporaryBlurryVision>
 {
-    [Dependency] private readonly CMUTemporaryBlurryVisionSystem _blurryVision = default!;
+    [Dependency] private CMUTemporaryBlurryVisionSystem _blurryVision = default!;
 
     protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<TemporaryBlurryVision> args)
     {

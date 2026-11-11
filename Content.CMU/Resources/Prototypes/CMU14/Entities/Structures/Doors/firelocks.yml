@@ -1,0 +1,64 @@
+# Firelocks with cm13 sprites that seal themselves when the air starts escaping (see CMUFirelockSealSystem). They run
+# without power, and GOVFOR/OPFOR engineers can open them by hand; anyone else needs a crowbar once they've sealed.
+- type: entity
+  parent: Firelock
+  id: CMUFirelock
+  suffix: CMU
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Doors/firelock_cm13.rsi
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+      visible: false
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: bolted_unlit
+      shader: unshaded
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+      visible: false
+    - state: panel_open
+      sprite: Structures/Doors/Airlocks/Effects/airlock-effects.rsi
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+    # cm13 firelocks have no glowing warning lights; these layers stay blank so the visualizer has something to toggle.
+    - state: emergency_unlit
+      visible: false
+      map: ["enum.FirelockVisualLayersPressure.Base"]
+    - state: emergency_unlit
+      visible: false
+      map: ["enum.FirelockVisualLayersTemperature.Base"]
+  - type: RemoveComponents
+    components:
+    - type: ApcPowerReceiver
+    - type: ExtensionCableReceiver
+    - type: DeviceNetworkRequiresPower
+    - type: PointLight # the red glow while holding back pressure
+  - type: AccessReader
+    access: [["AU14AccessGovforEngineering"], ["AU14AccessOpforEngineering"]]
+  - type: CMUFirelockSeal
+
+- type: entity
+  parent: CMUFirelock
+  id: CMUFirelockGlass
+  name: glass firelock
+  components:
+  - type: Occluder
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        mask:
+        - Impassable
+        - HighImpassable
+        layer:
+        - GlassAirlockLayer
+  - type: Door
+    occludes: false
+  - type: Construction
+    node: FirelockGlass

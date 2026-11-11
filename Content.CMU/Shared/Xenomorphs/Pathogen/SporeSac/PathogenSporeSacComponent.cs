@@ -46,7 +46,9 @@ public sealed partial class CMUPathogenSporeSacComponent : Component
     public TimeSpan? BurstAt;
 
     /// <summary>
-    /// The xeno that placed this sac (for cleanup + hive lookup)
+    /// The xeno that placed this sac (for cleanup + hive lookup). Server-only and may outlive
+    /// that xeno, so it must not auto-network: PVS state building would resolve the deleted
+    /// placer every tick.
     /// </summary>
     [DataField]
     public EntityUid? Placer;

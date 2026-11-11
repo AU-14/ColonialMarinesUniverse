@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;

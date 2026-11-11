@@ -1,0 +1,4 @@
+- type: shader
+  id: CMUMohawkApproachShadow
+  kind: source
+  path: /Textures/CMU14/Effects/Dropship/mohawk_shadow.swsl

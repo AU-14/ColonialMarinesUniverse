@@ -36,7 +36,6 @@ using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -67,7 +66,6 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private TacticalMapSystem _tacticalMap = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -164,6 +162,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         InitializePhone();
         InitializeExpert();
+        InitializeDamage();
     }
 
     private void OnRadioReceive(Entity<ANPRCRadioComponent> ent, ref RadioReceiveEvent args)
@@ -324,7 +323,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
         if (TryComp(ent.Owner, out RTORelayComponent? relay))
         {
-            relay.Active = true;
+            relay.Active = !ent.Comp.WiresRipped;
             Dirty(ent.Owner, relay);
         }
 
@@ -516,6 +515,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
             anchor.Channels.Add(channel);
         }
+        _range.RefreshAnchorChannels((ent.Owner, anchor));
     }
 
     public void StartPlant(Entity<ANPRCRadioComponent> ent, EntityUid user)

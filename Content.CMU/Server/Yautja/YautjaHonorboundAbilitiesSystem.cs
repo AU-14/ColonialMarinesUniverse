@@ -49,6 +49,7 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private YautjaCloakSystem _cloak = default!;
+    [Dependency] private CMUYautjaEffectsSystem _effects = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 
@@ -58,20 +59,25 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, YautjaHuntingLeapActionEvent>(OnHuntingLeap);
         SubscribeLocalEvent<YautjaHuntingLeapingComponent, ThrowDoHitEvent>(OnLeapHit);
         SubscribeLocalEvent<YautjaHuntingLeapingComponent, LandEvent>(OnLeapLand);
+        SubscribeLocalEvent<YautjaHuntingLeapingComponent, StopThrowEvent>(OnLeapStopped);
     }
 
     public void GrantActions(Entity<YautjaComponent> ent)
     {
-        if (HasComp<YautjaBadBloodComponent>(ent))
+
+        if (!HasComp<YautjaBadBloodComponent>(ent))
             return;
 
-        _actions.AddAction(ent.Owner, ref ent.Comp.HonorRoarAction, ent.Comp.HonorRoarActionId);
-        _actions.AddAction(ent.Owner, ref ent.Comp.HuntingLeapAction, ent.Comp.HuntingLeapActionId);
+        // MapInit and random-humanoid spawn both land here; grant each action once
+        if (ent.Comp.HonorRoarAction == null)
+            _actions.AddAction(ent.Owner, ref ent.Comp.HonorRoarAction, ent.Comp.HonorRoarActionId);
+        if (ent.Comp.HuntingLeapAction == null)
+            _actions.AddAction(ent.Owner, ref ent.Comp.HuntingLeapAction, ent.Comp.HuntingLeapActionId);
     }
 
     private void OnHonorRoar(Entity<YautjaComponent> hunter, ref YautjaHonorRoarActionEvent args)
     {
-        if (args.Handled || args.Performer != hunter.Owner || HasComp<YautjaBadBloodComponent>(hunter))
+        if (args.Handled || args.Performer != hunter.Owner || !HasComp<YautjaBadBloodComponent>(hunter))
             return;
 
         args.Handled = true;
@@ -91,10 +97,12 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
             }
 
             _cameraShake.ShakeCamera(target, 8, 4);
+            _effects.Motion(target, CMUYautjaEffect.Flinch, CMUYautjaPresentation.RoarDuration);
             _screech.Deafen(hunter.Owner, target.Owner, hunter.Comp.HonorRoarDuration);
         }
 
-        SpawnAttachedTo("CMEffectScreech", hunter.Owner.ToCoordinates());
+        _effects.Motion(hunter, CMUYautjaEffect.Roar, CMUYautjaPresentation.RoarDuration);
+        _effects.Emit(CMUYautjaEffect.Roar, hunter.Owner.ToCoordinates(), CMUYautjaPresentation.RoarDuration, hunter);
         _adminLog.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(hunter.Owner):player} used their honor roar");
     }
@@ -103,7 +111,7 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
     {
         if (args.Handled ||
             args.Performer != hunter.Owner ||
-            HasComp<YautjaBadBloodComponent>(hunter) ||
+            !HasComp<YautjaBadBloodComponent>(hunter) ||
             !CanAttack(hunter.Owner, args.Target) ||
             HasComp<YautjaHuntingLeapingComponent>(hunter) ||
             !_melee.TryGetWeapon(hunter.Owner, out var weapon, out _) ||
@@ -112,7 +120,6 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
             return;
         }
 
-        args.Handled = true;
         _cloak.ForceDecloak(hunter.Owner);
         _pulling.TryStopAllPullsFromAndOn(hunter.Owner);
 
@@ -121,11 +128,25 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
         active.Weapon = weapon;
         active.Resolved = false;
 
-        _obstacleSlamming.MakeImmune(hunter.Owner, 0.5f);
-        _throwing.TryThrow(hunter.Owner,
-            direction.Normalized() * hunter.Comp.HuntingLeapRange,
-            hunter.Comp.HuntingLeapSpeed,
-            animated: false);
+        // Land in striking range instead of launching through the target at maximum range.
+        // The flight must last long enough for the replicated body arc to be visible.
+        var travelDistance = MathF.Max(0.1f, direction.Length() - 1f);
+        var flightTime = MathF.Max(travelDistance / hunter.Comp.HuntingLeapSpeed,
+            (float) hunter.Comp.HuntingLeapMinimumFlightTime.TotalSeconds);
+        _obstacleSlamming.MakeImmune(hunter.Owner, flightTime + 0.25f);
+        if (!_throwing.TryThrow(hunter.Owner,
+                direction.Normalized() * travelDistance,
+                travelDistance / flightTime,
+                animated: false,
+                doSpin: false))
+        {
+            RemComp<YautjaHuntingLeapingComponent>(hunter);
+            return;
+        }
+
+        args.Handled = true;
+        _transform.SetWorldRotation(hunter, direction.ToWorldAngle());
+        _effects.Motion(hunter, CMUYautjaEffect.Leap, flightTime);
 
         if (_transform.GetMapCoordinates(hunter).InRange(_transform.GetMapCoordinates(args.Target), 1.25f))
             ResolveLeapStrike((hunter.Owner, active));
@@ -142,6 +163,7 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
 
     private void OnLeapLand(Entity<YautjaHuntingLeapingComponent> hunter, ref LandEvent args)
     {
+        _effects.Land(hunter);
         if (!TerminatingOrDeleted(hunter.Comp.Target) &&
             _transform.GetMapCoordinates(hunter).InRange(_transform.GetMapCoordinates(hunter.Comp.Target), 1.5f))
         {
@@ -151,12 +173,20 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
         RemCompDeferred<YautjaHuntingLeapingComponent>(hunter);
     }
 
+    private void OnLeapStopped(Entity<YautjaHuntingLeapingComponent> hunter, ref StopThrowEvent args)
+    {
+        // Pulls and interrupted throws can stop without raising LandEvent.
+        _effects.Land(hunter);
+        RemCompDeferred<YautjaHuntingLeapingComponent>(hunter);
+    }
+
     private void ResolveLeapStrike(Entity<YautjaHuntingLeapingComponent> hunter)
     {
         if (hunter.Comp.Resolved || !CanAttack(hunter.Owner, hunter.Comp.Target))
             return;
 
         hunter.Comp.Resolved = true;
+        _effects.Land(hunter);
 
         if (TryComp(hunter.Owner, out ThrownItemComponent? thrown) &&
             TryComp(hunter.Owner, out PhysicsComponent? physics))

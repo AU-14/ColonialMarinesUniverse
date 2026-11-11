@@ -1,0 +1,21 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed several movement, ammunition, recycling, lathe, shuttle and sentry-camera
+    issues.
+  type: Fix
+- message: Fixed gas loss and duplication when blocking and reopening tiles.
+  type: Fix
+- message: Rockets now trigger at their aimed stopping point, and hijack pipe warnings
+    remain until their burst.
+  type: Fix
+- message: Added guidebook Back/Forward navigation with remembered page searches and
+    scroll positions.
+  type: Add
+- message: Ordinary handheld radios now support a receive-only mode.
+  type: Add
+- message: Health scanners distinguish critical overdoses, and options refresh when
+    settings change.
+  type: Tweak
+time: '2026-10-30T14:05:14.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2377

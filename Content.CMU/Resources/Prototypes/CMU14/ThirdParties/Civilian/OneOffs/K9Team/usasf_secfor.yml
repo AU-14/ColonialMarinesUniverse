@@ -1,0 +1,139 @@
+# The K9 call-in for UA forces: same dog and medical kit as the civilian S&R team, but the handler is
+# US Aerospace Force Security Forces.
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUSArmy
+  id: CMUIntelThirdPartyK9HandlerUSASF
+  name: USASF Security Forces K9 Handler
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-usasf-k9handler
+    description: cmu-job-description-usasf-k9handler
+    job: CMUJobUSASFK9Handler
+    rules: cmu-job-rules-usasf-k9handler
+    raffle:
+      settings: short
+  - type: Skills
+    preset: AU14SkillPresetPlatoonHospitalCorpsman
+  - type: K9Handler
+
+- type: job
+  parent: AU14Jobk9handlerBase
+  id: CMUJobUSASFK9Handler
+  roundForce: USASF
+  name: cmu-job-name-usasf-k9handler
+  description: cmu-job-description-usasf-k9handler
+  startingGear: CMUGearUSASFK9Handler
+  playTimeTracker: AU14JobThirdPartyK9Handler
+  spawnMenuRoleName: cmu-job-name-usasf-k9handler
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    AU14RankUSASFTechnicalSergeant:
+      entity: AU14ChevronUSASFTechnicalSergeant
+      requirements: []
+
+- type: startingGear
+  id: CMUGearUSASFK9Handler
+  equipment:
+    jumpsuit: AU14USASFSecForUniform
+    outerClothing: AU14USASFSECFORChestrig
+    head: AU14USASFSECFORBeret
+    id: CMUIDCardUSASFK9Handler
+    ears: AU14HeadsetUSArmyERT
+    eyes: RMCGlassesAviators
+    shoes: CMBootsBlackFilled
+    neck: RMCWhistle
+    gloves: CMHandsBlackMarine
+    belt: RMCBeltHolsterPistol
+    pocket1: RMCPouchMedkitPMCFilled
+    pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
+    back: AU14TechBackpackMarine
+    suitstorage: CMUWeaponRifleXM24AStandard
+  storage:
+    belt:
+    - AU14WeaponPistolM4A4
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    back:
+    # The chest rig only takes small items, so the rifle magazines ride in the pack.
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    - RMCMagazineRifleL42A
+    - RMCGlassesMedicalHUDGlasses
+    - CMBurnKit10
+    - CMBurnKit10
+    - CMTraumaKit10
+    - CMTraumaKit10
+    - CMPillCanisterBicaridine
+    - CMPillCanisterKelotane
+    - CMPillCanisterDexalin
+    - CMPillCanisterDylovene
+    - CMPillCanisterInaprovaline
+    - CMPillCanisterTricordrazine
+    - RMCPillCanisterIron
+    - AU14IVFoldableFolded
+    - AU14CMDefibrillator
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUSASFK9Handler
+  name: USASF K9 handler ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUSASFK9Handler
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: partySpawn
+  id: CMUIntelThirdPartyK9USASFSpawn
+  leadersToSpawn:
+    CMUIntelThirdPartyK9HandlerUSASF: 1
+  gruntsToSpawn:
+    AU14MobK9BagMedicGhostRole: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUIntelThirdPartyK9USASF
+  partyspawn: CMUIntelThirdPartyK9USASFSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
+  weight: 1
+  minplayers: 500
+  maxplayers: 600
+  ghostsNeeded: 600
+  roundstart: false
+
+# XM24A loaded with standard rounds instead of HEAP.
+- type: entity
+  parent: CMUWeaponRifleXM24A
+  id: CMUWeaponRifleXM24AStandard
+  suffix: Standard ammo
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineRifleL42A
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/l42_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineRifleL42A
+          - RMCMagazineRifleL42AAP
+          - RMCMagazineRifleL42AExtended
+          - RMCMagazineRifleL42AWP
+          - RMCMagazineRifleL42AIncendiary
+          - CMUMagazineRifleXM24AHEAP

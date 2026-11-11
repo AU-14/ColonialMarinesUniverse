@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared._RMC14.Roles; // CMU14
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
@@ -77,7 +78,14 @@ public sealed partial class RankSystem : SharedRankSystem
         ApplyJobRank(ev.Mob);
     }
 
-    public ProtoId<JobPrototype>? GetJobId(EntityUid mob) => _spawnData.TryGetValue(mob, out var ev) ? ev.JobId : null;
+    // CMU14 method: ghost-role spawns retain their job in OriginalRole instead of PlayerSpawnComplete.
+    public ProtoId<JobPrototype>? GetJobId(EntityUid mob)
+    {
+        if (_spawnData.TryGetValue(mob, out var ev) && ev.JobId is { } job)
+            return job;
+
+        return TryComp<OriginalRoleComponent>(mob, out var original) ? original.Job : null;
+    }
 
     public void ReapplyJobRank(EntityUid mob)
     {

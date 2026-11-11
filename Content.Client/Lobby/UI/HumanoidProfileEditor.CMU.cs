@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics; // CMU14
 using Content.Client._RMC14.NamedItems;
 // cmu edit start
 using Content.Client.Administration.UI.CustomControls;
@@ -9,7 +10,12 @@ using Content.Client.Message;
 using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.CharacterDescription;
+using Content.Shared.CMU14.Medical.Blood; // CMU14
 using Content.Shared.CMU14.Roles;
+// cmu edit start
+using Content.Client.CMU14.Interface;
+using Content.Shared.CMU14.Squads.Foxtrot;
+// cmu edit end
 using Content.Shared._RMC14.LinkAccount;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
@@ -130,6 +136,11 @@ public sealed partial class HumanoidProfileEditor
             SetOrigin(args.Id == 0 ? null : _origins[args.Id - 1].ID);
         };
 
+        // cmu edit start
+        InitializeReligion();
+        InitializeGearFlavor();
+        // cmu edit end
+
         InitializeCharacterDescription();
         InitializeRegulationAppearance();
 
@@ -155,6 +166,11 @@ public sealed partial class HumanoidProfileEditor
                 || team.Group != "GOVFOR")
                 continue;
 
+            // cmu edit start: Foxtrot is joined through its own opt-in
+            if (squadProto.HasComp<CMUFoxtrotSquadComponent>(_componentFactory))
+                continue;
+            // cmu edit end
+
             SquadPreferenceButton.AddItem(squadProto.Name, i + 1);
         }
 
@@ -172,12 +188,21 @@ public sealed partial class HumanoidProfileEditor
         };
 
         PlaytimePerksButton.OnPressed += args => SetPlaytimePerks(args.Button.Pressed);
+        // cmu edit start
+        FoxtrotSquadOptInButton.OnPressed += args =>
+        {
+            Profile = Profile?.WithFoxtrotSquadOptIn(args.Button.Pressed);
+            UpdateFoxtrotSquadOptIn();
+            SetDirty();
+        };
+        UpdateFoxtrotSquadOptIn();
+        // cmu edit end
         XenoPrefix.OnTextChanged += args => SetXenoPrefix(args.Text);
         XenoPostfix.OnTextChanged += args => SetXenoPostfix(args.Text);
 
         RefreshThreatPreferences();
         // CMU14: Force on Force roles, hijacking, announcements and identification.
-        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        UpdateEventSideControls(); // CMU14
         FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         InitializeNamedItems();
         CrtLobbyTheme.Apply(this);
@@ -233,6 +258,17 @@ public sealed partial class HumanoidProfileEditor
         {
             BuildButton.SelectId(args.Id);
             SetBuild((BuildType)args.Id);
+        };
+
+        // CMU14: blood type
+        foreach (var bloodType in Enum.GetValues<CMUBloodType>())
+            BloodTypeButton.AddItem(CMUBloodTypes.Name(bloodType), (int)bloodType);
+
+        BloodTypeButton.OnItemSelected += args =>
+        {
+            BloodTypeButton.SelectId(args.Id);
+            Profile = Profile?.WithBloodType((CMUBloodType)args.Id);
+            SetDirty();
         };
 
         HideMetaInformationButton.OnToggled += args =>
@@ -329,21 +365,30 @@ public sealed partial class HumanoidProfileEditor
         DistressSignalTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-government-jobs-tab"));
         DistressSignalTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
         DistressSignalTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+        ForceOnForceTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-military-jobs-tab"));
+        ForceOnForceTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-colony-jobs-tab"));
     }
 
     private void UpdateCmuControls()
     {
         // CMU14: Force on Force roles, hijacking, announcements and identification.
-        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        UpdateEventSideControls(); // CMU14
         FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         MarkPreviewJobsDirty();
         UpdateRegulationHairPickers();
         UpdateAllegianceControls();
         UpdateOriginControls();
+        // cmu edit start
+        UpdateReligionControls();
+        UpdateGearFlavorControls();
+        // cmu edit end
         UpdateArmorPreferenceControls();
         UpdateSquadPreferenceControls();
         UpdateNamedItems();
         UpdatePlaytimePerks();
+        // cmu edit start
+        UpdateFoxtrotSquadOptIn();
+        // cmu edit end
         UpdateCharacterDescriptionControls();
         UpdateXenoPrefix();
         UpdateXenoPostfix();
@@ -492,7 +537,8 @@ public sealed partial class HumanoidProfileEditor
         var previousSignature = _previewJobSignature;
         _previewJobs.Clear();
         if (Profile != null)
-            _previewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(Profile, _prototypeManager));
+            _previewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(EventProfile()!, _prototypeManager)
+                .Where(entry => !EventAccess.IsLocked(entry.Job.ID))); // CMU14
 
         _previewJobSignature = LobbyHighJobPreview.GetSignature(_previewJobs);
         _previewJobsDirty = false;
@@ -637,10 +683,15 @@ public sealed partial class HumanoidProfileEditor
         SetDirty();
     }
 
+    // CMU14 method: keep the Character Records build and visible body in sync.
     private void SetBuild(BuildType value)
     {
-        Profile = Profile?.WithBuild(value);
-        SetDirty();
+        if (Profile is null)
+            return;
+
+        Profile = Profile.WithBuild(value);
+        _markingsModel.Markings = Profile.Appearance.Markings;
+        ReloadPreview();
     }
 
     private void SetHideMetaInformation(bool value)
@@ -717,6 +768,21 @@ public sealed partial class HumanoidProfileEditor
         NamedItems.Sentry.Text = Profile?.NamedItems.SentryName ?? string.Empty;
     }
 
+    // cmu edit start
+    /// <summary>
+    /// The opt-in uses the lobby ready toggle's two looks, so on and off read at a glance.
+    /// </summary>
+    private void UpdateFoxtrotSquadOptIn()
+    {
+        var optedIn = Profile?.FoxtrotSquadOptIn ?? false;
+        CmuReadyToggle.Apply(FoxtrotSquadOptInButton, optedIn);
+        FoxtrotSquadOptInButton.Pressed = optedIn;
+        FoxtrotSquadOptInButton.Text = Loc.GetString(optedIn
+            ? "cmu-humanoid-profile-editor-foxtrot-squad-opted-in"
+            : "cmu-humanoid-profile-editor-foxtrot-squad-opted-out");
+    }
+    // cmu edit end
+
     private void UpdatePlaytimePerks()
     {
         PlaytimePerksButton.Pressed = Profile?.PlaytimePerks ?? true;
@@ -737,6 +803,7 @@ public sealed partial class HumanoidProfileEditor
         CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);
         GeneralRecordEdit.TextRope = new Rope.Leaf(Profile?.GeneralRecord ?? string.Empty);
         BuildButton.SelectId((int)(Profile?.Build ?? BuildType.Average));
+        BloodTypeButton.SelectId((int)(Profile?.BloodType ?? CMUBloodType.OPositive)); // CMU14
         HideMetaInformationButton.Pressed = Profile?.HideMetaInformation ?? false;
         UpdateHideMetaInformationButtonText();
 
@@ -876,7 +943,7 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshSynthetic()
     {
-        SyntheticContainer.DisposeAllChildren();
+        SyntheticContainer.ReleaseChildren();
         var selector = new RequirementsSelector { Margin = new Thickness(3f, 3f, 3f, 0f) };
         selector.Setup(
             [("humanoid-profile-editor-synthetic-yes-button", 0),
@@ -903,16 +970,82 @@ public sealed partial class HumanoidProfileEditor
             selector.UnlockRequirements();
         }
 
+        // CMU14 Synthetic Character Preferences Begin
+        var generationRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            Margin = new Thickness(3f, 3f, 3f, 0f),
+            Visible = Profile?.Synthetic == true,
+        };
+        generationRow.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-profile-editor-synthetic-generation-label"),
+        });
+        generationRow.AddChild(new Control { HorizontalExpand = true });
+
+        var generationSelector = new OptionButton { MinWidth = 140 };
+        for (var generation = HumanoidCharacterProfile.MinSyntheticGeneration;
+             generation <= HumanoidCharacterProfile.MaxSyntheticGeneration;
+             generation++)
+        {
+            generationSelector.AddItem(
+                Loc.GetString($"cmu-profile-editor-synthetic-generation-{generation}"),
+                generation - HumanoidCharacterProfile.MinSyntheticGeneration);
+        }
+
+        generationSelector.SelectId((Profile?.SyntheticGeneration ?? HumanoidCharacterProfile.MinSyntheticGeneration)
+            - HumanoidCharacterProfile.MinSyntheticGeneration);
+        generationRow.AddChild(generationSelector);
+
+        var modelSuffixRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            Margin = new Thickness(3f, 3f, 3f, 0f),
+            Visible = Profile?.Synthetic == true,
+        };
+        modelSuffixRow.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-profile-editor-synthetic-model-suffix-label"),
+        });
+        modelSuffixRow.AddChild(new Control { HorizontalExpand = true });
+
+        var modelSuffixEdit = new LineEdit
+        {
+            MinSize = new Vector2(180, 0),
+            Text = Profile?.SyntheticModelSuffix ?? string.Empty,
+            IsValid = text => text.Length <= HumanoidCharacterProfile.SyntheticModelSuffixMaxLength,
+        };
+        modelSuffixRow.AddChild(modelSuffixEdit);
+
         selector.OnSelected += preference =>
         {
             Profile = Profile?.WithSynthetic(preference == 0);
+            generationRow.Visible = preference == 0;
+            modelSuffixRow.Visible = preference == 0;
             CMUUpdateSyntheticNameFields();
             CMURecomposeName();
             SetDirty();
             UpdateSaveButton();
             RefreshJobs();
         };
+        generationSelector.OnItemSelected += args =>
+        {
+            generationSelector.SelectId(args.Id);
+            Profile = Profile?.WithSyntheticGeneration(args.Id + HumanoidCharacterProfile.MinSyntheticGeneration);
+            SetDirty();
+            UpdateSaveButton();
+        };
+        modelSuffixEdit.OnTextChanged += args =>
+        {
+            Profile = Profile?.WithSyntheticModelSuffix(args.Text);
+            SetDirty();
+            UpdateSaveButton();
+        };
+
         SyntheticContainer.AddChild(selector);
+        SyntheticContainer.AddChild(generationRow);
+        SyntheticContainer.AddChild(modelSuffixRow);
+        // CMU14 End
     }
 
     public void RefreshAllegiances()
@@ -943,8 +1076,8 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshThreatPreferences()
     {
-        ColonyThreatPreferenceList.DisposeAllChildren();
-        DistressThreatPreferenceList.DisposeAllChildren();
+        ColonyThreatPreferenceList.ReleaseChildren();
+        DistressThreatPreferenceList.ReleaseChildren();
         _threatPreferenceButtons.Clear();
         PopulateThreatPreferenceList(ColonyThreatPreferenceList, GamemodeColonyFall);
         PopulateThreatPreferenceList(DistressThreatPreferenceList, GamemodeDistressSignal);
@@ -1047,8 +1180,8 @@ public sealed partial class HumanoidProfileEditor
     {
         if (threat.BlacklistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase)))
             return false;
-        return threat.whitelistedgamemodes.Count == 0 ||
-               threat.whitelistedgamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
+        return threat.WhitelistedGamemodes.Count == 0 ||
+               threat.WhitelistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
     }
 
     private static string GetThreatDisplayName(ThreatPrototype threat)

@@ -78,7 +78,7 @@ public sealed partial class ApeLimbRipSystem : EntitySystem
                 _transform.SetCoordinates(limb.Id, ape.Owner.ToCoordinates());
                 _transform.AttachToGridOrMap(limb.Id);
                 _hands.TryPickupAnyHand(ape, limb.Id);
-                _popup.PopupClient(Loc.GetString(ape.Comp.FinishedPopup), ape, ape);
+                _popup.PopupEntity(Loc.GetString(ape.Comp.FinishedPopup), ape, ape);
                 _audio.PlayPvs(ape.Comp.Sound, ape);
                 return;
             }
@@ -91,7 +91,7 @@ public sealed partial class ApeLimbRipSystem : EntitySystem
             !_mobState.IsDead(target) ||
             !TryComp<BodyComponent>(target, out var body))
         {
-            _popup.PopupClient(Loc.GetString(ape.Comp.InvalidTargetPopup), ape, ape, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString(ape.Comp.InvalidTargetPopup), ape, ape, PopupType.SmallCaution);
             return false;
         }
 
@@ -101,7 +101,7 @@ public sealed partial class ApeLimbRipSystem : EntitySystem
                 return true;
         }
 
-        _popup.PopupClient(Loc.GetString(ape.Comp.InvalidTargetPopup), ape, ape, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString(ape.Comp.InvalidTargetPopup), ape, ape, PopupType.SmallCaution);
         return false;
     }
 }

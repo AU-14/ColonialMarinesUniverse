@@ -15,7 +15,8 @@ public interface IStylesheetManager
     Stylesheet SheetSystem { get; }
 
 
-    [Obsolete("Update to use SheetNanotrasen instead")]
+    // CMU14: SheetNano includes the live CRT theme; SheetNanotrasen alone does not.
+    // [Obsolete("Update to use SheetNanotrasen instead")]
     Stylesheet SheetNano { get; }
 
     [Obsolete("Update to use SheetSystem instead")]

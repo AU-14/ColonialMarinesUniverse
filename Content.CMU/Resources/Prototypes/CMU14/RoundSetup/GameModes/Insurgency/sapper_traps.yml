@@ -116,7 +116,7 @@
   # Full IED-grade blast: identical numbers to the AU14IED item (plus its shrapnel burst), so the
   # buried version hits exactly as hard as the handheld one.
   - type: Explosive
-    explosionType: RMC
+    explosionType: CMUIED # FLOW-09: own tank blast multiplier; otherwise RMC.
     totalIntensity: 1400
     intensitySlope: 1.5
     maxIntensity: 80
@@ -473,12 +473,12 @@
 # The Sapper's signature trap kit: sensor traps to seed plus the workbench kit for crafting the
 # heavier ordnance in the field. Deliberately no prebuilt IEDs/shotgun traps and no loose materials
 # kit - the lethal stuff must be crafted at the bench. Parented to the insurgent-styled toolbox so
-# it reads as improvised gear.
+# changed the name and sprite to prevent metagaming!
 - type: entity
-  parent: RMCToolboxSyndicate
+  parent: RMCToolboxMechanical
   id: AU14SapperTrapToolbox
-  name: sapper trap kit
-  description: A battered toolbox packed with improvised charges and triplines. Everything a CLF sapper needs to seed a killbox.
+  name: mechanical toolbox
+  description: A mechanical toolbox filled with weird, mechanical components that you probably don't understand.
   suffix: CLF, Sapper
   components:
   - type: StorageFill

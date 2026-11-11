@@ -1,0 +1,16 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Scavengers preserve combat movement and utility actions through target
+    changes.
+  type: Fix
+- message: Squad radio reports trigger bounded support approaches and no longer keep
+    postponing reception on busy channels.
+  type: Fix
+- message: Nearby squadmates fighting different opponents can provide covering support.
+  type: Tweak
+- message: Added radio response diagnostics to scavenger status, including the here
+    option.
+  type: Admin
+time: '2026-10-08T21:45:59.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2111

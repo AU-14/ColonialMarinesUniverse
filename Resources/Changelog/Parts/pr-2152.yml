@@ -1,0 +1,33 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The queen can decline the hijack and end the round again
+  type: Fix
+- message: Intel and data scanners no longer ping bodies, barricades, plants and vendors
+  type: Fix
+- message: MFHS grenades and other chem smoke and foam reactions work again
+  type: Fix
+- message: LACN breacher breaching shells break walls (2 shots normal, 4 reinforced)
+  type: Fix
+- message: Platoon jobs like the UPP CO get their faction languages on spawn
+  type: Fix
+- message: Helmet lights no longer hide NVGs, headphones and other helmet garb
+  type: Fix
+- message: The Yautja wrist blade action no longer deploys the gauntlet too
+  type: Fix
+- message: An aheal clears perma, so the next death gets a normal revive window
+  type: Fix
+- message: Patients who get their brain back wake up instead of staying asleep forever
+  type: Fix
+- message: The SAS commander can give orders
+  type: Fix
+- message: WeYu experiment crates have a salvaged hivebreaker WeYu can pick up and
+    use instead of the Yautja one that shocked them
+  type: Fix
+- message: You can climb ladders while dragging someone
+  type: Fix
+- message: PM-61 IFAK matches the standard IFAK, UPP ushankas have the armor they
+    describe, old UPP radio packs removed from command vendors
+  type: Fix
+time: '2026-10-11T17:07:28.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2152

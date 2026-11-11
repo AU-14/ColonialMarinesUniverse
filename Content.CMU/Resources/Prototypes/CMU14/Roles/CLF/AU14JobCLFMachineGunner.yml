@@ -15,6 +15,7 @@
       RMCSkillEndurance: 2
       RMCSkillFirearms: 2
       RMCSkillConstruction: 2
+      RMCSkillCqc: 1
       RMCSkillEngineer: 3
       RMCSkillFireman: 2
       RMCSkillVehicles: 1
@@ -43,6 +44,11 @@
     traits:
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFMachineGunner

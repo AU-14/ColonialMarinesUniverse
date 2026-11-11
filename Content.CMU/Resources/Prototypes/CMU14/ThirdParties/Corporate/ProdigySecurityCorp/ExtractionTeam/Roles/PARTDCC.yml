@@ -1,6 +1,10 @@
 - type: job
   parent: AU14JobPARTSPartyContractorBase
   id: AU14JobPARTDCC
+  chevrons:
+    AU14RankPrDCrewChief:
+      entity: AU14ChevronPrDCrewChief
+      requirements: []
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: PARTDCC
@@ -25,7 +29,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: Prodigy Extraction Crewchief
+  name: Crew Chief
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTDCCTracker
   ranks:
@@ -80,7 +84,7 @@
   storage:
     back:
     - RMCGrenadeBlastM12
-    - CMMRE
+    - CMUMREFSR
     - RMCBinocularsPVE
     - AU14CMDefibrillator
     - CMPortableSurgicalBedSpawnFolded

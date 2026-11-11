@@ -6,6 +6,7 @@ using Content.Shared.CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Scanner;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.DoAfter;
@@ -28,6 +29,7 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedLungsSystem _lungs = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
+    [Dependency] private SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private RMCStethoscopeSystem _stethoscope = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -127,8 +129,8 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
         }
 
         if (!TryComp<BodyComponent>(args.Patient, out var body) ||
-            !TryComp<TransformComponent>(args.Patient, out var patientTransform) ||
-            !TryComp<TransformComponent>(args.User, out var medicTransform) ||
+            !TryComp(args.Patient, out TransformComponent? patientTransform) ||
+            !TryComp(args.User, out TransformComponent? medicTransform) ||
             !TryComp<SkillsComponent>(args.User, out var skills) ||
             !TryComp<DoAfterComponent>(args.User, out var doAfterComponent) ||
             _skills.GetSkill((args.User, skills), MedicalSkill) < 1)
@@ -240,6 +242,9 @@ public sealed partial class CMUStethoscopeSystem : EntitySystem
         else
             breathing = Loc.GetString("cmu-medical-stethoscope-lungs-qualitative",
                 ("description", QualitativeLungs(GetLungSounds(patient, lungs))));
+
+        if (hasLungs && !_mobState.IsDead(patient) && _parasite.HasNeomorphBreathingSymptoms(patient))
+            breathing += "\n" + Loc.GetString("cmu-medical-stethoscope-raspy-breathing");
 
         var painText = string.Empty;
         if (skill >= 2 && TryComp<PainShockComponent>(patient, out var pain))

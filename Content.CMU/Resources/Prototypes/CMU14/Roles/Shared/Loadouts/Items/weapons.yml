@@ -1,0 +1,5 @@
+- type: loadout
+  id: TPR9CivilianCaseCMU
+  cost: 4
+  inhand:
+    - CMUGunCasePistolTPR9CivilianLoadout

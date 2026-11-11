@@ -1,0 +1,30 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Weeds can be expanded out of a closed resin door tile
+  type: Fix
+- message: Hunting preserve walls can no longer be broken through
+  type: Fix
+- message: Clan masks show xeno health and plasma
+  type: Fix
+- message: Clan masks connect to internals and Yautja gear racks sell oxygen tanks
+  type: Add
+- message: Hijacks clear pathogen blight cores left on the planet
+  type: Fix
+- message: Lesser drones, swarm lessers, facehuggers and poppers no longer count for
+    the Kill Threats objective
+  type: Tweak
+- message: Despoilers no longer gain fake hypertension from healing
+  type: Fix
+- message: The adaptability boon no longer offers Pathogen castes
+  type: Fix
+- message: Facehuggers and other xenos no longer drop a head when gibbed
+  type: Fix
+- message: Charger lunges shake vehicles again instead of passing through them
+  type: Fix
+- message: A revived queen keeps the hive from collapsing
+  type: Fix
+- message: Hijack larva respawn on the queen instead of the planet
+  type: Fix
+time: '2026-10-19T14:44:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2228

@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: CMUCorporateSkirts
+  name: cmu-loadout-group-corporate-skirts
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CMULiaisonBlackSuitskirt
+  - CMULiaisonCharcoalSuitskirt
+  - CMULiaisonFieldSuitskirt
+  - CMULiaisonSkirt

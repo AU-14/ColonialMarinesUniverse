@@ -12,6 +12,10 @@ namespace Content.Shared._RMC14.Dropship;
 [Access(typeof(SharedDropshipSystem))]
 public sealed partial class DropshipComponent : Component
 {
+    // CMU14: configurable cap for weapons installed on ordinary internal utility points.
+    [DataField]
+    public int MaxInternalWeapons = 2;
+
     [DataField, AutoNetworkedField]
     public FTLState State;
 
@@ -89,6 +93,10 @@ public sealed partial class DropshipComponent : Component
 
     [DataField]
     public EntityUid? LaunchAlarmEntity;
+
+    // CMU14: set while a ship fire alarm is active; life support vents hold their gas mix.
+    [DataField, Access(typeof(SharedDropshipSystem), Other = AccessPermissions.ReadWrite)] // CMU14
+    public bool FireAlarmActive;
 
     /// <summary>Optional takeoff cue; null preserves the standard shuttle startup sound.</summary>
     [DataField]

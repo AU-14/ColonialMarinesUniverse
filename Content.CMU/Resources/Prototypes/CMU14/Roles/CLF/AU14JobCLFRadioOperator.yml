@@ -21,6 +21,7 @@
       RMCSkillEngineer: 2
       RMCSkillFireman: 1
       RMCSkillJtac: 4
+      RMCSkillCqc: 1
       RMCSkillLeadership: 1
       RMCSkillIntel: 1
       RMCSkillVehicles: 1
@@ -54,6 +55,11 @@
     traits:
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
     - NoEnglish
   ranks:
     RMCRankCivilian: []

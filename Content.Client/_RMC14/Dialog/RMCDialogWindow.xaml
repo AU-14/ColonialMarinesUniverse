@@ -2,5 +2,6 @@
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Dialog"
     MinSize="300 135"
-    Resizable="False">
+    Resizable="True">
+    <!-- CMU14: long option names (blooding console) got cut off with no way to widen the window -->
 </controls:RMCDialogWindow>

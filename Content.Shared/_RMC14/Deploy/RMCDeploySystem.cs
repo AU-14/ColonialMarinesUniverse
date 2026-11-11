@@ -86,7 +86,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
 
         if (HasAnyAcid(uid))
         {
-            _popup.PopupClient(Loc.GetString("rmc-deploy-popup-acid", ("entity", ent)), uid, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-deploy-popup-acid", ("entity", ent)), uid, user, PopupType.SmallCaution);
             return;
         }
 
@@ -117,7 +117,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
         var started = _doAfter.TryStartDoAfter(doAfter);
         if (started)
         {
-            _popup.PopupClient(Loc.GetString("rmc-deploy-popup-start"), ent.Owner, user, PopupType.Small);
+            _popup.PopupEntity(Loc.GetString("rmc-deploy-popup-start"), ent.Owner, user, PopupType.Small);
 
             // Sending an event to display the deployment area on the client
             if (_netManager.IsServer)
@@ -397,7 +397,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
 
         if (found && user != null && _netManager.IsClient)
         {
-            _popup.PopupClient(Loc.GetString("rmc-deploy-popup-blocked"), user.Value, user.Value, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-deploy-popup-blocked"), user.Value, user.Value, PopupType.SmallCaution);
         }
 
         return found;
@@ -443,7 +443,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
         if (!HasComp<RMCPlanetComponent>(gridUid))
         {
             if (user != null && _netManager.IsClient)
-                _popup.PopupClient(Loc.GetString("rmc-deploy-popup-surface"), ignore, user.Value, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-deploy-popup-surface"), ignore, user.Value, PopupType.SmallCaution);
 
             return false;
         }
@@ -586,7 +586,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupClient(Loc.GetString("rmc-deployable-collapse-start"), args.User, args.User, PopupType.Small);
+            _popup.PopupEntity(Loc.GetString("rmc-deployable-collapse-start"), args.User, args.User, PopupType.Small);
 
     }
 

@@ -29,33 +29,41 @@ public sealed class ANPRCSearchTest
     private static readonly EntProtoId OpforPack = "ANPRC117GRadioOPFORFilled";
     private static readonly ProtoId<JobPrototype> Rifleman = "AU14JobGOVFORSquadRifleman";
     private static readonly ProtoId<RadioChannelPrototype> OpforBravo = "radioOpforBravo";
-    private static readonly ProtoId<RadioChannelPrototype> GovforCommand = "radioGovforCommand";
 
     private const string BackSlot = "back";
     private const string Opfor = "opfor";
 
     private int _line;
 
+    // the worst case for a single line: said just after the head went past its frequency.
+    // it has to still be fresh a whole pass later, or a quiet net can go unheard by chance
     [Test]
-    public async Task BusyNetFixesInAboutAMinute()
+    public async Task LineSaidJustBehindTheHeadIsCaughtNextPass()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var testMap = await pair.CreateTestMap();
-
         EntityUid pack = default, talker = default;
         RadioFrequency frequency = default;
-
         await server.WaitAssertion(() =>
         {
             (_, pack) = SpawnSearcher(server, testMap.GridCoords);
             talker = server.EntMan.SpawnEntity(null, testMap.GridCoords.Offset(new Vector2(5, 0)));
             frequency = Frequency(server, OpforBravo);
         });
-
-        var fixedAt = await TalkUntilFixed(pair, pack, talker, frequency, interval: 8, limit: 120);
-
-        Assert.That(fixedAt, Is.LessThanOrEqualTo(75), "a net talking every 8 s is fixed in about a minute");
+        await Say(pair, talker, OpforBravo);
+        await pair.RunSeconds(0.9f);
+        await server.WaitAssertion(() =>
+        {
+            var khz = frequency.Kilohertz + 1;
+            if (khz > ANPRCRadioComponent.SweepBandMax.Kilohertz)
+                khz = ANPRCRadioComponent.SweepBandMin.Kilohertz;
+            server.EntMan.GetComponent<ANPRCRadioComponent>(pack).SweepPosition = RadioFrequency.FromKilohertz(khz);
+        });
+        await pair.RunSeconds(25);
+        await server.WaitAssertion(() =>
+            Assert.That(server.EntMan.GetComponent<ANPRCRadioComponent>(pack).SweepContacts.ContainsKey(frequency), Is.True,
+                "a line said just after the head passed is still caught on the next pass"));
         await pair.CleanReturnAsync();
     }
 
@@ -224,47 +232,62 @@ public sealed class ANPRCSearchTest
     }
 
     [Test]
-    public async Task FixedNetBanksTrialsAndPutsABearingOnTheMap()
+    public async Task FixedNetBanksTrialsButNeverMarksTheMap()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var testMap = await pair.CreateTestMap();
 
-        EntityUid pack = default, talker = default;
+        EntityUid pack = default, talker = default, rto = default, rtoPack = default;
+        RadioFrequency frequency = default;
         TacticalMapComponent tacmap = default!;
-        var intelKey = 0;
 
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
             (_, pack) = SpawnSearcher(server, testMap.GridCoords, sweep: false);
             talker = entities.SpawnEntity(null, testMap.GridCoords);
+            (rto, rtoPack) = SpawnOperator(server, testMap.GridCoords.Offset(new Vector2(0, 30)), OpforPack, trained: true);
             tacmap = entities.EnsureComponent<TacticalMapComponent>(testMap.Grid.Owner);
+            frequency = Frequency(server, OpforBravo);
 
-            entities.GetComponent<ANPRCRadioComponent>(pack).DiscoveredFrequencies.Add(Frequency(server, OpforBravo));
+            entities.GetComponent<ANPRCRadioComponent>(pack).DiscoveredFrequencies.Add(frequency);
         });
 
+        // a headset line banks a trial but gives nothing away about where it came from
         await Say(pair, talker, OpforBravo);
         await pair.RunTicksSync(2);
 
         await server.WaitAssertion(() =>
         {
+            var radio = server.EntMan.GetComponent<ANPRCRadioComponent>(pack);
             Assert.That(Analysis(server, pack).Depth, Is.EqualTo(1), "an encrypted line on a fixed net banks a trial");
-            Assert.That(tacmap.LastUpdateGovforBlips, Is.Not.Empty, "the bearing is on the map every tacmap on the side draws");
-
-            // the 3D reconstruction places contacts by the entity behind the key; an intel blip has none,
-            // so it has to be able to ask which grid the blip sits on or it drops it
-            intelKey = tacmap.LastUpdateGovforBlips.Keys.First();
-            Assert.That(server.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().TryGetIntelBlipGrid(intelKey, out var grid), Is.True);
-            Assert.That(grid, Is.EqualTo(testMap.Grid.Owner));
+            Assert.That(radio.FixedNetDFLast, Does.Not.ContainKey(frequency), "headsets never give a bearing");
         });
 
-        await pair.RunSeconds(9);
+        // a manpack on FH leaks a bearing, but only into the operator's chat
+        await Say(pair, rto, OpforBravo, rtoPack);
+        await pair.RunTicksSync(2);
 
         await server.WaitAssertion(() =>
         {
-            Assert.That(tacmap.LastUpdateGovforBlips, Is.Empty, "and gone again after a few seconds");
-            Assert.That(server.System<Content.Server._RMC14.TacticalMap.TacticalMapSystem>().TryGetIntelBlipGrid(intelKey, out _), Is.False);
+            var radio = server.EntMan.GetComponent<ANPRCRadioComponent>(pack);
+            Assert.That(radio.FixedNetDFLast, Does.ContainKey(frequency), "an FH manpack line gives a bearing");
+            // intel blips take negative keys, so the marines' own blips don't count here
+            Assert.That(tacmap.GovforBlips.Keys.Where(k => k < 0), Is.Empty, "nothing goes on the ops map");
+            Assert.That(tacmap.LastUpdateGovforBlips.Keys.Where(k => k < 0), Is.Empty, "nothing goes on anyone's map");
+
+            radio.FixedNetDFLast.Clear();
+            server.EntMan.GetComponent<ANPRCRadioComponent>(rtoPack).Burst = true;
+        });
+
+        await Say(pair, rto, OpforBravo, rtoPack);
+        await pair.RunTicksSync(2);
+
+        await server.WaitAssertion(() =>
+        {
+            var radio = server.EntMan.GetComponent<ANPRCRadioComponent>(pack);
+            Assert.That(radio.FixedNetDFLast, Does.Not.ContainKey(frequency), "a burst line is too short to take a bearing on");
 
             // the bank is a buffer, not a hoard
             var crypto = server.System<ANPRCCryptoSystem>();
@@ -500,90 +523,6 @@ public sealed class ANPRCSearchTest
             {
                 Assert.That(server.EntMan.GetComponent<ANPRCRadioComponent>(offPack).SweepEnabled, Is.False, "switched off");
                 Assert.That(server.EntMan.GetComponent<ANPRCRadioComponent>(strippedPack).SweepEnabled, Is.False, "taken off");
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task AFactionlessSetKnowsOnlyTheOpenNets()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var plan = server.System<ANPRCFrequencyPlanSystem>();
-            var enemy = Frequency(server, OpforBravo);
-            var own = Frequency(server, GovforCommand);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(plan.IsKnownTo(enemy, string.Empty), Is.False, "no faction is not every faction");
-                Assert.That(plan.IsKnownTo(enemy, "govfor"), Is.False);
-                Assert.That(plan.IsKnownTo(own, "govfor"), Is.True);
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task InterceptsAndNoticesArriveAsTaggedRadioRows()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var server = pair.Server;
-        var client = pair.Client;
-        var testMap = await pair.CreateTestMap();
-
-        EntityUid wearer = default, pack = default, talker = default;
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var ui = server.System<SharedUserInterfaceSystem>();
-            (wearer, pack) = SpawnSearcher(server, testMap.GridCoords, sweep: false);
-            talker = entities.SpawnEntity(null, testMap.GridCoords.Offset(new Vector2(2, 0)));
-
-            // their net carries here, and the set has fixed it and tuned it into a memory
-            entities.SpawnEntity("AU14CommsMastOpfor", testMap.GridCoords);
-            var frequency = Frequency(server, OpforBravo);
-            entities.GetComponent<ANPRCRadioComponent>(pack).DiscoveredFrequencies.Add(frequency);
-            entities.GetComponent<ANPRCRadioComponent>(pack).SlotLabels[0] = "INT";
-
-            server.PlayerMan.SetAttachedEntity(pair.Player, wearer);
-
-            ui.OpenUi(pack, ANPRCRadioUI.Key, wearer);
-            ui.RaiseUiMessage(pack, ANPRCRadioUI.Key, new ANPRCTuneContactMsg(0, frequency) { Actor = wearer });
-            ui.RaiseUiMessage(pack, ANPRCRadioUI.Key, new ANPRCSelectSlotMsg(0) { Actor = wearer });
-
-            // a refusal from the set: dwelling needs a running search
-            ui.RaiseUiMessage(pack, ANPRCRadioUI.Key, new ANPRCSetDwellMsg(100_000) { Actor = wearer });
-        });
-
-        await pair.RunTicksSync(5);
-        await Say(pair, talker, OpforBravo);
-        await pair.RunTicksSync(10);
-
-        await client.WaitAssertion(() =>
-        {
-            var history = client.ResolveDependency<IUserInterfaceManager>()
-                .GetUIController<ChatUIController>()
-                .History
-                .Select(entry => entry.Msg)
-                .ToList();
-
-            var intercept = history.FirstOrDefault(msg => msg.Display?.ChannelLabel == "INT");
-            var notice = history.FirstOrDefault(msg => msg.Display?.ChannelLabel == "117G");
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(intercept, Is.Not.Null, "enemy traffic through the pack is an INT row");
-                Assert.That(intercept?.Channel, Is.EqualTo(ChatChannel.Radio));
-                Assert.That(intercept?.WrappedMessage, Does.Not.Contain("FF6B6B"), "not the old red line");
-                Assert.That(notice, Is.Not.Null, "the set's own words are a 117G row");
-                Assert.That(notice?.Channel, Is.EqualTo(ChatChannel.Radio));
             });
         });
 

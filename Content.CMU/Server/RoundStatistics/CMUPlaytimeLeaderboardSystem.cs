@@ -38,18 +38,21 @@ internal sealed record CMUPlaytimeLeaderboardSnapshot(
     List<CMUPlaytimeChampion> XenoChampions,
     List<CMUPlaytimeChampion> GovforChampions,
     ILookup<string, CMUPlaytimeLeaderboardRow> Rows,
-    Dictionary<Guid, string> Tags);
+    Dictionary<Guid, string> Tags,
+    HashSet<Guid> HiddenPlayers,
+    HashSet<Guid> BannedPlayers);
 
-public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
+public sealed partial class CMUPlaytimeLeaderboardSystem : EntitySystem
 {
     private const int TopPerRole = 3;
     private const int ChampionsPerSide = 10;
+    private const double MinRoleHours = 10;
     private const string DefaultPrefix = "XX";
 
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly PlayTimeTrackingManager _playTime = default!;
-    [Dependency] private readonly IServerPreferencesManager _prefs = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private PlayTimeTrackingManager _playTime = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.playtime_leaderboard");
 
@@ -81,14 +84,31 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
     {
         var times = _playTime.GetPlayTimes(player);
         var youTag = GetXenoTag(player.UserId);
+        var youRedaction = GetRedaction(player.UserId.UserId, snapshot);
 
         return new CMUPlaytimeLeaderboard(
             snapshot.Players,
-            BakeChampions(snapshot.XenoChampions, snapshot.Tags, snapshot.XenoTrackers, times, player, youTag),
-            BakeChampions(snapshot.GovforChampions, snapshot.Tags, snapshot.GovforTrackers, times, player, string.Empty),
+            BakeChampions(snapshot.XenoChampions, snapshot, snapshot.XenoTrackers, times, player, youTag),
+            BakeChampions(snapshot.GovforChampions, snapshot, snapshot.GovforTrackers, times, player, string.Empty),
             BakeRoles(snapshot.Xeno, snapshot, times, player, youTag),
-            BakeRoles(snapshot.Govfor, snapshot, times, player, string.Empty));
+            BakeRoles(snapshot.Govfor, snapshot, times, player, string.Empty),
+            youRedaction == CMUPlaytimeRedaction.HiddenByUser);
     }
+
+    // A ban outranks the user's own opt-out in what the entry says
+    private static CMUPlaytimeRedaction GetRedaction(Guid playerId, CMUPlaytimeLeaderboardSnapshot snapshot)
+        => snapshot.BannedPlayers.Contains(playerId)
+            ? CMUPlaytimeRedaction.Banned
+            : snapshot.HiddenPlayers.Contains(playerId)
+                ? CMUPlaytimeRedaction.HiddenByUser
+                : CMUPlaytimeRedaction.None;
+
+    internal Task SetPlayerHidden(NetUserId player, bool hidden)
+        => _db.SetCMUPlaytimeHidden(player, hidden);
+
+    // Drop the cached board so the next open sees the new privacy setting
+    internal void InvalidateSnapshot()
+        => _load = null;
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
@@ -103,6 +123,8 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
         var roleNames = GetRoleNames();
 
         var rows = await _db.GetCMUPlaytimeLeaderboardRows(xenoTrackers.Concat(govforTrackers).ToList());
+        var hiddenPlayers = (await _db.GetCMUPlaytimeHiddenPlayers()).ToHashSet();
+        var bannedPlayers = (await _db.GetCMUPlaytimeBannedPlayers()).ToHashSet();
         var byTracker = rows.ToLookup(row => row.Tracker);
         var xenoTops = BuildTops(byTracker, roleNames, xenoTrackers);
         var govforTops = BuildTops(byTracker, roleNames, govforTrackers);
@@ -128,7 +150,9 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
             xenoChampions,
             govforChampions,
             byTracker,
-            tags);
+            tags,
+            hiddenPlayers,
+            bannedPlayers);
     }
 
     private (List<string> Xeno, List<string> Govfor) GetTrackers()
@@ -208,6 +232,7 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
                     .OrderByDescending(row => row.Hours)
                     .Take(TopPerRole)
                     .ToList()))
+            .Where(top => top.TotalHours >= MinRoleHours)
             .OrderBy(top => top.Role, StringComparer.OrdinalIgnoreCase)
             .ToList();
     }
@@ -247,13 +272,16 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
             {
                 var row = top.Rows[i];
                 var isYou = row.PlayerId == userId;
+                // The viewer always sees their own true hours
+                var redaction = isYou ? CMUPlaytimeRedaction.None : GetRedaction(row.PlayerId, snapshot);
                 inBoard |= isYou;
                 entries.Add(new CMUPlaytimeLeaderboardEntry(
                     i + 1,
                     row.Player,
-                    row.Hours,
+                    redaction == CMUPlaytimeRedaction.None ? row.Hours : 0,
                     snapshot.Tags.GetValueOrDefault(row.PlayerId, string.Empty),
-                    isYou));
+                    isYou,
+                    redaction));
             }
 
             // The viewer's own row, when they have hours but missed the top
@@ -262,7 +290,7 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
             {
                 var hours = times[top.Tracker].TotalHours;
                 var rank = 1 + snapshot.Rows[top.Tracker].Count(row => row.Hours > hours);
-                entries.Add(new CMUPlaytimeLeaderboardEntry(rank, player.Name, hours, youTag, true));
+                entries.Add(new CMUPlaytimeLeaderboardEntry(rank, player.Name, hours, youTag, true, CMUPlaytimeRedaction.None));
             }
 
             roles.Add(new CMUPlaytimeRoleLeaderboard(top.Role, top.PlayerCount, top.TotalHours, entries));
@@ -273,7 +301,7 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
 
     private static List<CMUPlaytimeLeaderboardEntry> BakeChampions(
         List<CMUPlaytimeChampion> champions,
-        Dictionary<Guid, string> tags,
+        CMUPlaytimeLeaderboardSnapshot snapshot,
         List<string> trackers,
         IReadOnlyDictionary<string, TimeSpan> times,
         ICommonSession player,
@@ -287,20 +315,23 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
         {
             var champion = champions[i];
             var isYou = champion.PlayerId == userId;
+            // The viewer always sees their own true hours
+            var redaction = isYou ? CMUPlaytimeRedaction.None : GetRedaction(champion.PlayerId, snapshot);
             inBoard |= isYou;
             entries.Add(new CMUPlaytimeLeaderboardEntry(
                 i + 1,
                 champion.Player,
-                champion.Hours,
-                tags.GetValueOrDefault(champion.PlayerId, string.Empty),
-                isYou));
+                redaction == CMUPlaytimeRedaction.None ? champion.Hours : 0,
+                snapshot.Tags.GetValueOrDefault(champion.PlayerId, string.Empty),
+                isYou,
+                redaction));
         }
 
         if (!inBoard)
         {
             var hours = trackers.Sum(tracker => times.GetValueOrDefault(tracker).TotalHours);
             if (hours > 0)
-                entries.Add(new CMUPlaytimeLeaderboardEntry(0, player.Name, hours, youTag, true));
+                entries.Add(new CMUPlaytimeLeaderboardEntry(0, player.Name, hours, youTag, true, CMUPlaytimeRedaction.None));
         }
 
         return entries;

@@ -1,0 +1,97 @@
+# Platoon drink menus for the NutriCo AutoDrink. The mess drink vendor marker (CMUVMarkerShipMessDrink) picks one of
+# these, or the default RMCVendorNutriCoDrink, from the platoon's vendor set.
+
+# LACN: the default menu, with Latin American drinks in place of the electrolyte mixes.
+- type: entity
+  parent: RMCVendorNutriCoDrink
+  id: CMUNutriCoDrinkLACN
+  suffix: LACN
+  components:
+  - type: CMUAutoDrink
+    drinks:
+    - reagent: Water
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCCoffee
+      name: cmu-autodrink-coffee
+      note: cmu-autodrink-note-hot
+    - reagent: RMCTea
+      name: cmu-autodrink-tea
+      note: cmu-autodrink-note-hot
+    - reagent: Milk
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCChocolateDrink
+      name: cmu-autodrink-chocolate-milk
+      note: cmu-autodrink-note-chilled
+    - reagent: CMUHorchata
+      note: cmu-autodrink-note-chilled
+    - reagent: CMUCafeDeOlla
+      note: cmu-autodrink-note-hot
+    - reagent: CMUAguaFresca
+      note: cmu-autodrink-note-chilled
+    - reagent: Ice
+      name: cmu-autodrink-ice
+      extra: true
+
+# RMC: the default menu, with chai and mango lassi in place of two of the electrolyte mixes.
+- type: entity
+  parent: RMCVendorNutriCoDrink
+  id: CMUNutriCoDrinkRMC
+  suffix: RMC
+  components:
+  - type: CMUAutoDrink
+    drinks:
+    - reagent: Water
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCCoffee
+      name: cmu-autodrink-coffee
+      note: cmu-autodrink-note-hot
+    - reagent: RMCTea
+      name: cmu-autodrink-tea
+      note: cmu-autodrink-note-hot
+    - reagent: Milk
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCChocolateDrink
+      name: cmu-autodrink-chocolate-milk
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceOrange
+      name: cmu-autodrink-electrolyte-orange
+      note: cmu-autodrink-note-chilled
+    - reagent: CMUChaiTea
+      note: cmu-autodrink-note-hot
+    - reagent: CMUMangoLassi
+      note: cmu-autodrink-note-chilled
+    - reagent: Ice
+      name: cmu-autodrink-ice
+      extra: true
+
+# UPP and BEAR: the default menu, with kvass and sbiten in place of two of the electrolyte mixes.
+- type: entity
+  parent: RMCVendorNutriCoDrink
+  id: CMUNutriCoDrinkSPP
+  suffix: SPP
+  components:
+  - type: CMUAutoDrink
+    drinks:
+    - reagent: Water
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCCoffee
+      name: cmu-autodrink-coffee
+      note: cmu-autodrink-note-hot
+    - reagent: RMCTea
+      name: cmu-autodrink-tea
+      note: cmu-autodrink-note-hot
+    - reagent: Milk
+      note: cmu-autodrink-note-chilled
+    - reagent: RMCChocolateDrink
+      name: cmu-autodrink-chocolate-milk
+      note: cmu-autodrink-note-chilled
+    - reagent: JuiceOrange
+      name: cmu-autodrink-electrolyte-orange
+      note: cmu-autodrink-note-chilled
+    - reagent: CMUKvass
+      note: cmu-autodrink-note-chilled
+    - reagent: CMUSbiten
+      note: cmu-autodrink-note-hot
+    - reagent: Ice
+      name: cmu-autodrink-ice
+      extra: true

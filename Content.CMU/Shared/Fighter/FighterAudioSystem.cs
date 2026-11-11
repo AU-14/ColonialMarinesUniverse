@@ -6,7 +6,7 @@ using Robust.Shared.Player;
 namespace Content.Shared.CMU14.Fighter;
 
 /// <summary>Exterior sounds reach nearby listeners beyond the sprite's small PVS radius.</summary>
-public sealed class FighterAudioSystem : EntitySystem
+public sealed partial class FighterAudioSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -19,6 +19,9 @@ public sealed class FighterAudioSystem : EntitySystem
 
     public static AudioParams Exterior(float range = 55, float volume = -2) => AudioParams.Default
         .WithVolume(volume).WithMaxDistance(range).WithReferenceDistance(6).WithRolloffFactor(.85f);
+
+    public static SoundSpecifier Engine(CMUFighterAirframePrototype airframe, string cue) =>
+        new SoundPathSpecifier($"/Audio/CMU14/Fighter/{airframe.SoundSet}/{cue}.ogg");
 
     public static SoundSpecifier Release(FighterWeaponKind kind, bool cockpit = false) => new SoundPathSpecifier(kind switch
     {

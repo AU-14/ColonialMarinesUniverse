@@ -242,7 +242,7 @@ public sealed partial class CustomConstructionMenuSystem
             }
 
             // Item vs structure differs per entity, so the recipe is validated against each one.
-            var isItemRecipe = proto.TryGetComponent<ItemComponent>(out _, _componentFactory);
+            var isItemRecipe = proto.TryComp<ItemComponent>(out _, _componentFactory);
             if (!ValidateSteps(steps, isItemRecipe, out var invalidReason))
             {
                 failed++;

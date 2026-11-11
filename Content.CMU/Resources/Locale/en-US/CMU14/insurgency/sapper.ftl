@@ -86,6 +86,8 @@ insfor-sapper-workbench-detach = Detach: {$name}
 # ATM hacking.
 insfor-sapper-atm-already-hacked = This machine has already been bled dry.
 insfor-sapper-atm-hacked = The ATM shudders and spits out {$amount} in cash.
+insfor-sapper-atm-message-title = Siphon Rig
+insfor-sapper-atm-message-prompt = Leave a message on the ATM's screen until it repairs itself (optional, up to {$max} characters)
 cmu-sapper-atm-logins-leaked = The rig also dumps {$count} cached card {$count ->
     [one] login
    *[other] logins

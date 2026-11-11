@@ -8,9 +8,9 @@ namespace Content.Shared.CMU14.Atmos;
 /// Mirrors the fire stack: each shielded item reduces the dose, and a suit
 /// whose head is not itself shielded gives part of its reduction back.
 /// </summary>
-public sealed class CMURadProtectionSystem : EntitySystem
+public sealed partial class CMURadProtectionSystem : EntitySystem
 {
-    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     public override void Initialize()
     {

@@ -20,4 +20,11 @@ public sealed partial class RankChangerComponent : Component
 
     [DataField]
     public bool Applied = false;
+
+    /// <summary>
+    /// Rank the wearer had before this chevron went on, put back when it comes off.
+    /// Jobs without ranks (CLF, survivors) have nothing to reapply, so without this the chevron's rank stuck.
+    /// </summary>
+    [DataField]
+    public ProtoId<RankPrototype>? PreviousRank;
 }

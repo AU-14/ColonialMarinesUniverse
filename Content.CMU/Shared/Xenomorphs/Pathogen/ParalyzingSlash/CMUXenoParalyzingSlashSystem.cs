@@ -38,7 +38,7 @@ public sealed partial class CMUXenoParalyzingSlashSystem : EntitySystem
         if (RemComp<CMUXenoParalyzingSlashPendingComponent>(performer))
         {
             args.Handled = true;
-            _popup.PopupClient(Loc.GetString("cmu-xeno-paralyzing-slash-cancel"), performer, performer, PopupType.Small);
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-paralyzing-slash-cancel"), performer, performer, PopupType.Small);
             return;
         }
 
@@ -52,7 +52,7 @@ public sealed partial class CMUXenoParalyzingSlashSystem : EntitySystem
         pending.SuperSlow = args.SuperSlow;
         Dirty(performer, pending);
 
-        _popup.PopupClient(Loc.GetString("cmu-xeno-paralyzing-slash-ready"), performer, performer, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-xeno-paralyzing-slash-ready"), performer, performer, PopupType.MediumCaution);
 
         foreach (var action in _rmcActions.GetActionsWithEvent<CMUXenoParalyzingSlashActionEvent>(performer))
         {

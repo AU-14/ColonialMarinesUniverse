@@ -40,9 +40,11 @@ public sealed partial class CMUPathogenSporeSacSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CMUPathogenSporeSacComponent> sac, ref DamageChangedEvent args)
     {
-        // Swap for whatever your actual damageable→health bridge looks like;
-        // if you're not using DamageableComponent for this, drive Health
-        // directly from wherever attack damage lands and call HealthCheck from there.
+        if (!args.DamageIncreased || args.DamageDelta is not { } delta)
+            return;
+
+        sac.Comp.Health -= delta.GetTotal();
+        Dirty(sac);
         HealthCheck(sac);
     }
 

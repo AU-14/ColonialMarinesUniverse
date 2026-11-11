@@ -13,7 +13,9 @@ rmc-guide-entry-rules-general-roleplay-standards = General Roleplay
 rmc-guide-entry-rules-marine-character-names = Character Names
 rmc-guide-entry-rules-marine-roleplay-standards = Marine Roleplay
 rmc-guide-entry-rules-command-roleplay = Command Roleplay
-rmc-guide-entry-rules-xeno-roleplay = Xenonid Roleplay
+# cmu edit start: lore names
+rmc-guide-entry-rules-xeno-roleplay = Xenomorph Roleplay
+# cmu edit end
 rmc-guide-entry-rules-survivor-roleplay = Survivor Roleplay
 rmc-guide-entry-rules-hostile-faction-roleplay = Hostile Factions
 rmc-guide-entry-rules-command-chain = Commander Succession

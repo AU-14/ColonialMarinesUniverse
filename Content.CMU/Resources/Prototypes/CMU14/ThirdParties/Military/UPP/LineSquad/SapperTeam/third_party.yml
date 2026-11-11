@@ -1,0 +1,145 @@
+# UPP sapper team, called in through the UPP intel list: a senior sapper and two sappers with flamer rifles,
+# claymores, demolition charges and building materials.
+
+- type: job
+  parent: CMUJobUPPLineSapper
+  id: CMUJobUPPSapperLead
+  name: cmu-job-title-upp-sapper-lead
+  startingGear: CMUGearUPPSapperLead
+  spawnMenuRoleName: UPP Senior Sapper (Sapper Team)
+  playTimeTracker: CMUJobUPPSapperLead
+  chevrons:
+    UPP_SeniorGefreiter:
+      entity: AU14ChevronUPPNICorporal
+      requirements: []
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUPPSapperLead
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPSapperLead
+  name: UPP Senior Sapper (Sapper Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-sapper-lead-name
+    description: cmu-upp-sapper-description
+    reregister: false
+    job: CMUJobUPPSapperLead
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: job
+  parent: CMUJobUPPLineSapper
+  id: CMUJobUPPSapperTeam
+  startingGear: CMUGearUPPSapperTeam
+  spawnMenuRoleName: UPP Sapper (Sapper Team)
+  playTimeTracker: CMUJobUPPSapperTeam
+  chevrons:
+    UPP_SeniorGefreiter:
+      entity: AU14ChevronUPPNISeniorGefreiter
+      requirements: []
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobUPPSapperTeam
+
+- type: entity
+  parent: CMUBaseMobSpeciesUPPLine
+  id: CMUJobUPPSapperTeam
+  name: UPP Sapper (Sapper Team)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMUSquadUPPLine
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-upp-sapper-name
+    description: cmu-upp-sapper-description
+    reregister: false
+    job: CMUJobUPPSapperTeam
+    raffle:
+      settings: short
+    rules: cmu-uppline-rules
+
+- type: startingGear
+  parent: CMUGearUPPLineSapper
+  id: CMUGearUPPSapperLead
+  equipment:
+    id: CMUIDCardUPPSapperLead
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - RMCExplosivePlastic
+    - RMCExplosiveBreachingCharge
+  inhand:
+  - RMCToolWebbingSmallFilled
+  - RMCBoxClaymoreMineFilled
+
+- type: startingGear
+  parent: CMUGearUPPLineSapper
+  id: CMUGearUPPSapperTeam
+  equipment:
+    id: CMUIDCardUPPSapperTeam
+  storage:
+    back:
+    - RMCExplosivePlastic
+    - CMSandbagEmpty25
+  inhand:
+  - RMCToolWebbingSmallFilled
+  - CMSheetMetal50
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPSapperLead
+  name: UPP senior sapper ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPSapperLead
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardUPPSapperTeam
+  name: UPP sapper ID card
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PresetIdCard
+    job: CMUJobUPPSapperTeam
+  - type: ItemIFF
+    factions:
+    - FactionSurvivor
+
+- type: partySpawn
+  id: CMUUPPSapperTeamSpawn
+  leadersToSpawn:
+    CMUJobUPPSapperLead: 1
+  gruntsToSpawn:
+    CMUJobUPPSapperTeam: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUPPSapperTeam
+  displayName: UPP Sapper Team
+  partyspawn: CMUUPPSapperTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 3
+  roundstart: false

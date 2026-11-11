@@ -233,28 +233,13 @@ public abstract partial class SharedItemSystem : EntitySystem
     /// <summary>
     /// Gets the shape of an item, adjusting for rotation and offset.
     /// </summary>
+    // CMU14 method: avoid shape copies and boxed enumerators on repeated placement checks.
     public IReadOnlyList<Box2i> GetAdjustedItemShape(Entity<StorageComponent?> storage, Entity<ItemComponent?> entity, Angle rotation, Vector2i position)
     {
         if (!Resolve(entity, ref entity.Comp))
             return new Box2i[] { };
 
-        var shapes = GetItemShape(storage, entity);
-        var boundingShape = shapes.GetBoundingBox();
-        var boundingCenter = ((Box2) boundingShape).Center;
-        var matty = Matrix3Helpers.CreateTransform(boundingCenter, rotation);
-        var drift = boundingShape.BottomLeft - matty.TransformBox(boundingShape).BottomLeft;
-
-        var adjustedShapes = new List<Box2i>();
-        foreach (var shape in shapes)
-        {
-            var transformed = matty.TransformBox(shape).Translated(drift);
-            var floored = new Box2i(transformed.BottomLeft.Floored(), transformed.TopRight.Floored());
-            var translated = floored.Translated(position);
-
-            adjustedShapes.Add(translated);
-        }
-
-        return adjustedShapes;
+        return CMUAdjustItemShape(GetItemShape(storage, entity), rotation, position);
     }
 
     /// <summary>

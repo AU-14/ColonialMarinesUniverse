@@ -29,7 +29,7 @@
     - id: CMPen
     - id: AU14GuidebookSOP
     - id: AU14GuidebookLawMarine
-    - id: AU14Scissors
+    - id: CMUScissorsRegulation
     - id: RMCCPRDummy
     - id: RMCGrenadeTraining
       amount: 2

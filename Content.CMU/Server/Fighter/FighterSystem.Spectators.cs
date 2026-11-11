@@ -61,6 +61,8 @@ public sealed partial class FighterSystem
 
     private void OnFighterRoundCleanup(RoundRestartCleanupEvent ev)
     {
+        _aircraftNetworkState.Clear();
+        _seatNetworkState.Clear();
         ClearSpectatorViews();
         _manpadCharts.Clear();
         _manpadRadarMaps.Clear();
@@ -69,6 +71,8 @@ public sealed partial class FighterSystem
 
     public override void Shutdown()
     {
+        _aircraftNetworkState.Clear();
+        _seatNetworkState.Clear();
         ClearSpectatorViews();
         base.Shutdown();
     }

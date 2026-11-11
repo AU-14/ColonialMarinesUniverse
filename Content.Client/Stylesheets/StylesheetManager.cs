@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets.Stylesheets;
 using Content.Shared.CCVar;
 using Robust.Client.Graphics;
@@ -27,11 +27,12 @@ namespace Content.Client.Stylesheets
         public Stylesheet SheetNanotrasen { get; private set; } = default!;
         public Stylesheet SheetSystem { get; private set; } = default!;
 
-        [Obsolete("Update to use SheetNanotrasen instead")]
+        // CMU14: SheetNano includes the live CRT theme; SheetNanotrasen alone does not.
+        // [Obsolete("Update to use SheetNanotrasen instead")]
         public Stylesheet SheetNano { get; private set; } = default!;
 
         [Obsolete("Update to use SheetSystem instead")]
-        public Stylesheet SheetSpace { get; private set; } = default!;
+        public Stylesheet SheetSpace => SheetSystem;
 
         private Dictionary<string, Stylesheet> Stylesheets { get; set; } = default!;
 
@@ -98,7 +99,6 @@ namespace Content.Client.Stylesheets
             StyleNano.SetChatFontStep(
                 StyleNano.ParseChatFontStep(_configurationManager.GetCVar(CCVars.CMUChatBigFont)));
             RefreshNanoSheet();
-            SheetSpace = new StyleSpace(_resCache).Stylesheet; // TODO: REMOVE (obsolete)
 
             _configurationManager.OnValueChanged(CCVars.CMUUiFont, OnUiFontChanged);
             _configurationManager.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);

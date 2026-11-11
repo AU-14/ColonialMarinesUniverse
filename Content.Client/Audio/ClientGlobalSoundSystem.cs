@@ -1,5 +1,6 @@
 using Content.Shared.Audio;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.Audio; // CMU14: admin audio stop event.
 using Content.Shared.GameTicking;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -26,6 +27,7 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
         base.Initialize();
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         SubscribeNetworkEvent<AdminSoundEvent>(PlayAdminSound);
+        SubscribeNetworkEvent<CMUStopAdminSoundEvent>(OnCMUStopAdminSound); // CMU14: stop admin audio on request.
         Subs.CVar(_cfg, CCVars.AdminSoundsEnabled, ToggleAdminSound, true);
 
         SubscribeNetworkEvent<StationEventMusicEvent>(PlayStationEventMusic);

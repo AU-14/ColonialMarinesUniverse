@@ -25,6 +25,11 @@ public sealed partial class GasMaskFilterComponent : Component
     [DataField]
     public float ChemicalIrritantDamageMultiplier = 1f;
 
+    [DataField]
+    public float OrbitalGasProtectionSeconds = 5f;
+
+    public TimeSpan? LastOrbitalGasDamage;
+
     /// <summary>
     /// The "Starting HP" of the filter
     /// </summary>

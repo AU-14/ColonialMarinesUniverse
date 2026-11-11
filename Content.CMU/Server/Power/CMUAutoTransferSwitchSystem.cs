@@ -8,13 +8,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Power;
 
-public sealed class CMUAutoTransferSwitchSystem : EntitySystem
+public sealed partial class CMUAutoTransferSwitchSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
-    [Dependency] private readonly NodeGroupSystem _nodeGroup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private NodeGroupSystem _nodeGroup = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {

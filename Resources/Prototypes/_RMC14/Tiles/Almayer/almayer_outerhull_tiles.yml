@@ -10,6 +10,7 @@
   id: CMFloorOuterHullSouth
   name: tiles-rmc-outer-hull
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull_dir_0.png
+  isSpace: True # cmu edit: open to space like the rest of the outer hull
 
 - type: tile
   parent: CMFloorOuterHull

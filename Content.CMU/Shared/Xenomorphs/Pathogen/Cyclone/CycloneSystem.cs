@@ -12,6 +12,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
+using Content.Shared.Interaction;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -37,6 +38,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoRotateSystem _rotate = default!;
+    [Dependency] private SharedInteractionSystem _interact = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _hits = new();
 
@@ -58,7 +60,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
 
         _audio.PlayPredicted(xeno.Comp.WindupSound, xeno, xeno);
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu14-xeno-cyclone-charge"),
             Loc.GetString("cmu14-xeno-cyclone-charge-others", ("xeno", xeno.Owner)),
             xeno, xeno, PopupType.MediumCaution);
@@ -162,6 +164,9 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
             if (_mobState.IsDead(target))
                 continue;
 
+            if (!_interact.InRangeUnobstructed(xeno.Owner, target.Owner, range))  
+                continue;
+
             count++;
 
             // Client: just flash
@@ -185,7 +190,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
         }
 
         // Play spin popup text on each spin tick, not just the first
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu14-xeno-cyclone-spin"),
             Loc.GetString("cmu14-xeno-cyclone-spin-others", ("xeno", xeno.Owner)),
             xeno, xeno, PopupType.LargeCaution);

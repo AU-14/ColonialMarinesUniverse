@@ -214,7 +214,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
             Act = () =>
             {
                 ShuffleDeck(ent);
-                Popup.PopupPredicted(Loc.GetString("rmc-playing-card-deck-shuffle", ("deck", ent.Owner)), null, ent, user);
+                Popup.PopupEntity(Loc.GetString("rmc-playing-card-deck-shuffle", ("deck", ent.Owner)), null, ent, user);
                 Audio.PlayPredicted(ent.Comp.ShuffleSound, ent, user);
             },
             Priority = 2
@@ -471,7 +471,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
             Act = () =>
             {
                 ShuffleHand(ent);
-                Popup.PopupPredicted(Loc.GetString("rmc-playing-card-hand-shuffle", ("hand", ent.Owner)), null, ent, user);
+                Popup.PopupEntity(Loc.GetString("rmc-playing-card-hand-shuffle", ("hand", ent.Owner)), null, ent, user);
                 Audio.PlayPredicted(ent.Comp.ShuffleSound, ent, user);
             },
             Priority = 2
@@ -537,7 +537,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
         Dirty(card);
 
         var direction = card.Comp.FaceUp ? "up" : "down";
-        Popup.PopupPredicted(Loc.GetString("rmc-playing-card-flip", ("direction", direction)), null, card, user);
+        Popup.PopupEntity(Loc.GetString("rmc-playing-card-flip", ("direction", direction)), null, card, user);
     }
 
     public virtual void FlipHand(Entity<PlayingCardHandComponent> hand, EntityUid user)
@@ -546,7 +546,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
         Dirty(hand);
 
         var direction = hand.Comp.FaceUp ? "up" : "down";
-        Popup.PopupPredicted(Loc.GetString("rmc-playing-card-hand-flip", ("direction", direction)), null, hand, user);
+        Popup.PopupEntity(Loc.GetString("rmc-playing-card-hand-flip", ("direction", direction)), null, hand, user);
     }
 
     protected virtual void CombineCards(Entity<PlayingCardComponent> card1, Entity<PlayingCardComponent> card2, EntityUid user)
@@ -594,7 +594,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
             return;
 
         hand.Comp.LastPopupTime = curTime;
-        Popup.PopupPredicted(message, null, hand, user);
+        Popup.PopupEntity(message, null, hand, user);
     }
 
     #endregion
@@ -649,7 +649,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
     {
         if (deck.Comp.CardsRemaining >= deck.Comp.MaxCards)
         {
-            Popup.PopupPredicted(Loc.GetString("rmc-playing-card-deck-full"), null, deck, user);
+            Popup.PopupEntity(Loc.GetString("rmc-playing-card-deck-full"), null, deck, user);
             return;
         }
 
@@ -658,7 +658,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
         Dirty(deck);
         QueueDel(card);
 
-        Popup.PopupPredicted(Loc.GetString("rmc-playing-card-added-to-deck"), null, deck, user);
+        Popup.PopupEntity(Loc.GetString("rmc-playing-card-added-to-deck"), null, deck, user);
         Audio.PlayPredicted(deck.Comp.DrawSound, deck, user);
     }
 
@@ -666,7 +666,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
     {
         if (deck.Comp.CardsRemaining >= deck.Comp.MaxCards)
         {
-            Popup.PopupPredicted(Loc.GetString("rmc-playing-card-deck-full"), null, deck, user);
+            Popup.PopupEntity(Loc.GetString("rmc-playing-card-deck-full"), null, deck, user);
             return;
         }
 
@@ -691,7 +691,7 @@ public abstract partial class SharedPlayingCardSystem : EntitySystem
 
         if (added > 0)
         {
-            Popup.PopupPredicted(Loc.GetString("rmc-playing-card-added-cards-to-deck", ("count", added)), null, deck, user);
+            Popup.PopupEntity(Loc.GetString("rmc-playing-card-added-cards-to-deck", ("count", added)), null, deck, user);
             Audio.PlayPredicted(deck.Comp.DrawSound, deck, user);
         }
     }

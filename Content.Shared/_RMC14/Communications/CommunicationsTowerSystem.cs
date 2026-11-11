@@ -155,7 +155,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
         args.Handled = true;
         var msg = $"You wipe the preexisting frequencies from the {Name(ent)}.";
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
         ent.Comp.Faction = string.Empty;
         ent.Comp.Channels.Clear();
     }
@@ -186,7 +186,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
         args.Handled = true;
         var msg = $"You add your faction's communication frequencies to the {Name(ent)}'s comm list.";
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
         ent.Comp.Faction = factions.FirstOrDefault().ToString() ?? string.Empty;
     }
 
@@ -194,13 +194,13 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
     {
         if (ent.Comp.State == CommunicationsTowerState.Broken)
         {
-            _popup.PopupClient($"{Name(ent)} needs repairs to be turned back on!", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity($"{Name(ent)} needs repairs to be turned back on!", ent, args.User, PopupType.MediumCaution);
             return;
         }
 
         if (!_rmcPower.IsPowered(ent))
         {
-            _popup.PopupClient($"{Name(ent)} makes a small plaintful beep, and nothing happens. It seems to be out of power.", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity($"{Name(ent)} makes a small plaintful beep, and nothing happens. It seems to be out of power.", ent, args.User, PopupType.MediumCaution);
             return;
         }
 

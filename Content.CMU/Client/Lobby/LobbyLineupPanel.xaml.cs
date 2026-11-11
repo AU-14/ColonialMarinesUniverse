@@ -266,7 +266,7 @@ public sealed partial class LobbyLineupPanel : Control
             if (remaining.Contains(id))
                 continue;
             card.Orphan();
-            card.Dispose();
+            card.Release();
             _cards.Remove(id);
         }
         if (_showcase == null)
@@ -292,7 +292,7 @@ public sealed partial class LobbyLineupPanel : Control
                 if (_cards.TryGetValue(entry.UserId, out var card) && card.Parent != section.Cards)
                 {
                     card.Orphan();
-                    card.Dispose();
+                    card.Release();
                     _cards.Remove(entry.UserId);
                     card = null;
                 }
@@ -314,7 +314,7 @@ public sealed partial class LobbyLineupPanel : Control
             if (activeSections.Contains(id))
                 continue;
             section.Orphan();
-            section.Dispose();
+            section.Release();
             _sections.Remove(id);
         }
         ReadyCount.Text = Loc.GetString("cmu-lobby-lineup-count", ("count", entries.Count));
@@ -562,7 +562,7 @@ public sealed partial class LobbyLineupPanel : Control
         foreach (var section in _sections.Values)
         {
             section.Orphan();
-            section.Dispose();
+            section.Release();
         }
         _cards.Clear();
         _sections.Clear();

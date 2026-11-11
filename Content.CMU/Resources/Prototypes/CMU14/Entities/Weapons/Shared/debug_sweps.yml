@@ -109,3 +109,15 @@
   - type: HolosignProjector
     signProto: HoloFan
     chargeUse: 0
+
+# inhaleAmount 0 means the smokable solution never drains, so the
+# cigar never reaches Burnt. Water spray still snuffs it, though.
+- type: entity
+  name: the one
+  parent: RMCShioCigar
+  id: CMUDebugEternalCigar
+  description: this is the one.
+  suffix: DEBUG, CMU
+  components:
+  - type: Smokable
+    inhaleAmount: 0

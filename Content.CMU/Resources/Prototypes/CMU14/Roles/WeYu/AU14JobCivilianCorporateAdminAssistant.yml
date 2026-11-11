@@ -1,8 +1,17 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 23
   id: AU14JobCivilianCorporateAdminAssistant
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
+  roundProfiles:
+  - AU14RoundJobProfileThirdParty
   roundRole: CivilianCorporateAdminAssistant
   roundComponents:
   - type: Skills
@@ -23,7 +32,7 @@
     whitelist:
       tags:
       - SquadPMC
-  name: au14-job-name-civiliancorporateadminassistant
+  name: cmu-job-title-corporate-admin-assistant
   description: au14-job-description-civiliancorporateadminassistant
   setPreference: false
   playTimeTracker: AU14JobCivilianCorporateAdminAssistant
@@ -60,6 +69,7 @@
   storage:
     back:
     - CMUUniversalPaperTool
+    - CMUPepperSpray
 
 - type: entity
   parent: CMSpawnPointJobBase

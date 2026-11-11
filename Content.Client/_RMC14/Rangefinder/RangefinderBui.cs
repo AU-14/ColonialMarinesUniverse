@@ -50,7 +50,7 @@ public sealed class RangefinderBui : BoundUserInterface
             _window.Latitude.SetMarkupPermissive(msg);
         }
 
-        _window.BottomContainer.DisposeAllChildren();
+        _window.BottomContainer.ReleaseChildren();
 
         if (rangefinder.LastCoords is { } mapCoords)
         {

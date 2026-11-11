@@ -53,7 +53,7 @@
         Blunt: 35
   - type: Synth
 
-  name: Prodigy Hazard Support Synthetic
+  name: Support Synthetic
   description: au14-prodigyhazard-description
   playTimeTracker: AU14JobHRTPartySyntheticTracker
   whitelisted: true

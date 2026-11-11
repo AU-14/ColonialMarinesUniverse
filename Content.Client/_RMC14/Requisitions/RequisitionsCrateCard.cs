@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Requisitions; // CMU14
 using System.Numerics;
 using System.Linq;
 using Content.Shared._RMC14.Requisitions;
@@ -83,7 +84,7 @@ public sealed class RequisitionsCrateCard : PanelContainer
                 SetSize = new Vector2(26, 26),
             };
             if (prototypes.TryIndex<EntityPrototype>(item.Prototype, out var prototype))
-                icon.Textures = sprites.GetPrototypeTextures(prototype).Select(layer => layer.Default).ToList();
+                icon.Textures = RequisitionsIconCache.Get(sprites, prototype); // CMU14
             line.AddChild(icon);
             line.AddChild(new Label
             {

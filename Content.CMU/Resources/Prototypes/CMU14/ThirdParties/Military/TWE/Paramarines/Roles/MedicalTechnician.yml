@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobParamarineMedicalTechnician
+  chevrons:
+    IASF_ChiefPrivate:
+      entity: AU14ChevronIASFChiefPrivate
+      requirements: []
   roundSide: ThirdParty
   roundForce: CMUParamarines
   roundRole: ParamarineMedicalTechnician
@@ -24,13 +28,13 @@
     - English
     currentLanguage: English
     defaultLanguage: English
-  name: cmu-paramarines-name-medic
+  name: cmu-paramarines-name-medic-title
   description: cmu-paramarines-description
   playTimeTracker: CMUJobParamarineMedicalTechnician
   ranks:
     RMCRankCivilian: []
   startingGear: CMUGearParamarineMedicalTechnician
-  spawnMenuRoleName: TWE Royal Paramarine Medical Technician (3rd party)
+  spawnMenuRoleName: IASF Parachute Regiment Medical Technician (3rd party)
   greeting: cmu-paramarines-greeting
   icon: RMCJobIconParaMedicalTechnican
   joinNotifyCrew: false
@@ -42,7 +46,7 @@
 - type: entity
   parent: CMUBaseMobSpeciesParamarines
   id: CMUJobParamarineMedicalTechnician
-  name: TWE Royal Paramarine Medical Technician
+  name: IASF Parachute Regiment Medical Technician
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

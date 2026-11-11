@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Xenos and neomorphs can mark future construction sites and automatically
+    build them when in range.
+  type: Add
+time: '2026-11-08T11:28:14.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2536

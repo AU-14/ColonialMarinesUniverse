@@ -75,7 +75,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
         args.Handled = true;
         if (_container.IsEntityInContainer(xeno))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-for-the-hive-container"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-for-the-hive-container"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -88,7 +88,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
             _energy.TryRemoveEnergy(xeno.Owner, acid.Current / 4);
 
-            _popup.PopupClient(Loc.GetString("rmc-xeno-for-the-hive-cancel"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-for-the-hive-cancel"), xeno, xeno);
             RemCompDeferred<ActiveForTheHiveComponent>(xeno);
             return;
         }
@@ -104,7 +104,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
         ForTheHiveShout(xeno);
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-for-the-hive-activate"), xeno, xeno, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-for-the-hive-activate"), xeno, xeno, PopupType.Medium);
     }
 
     protected virtual void ForTheHiveShout(EntityUid xeno)
@@ -288,7 +288,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
     private void OnVentCrawlAttempt(Entity<ActiveForTheHiveComponent> xeno, ref VentEnterAttemptEvent args)
     {
-        _popup.PopupClient(Loc.GetString("rmc-vent-crawling-primed"), xeno, PopupType.SmallCaution);
+        _popup.PopupSelf(Loc.GetString("rmc-vent-crawling-primed"), xeno, PopupType.SmallCaution);
         args.Cancel();
     }
 }

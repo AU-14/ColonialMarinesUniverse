@@ -120,15 +120,17 @@ public sealed partial class RMCSpriteSystem : SharedRMCSpriteSystem
                 !HasComp<ParaDroppingComponent>(player) &&
                 !HasComp<CrashLandingComponent>(player))
             {
+                // CMU14: set the sprite directly, writing appearance every frame re-ran the visualizers and froze
+                // animated clothing like a lit cigarette while buckled
                 if (TryComp(player, out BuckleComponent? buckle) && buckle.Buckled)
                 {
-                    UpdateDrawDepth(player);
+                    _sprite.SetDrawDepth((player, playerSprite), (int) GetDrawDepth(player));
                     return;
                 }
 
                 if (HasComp<XenoChargerRidingComponent>(player))
                 {
-                    UpdateDrawDepth(player);
+                    _sprite.SetDrawDepth((player, playerSprite), (int) GetDrawDepth(player));
                     return;
                 }
 

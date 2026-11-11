@@ -292,8 +292,8 @@ public sealed partial class LobbyLineupCard : Control
         Preview.OverrideDirection = pose.Facing;
         var rotation = new Angle(pose.Rotation);
         // Camera rotation is cancelled by upright humanoid layers. Rotate only this local preview's sprite.
-        if (Preview.Sprite is { } sprite && sprite.Rotation != rotation)
-            _entities.System<SpriteSystem>().SetRotation((sprite.Owner, sprite), rotation);
+        if (Preview.Entity is { } preview && Preview.Sprite is { } sprite && sprite.Rotation != rotation)
+            _entities.System<SpriteSystem>().SetRotation((preview, sprite), rotation);
         if (active is LobbyLineupEmote.Chestburst or LobbyLineupEmote.XenoMorph)
             Preview.Modulate = Preview.Modulate.WithAlpha(1 - LobbyLineupChoreography.XenoBlend(phase));
         if (_previewBounds.Height > 0)

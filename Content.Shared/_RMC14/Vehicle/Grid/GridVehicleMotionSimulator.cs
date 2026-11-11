@@ -57,15 +57,16 @@ public static class GridVehicleMotionSimulator
     /// embedded vehicle back out; movement further into the obstacle remains
     /// blocked.
     /// </summary>
+    // CMU14 method: the first acceleration step can be less than 0.001 tiles.
     public static bool IsMovingAwayFromObstacle(
         Vector2 moveDelta,
         Vector2 vehicleCenter,
         Vector2 obstacleCenter)
     {
-        if (moveDelta.LengthSquared() <= 0.000001f)
+        if (moveDelta.LengthSquared() <= 0f)
             return false;
 
-        return Vector2.Dot(moveDelta, obstacleCenter - vehicleCenter) < -0.000001f;
+        return Vector2.Dot(Vector2.Normalize(moveDelta), obstacleCenter - vehicleCenter) < -0.000001f;
     }
 
     /// <summary>

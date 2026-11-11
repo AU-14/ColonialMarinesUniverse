@@ -1,0 +1,16 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Facehuggers now complete infection and fall off within 15 seconds when
+    their host is nested.
+  type: Tweak
+- message: Newly infected nested hosts correctly receive the nest's incubation speed
+    bonus.
+  type: Fix
+- message: Facehugger oxygen supply now requires the parasite to remain attached.
+  type: Fix
+- message: Living nested humans passively heal 1 HP per second, up to 50% of their
+    maximum health.
+  type: Add
+time: '2026-10-19T14:59:54.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2209

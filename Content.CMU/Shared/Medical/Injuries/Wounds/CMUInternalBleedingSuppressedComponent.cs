@@ -9,4 +9,11 @@ public sealed partial class CMUInternalBleedingSuppressedComponent : Component
 
     [DataField]
     public float BloodlossPerSecond;
+
+    /// <summary>
+    ///     When a drug's hold on the bleed wears off and it starts bleeding again. Null for a surgical clamp, which
+    ///     holds for good.
+    /// </summary>
+    [DataField]
+    public TimeSpan? ExpiresAt;
 }

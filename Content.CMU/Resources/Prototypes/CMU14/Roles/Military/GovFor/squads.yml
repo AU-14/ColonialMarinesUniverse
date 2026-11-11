@@ -54,6 +54,7 @@
   id: SquadGovforIntel
   name: Auxiliary
   components:
+  - type: CMUAuxiliarySquad
   - type: AU14SquadCallsign
     word: LONGBOW
   - type: SquadTeam
@@ -65,3 +66,39 @@
     minimapBackground:
      sprite: /Textures/_RMC14/Interface/map_blips.rsi
      state: background_intel
+
+# FOB security squad: opt-in (character menu), with its own slots on top of the regular ones; see CMUFoxtrotSquadSystem.
+- type: entity
+  parent: SquadGovfor
+  id: SquadGovforFoxtrot
+  name: Foxtrot
+  components:
+  - type: CMUFoxtrotSquad
+    slots:
+      SquadSergeant: 1
+      RadioTrafficOperator: 1
+      SquadCombatTech: 2
+      PlatoonCorpsman: 1
+      SquadRifleman: 2
+    # the squad leader, RTO, corpsman and riflemen can help build the FOB; the combat technicians keep their own skills
+    skillRoles:
+    - SquadSergeant
+    - RadioTrafficOperator
+    - PlatoonCorpsman
+    - SquadRifleman
+    skills:
+      RMCSkillConstruction: 3
+      RMCSkillEngineer: 3
+    extraVendorPoints:
+      SquadCombatTech: 15
+  - type: AU14SquadCallsign
+    word: HALBERD
+  - type: SquadTeam
+    roundStart: true
+    color: "#4B6584"
+    group: GOVFOR
+    radio: radioGovforFoxtrot
+    supplyDropPadSquad: SquadDelta
+    minimapBackground:
+     sprite: /Textures/_RMC14/Interface/map_blips.rsi
+     state: background_foxtrot

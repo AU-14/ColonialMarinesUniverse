@@ -37,28 +37,37 @@ public sealed partial class LoadoutContainer : BoxContainer
         SelectButton.Disabled = disabled;
         SelectButton.ToggleMode = !repeatable;
 
-        if (disabled && reason != null)
-        {
-            var tooltip = new Tooltip();
-            tooltip.SetMessage(reason);
-            SelectButton.TooltipSupplier = _ => tooltip;
-        }
-
+        var message = new FormattedMessage();
         if (_protoManager.Resolve(proto, out var loadProto))
         {
+            message.AddText(Loc.GetString("loadouts-point-cost-tooltip", ("cost", loadProto.Cost ?? 0)));
             var ent = loadProto.DummyEntity ?? _entManager.System<LoadoutSystem>().GetFirstOrNull(loadProto);
 
-            if (ent == null)
-                return;
+            if (ent != null)
+            {
+                _entity = _entManager.SpawnEntity(ent, MapCoordinates.Nullspace);
+                Sprite.SetEntity(_entity);
 
-            _entity = _entManager.SpawnEntity(ent, MapCoordinates.Nullspace);
-            Sprite.SetEntity(_entity);
-
-            var spriteTooltip = new Tooltip();
-            spriteTooltip.SetMessage(FormattedMessage.FromUnformatted(_entManager.GetComponent<MetaDataComponent>(_entity.Value).EntityDescription));
-
-            TooltipSupplier = _ => spriteTooltip;
+                var description = _entManager.GetComponent<MetaDataComponent>(_entity.Value).EntityDescription;
+                if (!string.IsNullOrWhiteSpace(description))
+                {
+                    message.PushNewline();
+                    message.AddText(description);
+                }
+            }
         }
+
+        if (disabled && reason != null)
+        {
+            message.PushNewline();
+            message.AddMessage(reason);
+        }
+
+        var tooltip = new Tooltip();
+        tooltip.SetMessage(message);
+        SelectButton.TooltipSupplier = _ => tooltip;
+        Sprite.TooltipSupplier = _ => tooltip;
+        TooltipSupplier = _ => tooltip;
     }
 
     [System.Obsolete]

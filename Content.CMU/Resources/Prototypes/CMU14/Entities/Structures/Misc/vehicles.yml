@@ -718,7 +718,7 @@
   parent: AU14PropCLFVan
   id: AU14PropCLFVanProp
   suffix: Vehicle
-  name: CLF Van
+  name: INSFOR Van
   description: A vehicle.
   components:
   - type: Sprite

@@ -367,7 +367,7 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 
         foreach (var entity in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (entity.HasComponent<CMSurgeryComponent>())
+            if (entity.HasComp<CMSurgeryComponent>(Factory))
                 _surgeries.Add(new EntProtoId(entity.ID));
         }
     }

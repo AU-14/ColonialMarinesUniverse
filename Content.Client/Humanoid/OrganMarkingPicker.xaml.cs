@@ -79,7 +79,7 @@ public sealed partial class OrganMarkingPicker : Control
 
             var control = new LayerMarkingPicker(_markingsModel, _organ, layer, allMarkings);
             LayerTabs.AddChild(control);
-            if (Loc.TryGetString($"markings-layer-{layer}-{_group.Id}", out var layerTitle))
+            if (IoCManager.Resolve<ILocalizationManager>().TryGetString($"markings-layer-{layer}-{_group.Id}", out var layerTitle))
                 LayerTabs.SetTabTitle(i, layerTitle);
             else
                 LayerTabs.SetTabTitle(i, Loc.GetString($"markings-layer-{layer}"));

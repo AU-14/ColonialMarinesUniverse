@@ -1,5 +1,7 @@
+using Content.Shared.CMU14.Chemistry.Effects.Neutral;
 using Content.Shared.CMU14.Chemistry.Effects.Positive;
 using Content.Shared._RMC14.Chemistry.Effects;
+using Robust.Shared.Random;
 using Content.Shared._RMC14.Chemistry.Effects.Negative;
 using Content.Shared._RMC14.Chemistry.Effects.Positive;
 using Content.Shared.Botany.Components;
@@ -15,10 +17,12 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private PlantHolderSystem _plantHolder = default!;
     [Dependency] private PlantTraySystem _plantTray = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<HydroTickEvent<Trichogenic>>(Trichogenic);
         SubscribeLocalEvent<HydroTickEvent<Carcinogenic>>(Carcinogenic);
         SubscribeLocalEvent<HydroTickEvent<Antitoxic>>(Antitoxic);
         SubscribeLocalEvent<HydroTickEvent<Anticorrosive>>(Anticorrosive);
@@ -30,6 +34,16 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
         SubscribeLocalEvent<HydroTickEvent<Neuropeutic>>(Neuropeutic);
         SubscribeLocalEvent<PlantHolderComponent, BeforeRandomPlantMutationEvent>(OnBeforeRandomPlantMutation);
         SubscribeLocalEvent<PlantSpeciesChangedEvent>(OnPlantSpeciesChanged);
+    }
+
+    /// <summary>Trichogenic: a potency-scaled chance per tick to raise the plant's yield modifier by one.</summary>
+    private void Trichogenic(ref HydroTickEvent<Trichogenic> args)
+    {
+        if (!TryGetAlivePlant(args.Target, out _, out var plant))
+            return;
+
+        if (_random.Prob(Math.Min(0.25f, HydroStrength(args.Potency, args.Quantity) * 0.02f)))
+            _plantHolder.AdjustsYieldMod((plant.Owner, (PlantHolderComponent?) plant.Comp), 1);
     }
 
     private void Antitoxic(ref HydroTickEvent<Antitoxic> args)

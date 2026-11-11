@@ -2,7 +2,7 @@
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Mentor"
-    xmlns:ui="clr-namespace:Content.Client._CMU14.Interface"
+    xmlns:ui="clr-namespace:Content.Client.CMU14.Interface"
     Title="Admin and Mentor Help"
     MinWidth="{x:Static ui:CmuPanelMetrics.ChoiceWindowWidth}">
     <!-- Just a ground and a slot. The two choices are CmuChoiceCards built in the code-behind, which

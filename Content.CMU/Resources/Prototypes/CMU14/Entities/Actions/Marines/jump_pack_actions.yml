@@ -1,0 +1,61 @@
+# Placeholder icons until the jump pack sprites are added.
+- type: entity
+  id: CMUActionJumpPackBoost
+  name: Jump Pack Boost
+  description: Fire the thrusters and dash six tiles along the set heading.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.JumpPack.CMUJumpPackBoostActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - sprite: Objects/Tanks/Jetpacks/blue.rsi
+      state: icon-on
+      map: ["enum.ActionVisuals.Icon"]
+
+- type: entity
+  id: CMUActionJumpPackDirection
+  name: Jump Pack Heading
+  description: Rotate the boost heading clockwise. Alt-click the pack to switch between four and eight headings.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.JumpPack.CMUJumpPackDirectionActionEvent
+  - type: Action
+    checkCanInteract: false
+    itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - sprite: CMU14/ZLevels/Actions/misc.rsi
+      state: eye
+      map: ["enum.ActionVisuals.Icon"]
+
+- type: entity
+  id: CMUActionJumpPackJump
+  name: Jump Pack Leap
+  description: Blast upward to the level above. Shares a cooldown with the boost.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.JumpPack.CMUJumpPackJumpActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - sprite: CMU14/ZLevels/Actions/misc.rsi
+      state: up
+      map: ["enum.ActionVisuals.Icon"]
+
+- type: entity
+  id: CMUActionJumpPackHover
+  name: Jump Pack Hover
+  description: Rise one level and hover for up to twenty seconds. Use again to land early.
+  components:
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.JumpPack.CMUJumpPackHoverActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - sprite: Objects/Tanks/Jetpacks/blue.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]

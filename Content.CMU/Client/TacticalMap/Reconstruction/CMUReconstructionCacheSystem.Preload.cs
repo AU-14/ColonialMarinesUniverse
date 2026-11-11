@@ -14,7 +14,7 @@ public sealed partial class CMUReconstructionCacheSystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
-    private readonly record struct Context(EntityUid Actor, string? Faction, EntityUid? Location, bool PlanetOnShip);
+    private readonly record struct Context(EntityUid Actor, FactionIdentity Faction, EntityUid? Location, bool PlanetOnShip);
     private Context? _preloadContext;
     private CMUReconstructionControl? _preloadView;
     private int _preloadRequest;
@@ -91,7 +91,7 @@ public sealed partial class CMUReconstructionCacheSystem
         _preloadRequest = 0;
         // Unattached controls do not receive ExitedTree, so release their GPU ownership explicitly.
         _preloadView?.TakeRenderData().Dispose();
-        _preloadView?.Dispose();
+        _preloadView?.Release();
         _preloadView = null;
     }
 }

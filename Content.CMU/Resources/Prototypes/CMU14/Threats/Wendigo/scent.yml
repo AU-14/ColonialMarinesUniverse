@@ -1,0 +1,56 @@
+# Wendigo scent tracking: the Catch Scent action and its tracker arrow alert.
+# Systems: Content.CMU/{Shared,Server,Client}/Threats/Mobs/Wendigo/Scent.
+
+- type: entity
+  id: ActionCMUWendigoScent
+  parent: ActionXenoBase
+  name: Catch Scent
+  description: Sniff a living creature, or an item someone has held, to catch its scent. For a few minutes you sense which way it lies and see the trail it leaves.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 30
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: mark_hosts
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 10
+  - type: EntityTargetAction
+    event: !type:CMUWendigoScentActionEvent
+    canTargetSelf: false
+  - type: ActionBlockIfResting
+
+# Own category: the natural Wendigo also has a HiveTracker, which clears its own tracker category every update.
+- type: alertCategory
+  id: CMUWendigoScent
+
+- type: alert
+  id: CMUWendigoScentTracker
+  category: CMUWendigoScent
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackoff
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-center
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-south
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-southeast
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-east
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-northeast
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-north
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-northwest
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-west
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_tracker.rsi
+    state: trackon-southwest
+  name: cmu-wendigo-scent-alert-name
+  description: cmu-wendigo-scent-alert-desc
+  minSeverity: 0
+  maxSeverity: 10

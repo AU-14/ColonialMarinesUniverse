@@ -15,6 +15,14 @@ public sealed partial class RestartRoundCommand : LocalizedEntityCommands
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
+        // CMU14: restartround ends the round for everyone; require an explicit confirm argument
+        if (args.Length == 0
+            || !args[0].Equals("confirm", StringComparison.OrdinalIgnoreCase))
+        {
+            shell.WriteLine(Loc.GetString("cmu-cmd-restartround-needs-confirm"));
+            return;
+        }
+
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
         {
             shell.WriteLine(Loc.GetString("shell-can-only-run-while-round-is-active"));
@@ -34,6 +42,14 @@ public sealed partial class RestartRoundNowCommand : LocalizedEntityCommands
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
+        // CMU14: restartroundnow restarts the round for everyone; require an explicit confirm argument
+        if (args.Length == 0
+            || !args[0].Equals("confirm", StringComparison.OrdinalIgnoreCase))
+        {
+            shell.WriteLine(Loc.GetString("cmu-cmd-restartroundnow-needs-confirm"));
+            return;
+        }
+
         _gameTicker.RestartRound();
     }
 }

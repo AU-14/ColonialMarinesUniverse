@@ -57,6 +57,7 @@
   - type: VehicleSmashable
     damageOnHit: 1000
     requiresDoorUnpowered: true
+    minContinueWeightClass: Heavy
   - type: ContainerFill
     containers:
       board: [ DoorElectronics ]
@@ -141,7 +142,7 @@
             CMShardGlass:
               min: 1
               max: 1
-            RMCCableCoil1: #dropping a cable coil more than was used to make it, because... parity!
+            CMUCableThinLVStack1: # CMU14: was RMCCableCoil1, still drops two for parity
               min: 2
               max: 2
             DoorElectronics:
@@ -196,7 +197,7 @@
             CMShardGlass: #doesn't drop Reinforced glass shard, because parity.
               min: 1
               max: 1
-            RMCCableCoil1: #double cable coil again.
+            CMUCableThinLVStack1: # CMU14: was RMCCableCoil1, still drops two for parity
               min: 2
               max: 2
             DoorElectronics:

@@ -1,4 +1,4 @@
-﻿- type: job
+- type: job
   parent: CMJobBase
   id: AU14JobUNISCEnforcerLeader
   icon: AU14JobIconGovCMP
@@ -28,7 +28,7 @@
     currentLanguage: English
     defaultLanguage: English
 
-  name: UNISC Lead Enforcer
+  name: Lead Enforcer
   description: au14-unisc-description
   playTimeTracker: AU14JobUNISCEnforcerLeader
   ranks:

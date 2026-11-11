@@ -62,7 +62,9 @@ public sealed partial class ClientClothingSystem : ClothingSystem
         if (args.Sprite == null)
             return;
 
-        UpdateAllSlots(ent.AsNullable());
+        // CMU14: unchanged appearance states must not reconstruct every equipped layer.
+        // UpdateAllSlots(ent.AsNullable());
+        RefreshCMUAppearanceEquipment(ent, args.Sprite);
 
         // No clothing equipped -> make sure the layer is hidden, though this should already be handled by on-unequip.
         if (_sprite.LayerMapTryGet((ent, args.Sprite), HumanoidVisualLayers.StencilMask, out var layer, false))

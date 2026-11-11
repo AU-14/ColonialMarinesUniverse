@@ -284,7 +284,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
             crate.Comp.LandingEffectId,
             crate.Comp.ArrivingSound);
 
-        _popup.PopupClient(Loc.GetString("rmc-supply-drop-crate-load", ("crate", crate)), crateCoordinates, user, PopupType.Medium);
+        _popup.PopupCoordinates(Loc.GetString("rmc-supply-drop-crate-load", ("crate", crate)), crateCoordinates, user, PopupType.Medium);
         _marineAnnounce.AnnounceSquad(Loc.GetString("rmc-supply-drop-squad-announcement", ("crate", crate)), squad);
         _audio.PlayPvs(crate.Comp.LaunchSound, crateCoordinates);
 

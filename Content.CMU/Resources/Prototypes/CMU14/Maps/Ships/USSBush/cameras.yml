@@ -1,0 +1,25 @@
+- type: cameraNetwork
+  id: CMUSurveillanceCameraBush
+  name: cmu-camera-network-bush
+  configurable: true
+
+- type: entity
+  parent: RMCSurveillanceCameraAlmayer
+  id: CMUSurveillanceCameraBush
+  suffix: USS George W. Bush
+  components:
+  - type: SurveillanceCamera
+    setupAvailableNetworks:
+    - CMUSurveillanceCameraBush
+  - type: CameraNetworkMember
+    networks: [CMUSurveillanceCameraBush]
+    sourceKinds: Rmc
+
+- type: entity
+  parent: RMCMonitorCameraAlmayer
+  id: CMUMonitorCameraBush
+  suffix: USS George W. Bush
+  components:
+  - type: CameraNetworkReceiver
+    networks: [CMUSurveillanceCameraBush, CMUMohawkOmaha]
+    supportedSources: Rmc

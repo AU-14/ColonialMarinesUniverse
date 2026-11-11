@@ -1,6 +1,9 @@
 - type: traitCategory
   id: Disabilities
   name: trait-category-disabilities
+  # cmu edit start: up to four disabilities
+  maxTraitPoints: 4
+  # cmu edit end
 
 - type: traitCategory
   id: SpeechTraits

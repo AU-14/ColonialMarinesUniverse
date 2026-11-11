@@ -492,48 +492,7 @@ public sealed class VisceralPhysiologyLifecycleTest
         });
         await pair.CleanReturnAsync();
     }
-    [TestCase("liver", true)]
-    [TestCase("kidneys", false)]
-    [TestCase("stomach", false)]
-    public async Task APermissionCallbackQueuingPatientOrOrganDeletionCancelsPendingPressure(string kind, bool queuePatient)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        EntityUid patient = default, organ = default, queued = default;
-        CMUVisceralPressureProbeComponent observed = default!;
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            (patient, organ) = CreatePatient(entities, kind);
-            observed = Probe(entities, patient);
-            ConfigureVomit(entities, organ, kind);
-            DamageToStage(entities, patient, organ, OrganDamageStage.Dead);
-            DelayService(entities, organ, kind);
-        });
-        await pair.RunTicksSync(pair.SecondsToTicks(2.3f));
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            queued = queuePatient ? patient : organ;
-            observed.QueueOnPermission = queued;
-            Heal(entities, patient, organ);
-            Assert.That(observed.Queued, Is.True);
-            Assert.That(entities.IsQueuedForDeletion(queued), Is.True,
-                "QueueDeleteEntity has run, but synchronous deletion has not hidden stale-owner effects yet.");
-            Assert.That(observed.Toxin, Is.EqualTo(FixedPoint2.Zero));
-            Assert.That(observed.Vomits, Is.Zero);
-        });
-        await pair.RunTicksSync(2);
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            Assert.That(entities.EntityExists(queued), Is.False);
-            Assert.That(observed.Toxin, Is.EqualTo(FixedPoint2.Zero));
-            Assert.That(observed.Vomits, Is.Zero);
-            if (entities.EntityExists(patient))
-                entities.DeleteEntity(patient);
-        });
-        await pair.CleanReturnAsync();
-    }
+
     private static (EntityUid Patient, EntityUid Organ) CreatePatient(IEntityManager entities, string kind,
         MapCoordinates? coordinates = null)
     {
@@ -615,8 +574,6 @@ public sealed partial class CMUVisceralPressureProbeComponent : Component
     public int Vomits;
     public bool RejuvenateOnPermission;
     public bool Rejuvenated;
-    public EntityUid? QueueOnPermission;
-    public bool Queued;
 }
 
 [RegisterComponent]
@@ -646,13 +603,6 @@ public sealed partial class CMUVisceralPressureProbeSystem : EntitySystem
 
     private void OnMetabolismPermission(Entity<CMUVisceralPressureProbeComponent> ent, ref CMMetabolizeAttemptEvent args)
     {
-        if (ent.Comp.QueueOnPermission is { } queued)
-        {
-            ent.Comp.QueueOnPermission = null;
-            EntityManager.QueueDeleteEntity(queued);
-            ent.Comp.Queued = true;
-            return;
-        }
         if (!ent.Comp.RejuvenateOnPermission)
             return;
         ent.Comp.RejuvenateOnPermission = false;

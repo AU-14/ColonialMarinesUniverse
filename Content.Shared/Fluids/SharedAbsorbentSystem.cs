@@ -20,6 +20,9 @@ namespace Content.Shared.Fluids;
 /// </summary>
 public abstract partial class SharedAbsorbentSystem : EntitySystem
 {
+    // CMU14: flat solution cost per mop use on reaction-less tiles; mirrors CM13's
+    // per-use mop economy. Tiles with reactions pay their own reaction cost instead.
+    private static readonly FixedPoint2 MopCleanSolutionUse = FixedPoint2.New(5);
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
     [Dependency] protected SharedPuddleSystem Puddle = default!;
@@ -151,11 +154,17 @@ public abstract partial class SharedAbsorbentSystem : EntitySystem
 
             if (available == FixedPoint2.Zero)
             {
-                _popups.PopupClient(Loc.GetString("mopping-system-no-water", ("used", absorbEnt)), absorbEnt, user);
+                _popups.PopupEntity(Loc.GetString("mopping-system-no-water", ("used", absorbEnt)), absorbEnt, user);
                 return true;
             }
 
             Puddle.DoTileReactions(tileRef, absorberSolution);
+
+            // CMU14: charge the flat use cost only when the reaction pass consumed
+            // nothing, so a decal clean pays its reaction cost exactly once.
+            if (available == absorberSolution.Volume)
+                absorberSolution.SplitSolutionWithOnly(MopCleanSolutionUse,
+                    Puddle.GetAbsorbentReagents(absorberSolution));
             SolutionContainer.UpdateChemicals(absorberSoln.Value);
         }
 

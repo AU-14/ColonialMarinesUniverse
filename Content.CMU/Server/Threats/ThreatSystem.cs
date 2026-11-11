@@ -1,5 +1,7 @@
 using System.Linq;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Ship;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.GameTicking;
 using Content.Server.Chat.Managers;
@@ -7,12 +9,12 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.CMU14.util;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
@@ -41,6 +43,7 @@ namespace Content.Server.CMU14.Threats;
 
 public sealed partial class ThreatSystem : EntitySystem
 {
+    [Dependency] private CMUAdriftSystem _adrift = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -48,6 +51,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -344,27 +348,47 @@ public sealed partial class ThreatSystem : EntitySystem
         var assignments = assignedJobs.Where(pair => IsThreatJob(pair.Value.Item1)).ToDictionary();
         var volunteers = voteHeldPlayers?.ToList() ?? assignments.Keys.ToList();
         var name = Loc.GetString(ThreatVoteSelection.GetThreatDisplayNameLocId(threat.ID), ("threat", threat.ID));
-        var id = _forceInterest.QueueForce(name, bodies, interested =>
+        var id = _forceInterest.QueueDeployment(name, bodies,
+            interested => DeployThreat(interested).GetEnumerator(), ready, volunteers, fallbackJobs);
+
+        IEnumerable<ForceDeploymentStep> DeployThreat(IReadOnlySet<NetUserId> interested)
         {
             // A vote is consent, but only while that player remains interested and available.
             var currentAssignments = assignments.Where(pair => interested.Contains(pair.Key)).ToDictionary();
             var currentVoters = voteHeldPlayers?.Where(interested.Contains).ToList();
-            if (!ExecuteSpawn(threat, mapId, currentAssignments, currentVoters,
-                    scalingPlayerCount: population, playerBudget: playerBudget))
-                return false;
-
-            if (startWinConditions)
+            var stagedBodies = new List<EntityUid>();
+            try
             {
-                StartThreatWinConditions(threat);
-                if (forced)
+                foreach (var step in ExecuteSpawnSteps(threat, mapId, currentAssignments, stagedBodies, currentVoters,
+                             scalingPlayerCount: population, playerBudget: playerBudget))
                 {
-                    _auRound.SetSelectedThreat(threat);
-                    _auRound.PreselectThirdPartiesForSelectedThreat();
+                    if (step == ForceDeploymentStep.Completed && startWinConditions)
+                    {
+                        StartThreatWinConditions(threat);
+                        if (forced)
+                        {
+                            _auRound.SetSelectedThreat(threat);
+                            _auRound.PreselectThirdPartiesForSelectedThreat();
+                        }
+                    }
+
+                    yield return step;
                 }
             }
+            finally
+            {
+                // Bodies cannot be claimed between spawn steps and their reserved mind assignments.
+                // Also release partial deployments if the scheduler cancels or a later step fails.
+                foreach (var body in stagedBodies)
+                {
+                    if (TerminatingOrDeleted(body))
+                        continue;
 
-            return true;
-        }, ready, volunteers, fallbackJobs);
+                    _ghostRole.ReleaseForceRole(body);
+                    _forceInterest.TrackRole(body);
+                }
+            }
+        }
 
         // Shelved forces must not indefinitely prevent volunteers from joining another role.
         ReleaseVoteHeldPlayers(voteHeldPlayers, threat.ID, "force queued for interest", false);
@@ -384,17 +408,17 @@ public sealed partial class ThreatSystem : EntitySystem
         _pendingSpawns.Insert(index, pending);
     }
 
-    private bool ExecuteSpawn(ThreatPrototype threat,
+    private IEnumerable<ForceDeploymentStep> ExecuteSpawnSteps(ThreatPrototype threat,
         MapId mapId,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
+        List<EntityUid> stagedBodies,
         IReadOnlyList<NetUserId>? voteHeldPlayers = null,
         bool requireObserverForVotePlayers = false,
         int? scalingPlayerCount = null,
         int? playerBudget = null)
     {
         string threatId = threat.ID;
-        ProtoId<PartySpawnPrototype> partySpawn = threat.RoundStartSpawn;
-        if (string.IsNullOrWhiteSpace(partySpawn))
+        if (threat.RoundStartSpawn is not { } partySpawn || string.IsNullOrWhiteSpace(partySpawn.Id))
         {
             _sawmill.Debug($"[DEBUG] Threat '{threat.ID}' has no RoundStartSpawn configured, skipping spawn.");
             int removed = ThreatSystem.RemoveThreatJobAssignments(assignedJobs);
@@ -406,7 +430,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
             ReleaseVoteHeldPlayers(voteHeldPlayers, threat.ID, "no roundstart spawn was configured", true);
 
-            return false;
+            yield break;
         }
 
         PartySpawnPrototype? newPartySpawn = _prototypeManager.TryIndex(partySpawn, out PartySpawnPrototype? spawn)
@@ -425,7 +449,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
             ReleaseVoteHeldPlayers(voteHeldPlayers, threat.ID, $"roundstart spawn '{partySpawn}' was missing", true);
 
-            return false;
+            yield break;
         }
 
         var markerCache = new Dictionary<ThreatMarkerType, List<EntityUid>>();
@@ -581,8 +605,8 @@ public sealed partial class ThreatSystem : EntitySystem
                 (ThreatMarkerType.Member, memberReq, memberMarkers.Count),
                 (ThreatMarkerType.Entity, entityReq, entityMarkers.Count));
 
-            int SpawnBodies(string protoId, int count, List<EntityUid> markers, List<EntityUid>? spawnedList,
-                string label)
+            IEnumerable<ForceDeploymentStep> SpawnBodies(string protoId, int count, List<EntityUid> markers,
+                List<EntityUid> spawnedList, string label, ProtoId<JobPrototype>? job = null)
             {
                 _sawmill.Debug($"[DEBUG] Spawning {count} {label}(s) of protoId {protoId} at {markers.Count} markers");
 
@@ -594,20 +618,24 @@ public sealed partial class ThreatSystem : EntitySystem
                     } marker(s) are available; remaining bodies will not spawn instead of stacking on reused markers.");
                 }
 
-                var spawned = 0;
                 for (var i = 0; i < count && markers.Count > 0; i++)
                 {
                     int markerIndex = _random.Next(markers.Count);
                     EntityUid marker = markers[markerIndex];
                     markers.RemoveAt(markerIndex);
-                    EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
+                    if (TerminatingOrDeleted(marker) || !TryComp(marker, out TransformComponent? markerTransform))
+                        continue;
+                    var coords = markerTransform.Coordinates;
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
-                        spawnedList?.Add(ent);
-                        _forceInterest.TrackRole(ent);
-                        spawned++;
+                        stagedBodies.Add(ent);
+                        _ghostRole.HoldForceRole(ent);
+                        spawnedList.Add(ent);
+                        if (job is { } bodyJob)
+                            AddThreatFaction(ent, bodyJob);
                         _sawmill.Debug($"[DEBUG] Spawned {label} entity {ent} at marker {marker}");
                     }
                     catch (Exception ex)
@@ -615,9 +643,9 @@ public sealed partial class ThreatSystem : EntitySystem
                         _sawmill.Error($"[ThreatSystem] Failed to spawn {label} ({protoId}) for threat '{threatId
                         }' at marker {marker}: {ex}");
                     }
-                }
 
-                return spawned;
+                    yield return ForceDeploymentStep.Spawned;
+                }
             }
 
             string? GetExtraMemberPrototype()
@@ -631,17 +659,17 @@ public sealed partial class ThreatSystem : EntitySystem
                 return null;
             }
 
-            int SpawnExtraVoteMemberBodies(int count)
+            IEnumerable<ForceDeploymentStep> SpawnExtraVoteMemberBodies(int count)
             {
                 if (count <= 0)
-                    return 0;
+                    yield break;
 
                 string? protoId = GetExtraMemberPrototype();
                 if (protoId == null)
                 {
                     _sawmill.Warning($"[ThreatSystem] Threat '{threatId}' needs {count} extra voted member body/bodies but has no member body prototype configured.");
 
-                    return 0;
+                    yield break;
                 }
 
                 List<EntityUid> markers = originalMemberMarkers.Count > 0
@@ -651,62 +679,77 @@ public sealed partial class ThreatSystem : EntitySystem
                 {
                     _sawmill.Warning($"[ThreatSystem] Threat '{threatId}' needs {count} extra voted member body/bodies but has no member or leader markers to reuse.");
 
-                    return 0;
+                    yield break;
                 }
 
-                var spawned = 0;
                 for (var i = 0; i < count; i++)
                 {
                     EntityUid marker = markers[_random.Next(markers.Count)];
-                    EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
+                    if (TerminatingOrDeleted(marker) || !TryComp(marker, out TransformComponent? markerTransform))
+                        continue;
+                    var coords = markerTransform.Coordinates;
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-extra-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
+                        stagedBodies.Add(ent);
+                        _ghostRole.HoldForceRole(ent);
                         spawnedMembers.Add(ent);
                         AddThreatFaction(ent, ThreatMemberJobId);
-                        spawned++;
                     }
                     catch (Exception ex)
                     {
                         _sawmill.Error($"[ThreatSystem] Failed to spawn extra voted member ({protoId}) for threat '{threatId}' at marker {marker}: {ex}");
                     }
-                }
 
-                return spawned;
+                    yield return ForceDeploymentStep.Spawned;
+                }
             }
+
+            // short on markers? share them out per body type, otherwise the first type listed eats
+            // all of them and you get a tribe of spearmen with no bows or shaman
+            int leaderMarkerBudget = leaderMarkers.Count;
+            if (leaderReq > leaderMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(leaderBodies, ref leaderMarkerBudget);
+            int memberMarkerBudget = memberMarkers.Count;
+            if (memberReq > memberMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(memberBodies, ref memberMarkerBudget);
+
+            yield return ForceDeploymentStep.Prepared;
 
             // Spawn leaders — each entity proto gets its own scaled count
             foreach ((string protoId, int count) in leaderBodies)
             {
-                SpawnBodies(protoId, count, leaderMarkers, spawnedLeaders, "leader");
+                foreach (var step in SpawnBodies(protoId, count, leaderMarkers, spawnedLeaders, "leader", ThreatLeaderJobId))
+                    yield return step;
             }
 
             // Spawn grunts/members — each entity proto gets its own scaled count
             foreach ((string protoId, int count) in memberBodies)
             {
-                SpawnBodies(protoId, count, memberMarkers, spawnedMembers, "member");
+                foreach (var step in SpawnBodies(protoId, count, memberMarkers, spawnedMembers, "member", ThreatMemberJobId))
+                    yield return step;
             }
 
             _sawmill.Debug($"[DEBUG] Spawned {spawnedMembers.Count} threat members.");
 
-            foreach (var leader in spawnedLeaders)
-                AddThreatFaction(leader, ThreatLeaderJobId);
-            foreach (var member in spawnedMembers)
-                AddThreatFaction(member, ThreatMemberJobId);
-
             // Spawn other entities
-            var spawnedEntities = 0;
+            var spawnedEntities = new List<EntityUid>();
             foreach ((string protoId, int count) in entityBodies)
             {
-                spawnedEntities += SpawnBodies(protoId, count, entityMarkers, null, "entity");
+                foreach (var step in SpawnBodies(protoId, count, entityMarkers, spawnedEntities, "entity"))
+                    yield return step;
             }
 
-            _sawmill.Debug($"[DEBUG] Spawned {spawnedEntities} other threat entities.");
+            _sawmill.Debug($"[DEBUG] Spawned {spawnedEntities.Count} other threat entities.");
             _sawmill.Info($"[ThreatSystem] Threat spawn result for '{threatId}': spawnedLeaders={spawnedLeaders.Count}/{
                 leaderReq
-            }, spawnedMembers={spawnedMembers.Count}/{memberReq}, spawnedEntities={spawnedEntities}/{entityReq}.");
+            }, spawnedMembers={spawnedMembers.Count}/{memberReq}, spawnedEntities={spawnedEntities.Count}/{entityReq}.");
 
+            // Earlier bodies may have been deleted while the deployment yielded.
+            spawnedLeaders.RemoveAll(uid => TerminatingOrDeleted(uid));
+            spawnedMembers.RemoveAll(uid => TerminatingOrDeleted(uid));
             var spawnedThreatPlayers = new HashSet<NetUserId>();
 
             if (voteHeldPlayers != null)
@@ -720,12 +763,18 @@ public sealed partial class ThreatSystem : EntitySystem
                     ? Math.Min(eligibleHeldPlayers.Count - spawnedLeaders.Count - spawnedMembers.Count,
                         availableVoteSeats)
                     : 0;
-                int extraMembers = SpawnExtraVoteMemberBodies(missingVoteBodies);
+                var previousMembers = spawnedMembers.Count;
+                foreach (var step in SpawnExtraVoteMemberBodies(missingVoteBodies))
+                    yield return step;
+                var extraMembers = spawnedMembers.Count - previousMembers;
                 if (extraMembers > 0)
                 {
                     _sawmill.Info($"[ThreatSystem] Spawned {extraMembers} extra voted threat member body/bodies for '{threatId}' so held voters can enter the round.");
                 }
 
+                spawnedLeaders.RemoveAll(uid => TerminatingOrDeleted(uid));
+                spawnedMembers.RemoveAll(uid => TerminatingOrDeleted(uid));
+                eligibleHeldPlayers = GetEligibleVoteHeldPlayers(voteHeldPlayers, requireObserverForVotePlayers);
                 _random.Shuffle(eligibleHeldPlayers);
                 var heldAssignments = new List<ThreatVoteAssignment>(eligibleHeldPlayers.Count);
                 foreach (NetUserId player in eligibleHeldPlayers)
@@ -793,7 +842,8 @@ public sealed partial class ThreatSystem : EntitySystem
 
                 ReleaseVoteHeldPlayers(voteHeldPlayers, threatId, "voted threat spawn completed", false);
 
-                return true;
+                yield return ForceDeploymentStep.Completed;
+                yield break;
             }
 
             var roundstartLeaderAssignments = new List<ThreatVoteAssignment>();
@@ -836,7 +886,7 @@ public sealed partial class ThreatSystem : EntitySystem
             }
         }
 
-        return true;
+        yield return ForceDeploymentStep.Completed;
     }
 
     private static Dictionary<string, int> GetSpawnBodies(
@@ -888,7 +938,8 @@ public sealed partial class ThreatSystem : EntitySystem
         foreach (NetUserId playerId in heldPlayers)
         {
             if (!_playerManager.TryGetSessionById(playerId, out ICommonSession? session)
-                || session.Status == SessionStatus.Disconnected)
+                || session.Status is SessionStatus.Disconnected or SessionStatus.Zombie
+                || session.AttachedEntity is { } attached && !HasComp<GhostComponent>(attached))
                 continue;
 
             if (requireObserver && !_entityManager.TryGetComponent(session.AttachedEntity, out GhostComponent? _))
@@ -932,6 +983,12 @@ public sealed partial class ThreatSystem : EntitySystem
 
             return false;
         }
+
+        // The player can join another role while earlier bodies are being spawned.
+        if (TerminatingOrDeleted(entity)
+            || MetaData(entity).EntityPrototype is not { } prototype
+            || !_ghostRole.CanJoinForceRole(session, prototype.ID, jobId))
+            return false;
 
         _ticker.PlayerJoinGame(session, true);
 
@@ -1005,17 +1062,6 @@ public sealed partial class ThreatSystem : EntitySystem
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));
     }
 
-    internal bool HasCrashedDropship()
-    {
-        EntityQueryEnumerator<DropshipComponent> dropships = EntityQueryEnumerator<DropshipComponent>();
-        while (dropships.MoveNext(out _, out DropshipComponent? dropship))
-        {
-            return dropship.Crashed;
-        }
-
-        return false;
-    }
-
     internal bool IsExcludedFromVictory(EntityUid uid, MobStateComponent mobState)
     {
         // Exclude all threats, which use their own Victory Condition logic
@@ -1024,7 +1070,8 @@ public sealed partial class ThreatSystem : EntitySystem
             || HasComp<ApeComponent>(uid)
             || HasComp<TribalComponent>(uid)
             || HasComp<BiomorphComponent>(uid)
-            || HasComp<BiomorphMimicComponent>(uid))
+            || HasComp<BiomorphMimicComponent>(uid)
+            || HasComp<CMUWendigoPackComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))
@@ -1034,9 +1081,10 @@ public sealed partial class ThreatSystem : EntitySystem
         if (mobState.CurrentState == MobState.Dead)
             return false;
 
-        // Alive and nested or SSD
+        // Alive and nested or SSD, or adrift in space outside the ship
         return HasComp<XenoNestedComponent>(uid)
-            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD);
+            || (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD)
+            || _adrift.IsAdrift(uid);
     }
 
     internal sealed record PendingThreatSpawnDebugView(

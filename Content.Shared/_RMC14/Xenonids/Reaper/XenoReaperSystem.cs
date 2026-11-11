@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared.CMU14.Xenomorphs.Reaper; // CMU14
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Marines;
@@ -31,6 +32,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Robust.Shared.Spawners; // CMU14
 
 namespace Content.Shared._RMC14.Xenonids.Reaper;
 
@@ -63,6 +65,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeCmuRevival(); // CMU14
         SubscribeLocalEvent<XenoReaperComponent, MapInitEvent>(OnReaperMapInit);
         SubscribeLocalEvent<XenoReaperComponent, ComponentRemove>(OnReaperRemove);
         SubscribeLocalEvent<XenoReaperComponent, MeleeHitEvent>(OnMeleeHit);
@@ -108,6 +111,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         }
     }
 
+    // CMU14 method: synchronize the cast and its vascular effect through completion or cancellation.
     private void OnFleshHarvestAction(Entity<XenoReaperComponent> xeno, ref XenoFleshHarvestActionEvent args)
     {
         if (args.Handled)
@@ -121,24 +125,37 @@ public sealed partial class XenoReaperSystem : EntitySystem
 
         args.Handled = true;
 
-        var doAfter = new DoAfterArgs(EntityManager, xeno.Owner, xeno.Comp.FleshHarvestDelay, new XenoFleshHarvestDoAfterEvent(), xeno.Owner, args.Target)
+        // CMU14: synchronize the feeding cords with the accepted harvest.
+        var harvestEvent = new XenoFleshHarvestDoAfterEvent();
+        EntityUid? effect = null;
+        if (_net.IsServer)
+        {
+            effect = StartRitual(xeno, args.Target, xeno.Comp.FleshHarvestDelay, CMUReaperRitualKind.Harvest);
+            harvestEvent.Effect = GetNetEntity(effect);
+        }
+        var doAfter = new DoAfterArgs(EntityManager, xeno.Owner, xeno.Comp.FleshHarvestDelay, harvestEvent, xeno.Owner, args.Target)
         {
             BreakOnMove = true,
             DuplicateCondition = DuplicateConditions.SameEvent,
             CancelDuplicate = true,
         };
 
-        _doAfter.TryStartDoAfter(doAfter);
+        // CMU14: do not leave an animation behind when starting was rejected.
+        if (!_doAfter.TryStartDoAfter(doAfter) && effect != null)
+            QueueDel(effect);
     }
 
+    // CMU14 method: synchronize the cast and its vascular effect through completion or cancellation.
     private void OnFleshHarvestDoAfter(Entity<XenoReaperComponent> xeno, ref XenoFleshHarvestDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled || args.Target is not { } target)
+        // CMU14: resolve the animation on both interruption and target validation failure.
+        if (args.Handled)
             return;
-
-        if (!CanFleshHarvestTarget(xeno, target, false))
+        var success = !args.Cancelled && args.Target is { } corpse && CanFleshHarvestTarget(xeno, corpse, false);
+        if (_net.IsServer && args.Effect is { } effect)
+            FinishRitual(GetEntity(effect), success);
+        if (!success || args.Target is not { } target)
             return;
-
         args.Handled = true;
         EnsureComp<XenoFleshHarvestedComponent>(target);
         RipLimbsFromCorpse(target);
@@ -163,6 +180,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
             AddFleshResin(xeno, xeno.Comp.RaptureGain);
     }
 
+    // CMU14 method: synchronize the cast and its vascular effect through completion or cancellation.
     private void OnFleshBloomAction(Entity<XenoReaperComponent> xeno, ref XenoFleshBloomActionEvent args)
     {
         if (args.Handled || !HasFleshResinPopup(xeno, xeno.Comp.FleshBloomCost))
@@ -175,11 +193,15 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (!_rmcActions.TryUseAction(args))
             return;
 
+        // CMU14: retain the visual on the cast so interrupted casts remove it too.
+        var bloomEvent = new XenoFleshBloomDoAfterEvent(GetNetCoordinates(coordinates));
+        var telegraph = SpawnFleshBloomTelegraph(xeno, coordinates);
+        bloomEvent.Telegraph = GetNetEntity(telegraph);
         var doAfter = new DoAfterArgs(
             EntityManager,
             xeno.Owner,
             xeno.Comp.FleshBloomDelay,
-            new XenoFleshBloomDoAfterEvent(GetNetCoordinates(coordinates)),
+            bloomEvent, // CMU14
             xeno.Owner)
         {
             BreakOnMove = true,
@@ -188,21 +210,28 @@ public sealed partial class XenoReaperSystem : EntitySystem
         };
 
         if (!_doAfter.TryStartDoAfter(doAfter))
+        { // CMU14
+            if (telegraph != null)
+                QueueDel(telegraph);
             return;
+        }
 
         args.Handled = true;
         _audio.PlayPredicted(xeno.Comp.FleshBloomSound, coordinates, xeno);
-        SpawnFleshBloomTelegraph(xeno, coordinates);
+        // SpawnFleshBloomTelegraph(xeno, coordinates); // CMU14: started with the do-after above.
     }
 
+    // CMU14 method: synchronize the cast and its vascular effect through completion or cancellation.
     private void OnFleshBloomDoAfter(Entity<XenoReaperComponent> xeno, ref XenoFleshBloomDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled)
+        // CMU14: only a successful cast emits the inward spray.
+        if (args.Handled)
             return;
-
-        if (!TryRemoveFleshResin(xeno, xeno.Comp.FleshBloomCost))
+        var success = !args.Cancelled && TryRemoveFleshResin(xeno, xeno.Comp.FleshBloomCost);
+        if (_net.IsServer && args.Telegraph is { } telegraph)
+            FinishBloom(GetEntity(telegraph), success);
+        if (!success)
             return;
-
         args.Handled = true;
 
         if (_net.IsClient)
@@ -258,6 +287,10 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (args.Target != xeno.Owner && !_hive.FromSameHive(xeno.Owner, args.Target))
             return;
 
+        // CMU14: weeds and resin are same-hive too, so a click that slips off a moving xeno used to mantle the floor and eat the cooldown
+        if (!HasComp<XenoComponent>(args.Target) || _mobState.IsDead(args.Target))
+            return;
+
         if (!HasFleshResinPopup(xeno, xeno.Comp.CarrionMantleCost) || !_rmcActions.TryUseAction(args))
             return;
 
@@ -278,7 +311,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
             visualState: xeno.Comp.CarrionMantleShieldVisualState);
         _movementSpeed.RefreshMovementSpeedModifiers(args.Target);
         _armor.UpdateArmorValue((args.Target, null));
-        _popup.PopupClient(Loc.GetString("cm-xeno-reaper-carrion-mantle"), args.Target, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-carrion-mantle"), args.Target, xeno);
     }
 
     private void OnCarrionMantleGetArmor(Entity<XenoCarrionMantleComponent> ent, ref CMGetArmorEvent args)
@@ -307,6 +340,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        UpdateCmuRituals(); // CMU14
         var time = _timing.CurTime;
         var query = EntityQueryEnumerator<XenoReaperComponent>();
         while (query.MoveNext(out var uid, out var reaper))
@@ -369,7 +403,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
             !_unrevivable.IsUnrevivable(target))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("cm-xeno-reaper-harvest-permadead-marine"), xeno, xeno);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-harvest-permadead-marine"), xeno, xeno);
 
             return false;
         }
@@ -377,7 +411,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (HasComp<XenoFleshHarvestedComponent>(target))
         {
             if (popup)
-                _popup.PopupClient(Loc.GetString("cm-xeno-reaper-harvest-spent"), xeno, xeno);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-harvest-spent"), xeno, xeno);
 
             return false;
         }
@@ -603,18 +637,22 @@ public sealed partial class XenoReaperSystem : EntitySystem
         }
     }
 
-    private void SpawnFleshBloomTelegraph(Entity<XenoReaperComponent> xeno, EntityCoordinates center)
+    // CMU14 method: one synchronized tendril covers the entire 3x3 bloom.
+    private EntityUid? SpawnFleshBloomTelegraph(Entity<XenoReaperComponent> xeno, EntityCoordinates center)
     {
         if (_net.IsClient)
-            return;
+            return null;
 
-        for (var x = -1; x <= 1; x++)
-        {
-            for (var y = -1; y <= 1; y++)
-            {
-                SpawnAtPosition(xeno.Comp.FleshBloomTelegraphPrototype, center.Offset(new Vector2(x, y)));
-            }
-        }
+        var effect = SpawnAtPosition(xeno.Comp.FleshBloomTelegraphPrototype, center);
+        var visual = EnsureComp<CMUFleshBloomTelegraphComponent>(effect);
+        visual.Caster = xeno; // CMU14
+        visual.Origin = _transform.WithEntityId(Transform(xeno).Coordinates, center.EntityId).Position - center.Position;
+        visual.StartedAt = _timing.CurTime;
+        visual.Duration = xeno.Comp.FleshBloomDelay;
+        Dirty(effect, visual);
+        // Fallback cleanup if the caster disappears before its do-after can finish.
+        EnsureComp<TimedDespawnComponent>(effect).Lifetime = (float) visual.Duration.TotalSeconds + 3f;
+        return effect;
     }
 
     private void SpawnFleshBlooms(Entity<XenoReaperComponent> xeno, EntityCoordinates center)
@@ -674,7 +712,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (reaper.Comp.FleshResin >= amount)
             return true;
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-reaper-not-enough-flesh"), reaper, reaper);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-reaper-not-enough-flesh"), reaper, reaper);
         return false;
     }
 

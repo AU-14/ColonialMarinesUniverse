@@ -1,0 +1,1735 @@
+# Fixed source pieces: no IconSmooth. See SOURCES_CONTAINMENT_WALLS.md.
+- type: cmu3DModel
+  id: CMU3DContainmentSouth
+  label: Containment South wall
+  status: draft
+  sourcePrototypes:
+  - RMCWallContainment
+  referencePrototype: RMCWallContainment
+  referenceRsi: _RMC14/Structures/Walls/containment.rsi
+  referenceState: containment_wall_south
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Fixed full-tile wall with source-palette pale outer panels and brown interior service cabinets. Interior
+    facing follows the saved Redux cell layout; corners rotate with the entity and never auto-connect. Recessed
+    panels, flanges and original vent pixels have physical depth. 2.8-tile height, unseen side elevations, cap and
+    recess dimensions remain inferred. Static source; see SOURCES_CONTAINMENT_WALLS.md.
+  parts:
+  - label: solid wall core
+    min: -0.4633200, -0.4633200, 0.1000000
+    max: 0.4633200, 0.4633200, 2.6500000
+    color: '#413626'
+  - label: continuous base course
+    min: -0.5000000, -0.5000000, 0.0000000
+    max: 0.5000000, 0.5000000, 0.1000000
+    color: '#565545'
+  - label: continuous pale cap and vent upper lip
+    min: -0.5000000, -0.5000000, 2.6500000
+    max: 0.5000000, 0.5000000, 2.7600000
+    color: '#C4C3BE'
+  - label: inset upper cap
+    min: -0.4640625, -0.4640625, 2.7600000
+    max: 0.4640625, 0.4640625, 2.7900000
+    color: '#D2D0CA'
+  - label: south outer pale recessed backing
+    min: -0.4752000, -0.4653000, 0.1200000
+    max: 0.4752000, -0.4435200, 2.2900000
+    color: '#AAA798'
+  - label: south outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: 0.4950000, -0.4455000, 0.1200000
+    color: '#898478'
+  - label: south outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: 0.4950000, -0.4455000, 2.3000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.4950000, -0.4900500, 0.1200000
+    max: -0.4393125, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.0402187, -0.4900500, 0.1200000
+    max: 0.0402187, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: 0.4393125, -0.4900500, 0.1200000
+    max: 0.4950000, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer course separator
+    min: -0.4950000, -0.4940100, 1.7300000
+    max: 0.4950000, -0.4554000, 1.8700000
+    color: '#898478'
+  - label: south vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: 0.4950000, -0.4455000, 2.3600000
+    color: '#898478'
+  - label: south original vent grille pixels
+    min: -0.4640625, -0.4712400, 2.3650000
+    max: 0.4640625, -0.4672800, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+  - label: east outer pale recessed backing
+    min: 0.4435200, -0.4752000, 0.1200000
+    max: 0.4653000, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: east outer lower sill
+    min: 0.4455000, -0.4950000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: east outer upper rail
+    min: 0.4455000, -0.4950000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.4950000, 0.1200000
+    max: 0.4900500, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.0402187, 0.1200000
+    max: 0.4900500, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, 0.4393125, 0.1200000
+    max: 0.4900500, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer course separator
+    min: 0.4554000, -0.4950000, 1.7300000
+    max: 0.4940100, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: east vent lower molded lip
+    min: 0.4455000, -0.4950000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: east original vent grille pixels
+    min: 0.4672800, -0.4640625, 2.3650000
+    max: 0.4712400, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: north inner lower sill
+    min: -0.4950000, 0.4455000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#3A2E21'
+  - label: north inner shared lower panel stile
+    min: 0.3989700, 0.4732200, 0.1800000
+    max: 0.4257000, 0.4900500, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel stile
+    min: -0.0663300, 0.4732200, 0.1800000
+    max: 0.0663300, 0.4900500, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel stile
+    min: -0.4257000, 0.4732200, 0.1800000
+    max: -0.3989700, 0.4900500, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel rail
+    min: -0.3989700, 0.4732200, 0.1800000
+    max: 0.3989700, 0.4851000, 0.2300000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel rail
+    min: -0.3989700, 0.4732200, 1.3400000
+    max: 0.3989700, 0.4851000, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner horizontal equipment rail
+    min: -0.4752000, 0.4554000, 1.4500000
+    max: 0.4752000, 0.4900500, 1.5200000
+    color: '#4C3D2E'
+  - label: north inner horizontal equipment rail
+    min: -0.4752000, 0.4554000, 1.6100000
+    max: 0.4752000, 0.4900500, 1.6800000
+    color: '#4C3D2E'
+  - label: north inner shared upper cabinet flange
+    min: -0.4405500, 0.4554000, 1.8100000
+    max: 0.4405500, 0.4831200, 2.2100000
+    color: '#4C3D2E'
+  - label: north inner upper cabinet face
+    min: 0.2425500, 0.4831200, 1.8600000
+    max: 0.4158000, 0.4900500, 2.1600000
+    color: '#413626'
+  - label: north inner green status label
+    min: 0.2524500, 0.4900500, 1.8600000
+    max: 0.2821500, 0.4930200, 1.9000000
+    color: '#366D3C'
+  - label: north inner upper cabinet face
+    min: -0.1534500, 0.4831200, 1.8600000
+    max: 0.1534500, 0.4900500, 2.1600000
+    color: '#413626'
+  - label: north inner green status label
+    min: -0.1435500, 0.4900500, 1.8600000
+    max: -0.1138500, 0.4930200, 1.9000000
+    color: '#366D3C'
+  - label: north inner upper cabinet face
+    min: -0.4158000, 0.4831200, 1.8600000
+    max: -0.2425500, 0.4900500, 2.1600000
+    color: '#413626'
+  - label: north inner green status label
+    min: -0.4059000, 0.4900500, 1.8600000
+    max: -0.3762000, 0.4930200, 1.9000000
+    color: '#366D3C'
+  - label: north inner lower green status label
+    min: -0.3465000, 0.4732200, 0.5100000
+    max: -0.3019500, 0.4771800, 0.5850000
+    color: '#3C8443'
+  - label: north vent lower molded lip
+    min: -0.4950000, 0.4455000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: north original vent grille pixels
+    min: -0.4640625, 0.4672800, 2.3650000
+    max: 0.4640625, 0.4712400, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: west outer pale recessed backing
+    min: -0.4653000, -0.4752000, 0.1200000
+    max: -0.4435200, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: west outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: -0.4455000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: west outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: -0.4455000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, 0.4393125, 0.1200000
+    max: -0.4455000, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.0402187, 0.1200000
+    max: -0.4455000, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.4950000, 0.1200000
+    max: -0.4455000, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer course separator
+    min: -0.4940100, -0.4950000, 1.7300000
+    max: -0.4554000, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: west vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: -0.4455000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: west original vent grille pixels
+    min: -0.4712400, -0.4640625, 2.3650000
+    max: -0.4672800, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+- type: cmu3DModel
+  id: CMU3DContainmentNorth
+  label: Containment North wall
+  status: draft
+  sourcePrototypes:
+  - RMCWallContainmentNorth
+  referencePrototype: RMCWallContainmentNorth
+  referenceRsi: _RMC14/Structures/Walls/containment.rsi
+  referenceState: containment_wall_n
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Fixed full-tile wall with source-palette pale outer panels and brown interior service cabinets. Interior
+    facing follows the saved Redux cell layout; corners rotate with the entity and never auto-connect. Recessed
+    panels, flanges and original vent pixels have physical depth. 2.8-tile height, unseen side elevations, cap and
+    recess dimensions remain inferred. Static source; see SOURCES_CONTAINMENT_WALLS.md.
+  parts:
+  - label: solid wall core
+    min: -0.4633200, -0.4633200, 0.1000000
+    max: 0.4633200, 0.4633200, 2.6500000
+    color: '#413626'
+  - label: continuous base course
+    min: -0.5000000, -0.5000000, 0.0000000
+    max: 0.5000000, 0.5000000, 0.1000000
+    color: '#565545'
+  - label: continuous pale cap and vent upper lip
+    min: -0.5000000, -0.5000000, 2.6500000
+    max: 0.5000000, 0.5000000, 2.7600000
+    color: '#C4C3BE'
+  - label: inset upper cap
+    min: -0.4640625, -0.4640625, 2.7600000
+    max: 0.4640625, 0.4640625, 2.7900000
+    color: '#D2D0CA'
+  - label: south inner lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: 0.4950000, -0.4455000, 0.1200000
+    color: '#3A2E21'
+  - label: south inner shared lower panel stile
+    min: -0.4257000, -0.4900500, 0.1800000
+    max: -0.3989700, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel stile
+    min: -0.0663300, -0.4900500, 0.1800000
+    max: 0.0663300, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel stile
+    min: 0.3989700, -0.4900500, 0.1800000
+    max: 0.4257000, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel rail
+    min: -0.3989700, -0.4851000, 0.1800000
+    max: 0.3989700, -0.4732200, 0.2300000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel rail
+    min: -0.3989700, -0.4851000, 1.3400000
+    max: 0.3989700, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner horizontal equipment rail
+    min: -0.4752000, -0.4900500, 1.4500000
+    max: 0.4752000, -0.4554000, 1.5200000
+    color: '#4C3D2E'
+  - label: south inner horizontal equipment rail
+    min: -0.4752000, -0.4900500, 1.6100000
+    max: 0.4752000, -0.4554000, 1.6800000
+    color: '#4C3D2E'
+  - label: south inner shared upper cabinet flange
+    min: -0.4405500, -0.4831200, 1.8100000
+    max: 0.4405500, -0.4554000, 2.2100000
+    color: '#4C3D2E'
+  - label: south inner upper cabinet face
+    min: -0.4158000, -0.4900500, 1.8600000
+    max: -0.2425500, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: -0.2821500, -0.4930200, 1.8600000
+    max: -0.2524500, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner upper cabinet face
+    min: -0.1534500, -0.4900500, 1.8600000
+    max: 0.1534500, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: 0.1138500, -0.4930200, 1.8600000
+    max: 0.1435500, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner upper cabinet face
+    min: 0.2425500, -0.4900500, 1.8600000
+    max: 0.4158000, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: 0.3762000, -0.4930200, 1.8600000
+    max: 0.4059000, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner lower green status label
+    min: 0.3019500, -0.4771800, 0.5100000
+    max: 0.3465000, -0.4732200, 0.5850000
+    color: '#3C8443'
+  - label: south vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: 0.4950000, -0.4455000, 2.3600000
+    color: '#898478'
+  - label: south original vent grille pixels
+    min: -0.4640625, -0.4712400, 2.3650000
+    max: 0.4640625, -0.4672800, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+  - label: east outer pale recessed backing
+    min: 0.4435200, -0.4752000, 0.1200000
+    max: 0.4653000, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: east outer lower sill
+    min: 0.4455000, -0.4950000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: east outer upper rail
+    min: 0.4455000, -0.4950000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.4950000, 0.1200000
+    max: 0.4900500, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.0402187, 0.1200000
+    max: 0.4900500, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, 0.4393125, 0.1200000
+    max: 0.4900500, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer course separator
+    min: 0.4554000, -0.4950000, 1.7300000
+    max: 0.4940100, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: east vent lower molded lip
+    min: 0.4455000, -0.4950000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: east original vent grille pixels
+    min: 0.4672800, -0.4640625, 2.3650000
+    max: 0.4712400, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: north outer pale recessed backing
+    min: -0.4752000, 0.4435200, 0.1200000
+    max: 0.4752000, 0.4653000, 2.2900000
+    color: '#AAA798'
+  - label: north outer lower sill
+    min: -0.4950000, 0.4455000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: north outer upper rail
+    min: -0.4950000, 0.4455000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: 0.4393125, 0.4455000, 0.1200000
+    max: 0.4950000, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.0402187, 0.4455000, 0.1200000
+    max: 0.0402187, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.4950000, 0.4455000, 0.1200000
+    max: -0.4393125, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer course separator
+    min: -0.4950000, 0.4554000, 1.7300000
+    max: 0.4950000, 0.4940100, 1.8700000
+    color: '#898478'
+  - label: north vent lower molded lip
+    min: -0.4950000, 0.4455000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: north original vent grille pixels
+    min: -0.4640625, 0.4672800, 2.3650000
+    max: 0.4640625, 0.4712400, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: west outer pale recessed backing
+    min: -0.4653000, -0.4752000, 0.1200000
+    max: -0.4435200, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: west outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: -0.4455000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: west outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: -0.4455000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, 0.4393125, 0.1200000
+    max: -0.4455000, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.0402187, 0.1200000
+    max: -0.4455000, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.4950000, 0.1200000
+    max: -0.4455000, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer course separator
+    min: -0.4940100, -0.4950000, 1.7300000
+    max: -0.4554000, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: west vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: -0.4455000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: west original vent grille pixels
+    min: -0.4712400, -0.4640625, 2.3650000
+    max: -0.4672800, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+- type: cmu3DModel
+  id: CMU3DContainmentWest
+  label: Containment West wall
+  status: draft
+  sourcePrototypes:
+  - RMCWallContainmentWest
+  referencePrototype: RMCWallContainmentWest
+  referenceRsi: _RMC14/Structures/Walls/containment.rsi
+  referenceState: containment_wall_w
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Fixed full-tile wall with source-palette pale outer panels and brown interior service cabinets. Interior
+    facing follows the saved Redux cell layout; corners rotate with the entity and never auto-connect. Recessed
+    panels, flanges and original vent pixels have physical depth. 2.8-tile height, unseen side elevations, cap and
+    recess dimensions remain inferred. Static source; see SOURCES_CONTAINMENT_WALLS.md.
+  parts:
+  - label: solid wall core
+    min: -0.4633200, -0.4633200, 0.1000000
+    max: 0.4633200, 0.4633200, 2.6500000
+    color: '#413626'
+  - label: continuous base course
+    min: -0.5000000, -0.5000000, 0.0000000
+    max: 0.5000000, 0.5000000, 0.1000000
+    color: '#565545'
+  - label: continuous pale cap and vent upper lip
+    min: -0.5000000, -0.5000000, 2.6500000
+    max: 0.5000000, 0.5000000, 2.7600000
+    color: '#C4C3BE'
+  - label: inset upper cap
+    min: -0.4640625, -0.4640625, 2.7600000
+    max: 0.4640625, 0.4640625, 2.7900000
+    color: '#D2D0CA'
+  - label: south outer pale recessed backing
+    min: -0.4752000, -0.4653000, 0.1200000
+    max: 0.4752000, -0.4435200, 2.2900000
+    color: '#AAA798'
+  - label: south outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: 0.4950000, -0.4455000, 0.1200000
+    color: '#898478'
+  - label: south outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: 0.4950000, -0.4455000, 2.3000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.4950000, -0.4900500, 0.1200000
+    max: -0.4393125, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.0402187, -0.4900500, 0.1200000
+    max: 0.0402187, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: 0.4393125, -0.4900500, 0.1200000
+    max: 0.4950000, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer course separator
+    min: -0.4950000, -0.4940100, 1.7300000
+    max: 0.4950000, -0.4554000, 1.8700000
+    color: '#898478'
+  - label: south vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: 0.4950000, -0.4455000, 2.3600000
+    color: '#898478'
+  - label: south original vent grille pixels
+    min: -0.4640625, -0.4712400, 2.3650000
+    max: 0.4640625, -0.4672800, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+  - label: east inner lower sill
+    min: 0.4455000, -0.4950000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#3A2E21'
+  - label: east inner shared lower panel stile
+    min: 0.4732200, -0.4257000, 0.1800000
+    max: 0.4900500, -0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel stile
+    min: 0.4732200, -0.0663300, 0.1800000
+    max: 0.4900500, 0.0663300, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel stile
+    min: 0.4732200, 0.3989700, 0.1800000
+    max: 0.4900500, 0.4257000, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel rail
+    min: 0.4732200, -0.3989700, 0.1800000
+    max: 0.4851000, 0.3989700, 0.2300000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel rail
+    min: 0.4732200, -0.3989700, 1.3400000
+    max: 0.4851000, 0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner horizontal equipment rail
+    min: 0.4554000, -0.4752000, 1.4500000
+    max: 0.4900500, 0.4752000, 1.5200000
+    color: '#4C3D2E'
+  - label: east inner horizontal equipment rail
+    min: 0.4554000, -0.4752000, 1.6100000
+    max: 0.4900500, 0.4752000, 1.6800000
+    color: '#4C3D2E'
+  - label: east inner shared upper cabinet flange
+    min: 0.4554000, -0.4405500, 1.8100000
+    max: 0.4831200, 0.4405500, 2.2100000
+    color: '#4C3D2E'
+  - label: east inner upper cabinet face
+    min: 0.4831200, -0.4158000, 1.8600000
+    max: 0.4900500, -0.2425500, 2.1600000
+    color: '#413626'
+  - label: east inner green status label
+    min: 0.4900500, -0.2821500, 1.8600000
+    max: 0.4930200, -0.2524500, 1.9000000
+    color: '#366D3C'
+  - label: east inner upper cabinet face
+    min: 0.4831200, -0.1534500, 1.8600000
+    max: 0.4900500, 0.1534500, 2.1600000
+    color: '#413626'
+  - label: east inner green status label
+    min: 0.4900500, 0.1138500, 1.8600000
+    max: 0.4930200, 0.1435500, 1.9000000
+    color: '#366D3C'
+  - label: east inner upper cabinet face
+    min: 0.4831200, 0.2425500, 1.8600000
+    max: 0.4900500, 0.4158000, 2.1600000
+    color: '#413626'
+  - label: east inner green status label
+    min: 0.4900500, 0.3762000, 1.8600000
+    max: 0.4930200, 0.4059000, 1.9000000
+    color: '#366D3C'
+  - label: east inner lower green status label
+    min: 0.4732200, 0.3019500, 0.5100000
+    max: 0.4771800, 0.3465000, 0.5850000
+    color: '#3C8443'
+  - label: east vent lower molded lip
+    min: 0.4455000, -0.4950000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: east original vent grille pixels
+    min: 0.4672800, -0.4640625, 2.3650000
+    max: 0.4712400, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: north outer pale recessed backing
+    min: -0.4752000, 0.4435200, 0.1200000
+    max: 0.4752000, 0.4653000, 2.2900000
+    color: '#AAA798'
+  - label: north outer lower sill
+    min: -0.4950000, 0.4455000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: north outer upper rail
+    min: -0.4950000, 0.4455000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: 0.4393125, 0.4455000, 0.1200000
+    max: 0.4950000, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.0402187, 0.4455000, 0.1200000
+    max: 0.0402187, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.4950000, 0.4455000, 0.1200000
+    max: -0.4393125, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer course separator
+    min: -0.4950000, 0.4554000, 1.7300000
+    max: 0.4950000, 0.4940100, 1.8700000
+    color: '#898478'
+  - label: north vent lower molded lip
+    min: -0.4950000, 0.4455000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: north original vent grille pixels
+    min: -0.4640625, 0.4672800, 2.3650000
+    max: 0.4640625, 0.4712400, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: west outer pale recessed backing
+    min: -0.4653000, -0.4752000, 0.1200000
+    max: -0.4435200, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: west outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: -0.4455000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: west outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: -0.4455000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, 0.4393125, 0.1200000
+    max: -0.4455000, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.0402187, 0.1200000
+    max: -0.4455000, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.4950000, 0.1200000
+    max: -0.4455000, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer course separator
+    min: -0.4940100, -0.4950000, 1.7300000
+    max: -0.4554000, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: west vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: -0.4455000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: west original vent grille pixels
+    min: -0.4712400, -0.4640625, 2.3650000
+    max: -0.4672800, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+  - label: west outer white status stencil
+    min: -0.4930200, -0.0346500, 1.9700000
+    max: -0.4900500, 0.0346500, 2.1000000
+    color: '#E2E0DC'
+  - label: west outer green status stroke
+    min: -0.4950000, -0.0049500, 1.9700000
+    max: -0.4930200, 0.0346500, 2.0450000
+    color: '#3C8443'
+  - label: west outer green status upright
+    min: -0.4950000, -0.0346500, 2.0100000
+    max: -0.4930200, -0.0049500, 2.0700000
+    color: '#366D3C'
+- type: cmu3DModel
+  id: CMU3DContainmentEast
+  label: Containment East wall
+  status: draft
+  sourcePrototypes:
+  - RMCWallContainmentEast
+  referencePrototype: RMCWallContainmentEast
+  referenceRsi: _RMC14/Structures/Walls/containment.rsi
+  referenceState: containment_wall_e
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Fixed full-tile wall with source-palette pale outer panels and brown interior service cabinets. Interior
+    facing follows the saved Redux cell layout; corners rotate with the entity and never auto-connect. Recessed
+    panels, flanges and original vent pixels have physical depth. 2.8-tile height, unseen side elevations, cap and
+    recess dimensions remain inferred. Static source; see SOURCES_CONTAINMENT_WALLS.md.
+  parts:
+  - label: solid wall core
+    min: -0.4633200, -0.4633200, 0.1000000
+    max: 0.4633200, 0.4633200, 2.6500000
+    color: '#413626'
+  - label: continuous base course
+    min: -0.5000000, -0.5000000, 0.0000000
+    max: 0.5000000, 0.5000000, 0.1000000
+    color: '#565545'
+  - label: continuous pale cap and vent upper lip
+    min: -0.5000000, -0.5000000, 2.6500000
+    max: 0.5000000, 0.5000000, 2.7600000
+    color: '#C4C3BE'
+  - label: inset upper cap
+    min: -0.4640625, -0.4640625, 2.7600000
+    max: 0.4640625, 0.4640625, 2.7900000
+    color: '#D2D0CA'
+  - label: south outer pale recessed backing
+    min: -0.4752000, -0.4653000, 0.1200000
+    max: 0.4752000, -0.4435200, 2.2900000
+    color: '#AAA798'
+  - label: south outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: 0.4950000, -0.4455000, 0.1200000
+    color: '#898478'
+  - label: south outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: 0.4950000, -0.4455000, 2.3000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.4950000, -0.4900500, 0.1200000
+    max: -0.4393125, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.0402187, -0.4900500, 0.1200000
+    max: 0.0402187, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: 0.4393125, -0.4900500, 0.1200000
+    max: 0.4950000, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer course separator
+    min: -0.4950000, -0.4940100, 1.7300000
+    max: 0.4950000, -0.4554000, 1.8700000
+    color: '#898478'
+  - label: south vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: 0.4950000, -0.4455000, 2.3600000
+    color: '#898478'
+  - label: south original vent grille pixels
+    min: -0.4640625, -0.4712400, 2.3650000
+    max: 0.4640625, -0.4672800, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+  - label: east outer pale recessed backing
+    min: 0.4435200, -0.4752000, 0.1200000
+    max: 0.4653000, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: east outer lower sill
+    min: 0.4455000, -0.4950000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: east outer upper rail
+    min: 0.4455000, -0.4950000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.4950000, 0.1200000
+    max: 0.4900500, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.0402187, 0.1200000
+    max: 0.4900500, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, 0.4393125, 0.1200000
+    max: 0.4900500, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer course separator
+    min: 0.4554000, -0.4950000, 1.7300000
+    max: 0.4940100, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: east vent lower molded lip
+    min: 0.4455000, -0.4950000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: east original vent grille pixels
+    min: 0.4672800, -0.4640625, 2.3650000
+    max: 0.4712400, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: north outer pale recessed backing
+    min: -0.4752000, 0.4435200, 0.1200000
+    max: 0.4752000, 0.4653000, 2.2900000
+    color: '#AAA798'
+  - label: north outer lower sill
+    min: -0.4950000, 0.4455000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: north outer upper rail
+    min: -0.4950000, 0.4455000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: 0.4393125, 0.4455000, 0.1200000
+    max: 0.4950000, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.0402187, 0.4455000, 0.1200000
+    max: 0.0402187, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.4950000, 0.4455000, 0.1200000
+    max: -0.4393125, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer course separator
+    min: -0.4950000, 0.4554000, 1.7300000
+    max: 0.4950000, 0.4940100, 1.8700000
+    color: '#898478'
+  - label: north vent lower molded lip
+    min: -0.4950000, 0.4455000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: north original vent grille pixels
+    min: -0.4640625, 0.4672800, 2.3650000
+    max: 0.4640625, 0.4712400, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: west inner lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: -0.4455000, 0.4950000, 0.1200000
+    color: '#3A2E21'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, 0.3989700, 0.1800000
+    max: -0.4732200, 0.4257000, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, -0.0663300, 0.1800000
+    max: -0.4732200, 0.0663300, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, -0.4257000, 0.1800000
+    max: -0.4732200, -0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel rail
+    min: -0.4851000, -0.3989700, 0.1800000
+    max: -0.4732200, 0.3989700, 0.2300000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel rail
+    min: -0.4851000, -0.3989700, 1.3400000
+    max: -0.4732200, 0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner horizontal equipment rail
+    min: -0.4900500, -0.4752000, 1.4500000
+    max: -0.4554000, 0.4752000, 1.5200000
+    color: '#4C3D2E'
+  - label: west inner horizontal equipment rail
+    min: -0.4900500, -0.4752000, 1.6100000
+    max: -0.4554000, 0.4752000, 1.6800000
+    color: '#4C3D2E'
+  - label: west inner shared upper cabinet flange
+    min: -0.4831200, -0.4405500, 1.8100000
+    max: -0.4554000, 0.4405500, 2.2100000
+    color: '#4C3D2E'
+  - label: west inner upper cabinet face
+    min: -0.4900500, 0.2425500, 1.8600000
+    max: -0.4831200, 0.4158000, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, 0.2524500, 1.8600000
+    max: -0.4900500, 0.2821500, 1.9000000
+    color: '#366D3C'
+  - label: west inner upper cabinet face
+    min: -0.4900500, -0.1534500, 1.8600000
+    max: -0.4831200, 0.1534500, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, -0.1435500, 1.8600000
+    max: -0.4900500, -0.1138500, 1.9000000
+    color: '#366D3C'
+  - label: west inner upper cabinet face
+    min: -0.4900500, -0.4158000, 1.8600000
+    max: -0.4831200, -0.2425500, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, -0.4059000, 1.8600000
+    max: -0.4900500, -0.3762000, 1.9000000
+    color: '#366D3C'
+  - label: west inner lower green status label
+    min: -0.4771800, -0.3465000, 0.5100000
+    max: -0.4732200, -0.3019500, 0.5850000
+    color: '#3C8443'
+  - label: west vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: -0.4455000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: west original vent grille pixels
+    min: -0.4712400, -0.4640625, 2.3650000
+    max: -0.4672800, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+  - label: east outer white status stencil
+    min: 0.4900500, -0.0346500, 1.9700000
+    max: 0.4930200, 0.0346500, 2.1000000
+    color: '#E2E0DC'
+  - label: east outer green status stroke
+    min: 0.4930200, -0.0346500, 1.9700000
+    max: 0.4950000, 0.0049500, 2.0450000
+    color: '#3C8443'
+  - label: east outer green status upright
+    min: 0.4930200, 0.0049500, 2.0100000
+    max: 0.4950000, 0.0346500, 2.0700000
+    color: '#366D3C'
+- type: cmu3DModel
+  id: CMU3DContainmentCorner
+  label: Containment Corner wall
+  status: draft
+  sourcePrototypes:
+  - RMCWallContainmentCorner
+  referencePrototype: RMCWallContainmentCorner
+  referenceRsi: _RMC14/Structures/Walls/containment.rsi
+  referenceState: containment_wall_corner
+  sourceDirections: 4
+  useEntityRotation: true
+  description: Fixed full-tile wall with source-palette pale outer panels and brown interior service cabinets. Interior
+    facing follows the saved Redux cell layout; corners rotate with the entity and never auto-connect. Recessed
+    panels, flanges and original vent pixels have physical depth. 2.8-tile height, unseen side elevations, cap and
+    recess dimensions remain inferred. Static source; see SOURCES_CONTAINMENT_WALLS.md.
+  parts:
+  - label: solid wall core
+    min: -0.4633200, -0.4633200, 0.1000000
+    max: 0.4633200, 0.4633200, 2.6500000
+    color: '#413626'
+  - label: continuous base course
+    min: -0.5000000, -0.5000000, 0.0000000
+    max: 0.5000000, 0.5000000, 0.1000000
+    color: '#565545'
+  - label: continuous pale cap and vent upper lip
+    min: -0.5000000, -0.5000000, 2.6500000
+    max: 0.5000000, 0.5000000, 2.7600000
+    color: '#C4C3BE'
+  - label: inset upper cap
+    min: -0.4640625, -0.4640625, 2.7600000
+    max: 0.4640625, 0.4640625, 2.7900000
+    color: '#D2D0CA'
+  - label: south outer pale recessed backing
+    min: -0.4752000, -0.4653000, 0.1200000
+    max: 0.4752000, -0.4435200, 2.2900000
+    color: '#AAA798'
+  - label: south outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: 0.4950000, -0.4455000, 0.1200000
+    color: '#898478'
+  - label: south outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: 0.4950000, -0.4455000, 2.3000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.4950000, -0.4900500, 0.1200000
+    max: -0.4393125, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: -0.0402187, -0.4900500, 0.1200000
+    max: 0.0402187, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer shared panel stile
+    min: 0.4393125, -0.4900500, 0.1200000
+    max: 0.4950000, -0.4455000, 2.2000000
+    color: '#C4C3BE'
+  - label: south outer course separator
+    min: -0.4950000, -0.4940100, 1.7300000
+    max: 0.4950000, -0.4554000, 1.8700000
+    color: '#898478'
+  - label: south vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: 0.4950000, -0.4455000, 2.3600000
+    color: '#898478'
+  - label: south original vent grille pixels
+    min: -0.4640625, -0.4712400, 2.3650000
+    max: 0.4640625, -0.4672800, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+  - label: east outer pale recessed backing
+    min: 0.4435200, -0.4752000, 0.1200000
+    max: 0.4653000, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: east outer lower sill
+    min: 0.4455000, -0.4950000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: east outer upper rail
+    min: 0.4455000, -0.4950000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.4950000, 0.1200000
+    max: 0.4900500, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.0402187, 0.1200000
+    max: 0.4900500, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, 0.4393125, 0.1200000
+    max: 0.4900500, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer course separator
+    min: 0.4554000, -0.4950000, 1.7300000
+    max: 0.4940100, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: east vent lower molded lip
+    min: 0.4455000, -0.4950000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: east original vent grille pixels
+    min: 0.4672800, -0.4640625, 2.3650000
+    max: 0.4712400, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: north inner lower sill
+    min: -0.4950000, 0.4455000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#3A2E21'
+  - label: north inner shared lower panel stile
+    min: 0.3989700, 0.4732200, 0.1800000
+    max: 0.4257000, 0.4900500, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel stile
+    min: -0.0663300, 0.4732200, 0.1800000
+    max: 0.0663300, 0.4900500, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel stile
+    min: -0.4257000, 0.4732200, 0.1800000
+    max: -0.3989700, 0.4900500, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel rail
+    min: -0.3989700, 0.4732200, 0.1800000
+    max: 0.3989700, 0.4851000, 0.2300000
+    color: '#4C3D2E'
+  - label: north inner shared lower panel rail
+    min: -0.3989700, 0.4732200, 1.3400000
+    max: 0.3989700, 0.4851000, 1.3900000
+    color: '#4C3D2E'
+  - label: north inner horizontal equipment rail
+    min: -0.4752000, 0.4554000, 1.4500000
+    max: 0.4752000, 0.4900500, 1.5200000
+    color: '#4C3D2E'
+  - label: north inner horizontal equipment rail
+    min: -0.4752000, 0.4554000, 1.6100000
+    max: 0.4752000, 0.4900500, 1.6800000
+    color: '#4C3D2E'
+  - label: north inner shared upper cabinet flange
+    min: -0.4405500, 0.4554000, 1.8100000
+    max: 0.4405500, 0.4831200, 2.2100000
+    color: '#4C3D2E'
+  - label: north inner upper cabinet face
+    min: 0.2425500, 0.4831200, 1.8600000
+    max: 0.4158000, 0.4900500, 2.1600000
+    color: '#413626'
+  - label: north inner green status label
+    min: 0.2524500, 0.4900500, 1.8600000
+    max: 0.2821500, 0.4930200, 1.9000000
+    color: '#366D3C'
+  - label: north inner upper cabinet face
+    min: -0.1534500, 0.4831200, 1.8600000
+    max: 0.1534500, 0.4900500, 2.1600000
+    color: '#413626'
+  - label: north inner green status label
+    min: -0.1435500, 0.4900500, 1.8600000
+    max: -0.1138500, 0.4930200, 1.9000000
+    color: '#366D3C'
+  - label: north inner upper cabinet face
+    min: -0.4158000, 0.4831200, 1.8600000
+    max: -0.2425500, 0.4900500, 2.1600000
+    color: '#413626'
+  - label: north inner green status label
+    min: -0.4059000, 0.4900500, 1.8600000
+    max: -0.3762000, 0.4930200, 1.9000000
+    color: '#366D3C'
+  - label: north inner lower green status label
+    min: -0.3465000, 0.4732200, 0.5100000
+    max: -0.3019500, 0.4771800, 0.5850000
+    color: '#3C8443'
+  - label: north vent lower molded lip
+    min: -0.4950000, 0.4455000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: north original vent grille pixels
+    min: -0.4640625, 0.4672800, 2.3650000
+    max: 0.4640625, 0.4712400, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: west inner lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: -0.4455000, 0.4950000, 0.1200000
+    color: '#3A2E21'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, 0.3989700, 0.1800000
+    max: -0.4732200, 0.4257000, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, -0.0663300, 0.1800000
+    max: -0.4732200, 0.0663300, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, -0.4257000, 0.1800000
+    max: -0.4732200, -0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel rail
+    min: -0.4851000, -0.3989700, 0.1800000
+    max: -0.4732200, 0.3989700, 0.2300000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel rail
+    min: -0.4851000, -0.3989700, 1.3400000
+    max: -0.4732200, 0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner horizontal equipment rail
+    min: -0.4900500, -0.4752000, 1.4500000
+    max: -0.4554000, 0.4752000, 1.5200000
+    color: '#4C3D2E'
+  - label: west inner horizontal equipment rail
+    min: -0.4900500, -0.4752000, 1.6100000
+    max: -0.4554000, 0.4752000, 1.6800000
+    color: '#4C3D2E'
+  - label: west inner shared upper cabinet flange
+    min: -0.4831200, -0.4405500, 1.8100000
+    max: -0.4554000, 0.4405500, 2.2100000
+    color: '#4C3D2E'
+  - label: west inner upper cabinet face
+    min: -0.4900500, 0.2425500, 1.8600000
+    max: -0.4831200, 0.4158000, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, 0.2524500, 1.8600000
+    max: -0.4900500, 0.2821500, 1.9000000
+    color: '#366D3C'
+  - label: west inner upper cabinet face
+    min: -0.4900500, -0.1534500, 1.8600000
+    max: -0.4831200, 0.1534500, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, -0.1435500, 1.8600000
+    max: -0.4900500, -0.1138500, 1.9000000
+    color: '#366D3C'
+  - label: west inner upper cabinet face
+    min: -0.4900500, -0.4158000, 1.8600000
+    max: -0.4831200, -0.2425500, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, -0.4059000, 1.8600000
+    max: -0.4900500, -0.3762000, 1.9000000
+    color: '#366D3C'
+  - label: west inner lower green status label
+    min: -0.4771800, -0.3465000, 0.5100000
+    max: -0.4732200, -0.3019500, 0.5850000
+    color: '#3C8443'
+  - label: west vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: -0.4455000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: west original vent grille pixels
+    min: -0.4712400, -0.4640625, 2.3650000
+    max: -0.4672800, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+  - label: east outer white status stencil
+    min: 0.4900500, -0.0346500, 1.9700000
+    max: 0.4930200, 0.0346500, 2.1000000
+    color: '#E2E0DC'
+  - label: east outer green status stroke
+    min: 0.4930200, -0.0346500, 1.9700000
+    max: 0.4950000, 0.0049500, 2.0450000
+    color: '#3C8443'
+  - label: east outer green status upright
+    min: 0.4930200, 0.0049500, 2.0100000
+    max: 0.4950000, 0.0346500, 2.0700000
+    color: '#366D3C'
+- type: cmu3DModel
+  id: CMU3DContainmentNorthWestJunction
+  label: Containment NorthWestJunction wall
+  status: draft
+  sourcePrototypes:
+  - RMCWallContainmentConnect4
+  referencePrototype: RMCWallContainmentConnect4
+  referenceRsi: _RMC14/Structures/Walls/containment.rsi
+  referenceState: containment_wall_connect_w2
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Fixed full-tile wall with source-palette pale outer panels and brown interior service cabinets. Interior
+    facing follows the saved Redux cell layout; corners rotate with the entity and never auto-connect. Recessed
+    panels, flanges and original vent pixels have physical depth. 2.8-tile height, unseen side elevations, cap and
+    recess dimensions remain inferred. Static source; see SOURCES_CONTAINMENT_WALLS.md.
+  parts:
+  - label: solid wall core
+    min: -0.4633200, -0.4633200, 0.1000000
+    max: 0.4633200, 0.4633200, 2.6500000
+    color: '#413626'
+  - label: continuous base course
+    min: -0.5000000, -0.5000000, 0.0000000
+    max: 0.5000000, 0.5000000, 0.1000000
+    color: '#565545'
+  - label: continuous pale cap and vent upper lip
+    min: -0.5000000, -0.5000000, 2.6500000
+    max: 0.5000000, 0.5000000, 2.7600000
+    color: '#C4C3BE'
+  - label: inset upper cap
+    min: -0.4640625, -0.4640625, 2.7600000
+    max: 0.4640625, 0.4640625, 2.7900000
+    color: '#D2D0CA'
+  - label: south inner lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: 0.4950000, -0.4455000, 0.1200000
+    color: '#3A2E21'
+  - label: south inner shared lower panel stile
+    min: -0.4257000, -0.4900500, 0.1800000
+    max: -0.3989700, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel stile
+    min: -0.0663300, -0.4900500, 0.1800000
+    max: 0.0663300, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel stile
+    min: 0.3989700, -0.4900500, 0.1800000
+    max: 0.4257000, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel rail
+    min: -0.3989700, -0.4851000, 0.1800000
+    max: 0.3989700, -0.4732200, 0.2300000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel rail
+    min: -0.3989700, -0.4851000, 1.3400000
+    max: 0.3989700, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner horizontal equipment rail
+    min: -0.4752000, -0.4900500, 1.4500000
+    max: 0.4752000, -0.4554000, 1.5200000
+    color: '#4C3D2E'
+  - label: south inner horizontal equipment rail
+    min: -0.4752000, -0.4900500, 1.6100000
+    max: 0.4752000, -0.4554000, 1.6800000
+    color: '#4C3D2E'
+  - label: south inner shared upper cabinet flange
+    min: -0.4405500, -0.4831200, 1.8100000
+    max: 0.4405500, -0.4554000, 2.2100000
+    color: '#4C3D2E'
+  - label: south inner upper cabinet face
+    min: -0.4158000, -0.4900500, 1.8600000
+    max: -0.2425500, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: -0.2821500, -0.4930200, 1.8600000
+    max: -0.2524500, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner upper cabinet face
+    min: -0.1534500, -0.4900500, 1.8600000
+    max: 0.1534500, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: 0.1138500, -0.4930200, 1.8600000
+    max: 0.1435500, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner upper cabinet face
+    min: 0.2425500, -0.4900500, 1.8600000
+    max: 0.4158000, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: 0.3762000, -0.4930200, 1.8600000
+    max: 0.4059000, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner lower green status label
+    min: 0.3019500, -0.4771800, 0.5100000
+    max: 0.3465000, -0.4732200, 0.5850000
+    color: '#3C8443'
+  - label: south vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: 0.4950000, -0.4455000, 2.3600000
+    color: '#898478'
+  - label: south original vent grille pixels
+    min: -0.4640625, -0.4712400, 2.3650000
+    max: 0.4640625, -0.4672800, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+  - label: east inner lower sill
+    min: 0.4455000, -0.4950000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#3A2E21'
+  - label: east inner shared lower panel stile
+    min: 0.4732200, -0.4257000, 0.1800000
+    max: 0.4900500, -0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel stile
+    min: 0.4732200, -0.0663300, 0.1800000
+    max: 0.4900500, 0.0663300, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel stile
+    min: 0.4732200, 0.3989700, 0.1800000
+    max: 0.4900500, 0.4257000, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel rail
+    min: 0.4732200, -0.3989700, 0.1800000
+    max: 0.4851000, 0.3989700, 0.2300000
+    color: '#4C3D2E'
+  - label: east inner shared lower panel rail
+    min: 0.4732200, -0.3989700, 1.3400000
+    max: 0.4851000, 0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: east inner horizontal equipment rail
+    min: 0.4554000, -0.4752000, 1.4500000
+    max: 0.4900500, 0.4752000, 1.5200000
+    color: '#4C3D2E'
+  - label: east inner horizontal equipment rail
+    min: 0.4554000, -0.4752000, 1.6100000
+    max: 0.4900500, 0.4752000, 1.6800000
+    color: '#4C3D2E'
+  - label: east inner shared upper cabinet flange
+    min: 0.4554000, -0.4405500, 1.8100000
+    max: 0.4831200, 0.4405500, 2.2100000
+    color: '#4C3D2E'
+  - label: east inner upper cabinet face
+    min: 0.4831200, -0.4158000, 1.8600000
+    max: 0.4900500, -0.2425500, 2.1600000
+    color: '#413626'
+  - label: east inner green status label
+    min: 0.4900500, -0.2821500, 1.8600000
+    max: 0.4930200, -0.2524500, 1.9000000
+    color: '#366D3C'
+  - label: east inner upper cabinet face
+    min: 0.4831200, -0.1534500, 1.8600000
+    max: 0.4900500, 0.1534500, 2.1600000
+    color: '#413626'
+  - label: east inner green status label
+    min: 0.4900500, 0.1138500, 1.8600000
+    max: 0.4930200, 0.1435500, 1.9000000
+    color: '#366D3C'
+  - label: east inner upper cabinet face
+    min: 0.4831200, 0.2425500, 1.8600000
+    max: 0.4900500, 0.4158000, 2.1600000
+    color: '#413626'
+  - label: east inner green status label
+    min: 0.4900500, 0.3762000, 1.8600000
+    max: 0.4930200, 0.4059000, 1.9000000
+    color: '#366D3C'
+  - label: east inner lower green status label
+    min: 0.4732200, 0.3019500, 0.5100000
+    max: 0.4771800, 0.3465000, 0.5850000
+    color: '#3C8443'
+  - label: east vent lower molded lip
+    min: 0.4455000, -0.4950000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: east original vent grille pixels
+    min: 0.4672800, -0.4640625, 2.3650000
+    max: 0.4712400, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: north outer pale recessed backing
+    min: -0.4752000, 0.4435200, 0.1200000
+    max: 0.4752000, 0.4653000, 2.2900000
+    color: '#AAA798'
+  - label: north outer lower sill
+    min: -0.4950000, 0.4455000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: north outer upper rail
+    min: -0.4950000, 0.4455000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: 0.4393125, 0.4455000, 0.1200000
+    max: 0.4950000, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.0402187, 0.4455000, 0.1200000
+    max: 0.0402187, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.4950000, 0.4455000, 0.1200000
+    max: -0.4393125, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer course separator
+    min: -0.4950000, 0.4554000, 1.7300000
+    max: 0.4950000, 0.4940100, 1.8700000
+    color: '#898478'
+  - label: north vent lower molded lip
+    min: -0.4950000, 0.4455000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: north original vent grille pixels
+    min: -0.4640625, 0.4672800, 2.3650000
+    max: 0.4640625, 0.4712400, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: west outer pale recessed backing
+    min: -0.4653000, -0.4752000, 0.1200000
+    max: -0.4435200, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: west outer lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: -0.4455000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: west outer upper rail
+    min: -0.4950000, -0.4950000, 2.2000000
+    max: -0.4455000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, 0.4393125, 0.1200000
+    max: -0.4455000, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.0402187, 0.1200000
+    max: -0.4455000, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer shared panel stile
+    min: -0.4900500, -0.4950000, 0.1200000
+    max: -0.4455000, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: west outer course separator
+    min: -0.4940100, -0.4950000, 1.7300000
+    max: -0.4554000, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: west vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: -0.4455000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: west original vent grille pixels
+    min: -0.4712400, -0.4640625, 2.3650000
+    max: -0.4672800, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+  - label: west outer white status stencil
+    min: -0.4930200, -0.0346500, 1.9700000
+    max: -0.4900500, 0.0346500, 2.1000000
+    color: '#E2E0DC'
+  - label: west outer green status stroke
+    min: -0.4950000, -0.0049500, 1.9700000
+    max: -0.4930200, 0.0346500, 2.0450000
+    color: '#3C8443'
+  - label: west outer green status upright
+    min: -0.4950000, -0.0346500, 2.0100000
+    max: -0.4930200, -0.0049500, 2.0700000
+    color: '#366D3C'
+  - label: source connector inspection hatch
+    min: -0.0928125, 0.1546875, 2.7900000
+    max: 0.2475000, 0.4331250, 2.8000000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentNorthWestHatch
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DContainmentNorthEastJunction
+  label: Containment NorthEastJunction wall
+  status: draft
+  sourcePrototypes:
+  - RMCWallContainmentConnect5
+  referencePrototype: RMCWallContainmentConnect5
+  referenceRsi: _RMC14/Structures/Walls/containment.rsi
+  referenceState: containment_wall_connect_e2
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Fixed full-tile wall with source-palette pale outer panels and brown interior service cabinets. Interior
+    facing follows the saved Redux cell layout; corners rotate with the entity and never auto-connect. Recessed
+    panels, flanges and original vent pixels have physical depth. 2.8-tile height, unseen side elevations, cap and
+    recess dimensions remain inferred. Static source; see SOURCES_CONTAINMENT_WALLS.md.
+  parts:
+  - label: solid wall core
+    min: -0.4633200, -0.4633200, 0.1000000
+    max: 0.4633200, 0.4633200, 2.6500000
+    color: '#413626'
+  - label: continuous base course
+    min: -0.5000000, -0.5000000, 0.0000000
+    max: 0.5000000, 0.5000000, 0.1000000
+    color: '#565545'
+  - label: continuous pale cap and vent upper lip
+    min: -0.5000000, -0.5000000, 2.6500000
+    max: 0.5000000, 0.5000000, 2.7600000
+    color: '#C4C3BE'
+  - label: inset upper cap
+    min: -0.4640625, -0.4640625, 2.7600000
+    max: 0.4640625, 0.4640625, 2.7900000
+    color: '#D2D0CA'
+  - label: south inner lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: 0.4950000, -0.4455000, 0.1200000
+    color: '#3A2E21'
+  - label: south inner shared lower panel stile
+    min: -0.4257000, -0.4900500, 0.1800000
+    max: -0.3989700, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel stile
+    min: -0.0663300, -0.4900500, 0.1800000
+    max: 0.0663300, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel stile
+    min: 0.3989700, -0.4900500, 0.1800000
+    max: 0.4257000, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel rail
+    min: -0.3989700, -0.4851000, 0.1800000
+    max: 0.3989700, -0.4732200, 0.2300000
+    color: '#4C3D2E'
+  - label: south inner shared lower panel rail
+    min: -0.3989700, -0.4851000, 1.3400000
+    max: 0.3989700, -0.4732200, 1.3900000
+    color: '#4C3D2E'
+  - label: south inner horizontal equipment rail
+    min: -0.4752000, -0.4900500, 1.4500000
+    max: 0.4752000, -0.4554000, 1.5200000
+    color: '#4C3D2E'
+  - label: south inner horizontal equipment rail
+    min: -0.4752000, -0.4900500, 1.6100000
+    max: 0.4752000, -0.4554000, 1.6800000
+    color: '#4C3D2E'
+  - label: south inner shared upper cabinet flange
+    min: -0.4405500, -0.4831200, 1.8100000
+    max: 0.4405500, -0.4554000, 2.2100000
+    color: '#4C3D2E'
+  - label: south inner upper cabinet face
+    min: -0.4158000, -0.4900500, 1.8600000
+    max: -0.2425500, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: -0.2821500, -0.4930200, 1.8600000
+    max: -0.2524500, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner upper cabinet face
+    min: -0.1534500, -0.4900500, 1.8600000
+    max: 0.1534500, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: 0.1138500, -0.4930200, 1.8600000
+    max: 0.1435500, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner upper cabinet face
+    min: 0.2425500, -0.4900500, 1.8600000
+    max: 0.4158000, -0.4831200, 2.1600000
+    color: '#413626'
+  - label: south inner green status label
+    min: 0.3762000, -0.4930200, 1.8600000
+    max: 0.4059000, -0.4900500, 1.9000000
+    color: '#366D3C'
+  - label: south inner lower green status label
+    min: 0.3019500, -0.4771800, 0.5100000
+    max: 0.3465000, -0.4732200, 0.5850000
+    color: '#3C8443'
+  - label: south vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: 0.4950000, -0.4455000, 2.3600000
+    color: '#898478'
+  - label: south original vent grille pixels
+    min: -0.4640625, -0.4712400, 2.3650000
+    max: 0.4640625, -0.4672800, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+  - label: east outer pale recessed backing
+    min: 0.4435200, -0.4752000, 0.1200000
+    max: 0.4653000, 0.4752000, 2.2900000
+    color: '#AAA798'
+  - label: east outer lower sill
+    min: 0.4455000, -0.4950000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: east outer upper rail
+    min: 0.4455000, -0.4950000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.4950000, 0.1200000
+    max: 0.4900500, -0.4393125, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, -0.0402187, 0.1200000
+    max: 0.4900500, 0.0402187, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer shared panel stile
+    min: 0.4455000, 0.4393125, 0.1200000
+    max: 0.4900500, 0.4950000, 2.2000000
+    color: '#C4C3BE'
+  - label: east outer course separator
+    min: 0.4554000, -0.4950000, 1.7300000
+    max: 0.4940100, 0.4950000, 1.8700000
+    color: '#898478'
+  - label: east vent lower molded lip
+    min: 0.4455000, -0.4950000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: east original vent grille pixels
+    min: 0.4672800, -0.4640625, 2.3650000
+    max: 0.4712400, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: north outer pale recessed backing
+    min: -0.4752000, 0.4435200, 0.1200000
+    max: 0.4752000, 0.4653000, 2.2900000
+    color: '#AAA798'
+  - label: north outer lower sill
+    min: -0.4950000, 0.4455000, 0.0000000
+    max: 0.4950000, 0.4950000, 0.1200000
+    color: '#898478'
+  - label: north outer upper rail
+    min: -0.4950000, 0.4455000, 2.2000000
+    max: 0.4950000, 0.4950000, 2.3000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: 0.4393125, 0.4455000, 0.1200000
+    max: 0.4950000, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.0402187, 0.4455000, 0.1200000
+    max: 0.0402187, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer shared panel stile
+    min: -0.4950000, 0.4455000, 0.1200000
+    max: -0.4393125, 0.4900500, 2.2000000
+    color: '#C4C3BE'
+  - label: north outer course separator
+    min: -0.4950000, 0.4554000, 1.7300000
+    max: 0.4950000, 0.4940100, 1.8700000
+    color: '#898478'
+  - label: north vent lower molded lip
+    min: -0.4950000, 0.4455000, 2.3000000
+    max: 0.4950000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: north original vent grille pixels
+    min: -0.4640625, 0.4672800, 2.3650000
+    max: 0.4640625, 0.4712400, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: XZ
+    surfaceFlipU: true
+  - label: west inner lower sill
+    min: -0.4950000, -0.4950000, 0.0000000
+    max: -0.4455000, 0.4950000, 0.1200000
+    color: '#3A2E21'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, 0.3989700, 0.1800000
+    max: -0.4732200, 0.4257000, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, -0.0663300, 0.1800000
+    max: -0.4732200, 0.0663300, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel stile
+    min: -0.4900500, -0.4257000, 0.1800000
+    max: -0.4732200, -0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel rail
+    min: -0.4851000, -0.3989700, 0.1800000
+    max: -0.4732200, 0.3989700, 0.2300000
+    color: '#4C3D2E'
+  - label: west inner shared lower panel rail
+    min: -0.4851000, -0.3989700, 1.3400000
+    max: -0.4732200, 0.3989700, 1.3900000
+    color: '#4C3D2E'
+  - label: west inner horizontal equipment rail
+    min: -0.4900500, -0.4752000, 1.4500000
+    max: -0.4554000, 0.4752000, 1.5200000
+    color: '#4C3D2E'
+  - label: west inner horizontal equipment rail
+    min: -0.4900500, -0.4752000, 1.6100000
+    max: -0.4554000, 0.4752000, 1.6800000
+    color: '#4C3D2E'
+  - label: west inner shared upper cabinet flange
+    min: -0.4831200, -0.4405500, 1.8100000
+    max: -0.4554000, 0.4405500, 2.2100000
+    color: '#4C3D2E'
+  - label: west inner upper cabinet face
+    min: -0.4900500, 0.2425500, 1.8600000
+    max: -0.4831200, 0.4158000, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, 0.2524500, 1.8600000
+    max: -0.4900500, 0.2821500, 1.9000000
+    color: '#366D3C'
+  - label: west inner upper cabinet face
+    min: -0.4900500, -0.1534500, 1.8600000
+    max: -0.4831200, 0.1534500, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, -0.1435500, 1.8600000
+    max: -0.4900500, -0.1138500, 1.9000000
+    color: '#366D3C'
+  - label: west inner upper cabinet face
+    min: -0.4900500, -0.4158000, 1.8600000
+    max: -0.4831200, -0.2425500, 2.1600000
+    color: '#413626'
+  - label: west inner green status label
+    min: -0.4930200, -0.4059000, 1.8600000
+    max: -0.4900500, -0.3762000, 1.9000000
+    color: '#366D3C'
+  - label: west inner lower green status label
+    min: -0.4771800, -0.3465000, 0.5100000
+    max: -0.4732200, -0.3019500, 0.5850000
+    color: '#3C8443'
+  - label: west vent lower molded lip
+    min: -0.4950000, -0.4950000, 2.3000000
+    max: -0.4455000, 0.4950000, 2.3600000
+    color: '#898478'
+  - label: west original vent grille pixels
+    min: -0.4712400, -0.4640625, 2.3650000
+    max: -0.4672800, 0.4640625, 2.6450000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentVentFace
+    surfaceAxis: YZ
+  - label: east outer white status stencil
+    min: 0.4900500, -0.0346500, 1.9700000
+    max: 0.4930200, 0.0346500, 2.1000000
+    color: '#E2E0DC'
+  - label: east outer green status stroke
+    min: 0.4930200, -0.0346500, 1.9700000
+    max: 0.4950000, 0.0049500, 2.0450000
+    color: '#3C8443'
+  - label: east outer green status upright
+    min: 0.4930200, 0.0049500, 2.0100000
+    max: 0.4950000, 0.0346500, 2.0700000
+    color: '#366D3C'
+  - label: source connector inspection hatch
+    min: -0.2475000, 0.1546875, 2.7900000
+    max: 0.0928125, 0.4331250, 2.8000000
+    color: '#FFFFFF'
+    surface: CMU3DContainmentNorthEastHatch
+    surfaceAxis: XY

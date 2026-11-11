@@ -13,7 +13,8 @@ public sealed class AU14AntennaHeadConstructionTest : InteractionTest
     private const string Frame = "AU14MastAntennaHeadFrame";
     private const string Head = "AU14MastAntennaHead";
     private const string Plasteel = "CMPlasteel";
-    private const string CableStack = "RMCCable";
+    // CMU14: the mast graphs wire with thin LV cable stacks since the RMCCable swap
+    private const string CableStack = "CMUCableThinLVStack";
     private const string Board = "CMAPCElectronics";
     private const string Multitool = "Multitool";
 
@@ -44,11 +45,13 @@ public sealed class AU14AntennaHeadConstructionTest : InteractionTest
         AssertPrototype(Head);
     }
 
-    [Test]
-    public async Task RaiseKeyAndReopenMast()
+    // CMU14: both engineering and mast-specific RTO training support the full assembly flow.
+    [TestCase("RMCSkillEngineer", 2)]
+    [TestCase("RMCSkillJtac", 4)]
+    public async Task RaiseKeyAndReopenMast(string skill, int level)
     {
         await Server.WaitPost(() =>
-            Server.System<SkillsSystem>().SetSkill(SPlayer, "RMCSkillEngineer", 2));
+            Server.System<SkillsSystem>().SetSkill(SPlayer, skill, level));
 
         await SpawnTarget("AU14CommsMastFooting");
 

@@ -91,9 +91,23 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // CMU14 Begin: Del and Spawn below mutate the table this enumerates,
+        // which throws mid-enumeration; snapshot the uids first.
+        var toReplace = new List<EntityUid>();
         var query = EntityQueryEnumerator<RMCReplaceOnHijackLandComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        // CMU14
+        while (query.MoveNext(out var uid, out _))
         {
+            toReplace.Add(uid);
+        }
+
+        foreach (var uid in toReplace)
+        {
+            if (TerminatingOrDeleted(uid)
+                || !TryComp(uid, out RMCReplaceOnHijackLandComponent? comp))
+                continue;
+        // CMU14 End
+
             if (!TryComp(uid, out TransformComponent? xform)
                 || !_zLevels.IsSameZNetwork(xform.MapUid, ev.Map)) // CMU14
                 continue;
@@ -137,7 +151,10 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!TryComp(user, out TransformComponent? transform))
             return false;
 
-        if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel))
+        // CMU14: selected construction recipes also accept specialist training.
+        // if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel))
+        if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel) &&
+            !(proto.AlternativeSkill is { } alternative && _skills.HasSkill(user, alternative, proto.AlternativeSkillLevel)))
         {
             var message = Loc.GetString("rmc-construction-untrained-build");
             _popup.PopupEntity(message, ent, user, PopupType.SmallCaution);
@@ -344,7 +361,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         {
             var entity = SpawnAtPosition(entityPrototype, spawnPosition);
             spawnedEnts.Add(entity);
-            _stack.SetCount(entity, count);
+            _stack.SetCount((entity, null), count);
         }
 
         return spawnedEnts;
@@ -440,7 +457,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
 
         if (!CanBuildAt(ent.Owner.ToCoordinates(), Name(ent), out var popup, true))
         {
-            _popup.PopupClient(popup, ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, ent, args.User, PopupType.SmallCaution);
             args.Cancel();
         }
     }

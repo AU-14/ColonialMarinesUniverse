@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Numerics;
 using Robust.Client.UserInterface.Controls;
@@ -9,7 +10,7 @@ internal static class CMUMedicalWindowSizing
 {
     private static readonly Vector2 WindowMargin = new(64f, 80f);
     private static readonly Vector2 AbsoluteFloor = new(360f, 300f);
-    private static readonly Dictionary<string, Vector2> RememberedSizes = new();
+    private static readonly ConcurrentDictionary<string, Vector2> RememberedSizes = new();
 
     public static Vector2 GetInitialSize(string key, Vector2 preferredSize)
     {

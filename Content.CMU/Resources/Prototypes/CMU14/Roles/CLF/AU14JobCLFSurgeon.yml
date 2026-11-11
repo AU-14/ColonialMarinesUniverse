@@ -19,6 +19,7 @@
       RMCSkillMedical: 4
       RMCSkillResearch: 1
       RMCSkillSurgery: 4
+      RMCSkillCqc: 1
       RMCSkillFirearms: 2
       RMCSkillLeadership: 1
       RMCSkillPolice: 1
@@ -57,6 +58,11 @@
     traits:
     - NonResuscitable
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: AU14GearCLFSurgeon

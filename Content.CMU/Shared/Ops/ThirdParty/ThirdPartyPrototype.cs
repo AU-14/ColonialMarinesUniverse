@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Allegiance;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Robust.Shared.Utility;
@@ -18,7 +19,11 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     ///     If not set, falls back to ID.
     /// </summary>
     [DataField("displayName")]
-    public string? DisplayName { get; private set; }
+    private string? _displayName;
+
+    public string? DisplayName => _displayName != null && Loc.TryGetString(_displayName, out var localized)
+        ? localized
+        : _displayName;
 
     [DataField("blacklistedThreats")]
     public List<string> BlacklistedThreats { get; private set; } = new();
@@ -27,41 +32,49 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     public List<string> WhitelistedThreats { get; private set; } = new();
 
     // The preferred field is the string 'entrymethod' (values: "ground", "shuttle", "parachute").
-    [DataField("entrymethod", required: false)]
+    [DataField("entrymethod")]
     public string? EntryMethod { get; private set; }
 
-    [DataField("dropshippath", required: false)]
-    public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Shuttles/black_ert.yml");
+    [DataField]
+    public ResPath dropshippath { get; private set; } = new("/Maps/CMU14/Dropships/black_ert.yml");
 
-    // used if enterbyshuttle is true
-
-    [DataField("blacklistedgamemodes")]
+    [DataField]
     public List<string> BlacklistedGamemodes { get; private set; } = new();
 
-    [DataField("whitelistedgamemodes")]
-    public List<string> whitelistedgamemodes { get; private set; } = new();
+    [DataField]
+    public List<string> WhitelistedGamemodes { get; private set; } = new();
 
-    [DataField("weight", required: false)]
+    [DataField]
     public int weight { get; private set; } = 1;
 
     [DataField("maxplayers")]
     public int MaxPlayers { get; private set; } = 100;
 
+    /// <summary>
+    ///     If true, ghosts may call this party in through the ghost role menu once enough players are dead.
+    ///     Meant for minor civilian drop-ins, not heavy forces.
+    /// </summary>
+    [DataField]
+    public bool GhostsCallable { get; private set; }
+
     [DataField("minplayers")]
     public int MinPlayers { get; private set; }
 
-// for rolling
-
-    [DataField("GhostsNeeded")]
+    [DataField]
     public int GhostsNeeded { get; private set; } = 10;
 
-    // used if this isn't a roundstart spawn
-
-    [DataField("blacklistedPlatoons", required: false)]
+    [DataField]
     public List<string> BlacklistedPlatoons { get; private set; } = new();
 
-    [DataField("WhitelistedPlatoons", required: false)]
+    [DataField]
     public List<string> WhitelistedPlatoons { get; private set; } = new();
+
+    /// <summary>
+    ///     Allegiance this party fights for. In Force on Force a party whose allegiance matches
+    ///     a side's platoon is tagged with that side, so identification treats it as a teammate.
+    /// </summary>
+    [DataField("allegiance")]
+    public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
 
     [DataField("roundstart", required: false)]
     public bool RoundStart { get; private set; }
@@ -75,14 +88,19 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField("partyspawn", required: true)]
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 
-    [DataField("announcearrival", required: false)]
-    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict zone.";
+    [DataField("announcearrival")]
+    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict.";
+
+    // optional header for the arrival line instead of the plain announcement wrap,
+    // e.g. Dutch's Dozen uses cmss13's "Intercepted Transmission:"
+    [DataField("announcearrivaltitle")]
+    public LocId? AnnounceArrivalTitle { get; private set; }
 
     /// <summary>
     ///     Announced when a scheduled party goes ready and starts gathering ghost volunteers,
     ///     before it deploys. Worded as responders en route so a delayed landing reads as intended.
     /// </summary>
-    [DataField("announceinbound", required: false)]
+    [DataField("announceinbound")]
     public string? AnnounceInbound { get; private set; } = "Long range arrays detect an unidentified force moving to answer the distress call. Arrival expected shortly.";
 
     [IdDataField]

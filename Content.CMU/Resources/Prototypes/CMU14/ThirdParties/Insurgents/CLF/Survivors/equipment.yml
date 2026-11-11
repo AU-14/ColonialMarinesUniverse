@@ -17,7 +17,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCMagazineRifleAR10
+    - id: CMUMagazineRifleAR10
       amount: 4
 
 - type: entity

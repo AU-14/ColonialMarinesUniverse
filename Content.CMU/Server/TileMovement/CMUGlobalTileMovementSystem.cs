@@ -10,7 +10,7 @@ namespace Content.Server.CMU14.TileMovement;
 /// command (backed by <see cref="CCVars.CMUTileMovementForcedForAll"/>). Applies retroactively to
 /// everyone already moving around, and (via <see cref="Update"/>) to anyone who spawns/attaches to a
 /// mover while it's enabled. Never touches entities that already had <see cref="CMUTileMovementComponent"/>
-/// before the toggle (e.g. via the trait), so turning the toggle back off doesn't strip those.
+/// before the toggle (e.g. from a player's own tile movement setting), so turning the toggle back off doesn't strip those.
 /// </summary>
 public sealed partial class CMUGlobalTileMovementSystem : EntitySystem
 {

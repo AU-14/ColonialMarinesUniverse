@@ -13,11 +13,11 @@ There are two tabs, "Manage Research" and "View Chemicals".
 ## Manage Research
 This tab shows you a list of chemicals you could potentially make, alongside their difficulty.
 
-[bold]Easy[/bold] chemicals are relatively fast to make, but they only give you 3 credits.
+[bold]Easy[/bold] chemicals use elements and basic reagents, carry only common properties, and give you 3 credits.
 
-[bold]Intermediate[/bold] chemicals may take some time, and involve rarer ingredients, and give you 5 credits.
+[bold]Intermediate[/bold] chemicals add uncommon medicines to the recipe, may carry uncommon properties and occasionally a rare one, and give you 5 credits.
 
-[bold]Hard chemicals[/bold] require special ingredients only obtained through [textlink="Hydroponics" link="CMUBotany"], and give you 7 credits.
+[bold]Hard chemicals[/bold] always need either a precious metal (gold, silver, platinum, uranium) or a special ingredient from [textlink="Hydroponics" link="CMUBotany"], ask for more reagent, carry a rare property, and give you 7 credits.
 
 Each faction has its own offers, points, clearance, reports, and six-minute wait after picking a chemical. Other factions taking contracts do not affect your terminal.
 

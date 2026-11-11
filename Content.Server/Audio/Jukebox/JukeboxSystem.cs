@@ -160,7 +160,9 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
                 return false;
             }
 
-            ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f))?.Entity;
+            // cmu edit start: heard out to 10 tiles, fading away well before the edge instead of cutting off
+            ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f).WithRolloffFactor(2f))?.Entity;
+            // cmu edit end
             if (ent.Comp.AudioStream is { } stream)
                 References.Watch(ent.Owner, stream);
             Dirty(ent);

@@ -1,0 +1,47 @@
+author: troytroy400
+category: CMU
+changes:
+- message: You can now build concrete barricades. It needs construction skill 2. Lay
+    a frame with 22 metal rods from the construction menu, then pour a concrete bag
+    onto it. Poured concrete takes 10 minutes to harden. While it's wet it's pale
+    grey, has little HP, can't take barbed wire and examining it shows how long is
+    left. Once hardened it's much tougher than a HESCO against bullets and explosives
+    plus has a larger pool of health, but is suspectable to acid damage.
+  type: Add
+- message: Platoon requisition vendors now stock 15 concrete bags, and a crate of
+    10 concrete bags can be ordered from the requisitions lift for 600.
+  type: Add
+- message: Breathing from internals with oxygen in the connected tank now protects
+    you from tear gas, pepper spray, mycotoxin, spore clouds and other inhaled gases,
+    the same way a gas mask filter does. Boiler acid gas still burns you while you're
+    on internals, but you won't take oxygen damage, shake or cough.
+  type: Add
+- message: Added a rebindable "Open worn storage" key (Controls > CMU). Hover over
+    a belt, backpack or pouch slot and press it to open it. It's unbound by default.
+    CM13 player QOL.
+  type: Add
+- message: Added an option (Controls > CMU) so that clicking worn storage with an
+    empty hand opens it instead of taking it off. CM13 QOL.
+  type: Add
+- message: Empty weapon kits now despawn after lying on the ground for a minute.
+  type: Tweak
+- message: The Mohawk's ramp and ladder controls now require GOVFOR or OPFOR pilot,
+    engineering or command access.
+  type: Tweak
+- message: The IFAK first-aid autoinjector now holds 15u tricordrazine, 6u paracetamol
+    and 6u dexalin. The infantry first aid guide has been updated to match.
+  type: Tweak
+- message: Snack, drink, cigarette and recreation vendors on GOVFOR and OPFOR ships
+    now take cash or your ID for payment, like the ones on the planet.
+  type: Tweak
+- message: The SU6 now uses alt-iff and is buffed to be similar in stats to the M4A4.
+    CMB CIU, USCM, VAIPO and RMC now have three SU6 kits in their req vendors and
+    can order more.
+  type: Tweak
+- message: You no longer start gasping for air until you've taken at least 20 oxygen
+    damage.
+  type: Tweak
+- message: BEAR has been removed from rotation.
+  type: Remove
+time: '2026-10-10T10:42:57.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2133

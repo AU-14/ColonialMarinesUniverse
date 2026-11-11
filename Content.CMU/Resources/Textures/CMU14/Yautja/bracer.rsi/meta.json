@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/obj/items/hunter/pred_bracers.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/hunter/pred_bracers.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/obj/items/hunter/pred_bracers.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/hunter/pred_bracers.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata. Retro, ebony, silver, bronze, crimson and bone bracers redrawn and shadow, xenobone, serpent, knight and seeker bracers added by DimDim, from cmss13-devs/cmss13 PR #12174 (unmerged), taken from https://github.com/realforest2001/forest-cm13/blob/08d99ee337e61795b2dae54b7925ed1a6c13c436/icons/obj/items/hunter/pred_bracers.dmi, https://github.com/realforest2001/forest-cm13/blob/08d99ee337e61795b2dae54b7925ed1a6c13c436/icons/mob/humans/onmob/hunter/pred_bracers.dmi. License per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated.",
   "size": {
     "x": 32,
     "y": 32
@@ -235,6 +235,115 @@
     },
     {
       "name": "equipped-HAND-swamp",
+      "directions": 4
+    },
+    {
+      "name": "icon"
+    },
+    {
+      "name": "bracer1_shadow"
+    },
+    {
+      "name": "bracer_shadow",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-shadow",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_xenobone"
+    },
+    {
+      "name": "bracer_xenobone",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-xenobone",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_serpent"
+    },
+    {
+      "name": "bracer_serpent",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-serpent",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_knight"
+    },
+    {
+      "name": "bracer_knight",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-knight",
+      "directions": 4
+    },
+    {
+      "name": "bracer1_seeker"
+    },
+    {
+      "name": "bracer_seeker",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "equipped-HAND-seeker",
       "directions": 4
     }
   ]

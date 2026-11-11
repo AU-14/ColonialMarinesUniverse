@@ -8,6 +8,10 @@
     sprite: CMU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
+  - type: IntegratedVisors
+    startToggled: true
+    visorsToAdd:
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -74,6 +78,10 @@
     sprite: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+  - type: IntegratedVisors
+    startToggled: true
+    visorsToAdd:
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -180,9 +188,13 @@
     camouflageVariations:
       Jungle: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
       Desert: CMU14/Clothing/DesertHats/m10corpsmanhelmet.rsi
-      Snow: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+      Snow: CMU14/Clothing/SnowHats/m10corpsmanhelmet.rsi
       Classic: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
-      Urban: CMU14/Clothing/JungleHats/m10corpsmanhelmet.rsi
+      Urban: CMU14/Clothing/UrbanHats/m10corpsmanhelmet.rsi
+  - type: IntegratedVisors
+    startToggled: true
+    visorsToAdd:
+    - CMUVisorMedicalSquadIntegrated
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -198,9 +210,9 @@
     camouflageVariations:
       Jungle: CMU14/Clothing/JungleHats/m10helmet.rsi
       Desert: CMU14/Clothing/DesertHats/m10helmet.rsi
-      Snow: CMU14/Clothing/JungleHats/m10helmet.rsi
+      Snow: CMU14/Clothing/SnowHats/m10helmet.rsi
       Classic: CMU14/Clothing/JungleHats/m10helmet.rsi
-      Urban: CMU14/Clothing/JungleHats/m10helmet.rsi
+      Urban: CMU14/Clothing/UrbanHats/m10helmet.rsi
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -216,9 +228,9 @@
     camouflageVariations:
       Jungle: CMU14/Clothing/JungleHats/m11helmet.rsi
       Desert: CMU14/Clothing/DesertHats/m11helmet.rsi
-      Snow: CMU14/Clothing/JungleHats/m11helmet.rsi
+      Snow: CMU14/Clothing/SnowHats/m11helmet.rsi
       Classic: CMU14/Clothing/JungleHats/m11helmet.rsi
-      Urban: CMU14/Clothing/JungleHats/m11helmet.rsi
+      Urban: CMU14/Clothing/UrbanHats/m11helmet.rsi
 
 - type: entity
   parent: RMCMarineHelmetBase

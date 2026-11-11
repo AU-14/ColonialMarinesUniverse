@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: CMUJobParamarineRifleman
+  chevrons:
+    IASF_PrivateFirstClass:
+      entity: AU14ChevronIASFPrivateFirstClass
+      requirements: []
   roundSide: ThirdParty
   roundForce: CMUParamarines
   roundRole: ParamarineRifleman
@@ -23,13 +27,13 @@
     - English
     currentLanguage: English
     defaultLanguage: English
-  name: cmu-paramarines-name-rifleman
+  name: cmu-paramarines-name-rifleman-title
   description: cmu-paramarines-description
   playTimeTracker: CMUJobParamarineRifleman
   ranks:
     RMCRankCivilian: []
   startingGear: CMUGearParamarineRifleman
-  spawnMenuRoleName: TWE Royal Paramarine Rifleman (3rd party)
+  spawnMenuRoleName: IASF Parachute Regiment Rifleman (3rd party)
   greeting: cmu-paramarines-greeting
   icon: RMCJobIconParamarine
   joinNotifyCrew: false
@@ -41,7 +45,7 @@
 - type: entity
   parent: CMUBaseMobSpeciesParamarines
   id: CMUJobParamarineRifleman
-  name: TWE Royal Paramarine Rifleman
+  name: IASF Parachute Regiment Rifleman
   components:
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial

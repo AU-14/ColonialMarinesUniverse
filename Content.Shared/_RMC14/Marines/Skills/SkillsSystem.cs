@@ -99,6 +99,10 @@ public sealed partial class SkillsSystem : EntitySystem
 
     private void OnSkillsStartup(Entity<SkillsComponent> ent, ref ComponentStartup args)
     {
+        // CMU14: the server sends the effective skills, including training and squad bonuses.
+        if (_net.IsClient)
+            return;
+
         if (ent.Comp.Preset is not { } presetPrototype)
             return;
 
@@ -185,7 +189,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", args.Used));
-            _popup.PopupClient(msg, args.User, PopupType.SmallCaution);
+            _popup.PopupSelf(msg, args.User, PopupType.SmallCaution);
             args.Handled = true;
         }
     }
@@ -198,7 +202,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-no-training", ("target", ent));
-            _popup.PopupClient(msg, args.User, PopupType.SmallCaution);
+            _popup.PopupSelf(msg, args.User, PopupType.SmallCaution);
             args.Cancel();
         }
     }
@@ -208,7 +212,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", ent));
-            _popup.PopupClient(msg, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, args.User, args.User, PopupType.SmallCaution);
             args.Handled = true;
         }
     }
@@ -218,7 +222,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", ent));
-            _popup.PopupClient(msg, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, args.User, args.User, PopupType.SmallCaution);
             args.Cancelled = true;
         }
     }
@@ -242,7 +246,7 @@ public sealed partial class SkillsSystem : EntitySystem
         if (!HasAllSkills(args.User, ent.Comp.Skills))
         {
             var msg = Loc.GetString("rmc-skills-cant-use", ("item", ent));
-            _popup.PopupClient(msg, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, args.User, args.User, PopupType.SmallCaution);
             args.Handled = true;
         }
     }
@@ -272,7 +276,7 @@ public sealed partial class SkillsSystem : EntitySystem
             if (_toggle.IsActivated(ent.Owner) && _toggle.TryDeactivate(ent.Owner, args.EquipTarget) && ent.Comp.Popup != null)
             {
                 var msg = Loc.GetString(ent.Comp.Popup, ("item", ent));
-                _popup.PopupClient(msg, args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
             }
         }
     }
@@ -365,7 +369,7 @@ public sealed partial class SkillsSystem : EntitySystem
         var skillsDict = ImmutableDictionary.CreateBuilder<string, EntProtoId<SkillDefinitionComponent>>();
         foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (!prototype.HasComponent<SkillDefinitionComponent>())
+            if (!prototype.HasComp<SkillDefinitionComponent>(_compFactory))
                 continue;
 
             var id = prototype.ID;
@@ -575,7 +579,7 @@ public sealed partial class SkillsSystem : EntitySystem
         }
 
         DebugTools.Assert(_prototypes.TryIndex(skill, out var entProto) &&
-                     entProto.HasComponent<SkillDefinitionComponent>());
+                     entProto.HasComp<SkillDefinitionComponent>(_compFactory));
 
         ent.Comp ??= EnsureComp<SkillsComponent>(ent);
 

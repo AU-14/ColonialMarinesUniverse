@@ -133,7 +133,7 @@ public sealed partial class VisorSystem : EntitySystem
 
         if (containers.All(c => c.ContainedEntity == null))
         {
-            _popup.PopupClient(Loc.GetString("rmc-no-visors-to-swap"), ent, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-no-visors-to-swap"), ent, args.Performer, PopupType.SmallCaution);
             return;
         }
 
@@ -171,7 +171,18 @@ public sealed partial class VisorSystem : EntitySystem
                 RaiseLocalEvent(newContained, ref rev);
 
                 if (rev.Cancelled)
+                {
+                    // CMU14: say why a visor that needs training was skipped, as equipping the helmet does
+                    if (TryComp<VisorComponent>(newContained, out var skillVisor) &&
+                        skillVisor.SkillsRequired != null &&
+                        !_skills.HasSkills(args.Performer, skillVisor.SkillsRequired))
+                    {
+                        _popup.PopupEntity(Loc.GetString("rmc-skills-no-training", ("target", newContained)),
+                            args.Performer, args.Performer, PopupType.SmallCaution);
+                    }
+
                     continue;
+                }
 
                 var ev = new ActivateVisorEvent(ent, args.Performer);
                 RaiseLocalEvent(newContained, ref ev);
@@ -187,7 +198,7 @@ public sealed partial class VisorSystem : EntitySystem
         } while (current != null);
 
         if (startedNull && current == null)
-            _popup.PopupClient(Loc.GetString("rmc-no-visors-to-swap"), ent, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-no-visors-to-swap"), ent, args.Performer, PopupType.SmallCaution);
 
         if (ent.Comp.Action is { } action && Exists(action) && current == null)
             _actions.SetIcon(action, ent.Comp.OffIcon);
@@ -229,7 +240,7 @@ public sealed partial class VisorSystem : EntitySystem
                 if (ent.Comp.Action is { } action && Exists(action))
                     _actions.SetIcon(action, ent.Comp.OffIcon);
 
-                _popup.PopupClient(Loc.GetString("rmc-skills-no-training", ("target", newContained)), args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-skills-no-training", ("target", newContained)), args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
             }
         }
     }
@@ -288,9 +299,9 @@ public sealed partial class VisorSystem : EntitySystem
         }
 
         if (anyRemoved)
-            _popup.PopupClient("You remove the inserted visors", args.Target, args.User);
+            _popup.PopupEntity("You remove the inserted visors", args.Target, args.User);
         else
-            _popup.PopupClient("There are no visors left to take out!", args.Target, args.User);
+            _popup.PopupEntity("There are no visors left to take out!", args.Target, args.User);
 
         ent.Comp.CurrentVisor = null;
         Dirty(ent);
@@ -375,13 +386,13 @@ public sealed partial class VisorSystem : EntitySystem
             if (_container.Insert(visor.Owner, container))
             {
                 msg = $"You connect the {Name(visor)} to {Name(cycleable)}.";
-                _popup.PopupClient(msg, cycleable, user);
+                _popup.PopupEntity(msg, cycleable, user);
                 return true;
             }
         }
 
         msg = $"{Name(cycleable)} has used all of its visor attachment sockets.";
-        _popup.PopupClient(msg, cycleable, user, PopupType.SmallCaution);
+        _popup.PopupEntity(msg, cycleable, user, PopupType.SmallCaution);
         return true;
     }
 

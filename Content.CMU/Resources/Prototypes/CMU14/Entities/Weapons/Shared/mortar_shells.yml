@@ -1,0 +1,50 @@
+# White phosphorus mortar shell: a light blast, one burning tile and a cloud of phosphorus smoke.
+- type: entity
+  parent: RMCMortarShellBase
+  id: CMUMortarShellWP
+  name: M908 WP mortar shell
+  description: An 80mm mortar shell loaded with white phosphorus. It bursts into a thick cloud of burning phosphorus smoke that screens the area and sets the impact point alight.
+  components:
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
+  - type: Item
+    heldPrefix: inc
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/mortar.rsi
+    state: mortar_ammo_smk
+  - type: Explosive
+    explosionType: RMCMortar
+    maxIntensity: 15
+    intensitySlope: 2
+    totalIntensity: 60
+    canCreateVacuum: false
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+  - type: MortarShell
+    zLevelPenetration: 2
+  - type: CMUSpawnOnExplosiveTrigger
+    spawn: CMUSmokePhosphorusMortar
+    fire: RMCTileFire
+
+# The WP mortar shell's phosphorus smoke, which lasts 6 seconds.
+- type: entity
+  parent: RMCSmokePhosphorusNoSpread
+  id: CMUSmokePhosphorusMortarNoSpread
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 6
+  # The shell's own blast would otherwise clear the smoke the moment it appears.
+  - type: RemoveComponents
+    components:
+    - type: DeleteOnExplosion
+
+- type: entity
+  parent: CMUSmokePhosphorusMortarNoSpread
+  id: CMUSmokePhosphorusMortar
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EvenSmoke
+    spawn: CMUSmokePhosphorusMortarNoSpread
+    initialSpread: 3
+    range: 3

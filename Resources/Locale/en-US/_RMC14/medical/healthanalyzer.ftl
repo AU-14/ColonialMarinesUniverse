@@ -14,7 +14,10 @@ rmc-health-analyzer-healthy = {$percent} healthy
 rmc-health-analyzer-unknown-reagents = [color=white][italic]Unknown reagents detected.[/italic][/color]
 rmc-health-analyzer-additional-reagents = { $count } additional known reagents omitted. Overdose warnings are listed first.
 
-rmc-health-analyzer-advice-epinedrine = [color=#6bd43c][font="Emoji"]💉[/font][/color] Administer a single dose of epinedrine.
+# cmu edit start
+# rmc-health-analyzer-advice-epinedrine = [color=#6bd43c][font="Emoji"]💉[/font][/color] Administer a single dose of epinedrine.
+rmc-health-analyzer-advice-epinedrine = [color=#6bd43c][font="Emoji"]💉[/font][/color] Administer a single dose of epinephrine.
+# cmu edit end
 rmc-health-analyzer-advice-defib = [color=yellow][font="Emoji"]⚡[/font][/color] Apply shock via defibrillator!
 rmc-health-analyzer-advice-defib-repeated = [color=yellow][font="Emoji"]⚡[/font][/color] Apply repeated shocks via defibrillator.
 rmc-health-analyzer-advice-cpr = [color=skyblue][font="Emoji"]🫀[/font][/color] Perform CPR regularly to prevent braindeath.

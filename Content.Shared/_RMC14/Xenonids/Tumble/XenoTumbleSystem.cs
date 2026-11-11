@@ -72,7 +72,7 @@ public sealed partial class XenoTumbleSystem : EntitySystem
         }
         else
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tumble-not-perpendicular"), args.Target, xeno, PopupType.LargeCaution);
+            _popup.PopupCoordinates(Loc.GetString("rmc-xeno-tumble-not-perpendicular"), args.Target, xeno, PopupType.LargeCaution);
             return;
         }
 

@@ -29,6 +29,9 @@ public sealed partial class WendigoVoiceBui : BoundUserInterface
                 continue;
             if (!emote.Whitelist.Tags.Contains("Wendigo"))
                 continue;
+            // CMU14: Wendigos also use tagged Vocal emotes (roar, help, breathing); only General ones are mimicry lines.
+            if (emote.Category != EmoteCategory.General)
+                continue;
 
             lines.Add(new()
             {

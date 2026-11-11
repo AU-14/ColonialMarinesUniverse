@@ -582,8 +582,8 @@
     - id: CMCrowbar
     - id: CMWirecutter
     - id: CMWrench
-    - id: RMCCableCoil30
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
+    - id: CMUCableThinLVStack
     - id: CMMultitool
     # Something about /item/tool/weldingtool/hugetank - leaving empty
 
@@ -609,7 +609,7 @@
     - id: CMScrewdriver # TODO RMC14 tactical screwdriver??
     - id: CMWirecutter # TODO RMC14 tactical wirecutters??
     - id: CMCrowbar # TODO RMC14 tactical prybar
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
     - id: CMMultitool
     - id: CMWrench
     - id: RMCExplosivePlastic
@@ -676,6 +676,13 @@
     whitelist:
       components:
       - CassetteTape
+  # cmu edit start: a very small item that fits in a helmet. Not tagged Pouch, so helmets don't turn it away.
+  - type: Item
+    size: Tiny
+  - type: Tag
+    tags:
+    - CMUCassettePouch
+  # cmu edit end
 
 # Drum Pouch
 - type: entity

@@ -189,7 +189,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfterArgs))
-            _popup.PopupClient(Loc.GetString(popup), xeno, xeno, popupType);
+            _popup.PopupEntity(Loc.GetString(popup), xeno, xeno, popupType);
     }
 
     private void OnXenoGrowOvipositorDoAfter(Entity<XenoComponent> xeno, ref XenoGrowOvipositorDoAfterEvent args)
@@ -300,7 +300,7 @@ public sealed partial class XenoEggSystem : EntitySystem
             RootEntity = true
         };
 
-        _popup.PopupPredicted(Loc.GetString("rmc-xeno-egg-plant-self"), Loc.GetString("rmc-xeno-egg-plant", ("user", args.User)), egg, args.User);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-egg-plant-self"), Loc.GetString("rmc-xeno-egg-plant", ("user", args.User)), egg, args.User);
 
         _doAfter.TryStartDoAfter(doAfter);
     }
@@ -523,7 +523,7 @@ public sealed partial class XenoEggSystem : EntitySystem
             else
             {
                 if (user != null)
-                    _popup.PopupClient(Loc.GetString("cm-xeno-egg-clear"), egg, user.Value);
+                    _popup.PopupEntity(Loc.GetString("cm-xeno-egg-clear"), egg, user.Value);
 
                 if (_net.IsClient)
                     return true;
@@ -537,14 +537,14 @@ public sealed partial class XenoEggSystem : EntitySystem
         if (HasComp<XenoParasiteComponent>(user))
         {
             if (egg.Comp.State == XenoEggState.Grown || egg.Comp.State == XenoEggState.Growing)
-                _popup.PopupClient(Loc.GetString("rmc-xeno-egg-has-child"), user.Value);
+                _popup.PopupSelf(Loc.GetString("rmc-xeno-egg-has-child"), user.Value);
             return true;
         }
 
         if (egg.Comp.State != XenoEggState.Grown)
         {
             if (user != null)
-                _popup.PopupClient(Loc.GetString("cm-xeno-egg-not-developed"), egg, user.Value);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-egg-not-developed"), egg, user.Value);
 
             return false;
         }
@@ -679,7 +679,7 @@ public sealed partial class XenoEggSystem : EntitySystem
         }
 
         RemoveOvipositorActions(xeno.Owner);
-        _popup.PopupClient(Loc.GetString("cm-xeno-ovipositor-detach"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-ovipositor-detach"), xeno, xeno);
         RemCompDeferred<EggPlantingDistanceComponent>(xeno);
     }
 

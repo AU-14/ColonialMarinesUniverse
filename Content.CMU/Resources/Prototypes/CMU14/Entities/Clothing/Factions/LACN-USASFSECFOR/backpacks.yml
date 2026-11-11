@@ -55,10 +55,10 @@
     camouflageVariations: { }
 
 - type: entity
-  parent: CMSatchelMarineTech
+  parent: RMCSatchelWelderChestrig
   id: CMULACNSatchelEngineer
   name: LACN engineering satchel
-  description: A lightweight satchel issued to LACN engineers.
+  description: A lightweight satchel issued to LACN engineers, with a fuel tank for refilling welders in the field.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Backpacks/LACNengisatchel.rsi

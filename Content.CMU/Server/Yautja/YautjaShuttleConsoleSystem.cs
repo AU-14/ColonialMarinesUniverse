@@ -18,7 +18,9 @@ public sealed partial class YautjaShuttleConsoleSystem : EntitySystem
 
     private void OnOpenAttempt(Entity<YautjaShuttleConsoleComponent> ent, ref ActivatableUIOpenAttemptEvent args)
     {
-        if (HasComp<YautjaComponent>(args.User) || HasComp<YautjaTechAuthorizedComponent>(args.User))
+        // Only Ancients and clan Leaders fly the shuttle. The console AccessReader enforces
+        // the same rank bar on launch accept and gunship seat paths; this gate is the flavor denial.
+        if (TryComp<YautjaComponent>(args.User, out var yautja) && yautja.ClanRank >= YautjaRank.Leader)
             return;
 
         args.Cancel();

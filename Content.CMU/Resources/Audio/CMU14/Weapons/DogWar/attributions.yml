@@ -1,0 +1,4 @@
+- files: ["gun_hpr.ogg", "gun_carbine.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13-pve (cmss13-devs/cmss13-pve#1280)"
+  source: "https://github.com/AndroBetel/PvE-CMSS13/tree/5744cf0915607c28505847a15da110a1362869bd/sound/weapons"

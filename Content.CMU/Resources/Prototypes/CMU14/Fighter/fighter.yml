@@ -20,7 +20,7 @@
     range: 12
     volume: -8
     sound:
-      path: /Audio/CMU14/Fighter/jet-cockpit.ogg
+      path: /Audio/CMU14/Fighter/original/cockpit.ogg
 
 - type: entity
   id: CMUFighterCanopy
@@ -94,11 +94,11 @@
 - type: gameMap
   id: CMUFighterTrijent
   mapName: Trijent fighter flight trial
-  mapPath: /Maps/CMU14/trijent.yml
+  mapPath: /Maps/CMU14/Planets/Trijent/trijent.yml
   mapsBelow:
-  - /Maps/CMU14/trijent_below.yml
+  - /Maps/CMU14/Planets/Trijent/trijent_below.yml
   mapsAbove:
-  - /Maps/CMU14/trijent_above.yml
+  - /Maps/CMU14/Planets/Trijent/trijent_above.yml
   minPlayers: 0
   maxRandomOffset: 0
   randomRotation: false

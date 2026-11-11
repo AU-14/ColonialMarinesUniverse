@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Original emote_hug hand pixels separated into two layers without rotation, recoloring or redrawing. Taken from Resources/Textures/_RMC14/Effects/emotes.rsi, originally from cmss13: https://github.com/cmss13-devs/cmss13/blob/0525b5ada7da1afcd9b260e76d5fea01500d9c8d/icons/mob/do_afters.dmi . Animation uses unchanged original frame 0 translated per frame so the rotated hands bob vertically in unison.",
+    "size": {
+        "x": 16,
+        "y": 16
+    },
+    "states": [
+        {
+            "name": "left",
+            "delays": [
+                [
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "right",
+            "delays": [
+                [
+                    0.1,
+                    0.1,
+                    0.1,
+                    0.1
+                ]
+            ]
+        }
+    ]
+}

@@ -110,7 +110,7 @@ public sealed partial class CMUTacticalReconstructionSystem
     private bool StaticSceneryAt(EntityUid entity, EntityUid map, Vector2i origin, int size, out Vector2i tile)
     {
         tile = default;
-        if (TerminatingOrDeleted(entity) || !TryComp<TransformComponent>(entity, out var transform) ||
+        if (TerminatingOrDeleted(entity) || !TryComp(entity, out TransformComponent? transform) ||
             transform.Anchored || transform.ParentUid != map ||
             MetaData(entity).EntityPrototype is not { } prototype)
             return false;

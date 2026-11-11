@@ -1,0 +1,20 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Added Working Elevators that can also be built in round
+  type: Add
+- message: Elevators have a max weight limit of 250 (INCLUDING ITEMS IN BAG)
+  type: Tweak
+- message: Elevators have 2 types, railed and enclosed
+  type: Tweak
+- message: Elevators can be disabled/enabled. (engineering 3 required by default)
+  type: Tweak
+- message: Elevator call buttons work per floor (duh)
+  type: Tweak
+- message: Elevators that attempt to be used while overloaded breakdown and fall back
+    to elevator disable skill check
+  type: Tweak
+- message: Xenos / vehicles / weapons count as 1 weight
+  type: Tweak
+time: '2026-10-14T02:44:38.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2113

@@ -71,4 +71,8 @@ public sealed partial class AntagPrototype : IPrototype, IInheritingPrototype //
     /// </summary>
     [DataField("category")]
     public string? Category { get; private set; }
+
+    // CMU14: gamemodes (game preset IDs) this antag cannot roll in; hidden from that mode's preference tab.
+    [DataField]
+    public List<string> BlacklistedGamemodes { get; private set; } = new();
 }

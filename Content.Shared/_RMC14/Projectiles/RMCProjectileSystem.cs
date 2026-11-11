@@ -172,7 +172,10 @@ public sealed partial class RMCProjectileSystem : EntitySystem
 
         var accuracy = projectile.Comp.Accuracy;
         var targetCoords = _transform.GetMoverCoordinates(args.OtherEntity);
-        var distance = (targetCoords.Position - projectile.Comp.ShotFrom.Value.Position).Length();
+        // CMU14: shot origins and targets may belong to different grids on the same map.
+        // var distance = (targetCoords.Position - projectile.Comp.ShotFrom.Value.Position).Length();
+        if (!targetCoords.TryDistance(EntityManager, _transform, projectile.Comp.ShotFrom.Value, out var distance))
+            return;
 
         foreach (var threshold in projectile.Comp.Thresholds)
         {
@@ -266,7 +269,7 @@ public sealed partial class RMCProjectileSystem : EntitySystem
             }
         }
 
-        var spawn = SpawnAtPosition(ent.Comp.Spawn, coordinates);
+        var spawn = CMUSpawnVehicleImpact(ent, coordinates); // CMU14: preserve attribution and gibbing policy before impact MapInit.
         _hive.SetSameHive(ent.Owner, spawn);
 
         if (ent.Comp.Popup is { } popup)

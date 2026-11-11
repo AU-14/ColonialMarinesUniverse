@@ -18,13 +18,14 @@ namespace Content.Server.CMU14.Diagnostics;
 /// Correlates the state-request/ACK stream with bounded client-reported application progress.
 /// Diagnostic evidence never changes PVS, and receipt ACKs do not prove successful application/rendering.
 /// </summary>
-public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
+public sealed partial class CMUClientStateDiagnosticsSystem : EntitySystem
 {
     internal const string SawmillId = "cmu.client_state";
     protected override string SawmillName => SawmillId;
     private const int MaxDetailsPerWindow = 8;
     private const int MaxSummarySamples = 8;
     private static readonly TimeSpan ReportInterval = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan MemoryHeartbeatInterval = TimeSpan.FromSeconds(60);
 
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IServerGameStateManager _gameStates = default!;
@@ -42,6 +43,7 @@ public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
     private TimeSpan _nextSummary;
     private TimeSpan _nextDetailsWindow;
     private TimeSpan _nextErrorReport;
+    private TimeSpan _nextMemoryHeartbeat;
     private TimeSpan? _lastCleanup;
     private GameTick? _cleanupTick;
     private int _details;
@@ -80,6 +82,7 @@ public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
             _nextSummary = _windowStart + ReportInterval;
             _nextDetailsWindow = _windowStart + ReportInterval;
             _nextErrorReport = TimeSpan.Zero;
+            _nextMemoryHeartbeat = _windowStart + MemoryHeartbeatInterval;
             _gameStates.ClientRequestFull += OnClientRequestFull;
             _gameStates.ClientAck += OnClientAck;
             _players.PlayerStatusChanged += OnPlayerStatusChanged;
@@ -107,6 +110,14 @@ public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
         // One bounded pass over connected sessions every 30 seconds; never enumerate entities or components.
         if (_enabled && _timing.RealTime >= _nextSummary)
             WriteSummary(_timing.RealTime, "interval");
+
+        // Incident reports only sample memory when a client stall opens, so a memory explosion
+        // with no stall reports leaves no growth curve. Heartbeat the correlation context at Info.
+        if (_enabled && _timing.RealTime >= _nextMemoryHeartbeat)
+        {
+            _nextMemoryHeartbeat = _timing.RealTime + MemoryHeartbeatInterval;
+            _sawmill.Info($"memory-heartbeat round={_ticker.RoundId} phase={_ticker.RunLevel} {_performance.GetCorrelationContext()}");
+        }
     }
 
     private ClientTrace GetTrace(ICommonSession session)

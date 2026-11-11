@@ -1,7 +1,7 @@
 - type: job
   parent: CMUJobMilitaryBaseProvost
   id: CMUJobINDFORProvostInspectorChief
-  name: cmu-job-name-corp-provost-chief
+  name: cmu-job-name-corp-provost-chief-title
   description: cmu-job-description-inspector
   icon: CMUJobIconProvostInspectorChief
   startingGear: CMUGearProvostInspectorChief

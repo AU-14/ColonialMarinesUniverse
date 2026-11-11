@@ -140,7 +140,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     // beneath it (so a large spawnlist can be sorted by category); only the selected spawnlist's list is built
     // and shown at a time. _categoryContainers holds every spawnlist's (initially empty/hidden) child box;
     // _categoryButtons holds the currently-expanded spawnlist's buttons, keyed by the raw category value.
-    [Dependency] private  IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
     private readonly Dictionary<string, BoxContainer> _categoryContainers = new();
     private readonly Dictionary<string, BaseButton> _categoryButtons = new();
     // Per-spawnlist arrow glyph updaters (▶ collapsed / ▼ expanded); only spawnlists that actually have
@@ -398,8 +398,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
                     IoCManager.Resolve<IEntitySystemManager>()
                         .GetEntitySystem<SavedBuildPlacementSystem>()
                         .BeginPlacement(saved);
-                    // Close the menu so the cursor is free to choose the placement location.
-                    Close();
+                    // CMU14: leave the menu open while placement is active.
                 }
                 return;
             }
@@ -421,7 +420,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
                 IoCManager.Resolve<IEntitySystemManager>()
                     .GetEntitySystem<SavedBuildPlacementSystem>()
                     .PlaceAtOriginal(saved);
-                Close();
+                // CMU14: leave the menu open after placing a saved build.
                 return;
             }
 
@@ -1101,6 +1100,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
         OpenDetailPanel();
     }
 
+    [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
@@ -1215,7 +1215,8 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
     public bool UseGroupedView => true;
 
     /// <summary>The menu closes as soon as a build/placement begins.</summary>
-    public bool CloseOnConstruct => true;
+    // CMU14: keep the menu available while placing and after closing held/worn storage windows.
+    public bool CloseOnConstruct => false;
 
     // -------------------------------------------------------------------------
     // IConstructionMenuView - Button states

@@ -8,6 +8,7 @@ using Content.Client.CMU14.ZLevels.Culling;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Maps;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -187,6 +188,7 @@ public sealed partial class ScalingViewport
         }
 
         var fallbackEye = _eye;
+        _zEye.SourceEye = fallbackEye;
 
         using var zRenderProfile = _prof.Group("CMU Z Render");
 
@@ -372,6 +374,12 @@ public sealed partial class ScalingViewport
         if (_zRenderDiagnostics)
             LastZRenderDebugStats.LowestDepth = lowestDepth;
 
+        // Level drawn last onto the viewport; a stair preview is composited separately.
+        var finalDepth = (zLevelViewer.LookUp && _zLevels.TryMapOffset(viewXform.MapUid.Value, 1, out _, out _)) ? 1 : 0;
+
+        // Blind viewers must not see the level above through the separate composites.
+        var viewerBlind = _entityManager.TryGetComponent(viewEntity, out BlindableComponent? blindable) && blindable.IsBlind;
+
         //From the lowest depth to the highest, render each level
         using (var passProfile = _prof.Group("CMU Z Render Passes"))
         {
@@ -395,6 +403,7 @@ public sealed partial class ScalingViewport
                     _zEye.Scale = fallbackEye.Scale;
                     _zEye.VisualZOffset = Vector2.Zero;
                     _zEye.BlurCurrentLevel = zLevelViewer.LookUp;
+                    _zEye.IsFinalPass = finalDepth == 0;
                     _zEye.ConfigureVisibleEntityIndicators(false, _zOpeningBounds);
                     viewport.Eye = _zEye;
                 }
@@ -435,12 +444,16 @@ public sealed partial class ScalingViewport
                     _zEye.Scale = fallbackEye.Scale;
                     _zEye.VisualZOffset = offset;
                     _zEye.BlurCurrentLevel = false;
+                    _zEye.IsFinalPass = depth == finalDepth;
                     _zEye.ConfigureVisibleEntityIndicators(
                         _cfg.GetCVar(CMUZLevelsCVars.VisibleEntityIndicators) && depth == 1 && !separateStairPreview,
                         _zOpeningBounds);
 
                     if (separateStairPreview)
                     {
+                        if (viewerBlind)
+                            continue;
+
                         var stairPreviewStart = _zRenderDiagnostics ? Stopwatch.GetTimestamp() : 0;
                         if (RenderStairPreviewComposite(viewport, _zEye) && _zRenderDiagnostics)
                             LastZRenderDebugStats.StairPreviewCompositesRendered++;
@@ -482,7 +495,7 @@ public sealed partial class ScalingViewport
 
         // AU14 (building overhaul): stage 1 of the look-up cycle. When the viewer toggled faint mode, is not
         // already looking up and is not under a ceiling, ghost the level directly above at low alpha.
-        if (lookUp == 0 && zLevelViewer.FaintUp)
+        if (lookUp == 0 && zLevelViewer.FaintUp && !viewerBlind)
             RenderFaintUpperComposite(viewport, fallbackEye, viewXform, lowestDepth, weatherSourceMapId);
 
         if (_zRenderDiagnostics)
@@ -654,13 +667,8 @@ public sealed partial class ScalingViewport
                 return true;
             }
 
-            if (candidate != uid &&
-                TryResolveZLevelViewer(uid, out viewEntity, out viewer, out xform))
-            {
-                CacheZLevelViewEntity(uid, viewEntity);
-                return true;
-            }
-
+            // Remote eyes without a Z-level viewer use the normal camera renderer.
+            // Falling back to the owner would render the owner's map at the remote coordinates.
             ClearZLevelViewEntityCache();
             return false;
         }
@@ -689,13 +697,6 @@ public sealed partial class ScalingViewport
 
         var candidate = eye.Target ?? eyeEntity;
         if (TryResolveZLevelViewer(candidate, out viewEntity, out viewer, out xform))
-        {
-            CacheZLevelViewEntity(eyeEntity, viewEntity);
-            return true;
-        }
-
-        if (candidate != eyeEntity &&
-            TryResolveZLevelViewer(eyeEntity, out viewEntity, out viewer, out xform))
         {
             CacheZLevelViewEntity(eyeEntity, viewEntity);
             return true;
@@ -805,6 +806,7 @@ public sealed partial class ScalingViewport
 
     private static void CopyZEye(ZEye target, ZEye source)
     {
+        target.SourceEye = source.SourceEye;
         target.LowestDepth = source.LowestDepth;
         target.Depth = source.Depth;
         target.HighestDepth = source.HighestDepth;
@@ -818,6 +820,7 @@ public sealed partial class ScalingViewport
         target.Scale = source.Scale;
         target.VisualZOffset = source.VisualZOffset;
         target.BlurCurrentLevel = source.BlurCurrentLevel;
+        target.IsFinalPass = source.IsFinalPass;
         target.ApplyZLevelBlur = source.ApplyZLevelBlur;
     }
 
@@ -856,13 +859,14 @@ public sealed partial class ScalingViewport
         if (!_zLevels.TryMapOffset(mapUid, 1, out _, out var upperMapComp))
             return;
 
-        // Ceiling check: any non-empty tile on the upper map straight above the viewer means we're indoors.
+        // Ceiling check: a solid tile or roof on the upper map straight above the viewer means we're indoors.
+        // Grates can be seen up through.
         var viewerPos = _transform.GetWorldPosition(viewXform);
         var aboveCoords = new MapCoordinates(viewerPos, upperMapComp.MapId);
         if (_mapSystem.TryFindGridAt(aboveCoords, out var upperGridUid, out var upperGridComp))
         {
             var tileRef = _mapSystem.GetTileRef(upperGridUid, upperGridComp, aboveCoords);
-            if (!tileRef.Tile.IsEmpty)
+            if (!CMUZLevelOpeningCache.CanLookUpThrough(tileRef.Tile, _tile))
                 return;
         }
 
@@ -888,6 +892,7 @@ public sealed partial class ScalingViewport
         _zEye.Scale = fallbackEye.Scale;
         _zEye.VisualZOffset = offset;
         _zEye.BlurCurrentLevel = false;
+        _zEye.IsFinalPass = false;
         _zEye.ConfigureVisibleEntityIndicators(false, _zOpeningBounds);
 
         _stairPreviewViewport.Eye = _zEye;
@@ -1242,6 +1247,7 @@ public sealed partial class ScalingViewport
     {
         private readonly List<Box2> _visibleEntityIndicatorBounds = new();
 
+        public Robust.Shared.Graphics.IEye? SourceEye;
         public int LowestDepth;
         public int Depth;
         public int HighestDepth;
@@ -1249,6 +1255,8 @@ public sealed partial class ScalingViewport
         public MapId WeatherSourceMapId;
         public Vector2 VisualZOffset;
         public bool BlurCurrentLevel;
+        /// <summary>Last pass drawn onto the viewport.</summary>
+        public bool IsFinalPass;
         public bool ApplyZLevelBlur = true;
 
         public IReadOnlyList<Box2> VisibleEntityIndicatorBounds => _visibleEntityIndicatorBounds;

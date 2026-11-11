@@ -1,6 +1,10 @@
 - type: job
   parent: CMU14JobCivilianProdigyGuardBase
   id: CMU14JobCivilianProdigyGuardLeaderSurv
+  chevrons:
+    AU14RankPrDEnforcerLead:
+      entity: AU14ChevronPrDEnforcerLead
+      requirements: []
   roundSide: Civilian
   roundForce: PSC
   roundRole: CivilianProdigyGuardLeaderSurv
@@ -53,6 +57,11 @@
     inverted: true
     traits:
     - Epilepsy
+    - CMUHeartCondition
+    - CMUHemophilia
+    - CMUHardOfHearing
+    - CMUClaustrophobic
+    - CMUFearOfBlood
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
   spawnMenuRoleName: cmu-spawn-role-prodigy-team-leader-cmu-surv 
@@ -76,7 +85,7 @@
     eyes: AU14ProdigyWeldingGoggles
   storage:
     back:
-    - CMMRE #TODO prodigy one
+    - CMUMREFSR
     - CMCanteen
     - RMCRadioHandheldColony
     - CMSheetPlasteel40

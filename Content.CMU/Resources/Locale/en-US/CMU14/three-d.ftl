@@ -1,0 +1,56 @@
+cmd-cmu_3d-desc = Open the local 3D asset workbench.
+cmd-cmu_3d-help = Usage: cmu_3d [model ID], or cmu_3d off.
+cmu-3d-title = Garrison 3D asset workbench
+cmu-3d-model = Model
+cmu-3d-count = { $count } models
+cmu-3d-reset = Reset camera
+cmu-3d-edges = Show edges
+cmu-3d-south = South / front
+cmu-3d-east = East / right
+cmu-3d-north = North / back
+cmu-3d-west = West / left
+cmu-3d-reference = Sprite reference
+cmu-3d-details = Status: { $status } • { $parts } solid parts
+cmu-3d-too-complex = This model exceeds the preview's geometry budget and cannot be displayed. Simplify its solid parts.
+cmu-3d-reference-ready = Prototype icon shown for the selected direction.
+cmu-3d-reference-missing = This prototype has no available sprite reference.
+cmu-3d-no-reference = No source prototype assigned.
+cmu-3d-reference-help = Use the direction selector to compare the front, sides, and back. Icons may omit live layers, animation, and connected structure appearance.
+cmu-3d-controls = Left-drag to orbit freely • Scroll to zoom • Reset camera to fit the model
+cmu-3d-preview-status = Draft asset preview. Sprite matching and animation review are still required. The normal game view remains active.
+cmu-3d-empty = No 3D model prototypes are loaded.
+cmu-3d-unknown = Unknown 3D model ID: { $id }
+cmd-cmu_3d_live-desc = Open the live 3D scene workbench (debug administrators).
+cmd-cmu_3d_live-help = Usage: cmu_3d_live, or cmu_3d_live off.
+cmu-3d-live-title = Live 3D scene workbench
+cmu-3d-live-scope = Debug inspection of nearby replicated entities, refreshed 10 times per second. This view does not apply player fog, lighting or blindness. Draft art and fallback markers are incomplete; use the normal view for gameplay.
+cmu-3d-live-top = Top view
+cmu-3d-live-inherited = Inherited candidates
+cmu-3d-live-fallbacks = Missing / state markers
+cmu-3d-live-cutaway = Lower walls
+cmu-3d-live-controls = Left-drag to orbit • Right-drag to pan • Scroll to zoom • Click to inspect • Follows your controlled entity
+cmu-3d-live-unavailable = Requires an active debug administrator and a controlled entity on a loaded map.
+cmu-3d-live-statistics = { $exact } exact drafts • { $inherited } inherited • { $fallback } markers ({ $states } unsupported states) • { $floors } floor tiles • { $boxes } solids • { $omitted } entities omitted • { $dropped } solids rejected by render budget
+cmu-3d-live-select = Click an entity to inspect its model reference.
+cmu-3d-live-inspect = Open asset workbench
+cmu-3d-live-selected = { $prototype } → { $model }
+cmu-3d-live-no-model = No authored model
+cmd-cmu3d-desc = Toggle first-person 3D on Stable Garrison Redux.
+cmd-cmu3d-help = Usage: cmu3d. Run it again to return to the normal view.
+cmu-3d-firstperson-unavailable = First-person 3D is available only while controlling a character or observer on Stable Garrison Redux.
+cmd-cmu_3d_firstperson-desc = Enable first-person 3D on Stable Garrison Redux.
+cmd-cmu_3d_firstperson-help = Usage: cmu_3d_firstperson, or cmu_3d_firstperson off.
+cmu-3d-capture-title = CMU 3D controls
+cmu-3d-capture-instructions = First-person 3D is on. Use your usual movement and interaction keys.
+    Press { $key } to enable or disable mouse capture. Move the captured mouse to look around.
+    Escape, chat, the console or leaving the game window releases the mouse so you can use the HUD.
+    Change this shortcut in Options → Controls → Camera → 3D: Toggle mouse capture.
+    Run cmu3d again to return to the normal view.
+cmu-3d-change-binding = Change hotkey
+cmu-3d-start-look = Start mouse look
+ui-options-function-cmu-toggle-first-person-mouse = 3D: Toggle mouse capture
+cmd-cmu_3d_capture-desc = Capture the mouse in the first-person 3D view after closing the console, or release it.
+cmd-cmu_3d_capture-help = Usage: cmu_3d_capture [off]
+cmu-3d-capture-unavailable = Run cmu3d before requesting mouse capture.
+cmu-3d-capture-requested = Mouse capture requested. Close the console and any open popup; { $key } toggles capture and Escape releases it.
+cmu-3d-capture-released = Mouse released. Use { $key } to capture it again.

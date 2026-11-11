@@ -4,6 +4,7 @@
   name: TPR23B handgun
   description: A modernized variant of the M4A3 Service Pistol. The TPR23B was developed as part of a cost saving initiative by the LACN. Instead of acquiring new sidearms like the USCM, the LACN opted to retrofit existing M4A3 stocks with massproduced upgrade kits. This weapon takes M4A3 magazines.
   components:
+  - type: CMUAmmoCounter
   - type: Tag
     tags:
     - Sidearm

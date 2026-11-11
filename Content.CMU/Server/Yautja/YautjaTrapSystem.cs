@@ -75,7 +75,6 @@ public sealed partial class YautjaTrapSystem : EntitySystem
     [Dependency] private YautjaRitualSystem _ritual = default!;
     [Dependency] private YautjaPreyTrackingSystem _preyTracking = default!;
 
-    private const string YautjaInterferenceStatus = "YautjaInterference";
     private const string HuntingTrapInactiveState = "yauttrap0";
     private const string HuntingTrapArmedState = "yauttrap1";
     private const string HuntingTrapGrassState = "yauttrapgrass";
@@ -744,9 +743,6 @@ public sealed partial class YautjaTrapSystem : EntitySystem
 
         if (trap.Comp.ForceXenoHelpEmote)
             _emote.TryEmoteWithChat(tripper, XenoHelpEmote, forceEmote: true);
-
-        if (trap.Comp.XenoInterferenceDuration > TimeSpan.Zero)
-            _status.TryAddStatusEffect(tripper, YautjaInterferenceStatus, trap.Comp.XenoInterferenceDuration, true);
     }
 
     private bool CanTriggerTrap(Entity<YautjaTrapComponent> trap, EntityUid tripper)

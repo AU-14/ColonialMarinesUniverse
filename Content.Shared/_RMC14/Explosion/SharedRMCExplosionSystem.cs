@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Deafness;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
+using Content.Shared.CMU14.Weapons.Grenades; // cmu edit
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
@@ -80,7 +81,8 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
 
         foreach (var wall in _walls)
         {
-            QueueDel(wall);
+            // QueueDel(wall); // CMU14: preserve ore destruction drops.
+            DeleteExplosionTarget(wall);
         }
 
         if (ent.Comp.Whitelist != null &&
@@ -88,7 +90,8 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
             Transform(ent).ParentUid is { Valid: true } parent &&
             _entityWhitelist.IsWhitelistPass(ent.Comp.Whitelist, parent))
         {
-            QueueDel(parent);
+            // QueueDel(parent); // CMU14: preserve ore destruction drops.
+            DeleteExplosionTarget(parent);
         }
     }
 
@@ -121,6 +124,15 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
 
     private void OnStunOnExplosionReceivedBeforeExplode(Entity<StunOnExplosionReceivedComponent> ent, ref ExplosionReceivedEvent args)
     {
+        // cmu edit start: the mob a launched impact grenade struck isn't stunned by its blast
+        if (TryComp(ent, out CMUExplosionStunExemptComponent? exempt) &&
+            exempt.Epicenter.MapId == args.Epicenter.MapId &&
+            (exempt.Epicenter.Position - args.Epicenter.Position).Length() <= CMUExplosionStunExemptComponent.Range)
+        {
+            return;
+        }
+        // cmu edit end
+
         var damage = args.Damage.GetTotal();
         var factor = Math.Round(damage.Double() * 0.05) / 2;
         factor = Math.Min(20, factor);
@@ -212,7 +224,8 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         }
 
         if (!TerminatingOrDeleted(ent))
-            QueueDel(ent);
+            // QueueDel(ent); // CMU14: preserve ore destruction drops.
+            DeleteExplosionTarget(ent);
     }
 
     private void OnMobGibbedByExplosionReceived(Entity<MobGibbedByExplosionTypeComponent> ent, ref ExplosionReceivedEvent args)

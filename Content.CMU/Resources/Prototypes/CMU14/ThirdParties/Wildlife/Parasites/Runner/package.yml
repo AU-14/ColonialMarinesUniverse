@@ -21,6 +21,7 @@
     delay: 0
   - type: XenoStrain
     name: cmu-xeno-parasite-runner-name
+    baseCaste: CMXenoParasite
     description: cmu-xeno-parasite-runner-description
     popup: cmu-xeno-parasite-runner-popup
   - type: RMCActionOrder
@@ -57,7 +58,7 @@
 - type: thirdParty
   id: XenoParasiteRunnerParty
   partyspawn: XenoParasiteRunnerPartySpawn
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - DistressSignal
@@ -65,5 +66,5 @@
   weight: 10
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false

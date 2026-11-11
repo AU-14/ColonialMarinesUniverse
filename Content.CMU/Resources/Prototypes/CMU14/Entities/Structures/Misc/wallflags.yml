@@ -48,7 +48,7 @@
 - type: entity
   parent: AU14WallFlagBase
   id: AU14WallFlagCLF
-  name: "CLF Flag"
+  name: "INSFOR Flag"
   description: "The flag of the Colonial Liberation Front."
   components:
   - type: Sprite
@@ -57,7 +57,7 @@
 - type: entity
   parent: AU14WallFlagBase
   id: AU14WallFlagCLFWorn
-  name: "Worn CLF Flag"
+  name: "Worn INSFOR Flag"
   description: "The flag of the Colonial Liberation Front. This one has seen better days."
   components:
   - type: Sprite

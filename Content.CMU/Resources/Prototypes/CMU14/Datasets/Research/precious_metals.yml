@@ -1,0 +1,10 @@
+# Rare-class reagents that count as "precious" for research contract generation.
+# Hard contracts draw from this pool; the rest of the Rare class (welding fuel, cocoa, soda,
+# virus food) stays in the general C4 pool used by simulator-made chemicals.
+- type: dataset
+  id: CMUPreciousMetals
+  values:
+  - RMCGold
+  - RMCSilver
+  - RMCUranium
+  - RMCPlatinum

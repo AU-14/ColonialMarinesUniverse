@@ -104,7 +104,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
     {
         if (xeno.Comp.Lowered)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-toggle-crest-cant-fortify"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-toggle-crest-cant-fortify"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -113,7 +113,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
     {
         if (xeno.Comp.Lowered)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-toggle-crest-cant-tail-sweep"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-toggle-crest-cant-tail-sweep"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -122,7 +122,7 @@ public sealed partial class XenoCrestSystem : EntitySystem
     {
         if (xeno.Comp.Lowered)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-toggle-crest-cant-rest"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-toggle-crest-cant-rest"), xeno, xeno);
             args.Cancelled = true;
         }
     }

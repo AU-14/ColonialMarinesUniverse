@@ -8,10 +8,10 @@ namespace Content.Server.CMU14.Atmos;
 /// Reports grids whose GridAtmosphere carries no authored tile air on map init. Unauthored
 /// interior tiles are vacuum and every grid a map ships must be baked (fixgridatmos).
 /// </summary>
-public sealed class CMUGridAirCheckSystem : EntitySystem
+public sealed partial class CMUGridAirCheckSystem : EntitySystem
 {
-    [Dependency] private readonly ILogManager _logs = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
+    [Dependency] private ILogManager _logs = default!;
+    [Dependency] private SharedMapSystem _map = default!;
 
     private ISawmill _sawmill = default!;
 

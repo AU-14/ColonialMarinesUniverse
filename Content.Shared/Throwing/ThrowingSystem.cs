@@ -255,7 +255,7 @@ public sealed partial class ThrowingSystem : EntitySystem
         {
             _thrownSystem.LandComponent(uid, comp, physics, playSound);
         }
-        else
+        else if (!comp.Deleted) // CMU14: a ThrownEvent handler may have already stopped the throw.
         {
             _physics.SetBodyStatus(uid, physics, BodyStatus.InAir);
         }

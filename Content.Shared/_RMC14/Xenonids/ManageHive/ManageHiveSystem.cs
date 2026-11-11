@@ -392,7 +392,7 @@ public sealed partial class ManageHiveSystem : EntitySystem
         var individuals = GetEveryoneNearQueen(ent.Owner);
         if (individuals is null)
         {
-            _popup.PopupClient(Loc.GetString("xeno-manage-hive-allies-individuals-alone"), ent.Owner);
+            _popup.PopupSelf(Loc.GetString("xeno-manage-hive-allies-individuals-alone"), ent.Owner);
             return;
         }
         var choices = new List<DialogOption>();

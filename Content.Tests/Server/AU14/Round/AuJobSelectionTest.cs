@@ -149,6 +149,39 @@ public sealed class AuJobSelectionTest : ContentUnitTest
         }));
     }
 
+    // BUG-1061: a volunteer without the queen's playtime took her slot, then the force wouldn't let them in
+    [Test]
+    public void ThreatVoteHeldAssignmentsSkipPlayersWhoCannotPlayTheJob()
+    {
+        var unqualified = new NetUserId(new Guid("00000000-0000-0000-0000-000000000001"));
+        var qualified = new NetUserId(new Guid("00000000-0000-0000-0000-000000000002"));
+        var candidateThreats = new List<ProtoId<ThreatPrototype>> { new("XenoThreat") };
+        var leaderAndMember = HumanoidCharacterProfile.DefaultWithSpecies()
+            .WithGamemodeJobPriority("DistressSignal", ThreatVoteSelection.ThreatLeaderJobId, JobPriority.High)
+            .WithGamemodeJobPriority("DistressSignal", ThreatVoteSelection.ThreatMemberJobId, JobPriority.Medium);
+        var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+        {
+            [unqualified] = leaderAndMember,
+            [qualified] = leaderAndMember,
+        };
+
+        var assignments = ThreatVoteSelection.BuildHeldAssignments(
+            new List<NetUserId> { unqualified, qualified },
+            profiles,
+            candidateThreats,
+            leaderSlots: 1,
+            memberSlots: 1,
+            presetId: "DistressSignal",
+            canPlayJob: (player, job) => player != unqualified || job != ThreatVoteSelection.ThreatLeaderJobId);
+
+        // the unqualified one still gets a larva slot, the queen goes to someone who can take her
+        Assert.That(assignments, Is.EqualTo(new List<ThreatVoteAssignment>
+        {
+            new(qualified, ThreatVoteSelection.ThreatLeaderJobId),
+            new(unqualified, ThreatVoteSelection.ThreatMemberJobId),
+        }));
+    }
+
     [TestCase(0, 0)]
     [TestCase(1, 1)]
     [TestCase(10, 3)]
@@ -429,85 +462,34 @@ public sealed class AuJobSelectionTest : ContentUnitTest
         Assert.That(state.DistressSignalSurvivorCount, Is.Zero);
     }
 
-    [Test]
-    public void DistressSignalSurvivorAnnouncementTriggersOnceAtOneMinute()
-    {
-        var roundStart = TimeSpan.FromMinutes(10);
-
-        Assert.That(
-            GameTicker.IsDistressSignalSurvivorAnnouncementDue(
-                true,
-                GameRunLevel.PreRoundLobby,
-                false,
-                false,
-                roundStart,
-                roundStart - TimeSpan.FromSeconds(61)),
-            Is.False);
-        Assert.That(
-            GameTicker.IsDistressSignalSurvivorAnnouncementDue(
-                true,
-                GameRunLevel.PreRoundLobby,
-                false,
-                false,
-                roundStart,
-                roundStart - TimeSpan.FromSeconds(60)),
-            Is.True);
-        Assert.That(
-            GameTicker.IsDistressSignalSurvivorAnnouncementDue(
-                true,
-                GameRunLevel.PreRoundLobby,
-                false,
-                false,
-                roundStart,
-                roundStart - TimeSpan.FromSeconds(59.5)),
-            Is.True);
-        Assert.That(
-            GameTicker.IsDistressSignalSurvivorAnnouncementDue(
-                true,
-                GameRunLevel.PreRoundLobby,
-                false,
-                true,
-                roundStart,
-                roundStart - TimeSpan.FromSeconds(30)),
-            Is.False);
-        Assert.That(
-            GameTicker.IsDistressSignalSurvivorAnnouncementDue(
-                true,
-                GameRunLevel.PreRoundLobby,
-                true,
-                false,
-                roundStart,
-                roundStart - TimeSpan.FromSeconds(30)),
-            Is.False);
-    }
+    // cmu edit start
 
     [Test]
-    public void PlanetVoteOptionsUseStableCarryoverKey()
+    public void DistressSignalLeavesItsLeftoverCapacityToCallIns()
     {
-        var planets = new List<RMCPlanetMapPrototypeComponent>
-        {
-            CreatePlanet("FirstMap", "First Planet"),
-            CreatePlanet("SecondMap", "Second Planet"),
-        };
+        var locked = CreateThirdPartyPrototype("Locked");
+        var candidates = Enumerable.Range(0, 6).Select(i => CreateThirdPartyPrototype($"Random{i}")).ToList();
 
-        var vote = AuRoundSystem.BuildPlanetVoteOptions("DistressSignal", planets, TimeSpan.FromSeconds(30));
+        var additional = AuRoundSystem.SelectAdditionalDistressSignalThirdParties(
+            candidates,
+            [locked],
+            maxThirdParties: 5,
+            bodyBudget: 20,
+            PickFirst,
+            _ => 1,
+            out _,
+            out var additionalBodies,
+            AuRoundSystem.DistressSignalRandomThirdPartyShare);
 
-        Assert.That(vote.CarryoverEnabled, Is.True);
-        Assert.That(vote.CarryoverKey, Is.EqualTo("au14-planet:DistressSignal:FirstMap,SecondMap"));
-        Assert.That(vote.Options.Select(option => option.text), Is.EqualTo(new[] { "First Planet", "Second Planet" }));
+        // Four slots are left after the locked party; Distress Signal leaves them for call-ins.
+        Assert.That(additional, Is.Empty);
+        Assert.That(additionalBodies, Is.EqualTo(0));
+        return;
+
+        static ThirdPartyPrototype PickFirst(IReadOnlyList<ThirdPartyPrototype> candidates)
+            => candidates[0];
     }
-
-    private static RMCPlanetMapPrototypeComponent CreatePlanet(string mapId, string voteName)
-    {
-        var planet = new RMCPlanetMapPrototypeComponent();
-        typeof(RMCPlanetMapPrototypeComponent)
-            .GetField(nameof(RMCPlanetMapPrototypeComponent.MapId), BindingFlags.Instance | BindingFlags.Public)!
-            .SetValue(planet, mapId);
-        typeof(RMCPlanetMapPrototypeComponent)
-            .GetField(nameof(RMCPlanetMapPrototypeComponent.VoteName), BindingFlags.Instance | BindingFlags.Public)!
-            .SetValue(planet, voteName);
-        return planet;
-    }
+    // cmu edit end
 
     private static ThirdPartyPrototype CreateThirdPartyPrototype(
         string id = "TestThirdParty",

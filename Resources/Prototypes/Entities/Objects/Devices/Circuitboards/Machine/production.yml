@@ -529,8 +529,8 @@
     - type: MachineBoard
       prototype: CryoPod
       stackRequirements:
-        Glass: 5
-        Cable: 1
+        CMGlass: 5 # CMU14: CMSheetGlass for cryo pod construction
+        CMUThinCableLV: 1 # CMU14: thin LV cable for cryo pod construction
 
 - type: entity
   id: ChemMasterMachineCircuitboard

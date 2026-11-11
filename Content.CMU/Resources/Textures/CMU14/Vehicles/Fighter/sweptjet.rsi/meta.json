@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Original artwork by .unknowndeveloper on Discord, supplied by the contributor.",
+  "size": { "x": 288, "y": 384 },
+  "states": [
+    { "name": "folded" },
+    { "name": "flight" },
+    { "name": "glass" }
+  ]
+}

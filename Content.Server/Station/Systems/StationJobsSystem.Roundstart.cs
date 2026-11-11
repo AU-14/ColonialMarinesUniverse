@@ -1,7 +1,8 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
-using Content.Server.CMU14.Ops.ForceOnForce; // CMU14
+using Content.Server.CMU14.Lobby; // CMU14: event invitations.
+using Content.Server.CMU14.Ops.ForceOnForce;
 using Content.Server.CMU14.Round;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
@@ -13,6 +14,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using FofJobs = Content.Server.CMU14.Ops.ForceOnForce.FofJobs; // CMU14: Round also declares a FofJobs; this file binds the Ops twin.
 
 namespace Content.Server.Station.Systems;
 
@@ -114,7 +116,8 @@ public sealed partial class StationJobsSystem
         var forcedToRemove = new List<NetUserId>();
         foreach (var (player, jobId) in forcedAssignments)
         {
-            if (!profiles.TryGetValue(player, out var profile) ||
+            if (!EntityManager.System<CMUEventAccessSystem>().CanAccessJob(player, jobId) || // CMU14
+                !profiles.TryGetValue(player, out var profile) ||
                 !profile.JobPriorities.TryGetValue(jobId, out var priority) || priority <= JobPriority.Never)
             {
                 continue;
@@ -362,14 +365,15 @@ public sealed partial class StationJobsSystem
         // Determine the current preset so we can apply gamemode specific overflow behaviour.
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
 
-        // CMU14: Force on Force roles, hijacking, announcements and identification.
-        // The joint roll has already considered both fallback options and team capacities.
-        if (IsForceOnForce)
-        {
-            foreach (var player in allPlayersToAssign)
-                assignedJobs.TryAdd(player, (null, EntityUid.Invalid));
-            return;
-        }
+        // CMU14: the joint roll assigns its own players, but SpawnAsOverflow opt-ins are still
+        // dealt below against the alternating sides; the roll-era hard block is dead since
+        // dealing returned:
+        // if (IsForceOnForce)
+        // {
+        //     foreach (var player in allPlayersToAssign)
+        //         assignedJobs.TryAdd(player, (null, EntityUid.Invalid));
+        //     return;
+        // }
 
         foreach (var player in allPlayersToAssign)
         {
@@ -399,6 +403,11 @@ public sealed partial class StationJobsSystem
 
             // Try to select a station+overflow job pair according to gamemode rules.
             var bannedRoles = _banManager.GetRoleBans(player)?.Select(role => role.RoleId).ToHashSet();
+            // CMU14 Begin: overflow and its mirrored FoF jobs must respect event invitations too.
+            bannedRoles ??= new HashSet<string>();
+            bannedRoles.UnionWith(EntityManager.System<CMUEventAccessSystem>()
+                .GetLockedJobs(player).Select(job => job.Id));
+            // CMU14 End
             var allowedJobs = profile.JobPriorities
                 .Where(preference => preference.Value > JobPriority.Never &&
                     (bannedRoles == null || !bannedRoles.Contains(preference.Key.Id)))
@@ -474,21 +483,18 @@ public sealed partial class StationJobsSystem
                 // Fallback: pick any overflow job on the station as before
                 if (chosenOverflow == null)
                 {
-                    var overflows = stationOverflows.ToList();
-                    // CMU14
+                    // CMU14 Force on Force: the dealt side is served from its own overflow roles
+                    // only; a station without them hands the player to the next station or leaves
+                    // them unassigned instead of dealing the other side's roles.
                     var fofFallback = !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase);
                     if (fofFallback)
-                    {
-                        var wrong = _forceOnForceNextGovfor ? "OPFOR" : "GOVFOR";
-                        overflows.RemoveAll(id => id.Id.Contains(wrong));
-                    }
+                        continue;
 
+                    var overflows = stationOverflows.ToList();
                     _random.Shuffle(overflows);
                     if (overflows.Count == 0)
                         continue;
                     chosenOverflow = overflows[0];
-                    if (fofFallback)
-                        _forceOnForceNextGovfor = !_forceOnForceNextGovfor;
                 }
 
                 assignedJobs.Add(player, (chosenOverflow, station));
@@ -533,7 +539,7 @@ public sealed partial class StationJobsSystem
         {
             var roleBans = _banManager.GetJobBans(player);
             var profileJobs = profile.JobPriorities.Keys.Select(k => new ProtoId<JobPrototype>(k)).ToList();
-            var ev = new StationJobsGetCandidatesEvent(player, profileJobs);
+            var ev = new StationJobsGetCandidatesEvent(player, profileJobs, profile); // CMU14
             RaiseLocalEvent(ref ev);
 
             // Shouldn't happen but you know :P
@@ -561,6 +567,11 @@ public sealed partial class StationJobsSystem
 
                 if (!(roleBans == null || !roleBans.Contains(jobId))) //TODO: Replace with IsRoleBanned
                     continue;
+
+                // cmu edit start: military physical standards
+                if (!Content.Shared.CMU14.Roles.CMUMilitaryHeightRequirement.Check(job, EntityManager.ComponentFactory, profile, out _))
+                    continue;
+                // cmu edit end
 
                 if (!outputDict.TryGetValue(jobId, out var priorities))
                 {

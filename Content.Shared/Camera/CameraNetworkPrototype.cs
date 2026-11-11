@@ -2,7 +2,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Camera;
 
-[Prototype("cameraNetwork")]
+[Prototype]
 public sealed partial class CameraNetworkPrototype : IPrototype
 {
     [IdDataField] public string ID { get; private set; } = default!;

@@ -27,7 +27,7 @@ public sealed partial class SharedAU14CallsignConsoleSystem : EntitySystem
         if (args.Cancelled || CanView(ent, args.User))
             return;
 
-        _popup.PopupClient(Loc.GetString("au14-callsign-console-wrong-faction"), ent.Owner, args.User);
+        _popup.PopupEntity(Loc.GetString("au14-callsign-console-wrong-faction"), ent.Owner, args.User);
         args.Cancel();
     }
 

@@ -1,6 +1,10 @@
 - type: job
   parent: CMJobBase
   id: AU14JobPARTSPartyLeader
+  chevrons:
+    AU14RankPrDEnforcerLead:
+      entity: AU14ChevronPrDEnforcerLead
+      requirements: []
   roundSide: ThirdParty
   roundProfiles:
   - AU14RoundJobProfileThirdParty
@@ -29,7 +33,7 @@
       state: synth
   - type: MarineOrders
 
-  name: Prodigy Sierra Leader
+  name: Team Leader
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTSPartyLeaderTracker
   ranks:
@@ -90,7 +94,7 @@
     back:
     - CMSurgicalLine
     - CMSynthGraft
-    - CMMRE
+    - CMUMREFSR
     - RMCLaserDesignatorPVE
     - CMStunbaton
     - RMCHandcuffs

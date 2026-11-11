@@ -36,13 +36,18 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
         if (State is not RMCTelephoneBuiState state)
             return;
 
-        _window.Tabs.DisposeAllChildren();
+        _window.Tabs.ReleaseChildren();
         var tabs = new Dictionary<string, BoxContainer>();
         foreach (var phone in state.Phones)
         {
             if (!tabs.TryGetValue(phone.Category, out var tab))
             {
-                tab = new BoxContainer { Orientation = LayoutOrientation.Vertical };
+                tab = new BoxContainer
+                {
+                    Orientation = LayoutOrientation.Vertical,
+                    HorizontalExpand = true,
+                    VerticalExpand = true, // CMU14: give the phone list a bounded viewport
+                };
                 tabs[phone.Category] = tab;
 
                 var scroll = new ScrollContainer
@@ -50,6 +55,8 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
                     HScrollEnabled = false,
                     VScrollEnabled = true,
                     VerticalExpand = true,
+                    VScrollBarHidden = false, // CMU14: keep long phone lists draggable
+                    ReserveScrollbarSpace = true,
                 };
 
                 var category = new BoxContainer { Orientation = LayoutOrientation.Vertical };
@@ -125,7 +132,7 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
         TabContainer.SetTabTitle(emergencyTab, Loc.GetString("cmu-911-tab"));
         // cmu edit end
 
-        _window.Buttons.DisposeAllChildren();
+        _window.Buttons.ReleaseChildren();
         if (state.Dnd)
         {
             var disableDndButton = new Button

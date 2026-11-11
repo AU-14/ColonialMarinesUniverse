@@ -2,7 +2,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardParamarineRifleman
-  name: TWE royal paramarine rifleman ID card
+  name: IASF parachute regiment rifleman ID card
   components:
   - type: PresetIdCard
     job: CMUJobParamarineRifleman
@@ -14,7 +14,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardParamarineTeamLeader
-  name: TWE royal paramarine team leader id card
+  name: IASF parachute regiment team leader id card
   components:
   - type: PresetIdCard
     job: CMUJobParamarineTeamLeader
@@ -26,7 +26,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardParamarineCommander
-  name: TWE royal paramarine commander ID card
+  name: IASF parachute regiment commander ID card
   components:
   - type: PresetIdCard
     job: CMUJobParamarineCommander
@@ -38,7 +38,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardParamarineAssaultEngineer
-  name: TWE royal paramarine assault engineer ID card
+  name: IASF parachute regiment assault engineer ID card
   components:
   - type: PresetIdCard
     job: CMUJobParamarineAssaultEngineer
@@ -50,7 +50,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardParamarineMedicalTechnician
-  name: TWE royal paramarine medical technician ID card
+  name: IASF parachute regiment medical technician ID card
   components:
   - type: PresetIdCard
     job: CMUJobParamarineMedicalTechnician
@@ -62,7 +62,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardParamarinePilot
-  name: TWE royal paramarine pilot ID card
+  name: IASF parachute regiment pilot ID card
   components:
   - type: PresetIdCard
     job: CMUJobParamarinePilot
@@ -74,7 +74,7 @@
   parent: CMIDCardBase
   categories: [ HideSpawnMenu ]
   id: CMUIDCardParamarineSynthetic
-  name: TWE royal paramarine synthetic ID card
+  name: IASF parachute regiment synthetic ID card
   components:
   - type: PresetIdCard
     job: CMUJobParamarineSynthetic
