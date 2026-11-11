@@ -135,6 +135,9 @@ public sealed partial class RoundJobProfileSystem : EntitySystem
         {
             EnsureComp<RoundJobProfileAppliedComponent>(target);
             RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(target));
+
+            var appliedEv = new CMURoundJobProfileAppliedEvent(job);
+            RaiseLocalEvent(target, ref appliedEv);
         }
 
         return applied;

@@ -2,6 +2,8 @@
   id: AUPlanetLV759
   name: Hybrisa Metropolitan
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Hybrisa Metropolitan"
     mapId: hybrisametro
@@ -20,9 +22,8 @@
     - LACN
     - CMBCIU
     - VAIPO
-    - ProdigySF
     defaultgovfor: RMC
-    defaultopfor: ProdigySF
+    defaultopfor: LACN
     govforinship: false
     opforinship: true
     daycycleenabled: false
