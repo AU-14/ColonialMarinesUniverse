@@ -416,6 +416,8 @@
         amount: 8
       - id: CMUMagazineRifleM250
         amount: 8
+      - id: RMCPowerCellSmartgun
+        amount: 6
 
 - type: entity
   parent: ColMarTechBase
@@ -518,6 +520,11 @@
       - id: CMU14PyroSpecEquipmentCaseHAZOPS
         giveSquadRoleName: au14-job-name-specialist-pyro
         givePrefix: au14-job-prefix-specialist-pyro
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: CMUCaseM60GaussGun
+        giveSquadRoleName: au14-job-name-specialist-gauss
+        givePrefix: au14-job-prefix-specialist-gauss
         isAppendSquadRoleName: false
         isAppendPrefix: true
 
@@ -794,6 +801,8 @@
         amount: 5
       - id: RMCM2CCase
         amount: 1
+      - id: CMUWeaponRifleM250
+        amount: 2
     - name: primary ammunition
       entries:
       - id: AU14MagazineXMP5A6
@@ -958,6 +967,10 @@
         amount: 4
       - id: RMCOuterClothingExternalWebbing
         amount: 4
+    - name: Protective Clothing
+      entries:
+      - id: AU14CBRNSuit
+        amount: 8
     - name: Pouches
       entries:
       - id: RMCPouchMagazineLarge
