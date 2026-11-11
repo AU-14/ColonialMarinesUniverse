@@ -3697,6 +3697,10 @@ public sealed partial class YautjaCasterImmobilizerProjectileComponent : Compone
 [RegisterComponent]
 public sealed partial class YautjaCasterSingleLethalProjectileComponent : Component;
 
+// cmss13 plasma lance: ishuman_strict gets ex_act(300) on top of the blast, which gibs. synths aren't strict humans
+[RegisterComponent]
+public sealed partial class YautjaGibHumansOnHitComponent : Component;
+
 [RegisterComponent]
 public sealed partial class YautjaCasterEradicatorProjectileComponent : Component
 {

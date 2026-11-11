@@ -8,6 +8,8 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Body;
+using Content.Shared.Body.Systems;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Doors.Components;
@@ -34,6 +36,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private FlammableSystem _flammable = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
@@ -59,6 +62,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileHitEvent>(OnCasterEradicatorHit);
         SubscribeLocalEvent<YautjaIncendiaryPlasmaProjectileComponent, ProjectileHitEvent>(OnIncendiaryPlasmaHit);
         SubscribeLocalEvent<YautjaPlasmaRifleBoltComponent, ProjectileHitEvent>(OnPlasmaRifleBoltHit);
+        SubscribeLocalEvent<YautjaGibHumansOnHitComponent, ProjectileHitEvent>(OnGibHumansHit);
     }
 
     // CMU14: the ordinary airlock destruction threshold (Resources/Prototypes/_RMC14/Entities/Structures/Doors/
@@ -76,6 +80,18 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
             duration += ent.Comp.HumanBonusStunTime;
 
         ApplyCasterStun(args.Target, duration);
+    }
+
+    private void OnGibHumansHit(Entity<YautjaGibHumansOnHitComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (!IsHuman(args.Target) ||
+            HasComp<SynthComponent>(args.Target) ||
+            !TryComp<BodyComponent>(args.Target, out var body))
+        {
+            return;
+        }
+
+        _body.GibBody(args.Target, true, body);
     }
 
     private void OnCasterImmobilizerHit(Entity<YautjaCasterImmobilizerProjectileComponent> ent, ref ProjectileHitEvent args)
