@@ -9,6 +9,18 @@
     hiveUIColor: "#4d994d"
     canMakeAlliances: true
     corrupted: true
+    hiveStructureSlots:
+      HiveCoreXeno: 1
+      HiveClusterXeno: 8
+      HivePylonXeno: 2
+      HiveEggMorpherXeno: 6
+      HiveRecoveryNodeXeno: 6
+      HivePlasmaTreeXeno: 3
+      CMU14PathogenBlightCore: 3
+      CMU14PathogenCluster: 8
+      CMU14PathogenPlasmaTree: 3
+      CMU14PathogenRecoveryNode: 6
+      CMU14PathogenSporecaster: 6
 
 - type: entity
   id: CMUAlphaHive
@@ -19,6 +31,18 @@
     lateJoinGainLarva: false
     hiveColor: "#ff4040" #they are red for an amazing reason
     hiveUIColor: "#992626"
+    hiveStructureSlots:
+      HiveCoreXeno: 1
+      HiveClusterXeno: 8
+      HivePylonXeno: 2
+      HiveEggMorpherXeno: 6
+      HiveRecoveryNodeXeno: 6
+      HivePlasmaTreeXeno: 3
+      CMU14PathogenBlightCore: 3
+      CMU14PathogenCluster: 8
+      CMU14PathogenPlasmaTree: 3
+      CMU14PathogenRecoveryNode: 6
+      CMU14PathogenSporecaster: 6
 
 - type: entity
   id: CMUHunterShipAlphaHive
@@ -51,6 +75,18 @@
     lateJoinGainLarva: false
     hiveColor: "#ffff80" #they are yellow for an amazing reason
     hiveUIColor: "#99994d"
+    hiveStructureSlots:
+      HiveCoreXeno: 1
+      HiveClusterXeno: 8
+      HivePylonXeno: 2
+      HiveEggMorpherXeno: 6
+      HiveRecoveryNodeXeno: 6
+      HivePlasmaTreeXeno: 3
+      CMU14PathogenBlightCore: 3
+      CMU14PathogenCluster: 8
+      CMU14PathogenPlasmaTree: 3
+      CMU14PathogenRecoveryNode: 6
+      CMU14PathogenSporecaster: 6
 
 - type: entity
   id: CMUCharlieHive
@@ -61,6 +97,18 @@
     lateJoinGainLarva: false
     hiveColor: "#bb40ff" #they are purple for an amazing reason
     hiveUIColor: "#702699"
+    hiveStructureSlots:
+      HiveCoreXeno: 1
+      HiveClusterXeno: 8
+      HivePylonXeno: 2
+      HiveEggMorpherXeno: 6
+      HiveRecoveryNodeXeno: 6
+      HivePlasmaTreeXeno: 3
+      CMU14PathogenBlightCore: 3
+      CMU14PathogenCluster: 8
+      CMU14PathogenPlasmaTree: 3
+      CMU14PathogenRecoveryNode: 6
+      CMU14PathogenSporecaster: 6
 
 - type: entity
   id: CMUDeltaHive
@@ -71,3 +119,15 @@
     lateJoinGainLarva: false
     hiveColor: "#8080ff" #they are blue for an amazing reason
     hiveUIColor: "#4d4d99"
+    hiveStructureSlots:
+      HiveCoreXeno: 1
+      HiveClusterXeno: 8
+      HivePylonXeno: 2
+      HiveEggMorpherXeno: 6
+      HiveRecoveryNodeXeno: 6
+      HivePlasmaTreeXeno: 3
+      CMU14PathogenBlightCore: 3
+      CMU14PathogenCluster: 8
+      CMU14PathogenPlasmaTree: 3
+      CMU14PathogenRecoveryNode: 6
+      CMU14PathogenSporecaster: 6
