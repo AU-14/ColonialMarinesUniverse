@@ -25,13 +25,13 @@ public sealed partial class YautjaRankCommand : LocalizedCommands
     {
         if (args.Length != 2)
         {
-            shell.WriteError("Usage: yautjarank <player> <unblooded|blooded|elite|elder|leader|ancient>");
+            shell.WriteError("Usage: yautjarank <player> <unblooded|blooded|elite|elder>");
             return;
         }
 
         if (!TryParsePersistentRank(args[1], out var rank))
         {
-            shell.WriteError("Invalid Yautja rank. Young Blood is reserved for the special hunt role.");
+            shell.WriteError("Invalid Yautja rank. Clan Leader and Ancient come from the Leader and Council whitelists, Young Blood is the special hunt role.");
             return;
         }
 
@@ -70,8 +70,6 @@ public sealed partial class YautjaRankCommand : LocalizedCommands
         "blooded",
         "elite",
         "elder",
-        "leader",
-        "ancient",
     ];
 
     internal static bool TryParsePersistentRank(string value, out YautjaRank rank)
@@ -82,12 +80,10 @@ public sealed partial class YautjaRankCommand : LocalizedCommands
             "blooded" => YautjaRank.Blooded,
             "elite" => YautjaRank.Elite,
             "elder" => YautjaRank.Elder,
-            "leader" => YautjaRank.Leader,
-            "ancient" => YautjaRank.Ancient,
             _ => default,
         };
 
-        return value.Trim().ToLowerInvariant() is "unblooded" or "blooded" or "elite" or "elder" or "leader" or "ancient";
+        return value.Trim().ToLowerInvariant() is "unblooded" or "blooded" or "elite" or "elder";
     }
 }
 

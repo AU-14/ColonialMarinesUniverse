@@ -2,6 +2,8 @@
   id: AuPlanetFiorina
   name: Fiorina Prison
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Fiorina Prison"
     mapId: aufiorina
@@ -19,9 +21,8 @@
     platoonsOpfor:
     - LACN
     - UPP
-    - ProdigySF
     defaultgovfor: WEYU
-    defaultopfor: ProdigySF
+    defaultopfor: LACN
     govforinship: true
     opforinship: true
     daycycleenabled: false

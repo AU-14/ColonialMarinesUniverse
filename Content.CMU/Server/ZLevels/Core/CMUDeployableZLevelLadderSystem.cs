@@ -1,6 +1,7 @@
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Server.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevelBuilding.Pit;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.Atmos;
@@ -258,6 +259,10 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
         MapGridComponent upperGrid,
         Vector2i tile)
     {
+        // a pit dug up from below leaves the floor tile above in place, but it's still a hole to climb through
+        if (HasPitAt(upperMap.Owner, upperGrid, tile))
+            return false;
+
         // Generated cave roof flags mean coverage by ANY level above, including distant bedrock.
         // Only the immediately adjacent ceiling determines whether a ladder fits inside a cavern.
         var generated = TryComp<ZGeneratedStoneComponent>(currentMap.Owner, out var stone) && !stone.LocalizedToAuthoredLevel;
@@ -279,6 +284,18 @@ public sealed partial class CMUDeployableZLevelLadderSystem : EntitySystem
         var chunkRelative = SharedMapSystem.GetChunkRelative(tile, RoofComponent.ChunkSize);
         var bitFlag = (ulong) 1 << (chunkRelative.X + chunkRelative.Y * RoofComponent.ChunkSize);
         return (bitMask & bitFlag) == bitFlag;
+    }
+
+    private bool HasPitAt(EntityUid map, MapGridComponent grid, Vector2i tile)
+    {
+        var anchored = _map.GetAnchoredEntities(map, grid, tile);
+        while (anchored.MoveNext(out var uid))
+        {
+            if (HasComp<PitComponent>(uid))
+                return true;
+        }
+
+        return false;
     }
 
     private bool HasLadderAt(EntityUid map, MapGridComponent grid, Vector2i tile)
