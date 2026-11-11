@@ -1,11 +1,16 @@
-﻿<controls:CMAutomatedVendorSection
+<!-- CMU14: CRT presentation for the existing vendor UI; vendor gameplay logic is unchanged. -->
+<controls:CMAutomatedVendorSection
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Vendors"
-    xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
-    Margin="0 15 0 0">
-    <BoxContainer Orientation="Vertical">
-        <RichTextLabel Name="Label" Access="Public" />
-        <customControls:HSeparator Color="#4972A1" />
-        <BoxContainer Orientation="Vertical" Name="Entries" Access="Public" SeparationOverride="2" Margin="0 10 0 0" />
-    </BoxContainer>
+    HorizontalExpand="True">
+    <PanelContainer Name="SectionSurface" HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical" SeparationOverride="6">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                <RichTextLabel Name="Label" Access="Public" HorizontalExpand="True" />
+                <Label Name="EntryCount" VerticalAlignment="Center" />
+            </BoxContainer>
+            <PanelContainer Name="SectionRule" MinHeight="1" />
+            <BoxContainer Orientation="Vertical" Name="Entries" Access="Public" SeparationOverride="5" HorizontalExpand="True" />
+        </BoxContainer>
+    </PanelContainer>
 </controls:CMAutomatedVendorSection>
