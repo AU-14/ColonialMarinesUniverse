@@ -63,7 +63,7 @@
   - type: XenoTailSeize
   - type: XenoAbduct
   - type: XenoFling
-    range: -5
+    range: -3
     paralyzeTime: 0
     slowTime: 0
   - type: XenoRegen
