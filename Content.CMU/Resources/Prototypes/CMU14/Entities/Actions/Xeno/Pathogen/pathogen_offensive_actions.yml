@@ -1173,7 +1173,7 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 7
+    useDelay: 12
   - type: Sprite
     layers:
     - sprite: CMU14/Actions/actions_pathogen.rsi
