@@ -314,10 +314,13 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     {
         _audio.PlayPvs(ent.Comp.StunSound, ent.Owner);
 
+        var shooter = CompOrNull<ProjectileComponent>(ent)?.Shooter;
         var coordinates = _transform.GetMapCoordinates(ent);
         foreach (var target in _lookup.GetEntitiesInRange<MobStateComponent>(coordinates, ent.Comp.StunRange))
         {
-            if (HasComp<YautjaAbominationComponent>(target))
+            // CMU: cmss13 stuns the firer too if they're in range, which made point-blank shots lock up
+            // whoever held the caster (worst for a human running a researched bracer, no yautja reduction)
+            if (target == shooter || HasComp<YautjaAbominationComponent>(target))
                 continue;
 
             var duration = ent.Comp.StunTime;
