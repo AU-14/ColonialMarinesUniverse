@@ -65,7 +65,7 @@ jobs:
       needs.publish_start.result == 'success' &&
       needs.publish_start.outputs.already-published != 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
@@ -76,9 +76,11 @@ jobs:
               dotnet restore Content.Packaging/Content.Packaging.csproj
               dotnet restore Content.Client/Content.Client.csproj
           - name: server-win-x64
+            platform: win-x64
             command: server --platform win-x64
             restore: dotnet restore Content.Server/Content.Server.csproj --runtime win-x64 /p:TargetOs=Windows
           - name: server-linux-x64
+            platform: linux-x64
             command: server --platform linux-x64
             restore: dotnet restore Content.Server/Content.Server.csproj --runtime linux-x64 /p:TargetOs=Linux
 
@@ -89,12 +91,13 @@ jobs:
           submodules: false
 
       - name: Checkout submodules
+        if: matrix.name == 'client'
         run: |
           git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --recursive --depth=1
 
       - name: Checkout ColonialMarinesAudio
-        if: ${{ env.AUDIO_REPO_TOKEN != '' }}
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
         uses: actions/checkout@v7
         with:
           repository: AU-14/ColonialMarinesAudio
@@ -102,7 +105,7 @@ jobs:
           path: __audio-overlay
 
       - name: Rsync CMAudio into Resources
-        if: ${{ env.AUDIO_REPO_TOKEN != '' }}
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
         run: |
           mkdir -p Content.CMU/Resources/Audio/CMU14/Private/
           rsync -a --delete \
@@ -112,6 +115,7 @@ jobs:
           rm -rf __audio-overlay
 
       - uses: actions/setup-dotnet@v6.1.0
+        if: matrix.name == 'client'
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
           cache: true
@@ -122,13 +126,28 @@ jobs:
             **/packages.lock.json
 
       - name: Restore dependencies
+        if: matrix.name == 'client'
         run: ${{ matrix.restore }}
 
       - name: Build Packaging
+        if: matrix.name == 'client'
         run: dotnet build Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-restore /m
 
       - name: Package ${{ matrix.name }}
+        if: matrix.name == 'client'
         run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build --no-restore -- ${{ matrix.command }} --no-restore
+
+      # CMU14: Server source and detailed logs remain in the private build repository.
+      - name: Request verified server package
+        if: matrix.name != 'client'
+        env:
+          CMU_PRIVATE_BUILD_TOKEN: ${{ secrets.CMU_PRIVATE_BUILD_TOKEN }}
+          SOURCE_SHA: ${{ github.sha }}
+          PLATFORM: ${{ matrix.platform }}
+        run: |
+          audio_args=()
+          if [ -n "$AUDIO_REPO_TOKEN" ]; then audio_args+=(--require-audio); fi
+          python3 Tools/request_private_package.py --source-sha "$SOURCE_SHA" --platform "$PLATFORM" "${audio_args[@]}"
 
       - name: Upload ${{ matrix.name }} package
         uses: actions/upload-artifact@v7
@@ -168,9 +187,9 @@ jobs:
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
 
-      - name: Abort incomplete publish
+      # CMU14: Never finalize a release when a required package failed.
+      - name: Report incomplete publish
         if: needs.package.result != 'success'
-        continue-on-error: true
-        run: python3 Tools/publish_multi_request.py finish
-        env:
-          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        run: |
+          echo '::error::Required packages failed; the release was not finalized.'
+          exit 1
