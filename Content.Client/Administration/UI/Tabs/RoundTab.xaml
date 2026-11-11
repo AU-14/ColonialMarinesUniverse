@@ -11,5 +11,7 @@
         <controls:ConfirmButton Name="RestartRound" Text="{Loc administration-ui-round-tab-restart-round}" />
         <controls:ConfirmButton Name="RestartRoundNow" Text="{Loc administration-ui-round-tab-restart-round-now}" />
         <customControls:CommandButton Command="yautja_editor" Text="{Loc cmu-yautja-admin-editor-open}" />
+        <!-- CMU14: configure event access and slots without typing commands. -->
+        <customControls:CommandButton Command="eventsetup" Text="{Loc cmu-event-setup-title}" />
     </GridContainer>
 </Control>

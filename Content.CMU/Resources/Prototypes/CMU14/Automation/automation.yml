@@ -165,6 +165,57 @@
 
 # ---------------------------------------------------------------- the crafts
 
+- type: entity
+  parent: AU14RoboticArmFlipped
+  id: CMUInserterArm
+  name: inserter arm
+  description: Moves items from behind it into machines, containers or conveyor belts in front. Right-click to rotate, stop or pick it up. Examine it to check the transfer direction.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    scale: 1,1
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        density: 190
+        layer:
+        - MobMask
+  - type: Rotatable
+    rotateWhileAnchored: true
+  - type: PortableStructure
+  - type: ContainerContainer
+    containers:
+      cmu-inserter-claw: !type:ContainerSlot
+        showEnts: true
+        occludes: false
+  - type: CMUInserter
+
+- type: craftRecipe
+  id: CMUCraftInserterArm
+  name: cmu-craft-inserter-arm
+  output: CMUInserterArm
+  time: 12
+  minigames: [Center, Stitch]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitAutomation
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: CMSteel
+    amount: 2
+
 - type: craftRecipe
   id: RUMCCraftConveyorBelt
   name: au14-craft-recipe-conveyorbelt

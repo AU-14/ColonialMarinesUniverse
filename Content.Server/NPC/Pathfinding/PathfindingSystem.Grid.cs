@@ -370,16 +370,15 @@ public sealed partial class PathfindingSystem
 
         var chunks = comp.DirtyChunks;
 
+        // CMU14 Dirty Corners Begin: movement dirties the same four corners without allocating an array.
         // This assumes you never have bounds equal to or larger than 2 * ChunkSize.
-        var corners = new Vector2[] { aabb.BottomLeft, aabb.TopRight, aabb.BottomRight, aabb.TopLeft };
-        foreach (var corner in corners)
-        {
-            var sampledPoint = new Vector2i(
-                (int) Math.Floor((corner.X) / ChunkSize),
-                (int) Math.Floor((corner.Y) / ChunkSize));
-
-            chunks.Add(sampledPoint);
-        }
+        var bottomLeft = GetOrigin(aabb.BottomLeft);
+        var topRight = GetOrigin(aabb.TopRight);
+        chunks.Add(bottomLeft);
+        chunks.Add(topRight);
+        chunks.Add(new Vector2i(topRight.X, bottomLeft.Y));
+        chunks.Add(new Vector2i(bottomLeft.X, topRight.Y));
+        // CMU14 End
     }
 
     private GridPathfindingChunk GetChunk(Vector2i origin, EntityUid uid, GridPathfindingComponent? component = null)
@@ -430,6 +429,7 @@ public sealed partial class PathfindingSystem
         var gridOrigin = chunk.Origin * ChunkSize;
         var tileEntities = new ValueList<Entity<FixturesComponent>>();
         var fixtureList = new ValueList<(EntityUid, TransformComponent, ValueList<Fixture>)>();
+        var available = new HashSet<EntityUid>(); // CMU14: owned by this rebuild, including parallel workers.
 
         var chunkPolys = chunk.BufferPolygons;
 
@@ -456,7 +456,11 @@ public sealed partial class PathfindingSystem
                 // var isBorder = x < 0 || y < 0 || x == ChunkSize - 1 || y == ChunkSize - 1;
 
                 tileEntities.Clear();
-                var available = _lookup.GetLocalEntitiesIntersecting(tile, flags: LookupFlags.Dynamic | LookupFlags.Static);
+                // CMU14 Tile Lookup Begin: retain query storage across the tiles of this chunk.
+                available.Clear();
+                _lookup.GetLocalEntitiesIntersecting(grid.Owner, tilePos, available,
+                    flags: LookupFlags.Dynamic | LookupFlags.Static, gridComp: grid.Comp);
+                // CMU14 End
 
                 foreach (var ent in available)
                 {

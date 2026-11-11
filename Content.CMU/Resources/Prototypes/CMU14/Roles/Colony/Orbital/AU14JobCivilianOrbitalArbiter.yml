@@ -49,7 +49,6 @@
     inverted: true
     traits:
     - NonResuscitable
-    - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
   ranks:

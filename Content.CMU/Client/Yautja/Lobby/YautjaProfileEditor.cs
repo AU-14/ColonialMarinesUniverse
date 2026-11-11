@@ -67,8 +67,9 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
     private readonly GridContainer _skinGrid = new() { Columns = 6 };
     private readonly GridContainer _dreadGrid = new() { Columns = 7 };
     private readonly GridContainer _quillGrid = new() { Columns = 6 };
-    private readonly GridContainer _legacyGrid = new() { Columns = 4 };
-    private readonly GridContainer _uniqueGrid = new() { Columns = 4 };
+    private readonly GridContainer _noSetGrid = new() { Columns = 4 };
+    private readonly GridContainer _ancientSetGrid = new() { Columns = 4 };
+    private readonly GridContainer _leaderSetGrid = new() { Columns = 4 };
     private readonly BoxContainer _armorSections = EquipmentSectionContainer();
     private readonly BoxContainer _maskSections = EquipmentSectionContainer();
     private readonly GridContainer _maskAccessoryGrid = new() { Columns = 4 };
@@ -417,8 +418,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         RebuildSkinSelector(yautja);
         RebuildDreadSelector(yautja);
         RebuildQuillSelector(yautja);
-        RebuildLegacySelector(yautja);
-        RebuildUniqueSelector(yautja);
+        RebuildSetSelectors(yautja);
         RebuildArmorSelector(yautja);
         RebuildMaskSelector(yautja);
         RebuildMaskAccessorySelector(yautja);
@@ -533,78 +533,65 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         }
     }
 
-    private void RebuildLegacySelector(YautjaCharacterProfile yautja)
+    // the two set enums are just storage, the picker groups every set by what unlocks it: Ancient sets
+    // (council whitelist) and Leader sets (clan leader and up). one button group, a set is a single pick
+    private void RebuildSetSelectors(YautjaCharacterProfile yautja)
     {
-        _legacyGrid.RemoveAllChildren();
+        _noSetGrid.RemoveAllChildren();
+        _ancientSetGrid.RemoveAllChildren();
+        _leaderSetGrid.RemoveAllChildren();
         var group = new ButtonGroup();
 
-        foreach (var legacy in YautjaCharacterProfile.LegacyOrder)
+        AddTextSelector(_noSetGrid,
+            group,
+            Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(YautjaUniqueSet.None)),
+            yautja.Legacy == YautjaLegacySet.None && yautja.Unique == YautjaUniqueSet.None,
+            () => Mutate(profile => profile.WithLegacy(YautjaLegacySet.None).WithUnique(YautjaUniqueSet.None), true));
+
+        foreach (var setLock in new[] { YautjaSetLock.Ancient, YautjaSetLock.ClanLeader })
         {
-            var selected = yautja.Legacy == legacy;
-            if (legacy == YautjaLegacySet.None)
+            var grid = setLock == YautjaSetLock.Ancient ? _ancientSetGrid : _leaderSetGrid;
+
+            foreach (var legacy in YautjaCharacterProfile.LegacyOrder)
             {
-                AddTextSelector(_legacyGrid,
+                if (legacy == YautjaLegacySet.None || YautjaCharacterProfile.GetSetLock(legacy) != setLock)
+                    continue;
+
+                var name = Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy));
+                var locked = YautjaProfileEditorLayout.IsLegacySetLocked(_capabilities, legacy);
+                AddEntitySelector(grid,
                     group,
-                    Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy)),
-                    selected,
-                    () => Mutate(profile => profile.WithLegacy(YautjaLegacySet.None), true));
-                continue;
+                    YautjaCharacterProfile.Default.WithLegacy(legacy).ArmorPrototype,
+                    yautja.Legacy == legacy,
+                    locked ? SetLockTooltip(setLock) : name,
+                    () => Mutate(profile => profile.WithLegacy(legacy).WithUnique(YautjaUniqueSet.None), true),
+                    name,
+                    locked);
             }
 
-            var preview = YautjaCharacterProfile.Default.WithLegacy(legacy).ArmorPrototype;
-            var locked = YautjaProfileEditorLayout.IsLegacySetLocked(_capabilities, legacy);
-            var tooltip = locked
-                ? SetLockTooltip(YautjaCharacterProfile.GetSetLock(legacy))
-                : Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy));
-            AddEntitySelector(_legacyGrid,
-                group,
-                preview,
-                selected,
-                tooltip,
-                () => Mutate(profile => profile.WithLegacy(legacy).WithUnique(YautjaUniqueSet.None), true),
-                Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy)),
-                locked);
-        }
-    }
-
-    private void RebuildUniqueSelector(YautjaCharacterProfile yautja)
-    {
-        _uniqueGrid.RemoveAllChildren();
-        var group = new ButtonGroup();
-
-        foreach (var unique in YautjaCharacterProfile.UniqueOrder)
-        {
-            var selected = yautja.Unique == unique;
-            if (unique == YautjaUniqueSet.None)
+            foreach (var unique in YautjaCharacterProfile.UniqueOrder)
             {
-                AddTextSelector(_uniqueGrid,
-                    group,
-                    Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique)),
-                    selected,
-                    () => Mutate(profile => profile.WithUnique(YautjaUniqueSet.None), true));
-                continue;
-            }
+                if (unique == YautjaUniqueSet.None || YautjaCharacterProfile.GetSetLock(unique) != setLock)
+                    continue;
 
-            var preview = YautjaCharacterProfile.Default.WithUnique(unique).ArmorPrototype;
-            var locked = YautjaProfileEditorLayout.IsUniqueSetLocked(_capabilities, unique);
-            var tooltip = locked
-                ? SetLockTooltip(YautjaCharacterProfile.GetSetLock(unique))
-                : Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique));
-            AddEntitySelector(_uniqueGrid,
-                group,
-                preview,
-                selected,
-                tooltip,
-                () => Mutate(profile => profile.WithUnique(unique).WithLegacy(YautjaLegacySet.None), true),
-                Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique)),
-                locked);
+                var name = Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique));
+                var locked = YautjaProfileEditorLayout.IsUniqueSetLocked(_capabilities, unique);
+                AddEntitySelector(grid,
+                    group,
+                    YautjaCharacterProfile.Default.WithUnique(unique).ArmorPrototype,
+                    yautja.Unique == unique,
+                    locked ? SetLockTooltip(setLock) : name,
+                    () => Mutate(profile => profile.WithUnique(unique).WithLegacy(YautjaLegacySet.None), true),
+                    name,
+                    locked);
+            }
         }
     }
 
     private static string SetLockTooltip(YautjaSetLock setLock)
     {
-        return setLock == YautjaSetLock.LegacyWhitelist
-            ? Loc.GetString("cmu-yautja-lobby-locked-legacy")
+        return setLock == YautjaSetLock.Ancient
+            ? Loc.GetString("cmu-yautja-lobby-locked-ancient")
             : Loc.GetString("cmu-yautja-lobby-locked-leader-ancient");
     }
 
@@ -1392,8 +1379,9 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         RegisterResponsiveGrid(_skinGrid, 6);
         RegisterResponsiveGrid(_dreadGrid, 7);
         RegisterResponsiveGrid(_quillGrid, 6);
-        RegisterResponsiveGrid(_legacyGrid, 4);
-        RegisterResponsiveGrid(_uniqueGrid, 4);
+        RegisterResponsiveGrid(_noSetGrid, 4);
+        RegisterResponsiveGrid(_ancientSetGrid, 4);
+        RegisterResponsiveGrid(_leaderSetGrid, 4);
         RegisterResponsiveGrid(_maskAccessoryGrid, 4);
         RegisterResponsiveGrid(_capeGrid, 4);
     }
@@ -1495,8 +1483,9 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             HorizontalExpand = true,
             Children =
             {
-                VisualBlock("cmu-yautja-lobby-legacy", _legacyGrid),
-                VisualBlock("cmu-yautja-lobby-unique", _uniqueGrid),
+                VisualBlock("cmu-yautja-lobby-no-set", _noSetGrid),
+                VisualBlock("cmu-yautja-lobby-ancient-sets", _ancientSetGrid),
+                VisualBlock("cmu-yautja-lobby-leader-sets", _leaderSetGrid),
             },
         };
     }

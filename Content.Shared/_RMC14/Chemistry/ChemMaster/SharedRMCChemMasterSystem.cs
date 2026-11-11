@@ -123,6 +123,15 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
             return;
         }
 
+        if (!args.Handled && HasComp<PillComponent>(args.Used))
+        {
+            var scan = new RMCChemMasterPillScanEvent(args.User, args.Used);
+            RaiseLocalEvent(ent.Owner, scan);
+            if (scan.Handled)
+                args.Handled = true;
+            return;
+        }
+
         if (!_entityWhitelist.IsWhitelistPass(ent.Comp.PillBottleWhitelist, args.Used))
             return;
 

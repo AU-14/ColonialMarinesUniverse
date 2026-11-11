@@ -47,10 +47,39 @@ public sealed partial class CMULooseSweepSystem : EntitySystem
     private static readonly string[] ExcludedTrashComponents = { "Paper" };
 
     private readonly List<EntityUid> _scratch = new();
+    private readonly HashSet<EntityUid> _trashCandidates = new();
     private TimeSpan _nextSweep;
 
     public override void Initialize()
-        => _nextSweep = _timing.CurTime + SweepInterval;
+    {
+        _nextSweep = _timing.CurTime + SweepInterval;
+        SubscribeLocalEvent<TagComponent, ComponentStartup>(OnTagStartup);
+        SubscribeLocalEvent<TagComponent, ComponentRemove>(OnTagRemove);
+        SubscribeLocalEvent<TagComponent, CMUTagsChangedEvent>(OnTagsChanged);
+    }
+
+    private void OnTagStartup(Entity<TagComponent> ent, ref ComponentStartup args)
+        => UpdateTrashCandidate(ent);
+
+    private void OnTagRemove(Entity<TagComponent> ent, ref ComponentRemove args)
+        => _trashCandidates.Remove(ent.Owner);
+
+    private void OnTagsChanged(Entity<TagComponent> ent, ref CMUTagsChangedEvent args)
+        => UpdateTrashCandidate(ent);
+
+    private void UpdateTrashCandidate(Entity<TagComponent> ent)
+    {
+        // Index only tag/prototype eligibility. Pauses and container membership
+        // can change independently and are checked at the normal sweep deadline.
+        if (IsTrashTagged(ent.Comp)
+            || (AdditionalTrashPrototypes.Length > 0
+                && TryComp<MetaDataComponent>(ent.Owner, out var meta)
+                && meta.EntityPrototype is { } proto
+                && ContainsId(AdditionalTrashPrototypes, proto.ID)))
+            _trashCandidates.Add(ent.Owner);
+        else
+            _trashCandidates.Remove(ent.Owner);
+    }
 
     public void CollectLooseMagazines(List<EntityUid> results, HashSet<string>? ids = null, bool all = false)
     {
@@ -98,24 +127,33 @@ public sealed partial class CMULooseSweepSystem : EntitySystem
         }
     }
 
-    public bool IsLooseTrash(EntityUid uid, MetaDataComponent meta)
+    public bool IsLooseTrash(EntityUid uid, MetaDataComponent meta, TagComponent? tags = null)
     {
+        // Almost every tagged entity is not trash. Reject it before container and
+        // prototype exclusion lookups, and reuse the sweep's resolved TagComponent.
+        var proto = meta.EntityPrototype;
+        if (proto == null || !ContainsId(AdditionalTrashPrototypes, proto.ID))
+        {
+            if (tags == null && !TryComp(uid, out tags))
+                return false;
+
+            if (!IsTrashTagged(tags))
+                return false;
+        }
+
         if (_containers.IsEntityInContainer(uid))
             return false;
 
-        if (meta.EntityPrototype is { } proto)
+        if (proto != null)
         {
             foreach (var excluded in ExcludedTrashComponents)
             {
                 if (proto.Components.ContainsKey(excluded))
                     return false;
             }
-
-            if (ContainsId(AdditionalTrashPrototypes, proto.ID))
-                return true;
         }
 
-        return TryComp<TagComponent>(uid, out var tags) && IsTrashTagged(tags);
+        return true;
     }
 
     public bool IsMagazinePrototype(EntityPrototype proto)
@@ -161,13 +199,15 @@ public sealed partial class CMULooseSweepSystem : EntitySystem
         var trash = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.TrashDespawnTime));
         if (trash > TimeSpan.Zero)
         {
-            // Fast path: every tagged trash entity carries a TagComponent, and a
-            // metadata-only scan every few seconds is too costly on big rounds.
             _scratch.Clear();
-            var query = EntityQueryEnumerator<TagComponent, MetaDataComponent>();
-            while (query.MoveNext(out var uid, out _, out var meta))
+            var metadata = GetEntityQuery<MetaDataComponent>();
+            var tags = GetEntityQuery<TagComponent>();
+            foreach (var uid in _trashCandidates)
             {
-                if (IsLooseTrash(uid, meta))
+                if (metadata.TryComp(uid, out var meta)
+                    && !meta.EntityPaused
+                    && tags.TryComp(uid, out var tag)
+                    && IsLooseTrash(uid, meta, tag))
                     _scratch.Add(uid);
             }
 
