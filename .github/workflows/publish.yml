@@ -20,6 +20,12 @@ on:
         type: boolean
         default: false
 
+      # CMU14: a clean publish ends every test merge unless this is ticked.
+      keep_test_merges:
+        description: Keep test merges? On = master plus every PR labelled "Test Merge". Off = clean master, test merges end. Ignored on a dry run.
+        type: boolean
+        default: false
+
 env:
   DOTNET_VERSION: 10.0.x
   CONFIGURATION: Release
@@ -33,9 +39,28 @@ jobs:
     permissions:
       contents: write
 
+  # CMU14: keep_test_merges builds master plus the labelled PRs through the test merge workflow instead.
+  test_merge:
+    needs: changelog
+    if: >-
+      always() &&
+      inputs.keep_test_merges && !inputs.dry_run &&
+      (needs.changelog.result == 'success' || needs.changelog.result == 'skipped')
+    uses: ./.github/workflows/publish-test-merge.yml
+    with:
+      allow_empty: true
+      nested: true
+    secrets: inherit
+    permissions:
+      contents: read
+      actions: read
+      issues: write
+      pull-requests: write
+
   publish_start:
     name: Prepare publish
     # CMU14: Resolve metadata without creating a partial CDN transaction during the build.
+    if: inputs.dry_run || !inputs.keep_test_merges
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
@@ -178,6 +203,8 @@ jobs:
     permissions:
       contents: read
       actions: read
+      issues: write # CMU14: test merge labels
+      pull-requests: write # CMU14
     steps:
       - name: Require all packages
         if: needs.package.result != 'success'
@@ -188,7 +215,9 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-          sparse-checkout: Tools
+          sparse-checkout: |
+            Tools
+            .github/scripts
 
       # CMU14: matrix job retries can leave multiple artifacts with the same name.
       - name: Select latest verified packages
@@ -225,6 +254,16 @@ jobs:
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           PUBLISH_ENGINE_VERSION: ${{ needs.publish_start.outputs.engine-version }}
+
+      # CMU14: a clean publish replaces any test merge build, so every test merge label goes.
+      - name: End test merges
+        if: ${{ !inputs.dry_run }}
+        uses: actions/github-script@v9.0.0
+        env:
+          PUBLISH_VERSION: ${{ github.sha }}
+        with:
+          script: |
+            await require('./.github/scripts/test_merge.js').endAll({github, context, core});
 
       - name: Verify packages without publishing
         if: inputs.dry_run
