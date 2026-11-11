@@ -319,7 +319,6 @@ cmu-yautja-lobby-hair = Цвет дредов
 cmu-yautja-lobby-invisibility-help-modern = Плавное преломление с красной кромкой активации и современными звуками маскировки.
 cmu-yautja-lobby-invisibility-help-retro = Мерцающее растворение с бело-голубыми электрическими вспышками и ретро-звуками маскировки.
 cmu-yautja-lobby-invisibility-sound = Стиль маскировки
-cmu-yautja-lobby-legacy = Наследный комплект
 cmu-yautja-lobby-mask = Биомаска
 cmu-yautja-lobby-mask-accessory = Аксессуар маски
 cmu-yautja-lobby-mask-material = Материал маски
@@ -340,7 +339,6 @@ cmu-yautja-lobby-translator-help-combo = Переведённая речь в с
 cmu-yautja-lobby-translator-help-modern = Чистая переведённая речь с современным оформлением красного наруча.
 cmu-yautja-lobby-translator-help-retro = Переведённая речь в стиле leetspeak с белым ретро-оформлением переводчика.
 cmu-yautja-lobby-translator-type = Тип переводчика
-cmu-yautja-lobby-unique = Уникальный комплект
 
 cmu-yautja-mark-already-dishonored = {$target} уже заклеймён как обесчещенный {$hunter} за «{$reason}»!
 cmu-yautja-mark-already-gear-carrier = {$target} уже отмечен {$hunter} как носитель снаряжения!
