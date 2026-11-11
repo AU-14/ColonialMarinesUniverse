@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared.PowerCell;
+using Content.Server.CMU14.Round;
+using Content.Server.GameTicking;
 using Content.Server.Radio;
 using Content.Shared.CMU14.CCVar;
 using Content.Shared.CMU14.Radio;
@@ -30,6 +32,8 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
     [Dependency] private ANPRCFrequencyPlanSystem _freqPlan = default!;
     [Dependency] private ANPRCCryptoSystem _crypto = default!;
     [Dependency] private AU14CommsToggleSystem _comms = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
 
     // recent emissions on each frequency, one per line. kept per line rather than one per
     // frequency: a squad shares a net, and the far man talking last must not hide the near
@@ -179,6 +183,9 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
         BandEmission emission,
         Vector2 position)
     {
+        if (!DirectionFindingAllowed())
+            return;
+
         // a staked set has nobody to tell
         if (!TryGetOperator(ent, out var wearer))
             return;
@@ -209,6 +216,14 @@ public sealed partial class ANPRCSweepSystem : EntitySystem
                 ("bearing", Compass[sector]),
                 ("band", band)),
             wearer);
+    }
+
+    // the preset can switch DF off for the round. ticker preset is still null through AU round
+    // start, SelectedPreset covers that window
+    public bool DirectionFindingAllowed()
+    {
+        var preset = _ticker.CurrentPreset ?? _ticker.Preset ?? _auRound.SelectedPreset;
+        return preset?.AnprcDirectionFinding ?? true;
     }
 
     private static bool Hears(ANPRCRadioComponent radio, Vector2 position, MapId map, BandEmission emission)

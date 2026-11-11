@@ -257,6 +257,28 @@ public sealed partial class CMUFobMapSystem : EntitySystem
         return true;
     }
 
+    // any FOB site's landing footprint, whichever network owns it
+    public bool IsInAnyLandingArea(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        var worldPosition = _transform.GetWorldPosition(xform);
+        var sites = EntityQueryEnumerator<CMUFobSiteComponent, TransformComponent>();
+        while (sites.MoveNext(out _, out var site, out var siteXform))
+        {
+            if (siteXform.MapUid != xform.MapUid || siteXform.GridUid is not { } grid)
+                continue;
+
+            var local = Vector2.Transform(worldPosition, _transform.GetInvWorldMatrix(grid));
+            foreach (var exclusion in site.UtilityExclusions)
+            {
+                if (exclusion.Contains(local))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
     private void OfferRelays(Entity<CMUFobSiteComponent> site, Entity<CMUFobNetworkComponent> network, CMUFobMapComponent map)
     {
         if (network.Comp.State == CMUFobReserveState.Closed || network.Comp.JobExpiresAt != null

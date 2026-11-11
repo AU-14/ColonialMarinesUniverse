@@ -535,4 +535,11 @@ public enum LogType
     RMCIconLabel = RMCMarineAnnounce + 43,
     RMCMedalRecommendation = RMCMarineAnnounce + 44,
     RMCXenoPsychic = RMCMarineAnnounce + 45,
+
+    // cmu edit start: CMU log types, kept well clear of the RMC range
+    /// <summary>
+    /// A third party was called in from a console.
+    /// </summary>
+    CMUThirdPartyCall = 20000,
+    // cmu edit end
 }

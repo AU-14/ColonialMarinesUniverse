@@ -299,6 +299,7 @@
 
 - type: thirdParty
   id: NewsCrewThirdParty
+  speaksColonyLanguage: true
   partyspawn: NewsCrewSpawn
   displayName: TV News Crew
   entrymethod: shuttle

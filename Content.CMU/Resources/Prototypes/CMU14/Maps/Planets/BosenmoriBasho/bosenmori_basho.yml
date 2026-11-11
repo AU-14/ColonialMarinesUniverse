@@ -2,6 +2,8 @@
   id: AUPlanetBosenmoriBasho
   name: Bosenmori Basho
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Bosenmori Basho Redux"
     mapId: BosenmoriBasho

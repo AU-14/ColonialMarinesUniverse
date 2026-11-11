@@ -5,6 +5,9 @@
   roundForce: CCA
   roundRole: CivilianAmbassadorCCA
   roundComponents:
+  - type: CMUExtraLanguages # the ambassador's own allegiance languages, on top of the colony's
+    languages:
+    - Swahili
   - type: AU14CallsignRole
     exempt: true
   - type: Skills
@@ -105,6 +108,9 @@
   roundForce: ICSC
   roundRole: CivilianAmbassadorICSC
   roundComponents:
+  - type: CMUExtraLanguages # the ambassador's own allegiance languages, on top of the colony's
+    languages:
+    - French
   - type: AU14CallsignRole
     exempt: true
   - type: Skills
@@ -205,6 +211,10 @@
   roundForce: TWE
   roundRole: CivilianAmbassadorTWE
   roundComponents:
+  - type: CMUExtraLanguages # the ambassador's own allegiance languages, on top of the colony's
+    languages:
+    - English
+    - Japanese
   - type: AU14CallsignRole
     exempt: true
   - type: Skills
@@ -303,6 +313,10 @@
   roundForce: UA
   roundRole: CivilianAmbassadorUA
   roundComponents:
+  - type: CMUExtraLanguages # the ambassador's own allegiance languages, on top of the colony's
+    languages:
+    - English
+    - Spanish
   - type: AU14CallsignRole
     exempt: true
   - type: Skills
@@ -402,6 +416,10 @@
   roundForce: UPP
   roundRole: CivilianAmbassadorUPP
   roundComponents:
+  - type: CMUExtraLanguages # the ambassador's own allegiance languages, on top of the colony's
+    languages:
+    - Mandarin
+    - Russian
   - type: AU14CallsignRole
     exempt: true
   - type: Skills

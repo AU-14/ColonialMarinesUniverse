@@ -2,6 +2,8 @@
   id: CMUPlanetLV624
   name: LV624 Lazarus Landing
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "LV624 Lazarus Landing"
     mapId: CMULV624
@@ -15,7 +17,6 @@
     - LACN
     platoonsOpfor:
     - UPP
-    - ProdigySF
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: UPP
