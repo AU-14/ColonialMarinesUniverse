@@ -1,0 +1,34 @@
+name: Test Merge Status
+
+# CMU14: keeps the test merge labels honest between deploys. Only base-branch scripts run here;
+# no PR code is checked out.
+on:
+  pull_request_target:
+    types: [synchronize, closed]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  status:
+    name: Update test merge labels
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'Test Merge') ||
+      contains(github.event.pull_request.labels.*.name, 'TM: Live') ||
+      contains(github.event.pull_request.labels.*.name, 'TM: Conflict') ||
+      contains(github.event.pull_request.labels.*.name, 'TM: Outdated')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          submodules: false
+          sparse-checkout: .github/scripts
+
+      - uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            await require('./.github/scripts/test_merge.js').onPullRequest({github, context, core});

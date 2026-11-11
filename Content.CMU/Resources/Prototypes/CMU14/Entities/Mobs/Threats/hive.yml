@@ -131,3 +131,14 @@
       CMU14PathogenPlasmaTree: 3
       CMU14PathogenRecoveryNode: 6
       CMU14PathogenSporecaster: 6
+
+# serpents on the yautja preserve, kept out of the prime hive's slots and larva queue
+- type: entity
+  id: CMUYautjaPreserveHive
+  name: Preserve Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#c8a060"
+    hiveUIColor: "#7a6038"

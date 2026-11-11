@@ -284,6 +284,14 @@ public sealed class YautjaClanHallTest
     private static async Task Join(TestPair pair, NetUserId player, int clanId, YautjaRank rank, int honor = 0)
     {
         var db = pair.Server.ResolveDependency<IServerDbManager>();
+        // Clan Leader is the leader whitelist now, not a stored rank. the row itself stays Blooded
+        if (rank == YautjaRank.Leader)
+        {
+            await db.SetYautjaWhitelistFlagsAsync(player.UserId,
+                (int) (YautjaWhitelistFlags.Yautja | YautjaWhitelistFlags.Leader));
+            rank = YautjaRank.Blooded;
+        }
+
         await db.UpsertYautjaClanMemberAsync(new YautjaClanMemberRecord(
             player.UserId,
             clanId,

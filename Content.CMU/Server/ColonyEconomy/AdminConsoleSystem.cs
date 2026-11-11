@@ -221,7 +221,8 @@ public sealed partial class AdminConsoleSystem : EntitySystem
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto))
             return;
 
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false,
+            caller: new ThirdPartyCaller(Name(msg.Actor), Loc.GetString("cmu-third-party-caller-colony-admin"), Actor: msg.Actor, Console: uid));
 
         _colonyBudget.AddToBudget(-cost);
 

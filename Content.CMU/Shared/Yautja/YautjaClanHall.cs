@@ -19,7 +19,8 @@ public static class YautjaClanHallPolicy
     public const int MaxSects = 8;
     public const int MaxSectDescriptionLength = 300;
 
-    // council = Ancient rank or the council permission set, works on any clan
+    // council = Ancient (Council / Council Legacy whitelist), oversees every clan and every leader.
+    // a Leader whitelist is just a clan rank and only counts inside its own clan
     public static bool IsCouncil(YautjaClanHallActor actor)
     {
         return actor.Staff ||
@@ -27,7 +28,7 @@ public static class YautjaClanHallPolicy
                YautjaClanPolicy.HasPermission(actor.Member.Permissions, YautjaClanPermission.AdminAncient);
     }
 
-    // the Leader whitelist flag, the one in-lore role that can raise or drop Ancients
+    // the profile wipe. Ancients and staff
     public static bool IsManager(YautjaClanHallActor actor)
     {
         return actor.Staff ||
@@ -40,9 +41,10 @@ public static class YautjaClanHallPolicy
                YautjaClanPolicy.HasPermission(target.Permissions, YautjaClanPermission.AdminAncient);
     }
 
-    private static bool IsManagerTier(YautjaClanMemberSnapshot target)
+    // whitelist-made ranks can't be changed from the hall, only by changing the whitelist
+    private static bool IsWhitelistTier(YautjaClanMemberSnapshot target)
     {
-        return YautjaClanPolicy.HasPermission(target.Permissions, YautjaClanPermission.AdminManager);
+        return target.Rank >= YautjaRank.Leader || IsAncientTier(target);
     }
 
     private static bool InClan(YautjaClanHallActor actor, int? clanId)
@@ -117,7 +119,7 @@ public static class YautjaClanHallPolicy
         return actor.Host;
     }
 
-    // ancients are only touchable by staff or the council manager, and managers only by staff
+    // Ancients are only touchable by staff. Ancients handle leaders, leaders handle their own clan
     public static bool Outranks(YautjaClanHallActor actor, YautjaClanMemberSnapshot target)
     {
         if (actor.Member.PlayerId == target.PlayerId)
@@ -126,11 +128,8 @@ public static class YautjaClanHallPolicy
         if (actor.Staff)
             return true;
 
-        if (IsManagerTier(target))
-            return false;
-
         if (IsAncientTier(target))
-            return IsManager(actor);
+            return false;
 
         return actor.Rank > target.Rank || IsCouncil(actor);
     }
@@ -142,7 +141,7 @@ public static class YautjaClanHallPolicy
             return null;
 
         if (IsCouncil(actor))
-            return YautjaRank.Leader;
+            return YautjaRank.Elder;
 
         if (!InClan(actor, clanId))
             return null;
@@ -163,7 +162,7 @@ public static class YautjaClanHallPolicy
             target.Rank == requested ||
             !YautjaClanPolicy.GetNormalAssignableRanks().Contains(requested) ||
             !Outranks(actor, target) ||
-            IsAncientTier(target))
+            IsWhitelistTier(target))
         {
             return false;
         }
@@ -194,12 +193,7 @@ public static class YautjaClanHallPolicy
         return IsCouncil(actor) && Outranks(actor, target);
     }
 
-    public static bool CanSetAncient(YautjaClanHallActor actor, YautjaClanMemberSnapshot target)
-    {
-        return IsManager(actor) && !IsManagerTier(target) && actor.Member.PlayerId != target.PlayerId;
-    }
-
-    // wipes the whole yautja profile, staff or the council manager only
+    // wipes the whole yautja profile, staff or an Ancient only
     public static bool CanPurge(YautjaClanHallActor actor, YautjaClanMemberSnapshot target)
     {
         return IsManager(actor) && Outranks(actor, target);
