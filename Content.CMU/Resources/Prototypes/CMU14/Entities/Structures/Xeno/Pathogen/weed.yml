@@ -63,7 +63,10 @@
     level: 1
     spawns: CMU14XenoMyceliumWeeds
   - type: CMUWallWeedsSpawn
-    wall: CMU14XenoMyceliumWeedsWall
+    walls:
+      XenoWeedsWall: CMU14XenoMyceliumWeedsWall
+      CMUXenoWeedsWindow: CMU14XenoMyceliumWeedsWindow
+      CMUXenoWeedsWindowFrame: CMU14XenoMyceliumWeedsWindowFrame
 
 # ── Weed node (weed source) ───────────────────────────────────────────────────
 

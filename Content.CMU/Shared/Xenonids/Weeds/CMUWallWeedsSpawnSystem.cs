@@ -17,17 +17,21 @@ public sealed partial class CMUWallWeedsSpawnSystem : EntitySystem
         if (!TryComp(args.CoveredEntity, out XenoWeedableComponent? weedable))
             return;
 
-        if (TryComp(args.Weeds, out CMUWallWeedsSpawnComponent? wall))
+        // always start from the prototype's own wall weed, the live one may still be the other hive's
+        if (MetaData(args.CoveredEntity).EntityPrototype is not { } proto ||
+            !proto.TryGetComponent(out XenoWeedableComponent? original, EntityManager.ComponentFactory))
         {
-            _weeds.CMUSetWeedableSpawn((args.CoveredEntity, weedable), wall.Wall);
             return;
         }
 
-        // ordinary weeds put the wall back to its own prototype's wall weed, in case pathogen got there first
-        if (MetaData(args.CoveredEntity).EntityPrototype is { } proto &&
-            proto.TryGetComponent(out XenoWeedableComponent? original, EntityManager.ComponentFactory))
+        var spawn = original.Spawn;
+        if (spawn is { } own &&
+            TryComp(args.Weeds, out CMUWallWeedsSpawnComponent? walls) &&
+            walls.Walls.TryGetValue(own, out var swapped))
         {
-            _weeds.CMUSetWeedableSpawn((args.CoveredEntity, weedable), original.Spawn);
+            spawn = swapped;
         }
+
+        _weeds.CMUSetWeedableSpawn((args.CoveredEntity, weedable), spawn);
     }
 }
