@@ -113,12 +113,15 @@ public sealed class YautjaPredatorRoleTest
             DummyTicker = false,
         });
         var server = pair.Server;
+        var userId = pair.Player!.UserId.UserId;
 
         try
         {
             var session = pair.Player!;
             var db = server.ResolveDependency<IServerDbManager>();
-            await db.SetYautjaRank(session.UserId.UserId, YautjaRank.Ancient);
+            // Ancient comes from the council whitelist now, a stored Ancient rank caps at Elder
+            await db.SetYautjaWhitelistFlagsAsync(session.UserId.UserId,
+                (int) (YautjaWhitelistFlags.Yautja | YautjaWhitelistFlags.Council));
             await server.ResolveDependency<YautjaRankManager>().Refresh(session.UserId);
             var clientNet = pair.Client.ResolveDependency<IClientNetManager>();
             await pair.Client.WaitPost(() => clientNet.ClientDisconnect("Predator round spawn entitlement test"));
@@ -306,6 +309,8 @@ public sealed class YautjaPredatorRoleTest
         {
             var cfg = server.CfgMan;
             server.CfgMan.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, YautjaPredatorRoundCVars.RandomEnabled.DefaultValue);
+            await server.ResolveDependency<IServerDbManager>()
+                .SetYautjaWhitelistFlagsAsync(userId, (int) YautjaWhitelistFlags.None);
         }
 
         await pair.CleanReturnAsync();
