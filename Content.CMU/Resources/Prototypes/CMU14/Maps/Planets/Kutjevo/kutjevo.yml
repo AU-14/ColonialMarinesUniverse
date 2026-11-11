@@ -2,6 +2,8 @@
   id: AuPlanetKutjevo
   name: Kutjevo Biolab
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Kutjevo Biolab"
     mapId: auKutjevo
@@ -15,7 +17,6 @@
     - RMC
     - CMBCIU
     - HAZOPS
-    - ProdigySF
     - VAIPO
     platoonsOpfor:
     - LACN

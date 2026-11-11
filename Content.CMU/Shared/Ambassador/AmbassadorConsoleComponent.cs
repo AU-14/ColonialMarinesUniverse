@@ -1,4 +1,6 @@
+using Content.Shared._RMC14.Language.Prototypes;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Ambassador;
@@ -12,6 +14,13 @@ public sealed partial class AmbassadorConsoleComponent : Component
     /// </summary>
     [DataField("factionName")]
     public string FactionName = "Unknown Faction";
+
+    /// <summary>
+    /// The faction's own languages. Third parties called from this console that have
+    /// <c>speaksCallerLanguage</c> set learn them; the first is their default if <c>defaultsToCallerLanguage</c> is set.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> Languages = new();
 
     /// <summary>
     /// Internal bank balance.

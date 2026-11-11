@@ -11,6 +11,8 @@
 
 - type: thirdParty
   id: MigratingCivs
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
   partyspawn: MigratingCivsSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
@@ -31,6 +33,8 @@
 
 - type: thirdParty
   id: MigratingCivsMedium
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
   partyspawn: MigratingCivsMediumSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
@@ -51,6 +55,8 @@
 
 - type: thirdParty
   id: MigratingCivsLarge
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
   partyspawn: MigratingCivsLargeSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 30
