@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Language.Components;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Robust.Shared.Prototypes;
 
@@ -101,7 +102,8 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
 
     private bool IsQueen(EntityUid uid)
     {
-        return TryComp<XenoComponent>(uid, out var xeno) && xeno.Role == "CMXenoQueen";
+        // the evolution granter marks whoever rules the hive, so the pathogen overmind counts too, not just CMXenoQueen
+        return HasComp<XenoEvolutionGranterComponent>(uid);
     }
 
     private bool IsHivebrokenXeno(EntityUid uid)

@@ -58,6 +58,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<CMUFobCrateComponent, CMUFobCrateOpenAttemptEvent>(OnCrateOpenAttempt);
         SubscribeLocalEvent<CMUFobRepairableComponent, InteractUsingEvent>(OnRepairInteract);
         SubscribeLocalEvent<CMUFobRepairableComponent, CMUFobRepairDoAfterEvent>(OnRepairFinished);
         SubscribeLocalEvent<CMUFobRepairableComponent, DoAfterAttemptEvent<CMUFobRepairDoAfterEvent>>(OnRepairAttempt);
@@ -180,6 +181,16 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         if (!changed)
             _popup.PopupEntity(Loc.GetString("cmu-fob-control-wait"), control, args.Actor);
         UpdateControl(control);
+    }
+
+    // opening on the pad spills the folded terminal where it can never be deployed, only dragged off with a powerloader
+    private void OnCrateOpenAttempt(Entity<CMUFobCrateComponent> crate, ref CMUFobCrateOpenAttemptEvent args)
+    {
+        if (args.Cancelled || !_maps.IsInAnyLandingArea(crate))
+            return;
+
+        args.Cancelled = true;
+        _popup.PopupEntity(Loc.GetString("cmu-fob-crate-landing"), crate, args.User, PopupType.SmallCaution);
     }
 
     private void OnRepairInteract(Entity<CMUFobRepairableComponent> device, ref InteractUsingEvent args)

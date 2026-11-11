@@ -1,0 +1,100 @@
+# weeds growing over full windows and window frames, cmss13 weedwall/window and weedwall/frame.
+# the sprite follows the window's own junction (CMUWeededJunctionSprite), so no IconSmooth here,
+# and no XenoNestSurface: cmss13 never nested on windows
+
+- type: entity
+  abstract: true
+  id: CMUXenoWeedsWindowBase
+  name: weeds
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Appearance
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+  - type: Clickable
+  - type: HiveMember
+  - type: XenoFriendly
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralXeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ImmuneToUnarmed
+  - type: WallMount
+    arc: 360
+  - type: RMCNightVisionVisible
+    priority: -1
+    transparency: 0.2
+
+- type: entity
+  parent: CMUXenoWeedsWindowBase
+  id: CMUXenoWeedsWindow
+  components:
+  - type: NpcFactionMember # hostile structure, valid sentry/turret target like XenoWeedsWall
+    factions:
+    - RMCXeno
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: Objects
+    state: weedwindow0
+  - type: CMUWeededJunctionSprite
+    base: weedwindow
+
+- type: entity
+  parent: CMUXenoWeedsWindowBase
+  id: CMUXenoWeedsWindowFrame
+  components:
+  - type: NpcFactionMember # hostile structure, valid sentry/turret target like XenoWeedsWall
+    factions:
+    - RMCXeno
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: Objects
+    state: weedframe0
+  - type: CMUWeededJunctionSprite
+    base: weedframe
+
+- type: entity
+  parent: CMUXenoWeedsWindowBase
+  id: CMU14XenoMyceliumWeedsWindow
+  name: mycelium weeds
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    drawdepth: Objects
+    state: weedwindow0
+  - type: CMUWeededJunctionSprite
+    base: weedwindow
+
+- type: entity
+  parent: CMUXenoWeedsWindowBase
+  id: CMU14XenoMyceliumWeedsWindowFrame
+  name: mycelium weeds
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    drawdepth: Objects
+    state: weedframe0
+  - type: CMUWeededJunctionSprite
+    base: weedframe
