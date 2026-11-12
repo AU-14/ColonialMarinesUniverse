@@ -20,6 +20,7 @@
   vendorSet: USCM
   platoonPatch: /Textures/CMU14/Clothing/Patches/uscm_patch.rsi/icon.png
   #platoonflag:  uaflag
+  defaultLanguage: English
   languages:
     - English
   CompatibleDropships:
@@ -47,6 +48,7 @@
   name: cmu-platoon-lacn-name
   lorePrimer: AU14PrimerPlatoonLACN
   Allegiance: UA
+  defaultLanguage: Portuguese
   languages:
     - Spanish
     - Portuguese
@@ -420,6 +422,7 @@
   showInVote: false
   lorePrimer: RuMCPrimerPlatoonBEAR
   Allegiance: UPP
+  defaultLanguage: Russian
   languages:
     - Russian
     - German
@@ -761,6 +764,7 @@
     CMSatchelMarine: RuMCUPPNavalInfantrySatchel
   lorePrimer: AU14PrimerPlatoonUPP
   Allegiance: UPP
+  defaultLanguage: Mandarin
   languages:
     - Russian
     - German
@@ -1394,6 +1398,7 @@
         entity: AU14ChevronWeYuAdjutant
         requirements: []
 
+  defaultLanguage: English
   languages:
     - English
     - Japanese
@@ -1442,6 +1447,7 @@
     CMSatchelMarine: RMCSatchelTSEPA
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
+  defaultLanguage: English
   languages:
     - English
   reqlist: CMBCIUCargoCatalog
@@ -1670,6 +1676,7 @@
   name: cmu-platoon-hazops-name
   lorePrimer: AU14PrimerPlatoonHAZOPS
   Allegiance: UA
+  defaultLanguage: English
   languages:
     - English
   reqlist: HAZOPSCargoCatalog
@@ -1684,301 +1691,6 @@
   - /Maps/CMU14/Dropships/f84owl.yml
   - /Maps/CMU14/Dropships/ud_6.yml
   techTree: CMUIntelTechTree_UA
-
-- type: platoon
-  id: ProdigySF
-  vehicleSupplyCatalog:
-  - CMUFighterGround
-  - VehicleTank
-  - VehicleHumvee
-  - VehicleHumveeMedical
-  - VehicleHumveeTransport
-  - AU14VehicleCivArmoredTruck
-  - AU14VehicleCivTruck
-  - AU14VehicleCivEMSAmbulance
-  - VehicleAev
-  name: cmu-platoon-prodigysf-name
-  # The platoon's own satchel in place of the standard one.
-  startingGearOverrides:
-    CMSatchelMarine: RMCSatchelLightpackBlack
-  lorePrimer: AU14PrimerPlatoonProdigySF
-  Allegiance: Prodigy
-  reqlist: ProdigyCargoCatalog
-  languages:
-    - English
-  vendorSet: ProdigySF
-  rations: CMUMREFSR
-  platoonPatch: /Textures/CMU14/Clothing/Patches/merc_red_patch.rsi/icon.png
-  chevronOverrides:
-    AU14JobPlatCoBase:
-      AU14RankPrDOperationsDirector:
-        entity: AU14ChevronPrDOperationsDirector
-        requirements: []
-      AU14RankPrDRegionDirector:
-        entity: AU14ChevronPrDRegionDirector
-        requirements: []
-
-    AU14JobadvisorBase:
-      AU14RankPrDAdjutant:
-        entity: AU14ChevronPrDAdjutant
-        requirements: []
-
-    AU14JobAdjutantBase:
-      AU14RankPrDDeputyDirector:
-        entity: AU14ChevronPrDDeputyDirector
-        requirements: []
-
-    AU14JobOfficerEngiBase:
-      AU14RankPrDCommander:
-        entity: AU14ChevronPrDCommander
-        requirements: []
-
-    AU14JobOfficerIntelBase:
-      AU14RankPrDCommander:
-        entity: AU14ChevronPrDCommander
-        requirements: []
-
-    AU14JobOfficerLogisticsBase:
-      AU14RankPrDCommander:
-        entity: AU14ChevronPrDCommander
-        requirements: []
-
-    AU14JobOfficerMedicalBase:
-      AU14RankPrDCommanderSenior:
-        entity: AU14ChevronPrDCommanderSenior
-        requirements: []
-
-    AU14JobOfficerMPBase:
-      AU14RankPrDCommander:
-        entity: AU14ChevronPrDCommander
-        requirements: []
-
-    AU14JobPlatOpBase:
-      AU14RankPrDCommanderSenior:
-        entity: AU14ChevronPrDCommanderSenior
-        requirements: []
-
-    AU14JobVehicleCommanderBase:
-      AU14RankPrDEnforcerLead:
-        entity: AU14ChevronPrDEnforcerLead
-        requirements: []
-
-    AU14JobSectionSergeantBase:
-      AU14RankPrDEnforcerLead:
-        entity: AU14ChevronPrDEnforcerLead
-        requirements: []
-
-    AU14JobSquadSergeantBase:
-      AU14RankPrDEnforcerLead:
-        entity: AU14ChevronPrDEnforcerLead
-        requirements: []
-
-    AU14JobDCCBase:
-      AU14RankPrDSeniorCrewChief:
-        entity: AU14ChevronPrDSeniorCrewChief
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORDCC
-          time: 36000 #10 hours
-      AU14RankPrDCrewChief:
-        entity: AU14ChevronPrDCrewChief
-        requirements: []
-
-    AU14JobDSPilotBase:
-      AU14RankPrDSeniorPilot:
-        entity: AU14ChevronPrDSeniorPilot
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORDSPilot
-          time: 36000 #10 hours
-      AU14RankPrDPilot:
-        entity: AU14ChevronPrDPilot
-        requirements: []
-
-    AU14JobGOVFORFighterPilot:
-      AU14RankPrDCommander:
-        entity: AU14ChevronPrDCommander
-        requirements: []
-
-    AU14JobOPFORFighterPilot:
-      AU14RankPrDCommander:
-        entity: AU14ChevronPrDCommander
-        requirements: []
-
-    AU14JobAuxTechBase:
-      AU14RankPrDSeniorOperator:
-        entity: AU14ChevronPrDSeniorOperator
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORAuxTech
-          time: 86400 # 24 hours
-      AU14RankPrDOperator:
-        entity: AU14ChevronPrDOperator
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORAuxTech
-          time: 36000 #10 hours
-      AU14RankPrDAssociate:
-        entity: AU14ChevronPrDAssociate
-        requirements: []
-
-    AU14JobEngineeringTechBase:
-      AU14RankPrDSeniorOperator:
-        entity: AU14ChevronPrDSeniorOperator
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFOREngineeringTech
-          time: 86400 # 24 hours
-      AU14RankPrDOperator:
-        entity: AU14ChevronPrDOperator
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFOREngineeringTech
-          time: 36000 #10 hours
-      AU14RankPrDAssociate:
-        entity: AU14ChevronPrDAssociate
-        requirements: []
-
-    AU14JobSquadCombatTechBase:
-      AU14RankPrDAssociate:
-        entity: AU14ChevronPrDAssociate
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORSquadCombatTech
-          time: 36000 #10 hours
-      AU14RankPrDRecruit:
-        entity: AU14ChevronPrDRecruit
-        requirements: []
-
-    CMUJobDroneOperatorBase:
-      AU14RankPrDEnforcerLead:
-        entity: AU14ChevronPrDEnforcerLead
-        requirements:
-        - !type:RoleTimeRequirement
-          role: CMUJobGOVFORDroneOperator
-          time: 36000 #10 hours
-      AU14RankPrDEnforcerSenior:
-        entity: AU14ChevronPrDEnforcerSenior
-        requirements: []
-
-    AU14JobSquadAutomaticRiflemanBase:
-      AU14RankPrDAssociate:
-        entity: AU14ChevronPrDAssociate
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORSquadAutomaticRifleman
-          time: 36000 #10 hours
-      AU14RankPrDRecruit:
-        entity: AU14ChevronPrDRecruit
-        requirements: []
-
-    AU14JobSquadRiflemanBase:
-      AU14RankPrDAssociate:
-        entity: AU14ChevronPrDAssociate
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORSquadRifleman
-          time: 36000 #10 hours
-      AU14RankPrDRecruit:
-        entity: AU14ChevronPrDRecruit
-        requirements: []
-
-    AU14JobWeaponsSpecialistBase:
-      AU14RankPrDAssociate:
-        entity: AU14ChevronPrDAssociate
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORWeaponsSpecialist
-          time: 36000 #10 hours
-      AU14RankPrDRecruit:
-        entity: AU14ChevronPrDRecruit
-        requirements: []
-
-    AU14JobMilitaryDoctorBase:
-      AU14RankPrDCommander:
-        entity: AU14ChevronPrDCommander
-        requirements: []
-
-    AU14JobNurseBase:
-      AU14RankPrDEnforcerSenior:
-        entity: AU14ChevronPrDEnforcerSenior
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORNurse
-          time: 86400 # 24 hours
-      AU14RankPrDEnforcer:
-        entity: AU14ChevronPrDEnforcer
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORNurse
-          time: 36000 #10 hours
-      AU14RankPrDSeniorOperator:
-        entity: AU14ChevronPrDSeniorOperator
-        requirements: []
-
-    AU14JobPlatoonCorpsmanBase:
-      AU14RankPrDAssociate:
-        entity: AU14ChevronPrDAssociate
-        requirements: []
-
-    AU14JobGOVFORCombatCorrespondentBase:
-      AU14RankPrDSeniorOperator:
-        entity: AU14ChevronPrDSeniorOperator
-        requirements: []
-
-    AU14JobRadioTelephoneOperatorBase: # FTL not RTO
-      AU14RankPrDSeniorOperator:
-        entity: AU14ChevronPrDSeniorOperator
-        requirements: []
-
-    AU14JobMilitaryPoliceBase:
-      AU14RankPrDEnforcerSenior:
-        entity: AU14ChevronPrDEnforcerSenior
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORMilitaryPoliceMan
-          time: 86400 # 24 hours
-      AU14RankPrDEnforcer:
-        entity: AU14ChevronPrDEnforcer
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORMilitaryPoliceMan
-          time: 36000 #10 hours
-      AU14RankPrDSeniorOperator:
-        entity: AU14ChevronPrDSeniorOperator
-        requirements: []
-
-    AU14JobRadioTrafficOperatorBase:
-      AU14RankPrDOperator:
-        entity: AU14ChevronPrDOperator
-        requirements: []
-
-    AU14JobVehicleCrewmanBase:
-      AU14RankPrDEnforcer:
-        entity: AU14ChevronPrDEnforcer
-        requirements:
-        - !type:RoleTimeRequirement
-          role: AU14JobGOVFORVehicleCrewman
-          time: 36000 #10 hours
-      AU14RankPrDSeniorOperator:
-        entity: AU14ChevronPrDSeniorOperator
-        requirements: []
-
-    AU14JobAuxSupportSynthBase:
-      AU14RankPrDSynth2:
-        entity: AU14ChevronPrDSynth2
-        requirements: []
-
-  #platoonflag:  uaflag
-  CompatibleDropships:
-  - /Maps/CMU14/Dropships/Mohawk/midway_deployment.yml
-  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
-  compatibleFighters:
-    - /Maps/CMU14/Dropships/f84owl.yml
-    - /Maps/CMU14/Dropships/ud_6.yml
-  possibleships:
-      - USSBushRedux
-  techTree: CMUIntelTechTree_Other
 
 - type: platoon
   id: VAIPO
@@ -1997,6 +1709,7 @@
   lorePrimer: AU14PrimerPlatoonVAIPO
   reqlist: VAIPOCargoCatalog
   Allegiance: UA
+  defaultLanguage: English
   languages:
     - English
     - TacticalSignLanguage
@@ -2185,6 +1898,7 @@
   name: cmu-platoon-rmc-name
   lorePrimer: AU14PrimerPlatoonRMC
   Allegiance: TWE
+  defaultLanguage: English
   languages:
     - Japanese
     - English
@@ -2531,10 +2245,6 @@
 - type: lorePrimer
   id: AU14PrimerPlatoonHAZOPS
   PlatoonInfo: lore-primer-platoon-hazops-info
-
-- type: lorePrimer
-  id: AU14PrimerPlatoonProdigySF
-  PlatoonInfo: lore-primer-platoon-prodigysf-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonVAIPO

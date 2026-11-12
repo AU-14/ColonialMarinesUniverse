@@ -12,6 +12,7 @@
 
 - type: thirdParty
   id: MissionariesParty
+  speaksColonyLanguage: true
   partyspawn: MissionariesPartySpawn
   entrymethod: shuttle
   weight: 20
@@ -32,6 +33,7 @@
 
 - type: thirdParty
   id: MissionariesPartyMedium
+  speaksColonyLanguage: true
   partyspawn: MissionariesPartySpawnMid
   entrymethod: shuttle
   weight: 20

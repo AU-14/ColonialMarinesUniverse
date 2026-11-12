@@ -1,7 +1,7 @@
 - type: entity
   parent: CMMagazineRifleM54CMK1
   id: CMU14MagazineRifleM54CMK1Rubber
-  name: M54C MK1 rubber magazine (10x24mm)
+  name: M41A MK1 rubber magazine (10x24mm)
   components:
   - type: Tag
     tags:

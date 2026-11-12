@@ -1,5 +1,6 @@
 using Content.Server.CriminalRecords.Systems;
 using Content.Server.Traits;
+using Content.Shared.Access.Systems;
 using Content.Shared.Preferences;
 using Content.Shared.CMU14.CriminalRecords;
 using Content.Shared.CriminalRecords;
@@ -19,6 +20,7 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
     [Dependency] private CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
     [Dependency] private StationRecordsSystem _records = default!;
     [Dependency] private CMUUniversalRecordsSystem _universalRecords = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
 
     private static readonly ProtoId<DepartmentPrototype>[] RecordedDepartments =
     {
@@ -47,7 +49,26 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
             return;
 
         if (EnsureCharacterRecord(args.Mob, args.Profile.Name, args.Profile.Age, args.Profile.Gender) is { } key)
+        {
             FillArrival(key, args.Mob, args.Profile);
+            ApplyClfCover(key, args.Mob, args.JobId);
+        }
+    }
+
+    // the record took the real job name, so the personal file outed every CLF member. show the card's cover job instead
+    private void ApplyClfCover(StationRecordKey key, EntityUid mob, string jobId)
+    {
+        if (!ProtoMan.TryIndex<JobPrototype>(jobId, out var job) ||
+            !string.Equals(job.RoundForce, "CLF", StringComparison.OrdinalIgnoreCase) ||
+            !_records.TryGetRecord<GeneralStationRecord>(key, out var general) ||
+            !_idCard.TryFindIdCard(mob, out var card))
+        {
+            return;
+        }
+
+        general.JobTitle = card.Comp.LocalizedJobTitle ?? string.Empty;
+        general.JobIcon = card.Comp.JobIcon;
+        _records.Synchronize(key);
     }
 
     /// <summary>

@@ -2,6 +2,8 @@
   id: AUPlanetTrijent
   name: Trijent
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Raijin Hydroelectric"
     mapId: AUTrijentMap
@@ -18,7 +20,6 @@
     - UPP
     - CMBCIU
     - HAZOPS
-    - ProdigySF
     - VAIPO
     defaultgovfor: RMC
     defaultopfor: VAIPO
@@ -46,9 +47,6 @@
     - cultistThirdPartyNoQueen
     - UPPGROM
     - UPPGROMAlt
-    - CHTORM_PMC_BEAR
-    - GROZA_PMC_BEAR
-    - SKALA_PMC_BEAR
     - UPPGROMAlt2
     - FORECON
     - FORECONAlt

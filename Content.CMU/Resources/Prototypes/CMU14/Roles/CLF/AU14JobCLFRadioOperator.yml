@@ -13,6 +13,8 @@
     - CLF
   - type: CLFMember
   - type: ANPRCRadioUser
+  # the cell has one leader, so the operator can recrypto too or a dead leader strands the key
+  - type: ANPRCCryptoAuthority
   - type: Skills
     skills:
       RMCSkillEndurance: 1
@@ -21,6 +23,7 @@
       RMCSkillEngineer: 2
       RMCSkillFireman: 1
       RMCSkillJtac: 4
+      RMCSkillCqc: 1
       RMCSkillLeadership: 1
       RMCSkillIntel: 1
       RMCSkillVehicles: 1
@@ -59,7 +62,6 @@
     - CMUHardOfHearing
     - CMUClaustrophobic
     - CMUFearOfBlood
-    - NoEnglish
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFRadioOperator

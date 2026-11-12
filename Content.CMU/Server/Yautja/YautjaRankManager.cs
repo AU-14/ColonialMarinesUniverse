@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
@@ -41,23 +42,17 @@ public sealed partial class YautjaRankManager : IPostInjectInit
         var rank = youngbloodRole
             ? YautjaRank.YoungBlood
             : CanonicalHunterSpawnRank(resolution.Rank);
-        // A persisted clanless Ancient keeps its legacy entitlement. Leader also canonicalizes to Ancient,
-        // but its current whitelist must not implicitly grant Council status.
-        var externalCouncil = resolution.ClanId == null &&
-                              rank == YautjaRank.Ancient &&
-                              !resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.Leader);
-        var externalLeader = resolution.ClanId == null && rank == YautjaRank.Leader;
+        // Ancient = Council / Council Legacy whitelist, Clan Leader = Leader whitelist. nothing stored in the
+        // clan tables grants either any more (SanitizeStoredRank caps those at Elder)
+        var ancient = resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.Council) ||
+                      resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.CouncilLegacy);
 
         return new(
             rank,
             YautjaRankResolver.CanUseUnique(rank),
-            resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.Legacy) ||
-            resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.CouncilLegacy),
-            resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.Council) ||
-            resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.CouncilLegacy) ||
-            externalCouncil,
-            resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.Leader) ||
-            externalLeader);
+            ancient,
+            ancient,
+            resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.Leader));
     }
 
     public static YautjaRank CanonicalHunterSpawnRank(YautjaRank rank)
@@ -68,7 +63,7 @@ public sealed partial class YautjaRankManager : IPostInjectInit
     public async Task Set(NetUserId userId, YautjaRank rank)
     {
         if (!IsPersistentRank(rank))
-            throw new ArgumentException("Young Blood is reserved for the special hunt role.", nameof(rank));
+            throw new ArgumentException("Young Blood, Clan Leader and Ancient can't be stored, they come from the hunt role and whitelists.", nameof(rank));
 
         _clanManager.InvalidateCache(userId);
         if (!await _clanManager.SetMaintenanceRank(userId, rank))
@@ -93,7 +88,7 @@ public sealed partial class YautjaRankManager : IPostInjectInit
 
     public static bool IsPersistentRank(YautjaRank rank)
     {
-        return Enum.IsDefined(rank) && rank != YautjaRank.YoungBlood;
+        return YautjaClanPolicy.GetNormalAssignableRanks().Contains(rank);
     }
 
     private async Task LoadData(ICommonSession session, CancellationToken cancel)
