@@ -234,16 +234,17 @@ async function finalize({ github, context, core }) {
   }
 }
 
-// After a successful clean (non test merge) publish: every test merge is gone from the server.
+// After a successful clean (non test merge) publish: every test merge is gone from the server, but the
+// "Test Merge" label stays so the PR is queued for the next test merge run.
 async function endAll({ github, context, core }) {
   const h = helpers({ github, context, core });
   const version = process.env.PUBLISH_VERSION;
   const at = formatUtc(new Date());
 
-  for (const issue of await h.openPullsWithAny(ALL)) {
-    const had = await h.setLabels(issue.number, { remove: ALL });
+  for (const issue of await h.openPullsWithAny(STATUS)) {
+    const had = await h.setLabels(issue.number, { remove: STATUS });
     if (had.has(LIVE) || had.has(OUTDATED)) {
-      await h.upsertComment(issue.number, `**Test merge ended @ ${at}:** removed from the server by publish [${shortSha(version)}](${h.commitLink(version)}). Add the \`${REQUEST}\` label or type the PR number into Publish Test Merge to test it again.`);
+      await h.upsertComment(issue.number, `**Test merge paused @ ${at}:** removed from the server by publish [${shortSha(version)}](${h.commitLink(version)}). It keeps the \`${REQUEST}\` label and goes back on with the next test merge run; remove the label to drop it.`);
     }
   }
 }
