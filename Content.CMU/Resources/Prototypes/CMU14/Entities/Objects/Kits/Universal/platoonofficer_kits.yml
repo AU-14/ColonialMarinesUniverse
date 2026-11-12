@@ -215,6 +215,10 @@
         amount: 1
       - id: AU14StampCMO
         amount: 1
+      - id: CMJumpsuitCMO
+        amount: 1
+      - id: RMCLabcoatScience
+        amount: 1
 
 - type: entity
   parent: AU14KitPlatoonOfficer
