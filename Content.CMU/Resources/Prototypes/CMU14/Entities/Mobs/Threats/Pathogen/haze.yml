@@ -145,15 +145,15 @@
     baseSprintSpeed: 4.5
   - type: SlowOnPull
     slowdowns:
-    - multiplier: 0.7
+    - multiplier: 0.6
       whitelist:
         components:
         - Marine
-    - multiplier: 1.0
+    - multiplier: 0.6
       whitelist:
         components:
         - XenoLight
-    - multiplier: 1.0
+    - multiplier: 0.4
       whitelist:
         components:
         - XenoHeavy
@@ -306,6 +306,20 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.5
     baseSprintSpeed: 5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 1.0
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 1.0
+      whitelist:
+        components:
+        - XenoHeavy
   - type: VentCrawler
     ventCrawlIcon: haze
   - type: RMCActionOrder
