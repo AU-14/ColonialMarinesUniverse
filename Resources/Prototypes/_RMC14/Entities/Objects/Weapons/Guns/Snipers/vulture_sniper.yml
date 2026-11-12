@@ -65,6 +65,7 @@
       - VultureWhitelist
   - type: VultureRifle
   - type: VultureAim
+  - type: CMUVultureWindup # CMU14: 1.5s settle with a laser mark before every shot
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -107,7 +108,7 @@
   - type: RemoveComponents
     components:
     - type: AimedShot
-    - type: TargetingLaser
+    # - type: TargetingLaser # CMU14: kept, the windup mark draws its laser from it
     - type: GunToggleableLaser
       settings:
       - icon:
