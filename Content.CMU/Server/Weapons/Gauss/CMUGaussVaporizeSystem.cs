@@ -11,6 +11,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Weapons.Gauss;
@@ -28,6 +29,7 @@ public sealed class CMUGaussVaporizeSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -92,11 +94,22 @@ public sealed class CMUGaussVaporizeSystem : EntitySystem
         _transform.SetLocalRotation(boots.Value, Angle.Zero);
         SpawnAttachedTo(ent.Comp.Smoke, new EntityCoordinates(boots.Value, Vector2.Zero));
 
+        // Their backpack and ID survive, blown clear in random directions.
+        foreach (var slot in ent.Comp.ThrownSlots)
+        {
+            if (!_inventory.TryUnequip(ent, slot, out var item, silent: true, force: true))
+                continue;
+
+            _transform.SetCoordinates(item.Value, coords);
+            var direction = _random.NextAngle().ToVec() * _random.NextFloat(ent.Comp.ThrowDistanceMin, ent.Comp.ThrowDistanceMax);
+            _throwing.TryThrow(item.Value, direction, ent.Comp.ThrowSpeed, user: ent, recoil: false);
+        }
+
         // Decals are placed by their bottom-left corner, so centre it on the tile they stood on.
         _decals.TryAddDecal(ent.Comp.Decal, coords.Offset(new Vector2(-0.5f, -0.5f)), out _, cleanable: true);
         _audio.PlayPvs(ent.Comp.EndSound, coords);
 
-        // Deleting them takes everything they carried with them; their mind is moved to a ghost.
+        // Deleting them takes everything else they carried with them; their mind is moved to a ghost.
         QueueDel(ent);
     }
 }
