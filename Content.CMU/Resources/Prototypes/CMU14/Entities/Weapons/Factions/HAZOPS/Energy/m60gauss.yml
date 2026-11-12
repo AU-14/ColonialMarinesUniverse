@@ -1,9 +1,9 @@
 - type: entity
   id: CMUWeaponM60GaussGun
   parent: [BaseWeaponBatterySmall, BaseGrandTheftContraband]
-  name: M60 Experimental Gauss Gun
+  name: XM6283-185E
   suffix: HAZOPS
-  description: An experimental prototype handheld particle accelerator currently going through rapid field-testing. Capable of fast semiautomatic fire. Take caution to not leave its overcharge on for too long, as prior recorded effects have resulted in catastrophic accidents.
+  description: Operating off similar concepts as the Particle Beam Phalanx system. This experimental man portable version functions instead as a Directed Energy Weapon, accelerating T particles at the intended target. The weapon is self charging, however after every operation its recommended to replace the "Fuel box" mounted under the stock.
   components:
   - type: Sprite
     sprite: CMU14/Weapons/Guns/HAZOPS/M60Gauss.rsi
