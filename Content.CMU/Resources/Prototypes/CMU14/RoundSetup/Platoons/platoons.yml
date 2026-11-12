@@ -773,6 +773,9 @@
   reqlist: UPPCargoCatalog
   vendorSet: UPP
   rations: AU14MREUPP
+  startingGearJobOverrides:
+    AU14JobGOVFORRadioTelephoneOperator: CMUGearUPPGOVFORRadioTelephoneOperator
+    AU14JobOPFORRadioTelephoneOperator: CMUGearUPPOPFORRadioTelephoneOperator
   platoonPatch: /Textures/CMU14/Clothing/Patches/naval_patch.rsi/icon.png
   chevronOverrides:
     AU14JobPlatCoBase:
