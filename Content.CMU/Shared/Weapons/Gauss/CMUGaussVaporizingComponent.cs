@@ -54,4 +54,18 @@ public sealed partial class CMUGaussVaporizingComponent : Component
 
     [DataField]
     public ProtoId<DecalPrototype> Decal = "RMCScorch4";
+    
+    /// <summary>Inventory slots whose items survive, flung away from where they stood, instead of being deleted.</summary>
+    [DataField]
+    public List<string> ThrownSlots = new() { "back", "id" };
+
+    // How far, in tiles, and how fast the surviving items are flung.
+    [DataField]
+    public float ThrowDistanceMin = 4f;
+
+    [DataField]
+    public float ThrowDistanceMax = 6f;
+
+    [DataField]
+    public float ThrowSpeed = 12f;
 }
