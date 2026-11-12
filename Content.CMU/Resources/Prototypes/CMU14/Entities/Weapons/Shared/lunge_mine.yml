@@ -41,7 +41,7 @@
     seversWielderLimbs: false
   - type: Explosive
     explosionType: CMUIED # Shaped charge: uses the IED tank blast multiplier (FLOW-09) so it badly damages tanks.
-    maxIntensity: 25
-    intensitySlope: 6
-    totalIntensity: 200
+    maxIntensity: 20
+    intensitySlope: 15
+    totalIntensity: 40
     deleteAfterExplosion: true
