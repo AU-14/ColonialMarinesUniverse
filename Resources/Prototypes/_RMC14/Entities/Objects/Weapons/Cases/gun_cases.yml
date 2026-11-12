@@ -764,7 +764,7 @@
       amount: 4
     - id: RMCBoxShotgunHeavyDragonbreath
       amount: 2
-    - id: AU14AltynCustom
+    - id: AU14AltynCustom #CMU14
 
 - type: entity
   parent: RMCBaseEquipmentCase
