@@ -17802,5 +17802,78 @@
   id: 1030
   time: '2026-11-11T14:27:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2581
+- author: ArturUr1
+  changes:
+  - message: The synthetics construction skill has been increased to 4.
+    type: Tweak
+  id: 1031
+  time: '2026-11-11T19:39:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2572
+- author: rokudara-sen
+  changes:
+  - message: Mutiny leaders can recruit again on every marine role.
+    type: Fix
+  - message: 'Mutiny leaders get Begin Mutiny: converted marines are revealed and
+      everyone else on the side picks Mutineers, Loyalists or Refuse to fight.'
+    type: Add
+  - message: New HUD badges for mutineers, mutiny leaders, loyalists and non-combatants.
+    type: Add
+  - message: Ending a mutiny now also clears loyalists, non-combatants and unrevealed
+      recruits.
+    type: Admin
+  id: 1032
+  time: '2026-11-12T06:28:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2584
+- author: P-MCT
+  changes:
+  - message: Lunge Mine, also able to be crafted by a sapper in their workshop.
+    type: Add
+  id: 1033
+  time: '2026-11-12T06:34:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2574
+- author: SupremecyS
+  changes:
+  - message: resprite of altyn
+    type: Tweak
+  - message: The Party has issued a change in the type 23 Shotgunners standard issue
+      equipment after looking at Mortality and combat effectiveness rates, they have
+      given Type 23 Shotgunners their own Custom Altyn designed with a industrial
+      black finish and white stripes to strike fear into the enemy, alongside reinforcing
+      the helmet. (Custom Sprite and much stronger than its original helmet, Shotgunner
+      spec was underpreforming and they needed a small buff to hopefully make it more
+      fun to play)
+    type: Add
+  - message: The Party has recognized the bravery of their FTLs, and have awarded
+      them with their own Peaked caps that are lined with kevlar and steel, Safety
+      and fashion all in one package.
+    type: Add
+  id: 1034
+  time: '2026-11-12T08:41:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2535
+- author: TheHellFireo
+  changes:
+  - message: Reduced repeated work and memory allocation during physics and Z-level
+      movement.
+    type: Code
+  id: 1035
+  time: '2026-11-12T11:21:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2587
+- author: rokudara-sen
+  changes:
+  - message: Distress Signal and Colony Fall rules are back in the guidebook.
+    type: Fix
+  id: 1036
+  time: '2026-11-12T12:08:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2588
+- author: Ugnip55
+  changes:
+  - message: Added Battlefield Executions provisions to the UCMJ.
+    type: Add
+  - message: Updated existing execution regulations and related SOP documentation
+      for consistency.
+    type: Tweak
+  id: 1037
+  time: '2026-11-12T14:58:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2569
 Name: CMU
 Order: -1
