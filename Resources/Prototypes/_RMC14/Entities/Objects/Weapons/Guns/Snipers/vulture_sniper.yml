@@ -64,6 +64,9 @@
       components:
       - VultureWhitelist
   - type: VultureRifle
+    unbracedDamage: # CMU14: was 95, the windup and unbraced spread are the cost now
+      types:
+        Blunt: 40
   - type: VultureAim
   - type: CMUVultureWindup # CMU14: 1.5s settle with a laser mark before every shot
   - type: AttachableHolder
