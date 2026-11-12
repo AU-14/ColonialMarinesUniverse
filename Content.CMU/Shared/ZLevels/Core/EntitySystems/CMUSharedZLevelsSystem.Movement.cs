@@ -893,14 +893,15 @@ public abstract partial class CMUSharedZLevelsSystem
     private bool HasCurrentTileHighGround(EntityUid uid)
     {
         var xform = Transform(uid);
+        var worldPosition = _transform.GetWorldPosition(xform);
         if (xform.MapUid is not { } mapUid ||
             !_zMapQuery.TryComp(mapUid, out _) ||
-            !TryResolveMovementGrid(mapUid, _transform.GetWorldPosition(uid), out var gridUid, out var mapGrid))
+            !TryResolveMovementGrid(mapUid, worldPosition, out var gridUid, out var mapGrid))
         {
             return false;
         }
 
-        var worldPosI = _map.WorldToTile(gridUid, mapGrid, _transform.GetWorldPosition(uid));
+        var worldPosI = _map.WorldToTile(gridUid, mapGrid, worldPosition);
         var queryHigh = _map.GetAnchoredEntities(gridUid, mapGrid, worldPosI);
         while (queryHigh.MoveNext(out var anchoredUid))
         {
@@ -1003,20 +1004,31 @@ public abstract partial class CMUSharedZLevelsSystem
             return false;
         }
 
-        CMUVehicleSupportFootprint.GenerateWorldSamples(
-            localBounds,
-            vehicleTraversal.SupportSampleSpacing,
-            vehicleTraversal.SupportSampleInset,
-            _transform.GetWorldPosition(xform),
-            _transform.GetWorldRotation(xform),
-            _vehicleSupportSamples);
+        // Bounds are still resolved on every query, so fixture edits invalidate the derived samples immediately.
+        if (vehicleTraversal.CachedSupportBounds != localBounds ||
+            vehicleTraversal.CachedSupportSpacing != vehicleTraversal.SupportSampleSpacing ||
+            vehicleTraversal.CachedSupportInset != vehicleTraversal.SupportSampleInset)
+        {
+            CMUVehicleSupportFootprint.GenerateLocalSamples(localBounds,
+                vehicleTraversal.SupportSampleSpacing, vehicleTraversal.SupportSampleInset,
+                vehicleTraversal.CachedSupportSamples);
+            vehicleTraversal.CachedSupportBounds = localBounds;
+            vehicleTraversal.CachedSupportSpacing = vehicleTraversal.SupportSampleSpacing;
+            vehicleTraversal.CachedSupportInset = vehicleTraversal.SupportSampleInset;
+        }
+        var (worldPosition, worldRotation) = _transform.GetWorldPositionRotation(xform);
+        CMUVehicleSupportFootprint.GenerateWorldSamples(vehicleTraversal.CachedSupportSamples,
+            worldPosition, worldRotation, _vehicleSupportSamples);
 
         var falling = HasComp<CMUZFallingComponent>(target);
         var supported = 0;
         var supportedDistance = 0f;
         var highestSupportedSurfaceDistance = float.MaxValue;
-        foreach (var sample in _vehicleSupportSamples)
+        var testedSamples = 0;
+        for (var sampleIndex = 0; sampleIndex < _vehicleSupportSamples.Count; sampleIndex++)
         {
+            var sample = _vehicleSupportSamples[sampleIndex];
+            testedSamples++;
             var sampleDistance = DistanceToGroundAtWorldPositionCore(target, xform.MapUid, sample, out var sampleStickyGround, maxFloors);
             if (!CMUVehicleSupportFootprint.IsSampleSupported(
                     sampleDistance,
@@ -1025,6 +1037,11 @@ public abstract partial class CMUSharedZLevelsSystem
                     vehicleTraversal.SupportSnapDistance,
                     falling))
             {
+                // Once even all remaining samples cannot prevent tipping, the result is already known.
+                var maximumSupported = supported + _vehicleSupportSamples.Count - testedSamples;
+                if (!falling && CMUVehicleSupportFootprint.ShouldRejectSupport(maximumSupported,
+                        _vehicleSupportSamples.Count, vehicleTraversal.EdgeTipUnsupportedFraction))
+                    break;
                 continue;
             }
 
@@ -1044,7 +1061,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 DebugLogFalling(
                     target.Owner,
                     "vehicle-support-reject",
-                    $"falling={falling} supported={supported}/{_vehicleSupportSamples.Count} edgeTip={vehicleTraversal.EdgeTipUnsupportedFraction:F3} sticky={stickyGround}");
+                    $"falling={falling} supported={supported}/{_vehicleSupportSamples.Count} checked={testedSamples} edgeTip={vehicleTraversal.EdgeTipUnsupportedFraction:F3} sticky={stickyGround}");
             stickyGround = false;
             distance = maxFloors;
             return true;
@@ -1157,7 +1174,8 @@ public abstract partial class CMUSharedZLevelsSystem
                 continue;
             }
 
-            var checkingTile = _map.WorldToTile(checkingGridUid, checkingGrid, worldPos);
+            var gridLocal = _map.WorldToLocal(checkingGridUid, checkingGrid, worldPos) / checkingGrid.TileSize;
+            var checkingTile = new Vector2i((int) Math.Floor(gridLocal.X), (int) Math.Floor(gridLocal.Y));
             if (floor == 0)
                 fallCheck = new ZFallCheck(checkingGridUid, checkingTile);
 
@@ -1168,7 +1186,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     checkingGridUid,
                     checkingGrid,
                     checkingTile,
-                    worldPos,
+                    gridLocal,
                     floor,
                     out var highGroundDistance,
                     ref stickyGround))
@@ -1311,7 +1329,7 @@ public abstract partial class CMUSharedZLevelsSystem
         EntityUid checkingGridUid,
         MapGridComponent checkingGrid,
         Vector2i checkingTile,
-        Vector2 worldPos,
+        Vector2 gridLocal,
         int floor,
         out float distance,
         ref bool stickyGround)
@@ -1324,7 +1342,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 checkingGridUid,
                 checkingGrid,
                 checkingTile,
-                worldPos,
+                gridLocal,
                 floor,
                 out distance,
                 ref stickyGround);
@@ -1337,7 +1355,7 @@ public abstract partial class CMUSharedZLevelsSystem
             checkingGridUid,
             checkingGrid,
             checkingTile,
-            worldPos,
+            gridLocal,
             floor,
             out distance,
             ref stickyGround);
@@ -1357,7 +1375,7 @@ public abstract partial class CMUSharedZLevelsSystem
         EntityUid checkingGridUid,
         MapGridComponent checkingGrid,
         Vector2i checkingTile,
-        Vector2 worldPos,
+        Vector2 gridLocal,
         int floor,
         out float distance,
         ref bool stickyGround)
@@ -1368,7 +1386,6 @@ public abstract partial class CMUSharedZLevelsSystem
         var bestSticky = false;
         var bestScore = float.MaxValue;
         var bestIsCurrentTile = false;
-        var gridLocal = _map.WorldToLocal(checkingGridUid, checkingGrid, worldPos) / checkingGrid.TileSize;
         var profiling = Prof.IsEnabled;
 
         for (var x = -1; x <= 1; x++)
@@ -1400,7 +1417,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (heightComp.HeightCurve.Count == 0)
                         continue;
 
-                    if (!TryGetHighGroundCurveT(uid, heightComp, local, isCurrentTile, out var t))
+                    if (!TryGetHighGroundCurveT(GetHighGroundGridDirection(uid), heightComp, local, isCurrentTile, out var t))
                         continue;
 
                     if (profiling)
@@ -1468,6 +1485,10 @@ public abstract partial class CMUSharedZLevelsSystem
         // Every swept sticky candidate rejects these velocities. Avoid searching intermediate
         // tiles when jumping upward or falling too quickly to stick to a ramp.
         if (target.Comp.Velocity > 0.01f || target.Comp.Velocity <= -4f)
+            return false;
+
+        // Rotation-only events cannot cross a ramp between two identical positions.
+        if (args.OldPosition == args.NewPosition)
             return false;
 
         var oldMapCoordinates = _transform.ToMapCoordinates(args.OldPosition, false);
@@ -1563,8 +1584,8 @@ public abstract partial class CMUSharedZLevelsSystem
         distance = 0f;
         snappedLocalPosition = 0f;
 
-        var checkingTile = _map.WorldToTile(checkingMap, checkingGrid, sampleWorldPosition);
         var sampleGridLocal = _map.WorldToLocal(checkingMap, checkingGrid, sampleWorldPosition) / checkingGrid.TileSize;
+        var checkingTile = new Vector2i((int) Math.Floor(sampleGridLocal.X), (int) Math.Floor(sampleGridLocal.Y));
 
         var found = false;
         var bestDistance = 0f;
@@ -1595,11 +1616,12 @@ public abstract partial class CMUSharedZLevelsSystem
                         continue;
                     }
 
-                    if (!TryGetHighGroundCurveT(uid, heightComp, sampleLocal, isCurrentTile, out var sampleT))
+                    var direction = GetHighGroundGridDirection(uid);
+                    if (!TryGetHighGroundCurveT(direction, heightComp, sampleLocal, isCurrentTile, out var sampleT))
                         continue;
 
-                    var oldT = GetHighGroundCurveT(uid, heightComp, oldGridLocal - tileOrigin);
-                    var newT = GetHighGroundCurveT(uid, heightComp, newGridLocal - tileOrigin);
+                    var oldT = GetHighGroundCurveT(direction, heightComp, oldGridLocal - tileOrigin);
+                    var newT = GetHighGroundCurveT(direction, heightComp, newGridLocal - tileOrigin);
                     if (!ShouldUseSweptStickyHighGround(heightComp, oldT, newT, target.Comp.Velocity))
                         continue;
 
@@ -1637,7 +1659,7 @@ public abstract partial class CMUSharedZLevelsSystem
     }
 
     private bool TryGetHighGroundCurveT(
-        EntityUid highGround,
+        Direction direction,
         CMUZLevelHighGroundComponent heightComp,
         Vector2 local,
         bool isCurrentTile,
@@ -1650,7 +1672,7 @@ public abstract partial class CMUSharedZLevelsSystem
             if (local.X < 0f || local.X > 1f || local.Y < 0f || local.Y > 1f)
                 return false;
 
-            t = GetHighGroundCurveT(highGround, heightComp, local);
+            t = GetHighGroundCurveT(direction, heightComp, local);
             return true;
         }
 
@@ -1664,7 +1686,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 return false;
             }
 
-            t = GetHighGroundCurveT(highGround, heightComp, local);
+            t = GetHighGroundCurveT(direction, heightComp, local);
             return true;
         }
 
@@ -1678,11 +1700,11 @@ public abstract partial class CMUSharedZLevelsSystem
                 return false;
             }
 
-            t = GetHighGroundCurveT(highGround, heightComp, local);
+            t = GetHighGroundCurveT(direction, heightComp, local);
             return IsNearHighGroundTopEdge(heightComp, t);
         }
 
-        if (!TryGetHighGroundRampAxes(highGround, local, out var ramp, out var side))
+        if (!TryGetHighGroundRampAxes(direction, local, out var ramp, out var side))
             return false;
 
         if (!IsNearHighGroundTopEdge(heightComp, ramp) ||
@@ -1696,12 +1718,11 @@ public abstract partial class CMUSharedZLevelsSystem
         return true;
     }
 
-    private float GetHighGroundCurveT(EntityUid highGround, CMUZLevelHighGroundComponent heightComp, Vector2 local)
+    private static float GetHighGroundCurveT(Direction direction, CMUZLevelHighGroundComponent heightComp, Vector2 local)
     {
         if (heightComp.Corner)
         {
-            var dir = GetHighGroundGridDirection(highGround);
-            return dir switch
+            return direction switch
             {
                 Direction.East => (local.X + 1f - local.Y) / 2f,
                 Direction.West => (1f - local.X + local.Y) / 2f,
@@ -1711,17 +1732,15 @@ public abstract partial class CMUSharedZLevelsSystem
             };
         }
 
-        if (TryGetHighGroundRampAxes(highGround, local, out var ramp, out _))
+        if (TryGetHighGroundRampAxes(direction, local, out var ramp, out _))
             return ramp;
 
         return 0.5f;
     }
 
-    private bool TryGetHighGroundRampAxes(EntityUid highGround, Vector2 local, out float ramp, out float side)
+    private static bool TryGetHighGroundRampAxes(Direction direction, Vector2 local, out float ramp, out float side)
     {
-        var dir = GetHighGroundGridDirection(highGround);
-
-        (ramp, side) = dir switch
+        (ramp, side) = direction switch
         {
             Direction.East => (local.X, local.Y),
             Direction.West => (1f - local.X, local.Y),
@@ -1730,7 +1749,7 @@ public abstract partial class CMUSharedZLevelsSystem
             _ => (0.5f, 0.5f),
         };
 
-        return dir is Direction.East or Direction.West or Direction.North or Direction.South;
+        return direction is Direction.East or Direction.West or Direction.North or Direction.South;
     }
 
     private Direction GetHighGroundGridDirection(EntityUid highGround)

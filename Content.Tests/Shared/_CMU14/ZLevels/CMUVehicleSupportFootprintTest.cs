@@ -56,6 +56,25 @@ public sealed class CMUVehicleSupportFootprintTest
         Assert.That(actual.Y, Is.EqualTo(expected.Y).Within(0.001f));
     }
 
+    [TestCase(0)]
+    [TestCase(0.731)]
+    public void ReusedLocalFootprintKeepsWorldRoundingAndDoesNotAccumulateTransforms(double rotation)
+    {
+        var local = new List<Vector2>();
+        var world = new List<Vector2>();
+        CMUVehicleSupportFootprint.GenerateLocalSamples(new Box2(-1.7f, -.8f, 2.1f, 1.3f), .4f, .07f, local);
+        var original = local.ToArray();
+        foreach (var origin in new[] { new Vector2(10000.3f, -500.7f), new Vector2(-2.5f, 4.1f) })
+        {
+            var angle = new Angle(rotation);
+            CMUVehicleSupportFootprint.GenerateWorldSamples(local, origin, angle, world);
+            for (var i = 0; i < local.Count; i++)
+                Assert.That(world[i], Is.EqualTo(origin + angle.RotateVec(original[i])),
+                    "World samples must retain the existing per-point rounding at tile boundaries.");
+        }
+        Assert.That(local, Is.EqualTo(original), "Repeated world transforms must not corrupt the local geometry.");
+    }
+
     // Independent reference retained from the pre-optimization implementation. In particular,
     // rounding at large coordinates and tiny footprints must keep its tolerance and ordering.
 

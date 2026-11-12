@@ -9,8 +9,8 @@
     useDelay: 2
   - type: Sprite
     layers:
-    - sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: hudmutineer
+    - sprite: CMU14/Interface/Actions/mutiny_actions.rsi # CMU14: cmss13 recruit icon
+      state: recruit
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
