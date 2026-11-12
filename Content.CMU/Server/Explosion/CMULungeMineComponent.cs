@@ -23,10 +23,7 @@ public sealed partial class CMULungeMineComponent : Component
     [DataField]
     public SoundSpecifier? TriggerSound = new SoundPathSpecifier("/Audio/Items/wirecutter.ogg");
 
-    /// <summary>Chance for each tank within <see cref="CookOffRange"/> of the detonation to start an ammunition cook-off.</summary>
+    /// <summary>Chance for a tank struck directly by the mine to start an ammunition cook-off.</summary>
     [DataField]
     public float CookOffChance = 0.1f;
-
-    [DataField]
-    public float CookOffRange = 1.5f;
 }
