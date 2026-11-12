@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Frame geometry taken from CMU14/Interface/au14govforjobicons.rsi (cmss13-pve marine_hud.dmi, reworked by hutcrime); mutiny glyphs and colours made for CMU.",
+  "size": {
+    "x": 16,
+    "y": 16
+  },
+  "states": [
+    {
+      "name": "mutineer"
+    },
+    {
+      "name": "mutineer_leader"
+    },
+    {
+      "name": "loyalist"
+    },
+    {
+      "name": "noncombatant"
+    }
+  ]
+}
