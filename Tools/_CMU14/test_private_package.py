@@ -5,11 +5,13 @@ import json
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from request_private_package import PackageError, receive_package
+from request_private_package import PackageError, receive_package, request_package
 
 
 class PrivatePackageTests(unittest.TestCase):
@@ -54,6 +56,25 @@ class PrivatePackageTests(unittest.TestCase):
                 with self.assertRaisesRegex(PackageError, "does not match"):
                     receive_package(self.artifact(receipt=receipt), output, self.expected)
                 self.assertFalse((output / self.name).exists())
+
+    def test_client_receipt_cannot_be_substituted_for_server_package(self):
+        self.name = "SS14.Client.zip"
+        self.expected["platform"] = "client"
+        self.receipt = {**self.receipt, **self.expected, "package": self.name}
+        artifact = self.artifact()
+        server_request = {**self.expected, "platform": "linux-x64"}
+        with self.assertRaisesRegex(PackageError, "Unexpected private artifact"):
+            receive_package(artifact, self.root / "rejected", server_request)
+        result = receive_package(artifact, self.root / "accepted", self.expected)
+        self.assertEqual(result.name, "SS14.Client.zip")
+        self.assertEqual(result.read_bytes(), self.package)
+
+    def test_mid_publish_revision_change_stops_before_dispatch(self):
+        with patch.dict("os.environ", {"CMU_PRIVATE_BUILD_TOKEN": "test-token", "CMU_PRIVATE_BUILD_SHA": "b" * 40}, clear=True), \
+                patch("request_private_package.api", return_value={"object": {"sha": "c" * 40}}) as api:
+            with self.assertRaisesRegex(PackageError, "changed since publish preparation"):
+                request_package(SimpleNamespace(source_sha="a" * 40, patch=None))
+            api.assert_called_once_with("/git/ref/heads/main", "test-token")
 
     def test_rejects_tampered_bytes_without_leaving_a_publishable_file(self):
         damaged = bytearray(self.package)

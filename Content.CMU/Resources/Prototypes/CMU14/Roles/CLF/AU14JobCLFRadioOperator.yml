@@ -13,6 +13,8 @@
     - CLF
   - type: CLFMember
   - type: ANPRCRadioUser
+  # the cell has one leader, so the operator can recrypto too or a dead leader strands the key
+  - type: ANPRCCryptoAuthority
   - type: Skills
     skills:
       RMCSkillEndurance: 1
