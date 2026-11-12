@@ -69,7 +69,6 @@
         whitelist:
           tags:
           - RMCM5Bayonet
-      # The harness tag lets a sling go on its own mount, leaving the rail for the miniscope.
       rmc-aslot-rail:
         whitelist:
           tags:
