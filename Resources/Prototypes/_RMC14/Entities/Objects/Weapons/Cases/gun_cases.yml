@@ -743,7 +743,7 @@
   parent: RMCBaseEquipmentCase
   id: CMUType23ShotgunCase
   name: type 23 shotgunner equipment case
-  description: A gun case containing an Type 23 tactical shotgun, a box of high-dispersive shock grenades, and a box of buckshot shells, and a Custom Altyn
+  description: A gun case containing an Type 23 tactical shotgun, a box of high-dispersive shock grenades, a box of buckshot shells, and a Custom Altyn.  #CMU14
   components:
   - type: Item
     size: Ginormous # CMU14
