@@ -2,6 +2,8 @@
   id: AuPlanetChances
   name: Chances Claim
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Chances Claim"
     mapId: auchances
@@ -16,7 +18,6 @@
     - RMC
     - CMBCIU
     - HAZOPS
-    - ProdigySF
     platoonsOpfor:
     - LACN
     - UPP

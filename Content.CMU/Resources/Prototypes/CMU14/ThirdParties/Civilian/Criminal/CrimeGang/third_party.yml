@@ -9,6 +9,7 @@
 
 - type: thirdParty
   id: ForeignCrimeGang
+  speaksColonyLanguage: true
   partyspawn: ForeignCrimeGangSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 20

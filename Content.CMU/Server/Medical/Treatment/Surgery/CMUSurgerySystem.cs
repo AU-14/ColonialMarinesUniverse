@@ -90,19 +90,6 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         if (!HasComp<CMUHumanMedicalComponent>(body))
             return false;
 
-        if (HasComp<SynthComponent>(body) && type == BodyPartType.Leg)
-        {
-            foreach (var (torso, _) in Body.GetBodyChildrenOfType(body, BodyPartType.Torso))
-            {
-                if (TryComp<BodyPartHealthComponent>(torso, out var torsoHealth) &&
-                    torsoHealth.Current <= FixedPoint2.Zero)
-                {
-                    _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-torso-damaged"), body, user, PopupType.SmallCaution);
-                    return false;
-                }
-            }
-        }
-
         var configuredFraction = startingHpFraction ?? _cfg.GetCVar(CMUMedicalCCVars.SurgeryLimbReattachStartingHpFraction);
         if (!float.IsFinite(configuredFraction))
             return false;
