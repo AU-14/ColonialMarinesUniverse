@@ -51,19 +51,21 @@ public sealed partial class CMUZLevelsSystem
     public override void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
         => WakeZPhysics(ent, null);
 
-    private void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent, ZGroundContact? unchangedGround)
+    private void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent, ZGroundContact? unchangedGround,
+        bool activationChecked = false)
     {
         if (!Prof.IsEnabled)
         {
-            WakeZPhysicsCore(ent, unchangedGround);
+            WakeZPhysicsCore(ent, unchangedGround, activationChecked);
             return;
         }
 
         using var profile = Prof.Group("CMU Z Wake");
-        WakeZPhysicsCore(ent, unchangedGround);
+        WakeZPhysicsCore(ent, unchangedGround, activationChecked);
     }
 
-    private void WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent, ZGroundContact? unchangedGround)
+    private void WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent, ZGroundContact? unchangedGround,
+        bool activationChecked)
     {
         if (!_zLevelsEnabled ||
             !Resolve(ent, ref ent.Comp, false))
@@ -72,7 +74,8 @@ public sealed partial class CMUZLevelsSystem
         }
 
         var resolved = new Entity<CMUZPhysicsComponent>(ent.Owner, ent.Comp);
-        if (!CanUseZPhysics(resolved))
+        // Activation has no callbacks between its eligibility check and this call.
+        if (!activationChecked && !CanUseZPhysics(resolved))
         {
             RemCompDeferred<CMUZFallingComponent>(ent.Owner);
             return;
