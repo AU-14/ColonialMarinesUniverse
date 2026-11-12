@@ -359,6 +359,7 @@
   - type: YautjaCasterImmobilizerProjectile
   - type: ProjectileMaxRange
     max: 20
+  - type: YautjaMaxRangeEffect # cmss13 aoe_stun/do_at_max_range
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterLethalBolt
@@ -443,6 +444,8 @@
   - type: ProjectileMaxRange
     max: 20
   - type: YautjaCasterEradicatorProjectile
+  - type: YautjaMaxRangeEffect # cmss13 aoe_lethal/do_at_max_range
+    trigger: true
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger

@@ -68,6 +68,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, TriggerEvent>(OnCasterEradicatorTriggered);
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileFixedDistanceStopEvent>(OnCasterEradicatorStop);
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileHitEvent>(OnCasterEradicatorHit);
+        SubscribeLocalEvent<YautjaCasterImmobilizerProjectileComponent, YautjaProjectileReachedMaxRangeEvent>(OnCasterImmobilizerMaxRange);
         SubscribeLocalEvent<YautjaIncendiaryPlasmaProjectileComponent, ProjectileHitEvent>(OnIncendiaryPlasmaHit);
         SubscribeLocalEvent<YautjaPlasmaRifleBoltComponent, ProjectileHitEvent>(OnPlasmaRifleBoltHit);
         SubscribeLocalEvent<YautjaGibHumansOnHitComponent, ProjectileHitEvent>(OnGibHumansHit);
@@ -108,6 +109,12 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     }
 
     private void OnCasterImmobilizerStop(Entity<YautjaCasterImmobilizerProjectileComponent> ent, ref ProjectileFixedDistanceStopEvent args)
+    {
+        DoCasterImmobilizerAreaStun(ent);
+    }
+
+    // cmss13 aoe_stun/do_at_max_range: the sphere still goes off when it runs out of range
+    private void OnCasterImmobilizerMaxRange(Entity<YautjaCasterImmobilizerProjectileComponent> ent, ref YautjaProjectileReachedMaxRangeEvent args)
     {
         DoCasterImmobilizerAreaStun(ent);
     }
