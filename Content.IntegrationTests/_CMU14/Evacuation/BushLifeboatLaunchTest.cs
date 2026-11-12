@@ -173,29 +173,43 @@ public sealed class BushLifeboatLaunchTest
                         Assert.That(passengerXform.MapUid, Is.Not.EqualTo(planetMap), "passengers shouldn't fall out onto the planet");
                 }
             });
-            foreach (var berth in vacatedBerths)
-            foreach (var prototype in new[] { "CMMobHuman", "CMXenoRunner" })
-            {
-                var entrant = entities.SpawnEntity(prototype, berth.Offset(new Vector2(-1, 0)));
-                // Isolate berth collision damage from the exposed dock's vacuum.
-                entities.RemoveComponent<BarotraumaComponent>(entrant);
-                entrants.Add(entrant);
-                entities.System<SharedPhysicsSystem>().SetLinearVelocity(entrant, new Vector2(2, 0));
-            }
         });
 
-        await pair.RunTicksSync(10);
+        // one entrant at a time: a human and a runner sharing a tile bumped into each other on slow CI runners
+        foreach (var prototype in new[] { "CMMobHuman", "CMXenoRunner" })
+        {
+            entrants.Clear();
+            await server.WaitPost(() =>
+            {
+                foreach (var berth in vacatedBerths)
+                {
+                    var entrant = entities.SpawnEntity(prototype, berth.Offset(new Vector2(-1, 0)));
+                    // Isolate berth collision damage from the exposed dock's vacuum.
+                    entities.RemoveComponent<BarotraumaComponent>(entrant);
+                    entrants.Add(entrant);
+                    entities.System<SharedPhysicsSystem>().SetLinearVelocity(entrant, new Vector2(2, 0));
+                }
+            });
+
+            await pair.RunTicksSync(10);
+            await server.WaitAssertion(() =>
+            {
+                foreach (var entrant in entrants)
+                {
+                    Assert.That(entities.IsQueuedForDeletion(entrant) || !entities.EntityExists(entrant), Is.False,
+                        $"Entering a vacated lifeboat berth must not gib or delete the {prototype} entrant.");
+                    var damageable = entities.GetComponent<DamageableComponent>(entrant);
+                    var damage = entities.System<DamageableSystem>().GetAllDamage((entrant, damageable));
+                    var types = string.Join(", ", damage.DamageDict.Where(d => d.Value > FixedPoint2.Zero).Select(d => $"{d.Key} {d.Value}"));
+                    Assert.That(damage.GetTotal(), Is.EqualTo(FixedPoint2.Zero),
+                        $"A vacated berth must not damage the {prototype} entrant (took {types}).");
+                    entities.DeleteEntity(entrant);
+                }
+            });
+        }
+
         await server.WaitAssertion(() =>
         {
-            foreach (var entrant in entrants)
-            {
-                Assert.That(entities.IsQueuedForDeletion(entrant) || !entities.EntityExists(entrant), Is.False,
-                    "Entering a vacated lifeboat berth must not gib or delete the entrant.");
-                var damageable = entities.GetComponent<DamageableComponent>(entrant);
-                Assert.That(entities.System<DamageableSystem>().GetAllDamage((entrant, damageable)).GetTotal(), Is.EqualTo(FixedPoint2.Zero),
-                    "A vacated berth must not damage entrants that survive the initial collision.");
-            }
-
             Assert.That(vacantBerth, Is.Not.Null, "the lifeboat must leave an exposed berth to exercise this regression");
             Assert.That(berthApproach, Is.Not.Null, "the visitor needs a nearby real ship floor to leave");
             berthControl = entities.SpawnEntity("CMMobHuman", berthApproach!.Value);
