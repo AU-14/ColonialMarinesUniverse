@@ -55,7 +55,7 @@
     recoilUnwielded: 4
     scatterWielded: 2
     scatterUnwielded: 20
-    baseFireRate: 0.7
+    baseFireRate: 0.35
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.5
   - type: Wieldable
@@ -154,7 +154,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 300
+        Heat: 265
         Blunt: 15
         Asphyxiation: 20
         Radiation: 10
@@ -173,7 +173,7 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 500
+        Heat: 450
         Blunt: 20
         Asphyxiation: 20
         Radiation: 20
@@ -186,7 +186,7 @@
   parent: ActionMarineToggleable
   id: CMUActionToggleGaussGun
   name: Toggle gauss gun power
-  description: Powers the M60 gauss gun on or off. It won't fire while off. [color=red]Charge a shot with the unique gun action keybind, Spacebar by default, then pull the trigger to release it.[/color]
+  description: Powers the XM6283-185E gauss gun on or off. It won't fire while off. [color=red]Charge a shot with the unique gun action keybind, Spacebar by default, then pull the trigger to release it.[/color]
   components:
   - type: Action
     useDelay: 1
@@ -201,8 +201,8 @@
 - type: entity
   parent: RMCGunCaseBase
   id: CMUCaseM60GaussGun
-  name: M60 experimental gauss gun case
-  description: A large case for storing an M60 experimental gauss gun, a prototype handheld particle accelerator.
+  name: XM6283-185E experimental gauss gun case
+  description: A large case for storing an XM6283-185E experimental gauss gun, a prototype handheld particle accelerator.
   components:
   - type: Storage
     maxItemSize: Ginormous
