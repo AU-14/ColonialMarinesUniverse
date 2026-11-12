@@ -24,7 +24,7 @@ public sealed class CargoTest : GameTest
     [
         // This is ignored because it is explicitly intended to be able to sell for more than it costs.
         new("FunCrateGambling"),
-        // CMU: the crate's random soap rolls a rare 500-credit syndicate soap about 1 in 250 times.
+        // CMU14: the crate's random soap rolls a rare 500-credit syndicate soap about 1 in 250 times.
         new("JanitorialSupplies"),
     ];
 
