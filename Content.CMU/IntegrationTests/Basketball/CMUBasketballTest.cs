@@ -79,12 +79,11 @@ public sealed class CMUBasketballTest : GameTest
         {
             var basketball = SEntMan.System<CMUBasketballSystem>();
             var deviceLink = SEntMan.System<SharedDeviceLinkSystem>();
-            var spoken = SEntMan.System<CMUBasketballSpeechProbeSystem>();
-
             var left = SEntMan.SpawnEntity("CMUBasketballHoopLeft", map.GridCoords);
             var right = SEntMan.SpawnEntity("CMUBasketballHoopRight", map.GridCoords);
             var board = SEntMan.SpawnEntity("CMUBasketballScoreboard", map.GridCoords);
             var ball = SEntMan.SpawnEntity("Basketball", map.GridCoords);
+            var spoken = SEntMan.EnsureComponent<CMUBasketballSpeechProbeComponent>(board);
             deviceLink.LinkDefaults(null, left, board);
             deviceLink.LinkDefaults(null, right, board);
 
@@ -102,8 +101,7 @@ public sealed class CMUBasketballTest : GameTest
 
             spoken.Messages.Clear();
             basketball.TryDunkItem((left, SEntMan.GetComponent<CMUBasketballHoopComponent>(left)), ball);
-            Assert.That(spoken.Messages, Has.Some.Matches<(EntityUid Source, string Message)>(m =>
-                m.Source == board && m.Message.Contains("Marines")),
+            Assert.That(spoken.Messages, Has.Some.Contains("Marines"),
                 "The scoreboard says which team scored, like a player speaking.");
 
             basketball.SetTeamName(boardEnt, CMUBasketballTeam.Left, "   ");
@@ -120,11 +118,10 @@ public sealed class CMUBasketballTest : GameTest
         {
             var basketball = SEntMan.System<CMUBasketballSystem>();
             var deviceLink = SEntMan.System<SharedDeviceLinkSystem>();
-            var spoken = SEntMan.System<CMUBasketballSpeechProbeSystem>();
-
             var left = SEntMan.SpawnEntity("CMUBasketballHoopLeft", map.GridCoords);
             var right = SEntMan.SpawnEntity("CMUBasketballHoopRight", map.GridCoords);
             var board = SEntMan.SpawnEntity("CMUBasketballScoreboard", map.GridCoords);
+            var spoken = SEntMan.EnsureComponent<CMUBasketballSpeechProbeComponent>(board);
             var reset = SEntMan.SpawnEntity("CMUBasketballReset", map.GridCoords);
             var ball = SEntMan.SpawnEntity("Basketball", map.GridCoords);
             var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
@@ -164,8 +161,7 @@ public sealed class CMUBasketballTest : GameTest
 
             Assert.That(comp.Winner, Is.EqualTo(CMUBasketballTeam.Left));
             Assert.That(comp.LeftScore, Is.EqualTo(12));
-            Assert.That(spoken.Messages, Has.Some.Matches<(EntityUid Source, string Message)>(m =>
-                m.Source == board && m.Message.Contains("wins, 12 to 2")));
+            Assert.That(spoken.Messages, Has.Some.Contains("wins, 12 to 2"));
 
             basketball.TryDunkItem(rightHoop, ball);
             Assert.That(comp.RightScore, Is.EqualTo(2), "A finished game ignores baskets.");
@@ -270,19 +266,27 @@ public sealed class CMUBasketballTest : GameTest
 }
 
 /// <summary>
-///     Records in-character speech so tests can check what the scoreboard said.
+///     Records what the entity it is added to says in character, so tests can check the scoreboard's speech.
 /// </summary>
-public sealed class CMUBasketballSpeechProbeSystem : EntitySystem
+[RegisterComponent]
+public sealed partial class CMUBasketballSpeechProbeComponent : Component
 {
-    public readonly List<(EntityUid Source, string Message)> Messages = new();
+    public readonly List<string> Messages = new();
+}
 
+/// <summary>
+///     Only listens on entities with <see cref="CMUBasketballSpeechProbeComponent"/>, since test systems are
+///     loaded into every integration test server.
+/// </summary>
+public sealed partial class CMUBasketballSpeechProbeSystem : EntitySystem
+{
     public override void Initialize()
     {
-        SubscribeLocalEvent<EntitySpokeEvent>(OnSpoke);
+        SubscribeLocalEvent<CMUBasketballSpeechProbeComponent, EntitySpokeEvent>(OnSpoke);
     }
 
-    private void OnSpoke(EntitySpokeEvent args)
+    private static void OnSpoke(EntityUid uid, CMUBasketballSpeechProbeComponent comp, EntitySpokeEvent args)
     {
-        Messages.Add((args.Source, args.Message));
+        comp.Messages.Add(args.Message);
     }
 }
