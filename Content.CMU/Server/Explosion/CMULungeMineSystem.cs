@@ -16,7 +16,6 @@ public sealed partial class CMULungeMineSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private RMCDazedSystem _dazed = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private TankCookOffSystem _tankCookOff = default!;
@@ -37,8 +36,6 @@ public sealed partial class CMULungeMineSystem : EntitySystem
         new(BodyPartType.Foot, BodyPartSymmetry.Right),
     };
 
-    private readonly HashSet<Entity<TankCookOffComponent>> _tanks = new();
-
     public override void Initialize()
     {
         SubscribeLocalEvent<CMULungeMineComponent, MeleeHitEvent>(OnMeleeHit);
@@ -56,6 +53,8 @@ public sealed partial class CMULungeMineSystem : EntitySystem
                 continue;
 
             _audio.PlayPvs(ent.Comp.TriggerSound, ent);
+            // Only a tank struck directly can cook off; a blast beside one (stabbing someone next to it) cannot.
+            RollTankCookOff(ent, target);
             // Detonate at the target rather than in the wielder's hand.
             _transform.SetCoordinates(ent, Transform(target).Coordinates);
             _trigger.Trigger(ent, args.User);
@@ -65,8 +64,6 @@ public sealed partial class CMULungeMineSystem : EntitySystem
 
     private void OnTrigger(Entity<CMULungeMineComponent> ent, ref TriggerEvent args)
     {
-        RollTankCookOff(ent);
-
         if (args.User is not { } user || TerminatingOrDeleted(user))
             return;
 
@@ -76,18 +73,13 @@ public sealed partial class CMULungeMineSystem : EntitySystem
             SeverRandomLimbs(user, _random.Next(1, ent.Comp.MaxSeveredLimbs + 1));
     }
 
-    private void RollTankCookOff(Entity<CMULungeMineComponent> ent)
+    private void RollTankCookOff(Entity<CMULungeMineComponent> ent, EntityUid target)
     {
-        if (ent.Comp.CookOffChance <= 0)
+        if (ent.Comp.CookOffChance <= 0 || !TryComp<TankCookOffComponent>(target, out var tank))
             return;
 
-        _tanks.Clear();
-        _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(ent), ent.Comp.CookOffRange, _tanks);
-        foreach (var tank in _tanks)
-        {
             if (_random.Prob(Math.Clamp(ent.Comp.CookOffChance, 0, 1)))
-                _tankCookOff.TryStartCookOff(tank);
-        }
+            _tankCookOff.TryStartCookOff((target, tank));
     }
 
     private void SeverRandomLimbs(EntityUid body, int count)
