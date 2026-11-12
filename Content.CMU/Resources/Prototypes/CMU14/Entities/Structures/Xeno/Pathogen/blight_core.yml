@@ -46,9 +46,14 @@
       state: hive_weed0
     - state: pathogen_core
     drawdepth: FloorObjects
+  - type: Clickable
+  - type: InteractionOutline
+  - type: RequireProjectileTarget
+  - type: Appearance
   - type: Damageable
+    damageModifierSet: Resin
   - type: Injurable
-    damageContainer: Inorganic
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:

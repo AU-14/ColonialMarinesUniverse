@@ -3,6 +3,8 @@ using Content.Shared.Popups;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Standing;
 using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared.Projectiles;
@@ -26,6 +28,8 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
 
     public override void Initialize()
     {
@@ -339,6 +343,18 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     private static bool IsLethalMode(YautjaCasterComponent component)
     {
         return component.CurrentMode >= 2;
+    }
+
+    /// <summary>Weapons that project the red tri-dot targeting laser: the plasma caster and the dual plasma cannons.</summary>
+    public bool IsSightWeapon(EntityUid item)
+    {
+        return HasComp<YautjaCasterComponent>(item) || HasComp<YautjaCannonPackLinkedCannonComponent>(item);
+    }
+
+    /// <summary>The targeting laser shows only while the holder is up and able to fire, never crit, dead or downed.</summary>
+    public bool CanAimSight(EntityUid user, EntityUid item)
+    {
+        return IsSightWeapon(item) && !_mobState.IsIncapacitated(user) && !_standing.IsDown(user);
     }
 
     private bool CanUseCasterTech(EntityUid user)

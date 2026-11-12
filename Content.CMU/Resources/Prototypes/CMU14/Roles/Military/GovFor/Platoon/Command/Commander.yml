@@ -28,6 +28,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: CMUMutinyLoyalist # command and MPs side with command in a mutiny
   - type: AU14CallsignRole
     suffix: "6"
     commandElement: true
