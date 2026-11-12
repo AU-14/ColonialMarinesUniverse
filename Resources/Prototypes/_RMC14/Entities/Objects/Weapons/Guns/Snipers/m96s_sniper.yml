@@ -57,7 +57,7 @@
   - type: Corrodible
     isCorrodible: false
   - type: GunIFF
-    enabled: false # true
+    enabled: true #CMU14, though it's default state was initially true
   - type: RMCNameItemOnVend
     item: PrimaryGun
   - type: AttachableHolder
