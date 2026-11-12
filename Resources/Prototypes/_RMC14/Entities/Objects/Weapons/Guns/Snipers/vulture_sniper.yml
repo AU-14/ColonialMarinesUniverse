@@ -254,7 +254,7 @@
     deleteOnCollide: false
     damage:
       types:
-        Piercing: 550
+        Piercing: 400 # CMU14: back to the original port value, was 550
         Blunt: 25
         Structural: 1800
     soundHit:
@@ -265,7 +265,7 @@
       falloff: 9999
       ignoreModifiers: true
   - type: CMArmorPiercing
-    amount: 70
+    amount: 50 # CMU14: back to the original port value, was 70
   - type: RMCPenetratingProjectile
     range: 40
     rangeLossPerHit: 3
