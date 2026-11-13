@@ -1,0 +1,29 @@
+- type: alert
+  id: CMUXenoRegenPool
+  icons:
+  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_health.rsi
+    state: health_full
+  alertViewEntity: CMUXenoRegenPoolAlertView
+  name: cmu-xeno-regen-alert-name
+  description: cmu-xeno-regen-alert-desc
+
+- type: entity
+  id: CMUXenoRegenPoolAlertView
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GenericCounterAlert
+    centerGlyph: false
+    hideLeadingZeroes: true
+  - type: Sprite
+    sprite: /Textures/Interface/Alerts/essence_counter.rsi
+    layers:
+    - map: [ "enum.AlertVisualLayers.Base" ]
+    - map: [ "1" ]
+      offset: 0.25, 0
+    - map: [ "10" ]
+      offset: 0.125, 0
+    - map: [ "100" ]
+    - map: [ "1000" ]
+      offset: -0.125, 0
+    - map: [ "10000" ]
+      offset: -0.25, 0

@@ -629,17 +629,16 @@ public sealed partial class XenoSystem : EntitySystem
             xeno.NextRegenTime = time + xeno.RegenCooldown;
             DirtyField(uid, xeno, nameof(XenoRegenComponent.NextRegenTime));
 
+            // CMU14: contacts can be stale when weeds are placed under a stationary xeno.
+            if (Transform(uid).Anchored)
+                _weeds.UpdateQueued(uid);
+            var affectable = _affectableQuery.CompOrNull(uid);
+            var onWeeds = (affectable != null && affectable.OnXenoWeeds && affectable.OnFriendlyWeeds) ||
+                          _weeds.IsOnFriendlyWeeds(uid);
+            // CMU14 end
             if (!xeno.HealOffWeeds)
             {
-                // Engine bug where entities that do not move do not process new contacts for anything newly
-                // spawned under them
-                if (Transform(uid).Anchored)
-                    _weeds.UpdateQueued(uid);
-
-                var affectable = _affectableQuery.CompOrNull(uid);
-                var onWeeds = affectable != null && affectable.OnXenoWeeds && affectable.OnFriendlyWeeds;
-
-                if (affectable == null || !onWeeds)
+                if (!onWeeds) // CMU14
                 {
                     if (_xenoPlasmaQuery.TryComp(uid, out var plasmaComp))
                     {
@@ -654,10 +653,9 @@ public sealed partial class XenoSystem : EntitySystem
             var heal = GetWeedsHealAmount((uid, xeno));
             // CMU14: limit passive health regeneration without affecting plasma regeneration.
             var canRegenPlasma = heal > FixedPoint2.Zero;
-            var regenAttempt = new CMUXenoPassiveRegenAttemptEvent();
+            var regenAttempt = new CMUXenoPassiveRegenAttemptEvent(onWeeds);
             RaiseLocalEvent(uid, ref regenAttempt);
-            if (regenAttempt.Cancelled)
-                heal = FixedPoint2.Zero;
+            heal *= regenAttempt.Multiplier;
             // CMU14 end
             if (heal > FixedPoint2.Zero)
             {

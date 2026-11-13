@@ -10,9 +10,14 @@ using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Xenomorphs.Regen;
 using Content.Shared.Actions;
+using Content.Shared.Alert;
+using Content.Shared.Alert.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Examine;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.CMU14.Xenomorphs;
 
@@ -201,6 +206,72 @@ public sealed class CMUXenoRegenPoolTest : GameTest
         });
         await Pair.RunSeconds(0.2f);
         await Server.WaitAssertion(() => Assert.That(SEntMan.GetComponent<CMUXenoRegenPoolComponent>(_xeno).Charges, Is.Zero));
+    }
+
+    [TestCase("CMXenoDrone", "XenoWeeds")]
+    [TestCase("CMU14XenoNeomorph", "CMU14XenoMyceliumWeeds")]
+    public async Task DepletedRegenOnFriendlyWeedsIsSeventyFivePercent(string prototype, string weedsPrototype)
+    {
+        await Prepare(prototype);
+        EntityUid full = default;
+        await Server.WaitAssertion(() =>
+        {
+            var coordinates = SEntMan.GetComponent<TransformComponent>(_xeno).Coordinates;
+            full = SEntMan.SpawnEntity(prototype, coordinates);
+            var weeds = SEntMan.SpawnEntity(weedsPrototype, coordinates);
+            var hive = Server.System<SharedXenoHiveSystem>();
+            hive.SetHive(full, _hive);
+            hive.SetHive(weeds, _hive);
+            var damage = new DamageSpecifier { DamageDict = { ["Blunt"] = 100 } };
+            Server.System<DamageableSystem>().TryChangeDamage(_xeno, damage, true);
+            Server.System<DamageableSystem>().TryChangeDamage(full, damage, true);
+            SEntMan.GetComponent<CMUXenoRegenPoolComponent>(_xeno).Charges = 0;
+        });
+
+        await Pair.RunSeconds(3.2f);
+        await Server.WaitAssertion(() =>
+        {
+            var damage = Server.System<DamageableSystem>();
+            var fullHealing = 100f - damage.GetTotalDamage(full).Float();
+            var depletedHealing = 100f - damage.GetTotalDamage(_xeno).Float();
+            Assert.That(fullHealing, Is.GreaterThan(0), "friendly weeds must heal an unspent xeno");
+            Assert.That(depletedHealing, Is.EqualTo(fullHealing * 0.75f).Within(0.08f),
+                "depleted health regeneration on weeds must be reduced by 25%");
+        });
+    }
+
+    [Test]
+    public async Task ChargeAlertAndExamineAreAvailableOnlyWhenEnabled()
+    {
+        await Prepare();
+        await Server.WaitAssertion(() =>
+        {
+            var coordinates = SEntMan.GetComponent<TransformComponent>(_xeno).Coordinates;
+            var neo = SEntMan.SpawnEntity("CMU14XenoNeomorph", coordinates);
+            var human = SEntMan.SpawnEntity("CMMobHuman", coordinates);
+            var alerts = Server.System<AlertsSystem>();
+            var pool = SEntMan.GetComponent<CMUXenoRegenPoolComponent>(_xeno);
+            Assert.That(alerts.IsShowingAlert(_xeno, pool.Alert), Is.True);
+
+            var prototype = Server.ResolveDependency<IPrototypeManager>().Index(pool.Alert);
+            var counter = new GetGenericAlertCounterAmountEvent(prototype, _xeno);
+            SEntMan.EventBus.RaiseLocalEvent(_xeno, ref counter);
+            Assert.That(counter.Amount, Is.EqualTo(3));
+
+            var examine = new ExaminedEvent(new FormattedMessage(), _xeno, neo, true, false);
+            SEntMan.EventBus.RaiseLocalEvent(_xeno, examine);
+            Assert.That(examine.GetTotalMessage().ToString(), Does.Contain("3 / 3"));
+
+            var humanExamine = new ExaminedEvent(new FormattedMessage(), _xeno, human, true, false);
+            SEntMan.EventBus.RaiseLocalEvent(_xeno, humanExamine);
+            Assert.That(humanExamine.GetTotalMessage().ToString(), Does.Not.Contain("Regeneration charges"));
+
+            Server.CfgMan.SetCVar(CCVars.CMUXenoRegenPoolEnabled, false);
+            Assert.That(alerts.IsShowingAlert(_xeno, pool.Alert), Is.False);
+            var disabledExamine = new ExaminedEvent(new FormattedMessage(), _xeno, neo, true, false);
+            SEntMan.EventBus.RaiseLocalEvent(_xeno, disabledExamine);
+            Assert.That(disabledExamine.GetTotalMessage().ToString(), Does.Not.Contain("Regeneration charges"));
+        });
     }
 }
 #pragma warning restore RA0002

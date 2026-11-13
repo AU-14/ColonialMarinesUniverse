@@ -1,4 +1,6 @@
 using Robust.Shared.GameStates;
+using Content.Shared.Alert;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.CMU14.Xenomorphs.Regen;
@@ -22,6 +24,12 @@ public sealed partial class CMUXenoRegenPoolComponent : Component
     public float RechargeRange = 6f;
 
     [DataField, AutoNetworkedField]
+    public float DepletedWeedsHealingMultiplier = 0.75f;
+
+    [DataField]
+    public ProtoId<AlertPrototype> Alert = "CMUXenoRegenPool";
+
+    [DataField, AutoNetworkedField]
     public int Charges;
 
     [DataField, AutoNetworkedField]
@@ -35,7 +43,7 @@ public sealed partial class CMUXenoRegenPoolComponent : Component
 }
 
 [ByRefEvent]
-public record struct CMUXenoPassiveRegenAttemptEvent(bool Cancelled = false);
+public record struct CMUXenoPassiveRegenAttemptEvent(bool OnFriendlyWeeds, float Multiplier = 1f);
 
 [ByRefEvent]
 public record struct CMUXenoHealerHealEvent;

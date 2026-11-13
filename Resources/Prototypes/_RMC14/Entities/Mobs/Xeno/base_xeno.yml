@@ -49,6 +49,7 @@
     gracePeriod: 5
     rechargeTime: 10
     rechargeRange: 6
+    depletedWeedsHealingMultiplier: 0.75 # CMU14
   - type: DamageOverlay # CMU14: red damage vignette, xenos have no MobDamageable parent to inherit it from
   # CMU14: xenos take ambient heat damage from phoron/plasma fires; cold-immune like
   # the wizden xeno NPC. NOTE: Disabled until we're ready.

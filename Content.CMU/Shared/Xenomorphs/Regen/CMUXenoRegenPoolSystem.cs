@@ -1,13 +1,19 @@
 using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Construction;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.RecoveryNode;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared._RMC14.Xenonids.Rest;
 using Content.Shared.CCVar;
+using Content.Shared.Alert;
+using Content.Shared.Alert.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Examine;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
+using Content.Shared.Rejuvenate;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
@@ -17,12 +23,14 @@ namespace Content.Shared.CMU14.Xenomorphs.Regen;
 public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -38,6 +46,10 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
         SubscribeLocalEvent<CMUXenoRegenPoolComponent, CMUXenoHealerHealEvent>(OnHealerHeal);
         SubscribeLocalEvent<CMUXenoRegenPoolComponent, NewXenoEvolvedEvent>(OnEvolved);
         SubscribeLocalEvent<CMUXenoRegenPoolComponent, XenoDevolvedEvent>(OnDevolved);
+        SubscribeLocalEvent<CMUXenoRegenPoolComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<CMUXenoRegenPoolComponent, GetGenericAlertCounterAmountEvent>(OnAlertCounter);
+        SubscribeLocalEvent<CMUXenoRegenPoolComponent, ComponentRemove>(OnRemove);
+        SubscribeLocalEvent<CMUXenoRegenPoolComponent, RejuvenateEvent>(OnRejuvenate);
         Subs.CVar(_config, CCVars.CMUXenoRegenPoolEnabled, OnEnabledChanged, true);
     }
 
@@ -68,6 +80,7 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
         ent.Comp.RechargeAt = null;
         ent.Comp.BelowThreshold = IsBelowThreshold(ent);
         Dirty(ent);
+        UpdateAlert(ent);
     }
 
     private bool IsBelowThreshold(Entity<CMUXenoRegenPoolComponent> ent)
@@ -88,8 +101,12 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
 
         if (below && _timing.CurTime >= ent.Comp.NextDropAt)
         {
+            var oldCharges = ent.Comp.Charges;
             ent.Comp.Charges = Math.Max(0, ent.Comp.Charges - 1);
             ent.Comp.NextDropAt = _timing.CurTime + ent.Comp.GracePeriod;
+            if (oldCharges > 0 && ent.Comp.Charges == 0)
+                _popup.PopupEntity(Loc.GetString("cmu-xeno-regen-depleted"), ent, ent, PopupType.LargeCaution);
+            UpdateAlert(ent);
         }
 
         ent.Comp.BelowThreshold = below;
@@ -99,7 +116,7 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
     private void OnPassiveRegen(Entity<CMUXenoRegenPoolComponent> ent, ref CMUXenoPassiveRegenAttemptEvent args)
     {
         if (_enabled && ent.Comp.Charges <= 0)
-            args.Cancelled = true;
+            args.Multiplier *= args.OnFriendlyWeeds ? ent.Comp.DepletedWeedsHealingMultiplier : 0f;
     }
 
     private void OnHealerHeal(Entity<CMUXenoRegenPoolComponent> ent, ref CMUXenoHealerHealEvent args)
@@ -110,6 +127,7 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
         ent.Comp.Charges = Math.Max(0, ent.Comp.MaxCharges);
         ent.Comp.RechargeAt = null;
         Dirty(ent);
+        UpdateAlert(ent);
     }
 
     private void OnEvolved(Entity<CMUXenoRegenPoolComponent> ent, ref NewXenoEvolvedEvent args)
@@ -129,6 +147,7 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
         ent.Comp.BelowThreshold = IsBelowThreshold(ent);
         ent.Comp.RechargeAt = null;
         Dirty(ent);
+        UpdateAlert(ent);
     }
 
     public override void Update(float frameTime)
@@ -160,6 +179,7 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
                 pool.Charges++;
                 pool.RechargeAt = pool.Charges < pool.MaxCharges ? _timing.CurTime + pool.RechargeTime : null;
                 Dirty(uid, pool);
+                UpdateAlert((uid, pool));
             }
         }
     }
@@ -184,5 +204,46 @@ public sealed partial class CMUXenoRegenPoolSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private void OnRejuvenate(Entity<CMUXenoRegenPoolComponent> ent, ref RejuvenateEvent args)
+    {
+        if (_net.IsServer)
+            Reset(ent);
+    }
+
+    private void OnRemove(Entity<CMUXenoRegenPoolComponent> ent, ref ComponentRemove args)
+    {
+        if (_net.IsServer)
+            _alerts.ClearAlert(ent.Owner, ent.Comp.Alert);
+    }
+
+    private void UpdateAlert(Entity<CMUXenoRegenPoolComponent> ent)
+    {
+        if (!_enabled)
+        {
+            _alerts.ClearAlert(ent.Owner, ent.Comp.Alert);
+            return;
+        }
+
+        _alerts.ShowAlert(ent.Owner, ent.Comp.Alert,
+            dynamicMessage: Loc.GetString("cmu-xeno-regen-alert-count", ("charges", ent.Comp.Charges), ("max", ent.Comp.MaxCharges)));
+    }
+
+    private void OnAlertCounter(Entity<CMUXenoRegenPoolComponent> ent, ref GetGenericAlertCounterAmountEvent args)
+    {
+        if (!args.Handled && args.Alert.ID == ent.Comp.Alert.Id)
+            args.Amount = ent.Comp.Charges;
+    }
+
+    private void OnExamined(Entity<CMUXenoRegenPoolComponent> ent, ref ExaminedEvent args)
+    {
+        if (!_enabled || !HasComp<XenoComponent>(args.Examiner))
+            return;
+
+        using (args.PushGroup(nameof(CMUXenoRegenPoolComponent)))
+        {
+            args.PushText(Loc.GetString("cmu-xeno-regen-examine", ("charges", ent.Comp.Charges), ("max", ent.Comp.MaxCharges)));
+        }
     }
 }
