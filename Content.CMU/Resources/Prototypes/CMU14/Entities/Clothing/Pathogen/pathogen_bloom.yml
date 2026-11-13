@@ -11,5 +11,25 @@
     sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
   - type: NightVisionItem
     slotFlags: HEAD
-    defaultState: Full  
+    defaultState: Full
     ignoreUserOnlyHalf: true
+    actionId: CMU14ActionToggleWalkerVision
+    - type: Unremoveable
+    deleteOnDrop: true
+
+  - type: entity
+    parent: ActionMarineBase
+    id: CMU14ActionToggleWalkerVision
+    name: Toggle Night Vision
+    description: Toggle Pathogen night vision.
+    components:
+    - type: Action
+      icon:
+        sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
+        state: icon
+      iconOn:
+        sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
+        state: icon
+      useDelay: 0.25  
+    - type: InstantAction  
+      event: !type:ToggleActionEvent
