@@ -1,4 +1,6 @@
+using System.Numerics;
 using Robust.Shared.GameStates;
+using Robust.Shared.Maths;
 
 namespace Content.Shared.CMU14.ZLevels.Vehicles;
 
@@ -8,6 +10,12 @@ namespace Content.Shared.CMU14.ZLevels.Vehicles;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUVehicleZTraversalComponent : Component
 {
+    // Derived local geometry; excluded from component state and invalidated by all sampling inputs.
+    internal Box2? CachedSupportBounds;
+    internal float CachedSupportSpacing;
+    internal float CachedSupportInset;
+    internal readonly List<Vector2> CachedSupportSamples = new();
+
     /// <summary>
     /// Allows walking vehicles such as powerloaders to use stairs that exclude wheeled or tracked vehicles.
     /// </summary>

@@ -30,7 +30,7 @@ public sealed partial class YautjaPredatorRoundSystem
         return new YautjaProfileCapabilities(
             YautjaRank.Ancient,
             true,
-            entitlement.CanUseLegacy);
+            entitlement.CanUseAncientSets);
     }
 
     private void OnIsRoleAllowed(ref IsRoleAllowedEvent ev)

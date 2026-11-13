@@ -35,7 +35,6 @@
     - CMUHardOfHearing
     - CMUClaustrophobic
     - CMUFearOfBlood
-    - NoEnglish
   ranks:
     AU14RankFlightCaptain:
     - !type:RoleTimeRequirement

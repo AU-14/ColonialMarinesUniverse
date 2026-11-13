@@ -34,8 +34,6 @@
   output: RUMCSandItem
   outputCount: 4
   time: 3
-  skills:
-    RMCSkillConstruction: 1
   tools:
   - Hammering
   consumables:

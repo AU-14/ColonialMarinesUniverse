@@ -2,6 +2,8 @@
   id: CMUPlanetLament
   name: LV-376 "Ulixes"
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Barker's Lament"
     mapId: CMULV376BarkersLament
@@ -19,9 +21,8 @@
     platoonsOpfor:
     - UPP
     - HAZOPS
-    - ProdigySF
     defaultgovfor: WEYU
-    defaultopfor: ProdigySF
+    defaultopfor: UPP
     govforinship: false
     opforinship: true
     daycycleenabled: true
