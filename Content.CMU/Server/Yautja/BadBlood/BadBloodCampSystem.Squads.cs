@@ -130,8 +130,20 @@ public sealed partial class BadBloodCampSystem
 
         var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats();
         var byCap = _rule.GetLivingBadBloodCap() - bodies;
-        var byBudget = _rule.GetThreatBudget() - bodies - _kennelHounds.CountHounds();
-        return Math.Max(0, Math.Min(byCap, byBudget));
+        return Math.Max(0, Math.Min(byCap, GetSquadBudgetRoom()));
+    }
+
+    /// <summary>
+    /// How many more seats the threat budget alone allows: Bad Bloods, open seats and hounds against
+    /// round(pop x 0.25). The living cap is not counted.
+    /// </summary>
+    public int GetSquadBudgetRoom()
+    {
+        if (!_rule.TryGetRule(out _))
+            return 0;
+
+        var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats();
+        return Math.Max(0, _rule.GetThreatBudget() - bodies - _kennelHounds.CountHounds());
     }
 
     /// <summary>
@@ -144,18 +156,29 @@ public sealed partial class BadBloodCampSystem
             return false;
 
         string? reason = null;
+        var room = GetSquadSeatRoom();
         if (!CanCallSquad(buyer))
             reason = "cmu-bad-blood-squad-leader-only";
         else if (!TryGetLodge(out _))
             reason = "cmu-bad-blood-squad-no-lodge";
-        else if (GetSquadSeatRoom() < seats)
+        else if (room < seats)
             reason = "cmu-bad-blood-squad-cap";
         else if (!_rule.TrySpendSp(cost))
             reason = "cmu-bad-blood-squad-cannot-afford";
 
         if (reason != null)
         {
-            _popup.PopupEntity(Loc.GetString(reason, ("cost", cost.ToString())), buyer, buyer, PopupType.SmallCaution);
+            var living = _rule.CountLivingBadBloods();
+            var pending = GetPendingSquadSeats();
+            _popup.PopupEntity(Loc.GetString(reason,
+                    ("cost", cost.ToString()),
+                    ("seats", seats),
+                    ("living", living),
+                    ("pending", pending),
+                    ("limit", living + pending + room)),
+                buyer,
+                buyer,
+                PopupType.SmallCaution);
             return false;
         }
 

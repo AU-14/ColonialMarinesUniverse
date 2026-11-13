@@ -655,8 +655,8 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     }
 
     /// <summary>
-    /// The most living Bad Bloods the clan may have: the landing party + 2 or the seats the vote held, whichever is
-    /// higher. Once the ship has arrived it is the threat budget. Callers still check
+    /// The most living Bad Bloods the clan may have: the landing party + the founding squad + 2, or the seats the
+    /// vote held, whichever is higher. Once the ship has arrived it is the threat budget. Callers still check
     /// <see cref="GetThreatBudget"/> for Bad Bloods and hounds together.
     /// </summary>
     public int GetLivingBadBloodCap()
@@ -667,7 +667,8 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
         if (rule.Comp.ShipState == BadBloodShipState.Arrived)
             return GetThreatBudget();
 
-        return Math.Max(rule.Comp.LandingParty + rule.Comp.LivingCapBonus, rule.Comp.HeldVoteSeats);
+        return Math.Max(rule.Comp.LandingParty + rule.Comp.FoundingSeats + rule.Comp.LivingCapBonus,
+            rule.Comp.HeldVoteSeats);
     }
 
     /// <summary>

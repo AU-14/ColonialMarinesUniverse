@@ -235,7 +235,8 @@ public sealed partial class BadBloodCampRuleSystem
 
     /// <summary>
     /// Seats of the founding squad as it would open now: one per reserve member, at most
-    /// 1 + half the landing party, and never more than the population caps leave room for.
+    /// 1 + half the landing party, and never more than the threat budget leaves room for. The living cap does not
+    /// bound it: the founding squad raises that cap by its own seats (see <see cref="GetLivingBadBloodCap"/>).
     /// </summary>
     public int GetFoundingSquadSeats()
     {
@@ -244,7 +245,7 @@ public sealed partial class BadBloodCampRuleSystem
 
         PruneReserve(rule);
         var seats = Math.Min(rule.Comp.ReserveQueue.Count, 1 + rule.Comp.LandingParty / 2);
-        return Math.Max(0, Math.Min(seats, EntityManager.System<BadBloodCampSystem>().GetSquadSeatRoom()));
+        return Math.Max(0, Math.Min(seats, EntityManager.System<BadBloodCampSystem>().GetSquadBudgetRoom()));
     }
 
     /// <summary>
@@ -264,9 +265,14 @@ public sealed partial class BadBloodCampRuleSystem
         if (seats <= 0)
             return false;
 
+        // the founding seats lift the living cap first, so they never eat the +2 a bought squad needs
+        rule.Comp.FoundingSeats = seats;
         var camp = EntityManager.System<BadBloodCampSystem>();
         if (!camp.TryOpenSquad(seats, out call, reserveOnly: true) || call == null)
+        {
+            rule.Comp.FoundingSeats = 0;
             return false;
+        }
 
         // queue order, no raffle. a seat nobody could be given stays open to the rest of the reserve
         _reserveScratch.Clear();

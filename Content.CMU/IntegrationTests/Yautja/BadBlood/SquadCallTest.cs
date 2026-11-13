@@ -149,6 +149,7 @@ public sealed class SquadCallTest : GameTest
 
                 // three living Bad Bloods under a cap of four: one more seat, not two
                 rule.Comp.HeldVoteSeats = 0;
+                rule.Comp.FoundingSeats = 0;
                 rule.Comp.LandingParty = 2;
                 Assert.That(rules.GetLivingBadBloodCap(), Is.EqualTo(4));
                 Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(1));

@@ -186,6 +186,14 @@ public sealed class BloodReserveTest : GameTest
 
                 Assert.That(rules.TryOpenFoundingSquad(out _), Is.False, "the founding squad opens once");
 
+                // the founding seats raise the living cap instead of using up its +2, so a squad can still be bought
+                Assert.That(rule.Comp.FoundingSeats, Is.EqualTo(2));
+                rule.Comp.HeldVoteSeats = 0;
+                Assert.That(rules.GetLivingBadBloodCap(),
+                    Is.EqualTo(rule.Comp.LandingParty + rule.Comp.FoundingSeats + rule.Comp.LivingCapBonus));
+                Assert.That(Server.System<BadBloodCampSystem>().GetSquadSeatRoom(), Is.GreaterThanOrEqualTo(2),
+                    "a full founding squad still leaves room for a squad of 2");
+
                 // a later Lodge does not get another one
                 entMan.DeleteEntity(spawned[0]);
                 Assert.That(rules.HasLodge(), Is.False);

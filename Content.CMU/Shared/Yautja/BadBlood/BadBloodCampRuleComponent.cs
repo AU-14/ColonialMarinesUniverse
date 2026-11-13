@@ -153,6 +153,13 @@ public sealed partial class BadBloodCampRuleComponent : Component
     [DataField]
     public int HeldVoteSeats;
 
+    /// <summary>
+    /// Seats the free founding squad opened. They raise the living cap instead of using up
+    /// <see cref="LivingCapBonus"/>, so the clan can still buy a squad once the founding squad has landed.
+    /// </summary>
+    [ViewVariables]
+    public int FoundingSeats;
+
     [DataField]
     public int LivingCapBonus = 2;
 
