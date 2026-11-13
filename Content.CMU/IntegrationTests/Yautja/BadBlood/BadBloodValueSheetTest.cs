@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Vendors;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.Prototypes;
 using Robust.Shared.GameObjects;
@@ -157,6 +159,32 @@ public sealed class BadBloodValueSheetTest
                 var thirst = protos.Index<SatiationPrototype>("CMUYautjaBadBloodThirst");
                 Assert.That(thirst.BaseChangeRate, Is.EqualTo(-0.1f).Within(0.0001f), "-0.1 a second is 6 a minute");
                 Assert.That(thirst.StartingValueMinimum, Is.EqualTo(300));
+
+                // body: Bad Bloods take a little more than honourable hunters, who are untouched
+                foreach (var mob in new[] { "CMUMobYautjaBadBloodGrunt", "CMUMobYautjaBadBloodLeader" })
+                {
+                    Assert.That(Comp<DamageableComponent>(mob).DamageModifierSetId?.Id, Is.EqualTo("CMUYautjaBadBlood"), mob);
+                }
+
+                Assert.That(Comp<DamageableComponent>("CMUMobYautja").DamageModifierSetId?.Id, Is.EqualTo("CMUYautja"));
+                var badBloodSet = protos.Index<DamageModifierSetPrototype>("CMUYautjaBadBlood").Coefficients;
+                Assert.That(badBloodSet["Blunt"], Is.EqualTo(0.30f));
+                Assert.That(badBloodSet["Slash"], Is.EqualTo(0.30f));
+                Assert.That(badBloodSet["Piercing"], Is.EqualTo(0.30f));
+                Assert.That(badBloodSet["Heat"], Is.EqualTo(0.75f));
+                Assert.That(badBloodSet["Poison"], Is.EqualTo(0.5f));
+                Assert.That(badBloodSet.ContainsKey("Caustic"), Is.False, "caustic lands in full");
+                var hunterSet = protos.Index<DamageModifierSetPrototype>("CMUYautja").Coefficients;
+                Assert.That(hunterSet["Slash"], Is.EqualTo(0.28f));
+                Assert.That(hunterSet["Heat"], Is.EqualTo(0.65f));
+
+                // blades against marines: Bad Blood wrist blades penetration 50 / strip 0.006, honourable 40 / 0.01
+                var badBloodBlades = Comp<YautjaHumanMeleeComponent>("CMUYautjaBadBloodWristBlades");
+                Assert.That(badBloodBlades.Penetration, Is.EqualTo(50));
+                Assert.That(badBloodBlades.StripChancePerArmor, Is.EqualTo(0.006f));
+                var hunterBlades = Comp<YautjaHumanMeleeComponent>("CMUYautjaWristBlades");
+                Assert.That(hunterBlades.Penetration, Is.EqualTo(40));
+                Assert.That(hunterBlades.StripChancePerArmor, Is.EqualTo(0.01f));
 
                 // scuttle: 10 s fuse, max 12 / total 120 / slope 6
                 var scuttle = new BadBloodScuttleComponent();

@@ -16,6 +16,8 @@
   parent: CMUMobYautja
   id: CMUMobYautjaBadBloodBase
   components:
+  - type: Damageable
+    damageModifierSet: CMUYautjaBadBlood
   # overriding organs replaces the whole map, so this is AppearanceYautja's list with the stomach swapped
   - type: InitialBody
     organs:

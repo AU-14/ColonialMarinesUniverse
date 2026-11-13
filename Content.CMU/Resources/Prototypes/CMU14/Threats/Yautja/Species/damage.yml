@@ -6,3 +6,14 @@
     Piercing: 0.28
     Heat: 0.65
     Poison: 0
+
+# Bad Bloods are slightly squishier than honourable hunters, so marines can win the opening exchange.
+# Caustic is left at 1.0 and poison lands at half instead of being ignored.
+- type: damageModifierSet
+  id: CMUYautjaBadBlood
+  coefficients:
+    Blunt: 0.30
+    Slash: 0.30
+    Piercing: 0.30
+    Heat: 0.75
+    Poison: 0.5

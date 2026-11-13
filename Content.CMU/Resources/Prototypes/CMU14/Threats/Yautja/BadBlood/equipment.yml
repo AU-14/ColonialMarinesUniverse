@@ -74,6 +74,10 @@
   id: CMUYautjaBadBloodWristBlades
   suffix: Bad Blood
   components:
+  # sharper against marines than the honourable blades (40 / 0.01): about 15 a hit through standard armor
+  - type: YautjaHumanMelee
+    penetration: 50
+    stripChancePerArmor: 0.006
   - type: DamageBoosts
     boosts:
     - flags: Breaching
