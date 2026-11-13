@@ -19,6 +19,7 @@ public sealed partial class CMUYautjaEffectsSystem : EntitySystem
     [Dependency] private DecalSystem _decals = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private BloodstreamSystem _blood = default!;
+    [Dependency] private YautjaCasterSystem _caster = default!;
 
     // only a fallback for a client that stops sending: stowing or swapping the caster already clears the sight in
     // Update. 0.4s used to be shorter than other clients' lag + interp buffer, so watchers saw the sight blink
@@ -36,7 +37,7 @@ public sealed partial class CMUYautjaEffectsSystem : EntitySystem
     {
         if (args.SenderSession.AttachedEntity is not { } user ||
             !TryGetEntity(ev.Caster, out var caster) ||
-            _hands.GetActiveItem(user) != caster || !HasComp<YautjaCasterComponent>(caster) ||
+            _hands.GetActiveItem(user) != caster || !_caster.CanAimSight(user, caster.Value) ||
             !float.IsFinite(ev.Position.X) || !float.IsFinite(ev.Position.Y))
             return;
 
@@ -196,7 +197,8 @@ public sealed partial class CMUYautjaEffectsSystem : EntitySystem
         var aims = EntityQueryEnumerator<CMUYautjaCasterAimComponent>();
         while (aims.MoveNext(out var uid, out var aim))
         {
-            if (_timing.CurTime >= aim.ExpiresAt || _hands.GetActiveItem(uid) != aim.Caster)
+            if (_timing.CurTime >= aim.ExpiresAt || _hands.GetActiveItem(uid) != aim.Caster ||
+                !_caster.CanAimSight(uid, aim.Caster))
                 RemCompDeferred<CMUYautjaCasterAimComponent>(uid);
         }
     }
