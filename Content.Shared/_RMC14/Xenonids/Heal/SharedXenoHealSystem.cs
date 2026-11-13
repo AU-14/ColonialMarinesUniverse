@@ -244,6 +244,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
         {
             Charges = (int) (args.TotalHealDuration.TotalSeconds / args.TimeBetweenHeals.TotalSeconds),
             TimeBetweenHeals = args.TimeBetweenHeals,
+            CMURefillRegenPool = true, // CMU14: healer drone salve.
         };
         healStack.HealAmount = totalHealAmount / healStack.Charges;
         healStack.NextHealAt = _timing.CurTime + healStack.TimeBetweenHeals;
@@ -362,6 +363,13 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         Heal(target, healAmount);
 
+        // CMU14: sacrificial healing also restores the recipient's regeneration pool.
+        if (_damageable.GetTotalDamage(target) < targetTotalDamage)
+        {
+            var regenEvent = new Content.Shared.CMU14.Xenomorphs.Regen.CMUXenoHealerHealEvent();
+            RaiseLocalEvent(target, ref regenEvent);
+        }
+        // CMU14 end
 
         var clearParalysis = false;
         foreach (var status in args.AilmentsRemove)
@@ -495,7 +503,15 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
                 Dirty(uid, heal);
 
+                // CMU14: only actual healing from a healer's salve restores the pool.
+                var previousDamage = healStack.CMURefillRegenPool ? _damageable.GetTotalDamage(uid) : FixedPoint2.Zero;
                 Heal(uid, healStack.HealAmount);
+                if (healStack.CMURefillRegenPool && _damageable.GetTotalDamage(uid) < previousDamage)
+                {
+                    var ev = new Content.Shared.CMU14.Xenomorphs.Regen.CMUXenoHealerHealEvent();
+                    RaiseLocalEvent(uid, ref ev);
+                }
+                // CMU14 end
 
                 healStack.NextHealAt = time + healStack.TimeBetweenHeals;
                 healStack.Charges = healStack.Charges - 1;

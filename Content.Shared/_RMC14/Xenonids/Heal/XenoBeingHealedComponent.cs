@@ -27,6 +27,9 @@ public sealed partial class XenoHealStack
     [DataField]
     public int Charges;
 
+    [DataField] // CMU14
+    public bool CMURefillRegenPool;
+
     [DataField]
     public TimeSpan TimeBetweenHeals;
 

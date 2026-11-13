@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.CMU14.Xenomorphs.Regen; // CMU14
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Damage;
@@ -651,10 +652,20 @@ public sealed partial class XenoSystem : EntitySystem
             }
 
             var heal = GetWeedsHealAmount((uid, xeno));
+            // CMU14: limit passive health regeneration without affecting plasma regeneration.
+            var canRegenPlasma = heal > FixedPoint2.Zero;
+            var regenAttempt = new CMUXenoPassiveRegenAttemptEvent();
+            RaiseLocalEvent(uid, ref regenAttempt);
+            if (regenAttempt.Cancelled)
+                heal = FixedPoint2.Zero;
+            // CMU14 end
             if (heal > FixedPoint2.Zero)
             {
                 HealDamage(uid, heal);
-
+            }
+            // CMU14: plasma recovery is independent of the health regeneration pool.
+            if (canRegenPlasma)
+            {
                 if (_xenoPlasmaQuery.TryComp(uid, out var plasma))
                 {
                     var plasmaRestored = plasma.PlasmaRegenOnWeeds * plasma.MaxPlasma / 100 / 2;
