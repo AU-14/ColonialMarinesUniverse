@@ -1,4 +1,4 @@
-# CMU14: one retry for runner shutdowns; tests and execution timeouts need attention.
+# CMU14: one retry for runner shutdowns and artifact service outages; tests and execution timeouts need attention.
 name: Retry interrupted CI
 
 on:
@@ -65,10 +65,12 @@ jobs:
               });
               const log = typeof data === 'string' ? data : Buffer.from(data).toString('utf8');
               const shutdown = /Z\s+##\[error\]The runner has received a shutdown signal\./m;
+              // CMU14: GitHub's artifact service going down fails the upload steps after green tests.
+              const artifactOutage = /Z\s+##\[error\]Failed to (?:Create|Finalize)Artifact: /m;
               // CMU14: test timeouts are actionable failures, never infrastructure retries.
               const testFailure = /Z\s+(?:\|\s*)?Failed .+ \[|Failed:\s*[1-9]/m;
-              if (!shutdown.test(log) || testFailure.test(log)) {
-                core.info('A test failed or the runner-shutdown signature is absent.');
+              if (!(shutdown.test(log) || artifactOutage.test(log)) || testFailure.test(log)) {
+                core.info('A test failed or no infrastructure failure signature was found.');
                 return;
               }
             }

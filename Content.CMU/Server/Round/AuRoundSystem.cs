@@ -1,3 +1,4 @@
+using Content.Shared.CMU14;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Preferences.Managers;
@@ -130,7 +131,8 @@ namespace Content.Server.CMU14.Round
 
         // Grids keyed by prototype id. Round setup tags the voted ship's faction
         // once the votes have concluded.
-        private readonly Dictionary<string, IReadOnlyList<EntityUid>> _loadedGameMapGrids = new();
+        // a list per map id: both sides can vote the same ship, and one load must not overwrite the other
+        private readonly Dictionary<string, List<IReadOnlyList<EntityUid>>> _loadedGameMapGrids = new();
 
         public void SetOpforShip(string shipId)
         {
@@ -1162,12 +1164,52 @@ namespace Content.Server.CMU14.Round
 
         private void OnPostGameMapLoad(PostGameMapLoad ev)
         {
-            _loadedGameMapGrids[ev.GameMap.ID] = ev.Grids;
+            if (!_loadedGameMapGrids.TryGetValue(ev.GameMap.ID, out var loads))
+                _loadedGameMapGrids[ev.GameMap.ID] = loads = new();
+
+            // loads from earlier rounds are gone by now
+            loads.RemoveAll(grids => grids.All(grid => TerminatingOrDeleted(grid)));
+            loads.Add(ev.Grids);
         }
 
         /// <summary>The grids the given game map loaded with this round, if it has loaded.</summary>
         public bool TryGetLoadedShipGrids(string gameMapId, out IReadOnlyList<EntityUid> grids)
-            => _loadedGameMapGrids.TryGetValue(gameMapId, out grids!);
+        {
+            grids = default!;
+            if (!_loadedGameMapGrids.TryGetValue(gameMapId, out var loads) || loads.Count == 0)
+                return false;
+
+            grids = loads[^1];
+            return true;
+        }
+
+        // the load of this ship that belongs to the given side. with both sides on the same ship the
+        // plain lookup handed govfor the opfor copy, so govfor got tagged onto the opfor decks and spawned there
+        public bool TryGetLoadedShipGrids(string gameMapId, string faction, out IReadOnlyList<EntityUid> grids)
+        {
+            grids = default!;
+            if (!_loadedGameMapGrids.TryGetValue(gameMapId, out var loads) || loads.Count == 0)
+                return false;
+
+            foreach (var load in loads)
+            {
+                foreach (var grid in load)
+                {
+                    if (TryComp<ShipFactionComponent>(grid, out var ship) &&
+                        string.Equals(ship.Faction, faction, StringComparison.OrdinalIgnoreCase))
+                    {
+                        grids = load;
+                        return true;
+                    }
+                }
+            }
+
+            if (loads.Count != 1)
+                return false;
+
+            grids = loads[0];
+            return true;
+        }
 
         public bool IsVoteSequenceRunning()
         {

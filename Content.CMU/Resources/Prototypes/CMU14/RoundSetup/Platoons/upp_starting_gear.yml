@@ -1,0 +1,13 @@
+- type: startingGear
+  id: CMUGearUPPGOVFORRadioTelephoneOperator
+  equipment:
+    id: AU14JobIDCardGOVFORRadioTelephoneOperator
+    ears: AU14HeadsetGovforMarineFTL
+    head: AU14UPPPeakedFTL
+    
+- type: startingGear
+  id: CMUGearUPPOPFORRadioTelephoneOperator
+  equipment:
+    id: AU14JobIDCardOPFORRadioTelephoneOperator
+    ears: AU14HeadsetOpforMarineFTL
+    head: AU14UPPPeakedFTL

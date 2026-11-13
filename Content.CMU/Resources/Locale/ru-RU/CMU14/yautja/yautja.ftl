@@ -26,7 +26,6 @@ cmu-yautja-rank-hunter = Охотник
 cmu-yautja-rank-blooded = Окровавленный
 cmu-yautja-rank-elite = Элита
 cmu-yautja-rank-elder = Старейшина
-cmu-yautja-lobby-locked-legacy = Требуется Legacy whitelist
 cmu-yautja-lobby-status = Статус
 cmu-yautja-lobby-status-normal = Обычный
 cmu-yautja-lobby-status-council = Совет

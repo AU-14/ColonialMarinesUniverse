@@ -2,6 +2,8 @@
   id: CMUPlanetVaradero
   name: New Varadero
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: Portuguese
   - type: RMCPlanetMapPrototype
     votename: "New Varadero"
     mapId: CMUVaradero
@@ -15,7 +17,6 @@
     - LACN
     platoonsOpfor:
     - UPP
-    - ProdigySF
     - VAIPO
     defaultgovfor: LACN
     defaultopfor: UPP

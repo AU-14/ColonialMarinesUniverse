@@ -35,6 +35,7 @@
 
 - type: thirdParty
   id: AU14IntelThirdPartyK9
+  speaksColonyLanguage: true
   partyspawn: AU14IntelThirdPartyK9HandlerSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml
@@ -53,6 +54,7 @@
 
 - type: thirdParty
   id: AU14IntelThirdPartyK9Solo
+  speaksColonyLanguage: true
   partyspawn: AU14IntelThirdPartyK9SoloSpawn
   entrymethod: shuttle
   dropshippath: /Maps/CMU14/Dropships/rmc_ert_response_shuttle.yml

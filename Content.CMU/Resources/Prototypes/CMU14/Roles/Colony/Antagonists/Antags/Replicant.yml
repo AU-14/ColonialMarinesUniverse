@@ -35,6 +35,16 @@
     canUseGuns: true
     hideGeneration: true
     useHumanHealthIcons: true
+  # Same language setup as regular synths: speak and understand every human tongue (not the alien ones),
+  # and can learn Xeno, Yautja and Arcturian. These replace the human presets the character spawned with.
+  # Unlike regular synths (which start on Binary), a replicant starts speaking English. Both fields are set because
+  # the preset's currentLanguage would otherwise still be applied.
+  - type: Language
+    preset: AU14LanguagePresetSynth
+    currentLanguage: English
+    defaultLanguage: English
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
   - type: ColonyBounty
     bounty: 2600
     reason: Malfunctioning synthetic infiltrator - assume no identity is genuine

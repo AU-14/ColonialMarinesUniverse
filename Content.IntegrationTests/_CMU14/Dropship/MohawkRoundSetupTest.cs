@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Fabricator;
 using Content.Shared.CMU14;
+using Content.Shared.CMU14.Dropship.Exchange;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.util;
@@ -93,6 +94,13 @@ public sealed class MohawkRoundSetupTest
                 "Round setup must reserve a Bush landing pad for the replacement gunship.");
             destination = entities.GetComponent<DropshipComponent>(ship).Destination!.Value;
             Assert.That(entities.GetComponent<DropshipDestinationComponent>(destination).FactionController, Is.EqualTo(faction));
+            if (transport == "/Maps/CMU14/Dropships/osprey.yml")
+            {
+                var exchange = entities.QueryEntities<CMUDropshipMohawkExchangeComponent>().Single();
+                Assert.That(exchange.Comp.Faction, Is.EqualTo(faction));
+                Assert.That(exchange.Comp.MohawkPath.ToString(),
+                    Is.EqualTo("/Maps/CMU14/Dropships/Mohawk/midway_deployment.yml"));
+            }
             var terminals = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .Where(nav => entities.GetComponent<TransformComponent>(nav.Owner).GridUid == ship).ToArray();
             Assert.That(terminals, Is.Not.Empty);

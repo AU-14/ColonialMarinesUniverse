@@ -70,6 +70,8 @@
   thirdPartyRatio: 0.15
   maxThirdParties: 3
   dropshipFabricatorStartingPoints: 7500
+  # a cell lives or dies on not being found; radio DF made every transmission a giveaway
+  anprcDirectionFinding: false
   supportedPlanets:
   - SharedPlanetPool
   rules:

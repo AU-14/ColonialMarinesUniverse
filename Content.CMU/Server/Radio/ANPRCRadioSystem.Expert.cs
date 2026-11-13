@@ -484,6 +484,13 @@ public sealed partial class ANPRCRadioSystem
             return;
         }
 
+        if (!_sweep.DirectionFindingAllowed())
+        {
+            radio.JammerBearingTarget = null;
+            _anprcChat.Notice(Loc.GetString("anprc-df-disabled"), args.Actor, ANPRCNotice.Warn);
+            return;
+        }
+
         if (!_garble.TryGetNearestJammer(ent.Owner, out var jammer, out var jammerPosition))
         {
             radio.JammerBearingTarget = null;
