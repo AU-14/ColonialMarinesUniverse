@@ -47,11 +47,13 @@
     baseDamage: 30
   - type: CMUXenoMycotoxinInject
   - type: IntrinsicRadioReceiver  
-  - type: IntrinsicRadioTransmitter  
-    channels:  
-    - MyceliumLink  
-  - type: ActiveRadio  
-    channels:  
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - MyceliumLink
+  - type: ActiveRadio
+    channels:
+    - Hivemind
     - MyceliumLink
   - type: Xeno
     role: CMU14JobPathogenHarbinger
