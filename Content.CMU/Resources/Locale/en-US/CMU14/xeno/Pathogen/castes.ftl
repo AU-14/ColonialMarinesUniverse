@@ -28,6 +28,9 @@ cmu-job-description-pathogen-popper = A crawling bag of spores. Place spore sacs
 cmu-job-name-pathogen-aberration = Aberration
 cmu-job-description-pathogen-aberration = A Yautja-Pathogen hybrid. You are an abomination to both races — overwhelm all opposition with raw power.
 
+cmu-job-name-pathogen-walker = Walker
+cmu-job-supervisors-walker = Harbingers and The Overmind and Walkers who outranked you in life
+
 cmu-job-name-pathogen-matriarch = Matriarch
 cmu-job-description-pathogen-matriarch = Nothing will survive. Lead the Confluence to victory.
 cmu-xeno-death-matriarch = Matriarch has fallen! Vengeance!
