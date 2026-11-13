@@ -117,8 +117,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         RemComp<CMUOrganBlindnessComponent>(target);
         RemComp<CMUOrganVisionImpairmentComponent>(target);
-        RemComp<HungerComponent>(target);
-        RemComp<ThirstComponent>(target);
+        RemComp<SatiationComponent>(target);
         RemComp<PainShockComponent>(target);
 
         if (_mind.TryGetMind(target, out var mindId, out _))
