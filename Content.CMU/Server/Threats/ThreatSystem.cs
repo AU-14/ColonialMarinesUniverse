@@ -1110,6 +1110,10 @@ public sealed partial class ThreatSystem : EntitySystem
 
         EnsureComp<GhostTakeoverAvailableComponent>(entity);
         _forceInterest.TrackRole(entity);
+
+        // a threat can give its unclaimed bodies their own text and a raffle (the Bad Blood clan does)
+        var ev = new ThreatGhostRoleMadeEvent(jobId, jobId == ThreatLeaderJobId, ghostRole);
+        RaiseLocalEvent(entity, ref ev);
     }
 
     /// <summary>

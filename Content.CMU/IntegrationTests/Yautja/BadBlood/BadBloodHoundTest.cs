@@ -3,6 +3,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Yautja.BadBlood;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
+using Robust.Shared.Prototypes;
 using Content.Server.NPC.HTN;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.K9.Components;
@@ -108,7 +109,11 @@ public sealed class BadBloodHoundTest : GameTest
                     Assert.That(handler?.TameAction, Is.Not.Null, "the master gains the handler actions");
 
                     // the ghost raffle opens
-                    Assert.That(entMan.GetComponent<GhostRoleComponent>(hound).RaffleConfig, Is.Not.Null);
+                    var houndRole = entMan.GetComponent<GhostRoleComponent>(hound);
+                    Assert.That(houndRole.RaffleConfig, Is.Not.Null);
+                    Assert.That(houndRole.JobProto?.Id, Is.EqualTo("CMUYautjaHellhound"));
+                    Assert.That(houndRole.MindRoles, Does.Contain(new EntProtoId("MindRoleThreat")),
+                        "a hound taken by a ghost is part of the clan's threat, like a squad seat");
                     var open = Server.System<GhostRoleSystem>().GetGhostRolesInfo(null).Select(info => info.Entity);
                     Assert.That(open, Does.Contain(entMan.GetNetEntity(hound)));
 

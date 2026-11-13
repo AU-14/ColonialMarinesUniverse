@@ -38,6 +38,10 @@
     description: cmu-bad-blood-hound-ghost-description
     rules: cmu-bad-blood-hound-ghost-rules
     allowMovement: true
+    # like the squad seats: a job and the threat mind role, so the hound counts as part of the clan's threat
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
     raffle:
       settings: default
   - type: NpcFactionMember

@@ -148,6 +148,16 @@ public sealed class BadBloodForcedSpawnTest : GameTest
                 .ToList();
             Assert.That(clan, Has.Count.EqualTo(4), "the whole party lands without anyone showing interest");
             AssertOpenGhostRoles(clan);
+
+            // a Bad Blood body is its own ghost role, raffled like the squad seats and hounds, not the generic threat
+            foreach (var body in clan)
+            {
+                var role = SEntMan.GetComponent<GhostRoleComponent>(body);
+                Assert.That(role.RaffleConfig, Is.Not.Null, "an unclaimed Bad Blood body is raffled");
+                // RoleName comes back localized: "Bad Blood grunt" / "Bad Blood Leader", not the generic threat text
+                Assert.That(role.RoleName, Does.StartWith("Bad Blood"));
+                Assert.That(role.MindRoles, Does.Contain(new EntProtoId("MindRoleThreat")));
+            }
         });
     }
 
