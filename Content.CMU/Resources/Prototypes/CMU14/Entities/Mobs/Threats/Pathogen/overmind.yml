@@ -93,6 +93,13 @@
   - type: CMUXenoMycotoxinInject
     plasmaCost: 150
     range: 3.0
+  - type: IntrinsicRadioReceiver  
+  - type: IntrinsicRadioTransmitter  
+    channels:  
+    - MyceliumLink  
+  - type: ActiveRadio  
+    channels:  
+    - MyceliumLink
   - type: CMUXenoOvermind
     eyeFormActions:
     - CMU14ActionXenoPathogenHeal
