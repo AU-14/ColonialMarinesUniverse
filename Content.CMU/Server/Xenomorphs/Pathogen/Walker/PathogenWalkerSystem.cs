@@ -11,6 +11,9 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
+using Content.Shared.Roles;
+using Content.Shared.Nutrition.Components; 
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -65,6 +68,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -113,6 +117,12 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         RemComp<CMUOrganBlindnessComponent>(target);
         RemComp<CMUOrganVisionImpairmentComponent>(target);
+        RemComp<HungerComponent>(target);
+        RemComp<ThirstComponent>(target);
+        RemComp<PainShockComponent>(target);
+
+        if (_mind.TryGetMind(target, out var mindId, out _))
+            _roles.MindAddJobRole(mindId, silent: true, jobPrototype: "CMU14JobPathogenWalker");
 
         _faction.AddFaction(target, WalkerFaction);
         // Reanimatable hosts like monkeys can lack the language component entirely.
