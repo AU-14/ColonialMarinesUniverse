@@ -52,6 +52,7 @@
   - RemoveAllJobs
   - AddGovfor
   - AddGovforAuxiliaryStaffDistress
+  - AddColonist
   - DistressAntags
 
 - type: gamePreset

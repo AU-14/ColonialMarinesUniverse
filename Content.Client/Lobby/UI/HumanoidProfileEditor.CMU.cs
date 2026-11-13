@@ -363,8 +363,9 @@ public sealed partial class HumanoidProfileEditor
         ColonyFallTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
         ColonyFallTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
         DistressSignalTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-government-jobs-tab"));
-        DistressSignalTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
-        DistressSignalTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
+        DistressSignalTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-colony-jobs-tab"));
+        DistressSignalTabs.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-threat-roles-tab"));
+        DistressSignalTabs.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-antags-tab"));
         ForceOnForceTabs.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-military-jobs-tab"));
         ForceOnForceTabs.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-colony-jobs-tab"));
     }

@@ -302,6 +302,7 @@ namespace Content.Server.GameTicking
                 _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
             }
 
+            _auJobSelectionSystem.AssignSurvivorJobs(assignmentProfiles);
             RaiseLocalEvent(new CMURoundJobsReadyEvent()); // CMU14: apply event slots after normal setup.
             List<EntityUid> spawnableStations = GetSpawnableStations();
             _sawmill.Debug($"[RoundStart] Found {spawnableStations.Count} spawnable station(s).");
@@ -388,6 +389,7 @@ namespace Content.Server.GameTicking
             }
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, assignmentProfiles, spawnableStations);
+            EntityManager.System<AddColonistRuleSystem>().LimitDistressColonists(assignedJobs); // CMU14
             if (_sawmill.Level <= LogLevel.Debug)
             {
                 AuAssignmentCounts overflowAssignmentCounts = GameTicker.CountAuAssignments(assignedJobs);
@@ -429,14 +431,11 @@ namespace Content.Server.GameTicking
                 // (called above) already spawns those entities at threat markers and mind-transfers
                 // the players to them.
                 //
-                // ThirdParty jobs deliberately fall through to the standard spawn path. Putting them
-                // in this skip list (as PR #838 did) caused both distress and insurgency rounds to
-                // restart at start: those players ended up bodyless, then SpawnThirdParty's
-                // mind-transfer block (called below) hit GetMindâ†’nullâ†’CreateMindâ†’PlayerJoinGame on a
-                // session still in lobby state, which threw, which propagated to StartRound's
-                // EXCEPTION_TOLERANCE catch and called RestartRound(). Keep them in the standard
-                // pipeline so they have a body even if SpawnThirdParty later no-ops.
-                if (job != null && (job == "AU14JobThreatLeader" || job == "AU14JobThreatMember"))
+                // ThirdParty jobs are skipped as well: ThirdPartySystem transfers those players into the
+                // Distress Signal survivor bodies it spawns, so a normal spawn would leave an orphaned body.
+                if (job != null && (job == "AU14JobThreatLeader" || job == "AU14JobThreatMember"
+                    || _auRoundSystem.IsDistressSignalSelected &&
+                    (job == AuThirdPartyLeaderJob || job == AuThirdPartyMemberJob)))
                     continue;
 
                 if (job == null)
@@ -461,6 +460,24 @@ namespace Content.Server.GameTicking
             }
 
             RefreshLateJoinAllowed();
+
+            // CMU14: survivor players must be spawned before the threat vote delays the rest of the schedule.
+            if (_auRoundSystem.IsDistressSignalSelected)
+            {
+                _thirdParty.SpawnDistressSurvivors(assignedJobs);
+                foreach (var (player, (job, _)) in assignedJobs.ToArray())
+                {
+                    if (job != AuThirdPartyLeaderJob && job != AuThirdPartyMemberJob)
+                        continue;
+
+                    assignedJobs.Remove(player);
+                    if (!readySessions.TryGetValue(player, out var session))
+                        continue;
+
+                    PlayerJoinLobby(session);
+                    _chatManager.DispatchServerMessage(session, Loc.GetString("job-not-available-wait-in-lobby"));
+                }
+            }
 
             switch (threatVotePrepared)
             {

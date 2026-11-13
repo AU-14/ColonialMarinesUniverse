@@ -158,6 +158,9 @@ namespace Content.Server.CMU14.Round
             return IsPostRoundstartThreatVotePreset(presetId);
         }
 
+        public bool IsDistressSignalSelected
+            => _selectedPreset?.ID.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) == true;
+
         public static bool IsPostRoundstartThreatVotePreset(string? presetId)
         {
             return presetId != null && PostRoundstartThreatVotePresets.Contains(presetId);

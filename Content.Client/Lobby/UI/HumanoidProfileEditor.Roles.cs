@@ -363,6 +363,7 @@ public sealed partial class HumanoidProfileEditor
         yield return ColonyCivilianJobList;
         yield return ColonyThreatJobList;
         yield return DistressGovernmentJobList;
+        yield return DistressColonyJobList;
         yield return DistressThreatJobList;
     }
 
@@ -471,11 +472,18 @@ public sealed partial class HumanoidProfileEditor
                 title);
             // CMU14: FoF only assigns the AddColonist roster, hide roles it can never grant.
             if (_fofColonyJobs == null || _fofColonyJobs.Contains(job.ID))
+            {
                 yield return (
                     FoFColonyJobList,
                     GamemodeForceOnForce,
                     $"fof-colony-{department.ID}",
                     title);
+                yield return (
+                    DistressColonyJobList,
+                    GamemodeDistressSignal,
+                    $"distress-colony-{department.ID}",
+                    title);
+            }
             yield return (
                 ColonyCivilianJobList,
                 GamemodeColonyFall,
