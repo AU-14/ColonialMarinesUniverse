@@ -1,0 +1,10 @@
+# Commanding Officer job only. Survivor/Para/Recon commanders keep using RMCSkillPresetCommander.
+- type: entity
+  parent: RMCSkillPresetCommander
+  id: CMUSkillPresetCommandingOfficer
+  name: Commanding Officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillSurgery: 2 # Commander preset has 1

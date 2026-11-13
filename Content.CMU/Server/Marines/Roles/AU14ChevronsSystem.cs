@@ -295,6 +295,34 @@ public sealed partial class ChevronSystem : EntitySystem
         return job.Chevrons;
     }
 
+    /// <summary>
+    /// The rank the player picked for this job. Platoon jobs use that platoon's pick. Jobs with no platoon
+    /// (the ship's Commanding Officer) use whichever pick the player saved that this job can actually give.
+    /// </summary>
+    private static string? GetPreferredRankId(
+        HumanoidCharacterProfile? profile,
+        string jobId,
+        string? platoonId,
+        Dictionary<string, ChevronDefinition> chevronMap)
+    {
+        if (profile == null)
+            return null;
+
+        if (platoonId != null)
+            return profile.GetRankPreference(jobId, platoonId);
+
+        if (!profile.RankPreferences.TryGetValue(jobId, out var picks))
+            return null;
+
+        foreach (var rankId in picks.Values)
+        {
+            if (rankId != null && chevronMap.ContainsKey(rankId))
+                return rankId;
+        }
+
+        return null;
+    }
+
     private int? InheritanceDistance(string jobId, string ancestorId)
     {
         if (jobId == ancestorId)
@@ -325,7 +353,7 @@ public sealed partial class ChevronSystem : EntitySystem
             return;
 
         // Try preferred rank first
-        var preferredRankId = platoonId != null ? profile?.GetRankPreference(jobId, platoonId) : null;
+        var preferredRankId = GetPreferredRankId(profile, jobId, platoonId, chevronMap);
 
         if (preferredRankId != null && chevronMap.TryGetValue(preferredRankId, out var preferredDef) && IsChevronValid(preferredDef, profile, playTimes))
         {
@@ -386,7 +414,7 @@ public sealed partial class ChevronSystem : EntitySystem
             return null;
 
         // Try preferred rank first
-        var preferredRankId = platoon != null ? profile?.GetRankPreference(jobId, platoon.ID) : null;
+        var preferredRankId = GetPreferredRankId(profile, jobId, platoon?.ID, chevronMap);
         if (preferredRankId != null &&
             chevronMap.TryGetValue(preferredRankId, out var preferredDef) &&
             IsChevronValid(preferredDef, profile, playTimes) &&
