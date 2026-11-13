@@ -1,0 +1,147 @@
+# The Bad Blood Lodge: its resistances, the core, the kit, the leader bracer and Pitch Camp.
+# The Lodge parts are in the lodge_*.yml files next to this one, one file per part.
+
+# rifles barely scratch it, explosives and fire are what take it down
+- type: damageModifierSet
+  id: BadBloodLodge
+  coefficients:
+    Piercing: 0.25
+    Blunt: 0.6
+    Heat: 0.75
+    Structural: 0.15
+  flatReductions:
+    Piercing: 40
+    Blunt: 10
+    Slash: 10
+    Heat: 10
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodCamp
+  name: Bad Blood Lodge
+  description: A throne of bone and scavenged plating, hung with the clan's trophies. The clan does not outlast it for long.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
+    drawdepth: Objects
+    layers:
+    - state: "bone_throne"
+  - type: Icon
+    sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
+    state: "bone_throne"
+  - type: Damageable
+    damageModifierSet: BadBloodLodge
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 900
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ExplosionResistance
+    damageCoefficient: 2 # takes 2x explosion damage
+  - type: Flammable
+    damage:
+      types:
+        Heat: 10
+  - type: BadBloodCamp
+    regenDelay: 60
+    regen: 1
+    alertCooldown: 10
+    attackRevealTime: 30
+    revealComponents:
+    - type: TacticalMapAlwaysVisible
+      visibleToMarines: true
+      visibleToGovfor: true
+  # sits in the Yautja bucket, so marines only see it while it is revealed
+  - type: TacticalMapTracked
+    trackDead: true
+  - type: YautjaMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: core
+
+# the Leader's Pitch Camp action makes one. the Lodge swallows it when it is deployed
+- type: entity
+  parent: BaseItem
+  id: CMUBadBloodCampKit
+  name: Lodge kit
+  description: Bone poles, hide and plating, bundled for carrying. Only the clan's Leader knows how it goes together.
+  suffix: Bad Blood
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _RMC14/Objects/Tents/folded_tents.rsi
+    layers:
+    - state: base_tent
+      color: "#b8a27a"
+  - type: BadBloodCampKit
+  - type: RMCDeployable
+    deployTime: 10
+    deployArea:
+      !type:PhysShapeAabb
+      bounds: "-1.4,0.6,1.4,3.4"
+    areaBlockedCheck: true
+    failIfNotSurface: true
+    deploySetups:
+    - prototype: CMUBadBloodCamp
+      mode: ReactiveParental
+      neverRedeployableSetup: true
+      anchor: true
+      offset: 0, 0
+    - prototype: CMUBadBloodCampSpit
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: -1, 0
+    - prototype: CMUBadBloodCampCauldron
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: 1, 0
+    - prototype: CMUBadBloodCampArmory
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: -1, 1
+    - prototype: CMUBadBloodCampKennel
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: 1, 1
+    - prototype: CMUBadBloodCampAscensionStone
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: 0, -1
+
+- type: entity
+  parent: CMUYautjaBadBloodBracer
+  id: CMUYautjaBadBloodLeaderBracer
+  name: clan leader's bracer
+  description: A scavenged hunting bracer wound with the clan's kill-cords. Whoever leads the Bad Bloods wears it.
+  components:
+  - type: BadBloodLeaderBracer
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodPitchCamp
+  name: Pitch Camp
+  description: Ready a Lodge kit. Use the kit on open ground, away from the prey's landing zones, to raise the clan's Lodge.
+  components:
+  - type: Action
+    useDelay: 5
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodPitchCampActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: bracer_framed
+      map: [enum.ActionVisuals.Icon]

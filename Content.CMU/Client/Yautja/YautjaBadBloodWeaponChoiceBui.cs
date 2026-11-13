@@ -22,20 +22,6 @@ public sealed partial class YautjaBadBloodWeaponChoiceBui : BoundUserInterface
 
     private YautjaGearKind? _pendingChoice;
 
-    private static readonly Dictionary<YautjaGearKind, EntProtoId> GearDisplayPrototypes = new()
-    {
-        { YautjaGearKind.WristBlades, "CMUYautjaWristBlades" },
-        { YautjaGearKind.Scimitar, "CMUYautjaScimitar" },
-        { YautjaGearKind.ChainGauntlet, "CMUYautjaChainGauntlet" },
-    };
-
-    private static readonly Dictionary<YautjaGearKind, string> GearDisplayNames = new()
-    {
-        { YautjaGearKind.WristBlades, "cmu-yautja-choice-wrist-blades" },
-        { YautjaGearKind.Scimitar, "cmu-yautja-choice-scimitar" },
-        { YautjaGearKind.ChainGauntlet, "cmu-yautja-choice-chain-gauntlet" },
-    };
-
     public YautjaBadBloodWeaponChoiceBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
         _sprite = EntMan.System<SpriteSystem>();
@@ -49,34 +35,42 @@ public sealed partial class YautjaBadBloodWeaponChoiceBui : BoundUserInterface
         _window.WarningLabel.Visible = false;
         _buttons.Clear();
         _pendingChoice = null;
+    }
 
-        if (!EntMan.TryGetComponent(Owner, out YautjaBadBloodGearChoiceComponent? comp))
+    // the server says which weapons are on offer and what each one is, nothing here knows the gear list
+    private void RebuildChoices(List<YautjaBadBloodWeaponChoiceEntry> choices)
+    {
+        if (_window == null)
             return;
 
-        foreach (var kind in comp.Choices)
+        _window.WeaponContainer.RemoveAllChildren();
+        _buttons.Clear();
+
+        foreach (var choice in choices)
         {
-            if (!GearDisplayPrototypes.TryGetValue(kind, out var protoId))
+            if (!_prototype.TryIndex(choice.Prototype, out var proto))
                 continue;
-
-            if (!_prototype.TryIndex(protoId, out var proto))
-                continue;
-
-            var displayName = GearDisplayNames.TryGetValue(kind, out var displayNameKey)
-                ? Loc.GetString(displayNameKey)
-                : Loc.GetString(proto.Name);
 
             var control = new XenoChoiceControl();
             control.Button.ToggleMode = true;
-            control.Set(displayName, _sprite.Frame0(_prototype.Index(protoId)));
+            // keep the menu's own names where one exists; anything new falls back to the prototype name
+            var label = choice.Kind switch
+            {
+                YautjaGearKind.WristBlades => Loc.GetString("cmu-yautja-choice-wrist-blades"),
+                YautjaGearKind.Scimitar => Loc.GetString("cmu-yautja-choice-scimitar"),
+                YautjaGearKind.ChainGauntlet => Loc.GetString("cmu-yautja-choice-chain-gauntlet"),
+                _ => proto.Name,
+            };
+            control.Set(label, _sprite.Frame0(proto));
 
-            var capturedKind = kind;
+            var capturedKind = choice.Kind;
             control.Button.OnPressed += _ =>
             {
                 SendPredictedMessage(new YautjaBadBloodWeaponChoiceMsg(capturedKind));
             };
 
             _window.WeaponContainer.AddChild(control);
-            _buttons[kind] = control;
+            _buttons[capturedKind] = control;
         }
     }
 
@@ -90,6 +84,7 @@ public sealed partial class YautjaBadBloodWeaponChoiceBui : BoundUserInterface
         if (state is not YautjaBadBloodWeaponChoiceBuiState s)
             return;
 
+        RebuildChoices(s.Choices);
         _pendingChoice = s.PendingChoice;
         _window.WarningLabel.Visible = _pendingChoice != null;
 

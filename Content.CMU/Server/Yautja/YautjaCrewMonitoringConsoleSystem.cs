@@ -68,6 +68,10 @@ public sealed partial class YautjaCrewMonitoringConsoleSystem : EntitySystem
         var yautja = EntityQueryEnumerator<YautjaComponent, TransformComponent>();
         while (yautja.MoveNext(out var target, out var yautjaComponent, out var transform))
         {
+            // the clan doesn't track its outcasts
+            if (HasComp<YautjaBadBloodComponent>(target))
+                continue;
+
             if (!TryBuildStatus(target, yautjaComponent, transform, out var status))
                 continue;
 

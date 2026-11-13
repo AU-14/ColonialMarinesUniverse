@@ -8,6 +8,7 @@ using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.CMU14.Ghost;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Prototypes;
@@ -200,6 +201,7 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             if (!bracer.AutoSelfDestructOnUserDeath ||
                 bracer.User != args.Target ||
                 bracer.SelfDestructArmed ||
+                HasComp<BadBloodScuttleComponent>(uid) ||
                 TerminatingOrDeleted(uid))
             {
                 continue;
@@ -498,6 +500,10 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         if (!CanUseSelfDestructCommon(bracer, user))
             return false;
 
+        // a scuttling Bad Blood bracer is already going up, with its own small blast
+        if (HasComp<BadBloodScuttleComponent>(bracer))
+            return false;
+
         if (HasComp<VictimInfectedComponent>(user) ||
             _inventory.TryGetSlotEntity(user, "mask", out var mask) &&
             HasComp<XenoParasiteComponent>(mask.Value))
@@ -542,7 +548,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
         if (expectedVictimBracer != null && gloves.Value != expectedVictimBracer ||
             foundBracer.User != victim ||
-            foundBracer.SelfDestructArmed)
+            foundBracer.SelfDestructArmed ||
+            HasComp<BadBloodScuttleComponent>(gloves.Value))
         {
             return false;
         }

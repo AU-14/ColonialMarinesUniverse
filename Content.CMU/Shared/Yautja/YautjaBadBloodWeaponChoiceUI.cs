@@ -1,3 +1,4 @@
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Yautja;
@@ -8,12 +9,16 @@ public enum YautjaBadBloodWeaponChoiceUI : byte
     Key
 }
 
+// one weapon the bracer offers: the server reads the prototype from the bracer's own gear, the client only draws it
+[Serializable, NetSerializable]
+public readonly record struct YautjaBadBloodWeaponChoiceEntry(YautjaGearKind Kind, EntProtoId Prototype);
+
 [Serializable, NetSerializable]
 public sealed class YautjaBadBloodWeaponChoiceBuiState(
-    List<YautjaGearKind> choices,
+    List<YautjaBadBloodWeaponChoiceEntry> choices,
     YautjaGearKind? pendingChoice) : BoundUserInterfaceState
 {
-    public readonly List<YautjaGearKind> Choices = choices;
+    public readonly List<YautjaBadBloodWeaponChoiceEntry> Choices = choices;
     public readonly YautjaGearKind? PendingChoice = pendingChoice;
 }
 

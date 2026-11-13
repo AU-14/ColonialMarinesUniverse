@@ -1,0 +1,10 @@
+# Lodge part: the cauldron. A working Yautja cauldron that is deployed with the Lodge and removed with it.
+- type: entity
+  parent: CMUYautjaStructureYautjaMachinesVat
+  id: CMUBadBloodCampCauldron
+  name: Lodge cauldron
+  description: A black pot kept at a rolling boil. It strips a severed limb down to clean bone.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodCampPart
+    kind: Cauldron

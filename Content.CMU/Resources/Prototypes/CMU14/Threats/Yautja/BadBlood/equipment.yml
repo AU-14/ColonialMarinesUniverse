@@ -1,0 +1,106 @@
+# Bad Blood-only gear variants. The scavenged bracer installs these, so the honourable hunters' gear stays as it is.
+
+# every mode drains its own cost per shot. the honourable caster stores the cost of the last mode switch instead
+- type: entity
+  parent: CMUYautjaPlasmaCasterCrimson
+  id: CMUYautjaBadBloodPlasmaCaster
+  suffix: Bad Blood
+  components:
+  - type: YautjaCaster
+    modes:
+    - name: cmu-yautja-caster-mode-stun
+      projectile: CMUYautjaBadBloodCasterStunBolt
+      examineStrength: cmu-yautja-caster-mode-stun
+      fireRate: 0.8
+      powerCost: 60
+      fireSound:
+        path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
+    - name: cmu-yautja-caster-mode-immobilizer
+      projectile: CMUYautjaBadBloodCasterImmobilizerBolt
+      examineStrength: cmu-yautja-caster-mode-immobilizer
+      fireRate: 0.066667 # one every 15 s
+      powerCost: 300
+      fireSound:
+        path: /Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav
+    - name: cmu-yautja-caster-mode-lethal
+      projectile: CMUYautjaBadBloodCasterPlasmaBolt
+      examineStrength: cmu-yautja-caster-mode-lethal
+      fireRate: 0.555556
+      powerCost: 150
+      fireSound:
+        path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav
+    - name: cmu-yautja-caster-mode-eradicator
+      projectile: CMUYautjaCasterEradicatorBolt
+      examineStrength: cmu-yautja-caster-mode-eradicator
+      fireRate: 0.083333
+      powerCost: 1500
+      fireSound:
+        path: /Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav
+
+# The Bad Blood caster's own bolts. The hunters' bolts stay as they are.
+
+# 3 s on anyone, no extra second on humans
+- type: entity
+  parent: CMUYautjaCasterStunBolt
+  id: CMUYautjaBadBloodCasterStunBolt
+  categories: [HideSpawnMenu]
+  components:
+  - type: YautjaCasterStunProjectile
+    stunTime: 3
+    humanBonusStunTime: 0
+
+# radius 4 for 3 s
+- type: entity
+  parent: CMUYautjaCasterImmobilizerBolt
+  id: CMUYautjaBadBloodCasterImmobilizerBolt
+  categories: [HideSpawnMenu]
+  components:
+  - type: YautjaCasterImmobilizerProjectile
+    stunRange: 4
+    stunTime: 3
+
+# the hunters' lethal bolt with its damage untouched, it only flies 16 tiles
+- type: entity
+  parent: CMUYautjaCasterLethalBolt
+  id: CMUYautjaBadBloodCasterPlasmaBolt
+  categories: [HideSpawnMenu]
+  components:
+  - type: ProjectileMaxRange
+    max: 16
+
+# structure-only Breaching: the boost only lands on things flagged Breaching (barricades, doors, windows), never on mobs
+- type: entity
+  parent: CMUYautjaWristBlades
+  id: CMUYautjaBadBloodWristBlades
+  suffix: Bad Blood
+  components:
+  - type: DamageBoosts
+    boosts:
+    - flags: Breaching
+      damage:
+        types:
+          Blunt: 25
+
+- type: entity
+  parent: CMUYautjaScimitar
+  id: CMUYautjaBadBloodScimitar
+  suffix: Bad Blood
+  components:
+  - type: DamageBoosts
+    boosts:
+    - flags: Breaching
+      damage:
+        types:
+          Blunt: 45
+
+- type: entity
+  parent: CMUYautjaChainGauntlet
+  id: CMUYautjaBadBloodChainGauntlet
+  suffix: Bad Blood
+  components:
+  - type: DamageBoosts
+    boosts:
+    - flags: Breaching
+      damage:
+        types:
+          Blunt: 45

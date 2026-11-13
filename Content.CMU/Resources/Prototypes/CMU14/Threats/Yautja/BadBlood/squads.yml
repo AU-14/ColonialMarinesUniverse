@@ -1,0 +1,29 @@
+# Reinforcement squads: the ghost-role entry a squad call opens at the Lodge.
+# A player who wins the raffle holds a seat. The squad's bodies spawn together when every seat is held or the call
+# times out (squadSpawnTimeout on CMUBadBloodCampRule).
+
+# keep initialDuration in step with seatRaffleTime on CMUBadBloodCampRule
+- type: ghostRoleRaffleSettings
+  id: CMUBadBloodSquadSeat
+  settings:
+    initialDuration: 15
+    joinExtendsDurationBy: 0
+    maxDuration: 15
+
+- type: entity
+  id: CMUBadBloodSquadSeats
+  name: Bad Blood reinforcements
+  description: Seats in a squad the clan has called to its Lodge.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Transform
+  - type: GhostRole
+    name: cmu-bad-blood-squad-ghost-name
+    description: cmu-bad-blood-squad-ghost-description
+    rules: cmu-bad-blood-squad-ghost-rules
+    job: AU14JobThreatMember
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: CMUBadBloodSquadSeat
+  - type: BadBloodSquadSeats

@@ -36,6 +36,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     [Dependency] private IVoteManager _voteManager = default!;
     private static readonly TimeSpan VoteDuration = TimeSpan.FromSeconds(30);
     private const string VoteTitleLocId = "au14-threat-vote-title";
+    private const string VoteOptionSeatsLocId = "au14-threat-vote-option-seats";
     private readonly HashSet<NetUserId> _roundJoinBlockedPlayers = new();
 
     private PreparedThreatVote? _prepared;
@@ -210,7 +211,8 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         {
             Title = Loc.GetString(VoteTitleLocId),
             Options = prepared.Candidates
-                .Select(candidate => (GetLocalizedThreatDisplayName(candidate.Threat.ID), (object)candidate.Threat))
+                .Select(candidate => (GetThreatBallotLabel(candidate.Threat.ID, candidate.BodyCount.Total),
+                    (object)candidate.Threat))
                 .ToList(),
             Duration = VoteDuration,
             AllowedVoters = prepared.HeldPlayers.ToHashSet(),
@@ -268,11 +270,16 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         string? govforId = _platoonSpawnRule.SelectedGovforPlatoon?.ID;
         string? opforId = _platoonSpawnRule.SelectedOpforPlatoon?.ID;
         var candidates = new List<ThreatVoteCandidate>();
+        HashSet<string> addedGameRules = _ticker.GetAddedGameRules()
+            .Select(rule => MetaData(rule).EntityPrototype?.ID)
+            .OfType<string>()
+            .ToHashSet();
 
         foreach (ProtoId<ThreatPrototype> threatId in planet.AllowedThreats)
         {
             if (!_prototype.TryIndex(threatId, out ThreatPrototype? threatProto)
                 || !CanVoteForThreat(threatProto)
+                || ThreatVoteSelection.IsBlockedByRules(threatProto.BlockedGameRules, addedGameRules)
                 || !ThreatVoteSelection.IsThreatAllowed(threatProto, presetId, govforId, opforId, playerCount)
                 || !_prototype.TryIndex(threatProto.RoundStartSpawn, out PartySpawnPrototype? spawn))
                 continue;
@@ -466,6 +473,13 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         }
 
         return Loc.GetString(locId);
+    }
+
+    internal string GetThreatBallotLabel(string threatId, int seats)
+    {
+        return Loc.GetString(VoteOptionSeatsLocId,
+            ("threat", GetLocalizedThreatDisplayName(threatId)),
+            ("seats", seats));
     }
 
     private sealed record ThreatVoteCandidate(

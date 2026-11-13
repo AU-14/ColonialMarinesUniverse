@@ -115,12 +115,15 @@ public sealed partial class YautjaPowerSystem : EntitySystem
     private void OnGetItemActions(Entity<YautjaBracerComponent> ent, ref GetItemActionsEvent args)
     {
         var isYautja = HasComp<YautjaComponent>(args.User);
+        // Bad Bloods get no thrall surface at all, honourable hunters keep theirs
+        var isBadBlood = HasComp<YautjaBadBloodComponent>(args.User);
         if (args.InHands)
         {
             if (isYautja && _hands.GetActiveItem(args.User) == ent.Owner)
             {
                 AddAction(ent.Comp, ref args, ref ent.Comp.ToggleIdChipAction, ent.Comp.ToggleIdChipActionId);
-                AddAction(ent.Comp, ref args, ref ent.Comp.LinkThrallBracerAction, ent.Comp.LinkThrallBracerActionId);
+                if (!isBadBlood)
+                    AddAction(ent.Comp, ref args, ref ent.Comp.LinkThrallBracerAction, ent.Comp.LinkThrallBracerActionId);
             }
 
             return;
@@ -146,7 +149,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         // smart disc (cf. mcaste_items.dm:8) stay without it.
         AddAction(ent.Comp, ref args, ref ent.Comp.CallDiscAction, ent.Comp.CallDiscActionId);
 
-        if (ent.Comp.EnableRaiseThrall)
+        if (ent.Comp.EnableRaiseThrall && !isBadBlood)
             AddAction(ent.Comp, ref args, ref ent.Comp.RaiseThrallAction, ent.Comp.RaiseThrallActionId);
     }
 
@@ -329,7 +332,11 @@ public sealed partial class YautjaPowerSystem : EntitySystem
                 continue;
 
             bracer.NextRegen = time + bracer.RegenEvery;
-            RegenPower((uid, bracer), GetCmss13RegenAmount(bracer, bracer.User.Value));
+
+            // nothing answers this for an honourable hunter, so their regen stays as it was
+            var modify = new YautjaBracerRegenModifyEvent(uid);
+            RaiseLocalEvent(bracer.User.Value, ref modify);
+            RegenPower((uid, bracer), GetCmss13RegenAmount(bracer, bracer.User.Value) * modify.Multiplier);
         }
     }
 
@@ -562,3 +569,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         return false;
     }
 }
+
+// raised on the bracer's wearer each regen tick. handlers scale Multiplier, they never set it
+[ByRefEvent]
+public record struct YautjaBracerRegenModifyEvent(EntityUid Bracer, float Multiplier = 1f);

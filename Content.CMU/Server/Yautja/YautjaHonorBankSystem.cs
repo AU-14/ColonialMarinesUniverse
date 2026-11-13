@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
 using Robust.Shared.Network;
@@ -16,6 +17,7 @@ public sealed partial class YautjaHonorBankSystem : EntitySystem
     [Dependency] private IServerDbManager _db = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private YautjaClanManager _clans = default!;
+    [Dependency] private BadBloodSystem _badBlood = default!;
 
     private ISawmill _sawmill = default!;
 
@@ -41,7 +43,9 @@ public sealed partial class YautjaHonorBankSystem : EntitySystem
         var query = EntityQueryEnumerator<YautjaTrophyRecordComponent>();
         while (query.MoveNext(out var uid, out var record))
         {
+            // Bad Bloods are outcasts, nothing they earn reaches the persistent bank
             if (record.Score <= 0 ||
+                _badBlood.IsBadBlood(uid) ||
                 !_mind.TryGetMind(uid, out _, out var mind) ||
                 (mind.OriginalOwnerUserId ?? mind.UserId) is not { } user)
             {

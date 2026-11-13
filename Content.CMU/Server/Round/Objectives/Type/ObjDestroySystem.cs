@@ -1,6 +1,7 @@
 using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Server.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
+using Content.Shared.Destructible;
 using Robust.Shared.Map;
 
 namespace Content.Server.CMU14.Round.Objectives.Type;
@@ -15,6 +16,7 @@ public sealed partial class ObjDestroySystem : ObjectiveSystem
         SubscribeLocalEvent<DestroyObjectiveComponent, ObjectiveResetEvent>(OnReset);
         SubscribeLocalEvent<ObjectiveWatchedEntityStartupEvent>(OnEntityMetaStartup);
         SubscribeLocalEvent<DestroyMarkedForComponent, EntityTerminatingEvent>(OnMarkedEntityDestroyed);
+        SubscribeLocalEvent<DestroyMarkedForComponent, DestructionEventArgs>(OnMarkedEntityDestruction);
     }
 
     private void OnActivated(EntityUid uid, DestroyObjectiveComponent destroyComp, ref ObjectiveActivatedEvent _)
@@ -151,6 +153,17 @@ public sealed partial class ObjDestroySystem : ObjectiveSystem
 
     private void OnMarkedEntityDestroyed(EntityUid uid, DestroyMarkedForComponent comp, ref EntityTerminatingEvent args)
     {
+        CreditMarkedEntity(comp, requireDestruction: false);
+    }
+
+    // Objectives with RequireDestruction are paid here, by a real destruction, and never by a bare deletion.
+    private void OnMarkedEntityDestruction(EntityUid uid, DestroyMarkedForComponent comp, DestructionEventArgs args)
+    {
+        CreditMarkedEntity(comp, requireDestruction: true);
+    }
+
+    private void CreditMarkedEntity(DestroyMarkedForComponent comp, bool requireDestruction)
+    {
         var objectivesToRemove = new List<EntityUid>();
         foreach (var (objectiveUid, factionToCredit) in comp.AssociatedObjectives)
         {
@@ -158,11 +171,13 @@ public sealed partial class ObjDestroySystem : ObjectiveSystem
                     || !TryComp(objectiveUid, out CMUObjectiveComponent? auComp))
                 continue;
 
-            if (!TryCreditObjective(objectiveUid, auComp, destroyComp.AmountDestroyedPerFaction,
-                    factionToCredit.ToLowerInvariant(), destroyComp.DestroyCount))
+            if (destroyComp.RequireDestruction != requireDestruction)
                 continue;
 
+            // One target is one unit of progress, even when the objective needs more of them.
             objectivesToRemove.Add(objectiveUid);
+            TryCreditObjective(objectiveUid, auComp, destroyComp.AmountDestroyedPerFaction,
+                factionToCredit.ToLowerInvariant(), destroyComp.DestroyCount);
         }
         foreach (var o in objectivesToRemove)
             comp.AssociatedObjectives.Remove(o);

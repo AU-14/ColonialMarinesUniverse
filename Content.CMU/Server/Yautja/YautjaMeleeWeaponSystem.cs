@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Yautja.BadBlood;
 using Content.Server.Humanoid;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
@@ -49,6 +50,7 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private YautjaTrophySystem _trophies = default!;
     [Dependency] private YautjaMachineSystem _machines = default!;
+    [Dependency] private BadBloodProvenanceSystem _provenance = default!;
 
     public override void Initialize()
     {
@@ -653,6 +655,7 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
         {
             var steak = Spawn(dagger.Comp.MeatPrototype, coords);
             _meta.SetEntityName(steak, Loc.GetString("cmu-yautja-ceremonial-dagger-flay-meat-name", ("name", name)));
+            _provenance.StampMeat(steak, victim);
         }
 
         if (hide <= 0)
@@ -664,5 +667,6 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
         var owner = EnsureComp<YautjaFlayedHideComponent>(skin);
         owner.Victim = name;
         Dirty(skin, owner);
+        _provenance.StampTrophy(skin, victim);
     }
 }

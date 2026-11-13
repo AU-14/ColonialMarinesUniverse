@@ -1,0 +1,22 @@
+# Bad Bloods live off the land, so food and water matter to them. Hunger is divided by 1.5 in SatiationSystem,
+# which makes -0.2 an 8 per minute drain. Thirst is not divided, so -0.1 is 6 per minute.
+- type: satiation
+  id: CMUYautjaBadBloodHunger
+  parent: RMCHumanHunger
+  baseChangeRate: -0.2
+  startingValueMinimum: 300
+  startingValueMaximum: 380
+
+# the human thirst maximum is 378, so the start range stops there
+- type: satiation
+  id: CMUYautjaBadBloodThirst
+  parent: RMCHumanThirst
+  baseChangeRate: -0.1
+  startingValueMinimum: 300
+  startingValueMaximum: 378
+  changeModifiers:
+    Overhydrated: 1
+    Okay: 1
+    Thirsty: 1
+    Parched: 1
+    Dead: 0

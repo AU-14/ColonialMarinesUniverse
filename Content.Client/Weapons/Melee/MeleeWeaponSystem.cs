@@ -212,7 +212,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     public void ClientHeavyAttack(EntityUid user, EntityCoordinates coordinates, EntityUid meleeUid, MeleeWeaponComponent component)
     {
         // CMU14: no wide swing for weapons that forbid it.
-        if (!component.WideAttackAllowed)
+        if (!CMUWideAttackAllowed(user, meleeUid, component))
             return;
 
         // Only run on first prediction to avoid the potential raycast entities changing.

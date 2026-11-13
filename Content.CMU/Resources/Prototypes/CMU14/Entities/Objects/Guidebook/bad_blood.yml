@@ -1,0 +1,7 @@
+# The Bad Blood Clan threat: one page that explains every mechanic to both sides.
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideBadBlood
+  name: cmu-guide-entry-bad-blood
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUBadBloodClan.xml"

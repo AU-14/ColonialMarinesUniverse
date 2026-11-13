@@ -4,12 +4,14 @@ using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaLimbRegenerationSystem : EntitySystem
 {
+    [Dependency] private BadBloodSurvivalSystem _badBloodSurvival = default!;
     [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
     [Dependency] private CMUSurgerySystem _surgery = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -30,7 +32,9 @@ public sealed partial class YautjaLimbRegenerationSystem : EntitySystem
 
         regeneration.SeverAttempts.Remove(args.Part);
         var site = new YautjaLimbSite(args.Type, part.Symmetry);
-        regeneration.PendingRegrowth[site] = _timing.CurTime + regeneration.RegrowDelay;
+        // a starving Bad Blood regrows slower. everyone else gets a multiplier of 1
+        var delay = regeneration.RegrowDelay * _badBloodSurvival.GetLimbRegrowDelayMultiplier(args.Body);
+        regeneration.PendingRegrowth[site] = _timing.CurTime + delay;
         ScheduleNext(args.Body, regeneration);
     }
 

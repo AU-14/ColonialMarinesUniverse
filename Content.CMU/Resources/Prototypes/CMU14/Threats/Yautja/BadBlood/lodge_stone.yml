@@ -1,0 +1,39 @@
+# Lodge part: the Ascension Stone. Deployed with the Lodge and removed with it. The candidacy step goes on this prototype.
+- type: entity
+  parent: CMUYautjaFloorOverlayBase
+  id: CMUBadBloodCampAscensionStone
+  name: Ascension Stone
+  description: A slab cut with the marks of every Leader the clan has followed. Whoever would be the next one stands here.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Structures/hunter_floors.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: "hunter_glow"
+  - type: Icon
+    sprite: CMU14/Yautja/Structures/hunter_floors.rsi
+    state: "hunter_glow"
+  - type: InteractionOutline
+  - type: BadBloodCampPart
+    kind: AscensionStone
+  # standing on it while the clan has no Leader offers the Lodge (the ascension vote)
+  - type: BadBloodAscensionStone
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      stone:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        hard: false
+        layer:
+        - SlipLayer
+        mask:
+        - MobLayer
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.2
+  # reinforcement squads are called from the stone
+  - type: BadBloodSquadCaller

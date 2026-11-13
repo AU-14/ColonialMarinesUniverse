@@ -1,0 +1,48 @@
+# Bad Bloods drink water only. this refills at the Lodge spit
+- type: entity
+  parent: CMCanteen
+  id: CMUYautjaWaterFlask
+  name: hide water flask
+  description: A flask stitched from cured hide. It holds water and nothing a Bad Blood would rather drink.
+
+# Bad Blood medicomp. The tools are scavenged copies: same treatment, but every step takes 1.25x as long.
+# CMUImprovisedSurgeryTool is the surgery flow's existing per-tool delay lever, the honourable tools do not carry it
+- type: entity
+  parent: CMUYautjaStabilizerGel
+  id: CMUYautjaBadBloodStabilizerGel
+  suffix: Yautja, Bad Blood
+  components:
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.25
+
+- type: entity
+  parent: CMUYautjaHealingGun
+  id: CMUYautjaBadBloodHealingGun
+  suffix: Yautja, Bad Blood
+  components:
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.25
+
+- type: entity
+  parent: CMUYautjaWoundClamp
+  id: CMUYautjaBadBloodWoundClamp
+  suffix: Bad Blood
+  components:
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.25
+
+- type: entity
+  parent: CMUYautjaMedicompFull
+  id: CMUYautjaBadBloodMedicompFull
+  suffix: Yautja, Bad Blood, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaBadBloodStabilizerGel
+    - id: CMUYautjaBadBloodHealingGun
+    - id: CMUYautjaBadBloodWoundClamp
+    - id: CMUYautjaAlienHealthAnalyzer
+    - id: CMUYautjaAutoInjector
+      amount: 3
+    - id: CMUYautjaHealingGel
+      amount: 3

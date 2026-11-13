@@ -33,9 +33,15 @@ public sealed partial class YautjaHumanMeleeSystem : EntitySystem
 
     private void OnMeleeHit(Entity<YautjaHumanMeleeComponent> ent, ref MeleeHitEvent args)
     {
-        // pred weapons don't wide swing, so the one target decides it
-        if (!args.IsHit || args.HitEntities.Count != 1 || !IsHuman(args.HitEntities[0]))
+        // honourable pred weapons don't wide swing; a Bad Blood's can, and then every target has to be human
+        if (!args.IsHit || args.HitEntities.Count == 0)
             return;
+
+        foreach (var hit in args.HitEntities)
+        {
+            if (!IsHuman(hit))
+                return;
+        }
 
         // SkillsSystem already multiplied the swing, take it back off
         var skill = _skills.GetSkill(args.User, MeleeSkill);

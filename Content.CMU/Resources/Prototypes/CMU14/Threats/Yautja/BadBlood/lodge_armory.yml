@@ -1,0 +1,262 @@
+# Lodge part: the armory. Deployed with the Lodge and removed with it.
+# It is an automated vendor that sells from the clan's Superiority Points (BadBloodCampArmory answers the vendor's
+# pooled-points hook), so "points" below are SP. Tiers open by lifetime SP on the rule: II at 12, III at 30, IV with
+# the clan ship. The plasma caster itself is never sold: a Bad Blood lands with stun and immobilizer, the clan buys
+# the lethal bolt once at tier II, and the Leader buys the eradicator at tier III after it. The plasma lance is not
+# sold at all: it gibs humans, and a gibbed body gives the clan nothing.
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodCampArmory
+  name: Lodge armory
+  description: A scavenged forge and the racks around it. The clan arms itself here with what its kills have earned.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    drawdepth: Objects
+    layers:
+    - state: "autolathe"
+  - type: Icon
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    state: "autolathe"
+  - type: BadBloodCampPart
+    kind: Armory
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMAutomatedVendorBui
+        interactionRange: 2.5
+  - type: ActivatableUI
+    key: enum.CMAutomatedVendorUI.Key
+  - type: BadBloodCampArmory
+    pointsType: BadBloodSp
+    # every ware is listed, tier I included: the Leader-early rule and the tests read the tier from here
+    tiers:
+      CMUBadBloodArmoryTrapsBundle: 1
+      CMUYautjaHealingGel: 1
+      CMUYautjaSmartDisc: 1
+      CMUYautjaBadBloodStabilizerGel: 1
+      CMUYautjaCleanserGelVial: 1
+      CMUYautjaHarpoon: 1
+      CMUYautjaCeremonialDagger: 1
+      CMUBadBloodWristBladesAttachment: 2
+      CMUBadBloodScimitarAttachment: 2
+      CMUBadBloodChainGauntletAttachment: 2
+      CMUYautjaCombistick: 2
+      CMUYautjaClanSword: 2
+      CMUYautjaHunterSpear: 2
+      CMUBadBloodArmoredMask: 2
+      CMUBadBloodClanArmor: 2
+      CMUYautjaBracerShieldAttachment: 2
+      CMUYautjaChainwhip: 2
+      CMUYautjaWarAxe: 2
+      CMUBadBloodLethalUnlock: 2
+      CMUYautjaWarGlaive: 3
+      CMUYautjaDualWarScythe: 3
+      CMUBadBloodScavengedSpikeLauncher: 3
+      CMUBadBloodEradicatorUnlock: 3
+      CMUBadBloodLeaderArmor: 3
+      CMUYautjaHivebreaker: 3
+    leaderOnly:
+    - CMUBadBloodEradicatorUnlock
+    # bought by the Leader, unlocked for the whole clan
+    - CMUBadBloodLethalUnlock
+    # once the clan ship has arrived: half price (rounded up), and the lethal bolt and the eradicator are on every
+    # bracer without buying them
+    tierFourPrices:
+      CMUYautjaWarGlaive: 4
+      CMUBadBloodLeaderArmor: 5
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    pointsType: BadBloodSp
+    scaling: false
+    sections:
+    - name: Tier I
+      entries:
+      - id: CMUBadBloodArmoryTrapsBundle
+        name: Hunting Traps (x2)
+        points: 3
+      - id: CMUYautjaHealingGel
+        name: Healing Capsule
+        points: 3
+      - id: CMUYautjaBadBloodStabilizerGel
+        name: Stabilizer Gel
+        points: 3
+      - id: CMUYautjaCleanserGelVial
+        name: Cleanser Gel Vial
+        points: 2
+      - id: CMUYautjaHarpoon
+        name: Large Harpoon
+        points: 4
+      - id: CMUYautjaCeremonialDagger
+        name: Ceremonial Dagger
+        points: 4
+      - id: CMUYautjaSmartDisc
+        name: Smart-Disc
+        points: 5
+    - name: Tier II (12 lifetime SP)
+      entries:
+      - id: CMUBadBloodWristBladesAttachment
+        name: Wrist Blades (bracer attachment)
+        points: 4
+      - id: CMUBadBloodScimitarAttachment
+        name: Scimitar (bracer attachment)
+        points: 4
+      - id: CMUBadBloodChainGauntletAttachment
+        name: Chain Gauntlet (bracer attachment)
+        points: 4
+      - id: CMUYautjaBracerShieldAttachment
+        name: Compact Shield (bracer attachment)
+        points: 4
+      - id: CMUYautjaCombistick
+        name: Combi-Stick
+        points: 6
+      - id: CMUYautjaClanSword
+        name: Clan Sword
+        points: 6
+      - id: CMUYautjaHunterSpear
+        name: Hunter Spear
+        points: 4
+      - id: CMUYautjaChainwhip
+        name: Chainwhip
+        points: 6
+      - id: CMUYautjaWarAxe
+        name: War Axe
+        points: 6
+      - id: CMUBadBloodArmoredMask
+        name: Armored Clan Mask
+        points: 4
+      - id: CMUBadBloodClanArmor
+        name: Full Clan Armor
+        points: 7
+        replaceSlot: OUTERCLOTHING
+      - id: CMUBadBloodLethalUnlock
+        name: Lethal Bolt (whole clan, once)
+        points: 7
+    - name: Tier III (30 lifetime SP)
+      entries:
+      - id: CMUYautjaWarGlaive
+        name: War Glaive
+        points: 8
+      - id: CMUYautjaDualWarScythe
+        name: Dual War Scythe
+        points: 8
+      - id: CMUBadBloodScavengedSpikeLauncher
+        name: Scavenged Spike Launcher
+        points: 10
+        maxPerUser: 1
+      - id: CMUBadBloodLeaderArmor
+        name: Leader-Grade Armor
+        points: 9
+        replaceSlot: OUTERCLOTHING
+      - id: CMUYautjaHivebreaker
+        name: Hivebreaker
+        points: 11
+        maxPerUser: 1
+      - id: CMUBadBloodEradicatorUnlock
+        name: Eradicator Mode (Leader only, once, needs the lethal bolt)
+        points: 11
+
+- type: entity
+  id: CMUBadBloodArmoryTrapsBundle
+  name: hunting traps
+  description: Two hunting traps.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/yautja_items.rsi
+    state: yauttrap0
+  - type: CMVendorBundle
+    bundle:
+    - CMUYautjaHuntingTrap
+    - CMUYautjaHuntingTrap
+
+# Weapon swaps. Fitting one to a bracer takes the place of the weapon of the same kind that was there.
+# They deploy the Bad Blood blades, which carry the structure-only Breaching boost.
+- type: entity
+  parent: CMUYautjaWristBladesAttachment
+  id: CMUBadBloodWristBladesAttachment
+  suffix: Bad Blood
+  components:
+  - type: YautjaStoredGear
+    kind: WristBlades
+    deployedPrototype: CMUYautjaBadBloodWristBlades
+
+- type: entity
+  parent: CMUYautjaScimitarAttachment
+  id: CMUBadBloodScimitarAttachment
+  suffix: Bad Blood
+  components:
+  - type: YautjaStoredGear
+    kind: Scimitar
+    deployedPrototype: CMUYautjaBadBloodScimitar
+
+- type: entity
+  parent: CMUYautjaChainGauntletsAttachment
+  id: CMUBadBloodChainGauntletAttachment
+  suffix: Bad Blood
+  components:
+  - type: YautjaStoredGear
+    kind: ChainGauntlet
+    deployedPrototype: CMUYautjaBadBloodChainGauntlet
+
+# 20 / 25 / 20 / 10. the Leader starts with an armored mask, grunts buy theirs
+- type: entity
+  parent: CMUYautjaMaskBadBloodCommando
+  id: CMUBadBloodArmoredMask
+  name: armored clan mask
+  description: A clan mask backed with scavenged plating.
+  suffix: Bad Blood, Armored
+  components:
+  - type: CMArmor
+    melee: 20
+    bullet: 25
+    bio: 20
+    explosionArmor: 10
+
+# 35 / 45 / 25 / 35: a full suit of clan armor. grunts land in patchwork (35 / 20 / 20 / 30) and earn this at tier II
+- type: entity
+  parent: CMUYautjaClanArmor
+  id: CMUBadBloodClanArmor
+  name: full clan armor
+  description: A complete suit of clan plate, taken or traded for. Far better than the patchwork a Bad Blood lands in.
+  suffix: Bad Blood, Full
+
+# 40 / 50 / 30 / 40, the same plate the Leader lands in (leader_gear.yml). it makes a grunt a viable successor
+- type: entity
+  parent: CMUYautjaBadBloodArmorCommando
+  id: CMUBadBloodLeaderArmor
+  name: clan leader's armor
+  description: Heavy plate of the kind a clan's Leader wears.
+  suffix: Bad Blood, Leader
+  components:
+  - type: CMArmor
+    melee: 40
+    bullet: 50
+    bio: 30
+    explosionArmor: 40
+
+# not a thing to carry: buying it unlocks the lethal bolt for every Bad Blood's caster, and the armory deletes this
+# placeholder
+- type: entity
+  id: CMUBadBloodLethalUnlock
+  name: lethal bolt
+  description: The clan's plasma casters are tuned for the lethal bolt. Every Bad Blood may fire it.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/actions.rsi
+    state: bracer_framed
+  - type: BadBloodLethalUnlock
+
+# not a thing to carry: buying it unlocks the eradicator for the clan, and the armory deletes this placeholder
+- type: entity
+  id: CMUBadBloodEradicatorUnlock
+  name: eradicator mode
+  description: The clan's plasma caster is tuned for the eradicator. Only the Leader may fire it.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/actions.rsi
+    state: bracer_framed
+  - type: BadBloodEradicatorUnlock

@@ -386,9 +386,6 @@ ent-CMUYautjaThrallLoadoutVendor = яутжа Thrall снаряжение сте
 ent-CMUYautjaBloodedThrallLoadoutVendor = яутжа окровавленный Thrall снаряжение стеллаж
     .desc = Стеллаж снаряжения для охоты.
 
-ent-CMUYautjaBadBloodLoadoutVendor = яутжа охотничий снаряжение стеллаж
-    .desc = Стеллаж снаряжения для охоты.
-
 ent-CMUYautjaStrandedLoadoutVendor = яутжа охотничий снаряжение стеллаж
     .desc = Стеллаж снаряжения для охоты.
 
@@ -1067,7 +1064,7 @@ ent-CMUYautjaLarvaPeltTrophy = личинка шкура
 ent-CMUYautjaHumanHide = flayed шкура
     .desc = лист человеческий шкура removed during яутжа butchery.
 
-ent-CMUYautjaHumanSpine = череп
+ent-CMUYautjaHumanSpine = позвоночник
     .desc = Кость, которая выглядит человеческой.
 
 ent-CMUYautjaHumanTorso = Снаряжение яутжа

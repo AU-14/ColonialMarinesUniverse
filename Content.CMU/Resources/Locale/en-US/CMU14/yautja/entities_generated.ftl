@@ -365,8 +365,6 @@ ent-CMUYautjaThrallLoadoutVendor = Yautja Thrall Gear Rack
 ent-CMUYautjaBloodedThrallLoadoutVendor = Yautja Blooded Thrall Gear Rack
     .desc = A gear rack for hunting.
 
-ent-CMUYautjaBadBloodLoadoutVendor = Yautja Hunting Gear Rack
-    .desc = A gear rack for hunting.
 
 ent-CMUYautjaStrandedLoadoutVendor = Yautja Hunting Gear Rack
     .desc = A gear rack for hunting.
@@ -1058,7 +1056,7 @@ ent-CMUYautjaAbominationPeltTrophy = Abomination pelt
 ent-CMUYautjaHumanHide = human skin
     .desc = The by-product of human farming.
 
-ent-CMUYautjaHumanSpine = skull
+ent-CMUYautjaHumanSpine = spine
     .desc = A bone that appears to be of human origin.
 
 ent-CMUYautjaHumanTorso = ribcage

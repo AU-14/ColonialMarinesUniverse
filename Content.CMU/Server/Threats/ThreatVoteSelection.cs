@@ -351,6 +351,51 @@ public static class ThreatVoteSelection
         return assignments;
     }
 
+    /// <summary>
+    ///     Whether the profile lists the threat by name, as opposed to the empty "any threat" preference.
+    /// </summary>
+    public static bool ExplicitlyPrefersThreat(HumanoidCharacterProfile profile, string? presetId, string threatId)
+    {
+        return profile.GetThreatPreferencesForGamemode(presetId)
+            .Any(preference => preference.Id.Equals(threatId, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    ///     Stable split of already shuffled players: those who explicitly prefer the winning threat first,
+    ///     everyone else after. Each group keeps its shuffled order.
+    /// </summary>
+    public static List<NetUserId> OrderByThreatPreference(IReadOnlyList<NetUserId> shuffledPlayers,
+        Func<NetUserId, bool> prefersThreat)
+    {
+        var ordered = new List<NetUserId>(shuffledPlayers.Count);
+        var others = new List<NetUserId>();
+        foreach (NetUserId player in shuffledPlayers)
+        {
+            if (prefersThreat(player))
+                ordered.Add(player);
+            else
+                others.Add(player);
+        }
+
+        ordered.AddRange(others);
+        return ordered;
+    }
+
+    /// <summary>
+    ///     Whether a threat must stay off the ballot because one of its blocked game rules is already added.
+    /// </summary>
+    public static bool IsBlockedByRules(IReadOnlyCollection<EntProtoId> blockedGameRules,
+        IReadOnlyCollection<string> addedGameRules)
+    {
+        foreach (EntProtoId blocked in blockedGameRules)
+        {
+            if (addedGameRules.Contains(blocked.Id))
+                return true;
+        }
+
+        return false;
+    }
+
     public static string GetThreatDisplayName(string threatId)
     {
         if (string.IsNullOrWhiteSpace(threatId))

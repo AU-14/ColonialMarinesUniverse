@@ -7,6 +7,8 @@ using Content.Server.GameTicking;
 using Content.Server.Chat.Managers;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Players.PlayTimeTracking;
+using Content.Server.Preferences.Managers;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Synth;
@@ -24,6 +26,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Players;
+using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
 using Content.Shared.SSDIndicator;
@@ -53,6 +56,8 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private PlayTimeTrackingSystem _playTime = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
@@ -284,7 +289,7 @@ public sealed partial class ThreatSystem : EntitySystem
     }
 
     public bool ForceSpawnThreat(ProtoId<ThreatPrototype> threatId, EntityUid fallbackMarker,
-        bool startWinConditions = true)
+        bool startWinConditions = true, bool skipInterest = false)
     {
         if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threat) ||
             !_entityManager.TryGetComponent(fallbackMarker, out TransformComponent? transform))
@@ -292,8 +297,16 @@ public sealed partial class ThreatSystem : EntitySystem
             return false;
         }
 
-        return QueueThreat(threat, transform.MapID, new(), startWinConditions: startWinConditions,
-            forced: true) != null;
+        var id = QueueThreat(threat, transform.MapID, new(), startWinConditions: startWinConditions,
+            forced: true);
+        if (id == null)
+            return false;
+
+        // testing and events: do not wait for players to show interest, the bodies become ghost roles
+        if (skipInterest)
+            _forceInterest.DeployNow(id.Value);
+
+        return true;
     }
 
     internal void SchedulePendingThreatSpawn(ThreatPrototype threat,
@@ -360,7 +373,8 @@ public sealed partial class ThreatSystem : EntitySystem
             try
             {
                 foreach (var step in ExecuteSpawnSteps(threat, mapId, currentAssignments, stagedBodies, currentVoters,
-                             scalingPlayerCount: population, playerBudget: playerBudget))
+                             scalingPlayerCount: population, playerBudget: playerBudget,
+                             interestedPlayers: interested))
                 {
                     if (step == ForceDeploymentStep.Completed && startWinConditions)
                     {
@@ -415,7 +429,8 @@ public sealed partial class ThreatSystem : EntitySystem
         IReadOnlyList<NetUserId>? voteHeldPlayers = null,
         bool requireObserverForVotePlayers = false,
         int? scalingPlayerCount = null,
-        int? playerBudget = null)
+        int? playerBudget = null,
+        IReadOnlySet<NetUserId>? interestedPlayers = null)
     {
         string threatId = threat.ID;
         if (threat.RoundStartSpawn is not { } partySpawn || string.IsNullOrWhiteSpace(partySpawn.Id))
@@ -776,6 +791,11 @@ public sealed partial class ThreatSystem : EntitySystem
                 spawnedMembers.RemoveAll(uid => TerminatingOrDeleted(uid));
                 eligibleHeldPlayers = GetEligibleVoteHeldPlayers(voteHeldPlayers, requireObserverForVotePlayers);
                 _random.Shuffle(eligibleHeldPlayers);
+                // Voters who explicitly picked this threat are seated before "any threat" voters.
+                string? preferencePresetId = _auRound.SelectedPreset?.ID;
+                eligibleHeldPlayers = ThreatVoteSelection.OrderByThreatPreference(eligibleHeldPlayers,
+                    player => _prefs.GetPreferencesOrNull(player)?.SelectedCharacter is HumanoidCharacterProfile profile
+                        && ThreatVoteSelection.ExplicitlyPrefersThreat(profile, preferencePresetId, threatId));
                 var heldAssignments = new List<ThreatVoteAssignment>(eligibleHeldPlayers.Count);
                 foreach (NetUserId player in eligibleHeldPlayers)
                 {
@@ -811,10 +831,18 @@ public sealed partial class ThreatSystem : EntitySystem
                     eligibleHeldPlayers.Count}, assignedLeaders={assignedLeaders}/{spawnedLeaders.Count
                     }, assignedMembers={assignedMembers}/{spawnedMembers.Count}.");
 
+                bool reserveLeftoverVoters = threat?.ReserveLeftoverVoters == true;
+                var leftoverVoters = new List<NetUserId>();
                 foreach (NetUserId playerId in eligibleHeldPlayers)
                 {
                     if (spawnedThreatPlayers.Contains(playerId))
                         continue;
+
+                    if (reserveLeftoverVoters)
+                    {
+                        leftoverVoters.Add(playerId);
+                        continue;
+                    }
 
                     if (!_playerManager.TryGetSessionById(playerId, out ICommonSession? session))
                         continue;
@@ -841,6 +869,13 @@ public sealed partial class ThreatSystem : EntitySystem
                 }
 
                 ReleaseVoteHeldPlayers(voteHeldPlayers, threatId, "voted threat spawn completed", false);
+
+                if (leftoverVoters.Count > 0)
+                {
+                    _sawmill.Info($"[ThreatSystem] Reserving {leftoverVoters.Count} leftover voter(s) for '{threatId}' instead of returning them to lobby.");
+                    var leftoverEvent = new ThreatLeftoverVotersEvent(threatId, leftoverVoters);
+                    RaiseLocalEvent(ref leftoverEvent);
+                }
 
                 yield return ForceDeploymentStep.Completed;
                 yield break;
@@ -877,6 +912,29 @@ public sealed partial class ThreatSystem : EntitySystem
                 _sawmill.Warning($"[ThreatSystem] Threat '{threatId}' had {roundstartMemberAssignments.Count
                 } assigned member player(s) but only {spawnedMembers.Count} member body/bodies spawned.");
             }
+
+            // Forced and admin spawns reserve no jobs, so volunteers who registered interest are seated here.
+            if (interestedPlayers != null)
+            {
+                List<NetUserId> volunteers = GetEligibleVoteHeldPlayers(
+                    interestedPlayers.Where(player => !spawnedThreatPlayers.Contains(player)).ToList(),
+                    false);
+                _random.Shuffle(volunteers);
+                assignedRoundstartLeaders += AssignThreatMinds(
+                    volunteers.Select(player => new ThreatVoteAssignment(player, ThreatLeaderJobId)).ToList(),
+                    spawnedLeaders.Skip(assignedRoundstartLeaders).ToList(),
+                    spawnedThreatPlayers);
+                assignedRoundstartMembers += AssignThreatMinds(
+                    volunteers.Where(player => !spawnedThreatPlayers.Contains(player))
+                        .Select(player => new ThreatVoteAssignment(player, ThreatMemberJobId))
+                        .ToList(),
+                    spawnedMembers.Skip(assignedRoundstartMembers).ToList(),
+                    spawnedThreatPlayers);
+            }
+
+            // Must run before the deployment's finally block releases the bodies, or they stay unplayable.
+            AddGhostRolesForUnassigned(spawnedLeaders, assignedRoundstartLeaders, ThreatLeaderJobId);
+            AddGhostRolesForUnassigned(spawnedMembers, assignedRoundstartMembers, ThreatMemberJobId);
 
             int removed = ThreatSystem.RemoveThreatJobAssignments(assignedJobs, spawnedThreatPlayers);
             if (removed > 0)
@@ -1052,6 +1110,26 @@ public sealed partial class ThreatSystem : EntitySystem
 
         EnsureComp<GhostTakeoverAvailableComponent>(entity);
         _forceInterest.TrackRole(entity);
+    }
+
+    /// <summary>
+    ///     Makes <paramref name="body"/> count as the given threat job: objective job, THREAT faction and the
+    ///     objective re-scan. If the body has a mind, its job role is swapped to match.
+    /// </summary>
+    internal void ApplyThreatRole(EntityUid body, ProtoId<JobPrototype> job)
+    {
+        AddThreatFaction(body, job);
+
+        if (!_mindSystem.TryGetMind(body, out EntityUid mindId, out MindComponent? mind))
+            return;
+
+        if (_roles.MindHasRole<JobRoleComponent>((mindId, mind), out var current)
+            && current.Value.Comp1.JobPrototype == job)
+            return;
+
+        _roles.MindAddJobRole(mindId, mind, silent: true, jobPrototype: job);
+        if (mind.UserId is { } userId && _playerManager.TryGetSessionById(userId, out ICommonSession? session))
+            _playTime.PlayerRolesChanged(session);
     }
 
     private void AddThreatFaction(EntityUid entity, ProtoId<JobPrototype> jobId)

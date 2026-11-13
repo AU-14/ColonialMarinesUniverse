@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Server.Administration.Logs;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -960,6 +961,14 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private bool IsFriendlyToDisc(Entity<YautjaSmartDiscComponent> ent, EntityUid target)
     {
+        // CMU14: a Bad Blood's disc leaves the clan's hounds alone
+        if (HasComp<BadBloodHoundComponent>(target) &&
+            ent.Comp.YautjaOwner is { } discOwner &&
+            HasComp<YautjaBadBloodComponent>(discOwner))
+        {
+            return true;
+        }
+
         if (!TryComp(target, out NpcFactionMemberComponent? targetFaction))
             return false;
 

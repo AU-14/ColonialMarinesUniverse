@@ -1,0 +1,67 @@
+# Bad Bloods can only digest prey cooked at the Lodge spit, and pills so they can still take medicine
+- type: entity
+  parent: CMUOrganHumanStomach
+  id: CMUOrganYautjaBadBloodStomach
+  components:
+  - type: Stomach
+    specialDigestible:
+      tags:
+      - CMUYautjaPreyCooked
+      - Pill
+
+# everything the Bad Blood mobs share for survival. honourable hunters stay on CMUMobYautja
+- type: entity
+  abstract: true
+  save: false
+  parent: CMUMobYautja
+  id: CMUMobYautjaBadBloodBase
+  components:
+  # overriding organs replaces the whole map, so this is AppearanceYautja's list with the stomach swapped
+  - type: InitialBody
+    organs:
+      Torso: CMUPartYautjaTorso
+      Head: CMUPartYautjaHead
+      ArmLeft: CMUPartYautjaLeftArm
+      ArmRight: CMUPartYautjaRightArm
+      HandRight: CMUPartYautjaRightHand
+      HandLeft: CMUPartYautjaLeftHand
+      LegLeft: CMUPartYautjaLeftLeg
+      LegRight: CMUPartYautjaRightLeg
+      FootLeft: CMUPartYautjaLeftFoot
+      FootRight: CMUPartYautjaRightFoot
+      Brain: CMUOrganHumanBrain
+      Eyes: CMUOrganHumanEyes
+      Lungs: CMUOrganHumanLungs
+      Heart: CMUOrganHumanHeart
+      Stomach: CMUOrganYautjaBadBloodStomach
+      Liver: CMUOrganHumanLiver
+      Kidneys: CMUOrganHumanKidneys
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: CMUYautjaBadBloodHunger
+      Thirst:
+        prototype: CMUYautjaBadBloodThirst
+  - type: SatiationSpeedModifier
+    satiations:
+      Hunger:
+        thresholds:
+          Peckish: 0.85
+          Starving: 0.6
+      Thirst:
+        thresholds:
+          Thirsty: 0.85
+          Parched: 0.6
+  - type: SatiationDamage
+    satiations:
+      Hunger:
+        thresholds:
+          Starving:
+            types:
+              Blunt: 0.15
+      Thirst:
+        thresholds:
+          Parched:
+            types:
+              Blunt: 0.15
+  - type: BadBloodSurvival

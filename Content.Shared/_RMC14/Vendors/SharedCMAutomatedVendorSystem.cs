@@ -664,6 +664,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
             Dirty(vendor, thisJOVendor);
         }
 
+        if (CMUTryPayPooledPoints(vendor, actor, section, entry) is { } cmuPooledPaid) { if (!cmuPooledPaid) { ResetChoices(); return; } } else // CMU14: a pooled-points vendor (the Bad Blood armory) pays from its pool, not the buyer's points
         if (entry.Points != null)
         {
             if (vendor.Comp.UseObjectivePoints)

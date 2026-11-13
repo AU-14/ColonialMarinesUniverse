@@ -602,11 +602,13 @@
   - type: Item
     sprite: CMU14/Yautja/human_skin.rsi
     size: Small
+  - type: YautjaTrophy
+    kind: HumanHide
 
 - type: entity
   parent: BaseItem
   id: CMUYautjaHumanSpine
-  name: skull
+  name: spine
   description: A bone that appears to be of human origin.
   components:
   - type: Sprite
@@ -615,6 +617,8 @@
   - type: Item
     sprite: CMU14/Yautja/yautja_items.rsi
     size: Small
+  - type: YautjaTrophy
+    kind: HumanSpine
 
 - type: entity
   parent: BaseItem
@@ -628,6 +632,8 @@
   - type: Item
     sprite: CMU14/Yautja/yautja_items.rsi
     size: Small
+  - type: YautjaTrophy
+    kind: HumanTorso
 
 - type: entity
   id: CMUYautjaHumanButcheredRemains

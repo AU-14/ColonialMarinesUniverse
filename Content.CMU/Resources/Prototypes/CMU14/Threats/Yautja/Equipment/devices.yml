@@ -165,12 +165,21 @@
   description: A worn hunting bracer, crudely maintained. Its weapon bay has been damaged. A communicator has been wired
     directly into the bracer.
   components:
+  # Bad Bloods are not bound by the honour code, an empty list takes the guide off the bracer
+  - type: GuideHelp
+    guides:
+    - CMUGuideBadBlood
   - type: YautjaBadBloodGearChoice
   - type: YautjaBracer
-    enableRaiseThrall: true
-    maxRaiseThrall: 3
-    cloakDuration: 20
-    cloakCooldown: 20
+    enableRaiseThrall: false
+    maxRaiseThrall: 0
+    cloakDuration: 25
+    cloakCooldown: 30
+    # scavenged cloak: the marine scout cloak's visibility (ThermalCloak defaults 0.025 still, 0.25 moving),
+    # not the honourable 0.02 / 0.10. night vision stays hidden, as the scout cloak hides from it too
+    cloakOpacity: 0.025
+    cloakMovingOpacity: 0.25
+    bulletDecloakAbsorbs: false
     cloakWarningBefore: 5
     cloakWarningSound:
       collection: CMUYautjaCloakWarning
@@ -182,25 +191,23 @@
   - type: ContainerFill
     containers:
       key_slots:
-      - CMUYautjaEncryptionKey
+      - CMUYautjaBadBloodEncryptionKey
   - type: Headset
     requiredSlot: GLOVES
   - type: EncryptionKeyHolder
     keySlots: 1
   - type: YautjaGearContainer
     gearPrototypes:
-      Caster: CMUYautjaPlasmaCasterCrimson
-      WristBlades: CMUYautjaWristBlades
-      Scimitar: CMUYautjaScimitar
-      ChainGauntlet: CMUYautjaChainGauntlet
+      Caster: CMUYautjaBadBloodPlasmaCaster
+      WristBlades: CMUYautjaBadBloodWristBlades
+      Scimitar: CMUYautjaBadBloodScimitar
+      ChainGauntlet: CMUYautjaBadBloodChainGauntlet
   - type: UserInterface
     interfaces:
       enum.YautjaBracerUIKey.Key:
         type: YautjaBracerBui
       enum.YautjaMarkUIKey.Key:
         type: YautjaMarkBui
-      enum.YautjaThrallMessageUIKey.Key:
-        type: YautjaThrallMessageBui
       enum.YautjaTranslatorUIKey.Key:
         type: YautjaTranslatorBui
       enum.DialogUiKey.Key:
@@ -1644,6 +1651,24 @@
   - type: YautjaMaskVisorGlasses
   - type: Unremoveable
 
+# Bad Blood visor: like xeno vision. Mobs are drawn through walls by the overlay, but field of view stays on, so
+# rooms, items and structures behind a wall stay hidden.
+- type: entity
+  parent: CMUYautjaNightVisionGlasses
+  id: CMUBadBloodNightVisionGlasses
+  suffix: Bad Blood
+  components:
+  - type: NightVisionItem
+    actionId:
+    toggleable: false
+    slotFlags: EYES
+    defaultState: Full
+    green: false
+    overlay: true
+    blockScopes: true
+    ignoreUserOnlyHalf: true
+    experimentalMesonFov: false
+
 - type: entity
   parent: CMUYautjaMask
   id: CMUYautjaMaskScalable
@@ -2249,7 +2274,7 @@
     - CMUYautjaHuntingPouch
     - CMUYautjaMedicompSurvivor
     - CMUYautjaCleanserGelVial
-    - CMUYautjaHivebreaker
+    - CMUYautjaWaterFlask
 
 - type: entity
   id: CMUYautjaBadBloodArmorPatchworkBundle
@@ -3176,233 +3201,6 @@
         replaceSlot: back
         mandatory: true
 
-- type: entity
-  parent: CMUYautjaLoadoutVendor
-  id: CMUYautjaBadBloodLoadoutVendor
-  name: Yautja Hunting Gear Rack
-  description: A gear rack for hunting.
-  suffix: Yautja, Bad Blood, Hunting Gear
-  components:
-  - type: Sprite
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
-    drawdepth: SmallObjects
-    offset: 0,0.5
-    layers:
-    - state: pred_vendor_elder_left
-      map: ["enum.VendingMachineVisualLayers.Base"]
-    - state: pred_vendor_elder_left
-      shader: unshaded
-      map: ["enum.VendingMachineVisualLayers.BaseUnshaded", "rmc_flick_animation"]
-  - type: Icon
-    sprite: CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi
-    state: pred_vendor_elder_left
-  - type: YautjaGearRack
-    kind: BadBlood
-  - type: CMAutomatedVendor
-    uiStyle: Yautja
-    sections:
-    - name: Essential Hunting Supplies
-      entries:
-      - id: CMUYautjaBadBloodHuntingEquipmentBundle
-        name: Hunting Equipment
-        choices: {CMUYautjaEssentials: 1}
-        maxPerUser: 1
-        mandatory: true
-    - name: Armor Set
-      choices: {CMUYautjaArmor: 1}
-      entries:
-      - id: CMUYautjaBadBloodArmorPatchworkBundle
-        name: Patchwork Armor
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorPatchworkAltBundle
-        name: Patchwork Armor (Alt)
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorLunaticBundle
-        name: Lunatic Armor
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorScavengerBundle
-        name: Scavenger Armor
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorScavengerAltBundle
-        name: Scavenger Armor (Alt)
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorVenatorBundle
-        name: Venator Armor
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorCommandoBundle
-        name: Commando Armor
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorCommandoAltBundle
-        name: Commando Armor (Alt)
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBadBloodArmorEmissaryBundle
-        name: Emissary Armor
-        maxPerUser: 1
-        mandatory: true
-    - name: Main Weapons (CHOOSE 1)
-      choices: {CMUYautjaPrimary: 1}
-      entries:
-      - id: CMUYautjaClanSword
-        name: The Primary Hunting Sword
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaRendingSword
-        name: The Rending Hunting Sword
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaPiercingSword
-        name: The Piercing Hunting Sword
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaSeveringSword
-        name: The Severing Hunting Sword
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaCruelStaff
-        name: The Taruulan Staff
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaChainwhip
-        name: The Sundering Chain-Whip
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaDualWarScythe
-        name: The Cleaving War-Scythe
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaDoubleWarScythe
-        name: The Ripping War-Scythe
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaCombistick
-        name: The Adaptive Combi-Stick
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaWarAxe
-        name: The Butchering War Axe
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaWarGlaive
-        name: The Lumbering Glaive
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaCleavingGlaive
-        name: The Imposing Glaive
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaLongaxe
-        name: The Crushing Longaxe
-        maxPerUser: 1
-        recommended: true
-    - name: Bracer Attachments
-      entries:
-      - id: CMUYautjaWristBladesBundle
-        name: Wrist Blades
-        choices: {CMUYautjaBracer: 1}
-        maxPerUser: 1
-        mandatory: true
-      - id: CMUYautjaBracerShieldAttachment
-        name: The Compact Shield
-        choices: {CMUYautjaBracer: 1}
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaFearsomeScimitarsBundle
-        name: The Fearsome Scimitars
-        choices: {CMUYautjaPrimary: 1}
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaSkeweringScimitarsBundle
-        name: The Skewering Scimitars
-        choices: {CMUYautjaPrimary: 1}
-        maxPerUser: 1
-        recommended: true
-      - id: CMUYautjaChainGauntletsBundle
-        name: The Chain Gauntlets
-        choices: {CMUYautjaPrimary: 1}
-        maxPerUser: 1
-        recommended: true
-    - name: Support Equipment (CHOOSE 2)
-      choices: {CMUYautjaSupport: 2}
-      entries:
-      - id: CMUYautjaFalconDroneBadBlood
-        name: The Agile Drone
-        maxPerUser: 1
-      - id: CMUYautjaClanShield
-        name: The Steadfast Shield
-        maxPerUser: 1
-      - id: CMUYautjaHeavyClanArmor
-        name: The Formidable Plate Armor
-        maxPerUser: 1
-        replaceSlot: OUTERCLOTHING
-      - id: CMUYautjaSpikeLauncher
-        name: The Fleeting Spike Launcher
-        maxPerUser: 1
-      - id: CMUYautjaSmartDisc
-        name: The Purifying Smart-Disc
-        maxPerUser: 1
-    - name: Ranged Equipment (CHOOSE 1)
-      choices: {CMUYautjaRanged: 1}
-      entries:
-      - id: CMUYautjaQuiverStrapDynamic
-        name: The Firm Bow
-        maxPerUser: 1
-    - name: Clothing Accessory (CHOOSE 1)
-      choices: {CMUYautjaAccessory: 1}
-      entries:
-      - id: CMUYautjaCapeQuarter
-        name: Quarter-Cape
-        maxPerUser: 1
-        replaceSlot: back
-      - id: CMUYautjaCapeThird
-        name: Third-Cape
-        maxPerUser: 1
-        replaceSlot: back
-      - id: CMUYautjaCapeHalf
-        name: Half-Cape
-        maxPerUser: 1
-        replaceSlot: back
-      - id: CMUYautjaCapePoncho
-        name: Poncho
-        maxPerUser: 1
-        replaceSlot: back
-      - id: CMUYautjaCapeDamaged
-        name: Damaged-Cape
-        maxPerUser: 1
-        replaceSlot: back
-      - id: CMUYautjaCapeFull
-        name: Full-Cape
-        maxPerUser: 1
-        replaceSlot: back
-    - name: Spare Equipment
-      entries:
-      - id: CMUYautjaFalconDroneBadBlood
-        name: Falcon Drone
-        points: 20
-        maxPerUser: 10
-      - id: CMUYautjaHuntingTrap
-        name: Hunting Trap
-        points: 10
-        maxPerUser: 10
-      - id: CMUYautjaDynamicArrow
-        name: Arrow - Dynamic Warhead
-        points: 10
-        maxPerUser: 10
-      - id: CMUYautjaSnareArrow
-        name: Arrow - Snare
-        points: 15
-        maxPerUser: 10
-      - id: CMUFieldOxygenTankFilled # thin and toxic air worlds, refill at the ship's oxygen canister
-        name: Oxygen Tank
-        points: 5
-        maxPerUser: 4
 - type: entity
   parent: CMUYautjaLoadoutVendor
   id: CMUYautjaStrandedLoadoutVendor

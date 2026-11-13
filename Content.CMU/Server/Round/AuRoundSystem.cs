@@ -181,6 +181,8 @@ namespace Content.Server.CMU14.Round
             base.Initialize();
             SubscribeLocalEvent<LoadingMapsEvent>(OnLoadingMaps);
             SubscribeLocalEvent<PostGameMapLoad>(OnPostGameMapLoad);
+            // a round whose vote sequence never starts would otherwise inherit last round's threat
+            SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ => _state.SelectedThreat = null);
             _voteSequence.Reset();
             _state.Reset();
             SelectedPlanetMap = null;

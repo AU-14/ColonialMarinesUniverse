@@ -1,0 +1,175 @@
+<Document>
+  # The Bad Blood Clan
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUBadBloodCamp" Caption="The Lodge"/>
+    <GuideEntityEmbed Entity="CMUBadBloodTotem" Caption="Clan Totem"/>
+  </Box>
+
+  The Bad Bloods are Yautja cast out of their clans. They follow no honour code, hold no rank, and hunt everything. They are a [bold]Distress Signal threat[/bold]: a small clan lands on the planet, builds a camp, and grows stronger with every body it brings home.
+
+  This page covers every Bad Blood mechanic, for the clan and for the marines fighting it.
+
+  ## The round at a glance
+  - The clan lands as one [bold]Leader[/bold] and a few [bold]grunts[/bold].
+  - The Leader pitches the [bold]Lodge[/bold], the clan's camp.
+  - The clan kills prey, brings trophies and bodies back to the Lodge, and earns [bold]Superiority Points (SP)[/bold].
+  - SP buys reinforcements, hounds, Clan Totems and equipment.
+  - Late in the round the clan can call its [bold]ship[/bold]. If the Lodge is still standing when the ship leaves, the clan wins.
+
+  [color=#a4885c]Marines win[/color] by killing the Leader and destroying the Lodge, or by wiping out the clan before its ship arrives.
+
+  [color=#a4885c]Bad Bloods win[/color] by wiping out the marines, or by keeping the Lodge standing until the ship departs.
+
+  ## Joining the clan
+  - The Bad Blood Clan needs [bold]30 players[/bold] to appear on the threat vote. The ballot shows how many seats each threat has.
+  - Players who asked for the threat are seated first.
+  - If you voted for the clan but got no body, you wait in the [bold]Blood Reserve[/bold]. You are first in line for the next seats, and you can leave for the lobby from the reserve dialog.
+  - When the first Lodge is pitched, a free [bold]founding squad[/bold] opens for the reserve.
+  - Living Bad Bloods, hounds and open seats together can never exceed [bold]a quarter of the player count[/bold].
+  - There is no honourable predator hunt on a Bad Blood round.
+
+  ## Leader and grunts
+  [bold]Every Bad Blood[/bold] lands with:
+  - a scavenged bracer with a plasma caster and a choice of melee weapon;
+  - a filled medicomp and a health shard;
+  - a ceremonial dagger (sheathed in the greaves), a polishing rag and a cleanser gel vial, for taking and preparing trophies;
+  - two hunting traps, a water flask, a hunting pouch, a toolbelt and a hound observation pad.
+
+  [bold]Grunts[/bold] land in patchwork armor (35 melee / 20 bullet / 20 bio / 30 explosion).
+
+  [bold]The Leader[/bold] is somewhat stronger:
+  - Leader-grade armor (40 / 50 / 30 / 40);
+  - an extra healing capsule;
+  - tier II and III armory wares open to the Leader one tier early;
+  - only the Leader can pitch the Lodge, call squads while alive, buy the lethal bolt unlock, and buy and fire the eradicator.
+
+  ## The Lodge
+  - The Leader pitches it with the [bold]Pitch Camp[/bold] action, which readies a Lodge kit. Use the kit on open ground, away from the marines' landing zones.
+  - Only one Lodge stands at a time. If it is destroyed, the Leader can pitch a new one after 5 minutes.
+  - It has 900 health. Rifle fire barely scratches it; [bold]explosives and fire[/bold] are what bring it down.
+  - Hitting it reveals it on the marines' map for 30 seconds. It is also revealed while the clan ship is inbound or has arrived, and while no Bad Blood is alive.
+
+  The Lodge deploys with five parts:
+  - [bold]Spit[/bold]: cook bodies and meat for food and SP, and refill your flask.
+  - [bold]Ascension Stone[/bold]: call reinforcement squads, and choose a new Leader.
+  - [bold]Armory[/bold]: spend SP on equipment.
+  - [bold]Kennel[/bold]: buy hounds.
+  - [bold]Cauldron[/bold]: boil prepared limbs down to bone.
+
+  ## Superiority Points
+  SP is shared by the whole clan. One body is worth up to [bold]5 SP[/bold]: 2 from trophies and 3 from cooking. The two stack.
+
+  [bold]Trophies: 1 SP each, at most 2 from one body.[/bold]
+  - Hard trophies (skulls, spines, torsos, bones) are polished with the [bold]polishing rag[/bold].
+  - Soft trophies (hides, scalps, pelts) are cured with the [bold]cleanser gel[/bold], one piece at a time.
+  - Use the prepared trophy on the Lodge and wait three seconds. A trophy can only be offered once.
+
+  [bold]Cooking: up to 3 SP from one body.[/bold]
+  - A whole corpse on the spit pays 3 SP.
+  - Loose cuts of prey meat pay 0.5 SP each, out of the same 3 SP.
+
+  [bold]What counts as prey:[/bold] any human or xeno of any faction that was dead when you took from it. Yautja, synthetics, larvae and parasites pay nothing.
+
+  [bold]Clan Totems[/bold] also pay SP over time. See below.
+
+  ## Clan Totems
+  - Every Bad Blood has a [bold]Raise Clan Totem[/bold] action. The first Totem is free; each one after that costs 3 SP.
+  - The clan can hold 3 Totems, or 4 on rounds with more than 80 players.
+  - A standing Totem pays SP every minute and ripens with age:
+    - young (first 10 minutes): 0.2 SP a minute;
+    - growing (10 to 20 minutes): 0.4 SP a minute;
+    - ripe (after 20 minutes): 0.7 SP a minute.
+  - [bold]A Totem pays nothing while a living marine stands within 7 tiles of it.[/bold]
+  - Bad Bloods near a Totem get hungry more slowly.
+  - Examine a Totem as a Bad Blood to see its stage, its rate, what it has paid, and whether it is contested.
+  - Totem SP counts only half towards armory tiers.
+
+  [color=#a4885c]For marines:[/color] a Totem appears on your map two minutes after it is raised, and destroying Totems is an objective. Destroying one also reveals the Lodge for 90 seconds. Three ripe Totems left alone pay the clan about 21 SP every 10 minutes, more than it earns by hunting.
+
+  ## The armory
+  Armory tiers open as the clan's [bold]lifetime SP[/bold] grows: [bold]tier II at 12[/bold], [bold]tier III at 30[/bold]. Tier IV opens when the clan ship arrives.
+
+  [bold]Tier I[/bold]
+  - Cleanser gel vial: 2
+  - Hunting traps (two), healing capsule, stabiliser gel: 3 each
+  - Harpoon, ceremonial dagger: 4 each
+  - Smart disc: 5
+
+  [bold]Tier II[/bold]
+  - Wrist blade, scimitar and chain gauntlet attachments, bracer shield attachment, hunter spear, armored clan mask: 4 each
+  - Combistick, clan sword, chainwhip, war axe: 6 each
+  - Full clan armor (35 / 45 / 25 / 35): 7
+  - Lethal bolt unlock, for the whole clan: 7, Leader only, bought once
+
+  [bold]Tier III[/bold]
+  - War glaive, dual war scythe: 8 each
+  - Leader-grade armor (40 / 50 / 30 / 40): 9
+  - Scavenged spike launcher: 10, one per hunter
+  - Hivebreaker: 11, one per hunter
+  - Eradicator unlock: 11, Leader only, bought once
+
+  ## The plasma caster
+  Every Bad Blood has a caster. Its modes are earned:
+  - [bold]Stun[/bold] and [bold]immobilizer[/bold]: available from the landing.
+  - [bold]Lethal bolt[/bold]: bought at the armory by the Leader, and then unlocked for the whole clan.
+  - [bold]Eradicator[/bold]: Leader only, unlocked at the armory after the lethal bolt. One shot, then a 10-minute cooldown.
+
+  Each mode drains bracer power: stun 60, immobilizer 300, lethal 150, eradicator 1500.
+
+  ## Reinforcements
+  - [bold]Squads[/bold] are called at the Ascension Stone by the Leader, or by any Bad Blood while the clan has no Leader: 2 grunts for 12 SP, 3 grunts for 16 SP.
+  - The seats are offered as ghost roles. The Blood Reserve is first in line. Seats nobody takes are refunded.
+  - [bold]Hounds[/bold] cost 6 SP at the kennel. A hound arrives asleep and is reserved for its buyer for one minute. Waking it offers it as a ghost role. The buyer also receives an observation pad, which can only watch the clan's own hounds.
+  - The clan's traps and smart discs ignore its own hounds.
+
+  ## Staying alive
+  - Bad Bloods get [bold]hungry and thirsty[/bold]. They cannot eat raw meat and gain nothing from marine food.
+  - Eat [bold]cooked prey[/bold] from the spit, and drink water from your flask.
+  - A starving Bad Blood moves slower, regenerates bracer power and limbs more slowly, takes damage, and cannot raise the cloak.
+  - The medicomp treats wounds in three steps: stabilise, tend, clamp. A full treatment takes about 20 seconds.
+  - A dead Bad Blood stays dead.
+
+  ## Fighting as a Bad Blood
+  - [bold]Cloak:[/bold] lasts 25 seconds, then cools down for 30. It is weaker than an honourable hunter's: faintly visible when still and clearly visible when moving, like a scout's cloak.
+  - [bold]Ambush:[/bold] the first hit from cloak deals 30% more damage and drops the cloak, which then cannot be raised for 4 seconds.
+  - A cloak stripped by a bullet, an EMP or fire cannot be raised again for 10 seconds.
+  - [bold]Breaching:[/bold] wrist blades, the scimitar and the chain gauntlet deal bonus damage to barricades and other structures.
+  - [bold]Wide swing:[/bold] a Bad Blood can swing every Yautja melee weapon wide with right click, hitting everything in the arc. The chain gauntlet is the exception: its right click shoves.
+  - [bold]Mask vision:[/bold] the mask shows people, xenos and other creatures through walls, like xeno vision. It does not show the rooms, items or structures behind a wall.
+  - [bold]Human guns:[/bold] a Bad Blood cannot fire them. Yautja weapons work as normal.
+  - Bad Bloods cannot raise or link thralls. A Hivebreaker from the armory turns one downed xeno into a thrall.
+  - Bad Bloods are [bold]dishonoured[/bold]: they have no rank, earn no honour, and are worth no honour to anyone.
+
+  ## When the Leader dies
+  - If a Lodge is standing, an [bold]ascension vote[/bold] opens. Any living Bad Blood can stand as a candidate and every Bad Blood can vote.
+  - The vote lasts 60 seconds, plus 10 for each candidate, up to 2 minutes.
+  - A tie goes to the candidate with more kills, then to whoever stood first.
+  - The winner's bracer becomes the leader bracer. Every other leader bracer [bold]scuttles[/bold]: a 10-second countdown with a warning, then a small blast. A scuttling bracer cannot be taken off or picked up.
+  - If the Leader dies and no Lodge stands, the marines have won.
+
+  ## The clan ship
+  This is a [bold]late-game event[/bold]. Its clock starts when the clan lands, not at the start of the round.
+  - The ship is called once the clan has held [bold]3 ripe Totems for 10 minutes[/bold] without a break, but never earlier than 45 minutes after the landing.
+  - Losing a ripe Totem restarts the 10 minutes. Without 3 ripe Totems the ship is never called.
+  - It takes 20 minutes to arrive. [bold]Destroying the Lodge cancels the call.[/bold]
+
+  When the ship arrives:
+  - one free grunt seat opens every minute, up to the population cap, while the clan has a Leader and a Lodge;
+  - armory tier IV opens: the war glaive and Leader-grade armor are half price, every bracer can fire the eradicator, and the lethal bolt is unlocked if the clan had not bought it;
+  - every living Bad Blood receives a free smart disc;
+  - the Lodge can still be destroyed.
+
+  [bold]Departure:[/bold] if the Lodge is still standing 20 minutes after the ship arrives, the clan leaves with its trophies and the Bad Bloods win. The timer stops while no Lodge stands and resumes when one is pitched again. Both sides are told when the ship arrives and at 10, 5 and 1 minute to departure.
+
+  ## Fighting the clan
+  Advice for marines:
+  - [bold]Find and burn the Lodge.[/bold] Explosives and fire destroy it; rifles do not. Hitting it puts it on your map.
+  - [bold]Kill the Leader[/bold] while the Lodge is down and the round is yours.
+  - [bold]Push the Totems.[/bold] Standing near one stops its income, destroying it is an objective, and it reveals the Lodge.
+  - [bold]Recover your dead.[/bold] Every body the clan carries home is worth up to 5 SP to them.
+  - Armor-piercing rounds, shotguns, explosives and fire are your best weapons. Fire also stops a Bad Blood cloaking.
+  - A newly landed grunt is lightly armored. A clan that has had time to re-arm is not.
+  - [bold]Keep the clan below 3 ripe Totems and the ship never comes.[/bold] A Totem takes 20 minutes to ripen, and the clan must then hold all three for 10 more.
+  - When the ship is called you have 20 minutes to stop it and 20 more after it lands.
+</Document>

@@ -163,6 +163,12 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
 
     public bool TryInitializePredatorRound(out string message)
     {
+        if (SelectedThreatBlocksHunt())
+        {
+            message = Loc.GetString("cmu-yautja-admin-editor-hunt-blocked-by-threat");
+            return false;
+        }
+
         if (GameTicker.RunLevel == GameRunLevel.PreRoundLobby)
             return TryQueueLobbyHunt(out message);
 
@@ -463,8 +469,14 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
         SpawnRoundStartHunters();
 
         // a failed preset start can clear every added rule, lobby hunt included. put it back
-        if (_lobbyHuntRoundId == GameTicker.RoundId && !IsHuntActive() && !TryInitializePredatorRound(out var restoreMessage))
-            _sawmill.Warning($"Queued Yautja hunt was lost at round start and could not be restored: {restoreMessage}");
+        if (_lobbyHuntRoundId == GameTicker.RoundId && !IsHuntActive())
+        {
+            var wasRolled = _rolledHunt != null;
+            if (!TryInitializePredatorRound(out var restoreMessage))
+                _sawmill.Warning($"Queued Yautja hunt was lost at round start and could not be restored: {restoreMessage}");
+            else if (wasRolled && TryGetActivePredatorRule(out var restored))
+                _rolledHunt = restored.Owner; // still the dice's hunt, so a blocking threat can stand it down
+        }
 
         // no lobby this round (lobby off, forced start), so roll on the preset that actually started
         if (!_randomEnabled ||

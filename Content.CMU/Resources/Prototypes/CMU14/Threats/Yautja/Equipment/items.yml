@@ -250,6 +250,7 @@
   - type: YautjaScalp
     trueDescription: This is the scalp of an irrelevant human.
   - type: YautjaTrophy
+    kind: HumanScalp
 
 - type: entity
   parent:

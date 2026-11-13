@@ -140,6 +140,15 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     // CMU14: the entry message needs a live session. RandomHumanoidSpawnedEvent fires before the player is attached
     // (and mid-round antag spawns never see PlayerSpawnCompleteEvent), so delivery hangs off PlayerAttachedEvent,
     // which hands us the session directly.
+    public static readonly string[] BadBloodEntryLines =
+    [
+        "cmu-bad-blood-entry-1",
+        "cmu-bad-blood-entry-2",
+        "cmu-bad-blood-entry-3",
+        "cmu-bad-blood-entry-4",
+        "cmu-bad-blood-entry-5",
+    ];
+
     private void OnPlayerAttached(PlayerAttachedEvent args)
     {
         if (!TryComp(args.Entity, out YautjaComponent? yautja) || yautja.EntryMessageSent)
@@ -154,6 +163,17 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     // message channel - not as an in-character line. Sent only to the spawning hunter's session.
     private void SendEntryMessage(EntityUid hunter, ICommonSession session)
     {
+        // a Bad Blood is told about the Lodge, Superiority Points, the diet and succession instead of the honour code
+        if (HasComp<YautjaBadBloodComponent>(hunter))
+        {
+            foreach (var line in BadBloodEntryLines)
+            {
+                SendEntryLine(hunter, session, line);
+            }
+
+            return;
+        }
+
         SendEntryLine(hunter, session, "cmu-yautja-entry-1");
         SendEntryLine(hunter, session, "cmu-yautja-entry-2");
         SendEntryLine(hunter, session, "cmu-yautja-entry-3");

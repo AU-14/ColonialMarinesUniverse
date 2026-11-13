@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Server.CMU14.Yautja.BadBlood;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
@@ -32,6 +34,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
     [Dependency] private MetaDataSystem _metadata = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private YautjaTrophySystem _trophies = default!;
+    [Dependency] private BadBloodProvenanceSystem _provenance = default!;
 
     public override void Initialize()
     {
@@ -39,6 +42,29 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         SubscribeLocalEvent<YautjaCauldronComponent, ExaminedEvent>(OnCauldronExamined);
         SubscribeLocalEvent<YautjaCauldronComponent, InteractUsingEvent>(OnCauldronInteractUsing);
         SubscribeLocalEvent<YautjaCauldronComponent, YautjaCauldronBoilDoAfterEvent>(OnCauldronBoilDoAfter);
+        SubscribeLocalEvent<BodyPartSeveredEvent>(OnBodyPartSevered);
+    }
+
+    // Remember which body a severed part came off, and whether that was a Yautja. The part sits inside its
+    // detached carrier by now, and the carrier is what gets flayed and carried to the cauldron, so both are marked.
+    private void OnBodyPartSevered(ref BodyPartSeveredEvent args)
+    {
+        if (TerminatingOrDeleted(args.Part))
+            return;
+
+        var carrier = Transform(args.Part).ParentUid;
+        var hasCarrier = carrier.IsValid() && carrier != args.Body && IsDetachedBody(carrier);
+
+        _provenance.StampTrophy(args.Part, args.Body);
+        if (hasCarrier)
+            _provenance.StampTrophy(carrier, args.Body);
+
+        if (!HasComp<YautjaComponent>(args.Body))
+            return;
+
+        EnsureComp<YautjaOriginPartComponent>(args.Part);
+        if (hasCarrier)
+            EnsureComp<YautjaOriginPartComponent>(carrier);
     }
 
     private void OnCauldronStartup(Entity<YautjaCauldronComponent> ent, ref ComponentStartup args)
@@ -62,6 +88,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         if (args.Handled)
             return;
 
+        // every use on the cauldron is the cauldron's to answer, refusals included (CMSS13 attackby parity)
         args.Handled = true;
 
         if (!CanUseYautjaTech(args.User))
@@ -74,6 +101,12 @@ public sealed partial class YautjaMachineSystem : EntitySystem
             return;
 
         if (!TryResolveSeveredLimb(args.Used, out var bodyPart))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-cauldron-not-limb", ("cauldron", ent.Owner)), args.User, args.User);
+            return;
+        }
+
+        if (IsYautjaOriginPart(args.Used))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-cauldron-not-limb", ("cauldron", ent.Owner)), args.User, args.User);
             return;
@@ -142,6 +175,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         }
 
         if (!TryResolveSeveredLimb(limb, out var bodyPart) ||
+            IsYautjaOriginPart(limb) ||
             !HasComp<YautjaFlayedComponent>(limb) ||
             !TryGetBonePrototype(bodyPart, out var prototype))
         {
@@ -154,6 +188,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         trophy.Hunter = args.User;
         trophy.SourceName = Name(limb);
         Dirty(bone, trophy);
+        _provenance.CopyTrophyOrigin(limb, bone);
         _trophies.RecordCraftedTrophy(args.User, trophy.Kind);
 
         if (bodyPart.PartType == BodyPartType.Head)
@@ -171,7 +206,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
             return bodyPart.Body == null;
 
         bodyPart = null;
-        if (MetaData(held).EntityPrototype?.ID != DetachedBodyPrototype.Id ||
+        if (!IsDetachedBody(held) ||
             !TryComp<BodyComponent>(held, out var carrier) ||
             _body.GetRootPartOrNull(held, carrier) is not { } root)
         {
@@ -180,6 +215,19 @@ public sealed partial class YautjaMachineSystem : EntitySystem
 
         bodyPart = root.BodyPart;
         return true;
+    }
+
+    private bool IsDetachedBody(EntityUid uid)
+    {
+        return MetaData(uid).EntityPrototype?.ID == DetachedBodyPrototype.Id;
+    }
+
+    /// <summary>
+    /// True for a severed part, or the detached carrier of one, that was cut from a Yautja.
+    /// </summary>
+    public bool IsYautjaOriginPart(EntityUid held)
+    {
+        return HasComp<YautjaOriginPartComponent>(held);
     }
 
     private bool IsBusyWithCauldron(EntityUid user)

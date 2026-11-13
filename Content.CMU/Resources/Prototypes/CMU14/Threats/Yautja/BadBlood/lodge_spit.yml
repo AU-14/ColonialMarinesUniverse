@@ -1,0 +1,56 @@
+# Lodge part: the spit. Deployed with the Lodge and removed with it.
+# Corpses are dragged onto it, loose prey meat and flasks are used on it. Its fire burns from the start.
+# Anyone can put the fire out, and a Bad Blood rekindles it with bare hands.
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodCampSpit
+  name: Lodge spit
+  description: A fire pit under an iron spit, big enough to turn a whole carcass.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
+    drawdepth: Objects
+    noRot: true
+    layers:
+    - state: brazier_frame_filled
+    - state: brazier
+      map: ["burning"]
+      visible: false
+  - type: Icon
+    sprite: CMU14/HunterShip/obj/structures/bonfire.rsi
+    state: brazier_frame_filled
+  - type: BadBloodCampPart
+    kind: Spit
+  - type: BadBloodCampCook
+    corpseCookTime: 25
+    meatCookTime: 4
+    humanCorpseRecipe: CMUYautjaPreyCookHumanMeat
+    humanCorpseMinCuts: 4
+    humanCorpseMaxCuts: 5
+    xenoCorpseRecipe: CMUYautjaPreyCookXenoMeat
+    xenoCorpseMinCuts: 2
+    xenoCorpseMaxCuts: 3
+  # lit from the start, so the light, the sound and the heat start on to match
+  - type: Campfire
+    lit: true
+    fuelRequired: false
+  - type: AlwaysHot
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 2
+    color: "#FFC90C"
+  - type: AmbientSound
+    enabled: true
+    volume: -5
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/fireplace.ogg
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CampfireVisuals.Lit:
+        burning:
+          True: { visible: true }
+          False: { visible: false }

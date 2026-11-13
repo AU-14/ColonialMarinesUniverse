@@ -102,7 +102,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         // The character info panel must use the server-owned whitelist rank.
         // A Yautja may be clanless, so the entity's ClanRank is not authoritative here.
-        if (HasComp<YautjaComponent>(entity) && jobId != "CMUYautjaBadBlood")
+        if (HasComp<YautjaComponent>(entity) && !HasComp<YautjaBadBloodComponent>(entity)) // CMU14: a Bad Blood has no clan rank title, whatever job its body came with
         {
             var youngbloodRole = jobId == "CMUYautjaYoungblood";
             var rank = _yautjaRank.ResolveCached(args.SenderSession.UserId, youngbloodRole);

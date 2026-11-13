@@ -215,7 +215,6 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
                    "CMUYautjaYoungbloodLoadoutVendor" or
                    "CMUYautjaThrallLoadoutVendor" or
                    "CMUYautjaBloodedThrallLoadoutVendor" or
-                   "CMUYautjaBadBloodLoadoutVendor" or
                    "CMUYautjaStrandedLoadoutVendor";
     }
 

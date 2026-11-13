@@ -5,9 +5,11 @@ using System.Numerics;
 using Content.Server.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Server.Administration.Logs;
+using Content.Server.CMU14.Yautja.BadBlood;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
@@ -29,6 +31,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Stacks;
 using Content.Shared.Standing;
 using Content.Shared.Storage;
 using Content.Shared.Tag;
@@ -111,6 +114,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     [Dependency] private YautjaMarkSystem _marks = default!;
     [Dependency] private YautjaRitualSystem _ritual = default!;
     [Dependency] private CMUYautjaEffectsSystem _effects = default!;
+    [Dependency] private BadBloodSystem _badBlood = default!;
+    [Dependency] private BadBloodProvenanceSystem _provenance = default!;
 
     public override void Initialize()
     {
@@ -125,6 +130,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<YautjaTrophyComponent, InteractUsingEvent>(OnTrophyInteractUsing);
         SubscribeLocalEvent<YautjaTrophyComponent, UniformAccessoryInsertAttemptEvent>(OnTrophyUniformAccessoryInsertAttempt);
         SubscribeLocalEvent<YautjaTrophyComponent, YautjaPolishTrophyDoAfterEvent>(OnPolishTrophyDoAfter);
+        SubscribeLocalEvent<YautjaTrophyComponent, CMUStackMergeAttemptEvent>(OnTrophyMergeAttempt);
         SubscribeLocalEvent<YautjaTrophyRecordComponent, ExaminedEvent>(OnRecordExamined);
         SubscribeLocalEvent<YautjaTrophyDisplayComponent, ExaminedEvent>(OnDisplayExamined);
         SubscribeLocalEvent<YautjaScalpComponent, ExaminedEvent>(OnScalpExamined);
@@ -137,6 +143,10 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     private void OnMobStateExamined(Entity<MobStateComponent> ent, ref ExaminedEvent args)
     {
         if (!HasComp<YautjaComponent>(args.Examiner))
+            return;
+
+        // Bad Bloods are outside the honour code: they read no honour worth, and carry none
+        if (_badBlood.IsBadBlood(args.Examiner) || _badBlood.IsBadBlood(ent.Owner))
             return;
 
         args.PushMarkup(Loc.GetString(
@@ -559,6 +569,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         trophyComp.SourceName = GetSourceName(target, kind);
         Dirty(trophy, trophyComp);
         ApplyTrophyName(trophy, target, kind, trophyComp.SourceName);
+        _provenance.StampTrophy(trophy, target);
 
         SetTaken(source, kind);
         RecordTrophy(hunter, kind);
@@ -605,10 +616,29 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     }
 
     // cmss13 only polishes human bones, but most pred trophies are xeno skulls and the rag did nothing on them.
-    // pelts are hide, not bone, so they stay out
+    // every hard kind polishes. pelts and hides are not bone, they get cured instead.
+    // the scalp does both: it was a skull-kind trophy before it got its own kind, so the rag still works on it
     private static bool IsPolishableTrophy(YautjaTrophyKind kind)
     {
-        return IsHumanSkeletonTrophy(kind) || kind == YautjaTrophyKind.XenoSkull;
+        return IsHumanSkeletonTrophy(kind) ||
+               kind is YautjaTrophyKind.XenoSkull
+                   or YautjaTrophyKind.HumanScalp
+                   or YautjaTrophyKind.HumanSpine
+                   or YautjaTrophyKind.HumanTorso;
+    }
+
+    // the butcher's spine and torso were plain items before they became trophies, so they never pay honour
+    private static bool PolishPaysScore(YautjaTrophyKind kind)
+    {
+        return kind is not (YautjaTrophyKind.HumanSpine or YautjaTrophyKind.HumanTorso);
+    }
+
+    // the soft kinds. curing sets the same Polished flag polishing does
+    private static bool IsCurableTrophy(YautjaTrophyKind kind)
+    {
+        return kind is YautjaTrophyKind.HumanHide
+            or YautjaTrophyKind.HumanScalp
+            or YautjaTrophyKind.XenoPelt;
     }
 
     private static bool IsHumanSkeletonTrophy(YautjaTrophyKind kind)
@@ -751,24 +781,24 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             case 2:
                 if (kind == YautjaButcherKind.Xeno)
                 {
-                    SpawnNamedButcherMeat(XenoMeatPrototype, coords, GetXenoButcherName(target.Owner, "steak"));
+                    SpawnNamedButcherMeat(XenoMeatPrototype, coords, GetXenoButcherName(target.Owner, "steak"), target.Owner);
                 }
                 else
                 {
                     ApplyRandomHumanLimbDamage(target.Owner, hunter, 100);
-                    SpawnNamedButcherMeat(HumanMeatPrototype, coords, $"raw {Name(target.Owner)} steak");
+                    SpawnNamedButcherMeat(HumanMeatPrototype, coords, $"raw {Name(target.Owner)} steak", target.Owner);
                 }
 
                 break;
             case 3:
                 if (kind == YautjaButcherKind.Xeno)
                 {
-                    SpawnNamedButcherMeat(XenoMeatPrototype, coords, GetXenoButcherName(target.Owner, "tenderloin"));
+                    SpawnNamedButcherMeat(XenoMeatPrototype, coords, GetXenoButcherName(target.Owner, "tenderloin"), target.Owner);
                 }
                 else
                 {
                     ApplyHumanPartDamage(target.Owner, hunter, BodyPartType.Torso, BodyPartSymmetry.None, 100);
-                    SpawnNamedButcherMeat(HumanMeatPrototype, coords, $"raw {Name(target.Owner)} tenderloin");
+                    SpawnNamedButcherMeat(HumanMeatPrototype, coords, $"raw {Name(target.Owner)} tenderloin", target.Owner);
                 }
 
                 break;
@@ -831,16 +861,30 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             ApplyHumanPartDamage(target, hunter, BodyPartType.Head, BodyPartSymmetry.None, 150);
             var spine = Spawn(HumanSpinePrototype, coords);
             _meta.SetEntityName(spine, $"{Name(target)}'s spine");
+            StampButcherTrophy(spine, target);
         }
         else
         {
-            SpawnNamedButcherMeat(HumanMeatPrototype, coords, $"raw {MetaData(target).EntityName} steak");
-            Spawn(HumanTorsoPrototype, coords);
+            SpawnNamedButcherMeat(HumanMeatPrototype, coords, $"raw {MetaData(target).EntityName} steak", target);
+            StampButcherTrophy(Spawn(HumanTorsoPrototype, coords), target);
         }
 
         var hide = Spawn(HumanHidePrototype, coords);
         _meta.SetEntityName(hide, $"{Name(target)}-hide");
+        StampButcherTrophy(hide, target);
         Spawn(HumanRemainsPrototype, coords);
+    }
+
+    // the spine, torso and hide come out of the prototype as trophies, they only need to know whose they were
+    private void StampButcherTrophy(EntityUid uid, EntityUid target)
+    {
+        if (TryComp(uid, out YautjaTrophyComponent? trophy))
+        {
+            trophy.SourceName = MetaData(target).EntityName;
+            Dirty(uid, trophy);
+        }
+
+        _provenance.StampTrophy(uid, target);
     }
 
     private void SpawnXenoButcherTrophy(
@@ -858,6 +902,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         trophy.SourceName = GetSourceName(xeno, kind);
         Dirty(uid, trophy);
         _meta.SetEntityName(uid, name);
+        _provenance.StampTrophy(uid, xeno);
 
         if (HasComp<YautjaComponent>(hunter))
             RecordTrophy(hunter, kind);
@@ -894,10 +939,11 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         return true;
     }
 
-    private void SpawnNamedButcherMeat(EntProtoId prototype, EntityCoordinates coordinates, string name)
+    private void SpawnNamedButcherMeat(EntProtoId prototype, EntityCoordinates coordinates, string name, EntityUid body)
     {
         var meat = Spawn(prototype, coordinates);
         _meta.SetEntityName(meat, name);
+        _provenance.StampMeat(meat, body);
     }
 
     private void ApplyRandomHumanLimbDamage(EntityUid target, EntityUid hunter, float damage)
@@ -1021,6 +1067,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             ? hair[0].MarkingColors[0]
             : Color.White;
         Dirty(scalp, scalpComp);
+        _provenance.StampTrophy(scalp, scalpee);
         TryCompletePreyClaim(hunter, scalpee, scalp: true);
         return scalp;
     }
@@ -1295,7 +1342,16 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnTrophyInteractUsing(Entity<YautjaTrophyComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled || !TryComp(args.Used, out YautjaPolishingRagComponent? rag))
+        if (args.Handled)
+            return;
+
+        if (TryComp(args.Used, out YautjaCleanerComponent? gel))
+        {
+            TryStartCure(ent, gel, ref args);
+            return;
+        }
+
+        if (!TryComp(args.Used, out YautjaPolishingRagComponent? rag))
             return;
 
         args.Handled = true;
@@ -1342,9 +1398,85 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         _doAfter.TryStartDoAfter(doAfter);
     }
 
+    // the cleanser gel cures the soft kinds. only Bad Bloods cure: left unhandled, the gel dissolves the item
+    // for anyone else like it always did
+    private void TryStartCure(Entity<YautjaTrophyComponent> ent, YautjaCleanerComponent gel, ref InteractUsingEvent args)
+    {
+        if (!IsCurableTrophy(ent.Comp.Kind) || !_badBlood.IsBadBlood(args.User))
+            return;
+
+        args.Handled = true;
+
+        if (ent.Comp.Polished)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-cure-already"), args.User, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        // curing one piece of a stack is ambiguous, split it off first
+        if (IsTrophyStack(ent))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-cure-stack", ("trophy", ent.Owner)), args.User, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        var doAfter = new DoAfterArgs(
+            EntityManager,
+            args.User,
+            gel.DoAfter,
+            new YautjaPolishTrophyDoAfterEvent(),
+            ent.Owner,
+            target: ent.Owner,
+            used: args.Used)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = true,
+            BreakOnHandChange = true,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameTarget | DuplicateConditions.SameEvent,
+            DistanceThreshold = 1.5f,
+            ForceVisible = true,
+            TargetEffect = "RMCEffectXenoTelegraphRedEmpower",
+        };
+
+        if (_doAfter.TryStartDoAfter(doAfter))
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-cure-start", ("trophy", ent.Owner)), args.User, args.User);
+    }
+
+    // the Lodge counts trophies per body and wants them cured. a stamped hide only stacks with uncured hide off the
+    // same body, so a stack never hides whose it was or passes raw hide off as cured. unstamped hide stacks as before
+    private void OnTrophyMergeAttempt(Entity<YautjaTrophyComponent> ent, ref CMUStackMergeAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var other = args.Donor == ent.Owner ? args.Recipient : args.Donor;
+        var mine = CompOrNull<BadBloodTrophyOriginComponent>(ent.Owner);
+        var theirs = CompOrNull<BadBloodTrophyOriginComponent>(other);
+        if (mine == null && theirs == null)
+            return;
+
+        if (mine == null ||
+            theirs == null ||
+            mine.Body != theirs.Body ||
+            ent.Comp.Polished ||
+            CompOrNull<YautjaTrophyComponent>(other)?.Polished != false)
+        {
+            args.Cancelled = true;
+        }
+    }
+
+    private bool IsTrophyStack(EntityUid trophy)
+    {
+        return TryComp(trophy, out StackComponent? stack) && stack.Count > 1;
+    }
+
     private void OnTrophyUniformAccessoryInsertAttempt(Entity<YautjaTrophyComponent> ent, ref UniformAccessoryInsertAttemptEvent args)
     {
-        if (!IsHumanSkeletonTrophy(ent.Comp.Kind) ||
+        // the scalp counted as a skull here before it got its own kind
+        if (!(IsHumanSkeletonTrophy(ent.Comp.Kind) || ent.Comp.Kind == YautjaTrophyKind.HumanScalp) ||
             CanUseYautjaTech(args.User))
             return;
 
@@ -1359,33 +1491,53 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         args.Handled = true;
 
-        if (!IsPolishableTrophy(ent.Comp.Kind) ||
-            !CanUseYautjaTech(args.User) ||
+        if (!CanUseYautjaTech(args.User) ||
             ent.Comp.Polished ||
-            args.Used is not { } used ||
-            !HasComp<YautjaPolishingRagComponent>(used))
+            args.Used is not { } used)
         {
             return;
         }
 
-        ApplyPolishedTrophy(ent, args.User);
+        // the tool picks the path: a scalp can be cured with the gel or polished with the rag
+        var cured = HasComp<YautjaCleanerComponent>(used);
+        if (cured)
+        {
+            if (!IsCurableTrophy(ent.Comp.Kind) ||
+                !_badBlood.IsBadBlood(args.User) ||
+                IsTrophyStack(ent))
+            {
+                return;
+            }
+        }
+        else if (!IsPolishableTrophy(ent.Comp.Kind) ||
+                 !HasComp<YautjaPolishingRagComponent>(used))
+        {
+            return;
+        }
+
+        ApplyPolishedTrophy(ent, args.User, cured);
     }
 
-    private void ApplyPolishedTrophy(Entity<YautjaTrophyComponent> ent, EntityUid user)
+    private void ApplyPolishedTrophy(Entity<YautjaTrophyComponent> ent, EntityUid user, bool cured = false)
     {
         ent.Comp.Polished = true;
         Dirty(ent);
 
+        var prefix = cured ? "cured " : "polished ";
         var name = MetaData(ent).EntityName;
-        if (!name.StartsWith("polished ", StringComparison.OrdinalIgnoreCase))
-            _meta.SetEntityName(ent, $"polished {name}");
+        if (!name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            _meta.SetEntityName(ent, $"{prefix}{name}");
 
         var record = EnsureComp<YautjaTrophyRecordComponent>(user);
         record.PolishedTrophies++;
-        AddScore(user, 1, record);
 
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-polish-finished", ("trophy", ent.Owner)), user, user);
-        _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):hunter} polished Yautja trophy {ToPrettyString(ent):trophy}");
+        // a Bad Blood's trophies pay out at the Lodge, not into the honour bank
+        if (!_badBlood.IsBadBlood(user) && PolishPaysScore(ent.Comp.Kind))
+            AddScore(user, 1, record);
+
+        _popup.PopupEntity(Loc.GetString(cured ? "cmu-yautja-cure-finished" : "cmu-yautja-polish-finished", ("trophy", ent.Owner)), user, user);
+        var verb = cured ? "cured" : "polished";
+        _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):hunter} {verb} Yautja trophy {ToPrettyString(ent):trophy}");
     }
 
     public void RecordRitualDuelWin(EntityUid hunter, EntityUid target)
@@ -1461,6 +1613,10 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (Deleted(hunter) || score <= 0)
             return;
 
+        // a Bad Blood is cast out of the honour system: no score, no rank, no "advances you to" popup
+        if (_badBlood.IsBadBlood(hunter))
+            return;
+
         record ??= EnsureComp<YautjaTrophyRecordComponent>(hunter);
         record.Score += score;
         var rank = GetRankName(record.Score);
@@ -1502,6 +1658,13 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     {
         if (args.Examiner != ent.Owner && !HasComp<YautjaComponent>(args.Examiner))
             return;
+
+        // a Bad Blood has no rank and no trophy record worth reading
+        if (_badBlood.IsBadBlood(ent.Owner))
+        {
+            args.PushMarkup(Loc.GetString("cmu-bad-blood-dishonoured-examine"));
+            return;
+        }
 
         // Trophy score is historical progress, whereas ClanRank is the effective
         // rank granted by the persisted Yautja whitelist for this character.
@@ -1567,6 +1730,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             switch (trophy.Kind)
             {
                 case YautjaTrophyKind.HumanSkull:
+                case YautjaTrophyKind.HumanScalp: // counted as a skull before it got its own kind
                     human++;
                     break;
                 case YautjaTrophyKind.HumanLeftArmBone:

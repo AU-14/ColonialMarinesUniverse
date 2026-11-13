@@ -9,3 +9,5 @@ cmu-yautja-admin-editor-slots-saved = Yautja count {$slots} saved for the next h
 cmu-yautja-admin-editor-random-invalid = Hunt chances must be between 0% and 100%.
 cmu-yautja-admin-editor-random-enabled-message = Random Yautja hunts enabled: {$insurgency}% on Insurgency, {$distress}% on Distress Signal and Force on Force.
 cmu-yautja-admin-editor-random-disabled = Random Yautja initialization disabled.
+cmu-yautja-admin-editor-hunt-blocked-by-threat = This round's threat does not allow a Yautja hunt.
+cmu-yautja-hunt-threat-conflict-alert = The selected threat ({$threat}) does not allow a Yautja hunt, but a staff-started hunt is active. It was left running; end it by hand if it was not intended.

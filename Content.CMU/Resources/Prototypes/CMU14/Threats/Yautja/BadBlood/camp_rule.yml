@@ -1,0 +1,48 @@
+# The Bad Blood clan's state for the round: Superiority Points, ledgers, the Leader, the Lodge, Totems and the ship.
+# Started with the threat through BadBloodClanThreat winconditions. Every number of the loop is a field here.
+- type: entity
+  parent: BaseGameRule
+  id: CMUBadBloodCampRule
+  name: Bad Blood Clan
+  description: Tracks the Bad Blood clan, its Lodge and its Superiority Points.
+  components:
+  - type: BadBloodCampRule
+    tierTwoLifetimeSp: 12
+    tierThreeLifetimeSp: 30
+    totemTierCredit: 0.5
+    offeringSp: 1
+    maxOfferingsPerBody: 2
+    corpseCookSp: 3
+    meatCookSp: 0.5
+    cookSpCapPerBody: 3
+    squadOfTwoCost: 12
+    squadOfThreeCost: 16
+    houndCost: 6
+    totemCost: 3
+    livingCapBonus: 2
+    threatBudgetFraction: 0.25
+    houndsPerMaster: 3
+    deadPriorityWindow: 30
+    leaderSsdTimeout: 300
+    campRebuildCooldown: 300
+    foundingGrace: 900
+    campLandingZoneDistance: 25
+    voteDuration: 60
+    votePerCandidate: 10
+    voteMaxDuration: 120
+    reserveChoiceTime: 20
+    seatRaffleTime: 15
+    squadSpawnTimeout: 60
+    clanWipeDelay: 120
+    totemLimit: 3
+    totemLimitHighPop: 4
+    totemHighPopPlayers: 80
+    ripeTotemsForCall: 3
+    ripeHoldForCall: 600
+    shipEarliestCall: 2700
+    shipInboundTime: 1200
+    summonInterval: 60
+    shipRegenBonus: 0.25
+    departureTime: 1200
+  # the end rule's decision and its absence ledger. BadBloodCampRuleSystem.End.cs
+  - type: BadBloodCampEnd
