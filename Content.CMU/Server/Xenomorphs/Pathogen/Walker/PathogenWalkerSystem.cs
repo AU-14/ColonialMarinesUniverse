@@ -120,9 +120,6 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         RemComp<SatiationComponent>(target);
         RemComp<PainShockComponent>(target);
 
-        if (_mind.TryGetMind(target, out var mindId, out _))
-            _roles.MindAddJobRole(mindId, silent: true, jobPrototype: "CMU14JobPathogenWalker");
-
         _faction.AddFaction(target, WalkerFaction);
         // Reanimatable hosts like monkeys can lack the language component entirely.
         EnsureComp<LanguageComponent>(target);
@@ -200,6 +197,10 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         walker.OfferResolved = true;
         walker.OfferExpiresAt = null;
         Dirty(uid, walker);
+        
+        if (_mind.TryGetMind(uid, out var mindId, out _))  
+            _roles.MindAddJobRole(mindId, silent: true, jobPrototype: "CMU14JobPathogenWalker");
+
         ActivateWalker(uid, walker);
     }
 
@@ -229,6 +230,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         var ghostRole = EnsureComp<GhostRoleComponent>(uid);
         ghostRole.RoleName = Loc.GetString("cmu14-walker-ghost-role-name");
         ghostRole.RoleDescription = Loc.GetString("cmu14-walker-ghost-role-desc");
+        ghostRole.JobProto = "CMU14JobPathogenWalker";
 
         EnsureComp<GhostTakeoverAvailableComponent>(uid);
 
