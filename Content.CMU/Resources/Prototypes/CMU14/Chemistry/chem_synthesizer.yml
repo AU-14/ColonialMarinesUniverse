@@ -15,6 +15,8 @@
     board: CMUChemSynthesizerMachineCircuitboard
   - type: Damageable # CMU14 (ARCH-01): what BaseMachineDestructible gave it
     damageModifierSet: SteelMod
+  - type: Injurable # CMU14 (STATE-01, GraphAudit-InjurableSynthesizer): BaseStructureHealth's damage container; Damageable stores nothing without it
+    damageContainer: StructuralInorganic
   # CMU14 (ARCH-01): at 175 damage it breaks into the wreck of the RMC frame it is built on, not the upstream frame's (whose
   # rewiring needs cable the fork does not stock). Thresholds are inherited additively, so BaseMachineDestructible is not a parent;
   # it also never destroyed the machine itself, as the RMC chem master's own threshold does.
