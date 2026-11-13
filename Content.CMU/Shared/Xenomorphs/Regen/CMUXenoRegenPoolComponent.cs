@@ -1,5 +1,5 @@
-using Robust.Shared.GameStates;
 using Content.Shared.Alert;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -26,7 +26,7 @@ public sealed partial class CMUXenoRegenPoolComponent : Component
     [DataField, AutoNetworkedField]
     public float DepletedWeedsHealingMultiplier = 0.75f;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public ProtoId<AlertPrototype> Alert = "CMUXenoRegenPool";
 
     [DataField, AutoNetworkedField]
