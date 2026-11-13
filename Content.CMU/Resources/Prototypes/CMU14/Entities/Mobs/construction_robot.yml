@@ -1,0 +1,53 @@
+- type: entity
+  id: CMUConstructionRobot
+  parent: BaseMob
+  name: construction UGV
+  description: An autonomous construction UGV with room for 20 stacks of materials and 1000 units of welding fuel.
+  suffix: CMU14
+  components:
+  - type: RMCNightVisionVisible
+  - type: Sprite
+    sprite: CMU14/Mobs/CombatDrone/ugv.rsi
+    noRot: true
+    layers:
+    - state: healthy-hull
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3
+  - type: NoRotateOnMove
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeCircle
+          radius: 0.35
+        density: 100
+        mask: [MobMask]
+        layer: [MobLayer]
+  - type: Pullable
+  - type: NoSlip
+  - type: RMCImmuneToFireTileDamage
+  - type: HTN
+    rootTask:
+      task: CMUDroneFollowCompound
+    enabled: false
+  - type: CMUConstructionRobot
+    weldingFuel: 1000
+    fuelCapacity: 1000
+    maxMaterialStacks: 20
+    materialPickupRadius: 5
+    refuelDelay: 15
+  - type: Tag
+    tags: [DoorBumpOpener]
+
+- type: entity
+  id: CMUConstructionRobotKit
+  parent: BaseItem
+  name: construction UGV kit
+  description: Deploy this kit to release a construction UGV.
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/CombatDrone/ugv.rsi
+    state: healthy-hull
+  - type: Item
+    size: Normal
+  - type: CMUConstructionRobotKit
