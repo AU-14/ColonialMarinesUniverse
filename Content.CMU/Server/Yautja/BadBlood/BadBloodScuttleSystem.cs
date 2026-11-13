@@ -3,33 +3,21 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Database;
-using Content.Shared.Examine;
-using Content.Shared.Inventory.Events;
-using Content.Shared.Item;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Yautja.BadBlood;
 
 // the fallen Leader's bracer: a countdown everyone nearby can see and hear, then a small blast that gibs no one.
 // the honourable self-destruct is a different path and never comes through here
-public sealed partial class BadBloodScuttleSystem : EntitySystem
+public sealed partial class BadBloodScuttleSystem : SharedBadBloodScuttleSystem
 {
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPointLightSystem _pointLight = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-
-    public override void Initialize()
-    {
-        SubscribeLocalEvent<BadBloodScuttleComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
-        SubscribeLocalEvent<BadBloodScuttleComponent, BeingUnequippedAttemptEvent>(OnUnequipAttempt);
-        SubscribeLocalEvent<BadBloodScuttleComponent, ExaminedEvent>(OnExamined);
-    }
 
     /// <summary>
     ///     Starts the scuttle countdown on a bracer. False if it is not a bracer, is already counting down,
@@ -45,10 +33,11 @@ public sealed partial class BadBloodScuttleSystem : EntitySystem
             return false;
         }
 
-        var now = _timing.CurTime;
+        var now = Timing.CurTime;
         var scuttle = AddComp<BadBloodScuttleComponent>(bracer);
         scuttle.DetonateAt = now + scuttle.Fuse;
         scuttle.NextWarning = now;
+        Dirty(bracer, scuttle);
 
         var light = _pointLight.EnsureLight(bracer);
         _pointLight.SetColor(bracer, scuttle.LightColor, light);
@@ -73,7 +62,7 @@ public sealed partial class BadBloodScuttleSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        var now = _timing.CurTime;
+        var now = Timing.CurTime;
         var query = EntityQueryEnumerator<BadBloodScuttleComponent>();
         while (query.MoveNext(out var uid, out var scuttle))
         {
@@ -135,22 +124,5 @@ public sealed partial class BadBloodScuttleSystem : EntitySystem
             canCreateVacuum: false);
 
         QueueDel(ent.Owner);
-    }
-
-    private void OnPickupAttempt(Entity<BadBloodScuttleComponent> ent, ref GettingPickedUpAttemptEvent args)
-    {
-        args.Cancel();
-    }
-
-    private void OnUnequipAttempt(Entity<BadBloodScuttleComponent> ent, ref BeingUnequippedAttemptEvent args)
-    {
-        args.Cancel();
-        args.Reason = "cmu-bad-blood-scuttle-locked";
-    }
-
-    private void OnExamined(Entity<BadBloodScuttleComponent> ent, ref ExaminedEvent args)
-    {
-        var seconds = Math.Max(0, (int) Math.Ceiling((ent.Comp.DetonateAt - _timing.CurTime).TotalSeconds));
-        args.PushMarkup(Loc.GetString("cmu-bad-blood-scuttle-examine", ("seconds", seconds)));
     }
 }

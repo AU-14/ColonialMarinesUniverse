@@ -1,18 +1,20 @@
 using Content.Shared.Explosion;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
 // a bracer counting down to its scuttle. added by BadBloodScuttleSystem.TryStartScuttle, never by a prototype,
-// so honourable bracers never carry it
-[RegisterComponent, AutoGenerateComponentPause]
+// so honourable bracers never carry it. networked so the client predicts the pickup/unequip refusals and
+// CanArmSelfDestruct sees it; only the countdown end goes over, the beeps and light stay server-side
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class BadBloodScuttleComponent : Component
 {
     [DataField]
     public TimeSpan Fuse = TimeSpan.FromSeconds(10);
 
-    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan DetonateAt;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]

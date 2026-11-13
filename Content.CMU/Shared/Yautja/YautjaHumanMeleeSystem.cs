@@ -7,7 +7,6 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
 using Content.Shared.Random.Helpers;
-using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -23,39 +22,12 @@ public sealed partial class YautjaHumanMeleeSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<YautjaHumanMeleeComponent, MeleeHitEvent>(OnMeleeHit);
-        // the pen goes on from the victim's side because the hit zone (and so which armour piece got hit) is only
-        // known here, CMGetArmorPiercingEvent just gets the target
+        // the skill undo and the pen both go on from the victim's side: the hit zone (and so which armour piece got
+        // hit) is only known here, CMGetArmorPiercingEvent just gets the target, and a Bad Blood's wide swing can
+        // catch humans and non-humans at once, so the undo has to be decided per target
         SubscribeLocalEvent<HumanoidProfileComponent, DamageModifyEvent>(OnHumanDamageModify,
             before: [typeof(CMArmorSystem)]);
         SubscribeLocalEvent<PainShockComponent, DamageChangedEvent>(OnPainedDamageChanged);
-    }
-
-    private void OnMeleeHit(Entity<YautjaHumanMeleeComponent> ent, ref MeleeHitEvent args)
-    {
-        // honourable pred weapons don't wide swing; a Bad Blood's can, and then every target has to be human
-        if (!args.IsHit || args.HitEntities.Count == 0)
-            return;
-
-        foreach (var hit in args.HitEntities)
-        {
-            if (!IsHuman(hit))
-                return;
-        }
-
-        // SkillsSystem already multiplied the swing, take it back off
-        var skill = _skills.GetSkill(args.User, MeleeSkill);
-        if (skill <= 0)
-            return;
-
-        var coefficient = 1f / (1f + 0.25f * skill);
-        var undo = new DamageModifierSet();
-        foreach (var type in args.BaseDamage.DamageDict.Keys)
-        {
-            undo.Coefficients[type] = coefficient;
-        }
-
-        args.ModifiersList.Add(undo);
     }
 
     private void OnHumanDamageModify(Entity<HumanoidProfileComponent> ent, ref DamageModifyEvent args)
@@ -67,6 +39,15 @@ public sealed partial class YautjaHumanMeleeSystem : EntitySystem
             !args.Damage.AnyPositive())
         {
             return;
+        }
+
+        // SkillsSystem already multiplied the swing; humans don't get the melee skill bonus, so take it back off.
+        // only for melee, thrown hits never got the bonus
+        if (args.Impact.Delivery == DamageImpactDelivery.Melee && args.Origin is { } user)
+        {
+            var skill = _skills.GetSkill(user, MeleeSkill);
+            if (skill > 0)
+                args.Damage *= 1f / (1f + 0.25f * skill);
         }
 
         // cm: prob(getarmor(zone)) and the blade loses its sharp/edge, so the armour on that spot counts in full

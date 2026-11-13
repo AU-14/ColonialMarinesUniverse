@@ -3,7 +3,9 @@ using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Weapons.Melee;
@@ -62,6 +64,37 @@ public sealed class YautjaHumanMeleeTest : GameTest
             var human = Hit("CMUYautjaClanSword", null, map.GridCoords).Damage;
             var xeno = Hit("CMUYautjaClanSword", null, map.GridCoords, victimProto: "CMXenoDrone").Damage;
             Assert.That(xeno, Is.GreaterThan(human));
+        });
+    }
+
+    // a Bad Blood's wide swing can catch a barricade and marines at once. the skill undo is decided per target on
+    // the victim's side, so a human in the swing still takes the listed force whatever else was hit
+    [Test]
+    public async Task SkillUndoIsDecidedPerTarget()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hunter = SSpawnAtPosition("CMUMobYautja", map.GridCoords);
+            var weapon = SSpawnAtPosition("CMUYautjaClanSword", map.GridCoords);
+            var human = SSpawnAtPosition("CMMobHuman", map.GridCoords);
+            var xeno = SSpawnAtPosition("CMXenoDrone", map.GridCoords);
+            SEntMan.GetComponent<YautjaHumanMeleeComponent>(weapon).StripChancePerArmor = 0f;
+
+            var force = SEntMan.GetComponent<MeleeWeaponComponent>(weapon).Damage;
+            var swing = Server.System<SkillsSystem>().ApplyMeleeSkillModifier(hunter, force);
+            Assert.That(swing.GetTotal(), Is.GreaterThan(force.GetTotal()), "the hunter needs a melee skill bonus");
+
+            var damageable = Server.System<DamageableSystem>();
+            var impact = DamageImpact.ForMelee(swing, heavy: true);
+            // same order as a wide swing: the non-human first, then the marine
+            foreach (var target in new[] { xeno, human })
+            {
+                damageable.TryChangeDamage(target, swing, origin: hunter, tool: weapon, impact: impact);
+            }
+
+            Assert.That(damageable.GetTotalDamage(human).Float(), Is.EqualTo(force.GetTotal().Float()).Within(0.5f),
+                "no skill bonus on a human, whatever else the swing caught");
         });
     }
 
