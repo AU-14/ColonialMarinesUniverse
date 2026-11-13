@@ -1,0 +1,125 @@
+- type: entity
+  parent: RMCWeaponRifleM54C
+  id: CMUWeaponRifleLW317
+  name: LW-317 assault rifle
+  description: Light Weapon, Type 317. Originating from Norcomm before the CANC's absorption, the Type 317 served the CANC's arsenals for close quarters battle. Also preferred for its ease of use among former CANC soldiers. Chambered in 6x38mm, but can also fire 10x24mm rounds. This variant appears to be missing its 2x 'Yaoguai' scope, and is covered in cosmoline residue. Unfortunate.
+  components:
+  - type: Icon
+    sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
+    state: LW-317ICON
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
+    layers:
+    - state: LW-317_UNLOADED
+    - state: LW-317_LOADED
+  - type: ItemMapper
+    containerWhitelist:
+    - gun_magazine
+    mapLayers:
+      LW-317_UNLOADED:
+        whitelist:
+          tags:
+          - CMUMagazineSMGLW317
+          - CMUMagazineSMGLW317AP
+        maxCount: 0
+      LW-317_LOADED:
+        whitelist:
+          tags:
+          - CMUMagazineSMGLW317
+          - CMUMagazineSMGLW317AP
+  - type: Item
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/type71c.rsi
+    inhandVisuals:
+      left:
+      - state: wielded-inhand-left
+      right:
+      - state: wielded-inhand-right
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
+  - type: Gun
+    shotsPerBurst: 2
+    soundGunshot:
+      path: /Audio/CMU14/Weapons/DogWar/gun_lw317.ogg
+  - type: RMCSelectiveFire
+    baseFireRate: 4
+    burstFireRateMultiplier: 15
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
+      cmu-aslot-sling:
+        startingAttachable: AU14AttachmentTwoPointSling
+  - type: RMCWeaponDamageFalloff
+    falloffMultiplier: 1
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        startingItem: CMUMagazineSMGLW317AP
+        whitelist:
+          tags:
+          - CMUMagazineSMGLW317
+          - CMUMagazineSMGLW317AP
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: CMUMagazineSMGLW317
+  name: "LW-317 magazine (6x38mm)"
+  description: "A 55-round magazine for the LW-317. This magazine is stamped with a worn golden star."
+  components:
+  - type: Icon
+    sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
+    state: LW-317_MAG
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
+    layers:
+    - state: LW-317_MAG
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Tag
+    tags:
+    - CMMagazineSmg
+    - CMUMagazineSMGLW317
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMUCartridgeRifle6x38
+      - CMCartridgeRifle10x24mm
+    proto: CMUCartridgeRifle6x38
+    capacity: 55
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+
+- type: entity
+  parent: CMUMagazineSMGLW317
+  id: CMUMagazineSMGLW317AP
+  name: "LW-317 AP magazine (6x38mm)"
+  description: "A 55-round AP magazine for the LW-317, compatible with 6x38mm."
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineSmg
+    - CMUMagazineSMGLW317AP
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgeRifle6x38AP
+      - CMCartridgeRifle10x24mmAP
+    proto: CMUCartridgeRifle6x38AP
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifleAP
