@@ -1649,7 +1649,7 @@
         amount: 5
       - id: CMMagazineSMGM63
         amount: 200
-      - id: RMCMagazineSMGM63Rubber
+      - id: CMU14MagazineSMGM63Rubber
         amount: 20
       - id: CMMagazineSMGM63AP
         amount: 15
@@ -1657,7 +1657,7 @@
         amount: 10
       - id: CMMagazineRifleM4SPR
         amount: 60
-      - id: RMCMagazineRifleM4SPRRubber
+      - id: CMU14MagazineRifleM4SPRRubber
         amount: 20
       - id: CMMagazineRifleM4SPRAP
         amount: 15
@@ -1667,7 +1667,7 @@
         amount: 5
       - id: CMMagazineRifleM54C
         amount: 100
-      - id: RMCMagazineRifleM54CRubber
+      - id: CMU14MagazineRifleM54CRubber
         amount: 20
       - id: CMMagazineRifleM54CAP
         amount: 15
@@ -1693,7 +1693,7 @@
       entries:
       - id: CMMagazinePistolM1984
         amount: 200
-      - id: RMCMagazinePistolM1984Rubber
+      - id: CMU14MagazinePistolM1984Rubber
         amount: 20
       - id: RMCMagazinePistolM1984AP
         amount: 15
@@ -1701,7 +1701,7 @@
         amount: 5
       - id: CMMagazinePistolM77AP
         amount: 200
-      - id: RMCMagazinePistolM77Rubber
+      - id: CMU14MagazinePistolM77Rubber
         amount: 20
       - id: RMCSpeedLoaderM44
         amount: 100
@@ -1739,11 +1739,19 @@
       entries:
       - id: RMCBoxBulletsRifle
         amount: 5
+      - id: CMU14BoxBulletsRifle10x24mmRubber
+        amount: 5
       - id: RMCBoxBulletsSMG
+        amount: 5
+      - id: CMU14BoxBulletsSMG10x20mmRubber
         amount: 5
       - id: RMCBoxBulletsSmartGun
         amount: 5
       - id: CMUBoxBulletsPistol9MM
+        amount: 5
+      - id: CMU14BoxBulletsPistol9MMRubber
+        amount: 5
+      - id: CMU14BoxBulletsPistol45Rubber
         amount: 5
       - id: CMUBoxBulletsPistol9MMAP
         amount: 5

@@ -288,6 +288,50 @@
     bulletType: CMUBoxBulletsRifleAG80AP
     amount: 0
 
+- type: entity
+  parent: RMCBoxBulletsRifle
+  id: CMU14BoxBulletsRifle10x24mmRubber
+  name: rifle ammunition box (10x24mm rubber)
+  description: A box of less-lethal 10x24mm rubber cartridges.
+  components:
+  - type: BulletBox
+    bulletType: CMU14BoxBulletsRifle10x24mmRubber
+
+- type: entity
+  parent: RMCBoxBulletsSMG
+  id: CMU14BoxBulletsSMG10x20mmRubber
+  name: SMG ammunition box (10x20mm rubber)
+  description: A box of less-lethal 10x20mm rubber cartridges.
+  components:
+  - type: BulletBox
+    bulletType: CMU14BoxBulletsSMG10x20mmRubber
+
+- type: entity
+  parent: CMUBoxBulletsPistol9MM
+  id: CMU14BoxBulletsPistol9MMRubber
+  name: pistol ammunition box (9mm rubber)
+  description: A box of less-lethal 9mm rubber cartridges.
+  components:
+  - type: BulletBox
+    bulletType: CMU14BoxBulletsPistol9MMRubber
+
+- type: entity
+  parent: CMUBoxBulletsPistol45
+  id: CMU14BoxBulletsPistol45Rubber
+  name: pistol ammunition box (.45 ACP rubber)
+  description: A box of less-lethal .45 ACP rubber cartridges.
+  components:
+  - type: BulletBox
+    bulletType: CMU14BoxBulletsPistol45Rubber
+
+- type: entity
+  parent: CMUBoxBulletsRifleAG80
+  id: CMU14BoxBulletsRifleAG80Rubber
+  name: rifle ammunition box (9.7x16mm rubber)
+  description: A box of less-lethal 9.7x16mm rubber cartridges for AG80 magazines.
+  components:
+  - type: BulletBox
+    bulletType: CMU14BoxBulletsRifleAG80Rubber
 # -- SMG AMMUNITION BOXES --
 #   -- REG 5.7x28mm SMG Ammunition Box --
 - type: entity
@@ -577,6 +621,5 @@
   - type: BulletBox
     bulletType: CMUBoxBulletsPistol50
     amount: 0
-
 
 
