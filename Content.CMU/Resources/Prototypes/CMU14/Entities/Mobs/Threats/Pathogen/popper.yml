@@ -3,7 +3,7 @@
   parent: CMU14XenoPathogenBase
   id: CMU14XenoPopperBase
   name: Popper
-  description: A crawling bag of spores. What nightmare are you living in?
+  description: A crawling bag of spores.
   components:
   - type: CMUPathogenPopper
   - type: GhostRole
