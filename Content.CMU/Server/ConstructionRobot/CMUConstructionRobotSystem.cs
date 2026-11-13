@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Numerics;
 using Content.Server.Construction;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
+using Content.Server.NPC.Systems;
 using Content.Shared._RMC14.Construction;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -52,7 +54,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
     private static readonly ReagentId WeldingFuel = new("WeldingFuel", null);
 
     private readonly List<ConstructionRobotGhostTask> _ghosts = new();
-    private readonly List<EntityUid> _nearby = new();
+    private readonly HashSet<EntityUid> _nearby = new();
     private readonly HashSet<(EntityUid Owner, int GhostId)> _warnedUnsupportedTasks = new();
     private TimeSpan _nextThink;
 
@@ -101,6 +103,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         if (previousOwner is { } owner && owner != args.User)
             return;
 
+        var user = args.User;
         var taking = previousOwner == null;
         args.Verbs.Add(new Verb
         {
@@ -116,7 +119,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
                 if (!taking)
                     ReleaseAssignedTasks(ent.Owner);
 
-                current.Owner = taking ? args.User : null;
+                current.Owner = taking ? user : null;
                 Dirty(ent.Owner, current);
                 UpdateRobot((ent.Owner, current));
             },
@@ -174,7 +177,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         if (amount <= 0)
             return;
 
-        var removed = _solutions.RemoveReagent(solutionEntity, "WeldingFuel", FixedPoint2.New(amount));
+        var removed = _solutions.RemoveReagent(solutionEntity.Value, "WeldingFuel", FixedPoint2.New(amount));
         ent.Comp.WeldingFuel += removed.Float();
         Dirty(ent);
         _popup.PopupEntity(Loc.GetString("cmu-construction-robot-refuel-finished"), ent.Owner, args.User);
@@ -207,8 +210,10 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
 
     private void OnGhostPlaced(ConstructionRobotGhostPlacedMessage ev, EntitySessionEventArgs args)
     {
-        if (args.SenderSession.AttachedEntity is not { } owner ||
-            !_prototypes.TryIndex<ConstructionPrototype>(ev.Prototype, out _) ||
+        if (args.SenderSession.AttachedEntity is not { } owner)
+            return;
+
+        if (!_prototypes.TryIndex<ConstructionPrototype>(ev.Prototype, out _) ||
             _ghosts.Any(task => task.Owner == owner && task.GhostId == ev.GhostId))
             return;
 
@@ -364,7 +369,7 @@ public sealed partial class CMUConstructionRobotSystem : EntitySystem
         out EntityUid stackEntity)
     {
         _nearby.Clear();
-        _lookup.GetEntitiesInRange(_transform.ToMapCoordinates(task.Coordinates), radius, _nearby);
+        _lookup.GetEntitiesInRange(task.Coordinates, radius, _nearby);
         foreach (var entity in _nearby)
         {
             if (!TryComp<StackComponent>(entity, out var stack) ||
