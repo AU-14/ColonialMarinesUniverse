@@ -38,8 +38,8 @@ public abstract partial class SharedCMChatSystem : EntitySystem
             return;
         }
         
-        if (args.Channel?.ID != SharedChatSystem.HivemindChannel.Id &&
-            args.Channel?.ID != "MyceliumLink")
+        if (args.Channel?.ID != SharedChatSystem.HivemindChannel.Id && // CMU14
+            args.Channel?.ID != "MyceliumLink") // CMU14
             args.Channel = null;
     }
 
