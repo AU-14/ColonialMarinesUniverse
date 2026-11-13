@@ -3,6 +3,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Containers;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ConstructionRobot;
 
