@@ -1,6 +1,7 @@
 using Content.IntegrationTests.Pair;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared.Body;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.FixedPoint;
@@ -189,6 +190,58 @@ public sealed class BadBloodSurvivalTest
             }
 
             foreach (var uid in spawned)
+                entMan.DeleteEntity(uid);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // drainable foods (MRE cans, spreads, tubes, condiment packets) are "universally digestible" and used to skip the
+    // Bad Blood stomach: the Bad Blood ate them and the drink filter left it nothing. it must not start eating at all
+    [TestCase("CMUMRECanUPPBeef")]
+    [TestCase("CMUMRESpreadPeanutButter")]
+    [TestCase("CMUMRETubeStrawberry")]
+    [TestCase("FoodCondimentPacketSalt")]
+    public async Task BadBloodRefusesDrainableFoodBeforeTheFirstBite(string foodProto)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var ingestion = entMan.System<IngestionSystem>();
+            var openable = entMan.System<OpenableSystem>();
+
+            var badBlood = entMan.SpawnEntity(BadBloodTestHelpers.GruntPrototype, map.GridCoords);
+            var hunter = entMan.SpawnEntity(Hunter, map.GridCoords.Offset(new Vector2(0, 2)));
+            var food = entMan.SpawnEntity(foodProto, map.GridCoords);
+            var hunterFood = entMan.SpawnEntity(foodProto, map.GridCoords);
+            var steak = entMan.SpawnEntity(CookedHuman, map.GridCoords);
+            var carton = entMan.SpawnEntity(JuiceCarton, map.GridCoords);
+            foreach (var uid in new[] { food, hunterFood, carton })
+            {
+                if (entMan.HasComponent<OpenableComponent>(uid))
+                    openable.SetOpen(uid);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<DrainableSolutionComponent>(food), Is.True,
+                    $"{foodProto} must stay a drainable food for this test to mean anything.");
+                Assert.That(ingestion.TryIngest(badBlood, food), Is.False,
+                    $"A Bad Blood must not start eating {foodProto}.");
+
+                // the controls: the food itself is edible, and nothing on the Bad Blood blocks eating what it may eat
+                Assert.That(ingestion.TryIngest(hunter, hunterFood), Is.True,
+                    $"An honourable hunter still eats {foodProto}.");
+                Assert.That(ingestion.TryIngest(badBlood, steak), Is.True, "Cooked prey is still eaten.");
+                Assert.That(ingestion.TryIngest(badBlood, carton), Is.True,
+                    "Drinks are still taken; the drink filter holds them to water.");
+            });
+
+            foreach (var uid in new[] { badBlood, hunter, food, hunterFood, steak, carton })
                 entMan.DeleteEntity(uid);
         });
 

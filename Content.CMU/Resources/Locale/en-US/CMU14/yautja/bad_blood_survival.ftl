@@ -9,3 +9,4 @@ ent-CMUYautjaWaterFlask = hide water flask
 
 cmu-yautja-cloak-blocked-starving = You are too starved to hold the cloak together.
 cmu-bad-blood-drink-refused = You spit out everything that is not water.
+cmu-bad-blood-food-refused = Your stomach turns at { THE($food) }. Only prey seared at the Lodge spit will do.
