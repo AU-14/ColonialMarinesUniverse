@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCWeaponRifleM54C
   id: CMUWeaponRifleLW317
-  name: LW-317 assault rifle
+  name: LW-317 Carbine
   description: Light Weapon, Type 317. Originating from Norcomm before the CANC's absorption, the Type 317 served the CANC's arsenals for close quarters battle. Also preferred for its ease of use among former CANC soldiers. Chambered in 6x38mm, but can also fire 10x24mm rounds. This variant appears to be missing its 2x 'Yaoguai' scope, and is covered in cosmoline residue. Unfortunate.
   components:
   - type: Icon
@@ -28,12 +28,12 @@
           - CMUMagazineSMGLW317
           - CMUMagazineSMGLW317AP
   - type: Item
-    sprite: _RMC14/Objects/Weapons/Guns/Rifles/type71c.rsi
+    sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
     inhandVisuals:
       left:
-      - state: wielded-inhand-left
+      - state: LW-317_INHAND_LEFT
       right:
-      - state: wielded-inhand-right
+      - state: LW-317_INHAND_RIGHT
   - type: Clothing
     sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
   - type: Gun
