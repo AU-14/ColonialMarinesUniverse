@@ -120,6 +120,12 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         RemComp<SatiationComponent>(target);
         RemComp<PainShockComponent>(target);
 
+        EnsureComp<IntrinsicRadioReceiverComponent>(target);
+        var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(target);
+        transmitter.Channels.Add("MyceliumLink");
+        var radio = EnsureComp<ActiveRadioComponent>(target);
+        radio.Channels.Add("MyceliumLink");
+
         if (_mind.TryGetMind(target, out var mindId, out _))
             _roles.MindAddJobRole(mindId, silent: true, jobPrototype: "CMU14JobPathogenWalker");
 
