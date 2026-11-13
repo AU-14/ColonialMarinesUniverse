@@ -109,7 +109,7 @@
     baseSprintSpeed: 9.0
   - type: SlowOnPull
     slowdowns:
-    - multiplier: 0.45
+    - multiplier: 0.35
       whitelist:
         components:
         - Marine

@@ -152,6 +152,7 @@
         Slash: 11.67
         Piercing: 11.67
   - type: XenoTailStab
+    dazeTime: 0.5
     tailDamage:
       types:
         Blunt: 18
