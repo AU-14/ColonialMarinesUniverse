@@ -86,11 +86,9 @@
   - type: IntrinsicRadioTransmitter
     channels:
     - Hivemind
-    - MyceliumLink
   - type: ActiveRadio
     channels:
     - Hivemind
-    - MyceliumLink
     receiveAllChannels: false
   - type: SoundOnDeath
     sound:
