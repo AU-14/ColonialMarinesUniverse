@@ -130,9 +130,9 @@
     attackRate: 1.2
     damage:
       types:
-        Blunt: 11.66
-        Slash: 11.67
-        Piercing: 11.67
+        Blunt: 11.08
+        Slash: 11.08
+        Piercing: 11.09
   - type: XenoSprayAcid  
     acid: XenoAcidSprayStrong  
     barricadeDamage:  

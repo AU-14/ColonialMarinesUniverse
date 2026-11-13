@@ -148,9 +148,9 @@
     attackRate: 1.5
     damage:
       types:
-        Blunt: 11.66
-        Slash: 11.67
-        Piercing: 11.67
+        Blunt: 11.08
+        Slash: 11.09
+        Piercing: 11.09
   - type: XenoTailStab
     dazeTime: 0.5
     tailDamage:
