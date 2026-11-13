@@ -54,12 +54,14 @@
     plasmaCost: 150
     range: 3.0
     canInjectLiving: true
-  - type: IntrinsicRadioReceiver  
-  - type: IntrinsicRadioTransmitter  
-    channels:  
-    - MyceliumLink  
-  - type: ActiveRadio  
-    channels:  
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - MyceliumLink
+  - type: ActiveRadio
+    channels:
+    - Hivemind
     - MyceliumLink
   - type: Xeno
     role: CMU14JobPathogenMatriarch
