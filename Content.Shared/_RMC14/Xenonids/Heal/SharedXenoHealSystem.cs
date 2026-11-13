@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Strain;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker; // CMU14
 using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
@@ -173,7 +174,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         LocId? failureMessageId = null;
 
-        if (!HasComp<XenoComponent>(target))
+        if (!HasComp<XenoComponent>(target) && !HasComp<CMUPathogenWalkerComponent>(target)) // CMU14
             failureMessageId = "rmc-xeno-apply-salve-target-not-xeno-failure";
 
         if (ent.Owner == target)
