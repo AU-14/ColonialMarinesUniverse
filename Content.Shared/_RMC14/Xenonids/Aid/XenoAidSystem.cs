@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Xenonids.Energy;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Strain;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker; // CMU14
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
@@ -45,7 +46,7 @@ public sealed partial class XenoAidSystem : EntitySystem
     {
         var target = args.Target;
 
-        if (!HasComp<XenoComponent>(target))
+        if (!HasComp<XenoComponent>(target) && !HasComp<CMUPathogenWalkerComponent>(target)) // CMU 14; Healer Haze can heal same-hive Pathogen Walkers. No effect on Healer Drone.
         {
             var msg = Loc.GetString("rmc-xeno-heal-sisters");
             _popup.PopupEntity(msg, xeno, xeno, PopupType.SmallCaution);
