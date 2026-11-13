@@ -3,7 +3,7 @@
   id: CMU14JobPathogenWalker
   name: cmu-job-name-pathogen-Walker
   playTimeTracker: CMU14JobPathogenWalker
-  supervisors: cmu-job-name-pathogen-overmind
+  supervisors: cmu-job-supervisors-walker
  
 - type: playTimeTracker
   id: CMU14JobPathogenWalker
