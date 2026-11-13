@@ -29,4 +29,16 @@ public sealed partial class CMUIFFRemovalPrototype : IPrototype
 
     [DataField(required: true)]
     public DamageSpecifier SurgeryDamage = new();
+
+    [DataField(required: true)]
+    public DamageSpecifier UntrainedDamage = new();
+
+    [DataField(required: true)]
+    public float SelfDuration;
+
+    [DataField(required: true)]
+    public float SurgeryDuration;
+
+    [DataField(required: true)]
+    public float UntrainedDuration;
 }

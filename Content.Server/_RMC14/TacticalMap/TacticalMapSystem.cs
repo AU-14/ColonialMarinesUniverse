@@ -32,6 +32,7 @@ using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.CMU14.TacticalMap; // CMU14
+using Content.Shared.CMU14.Weapons.Ranged.IFF; // CMU14
 using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Database;
 using Content.Shared.Ghost.Components;
@@ -1369,6 +1370,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
     private void UpdateTracked(Entity<ActiveTacticalMapTrackedComponent> ent)
     {
+        // CMU14: an extracted IFF cannot be restored by tracking updates or replacement IDs.
+        if (HasComp<CMUIFFRemovedComponent>(ent))
+        {
+            BreakTracking(ent);
+            return;
+        }
+
         // If the tracked entity is restrained/cuffed, hide from tacmap UNLESS their faction has active sensors.
         if (TryComp<CuffableComponent>(ent, out var cuffable) && cuffable.CuffedHandCount > 0)
         {
