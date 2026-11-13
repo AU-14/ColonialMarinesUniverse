@@ -208,7 +208,7 @@ public partial class CMUYautjaEffectsOverlay : Overlay
 
     private void DrawSight(DrawingHandleWorld h, EntityUid user, EntityUid caster, Vector2 position, TimeSpan startedAt)
     {
-        if (!_entities.HasComponent<YautjaCasterComponent>(caster))
+        if (!_entities.System<YautjaCasterSystem>().IsSightWeapon(caster))
             return;
         var origin = _transform.GetWorldPosition(user) + new Vector2(7, 9) / 32;
         var age = (float) (_timing.CurTime - startedAt).TotalSeconds;
