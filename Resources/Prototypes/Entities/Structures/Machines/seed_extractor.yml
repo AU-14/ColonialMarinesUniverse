@@ -1,7 +1,7 @@
 ﻿- type: entity
   id: SeedExtractor
   name: seed extractor
-  parent: [ BaseMachinePowered, ConstructibleMachine, BaseConstructibleMachineDestructible ]
+  parent: [ BaseMachinePowered, RMCConstructibleMachine, BaseConstructibleMachineDestructible ] # CMU14: the RMC machine frame (upstream frame's rewiring needs cable this fork does not stock)
   description: Extracts seeds from produce.
   components:
   - type: Sprite
@@ -40,7 +40,97 @@
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
           False: { visible: false }
-  - type: SeedExtractor
+  # CMU14: the batch seed extractor replaces the upstream SeedExtractor component (the id stays, it is on many maps).
+  # Produce goes into produce1..8 (by hand, the window, an inserter or a dumped plant bag); seed packets come out in seeds1..16.
+  - type: CMUBatchSeedExtractor
+  - type: ItemSlots
+    slots:
+      produce1: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      produce2: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      produce3: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      produce4: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      produce5: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      produce6: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      produce7: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      produce8: { whitelist: { components: [ Produce ] }, insertOnInteract: false }
+      seeds1: { insertOnInteract: false }
+      seeds2: { insertOnInteract: false }
+      seeds3: { insertOnInteract: false }
+      seeds4: { insertOnInteract: false }
+      seeds5: { insertOnInteract: false }
+      seeds6: { insertOnInteract: false }
+      seeds7: { insertOnInteract: false }
+      seeds8: { insertOnInteract: false }
+      seeds9: { insertOnInteract: false }
+      seeds10: { insertOnInteract: false }
+      seeds11: { insertOnInteract: false }
+      seeds12: { insertOnInteract: false }
+      seeds13: { insertOnInteract: false }
+      seeds14: { insertOnInteract: false }
+      seeds15: { insertOnInteract: false }
+      seeds16: { insertOnInteract: false }
+  - type: ContainerContainer
+    containers:
+      machine_board: !type:Container
+      machine_parts: !type:Container
+      produce1: !type:ContainerSlot
+      produce2: !type:ContainerSlot
+      produce3: !type:ContainerSlot
+      produce4: !type:ContainerSlot
+      produce5: !type:ContainerSlot
+      produce6: !type:ContainerSlot
+      produce7: !type:ContainerSlot
+      produce8: !type:ContainerSlot
+      seeds1: !type:ContainerSlot
+      seeds2: !type:ContainerSlot
+      seeds3: !type:ContainerSlot
+      seeds4: !type:ContainerSlot
+      seeds5: !type:ContainerSlot
+      seeds6: !type:ContainerSlot
+      seeds7: !type:ContainerSlot
+      seeds8: !type:ContainerSlot
+      seeds9: !type:ContainerSlot
+      seeds10: !type:ContainerSlot
+      seeds11: !type:ContainerSlot
+      seeds12: !type:ContainerSlot
+      seeds13: !type:ContainerSlot
+      seeds14: !type:ContainerSlot
+      seeds15: !type:ContainerSlot
+      seeds16: !type:ContainerSlot
+  - type: WindowMachine
+    stackSlots:
+    - produce1
+    - produce2
+    - produce3
+    - produce4
+    - produce5
+    - produce6
+    - produce7
+    - produce8
+    outputSlots:
+    - seeds1
+    - seeds2
+    - seeds3
+    - seeds4
+    - seeds5
+    - seeds6
+    - seeds7
+    - seeds8
+    - seeds9
+    - seeds10
+    - seeds11
+    - seeds12
+    - seeds13
+    - seeds14
+    - seeds15
+    - seeds16
+  - type: UserInterface
+    interfaces:
+      enum.CMUBatchSeedExtractorUiKey.Key:
+        type: CMUBatchSeedExtractorBoundUserInterface
+  - type: ActivatableUI
+    key: enum.CMUBatchSeedExtractorUiKey.Key
+  # CMU14: end
   - type: Machine
     board: SeedExtractorMachineCircuitboard
   - type: ApcPowerReceiver

@@ -96,9 +96,7 @@
       amount: 2
     CMUPhenol:
       amount: 1
-    RMCMethane:
-      amount: 5
-      catalyst: true
+    # CMU14: no methane catalyst; the ungated CMUFormaldehyde reaction ate it whenever step 1 left oxygen/phoron over
   products:
     CMUPhenolFormaldehyde: 1
 

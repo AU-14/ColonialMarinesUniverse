@@ -1,10 +1,11 @@
-#pragma warning disable RA0002 // the test puts beakers on the chiller's ItemPlacer directly instead of through physics
+#pragma warning disable RA0002 // the test puts beakers on the plates' ItemPlacer directly instead of through physics
 
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Chemistry.Temperature;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared._RMC14.Chemistry.ChemMaster;
+using Content.Shared.CMU14.Chemistry.Temperature;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Chemistry.EntitySystems;
@@ -29,15 +30,7 @@ public sealed class CMUReactionGatesTest : GameTest
         EntityUid warm = default;
         EntityUid cold = default;
 
-        await Server.WaitAssertion(() =>
-        {
-            chiller = SSpawnAtPosition("CMUChemistryChiller", map.GridCoords);
-            Server.System<PowerReceiverSystem>().SetNeedsPower(chiller, false);
-            // No power net on the test map recomputes Powered, so set it as ReagentGrinderWorkflowTest does.
-            var receiver = SComp<ApcPowerReceiverComponent>(chiller);
-            receiver.Powered = true;
-            SEntMan.Dirty(chiller, receiver);
-        });
+        await Server.WaitAssertion(() => chiller = SpawnPoweredPlate("CMUChemistryChiller", map));
 
         // the power net flips the receiver to powered on its next update
         await RunTicksSync(5);
@@ -57,7 +50,12 @@ public sealed class CMUReactionGatesTest : GameTest
             var placer = SComp<ItemPlacerComponent>(chiller);
             placer.PlacedEntities.Add(warm);
             placer.PlacedEntities.Add(cold);
-            Assert.That(Server.System<CMUSolutionChillerSystem>().TryTurnOn(chiller), Is.True);
+
+            var plates = Server.System<CMUThermostatPlateSystem>();
+            plates.SetTarget(chiller, 250f);
+            plates.SetEnabled(chiller, true);
+            Assert.That(SEntMan.HasComponent<CMUActiveThermostatPlateComponent>(chiller), Is.True,
+                "a switched-on, powered chiller with beakers on it should be active");
         });
 
         // 160 energy/s on 10u is 16 K/s: 5 s is far more than the 43 K down to 250 K
@@ -65,15 +63,150 @@ public sealed class CMUReactionGatesTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            var min = SComp<CMUSolutionChillerComponent>(chiller).MinTemperature;
             Assert.Multiple(() =>
             {
-                Assert.That(BeakerSolution(warm).Comp.Solution.Temperature, Is.EqualTo(min).Within(0.01f),
-                    "the chiller should cool a beaker down to its minimum");
+                Assert.That(BeakerSolution(warm).Comp.Solution.Temperature, Is.EqualTo(250f).Within(0.01f),
+                    "the chiller should cool a beaker down to its target");
                 Assert.That(BeakerSolution(cold).Comp.Solution.Temperature, Is.EqualTo(240f).Within(0.01f),
-                    "the chiller warmed a beaker that was already below its minimum");
+                    "the chiller warmed a beaker that was already below its target");
             });
         });
+    }
+
+    // N5 (GraphAudit-ChemBotanyPlan): the hotplate heats to the target it was given and holds there, never above.
+    [Test]
+    public async Task HotplateHoldsTarget()
+    {
+        const float target = 374f;
+        var map = await Pair.CreateTestMap();
+        EntityUid hotplate = default;
+        EntityUid beaker = default;
+
+        await Server.WaitAssertion(() => hotplate = SpawnPoweredPlate("ChemistryHotplate", map));
+        await RunTicksSync(5);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Server.System<PowerReceiverSystem>().IsPowered(hotplate), Is.True);
+
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            beaker = SSpawnAtPosition("CMBeaker", map.GridCoords);
+            Assert.That(solutions.TryAddReagent(BeakerSolution(beaker), "Water", FixedPoint2.New(10)), Is.True);
+            solutions.SetTemperature(BeakerSolution(beaker), 293f);
+
+            SComp<ItemPlacerComponent>(hotplate).PlacedEntities.Add(beaker);
+
+            var plates = Server.System<CMUThermostatPlateSystem>();
+            plates.SetTarget(hotplate, target);
+            plates.SetEnabled(hotplate, true);
+            Assert.That(SEntMan.HasComponent<CMUActiveThermostatPlateComponent>(hotplate), Is.True);
+        });
+
+        // 16 K/s for 81 K is about 5 s: sample on the way up, then well after it should have arrived
+        var previous = 293f;
+        foreach (var seconds in new[] { 1f, 2f, 3f, 4f })
+        {
+            await RunSeconds(seconds);
+            await Server.WaitAssertion(() =>
+            {
+                var temperature = BeakerSolution(beaker).Comp.Solution.Temperature;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(temperature, Is.LessThanOrEqualTo(target + 0.01f), "the hotplate overshot its target");
+                    Assert.That(temperature, Is.GreaterThanOrEqualTo(previous - 0.01f), "the hotplate cooled a beaker");
+                });
+                previous = temperature;
+            });
+        }
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(BeakerSolution(beaker).Comp.Solution.Temperature, Is.EqualTo(target).Within(0.5f),
+                "the hotplate should hold a beaker at its target");
+        });
+    }
+
+    // N5: a plate that was never switched on does nothing, even with a beaker on it and power coming on afterwards.
+    [Test]
+    public async Task SwitchedOffPlateDoesNothing()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid hotplate = default;
+        EntityUid beaker = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            hotplate = SSpawnAtPosition("ChemistryHotplate", map.GridCoords);
+            Assert.That(SComp<CMUThermostatPlateComponent>(hotplate).Enabled, Is.False, "plates should start switched off");
+
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            beaker = SSpawnAtPosition("CMBeaker", map.GridCoords);
+            Assert.That(solutions.TryAddReagent(BeakerSolution(beaker), "Water", FixedPoint2.New(10)), Is.True);
+            solutions.SetTemperature(BeakerSolution(beaker), 293.15f);
+
+            // a target far from the beaker's temperature, so "unchanged" means the plate really did nothing
+            Server.System<CMUThermostatPlateSystem>().SetTarget(hotplate, 400f);
+
+            SComp<ItemPlacerComponent>(hotplate).PlacedEntities.Add(beaker);
+            var placed = new ItemPlacedEvent(beaker);
+            SEntMan.EventBus.RaiseLocalEvent(hotplate, ref placed);
+
+            PowerOn(hotplate);
+        });
+
+        await RunTicksSync(5);
+        await RunSeconds(3);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(Server.System<PowerReceiverSystem>().IsPowered(hotplate), Is.True);
+                Assert.That(BeakerSolution(beaker).Comp.Solution.Temperature, Is.EqualTo(293.15f).Within(0.01f),
+                    "a switched-off hotplate heated a beaker");
+                Assert.That(SEntMan.HasComponent<CMUActiveThermostatPlateComponent>(hotplate), Is.False,
+                    "a switched-off plate should never be active");
+            });
+        });
+    }
+
+    // N5: targets outside a plate's range are clamped to it.
+    [Test]
+    public async Task TargetIsClamped()
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var plates = Server.System<CMUThermostatPlateSystem>();
+            var hotplate = SSpawnAtPosition("ChemistryHotplate", map.GridCoords);
+            var chiller = SSpawnAtPosition("CMUChemistryChiller", map.GridCoords);
+
+            plates.SetTarget(hotplate, 9999f);
+            plates.SetTarget(chiller, 100f);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(SComp<CMUThermostatPlateComponent>(hotplate).TargetTemperature, Is.EqualTo(600f).Within(0.001f));
+                Assert.That(SComp<CMUThermostatPlateComponent>(chiller).TargetTemperature, Is.EqualTo(250f).Within(0.001f));
+            });
+        });
+    }
+
+    private EntityUid SpawnPoweredPlate(string prototype, Robust.UnitTesting.Pool.TestMapData map)
+    {
+        var plate = SSpawnAtPosition(prototype, map.GridCoords);
+        PowerOn(plate);
+        return plate;
+    }
+
+    private void PowerOn(EntityUid machine)
+    {
+        Server.System<PowerReceiverSystem>().SetNeedsPower(machine, false);
+        // No power net on the test map recomputes Powered, so set it as ReagentGrinderWorkflowTest does.
+        var receiver = SComp<ApcPowerReceiverComponent>(machine);
+        receiver.Powered = true;
+        SEntMan.Dirty(machine, receiver);
     }
 
     [Test]

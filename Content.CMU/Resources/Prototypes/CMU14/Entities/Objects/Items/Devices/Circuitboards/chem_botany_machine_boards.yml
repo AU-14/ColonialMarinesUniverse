@@ -1,0 +1,48 @@
+# CMU14 (ARCH-01, GraphAudit-FrameAndTileAlignment): machine boards for the chemical
+# synthesizer and the hydroponics tray arms, built on the RMC machine frame and sold
+# by the circuits cash vendor.
+# Parts pools only use stacks obtainable in CM rounds: CMSteel, CMUThinCableLV,
+# CMGlass. Upstream Manipulator/Cable/Glass are R&D or NT-supply goods this
+# fork never stocks, and empty pools build for free.
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUChemSynthesizerMachineCircuitboard
+  name: chemical synthesizer machine board
+  description: A machine printed circuit board for a chemical synthesizer.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUChemSynthesizer
+    stackRequirements:
+      CMSteel: 5
+      CMUThinCableLV: 3
+      CMGlass: 2
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUTrayArmHarvesterMachineCircuitboard
+  name: harvester arm machine board
+  description: A machine printed circuit board for a hydroponics harvester arm.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUTrayArmHarvester
+    stackRequirements:
+      CMSteel: 2
+      CMUThinCableLV: 2
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUTrayArmPlanterMachineCircuitboard
+  name: planter arm machine board
+  description: A machine printed circuit board for a hydroponics planter arm.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUTrayArmPlanter
+    stackRequirements:
+      CMSteel: 2
+      CMUThinCableLV: 2

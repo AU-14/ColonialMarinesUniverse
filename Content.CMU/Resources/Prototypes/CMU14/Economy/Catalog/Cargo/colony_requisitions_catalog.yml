@@ -46,10 +46,6 @@
       - cost: 350
         crate: CMUGeneratorPortableDragon
       - cost: 350
-        crate: RMCCratePacmanParts
-      - cost: 375
-        crate: RMCCrateSuperPacmanParts
-      - cost: 350
         crate: RMCCrateHighCapacityPowerCell
       - cost: 400
         crate: AU14CrateBoxFusionCells
@@ -63,6 +59,21 @@
         crate: AU14CrateBoxFloorTilesWood
       - cost: 350
         crate: CMUCrateBiosuitGeneral # Yellow engineering colors
+    # CMU14 (ARCH-04): every machine board, and every crate that only holds one, is sold here.
+    - name: Machine Boards
+      entries:
+      - cost: 60
+        crate: CMUChemSynthesizerMachineCircuitboard
+      - cost: 35
+        crate: CMUTrayArmHarvesterMachineCircuitboard
+      - cost: 35
+        crate: CMUTrayArmPlanterMachineCircuitboard
+      - cost: 40
+        crate: SeedExtractorMachineCircuitboard
+      - cost: 350
+        crate: RMCCratePacmanParts
+      - cost: 375
+        crate: RMCCrateSuperPacmanParts
     - name: Materials
       entries:
       - cost: 350

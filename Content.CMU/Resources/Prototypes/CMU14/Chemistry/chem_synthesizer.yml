@@ -1,0 +1,137 @@
+# N10 (GraphAudit-ChemBotanyPlan, variant B): a machine that runs one programmed reaction step in a sealed chamber.
+# Program it with a research report (or the window's start button after one was read) or from a vial sample, load the
+# reactants in beakers or pipe them into its tank. M3 (GraphAudit-DeferredFollowups): reactant inlets and a product
+# outlet (its kind is set to the program's product by the server), inserter I/O through WindowMachine, sample slot.
+# CMU14 (ARCH-01, GraphAudit-FrameAndTileAlignment): built on the RMC machine frame (CMMachineFrame graph) from
+# CMUChemSynthesizerMachineCircuitboard, sold by the circuits cash vendor; wrench it to move it.
+
+- type: entity
+  parent: [ BaseMachinePowered, RMCConstructibleMachine ] # CMU14 (ARCH-01): RMC frame graph; no BaseMachineDestructible (its upstream wreck would add to ours)
+  id: CMUChemSynthesizer
+  name: chemical synthesizer
+  description: A sealed reaction chamber with its own thermostat and mixer. Program it with a research report or a vial sample, feed it reactants in beakers or through its inlet pipes, and it runs that recipe's step at the right temperature, sending the product out of its product outlet (or to the output beaker) and the rest to waste. Built on a machine frame; wrench it to move it.
+  components:
+  - type: Machine # CMU14 (ARCH-01)
+    board: CMUChemSynthesizerMachineCircuitboard
+  - type: Damageable # CMU14 (ARCH-01): what BaseMachineDestructible gave it
+    damageModifierSet: SteelMod
+  - type: Injurable # CMU14 (STATE-01, GraphAudit-InjurableSynthesizer): BaseStructureHealth's damage container; Damageable stores nothing without it
+    damageContainer: StructuralInorganic
+  # CMU14 (ARCH-01): at 175 damage it breaks into the wreck of the RMC frame it is built on, not the upstream frame's (whose
+  # rewiring needs cable the fork does not stock). Thresholds are inherited additively, so BaseMachineDestructible is not a parent;
+  # it also never destroyed the machine itself, as the RMC chem master's own threshold does.
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 175
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:SpawnEntitiesBehavior
+        offset: 0
+        spawn:
+          CMMachineFrameDestroyed:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: GuideHelp # CMU14: DOC-02
+    guides:
+    - CMUChemSynthesizer
+  - type: Sprite
+    sprite: CMU14/Production/Electric/reactor.rsi
+    state: off
+    noRot: true
+  - type: ApcPowerReceiver
+    powerLoad: 60
+  - type: PowerState
+    idlePowerDraw: 60
+    workingPowerDraw: 900
+  - type: SolutionContainerManager
+    solutions:
+      chamber:
+        maxVol: 120
+        canReact: false # the synthesizer reacts the chamber itself, once, at the temperature it picked
+      buffer: # M4: chain intermediates wait here between steps, at room temperature
+        maxVol: 120
+        canReact: false
+  - type: ReactionMixer
+    reactionTypes:
+    - CMUMix
+  - type: CMUChemSynthesizer
+  - type: ItemSlots
+    slots:
+      input1:
+        whitelist:
+          components:
+          - FitsInDispenser
+        priority: 5
+      input2:
+        whitelist:
+          components:
+          - FitsInDispenser
+        priority: 4
+      input3:
+        whitelist:
+          components:
+          - FitsInDispenser
+        priority: 3
+      output:
+        whitelist:
+          components:
+          - FitsInDispenser
+        insertOnInteract: false
+      waste:
+        whitelist:
+          components:
+          - FitsInDispenser
+        insertOnInteract: false
+      program:
+        whitelist:
+          components:
+          - ResearchReport
+        priority: 6
+      sample: # ARCH-07: programs from the vial with the window's button; never touched by inserters
+        whitelist:
+          components:
+          - Vial
+        insertOnInteract: false
+  - type: ContainerContainer
+    containers:
+      input1: !type:ContainerSlot
+      input2: !type:ContainerSlot
+      input3: !type:ContainerSlot
+      output: !type:ContainerSlot
+      waste: !type:ContainerSlot
+      program: !type:ContainerSlot
+      sample: !type:ContainerSlot
+      machine_board: !type:Container # CMU14 (ARCH-01): this override replaces RMCConstructibleMachine's list
+      machine_parts: !type:Container
+  - type: WindowMachine # inserters fill the inputs (full beakers) and output/waste (empty ones), and empty the slots the server's gates allow
+    stackSlots: [ input1, input2, input3, output, waste ]
+    automationOutputSlots: [ output, waste, input1, input2, input3 ]
+  - type: FluidTank
+    capacity: 360
+  - type: FluidPorts
+    ports:
+    - id: reagent_in_1
+      rate: 8
+      limit: 100
+    - id: reagent_in_2
+      rate: 8
+      limit: 100
+    - id: reagent_in_3
+      rate: 8
+      limit: 100
+    - id: product_out # kind and scale are set at runtime from the program (off while unprogrammed)
+      output: true
+      rate: 8
+  - type: UserInterface
+    interfaces:
+      enum.CMUChemSynthesizerUiKey.Key:
+        type: CMUChemSynthesizerBoundUserInterface
+      enum.FluidPortsUiKey.Key:
+        type: FluidPortsBoundUserInterface
+  - type: ActivatableUI # no ActivatableUIRequiresPower: the window is the only way to the slots, so it opens unpowered (the cycle itself pauses)
+    key: enum.CMUChemSynthesizerUiKey.Key

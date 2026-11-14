@@ -27,6 +27,7 @@ namespace Content.Server.CMU14.Chemistry;
 /// </remarks>
 public sealed partial class CMUPayloadFireSystem : EntitySystem
 {
+    [Dependency] private CMUPayloadExplosionSystem _explosion = default!; // CMU14: N4 grenade explosion
     [Dependency] private CMUFuelProfileSystem _fuel = default!;
     [Dependency] private SharedRMCFlammableSystem _flammable = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
@@ -48,7 +49,11 @@ public sealed partial class CMUPayloadFireSystem : EntitySystem
             return;
         }
 
-        TryIgnite((ent, payload));
+        // N4 (COUPLING-01): the blast goes first and leaves explosive fuels for the fire step (FLOW-02).
+        // If no fire forms (too diluted), strip the explosive fuels the blast left behind so the casing can't blast again.
+        _explosion.TryDetonate((ent, payload), out var keptFuels);
+        if (!TryIgnite((ent, payload)))
+            _explosion.RemoveReagents((ent, payload), keptFuels);
     }
 
     /// <summary>Lights the payload's combined beakers if they resolve to a fire. True when a fire was spawned.</summary>

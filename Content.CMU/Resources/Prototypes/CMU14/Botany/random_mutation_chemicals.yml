@@ -1,0 +1,33 @@
+# CMU14: reagent pool for the ChangeChemicals plant mutation.
+# Mirrors the CMURandomHydroMutationChems dataset (with the RMC element ids for potassium, mercury and radium)
+# without the upstream joke/hazard reagents (Omnizine, Honk, BuzzochloricBees, Napalm, ChlorineTrifluoride).
+- type: weightedRandomFillSolution
+  id: CMURandomPickBotanyReagent
+  fills:
+  - quantity: 5
+    weight: 1
+    reagents:
+    - CMBicaridine
+    - CMCryoxadone
+    - Blood
+    - Water
+    - RMCPotassium
+    - CMInaprovaline
+    - RMCSpaceDrugs
+    - RMCParoxetine
+    - RMCMercury
+    - RMCSugar
+    - RMCRadium
+    - CMUAlkysine
+    - Thermite
+    - CMUTramadol
+    - Cryptobiolin
+    - CMDermaline
+    - CMMeralyne
+    - CMDexalin
+    - RMCPhoron
+    - Impedrezene
+    - RMCGenericToxin
+    - CMEthylredoxrazine
+    - CMUCyanide
+    - RMCMindbreakerToxin

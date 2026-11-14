@@ -911,7 +911,7 @@
     name: seeds-apple-name
     packetPrototype: AppleSeeds
     productPrototypes: [ FoodApple ]
-    mutationPrototypes: [ GoldenApplePlants ]
+    mutationPrototypes: [ GoldenApplePlants, PoisonApplePlants ] # CMU14: poison chain
   - type: Plant
     lifespan: 55
     maturation: 6
@@ -2046,6 +2046,7 @@
     name: seeds-berries-name
     packetPrototype: BerrySeeds
     productPrototypes: [ FoodBerries ]
+    mutationPrototypes: [ DeathberryPlants, PoisonberryPlants ] # CMU14: poison chain
   - type: Plant
     lifespan: 50
     maturation: 6

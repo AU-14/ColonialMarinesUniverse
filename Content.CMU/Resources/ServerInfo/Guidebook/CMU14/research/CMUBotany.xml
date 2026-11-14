@@ -33,7 +33,7 @@ This section details all parts of hydroponics that are important for research pu
 		<ColorBox><Box>Hatchet</Box></ColorBox><ColorBox><Box>Harvesting "Woody" plants.</Box></ColorBox><ColorBox><Box>Hydroponics Equipment Crate, NutriMax</Box></ColorBox>
 		<ColorBox><Box>Mini Hoe</Box></ColorBox><ColorBox><Box>Killing weeds.</Box></ColorBox><ColorBox><Box>Hydroponics Equipment Crate, NutriMax</Box></ColorBox>
 		<ColorBox><Box>Hand Labeler</Box></ColorBox><ColorBox><Box>Labeling important seeds, maintaining your sanity.</Box></ColorBox><ColorBox><Box>Autolathe</Box></ColorBox>
-		<ColorBox><Box>Seed Extractor</Box></ColorBox><ColorBox><Box>Getting seeds from plant yields.</Box></ColorBox><ColorBox><Box>Mapped, Admins</Box></ColorBox>
+		<ColorBox><Box>Seed Extractor</Box></ColorBox><ColorBox><Box>Getting seeds from plant yields. Takes 8 produce a batch; dump a plant bag into it.</Box></ColorBox><ColorBox><Box>Mapped, ASRS board</Box></ColorBox>
 		<ColorBox><Box>Reagent Grinder</Box></ColorBox><ColorBox><Box>Getting the chemicals out of the plant yields.</Box></ColorBox><ColorBox><Box>Mapped, Admins</Box></ColorBox>
 		<ColorBox><Box>Hydroponics Tray</Box></ColorBox><ColorBox><Box>Holding and growing plants.</Box></ColorBox><ColorBox><Box>ASRS</Box></ColorBox>
 	</Table>
@@ -44,7 +44,7 @@ It may seem daunting at first, but it really only boils down to luck!
 
 ### Applying Mutations
 In order to mutate plants, you will need to apply Unstable Mutagen to them and then cross your fingers.
-Each mutation has a 15% chance of mutating the plant's species and a 20% chance to mutate new chemicals.
+Every dose of mutagen rolls each possible mutation separately, and stronger doses raise the chance of every mutation (species change, new chemicals, stat changes and so on).
 This is more common than you may expect.
 Species mutations and regular mutations are not exclusive, both can happen and often do at the same time.
 
@@ -66,6 +66,8 @@ Apples -> Mutate Species -> Poison Apples -> Mutate -> Cyanide
 		<ColorBox><Box>Berries</Box></ColorBox><ColorBox><Box>Death Berries, Poison Berries</Box></ColorBox>
 		<ColorBox><Box>Nettles</Box></ColorBox><ColorBox><Box>Death Nettles</Box></ColorBox>
 	</Table>
+
+Apples mutate into Golden Apples or Poison Apples, Berries mutate into Death Berries or Poison Berries, and Nettles mutate into Death Nettles.
 
 [italic]Golden apples are useless.[/italic]
 

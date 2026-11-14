@@ -251,3 +251,117 @@
     amount: 2
   - stack: RUMCRubberSheet
     amount: 1
+
+# ---------------------------------------------------------------- the tray arms
+# CMU14 (ARCH-03): arms that work hydroponics trays, to close the botany loop with inserters. Each arm works the 3x3 block of
+# trays in front of it: it stands at the middle of one edge of the block, facing into it, and works up to three tiles ahead
+# (nine trays), one tray per action. The tile behind it stays free for an inserter or belt to load or unload it. The harvester
+# keeps the produce in its output slots for an inserter to take; the planter plants seed packets an inserter (or a hand) puts in
+# its seed slots, keeping those its gene filter refuses. Automatic trays farm themselves and are left alone. They are not
+# parented on the inserter arm, which would make them inserters too; the look is the robotic arm, tinted (no new art).
+# CMU14 (ARCH-01, GraphAudit-FrameAndTileAlignment): built on the RMC machine frame (CMMachineFrame graph) from a board
+# sold by the circuits cash vendor, and anchored with a wrench (no PortableStructure), so the wrench snaps the rotation.
+
+- type: entity
+  abstract: true
+  parent: [ AU14RoboticArmFlipped, RMCConstructibleMachine ] # CMU14 (ARCH-01): RMC frame graph
+  id: CMUTrayArmBase
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryMachines
+    - CMUGuideIndustry
+  - type: Transform
+    anchored: true
+  - type: Anchorable # CMU14 (ARCH-01): wrench to anchor or move, like BaseMachine
+    delay: 2
+  - type: Sprite
+    scale: 1,1
+    # CMU14 (ECS-04): set up like the inserter's; CMUTrayArmVisualsSystem cuts layer 0's art into the inserter's rig, draws
+    # the shoulder on the arm's tile, keeps the base upright and animates the reach the server records
+    noRot: true
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        density: 190
+        layer:
+        - MobMask
+  - type: Rotatable
+    rotateWhileAnchored: true
+    increment: 180 # CMU14 (ECS-03): the arm faces left or right only
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      direct:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Direct
+  - type: ApcPowerReceiver
+    powerLoad: 100
+  - type: ExtensionCableReceiver
+
+- type: entity
+  parent: CMUTrayArmBase
+  id: CMUTrayArmHarvester
+  name: harvester arm
+  description: Faces left or right and works the 3x3 block of hydroponics trays on that side, up to three tiles away, one tray at a time. It harvests a ripe plant, clears away a dead one, and keeps the produce for an inserter to take. It leaves automatic trays alone. Needs power. Wrench it to anchor or move it; right-click to rotate it.
+  components:
+  - type: Machine # CMU14 (ARCH-01)
+    board: CMUTrayArmHarvesterMachineCircuitboard
+  - type: Sprite
+    color: "#a8e08a"
+  - type: ItemSlots
+    slots:
+      produce1: { whitelist: { components: [ Produce ] }, ejectOnInteract: true }
+      produce2: { whitelist: { components: [ Produce ] }, ejectOnInteract: true }
+      produce3: { whitelist: { components: [ Produce ] }, ejectOnInteract: true }
+      produce4: { whitelist: { components: [ Produce ] }, ejectOnInteract: true }
+      produce5: { whitelist: { components: [ Produce ] }, ejectOnInteract: true }
+      produce6: { whitelist: { components: [ Produce ] }, ejectOnInteract: true }
+  - type: ContainerContainer
+    containers:
+      produce1: !type:ContainerSlot
+      produce2: !type:ContainerSlot
+      produce3: !type:ContainerSlot
+      produce4: !type:ContainerSlot
+      produce5: !type:ContainerSlot
+      produce6: !type:ContainerSlot
+      machine_board: !type:Container # CMU14 (ARCH-01): this override replaces RMCConstructibleMachine's list
+      machine_parts: !type:Container
+  - type: WindowMachine
+    outputSlots: [ produce1, produce2, produce3, produce4, produce5, produce6 ]
+  - type: CMUTrayArm
+    mode: Harvest
+    produceSlots: [ produce1, produce2, produce3, produce4, produce5, produce6 ]
+
+- type: entity
+  parent: CMUTrayArmBase
+  id: CMUTrayArmPlanter
+  name: planter arm
+  description: Faces left or right and works the 3x3 block of hydroponics trays on that side, up to three tiles away, one tray at a time. It plants a seed packet from its seed slots in an empty tray. It leaves automatic trays alone. Load it by hand or with an inserter. Needs power. Wrench it to anchor or move it; right-click to rotate it.
+  components:
+  - type: Machine # CMU14 (ARCH-01)
+    board: CMUTrayArmPlanterMachineCircuitboard
+  - type: Sprite
+    color: "#e0c88a"
+  - type: ItemSlots
+    slots:
+      seed1: { whitelist: { components: [ Seed ] } }
+      seed2: { whitelist: { components: [ Seed ] } }
+      seed3: { whitelist: { components: [ Seed ] } }
+  - type: ContainerContainer
+    containers:
+      seed1: !type:ContainerSlot
+      seed2: !type:ContainerSlot
+      seed3: !type:ContainerSlot
+      machine_board: !type:Container # CMU14 (ARCH-01): this override replaces RMCConstructibleMachine's list
+      machine_parts: !type:Container
+  - type: WindowMachine
+    stackSlots: [ seed1, seed2, seed3 ]
+  - type: CMUTrayArm
+    mode: Plant
+    seedSlots: [ seed1, seed2, seed3 ]

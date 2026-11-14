@@ -5,7 +5,8 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Electric;
 
-// A hydroponics tray that farms itself: it harvests the plant when it is ripe, and plants the same one again (the seed is kept inside).
+// A hydroponics tray that farms itself: it harvests the plant when it is ripe, and plants the next seed from its seed slot
+// (CMU14: or the same plant again for free, with FreeReplant).
 // It also feeds itself: from the tank joined to it (by a pipe, or poured in by hand) it tops up its water and its
 // nutrients whenever they run low, while it has power. The water is the water of the tank, the nutrients the fertilizer the
 // fertilizer machine makes.
@@ -36,6 +37,15 @@ public sealed partial class AutoFeedTrayComponent : Component
 
     [DataField]
     public bool AutoReplant = true;
+
+    // CMU14: when off (the default), a replant uses up the seed packet in SeedSlot and plants that seed's genes; with no seed,
+    // nothing is replanted. When on, the tray replants the remembered plant for free (the old behaviour).
+    [DataField]
+    public bool FreeReplant;
+
+    // CMU14: the item slot the replanting seed is taken from.
+    [DataField]
+    public string SeedSlot = "seed";
 
     [ViewVariables]
     public float NextFeed;

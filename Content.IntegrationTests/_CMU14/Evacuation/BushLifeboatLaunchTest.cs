@@ -6,6 +6,7 @@ using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
 using Content.Server.Atmos.Components;
+using Content.Server.Atmos.EntitySystems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
@@ -17,6 +18,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Maps;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -186,6 +188,11 @@ public sealed class BushLifeboatLaunchTest
                     var entrant = entities.SpawnEntity(prototype, berth.Offset(new Vector2(-1, 0)));
                     // Isolate berth collision damage from the exposed dock's vacuum.
                     entities.RemoveComponent<BarotraumaComponent>(entrant);
+                    // CMU14 (TEST-01, GraphAudit-LifeboatBerthCI): the crash makes every deck need pressure, so
+                    // CMUMapBreathingSystem gives a human its Barotrauma back on its next 1s check; immunity survives that.
+                    Assert.That(entities.System<StatusEffectsSystem>().TrySetStatusEffectDuration(entrant,
+                            PressureImmunityStatusEffectSystem.PressureImmunityEffect), Is.True,
+                        $"the {prototype} entrant must accept pressure immunity so the vacuum can't hurt it");
                     entrants.Add(entrant);
                     entities.System<SharedPhysicsSystem>().SetLinearVelocity(entrant, new Vector2(2, 0));
                 }

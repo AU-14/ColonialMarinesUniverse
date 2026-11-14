@@ -7,7 +7,7 @@
   parent: CMHydroponicsTray
   id: RUMCAutoHydroponicsTray
   name: automatic hydroponics tray
-  description: A hydroponics tray with a pump and a tank of its own. Give it water and fertilizer, and power, plant a seed once, and it waters and feeds the plant, harvests it when it is ripe and plants the same one again.
+  description: A hydroponics tray with a pump and a tank of its own. Give it water and fertilizer, and power, plant a seed once, and it waters and feeds the plant, harvests it when it is ripe and plants the next seed packet from its seed slot.
   components:
   - type: GuideHelp
     guides:
@@ -37,6 +37,16 @@
       enum.FluidPortsUiKey.Key:
         type: FluidPortsBoundUserInterface
   - type: AutoFeedTray
+  # CMU14: each replant uses up the seed packet in this slot (loaded by an inserter or the alt-click verb); no seed, no replant.
+  - type: ItemSlots
+    slots:
+      seed: { whitelist: { components: [ Seed ] }, insertOnInteract: false }
+  - type: ContainerContainer
+    containers:
+      seed: !type:ContainerSlot
+  - type: WindowMachine
+    stackSlots:
+    - seed
 
 # ---------------------------------------------------------------- the electric welder
 # The welding tool in every way, but the fuel is made of the charge of the power cell in it: no tank to fill, only a cell to charge.

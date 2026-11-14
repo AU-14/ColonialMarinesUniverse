@@ -1,8 +1,7 @@
 using System.Linq;
-using Content.Shared.Botany.Components;
 using Content.Shared.Botany.Items.Components;
 using Content.Shared.Botany.Systems;
-using Content.Shared.Botany.Traits.Components;
+using Content.Shared.CMU14.Botany;
 using Content.Shared.Popups;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Storage;
@@ -12,7 +11,9 @@ using Robust.Shared.Random;
 namespace Content.Server.CMU14.Botany;
 
 /// <summary>
-/// Preserves CMU's bulk plant-bag interaction on the shared Nubotany seed extractor.
+/// Preserves CMU's bulk plant-bag interaction on the seed extractor.
+/// CMU14: lives on <see cref="CMUBatchSeedExtractorComponent"/> (which replaced the upstream SeedExtractor component on the
+/// prototype) and uses the shared <see cref="CMUSeedYield"/> rules, so bag and batch give the same yield.
 /// </summary>
 public sealed partial class CMUSeedExtractorSystem : EntitySystem
 {
@@ -25,10 +26,10 @@ public sealed partial class CMUSeedExtractorSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SeedExtractorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
+        SubscribeLocalEvent<CMUBatchSeedExtractorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetAlternativeVerbs);
     }
 
-    private void OnGetAlternativeVerbs(Entity<SeedExtractorComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    private void OnGetAlternativeVerbs(Entity<CMUBatchSeedExtractorComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (!args.CanAccess ||
             !args.CanInteract ||
@@ -49,7 +50,7 @@ public sealed partial class CMUSeedExtractorSystem : EntitySystem
         });
     }
 
-    private void ConvertPlantBag(Entity<SeedExtractorComponent> ent, EntityUid plantBag, EntityUid user)
+    private void ConvertPlantBag(Entity<CMUBatchSeedExtractorComponent> ent, EntityUid plantBag, EntityUid user)
     {
         if (!Exists(plantBag) ||
             !_power.IsPowered(ent.Owner) ||
@@ -64,15 +65,12 @@ public sealed partial class CMUSeedExtractorSystem : EntitySystem
         foreach (var item in storage.Container.ContainedEntities.ToList())
         {
             if (!TryComp(item, out ProduceComponent? produce) ||
-                produce.PlantProtoId is not { } plantProtoId ||
-                _botany.TryGetPlantComponent<PlantTraitSeedlessComponent>(produce.PlantData, plantProtoId, out _) ||
-                !_botany.TryGetPlantComponent<PlantDataComponent>(produce.PlantData, plantProtoId, out var plantData))
+                !CMUSeedYield.TryGetSeedSource(_botany, produce, out var plantProtoId, out var plantData))
             {
                 continue;
             }
 
-            var baseSeeds = ent.Comp.BaseSeeds;
-            var amount = baseSeeds.Next(_random);
+            var amount = CMUSeedYield.RollPacketCount(ent.Comp.BaseSeeds, _random);
             var coords = Transform(ent).Coordinates;
             for (var i = 0; i < amount; i++)
             {
