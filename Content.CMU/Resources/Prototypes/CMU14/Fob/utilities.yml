@@ -12,12 +12,12 @@
     bodyType: Dynamic
   - type: Fixtures
     fixtures:
-      equipment:
+      fix1:
         shape: !type:PhysShapeAabb
           bounds: "-0.35,-0.35,0.35,0.35"
-        hard: false
-        layer: [MidImpassable]
-        mask: [MidImpassable]
+        hard: true
+        layer: []
+        mask: [ItemMask]
   - type: Appearance
   - type: CMUFobInstructions
   - type: CMUFobPresentation
@@ -103,11 +103,12 @@
     onState: sensor
   - type: Fixtures
     fixtures:
-      equipment:
+      fix1:
         shape: !type:PhysShapeCircle
           radius: 0.2
-        hard: false
-        layer: [LowImpassable]
+        hard: true
+        layer: []
+        mask: [ItemMask]
   - type: Destructible
     thresholds:
     - trigger: !type:DamageTrigger
@@ -120,6 +121,14 @@
   parent: CMUFobUtility
   id: CMUFobFence
   components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        hard: true
+        layer: []
+        mask: [ItemMask]
   - type: CMUFobPresentation
     device: Fence
   - type: Item

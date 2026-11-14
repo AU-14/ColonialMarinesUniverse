@@ -811,6 +811,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
     private void OnBlackfootShutdown(Entity<BlackfootFlightComponent> ent, ref ComponentShutdown args)
     {
+        EntityManager.System<BlackfootLandingPadSystem>().ReleaseAircraft(ent);
         DeleteShadow(ent);
         DeleteDownwash(ent);
         StopInteriorEngineLoop(ent.Owner);

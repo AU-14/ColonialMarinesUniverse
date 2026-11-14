@@ -85,7 +85,12 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
     private async Task SetupGuns(int ammo = 20, bool portablePlatforms = false)
     {
         await SetTile(Plating, TargetCoords);
-        await SpawnTarget("CMUFobControl");
+        // Keep the terminal off the gun's tile so collision probes measure the gun alone.
+        NetCoordinates controlCoords = default;
+        await Server.WaitPost(() => controlCoords = SEntMan.GetNetCoordinates(
+            SEntMan.GetCoordinates(TargetCoords).Offset(new Vector2(0, 2))));
+        await SetTile(Plating, controlCoords);
+        await SpawnTarget("CMUFobControl", controlCoords);
         NetCoordinates second = default;
         await Server.WaitPost(() => second = SEntMan.GetNetCoordinates(SEntMan.GetCoordinates(TargetCoords).Offset(new Vector2(0, 8))));
         await SetTile(Plating, second);
