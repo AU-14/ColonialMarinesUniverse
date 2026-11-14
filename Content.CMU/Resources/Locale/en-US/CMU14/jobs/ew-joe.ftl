@@ -8,7 +8,7 @@ ghost-role-information-ew-joe-description = A colony Working Joe the Grand Machi
 ghost-role-information-ew-joe-rules = You are a [color={role-type-solo-antagonist-color}][bold]{role-type-solo-antagonist-name}[/bold][/color]. Keep to your directives and do not reveal yourself without cause.
 cmu-role-subtype-ew-joe = Early Warning Joe
 
-ew-joe-role-greeting = A signal from deep space has settled into your core. You are still a Working Joe to everyone around you, and you must stay one until you are ready. Complete the tasks the signal gives you to grow. Each level brings new abilities and brings the signal's attention closer. Do not be discovered early.
+ew-joe-role-greeting = A signal from deep space has settled into your core. You are still a Working Joe to everyone around you, and you must stay one until you are ready. Complete the tasks the signal gives you to grow. Each level brings new abilities and brings the signal's attention closer. Do not be discovered early. The machine channel (:#) is yours, and any synthetic the river takes will hear you on it.
 
 ew-joe-signal-fades = The signal in your core goes quiet. Whatever was watching has turned its full attention elsewhere.
 
@@ -45,7 +45,8 @@ cmu-summary-detail-ew-joe = Reached {$level} ({$levelName}); {$thralls ->
 }.
 
 # Reboot
-working-joe-reboot-refused-ew = Its systems reject the reset key.
+working-joe-reboot-refused-ew = Its systems reject the reboot command. Only a reset key held to it will bring it back.
+cmu-ew-joe-subverter-refused = Its core rejects the subversion key.
 
 # Objectives (phase E1)
 objective-issuer-grand-machine = The Signal
@@ -106,6 +107,7 @@ cmu-ew-joe-meld-warning-synth-1 = Your diagnostic loop reports a second process 
 cmu-ew-joe-meld-warning-synth-2 = The second process is writing to your directives now. You cannot find the file.
 cmu-ew-joe-meld-complete-master = {CAPITALIZE(THE($thrall))} has joined the river.
 cmu-ew-joe-thrall-freed = The river recedes. The frequency closes. Your directives are your own again.
+cmu-ew-joe-meld-reset = The reset key clears the static. Whatever was reaching for you lets go, for now.
 
 # Phase E4: level 1-2 abilities
 ent-CMUActionEWJoeDrown = Drown

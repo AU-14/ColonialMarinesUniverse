@@ -14,7 +14,7 @@ namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
 /// Early Warning Joe phase E0: the level table grants the level-0 kit, levels shed slowdown and add
-/// armor, removing the antag component takes every grant back, and a reset key cannot revive the body.
+/// armor, removing the antag component takes every grant back, and (revised D3) only a defibrillator zap revives the body, see EWJoeReviveRadioTest.
 /// </summary>
 [TestFixture]
 public sealed class EWJoeLevelZeroTest

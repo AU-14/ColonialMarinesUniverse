@@ -97,7 +97,7 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public bool AddedArmorUser;
 
-    /// <summary>The machine radio channel was granted to the Joe (first thrall); stand-down revokes it.</summary>
+    /// <summary>The machine radio channel was granted to the Joe (on selection); stand-down revokes it.</summary>
     [DataField]
     public bool GrantedMachineRadio;
 
@@ -188,7 +188,10 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public EntProtoId CoreShardPrototype = "CMUEWJoeCoreShard";
 
-    /// <summary>Set after the shard dropped so a revived Joe never drops a second one.</summary>
+    /// <summary>
+    /// Set after the first shard drop. Later drops (a defibrillated Joe dying again) cover only consoles whose
+    /// own marker has no shard yet (<see cref="EWJoeAssimilatedConsoleComponent.ShardDropped"/>).
+    /// </summary>
     [DataField]
     public bool ShardDropped;
 
@@ -212,8 +215,23 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public TimeSpan SweepKnockdown = TimeSpan.FromSeconds(1.5);
 
+    /// <summary>Flat Blunt added to the RMC impact damage (lowered from 40).</summary>
     [DataField]
-    public int SlamDamage = 40;
+    public int SlamDamage = 35;
+
+    /// <summary>
+    /// Blunt added to every bare-handed hit. The fists themselves are the shared Working Joe mob's melee
+    /// weapon (Blunt 60), so the Early Warning Joe's extra lives here rather than on the mob prototype.
+    /// </summary>
+    [DataField]
+    public float UnarmedBonusDamage = 6f;
+
+    /// <summary>
+    /// Added to a defibrillator's or reset key's charge time on the Joe. A defibrillator zap is the only way
+    /// the Joe is brought back; chemical revival and the Working Joe reboot verb stay refused.
+    /// </summary>
+    [DataField]
+    public TimeSpan DefibDoAfterBonus = TimeSpan.FromSeconds(2);
 
     [DataField]
     public TimeSpan SlamParalyze = TimeSpan.FromSeconds(2);
@@ -398,6 +416,13 @@ public sealed partial class EWJoeComponent : Component
     /// <summary>Machine radio shared by the Joe and its thralls.</summary>
     [DataField]
     public ProtoId<RadioChannelPrototype>? ThrallRadioChannel = "CMUGrandMachine";
+
+    /// <summary>
+    /// How long a synthetic freed by a reset key is skipped by every meld search: the debt retries and the
+    /// next console's conversion alike.
+    /// </summary>
+    [DataField]
+    public TimeSpan ResetKeyMeldImmunity = TimeSpan.FromMinutes(5);
 
     // Playtest 4: the river takes synthetics only. An assimilation that finds no synthetic to meld keeps
     // a copy of the Joe instead: one respawn, never more than one held at a time.

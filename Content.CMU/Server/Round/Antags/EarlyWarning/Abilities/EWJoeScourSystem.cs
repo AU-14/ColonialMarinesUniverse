@@ -65,6 +65,7 @@ public sealed partial class EWJoeScourSystem : EntitySystem
     private static readonly ProtoId<TagPrototype>[] BatonTags = { "Stunbaton", "AU14TeleBaton" };
     private static readonly ProtoId<TagPrototype> FuelCanTag = "CMUJerryCan";
     private static readonly ProtoId<DamageTypePrototype> TorchDamage = "Heat";
+    private static readonly ProtoId<DamageTypePrototype> UnarmedDamage = "Blunt";
 
     /// <summary>The status alert each buff kind shows while it lasts.</summary>
     public static readonly Dictionary<EWJoeScourKind, ProtoId<AlertPrototype>> Alerts = new()
@@ -429,6 +430,9 @@ public sealed partial class EWJoeScourSystem : EntitySystem
     private void OnMeleeHit(Entity<EWJoeComponent> ent, ref MeleeHitEvent args)
     {
         // the Joe's own fists; the machete forwards its hits from EWJoeArsenalSystem
+        if (args.IsHit && args.Weapon == ent.Owner && ent.Comp.UnarmedBonusDamage > 0)
+            args.BonusDamage.DamageDict[UnarmedDamage] = args.BonusDamage.DamageDict.GetValueOrDefault(UnarmedDamage) + ent.Comp.UnarmedBonusDamage;
+
         ApplyCuttingTorch(ent, args);
 
         if (!TryComp(ent, out EWJoeScourComponent? scour) || scour.PunchStamina <= 0)

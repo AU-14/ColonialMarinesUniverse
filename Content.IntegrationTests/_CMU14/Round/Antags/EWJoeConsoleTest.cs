@@ -345,12 +345,18 @@ public sealed class EWJoeConsoleTest
             mobState.ChangeMobState(joe, MobState.Dead);
             Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5), "no further shards after a revive");
 
+            // a defibrillated Joe that takes another console owes exactly that console's shard on its next death
+            mobState.ChangeMobState(joe, MobState.Alive);
+            consoles.Assimilate((joe, comp), entities.SpawnEntity(CommsConsole, map.GridCoords));
+            mobState.ChangeMobState(joe, MobState.Dead);
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5 + 1), "only the new console's shard");
+
             // --- a Joe that holds no console still drops a single shard
             var joe3 = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             var comp3 = entities.EnsureComponent<EWJoeComponent>(joe3);
             Assert.That(consoles.CountAssimilatedBy(joe3), Is.Zero);
             Assert.That(consoles.TryDropShard((joe3, comp3), "test"), Is.True);
-            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5 + 1), "never fewer than one shard");
+            Assert.That(EWJoeTestHelpers.CountShards(entities), Is.EqualTo(1 + 5 + 1 + 1), "never fewer than one shard");
         });
 
         await pair.CleanReturnAsync();

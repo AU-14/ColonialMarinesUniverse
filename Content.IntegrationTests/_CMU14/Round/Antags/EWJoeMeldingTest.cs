@@ -21,8 +21,8 @@ namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
 /// Phase E3, playtest 4: River-Melded conversions. A console assimilation schedules a meld on an eligible
-/// synthetic player; the victim is warned, then converted in place and shown an alert; only the Weyland
-/// key or the Joe's death frees a thrall. Organics are never melded: an assimilation that finds no
+/// synthetic player; the victim is warned, then converted in place and shown an alert; any reset key used
+/// by someone else, or the Joe's death, frees a thrall, and a reset key blacklists it from new melds. Organics are never melded: an assimilation that finds no
 /// synthetic gives the Joe its one respawn instead.
 /// </summary>
 [TestFixture]
@@ -32,12 +32,11 @@ public sealed class EWJoeMeldingTest
     private const string Human = "CMMobHuman";
     private const string Console = "CMUResearchDataTerminal";
     private const string SeegsonKey = "RMCSynthResetKeySeegson";
-    private const string WeylandKey = "CMUSynthResetKeyWeyland";
     private const string ThrallAlert = "CMUEWJoeRiverMelded";
     private const string RespawnAlert = "CMUEWJoeRespawn";
 
     [Test]
-    public async Task SynthPlayerIsMeldedAfterWarningsAndOnlyTheWeylandKeyCures()
+    public async Task SynthPlayerIsMeldedAfterWarningsAndAResetKeyCures()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
         var server = pair.Server;
@@ -105,6 +104,7 @@ public sealed class EWJoeMeldingTest
             var roles = entities.System<SharedRoleSystem>();
             var mindSys = entities.System<MindSystem>();
             var alerts = entities.System<AlertsSystem>();
+            var melding = entities.System<EWJoeMeldingSystem>();
             var comp = entities.GetComponent<EWJoeComponent>(joe);
 
             Assert.Multiple(() =>
@@ -121,21 +121,23 @@ public sealed class EWJoeMeldingTest
                 Assert.That(entities.HasComponent<GrandMachineTouchedComponent>(victim), "touched by the machine");
             });
 
-            // the Seegson key (and so the Working Joe reboot verb) does nothing to a thrall
+            // a thrall cannot reset itself
             var seegson = entities.SpawnEntity(SeegsonKey, map.GridCoords);
+            var selfEv = new TargetDefibrillatedEvent(victim, victim, (seegson, entities.GetComponent<DefibrillatorComponent>(seegson)), new());
+            entities.EventBus.RaiseLocalEvent(victim, ref selfEv);
+            Assert.That(entities.HasComponent<RiverMeldedComponent>(victim), "a thrall's own reset key does not cure it");
+
+            // any reset key in someone else's hands does, the common Seegson model included
             var seegsonEv = new TargetDefibrillatedEvent(bystander, victim, (seegson, entities.GetComponent<DefibrillatorComponent>(seegson)), new());
             entities.EventBus.RaiseLocalEvent(victim, ref seegsonEv);
-            Assert.That(entities.HasComponent<RiverMeldedComponent>(victim), "Seegson key does not cure");
-
-            // the Weyland key does
-            var weyland = entities.SpawnEntity(WeylandKey, map.GridCoords);
-            Assert.That(entities.HasComponent<CMUWeylandResetKeyComponent>(weyland));
-            var weylandEv = new TargetDefibrillatedEvent(bystander, victim, (weyland, entities.GetComponent<DefibrillatorComponent>(weyland)), new());
-            entities.EventBus.RaiseLocalEvent(victim, ref weylandEv);
 
             Assert.Multiple(() =>
             {
-                Assert.That(entities.HasComponent<RiverMeldedComponent>(victim), Is.False, "Weyland key cures");
+                Assert.That(entities.HasComponent<RiverMeldedComponent>(victim), Is.False, "a reset key cures");
+                Assert.That(entities.TryGetComponent(victim, out RiverMeldImmuneComponent? immune)
+                    && immune.Until > timing.CurTime, "the freed synthetic is blacklisted for a while");
+                Assert.That(melding.IsEligible((joe, comp), victim, null), Is.False, "so a search skips it");
+                Assert.That(melding.PickMeldTarget((joe, comp)), Is.Null, "neither a debt retry nor a new console picks it");
                 Assert.That(comp.Thralls, Is.Empty);
                 Assert.That(mindSys.TryGetMind(victim, out var mindId, out _) && roles.MindHasRole<EWJoeThrallRoleComponent>(mindId), Is.False, "role removed");
                 Assert.That(alerts.IsShowingAlert(victim, ThrallAlert), Is.False, "the thrall alert goes with the cure");
@@ -236,6 +238,48 @@ public sealed class EWJoeMeldingTest
         await server.WaitAssertion(() =>
         {
             Assert.That(entities.HasComponent<RiverMeldedComponent>(orphanThrall), Is.False, "orphaned thrall freed by the sweep");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AResetKeyStopsAPendingMeldAndBlacklistsTheSynth()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+        var player = pair.Player!;
+
+        await server.WaitAssertion(() =>
+        {
+            var mindSys = entities.System<MindSystem>();
+            var melding = entities.System<EWJoeMeldingSystem>();
+
+            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+            var bystander = entities.SpawnEntity(Human, map.GridCoords);
+
+            var victim = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            entities.RemoveComponent<GhostTakeoverAvailableComponent>(victim);
+            entities.RemoveComponent<GhostRoleComponent>(victim);
+            var mind = mindSys.CreateMind(player.UserId, "Victim");
+            mindSys.TransferTo(mind, victim);
+
+            Assert.That(melding.TryStartMeld((joe, comp)), "the meld starts");
+            Assert.That(entities.HasComponent<RiverMeldingComponent>(victim));
+
+            var key = entities.SpawnEntity(SeegsonKey, map.GridCoords);
+            var ev = new TargetDefibrillatedEvent(bystander, victim, (key, entities.GetComponent<DefibrillatorComponent>(key)), new());
+            entities.EventBus.RaiseLocalEvent(victim, ref ev);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.HasComponent<RiverMeldingComponent>(victim), Is.False, "the reset key stops the meld");
+                Assert.That(entities.HasComponent<RiverMeldImmuneComponent>(victim), "and blacklists the synthetic");
+                Assert.That(melding.PickMeldTarget((joe, comp)), Is.Null, "so the next search finds nobody");
+            });
         });
 
         await pair.CleanReturnAsync();

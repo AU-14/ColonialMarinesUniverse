@@ -397,21 +397,37 @@ public sealed partial class EWJoeConsoleSystem : EntitySystem
     }
 
     /// <summary>
-    /// Spawns the core shards at the Joe's position, once per Joe. CMU14 rebalance RB-32: one shard for each
-    /// console this Joe still holds assimilated (never fewer than one), so every assimilation can be undone;
-    /// each repair still consumes its shard. False if they already dropped or the Joe has no position.
+    /// Spawns the core shards at the Joe's position. CMU14 rebalance RB-32: one shard for each console this Joe
+    /// still holds assimilated, so every assimilation can be undone; each repair still consumes its shard. Each
+    /// console's shard drops once, so a defibrillated Joe that dies again drops only for consoles taken since.
+    /// The first drop is never fewer than one shard. False if nothing is owed or the Joe has no position.
     /// </summary>
     public bool TryDropShard(Entity<EWJoeComponent> ent, string why)
     {
-        if (ent.Comp.ShardDropped)
-            return false;
-
         var xform = Transform(ent);
         if (xform.MapID == MapId.Nullspace)
             return false;
 
+        var count = 0;
+        var query = EntityQueryEnumerator<EWJoeAssimilatedConsoleComponent>();
+        while (query.MoveNext(out _, out var marker))
+        {
+            if (marker.AssimilatedBy != ent.Owner || marker.ShardDropped)
+                continue;
+
+            marker.ShardDropped = true;
+            count++;
+        }
+
+        if (count == 0)
+        {
+            if (ent.Comp.ShardDropped)
+                return false;
+
+            count = 1;
+        }
+
         ent.Comp.ShardDropped = true;
-        var count = Math.Max(1, CountAssimilatedBy(ent));
         for (var i = 0; i < count; i++)
         {
             // SpawnAtPosition resolves to map coordinates, so a Joe inside a container drops the shard on the floor

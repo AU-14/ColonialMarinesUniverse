@@ -27,6 +27,7 @@ public sealed partial class EWJoeMeldingSystem
         EarlyWarningJoe,
         Melded,
         Melding,
+        ResetImmune,
         NonHumanBody,
         NotSynthetic,
         OffNetwork,
@@ -43,6 +44,7 @@ public sealed partial class EWJoeMeldingSystem
         public int NoSession;
         public int ExclusiveAntag;
         public int MeldingOrMelded;
+        public int ResetImmune;
         public int Other;
 
         public void Count(MeldGate gate)
@@ -68,6 +70,9 @@ public sealed partial class EWJoeMeldingSystem
                 case MeldGate.Melding:
                     MeldingOrMelded++;
                     return;
+                case MeldGate.ResetImmune:
+                    ResetImmune++;
+                    return;
                 default:
                     // another Early Warning Joe, a drone android or a threat body
                     Other++;
@@ -81,7 +86,8 @@ public sealed partial class EWJoeMeldingSystem
                 return "the Joe is in nullspace";
 
             return $"synthetic bodies rejected: dead {Dead}, off-network {OffNetwork}, no session {NoSession}, "
-                + $"exclusive antag {ExclusiveAntag}, melding/melded {MeldingOrMelded}, other (Joes, drones, threats) {Other}";
+                + $"exclusive antag {ExclusiveAntag}, melding/melded {MeldingOrMelded}, reset-key immune {ResetImmune}, "
+                + $"other (Joes, drones, threats) {Other}";
         }
     }
 
@@ -152,6 +158,10 @@ public sealed partial class EWJoeMeldingSystem
 
         if (!pendingOk && HasComp<RiverMeldingComponent>(uid))
             return MeldGate.Melding;
+
+        // freed or spared by a reset key: neither a debt retry nor a new console reaches it yet
+        if (TryComp(uid, out RiverMeldImmuneComponent? immune) && _timing.CurTime < immune.Until)
+            return MeldGate.ResetImmune;
 
         if (EWJoeTargetRules.IsNonHumanBody(EntityManager, uid))
             return MeldGate.NonHumanBody;

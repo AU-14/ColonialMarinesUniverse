@@ -10,6 +10,8 @@ using Content.Shared.Flash;
 using System.Linq;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory.VirtualItem;
+using Content.Shared.CMU14.Medical.Defibrillator;
+using Content.Shared.CMU14.Threats.Mobs.SubvertedSynth;
 using Content.Shared.Medical;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -25,7 +27,7 @@ namespace Content.Shared.CMU14.Round.Antags.EarlyWarning;
 
 /// <summary>
 /// Level-0 Early Warning Joe abilities: innate armor (Sculpted Form), Test of Faith and Disrupt, plus
-/// the body rules that come with the role (no reset-key revival, D3). Optical Zoom and the punch
+/// the body rules that come with the role (D3: revived only by a defibrillator zap, on a longer charge). Optical Zoom and the punch
 /// effects are plain components granted by the level table.
 /// </summary>
 public sealed partial class EWJoeAbilitySystem : EntitySystem
@@ -51,6 +53,7 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, CMGetArmorEvent>(OnGetArmor);
         SubscribeLocalEvent<EWJoeComponent, EWJoeTestOfFaithActionEvent>(OnTestOfFaith);
         SubscribeLocalEvent<EWJoeComponent, EWJoeDisruptActionEvent>(OnDisrupt);
+        SubscribeLocalEvent<EWJoeComponent, CMUDefibZapDelayEvent>(OnDefibZapDelay);
         SubscribeLocalEvent<EWJoeComponent, TargetBeforeDefibrillatorZapsEvent>(OnBeforeDefibZap);
         SubscribeLocalEvent<EWJoeComponent, RMCDefibrillatorAttemptEvent>(OnDefibAttempt);
     }
@@ -234,23 +237,32 @@ public sealed partial class EWJoeAbilitySystem : EntitySystem
         }
     }
 
-    /// <summary>A reset key or defibrillator does nothing to an Early Warning Joe (D3).</summary>
-    private void OnBeforeDefibZap(Entity<EWJoeComponent> ent, ref TargetBeforeDefibrillatorZapsEvent args)
+    /// <summary>D3: a defibrillator or reset key brings the Joe back, but its charge takes longer.</summary>
+    private void OnDefibZapDelay(Entity<EWJoeComponent> ent, ref CMUDefibZapDelayEvent args)
     {
-        if (args.Cancelled)
-            return;
-
-        args.Cancel();
-        _popup.PopupEntity(Loc.GetString("working-joe-reboot-refused-ew"), ent, args.EntityUsingDefib);
+        args.Delay += ent.Comp.DefibDoAfterBonus;
     }
 
     /// <summary>
-    /// Defence in depth for D3: the RMC revival attempt is shared by the zap and the chemical path,
-    /// so any future non-zap revive is refused as well.
+    /// A subversion key would revive the Joe and stack a second antagonist role on it; the Joe's core refuses it.
+    /// </summary>
+    private void OnBeforeDefibZap(Entity<EWJoeComponent> ent, ref TargetBeforeDefibrillatorZapsEvent args)
+    {
+        if (args.Cancelled || !HasComp<SynthSubverterComponent>(args.Defib))
+            return;
+
+        args.Cancel();
+        _popup.PopupEntity(Loc.GetString("cmu-ew-joe-subverter-refused"), ent, args.EntityUsingDefib);
+    }
+
+    /// <summary>
+    /// D3: the RMC revival attempt is shared by the zap and the chemical path. Only a physical zap may
+    /// revive the Joe; chemical pacing is the attempt that tolerates a beating heart.
     /// </summary>
     private void OnDefibAttempt(Entity<EWJoeComponent> ent, ref RMCDefibrillatorAttemptEvent args)
     {
-        args.Cancel();
+        if (args.AllowBeatingHeart)
+            args.Cancel();
     }
 
     /// <summary>True when <paramref name="uid"/> sits anywhere inside <paramref name="holder"/>'s transform tree.</summary>
