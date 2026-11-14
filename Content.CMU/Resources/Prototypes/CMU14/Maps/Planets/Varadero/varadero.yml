@@ -51,7 +51,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    varadero:
+    Varadero:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
