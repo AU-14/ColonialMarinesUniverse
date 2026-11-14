@@ -11,6 +11,9 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
+using Content.Shared.Roles;
+using Content.Shared.Nutrition.Components; 
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -65,6 +68,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SharedRoleSystem _roles = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -113,6 +117,8 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         RemComp<CMUOrganBlindnessComponent>(target);
         RemComp<CMUOrganVisionImpairmentComponent>(target);
+        RemComp<SatiationComponent>(target);
+        RemComp<PainShockComponent>(target);
 
         _faction.AddFaction(target, WalkerFaction);
         // Reanimatable hosts like monkeys can lack the language component entirely.
@@ -121,10 +127,10 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         EnsureComp<IntrinsicRadioReceiverComponent>(target);
         var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(target);
-        transmitter.Channels = [SharedChatSystem.HivemindChannel];
+        transmitter.Channels.Add("MyceliumLink");
         var radio = EnsureComp<ActiveRadioComponent>(target);
-        radio.Channels = [SharedChatSystem.HivemindChannel];
-        var tacIcon = EnsureComp<TacticalMapIconComponent>(target);
+        radio.Channels.Add("MyceliumLink");
+        radio.Channels.Add(SharedChatSystem.HivemindChannel);
 
         EnsureComp<PullWhitelistComponent>(target);
         var whitelistEv = new SetPullWhitelistEvent(new EntityWhitelist
@@ -191,6 +197,10 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         walker.OfferResolved = true;
         walker.OfferExpiresAt = null;
         Dirty(uid, walker);
+        
+        if (_mind.TryGetMind(uid, out var mindId, out _))  
+            _roles.MindAddJobRole(mindId, silent: true, jobPrototype: "CMU14JobPathogenWalker");
+
         ActivateWalker(uid, walker);
     }
 
@@ -220,6 +230,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         var ghostRole = EnsureComp<GhostRoleComponent>(uid);
         ghostRole.RoleName = Loc.GetString("cmu14-walker-ghost-role-name");
         ghostRole.RoleDescription = Loc.GetString("cmu14-walker-ghost-role-desc");
+        ghostRole.JobProto = "CMU14JobPathogenWalker";
 
         EnsureComp<GhostTakeoverAvailableComponent>(uid);
 

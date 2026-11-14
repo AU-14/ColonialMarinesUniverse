@@ -63,9 +63,9 @@
   - type: XenoTailSeize
   - type: XenoAbduct
   - type: XenoFling
-    range: -3
-    paralyzeTime: 0
-    slowTime: 0
+    range: -4
+    paralyzeTime: 0.4
+    slowTime: 3
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4

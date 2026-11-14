@@ -1,15 +1,38 @@
-- type: entity
-  id: CMU14ClothingHeadWalkerMarker
-  parent: ClothingHeadBase
-  name: pathogen bloom
-  description: A grotesque fungal growth erupting from the skull.
-  components:
-  - type: CMUPathogenWalkerMarker
-  - type: Sprite
-    sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
-  - type: Clothing
-    sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
-  - type: NightVisionItem
-    slotFlags: HEAD
+- type: entity  
+  id: CMU14ClothingHeadWalkerMarker  
+  parent: ClothingHeadBase  
+  name: pathogen bloom  
+  description: A grotesque fungal growth erupting from the skull.  
+  components:  
+  - type: CMUPathogenWalkerMarker  
+  - type: Sprite  
+    sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi  
+  - type: Clothing  
+    sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi  
+  - type: NightVisionItem  
+    slotFlags: HEAD  
     defaultState: Full  
-    ignoreUserOnlyHalf: true
+    ignoreUserOnlyHalf: true  
+    actionId: CMU14ActionToggleWalkerVision  
+  - type: Unremoveable  
+    deleteOnDrop: true  
+  
+- type: entity
+  parent: ActionMarineBase
+  id: CMU14ActionToggleWalkerVision
+  name: Toggle Night Vision
+  description: Toggle Pathogen night vision.
+  components:
+  - type: Action
+    useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Objects/Xeno/Pathogen/pathogen_bloom.rsi
+      state: icon
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  - type: InstantAction
+    event: !type:ToggleActionEvent

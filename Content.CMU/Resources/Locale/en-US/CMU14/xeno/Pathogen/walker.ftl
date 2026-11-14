@@ -7,6 +7,7 @@ cmu14-walker-offer-decline = Resist
 cmu14-walker-ghost-role-name = Pathogen Walker
 cmu14-walker-ghost-role-desc = You are an animated corpse bound to the Pathogen hive. Serve the Overmind.
 cmu14-walker-death-reviving = Your mycelial bonds hold. You will rise again...
+cmu14-walker-revive-warning-body = The Confluence offers you another chance at life. You are reanimating!
 cmu14-walker-permanent-death = The mycelial bonds snap. You are truly dead.
 cmu14-walker-rise = You rise again, bound to the mycelium!
 

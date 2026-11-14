@@ -1,0 +1,10 @@
+- type: job
+  parent: CMJobXenoBase
+  id: CMU14JobPathogenWalker
+  name: cmu-job-name-pathogen-walker
+  playTimeTracker: CMU14JobPathogenWalker
+  supervisors: cmu-job-supervisors-walker
+ 
+- type: playTimeTracker
+  id: CMU14JobPathogenWalker
+  isXeno: true
