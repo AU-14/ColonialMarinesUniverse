@@ -43,6 +43,7 @@ public sealed partial class HiveTrackerSystem : EntitySystem
 
         SubscribeLocalEvent<RMCTrackableComponent, RequestTrackableNameEvent>(OnRequestTrackableName);
         SubscribeLocalEvent<RMCTrackableComponent, MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<RMCTrackableComponent, ComponentShutdown>(CMUOnTrackableShutdown); // CMU14
     }
 
     private void OnNewXenoEvolved(Entity<HiveTrackerComponent> newXeno, ref NewXenoEvolvedEvent args)
@@ -177,7 +178,9 @@ public sealed partial class HiveTrackerSystem : EntitySystem
 
     private void SetTarget(Entity<HiveTrackerComponent> ent, EntityUid? target)
     {
-        ent.Comp.Target = target;
+        // CMU14: a selection dialog may outlive its target.
+        // ent.Comp.Target = target;
+        ent.Comp.Target = target is { } uid && !TerminatingOrDeleted(uid) ? uid : null;
         Dirty(ent);
     }
 

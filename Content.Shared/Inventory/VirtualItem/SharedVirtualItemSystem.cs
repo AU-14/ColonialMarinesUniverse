@@ -278,10 +278,16 @@ public abstract partial class SharedVirtualItemSystem : EntitySystem
     /// <param name="virtualItem">The virtual item, if spawned</param>
     public bool TrySpawnVirtualItem(EntityUid blockingEnt, EntityUid user, [NotNullWhen(true)] out EntityUid? virtualItem)
     {
+        // CMU14: deferred interactions can outlive the real item.
+        virtualItem = null;
+        if (TerminatingOrDeleted(blockingEnt) || TerminatingOrDeleted(user))
+            return false;
+
         var pos = Transform(user).Coordinates;
         virtualItem = PredictedSpawnAttachedTo(VirtualItem, pos);
         var virtualItemComp = Comp<VirtualItemComponent>(virtualItem.Value);
         virtualItemComp.BlockingEntity = blockingEnt;
+        CMUOnVirtualItemCreated((virtualItem.Value, virtualItemComp), user); // CMU14
         Dirty(virtualItem.Value, virtualItemComp);
         return true;
     }

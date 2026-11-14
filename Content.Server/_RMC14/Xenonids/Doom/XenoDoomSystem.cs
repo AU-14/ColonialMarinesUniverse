@@ -38,10 +38,11 @@ public sealed partial class XenoDoomSystem : SharedXenoDoomSystem
             _expend.TryActivate((ent, flare));
 
             ent.Comp.WasEnabled = false;
-            // Startup can finish before deferred removal is culled. Do not let the
-            // shared expiry loop queue a second removal of this same component.
-            ent.Comp.EndsAt = TimeSpan.MaxValue;
-            RemCompDeferred<LightDoomedComponent>(ent);
+            // CMU14 Begin: let startup finish before the shared expiry loop removes the component.
+            // ent.Comp.EndsAt = TimeSpan.MaxValue;
+            // RemCompDeferred<LightDoomedComponent>(ent);
+            ent.Comp.EndsAt = TimeSpan.Zero;
+            // CMU14 End
             return;
         }
 

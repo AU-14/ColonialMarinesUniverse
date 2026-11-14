@@ -106,6 +106,7 @@ public sealed partial class XenoNestSystem : EntitySystem
 
         SubscribeLocalEvent<XenoNestedComponent, ComponentStartup>(OnNestedAdd);
         SubscribeLocalEvent<XenoNestedComponent, ComponentRemove>(OnNestedRemove);
+        SubscribeLocalEvent<XenoNestedComponent, EntityTerminatingEvent>(CMUOnNestedTerminating); // CMU14
         SubscribeLocalEvent<XenoNestedComponent, PreventCollideEvent>(OnNestedPreventCollide);
         SubscribeLocalEvent<XenoNestedComponent, PullAttemptEvent>(OnNestedPullAttempt);
         SubscribeLocalEvent<XenoNestedComponent, InteractionAttemptEvent>(OnNestedInteractionAttempt);

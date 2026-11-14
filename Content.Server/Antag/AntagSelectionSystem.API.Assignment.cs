@@ -6,6 +6,7 @@ using Content.Server.GameTicking.Rules.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Antag;
 using Content.Shared.Database;
+using Content.Shared.GameTicking.Components; // CMU14
 using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.Players;
@@ -438,7 +439,10 @@ public sealed partial class AntagSelectionSystem
     // [Obsolete]
     public void ForceMakeAntag<T>(ICommonSession player, EntProtoId defaultRule) where T : Component
     {
-        var rule = ForceGetGameRuleEnt<T>(defaultRule);
+        // CMU14: GameRuleAdded handlers can reject a rule and remove its selection component.
+        // var rule = ForceGetGameRuleEnt<T>(defaultRule);
+        if (ForceGetGameRuleEnt<T>(defaultRule) is not { } rule)
+            return;
 
         if (TryAssignNextAvailableAntag(rule, player))
             return;
@@ -472,7 +476,10 @@ public sealed partial class AntagSelectionSystem
     /// </remarks>
     public void ForceMakeAntag<T>(ICommonSession player, EntProtoId ruleProto, AntagSpecifierPrototype proto) where T : Component
     {
-        var rule = ForceGetGameRuleEnt<T>(ruleProto);
+        // CMU14: respect rules rejected by their GameRuleAdded handlers.
+        // var rule = ForceGetGameRuleEnt<T>(ruleProto);
+        if (ForceGetGameRuleEnt<T>(ruleProto) is not { } rule)
+            return;
 
         foreach (var antag in rule.Comp.Antags)
         {
@@ -498,17 +505,22 @@ public sealed partial class AntagSelectionSystem
     /// Note that this is private because you generally should not be forcing a gamerule and this code is evil.
     /// I'm not touching it any more than I have to.
     /// </summary>
-    private Entity<AntagSelectionComponent> ForceGetGameRuleEnt<T>(string id) where T : Component
+    private Entity<AntagSelectionComponent>? ForceGetGameRuleEnt<T>(string id) where T : Component // CMU14: rejected rules have no selection.
     {
         var query = EntityQueryEnumerator<T, AntagSelectionComponent>();
         while (query.MoveNext(out var uid, out _, out var comp))
         {
-            if (MetaData(uid).EntityPrototype?.ID == id)
+            // CMU14: ended rules cannot accept a new antagonist.
+            // if (MetaData(uid).EntityPrototype?.ID == id)
+            if (MetaData(uid).EntityPrototype?.ID == id && !HasComp<EndedGameRuleComponent>(uid))
                 return (uid, comp);
         }
         var ruleEnt = GameTicker.AddGameRule(id);
         RemComp<LoadMapRuleComponent>(ruleEnt);
-        var antag = RuleQuery.Comp(ruleEnt);
+        // CMU14: EWJoe can end itself and remove AntagSelection when disabled or excluded by the threat.
+        // var antag = RuleQuery.Comp(ruleEnt);
+        if (HasComp<EndedGameRuleComponent>(ruleEnt) || !RuleQuery.TryComp(ruleEnt, out var antag))
+            return null;
         antag.AssignmentHandled = true; // don't do normal selection.
         GameTicker.StartGameRule(ruleEnt);
         return (ruleEnt, antag);

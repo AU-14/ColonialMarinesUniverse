@@ -799,6 +799,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
         }
 
+        // Deployment yields between spawns; a previously spawned member may have been deleted meanwhile.
+        spawnedLeaders.RemoveAll(uid => _entityManager.Deleted(uid));
+        spawnedGrunts.RemoveAll(uid => _entityManager.Deleted(uid));
+
         // In Force on Force a party whose allegiance matches exactly one side's platoon is part
         // of that side: identification treats its members as teammates of it.
         var alignedSide = ResolveFoFAlignedSide(party);
@@ -891,6 +895,10 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         // Run neighbor-marking now (only once per spawn operation, using the last used marker)
         MarkNeighborsIfNeeded();
+
+        // Entity spawns above also yield before survivor setup and mind assignment.
+        spawnedLeaders.RemoveAll(uid => _entityManager.Deleted(uid));
+        spawnedGrunts.RemoveAll(uid => _entityManager.Deleted(uid));
 
         if (roundStart && party.AnnounceAsSurvivors) // CMU14
         {

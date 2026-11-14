@@ -41,6 +41,7 @@ public sealed partial class GunStacksSystem : EntitySystem
         SubscribeLocalEvent<GunStacksActiveComponent, DroppedEvent>(OnStacksActiveDropped);
 
         SubscribeLocalEvent<GunStacksProjectileComponent, ProjectileHitEvent>(OnStacksProjectileHit);
+        CMUInitializeTargetLifetime(); // CMU14
     }
 
     private void OnStacksAmmoShot(Entity<GunStacksComponent> ent, ref AmmoShotEvent args)
@@ -116,7 +117,9 @@ public sealed partial class GunStacksSystem : EntitySystem
 
             gun.Hits++;
             gun.ExpireAt = _timing.CurTime + gun.StacksExpire;
-            gun.LastHitEntity = target;
+            // CMU14: retain the hit bonus without retaining a deleted target in network state.
+            // gun.LastHitEntity = target;
+            CMUSetLastHit((ent.Comp.Gun.Value, gun), target);
             if (args.Shooter is { } shooter &&
                 _net.IsServer)
             {

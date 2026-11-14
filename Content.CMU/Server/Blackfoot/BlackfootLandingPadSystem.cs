@@ -71,6 +71,22 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
         DeletePadLights(ent, dirty: false);
     }
 
+    public void ReleaseAircraft(EntityUid aircraft)
+    {
+        var query = EntityQueryEnumerator<BlackfootLandingPadComponent>();
+        while (query.MoveNext(out var uid, out var pad))
+        {
+            if (pad.ParkedAircraft != aircraft || TerminatingOrDeleted(uid))
+                continue;
+
+            pad.ParkedAircraft = null;
+            pad.Refueling = false;
+            pad.Recharging = false;
+            Dirty(uid, pad);
+            PushLinkedComputerStates((uid, pad));
+        }
+    }
+
     private void OnComputerActivate(Entity<BlackfootFlightComputerComponent> ent, ref ActivateInWorldEvent args)
     {
         if (args.Handled)
