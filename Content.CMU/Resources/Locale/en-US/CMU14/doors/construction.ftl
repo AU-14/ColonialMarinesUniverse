@@ -1,0 +1,10 @@
+cmu-door-links-lock = Lock links
+cmu-door-links-unlock = Unlock links
+cmu-door-links-locked = Link changes are locked.
+cmu-door-links-unlocked = Link changes are unlocked.
+cmu-door-links-protected = The builder has locked link changes.
+cmu-door-links-selected = Control selected. Use the multitool on a constructed podlock or shutter to link or unlink it.
+cmu-door-links-select-first = Use the multitool on a constructed control button first.
+cmu-door-links-different-map = The control and door must be on the same map.
+cmu-door-links-linked = Control linked.
+cmu-door-links-unlinked = Control unlinked.

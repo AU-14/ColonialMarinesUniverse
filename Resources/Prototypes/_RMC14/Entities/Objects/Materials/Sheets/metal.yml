@@ -55,6 +55,10 @@
       - RMCMetalRodBuild
       - RMCWallGirderBuild
       - RMCWindowFrameBuild
+      # CMU14: player-built podlocks and controls
+      - CMUPodDoorBuild
+      - CMUShutterBuild
+      - CMUPodDoorButtonBuild
       # Airlock assembly
       # large airlock assembly
       - RMCDividerConstruction

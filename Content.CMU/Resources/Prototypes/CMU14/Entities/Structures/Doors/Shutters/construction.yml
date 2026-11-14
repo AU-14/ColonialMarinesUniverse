@@ -1,0 +1,55 @@
+- type: entity
+  parent: RMCPodDoor
+  id: CMUConstructedPodDoor
+  description: A field-built podlock. Use a multitool to link it to a constructed control button. Its builder can lock link changes using the right-click menu.
+  components:
+  - type: CMUConstructedDoorControl
+
+- type: entity
+  parent: RMCShutterAlmayer
+  id: CMUConstructedShutter
+  description: Field-built shutters. Use a multitool to link them to a constructed control button. Their builder can lock link changes using the right-click menu.
+  components:
+  - type: CMUConstructedDoorControl
+
+- type: entity
+  parent: RMCPodDoorButton
+  id: CMUConstructedPodDoorButton
+  name: podlock control button
+  description: A field-built control button. Use a multitool on it, then on a constructed podlock or shutter to link or unlink it. Its builder can lock link changes using the right-click menu.
+  components:
+  - type: Transform
+    anchored: true
+  - type: RMCDoorButton
+    id: CMUConstructedControl
+  - type: CMUConstructedDoorControl
+
+- type: rmcConstruction
+  id: CMUPodDoorBuild
+  name: podlock
+  prototype: CMUConstructedPodDoor
+  doAfterTime: 10
+  doAfterTimeMin: 5
+  materialCost: 10
+  skill: RMCSkillEngineer
+  requiredSkillLevel: 1
+
+- type: rmcConstruction
+  id: CMUShutterBuild
+  name: shutters
+  prototype: CMUConstructedShutter
+  doAfterTime: 8
+  doAfterTimeMin: 4
+  materialCost: 6
+  skill: RMCSkillEngineer
+  requiredSkillLevel: 1
+
+- type: rmcConstruction
+  id: CMUPodDoorButtonBuild
+  name: podlock control button
+  prototype: CMUConstructedPodDoorButton
+  doAfterTime: 4
+  doAfterTimeMin: 2
+  materialCost: 2
+  skill: RMCSkillEngineer
+  requiredSkillLevel: 1

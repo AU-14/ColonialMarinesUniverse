@@ -153,7 +153,9 @@ public sealed partial class CMDoorSystem : EntitySystem
         var buttonName = button.Comp.Id ?? Name(button);
         var buttonTransform = Transform(button);
 
-        if (IsAnyLinkedDoorLocked(buttonName, buttonTransform.MapID))
+        // CMU14: constructed controls use explicit links, not map-wide names.
+        var constructedButton = CompOrNull<CMUConstructedDoorControlComponent>(button);
+        if (constructedButton == null && IsAnyLinkedDoorLocked(buttonName, buttonTransform.MapID))
         {
             _popup.PopupEntity(Loc.GetString("cmu-machines-button-locked-open"), button, user, PopupType.SmallCaution);
             return;
@@ -197,9 +199,20 @@ public sealed partial class CMDoorSystem : EntitySystem
             if (buttonTransform.MapID != doorTransform.MapID)
                 continue;
 
-            var id = podDoor.Id ?? metaData.EntityName;
-            if (buttonName != id)
-                continue;
+            // CMU14: never mix explicitly linked constructions with mapped name/ID controls.
+            if (constructedButton != null)
+            {
+                if (!constructedButton.LinkedDoors.Contains(door))
+                    continue;
+            }
+            else
+            {
+                if (HasComp<CMUConstructedDoorControlComponent>(door))
+                    continue;
+                var id = podDoor.Id ?? metaData.EntityName;
+                if (buttonName != id)
+                    continue;
+            }
 
             if (doorComp.State == DoorState.Open)
             {
