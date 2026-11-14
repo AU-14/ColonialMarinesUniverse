@@ -53,7 +53,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    lv624:
+    LV-624:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup
