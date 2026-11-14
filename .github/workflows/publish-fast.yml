@@ -20,9 +20,9 @@ on:
         type: boolean
         default: false
 
-      # CMU14: a clean publish takes test merges off the server unless this is ticked; their "Test Merge" labels stay queued.
+      # CMU14: a clean publish takes test merges off the server and clears every test merge label unless this is ticked.
       keep_test_merges:
-        description: Keep test merges? On = master plus every PR labelled "Test Merge". Off = clean master, test merges come off the server but keep their "Test Merge" label for the next test merge run. Ignored on a dry run.
+        description: Keep test merges? On = master plus every PR marked "Test Merge" (the marks are used up). Off = clean master, test merges come off the server and every test merge label is cleared, "Test Merge" included. Ignored on a dry run.
         type: boolean
         default: false
 
@@ -39,7 +39,7 @@ jobs:
     permissions:
       contents: write
 
-  # CMU14: keep_test_merges builds master plus the labelled PRs through the test merge workflow instead.
+  # CMU14: keep_test_merges builds master plus the marked PRs through the test merge workflow instead.
   test_merge:
     needs: changelog
     if: >-
@@ -217,7 +217,7 @@ jobs:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           PUBLISH_ENGINE_VERSION: ${{ needs.publish_start.outputs.engine-version }}
 
-      # CMU14: a clean publish replaces any test merge build, so the TM status labels go; "Test Merge" stays queued.
+      # CMU14: a clean publish replaces any test merge build, so every test merge label goes, "Test Merge" included.
       - name: End test merges
         if: ${{ !inputs.dry_run }}
         uses: actions/github-script@v9.0.0
