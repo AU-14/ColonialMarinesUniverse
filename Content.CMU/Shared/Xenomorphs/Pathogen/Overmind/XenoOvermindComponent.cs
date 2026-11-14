@@ -1,3 +1,4 @@
+using Content.Shared.Actions.Components;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -60,6 +61,10 @@ public sealed partial class CMUXenoOvermindComponent : Component
     /// <summary>Tracks spawned action entities for physical form so we can remove them.</summary>
     [DataField, AutoNetworkedField]
     public Dictionary<EntProtoId, EntityUid> PhysicalFormActionEntities = new();
+
+    // cooldowns of form actions that are currently revoked, so swapping forms can't reset them
+    [ViewVariables]
+    public Dictionary<EntProtoId, ActionCooldown> FormActionCooldowns = new();
 
     [DataField, AutoNetworkedField]
     public EntProtoId EyeFormActionOrderId = "CMU14XenoOvermindEyeOrder";
