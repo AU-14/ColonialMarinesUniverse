@@ -1,0 +1,26 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Tranquilizer slug resprite made for CMU14, based on the beanbag slug handful taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/7cb618c69b75873f3ce893022fe08d1233b3152d/icons/obj/items/weapons/guns/handful.dmi",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "tranq_slug_1"
+        },
+        {
+            "name": "tranq_slug_2"
+        },
+        {
+            "name": "tranq_slug_3"
+        },
+        {
+            "name": "tranq_slug_4"
+        },
+        {
+            "name": "tranq_slug_5"
+        }
+    ]
+}

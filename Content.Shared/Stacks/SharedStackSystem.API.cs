@@ -30,6 +30,12 @@ public abstract partial class SharedStackSystem
         var entityUid = PredictedSpawnNextToOrDrop(stackId.Spawn, stackEnt.Owner);
 
         SetCount((entityUid, null), 1);
+
+        // CMU14 Begin: taking one off a stack is a split, so per-stack data (tranquiliser shell
+        // chemicals) can follow the shell.
+        var splitEv = new StackSplitEvent(entityUid, null);
+        RaiseLocalEvent(stackEnt.Owner, ref splitEv);
+        // CMU14 End
         return entityUid;
     }
 
