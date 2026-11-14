@@ -62,6 +62,59 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
     }
 
 
+    /// <summary>
+    /// Distress Signal survivors are filled only from players who queued for the third party jobs.
+    /// </summary>
+    public void AssignSurvivorJobs(Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
+    {
+        if (!_auRoundSystem.IsDistressSignalSelected)
+            return;
+
+        var leaderSlots = 0;
+        var memberSlots = 0;
+        foreach (var party in _auRoundSystem.SelectedThirdParties)
+        {
+            if (!party.RoundStart || !party.AnnounceAsSurvivors ||
+                !_prototypeManager.TryIndex(party.PartySpawn, out PartySpawnPrototype? spawn))
+            {
+                continue;
+            }
+
+            leaderSlots += spawn.LeadersToSpawn.Values.Sum(count => Math.Max(0, count));
+            memberSlots += spawn.GruntsToSpawn.Values.Sum(count => Math.Max(0, count));
+        }
+
+        if (leaderSlots == 0 && memberSlots == 0)
+            return;
+
+        var presetId = _auRoundSystem.SelectedPreset?.ID.ToLowerInvariant();
+        var leaderJob = new ProtoId<JobPrototype>("AU14JobThirdPartyLeader");
+        var memberJob = new ProtoId<JobPrototype>("AU14JobThirdPartyMember");
+
+        bool Queued(NetUserId player, ProtoId<JobPrototype> job)
+        {
+            return !ForcedJobAssignments.ContainsKey(player) &&
+                   _players.TryGetSessionById(player, out var session) &&
+                   _ghostRole.CanPlayForceJob(session, job) &&
+                   profiles.TryGetValue(player, out var profile) &&
+                   profile.GetJobPrioritiesForGamemode(presetId).TryGetValue(job, out var priority) &&
+                   priority != JobPriority.Never;
+        }
+
+        var players = profiles.Keys.ToList();
+        _random.Shuffle(players);
+
+        foreach (var player in players.Where(p => Queued(p, leaderJob)).Take(leaderSlots).ToList())
+        {
+            ForcedJobAssignments[player] = leaderJob.Id;
+        }
+
+        foreach (var player in players.Where(p => Queued(p, memberJob)).Take(memberSlots).ToList())
+        {
+            ForcedJobAssignments[player] = memberJob.Id;
+        }
+    }
+
     public void AssignThreatAndThirdPartyJobs(Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
     {
         ForcedJobAssignments.Clear();

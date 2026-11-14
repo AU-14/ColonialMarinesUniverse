@@ -90,6 +90,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private readonly Dictionary<int, uint> _scheduledForces = new();
     private readonly Dictionary<string, uint> _automaticForces = new();
     private readonly Dictionary<uint, ThirdPartyPrototype> _queuedParties = new();
+    private readonly HashSet<NetUserId> _claimedSurvivors = new();
 
     public override void Initialize()
     {
@@ -106,6 +107,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         _scheduledForces.Clear();
         _queuedParties.Clear();
         _automaticForces.Clear();
+        _claimedSurvivors.Clear();
     }
 
     public override void Update(float frameTime)
@@ -495,9 +497,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
             candidateMapIds.Add(markerTransform.MapID);
         }
 
-        MapId? mapId = candidateMapIds.Count > 0
-            ? candidateMapIds[0]
-            : null;
+        MapId? mapId = roundStart && party.AnnounceAsSurvivors && _auRoundSystem.IsDistressSignalSelected
+            ? _entityManager.System<GameTicker>().DefaultMap
+            : candidateMapIds.Count > 0 ? candidateMapIds[0] : null;
         if (_sawmill.Level <= LogLevel.Debug)
         {
             _sawmill.Debug(
@@ -513,6 +515,30 @@ public sealed partial class ThirdPartySystem : EntitySystem
         IReadOnlyDictionary<string, int> entityBodies = ThirdPartySystem.GetSpawnBodies(
             ThreatMarkerType.Entity,
             spawnProto.EntitiesToSpawn);
+        if (roundStart && party.AnnounceAsSurvivors && _auRoundSystem.IsDistressSignalSelected)
+        {
+            // Survivors are only the players who rolled for them; unclaimed survivor bodies do not spawn.
+            var leaderPlayers = new List<NetUserId>();
+            var memberPlayers = new List<NetUserId>();
+            foreach (var (player, (job, _)) in assignedJobs ?? new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>())
+            {
+                if (_claimedSurvivors.Contains(player))
+                    continue;
+
+                if (job == ThirdPartyLeaderJobId)
+                    leaderPlayers.Add(player);
+                else if (job == ThirdPartyMemberJobId)
+                    memberPlayers.Add(player);
+            }
+
+            leaderBodies = LimitBodies(leaderBodies, leaderPlayers.Count);
+            gruntBodies = LimitBodies(gruntBodies, memberPlayers.Count);
+            var claimed = leaderPlayers.Take(leaderBodies.Values.Sum())
+                .Concat(memberPlayers.Take(gruntBodies.Values.Sum()))
+                .ToHashSet();
+            assignedJobs = assignedJobs?.Where(pair => claimed.Contains(pair.Key)).ToDictionary();
+        }
+
         int leaderReq = leaderBodies.Values.Sum();
         int gruntReq = gruntBodies.Values.Sum();
         int entityReq = entityBodies.Values.Sum();
@@ -911,8 +937,9 @@ public sealed partial class ThirdPartySystem : EntitySystem
             }
 
             _sawmill.Debug("[ThirdPartySystem] Assigning minds to third party entities (roundstart)");
-            AssignMinds(leaderPlayers, spawnedLeaders, ThirdPartyLeaderJobId.Id, "leader");
-            AssignMinds(memberPlayers, spawnedGrunts, ThirdPartyMemberJobId.Id, "member");
+            var distressSurvivors = party.AnnounceAsSurvivors && _auRoundSystem.IsDistressSignalSelected;
+            AssignMinds(leaderPlayers, spawnedLeaders, ThirdPartyLeaderJobId.Id, "leader", distressSurvivors);
+            AssignMinds(memberPlayers, spawnedGrunts, ThirdPartyMemberJobId.Id, "member", distressSurvivors);
         }
 
         if (!string.IsNullOrWhiteSpace(party.AnnounceArrival) && party.AnnounceArrivalTitle is { } arrivalTitle)
@@ -948,6 +975,23 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 body => body.Key,
                 body => Math.Max(0, body.Value),
                 StringComparer.OrdinalIgnoreCase);
+    }
+
+    private static IReadOnlyDictionary<string, int> LimitBodies(IReadOnlyDictionary<string, int> bodies, int max)
+    {
+        var result = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+        var remaining = max;
+        foreach (var (id, count) in bodies)
+        {
+            var take = Math.Min(count, remaining);
+            if (take <= 0)
+                continue;
+
+            result[id] = take;
+            remaining -= take;
+        }
+
+        return result;
     }
 
     private static bool IsOnGrid(TransformComponent transform, EntityUid gridUid)
@@ -1032,6 +1076,38 @@ public sealed partial class ThirdPartySystem : EntitySystem
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null)
     {
         StartThirdPartySpawning(null, preset.ThirdPartyInterval, $"preset={preset.ID}", assignedJobs);
+    }
+
+    /// <summary>Deploy the locked survivor groups before the post-roundstart threat vote.</summary>
+    public void SpawnDistressSurvivors(Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs)
+    {
+        if (!_auRoundSystem.IsDistressSignalSelected)
+            return;
+
+        foreach (var party in _auRoundSystem.SelectedThirdParties)
+        {
+            if (!party.RoundStart || !party.AnnounceAsSurvivors || _automaticForces.ContainsKey(party.ID))
+                continue;
+
+            if (!_prototypeManager.TryIndex(party.PartySpawn, out var spawn))
+            {
+                _sawmill.Error($"[ThirdPartySystem] Missing survivor spawn prototype {party.PartySpawn}.");
+                continue;
+            }
+
+            try
+            {
+                if (SpawnThirdPartyNow(party, spawn, true, assignedJobs, false))
+                    _automaticForces.Add(party.ID, 0);
+            }
+            catch (Exception ex)
+            {
+                _sawmill.Error($"[ThirdPartySystem] Failed to spawn roundstart survivors ({party.ID}): {ex}");
+            }
+        }
+
+        foreach (var player in _claimedSurvivors)
+            assignedJobs.Remove(player);
     }
 
     private void StartThirdPartySpawning(ThreatPrototype? threat,
@@ -1296,7 +1372,8 @@ public sealed partial class ThirdPartySystem : EntitySystem
         return marker;
     }
 
-    private void AssignMinds(List<NetUserId> playerIds, List<EntityUid> spawnedList, string jobProto, string roleLabel)
+    private void AssignMinds(List<NetUserId> playerIds, List<EntityUid> spawnedList, string jobProto, string roleLabel,
+        bool distressSurvivors)
     {
         var mindSystem = _entityManager.System<SharedMindSystem>();
         var roleSystem = _entityManager.System<SharedRoleSystem>();
@@ -1307,6 +1384,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         {
             NetUserId playerNetId = playerIds[i];
             EntityUid entity = spawnedList[i];
+            var transferred = false;
             try
             {
                 if (!_playerManager.TryGetSessionById(playerNetId, out ICommonSession? session))
@@ -1323,11 +1401,19 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 mindSystem.SetUserId(mind.Value, playerNetId);
                 mindSystem.TransferTo(mind.Value, entity);
                 roleSystem.MindAddJobRole(mind.Value, silent: true, jobPrototype: jobProto);
+                if (distressSurvivors)
+                    _claimedSurvivors.Add(playerNetId);
+                transferred = true;
                 assigned++;
             }
             catch (Exception ex)
             {
                 _sawmill.Error($"[ThirdPartySystem] Failed to assign {roleLabel} mind (player {playerNetId}, entity {entity}): {ex}");
+            }
+            finally
+            {
+                if (distressSurvivors && !transferred)
+                    QueueDel(entity);
             }
         }
 

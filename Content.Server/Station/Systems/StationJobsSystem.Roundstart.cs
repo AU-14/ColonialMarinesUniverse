@@ -135,11 +135,8 @@ public sealed partial class StationJobsSystem
                     break;
                 }
             }
-            // Third-party utility jobs are only used as role labels after
-            // ThirdPartySystem spawns the real entity. Falling back to a normal
-            // station spawn for them creates naked placeholder bodies.
-            if (assignedStation == null && (jobId == "AU14JobThirdPartyLeader" || jobId == "AU14JobThirdPartyMember"))
-                continue;
+            // Third-party utility jobs are role labels only; GameTicker skips the normal spawn for them and
+            // ThirdPartySystem transfers the player into a survivor body instead.
 
             // If not found, just assign to first station (fallback)
             if (assignedStation == null && stations.Count > 0)
