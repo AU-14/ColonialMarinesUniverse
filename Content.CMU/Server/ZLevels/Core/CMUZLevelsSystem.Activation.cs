@@ -69,7 +69,7 @@ public sealed partial class CMUZLevelsSystem
     {
         OnZPhysicsMoveGroundSnap(ent, ref args, out var unchangedGround);
 
-        if (!TryGetFallCheckTile(ent, out var map, out var tile))
+        if (!TryGetFallCheckTile(ent, unchangedGround, out var map, out var tile))
         {
             // A hovering shuttle can unload onto an empty upper map with no terrain grid.
             // Leaving its deck must wake falling even though there is no tile to cache.
@@ -154,27 +154,41 @@ public sealed partial class CMUZLevelsSystem
     private void SetActiveStatus(EntityUid ent, bool active, ZGroundContact? unchangedGround = null)
     {
         if (active)
-            WakeZPhysics(ent, unchangedGround);
+            WakeZPhysics(ent, unchangedGround, activationChecked: true);
         else
         {
             RemCompDeferred<CMUZFallingComponent>(ent);
         }
     }
 
-    private bool TryGetFallCheckTile(Entity<CMUZPhysicsComponent> ent, out EntityUid map, out Vector2i tile)
+    private bool TryGetFallCheckTile(Entity<CMUZPhysicsComponent> ent, ZGroundContact? unchangedGround,
+        out EntityUid map, out Vector2i tile)
     {
         map = default;
         tile = default;
 
+        // Ground snapping already resolved this exact position. The contact is only returned
+        // when no snap/transition/wake occurred; vehicles keep their separate center query.
+        if (unchangedGround?.FallCheck is { } fallCheck)
+        {
+            if (fallCheck.Grid is not { } cachedGrid)
+                return false;
+
+            map = cachedGrid;
+            tile = fallCheck.Tile;
+            return true;
+        }
+
         var xform = Transform(ent);
+        var worldPosition = _transform.GetWorldPosition(xform);
         if (xform.MapUid is not { } mapUid ||
-            !TryResolveMovementGrid(mapUid, _transform.GetWorldPosition(ent), out var gridUid, out var grid))
+            !TryResolveMovementGrid(mapUid, worldPosition, out var gridUid, out var grid))
         {
             return false;
         }
 
         map = gridUid;
-        tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(_transform.GetWorldPosition(xform), xform.MapID));
+        tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPosition, xform.MapID));
         return true;
     }
 

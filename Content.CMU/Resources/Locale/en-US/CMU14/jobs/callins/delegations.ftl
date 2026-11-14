@@ -1,0 +1,23 @@
+# Job names and descriptions for the delegation call-ins (ThirdParties/Civilian/Delegations/delegations.yml)
+cmu-job-name-embassy-aide = Embassy Aide
+cmu-job-description-embassy-aide = You are an aide sent by your faction's embassy. Support the ambassador who called you: carry their messages, handle their paperwork and speak for them when they cannot.
+cmu-job-name-embassy-press-secretary = Embassy Press Secretary
+cmu-job-description-embassy-press-secretary = You are the press secretary of your faction's embassy. Speak to the colony and the press for the ambassador who called you, and make sure your faction's side of the story is heard.
+cmu-job-name-trade-envoy = Trade Envoy
+cmu-job-description-trade-envoy = You lead a trade delegation. Buy, sell and sign deals that benefit the faction that sent you, and bring the paperwork home.
+cmu-job-name-trade-clerk = Trade Clerk
+cmu-job-description-trade-clerk = You are a clerk with a trade delegation. Keep the envoy's ledgers, count the money and make sure every deal is written down.
+cmu-job-name-union-organiser = Union Organizer
+cmu-job-description-union-organiser = You are a labor union organizer. Rally the colony's workers, press their demands and negotiate with whoever runs the colony.
+cmu-job-name-union-steward = Union Steward
+cmu-job-description-union-steward = You are a union steward. Sign up members, keep the picket line organized and back up the organizer.
+cmu-job-name-lead-archaeologist = Lead Archaeologist
+cmu-job-description-lead-archaeologist = You lead an archaeology team. Get permission to dig, find something worth the trip and document it.
+cmu-job-name-field-archaeologist = Field Archaeologist
+cmu-job-description-field-archaeologist = You are a field archaeologist. Dig where the lead tells you, handle finds carefully and keep the team out of trouble.
+cmu-job-name-fema-coordinator = FEMA Coordinator
+cmu-job-description-fema-coordinator = You run a FEMA disaster response team sent by the United Americas. Find out what the colony needs most, organize the relief effort and keep civilians safe.
+cmu-job-name-fema-relief-worker = FEMA Relief Worker
+cmu-job-description-fema-relief-worker = You are a FEMA relief worker. Hand out supplies, treat the injured, put out fires and help colonists get to safety.
+cmu-job-name-fema-emt = FEMA EMT
+cmu-job-description-fema-emt = You are the EMT with a FEMA disaster response team. Triage and treat injured colonists, stabilize the worst and get them to a doctor.

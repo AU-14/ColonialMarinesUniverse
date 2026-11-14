@@ -1,0 +1,22 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Added LGBTQ+ identity pins to the all loadouts.
+  type: Add
+- message: Synthetics can choose a generation from 1 to 4 and add an optional model/designation
+    suffix. Every generation comes with its own affects
+  type: Add
+- message: Generation 1 synths now have pale white skin (like working joe) and their
+    eyes turn red in combat mode, maintaining the set eye color when not in combat
+    mode.
+  type: Add
+- message: Generation 1 and 2 Synths have a movement mod of 0.85, all skills reduced
+    by 1 and a leap block chance of 0.15, go crit at 250, and die at 300
+  type: Add
+- message: Generation 3 and 4 Synths have the current synth stats but crit at 200
+    and die at 250
+  type: Add
+- message: Terra has written or will write Gen 4 lore
+  type: Admin
+time: '2026-11-07T20:41:50.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2396

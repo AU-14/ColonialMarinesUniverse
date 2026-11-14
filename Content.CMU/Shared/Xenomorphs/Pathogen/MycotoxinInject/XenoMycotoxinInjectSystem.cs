@@ -1,4 +1,6 @@
+using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
@@ -104,7 +106,8 @@ public sealed partial class CMUXenoMycotoxinInjectSystem : EntitySystem
             return false;
         }
 
-        if (HasComp<XenoComponent>(target))
+        // yautja and synths are not hosts: the pathogen cannot raise either as a walker
+        if (HasComp<XenoComponent>(target) || HasComp<YautjaComponent>(target) || HasComp<SynthComponent>(target))
         {
             _popup.PopupEntity(Loc.GetString("cmu14-mycotoxin-inject-invalid"), xeno, xeno, PopupType.SmallCaution);
             return false;

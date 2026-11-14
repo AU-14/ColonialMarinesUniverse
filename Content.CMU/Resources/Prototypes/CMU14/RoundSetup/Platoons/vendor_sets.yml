@@ -165,26 +165,6 @@
     VehicleCrew: AU14VehicleCrewmanVendorHAZOPS
 
 - type: platoonVendorSet
-  id: ProdigySF
-  parent: AU14BasePlatoonVendorSet
-  vendors:
-    MessFood: CMUNutriCoVendorPMC
-    Clothing: AU14prodigyclothingequipmentvendor
-    ShipsideUniform: AU14ProdigyShipsideUniformVendor
-    Weapons: AU14prodigyWeaponsVendor
-    SWeapons: AU14SpecVend
-    Corpsman: AU14prodigycorpsmanvendor
-    Arifleman: AU14prodigySGequipmentvendor
-    Dcc: AU14prodigyaircrewvendor
-    OperationsOfficer: AU14prodigycommandequipmentvendor
-    SectionSergeant: AU14prodigysectionleaderequipmentvendor
-    SquadSergeant: AU14prodigysquadleaderequipmentvendor
-    MilitaryPolice: AU14MilitaryPolicemanGenericVendor
-    ReqVend: AU14ProdigyRequisitionVendor
-    EngiEquipment: AU14EngineeringStaffVendor
-    VehicleCrew: AU14VehicleCrewmanVendorProdigy
-
-- type: platoonVendorSet
   id: VAIPO
   parent: AU14BasePlatoonVendorSet
   vendors:

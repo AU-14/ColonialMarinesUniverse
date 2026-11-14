@@ -759,6 +759,7 @@
   - type: YautjaChainGauntlet
   - type: MeleeWeapon
     wideAttackAllowed: false
+    heldAltDisarm: true # right click shoves so the throw finisher is reachable
     attackRate: 1
     damage:
       types:
@@ -3682,3 +3683,12 @@
     clothingVisuals:
       gloves:
       - state: equipped-HAND-xenobone
+
+# the bracer that turns up in a We-Yu experiment crate. same device, just kept off the pred tracker for the
+# first hour so the research has a window before the hunters come for it
+- type: entity
+  parent: CMUYautjaBracer
+  id: CMUYautjaResearchBracer
+  suffix: We-Yu research
+  components:
+  - type: YautjaTrackerHiddenUntil

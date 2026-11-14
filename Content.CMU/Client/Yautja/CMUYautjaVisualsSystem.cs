@@ -34,6 +34,7 @@ public sealed partial class CMUYautjaVisualsSystem : EntitySystem
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IUserInterfaceManager _ui = default!;
+    [Dependency] private YautjaCasterSystem _caster = default!;
 
     private readonly Dictionary<EntityUid, (Vector2 Base, Vector2 Applied)> _offsets = new();
     private readonly Dictionary<EntityUid, (Angle BaseRotation, Angle AppliedRotation, Vector2 BaseScale, Vector2 AppliedScale)> _poses = new();
@@ -182,7 +183,7 @@ public sealed partial class CMUYautjaVisualsSystem : EntitySystem
     private void UpdateAim()
     {
         if (_player.LocalEntity is not { } player || _hands.GetActiveItem(player) is not { } caster ||
-            !HasComp<YautjaCasterComponent>(caster))
+            !_caster.CanAimSight(player, caster))
         {
             LocalAimUser = null;
             _aimCaster = null;

@@ -198,6 +198,36 @@
         whitelist:
           tags:
             - RMCMagazineRifleHunting
+  # the scope takes the rail, so the sling gets an underbarrel mount
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentMiniscopeHunting
+        whitelist:
+          tags:
+          - RMCAttachmentHuntingScope
+          - RMCAttachmentMiniscopeHunting
+          - RMCAttachmentS84xTelescopicScope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentMagneticHarness
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RMCAttachmentHuntingStock
+        whitelist:
+          tags:
+          - RMCAttachmentHuntingStock
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.80, 0.06
+      rmc-aslot-rail: -0.28, 0.06
+      rmc-aslot-underbarrel: 0.52, -0.03
+      rmc-aslot-stock: -0.74, -0.14
 
 - type: entity
   parent: CMUWeaponPistolTPR9Civilian

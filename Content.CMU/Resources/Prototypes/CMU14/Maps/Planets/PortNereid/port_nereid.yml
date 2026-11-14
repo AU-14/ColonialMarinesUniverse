@@ -2,6 +2,8 @@
   id: AUPlanetLV327
   name: Port Nereid
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Port Nereid"
     mapId: portneroid
@@ -14,7 +16,6 @@
     - USCM
     - RMC
     - HAZOPS
-    - ProdigySF
     - VAIPO
     platoonsOpfor:
     - UPP

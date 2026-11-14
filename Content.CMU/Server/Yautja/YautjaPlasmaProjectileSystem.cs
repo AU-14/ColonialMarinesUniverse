@@ -8,6 +8,8 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Body;
+using Content.Shared.Body.Systems;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Doors.Components;
@@ -24,8 +26,13 @@ using Content.Shared.Throwing;
 using Content.Shared.Vehicle.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Explosion.EntitySystems;
+using Content.Shared.Maps;
+using Content.Shared.Physics;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Yautja;
@@ -34,6 +41,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private FlammableSystem _flammable = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
@@ -46,6 +54,9 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private TriggerSystem _trigger = default!;
     [Dependency] private VehicleTopologySystem _vehicleTopology = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private TurfSystem _turf = default!;
 
     public override void Initialize()
     {
@@ -57,8 +68,10 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, TriggerEvent>(OnCasterEradicatorTriggered);
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileFixedDistanceStopEvent>(OnCasterEradicatorStop);
         SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileHitEvent>(OnCasterEradicatorHit);
+        SubscribeLocalEvent<YautjaCasterImmobilizerProjectileComponent, YautjaProjectileReachedMaxRangeEvent>(OnCasterImmobilizerMaxRange);
         SubscribeLocalEvent<YautjaIncendiaryPlasmaProjectileComponent, ProjectileHitEvent>(OnIncendiaryPlasmaHit);
         SubscribeLocalEvent<YautjaPlasmaRifleBoltComponent, ProjectileHitEvent>(OnPlasmaRifleBoltHit);
+        SubscribeLocalEvent<YautjaGibHumansOnHitComponent, ProjectileHitEvent>(OnGibHumansHit);
     }
 
     // CMU14: the ordinary airlock destruction threshold (Resources/Prototypes/_RMC14/Entities/Structures/Doors/
@@ -78,12 +91,30 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         ApplyCasterStun(args.Target, duration);
     }
 
+    private void OnGibHumansHit(Entity<YautjaGibHumansOnHitComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (!IsHuman(args.Target) ||
+            HasComp<SynthComponent>(args.Target) ||
+            !TryComp<BodyComponent>(args.Target, out var body))
+        {
+            return;
+        }
+
+        _body.GibBody(args.Target, true, body);
+    }
+
     private void OnCasterImmobilizerHit(Entity<YautjaCasterImmobilizerProjectileComponent> ent, ref ProjectileHitEvent args)
     {
         DoCasterImmobilizerAreaStun(ent);
     }
 
     private void OnCasterImmobilizerStop(Entity<YautjaCasterImmobilizerProjectileComponent> ent, ref ProjectileFixedDistanceStopEvent args)
+    {
+        DoCasterImmobilizerAreaStun(ent);
+    }
+
+    // cmss13 aoe_stun/do_at_max_range: the sphere still goes off when it runs out of range
+    private void OnCasterImmobilizerMaxRange(Entity<YautjaCasterImmobilizerProjectileComponent> ent, ref YautjaProjectileReachedMaxRangeEvent args)
     {
         DoCasterImmobilizerAreaStun(ent);
     }
@@ -107,11 +138,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     private void OnCasterEradicatorHit(Entity<YautjaCasterEradicatorProjectileComponent> ent, ref ProjectileHitEvent args)
     {
         if (!ent.Comp.Triggered && !TerminatingOrDeleted(ent.Owner))
-        {
-            ent.Comp.Triggered = true;
-            var trigger = new TriggerEvent(ent.Owner);
-            RaiseLocalEvent(ent.Owner, ref trigger);
-        }
+            _trigger.Trigger(ent.Owner, args.Target);
 
         if (!_vehicleTopology.TryGetVehicle(args.Target, out var vehicle))
             return;
@@ -133,6 +160,40 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         }
 
         ent.Comp.Triggered = true;
+        MoveOutOfBlockedTile(ent.Owner);
+    }
+
+    /// <summary>
+    /// CMU14: a BYOND projectile never enters a dense turf, so cmss13's cell_explosion starts on the open tile in front
+    /// of the wall. Ours is already overlapping the wall when the hit registers, and a blast centred inside a wall is
+    /// swallowed by it whole (0 tiles), so step back along the flight path to the last open tile.
+    /// </summary>
+    private void MoveOutOfBlockedTile(EntityUid bolt)
+    {
+        var xform = Transform(bolt);
+        if (xform.GridUid is not { } gridUid || !TryComp(gridUid, out MapGridComponent? grid))
+            return;
+
+        var direction = TryComp(bolt, out PhysicsComponent? body)
+            ? _physics.GetMapLinearVelocity(bolt, body)
+            : Vector2.Zero;
+        if (direction.LengthSquared() < 0.0001f && TryComp(bolt, out CMUYautjaPlasmaVisualComponent? visual))
+            direction = visual.Direction;
+        if (direction.LengthSquared() < 0.0001f)
+            return;
+
+        direction = Vector2.Normalize(direction);
+        var position = _transform.GetWorldPosition(xform);
+        for (var step = 0; step <= 8; step++)
+        {
+            var tile = _map.WorldToTile(gridUid, grid, position - direction * (step * 0.25f));
+            if (_turf.IsTileBlocked(gridUid, tile, CollisionGroup.Impassable, grid, ignore: e => !Transform(e).Anchored))
+                continue;
+
+            if (step > 0)
+                _transform.SetWorldPosition(bolt, _map.GridTileToWorldPos(gridUid, grid, tile));
+            return;
+        }
     }
 
     /// <summary>
@@ -298,10 +359,13 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     {
         _audio.PlayPvs(ent.Comp.StunSound, ent.Owner);
 
+        var shooter = CompOrNull<ProjectileComponent>(ent)?.Shooter;
         var coordinates = _transform.GetMapCoordinates(ent);
         foreach (var target in _lookup.GetEntitiesInRange<MobStateComponent>(coordinates, ent.Comp.StunRange))
         {
-            if (HasComp<YautjaAbominationComponent>(target))
+            // CMU: cmss13 stuns the firer too if they're in range, which made point-blank shots lock up
+            // whoever held the caster (worst for a human running a researched bracer, no yautja reduction)
+            if (target == shooter || HasComp<YautjaAbominationComponent>(target))
                 continue;
 
             var duration = ent.Comp.StunTime;

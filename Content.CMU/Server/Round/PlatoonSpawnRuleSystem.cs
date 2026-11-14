@@ -778,7 +778,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         var shipId = faction == "govfor"
             ? _auRoundSystem.ResolveGovforShip(null)
             : _auRoundSystem.ResolveOpforShip(null);
-        if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, out var grids))
+        if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, faction, out var grids))
             return;
 
         // The game-map event contains the main deck; the z-level loader loads the remaining decks separately.

@@ -85,6 +85,26 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField]
     public bool AnnounceAsSurvivors { get; private set; }
 
+    /// <summary>
+    /// Whether the party's members also speak the colony's language (the planet's <c>CMUColonyLanguage</c>).
+    /// Their own default language stays. Set on civilian parties.
+    /// </summary>
+    [DataField]
+    public bool SpeaksColonyLanguage { get; private set; }
+
+    /// <summary>
+    /// Whether the party's members also speak the languages of the faction that called them in from a console
+    /// (the ambassador console's <c>languages</c>).
+    /// </summary>
+    [DataField]
+    public bool SpeaksCallerLanguage { get; private set; }
+
+    /// <summary>
+    /// With <see cref="SpeaksCallerLanguage"/>, the caller's first language also becomes the members' default.
+    /// </summary>
+    [DataField]
+    public bool DefaultsToCallerLanguage { get; private set; }
+
     [DataField("partyspawn", required: true)]
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 

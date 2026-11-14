@@ -2,6 +2,8 @@
   id: CMUPlanetSolarisRidge
   name: Solaris Ridge
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Solaris Ridge"
     mapId: SolarisRidge

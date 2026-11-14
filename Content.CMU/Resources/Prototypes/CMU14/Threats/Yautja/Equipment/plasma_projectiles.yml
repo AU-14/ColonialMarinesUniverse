@@ -359,6 +359,7 @@
   - type: YautjaCasterImmobilizerProjectile
   - type: ProjectileMaxRange
     max: 20
+  - type: YautjaMaxRangeEffect # cmss13 aoe_stun/do_at_max_range
 - type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterLethalBolt
@@ -443,6 +444,8 @@
   - type: ProjectileMaxRange
     max: 20
   - type: YautjaCasterEradicatorProjectile
+  - type: YautjaMaxRangeEffect # cmss13 aoe_lethal/do_at_max_range
+    trigger: true
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger
@@ -478,8 +481,47 @@
         Heat: 10
   - type: YautjaIncendiaryPlasmaProjectile
 
+# cmss13 lance blows up on mobs, turfs, objects and at max range alike, so it is not a single-lethal bolt
 - type: entity
-  parent: CMUYautjaCasterLethalBolt
+  parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterLanceBolt
   name: plasma lance bolt
   categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    layers:
+    - state: pulse1
+      shader: unshaded
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 75
+  - type: ProjectileMaxRange
+    max: 22
+  - type: YautjaGibHumansOnHit
+  - type: YautjaCasterEradicatorProjectile
+  - type: YautjaMaxRangeEffect # cmss13 lance/do_at_max_range
+    trigger: true
+  - type: TriggerOnCollide
+    fixtureID: projectile
+  - type: ExplodeOnTrigger
+  - type: DeleteOnTrigger
+  - type: Explosive
+    explosionType: CMUYautjaCasterExplosion
+    maxIntensity: 50
+    intensitySlope: 6
+    totalIntensity: 50
+    maxTileBreak: 2
+  - type: CMExplosionEffect
+    minShrapnel: 7
+    maxShrapnel: 12
+    shrapnelSpeed: 6
+  - type: RMCScorchEffect
+    count: 3
+    scatterRadius: 1.5
+    radius: 1
+  - type: PointLight
+    color: "#55b8ff"
+    radius: 4.75
+    energy: 3.2

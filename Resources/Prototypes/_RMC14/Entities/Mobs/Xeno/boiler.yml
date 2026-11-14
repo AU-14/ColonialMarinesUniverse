@@ -245,6 +245,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-trapper-name
+    baseCaste: CMXenoBoiler # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-trapper-description
     popup: rmc-xeno-trapper-popup
   - type: CMArmor

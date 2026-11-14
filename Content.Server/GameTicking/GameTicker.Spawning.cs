@@ -7,6 +7,7 @@ using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.CMU14.Allegiance;
+using Content.Server.CMU14.Lobby; // CMU14: event invitations and slot setup.
 using Content.Server.CMU14.Origin;
 using Content.Server.CMU14.Round;
 using Content.Server.GameTicking.Events;
@@ -301,6 +302,7 @@ namespace Content.Server.GameTicking
                 _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
             }
 
+            RaiseLocalEvent(new CMURoundJobsReadyEvent()); // CMU14: apply event slots after normal setup.
             List<EntityUid> spawnableStations = GetSpawnableStations();
             _sawmill.Debug($"[RoundStart] Found {spawnableStations.Count} spawnable station(s).");
             Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs
@@ -674,6 +676,9 @@ namespace Content.Server.GameTicking
 
             // We raise this event to allow other systems to handle spawning this player themselves. (e.g. late-join wizard,
             // etc.)
+            if (!CanSpawnEventJob(player, jobId)) // CMU14: enforce event invitations before custom spawning.
+                return;
+
             var bev = new PlayerBeforeSpawnEvent(player, character, jobId, lateJoin, station);
             RaiseLocalEvent(bev);
 
@@ -862,6 +867,15 @@ namespace Content.Server.GameTicking
             out JobPrototype jobPrototype,
             out string jobName)
         {
+            // CMU14 Begin: direct spawns and fallback jobs must also respect event invitations.
+            if (!CanSpawnEventJob(player, jobId))
+            {
+                mob = EntityUid.Invalid;
+                jobPrototype = ProtoMan.Index<JobPrototype>(jobId);
+                jobName = jobPrototype.Name;
+                return false;
+            }
+            // CMU14 End
             PlayerJoinGame(player, silent);
 
             var data = player.ContentData();
