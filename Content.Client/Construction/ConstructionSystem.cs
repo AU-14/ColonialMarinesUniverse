@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Popups;
 using Content.Shared._RMC14.Construction;
+using Content.Shared.CMU14.ConstructionRobot;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Examine;
@@ -426,6 +427,12 @@ namespace Content.Client.Construction
             if (prototype.CanBuildInImpassable)
                 EnsureComp<WallMountComponent>(ghost.Value).Arc = new(Math.Tau);
 
+            RaiseNetworkEvent(new ConstructionRobotGhostPlacedMessage(
+                GetNetCoordinates(Transform(ghost.Value).Coordinates),
+                prototype.ID,
+                dir.ToAngle(),
+                comp.GhostId));
+
             return true;
         }
 
@@ -511,6 +518,7 @@ namespace Content.Client.Construction
             if (!_ghosts.TryGetValue(ghostId, out var ghost))
                 return;
 
+            RaiseNetworkEvent(new ConstructionRobotGhostRemovedMessage(ghostId));
             QueueDel(ghost);
             _ghosts.Remove(ghostId);
         }
@@ -520,12 +528,8 @@ namespace Content.Client.Construction
         /// </summary>
         public void ClearAllGhosts()
         {
-            foreach (var ghost in _ghosts.Values)
-            {
-                QueueDel(ghost);
-            }
-
-            _ghosts.Clear();
+            foreach (var ghostId in _ghosts.Keys.ToArray())
+                ClearGhost(ghostId);
         }
 
         public void QueryMenuExtensions(ref ConstructionMenuFilterEvent args)
