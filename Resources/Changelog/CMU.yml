@@ -17989,5 +17989,60 @@
   id: 1047
   time: '2026-11-13T15:30:48.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2533
+- author: rokudara-sen
+  changes:
+  - message: Added BALANCE.md and balance questions to the PR template.
+    type: Code
+  id: 1048
+  time: '2026-11-14T09:34:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2610
+- author: rokudara-sen
+  changes:
+  - message: The Test Merge label now only marks a PR for the next publish; re-add
+      it to keep a PR test merged, and a normal publish clears every test merge label.
+    type: Code
+  id: 1049
+  time: '2026-11-14T09:37:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2609
+- author: TheHellFireo
+  changes:
+  - message: Fixed Varadero's station initialization identifier.
+    type: Fix
+  id: 1050
+  time: '2026-11-14T13:52:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2613
+- author: TheHellFireo
+  changes:
+  - message: Fixed FOB equipment collisions while deployed, packed, anchored, and
+      broken.
+    type: Fix
+  - message: Fixed stale entity references producing metadata errors after equipment
+      and targets were deleted.
+    type: Fix
+  - message: Fixed rejected antagonist assignments, tube-fed gun disruption, expired
+      explosion sources, and jeep seat pull-joint errors.
+    type: Fix
+  id: 1051
+  time: '2026-11-14T13:54:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2614
+- author: TheHellFireo
+  changes:
+  - message: Fixed LV-624's station initialization identifier.
+    type: Fix
+  id: 1052
+  time: '2026-11-14T14:33:42.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2612
+- author: IntelligenceOfficerArthur
+  changes:
+  - message: Added the Battalion Commander dress vendor and combat vendors for the
+      platoon Commanding Officer.
+    type: Add
+  - message: Platoon Commanding Officer now has Surgery +1.
+    type: Tweak
+  - message: M59A prototype rifle has lower max scatter.
+    type: Tweak
+  id: 1053
+  time: '2026-11-14T14:40:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2606
 Name: CMU
 Order: -1
