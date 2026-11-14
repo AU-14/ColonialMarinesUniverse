@@ -33,6 +33,28 @@
 # WY SEC
 
 - type: entity
+  id: CMUCrateNSG23
+  parent: RMCCrateWeapons
+  name: NSG-23 rifle crate
+  description: A crate containing one NSG-23 rifle.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRifleSSG45
+      amount: 1
+
+- type: entity
+  id: CMUCrateNSG23Magazine
+  parent: RMCCrateAmmo
+  name: NSG-23 magazine crate
+  description: A crate containing one standard NSG-23 magazine.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleSSG45
+      amount: 1
+
+- type: entity
   id: CMUCrateP90
   parent: RMCCrateWeapons
   name: FN P90 rifle crate

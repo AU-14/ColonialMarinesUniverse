@@ -107,11 +107,13 @@
         crate: CMBeltSecurityMarshal
       - cost: 550
         crate: RMCCoatMilitiaVest
+      - cost: 500
+        crate: CMUArmorProdigyFlakVest
       - cost: 50
         crate: RMCScabbardMachete
       - cost: 400
         crate: RMCPouchMachete
-      - cost: 300
+      - cost: 50
         crate: AU14AttachmentTwoPointSling
       - cost: 350
         crate: AU14CrateBoxCivBinocs
@@ -183,6 +185,10 @@
         crate: RMCCrateSuppliesCrayons
     - name: Weapons
       entries:
+      - cost: 1200
+        maxStock: 4
+        stockReplenishDelay: 300
+        crate: CMUCrateM20AColony
       - cost: 650
         crate: CMUWeaponShotgunM37A1Colony
       - cost: 1000
@@ -227,6 +233,8 @@
         stockReplenishDelay: 1800
     - name: Ammunition
       entries:
+      - cost: 100
+        crate: CMUCrateM20AColonyMagazine
       - cost: 240
         crate: CMUCrateBoxM16ColonyMagazines
       - cost: 300
