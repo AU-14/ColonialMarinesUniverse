@@ -125,6 +125,7 @@
   points: 7
   groups:
   - PaperworkRMC
+  - MasksRMC
   - WYGuardJumpsuitAU14
   - WYGuardLeftPouchAU14
   - WYGuardRightPouchAU14
@@ -132,3 +133,4 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
