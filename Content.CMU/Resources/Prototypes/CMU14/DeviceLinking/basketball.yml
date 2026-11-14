@@ -1,0 +1,21 @@
+- type: sourcePort
+  id: CMUBasketballScore
+  name: cmu-signal-port-name-basketball-score
+  description: cmu-signal-port-description-basketball-score-source
+  defaultLinks: [ CMUBasketballScore ]
+
+- type: sourcePort
+  id: CMUBasketballReset
+  name: cmu-signal-port-name-basketball-reset
+  description: cmu-signal-port-description-basketball-reset-source
+  defaultLinks: [ CMUBasketballReset ]
+
+- type: sinkPort
+  id: CMUBasketballScore
+  name: cmu-signal-port-name-basketball-score
+  description: cmu-signal-port-description-basketball-score-sink
+
+- type: sinkPort
+  id: CMUBasketballReset
+  name: cmu-signal-port-name-basketball-reset
+  description: cmu-signal-port-description-basketball-reset-sink
