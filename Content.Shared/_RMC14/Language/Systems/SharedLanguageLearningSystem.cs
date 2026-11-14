@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Content.Shared._RMC14.Language.Components;
@@ -177,7 +178,9 @@ public abstract partial class SharedLanguageLearningSystem : EntitySystem
             return 0f;
 
         var minimumRequiredWords = Math.Max(1, languageProto.MinimumRequiredLearnedWords);
-        var expectedVocabSize = Math.Max(minimumRequiredWords, languageProto.ExpectedVocabularySize);
+        // CMU14: VocabularyScale lets a learner (synths) need fewer distinct words than the language's full vocabulary
+        var scaledVocabSize = (int) MathF.Round(languageProto.ExpectedVocabularySize * Math.Max(0.01f, comp.VocabularyScale));
+        var expectedVocabSize = Math.Max(minimumRequiredWords, scaledVocabSize);
 
         if (languageData.LearnedWords.Count < minimumRequiredWords)
         {
@@ -187,7 +190,13 @@ public abstract partial class SharedLanguageLearningSystem : EntitySystem
         }
 
         var vocabularyCompleteness = Math.Min(1.0f, (float) languageData.LearnedWords.Count / expectedVocabSize);
-        var averageWordComprehension = CalculateBaseComprehension(languageData);
+        // CMU14: with core vocabulary scoring only the best-known words (up to the language's expected
+        // vocabulary size) count towards the average. Every distinct word ever heard is stored, and a long
+        // tail of words heard once or twice sits near zero, which used to drag the average down and stall
+        // progress around 40% no matter how well the common words were known.
+        var averageWordComprehension = CalculateBaseComprehension(
+            languageData,
+            comp.CoreVocabularyScoring ? expectedVocabSize : int.MaxValue);
         var totalWeight = languageProto.LearnedWordComprehensionWeight + languageProto.VocabularyCompletenessWeight;
         var combinedComprehension = totalWeight > 0f
             ? ((averageWordComprehension * languageProto.LearnedWordComprehensionWeight) +
@@ -197,12 +206,20 @@ public abstract partial class SharedLanguageLearningSystem : EntitySystem
         return Math.Min(languageProto.MaximumOverallComprehension, combinedComprehension);
     }
 
-    private static float CalculateBaseComprehension(LanguageLearningData languageData)
+    private static float CalculateBaseComprehension(LanguageLearningData languageData, int coreVocabularySize = int.MaxValue)
     {
         var totalComprehension = 0f;
         var totalWeight = 0f;
 
-        foreach (var (word, comprehension) in languageData.LearnedWords)
+        IEnumerable<KeyValuePair<string, float>> words = languageData.LearnedWords;
+        if (languageData.LearnedWords.Count > coreVocabularySize)
+        {
+            words = languageData.LearnedWords
+                .OrderByDescending(kvp => kvp.Value)
+                .Take(coreVocabularySize);
+        }
+
+        foreach (var (word, comprehension) in words)
         {
             var frequency = languageData.WordFrequency.GetValueOrDefault(word, 1);
             var weight = Math.Min(frequency, 10) + 1;

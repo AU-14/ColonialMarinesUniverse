@@ -49,6 +49,9 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
             ent.Comp.LearningRange = preset.LearningRange;
             ent.Comp.BaseWordLearningRate = preset.BaseWordLearningRate;
             ent.Comp.ComprehensionThreshold = preset.ComprehensionThreshold;
+            ent.Comp.CoreVocabularyScoring = preset.CoreVocabularyScoring;
+            ent.Comp.VocabularyScale = preset.VocabularyScale;
+            ent.Comp.LearningSpeedMultiplier = preset.LearningSpeedMultiplier;
         }
 
         foreach (var language in ent.Comp.LearnableLanguages)
@@ -342,6 +345,7 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
             var actualLearning = learningRate * diminishingFactor * distancePenalty * sisterBonus;
 
             actualLearning *= languageProto.LearningRateMultiplier;
+            actualLearning *= comp.LearningSpeedMultiplier; // CMU14: per-learner speed (synth preset)
             actualLearning /= LearningDurationMultiplier;
             actualLearning *= _random.NextFloat(0.9f, 1.1f);
 
