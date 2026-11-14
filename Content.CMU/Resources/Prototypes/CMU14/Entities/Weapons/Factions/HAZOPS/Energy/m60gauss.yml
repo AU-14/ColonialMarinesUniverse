@@ -1,0 +1,279 @@
+- type: entity
+  id: CMUWeaponM60GaussGun
+  parent: [BaseWeaponBatterySmall, BaseGrandTheftContraband]
+  name: XM6283-185E
+  suffix: HAZOPS
+  description: Operating off similar concepts as the Particle Beam Phalanx system. This experimental man portable version functions instead as a Directed Energy Weapon, accelerating T particles at the intended target. The weapon is self charging, however after every operation its recommended to replace the "Fuel box" mounted under the stock.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/HAZOPS/M60Gauss.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Item
+    size: Large
+    sprite: CMU14/Weapons/Guns/HAZOPS/M60GaussWorn.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/HAZOPS/M60GaussWorn.rsi
+    slots:
+    - suitStorage
+    - Back
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/CMU14/Weapons/m60gauss/tau_gaus.ogg
+  - type: Battery
+    maxCharge: 600
+    startingCharge: 600
+  - type: BatteryAmmoProvider
+    proto: CMUGaussShot
+    fireCost: 75
+  - type: BatterySelfRecharger
+    autoRechargeRate: 15
+  # Has to be switched on before it fires, like a defibrillator. Z is the wield key, so it toggles from
+  # its action button or the activation verb instead.
+  - type: ItemToggle
+    onUse: false
+    verbToggleOn: cmu-gauss-verb-activate
+    verbToggleOff: cmu-gauss-verb-deactivate
+    soundActivate:
+      path: /Audio/CMU14/Weapons/m60gauss/tau_activate.ogg
+    soundDeactivate:
+      path: /Audio/Machines/button.ogg
+  - type: CMUGaussGun
+  - type: UniqueAction
+  - type: Appearance
+  - type: GunRequiresWield
+  - type: WieldDelay
+    baseDelay: 0.7
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 1.5
+    recoilUnwielded: 4
+    scatterWielded: 2
+    scatterUnwielded: 20
+    baseFireRate: 0.35
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.5
+  - type: Wieldable
+  - type: EmitSoundOnPickup
+    sound:
+      collection: RMCEquipGun
+      params:
+        volume: -6
+  - type: EmitSoundOnDrop
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      collection: RMCRustleGun
+      params:
+        volume: -4
+  - type: WieldableSpeedModifiers
+    base: 0.75
+    light: 0.75
+    medium: 0.75
+    heavy: 0.75
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-rail:
+        whitelist:
+          requireAll: true
+          tags:
+          - RMCAttachmentMagneticHarness
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.14, 0.13
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/sniper_mouse.rsi
+      state: all
+  - type: Tag
+    tags:
+    - CMUWeaponM60GaussGun
+  - type: GunGroupPenalty
+  - type: GunPointBlank
+  - type: GunDualWielding
+    weaponGroup: Rifle
+  - type: GunUnskilledPenalty
+  - type: GunIFF
+    enabled: false
+  - type: GunIDLock
+  - type: Corrodible
+    isCorrodible: false
+
+# What every gauss shot shares, including the XM99A's blue beam. It doesn't inherit BasicHitscan,
+- type: entity
+  abstract: true
+  id: CMUGaussBeamBase
+  components:
+  - type: HitscanAmmo
+  - type: HitscanBasicEffects
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_blue
+    travelFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam_blue
+    impactFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_blue
+
+# Primary fire: a quick, hot bolt.
+- type: entity
+  parent: CMUGaussBeamBase
+  id: CMUGaussShot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUGaussRaycast
+  - type: CMUFixtureHitscan
+  - type: HitscanReflect
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 100
+        Blunt: 5
+        Radiation: 5
+        Asphyxiation: 10
+
+# Charged shot: double damage, ricochets off walls twice, with small chance to alight.
+- type: entity
+  parent: CMUGaussBeamBase
+  id: CMUGaussChargedShot
+  name: charged gauss beam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUGaussRaycast
+    maxBounces: 2
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 265
+        Blunt: 15
+        Asphyxiation: 20
+        Radiation: 10
+  - type: CMUGaussIgnite
+    chance: 0.2
+    intensity: 5
+    duration: 8
+
+# Overcharge discharge: 4x damage, still ricochets, and will most likely set the target alight.
+- type: entity
+  parent: CMUGaussChargedShot
+  id: CMUGaussOverchargedShot
+  name: overcharged gauss beam
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 450
+        Blunt: 20
+        Asphyxiation: 20
+        Radiation: 20
+  - type: CMUGaussIgnite
+    chance: 0.6
+    intensity: 5
+    duration: 8
+
+- type: entity
+  parent: ActionMarineToggleable
+  id: CMUActionToggleGaussGun
+  name: Toggle gauss gun power
+  description: Powers the XM6283-185E gauss gun on or off. It won't fire while off. [color=red]Charge a shot with the unique gun action keybind, Spacebar by default, then pull the trigger to release it.[/color]
+  components:
+  - type: Action
+    useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Weapons/Guns/HAZOPS/M60Gauss.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUGaussToggleActionEvent
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: CMUCaseM60GaussGun
+  name: XM6283-185E experimental gauss gun case
+  description: A large case for storing an XM6283-185E experimental gauss gun, a prototype handheld particle accelerator.
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,1,1
+    whitelist:
+      tags:
+      - CMUWeaponM60GaussGun
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponM60GaussGun
+
+# Smoke curling off the boots left behind when an overcharge vaporizes its holder.
+- type: entity
+  id: CMUGaussVaporizeSmoke
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _RMC14/Effects/welding_effect.rsi
+    state: smoke
+    noRot: true
+  - type: TimedDespawn
+    lifetime: 30
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# Particles thrown off someone being vaporized. The client spawns these locally around them.
+- type: entity
+  abstract: true
+  id: CMUGaussVaporizeParticleBase
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+# Glowing embers rising off them.
+- type: entity
+  parent: CMUGaussVaporizeParticleBase
+  id: CMUGaussVaporizeEmber
+  components:
+  - type: Sprite
+    sprite: _RMC14/Effects/welding_effect.rsi
+    scale: 0.4, 0.4
+    layers:
+    - state: welding_sparks
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.6
+
+# Black ash drifting up as they crumble.
+- type: entity
+  parent: CMUGaussVaporizeParticleBase
+  id: CMUGaussVaporizeAsh
+  components:
+  - type: Sprite
+    sprite: _RMC14/Effects/welding_effect.rsi
+    state: smoke
+    color: "#1a1a1a"
+    scale: 0.5, 0.5
+  - type: TimedDespawn
+    lifetime: 0.9
+
+- type: Tag
+  id: CMUWeaponM60GaussGun

@@ -214,3 +214,5 @@ au-14-job-prefix-uppgrom-squadleader = SL
 
 au14-job-name-specialist-pyro = Pyrotechnician
 au14-job-prefix-specialist-pyro = PYRO
+au14-job-name-specialist-gauss = Gauss Gunner
+au14-job-prefix-specialist-gauss = GAUSS
