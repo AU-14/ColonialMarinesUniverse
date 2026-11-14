@@ -81,6 +81,26 @@ public sealed partial class LanguageLearningComponent : Component
 
     [DataField]
     public int MaxContextWordsStored = 50;
+
+    /// <summary>
+    /// CMU14: score overall comprehension from the best-known words (up to the language's expected vocabulary
+    /// size) instead of every word ever heard, so a long tail of one-off words can't hold progress down.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CoreVocabularyScoring;
+
+    /// <summary>
+    /// CMU14: scales every language's expected vocabulary size for this learner. Below 1 means fewer words have
+    /// to be known for the vocabulary part of comprehension to fill up, and a smaller core vocabulary.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float VocabularyScale = 1f;
+
+    /// <summary>
+    /// CMU14: multiplies how much each heard word is learned, for this learner only.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float LearningSpeedMultiplier = 1f;
 }
 
 [DataDefinition]
