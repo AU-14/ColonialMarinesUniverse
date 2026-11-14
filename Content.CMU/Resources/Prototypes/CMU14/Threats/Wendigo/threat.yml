@@ -1,5 +1,6 @@
 - type: threat
   id: WendigoThreatCF
+  xenofauna: true # non-humanoid threat life; EW Joe xenofauna directives
   lorePrimer: AU14PrimerThreatWendigo
   roundstartspawns: wendigoParty
   spawnExtraVoteMembers: false

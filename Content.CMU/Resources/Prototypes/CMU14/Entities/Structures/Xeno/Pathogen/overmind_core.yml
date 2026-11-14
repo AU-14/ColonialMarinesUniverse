@@ -3,6 +3,8 @@
   name: overmind core
   description: A pulsating organic mass. You feel drawn to it.
   components:
+  - type: CMUThreatStructure # Purge the Nest (EW Joe)
+    weight: 3
   - type: NpcFactionMember
     factions:
     - CMU14PathogenWalker

@@ -14,7 +14,7 @@ namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
 /// Early Warning Joe phase E0: the level table grants the level-0 kit, levels shed slowdown and add
-/// armor, removing the antag component takes every grant back, and a reset key cannot revive the body.
+/// armor, removing the antag component takes every grant back, and (revised D3) only a defibrillator zap revives the body, see EWJoeReviveRadioTest.
 /// </summary>
 [TestFixture]
 public sealed class EWJoeLevelZeroTest
@@ -76,10 +76,13 @@ public sealed class EWJoeLevelZeroTest
                 Assert.That(slowdown.Slowdown,
                     Is.EqualTo(baseSlowdown - ewJoe.SlowdownShedPerLevel).Within(0.001f),
                     "Each level sheds innate slowdown (balance A-4).");
-                Assert.That(armorAtOne.Melee - armorAtZero.Melee, Is.EqualTo(ewJoe.ArmorPerLevel),
+                Assert.That(armorAtOne.Melee - armorAtZero.Melee, Is.EqualTo(ewJoe.MeleeArmorPerLevel),
                     "Sculpted Form adds melee armor per level on top of whatever the Joe wears.");
-                Assert.That(armorAtOne.Bullet - armorAtZero.Bullet, Is.EqualTo(ewJoe.ArmorPerLevel),
+                Assert.That(armorAtOne.Bullet - armorAtZero.Bullet, Is.EqualTo(ewJoe.BulletArmorPerLevel),
                     "Sculpted Form adds bullet armor per level on top of whatever the Joe wears.");
+                // rebalance RB-01/RB-02: bullet and melee armor scale separately (L5: 20 bullet, 10 melee)
+                Assert.That(ewJoe.BulletArmorPerLevel, Is.EqualTo(4), "RB-01: +4 bullet armor per level");
+                Assert.That(ewJoe.MeleeArmorPerLevel, Is.EqualTo(2), "RB-02: +2 melee armor per level");
             });
 
             entities.RemoveComponent<EWJoeComponent>(joe);

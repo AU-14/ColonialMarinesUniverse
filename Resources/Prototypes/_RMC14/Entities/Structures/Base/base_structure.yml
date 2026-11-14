@@ -29,6 +29,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUThreatStructure # CMU14: counted by the Early Warning Joe's Purge the Nest
   - type: Corrodible
     isCorrodible: false
   - type: CMIconSmooth

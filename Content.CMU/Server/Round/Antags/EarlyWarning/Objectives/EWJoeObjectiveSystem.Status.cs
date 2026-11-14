@@ -18,23 +18,29 @@ public sealed partial class EWJoeObjectiveSystem
         var level = Math.Clamp(ent.Comp.Level, 0, table.Levels.Count - 1);
         var def = table.Levels[level];
 
+        var final = def.ObjectiveGroup == null && def.ForcedObjective == null;
         var entries = new List<EWJoeObjectiveEntry>();
+        var anyRerollable = false;
         if (_mind.TryGetMind(ent, out var mindId, out var mind))
         {
-            foreach (var objective in ent.Comp.CurrentObjectives)
+            for (var slot = 0; slot < ent.Comp.CurrentObjectives.Count; slot++)
             {
+                var objective = ent.Comp.CurrentObjectives[slot];
                 if (!Exists(objective) || _objectives.GetInfo(objective, mindId, mind) is not { } info)
                     continue;
 
                 var completed = ent.Comp.CompletedCredit.ContainsKey(objective);
+                // ARCH-02: only a level with a pool can swap a directive
+                var rerollable = !final && def.ObjectiveGroup != null && IsRerollable(ent, def, objective);
+                anyRerollable |= rerollable;
                 entries.Add(new EWJoeObjectiveEntry(info.Title, info.Description,
-                    completed ? 1f : info.Progress, completed));
+                    completed ? 1f : info.Progress, completed, slot, rerollable));
             }
         }
 
         var required = ent.Comp.CurrentObjectives.Count == 0 ? 0 : RequiredCredit(ent.Comp);
         var earned = ent.Comp.CompletedCredit.Values.Sum();
-        var final = def.ObjectiveGroup == null && def.ForcedObjective == null;
+        var rerollReady = anyRerollable && RerollReady(ent);
         var doubled = IsPreThreatWindow(ent.Comp);
         var thralls = ent.Comp.Thralls.Where(t => Exists(t) && !_mobState.IsDead(t)).Select(t => Name(t)).ToList();
 
@@ -47,6 +53,7 @@ public sealed partial class EWJoeObjectiveSystem
             && status.RequireAssimilation == def.RequireAssimilation
             && status.DoubleCredit == doubled
             && status.RespawnReady == ent.Comp.RespawnReady
+            && status.RerollReady == rerollReady
             && status.Thralls.SequenceEqual(thralls)
             && status.Objectives.SequenceEqual(entries))
         {
@@ -61,6 +68,7 @@ public sealed partial class EWJoeObjectiveSystem
         status.RequireAssimilation = def.RequireAssimilation;
         status.DoubleCredit = doubled;
         status.RespawnReady = ent.Comp.RespawnReady;
+        status.RerollReady = rerollReady;
         status.Thralls = thralls;
         status.Objectives = entries;
         Dirty(ent, status);

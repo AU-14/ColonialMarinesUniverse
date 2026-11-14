@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
 using Content.Server.Antag.Components;
+using Content.Server.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.Administration;
 using Content.Shared.Antag;
+using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.Database;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mind.Components;
+using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
@@ -35,6 +39,8 @@ public sealed partial class ColonyAntagVerbSystem : EntitySystem
         ["CLFVeteran"] = new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"), "clf_mil"),
         ["CorporateSpy"] = new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"), "weya_execspec"),
         ["DrugDealer"] = new SpriteSpecifier.Rsi(new("/Textures/Objects/Specific/Chemistry/pills.rsi"), "pill"),
+        // COUPLING-04: its own glyph instead of the CLF fallback
+        ["EWJoe"] = new SpriteSpecifier.Rsi(new("/Textures/CMU14/Interface/au14colonyjobicons.rsi"), "working_joe"),
         ["Fugitive"] = new SpriteSpecifier.Rsi(new("/Textures/Objects/Misc/handcuffs.rsi"), "handcuff"),
         ["Replicant"] = new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"), "hudsquad_syn"),
         ["RunawaySynth"] = new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"), "hudsquad_original"),
@@ -45,7 +51,10 @@ public sealed partial class ColonyAntagVerbSystem : EntitySystem
     };
 
     [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private EWJoeRuleSystem _ewRule = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _proto = default!;
 
     public override void Initialize()
@@ -67,6 +76,7 @@ public sealed partial class ColonyAntagVerbSystem : EntitySystem
             return;
 
         var target = targetActor.PlayerSession;
+        var user = args.User;
 
         foreach (var specifier in _proto.EnumeratePrototypes<AntagSpecifierPrototype>())
         {
@@ -92,8 +102,38 @@ public sealed partial class ColonyAntagVerbSystem : EntitySystem
                 Icon = PlaceholderIcons.GetValueOrDefault(specifier.ID, new SpriteSpecifier.Rsi(new("/Textures/_RMC14/Interface/cm_job_icons.rsi"), "hudCLF")),
                 Message = Loc.GetString(role.Objective),
                 Impact = LogImpact.High,
-                Act = () => _antag.ForceMakeAntag<GameRuleComponent>(target, ruleId, specId),
+                Act = specId == EWJoeRuleSystem.AntagId
+                    ? () => MakeEWJoe(user, target)
+                    : () => _antag.ForceMakeAntag<GameRuleComponent>(target, ruleId, specId),
             });
+        }
+    }
+
+    /// <summary>
+    /// FLOW-07: an admin's Early Warning Joe ignores the ewjoemechanics switch, which only stops the antag being
+    /// rolled. The Grand Machine stand-down (D10) still applies, and the admin is told when nothing was made.
+    /// </summary>
+    public void MakeEWJoe(EntityUid admin, ICommonSession target)
+    {
+        if (_ewRule.IsGrandMachineSelected())
+        {
+            _adminLog.Add(LogType.AntagSelection, LogImpact.Medium,
+                $"{ToPrettyString(admin):admin} tried to make {target:player} an Early Warning Joe; refused: the Grand Machine threat is active");
+            _popup.PopupEntity(Loc.GetString("ew-joe-admin-refused-grand-machine"), admin, admin, PopupType.MediumCaution);
+            return;
+        }
+
+        using (_ewRule.AdminOverride())
+        {
+            _antag.ForceMakeAntag<GameRuleComponent>(target, EWJoeRuleSystem.AntagId, EWJoeRuleSystem.AntagId);
+        }
+
+        // ForceMakeAntag refuses silently, e.g. when the round's rule already has its one Joe
+        if (target.AttachedEntity is not { } body || !HasComp<EWJoeComponent>(body))
+        {
+            _adminLog.Add(LogType.AntagSelection, LogImpact.Medium,
+                $"{ToPrettyString(admin):admin} tried to make {target:player} an Early Warning Joe; nothing was made (antag cap reached or invalid body)");
+            _popup.PopupEntity(Loc.GetString("ew-joe-admin-failed"), admin, admin, PopupType.MediumCaution);
         }
     }
 

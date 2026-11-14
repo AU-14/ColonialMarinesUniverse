@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared.Actions;
 using Content.Shared.Bed.Sleep;
+using Content.Shared.CMU14.Medical.Synth; // CMU14
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -282,9 +283,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
         }
 
         var ev = new RMCSynthRepairEvent();
-        var repairTime = selfRepair
-            ? synth.Comp.SelfRepairTime
-            : synth.Comp.RepairTime * _skills.GetSkillDelayMultiplier(user, ConstructionSkill); // CMU14
+        var repairTime = GetRepairTime(synth, user); // CMU14
         var doAfter = new DoAfterArgs(EntityManager, user, repairTime, ev, synth, used: args.Used)
         {
             BreakOnMove = true,
@@ -335,6 +334,17 @@ public abstract partial class SharedSynthSystem : EntitySystem
             // No damage: leave InteractUsing unhandled so AfterInteract can open synth surgery dispatch.
         }
     }
+
+    // CMU14 start: FLOW-11. The chassis repair delay. Self-repair pays SelfRepairTime unless the user has
+    // CMUNoSelfRepairPenaltyComponent, in which case it takes as long as someone else doing it.
+    public TimeSpan GetRepairTime(Entity<SynthComponent> synth, EntityUid user)
+    {
+        var selfPenalty = user == synth.Owner && !HasComp<CMUNoSelfRepairPenaltyComponent>(user);
+        return selfPenalty
+            ? synth.Comp.SelfRepairTime
+            : synth.Comp.RepairTime * _skills.GetSkillDelayMultiplier(user, ConstructionSkill);
+    }
+    // CMU14 end
 
     private void OnSynthRepairDoAfter(Entity<SynthComponent> synth, ref RMCSynthRepairEvent args)
     {

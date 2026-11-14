@@ -75,10 +75,7 @@ public sealed partial class CMUSynthCirculationSystem : EntitySystem
         if (!_repairable.UseFuel(used, args.User, ent.Comp.OrganRepairFuel, true))
             return;
 
-        var self = args.User == ent.Owner;
-        var delay = self
-            ? ent.Comp.OrganSelfRepairTime
-            : ent.Comp.OrganRepairTime * _skills.GetSkillDelayMultiplier(args.User, ConstructionSkill);
+        var delay = GetOrganRepairDelay(args.User, ent);
 
         var doAfter = new DoAfterArgs(EntityManager, args.User, delay, new CMUSynthOrganRepairDoAfterEvent(), ent, ent, used)
         {
@@ -96,6 +93,15 @@ public sealed partial class CMUSynthCirculationSystem : EntitySystem
             Loc.GetString("cmu-synth-organ-repair-start-others", ("user", args.User), ("target", ent.Owner), ("tool", used)),
             ent,
             args.User);
+    }
+
+    public TimeSpan GetOrganRepairDelay(EntityUid user, Entity<CMUSynthCirculationComponent> ent)
+    {
+        // CMUNoSelfRepairPenalty (EW Joe) welds itself at the same speed as anyone else would
+        if (user == ent.Owner && !HasComp<CMUNoSelfRepairPenaltyComponent>(user))
+            return ent.Comp.OrganSelfRepairTime;
+
+        return ent.Comp.OrganRepairTime * _skills.GetSkillDelayMultiplier(user, ConstructionSkill);
     }
 
     private void OnOrganRepairDoAfter(Entity<CMUSynthCirculationComponent> ent, ref CMUSynthOrganRepairDoAfterEvent args)

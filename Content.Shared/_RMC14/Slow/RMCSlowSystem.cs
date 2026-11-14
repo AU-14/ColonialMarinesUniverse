@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Movement;
 using Content.Shared.CMU14.Chemistry.Effects;
+using Content.Shared.CMU14.Movement; // CMU14
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Rejuvenate;
@@ -56,6 +57,11 @@ public sealed partial class RMCSlowSystem : EntitySystem
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
         var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow?.DurationMultiplier ?? 1) * MathF.Max(0f, chemical.Multiplier);
+        // CMU14 start - ARCH-12: incoming slow durations can be shortened (EW Joe Liturgy)
+        var slowDuration = new CMUGetSlowDurationMultiplierEvent();
+        RaiseLocalEvent(ent, ref slowDuration);
+        adjustedDuration *= MathF.Max(0f, slowDuration.Multiplier);
+        // CMU14 end
         var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSlowdownComponent>(ent);
@@ -82,6 +88,11 @@ public sealed partial class RMCSlowSystem : EntitySystem
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
         var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow?.DurationMultiplier ?? 1) * MathF.Max(0f, chemical.Multiplier);
+        // CMU14 start - ARCH-12: incoming slow durations can be shortened (EW Joe Liturgy)
+        var slowDuration = new CMUGetSlowDurationMultiplierEvent();
+        RaiseLocalEvent(ent, ref slowDuration);
+        adjustedDuration *= MathF.Max(0f, slowDuration.Multiplier);
+        // CMU14 end
         var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSuperSlowdownComponent>(ent);
@@ -109,6 +120,11 @@ public sealed partial class RMCSlowSystem : EntitySystem
                 return false;
         }
 
+        // CMU14 start - ARCH-12: incoming slow durations can be shortened (EW Joe Liturgy)
+        var slowDuration = new CMUGetSlowDurationMultiplierEvent();
+        RaiseLocalEvent(ent, ref slowDuration);
+        adjustedDuration *= MathF.Max(0f, slowDuration.Multiplier);
+        // CMU14 end
         var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCRootedComponent>(ent);

@@ -29,4 +29,12 @@ public sealed partial class EWJoeOverclockComponent : Component
 
     [DataField, AutoNetworkedField]
     public float SpeedMultiplier = 1.5f;
+
+    /// <summary>RB-28: one activation runs at most this long, then throttles back as a toggle off would.</summary>
+    [DataField]
+    public TimeSpan MaxDuration = TimeSpan.FromSeconds(15);
+
+    /// <summary>When this activation hits <see cref="MaxDuration"/>; set on startup. Server bookkeeping.</summary>
+    [DataField]
+    public TimeSpan EndsAt;
 }

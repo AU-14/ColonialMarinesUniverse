@@ -9,6 +9,12 @@ namespace Content.Shared.CMU14.Medical.Defibrillator;
 public record struct CMUDefibZapAttemptEvent(EntityUid User, EntityUid Target, bool Cancelled = false);
 
 /// <summary>
+/// Raised on the target before the charge starts, so the patient can lengthen or shorten it.
+/// </summary>
+[ByRefEvent]
+public record struct CMUDefibZapDelayEvent(EntityUid User, EntityUid Defibrillator, TimeSpan Delay);
+
+/// <summary>
 /// Raised on a defibrillator once it has started charging for a shock that lands after <see cref="Delay"/>.
 /// </summary>
 [ByRefEvent]

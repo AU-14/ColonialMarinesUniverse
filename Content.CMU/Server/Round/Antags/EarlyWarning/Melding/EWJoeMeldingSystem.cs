@@ -6,6 +6,8 @@ using Content.Shared.Alert;
 using Content.Shared.Antag;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Melding;
+using Content.Shared.CMU14.SynthRepairer;
+using Content.Shared.CMU14.Threats.Mobs.SubvertedSynth;
 using Content.Shared.CMU14.Threats.GrandMachine;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Database;
@@ -28,10 +30,13 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Melding;
 
 /// <summary>
 /// Phase E3: River-Melded conversions. Each console the Early Warning Joe assimilates schedules one
-/// conversion of a synthetic player (playtest 4: synthetics only; with none eligible the Joe is given
-/// its one respawn instead, <see cref="EWJoeRespawnSystem"/>). The victim is warned three times, then
-/// converted in place. Thralls are freed only by the Weyland reset key or by the Joe's death or
-/// stand-down (D4).
+/// conversion of a synthetic player (playtest 4: synthetics only). With none eligible the miss becomes a
+/// meld debt that is retried on the planet network for a search window (N7); only when the window closes
+/// with debts left is the Joe given its one respawn instead, <see cref="EWJoeRespawnSystem"/>. A dead,
+/// stood-down or deleted Joe's debts are dropped. The victim is warned three times, then
+/// converted in place. Thralls are freed by any synthetic reset key used by someone else, or by the Joe's
+/// death or stand-down (D4); a reset key also stops a pending meld, and either way the synthetic is skipped
+/// by meld searches for <see cref="EWJoeComponent.ResetKeyMeldImmunity"/>.
 /// </summary>
 public sealed partial class EWJoeMeldingSystem : EntitySystem
 {
@@ -55,6 +60,9 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
     /// <summary>Number of warnings before conversion, spread evenly over the meld duration.</summary>
     public const int Warnings = 3;
 
+    /// <summary>Reset-key immunity when the master is already gone (matches the component default).</summary>
+    private static readonly TimeSpan DefaultResetImmunity = TimeSpan.FromMinutes(5);
+
     private TimeSpan _nextUpdate;
 
     public override void Initialize()
@@ -67,6 +75,9 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
         SubscribeLocalEvent<RiverMeldedComponent, TargetDefibrillatedEvent>(OnThrallDefibrillated);
+        SubscribeLocalEvent<RiverMeldingComponent, TargetDefibrillatedEvent>(OnMeldingDefibrillated);
+        // level 0 is applied on selection, so this hands the Joe its machine channel before any thrall exists
+        SubscribeLocalEvent<EWJoeLevelChangedEvent>(OnJoeLevelChanged);
         SubscribeLocalEvent<RiverMeldedComponent, ComponentShutdown>(OnMeldedShutdown);
         SubscribeLocalEvent<RiverMeldedComponent, EntityTerminatingEvent>(OnMeldedTerminating);
     }
@@ -96,6 +107,20 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
             Cure(thrall, "the master is gone");
         }
 
+        // lapsed reset-key immunities; the eligibility gate already ignores them, this only tidies up
+        var lapsed = new List<EntityUid>();
+        var immuneQuery = EntityQueryEnumerator<RiverMeldImmuneComponent>();
+        while (immuneQuery.MoveNext(out var uid, out var immune))
+        {
+            if (now >= immune.Until)
+                lapsed.Add(uid);
+        }
+
+        foreach (var uid in lapsed)
+        {
+            RemComp<RiverMeldImmuneComponent>(uid);
+        }
+
         var pending = new List<(EntityUid Uid, RiverMeldingComponent Comp)>();
         var query = EntityQueryEnumerator<RiverMeldingComponent>();
         while (query.MoveNext(out var uid, out var comp))
@@ -123,6 +148,8 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
             if (now >= melding.ConvertAt && melding.WarningsSent >= Warnings)
                 Convert(victim, melding);
         }
+
+        UpdateMeldDebts(now);
     }
 
     #region Scheduling
@@ -133,19 +160,30 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
     }
 
     /// <summary>
-    /// Picks a synthetic victim and starts the countdown. When none is eligible the Joe is given its one
-    /// respawn instead (playtest 4) and this returns false; the console still counts.
+    /// Picks a synthetic victim and starts the countdown. When none is eligible this returns false (the
+    /// console still counts) and the miss becomes a meld debt (N7): the river searches the planet
+    /// network again every <see cref="EWJoeComponent.MeldRetry"/>, and only when
+    /// <see cref="EWJoeComponent.MeldSearchWindow"/> runs out with debts left is the Joe given its one
+    /// respawn (playtest 4; at most once per round since RB-05). A zero window grants the respawn at once.
     /// </summary>
     public bool TryStartMeld(Entity<EWJoeComponent> joe)
     {
-        if (PickMeldTarget(joe) is not { } victim)
+        var rejections = new MeldRejections();
+        if (PickMeldTarget(joe, rejections) is { } victim)
         {
-            _adminLogger.Add(LogType.Action, LogImpact.Low,
-                $"Early Warning Joe {ToPrettyString(joe):joe} found no synthetic to meld");
-            _respawn.Grant(joe);
-            return false;
+            StartMeld(joe, victim);
+            return true;
         }
 
+        var reasons = rejections.ToString();
+        _adminLogger.Add(LogType.Action, LogImpact.Low,
+            $"Early Warning Joe {ToPrettyString(joe):joe} found no synthetic to meld ({reasons})");
+        AddMeldDebt(joe);
+        return false;
+    }
+
+    private void StartMeld(Entity<EWJoeComponent> joe, EntityUid victim)
+    {
         var melding = EnsureComp<RiverMeldingComponent>(victim);
         melding.Master = joe;
         melding.StartedAt = _timing.CurTime;
@@ -154,7 +192,103 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
 
         _adminLogger.Add(LogType.Action, LogImpact.High,
             $"Early Warning Joe {ToPrettyString(joe):joe} began melding {ToPrettyString(victim):victim}");
-        return true;
+    }
+
+    /// <summary>
+    /// Records a missed meld. The first debt of a search opens the window and tells the Joe once; later
+    /// debts join the open search.
+    /// </summary>
+    private void AddMeldDebt(Entity<EWJoeComponent> joe)
+    {
+        if (joe.Comp.MeldSearchWindow <= TimeSpan.Zero)
+        {
+            _respawn.Grant(joe);
+            return;
+        }
+
+        var searching = joe.Comp.PendingMelds > 0;
+        joe.Comp.PendingMelds++;
+        if (searching)
+            return;
+
+        var now = _timing.CurTime;
+        joe.Comp.MeldSearchUntil = now + joe.Comp.MeldSearchWindow;
+        joe.Comp.NextMeldRetry = now + joe.Comp.MeldRetry;
+        _messages.Notify(joe, Loc.GetString("cmu-ew-joe-meld-searching"));
+    }
+
+    /// <summary>
+    /// Every <see cref="EWJoeComponent.MeldRetry"/>, and once more when the window closes, each open debt
+    /// looks for a synthetic. Debts still open when the window closes give the copy once between them:
+    /// <see cref="EWJoeRespawnSystem.Grant"/> never holds more than one.
+    /// </summary>
+    private void UpdateMeldDebts(TimeSpan now)
+    {
+        var debtors = new List<Entity<EWJoeComponent>>();
+        var query = EntityQueryEnumerator<EWJoeComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.PendingMelds > 0)
+                debtors.Add((uid, comp));
+        }
+
+        foreach (var joe in debtors)
+        {
+            if (TerminatingOrDeleted(joe))
+                continue;
+
+            if (_mobState.IsDead(joe))
+            {
+                ClearMeldDebts(joe, "the Joe is dead");
+                continue;
+            }
+
+            var expired = now >= joe.Comp.MeldSearchUntil;
+            if (!expired && now < joe.Comp.NextMeldRetry)
+                continue;
+
+            joe.Comp.NextMeldRetry = now + joe.Comp.MeldRetry;
+
+            // each pick re-counts from zero, so the log below describes the last, failed search only
+            var rejections = new MeldRejections();
+            while (joe.Comp.PendingMelds > 0)
+            {
+                rejections = new MeldRejections();
+                if (PickMeldTarget(joe, rejections) is not { } victim)
+                    break;
+
+                joe.Comp.PendingMelds--;
+                StartMeld(joe, victim);
+                var left = joe.Comp.PendingMelds;
+                _adminLogger.Add(LogType.Action, LogImpact.Medium,
+                    $"Early Warning Joe {ToPrettyString(joe):joe} paid a meld debt with {ToPrettyString(victim):victim}, {left} left");
+            }
+
+            if (joe.Comp.PendingMelds <= 0 || !expired)
+                continue;
+
+            var debts = joe.Comp.PendingMelds;
+            joe.Comp.PendingMelds = 0;
+            var reasons = rejections.ToString();
+            _adminLogger.Add(LogType.Action, LogImpact.Medium,
+                $"Early Warning Joe {ToPrettyString(joe):joe} found no synthetic to meld for {debts} debt(s) before its search window closed ({reasons})");
+
+            // RB-05: a copy already held says so; one already given this round is not given again
+            if (!_respawn.Grant(joe))
+                _messages.Notify(joe, Loc.GetString(joe.Comp.RespawnReady ? "cmu-ew-joe-meld-search-ended" : "cmu-ew-joe-meld-search-ended-spent"));
+        }
+    }
+
+    /// <summary>Drops every open meld debt without granting the copy (death, stand-down).</summary>
+    private void ClearMeldDebts(EntityUid joe, string why)
+    {
+        if (!TryComp(joe, out EWJoeComponent? comp) || comp.PendingMelds <= 0)
+            return;
+
+        var debts = comp.PendingMelds;
+        comp.PendingMelds = 0;
+        _adminLogger.Add(LogType.Action, LogImpact.Low,
+            $"Early Warning Joe {ToPrettyString(joe):joe} dropped {debts} meld debt(s): {why}");
     }
 
     private bool StillValid(EntityUid victim, RiverMeldingComponent melding)
@@ -244,11 +378,7 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
         }
 
         GrantRadio(victim, master.ThrallRadioChannel, melded);
-        if (!master.GrantedMachineRadio)
-        {
-            GrantRadio(masterUid, master.ThrallRadioChannel, null);
-            master.GrantedMachineRadio = true;
-        }
+        GrantMasterRadio((masterUid, master));
 
         if (!master.Thralls.Contains(victim))
             master.Thralls.Add(victim);
@@ -326,12 +456,16 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
             CancelMeld(args.Target, "victim died");
 
         if (HasComp<EWJoeComponent>(args.Target))
+        {
             FreeAll(args.Target, "the Joe died");
+            ClearMeldDebts(args.Target, "the Joe died");
+        }
     }
 
     private void OnJoeRemoved(ref EWJoeRemovedEvent args)
     {
         FreeAll(args.Joe, "the Joe stood down");
+        ClearMeldDebts(args.Joe, "the Joe stood down");
 
         if (TryComp(args.Joe, out EWJoeComponent? comp) && comp.GrantedMachineRadio && comp.ThrallRadioChannel is { } channel)
         {
@@ -340,13 +474,66 @@ public sealed partial class EWJoeMeldingSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Any synthetic reset key frees a thrall (the Working Joe reboot verb zaps with one too). A thrall cannot
+    /// reset itself. The freed synthetic is then skipped by meld searches for a while.
+    /// </summary>
     private void OnThrallDefibrillated(Entity<RiverMeldedComponent> ent, ref TargetDefibrillatedEvent args)
     {
-        // only the Weyland key; Seegson keys and the Working Joe reboot verb run the same path
-        if (!HasComp<CMUWeylandResetKeyComponent>(args.Defibrillator))
+        if (!IsResetKeyByOther(ent, args))
             return;
 
-        Cure(ent, $"Weyland reset key used by {ToPrettyString(args.User)}");
+        var master = ent.Comp.Master;
+        Cure(ent, $"reset key {ToPrettyString(args.Defibrillator.Owner)} used by {ToPrettyString(args.User)}");
+        GrantResetImmunity(ent, master);
+    }
+
+    /// <summary>A reset key on a synthetic the river is still reaching for stops the meld before it lands.</summary>
+    private void OnMeldingDefibrillated(Entity<RiverMeldingComponent> ent, ref TargetDefibrillatedEvent args)
+    {
+        if (!IsResetKeyByOther(ent, args))
+            return;
+
+        var master = ent.Comp.Master;
+        CancelMeld(ent, $"reset key {ToPrettyString(args.Defibrillator.Owner)} used by {ToPrettyString(args.User)}");
+        GrantResetImmunity(ent, master);
+        _popup.PopupEntity(Loc.GetString("cmu-ew-joe-meld-reset"), ent, ent, PopupType.Medium);
+    }
+
+    private bool IsResetKeyByOther(EntityUid target, TargetDefibrillatedEvent args)
+    {
+        // a subversion key inherits the reset key's component but never acts as a reset (SubvertedSynthRuleSystem)
+        return args.User != target && HasComp<SynthRepairerComponent>(args.Defibrillator)
+            && !HasComp<SynthSubverterComponent>(args.Defibrillator);
+    }
+
+    private void GrantResetImmunity(EntityUid synth, EntityUid? master)
+    {
+        var duration = TryComp(master, out EWJoeComponent? joe) ? joe.ResetKeyMeldImmunity : DefaultResetImmunity;
+
+        if (duration <= TimeSpan.Zero)
+            return;
+
+        var immune = EnsureComp<RiverMeldImmuneComponent>(synth);
+        var until = _timing.CurTime + duration;
+        if (until > immune.Until)
+            immune.Until = until;
+    }
+
+    private void OnJoeLevelChanged(ref EWJoeLevelChangedEvent args)
+    {
+        if (TryComp(args.Joe, out EWJoeComponent? joe))
+            GrantMasterRadio((args.Joe, joe));
+    }
+
+    /// <summary>The Joe's own machine channel, once; stand-down revokes it.</summary>
+    private void GrantMasterRadio(Entity<EWJoeComponent> joe)
+    {
+        if (joe.Comp.GrantedMachineRadio || joe.Comp.ThrallRadioChannel is null)
+            return;
+
+        GrantRadio(joe, joe.Comp.ThrallRadioChannel, null);
+        joe.Comp.GrantedMachineRadio = true;
     }
 
     private void OnMeldedShutdown(Entity<RiverMeldedComponent> ent, ref ComponentShutdown args)

@@ -148,7 +148,8 @@
       components:
       - Item
 
-# Offer: a loose firearm an Offer directive asks for is taken in and leaves play (EWJoeOfferSystem).
+# Offer: a loose item an Offer directive asks for is taken in and leaves play; a structure a Meld directive asks
+# for is melded into the river where it stands (EWJoeOfferSystem).
 - type: entity
   id: CMUActionEWJoeOffer
   parent: ActionMarineBase
@@ -170,12 +171,17 @@
   - type: EntityTargetAction
     canTargetSelf: false
     event: !type:EWJoeOfferActionEvent
-    # a carried firearm, not a sentry, FOB gun, drone, attachment or vehicle hardpoint (EWJoeOfferSystem.IsOfferable)
+    # FLOW-14: anything some Offer directive in ew_joe.yml can want (firearms, ordnance, cameras, telecomms servers,
+    # threat structures); the server decides what this Joe's open directives want (EWJoeOfferSystem.IsOfferable).
+    # Never a sentry, FOB gun, drone, attachment or vehicle hardpoint.
     whitelist:
-      requireAll: true
+      requireAll: false
       components:
       - Gun
-      - Item
+      - Explosive
+      - SurveillanceCamera
+      - TelecomServer
+      - CMUThreatStructure
     blacklist:
       components:
       - Sentry
@@ -285,6 +291,34 @@
       components:
       - MobState
 
+# ECS-05: Desecrate, a targeted punch like Leg Sweep (heavy Blunt, a guaranteed fracture, a knockback
+# armed with the obstacle slam). Its numbers are on EWJoeDesecrate, granted with it at level 2.
+- type: entity
+  id: CMUActionEWJoeDesecrate
+  parent: ActionMarineBase
+  components:
+  - type: EWJoeDropsSurrender
+  - type: EWJoeAbilityGroup
+    group: Hands
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_crush
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: true
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:EWJoeDesecrateActionEvent
+    whitelist:
+      components:
+      - MobState
+
 - type: entity
   id: CMUActionEWJoeSense
   parent: ActionMarineBase
@@ -374,7 +408,7 @@
   - type: InstantAction
     event: !type:EWJoeMacheteActionEvent
 
-# A-18: one Consecrate per 8 s by cooldown, so heat is the limiter rather than spam.
+# A-18: heat is the main limiter. Rebalance RB-20: one Consecrate per 16 s by cooldown (was 8).
 - type: entity
   id: CMUActionEWJoeConsecrate
   parent: ActionMarineBase
@@ -384,7 +418,7 @@
     group: Engine
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 8
+    useDelay: 16
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
@@ -401,6 +435,7 @@
       components:
       - MobState
 
+# Rebalance RB-23: 45 s cooldown (was 25) and 20 heat (EWJoeComponent.UnwindHeat).
 - type: entity
   id: CMUActionEWJoeUnwind
   parent: ActionMarineBase
@@ -410,7 +445,7 @@
     group: Machine
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 25
+    useDelay: 45
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
@@ -469,9 +504,10 @@
   - type: EWJoeDropsSurrender
   - type: EWJoeAbilityGroup
     group: Engine
+  # rebalance RB-21: 15 s (was 12)
   - type: Action
     itemIconStyle: NoItem
-    useDelay: 12
+    useDelay: 15
   - type: Sprite
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi

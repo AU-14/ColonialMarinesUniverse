@@ -1,6 +1,7 @@
 
 - type: threat
   id: NeomorphsThreat
+  xenofauna: true # non-humanoid threat life; EW Joe xenofauna directives
   voteCooldownGroup: Neomorphs
   lorePrimer: AU14PrimerThreatNeomorphs
   roundstartspawns: NeomorphsThreatSpawns
@@ -28,6 +29,7 @@
 
 - type: threat
   id: NeomorphsThreatCF
+  xenofauna: true # non-humanoid threat life; EW Joe xenofauna directives
   voteCooldownGroup: Neomorphs
   lorePrimer: AU14PrimerThreatNeomorphs
   roundstartspawns: NeomorphsThreatSpawnsCF

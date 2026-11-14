@@ -39,9 +39,16 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public ProtoId<EWJoeLevelsPrototype> LevelTable = "CMUEWJoeLevels";
 
-    /// <summary>Melee and bullet armor added per level (Sculpted Form).</summary>
+    /// <summary>Bullet armor added per level (Sculpted Form; rebalance RB-01: +4, 20 at level 5).</summary>
     [DataField, AutoNetworkedField]
-    public int ArmorPerLevel = 5;
+    public int BulletArmorPerLevel = 4;
+
+    /// <summary>
+    /// Melee armor added per level (Sculpted Form; rebalance RB-02: +2, 10 at level 5). Scales slower than
+    /// <see cref="BulletArmorPerLevel"/> so xeno claws keep up with the Joe at even tier.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int MeleeArmorPerLevel = 2;
 
     /// <summary>The innate slowdown the Joe starts with; shed by <see cref="SlowdownShedPerLevel"/> each level.</summary>
     [DataField, AutoNetworkedField]
@@ -59,6 +66,14 @@ public sealed partial class EWJoeComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan TestOfFaithStun = TimeSpan.FromSeconds(1.5);
+
+    /// <summary>
+    /// ECS-11: every EW Joe stun on xenofauna is multiplied by this before RMC's own xeno reduction (×0.667),
+    /// so a xeno is held for a real window instead of a split second. Routed through EWJoeTargetRules.ScaleStun.
+    /// Rebalance RB-16: 1.5, so after RMC's reduction a xeno is held about as long as a human (≈1.0×).
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float XenofaunaStunMultiplier = 1.5f;
 
     /// <summary>Disrupt: the level-0 EMP pulse. Lights, headsets and batteries respond today.</summary>
     [DataField, AutoNetworkedField]
@@ -82,7 +97,7 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public bool AddedArmorUser;
 
-    /// <summary>The machine radio channel was granted to the Joe (first thrall); stand-down revokes it.</summary>
+    /// <summary>The machine radio channel was granted to the Joe (on selection); stand-down revokes it.</summary>
     [DataField]
     public bool GrantedMachineRadio;
 
@@ -173,7 +188,10 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public EntProtoId CoreShardPrototype = "CMUEWJoeCoreShard";
 
-    /// <summary>Set after the shard dropped so a revived Joe never drops a second one.</summary>
+    /// <summary>
+    /// Set after the first shard drop. Later drops (a defibrillated Joe dying again) cover only consoles whose
+    /// own marker has no shard yet (<see cref="EWJoeAssimilatedConsoleComponent.ShardDropped"/>).
+    /// </summary>
     [DataField]
     public bool ShardDropped;
 
@@ -197,8 +215,23 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public TimeSpan SweepKnockdown = TimeSpan.FromSeconds(1.5);
 
+    /// <summary>Flat Blunt added to the RMC impact damage (lowered from 40).</summary>
     [DataField]
-    public int SlamDamage = 40;
+    public int SlamDamage = 35;
+
+    /// <summary>
+    /// Blunt added to every bare-handed hit. The fists themselves are the shared Working Joe mob's melee
+    /// weapon (Blunt 60), so the Early Warning Joe's extra lives here rather than on the mob prototype.
+    /// </summary>
+    [DataField]
+    public float UnarmedBonusDamage = 6f;
+
+    /// <summary>
+    /// Added to a defibrillator's or reset key's charge time on the Joe. A defibrillator zap is the only way
+    /// the Joe is brought back; chemical revival and the Working Joe reboot verb stay refused.
+    /// </summary>
+    [DataField]
+    public TimeSpan DefibDoAfterBonus = TimeSpan.FromSeconds(2);
 
     [DataField]
     public TimeSpan SlamParalyze = TimeSpan.FromSeconds(2);
@@ -240,20 +273,35 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public TimeSpan OfferDelay = TimeSpan.FromSeconds(3);
 
+    /// <summary>How long a timed Scour buff lasts (baton, radio). Body armor has its own, shorter window.</summary>
     [DataField]
     public TimeSpan ScourDuration = TimeSpan.FromMinutes(5);
 
+    /// <summary>How long the digested body armor's bullet armor lasts (rebalance RB-03: 3 min).</summary>
     [DataField]
-    public int ScourBulletArmor = 10;
+    public TimeSpan ScourArmorDuration = TimeSpan.FromMinutes(3);
+
+    /// <summary>Bullet armor from digested body armor (rebalance RB-03: +5).</summary>
+    [DataField]
+    public int ScourBulletArmor = 5;
 
     [DataField]
     public double ScourPunchStamina = 15;
 
+    /// <summary>Fuel-can self-repair per second (rebalance RB-04: 2, so 90 over the window).</summary>
     [DataField]
-    public float ScourRepairPerSecond = 5f;
+    public float ScourRepairPerSecond = 2f;
 
+    /// <summary>The fuel-can self-repair window (rebalance RB-04: 45 s).</summary>
     [DataField]
-    public TimeSpan ScourRepairDuration = TimeSpan.FromSeconds(60);
+    public TimeSpan ScourRepairDuration = TimeSpan.FromSeconds(45);
+
+    /// <summary>
+    /// Rebalance RB-04: the fuel-can self-repair stops for this long after the Joe takes damage. The pause does
+    /// not extend the repair window.
+    /// </summary>
+    [DataField]
+    public TimeSpan ScourRepairDamagePause = TimeSpan.FromSeconds(5);
 
     [DataField]
     public List<ProtoId<RadioChannelPrototype>> ScourRadioChannels = new() { "Colony", "radioCMB" };
@@ -279,8 +327,9 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public EntProtoId MachetePrototype = "CMUEWJoeMachete";
 
+    /// <summary>Heat paid per Consecrate (rebalance RB-20: 30).</summary>
     [DataField]
-    public float ConsecrateHeat = 25f;
+    public float ConsecrateHeat = 30f;
 
     /// <summary>Targets in the chain, the clicked one included.</summary>
     [DataField]
@@ -289,21 +338,31 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public float ConsecrateJumpRange = 3f;
 
-    /// <summary>Raw Heat per target; armor applies (A-12: ~18 through M3).</summary>
+    /// <summary>
+    /// Raw Heat per target in the chain (rebalance RB-11: 40). The rebalance audit (RB-11) found that M3 armor
+    /// does not reduce it; the old "~18 through M3" note was wrong.
+    /// </summary>
     [DataField]
-    public int ConsecrateDamage = 60;
+    public int ConsecrateDamage = 40;
 
+    /// <summary>Paralyze per target in the chain (rebalance RB-20: 1.5 s).</summary>
     [DataField]
-    public TimeSpan ConsecrateParalyze = TimeSpan.FromSeconds(3);
+    public TimeSpan ConsecrateParalyze = TimeSpan.FromSeconds(1.5);
 
     [DataField]
     public EntProtoId ConsecrateBeam = "EffectTeslaBeam";
 
+    /// <summary>Unwind's reach, guns and sentries alike (rebalance RB-23: 4 tiles).</summary>
     [DataField]
-    public float UnwindRange = 6f;
+    public float UnwindRange = 4f;
 
+    /// <summary>How long Unwind holds a sentry off (rebalance RB-23: 6 s).</summary>
     [DataField]
-    public TimeSpan UnwindSentryLockout = TimeSpan.FromSeconds(10);
+    public TimeSpan UnwindSentryLockout = TimeSpan.FromSeconds(6);
+
+    /// <summary>Heat paid per Unwind (rebalance RB-23: 20; it was free).</summary>
+    [DataField]
+    public float UnwindHeat = 20f;
 
     /// <summary>Racking the jammed chamber clear takes this long (A-13: 2 s).</summary>
     [DataField]
@@ -358,6 +417,13 @@ public sealed partial class EWJoeComponent : Component
     [DataField]
     public ProtoId<RadioChannelPrototype>? ThrallRadioChannel = "CMUGrandMachine";
 
+    /// <summary>
+    /// How long a synthetic freed by a reset key is skipped by every meld search: the debt retries and the
+    /// next console's conversion alike.
+    /// </summary>
+    [DataField]
+    public TimeSpan ResetKeyMeldImmunity = TimeSpan.FromMinutes(5);
+
     // Playtest 4: the river takes synthetics only. An assimilation that finds no synthetic to meld keeps
     // a copy of the Joe instead: one respawn, never more than one held at a time.
 
@@ -392,6 +458,95 @@ public sealed partial class EWJoeComponent : Component
     /// <summary>Random tiles tried when looking for a place to come back.</summary>
     [DataField]
     public int RespawnAttempts = 300;
+
+    // ---- N7 (FLOW-05): meld debt. An assimilation that finds no synthetic does not give the copy at
+    // once: the river keeps searching the planet network every MeldRetry for up to MeldSearchWindow.
+    // Every debt still open when the window closes gives the copy once between them (never more than
+    // one held). Server bookkeeping.
+
+    /// <summary>Assimilations still waiting for a synthetic to meld.</summary>
+    [DataField]
+    public int PendingMelds;
+
+    /// <summary>When the current search gives up and grants the copy. Set by the first debt of a search.</summary>
+    [DataField]
+    public TimeSpan MeldSearchUntil;
+
+    /// <summary>The next time the open debts look for a synthetic again.</summary>
+    [DataField]
+    public TimeSpan NextMeldRetry;
+
+    /// <summary>How long the river searches before it keeps a copy instead. Zero grants the copy at once (playtest 4 behaviour).</summary>
+    [DataField]
+    public TimeSpan MeldSearchWindow = TimeSpan.FromMinutes(5);
+
+    /// <summary>How often an open debt looks for a synthetic again.</summary>
+    [DataField]
+    public TimeSpan MeldRetry = TimeSpan.FromSeconds(15);
+
+    // ---- N5 (FLOW-02): Machine Grip. The Joe's first Ctrl-click on a valid target telegraphs and then goes
+    // straight to an aggressive grab (EWJoeMachineGripSystem). EWJoeRuleSystem applies the per-level grants below.
+
+    /// <summary>The windup between the pull and the aggressive grab; the victim breaks it by moving away.</summary>
+    [DataField]
+    public TimeSpan GripTelegraph = TimeSpan.FromSeconds(0.4);
+
+    /// <summary>
+    /// The windup against a large xeno (RMC size Big: the grabbable T3s such as the praetorian, boiler and despoiler)
+    /// is this many times <see cref="GripTelegraph"/>; the manual Ctrl-click upgrade waits just as long.
+    /// </summary>
+    [DataField]
+    public float LargeXenoGripMultiplier = 1.5f;
+
+    /// <summary>How far apart the Joe and the victim may get during the windup.</summary>
+    [DataField]
+    public float GripTelegraphRange = 1.5f;
+
+    /// <summary>
+    /// Break-free time multiplier the Joe's grabs impose, indexed by level; levels past the end use the last entry
+    /// (rebalance RB-19: x1.0 at L0-1, x1.25 at L2-3, x1.5 from L4).
+    /// </summary>
+    [DataField]
+    public List<float> GripEscapeMultipliers = new() { 1f, 1f, 1.25f, 1.25f, 1.5f };
+
+    /// <summary>
+    /// From this level the Joe can aggressively grab xenos up to tier 3 and size Big, never the heavies
+    /// (CMUXenoGrabberComponent).
+    /// </summary>
+    [DataField]
+    public int XenoGripLevel = 2;
+
+    /// <summary>An aggressive grab on a xeno is released after this long.</summary>
+    [DataField]
+    public TimeSpan XenoGripHoldCap = TimeSpan.FromSeconds(3);
+
+    /// <summary>After a xeno grab ends, no xeno can be aggressively grabbed again for this long.</summary>
+    [DataField]
+    public TimeSpan XenoGripCooldown = TimeSpan.FromSeconds(10);
+
+    /// <summary>
+    /// Entity prototype whose ParalyzeImmuneFrom entry is copied onto a Joe that lacks one at the xeno-grip level, so
+    /// pulling a small caste does not paralyze it. The synthetic add-list whitelists the same RMCSynthGrabbable castes.
+    /// </summary>
+    [DataField]
+    public EntProtoId XenoGripPullImmunity = "RMCSynthAddComponents";
+
+    /// <summary>The mob's own CanFiremanCarry.AggressiveGrabDelay, restored on stand-down. Server bookkeeping.</summary>
+    [DataField]
+    public TimeSpan? OriginalAggressiveGrabDelay;
+
+    /// <summary>The mob's own escape multiplier when it had one before the grants. Server bookkeeping.</summary>
+    [DataField]
+    public float? OriginalGripEscapeMultiplier;
+
+    [DataField]
+    public bool AddedGripEscapeMultiplier;
+
+    [DataField]
+    public bool AddedXenoGrabber;
+
+    [DataField]
+    public bool AddedParalyzeImmuneFrom;
 }
 
 /// <summary>
