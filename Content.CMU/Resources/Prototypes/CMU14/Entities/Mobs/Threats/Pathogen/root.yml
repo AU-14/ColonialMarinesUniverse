@@ -122,7 +122,7 @@
   - type: XenoGuardianSweep
     damage:
       types:
-        Blunt: 30
+        Blunt: 0
   - type: XenoFling
     range: 5
     healAmount: 125
@@ -132,7 +132,7 @@
     throwSpeed: 12
     damage:  
       types:  
-        Blunt: 50
+        Blunt: 0
   - type: XenoGuardian
     linkDuration: 10
   - type: GuardianCritSave
