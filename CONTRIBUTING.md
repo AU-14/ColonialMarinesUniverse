@@ -150,7 +150,8 @@ Before submitting, re-check the diff:
 - the full diff was reviewed: no stray whitespace, unintended hunks, or line-ending changes.
 
 Balance and gameplay decisions without an established precedent should be discussed on
-Discord or in an issue first. Don't guess through a high-impact ambiguity.
+Discord or in an issue first. Don't guess through a high-impact ambiguity. For balance PRs,
+see [BALANCE.md](BALANCE.md).
 
 ## Reviews
 

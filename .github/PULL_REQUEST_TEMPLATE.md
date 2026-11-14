@@ -4,7 +4,24 @@
 <!-- What did you change? -->
 
 ## Why / Balance
-<!-- Discuss how this would affect game balance or explain why it was changed. Link any relevant discussions or issues. -->
+<!-- See BALANCE.md. Pick a tier. The bigger it is, the more you write here.
+None: one line on why.
+Minor: problem and baseline, every value before -> after.
+Significant: answer all five.
+Major: all five in detail, plus a link to the design issue or Discord thread and a test plan.
+Delete what your tier doesn't need. -->
+
+**Tier:** None / Minor / Significant / Major
+
+**Problem:** <!-- What goes wrong in a round? Which mode, which situation? -->
+
+**Baseline:** <!-- What does cmss13/RMC14 do, what does CMU do now? Every changed value before -> after. -->
+
+**Why this fix:** <!-- Why this and not something else, or nothing? -->
+
+**Counterplay:** <!-- Who's on the receiving end and what can they still do about it? -->
+
+**Revert if:** <!-- What would make us revert it? -->
 
 ## Technical details
 <!-- Summary of code changes for easier review. -->
