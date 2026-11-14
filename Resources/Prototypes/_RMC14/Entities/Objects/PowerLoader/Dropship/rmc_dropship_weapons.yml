@@ -51,8 +51,9 @@
 - type: entity
   parent: RMCDropshipAttachmentWeapon
   id: CMUDropshipAttachmentM4332FlareLauncher
-  name: M4332 Signal Flare Launcher
-  description: A pilot-controlled forward signal-flare launcher with a limited gimbal. It can only be installed on a direct-fire attach point.
+  # CMU14: This launcher also supports the gunship Bangalore ammunition box.
+  name: M4332 Munition Launcher
+  description: A pilot-controlled forward munition launcher with a limited gimbal. It accepts signal-flare and Bangalore ammunition boxes and can only be installed on a direct-fire attach point.
   components:
   - type: Sprite
     sprite: CMU14/Objects/Dropship/m4332_flare_launcher.rsi
@@ -69,7 +70,7 @@
     attachableTypes:
     - RMCDropshipDirectFirePoint
   - type: DropshipWeapon
-    abbreviation: FLR
+    abbreviation: MUN
     directFireOnly: true
     weaponAttachedSprite:
       sprite: CMU14/Objects/Dropship/m4332_flare_launcher.rsi
@@ -83,6 +84,8 @@
   - type: GunshipDirectFireWeapon
     projectile: RMCFlareCASBullet
     ammoPrototype: CMUDropshipAttachmentAmmoM4332Flares
+    additionalAmmoPrototypes:
+    - CMUDropshipAttachmentAmmoBangalore
     gimbalDegrees: 30
   - type: Gun
     projectileSpeed: 20

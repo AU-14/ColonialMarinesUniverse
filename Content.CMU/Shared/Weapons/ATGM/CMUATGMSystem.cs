@@ -9,7 +9,10 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
@@ -20,8 +23,8 @@ using Robust.Shared.Timing;
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     A.T.G.M. crew interactions: loading a missile, wiring the spotter's finder to the launcher, and the
-///     two-man fire interlock. Missile flight and guidance are server-only (see the server guidance system).
+///     A.T.G.M. crew interactions: loading a missile and optionally wiring a finder to the launcher for target
+///     locks. Gunship launchers are guided by their shooter; ground launchers retain their trained spotter and finder.
 /// </summary>
 /// <remarks>
 ///     Loading is handled on the tripod because <see cref="SharedWeaponMountSystem"/> only reloads through a
@@ -40,10 +43,11 @@ public sealed partial class CMUATGMSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedRMCTargetingSystem _targeting = default!;
+    [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
@@ -128,7 +132,8 @@ public sealed partial class CMUATGMSystem : EntitySystem
             reason = "cmu-atgm-not-deployed";
         else if (mount.Comp2.User == user)
             reason = "cmu-atgm-gunner-cannot-load";
-        else if (!_skills.HasSkill(user, launcher.Comp1.Skill, 1))
+        else if (RequiresFinderGuidance((launcher.Owner, launcher.Comp1)) &&
+                 !_skills.HasSkill(user, launcher.Comp1.Skill, 1))
             reason = "cmu-atgm-unskilled";
         else if (_gun.IsFull((launcher, launcher.Comp2)))
             reason = "cmu-atgm-already-loaded";
@@ -191,7 +196,7 @@ public sealed partial class CMUATGMSystem : EntitySystem
 
         if (!IsDeployed(mount))
             reason = "cmu-atgm-not-deployed";
-        else if (!_skills.HasSkill(user, launcher.Comp.Skill, 1))
+        else if (RequiresFinderGuidance(launcher) && !_skills.HasSkill(user, launcher.Comp.Skill, 1))
             reason = "cmu-atgm-unskilled";
 
         if (reason == null)
@@ -242,18 +247,6 @@ public sealed partial class CMUATGMSystem : EntitySystem
         args.PushMarkup(Loc.GetString(linked ? "cmu-atgm-finder-examine-linked" : "cmu-atgm-finder-examine-unlinked"));
         if (ent.Comp.LockedTarget is { } target && !TerminatingOrDeleted(target))
             args.PushMarkup(Loc.GetString("cmu-atgm-finder-examine-locked", ("target", target)));
-    }
-
-    private void OnLauncherAttemptShoot(Entity<CMUATGMLauncherComponent> ent, ref AttemptShootEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        if (TryGetSpotter(ent, args.User, out _, out _, out var reason))
-            return;
-
-        args.Cancelled = true;
-        _popup.PopupEntity(Loc.GetString(reason), args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnLauncherShutdown(Entity<CMUATGMLauncherComponent> ent, ref ComponentShutdown args)
@@ -343,30 +336,72 @@ public sealed partial class CMUATGMSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Whether the tripod is anchored and unfolded.
+    ///     Whether the tripod is unfolded and anchored, or, when <see cref="CMUATGMMountComponent.RequireAnchored"/>
+    ///     is off, unfolded and out of storage.
     /// </summary>
     public bool IsDeployed(EntityUid mount)
     {
-        return Transform(mount).Anchored && !_foldable.IsFolded(mount);
+        if (TryComp(mount, out FoldableComponent? foldable) && _foldable.IsFolded(mount, foldable))
+            return false;
+
+        if (Transform(mount).Anchored)
+            return true;
+
+        return TryComp(mount, out CMUATGMMountComponent? atgm) &&
+               !atgm.RequireAnchored &&
+               !_container.IsEntityInContainer(mount);
     }
 
     /// <summary>
-    ///     Whether <paramref name="guider"/> can currently steer with <paramref name="finder"/>: alive, conscious
-    ///     and holding it.
+    ///     Whether <paramref name="guider"/> can currently steer: alive and conscious.
     /// </summary>
-    public bool CanGuide(EntityUid guider, EntityUid finder)
+    public bool CanGuide(EntityUid guider, EntityUid? finder = null)
     {
         return !TerminatingOrDeleted(guider) &&
-               !TerminatingOrDeleted(finder) &&
                _mobState.IsAlive(guider) &&
                !_mobState.IsIncapacitated(guider) &&
-               _hands.IsHolding(guider, finder);
+               (finder == null || (!TerminatingOrDeleted(finder.Value) && _hands.IsHolding(guider, finder.Value)));
     }
 
     /// <summary>
-    ///     The two-man interlock: finds the spotter who would guide a missile fired by <paramref name="gunner"/>.
+    ///     Whether a launcher belongs to an unanchored gunship hardpoint.
     /// </summary>
-    /// <param name="reason">Locale id explaining why no spotter is available.</param>
+    public bool IsGunshipLauncher(Entity<CMUATGMLauncherComponent> launcher)
+    {
+        return TryComp(launcher, out MountableWeaponComponent? mountable) &&
+               GetEntity(mountable.MountedTo) is { } mount &&
+               TryComp(mount, out CMUATGMMountComponent? atgm) &&
+               !atgm.RequireAnchored;
+    }
+
+    private bool RequiresFinderGuidance(Entity<CMUATGMLauncherComponent> launcher)
+    {
+        return !IsGunshipLauncher(launcher);
+    }
+
+    private void OnLauncherAttemptShoot(Entity<CMUATGMLauncherComponent> ent, ref AttemptShootEvent args)
+    {
+        if (args.Cancelled || IsGunshipLauncher(ent))
+            return;
+
+        if (!_skills.HasSkill(args.User, ent.Comp.Skill, 1))
+        {
+            args.Cancelled = true;
+            _popup.PopupEntity(Loc.GetString("cmu-atgm-unskilled", ("launcher", ent.Owner)),
+                args.User, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        if (TryGetSpotter(ent, args.User, out _, out _, out var reason))
+            return;
+
+        args.Cancelled = true;
+        _popup.PopupEntity(Loc.GetString(reason), args.User, args.User, PopupType.SmallCaution);
+    }
+
+    /// <summary>
+    ///     Finds the trained spotter required by a ground tripod.
+    /// </summary>
     public bool TryGetSpotter(
         Entity<CMUATGMLauncherComponent> launcher,
         EntityUid gunner,
@@ -395,7 +430,7 @@ public sealed partial class CMUATGMSystem : EntitySystem
             return false;
         }
 
-        if (!CanGuide(holder.Value, linked))
+        if (!CanGuide(holder.Value))
         {
             reason = "cmu-atgm-spotter-incapacitated";
             return false;

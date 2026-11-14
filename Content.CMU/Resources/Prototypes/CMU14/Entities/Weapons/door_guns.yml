@@ -59,6 +59,8 @@
           tags:
           - RMCMagazineM2C
           - AU14MagazineM2CTracter
+          - CMUGunshipMagazineM2C
+  - type: GunshipHardpointAutoload
 
 - type: entity
   parent: RMCSmartGunMountedStatic
@@ -69,6 +71,19 @@
   - type: GunIFF
     enabled: false
   - type: CMUMountedIFF
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RMCMagazineML66DLarge
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RMCMagazineML66DLarge
+          - CMUGunshipMagazineML66D
+  - type: GunshipHardpointAutoload
 
 - type: entity
   parent: CMUDropshipAttachmentDoorGunM2C

@@ -44,3 +44,35 @@
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
+
+- type: entity
+  parent: AU14Bangalore
+  id: CMUDropshipBangaloreProjectile
+  name: launched Bangalore charge
+  description: A Bangalore demolition charge launched from the M4332 Munition Launcher.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.15,-0.15,0.15,0.15"
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+        restitution: 0.0
+        density: 5
+  - type: Projectile
+    deleteOnCollide: true
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Blunt: 20
+  - type: DeleteOnTrigger
+  - type: TriggerOnCollide
+    fixtureID: projectile

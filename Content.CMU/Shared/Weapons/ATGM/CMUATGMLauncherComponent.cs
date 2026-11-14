@@ -5,7 +5,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
 /// <summary>
-///     The fixed A.T.G.M. launcher inside the tripod. Holds the spotter link and the guidance
+///     The fixed A.T.G.M. launcher inside the tripod. Holds the finder link and the guidance
 ///     tunables copied onto every missile it fires.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -13,13 +13,13 @@ namespace Content.Shared.CMU14.Weapons.ATGM;
 public sealed partial class CMUATGMLauncherComponent : Component
 {
     /// <summary>
-    ///     The finder whose holder steers missiles fired from this launcher.
+    ///     The finder linked to this launcher.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? LinkedFinder;
 
     /// <summary>
-    ///     Skill required to load, link and spot for this launcher.
+    ///     Skill required to crew the ground tripod.
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntProtoId<SkillDefinitionComponent> Skill = "CMUSkillATGM";
@@ -50,27 +50,26 @@ public sealed partial class CMUATGMLauncherComponent : Component
     public TimeSpan MaxFlightTime = TimeSpan.FromSeconds(8);
 
     /// <summary>
-    ///     The missile detonates once it is this close to the spotter's aim point, or to the bounding box of
+    ///     The missile detonates once it is this close to the gunner's aim point, or to the bounding box of
     ///     its locked target.
     /// </summary>
     [DataField, AutoNetworkedField]
     public float ImpactRadius = 0.25f;
 
     /// <summary>
-    ///     The missile cannot detonate on the aim point until it has flown this long, so a careless
-    ///     spotter cannot blow up the crew at the tube.
+    ///     The missile cannot detonate on the aim point until it has flown this long, protecting the crew at the tube.
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan ArmingDelay = TimeSpan.FromSeconds(0.3);
 
     /// <summary>
-    ///     Aim points further than this from the spotter are pulled back to this distance.
+    ///     Aim points further than this from the gunner are pulled back to this distance.
     /// </summary>
     [DataField, AutoNetworkedField]
     public float MaxGuidanceDistance = 30f;
 
     /// <summary>
-    ///     With a lock, the furthest the spotter's cursor can pull the aim point away from the target, in tiles.
+    ///     With a lock, the furthest the gunner's cursor can pull the aim point away from the target, in tiles.
     /// </summary>
     [DataField, AutoNetworkedField]
     public float MaxSteerOffset = 4f;
@@ -82,7 +81,7 @@ public sealed partial class CMUATGMLauncherComponent : Component
     public float SteerOffsetPerDistance = 0.5f;
 
     /// <summary>
-    ///     Within this many tiles of a locked target the spotter's cursor has no effect.
+    ///     Within this many tiles of a locked target the gunner's cursor has no effect.
     /// </summary>
     [DataField, AutoNetworkedField]
     public float TerminalDistance = 2.5f;
@@ -94,7 +93,7 @@ public sealed partial class CMUATGMLauncherComponent : Component
     public float FadeDistance = 3f;
 
     /// <summary>
-    ///     With a lock, a spotter cursor older than this is ignored and the missile homes straight on the target.
+    ///     With a lock, a gunner cursor older than this is ignored and the missile homes straight on the target.
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan CursorFreshness = TimeSpan.FromSeconds(0.5);
@@ -106,7 +105,7 @@ public sealed partial class CMUATGMLauncherComponent : Component
     public float MaxLead = 2f;
 
     /// <summary>
-    ///     If the spotter cannot see the locked target for this long, the missile stops tracking it and flies
+    ///     If the gunner cannot see the locked target for this long, the missile stops tracking it and flies
     ///     to where it was last seen.
     /// </summary>
     [DataField, AutoNetworkedField]
