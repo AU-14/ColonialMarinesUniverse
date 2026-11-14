@@ -16,4 +16,4 @@ cmu-whiteout-supervisors-directorate = The Weyland-Yutani Directorate
 cmu-whiteout-name-dogcatcher = WY Whiteout Dog Catcher
 cmu-whiteout-prefix-dogcatcher = WHD
 cmu-whiteout-description-dogcatcher = A Weyland-Yutani Whiteout combat synthetic trained for live specimen recovery. Everyone else on the team is there to leave nothing behind. The Dog Catcher is there to bring something back.
-cmu-whiteout-greeting-dogcatcher = You are a Weyland-Yutani Whiteout Dog Catcher. The rest of the team sterilises the site. Your orders are to recover a live specimen: put it under with capture slugs, drag it onto the specimen crate and seal it in, and deliver it intact. The company denies your existence. Good hunting.
+cmu-whiteout-greeting-dogcatcher = You are a Weyland-Yutani Whiteout Dog Catcher. The rest of the team sterilises the site. Your orders are to recover a live specimen: put it under with Somnazine tranquilizer slugs, drag it onto the specimen crate and seal it in, and deliver it intact. The company denies your existence. Good hunting.

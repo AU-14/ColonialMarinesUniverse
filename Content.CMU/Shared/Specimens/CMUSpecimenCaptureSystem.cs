@@ -25,7 +25,7 @@ using Robust.Shared.Timing;
 namespace Content.Shared.CMU14.Specimens;
 
 /// <summary>
-///     Live specimen capture: capture slugs sedate a specimen, handlers drag it onto an open secure
+///     Live specimen capture: Somnazine tranquilizer slugs sedate a specimen, handlers drag it onto an open secure
 ///     crate, and closing the lid seals it in so it can be hauled away.
 ///
 ///     Works on every hostile creature: xenonids and their variants (neomorphs, the abomination),

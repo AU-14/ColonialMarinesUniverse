@@ -125,20 +125,20 @@
   storage:
     back:
     - CMCrowbar
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
     outerClothing:
     - CMShellShotgunBuckshot
     - CMShellShotgunBuckshot
     pocket1:
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
     pocket2:
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
 
 - type: playTimeTracker
   id: CMUJobPMCWhiteoutDogCatcher

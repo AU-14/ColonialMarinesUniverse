@@ -34,8 +34,8 @@ public sealed class CMUTranqShellTest
             var solutions = server.System<SharedSolutionContainerSystem>();
             var stacks = server.System<SharedStackSystem>();
 
-            // Five capture slugs hold 5u of Somnazine each.
-            var handful = entities.SpawnEntity("CMUShellShotgunCapture", map.GridCoords);
+            // Five Somnazine tranquilizer slugs hold 5u of Somnazine each.
+            var handful = entities.SpawnEntity("CMUShellShotgunTranquilizerSomnazine", map.GridCoords);
             Assert.That(Units(entities, solutions, handful), Is.EqualTo(FixedPoint2.New(25)));
 
             // Taking one off (as loading a gun does) takes its 5u with it.

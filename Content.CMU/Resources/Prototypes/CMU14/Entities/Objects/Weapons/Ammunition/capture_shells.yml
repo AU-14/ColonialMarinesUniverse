@@ -59,12 +59,12 @@
 - type: Tag
   id: CMUShellShotgunCapture
 
-# The Dog Catcher's capture slugs: tranquiliser slugs loaded at the factory with 5u of Somnazine each.
+# Tranquilizer slugs loaded at the factory with 5u of Somnazine each: the Dog Catcher's and the retrieval
+# technician's capture ammunition.
 - type: entity
   parent: CMUShellShotgunTranquilizer
-  id: CMUShellShotgunCapture
-  name: handful of capture slugs
-  description: Weyland-Yutani tranquilizer slugs for live specimen recovery, each loaded with 5 units of Somnazine. 12 gauge.
+  id: CMUShellShotgunTranquilizerSomnazine
+  suffix: Somnazine
   components:
   - type: SolutionContainerManager
     solutions:
@@ -110,9 +110,10 @@
 
 - type: entity
   parent: RMCBoxShotgunBeanbag
-  id: CMUBoxShotgunCapture
-  name: box of capture slugs
-  description: Weyland-Yutani tranquiliser slugs for live specimen recovery. Not for sale. 12 gauge.
+  id: CMUBoxShotgunTranquilizerSomnazine
+  name: box of tranquilizer slugs
+  description: Weyland-Yutani tranquilizer slugs for live specimen recovery, loaded with Somnazine. Not for sale. 12 gauge.
+  suffix: Somnazine
   components:
   - type: Storage
     whitelist:
@@ -120,7 +121,7 @@
       - CMUShellShotgunCapture
   - type: StorageFill
     contents:
-    - id: CMUShellShotgunCapture
+    - id: CMUShellShotgunTranquilizerSomnazine
       amount: 5
 
 - type: entity
@@ -129,4 +130,4 @@
   suffix: Capture
   components:
   - type: BallisticAmmoProvider
-    proto: CMUShellShotgunCapture
+    proto: CMUShellShotgunTranquilizerSomnazine

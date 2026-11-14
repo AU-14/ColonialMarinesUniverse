@@ -321,14 +321,14 @@
     suitstorage: CMUWeaponShotgunXM38Capture
   storage:
     pocket1:
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
     back:
     - CMCrowbar
-    - CMUShellShotgunCapture
-    - CMUShellShotgunCapture
+    - CMUShellShotgunTranquilizerSomnazine
+    - CMUShellShotgunTranquilizerSomnazine
     - RMCZipties
     - RMCZipties
     - RMCMREWeYaPMC
