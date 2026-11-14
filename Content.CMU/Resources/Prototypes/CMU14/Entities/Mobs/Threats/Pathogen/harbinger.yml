@@ -125,9 +125,9 @@
     attackRate: 2.0
     damage:
       types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
+        Blunt: 14.25
+        Slash: 14.25
+        Piercing: 14.25
   - type: XenoTailStab
     tailDamage:
       types:

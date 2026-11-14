@@ -108,9 +108,9 @@
     attackRate: 2.5
     damage:
       types:
-        Blunt: 18.33
-        Slash: 18.33
-        Piercing: 18.34
+        Blunt: 17.41
+        Slash: 17.41
+        Piercing: 17.43
   - type: CMArmor
     explosionArmor: 50
     xenoArmor: 15
