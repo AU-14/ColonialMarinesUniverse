@@ -31,8 +31,5 @@ public sealed partial class XenoGuardianSweepComponent : Component
     public float KnockBackDistance = 2f;
 
     [DataField]  
-    public float KnockBackDistance = 2f;
-
-    [DataField]  
     public TimeSpan ParalyzeTime = TimeSpan.FromSeconds(3);
 }
