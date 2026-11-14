@@ -38,7 +38,7 @@
 
 - type: construction
   id: AU14Custom_RMCLampGreen__AU14__Furniture
-  name: "desk lamp"
+  name: "green desk lamp"
   description: "A classic green-shaded desk lamp."
   graph: AU14CustomGraph_RMCLampGreen__AU14__Furniture
   startNode: start
