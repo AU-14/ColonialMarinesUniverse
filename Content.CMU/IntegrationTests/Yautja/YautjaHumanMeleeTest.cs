@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Server._RMC14.Xenonids.AcidBloodSplash;
 using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
@@ -79,6 +80,8 @@ public sealed class YautjaHumanMeleeTest : GameTest
             var weapon = SSpawnAtPosition("CMUYautjaClanSword", map.GridCoords);
             var human = SSpawnAtPosition("CMMobHuman", map.GridCoords);
             var xeno = SSpawnAtPosition("CMXenoDrone", map.GridCoords);
+            // the drone shares the human's tile, so its acid blood would randomly splash the human on top of the swing
+            SEntMan.RemoveComponent<AcidBloodSplashComponent>(xeno);
             SEntMan.GetComponent<YautjaHumanMeleeComponent>(weapon).StripChancePerArmor = 0f;
 
             var force = SEntMan.GetComponent<MeleeWeaponComponent>(weapon).Damage;
@@ -93,6 +96,7 @@ public sealed class YautjaHumanMeleeTest : GameTest
                 damageable.TryChangeDamage(target, swing, origin: hunter, tool: weapon, impact: impact);
             }
 
+            Assert.That(damageable.GetTotalDamage(xeno), Is.GreaterThan(swing.GetTotal()), "the xeno keeps the bonus");
             Assert.That(damageable.GetTotalDamage(human).Float(), Is.EqualTo(force.GetTotal().Float()).Within(0.5f),
                 "no skill bonus on a human, whatever else the swing caught");
         });
