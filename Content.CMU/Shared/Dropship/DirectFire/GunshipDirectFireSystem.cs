@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Linq;
 using Content.Shared.CMU14.Dropship.Integrity;
 using Content.Shared.CMU14.Dropship.TacticalLand;
+using Content.Shared.CMU14.Explosion;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -358,6 +359,29 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
     private void OnGunShot(Entity<GunshipDirectFireWeaponComponent> ent, ref GunShotEvent args)
     {
+        if (TryComp(ent, out GunComponent? launcherGun) && launcherGun.ProjectileSpeedModified > 0)
+        {
+            var from = _transform.ToMapCoordinates(args.FromCoordinates);
+            var target = _transform.ToMapCoordinates(args.ToCoordinates);
+            var distance = Vector2.Distance(from.Position, target.Position);
+            foreach (var (projectile, _) in args.Ammo)
+            {
+                if (projectile is not { } uid || !HasComp<CMULaunchedBangaloreComponent>(uid))
+                    continue;
+
+                var direction = target.Position - from.Position;
+                if (TryComp(uid, out PhysicsComponent? body) && body.LinearVelocity.LengthSquared() > 0.0001f)
+                    direction = body.LinearVelocity;
+                if (direction.LengthSquared() <= 0.0001f)
+                    continue;
+
+                var stop = EnsureComp<ProjectileFixedDistanceComponent>(uid);
+                stop.TargetCoordinates = new MapCoordinates(from.Position + Vector2.Normalize(direction) * distance, from.MapId);
+                stop.FlyEndTime = _timing.CurTime + TimeSpan.FromSeconds(distance / launcherGun.ProjectileSpeedModified);
+                Dirty(uid, stop);
+            }
+        }
+
         if (TryComp(ent, out GunComponent? gun) && gun.ProjectileSpeedModified > 0 &&
             _containers.TryGetContainingContainer(ent.Owner, out var container) &&
             HasComp<MohawkChinGunComponent>(container.Owner))

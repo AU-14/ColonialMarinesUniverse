@@ -1,8 +1,10 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.CMU14.Dropship.DirectFire;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 
@@ -44,6 +46,16 @@ public sealed class GunshipBangaloreAmmoTest : GameTest
                     Assert.That(ammoComponent.Rounds, Is.EqualTo(15 - shot * 3),
                         $"Shot {shot} consumes three rounds.");
                 });
+
+                var target = map.GridCoords.Offset(new System.Numerics.Vector2(10, 0));
+                var fired = new GunShotEvent(point, takeAmmo.Ammo, map.GridCoords, target);
+                SEntMan.EventBus.RaiseLocalEvent(weapon, ref fired);
+                foreach (var (projectile, _) in takeAmmo.Ammo)
+                {
+                    Assert.That(projectile, Is.Not.Null);
+                    Assert.That(SEntMan.TryGetComponent(projectile!.Value, out ProjectileFixedDistanceComponent? stop), Is.True);
+                    Assert.That(stop!.TargetCoordinates, Is.Not.Null);
+                }
             }
 
             var afterEmpty = new TakeAmmoEvent(1, [], map.GridCoords, null);
