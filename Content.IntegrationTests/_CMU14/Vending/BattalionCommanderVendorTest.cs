@@ -61,7 +61,8 @@ public sealed class BattalionCommanderVendorTest : InteractionTest
         var vendor = SEntMan.GetComponent<CMAutomatedVendorComponent>(STarget!.Value);
         var primary = vendor.Sections.Single(s => s.Name == "Primary Weapon");
 
-        Assert.That(primary.Choices, Is.Not.Null.And.Property("Amount").EqualTo(1),
+        Assert.That(primary.Choices, Is.Not.Null, "Primary weapon section must be a pick-one section.");
+        Assert.That(primary.Choices!.Value.Amount, Is.EqualTo(1),
             "Primary weapon section must allow exactly one pick.");
         var armor = vendor.Sections.Single(s => s.Name == "Armor");
         Assert.That(armor.Entries.Select(e => e.Id.Id), Does.Not.Contain("RMCArmorM3General"),
