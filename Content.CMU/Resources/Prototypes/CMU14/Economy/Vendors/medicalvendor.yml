@@ -388,3 +388,8 @@
     needsPower: false # intentionally!
   - type: CMAutomatedVendor
     ejectContentsOnDestruction: true
+
+- type: entity
+  parent: [AU14GeneralMedicalVendor, ColMarTechBaseAnchorable]
+  id: AU14GeneralMedicalVendorMovable
+  suffix: Movable

@@ -52,7 +52,7 @@
   description: A crate containing one We-Yu-Med vendor.
   components:
   - type: SpawnOnTerminate
-    spawn: AU14GeneralMedicalVendor
+    spawn: AU14GeneralMedicalVendorMovable
 
 - type: entity
   parent: RMCSecureCaseMedicalBig
