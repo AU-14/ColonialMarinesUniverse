@@ -18,8 +18,19 @@ public sealed class BattalionCommanderVendorTest : InteractionTest
         var protoMan = Server.ResolveDependency<IPrototypeManager>();
         var compFactory = Server.ResolveDependency<IComponentFactory>();
 
-        Assert.That(vendor.Jobs, Does.Contain((ProtoId<JobPrototype>) "CMCommandingOfficer"),
-            "Battalion Commander vendor must be locked to the Commanding Officer job.");
+        // Every platoon commander job a player can spawn as, GOVFOR and OPFOR, including the faction variants.
+        foreach (var job in new[]
+                 {
+                     "AU14JobGOVFORPlatCo", "AU14JobOPFORPlatCo", "AU14JobGOVFORPlatCoCMBCIU",
+                     "AU14JobGOVFORPlatCoRMC", "AU14JobGOVFORPlatCoUPP", "AU14JobGOVFORPlatCoWYPMC",
+                 })
+        {
+            Assert.That(vendor.Jobs, Does.Contain((ProtoId<JobPrototype>) job),
+                $"Battalion Commander vendor must be usable by {job}.");
+        }
+
+        Assert.That(vendor.Jobs, Does.Not.Contain((ProtoId<JobPrototype>) "CMCommandingOfficer"),
+            "Battalion Commander vendor is for platoon commanders, not the ship CO.");
         Assert.That(vendor.Sections, Is.Not.Empty, "Vendor has no sections.");
 
         foreach (var section in vendor.Sections)

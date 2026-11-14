@@ -1,5 +1,5 @@
 # Battalion Commander
-# Locked to the Commanding Officer job (plus command access). Placeholder inventory.
+# Locked to the platoon commander jobs (GOVFOR and OPFOR, every faction variant) plus command access.
 - type: entity
   parent: ColMarTechBase
   id: CMUBattalionCommanderVendor
@@ -11,12 +11,18 @@
   components:
   - type: AccessReader
     access:
-    - [ "RMCAccessCommand" ]
+    - [ "AU14AccessGovforCommand" ]
+    - [ "AU14AccessOpforCommand" ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/dress.rsi
   - type: CMAutomatedVendor
     jobs:
-    - CMCommandingOfficer
+    - AU14JobGOVFORPlatCo
+    - AU14JobOPFORPlatCo
+    - AU14JobGOVFORPlatCoCMBCIU
+    - AU14JobGOVFORPlatCoRMC
+    - AU14JobGOVFORPlatCoUPP
+    - AU14JobGOVFORPlatCoWYPMC
     sections:
     - name: Dress Blues
       takeAll: CMUBattalionCommanderDressBlues
@@ -190,7 +196,8 @@
   components:
   - type: AccessReader
     access:
-    - [ "RMCAccessCommand" ]
+    - [ "AU14AccessGovforCommand" ]
+    - [ "AU14AccessOpforCommand" ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
   # Picking the smart gun kit teaches the skill needed to fire it.
@@ -200,7 +207,12 @@
         RMCSkillSmartGun: 1
   - type: CMAutomatedVendor
     jobs:
-    - CMCommandingOfficer
+    - AU14JobGOVFORPlatCo
+    - AU14JobOPFORPlatCo
+    - AU14JobGOVFORPlatCoCMBCIU
+    - AU14JobGOVFORPlatCoRMC
+    - AU14JobGOVFORPlatCoUPP
+    - AU14JobGOVFORPlatCoWYPMC
     sections:
     - name: Armor
       choices: { CMUBattalionCommanderArmor: 1 }

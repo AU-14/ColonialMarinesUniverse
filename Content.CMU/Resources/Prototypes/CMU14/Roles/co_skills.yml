@@ -1,10 +1,10 @@
-# Commanding Officer job only. Survivor/Para/Recon commanders keep using RMCSkillPresetCommander.
+# Platoon commander jobs only (AU14JobPlatCoBase). Other jobs keep using AU14SkillPresetPlatoonCommander.
 - type: entity
-  parent: RMCSkillPresetCommander
-  id: CMUSkillPresetCommandingOfficer
-  name: Commanding Officer
+  parent: AU14SkillPresetPlatoonCommander
+  id: CMUSkillPresetPlatoonCommanderBattalion
+  name: Commander
   categories: [ HideSpawnMenu ]
   components:
   - type: SkillPreset
     skills:
-      RMCSkillSurgery: 2 # Commander preset has 1
+      RMCSkillSurgery: 2 # AU14SkillPresetPlatoonCommander has 1

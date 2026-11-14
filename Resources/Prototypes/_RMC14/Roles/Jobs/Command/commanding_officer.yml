@@ -17,23 +17,6 @@
       role: CMJobCommandingOfficer
       time: 252000 # 70 hours
     RMCRankMajor: []
-  # CMU14: chevron is attached to the jumpsuit at spawn, highest rank the player qualifies for first
-  chevrons:
-    RMCRankColonel:
-      entity: AU14ChevronColonel
-      requirements:
-      - !type:RoleTimeRequirement
-        role: CMJobCommandingOfficer
-        time: 630000 # 175 hours
-    RMCRankLieutenantColonel:
-      entity: AU14ChevronLieutenantColonel
-      requirements:
-      - !type:RoleTimeRequirement
-        role: CMJobCommandingOfficer
-        time: 252000 # 70 hours
-    RMCRankMajor:
-      entity: AU14ChevronMajor
-      requirements: []
   weight: 10
   startingGear: CMGearCommandingOfficer
   icon: "CMJobIconCommandingOfficer"
@@ -49,7 +32,7 @@
   - !type:AddComponentSpecial
     components:
     - type: Skills
-      preset: CMUSkillPresetCommandingOfficer # CMU14: was RMCSkillPresetCommander (+1 surgery)
+      preset: RMCSkillPresetCommander
     - type: MarineOrders
     - type: CMVendorUser
       id: CMCommandingOfficer
@@ -76,10 +59,13 @@
 - type: startingGear
   id: CMGearCommandingOfficer
   equipment:
-    # CMU14: spawn kit trimmed to the basics (outer coat, hat and pouches come from the Battalion Commander vendors)
     jumpsuit: CMJumpsuitBO
     shoes: CMShoesLaceupCommander
+    head: CMHeadBeretCO
+    outerClothing: RMCCoatService
     ears: CMHeadsetSeniorCommand
+    pocket1: RMCPouchCommand
+    pocket2: RMCPouchGeneralLarge
 
 - type: entity
   parent: CMSpawnPointJobBase
