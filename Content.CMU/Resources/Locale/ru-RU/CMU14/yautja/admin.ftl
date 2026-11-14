@@ -9,3 +9,5 @@ cmu-yautja-admin-editor-slots-saved = Количество яутжей {$slots}
 cmu-yautja-admin-editor-random-invalid = Шанс охоты должен быть от 0% до 100%.
 cmu-yautja-admin-editor-random-enabled-message = Случайные охоты включены: {$insurgency}% на Insurgency, {$distress}% на Distress Signal и Force on Force.
 cmu-yautja-admin-editor-random-disabled = Случайная инициализация отключена.
+cmu-yautja-admin-editor-hunt-blocked-by-threat = Угроза этого раунда не допускает охоту яутжей.
+cmu-yautja-hunt-threat-conflict-alert = Выбранная угроза ({$threat}) не допускает охоту яутжей, но активна охота, запущенная администрацией. Она оставлена; завершите её вручную, если это не задумано.

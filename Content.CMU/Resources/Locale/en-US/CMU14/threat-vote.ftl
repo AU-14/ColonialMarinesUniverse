@@ -10,6 +10,7 @@ au14-threat-vote-option-tribal = Tribal Threat
 au14-threat-vote-option-ape = Ape Threat
 au14-threat-vote-option-wendigo = Wendigo Threat
 au14-threat-vote-option-generic = {$threat}
+au14-threat-vote-option-seats = {$threat} (seats: {$seats})
 au14-threat-vote-round-join-blocked = You were selected for the threat roll. You cannot join as another role while your threat assignment is pending.
 au14-threat-vote-colony-fall-observer-warning = The threat is scheduled in roughly {$min} to {$max} minutes and will deploy when enough players show interest. Your vote counts as interest. You can withdraw in Threats and Third Parties; joining another role removes your interest.
 au14-threat-vote-observer-notice = The threat vote selected {$threat}. Your vote counts as interest. You can withdraw in Threats and Third Parties; joining another role removes your interest.

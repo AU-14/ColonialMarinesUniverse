@@ -2,12 +2,14 @@ using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.CMU14.Round;
+using Content.Server.CMU14.Threats;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Players.JobWhitelist;
 using Content.Shared.Chat;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Components;
 using Robust.Server.Audio;
 using Robust.Server.Player;
 using Robust.Shared.Audio;
@@ -51,6 +53,7 @@ public sealed partial class YautjaPredatorRoundSystem
     {
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<IsRoleAllowedEvent>(OnIsRoleAllowed);
+        SubscribeLocalEvent<ThreatSelectedEvent>(OnThreatSelected);
     }
 
     public override void Update(float frameTime)
@@ -116,6 +119,10 @@ public sealed partial class YautjaPredatorRoundSystem
         if (IsHuntActive())
             return;
 
+        // the round's threat doesn't share the planet with a hunt
+        if (SelectedThreatBlocksHunt())
+            return;
+
         if (GameTicker.RunLevel == GameRunLevel.PreRoundLobby)
         {
             _rolledHunt = GameTicker.AddGameRule(CMUYautjaPredatorRoundPrototype);
@@ -125,6 +132,52 @@ public sealed partial class YautjaPredatorRoundSystem
 
         if (!TryInitializePredatorRound(out var message))
             _sawmill.Warning($"Automatic Yautja hunt initialization failed: {message}");
+        else if (TryGetActivePredatorRule(out var rolled))
+            _rolledHunt = rolled.Owner; // remembered so a blocking threat can stand it down
+    }
+
+    private bool SelectedThreatBlocksHunt()
+    {
+        return _auRound.SelectedThreat is { } threat
+            && threat.BlockedGameRules.Contains(CMUYautjaPredatorRoundPrototype);
+    }
+
+    // the threat vote lands after round start, so a hunt can already be queued or running when a threat
+    // that blocks it wins. the dice's hunt is ended, a staff-made one is left alone and staff are told
+    private void OnThreatSelected(ref ThreatSelectedEvent args)
+    {
+        if (!SelectedThreatBlocksHunt())
+            return;
+
+        var hunts = new List<(EntityUid Uid, GameRuleComponent Rule)>();
+        var query = QueryAllRules();
+        while (query.MoveNext(out var uid, out var comp, out var gameRule))
+        {
+            if (comp.ModePredator && GameTicker.IsGameRuleAdded(uid, gameRule))
+                hunts.Add((uid, gameRule));
+        }
+
+        var threatId = _auRound.SelectedThreat?.ID ?? string.Empty;
+        foreach (var (uid, gameRule) in hunts)
+        {
+            if (uid != _rolledHunt)
+            {
+                _chat.SendAdminAlert(Loc.GetString("cmu-yautja-hunt-threat-conflict-alert", ("threat", threatId)));
+                continue;
+            }
+
+            _rolledHunt = null;
+            if (_lobbyHuntRoundId == GameTicker.RoundId)
+                _lobbyHuntRoundId = 0;
+
+            // still only queued in the lobby, so there's nothing to end. just drop it
+            if (HasComp<ActiveGameRuleComponent>(uid))
+                GameTicker.EndGameRule(uid, gameRule);
+            else
+                Del(uid);
+
+            _sawmill.Info($"Automatic Yautja hunt stood down: threat '{threatId}' blocks it.");
+        }
     }
 
     // only ever takes back the hunt the dice queued, never one staff queued, and only before round start

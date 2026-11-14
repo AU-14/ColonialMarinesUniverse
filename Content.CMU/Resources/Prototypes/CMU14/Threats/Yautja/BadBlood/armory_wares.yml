@@ -1,0 +1,35 @@
+# Bad Blood copies of honourable gear that the Lodge armory sells (lodge_armory.yml). The honourable prototypes keep
+# their values: whatever would be too strong in a Bad Blood's hands is cut down here and sold in its place.
+
+# the hunters' spike is 30 piercing through 50 armor. the clan's is filed down from scrap: 22 through 30.
+# it keeps the spike's bite on walls and barricades
+- type: entity
+  parent: CMUYautjaSpikeProjectile
+  id: CMUBadBloodScavengedSpike
+  name: scrap spike
+  categories: [HideSpawnMenu]
+  components:
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 22
+  - type: CMArmorPiercing
+    amount: 30
+
+# half the magazine (6 for 12) and half the recharge (a spike every 20 s for every 10 s), firing the scrap spike.
+# a ranged weapon that reloads itself must not stand in for the plasma caster
+- type: entity
+  parent: CMUYautjaSpikeLauncher
+  id: CMUBadBloodScavengedSpikeLauncher
+  name: scavenged spike launcher
+  description: A spike launcher with a cracked housing and a magazine patched from scrap. It holds half of what it should and recharges slowly.
+  suffix: Bad Blood
+  components:
+  - type: BasicEntityAmmoProvider
+    proto: CMUBadBloodScavengedSpike
+    capacity: 6
+    count: 6
+  - type: YautjaSpikeLauncher
+    rechargeCooldown: 20
+    rechargeSound: null

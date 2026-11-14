@@ -98,6 +98,7 @@ cmu-guide-entry-research-hydroponics = Hydroponics
 # Antagonists
 cmu-guide-entry-hearing-loss = Hearing Loss
 cmu-guide-entry-cmu = Guidebook
+cmu-guide-entry-bad-blood = The Bad Blood Clan
 cmu-guide-entry-cas = Dropships and CAS
 cmu-guide-entry-mortar = Mortar
 cmu-guide-entry-explosives = Explosives

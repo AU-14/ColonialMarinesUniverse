@@ -30,7 +30,8 @@ public sealed partial class YautjaCleavingGlaiveSystem : EntitySystem
     {
         if (args.Handled ||
             !TryComp<YautjaTrophyComponent>(args.Used, out var trophy) ||
-            trophy.Kind != YautjaTrophyKind.HumanSkull)
+            // the scalp was a skull-kind trophy before it got its own kind, and still mounts
+            trophy.Kind is not (YautjaTrophyKind.HumanSkull or YautjaTrophyKind.HumanScalp))
         {
             return;
         }

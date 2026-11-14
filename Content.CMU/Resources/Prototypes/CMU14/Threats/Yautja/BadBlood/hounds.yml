@@ -1,0 +1,112 @@
+# Bad Blood hounds. A hound only comes from a sleeping hound and only a ghost drives it.
+# Same body as the hunters' hellhound (330 health, xeno armor 30), with a bite that pierces 20 armor.
+
+# stands still: no wandering and no hostile fallback while nobody is driving it
+- type: htnCompound
+  id: CMUBadBloodHoundIdleCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:NoOperator
+
+# the hound's camera id is its prototype id, like the hunters' hellhound
+- type: cameraNetwork
+  id: CMUMobYautjaBadBloodHound
+  name: cmu-bad-blood-houndpad-interface-title
+
+- type: entity
+  parent: CMUMobYautjaHellhound
+  id: CMUMobYautjaBadBloodHound
+  name: clan hound
+  description: A scarred hunting beast that answers to the Bad Bloods now.
+  suffix: Yautja, Bad Blood
+  components:
+  - type: BadBloodHound
+    unclaimedSleepAfter: 180
+    reservePriority: 60
+    sleeperPrototype: CMUBadBloodSleepingHound
+  - type: YautjaHellhound
+    cameraId: CMUMobYautjaBadBloodHound
+  # a pad lists the hounds on its camera network. this list takes the place of the hellhound's, so a clan hound is
+  # on the clan's network only: the clan's pad sees it and the hunters' pad never does (BadBloodHoundPadScopeTest)
+  - type: CameraNetworkMember
+    networks:
+    - CMUMobYautjaBadBloodHound
+    sourceKinds: Rmc
+  - type: GhostRole
+    name: cmu-bad-blood-hound-ghost-name
+    description: cmu-bad-blood-hound-ghost-description
+    rules: cmu-bad-blood-hound-ghost-rules
+    allowMovement: true
+    # like the squad seats: a job and the threat mind role, so the hound counts as part of the clan's threat
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  - type: HTN
+    rootTask:
+      task: CMUBadBloodHoundIdleCompound
+  # the bite is the hound's own melee, so the piercing sits on the hound
+  - type: CMArmorPiercing
+    amount: 20
+
+- type: entity
+  id: CMUBadBloodSleepingHound
+  name: sleeping clan hound
+  description: One of the clan's hounds, asleep. A Bad Blood could wake it.
+  suffix: Bad Blood
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
+    drawdepth: SmallObjects
+    layers:
+    - state: "Normal_Hellhound_Sleeping"
+  - type: Icon
+    sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
+    state: "Normal_Hellhound_Sleeping"
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: YautjaSleepingHellhound
+    spawnPrototype: CMUMobYautjaBadBloodHound
+    maxHoundsPerMaster: 3
+  - type: BadBloodSleepingHound
+
+- type: entity
+  id: CMUBadBloodHoundObservationPadInternalCamera
+  name: Clan Hound Observation Interface
+  description: If you can see this, someone messed up.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Transform
+  - type: UserInterface
+    interfaces:
+      enum.RMCCameraUiKey.Key:
+        type: RMCCameraBui
+  - type: RMCCameraComputer
+    title: cmu-bad-blood-houndpad-interface-title
+    viewportSize: 672, 480
+  - type: CameraNetworkReceiver
+    networks:
+    - CMUMobYautjaBadBloodHound
+    supportedSources: Rmc
+
+- type: entity
+  parent: CMUYautjaHoundObservationPad
+  id: CMUBadBloodHoundObservationPad
+  name: clan hound observation pad
+  description: A scavenged camera pad, tuned to the clan's hounds.
+  suffix: Yautja, Bad Blood
+  components:
+  - type: YautjaHoundPad
+    internalCameraPrototype: CMUBadBloodHoundObservationPadInternalCamera

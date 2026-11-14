@@ -834,8 +834,28 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     [DataField]
     public TimeSpan CloakCooldown = TimeSpan.Zero;
 
+    /// <summary>
+    /// Cooldown started when the cloak is stripped by force (bullet roll, EMP, acid, ...), so it cannot be
+    /// re-raised at once. A voluntary decloak or a timed expiry keeps using <see cref="CloakCooldown"/>.
+    /// </summary>
+    [DataField]
+    public TimeSpan CloakForcedDecloakCooldown = TimeSpan.FromSeconds(10);
+
     [DataField]
     public TimeSpan CloakCombatLockout = TimeSpan.FromSeconds(6);
+
+    /// <summary>
+    /// Combat lockout used instead of <see cref="CloakCombatLockout"/> when the wearer is a Bad Blood.
+    /// </summary>
+    [DataField]
+    public TimeSpan CloakBadBloodCombatLockout = TimeSpan.FromSeconds(4);
+
+    /// <summary>
+    /// Bad Blood ambush rule: the first damaging hit dealt from cloak deals this fraction as bonus damage
+    /// and drops the cloak.
+    /// </summary>
+    [DataField]
+    public float CloakBadBloodAmbushBonus = 0.3f;
 
     [DataField, AutoNetworkedField]
     public TimeSpan CloakCombatLockoutUntil;
@@ -1031,6 +1051,10 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
 
     [DataField]
     public EntProtoId VisorGlassesPrototype = "CMUYautjaNightVisionGlasses";
+
+    // a Bad Blood wearer gets this one: mobs show through walls, the map behind walls does not
+    [DataField]
+    public EntProtoId BadBloodVisorGlassesPrototype = "CMUBadBloodNightVisionGlasses";
 
     [DataField]
     public EntityUid? VisorGlasses;
@@ -1677,6 +1701,10 @@ public sealed partial class YautjaCasterMode
 
     [DataField]
     public float FireRate;
+
+    // CMU14: what one shot in this mode drains from the bracer. null keeps the caster's own PowerCost
+    [DataField]
+    public FixedPoint2? PowerCost;
 
     [DataField]
     public SoundSpecifier FireSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
@@ -3057,6 +3085,11 @@ public enum YautjaTrophyKind : byte
     HumanRibcage,
     XenoSkull,
     XenoPelt,
+    // byte-serialised, so new kinds only ever go at the end
+    HumanScalp,
+    HumanHide,
+    HumanSpine,
+    HumanTorso,
 }
 
 [Serializable, NetSerializable]

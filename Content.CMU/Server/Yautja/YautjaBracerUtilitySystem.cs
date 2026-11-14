@@ -8,6 +8,7 @@ using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Stealth;
@@ -186,7 +187,9 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             },
         });
 
-        if (HasComp<UnrevivableComponent>(ev.Target) && !ent.Comp.SelfDestructArmed)
+        if (HasComp<UnrevivableComponent>(ev.Target) &&
+            !ent.Comp.SelfDestructArmed &&
+            !HasComp<BadBloodScuttleComponent>(ent))
         {
             ev.Verbs.Add(new EquipmentVerb
             {
@@ -230,7 +233,8 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
     private void OnOverloadBracerDoAfter(Entity<YautjaBracerComponent> ent, ref YautjaOverloadBracerDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled)
+        // a scuttle that started during the do-after wins, the bracer is already going up
+        if (args.Cancelled || args.Handled || HasComp<BadBloodScuttleComponent>(ent))
             return;
 
         args.Handled = true;

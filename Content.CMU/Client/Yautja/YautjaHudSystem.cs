@@ -31,6 +31,10 @@ public sealed partial class YautjaHudSystem : EntitySystem
         if (HasComp<YautjaMilitaryCasteComponent>(ent.Owner))
             return;
 
+        // Bad Bloods are cast out: no clan rank icon
+        if (HasComp<YautjaBadBloodComponent>(ent.Owner))
+            return;
+
         if (!CanSeeYautjaRankIcon(ent.Owner))
             return;
 

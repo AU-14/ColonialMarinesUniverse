@@ -400,33 +400,6 @@
     radius: 4.75
     energy: 3.2
 - type: entity
-  parent: CMUYautjaCasterLethalBolt
-  id: CMUYautjaBadBloodCasterLethalBolt
-  name: unstable plasma bolt
-  categories: [HideSpawnMenu]
-  components:
-  - type: Projectile
-    impactEffect: null # CMU14: no landing effect - the bolt simply disappears
-    damage:
-      types:
-        Heat: 30
-        Structural: 8
-  - type: Explosive
-    explosionType: CMUYautjaCasterExplosion
-    maxIntensity: 18
-    intensitySlope: 6
-    totalIntensity: 70
-    maxTileBreak: 1
-  - type: CMExplosionEffect
-    minShrapnel: 1
-    maxShrapnel: 2
-    shrapnelSpeed: 5
-  - type: RMCScorchEffect
-    count: 2
-    scatterRadius: 1
-    radius: 1
-
-- type: entity
   parent: CMUYautjaPlasmaBoltBase
   id: CMUYautjaCasterEradicatorBolt
   name: plasma eradicator

@@ -1,0 +1,24 @@
+# Lodge part: the kennel. Deployed with the Lodge and removed with it. Buying hounds goes on this prototype.
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodCampKennel
+  name: Lodge kennel
+  description: A slatted livestock crate dragged out of the prey's colony, its bars gnawed from the inside. The clan's hounds sleep here until they are called.
+  suffix: Bad Blood
+  components:
+  # the upstream livestock crate: the only animal cage in the tree that is not a hamster cage or a pet carrier
+  - type: Sprite
+    sprite: Structures/Storage/Crates/livestock.rsi
+    drawdepth: Objects
+    layers:
+    - state: base
+    - state: closed
+  - type: Icon
+    sprite: Structures/Storage/Crates/livestock.rsi
+    state: base
+  - type: BadBloodCampPart
+    kind: Kennel
+  # any Bad Blood buys a sleeping hound here
+  - type: BadBloodKennel
+    buyerReservation: 60
+    padPrototype: CMUBadBloodHoundObservationPad

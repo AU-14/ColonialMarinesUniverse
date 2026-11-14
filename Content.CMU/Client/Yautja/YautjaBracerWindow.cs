@@ -120,6 +120,13 @@ public sealed partial class YautjaBracerWindow : BaseWindow
 
         AddTab(tabs, area, BracerTab.Hunt, "cmu-yautja-bracer-ui-tab-hunt", BuildHuntPage());
         AddTab(tabs, area, BracerTab.Thrall, "cmu-yautja-bracer-ui-tab-thrall", BuildThrallPage());
+        // Bad Bloods run no bracer thralls, so the tab would only hold dead buttons
+        if (IoCManager.Resolve<Robust.Client.Player.IPlayerManager>().LocalEntity is { } local &&
+            IoCManager.Resolve<IEntityManager>().HasComponent<YautjaBadBloodComponent>(local))
+        {
+            _tabButtons[BracerTab.Thrall].Visible = false;
+        }
+
         AddTab(tabs, area, BracerTab.Fabricator, "cmu-yautja-bracer-ui-tab-fabricator", BuildFabricatorPage());
         AddTab(tabs, area, BracerTab.Bracer, "cmu-yautja-bracer-ui-tab-bracer", BuildBracerPage());
 

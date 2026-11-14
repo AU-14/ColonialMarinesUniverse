@@ -5,6 +5,7 @@ using Content.Server.NPC.HTN;
 using Content.Shared.ActionBlocker;
 using Content.Server.CMU14.TacticalMap;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Tether;
@@ -639,6 +640,10 @@ public sealed partial class YautjaTrapSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cmu-yautja-trap-yautja-avoid"), tripper, tripper);
             return true;
         }
+
+        // CMU14: a Bad Blood hound walks over its own clan's traps
+        if (trap.Comp.ArmedFaction == BadBloodYautjaFaction && HasComp<BadBloodHoundComponent>(tripper))
+            return true;
 
         if (!IsBadBloodHiveAvoidingBadBloodTrap(trap, tripper))
             return false;

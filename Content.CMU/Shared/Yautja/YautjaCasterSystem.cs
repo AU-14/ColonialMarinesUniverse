@@ -63,6 +63,12 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (mode == null)
             return;
 
+        // CMU14: a Bad Blood has to earn the eradicator at the Lodge armory. nothing answers this for a hunter
+        var attempt = new YautjaCasterModeAttemptEvent(ent.Owner, mode.Value);
+        RaiseLocalEvent(args.User, ref attempt);
+        if (attempt.Cancelled)
+            return;
+
         if (_net.IsClient)
         {
             PopupMode(ent, args.User, "cmu-yautja-caster-mode-set", mode.Value);
@@ -98,6 +104,12 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         var isLethal = IsLethalMode(ent.Comp);
         var mode = isLethal ? 0 : 2;
         var cost = isLethal ? (FixedPoint2) 30 : 100;
+
+        // CMU14: a Bad Blood has to earn the lethal bolt at the Lodge armory. nothing answers this for a hunter
+        var attempt = new YautjaCasterModeAttemptEvent(ent.Owner, mode);
+        RaiseLocalEvent(args.UserUid, ref attempt);
+        if (attempt.Cancelled)
+            return;
 
         if (_net.IsClient)
         {
@@ -137,6 +149,16 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         {
             args.Cancelled = true;
             args.Message = Loc.GetString("cmu-yautja-spike-launcher-denied");
+            return;
+        }
+
+        // CMU14: a mode can be locked after it was selected (a caster that changed hands). ask again before the
+        // shot. nothing answers this for a hunter
+        var modeAttempt = new YautjaCasterModeAttemptEvent(ent.Owner, ent.Comp.CurrentMode);
+        RaiseLocalEvent(args.User, ref modeAttempt);
+        if (modeAttempt.Cancelled)
+        {
+            args.Cancelled = true;
             return;
         }
 
@@ -234,6 +256,13 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
             args.Ammo.Add((projectile, _gun.EnsureShootable(projectile)));
         }
+
+        // CMU14: lets the Bad Blood armory put the eradicator on its own cooldown
+        if (_net.IsServer && args.Ammo.Count > 0)
+        {
+            var fired = new YautjaCasterFiredEvent(ent.Owner, ent.Comp.CurrentMode);
+            RaiseLocalEvent(user, ref fired);
+        }
     }
 
     private void OnAmmoShot(Entity<YautjaCasterComponent> ent, ref AmmoShotEvent args)
@@ -272,6 +301,17 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         }
 
         _power.RegenPower((ent.Comp.Bracer, bracer), ent.Comp.ChargeCost);
+    }
+
+    // CMU14: moves a caster to a mode from outside, e.g. back to the lethal bolt after a Bad Blood's one eradicator
+    // shot. the fire rate follows on the next shot attempt, which applies the mode before anything else
+    public void ForceMode(Entity<YautjaCasterComponent?> ent, int mode)
+    {
+        if (!Resolve(ent, ref ent.Comp, false) || mode < 0 || mode >= ent.Comp.Modes.Count)
+            return;
+
+        ent.Comp.CurrentMode = mode;
+        Dirty(ent);
     }
 
     private void SetMode(Entity<YautjaCasterComponent> ent, int mode, FixedPoint2 powerCost)
@@ -316,7 +356,8 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
     private static FixedPoint2 GetPowerCost(YautjaCasterComponent component)
     {
-        return component.PowerCost;
+        // CMU14: a mode with its own cost wins over the mode-switch cost stored on the caster
+        return GetMode(component)?.PowerCost ?? component.PowerCost;
     }
 
     private static Robust.Shared.Audio.SoundSpecifier GetFireSound(YautjaCasterComponent component)

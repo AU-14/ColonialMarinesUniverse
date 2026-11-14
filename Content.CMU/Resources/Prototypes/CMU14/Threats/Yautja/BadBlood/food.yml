@@ -1,0 +1,58 @@
+- type: Tag
+  id: CMUYautjaPreyCooked
+
+# the only food a Bad Blood stomach accepts. FoodMeatHuman itself is left alone, the cannibal checks match its id
+- type: entity
+  parent: FoodMeatCookedBase
+  id: CMUFoodMeatPreyHumanCooked
+  name: seared prey steak
+  description: A thick cut of prey, seared over a Lodge fire. No hunter asks what it was.
+  components:
+  - type: Tag
+    tags:
+    - Cooked
+    - Meat
+    - CMUYautjaPreyCooked
+  - type: Sprite
+    layers:
+    - state: plain-cooked
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 12
+      - ReagentId: Protein
+        Quantity: 6
+
+- type: entity
+  parent: FoodMeatCookedBase
+  id: CMUFoodMeatPreyXenoCooked
+  name: seared serpent cut
+  description: A cut of serpent flesh with the acid cooked out of it. It keeps for a long time.
+  components:
+  - type: Tag
+    tags:
+    - Cooked
+    - Meat
+    - CMUYautjaPreyCooked
+  - type: Sprite
+    layers:
+    - state: xenocutlet-cooked
+  - type: Solution
+    solution:
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 8
+      - ReagentId: Protein
+        Quantity: 4
+
+# what the Lodge spit turns loose prey meat into
+- type: cmuYautjaPreyCookRecipe
+  id: CMUYautjaPreyCookHumanMeat
+  input: FoodMeatHuman
+  cooked: CMUFoodMeatPreyHumanCooked
+
+- type: cmuYautjaPreyCookRecipe
+  id: CMUYautjaPreyCookXenoMeat
+  input: FoodMeatXeno
+  cooked: CMUFoodMeatPreyXenoCooked

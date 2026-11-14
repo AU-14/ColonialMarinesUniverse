@@ -1609,7 +1609,18 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if (ent.Comp.Chosen)
             return;
 
-        if (!ent.Comp.Choices.Contains(args.Choice))
+        // only a weapon the menu was sent can be picked, so a stale or forged choice can't burn the pick on nothing
+        var offered = false;
+        foreach (var entry in GetBadBloodWeaponChoices(ent))
+        {
+            if (entry.Kind != args.Choice)
+                continue;
+
+            offered = true;
+            break;
+        }
+
+        if (!offered)
             return;
 
         if (ent.Comp.PendingChoice == args.Choice)
@@ -1662,8 +1673,24 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void UpdateBadBloodChoiceUi(Entity<YautjaBadBloodGearChoiceComponent> ent)
     {
-        var state = new YautjaBadBloodWeaponChoiceBuiState(ent.Comp.Choices, ent.Comp.PendingChoice);
+        var state = new YautjaBadBloodWeaponChoiceBuiState(GetBadBloodWeaponChoices(ent), ent.Comp.PendingChoice);
         _ui.SetUiState(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, state);
+    }
+
+    // the choices the bracer can really install, with the gear prototype the client draws for each
+    public List<YautjaBadBloodWeaponChoiceEntry> GetBadBloodWeaponChoices(Entity<YautjaBadBloodGearChoiceComponent> ent)
+    {
+        var choices = new List<YautjaBadBloodWeaponChoiceEntry>();
+        if (!TryComp(ent.Owner, out YautjaGearContainerComponent? gear))
+            return choices;
+
+        foreach (var kind in ent.Comp.Choices)
+        {
+            if (gear.GearPrototypes.TryGetValue(kind, out var prototype))
+                choices.Add(new YautjaBadBloodWeaponChoiceEntry(kind, prototype));
+        }
+
+        return choices;
     }
 
     private bool CanUseYautjaGear(EntityUid user)

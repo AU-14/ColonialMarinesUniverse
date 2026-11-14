@@ -171,6 +171,22 @@ public sealed partial class ForceInterestSystem : EntitySystem
         _ghostRole.UpdateAllEui();
     }
 
+    /// <summary>
+    /// Deploys a queued force at once with whoever has shown interest, even nobody. Bodies nobody takes become
+    /// ghost roles. For admin commands that must not wait on the interest count; false if the force is not queued.
+    /// </summary>
+    public bool DeployNow(uint id)
+    {
+        if (!_forces.TryGetValue(id, out var force))
+            return false;
+
+        _adminLog.Add(LogType.AdminCommands, LogImpact.Medium,
+            $"'{force.Name}' was deployed at once, skipping the interest wait");
+        Deploy(id, force);
+        _ghostRole.UpdateAllEui();
+        return true;
+    }
+
     private bool CanJoin(PendingForce force, NetUserId player)
     {
         return _players.TryGetSessionById(player, out var session) &&

@@ -157,7 +157,7 @@
     value: 1.4
 
 - type: entity
-  parent: CMUMobYautja
+  parent: CMUMobYautjaBadBloodBase
   id: CMUMobYautjaBadBloodGrunt
   name: Bad Blood Grunt
   suffix: Yautja, Bad Blood
@@ -196,7 +196,7 @@
     - CMUYautjaBadBloodGruntGear21
 
 - type: entity
-  parent: CMUMobYautja
+  parent: CMUMobYautjaBadBloodBase
   id: CMUMobYautjaBadBloodLeader
   name: Bad Blood Leader
   suffix: Yautja, Bad Blood
@@ -304,7 +304,7 @@
     - CMUYautjaMilitaryCasteEnforcerLowThreatGear
 
 - type: entity
-  parent: CMUMobYautja
+  parent: CMUMobYautjaBadBloodBase
   id: CMUMobYautjaBadBlood
   name: Yautja Bad Blood
   suffix: Yautja, Bad Blood, Event

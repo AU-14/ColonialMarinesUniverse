@@ -1,0 +1,107 @@
+# Clan Totems: the Bad Blood clan's territory, and the marine objective that pays for destroying them.
+
+# a lone rifleman needs about 30 s, a fireteam about 10 s. explosions take it at full strength
+- type: damageModifierSet
+  id: BadBloodTotem
+  coefficients:
+    Piercing: 0.4
+  flatReductions:
+    Piercing: 30
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodTotem
+  name: Clan Totem
+  description: A spear driven into the ground and hung with skulls. The clan that raised it claims everything around it.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    drawdepth: Objects
+    layers:
+    - sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hunter_armor_prop"
+  - type: Icon
+    sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
+    state: "hunter_armor_prop"
+  - type: Damageable
+    damageModifierSet: BadBloodTotem
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: BadBloodTotem
+    youngIncome: 0.2
+    growingIncome: 0.4
+    ripeIncome: 0.7
+    growingAfter: 600
+    ripeAfter: 1200
+    payoutStep: 0.01
+    contestRadius: 7
+    auraRadius: 7
+    mapRevealDelay: 120
+    lodgeRevealTime: 90
+    destroyedIntel: 0.7
+    intelTeam: govfor
+    loot: CMUYautjaHumanSkullTrophy
+    revealComponents:
+    - type: TacticalMapAlwaysVisible
+      visibleToMarines: true
+      visibleToGovfor: true
+  # sits in the Yautja bucket, so marines only see it once it is revealed
+  - type: TacticalMapTracked
+    trackDead: true
+  - type: YautjaMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: core
+
+# every Bad Blood carries this while the clan's rule runs
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodRaiseTotem
+  name: Raise Clan Totem
+  description: Raise a Clan Totem where you stand. It needs open sky, and distance from the Lodge, other Totems and the prey's landing zones. The clan's first is free, the rest cost Superiority Points.
+  components:
+  - type: Action
+    useDelay: 5
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodRaiseTotemActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: bracer_framed
+      map: [enum.ActionVisuals.Icon]
+
+# Marines are paid for every Totem they really destroy. BadBloodTotemObjectiveSystem puts this on the planet and
+# switches it on in every Bad Blood round, it is never left to the objective roll.
+- type: entity
+  id: CMUBadBloodTotemObjective
+  name: Destroy the Clan Totems
+  description: Find and destroy the totems the hostile clan has raised in the area of operations.
+  categories: [HideSpawnMenu]
+  components:
+  - type: CMUObjective
+    id: cmubadbloodtotems
+    factionNeutral: false
+    allowedPresets:
+    - DistressSignal
+    factions:
+    - govfor
+    repeating: true
+    maxRepeatable: 10
+    objectiveLevel: 1
+    customPoints: 8
+    objectiveDescription: "Destroy a Clan Totem raised by the hostile hunters"
+  - type: DestroyObjective
+    targetPrototype: CMUBadBloodTotem
+    spawnCount: 0
+    destroyCount: 1
+    requireDestruction: true

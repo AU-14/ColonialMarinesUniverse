@@ -2,10 +2,10 @@ using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Yautja;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class YautjaBadBloodGearChoiceComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public List<YautjaGearKind> Choices = new()
     {
         YautjaGearKind.WristBlades,
@@ -13,9 +13,9 @@ public sealed partial class YautjaBadBloodGearChoiceComponent : Component
         YautjaGearKind.ChainGauntlet,
     };
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public YautjaGearKind? PendingChoice;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool Chosen;
 }

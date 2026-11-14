@@ -18,6 +18,13 @@ public sealed partial class DestroyObjectiveComponent : Robust.Shared.GameObject
     [DataField]
     public int DestroyCount { get; private set; } = 1;
 
+    /// <summary>
+    /// When set, a target only counts once the Destructible pipeline destroys it (DestructionEventArgs).
+    /// A plain deletion, such as deconstruction or cleanup, pays nothing. Off by default: any deletion counts.
+    /// </summary>
+    [DataField]
+    public bool RequireDestruction { get; private set; }
+
     public Dictionary<string, int> AmountDestroyedPerFaction = new();
     public bool HasSpawned = false; // EntitiesSpawned
 }

@@ -14,7 +14,9 @@ using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Light.Components;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.CMU14.Movement;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Devour;
@@ -41,6 +43,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private INetManager _net = default!;
@@ -52,6 +55,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedWeatherSystem _weather = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
+    [Dependency] private BadBloodSurvivalSystem _badBloodSurvival = default!;
 
     private static readonly ProtoId<TagPrototype> HideContextMenuTag = "HideContextMenu";
 
@@ -225,8 +229,8 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 return false;
             }
 
-            if (bracer.Comp.CloakCooldown > TimeSpan.Zero &&
-                _timing.CurTime < bracer.Comp.CloakCooldownUntil)
+            // CloakCooldownUntil is also set by a forced decloak, even on a bracer with no normal cooldown.
+            if (_timing.CurTime < bracer.Comp.CloakCooldownUntil)
             {
                 var remaining = (int) Math.Ceiling((bracer.Comp.CloakCooldownUntil - _timing.CurTime).TotalSeconds);
                 _popup.PopupEntity(Loc.GetString("cmu-yautja-cloak-cooldown", ("seconds", remaining)), user, user, PopupType.SmallCaution);
@@ -432,8 +436,18 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             return;
         }
 
-        TrySetInvisibility(bracer, user, false, true);
+        var decloaked = TrySetInvisibility(bracer, user, false, true);
         _actions.SetToggled(bracer.Comp.ToggleCloakAction, false);
+
+        // A stripped cloak cannot be raised again at once. Never shortens a longer cooldown already running.
+        var until = _timing.CurTime + bracer.Comp.CloakForcedDecloakCooldown;
+        // Bad Bloods only: honourable hunters keep their normal cooldown behaviour.
+        if (!decloaked || !HasComp<YautjaBadBloodComponent>(user) || until <= bracer.Comp.CloakCooldownUntil)
+            return;
+
+        bracer.Comp.CloakCooldownUntil = until;
+        Dirty(bracer);
+        _actions.SetCooldown(bracer.Comp.ToggleCloakAction, bracer.Comp.CloakForcedDecloakCooldown);
     }
 
     // Taking a hit must not break the cloak by itself: a hunter can stay hidden
@@ -457,7 +471,8 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             return;
 
         ForceDecloak(args.Target);
-        if (bracer.Comp.BulletDecloakAbsorbs)
+        // A Bad Blood's cloak never eats the bullet that strips it.
+        if (bracer.Comp.BulletDecloakAbsorbs && !HasComp<YautjaBadBloodComponent>(args.Target))
             args.Damage = new DamageSpecifier();
     }
 
@@ -517,19 +532,55 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             return;
         }
 
+        TryBadBloodAmbush(target, origin, args.DamageDelta!);
         ApplyOffensiveCombatLockout(origin);
     }
 
-    public void ApplyOffensiveCombatLockout(EntityUid attacker)
+    /// <summary>
+    /// Bad Blood ambush rule: the first damaging hit on a mob from cloak deals bonus damage and drops the
+    /// cloak. The combat lockout applied by the caller then gates the re-cloak.
+    /// </summary>
+    private void TryBadBloodAmbush(EntityUid target, EntityUid attacker, DamageSpecifier delta)
     {
-        if (!HasComp<YautjaComponent>(attacker) ||
-            HasComp<YautjaBadBloodComponent>(attacker) ||
+        if (attacker == target ||
+            !HasComp<YautjaBadBloodComponent>(attacker) ||
+            !HasComp<MobStateComponent>(target) ||
+            !HasComp<EntityActiveInvisibleComponent>(attacker) ||
+            // The active marker is removed deferred; Enabled flips at once, so one hit cannot ambush twice.
+            !TryComp(attacker, out EntityTurnInvisibleComponent? cloak) ||
+            !cloak.Enabled ||
             !_power.TryGetWornBracer(attacker, out var bracer))
         {
             return;
         }
 
-        var until = _timing.CurTime + bracer.Comp.CloakCombatLockout;
+        // Decloak before dealing the bonus. This is the Bad Blood's own strike, so it does not start the
+        // forced-decloak cooldown.
+        if (!TrySetInvisibility(bracer, attacker, false, true))
+            return;
+
+        _actions.SetToggled(bracer.Comp.ToggleCloakAction, false);
+
+        if (bracer.Comp.CloakBadBloodAmbushBonus <= 0f)
+            return;
+
+        // The delta is already past armor, and carries no tool or impact, so it cannot re-enter this rule.
+        var bonus = DamageSpecifier.GetPositive(delta) * bracer.Comp.CloakBadBloodAmbushBonus;
+        _damageable.TryChangeDamage(target, bonus, ignoreResistances: true, origin: attacker);
+    }
+
+    public void ApplyOffensiveCombatLockout(EntityUid attacker)
+    {
+        if (!HasComp<YautjaComponent>(attacker) ||
+            !_power.TryGetWornBracer(attacker, out var bracer))
+        {
+            return;
+        }
+
+        var lockout = HasComp<YautjaBadBloodComponent>(attacker)
+            ? bracer.Comp.CloakBadBloodCombatLockout
+            : bracer.Comp.CloakCombatLockout;
+        var until = _timing.CurTime + lockout;
         if (until <= bracer.Comp.CloakCombatLockoutUntil)
             return;
 
@@ -584,6 +635,10 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         if (IsExposedToRain(user))
             return YautjaCloakDotBlocker.Water;
 
+        // Bad Bloods only: a starving or parched body cannot hold the field up.
+        if (_badBloodSurvival.IsStarving(user))
+            return YautjaCloakDotBlocker.Starving;
+
         return null;
     }
 
@@ -594,6 +649,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             YautjaCloakDotBlocker.Acid => "cmu-yautja-cloak-blocked-acid",
             YautjaCloakDotBlocker.Fire => "cmu-yautja-cloak-blocked-fire",
             YautjaCloakDotBlocker.Water => "cmu-yautja-cloak-blocked-water",
+            YautjaCloakDotBlocker.Starving => "cmu-yautja-cloak-blocked-starving",
             _ => "cmu-yautja-cloak-blocked-dot",
         };
     }
@@ -646,4 +702,5 @@ public enum YautjaCloakDotBlocker : byte
     Fire,
     Other,
     Water,
+    Starving,
 }

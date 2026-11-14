@@ -115,7 +115,11 @@ public sealed class ForceInterestTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.False);
-            Assert.That(SEntMan.EntityQuery<UnclaimedForceRoleComponent>().Count(), Is.EqualTo(1));
+            // CMU14 FLOW-101: the volunteer is seated in the body instead of it being left as an unclaimed role.
+            Assert.That(SEntMan.EntityQuery<UnclaimedForceRoleComponent>().Count(), Is.Zero);
+            Assert.That(ServerSession!.AttachedEntity, Is.Not.Null);
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(ServerSession!.AttachedEntity!.Value).EntityPrototype?.ID,
+                Is.EqualTo("TestForceInterestBody"));
         });
     }
 

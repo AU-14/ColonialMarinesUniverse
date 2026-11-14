@@ -170,11 +170,13 @@ public sealed class YautjaEdgeCaseRegressionTest
             var entMan = server.EntMan;
             var mobState = entMan.System<MobStateSystem>();
             hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
-            // raise thrall only exists on the bad blood bracer
+            // no bracer prototype ships raise thrall any more (the bad blood bracer lost it), so switch it on
+            // for this bracer to keep covering the shared raise path
             var inventory = entMan.System<InventorySystem>();
             if (inventory.TryUnequip(hunter, "gloves", out var oldBracer, silent: true, force: true))
                 entMan.DeleteEntity(oldBracer.Value);
             var badBloodBracer = entMan.SpawnEntity("CMUYautjaBadBloodBracer", map.GridCoords);
+            entMan.GetComponent<YautjaBracerComponent>(badBloodBracer).EnableRaiseThrall = true;
             Assert.That(inventory.TryEquip(hunter, badBloodBracer, "gloves", silent: true, force: true), Is.True);
             headless =entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
             intact = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 1)));

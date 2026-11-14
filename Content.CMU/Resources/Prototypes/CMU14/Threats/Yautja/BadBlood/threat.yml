@@ -18,10 +18,17 @@
   - ColonyFall
   jobScaling: DefaultDistressScale
   spawnExtraVoteMembers: false
+  # No honourable hunt on a Bad Blood round: off the ballot while it is queued, and it stands down if we win.
+  blockedGameRules:
+  - CMUYautjaPredatorRound
   winconditions:
   - KillAllGovforRule
-  - KillAllYautjaRule
-  minplayers: 0
+  # the clan state: Superiority Points, the Leader, the Lodge. It is also the end rule: marines win when the
+  # Leader is gone and no Lodge stands, the clan wins if the Lodge outlasts the clan ship (no KillAllYautjaRule)
+  - CMUBadBloodCampRule
+  # leftover threat voters wait in the Blood Reserve instead of being sent back to the lobby
+  reserveLeftoverVoters: true
+  minplayers: 30
 
 - type: partySpawn
   id: badBloodClanParty

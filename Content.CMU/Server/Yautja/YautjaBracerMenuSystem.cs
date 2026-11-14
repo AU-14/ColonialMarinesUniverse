@@ -133,6 +133,10 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         if (!CanUseMenu(ent, args.Actor))
             return;
 
+        // Bad Bloods have no thralls, so the thrall page does nothing for them
+        if (IsThrallCommand(args.Command) && HasComp<YautjaBadBloodComponent>(args.Actor))
+            return;
+
         switch (args.Command)
         {
             case YautjaBracerPanelCommand.OpenMarks:
@@ -208,6 +212,15 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         }
 
         UpdateUi(ent, args.Actor);
+    }
+
+    private static bool IsThrallCommand(YautjaBracerPanelCommand command)
+    {
+        return command is YautjaBracerPanelCommand.LinkThrallBracer
+            or YautjaBracerPanelCommand.OpenThrallTransmission
+            or YautjaBracerPanelCommand.StunThrall
+            or YautjaBracerPanelCommand.ToggleThrallSelfDestruct
+            or YautjaBracerPanelCommand.ToggleThrallBracerLock;
     }
 
     private void UpdateUi(Entity<YautjaBracerComponent> bracer, EntityUid actor, bool popup = true)

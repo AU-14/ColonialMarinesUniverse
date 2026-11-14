@@ -421,7 +421,10 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (_inventory.TryGetSlotEntity(user, "eyes", out _))
             return false;
 
-        var glasses = Spawn(mask.Comp.VisorGlassesPrototype, Transform(user).Coordinates);
+        var prototype = HasComp<YautjaBadBloodComponent>(user)
+            ? mask.Comp.BadBloodVisorGlassesPrototype
+            : mask.Comp.VisorGlassesPrototype;
+        var glasses = Spawn(prototype, Transform(user).Coordinates);
         if (!_inventory.TryEquip(user, glasses, "eyes", silent: true, force: true))
         {
             QueueDel(glasses);

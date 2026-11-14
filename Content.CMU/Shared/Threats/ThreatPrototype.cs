@@ -48,6 +48,13 @@ public sealed partial class ThreatPrototype : IPrototype
     [DataField(required: false)]
     public bool SpawnExtraVoteMembers { get; private set; } = true;
 
+    /// <summary>
+    ///     Whether consenting voters left without a body are handed to <c>ThreatLeftoverVotersEvent</c>
+    ///     subscribers instead of being respawned to the lobby.
+    /// </summary>
+    [DataField]
+    public bool ReserveLeftoverVoters { get; private set; }
+
     [DataField("possibleInserts")]
     public List<AuInsertPrototype> Inserts { get; private set; } = new();
 
@@ -82,6 +89,13 @@ public sealed partial class ThreatPrototype : IPrototype
 
     [DataField("addgamerules", required: false)]
     public List<string> AddGameRules { get; private set; } = new();
+
+    /// <summary>
+    ///     Game rules that must not run alongside this threat. The threat is kept off the ballot while one of
+    ///     them is added, and the owning rule system stands down if the threat is selected anyway.
+    /// </summary>
+    [DataField]
+    public List<EntProtoId> BlockedGameRules { get; private set; } = new();
 
     [DataField("winmessage", required: false)]
     public string? WinMessage { get; private set; }
