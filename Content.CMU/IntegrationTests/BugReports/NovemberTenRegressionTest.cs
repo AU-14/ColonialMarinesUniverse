@@ -163,6 +163,17 @@ public sealed class NovemberTenRegressionTest : GameTest
                 Assert.That(sprites.LayerGetRsiState((overlay, null), 0).ToString(), Is.EqualTo(target.State), $"{target.Proto} at {tile}");
             }
         });
+
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var (tile, overlay) in overlays)
+            {
+                SEntMan.DeleteEntity(SEntMan.GetEntity(overlay));
+                var weedable = SEntMan.GetComponent<XenoWeedableComponent>(spawned[tile]);
+                Assert.That(weedable.Entity, Is.Null, "Destroyed coverings must release both walls and windows immediately.");
+                SEntMan.GetComponentState(SEntMan.EventBus, weedable, null, Robust.Shared.Timing.GameTick.Zero);
+            }
+        });
     }
 
     // corners and tees have no cmss13 weed sprite, they fall back to a straight run instead of the error sprite
