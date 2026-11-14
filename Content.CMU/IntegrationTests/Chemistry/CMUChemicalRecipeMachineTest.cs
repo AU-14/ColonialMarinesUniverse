@@ -1,17 +1,40 @@
+#pragma warning disable RA0002 // Inspect the resolved requisitions catalogs.
+
+using System.Linq;
+using Content.Client.Guidebook.Components;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.Chemistry;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.FixedPoint;
+using Content.Shared.Guidebook;
 using Content.Shared.Interaction;
 using Content.Shared.Paper;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Chemistry;
 
 [TestFixture]
 public sealed class CMUChemicalRecipeMachineTest : GameTest
 {
+    [Test]
+    public async Task MachineOffersMedicalMachinesGuide()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            ProtoId<GuideEntryPrototype> guide = "CMUGuideMedicalMachines";
+            var factory = Client.ResolveDependency<IComponentFactory>();
+            var machine = CProtoMan.Index<EntityPrototype>("CMUChemicalRecipeMachine");
+            Assert.That(machine.TryComp<GuideHelpComponent>(out var help, factory), Is.True);
+            Assert.That(help!.Guides.First(), Is.EqualTo(guide));
+            Assert.That(CProtoMan.Index(guide), Is.Not.Null);
+        });
+    }
+
     [Test]
     public async Task ScanningPillPrintsMachineReadableAndManualRecipe()
     {
@@ -81,6 +104,78 @@ public sealed class CMUChemicalRecipeMachineTest : GameTest
 
             Assert.That(source.GetTotalPrototypeQuantity("Water"), Is.EqualTo(FixedPoint2.New(5)));
             Assert.That(stock.Value.Comp.Solution.GetTotalPrototypeQuantity("Water"), Is.EqualTo(FixedPoint2.Zero));
+        });
+    }
+
+    [TestCase("CMVendorCircuits")]
+    [TestCase("CMVendorElectronics")]
+    public async Task ElectronicsVendorsStockMachineBoard(string vendorId)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var vendor = Server.ProtoMan.Index<EntityPrototype>(vendorId)
+                .Components.Values.Select(c => c.Component).OfType<CMAutomatedVendorComponent>().Single();
+            Assert.That(vendor.Sections.SelectMany(s => s.Entries)
+                .Any(e => e.Id == "CMUCircuitboardChemicalRecipeMachine" && e.Amount > 0), Is.True);
+        });
+    }
+
+    [Test]
+    public async Task CashCircuitVendorSellsMachineBoard()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var vendor = Server.ProtoMan.Index<EntityPrototype>("CMUCashVendorCircuits")
+                .Components.Values.Select(c => c.Component).OfType<AU14CashVendorComponent>().Single();
+            Assert.That(vendor.Items.Any(e => e.ItemId == "CMUCircuitboardChemicalRecipeMachine" && e.BasePrice > 0), Is.True);
+        });
+    }
+
+    [TestCase("CMCargoCatalog")]
+    [TestCase("USCMCargoCatalog")]
+    [TestCase("UPPCargoCatalog")]
+    [TestCase("BEARCargoCatalog")]
+    [TestCase("LACNCargoCatalog")]
+    [TestCase("WYPMCCargoCatalog")]
+    [TestCase("VAIPOCargoCatalog")]
+    [TestCase("HAZOPSCargoCatalog")]
+    [TestCase("RMCCargoCatalog")]
+    [TestCase("CMBCIUCargoCatalog")]
+    [TestCase("ProdigyCargoCatalog")]
+    [TestCase("AU14CorporateASRSConsole")]
+    public async Task AsrsCatalogSellsMachineCrate(string catalogId)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var catalog = Server.ProtoMan.Index<EntityPrototype>(catalogId)
+                .Components.Values.Select(c => c.Component).OfType<RequisitionsComputerComponent>().Single();
+            Assert.That(catalog.Categories.SelectMany(c => c.Entries)
+                .Any(e => e.Crate.Id == "CMUCrateChemicalRecipeMachine" && e.Cost > 0), Is.True, catalogId);
+        });
+    }
+
+    [Test]
+    public async Task CrowbarOpensCrateIntoMachine()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid crate = default;
+        var initialMachines = 0;
+        await Server.WaitAssertion(() =>
+        {
+            initialMachines = SEntMan.EntityQuery<CMUChemicalRecipeMachineComponent>().Count();
+            crate = SEntMan.SpawnEntity("CMUCrateChemicalRecipeMachine", map.GridCoords);
+            var crowbar = SEntMan.SpawnEntity("CMCrowbar", map.GridCoords);
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var interact = new InteractUsingEvent(user, crowbar, crate, map.GridCoords);
+            SEntMan.EventBus.RaiseLocalEvent(crate, interact);
+            Assert.That(interact.Handled, Is.True);
+        });
+
+        await Pair.RunSeconds(1);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.Deleted(crate), Is.True);
+            Assert.That(SEntMan.EntityQuery<CMUChemicalRecipeMachineComponent>().Count(), Is.EqualTo(initialMachines + 1));
         });
     }
 

@@ -957,6 +957,10 @@
       section: Machineboards
       name: Recharger Circuit Board
       price: 75
+    - id: CMUCircuitboardChemicalRecipeMachine
+      section: Machineboards
+      name: Chemical Synthesis Unit Board
+      price: 50
     - id: AirAlarmElectronics
       section: Circuitboards
       name: Air Alarm Electronics

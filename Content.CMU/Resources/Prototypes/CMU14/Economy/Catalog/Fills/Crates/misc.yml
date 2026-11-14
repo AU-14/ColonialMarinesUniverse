@@ -122,6 +122,15 @@
     spawn: CMUChemSimulator
 
 - type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateChemicalRecipeMachine
+  name: chemical synthesis unit crate
+  description: A crate containing a chemical synthesis unit.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUChemicalRecipeMachine
+
+- type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
   id: AU14CrateMedicalBloodVendor
   name: WeYu blood dispenser crate

@@ -16,6 +16,8 @@
         crate: CMUCrateResearchTerminal
       - cost: 900
         crate: CMUCrateSim
+      - cost: 500
+        crate: CMUCrateChemicalRecipeMachine
       - cost: 4000
         crate: CMUMonkeyCubeCrate
         maxStock: 1
