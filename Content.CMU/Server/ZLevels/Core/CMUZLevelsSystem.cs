@@ -37,6 +37,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         InitializeActivation();
         InitializeTopology();
         InitializeSupportActivation();
+        InitializeMovementDeckQueries();
 
         SubscribeLocalEvent<ExpandPvsEvent>(OnExpandOverheadEntityPvs);
 

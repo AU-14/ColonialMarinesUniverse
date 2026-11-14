@@ -465,6 +465,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         sub.ID = $"{sub.ID}-{faction}-{_nextContractId++}";
         sub.GenTier = _random.Next(1, 3);
         _generator.GenerateStats(ref sub);
+        _generator.RollTemperatureGate(ref sub);
         AssignContractRewardAndHint(ref sub);
         sub.PropertyHint = sub.Effects.Count > 0 ? _random.Pick(sub.Effects.Keys) : string.Empty;
         return TryGenerateContractRecipe(ref sub, null);
@@ -779,8 +780,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             ? Loc.GetString("cmu-paper-contract-experiment", ("EXP", experiment), ("NAME", dat.Name)) + '\n'
             : Loc.GetString("research-report-contract-reagents", ("NAME", dat.Name)) + '\n';
         AppendRecipe(ref text, dat);
-        if (dat.GenTier >= SharedReagentGeneratorSystem.MixGatedGenTier)
-            text += Loc.GetString("research-report-contract-mix-required") + '\n';
+        AppendProcessRequirements(ref text, dat);
 
         if (dat.SubContractIsNew && !string.IsNullOrEmpty(dat.SubContractID) &&
             _generator.ProceduralReagentData.TryGetValue(dat.SubContractID, out var sub))
@@ -788,6 +788,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             text += Loc.GetString("research-report-subcontract-header", ("NAME", sub.Name)) + '\n';
             text += Loc.GetString("research-report-subcontract-reagents", ("NAME", sub.Name), ("PARENT", dat.Name)) + '\n';
             AppendRecipe(ref text, sub);
+            AppendProcessRequirements(ref text, sub);
         }
 
         if (includeProperties)
@@ -809,6 +810,10 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             text += Loc.GetString("cmu-paper-contract-footer") + '\n';
         return text;
     }
+
+    /// <summary>The Mix, heat/cooling gate and ignition-ceiling lines for a contract (or sub-contract) recipe.</summary>
+    private void AppendProcessRequirements(ref string text, GeneratedReagentData data)
+        => text += _generator.ProcessRequirementsText(data);
 
     /// <summary>Appends a contract's reactant lines, then its catalysts under their own header.</summary>
     private void AppendRecipe(ref string text, GeneratedReagentData data)
@@ -956,6 +961,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             data.ID = $"{data.ID}-{faction}-{_nextContractId++}";
             data.GenTier = _random.Next(1, 4);
             _generator.GenerateStats(ref data);
+            _generator.RollTemperatureGate(ref data);
             AssignContractRewardAndHint(ref data);
             data.PropertyHint = _random.Pick(data.Effects.Keys);
             research.Selectable.Add(data);

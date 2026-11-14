@@ -10,6 +10,7 @@
 
 - type: thirdParty
   id: ICRCReliefParty
+  speaksColonyLanguage: true
   partyspawn: ICRCReliefPartySpawn
   displayName: Red Cross Relief Party
   entrymethod: shuttle

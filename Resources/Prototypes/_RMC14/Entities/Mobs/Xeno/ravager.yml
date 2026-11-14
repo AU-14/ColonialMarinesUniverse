@@ -244,6 +244,7 @@
   - type: XenoShield
   - type: XenoStrain
     name: rmc-xeno-berserker-name
+    baseCaste: CMXenoRavager # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-berserker-description
     popup: rmc-xeno-berserker-popup
   - type: XenoPlasma
@@ -333,6 +334,7 @@
     explosionArmor: 100
   - type: XenoStrain
     name: rmc-xeno-hedgehog-name
+    baseCaste: CMXenoRavager # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-hedgehog-description
     popup: rmc-xeno-hedgehog-popup
   - type: XenoPlasma

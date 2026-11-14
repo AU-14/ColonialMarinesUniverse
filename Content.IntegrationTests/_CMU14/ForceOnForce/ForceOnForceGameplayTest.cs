@@ -257,6 +257,207 @@ public sealed class ForceOnForceGameplayTest : GameTest
         });
     }
 
+    [TestCase("govfor", "opfor", "USCM", "UPP", "AU14DesertFatigues", "AU14FatiguesUPP")]
+    [TestCase("opfor", "govfor", "UPP", "USCM", "AU14FatiguesUPP", "AU14DesertFatigues")]
+    public async Task UniformMarkerUsesTheViewersFactionAndUniforms(
+        string faction, string otherFaction, string platoon, string otherPlatoon, string ownUniform, string otherUniform)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid viewer = default;
+        EntityUid target = default;
+        await Server.WaitAssertion(() =>
+        {
+            viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var viewerMarine = SEntMan.EnsureComponent<MarineComponent>(viewer);
+            viewerMarine.Faction = faction;
+            SEntMan.Dirty(viewer, viewerMarine);
+            var policy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+            policy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>(platoon).Uniforms);
+            target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var targetMarine = SEntMan.EnsureComponent<MarineComponent>(target);
+            targetMarine.Faction = otherFaction;
+            var targetPolicy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(target);
+            targetPolicy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>(otherPlatoon).Uniforms);
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var inventory = Server.System<InventorySystem>();
+            Assert.That(recognition.IsUnidentified(target, viewer), Is.True, "missing uniforms are unfamiliar");
+            Assert.That(recognition.IsUnidentified(viewer, viewer), Is.False, "the viewer is never marked");
+            Assert.That(recognition.IsUnidentified(target, null), Is.False, "spectators have no faction uniform policy");
+            var own = SEntMan.SpawnEntity(ownUniform, map.GridCoords);
+            Assert.That(inventory.TryEquip(target, own, "jumpsuit", silent: true, force: true), Is.True);
+            Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "recognize the viewer's uniforms on other factions");
+            Assert.That(inventory.TryUnequip(target, "jumpsuit", silent: true, force: true), Is.True);
+            Assert.That(recognition.IsUnidentified(target, viewer), Is.True);
+            var enemy = SEntMan.SpawnEntity(otherUniform, map.GridCoords);
+            Assert.That(inventory.TryEquip(target, enemy, "jumpsuit", silent: true, force: true), Is.True);
+            Assert.That(recognition.IsUnidentified(target, viewer), Is.True, "the target's own whitelist does not identify them to the viewer");
+            targetMarine.Faction = faction.ToUpperInvariant();
+            Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "teammates keep identifiers even in foreign uniforms");
+            Assert.That(inventory.TryUnequip(target, "jumpsuit", silent: true, force: true), Is.True);
+            Assert.That(recognition.IsUnidentified(target, viewer), Is.False, "teammates without uniforms are never marked");
+        });
+    }
+
+    [Test]
+    public async Task IdentificationSplitsOppositionAlliesAndNeutrals()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(viewer).Faction = "govfor";
+            var policy = SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+            policy.Uniforms.UnionWith(SProtoMan.Index<ForceOnForceUniformPrototype>("USCM").Uniforms);
+
+            var enemy = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(enemy).Faction = "opfor";
+            Assert.That(recognition.Classify(enemy, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "the opposing side is the direct competition");
+
+            var ally = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(ally).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceSideComponent>(ally).Side = "opfor";
+            Assert.That(recognition.Classify(ally, viewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "a third party aligned with the opposing side is still the competition");
+
+            var opforViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(opforViewer).Faction = "opfor";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(opforViewer);
+            Assert.That(recognition.Classify(ally, opforViewer), Is.EqualTo(ForceOnForceIdentification.None),
+                "aligned third parties count as teammates of their side, whatever they wear");
+
+            var colonist = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(colonist).Faction = "marine";
+            Assert.That(recognition.Classify(colonist, viewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "unaffiliated parties stay unknown to a war side");
+
+            var neutralViewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(neutralViewer).Faction = "marine";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(neutralViewer);
+            Assert.That(recognition.Classify(viewer, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Hostile),
+                "neutrals see both war sides as the direct competition");
+            Assert.That(recognition.Classify(colonist, neutralViewer), Is.EqualTo(ForceOnForceIdentification.Unknown),
+                "neutrals cannot tell other unaffiliated parties apart");
+        });
+    }
+
+    [Test]
+    public async Task YautjaGetNoIdentificationMarker()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var recognition = Server.System<ForceOnForceUniformSystem>();
+            var viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(viewer).Faction = "govfor";
+            SEntMan.EnsureComponent<ForceOnForceUniformComponent>(viewer);
+
+            // a sideless faction is what got preds the "?" in the first place
+            var hunter = SEntMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(hunter).Faction = "yautja";
+            Assert.That(recognition.Classify(hunter, viewer), Is.EqualTo(ForceOnForceIdentification.None));
+        });
+    }
+
+    [TestCase("govfor", "opfor", "USCM", "UPP", "CMJumpsuitXOFormal", "AU14FatiguesUPP")]
+    [TestCase("opfor", "govfor", "UPP", "USCM", "AU14ServiceFatiguesUPP", "AU14CamoUSCMFatigues")]
+    public async Task UniformMarkerRecognizesVendorStockOnTheClient(
+        string faction, string enemyFaction, string platoon, string enemyPlatoon, string ownUniform, string enemyUniform)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid viewer = default;
+        EntityUid target = default;
+        await Server.WaitAssertion(() =>
+        {
+            var ticker = Server.System<GameTicker>();
+            typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "govfor" ? platoon : enemyPlatoon);
+            platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "opfor" ? platoon : enemyPlatoon);
+            viewer = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var viewerMarine = SEntMan.EnsureComponent<MarineComponent>(viewer);
+            viewerMarine.Faction = faction;
+            SEntMan.Dirty(viewer, viewerMarine);
+            target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<MarineComponent>(target).Faction = enemyFaction;
+            SEntMan.EventBus.RaiseLocalEvent(viewer, new PlayerSpawnCompleteEvent(viewer, ServerSession!, null,
+                false, true, 0, map.Grid.Owner, HumanoidCharacterProfile.DefaultWithSpecies()), true);
+            var policy = SEntMan.GetComponent<ForceOnForceUniformComponent>(viewer);
+            Assert.That(policy.Uniforms.Contains(ownUniform), Is.True, "include uniforms from the resolved vendors");
+            Assert.That(policy.Uniforms.Contains(enemyUniform), Is.False, "enemy vendor stock stays unfamiliar");
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, viewer);
+        });
+
+        try
+        {
+            foreach (var (uniform, friendly, state, expected) in new (string, bool, MobState, bool)[]
+                     {
+                         (enemyUniform, false, MobState.Alive, true),
+                         (ownUniform, false, MobState.Alive, false),
+                         (enemyUniform, true, MobState.Alive, false),
+                         (null, true, MobState.Alive, false),
+                         (null, false, MobState.Alive, true),
+                         (enemyUniform, false, MobState.Dead, false),
+                         (null, false, MobState.Dead, false),
+                         (enemyUniform, false, MobState.Alive, true),
+                     })
+            {
+                await Server.WaitAssertion(() =>
+                {
+                    var inventory = Server.System<InventorySystem>();
+                    if (inventory.TryGetSlotEntity(target, "jumpsuit", out _))
+                        Assert.That(inventory.TryUnequip(target, "jumpsuit", silent: true, force: true), Is.True);
+                    if (uniform != null)
+                        Assert.That(inventory.TryEquip(target, SEntMan.SpawnEntity(uniform, map.GridCoords),
+                            "jumpsuit", silent: true, force: true), Is.True);
+                    var marine = SEntMan.GetComponent<MarineComponent>(target);
+                    marine.Faction = friendly ? faction.ToUpperInvariant() : enemyFaction;
+                    SEntMan.Dirty(target, marine);
+                    Server.System<MobStateSystem>().ChangeMobState(target, state);
+                });
+                await Pair.RunTicksSync(5);
+                await Pair.RunUntilSynced();
+                await Client.WaitAssertion(() =>
+                {
+                    Assert.That(CEntMan.GetComponent<MarineComponent>(ToClientUid(viewer)).Faction,
+                        Is.EqualTo(faction), "replicated viewer faction");
+                    Assert.That(CEntMan.GetComponent<MarineComponent>(ToClientUid(target)).Faction,
+                        Is.EqualTo(friendly ? faction.ToUpperInvariant() : enemyFaction), "replicated target faction");
+                    Assert.That(
+                    Client.System<ForceOnForceUniformSystem>().IsUnidentified(ToClientUid(target), ToClientUid(viewer)),
+                    Is.EqualTo(expected), $"client recognition: uniform={uniform}, friendly={friendly}, state={state}");
+                });
+            }
+        }
+        finally
+        {
+            await Server.WaitPost(() => Server.PlayerMan.SetAttachedEntity(ServerSession!, null));
+        }
+    }
+
+    [Test]
+    public async Task UniformMarkerSettingDefaultsOnAndCanBeChangedLocally()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var configuration = Client.ResolveDependency<IConfigurationManager>();
+            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
+            using var tab = new CmuTab();
+            var checkbox = tab.FindControl<CheckBox>("FoFUnidentifiedMarkerCheckBox");
+            Assert.That(checkbox.Pressed, Is.True);
+            checkbox.Pressed = false;
+            tab.Control.ApplyChanges();
+            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.False);
+            tab.Control.ReloadValues();
+            Assert.That(checkbox.Pressed, Is.False);
+            checkbox.Pressed = true;
+            tab.Control.ApplyChanges();
+            Assert.That(configuration.GetCVar(CCVars.ForceOnForceUnidentifiedMarkerEnabled), Is.True);
+        });
+    }
+
     [TestCase("govfor", RoundJobSide.Govfor, RoundJobSide.Opfor)]
     public async Task RespawnsStayOnTheirOriginalSideUntilTheRoundResets(string faction, RoundJobSide own, RoundJobSide enemy)
     {

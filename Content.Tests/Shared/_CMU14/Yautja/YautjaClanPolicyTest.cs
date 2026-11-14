@@ -97,35 +97,44 @@ public sealed class YautjaClanPolicyTest
     [Test]
     public void AncientWorksAcrossClansButNotOnAncients()
     {
-        var ancient = Actor(1, YautjaRank.Ancient, YautjaClanPermission.AdminAncient, clanId: null);
+        var ancient = Actor(1, YautjaRank.Ancient, YautjaClanPermission.All, clanId: null);
         var leader = Member(2, YautjaRank.Leader, clanId: 5);
-        var otherAncient = Member(3, YautjaRank.Ancient, YautjaClanPermission.AdminAncient, clanId: 5);
+        var elite = Member(4, YautjaRank.Elite, clanId: 5);
+        var otherAncient = Member(3, YautjaRank.Ancient, YautjaClanPermission.All, clanId: 5);
 
         Assert.Multiple(() =>
         {
-            Assert.That(YautjaClanHallPolicy.CanSetRank(ancient, leader, YautjaRank.Elder), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanSetRank(ancient, elite, YautjaRank.Elder), Is.True);
             Assert.That(YautjaClanHallPolicy.CanMove(ancient, leader), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanExile(ancient, leader), Is.True);
             Assert.That(YautjaClanHallPolicy.CanFoundOrDisband(ancient), Is.True);
             Assert.That(YautjaClanHallPolicy.CanSetHonor(ancient), Is.True);
             Assert.That(YautjaClanHallPolicy.CanSeeEliteNotes(ancient, 5), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanPurge(ancient, elite), Is.True);
             Assert.That(YautjaClanHallPolicy.CanMove(ancient, otherAncient), Is.False);
-            Assert.That(YautjaClanHallPolicy.CanSetAncient(ancient, leader), Is.False);
+            Assert.That(YautjaClanHallPolicy.CanPurge(ancient, otherAncient), Is.False);
             Assert.That(YautjaClanHallPolicy.CanManageWhitelist(ancient), Is.False);
         });
     }
 
+    // Clan Leader and Ancient only come from the whitelists, the hall can't hand them out or take them away
     [Test]
-    public void CouncilManagerRaisesAndDropsAncients()
+    public void WhitelistRanksStayOutOfTheRankPicker()
     {
-        var manager = Actor(1, YautjaRank.Ancient, YautjaClanPermission.All, clanId: null);
-        var ancient = Member(2, YautjaRank.Ancient, YautjaClanPermission.AdminAncient);
-        var otherManager = Member(3, YautjaRank.Ancient, YautjaClanPermission.All);
+        var ancient = Actor(1, YautjaRank.Ancient, YautjaClanPermission.All, clanId: null);
+        var staff = Actor(9, YautjaRank.Blooded, clanId: null, staff: true);
+        var leader = Member(2, YautjaRank.Leader, clanId: 5);
+        var elder = Member(3, YautjaRank.Elder, clanId: 5);
+        var otherAncient = Member(4, YautjaRank.Ancient, YautjaClanPermission.All, clanId: 5);
 
         Assert.Multiple(() =>
         {
-            Assert.That(YautjaClanHallPolicy.CanSetAncient(manager, ancient), Is.True);
-            Assert.That(YautjaClanHallPolicy.CanMove(manager, ancient), Is.True);
-            Assert.That(YautjaClanHallPolicy.CanSetAncient(manager, otherManager), Is.False);
+            Assert.That(YautjaClanPolicy.GetNormalAssignableRanks(), Does.Not.Contain(YautjaRank.Leader));
+            Assert.That(YautjaClanPolicy.GetNormalAssignableRanks(), Does.Not.Contain(YautjaRank.Ancient));
+            Assert.That(YautjaClanHallPolicy.CanSetRank(ancient, elder, YautjaRank.Leader), Is.False);
+            Assert.That(YautjaClanHallPolicy.AssignableRanks(ancient, leader), Is.Empty);
+            Assert.That(YautjaClanHallPolicy.AssignableRanks(staff, leader), Is.Empty);
+            Assert.That(YautjaClanHallPolicy.AssignableRanks(staff, otherAncient), Is.Empty);
         });
     }
 
@@ -133,13 +142,12 @@ public sealed class YautjaClanPolicyTest
     public void StaffCanDoEverythingButActOnThemselves()
     {
         var staff = Actor(1, YautjaRank.Blooded, clanId: null, staff: true);
-        var manager = Member(2, YautjaRank.Ancient, YautjaClanPermission.All);
+        var ancient = Member(2, YautjaRank.Ancient, YautjaClanPermission.All);
 
         Assert.Multiple(() =>
         {
             Assert.That(YautjaClanHallPolicy.CanManageWhitelist(staff), Is.True);
-            Assert.That(YautjaClanHallPolicy.CanSetAncient(staff, manager), Is.False);
-            Assert.That(YautjaClanHallPolicy.CanPurge(staff, manager), Is.True);
+            Assert.That(YautjaClanHallPolicy.CanPurge(staff, ancient), Is.True);
             Assert.That(YautjaClanHallPolicy.CanPurge(staff, staff.Member), Is.False);
             Assert.That(YautjaClanHallPolicy.CanEditRound(staff), Is.False);
             Assert.That(YautjaClanHallPolicy.CanEditRound(staff with { Host = true }), Is.True);

@@ -1,0 +1,10 @@
+# FLOW-02 (GraphAudit-ProcgenIgnitionHeat): what a combustible chemical leaves when it ignites but forms no fire
+# (too diluted to burn, or an oxidizer that is no fuel by itself). Inert on purpose: no class, so contracts never use
+# it, and no reaction consumes it (upstream Ash would turn into Lye in a water-cooled beaker).
+- type: reagent
+  id: CMUScorchedResidue
+  name: reagent-name-cmu-scorched-residue
+  desc: reagent-desc-cmu-scorched-residue
+  physicalDesc: reagent-physical-desc-powdery
+  flavor: bitter
+  color: "#2b2522"

@@ -1,4 +1,6 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Body.Part;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage.Systems;
@@ -63,7 +65,36 @@ public sealed class YautjaHumanMeleeTest : GameTest
         });
     }
 
-    // cmss13 two-shots a naked marine with a wielded glaive: 90 brute is 90 pain on the spot
+    // cmss13: 90 brute is 90 of a human's 200 pain (45%), moderate, still standing. horrible needs 80%
+    [Test]
+    public async Task TwoGlaiveHitsDoNotShockANakedMarine()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hit = Hit("CMUYautjaWarGlaive", null, map.GridCoords, hits: 2, wield: true);
+            var pain = SEntMan.GetComponent<PainShockComponent>(hit.Victim);
+
+            Assert.That(hit.Damage, Is.EqualTo(90f).Within(0.5f));
+            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage / 2).Within(1f), "pain is half of what landed");
+            Assert.That(pain.Tier, Is.LessThan(PainTier.Severe));
+        });
+    }
+
+    // cmss13: 135 brute is 67% (distressing), 180 is 90% (horrible, and past hard crit anyway)
+    [Test]
+    public async Task FourthGlaiveHitShocksANakedMarine()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var three = Hit("CMUYautjaWarGlaive", null, map.GridCoords, hits: 3, wield: true);
+            var four = Hit("CMUYautjaWarGlaive", null, map.GridCoords, hits: 4, wield: true);
+
+            Assert.That(SEntMan.GetComponent<PainShockComponent>(three.Victim).Tier, Is.LessThan(PainTier.Shock));
+            Assert.That(SEntMan.GetComponent<PainShockComponent>(four.Victim).Tier, Is.EqualTo(PainTier.Shock));
+        });
+    }
 
     [Test]
     public async Task ArmourThatStopsTheEdgeKeepsAMarineOutOfShock()
@@ -74,7 +105,7 @@ public sealed class YautjaHumanMeleeTest : GameTest
             var hit = Hit("CMUYautjaWarGlaive", Armor, map.GridCoords, hits: 2, wield: true, stripChance: 1f);
             var pain = SEntMan.GetComponent<PainShockComponent>(hit.Victim);
 
-            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage).Within(1f));
+            Assert.That(pain.Pain.Float(), Is.EqualTo(hit.Damage / 2).Within(1f));
             Assert.That(pain.Tier, Is.LessThan(PainTier.Shock));
         });
     }
@@ -89,6 +120,8 @@ public sealed class YautjaHumanMeleeTest : GameTest
         string victimProto = "CMMobHuman")
     {
         var hunter = SSpawnAtPosition("CMUMobYautja", coords);
+        // Forced torso hits must bypass called-shot accuracy to exercise body armour consistently.
+        SEntMan.RemoveComponent<BodyZoneTargetingComponent>(hunter);
         var victim = SSpawnAtPosition(victimProto, coords);
         if (armorProto != null)
         {
@@ -112,6 +145,7 @@ public sealed class YautjaHumanMeleeTest : GameTest
             // picking a weapon up starts its swing cooldown
             comp.NextAttack = TimeSpan.Zero;
             SEntMan.RemoveComponent<RMCMeleeUserCooldownComponent>(hunter);
+            Server.System<SharedHitLocationSystem>().SetForcedHit(victim, BodyPartType.Torso);
             Assert.That(melee.AttemptLightAttack(hunter, used, comp, victim, requireCombatMode: false), Is.True);
         }
 

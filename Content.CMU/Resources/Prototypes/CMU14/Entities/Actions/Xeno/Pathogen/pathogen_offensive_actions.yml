@@ -423,7 +423,7 @@
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenSprayAcid
   name: Spray Acid (40)
-  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will coat barricades in acid and significantly strengthen acid inflicted from Charge Spit![/color]
+  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will coat barricades in acid![/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -1163,6 +1163,29 @@
     event: !type:XenoFlingActionEvent  
     toggleOutline: false  
   - type: XenoOffensiveAction  
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenGrapple
+  parent: ActionXenoBase
+  name: Grapple
+  description: Lift up a close range target with your appendages and fling them behind you.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Actions/actions_pathogen.rsi
+      state: lunge
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoFlingActionEvent
+    toggleOutline: false
+  - type: XenoOffensiveAction
   - type: RMCDazeableAction
 
 - type: entity

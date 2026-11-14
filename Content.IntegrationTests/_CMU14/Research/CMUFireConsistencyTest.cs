@@ -257,13 +257,18 @@ public sealed class CMUFireConsistencyTest : GameTest
                 Assert.That(carried!.GetTotalPrototypeQuantity("RMCNapalmUT"), Is.EqualTo(FixedPoint2.New(30)), "the molotov contains the napalm");
             });
 
-            // Shattering burns the contents in a circle with the napalm's own stats.
+            // Shattering keeps the fuel's burn strength but makes a smaller splash than a container ignition.
             var ev = new RMCTriggerEvent(null, false);
             SEntMan.EventBus.RaiseLocalEvent(molotov!.Value, ref ev);
             var fires = Fires();
             Assert.Multiple(() =>
             {
-                Assert.That(fires, Has.Length.EqualTo(CircleTiles(CMUFuelProfileSystem.CircleRadius(FixedPoint2.New(30), 5))));
+                Assert.That(fires, Is.Not.Empty);
+                Assert.That(SEntMan.System<CMUFuelProfileSystem>().TryResolveFire(Pure("RMCNapalmUT", 30),
+                    CMUFireSource.Container, out var containerFire), Is.True);
+                Assert.That(fires.Length,
+                    Is.LessThan(CircleTiles(CMUFuelProfileSystem.CircleRadius(FixedPoint2.New(30), containerFire))),
+                    "A fuel-filled bottle must not cover the same large area as a chemical container ignition.");
                 foreach (var fire in fires)
                     AssertTiered(fire, 30);
             });

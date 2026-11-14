@@ -13,6 +13,38 @@ public sealed class CMUXenoLanguageSystemTest
 {
     private static readonly ProtoId<LanguagePrototype> XenoLanguage = "Xeno";
 
+    // the overmind rules the pathogen hive, the queen-only check left it mute in a corrupted hive
+    [Test]
+    public async Task CorruptedPathogenOvermindSpeaksHumanLanguages()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid overmind = default;
+        EntityUid corruptedHive = default;
+
+        await server.WaitPost(() =>
+        {
+            overmind = server.EntMan.SpawnEntity("CMU14XenoOvermind", map.GridCoords);
+            corruptedHive = server.EntMan.SpawnEntity("CMUCorruptedHive", map.GridCoords);
+        });
+
+        await pair.RunTicksSync(5);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<LanguageSystem>().CanSpeak(overmind, SharedLanguageSystem.CommonLanguage), Is.False);
+            server.EntMan.System<XenoHiveSystem>().SetHive(overmind, corruptedHive);
+        });
+
+        await pair.RunTicksSync(1);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<LanguageSystem>().CanSpeak(overmind, SharedLanguageSystem.CommonLanguage), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase("CMXenoDrone", false)]
     [TestCase("CMXenoQueen", true)]
     public async Task CorruptedHiveOnlyQueenGainsHumanSpeechOnHiveAssignment(string prototype, bool canSpeakHuman)

@@ -2,8 +2,7 @@ using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._RMC14.Shuttles;
 using Content.Server.Shuttles.Events;
-using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
+using Content.Shared._RMC14.OnCollide;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -19,7 +18,6 @@ public sealed class CMULegacyDepartureHazardTest : GameTest
     {
         EntityUid map = default;
         EntityUid transitMap = default;
-        EntityUid visitor = default;
         await Server.WaitAssertion(() =>
         {
             var maps = SEntMan.System<SharedMapSystem>();
@@ -40,13 +38,19 @@ public sealed class CMULegacyDepartureHazardTest : GameTest
             var departed = new FTLStartedEvent(shuttle, new EntityCoordinates(map, Vector2.Zero),
                 map, Matrix3x2.Identity, Angle.Zero);
             SEntMan.EventBus.RaiseLocalEvent(shuttle, ref departed);
-            visitor = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(terrain, new Vector2(0.5f, 0.5f)));
         });
 
-        await RunTicksSync(2);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.GetComponent<MobStateComponent>(visitor).CurrentState, Is.EqualTo(MobState.Dead),
+            var hazards = 0;
+            var query = SEntMan.EntityQueryEnumerator<MetaDataComponent, TransformComponent, DamageOnCollideComponent>();
+            while (query.MoveNext(out _, out var metadata, out var transform, out _))
+            {
+                if (!metadata.Deleted && metadata.EntityPrototype?.ID == "FloorDeathEntity" && transform.MapUid == map)
+                    hazards++;
+            }
+
+            Assert.That(hazards, Is.EqualTo(1),
                 "legacy maps which have not opted into playable space must retain their departure hazard");
         });
         await Pair.DeleteEntityTreeLeafFirst(map);

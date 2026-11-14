@@ -756,7 +756,6 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
             screen.Viewport.Eye = turretEye.Eye;
             screen.Viewport.ModulateSelfOverride = terminal.ChinGunVision switch
             {
-                MohawkChinGunVisionMode.Night => Color.FromHex("#7CFF8C"),
                 MohawkChinGunVisionMode.Thermal => Color.FromHex("#FFB070"),
                 _ => null,
             };

@@ -346,6 +346,9 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                     }
                 }
             }
+            // CMU14: a generated synthesis states its Mix, heat/cooling gate and ignition ceiling, as on contracts.
+            if (ProceduralReagentData.TryGetValue(reagentID, out var generated) || ReagentData.TryGetValue(reagentID, out generated))
+                data.Info += ProcessRequirementsText(generated);
         }
         else if (ChemicalGenClassesList["C1"].Contains(reagentID))
         {
@@ -991,6 +994,8 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.ScanPointYield = B.ScanPointYield;
         A.SubContractID = B.SubContractID ?? string.Empty;
         A.SubContractIsNew = B.SubContractIsNew;
+        A.RequiredMinTemp = B.RequiredMinTemp;
+        A.RequiredMaxTemp = B.RequiredMaxTemp;
         return;
     }
 
@@ -1052,9 +1057,84 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
         A.ScanPointYield = other.ScanPointYield;
         A.SubContractID = other.SubContractID ?? string.Empty;
         A.SubContractIsNew = other.SubContractIsNew;
+        A.RequiredMinTemp = other.RequiredMinTemp;
+        A.RequiredMaxTemp = other.RequiredMaxTemp;
         return;
     }
 
+
+    #region Contract temperature gates
+    /// <summary>
+    /// The conditions a generated synthesis needs on top of its reagents, one line each: the lid-closed Mix (Hard),
+    /// the §5 heat or cooling gate, and the FLOW-01 ceiling an ignitable chemical must stay under. Matches CreateRecipe.
+    /// </summary>
+    public string ProcessRequirementsText(GeneratedReagentData data)
+    {
+        var text = string.Empty;
+        if (data.GenTier >= MixGatedGenTier)
+            text += Loc.GetString("research-report-contract-mix-required") + '\n';
+
+        GetSynthesisTemperatureBand(data, out var minTemp, out var maxTemp);
+        if (minTemp > 0)
+            text += Loc.GetString("research-report-contract-heat-required", ("TEMP", (int) minTemp)) + '\n';
+        if (data.RequiredMaxTemp > 0)
+            text += Loc.GetString("research-report-contract-cooling-required", ("TEMP", (int) data.RequiredMaxTemp)) + '\n';
+        else if (float.IsFinite(maxTemp))
+            text += Loc.GetString("research-report-contract-ignition-ceiling", ("TEMP", (int) maxTemp)) + '\n';
+        return text;
+    }
+
+    /// <summary>§5: chance of a heat gate and of a cooling gate, by contract tier (Easy never gets one).</summary>
+    public static (float Heat, float Cool) TemperatureGateChances(int genTier) => genTier switch
+    {
+        <= 1 => (0f, 0f),
+        2 => (0.15f, 0.10f),
+        _ => (0.25f, 0.20f),
+    };
+
+    /// <summary>
+    /// §5: occasionally gives an Intermediate or Hard contract a heat or a cooling requirement. Call after
+    /// <see cref="GenerateStats"/>: a self-heating (Hyperthermic) synthesis would climb out of a cooling gate and a
+    /// self-cooling (Hypothermic) one would fall out of a heat gate, so the roll swaps to the gate that suits it.
+    /// Ignitable chemicals get a lower heat gate so a hotplate overshoot does not reach their ignition point.
+    /// </summary>
+    public void RollTemperatureGate(ref GeneratedReagentData data)
+    {
+        data.RequiredMinTemp = 0f;
+        data.RequiredMaxTemp = 0f;
+        var (heatChance, coolChance) = TemperatureGateChances(data.GenTier);
+        var roll = _random.NextFloat();
+        bool heat;
+        if (roll < heatChance)
+            heat = true;
+        else if (roll < heatChance + coolChance)
+            heat = false;
+        else
+            return;
+
+        var net = NetSynthesisHeat(data.Effects);
+        if (heat && net < 0)
+            heat = false;
+        else if (!heat && net > 0)
+            heat = true;
+
+        if (heat)
+        {
+            var max = IgnitionLevel(data.Effects) > 0 ? HeatGateMaxIgnitable : HeatGateMax;
+            data.RequiredMinTemp = PickStep(HeatGateMin, max);
+        }
+        else
+        {
+            data.RequiredMaxTemp = PickStep(CoolGateMin, CoolGateMax);
+        }
+    }
+
+    private float PickStep(float min, float max)
+    {
+        var steps = (int) MathF.Round((max - min) / GateStep);
+        return min + GateStep * _random.Next(0, steps + 1);
+    }
+    #endregion
 
     private Dictionary<string, List<string>> UnfoldCombinations()
     {

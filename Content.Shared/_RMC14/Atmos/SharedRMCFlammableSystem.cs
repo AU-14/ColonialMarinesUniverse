@@ -1304,6 +1304,11 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (HasComp<RMCFireImmunityBypassComponent>(fireEntity))
             return true;
 
+        // CMU14: penetrating research fire burns through fire immunity like cmss13's fire_penetrating,
+        // ravagers stood in it untouched before
+        if (TryComp<RMCIgniteOnCollideComponent>(fireEntity, out var ignite) && ignite.FirePenetrating)
+            return true;
+
         var tileEv = new RMCGetFireImmunityEvent(fireEntity);
         RaiseLocalEvent(targetEntity, ref tileEv);
 

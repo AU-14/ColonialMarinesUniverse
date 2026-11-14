@@ -77,10 +77,38 @@ public static class CMUVehicleSupportFootprint
         List<Vector2> samples)
     {
         GenerateLocalSamples(localBounds, sampleSpacing, sampleInset, samples);
+        TransformWorldSamples(worldOrigin, worldRotation, samples);
+    }
 
+    public static void GenerateWorldSamples(
+        List<Vector2> localSamples,
+        Vector2 worldOrigin,
+        Angle worldRotation,
+        List<Vector2> samples)
+    {
+        samples.Clear();
+        samples.AddRange(localSamples);
+        TransformWorldSamples(worldOrigin, worldRotation, samples);
+    }
+
+    private static void TransformWorldSamples(Vector2 worldOrigin, Angle worldRotation, List<Vector2> samples)
+    {
+        if (worldRotation.Theta == 0)
+        {
+            for (var i = 0; i < samples.Count; i++)
+                samples[i] = worldOrigin + samples[i];
+            return;
+        }
+
+        // Match Angle.RotateVec's double arithmetic and float rounding, once per footprint.
+        var cos = Math.Cos(worldRotation.Theta);
+        var sin = Math.Sin(worldRotation.Theta);
         for (var i = 0; i < samples.Count; i++)
         {
-            samples[i] = worldOrigin + worldRotation.RotateVec(samples[i]);
+            var local = samples[i];
+            samples[i] = worldOrigin + new Vector2(
+                (float) (cos * local.X - sin * local.Y),
+                (float) (sin * local.X + cos * local.Y));
         }
     }
 

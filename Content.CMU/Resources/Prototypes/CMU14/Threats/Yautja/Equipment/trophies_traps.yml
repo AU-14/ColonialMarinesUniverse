@@ -681,6 +681,13 @@
       components:
       - YautjaTrophy
       - UniformAccessory
+      tags:
+      - CMUYautjaHarpoon
+  # the harpoon is the one non-trophy that rides on the belt, without letting bigger trophies in
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMUYautjaHarpoon
   - type: YautjaTechItem
   - type: YautjaTrophyDisplay
 

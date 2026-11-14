@@ -35,6 +35,7 @@ using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Mind;
 using Content.Shared.Whitelist;
 using Content.Shared._RMC14.Pulling;
@@ -94,7 +95,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         if (HasComp<CMUPathogenWalkerComponent>(target))
             return;
 
-        if (HasComp<SynthComponent>(target))
+        if (HasComp<SynthComponent>(target) || HasComp<YautjaComponent>(target))
             return;
 
         var walker = EnsureComp<CMUPathogenWalkerComponent>(target);

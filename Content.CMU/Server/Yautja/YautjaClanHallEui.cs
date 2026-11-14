@@ -238,14 +238,6 @@ public sealed partial class YautjaClanHallEui : BaseEui
                 return;
             }
 
-            case YautjaClanHallSetAncientMessage ancient:
-            {
-                var result = await _clans.HallSetAncient(actor, ancient.Target, ancient.Enabled);
-                await AfterMemberChange(result, $"{(ancient.Enabled ? "made" : "removed")} Yautja Ancient {ancient.Target}");
-                Report(result, ancient.Enabled ? "cmu-yautja-hall-done-ancient" : "cmu-yautja-hall-done-unancient");
-                return;
-            }
-
             case YautjaClanHallPurgeMessage purge:
             {
                 var result = await _clans.HallPurge(actor, purge.Target);
@@ -732,8 +724,6 @@ public sealed partial class YautjaClanHallEui : BaseEui
             AssignableRanks = YautjaClanHallPolicy.AssignableRanks(actor, target).ToList(),
             CanExile = YautjaClanHallPolicy.CanExile(actor, target),
             CanMove = YautjaClanHallPolicy.CanMove(actor, target),
-            CanSetAncient = YautjaClanHallPolicy.CanSetAncient(actor, target),
-            IsAncient = target.Rank == YautjaRank.Ancient,
             CanPurge = YautjaClanHallPolicy.CanPurge(actor, target),
         };
     }

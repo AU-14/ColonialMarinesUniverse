@@ -3,7 +3,7 @@ namespace Content.Server.GameTicking.Presets;
 
 public sealed partial class GamePresetPrototype
 {
-    // off for modes where a stranded pred on the planet makes no sense (colony fall)
+    // opt-in: only distress signal and force on force open the stranded slot
     [DataField]
-    public bool StrandedYautjaEnabled = true;
+    public bool StrandedYautjaEnabled;
 }

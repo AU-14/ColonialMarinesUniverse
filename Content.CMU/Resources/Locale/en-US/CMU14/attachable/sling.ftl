@@ -16,3 +16,4 @@ cmu-sling-set-carry-suitstorage = The sling will now use suit storage.
 cmu-sling-examine-carry-vest = Configured to attach the rifle to your vest. Alt-click to switch to suit storage.
 cmu-sling-examine-carry-suitstorage = Configured to use suit storage. Alt-click to switch to attaching the rifle to your vest.
 cmu-sling-vest-occupied = There is already a rifle attached to this vest.
+cmu-sling-vest-retrieve = Take the rifle off the vest

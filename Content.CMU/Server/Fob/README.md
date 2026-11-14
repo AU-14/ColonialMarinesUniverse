@@ -1,7 +1,7 @@
 # FOB reserve and physical equipment
 
 The reserve system owns the bank and paired relay-job lifecycle. The interaction system connects
-physical relay repairs and local controls to it. The defense system supports two player-placed gun platforms.
+physical relay repairs and local controls to it. The defense system supports three player-placed gun platforms.
 The map system selects the deployment area on the first friendly landing at any configured primary colony LZ
 in Distress Signal and schedules relay pairs. See [supported maps and authoring](MAPS.md).
 The same validated pilot enforces [contested evacuation](EVACUATION.md): ordinary physical boarding
@@ -64,8 +64,7 @@ Damage does not delete the anchor or erase its reuse history.
 
 `CMUFobControl` binds to one existing faction network within 40 tiles of the selected LZ center,
 outside its landing footprint. Moving the control does not move this area.
-It never creates a bank, and duplicate live controls cannot take over. Local access requires the
-owning faction and construction skill 3, engineering skill 2, or squad leadership. The panel shows
+It never creates a bank, and duplicate live controls cannot take over. Any conscious Marine of the owning faction can use the local panel; engineering training is only required for assembly and repairs. The panel shows
 reserve, mode, shutdown/restart locks, both relay coordinates, expiry and the currently available reward.
 All activation requests go through the backend's startup, minimum-use and restart rules.
 
@@ -82,9 +81,9 @@ into automatic objective deployment only when the round starts with the flag ena
 
 ## Support guns
 
-The normal delivery supplies two folded `CMUFobPlatformModule` entities. Operators wrench them down
+The normal delivery supplies three folded `CMUFobPlatformModule` entities. Operators wrench them down
 on valid ground within the selected LZ's deployment area. `TryDeployPlatform` registers the physical
-platform against the round's two-slot budget. Removing its gun and folding the platform permits
+platform against the round's three-slot budget. Removing its gun and folding the platform permits
 relocation within the area while support is off. Deleting a gun, its platform or the terminal does
 not authorize another allocation. Directly moving deployed hardware invalidates it until properly
 redeployed. No fixed equipment coordinates are authored. `TryRegisterMounts` remains a developer
@@ -114,10 +113,10 @@ Its wreck loses movement and projectile collision. Restoration requires the exis
 welding fuel, cable, screwdriver and tuner steps. A repaired gun remains off until a new reserve
 activation and startup warning. If corrosion or another deletion removes the weapon, its persistent
 mount installs an empty broken replacement that requires that same material repair sequence. The
-initial magazine grant is not repeated. Only that slot's weapon is restored; no third gun is minted.
+initial magazine grant is not repeated. Only that slot's weapon is restored; no extra weapon is minted.
 
 Original CMSS13 platforms, heavy-gun and rocket-module art replace the standard sentry placeholders.
-The UH-99 module uses the same two slots, a finite rocket cassette, a three-second acquisition warning
+The UH-99 module uses the same three slots, a finite rocket cassette, a three-second acquisition warning
 and live UE-04 sensor coverage. See [equipment and logistics](CONTENT-PORT.md) for physical swapping,
 powered utilities, backup use and the delivered supply allocation.
 
@@ -132,7 +131,7 @@ loss, breaching a powered fence and duplicate backup prevention. `ModuleSwapPres
 covers actual powerloader installation, preserved ammunition, forbidden live swaps and loss of sensor
 coverage during launch acquisition. The authored-map landing cases also protect the single reserve
 allocation across repeated or alternate LZ landings. Logistics cases exercise actual requisitions
-delivery, physical assembly, relocation, blocked placement, the two-platform budget and fence recovery.
+delivery, physical assembly, relocation, blocked placement, the three-platform budget and fence recovery.
 
 The focused `CMUFobReserveTest` integration fixture exercises the actual server system with short,
 nonzero durations. It covers:
@@ -149,11 +148,11 @@ nonzero durations. It covers:
 | Held tool and capped physical completion | `PhysicalRelayRequiresHeldToolAndTransfersOneCappedReward` |
 | Damage, movement, tool loss, faction and incapacitation interrupts | `InterruptedRepairsNeverAwardAndReleaseTheOperatorLock` |
 | Worker lock and competing alternatives | `FasterAlternativeCancelsOtherRepairAndOperatorsCannotStack` |
-| Actual client UI, training, faction and reach checks | `ControlUiEnforcesTrainingTimersAndRechecksFactionAndReach` |
+| Actual client UI, training, faction and reach checks | `ControlUiAllowsUntrainedMarinesAndRechecksFactionAndReach` |
 | Broken control, repair and replacement preserve the bank | `BrokenControlStopsSupportAndRepairOrReplacementNeverRefillsIt` |
 | Flag-off equipment cannot open or repair | `DisabledEquipmentCannotCreateBanksOpenControlsOrStartRepairs` |
 | Disabled/unregistered weapons cannot fire through forced modes | `DisabledAndUnregisteredWeaponsRejectForcedFiring` |
-| Two-slot budget, startup/acquisition warning, real shots and ammo exhaustion | `TwoMountsWarnBeforeFiringAndExhaustFiniteAmmoWithoutRefills` |
+| Startup/acquisition warning, real shots and ammo exhaustion | `TwoMountsWarnBeforeFiringAndExhaustFiniteAmmoWithoutRefills` |
 | Range, wall/door LOS, burrow/vent, map and IFF loss restart acquisition | `GeometryConcealmentAndIffLossRequireFreshAcquisition` |
 | Powered gun damage and nonblocking wreck geometry | `PoweredGunTakesProjectileDamageAndItsWreckAllowsShotsAndMovementThrough` |
 | Material repair, physical magazine reload, replacement and restart requirement | `MaterialRepairReloadAndReplacementCannotMintAmmoOrBypassRestart` |

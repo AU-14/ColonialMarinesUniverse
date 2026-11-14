@@ -359,6 +359,9 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
             return;
         }
         chem.Recipe = recipe.Recipe;
+        // CMU14: §5 temperature gates belong to contracts; MakeAlike copied the parent's, so drop them here.
+        chem.RequiredMinTemp = 0f;
+        chem.RequiredMaxTemp = 0f;
         // The copied parent (or stock) recipe can ask for more precious metal than contracts allow.
         _gen.ClampPreciousAmounts(chem.Recipe);
         _simulations.Add(chem.ID);

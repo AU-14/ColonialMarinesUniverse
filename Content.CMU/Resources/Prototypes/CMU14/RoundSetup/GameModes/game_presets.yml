@@ -7,7 +7,6 @@
   maxPlayers: 65
   description: cmu-gamemode-colonyfall-desc
   burrowedLarvaEnabled: false
-  strandedYautjaEnabled: false
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 2250
   thirdPartyRatio: 0.25
@@ -26,6 +25,7 @@
   showInVote: true
   description: cmu-gamemode-distresssignal-desc
   requiresGovforVote: true
+  strandedYautjaEnabled: true
   thirdPartyForceShuttle: true
   dropshipFabricatorStartingPoints: 18000
   supportedPlanets:
@@ -69,6 +69,8 @@
   thirdPartyRatio: 0.15
   maxThirdParties: 3
   dropshipFabricatorStartingPoints: 7500
+  # a cell lives or dies on not being found; radio DF made every transmission a giveaway
+  anprcDirectionFinding: false
   supportedPlanets:
   - SharedPlanetPool
   rules:
@@ -91,6 +93,7 @@
   burrowedLarvaEnabled: false
   requiresOpforVote: true
   requiresGovforVote: true
+  strandedYautjaEnabled: true
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 1800
   thirdPartyRatio: 0.10

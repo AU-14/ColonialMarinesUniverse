@@ -3,7 +3,11 @@
 using System.Numerics;
 using Content.Server.CMU14.Fob;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines;
+using Content.Shared.Buckle;
 using Content.Shared.CMU14.Fob;
+using Content.Shared.Interaction;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Tag;
 using Robust.Shared.GameObjects;
@@ -14,6 +18,36 @@ namespace Content.IntegrationTests.CMU14.Fob;
 public sealed partial class CMUFobDefenseTest
 {
     private CMUFobEquipmentSystem Equipment => Server.System<CMUFobEquipmentSystem>();
+
+    [Test]
+    public async Task LoaderCannotPickUpInstalledGunButCanTransportDetachedModule()
+    {
+        await SetupGuns(ammo: 7);
+        await Server.WaitAssertion(() =>
+        {
+            var loader = SEntMan.SpawnAtPosition("RMCMechPowerLoader", _gunCoords.Offset(new Vector2(-1, 0)));
+            var pilot = SEntMan.SpawnAtPosition("CMMobHuman", SEntMan.GetComponent<TransformComponent>(loader).Coordinates);
+            SEntMan.EnsureComponent<MarineComponent>(pilot).Faction = "govfor";
+            Server.System<SkillsSystem>().SetSkill(pilot, "RMCSkillConstruction", 3);
+            var loaderComp = SEntMan.GetComponent<PowerLoaderComponent>(loader);
+            foreach (var (skill, level) in loaderComp.Skills.All)
+                Server.System<SkillsSystem>().SetSkill(pilot, skill, level);
+            Assert.That(Server.System<SharedBuckleSystem>().TryBuckle(pilot, pilot, loader), Is.True);
+            Server.System<TagSystem>().AddTag(loader, "InstantDoAfters");
+
+            SEntMan.EventBus.RaiseLocalEvent(loader, new UserActivateInWorldEvent(loader, _gun, true));
+            Assert.That(HandSys.IsHolding(loader, _gun), Is.False, "Installed guns must not enter loader hands.");
+            Assert.That(SEntMan.GetComponent<TransformComponent>(_gun).Anchored, Is.True);
+            Assert.That(Gun.Mount, Is.EqualTo(_mount));
+
+            Assert.That(Defense.TryRemoveModule((_gun, Gun), pilot), Is.True);
+            SEntMan.EventBus.RaiseLocalEvent(loader, new UserActivateInWorldEvent(loader, _gun, true));
+            Assert.That(HandSys.IsHolding(loader, _gun), Is.True);
+            Assert.That(Defense.TryInstallModule((_gun, Gun), _mount, pilot, loader), Is.True);
+            Assert.That(Gun.Mount, Is.EqualTo(_mount));
+            Assert.That(Ammo, Is.EqualTo(7), "Removal and loader transport must retain the real magazine.");
+        });
+    }
 
     [Test]
     public async Task RemovedGunReinstallsThroughLoaderAtLoaderReachWithBothSlotsAllocated()

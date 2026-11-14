@@ -1,0 +1,16 @@
+- type: entity
+  id: CMUActionMutinyBegin
+  parent: ActionMarineBase
+  name: Begin mutiny
+  description: Begin the mutiny.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Interface/Actions/mutiny_actions.rsi
+      state: begin
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUMutinyBeginActionEvent

@@ -40,7 +40,6 @@
   - !type:TraitsRequirement
     inverted: true
     traits:
-    - NoEnglish
     - CMUBadLeg
   icon: "AU14JobIconColonyKellandWarden"
   hasIcon: false

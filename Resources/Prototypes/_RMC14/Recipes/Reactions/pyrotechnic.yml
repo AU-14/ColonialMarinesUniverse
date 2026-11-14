@@ -37,6 +37,7 @@
 
 - type: reaction
   id: RMCCLF3
+  conserveEnergy: false # CMU14: losing units must not concentrate heat into the product (FLOW-01, GraphAudit-ProcgenIgnitionHeat)
   priority: 10
   reactants:
     Water:
@@ -95,6 +96,7 @@
 
 - type: reaction
   id: RMCMethane
+  conserveEnergy: false # CMU14: losing units must not concentrate heat into the product (FLOW-01, GraphAudit-ProcgenIgnitionHeat)
   reactants:
     RMCHydrogen:
       amount: 4

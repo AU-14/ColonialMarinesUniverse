@@ -12,6 +12,7 @@ namespace Content.Client.CMU14.Attachable;
 public sealed class CMUSlingVestVisualSystem : EntitySystem
 {
     private const string LayerKey = "cmu-sling-vest-rifle";
+    private static readonly string[] WornStates = ["equipped-SUITSTORAGE", "equipped-BACKPACK"];
 
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedItemSystem _item = default!;
@@ -43,11 +44,25 @@ public sealed class CMUSlingVestVisualSystem : EntitySystem
             return;
         }
 
-        var state = _sprite.LayerGetRsiState((rifle, sprite), 0);
+        // layer 0 is the gun's icon, drawn over the body it smeared the item sprite across the whole mob.
+        // use the gun's worn-on-body state like suit storage does
+        string? state = null;
+        foreach (var worn in WornStates)
+        {
+            if (rsi.TryGetState(worn, out _))
+            {
+                state = worn;
+                break;
+            }
+        }
+
+        if (state == null)
+            return;
+
         args.Layers.Add((LayerKey, new PrototypeLayerData
         {
             RsiPath = rsi.Path.ToString(),
-            State = state.ToString(),
+            State = state,
             Visible = true,
         }));
     }

@@ -1625,27 +1625,13 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         // CMU14: zone lines (hotspots) go to every viewer, ghosts included
         lines.SharedLines = map.SharedLines;
 
-        // Collect infra ids (comms, sensors, tunnels) so we can exclude them from enemy sprite replacement
-        var infraIds = new HashSet<int>();
-        var comms = EntityQueryEnumerator<CommunicationsTowerComponent>();
-        while (comms.MoveNext(out var cid, out _))
-            infraIds.Add(cid.Id);
-
-        var sensors = EntityQueryEnumerator<SensorTowerComponent>();
-        while (sensors.MoveNext(out var sid, out _))
-            infraIds.Add(sid.Id);
-
-        var tunnels = EntityQueryEnumerator<XenoTunnelComponent>();
-        while (tunnels.MoveNext(out var tid, out _))
-            infraIds.Add(tid.Id);
-
         // Local helper to apply enemy sprite to any blip in the target dictionary that belongs to a different human faction
         void ApplyEnemySpritesToUser(string userFaction, Dictionary<int, TacticalMapBlip> blips, int playerId)
         {
             if (string.IsNullOrWhiteSpace(userFaction))
                 return;
 
-            AddSensorContacts(userFaction, blips, map, infraIds); // CMU14: grant and revoke the owner's sensor feed.
+            AddSensorContacts(userFaction, blips, map); // CMU14: grant and revoke the owner's sensor feed.
             var factionHasSensors = TeamHasActiveSensors(userFaction);
             var enemyRsi = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "enemy_blip");
             var keys = blips.Keys.ToList();
@@ -1654,7 +1640,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
                 // Never remove or replace the player's own blip
                 if (id == playerId)
                     continue;
-                if (infraIds.Contains(id))
+                if (IsTacticalInfrastructure(id)) // CMU14: inspect contacts instead of scanning all infrastructure per viewer.
                     continue;
 
                 // never change xeno entities/structures here
@@ -1686,27 +1672,17 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
         {
             var xenoBlips = user.Comp.LiveUpdate ? map.XenoBlips : map.LastUpdateXenoBlips;
             var xenoStructureBlips = user.Comp.LiveUpdate ? map.XenoStructureBlips : map.LastUpdateXenoStructureBlips;
-            var hiveMembers = new HashSet<int>();
-            var hasHive = false;
+            // CMU14 Hive Filtering Begin: membership is needed only for the published contacts.
+            var hive = _xenoHive.GetHive(user.Owner)?.Owner;
+            var hasHive = hive != null;
             var isGhost = HasComp<GhostComponent>(user);
-
-            if (_xenoHive.GetHive(user.Owner) is { } hive)
-            {
-                hasHive = true;
-                var members = EntityQueryEnumerator<HiveMemberComponent>();
-                while (members.MoveNext(out var member, out var hiveMember))
-                {
-                    if (hiveMember.Hive == hive.Owner)
-                        hiveMembers.Add(member.Id);
-                }
-            }
-
             user.Comp.XenoBlips = xenoBlips
-                .Where(blip => isGhost || hiveMembers.Contains(blip.Key) || (!hasHive && blip.Key == playerId))
+                .Where(blip => isGhost || IsTacticalHiveMember(blip.Key, hive) || (!hasHive && blip.Key == playerId))
                 .ToDictionary();
             user.Comp.XenoStructureBlips = xenoStructureBlips
-                .Where(blip => isGhost || hiveMembers.Contains(blip.Key))
+                .Where(blip => isGhost || IsTacticalHiveMember(blip.Key, hive))
                 .ToDictionary();
+            // CMU14 End
 
             if (!user.Comp.LiveUpdate)
             {
@@ -1724,7 +1700,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
                 if (!isGhost && TryComp(uid, out HiveMemberComponent? alwaysVisibleMember) &&
                     alwaysVisibleMember is not null &&
-                    !hiveMembers.Contains(uid.Id))
+                    !IsTacticalHiveMember(uid.Id, hive)) // CMU14
                 {
                     continue;
                 }

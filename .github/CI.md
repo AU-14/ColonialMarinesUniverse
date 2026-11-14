@@ -1,9 +1,9 @@
 # CMU CI
 
 `workflows/ci.yml` owns the PR build, unit tests, YAML lint, asset validation,
-and gameplay jobs in one run. `Required Checks` waits for the complete result.
-`Testcases Complete` remains available as a required check, backed by a real
-job. Every gameplay check links directly to its own steps and logs. New PR
+and gameplay jobs in one run. `Required Checks` collects test evidence and waits
+for the complete result; there is no separate `Testcases Complete` job.
+Every gameplay check links directly to its own steps and logs. New PR
 revisions cancel the previous revision's run.
 
 The [2026-11-06 test audit](CI-test-audit-2026-11-06.md) records the removal
@@ -87,8 +87,9 @@ Without history, the first run uses default timing estimates.
 ## Execution and evidence
 
 The build runner compiles the YAML linter project and its dependencies once.
-Unit tests and YAML lint finish before build/source artifacts are uploaded.
-Gameplay jobs use those artifacts instead of fetching and compiling again.
+YAML lint finishes before build/source artifacts are uploaded. Unit tests then
+run on their own runner in parallel with the gameplay lanes. Both use those
+artifacts instead of fetching and compiling again.
 The 31 normal gameplay selectors are in `Tools/_CMU14/ci-shards.json`; the
 root selector is derived from top-level integration test files as before.
 The planner assigns selected groups to at most six lanes using previous durations.
@@ -104,8 +105,11 @@ Generated-prototype tests retain isolated pairs. The separate process budgets
 bound their repeated startup work after the previous combined group reached its
 30-minute limit; hosted timings will determine the resulting runtime.
 
-The worker counts, prototype-loader workaround, heap limit, and isolated heavy
-fixtures remain in `adaptive_ci.py` and the gameplay environment. The test audit
+Gameplay groups use at most two NUnit workers; the existing memory-heavy groups
+remain serial. Four simultaneous cold pairs can spend nearly five minutes in
+startup and exceed the runner's physical memory before any test completes.
+The prototype-loader workaround, heap limit, and isolated heavy fixtures remain
+in `adaptive_ci.py` and the gameplay environment. The test audit
 removes UI/camera presentation, static prototype inventories, numeric balance
 mirrors, private-helper probes, duplicated scenarios and obsolete benchmarks.
 Real authority, state transitions, geometry, resource conservation and lifecycle
@@ -123,7 +127,11 @@ an aborted run fails the job. Previous TRX evidence is removed before execution.
 Unit execution has a 12-minute wall limit; each gameplay group shares one
 30-minute wall limit across its priority and remaining passes. A lane has at
 most six groups and a 190-minute job cap, including setup and uploads. Existing
-per-test hang timeouts remain in effect. Linux cancellation/timeout terminates
+per-test hang timeouts remain in effect. DLL-mode execution passes VSTest's
+`HangDumpType=none` directly: the SDK's separate dump-type flag can be lost when
+forwarding to VSTest, producing a full memory dump and exhausting runner disk.
+Sequence files and TRX diagnostics remain available without memory dumps.
+Linux cancellation/timeout terminates
 the test process group. Logs and TRX results are uploaded on failure or cancellation;
 a runner disappearing entirely can still prevent uploads.
 
@@ -148,9 +156,9 @@ and antag takeover tests nightly and on manual dispatch. Fixed map power budgets
 and the upstream recipe-count freeze were removed. Publishing, map rendering/checking, RSI previews, and packaging
 keep their dedicated workflows.
 
-The required check names are retained for migration. After this change lands,
-new PR revisions use the unified run; existing revisions may still show legacy
-placeholder checks. Actual hosted execution must be checked on the first PR
+Use `Required Checks` as the aggregate required check; remove any branch rule
+that still requires the retired `Testcases Complete` name. New PR revisions use
+the updated job graph. Actual hosted execution must be checked on the first PR
 run, including documentation skips, failures, and cancellation. No runtime
 speedup is claimed without timing measurements.
 

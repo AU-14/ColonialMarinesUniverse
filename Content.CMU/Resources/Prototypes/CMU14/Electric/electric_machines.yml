@@ -782,7 +782,24 @@
     ports:
     - id: liquid_in
       rate: 8
-    - id: liquid_out
+    - id: hydrogen_out
+      kind: Hydrogen
+      output: true
+      rate: 8
+    - id: oxygen_out
+      kind: Oxygen
+      output: true
+      rate: 8
+    - id: chlorine_out
+      kind: Chlorine
+      output: true
+      rate: 8
+    - id: caustic_out
+      kind: SodiumHydroxide
+      output: true
+      rate: 8
+    - id: mercury_out
+      kind: Mercury
       output: true
       rate: 8
     - id: salt_in

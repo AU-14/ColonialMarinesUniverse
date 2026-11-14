@@ -37,6 +37,14 @@ public sealed partial class CMUSolutionTileFire : EntityEffectBase<CMUSolutionTi
     [DataField]
     public int? Duration;
 
+    /// <summary>
+    /// FLOW-02: what the burnt <see cref="Reagent"/> leaves behind (one unit per unit reaction) when no fire forms, for
+    /// example because the fuel is too diluted. The reaction has already removed the reagent, so without a residue it
+    /// would vanish without a trace. Null: leave nothing.
+    /// </summary>
+    [DataField]
+    public ProtoId<ReagentPrototype>? Residue = Content.Shared.CMU14.Chemistry.Reagents.SharedReagentGeneratorSystem.IgnitionResidueReagent;
+
     public override string EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => Loc.GetString("cmu-entity-effect-guidebook-solution-tile-fire",
             ("chance", Probability),

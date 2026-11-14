@@ -74,6 +74,12 @@ class AdaptiveCiTests(unittest.TestCase):
             "Content.IntegrationTests/Tests/GameRules/AntagGhostRoleTest.cs":
                 "Content.IntegrationTests.Tests.GameRules.AntagGhostRoleTest",
         }
+        entity_fixture = fixtures["Content.IntegrationTests/Tests/EntityTest.cs"]
+        sweeps = {
+            "nightly_affected_entity_maps": "SpawnAndDeleteAllEntitiesOnDifferentMaps",
+            "nightly_affected_entity_dirty": "SpawnAndDirtyAllEntities",
+            "nightly_affected_entity_count": "SpawnAndDeleteEntityCountTest",
+        }
         files = {shared: "namespace Shared; class SharedRules {}",
                  unrelated: "namespace Shared; class OtherRules {}",
                  unit: "namespace Content.Tests.Shared; class IndependentTest { [Test] void Example() {} }"}
@@ -88,6 +94,7 @@ class AdaptiveCiTests(unittest.TestCase):
                       (next(iter(fixtures)), True, [next(iter(fixtures.values()))],
                        {"storage", "round", "nightly_affected"})]
         for path, partial, expected, groups in scenarios:
+            groups = groups | (sweeps.keys() if entity_fixture in expected else set())
             with self.subTest(path=path, partial=partial), tempfile.TemporaryDirectory() as directory, \
                     patch.dict(os.environ, {"CMU_CI_STATE": directory}), \
                     patch("adaptive_ci.history_inputs", return_value={}), \
@@ -102,9 +109,18 @@ class AdaptiveCiTests(unittest.TestCase):
                 self.assertEqual(result["gameplay"], bool(groups))
                 if expected:
                     nightly = next(s for s in plan["shards"] if s["name"] == "nightly_affected")
-                    self.assertEqual(nightly["filter"], "(" + " | ".join(
-                        "FullyQualifiedName~" + fixture + "." for fixture in expected) + ")")
-                    self.assertEqual((nightly["workers"], nightly["hang"]), (1, "20m"))
+                    selection = " | ".join("FullyQualifiedName~" + fixture + "." for fixture in expected)
+                    if entity_fixture in expected:
+                        selection = "(" + selection + ")" + "".join(
+                            " & FullyQualifiedName!=" + entity_fixture + "." + method for method in sweeps.values())
+                        for name, method in sweeps.items():
+                            sweep = next(s for s in plan["shards"] if s["name"] == name)
+                            self.assertEqual(sweep["filter"],
+                                             f"(FullyQualifiedName~{entity_fixture}. & Name={method})")
+                    self.assertEqual(nightly["filter"], "(" + selection + ")")
+                    for shard in plan["shards"]:
+                        if shard["name"].startswith("nightly_affected"):
+                            self.assertEqual((shard["workers"], shard["hang"]), (1, "20m"))
 
     def test_integration_fixture_selection_retains_name_split_shards_and_shared_helpers_run_all(self):
         shards = [dict(name="a", filter="FullyQualifiedName~Tests.FeatureTest. & Name~One"),

@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
+using Content.Server.CMU14.Lobby; // CMU14: event invitations.
 using Content.Server.CMU14.Ops.ForceOnForce;
 using Content.Server.CMU14.Round;
 using Content.Server.Station.Components;
@@ -115,7 +116,8 @@ public sealed partial class StationJobsSystem
         var forcedToRemove = new List<NetUserId>();
         foreach (var (player, jobId) in forcedAssignments)
         {
-            if (!profiles.TryGetValue(player, out var profile) ||
+            if (!EntityManager.System<CMUEventAccessSystem>().CanAccessJob(player, jobId) || // CMU14
+                !profiles.TryGetValue(player, out var profile) ||
                 !profile.JobPriorities.TryGetValue(jobId, out var priority) || priority <= JobPriority.Never)
             {
                 continue;
@@ -401,6 +403,11 @@ public sealed partial class StationJobsSystem
 
             // Try to select a station+overflow job pair according to gamemode rules.
             var bannedRoles = _banManager.GetRoleBans(player)?.Select(role => role.RoleId).ToHashSet();
+            // CMU14 Begin: overflow and its mirrored FoF jobs must respect event invitations too.
+            bannedRoles ??= new HashSet<string>();
+            bannedRoles.UnionWith(EntityManager.System<CMUEventAccessSystem>()
+                .GetLockedJobs(player).Select(job => job.Id));
+            // CMU14 End
             var allowedJobs = profile.JobPriorities
                 .Where(preference => preference.Value > JobPriority.Never &&
                     (bannedRoles == null || !bannedRoles.Contains(preference.Key.Id)))

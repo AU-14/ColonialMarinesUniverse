@@ -34,7 +34,7 @@
 - type: colonyWorldGood
   id: RUMCGoodSteel
   name: rumc-good-steel-name
-  stack: Steel
+  stack: CMSteel
   buyPrice: 40
   sellPrice: 24
   capacity: 80
@@ -43,7 +43,7 @@
 - type: colonyWorldGood
   id: RUMCGoodWood
   name: rumc-good-wood-name
-  stack: WoodPlank
+  stack: RMCWood
   buyPrice: 24
   sellPrice: 15
   capacity: 80
@@ -52,7 +52,7 @@
 - type: colonyWorldGood
   id: RUMCGoodGlass
   name: rumc-good-glass-name
-  stack: Glass
+  stack: CMGlass
   buyPrice: 30
   sellPrice: 19
   capacity: 70
@@ -71,7 +71,7 @@
 - type: colonyWorldGood
   id: RUMCGoodPlastic
   name: rumc-good-plastic-name
-  stack: Plastic
+  stack: RMCPlastic
   buyPrice: 34
   sellPrice: 22
   capacity: 60

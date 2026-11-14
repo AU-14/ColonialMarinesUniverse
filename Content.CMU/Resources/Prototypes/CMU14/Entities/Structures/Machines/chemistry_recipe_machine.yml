@@ -1,0 +1,76 @@
+- type: entity
+  parent: [ BaseMachinePowered, ConstructibleMachine, BaseConstructibleMachineDestructible ]
+  id: CMUChemicalRecipeMachine
+  name: chemical synthesis unit
+  description: Reads chemical recipe papers, safely synthesizes their listed products, and fills a beaker for pill production.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/mixer.rsi
+    snapCardinals: true
+    layers:
+    - state: mixer_empty
+    - state: mixer_screens
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/mixer.rsi
+    state: mixer_empty
+  - type: ActivatableUI
+    key: enum.CMUChemicalRecipeMachineUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.CMUChemicalRecipeMachineUiKey.Key:
+        type: CMUChemicalRecipeMachineBui
+  - type: ApcPowerReceiver
+    powerLoad: 250
+  - type: SolutionContainerManager
+    solutions:
+      stock:
+        maxVol: 1000
+        canReact: false
+  - type: ItemSlots
+    slots:
+      recipe:
+        whitelist:
+          tags:
+          - Paper
+      vessel:
+        whitelist:
+          components:
+          - FitsInDispenser
+  - type: ContainerContainer
+    containers:
+      recipe: !type:ContainerSlot
+      vessel: !type:ContainerSlot
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: CMUChemicalRecipeMachine
+  - type: Machine
+    board: CMUCircuitboardChemicalRecipeMachine
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+
+- type: entity
+  parent: Paper
+  id: CMUChemRecipePaper
+  name: chemical recipe sheet
+  description: A printed recipe with machine-readable instructions and a manual procedure.
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUCircuitboardChemicalRecipeMachine
+  name: chemical synthesis unit machine board
+  description: A machine printed circuit board for a chemical synthesis unit.
+  components:
+  - type: Sprite
+    state: blank_mod
+  - type: MachineBoard
+    prototype: CMUChemicalRecipeMachine

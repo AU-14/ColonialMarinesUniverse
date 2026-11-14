@@ -1098,6 +1098,12 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (!Resolve(grabbable, ref grabbable.Comp, false))
             return false;
 
+        // CMU14: loader pickup uses DoPickup, so honor item pickup guards before inserting into its hands.
+        var pickup = new GettingPickedUpAttemptEvent(loader, grabbable, showPopup: true);
+        RaiseLocalEvent(grabbable.Owner, pickup);
+        if (pickup.Cancelled)
+            return false;
+
         if (!HasFreeHands((loader, loader)))
         {
             var msg = Loc.GetString("rmc-power-loader-cant-grab-full", ("mech", loader));

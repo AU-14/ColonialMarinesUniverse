@@ -324,7 +324,55 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
     /// <summary>Units of an explosive chemical that reach the total-intensity cap.</summary>
     public const float ExplosionUnitsToCap = 5f;
 
+    /// <summary>
+    /// FLOW-01: an ignitable chemical's synthesis stops this far below its ignition point, so a mixture that is already
+    /// too hot (hot ingredients, a hot container) waits to be cooled instead of making the chemical and burning it.
+    /// </summary>
+    public const float IgnitionGuardMargin = 10f;
+    /// <summary>Residue CMUSolutionTileFire leaves when an ignition forms no fire (FLOW-02); its default.</summary>
+    public const string IgnitionResidueReagent = "CMUScorchedResidue";
+
+    // §5 contract temperature gates: heating works with a microwave (≤373 K) or hotplate and stays under the synthesis
+    // cap and ignition; cooling works with ice brine (255 K) or the chemistry chiller (250 K).
+    public const float HeatGateMin = 330f;
+    public const float HeatGateMax = 370f;
+    /// <summary>Upper bound of the heat gate for ignitable chemicals, leaving room before a hotplate overshoot ignites them.</summary>
+    public const float HeatGateMaxIgnitable = 350f;
+    public const float CoolGateMin = 260f;
+    public const float CoolGateMax = 275f;
+    public const float GateStep = 5f;
+
     public static string IgnitionRecipeId(string reagentId) => reagentId + IgnitionRecipeSuffix;
+
+    /// <summary>The level that sets a chemical's ignition point: its strongest Explosive/Oxidizing/Fueling/Igniting level, 0 if none.</summary>
+    public static int IgnitionLevel(IReadOnlyDictionary<string, int> effects)
+    {
+        var level = 0;
+        foreach (var ignitionProp in IgnitionProperties)
+        {
+            if (effects.TryGetValue(ignitionProp, out var propLevel))
+                level = Math.Max(level, propLevel);
+        }
+        return level;
+    }
+
+    /// <summary>Net Hyperthermic − Hypothermic level: positive means the synthesis heats itself, negative cools itself.</summary>
+    public static int NetSynthesisHeat(IReadOnlyDictionary<string, int> effects)
+        => (effects.TryGetValue("Hyperthermic", out var hyper) ? hyper : 0) -
+           (effects.TryGetValue("Hypothermic", out var hypo) ? hypo : 0);
+
+    /// <summary>
+    /// The temperature band a generated synthesis reacts in: the contract's heat or cooling gate (§5), and for an
+    /// ignitable chemical a ceiling just under its ignition point (FLOW-01). 0 / +∞ mean no bound.
+    /// </summary>
+    public static void GetSynthesisTemperatureBand(GeneratedReagentData args, out float minTemp, out float maxTemp)
+    {
+        minTemp = args.RequiredMinTemp > 0 ? args.RequiredMinTemp : 0f;
+        maxTemp = args.RequiredMaxTemp > 0 ? args.RequiredMaxTemp : float.PositiveInfinity;
+        var level = args.Effects is null ? 0 : IgnitionLevel(args.Effects);
+        if (level > 0)
+            maxTemp = MathF.Min(maxTemp, IgnitionTemperature(level) - IgnitionGuardMargin);
+    }
 
     /// <summary>The temperature (K) at which a chemical whose strongest combustion property has this level ignites.</summary>
     public static float IgnitionTemperature(int level)
@@ -402,6 +450,10 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         var mixYaml = args.GenTier >= MixGatedGenTier
             ? $"  requiredMixerCategories:\n  - {GeneratedMixingCategory}\n"
             : string.Empty;
+        // FLOW-01 ignition guard and §5 heat/cooling gates.
+        GetSynthesisTemperatureBand(args, out var bandMin, out var bandMax);
+        var tempYaml = (bandMin > 0 ? $"  minTemp: {FormatFloat(bandMin)}\n" : string.Empty) +
+                       (float.IsFinite(bandMax) ? $"  maxTemp: {FormatFloat(bandMax)}\n" : string.Empty);
         LoadRecipe(args.ID, recipstr);
 
         // Sheets and uranium glass yield upstream Uranium, while RMC jugs and
@@ -429,6 +481,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
                 $"  priority: {prio}\n" +
                 $"  conserveEnergy: false\n" +
                 mixYaml +
+                tempYaml +
                 $"  reactants:\n{reactants}" +
                 $"  products:\n" +
                 $"    {args.ID}: {yield}\n" +
@@ -454,12 +507,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         IReadOnlyDictionary<string, ReagentPropertyPrototype> properties,
         HashSet<string> recipeIds)
     {
-        var level = 0;
-        foreach (var ignitionProp in IgnitionProperties)
-        {
-            if (args.Effects.TryGetValue(ignitionProp, out var propLevel))
-                level = Math.Max(level, propLevel);
-        }
+        var level = IgnitionLevel(args.Effects);
         if (level <= 0)
             return;
 
@@ -495,6 +543,9 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         var combustible = (args.Effects.TryGetValue("Fueling", out var fuelLevel) && fuelLevel > 0) ||
                           (args.Effects.TryGetValue("Oxidizing", out var oxLevel) && oxLevel > 0) ||
                           (args.Effects.TryGetValue("Igniting", out var ignLevel) && ignLevel > 0);
+        // Fueling, Oxidizing and Igniting are all fuel properties, so a combustible chemical always gets the tile-fire
+        // effect, and the only other way to an ignition level is Explosive. When the whole solution resolves to no fire
+        // (an oxidizer on its own, or too diluted), the effect leaves CMUSolutionTileFire.Residue instead (FLOW-02).
         if (combustible && fire.IsFuel)
         {
             yamlstr +=

@@ -42,7 +42,7 @@ public abstract partial class CMUSharedZLevelsSystem
             {
                 if (!TryComp<CMUZLevelHighGroundComponent>(uid, out var ramp) || !ramp.Stick
                     || ramp.SupportOnlyFromAbove || ramp.HeightCurve.Count < 2
-                    || !TryGetHighGroundCurveT(uid.Value, ramp, local, x == 0 && y == 0, out _))
+                    || !TryGetHighGroundCurveT(GetHighGroundGridDirection(uid.Value), ramp, local, x == 0 && y == 0, out _))
                 {
                     continue;
                 }

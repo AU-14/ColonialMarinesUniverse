@@ -38,6 +38,9 @@
   equipment:
     id: CMUIDCardIntelCaseOfficer
     pocket1: CMUIDCardIntelCover
+  # Spawns cuffed to the officer's hand, with its key put in the free pocket.
+  inhand:
+  - CMUIntelCuffedBriefcase
 
 - type: entity
   parent: CMSpawnPointJobBase

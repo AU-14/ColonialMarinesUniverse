@@ -76,8 +76,10 @@ public sealed partial class CMUFobEffectsSystem : EntitySystem
         // Gunshots and crate lids already have their own audio. These cues must not double it.
         var sound = cue switch
         {
-            CMUFobPresentationCue.Deploy or CMUFobPresentationCue.Pack when !HasComp<EntityStorageComponent>(uid)
+            CMUFobPresentationCue.Deploy when !HasComp<EntityStorageComponent>(uid)
                 => "/Audio/_RMC14/Machines/hydraulics_1.ogg",
+            CMUFobPresentationCue.Pack when !HasComp<EntityStorageComponent>(uid)
+                => "/Audio/Items/ratchet.ogg",
             CMUFobPresentationCue.Repair or CMUFobPresentationCue.Charge => "/Audio/Machines/twobeep.ogg",
             CMUFobPresentationCue.Reload => "/Audio/Weapons/Guns/MagIn/batrifle_magin.ogg",
             CMUFobPresentationCue.Shock => "/Audio/Effects/sparks4.ogg",

@@ -52,7 +52,7 @@
 - type: npcFaction
   parent: MILITARY
   id: CMUTWE
-  name: Third World Empire
+  name: Three World Empire
 
 - type: npcFaction
   parent: MILITARY

@@ -796,6 +796,9 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     /// </summary>
     public bool DigDown(EntityUid digger)
     {
+        if (!CanDigDown)
+            return false;
+
         var xform = Transform(digger);
         if (xform.MapUid is not { } mapUid || xform.GridUid is not { } gridUid)
             return false;

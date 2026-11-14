@@ -154,6 +154,13 @@ public sealed class CMUZOpeningEdgePruningTest : GameTest
         var centers = new List<(Vector2 Center, float Distance)>();
         cache.FindOpeningCentersNear(mapId, source, radius, centers, grids, maps, transform, tiles);
         Assert.That(centers, Is.EqualTo(expected.Select(portal => (portal.Center, portal.Distance))));
+
+        // A bounded scan must append the same prefix, even with existing caller-owned results.
+        var bounded = centers.Take(2).ToList();
+        var prefix = bounded.ToArray();
+        cache.FindOpeningCentersNear(mapId, source, radius, bounded, grids, maps, transform, tiles,
+            maxOpenings: 25);
+        Assert.That(bounded, Is.EqualTo(prefix.Concat(centers.Take(25))));
         AssertNearest(cache, mapId, source, radius, expected, grids, maps, transform, tiles, true);
         AssertNearest(cache, mapId, source, radius, all, grids, maps, transform, tiles, false);
         return expected;

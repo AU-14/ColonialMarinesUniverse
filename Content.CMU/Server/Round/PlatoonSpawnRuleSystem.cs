@@ -37,6 +37,8 @@ namespace Content.Server.CMU14.Round;
 
 public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComponent>
 {
+    private static readonly ResPath ExchangeMohawkPath = new("/Maps/CMU14/Dropships/Mohawk/midway_deployment.yml");
+
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -315,15 +317,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 _mapSystem.InitializeMap(gridMapId);
                 PrepareLoadedShuttleGrid(grid, faction, planetComp, DropshipDestinationComponent.DestinationType.Dropship);
 
-                // The dynamic gunship's navigation computer can trade the parked ship
-                // back for the platoon's standard Mohawk before its first takeoff.
-                if (mapId.Filename == "dynamic_gunship.yml" &&
-                    HasComp<DropshipComponent>(grid) &&
-                    TryGetPlatoonMohawkPath(platoon, out var mohawkPath))
+                // Dynamic gunships and the Osprey exchange for the Midway, regardless
+                // of the platoon's regular round-start Mohawk.
+                if (mapId.Filename is "dynamic_gunship.yml" or "osprey.yml" &&
+                    HasComp<DropshipComponent>(grid))
                 {
                     var exchange = EnsureComp<CMUDropshipMohawkExchangeComponent>(grid);
                     exchange.Faction = faction;
-                    exchange.MohawkPath = mohawkPath;
+                    exchange.MohawkPath = ExchangeMohawkPath;
                 }
 
                 SpawnShuttleConsoleMarkers(
@@ -372,21 +373,6 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 usedDestinations,
                 destinationRandom);
         }
-    }
-
-    private static bool TryGetPlatoonMohawkPath(PlatoonPrototype platoon, out ResPath path)
-    {
-        foreach (var candidate in platoon.CompatibleDropships)
-        {
-            if (candidate.ToString().Contains("/Dropships/Mohawk/", StringComparison.OrdinalIgnoreCase))
-            {
-                path = candidate;
-                return true;
-            }
-        }
-
-        path = default;
-        return false;
     }
 
     /// <summary>
@@ -792,7 +778,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         var shipId = faction == "govfor"
             ? _auRoundSystem.ResolveGovforShip(null)
             : _auRoundSystem.ResolveOpforShip(null);
-        if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, out var grids))
+        if (string.IsNullOrEmpty(shipId) || !_auRoundSystem.TryGetLoadedShipGrids(shipId, faction, out var grids))
             return;
 
         // The game-map event contains the main deck; the z-level loader loads the remaining decks separately.

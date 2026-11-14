@@ -4,7 +4,9 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Chemistry.Temperature;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
+using Content.Shared._RMC14.Chemistry.ChemMaster;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.EntitySystems;
@@ -198,6 +200,105 @@ public sealed class CMUReactionGatesTest : GameTest
                     "napalm UT ate napalm B's reactants");
             });
         });
+    }
+
+    // FLOW-01 (GraphAudit-ProcgenIgnitionHeat): ClF3 and methane used to keep their batch's heat while losing units
+    // (ClF3 + water ~733 K, methane ~1466 K) and carried it into every recipe they were poured into.
+    [Test]
+    public async Task PyrotechnicSynthesisDoesNotSelfHeat()
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            // Water first: chlorine and fluorine without it detonate (RMCCLF3Bad).
+            var clf3 = Fill(map, ("Water", 5), ("RMCChlorine", 5), ("RMCFluorine", 15));
+            var methane = Fill(map, ("RMCCarbon", 5), ("RMCHydrogen", 20));
+            var clf3Solution = BeakerSolution(clf3).Comp.Solution;
+            var methaneSolution = BeakerSolution(methane).Comp.Solution;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(clf3Solution.GetTotalPrototypeQuantity("RMCCLF3"), Is.EqualTo(FixedPoint2.New(5)));
+                Assert.That(clf3Solution.Temperature, Is.EqualTo(293.15f).Within(1f),
+                    "ClF3 synthesis (and the water its by-products form) concentrated the batch's heat");
+                Assert.That(methaneSolution.GetTotalPrototypeQuantity("RMCMethane"), Is.EqualTo(FixedPoint2.New(5)));
+                Assert.That(methaneSolution.Temperature, Is.EqualTo(293.15f).Within(1f),
+                    "methane synthesis concentrated the batch's heat");
+            });
+        });
+    }
+
+    // STATE-02: adding a reagent at a given temperature blends its heat by quantity.
+    [Test]
+    public async Task AddingAReagentAtATemperatureBlendsByQuantity()
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            var beaker = Fill(map, ("Water", 10));
+            var soln = BeakerSolution(beaker);
+            solutions.SetTemperature(soln, 300f);
+            Assert.That(solutions.TryAddReagent(soln, "Water", FixedPoint2.New(10), temperature: 200f), Is.True);
+            Assert.That(soln.Comp.Solution.Temperature, Is.EqualTo(250f).Within(0.01f),
+                "10u at 300 K plus 10u at 200 K should settle at 250 K");
+
+            var empty = SSpawnAtPosition("CMBeaker", map.GridCoords);
+            var emptySoln = BeakerSolution(empty);
+            Assert.That(solutions.TryAddReagent(emptySoln, "Water", FixedPoint2.New(10), temperature: 260f), Is.True);
+            Assert.That(emptySoln.Comp.Solution.Temperature, Is.EqualTo(260f).Within(0.01f),
+                "reagent poured into an empty container keeps its own temperature");
+        });
+    }
+
+    // FLOW-03: the ChemMaster moves reagents one at a time; each move must carry its temperature, and an emptied
+    // buffer must not keep the heat of what it last held.
+    [Test]
+    public async Task ChemMasterKeepsTemperatureAndResetsAnEmptyBuffer()
+    {
+        var map = await Pair.CreateTestMap();
+
+        await Server.WaitAssertion(() =>
+        {
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            var chemMaster = SSpawnAtPosition("CMChemMaster", map.GridCoords);
+            var beaker = Fill(map, ("Water", 10));
+            var beakerSoln = BeakerSolution(beaker);
+            solutions.SetTemperature(beakerSoln, 260f);
+
+            var master = SComp<RMCChemMasterComponent>(chemMaster);
+            Assert.That(Server.System<ItemSlotsSystem>().TryInsert(chemMaster, master.BeakerSlot, beaker, null), Is.True);
+            Assert.That(solutions.TryGetSolution(chemMaster, master.BufferSolutionId, out var buffer, out var bufferSolution), Is.True);
+
+            Send(chemMaster, new RMCChemMasterBeakerTransferMsg("Water", FixedPoint2.New(10)));
+            Assert.Multiple(() =>
+            {
+                Assert.That(bufferSolution!.GetTotalPrototypeQuantity("Water"), Is.EqualTo(FixedPoint2.New(10)));
+                Assert.That(bufferSolution.Temperature, Is.EqualTo(260f).Within(0.01f),
+                    "a chilled reagent warmed to the buffer's temperature on the way in");
+            });
+
+            // A hot buffer, emptied back into the beaker: the beaker gets the heat and the buffer forgets it.
+            solutions.SetTemperature(buffer!.Value, 600f);
+            Send(chemMaster, new RMCChemMasterBufferTransferMsg("Water", FixedPoint2.New(10)));
+            Assert.Multiple(() =>
+            {
+                Assert.That(bufferSolution!.Volume, Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(bufferSolution.Temperature, Is.EqualTo(293.15f).Within(0.01f),
+                    "an empty buffer kept the heat of what it last held");
+                Assert.That(beakerSoln.Comp.Solution.Temperature, Is.EqualTo(600f).Within(0.01f),
+                    "the reagent lost its heat on the way out of the buffer");
+            });
+        });
+    }
+
+    private void Send(EntityUid chemMaster, BoundUserInterfaceMessage msg)
+    {
+        msg.UiKey = RMCChemMasterUI.Key;
+        msg.Actor = chemMaster;
+        SEntMan.EventBus.RaiseLocalEvent(chemMaster, (object) msg);
     }
 
     private EntityUid Fill(Robust.UnitTesting.Pool.TestMapData map, params (string Reagent, int Amount)[] reagents)

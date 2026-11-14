@@ -37,20 +37,20 @@ public sealed class YautjaProfileCapabilities
     public YautjaProfileCapabilities(
         YautjaRank rank,
         bool canUseUnique,
-        bool canUseLegacy,
+        bool canUseAncientSets,
         bool canUseCouncilStatus = false,
         bool canUseLeaderStatus = false)
     {
         Rank = rank;
         CanUseUnique = canUseUnique;
-        CanUseLegacy = canUseLegacy;
+        CanUseAncientSets = canUseAncientSets;
         CanUseCouncilStatus = canUseCouncilStatus;
         CanUseLeaderStatus = canUseLeaderStatus;
     }
 
     public YautjaRank Rank { get; }
     public bool CanUseUnique { get; }
-    public bool CanUseLegacy { get; }
+    public bool CanUseAncientSets { get; }
     public bool CanUseCouncilStatus { get; }
     public bool CanUseLeaderStatus { get; }
 
@@ -73,15 +73,21 @@ public sealed class YautjaProfileCapabilities
         if (CanUseCouncilStatus)
             return YautjaProfileStatus.Council;
 
+        if (CanUseLeaderStatus)
+            return YautjaProfileStatus.Leader;
+
         return YautjaProfileStatus.Normal;
     }
 
     public YautjaRank ResolveRank(YautjaProfileStatus status)
     {
-        return status == YautjaProfileStatus.Normal &&
-               (CanUseCouncilStatus || CanUseLeaderStatus)
-            ? YautjaRank.Blooded
-            : Rank;
+        return status switch
+        {
+            YautjaProfileStatus.Normal when CanUseCouncilStatus || CanUseLeaderStatus => YautjaRank.Blooded,
+            // an Ancient who also holds the leader flag can still play as just a clan leader
+            YautjaProfileStatus.Leader when CanUseLeaderStatus => YautjaRank.Leader,
+            _ => Rank,
+        };
     }
 
     public YautjaProfileCapabilities ForStatus(YautjaProfileStatus status)
@@ -91,7 +97,7 @@ public sealed class YautjaProfileCapabilities
         return new(
             rank,
             YautjaRankResolver.CanUseUnique(rank),
-            CanUseLegacy,
+            CanUseAncientSets,
             CanUseCouncilStatus,
             CanUseLeaderStatus);
     }
@@ -103,15 +109,13 @@ public sealed class YautjaProfileCapabilities
                 Rank is YautjaRank.Leader or YautjaRank.Ancient);
     }
 
-    /// <summary>
-    /// Sets are split between the legacy whitelist and clan leader and above (Leader, Ancient). Elites and elders
-    /// get none; this is a CMU rule, cmss13 opens elite sets from Elite rank.
-    /// </summary>
+    // Ancient sets need the Council / Council Legacy whitelist, Leader sets need Clan Leader or Ancient rank.
+    // elites and elders get none, that's a CMU rule (cmss13 opens elite sets from Elite)
     public bool CanUseSetLock(YautjaSetLock setLock)
     {
         return setLock switch
         {
-            YautjaSetLock.LegacyWhitelist => CanUseLegacy,
+            YautjaSetLock.Ancient => CanUseAncientSets,
             YautjaSetLock.ClanLeader => CanUseUnique,
             _ => false,
         };

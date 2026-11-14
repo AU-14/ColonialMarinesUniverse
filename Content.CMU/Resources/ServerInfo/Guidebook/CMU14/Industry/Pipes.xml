@@ -25,6 +25,8 @@
 
   [bold]Tanks beside tanks do NOT connect.[/bold] Connect one tank's OUTPUT to the other tank's INPUT through pipes. Keep different liquids on separate pipe runs; one pipe carries one liquid at a time.
 
+  [bold]Electrolyzer:[/bold] connect water to an INPUT and use the separate hydrogen and oxygen OUTPUTS for water electrolysis. Brine also needs salt and uses the hydrogen, chlorine and caustic soda outputs. Cinnabar produces mercury through its own output. Choose each product's labeled port with the screwdriver and keep its pipe run separate; these outputs never drain the input water.
+
   ## Wrong liquid or no flow?
   - [bold]Wrong port:[/bold] open Pipe connections → Disconnect → choose the right INPUT/OUTPUT.
   - [bold]Wrong liquid in a pipe:[/bold] disconnect its source, then right-click each affected pipe → Drain pipe. This discards its contents.

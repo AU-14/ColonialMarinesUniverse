@@ -243,6 +243,19 @@ rmc-xeno-bloodletter-description = You trade your Abduct and most of your damage
     - Most of the raw damage of your attacks and abilities.
 rmc-xeno-bloodletter-popup = Open their veins. Bleed them dry. The Mycelium will run red.
 
+cmu-xeno-haze-healer-name = Healer  
+cmu-xeno-haze-healer-description = You trade your ability to secrete structures and spread spores for the ability to heal your sisters' wounds.  
+    You gain:  
+    - The ability to heal sisters by using plasma and some of your own health.  
+    - A faster plasma transfer.  
+    - The Sacrifice ability, letting you give your life to heal a sister. You will only respawn if you maxed out your transferred health by healing.  
+    - Some health and movement speed.  
+    You lose:  
+    - Your Spore Sac and Direct Spore Infect abilities.  
+    - Your ability to build structures.
+    - Some tackle strength and attack strength.
+cmu-xeno-haze-healer-popup = The Confluence provides. Mend the bloom, and the bloom will mend you.
+
 cm-xeno-heatshield-vomit-bile-extinguish = You smother the flames with bile.
 cm-xeno-heatshield-vomit-bile-hostile = You coat the target in volatile bile.
 cm-xeno-heatshield-vomit-bile-tile = You smother the burning ground with bile.

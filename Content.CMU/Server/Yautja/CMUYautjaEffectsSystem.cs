@@ -19,6 +19,12 @@ public sealed partial class CMUYautjaEffectsSystem : EntitySystem
     [Dependency] private DecalSystem _decals = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private BloodstreamSystem _blood = default!;
+    [Dependency] private YautjaCasterSystem _caster = default!;
+
+    // only a fallback for a client that stops sending: stowing or swapping the caster already clears the sight in
+    // Update. 0.4s used to be shorter than other clients' lag + interp buffer, so watchers saw the sight blink
+    private static readonly TimeSpan AimLifetime = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan AimMinInterval = TimeSpan.FromSeconds(.09);
 
     public override void Initialize()
     {
@@ -31,7 +37,7 @@ public sealed partial class CMUYautjaEffectsSystem : EntitySystem
     {
         if (args.SenderSession.AttachedEntity is not { } user ||
             !TryGetEntity(ev.Caster, out var caster) ||
-            _hands.GetActiveItem(user) != caster || !HasComp<YautjaCasterComponent>(caster) ||
+            _hands.GetActiveItem(user) != caster || !_caster.CanAimSight(user, caster.Value) ||
             !float.IsFinite(ev.Position.X) || !float.IsFinite(ev.Position.Y))
             return;
 
@@ -43,12 +49,12 @@ public sealed partial class CMUYautjaEffectsSystem : EntitySystem
         if (aim.ExpiresAt <= _timing.CurTime)
             aim.StartedAt = _timing.CurTime;
         // A client may update a sight ten times a second, but cannot direct another player's caster.
-        if (aim.ExpiresAt - _timing.CurTime > TimeSpan.FromSeconds(.31))
+        if (aim.ExpiresAt - _timing.CurTime > AimLifetime - AimMinInterval)
             return;
         var delta = ev.Position.Position - origin.Position;
         aim.Position = origin.Position + delta / MathF.Max(1, delta.Length() / 20);
         aim.Caster = caster.Value;
-        aim.ExpiresAt = _timing.CurTime + TimeSpan.FromSeconds(.4);
+        aim.ExpiresAt = _timing.CurTime + AimLifetime;
         Dirty(user, aim);
     }
 
@@ -191,7 +197,8 @@ public sealed partial class CMUYautjaEffectsSystem : EntitySystem
         var aims = EntityQueryEnumerator<CMUYautjaCasterAimComponent>();
         while (aims.MoveNext(out var uid, out var aim))
         {
-            if (_timing.CurTime >= aim.ExpiresAt || _hands.GetActiveItem(uid) != aim.Caster)
+            if (_timing.CurTime >= aim.ExpiresAt || _hands.GetActiveItem(uid) != aim.Caster ||
+                !_caster.CanAimSight(uid, aim.Caster))
                 RemCompDeferred<CMUYautjaCasterAimComponent>(uid);
         }
     }

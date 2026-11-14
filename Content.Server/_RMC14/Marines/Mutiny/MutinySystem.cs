@@ -34,6 +34,7 @@ public sealed partial class MutinySystem : SharedMutinySystem
         SubscribeLocalEvent<MutineerLeaderComponent, ComponentAdd>(OnLeaderAdded);
         SubscribeLocalEvent<MutineerLeaderComponent, ComponentRemove>(OnLeaderRemoved);
         SubscribeLocalEvent<MutineerLeaderComponent, MutineerRecruitActionEvent>(OnRecruitAction);
+        InitializeCMU(); // CMU14: begin mutiny, sides, styled prompts
     }
 
     private void AddMakeMutineerVerb(GetVerbsEvent<Verb> args)
@@ -124,12 +125,14 @@ public sealed partial class MutinySystem : SharedMutinySystem
     {
         EnsureComp<MutineerComponent>(ent.Owner);
         _actions.AddAction(ent, ref ent.Comp.RecruitActionEntity, ent.Comp.RecruitAction);
+        CMULeaderStartup(ent); // CMU14: begin mutiny action
         Dirty(ent);
     }
 
     private void OnLeaderShutdown(Entity<MutineerLeaderComponent> ent, ref ComponentShutdown args)
     {
         _actions.RemoveAction(ent.Owner, ent.Comp.RecruitActionEntity);
+        CMULeaderShutdown(ent); // CMU14: release sworn recruits, drop begin mutiny
     }
 
     private void OnLeaderAdded(Entity<MutineerLeaderComponent> ent, ref ComponentAdd args)
@@ -149,28 +152,14 @@ public sealed partial class MutinySystem : SharedMutinySystem
             _chatManager.DispatchServerMessage(actor.PlayerSession, Loc.GetString("mutineer-leader-status-removed"));
             _chatManager.SendAdminAnnouncement($"Player {actor.PlayerSession.Name} is no longer a mutineer leader.");
         }
-        _actions.RemoveAction(ent.Owner, ent.Comp.RecruitActionEntity);
+        // CMU14: OnLeaderShutdown already removed the recruit action, a second remove logged an error every time
         Dirty(ent);
     }
 
     private void OnRecruitAction(Entity<MutineerLeaderComponent> ent, ref MutineerRecruitActionEvent args)
     {
-        if (args.Handled)
-            return;
-
-        if (!args.Target.IsValid() || HasComp<MutineerComponent>(args.Target) || !HasComp<MarineComponent>(args.Target))
-            return;
-
-        if (!TryComp<MindContainerComponent>(args.Target, out var mind) || !mind.HasMind)
-            return;
-
-        if (!HasComp<MutinyEligibleComponent>(args.Target) || HasComp<SynthComponent>(args.Target))
-            return;
-
-        if (!TryComp<ActorComponent>(args.Target, out var actor))
-            return;
-
-        args.Handled = true;
-        _euis.OpenEui(new MutineerInviteEui(args.Target, this), actor.PlayerSession);
+        // CMU14: the RMC checks needed MutinyEligible, which no CMU job has, and failed silently. CMU
+        // checks side, MPs/command and synths, tells the leader why, and swears people in quietly
+        CMURecruit(ent, ref args);
     }
 }

@@ -71,9 +71,18 @@ public sealed class YautjaWhitelistAccessTest
                     Assert.That(db.GetYautjaWhitelistFlagsAsync(playerId).GetAwaiter().GetResult(), Is.EqualTo((int) flag));
                     Assert.That(jobWhitelist.IsAllowed(session, hunter.ID), Is.True);
                     var capabilities = rankManager.ResolveProfileCapabilitiesCached(session.UserId);
+                    // Ancient is the council whitelists, Clan Leader the leader one. the leader flag must not
+                    // hand out the Ancient tag
+                    var expectedRank = flag switch
+                    {
+                        YautjaWhitelistFlags.Council or YautjaWhitelistFlags.CouncilLegacy => YautjaRank.Ancient,
+                        YautjaWhitelistFlags.Leader => YautjaRank.Leader,
+                        _ => YautjaRank.Blooded,
+                    };
+                    Assert.That(capabilities.Rank, Is.EqualTo(expectedRank), flag.ToString());
                     Assert.That(
-                        capabilities.CanUseLegacy,
-                        Is.EqualTo(flag is YautjaWhitelistFlags.Legacy or YautjaWhitelistFlags.CouncilLegacy));
+                        capabilities.CanUseAncientSets,
+                        Is.EqualTo(flag is YautjaWhitelistFlags.Council or YautjaWhitelistFlags.CouncilLegacy));
                     Assert.That(
                         capabilities.CanUseCouncilStatus,
                         Is.EqualTo(flag is YautjaWhitelistFlags.Council or YautjaWhitelistFlags.CouncilLegacy));
@@ -89,8 +98,8 @@ public sealed class YautjaWhitelistAccessTest
                     Assert.That(requirements.IsWhitelisted(hunter.ID), Is.True);
                     Assert.That(requirements.CanCustomizeWhitelistedJob(hunter.ID), Is.True);
                     Assert.That(
-                        preferences.YautjaCapabilities.CanUseLegacy,
-                        Is.EqualTo(flag is YautjaWhitelistFlags.Legacy or YautjaWhitelistFlags.CouncilLegacy));
+                        preferences.YautjaCapabilities.CanUseAncientSets,
+                        Is.EqualTo(flag is YautjaWhitelistFlags.Council or YautjaWhitelistFlags.CouncilLegacy));
                     Assert.That(
                         preferences.YautjaCapabilities.CanUseCouncilStatus,
                         Is.EqualTo(flag is YautjaWhitelistFlags.Council or YautjaWhitelistFlags.CouncilLegacy));
@@ -108,7 +117,7 @@ public sealed class YautjaWhitelistAccessTest
                 Assert.That(db.GetYautjaWhitelistFlagsAsync(playerId).GetAwaiter().GetResult(), Is.EqualTo(0));
                 Assert.That(jobWhitelist.IsAllowed(session, hunter.ID), Is.False);
                 var capabilities = rankManager.ResolveProfileCapabilitiesCached(session.UserId);
-                Assert.That(capabilities.CanUseLegacy, Is.False);
+                Assert.That(capabilities.CanUseAncientSets, Is.False);
                 Assert.That(capabilities.CanUseCouncilStatus, Is.False);
                 Assert.That(capabilities.CanUseLeaderStatus, Is.False);
                 var state = (YautjaClanHallEuiState) editor!.GetNewState();
@@ -118,7 +127,7 @@ public sealed class YautjaWhitelistAccessTest
             {
                 Assert.That(requirements.IsWhitelisted(hunter.ID), Is.False);
                 Assert.That(requirements.CanCustomizeWhitelistedJob(hunter.ID), Is.False);
-                Assert.That(preferences.YautjaCapabilities.CanUseLegacy, Is.False);
+                Assert.That(preferences.YautjaCapabilities.CanUseAncientSets, Is.False);
                 Assert.That(preferences.YautjaCapabilities.CanUseCouncilStatus, Is.False);
                 Assert.That(preferences.YautjaCapabilities.CanUseLeaderStatus, Is.False);
             });

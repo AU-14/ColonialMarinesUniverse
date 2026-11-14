@@ -31,7 +31,7 @@
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
       state: bofors_cannon_interior_loaded
   - type: DropshipFabricatorPrintable
-    cost: 800
+    cost: 450
   - type: PowerLoaderAttachable
     attachableTypes:
     - AU14InteriorWeaponPoint
@@ -71,7 +71,7 @@
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
       state: howitzer_cannon_interior_loaded
   - type: DropshipFabricatorPrintable
-    cost: 600
+    cost: 500
   - type: PowerLoaderAttachable
     attachableTypes:
     - AU14InteriorWeaponPoint

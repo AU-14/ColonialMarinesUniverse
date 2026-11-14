@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
+using Content.Shared._RMC14.Xenonids.Strain; // CMU14: validate destraining against the current strain.
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
@@ -108,6 +109,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         SubscribeLocalEvent<XenoDevolveComponent, XenoOpenDevolveActionEvent>(OnXenoOpenDevolveAction);
 
+        SubscribeLocalEvent<XenoStrainComponent, MapInitEvent>(OnDestrainMapInit); // CMU14
         SubscribeLocalEvent<XenoEvolutionComponent, MapInitEvent>(OnXenoEvolveMapInit);
         SubscribeLocalEvent<XenoEvolutionComponent, XenoOpenEvolutionsActionEvent>(OnXenoEvolveAction);
         SubscribeLocalEvent<XenoEvolutionComponent, XenoEvolutionDoAfterEvent>(OnXenoEvolveDoAfter);
@@ -248,11 +250,17 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!xeno.Comp.Strains.Contains(args.Choice))
+        // CMU14: a strain may also return to its configured base caste.
+        // if (!xeno.Comp.Strains.Contains(args.Choice))
+        var destraining = TryComp(xeno, out XenoStrainComponent? strain) && strain.BaseCaste == args.Choice;
+        if (!xeno.Comp.Strains.Contains(args.Choice) && !destraining)
         {
             Log.Warning($"{ToPrettyString(actor)} sent an invalid strain choice: {args.Choice}.");
             return;
         }
+
+        if (destraining && !DestrainCooldownCheckPopup(xeno)) // CMU14
+            return;
 
         if (!HivebrokenCheckPopup(xeno))
             return;
@@ -264,6 +272,8 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             return;
 
         var newXeno = TransferXeno(xeno, args.Choice);
+        if (destraining) // CMU14: only a successful destrain starts the timer.
+            StartDestrainCooldown(newXeno);
         var ev = new NewXenoEvolvedEvent(xeno, newXeno, false);
         RaiseLocalEvent(newXeno, ref ev, true);
 
@@ -893,6 +903,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         EnsureComp<XenoEvolutionTransferComponent>(xeno);
         var coordinates = _transform.GetMoverCoordinates(xeno);
         var newXeno = Spawn(proto, coordinates);
+        TransferDestrainCooldown(xeno, newXeno); // CMU14: retain the timer through every evolution path.
         EnsureComp<LarvaQueueClaimBlockedComponent>(newXeno);
         EnsureComp<XenoEvolutionTransferComponent>(newXeno);
         _xenoHive.SetSameHive(xeno, newXeno);

@@ -5,7 +5,11 @@ using Content.Shared._RMC14.Construction;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Examine;
+using Content.Shared.Hands.Components; // CMU14: refresh stock when held storage changes
 using Content.Shared.Input;
+using Content.Shared.Inventory; // CMU14: refresh stock when worn storage changes
+using Content.Shared.Stacks; // CMU14: refresh stock when material stacks change
+using Content.Shared.Storage; // CMU14: refresh stock when backpack contents change
 using Content.Shared.Wall;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -15,6 +19,7 @@ using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Containers; // CMU14: observe storage contents
 
 namespace Content.Client.Construction
 {
@@ -50,6 +55,12 @@ namespace Content.Client.Construction
             SubscribeNetworkEvent<ResponseConstructionGuide>(OnConstructionGuideReceived);
             SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnConstructionPrototypesReloaded);
 
+            // CMU14 Construction stock refresh Begin
+            SubscribeLocalEvent<StackComponent, StackCountChangedEvent>(OnMaterialStackChanged);
+            SubscribeLocalEvent<EntInsertedIntoContainerMessage>(OnItemInserted);
+            SubscribeLocalEvent<EntRemovedFromContainerMessage>(OnItemRemoved);
+            // CMU14 Construction stock refresh End
+
             CommandBinds.Builder
                 .Bind(ContentKeyFunctions.OpenCraftingMenu,
                     new PointerInputCmdHandler(HandleOpenCraftingMenu, outsidePrediction: true))
@@ -62,6 +73,26 @@ namespace Content.Client.Construction
             SubscribeLocalEvent<ConstructionGhostComponent, ExaminedEvent>(HandleConstructionGhostExamined);
             SubscribeLocalEvent<ConstructionGhostComponent, ComponentShutdown>(HandleGhostComponentShutdown);
         }
+
+        // CMU14 Construction stock refresh Begin
+        private void OnMaterialStackChanged(Entity<StackComponent> ent, ref StackCountChangedEvent args)
+            => MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+
+        private void OnItemInserted(EntInsertedIntoContainerMessage args)
+        {
+            if (IsMaterialStockContainer(args.Container.Owner))
+                MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnItemRemoved(EntRemovedFromContainerMessage args)
+        {
+            if (IsMaterialStockContainer(args.Container.Owner))
+                MaterialStockChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool IsMaterialStockContainer(EntityUid owner)
+            => HasComp<StorageComponent>(owner) || HasComp<InventoryComponent>(owner) || HasComp<HandsComponent>(owner);
+        // CMU14 Construction stock refresh End
 
         private void OnConstructionPrototypesReloaded(PrototypesReloadedEventArgs args)
         {
@@ -251,6 +282,8 @@ namespace Content.Client.Construction
         }
 
         public event EventHandler<CraftingAvailabilityChangedArgs>? CraftingAvailabilityChanged;
+        // CMU14 event
+        public event EventHandler? MaterialStockChanged;
         public event EventHandler<string>? ConstructionGuideAvailable;
         public event EventHandler? ConstructionRecipesChanged;
         public event EventHandler? ToggleCraftingWindow;

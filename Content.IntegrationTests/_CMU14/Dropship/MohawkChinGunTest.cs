@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Eye;
 using Content.Shared.Damage.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.Shuttles.Components;
@@ -140,6 +141,17 @@ public sealed class MohawkChinGunTest
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
             Assert.That(chin.Operator, Is.EqualTo(actor));
             Assert.That(entities.GetComponent<RemoteWeaponOperatorComponent>(actor).SelectedWeapon, Is.EqualTo(weapon));
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunVisionMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Night));
+            Assert.That(entities.GetComponent<EyeComponent>(chin.Eye!.Value).DrawLight, Is.False,
+                "Night optics must use the gun console's normal fullbright night-vision behavior.");
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunVisionMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunVisionMessage
+                { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });
+            Assert.That(chin.VisionMode, Is.EqualTo(MohawkChinGunVisionMode.Normal));
+            Assert.That(entities.GetComponent<EyeComponent>(chin.Eye.Value).DrawLight, Is.True);
             entities.EventBus.RaiseLocalEvent(console, new MohawkChinGunAimMessage(
                 entities.GetNetCoordinates(new EntityCoordinates(map, -8.5f, 11)))
                 { Actor = actor, UiKey = DropshipTerminalWeaponsUi.Key });

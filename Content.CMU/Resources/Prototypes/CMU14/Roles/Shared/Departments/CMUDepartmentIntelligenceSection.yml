@@ -6,7 +6,11 @@
   color: "#5c6f80"
   roles:
   - CMUJobIntelCaseOfficer
-  - CMUJobIntelParamilitaryOfficer
-  - CMUJobIntelParamilitaryMember
+  - CMUJobIntelGRUSpetsnazOfficer
+  - CMUJobIntelCIASADOfficer
+  - CMUJobIntelSASOfficer
+  - CMUJobIntelGRUSpetsnazMember
+  - CMUJobIntelCIASADMember
+  - CMUJobIntelSASMember
   departmentRadio: null
   faction: colonist

@@ -1,0 +1,34 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: Whitelisted ghosts can Join the Hunt while a hunt is running.
+  type: Add
+- message: Xenos pouncing into a Yautja's front can get body slammed.
+  type: Add
+- message: Hunters can see who marked a target by examining it.
+  type: Add
+- message: Stranded Yautja only appear in Distress Signal and Force on Force.
+  type: Tweak
+- message: Harpoons fit in the hunting pouch and trophy belt.
+  type: Tweak
+- message: Called preserve prey spawn spread out instead of in one group.
+  type: Tweak
+- message: Lethal and eradicator plasma caster shots are blue, like cmss13.
+  type: Tweak
+- message: The chain gauntlet execution no longer leaves the body floating.
+  type: Fix
+- message: Chain gauntlet combos only build on living targets; the slam and shove
+    finishers match cmss13.
+  type: Fix
+- message: A broken bracer shield no longer locks up the bracer, and Z raises the
+    bracer shield.
+  type: Fix
+- message: The plasma caster sight no longer flickers for other players.
+  type: Fix
+- message: Two Yautja glaive hits no longer put an unarmoured human into pain shock;
+    it takes 3 to 4 like cmss13.
+  type: Fix
+- message: Yautja no longer show a question mark over their heads in Force on Force.
+  type: Fix
+time: '2026-11-07T20:54:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2503
