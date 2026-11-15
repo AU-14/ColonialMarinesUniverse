@@ -499,6 +499,10 @@ public sealed partial class SentrySystem : EntitySystem
                 _pointLight.SetEnabled(sentry, true);
                 break;
         }
+
+        // CMU14: let fixed support variants keep broken wrecks nonblocking after a mode refresh.
+        var updated = new CMUSentryStateUpdatedEvent();
+        RaiseLocalEvent(sentry, ref updated);
     }
 
     private bool CanDeployPopup(
@@ -522,7 +526,9 @@ public sealed partial class SentrySystem : EntitySystem
 
         var direction = rotation.GetCardinalDir();
         coordinates = coordinates.Offset(direction.ToVec());
-        if (!_rmcMap.CanBuildOn(coordinates))
+        // CMU14: allow deploying against barricades while preserving other obstruction checks.
+        // if (!_rmcMap.CanBuildOn(coordinates))
+        if (!_rmcMap.CanDeployWeaponOn(coordinates))
         {
             var msg = Loc.GetString("rmc-sentry-need-open-area", ("sentry", sentry));
             _popup.PopupEntity(msg, user, user, PopupType.SmallCaution);

@@ -16,7 +16,7 @@
   - type: Skills
     preset: AU14SkillPresetPlatoonRifleman
   - type: JobPrefix
-    prefix: au14-job-prefix-govforspecialist-marksmanRMC
+    prefix: au14-job-prefix-govforspecialist-pointmanRMC
   - type: Language
     spokenLanguages:
     - Polish
@@ -35,7 +35,7 @@
     currentLanguage: Polish
     defaultLanguage: Polish
 
-  name: au14-job-name-govforspecialist-marksmanRMC
+  name: au14-job-name-govforspecialist-pointmanRMC
   description: au14-uppgrom-description
   playTimeTracker: AU14JobUPPGROMPointman
   ranks:

@@ -67,6 +67,10 @@ public sealed class CMUXenoOvermindVisualizerSystem : VisualizerSystem<CMUXenoOv
                 SpriteSystem.LayerSetVisible((uid, args.Sprite), LayerTransition, true);
                 SpriteSystem.LayerSetRsiState((uid, args.Sprite), LayerTransition, "overmind_disappear");
                 break;
+            
+            case OvermindVisualState.Dead:  
+                 SpriteSystem.LayerSetRsiState((uid, args.Sprite), OvermindVisualLayers.Base, "dead");  
+                 break;
         }
     }
 }

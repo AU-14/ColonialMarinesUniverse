@@ -11,7 +11,8 @@ public readonly record struct ExplosionReceivedEvent(
     ProtoId<ExplosionPrototype> Explosion,
     MapCoordinates Epicenter,
     DamageSpecifier Damage,
-    MobState? StateBeforeDamage = null);
+    MobState? StateBeforeDamage = null,
+    EntityUid? SourceVehicle = null); // CMU14: retained even after the projectile is deleted.
 
 /// <summary>Allows content to scale the single incoming explosion transaction before aggregate damage commits.</summary>
 [ByRefEvent]

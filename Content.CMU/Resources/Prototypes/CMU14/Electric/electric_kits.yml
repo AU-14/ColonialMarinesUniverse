@@ -1,0 +1,445 @@
+# The kits of parts: six boxes that stand in for the small parts (bolts, screws, wire, tubes, motors, pistons and the rest), so that the crafts and the
+# machines count a few kinds of things instead of seventeen. One crate sprite (Textures/CMU14/Objects/Electric/kit.rsi), a color for each kit.
+# Fasteners: bolts, screws, gears. Wiring: wire and cable. Electronics: boards, tubes, resistors, diodes, transistors, capacitors.
+# Drive: motors and conveyors. Hydraulics: pistons and pumps. Heating: coils. Simple circuits: the set that stands in for the first circuit board.
+
+- type: stack
+  id: RUMCKitFasteners
+  name: fasteners kit
+  spawn: RUMCKitFastenersItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitFastenersItem
+  name: fasteners kit
+  description: "A box of bolts, screws and gears."
+  components:
+  - type: Stack
+    stackType: RUMCKitFasteners
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#9aa4ad"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitWiring
+  name: wiring kit
+  spawn: RUMCKitWiringItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitWiringItem
+  name: wiring kit
+  description: "A box of wire, insulated cable and inductors."
+  components:
+  - type: Stack
+    stackType: RUMCKitWiring
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#c97b3c"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitElectronics
+  name: electronics kit
+  spawn: RUMCKitElectronicsItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitElectronicsItem
+  name: electronics kit
+  description: "A box of boards, tubes, resistors, diodes, transistors and capacitors."
+  components:
+  - type: Stack
+    stackType: RUMCKitElectronics
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#3fa05a"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitDrive
+  name: drive kit
+  spawn: RUMCKitDriveItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitDriveItem
+  name: drive kit
+  description: "A box of motors and conveyor modules."
+  components:
+  - type: Stack
+    stackType: RUMCKitDrive
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#4b7bd1"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitHydraulics
+  name: hydraulics kit
+  spawn: RUMCKitHydraulicsItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitHydraulicsItem
+  name: hydraulics kit
+  description: "A box of pistons and pumps."
+  components:
+  - type: Stack
+    stackType: RUMCKitHydraulics
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#d8a431"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitHeating
+  name: heating kit
+  spawn: RUMCKitHeatingItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitHeatingItem
+  name: heating kit
+  description: "A box of heating coils."
+  components:
+  - type: Stack
+    stackType: RUMCKitHeating
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#d9503f"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitSimpleCircuits
+  name: simple circuits set
+  spawn: RUMCKitSimpleCircuitsItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitSimpleCircuitsItem
+  name: simple circuits set
+  description: "A set of simple circuits. Every machine of the electric age asks for one: it stands in for the first circuit board."
+  components:
+  - type: Stack
+    stackType: RUMCKitSimpleCircuits
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#8a7be0"
+  - type: Item
+    size: Small
+
+# The chip kits: what the engraver makes out of a silicon wafer, one kit for each kind of chip (the wafers cut into chips are gone). The quality boards are the boards of
+# the second tier (phenolic, plastic and the good circuit); the quality parts are the hull and the motor of the second tier.
+- type: stack
+  id: RUMCKitChipIC
+  name: logic chips kit
+  spawn: RUMCKitChipICItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitChipICItem
+  name: logic chips kit
+  description: "A box of simple logic chips, engraved on silicon with a ruby lens."
+  components:
+  - type: Stack
+    stackType: RUMCKitChipIC
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#59c2d6"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitChipULPIC
+  name: low-power chips kit
+  spawn: RUMCKitChipULPICItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitChipULPICItem
+  name: low-power chips kit
+  description: "A box of ultra-low-power chips, engraved on silicon with an alexandrite lens."
+  components:
+  - type: Stack
+    stackType: RUMCKitChipULPIC
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#7fd68a"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitChipRAM
+  name: memory chips kit
+  spawn: RUMCKitChipRAMItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitChipRAMItem
+  name: memory chips kit
+  description: "A box of memory chips, engraved on silicon with an emerald lens."
+  components:
+  - type: Stack
+    stackType: RUMCKitChipRAM
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#d6c25a"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitChipCPU
+  name: processor chips kit
+  spawn: RUMCKitChipCPUItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitChipCPUItem
+  name: processor chips kit
+  description: "A box of processor chips, engraved on silicon with a diamond lens."
+  components:
+  - type: Stack
+    stackType: RUMCKitChipCPU
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#d6685a"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitQualityBoards
+  name: quality boards kit
+  spawn: RUMCKitQualityBoardsItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitQualityBoardsItem
+  name: quality boards kit
+  description: "A box of boards of the second tier: phenolic and plastic ones, and the good circuit boards."
+  components:
+  - type: Stack
+    stackType: RUMCKitQualityBoards
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#46b3a5"
+  - type: Item
+    size: Small
+
+- type: stack
+  id: RUMCKitQualityParts
+  name: quality structure parts kit
+  spawn: RUMCKitQualityPartsItem
+  maxCount: 50
+
+- type: entity
+  parent: BaseItem
+  id: RUMCKitQualityPartsItem
+  name: quality structure parts kit
+  description: "A box of the parts of the second tier machines: aluminium hulls and silver-wound motors."
+  components:
+  - type: Stack
+    stackType: RUMCKitQualityParts
+    count: 1
+  - type: Sprite
+    sprite: CMU14/Objects/Electric/kit.rsi
+    state: icon
+    color: "#b0b7c3"
+  - type: Item
+    size: Small
+
+# By hand the kits are made like this; the machines make them from the same things in greater numbers.
+- type: craftRecipe
+  id: RUMCCraftKitFasteners
+  name: au14-craft-recipe-kitfasteners
+  output: RUMCKitFastenersItem
+  outputCount: 3
+  time: 6
+  minigames: [Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronRod
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftKitWiring
+  name: au14-craft-recipe-kitwiring
+  output: RUMCKitWiringItem
+  outputCount: 3
+  time: 8
+  minigames: [Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCCopperIngot
+    amount: 1
+  - stack: RUMCRubberSheet
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftKitElectronics
+  name: au14-craft-recipe-kitelectronics
+  output: RUMCKitElectronicsItem
+  outputCount: 2
+  time: 12
+  minigames: [Trace, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RMCWood
+    amount: 1
+  - stack: RUMCRubberSheet
+    amount: 1
+  - stack: RUMCCopperIngot
+    amount: 1
+  - stack: RUMCCokeCoal
+    amount: 1
+  - stack: CMGlass
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftKitSimpleCircuits
+  name: au14-craft-recipe-kitsimplecircuits
+  output: RUMCKitSimpleCircuitsItem
+  outputCount: 1
+  time: 14
+  minigames: [Trace, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitElectronics
+    amount: 3
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftKitDrive
+  name: au14-craft-recipe-kitdrive
+  output: RUMCKitDriveItem
+  outputCount: 1
+  time: 15
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 1
+  - stack: RUMCIronRod
+    amount: 2
+  - stack: RUMCKitFasteners
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftKitHydraulics
+  name: au14-craft-recipe-kithydraulics
+  output: RUMCKitHydraulicsItem
+  outputCount: 1
+  time: 15
+  minigames: [Rhythm, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 1
+  - stack: RUMCIronRod
+    amount: 2
+  - stack: RUMCKitFasteners
+    amount: 1
+  - stack: RUMCRubberSheet
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftKitHeating
+  name: au14-craft-recipe-kitheating
+  output: RUMCKitHeatingItem
+  outputCount: 1
+  time: 12
+  minigames: [Trace, Hold]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitWiring
+    amount: 4
+  - stack: RUMCIronRod
+    amount: 1
+
+# The quality parts by hand: the hull of the second tier, or the motor of it. Either makes a kit.
+- type: craftRecipe
+  id: RUMCCraftKitQualityPartsHull
+  name: au14-craft-recipe-kitqualityparts-hull
+  output: RUMCKitQualityPartsItem
+  outputCount: 1
+  time: 16
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RMCAluminum
+    amount: 8
+  - stack: RUMCKitChipULPIC
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftKitQualityPartsMotor
+  name: au14-craft-recipe-kitqualityparts-motor
+  output: RUMCKitQualityPartsItem
+  outputCount: 1
+  time: 20
+  minigames: [Trace, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCKitDrive
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 2
+  - stack: RMCAluminum
+    amount: 2
+  - stack: RUMCSilverWire
+    amount: 2

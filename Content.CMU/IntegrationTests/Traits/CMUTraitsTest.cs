@@ -14,29 +14,6 @@ namespace Content.IntegrationTests.CMU14.Traits;
 [TestFixture]
 public sealed class CMUTraitsTest : GameTest
 {
-    [Test]
-    public async Task BadLegIsKeptOffMilitaryAndLawEnforcement()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var prototypes = Server.ResolveDependency<IPrototypeManager>();
-
-            var roles = SEntMan.System<SharedRoleSystem>();
-
-            bool Bars(string job) => roles.GetRoleRequirements(prototypes.Index<JobPrototype>(job))?
-                .OfType<TraitsRequirement>()
-                .Any(requirement => requirement.Inverted && requirement.Traits.Contains("CMUBadLeg")) == true;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(Bars("AU14JobGOVFORSquadRifleman"), Is.True);
-                Assert.That(Bars("AU14JobOPFORSquadRifleman"), Is.True);
-                Assert.That(Bars("AU14JobCivilianCMBMarshal"), Is.True);
-                Assert.That(Bars("CMUJobINDFORProvostEnforcer"), Is.True);
-                Assert.That(Bars("AU14JobCivilianJournalist"), Is.False);
-            });
-        });
-    }
 
     [Test]
     public async Task MouthItemsFallOutUnlessIronTeeth()

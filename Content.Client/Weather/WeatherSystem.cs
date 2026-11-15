@@ -36,6 +36,7 @@ public sealed partial class WeatherSystem : SharedWeatherSystem
         ent.Comp.Stream = _audio.Stop(ent.Comp.Stream);
     }
 
+    // CMU14 method: reuse search storage and share geometry within this update only.
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -49,6 +50,7 @@ public sealed partial class WeatherSystem : SharedWeatherSystem
             return;
 
         var playerXform = Transform(player.Value);
+        float? cachedOcclusion = null;
 
         var query = EntityQueryEnumerator<WeatherStatusEffectComponent, StatusEffectComponent>();
         while (query.MoveNext(out var uid, out var weather, out var status))
@@ -64,20 +66,22 @@ public sealed partial class WeatherSystem : SharedWeatherSystem
             if (!_audioQuery.TryComp(weather.Stream, out var audio))
                 continue;
 
-            var occlusion = 0f;
+            var occlusion = cachedOcclusion ?? 0f;
 
             // Work out tiles nearby to determine volume.
-            if (_gridQuery.TryComp(playerXform.GridUid, out var grid))
+            if (cachedOcclusion == null && _gridQuery.TryComp(playerXform.GridUid, out var grid))
             {
                 _roofQuery.TryComp(playerXform.GridUid, out var roofComp);
                 var gridId = playerXform.GridUid.Value;
                 // FloodFill to the nearest tile and use that for audio.
                 var seed = _mapSystem.GetTileRef(gridId, grid, playerXform.Coordinates);
-                var frontier = new Queue<TileRef>();
+                var frontier = _cmuWeatherFrontier;
+                frontier.Clear();
                 frontier.Enqueue(seed);
                 // If we don't have a nearest node don't play any sound.
                 EntityCoordinates? nearestNode = null;
-                var visited = new HashSet<Vector2i>();
+                var visited = _cmuWeatherVisited;
+                visited.Clear();
 
                 while (frontier.TryDequeue(out var node))
                 {
@@ -125,8 +129,12 @@ public sealed partial class WeatherSystem : SharedWeatherSystem
                 {
                     occlusion = 3f;
                 }
+
+                frontier.Clear();
+                visited.Clear();
             }
 
+            cachedOcclusion = occlusion;
             var alpha = GetWeatherPercent((uid, status));
             alpha *= SharedAudioSystem.VolumeToGain(weather.Sound.Params.Volume);
             _audio.SetGain(weather.Stream, alpha, audio);

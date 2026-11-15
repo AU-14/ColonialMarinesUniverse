@@ -947,6 +947,8 @@
     refineResult:
     - id: FoodMeat
       amount: 5
+    - id: CMUCowHide # CMU14: obtainable hide for industrial tanning.
+      amount: 1
   - type: Grammar
     attributes:
       gender: female # Milk-producing animals are female.

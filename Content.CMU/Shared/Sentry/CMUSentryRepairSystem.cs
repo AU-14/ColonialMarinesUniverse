@@ -28,7 +28,10 @@ public sealed class CMUSentryRepairSystem : EntitySystem
     private static readonly ProtoId<ToolQualityPrototype> Welding = "Welding";
     private static readonly ProtoId<ToolQualityPrototype> Screwing = "Screwing";
     private static readonly ProtoId<ToolQualityPrototype> Anchoring = "Anchoring";
+    // The deprecated RMCCableCoil stays valid alongside its thin and thick LV replacements.
     private static readonly ProtoId<StackPrototype> Cable = "RMCCable";
+    private static readonly ProtoId<StackPrototype> ThinCable = "CMUThinCableLV";
+    private static readonly ProtoId<StackPrototype> ThickCable = "Cable";
     private static readonly EntProtoId<SkillDefinitionComponent> DelaySkill = "RMCSkillConstruction";
 
     private const int CableNeeded = 10;
@@ -89,6 +92,14 @@ public sealed class CMUSentryRepairSystem : EntitySystem
 
         var used = args.Used;
         var user = args.User;
+
+        var attempt = new CMUSentryRepairAttemptEvent(user);
+        RaiseLocalEvent(ent, ref attempt);
+        if (attempt.Cancelled)
+        {
+            args.Handled = true;
+            return;
+        }
 
         // Packing it up and setting it down still works while it's broken.
         if (_tools.HasQuality(used, Anchoring))
@@ -160,6 +171,11 @@ public sealed class CMUSentryRepairSystem : EntitySystem
         if (args.Cancelled || args.Handled || args.Step != ent.Comp.Step || ent.Comp.Step >= Steps.Length)
             return;
 
+        var attempt = new CMUSentryRepairAttemptEvent(args.User);
+        RaiseLocalEvent(ent, ref attempt);
+        if (attempt.Cancelled)
+            return;
+
         if (!TryComp(ent, out SentryComponent? sentry) || sentry.Mode == SentryMode.Item)
             return;
 
@@ -182,6 +198,8 @@ public sealed class CMUSentryRepairSystem : EntitySystem
 
         _damageable.ClearAllDamage(ent.Owner);
         RemCompDeferred<CMUSentryBrokenComponent>(ent);
+        var repaired = new CMUSentryRepairedEvent();
+        RaiseLocalEvent(ent, ref repaired);
         _popup.PopupPredicted(Loc.GetString("cmu-sentry-repair-finished", ("sentry", ent.Owner)),
             Loc.GetString("cmu-sentry-repair-finished-others", ("sentry", ent.Owner), ("user", args.User)),
             ent, args.User, PopupType.Medium);
@@ -207,7 +225,10 @@ public sealed class CMUSentryRepairSystem : EntitySystem
 
     private Tool? ToolOf(EntityUid used)
     {
-        if (TryComp(used, out StackComponent? stack) && stack.StackTypeId == Cable)
+        if (TryComp(used, out StackComponent? stack)
+            && (stack.StackTypeId == Cable
+                || stack.StackTypeId == ThinCable
+                || stack.StackTypeId == ThickCable))
             return Tool.Cable;
 
         if (HasComp<MultitoolComponent>(used))

@@ -1,0 +1,473 @@
+# What an ambassador can do for a city of the world map (see WorldCityActionPrototype), paid from the budget of the console. minInfluence is the favour of the faction in the city that it
+# takes; buildSeconds is how long it is built, effectSeconds how long it stands afterwards (nothing: for good); incomePerMinute is what it brings to the budget of the faction.
+
+# ---- the favour that anybody can win
+
+- type: worldCityAction
+  id: RUMCActionFestival
+  name: rumc-action-festival-name
+  description: rumc-action-festival-desc
+  order: 10
+  cost: 120
+  influence: 4
+  effectSeconds: 300
+
+- type: worldCityAction
+  id: RUMCActionWater
+  name: rumc-action-water-name
+  description: rumc-action-water-desc
+  order: 20
+  cost: 300
+  influence: 8
+  buildSeconds: 60
+  effectSeconds: 1200
+  protects:
+  - RUMCCrisisEpidemic
+  - RUMCCrisisDrought
+  resolves:
+  - RUMCCrisisDrought
+
+# ---- against a trouble that is on (only then)
+
+- type: worldCityAction
+  id: RUMCActionRescue
+  name: rumc-action-rescue-name
+  description: rumc-action-rescue-desc
+  order: 30
+  cost: 200
+  influence: 10
+  onlyInCrisis: true
+  resolves:
+  - RUMCCrisisRaid
+  - RUMCCrisisFire
+  - RUMCCrisisFlood
+  - RUMCCrisisCollapse
+
+- type: worldCityAction
+  id: RUMCActionFirefighting
+  name: rumc-action-firefighting-name
+  description: rumc-action-firefighting-desc
+  order: 31
+  cost: 150
+  influence: 8
+  onlyInCrisis: true
+  resolves:
+  - RUMCCrisisFire
+  - RUMCCrisisFlood
+
+# ---- after the first favour
+
+- type: worldCityAction
+  id: RUMCActionWarehouse
+  name: rumc-action-warehouse-name
+  description: rumc-action-warehouse-desc
+  order: 40
+  cost: 250
+  influence: 5
+  minInfluence: 10
+  buildSeconds: 30
+  effectSeconds: 1500
+  charges: 2
+  absorbInfluence: 12
+  absorbs:
+  - RUMCCrisisFamine
+  - RUMCCrisisEpidemic
+  - RUMCCrisisDrought
+  resolves:
+  - RUMCCrisisFamine
+
+- type: worldCityAction
+  id: RUMCActionWorkCrew
+  name: rumc-action-workcrew-name
+  description: rumc-action-workcrew-desc
+  order: 41
+  cost: 200
+  influence: 4
+  minInfluence: 10
+  buildSeconds: 90
+  effectSeconds: 900
+  incomePerMinute: 12
+
+# ---- partners
+
+- type: worldCityAction
+  id: RUMCActionRoads
+  name: rumc-action-roads-name
+  description: rumc-action-roads-desc
+  order: 50
+  cost: 500
+  influence: 10
+  minInfluence: 20
+  buildSeconds: 120
+  incomePerMinute: 6
+  repairsRoads: true
+
+- type: worldCityAction
+  id: RUMCActionHospital
+  name: rumc-action-hospital-name
+  description: rumc-action-hospital-desc
+  order: 51
+  placement: City
+  cost: 450
+  influence: 8
+  minInfluence: 20
+  buildSeconds: 120
+  effectSeconds: 1800
+  protects:
+  - RUMCCrisisEpidemic
+  resolves:
+  - RUMCCrisisEpidemic
+
+- type: worldCityAction
+  id: RUMCActionEvacuation
+  name: rumc-action-evacuation-name
+  description: rumc-action-evacuation-desc
+  order: 52
+  cost: 300
+  influence: 14
+  minInfluence: 20
+  onlyInCrisis: true
+  resolves:
+  - RUMCCrisisFlood
+  - RUMCCrisisFire
+  - RUMCCrisisRaid
+  - RUMCCrisisCollapse
+
+# ---- allies
+
+- type: worldCityAction
+  id: RUMCActionSchool
+  name: rumc-action-school-name
+  description: rumc-action-school-desc
+  order: 60
+  placement: City
+  cost: 400
+  influence: 14
+  minInfluence: 30
+  buildSeconds: 240
+  incomePerMinute: 5
+
+- type: worldCityAction
+  id: RUMCActionRefugees
+  name: rumc-action-refugees-name
+  description: rumc-action-refugees-desc
+  order: 61
+  cost: 250
+  influence: 16
+  minInfluence: 30
+  effectSeconds: 600
+  incomePerMinute: -2
+  onlyInCrisis: true
+  resolves:
+  - RUMCCrisisRaid
+  - RUMCCrisisFlood
+  - RUMCCrisisFire
+  - RUMCCrisisCollapse
+  - RUMCCrisisFamine
+
+# ---- patrons
+
+- type: worldCityAction
+  id: RUMCActionPower
+  name: rumc-action-power-name
+  description: rumc-action-power-desc
+  order: 70
+  cost: 600
+  influence: 6
+  minInfluence: 40
+  buildSeconds: 120
+  incomePerMinute: 8
+
+- type: worldCityAction
+  id: RUMCActionFund
+  name: rumc-action-fund-name
+  description: rumc-action-fund-desc
+  order: 71
+  cost: 600
+  influence: 10
+  minInfluence: 40
+  effectSeconds: 1800
+  returnPercent: 130
+  stackable: true
+
+- type: worldCityAction
+  id: RUMCActionQuarter
+  name: rumc-action-quarter-name
+  description: rumc-action-quarter-desc
+  order: 72
+  cost: 800
+  influence: 12
+  minInfluence: 60
+  buildSeconds: 180
+  incomePerMinute: 12
+
+# ---- joint works: two factions pay a share each, and both have the work while both keep the favour in the city
+
+- type: worldCityAction
+  id: RUMCActionJointBridge
+  name: rumc-action-jointbridge-name
+  description: rumc-action-jointbridge-desc
+  joint: true
+  order: 80
+  cost: 700
+  influence: 10
+  minInfluence: 20
+  buildSeconds: 150
+  incomePerMinute: 8
+  repairsRoads: true
+
+- type: worldCityAction
+  id: RUMCActionJointHospital
+  name: rumc-action-jointhospital-name
+  description: rumc-action-jointhospital-desc
+  joint: true
+  order: 81
+  cost: 600
+  influence: 10
+  minInfluence: 20
+  buildSeconds: 120
+  effectSeconds: 1800
+  incomePerMinute: 4
+  protects:
+  - RUMCCrisisEpidemic
+  resolves:
+  - RUMCCrisisEpidemic
+
+# ---- great buildings: very dear, only for a patron of the city, and each brings a point of influence with the mother faction every fifteen minutes while it stands (a faction may have three)
+
+- type: worldCityAction
+  id: RUMCActionEmbassy
+  name: rumc-action-embassy-name
+  description: rumc-action-embassy-desc
+  order: 90
+  placement: City
+  cost: 12000
+  influence: 20
+  minInfluence: 60
+  buildSeconds: 300
+  pointEverySeconds: 900
+
+- type: worldCityAction
+  id: RUMCActionUniversity
+  name: rumc-action-university-name
+  description: rumc-action-university-desc
+  order: 91
+  placement: City
+  cost: 18000
+  influence: 25
+  minInfluence: 70
+  buildSeconds: 420
+  incomePerMinute: 20
+  pointEverySeconds: 900
+
+- type: worldCityAction
+  id: RUMCActionCongress
+  name: rumc-action-congress-name
+  description: rumc-action-congress-desc
+  order: 92
+  placement: City
+  cost: 26000
+  influence: 35
+  minInfluence: 80
+  buildSeconds: 600
+  pointEverySeconds: 900
+  protects:
+  - RUMCCrisisEpidemic
+  - RUMCCrisisDrought
+  - RUMCCrisisFamine
+
+# ---- dear buildings bought for the points of influence (the reputation with the mother faction) that bring money to the budget while they stand; they are put up at once, with no caravan
+
+- type: worldCityAction
+  id: RUMCActionPassage
+  name: rumc-action-passage-name
+  description: rumc-action-passage-desc
+  order: 100
+  placement: City
+  cost: 0
+  pointCost: 2
+  influence: 15
+  minInfluence: 50
+  buildSeconds: 240
+  incomePerMinute: 100
+
+- type: worldCityAction
+  id: RUMCActionBankingHouse
+  name: rumc-action-bankinghouse-name
+  description: rumc-action-bankinghouse-desc
+  order: 101
+  placement: City
+  cost: 0
+  pointCost: 3
+  influence: 20
+  minInfluence: 65
+  buildSeconds: 360
+  incomePerMinute: 170
+
+- type: worldCityAction
+  id: RUMCActionPortTerminal
+  name: rumc-action-portterminal-name
+  description: rumc-action-portterminal-desc
+  order: 102
+  placement: City
+  cost: 0
+  pointCost: 5
+  influence: 30
+  minInfluence: 80
+  buildSeconds: 600
+  incomePerMinute: 300
+
+# ---- buildings of the other objects of the map (the sites): a deposit makes what is built on it bring in twice as much
+
+- type: worldCityAction
+  id: RUMCActionWatchtower
+  name: rumc-action-watchtower-name
+  description: rumc-action-watchtower-desc
+  placement: Site
+  order: 15
+  cost: 200
+  influence: 4
+  buildSeconds: 45
+  effectSeconds: 1500
+  protects:
+  - RUMCCrisisRaid
+
+- type: worldCityAction
+  id: RUMCActionOutpost
+  name: rumc-action-outpost-name
+  description: rumc-action-outpost-desc
+  placement: Site
+  order: 42
+  cost: 350
+  influence: 8
+  minInfluence: 10
+  buildSeconds: 60
+  effectSeconds: 1800
+  protects:
+  - RUMCCrisisRaid
+  - RUMCCrisisCollapse
+
+- type: worldCityAction
+  id: RUMCActionWorkCamp
+  name: rumc-action-workcamp-name
+  description: rumc-action-workcamp-desc
+  placement: Site
+  order: 43
+  cost: 450
+  influence: 4
+  minInfluence: 15
+  buildSeconds: 90
+  effectSeconds: 1800
+  incomePerMinute: 40
+
+- type: worldCityAction
+  id: RUMCActionFieldHospital
+  name: rumc-action-fieldhospital-name
+  description: rumc-action-fieldhospital-desc
+  placement: Site
+  order: 53
+  cost: 300
+  influence: 6
+  minInfluence: 15
+  buildSeconds: 60
+  effectSeconds: 1500
+  protects:
+  - RUMCCrisisEpidemic
+
+# ---- the headquarters of the intelligence: a faction has one, in a city or in another object of the map. It lets the faction send scouts into a place and do harm to the other ambassadors
+# in secret (discredit, sabotage, provocation) and turn counter-intelligence on (see WorldMarketSystem.Espionage).
+
+- type: worldCityAction
+  id: RUMCActionIntelHq
+  name: rumc-action-intelhq-name
+  description: rumc-action-intelhq-desc
+  feature: IntelHq
+  unique: true
+  order: 95
+  cost: 1500
+  influence: 6
+  minInfluence: 20
+  buildSeconds: 120
+
+# ---- more joint works: the partners each pay a share, both have the work while both keep the favour in the city, it brings in half as much again, they guard one another there from secret
+# harm, and the mother faction thinks the better of both (see WorldMarketSystem.Diplomacy)
+
+- type: worldCityAction
+  id: RUMCActionJointMarket
+  name: rumc-action-jointmarket-name
+  description: rumc-action-jointmarket-desc
+  joint: true
+  placement: City
+  order: 82
+  cost: 800
+  influence: 8
+  minInfluence: 20
+  buildSeconds: 120
+  incomePerMinute: 24
+
+- type: worldCityAction
+  id: RUMCActionJointGranary
+  name: rumc-action-jointgranary-name
+  description: rumc-action-jointgranary-desc
+  joint: true
+  order: 83
+  cost: 600
+  influence: 8
+  minInfluence: 20
+  buildSeconds: 90
+  effectSeconds: 1800
+  charges: 3
+  absorbInfluence: 14
+  absorbs:
+  - RUMCCrisisFamine
+  - RUMCCrisisDrought
+  - RUMCCrisisEpidemic
+  protects:
+  - RUMCCrisisFamine
+
+- type: worldCityAction
+  id: RUMCActionJointFort
+  name: rumc-action-jointfort-name
+  description: rumc-action-jointfort-desc
+  joint: true
+  placement: Site
+  order: 84
+  cost: 900
+  influence: 10
+  minInfluence: 20
+  buildSeconds: 150
+  effectSeconds: 2400
+  incomePerMinute: 8
+  protects:
+  - RUMCCrisisRaid
+  - RUMCCrisisCollapse
+  - RUMCCrisisFire
+
+- type: worldCityAction
+  id: RUMCActionJointMine
+  name: rumc-action-jointmine-name
+  description: rumc-action-jointmine-desc
+  joint: true
+  placement: Site
+  order: 85
+  cost: 1000
+  influence: 8
+  minInfluence: 20
+  buildSeconds: 180
+  incomePerMinute: 70
+
+- type: worldCityAction
+  id: RUMCActionJointAcademy
+  name: rumc-action-jointacademy-name
+  description: rumc-action-jointacademy-desc
+  joint: true
+  placement: City
+  order: 86
+  cost: 4000
+  influence: 14
+  minInfluence: 30
+  buildSeconds: 300
+  incomePerMinute: 20
+  pointEverySeconds: 900
+  protects:
+  - RUMCCrisisEpidemic

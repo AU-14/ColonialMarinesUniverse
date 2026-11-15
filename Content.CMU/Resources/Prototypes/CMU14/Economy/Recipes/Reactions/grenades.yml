@@ -6,10 +6,14 @@
 # Upstream already defines Foam (Fluorosurfactant + Water), Smoke, MetalFoam and the RMC metal foams; the
 # upstream recipes for the intermediates use upstream element ids that RMC dispensers do not stock, so the
 # intermediates are re-derived here from RMC elements.
+#
+# Everything here needs CMUMix: close the lid and use Mix, or let the payload mix it when the grenade goes off.
 
 - type: reaction
   id: CMUFluorosurfactant
   impact: Low
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCCarbon:
       amount: 2
@@ -23,6 +27,8 @@
 - type: reaction
   id: CMUFoamingAgent
   impact: Low
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCLithium:
       amount: 1
@@ -36,6 +42,8 @@
   id: CMUSmoke
   impact: Medium
   priority: 1
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCPhosphorus:
       amount: 1
@@ -55,6 +63,8 @@
 - type: reaction
   id: CMUTearGas
   impact: Medium
+  requiredMixerCategories: # CMU14: only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCChlorine:
       amount: 1

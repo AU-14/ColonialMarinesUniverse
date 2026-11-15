@@ -105,8 +105,9 @@ public sealed class PopupOverlay : Overlay
             var distance = (mapPos.Position - ourPos).Length();
 
             // Should handle fade here too wyci.
+            // CMU14: pass predicate state without allocating a closure for each popup on each draw.
             if (!args.WorldBounds.Contains(mapPos.Position) || !_examine.InRangeUnOccluded(viewPos, mapPos, distance,
-                    e => e == popup.InitialPos.EntityId || e == ourEntity))
+                    (popup.InitialPos.EntityId, ourEntity), static (uid, state) => uid == state.EntityId || uid == state.ourEntity))
                 continue;
 
             var pos = Vector2.Transform(mapPos.Position, matrix);

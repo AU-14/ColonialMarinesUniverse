@@ -792,7 +792,9 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
         if (!dept.ColonyManaged)
             return false;
 
-        if (amount <= 0 || amount > _budget.GetBudget())
+        if (!float.IsFinite(amount)
+            || amount <= 0
+            || amount > _budget.GetBudget())
             return false;
 
         _budget.AddToBudget(-amount);
@@ -806,7 +808,9 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     /// </summary>
     private void OnWithdraw(EntityUid uid, DepartmentConsoleComponent comp, DepartmentConsoleWithdrawBuiMsg msg)
     {
-        if (msg.Amount <= 0 || msg.Amount > comp.DepartmentBudget)
+        if (!float.IsFinite(msg.Amount)
+            || msg.Amount <= 0
+            || msg.Amount > comp.DepartmentBudget)
             return;
 
         var amount = (int) msg.Amount;

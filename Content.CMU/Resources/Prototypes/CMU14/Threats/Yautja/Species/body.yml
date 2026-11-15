@@ -56,16 +56,16 @@
   id: OrganYautjaLegLeft
   components:
   - type: MovementBodyPart
-    walkSpeed: 3.7
-    sprintSpeed: 7.1
+    walkSpeed: 4.2
+    sprintSpeed: 8.0
 
 - type: entity
   parent: [ OrganBaseLegRight, OrganYautjaExternal ]
   id: OrganYautjaLegRight
   components:
   - type: MovementBodyPart
-    walkSpeed: 3.7
-    sprintSpeed: 7.1
+    walkSpeed: 4.2
+    sprintSpeed: 8.0
 
 - type: entity
   parent: [ OrganBaseFootLeft, OrganYautjaExternal ]
@@ -123,16 +123,16 @@
   id: CMUPartYautjaLeftLeg
   components:
   - type: MovementBodyPart
-    walkSpeed: 3.7
-    sprintSpeed: 7.1
+    walkSpeed: 4.2
+    sprintSpeed: 8.0
 
 - type: entity
   parent: [ CMUPartYautjaVisual, CMUPartHumanRightLeg ]
   id: CMUPartYautjaRightLeg
   components:
   - type: MovementBodyPart
-    walkSpeed: 3.7
-    sprintSpeed: 7.1
+    walkSpeed: 4.2
+    sprintSpeed: 8.0
 
 - type: entity
   parent: [ CMUPartYautjaVisual, CMUPartHumanLeftFoot ]

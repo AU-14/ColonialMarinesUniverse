@@ -10,6 +10,10 @@ using Content.Shared.Access.Systems;
 using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Robust.Shared.Prototypes;
+// CMU14 start
+using Content.Shared._RMC14.Synth;
+using Content.Shared.CMU14.Preferences;
+// CMU14 end
 // cmu edit start
 using Content.Server.Body;
 using Content.Server.Humanoid.Systems;
@@ -64,6 +68,11 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
 
         if (!_prototype.TryIndex(jobProto, out var job))
             return;
+
+        // CMU14 start: normalize synth names before copying them onto the ID. Job components are applied later.
+        if (job.RoundComponents.ContainsKey(EntityManager.ComponentFactory.GetComponentName<SynthComponent>()))
+            _meta.SetEntityName(ent, CMUCharacterName.Normalize(metaData.EntityName, artificialWomb: false, synthetic: true));
+        // CMU14 end
 
         if (job.StartingGear is { } gear)
         {

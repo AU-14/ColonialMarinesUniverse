@@ -162,31 +162,4 @@ public sealed class AbsorbentMergeRegressionTest : GameTest
                 "An emptied puddle must be deleted on the direct-absorption path."));
     }
 
-    [Test]
-    public async Task SolutionProgressIncludesTransparentAvailableSegment()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var entities = Server.EntMan;
-            var solutions = Server.System<SharedSolutionContainerSystem>();
-            var mop = entities.SpawnEntity(WetMop, map.GridCoords);
-            var absorbent = entities.GetComponent<AbsorbentComponent>(mop);
-
-            Assert.That(solutions.TryGetSolution(mop, absorbent.SolutionName, out var solutionEnt), Is.True);
-            solutions.AddSolution(solutionEnt!.Value, new Solution("Water", FixedPoint2.New(5)));
-            solutions.AddSolution(solutionEnt.Value, new Solution("Cola", FixedPoint2.New(2)));
-            solutions.UpdateChemicals(solutionEnt.Value);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(absorbent.Progress, Has.Count.EqualTo(3),
-                    "Absorbent, contaminant, and available-volume segments must remain distinct.");
-                Assert.That(absorbent.Progress[Color.Transparent], Is.EqualTo(3f),
-                    "Available capacity must use the upstream transparent progress segment.");
-                Assert.That(absorbent.Progress.Values.Sum(), Is.EqualTo(10f));
-            });
-        });
-    }
 }

@@ -2,12 +2,14 @@
   id: CMUPlanetFortMcNeil
   name: Fort McNeil
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Fort McNeil"
     mapId: cmufortmcneil
     lorePrimer: CMUPrimerPlanetFortMcNeil
     allegiance: UA
-    camouflage: Desert
+    camouflage: Urban
     announcement: "An automated distress signal has been received from the colony site of Fort McNeil, on the border world of White Antre. A response team has been dispatched to investigate."
     platoonsGovfor:
     - USCM
@@ -15,7 +17,6 @@
     - RMC
     - CMBCIU
     - HAZOPS
-    - ProdigySF
     - VAIPO
     platoonsOpfor:
     - LACN
@@ -85,11 +86,11 @@
   - "/Maps/CMU14/Planets/FortMcNeil/FortMcNeilMultiZ1.yml"
   - "/Maps/CMU14/Planets/FortMcNeil/FortMcNeilMultiZ2.yml"
   minPlayers: 0
-  maxPlayers: 80
+  maxPlayers: 90
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    fortmcneil:
+    FortMcNeil:
       stationProto: StandardUNMCWarship
       components:
       - type: StationNameSetup

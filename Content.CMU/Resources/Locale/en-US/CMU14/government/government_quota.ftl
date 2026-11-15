@@ -1,0 +1,19 @@
+# The quota of the metropolis
+rumc-government-tab-quotas = Quotas
+rumc-quota-title = Quota of the metropolis
+rumc-quota-none = No quota is set.
+rumc-quota-metropolis-name = Money plan of the metropolis
+rumc-quota-metropolis-desc = The metropolis asks that a sum of money is paid into the plan in the time given. It is paid out of the budget, which the townsfolk fill with rent, fees and trade. If the plan is kept in time, the metropolis gives a grant greater than what was paid. If not, what was paid goes back, but the budget is fined and the factions think the worse of the city.
+rumc-quota-terms = The sum of the plan: { $amount }. The grant for keeping it: { $grant }. The fine for failing: { $fine }. Plans kept in a row: { $level }.
+rumc-quota-active = The plan goes
+rumc-quota-progress = Paid { $paid } of { $amount } ({ $percent }%)
+rumc-quota-left = Time left: { $time }
+rumc-quota-pay = Pay { $sum }
+rumc-quota-pay-rest = Pay the rest ({ $sum })
+rumc-quota-active-hint = It may be paid at any time, in parts. When the sum is whole, the grant comes to the budget at once.
+rumc-quota-waiting = No new plan is set yet
+rumc-quota-next = The next plan in { $time }
+rumc-quota-log = What came of the plans
+rumc-quota-log-none = No plans yet.
+rumc-quota-log-success = The plan { $amount } is kept. Grant of the metropolis: { $grant }.
+rumc-quota-log-failure = The plan { $amount } is failed. Paid { $paid } (given back), fine { $fine }, the factions think the worse of the city.

@@ -1,0 +1,66 @@
+{
+  "j79-start-stop": {
+    "author": "C-V",
+    "source": "https://freesound.org/people/C-V/sounds/704945/",
+    "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "download": "https://cdn.freesound.org/previews/704/704945_8956746-hq.mp3",
+    "sha256": "f8d7cb2fb0752ca3c371d60fbef12f9f3520263a5826b40c8573990cd8aae455",
+    "bytes": 3735168
+  },
+  "f15-start": {
+    "author": "daveincamas",
+    "source": "https://freesound.org/people/daveincamas/sounds/221664/",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "download": "https://cdn.freesound.org/previews/221/221664_111413-hq.mp3",
+    "sha256": "8e7fde50851ac8bf225f610da161dafbdfe4f12c12a7acfcfb5deff61d9763c9",
+    "bytes": 942624
+  },
+  "cf18-climb": {
+    "author": "lonemonk",
+    "source": "https://freesound.org/people/lonemonk/sounds/349713/",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "download": "https://cdn.freesound.org/previews/349/349713_230160-hq.mp3",
+    "sha256": "f1240709afec745593a6efe57844f58b723c55d30e62f288f03f4f9f1ed08141",
+    "bytes": 699769
+  },
+  "typhoon-pass": {
+    "author": "TimoSchmied",
+    "source": "https://freesound.org/people/TimoSchmied/sounds/640504/",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "download": "https://cdn.freesound.org/previews/640/640504_4424897-hq.mp3",
+    "sha256": "7e173fae9314762bccdaa7c8aefb62501420c6aa32f15ec59db649da9232a886",
+    "bytes": 512604
+  },
+  "f16-takeoff": {
+    "author": "Sandermotions",
+    "source": "https://freesound.org/people/Sandermotions/sounds/275990/",
+    "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "download": "https://cdn.freesound.org/previews/275/275990_1402315-hq.mp3",
+    "sha256": "8f477bc737c299906e61ea92d0c6dddba724adb6a5d3cd6108516e1ecadb7248",
+    "bytes": 955008
+  },
+  "cannon": {
+    "author": "Seidhepriest",
+    "source": "https://freesound.org/people/Seidhepriest/sounds/611449/",
+    "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "download": "https://cdn.freesound.org/previews/611/611449_736471-hq.mp3",
+    "sha256": "6af33c66e8346337912186410661918f9105b6c71b37736de7a6b142ba1ad45b",
+    "bytes": 104678
+  },
+  "rocket-launch": {
+    "author": "qubodup",
+    "source": "https://freesound.org/people/qubodup/sounds/854511/",
+    "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "download": "https://cdn.freesound.org/previews/854/854511_71257-hq.mp3",
+    "sha256": "b1e3ecdd1001c13b8d73fe94523551ee7f4fc3e57234db3243ec3a75e73a043d",
+    "bytes": 131808
+  },
+  "impact-whoosh": {
+    "author": "zapsplat.com",
+    "source": "https://freesound.org/people/zapsplat.com/sounds/719426/",
+    "license": "http://creativecommons.org/publicdomain/zero/1.0/",
+    "download": "https://cdn.freesound.org/previews/719/719426_15601358-hq.mp3",
+    "sha256": "f08cce47623d50d5b49bc54e3881bf9ee4b72b0a0b4d53d3c7a9e8fc3fc4308a",
+    "bytes": 179232
+  }
+}

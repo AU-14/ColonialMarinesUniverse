@@ -58,7 +58,7 @@
           cost: 35
           repurchasable: true
           maxPurchases: 2
-          purchaseCooldown: 600
+          purchaseCooldown: 1800
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: CMUCLFJeepReinforcements

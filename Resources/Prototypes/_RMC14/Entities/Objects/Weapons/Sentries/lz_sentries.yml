@@ -71,6 +71,7 @@
   # cmu edit end
   description: A fully-automated defence turret with mid-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed.
   components:
+  - type: CMUFobLegacyDefense # CMU14: replace only on validated, enabled FOB pilot maps.
   - type: UserIFF
     factions: []
   - type: EntityIFF

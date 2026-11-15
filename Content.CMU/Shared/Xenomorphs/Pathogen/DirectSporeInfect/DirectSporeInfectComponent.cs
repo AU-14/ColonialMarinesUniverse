@@ -24,4 +24,7 @@ public sealed partial class CMUXenoDirectSporeInfectComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan InfectDelay = TimeSpan.FromSeconds(1.5);
+
+    [DataField, AutoNetworkedField]
+    public float ProtectionBypassChance = 0.1f;
 }

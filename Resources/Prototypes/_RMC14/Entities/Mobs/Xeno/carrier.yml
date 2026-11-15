@@ -133,6 +133,11 @@
   parent: RMCXenoCarrierBase
   id: CMXenoCarrier
   components:
+  - type: FiremanCarriable # CMU14: Yautja can aggressively grab, carry and throw this caste, matching
+    canThrow: true           # CM-SS13's grab gate (mob_grab.dm:82-89: Yautja reach MOB_SIZE_XENO, 3).
+    carrierWhitelist:
+      components:
+      - Yautja
   - type: GuideHelp
     guides:
     - RMCGuideRoleCarrier
@@ -218,6 +223,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-eggsac-name
+    baseCaste: CMXenoCarrier # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-eggsac-description
     popup: rmc-xeno-eggsac-popup
   - type: DrawableSolution

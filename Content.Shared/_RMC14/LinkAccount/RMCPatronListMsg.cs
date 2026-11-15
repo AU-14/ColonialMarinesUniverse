@@ -13,6 +13,8 @@ public sealed class RMCPatronListMsg : NetMessage
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {
         var count = buffer.ReadVariableInt32();
+        // CMU14: validate the minimum encoded size before allocation.
+        buffer.AssertAtLeastSize(count * (2 * NetMessageExt.MinSizeOfString + NetMessageExt.MinSizeOfVariableInt));
         Patrons = new List<SharedRMCPatron>(count);
         for (var i = 0; i < count; i++)
         {

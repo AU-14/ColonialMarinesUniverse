@@ -4,7 +4,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Hive
-    lateJoinGainLarva: false
+    lateJoinGainLarva: true
     hiveUIColor: "#8a8c50"
     canMakeAlliances: false
     corrupted: false
@@ -14,7 +14,8 @@
       3: 0.4
     freeSlots:
       CMU14XenoConditor: 2
-      CMU14XenoHarbingerBase: 1
+      CMU14XenoHarbinger: 1
+      CMU14XenoNeomorph: 1
     announceSound:
       path: /Audio/CMU14/Xeno/Pathogen/pathogen_distant_roar.ogg
       params:

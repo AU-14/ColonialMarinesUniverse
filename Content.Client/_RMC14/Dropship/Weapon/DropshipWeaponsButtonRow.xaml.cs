@@ -54,12 +54,7 @@ public sealed partial class DropshipWeaponsButtonRow : BoxContainer
         static string Wrap(LocId? loc)
         {
             var text = loc == null ? string.Empty : Loc.GetString(loc);
-            var size = 9;
-            // TODO RMC14 FIXME my kingdom for mono font
-            if (text == "WEAPON")
-                size = 8;
-
-            return $"[font size={size}][color=white]{text}[/color][/font]";
+            return text;
         }
 
         button.RichLabel.SetMarkupPermissive(Wrap(data?.Text));

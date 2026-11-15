@@ -294,6 +294,7 @@ public sealed partial class ChatUIController : UIController
 
     public void OnScreenUnload()
     {
+        CMUClearSpeechBubbles(); // CMU14: release owned controls before the screen is disposed.
         SetMainChat(false);
     }
 
@@ -627,7 +628,10 @@ public sealed partial class ChatUIController : UIController
     public void RemoveSpeechBubble(EntityUid entityUid, SpeechBubble bubble)
     {
         bubble.OnDied -= SpeechBubbleDied;
-        bubble.Orphan();
+        // CMU14 Begin: release the control and cancel pending death callbacks.
+        // bubble.Orphan();
+        bubble.CMURetire();
+        // CMU14 End
 
         if (!_activeSpeechBubbles.TryGetValue(entityUid, out var list))
             return;
@@ -778,86 +782,10 @@ public sealed partial class ChatUIController : UIController
         }
     }
 
+    // CMU14 method: queue processing and lifetime management must also run for hidden bubbles.
     private void UpdateQueuedSpeechBubbles(FrameEventArgs delta)
     {
-        // Update queued speech bubbles.
-        if (_queuedSpeechBubbles.Count == 0 || _examine == null)
-        {
-            return;
-        }
-
-        foreach (var (entity, queueData) in _queuedSpeechBubbles.ShallowClone())
-        {
-            if (!EntityManager.EntityExists(entity))
-            {
-                _queuedSpeechBubbles.Remove(entity);
-                continue;
-            }
-
-            queueData.TimeLeft -= delta.DeltaSeconds;
-            if (queueData.TimeLeft > 0)
-            {
-                continue;
-            }
-
-            if (queueData.MessageQueue.Count == 0)
-            {
-                _queuedSpeechBubbles.Remove(entity);
-                continue;
-            }
-
-            var msg = queueData.MessageQueue.Dequeue();
-
-            queueData.TimeLeft += BubbleDelayBase + msg.Message.Message.Length * BubbleDelayFactor;
-
-            // We keep the queue around while it has 0 items. This allows us to keep the timer.
-            // When the timer hits 0 and there's no messages left, THEN we can clear it up.
-            CreateSpeechBubble(entity, msg);
-        }
-
-        var player = _player.LocalEntity;
-        var predicate = static (EntityUid uid, (EntityUid compOwner, EntityUid? attachedEntity) data)
-            => uid == data.compOwner || uid == data.attachedEntity;
-        var playerPos = player != null
-            ? _eye.CurrentEye.Position
-            : MapCoordinates.Nullspace;
-
-        var occluded = player != null && _examine.IsOccluded(player.Value);
-
-        foreach (var (ent, bubs) in _activeSpeechBubbles)
-        {
-            if (EntityManager.Deleted(ent))
-            {
-                SetBubbles(bubs, false);
-                continue;
-            }
-
-            if (ent == player)
-            {
-                SetBubbles(bubs, true);
-                continue;
-            }
-
-            if (!CanShowSpeechBubble(ent, out var sameMap))
-            {
-                SetBubbles(bubs, false);
-                continue;
-            }
-
-            var otherPos = _transform?.GetMapCoordinates(ent) ?? MapCoordinates.Nullspace;
-
-            // CMU14: the perspective speech control checks occlusion against the visible 3D solids.
-            if (sameMap && occluded && _eye.MainViewport is not Content.Client.CMU14.ThreeD.Scene.CMU3DSceneControl { FirstPerson: true } && !_examine.InRangeUnOccluded(
-                    playerPos,
-                    otherPos, 0f,
-                    (ent, player), predicate))
-            {
-                SetBubbles(bubs, false);
-                continue;
-            }
-
-            SetBubbles(bubs, true);
-        }
+        CMUUpdateSpeechBubbles(delta);
     }
 
     private void SetBubbles(List<SpeechBubble> bubbles, bool visible)

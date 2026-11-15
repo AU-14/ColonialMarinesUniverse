@@ -2,12 +2,14 @@
   id: AUPlanetShepherdsPride
   name: Shepherds' Pride
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: Spanish
   - type: RMCPlanetMapPrototype
     votename: "Shepherds' Pride"
     mapId: Sheperds
     lorePrimer: AU14PrimerPlanetShepherdsPride
     allegiance: UA
-    camouflage: Desert
+    camouflage: Jungle
     announcement: "The wildlife reserve of Shepherds' Pride on the fringe of the Neroid Sector has gone silent. A response force has been dispatched to investigate."
     platoonsGovfor:
     - LACN
@@ -18,7 +20,6 @@
     platoonsOpfor:
     - UPP
     - HAZOPS
-    - ProdigySF
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: VAIPO

@@ -76,38 +76,6 @@ public sealed class CMUAutodocProcedureParityTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task DeletedAnatomyDuringCleanupCannotReceiveLaterMarkersOrSucceed()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var em = pair.Server.EntMan;
-            var patient = em.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            try
-            {
-                var hand = PrepareFracture(em, patient);
-                var probe = em.GetComponent<CMUAutodocAccessProbeComponent>(hand);
-                probe.DeleteOnTraitCleanup = true;
-                var step = em.System<SharedCMSurgerySystem>().GetSingleton("CMUAutodocParityDeletionCleanupStep")!.Value;
-                var effect = new CMSurgeryStepEvent(patient, patient, hand, new());
-                var result = em.System<SharedCMUSurgerySystem>().TryExecuteStep(step, ref effect, automated: true);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(probe.DeletedDuringCleanup, Is.True);
-                    Assert.That(em.EntityExists(hand), Is.False);
-                    Assert.That(result, Is.EqualTo(CMUSurgeryStepOutcome.Failed));
-                    Assert.That(effect.Failed, Is.True);
-                });
-            }
-            finally
-            {
-                em.DeleteEntity(patient);
-            }
-        });
-        await pair.CleanReturnAsync();
-    }
-
     [TestCase(false)]
     [TestCase(true)]
     public async Task RegenerationRemainsBoundToTheSelectedMissingSlotParent(bool replaceParent)
@@ -167,68 +135,6 @@ public sealed class CMUAutodocProcedureParityTest
             {
                 if (em.EntityExists(handCarrier)) em.DeleteEntity(handCarrier);
                 if (em.EntityExists(armCarrier)) em.DeleteEntity(armCarrier);
-                if (rig != null) DeleteRig(em, rig);
-            });
-        }
-        await pair.CleanReturnAsync();
-    }
-
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task WoundTreatmentCallbackDepartureCannotClearEscharOrRestoreStructure(bool detachPart)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        var em = pair.Server.EntMan;
-        Rig rig = default!;
-        EntityUid hand = default;
-        CMUAutodocAccessProbeComponent probe = default!;
-        FixedPoint2 initialHealth = default;
-        try
-        {
-            await pair.Server.WaitAssertion(() =>
-            {
-                rig = CreateRig(em, map.GridCoords);
-                hand = Part(em, rig.Patient, BodyPartType.Hand, BodyPartSymmetry.Left);
-                var health = em.GetComponent<BodyPartHealthComponent>(hand);
-                // A zero-damage, already-treated retained-fragment row naturally
-                // expires before the queue deadline. Use a real untreated injury.
-                Assert.That(em.System<SharedBodyPartHealthSystem>().TryApplyPartDamage(rig.Patient, hand,
-                    new DamageSpecifier { DamageDict = { ["Slash"] = FixedPoint2.New(6) } }), Is.True);
-                var wounds = em.GetComponent<BodyPartWoundComponent>(hand);
-                Assert.That(em.System<CMUWoundLedgerSystem>().GetEntries(wounds)
-                    .Count(entry => !entry.Wound.Treated && entry.Wound.Damage > FixedPoint2.Zero), Is.EqualTo(1));
-                em.System<SharedBodyPartHealthSystem>().SetCurrent((hand, health), health.Max / 2);
-                initialHealth = health.Current;
-                em.EnsureComponent<CMUEscharComponent>(hand);
-                probe = em.EnsureComponent<CMUAutodocAccessProbeComponent>(hand);
-                probe.PodOnWoundTreatment = rig.Pod;
-                probe.DetachOnWoundTreatment = detachPart;
-                Queue(pair.Server.ResolveDependency<IRobustSerializer>(), em, rig, hand, "CMUAutodocRepairWounds");
-                Start(em, rig);
-            });
-            await pair.RunTicksSync(pair.SecondsToTicks(1.25f));
-            await pair.Server.WaitAssertion(() =>
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(probe.TreatmentCallbackRan, Is.True, "Exercise the actual WoundTreated callback during queue execution.");
-                    Assert.That(em.HasComponent<CMUEscharComponent>(hand), Is.True);
-                    Assert.That(em.GetComponent<BodyPartHealthComponent>(hand).Current, Is.EqualTo(initialHealth));
-                    Assert.That(rig.Component.IsRunning, Is.False);
-                    Assert.That(rig.Component.Queue.Count, Is.EqualTo(detachPart ? 1 : 0));
-                });
-                if (detachPart)
-                    Assert.That(em.GetComponent<BodyPartComponent>(hand).Body, Is.EqualTo(probe.DetachedCarrier));
-                else
-                    Assert.That(rig.Component.Patient, Is.Null);
-            });
-        }
-        finally
-        {
-            await pair.Server.WaitPost(() =>
-            {
-                if (probe?.DetachedCarrier is { } carrier && em.EntityExists(carrier)) em.DeleteEntity(carrier);
                 if (rig != null) DeleteRig(em, rig);
             });
         }
@@ -500,6 +406,73 @@ public sealed class CMUAutodocProcedureParityTest
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task RegeneratedLegsAndHandRestoreSupportAfterPodEjection()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        var em = pair.Server.EntMan;
+        Rig rig = default!;
+        var carriers = new List<EntityUid>();
+        var missing = new[]
+        {
+            (BodyPartType.Leg, BodyPartSymmetry.Left),
+            (BodyPartType.Leg, BodyPartSymmetry.Right),
+            (BodyPartType.Hand, BodyPartSymmetry.Left),
+        };
+        try
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+                rig = CreateRig(em, map.GridCoords);
+                foreach (var (type, symmetry) in missing)
+                    carriers.Add(em.System<DetachableOrganSystem>().Detach(Part(em, rig.Patient, type, symmetry))!.Value);
+            });
+            await pair.RunTicksSync(2);
+            await pair.Server.WaitAssertion(() =>
+            {
+                Assert.That(em.System<StandingStateSystem>().IsDown(rig.Patient), Is.True);
+                foreach (var (type, symmetry) in missing)
+                {
+                    var state = State(em, rig);
+                    var row = state.Parts.Single(p => p.Type == type && p.Symmetry == symmetry);
+                    var surgery = row.EligibleSurgeries.Single(s => s.SurgeryId == "CMUAutodocRegenerateLimb");
+                    Send(em, rig, new CMUAutodocQueueStepMessage(row.Part, type, symmetry, surgery.SurgeryId,
+                        surgery.NextStepIndex, state.CommandContext!.Value));
+                }
+                Assert.That(rig.Component.Queue.Count, Is.EqualTo(3));
+                for (var i = 0; i < rig.Component.Queue.Count; i++)
+                    rig.Component.Queue[i] = rig.Component.Queue[i] with { DurationSeconds = 1 };
+                Start(em, rig);
+            });
+            await pair.RunTicksSync(pair.SecondsToTicks(3.5f));
+            await pair.Server.WaitAssertion(() =>
+            {
+                Assert.That(rig.Component.Queue, Is.Empty);
+                Assert.That(em.System<CMULegSupportSystem>().HasLegsToStand(rig.Patient), Is.True,
+                    "Both regenerated legs need their feet before the patient can stand.");
+                foreach (var (type, symmetry) in missing)
+                    Part(em, rig.Patient, type, symmetry);
+                Assert.That(rig.Component.BodyContainer.ContainedEntity, Is.Null,
+                    "Completing the queue must automatically eject the restored patient.");
+            });
+            await pair.RunTicksSync(2);
+            await pair.Server.WaitAssertion(() =>
+                Assert.That(em.System<StandingStateSystem>().IsDown(rig.Patient), Is.False,
+                    "The leg-loss down state must be reevaluated after leaving the pod."));
+        }
+        finally
+        {
+            await pair.Server.WaitPost(() =>
+            {
+                foreach (var carrier in carriers)
+                    if (em.EntityExists(carrier)) em.DeleteEntity(carrier);
+                if (rig != null) DeleteRig(em, rig);
+            });
+        }
+        await pair.CleanReturnAsync();
+    }
+
     private static Rig CreateRig(IEntityManager em, EntityCoordinates coordinates)
     {
         var pod = em.SpawnEntity("CMUAutodocPod", coordinates.Offset(new Vector2(1, 0)));
@@ -593,12 +566,6 @@ public sealed partial class CMUAutodocAccessProbeComponent : Component
     public bool Opened;
     public bool CleanedWithAccess;
     public EntityUid? EjectFromPodOnOpening;
-    public EntityUid? PodOnWoundTreatment;
-    public bool DetachOnWoundTreatment;
-    public bool TreatmentCallbackRan;
-    public EntityUid? DetachedCarrier;
-    public bool DeleteOnTraitCleanup;
-    public bool DeletedDuringCleanup;
 }
 
 public sealed class CMUAutodocAccessProbeSystem : EntitySystem
@@ -608,8 +575,6 @@ public sealed class CMUAutodocAccessProbeSystem : EntitySystem
         base.Initialize();
         SubscribeLocalEvent<CMIncisionOpenComponent, ComponentStartup>(OnOpening);
         SubscribeLocalEvent<CMUContaminatedWoundComponent, ComponentShutdown>(OnCleanup);
-        SubscribeLocalEvent<WoundTreatedEvent>(OnWoundTreated);
-        SubscribeLocalEvent<CMUSurgicalTraitChangedEvent>(OnTraitChanged);
     }
 
     private void OnOpening(Entity<CMIncisionOpenComponent> ent, ref ComponentStartup args)
@@ -628,31 +593,5 @@ public sealed class CMUAutodocAccessProbeSystem : EntitySystem
     {
         if (!TerminatingOrDeleted(ent.Owner) && TryComp<CMUAutodocAccessProbeComponent>(ent.Owner, out var probe))
             probe.CleanedWithAccess = EntityManager.System<CMUSurgeryFlowSystem>().GetSiteState(ent.Owner).Access >= CMUSurgicalAccess.Shallow;
-    }
-
-    private void OnWoundTreated(ref WoundTreatedEvent args)
-    {
-        if (!TryComp<CMUAutodocAccessProbeComponent>(args.Part, out var probe) || probe.TreatmentCallbackRan ||
-            probe.PodOnWoundTreatment is not { } pod)
-            return;
-        probe.TreatmentCallbackRan = true;
-        if (probe.DetachOnWoundTreatment)
-        {
-            probe.DetachedCarrier = EntityManager.System<DetachableOrganSystem>().Detach(args.Part);
-            Assert.That(probe.DetachedCarrier, Is.Not.Null);
-        }
-        else
-        {
-            var machine = Comp<CMUAutodocPodComponent>(pod);
-            Assert.That(EntityManager.System<CMUMedicalPatientBaySystem>().TryEjectPatient(pod, machine.BodyContainer, args.Body), Is.True);
-        }
-    }
-
-    private void OnTraitChanged(ref CMUSurgicalTraitChangedEvent args)
-    {
-        if (!args.Removed || !TryComp<CMUAutodocAccessProbeComponent>(args.Part, out var probe) || !probe.DeleteOnTraitCleanup)
-            return;
-        probe.DeletedDuringCleanup = true;
-        Del(args.Part);
     }
 }

@@ -5,10 +5,14 @@ using Content.Server.CMU14.Dropship.Integrity;
 using Content.Server.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Server.CMU14.ZLevels.Core;
+using Content.Server.CMU14.ZLevelBuilding;
 using Content.Server._RMC14.Dropship;
+using Content.Shared.CMU14.Dropship.GunshipControls;
 using Content.Shared.CMU14.Dropship.TacticalLand;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.CMU14.ZLevels.Ordnance;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines;
@@ -56,9 +60,12 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private ZLevelBuildingSystem _zBuilding = default!;
     [Dependency] private DropshipIntegritySystem _integrity = default!;
     [Dependency] private MultiDeckDropshipSystem _multiDeck = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
 
     private static readonly TimeSpan FootprintTickInterval = TimeSpan.FromMilliseconds(150);
     private static readonly TimeSpan HoverEffectUpdateInterval = TimeSpan.FromMilliseconds(50);
@@ -181,6 +188,13 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         session.InitialMap = Transform(eye).MapUid;
         Dirty(ent, session);
 
+        if (session.InitialMap is { } planet && HasComp<RMCPlanetComponent>(planet))
+        {
+            // Legacy single-level colonies need an empty flight level as well.
+            _zBuilding.EnsureNeighborLevel(planet, 1, Transform(eye).GridUid ?? planet,
+                _transform.GetWorldPosition(eye), out _, out _);
+        }
+
         if (TryComp(pilot, out EyeComponent? pilotEye))
         {
             session.OriginalZoom = pilotEye.Zoom;
@@ -276,30 +290,15 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         if (!TryComp(destination.Owner, out TransformComponent? xform))
             return;
 
-        if (!TryComp(dropshipGrid, out DropshipComponent? dropship))
-            return;
-
         var destCoords = xform.Coordinates;
         var remaining = ftl.StateTime.End - _timing.CurTime;
         var lifetime = (float)remaining.TotalSeconds + 1f;
         if (lifetime < 2f)
             lifetime = 2f;
 
-        Entity<DropshipNavigationComputerComponent>? console = null;
-        var consoleQuery = EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
-        while (consoleQuery.MoveNext(out var navUid, out var navComp, out var navXform))
-        {
-            if (navXform.GridUid == dropshipGrid)
-            {
-                console = (navUid, navComp);
-                break;
-            }
-        }
-
-        var footprint = console is { } c ? GetFootprint(c, dropship) : dropship.TacticalLandFootprint;
-
         _audio.PlayPvs(WarningSound, destCoords, AudioParams.Default.WithVolume(2f));
-        SpawnWarningBorder(destCoords, footprint, xform.LocalRotation, lifetime);
+        if (!TrySpawnMohawkApproachShadows(destination, dropshipGrid, lifetime, ftl.StateTime.End))
+            SpawnWarningBorder(destCoords, xform.LocalRotation, lifetime, dropshipGrid);
 
         EnsureComp<DropshipLandingMarkersSpawnedComponent>(destination);
     }
@@ -414,21 +413,42 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         return dropship.TacticalLandFootprint;
     }
 
-    private void SpawnWarningBorder(EntityCoordinates center, Vector2i footprint, Angle rotation, float lifetime)
+    private void SpawnWarningBorder(EntityCoordinates center, Angle rotation, float lifetime, EntityUid dropshipGrid)
     {
-        var halfW = footprint.X / 2;
-        var halfH = footprint.Y / 2;
+        // the hull lands origin-anchored and turned with the destination, so the border must
+        // cover the real rotated tiles: a hull origin that is not its footprint center puts
+        // the tail past a nominal centered rectangle when the dropship lands sideways
+        var turns = (byte) (((int) MathF.Round((float) (-rotation.Degrees / 90f)) % 4 + 4) % 4);
 
-        for (var dx = -halfW; dx <= halfW; dx += 2)
+        if (!TryComp(dropshipGrid, out MapGridComponent? grid))
+            return;
+
+        var minX = int.MaxValue;
+        var minY = int.MaxValue;
+        var maxX = int.MinValue;
+        var maxY = int.MinValue;
+        foreach (var tile in _map.GetAllTiles(dropshipGrid, grid))
         {
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2(dx,  halfH))), lifetime);
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2(dx, -halfH))), lifetime);
+            var rotated = RotateGridTileOffset(tile.GridIndices, turns);
+            minX = Math.Min(minX, rotated.X);
+            minY = Math.Min(minY, rotated.Y);
+            maxX = Math.Max(maxX, rotated.X);
+            maxY = Math.Max(maxY, rotated.Y);
         }
 
-        for (var dy = -halfH + 2; dy <= halfH - 2; dy += 2)
+        if (minX > maxX)
+            return;
+
+        for (var x = minX; x <= maxX; x += 2)
         {
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2( halfW, dy))), lifetime);
-            SpawnTimed(center.Offset(rotation.RotateVec(new Vector2(-halfW, dy))), lifetime);
+            SpawnTimed(center.Offset(new Vector2(x + 0.5f, minY + 0.5f)), lifetime);
+            SpawnTimed(center.Offset(new Vector2(x + 0.5f, maxY + 0.5f)), lifetime);
+        }
+
+        for (var y = minY + 2; y <= maxY - 2; y += 2)
+        {
+            SpawnTimed(center.Offset(new Vector2(minX + 0.5f, y + 0.5f)), lifetime);
+            SpawnTimed(center.Offset(new Vector2(maxX + 0.5f, y + 0.5f)), lifetime);
         }
     }
 
@@ -449,6 +469,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         }
 
         var allowUnmappedAir = CanHoverOverUnmappedAir(eye.Comp, xform);
+        if (allowUnmappedAir && xform.MapUid is { } sky)
+            EnsureComp<MapGridComponent>(sky);
         var footprintOffsets = GetRotatedFootprintOffsets(eye.Comp);
         var blocked = eye.Comp.BlockedTilesScratch;
         blocked.Clear();
@@ -484,11 +506,14 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
                 {
                     blockedThis = true;
                 }
-                else if (!_map.TryGetTileRef(gridUid, grid, t, out var tileRef))
+                else if (!_map.TryGetTileRef(gridUid, grid, t, out var tileRef) || tileRef.Tile.IsEmpty)
                 {
                     // Empty upper maps have no chunks. Hovering must not require an
                     // invisible floor, which would also prevent items falling through.
-                    blockedThis = !allowUnmappedAir;
+                    var world = _map.GridTileToWorld(gridUid, grid, t);
+                    blockedThis = !allowUnmappedAir || xform.MapUid is not { } airMap ||
+                                  !HasFlightWorldBelow(airMap, world.Position) ||
+                                  !_topDownOrdnance.IsOpenToSky(world);
                 }
                 else
                 {
@@ -497,6 +522,14 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
                         blockedThis = true;
                     else if (!opening &&
                              _turf.IsTileBlocked(tileRef, blockMask, DropshipMinimumBlockingArea))
+                        blockedThis = true;
+
+                    // The hull descends from the sky: the tile must be open above, and its
+                    // area must allow aerial access, so level 4 areas cannot be landed in.
+                    // Only tiles with a surface; unmapped air above is hover territory.
+                    if (!blockedThis &&
+                        (!_topDownOrdnance.IsOpenToSky(_map.GridTileToWorld(gridUid, grid, t))
+                            || !_area.CanOrbitalBombard(_map.ToCoordinates(gridUid, t, grid), out _)))
                         blockedThis = true;
                 }
 
@@ -631,13 +664,13 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
             !HasComp<RMCPlanetComponent>(initialMap) ||
             xform.MapUid is not { } map ||
             !TryComp(map, out CMUZLevelMapComponent? level) ||
-            !_zLevels.TryMapOffset(initialMap, TacticalHoverMapOffset, out var upperMap) ||
-            upperMap.Value.Owner != map)
+            !TryComp(initialMap, out CMUZLevelMapComponent? initialLevel) ||
+            level.NetworkUid != initialLevel.NetworkUid)
         {
             return false;
         }
 
-        return level.Depth == 1;
+        return level.Depth > initialLevel.Depth;
     }
 
     private IReadOnlyList<Vector2i> GetRotatedFootprintOffsets(DropshipPilotEyeComponent eye)
@@ -1083,7 +1116,8 @@ public sealed partial class DropshipTacticalLandSystem : SharedDropshipTacticalL
         var canMoveUp = CanMoveTacticalEye(eye, TacticalHoverMapOffset);
         var canMoveDown = CanMoveTacticalEye(eye, -TacticalHoverMapOffset);
         var rotationDegrees = pilotEye?.RotationQuarterTurns * 90 ?? 0;
-        var state = new DropshipNavigationTacticalLandBuiState(GetNetEntity(eye), clearForLanding, tacticalHover, canMoveUp, canMoveDown, rotationDegrees, doorLocks, false);
+        TryComp(ent, out GunshipControlsComponent? gunshipControls);
+        var state = new DropshipNavigationTacticalLandBuiState(GetNetEntity(eye), clearForLanding, tacticalHover, canMoveUp, canMoveDown, rotationDegrees, doorLocks, false, gunshipControls != null, gunshipControls?.Armed ?? false);
         _ui.SetUiState(ent.Owner, DropshipNavigationUiKey.Key, state);
     }
 

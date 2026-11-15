@@ -30,6 +30,21 @@ public sealed class CMUZVisibilityMask
     public CMUZVisibility Visibility { get; private set; }
     public bool DynamicOnly { get; private set; }
 
+    /// <summary>One retained region admits the whole view, so sprite culling cannot save visible work.</summary>
+    public bool CoversWorldBounds
+    {
+        get
+        {
+            foreach (var bounds in _bounds)
+            {
+                if (bounds.Contains(WorldBounds))
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
     /// <summary>
     /// Copies an aperture query. An incomplete query covers the entire view conservatively;
     /// its truncated list must never hide an unchecked aperture.

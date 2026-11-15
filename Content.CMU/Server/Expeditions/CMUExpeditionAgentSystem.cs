@@ -82,7 +82,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     }
 
     private void OnPlayerAttached(Entity<CMUExpeditionAgentComponent> ent, ref PlayerAttachedEvent args) => Stop(ent);
-    private void OnShutdown(Entity<CMUExpeditionAgentComponent> ent, ref ComponentShutdown args) => Stop(ent);
+    private void OnShutdown(Entity<CMUExpeditionAgentComponent> ent, ref ComponentShutdown args)
+    {
+        Stop(ent);
+        RemoveFromSquadPlan(ent);
+    }
 
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
@@ -121,8 +125,6 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        // the fire/acid index below walks every burning tile and acid splash on the server, so don't build it
-        // for nobody. most rounds have no expedition agents at all
         if (EntityManager.Count<CMUExpeditionAgentComponent>() == 0)
             return;
 
@@ -134,8 +136,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         _doorPassageCache.Clear();
         _windowSightCache.Clear();
         _groundCache.Clear();
-        RefreshAcidTiles();
-        RefreshFireRegions();
+        _fireSnapshotTick = null;
+        _acidSnapshotTick = null;
         _smokeTiles.Clear();
         _smokeScreens.RemoveAll(screen => screen.Until <= now);
         _grenadeHazards.RemoveAll(hazard => hazard.Until <= now);
@@ -935,6 +937,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return false;
         }
         var precise = agent.State == CMUExpeditionAgentState.Peeking;
+        // A tactical action must stop at the same stance its completion check accepts.
+        var arrivalRange = agent.State == CMUExpeditionAgentState.PlanMove ? PlanMoveArrivalRange : ArrivalRange;
         var seekingShelter = agent.CoverAnchor != null &&
             agent.State is CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo;
         // Native steering can oscillate around a tiny sub-tile radius. Stop as soon as the actual
@@ -947,7 +951,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             _transform.InRange(transform.Coordinates, destination, 0.55f) && BodyFits(uid, transform.Coordinates) &&
             ShelteredFromKnownThreats(uid, agent, transform.Coordinates);
         if (clearStance || shelteredStop || !seekingShelter &&
-            _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : ArrivalRange))
+            _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : arrivalRange))
         {
             _steering.Unregister(uid);
             // Cancel travel momentum at a deliberate cover stop; otherwise a short arrival radius

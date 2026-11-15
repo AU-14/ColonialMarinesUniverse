@@ -1,0 +1,9 @@
+author: Scott-SS14
+category: CMU
+changes:
+- message: A rechargeable CPR compressor for hands free CPR on downed patients.
+  type: Add
+- message: CPR compressor functionality to CPR dummies.
+  type: Add
+time: '2026-11-06T15:45:20.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2427

@@ -2,6 +2,8 @@
   id: AUPlanetStableGarrison
   name: Stable Garrison
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Stable Garrison"
     mapId: stablegarrison
@@ -16,7 +18,6 @@
     - CMBCIU
     - RMC
     - HAZOPS
-    - ProdigySF
     - VAIPO
     platoonsOpfor:
     - UPP
@@ -32,9 +33,6 @@
     - TimeSharesSalesman
     - UPPGROM
     - UPPGROMAlt
-    - CHTORM_PMC_BEAR
-    - GROZA_PMC_BEAR
-    - SKALA_PMC_BEAR
     - UPPGROMAlt2
     - USArmyTank
     - UACGLostTeam

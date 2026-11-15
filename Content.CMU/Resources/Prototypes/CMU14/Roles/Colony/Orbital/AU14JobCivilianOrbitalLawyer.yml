@@ -42,7 +42,6 @@
     inverted: true
     traits:
     - NonResuscitable
-    - NoEnglish
   ranks:
     AU14RankOrbitalCounselorIC:
     - !type:RoleTimeRequirement

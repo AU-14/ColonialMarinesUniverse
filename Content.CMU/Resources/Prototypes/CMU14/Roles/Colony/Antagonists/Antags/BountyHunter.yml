@@ -57,6 +57,8 @@
   id: BountyHunterRole
   name: cmu-antag-bounty-hunter-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: cmu-antag-bounty-hunter-objective
 
 - type: startingGear

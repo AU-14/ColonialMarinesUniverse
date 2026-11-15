@@ -18,8 +18,11 @@
     skills:
       RMCSkillEndurance: 2
       RMCSkillFirearms: 3
+      RMCSkillFireman: 1
+      RMCSkillEngineer: 1
       RMCSkillLeadership: 2
       RMCSkillJtac: 1
+  - type: MarineOrders
   - type: JobPrefix
     prefix: cmu-uppline-prefix-commando-leader
   - type: Language

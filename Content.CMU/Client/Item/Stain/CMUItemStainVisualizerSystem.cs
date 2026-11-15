@@ -60,7 +60,7 @@ public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
     private void OnAppearanceChange(Entity<CMUItemStainComponent> ent, ref AppearanceChangeEvent args)
     {
         if (args.Sprite != null)
-            RebuildWorldLayers(ent, args.Sprite);
+            RefreshWorldLayers(ent, args.Sprite);
     }
 
     private void OnGetEquipmentVisuals(Entity<CMUItemStainComponent> ent, ref GetEquipmentVisualsEvent args)
@@ -87,26 +87,60 @@ public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
     {
         _item.VisualsChanged(ent);
         if (TryComp<SpriteComponent>(ent, out var sprite))
-            RebuildWorldLayers(ent, sprite);
+            RefreshWorldLayers(ent, sprite);
     }
 
-    private void RebuildWorldLayers(Entity<CMUItemStainComponent> ent, SpriteComponent sprite)
+    private void RefreshWorldLayers(Entity<CMUItemStainComponent> ent, SpriteComponent sprite)
     {
         var spriteEnt = new Entity<SpriteComponent?>(ent.Owner, sprite);
-        ClearWorldLayers((ent.Owner, sprite));
-
         if (ent.Comp.Color is not { } color || !_prototypes.TryIndex(ItemStainShader, out var shaderPrototype))
+        {
+            ClearWorldLayers((ent.Owner, sprite));
             return;
-
-        var sourceLayers = sprite.AllLayers
-            .OfType<SpriteComponent.Layer>()
-            .Where(layer => layer.Visible && !layer.Blank && layer.CopyToShaderParameters == null)
-            .ToArray();
-        if (sourceLayers.Length == 0)
-            return;
+        }
 
         var visuals = EnsureComp<CMUItemStainVisualsComponent>(ent);
-        for (var i = 0; i < sourceLayers.Length; i++)
+        visuals.OwnedLayers.Clear();
+        foreach (var key in visuals.LayerKeys)
+            if (_sprite.TryGetLayer(spriteEnt, key, out var owned, false))
+                visuals.OwnedLayers.Add(owned);
+
+        var sourceLayers = visuals.SourceBuffer;
+        sourceLayers.Clear();
+        foreach (var layer in sprite.AllLayers)
+        {
+            if (layer is SpriteComponent.Layer source && source.Visible && !source.Blank &&
+                source.CopyToShaderParameters == null && !visuals.OwnedLayers.Contains(source))
+                sourceLayers.Add(source);
+        }
+
+        var reusable = sourceLayers.Count == visuals.Layers.Count;
+        for (var i = 0; reusable && i < sourceLayers.Count; i++)
+        {
+            var entry = visuals.Layers[i];
+            reusable = ReferenceEquals(sourceLayers[i], entry.Source) &&
+                       _sprite.TryGetLayer(spriteEnt, entry.OverlayKey, out var overlay, false) &&
+                       ReferenceEquals(overlay, entry.Overlay) &&
+                       _sprite.TryGetLayer(spriteEnt, entry.MaskKey, out var mask, false) &&
+                       ReferenceEquals(mask, entry.Mask);
+        }
+
+        if (reusable)
+        {
+            foreach (var entry in visuals.Layers)
+            {
+                SynchronizeSourceClone(entry.Source, entry.Overlay);
+                if (visuals.Color != color)
+                    entry.Overlay.Shader?.SetParameter("stainColor", color.RGBA);
+            }
+            visuals.Color = color;
+            sourceLayers.Clear();
+            return;
+        }
+
+        ClearWorldLayers((ent.Owner, sprite));
+        visuals.Color = color;
+        for (var i = 0; i < sourceLayers.Count; i++)
         {
             var source = sourceLayers[i];
             var overlayIndex = AddSourceClone(spriteEnt, source);
@@ -138,7 +172,32 @@ public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
                 ParameterTexture = "stainMask",
                 ParameterUV = "stainMaskUV",
             };
+            if (_sprite.TryGetLayer(spriteEnt, overlayKey, out var overlayLayer, false))
+                visuals.Layers.Add(new(source, overlayLayer, maskLayer, overlayKey, maskKey));
         }
+        sourceLayers.Clear();
+    }
+
+    private void SynchronizeSourceClone(SpriteComponent.Layer source, SpriteComponent.Layer clone)
+    {
+        if (source.State.IsValid && source.ActualRsi != null)
+        {
+            if (clone.RSI != source.ActualRsi || clone.State != source.State)
+                _sprite.LayerSetRsi(clone, source.ActualRsi, source.State);
+        }
+        else if (clone.State.IsValid || clone.Texture != source.Texture)
+            _sprite.LayerSetTexture(clone, source.Texture);
+
+        _sprite.LayerSetScale(clone, source.Scale);
+        _sprite.LayerSetRotation(clone, source.Rotation);
+        _sprite.LayerSetOffset(clone, source.Offset);
+        _sprite.LayerSetDirOffset(clone, source.DirOffset);
+        _sprite.LayerSetRenderingStrategy(clone, source.RenderingStrategy);
+        _sprite.LayerSetAutoAnimated(clone, source.AutoAnimated);
+        if (clone.AnimationTime != source.AnimationTime)
+            _sprite.LayerSetAnimationTime(clone, source.AnimationTime);
+        clone.Cycle = source.Cycle;
+        clone.Loop = source.Loop;
     }
 
     private int AddSourceClone(Entity<SpriteComponent?> sprite, SpriteComponent.Layer source)
@@ -173,7 +232,8 @@ public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
         if (!TryComp<CMUItemStainVisualsComponent>(sprite, out var visuals))
             return;
 
-        var indices = new List<int>();
+        var indices = visuals.RemovalIndices;
+        indices.Clear();
         foreach (var key in visuals.LayerKeys)
         {
             if (_sprite.LayerMapTryGet(sprite.AsNullable(), key, out var index, false))
@@ -185,6 +245,10 @@ public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
             _sprite.RemoveLayer(sprite.AsNullable(), index, false);
 
         visuals.LayerKeys.Clear();
+        visuals.Layers.Clear();
+        visuals.OwnedLayers.Clear();
+        visuals.Color = null;
+        indices.Clear();
     }
 
     private static string? GetWornState(CMUItemStainComponent component, string slot)

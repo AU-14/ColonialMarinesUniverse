@@ -37,72 +37,49 @@ public sealed partial class VehicleAudioRelaySystem : EntitySystem
         }
     }
 
+    // CMU14: share recipient selection with sounds admitted before allocation.
     private void RelaySound(Entity<AudioComponent> ent)
     {
         var comp = ent.Comp;
         if (comp.Global || comp.IncludedEntities != null || comp.Params.Loop || comp.FileName.Length == 0)
             return;
 
-        var coordinates = Transform(ent).Coordinates;
-        var soundMap = _transform.GetMapId(coordinates);
-        if (soundMap == MapId.Nullspace)
-            return;
-
-        var maxDistance = comp.Params.MaxDistance;
-        if (maxDistance <= 0f)
-            maxDistance = AudioParams.Default.MaxDistance;
-
-        var links = EntityQueryEnumerator<VehicleInteriorLinkComponent>();
-        while (links.MoveNext(out _, out var link))
-        {
-            var vehicle = link.Vehicle;
-            if (Deleted(vehicle) || !TryComp(vehicle, out VehicleInteriorComponent? interior))
-                continue;
-
-            if (interior.Passengers.Count == 0 && interior.Xenos.Count == 0)
-                continue;
-
-            if (!TryComp(vehicle, out TransformComponent? vehicleXform) || vehicleXform.MapID != soundMap)
-                continue;
-
-            if (!coordinates.TryDistance(EntityManager, _transform, vehicleXform.Coordinates, out var distance) ||
-                distance > maxDistance)
-            {
-                continue;
-            }
-
-            RelayToOccupants(interior, comp, distance, maxDistance);
-        }
+        RelayCMUTransientSound(new ResolvedPathSpecifier(comp.FileName), comp.Params, ent, comp.ExcludedEntity);
     }
 
-    private void RelayToOccupants(VehicleInteriorComponent interior, AudioComponent source, float distance, float maxDistance)
+    // CMU14: preserve muffling and occupant selection for pre-admitted sounds.
+    private void RelayToOccupants(VehicleInteriorComponent interior, ResolvedSoundSpecifier specifier,
+        AudioParams sourceParams, float distance, float maxDistance, EntityUid? excluded)
     {
-        var specifier = new ResolvedPathSpecifier(source.FileName);
         var falloff = Math.Clamp(distance / maxDistance, 0f, 1f) * MaxFalloffDb;
-        var sourceParams = source.Params;
         var audioParams = sourceParams.WithVolume(sourceParams.Volume + falloff + MuffleVolumeDb);
 
         foreach (var occupant in interior.Passengers)
         {
-            RelayToOccupant(occupant, specifier, audioParams);
+            RelayToOccupant(occupant, specifier, audioParams, excluded);
         }
 
         foreach (var occupant in interior.Xenos)
         {
-            RelayToOccupant(occupant, specifier, audioParams);
+            RelayToOccupant(occupant, specifier, audioParams, excluded);
         }
     }
 
-    private void RelayToOccupant(EntityUid occupant, ResolvedSoundSpecifier specifier, AudioParams audioParams)
+    // CMU14: rejected relays must not allocate or release a different sound's budget.
+    private void RelayToOccupant(EntityUid occupant, ResolvedSoundSpecifier specifier, AudioParams audioParams, EntityUid? excluded)
     {
-        if (TerminatingOrDeleted(occupant) ||
+        if (occupant == excluded || TerminatingOrDeleted(occupant) ||
             !TryComp(occupant, out ActorComponent? actor) ||
             IsListeningOutside(occupant))
         {
             return;
         }
 
-        _audio.PlayGlobal(specifier, actor.PlayerSession, audioParams);
+        var filter = _cmuBudget.LimitAudience(specifier, Filter.SinglePlayer(actor.PlayerSession), audioParams);
+        if (filter.Count == 0)
+            return;
+        if (_audio.PlayGlobal(specifier, actor.PlayerSession, audioParams) is { } sound)
+            _cmuBudget.Track(sound.Component, filter);
     }
 
     private bool IsListeningOutside(EntityUid occupant)

@@ -8,10 +8,12 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Chat;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind.Components;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Paper;
 using Content.Shared.ParcelWrap.Components;
 using Content.Shared.Popups;
+using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
@@ -66,6 +68,7 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
 
     // Times into the round, not server time, so the lobby doesn't use them up.
     private TimeSpan _nextMail = FirstMail;
+    private TimeSpan _nextRoundStartMail = RoundStartMail;
     private bool _roundStartSent;
 
     public override void Initialize()
@@ -73,6 +76,7 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(_ =>
         {
             _nextMail = FirstMail;
+            _nextRoundStartMail = RoundStartMail;
             _roundStartSent = false;
         });
         SubscribeLocalEvent<CMURequisitionsCrateDeliveredEvent>(OnCrateDelivered);
@@ -85,10 +89,10 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
             return;
 
         var now = _gameTicker.RoundDuration();
-        if (!_roundStartSent && now >= RoundStartMail)
+        if (!_roundStartSent && now >= _nextRoundStartMail)
         {
-            if (TrySendMail(RoundStartMailCrate))
-                _roundStartSent = true;
+            _roundStartSent = TrySendMail(RoundStartMailCrate);
+            _nextRoundStartMail = now + RetryDelay;
         }
 
         if (now < _nextMail)
@@ -100,9 +104,6 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
     /// <summary>Queues a mail crate on the colony ASRS, if there's a colonist to send it to and the lift is free.</summary>
     private bool TrySendMail(EntProtoId crate)
     {
-        if (FindColonists().Count == 0)
-            return false;
-
         var sent = false;
         var elevators = EntityQueryEnumerator<RequisitionsElevatorComponent>();
         while (elevators.MoveNext(out var uid, out var elevator))
@@ -120,6 +121,10 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
             var side = (int) MathF.Floor(elevator.Radius * 2 + 1);
             if (elevator.Orders.Count >= side * side)
                 continue;
+
+            // Check recipients once, and only when there is somewhere to send the crate.
+            if (!sent && !HasColonist())
+                return false;
 
             elevator.Orders.Add(new RequisitionsEntry { Crate = crate, Name = Loc.GetString("cmu-colony-mail-order") });
             Dirty(uid, elevator);
@@ -191,6 +196,38 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
         return (item, Name(item));
     }
 
+    private bool HasColonist()
+    {
+        var query = EntityQueryEnumerator<ActorComponent, MindContainerComponent>();
+        while (query.MoveNext(out var uid, out _, out var mind))
+        {
+            if (TryGetColonistJob(uid, mind, out _))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool TryGetColonistJob(EntityUid uid, MindContainerComponent mind, out JobPrototype job)
+    {
+        job = default!;
+        if (mind.Mind is not { } mindId ||
+            !_mobState.IsAlive(uid) ||
+            !_jobs.MindTryGetJob(mindId, out var foundJob))
+        {
+            return false;
+        }
+
+        job = foundJob;
+        foreach (var department in _prototypes.EnumeratePrototypes<DepartmentPrototype>())
+        {
+            if (department.Faction == ColonistFaction && department.Roles.Contains(job.ID))
+                return true;
+        }
+
+        return false;
+    }
+
     /// <summary>Living players whose job is in a colonist department, with their job's name.</summary>
     private List<(EntityUid Mob, string Job)> FindColonists()
     {
@@ -198,16 +235,15 @@ public sealed partial class CMUColonyMailSystem : EntitySystem
         var query = EntityQueryEnumerator<ActorComponent, MindContainerComponent>();
         while (query.MoveNext(out var uid, out _, out var mind))
         {
-            if (mind.Mind is not { } mindId ||
-                !_mobState.IsAlive(uid) ||
-                !_jobs.MindTryGetJob(mindId, out var job) ||
-                !_jobs.TryGetAllDepartments(job.ID, out var departments) ||
-                !departments.Exists(d => d.Faction == ColonistFaction))
+            if (!TryGetColonistJob(uid, mind, out var job))
             {
                 continue;
             }
 
-            found.Add((uid, job.LocalizedName));
+            var title = HasComp<CLFMemberComponent>(uid)
+                ? Loc.GetString("faction-roster-console-colonist-job")
+                : job.LocalizedName;
+            found.Add((uid, title));
         }
 
         return found;

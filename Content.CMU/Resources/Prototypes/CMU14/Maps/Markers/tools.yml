@@ -53,9 +53,9 @@
       - RMCHelmetWelding
       - RMCHelmetWelding
       #Materials
-      - RMCCableCoil10 # x2
-      - RMCCableCoil10
-      - RMCCableCoil20
+      - CMUCableThinLVStack10 # x2, was RMCCableCoil10
+      - CMUCableThinLVStack10
+      - CMUCableThinLVStack20 # was RMCCableCoil20
       - CMSheetGlass10 # x2
       - CMSheetGlass10
       - CMSheetGlassReinforced10 # x2
@@ -92,8 +92,8 @@
       - RMCWelderPVE
       - RMCWelderIndustrial
       #Materials
-      - RMCCableCoil30 # x2
-      - RMCCableCoil30
+      - CMUCableThinLVStack # x2, was RMCCableCoil30
+      - CMUCableThinLVStack
       - CMSheetGlass30 # x2
       - CMSheetGlass30
       - CMSheetGlass # 50

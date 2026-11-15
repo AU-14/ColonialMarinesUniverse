@@ -63,11 +63,11 @@
       effects:
       - !type:Crossmetabolizing
         potency: 1
+      - !type:Painkilling
+        potency: 4
       - !type:Antitoxic
         potency: 1
       - !type:Yautjahemogenic
-        potency: 9
-      - !type:YautjaWoundHealing
         potency: 9
       - !type:Oxygenating
         potency: 6
@@ -76,6 +76,7 @@
       - !type:Bonemending
         potency: 6
         requiresSet: false
+        mendsShattered: true
       - !type:Aiding
         potency: 1
       - !type:Antihallucinogenic
@@ -110,8 +111,6 @@
         potency: 1
       - !type:Yautjahemogenic
         potency: 3
-      - !type:YautjaWoundHealing
-        potency: 3
       - !type:Oxygenating
         potency: 6
       - !type:Anticarcinogenic
@@ -119,6 +118,7 @@
       - !type:Bonemending
         potency: 6
         requiresSet: false
+        mendsShattered: true
       - !type:Aiding
         potency: 1
       - !type:Antihallucinogenic

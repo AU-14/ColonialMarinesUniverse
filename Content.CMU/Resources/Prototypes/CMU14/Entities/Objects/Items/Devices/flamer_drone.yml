@@ -12,7 +12,7 @@
     - id: CMUFlamerDroneFuelTank
       amount: 2
     - id: CMWelder
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack
 
 - type: entity
   parent: CMUCombatDroneHull

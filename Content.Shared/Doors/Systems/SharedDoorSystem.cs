@@ -826,34 +826,48 @@ public abstract partial class SharedDoorSystem : EntitySystem
     /// <summary>
     ///     Iterate over active doors and progress them to the next state if they need to be updated.
     /// </summary>
+    // CMU14 method: retain snapshot semantics without allocating a list every tick.
     public override void Update(float frameTime)
     {
+        if (_activeDoors.Count == 0)
+            return;
+
         var time = GameTiming.CurTime;
-
-        foreach (var ent in _activeDoors.ToList())
+        var activeDoors = _cmuActiveDoorSnapshots.TryPop(out var reusable)
+            ? reusable : new List<Entity<DoorComponent>>();
+        try
         {
-            var door = ent.Comp;
-            if (door.Deleted || door.NextStateChange == null)
+            activeDoors.AddRange(_activeDoors);
+            foreach (var ent in activeDoors)
             {
-                _activeDoors.Remove(ent);
-                continue;
+                var door = ent.Comp;
+                if (door.Deleted || door.NextStateChange == null)
+                {
+                    _activeDoors.Remove(ent);
+                    continue;
+                }
+
+                PruneCurrentlyCrushing(ent);
+
+                if (Paused(ent))
+                    continue;
+
+                if (door.NextStateChange.Value < time)
+                    NextState(ent, time);
+
+                if (door.State == DoorState.Closed &&
+                    TryComp<PhysicsComponent>(ent, out var doorBody))
+                {
+                    // If something bumped into us during closing then start to re-open, otherwise, remove it from active.
+                    _activeDoors.Remove(ent);
+                    CheckDoorBump((ent, door, doorBody));
+                }
             }
-
-            PruneCurrentlyCrushing(ent);
-
-            if (Paused(ent))
-                continue;
-
-            if (door.NextStateChange.Value < time)
-                NextState(ent, time);
-
-            if (door.State == DoorState.Closed &&
-                TryComp<PhysicsComponent>(ent, out var doorBody))
-            {
-                // If something bumped into us during closing then start to re-open, otherwise, remove it from active.
-                _activeDoors.Remove(ent);
-                CheckDoorBump((ent, door, doorBody));
-            }
+        }
+        finally
+        {
+            activeDoors.Clear();
+            _cmuActiveDoorSnapshots.Push(activeDoors);
         }
     }
 
@@ -935,7 +949,8 @@ public abstract partial class SharedDoorSystem : EntitySystem
             return;
 
         var wasCrushing = door.Comp.IsCrushing;
-        door.Comp.CurrentlyCrushing.RemoveWhere(uid => TerminatingOrDeleted(uid));
+        door.Comp.CurrentlyCrushing.RemoveWhere(
+            _cmuTerminatingCrushTarget ??= uid => TerminatingOrDeleted(uid)); // CMU14: reuse the predicate.
         door.Comp.IsCrushing = door.Comp.CurrentlyCrushing.Count != 0;
 
         if (wasCrushing != door.Comp.IsCrushing)

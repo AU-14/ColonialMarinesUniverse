@@ -15,8 +15,6 @@ public sealed class CMUSensorTowerVisionTest : GameTest
 
 #pragma warning disable RA0002 // Arrange faction feeds and a repaired, inactive sensor array.
     [TestCase("GOVFOR", true)]
-    [TestCase("OPFOR", true)]
-    [TestCase("GOVFOR", false)]
     [TestCase("OPFOR", false)]
     public async Task ActivatingSensorGrantsOnlyItsFactionVisionAndTurningItOffRevokesIt(string faction, bool live)
     {

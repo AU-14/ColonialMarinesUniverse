@@ -12,3 +12,13 @@
     - CMSheetMetal50
     - CMSheetMetal50
     - CMSheetPlasteel50
+
+- type: survivorSupplement
+  id: CMUSurvivorSupplementColonist
+  target: Colonists
+  whitelistedGamemodes:
+  - DistressSignal
+  - ForceOnForce
+  entries:
+  - items:
+    - RMCRadioHandheldColonyOff

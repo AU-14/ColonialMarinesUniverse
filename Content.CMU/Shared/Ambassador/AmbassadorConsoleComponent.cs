@@ -1,4 +1,6 @@
+using Content.Shared._RMC14.Language.Prototypes;
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Ambassador;
@@ -14,16 +16,29 @@ public sealed partial class AmbassadorConsoleComponent : Component
     public string FactionName = "Unknown Faction";
 
     /// <summary>
+    /// The faction's own languages. Third parties called from this console that have
+    /// <c>speaksCallerLanguage</c> set learn them; the first is their default if <c>defaultsToCallerLanguage</c> is set.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> Languages = new();
+
+    /// <summary>
     /// Internal bank balance.
     /// </summary>
     [DataField("budget")]
     public float Budget = 0f;
 
+    // RUMC: the part of the account that cannot be taken out as cash: only what is above it can be withdrawn.
+    public const float WithdrawFloorDefault = 10000f;
+
+    [DataField("withdrawFloor")]
+    public float WithdrawFloor = WithdrawFloorDefault;
+
     /// <summary>
     /// How much money is added each replenish tick.
     /// </summary>
     [DataField("replenishAmount")]
-    public float ReplenishAmount = 10f;
+    public float ReplenishAmount = 2f; // RUMC: was 10, the incomes of the ambassadors are cut
 
     /// <summary>
     /// How often (in seconds) budget replenishes.

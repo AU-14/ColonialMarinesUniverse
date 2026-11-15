@@ -1,0 +1,275 @@
+# Early Warning Joe objectives (phase E1).
+# They ride the upstream mind/objective pipeline: three directives are offered per level and two
+# completions advance it (D8). Collect and offer directives only ask for what exists on the planet (H-6).
+# Per-level pools are weightedRandom-of-weightedRandom, exactly as the traitor pools are, and are
+# consumed by EWJoeObjectiveSystem.PickFromPool on each level-up (the traitor walk, minus prototypes
+# already on offer).
+
+- type: objectiveIssuer
+  id: GrandMachine
+  name: objective-issuer-grand-machine
+
+# Every EW objective requires the EW mind role, so a stood-down Joe (D10) can never be offered one.
+- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: CMUEWJoeBaseObjective
+  components:
+  - type: Objective
+    issuer: GrandMachine
+    difficulty: 1
+  - type: RoleRequirement
+    roles:
+    - EWJoeRole
+
+# Murder X person: a living organic player; never a synthetic, a threat, a xeno, a Yautja or a drone.
+# The target must actually die (requireDead); evac marooning means nothing on a colony.
+- type: entity
+  parent: [ CMUEWJoeBaseObjective, BaseKillRandomObjective ]
+  id: CMUEWJoeKillPersonObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+  - type: TargetObjective
+    title: cmu-ew-joe-objective-kill-person-title
+  - type: PickRandomPerson
+    conditions:
+    - !type:BodyWhitelistCondition
+      blacklist:
+        components:
+        - Synth
+        - Threat
+        - Xeno
+        - Yautja
+        - CMUDroneAndroid
+        # the Joe's own thralls, pending or made, are not targets (congruence NEW-03)
+        - RiverMelding
+        - RiverMelded
+  - type: KillPersonCondition
+    requireDead: true
+
+# Murder N people: any organic kill that resolves to the Joe (melee, a fired projectile, a thrown
+# weapon in its hand). EWJoeObjectiveSystem increments the counter.
+- type: entity
+  parent: [ CMUEWJoeBaseObjective, BaseCounterObjective ]
+  id: CMUEWJoeKillCountObjective
+  components:
+  - type: Objective
+    difficulty: 1.5
+    unique: false
+    icon:
+      sprite: Objects/Weapons/Guns/Pistols/viper.rsi
+      state: icon
+  - type: NumberObjective
+    min: 2
+    max: 3
+    title: cmu-ew-joe-objective-kill-count-title
+    description: cmu-ew-joe-objective-kill-count-description
+  - type: EWJoeKillCounter
+
+# Obtain N items. Not unique: a flavour can be offered again later in the round, but items that
+# counted toward an earlier objective of any flavour are spent and never count again, and a new
+# objective is refused unless enough fresh items exist (EWJoeCollectConditionSystem).
+- type: entity
+  abstract: true
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeBaseCollectObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+    icon:
+      sprite: Objects/Misc/folders.rsi
+      state: folder-colormap
+
+# Offer N firearms: the Joe consumes loose guns with the Offer action and they leave play
+# (EWJoeOfferSystem). Refused at assignment when fewer than the minimum exist on the planet.
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeOfferFirearmsObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+    icon:
+      sprite: _RMC14/Objects/Weapons/Guns/Pistols/m44.rsi
+      state: icon
+  - type: EWJoeOfferCondition
+    min: 2
+    max: 3
+    title: cmu-ew-joe-objective-offer-firearms-title
+    description: cmu-ew-joe-objective-offer-firearms-description
+    whitelist:
+      components:
+      - Gun
+
+- type: entity
+  parent: CMUEWJoeBaseCollectObjective
+  id: CMUEWJoeCollectIntelObjective
+  components:
+  - type: Objective
+    icon:
+      sprite: CMU14/Items/laptop.rsi
+      state: laptop_off_objective
+  - type: EWJoeCollectCondition
+    min: 1
+    max: 2
+    title: cmu-ew-joe-objective-collect-intel-title
+    description: cmu-ew-joe-objective-collect-intel-description
+    whitelist:
+      components:
+      - IntelDetectorTracked
+
+- type: entity
+  parent: CMUEWJoeBaseCollectObjective
+  id: CMUEWJoeCollectDisksObjective
+  components:
+  - type: Objective
+    icon:
+      sprite: _RMC14/Objects/Misc/computer_disks.rsi
+      state: disk3
+  - type: EWJoeCollectCondition
+    min: 1
+    max: 2
+    title: cmu-ew-joe-objective-collect-disks-title
+    description: cmu-ew-joe-objective-collect-disks-description
+    whitelist:
+      tags:
+      - CMUIntelDisk
+
+# Assimilate a console: pins one whitelisted console on the owner's planet; the Assimilate action is
+# gated on this objective (playtest 4).
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeAssimilateConsoleObjective
+  components:
+  - type: Objective
+    difficulty: 2
+    unique: false
+    icon:
+      sprite: _RMC14/Structures/Machines/computer.rsi
+      state: terminal
+  - type: EWJoeAssimilateCondition
+    title: cmu-ew-joe-objective-assimilate-title
+    description: cmu-ew-joe-objective-assimilate-description
+    whitelist:
+      components:
+      - BudgetConsole
+      - CorporateConsole
+      - ResearchDataTerminal
+      - DepartmentConsole
+      - ColonyCommsConsole
+
+# Distress Signal only (an admin-made Joe there; the antag never rolls in that preset). Both are
+# refused on assignment in any other mode, so the pools below can list them everywhere.
+# Maim N xenofauna: each xeno the Joe brings down to critical (or kills outright) counts once.
+- type: entity
+  parent: [ CMUEWJoeBaseObjective, BaseCounterObjective ]
+  id: CMUEWJoeMaimXenoObjective
+  components:
+  - type: Objective
+    difficulty: 1.5
+    unique: false
+    icon:
+      sprite: _RMC14/Mobs/Xenonids/Drone/drone.rsi
+      state: crit
+  - type: NumberObjective
+    min: 2
+    max: 4
+    title: cmu-ew-joe-objective-maim-xeno-title
+    description: cmu-ew-joe-objective-maim-xeno-description
+  - type: EWJoeXenoCounter
+  - type: EWJoeDistressSignalOnly
+
+# Gather N xenofauna victims (burst corpses or the still-infected) in a pinned powered area at once.
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeDeliverVictimsObjective
+  components:
+  - type: Objective
+    difficulty: 2
+    unique: false
+    icon:
+      sprite: _RMC14/Mobs/Xenonids/Larva/larva.rsi
+      state: embryo
+  - type: EWJoeDeliverVictimsCondition
+    min: 1
+    max: 2
+    title: cmu-ew-joe-objective-deliver-victims-title
+    description: cmu-ew-joe-objective-deliver-victims-description
+    areaSource:
+      components:
+      - RMCApc
+  - type: EWJoeDistressSignalOnly
+
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupXeno
+  weights:
+    CMUEWJoeMaimXenoObjective: 1
+    CMUEWJoeDeliverVictimsObjective: 1
+
+# Pools. PickFromPool picks a group, then an objective inside it, and skips anything whose
+# requirements or target search fail (no valid victim, no firearms on the planet, every console taken).
+
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupKill
+  weights:
+    CMUEWJoeKillPersonObjective: 1
+    CMUEWJoeKillCountObjective: 0.5
+
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupCollect
+  weights:
+    CMUEWJoeOfferFirearmsObjective: 1
+    CMUEWJoeCollectIntelObjective: 1
+    CMUEWJoeCollectDisksObjective: 0.5
+
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupConsole
+  weights:
+    CMUEWJoeAssimilateConsoleObjective: 1
+
+# Dormant -> UNDERTOW: quiet work only.
+- type: weightedRandom
+  id: CMUEWJoeObjectivesLevel0
+  weights:
+    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupKill: 1
+    CMUEWJoeObjectiveGroupCollect: 1
+
+# UNDERTOW -> MURMUR: consoles enter the pool.
+- type: weightedRandom
+  id: CMUEWJoeObjectivesLevel1
+  weights:
+    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupKill: 1
+    CMUEWJoeObjectiveGroupCollect: 1
+    CMUEWJoeObjectiveGroupConsole: 0.5
+
+# MURMUR -> CHORUS
+- type: weightedRandom
+  id: CMUEWJoeObjectivesLevel2
+  weights:
+    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupKill: 1
+    CMUEWJoeObjectiveGroupCollect: 1
+    CMUEWJoeObjectiveGroupConsole: 1
+
+# CHORUS -> ATTENTION
+- type: weightedRandom
+  id: CMUEWJoeObjectivesLevel3
+  weights:
+    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupKill: 1
+    CMUEWJoeObjectiveGroupCollect: 0.5
+    CMUEWJoeObjectiveGroupConsole: 1
+
+# ATTENTION -> MELDING: the level table forces a console objective into this offer (D8).
+- type: weightedRandom
+  id: CMUEWJoeObjectivesLevel4
+  weights:
+    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupKill: 1
+    CMUEWJoeObjectiveGroupCollect: 0.5
+    CMUEWJoeObjectiveGroupConsole: 1

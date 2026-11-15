@@ -67,6 +67,10 @@ cmu-medical-examine-severity-massive = Massive
 cmu-medical-examine-treated = treated
 cmu-medical-examine-untreated = untreated
 cmu-medical-examine-bleed-tier-none = none
+cmu-medical-examine-bleed-tier-minor = minor
+cmu-medical-examine-bleed-tier-moderate = moderate
+cmu-medical-examine-bleed-tier-severe = severe
+cmu-medical-examine-bleed-tier-arterial = arterial
 
 cmu-medical-examine-part-head = Head
 cmu-medical-examine-part-head-left = Left head

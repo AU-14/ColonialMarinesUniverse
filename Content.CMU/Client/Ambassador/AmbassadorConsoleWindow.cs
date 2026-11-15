@@ -24,6 +24,10 @@ public sealed class AmbassadorConsoleWindow : DefaultWindow
     public event Action? OnScanRadar;
     public event Action? OnOpenThirdParty;
 
+    // RUMC: the exchange with the mother faction and the world map
+    public event Action? OnOpenMother;
+    public event Action? OnOpenMap;
+
     private readonly CrtConsoleKit _kit = new();
 
     private readonly Label _subheading;
@@ -62,6 +66,7 @@ public sealed class AmbassadorConsoleWindow : DefaultWindow
         // Treasury.
         body.AddChild(_kit.Section(Loc.GetString("cmu-ambassador-treasury"), out var treasury));
         treasury.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-ambassador-treasury-hint"), CrtTerminalPalette.TextDim));
+        treasury.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("rumc-ambassador-withdraw-floor-hint", ("floor", (int) AmbassadorConsoleComponent.WithdrawFloorDefault)), CrtTerminalPalette.TextDim)); // RUMC
         var withdraw = CrtConsoleKit.Row(4);
         foreach (var amount in new[] { 100, 250, 500 })
         {
@@ -122,6 +127,15 @@ public sealed class AmbassadorConsoleWindow : DefaultWindow
         open.OnPressed += _ => OnOpenThirdParty?.Invoke();
         body.AddChild(_kit.Section(Loc.GetString("cmu-ambassador-third-party"), out var thirdParty, right: open));
         thirdParty.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-ambassador-third-party-hint"), CrtTerminalPalette.TextDim));
+
+        // RUMC: the exchange with the mother faction (points of influence, orders, subsidy) and the world map.
+        var mother = _kit.Button(Loc.GetString("rumc-ambassador-open-mother"), CmuButtonStyles.Variant.Affirm);
+        mother.OnPressed += _ => OnOpenMother?.Invoke();
+        body.AddChild(_kit.Section(Loc.GetString("rumc-ambassador-mother-section"), out _, right: mother));
+
+        var map = _kit.Button(Loc.GetString("rumc-ambassador-open-map"), CmuButtonStyles.Variant.Affirm);
+        map.OnPressed += _ => OnOpenMap?.Invoke();
+        body.AddChild(_kit.Section(Loc.GetString("rumc-ambassador-map-section"), out _, right: map));
 
         _kit.Root.AddChild(_kit.Footer(out _footer));
         _footer.Text = Loc.GetString("cmu-ambassador-footer");

@@ -1,0 +1,12 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Players can climb up beside walls underground through an opening with a
+    15-second delay.
+  type: Add
+- message: Vaultable surfaces inside walls no longer allow wall clipping.
+  type: Fix
+- message: Climbing and ladder landings reject solid obstructions.
+  type: Fix
+time: '2026-11-05T12:36:32.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2476

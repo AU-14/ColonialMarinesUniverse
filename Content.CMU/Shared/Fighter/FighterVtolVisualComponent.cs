@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -15,6 +16,8 @@ public enum FighterVtolSurface : byte { Dust, Deck, Water, Snow }
 public sealed partial class FighterVtolVisualComponent : Component
 {
     public const float ResidueSeconds = 3;
+    [DataField, AutoNetworkedField] public ProtoId<CMUFighterAirframePrototype> Airframe = CMUFighterAirframePrototype.Default;
+    [DataField, AutoNetworkedField] public float RollDistance;
     [DataField, AutoNetworkedField] public bool Landing;
     [DataField, AutoNetworkedField] public FighterVtolOutcome Outcome;
     [DataField, AutoNetworkedField] public FighterVtolSurface Surface;

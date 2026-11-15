@@ -47,6 +47,7 @@ cm-xeno-requires-more-plasma = {CAPITALIZE(THE($construction))} requires {$plasm
 cm-xeno-construction-plasma-left = A {$construction} construction is designated here. It requires [color=cyan]{$plasma}[/color] more plasma.
 cm-xeno-cant-reach-there = You can't reach there!
 cm-xeno-cant-build-in-self = You can't build structures that close!
+rmc-xeno-build-mark-cleared = We clear the psychic mark from that location.
 rmc-xeno-construction-unique-exists = There's already a {$choice} built!
 rmc-xeno-construction-hive-limit-met = We have reached the limit of {$choice} the hive can support!
 rmc-xeno-construction-requires-hive-weeds = {$choice} must be built on hive weeds!
@@ -472,3 +473,12 @@ rmc-doomed-fail = It's not working...
 # Destroy
 rmc-destroy-cant-reach = We don't have a clear path to that location!
 rmc-destroy-cant-area = We can't leap to that area!
+
+# Root (Pathogen)
+rmc-xeno-guardian-link-self = We cannot link to ourself!  
+rmc-xeno-guardian-link-dead = {$target} is already dead!  
+rmc-xeno-guardian-link-see-fail = We can't see that target clearly enough!  
+rmc-xeno-guardian-link-start-self = We link ourselves to {$target}, ready to absorb their wounds!  
+rmc-xeno-guardian-link-start-target = {$user} links itself to us, ready to absorb our wounds!
+rmc-xeno-guardian-absorbing-damage = The Confluence shields {$target} from harm!
+

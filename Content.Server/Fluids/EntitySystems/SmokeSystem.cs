@@ -256,6 +256,9 @@ public sealed partial class SmokeSystem : EntitySystem
         if (!Resolve(smokeUid, ref component))
             return;
 
+        if (CMUBlocksSmoke(entity)) // CMU14
+            return;
+
         // RMC14 allow smoke to react without a bloodstream
         if (!TryComp<BloodstreamComponent>(entity, out var bloodstream))
         {

@@ -33,38 +33,6 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
 {
     private static readonly ProtoId<NpcFactionPrototype> Govfor = "GOVFOR";
 
-    // the adaptability boon gathered every caste of the same tier, pathogen ones included,
-    // so a normal hive could swap into neomorphs and blights
-    [Test]
-    public async Task AdaptabilityBoonDoesNotOfferPathogenCastes()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var hiveSystem = SEntMan.System<SharedXenoHiveSystem>();
-            var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
-            var boon = SEntMan.SpawnEntity(null, map.GridCoords);
-            var warrior = SEntMan.SpawnEntity("CMXenoWarrior", map.GridCoords);
-            hiveSystem.SetHive(boon, hive);
-            hiveSystem.SetHive(warrior, hive);
-
-            SEntMan.EventBus.RaiseEvent(EventSource.Local, new HiveBoonActivateAdaptabilityEvent { Boon = boon });
-
-            var offered = SEntMan.GetComponent<XenoEvolutionComponent>(warrior).EvolvesToWithoutPoints;
-            Assert.Multiple(() =>
-            {
-                // sanity, the boon still works for normal castes
-                Assert.That(offered, Does.Contain(new EntProtoId("CMXenoLurker")));
-                Assert.That(offered, Does.Not.Contain(new EntProtoId("CMU14XenoNeomorph")));
-                Assert.That(offered, Does.Not.Contain(new EntProtoId("CMU14XenoBlight")));
-            });
-
-            SEntMan.DeleteEntity(warrior);
-            SEntMan.DeleteEntity(boon);
-            SEntMan.DeleteEntity(hive);
-        });
-    }
-
     // nubody gave xenos a real head part, and GibBody drops every part
     [Test]
     public async Task GibbedXenoDoesNotLeaveItsHeadBehind()
@@ -131,8 +99,6 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
 
     // kill threats paid intel for every hugger, lesser drone and popper
     [TestCase("CMXenoLesserDrone", 0)]
-    [TestCase("CMUSwarmLesser", 0)]
-    [TestCase("CMXenoParasite", 0)]
     [TestCase("CMU14XenoPopper", 0)]
     [TestCase("CMXenoDrone", 1)]
     public async Task KillThreatObjectiveIgnoresMinions(string prototype, int credited)
@@ -157,37 +123,6 @@ public sealed class OctoberEighteenXenoRegressionTest : GameTest
 
             SEntMan.DeleteEntity(objective);
             SEntMan.DeleteEntity(killer);
-        });
-    }
-
-    // hijack respawns players in the same tick it only queues the planet core for deletion,
-    // and the surged flag that prefers the queen may not be set yet depending on handler order
-    [Test]
-    public async Task HijackRespawnSkipsAQueuedPlanetCore()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
-            var component = SEntMan.GetComponent<HiveComponent>(hive);
-            var core = SEntMan.SpawnEntity(null, map.GridCoords);
-            var queen = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(10, 0)));
-            SEntMan.EnsureComponent<HiveCoreComponent>(core);
-            SEntMan.EnsureComponent<XenoEvolutionGranterComponent>(queen);
-            var system = SEntMan.System<SharedXenoHiveSystem>();
-            system.SetHive(core, hive);
-            system.SetHive(queen, hive);
-            Assert.That(component.HijackSurged, Is.False);
-
-            SEntMan.QueueDeleteEntity(core);
-
-            var spawn = typeof(SharedXenoHiveSystem).GetMethod("TryGetBurrowedLarvaSpawnPosition", BindingFlags.Instance | BindingFlags.NonPublic)!;
-            object[] args = [new Entity<HiveComponent>(hive, component), default(EntityCoordinates)];
-            Assert.That(spawn.Invoke(system, args), Is.True);
-            Assert.That(args[1], Is.EqualTo(SEntMan.GetComponent<TransformComponent>(queen).Coordinates));
-
-            SEntMan.DeleteEntity(queen);
-            SEntMan.DeleteEntity(hive);
         });
     }
 

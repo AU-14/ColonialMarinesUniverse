@@ -8,10 +8,16 @@
   id: CMUYautjaToolbelt
 
 - type: Tag
+  id: CMUYautjaHarpoon
+
+- type: Tag
   id: CMUYautjaHerbalMedicine
 
 - type: Tag
   id: CMUYautjaMedicompItem
+
+- type: Tag
+  id: CMUYautjaCeremonialDagger
 
 - type: Tag
   id: CMUYautjaDuellingKnife

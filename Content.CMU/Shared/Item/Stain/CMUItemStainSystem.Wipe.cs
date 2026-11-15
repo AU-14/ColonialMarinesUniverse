@@ -12,17 +12,20 @@ public sealed partial class CMUItemStainSystem
         ShoesSlot,
     ];
 
+    /// <summary>Whether this one item is stained with blood or acid.</summary>
+    public bool IsBloodStained(EntityUid item)
+    {
+        return TryComp<CMUItemStainComponent>(item, out var stain) &&
+            stain is { Color: not null, Kind: CMUItemStainKind.Blood };
+    }
+
     /// <summary>Whether anything the wearer has on is stained with blood or acid.</summary>
     public bool HasBloodStainedEquipment(EntityUid wearer)
     {
         foreach (var slot in WipeableSlots)
         {
-            if (_inventory.TryGetSlotEntity(wearer, slot, out var item) &&
-                TryComp<CMUItemStainComponent>(item, out var stain) &&
-                stain is { Color: not null, Kind: CMUItemStainKind.Blood })
-            {
+            if (_inventory.TryGetSlotEntity(wearer, slot, out var item) && IsBloodStained(item.Value))
                 return true;
-            }
         }
 
         return false;

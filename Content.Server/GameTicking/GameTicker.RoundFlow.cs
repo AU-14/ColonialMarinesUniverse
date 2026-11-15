@@ -686,6 +686,7 @@ namespace Content.Server.GameTicking
             // Grab the great big book of all the Minds, we'll need them for this.
             var allMinds = EntityQueryEnumerator<MindComponent>();
             var pvsOverride = _cfg.GetCVar(CCVars.RoundEndPVSOverrides);
+            var cmuOverrideRequests = 0; // CMU14: record effective visibility behavior at the transition.
             while (allMinds.MoveNext(out var mindId, out var mind))
             {
                 // TODO don't list redundant observer roles?
@@ -719,6 +720,7 @@ namespace Content.Server.GameTicking
                 if (TryGetEntity(mind.OriginalOwnedEntity, out var entity) && pvsOverride)
                 {
                     _pvsOverride.AddGlobalOverride(entity.Value);
+                    cmuOverrideRequests++; // CMU14
                 }
 
                 var roles = _roles.MindGetAllRoleInfo(mindId);
@@ -747,6 +749,10 @@ namespace Content.Server.GameTicking
                 };
                 listOfPlayerInfo.Add(playerEndRoundInfo);
             }
+
+            // CMU14: explicit config can enable the costly legacy behavior despite the default.
+            _sawmill.Info($"Round-end visibility: globalBodyOverrides={pvsOverride} " +
+                $"overrideRequests={cmuOverrideRequests} scoreboardEntries={listOfPlayerInfo.Count}");
 
             // This ordering mechanism isn't great (no ordering of minds) but functions
             var listOfPlayerInfoFinal = listOfPlayerInfo.OrderBy(pi => pi.PlayerOOCName).ToArray();

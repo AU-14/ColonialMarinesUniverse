@@ -5,7 +5,7 @@ meta:
   forkId: cmu14
   forkVersion: yautja-hunting-grounds-source-port
   time: "2026-05-29T00:00:00.000Z"
-  entityCount: 4591
+  entityCount: 4590
 maps:
 - 1
 grids:
@@ -593,16 +593,6 @@ entities:
     - type: Transform
       pos: 56.5,3.5
       parent: 2
-- proto: CMUYautjaYoungbloodSpawn
-  entities:
-  - uid: 4583
-    components:
-    - type: Transform
-      pos: 56.5,3.5
-      parent: 2
-    - type: YautjaHuntSpawnPoint
-      kind: Youngblood
-      destinationId: jungle_moon
 - proto: CMUYautjaPreserveSandstoneTemple
   entities:
   - uid: 42

@@ -1,0 +1,94 @@
+# Existing native RSI assets retain their original license metadata in place.
+# These are non-blocking scenery. Mineable ores use the separate deposit/vein prototypes.
+- type: entity
+  id: CMUCavernPebbles
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    sprite: _RMC14/Objects/Flora/rocks.rsi
+    state: rock
+    scale: 0.4, 0.4
+    drawdepth: FloorObjects
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernStalagmite
+  components:
+  - type: Sprite
+    sprite: Objects/Decoration/Flora/flora_stalagmite.rsi
+    state: grey_stalagmite3
+    scale: 0.7, 0.7
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernCrystal
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/ice_crystal.rsi
+    state: icon_1
+    scale: 0.85, 0.85
+    color: "#A7C6CE"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernMineral
+  components:
+  - type: Sprite
+    sprite: Objects/Decoration/Flora/flora_stalagmite.rsi
+    state: grey_stalagmite6
+    scale: 0.8, 0.3
+    color: "#D6AC68"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernDeadFungi
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/plump.rsi
+    state: dead
+    scale: 0.85, 0.85
+    color: "#C2BEA3"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernDeadRoots
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/kudzu.rsi
+    state: kudzu_11
+    scale: 0.85, 0.85
+    color: "#ADA891"
+
+- type: entity
+  parent: CMUCavernPebbles
+  id: CMUCavernVent
+  components:
+  - type: Sprite
+    sprite: Structures/Windows/cracks.rsi
+    state: DamageOverlay_10
+    scale: 1, 1
+    color: "#C88B5A"
+
+- type: entity
+  parent: RUMCCaveWater
+  id: CMUCavernWater
+  components:
+  - type: Sprite
+    drawdepth: Puddles
+    color: "#7B9DABDD"
+
+- type: entity
+  parent: RUMCCaveLava
+  id: CMUCavernLava
+  components:
+  - type: Sprite
+    drawdepth: Puddles
+
+- type: entity
+  parent: CMUCavernWater
+  id: CMUCavernSpring
+  components:
+  - type: Sprite
+    color: "#D2C59EE0"

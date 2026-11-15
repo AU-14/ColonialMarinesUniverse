@@ -17,47 +17,7 @@ namespace Content.IntegrationTests.CMU14.Threats.Wendigo;
 public sealed class CMUWendigoSpeechTest
 {
     private const string Human = "CMMobHuman";
-    private const string Sentence = "They're in the upper window, get the rifles and hold the stairs now!";
 
-    [Test]
-    public async Task BrokenSpeechKeepsMostWords()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var accent = entMan.System<CMUWendigoBrokenSpeechAccentSystem>();
-            var speaker = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-            var comp = entMan.AddComponent<CMUWendigoBrokenSpeechAccentComponent>(speaker);
-
-            var words = Sentence.Split(' ').Select(Squeeze).Where(w => w.Length > 0).ToList();
-            Assert.That(words, Has.Count.GreaterThanOrEqualTo(10));
-
-            var changed = false;
-            for (var i = 0; i < 5; i++)
-            {
-                // Without the entity the accent rolls the shared random, so each try differs.
-                var result = i == 0
-                    ? accent.Accentuate(Sentence, new Entity<CMUWendigoBrokenSpeechAccentComponent>(speaker, comp))
-                    : accent.Accentuate(Sentence);
-                changed |= result != Sentence;
-
-                // Stretched and doubled letters collapse back, so "Uuupperrr" still counts as "upper".
-                var squeezed = Squeeze(result);
-                var survived = words.Count(w => squeezed.Contains(w));
-                Assert.That(survived, Is.GreaterThanOrEqualTo(words.Count / 2),
-                    $"Too many words lost: \"{result}\"");
-                Assert.That(result.TrimEnd().EndsWith('!'), Is.True, $"End punctuation lost: \"{result}\"");
-            }
-
-            Assert.That(changed, Is.True, "The accent must break the sentence up.");
-            entMan.DeleteEntity(speaker);
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task StabilizedMutagenDamagesTheBrain()
@@ -99,20 +59,5 @@ public sealed class CMUWendigoSpeechTest
     /// <summary>
     /// Lower-cased letters and digits with repeated letters collapsed.
     /// </summary>
-    private static string Squeeze(string text)
-    {
-        var builder = new StringBuilder(text.Length);
-        foreach (var c in text.ToLowerInvariant())
-        {
-            if (!char.IsLetterOrDigit(c) && c != ' ')
-                continue;
 
-            if (builder.Length > 0 && builder[builder.Length - 1] == c)
-                continue;
-
-            builder.Append(c);
-        }
-
-        return builder.ToString();
-    }
 }

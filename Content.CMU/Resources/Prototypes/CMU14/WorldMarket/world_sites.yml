@@ -1,0 +1,165 @@
+# The other objects of the world map besides the cities (see WorldCityPrototype, site): a few of them are taken at random in every round and put on the land. The factions win the favour of
+# them, build on them and do harm to one another in them like in the cities; a site is joined to the nearest city by a trail. A deposit makes what is built on it bring in twice as much.
+
+- type: worldCity
+  id: RUMCSiteDeepMine
+  site: true
+  name: rumc-site-deepmine-name
+  description: rumc-site-deepmine-desc
+  color: "#e0a050"
+  capabilities:
+  - Deposit
+  giftCost: 250
+
+- type: worldCity
+  id: RUMCSiteOilField
+  site: true
+  name: rumc-site-oilfield-name
+  description: rumc-site-oilfield-desc
+  color: "#5a5a66"
+  capabilities:
+  - Deposit
+  giftCost: 300
+
+- type: worldCity
+  id: RUMCSiteSaltFlats
+  site: true
+  name: rumc-site-saltflats-name
+  description: rumc-site-saltflats-desc
+  color: "#e8e8f0"
+  capabilities:
+  - Deposit
+  giftCost: 200
+
+- type: worldCity
+  id: RUMCSiteQuarry
+  site: true
+  name: rumc-site-quarry-name
+  description: rumc-site-quarry-desc
+  color: "#b0a090"
+  capabilities:
+  - Deposit
+  giftCost: 220
+
+- type: worldCity
+  id: RUMCSiteFarmstead
+  site: true
+  name: rumc-site-farmstead-name
+  description: rumc-site-farmstead-desc
+  color: "#9bd45a"
+  capabilities:
+  - Deposit
+  giftCost: 200
+
+- type: worldCity
+  id: RUMCSiteHotSprings
+  site: true
+  name: rumc-site-hotsprings-name
+  description: rumc-site-hotsprings-desc
+  color: "#7fd8d0"
+  capabilities:
+  - Deposit
+  giftCost: 260
+
+- type: worldCity
+  id: RUMCSiteRadioRelay
+  site: true
+  name: rumc-site-radiorelay-name
+  description: rumc-site-radiorelay-desc
+  color: "#ff6aa8"
+  capabilities:
+  - Intelligence
+  giftCost: 300
+
+- type: worldCity
+  id: RUMCSiteObservatory
+  site: true
+  name: rumc-site-observatory-name
+  description: rumc-site-observatory-desc
+  color: "#a0b4ff"
+  capabilities:
+  - Intelligence
+  giftCost: 350
+
+- type: worldCity
+  id: RUMCSiteWatchFort
+  site: true
+  name: rumc-site-watchfort-name
+  description: rumc-site-watchfort-desc
+  color: "#d04a3a"
+  capabilities:
+  - ArmsMarket
+  giftCost: 350
+
+- type: worldCity
+  id: RUMCSiteOldBunker
+  site: true
+  name: rumc-site-oldbunker-name
+  description: rumc-site-oldbunker-desc
+  color: "#8a8a70"
+  capabilities:
+  - ArmsMarket
+  giftCost: 320
+
+- type: worldCity
+  id: RUMCSiteCrossroads
+  site: true
+  name: rumc-site-crossroads-name
+  description: rumc-site-crossroads-desc
+  color: "#f0d878"
+  capabilities:
+  - TradeHub
+  giftCost: 300
+
+- type: worldCity
+  id: RUMCSiteRuins
+  site: true
+  name: rumc-site-ruins-name
+  description: rumc-site-ruins-desc
+  color: "#a08ab0"
+  capabilities:
+  - BlackMarket
+  giftCost: 280
+
+- type: worldCity
+  id: RUMCSiteCrashSite
+  site: true
+  name: rumc-site-crashsite-name
+  description: rumc-site-crashsite-desc
+  color: "#ff9a4a"
+  capabilities:
+  - BlackMarket
+  giftCost: 240
+
+- type: worldCity
+  id: RUMCSiteSmugglerCove
+  site: true
+  coastal: true
+  name: rumc-site-smugglercove-name
+  description: rumc-site-smugglercove-desc
+  color: "#9a5cd0"
+  capabilities:
+  - BlackMarket
+  giftCost: 300
+
+- type: worldCity
+  id: RUMCSiteLighthouse
+  site: true
+  coastal: true
+  name: rumc-site-lighthouse-name
+  description: rumc-site-lighthouse-desc
+  color: "#ffe9a0"
+  capabilities:
+  - Intelligence
+  giftCost: 260
+
+- type: worldCity
+  id: RUMCSiteFishery
+  site: true
+  coastal: true
+  name: rumc-site-fishery-name
+  description: rumc-site-fishery-desc
+  color: "#6ab8e8"
+  capabilities:
+  - Deposit
+  giftCost: 220

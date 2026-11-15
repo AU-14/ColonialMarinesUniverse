@@ -19,7 +19,8 @@ public abstract partial class SharedRMCTargetingSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<TargetingComponent, ComponentRemove>(OnTargetingRemoved);
+        InitializeCMUTargetingLifetime(); // CMU14: cancel references before their entities disappear.
+        SubscribeLocalEvent<TargetingComponent, ComponentShutdown>(OnTargetingRemoved); // CMU14: Resolve rejects components during ComponentRemove.
         SubscribeLocalEvent<TargetingComponent, DroppedEvent>(OnTargetingDropped);
         SubscribeLocalEvent<TargetingComponent, RMCDroppedEvent>(OnTargetingDropped);
         SubscribeLocalEvent<TargetingComponent, GotUnequippedHandEvent>(OnTargetingDropped);
@@ -67,10 +68,14 @@ public abstract partial class SharedRMCTargetingSystem : EntitySystem
             if (!TryComp(targeting, out TargetingComponent? targetingComp))
                 continue;
 
-            targetingComp.Targets.Remove(ent);
+            // CMU14: a deleted target may have multiple lasers from the same equipment.
+            targetingComp.Targets.RemoveAll(target => target == ent.Owner);
             targetingComp.LaserDurations.Remove(ent);
             targetingComp.OriginalLaserDurations.Remove(ent);
             Dirty(targeting, targetingComp);
+            if (targetingComp.Targets.Count == 0)
+                RemComp<TargetingComponent>(targeting);
+            // CMU14 end
         }
     }
 
@@ -85,12 +90,26 @@ public abstract partial class SharedRMCTargetingSystem : EntitySystem
             return;
 
         targeting.Comp.Targets.Remove(target);
+        // CMU14: remove serialized keys when the last laser to this target stops.
+        if (!targeting.Comp.Targets.Contains(target))
+        {
+            targeting.Comp.LaserDurations.Remove(target);
+            targeting.Comp.OriginalLaserDurations.Remove(target);
+        }
         Dirty(targeting);
+
+        // Cleanup belongs to the targeting entity, even if the target is gone or has other lasers.
+        if (targeting.Comp.Targets.Count == 0 && targeting.Comp.LifeStage < ComponentLifeStage.Stopping)
+            RemComp<TargetingComponent>(targeting);
+        // CMU14 end
 
         if (!TryComp(target, out RMCTargetedComponent? targeted))
             return;
 
         targeted.TargetedBy.Remove(targeting);
+        // CMU14: a surviving target must not serialize a removed laser's source.
+        if (!targeted.TargetedBy.Contains(targeting.Owner))
+            targeted.AlphaMultipliers.Remove(targeting.Owner);
         Dirty(target, targeted);
 
         // Find the next target marker with the highest priority
@@ -123,8 +142,9 @@ public abstract partial class SharedRMCTargetingSystem : EntitySystem
         // Remove the target's targeted component if it has nothing targeting it anymore
         RemComp<RMCTargetedComponent>(target);
 
-        if (targeting.Comp.Targets.Count == 0)
-            RemComp<TargetingComponent>(targeting);
+        // CMU14: performed above, before target-dependent early returns.
+        // if (targeting.Comp.Targets.Count == 0)
+        //     RemComp<TargetingComponent>(targeting);
     }
 
     /// <summary>
@@ -163,6 +183,7 @@ public abstract partial class SharedRMCTargetingSystem : EntitySystem
         targeting.Origin = Transform(user).Coordinates;
         targeting.User = user;
         targeting.LaserType = targetedEffect;
+        WatchCMUTargetingLifetime((equipment, targeting)); // CMU14
         Dirty(equipment, targeting);
     }
 

@@ -42,6 +42,7 @@ public sealed partial class BlackfootSupportDeploySystem : EntitySystem
         SubscribeLocalEvent<BlackfootPackableSupportComponent, BlackfootSupportInitialWrenchDoAfterEvent>(OnInitialWrenchDoAfter);
         SubscribeLocalEvent<BlackfootPackableSupportComponent, BlackfootSupportPanelScrewdriverDoAfterEvent>(OnPanelScrewdriverDoAfter);
         SubscribeLocalEvent<BlackfootPackableSupportComponent, BlackfootSupportFinalWrenchDoAfterEvent>(OnFinalWrenchDoAfter);
+        SubscribeLocalEvent<BlackfootPackableSupportComponent, ComponentShutdown>(OnSupportShutdown);
     }
 
     private void OnActivate(Entity<BlackfootDeployableSupportComponent> ent, ref ActivateInWorldEvent args)
@@ -657,6 +658,12 @@ public sealed partial class BlackfootSupportDeploySystem : EntitySystem
             computer.LandingPad = null;
             Dirty(ent.Owner, computer);
         }
+    }
+
+    private void OnSupportShutdown(Entity<BlackfootPackableSupportComponent> ent, ref ComponentShutdown args)
+    {
+        // Destruction must release the same links as packing up the equipment.
+        ClearSupportLinks(ent);
     }
 
     private static string GetPackTool(BlackfootPackableSupportComponent comp)

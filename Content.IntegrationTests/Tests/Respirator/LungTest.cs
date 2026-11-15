@@ -8,6 +8,7 @@ using Robust.Shared.Map;
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.Atmos.Components;
+using Robust.Shared.Map.Components; // CMU14
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Utility;
 
@@ -94,11 +95,21 @@ public sealed class LungTest : GameTest
 
         await server.WaitAssertion(() =>
         {
+            // CMU14: finish map gas displacement before measuring the breathing cycle's baseline.
+            relevantAtmos = entityManager.GetComponent<GridAtmosphereComponent>(grid.Value);
+            var transform = entityManager.GetComponent<TransformComponent>(grid.Value);
+            var atmosphere = entityManager.System<AtmosphereSystem>();
+            atmosphere.RunProcessingFull(new Entity<GridAtmosphereComponent, GasTileOverlayComponent, MapGridComponent, TransformComponent>(
+                grid.Value,
+                relevantAtmos,
+                entityManager.GetComponent<GasTileOverlayComponent>(grid.Value),
+                entityManager.GetComponent<MapGridComponent>(grid.Value),
+                transform), transform.MapUid!.Value, atmosphere.AtmosTickRate);
+            startingMoles = GetMapMoles();
+
             var center = new Vector2(0.5f, 0.5f);
             var coordinates = new EntityCoordinates(grid.Value, center);
             human = entityManager.SpawnEntity("HumanLungDummy", coordinates);
-            relevantAtmos = entityManager.GetComponent<GridAtmosphereComponent>(grid.Value);
-            startingMoles = 100f; // Hardcoded because GetMapMoles returns 900 here for some reason.
 
 #pragma warning disable NUnit2045
             Assert.That(entityManager.TryGetComponent(human, out resp), Is.True);

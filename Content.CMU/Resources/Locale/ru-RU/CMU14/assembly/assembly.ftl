@@ -1,0 +1,10 @@
+au14-assembly-title = Сборочная машина
+au14-assembly-result-label = Результат
+au14-assembly-charge-label = Заряд
+au14-assembly-status-assembling = Сборка: { $percent }%
+au14-assembly-status-no-blueprint = Рецепт не запрограммирован
+au14-assembly-status-ready = Готов
+au14-assembly-examine-progress = Идёт сборка: { $percent }%.
+au14-assembly-examine-no-blueprint = Чертёж не вставлен, либо на нём не записан рецепт.
+au14-assembly-examine-idle = Простаивает.
+au14-assembly-blueprint-title = Программирование чертежа

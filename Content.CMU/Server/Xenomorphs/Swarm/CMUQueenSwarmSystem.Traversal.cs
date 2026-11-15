@@ -1,6 +1,8 @@
 using System.Numerics;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.NPC.Components;
+using Content.Shared._RMC14.Ladder;
+using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Robust.Shared.Map;
 
@@ -8,6 +10,8 @@ namespace Content.Server.CMU14.Xenomorphs.Swarm;
 
 public sealed partial class CMUQueenSwarmSystem
 {
+    [Dependency] private ITileDefinitionManager _traversalTiles = default!;
+    [Dependency] private CMUZLevelLadderSystem _zLadders = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     private readonly List<CMUSwarmStairRoute> _stairRoutes = new();
@@ -19,10 +23,10 @@ public sealed partial class CMUQueenSwarmSystem
         var targetMap = Transform(anchor).MapUid;
         TryComp<CMUSwarmTraversalComponent>(member, out var traversal);
         if (map == targetMap && traversal?.Route == null)
-            return false;
+            return TryCrossGridToAnchor(member, anchor);
 
         RemComp<NPCMeleeCombatComponent>(member);
-        if (map is not { } from || targetMap is not { } to || !_zLevels.IsSameZNetwork(from, to))
+        if (map is not { } from || targetMap is not { } to)
         {
             _steering.Unregister(member);
             return true;
@@ -61,16 +65,12 @@ public sealed partial class CMUQueenSwarmSystem
             if (from == to)
                 return false;
             RefreshStairRoutes();
-            if (!TryComp<CMUZLevelMapComponent>(from, out var start) || !TryComp<CMUZLevelMapComponent>(to, out var end))
-                return true;
             var best = float.MaxValue;
             foreach (var route in _stairRoutes)
             {
-                if (route.FromMap != from || TerminatingOrDeleted(route.Stair) ||
-                    traversal.FailedStairs.GetValueOrDefault(route.Stair) > _timing.CurTime ||
-                    !TryComp<CMUZLevelMapComponent>(route.ToMap, out var next) ||
-                    !_zLevels.IsSameZNetwork(route.ToMap, to) ||
-                    Math.Abs((long) next.Depth - end.Depth) >= Math.Abs((long) start.Depth - end.Depth))
+                if (route.FromMap != from || TerminatingOrDeleted(route.Stair)
+                    || traversal.FailedStairs.GetValueOrDefault(route.Stair) > _timing.CurTime
+                    || !RouteApproachesMap(from, route.ToMap, to))
                     continue;
                 var score = Vector2.Distance(position, route.Approach) + Vector2.Distance(route.Exit, _transform.GetWorldPosition(anchor));
                 if (score >= best)
@@ -85,6 +85,32 @@ public sealed partial class CMUQueenSwarmSystem
         if (traversal.Route is not { } selected)
         {
             _steering.Unregister(member);
+            return true;
+        }
+
+        if (selected.LadderOffset is { } ladderOffset)
+        {
+            MoveTo(member, Transform(selected.Stair).Coordinates, 0.7f);
+            if (Vector2.Distance(position, selected.Approach) <= 0.8f
+                && _interaction.InRangeUnobstructed(member, selected.Stair))
+            {
+                _steering.Unregister(member);
+                if (_timing.CurTime >= traversal.NextUse)
+                {
+                    if (TryComp<CMUZLevelLadderComponent>(selected.Stair, out var ladder))
+                    {
+                        var allowed = ladderOffset > 0 ? ladder.CanMoveUp : ladder.CanMoveDown;
+                        if (allowed)
+                            _zLadders.StartClimb((selected.Stair, ladder), member, ladderOffset);
+                        traversal.NextUse = _timing.CurTime + ladder.Delay + TimeSpan.FromSeconds(0.25);
+                    }
+                    else if (TryComp<LadderComponent>(selected.Stair, out var linked))
+                    {
+                        _interaction.InteractionActivate(member, selected.Stair);
+                        traversal.NextUse = _timing.CurTime + linked.Delay + TimeSpan.FromSeconds(0.25);
+                    }
+                }
+            }
             return true;
         }
 
@@ -118,6 +144,52 @@ public sealed partial class CMUQueenSwarmSystem
         return true;
     }
 
+    private bool RouteApproachesMap(EntityUid from, EntityUid nextMap, EntityUid target)
+    {
+        if (nextMap == target)
+            return true;
+        return _zLevels.IsSameZNetwork(from, target) && _zLevels.IsSameZNetwork(nextMap, target)
+            && TryComp<CMUZLevelMapComponent>(from, out var start)
+            && TryComp<CMUZLevelMapComponent>(nextMap, out var next)
+            && TryComp<CMUZLevelMapComponent>(target, out var end)
+            && Math.Abs((long) next.Depth - end.Depth) < Math.Abs((long) start.Depth - end.Depth);
+    }
+
+    private bool TryCrossGridToAnchor(EntityUid member, EntityUid anchor)
+    {
+        var xform = Transform(member);
+        var target = Transform(anchor);
+        if (xform.GridUid == target.GridUid || target.GridUid == null || xform.MapUid == null)
+            return false;
+
+        var from = _transform.GetMapCoordinates(member);
+        var to = _transform.GetMapCoordinates(anchor);
+        if (!_interaction.InRangeUnobstructed(member, anchor, range: 0f))
+            return false;
+
+        // Landed ships and terrain have separate navmeshes. Only bypass that seam along
+        // an unobstructed, continuously floored path; flight and open hull gaps stay impassable.
+        var distance = Vector2.Distance(from.Position, to.Position);
+        var steps = Math.Max(1, (int) MathF.Ceiling(distance * 2));
+        for (var i = 0; i <= steps; i++)
+        {
+            var point = Vector2.Lerp(from.Position, to.Position, (float) i / steps);
+            if (!_map.TryFindGridAt(new MapCoordinates(point, from.MapId), out var gridUid, out var grid)
+                || !_map.TryGetTileRef(gridUid, grid, _map.WorldToTile(gridUid, grid, point), out var tile)
+                || CMUZLevelOpeningCache.IsFallThroughTile(tile.Tile, _traversalTiles))
+                return false;
+        }
+
+        if (TryComp<NPCSteeringComponent>(member, out var previous) && previous.Status == SteeringStatus.NoPath)
+            _steering.Unregister(member);
+        var steering = _steering.Register(member, new EntityCoordinates(anchor, Vector2.Zero));
+        ConfigureSteering(steering);
+        steering.Range = 0.8f;
+        steering.CurrentPath.Clear();
+        steering.RepathRange = distance + 1;
+        return true;
+    }
+
     // Already standing on the ramp, the navmesh has no path back down to the approach.
     private static bool OnStairLane(Vector2 position, CMUSwarmStairRoute route)
     {
@@ -132,6 +204,7 @@ public sealed partial class CMUQueenSwarmSystem
     {
         traversal.Route = null;
         traversal.Crossing = false;
+        traversal.NextUse = TimeSpan.Zero;
         _steering.Unregister(member);
     }
 
@@ -180,6 +253,28 @@ public sealed partial class CMUQueenSwarmSystem
             var delta = stair.Direction.ToVec() * (stair.Offset >= 0 ? 1 : -1);
             var center = _transform.GetWorldPosition(uid);
             _stairRoutes.Add(new(uid, from, to.Value.Owner, center - delta, center + delta));
+        }
+
+        var ladders = EntityQueryEnumerator<CMUZLevelLadderComponent, TransformComponent>();
+        while (ladders.MoveNext(out var uid, out var ladder, out var xform))
+        {
+            if (!xform.Anchored || xform.MapUid is not { } from)
+                continue;
+            var magnitude = Math.Max(Math.Abs(ladder.Offset), 1);
+            var center = _transform.GetWorldPosition(uid);
+            if (ladder.CanMoveUp && _zLevels.TryMapOffset(from, magnitude, out var above))
+                _stairRoutes.Add(new(uid, from, above.Value.Owner, center, center, magnitude));
+            if (ladder.CanMoveDown && _zLevels.TryMapOffset(from, -magnitude, out var below))
+                _stairRoutes.Add(new(uid, from, below.Value.Owner, center, center, -magnitude));
+        }
+
+        var linkedLadders = EntityQueryEnumerator<LadderComponent, TransformComponent>();
+        while (linkedLadders.MoveNext(out var uid, out var ladder, out var xform))
+        {
+            if (xform.MapUid is not { } from || ladder.Other is not { } other
+                || TerminatingOrDeleted(other) || Transform(other).MapUid is not { } to)
+                continue;
+            _stairRoutes.Add(new(uid, from, to, _transform.GetWorldPosition(uid), _transform.GetWorldPosition(other), 0));
         }
     }
 }

@@ -339,6 +339,10 @@
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
     sections:
+    - name: cmu-vendor-section-pressurized-canisters
+      entries:
+      - id: RMCPouchReagentCanister
+        amount: 1
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
       entries:
@@ -481,6 +485,14 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
   - type: CMAutomatedVendor
     sections:
+    - name: cmu-vendor-advanced-gunship-crew-hud
+      choices: { CMUPlatoonAirCrewGunshipHUD: 1 }
+      entries:
+      - id: CMUVisorGunshipCrewAdvanced
+    - name: cmu-vendor-basic-gunship-crew-huds
+      entries:
+      - id: CMUVisorGunshipCrew
+        amount: 5
     - name: Fatigues
       choices: { CMUPlatoonAirCrewFatigues: 1 }
       entries:
@@ -699,7 +711,7 @@
         amount: 5
     - name: Backpack
       entries:
-      - id: RMCBackpackRTOPMC
+      - id: ANPRC117GRadioIssued
         amount: 5
     - name: Pouches
       entries:
@@ -1091,12 +1103,16 @@
         amount: 200
       - id: CMMagazineSMGM63
         amount: 200
+      - id: CMU14MagazineSMGM63Rubber
+        amount: 20
       - id: CMMagazineSMGM63AP
         amount: 15
       - id: CMMagazineSMGM63Ext
         amount: 10
       - id: CMMagazineRifleM54C
         amount: 100
+      - id: CMU14MagazineRifleM54CRubber
+        amount: 20
       - id: CMMagazineRifleM54CAP
         amount: 15
       - id: CMMagazineRifleM54CExt
@@ -1113,6 +1129,8 @@
         amount: 100
       - id: CMMagazineRifleM54CMK1
         amount: 100
+      - id: CMU14MagazineRifleM54CMK1Rubber
+        amount: 20
       - id: CMMagazineRifleM54CMK1AP
         amount: 10
       - id: CMMagazineRifleM54CMK1Tracer
@@ -1133,6 +1151,8 @@
       entries:
       - id: CMMagazinePistolM77AP
         amount: 200
+      - id: CMU14MagazinePistolM77Rubber
+        amount: 20
     - name: Magazine Boxes
       entries:
       - id: CMUBoxMagazineSMGFP9000
@@ -1150,6 +1170,12 @@
       - id: RMCBoxBulletsSmartGun
         amount: 5
       - id: CMUBoxBulletsSMGP90
+        amount: 5
+      - id: CMU14BoxBulletsRifle10x24mmRubber
+        amount: 5
+      - id: CMU14BoxBulletsSMG10x20mmRubber
+        amount: 5
+      - id: CMU14BoxBulletsPistol9MMRubber
         amount: 5
     - name: explosives
       entries:
@@ -1438,7 +1464,11 @@
       - id: RMCPouchElectronics
     - name: Engineering Supplies
       entries:
-      - id: RMCCableCoil
+      - id: CMUCableThinHVStack
+        points: 1
+      - id: CMUCableThinMVStack
+        points: 1
+      - id: CMUCableThinLVStack
         points: 1
       - id: AU14MaintenanceJack
         points: 2

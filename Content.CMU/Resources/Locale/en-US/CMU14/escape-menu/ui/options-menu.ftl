@@ -3,8 +3,8 @@ cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat l
 cmu-ui-options-examine-wounds-in-chat = Echo people's wounds to chat when you examine them like in CM13
 
 cmu-ui-options-identification = Identification
-cmu-ui-options-fof-unidentified-marker = Show question marks for unfamiliar enemy uniforms in FoF
-cmu-ui-options-fof-unidentified-marker-tooltip = Shows a question mark above living enemies whose uniform is not issued or sold by your platoon. Works without HUD gear and never marks teammates or dead bodies.
+cmu-ui-options-fof-unidentified-marker = Show FoF identification markers
+cmu-ui-options-fof-unidentified-marker-tooltip = Shows an exclamation mark above the opposing side and a question mark above unfamiliar units. Allegiance-aligned third parties count as teammates. Works without HUD gear and never marks your own forces or dead bodies.
 
 cmu-ui-options-accessibility = Accessibility
 cmu-ui-options-chat-crt-haze = CRT haze over chat

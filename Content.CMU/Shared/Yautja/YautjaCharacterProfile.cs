@@ -31,6 +31,11 @@ public enum YautjaBracerMaterial : byte
     Swamp,
     Enforcer,
     Collector,
+    Shadow,
+    Knight,
+    Seeker,
+    Serpent,
+    Xenobone,
 }
 
 [Serializable, NetSerializable]
@@ -56,6 +61,10 @@ public enum YautjaLegacySet : byte
     Swamp,
     Enforcer,
     Collector,
+    Shadow,
+    Knight,
+    Seeker,
+    Serpent,
 }
 
 [Serializable, NetSerializable]
@@ -66,6 +75,20 @@ public enum YautjaUniqueSet : byte
     Cleopatra,
     Plated,
     Ronin,
+    SeekerInitiate,
+    SeekerAdept,
+    Defender,
+    Warrior,
+    // Clan leader only.
+    Praetorian,
+}
+
+// what unlocks a set: Ancient sets are the Council / Council Legacy whitelist, Leader sets are Clan Leader
+// and up. elites and elders get none. decided per set, the lobby groups the pickers by this
+public enum YautjaSetLock : byte
+{
+    Ancient,
+    ClanLeader,
 }
 
 [Serializable, NetSerializable]
@@ -77,8 +100,6 @@ public enum YautjaSkinColor : byte
     Blue,
     Red,
     Black,
-    Gray,
-    White,
 }
 
 [Serializable, NetSerializable]
@@ -115,6 +136,9 @@ public enum YautjaCapeStyle : byte
     Quarter,
     Poncho,
     Damaged,
+    BoneFull,
+    BoneThird,
+    BoneCeremonial,
 }
 
 [Serializable, NetSerializable]
@@ -164,6 +188,11 @@ public sealed partial class YautjaCharacterProfile
         YautjaBracerMaterial.Swamp,
         YautjaBracerMaterial.Enforcer,
         YautjaBracerMaterial.Collector,
+        YautjaBracerMaterial.Shadow,
+        YautjaBracerMaterial.Knight,
+        YautjaBracerMaterial.Seeker,
+        YautjaBracerMaterial.Serpent,
+        YautjaBracerMaterial.Xenobone,
     ];
 
     public static readonly YautjaBracerMaterial[] CasterMaterialOrder =
@@ -196,6 +225,10 @@ public sealed partial class YautjaCharacterProfile
         YautjaLegacySet.Swamp,
         YautjaLegacySet.Enforcer,
         YautjaLegacySet.Collector,
+        YautjaLegacySet.Shadow,
+        YautjaLegacySet.Knight,
+        YautjaLegacySet.Seeker,
+        YautjaLegacySet.Serpent,
     ];
 
     public static readonly YautjaProfileStatus[] StatusOrder =
@@ -212,18 +245,23 @@ public sealed partial class YautjaCharacterProfile
         YautjaUniqueSet.Cleopatra,
         YautjaUniqueSet.Plated,
         YautjaUniqueSet.Ronin,
+        YautjaUniqueSet.SeekerInitiate,
+        YautjaUniqueSet.SeekerAdept,
+        YautjaUniqueSet.Defender,
+        YautjaUniqueSet.Warrior,
+        YautjaUniqueSet.Praetorian,
     ];
 
+    // CM-SS13 PRED_SKIN_COLOR order (code/__DEFINES/pred.dm:11), so the picker lists the reference skins first.
+    // Gray and White are CMU-only extras and stay last.
     public static readonly YautjaSkinColor[] SkinColorOrder =
     [
-        YautjaSkinColor.Green,
         YautjaSkinColor.Tan,
+        YautjaSkinColor.Green,
         YautjaSkinColor.Purple,
         YautjaSkinColor.Blue,
         YautjaSkinColor.Red,
         YautjaSkinColor.Black,
-        YautjaSkinColor.Gray,
-        YautjaSkinColor.White,
     ];
 
     public static readonly YautjaQuillStyle[] QuillStyleOrder =
@@ -270,6 +308,9 @@ public sealed partial class YautjaCharacterProfile
         YautjaCapeStyle.Quarter,
         YautjaCapeStyle.Poncho,
         YautjaCapeStyle.Damaged,
+        YautjaCapeStyle.BoneFull,
+        YautjaCapeStyle.BoneThird,
+        YautjaCapeStyle.BoneCeremonial,
     ];
 
     public static readonly Color[] SkinToneColors =
@@ -280,8 +321,6 @@ public sealed partial class YautjaCharacterProfile
         C(125, 139, 150),
         C(105, 57, 59),
         C(72, 69, 77),
-        C(128, 128, 128),
-        C(255, 255, 255),
     ];
 
     public static readonly Color[] EyeColors =
@@ -311,6 +350,9 @@ public sealed partial class YautjaCharacterProfile
 
     [DataField]
     public HumanoidCharacterAppearance Appearance { get; private set; } = BuildDefaultAppearance();
+
+    [DataField]
+    public bool SkinColorSelected { get; private set; }
 
     [DataField]
     public YautjaDreadColor DreadColor { get; private set; } = YautjaDreadColor.MatchSkin;
@@ -402,7 +444,24 @@ public sealed partial class YautjaCharacterProfile
 
     public string BracerPrototype => Legacy != YautjaLegacySet.None
         ? $"CMUYautjaBracerLegacy{Legacy}"
-        : BracerMaterial switch
+        : BracerMaterialPrototype(UniqueBracer(Unique) ?? BracerMaterial);
+
+    /// <summary>
+    /// cmss13 #12174: the seeker and xenobone elite sets come with their own bracers, the others keep the picked one.
+    /// </summary>
+    public static YautjaBracerMaterial? UniqueBracer(YautjaUniqueSet unique)
+    {
+        return unique switch
+        {
+            YautjaUniqueSet.SeekerInitiate or YautjaUniqueSet.SeekerAdept => YautjaBracerMaterial.Seeker,
+            YautjaUniqueSet.Defender or YautjaUniqueSet.Warrior or YautjaUniqueSet.Praetorian => YautjaBracerMaterial.Xenobone,
+            _ => null,
+        };
+    }
+
+    private static string BracerMaterialPrototype(YautjaBracerMaterial material)
+    {
+        return material switch
         {
             YautjaBracerMaterial.Retro => "CMUYautjaBracerRetro",
             YautjaBracerMaterial.Silver => "CMUYautjaBracerSilver",
@@ -413,8 +472,14 @@ public sealed partial class YautjaCharacterProfile
             YautjaBracerMaterial.Swamp => "CMUYautjaBracerLegacySwamp",
             YautjaBracerMaterial.Enforcer => "CMUYautjaBracerLegacyEnforcer",
             YautjaBracerMaterial.Collector => "CMUYautjaBracerLegacyCollector",
+            YautjaBracerMaterial.Shadow => "CMUYautjaBracerLegacyShadow",
+            YautjaBracerMaterial.Knight => "CMUYautjaBracerLegacyKnight",
+            YautjaBracerMaterial.Seeker => "CMUYautjaBracerLegacySeeker",
+            YautjaBracerMaterial.Serpent => "CMUYautjaBracerLegacySerpent",
+            YautjaBracerMaterial.Xenobone => "CMUYautjaBracerXenobone",
             _ => "CMUYautjaBracerEbony",
         };
+    }
 
     public string CasterPrototype => CasterMaterial switch
     {
@@ -434,6 +499,9 @@ public sealed partial class YautjaCharacterProfile
         YautjaCapeStyle.Quarter => "CMUYautjaCapeQuarter",
         YautjaCapeStyle.Poncho => "CMUYautjaCapePoncho",
         YautjaCapeStyle.Damaged => "CMUYautjaCapeDamaged",
+        YautjaCapeStyle.BoneFull => "CMUYautjaCapeBoneFull",
+        YautjaCapeStyle.BoneThird => "CMUYautjaCapeBoneThird",
+        YautjaCapeStyle.BoneCeremonial => "CMUYautjaCapeBoneCeremonial",
         _ => "CMUYautjaCapeFull",
     };
 
@@ -457,7 +525,7 @@ public sealed partial class YautjaCharacterProfile
 
     public string BracerDisplayName => Legacy != YautjaLegacySet.None
         ? $"{GetLegacyDisplayName(Legacy)}-bracer"
-        : GetBracerDisplayName(BracerMaterial);
+        : GetBracerDisplayName(UniqueBracer(Unique) ?? BracerMaterial);
 
     public YautjaCharacterProfile()
     {
@@ -472,6 +540,7 @@ public sealed partial class YautjaCharacterProfile
         Gender = isFemale ? Gender.Female : Gender.Male;
         DreadColor = SanitizeDreadColor(other.DreadColor);
         Appearance = SanitizeAppearance(other.Appearance, DreadColor);
+        SkinColorSelected = other.SkinColorSelected;
         ArmorMaterial = SanitizeEnum(other.ArmorMaterial, YautjaGearMaterial.Ebony);
         ArmorStyle = other.ArmorStyle is >= 1 and <= 8 ? other.ArmorStyle : DefaultArmorStyle;
         MaskMaterial = SanitizeEnum(other.MaskMaterial, YautjaGearMaterial.Ebony);
@@ -535,10 +604,18 @@ public sealed partial class YautjaCharacterProfile
         return profile;
     }
 
-    public YautjaCharacterProfile WithSkinColor(YautjaSkinColor skinColor)
+    /// <summary>
+    /// Applies a skin tone. <paramref name="markSelected"/> records that the tone was chosen, which is what keeps the
+    /// spawn-time randomiser off it. The save/load path passes the stored flag instead of assuming, because restoring
+    /// a saved colour is not the same as the player picking one.
+    /// </summary>
+    public YautjaCharacterProfile WithSkinColor(YautjaSkinColor skinColor, bool markSelected = true)
     {
         var color = GetSkinColorColor(skinColor);
-        return WithAppearance(Appearance.WithSkinColor(color));
+        var profile = WithAppearance(Appearance.WithSkinColor(color));
+        if (markSelected)
+            profile.SkinColorSelected = true;
+        return profile;
     }
 
     public YautjaCharacterProfile WithEyeColor(YautjaEyeColor eyeColor)
@@ -619,7 +696,8 @@ public sealed partial class YautjaCharacterProfile
             OwnerRank = YautjaRankResolver.ToOwnerRank(rank),
         };
 
-        return YautjaRankResolver.CanUseUnique(rank)
+        // rank only decides the leader sets, the ancient ones are checked against capabilities
+        return GetSetLock(profile.Unique) == YautjaSetLock.Ancient || YautjaRankResolver.CanUseUnique(rank)
             ? profile
             : profile.WithUnique(YautjaUniqueSet.None);
     }
@@ -653,7 +731,7 @@ public sealed partial class YautjaCharacterProfile
         if (!capabilities.CanUseLegacySet(profile.Legacy))
             profile = profile.WithLegacy(YautjaLegacySet.None);
 
-        if (!capabilities.CanUseUnique || profile.Legacy != YautjaLegacySet.None)
+        if (!capabilities.CanUseUniqueSet(profile.Unique) || profile.Legacy != YautjaLegacySet.None)
             profile = profile.WithUnique(YautjaUniqueSet.None);
 
         if (!capabilities.CanUseCape(profile.CapeStyle))
@@ -677,6 +755,14 @@ public sealed partial class YautjaCharacterProfile
     public YautjaCharacterProfile WithCapeStyle(YautjaCapeStyle style)
     {
         return new(this) { CapeStyle = style };
+    }
+
+    /// <summary>
+    /// Bone capes are drawn in their final colours and ignore the cloth colour (cmss13 can_recolor = FALSE).
+    /// </summary>
+    public static bool IsCapeRecolorable(YautjaCapeStyle style)
+    {
+        return style is not (YautjaCapeStyle.BoneFull or YautjaCapeStyle.BoneThird or YautjaCapeStyle.BoneCeremonial);
     }
 
     public YautjaCharacterProfile WithCapeColor(Color color)
@@ -730,13 +816,43 @@ public sealed partial class YautjaCharacterProfile
 
     public static string GetBracerDisplayName(YautjaBracerMaterial material)
     {
-        var variant = material is YautjaBracerMaterial.Dragon or
+        var variant = IsLegacyBracer(material)
+            ? "legacy"
+            : material == YautjaBracerMaterial.Xenobone
+                ? "elite"
+                : "clan";
+        return $"cmu-yautja-profile-bracer-{BracerMaterialKey(material)}-{variant}";
+    }
+
+    public static YautjaSetLock GetSetLock(YautjaLegacySet legacy)
+    {
+        return legacy is YautjaLegacySet.Enforcer or YautjaLegacySet.Seeker or YautjaLegacySet.Serpent
+            ? YautjaSetLock.Ancient
+            : YautjaSetLock.ClanLeader;
+    }
+
+    public static YautjaSetLock GetSetLock(YautjaUniqueSet unique)
+    {
+        return unique is YautjaUniqueSet.Anubys or
+            YautjaUniqueSet.Cleopatra or
+            YautjaUniqueSet.Ronin or
+            YautjaUniqueSet.Praetorian or
+            YautjaUniqueSet.SeekerInitiate or
+            YautjaUniqueSet.SeekerAdept
+            ? YautjaSetLock.Ancient
+            : YautjaSetLock.ClanLeader;
+    }
+
+    public static bool IsLegacyBracer(YautjaBracerMaterial material)
+    {
+        return material is YautjaBracerMaterial.Dragon or
             YautjaBracerMaterial.Swamp or
             YautjaBracerMaterial.Enforcer or
-            YautjaBracerMaterial.Collector
-            ? "legacy"
-            : "clan";
-        return $"cmu-yautja-profile-bracer-{BracerMaterialKey(material)}-{variant}";
+            YautjaBracerMaterial.Collector or
+            YautjaBracerMaterial.Shadow or
+            YautjaBracerMaterial.Knight or
+            YautjaBracerMaterial.Seeker or
+            YautjaBracerMaterial.Serpent;
     }
 
     public static string GetCasterDisplayName(YautjaBracerMaterial material)
@@ -754,6 +870,9 @@ public sealed partial class YautjaCharacterProfile
             YautjaCapeStyle.Quarter => "quarter",
             YautjaCapeStyle.Poncho => "poncho",
             YautjaCapeStyle.Damaged => "damaged",
+            YautjaCapeStyle.BoneFull => "bone-full",
+            YautjaCapeStyle.BoneThird => "bone-third",
+            YautjaCapeStyle.BoneCeremonial => "bone-ceremonial",
             _ => "full",
         };
         return $"cmu-yautja-profile-cape-{suffix}";
@@ -805,6 +924,10 @@ public sealed partial class YautjaCharacterProfile
             YautjaLegacySet.Swamp => "swamp",
             YautjaLegacySet.Enforcer => "enforcer",
             YautjaLegacySet.Collector => "collector",
+            YautjaLegacySet.Shadow => "shadow",
+            YautjaLegacySet.Knight => "knight",
+            YautjaLegacySet.Seeker => "seeker",
+            YautjaLegacySet.Serpent => "serpent",
             _ => "none",
         };
         return $"cmu-yautja-profile-legacy-{suffix}";
@@ -829,6 +952,11 @@ public sealed partial class YautjaCharacterProfile
             YautjaUniqueSet.Cleopatra => "cleopatra",
             YautjaUniqueSet.Plated => "plated",
             YautjaUniqueSet.Ronin => "ronin",
+            YautjaUniqueSet.SeekerInitiate => "seeker-initiate",
+            YautjaUniqueSet.SeekerAdept => "seeker-adept",
+            YautjaUniqueSet.Defender => "defender",
+            YautjaUniqueSet.Warrior => "warrior",
+            YautjaUniqueSet.Praetorian => "praetorian",
             _ => "none",
         };
         return $"cmu-yautja-profile-unique-{suffix}";
@@ -843,8 +971,6 @@ public sealed partial class YautjaCharacterProfile
             YautjaSkinColor.Blue => "blue",
             YautjaSkinColor.Red => "red",
             YautjaSkinColor.Black => "black",
-            YautjaSkinColor.Gray => "gray",
-            YautjaSkinColor.White => "white",
             _ => "tan",
         };
         return $"cmu-yautja-profile-skin-color-{suffix}";
@@ -921,8 +1047,6 @@ public sealed partial class YautjaCharacterProfile
             YautjaSkinColor.Blue => SkinToneColors[3],
             YautjaSkinColor.Red => SkinToneColors[4],
             YautjaSkinColor.Black => SkinToneColors[5],
-            YautjaSkinColor.Gray => SkinToneColors[6],
-            YautjaSkinColor.White => SkinToneColors[7],
             _ => SkinToneColors[0],
         };
     }
@@ -1156,6 +1280,11 @@ public sealed partial class YautjaCharacterProfile
             YautjaBracerMaterial.Swamp => "swamp",
             YautjaBracerMaterial.Enforcer => "enforcer",
             YautjaBracerMaterial.Collector => "collector",
+            YautjaBracerMaterial.Shadow => "shadow",
+            YautjaBracerMaterial.Knight => "knight",
+            YautjaBracerMaterial.Seeker => "seeker",
+            YautjaBracerMaterial.Serpent => "serpent",
+            YautjaBracerMaterial.Xenobone => "xenobone",
             _ => "ebony",
         };
     }

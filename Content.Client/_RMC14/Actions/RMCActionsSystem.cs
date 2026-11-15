@@ -154,7 +154,9 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
             if (aXeno != -1 && bXeno != -1)
                 return aXeno - bXeno;
 
-            return ActionsSystem.ActionComparer((a, a), (b, b));
+            // CMU14
+            var compare = ActionsSystem.ActionComparer((a, a), (b, b));
+            return compare != 0 ? compare : GetNetEntity(a.Owner).Id.CompareTo(GetNetEntity(b.Owner).Id);
         });
 
         var assignments = actions.Select((t, i) => new ActionsSystem.SlotAssignment(0, (byte) i, t)).ToList();
@@ -187,10 +189,16 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
 
         _sortEnt = player;
 
+        // CMU14
+        Array.Sort(clientActions, (a, b) => GetNetEntity(a.Owner).Id.CompareTo(GetNetEntity(b.Owner).Id));
+
         if (hiddenActions == null)
         {
             hiddenActions = UpgradeHistoricalHiddenActions(orderComp.Id, order, clientActions);
         }
+
+        // CMU14: Early Warning Joe wheel abilities stay off the bar unless the saved order places them (a pin)
+        hiddenActions = HideUnpinnedWheelActions(clientActions, order, hiddenActions.Value);
 
         var allActions = ReconcileActionOrder(
             clientActions,

@@ -1,7 +1,5 @@
-using System.Numerics;
 using Content.Server._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Supply;
-using Content.Shared.CMU14.Blackfoot;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.Examine;
 using Robust.Shared.Map;
@@ -16,8 +14,6 @@ public sealed partial class FighterSystem
     {
         SubscribeLocalEvent<FighterIFFComponent, MapInitEvent>(OnIFFInit);
         SubscribeLocalEvent<FighterIFFComponent, VehicleSupplyDeliveredEvent>(OnSupplyDelivered);
-        SubscribeLocalEvent<FighterIFFComponent, BlackfootSupportDeployedEvent>(OnPadDeployed);
-        SubscribeLocalEvent<FighterIFFComponent, BlackfootSupportPackedEvent>(OnPadPacked);
         SubscribeLocalEvent<FighterIFFComponent, ExaminedEvent>(OnIFFExamined);
         SubscribeLocalEvent<FighterIFFComponent, VehicleSupplyVendedEvent>(OnFighterEquipmentVended);
     }
@@ -31,19 +27,6 @@ public sealed partial class FighterSystem
 
     private void OnFighterEquipmentVended(Entity<FighterIFFComponent> ent, ref VehicleSupplyVendedEvent args) =>
         SetEquipmentFaction(ent, ent.Comp.Faction ?? _iff.GetOperatorFaction(args.User));
-
-    private void OnPadDeployed(Entity<FighterIFFComponent> kit, ref BlackfootSupportDeployedEvent args)
-    {
-        if (TryComp(args.Deployed, out FighterIFFComponent? pad))
-            SetEquipmentFaction((args.Deployed, pad), kit.Comp.Faction ?? _iff.GetOperatorFaction(args.User));
-    }
-
-    // the folded kit only gets a side from where it spawns, so copy the pad's or it comes back unowned
-    private void OnPadPacked(Entity<FighterIFFComponent> pad, ref BlackfootSupportPackedEvent args)
-    {
-        if (TryComp(args.Packed, out FighterIFFComponent? kit))
-            SetEquipmentFaction((args.Packed, kit), pad.Comp.Faction);
-    }
 
     private void SetEquipmentFaction(Entity<FighterIFFComponent> ent, string? faction)
     {
@@ -75,22 +58,11 @@ public sealed partial class FighterSystem
     private string? GetHullFaction(EntityUid hull) =>
         TryComp(hull, out FighterIFFComponent? iff) ? iff.Faction : null;
 
-    private bool CanUsePad(EntityUid hull, EntityUid pad) =>
-        TryComp(pad, out FighterIFFComponent? iff) && FighterIFFSystem.Same(GetHullFaction(hull), iff.Faction);
-
     private bool CanUseGroundSite(EntityUid hull, EntityCoordinates coordinates)
     {
         var faction = GetHullFaction(hull);
         if (_iff.GetSiteFaction(coordinates.EntityId) is { } owner && !FighterIFFSystem.Same(faction, owner))
             return false;
-        var world = _transform.ToMapCoordinates(coordinates);
-        var pads = EntityQueryEnumerator<FighterLandingPadComponent, TransformComponent>();
-        while (pads.MoveNext(out var uid, out var pad, out var transform))
-        {
-            if (transform.MapID == world.MapId &&
-                Vector2.DistanceSquared(_transform.GetWorldPosition(uid), world.Position) <= pad.Radius * pad.Radius &&
-                !CanUsePad(hull, uid)) return false;
-        }
         return true;
     }
 }

@@ -1,15 +1,13 @@
 # ├──[ Common tongue ]───────────────────────────────────────────────┤
+# Nobody speaks English automatically: platoons and colonies give their own default language.
 - type: trait
-  id: NoEnglish
-  name: au14-trait-no-english-name
-  description: au14-trait-no-english-desc
+  id: EnglishLanguage
+  name: au14-trait-english-language-name
+  description: au14-trait-english-language-desc
   category: LanguageTraits
-  cost: -1
-  components:
-  - type: RemoveLanguage
-    languages:
-    - English
-    clearCurrentLanguage: true
+  cost: 1
+  components: []
+  language: English
 
 - type: trait
   id: NoLanguageLearning

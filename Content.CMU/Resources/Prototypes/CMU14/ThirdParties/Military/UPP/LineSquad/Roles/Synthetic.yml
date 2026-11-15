@@ -5,6 +5,7 @@
   roundForce: UPPLine
   roundRole: UPPLineSynthetic
   roundComponents:
+  - type: Synth
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -36,6 +37,9 @@
   name: cmu-job-title-uppline-synthetic
   description: cmu-uppline-description-synthetic
   playTimeTracker: CMUJobUPPLineSynthetic
+  isSynthetic: true
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
   ranks:
     RMCRankCivilian: []
   startingGear: CMUGearUPPLineSynthetic

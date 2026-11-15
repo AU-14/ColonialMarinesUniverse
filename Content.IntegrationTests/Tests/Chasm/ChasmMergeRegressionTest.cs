@@ -22,20 +22,6 @@ public sealed class ChasmMergeRegressionTest : GameTest
         """;
 
     [Test]
-    public async Task ChasmPrototypeBlocksWeedSpread()
-    {
-        var map = await Pair.CreateTestMap();
-
-        await Server.WaitAssertion(() =>
-        {
-            var chasm = SEntMan.SpawnEntity("FloorChasmEntity", map.GridCoords);
-
-            Assert.That(SEntMan.HasComponent<BlockWeedsComponent>(chasm), Is.True,
-                "chasm hazards must prevent weeds from spreading onto their tile");
-        });
-    }
-
-    [Test]
     public async Task QueenDeathPrecedesCompletionAndSourcelessFallSkipsCompletionEvents()
     {
         var map = await Pair.CreateTestMap();

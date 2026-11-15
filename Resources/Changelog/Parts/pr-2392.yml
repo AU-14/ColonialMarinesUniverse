@@ -1,0 +1,7 @@
+author: Vixting
+category: CMU
+changes:
+- message: Removed carry over votes being halved
+  type: Remove
+time: '2026-10-31T12:53:25.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2392

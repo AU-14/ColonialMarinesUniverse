@@ -1,0 +1,44 @@
+- type: shader
+  id: CMUYautjaOpticalCloak
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_cloak.swsl
+
+- type: shader
+  id: CMUYautjaButcher
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_butcher.swsl
+
+- type: shader
+  id: CMUYautjaTissue
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_tissue.swsl
+
+- type: shader
+  id: CMUYautjaGlowAttenuate
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_glow_attenuate.swsl
+
+- type: shader
+  id: CMUYautjaGlowEmit
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_glow_emit.swsl
+
+- type: shader
+  id: CMUYautjaExperimentRibbon
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_experiment_ribbon.swsl
+
+- type: shader
+  id: CMUYautjaExperimentField
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_experiment_field.swsl
+
+- type: shader
+  id: CMUYautjaExperimentProjection
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_experiment_projection.swsl
+
+- type: shader
+  id: CMUYautjaExperimentRefraction
+  kind: source
+  path: /Textures/CMU14/Shaders/yautja_experiment_refraction.swsl

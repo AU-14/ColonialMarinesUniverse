@@ -31,6 +31,10 @@ public sealed partial class VehicleOperatorDamageSystem : EntitySystem
 
     private void OnExplosionReceived(Entity<VehicleOperatorDamageComponent> ent, ref ExplosionReceivedEvent args)
     {
+        // CMU14: only exempt the firing tank; hostile blasts and non-projectile explosions still reach the operator.
+        if (ent.Comp.IgnoreOwnProjectiles && args.SourceVehicle == ent.Owner)
+            return;
+
         if (!args.Damage.AnyPositive() || !TryGetOperator(ent.Owner, out var operatorUid))
             return;
 

@@ -1,0 +1,27 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Liquid pipes now have rotatable straight, elbow, T-junction and cross shapes.
+  type: Add
+- message: Blue arrows on connected pipes point into machines; amber arrows point
+    out.
+  type: Add
+- message: Machinery needs touching pipes; inspect INPUT/OUTPUT connections and disconnect
+    individual links.
+  type: Fix
+- message: Dropped machinery stays heavy when dragged and can no longer be thrown.
+  type: Fix
+- message: Fuel and industry trade goods now pay into the colony budget when sold
+    through ASRS, loose or in requisitions crates.
+  type: Fix
+- message: Click Guidebook ingredients and equipment to find gathering sources, drops
+    or the machines and recipes that produce them.
+  type: Add
+- message: The electrical guide now shows the electrical panel used to supply industry
+    machines.
+  type: Fix
+- message: Clearer fluid quantities and a short illustrated Pipes guide explain connections,
+    diesel production and selling.
+  type: Tweak
+time: '2026-11-03T16:54:55.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2450

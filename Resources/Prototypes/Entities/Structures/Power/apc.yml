@@ -58,6 +58,7 @@
       output:
         !type:CableDeviceNode
         nodeGroupID: Apc
+        connection: Both # CMU14: the APC joins the cables that lie under it and the ones run by hand to it
   - type: PowerMonitoringDevice
     group: APC
     sourceNode: input
@@ -180,6 +181,17 @@
   - type: Battery
     maxCharge: 50000
     startingCharge: 50000
+  - type: NodeContainer # CMU14: a second node container, with its input run by hand
+    examinable: true
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        connection: Direct
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+        connection: Both
 
 - type: entity
   parent: BaseAPC

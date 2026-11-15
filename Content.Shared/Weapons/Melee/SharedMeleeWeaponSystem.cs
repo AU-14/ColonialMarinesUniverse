@@ -608,6 +608,9 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
 
                     animation = DisarmEffect; // RMC14 change disarm effect
                     break;
+                // CMU14: no wide swing when the weapon forbids it.
+                case HeavyAttackEvent when !weapon.WideAttackAllowed:
+                    return false;
                 case HeavyAttackEvent heavy:
                     if (!DoHeavyAttack(user, heavy, weaponUid, weapon, session))
                         return false;

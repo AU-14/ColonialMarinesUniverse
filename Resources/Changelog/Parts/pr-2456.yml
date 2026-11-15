@@ -1,0 +1,40 @@
+author: Operator-Exi
+category: CMU
+changes:
+- message: The Early Warning Antagonist wakes. A Working Joe corrupted by The_Grand_Machine
+    arrives as a forward scout.
+  type: Add
+- message: 'The Early Warning climbs six levels by completing the signal''s directives:
+    killing, collecting intel, offering firearms and assimilating consoles.'
+  type: Add
+- message: Its abilities are grouped into four Signal wheels on the action bar, and
+    Signal Status shows its level and directives.
+  type: Add
+- message: On Distress Signal, the Early Warning Joe is offered as a ghost role in
+    a colony Working Joe on the planet.
+  type: Add
+- message: Assimilated consoles lock up and are reported by APOLLO. Colonists repair
+    them with a screwdriver, wirecutters and the corrupted core shard the Joe drops
+    when killed.
+  type: Add
+- message: Assimilating a console converts a synthetic into a River-Melded thrall.
+    A Weyland-Yutani reset key frees them.
+  type: Add
+- message: At its final level the Early Warning Joe gains THE LIGHT, an orange glow
+    that paralyzes those who keep looking at it.
+  type: Add
+- message: Antagonist synthetics can finally fire guns, however they became antagonists,
+    including through reset keys. Frag out at the CLFs command at last.
+  type: Tweak
+- message: Blood splatters now appear on stations and ships instead of being refused.
+  type: Fix
+- message: FOB support guns respect a sentry lockout.
+  type: Fix
+- message: Added the ewjoemechanics command to stop or allow the Early Warning Joe
+    being rolled.
+  type: Admin
+- message: Added a shared blood-spray helper for weapon hits, and the yautja Z-level
+    leap can now be given to non-yautja mobs.
+  type: Code
+time: '2026-11-06T18:05:06.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2456

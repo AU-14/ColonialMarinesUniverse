@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 11
   id: AU14JobWYPMCPartyEngineer #m41a/2
   chevrons:
     AU14RankWeYuEnforcer:
@@ -65,7 +66,7 @@
     jumpsuit: AU14WYPMCFatiguesEngineer
     shoes: RMCBootsPMCFilled
     head: AU14ArmorHelmetPMCTacticalEngi
-    gloves: RMCHandsVeteranPMC
+    gloves: CMUHandsVeteranPMC
     belt: AU14BeltUtilityFilled
     pocket1: RMCPouchMagazineLargePMC
     pocket2: AU14PouchIFAKFill

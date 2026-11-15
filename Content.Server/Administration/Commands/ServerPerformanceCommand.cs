@@ -483,12 +483,13 @@ public sealed class ServerPerformanceCommand : IConsoleCommand
         }
     }
 
+    // CMU14 method: collect names only for the selected rows, not every entity in the snapshot.
     private static void WriteEntityDetailReport(IConsoleShell shell, SnapshotState snapshot, int top, string? filter)
     {
         var rows = snapshot.Entities
-            .Where(s => s.DirtyComponents > 0 || s.CreatedComponentNames.Length > 0 || IsRecent(s.CreationTick, snapshot.MinRecentTick))
+            .Where(s => s.DirtyComponents > 0 || s.CreatedComponents > 0 || IsRecent(s.CreationTick, snapshot.MinRecentTick))
             .OrderByDescending(s => s.DirtyComponents)
-            .ThenByDescending(s => s.CreatedComponentNames.Length)
+            .ThenByDescending(s => s.CreatedComponents)
             .ThenByDescending(s => s.ComponentCount)
             .ThenByDescending(s => s.LastModifiedTick.Value)
             .Take(top)
@@ -504,14 +505,33 @@ public sealed class ServerPerformanceCommand : IConsoleCommand
             return;
         }
 
+        var entityManager = IoCManager.Resolve<IEntityManager>();
+        var names = new List<string>();
+        var dirtyNames = new List<string>();
+        var createdNames = new List<string>();
         for (var i = 0; i < rows.Length; i++)
         {
             var row = rows[i];
+            names.Clear();
+            dirtyNames.Clear();
+            createdNames.Clear();
+            foreach (var component in entityManager.GetComponents(row.Uid))
+            {
+                var name = ComponentName(component);
+                names.Add(name);
+                if (IsRecent(component.LastModifiedTick, snapshot.MinRecentTick))
+                    dirtyNames.Add(name);
+                if (IsRecent(component.CreationTick, snapshot.MinRecentTick))
+                    createdNames.Add(name);
+            }
+            names.Sort();
+            dirtyNames.Sort();
+            createdNames.Sort();
             var entityCreated = IsRecent(row.CreationTick, snapshot.MinRecentTick);
             shell.WriteLine($"{i + 1,3}. {row.Uid,-10} proto={row.Prototype} map={row.MapId} grid={row.GridUid} createdEntity={YesNo(entityCreated)} name=\"{Truncate(row.Name, 40)}\"");
-            shell.WriteLine($"     dirty=[{JoinNames(row.DirtyComponentNames, 12)}]");
-            shell.WriteLine($"     created=[{JoinNames(row.CreatedComponentNames, 12)}]");
-            shell.WriteLine($"     comps=[{JoinNames(row.ComponentNames, 18)}]");
+            shell.WriteLine($"     dirty=[{JoinNames(dirtyNames, 12)}]");
+            shell.WriteLine($"     created=[{JoinNames(createdNames, 12)}]");
+            shell.WriteLine($"     comps=[{JoinNames(names, 18)}]");
         }
     }
 
@@ -823,12 +843,15 @@ public sealed class ServerPerformanceCommand : IConsoleCommand
         return results;
     }
 
+    // CMU14 method: retain scalar counts for comparisons; component names are report-only data.
     private static List<EntityStats> CollectEntityStats(int dirtyTicks, string? filter)
     {
         var entityManager = IoCManager.Resolve<IEntityManager>();
         var timing = IoCManager.Resolve<IGameTiming>();
         var minTick = MinRecentTick(timing, dirtyTicks);
-        var results = new List<EntityStats>();
+        var results = new List<EntityStats>(entityManager.EntityCount);
+        var mapNames = new Dictionary<Robust.Shared.Map.MapId, string>();
+        var gridNames = new Dictionary<EntityUid, string>();
 
         foreach (var uid in entityManager.GetEntities())
         {
@@ -837,54 +860,48 @@ public sealed class ServerPerformanceCommand : IConsoleCommand
 
             var prototype = meta.EntityPrototype?.ID ?? "<none>";
             var name = meta.EntityName;
-            if (!Matches(filter, uid.ToString(), prototype, name))
+            if (filter != null && !Matches(filter, uid.ToString(), prototype, name))
                 continue;
 
-            var components = entityManager.GetComponents(uid)
-                .Where(component => !component.Deleted)
-                .Distinct()
-                .ToArray();
-
+            var count = 0;
             var dirty = 0;
+            var created = 0;
             var networked = 0;
-            var componentNames = new List<string>(components.Length);
-            var dirtyComponents = new List<string>();
-            var createdComponents = new List<string>();
 
-            foreach (var component in components)
+            // GetComponents already enumerates the unique live component set.
+            foreach (var component in entityManager.GetComponents(uid))
             {
-                var componentName = ComponentName(component);
-                componentNames.Add(componentName);
-
+                count++;
                 if (component.NetSyncEnabled)
                     networked++;
 
                 if (IsRecent(component.LastModifiedTick, minTick))
-                {
                     dirty++;
-                    dirtyComponents.Add(componentName);
-                }
 
                 if (IsRecent(component.CreationTick, minTick))
-                    createdComponents.Add(componentName);
+                    created++;
             }
 
             entityManager.TryGetComponent(uid, out TransformComponent? xform);
+            var mapName = "<none>";
+            var gridName = "<none>";
+            if (xform != null && !mapNames.TryGetValue(xform.MapID, out mapName))
+                mapNames.Add(xform.MapID, mapName = xform.MapID.ToString());
+            if (xform?.GridUid is { } grid && !gridNames.TryGetValue(grid, out gridName))
+                gridNames.Add(grid, gridName = grid.ToString());
 
             results.Add(new EntityStats(
                 uid,
                 name,
                 prototype,
-                components.Length,
+                count,
                 dirty,
+                created,
                 networked,
                 meta.EntityLastModifiedTick,
                 meta.CreationTick,
-                xform?.MapID.ToString() ?? "<none>",
-                xform?.GridUid?.ToString() ?? "<none>",
-                componentNames.OrderBy(n => n).ToArray(),
-                dirtyComponents.OrderBy(n => n).ToArray(),
-                createdComponents.OrderBy(n => n).ToArray()));
+                mapName,
+                gridName));
         }
 
         return results;
@@ -1222,20 +1239,19 @@ public sealed class ServerPerformanceCommand : IConsoleCommand
 
     private sealed record ComponentStats(string Name, int Count, int Dirty, int Created, bool Networked);
 
+    // CMU14 record: snapshots do not retain component-name arrays for the whole world.
     private sealed record EntityStats(
         EntityUid Uid,
         string Name,
         string Prototype,
         int ComponentCount,
         int DirtyComponents,
+        int CreatedComponents,
         int NetworkedComponents,
         GameTick LastModifiedTick,
         GameTick CreationTick,
         string MapId,
-        string GridUid,
-        string[] ComponentNames,
-        string[] DirtyComponentNames,
-        string[] CreatedComponentNames);
+        string GridUid);
 
     private sealed class PrototypeStats(string prototype)
     {

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server._RMC14.Scorch;
+using Content.Server.CMU14.Decals; // CMU14
 using Content.Server.Decals;
 using Content.Server.Explosion.Components;
 using Content.Server.Explosion.EntitySystems;
@@ -37,6 +38,7 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CMUDecalFloorSystem _decalFloor = default!; // CMU14
     [Dependency] private SharedTriggerSystem _trigger = default!;
 
     private readonly Dictionary<string, ProtoId<DecalPrototype>[]> _scorchDecalsByTag = new();
@@ -135,6 +137,9 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
                         continue;
 
                     var indices = new Vector2i(center.X + dx, center.Y + dy);
+                    if (!_decalFloor.HasFloor(tile.GridUid, grid, indices)) // CMU14: cross-z blasts land beside holes
+                        continue;
+
                     var coords = _map.GridTileToLocal(tile.GridUid, grid, indices);
                     var decalCoords = coords.Offset(new Vector2(-0.5f, -0.5f));
                     var decals = distSq <= centerRadiusSq ? centerDecals : edgeDecals;
@@ -152,6 +157,14 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
 
             var count = Math.Max(1, ent.Comp.Count);
             // Decals spawn based on bottom left corner, if bigger decals are used the offset will have to change
+            // CMU14 start: no decals floating over holes
+            if (_rmcMap.TryGetTileRefForEnt(Transform(ent).Coordinates, out var floorGrid, out var floorTile) &&
+                !_decalFloor.HasFloor(floorTile.GridUid, floorGrid, floorTile.GridIndices))
+            {
+                return;
+            }
+            // CMU14 end
+
             var baseCoords = Transform(ent).Coordinates.Offset(new Vector2(-0.5f, -0.5f));
             var scatterRadius = Math.Max(0f, ent.Comp.ScatterRadius);
 

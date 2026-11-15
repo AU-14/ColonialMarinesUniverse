@@ -1,0 +1,27 @@
+- type: job
+  parent: AU14UPPGROMSquadleader
+  id: AU14UPPGROMRRUSquadleader
+  description: au14-uppgrom-rru-description
+  spawnMenuRoleName: UPP GROM Squad Leader (Rapid Response Unit)
+# startingGear: same as parent
+  greeting: au14-uppgrom-rru-greeting
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14UPPGROMRRUSquadleader
+  name: UPP GROM Squad Leader (Rapid Response Unit)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-uppgrom-squadleader
+    description: au14-uppgrom-rru-description
+    reregister: false
+    job: AU14UPPGROMSquadleader
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules

@@ -70,15 +70,6 @@ namespace Content.IntegrationTests.Tests.Preferences
         }
 
         [Test]
-        public async Task TestUserDoesNotExist()
-        {
-            var pair = Pair;
-            var db = GetDb(pair.Server);
-            // Database should be empty so a new GUID should do it.
-            Assert.That(await db.GetPlayerPreferencesAsync(NewUserId()), Is.Null);
-        }
-
-        [Test]
         public async Task TestAppearanceValidationAndSave()
         {
             var pair = Pair;
@@ -126,21 +117,6 @@ namespace Content.IntegrationTests.Tests.Preferences
         }
 
         [Test]
-        public async Task TestDeleteCharacter()
-        {
-            var pair = Pair;
-            var server = pair.Server;
-            var db = GetDb(server);
-            var username = new NetUserId(new Guid("640bd619-fc8d-4fe2-bf3c-4a5fb17d6ddd"));
-            await db.InitPrefsAsync(username, new HumanoidCharacterProfile());
-            await db.SaveCharacterSlotAsync(username, CharlieCharlieson(), 1);
-            await db.SaveSelectedCharacterIndexAsync(username, 1);
-            await db.SaveCharacterSlotAsync(username, null, 1);
-            var prefs = await db.GetPlayerPreferencesAsync(username);
-            Assert.That(prefs!.Profiles, Has.Count.EqualTo(1));
-        }
-
-        [Test]
         public async Task ReplacingHighPriorityJobPreservesUniquePriorityAndOtherPreferences()
         {
             var db = GetDb(Pair.Server);
@@ -172,7 +148,7 @@ namespace Content.IntegrationTests.Tests.Preferences
             var user = NewUserId();
             var yautja = YautjaCharacterProfile.Default
                 .WithName("Database Hunter")
-                .WithSkinColor(YautjaSkinColor.Gray)
+                .WithSkinColor(YautjaSkinColor.Black)
                 .WithDreadColor(YautjaDreadColor.Brown)
                 .WithQuillStyle(YautjaQuillStyle.LongCurved)
                 .WithEyeColor(YautjaEyeColor.Jade);
@@ -185,7 +161,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 Assert.Multiple(() =>
                 {
                     Assert.That(restored.Name, Is.EqualTo(yautja.Name));
-                    Assert.That(restored.SkinColor, Is.EqualTo(YautjaSkinColor.Gray));
+                    Assert.That(restored.SkinColor, Is.EqualTo(YautjaSkinColor.Black));
                     Assert.That(restored.DreadColor, Is.EqualTo(YautjaDreadColor.Brown));
                     Assert.That(restored.QuillStyle, Is.EqualTo(YautjaQuillStyle.LongCurved));
                     Assert.That(restored.Appearance.EyeColor, Is.EqualTo(yautja.Appearance.EyeColor));

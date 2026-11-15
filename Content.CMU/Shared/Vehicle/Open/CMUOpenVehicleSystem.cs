@@ -559,6 +559,10 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
                 {
                     _popup.PopupClient(Loc.GetString("cmu-open-vehicle-engine-fine"), vehicle, user);
                 }
+                else if (_seats.IsSeatedIn(user, vehicle))
+                {
+                    _popup.PopupClient(Loc.GetString("cmu-vehicle-repair-while-riding"), vehicle, user);
+                }
                 else
                 {
                     _tool.UseTool(used, user, vehicle, (float) jeep.EngineRepairDelay.TotalSeconds,
@@ -579,6 +583,10 @@ public sealed partial class CMUOpenVehicleSystem : EntitySystem
                 else if (integrity.Integrity >= integrity.MaxIntegrity)
                 {
                     _popup.PopupClient(Loc.GetString("cmu-open-vehicle-part-fine", ("part", Name(ent))), vehicle, user);
+                }
+                else if (_seats.IsSeatedIn(user, vehicle))
+                {
+                    _popup.PopupClient(Loc.GetString("cmu-vehicle-repair-while-riding"), vehicle, user);
                 }
                 else
                 {

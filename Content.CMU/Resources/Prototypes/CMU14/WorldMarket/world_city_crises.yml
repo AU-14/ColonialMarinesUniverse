@@ -1,0 +1,58 @@
+# The troubles that a city of the world map can fall into (see WorldCrisisPrototype). Every faction loses some of its favour in the city if one ends with nothing done; what is done against
+# them is in world_city_actions.yml.
+
+- type: worldCityCrisis
+  id: RUMCCrisisEpidemic
+  name: rumc-crisis-epidemic-name
+  description: rumc-crisis-epidemic-desc
+  durationSeconds: 300
+  weight: 1.2
+  penalty: 6
+
+- type: worldCityCrisis
+  id: RUMCCrisisDrought
+  name: rumc-crisis-drought-name
+  description: rumc-crisis-drought-desc
+  durationSeconds: 360
+  weight: 1
+  penalty: 4
+
+- type: worldCityCrisis
+  id: RUMCCrisisFamine
+  name: rumc-crisis-famine-name
+  description: rumc-crisis-famine-desc
+  durationSeconds: 300
+  weight: 0.8
+  penalty: 6
+
+- type: worldCityCrisis
+  id: RUMCCrisisRaid
+  name: rumc-crisis-raid-name
+  description: rumc-crisis-raid-desc
+  durationSeconds: 180
+  weight: 1
+  penalty: 7
+
+- type: worldCityCrisis
+  id: RUMCCrisisFire
+  name: rumc-crisis-fire-name
+  description: rumc-crisis-fire-desc
+  durationSeconds: 150
+  weight: 1
+  penalty: 5
+
+- type: worldCityCrisis
+  id: RUMCCrisisFlood
+  name: rumc-crisis-flood-name
+  description: rumc-crisis-flood-desc
+  durationSeconds: 200
+  weight: 0.8
+  penalty: 5
+
+- type: worldCityCrisis
+  id: RUMCCrisisCollapse
+  name: rumc-crisis-collapse-name
+  description: rumc-crisis-collapse-desc
+  durationSeconds: 200
+  weight: 0.6
+  penalty: 5

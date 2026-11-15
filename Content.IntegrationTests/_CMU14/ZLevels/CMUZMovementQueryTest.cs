@@ -58,31 +58,6 @@ public sealed class CMUZMovementQueryTest : GameTest
     private CMUZPhysicsComponent _bodyZ = default!;
     private bool? _originalProfiler;
 
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task UnchangedMovementReusesGroundQuery(bool vehicle)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            CreateScenario(vehicle);
-            var before = Floors;
-            Assert.That(_z.DistanceToGround((_body, _bodyZ), out var sticky), Is.Zero);
-            Assert.That(sticky, Is.False);
-            var oneQuery = Floors - before;
-            Assert.That(oneQuery, Is.GreaterThan(0));
-
-            foreach (var x in new[] { 1.05f, 0.95f })
-            {
-                before = Floors;
-                Move(x);
-                Assert.That(Floors - before, Is.EqualTo(oneQuery),
-                    "An unchanged snap and its activation must share one ground query, including the whole vehicle footprint.");
-                AssertSettled(_map.Owner, 0f);
-                Assert.That(_transform.GetWorldPosition(_body), Is.EqualTo(new Vector2(x, 0.5f)));
-            }
-        });
-    }
-
     [Test]
     public async Task ChangedHeightRequeriesGroundAfterSnap()
     {
@@ -176,87 +151,66 @@ public sealed class CMUZMovementQueryTest : GameTest
         });
     }
 
-    [Test, Explicit("Run by exact method filter to record Release movement and footprint costs.")]
-    public async Task MeasureMovementAndFootprint()
+    private int Floors => (int) DistanceFloors.GetValue(_z)!;
+
+    [Test]
+    public async Task VehicleSupportTracksGeometryAndSamplingEditsAtAnEdge()
     {
-        var rows = new List<object>();
         await Server.WaitAssertion(() =>
         {
-            CreateScenario(false);
-            foreach (var vehicle in new[] { false, true })
-            {
-                if (vehicle)
-                {
-                    SEntMan.DeleteEntity(_body);
-                    CreateBody(true);
-                }
-                Server.CfgMan.SetCVar(Robust.Shared.CVars.ProfEnabled, true);
-                var floors = Floors;
-                Move(1.05f);
-                var floorsPerMove = Floors - floors;
-                Server.CfgMan.SetCVar(Robust.Shared.CVars.ProfEnabled, false);
-                var positions = new[]
-                {
-                    new EntityCoordinates(_map.Owner, 0.95f, 0.5f),
-                    new EntityCoordinates(_map.Owner, 1.05f, 0.5f),
-                };
-                Measure(vehicle ? "vehicle-move" : "body-move", 4096, floorsPerMove,
-                    i => _transform.SetCoordinates(_body, positions[i & 1]));
-                AssertSettled(_map.Owner, 0f);
-            }
-
+            CreateScenario(true);
+            var traversal = SComp<CMUVehicleZTraversalComponent>(_body);
+            var fixtures = SComp<FixturesComponent>(_body);
             var samples = new List<Vector2>();
-            Measure("vehicle-footprint", 4096, 0, _ => CMUVehicleSupportFootprint.GenerateWorldSamples(
-                new Box2(-1f, -2f, 1f, 2f), 0.5f, 0.05f, new Vector2(0.95f, 0.5f),
-                Angle.FromDegrees(37), samples));
-            Assert.That(samples, Has.Count.EqualTo(45));
+            var fixtureSystem = Server.System<FixtureSystem>();
+            Move(5.8f);
+            CheckSupport();
 
-            void Measure(string name, int operations, int floorsPerMove, Action<int> action)
+            fixtureSystem.DestroyFixture(_body, "body");
+            var shape = new Robust.Shared.Physics.Collision.Shapes.PolygonShape();
+            shape.SetAsBox(2.8f, .6f);
+            Assert.That(fixtureSystem.TryCreateFixture(_body, shape, "body"), Is.True);
+            CheckSupport();
+            traversal.SupportSampleSpacing = .83f;
+            CheckSupport();
+            traversal.SupportSampleInset = .4f;
+            CheckSupport();
+            _transform.SetWorldRotation(_body, new Angle(.7));
+            CheckSupport();
+            return;
+
+            void CheckSupport()
             {
-                // Tiered compilation continues in the background. An iteration-only warmup
-                // can finish sooner after optimization and put more Tier-0 work in that mode's
-                // measured samples. Give each workload the same minimum elapsed warmup.
-                var warmupStart = Stopwatch.GetTimestamp();
-                var warmupOperations = 0;
-                do
+                Assert.That(CMUVehicleSupportFootprint.TryGetFixtureLocalAabb(fixtures, out var bounds), Is.True);
+                CMUVehicleSupportFootprint.GenerateWorldSamples(bounds, traversal.SupportSampleSpacing,
+                    traversal.SupportSampleInset, _transform.GetWorldPosition(_body),
+                    _transform.GetWorldRotation(_body), samples);
+                var falling = SEntMan.HasComponent<CMUZFallingComponent>(_body);
+                var supportedDistances = new List<float>();
+                foreach (var sample in samples)
                 {
-                    for (var i = 0; i < operations; i++) action(i);
-                    warmupOperations += operations;
-                } while (Stopwatch.GetElapsedTime(warmupStart).TotalSeconds < 4);
-                var warmupMilliseconds = Stopwatch.GetElapsedTime(warmupStart).TotalMilliseconds;
-                var milliseconds = new double[9];
-                var allocatedBytes = new long[9];
-                for (var block = 0; block < milliseconds.Length; block++)
-                {
-                    var bytes = GC.GetAllocatedBytesForCurrentThread();
-                    var start = Stopwatch.GetTimestamp();
-                    for (var i = 0; i < operations; i++) action(i);
-                    milliseconds[block] = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
-                    allocatedBytes[block] = GC.GetAllocatedBytesForCurrentThread() - bytes;
+                    var distance = _z.DistanceToGroundAtWorldPosition((_body, _bodyZ), sample, out var sticky);
+                    if (CMUVehicleSupportFootprint.IsSampleSupported(distance, sticky,
+                            traversal.MaxSupportStepHeight, traversal.SupportSnapDistance, falling))
+                        supportedDistances.Add(distance);
                 }
-                rows.Add(new { name, operations, floorsPerMove, warmupOperations, warmupMilliseconds,
-                    milliseconds, allocatedBytes });
+                Assert.That(supportedDistances.Count, Is.InRange(1, samples.Count - 1),
+                    "The fixture must straddle the edge so a stale sample layout changes support.");
+                // Exercise both sides of the rejection boundary, including equality (which remains supported).
+                var boundary = 1f - supportedDistances.Count / (float) samples.Count;
+                foreach (var threshold in new[] { MathF.Max(0, boundary - .01f), boundary })
+                {
+                    traversal.EdgeTipUnsupportedFraction = threshold;
+                    SEntMan.RemoveComponent<CMUZFallingComponent>(_body);
+                    var expected = boundary > threshold ? 1f : supportedDistances.Average();
+                    var actual = _z.DistanceToGround((_body, _bodyZ), out var sticky);
+                    Assert.That(actual, Is.EqualTo(expected).Within(.0001f),
+                        "A full geometric scan and the cached/short-circuit query must agree after each edit.");
+                    Assert.That(sticky, Is.False);
+                }
             }
         });
-
-        var output = Environment.GetEnvironmentVariable("CMU_SIMULATION_MEASUREMENT") ??
-                     Path.Combine(TestContext.CurrentContext.WorkDirectory, "simulation-ground-measurement.json");
-        var engine = typeof(SharedPhysicsSystem).Assembly;
-        File.WriteAllText(output, JsonSerializer.Serialize(new
-        {
-            utc = DateTime.UtcNow,
-            runtime = System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,
-            processId = Environment.ProcessId,
-            engineMvid = engine.ManifestModule.ModuleVersionId,
-            engineDebugModes = engine.GetCustomAttribute<DebuggableAttribute>()?.DebuggingFlags.ToString(),
-            contentMvid = typeof(CMUSharedZLevelsSystem).Assembly.ManifestModule.ModuleVersionId,
-            serverMvid = typeof(CMUZLevelsSystem).Assembly.ManifestModule.ModuleVersionId,
-            rows,
-        }, new JsonSerializerOptions { WriteIndented = true }));
-        TestContext.AddTestAttachment(output);
     }
-
-    private int Floors => (int) DistanceFloors.GetValue(_z)!;
 
     private void CreateScenario(bool vehicle)
     {

@@ -1,0 +1,32 @@
+<Document>
+  # From ore to metal
+
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Make this equipment" link="CMUGuideIndustryRecipes"]
+
+  <Box>
+    <GuideEntityEmbed Entity="RUMCSmeltery" Caption="HEAT"/>
+    <GuideEntityEmbed Entity="RUMCCrucible" Caption="MELT"/>
+    <GuideEntityEmbed Entity="RUMCIngotMold" Caption="CAST"/>
+  </Box>
+
+  ## First casting: click by click
+  1. Use ore on the [bold]crucible[/bold] to load it. Fuel the furnace and ignite it with a striker or ignition source.
+  2. Hold [bold]tongs[/bold], click the crucible to grip it, then click the furnace to seat it. Examine the crucible to check temperature.
+  3. When molten, lift the crucible with tongs and click the [bold]casting mold[/bold] to pour. Clicking bare floor with loaded tongs puts the held workpiece down.
+  4. Let the mold cool. Right-click it → [bold]Extract casting[/bold]. Handle hot metal with tongs; bare hands can burn.
+
+  [bold]Iron won't melt?[/bold] The clay furnace reaches 1500°C; iron needs 1538°C. Use the stone furnace, which reaches 2000°C. Equal copper and zinc make brass.
+
+  ## Forge an ingot into parts
+  <Box>
+    <GuideEntityEmbed Entity="RUMCAnvil" Caption="HOT WORKPIECE"/>
+    <GuideEntityEmbed Entity="RUMCForgeHammer" Caption="HAMMER"/>
+    <GuideEntityEmbed Entity="RUMCForgeChisel" Caption="CHISEL"/>
+  </Box>
+  Heat an ingot, then use tongs to seat it on the anvil. Click the [bold]workpiece[/bold] with a hammer or chisel to open the recipe menu. Choose the result, then click with the tool requested for each step. Examine progress; reheat a cold workpiece.
+
+  ## Cast or press?
+  A [bold]casting mold[/bold] takes molten liquid. A [bold]sheet/ingot press mold[/bold] goes in a machine's mold slot. They are different tools. Hammer suitable loose stone, ore or crystals to crush them; the grinder handles batches.
+
+  [textlink="Presses, grinders and smelters" link="CMUGuideIndustrySteam"] · [textlink="Electric processing" link="CMUGuideIndustryMachines"]
+</Document>

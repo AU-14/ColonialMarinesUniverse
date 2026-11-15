@@ -22,6 +22,7 @@
       RMCSkillMedical: 3
       RMCSkillSurgery: 1
       RMCSkillPolice: 2
+      RMCSkillExecution: 1
 
 - type: entity
   id: AU14SkillPresetPlatoonAdvisor
@@ -111,8 +112,8 @@
       RMCSkillIntel: 5
       RMCSkillNavigations: 2
       RMCSkillCqc: 1
-      RMCSkillFirearms: 2
-      RMCSkillEndurance: 2
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 1
       RMCSkillPilot: 1
       RMCSkillEngineer: 1
       RMCSkillConstruction: 1

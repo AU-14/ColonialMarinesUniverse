@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Drawn for the project by the user (the colony power controller)",
+  "size": {
+    "x": 20,
+    "y": 24
+  },
+  "states": [
+    {
+      "name": "closed"
+    },
+    {
+      "name": "open"
+    },
+    {
+      "name": "display-lack"
+    },
+    {
+      "name": "display-charging"
+    },
+    {
+      "name": "display-full"
+    },
+    {
+      "name": "display-remote"
+    },
+    {
+      "name": "display-tripped"
+    },
+    {
+      "name": "channel-on"
+    },
+    {
+      "name": "channel-disconnected"
+    },
+    {
+      "name": "channel-tripped"
+    },
+    {
+      "name": "emag-unlit"
+    },
+    {
+      "name": "panel"
+    }
+  ]
+}

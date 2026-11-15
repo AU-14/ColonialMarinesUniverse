@@ -264,6 +264,50 @@ public sealed partial class AtmosphereSystem
         args.Handled = true;
     }
 
+    // CMU14 Begin: transfer gas when a tile changes volume instead of destroying/recreating it.
+    private void ShuntTileVolume(GridAtmosphereComponent atmosphere, TileAtmosphere tile)
+    {
+        DebugTools.AssertNotNull(tile.Air);
+        DebugTools.Assert(tile.Air?.Immutable == false);
+
+        var count = 0;
+        for (var i = 0; i < Atmospherics.Directions; i++)
+        {
+            if (GetDisplacementReceiver(atmosphere, tile, i) != null)
+                count++;
+        }
+
+        if (count > 0)
+        {
+            // Merge does not consume the source; each neighbor receives an equal share.
+            var share = tile.Air.RemoveRatio(1f / count);
+            for (var i = 0; i < Atmospherics.Directions; i++)
+            {
+                if (GetDisplacementReceiver(atmosphere, tile, i) is { } receiver)
+                    Merge(receiver, share);
+            }
+        }
+
+        tile.Air = null;
+        tile.AirArchived = null;
+        tile.ArchivedCycle = 0;
+        tile.LastShare = 0f;
+        tile.Hotspot = new Hotspot();
+    }
+
+    private static GasMixture? GetDisplacementReceiver(GridAtmosphereComponent atmosphere, TileAtmosphere tile, int directionIndex)
+    {
+        // CMU clears blocked adjacency links before updating tile air. Use the neighboring tile
+        // volumes, while respecting the neighbor's own blocking face, to move gas out of this tile.
+        var direction = (AtmosDirection) (1 << directionIndex);
+        var opposite = (AtmosDirection) (1 << directionIndex.ToOppositeIndex());
+        if (!atmosphere.Tiles.TryGetValue(tile.GridIndices.Offset(direction), out var adjacent) ||
+            adjacent.AirtightData.BlockedDirections.IsFlagSet(opposite))
+            return null;
+
+        return adjacent.Air;
+    }
+
     private void GridFixTileVacuum(TileAtmosphere tile)
     {
         DebugTools.AssertNotNull(tile.Air);
@@ -281,34 +325,18 @@ public sealed partial class AtmosphereSystem
         if (count == 0)
             return;
 
-        var ratio = 1f / count;
-        var totalTemperature = 0f;
-
+        var ratio = 1f / (count + 1);
         foreach (var adj in tile.AdjacentTiles)
         {
             if (adj?.Air == null)
                 continue;
 
-            totalTemperature += adj.Temperature;
-
-            // TODO ATMOS. Why is this removing and then re-adding air to the neighbouring tiles?
-            // Is it some rounding issue to do with Atmospherics.GasMinMoles? because otherwise this is just unnecessary.
-            // if we get rid of this, then this could also just add moles and then multiply by ratio at the end, rather
-            // than having to iterate over adjacent tiles twice.
-
-            // Remove a bit of gas from the adjacent ratio...
             var mix = adj.Air.RemoveRatio(ratio);
-
-            // And merge it to the new tile air.
             Merge(tile.Air, mix);
-
-            // Return removed gas to its original mixture.
-            Merge(adj.Air, mix);
         }
-
-        // New temperature is the arithmetic mean of the sum of the adjacent temperatures...
-        tile.Air.Temperature = totalTemperature / count;
+        // Merge already computes temperature from heat capacity; an arithmetic mean adds/removes energy.
     }
+    // CMU14 End
 
     /// <summary>
     ///     Repopulates all tiles on a grid atmosphere.

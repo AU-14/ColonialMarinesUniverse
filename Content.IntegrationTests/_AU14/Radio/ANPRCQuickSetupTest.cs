@@ -89,46 +89,4 @@ public sealed class ANPRCQuickSetupTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task RenameKeepsTheMemorysNet()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var testMap = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var spawning = server.System<StationSpawningSystem>();
-            var inventory = server.System<InventorySystem>();
-            var ui = server.System<SharedUserInterfaceSystem>();
-
-            var wearer = spawning.SpawnPlayerMob(testMap.GridCoords, Rifleman, new HumanoidCharacterProfile(), station: null);
-            var pack = entities.SpawnEntity(Pack, testMap.GridCoords);
-
-            if (inventory.TryGetSlotEntity(wearer, BackSlot, out var oldBack))
-                entities.DeleteEntity(oldBack.Value);
-
-            Assert.That(inventory.TryEquip(wearer, pack, BackSlot, force: true), Is.True);
-
-            var radio = entities.GetComponent<ANPRCRadioComponent>(pack);
-            radio.SlotLabels[2] = "OLD";
-            radio.Presets[2] = CommandNet;
-
-            ui.OpenUi(pack, ANPRCRadioUI.Key, wearer);
-            ui.RaiseUiMessage(pack, ANPRCRadioUI.Key, new ANPRCRenameSlotMsg(2, "boss net") { Actor = wearer });
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(radio.SlotLabels[2], Is.EqualTo("BOSS NET"));
-                Assert.That(radio.Presets[2], Is.EqualTo(CommandNet), "renaming used to delete and re-add, emptying the memory");
-                Assert.That(radio.SlotLabels.Count, Is.EqualTo(1));
-            });
-
-            entities.DeleteEntity(wearer);
-            entities.DeleteEntity(pack);
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

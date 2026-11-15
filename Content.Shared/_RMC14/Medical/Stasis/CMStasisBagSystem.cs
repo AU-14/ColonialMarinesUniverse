@@ -106,6 +106,7 @@ public sealed partial class CMStasisBagSystem : EntitySystem
         RemCompDeferred<CMInStasisComponent>(target);
     }
 
+    // CMU14 method: reuse occupant snapshots while preserving container-event ordering.
     public override void Update(float frameTime)
     {
         if (_net.IsClient)
@@ -122,18 +123,30 @@ public sealed partial class CMStasisBagSystem : EntitySystem
                 continue;
 
             bool inStasis = false;
-            var containedEntities = container.ContainedEntities.ToList();
-            foreach (var ent in containedEntities)
+            var containedEntities = _cmuStasisSnapshots.TryPop(out var reusable)
+                ? reusable : new List<EntityUid>();
+            try
             {
-                if (_mobstate.IsDead(ent))
-                {
-                    _entStorage.OpenStorage(uid);
-                    _popup.PopupEntity(Loc.GetString("rmc-stasis-reject-dead"), uid, PopupType.SmallCaution);
-                    continue;
-                }
+                for (var i = 0; i < container.ContainedEntities.Count; i++)
+                    containedEntities.Add(container.ContainedEntities[i]);
 
-                if (HasComp<CMInStasisComponent>(ent))
-                    inStasis = true;
+                foreach (var ent in containedEntities)
+                {
+                    if (_mobstate.IsDead(ent))
+                    {
+                        _entStorage.OpenStorage(uid);
+                        _popup.PopupEntity(Loc.GetString("rmc-stasis-reject-dead"), uid, PopupType.SmallCaution);
+                        continue;
+                    }
+
+                    if (HasComp<CMInStasisComponent>(ent))
+                        inStasis = true;
+                }
+            }
+            finally
+            {
+                containedEntities.Clear();
+                _cmuStasisSnapshots.Push(containedEntities);
             }
 
             if (!inStasis)

@@ -42,7 +42,8 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
             mask.MapId != eye.Position.MapId ||
             !_config.GetCVar(CMUZLevelsCVars.Enabled) ||
             !_config.GetCVar(CMUZLevelsCVars.RenderEnabled) ||
-            mask.DynamicOnly && !_config.GetCVar(CMUZLevelsCVars.CullOccludedDynamicSprites))
+            mask.DynamicOnly && !_config.GetCVar(CMUZLevelsCVars.CullOccludedDynamicSprites) ||
+            mask.CoversWorldBounds)
         {
             viewport.Render();
             return;

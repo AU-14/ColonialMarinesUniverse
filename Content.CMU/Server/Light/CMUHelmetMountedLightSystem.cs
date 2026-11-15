@@ -41,7 +41,10 @@ public sealed class CMUHelmetMountedLightSystem : EntitySystem
     private void OnInserted(Entity<CMUHelmetMountedLightComponent> ent, ref EntGotInsertedIntoContainerMessage args)
     {
         if (args.Container.ID == StorageComponent.ContainerId && _tag.HasTag(args.Container.Owner, HelmetTag))
+        {
+            args.Container.OccludesLight = false;
             EnsureComp<CMUHelmetLightHolderComponent>(args.Container.Owner);
+        }
 
         Refresh(ent);
     }

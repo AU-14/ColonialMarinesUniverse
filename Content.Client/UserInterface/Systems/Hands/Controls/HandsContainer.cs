@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Client.CMU14.Hands; // CMU14: allocation-free display-order enumeration.
 using Content.Client.UserInterface.Systems.Inventory.Controls;
 using Content.Shared.Hands.Components;
 using Robust.Client.UserInterface.Controls;
@@ -54,12 +55,6 @@ public sealed class HandsContainer : ItemSlotUIContainer<HandButton>
         _orderedButtons.Clear();
     }
 
-    public IEnumerable<HandButton> GetButtons()
-    {
-        foreach (var child in _grid.Children)
-        {
-            if (child is HandButton hand)
-                yield return hand;
-        }
-    }
+    // CMU14 method: foreach uses the value enumerator, while IEnumerable callers remain supported.
+    public CMUHandButtonEnumerable GetButtons() => new(_grid.Children);
 }

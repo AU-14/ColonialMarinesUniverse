@@ -61,6 +61,22 @@
     tags:
     - CMUGunshipHardpointAttachmentPoint
 
+# AU-14: interior (crew compartment) weapon attach point. Weapons installed here
+# (40mm BOFORS, 105mm howitzer, JDAM bomb clamp) are fireable from the pilot
+# weapons console and usable in fire missions.
+- type: entity
+  parent: RMCUtilityAttachmentPoint
+  id: AU14InteriorWeaponAttachmentPoint
+  name: interior weapon attach point
+  description: A crew compartment attach point for dropship weapons such as the 40mm BOFORS autocannon, the M137 105mm howitzer, and the JDAM bomb clamp. Weapons installed here can be fired from the pilot weapons console.
+  components:
+  - type: DropshipUtilityPoint
+    location: PortFore
+  - type: Tag
+    tags:
+    - RMCDropshipUtilityPoint
+    - AU14InteriorWeaponPoint
+
 - type: entity
   parent: RMCUtilityAttachmentPoint
   id: CMUGunshipUtilityAttachmentPoint

@@ -4,6 +4,7 @@
   name: resin wall
   description: Weird slime solidified into a wall.
   components:
+  - type: CMUVehicleStickyResin # CMU14
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_wall.rsi
   - type: Icon
@@ -95,6 +96,8 @@
   name: thick resin wall
   description: Weird slime solidified into a thick wall.
   components:
+  - type: CMUVehicleStickyResin # CMU14
+    chance: 0.6
   - type: VehicleReinforcedObstacle
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_resin_wall.rsi

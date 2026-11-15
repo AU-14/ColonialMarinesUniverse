@@ -80,13 +80,13 @@
         - id: CMScrewdriver
         - id: CMCrowbar
         - id: CMWirecutter
-        - id: RMCCableCoil
-        - id: RMCCableCoil
+        - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil, thin LV cable
+        - id: CMUCableThinLVStack
         - !type:GroupSelector
           children:
           - id: CMHandsInsulated
             weight: 0.05
-          - id: RMCCableCoil
+          - id: CMUCableThinLVStack
   suffix: RMC14, Filled
 
 - type: entity
@@ -159,7 +159,7 @@
         - id: CMWelder
         - id: CMWirecutter
         - id: CMScrewdriver
-        - id: RMCCableCoil
+        - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil, thin LV cable
         - id: CMMultitool
       # - id: RMCCodeSpeakPamphlet
   suffix: RMC14, Filled

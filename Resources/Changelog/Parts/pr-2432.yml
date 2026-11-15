@@ -1,0 +1,7 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Xeno's are now slowed and have their vision hazed inside gas OBs
+  type: Fix
+time: '2026-11-06T13:08:46.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2432

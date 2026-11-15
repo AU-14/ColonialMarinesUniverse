@@ -11,6 +11,7 @@
   name: mycelium wall
   description: A dense wall of pale, fibrous mycelium secreted by a Neomorph. It pulses faintly with bioluminescent light.
   components:
+  - type: CMUVehicleStickyResin
   - type: Sprite
     sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     drawdepth: Walls
@@ -64,6 +65,8 @@
   name: thick mycelium wall
   description: A heavily reinforced mycelium wall. The fibrous strands have fused into a dense, almost chitinous mass.
   components:
+  - type: CMUVehicleStickyResin
+    chance: 0.6
   - type: Sprite
     sprite: CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
     drawdepth: Walls
@@ -226,6 +229,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: CMUVehicleStickyResin
   - type: NpcFactionMember
     factions:
     - CMU14PathogenWalker
@@ -332,6 +336,8 @@
   name: thick mycelium door
   description: A dense, reinforced curtain of mycelium. The fibres have hardened into something almost solid.
   components:
+  - type: CMUVehicleStickyResin
+    chance: 0.6
   - type: Sprite
     sprite: CMU14/Effects/pathogen_effects.rsi
     layers:

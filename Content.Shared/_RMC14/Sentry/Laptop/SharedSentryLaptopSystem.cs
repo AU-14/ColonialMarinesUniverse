@@ -694,7 +694,8 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
 
     private NetEntity? GetSentryTarget(EntityUid sentry)
     {
-        if (TryComp<GunComponent>(sentry, out var gun) && gun.Target != null)
+        if (TryComp<GunComponent>(sentry, out var gun) && gun.Target != null &&
+            !TerminatingOrDeleted(gun.Target.Value)) // CMU14: targets can terminate before the next UI refresh.
             return GetNetEntity(gun.Target.Value);
 
         return null;

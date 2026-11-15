@@ -16,6 +16,8 @@ public sealed partial class TankCookOffComponent : Component
     [DataField, AutoNetworkedField] public float RuptureDelay = 2.4f;
     [DataField] public float EjectionDistance = 4;
     [DataField] public float EjectionSpeed = 8;
+    [DataField] public int CrewFireIntensity = 30;
+    [DataField] public int CrewFireDuration = 40;
     [DataField, AutoNetworkedField] public SpriteSpecifier TurretSprite = new SpriteSpecifier.Rsi(
         new ResPath("_RMC14/Structures/Vehicles/tank.rsi"), "tank_turret_0");
     [DataField] public SoundSpecifier RuptureSound = new SoundPathSpecifier("/Audio/_RMC14/Explosion/bigboom3.ogg");

@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Systems;
+using Content.Server.CMU14.HelpRelay.ErrorRelay; // CMU14: Extreme log feed event for the error relay
 using Content.Server.Database;
 using Content.Server.EUI;
 using Content.Server.GameTicking;
@@ -16,6 +17,7 @@ using Prometheus;
 using Robust.Server.GameObjects;
 using Robust.Shared;
 using Robust.Shared.Configuration;
+using Robust.Shared.GameObjects; // CMU14: IEntityManager/EventSource for the error relay raise
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -40,6 +42,7 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
     [Dependency] private ISharedPlaytimeManager _playtime = default!;
     [Dependency] private ISharedChatManager _chat = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IEntityManager _entMan = default!; // CMU14: raises Extreme admin logs for the error relay
 
     public const string SawmillId = "admin.logs";
 
@@ -386,6 +389,14 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
             Players = players,
         };
 
+        // CMU14 Begin: the error relay mirrors Extreme admin logs to its Discord feed.
+        if (impact == LogImpact.Extreme)
+        {
+            var cmuRelayEvent = new AdminLogExtremeEvent(type, message);
+            _entMan.EventBus.RaiseEvent(EventSource.Local, ref cmuRelayEvent);
+        }
+        // CMU14 End
+
         DoAdminAlerts(players, message, impact, handler);
 
         if (preRound)
@@ -532,6 +543,28 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
             if (CreateCordLinks(coords, out var cordLinks))
                 _chat.SendAdminAlertNoFormatOrEscape(cordLinks);
         }
+    }
+
+    // CMU14 method: same link format as the private overload, but for arbitrary entities with a caller-supplied header
+    public bool CreateTpLinks(string header, List<(EntityUid Entity, string Name)> entities, out string outString)
+    {
+        outString = string.Empty;
+
+        if (entities.Count == 0)
+            return false;
+
+        outString = header;
+
+        for (var i = 0; i < entities.Count; i++)
+        {
+            var (entity, name) = entities[i];
+            outString += $"[cmdlink=\"{FormattedMessage.EscapeStringParameter(name)}\" command=\"tpto {EntityManager.GetNetEntity(entity)}\"/]";
+
+            if (i < entities.Count - 1)
+                outString += ", ";
+        }
+
+        return true;
     }
 
     /// <summary>

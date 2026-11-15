@@ -1,0 +1,74 @@
+# The biomes of the world map (see WorldBiomePrototype). The globe cuts the surface into cells, and every cell is of one of these; the colour is how the cell is painted, the description
+# is what the console says when the cell is picked. Which cell is which is decided in the drawing of the globe (GlobeControl.Classify): by the latitude, the moisture and the height.
+
+- type: worldBiome
+  id: RUMCBiomeOcean
+  name: rumc-biome-ocean-name
+  description: rumc-biome-ocean-desc
+  color: "#22456b"
+
+- type: worldBiome
+  id: RUMCBiomeShallows
+  name: rumc-biome-shallows-name
+  description: rumc-biome-shallows-desc
+  color: "#2f6f99"
+
+- type: worldBiome
+  id: RUMCBiomeIce
+  name: rumc-biome-ice-name
+  description: rumc-biome-ice-desc
+  color: "#dfeaf2"
+
+- type: worldBiome
+  id: RUMCBiomeTundra
+  name: rumc-biome-tundra-name
+  description: rumc-biome-tundra-desc
+  color: "#8c9488"
+
+- type: worldBiome
+  id: RUMCBiomeTaiga
+  name: rumc-biome-taiga-name
+  description: rumc-biome-taiga-desc
+  color: "#3f6a4d"
+
+- type: worldBiome
+  id: RUMCBiomeForest
+  name: rumc-biome-forest-name
+  description: rumc-biome-forest-desc
+  color: "#3b7a3a"
+
+- type: worldBiome
+  id: RUMCBiomePlains
+  name: rumc-biome-plains-name
+  description: rumc-biome-plains-desc
+  color: "#7ea04a"
+
+- type: worldBiome
+  id: RUMCBiomeDesert
+  name: rumc-biome-desert-name
+  description: rumc-biome-desert-desc
+  color: "#c9a96a"
+
+- type: worldBiome
+  id: RUMCBiomeSavanna
+  name: rumc-biome-savanna-name
+  description: rumc-biome-savanna-desc
+  color: "#a8a044"
+
+- type: worldBiome
+  id: RUMCBiomeJungle
+  name: rumc-biome-jungle-name
+  description: rumc-biome-jungle-desc
+  color: "#1f6b34"
+
+- type: worldBiome
+  id: RUMCBiomeMountains
+  name: rumc-biome-mountains-name
+  description: rumc-biome-mountains-desc
+  color: "#7a6f66"
+
+- type: worldBiome
+  id: RUMCBiomeSwamp
+  name: rumc-biome-swamp-name
+  description: rumc-biome-swamp-desc
+  color: "#4f6b4a"

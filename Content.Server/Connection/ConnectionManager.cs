@@ -305,7 +305,11 @@ namespace Content.Server.Connection
 
             if ((softPlayerCount >= _cfg.GetCVar(CCVars.SoftMaxPlayers) && !adminBypass) && !wasInGame)
             {
-                return (ConnectionDenyReason.Full, Loc.GetString("soft-player-cap-full"), null);
+                // CMU14: custom notice overrides the locale string
+                var softCapNotice = _cfg.GetCVar(CCVars.SoftMaxNotice);
+                return (ConnectionDenyReason.Full,
+                    softCapNotice != string.Empty ? softCapNotice : Loc.GetString("soft-player-cap-full"),
+                    null);
             }
 
             // Checks for whitelist IF it's enabled AND the user isn't an admin. Admins are always allowed.

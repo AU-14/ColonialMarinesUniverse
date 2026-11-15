@@ -5,6 +5,7 @@
   maxLimit: 1
   loadouts:
   - CLFPhysicianSpecializationDefaultAU14
+  - CMUCLFPhysicianSpecializationSurgeon
   - CLFPhysicianSpecializationPharmacistAU14
   - CLFPhysicianSpecializationGeneralPractitionerAU14
 

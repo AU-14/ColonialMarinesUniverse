@@ -71,6 +71,7 @@
 # TODO: smoking reaction
 - type: reaction
   id: CMUFormaldehyde
+  conserveEnergy: false # CMU14: the chain must not heat itself past its own heat gate; any outside heat (hotplate, hot reagent) counts
   reactants:
     RMCMethane:
       amount: 1
@@ -85,9 +86,11 @@
   products:
     CMUFormaldehyde: 3
 
-# TODO: ENDOTHERMIC
+# Endothermic in CM13; modelled as a 374 K heat gate (above a microwave's 373 K); any heat source works.
 - type: reaction
   id: CMUPhenolFormaldehyde
+  conserveEnergy: false # CMU14: the chain must not heat itself past its own heat gate; any outside heat (hotplate, hot reagent) counts
+  minTemp: 374
   reactants:
     CMUFormaldehyde:
       amount: 2
@@ -114,6 +117,8 @@
 
 - type: reaction
   id: CMUOleoresinCapsicum
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     RMCEthanol:
       amount: 2
@@ -126,6 +131,8 @@
 
 - type: reaction
   id: CMUOleoresinCapsicumFromPeppers
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     CapsaicinOil:
       amount: 2

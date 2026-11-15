@@ -1,0 +1,15 @@
+author: RomiGur
+category: CMU
+changes:
+- message: EMBLR MANPAD can lock onto and shoot down gunships and Blackfoots
+  type: Add
+- message: Shot-down Blackfoots fall, crash and leave a wreck
+  type: Add
+- message: Vehicle crew can look up and shoot across Z-levels
+  type: Add
+- message: Crews of cooked-off tanks and crashed Blackfoots are thrown out on fire
+  type: Tweak
+- message: Blood, scorch and explosion decals no longer appear over holes in the floor
+  type: Fix
+time: '2026-11-02T22:12:56.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2403

@@ -108,9 +108,9 @@
   - type: RMCSuitLight
   - type: HolocardState
   - type: Satiation
-    # baseDecayRate of 0.1/sec with all threshold modifiers at 1 means decay is a flat 6/min.
-    # Okay(380) -> Peckish(110) is a gap of 270, i.e. exactly 45 minutes of not eating: warning popup + slowdown starts.
-    # Peckish(110) -> Starving(50) is a gap of 60, i.e. exactly 10 more minutes: severe popup + screen desaturates.
+    # CMU14: hunger's effective decay is 0.0667/sec (4/min) after the 1.5x slowdown.
+    # CMU14: Okay(380) -> Peckish(110) takes 67.5 minutes: warning popup + slowdown starts.
+    # CMU14: Peckish(110) -> Starving(50) takes 15 more minutes: severe popup + screen desaturates.
     satiations:
       Hunger:
         prototype: RMCHumanHunger

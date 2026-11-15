@@ -21,6 +21,11 @@ public sealed partial class MotionDetectorOverlay : Overlay
     private readonly MotionDetectorOverlaySystem _motionDetector;
     private readonly SpriteSystem _sprite;
 
+    // CMU14 Begin: descriptors are immutable; frame lookup still follows animation/resource reloads.
+    private static readonly SpriteSpecifier.Rsi CMUBlip = new(new ResPath("/Textures/_RMC14/Objects/Tools/motion_detector.rsi"), "detector_blip");
+    private static readonly SpriteSpecifier.Rsi CMUQueenEye = new(new ResPath("/Textures/_RMC14/Objects/Tools/motion_detector.rsi"), "queen_eye_blip");
+    // CMU14 End
+
     public MotionDetectorOverlay()
     {
         IoCManager.InjectDependencies(this);
@@ -30,8 +35,8 @@ public sealed partial class MotionDetectorOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        var frame = _sprite.GetFrame(new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Objects/Tools/motion_detector.rsi"), "detector_blip"), _timing.CurTime);
-        var queenEyeFrame = _sprite.GetFrame(new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Objects/Tools/motion_detector.rsi"), "queen_eye_blip"), _timing.CurTime);
+        var frame = _sprite.GetFrame(CMUBlip, _timing.CurTime); // CMU14
+        var queenEyeFrame = _sprite.GetFrame(CMUQueenEye, _timing.CurTime); // CMU14
         _motionDetector.DrawBlips<MotionDetectorComponent>(args.WorldHandle, ref _last, _blips, frame, queenEyeFrame);
     }
 }

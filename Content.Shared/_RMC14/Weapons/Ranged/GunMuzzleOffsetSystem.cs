@@ -81,9 +81,11 @@ public sealed partial class GunMuzzleOffsetSystem : EntitySystem
         var baseCoords = _transform.GetMoverCoordinates(baseUid);
         var baseRotation = GetBaseRotation(baseUid, component.AngleOffset);
         var (offset, rotateOffset) = GetOffset(component, baseUid, baseRotation);
-        muzzleCoords = rotateOffset
-            ? baseCoords.Offset(baseRotation.RotateVec(offset))
-            : baseCoords.Offset(offset);
+        // CMU14 Begin: these offsets are in world space; the mover's parent may itself be rotated.
+        var baseMap = _transform.ToMapCoordinates(baseCoords);
+        var muzzleMap = new MapCoordinates(baseMap.Position + (rotateOffset ? baseRotation.RotateVec(offset) : offset), baseMap.MapId);
+        muzzleCoords = _transform.ToCoordinates(baseCoords.EntityId, muzzleMap);
+        // CMU14 End
         muzzleRotation = baseRotation;
 
         if (component.MuzzleOffset == Vector2.Zero)
@@ -101,7 +103,11 @@ public sealed partial class GunMuzzleOffsetSystem : EntitySystem
             }
         }
 
-        muzzleCoords = muzzleCoords.Offset(muzzleRotation.RotateVec(component.MuzzleOffset));
+        // CMU14 Begin
+        muzzleMap = _transform.ToMapCoordinates(muzzleCoords);
+        muzzleCoords = _transform.ToCoordinates(baseCoords.EntityId,
+            new MapCoordinates(muzzleMap.Position + muzzleRotation.RotateVec(component.MuzzleOffset), muzzleMap.MapId));
+        // CMU14 End
         return true;
     }
 

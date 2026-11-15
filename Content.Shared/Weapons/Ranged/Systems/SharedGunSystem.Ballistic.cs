@@ -460,7 +460,7 @@ public abstract partial class SharedGunSystem
             {
                 ent.Comp.UnspawnedCount--;
                 DirtyField(ent.AsNullable(), nameof(BallisticAmmoProviderComponent.UnspawnedCount));
-                ammoEntity = Spawn(ent.Comp.Proto, args.Coordinates);
+                ammoEntity = PredictedSpawnAttachedTo(ent.Comp.Proto, args.Coordinates); // CMU14: predict chambered rounds.
                 if (TryComp(ammoEntity.Value, out StackComponent? stack))
                     _stack.SetCount((ammoEntity.Value, stack), 1);
             }

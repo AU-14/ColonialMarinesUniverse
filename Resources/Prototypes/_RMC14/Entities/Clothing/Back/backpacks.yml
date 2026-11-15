@@ -138,6 +138,16 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/jungle-desert-classic.rsi
+  - type: CMUBackpackRocketAttachment
+  - type: AttachableHolder
+    slots:
+      cmu-aslot-backpack:
+        whitelist:
+          components:
+          - CMUBackpackRocketLauncher
+  - type: AttachableHolderVisuals
+    offsets:
+      cmu-aslot-backpack: 0, 0
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/jungle-desert-classic.rsi

@@ -692,6 +692,11 @@
   - type: DropshipWeaponPoint
     dirOffset: Clockwise
     location: PortWing
+    spriteOverrides:
+      bofors_cannon_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      bofors_cannon_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      cas_howitzer_105_installed_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
+      cas_howitzer_105_installed_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
   - type: Appearance
   - type: Tag
     tags:
@@ -750,6 +755,11 @@
   - type: DropshipWeaponPoint
     dirOffset: CounterClockwise
     location: StarboardWing
+    spriteOverrides:
+      bofors_cannon_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      bofors_cannon_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      cas_howitzer_105_installed_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
+      cas_howitzer_105_installed_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
   - type: Appearance
   - type: Tag
     tags:
@@ -970,6 +980,11 @@
   - type: DropshipWeaponPoint
     dirOffset: Flip
     location: PortFore
+    spriteOverrides:
+      bofors_cannon_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      bofors_cannon_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: boforsnew2}
+      cas_howitzer_105_installed_loaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
+      cas_howitzer_105_installed_unloaded: {sprite: _RMC14/Objects/dropship_attachments.rsi, state: cas_howitzer_105_uninstalled}
   - type: Appearance
   - type: Tag
     tags:

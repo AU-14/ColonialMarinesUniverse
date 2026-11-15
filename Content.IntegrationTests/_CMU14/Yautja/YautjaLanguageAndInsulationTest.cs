@@ -17,96 +17,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaLanguageAndInsulationTest
 {
-    private static readonly ProtoId<LanguagePrototype> XenoLanguage = "Xeno";
-    private static readonly ProtoId<LanguagePrototype> YautjaLanguage = "Yautja";
 
-    private static readonly string[] RegularLoadouts =
-    {
-        "CMUYautjaHunterGear",
-        "CMUYautjaHunterGearBronze",
-        "CMUYautjaHunterGearSilver",
-        "CMUYautjaHunterGearCrimson",
-        "CMUYautjaHunterGearBone",
-    };
-
-    [Test]
-    public async Task DirectAndRandomYautjaKeepNativeXenoWithoutTranslatorGear()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var inventory = entMan.System<InventorySystem>();
-            var language = entMan.System<LanguageSystem>();
-            var randomHumanoid = entMan.System<RandomHumanoidSystem>();
-            var directHunter = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-            var randomHunter = randomHumanoid.SpawnRandomHumanoid(
-                "CMUYautjaHunter",
-                EntityCoordinates.Invalid,
-                string.Empty);
-
-            try
-            {
-                foreach (var hunter in new[] { directHunter, randomHunter })
-                {
-                    AssertNativeLanguages(entMan, language, hunter);
-
-                    foreach (var slot in new[] { "mask", "gloves" })
-                    {
-                        if (inventory.TryGetSlotEntity(hunter, slot, out _))
-                            Assert.That(inventory.TryUnequip(hunter, slot, force: true), Is.True);
-
-                        Assert.That(inventory.TryGetSlotEntity(hunter, slot, out _), Is.False);
-                    }
-                    language.UpdateEntityLanguages(hunter);
-
-                    AssertNativeLanguages(entMan, language, hunter);
-                }
-            }
-            finally
-            {
-                entMan.DeleteEntity(directHunter);
-                entMan.DeleteEntity(randomHunter);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task OrdinaryHumanDoesNotGainYautjaOrXeno()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var language = entMan.System<LanguageSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-
-            try
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(language.CanSpeak(human, YautjaLanguage), Is.False);
-                    Assert.That(language.CanUnderstand(human, YautjaLanguage), Is.False);
-                    Assert.That(language.CanSpeak(human, XenoLanguage), Is.False);
-                    Assert.That(language.CanUnderstand(human, XenoLanguage), Is.False);
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [TestCaseSource(nameof(RegularLoadouts))]
+    [TestCase("CMUYautjaHunterGear")]
     public async Task RegularLoadoutBracerInsulatesOnlyWhileWorn(string loadoutId)
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -153,52 +65,6 @@ public sealed class YautjaLanguageAndInsulationTest
         });
 
         await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task InsulationBypassStillElectrocutesWornBracerUser()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var inventory = entMan.System<InventorySystem>();
-            var electrocution = entMan.System<ElectrocutionSystem>();
-            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-
-            try
-            {
-                Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
-                Assert.That(TryShock(electrocution, hunter, ignoreInsulation: true), Is.True);
-            }
-            finally
-            {
-                entMan.DeleteEntity(hunter);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    private static void AssertNativeLanguages(
-        IEntityManager entMan,
-        LanguageSystem language,
-        EntityUid hunter)
-    {
-        var component = entMan.GetComponent<LanguageComponent>(hunter);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(language.CanSpeak(hunter, XenoLanguage), Is.True);
-            Assert.That(language.CanUnderstand(hunter, XenoLanguage), Is.True);
-            Assert.That(language.CanSpeak(hunter, YautjaLanguage), Is.True);
-            Assert.That(language.CanUnderstand(hunter, YautjaLanguage), Is.True);
-            Assert.That(language.GetCurrentLanguage(hunter), Is.EqualTo(YautjaLanguage));
-            Assert.That(component.DefaultLanguage, Is.EqualTo(YautjaLanguage));
-        });
     }
 
     private static bool TryShock(

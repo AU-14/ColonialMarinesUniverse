@@ -1,0 +1,75 @@
+# The machines of the grid that the earlier files had no way to build: the grinder, the drilling rig, the electric smelter and the condenser.
+
+- type: craftRecipe
+  id: RUMCCraftBuildGrinder
+  name: au14-craft-recipe-buildgrinder
+  output: RUMCGrinder
+  time: 20
+  minigames: [Rhythm, Center, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricDrill
+  name: au14-craft-recipe-buildelectricdrill
+  output: RUMCElectricDrill
+  time: 20
+  minigames: [Center, Hold, Drill]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitDrive
+    amount: 2
+  - stack: RUMCKitHydraulics
+    amount: 1
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildElectricSmelter
+  name: au14-craft-recipe-buildelectricsmelter
+  output: RUMCElectricSmelter
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHeating
+    amount: 4
+  - stack: RUMCKitSimpleCircuits
+    amount: 2
+  - stack: RUMCKitWiring
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftBuildCondenser
+  name: au14-craft-recipe-buildcondenser
+  output: RUMCCondenser
+  time: 20
+  minigames: [Rhythm, Hold, Trace]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCMachineHull
+    amount: 1
+  - stack: RUMCKitHydraulics
+    amount: 2
+  - stack: RUMCKitSimpleCircuits
+    amount: 1
+  - stack: RUMCKitWiring
+    amount: 1

@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Server.CMU14.Radio;
 using Content.Server.CMU14.Round;
 using Content.Server.Radio.EntitySystems;
@@ -10,6 +9,7 @@ using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Dropship;
+using Content.Shared.CMU14.Dropship.Cas;
 using Content.Shared.CMU14.Preferences;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -43,6 +43,7 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
     {
         SubscribeLocalEvent<CMUFultonDeployedEvent>(OnFultonDeployed);
         SubscribeLocalEvent<CMUMedevacBeaconEvent>(OnMedevacBeacon);
+        SubscribeLocalEvent<CMUCasRadioEvent>(OnCasRadio);
     }
 
     private void OnFultonDeployed(ref CMUFultonDeployedEvent ev)
@@ -58,6 +59,15 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
         SendClear(ev.User, message, channel, faction);
     }
 
+    private void OnCasRadio(ref CMUCasRadioEvent ev)
+    {
+        var faction = ev.Faction.ToLowerInvariant();
+        if (!JtacChannels.TryGetValue(faction, out var channel) || TerminatingOrDeleted(ev.Source))
+            return;
+
+        SendClear(ev.Source, ev.Message, channel, faction);
+    }
+
     private void OnMedevacBeacon(ref CMUMedevacBeaconEvent ev)
     {
         // Strapping someone onto a stretcher only matters if its beacon is already calling for pickup.
@@ -65,7 +75,19 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
             return;
 
         TryComp(ev.Stretcher, out StrapComponent? strap);
-        var patient = strap?.BuckledEntities.FirstOrDefault();
+        EntityUid? patient = null;
+        if (strap != null)
+        {
+            foreach (var buckled in strap.BuckledEntities)
+            {
+                if (TerminatingOrDeleted(buckled))
+                    continue;
+
+                patient = buckled;
+                break;
+            }
+        }
+
         var factionSource = ev.User ?? patient;
         if (factionSource is not { } source || !TryGetJtacChannel(source, out var channel, out var faction))
             return;

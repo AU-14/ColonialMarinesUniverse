@@ -229,8 +229,9 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return;
         }
 
-        if (viewer == null && !_rmcHands.TryGetHolder(scanner, out _))
-            return;
+        // CMU14: the analyzer UI supports use outside hands, so its open readings must keep refreshing.
+        // if (viewer == null && !_rmcHands.TryGetHolder(scanner, out _))
+        //     return;
 
         if (viewer is { } targetViewer && targetViewer.IsValid())
         {

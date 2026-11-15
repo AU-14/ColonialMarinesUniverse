@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Thwomper (FOB rework sprites), CM-SS13 contributors. Source: https://github.com/cmss13-devs/cmss13/blob/2cb8bdbb3e2ae072e3a46293856adddceec334d1/icons/obj/structures/machinery/fob_machinery/service_terminal.dmi (PR 9293). Converted from DMI to RSI without redrawing; directions and animation timings retained.",
+  "size": {
+    "x": 32,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "terminal",
+      "directions": 1
+    },
+    {
+      "name": "terminal_off",
+      "directions": 1
+    },
+    {
+      "name": "terminal_undeployed",
+      "directions": 1
+    }
+  ]
+}

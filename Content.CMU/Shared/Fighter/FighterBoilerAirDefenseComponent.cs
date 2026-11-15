@@ -16,6 +16,7 @@ public sealed partial class FighterBoilerAirDefenseComponent : Component
     [DataField] public FixedPoint2 PlasmaCost = 200;
     [DataField] public TimeSpan AcquisitionTime = TimeSpan.FromSeconds(2);
     [DataField] public TimeSpan Cooldown = TimeSpan.FromSeconds(15);
+    [DataField] public float GunshipDamage = 800f;
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField] public TimeSpan ReadyAt;
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField] public TimeSpan LaunchAt;
     public EntityUid? Target;

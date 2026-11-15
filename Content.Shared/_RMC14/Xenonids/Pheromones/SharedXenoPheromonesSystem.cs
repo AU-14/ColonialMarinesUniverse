@@ -296,6 +296,7 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
         return xeno.Comp.PheroSuffix;
     }
 
+    // CMU14 method: compare completed frenzy strengths and only dispatch spatial work when due.
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -329,11 +330,13 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
 
         var oldFrenzy = _oldReceivers[(int) XenoPheromones.Frenzy];
         oldFrenzy.Clear();
+        _cmuPreviousFrenzy.Clear();
 
         var frenzyQuery = EntityQueryEnumerator<XenoFrenzyPheromonesComponent>();
         while (frenzyQuery.MoveNext(out var uid, out var frenzy))
         {
             oldFrenzy.Add(uid);
+            _cmuPreviousFrenzy.Add(uid, frenzy.Multiplier);
             frenzy.Multiplier = 0;
         }
 
@@ -341,6 +344,7 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
         _pheromonesJob.Receivers.Clear();
         _pheromonesJob.Pheromones.Clear();
         _refreshSpeeds.Clear();
+        var scanDue = false;
 
         while (query.MoveNext(out var uid, out var active, out var pheromones, out var xform))
         {
@@ -367,6 +371,7 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
             }
 
             _pheromonesJob.Receivers.Add((true, active.Receivers));
+            scanDue = true;
             Dirty(uid, pheromones);
         }
 
@@ -376,7 +381,8 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
         // 3. Because the lookups are cached for a second we need to make sure
         //    none of the target entities are deleted in the interim.
 
-        _parallel.ProcessNow(_pheromonesJob, _pheromonesJob.Pheromones.Count);
+        if (scanDue)
+            _parallel.ProcessNow(_pheromonesJob, _pheromonesJob.Pheromones.Count);
         DebugTools.Assert(_pheromonesJob.Receivers.Count >= _pheromonesJob.Pheromones.Count);
 
         for (var i = 0; i < _pheromonesJob.Pheromones.Count; i++)
@@ -427,11 +433,9 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
 
                         oldFrenzy.Remove(receiver);
                         var frenzy = EnsureComp<XenoFrenzyPheromonesComponent>(receiver);
-                        var old = frenzy.Multiplier;
+                        _cmuPreviousFrenzy.TryAdd(receiver, frenzy.Multiplier);
                         AssignMaxMultiplier(ref frenzy.Multiplier, pheromones.PheromonesMultiplier);
-
-                        if (frenzy.Multiplier != old)
-                            _refreshSpeeds.Add(receiver);
+                        _refreshSpeeds.Add(receiver);
                     }
 
                     break;
@@ -440,6 +444,14 @@ public abstract partial class SharedXenoPheromonesSystem : EntitySystem
 
         foreach (var uid in _refreshSpeeds)
         {
+            // Overlapping emitters must finish contributing before comparing strengths.
+            if (!TryComp<XenoFrenzyPheromonesComponent>(uid, out var frenzy))
+                continue;
+            _cmuPreviousFrenzy.TryGetValue(uid, out var previous);
+            if (frenzy.Multiplier == previous)
+                continue;
+
+            Dirty(uid, frenzy);
             _movementSpeed.RefreshMovementSpeedModifiers(uid);
         }
 

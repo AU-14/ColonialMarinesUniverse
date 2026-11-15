@@ -67,6 +67,8 @@
   id: FugitiveRole
   name: roles-antag-fugitive-name
   setPreference: true
+  blacklistedGamemodes:
+  - DistressSignal
   objective: roles-antag-fugitive-objective
 
 - type: startingGear

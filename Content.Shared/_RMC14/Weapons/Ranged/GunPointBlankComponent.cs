@@ -12,4 +12,11 @@ public sealed partial class GunPointBlankComponent : Component
 
     [DataField, AutoNetworkedField]
     public float Range = 1.5f;
+
+    /// <summary>
+    /// CMU14: multiplier applied to the accuracy of every projectile fired point blank, so a spread weapon
+    /// still puts most of its pellets into an adjacent target instead of scattering them past it.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 AccuracyMultiplier = 2;
 }

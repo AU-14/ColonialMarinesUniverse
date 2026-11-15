@@ -16,10 +16,12 @@ public sealed partial class CMUPresetVoteSystem : EntitySystem
     private ProtoId<GamePresetPrototype>? _lastPlayedPreset;
 
     /// <summary>The only gamemode the vote offers while an admin has locked it, see <see cref="LockPreset"/>.</summary>
-    public ProtoId<GamePresetPrototype>? LockedPreset { get; private set; }
+    public ProtoId<GamePresetPrototype>? LockedPreset =>
+        _cfg.GetCVar(CCVars.GamemodeLockPreset) is { Length: > 0 } preset ? preset : null;
 
     /// <summary>How many more rounds the lock lasts, counting the next one, or null if it lasts until cleared.</summary>
-    public int? LockedRounds { get; private set; }
+    public int? LockedRounds =>
+        _cfg.GetCVar(CCVars.GamemodeLockRounds) is { } rounds && rounds > 0 ? rounds : null;
 
     public override void Initialize()
     {
@@ -36,12 +38,13 @@ public sealed partial class CMUPresetVoteSystem : EntitySystem
         // retain the exclusion until another round actually starts, including fallbacks.
         _lastPlayedPreset = _ticker.CurrentPreset?.ID;
 
-        if (LockedPreset == null || LockedRounds == null)
+        if (LockedPreset == null || LockedRounds is not { } locked)
             return;
 
-        LockedRounds--;
-        if (LockedRounds <= 0)
+        if (locked <= 1)
             ClearLock();
+        else
+            _cfg.SetCVar(CCVars.GamemodeLockRounds, locked - 1);
     }
 
     /// <summary>
@@ -50,14 +53,14 @@ public sealed partial class CMUPresetVoteSystem : EntitySystem
     /// </summary>
     public void LockPreset(ProtoId<GamePresetPrototype> preset, int? rounds = null)
     {
-        LockedPreset = preset;
-        LockedRounds = rounds is { } count ? Math.Max(1, count) : null;
+        _cfg.SetCVar(CCVars.GamemodeLockPreset, preset.Id);
+        _cfg.SetCVar(CCVars.GamemodeLockRounds, rounds is { } count ? Math.Max(1, count) : 0);
     }
 
     public void ClearLock()
     {
-        LockedPreset = null;
-        LockedRounds = null;
+        _cfg.SetCVar(CCVars.GamemodeLockPreset, "");
+        _cfg.SetCVar(CCVars.GamemodeLockRounds, 0);
     }
 
     /// <summary>

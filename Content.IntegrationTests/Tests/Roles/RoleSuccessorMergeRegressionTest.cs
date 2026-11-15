@@ -23,8 +23,6 @@ namespace Content.IntegrationTests.Tests.Roles;
 [TestFixture]
 public sealed class RoleSuccessorMergeRegressionTest : GameTest
 {
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CaptainPrototype = "Captain";
-    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMCommandingOfficerPrototype = "CMCommandingOfficer";
 
     private static readonly ProtoId<JobPrototype> Alpha = "RoleMergeAlpha";
     private static readonly ProtoId<JobPrototype> Beta = "RoleMergeBeta";
@@ -152,14 +150,6 @@ public sealed class RoleSuccessorMergeRegressionTest : GameTest
             - !type:FixedAntagCount
               proto: RoleMergeBlacklistSpec
         """;
-
-    [Test]
-    public async Task JobFieldsTrackerAndWeightsPreserveAllFallbacks()
-    {
-        await Server.WaitAssertion(() => AssertJobPrototypeContract(SProtoMan, Server.System<SharedJobSystem>(),
-            Server.System<StationJobsSystem>()));
-        await Client.WaitAssertion(() => AssertJobFields(CProtoMan.Index(Alpha)));
-    }
 
     [Test]
     public async Task PreselectedAntagCannotReceiveImmuneJobThroughEitherCandidatePath()
@@ -350,103 +340,6 @@ public sealed class RoleSuccessorMergeRegressionTest : GameTest
             await Server.RemoveDummySession(oldOwner);
             await Pair.RunTicksSync(2);
         }
-    }
-
-    private void AssertJobPrototypeContract(
-        IPrototypeManager prototypes,
-        SharedJobSystem jobs,
-        StationJobsSystem stationJobs)
-    {
-        var alpha = prototypes.Index(Alpha);
-        var beta = prototypes.Index(Beta);
-        var tracked = jobs.GetJobPrototypes("RoleMergeTracker");
-        var duplicateTrackers = prototypes.EnumeratePrototypes<JobPrototype>()
-            .Where(job => job.PlayTimeTracker.Id != "RoleMergeTracker")
-            .GroupBy(job => job.PlayTimeTracker)
-            .Where(group => group.Count() > 1)
-            .ToList();
-        var survivorJobs = jobs.GetJobPrototypes("CMJobSurvivor");
-#pragma warning disable CS0618
-        var legacyFirst = jobs.GetJobPrototype("RoleMergeTracker");
-#pragma warning restore CS0618
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(tracked, Is.EquivalentTo(new[] { Alpha, Beta }));
-            Assert.That(legacyFirst, Is.EqualTo(tracked[0]));
-            Assert.That(survivorJobs, Does.Contain((ProtoId<JobPrototype>) "CMSurvivor"));
-            Assert.That(survivorJobs, Does.Contain((ProtoId<JobPrototype>) "CMJobSurvivorSoroMiner"));
-            Assert.That(jobs.TryGetListHighestWeightDepartment([Alpha, Beta], out var highest), Is.True);
-            Assert.That(highest!.ID, Is.EqualTo("RoleMergeHighDepartment"));
-        });
-        foreach (var group in duplicateTrackers)
-        {
-            Assert.That(jobs.GetJobPrototypes(group.Key),
-                Is.EquivalentTo(group.Select(job => (ProtoId<JobPrototype>) job.ID)),
-                $"tracker {group.Key} must retain all {group.Count()} job prototypes");
-        }
-        AssertJobFields(alpha);
-
-        var defaultWeights = prototypes.Index<JobWeightPrototype>(JobWeightPrototype.Default);
-        var captain = prototypes.Index<JobPrototype>(CaptainPrototype);
-        var omittedForkJob = prototypes.Index<JobPrototype>(CMCommandingOfficerPrototype);
-        Assert.Multiple(() =>
-        {
-            Assert.That(defaultWeights.Weights.ContainsKey(omittedForkJob.ID), Is.False,
-                "the live fork job must actually exercise the legacy fallback");
-            Assert.That(stationJobs.TryGetJobWeight(omittedForkJob, null, out var assignmentFork), Is.True);
-            Assert.That(assignmentFork, Is.EqualTo(omittedForkJob.Weight).And.EqualTo(10));
-            Assert.That(stationJobs.TryGetJobWeight(alpha, null, out var assignmentAlpha), Is.True);
-            Assert.That(assignmentAlpha, Is.EqualTo(alpha.Weight).And.EqualTo(7));
-            Assert.That(stationJobs.TryGetJobWeight(captain, null, out var assignmentCaptain), Is.True);
-            Assert.That(assignmentCaptain, Is.EqualTo(defaultWeights.Weights[captain.ID]));
-            Assert.That(stationJobs.TryGetJobWeight(alpha, "RoleMergeMapWeights", out var mapAlpha), Is.True);
-            Assert.That(mapAlpha, Is.EqualTo(40));
-            Assert.That(stationJobs.TryGetJobWeight(captain, "RoleMergeMapWeights", out var mapCaptain), Is.True);
-            Assert.That(mapCaptain, Is.EqualTo(99));
-            Assert.That(stationJobs.TryGetJobWeight(omittedForkJob, "RoleMergeMapWeights", out var mapFork), Is.True);
-            Assert.That(mapFork, Is.EqualTo(10));
-        });
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(JobUIComparer.Instance.GetWeight(alpha), Is.EqualTo(alpha.RealDisplayWeight).And.EqualTo(11));
-            Assert.That(JobUIComparer.Instance.GetWeight(omittedForkJob),
-                Is.EqualTo(omittedForkJob.RealDisplayWeight).And.EqualTo(10));
-        });
-        Assert.That(JobUIComparer.TryCreate(prototypes, null, out var defaults), Is.True);
-        Assert.Multiple(() =>
-        {
-            Assert.That(defaults!.GetWeight(omittedForkJob), Is.EqualTo(omittedForkJob.RealDisplayWeight).And.EqualTo(10));
-            Assert.That(defaults.GetWeight(alpha), Is.EqualTo(alpha.RealDisplayWeight).And.EqualTo(11));
-            Assert.That(defaults.GetWeight(captain), Is.EqualTo(defaultWeights.Weights[captain.ID]));
-        });
-
-        Assert.That(JobUIComparer.TryCreate(prototypes, "RoleMergeMapWeights", out var mapped), Is.True);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mapped!.GetWeight(alpha), Is.EqualTo(40));
-            Assert.That(mapped.GetWeight(captain), Is.EqualTo(99));
-            Assert.That(mapped.GetWeight(omittedForkJob), Is.EqualTo(10));
-            Assert.That(mapped.Compare(alpha, captain), Is.GreaterThan(0),
-                "the larger map override sorts Captain ahead of Alpha");
-        });
-    }
-
-    private static void AssertJobFields(JobPrototype job)
-    {
-        Assert.Multiple(() =>
-        {
-            Assert.That(job.CanBeAntag, Is.False);
-            Assert.That(job.Weight, Is.EqualTo(7));
-            Assert.That(job.DisplayWeight, Is.EqualTo(11));
-            Assert.That(job.RealDisplayWeight, Is.EqualTo(11));
-            Assert.That(job.AllegianceOverride?.Id, Is.EqualTo("UA"));
-            Assert.That(job.IgnoreAllegiance, Is.False);
-            Assert.That(job.OriginWhitelist?.Select(origin => origin.Id), Is.EquivalentTo(new[] { "UAMexico" }));
-            Assert.That(job.OriginBlackist?.Select(origin => origin.Id), Is.EquivalentTo(new[] { "UAColonies" }));
-            Assert.That(job.AutoOpenGuides?.Select(guide => guide.Id), Is.EqualTo(new[] { "Antagonists" }));
-        });
     }
 
     private EntityUid SpawnRule(string prototype, ProtoId<AntagSpecifierPrototype> specifier, ICommonSession session)

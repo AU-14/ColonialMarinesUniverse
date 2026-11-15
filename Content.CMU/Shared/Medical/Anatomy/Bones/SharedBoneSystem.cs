@@ -86,6 +86,15 @@ public abstract partial class SharedBoneSystem : EntitySystem
 
     private void OnBoneFractureAttempt(Entity<BoneComponent> ent, ref BoneFractureAttemptEvent args)
     {
+        // cmss13 NO_PERMANENT_DAMAGE: "your limb withstands the blow", the bone just doesn't break
+        if (TryComp<BodyPartComponent>(ent, out var part) &&
+            part.Body is { } owner &&
+            HasComp<CMUNoPermanentDamageComponent>(owner))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
         if (!PartBelongsToSynth(ent.Owner))
             return;
 
@@ -451,7 +460,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
         return true;
     }
 
-    public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount, bool requireSet = true)
+    public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount, bool requireSet = true, bool mendShattered = false)
     {
         if (amount <= FixedPoint2.Zero)
             return 0;
@@ -461,7 +470,8 @@ public abstract partial class SharedBoneSystem : EntitySystem
         {
             if (!TryComp<BoneComponent>(part, out var bone) ||
                 !TryComp<FractureComponent>(part, out var fracture) ||
-                fracture.Severity is FractureSeverity.None or FractureSeverity.Shattered ||
+                fracture.Severity == FractureSeverity.None ||
+                fracture.Severity == FractureSeverity.Shattered && !mendShattered ||
                 requireSet && !HasComp<CMUSplintedComponent>(part) && !HasComp<CMUCastComponent>(part))
             {
                 continue;

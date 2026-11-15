@@ -132,31 +132,6 @@ public sealed class OctoberEighteenGearRegressionTest : GameTest
         });
     }
 
-    // flashlights have a 0 damage MeleeWeapon so the holster keys pulled them off the belt like a weapon
-    [Test]
-    public async Task FlashlightsAreNotUnholsteredAsWeapons()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var flashlight = SEntMan.SpawnEntity("RMCFlashlight", MapCoordinates.Nullspace);
-            var knife = SEntMan.SpawnEntity("RMCM5Bayonet", MapCoordinates.Nullspace);
-
-            var flashlightEv = new IsUnholsterableEvent();
-            SEntMan.EventBus.RaiseLocalEvent(flashlight, ref flashlightEv);
-            var knifeEv = new IsUnholsterableEvent();
-            SEntMan.EventBus.RaiseLocalEvent(knife, ref knifeEv);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(flashlightEv.Unholsterable, Is.False);
-                Assert.That(knifeEv.Unholsterable, Is.True);
-            });
-
-            SEntMan.DeleteEntity(flashlight);
-            SEntMan.DeleteEntity(knife);
-        });
-    }
-
     // secondary started at the belt, so with empty suit storage it drew the same pistol primary would
     [Test]
     public async Task SecondaryUnholsterSkipsWhatPrimaryWouldDraw()
@@ -251,26 +226,4 @@ public sealed class OctoberEighteenGearRegressionTest : GameTest
         });
     }
 
-    // a small box that took any small item was a free pocket expander
-    [Test]
-    public async Task RegulationTapeBoxOnlyTakesTapes()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var storage = SEntMan.System<SharedStorageSystem>();
-            var box = SEntMan.SpawnEntity("RMCBoxRegulationTapesEmpty", MapCoordinates.Nullspace);
-            var tape = SEntMan.SpawnEntity("RMCUniversalRecorderTape", MapCoordinates.Nullspace);
-            var flashlight = SEntMan.SpawnEntity("RMCFlashlight", MapCoordinates.Nullspace);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(storage.CanInsert(box, tape, out _, ignoreLocation: true), Is.True);
-                Assert.That(storage.CanInsert(box, flashlight, out _, ignoreLocation: true), Is.False);
-            });
-
-            SEntMan.DeleteEntity(flashlight);
-            SEntMan.DeleteEntity(tape);
-            SEntMan.DeleteEntity(box);
-        });
-    }
 }

@@ -50,15 +50,16 @@ public sealed partial class FighterGroundVisualSystem
             ? ground.Canopy : CompOrNull<FighterAircraftComponent>(seat.Aircraft)?.Canopy;
         if (canopyUid is not { } canopy || !TryComp(canopy, out SpriteComponent? sprite)) return;
 
-        // Apertures in the 266 x 335 airframe art, also used by cockpit-frame.swsl.
+        // Use this airframe's source-pixel openings, also used by cockpit-frame.swsl.
         // Clip the actual character, including equipment, rather than shrinking it.
-        var center = seat.Pilot ? new Vector2(133, 228.5f) : new Vector2(133, 193.5f);
-        var halfSize = seat.Pilot ? new Vector2(8.5f, 12.5f) : new Vector2(9.5f, 16.5f);
+        var definition = Airframe(canopy);
+        var center = seat.Pilot ? definition.PilotWindowCenter : definition.ObserverWindowCenter;
+        var halfSize = seat.Pilot ? definition.PilotWindowHalfSize : definition.ObserverWindowHalfSize;
         var pixelScale = sprite.Scale / EyeManager.PixelsPerMeter * new Vector2(1, -1);
         var rotation = _transform.GetWorldRotation(canopy) + sprite.Rotation;
         var origin = _transform.GetWorldPosition(canopy) +
             _transform.GetWorldRotation(canopy).RotateVec(sprite.Offset) +
-            rotation.RotateVec((center - new Vector2(133, 167.5f)) * pixelScale);
+            rotation.RotateVec((center - definition.SpriteSize / 2) * pixelScale);
         var viewport = args.Viewport;
         var screenOrigin = ScreenUv(viewport, origin);
         var x = ScreenUv(viewport, origin + rotation.RotateVec(new Vector2(halfSize.X * pixelScale.X, 0))) - screenOrigin;

@@ -43,6 +43,8 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
     }
 
     private CharacterWindow? _window;
+    // CMU14: the auto open is a round join convenience, later body swaps must not repeat it
+    private bool _autoOpened;
     private MenuButton? CharacterButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.CharacterButton;
 
     public void OnStateEntered(GameplayState state)
@@ -75,6 +77,8 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
             _window = null;
         }
 
+        // CMU14: a new round earns a fresh auto open
+        _autoOpened = false;
         CommandBinds.Unregister<CharacterUIController>();
     }
 
@@ -256,6 +260,12 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
         if (_ent.HasComponent<GhostComponent>(uid))
             return;
 
+        // CMU14: only the first attach of a round opens it, drone piloting and ghost
+        // role takeovers must not force the primer on the player
+        if (_autoOpened)
+            return;
+
+        _autoOpened = true;
         CharacterButton?.SetClickPressed(true);
         _characterInfo.RequestCharacterInfo();
         _window.Open();

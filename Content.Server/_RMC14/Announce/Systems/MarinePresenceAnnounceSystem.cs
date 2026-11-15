@@ -11,6 +11,7 @@ using Content.Shared.Bed.Cryostorage;
 using Content.Shared.StationRecords;
 using Content.Shared.StationRecords.Components;
 using Content.Shared.StationRecords.Systems;
+using Content.Shared.CMU14.Yautja;
 using Content.Server.CMU14.Marines.Roles.Chevrons;
 
 namespace Content.Server._RMC14.Announce
@@ -28,7 +29,14 @@ namespace Content.Server._RMC14.Announce
 
         public void AnnounceLateJoin(bool lateJoin, bool silent, EntityUid mob, string jobId, string jobName, JobPrototype jobPrototype)
         {
+            // CMU14: yautja join through the standard spawn path but must never be announced to marines.
+            if (HasComp<YautjaComponent>(mob))
+                return;
+
             if (!_aresCore.TryGetMarineARES(out var ares) || ares == null)
+                return;
+
+            if (IsCMULateJoinAnnouncementExcluded(mob)) // CMU14
                 return;
 
             var aresUid = ares.Value.Owner;

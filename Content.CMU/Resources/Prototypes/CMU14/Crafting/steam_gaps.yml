@@ -1,0 +1,97 @@
+# The holes of the steam stage that nothing could be made of: the anvil and the smith's tools, the mold of sand, the solid-fuel press, the steam
+# grinder. The tools and the anvil are made of the iron sheets the steam press makes (the iron ingot and the steel
+# are forged at the anvil, never put in the menu).
+
+- type: craftRecipe
+  id: RUMCCraftIngotMold
+  name: au14-craft-recipe-ingot-mold
+  output: RUMCIngotMold
+  time: 6
+  consumables:
+  - stack: RUMCSand
+    amount: 6
+
+- type: craftRecipe
+  id: RUMCCraftForgeHammer
+  name: au14-craft-recipe-forge-hammer
+  output: RUMCForgeHammer
+  time: 8
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 3
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftForgeTongs
+  name: au14-craft-recipe-forge-tongs
+  output: RUMCForgeTongs
+  time: 8
+  minigames: [Rhythm]
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 2
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftForgeChisel
+  name: au14-craft-recipe-forge-chisel
+  output: RUMCForgeChisel
+  time: 6
+  tools:
+  - Hammering
+  consumables:
+  - stack: CMSteel
+    amount: 1
+  - stack: RUMCBranch
+    amount: 1
+
+- type: craftRecipe
+  id: RUMCCraftAnvil
+  name: au14-craft-recipe-anvil
+  output: RUMCAnvil
+  time: 20
+  minigames: [Rhythm, Polish]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassIngot
+    amount: 5
+  - stack: RUMCStone
+    amount: 4
+
+- type: craftRecipe
+  id: RUMCCraftSolidFuelPress
+  name: au14-craft-recipe-solid-fuel-press
+  output: RUMCSolidFuelPress
+  time: 20
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4
+  - stack: RMCWood
+    amount: 2
+
+- type: craftRecipe
+  id: RUMCCraftSteamGrinder
+  name: au14-craft-recipe-steam-grinder
+  output: RUMCSteamGrinder
+  time: 20
+  minigames: [Rhythm, Center]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCBrassSheet
+    amount: 6
+  - stack: RUMCBrassParts
+    amount: 4

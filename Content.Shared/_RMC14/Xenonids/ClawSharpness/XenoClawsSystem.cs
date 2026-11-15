@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared._RMC14.Armor; // CMU14
 using Content.Shared.Doors.Components;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Prototypes;
@@ -27,6 +28,7 @@ public sealed partial class XenoClawsSystem : EntitySystem
 
         SubscribeLocalEvent<ReceiverXenoClawsComponent, DamageModifyEvent>(OnReceiverDamageModify);
         SubscribeLocalEvent<AirlockReceiverXenoClawsComponent, DamageModifyEvent>(OnAirlockReceiverDamageModify);
+        SubscribeLocalEvent<XenoClawsComponent, CMGetArmorPiercingEvent>(OnGetArmorPiercing); // CMU14 system for Xeno AP
     }
 
     /*
@@ -86,7 +88,13 @@ public sealed partial class XenoClawsSystem : EntitySystem
         return _xenoClawsQuery.TryComp(uid, out var claws) &&
                claws.ClawType.CompareTo(minimum) >= 0;
     }
-
+   
+    private void OnGetArmorPiercing(Entity<XenoClawsComponent> ent, ref CMGetArmorPiercingEvent args)  // CMU14
+    {
+        args.Piercing += ent.Comp.ArmorPiercing;  
+    }
+    
+    
     private void OnAirlockReceiverDamageModify(Entity<AirlockReceiverXenoClawsComponent> ent, ref DamageModifyEvent args)
     {
         var xeno = args.Tool;

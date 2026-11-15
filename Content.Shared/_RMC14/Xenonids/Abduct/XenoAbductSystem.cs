@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Line;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Hook;
 using Content.Shared._RMC14.Xenonids.Plasma;
@@ -40,6 +41,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
     [Dependency] private RMCObstacleSlammingSystem _rmcObstacleSlamming = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -206,7 +208,9 @@ public sealed partial class XenoAbductSystem : EntitySystem
 
                 //TODO RMC14 Camera shake
 
-                _slow.TrySlowdown(ent, slowTime, ignoreDurationModifier: true);
+                // CMU14: only the single target abduct slows, same as cmss13
+                if (slowTime <= TimeSpan.Zero || !_yautjaSlow.TryApply(ent, xeno.Comp.YautjaSlow))
+                    _slow.TrySlowdown(ent, slowTime, ignoreDurationModifier: true);
                 _slow.TryRoot(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, rootTime));
                 _dazed.TryDaze(ent, dazeTime, true, stutter: true);
                 _stun.TryParalyze(ent, _xeno.TryApplyXenoDebuffMultiplier(ent, stunTime), true);

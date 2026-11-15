@@ -163,46 +163,10 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         if (_inventoryHotbar == null)
             return;
 
-        var clothing = clientInv.SlotData.Where(p => !p.Value.HasSlotGroup).ToList();
-
+        // CMU14: retain spacer controls and ordering until the slot topology changes.
+        var hasClothing = _inventoryHotbar.CMUUpdateClothingLayout(clientInv);
         if (_inventoryButton != null)
-            _inventoryButton.Visible = clothing.Count != 0;
-        if (clothing.Count == 0)
-            return;
-
-        foreach (var child in new List<Control>(_inventoryHotbar.Children))
-        {
-            if (child is not SlotControl)
-                _inventoryHotbar.RemoveChild(child);
-        }
-
-        var maxWidth = clothing.Max(p => p.Value.ButtonOffset.X) + 1;
-        var maxIndex = clothing.Select(p => GetIndex(p.Value.ButtonOffset)).Max();
-
-        _inventoryHotbar.MaxColumns = maxWidth;
-        _inventoryHotbar.Columns = maxWidth;
-
-        for (var i = 0; i <= maxIndex; i++)
-        {
-            var index = i;
-            if (clothing.FirstOrNull(p => GetIndex(p.Value.ButtonOffset) == index) is { } pair)
-            {
-                if (_inventoryHotbar.TryGetButton(pair.Key, out var slot))
-                    slot.SetPositionLast();
-            }
-            else
-            {
-                _inventoryHotbar.AddChild(new Control
-                {
-                    MinSize = new Vector2(64, 64)
-                });
-            }
-        }
-
-        int GetIndex(Vector2i position)
-        {
-            return position.Y * maxWidth + position.X;
-        }
+            _inventoryButton.Visible = hasClothing;
     }
 
     private void UpdateStrippingWindow(InventorySlotsComponent? clientInv)
@@ -375,7 +339,9 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         }
 
         // Set green / red overlay at 50% transparency
-        var hoverEntity = _entities.SpawnEntity("hoverentity", MapCoordinates.Nullspace);
+        // CMU14: reuse the slot-owned preview while refreshing sprite and insertion eligibility.
+        // var hoverEntity = _entities.SpawnEntity("hoverentity", MapCoordinates.Nullspace);
+        var hoverEntity = control.CMUGetHoverEntity();
         var hoverSprite = _entities.GetComponent<SpriteComponent>(hoverEntity);
         var fits = _inventorySystem.CanEquip(player.Value, held.Value, control.SlotName, out _, slotDef, containerSlot: container);
 

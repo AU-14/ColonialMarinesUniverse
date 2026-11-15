@@ -2611,7 +2611,9 @@
   name: cotton boll
   description: Moth people's favorite snack, and just as fluffy as them.
   id: CottonBol
-  parent: [FoodProduceBase, BaseSlicingRefinableFood]
+  # CMU14: fiber processing accepts slicing tools without requiring a food utensil.
+  # parent: [FoodProduceBase, BaseSlicingRefinableFood]
+  parent: [FoodProduceBase, BaseSlicingRefinable]
   components:
   - type: Sprite
     sprite: Objects/Specific/Hydroponics/cotton.rsi

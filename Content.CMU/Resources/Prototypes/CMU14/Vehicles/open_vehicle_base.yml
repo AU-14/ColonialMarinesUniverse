@@ -6,6 +6,8 @@
   components:
   - type: RMCNightVisionVisible
     priority: -2
+  # Can have an IED wired into it as a car bomb.
+  - type: CMUVBIEDRiggable
   - type: Vehicle
     movementKind: Grid
     transferDamage: false

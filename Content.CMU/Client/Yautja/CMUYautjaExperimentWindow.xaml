@@ -1,0 +1,35 @@
+<yautja:CMUYautjaExperimentWindow xmlns="https://spacestation14.io"
+            xmlns:yautja="clr-namespace:Content.Client.CMU14.Yautja"
+            MouseFilter="Ignore" Resizable="False">
+    <yautja:CMUYautjaBracerDiagram Name="Diagram" MouseFilter="Ignore" />
+    <PanelContainer Name="InspectionPanel" SetWidth="360" MaxHeight="410" MouseFilter="Stop">
+        <ScrollContainer HScrollEnabled="False" ReturnMeasure="True">
+            <BoxContainer Orientation="Vertical" Margin="12" SeparationOverride="8">
+                <BoxContainer SeparationOverride="8">
+                    <Label Name="ItemName" HorizontalExpand="True" ClipText="True" Modulate="#DECEAF" />
+                    <Button Name="CloseButton" Text="×" ToolTip="{Loc 'cmu-yautja-experiment-close'}" />
+                </BoxContainer>
+                <BoxContainer SeparationOverride="8">
+                    <Label Name="SealStatus" HorizontalExpand="True" StyleClasses="LabelSubText" Modulate="#BCC7BF" />
+                    <Label Name="StrainStatus" StyleClasses="LabelSubText" Modulate="#CAA77B" />
+                </BoxContainer>
+                <ProgressBar Name="Strain" MinValue="0" MaxValue="8" SetHeight="3" />
+                <Label Name="ContactTitle" Modulate="#D7BD92" />
+                <RichTextLabel Name="Clue" />
+                <Button Name="ProcedureButton" ClipText="True" />
+                <BoxContainer Name="Drawer" Orientation="Vertical" SeparationOverride="6" Visible="False">
+                    <Label Name="DrawerTitle" Modulate="#D7BD92" />
+                    <LineEdit Name="ProcedureSearch" PlaceHolder="{Loc 'cmu-yautja-experiment-search'}" Visible="False" />
+                    <ScrollContainer MaxHeight="150" HScrollEnabled="False" ReturnMeasure="True">
+                        <BoxContainer Name="DrawerContent" Orientation="Vertical" SeparationOverride="4" />
+                    </ScrollContainer>
+                </BoxContainer>
+                <Label Name="Requirement" StyleClasses="LabelSubText" ClipText="True" Modulate="#BCC7BF" />
+                <Label Name="ToolRequirement" StyleClasses="LabelSubText" ClipText="True" Modulate="#BCC7BF" />
+                <Button Name="RecordsButton" Text="{Loc 'cmu-yautja-experiment-records-tab'}" />
+                <Label Name="WorkStatus" StyleClasses="LabelSubText" Modulate="#BCC7BF" />
+                <Button Name="AuthorizeButton" Text="{Loc 'cmu-yautja-experiment-authorize'}" Visible="False" />
+            </BoxContainer>
+        </ScrollContainer>
+    </PanelContainer>
+</yautja:CMUYautjaExperimentWindow>

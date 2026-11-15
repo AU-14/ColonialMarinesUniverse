@@ -12,7 +12,7 @@
   - type: ItemCamouflage
     camouflageVariations: { }
   - type: CMArmor
-    bullet: 30
+    bullet: 25
     bio: 15
     explosionArmor: 20
     # armor_energy = 20

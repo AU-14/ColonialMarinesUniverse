@@ -60,6 +60,8 @@
                         <BoxContainer Orientation="Vertical">
                             <Button Name="SaveButton" Text="{Loc 'humanoid-profile-editor-save-button'}"/>
                             <Button Name="ResetButton" Disabled="True" Text="{Loc 'humanoid-profile-editor-reset-button'}"/>
+                            <!-- CMU14: character-wide loadout preferences. -->
+                            <Button Name="GlobalLoadoutButton" Text="{Loc 'cmu-global-loadout-button'}"/>
                             <Button Name="ImportButton" Text="{Loc 'humanoid-profile-editor-import-button'}"/>
                             <Button Name="ExportButton" Text="{Loc 'humanoid-profile-editor-export-button'}"/>
                             <Button Name="ExportImageButton" Text="{Loc 'humanoid-profile-editor-export-image-button'}"/>
@@ -376,8 +378,8 @@
                     <!-- cmu edit end -->
                 </BoxContainer>
                 <!-- cmu edit end -->
-                <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
-                <Control VerticalExpand="True">
+                <!-- CMU14: Insurgency role priorities and antag opt-ins, split by faction like the other gamemodes. -->
+                <BoxContainer Orientation="Vertical">
                     <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
                             <ScrollContainer VerticalExpand="True">
@@ -400,10 +402,7 @@
                             </ScrollContainer>
                         </BoxContainer>
                     </TabContainer>
-                    <Label Text="{Loc 'humanoid-profile-editor-fof-included-label'}"
-                           HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 3 6 0"
-                           MouseFilter="Ignore" StyleClasses="CrtText" />
-                </Control>
+                </BoxContainer>
                 <BoxContainer Orientation="Vertical">
                     <TabContainer Name="ColonyFallTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <BoxContainer Orientation="Vertical">
@@ -465,10 +464,17 @@
                     </BoxContainer>
                     <Label Text="{Loc 'cmu-fof-fallback-explanation'}" />
                     <TabContainer Name="ForceOnForceTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
-                        <ScrollContainer VerticalExpand="True">
-                            <!-- CMU14: faction gameplay options. -->
-                            <BoxContainer Name="FoFJobList" Orientation="Vertical" />
-                        </ScrollContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <!-- CMU14: faction gameplay options. -->
+                                <BoxContainer Name="FoFJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical">
+                            <ScrollContainer VerticalExpand="True">
+                                <BoxContainer Name="FoFColonyJobList" Orientation="Vertical" />
+                            </ScrollContainer>
+                        </BoxContainer>
                     </TabContainer>
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">

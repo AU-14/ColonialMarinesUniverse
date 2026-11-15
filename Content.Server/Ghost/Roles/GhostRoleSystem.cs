@@ -73,6 +73,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
     private readonly Dictionary<ICommonSession, MakeGhostRoleEui> _openMakeGhostRoleUis = new();
 
     private static readonly ProtoId<JobPrototype> XenoLarvaRole = "CMXenoLarva";
+    private static readonly ProtoId<JobPrototype> CmuBloodbursterRole = "CMUJobPathogenBloodburster"; // CMU14
 
     [ViewVariables]
     public IReadOnlyCollection<Entity<GhostRoleComponent>> GhostRoles => _ghostRoles.Values;
@@ -390,6 +391,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         //     return;
         // }
         if (role.Comp.Taken
+            || IsPendingForceRole(role.Owner) // CMU14: staged force bodies still have reserved assignments.
             || MetaData(role.Owner).EntityPaused
             || IsBlockedXenoGhostRole(role.Owner))
         {
@@ -1016,10 +1018,11 @@ public sealed partial class GhostRoleSystem : EntitySystem
                TryComp(uid, out MindContainerComponent? mind) && mind.HasMind;
     }
 
+    // CMU14: queue-only castes keep GhostRole for mind transfer, but cannot enter the raffle.
     private bool IsBlockedXenoGhostRole(EntityUid uid)
     {
         return TryComp(uid, out XenoComponent? xeno) &&
-               xeno.Role == XenoLarvaRole;
+               (xeno.Role == XenoLarvaRole || xeno.Role == CmuBloodbursterRole);
     }
 
     private void OnTakeoverTakeRole(EntityUid uid, GhostTakeoverAvailableComponent component, ref TakeGhostRoleEvent args)

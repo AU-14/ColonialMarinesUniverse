@@ -55,13 +55,6 @@ public sealed class DropshipFabricatorTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
-    public async Task CatalogExcludesRemovedPrintablesOnBothSides()
-    {
-        await Server.WaitAssertion(() => AssertCatalog(SEntMan));
-        await Client.WaitAssertion(() => AssertCatalog(CEntMan));
-    }
-
-    [Test]
     public async Task FactionAccountsIsolatePurchasesRefundsIncomeAndTechRewardsAfterLateShipAssignment()
     {
         var govforMap = await Pair.CreateTestMap();
@@ -180,15 +173,4 @@ public sealed class DropshipFabricatorTest : GameTest
         });
     }
 
-    private static void AssertCatalog(IEntityManager entities)
-    {
-        var printables = entities.System<DropshipFabricatorSystem>().Printables.Select(id => id.Id).ToArray();
-        Assert.Multiple(() =>
-        {
-            Assert.That(printables, Does.Not.Contain("TestDropshipFixedGun"));
-            Assert.That(printables, Does.Contain("TestDropshipPrintableGun"));
-            Assert.That(printables, Does.Contain("RMCDropshipAttachmentGau21Cannon"));
-            Assert.That(printables, Does.Contain("RMCDropshipAttachmentAmmoGAU"));
-        });
-    }
 }

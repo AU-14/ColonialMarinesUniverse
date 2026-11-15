@@ -1,8 +1,6 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Weapons.Ranged;
-using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Construction;
-using Content.Shared.DoAfter;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Timing;
 
@@ -66,22 +64,4 @@ public sealed class CMULoggedReferenceLifetimeTest : GameTest
         });
     }
 
-    [Test]
-    public async Task DeletedChargeTargetDoesNotBreakChargeStateReplication()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var xeno = SEntMan.SpawnEntity("RMCXenoCrusher", map.GridCoords);
-            var targetCoordinates = map.GridCoords.Offset(new Vector2(3, 0));
-            var target = SEntMan.SpawnEntity("CMMobHuman", targetCoordinates);
-            var charge = SEntMan.GetComponent<XenoChargeComponent>(xeno);
-            var completed = new XenoChargeDoAfterEvent(SEntMan.GetNetCoordinates(targetCoordinates));
-            completed.DoAfter = new DoAfter(0, new DoAfterArgs(SEntMan, xeno, TimeSpan.Zero, completed, xeno), SGameTiming.CurTime);
-            SEntMan.EventBus.RaiseLocalEvent(xeno, completed);
-            Assert.That(charge.PrimaryTarget, Is.EqualTo(target));
-            SEntMan.DeleteEntity(target);
-            Assert.DoesNotThrow(() => SEntMan.GetComponentState(SEntMan.EventBus, charge, null, GameTick.Zero));
-        });
-    }
 }

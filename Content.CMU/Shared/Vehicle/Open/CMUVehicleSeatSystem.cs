@@ -528,7 +528,7 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
         return TryComp(seat, out StrapComponent? strap) && strap.BuckledEntities.Count == 0;
     }
 
-    private bool IsSeatedIn(EntityUid user, EntityUid vehicle)
+    public bool IsSeatedIn(EntityUid user, EntityUid vehicle)
     {
         return TryComp(user, out BuckleComponent? buckle) &&
                TryComp(buckle.BuckledTo, out CMUVehicleSeatComponent? seat) &&

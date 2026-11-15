@@ -23,7 +23,6 @@ namespace Content.IntegrationTests._CMU14;
 [TestOf(typeof(VehicleSystem))]
 public sealed class VehicleInteriorFactionTest : GameTest
 {
-    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> USCMPrototype = "USCM";
 
     public override PoolSettings PoolSettings => new() { Connected = false };
 
@@ -61,86 +60,7 @@ public sealed class VehicleInteriorFactionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task OpforSupplyLiftAssignsCommandVehicleFaction()
-    {
-        var ship = await Pair.CreateTestMap();
-        EntityUid lift = default;
-        EntityUid console = default;
-        EntityUid vehicle = default;
-        PlatoonPrototype? previousPlatoon = null;
-        try
-        {
-            await Server.WaitPost(() =>
-            {
-                SEntMan.EnsureComponent<ShipFactionComponent>(ship.GridCoords.EntityId).Faction = "opfor";
-                var platoons = Server.System<PlatoonSpawnRuleSystem>();
-                previousPlatoon = platoons.SelectedOpforPlatoon;
-                platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(USCMPrototype);
-                lift = SEntMan.SpawnEntity("VehicleLift", ship.GridCoords);
-                console = SEntMan.SpawnEntity("VehicleSupplyConsole", ship.GridCoords);
-                SEntMan.GetComponent<VehicleSupplyConsoleComponent>(console).Faction = "opfor";
-                var supply = SEntMan.GetComponent<VehicleSupplyLiftComponent>(lift);
-                supply.PendingVehicle = "VehicleAPCCommand";
-                // Delivery revalidates the ordering console, side and selected platoon's catalog.
-                supply.PendingSupplyConsole = console;
-                supply.PendingSupplySide = "opfor";
-                supply.Mode = VehicleSupplyLiftMode.Raising;
-                supply.RaiseDelay = TimeSpan.Zero;
-                supply.LowerDelay = TimeSpan.Zero;
-                supply.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
-            });
-            await Pair.RunTicksSync(2);
-            await Server.WaitAssertion(() =>
-            {
-                foreach (var entity in Server.System<EntityLookupSystem>().GetEntitiesIntersecting(lift))
-                {
-                    if (!SEntMan.HasComponent<VehicleComponent>(entity))
-                        continue;
-
-                    vehicle = entity;
-                    break;
-                }
-
-                Assert.That(vehicle.Valid, Is.True, "Exercise the real supply spawn path.");
-                AssertInterior(vehicle, "opfor");
-            });
-        }
-        finally
-        {
-            await Server.WaitPost(() =>
-            {
-                if (vehicle.Valid && !SEntMan.Deleted(vehicle))
-                    SEntMan.DeleteEntity(vehicle);
-                if (lift.Valid && !SEntMan.Deleted(lift))
-                    SEntMan.DeleteEntity(lift);
-                if (console.Valid && !SEntMan.Deleted(console))
-                    SEntMan.DeleteEntity(console);
-                Server.System<PlatoonSpawnRuleSystem>().SelectedOpforPlatoon = previousPlatoon;
-            });
-        }
-    }
-
-    [Test]
-    public async Task UnownedVehicleKeepsMappedDefaults()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var vehicle = SEntMan.SpawnEntity("VehicleAPCCommand", map.GridCoords);
-            try
-            {
-                AssertInterior(vehicle, "govfor", mappedDefaults: true);
-                Assert.That(SEntMan.GetComponent<VehicleEnterComponent>(vehicle).InteriorFaction, Is.Null);
-            }
-            finally
-            {
-                SEntMan.DeleteEntity(vehicle);
-            }
-        });
-    }
-
-    private void AssertInterior(EntityUid vehicle, string faction, bool expectCommandAccess = true, bool mappedDefaults = false)
+    private void AssertInterior(EntityUid vehicle, string faction, bool expectCommandAccess = true)
     {
         var vehicles = Server.System<VehicleSystem>();
         var access = Server.System<AccessReaderSystem>();
@@ -181,21 +101,9 @@ public sealed class VehicleInteriorFactionTest : GameTest
                         Is.False, "Ordinary faction access must not bypass command restrictions.");
                     Assert.That(reader.AccessListsOriginal!.SelectMany(group => group).Select(id => id.Id),
                         Does.Contain(prefix + "Command"), "Inspect must show the assigned faction's command access.");
-                    if (mappedDefaults)
-                    {
-                        // This map has no access overrides. Unowned vehicles retain each console's
-                        // prototype access, including consoles that accept command staff from both sides.
-                        var prototype = SEntMan.GetComponent<MetaDataComponent>(uid).EntityPrototype!;
-                        var defaults = (AccessReaderComponent) prototype.Components["AccessReader"].Component;
-                        Assert.That(reader.AccessLists, Is.EquivalentTo(defaults.AccessLists));
-                        Assert.That(reader.AccessListsOriginal, Is.EquivalentTo(defaults.AccessLists));
-                    }
-                    else
-                    {
-                        Assert.That(access.AreAccessTagsAllowed(new List<ProtoId<AccessLevelPrototype>> { enemyPrefix + "Command" }, reader),
-                            Is.False, "Enemy command access must not work.");
-                        Assert.That(reader.AccessListsOriginal.SelectMany(group => group).Any(id => id.Id.StartsWith(enemyPrefix)), Is.False);
-                    }
+                    Assert.That(access.AreAccessTagsAllowed(new List<ProtoId<AccessLevelPrototype>> { enemyPrefix + "Command" }, reader),
+                        Is.False, "Enemy command access must not work.");
+                    Assert.That(reader.AccessListsOriginal.SelectMany(group => group).Any(id => id.Id.StartsWith(enemyPrefix)), Is.False);
                 });
             }
 

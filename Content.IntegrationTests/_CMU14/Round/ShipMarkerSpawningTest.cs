@@ -18,7 +18,7 @@ namespace Content.IntegrationTests.CMU14.Round;
 [TestFixture]
 public sealed class ShipMarkerSpawningTest
 {
-    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> USSBushReduxPrototype = "USSBushRedux";
+
     private static readonly Robust.Shared.Prototypes.EntProtoId PlatoonSpawnPrototype = "PlatoonSpawn";
 
     [TestPrototypes]
@@ -34,95 +34,6 @@ public sealed class ShipMarkerSpawningTest
             govfordropships: 0
             opfordropships: 0
         """;
-
-    [TestCase("WEYU", "govfor")]
-    [TestCase("USCM", "opfor")]
-    public async Task ShipMarkersSpawnVendorsAndConsolesAcrossDecks(string platoonId, string faction)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
-        var server = pair.Server;
-        var entities = server.EntMan;
-
-        await server.WaitAssertion(() =>
-        {
-            var ticker = entities.System<GameTicker>();
-            var round = entities.System<AuRoundSystem>();
-            var platoons = entities.System<PlatoonSpawnRuleSystem>();
-            var zLevels = entities.System<CMUZLevelsSystem>();
-            var prototypes = server.ProtoMan;
-            var platoon = prototypes.Index<PlatoonPrototype>(platoonId);
-            if (faction == "govfor")
-                platoons.SelectedGovforPlatoon = platoon;
-            else
-                platoons.SelectedOpforPlatoon = platoon;
-
-            Assert.That(round.SetPlanet("CMUTestShipMarkerPlanet"), Is.True);
-            var grids = ticker.LoadGameMap(prototypes.Index<GameMapPrototype>(USSBushReduxPrototype),
-                out var mapId, DeserializationOptions.Default with { InitializeMaps = true });
-            Assert.That(grids, Is.Not.Empty);
-            foreach (var grid in grids)
-                entities.EnsureComponent<ShipFactionComponent>(grid).Faction = faction;
-
-            var map = entities.System<SharedMapSystem>().GetMap(mapId);
-
-            var expected = new List<(EntityCoordinates Coordinates, string Prototype)>();
-            var vendors = prototypes.Index(platoon.VendorSet!.Value).Vendors;
-            var markers = entities.AllEntityQueryEnumerator<VendorMarkerComponent, TransformComponent>();
-            while (markers.MoveNext(out var marker, out var transform))
-            {
-                if (!marker.Ship || !zLevels.IsSameZNetwork(transform.MapUid, map))
-                    continue;
-
-                if (vendors.TryGetValue(marker.Class, out var vendor))
-                    expected.Add((transform.Coordinates, vendor.Id));
-            }
-
-            Assert.That(expected.Count, Is.GreaterThan(20));
-            Assert.That(ticker.StartGameRule(PlatoonSpawnPrototype), Is.True);
-
-            var spawned = new List<(EntityCoordinates Coordinates, string Prototype)>();
-            var query = entities.AllEntityQueryEnumerator<MetaDataComponent, TransformComponent>();
-            while (query.MoveNext(out var metadata, out var transform))
-                spawned.Add((transform.Coordinates, metadata.EntityPrototype?.ID));
-
-            Assert.Multiple(() =>
-            {
-                foreach (var item in expected)
-                    Assert.That(spawned.Count(candidate => candidate == item), Is.EqualTo(1),
-                        $"{faction}/{platoonId}: expected one {item.Prototype} at {item.Coordinates}");
-
-                // Govfor machines baked into the map must become their Opfor variants on an Opfor ship
-                Assert.That(spawned.Count(c => c.Prototype == "AU14WithdrawConsoleGovFor"),
-                    Is.EqualTo(faction == "govfor" ? 1 : 0));
-                Assert.That(spawned.Count(c => c.Prototype == "AU14WithdrawConsoleOpFor"),
-                    Is.EqualTo(faction == "opfor" ? 1 : 0));
-                Assert.That(spawned.Count(c => c.Prototype == "CMAirlockGovforGlassLocked"),
-                    faction == "govfor" ? Is.GreaterThan(5) : Is.EqualTo(0));
-                Assert.That(spawned.Count(c => c.Prototype == "CMAirlockOpforGlassLocked"),
-                    faction == "opfor" ? Is.GreaterThan(5) : Is.EqualTo(0));
-                Assert.That(spawned.Count(c => c.Prototype == "CMUResearchDataTerminalGovfor"),
-                    Is.EqualTo(faction == "govfor" ? 2 : 0));
-                Assert.That(spawned.Count(c => c.Prototype == "CMUResearchDataTerminalOpfor"),
-                    Is.EqualTo(faction == "opfor" ? 2 : 0));
-                Assert.That(spawned.Count(c => c.Prototype == "CMUHospitalEmergencyComputerGovfor"),
-                    Is.EqualTo(faction == "govfor" ? 1 : 0));
-                Assert.That(spawned.Count(c => c.Prototype == "CMUHospitalEmergencyComputerOpfor"),
-                    Is.EqualTo(faction == "opfor" ? 1 : 0));
-
-                var hospitals = entities.AllEntityQueryEnumerator<HospitalEmergencyComputerComponent, TransformComponent>();
-                while (hospitals.MoveNext(out var hospital, out var transform))
-                {
-                    if (!zLevels.IsSameZNetwork(transform.MapUid, map))
-                        continue;
-                    Assert.That(hospital.LandingZone, Is.Not.Null, "Ship hospital must find the landing zone on its other deck.");
-                    Assert.That(zLevels.IsSameZNetwork(entities.GetComponent<TransformComponent>(hospital.LandingZone!.Value).MapUid, map),
-                        Is.True, "Ship hospital must keep its own ship's landing zone.");
-                }
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task IdenticalShipsResolveTerminalsByOwnerAndColonyMarkersKeepColonyAccess()

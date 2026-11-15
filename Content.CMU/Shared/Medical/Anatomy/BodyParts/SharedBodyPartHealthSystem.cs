@@ -511,6 +511,9 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
 
     private bool CanAutomaticallySever(EntityUid body, BodyPartType type, DamageImpact impact, MobState? stateAtImpact = null)
     {
+        if ((impact.Context & DamageImpactContext.NonGibbing) != 0 &&
+            type is BodyPartType.Head or BodyPartType.Torso)
+            return false;
         if (type != BodyPartType.Head)
             return true;
 

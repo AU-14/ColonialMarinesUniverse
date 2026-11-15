@@ -223,6 +223,7 @@
 
 - type: thirdParty
   id: CMUProdigySniperOverwatch
+  allegiance: Prodigy
   displayName: Prodigy Sniper Overwatch
   partyspawn: CMUProdigySniperOverwatchSpawn
   entrymethod: shuttle

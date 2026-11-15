@@ -16,6 +16,7 @@
 
 - type: thirdParty
   id: ProdigyPARTY
+  allegiance: Prodigy
   partyspawn: ProdigyPARTYSpawn
   entrymethod: shuttle
   weight: 20

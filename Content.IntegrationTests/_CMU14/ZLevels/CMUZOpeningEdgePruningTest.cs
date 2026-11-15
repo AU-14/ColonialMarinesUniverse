@@ -86,20 +86,6 @@ public sealed class CMUZOpeningEdgePruningTest : GameTest
         }, mapGrid: true);
     }
 
-    [TestCase(8388610f)]
-    [TestCase(-8388610f)]
-    public Task ExtremeSourcePositionsPreserveRoundedCenterCandidates(float coordinate)
-    {
-        return WithGrid((mapId, grid, maps, transform, tiles) =>
-        {
-            var cache = new CMUZLevelOpeningCache();
-            var expected = AssertMatchesFullEnumeration(cache, mapId, grid, new Vector2(coordinate, 3.5f),
-                0.1f, maps, transform, tiles);
-            Assert.That(expected.Count, Is.GreaterThan(1),
-                "Multiple integer tiles share this float center and must retain the near-center exception.");
-        }, mapGrid: true);
-    }
-
     [TestCase(4)]
     [TestCase(8)]
     public Task WarmEdgesObserveSameTickInteriorAndAdjacentChunkChanges(int chunkSize)
@@ -141,105 +127,6 @@ public sealed class CMUZOpeningEdgePruningTest : GameTest
         });
     }
 
-    [TestCase(4, 2, 3)]
-    [TestCase(8, 3, 2)]
-    public Task NearestOpeningRetainsFirstCandidateForEqualDistances(int chunkSize, int expectedX, int expectedY)
-    {
-        return WithGrid((mapId, grid, maps, transform, tiles) =>
-        {
-            var floor = new Tile(tiles["Plating"].TileId);
-            var lattice = new Tile(tiles["Lattice"].TileId);
-            for (var x = 0; x < 8; x++)
-            for (var y = 0; y < 8; y++)
-                maps.SetTile(grid, new Vector2i(x, y), floor);
-            maps.SetTile(grid, new Vector2i(2, 3), lattice);
-            maps.SetTile(grid, new Vector2i(3, 2), lattice);
-
-            var cache = new CMUZLevelOpeningCache(chunkSize);
-            var source = new Vector2(3.5f, 3.5f);
-            var expected = AssertMatchesFullEnumeration(cache, mapId, grid, source, 1.25f,
-                maps, transform, tiles);
-            Assert.That(expected, Has.Count.EqualTo(2));
-            Assert.That(expected[0].Tile, Is.EqualTo(new Vector2i(expectedX, expectedY)));
-            Assert.That(expected[0].Distance, Is.EqualTo(expected[1].Distance));
-
-            var grids = new List<Entity<MapGridComponent>>();
-            Assert.That(cache.TryFindNearestOpeningCenterNear(mapId, source, 1.25f, out var nearest,
-                grids, maps, transform, tiles), Is.True);
-            Assert.That(nearest, Is.EqualTo(expected[0].Center));
-        });
-    }
-
-    [TestCase(false, false)]
-    [TestCase(false, true)]
-    [TestCase(true, false)]
-    [TestCase(true, true)]
-    [Explicit("Select this method explicitly for before/after Release edge-query measurements.")]
-    public async Task WarmEdgeQueryMeasurement(bool fragmented, bool nearest)
-    {
-        var report = new List<string>();
-        await WithGrid((mapId, grid, maps, transform, tiles) =>
-        {
-            var floor = new Tile(tiles["Plating"].TileId);
-            var lattice = new Tile(tiles["Lattice"].TileId);
-            for (var x = -24; x < 24; x++)
-            for (var y = -24; y < 24; y++)
-            {
-                var open = fragmented
-                    ? (x + y) % 2 == 0
-                    : x >= -16 && x < 16 && y >= -16 && y < 16;
-                maps.SetTile(grid, new Vector2i(x, y), open ? lattice : floor);
-            }
-
-            var cache = new CMUZLevelOpeningCache();
-            var portals = new List<CMUZOpeningPortal>(4096);
-            var grids = new List<Entity<MapGridComponent>>(16);
-            var resultCount = 0L;
-            void Query()
-            {
-                if (nearest)
-                {
-                    if (cache.TryFindNearestOpeningCenterNear(mapId, Vector2.Zero, 16f, out _,
-                            grids, maps, transform, tiles))
-                        resultCount++;
-                }
-                else
-                {
-                    portals.Clear();
-                    cache.FindOpeningPortalsNear(mapId, Vector2.Zero, 16f, portals,
-                        grids, maps, transform, tiles);
-                    resultCount += portals.Count;
-                }
-            }
-
-            for (var i = 0; i < 512; i++)
-                Query();
-            const int queriesPerBatch = 256;
-            var times = new double[17];
-            var allocations = new long[times.Length];
-            for (var batch = 0; batch < times.Length; batch++)
-            {
-                var before = GC.GetAllocatedBytesForCurrentThread();
-                var start = Stopwatch.GetTimestamp();
-                for (var i = 0; i < queriesPerBatch; i++)
-                    Query();
-                times[batch] = Stopwatch.GetElapsedTime(start).TotalMilliseconds;
-                allocations[batch] = GC.GetAllocatedBytesForCurrentThread() - before;
-            }
-
-            Assert.That(resultCount, Is.GreaterThan(0), "Both layouts must exercise real opening edges.");
-            report.Add($"fragmented={fragmented} nearest={nearest} queriesPerBatch={queriesPerBatch} resultCount={resultCount}");
-            report.Add("milliseconds=" + string.Join(",", times.Select(value => value.ToString("F4", CultureInfo.InvariantCulture))));
-            report.Add("allocatedBytes=" + string.Join(",", allocations));
-            Array.Sort(times);
-            Array.Sort(allocations);
-            report.Add("medianMilliseconds=" + times[times.Length / 2].ToString("F4", CultureInfo.InvariantCulture) +
-                       " medianAllocatedBytes=" + allocations[allocations.Length / 2]);
-        }, mapGrid: true);
-        foreach (var line in report)
-            TestContext.Out.WriteLine(line);
-    }
-
     private static List<CMUZOpeningPortal> AssertMatchesFullEnumeration(
         CMUZLevelOpeningCache cache,
         MapId mapId,
@@ -267,6 +154,13 @@ public sealed class CMUZOpeningEdgePruningTest : GameTest
         var centers = new List<(Vector2 Center, float Distance)>();
         cache.FindOpeningCentersNear(mapId, source, radius, centers, grids, maps, transform, tiles);
         Assert.That(centers, Is.EqualTo(expected.Select(portal => (portal.Center, portal.Distance))));
+
+        // A bounded scan must append the same prefix, even with existing caller-owned results.
+        var bounded = centers.Take(2).ToList();
+        var prefix = bounded.ToArray();
+        cache.FindOpeningCentersNear(mapId, source, radius, bounded, grids, maps, transform, tiles,
+            maxOpenings: 25);
+        Assert.That(bounded, Is.EqualTo(prefix.Concat(centers.Take(25))));
         AssertNearest(cache, mapId, source, radius, expected, grids, maps, transform, tiles, true);
         AssertNearest(cache, mapId, source, radius, all, grids, maps, transform, tiles, false);
         return expected;

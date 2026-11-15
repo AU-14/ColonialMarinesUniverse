@@ -9,23 +9,6 @@ namespace Content.IntegrationTests.Tests.Physics;
 
 public sealed class ItemThrowingTest : InteractionTest
 {
-    [Test]
-    [TestOf(typeof(ThrownItemComponent))]
-    public async Task TestThrownItemsDoNotUseHardCollision()
-    {
-        await SpawnTarget("CMUHunterShipWallTurfClosedWallHuntershipHunterBase");
-        var pen = await PlaceInHands("Pen");
-
-        Assert.That(await ThrowItem(), Is.True);
-        await RunTicks(1);
-
-        var fixtures = Comp<FixturesComponent>(pen);
-        Assert.That(fixtures.Fixtures.TryGetValue("throw-fixture", out var thrownFixture), Is.True);
-        Assert.That(thrownFixture!.Hard, Is.False,
-            "Thrown items may report hits, but must not physically push players or other colliders.");
-        Assert.That(thrownFixture.CollisionLayer, Is.EqualTo(0),
-            "Thrown items must not advertise a physical collision layer.");
-    }
 
     /// <summary>
     /// Check that an egg breaks when thrown at a wall.

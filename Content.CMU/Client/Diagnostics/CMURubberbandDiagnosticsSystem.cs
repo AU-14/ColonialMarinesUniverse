@@ -28,15 +28,18 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
 
     private ISawmill _sawmill = default!;
 
+    private static readonly TimeSpan LowBufferSampleInterval = TimeSpan.FromSeconds(5);
+
     private bool _enabled = true;
     private float _snapThreshold = 0.75f;
     private int _catchupApplyThreshold = 3;
     private float _logCooldown = 1f;
 
     private LocalPlayerSnapshot? _lastFrameSnapshot;
-    private LocalPlayerSnapshot? _lastStateSnapshot;
     private TimeSpan _nextCatchupLog;
+    private TimeSpan _nextLowBufferSample;
     private TimeSpan _nextSnapLog;
+    private TimeSpan _nextParentMotionLog;
     private uint _stateApplyFrame;
     private int _stateApplicationsThisFrame;
     private GameTick _lastAppliedStateTick;
@@ -80,17 +83,24 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         if (!TryGetSnapshot(out var current))
         {
             _lastFrameSnapshot = null;
-            _lastStateSnapshot = null;
             return;
         }
 
-        if (_lastFrameSnapshot is { } previous &&
-            IsComparable(previous, current) &&
-            TryGetDistance(previous, current, out var distance) &&
-            distance >= GetFrameSnapThreshold(previous, current, frameTime) &&
-            CanLog(ref _nextSnapLog))
+        if (_lastFrameSnapshot is { } previous && IsComparable(previous, current))
         {
-            LogSnap("frame", previous, current, distance, null, 0);
+            var distance = (current.LocalPosition - previous.LocalPosition).Length();
+            var worldDistance = (current.MapPosition - previous.MapPosition).Length();
+            var threshold = GetFrameSnapThreshold(previous, current, frameTime);
+            if (float.IsFinite(distance) && distance >= threshold)
+            {
+                if (CanLog(ref _nextSnapLog))
+                    LogMotion(previous, current, distance, worldDistance, parentMotion: false);
+            }
+            else if (float.IsFinite(worldDistance) && worldDistance >= threshold && CanLog(ref _nextParentMotionLog))
+            {
+                // A seated passenger inherits shuttle motion. Retain it as context, not a player correction.
+                LogMotion(previous, current, distance, worldDistance, parentMotion: true);
+            }
         }
 
         _lastFrameSnapshot = current;
@@ -105,30 +115,16 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         {
             _stateApplyFrame = _timing.CurFrame;
             _stateApplicationsThisFrame = 0;
-            _lastStateSnapshot = _lastFrameSnapshot;
         }
 
         _stateApplicationsThisFrame++;
 
         var stateTickGap = GetStateTickGap(args.AppliedState.ToSequence);
 
-        LocalPlayerSnapshot? current = null;
-        if (TryGetSnapshot(out var snapshot))
-        {
-            current = snapshot;
-            if (_lastStateSnapshot is { } previous &&
-                IsComparable(previous, snapshot) &&
-                TryGetDistance(previous, snapshot, out var distance) &&
-                distance >= _snapThreshold &&
-                CanLog(ref _nextSnapLog))
-            {
-                LogSnap("state-applied", previous, snapshot, distance, args, stateTickGap);
-            }
-
-            _lastStateSnapshot = snapshot;
-        }
-
-        MaybeLogCatchup(args, current, stateTickGap);
+        // This callback runs before prediction replay. Comparing its older authoritative position
+        // with the last rendered frame mistakes normal prediction rewind for visible rubberbanding.
+        // FrameUpdate compares positions after replay; state callbacks only describe buffer health.
+        MaybeLogStateProgress(args, stateTickGap);
         _lastAppliedStateTick = args.AppliedState.ToSequence;
     }
 
@@ -163,20 +159,41 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         _sawmill.Info($"diagnostics-enabled snapThreshold={F(_snapThreshold)} catchupApplyThreshold={_catchupApplyThreshold} cooldown={F(_logCooldown)}");
     }
 
-    private void MaybeLogCatchup(GameStateAppliedArgs args, LocalPlayerSnapshot? snapshot, uint stateTickGap)
+    private void MaybeLogStateProgress(GameStateAppliedArgs args, uint stateTickGap)
     {
-        var applicable = _gameStates.GetApplicableStateCount();
         var catchup = _stateApplicationsThisFrame >= _catchupApplyThreshold;
-        var lowBuffer = applicable < _gameStates.MinBufferSize;
         var skippedStateTick = stateTickGap > 1;
+        var noteworthy = catchup || skippedStateTick;
 
-        if (!catchup && !lowBuffer && !skippedStateTick)
+        if (noteworthy)
+        {
+            if (!CanLog(ref _nextCatchupLog))
+                return;
+        }
+        else
+        {
+            // A low buffer after applying one state is not a catch-up burst. Sample it separately,
+            // before traversing the buffer, so ordinary updates do not pay for logging every tick.
+            var now = _timing.RealTime;
+            if (now < _nextLowBufferSample)
+                return;
+
+            _nextLowBufferSample = now + TimeSpan.FromSeconds(
+                Math.Max(LowBufferSampleInterval.TotalSeconds, _logCooldown));
+        }
+
+        var applicable = _gameStates.GetApplicableStateCount();
+        var lowBuffer = applicable < _gameStates.MinBufferSize;
+        if (!noteworthy && !lowBuffer)
             return;
 
-        if (!CanLog(ref _nextCatchupLog))
-            return;
-
-        _sawmill.Warning($"state-catchup appliesThisFrame={_stateApplicationsThisFrame} lowBuffer={lowBuffer} skippedStateTick={skippedStateTick} {FormatState(args, stateTickGap)} {(snapshot is { } value ? FormatSnapshot(value) : $"player={FormatPlayer()} ent=none")} {FormatTiming()}");
+        LocalPlayerSnapshot? snapshot = TryGetSnapshot(out var current) ? current : null;
+        var kind = catchup ? "state-catchup" : skippedStateTick ? "state-tick-gap" : "state-low-buffer";
+        var message = $"{kind} appliesThisFrame={_stateApplicationsThisFrame} lowBuffer={lowBuffer} skippedStateTick={skippedStateTick} {FormatState(args, stateTickGap, applicable)} {(snapshot is { } value ? FormatSnapshot(value) : $"player={FormatPlayer()} ent=none")} {FormatTiming()}";
+        if (noteworthy)
+            _sawmill.Warning(message);
+        else
+            _sawmill.Info(message);
     }
 
     private bool TryGetSnapshot(out LocalPlayerSnapshot snapshot)
@@ -195,12 +212,8 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             return false;
 
         var velocity = Vector2.Zero;
-        var physics = "none";
         if (TryComp(entity, out PhysicsComponent? body))
-        {
             velocity = body.LinearVelocity;
-            physics = $"bodyType={body.BodyType} bodyStatus={body.BodyStatus} awake={body.Awake} predict={body.Predict} canCollide={body.CanCollide} contacts={body.ContactCount}";
-        }
 
         snapshot = new LocalPlayerSnapshot(
             entity,
@@ -212,9 +225,6 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
             xform.LocalPosition,
             velocity,
             velocity.Length(),
-            physics,
-            FormatMover(entity),
-            FormatRelay(entity),
             _timing.CurTick,
             _timing.LastRealTick,
             _timing.CurFrame,
@@ -223,29 +233,38 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         return true;
     }
 
-    private void LogSnap(
-        string reason,
+    private void LogMotion(
         LocalPlayerSnapshot previous,
         LocalPlayerSnapshot current,
         float distance,
-        GameStateAppliedArgs? args,
-        uint stateTickGap)
+        float worldDistance,
+        bool parentMotion)
     {
-        var state = args != null
-            ? FormatState(args, stateTickGap)
-            : "state=none";
-
-        _sawmill.Warning($"snap reason={reason} dist={F(distance)} {state} previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}");
+        var message = $"{(parentMotion ? "parent-motion" : "snap reason=frame")} dist={F(distance)} space=parent worldDist={F(worldDistance)} state=none previous={FormatPrevious(previous)} current={FormatSnapshot(current)} {FormatTiming()}";
+        if (parentMotion)
+            _sawmill.Info(message);
+        else
+            _sawmill.Warning(message);
     }
 
-    private string FormatState(GameStateAppliedArgs args, uint stateTickGap)
+    private string FormatState(GameStateAppliedArgs args, uint stateTickGap, int? applicable = null)
     {
-        return $"stateFrom={args.AppliedState.FromSequence} stateTo={args.AppliedState.ToSequence} stateTickGap={stateTickGap} payload={args.AppliedState.PayloadSize} detached={args.Detached.Count} bufferApplicable={_gameStates.GetApplicableStateCount()} bufferTotal={_gameStates.StateCount} bufferTarget={_gameStates.TargetBufferSize} bufferMin={_gameStates.MinBufferSize} mergeThreshold={_gameStates.StateBufferMergeThreshold} predictionEnabled={_gameStates.IsPredictionEnabled}";
+        return $"stateFrom={args.AppliedState.FromSequence} stateTo={args.AppliedState.ToSequence} stateTickGap={stateTickGap} payload={args.AppliedState.PayloadSize} detached={args.Detached.Count} bufferApplicable={applicable ?? _gameStates.GetApplicableStateCount()} bufferTotal={_gameStates.StateCount} bufferTarget={_gameStates.TargetBufferSize} bufferMin={_gameStates.MinBufferSize} mergeThreshold={_gameStates.StateBufferMergeThreshold} predictionEnabled={_gameStates.IsPredictionEnabled}";
     }
 
     private string FormatSnapshot(LocalPlayerSnapshot snapshot)
     {
-        return $"player={FormatPlayer()} ping={_players.LocalSession?.Ping ?? -1} ent={ToPrettyString(snapshot.Entity)} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} snapTick={snapshot.CurTick} snapRealTick={snapshot.LastRealTick} snapFrame={snapshot.Frame} snapTime={F(snapshot.RealTime.TotalSeconds)} physics=\"{snapshot.Physics}\" mover=\"{snapshot.Mover}\" relay=\"{snapshot.Relay}\"";
+        // Current snapshots are logged synchronously. Historical motion stays in the value snapshot;
+        // detailed component text is only needed when a line is actually emitted.
+        return $"player={FormatPlayer()} ping={_players.LocalSession?.Ping ?? -1} ent={ToPrettyString(snapshot.Entity)} net={snapshot.NetEntity} map={snapshot.MapId} grid={FormatEntity(snapshot.GridUid)} parent={FormatEntity(snapshot.ParentUid)} pos={FormatVector(snapshot.MapPosition)} local={FormatVector(snapshot.LocalPosition)} vel={FormatVector(snapshot.LinearVelocity)} speed={F(snapshot.Speed)} snapTick={snapshot.CurTick} snapRealTick={snapshot.LastRealTick} snapFrame={snapshot.Frame} snapTime={F(snapshot.RealTime.TotalSeconds)} physics=\"{FormatPhysics(snapshot.Entity)}\" mover=\"{FormatMover(snapshot.Entity)}\" relay=\"{FormatRelay(snapshot.Entity)}\"";
+    }
+
+    private string FormatPhysics(EntityUid entity)
+    {
+        if (!TryComp(entity, out PhysicsComponent? body))
+            return "none";
+
+        return $"bodyType={body.BodyType} bodyStatus={body.BodyStatus} awake={body.Awake} predict={body.Predict} canCollide={body.CanCollide} contacts={body.ContactCount}";
     }
 
     private static string FormatPrevious(LocalPlayerSnapshot snapshot)
@@ -339,21 +358,18 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
 
     private static bool IsComparable(LocalPlayerSnapshot previous, LocalPlayerSnapshot current)
     {
-        return previous.Entity == current.Entity && previous.MapId == current.MapId;
-    }
-
-    private static bool TryGetDistance(LocalPlayerSnapshot previous, LocalPlayerSnapshot current, out float distance)
-    {
-        distance = (current.MapPosition - previous.MapPosition).Length();
-        return float.IsFinite(distance);
+        // Following a different entity or moving between coordinate spaces starts a new baseline.
+        return previous.Entity == current.Entity && previous.MapId == current.MapId &&
+            previous.GridUid == current.GridUid && previous.ParentUid == current.ParentUid;
     }
 
     private void ResetSnapshots()
     {
         _lastFrameSnapshot = null;
-        _lastStateSnapshot = null;
         _stateApplicationsThisFrame = 0;
         _lastAppliedStateTick = GameTick.Zero;
+        _nextCatchupLog = _nextSnapLog = _nextParentMotionLog = TimeSpan.Zero;
+        _nextLowBufferSample = default;
     }
 
     private readonly record struct LocalPlayerSnapshot(
@@ -366,9 +382,6 @@ public sealed partial class CMURubberbandDiagnosticsSystem : EntitySystem
         Vector2 LocalPosition,
         Vector2 LinearVelocity,
         float Speed,
-        string Physics,
-        string Mover,
-        string Relay,
         GameTick CurTick,
         GameTick LastRealTick,
         uint Frame,

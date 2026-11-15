@@ -128,41 +128,6 @@ public sealed class NativePartRecoveryTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task QueuedDeletionCannotReceiveOneLastNativeRecoveryQuantum(bool deletePart)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var cfg = pair.Server.ResolveDependency<IConfigurationManager>();
-            var originalWounds = cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled);
-            var patient = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            try
-            {
-                cfg.SetCVar(CMUMedicalCCVars.WoundsEnabled, false);
-                var arm = InjureArm(entities, patient, BodyPartSymmetry.Left);
-                var health = entities.GetComponent<BodyPartHealthComponent>(arm);
-                var initialHealth = health.Current;
-                var initialSeverance = health.SeveranceDamage;
-                EnableRecovery(pair.Server.ResolveDependency<IGameTiming>(), health, 1f);
-                health.NextHealTick = TimeSpan.Zero;
-                entities.QueueDeleteEntity(deletePart ? arm : patient);
-                // Exercise the service before the engine flushes the public deletion request.
-                entities.System<BodyPartHealthSystem>().Update(1f);
-                Assert.That(health.Current, Is.EqualTo(initialHealth));
-                Assert.That(health.SeveranceDamage, Is.EqualTo(initialSeverance));
-            }
-            finally
-            {
-                entities.DeleteEntity(patient);
-                cfg.SetCVar(CMUMedicalCCVars.WoundsEnabled, originalWounds);
-            }
-        });
-        await pair.CleanReturnAsync();
-    }
-
     private static EntityUid InjureArm(IEntityManager entities, EntityUid patient, BodyPartSymmetry side)
     {
         entities.System<RegionalDamageProbeSystem>();

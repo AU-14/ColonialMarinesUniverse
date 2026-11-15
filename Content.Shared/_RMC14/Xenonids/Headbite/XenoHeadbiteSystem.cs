@@ -2,6 +2,8 @@ using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Body.Systems;
+using Content.Shared.Body.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -37,6 +39,7 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
 
     private static readonly ProtoId<DamageTypePrototype> LethalDamageType = "Asphyxiation";
     private static readonly ProtoId<StatusEffectPrototype> Unconsciousness = "Unconscious";
@@ -102,6 +105,9 @@ public sealed partial class XenoHeadbiteSystem : EntitySystem
             var filter = Filter.Pvs(target, entityManager: EntityManager).RemoveWhereAttachedEntity(o => o == xeno.Owner);
             _colorFlash.RaiseEffect(Color.Red, new List<EntityUid> { target }, filter);
         }
+
+        if (xeno.Comp.Bloodloss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(target, out var bloodstream))
+            _bloodstream.TryModifyBloodLevel((target, bloodstream), -xeno.Comp.Bloodloss);
 
         if (_mobThresholds.TryGetDeadThreshold(target, out var mobThreshold) && TryComp<DamageableComponent>(target, out var damageable))
         {

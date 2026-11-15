@@ -30,7 +30,7 @@ cmu-cmd-client-perf-failed = Client performance diagnostics failed: { $error }
 
 # Server performance diagnostics
 cmu-cmd-server-perf-desc = Shows or manually captures CMU automatic server performance diagnostics.
-cmu-cmd-server-perf-help = Usage: cmuperf status | report | pvs | physics | reset
+cmu-cmd-server-perf-help = Usage: cmuperf status | report | pvs | physics | window | reset
 cmu-cmd-server-perf-report-written = Detailed CMU performance report written to the cmu.server-performance sawmill.
 cmu-cmd-server-perf-report-unavailable = Performance diagnostics are disabled or have not produced their first sample.
 cmu-cmd-server-perf-reset = CMU performance rate windows and healthy baselines were reset.
@@ -53,3 +53,5 @@ cmu-cmd-medical-perf-marine-candidates =   marine icon candidates: { $count }
 
 cmu-cmd-server-perf-pvs-written = PVS stage window written to the cmu.server-performance sawmill.
 cmu-cmd-server-perf-physics-written = Physics controller window and body census written to the cmu.server-performance sawmill.
+cmu-cmd-server-perf-window-written = Server performance window written to the cmu.server-performance sawmill.
+cmu-cmd-server-perf-window-unavailable = Enable cmu.server_performance.window_enabled and the performance monitor, then allow a measurement window to accumulate.

@@ -108,9 +108,12 @@
     - id: RMCWelderPVE
     - id: CMCrowbar
     - id: CMWirecutter
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack
     - id: CMMultitool
-    - id: CMEntrenchingTool
+    # RUMC: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
+    # - id: CMEntrenchingTool
+    - id: RUMCHandSaw
+    - id: RUMCHammer
 
 - type: entity
   parent: CMBeltUtilityCombat
@@ -124,9 +127,12 @@
     - id: RMCWelderPVE
     - id: CMCrowbar
     - id: CMWirecutter
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack
     - id: CMMultitool
-    - id: CMEntrenchingTool
+    # RUMC: the entrenching tool gives its place in the belt to the hand saw and the hammer (kept, switched off):
+    # - id: CMEntrenchingTool
+    - id: RUMCHandSaw
+    - id: RUMCHammer
 
 - type: entity
   parent: RMCPouchToolsSoc
@@ -140,7 +146,7 @@
     - id: RMCWelderPVE
     - id: CMCrowbar
     - id: CMWirecutter
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack
     - id: CMMultitool
     - id: CMEntrenchingTool
 
@@ -533,10 +539,6 @@
       - CMMagazineRifle
       - CMMagazineSmg
       - CMMagazineSniper
-    blacklist:
-      tags:
-      - RMCSmartPistol
-      - RMCMagazinePistolSU6
   - type: FixedItemSizeStorage
   - type: LimitedStorage
     limits:

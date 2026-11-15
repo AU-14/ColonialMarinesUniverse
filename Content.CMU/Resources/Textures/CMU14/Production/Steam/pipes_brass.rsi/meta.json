@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for Colonial Marines Universe",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "c0"
+    },
+    {
+      "name": "c1"
+    },
+    {
+      "name": "c2"
+    },
+    {
+      "name": "c3"
+    },
+    {
+      "name": "c4"
+    },
+    {
+      "name": "c5"
+    },
+    {
+      "name": "c6"
+    },
+    {
+      "name": "c7"
+    },
+    {
+      "name": "c8"
+    },
+    {
+      "name": "c9"
+    },
+    {
+      "name": "c10"
+    },
+    {
+      "name": "c11"
+    },
+    {
+      "name": "c12"
+    },
+    {
+      "name": "c13"
+    },
+    {
+      "name": "c14"
+    },
+    {
+      "name": "c15"
+    },
+    {
+      "name": "down_n"
+    },
+    {
+      "name": "down_e"
+    },
+    {
+      "name": "down_w"
+    }
+  ]
+}

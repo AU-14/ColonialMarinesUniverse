@@ -60,6 +60,7 @@ public abstract partial class SharedObjectivesSystem : EntitySystem
 
         if (!CanBeAssigned(uid, mindId, mind, comp))
         {
+            Del(uid); // CMU14: the log line promised a delete the upstream code never did; the Early Warning ladder hits this path every level
             Log.Warning($"Objective {proto} did not match the requirements for {_mind.MindOwnerLoggingString(mind)}, deleted it");
             return null;
         }

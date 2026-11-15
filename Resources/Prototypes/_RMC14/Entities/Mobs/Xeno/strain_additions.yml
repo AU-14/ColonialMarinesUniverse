@@ -18,6 +18,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-heatshield-name
+    baseCaste: CMXenoDefender # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-heatshield-description
     popup: rmc-xeno-heatshield-popup
   - type: XenoHeatshield
@@ -51,6 +52,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-venator-name
+    baseCaste: CMXenoSpitter # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-venator-description
     popup: rmc-xeno-venator-popup
   - type: MobThresholds
@@ -107,6 +109,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-alchemist-name
+    baseCaste: CMXenoSpitter # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-alchemist-description
     popup: rmc-xeno-alchemist-popup
   - type: XenoAlchemist
@@ -155,6 +158,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-bulwark-name
+    baseCaste: CMXenoWarrior # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-bulwark-description
     popup: rmc-xeno-bulwark-popup
   - type: XenoBulwark

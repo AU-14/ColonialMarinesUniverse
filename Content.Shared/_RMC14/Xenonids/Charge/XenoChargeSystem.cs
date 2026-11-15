@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Actions;
 using Content.Shared._RMC14.Xenonids.Animation;
@@ -86,6 +87,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private SharedDestructibleSystem _destruct = default!;
     [Dependency] private RMCSizeStunSystem _sizeStun = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -382,7 +384,8 @@ public sealed partial class XenoChargeSystem : EntitySystem
             if (!_xeno.CanAbilityAttackTarget(xeno, slower))
                 continue;
 
-            _slow.TrySlowdown(slower, xeno.Comp.SlowTime, ignoreDurationModifier: true);
+            if (!_yautjaSlow.TryApply(slower, xeno.Comp.YautjaSlow)) // CMU14
+                _slow.TrySlowdown(slower, xeno.Comp.SlowTime, ignoreDurationModifier: true);
         }
 
         RemCompDeferred<XenoChargingComponent>(xeno);

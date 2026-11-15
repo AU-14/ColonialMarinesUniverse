@@ -55,6 +55,17 @@
   anchorGated: true
 
 - type: radioChannel
+  id: CMURadioGovforMedical
+  name: cmu-radio-govfor-medical
+  keycode: "z"
+  frequency: 259.6
+  color: "#1b5e20"
+  longRange: true
+  tower: true
+  faction: "govfor"
+  anchorGated: true
+
+- type: radioChannel
   id: radioGovforFoxtrot
   name: chat-radio-govforfoxtrot
   keycode: "f"
@@ -138,6 +149,17 @@
   keycode: "i"
   frequency: 160.2
   color: "#e4860c"
+  longRange: true
+  tower: true
+  faction: "opfor"
+  anchorGated: true
+
+- type: radioChannel
+  id: CMURadioOpforMedical
+  name: cmu-radio-opfor-medical
+  keycode: "z"
+  frequency: 147.8
+  color: "#1b5e20"
   longRange: true
   tower: true
   faction: "opfor"

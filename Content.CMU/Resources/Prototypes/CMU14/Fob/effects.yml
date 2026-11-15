@@ -1,0 +1,31 @@
+# Reuse existing licensed effect artwork without modifying the imported CMSS13 frames.
+- type: entity
+  parent: EffectSparks
+  id: CMUFobElectricalEffect
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Effects/sparks.rsi
+      state: sparks
+      shader: unshaded
+      map: ["enum.EffectLayers.Unshaded"]
+    - sprite: Effects/electricity.rsi
+      state: electrified
+      shader: unshaded
+  - type: PointLight
+    radius: 1.5
+    energy: 1.5
+    color: "#87cefa"
+
+- type: entity
+  parent: RMCEffectWeldingSparks
+  id: CMUFobRepairEffect
+  categories: [HideSpawnMenu]
+  components:
+  - type: TimedDespawn
+    lifetime: 0.6
+  - type: PointLight
+    radius: 1.5
+    energy: 1
+    color: "#a3ffc2"

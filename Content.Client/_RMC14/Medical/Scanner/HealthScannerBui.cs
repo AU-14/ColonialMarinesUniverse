@@ -204,10 +204,11 @@ public sealed partial class HealthScannerBui : BoundUserInterface
                 continue;
 
             var text = $"{reagent.Quantity.Float():F1}u {prototype.LocalizedName}";
-            if (reagent.Overdose)
-                text += " OD";
-
-            _window.ChemicalsContainer.AddChild(BuildChemicalRow(text, prototype.SubstanceColor, reagent.Overdose));
+            // CMU14: distinguish critical overdose while retaining the bounded server chemical projection.
+            var critical = prototype.CriticalOverdose is { } threshold && reagent.Quantity > threshold;
+            if (critical || reagent.Overdose)
+                text += " " + Loc.GetString(critical ? "cmu-health-scanner-critical-overdose" : "cmu-health-scanner-overdose");
+            _window.ChemicalsContainer.AddChild(BuildChemicalRow(text, prototype.SubstanceColor, reagent.Overdose, critical));
             anyChemicals = true;
         }
 
@@ -394,7 +395,7 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         return untreated ? $"{{{text}}}" : text;
     }
 
-    private static Control BuildChemicalRow(string text, Color reagentColor, bool overdose)
+    private static Control BuildChemicalRow(string text, Color reagentColor, bool overdose, bool critical) // CMU14
     {
         var row = new BoxContainer
         {
@@ -412,9 +413,9 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         });
 
         var label = new Label { Text = text };
-        if (overdose)
+        if (overdose || critical) // CMU14
         {
-            label.FontColorOverride = Color.FromHex("#FF6060");
+            label.FontColorOverride = Color.FromHex(critical ? "#FF6060" : "#FFAA00"); // CMU14
             label.AddStyleClass(CMUMedicalUniformScaler.BoldStyleClass);
         }
         row.AddChild(label);

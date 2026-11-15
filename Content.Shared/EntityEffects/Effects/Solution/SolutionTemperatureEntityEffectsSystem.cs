@@ -111,7 +111,13 @@ public sealed partial class AdjustSolutionThermalEnergyEntityEffectSystem : Enti
                 return;
         }
 
-        _solutionContainer.AddThermalEnergyClamped(entity, delta, args.Effect.MinTemp, args.Effect.MaxTemp);
+        // CMU14 start: clamp only in the direction of the change. A heating effect on a solution below MinTemp (or a
+        // cooling one above MaxTemp) must not jump it to the far bound in one step. FLOW-05.
+        if (delta > 0)
+            _solutionContainer.AddThermalEnergyClamped(entity, delta, float.NegativeInfinity, args.Effect.MaxTemp);
+        else
+            _solutionContainer.AddThermalEnergyClamped(entity, delta, args.Effect.MinTemp, float.PositiveInfinity);
+        // CMU14 end
     }
 }
 

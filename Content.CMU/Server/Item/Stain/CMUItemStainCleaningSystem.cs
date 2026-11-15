@@ -1,6 +1,7 @@
 using Content.Shared.CMU14.Item.Stain;
 using Content.Shared.Forensics;
 using Content.Shared.Forensics.Components;
+using Content.Shared.Inventory;
 
 namespace Content.Server.CMU14.Item.Stain;
 
@@ -23,5 +24,7 @@ public sealed partial class CMUItemStainCleaningSystem : EntitySystem
             return;
 
         _stains.TryClean(target);
+        if (HasComp<InventoryComponent>(target))
+            _stains.CleanExposedEquipment(target);
     }
 }

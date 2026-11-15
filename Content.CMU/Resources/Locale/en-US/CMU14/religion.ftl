@@ -16,6 +16,7 @@ cmu-pray-cooldown = You prayed recently. You can pray again in {$minutes} {$minu
    *[other] minutes
 }.
 cmu-pray-admin-message = {$name} prays: "{$prayer}"
+cmu-pray-teleport-header = Teleport:{" "}
 
 cmu-religion-atheist = Atheist
 cmu-religion-agnostic = Agnostic

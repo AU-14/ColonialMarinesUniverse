@@ -11,6 +11,7 @@
   - type: Skills
     skills:
       RMCSkillMedical: 3
+      RMCSkillResearch: 1
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1

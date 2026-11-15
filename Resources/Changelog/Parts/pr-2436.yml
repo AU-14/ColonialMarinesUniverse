@@ -1,0 +1,19 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Right-click mining and industry tools or machines and choose Help for illustrated
+    controls, crafting and setup guides.
+  type: Add
+- message: Open Mining & Industry in the Guidebook for a searchable crafting recipe
+    planner; click materials to see their recipes.
+  type: Add
+- message: Ghosts can use Mining map to view underground terrain they explore in 3D.
+  type: Add
+- message: Cave survey maps pan continuously across recorded terrain instead of using
+    sector buttons.
+  type: Tweak
+- message: Tab-complete cavern settings, biome names and presets with cmu_caverns
+    before Insurgency.
+  type: Add
+time: '2026-11-02T22:17:14.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2436

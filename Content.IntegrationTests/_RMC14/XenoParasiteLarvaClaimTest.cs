@@ -453,36 +453,6 @@ public sealed class XenoParasiteLarvaClaimTest
         await CleanReturnDisconnected(pair);
     }
 
-    [Test]
-    public async Task DeletingControlledLarvaDoesNotUpdateRemovedEye()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
-        var map = await pair.CreateTestMap();
-        EntityUid larva = default;
-        await pair.Server.WaitPost(() =>
-        {
-            var entMan = pair.Server.EntMan;
-            larva = entMan.SpawnEntity("CMXenoLarva", map.GridCoords);
-            var mind = entMan.System<MindSystem>();
-            var mindId = mind.CreateMind(pair.Server.PlayerMan.Sessions.Single().UserId, "Larva");
-            mind.TransferTo(mindId, larva);
-        });
-        await pair.RunTicksSync(5);
-        // Network deletions can dispose the controlled entity before the session detaches from it.
-        await pair.Client.WaitPost(() =>
-        {
-            using var state = pair.Client.ResolveDependency<IClientGameTiming>().StartStateApplicationArea();
-            var entMan = pair.Client.EntMan;
-            var localLarva = pair.Client.PlayerMan.LocalEntity!.Value;
-            entMan.RemoveComponent<EyeComponent>(localLarva);
-            entMan.RemoveComponent<NightVisionComponent>(localLarva);
-            entMan.DeleteEntity(localLarva);
-        });
-        await pair.Server.WaitPost(() => pair.Server.EntMan.DeleteEntity(larva));
-        await pair.RunTicksSync(5);
-        await CleanReturnDisconnected(pair);
-    }
-
     private static async Task AssertClaimedLarvaCanBurst(TestPair pair, EntityUid victim)
     {
         var server = pair.Server;

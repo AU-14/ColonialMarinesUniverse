@@ -1,0 +1,35 @@
+<Document>
+  # Tools: what to click
+
+  [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Make these tools" link="CMUGuideIndustryRecipes"]
+
+  These are [bold]OOC controls[/bold]. Right-click equipment → [bold]Help[/bold] opens its instructions. Key names below follow your bindings.
+
+  ## Digging kit
+  <Box>
+    <GuideEntityEmbed Entity="RUMCStoneShovel" Caption="SOIL"/>
+    <GuideEntityEmbed Entity="RUMCBrassPickaxe" Caption="ROCK"/>
+    <GuideEntityEmbed Entity="RUMCJackhammer" Caption="BLACK ROCK"/>
+  </Box>
+  - [bold]Shovel:[/bold] hold it, point at clear nearby floor and press [keybind="ActivateItemInHand"] to dig a shaft. Right-click the tool to change up/down mode.
+  - [bold]Pickaxe:[/bold] use the same shaft controls for deeper rock layers. To mine a wall, strike it with the appropriate mining tool.
+  - [bold]Jackhammer:[/bold] the tool for black rock. Insert a charged power cell; a flat tool will refuse to work.
+  - Wooden digging tools break after two digs; stone after six. Examine primitive tools to check their remaining uses.
+
+  [textlink="Where to dig, ladders and maps" link="CMUGuideIndustryDig"]
+
+  ## Wood and fire
+  <Box>
+    <GuideEntityEmbed Entity="RUMCHandSaw" Caption="LOG → PLANKS"/>
+    <GuideEntityEmbed Entity="RUMCFlintStriker" Caption="LIGHT A FIRE"/>
+  </Box>
+  Chop a tree with an axe. Use a hand saw on its log to make planks. Logs occupy both hands. Use a stone striker on a fueled campfire or furnace; failed sparks are normal, but each attempt wears the striker.
+
+  ## Powered tools and surveying
+  <GuideEntityEmbed Entity="RUMCProspector" Caption="ACTIVATE TO SCAN"/>
+  Insert a charged cell into powered tools; recharge spare cells in a powered charger. Electric screwdrivers, wrenches, cutters, crowbars and hammers perform their usual tool jobs faster.
+
+  Hold the [bold]prospector[/bold] and press [keybind="ActivateItemInHand"]. It spends charge to report nearby ore/oil deposit counts and the nearest direction and distance. It is a local scan, not a full map of unexplored caves.
+
+  [textlink="Tongs, hammer and chisel controls" link="CMUGuideIndustryForge"] · [textlink="Charging and power" link="CMUGuideIndustryElectric"]
+</Document>

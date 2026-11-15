@@ -46,6 +46,16 @@ public sealed class CMUVehicleEngineLoopSystem : EntitySystem
             if (!engine.EngineRunning || (MetaData(uid).Flags & MetaDataFlags.Detached) != 0)
                 continue;
 
+            var idleSound = engine.Rough ? engine.RoughSound : engine.IdleSound;
+            var driveSound = engine.Rough ? engine.RoughDriveSound : engine.DriveSound;
+            var maxDistance = MathF.Max(idleSound?.Params.MaxDistance ?? 0f, driveSound?.Params.MaxDistance ?? 0f);
+            // Keep a small margin for existing loops so movement at the hearing boundary
+            // does not repeatedly destroy and recreate them. Other maps never retain sources.
+            if (_loops.ContainsKey(uid))
+                maxDistance += 1f;
+            if (!Audible(uid, maxDistance))
+                continue;
+
             _running.Add(uid);
             if (!_loops.TryGetValue(uid, out var loops) || loops.Rough != engine.Rough)
             {
@@ -53,8 +63,8 @@ public sealed class CMUVehicleEngineLoopSystem : EntitySystem
                 loops = new Loops
                 {
                     Rough = engine.Rough,
-                    Idle = Play(uid, engine.Rough ? engine.RoughSound : engine.IdleSound),
-                    Drive = Play(uid, engine.Rough ? engine.RoughDriveSound : engine.DriveSound),
+                    Idle = Play(uid, idleSound),
+                    Drive = Play(uid, driveSound),
                 };
                 _loops[uid] = loops;
             }
@@ -82,7 +92,7 @@ public sealed class CMUVehicleEngineLoopSystem : EntitySystem
 
     private void SetGain((EntityUid Entity, float Volume)? loop, float gain)
     {
-        if (loop is not { } playing || !TryComp(playing.Entity, out AudioComponent? audio) || !Audible(playing.Entity, audio))
+        if (loop is not { } playing || !TryComp(playing.Entity, out AudioComponent? audio) || !Audible(playing.Entity, audio.MaxDistance))
             return;
 
         _audio.SetVolume(playing.Entity, playing.Volume + SharedAudioSystem.GainToVolume(gain), audio);
@@ -92,7 +102,7 @@ public sealed class CMUVehicleEngineLoopSystem : EntitySystem
     /// The audio system mutes a source on another map or out of range without moving it, and setting the
     /// volume would unmute it there. Same checks as its own, so the loops are only set where they're heard.
     /// </summary>
-    private bool Audible(EntityUid loop, AudioComponent audio)
+    private bool Audible(EntityUid loop, float maxDistance)
     {
         var listener = _eye.CurrentEye.Position;
         var xform = Transform(loop);
@@ -100,7 +110,7 @@ public sealed class CMUVehicleEngineLoopSystem : EntitySystem
             return false;
 
         var distance = (_transform.GetWorldPosition(xform) - listener.Position).Length();
-        return _audio.GetAudioDistance(distance) <= audio.MaxDistance;
+        return _audio.GetAudioDistance(distance) <= maxDistance;
     }
 
     private void StopUnused()

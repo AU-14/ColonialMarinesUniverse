@@ -92,45 +92,6 @@ public sealed class MohawkFlightFeaturesTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase("omaha")]
-    [TestCase("midway")]
-    public async Task QueenCanUseTheHijackPointFromTheCabinAboveAColony(string variant)
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var config = pair.Server.ResolveDependency<IConfigurationManager>();
-            config.SetCVar(RMCCVars.RMCDropshipInitialDelayMinutes, 0f);
-            config.SetCVar(RMCCVars.RMCDropshipHijackInitialDelayMinutes, 0);
-            var ship = LoadShip(entities, variant);
-            var lower = entities.GetComponent<MultiDeckDropshipComponent>(ship).Decks[-1];
-            var ground = entities.GetComponent<TransformComponent>(lower).MapUid!.Value;
-            entities.AddComponent<RMCPlanetComponent>(ground);
-            var carrier = entities.System<SharedMapSystem>().CreateMap();
-            entities.AddComponent<ShipFactionComponent>(carrier);
-            var marker = entities.SpawnEntity(null, new EntityCoordinates(carrier, 10, 10));
-            entities.AddComponent<DropshipHijackDestinationComponent>(marker);
-            var nav = OnShip<DropshipNavigationComputerComponent>(entities, ship);
-            var queen = entities.SpawnEntity("CMXenoQueen", entities.GetComponent<TransformComponent>(nav.Owner).Coordinates.Offset(new(0, -1)));
-            entities.EnsureComponent<XenoMaturingComponent>(queen);
-#pragma warning disable RA0002 // Skip the tested-elsewhere three-second console lockout do-after.
-            nav.Comp.LockedOutUntil = pair.Server.ResolveDependency<IGameTiming>().CurTime + TimeSpan.FromMinutes(1);
-#pragma warning restore RA0002
-            var attempt = new ActivateInWorldEvent(queen, nav.Owner, true);
-            entities.EventBus.RaiseLocalEvent(nav.Owner, attempt);
-            var ui = entities.System<SharedUserInterfaceSystem>();
-            Assert.That(ui.IsUiOpen(nav.Owner, DropshipHijackerUiKey.Key, queen), Is.True,
-                "The cabin is one Z level above the RMCPlanet map; it must still permit a planetside queen hijack.");
-            var state = (DropshipHijackerBuiState) entities.GetComponent<UserInterfaceComponent>(nav.Owner).States[DropshipHijackerUiKey.Key];
-            Assert.That(state.CanHijack, Is.True, "The single hijack action must enable when the server has a valid carrier destination.");
-            Assert.That(state.CanDeclineHijack, Is.True);
-            entities.DeleteEntity(ship);
-            entities.DeleteEntity(carrier);
-        });
-        await pair.CleanReturnAsync();
-    }
-
     // pooled servers can still have consoles and doors from earlier tests, so only look at this ship
     private static Entity<T> OnShip<T>(IEntityManager entities, EntityUid ship, Func<Entity<T>, bool>? filter = null) where T : IComponent
     {

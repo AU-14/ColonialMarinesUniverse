@@ -1,8 +1,9 @@
+using System.Numerics;
 using Content.Server.Shuttles.Components;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Utility.Components;
+using Content.Shared._RMC14.Emplacements;
 using Content.Shared.Buckle.Components;
-using Content.Shared.Doors;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
 using Robust.Shared.Map;
@@ -11,14 +12,15 @@ using Robust.Shared.Maths;
 namespace Content.Server.CMU14.Dropship.AttachmentPoint;
 
 /// <summary>
-/// Links an MTU-4B deployed from a dedicated hardpoint to an adjacent exterior
-/// dropship door. The deployed mount moves into the doorway and holds an
+/// Links a door gun deployed from a dedicated hardpoint to an adjacent exterior
+/// dropship door. The deployed mount moves outward into the doorway and holds an
 /// unlocked door open until it is retracted.
 /// </summary>
 public sealed partial class GunshipDoorGunnerSystem : EntitySystem
 {
     [Dependency] private SharedDoorSystem _doors = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedWeaponMountSystem _mounts = default!;
 
     public override void Initialize()
     {
@@ -27,7 +29,6 @@ public sealed partial class GunshipDoorGunnerSystem : EntitySystem
         SubscribeLocalEvent<GunshipDoorGunnerAttachmentComponent, RMCEquipmentDeployedEvent>(OnEquipmentDeployed);
         SubscribeLocalEvent<ActiveGunshipDoorGunnerComponent, StrappedEvent>(OnGunnerStrapped);
         SubscribeLocalEvent<ActiveGunshipDoorGunnerComponent, ComponentShutdown>(OnGunnerShutdown);
-        SubscribeLocalEvent<GunshipDoorGunnerHeldOpenComponent, BeforeDoorClosedEvent>(OnHeldDoorClosing);
     }
 
     private void OnEquipmentDeployed(
@@ -36,6 +37,9 @@ public sealed partial class GunshipDoorGunnerSystem : EntitySystem
     {
         if (!args.Deployed)
         {
+            if (TryComp(args.Equipment, out WeaponMountComponent? mount))
+                _mounts.SetRotationLocked((args.Equipment, mount), false);
+
             if (TryComp(args.Equipment, out ActiveGunshipDoorGunnerComponent? active))
             {
                 ReleaseDoor((args.Equipment, active));
@@ -80,14 +84,19 @@ public sealed partial class GunshipDoorGunnerSystem : EntitySystem
         var outward = doorXform.LocalPosition - pointXform.LocalPosition;
 
         _transform.SetCoordinates(gunner,
-            new EntityCoordinates(doorXform.ParentUid, doorXform.LocalPosition));
+            new EntityCoordinates(doorXform.ParentUid, doorXform.LocalPosition + Vector2.Normalize(outward) * 0.9f));
         _transform.SetLocalRotation(gunner, outward.ToWorldAngle());
+
+        if (TryComp(gunner, out WeaponMountComponent? mount))
+            _mounts.SetRotationLocked((gunner, mount), true);
     }
 
     private void HoldDoor(Entity<ActiveGunshipDoorGunnerComponent> gunner, Entity<DoorComponent> door)
     {
         var heldOpen = EnsureComp<GunshipDoorGunnerHeldOpenComponent>(door);
         heldOpen.Holders.Add(gunner.Owner);
+        heldOpen.HeldOpen = true;
+        Dirty(door.Owner, heldOpen);
         gunner.Comp.HeldDoor = door.Owner;
 
         if (door.Comp.State is not DoorState.Open and not DoorState.Opening)
@@ -97,13 +106,6 @@ public sealed partial class GunshipDoorGunnerSystem : EntitySystem
     private void OnGunnerShutdown(Entity<ActiveGunshipDoorGunnerComponent> gunner, ref ComponentShutdown args)
     {
         ReleaseDoor(gunner);
-    }
-
-    private void OnHeldDoorClosing(Entity<GunshipDoorGunnerHeldOpenComponent> door, ref BeforeDoorClosedEvent args)
-    {
-        door.Comp.Holders.RemoveWhere(holder => TerminatingOrDeleted(holder));
-        if (door.Comp.Holders.Count > 0)
-            args.Cancel();
     }
 
     private void ReleaseDoor(Entity<ActiveGunshipDoorGunnerComponent> gunner)
@@ -116,9 +118,12 @@ public sealed partial class GunshipDoorGunnerSystem : EntitySystem
             return;
 
         heldOpen.Holders.Remove(gunner.Owner);
+        heldOpen.Holders.RemoveWhere(holder => TerminatingOrDeleted(holder));
         if (heldOpen.Holders.Count > 0)
             return;
 
+        heldOpen.HeldOpen = false;
+        Dirty(door, heldOpen);
         RemCompDeferred<GunshipDoorGunnerHeldOpenComponent>(door);
         if (TryComp(door, out DoorComponent? doorComp))
             _doors.TryClose(door, doorComp);

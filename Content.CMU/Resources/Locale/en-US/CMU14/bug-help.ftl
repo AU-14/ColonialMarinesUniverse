@@ -1,0 +1,27 @@
+cmu-cmd-bughelp-desc = Send a bug report to the developers. The server attaches your location, gear and round context automatically.
+cmu-cmd-bughelp-help = bughelp opens the report window; bughelp <what happened> sends directly.
+cmu-cmd-bughelp-player-only = This command can only be run by a player.
+cmu-cmd-bughelp-sent = Report { $id } sent to the developers. Add a screenshot in the bug report channel on Discord if you can.
+cmu-cmd-bughelp-disabled = Bug reporting is not configured on this server.
+cmu-cmd-bughelp-rate-limited = You are filing bug reports too quickly. Try again later.
+cmu-cmd-bughelp-no-entity = You must be in the game to file a bug report.
+
+cmu-bughelp-window-title = Bug Report
+cmu-bughelp-dualmode = Need help right now? Staff answer during the round. Bug reports go to the developers and may take days.
+cmu-bughelp-talk-to-staff = Talk to staff
+cmu-bughelp-window-empty = Describe what happened before sending.
+cmu-bughelp-category = Category
+cmu-bughelp-category-code = Code bug
+cmu-bughelp-category-mapping = Mapping bug
+cmu-bughelp-what-happened = What happened?
+cmu-bughelp-expected = What did you expect to happen? (optional)
+cmu-bughelp-steps = Steps to reproduce (optional)
+cmu-bughelp-item = Item involved (optional)
+cmu-bughelp-item-placeholder = flamer, M34, mortar shell...
+cmu-bughelp-examine = Examine text (optional)
+cmu-bughelp-submit = Send Report
+cmu-bughelp-autocontext = The server attaches your position, gear and round context automatically.
+cmu-bughelp-promote-ack = SERVER: staff filed your bug report as { $id }.
+cmu-bughelp-promote-decline-offline = SERVER: bug report not filed. The player must be online and in the round.
+cmu-bughelp-promote-decline-empty = SERVER: bug report not filed. The conversation has nothing to report.
+cmu-bughelp-promote-decline-disabled = SERVER: bug report not filed. Bug reporting is not configured on this server.

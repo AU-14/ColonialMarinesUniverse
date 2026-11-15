@@ -32,10 +32,12 @@ public sealed partial class GovforEvacAlertSystem : EntitySystem
             return;
         }
 
-        var minutes = progress.SelfDestructAt is { } destructAt
-            ? (int) Math.Ceiling((destructAt - _timing.CurTime).TotalMinutes)
-            : 0;
-        Broadcast(ev.Map, Loc.GetString("govfor-evac-started", ("minutes", minutes)));
+        // No destruct clock means no departure timer to quote; the retreat notice still goes out.
+        var message = progress.SelfDestructAt is { } destructAt
+            ? Loc.GetString("govfor-evac-started",
+                ("minutes", (int) Math.Ceiling((destructAt - _timing.CurTime).TotalMinutes)))
+            : Loc.GetString("govfor-evac-started-no-destruct");
+        Broadcast(ev.Map, message);
     }
 
     private void OnEvacuationDisabled(ref EvacuationDisabledEvent ev)

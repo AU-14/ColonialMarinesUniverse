@@ -1,0 +1,354 @@
+# cmss13 runedsandstone_recipes and sandstone_recipes. the runed menu was yautja-only there,
+# here every runed recipe needs the hunter antag skill instead
+
+# --- runed sandstone ---
+
+- type: rmcConstruction
+  id: CMUYautjaRunedBuildBase
+  abstract: true
+  prototype: CMUYautjaTempleWall
+  skill: RMCSkillAntagonist
+  requiredSkillLevel: 2
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaTempleDoorBuild
+  name: temple door
+  prototype: CMUYautjaTempleDoor
+  doAfterTime: 1
+  materialCost: 15
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaTempleDoorDarkBuild
+  name: dark temple door
+  prototype: CMUYautjaTempleDoorDark
+  doAfterTime: 1
+  materialCost: 15
+
+- type: rmcConstruction
+  id: CMUYautjaTempleWallsBuild
+  name: temple walls (5 runed sandstone)
+  prototype: CMUYautjaTempleWall
+  listed:
+  - CMUYautjaTempleWallBuild
+  - CMUYautjaTempleWallDecorated1Build
+  - CMUYautjaTempleWallDecorated2Build
+  - CMUYautjaTempleWallDecorated3Build
+  - CMUYautjaTempleWallDarkBuild
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaTempleWallBuildBase
+  abstract: true
+  noRotate: true
+  doAfterTime: 5
+  materialCost: 5
+
+- type: rmcConstruction
+  parent: CMUYautjaTempleWallBuildBase
+  id: CMUYautjaTempleWallBuild
+  name: temple wall
+  prototype: CMUYautjaTempleWall
+
+- type: rmcConstruction
+  parent: CMUYautjaTempleWallBuildBase
+  id: CMUYautjaTempleWallDecorated1Build
+  name: decorated temple wall 1
+  prototype: CMUYautjaTempleWallDecorated1
+
+- type: rmcConstruction
+  parent: CMUYautjaTempleWallBuildBase
+  id: CMUYautjaTempleWallDecorated2Build
+  name: decorated temple wall 2
+  prototype: CMUYautjaTempleWallDecorated2
+
+- type: rmcConstruction
+  parent: CMUYautjaTempleWallBuildBase
+  id: CMUYautjaTempleWallDecorated3Build
+  name: decorated temple wall 3
+  prototype: CMUYautjaTempleWallDecorated3
+
+- type: rmcConstruction
+  parent: CMUYautjaTempleWallBuildBase
+  id: CMUYautjaTempleWallDarkBuild
+  name: dark temple wall
+  prototype: CMUYautjaTempleWallDark
+
+- type: rmcConstruction
+  id: CMUYautjaTempleFloorsBuild
+  name: temple floors (1 runed sandstone)
+  prototype: CMUYautjaTileApplierTempleFloor
+  listed:
+  - CMUYautjaTempleFloorBuild
+  - CMUYautjaDecoSquareVerticalBuild
+  - CMUYautjaDecoSquareHorizontalBuild
+  - CMUYautjaDecoDiamondBuild
+  - CMUYautjaDecoPatternVerticalBuild
+  - CMUYautjaDecoPatternHorizontalBuild
+  - CMUYautjaDarkDecoSquareVerticalBuild
+  - CMUYautjaDarkDecoSquareHorizontalBuild
+  - CMUYautjaDarkDecoDiamondBuild
+  - CMUYautjaDarkDecoPatternVerticalBuild
+  - CMUYautjaDarkDecoPatternHorizontalBuild
+  - CMUYautjaEngravedFloorBuild
+  - CMUYautjaDarkRedFloorBuild
+  - CMUYautjaSunRunedFloorBuild
+  - CMUYautjaSquareRunedFloorBuild
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaFloorBuildBase
+  abstract: true
+  noRotate: true
+  materialCost: 1
+  restrictedCollisionGroup: null
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaTempleFloorBuild
+  name: temple floor
+  prototype: CMUYautjaTileApplierTempleFloor
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDecoSquareVerticalBuild
+  name: temple floor deco square vertical
+  prototype: CMUYautjaTileApplierDecoSquareVertical
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDecoSquareHorizontalBuild
+  name: temple floor deco square horizontal
+  prototype: CMUYautjaTileApplierDecoSquareHorizontal
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDecoDiamondBuild
+  name: temple floor deco diamond pattern
+  prototype: CMUYautjaTileApplierDecoDiamond
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDecoPatternVerticalBuild
+  name: temple floor deco pattern vertical
+  prototype: CMUYautjaTileApplierDecoPatternVertical
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDecoPatternHorizontalBuild
+  name: temple floor deco pattern horizontal
+  prototype: CMUYautjaTileApplierDecoPatternHorizontal
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDarkDecoSquareVerticalBuild
+  name: dark temple floor deco square vertical
+  prototype: CMUYautjaTileApplierDarkDecoSquareVertical
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDarkDecoSquareHorizontalBuild
+  name: dark temple floor deco square horizontal
+  prototype: CMUYautjaTileApplierDarkDecoSquareHorizontal
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDarkDecoDiamondBuild
+  name: dark temple floor deco diamond pattern
+  prototype: CMUYautjaTileApplierDarkDecoDiamond
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDarkDecoPatternVerticalBuild
+  name: dark temple floor deco pattern vertical
+  prototype: CMUYautjaTileApplierDarkDecoPatternVertical
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDarkDecoPatternHorizontalBuild
+  name: dark temple floor deco pattern horizontal
+  prototype: CMUYautjaTileApplierDarkDecoPatternHorizontal
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaEngravedFloorBuild
+  name: engraved floor
+  prototype: CMUYautjaTileApplierEngraved
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaDarkRedFloorBuild
+  name: dark red floor
+  prototype: CMUYautjaTileApplierDarkRed
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaSunRunedFloorBuild
+  name: sun runed floor
+  prototype: CMUYautjaTileApplierSunRuned
+
+- type: rmcConstruction
+  parent: CMUYautjaFloorBuildBase
+  id: CMUYautjaSquareRunedFloorBuild
+  name: square runed floor
+  prototype: CMUYautjaTileApplierSquareRuned
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaBrazierFrameBuild
+  name: brazier frame
+  prototype: CMUYautjaBrazierFrame
+  noRotate: true
+  doAfterTime: 5
+  materialCost: 5
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaWallTorchFrameBuild
+  name: wall torch frame
+  prototype: CMUYautjaWallTorchFrame
+  noRotate: true
+  doAfterTime: 2
+  materialCost: 2
+  ignoreBuildRestrictions: true
+  restrictedCollisionGroup: null
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaAlienChairBuild
+  name: alien chair
+  prototype: CMUYautjaAlienChair
+  doAfterTime: 2
+  materialCost: 2
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaAlienBedBuild
+  name: alien bed
+  prototype: CMUYautjaAlienBed
+  noRotate: true
+  doAfterTime: 3
+  materialCost: 3
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaStatueAncientBuild
+  name: ancient statue
+  prototype: CMUYautjaStatueAncient
+  noRotate: true
+  doAfterTime: 3
+  materialCost: 10
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaStatueTanBuild
+  name: tan statue
+  prototype: CMUYautjaStatueTan
+  noRotate: true
+  doAfterTime: 3
+  materialCost: 10
+
+- type: rmcConstruction
+  parent: CMUYautjaRunedBuildBase
+  id: CMUYautjaStatueGreyBuild
+  name: grey statue
+  prototype: CMUYautjaStatueGrey
+  noRotate: true
+  doAfterTime: 3
+  materialCost: 10
+
+# --- plain sandstone, anyone can use these ---
+
+- type: rmcConstruction
+  id: CMUSandstoneDirtPileBuild
+  name: pile of dirt
+  prototype: hydroponicsSoil
+  noRotate: true
+  doAfterTime: 1
+  materialCost: 3
+
+- type: rmcConstruction
+  id: CMUSandstoneDoorBuild
+  name: sandstone door
+  prototype: RMCSandstoneDoor
+  materialCost: 10
+
+- type: rmcConstruction
+  id: CMUSandstoneWallBuild
+  name: sandstone wall
+  prototype: RMCWallSandstone
+  noRotate: true
+  doAfterTime: 5
+  materialCost: 5
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 2
+
+- type: rmcConstruction
+  id: CMUSandstoneFloorBuild
+  name: sandstone floor
+  prototype: CMUYautjaTileApplierTempleFloor
+  noRotate: true
+  materialCost: 1
+  restrictedCollisionGroup: null
+
+- type: rmcConstruction
+  id: CMUSandstoneHandrailBuildBase
+  abstract: true
+  prototype: CMUSandstoneHandrail
+  doAfterTime: 2
+  doAfterTimeMin: 1
+  materialCost: 2
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 1
+  restrictedCollisionGroup: null
+
+- type: rmcConstruction
+  parent: CMUSandstoneHandrailBuildBase
+  id: CMUSandstoneHandrailBuild
+  name: sandstone handrail (crenellations)
+  prototype: CMUSandstoneHandrail
+
+- type: rmcConstruction
+  parent: CMUSandstoneHandrailBuildBase
+  id: CMUSandstoneHandrailFlatBuild
+  name: sandstone handrail (flat)
+  prototype: CMUSandstoneHandrailFlat
+
+- type: rmcConstruction
+  parent: CMUSandstoneHandrailBuildBase
+  id: CMUSandstoneHandrailDarkBuild
+  name: dark sandstone handrail (cren.)
+  prototype: CMUSandstoneHandrailDark
+
+- type: rmcConstruction
+  parent: CMUSandstoneHandrailBuildBase
+  id: CMUSandstoneHandrailDarkFlatBuild
+  name: dark sandstone handrail (flat)
+  prototype: CMUSandstoneHandrailDarkFlat
+
+# --- graphs ---
+
+# a dead end so the parents' girder/metal-refund graphs don't apply
+- type: constructionGraph
+  id: CMUYautjaLodgeStatic
+  start: static
+  graph:
+  - node: static
+
+- type: constructionGraph
+  parent: RMC
+  id: CMUYautjaBrazier
+  start: frame
+  graph:
+  - node: frame
+    entity: CMUYautjaBrazierFrame
+    edges:
+    - to: brazier
+      steps:
+      - material: RMCWood
+        amount: 5
+        doAfter: 2
+
+  - node: brazier
+    entity: CMUYautjaBrazier

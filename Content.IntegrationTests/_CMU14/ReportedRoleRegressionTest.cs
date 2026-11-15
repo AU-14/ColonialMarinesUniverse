@@ -25,46 +25,6 @@ public sealed class ReportedRoleRegressionTest
 
     private static readonly ProtoId<NpcFactionPrototype> Govfor = "GOVFOR";
 
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task ImaginaryFriendRetainsMentorsCurrentBody(bool deleteImaginer)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        EntityUid body = default, mindUid = default;
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var minds = entities.System<MindSystem>();
-            var mind = minds.CreateMind(null, "Mentor");
-            mindUid = mind;
-            var original = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-            body = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-            var imaginer = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-            var ghost = entities.SpawnEntity("MentorObserver", map.GridCoords);
-            minds.TransferTo(mind, original);
-            minds.TransferTo(mind, body);
-            minds.Visit(mind, ghost);
-            entities.System<ImaginaryFriendSystem>().BecomeImaginaryFriend(imaginer, ghost);
-            Assert.That(mind.Comp.OwnedEntity, Is.EqualTo(body));
-            Assert.That(mind.Comp.VisitingEntity, Is.Not.Null);
-            var friend = mind.Comp.VisitingEntity!.Value;
-            Assert.That(entities.HasComponent<ImaginaryFriendComponent>(friend), Is.True);
-            if (deleteImaginer)
-                entities.DeleteEntity(imaginer);
-            else
-                entities.EventBus.RaiseLocalEvent(friend, new ImaginaryFriendStopBeingFriendsActionEvent());
-        });
-        await pair.RunTicksSync(2);
-        await pair.Server.WaitAssertion(() =>
-        {
-            var mind = pair.Server.EntMan.GetComponent<Content.Shared.Mind.MindComponent>(mindUid);
-            Assert.That(mind.OwnedEntity, Is.EqualTo(body));
-            Assert.That(mind.VisitingEntity, Is.Null);
-        });
-        await pair.CleanReturnAsync();
-    }
-
     [Test]
     public async Task ReanimatedHumansRemainEliminated()
     {

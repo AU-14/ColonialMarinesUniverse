@@ -14,6 +14,7 @@ using Content.Shared.Shuttles.Components;
 using Content.Shared.Tag;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.CMU14.TileMovement;
+using Content.Shared.CMU14.Movement; // CMU14
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -462,6 +463,10 @@ public abstract partial class SharedMoverController : VirtualController
                 TryGetSound(weightless, uid, mover, mobMover, xform, out var sound, tileDef: tileDef))
             {
                 var soundModifier = mover.Sprinting ? InputMoverComponent.SprintingSoundModifier : InputMoverComponent.WalkingSoundModifier;
+                // CMU14
+                var volumeEv = new GetMobFootstepVolumeEvent();
+                RaiseLocalEvent(uid, ref volumeEv);
+                soundModifier += volumeEv.Modifier;
 
                 var audioParams = sound.Params
                     .AddVolume(sound.Params.Volume + soundModifier)
@@ -470,11 +475,15 @@ public abstract partial class SharedMoverController : VirtualController
                 // If we're a relay target then predict the sound for all relays.
                 if (relaySource != null)
                 {
-                    _audio.PlayPredicted(sound, uid, relaySource.Value, audioParams);
+                    // CMU14: bound sources before allocation and filter their original floor.
+                    // _audio.PlayPredicted(sound, uid, relaySource.Value, audioParams);
+                    PlayCMUFootstepSound(sound, uid, relaySource.Value, audioParams);
                 }
                 else
                 {
-                    _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    PlayCMUFootstepSound(sound, uid, uid, audioParams);
                 }
             }
         }
@@ -855,6 +864,10 @@ public abstract partial class SharedMoverController : VirtualController
                 TryGetSound(false, uid, inputMover, mobMover, targetTransform, out var sound, tileDef: tileDef))
             {
                 var soundModifier = inputMover.Sprinting ? 3.5f : 1.5f;
+                // CMU14
+                var volumeEv = new GetMobFootstepVolumeEvent();
+                RaiseLocalEvent(uid, ref volumeEv);
+                soundModifier += volumeEv.Modifier;
                 var volume = sound.Params.Volume + soundModifier;
 
                 var audioParams = sound.Params
@@ -864,11 +877,15 @@ public abstract partial class SharedMoverController : VirtualController
                 // If we're a relay target then predict the sound for all relays.
                 if (relayTarget != null)
                 {
-                    _audio.PlayPredicted(sound, uid, relayTarget.Source, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, relayTarget.Source, audioParams);
+                    PlayCMUFootstepSound(sound, uid, relayTarget.Source, audioParams);
                 }
                 else
                 {
-                    _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    // CMU14
+                    // _audio.PlayPredicted(sound, uid, uid, audioParams);
+                    PlayCMUFootstepSound(sound, uid, uid, audioParams);
                 }
             }
 

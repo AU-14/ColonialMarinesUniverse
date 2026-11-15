@@ -18,6 +18,7 @@ public sealed partial class DropshipUtilitySystem : EntitySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDropshipWeaponSystem _dropshipWeapon = default!;
+    [Dependency] private DropshipHandLoadSystem _handLoad = default!;
 
     public override void Initialize()
     {
@@ -41,6 +42,13 @@ public sealed partial class DropshipUtilitySystem : EntitySystem
     /// </summary>
     private void OnInteract(Entity<DropshipUtilityPointComponent> ent, ref InteractHandEvent args)
     {
+        // AU-14: hand-loaded cannon ammo (BOFORS/howitzer) unloads from the point first.
+        if (_handLoad.TryHandUnload(ent, args.User))
+        {
+            args.Handled = true;
+            return;
+        }
+
         var slot = _container.EnsureContainer<ContainerSlot>(ent, ent.Comp.UtilitySlotId);
         var utilityEntity = slot.ContainedEntity;
         if (!HasComp<DropshipUtilityComponent>(utilityEntity))

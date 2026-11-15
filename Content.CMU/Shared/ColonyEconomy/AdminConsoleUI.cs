@@ -25,15 +25,21 @@ public sealed class AdminConsoleBuiState : BoundUserInterfaceState
     /// <summary>Current income tax in percent (0–50).</summary>
     public float IncomeTaxPercent { get; }
 
+    // RUMC: the tax on the parcels sold through the trade platforms
+    /// <summary>Current tax on the parcels sold through the trade platforms, in percent (0–50).</summary>
+    public float TradeTaxPercent { get; }
+
     /// <summary>Current colony budget balance.</summary>
     public float ColonyBudget { get; }
 
     public EconomyStatusState EconomyStatus { get; }
 
-    public AdminConsoleBuiState(float salesTaxPercent, float incomeTaxPercent, float colonyBudget, EconomyStatusState economyStatus)
+    // RUMC: the constructor had no trade tax (kept): public AdminConsoleBuiState(float salesTaxPercent, float incomeTaxPercent, float colonyBudget, EconomyStatusState economyStatus)
+    public AdminConsoleBuiState(float salesTaxPercent, float incomeTaxPercent, float colonyBudget, EconomyStatusState economyStatus, float tradeTaxPercent = 0f)
     {
         SalesTaxPercent = salesTaxPercent;
         IncomeTaxPercent = incomeTaxPercent;
+        TradeTaxPercent = tradeTaxPercent; // RUMC
         ColonyBudget = colonyBudget;
         EconomyStatus = economyStatus;
     }
@@ -88,4 +94,19 @@ public sealed class AdminConsoleCallThirdPartyBuiMsg : BoundUserInterfaceMessage
 {
     public string ThirdPartyId { get; }
     public AdminConsoleCallThirdPartyBuiMsg(string thirdPartyId) { ThirdPartyId = thirdPartyId; }
+}
+
+// RUMC message: the console sets the tax on the parcels sold through the trade platforms
+[Serializable, NetSerializable]
+public sealed class AdminConsoleSetTradeTaxBuiMsg : BoundUserInterfaceMessage
+{
+    /// <summary>New tax on the parcels sold through the trade platforms, in percent (0–50).</summary>
+    public float TaxPercent { get; }
+    public AdminConsoleSetTradeTaxBuiMsg(float taxPercent) { TaxPercent = taxPercent; }
+}
+
+// RUMC message: the console opens the window of the government of the colony (the reforms and the foreign policy)
+[Serializable, NetSerializable]
+public sealed class AdminConsoleOpenGovernmentBuiMsg : BoundUserInterfaceMessage
+{
 }

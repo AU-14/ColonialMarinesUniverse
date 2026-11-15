@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Linq;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using Content.Shared.Maps;
 using Content.Client.IconSmoothing;
@@ -167,12 +166,23 @@ public sealed partial class CMUReconstructionControl
             var dimensions = handle.GetDimensions(_font, label.Text, 1) + new Vector2(16, 8);
             var rect = UIBox2.FromDimensions(p - dimensions / 2, dimensions);
             if (rect.Left < 8 || rect.Right > PixelWidth - 8 || rect.Top < 36 || rect.Bottom > PixelHeight - 30 ||
-                _labelBoxes.Any(other => rect.Intersects(other)))
+                OverlapsLabel(rect))
                 continue;
             _labelBoxes.Add(UIBox2.FromDimensions(rect.TopLeft - padding, rect.Size + padding * 2));
             handle.DrawRect(rect, Color.FromHex("#0B1826EC"));
             handle.DrawRect(rect, Color.FromHex("#41606C"), false);
             handle.DrawString(_font, rect.TopLeft + new Vector2(8, 4), label.Text, Color.FromHex("#E1EEEE"));
         }
+    }
+
+    private bool OverlapsLabel(UIBox2 rect)
+    {
+        foreach (var other in _labelBoxes)
+        {
+            if (rect.Intersects(other))
+                return true;
+        }
+
+        return false;
     }
 }

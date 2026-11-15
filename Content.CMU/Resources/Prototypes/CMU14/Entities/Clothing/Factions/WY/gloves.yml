@@ -1,0 +1,8 @@
+- type: entity
+  parent: RMCHandsVeteranPMC
+  id: CMUHandsVeteranPMC
+  components:
+  - type: CMArmor
+    melee: 40
+    bullet: 40
+    explosionArmor: 20

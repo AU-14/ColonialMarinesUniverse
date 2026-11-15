@@ -1,0 +1,13 @@
+cmu-gunship-crew-unlinked = Gunship not linked.
+cmu-gunship-crew-current-ammo = {$gun}: {$count} / {$capacity}
+cmu-gunship-crew-other-guns = OTHER DOOR GUNS
+cmu-gunship-crew-no-other-guns = No other door guns installed.
+cmu-gunship-crew-west = West doorgun
+cmu-gunship-crew-east = East doorgun
+cmu-gunship-crew-north = North doorgun
+cmu-gunship-crew-south = South doorgun
+cmu-gunship-crew-gun = {$side}: {$gun}
+cmu-gunship-crew-ammo-percent = {$percent}%
+cmu-gunship-crew-iff-on = Gunship IFF enabled.
+cmu-gunship-crew-iff-off = Gunship IFF disabled.
+cmu-gunship-crew-iff-blocked = Gunship IFF: your gunship is in the line of fire.

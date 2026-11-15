@@ -1211,7 +1211,8 @@
     sprite: _RMC14/Objects/Weapons/Guns/Attachments/rmc_stock.rsi
     state: ak4047_stock
   - type: AttachableToggleable
-    active: true
+    # CMU14: AK-4047 stock starts collapsed like CM-SS13; default Active=false, so the pin is removed.
+    # active: true
     doAfterBreakOnMove: false
     doAfter: 0.5
     icon:

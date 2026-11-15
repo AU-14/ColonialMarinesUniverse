@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Shared.CMU14.ZLevels.Vehicles;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Actions;
@@ -13,10 +14,13 @@ namespace Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 public abstract partial class CMUSharedZLevelsSystem
 {
     [Dependency] protected ITileDefinitionManager TilDefMan = default!;
+    [Dependency] private CMUVehicleZViewSystem _vehicleView = default!;
 
     private readonly List<(Vector2 Center, float Distance)> _distanceOpeningCandidates = new();
     private readonly List<Entity<MapGridComponent>> _openingGridScratch = new();
     private readonly CMUZLevelOpeningCache _sharedOpeningCache = new();
+    private readonly List<Entity<MapGridComponent>> _zShotOpeningGrids = new();
+    private readonly List<float> _zShotCrossings = new();
     private readonly HashSet<Vector2i> _zShotSupportingWallTiles = new();
     private readonly Queue<Vector2i> _zShotSupportingWallQueue = new();
 
@@ -91,7 +95,7 @@ public abstract partial class CMUSharedZLevelsSystem
         }
 
         // Faint -> full look up (original gates apply; on failure we stay in faint mode).
-        if (HasOpaqueAbove(ent))
+        if (HasOpaqueAbove(_vehicleView.GetViewSource(ent)))
         {
             _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
@@ -116,6 +120,33 @@ public abstract partial class CMUSharedZLevelsSystem
 
         viewer.LookUp = false;
         DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.LookUp));
+        return true;
+    }
+
+    // client-side only, not networked
+    public void SetLocalView(Entity<CMUZLevelViewerComponent> ent, bool lookUp, bool faintUp)
+    {
+        ent.Comp.LookUp = lookUp;
+        ent.Comp.FaintUp = faintUp;
+    }
+    /// <summary>
+    /// CMU14: ends the whole look up cycle - full mode and the faint upper ghost - for a viewer whose level is changing
+    /// under it. The faint ghost is otherwise a latched preference the renderer suppresses under a ceiling, but a
+    /// crossing that the player did not ask for (a Yautja leap aimed with look up, arriving on another deck) must not
+    /// leave the upper level ghosted over the level they end up on.
+    /// </summary>
+    public bool EndLookUpCycle(EntityUid uid)
+    {
+        if (!TryComp<CMUZLevelViewerComponent>(uid, out var viewer) ||
+            (!viewer.LookUp && !viewer.FaintUp))
+        {
+            return false;
+        }
+
+        viewer.LookUp = false;
+        viewer.FaintUp = false;
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.LookUp));
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.FaintUp));
         return true;
     }
 
@@ -240,6 +271,10 @@ public abstract partial class CMUSharedZLevelsSystem
         return true;
     }
 
+    /// <summary>
+    /// Finds an opening on the firing line. A finite range is measured to the tile's entry edge,
+    /// not its center. Projectile callers block roofs; artillery and throwing retain their existing rules.
+    /// </summary>
     public bool TryFindZShotOpening(
         EntityUid sourceMap,
         EntityUid targetMap,
@@ -248,30 +283,32 @@ public abstract partial class CMUSharedZLevelsSystem
         Vector2 to,
         out Vector2 opening,
         bool preferOpeningAwayFromSource = false,
-        float maxSourceDistanceFromOpeningEdgeTiles = float.PositiveInfinity)
+        float maxSourceDistanceFromOpeningEdgeTiles = float.PositiveInfinity,
+        bool blockRoofs = false)
     {
         opening = default;
         if (offset == 0)
             return false;
 
-        if (TryFindSourceZStairOpening(sourceMap, offset, from, to, out opening))
+        if (TryFindSourceZStairOpening(sourceMap, offset, from, to, out opening,
+                maxSourceDistanceFromOpeningEdgeTiles))
             return true;
 
         var openingMap = offset < 0 ? sourceMap : targetMap;
-        var openingGrid = openingMap;
-        _movementDeckCandidates.Clear();
-        var candidates = _movementDeckCandidates;
+        var primaryGridUid = openingMap;
+        _zShotOpeningGrids.Clear();
+        var candidates = _zShotOpeningGrids;
         _map.FindGridsIntersecting(openingMap,
             new Box2(Vector2.Min(from, to) - new Vector2(0.01f), Vector2.Max(from, to) + new Vector2(0.01f)), ref candidates);
         foreach (var candidate in candidates)
         {
             if (_dropshipDeckQuery.HasComp(candidate.Owner))
             {
-                openingGrid = candidate.Owner;
+                primaryGridUid = candidate.Owner;
                 break;
             }
         }
-        if (!_gridQuery.TryComp(openingGrid, out var grid))
+        if (!_gridQuery.TryComp(primaryGridUid, out var primaryGrid))
         {
             if (candidates.Count == 0)
             {
@@ -282,39 +319,44 @@ public abstract partial class CMUSharedZLevelsSystem
 
             // Generated maps may later acquire ordinary terrain grids. Their
             // floors still block shots after the dropship has flown away.
-            openingGrid = candidates[0].Owner;
-            grid = candidates[0].Comp;
+            primaryGridUid = candidates[0].Owner;
+            primaryGrid = candidates[0].Comp;
         }
 
-        var sourceTile = preferOpeningAwayFromSource
-            ? _map.WorldToTile(openingGrid, grid, from)
-            : default;
         var fallbackOpening = Vector2.Zero;
         var hasFallbackOpening = false;
-        var maxSourceDistanceFromOpeningCenter = float.IsPositiveInfinity(maxSourceDistanceFromOpeningEdgeTiles)
-            ? float.PositiveInfinity
-            : grid.TileSize * (0.5f + Math.Max(0f, maxSourceDistanceFromOpeningEdgeTiles));
-        var maxSourceDistanceSquared = maxSourceDistanceFromOpeningCenter * maxSourceDistanceFromOpeningCenter;
         var selectedOpening = Vector2.Zero;
 
         CollectSupportingWallGroup(
             targetMap,
             offset,
             from,
-            maxSourceDistanceFromOpeningCenter,
+            (maxSourceDistanceFromOpeningEdgeTiles + 1f) * primaryGrid.TileSize,
             out var supportingWallGrid);
 
-        bool TryUseOpeningTile(Vector2i tile)
+        bool TryUseOpeningTile(Entity<MapGridComponent> openingSurface, Vector2i tile, float entry, float exit)
         {
+            var openingGrid = openingSurface.Owner;
+            var grid = openingSurface.Comp;
+            var maxSourceDistance = grid.TileSize * Math.Max(0f, maxSourceDistanceFromOpeningEdgeTiles);
             var openingCenter = _transform.ToMapCoordinates(_map.ToCenterCoordinates(openingGrid, tile, grid)).Position;
-            if (_map.TryFindGridAt(openingMap, openingCenter, out var surface, out var surfaceGrid) &&
-                !CMUZLevelOpeningCache.IsOpeningTile(surface, surfaceGrid, openingCenter, _map, TilDefMan) &&
+            // Rendering transparency includes solid destroyable roofs. Bullets need a real aperture,
+            // checked on every overlapping grid at the projectile's position on the firing line.
+            var crossing = from + (to - from) * entry;
+            var openingPosition = float.IsFinite(maxSourceDistance)
+                ? ZShotOpeningPosition(from, to, entry, exit)
+                : openingCenter;
+            var blocked = blockRoofs
+                ? !IsZShotPathOpen(openingMap, openingPosition, openingPosition, blockRoofs: true)
+                : _map.TryFindGridAt(openingMap, openingCenter, out var surface, out var surfaceGrid) &&
+                  !CMUZLevelOpeningCache.IsOpeningTile(surface, surfaceGrid, openingCenter, _map, TilDefMan);
+            if (blocked &&
                 !TryFindZStairOpening(openingMap, sourceMap, openingGrid, grid, tile, offset, out openingCenter))
             {
                 return false;
             }
 
-            if (Vector2.DistanceSquared(from, openingCenter) > maxSourceDistanceSquared)
+            if (Vector2.DistanceSquared(from, crossing) > maxSourceDistance * maxSourceDistance)
                 return false;
 
             // A wall directly below the shooter is acting as the surface they are standing on. Keep the
@@ -322,31 +364,64 @@ public abstract partial class CMUSharedZLevelsSystem
             // cross-z projectile is created on the lower map inside its own supporting wall and immediately hits
             // it. Unconnected walls are deliberately not skipped and remain valid targets/obstructions.
             if (supportingWallGrid is { } targetGrid &&
-                _zShotSupportingWallTiles.Contains(_map.WorldToTile(targetGrid.Owner, targetGrid.Comp, openingCenter)))
+                _zShotSupportingWallTiles.Contains(_map.WorldToTile(targetGrid.Owner, targetGrid.Comp, openingPosition)))
             {
                 return false;
             }
 
             if (preferOpeningAwayFromSource &&
-                tile == sourceTile)
+                tile == _map.WorldToTile(openingGrid, grid, from))
             {
                 if (!hasFallbackOpening)
                 {
-                    fallbackOpening = openingCenter;
+                    fallbackOpening = openingPosition;
                     hasFallbackOpening = true;
                 }
 
                 return false;
             }
 
-            selectedOpening = openingCenter;
+            selectedOpening = openingPosition;
             return true;
         }
 
-        foreach (var tile in EnumerateZShotLine((openingGrid, grid), from, to))
+        if (blockRoofs)
         {
-            if (TryUseOpeningTile(tile))
+            // Split the firing line at every grid's boundaries. The start of each shared open
+            // segment is the actual aperture edge, even when overlapping grids move or rotate.
+            _zShotCrossings.Clear();
+            _zShotCrossings.Add(0f);
+            _zShotCrossings.Add(1f);
+            AddCrossings((primaryGridUid, primaryGrid));
+            foreach (var candidate in candidates)
             {
+                if (candidate.Owner != primaryGridUid)
+                    AddCrossings(candidate);
+            }
+
+            _zShotCrossings.Sort();
+            for (var i = 1; i < _zShotCrossings.Count; i++)
+            {
+                var entry = _zShotCrossings[i - 1];
+                var exit = _zShotCrossings[i];
+                if (exit <= entry)
+                    continue;
+
+                var tile = _map.WorldToTile(primaryGridUid, primaryGrid, ZShotOpeningPosition(from, to, entry, exit));
+                if (!TryUseOpeningTile((primaryGridUid, primaryGrid), tile, entry, exit))
+                    continue;
+
+                opening = selectedOpening;
+                return true;
+            }
+        }
+        else
+        {
+            foreach (var (tile, entry, exit) in EnumerateZShotLine((primaryGridUid, primaryGrid), from, to))
+            {
+                if (!TryUseOpeningTile((primaryGridUid, primaryGrid), tile, entry, exit))
+                    continue;
+
                 opening = selectedOpening;
                 return true;
             }
@@ -359,14 +434,32 @@ public abstract partial class CMUSharedZLevelsSystem
         }
 
         return false;
+
+        void AddCrossings(Entity<MapGridComponent> surface)
+        {
+            foreach (var (_, entry, exit) in EnumerateZShotLine(surface, from, to))
+            {
+                _zShotCrossings.Add(entry);
+                _zShotCrossings.Add(exit);
+            }
+        }
     }
 
     /// <summary>
     /// True when a cross-z shot from <paramref name="from"/> to <paramref name="to"/> crosses no floor
     /// tiles on <paramref name="map"/>, including floors on child grids such as dropship cabins.
+    /// With <paramref name="blockRoofs"/>, rendering-transparent roofs also block the path.
     /// </summary>
-    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to)
+    public bool IsZShotPathOpen(EntityUid map, Vector2 from, Vector2 to, EntityUid? supportingMap = null,
+        bool blockRoofs = false)
     {
+        // An empty upper tile can still be supported by a wall on the lower map. Such shots
+        // must use the opening search to clear the wall before creating the projectile below.
+        if (supportingMap is { } below &&
+            _map.TryFindGridAt(below, from, out var supportGrid, out var support) &&
+            HasWallAt(supportGrid, support, _map.WorldToTile(supportGrid, support, from)))
+            return false;
+
         if (_gridQuery.TryComp(map, out var mapGrid) && !IsGridPathOpen((map, mapGrid)))
             return false;
 
@@ -384,17 +477,20 @@ public abstract partial class CMUSharedZLevelsSystem
 
         bool IsGridPathOpen(Entity<MapGridComponent> grid)
         {
-            foreach (var tile in EnumerateZShotLine(grid, from, to))
+            foreach (var (tile, _, _) in EnumerateZShotLine(grid, from, to))
             {
                 if (_map.TryGetTileRef(grid, grid.Comp, tile, out var tileRef) &&
-                    !CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan))
+                    !(blockRoofs
+                        ? CMUZLevelOpeningCache.CanLookUpThrough(tileRef.Tile, TilDefMan)
+                        : CMUZLevelOpeningCache.IsOpeningTile(tileRef.Tile, TilDefMan)))
                     return false;
             }
             return true;
         }
     }
 
-    private IEnumerable<Vector2i> EnumerateZShotLine(Entity<MapGridComponent> map, Vector2 from, Vector2 to)
+    private IEnumerable<(Vector2i Tile, float Entry, float Exit)> EnumerateZShotLine(
+        Entity<MapGridComponent> map, Vector2 from, Vector2 to)
     {
         var localFrom = _map.WorldToLocal(map, map.Comp, from) / map.Comp.TileSize;
         var localTo = _map.WorldToLocal(map, map.Comp, to) / map.Comp.TileSize;
@@ -410,14 +506,16 @@ public abstract partial class CMUSharedZLevelsSystem
         var nextBoundaryY = stepY > 0 ? currentTile.Y + 1f : currentTile.Y;
         var tMaxX = stepX == 0 ? float.PositiveInfinity : (nextBoundaryX - localFrom.X) / localDelta.X;
         var tMaxY = stepY == 0 ? float.PositiveInfinity : (nextBoundaryY - localFrom.Y) / localDelta.Y;
+        var entry = 0f;
 
         while (true)
         {
-            yield return currentTile;
+            yield return (currentTile, entry, Math.Min(1f, Math.Min(tMaxX, tMaxY)));
 
             if (currentTile == endTile)
                 yield break;
 
+            entry = Math.Min(tMaxX, tMaxY);
             if (tMaxX < tMaxY)
             {
                 currentTile += new Vector2i(stepX, 0);
@@ -437,12 +535,20 @@ public abstract partial class CMUSharedZLevelsSystem
         }
     }
 
+    private static Vector2 ZShotOpeningPosition(Vector2 from, Vector2 to, float entry, float exit)
+    {
+        // Keep the projectile inside the aperture and away from supporting wall edges below it.
+        // A tile-center snap bends diagonal shots; use the middle of the crossed segment instead.
+        return from + (to - from) * ((entry + exit) / 2f);
+    }
+
     private bool TryFindSourceZStairOpening(
         EntityUid sourceMap,
         int offset,
         Vector2 from,
         Vector2 to,
-        out Vector2 opening)
+        out Vector2 opening,
+        float maxSourceDistanceFromOpeningEdgeTiles)
     {
         opening = default;
 
@@ -469,6 +575,26 @@ public abstract partial class CMUSharedZLevelsSystem
             var closest = from + delta * progress;
             if (Vector2.DistanceSquared(candidate, closest) > 0.25f)
                 continue;
+
+            if (float.IsFinite(maxSourceDistanceFromOpeningEdgeTiles))
+            {
+                var stairGridUid = xform.GridUid ?? sourceMap;
+                if (!_gridQuery.TryComp(stairGridUid, out var stairGrid))
+                    continue;
+
+                var candidateTile = _map.WorldToTile(stairGridUid, stairGrid, candidate);
+                var maxDistance = Math.Max(0f, maxSourceDistanceFromOpeningEdgeTiles) * stairGrid.TileSize;
+                foreach (var (tile, entry, exit) in EnumerateZShotLine((stairGridUid, stairGrid), from, to))
+                {
+                    if (tile != candidateTile || delta.LengthSquared() * entry * entry > maxDistance * maxDistance)
+                        continue;
+
+                    opening = ZShotOpeningPosition(from, to, entry, exit);
+                    return true;
+                }
+
+                continue;
+            }
 
             opening = candidate;
             return true;

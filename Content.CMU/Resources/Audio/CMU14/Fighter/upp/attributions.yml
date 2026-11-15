@@ -1,0 +1,32 @@
+- files:
+  - idle.ogg
+  - taxi.ogg
+  - exterior.ogg
+  - cockpit.ogg
+  - takeoff.ogg
+  - landing.ogg
+  - startup.ogg
+  - shutdown.ogg
+  - pass.ogg
+  - pass-high.ogg
+  - touchdown.ogg
+  license: CC0-1.0
+  copyright: 'Sandermotions; public HQ recording preview. CMU edits: excerpts, mono, filtering, pitch, layering, envelopes, crossfades
+    and level matching. Rebuild with Tools/fighter/generate-airframe-audio.py.'
+  source: https://freesound.org/people/Sandermotions/sounds/275990/
+- files:
+  - idle.ogg
+  - taxi.ogg
+  - exterior.ogg
+  - cockpit.ogg
+  - takeoff.ogg
+  - landing.ogg
+  - startup.ogg
+  - shutdown.ogg
+  - pass.ogg
+  - pass-high.ogg
+  - touchdown.ogg
+  license: CC0-1.0
+  copyright: 'C-V; public HQ recording preview. CMU edits: excerpts, mono, filtering, pitch, layering, envelopes, crossfades and level
+    matching. Rebuild with Tools/fighter/generate-airframe-audio.py.'
+  source: https://freesound.org/people/C-V/sounds/704945/

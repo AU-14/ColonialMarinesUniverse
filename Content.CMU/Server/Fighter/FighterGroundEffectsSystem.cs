@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.Maps;
+using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Spawners;
 using Robust.Shared.Timing;
@@ -16,6 +17,18 @@ public sealed partial class FighterGroundEffectsSystem : EntitySystem
     [Dependency] private FighterAudioSystem _audio = default!;
 
     public override void Initialize() => SubscribeLocalEvent<FighterPayloadVisualComponent, DropshipWeaponImpactEvent>(OnImpact);
+
+    public override void Update(float frameTime)
+    {
+        // A committed strike survives expiry or removal of its designator.
+        var strikes = EntityQueryEnumerator<FighterStrikeVisualComponent, TransformComponent>();
+        while (strikes.MoveNext(out _, out var strike, out var xform))
+        {
+            if (strike.WarningPlayed || !FighterEffects.WarningVisible(strike, _timing.CurTime)) continue;
+            strike.WarningPlayed = true;
+            _audio.PlayGround(new SoundPathSpecifier("/Audio/CMU14/Fighter/strike-warning.ogg"), xform.Coordinates, 24, -4);
+        }
+    }
 
     private void OnImpact(Entity<FighterPayloadVisualComponent> payload, ref DropshipWeaponImpactEvent args)
     {

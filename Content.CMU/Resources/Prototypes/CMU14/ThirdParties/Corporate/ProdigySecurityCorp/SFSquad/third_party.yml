@@ -425,6 +425,7 @@
 
 - type: thirdParty
   id: CMUProdigySFSquad
+  allegiance: Prodigy
   displayName: Prodigy Security Forces Squad
   partyspawn: CMUProdigySFSquadSpawn
   entrymethod: shuttle

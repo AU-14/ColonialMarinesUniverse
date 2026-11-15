@@ -215,38 +215,33 @@
   isSubfloor: false
 
 - type: tile
-  parent: CMUBosenmoriExact103c10c90bd42017
-  id: CMUBosenmoriCoveredCMUBosenmoriExact103c10c90bd42017
+  parent: CMFloorSteelPlanetBlueFull
+  id: CMUBosenmoriCoveredFloorSteelPlanetBlueFull
   isSubfloor: false
 
 - type: tile
-  parent: CMUBosenmoriExact33bb35301abf7ff9
-  id: CMUBosenmoriCoveredCMUBosenmoriExact33bb35301abf7ff9
+  parent: CMUBosenmoriFloorWarningYellow2
+  id: CMUBosenmoriCoveredFloorWarningYellow2
   isSubfloor: false
 
 - type: tile
-  parent: CMUBosenmoriExact66b0de159b0c15c5
-  id: CMUBosenmoriCoveredCMUBosenmoriExact66b0de159b0c15c5
+  parent: RMCFloorTComms
+  id: CMUBosenmoriCoveredFloorTComms
   isSubfloor: false
 
 - type: tile
-  parent: CMUBosenmoriExact93f730d271a121f9
-  id: CMUBosenmoriCoveredCMUBosenmoriExact93f730d271a121f9
+  parent: CMFloorSteelShivaPlate
+  id: CMUBosenmoriCoveredFloorSteelShivaPlate
   isSubfloor: false
 
 - type: tile
-  parent: CMUBosenmoriExact954361d14f9ec125
-  id: CMUBosenmoriCoveredCMUBosenmoriExact954361d14f9ec125
+  parent: CMFloorSteelShivaMultiTile
+  id: CMUBosenmoriCoveredFloorSteelShivaMultiTile
   isSubfloor: false
 
 - type: tile
-  parent: CMUBosenmoriExacta77eb44c355bd64b
-  id: CMUBosenmoriCoveredCMUBosenmoriExacta77eb44c355bd64b
-  isSubfloor: false
-
-- type: tile
-  parent: CMUBosenmoriExactdadc6df0e2c8f84d
-  id: CMUBosenmoriCoveredCMUBosenmoriExactdadc6df0e2c8f84d
+  parent: CMUBosenmoriFloorRedYellowFull
+  id: CMUBosenmoriCoveredFloorRedYellowFull
   isSubfloor: false
 
 - type: tile

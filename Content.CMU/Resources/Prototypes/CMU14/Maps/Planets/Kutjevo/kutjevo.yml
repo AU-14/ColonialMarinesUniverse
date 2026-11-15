@@ -2,6 +2,8 @@
   id: AuPlanetKutjevo
   name: Kutjevo Biolab
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Kutjevo Biolab"
     mapId: auKutjevo
@@ -15,7 +17,6 @@
     - RMC
     - CMBCIU
     - HAZOPS
-    - ProdigySF
     - VAIPO
     platoonsOpfor:
     - LACN
@@ -86,7 +87,7 @@
   mapsAbove:
   - /Maps/CMU14/Planets/Kutjevo/kutjevo_above.yml
   minPlayers: 0
-  maxPlayers: 200
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:

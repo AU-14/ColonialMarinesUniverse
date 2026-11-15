@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client.Gameplay;
 using Content.Client.Guidebook;
 using Content.Client.Guidebook.Controls;
@@ -147,10 +147,9 @@ public sealed partial class GuidebookUIController : UIController, IOnStateEntere
         if (GuidebookButton != null)
             GuidebookButton.Pressed = false;
 
-        if (_guideWindow != null)
-        {
-            _guideWindow.ReturnContainer.Visible = false;
-        }
+        // CMU14: the window retains navigation state when reopened.
+        // if (_guideWindow != null)
+        //     _guideWindow.ReturnContainer.Visible = false;
     }
 
     private void OnWindowOpen()

@@ -385,8 +385,10 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
             return;
 
         // TODO this should be event based but 2 systems modify the same component differently for some reason
+        var cmuSurrendering = CMUIsSurrendering(); // CMU14
         foreach (var hand in handsGui.HandContainer.GetButtons())
         {
+            CMUUpdateSurrenderHand(hand, cmuSurrendering); // CMU14
 
             if (!_entities.TryGetComponent(hand.Entity, out UseDelayComponent? useDelay))
             {
@@ -395,7 +397,7 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
             }
             var delay = _useDelay.GetLastEndingDelay((hand.Entity.Value, useDelay));
 
-            hand.CooldownDisplay.Visible = true;
+            // hand.CooldownDisplay.Visible = true; // CMU14: FromTime owns visibility, including expired delays.
             hand.CooldownDisplay.FromTime(delay.StartTime, delay.EndTime);
         }
     }
