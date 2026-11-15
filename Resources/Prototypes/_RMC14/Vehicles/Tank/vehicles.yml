@@ -1,0 +1,914 @@
+- type: entity
+  id: VehicleTankBase # CMU14
+  abstract: true
+  name: M34A2 Longstreet
+  description: "An older light tank made for all ground forces of the United Americas, although being phased out due to being outdated by the American Army and the CCAF, the longstreet still remains in service with USCM and LACN detachments in colonial sectors."
+  components:
+  - type: TankCookOff # CMU14
+  - type: CMUVehicleBlastPenetration # CMU14: AP ordnance replicates inside the crew cabin; grenades and plain mortars can't breach tank armour.
+    extraIntensities:
+      RMCMortar: 0
+  - type: RMCNightVisionVisible # CMU14
+    priority: -2
+  - type: Vehicle
+    movementKind: Grid
+    transferDamage: false
+  - type: VehicleOperatorDamage
+    ignoreOwnProjectiles: true
+  - type: VehicleMaintenance
+  - type: Clickable
+  - type: Tag
+    tags:
+    - VehicleHeavy
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
+    # CMU14: vehicle damage and conscious controls.
+    alwaysHitWhitelist:
+      components: [XenoAcidProjectile, VehicleDamageMultiplier]
+  - type: GridVehicleMover
+    maxSpeed: 2.5
+    acceleration: 1.8
+    deceleration: 8
+    maxReverseSpeed: 2
+    reverseAcceleration: 2.2
+    maxRotationSpeedDegrees: 60
+    rotationAccelerationDegrees: 120
+    rotationDecelerationDegrees: 180
+    alignmentAssistDegrees: 8
+    turnDelay: 1
+    turnInPlace: true
+    turnInPlaceMaxSpeed: 0.5
+    pushCooldown: 1
+    canPushVehicles: true
+    blockingMobBypassNudgeLimit: 2
+    xenoBlockMinimumSize: Immobile
+    canXenosPush: false
+    canSmashWalls: true
+    wallSmashMinSpeed: 1.5
+    wallSmashWheelDamage: 0.6
+    wallSmashHullDamage: 12
+    wallSmashSlowdownMultiplier: 0.2
+    wallSmashSlowdownDuration: 1.5
+    speedAtZeroIntegrity: 0.7
+    weightClass: Medium
+  - type: VehicleRideSurface
+    bounds:
+    - -1.3,-1.9,1.3,1.9
+    climbBounds:
+    - -1.8,1.8,1.8,2.8
+  - type: VehicleOvercharge
+    speedMultiplier: 1.2
+    duration: 5
+    cooldown: 24
+    overchargeSound:
+      path: /Audio/_RMC14/Vehicle/tank_boost_rev.wav
+      params:
+        volume: -5
+        pitch: 0.6
+  - type: VehicleSound
+    crashSound: /Audio/_RMC14/Effects/metal_crash.ogg
+    runningSound:
+      path: /Audio/_RMC14/Vehicle/tank_engine_loop.wav
+      params:
+        volume: -6
+    runningSoundCooldown: 3.38
+    hornSound: /Audio/_RMC14/Vehicle/honk_2_truck.ogg
+    hornCooldown: 1
+    collisionSound:
+      path: /Audio/Effects/metal_slam3.ogg
+      params:
+        volume: -3
+        pitch: 0.8
+    collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 2.5
+    mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
+  - type: VehicleSpotlight
+    radius: 8
+    energy: 3
+    softness: 2
+  - type: Physics
+    bodyType: Dynamic
+  #CMU
+  - type: CMUZPhysics
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
+  - type: Fixtures
+    fixtures:
+      world:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -1.2,-1.6,1.2,1.6
+        density: 1500
+        mask:
+        - Impassable
+        - HighImpassable
+        - LowImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+      mob:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -1.2,-1.6,1.2,1.6
+        density: 1500
+        mask:
+        - MidImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+  - type: Damageable
+    damageModifierSet: VehicleFrameTank
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: ReceiverXenoClaws
+    minimumClawStrength: Sharp
+    # CMU14: vehicle damage and conscious controls.
+    useWeaponDamage: true
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _RMC14/Structures/Vehicles/tank.rsi
+    layers:
+    - map: [ base ]
+      state: tank_base
+    - map: [ armor ]
+      state: ARMOR
+      visible: false
+    - map: [ primary ]
+      state: tank_turret_0
+    - map: [ secondary ]
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: SpriteMovement
+    movementLayers:
+      rmc-wheels:
+        state: wheels_0
+    noMovementLayers:
+      rmc-wheels:
+        state: wheels_1
+  - type: PointLight
+    enabled: false
+    radius: 12
+    energy: 3
+    softness: 2
+    autoRot: true
+    offset: "0,0.9"
+  - type: Corrodible
+    isCorrodible: true
+  - type: DoAfter
+  - type: UserInterface
+    interfaces:
+      enum.HardpointUiKey.Key:
+        type: HardpointBoundUserInterface
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface
+  - type: VehicleWeapons
+  - type: VehicleHardpointVisuals
+  - type: InputMover
+  - type: ItemSlots
+    slots:
+      armor:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      primary:
+        startingItem: VehicleTankTurret
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      secondary:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreads
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+  - type: HardpointSlots
+    vehicleFamily: Tank
+    slots:
+    - id: armor
+      hardpointType: Armor
+      slotType: Armor
+      visualLayer: armor
+      insertDelay: 2.5
+      required: false
+    - id: primary
+      hardpointType: Turret
+      slotType: Turret
+      visualLayer: primary
+      insertDelay: 3.0
+      required: false
+    - id: secondary
+      hardpointType: Secondary
+      visualLayer: secondary
+      insertDelay: 2.5
+      required: false
+    - id: support
+      hardpointType: Support
+      slotType: SupportAttachment
+      visualLayer: support
+      insertDelay: 2.0
+      required: false
+    - id: wheel-1
+      hardpointType: Wheel
+      slotType: Treads
+      insertDelay: 2.0
+  - type: VehicleWheelSlots
+    slotCount: 1
+  - type: HardpointIntegrity
+    maxIntegrity: 1000
+    bypassEntryOnZero: true
+  - type: Appearance
+  - type: VehicleEnter
+    interiorPath: /Maps/_RMC14/Vehicles/tank_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 2
+    entryPoints:
+    - offset: 0,2
+      radius: 1
+      interiorCoords: 0.5,-1
+  - type: VehicleXenoSize
+    minimumSize: Xeno
+  - type: VehicleDemolition
+
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleTank
+  components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
+  - type: MarineMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips_large.rsi
+      state: tank
+
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleTankPMC
+  name: M34A2 Longstreet 'Yutani'
+  description: A light tank used by the Yutani Corporation for security and military operations, often seen in colonial sectors where Yutani has a presence.
+  components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
+  - type: TankCookOff # CMU14
+    turretSprite:
+      sprite: _RMC14/Structures/Vehicles/wytank.rsi
+      state: tank_turret_0
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
+  - type: Sprite
+    sprite: _RMC14/Structures/Vehicles/wytank.rsi
+    layers:
+    - map: [ base ]
+      state: tank_base
+    - map: [ armor ]
+      state: ARMOR
+      visible: false
+    - map: [ primary ]
+      state: tank_turret_0
+    - map: [ secondary ]
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      armor:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      primary:
+        startingItem: VehicleTankTurretPMC
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      secondary:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreads
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+
+
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleAev # CMU14
+  name: M34E1 Armored Engineering Vehicle
+  description: An unarmed engineering vehicle built on the chassis of a Longstreet Tank, fitted with a reinforced plow, built for hauling personnel/cargo and clearing enemy defenses without interrupting the flow of combat.
+  components:
+  - type: TankCookOff # CMU14
+    enabled: false
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
+  - type: VehiclePlowChassis
+    structureDamageMultiplier: 4
+    poweredDemolitionDamagePerSecond: 2000
+    poweredDemolitionWarmup: 0.5
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _RMC14/Structures/Vehicles/tank.rsi
+    layers:
+    - map: [ base ]
+      state: aev_base
+    - map: [ armor ]
+      state: ARMOR
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      armor:
+        startingItem: VehicleTankSnowplow
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        startingItem: VehicleTankOverdriveEnhancer
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreads
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+  - type: HardpointSlots
+    vehicleFamily: Tank
+    slots:
+    - id: armor
+      hardpointType: Armor
+      slotType: Armor
+      visualLayer: armor
+      insertDelay: 2.5
+      required: false
+    - id: support
+      hardpointType: Support
+      slotType: SupportAttachment
+      visualLayer: support
+      insertDelay: 2.0
+      required: false
+    - id: wheel-1
+      hardpointType: Wheel
+      slotType: Treads
+      insertDelay: 2.0
+  - type: HardpointIntegrity
+    maxIntegrity: 1500
+    bypassEntryOnZero: true
+    integrity: 1500
+  - type: GridVehicleMover
+    maxSpeed: 1.8
+    acceleration: 0.9
+    deceleration: 9
+    maxReverseSpeed: 1.5
+    reverseAcceleration: 1.8
+    turnDelay: 1
+    turnInPlace: true
+    turnInPlaceMaxSpeed: 0.4
+    pushCooldown: 2
+    canPushVehicles: true
+    blockingMobBypassNudgeLimit: 2
+    xenoBlockMinimumSize: Immobile
+    canXenosPush: false
+    canSmashWalls: true
+    wallSmashMinSpeed: 0.1
+    wallSmashWheelDamage: 0.1
+    wallSmashHullDamage: 0.1
+    wallSmashSlowdownMultiplier: 0.1
+    wallSmashSlowdownDuration: 0.2
+    speedAtZeroIntegrity: 0.7
+  - type: VehicleEnter
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/arv.yml # CMU14
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 8
+    maxXenos: 0
+    entryPoints:
+    - offset: 0,2
+      radius: 1
+      interiorCoords: -1.3,-1
+  - type: RemoveComponents
+    components:
+    - type: VehicleWeapons
+
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleSPPTank
+  name: Cheetah 2A Light Tank
+  description: A light-weight tank made for all ground forces of the UPP.
+  components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
+  - type: TankCookOff # CMU14
+    turretSprite:
+      sprite: _RMC14/Structures/Vehicles/spptank.rsi
+      state: tank_turret_0
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
+  - type: VehicleEnter
+    interiorPath: /Maps/_RMC14/Vehicles/spp_tank_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 2
+    entryPoints:
+    - offset: 0,2
+      radius: 1
+      interiorCoords: 0.5,0.5
+  - type: Sprite
+    sprite: _RMC14/Structures/Vehicles/spptank.rsi
+    layers:
+    - map: [ base ]
+      state: tank_base
+    - map: [ armor ]
+      state: ARMOR
+      visible: false
+    - map: [ primary ]
+      state: tank_turret_0
+    - map: [ secondary ]
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      armor:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      primary:
+        startingItem: VehicleSPPTankTurret
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      secondary:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreads
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+  - type: HardpointSlots
+    vehicleFamily: Tank
+    slots:
+    - id: armor
+      hardpointType: Armor
+      slotType: Armor
+      compatibilityId: SPPTank
+      visualLayer: armor
+      insertDelay: 2.5
+      required: false
+    - id: primary
+      hardpointType: Turret
+      slotType: Turret
+      compatibilityId: SPPTank
+      visualLayer: primary
+      insertDelay: 3.0
+      required: false
+    - id: secondary
+      hardpointType: Secondary
+      compatibilityId: SPPTank
+      visualLayer: secondary
+      insertDelay: 2.5
+      required: false
+    - id: support
+      hardpointType: Support
+      slotType: SupportAttachment
+      compatibilityId: SPPTank
+      visualLayer: support
+      insertDelay: 2.0
+      required: false
+    - id: wheel-1
+      hardpointType: Wheel
+      slotType: Treads
+      insertDelay: 2.0
+
+- type: entity
+  parent: VehicleSPPTank
+  id: VehicleSPPTankCommand
+  name: Cheetah 2A Light Command Tank
+  description: A light-weight command tank made for all ground forces of the UPP.
+  components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 1000
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: armor
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
+  - type: VehicleEnter
+    interiorPath: /Maps/_RMC14/Vehicles/spp_tank_command_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 2
+    entryPoints:
+    - offset: 0,2
+      radius: 1
+      interiorCoords: 0.5,0.5
+
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleTankTWE
+  name: FV150 Hobelar LCT
+  description: The FV150 ‘Hobelar’ Light Cavalry Tank is a 6m long, 6m wide, 8m tall support vehicle for the RMC. Originally procured for the Special Air Service operations as an Airborne tank, this model has been made into a support vehicle for the Royal Marines thanks to a change of symbol and technological design. Entrance at the back.
+  components:
+  - type: CMUTankBlastProfile # CMU14: FLOW-09 per-explosion tank blast damage.
+  - type: TankCookOff # CMU14
+    turretSprite:
+      sprite: CMU14/Structures/vehicles/fv150/exterior.rsi
+      state: tank_turret_0
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      primary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      secondary: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      support: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      armor: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 700
+  - type: VehicleWheelSlots
+    slots:
+    - wheel-1
+  - type: VehicleHardpointVisuals
+    layers:
+    - state: ""
+      layer: primary
+    - state: ""
+      layer: secondary
+    - state: ""
+      layer: support
+  - type: PointLight
+    radius: 8
+  - type: VehicleEnter
+    interiorPath: /Maps/_RMC14/Vehicles/tank_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 2
+    entryPoints:
+    - offset: 0,2
+      radius: 1
+      interiorCoords: 0.5,-1
+  - type: GridVehicleMover
+    maxSpeed: 8
+    acceleration: 1.556
+    deceleration: 8
+    maxReverseSpeed: 4
+    reverseAcceleration: 1.556
+    turnDelay: 0.7
+    turnInPlace: true
+    turnInPlaceMaxSpeed: 1
+    pushCooldown: 2
+    canPushVehicles: true
+    blockingMobBypassNudgeLimit: 2
+    xenoBlockMinimumSize: Immobile
+    canXenosPush: false
+    canSmashWalls: true
+    wallSmashMinSpeed: 1.5
+    wallSmashWheelDamage: 0.6
+    wallSmashHullDamage: 12
+    wallSmashSlowdownMultiplier: 0.2
+    wallSmashSlowdownDuration: 1.5
+    speedAtZeroIntegrity: 1
+  - type: Fixtures
+    fixtures:
+      world:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.8,-1.2,0.8,1.2
+        density: 1500
+        mask:
+        - Impassable
+        - HighImpassable
+        - LowImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+      mob:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.8,-1.2,0.8,1.2
+        density: 1500
+        mask:
+        - MidImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/fv150/exterior.rsi
+    layers:
+    - map: [ base ]
+      state: tank_base
+    - map: [ primary ]
+      state: tank_turret_0
+    - map: [ secondary ]
+      sprite: _RMC14/Structures/Vehicles/tank.rsi
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      sprite: _RMC14/Structures/Vehicles/tank.rsi
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      primary:
+        startingItem: VehicleTankTurretTWE
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      secondary:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreadsTWE
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+  - type: HardpointSlots
+    vehicleFamily: Tank
+    slots:
+    - id: armor
+      hardpointType: Armor
+      slotType: Armor
+
+      visualLayer: armor
+      insertDelay: 2.5
+      required: false
+    - id: primary
+      hardpointType: Turret
+      slotType: Turret
+
+      visualLayer: primary
+      insertDelay: 3.0
+      required: false
+    - id: secondary
+      hardpointType: Secondary
+
+      visualLayer: secondary
+      insertDelay: 2.5
+      required: false
+    - id: support
+      hardpointType: Support
+      slotType: SupportAttachment
+
+      visualLayer: support
+      insertDelay: 2.0
+      required: false
+    - id: wheel-1
+      hardpointType: Wheel
+      slotType: Treads
+      insertDelay: 2.0
