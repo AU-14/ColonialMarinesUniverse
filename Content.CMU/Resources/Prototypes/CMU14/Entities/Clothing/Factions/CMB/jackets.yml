@@ -9,6 +9,11 @@
     sprite: CMU14/Clothing/CMB/cmbdeputywindbreaker.rsi
   - type: Clothing
     sprite: CMU14/Clothing/CMB/cmbdeputywindbreaker.rsi
+  - type: CMArmor # same protection as the CMB deputy jacket
+    melee: 30
+    bullet: 15
+    bio: 10
+    explosionArmor: 10
   - type: AllowSuitStorage
     whitelist:
       components:

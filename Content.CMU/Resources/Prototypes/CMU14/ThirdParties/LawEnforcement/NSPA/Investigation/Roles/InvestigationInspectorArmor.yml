@@ -70,6 +70,9 @@
     back: AU14SatchelCMBShotgun
     ears: AU14CMBHeadsetOnlyCMB
     suitstorage: RMCWeaponShotgunHG3712
+  storage:
+    back:
+    - CMUCameraGearM3aCivilian
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicNSPA

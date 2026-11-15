@@ -580,6 +580,14 @@
 
 - type: entity
   parent: AU14IDCardColonyLEOLeader
+  id: AU14IDCardColonyCWPSMarshal
+  name: CWPS chief ranger ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianCWPSMarshal
+
+- type: entity
+  parent: AU14IDCardColonyLEOLeader
   id: AU14IDCardColonyNSPAInspector
   name: NSPA inspector ID card
   components:
