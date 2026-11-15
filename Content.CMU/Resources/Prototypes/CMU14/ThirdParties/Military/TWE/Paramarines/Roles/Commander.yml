@@ -19,6 +19,8 @@
       RMCSkillFirearms: 3
       RMCSkillCqc: 2
       RMCSkillLeadership: 3
+  # leadership alone grants nothing, the order actions only come from this comp
+  - type: MarineOrders
   - type: JobPrefix
     prefix: cmu-paramarines-prefix-commander
   - type: Language

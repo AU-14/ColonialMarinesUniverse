@@ -6,6 +6,7 @@ using Content.Server.CMU14.Fob;
 using Content.Server.GameTicking.Events;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Sentry;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Fob;
 using Content.Shared.Damage.Systems;
@@ -23,11 +24,32 @@ public sealed class CMUFobFenceMovementTest : MovementTest
     protected override string PlayerPrototype => "CMMobHuman";
     protected override int Tiles => 5;
 
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task StationaryDeployedFenceBlocksWalkingUntilRecovered(bool powered)
+    [TestCase("CMUFobControl")]
+    [TestCase("CMUFobRelay")]
+    public async Task AnchoredDevicesBlockWalking(string prototype)
     {
-        await SpawnTarget("CMUFobFence");
+        await SpawnTarget(prototype);
+        await RunSeconds(2);
+        await Move(DirectionFlag.East, 1);
+        await Server.WaitAssertion(() => Assert.That(Delta(), Is.GreaterThan(0.4f),
+            "A deployed terminal or relay must remain a physical obstacle after settling."));
+
+        if (prototype == "CMUFobControl")
+        {
+            await Server.WaitPost(() => Server.System<SharedTransformSystem>().Unanchor(STarget!.Value));
+            await Move(DirectionFlag.East, 1);
+            await Server.WaitAssertion(() => Assert.That(Delta(), Is.LessThan(-0.5f),
+                "Unanchoring the control must clear its blocking footprint immediately."));
+        }
+    }
+
+    [TestCase("CMUFobFence", false)]
+    [TestCase("CMUFobFence", true)]
+    [TestCase("CMUFobIlluminator", false)]
+    [TestCase("CMUFobGenerator", false)]
+    public async Task DeployedEquipmentBlocksWalkingUntilRecovered(string prototype, bool powered)
+    {
+        await SpawnTarget(prototype);
         var fence = STarget!.Value;
         var equipment = Server.System<CMUFobEquipmentSystem>();
         var reserve = Server.System<CMUFobReserveSystem>();
@@ -63,6 +85,10 @@ public sealed class CMUFobFenceMovementTest : MovementTest
         });
         await Client.WaitAssertion(() => Assert.That(CEntMan.HasComponent<StunnedComponent>(ToClient(SPlayer)), Is.EqualTo(powered),
             "The contact stun must reach the marine's client."));
+        await Client.WaitAssertion(() => Assert.That(
+            CEntMan.System<SharedTransformSystem>().GetWorldPosition(ToClient(fence)).X
+            - CEntMan.System<SharedTransformSystem>().GetWorldPosition(CPlayer).X, Is.GreaterThan(0.4f),
+            "The client must also collide with the deployed equipment."));
         await RunSeconds(1.2f);
         await Server.WaitAssertion(() =>
         {
@@ -70,11 +96,32 @@ public sealed class CMUFobFenceMovementTest : MovementTest
             if (powered) Assert.That(reserve.TryDeactivate(network), Is.True);
         });
 
-        var cutters = ToServer(await PlaceInHands("CMWirecutter"));
+        var cutters = ToServer(await PlaceInHands(prototype == "CMUFobFence" ? "CMWirecutter" : "CMWrench"));
         await Server.WaitAssertion(() => Assert.That(equipment.TryStartWork(
             (fence, SEntMan.GetComponent<CMUFobEquipmentComponent>(fence)), SPlayer, cutters), Is.True));
         await Move(DirectionFlag.East, 1);
         await Server.WaitAssertion(() => Assert.That(Delta(), Is.LessThan(-0.5f),
             "Recovering the fence must clear the physical barrier."));
+    }
+
+    [TestCase("CMUFobHeavyModule")]
+    [TestCase("CMUFobControlModule")]
+    [TestCase("CMUFobPlatformModule")]
+    public async Task FoldedCargoDoesNotBlockWalkingAfterStateRefresh(string prototype)
+    {
+        await SpawnTarget(prototype);
+        await Server.WaitPost(() =>
+        {
+            if (SEntMan.TryGetComponent<SentryComponent>(STarget, out var sentry))
+            {
+                var system = Server.System<SentrySystem>();
+                system.TrySetMode((STarget!.Value, sentry), SentryMode.On);
+                system.TrySetMode((STarget.Value, sentry), SentryMode.Off);
+            }
+        });
+        await RunSeconds(2);
+        await Move(DirectionFlag.East, 1);
+        await Server.WaitAssertion(() => Assert.That(Delta(), Is.LessThan(-0.5f),
+            "Folded equipment must stay passable after becoming stationary and receiving a mode refresh."));
     }
 }

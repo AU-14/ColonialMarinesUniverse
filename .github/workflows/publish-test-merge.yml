@@ -12,18 +12,18 @@ on:
   workflow_dispatch:
     inputs:
       pr_numbers:
-        description: Optional PR number(s) to add on top of every open PR labelled "Test Merge" (spaces, commas, or new lines). They get the label once the publish succeeds.
+        description: Optional PR number(s) to add on top of every open PR marked "Test Merge" (spaces, commas, or new lines). Live PRs that are not marked or typed here come off the server.
         required: false
         type: string
       remove_pr_numbers:
-        description: Optional PR number(s) to take off the test merge. They lose the "Test Merge" label once the publish succeeds.
+        description: Optional PR number(s) to leave out even though they are marked "Test Merge". They lose the mark once the publish succeeds.
         required: false
         type: string
-  # CMU14: Publish uses this to rebuild master plus the labelled PRs.
+  # CMU14: Publish uses this to rebuild master plus the marked PRs.
   workflow_call:
     inputs:
       allow_empty:
-        description: Publish the plain base branch when no PR is labelled.
+        description: Publish the plain base branch when no PR is marked.
         required: false
         type: boolean
         default: false
