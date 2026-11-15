@@ -281,7 +281,7 @@
   - type: HardpointVisual
     vehicleState: artillerymod_0
     damagedVehicleState: artillerymod_1
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankSnowplow # CMU14
@@ -306,7 +306,7 @@
   - type: Tag
     tags:
     - VehiclePlow
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankMountedFlag # CMU14
@@ -322,7 +322,7 @@
     slotType: SupportAttachment
     damageMultiplier: 0.0
     repairRate: 0.0125
-  - type: DropshipTarget 
+  - type: DropshipTarget
     abbreviation: TANK
   - type: HardpointIntegrity
     maxIntegrity: 350
@@ -341,11 +341,11 @@
   - type: HardpointVisual
     vehicleState: mountedflag_0
     damagedVehicleState: mountedflag_2
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
-  id: TWEVehicleTankArtilleryModule # CMU14
-  name: Improper artillery module
+  id: VehicleTankArtilleryModuleTWE # CMU14
+  name: TWE Artillery module
   description: An artillery support module for a tank.
   components:
   - type: Sprite

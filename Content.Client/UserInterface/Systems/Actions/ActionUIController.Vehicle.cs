@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions.Components;
 using Content.Shared.CombatMode;
 using Robust.Shared.GameObjects;
+using Content.Shared.CMU14.Vehicle;
 
 namespace Content.Client.UserInterface.Systems.Actions;
 
@@ -198,6 +199,93 @@ public sealed partial class ActionUIController
 
         if (vehicleLockAction is { } ensuredVehicleLockAction)
             desiredOrdered.Add(ensuredVehicleLockAction);
+
+        EntityUid? vehicleEngineToggle = null;
+        if (_playerManager.LocalEntity is { } engineUser &&
+            EntityManager.TryGetComponent<VehicleMovementActionHolderComponent>(engineUser, out var engineState) &&
+            engineState.Action3 is { } engineAction &&
+            !EntityManager.HasComponent<VehicleMovementActionHolderComponent>(engineAction))
+        {
+            vehicleEngineToggle = engineAction;
+        }
+
+        if (vehicleEngineToggle == null)
+        {
+            foreach (var action in _actionsSystem.GetClientActions())
+            {
+                var uid = action.Owner;
+                if (EntityManager.HasComponent<VehicleMovementActionHolderComponent>(uid) ||
+                    !EntityManager.TryGetComponent<MetaDataComponent>(uid, out var metaData) ||
+                    metaData.EntityPrototype?.ID != "ActionVehicleToggleEngine")
+                {
+                    continue;
+                }
+
+                vehicleEngineToggle = uid;
+                break;
+            }
+        }
+
+        if (vehicleEngineToggle is { } ensuredvehicleEngineToggle)
+            desiredOrdered.Add(ensuredvehicleEngineToggle);
+
+        EntityUid? vehicleShiftUpAction = null;
+        if (_playerManager.LocalEntity is { } shiftUpUser &&
+            EntityManager.TryGetComponent<VehicleMovementActionHolderComponent>(shiftUpUser, out var shiftUpState) &&
+            shiftUpState.Action1 is { } shiftUpAction &&
+            !EntityManager.HasComponent<VehicleMovementActionHolderComponent>(shiftUpAction))
+        {
+            vehicleShiftUpAction = shiftUpAction;
+        }
+
+        if (vehicleShiftUpAction == null)
+        {
+            foreach (var action in _actionsSystem.GetClientActions())
+            {
+                var uid = action.Owner;
+                if (EntityManager.HasComponent<VehicleMovementActionHolderComponent>(uid) ||
+                    !EntityManager.TryGetComponent<MetaDataComponent>(uid, out var metaData) ||
+                    metaData.EntityPrototype?.ID != "ActionVehicleGearUp")
+                {
+                    continue;
+                }
+
+                vehicleShiftUpAction = uid;
+                break;
+            }
+        }
+
+        if (vehicleShiftUpAction is { } ensuredvehicleShiftUpAction)
+            desiredOrdered.Add(ensuredvehicleShiftUpAction);
+
+        EntityUid? vehicleShiftDownAction = null;
+        if (_playerManager.LocalEntity is { } shiftDownUser &&
+            EntityManager.TryGetComponent<VehicleMovementActionHolderComponent>(shiftDownUser, out var shiftDownState) &&
+            shiftDownState.Action2 is { } shiftDownAction &&
+            !EntityManager.HasComponent<VehicleMovementActionHolderComponent>(shiftDownAction))
+        {
+            vehicleShiftDownAction = shiftDownAction;
+        }
+
+        if (vehicleShiftDownAction == null)
+        {
+            foreach (var action in _actionsSystem.GetClientActions())
+            {
+                var uid = action.Owner;
+                if (EntityManager.HasComponent<VehicleMovementActionHolderComponent>(uid) ||
+                    !EntityManager.TryGetComponent<MetaDataComponent>(uid, out var metaData) ||
+                    metaData.EntityPrototype?.ID != "ActionVehicleGearDown")
+                {
+                    continue;
+                }
+
+                vehicleShiftDownAction = uid;
+                break;
+            }
+        }
+
+        if (vehicleShiftDownAction is { } ensuredvehicleShiftDownAction)
+            desiredOrdered.Add(ensuredvehicleShiftDownAction);
 
         // Preserve manual ordering while all current actions still exist.
         var remaining = new HashSet<EntityUid>();

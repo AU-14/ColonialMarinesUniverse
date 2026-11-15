@@ -1,51 +1,94 @@
 <controls:VehicleWeaponsMenu
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Vehicle.Ui"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     Title=""
-    MinSize="420 160">
+    MinSize="0 160">
 
-    <BoxContainer Orientation="Vertical" Margin="0" SeparationOverride="0" HorizontalExpand="True" VerticalExpand="False">
-        <ScrollContainer Name="HardpointScroll"
-                         Access="Public"
-                         HorizontalExpand="True"
-                         VerticalExpand="False"
-                         MinSize="0 56"
-                         HScrollEnabled="True"
-                         VScrollEnabled="False">
-            <BoxContainer Name="HardpointStrip"
-                          Access="Public"
-                          Orientation="Horizontal"
-                          SeparationOverride="0"
-                          HorizontalExpand="True"
-                          VerticalExpand="False" />
-        </ScrollContainer>
+    <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat
+                BackgroundColor="#070E18"
+                BorderColor="#6BC7FF"
+                BorderThickness="2"/>
+        </PanelContainer.PanelOverride>
 
-        <BoxContainer Orientation="Horizontal" SeparationOverride="0" HorizontalExpand="True">
-            <CheckBox Name="AutoTurretToggle" Access="Public" ToggleMode="True" Text="Auto Turret"/>
-            <CheckBox Name="StabilizationToggle" Access="Public" ToggleMode="True" Text="Stabilization"/>
+        <BoxContainer Orientation="Vertical" Margin="8" HorizontalExpand="True" VerticalExpand="False">
+            <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#0B131F"
+                        BorderColor="#1E3450"
+                        BorderThickness="1"/>
+                </PanelContainer.PanelOverride>
+                <ScrollContainer Name="HardpointScroll"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                VerticalExpand="False"
+                                MinSize="0 56"
+                                HScrollEnabled="True"
+                                VScrollEnabled="False">
+                <BoxContainer Name="HardpointStrip"
+                            Access="Public"
+                            Orientation="Horizontal"
+                            SeparationOverride="0"
+                            HorizontalExpand="False"
+                            VerticalExpand="False" />
+                </ScrollContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="20" HorizontalExpand="True" VerticalExpand="False">
+                <Label Name="GearTextLabel"
+                    Access="Public"
+                    Text=""
+                    FontColorOverride="#E5A52E"
+                    HorizontalExpand="False"
+                    ClipText="False"/>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="8" HorizontalExpand="True" VerticalExpand="False">
+                    <Label Name="FuelTextLabel"
+                        Access="Public"
+                        Text=""
+                        FontColorOverride="#53D188"
+                        HorizontalExpand="False"
+                        ClipText="False"/>
+                    <ProgressBar Name="FuelBar"
+                                Access="Public"
+                                MinValue="0"
+                                MaxValue="1"
+                                MinSize="12 6"
+                                HorizontalExpand="True"
+                                SizeFlagsStretchRatio="1"/>
+                </BoxContainer>
+            </BoxContainer>
+
+            <BoxContainer Orientation="Horizontal" SeparationOverride="0" HorizontalExpand="True">
+                <CheckBox Name="AutoTurretToggle" Access="Public" ToggleMode="True" Text="Auto Turret"/>
+                <CheckBox Name="StabilizationToggle" Access="Public" ToggleMode="True" Text="Stabilization"/>
+            </BoxContainer>
+
+            <Label Name="AmmoCounter"
+                Access="Public"
+                Text="Ammo: --"
+                FontColorOverride="#C7D9ED"
+                HorizontalExpand="True"
+                ClipText="True"/>
+
+            <Label Name="CooldownLabel"
+                Access="Public"
+                Text=""
+                FontColorOverride="#53D188"
+                HorizontalExpand="True"
+                ClipText="True"/>
+
+            <ProgressBar Name="CooldownBar"
+                        Access="Public"
+                        MinValue="0"
+                        MaxValue="1"
+                        Value="1"
+                        MinSize="0 6"
+                        HorizontalExpand="True"
+                        Visible="False"/>
         </BoxContainer>
+    </PanelContainer>
 
-        <Label Name="AmmoCounter"
-               Access="Public"
-               Text="Ammo: --"
-               FontColorOverride="#C7D9ED"
-               HorizontalExpand="True"
-               ClipText="True"/>
-
-        <Label Name="CooldownLabel"
-               Access="Public"
-               Text=""
-               FontColorOverride="#53D188"
-               HorizontalExpand="True"
-               ClipText="True"/>
-
-        <ProgressBar Name="CooldownBar"
-                     Access="Public"
-                     MinValue="0"
-                     MaxValue="1"
-                     Value="1"
-                     MinSize="0 6"
-                     HorizontalExpand="True"
-                     Visible="False"/>
-    </BoxContainer>
 </controls:VehicleWeaponsMenu>

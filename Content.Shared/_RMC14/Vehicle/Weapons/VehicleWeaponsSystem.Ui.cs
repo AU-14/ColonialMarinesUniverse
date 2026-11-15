@@ -371,4 +371,13 @@ public sealed partial class VehicleWeaponsSystem
             UpdateWeaponsUi(seat, vehicle, weapons, hardpoints, itemSlots, operatorUid);
         }
     }
+
+    public void RefreshWeaponsUi(EntityUid vehicle)
+    {
+        if (!TryComp(vehicle, out VehicleWeaponsComponent? weapons))
+            return;
+
+        UpdateWeaponsUiForAllOperators(vehicle, weapons);
+    }
+
 }

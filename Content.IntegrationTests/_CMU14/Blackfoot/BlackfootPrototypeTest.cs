@@ -5,6 +5,7 @@ using System.IO;
 using System.Numerics;
 using Content.Shared.CMU14.Blackfoot;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
@@ -103,8 +104,8 @@ public sealed class BlackfootPrototypeTest
                     }),
                     variantName);
 
-                Assert.That(proto.TryComp<BlackfootFuelPowerComponent>(out var fuel, factory), Is.True, variantName);
-                Assert.That(fuel!.FuelLeakDrain, Is.GreaterThan(0f), variantName);
+                Assert.That(proto.TryComp<VehiclePowerSourceDrainComponent>(out var fuel, factory), Is.True, variantName);
+                Assert.That(fuel!.LeakTorn, Is.GreaterThan(0f), variantName);
 
                 AssertBlackfootXenoProjectileTarget(proto, factory, variantName);
 

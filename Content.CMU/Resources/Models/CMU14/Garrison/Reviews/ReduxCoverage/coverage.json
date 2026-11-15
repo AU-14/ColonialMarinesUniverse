@@ -1096,13 +1096,13 @@
       "mountedTurrets": []
     },
     {
-      "id": "CMU3DReduxTWEVehicleTankArtilleryModuleMounted",
+      "id": "CMU3DReduxVehicleTankArtilleryModuleTWEMounted",
       "sourcePrototypes": [],
       "parts": 2,
       "triangles": 24,
       "vehicleLayerStates": 1,
       "mountedTurrets": [
-        "TWEVehicleTankArtilleryModule"
+        "VehicleTankArtilleryModuleTWE"
       ]
     },
     {

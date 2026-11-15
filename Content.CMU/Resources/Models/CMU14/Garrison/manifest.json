@@ -20029,8 +20029,8 @@
       ]
     },
     {
-      "id": "CMU3DReduxTWEVehicleTankArtilleryModuleMounted",
-      "label": "TWEVehicleTankArtilleryModuleMounted",
+      "id": "CMU3DReduxVehicleTankArtilleryModuleTWEMounted",
+      "label": "VehicleTankArtilleryModuleTWEMounted",
       "file": "CMU3DReduxTWEVehicleTankArtilleryModuleMounted.glb",
       "status": "draft",
       "parts": 2,

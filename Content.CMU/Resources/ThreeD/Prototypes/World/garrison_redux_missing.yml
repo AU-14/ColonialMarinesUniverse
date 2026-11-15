@@ -42391,8 +42391,8 @@
       surface: CMU3DReduxSurface3791
       surfaceAxis: XY
 - type: cmu3DModel
-  id: CMU3DReduxTWEVehicleTankArtilleryModuleMounted
-  label: TWEVehicleTankArtilleryModuleMounted
+  id: CMU3DReduxVehicleTankArtilleryModuleTWEMounted
+  label: VehicleTankArtilleryModuleTWEMounted
   status: draft
   sourcePrototypes: []
   parts:
@@ -42411,12 +42411,12 @@
   placement: floor
   groundOffset: 0, 0
   description: Source-referenced solid draft; inferred depth and hidden surfaces. See SOURCES_REDUX_COVERAGE.md.
-  referencePrototype: TWEVehicleTankArtilleryModule
+  referencePrototype: VehicleTankArtilleryModuleTWE
   referenceRsi: CMU14/Structures/vehicles/fv150/exterior.rsi
   referenceState: tweartillerymod_0
   useEntityRotation: true
   vehicleTurretPrototypes:
-  - TWEVehicleTankArtilleryModule
+  - VehicleTankArtilleryModuleTWE
   vehicleLayers:
   - rsi: CMU14/Structures/vehicles/fv150/exterior.rsi
     state: tweartillerymod_0

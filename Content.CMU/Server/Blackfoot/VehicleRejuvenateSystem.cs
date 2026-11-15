@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared.CMU14.Blackfoot;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -36,7 +37,7 @@ public sealed partial class VehicleRejuvenateSystem : EntitySystem
         _hardpoint.ResetAllHardpointsToFullHealth(uid); // heal hardpoints & recalc integrity
         _hardpoint.ClearAllFailures(uid); // bulk resets failures, repair/progress + refresh UI
 
-        if (TryComp<BlackfootFuelPowerComponent>(uid, out var fuelPower))
+        if (TryComp<VehiclePowerSourceTankComponent>(uid, out var fuelPower))
         {
             fuelPower.Fuel = fuelPower.MaxFuel;
             fuelPower.Battery = fuelPower.MaxBattery;

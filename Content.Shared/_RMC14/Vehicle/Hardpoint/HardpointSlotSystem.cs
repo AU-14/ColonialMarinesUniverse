@@ -15,6 +15,8 @@ using Content.Shared.Vehicle;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
+using Content.Shared._RMC14.Power;
+using Content.Shared.CMU14.Vehicle;
 
 namespace Content.Shared._RMC14.Vehicle;
 
@@ -91,7 +93,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         if (_rmcVehicles.TryFindEntryPoint(ent.Owner, args.User, out _))
             return;
 
-        args.Handled = TryOpenHardpointUi(ent, args.User); // no powerloader needed
+        args.Handled = true; // no powerloader needed
     }
 
     private void OnSlotsActivateInWorld(Entity<HardpointSlotsComponent> ent, ref ActivateInWorldEvent args) // CMU14 Method
@@ -246,6 +248,15 @@ public sealed partial class HardpointSlotSystem : EntitySystem
             args.Handled = true;
             return;
         }
+
+        if(HasComp<RMCFusionCellComponent>(args.Used))
+            if(TryComp(ent.Owner, out VehiclePowerSourceTankComponent? our_fueltank))
+            {
+                var ev = new VehicleRefuelAttemptEvent(args.User, args.Used);
+                RaiseLocalEvent(our_fueltank.Owner, ref ev);
+                args.Handled = true;
+                return;
+            }
 
         if (HasComp<HardpointItemComponent>(args.Used) &&
             HasComp<VehicleTurretAttachmentComponent>(args.Used))

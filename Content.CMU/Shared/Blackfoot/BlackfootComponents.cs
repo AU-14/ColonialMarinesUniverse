@@ -78,10 +78,10 @@ public sealed partial class BlackfootFlightComponent : Component
     public TimeSpan StateStartedAt;
 
     [DataField, AutoNetworkedField]
-    public TimeSpan TakeoffDuration = TimeSpan.FromSeconds(16.562);
+    public TimeSpan TakeoffDuration = TimeSpan.FromSeconds(5);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan LandingDuration = TimeSpan.FromSeconds(9);
+    public TimeSpan LandingDuration = TimeSpan.FromSeconds(2);
 
     [DataField, AutoNetworkedField]
     public Vector2i Footprint = new(3, 3);
@@ -211,43 +211,6 @@ public sealed partial class BlackfootGunshotComponent : Component
 {
     [DataField]
     public SoundSpecifier? Sound;
-}
-
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class BlackfootFuelPowerComponent : Component
-{
-    [DataField, AutoNetworkedField]
-    public float Fuel = 600f;
-
-    [DataField, AutoNetworkedField]
-    public float MaxFuel = 600f;
-
-    [DataField, AutoNetworkedField]
-    public float Battery = 600f;
-
-    [DataField, AutoNetworkedField]
-    public float MaxBattery = 600f;
-
-    [DataField, AutoNetworkedField]
-    public float IdleFuelDrain = 0.5f;
-
-    [DataField("vtolFuelDrain"), AutoNetworkedField]
-    public float VTOLFuelDrain = 3f;
-
-    [DataField, AutoNetworkedField]
-    public float FlightFuelDrain = 1f;
-
-    [DataField, AutoNetworkedField]
-    public float SensorBatteryDrain = 1f;
-
-    [DataField, AutoNetworkedField]
-    public float MinimumTakeoffFuel = 30f;
-
-    [DataField, AutoNetworkedField]
-    public float FuelLeakDrain = 2.5f;
-
-    [DataField, AutoNetworkedField]
-    public bool CrashOnZeroFuel = true;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]

@@ -1,5 +1,6 @@
 using Content.Server.CMU14.Blackfoot;
 using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.CMU14.Vehicle;
 using NUnit.Framework;
 
 namespace Content.Tests.Server.CMU14.Blackfoot;
@@ -24,10 +25,9 @@ public sealed class BlackfootStateTest
     public void CrashedBlackfootRecoversAfterFuelAndThrustersAreRestored()
     {
         var flight = new BlackfootFlightComponent { State = BlackfootFlightState.Crashed };
-        var fuel = new BlackfootFuelPowerComponent
+        var fuel = new VehiclePowerSourceTankComponent
         {
             Fuel = 0f,
-            CrashOnZeroFuel = true,
         };
 
         Assert.That(BlackfootFlightSystem.ShouldRecoverFromCrash(flight, fuel, true), Is.False);

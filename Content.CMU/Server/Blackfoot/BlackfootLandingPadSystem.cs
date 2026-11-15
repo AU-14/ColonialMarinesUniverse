@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared.CMU14.Blackfoot;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -175,7 +176,7 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
         }
 
         if (parked is not { } aircraft ||
-            !TryComp(aircraft, out BlackfootFuelPowerComponent? fuelPower))
+            !TryComp(aircraft, out VehiclePowerSourceTankComponent? fuelPower))
         {
             return;
         }
@@ -558,7 +559,7 @@ public sealed partial class BlackfootLandingPadSystem : EntitySystem
         var fuelPumpLinked = !activePad.Comp.RequireFuelPump || TryGetFuelPump(activePad, out _);
         var aircraft = activePad.Comp.ParkedAircraft;
         if (aircraft is not { } aircraftUid ||
-            !TryComp(aircraftUid, out BlackfootFuelPowerComponent? fuelPower))
+            !TryComp(aircraftUid, out VehiclePowerSourceTankComponent? fuelPower))
         {
             _ui.SetUiState(
                 computer.Owner,

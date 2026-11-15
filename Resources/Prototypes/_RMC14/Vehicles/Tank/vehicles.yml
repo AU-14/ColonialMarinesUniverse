@@ -63,11 +63,6 @@
         pitch: 0.6
   - type: VehicleSound
     crashSound: /Audio/_RMC14/Effects/metal_crash.ogg
-    runningSound:
-      path: /Audio/_RMC14/Vehicle/tank_engine_loop.wav
-      params:
-        volume: -6
-    runningSoundCooldown: 3.38
     hornSound: /Audio/_RMC14/Vehicle/honk_2_truck.ogg
     hornCooldown: 1
     collisionSound:
@@ -78,6 +73,35 @@
     collisionSoundCooldown: 1.5
     collisionSoundMinSpeed: 2.5
     mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
+
+  - type: CMUVehicleEngineSound
+    startSound:
+      path: /Audio/_RMC14/Vehicle/crooner__helicopter-turbine_tank_startup.ogg
+      params:
+        maxDistance: 12
+    idleSound:
+      path: /Audio/_RMC14/Vehicle/tank_engine_loop.wav
+      params:
+        volume: -2
+        maxDistance: 10
+    driveSound:
+      path: /Audio/_RMC14/Vehicle/tank_driving.ogg
+      params:
+        volume: 3
+        maxDistance: 12
+    revSound:
+      path: /Audio/_RMC14/Vehicle/tank_driving.ogg
+      params:
+        maxDistance: 12
+    stallSound:
+      path: /Audio/_RMC14/Vehicle/crooner__helicopter-turbine_tank_shutdown.ogg
+      params:
+        maxDistance: 12
+    offSound:
+      path: /Audio/_RMC14/Vehicle/crooner__helicopter-turbine_tank_shutdown.ogg
+      params:
+        maxDistance: 12
+
   - type: VehicleSpotlight
     radius: 8
     energy: 3
@@ -166,6 +190,13 @@
         type: VehicleWeaponsBoundUserInterface
   - type: VehicleWeapons
   - type: VehicleHardpointVisuals
+  - type: VehiclePowerSourceTank
+  - type: VehiclePowerSourceDrain
+  - type: VehicleMovementState
+  - type: VehiclePowerSourceStates
+  - type: VehicleMovementMode
+  - type: VehicleMovementModeModifiers
+  - type: VehicleMovementSpeedGear
   - type: InputMover
   - type: ItemSlots
     slots:

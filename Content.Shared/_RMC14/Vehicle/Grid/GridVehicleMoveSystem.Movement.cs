@@ -14,6 +14,7 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
+using Content.Shared.CMU14.Vehicle;
 
 namespace Content.Shared.Vehicle;
 
@@ -1363,6 +1364,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
+        if (TryComp<VehicleMovementSpeedGearComponent>(uid, out var gear_speed_mod))
+            maxSpeed *= gear_speed_mod.GearSpeedMultiplier;
 
         maxSpeed *= GetBlackfootAirSpeedMultiplier(uid);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
@@ -1386,6 +1389,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             maxSpeed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             maxSpeed *= speedMod.SpeedMultiplier;
+        if (TryComp<VehicleMovementSpeedGearComponent>(uid, out var gear_speed_mod))
+            maxSpeed *= gear_speed_mod.GearSpeedMultiplier;
 
         maxSpeed *= GetBlackfootAirSpeedMultiplier(uid);
         if (TryGetBlackfootTowTaxiMultiplier(uid, out var taxiMultiplier))
