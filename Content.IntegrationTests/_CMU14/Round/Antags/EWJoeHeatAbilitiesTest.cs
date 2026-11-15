@@ -357,6 +357,7 @@ public sealed class EWJoeHeatAbilitiesTest
             var slung = entities.SpawnEntity(Rifle, map.GridCoords);
             Assert.That(inventory.TryEquip(bystander, slung, "back", silent: true, force: true), "and slings another on the back");
             var loose = entities.SpawnEntity(Rifle, map.GridCoords);
+            var tubeFed = entities.SpawnEntity("RMCWeaponShotgunXM38", map.GridCoords); // CMU14
 
             var guns = new[] { held, slung, loose };
             foreach (var gun in guns)
@@ -367,7 +368,10 @@ public sealed class EWJoeHeatAbilitiesTest
             }
 
             var (count, _) = arsenal.Unwind((joe, comp));
-            Assert.That(count, Is.EqualTo(3), "held, slung and loose rifles are all unwound");
+            Assert.That(count, Is.EqualTo(4), "Held, slung, loose and tube-fed guns are all unwound."); // CMU14
+            // CMU14: a gun without ItemSlots still receives the safety and chamber effects.
+            Assert.That(entities.HasComponent<GunJammedComponent>(tubeFed), Is.True);
+            Assert.That(safety.IsOn(tubeFed), Is.True);
 
             foreach (var gun in guns)
             {

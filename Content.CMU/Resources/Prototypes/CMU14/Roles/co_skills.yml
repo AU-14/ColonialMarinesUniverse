@@ -1,0 +1,10 @@
+# Platoon commander jobs only (AU14JobPlatCoBase). Other jobs keep using AU14SkillPresetPlatoonCommander.
+- type: entity
+  parent: AU14SkillPresetPlatoonCommander
+  id: CMUSkillPresetPlatoonCommanderBattalion
+  name: Commander
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillSurgery: 2 # AU14SkillPresetPlatoonCommander has 1

@@ -249,6 +249,15 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
 
     private void OnWallWeedsRemove<T>(Entity<XenoWallWeedsComponent> ent, ref T args)
     {
+        // CMU14: the covering can disappear independently of the wall or window it covers.
+        if (_net.IsServer &&
+            ent.Comp.Weedable is { } owner && !TerminatingOrDeleted(owner) &&
+            TryComp<XenoWeedableComponent>(owner, out var weedable) && weedable.Entity == ent.Owner)
+        {
+            weedable.Entity = null;
+            Dirty(owner, weedable);
+        }
+
         if (ent.Comp.Weeds is not { } weedsUid ||
             !TryComp(weedsUid, out XenoWeedsComponent? weeds))
             return;
@@ -261,7 +270,11 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
     private void OnWeedableAnchorStateChanged(Entity<XenoWeedableComponent> weedable, ref AnchorStateChangedEvent args)
     {
         if (_net.IsServer && !args.Anchored)
+        { // CMU14: release the reference before deferred deletion and state serialization.
             QueueDel(weedable.Comp.Entity);
+            weedable.Comp.Entity = null;
+            Dirty(weedable);
+        }
     }
 
     private void OnWeedableRemove<T>(Entity<XenoWeedableComponent> weedable, ref T args)

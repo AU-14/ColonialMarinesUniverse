@@ -437,7 +437,9 @@ public sealed partial class EWJoeArsenalSystem : EntitySystem
     /// <summary>Magazine out, safety on (no lock: playtest 3), chamber jammed for one clean rack.</summary>
     private void UnwindGun(Entity<EWJoeComponent> joe, EntityUid gun)
     {
-        _itemSlots.TryEject(gun, SharedGunSystem.MagazineSlot, null, out _);
+        // Tube-fed guns have no detachable magazine slot, but still receive the safety and jam effects.
+        if (TryComp<ItemSlotsComponent>(gun, out var slots))
+            _itemSlots.TryEject((gun, slots), SharedGunSystem.MagazineSlot, null, out _);
 
         if (!HasComp<CMUNoSafetyComponent>(gun))
             _safety.SetSafety(gun, true, playSound: false);

@@ -405,6 +405,7 @@
       entries:
       - id: AU14HAZOPSBatteryMinigunGAU19Backpack
       - id: RMCScabbardMacheteSGFilled
+      - id: RMCPowerCellSmartgun # spare for the GAU-19/H, same as the USCM smartgunner rack
     - name: Firearm System
       choices: { CMUPlatoonMG: 1 }
       entries:

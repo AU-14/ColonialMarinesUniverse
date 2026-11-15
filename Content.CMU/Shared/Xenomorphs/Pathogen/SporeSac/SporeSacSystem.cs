@@ -58,7 +58,8 @@ public sealed partial class CMUPathogenSporeSacSystem : EntitySystem
             return false;
 
         // Don't trigger on members of the same hive as whoever placed the sac.
-        if (sac.Comp.Placer is { } placer && _hive.FromSameHive(placer, crosser))
+        if (_hive.FromSameHive(sac.Owner, crosser) ||
+            sac.Comp.Placer is { } placer && _hive.FromSameHive(placer, crosser))
             return false;
 
         // TODO: predator (yautja) exclusion, matching isyautja() in DM.
@@ -124,7 +125,9 @@ public sealed partial class CMUPathogenSporeSacSystem : EntitySystem
         }
 
         var cloud = SpawnAtPosition(sac.Comp.CloudPrototype, Transform(sac).Coordinates);
-        if (sac.Comp.Placer is { } placer)
+        if (_hive.GetHive(sac.Owner) != null)
+            _hive.SetSameHive(sac.Owner, cloud);
+        else if (sac.Comp.Placer is { } placer)
             _hive.SetSameHive(placer, cloud);
 
         if (TryComp(cloud, out CMUPathogenSporeCloudComponent? cloudComp))
