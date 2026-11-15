@@ -1,0 +1,108 @@
+- type: entity
+  parent: BaseItem
+  id: VehicleTankHardpointBaseGorvin
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Vehicles/Gorvin_TWE.rsi
+  - type: Item
+    size: Ginormous
+  - type: PowerLoaderGrabbable
+  - type: RemoveComponents
+    components:
+    - type: Pullable
+
+- type: entity
+  parent: VehicleTankHardpointBaseGorvin
+  id: VehicleTankTurretGorvin
+  name: heavy tank turret
+  description: A tank turret hardpoint.
+  components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      turret-launcher: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: Sprite
+    sprite: CMU14/Vehicles/Gorvin_TWE.rsi
+    state: tank_turret_0_duo
+  - type: HardpointItem
+    hardpointType: Turret
+    vehicleFamily: Tank
+    slotType: Turret
+    damageMultiplier: 0.05
+    repairRate: 0.008
+  - type: HardpointIntegrity
+    maxIntegrity: 600
+    integrity: 600
+  - type: VehicleTurret
+    rotateToCursor: true
+    stabilizedRotation: false
+    rotationSpeed: 80
+    showOverlay: true
+    overlayRsi: CMU14/Vehicles/Gorvin_TWE.rsi
+    overlayState: tank_turret_0_duo
+    overlayDamagedState: tank_turret_1_duo
+    useDirectionalOffsets: false
+    pixelOffsetNorth: "0,2"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,-2"
+    pixelOffsetWest: "0,0"
+  - type: ItemSlots
+    slots:
+      turret-cannon:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      turret-launcher:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: HardpointSlots
+    vehicleFamily: Tank
+    slots:
+    - id: turret-cannon
+      hardpointType: Cannon
+      slotType: Cannon
+      required: false
+      insertDelay: 2.0
+    - id: turret-launcher
+      hardpointType: Launcher
+      slotType: Launcher
+      required: false
+      insertDelay: 2.0
+
+
+
+- type: entity
+  parent: VehicleTankHardpointBaseGorvin
+  id: VehicleTankTreadsGorvin
+  name: tank treads
+  description: Heavy duty tank treads.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/fv150/icons.rsi
+    state: treads
+  - type: HardpointItem
+    damageRegion: Sides
+    hardpointType: Wheel
+    vehicleFamily: Tank
+    slotType: Treads
+    damageMultiplier: 0.15
+    repairRate: 0.0165
+  - type: HardpointIntegrity
+    maxIntegrity: 600
+    integrity: 600
+  - type: VehicleWheelItem
+  - type: RemoveComponents
+    components:
+    - type: PowerLoaderGrabbable
+

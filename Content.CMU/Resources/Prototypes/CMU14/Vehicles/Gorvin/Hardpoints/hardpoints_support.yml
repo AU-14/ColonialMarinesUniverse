@@ -1,0 +1,145 @@
+- type: entity
+  parent: VehicleTankHardpointBaseGorvin
+  id: VehicleTankWarningArrayGorvin
+  name: integrated weapons sensor array
+  description: An integrated sensor array that improves accuracy and fire rate of onboard weapons.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/vehicles/hardpoints/tank.rsi
+    state: warray
+  - type: HardpointItem
+    damageRegion: Exterior
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.075
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+    integrity: 350
+  - type: VehicleWeaponSupportAttachment
+    accuracyMultiplier: 1.2
+    fireRateMultiplier: 1.15
+  - type: HardpointVisual
+    vehicleState: warray_0
+    damagedVehicleState: warray_1
+
+- type: entity
+  parent: VehicleTankHardpointBaseGorvin
+  id: VehicleTankOverdriveEnhancerGorvin
+  name: overdrive enhancer
+  description: An overdrive enhancer support attachment for a tank.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/vehicles/hardpoints/tank.rsi
+    state: odrive_enhancer
+  - type: HardpointItem
+    damageRegion: Rear
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.075
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+    integrity: 350
+  - type: VehicleSpeedModifierAttachment
+    speedMultiplier: 1.2
+  - type: HardpointVisual
+    vehicleState: odrive_enhancer_0
+    damagedVehicleState: odrive_enhancer_1
+
+- type: entity
+  parent: VehicleTankHardpointBaseGorvin
+  id: VehicleTankRocketLauncherGorvin
+  name: smoke launcher
+  description: A smoke launcher support attachment for a tank.
+  components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: Sprite
+    sprite: _RMC14/Structures/vehicles/hardpoints/tank.rsi
+    state: slauncher_0
+  - type: HardpointItem
+    damageRegion: Exterior
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.075
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 150
+    integrity: 150
+  - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
+    useDirectionalOffsets: true
+    pixelOffsetNorth: "0,-10"
+    pixelOffsetEast: "-10,0"
+    pixelOffsetSouth: "0,10"
+    pixelOffsetWest: "10,0"
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: GunIgnorePrediction
+  - type: Gun
+    fireRate: 0.6
+    projectileSpeed: 18
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
+    cameraRecoilScalar: 0
+  - type: ShootAtFixedPoint
+  - type: OnShootTriggerAmmoTimer
+    delay: 0.2
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: RMC40MMGrenadeM74AGMSVehicle
+    capacity: 6
+  - type: VehicleHardpointAmmo
+    magazineSize: 6
+    maxStoredMagazines: 2
+  - type: GunFireArc
+    arc: 360
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxGrenadeLauncher
+  - type: GunMuzzleOffset
+    offset: "0,0"
+    useDirectionalOffsets: true
+    offsetEast: "0,0.2"
+    muzzleOffset: "0,-1"
+    useAimDirection: true
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: slauncher_0
+
+- type: entity
+  parent: VehicleTankHardpointBaseGorvin
+  id: VehicleTankArtilleryModuleGorvin
+  name: artillery module
+  description: An artillery support module for a tank.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/vehicles/hardpoints/tank.rsi
+    state: artillery
+  - type: HardpointItem
+    damageRegion: Internal
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.075
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+    integrity: 350
+  - type: VehicleGunnerViewAttachment
+    pvsScale: 0.35
+    cursorMaxOffset: 5
+    cursorPvsIncrease: 0.5
+  - type: HardpointVisual
+    vehicleState: artillerymod_0
+    damagedVehicleState: artillerymod_1
