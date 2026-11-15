@@ -24,7 +24,8 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     }
 
     public bool CanExport(EntityUid uid)
-        => HasComp<CMUIndustryExportComponent>(uid)
+        => HasComp<ASRSSellableComponent>(uid)
+           || HasComp<CMUIndustryExportComponent>(uid)
            || HasComp<FluidTankComponent>(uid) && HasComp<FluidFillableComponent>(uid)
            || TryComp<StackComponent>(uid, out var stack) && GetTradePrice(stack) > 0;
 

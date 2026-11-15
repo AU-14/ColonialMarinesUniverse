@@ -4,6 +4,7 @@ using Content.Shared.Cargo.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Timing;
 using Content.Shared.Cargo.Systems;
+using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.Cargo.Systems;
@@ -21,6 +22,15 @@ public sealed partial class PriceGunSystem : SharedPriceGunSystem
     {
         if (!TryComp(entity.Owner, out UseDelayComponent? useDelay) || _useDelay.IsDelayed((entity.Owner, useDelay)))
             return false;
+
+        if (entity.Comp.OnlyASRSSellable && !HasComp<ASRSSellableComponent>(target))
+        {
+            _popupSystem.PopupEntity(Loc.GetString("cmu-asrs-appraisal-not-sellable"), user, user);
+            _audio.PlayPvs(entity.Comp.AppraisalSound, entity.Owner);
+            _useDelay.TryResetDelay((entity.Owner, useDelay));
+            return true;
+        }
+
         // Check if we're scanning a bounty crate
         if (_bountySystem.IsBountyComplete(target, out _))
         {

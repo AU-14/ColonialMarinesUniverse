@@ -3,6 +3,7 @@
 using Content.Server.CMU14.Fluids;
 using Content.Server.Power.EntitySystems;
 using Content.Shared.CMU14.Electric;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Examine;
@@ -385,6 +386,7 @@ public sealed class RecipeMachineSystem : EntitySystem
     private void SpawnItem(Entity<RecipeMachineComponent> machine, EntityCoordinates coords, EntProtoId proto)
     {
         var item = Spawn(proto, coords);
+        EnsureComp<ASRSSellableComponent>(item);
         foreach (var slotId in machine.Comp.OutputIds)
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) == null && _itemSlots.TryInsert(machine.Owner, slotId, item, null))
@@ -400,6 +402,7 @@ public sealed class RecipeMachineSystem : EntitySystem
             return;
 
         var result = Spawn(stackProto.Spawn, coords);
+        EnsureComp<ASRSSellableComponent>(result);
         if (TryComp<StackComponent>(result, out var resultStack))
             _stack.SetCount(result, amount, resultStack);
 
@@ -415,6 +418,7 @@ public sealed class RecipeMachineSystem : EntitySystem
                     continue;
                 }
 
+                EnsureComp<ASRSSellableComponent>(held);
                 _stack.TryMergeStacks((result, resultStack), (held, heldStack), out _);
                 if (TerminatingOrDeleted(result) || resultStack.Count <= 0)
                     return;

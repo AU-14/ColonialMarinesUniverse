@@ -10,6 +10,12 @@ namespace Content.Shared.Cargo.Components;
 public sealed partial class PriceGunComponent : Component
 {
     /// <summary>
+    /// If true, the tool only appraises entities explicitly marked for ASRS sale.
+    /// </summary>
+    [DataField]
+    public bool OnlyASRSSellable;
+
+    /// <summary>
     /// The sound that plays when the price gun appraises an object.
     /// </summary>
     [DataField]

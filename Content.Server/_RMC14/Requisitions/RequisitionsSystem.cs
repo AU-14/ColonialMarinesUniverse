@@ -129,6 +129,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         ApplyPlatoonCatalogToComputer(uid, comp);
         AppendFactionVendorGear(uid, comp); // CMU14: use the ReqVend/ReqEquipment vmarker mapping for ASRS stock.
         AddXRFToCatalog(uid, comp);
+        AddRUMCIndustryToCatalog(uid, comp);
         var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
@@ -1254,6 +1255,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             ApplyPlatoonCatalogToComputer(uid, comp);
             AppendFactionVendorGear(uid, comp); // CMU14: keep selected platoon vendor stock after round-start catalog refreshes.
             AddResearchTerminalToCatalog(uid, comp); // CMU14
+            AddRUMCIndustryToCatalog(uid, comp);
             var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);

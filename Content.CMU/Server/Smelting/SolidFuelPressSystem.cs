@@ -294,6 +294,7 @@ public sealed class SolidFuelPressSystem : EntitySystem
         }
 
         var made = Spawn(resultProto.Spawn, Transform(press).Coordinates);
+        EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(made);
         if (TryComp<StackComponent>(made, out var madeStack))
             _stack.SetCount((made, madeStack), recipe.ResultAmount);
 
@@ -307,6 +308,7 @@ public sealed class SolidFuelPressSystem : EntitySystem
             }
 
             _stack.TryMergeStacks(made, (held, heldStack), out _);
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(held);
             if (!TerminatingOrDeleted(made))
                 Del(made);
 

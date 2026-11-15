@@ -264,6 +264,7 @@ public sealed class SteamSmelterSystem : EntitySystem
         if (_proto.TryIndex(job.Result, out var resultProto) && !string.IsNullOrEmpty(resultProto.Spawn.Id))
         {
             var made = Spawn(resultProto.Spawn, Transform(smelter).Coordinates);
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(made);
             if (TryComp<StackComponent>(made, out var madeStack))
                 _stack.SetCount((made, madeStack), job.ResultAmount);
 
@@ -271,6 +272,7 @@ public sealed class SteamSmelterSystem : EntitySystem
                 TryComp<StackComponent>(held, out var heldStack))
             {
                 _stack.TryMergeStacks(made, (held, heldStack), out _);
+                EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(held);
                 if (!TerminatingOrDeleted(made))
                     Del(made);
             }

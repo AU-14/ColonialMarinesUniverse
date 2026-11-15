@@ -157,6 +157,7 @@ public sealed class GrinderSystem : EntitySystem
             return;
 
         var result = Spawn(stackProto.Spawn, coords);
+        EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(result);
         if (TryComp<StackComponent>(result, out var resultStack))
             _stack.SetCount(result, amount, resultStack);
 

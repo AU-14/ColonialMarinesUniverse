@@ -1131,6 +1131,15 @@
   duration: 8
 
 - type: cmuMachineRecipe
+  id: RUMCMRSifterStonePowderToSand
+  machine: sifter
+  inputs:
+    RUMCStonePowder: 4
+  outputs:
+    RUMCSand: 4
+  duration: 4
+
+- type: cmuMachineRecipe
   id: RUMCMRAutoclaveGrowDiamond
   machine: autoclave
   inputs:

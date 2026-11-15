@@ -11,6 +11,7 @@ using Content.Shared.CMU14.CCVar;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Portable;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -42,6 +43,27 @@ public sealed class CMUIndustryPipeworkTest : GameTest
           components:
           - type: RequisitionsAccount
             faction: unassigned
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryGovforAccount
+          components:
+          - type: RequisitionsAccount
+            faction: govfor
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryOpforAccount
+          components:
+          - type: RequisitionsAccount
+            faction: opfor
+
+        - type: entity
+          parent: CMUTestIndustryAccount
+          id: CMUTestIndustryCorporateAccount
+          components:
+          - type: RequisitionsAccount
+            faction: corporate
         """;
 
     [Test]
@@ -286,6 +308,48 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(SEntMan.IsQueuedForDeletion(barrel), Is.True);
             Assert.That(SEntMan.IsQueuedForDeletion(shipment), Is.True);
             SEntMan.DeleteEntity(accountUid);
+        });
+    }
+
+    [TestCase("colony", "CMUTestIndustryAccount")]
+    [TestCase("govfor", "CMUTestIndustryGovforAccount")]
+    [TestCase("opfor", "CMUTestIndustryOpforAccount")]
+    [TestCase("corporate", "CMUTestIndustryCorporateAccount")]
+    public async Task AsrsSellableStacksPayTheMatchingFactionBudget(string faction, string accountPrototype)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(AU14CCVars.SellCargoRewards, true);
+            var accountUid = SEntMan.SpawnEntity(accountPrototype, MapCoordinates.Nullspace);
+            var account = SComp<RequisitionsAccountComponent>(accountUid);
+            var otherUid = SEntMan.SpawnEntity("CMUTestIndustryUnassignedAccount", MapCoordinates.Nullspace);
+            var other = SComp<RequisitionsAccountComponent>(otherUid);
+            var balance = account.Balance;
+            var otherBalance = other.Balance;
+
+            var elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            var lift = SComp<RequisitionsElevatorComponent>(elevator);
+            lift.Faction = faction;
+            lift.Mode = RequisitionsElevatorMode.Lowering;
+            lift.NextMode = RequisitionsElevatorMode.Lowered;
+            lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
+            lift.LowerDelay = TimeSpan.Zero;
+            lift.LoweringSound = null;
+
+            var product = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(product);
+            Server.System<SharedStackSystem>().SetCount(product, 4);
+            var value = (int) Math.Round(Server.System<PricingSystem>().GetPrice(product));
+            Assert.That(value, Is.GreaterThan(0));
+
+            Server.System<RequisitionsSystem>().Update(0.1f);
+
+            Assert.That(account.Balance, Is.EqualTo(balance + value));
+            Assert.That(other.Balance, Is.EqualTo(otherBalance));
+            Assert.That(SEntMan.IsQueuedForDeletion(product), Is.True);
+            SEntMan.DeleteEntity(accountUid);
+            SEntMan.DeleteEntity(otherUid);
         });
     }
 }

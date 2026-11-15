@@ -253,6 +253,7 @@ public sealed class OreDrillSystem : EntitySystem
 
         var coords = Transform(drill).Coordinates;
         var made = Spawn(stackProto.Spawn, coords);
+        EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(made);
         if (!TryComp<StackComponent>(made, out var madeStack))
         {
             Del(made);
@@ -270,6 +271,7 @@ public sealed class OreDrillSystem : EntitySystem
                 continue;
             }
 
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(held);
             _stack.TryMergeStacks((made, madeStack), (held, heldStack), out _);
             if (TerminatingOrDeleted(made))
                 return;

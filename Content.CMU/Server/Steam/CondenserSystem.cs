@@ -182,6 +182,7 @@ public sealed class CondenserSystem : EntitySystem
         if (_proto.TryIndex(recipe.Result, out var resultProto) && !string.IsNullOrEmpty(resultProto.Spawn.Id))
         {
             var made = Spawn(resultProto.Spawn, Transform(condenser).Coordinates);
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(made);
             if (TryComp<StackComponent>(made, out var madeStack))
                 _stack.SetCount((made, madeStack), recipe.ResultAmount);
 
@@ -189,6 +190,7 @@ public sealed class CondenserSystem : EntitySystem
                 TryComp<StackComponent>(held, out var heldStack))
             {
                 _stack.TryMergeStacks(made, (held, heldStack), out _);
+                EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(held);
                 if (!TerminatingOrDeleted(made))
                     Del(made);
             }

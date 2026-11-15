@@ -1,0 +1,8 @@
+- type: entity
+  parent: AppraisalTool
+  id: CMUASRSAppraisalTool
+  name: ASRS appraisal tool
+  description: Reads the exact ASRS sale value of marked industrial products. It refuses anything the ASRS will not buy.
+  components:
+  - type: PriceGun
+    onlyASRSSellable: true
