@@ -8,3 +8,4 @@ cmu-door-links-select-first = Use the multitool on a constructed control button 
 cmu-door-links-different-map = The control and door must be on the same map.
 cmu-door-links-linked = Control linked.
 cmu-door-links-unlinked = Control unlinked.
+cmu-podlock-insurgency-only = Podlocks can only be built during Insurgency.

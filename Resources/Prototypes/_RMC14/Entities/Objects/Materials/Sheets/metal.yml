@@ -55,8 +55,7 @@
       - RMCMetalRodBuild
       - RMCWallGirderBuild
       - RMCWindowFrameBuild
-      # CMU14: player-built podlocks and controls
-      - CMUPodDoorBuild
+      # CMU14: player-built shutters and controls
       - CMUShutterBuild
       - CMUPodDoorButtonBuild
       # Airlock assembly
@@ -215,6 +214,8 @@
   components:
     - type: RMCConstructionItem
       buildable:
+      # CMU14: insurgency-only podlock frame
+      - CMUPodDoorBuild
       - RMCPlasteelBarricadeFoldableBuild
       - RMCPlasteelBarricadeBuild
       - RMCDividerConstruction

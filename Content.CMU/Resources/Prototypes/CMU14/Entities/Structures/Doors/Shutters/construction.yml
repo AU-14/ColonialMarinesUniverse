@@ -3,7 +3,40 @@
   id: CMUConstructedPodDoor
   description: A field-built podlock. Use a multitool to link it to a constructed control button. Its builder can lock link changes using the right-click menu.
   components:
+  - type: Construction
+    graph: CMUPodDoorConstruction
+    node: built
   - type: CMUConstructedDoorControl
+
+- type: entity
+  parent: CMGirder
+  id: CMUConstructedPodDoorFrame
+  name: podlock frame
+  description: An unfinished podlock frame. Add medium and light cable, then weld and screw it together.
+  components:
+  - type: Construction
+    graph: CMUPodDoorConstruction
+    node: frame
+
+- type: entity
+  parent: CMUConstructedPodDoorFrame
+  id: CMUConstructedPodDoorMediumWiredFrame
+  name: podlock frame
+  description: An unfinished podlock frame with medium cable installed.
+  components:
+  - type: Construction
+    graph: CMUPodDoorConstruction
+    node: mediumWired
+
+- type: entity
+  parent: CMUConstructedPodDoorFrame
+  id: CMUConstructedPodDoorWiredFrame
+  name: podlock frame
+  description: An unfinished podlock frame with medium and light cable installed.
+  components:
+  - type: Construction
+    graph: CMUPodDoorConstruction
+    node: wired
 
 - type: entity
   parent: RMCShutterAlmayer
@@ -11,6 +44,39 @@
   description: Field-built shutters. Use a multitool to link them to a constructed control button. Their builder can lock link changes using the right-click menu.
   components:
   - type: CMUConstructedDoorControl
+
+- type: constructionGraph
+  id: CMUPodDoorConstruction
+  start: frame
+  graph:
+  - node: frame
+    entity: CMUConstructedPodDoorFrame
+    edges:
+    - to: mediumWired
+      steps:
+      - material: CableMV
+        amount: 5
+
+  - node: mediumWired
+    entity: CMUConstructedPodDoorMediumWiredFrame
+    edges:
+    - to: wired
+      steps:
+      - material: Cable
+        amount: 5
+
+  - node: wired
+    entity: CMUConstructedPodDoorWiredFrame
+    edges:
+    - to: built
+      steps:
+      - tool: Welding
+        doAfter: 5
+      - tool: Screwing
+        doAfter: 2
+
+  - node: built
+    entity: CMUConstructedPodDoor
 
 - type: entity
   parent: RMCPodDoorButton
@@ -26,13 +92,14 @@
 
 - type: rmcConstruction
   id: CMUPodDoorBuild
-  name: podlock
-  prototype: CMUConstructedPodDoor
+  name: podlock frame
+  prototype: CMUConstructedPodDoorFrame
   doAfterTime: 10
   doAfterTimeMin: 5
-  materialCost: 10
+  materialCost: 15
   skill: RMCSkillEngineer
   requiredSkillLevel: 1
+  insurgencyOnly: true
 
 - type: rmcConstruction
   id: CMUShutterBuild

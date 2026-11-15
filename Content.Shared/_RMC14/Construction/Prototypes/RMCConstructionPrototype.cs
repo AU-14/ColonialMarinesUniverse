@@ -70,6 +70,10 @@ public sealed partial class RMCConstructionPrototype : IPrototype, IInheritingPr
     [DataField]
     public bool IgnoreBuildRestrictions = false;
 
+    // CMU14: Restrict this recipe to active Insurgency rounds.
+    [DataField]
+    public bool InsurgencyOnly;
+
     [DataField]
     public EntProtoId Prototype = default!;
 

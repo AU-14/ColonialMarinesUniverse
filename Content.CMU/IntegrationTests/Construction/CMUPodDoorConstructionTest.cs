@@ -1,16 +1,22 @@
 using System.Linq;
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Construction.Components;
 using Content.Shared._RMC14.Construction;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.CMU14.Doors;
 using Content.Shared.Construction;
+using Content.Shared.Construction.Prototypes;
+using Content.Shared.Construction.Steps;
 using Content.Shared.Doors.Components;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Power.EntitySystems;
+using Content.Shared.Stacks;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Construction;
 
@@ -19,7 +25,6 @@ public sealed class CMUPodDoorConstructionTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
-    [TestCase("CMUPodDoorBuild", "CMUConstructedPodDoor")]
     [TestCase("CMUShutterBuild", "CMUConstructedShutter")]
     [TestCase("CMUPodDoorButtonBuild", "CMUConstructedPodDoorButton")]
     public async Task EngineeringSkillRequiredAndBuilderRecorded(string recipe, string prototype)
@@ -47,6 +52,63 @@ public sealed class CMUPodDoorConstructionTest : GameTest
                 .Single(c => SEntMan.GetComponent<MetaDataComponent>(c.Owner).EntityPrototype?.ID == prototype);
             Assert.That(built.Builder, Is.EqualTo(user));
         });
+    }
+
+    [Test]
+    public async Task PodlockRequiresInsurgencyAndEngineeringAndConsumesMaterialsAcrossStages()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid user = default;
+        EntityUid plasteel = default;
+        await Server.WaitAssertion(() =>
+        {
+            user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            plasteel = SEntMan.SpawnEntity("CMSheetPlasteel", map.GridCoords);
+            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(user, plasteel), Is.True);
+
+            var skills = Server.System<SkillsSystem>();
+            var construction = Server.System<RMCConstructionSystem>();
+            var item = SEntMan.GetComponent<RMCConstructionItemComponent>(plasteel);
+            Assert.That(item.Buildable!.Any(p => p.ToString() == "CMUPodDoorBuild"), Is.True);
+
+            skills.SetSkill(user, "RMCSkillEngineer", 1);
+            Assert.That(construction.Build((plasteel, item), user, "CMUPodDoorBuild", 1), Is.False);
+
+            var rule = SEntMan.SpawnEntity("InsWinConditionsRule", map.GridCoords);
+            SEntMan.EnsureComponent<ActiveGameRuleComponent>(rule);
+            skills.SetSkill(user, "RMCSkillEngineer", 0);
+            Assert.That(construction.Build((plasteel, item), user, "CMUPodDoorBuild", 1), Is.False);
+
+            skills.SetSkill(user, "RMCSkillEngineer", 1);
+            Assert.That(construction.Build((plasteel, item), user, "CMUPodDoorBuild", 1), Is.True);
+        });
+
+        await Pair.RunSeconds(22);
+        await Server.WaitAssertion(() =>
+        {
+            var frame = SEntMan.EntityQuery<ConstructionComponent>()
+                .Single(c => SEntMan.GetComponent<MetaDataComponent>(c.Owner).EntityPrototype?.ID == "CMUConstructedPodDoorFrame");
+            Assert.That(frame.Graph, Is.EqualTo("CMUPodDoorConstruction"));
+            Assert.That(frame.Node, Is.EqualTo("frame"));
+            Assert.That(SEntMan.GetComponent<StackComponent>(plasteel).Count, Is.EqualTo(25));
+
+            var protoMan = Server.ResolveDependency<IPrototypeManager>();
+            ProtoId<ConstructionGraphPrototype> graphId = "CMUPodDoorConstruction";
+            var graph = protoMan.Index(graphId);
+            AssertMaterialStep(graph.Nodes["frame"], "CableMV", 5);
+            AssertMaterialStep(graph.Nodes["mediumWired"], "Cable", 5);
+            Assert.That(graph.Nodes["wired"].Edges.Single().Steps.Select(s => s.GetType()),
+                Is.EqualTo(new[] { typeof(ToolConstructionGraphStep), typeof(ToolConstructionGraphStep) }));
+        });
+    }
+
+    private static void AssertMaterialStep(ConstructionGraphNode node, string stackType, int amount)
+    {
+        var step = node.Edges.Single().Steps.Single();
+        Assert.That(step, Is.TypeOf<MaterialConstructionGraphStep>());
+        var material = (MaterialConstructionGraphStep)step;
+        Assert.That(material.MaterialPrototypeId.ToString(), Is.EqualTo(stackType));
+        Assert.That(material.Amount, Is.EqualTo(amount));
     }
 }
 

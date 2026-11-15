@@ -9,12 +9,14 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Water;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.Examine;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -148,6 +150,13 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!_prototype.TryIndex<RMCConstructionPrototype>(protoID, out var proto))
             return false;
 
+        // CMU14: The menu is client-side, so enforce this restriction on the server build path too.
+        if (proto.InsurgencyOnly && !IsInsurgencyActive())
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-podlock-insurgency-only"), ent, user, PopupType.SmallCaution);
+            return false;
+        }
+
         if (!TryComp(user, out TransformComponent? transform))
             return false;
 
@@ -266,6 +275,13 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!_prototype.TryIndex(args.Prototype, out var entry))
             return;
 
+        // CMU14: Do not let a build finish if the mode ended during its do-after.
+        if (entry.InsurgencyOnly && !IsInsurgencyActive())
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-podlock-insurgency-only"), ent, args.User, PopupType.SmallCaution);
+            return;
+        }
+
         var coordinates = GetCoordinates(args.Coordinates);
         args.Handled = true;
 
@@ -336,6 +352,13 @@ public sealed partial class RMCConstructionSystem : EntitySystem
             var completedEv = new ConstructionCompletedEvent(built, args.User);
             RaiseLocalEvent(built, ref completedEv, broadcast: true);
         }
+    }
+
+    // CMU14
+    private bool IsInsurgencyActive()
+    {
+        var rules = EntityQueryEnumerator<InsurgencyRuleComponent, ActiveGameRuleComponent, GameRuleComponent>();
+        return rules.MoveNext(out _, out _, out _, out _);
     }
 
     /// <summary>
