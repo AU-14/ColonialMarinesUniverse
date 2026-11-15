@@ -48,61 +48,74 @@ public sealed class CMUPodDoorConstructionTest : GameTest
             Assert.That(built.Builder, Is.EqualTo(user));
         });
     }
+}
 
-    [TestFixture]
-    public sealed class CMUPodDoorNetworkTest : GameTest
+[TestFixture]
+public sealed class CMUPodDoorNetworkTest : GameTest
+{
+    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    [Test]
+    public async Task PredictedButtonDoesNotAffectMappedDoorsAndServerStateReplicates()
     {
-        public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
-
-        [Test]
-        public async Task PredictedButtonDoesNotAffectMappedDoorsAndServerStateReplicates()
+        var map = await Pair.CreateTestMap();
+        EntityUid user = default;
+        EntityUid button = default;
+        EntityUid door = default;
+        NetEntity userNet = default;
+        NetEntity buttonNet = default;
+        NetEntity doorNet = default;
+        NetEntity mappedNet = default;
+        await Server.WaitAssertion(() =>
         {
-            var map = await Pair.CreateTestMap();
-            EntityUid user = default;
-            EntityUid button = default;
-            EntityUid door = default;
-            NetEntity userNet = default;
-            NetEntity buttonNet = default;
-            NetEntity doorNet = default;
-            NetEntity mappedNet = default;
-            await Server.WaitAssertion(() =>
-            {
-                user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                button = SEntMan.SpawnEntity("CMUConstructedPodDoorButton", map.GridCoords);
-                door = SEntMan.SpawnEntity("CMUConstructedPodDoor", map.GridCoords.Offset(new Vector2(1, 0)));
-                var mapped = SEntMan.SpawnEntity("RMCPodDoor", map.GridCoords.Offset(new Vector2(2, 0)));
-                Server.System<MetaDataSystem>().SetEntityName(mapped, "CMUConstructedControl");
-                var tool = SEntMan.SpawnEntity("CMMultitool", map.GridCoords);
-                SEntMan.EventBus.RaiseLocalEvent(button, new InteractUsingEvent(user, tool, button, map.GridCoords));
-                SEntMan.EventBus.RaiseLocalEvent(door, new InteractUsingEvent(user, tool, door, map.GridCoords));
-                Server.System<SharedPowerReceiverSystem>().SetNeedsPower(button, false);
-                Server.System<SharedPowerReceiverSystem>().SetNeedsPower(door, false);
-                Server.System<SharedPowerReceiverSystem>().SetNeedsPower(mapped, false);
-                Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
-                userNet = SEntMan.GetNetEntity(user);
-                buttonNet = SEntMan.GetNetEntity(button);
-                doorNet = SEntMan.GetNetEntity(door);
-                mappedNet = SEntMan.GetNetEntity(mapped);
-            });
-            await Pair.RunUntilSynced();
-            await Client.WaitAssertion(() =>
-            {
-                var clientButton = CEntMan.GetEntity(buttonNet);
-                var clientUser = CEntMan.GetEntity(userNet);
-                Assert.That(CEntMan.HasComponent<CMUConstructedDoorControlComponent>(clientButton), Is.True);
-                CEntMan.EventBus.RaiseLocalEvent(clientButton, new ActivateInWorldEvent(clientUser, clientButton, true));
-                Assert.That(CEntMan.GetComponent<DoorComponent>(CEntMan.GetEntity(mappedNet)).State, Is.EqualTo(DoorState.Closed));
-            });
-            await Server.WaitPost(() => SEntMan.EventBus.RaiseLocalEvent(button, new ActivateInWorldEvent(user, button, true)));
-            await Pair.RunSeconds(2);
-            await Pair.RunUntilSynced();
-            await Client.WaitAssertion(() =>
-            {
-                Assert.That(CEntMan.GetComponent<DoorComponent>(CEntMan.GetEntity(doorNet)).State, Is.EqualTo(DoorState.Open));
-                Assert.That(CEntMan.GetComponent<DoorComponent>(CEntMan.GetEntity(mappedNet)).State, Is.EqualTo(DoorState.Closed));
-            });
-        }
+            user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            button = SEntMan.SpawnEntity("CMUConstructedPodDoorButton", map.GridCoords);
+            door = SEntMan.SpawnEntity("CMUConstructedPodDoor", map.GridCoords.Offset(new Vector2(1, 0)));
+            var mapped = SEntMan.SpawnEntity("RMCPodDoor", map.GridCoords.Offset(new Vector2(2, 0)));
+            Server.System<MetaDataSystem>().SetEntityName(mapped, "CMUConstructedControl");
+            var buttonBuilt = new ConstructionCompletedEvent(button, user);
+            SEntMan.EventBus.RaiseLocalEvent(button, ref buttonBuilt, true);
+            var doorBuilt = new ConstructionCompletedEvent(door, user);
+            SEntMan.EventBus.RaiseLocalEvent(door, ref doorBuilt, true);
+            var tool = SEntMan.SpawnEntity("CMMultitool", map.GridCoords);
+            SEntMan.EventBus.RaiseLocalEvent(button, new InteractUsingEvent(user, tool, button, map.GridCoords));
+            SEntMan.EventBus.RaiseLocalEvent(door, new InteractUsingEvent(user, tool, door, map.GridCoords));
+            Server.System<SharedPowerReceiverSystem>().SetNeedsPower(button, false);
+            Server.System<SharedPowerReceiverSystem>().SetNeedsPower(door, false);
+            Server.System<SharedPowerReceiverSystem>().SetNeedsPower(mapped, false);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, user);
+            userNet = SEntMan.GetNetEntity(user);
+            buttonNet = SEntMan.GetNetEntity(button);
+            doorNet = SEntMan.GetNetEntity(door);
+            mappedNet = SEntMan.GetNetEntity(mapped);
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            var clientButton = CEntMan.GetEntity(buttonNet);
+            var clientUser = CEntMan.GetEntity(userNet);
+            Assert.That(CEntMan.HasComponent<CMUConstructedDoorControlComponent>(clientButton), Is.True);
+            var buttonControl = CEntMan.GetComponent<CMUConstructedDoorControlComponent>(clientButton);
+            Assert.That(buttonControl.Builder, Is.EqualTo(clientUser));
+            Assert.That(buttonControl.LinkedDoors, Does.Contain(CEntMan.GetEntity(doorNet)));
+            CEntMan.EventBus.RaiseLocalEvent(clientButton, new ActivateInWorldEvent(clientUser, clientButton, true));
+            Assert.That(CEntMan.GetComponent<DoorComponent>(CEntMan.GetEntity(mappedNet)).State, Is.EqualTo(DoorState.Closed));
+        });
+        await Server.WaitPost(() => SEntMan.EventBus.RaiseLocalEvent(button, new ActivateInWorldEvent(user, button, true)));
+        await Pair.RunSeconds(2);
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            Assert.That(CEntMan.GetComponent<DoorComponent>(CEntMan.GetEntity(doorNet)).State, Is.EqualTo(DoorState.Open));
+            Assert.That(CEntMan.GetComponent<DoorComponent>(CEntMan.GetEntity(mappedNet)).State, Is.EqualTo(DoorState.Closed));
+        });
     }
+}
+
+[TestFixture]
+public sealed class CMUPodDoorLinkingTest : GameTest
+{
+    public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [Test]
     public async Task LinksAreExplicitAndBuilderCanProtectBothEndpoints()

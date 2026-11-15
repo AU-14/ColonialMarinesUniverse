@@ -3,16 +3,16 @@ using Robust.Shared.GameStates;
 namespace Content.Shared.CMU14.Doors;
 
 /// <summary>Ownership and explicit links for player-built podlocks, shutters, and buttons.</summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUConstructedDoorControlComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public EntityUid? Builder;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool LinksLocked;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public HashSet<EntityUid> LinkedDoors = new();
 }
 

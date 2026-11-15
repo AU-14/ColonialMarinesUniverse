@@ -25,6 +25,7 @@ public sealed partial class CMUConstructedDoorControlSystem : EntitySystem
     private void OnBuilt(Entity<CMUConstructedDoorControlComponent> ent, ref ConstructionCompletedEvent args)
     {
         ent.Comp.Builder = args.Builder;
+        Dirty(ent);
     }
 
     private void OnGetVerbs(Entity<CMUConstructedDoorControlComponent> ent, ref GetVerbsEvent<Verb> args)
@@ -46,6 +47,7 @@ public sealed partial class CMUConstructedDoorControlSystem : EntitySystem
             return;
 
         ent.Comp.LinksLocked = !ent.Comp.LinksLocked;
+        Dirty(ent);
         _popup.PopupEntity(Loc.GetString(ent.Comp.LinksLocked ? "cmu-door-links-locked" : "cmu-door-links-unlocked"),
             ent, user);
     }
@@ -101,6 +103,7 @@ public sealed partial class CMUConstructedDoorControlSystem : EntitySystem
         if (!linked)
             buttonControl.LinkedDoors.Remove(ent);
 
+        Dirty(new Entity<CMUConstructedDoorControlComponent>(button, buttonControl));
         _popup.PopupEntity(Loc.GetString(linked ? "cmu-door-links-linked" : "cmu-door-links-unlinked"), ent, args.User);
     }
 
@@ -114,6 +117,9 @@ public sealed partial class CMUConstructedDoorControlSystem : EntitySystem
 
         var controls = EntityQueryEnumerator<CMUConstructedDoorControlComponent, RMCDoorButtonComponent>();
         while (controls.MoveNext(out _, out var control, out _))
-            control.LinkedDoors.Remove(ent);
+        {
+            if (control.LinkedDoors.Remove(ent))
+                Dirty(new Entity<CMUConstructedDoorControlComponent>(control.Owner, control));
+        }
     }
 }
