@@ -1,3 +1,4 @@
+// CMU14
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -206,11 +207,13 @@ public abstract partial class SharedLanguageLearningSystem : EntitySystem
         return Math.Min(languageProto.MaximumOverallComprehension, combinedComprehension);
     }
 
+    // CMU14: coreVocabularySize is new, see CalculateOverallComprehension
     private static float CalculateBaseComprehension(LanguageLearningData languageData, int coreVocabularySize = int.MaxValue)
     {
         var totalComprehension = 0f;
         var totalWeight = 0f;
 
+        // CMU14: only the best-known words count when the learner has more words than the core vocabulary size
         IEnumerable<KeyValuePair<string, float>> words = languageData.LearnedWords;
         if (languageData.LearnedWords.Count > coreVocabularySize)
         {
@@ -218,6 +221,7 @@ public abstract partial class SharedLanguageLearningSystem : EntitySystem
                 .OrderByDescending(kvp => kvp.Value)
                 .Take(coreVocabularySize);
         }
+        // CMU14
 
         foreach (var (word, comprehension) in words)
         {
