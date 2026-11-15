@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
@@ -27,6 +28,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     public override void Initialize()
     {
@@ -124,6 +126,9 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
 
             if (TryComp(sac, out CMUPathogenSporeSacComponent? comp))
                 comp.Placer = xeno.Owner;
+
+            // the sac keeps its own hive, the placer can die or evolve long before anyone steps on it
+            _hive.SetSameHive(xeno.Owner, sac);
 
             xeno.Comp.PlacedSacs.Add(sac);
         }

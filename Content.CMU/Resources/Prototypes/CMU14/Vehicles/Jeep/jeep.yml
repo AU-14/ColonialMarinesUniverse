@@ -2375,6 +2375,10 @@
   categories: [ HideSpawnMenu ]
   name: seat
   components:
+  # Buckled riders relay pull joints through their seat. The chassis owns collision geometry.
+  - type: Physics
+    bodyType: Static
+    canCollide: false
   - type: Sprite
     layers:
     - map: [ mask ]

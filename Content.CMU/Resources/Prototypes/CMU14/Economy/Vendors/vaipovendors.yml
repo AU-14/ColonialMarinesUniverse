@@ -1108,6 +1108,8 @@
       entries:
       - id: CMMagazineRifleM54C
         amount: 200
+      - id: CMU14MagazineRifleM54CRubber
+        amount: 20
       - id: CMMagazineRifleM54CAP
         amount: 15
       - id: CMMagazineRifleM54CExt
@@ -1128,6 +1130,8 @@
         amount: 2
       - id: CMMagazineRifleM54CMK1
         amount: 70
+      - id: CMU14MagazineRifleM54CMK1Rubber
+        amount: 20
       - id: CMMagazineRifleM54CMK1AP
         amount: 10
       - id: CMMagazineRifleM54CMK1Tracer
@@ -1152,6 +1156,8 @@
         amount: 100
       - id: CMMagazinePistolM1984
         amount: 200
+      - id: CMU14MagazinePistolM1984Rubber
+        amount: 20
       - id: RMCMagazinePistolM1984AP
         amount: 15
       - id: RMCMagazinePistolM1984HP
@@ -1177,6 +1183,10 @@
       - id: CMUBoxBulletsPistol9MM
         amount: 5
       - id: CMUBoxBulletsPistol45
+        amount: 5
+      - id: CMU14BoxBulletsRifle10x24mmRubber
+        amount: 5
+      - id: CMU14BoxBulletsPistol9MMRubber
         amount: 5
     - name: explosives
       entries:

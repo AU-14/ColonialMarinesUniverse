@@ -241,7 +241,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         var doAfter = new DoAfterArgs(EntityManager, user, construction.OrderConstructionDelay, doAfterEvent, user)
         {
             // CMU14: moving the remote eye must not interrupt the queen's construction.
-            BreakOnMove = !_queenEye.IsInQueenEye(user),
+            BreakOnMove = !_queenEye.IsMovingRemoteEye(user),
             BlockDuplicate = false,
         };
 
@@ -670,7 +670,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         var doAfter = new DoAfterArgs(EntityManager, xeno, finalBuildTime, ev, xeno)
         {
             // CMU14: do-afters follow the effective mover, which may be the remote eye.
-            BreakOnMove = !_queenEye.IsInQueenEye(xeno.Owner),
+            BreakOnMove = !_queenEye.IsMovingRemoteEye(xeno.Owner),
             RootEntity = true,
             CancelDuplicate = false
         };
