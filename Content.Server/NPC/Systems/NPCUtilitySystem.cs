@@ -351,9 +351,9 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             {
                 var radius = blackboard.GetValueOrDefault<float>(blackboard.GetVisionRadiusKey(EntityManager), EntityManager);
 
-                // CMU14: partial ballistic cover can intercept a shot, but cannot prevent acquiring its target.
+                // CMU14: sentries can acquire targets over a nearby, directionally aligned barricade.
                 return _interaction.InRangeUnobstructed(owner, targetUid, radius + 0.5f, CollisionGroup.BulletImpassable,
-                    predicate: blocker => TryComp<BarricadeBlockComponent>(blocker, out var cover) && cover.Blocking < 100) ? 1f : 0f;
+                    predicate: blocker => _sentryTargeting.CanShootOverBarricade(owner, blocker)) ? 1f : 0f;
             }
             case TargetInLOSCon:
             {

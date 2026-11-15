@@ -180,7 +180,8 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
             || Math.Abs(Angle.ShortestDistance(mount.Facing, delta.ToWorldAngle()).Theta) > gun.Comp.HalfArc.Theta)
             return false;
         return _interaction.InRangeUnobstructed(gun.Owner, target, gun.Comp.Range,
-            CollisionGroup.Impassable | CollisionGroup.BulletImpassable);
+            CollisionGroup.Impassable | CollisionGroup.BulletImpassable,
+            predicate: blocker => _targeting.CanShootOverBarricade(gun.Owner, blocker));
     }
 
     private void OnAuthorizeFire(Entity<CMUFobSupportGunComponent> gun, ref CMUFobFireAuthorizationEvent args)

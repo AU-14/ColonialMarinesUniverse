@@ -279,6 +279,30 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
     }
 
     [Test]
+    public async Task HeavyGunShootsOverBarricadeWithinFourTiles()
+    {
+        await SetupGuns(ammo: 20);
+        await Server.WaitAssertion(() =>
+        {
+            var secondGun = SEntMan.GetComponent<CMUFobGunMountComponent>(_secondMount).Gun!.Value;
+            SetAmmo(Magazine(secondGun), 0);
+
+            var cover = SEntMan.SpawnAtPosition("CMBarricadeMetal", _gunCoords.Offset(new Vector2(4, 0)));
+            Transform.SetWorldRotation(cover, Vector2.UnitX.ToWorldAngle());
+            Transform.SetCoordinates(_victim, _gunCoords.Offset(new Vector2(6, 0)));
+            Assert.That(Reserve.TryActivate(_network), Is.True);
+        });
+
+        await RunSeconds(1.8f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Gun.Target, Is.EqualTo(_victim), "The fixed FOB gun must acquire targets over a nearby, aligned barricade.");
+            Assert.That(Ammo, Is.LessThan(20), "The FOB gun must fire through the barricade.");
+            Assert.That(Damage.GetTotalDamage(_victim), Is.GreaterThan(FixedPoint2.Zero));
+        });
+    }
+
+    [Test]
     public async Task PoweredGunTakesProjectileDamageAndItsWreckAllowsShotsAndMovementThrough()
     {
         await SetupGuns(ammo: 0);

@@ -36,7 +36,7 @@ public sealed class CMUSentryCoverTest : GameTest
                 maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
 
             sentry = SEntMan.SpawnEntity("RMCSentry", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
-            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));
             var transform = Server.System<SharedTransformSystem>();
             transform.SetLocalRotation(sentry, Direction.East.ToAngle());
             transform.SetLocalRotation(cover, Direction.East.ToAngle());
@@ -56,9 +56,9 @@ public sealed class CMUSentryCoverTest : GameTest
         await Pair.RunSeconds(6);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(Ammo(), Is.LessThan(initialAmmo), "Low cover must not prevent acquiring a target beyond the barricade.");
+            Assert.That(Ammo(), Is.LessThan(initialAmmo), "A sentry within four tiles of an aligned barricade must acquire targets beyond it.");
             Assert.That(Server.System<DamageableSystem>().GetTotalDamage(hostile), Is.GreaterThan(FixedPoint2.Zero),
-                "Actual projectiles must pass the aligned nearby barricade and reach the target.");
+                "Actual projectiles must pass the aligned barricade within four tiles and reach the target.");
             // The first body is also ballistic cover; keep the next phase limited to the wall under test.
             SEntMan.DeleteEntity(hostile);
             wall = SEntMan.SpawnEntity("CMWallMetal", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));

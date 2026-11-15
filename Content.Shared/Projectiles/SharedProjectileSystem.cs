@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Projectiles.Penetration;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Xenonids.Damage;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Administration.Logs;
@@ -82,6 +83,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
     [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
@@ -441,40 +443,38 @@ public abstract partial class SharedProjectileSystem : EntitySystem
             //_sawmill.Info("Checking BarricadeBlock...");
             if (component.Shooter is { } shooterUid && Exists(shooterUid))
             {
-                // Condition 1: Directions are the same (using cardinal directions).
-                // Or, if bidirectional, directions can be opposite.
-                var shooterWorldRotation = _transform.GetWorldRotation(shooterUid);
-                var BarricadeBlockWorldRotation = _transform.GetWorldRotation(args.OtherEntity);
-
-                var shooterDir = shooterWorldRotation.GetCardinalDir();
-                var BarricadeBlockDir = BarricadeBlockWorldRotation.GetCardinalDir();
-
-                bool directionallyAllowed = false;
-                if (shooterDir == BarricadeBlockDir)
+                if (HasComp<SentryComponent>(shooterUid))
                 {
-                    directionallyAllowed = true;
-                    //_sawmill.Debug("Shooter and BarricadeBlock facing same cardinal direction.");
+                    alwaysPassThrough = _sentryTargeting.CanShootOverBarricade(shooterUid, args.OtherEntity);
                 }
-                else if (BarricadeBlock.Bidirectional)
+                else
                 {
-                    var oppositeBarricadeBlockDir = (Direction)(((int)BarricadeBlockDir + 4) % 8);
-                    if (shooterDir == oppositeBarricadeBlockDir)
+                    // Condition 1: Directions are the same (using cardinal directions).
+                    // Or, if bidirectional, directions can be opposite.
+                    var shooterWorldRotation = _transform.GetWorldRotation(shooterUid);
+                    var BarricadeBlockWorldRotation = _transform.GetWorldRotation(args.OtherEntity);
+
+                    var shooterDir = shooterWorldRotation.GetCardinalDir();
+                    var BarricadeBlockDir = BarricadeBlockWorldRotation.GetCardinalDir();
+
+                    bool directionallyAllowed = false;
+                    if (shooterDir == BarricadeBlockDir)
                     {
                         directionallyAllowed = true;
-                        //_sawmill.Debug("Shooter and BarricadeBlock facing opposite cardinal directions (bidirectional pass).");
                     }
-                }
-
-                if (directionallyAllowed)
-                {
-                    // Condition 2: Firer is within 1 tile of the BarricadeBlock.
-                    var shooterCoords = Transform(shooterUid).Coordinates;
-                    var BarricadeBlockCoords = Transform(args.OtherEntity).Coordinates;
-
-                    if (shooterCoords.TryDistance(EntityManager, BarricadeBlockCoords, out var distance) &&
-                        distance <= BarricadeBlock.Distance)
+                    else if (BarricadeBlock.Bidirectional)
                     {
-                        alwaysPassThrough = true;
+                        var oppositeBarricadeBlockDir = (Direction)(((int)BarricadeBlockDir + 4) % 8);
+                        if (shooterDir == oppositeBarricadeBlockDir)
+                            directionallyAllowed = true;
+                    }
+
+                    if (directionallyAllowed)
+                    {
+                        var shooterCoords = Transform(shooterUid).Coordinates;
+                        var barricadeCoords = Transform(args.OtherEntity).Coordinates;
+                        alwaysPassThrough = shooterCoords.TryDistance(EntityManager, barricadeCoords, out var distance)
+                                            && distance <= BarricadeBlock.Distance;
                     }
                 }
             }
