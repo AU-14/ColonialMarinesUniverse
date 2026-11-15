@@ -1896,6 +1896,9 @@
   - VehicleHumveeTransport
   - VehicleHumveeMedical
   name: cmu-platoon-rmc-name
+  # the small RMC pack is a satchel underneath, same as the other platoons' own satchels
+  startingGearOverrides:
+    CMSatchelMarine: AU14SmallBackpackRMC
   lorePrimer: AU14PrimerPlatoonRMC
   Allegiance: TWE
   defaultLanguage: English

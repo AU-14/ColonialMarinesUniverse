@@ -131,3 +131,8 @@
     sprite: _RMC14/Objects/Clothing/Hands/Gloves/cbrn.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Hands/Gloves/cbrn.rsi
+  - type: CMArmor # CMU14: cmss13 armor_bio GIGAHIGHPLUS, the gloves had no bio at all
+    melee: 40
+    bullet: 40
+    bio: 75
+    explosionArmor: 20
