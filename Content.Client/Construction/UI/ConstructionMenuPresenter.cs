@@ -2,13 +2,16 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Lobby;
 using Content.Client.Stylesheets;
+using Content.Client.Hands.Systems; // CMU14: read materials from held storage
 using Content.Client.UserInterface.Systems.MenuBar.Widgets;
 using Content.Shared.CMU14.Construction;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Construction.Steps;
+using Content.Shared.Inventory; // CMU14: read materials from worn storage
 using Content.Shared.Stacks;
+using Content.Shared.Storage; // CMU14: read backpack contents
 using Content.Shared.Whitelist;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -462,6 +465,8 @@ namespace Content.Client.Construction.UI
                 return;
 
             var materialSteps = GetMaterialSteps(prototype);
+            // CMU14: snapshot carried and worn storage once for all material steps in the recipe.
+            var materialStock = GetBackpackMaterialStock();
             foreach (var entry in guide.Entries)
             {
                 if (entry.Empty())
@@ -472,22 +477,26 @@ namespace Content.Client.Construction.UI
                 string text;
                 try
                 {
+                    var localization = entry.Localization;
                     var arguments = entry.Arguments;
                     if (entry.Localization == "construction-presenter-material-step" &&
                         materialSteps.TryDequeue(out var materialStep) &&
                         _prototypeManager.TryIndex(materialStep.MaterialPrototypeId, out StackPrototype? material))
                     {
+                        // CMU14: show the available stock from held and worn storage with the recipe requirement.
+                        var available = materialStock.GetValueOrDefault(materialStep.MaterialPrototypeId);
                         var amount = AU14ConstructionSkillSystem.GetMaterialCost(
                             materialStep.MaterialPrototypeId,
                             materialStep.Amount,
                             skillLevel);
                         var materialName = Loc.GetString(material.Name, ("amount", amount));
-                        arguments = [("amount", amount), ("material", materialName)];
+                        arguments = [("amount", amount), ("material", materialName), ("available", available)];
+                        localization = "cmu-construction-presenter-material-step-with-stock";
                     }
 
                     text = arguments != null
-                        ? Loc.GetString(entry.Localization, arguments)
-                        : Loc.GetString(entry.Localization);
+                        ? Loc.GetString(localization, arguments)
+                        : Loc.GetString(localization);
 
                     if (entry.EntryNumber is { } number)
                     {
@@ -508,6 +517,48 @@ namespace Content.Client.Construction.UI
                 var icon = entry.Icon != null ? _spriteSystem.Frame0(entry.Icon) : Texture.Transparent;
                 stepList.AddItem(text, icon, false);
             }
+        }
+
+        // CMU14 method
+        private Dictionary<ProtoId<StackPrototype>, int> GetBackpackMaterialStock()
+        {
+            var stock = new Dictionary<ProtoId<StackPrototype>, int>();
+            if (_playerManager.LocalEntity is not { } player)
+                return stock;
+
+            var storageItems = new HashSet<EntityUid>();
+            var hands = _entManager.System<HandsSystem>();
+            foreach (var item in hands.EnumerateHeld(player))
+            {
+                if (_entManager.HasComponent<StorageComponent>(item))
+                    storageItems.Add(item);
+            }
+
+            var inventory = _entManager.System<InventorySystem>();
+            if (inventory.TryGetContainerSlotEnumerator(player, out var slots))
+            {
+                while (slots.NextItem(out var item))
+                {
+                    if (_entManager.HasComponent<StorageComponent>(item))
+                        storageItems.Add(item);
+                }
+            }
+
+            foreach (var storageItem in storageItems)
+            {
+                if (!_entManager.TryGetComponent(storageItem, out StorageComponent? storage))
+                    continue;
+
+                foreach (var storedItem in storage.Container.ContainedEntities)
+                {
+                    if (!_entManager.TryGetComponent(storedItem, out StackComponent? stack))
+                        continue;
+
+                    stock[stack.StackTypeId] = stock.GetValueOrDefault(stack.StackTypeId) + stack.Count;
+                }
+            }
+
+            return stock;
         }
 
         private Queue<MaterialConstructionGraphStep> GetMaterialSteps(ConstructionPrototype prototype)
@@ -954,6 +1005,8 @@ namespace Content.Client.Construction.UI
             system.ToggleCraftingWindow += SystemOnToggleMenu;
             system.FlipConstructionPrototype += SystemFlipConstructionPrototype;
             system.CraftingAvailabilityChanged += SystemCraftingAvailabilityChanged;
+            // CMU14: keep displayed backpack material stock current while the menu is open.
+            system.MaterialStockChanged += SystemMaterialStockChanged;
             system.ConstructionGuideAvailable += SystemGuideAvailable;
             system.ConstructionRecipesChanged += SystemRecipesChanged;
             if (_uiManager.GetActiveUIWidgetOrNull<GameTopMenuBar>() != null)
@@ -972,6 +1025,8 @@ namespace Content.Client.Construction.UI
             system.ToggleCraftingWindow -= SystemOnToggleMenu;
             system.FlipConstructionPrototype -= SystemFlipConstructionPrototype;
             system.CraftingAvailabilityChanged -= SystemCraftingAvailabilityChanged;
+            // CMU14: release the material-stock listener with the construction system binding.
+            system.MaterialStockChanged -= SystemMaterialStockChanged;
             system.ConstructionGuideAvailable -= SystemGuideAvailable;
             system.ConstructionRecipesChanged -= SystemRecipesChanged;
             _constructionSystem = null;
@@ -1003,6 +1058,13 @@ namespace Content.Client.Construction.UI
             if (_uiManager.ActiveScreen == null)
                 return;
             CraftingAvailable = e.Available;
+        }
+
+        // CMU14 method
+        private void SystemMaterialStockChanged(object? sender, EventArgs args)
+        {
+            if (WindowOpen && _selected is not null)
+                PopulateInfo(_selected);
         }
 
         private void SystemOnToggleMenu(object? sender, EventArgs eventArgs)

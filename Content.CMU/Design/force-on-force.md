@@ -17,20 +17,85 @@ The roll maximizes balanced assignments, then prefers higher role priorities and
 
 ## Dropships
 
+RTO CAS uplinks can call **OWN POSITION** without a visible hostile or a flare.
+The operator may offset the call by up to 15 tiles east/west and north/south,
+including diagonally. The server adds up to 12 tiles of random radial deviation
+to the requested position; the resulting mark stays fixed when the RTO moves.
+Aircrew can accept, deny or complete requests on the weapons console and select
+AUTO or MANUAL carry-out. Undecided requests switch to AUTO after twelve seconds.
+Only AUTO requires the requesting RTO to transmit CLEARED HOT before firing;
+MANUAL does not lock the crew's weapons. AUTO uses matching weapons already
+mounted on the aircraft (for example the GAU-21 or rocket pod), not a preset
+loadout. A missing or unusable requested weapon cancels the automatic request.
+RTO laser designations tighten strike spread by 25%. Direct console strikes
+within five tiles of friendlies require a second fire command within five seconds,
+unless covered by a cleared-hot request.
+
+Ground GPS reports are optional. The RTO layer has no guidance dependency:
+server systems may subscribe to broadcast `CMUCasGroundReportsEvent(Actor,
+Reports)` and append display-only `CMUCasGroundReport(Id, Observer, Map, X, Y)`
+records. Resolving a selection raises `CMUCasResolveGroundReportEvent(Actor,
+ReportId)`; a provider must revalidate faction, expiry, surface and range before
+setting its nullable `EntityCoordinates` field `Coordinates`. With no provider,
+the report list is empty and report IDs are rejected. Both events and the
+serializable record are owned by `Content.Shared.CMU14.Dropship.Cas`.
+
+The combined integration layer supplies this provider using the guidance report
+store. RTO calls and aircraft programming share the same validated, fixed-deviation
+solution. It also adds the GPS-guided 105mm Howitzer shell when CAS Weapons and
+Guidance are installed: 1400 points, twice standard HE, with the same HE payload.
+Neither addition is required by the standalone feature branches.
+
+Xenos, or players holding a sharp tool such as a knife, can right-click an RTO
+radio pack or its wearer to **Rip out radio wires**.
+This takes seven seconds and is interrupted by movement, damage, or changing
+hands/dropping the required tool. The broken
+pack cannot operate its radio, relay, phone or CAS uplink. An RTO or someone with
+Engineer skill 1 can use five cable on the pack (or its wearer) to repair it,
+then power it back on.
+
+Focused RTO coverage is in `CMURtoRadioTest`, `CMUCasRequestTest` and
+`CMUCasAutoCarryTest`. These use master weapon prototypes and cover position
+deviation, JTAC relay, wire damage/repair, optional report providers, request
+lifecycle, AUTO-only clearance, mounted GAU ammunition consumption and danger-close
+confirmation. Run with `dotnet test Content.IntegrationTests\Content.IntegrationTests.csproj
+-c DebugOpt --filter "FullyQualifiedName~CMURtoRadioTest|FullyQualifiedName~CMUCasRequestTest|FullyQualifiedName~CMUCasAutoCarryTest"
+-- NUnit.NumberOfTestWorkers=1 NUnit.DefaultTimeout=180000`.
+
 The CIP foundation exposes shared console-faction lookup and target selection
 for independently merged aircraft features. It adds no weapons or automated
 strike behavior. Console-local faction whitelists take priority over the ship's
 faction; otherwise consoles inherit their grid's faction.
 
+`CIP-Foundation` is the only common prerequisite for the standalone CAS Weapons,
+Mohawk 90mm, RTO and GPS/Laser branches. None requires another feature branch.
+`CIP-Standalone-Combined` includes all four plus their optional integration
+adapters. The original stacked CIP branches are preserved.
+
+Independent functionality does not imply conflict-free Git merges: the features
+share console UI and weapon-system edit locations. When combining them, preserve
+each feature's handlers and controls; the combined branch records those
+resolutions. The RTO/GPS report provider, CAS AUTO readiness adapter and Mohawk
+readiness/ammo/visibility adapter belong to the combined integration layer.
+
+### Aircraft laser codes and ground GPS reports
+
+Laser designators default to `1111-1`. Use Guidance programming on a designator,
+dropship weapons console or fighter cockpit to change its code. Aircraft reject
+laser targets that do not match their receiver code.
+
+Guided missiles can be individually programmed from friendly ground rangefinder
+reports instead of a continuing laser mark. Reports use planet coordinate
+offsets, expire after five minutes, and carry fixed deviation of up to fifteen
+tiles per axis. Reusing a report does not reroll its error. Pilots cannot enter
+arbitrary coordinates; normal flight, range and protected-area checks still apply.
+The GPS Howitzer shell is a separate integration follow-up requiring CAS Weapons.
+
 Dropship part fabricators share a budget within their carrier's faction, including linked decks. GOVFOR and OPFOR have separate accounts for purchases, refunds, passive income and faction tech rewards.
 
-In FoF, squad leaders, acting squad leaders, officers and command personnel can hack an opposing dropship's navigation console. The hack takes 60 seconds and breaks on movement, damage or resting. Existing launch and hijack timing limits apply. Authorization is tied to the user and console and expires after one minute.
-
-Humans and xenos have a single **Initiate hijack** action. The server chooses a valid destination at random when pressed. FoF humans only target the opposing faction's carrier: GOVFOR attacks OPFOR and OPFOR attacks GOVFOR. The human FoF route uses the queen-style crash sequence. Xenos retain the existing valid carrier set and queen decline option. Legacy human intel hijacks outside FoF retain their landing-zone behavior with random selection.
+Hijacking is disabled in Force on Force. Both factions need their carrier for the whole round, and a hijack crash takes the victim carrier out of play, so no hijack initiation is accepted in the mode: not the FoF command hack, not legacy intel hijackers, not xenos or third parties carrying a hijacker component. The console hack and the hijack join offer stay wired up but have no trigger while the mode disables hijacking.
 
 Ordinary navigation respects both carrier ownership (including connected decks) and landing-zone faction whitelists. A hostile passenger on a launched dropship triggers the owning faction's ship announcement, including passengers on other dropship decks.
-
-When a FoF hijack flight starts, living attackers on the ground or their own carrier receive a **Join / Stay** popup offering transport aboard the hijacked dropship. Living defenders on the ground or the attackers' carrier receive the same choice to return to their own carrier's spawn area. Players already aboard the hijacking dropship or defending carrier are not prompted. Closing the popup counts as staying. The offer expires at landing, on death, or when the player changes body, faction or eligible location; acceptance is validated on the server and requires a clear floor tile.
 
 Admin commands support faction recipients:
 
@@ -71,11 +136,13 @@ Asset-level attribution is in `Resources/Audio/CMU14/ForceOnForce/attributions.y
 
 ## Identification and respawn
 
-Options → CMU → Identification has a personal "Show question marks for unfamiliar enemy uniforms in FoF" toggle. Its saved client CVar, `cmu.fof.unidentified_marker_enabled`, defaults to `true`. When enabled, the HUD replaces faction, role, squad and fireteam markers with a red question mark with a black outline for other factions wearing uniforms the viewer does not recognize, including missing uniforms. Teammates never receive the question mark, even with no uniform or a foreign uniform. Recognition includes the selected platoon's resolved vendor stock (including shipside and specialist vendors), its explicit uniform list and the viewer's issued uniform. It matches exact uniform prototypes; inheriting another uniform's components does not establish faction identity. Other factions wearing a recognized uniform do not receive the question mark. Applying the setting and changing equipment update recognition without respawning.
+Options → CMU → Identification has a personal "Show FoF identification markers" toggle. Its saved client CVar, `cmu.fof.unidentified_marker_enabled`, defaults to `true`. A server CVar, `cmu.fof.identification_markers_enabled`, disables the whole system mid-round without touching that preference; the personal toggle still applies per client while the server switch is on. When enabled, the HUD replaces faction, role, squad and fireteam markers with a red symbol with a black outline: an exclamation mark above the opposing side and a question mark above unfamiliar parties, in both cases when the target wears uniforms the viewer does not recognize, including missing uniforms. Teammates never receive a marker, even with no uniform or a foreign uniform. Recognition includes the selected platoon's resolved vendor stock (including shipside and specialist vendors), its explicit uniform list and the viewer's issued uniform. It matches exact uniform prototypes; inheriting another uniform's components does not establish faction identity. Targets wearing a recognized uniform keep their normal identifiers. Applying the setting and changing equipment update recognition without respawning.
 
-The question mark does not require marine HUD gear. Normal role and squad identifiers retain their existing HUD requirements.
+War sides are govfor and opfor. Third parties declare an allegiance; when it matches a side's platoon allegiance in Force on Force, its members are tagged with that side and count as teammates of it, so a UPP force arriving while opfor plays UPP is friendly to opfor and shows the exclamation mark to govfor. When both sides rolled platoons of the same allegiance, the tie stays unaligned and the party shows the question mark to both sides. Participants without a platoon (colonists, unaligned third parties) carry an empty recognition list: both war sides show the exclamation mark, every other unfamiliar unit shows the question mark.
 
-Dead bodies display neither the question mark nor marine identification icons. Revived enemies are evaluated normally again.
+The markers do not require marine HUD gear. Normal role and squad identifiers retain their existing HUD requirements.
+
+Dead bodies display neither marker nor marine identification icons. Revived enemies are evaluated normally again.
 
 FoF respawning waits five minutes from death, tracked by account through ghosting and reconnecting. An account's first GOVFOR or OPFOR spawn locks every subsequent life to that side for the rest of the round, including after changing character. The job list, assignment roll and final spawn check enforce the lock. Revival cancels that death's eligibility; a subsequent death starts a new five-minute wait. The round reset clears the timer and side lock. Existing population balance limits still apply; a returning player waits if their original side is larger.
 

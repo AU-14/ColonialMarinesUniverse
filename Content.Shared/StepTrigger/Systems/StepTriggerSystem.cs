@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Gravity;
 using Content.Shared.StepTrigger.Components;
 using Content.Shared.Whitelist;
@@ -135,6 +136,11 @@ public sealed partial class StepTriggerSystem : EntitySystem
     private bool CanTrigger(EntityUid uid, EntityUid otherUid, StepTriggerComponent component)
     {
         if (!component.Active || component.CurrentlySteppedOn.Contains(otherUid))
+            return false;
+
+        // CMU14: a Yautja does not set off traps. Scoped to entities that actually are traps, so step-triggered
+        // teleporters, slips, shards and chasms still trigger for them.
+        if (HasComp<YautjaComponent>(otherUid) && YautjaTrapIgnore.IsTrap(EntityManager, uid))
             return false;
 
         // Can't trigger if we don't ignore weightless entities

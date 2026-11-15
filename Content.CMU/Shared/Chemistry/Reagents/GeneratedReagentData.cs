@@ -69,6 +69,26 @@ public struct GeneratedReagentData
     public HashSet<string> ModifiedChems;
     [ViewVariables(VVAccess.ReadOnly)]
     public ReagentClass Class;
+    /// <summary>
+    /// ARCH-02: the nested chemical ("Chem A") this contract needs as one of its reactants, or string.Empty.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public string SubContractID;
+    /// <summary>
+    /// True when <see cref="SubContractID"/> was rolled as a new sub-contract for this contract (its recipe is
+    /// printed on the contract), false when it reuses a chemical the faction already completed.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public bool SubContractIsNew;
+    /// <summary>
+    /// §5 heat gate: the synthesis only runs at or above this temperature (K). 0 = no gate. Rolled once on the server
+    /// and networked, so the client rebuilds the same recipe.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float RequiredMinTemp;
+    /// <summary>§5 cooling gate: the synthesis only runs at or below this temperature (K). 0 = no gate.</summary>
+    [ViewVariables(VVAccess.ReadOnly)]
+    public float RequiredMaxTemp;
     // TODO: effects on mix
     public GeneratedReagentData()
     {
@@ -88,6 +108,10 @@ public struct GeneratedReagentData
         PropertyHint = string.Empty;
         OriginalID = string.Empty;
         ModifiedChems = [];
+        SubContractID = string.Empty;
+        SubContractIsNew = false;
+        RequiredMinTemp = 0f;
+        RequiredMaxTemp = 0f;
     }
     
 }

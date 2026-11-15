@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Outlines of the ore overlays of Space Station 14 (Structures/Walls/stone-ore.rsi), painted in the colour of each ore",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ore_iron"
+    },
+    {
+      "name": "ore_copper"
+    },
+    {
+      "name": "ore_aluminum"
+    },
+    {
+      "name": "ore_lead"
+    },
+    {
+      "name": "ore_silver"
+    },
+    {
+      "name": "ore_gold"
+    },
+    {
+      "name": "ore_chrome"
+    },
+    {
+      "name": "ore_cobalt"
+    },
+    {
+      "name": "ore_titanium"
+    },
+    {
+      "name": "ore_tungsten"
+    },
+    {
+      "name": "ore_platinum"
+    },
+    {
+      "name": "ore_uranium"
+    },
+    {
+      "name": "ore_saltpeter"
+    },
+    {
+      "name": "ore_cinnabar"
+    },
+    {
+      "name": "ore_asbestos"
+    },
+    {
+      "name": "ore_fluorite"
+    },
+    {
+      "name": "ore_beryllium"
+    },
+    {
+      "name": "ore_coltan"
+    },
+    {
+      "name": "ore_alexandrite"
+    },
+    {
+      "name": "ore_rawdiamond"
+    },
+    {
+      "name": "ore_emerald"
+    },
+    {
+      "name": "ore_ruby"
+    },
+    {
+      "name": "ore_phosphorus"
+    },
+    {
+      "name": "ore_trimorid"
+    },
+    {
+      "name": "ore_laxanite"
+    },
+    {
+      "name": "ore_laytoite"
+    },
+    {
+      "name": "ore_quartz"
+    }
+  ]
+}

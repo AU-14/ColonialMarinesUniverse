@@ -7,6 +7,7 @@ namespace Content.Shared.CMU14.Radio;
 [RegisterComponent]
 public sealed partial class ANPRCRelayAnchorComponent : Component
 {
+    // Runtime writers must publish membership through ANPRCRangeSystem.RefreshAnchorChannels.
     [DataField]
     public HashSet<ProtoId<RadioChannelPrototype>> Channels = new();
 

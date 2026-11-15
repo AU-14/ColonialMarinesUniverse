@@ -25,6 +25,9 @@ namespace Content.Server.Chat.Managers
         void SendAdminAnnouncement(string message, AdminFlags? flagBlacklist = null, AdminFlags? flagWhitelist = null);
         void SendAdminAnnouncementMessage(ICommonSession player, string message, bool suppressLog = true);
 
+        // CMU14: unescaped variant of SendAdminAnnouncement for command links; the caller must escape all dynamic text
+        void SendAdminAnnouncementNoFormatOrEscape(string message);
+
         // RMC14
         void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat,
             INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false,

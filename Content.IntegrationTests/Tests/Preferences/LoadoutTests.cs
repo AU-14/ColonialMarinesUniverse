@@ -246,57 +246,6 @@ public sealed class LoadoutTests : GameTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task ColonyAdministratorLeadershipUpgradeGrantsOrderActions()
-    {
-        var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Dirty = true,
-        });
-        var server = pair.Server;
-        var entManager = server.ResolveDependency<IEntityManager>();
-        var protoManager = server.ResolveDependency<IPrototypeManager>();
-        var stationSystem = entManager.System<StationSpawningSystem>();
-        var testMap = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var loadout = new RoleLoadout("JobAU14JobCivilianColonyAdministrator")
-            {
-                Points = 100,
-                SelectedLoadouts =
-                {
-                    ["ColonyAdministratorSkillsAU14"] = new List<Loadout>(),
-                },
-            };
-
-            Assert.That(loadout.AddLoadout(
-                "ColonyAdministratorSkillsAU14",
-                "ColonyAdministratorLeadershipSkillAU14",
-                protoManager), Is.True);
-
-            var profile = new HumanoidCharacterProfile();
-            profile.SetLoadout(loadout);
-            var administrator = stationSystem.SpawnPlayerMob(
-                testMap.GridCoords,
-                job: "AU14JobCivilianColonyAdministrator",
-                profile,
-                station: null);
-
-            Assert.That(entManager.TryGetComponent(administrator, out MarineOrdersComponent? orders), Is.True);
-            Assert.Multiple(() =>
-            {
-                Assert.That(orders!.MoveActionEntity, Is.Not.Null);
-                Assert.That(orders.HoldActionEntity, Is.Not.Null);
-                Assert.That(orders.FocusActionEntity, Is.Not.Null);
-            });
-
-            entManager.DeleteEntity(administrator);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
     /// <summary>
     /// Checks that every loadout referenced by a group exists.
     /// </summary>

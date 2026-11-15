@@ -29,6 +29,8 @@
 # ammonia-stabilised, sulfur-vulcanised
 - type: reaction
   id: CMUSyntheticLatex
+  minTemp: 350 # vulcanization: needs heat (hotplate or any other source)
+  conserveEnergy: false # do not self-heat past the gate
   reactants:
     RMCMethane:
       amount: 1
@@ -67,6 +69,8 @@
 
 - type: reaction
   id: CMUSynthBlood
+  requiredMixerCategories: # only reacts when mixed (lid-closed Mix verb or a detonating payload)
+  - CMUMix
   reactants:
     Water:
       amount: 3

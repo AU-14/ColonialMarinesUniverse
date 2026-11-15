@@ -338,6 +338,7 @@ public sealed class ANPRCRadioState(
     ANPRCExpertState expert)
     : BoundUserInterfaceState
 {
+    public long Revision;
     public readonly ANPRCPanelInfo Info = info;
     public readonly ANPRCExpertState Expert = expert;
 
@@ -374,4 +375,29 @@ public sealed class ANPRCRadioState(
     // the round's signal plan: channel id -> live frequency. prototype frequencies
     // are only the book values, the plan is rolled per round
     public readonly Dictionary<string, RadioFrequency> ChannelFrequencies = channelFrequencies;
+
+    // A telemetry update retains the authorized configuration snapshot and its collections.
+    public ANPRCRadioState WithTelemetry(ANPRCRadioTelemetryMsg telemetry) => new(
+        Presets, FrequencyOverrides, SlotLabels, ActiveSlot, Enabled, IsEquipped, MonitorEnabled,
+        Mode, ScanEnabled, SquelchLevel, TxPower, Planted, Callsign, telemetry.WearerCallsign, CallsignPresets,
+        CryptoDesignation, CryptoFaction, telemetry.CryptoStale, OperatorFaction, NetLog,
+        telemetry.BatteryFraction, telemetry.HasBattery, AntennaLabel, ChannelFrequencies,
+        SweepEnabled, SweepPosition, SweepContacts,
+        telemetry.Info, telemetry.Expert)
+        { Revision = Revision };
+}
+
+[Serializable, NetSerializable]
+public sealed class ANPRCRadioTelemetryMsg(
+    long revision, float batteryFraction, bool hasBattery, string wearerCallsign, bool cryptoStale,
+    ANPRCPanelInfo info, ANPRCExpertState expert)
+    : BoundUserInterfaceMessage
+{
+    public readonly long Revision = revision;
+    public readonly float BatteryFraction = batteryFraction;
+    public readonly bool HasBattery = hasBattery;
+    public readonly string WearerCallsign = wearerCallsign;
+    public readonly bool CryptoStale = cryptoStale;
+    public readonly ANPRCPanelInfo Info = info;
+    public readonly ANPRCExpertState Expert = expert;
 }

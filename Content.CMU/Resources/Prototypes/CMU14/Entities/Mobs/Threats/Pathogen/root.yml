@@ -12,13 +12,31 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      650: Critical
-      750: Dead
+      1000: Critical
+      1100: Dead
     stateAlertDict:
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution  
+    solution: blood  
+  - type: Solution  
+    id: blood  
+    solution:  
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 300
+      - ReagentId: CMUPathogenSporoplasmNutrient
+        Quantity: 300
+  - type: SolutionRegeneration
+    generated:
+      reagents:
+      - ReagentId: CMUPathogenMycohemolymph
+        Quantity: 1
+      - ReagentId: CMUPathogenSporoplasmNutrient
+        Quantity: 1
   - type: Xeno
     role: CMU14JobPathogenRoot
     tier: 3
@@ -28,16 +46,12 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenGuardianSweep
     - CMU14ActionXenoPathogenPheromones
-    - CMU14ActionXenoPathogenTantrum
-    - CMU14ActionXenoPathogenTailFountain
-    - CMU14ActionXenoPathogenAidRejuvenate
-    - ActionXenoPierce
-    - ActionXenoBlitz
-    - ActionXenoCleaveRoot
-    - ActionXenoCleaveFling
+    - CMU14ActionXenoPathogenGuardianLink
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenRegurgitate
+    - CMU14ActionXenoPathogenGuardianFling
   - type: XenoHeavy
   - type: XenoDevolve
     devolvesTo:
@@ -47,9 +61,11 @@
     plasma: 800
     maxPlasma: 800
     plasmaRegenOnWeeds: 3
+  - type: XenoRegen  
+    restHealMultiplier: 2.0 
   - type: CMArmor
-    xenoArmor: 25
-    explosionArmor: 40
+    xenoArmor: 30
+    explosionArmor: 60
   - type: MeleeWeapon
     damage:
       types:
@@ -64,6 +80,8 @@
         Piercing: 16
   - type: Tackle
     chance: 0.45
+    stunMin: 5
+    stunMax: 6
   - type: Fixtures
     fixtures:
       fix1:
@@ -93,14 +111,31 @@
       whitelist:
         components:
         - Marine
-    - multiplier: 0.7025
+    - multiplier: 1.0
       whitelist:
         components:
         - XenoLight
-    - multiplier: 0.475
+    - multiplier: 1.0
       whitelist:
         components:
         - XenoHeavy
+  - type: XenoGuardianSweep
+    damage:
+      types:
+        Blunt: 30
+  - type: XenoFling
+    range: 5
+    healAmount: 125
+    paralyzeTime: 3
+    slowTime: 5
+    dazeTime: 4
+    throwSpeed: 12
+    damage:  
+      types:  
+        Blunt: 50
+  - type: XenoGuardian
+    linkDuration: 10
+  - type: GuardianCritSave
   - type: RMCSize
     size: Big
   - type: RMCXenoDamageVisuals
@@ -111,44 +146,6 @@
   - type: XenoPheromones
     pheromonesMultiplier: 3
     pheroSuffix: strong
-  - type: XenoEnergy
-    alert: XenoEnergyValkyrie
-    popupGain: rmc-xeno-fury-increase-user
-    popupNotEnough: rmc-xeno-not-enough-fury
-    max: 200
-    gainAttack: 15
-    gainAttackDowned: 15
-  - type: XenoFury
-  - type: XenoRetrieve
-  - type: XenoTailFountain
-  - type: XenoTantrum
-  - type: XenoFightOrFlight
-    componentsRemove:
-    - type: RMCSlowdown
-    - type: RMCSuperSlowdown
-    - type: RMCRooted
-  - type: XenoHighGallop
-  - type: XenoShield
-  - type: VanguardShield
-  - type: XenoPierce
-    damage:
-      types:
-        Blunt: 15
-        Slash: 15
-        Piercing: 15
-  - type: XenoLeap
-    plasmaCost: 50
-    delay: 0
-    knockdownTime: 0
-    range: 6
-    moveDelayTime: 0
-  - type: XenoBlitz
-    damage:
-      types:
-        Blunt: 13.33
-        Slash: 13.33
-        Piercing: 13.34
-  - type: XenoCleave
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/CMU14/Interface/neo_blips.rsi

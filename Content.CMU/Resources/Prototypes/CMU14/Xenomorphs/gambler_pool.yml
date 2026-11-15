@@ -1,0 +1,608 @@
+- type: cmuXenoGamblePool
+  id: CMUXenoGamblerDefault
+  tiers:
+  - name: jackpot
+    weight: 1
+    priority: 4
+    overlay: { sprite: CMU14/Actions/Xeno/gambler.rsi, state: won_jackpot }
+    stopPop: 1
+    stopPopRainbow: true
+    sounds:
+    - path: /Audio/CMU14/Xeno/Gambler/play_on_actual_win.ogg
+      params:
+        volume: -6
+    rewards:
+    - action: ActionXenoDestroy
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: charge }
+      consumeOnCooldown: true
+      components:
+      - type: XenoDestroy
+        structureDamage:
+          types:
+            Blunt: 1000
+        mobDamage:
+          types:
+            Blunt: 1000
+        structures:
+          tags:
+          - Structure
+          - Wall
+          - Window
+          components:
+          - Sentry
+          - RMCTeslaCoil
+          - Barricade
+          - Mortar
+          - EntityStorage
+          - ReagentTank
+          - PlaceableSurface
+          - ReagentDispenser
+          - IVDrip
+
+  - name: legendary
+    weight: 4
+    priority: 3
+    overlay: { sprite: CMU14/Actions/Xeno/gambler.rsi, state: won_legendary }
+    stopPop: 0.75
+    stopPopColor: "#FFE13C"
+    sounds:
+    - path: /Audio/CMU14/Xeno/Gambler/play_on_rare.ogg
+      params:
+        volume: -6
+    - path: /Audio/CMU14/Xeno/Gambler/play_on_jackpot.ogg
+      params:
+        volume: -6
+    rewards:
+    - action: ActionXenoGut
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: gut }
+      components:
+      - type: XenoGut
+    - action: ActionXenoScreech
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: screech }
+      components:
+      - type: XenoScreech
+    - action: CMUActionXenoGambleExplode
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: gardener_plant }
+    - action: ActionXenoDoom
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: screech }
+      components:
+      - type: XenoDoom
+    - action: ActionXenoBulwarkOfTheHive
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: soak }
+      components:
+      - type: XenoBulwarkOfTheHive
+    - action: CMUActionXenoGambleFruitRain
+      icon: { sprite: _RMC14/Structures/Xenos/xeno_fruit.rsi, state: fruit_greater_item }
+
+  - name: epic
+    weight: 15
+    priority: 2
+    overlay: { sprite: CMU14/Actions/Xeno/gambler.rsi, state: won_epic }
+    stopPop: 0.5
+    stopPopColor: "#E070FF"
+    sounds:
+    - path: /Audio/CMU14/Xeno/Gambler/play_on_rare.ogg
+      params:
+        volume: -6
+    rewards:
+    - action: ActionXenoDefensiveShield
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: empower }
+      components:
+      - type: CrusherShield
+    - action: ActionXenoAbduct
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: abduct }
+      consumeOnCooldown: true
+      components:
+      - type: XenoAbduct
+      - type: XenoHook
+    - action: ActionXenoApprehend
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: rav_enrage }
+      components:
+      - type: XenoCripplingStrike
+        activateText: rmc-xeno-apprehend-activate
+        deactivateText: rmc-xeno-apprehend-deactivate
+        expireText: rmc-xeno-apprehend-expire
+        auraColor: "#522020"
+        damageMult: 1
+        speed: 1.2
+    - action: CMUActionXenoGambleExplode
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: gardener_plant }
+    - action: ActionXenoRend
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: rav_eviscerate }
+      components:
+      - type: XenoRend
+        damage:
+          types:
+            Blunt: 8.33
+            Slash: 8.33
+            Piercing: 8.34
+    - action: ActionXenoDirectionalStomp
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: stomp }
+      components:
+      - type: XenoStomp
+        directional: true
+        directionalRange: 4
+        directionalAngle: 90
+        paralyzeTime: 1
+        slowTime: 2.5
+        knockBackDistance: 2
+        screenShakeStrength: 4
+        directionalTileEffect: RMCEffectXenoTelegraphRed
+        damage:
+          types:
+            Blunt: 65
+        directionalMinDamage:
+          types:
+            Blunt: 40
+        selfEffect: CMEffectSelfStomp
+    - action: ActionXenoReflectiveShield
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: bulwark_reflective_shield }
+      components:
+      - type: XenoBulwark
+    - action: CMUActionXenoPsychicBlast
+      icon: { sprite: CMU14/Actions/Xeno/warlock.rsi, state: psy_blast }
+      components:
+      - type: CMUXenoWarlock
+    - action: CMUActionXenoPsychicCrush
+      icon: { sprite: CMU14/Actions/Xeno/warlock.rsi, state: psy_crush }
+      components:
+      - type: CMUXenoWarlock
+    - action: CMUActionXenoPsychicShield
+      icon: { sprite: CMU14/Actions/Xeno/warlock.rsi, state: psy_shield }
+      components:
+      - type: CMUXenoWarlock
+    - action: CMU14ActionXenoPathogenCyclone
+      icon: { sprite: CMU14/Actions/actions_pathogen.rsi, state: cyclone }
+      components:
+      - type: CMUXenoCyclone
+        plasmaCost: 75
+        baseRange: 2
+        baseDamage: 30
+    - action: CMU14ActionXenoPathogenBlightWave
+      icon: { sprite: CMU14/Actions/actions_pathogen.rsi, state: screech }
+      components:
+      - type: CMUXenoBlightWave
+    - action: ActionXenoDigTunnel
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: build_tunnel }
+    - action: ActionXenoBombard
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: bombard }
+      components:
+      - type: XenoBombard
+
+  - name: rare
+    weight: 25
+    priority: 1
+    overlay: { sprite: CMU14/Actions/Xeno/gambler.rsi, state: won_rare }
+    stopPop: 0.3
+    stopPopColor: "#4696FF"
+    sounds:
+    - path: /Audio/CMU14/Xeno/Gambler/play_on_rare.ogg
+      params:
+        volume: -6
+    rewards:
+    - action: ActionXenoDash
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_dash }
+      components:
+      - type: XenoLeap
+        plasmaCost: 40
+        delay: 0
+        knockdownTime: 0
+        range: 6
+        moveDelayTime: 0
+    - action: ActionXenoAcidBall
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_acid_ball }
+      consumeOnCooldown: true
+      components:
+      - type: XenoAcidBall
+    - action: ActionXenoSprayAcidPraetorian
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: spray_acid }
+      consumeOnCooldown: true
+      components:
+      - type: XenoSprayAcid
+        barricadeDamage:
+          types:
+            Heat: 5
+        acid: XenoAcidSprayAcidStacks
+        plasmaCost: 80
+        range: 7
+    - action: ActionXenoPierce
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_pierce }
+      components:
+      - type: XenoPierce
+        damage:
+          types:
+            Blunt: 15
+            Slash: 15
+            Piercing: 15
+    - action: ActionXenoStomp
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: stomp }
+      components:
+      - type: XenoStomp
+        directional: false
+        plasmaCost: 25
+        knocksBack: true
+        knockbackPower: 2
+        paralyzeTime: 1.5
+        range: 3
+        damage:
+          types:
+            Blunt: 35
+    - action: ActionXenoCleaveRoot
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_cleave_root }
+      components:
+      - type: XenoCleave
+    - action: ActionXenoDislocate
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: dislocate }
+      components:
+      - type: XenoDislocate
+        damage:
+          types:
+            Blunt: 6.66
+            Slash: 6.67
+            Piercing: 6.67
+    - action: ActionXenoTailLash
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_tail_lash }
+      consumeOnCooldown: true
+      components:
+      - type: XenoTailLash
+    - action: ActionXenoCharge
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: ready_charge }
+      components:
+      - type: XenoCharge
+        chargeWindupSound:
+          path: /Audio/_RMC14/Xeno/crusher_windup_sound.ogg
+        damage:
+          types:
+            Blunt: 65
+            Structural: 750
+    - action: ActionXenoScissorCut
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: rav_scissor_cut }
+      components:
+      - type: XenoScissorCut
+        damage:
+          types:
+            Slash: 75
+    - action: ActionXenoHighGallop
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: stomp }
+      components:
+      - type: XenoHighGallop
+    - action: ActionXenoTremor
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: tremor }
+      components:
+      - type: XenoStomp
+        selfEffect: CMEffectSelfStomp
+        shortRange: 0
+        range: 4
+        stompsThroughBarricades: true
+        plasmaCost: 100
+        paralyzeTime: 2
+        slowBigInsteadOfStun: true
+        slows: false
+        sound: /Audio/_RMC14/Xeno/alien_footstep_charge1.ogg
+        debuffsHurtXenosMore: false
+    - action: ActionXenoToxicSlash
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: neuroclaws_off }
+      components:
+      - type: XenoToxicSlash
+    - action: ActionXenoDrainSting
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: neuro_sting }
+      components:
+      - type: XenoDrainSting
+    - action: ActionXenoRush
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: pounce }
+      components:
+      - type: XenoLeap
+        delay: 0
+        range: 4
+        moveDelayTime: 0
+        knockdownTime: 0
+        leapSound: /Audio/Weapons/Xeno/alien_claw_flesh3.ogg
+        hitEffect: RMCEffectExtraSlash
+        targetJitterTime: 1
+        targetCameraShakeStrength: 1
+        damage:
+          types:
+            Blunt: 13.33
+            Slash: 13.33
+            Piercing: 13.34
+    - action: ActionXenoAssault
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: charge }
+      components:
+      - type: XenoLeap
+        delay: 0
+        knockdownTime: 0
+        range: 5
+        moveDelayTime: 0
+        plasmaCost: 25
+        leapSound: /Audio/_RMC14/Xeno/alien_pounce.ogg
+        destroyObjects: true
+    - action: ActionXenoFlurry
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: rav_spike }
+      components:
+      - type: XenoFlurry
+        damage:
+          types:
+            Blunt: 11.66
+            Slash: 11.67
+            Piercing: 11.67
+    - action: ActionXenoClothesline
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_cleave_fling }
+      components:
+      - type: XenoFling
+        range: 2
+        enragedRange: 1
+        healAmount: 95
+        enragedHealAmount: 125
+        paralyzeTime: 0
+        slowTime: 0
+        dazeTime: 4
+        throwSpeed: 12
+        damage:
+          types:
+            Blunt: 6.66
+            Slash: 6.67
+            Piercing: 6.67
+    - action: ActionXenoCleaveFling
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_cleave_fling }
+      components:
+      - type: XenoCleave
+    - action: ActionXenoImpale
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: dancer_impale }
+      components:
+      - type: XenoImpale
+        damage:
+          types:
+            Blunt: 20
+            Slash: 20
+            Piercing: 20
+    - action: ActionXenoTailTrip
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: dancer_tail_trip }
+      components:
+      - type: XenoTailTrip
+    - action: ActionXenoTailSeize
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: tail_seize }
+      components:
+      - type: XenoTailSeize
+      - type: XenoHook
+    - action: ActionXenoAcidMine
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: acid_mine }
+      components:
+      - type: XenoAcidMine
+    - action: ActionXenoAcidShotgun
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: acid_shotgun }
+      components:
+      - type: XenoAcidShotgun
+    - action: ActionXenoVenatorCorrosiveSpit
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: venator_corrosive_spit }
+      components:
+      - type: XenoVenator
+    - action: ActionXenoVenatorAcidBlob
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: venator_acid_blob }
+      components:
+      - type: XenoVenator
+    - action: ActionXenoVenatorEnzymaticBreath
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: venator_enzymatic_breath }
+      components:
+      - type: XenoVenator
+    - action: ActionXenoPlateBash
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: bulwark_plate_bash }
+      components:
+      - type: XenoBulwark
+    - action: CMU14ActionXenoPathogenMycotoxinInject
+      icon: { sprite: CMU14/Actions/actions_pathogen.rsi, state: inject_walker }
+      components:
+      - type: CMUXenoMycotoxinInject
+    - action: ActionXenoLunge
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: lunge }
+      components:
+      - type: XenoLunge
+    - action: ActionXenoEmpower
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: rav_empower }
+      components:
+      - type: XenoEmpower
+        damageIncreasePer:
+          types:
+            Blunt: 0.66
+            Slash: 0.67
+            Piercing: 0.67
+        damageTailIncreasePer:
+          types:
+            Blunt: 0.8
+            Slash: 0.8
+            Piercing: 0.8
+        leapDamage:
+          types:
+            Blunt: 15
+            Slash: 15
+            Piercing: 15
+    - action: ActionXenoHeadbite
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: headbite }
+      components:
+      - type: XenoHeadbite
+        damage:
+          types:
+            Blunt: 20
+            Slash: 20
+            Piercing: 20
+    - action: ActionXenoTurnInvisible
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: lurker_invisibility }
+      components:
+      - type: XenoTurnInvisible
+
+  - name: common
+    weight: 55
+    priority: 0
+    overlay: { sprite: CMU14/Actions/Xeno/gambler.rsi, state: won_common }
+    stopPop: 0.12
+    stopPopColor: "#E6E6F0"
+    sounds:
+    - path: /Audio/CMU14/Xeno/Gambler/play_on_fail.ogg
+      params:
+        volume: -6
+    rewards:
+    - action: ActionXenoPunch
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: punch }
+      components:
+      - type: XenoPunch
+        damage:
+          types:
+            Blunt: 27.5
+    - action: ActionXenoFling
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: fling }
+      components:
+      - type: XenoFling
+    - action: ActionXenoDeployTraps
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: gas_mine }
+      components:
+      - type: XenoDeployTraps
+    - action: ActionXenoLeap
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: pounce }
+      components:
+      - type: XenoLeap
+        delay: 0
+        knockdownTime: 2
+        leapSound: /Audio/_RMC14/Xeno/alien_pounce.ogg
+    - action: ActionXenoCripplingStrike
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: lurker_inject_neuro }
+      components:
+      - type: XenoCripplingStrike
+        removeOnHit: true
+        preventTackle: true
+        resetMeleeCooldown: true
+    - action: ActionXenoTailStab
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: tail_attack }
+    - action: ActionXenoAcidNormal
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: corrosive_acid }
+    - action: ActionXenoAcidStrong
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: corrosive_acid }
+    - action: ActionXenoPlantWeeds
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: plant_weeds }
+    - action: ActionXenoPlantWeedsHardy
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: plant_gardener_weeds }
+    - action: ActionXenoHeadbutt
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: headbutt }
+      components:
+      - type: XenoHeadbutt
+        damage:
+          types:
+            Blunt: 30
+        crestedDamageReduction:
+          types:
+            Blunt: -10
+    - action: ActionXenoTailSweep
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: tail_sweep }
+      components:
+      - type: XenoTailSweep
+        damage:
+          types:
+            Slash: 30
+    - action: ActionXenoSoak
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: soak }
+      components:
+      - type: XenoSoak
+    - action: ActionXenoCrusherSoak
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: soak }
+      components:
+      - type: XenoSoak
+        damageGoal: 240
+        heal: 120
+    - action: ActionXenoSlowingSpit
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: xeno_spit }
+      components:
+      - type: XenoSlowingSpit
+    - action: ActionXenoScatteredSpit
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: acid_shotgun }
+      components:
+      - type: XenoScatteredSpit
+    - action: ActionXenoToxicSpit
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: xeno_spit }
+      components:
+      - type: XenoToxicSpit
+    - action: ActionXenoBoneChips
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: runner_bonespur }
+      components:
+      - type: XenoBoneChips
+    - action: ActionXenoPounce
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: pounce }
+      components:
+      - type: XenoLeap
+        plasmaCost: 20
+        delay: 0
+        moveDelayTime: 1.5
+        knockdownTime: 5
+        leapSound: /Audio/_RMC14/Xeno/alien_pounce.ogg
+        knockdownRequiresInvisibility: true
+        unrootOnMelee: true
+    - action: ActionXenoTailJab
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_pierce }
+      components:
+      - type: XenoTailJab
+        attackEffect: RMCEffectTailHit
+        damage:
+          types:
+            Blunt: 16.66
+            Slash: 16.67
+            Piercing: 16.67
+    - action: ActionXenoSpitPraetorian
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: xeno_spit }
+      components:
+      - type: XenoSpit
+        projectileId: XenoSpitProjectilePraetorian
+    - action: ActionXenoSpit
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: xeno_spit }
+      components:
+      - type: XenoSpit
+    - action: ActionXenoDodge
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: dancer_dodge }
+      components:
+      - type: XenoDodge
+    - action: ActionXenoTailFountain
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: prae_tail_fountain }
+      components:
+      - type: XenoTailFountain
+    - action: ActionXenoSprayAcid
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: spray_acid }
+      consumeOnCooldown: true
+      components:
+      - type: XenoSprayAcid
+        barricadeDamage:
+          types:
+            Heat: 5
+    - action: ActionXenoSprayAcidBoiler
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: spray_acid }
+      consumeOnCooldown: true
+      components:
+      - type: XenoSprayAcid
+        acid: XenoAcidSprayStrong
+        barricadeDamage:
+          types:
+            Heat: 5
+    - action: ActionXenoAcidShroud
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: acid_shroud }
+      components:
+      - type: XenoAcidShroud
+    - action: ActionXenoResinSurge
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: gardener_resin_surge }
+      components:
+      - type: XenoResinSurge
+    - action: ActionXenoSelfImmolate
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: screech }
+      components:
+      - type: XenoHeatshield
+    - action: ActionXenoVomitBile
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: xeno_spit }
+      consumeOnCooldown: true
+      components:
+      - type: XenoHeatshield
+    - action: ActionXenoBulwarkTailSwing
+      icon: { sprite: _CM13/Actions/xeno_strain_actions.rsi, state: bulwark_tail_swing }
+      components:
+      - type: XenoBulwark
+    - action: CMUActionXenoGambleRetrieve
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: retrieve }
+      components:
+      - type: XenoRetrieve
+    - action: ActionXenoParalyzingSlash
+      icon: { sprite: _RMC14/Actions/xeno_actions.rsi, state: lurker_inject_neuro }
+      components:
+      - type: XenoParalyzingSlash

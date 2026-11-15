@@ -1,0 +1,298 @@
+using Content.IntegrationTests.Fixtures;
+using Content.Client.CMU14.TacticalMap.Reconstruction;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Input;
+using Content.Server.CMU14.CaveSurvey;
+using Content.Server.CMU14.ZLevelBuilding;
+using Content.Server.CMU14.ZLevels.Core;
+using Content.Shared.Actions;
+using Content.Shared.CMU14.CaveSurvey;
+using Content.Shared.CMU14.TacticalMap.Reconstruction;
+using Content.Shared.CMU14.ZLevelBuilding;
+using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Wall;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
+
+namespace Content.IntegrationTests.CMU.ZLevelBuilding;
+
+public sealed class CMUCaveToolsTest : GameTest
+{
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task PersonalSurveyStreamsOnlyObservedCellsAndTracksItsOwner(bool ghost)
+    {
+        EntityUid map = default;
+        EntityUid network = default;
+        EntityUid actor = default;
+        NetEntity actionNet = default;
+        var session = Pair.Player!;
+        var original = session.AttachedEntity;
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var maps = Server.System<SharedMapSystem>();
+                map = maps.CreateMap(runMapInit: true);
+                var grid = SEntMan.EnsureComponent<MapGridComponent>(map);
+                var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
+                for (var x = -66; x <= 70; x++)
+                for (var y = -1; y <= 2; y++) maps.SetTile(map, grid, new Vector2i(x, y), floor);
+                var levels = Server.System<CMUZLevelsSystem>();
+                var createdNetwork = levels.CreateZNetwork();
+                network = createdNetwork.Owner;
+                Assert.That(levels.TryAddMapsIntoZNetwork(createdNetwork, new() { [map] = -3 }), Is.True);
+                actor = SEntMan.SpawnEntity(ghost ? "MobObserver" : "MobHuman", new EntityCoordinates(map, new Vector2(0.5f)));
+                Server.PlayerMan.SetAttachedEntity(session, actor);
+                var survey = Server.System<CMUCaveSurveySystem>();
+                survey.Observe(actor);
+                var memory = SEntMan.GetComponent<CMUCaveSurveyMemoryComponent>(actor);
+                foreach (var x in new[] { -64.5f, 64.5f })
+                {
+                    Server.System<SharedTransformSystem>().SetCoordinates(actor, new EntityCoordinates(map, new Vector2(x, 0.5f)));
+                    memory.NextObservation = TimeSpan.Zero;
+                    survey.Observe(actor);
+                }
+                Server.System<SharedTransformSystem>().SetCoordinates(actor, new EntityCoordinates(map, new Vector2(0.5f)));
+                if (ghost)
+                {
+                    var actions = Server.System<SharedActionsSystem>();
+                    actionNet = SEntMan.GetNetEntity(actions.GetActions(actor).Single(a => actions.GetEvent(a) is CMUOpenCaveSurveyActionEvent));
+                }
+            });
+            await Pair.RunUntilSynced();
+            if (ghost)
+                await Client.WaitPost(() => CEntMan.RaisePredictiveEvent(new RequestPerformActionEvent(actionNet,
+                    Client.ResolveDependency<IGameTiming>().CurTick)));
+            else
+                await Server.WaitPost(() => Server.System<CMUCaveSurveySystem>().Open(actor));
+
+            // A predicted action can open the window before the server subscribes it; allow its request retry.
+            await Pair.RunSeconds(2);
+            await Client.WaitAssertion(() =>
+            {
+                var view = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView;
+                var scene = view.Scene!;
+                Assert.That(scene.LoadedChunks, Is.EqualTo(scene.TotalChunks));
+                var local = Vector2i.Zero - scene.Origin;
+                Assert.That(scene.Cells[CMUReconGeometry.Index(local.X, local.Y, -3 - scene.MinDepth, scene.Width, scene.Height)],
+                    Is.EqualTo((byte) CMUReconMaterial.Ground));
+                Assert.That(scene.Cells[CMUReconGeometry.Index(local.X + 7, local.Y, -3 - scene.MinDepth, scene.Width, scene.Height)],
+                    Is.EqualTo((byte) CMUReconMaterial.Empty), "Existing nearby floor outside the recording must stay unknown over the wire.");
+                foreach (var x in new[] { -65, 64 })
+                    Assert.That(scene.Cells[CMUReconGeometry.Index(local.X + x, local.Y, -3 - scene.MinDepth, scene.Width, scene.Height)],
+                        Is.EqualTo((byte) CMUReconMaterial.Ground), "Both sides of the former sector boundaries belong to one map.");
+                var camera = view.CaptureCamera();
+                view.Pan(new Vector2(64, 0));
+                Assert.That(view.Scene, Is.SameAs(scene));
+                Assert.That(view.CaptureCamera().Center.X, Is.EqualTo(camera.Center.X + 64).Within(0.01f));
+            });
+            await Server.WaitPost(() => Server.System<SharedTransformSystem>().SetCoordinates(actor, new EntityCoordinates(map, new Vector2(2.5f, 0.5f))));
+            await Pair.RunSeconds(1);
+            await Client.WaitAssertion(() =>
+            {
+                var scene = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single().SurveyView.Scene!;
+                Assert.That(scene.OperatorPosition!.Value.X, Is.EqualTo(2.5f).Within(0.1f), "Navigation must follow the owner without requesting a new terrain snapshot.");
+            });
+            if (ghost)
+            {
+                await Server.WaitPost(() =>
+                {
+                    var maps = Server.System<SharedMapSystem>();
+                    var grid = SEntMan.GetComponent<MapGridComponent>(map);
+                    maps.SetTile(map, grid, new Vector2i(5000, 0), new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId));
+                    var transform = Server.System<SharedTransformSystem>();
+                    transform.SetCoordinates(actor, new EntityCoordinates(map, new Vector2(5000.5f, 0.5f)));
+                    Server.System<CMUCaveSurveySystem>().Observe(actor);
+                    transform.SetCoordinates(actor, new EntityCoordinates(map, new Vector2(2.5f, 0.5f)));
+                });
+                var window = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<CMUReconstructionWindow>().Single();
+                var refresh = window.FindControl<Button>("CaveRefresh");
+                var point = new ScreenCoordinates(refresh.GlobalPixelPosition + refresh.PixelSize / 2, refresh.Root!.Window!.Id);
+                foreach (var state in new[] { BoundKeyState.Down, BoundKeyState.Up })
+                    await Client.DoGuiEvent(refresh, new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick,
+                        state, point, true, refresh.Size / 2, refresh.PixelSize / 2));
+                await Pair.RunSeconds(2);
+                Vector2 camera = default;
+                await Client.WaitAssertion(() =>
+                {
+                    Assert.That(window.IsRefreshing, Is.False);
+                    Assert.That(window.SurveyView.Scene!.Width, Is.EqualTo(CMUReconGeometry.MaxSize));
+                    window.SurveyView.Pan(new Vector2(900, 0));
+                    camera = window.SurveyView.CaptureCamera().Center;
+                });
+                await Pair.RunSeconds(2);
+                await Client.WaitAssertion(() =>
+                {
+                    Assert.That(window.IsRefreshing, Is.False, "Panning into an unrecorded gap must complete without waiting for nonexistent chunks.");
+                    Assert.That(window.SurveyView.Scene!.Origin.X, Is.GreaterThan(0), "Panning must move the loaded window automatically.");
+                    Assert.That(window.SurveyView.Scene.TotalChunks, Is.Zero, "Unknown terrain must not be generated to fill the view.");
+                    Assert.That(window.SurveyView.CaptureCamera().Center, Is.EqualTo(camera), "Loading more map must not jump the camera.");
+                    window.SurveyView.Pan(new Vector2(-2000, 0));
+                });
+                await Pair.RunSeconds(2);
+                await Client.WaitAssertion(() =>
+                {
+                    Assert.That(window.IsRefreshing, Is.False);
+                    var scene = window.SurveyView.Scene!;
+                    var local = new Vector2i(-65, 0) - scene.Origin;
+                    Assert.That(scene.Cells[CMUReconGeometry.Index(local.X, local.Y, -3 - scene.MinDepth, scene.Width, scene.Height)],
+                        Is.EqualTo((byte) CMUReconMaterial.Ground), "Panning back must restore earlier recordings.");
+                });
+                await Server.WaitAssertion(() =>
+                {
+                    var colonyMap = new CMUOpenCaveSurveyEvent();
+                    SEntMan.EventBus.RaiseLocalEvent(actor, ref colonyMap);
+                    Assert.That(colonyMap.Handled, Is.False, "The observer's normal tactical action must still open the colony map.");
+                    var paper = SEntMan.SpawnEntity("CMUCaveSurveyMap", SEntMan.GetComponent<TransformComponent>(actor).Coordinates);
+                    try
+                    {
+                        Assert.That(Server.System<CMUCaveSurveySystem>().WriteMap(actor, paper), Is.False,
+                            "Private ghost observations must never be transcribed onto a physical map.");
+                    }
+                    finally
+                    {
+                        SEntMan.DeleteEntity(paper);
+                    }
+                });
+            }
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                if (SEntMan.EntityExists(actor)) Server.System<SharedUserInterfaceSystem>().CloseUi(actor, CMUCaveSurveyUiKey.Key);
+                Server.PlayerMan.SetAttachedEntity(session, original);
+                if (SEntMan.EntityExists(actor)) SEntMan.DeleteEntity(actor);
+            });
+            await Pair.RunUntilSynced();
+            if (map.IsValid()) await Pair.DeleteEntityTreeLeafFirst(map);
+            if (network.IsValid()) await Pair.DeleteEntityTreeLeafFirst(network);
+        }
+
+        // A survey session must leave the pooled client reusable after reconnecting.
+        await Pair.Disconnect();
+        await Pair.Connect();
+    }
+
+    [Test]
+    public async Task SurveyClipsWallsAndSharesFrozenKnowledgeWithoutGeneratingTerrain()
+    {
+        var map = await Pair.CreateTestMap();
+        var other = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var levels = Server.System<CMUZLevelsSystem>();
+            var network = levels.CreateZNetwork();
+            Assert.That(levels.TryAddMapsIntoZNetwork(network, new Dictionary<EntityUid, int> { [map.MapUid] = -3 }), Is.True);
+            var otherNetwork = levels.CreateZNetwork();
+            Assert.That(levels.TryAddMapsIntoZNetwork(otherNetwork, new Dictionary<EntityUid, int> { [other.MapUid] = -3 }), Is.True);
+            for (var x = -1; x <= 2; x++)
+            for (var y = -1; y <= 2; y++) maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
+            var stone = SEntMan.EnsureComponent<ZGeneratedStoneComponent>(map.MapUid);
+            stone.StoneGrid = map.Grid.Owner;
+            stone.GeneratedChunks.UnionWith([new(-1, -1), new(-1, 0), new(0, -1), new(0, 0)]);
+            var actor = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            var reader = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            var paper = SEntMan.SpawnEntity("CMUCaveSurveyMap", map.GridCoords);
+            var rockTile = new Vector2i(1, 0);
+            var rock = SEntMan.SpawnEntity("AsteroidRock", maps.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, rockTile));
+            var survey = Server.System<CMUCaveSurveySystem>();
+            survey.Observe(actor);
+            var memory = SEntMan.GetComponent<CMUCaveSurveyMemoryComponent>(actor);
+            var data = memory.Worlds[network];
+            Assert.That(data.Get(rockTile, -3).Material, Is.EqualTo(CMUReconMaterial.Rock));
+            Assert.That(data.Get(new Vector2i(2, 0), -3).Revision, Is.Zero, "A rock face must hide the tile behind it.");
+            Assert.That(stone.GeneratedChunks.Count, Is.EqualTo(4), "Recording must never generate more terrain.");
+            Assert.That(survey.WriteMap(actor, paper), Is.True);
+            SEntMan.DeleteEntity(rock);
+            memory.NextObservation = TimeSpan.Zero;
+            survey.Observe(actor);
+            Assert.That(data.Get(rockTile, -3).Material, Is.EqualTo(CMUReconMaterial.Ground));
+            Assert.That(survey.ReadMap(reader, paper), Is.True);
+            var read = SEntMan.GetComponent<CMUCaveSurveyMemoryComponent>(reader);
+            Assert.That(read.Worlds[network].Get(rockTile, -3).Material, Is.EqualTo(CMUReconMaterial.Rock),
+                "A physical map must not track later changes automatically.");
+            Assert.That(survey.ReadMap(actor, paper), Is.True);
+            Assert.That(data.Get(rockTile, -3).Material, Is.EqualTo(CMUReconMaterial.Ground), "Reading old knowledge must not erase a newer observation.");
+            Server.System<SharedTransformSystem>().SetCoordinates(reader, other.GridCoords);
+            survey.Observe(reader);
+            Assert.That(read.Worlds[network].Get(rockTile, -3).Material, Is.EqualTo(CMUReconMaterial.Rock));
+            Assert.That(read.Worlds[otherNetwork].Get(rockTile, -3).Material, Is.Not.EqualTo(CMUReconMaterial.Rock),
+                "Identical coordinates on different worlds must remain separate.");
+            Assert.That(survey.ReadMap(reader, paper), Is.False, "A map on another world is not accessible.");
+            SEntMan.DeleteEntity(actor);
+            SEntMan.DeleteEntity(reader);
+            SEntMan.DeleteEntity(paper);
+        });
+    }
+
+    [Test]
+    public async Task UpStairClearsGeneratedLandingAcrossChunkEdgeAndLadderDeploysInItsShaft()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid upper = default;
+        EntityUid lower = default;
+        EntityUid ceiling = default;
+        var tile = new Vector2i(7, 7);
+        var position = new Vector2(7.5f, 7.5f);
+        await Server.WaitAssertion(() =>
+        {
+            var building = Server.System<ZLevelBuildingSystem>();
+            var settings = SEntMan.EnsureComponent<ZBuildableMapComponent>(map.MapUid);
+            settings.Caverns = null;
+            settings.DepthBiomes.Clear();
+            settings.StoneCaves = null;
+            settings.StoneOreVeins.Clear();
+            settings.StoneDeposits.Clear();
+            settings.StoneCaveDecor.Clear();
+            settings.StoneWater = null;
+            Assert.That(building.EnsureNeighborLevel(map.MapUid, -1, map.Grid.Owner, position, out ceiling, out _), Is.True);
+            SEntMan.EnsureComponent<ZGeneratedStoneComponent>(ceiling).StoneGrid = ceiling;
+            Assert.That(building.EnsureNeighborLevel(ceiling, -1, ceiling, position, out upper, out _), Is.True);
+            SEntMan.EnsureComponent<ZGeneratedStoneComponent>(upper).StoneGrid = upper;
+            Assert.That(building.EnsureNeighborLevel(upper, -1, upper, position, out lower, out _), Is.True);
+            SEntMan.EnsureComponent<ZGeneratedStoneComponent>(lower).StoneGrid = lower;
+            building.PrepareCavernConstruction(ceiling, position);
+            building.PrepareCavernConstruction(lower, position, clearRock: true);
+        });
+        await RunSeconds(0.1f);
+        EntityUid stair = default;
+        await Server.WaitAssertion(() => stair = SEntMan.SpawnEntity("AU14ZStairUp", new EntityCoordinates(lower, position)));
+        await RunSeconds(0.1f);
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var grid = SEntMan.GetComponent<MapGridComponent>(upper);
+            var stone = SEntMan.GetComponent<ZGeneratedStoneComponent>(upper);
+            Assert.That(stone.GeneratedChunks.Contains(new Vector2i(1, 1)), Is.True, "The far side of the landing crosses a chunk edge.");
+            Assert.That(maps.GetTileRef(upper, grid, tile).Tile.IsEmpty, Is.True, "Stairs need an open shaft above their lower end.");
+            Assert.That(maps.GetTileRef(upper, grid, tile + new Vector2i(1, 1)).Tile.IsEmpty, Is.False);
+            foreach (var entity in maps.GetAnchoredEntities(upper, grid, tile + new Vector2i(1, 1)))
+                Assert.That(SEntMan.HasComponent<WallComponent>(entity), Is.False, "The landing must not remain buried in generated rock.");
+            SEntMan.DeleteEntity(stair);
+            var actor = SEntMan.SpawnEntity("MobHuman", new EntityCoordinates(lower, position));
+            var ladder = SEntMan.SpawnEntity("CMUDeployableZLevelLadder", new EntityCoordinates(lower, position));
+            var use = new UseInHandEvent(actor);
+            SEntMan.EventBus.RaiseLocalEvent(ladder, use);
+            var bottom = false;
+            var top = false;
+            // The top end is in empty space and cannot anchor to a floor tile.
+            var deployed = SEntMan.EntityQueryEnumerator<CMUDeployedZLevelLadderComponent, TransformComponent>();
+            while (deployed.MoveNext(out _, out _, out var xform))
+            {
+                bottom |= xform.MapUid == lower;
+                top |= xform.MapUid == upper;
+            }
+            Assert.That(bottom && top, Is.True, "A deployable ladder must connect both generated cave levels.");
+            SEntMan.DeleteEntity(actor);
+            SEntMan.DeleteEntity(upper);
+            SEntMan.DeleteEntity(lower);
+            SEntMan.DeleteEntity(ceiling);
+        });
+    }
+}

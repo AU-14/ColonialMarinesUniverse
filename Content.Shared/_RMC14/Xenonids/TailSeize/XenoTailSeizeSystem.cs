@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Hook;
 using Content.Shared._RMC14.Xenonids.Projectile;
@@ -23,6 +24,7 @@ public sealed partial class XenoTailSeizeSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
     [Dependency] private RMCPullingSystem _pulling = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -89,7 +91,8 @@ public sealed partial class XenoTailSeizeSystem : EntitySystem
 
     private void OnSeizeEnd(Entity<VictimTailSeizedComponent> victim, ref StopThrowEvent args)
     {
-        _slow.TrySlowdown(victim, victim.Comp.SlowTime, ignoreDurationModifier: true);
+        if (!_yautjaSlow.TryApply(victim, victim.Comp.YautjaSlow)) // CMU14
+            _slow.TrySlowdown(victim, victim.Comp.SlowTime, ignoreDurationModifier: true);
         _slow.TryRoot(victim, victim.Comp.RootTime);
         RemCompDeferred<VictimTailSeizedComponent>(victim);
     }

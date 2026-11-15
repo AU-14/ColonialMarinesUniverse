@@ -345,6 +345,10 @@ public static class GhostWarpGrouping
         if (tab == TabSurvivors)
             return TabSurvivors;
 
+        // CMU14: single section for WeYa/PMC so job displayWeight orders the org chart instead of splitting it across weight bands
+        if (tab == TabWeYaPmc)
+            return SectionPersonnel;
+
         if (realDisplayWeight >= 10)
             return SectionHighCommand;
 

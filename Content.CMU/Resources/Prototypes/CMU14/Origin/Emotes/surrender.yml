@@ -1,0 +1,393 @@
+- type: emote
+  id: CMUSurrender
+  name: cmu-emote-name-surrender
+  category: Hands
+  icon: CMU14/Interface/Emotes/surrender.png
+  whitelist:
+    requireAll: true
+    components:
+    - Hands
+    - HumanoidProfile
+    - VisualBody
+  chatTriggers:
+  - surrender
+  - raises both hands
+  - hands up
+
+- type: displacementData
+  id: CMUSurrenderLimbs
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: limbs
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderClothing
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: clothing
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderWaistGear
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: waist_gear
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderTorso
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: torso
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundLimbs
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_limbs
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundClothing
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_clothing
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderArmor
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: armor
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderArmorNone
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: armor_none
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderArmorLeft
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: armor_left
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderArmorRight
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: armor_right
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundArmor
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_armor
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundArmorNone
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_armor_none
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundArmorLeft
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_armor_left
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundArmorRight
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_armor_right
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderLimbsNone
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: limbs_none
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderLimbsLeft
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: limbs_left
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderLimbsRight
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: limbs_right
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderClothingNone
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: clothing_none
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderClothingLeft
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: clothing_left
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderClothingRight
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: clothing_right
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundLimbsNone
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_limbs_none
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundLimbsLeft
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_limbs_left
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundLimbsRight
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_limbs_right
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundClothingNone
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_clothing_none
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundClothingLeft
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_clothing_left
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: displacementData
+  id: CMUSurrenderForegroundClothingRight
+  displacement:
+    shaderOverride: CMUSurrenderDraw
+    shaderOverrideUnshaded: CMUSurrenderDrawUnshaded
+    sizeMaps:
+      32:
+        sprite: CMU14/Mobs/Surrender/pose.rsi
+        state: foreground_clothing_right
+        copyToShaderParameters:
+          layerKey: dummy
+          parameterTexture: displacementMap
+          parameterUV: displacementUV
+
+- type: shader
+  id: CMUSurrenderDraw
+  kind: source
+  path: "/Textures/CMU14/Shaders/surrender_displacement.swsl"
+  params:
+    displacementSize: 127
+
+- type: shader
+  id: CMUSurrenderDrawUnshaded
+  kind: source
+  path: "/Textures/CMU14/Shaders/surrender_displacement_unshaded.swsl"
+  params:
+    displacementSize: 127

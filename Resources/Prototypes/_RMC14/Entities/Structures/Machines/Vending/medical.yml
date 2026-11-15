@@ -157,7 +157,7 @@
     access: [["CMAccessMedical"]]
 
 - type: entity
-  parent: CMVendorMedical
+  parent: CMVendorMedicalAllAccess # CMU14: was CMVendorMedical, whose CMAccessMedical lock shut civilian colonists out of the PVE vendor
   id: RMCVendorMedicalPVE
   suffix: PVE
   components:

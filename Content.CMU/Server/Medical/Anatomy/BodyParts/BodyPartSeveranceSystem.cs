@@ -17,6 +17,8 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -84,6 +86,15 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
             || partComp.Body != args.Body
             || partComp.PartType != args.Type)
             return;
+
+        // cmss13 droplimb skips NO_PERMANENT_DAMAGE bodies, but a butcher or surgeon still gets the limb
+        if (!args.Surgical &&
+            HasComp<CMUNoPermanentDamageComponent>(args.Body) &&
+            (!TryComp(args.Body, out MobStateComponent? mobState) || mobState.CurrentState != MobState.Dead))
+        {
+            args.Cancelled = true;
+            return;
+        }
 
         if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled)
             || !_cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled))

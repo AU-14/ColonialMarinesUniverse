@@ -1,4 +1,5 @@
 using Content.Server._RMC14.Vehicle;
+using Content.Shared.CMU14.Audio;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -18,12 +19,12 @@ public sealed partial class CMUZLevelsSystem
 
     [Dependency] private VehicleAudioRelaySystem _vehicleAudio = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
+    [Dependency] private CMUSharedAudioBudgetSystem _audioBudget = default!;
 
     private readonly HashSet<EntityUid> _pendingZLevelAudio = new();
     private readonly Dictionary<EntityUid, ZLevelAudioSource> _zLevelAudioSources = new();
     private readonly HashSet<EntityUid> _zLevelAudioProjections = new();
     private readonly HashSet<EntityUid> _manualZLevelAudioSources = new();
-    private readonly HashSet<Entity<ActorComponent>> _zAudioActorLookup = new();
     private readonly List<EntityUid> _zAudioSourceBuffer = new();
     private readonly List<EntityUid> _zAudioMapBuffer = new();
     private readonly HashSet<EntityUid> _zAudioWantedMaps = new();
@@ -213,14 +214,15 @@ public sealed partial class CMUZLevelsSystem
         if (sound == null)
             return false;
 
+        if (!_zLevelsEnabled || Transform(source).MapUid is not { } map || !TryGetZNetwork(map, out _))
+            return false;
+
         _creatingZLevelAudioProjection = true;
 
         try
         {
-            var original = _audioSystem.PlayPredicted(sound, source, user);
-            if (original is { } played)
-                _manualZLevelAudioSources.Add(played.Entity);
             var resolved = _audioSystem.ResolveSound(sound);
+            PlayDirectAudioOriginal(resolved, sound.Params, source, user);
             ProjectPredictedDirectlyAcrossZ(resolved, sound.Params, source, user, maxDepth);
             return true;
         }
@@ -235,10 +237,11 @@ public sealed partial class CMUZLevelsSystem
         AudioParams audioParams,
         EntityUid source,
         EntityUid? excludedEntity,
-        int maxDepth)
+        int maxDepth,
+        bool requireCrossZAudio = true)
     {
         if (!_zLevelsEnabled ||
-            !_crossZAudioEnabled ||
+            requireCrossZAudio && !_crossZAudioEnabled ||
             maxDepth <= 0 ||
             audioParams.MaxDistance <= 0f)
         {
@@ -285,14 +288,19 @@ public sealed partial class CMUZLevelsSystem
 
     public void PlayPvsDirectlyAcrossZ(SoundSpecifier sound, EntityUid source, int maxDepth = 1)
     {
+        if (!_zLevelsEnabled || Transform(source).MapUid is not { } map || !TryGetZNetwork(map, out _))
+        {
+            _audioSystem.PlayPvs(sound, source);
+            return;
+        }
+
         _creatingZLevelAudioProjection = true;
 
         try
         {
-            var original = _audioSystem.PlayPvs(sound, source);
-            if (original is { } played)
-                _manualZLevelAudioSources.Add(played.Entity);
-            ProjectDirectlyAcrossZ(sound, source, maxDepth, requireCrossZAudio: false);
+            var resolved = _audioSystem.ResolveSound(sound);
+            PlayDirectAudioOriginal(resolved, sound.Params, source, null);
+            ProjectPredictedDirectlyAcrossZ(resolved, sound.Params, source, null, maxDepth, requireCrossZAudio: false);
         }
         finally
         {
@@ -300,52 +308,28 @@ public sealed partial class CMUZLevelsSystem
         }
     }
 
-    private void ProjectDirectlyAcrossZ(
-        SoundSpecifier sound,
+    private void PlayDirectAudioOriginal(
+        ResolvedSoundSpecifier sound,
+        AudioParams audioParams,
         EntityUid source,
-        int maxDepth,
-        bool requireCrossZAudio)
+        EntityUid? excludedEntity)
     {
-        if (!_zLevelsEnabled ||
-            maxDepth <= 0 ||
-            requireCrossZAudio && !_crossZAudioEnabled)
-        {
-            return;
-        }
-
         var xform = Transform(source);
-        if (xform.MapUid is not { } sourceMap ||
-            !TryComp<CMUZLevelMapComponent>(sourceMap, out var sourceZMap))
-        {
+        if (xform.MapUid is not { } map)
             return;
-        }
-
-        var sourcePosition = _transform.GetWorldPosition(xform);
-        Entity<CMUZLevelMapComponent?> currentMap = (sourceMap, sourceZMap);
-
-        PlayPvsDirectlyAcrossZDirection(sound, currentMap, sourcePosition, -1, maxDepth);
-        PlayPvsDirectlyAcrossZDirection(sound, currentMap, sourcePosition, 1, maxDepth);
-    }
-
-    private void PlayPvsDirectlyAcrossZDirection(
-        SoundSpecifier sound,
-        Entity<CMUZLevelMapComponent?> sourceMap,
-        Vector2 sourcePosition,
-        int step,
-        int maxDepth)
-    {
-        var currentMap = sourceMap;
-
-        for (var depth = step; Math.Abs(depth) <= maxDepth; depth += step)
-        {
-            if (!TryMapOffset(currentMap, step, out var targetMap))
-                return;
-
-            var projected = _audioSystem.PlayPvs(sound, new EntityCoordinates(targetMap.Value.Owner, sourcePosition));
-            if (projected is { } played)
-                _zLevelAudioProjections.Add(played.Entity);
-            currentMap = (targetMap.Value.Owner, targetMap.Value.Comp);
-        }
+        if (!audioParams.Loop)
+            _vehicleAudio.RelayCMUTransientSound(sound, audioParams, source, excludedEntity);
+        // Cross-floor PVS can include the original as well as a projection. Muting the
+        // original on the client still allocates an audio source, so restrict it before replication.
+        var filter = BuildCrossZAudioFilter(audioParams, excludedEntity, map, _transform.GetWorldPosition(xform));
+        filter = _audioBudget.LimitAudience(sound, filter, audioParams);
+        if (filter.Count == 0)
+            return;
+        var original = _audioSystem.PlayEntity(sound, filter, source, false, audioParams);
+        if (original is not { } played)
+            return;
+        _manualZLevelAudioSources.Add(played.Entity);
+        _audioBudget.Track(played.Component, filter);
     }
 
     private void ProjectCrossZAudioDirection(
@@ -473,27 +457,24 @@ public sealed partial class CMUZLevelsSystem
         var maxDistanceSquared = maxDistance * maxDistance;
         var filter = Filter.Empty();
 
-        if (!TryGetMapCoordinates(targetMap, sourcePosition, out var targetCoordinates))
-            return filter;
-
-        _zAudioActorLookup.Clear();
-        _entityLookup.GetEntitiesInRange(targetCoordinates, maxDistance, _zAudioActorLookup, LookupFlags.All);
-
-        foreach (var listener in _zAudioActorLookup)
+        // Audio follows the eye, including remote cameras and vehicle interiors. An actor
+        // lookup near the source misses listeners whose bodies are on another map.
+        var listeners = EntityQueryEnumerator<ActorComponent, TransformComponent>();
+        while (listeners.MoveNext(out var uid, out var actor, out var xform))
         {
-            if (excludedEntity == listener.Owner ||
-                !_zAudioXformQuery.TryComp(listener.Owner, out var xform) ||
-                xform.MapUid != targetMap)
-            {
+            if (excludedEntity == uid)
                 continue;
-            }
 
-            var listenerPosition = _transform.GetWorldPosition(xform);
+            TryComp<EyeComponent>(uid, out var eye);
+            if (eye?.Target is { } target && _zAudioXformQuery.TryComp(target, out var targetTransform))
+                xform = targetTransform;
+            if (xform.MapUid != targetMap)
+                continue;
+
+            var listenerPosition = _transform.GetWorldPosition(xform) + (eye?.Offset ?? Vector2.Zero);
             if (Vector2.DistanceSquared(listenerPosition, sourcePosition) <= maxDistanceSquared)
-                filter.AddPlayer(listener.Comp.PlayerSession);
+                filter.AddPlayer(actor.PlayerSession);
         }
-
-        _zAudioActorLookup.Clear();
         return filter;
     }
 
@@ -505,6 +486,10 @@ public sealed partial class CMUZLevelsSystem
         EntityUid targetMap,
         Vector2 sourcePosition)
     {
+        filter = _audioBudget.LimitAudience(specifier, filter, audioParams);
+        if (filter.Count == 0)
+            return null;
+
         _creatingZLevelAudioProjection = true;
 
         try
@@ -520,6 +505,7 @@ public sealed partial class CMUZLevelsSystem
                 return null;
 
             _zLevelAudioProjections.Add(projected.Entity);
+            _audioBudget.Track(projected.Component, filter);
             projected.Component.Flags = flags & ~AudioFlags.GridAudio;
 
             Dirty(projected.Entity, projected.Component);

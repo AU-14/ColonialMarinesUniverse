@@ -72,7 +72,7 @@ public sealed partial class CMUXenoCycloneComponent : Component
         AudioParams.Default.WithVolume(-2));
 
     [DataField, AutoNetworkedField]
-    public EntProtoId HitEffect = "RMCEffectTailswipe";
+    public EntProtoId HitEffect = "RMCEffectTailHit";
 
     /// <summary>
     /// Animation entity spawned attached to the xeno itself on each spin tick,
@@ -80,5 +80,5 @@ public sealed partial class CMUXenoCycloneComponent : Component
     /// showing hit effects on targets.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public EntProtoId? SpinAnimationId = "RMCEffectTailswipe";
+    public EntProtoId? SpinAnimationId = "RMCEffectTailHit";
 }

@@ -157,8 +157,7 @@ public sealed partial class FighterSystem
             if (Math.Max(Math.Abs(x), Math.Abs(y)) != radius) continue;
             var site = new EntityCoordinates(map, origin + new Vector2(x, y));
             if (!GroundSiteClear(hull, site)) continue;
-              _transform.SetCoordinates(hull, site);
-              Spawn("CMUFighterLandingPadGovfor", site);
+            _transform.SetCoordinates(hull, site);
             var uid = Comp<FighterGroundComponent>(hull).Aircraft!.Value;
             Log.Info($"Ground fighter trial ready at {site}.");
             return (uid, Comp<FighterAircraftComponent>(uid));

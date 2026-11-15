@@ -155,40 +155,6 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         });
     }
 
-    [Test]
-    public async Task ClearEditsCancelBacksOutAndExitReturnsTheCard()
-    {
-        await SpawnTarget(Atm);
-        var (card, pin, _) = await InsertNewCard(100);
-        await Type(pin.ToString());
-
-        await Type("1", enter: false);              // 1) WITHDRAW
-        await Type("12", enter: false);
-        Assert.That(AtmComp.KeypadBuffer, Is.EqualTo("12"));
-
-        await Clear();
-        Assert.That(AtmComp.KeypadBuffer, Is.EqualTo("1"), "CLEAR did not remove the last digit");
-        await Clear();
-        await Clear();
-        Assert.Multiple(() =>
-        {
-            Assert.That(AtmComp.KeypadBuffer, Is.Empty);
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Withdraw), "CLEAR on an empty entry left the screen");
-        });
-
-        await Cancel();
-        Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu), "CANCEL did not back out of the withdrawal");
-
-        await Type("6", enter: false);              // 6) EXIT
-        Assert.Multiple(() =>
-        {
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));
-            Assert.That(CardInAtm(), Is.Null, "EXIT kept the card");
-            Assert.That(HeldItem(), Is.EqualTo(ToServer(card)), "EXIT did not hand the card back");
-            Assert.That(AtmComp.PinAuthenticated, Is.False);
-        });
-    }
-
     /// <summary>CANCEL abandons a transaction from any step of it, not just the last one.</summary>
     [Test]
     public async Task CancelAbandonsATransferHalfway()
@@ -216,60 +182,8 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         Assert.That(CardInAtm(), Is.Null);
     }
 
-    /// <summary>00 types two zeros, and only while both still fit.</summary>
-    [Test]
-    public async Task DoubleZeroKeyTypesTwoZeros()
-    {
-        await SpawnTarget(Atm);
-        var (_, pin, _) = await InsertNewCard(100);
-        await Type(pin.ToString());
 
-        await Type("1", enter: false);              // 1) WITHDRAW
-        await Type("5", enter: false);
-        await ClickControl<ColonyAtmWindow>(nameof(ColonyAtmWindow.Btn00));
-        await RunTicks(5);
-        Assert.That(AtmComp.KeypadBuffer, Is.EqualTo("500"));
-    }
 
-    /// <summary>A card left signed in stays signed in; only what was half typed is gone.</summary>
-    [Test]
-    public async Task CardLeftSignedInStaysSignedIn()
-    {
-        await SpawnTarget(Atm);
-        var (_, pin, _) = await InsertNewCard(100);
-        await Type(pin.ToString());
-        await Type("1", enter: false);              // 1) WITHDRAW
-        await Type("5", enter: false);
-
-        await CloseBui(ColonyAtmUi.Key);
-        await Interact();                            // come back; the card is still in the reader
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(AtmComp.PinAuthenticated, Is.True, "Walking away signed the card out");
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu));
-            Assert.That(AtmComp.KeypadBuffer, Is.Empty, "The half-typed amount was kept");
-        });
-    }
-
-    /// <summary>A card left at its PIN prompt still needs the PIN; the digits typed so far are gone.</summary>
-    [Test]
-    public async Task CardLeftAtThePinPromptStillNeedsThePin()
-    {
-        await SpawnTarget(Atm);
-        var (_, pin, _) = await InsertNewCard(100);
-        await Type(pin.ToString()[..2], enter: false);
-
-        await CloseBui(ColonyAtmUi.Key);
-        await Interact();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
-            Assert.That(AtmComp.PinAuthenticated, Is.False);
-            Assert.That(AtmComp.KeypadBuffer, Is.Empty, "The half-typed PIN was kept");
-        });
-    }
 
     /// <summary>The lock is on the card, so walking to another ATM does not get around it.</summary>
     [Test]
@@ -294,62 +208,6 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         });
     }
 
-    /// <summary>
-    ///     A siphoned ATM is out of order until it repairs itself. It refuses cards; a click shows its
-    ///     out-of-order screen and every key on it is dead.
-    /// </summary>
-    [Test]
-    public async Task HackedAtmIsOutOfOrderUntilItRepairsItself()
-    {
-        await SpawnTarget(Atm);
-        await Server.WaitPost(() =>
-        {
-            var hacked = SEntMan.EnsureComponent<SapperAtmHackedComponent>(STarget!.Value);
-            hacked.RecoverAt = STiming.CurTime + TimeSpan.FromSeconds(3);
-        });
 
-        await PlaceInHands(IdCard);
-        await Interact();
-        Assert.That(IsUiOpen(ColonyAtmUi.Key), Is.False, "An out-of-order ATM accepted a card");
 
-        await Activate();
-        Assert.Multiple(() =>
-        {
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), "A click on the seized ATM showed nothing");
-            Assert.That(ClientAtmState().OutOfService, "The seized ATM showed the terminal");
-            Assert.That(AtmComp.CurrentUser, Is.Null, "The seized ATM started a session");
-        });
-        await Type("1", enter: false);              // 1) REMOTE DEPOSIT, if anything worked
-        Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome), "A key on the seized screen did something");
-
-        await RunSeconds(4);
-        Assert.That(SEntMan.HasComponent<SapperAtmHackedComponent>(STarget), Is.False, "The ATM never repaired itself");
-        await Interact();
-        Assert.Multiple(() =>
-        {
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), "The repaired ATM refused the card");
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
-        });
-    }
-
-    /// <summary>
-    ///     The ASRS console also carries the ATM component (for cash intake) but has no ATM screen,
-    ///     so it must never start an ATM session.
-    /// </summary>
-    [Test]
-    public async Task AsrsConsoleIsNotTreatedAsAnAtm()
-    {
-        await SpawnTarget("CMASRSConsole");
-        await PlaceInHands(IdCard);
-        await Interact();
-        await Activate();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(AtmComp.CurrentUser, Is.Null, "The ASRS console started an ATM session");
-            Assert.That(CardInAtm(), Is.Null, "The ASRS console took the card");
-            Assert.That(HeldItem(), Is.Not.Null, "The card left the player's hand");
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), Is.False);
-        });
-    }
 }

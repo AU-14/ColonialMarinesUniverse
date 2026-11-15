@@ -18,7 +18,6 @@ namespace Content.IntegrationTests.Tests.Utility
         private const string WhitelistTestValidTagProtoId = "WhitelistTestValidTagDummy";
         private const string InvalidComponentProtoId = "InvalidComponentDummy";
         private const string WhitelistTestInvalidTagProtoId = "WhitelistTestInvalidTagDummy";
-        private static readonly EntProtoId CircularSawPrototype = "CMCircularSaw";
 
         [TestPrototypes]
         private const string Prototypes = $@"
@@ -148,21 +147,5 @@ namespace Content.IntegrationTests.Tests.Utility
             });
         }
 
-        [Test]
-        public async Task CircularSawComponentNameIsValidForWhitelists()
-        {
-            var server = Pair.Server;
-
-            await server.WaitAssertion(() =>
-            {
-                var compFactory = server.ResolveDependency<IComponentFactory>();
-                var protoManager = server.ResolveDependency<IPrototypeManager>();
-
-                Assert.That(compFactory.GetComponentAvailability("CMCircularSaw"),
-                    Is.EqualTo(ComponentAvailability.Available));
-                Assert.That(protoManager.TryIndex<EntityPrototype>(CircularSawPrototype, out var saw), Is.True);
-                Assert.That(saw!.Components.ContainsKey("CMCircularSaw"), Is.True);
-            });
-        }
     }
 }

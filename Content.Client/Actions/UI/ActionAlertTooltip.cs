@@ -9,7 +9,7 @@ namespace Content.Client.Actions.UI
     /// <summary>
     /// Tooltip for actions or alerts because they are very similar.
     /// </summary>
-    public sealed class ActionAlertTooltip : PanelContainer
+    public sealed partial class ActionAlertTooltip : PanelContainer // CMU14: cached text updates.
     {
         private const float TooltipTextMaxWidth = 350;
 
@@ -86,41 +86,11 @@ namespace Content.Client.Actions.UI
             }
         }
 
+        // CMU14 method: only rebuild markup when the displayed inputs change.
         protected override void FrameUpdate(FrameEventArgs args)
         {
             base.FrameUpdate(args);
-            if (!Cooldown.HasValue)
-            {
-                _cooldownLabel.Visible = false;
-            }
-            else
-            {
-                var timeLeft = Cooldown.Value.End - _gameTiming.CurTime;
-                if (timeLeft > TimeSpan.Zero)
-                {
-                    var duration = Cooldown.Value.End - Cooldown.Value.Start;
-
-                    if (FormattedMessage.TryFromMarkup(Loc.GetString("ui-actionslot-duration", ("duration", (int)duration.TotalSeconds), ("timeLeft", (int)timeLeft.TotalSeconds + 1)), out var markup))
-                    {
-                        _cooldownLabel.SetMessage(markup);
-                        _cooldownLabel.Visible = true;
-                    }
-                }
-                else
-                {
-                    _cooldownLabel.Visible = false;
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(DynamicMessage))
-            {
-                _dynamicMessageLabel.Visible = false;
-            }
-            else if (FormattedMessage.TryFromMarkup($"[color=#ffffff]{DynamicMessage}[/color]", out var dynamicMarkup))
-            {
-                _dynamicMessageLabel.SetMessage(dynamicMarkup);
-                _dynamicMessageLabel.Visible = true;
-            }
+            CMUUpdateText();
         }
     }
 }

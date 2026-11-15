@@ -201,12 +201,15 @@ public abstract partial class SatiationSystem : EntitySystem
             currentChangeMod = 1f;
         }
 
-        satiation.ActualChangeRate = proto.BaseChangeRate * currentChangeMod;
-        // cmu edit start: traits like hearty appetite and high thirst change how fast it runs down
-        var cmuRate = new Content.Shared.CMU14.Nutrition.CMUSatiationRateEvent(satiation.SatiationType.Id, satiation.ActualChangeRate);
+        // CMU14 Satiation Begin: slow hunger drain before applying the character's traits.
+        var changeRate = proto.BaseChangeRate * currentChangeMod;
+        if (satiation.SatiationType == Hunger && changeRate < 0f)
+            changeRate /= 1.5f;
+
+        var cmuRate = new Content.Shared.CMU14.Nutrition.CMUSatiationRateEvent(satiation.SatiationType.Id, changeRate);
         RaiseLocalEvent(entity, ref cmuRate);
         satiation.ActualChangeRate = cmuRate.Rate;
-        // cmu edit end
+        // CMU14 End
         satiation.NextChangeRateModUpdateTime = EvolvesToBoundAt(
             satiation,
             proto,

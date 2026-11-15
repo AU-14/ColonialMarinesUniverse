@@ -32,6 +32,7 @@ public sealed partial class MarineOverlay : Overlay
     private static readonly ProtoId<ShaderPrototype> ShadedShader = "shaded";
     // CMU14: faction identification.
     private static readonly Color UnidentifiedColor = Color.FromHex("#FF3030");
+    private static readonly SpriteSpecifier.Rsi HostileRsi = new(new ResPath("Effects/text.rsi"), "exclamation");
 
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IPlayerManager _players = default!;
@@ -58,6 +59,7 @@ public sealed partial class MarineOverlay : Overlay
     private readonly ShaderInstance _shader;
     // CMU14: faction gameplay fixes.
     private readonly Texture _unidentifiedIcon;
+    private readonly Texture _hostileIcon;
     private readonly Texture _fireteamOneIcon;
     private readonly Texture _fireteamTwoIcon;
     private readonly Texture _fireteamThreeIcon;
@@ -111,6 +113,7 @@ public sealed partial class MarineOverlay : Overlay
         _fireteamLeaderIcon = GetTexture(FireteamLeaderRsi);
         // CMU14: faction gameplay fixes.
         _unidentifiedIcon = GetTexture(UnidentifiedRsi);
+        _hostileIcon = GetTexture(HostileRsi); // CMU14: opposition marker
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -120,7 +123,8 @@ public sealed partial class MarineOverlay : Overlay
 
         // CMU14: faction gameplay fixes.
         var localEnt = _players.LocalEntity;
-        var showUnidentified = _configuration.GetCVar(Content.Shared.CCVar.CCVars.ForceOnForceUnidentifiedMarkerEnabled) &&
+        var showUnidentified = _configuration.GetCVar(Content.Shared.CCVar.CCVars.ForceOnForceIdentificationMarkersEnabled) &&
+                               _configuration.GetCVar(Content.Shared.CCVar.CCVars.ForceOnForceUnidentifiedMarkerEnabled) &&
                                localEnt is { } viewer && _entity.HasComponent<ForceOnForceUniformComponent>(viewer);
         if (!_marineIconsQuery.TryComp(localEnt, out var marineHudComp) && !showUnidentified)
             return;
@@ -190,15 +194,22 @@ public sealed partial class MarineOverlay : Overlay
             handle.SetTransform(matrix);
 
             // CMU14: faction identification.
-            if (showUnidentified && _uniforms.IsUnidentified(uid, localEnt))
+            var marker = showUnidentified
+                ? _uniforms.Classify(uid, localEnt)
+                : ForceOnForceIdentification.None;
+            if (marker != ForceOnForceIdentification.None)
             {
                 var center = new Vector2(0, (bounds.Height + sprite.Offset.Y) / 2f + .3f);
                 // CMU14: faction gameplay fixes.
-                // A question mark replaces identifiers for other factions in unfamiliar uniforms.
-                // Keep its contrast in dim lighting while retaining the overlay's normal FOV.
+                // An exclamation mark replaces identifiers for the opposing side in unfamiliar
+                // uniforms; a question mark marks unfamiliar parties. Keep their contrast in dim
+                // lighting while retaining the overlay's normal FOV.
                 handle.UseShader(null);
                 // CMU14: faction gameplay fixes.
-                DrawUnidentifiedQuestionMark(handle, center);
+                if (marker == ForceOnForceIdentification.Hostile)
+                    DrawUnidentifiedMark(handle, center, _hostileIcon);
+                else
+                    DrawUnidentifiedMark(handle, center, _unidentifiedIcon);
                 handle.UseShader(_shader);
                 continue;
             }
@@ -268,24 +279,21 @@ public sealed partial class MarineOverlay : Overlay
     }
 
     // CMU14: faction identification.
-    private void DrawUnidentifiedQuestionMark(DrawingHandleWorld handle, Vector2 center)
+    private void DrawUnidentifiedMark(DrawingHandleWorld handle, Vector2 center, Texture icon)
     {
-        // CMU14: faction gameplay fixes.
-        var size = new Vector2(_unidentifiedIcon.Width, _unidentifiedIcon.Height) * (3f / EyeManager.PixelsPerMeter);
+        var size = new Vector2(icon.Width, icon.Height) * (3f / EyeManager.PixelsPerMeter);
         var bounds = Box2.CenteredAround(center, size);
         for (var x = -1; x <= 1; x++)
         for (var y = -1; y <= 1; y++)
         {
-            // CMU14: faction gameplay fixes.
             if (x == 0 && y == 0)
                 continue;
 
             var offset = new Vector2(x, y) / EyeManager.PixelsPerMeter;
-            handle.DrawTextureRect(_unidentifiedIcon, bounds.Translated(offset), Color.Black);
+            handle.DrawTextureRect(icon, bounds.Translated(offset), Color.Black);
         }
-        // CMU14: faction gameplay fixes.
 
-        handle.DrawTextureRect(_unidentifiedIcon, bounds, UnidentifiedColor);
+        handle.DrawTextureRect(icon, bounds, UnidentifiedColor);
     }
 
     private Texture GetTexture(SpriteSpecifier specifier)

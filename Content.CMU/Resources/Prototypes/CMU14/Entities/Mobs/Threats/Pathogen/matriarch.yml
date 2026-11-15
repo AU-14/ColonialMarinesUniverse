@@ -31,6 +31,24 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: DrawableSolution
+    solution: blood
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUPathogenRoyalMycohemolymph
+        Quantity: 300
+      - ReagentId: CMUPathogenSporoplasmMycotoxin
+        Quantity: 300
+  - type: SolutionRegeneration  
+    generated:  
+      reagents:  
+      - ReagentId: CMUPathogenRoyalMycohemolymph  
+        Quantity: 1  
+      - ReagentId: CMUPathogenSporoplasmMycotoxin
+        Quantity: 1
   - type: XenoHeavy
   - type: CMUXenoMycotoxinInject
     plasmaCost: 150

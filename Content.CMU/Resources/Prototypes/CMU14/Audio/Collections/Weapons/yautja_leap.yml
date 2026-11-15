@@ -1,0 +1,5 @@
+- type: soundCollection
+  id: CMUYautjaLeap
+  files:
+  - /Audio/CMU14/Yautja/Effects/pred_leap1.ogg
+  - /Audio/CMU14/Yautja/Effects/pred_leap2.ogg

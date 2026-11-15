@@ -9,6 +9,11 @@ namespace Content.Shared._RMC14.Vehicle;
 [Access(typeof(VehicleOperatorDamageSystem))]
 public sealed partial class VehicleOperatorDamageComponent : Component
 {
+    // CMU14: own mounted weapons still damage the hull, but do not forward blast damage into the cabin.
+    // on for every vehicle, only the tank opted in and APC drivers kept eating their own shells
+    [DataField]
+    public bool IgnoreOwnProjectiles = true;
+
     /// <summary>
     /// Explosion epicenters within this many tiles of the chassis center count as direct hits.
     /// </summary>

@@ -40,10 +40,9 @@
   - type: GunRequiresWield
   - type: RMCNameItemOnVend
     item: PrimaryGun
-  - type: OnShootTriggerAmmoTimer
-    delay: 0.2 # TODO RMC14 Make some way for rockets to explode when they stop, for shooting at the ground closer than max range.
-    # This is a temporary hack to guarantee it will always go off after stopping even if it doesn't collide with anything.
-    # Works for almost all gameplay purposes at least right now because even max range rockets are less than 0.2s and it's fast enough not matter.
+  # CMU14: detonation belongs to the projectile's fixed-distance stop, not a firing timer.
+  # - type: OnShootTriggerAmmoTimer
+  #   delay: 0.2
   - type: ShootAtFixedPoint
     shootArcProj: false
   - type: WieldableSpeedModifiers
@@ -218,6 +217,8 @@
   categories: [ HideSpawnMenu ]
   description: Uh oh.
   components:
+  - type: TriggerOnFixedDistanceStop # CMU14: inherited by HE, AP and phosphorus variants.
+    delay: 0
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -291,6 +292,8 @@
   categories: [ HideSpawnMenu ]
   description: Uh oh.
   components:
+  - type: TriggerOnFixedDistanceStop # CMU14: inherited by HE, AP and phosphorus variants.
+    delay: 0
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false

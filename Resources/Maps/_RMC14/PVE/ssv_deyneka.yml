@@ -22691,7 +22691,7 @@ entities:
       parent: 710
     - type: Physics
       canCollide: False
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack # CMU14: replaced RMCCableCoil30, thin LV cable
   entities:
   - uid: 1818
     components:

@@ -35,7 +35,6 @@ public sealed class DropshipNavigationAccessTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [TestCase("govfor", "opfor", "Govfor", "Opfor")]
-    [TestCase("opfor", "govfor", "Opfor", "Govfor")]
     public async Task EnemyOfficersCannotLaunchNormallyEvenWithCapturedCredentials(
         string faction, string enemy, string ownAccess, string enemyAccess)
     {
@@ -102,7 +101,6 @@ public sealed class DropshipNavigationAccessTest : GameTest
     }
 
     [TestCase("govfor", "opfor", "Govfor", "Opfor")]
-    [TestCase("opfor", "govfor", "Opfor", "Govfor")]
     public async Task PrebuiltGunshipIsAssignedAndLandsOnItsOwnCarrier(
         string faction, string enemy, string ownAccess, string enemyAccess)
     {

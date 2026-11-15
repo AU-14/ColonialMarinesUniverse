@@ -16,3 +16,25 @@
       RMCSkillMeleeWeapons: 2
       RMCSkillPolice: 2
       RMCSkillSurgery: 3
+
+# cmss13 /datum/skills/yautja/soldier: warrior plus max endurance, master firearms and beginner jtac
+- type: entity
+  parent: CMUSkillPresetYautjaWarrior
+  id: CMUSkillPresetYautjaSoldier
+  name: Yautja Soldier
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillAntagonist: 2
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 5
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 5
+      RMCSkillJtac: 1
+      RMCSkillMedical: 2
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPolice: 2
+      RMCSkillSurgery: 3

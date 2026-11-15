@@ -1,7 +1,7 @@
 {
     "version": 1,
     "license": "CC-BY-SA-3.0",
-    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 0d711eddc539ea7ac67cf6b5869a08fa33dc9391.",
+    "copyright": "CM-SS13 contributors: thwomper, PoltavskaPraca, Steelpoint. https://github.com/cmss13-devs/cmss13/pull/12866; 4b1f9b6bcd3c456b2adca874ff89d0a7fd5ce012.",
     "size": {
         "x": 32,
         "y": 32
@@ -37,6 +37,10 @@
         },
         {
             "name": "decal",
+            "directions": 4
+        },
+        {
+            "name": "stairs_decal_bot",
             "directions": 4
         }
     ]

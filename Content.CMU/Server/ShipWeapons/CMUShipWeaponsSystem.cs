@@ -456,6 +456,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
                 QueueDel(uid);
         }
 
+        UpdateCloudSpread();
         UpdateEmsFields();
     }
 
@@ -475,29 +476,43 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             _rmcExplosion.TryDoEffect(effect);
         }
 
-        if (profile.Cloud is { } cloud)
+        if (profile.Cloud != null)
         {
-            for (var x = -profile.CloudRadius; x <= profile.CloudRadius; x++)
-            for (var y = -profile.CloudRadius; y <= profile.CloudRadius; y++)
+            var levels = new Dictionary<MapId, EntityUid>();
+            foreach (var map in _zLevels.GetAllNetworkMaps(_map.GetMap(impact.MapId)))
             {
-                if (x * x + y * y > profile.CloudRadius * profile.CloudRadius)
-                    continue;
-
-                var cell = impact.Offset(new Vector2(x, y));
-                if (!TryGetGroundCoordinates(cell, out var coordinates) ||
-                    !_area.CanOrbitalBombard(coordinates, out _))
-                    continue;
-
-                Spawn(cloud, coordinates);
+                if (_zLevels.TryGetMapCoordinates(map, impact.Position, out var projected))
+                    CreateCloudField(profile, projected, levels);
             }
+        }
+    }
+
+    private void CreateCloudField(CMUShipWeaponPrototype profile, MapCoordinates impact,
+        Dictionary<MapId, EntityUid> levels)
+    {
+        var field = Spawn(profile.Ems ? "CMUShipWeaponEmsField" : null, _transform.ToCoordinates(impact));
+        var spread = EnsureComp<CMUShipWeaponCloudSpreadComponent>(field);
+        spread.Weapon = profile.ID;
+        spread.LevelFields = levels;
+        levels.Add(impact.MapId, field);
+        spread.NextSpread = _timing.CurTime + TimeSpan.FromSeconds(1);
+        spread.EndsAt = _timing.CurTime + profile.FieldDuration;
+        for (var x = -profile.CloudRadius; x <= profile.CloudRadius; x++)
+        for (var y = -profile.CloudRadius; y <= profile.CloudRadius; y++)
+        {
+            if (x * x + y * y > profile.CloudRadius * profile.CloudRadius)
+                continue;
+
+            var tile = new Vector2i(x, y);
+            if (TrySpawnCloudTile(profile, impact, tile, spread))
+                spread.Frontier.Add(tile);
         }
 
         if (profile.Ems)
         {
-            var field = Spawn("CMUShipWeaponEmsField", _transform.ToCoordinates(impact));
             var ems = Comp<CMUShipWeaponEmsFieldComponent>(field);
-            ems.Radius = profile.CloudRadius;
-            ems.EndsAt = _timing.CurTime + profile.FieldDuration;
+            ems.Radius = profile.FootprintRadius;
+            ems.EndsAt = spread.EndsAt;
             ems.StunAfterField = profile.StunAfterField;
         }
     }

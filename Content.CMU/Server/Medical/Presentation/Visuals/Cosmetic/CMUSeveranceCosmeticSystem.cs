@@ -17,6 +17,7 @@ using Content.Shared.Throwing;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Medical.Presentation.Visuals.Cosmetic;
 
@@ -35,6 +36,15 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
     [Dependency] private CMULegSupportSystem _legSupport = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    // a buckled or crit patient fails Stand forever; retrying every tick spun the queue
+    // until the server ground out. once a second is fast enough to look instant.
+    private static readonly TimeSpan StandRetryDelay = TimeSpan.FromSeconds(1);
+
+    // leg restores waiting out their StandRetryDelay; woken into the drain on a later tick.
+    // re-enqueuing into the queue the drain is iterating spins Update forever and freezes the tick.
+    private readonly List<(EntityUid Uid, TimeSpan Due)> _standRetryWait = new();
 
     /// <summary>
     ///     Bodies queued for next-tick glove-drop / shoe-drop / force-down.
@@ -55,6 +65,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         SubscribeLocalEvent<CMUHumanMedicalComponent, BodyPartRemovedEvent>(OnPartRemoved);
         SubscribeLocalEvent<CMUHumanMedicalComponent, BodyPartAddedEvent>(OnPartAdded);
         SubscribeLocalEvent<CMUHumanMedicalComponent, StandAttemptEvent>(OnStandAttempt);
+        SubscribeLocalEvent<CMULegLossDownedComponent, EntGotRemovedFromContainerMessage>(OnRestoredPatientRemoved);
     }
 
     public override void Update(float frameTime)
@@ -86,13 +97,21 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
             _standing.Down(d.Body);
         }
 
+        for (var i = _standRetryWait.Count - 1; i >= 0; i--)
+        {
+            if (_timing.CurTime < _standRetryWait[i].Due)
+                continue;
+            _deferredLegRestore.Enqueue(_standRetryWait[i].Uid);
+            _standRetryWait.RemoveAt(i);
+        }
+
         while (_deferredLegRestore.TryDequeue(out var restored))
         {
             // nothing else stands up a mob that was only down for missing legs, and RMC blocks item use
             // for a downed mob with both legs. not forced, so knockdown/rest/buckle/crit still win.
             // part-added also fires for every limb at spawn, so only mobs that lost leg support get stood up
             if (Deleted(restored) ||
-                !HasComp<CMULegLossDownedComponent>(restored) ||
+                !TryComp<CMULegLossDownedComponent>(restored, out var marker) ||
                 !_standing.IsDown(restored) ||
                 _container.IsEntityInContainer(restored) || // body bags and cryo own their down state
                 !_legSupport.HasLegsToStand(restored))
@@ -100,8 +119,21 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
                 continue;
             }
 
-            RemComp<CMULegLossDownedComponent>(restored);
-            _standing.Stand(restored);
+            if (_timing.CurTime < marker.NextStandRetry)
+            {
+                _standRetryWait.Add((restored, marker.NextStandRetry));
+                continue;
+            }
+
+            // CMU14: crit, pain knockdown, rest or a bed can cancel this stand; keep the marker and
+            // retry so the patient rises as soon as the canceller clears instead of staying floored
+            if (_standing.Stand(restored))
+                RemComp<CMULegLossDownedComponent>(restored);
+            else
+            {
+                marker.NextStandRetry = _timing.CurTime + StandRetryDelay;
+                _standRetryWait.Add((restored, marker.NextStandRetry));
+            }
         }
 
         while (_deferredHeadSever.TryDequeue(out var body))
@@ -180,6 +212,12 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         // deferred: this fires before SharedBodySystem counts the leg back in
         if (partType is BodyPartType.Leg or BodyPartType.Foot)
             _deferredLegRestore.Enqueue(ent.Owner);
+    }
+
+    private void OnRestoredPatientRemoved(Entity<CMULegLossDownedComponent> ent, ref EntGotRemovedFromContainerMessage args)
+    {
+        // Removal fires before reparenting. Retry after the pod/body bag releases the patient.
+        _deferredLegRestore.Enqueue(ent.Owner);
     }
 
     private void OnStandAttempt(Entity<CMUHumanMedicalComponent> ent, ref StandAttemptEvent args)

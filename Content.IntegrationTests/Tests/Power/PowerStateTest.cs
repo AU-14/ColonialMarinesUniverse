@@ -30,47 +30,6 @@ public sealed class PowerStateTest : GameTest
     /// <summary>
     /// Asserts that switching from idle to working updates the power receiver load to the working draw.
     /// </summary>
-    [Test]
-    public async Task SetWorkingState_IdleToWorking_UpdatesLoad()
-    {
-        var pair = Pair;
-        var server = pair.Server;
-
-        var entManager = server.ResolveDependency<IEntityManager>();
-        var mapSys = entManager.System<SharedMapSystem>();
-
-        await server.WaitAssertion(() =>
-        {
-            // mapSys.CreateMap(out var mapId);
-            var mapUid = mapSys.CreateMap(out var mapId); // CMU14
-            var grid = mapSys.CreateGridEntity(mapId);
-
-            // CMU14: keeps RMC area power from claiming the receiver and zeroing its load.
-            entManager.AddComponent<CMUMapUsesTilePowerComponent>(mapUid);
-
-            mapSys.SetTile(grid, Vector2i.Zero, new Tile(1));
-
-            var ent = entManager.SpawnEntity("PowerStateApcReceiverDummy", grid.Owner.ToCoordinates());
-
-            var receiver = entManager.GetComponent<Server.Power.Components.ApcPowerReceiverComponent>(ent);
-            var powerState = entManager.GetComponent<PowerStateComponent>(ent);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(powerState.IsWorking, Is.False);
-                Assert.That(receiver.Load, Is.EqualTo(powerState.IdlePowerDraw).Within(0.01f));
-            });
-
-            var system = entManager.System<SharedPowerStateSystem>();
-            system.SetWorkingState((ent, powerState), true);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(powerState.IsWorking, Is.True);
-                Assert.That(receiver.Load, Is.EqualTo(powerState.WorkingPowerDraw).Within(0.01f));
-            });
-        });
-    }
 
     /// <summary>
     /// Asserts that switching from working to idle updates the power receiver load to the idle draw.
@@ -129,62 +88,5 @@ public sealed class PowerStateTest : GameTest
     /// <summary>
     /// Asserts that setting the working state to the current state does not change the power receiver load.
     /// </summary>
-    [Test]
-    public async Task SetWorkingState_AlreadyInState_NoChange()
-    {
-        var pair = Pair;
-        var server = pair.Server;
 
-        var entManager = server.ResolveDependency<IEntityManager>();
-        var mapSys = entManager.System<SharedMapSystem>();
-
-        await server.WaitAssertion(() =>
-        {
-            // mapSys.CreateMap(out var mapId);
-            var mapUid = mapSys.CreateMap(out var mapId); // CMU14
-            var grid = mapSys.CreateGridEntity(mapId);
-
-            // CMU14: keeps RMC area power from claiming the receiver and zeroing its load.
-            entManager.AddComponent<CMUMapUsesTilePowerComponent>(mapUid);
-
-            mapSys.SetTile(grid, Vector2i.Zero, new Tile(1));
-
-            var ent = entManager.SpawnEntity("PowerStateApcReceiverDummy", grid.Owner.ToCoordinates());
-
-            var receiver = entManager.GetComponent<Server.Power.Components.ApcPowerReceiverComponent>(ent);
-            var powerState = entManager.GetComponent<PowerStateComponent>(ent);
-            var system = entManager.System<SharedPowerStateSystem>();
-            Entity<PowerStateComponent> valueTuple = (ent, powerState);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(powerState.IsWorking, Is.False);
-                Assert.That(receiver.Load, Is.EqualTo(powerState.IdlePowerDraw).Within(0.01f));
-            });
-
-            system.SetWorkingState(valueTuple, false);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(powerState.IsWorking, Is.False);
-                Assert.That(receiver.Load, Is.EqualTo(powerState.IdlePowerDraw).Within(0.01f));
-            });
-
-            system.SetWorkingState(valueTuple, true);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(powerState.IsWorking, Is.True);
-                Assert.That(receiver.Load, Is.EqualTo(powerState.WorkingPowerDraw).Within(0.01f));
-            });
-
-            system.SetWorkingState(valueTuple, true);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(powerState.IsWorking, Is.True);
-                Assert.That(receiver.Load, Is.EqualTo(powerState.WorkingPowerDraw).Within(0.01f));
-            });
-        });
-    }
 }

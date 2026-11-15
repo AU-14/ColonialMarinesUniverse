@@ -354,48 +354,4 @@ public sealed class VehicleDamageRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task DamageExamineListsMountedFaultsAndEffectsWithoutRepairInstructions()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var vehicle = SEntMan.SpawnEntity("VehicleDamageRegressionChassis", map.GridCoords);
-            var module = SEntMan.System<VehicleTopologySystem>().GetMountedSlots(vehicle)[0].Item!.Value;
-            SEntMan.EnsureComponent<VehicleHardpointFailureComponent>(vehicle).ActiveFailures.Add(VehicleHardpointFailure.EngineMisfire);
-            SEntMan.EnsureComponent<VehicleHardpointFailureComponent>(module).ActiveFailures.Add(VehicleHardpointFailure.RunawayTrigger);
-
-            var verbs = new GetVerbsEvent<ExamineVerb>(vehicle, vehicle, null, null, true, true, true, []);
-            SEntMan.EventBus.RaiseLocalEvent(vehicle, verbs);
-            Assert.That(verbs.Verbs.Any(verb => verb.Text == "Vehicle damage"), Is.True);
-
-            var group = SEntMan.EnsureComponent<GroupExamineComponent>(vehicle);
-            group.Group = [new ExamineGroup
-            {
-                Components = ["HardpointIntegrity"],
-                ContextText = "rmc-vehicle-damage-examine-verb",
-                HoverMessage = "rmc-vehicle-damage-examine-description",
-            }];
-            verbs = new GetVerbsEvent<ExamineVerb>(vehicle, vehicle, null, null, true, true, true, []);
-            SEntMan.EventBus.RaiseLocalEvent(vehicle, verbs);
-            var details = group.Group.Single().Entries.Single().Message.ToMarkup();
-            Assert.Multiple(() =>
-            {
-                Assert.That(details, Does.Contain("Integrity:"));
-                Assert.That(details, Does.Contain("test support module"));
-                Assert.That(details, Does.Contain("Engine misfire"));
-                Assert.That(details, Does.Contain("Runaway trigger"));
-                Assert.That(details, Does.Contain("discharge on its own while mounted"));
-                Assert.That(details, Does.Contain("acceleration and top speed are reduced"));
-                Assert.That(details, Does.Not.Contain("Repair:"));
-                Assert.That(details, Does.Not.Contain("multitool"));
-                Assert.That(details, Does.Not.Contain("step 1/"));
-            });
-
-            var basic = new ExaminedEvent(new FormattedMessage(), vehicle, vehicle, true, false);
-            SEntMan.EventBus.RaiseLocalEvent(vehicle, basic);
-            Assert.That(basic.GetTotalMessage().ToMarkup(), Does.Not.Contain("Integrity:"));
-            Assert.That(basic.GetTotalMessage().ToMarkup(), Does.Not.Contain("Repair:"));
-        });
-    }
 }

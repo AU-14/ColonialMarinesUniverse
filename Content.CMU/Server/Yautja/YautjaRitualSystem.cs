@@ -1,4 +1,5 @@
 using Content.Server.Administration.Logs;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Database;
@@ -22,6 +23,7 @@ public sealed partial class YautjaRitualSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -35,6 +37,7 @@ public sealed partial class YautjaRitualSystem : EntitySystem
         SubscribeLocalEvent<EntityTerminatingEvent>(OnAnyEntityTerminating);
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<YautjaComponent, YautjaHonorDuelAcceptedEvent>(OnHonorDuelAccepted);
     }
 
     private void OnRitualExamined(Entity<YautjaRitualDuelComponent> ent, ref ExaminedEvent args)
@@ -75,6 +78,7 @@ public sealed partial class YautjaRitualSystem : EntitySystem
             !HasComp<YautjaComponent>(args.Target))
             return;
 
+        CreditHonorDuelDefender(args.Target, args.Origin);
         ClearRitualsOwnedBy(args.Target);
     }
 
@@ -101,6 +105,88 @@ public sealed partial class YautjaRitualSystem : EntitySystem
         {
             RemCompDeferred<YautjaRitualDuelComponent>(uid);
         }
+    }
+
+    // the challenger dying to the hunter they called out is a duel win too, for the defender
+    private void CreditHonorDuelDefender(EntityUid challenger, EntityUid? origin)
+    {
+        var query = EntityQueryEnumerator<YautjaRitualDuelComponent>();
+        while (query.MoveNext(out var uid, out var ritual))
+        {
+            if (!ritual.HonorDuel ||
+                ritual.Hunter != challenger ||
+                ritual.State != YautjaRitualState.DuelActive ||
+                origin != uid ||
+                !_mob.IsAlive(uid))
+            {
+                continue;
+            }
+
+            _trophy.RecordRitualDuelWin(uid, challenger);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-ritual-duel-complete", ("target", challenger)), uid, uid);
+            _adminLog.Add(LogType.Action, LogImpact.Medium,
+                $"{ToPrettyString(uid):hunter} won a Yautja honor duel against {ToPrettyString(challenger):target}");
+        }
+    }
+
+    public bool CanChallengeHonorDuel(EntityUid challenger, EntityUid target)
+    {
+        return !Deleted(challenger) &&
+               !Deleted(target) &&
+               challenger != target &&
+               HasComp<YautjaComponent>(challenger) &&
+               HasComp<YautjaComponent>(target) &&
+               _mob.IsAlive(challenger) &&
+               _mob.IsAlive(target) &&
+               !HasComp<YautjaRitualDuelComponent>(challenger) &&
+               !HasComp<YautjaRitualDuelComponent>(target) &&
+               !HasActiveCaptive(challenger, target) &&
+               !HasActiveCaptive(target, challenger);
+    }
+
+    // a hunter can't be dragged in as a captive, so it's a challenge the other side has to accept
+    public bool TryChallengeHonorDuel(EntityUid challenger, EntityUid target)
+    {
+        if (!CanChallengeHonorDuel(challenger, target))
+            return false;
+
+        _dialog.OpenConfirmation(
+            target,
+            target,
+            Loc.GetString("cmu-yautja-honor-duel-challenge-title"),
+            Loc.GetString("cmu-yautja-honor-duel-challenge-message", ("hunter", HunterDisplayName(challenger))),
+            new YautjaHonorDuelAcceptedEvent(GetNetEntity(challenger)));
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-honor-duel-challenge-sent", ("target", target)), challenger, challenger);
+        return true;
+    }
+
+    private void OnHonorDuelAccepted(Entity<YautjaComponent> target, ref YautjaHonorDuelAcceptedEvent args)
+    {
+        if (!TryGetEntity(args.Challenger, out var challengerUid) ||
+            challengerUid is not { } challenger ||
+            !CanChallengeHonorDuel(challenger, target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-honor-duel-unavailable"), target, target, PopupType.SmallCaution);
+            return;
+        }
+
+        var ritual = EnsureComp<YautjaRitualDuelComponent>(target);
+        ritual.Hunter = challenger;
+        ritual.State = YautjaRitualState.DuelActive;
+        ritual.HonorDuel = true;
+        ritual.CapturedAt = _timing.CurTime;
+        ritual.DuelStartedAt = _timing.CurTime;
+
+        _audio.PlayPvs(ritual.DuelSound, target);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-ritual-duel-started", ("target", target.Owner)), challenger, challenger);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-honor-duel-accepted", ("hunter", HunterDisplayName(challenger))), target, target, PopupType.MediumCaution);
+        PopupToWitnesses(
+            challenger,
+            target,
+            Loc.GetString("cmu-yautja-honor-duel-others"),
+            PopupType.LargeCaution);
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(target.Owner):hunter} accepted a Yautja honor duel from {ToPrettyString(challenger):challenger}");
     }
 
     public bool TryClaimCaptive(EntityUid hunter, EntityUid target, bool bypassControlRequirement = false)

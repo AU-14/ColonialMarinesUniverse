@@ -61,6 +61,16 @@ public sealed partial class TankCookOffSystem : EntitySystem
             Start(ent);
     }
 
+    /// <summary>Starts an ammunition cook-off from an outside source, such as a lunge mine. False if it was disabled or already burning.</summary>
+    public bool TryStartCookOff(Entity<TankCookOffComponent> ent)
+    {
+        if (!ent.Comp.Enabled || HasComp<ActiveTankCookOffComponent>(ent))
+            return false;
+
+        Start(ent);
+        return true;
+    }
+
     private void Start(Entity<TankCookOffComponent> ent)
     {
         if (!ent.Comp.Enabled || HasComp<ActiveTankCookOffComponent>(ent))

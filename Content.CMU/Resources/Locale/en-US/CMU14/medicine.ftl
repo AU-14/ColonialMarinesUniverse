@@ -3,6 +3,7 @@ cm-pill-contents-dermaline = Heals 1.5 burn damage per second. The more effectiv
 cm-pill-contents-meralyne = Heals 1.5 brute damage per second. The more effective cousin of Bicaridine.
 cm-pill-contents-imidazoline = Heals 1 eye damage. Fixes blurry vision and blindness.
 cm-pill-contents-cryoxadone = Marine cryoxadone. Heals several kinds of damage when the patient is below 170K.
+cmu-large-beaker-marine-cryoxadone = large beaker of marine cryoxadone
 cm-pill-contents-leporazine = Attempts to stabilize patient's temperature. Used to treat extreme cold or extreme heat exposure.
 cm-pill-contents-albuterol = Heals 4 oxygen damage per second. The more effective cousin of Dexalin.
 cm-pill-contents-oxycodone = A heavy painkiller, usually used in surgical procedures. Reduces pain heavily.

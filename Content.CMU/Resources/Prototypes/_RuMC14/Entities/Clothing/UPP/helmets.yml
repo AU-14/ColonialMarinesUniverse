@@ -2,7 +2,7 @@
   parent:  RMCMarineHelmetBase
   id: RuMCUPPNavalInfantryHeavyHelmet
   name: Maska-S
-  description: The helmet for the UPP. It's called a heavy helmet, but the only difference is that the mask feels like it's made of cardboard, so there's not much difference between this and the regular version. [Head, eyes]
+  description: The helmet for the UPP. It's called a heavy helmet, but the only difference is that the mask feels like it's made of cardboard, so there's not much difference between this and the regular version. (Head, eyes)
   components:
   - type: Sprite
     sprite: _RuMC14/Clothing/UPP/helmet/Maska_s.rsi

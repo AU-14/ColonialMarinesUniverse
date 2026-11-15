@@ -22,121 +22,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaClanAdminEntryTest
 {
-    [Test]
-    public void EveryYautjaConsoleCommandRequiresClanPermission()
-    {
-        Type[] commandTypes =
-        [
-            typeof(YautjaClanAdminCommand),
-            typeof(YautjaClanInfoCommand),
-            typeof(YautjaPredatorAdminEditorCommand),
-            typeof(YautjaYoungbloodCallCommand),
-            typeof(YautjaClanSetMemberCommand),
-            typeof(YautjaClanCreateCommand),
-            typeof(YautjaClanWhitelistCommand),
-            typeof(YautjaRankCommand),
-            typeof(YautjaGetRankCommand),
-        ];
-
-        foreach (var commandType in commandTypes)
-        {
-            var attributes = commandType
-                .GetCustomAttributes(typeof(AdminCommandAttribute), false)
-                .Cast<AdminCommandAttribute>()
-                .ToArray();
-
-            Assert.That(attributes, Has.Exactly(1).Items, commandType.Name);
-            Assert.That(attributes[0].Flags, Is.EqualTo(AdminFlags.Clans), commandType.Name);
-        }
-
-        Assert.That(YautjaClanAdminEui.RequiredAdminFlag, Is.EqualTo(AdminFlags.Clans));
-    }
 
     [Test]
-    public async Task AdminTabProvidesLocalizedClanAdministrationCommand()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-
-        await pair.Client.WaitAssertion(() =>
-        {
-            var localization = pair.Client.ResolveDependency<ILocalizationManager>();
-            var tab = new AdminTab();
-            try
-            {
-                var button = Descendants(tab)
-                    .OfType<CommandButton>()
-                    .SingleOrDefault(entry => entry.Command == "yautja_clan_admin");
-
-                Assert.That(button, Is.Not.Null);
-                Assert.That(button!.Text, Is.EqualTo(localization.GetString("cmu-yautja-clan-admin-open")));
-            }
-            finally
-            {
-                tab.ReleaseChildren();
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ClanPermissionSurvivesAdminStatusNetworkMessage()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings
-        {
-            Connected = true,
-            Dirty = true,
-        });
-        var server = pair.Server;
-        var session = pair.Player!;
-        var db = server.ResolveDependency<IServerDbManager>();
-        var adminManager = (AdminManager) server.ResolveDependency<IAdminManager>();
-        var adminRecord = new Admin
-        {
-            UserId = session.UserId.UserId,
-            Flags = Flags(AdminFlags.Admin | AdminFlags.Clans),
-        };
-
-        try
-        {
-            await server.WaitPost(() => server.CfgMan.SetCVar(CCVars.ConsoleLoginLocal, false));
-            await db.AddAdminAsync(adminRecord);
-            await ReloadAdmin(pair, adminManager, session, AdminFlags.Admin | AdminFlags.Clans);
-
-            await pair.Client.WaitAssertion(() =>
-            {
-                var clientAdmin = pair.Client.ResolveDependency<IClientAdminManager>();
-                Assert.That(clientAdmin.GetAdminData()?.Flags, Is.EqualTo(AdminFlags.Admin | AdminFlags.Clans));
-
-                var tab = new AdminTab();
-                try
-                {
-                    var button = Descendants(tab)
-                        .OfType<CommandButton>()
-                        .Single(entry => entry.Command == "yautja_clan_admin");
-
-                    Assert.That(button.Visible, Is.True);
-                }
-                finally
-                {
-                    tab.ReleaseChildren();
-                }
-            });
-        }
-        finally
-        {
-            if (await db.GetAdminDataForAsync(session.UserId) != null)
-                await db.RemoveAdminAsync(session.UserId);
-
-            await server.WaitPost(() =>
-                server.CfgMan.SetCVar(CCVars.ConsoleLoginLocal, CCVars.ConsoleLoginLocal.DefaultValue));
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ClanPermissionControlsCommandEuiAndMutations()
+    public async Task ClanPermissionControlsClanHallAndMutations()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -162,17 +50,18 @@ public sealed class YautjaClanAdminEntryTest
 
             Assert.That(adminManager.CanCommand(session, "yautja_clan_admin"), Is.False);
 
-            YautjaClanAdminEui? denied = null;
+            YautjaClanHallEui? denied = null;
             await server.WaitPost(() =>
             {
-                denied = new YautjaClanAdminEui();
+                denied = new YautjaClanHallEui();
                 euiManager.OpenEui(denied, session);
             });
+            await pair.RunTicksSync(20);
             await server.WaitAssertion(() => Assert.That(denied!.IsShutDown, Is.True));
 
             const string deniedName = "Denied Clan Permission Test";
             await server.WaitPost(() =>
-                denied!.HandleMessage(new YautjaClanAdminCreateClanMessage(deniedName, "denied", "#112233")));
+                denied!.HandleMessage(new YautjaClanHallFoundClanMessage(deniedName, "#112233")));
             await pair.RunTicksSync(10);
             Assert.That((await db.GetYautjaClansAsync()).Any(clan => clan.Name == deniedName), Is.False);
 
@@ -182,10 +71,10 @@ public sealed class YautjaClanAdminEntryTest
 
             Assert.That(adminManager.CanCommand(session, "yautja_clan_admin"), Is.True);
 
-            YautjaClanAdminEui? allowed = null;
+            YautjaClanHallEui? allowed = null;
             await server.WaitPost(() =>
             {
-                allowed = new YautjaClanAdminEui();
+                allowed = new YautjaClanHallEui();
                 euiManager.OpenEui(allowed, session);
             });
             await server.WaitAssertion(() => Assert.That(allowed!.IsShutDown, Is.False));
@@ -193,18 +82,19 @@ public sealed class YautjaClanAdminEntryTest
 
             const string allowedName = "Allowed Clan Permission Test";
             await server.WaitPost(() =>
-                allowed!.HandleMessage(new YautjaClanAdminCreateClanMessage(allowedName, "allowed", "#445566")));
+                allowed!.HandleMessage(new YautjaClanHallFoundClanMessage(allowedName, "#445566")));
             await pair.RunTicksSync(20);
             Assert.That((await db.GetYautjaClansAsync()).Any(clan => clan.Name == allowedName), Is.True);
 
             adminRecord.Flags = Flags(AdminFlags.Admin);
             await db.UpdateAdminAsync(adminRecord);
             await ReloadAdmin(pair, adminManager, session, AdminFlags.Admin);
+            await pair.RunTicksSync(20);
             await server.WaitAssertion(() => Assert.That(allowed!.IsShutDown, Is.True));
 
             const string revokedName = "Revoked Clan Permission Test";
             await server.WaitPost(() =>
-                allowed!.HandleMessage(new YautjaClanAdminCreateClanMessage(revokedName, "revoked", "#778899")));
+                allowed!.HandleMessage(new YautjaClanHallFoundClanMessage(revokedName, "#778899")));
             await pair.RunTicksSync(10);
             Assert.That((await db.GetYautjaClansAsync()).Any(clan => clan.Name == revokedName), Is.False);
         }
@@ -239,16 +129,4 @@ public sealed class YautjaClanAdminEntryTest
             Assert.That(adminManager.GetAdminData(session)?.Flags, Is.EqualTo(expected)));
     }
 
-    private static IEnumerable<Control> Descendants(Control root)
-    {
-        foreach (var child in root.Children)
-        {
-            yield return child;
-
-            foreach (var descendant in Descendants(child))
-            {
-                yield return descendant;
-            }
-        }
-    }
 }

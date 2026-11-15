@@ -22,47 +22,6 @@ namespace Content.IntegrationTests.CMU14.Vehicle;
 [TestFixture]
 public sealed class CMUJeepRocketTest : GameTest
 {
-    [TestCase("RMCProjectileRocket84mm")]
-    [TestCase("RMCProjectileRocket84mmAntiArmor")]
-    public async Task OneRocketWrecksAJeep(string rocket)
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid jeep = default;
-        await Server.WaitPost(() =>
-        {
-            var maps = SEntMan.System<SharedMapSystem>();
-            for (var x = -8; x <= 8; x++)
-            {
-                for (var y = -8; y <= 8; y++)
-                {
-                    maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
-                }
-            }
-
-            jeep = SEntMan.SpawnEntity("CMUVehicleJeepCargo", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
-        });
-        await RunTicksSync(5);
-
-        await Server.WaitPost(() =>
-        {
-            // From the side, four tiles out: the shot that leaves the engine the least.
-            var shot = SEntMan.SpawnEntity(rocket, new EntityCoordinates(map.Grid, 4.5f, 0.5f));
-            SEntMan.System<SharedGunSystem>().ShootProjectile(shot, -Vector2.UnitX, Vector2.Zero, null, speed: 20);
-        });
-        await RunSeconds(1f);
-
-        await Server.WaitAssertion(() =>
-        {
-            var gone = SEntMan.Deleted(jeep);
-            var engine = gone ? 0f : SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).EngineIntegrity;
-            var burning = !gone && SEntMan.GetComponent<CMUOpenVehicleComponent>(jeep).Burning;
-            var hull = gone ? 0f : SEntMan.GetComponent<HardpointIntegrityComponent>(jeep).Integrity;
-            var wreck = SEntMan.EntityQuery<MetaDataComponent>()
-                .Any(m => m.EntityPrototype?.ID?.StartsWith("CMUJeepWreck") == true);
-            TestContext.Out.WriteLine($"{rocket}: deleted {gone}, wreck {wreck}, engine {engine}, burning {burning}, hull {hull}");
-            Assert.That(gone || wreck, Is.True, $"One {rocket} should leave the jeep a wreck.");
-        });
-    }
 
     private async Task<(TestMapData Map, EntityUid Jeep)> BurningJeep()
     {

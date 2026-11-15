@@ -65,11 +65,11 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
     };
 
     private readonly GridContainer _skinGrid = new() { Columns = 6 };
-    private readonly GridContainer _eyeGrid = new() { Columns = 7 };
     private readonly GridContainer _dreadGrid = new() { Columns = 7 };
     private readonly GridContainer _quillGrid = new() { Columns = 6 };
-    private readonly GridContainer _legacyGrid = new() { Columns = 4 };
-    private readonly GridContainer _uniqueGrid = new() { Columns = 4 };
+    private readonly GridContainer _noSetGrid = new() { Columns = 4 };
+    private readonly GridContainer _ancientSetGrid = new() { Columns = 4 };
+    private readonly GridContainer _leaderSetGrid = new() { Columns = 4 };
     private readonly BoxContainer _armorSections = EquipmentSectionContainer();
     private readonly BoxContainer _maskSections = EquipmentSectionContainer();
     private readonly GridContainer _maskAccessoryGrid = new() { Columns = 4 };
@@ -77,6 +77,8 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
     private readonly BoxContainer _bracerSections = EquipmentSectionContainer();
     private readonly BoxContainer _casterSections = EquipmentSectionContainer();
     private readonly GridContainer _capeGrid = new() { Columns = 4 };
+    private readonly ColorSelectorSliders _capeColor = new() { IsAlphaVisible = false };
+    private readonly Label _capeColorHelp = new();
     private readonly ButtonGroup _categoryButtonGroup = new();
     private readonly BoxContainer _categoryNavigation = new()
     {
@@ -126,6 +128,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
     public YautjaProfileEditor()
     {
         IoCManager.InjectDependencies(this);
+        _capeColor.OnColorChanged += color => Mutate(profile => profile.WithCapeColor(color));
         _previewWithoutGear.Text = Loc.GetString("cmu-yautja-lobby-preview-without-gear");
         _flavorText.Placeholder = new Rope.Leaf(Loc.GetString("cmu-yautja-lobby-flavor-placeholder"));
         _flavorText.ToolTip = Loc.GetString("cmu-yautja-lobby-flavor-limit-tooltip", ("max", YautjaCharacterProfile.MaxFlavorTextLength));
@@ -246,7 +249,6 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             Children =
             {
                 VisualBlock("cmu-yautja-lobby-skin-color", _skinGrid),
-                VisualBlock("cmu-yautja-lobby-eyes", _eyeGrid),
                 VisualBlock("cmu-yautja-lobby-dread-color", _dreadGrid),
                 VisualBlock("cmu-yautja-lobby-quills", _quillGrid),
             },
@@ -414,11 +416,9 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         ResetResponsiveGrids();
 
         RebuildSkinSelector(yautja);
-        RebuildEyeSelector(yautja);
         RebuildDreadSelector(yautja);
         RebuildQuillSelector(yautja);
-        RebuildLegacySelector(yautja);
-        RebuildUniqueSelector(yautja);
+        RebuildSetSelectors(yautja);
         RebuildArmorSelector(yautja);
         RebuildMaskSelector(yautja);
         RebuildMaskAccessorySelector(yautja);
@@ -426,6 +426,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         RebuildBracerSelector(yautja);
         RebuildCasterSelector(yautja);
         RebuildCapeSelector(yautja);
+        UpdateCapeColor(yautja);
         UpdateResponsiveGridColumns();
     }
 
@@ -434,7 +435,14 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         _skinGrid.RemoveAllChildren();
         var group = new ButtonGroup();
 
-        foreach (var skinColor in YautjaCharacterProfile.SkinColorOrder)
+        // CMU14: only the six CM-SS13 PRED_SKIN_COLOR tones are offered; the CMU-only Gray/White extras are not valid
+        // choices for the pre-coloured variants and should not appear in the lobby. A profile already saved with one of
+        // them keeps that option so the current selection stays representable.
+        var choices = YautjaCharacterProfile.SkinColorOrder[..6].ToList();
+        if (!choices.Contains(yautja.SkinColor))
+            choices.Add(yautja.SkinColor);
+
+        foreach (var skinColor in choices)
         {
             var button = BuildSelectorButton(
                 Loc.GetString(YautjaCharacterProfile.GetSkinColorDisplayName(skinColor)),
@@ -456,24 +464,6 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 },
             });
             _skinGrid.AddChild(button);
-        }
-    }
-
-    private void RebuildEyeSelector(YautjaCharacterProfile yautja)
-    {
-        _eyeGrid.RemoveAllChildren();
-        var group = new ButtonGroup();
-
-        foreach (var eyeColor in YautjaCharacterProfile.EyeColorOrder)
-        {
-            var button = BuildSwatchButton(
-                Loc.GetString(YautjaCharacterProfile.GetEyeColorDisplayName(eyeColor)),
-                yautja.EyeColor == eyeColor,
-                group,
-                YautjaCharacterProfile.GetEyeColorColor(eyeColor));
-
-            button.OnPressed += _ => Mutate(profile => profile.WithEyeColor(eyeColor), true);
-            _eyeGrid.AddChild(button);
         }
     }
 
@@ -543,74 +533,66 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         }
     }
 
-    private void RebuildLegacySelector(YautjaCharacterProfile yautja)
+    // the two set enums are just storage, the picker groups every set by what unlocks it: Ancient sets
+    // (council whitelist) and Leader sets (clan leader and up). one button group, a set is a single pick
+    private void RebuildSetSelectors(YautjaCharacterProfile yautja)
     {
-        _legacyGrid.RemoveAllChildren();
+        _noSetGrid.RemoveAllChildren();
+        _ancientSetGrid.RemoveAllChildren();
+        _leaderSetGrid.RemoveAllChildren();
         var group = new ButtonGroup();
 
-        foreach (var legacy in YautjaCharacterProfile.LegacyOrder)
+        AddTextSelector(_noSetGrid,
+            group,
+            Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(YautjaUniqueSet.None)),
+            yautja.Legacy == YautjaLegacySet.None && yautja.Unique == YautjaUniqueSet.None,
+            () => Mutate(profile => profile.WithLegacy(YautjaLegacySet.None).WithUnique(YautjaUniqueSet.None), true));
+
+        foreach (var setLock in new[] { YautjaSetLock.Ancient, YautjaSetLock.ClanLeader })
         {
-            var selected = yautja.Legacy == legacy;
-            if (legacy == YautjaLegacySet.None)
+            var grid = setLock == YautjaSetLock.Ancient ? _ancientSetGrid : _leaderSetGrid;
+
+            foreach (var legacy in YautjaCharacterProfile.LegacyOrder)
             {
-                AddTextSelector(_legacyGrid,
+                if (legacy == YautjaLegacySet.None || YautjaCharacterProfile.GetSetLock(legacy) != setLock)
+                    continue;
+
+                var name = Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy));
+                var locked = YautjaProfileEditorLayout.IsLegacySetLocked(_capabilities, legacy);
+                AddEntitySelector(grid,
                     group,
-                    Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy)),
-                    selected,
-                    () => Mutate(profile => profile.WithLegacy(YautjaLegacySet.None), true));
-                continue;
+                    YautjaCharacterProfile.Default.WithLegacy(legacy).ArmorPrototype,
+                    yautja.Legacy == legacy,
+                    locked ? SetLockTooltip(setLock) : name,
+                    () => Mutate(profile => profile.WithLegacy(legacy).WithUnique(YautjaUniqueSet.None), true),
+                    name,
+                    locked);
             }
 
-            var preview = YautjaCharacterProfile.Default.WithLegacy(legacy).ArmorPrototype;
-            var locked = YautjaProfileEditorLayout.IsLegacySetLocked(_capabilities, legacy);
-            var tooltip = locked
-                ? Loc.GetString("cmu-yautja-lobby-locked-legacy")
-                : Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy));
-            AddEntitySelector(_legacyGrid,
-                group,
-                preview,
-                selected,
-                tooltip,
-                () => Mutate(profile => profile.WithLegacy(legacy).WithUnique(YautjaUniqueSet.None), true),
-                Loc.GetString(YautjaCharacterProfile.GetLegacyDisplayName(legacy)),
-                locked);
+            foreach (var unique in YautjaCharacterProfile.UniqueOrder)
+            {
+                if (unique == YautjaUniqueSet.None || YautjaCharacterProfile.GetSetLock(unique) != setLock)
+                    continue;
+
+                var name = Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique));
+                var locked = YautjaProfileEditorLayout.IsUniqueSetLocked(_capabilities, unique);
+                AddEntitySelector(grid,
+                    group,
+                    YautjaCharacterProfile.Default.WithUnique(unique).ArmorPrototype,
+                    yautja.Unique == unique,
+                    locked ? SetLockTooltip(setLock) : name,
+                    () => Mutate(profile => profile.WithUnique(unique).WithLegacy(YautjaLegacySet.None), true),
+                    name,
+                    locked);
+            }
         }
     }
 
-    private void RebuildUniqueSelector(YautjaCharacterProfile yautja)
+    private static string SetLockTooltip(YautjaSetLock setLock)
     {
-        _uniqueGrid.RemoveAllChildren();
-        var group = new ButtonGroup();
-
-        foreach (var unique in YautjaCharacterProfile.UniqueOrder)
-        {
-            var selected = yautja.Unique == unique;
-            if (unique == YautjaUniqueSet.None)
-            {
-                AddTextSelector(_uniqueGrid,
-                    group,
-                    Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique)),
-                    selected,
-                    () => Mutate(profile => profile.WithUnique(YautjaUniqueSet.None), true));
-                continue;
-            }
-
-            var preview = YautjaCharacterProfile.Default.WithUnique(unique).ArmorPrototype;
-            var locked = YautjaProfileEditorLayout.IsUniqueSetLocked(_capabilities, unique);
-            var tooltip = locked
-                ? Loc.GetString(
-                    "cmu-yautja-lobby-locked-rank",
-                    ("rank", Loc.GetString(YautjaRankMetadata.For(YautjaRank.Elite).LocalizedName)))
-                : Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique));
-            AddEntitySelector(_uniqueGrid,
-                group,
-                preview,
-                selected,
-                tooltip,
-                () => Mutate(profile => profile.WithUnique(unique).WithLegacy(YautjaLegacySet.None), true),
-                Loc.GetString(YautjaCharacterProfile.GetUniqueDisplayName(unique)),
-                locked);
-        }
+        return setLock == YautjaSetLock.Ancient
+            ? Loc.GetString("cmu-yautja-lobby-locked-ancient")
+            : Loc.GetString("cmu-yautja-lobby-locked-leader-ancient");
     }
 
     private void RebuildArmorSelector(YautjaCharacterProfile yautja)
@@ -765,21 +747,12 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             {
                 var capturedMaterial = material;
                 var locked = YautjaProfileEditorLayout.IsBracerLocked(_capabilities, material);
-                var tooltip = locked && material is
-                    YautjaBracerMaterial.Dragon or
-                    YautjaBracerMaterial.Swamp or
-                    YautjaBracerMaterial.Enforcer or
-                    YautjaBracerMaterial.Collector
-                    ? Loc.GetString("cmu-yautja-lobby-locked-legacy")
-                    : locked
-                        ? Loc.GetString(
-                            "cmu-yautja-lobby-locked-rank",
-                            ("rank", Loc.GetString(YautjaRankMetadata.For(YautjaRank.Elite).LocalizedName)))
-                        : Loc.GetString(YautjaCharacterProfile.GetBracerDisplayName(material));
+                var tooltip = Loc.GetString(YautjaCharacterProfile.GetBracerDisplayName(material));
                 AddStaticBracerSelector(grid,
                     group,
                     material,
-                    yautja.Legacy == YautjaLegacySet.None && yautja.BracerMaterial == material,
+                    yautja.Legacy == YautjaLegacySet.None &&
+                    (YautjaCharacterProfile.UniqueBracer(yautja.Unique) ?? yautja.BracerMaterial) == material,
                     tooltip,
                     () => Mutate(profile => profile.WithBracer(capturedMaterial).WithLegacy(YautjaLegacySet.None), true),
                     Loc.GetString(YautjaCharacterProfile.GetBracerMaterialDisplayName(material)),
@@ -791,7 +764,7 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
 
             rows.AddChild(new Label
             {
-                Text = section.Title,
+                Text = Loc.GetString(section.Title),
                 FontColorOverride = Color.FromHex("#d6bf94"),
             });
             rows.AddChild(grid);
@@ -848,14 +821,26 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             var tooltip = locked
                 ? Loc.GetString("cmu-yautja-lobby-locked-leader-ancient")
                 : Loc.GetString(YautjaCharacterProfile.GetCapeDisplayName(style));
+            var label = Loc.GetString(YautjaCharacterProfile.GetCapeDisplayName(style));
             AddEntitySelector(_capeGrid,
                 group,
                 prototype,
                 yautja.CapeStyle == style,
                 tooltip,
                 () => Mutate(profile => profile.WithCapeStyle(style), true),
-                disabled: locked);
+                label,
+                locked);
         }
+    }
+
+    private void UpdateCapeColor(YautjaCharacterProfile yautja)
+    {
+        var recolorable = YautjaCharacterProfile.IsCapeRecolorable(yautja.CapeStyle);
+        _capeColor.Color = yautja.CapeColor;
+        _capeColor.Visible = recolorable;
+        _capeColorHelp.Text = Loc.GetString(recolorable
+            ? "cmu-yautja-lobby-cape-color-help"
+            : "cmu-yautja-lobby-cape-color-fixed");
     }
 
     private void ReloadPreview(YautjaCharacterProfile yautja)
@@ -877,11 +862,20 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
 
             EquipPreview("shoes", yautja.GreavesPrototype);
             EquipPreview("gloves", yautja.BracerPrototype);
-            EquipPreview("back", yautja.CapePrototype);
+            EquipPreview("back", yautja.CapePrototype, cape => ApplyPreviewCapeColor(cape, yautja));
             EquipPreview("suitStorage", yautja.CasterPrototype);
         }
 
         _preview.SetEntity(_previewDummy);
+    }
+
+    private void ApplyPreviewCapeColor(EntityUid cape, YautjaCharacterProfile yautja)
+    {
+        if (!_entManager.TryGetComponent(cape, out YautjaCapeComponent? capeComp) || !capeComp.Recolorable)
+            return;
+
+        capeComp.Color = yautja.CapeColor;
+        _entManager.System<YautjaCapeVisualsSystem>().UpdateVisuals((cape, capeComp));
     }
 
     private EntityUid? EquipPreview(string slot, string prototype, Action<EntityUid>? beforeEquip = null)
@@ -1077,6 +1071,11 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             YautjaBracerMaterial.Swamp => "bracer1_swamp",
             YautjaBracerMaterial.Enforcer => "bracer1_enforcer",
             YautjaBracerMaterial.Collector => "bracer1_collector",
+            YautjaBracerMaterial.Shadow => "bracer1_shadow",
+            YautjaBracerMaterial.Knight => "bracer1_knight",
+            YautjaBracerMaterial.Seeker => "bracer1_seeker",
+            YautjaBracerMaterial.Serpent => "bracer1_serpent",
+            YautjaBracerMaterial.Xenobone => "bracer1_xenobone",
             _ => "bracer1_ebony",
         };
     }
@@ -1340,6 +1339,13 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 YautjaBracerMaterial.Swamp,
                 YautjaBracerMaterial.Enforcer,
                 YautjaBracerMaterial.Collector,
+                YautjaBracerMaterial.Shadow,
+                YautjaBracerMaterial.Knight,
+                YautjaBracerMaterial.Seeker,
+                YautjaBracerMaterial.Serpent,
+            ]),
+            ("cmu-yautja-profile-material-group-elite", [
+                YautjaBracerMaterial.Xenobone,
             ]),
         ];
     }
@@ -1371,11 +1377,11 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
         _bracerResponsiveGrids.Clear();
         _casterResponsiveGrids.Clear();
         RegisterResponsiveGrid(_skinGrid, 6);
-        RegisterResponsiveGrid(_eyeGrid, 7);
         RegisterResponsiveGrid(_dreadGrid, 7);
         RegisterResponsiveGrid(_quillGrid, 6);
-        RegisterResponsiveGrid(_legacyGrid, 4);
-        RegisterResponsiveGrid(_uniqueGrid, 4);
+        RegisterResponsiveGrid(_noSetGrid, 4);
+        RegisterResponsiveGrid(_ancientSetGrid, 4);
+        RegisterResponsiveGrid(_leaderSetGrid, 4);
         RegisterResponsiveGrid(_maskAccessoryGrid, 4);
         RegisterResponsiveGrid(_capeGrid, 4);
     }
@@ -1446,6 +1452,25 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
                 VisualBlock("cmu-yautja-lobby-bracer", _bracerSections),
                 VisualBlock("cmu-yautja-lobby-caster", _casterSections),
                 VisualBlock("cmu-yautja-lobby-cape", _capeGrid),
+                CapeColorBlock(),
+            },
+        };
+    }
+
+    private Control CapeColorBlock()
+    {
+        _capeColorHelp.FontColorOverride = Color.FromHex("#9c8f78");
+        return new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            HorizontalExpand = true,
+            Margin = new Thickness(0, 2, 0, 8),
+            SeparationOverride = 4,
+            Children =
+            {
+                new Label { Text = Loc.GetString("cmu-yautja-lobby-cape-color") },
+                _capeColorHelp,
+                _capeColor,
             },
         };
     }
@@ -1458,8 +1483,9 @@ public sealed partial class YautjaProfileEditor : ScrollContainer
             HorizontalExpand = true,
             Children =
             {
-                VisualBlock("cmu-yautja-lobby-legacy", _legacyGrid),
-                VisualBlock("cmu-yautja-lobby-unique", _uniqueGrid),
+                VisualBlock("cmu-yautja-lobby-no-set", _noSetGrid),
+                VisualBlock("cmu-yautja-lobby-ancient-sets", _ancientSetGrid),
+                VisualBlock("cmu-yautja-lobby-leader-sets", _leaderSetGrid),
             },
         };
     }

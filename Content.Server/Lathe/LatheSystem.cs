@@ -500,6 +500,11 @@ namespace Content.Server.Lathe
                 {
                     node.ValueRef.ItemsPrinted--;
                 }
+                // CMU14: this batch was queued after the in-flight item left the previous batch.
+                else
+                {
+                    node.ValueRef.ItemsRequested++;
+                }
 
                 component.CurrentRecipe = null;
             }

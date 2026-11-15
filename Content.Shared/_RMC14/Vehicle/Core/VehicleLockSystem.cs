@@ -495,11 +495,12 @@ public sealed partial class VehicleLockSystem : EntitySystem
 
         _popup.PopupEntity(msg, vehicle, popupType);
 
-        foreach (var session in Filter.Pvs(vehicle).Recipients)
-        {
-            if (session.AttachedEntity is { } viewer)
-                _popup.PopupCursor(msg, viewer, popupType);
-        }
+        // CMU14: cursor popups stamped the lock state on the screen of every player in doubled PVS range, no matter how far away.
+        // foreach (var session in Filter.Pvs(vehicle).Recipients)
+        // {
+        //     if (session.AttachedEntity is { } viewer)
+        //         _popup.PopupCursor(msg, viewer, popupType);
+        // }
     }
 
     private void StartBreakAlarm(EntityUid vehicle, VehicleLockComponent lockComp)

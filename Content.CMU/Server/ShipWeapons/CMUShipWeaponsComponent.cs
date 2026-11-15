@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.ShipWeapons;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
 namespace Content.Server.CMU14.ShipWeapons;
@@ -61,6 +62,28 @@ public sealed partial class CMUShipWeaponStrikeComponent : Component
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextShot;
+}
+
+[RegisterComponent, AutoGenerateComponentPause]
+[Access(typeof(CMUShipWeaponsSystem))]
+public sealed partial class CMUShipWeaponCloudSpreadComponent : Component
+{
+    [DataField(required: true)]
+    public ProtoId<CMUShipWeaponPrototype> Weapon;
+
+    public readonly HashSet<Vector2i> CoveredTiles = new();
+
+    public HashSet<Vector2i> Frontier = new();
+
+    public Dictionary<MapId, EntityUid> LevelFields = new();
+
+    public readonly List<EntityUid> Clouds = new();
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextSpread;
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan EndsAt;
 }
 
 [RegisterComponent, AutoGenerateComponentPause]

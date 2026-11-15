@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CrashLand;
+using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.CMU14.Fighter;
 using Content.Shared.CMU14.Vehicle.Open;
@@ -24,6 +25,7 @@ public sealed partial class CMUVehicleDropFlareSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedSupplyDropSystem _supplyDrop = default!;
+    [Dependency] private TechSystem _tech = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -74,6 +76,22 @@ public sealed partial class CMUVehicleDropFlareSystem : EntitySystem
                     _popup.PopupEntity(Loc.GetString("cmu-vehicle-drop-flare-covered"), uid, PopupType.SmallCaution);
 
                 flare.Warned = true;
+                continue;
+            }
+
+            if (flare.SupplyOption is { } supplyOption &&
+                !_tech.TryConsumeSharedSupply(flare.SupplyTeam, supplyOption, out var retryAfter))
+            {
+                LocId warning = retryAfter > TimeSpan.Zero
+                    ? "cmu-vehicle-drop-flare-cooldown"
+                    : "cmu-vehicle-drop-flare-limit";
+                if (flare.SupplyWarning != warning)
+                {
+                    _popup.PopupEntity(Loc.GetString(warning,
+                        ("minutes", (int) Math.Ceiling(retryAfter.TotalMinutes))), uid, PopupType.SmallCaution);
+                    flare.SupplyWarning = warning;
+                }
+
                 continue;
             }
 

@@ -1,0 +1,45 @@
+- type: entity
+  abstract: true
+  id: CMUMohawkApproachShadow
+  categories: [HideSpawnMenu]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: Sprite
+    drawdepth: HighFloorObjects
+    noRot: false
+    offset: 0.5,0
+    layers:
+    - state: deathfromabove
+      shader: CMUMohawkApproachShadow
+  - type: TimedDespawn
+    lifetime: 10
+  - type: MohawkLandingBorder
+
+- type: entity
+  parent: CMUMohawkApproachShadow
+  id: CMUMohawkOmahaApproachShadow
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/omaha/belly.rsi
+
+- type: entity
+  parent: CMUMohawkApproachShadow
+  id: CMUMohawkMidwayApproachShadow
+  components:
+  - type: Sprite
+    sprite: CMU14/Dropships/Mohawk/turf/midway/belly.rsi
+
+- type: entity
+  id: CMUMohawkApproachBeacon
+  categories: [HideSpawnMenu]
+  components:
+  - type: Transform
+    gridTraversal: false
+  - type: PointLight
+    color: "#33D9FF"
+    radius: 6
+    energy: 3
+    softness: 1
+    falloff: 2
+    castShadows: true

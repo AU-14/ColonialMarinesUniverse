@@ -37,20 +37,20 @@ public sealed class YautjaProfileCapabilities
     public YautjaProfileCapabilities(
         YautjaRank rank,
         bool canUseUnique,
-        bool canUseLegacy,
+        bool canUseAncientSets,
         bool canUseCouncilStatus = false,
         bool canUseLeaderStatus = false)
     {
         Rank = rank;
         CanUseUnique = canUseUnique;
-        CanUseLegacy = canUseLegacy;
+        CanUseAncientSets = canUseAncientSets;
         CanUseCouncilStatus = canUseCouncilStatus;
         CanUseLeaderStatus = canUseLeaderStatus;
     }
 
     public YautjaRank Rank { get; }
     public bool CanUseUnique { get; }
-    public bool CanUseLegacy { get; }
+    public bool CanUseAncientSets { get; }
     public bool CanUseCouncilStatus { get; }
     public bool CanUseLeaderStatus { get; }
 
@@ -73,15 +73,21 @@ public sealed class YautjaProfileCapabilities
         if (CanUseCouncilStatus)
             return YautjaProfileStatus.Council;
 
+        if (CanUseLeaderStatus)
+            return YautjaProfileStatus.Leader;
+
         return YautjaProfileStatus.Normal;
     }
 
     public YautjaRank ResolveRank(YautjaProfileStatus status)
     {
-        return status == YautjaProfileStatus.Normal &&
-               (CanUseCouncilStatus || CanUseLeaderStatus)
-            ? YautjaRank.Blooded
-            : Rank;
+        return status switch
+        {
+            YautjaProfileStatus.Normal when CanUseCouncilStatus || CanUseLeaderStatus => YautjaRank.Blooded,
+            // an Ancient who also holds the leader flag can still play as just a clan leader
+            YautjaProfileStatus.Leader when CanUseLeaderStatus => YautjaRank.Leader,
+            _ => Rank,
+        };
     }
 
     public YautjaProfileCapabilities ForStatus(YautjaProfileStatus status)
@@ -91,7 +97,7 @@ public sealed class YautjaProfileCapabilities
         return new(
             rank,
             YautjaRankResolver.CanUseUnique(rank),
-            CanUseLegacy,
+            CanUseAncientSets,
             CanUseCouncilStatus,
             CanUseLeaderStatus);
     }
@@ -99,31 +105,38 @@ public sealed class YautjaProfileCapabilities
     public bool CanUseCape(YautjaCapeStyle style)
     {
         return Enum.IsDefined(style) &&
-               (style != YautjaCapeStyle.Ceremonial ||
+               (style is not (YautjaCapeStyle.Ceremonial or YautjaCapeStyle.BoneCeremonial) ||
                 Rank is YautjaRank.Leader or YautjaRank.Ancient);
     }
 
+    // Ancient sets need the Council / Council Legacy whitelist, Leader sets need Clan Leader or Ancient rank.
+    // elites and elders get none, that's a CMU rule (cmss13 opens elite sets from Elite)
+    public bool CanUseSetLock(YautjaSetLock setLock)
+    {
+        return setLock switch
+        {
+            YautjaSetLock.Ancient => CanUseAncientSets,
+            YautjaSetLock.ClanLeader => CanUseUnique,
+            _ => false,
+        };
+    }
+
+    public bool CanUseUniqueSet(YautjaUniqueSet unique)
+    {
+        return Enum.IsDefined(unique) &&
+               (unique == YautjaUniqueSet.None || CanUseSetLock(YautjaCharacterProfile.GetSetLock(unique)));
+    }
+
+    // Every bracer skin is open to everyone.
     public bool CanUseBracer(YautjaBracerMaterial material)
     {
-        if (!Enum.IsDefined(material))
-            return false;
-
-        return material switch
-        {
-            YautjaBracerMaterial.Bronze or
-            YautjaBracerMaterial.Crimson or
-            YautjaBracerMaterial.Bone => Rank >= YautjaRank.Elite,
-            YautjaBracerMaterial.Dragon or
-            YautjaBracerMaterial.Swamp or
-            YautjaBracerMaterial.Enforcer or
-            YautjaBracerMaterial.Collector => CanUseLegacy,
-            _ => true,
-        };
+        return Enum.IsDefined(material);
     }
 
     public bool CanUseLegacySet(YautjaLegacySet legacy)
     {
-        return Enum.IsDefined(legacy) && (legacy == YautjaLegacySet.None || CanUseLegacy);
+        return Enum.IsDefined(legacy) &&
+               (legacy == YautjaLegacySet.None || CanUseSetLock(YautjaCharacterProfile.GetSetLock(legacy)));
     }
 
     public static YautjaProfileCapabilities Default =>
@@ -185,8 +198,8 @@ public static class YautjaRankMetadata
             YautjaRank.Unblooded => new YautjaRankInfo("cmu-yautja-rank-unblooded", "predhud", SecureAccess, false, false),
             YautjaRank.YoungBlood => new YautjaRankInfo("cmu-yautja-rank-youngblood", "predhud", SecureAccess, false, false),
             YautjaRank.Blooded => new YautjaRankInfo("cmu-yautja-rank-blooded", "predhud", SecureAccess, false, false),
-            YautjaRank.Elite => new YautjaRankInfo("cmu-yautja-rank-elite", "predhud", EliteAccess, true, false),
-            YautjaRank.Elder => new YautjaRankInfo("cmu-yautja-rank-elder", "predhud", ElderAccess, true, false),
+            YautjaRank.Elite => new YautjaRankInfo("cmu-yautja-rank-elite", "predhud", EliteAccess, false, false),
+            YautjaRank.Elder => new YautjaRankInfo("cmu-yautja-rank-elder", "predhud", ElderAccess, false, false),
             YautjaRank.Leader => new YautjaRankInfo("cmu-yautja-rank-leader", "leaderhud", LeaderAccess, true, true),
             YautjaRank.Ancient => new YautjaRankInfo("cmu-yautja-rank-ancient", "councilhud", AncientAccess, true, true),
             _ => new YautjaRankInfo("cmu-yautja-rank-blooded", "predhud", SecureAccess, false, false),

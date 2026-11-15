@@ -13,13 +13,14 @@ cmu-zlevel-shoot-down-no-gun = You need a gun in hand to aim down a Z-level.
 cmu-zlevel-shoot-down-requires-wield = You need to wield your gun before aiming down a Z-level.
 cmu-zlevel-shoot-down-no-level = There is no Z-level below to shoot into.
 cmu-zlevel-shoot-up-no-level = There is no Z-level above to shoot into.
-cmu-zlevel-shoot-down-blocked-floor = You need to be within 2 tiles of an edge or opening to shoot down.
-cmu-zlevel-shoot-up-blocked-floor = You need to be within 2 tiles of an edge or opening to shoot up.
+cmu-zlevel-shoot-down-blocked-floor = You need an edge or opening within 3 tiles along your line of fire to shoot down.
+cmu-zlevel-shoot-up-blocked-floor = You need an edge or opening within 3 tiles along your line of fire to shoot up.
 
 cmu-zlevel-voice-from-up = {$name} (from above)
 cmu-zlevel-voice-from-down = {$name} (from below)
 
 cmu-zlevel-ladder-no-level = The ladder doesn't continue there.
+cmu-zlevel-ladder-no-footing = You feel no secure footing at the other end and hold on. You stay where you are.
 cmu-zlevel-ladder-look-up = Look up
 cmu-zlevel-ladder-look-down = Look down
 cmu-zlevel-ladder-start-self = You start climbing the ladder.

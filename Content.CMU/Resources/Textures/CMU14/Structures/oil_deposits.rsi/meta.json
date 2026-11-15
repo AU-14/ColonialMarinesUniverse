@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "sprites provided by the project author (placeholders); the ore deposits painted black",
+  "size": {
+    "x": 16,
+    "y": 16
+  },
+  "states": [
+    {
+      "name": "oil1"
+    },
+    {
+      "name": "oil2"
+    },
+    {
+      "name": "oil3"
+    },
+    {
+      "name": "oil4"
+    },
+    {
+      "name": "oil5"
+    },
+    {
+      "name": "oil6"
+    },
+    {
+      "name": "oil7"
+    },
+    {
+      "name": "oil8"
+    },
+    {
+      "name": "oil9"
+    },
+    {
+      "name": "oil10"
+    }
+  ]
+}

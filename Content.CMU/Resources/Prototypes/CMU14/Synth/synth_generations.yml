@@ -1,0 +1,33 @@
+- type: cmuSynthGeneration
+  id: CMUSynthGeneration1
+  generationName: rmc-species-synth-generation-first
+  critThreshold: 250
+  deadThreshold: 300
+  damageModifier: RMCSynth
+  movementSpeedModifier: 0.85
+  skillLevelOffset: -1
+  frontalLeapBlockChance: 0.15
+
+- type: cmuSynthGeneration
+  id: CMUSynthGeneration2
+  generationName: rmc-species-synth-generation-second
+  critThreshold: 250
+  deadThreshold: 300
+  damageModifier: RMCSynth
+  movementSpeedModifier: 0.85
+  skillLevelOffset: -1
+  frontalLeapBlockChance: 0.15
+
+- type: cmuSynthGeneration
+  id: CMUSynthGeneration3
+  generationName: rmc-species-synth-generation-third
+  critThreshold: 200
+  deadThreshold: 250
+  damageModifier: CMUSynthAdvanced
+
+- type: cmuSynthGeneration
+  id: CMUSynthGeneration4
+  generationName: cmu-species-synth-generation-fourth
+  critThreshold: 200
+  deadThreshold: 250
+  damageModifier: CMUSynthAdvanced

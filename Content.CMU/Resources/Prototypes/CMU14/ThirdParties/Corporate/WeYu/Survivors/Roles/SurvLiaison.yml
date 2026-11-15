@@ -10,6 +10,7 @@
     - AUWeYu
   - type: Skills
     skills:
+      RMCSkillResearch: 1
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1

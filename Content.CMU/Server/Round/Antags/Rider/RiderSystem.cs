@@ -634,8 +634,9 @@ public sealed partial class RiderSystem : EntitySystem
             }
         }
 
-        // Ghost copies keep aghosts in the conversation; living crew get nothing
-        var ghosts = Filter.Empty().AddWhereAttachedEntity(HasComp<GhostComponent>);
+        // Ghost copies keep aghosts in the conversation; living crew get nothing.
+        // GhostHearingComponent so ghosts with global hearing muted opt out.
+        var ghosts = Filter.Empty().AddWhereAttachedEntity(HasComp<GhostHearingComponent>);
         _chat.ChatMessageToMany(shown,
             Loc.GetString("rider-whisper-ghost",
                 ("rider", ent.Owner),

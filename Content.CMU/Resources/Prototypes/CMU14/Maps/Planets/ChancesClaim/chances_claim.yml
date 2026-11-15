@@ -2,6 +2,8 @@
   id: AuPlanetChances
   name: Chances Claim
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Chances Claim"
     mapId: auchances
@@ -16,7 +18,6 @@
     - RMC
     - CMBCIU
     - HAZOPS
-    - ProdigySF
     platoonsOpfor:
     - LACN
     - UPP
@@ -86,7 +87,7 @@
   mapsAbove:
   - /Maps/CMU14/Planets/ChancesClaim/chances_above.yml
   minPlayers: 0
-  maxPlayers: 75
+  maxPlayers: 500
   maxRandomOffset: 0
   randomRotation: false
   stations:

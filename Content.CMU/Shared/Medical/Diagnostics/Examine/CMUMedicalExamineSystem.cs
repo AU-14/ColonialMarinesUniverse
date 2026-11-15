@@ -572,10 +572,10 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
     private static string DescribeBleedTier(ExternalBleedTier tier) => StaticLoc.GetString(tier switch
     {
-        ExternalBleedTier.Minor => "cmu-medical-scanner-bleed-tier-minor",
-        ExternalBleedTier.Moderate => "cmu-medical-scanner-bleed-tier-moderate",
-        ExternalBleedTier.Severe => "cmu-medical-scanner-bleed-tier-severe",
-        ExternalBleedTier.Arterial => "cmu-medical-scanner-bleed-tier-arterial",
+        ExternalBleedTier.Minor => "cmu-medical-examine-bleed-tier-minor",
+        ExternalBleedTier.Moderate => "cmu-medical-examine-bleed-tier-moderate",
+        ExternalBleedTier.Severe => "cmu-medical-examine-bleed-tier-severe",
+        ExternalBleedTier.Arterial => "cmu-medical-examine-bleed-tier-arterial",
         _ => "cmu-medical-examine-bleed-tier-none",
     });
 

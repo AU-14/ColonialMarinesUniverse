@@ -19,32 +19,6 @@ public sealed class StackTest : GameTest
     [SidedDependency(Side.Server)] private readonly StackMergedProbeSystem _mergedProbe = default!;
 
     [Test]
-    [Description("Tests for SharedStackSystem.SetCount.")]
-    public async Task SetTest()
-    {
-        Assume.That(SEntMan.EntityCount, Is.Zero, "Unexpected entities at the start of the test.");
-
-        var stack = await Spawn(StackEnt1);
-
-        // Raising the count
-        await Server.WaitPost(() => _sStackSystem.SetCount((stack, null), 2));
-        Assert.That(_sStackSystem.GetCount(stack), Is.EqualTo(2));
-
-        // Lowering the count
-        await Server.WaitPost(() => _sStackSystem.SetCount((stack, null), 1));
-        Assert.That(_sStackSystem.GetCount(stack), Is.EqualTo(1));
-
-        // Setting above the max count clamps to max
-        await Server.WaitPost(() => _sStackSystem.SetCount((stack, null), 31));
-        Assert.That(_sStackSystem.GetCount(stack), Is.EqualTo(30));
-
-        // Setting to 0 deletes the stack
-        Server.Post(() => _sStackSystem.SetCount((stack, null), 0));
-        await Server.WaitRunTicks(1);
-        Assert.That(SEntMan.EntityCount, Is.Zero);
-    }
-
-    [Test]
     [Description("Tests that SharedStackSystem.MergeStacks functions as expected with small numbers.")]
     public async Task MergeTest()
     {

@@ -7,7 +7,6 @@ public sealed partial class HumanoidProfileEditor
     private void InitializeForceOnForcePreferences()
     {
         TabContainer.SetTabTitle(ForceOnForceTabIndex, Loc.GetString("cmu-fof-tab"));
-        ForceOnForceTabs.SetTabTitle(0, Loc.GetString("cmu-fof-roles"));
         foreach (var side in Enum.GetValues<ForceOnForceSide>())
             FoFSideButton.AddItem(Loc.GetString($"cmu-fof-side-{side.ToString().ToLowerInvariant()}"), (int) side);
         foreach (var fallback in Enum.GetValues<ForceOnForceFallback>())
@@ -15,8 +14,12 @@ public sealed partial class HumanoidProfileEditor
 
         FoFSideButton.OnItemSelected += args =>
         {
+            if (args.Id < 0)
+                return;
             FoFSideButton.SelectId(args.Id);
             Profile = Profile?.WithForceOnForcePreferences((ForceOnForceSide) args.Id, Profile.FoFFallback);
+            RefreshJobs();
+            MarkPreviewJobsDirty();
             SetDirty();
         };
         FoFFallbackButton.OnItemSelected += args =>

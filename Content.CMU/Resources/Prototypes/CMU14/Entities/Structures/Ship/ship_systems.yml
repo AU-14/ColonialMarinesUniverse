@@ -114,15 +114,19 @@
       - !type:PlaySoundBehavior
         sound:
           collection: WindowShatter
+      # The frame takes the window's exact tile, debris still scatters.
+      - !type:SpawnEntitiesBehavior
+        offset: 0
+        spawn:
+          RMCWindowFrameAlmayer:
+            min: 1
+            max: 1
       - !type:SpawnEntitiesBehavior
         spawn:
           CMShardGlass:
             min: 1
             max: 1
           CMRodMetal:
-            min: 1
-            max: 1
-          RMCWindowFrameAlmayer:
             min: 1
             max: 1
       - !type:DoActsBehavior

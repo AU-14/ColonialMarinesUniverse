@@ -31,12 +31,13 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
 
     private readonly Dictionary<(EntityUid Vehicle, EntityUid Sprite, string Layer), Rims> _rims = new();
     private readonly List<(EntityUid Vehicle, EntityUid Sprite, string Layer)> _stale = new();
+    private readonly Dictionary<(string State, int PrefixLength), string> _stateNames = new();
 
     private sealed class Rims(ShaderInstance shader)
     {
         public readonly ShaderInstance Shader = shader;
         public CMURimDesignPrototype? Design;
-        public readonly List<Color> Colors = new();
+        public (Color Base, Color Accent, Color Lip, Color Cap)? Colors;
         public float Dirt = -1f;
     }
 
@@ -107,20 +108,35 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     /// </summary>
     private string? MapState(RSI rsi, string state)
     {
-        if (rsi.TryGetState(MapPrefix + state, out _))
-            return MapPrefix + state;
+        var mapped = GetStateName(state, 0);
+        if (rsi.TryGetState(mapped, out _))
+            return mapped;
 
         foreach (var tyre in _prototypes.EnumeratePrototypes<CMUVehicleTyrePrototype>())
         {
-            if (tyre.StatePrefix.Length > 0 &&
-                state.StartsWith(tyre.StatePrefix) &&
-                rsi.TryGetState(MapPrefix + state[tyre.StatePrefix.Length..], out _))
-            {
-                return MapPrefix + state[tyre.StatePrefix.Length..];
-            }
+            if (tyre.StatePrefix.Length == 0 || !state.StartsWith(tyre.StatePrefix))
+                continue;
+
+            mapped = GetStateName(state, tyre.StatePrefix.Length);
+            if (rsi.TryGetState(mapped, out _))
+                return mapped;
         }
 
         return null;
+    }
+
+    private string GetStateName(string state, int prefixLength)
+    {
+        var key = (state, prefixLength);
+        if (_stateNames.TryGetValue(key, out var name))
+            return name;
+
+        // Cache names only: RSI contents and tyre prototypes remain live across reloads.
+        if (_stateNames.Count >= 256)
+            _stateNames.Clear();
+        name = MapPrefix + state[prefixLength..];
+        _stateNames.Add(key, name);
+        return name;
     }
 
     private void Mirror(
@@ -156,7 +172,7 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
                 continue;
             }
 
-            var rims = Update((vehicle, ent.Owner, key), design, Colors(wheels.Value.Comp, design), dirt);
+            var rims = Update((vehicle, ent.Owner, key), design, ColorValues(wheels.Value.Comp, design), dirt);
             if (_sprite.LayerGetRsiState(ent.AsNullable(), index) != state)
                 _sprite.LayerSetRsiState(ent.AsNullable(), index, state);
 
@@ -176,7 +192,7 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     private Rims Update(
         (EntityUid Vehicle, EntityUid Sprite, string Layer) key,
         CMURimDesignPrototype design,
-        List<Color> colors,
+        (Color Base, Color Accent, Color Lip, Color Cap) colors,
         float dirt)
     {
         if (!_rims.TryGetValue(key, out var rims))
@@ -206,14 +222,13 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
             rims.Design = design;
         }
 
-        if (!rims.Colors.SequenceEqual(colors))
+        if (rims.Colors != colors)
         {
-            shader.SetParameter("baseColor", colors[0]);
-            shader.SetParameter("accentColor", colors[1]);
-            shader.SetParameter("lipColor", colors[2]);
-            shader.SetParameter("capColor", colors[3]);
-            rims.Colors.Clear();
-            rims.Colors.AddRange(colors);
+            shader.SetParameter("baseColor", colors.Base);
+            shader.SetParameter("accentColor", colors.Accent);
+            shader.SetParameter("lipColor", colors.Lip);
+            shader.SetParameter("capColor", colors.Cap);
+            rims.Colors = colors;
         }
 
         if (!MathHelper.CloseTo(rims.Dirt, dirt))
@@ -230,13 +245,18 @@ public sealed class CMUVehicleRimVisualSystem : EntitySystem
     /// </summary>
     public static List<Color> Colors(CMUVehicleWheelPaintComponent wheels, CMURimDesignPrototype design)
     {
-        var colors = new List<Color> { wheels.Color };
-        if (wheels.RimColors.Count == 3)
-            colors.AddRange(wheels.RimColors);
-        else
-            colors.AddRange(new[] { design.Accent, design.LipColor, design.CapColor });
+        var colors = ColorValues(wheels, design);
+        // List collection expressions emit CollectionsMarshal.SetCount, which the sandbox disallows.
+        return new List<Color> { colors.Base, colors.Accent, colors.Lip, colors.Cap };
+    }
 
-        return colors;
+    private static (Color Base, Color Accent, Color Lip, Color Cap) ColorValues(
+        CMUVehicleWheelPaintComponent wheels,
+        CMURimDesignPrototype design)
+    {
+        return wheels.RimColors.Count == 3
+            ? (wheels.Color, wheels.RimColors[0], wheels.RimColors[1], wheels.RimColors[2])
+            : (wheels.Color, design.Accent, design.LipColor, design.CapColor);
     }
 
     /// <summary>

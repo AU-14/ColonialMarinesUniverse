@@ -18,11 +18,17 @@ public sealed partial class ActiveInvisibleSystem : EntitySystem
 
     private void OnInvisibleComponentAdd(Entity<EntityActiveInvisibleComponent> entity, ref ComponentAdd args)
     {
+        // CMU14: the yautja optical cloak relay listens on this lifecycle. Without the raise, any
+        // decloak that bypasses the bracer (thermal harness unequip, passive stealth) never ends the sweep.
+        var enabled = new ActiveInvisibleToggledEvent(true);
+        RaiseLocalEvent(entity.Owner, ref enabled);
         _evasionSystem.RefreshEvasionModifiers(entity.Owner);
     }
 
     private void OnInvisibleComponentRemove(Entity<EntityActiveInvisibleComponent> entity, ref ComponentRemove args)
     {
+        var disabled = new ActiveInvisibleToggledEvent(false);
+        RaiseLocalEvent(entity.Owner, ref disabled);
         _evasionSystem.RefreshEvasionModifiers(entity.Owner);
     }
 

@@ -1,10 +1,16 @@
+using Robust.Shared.Random;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Audio;
 using System.Linq;
+using Content.Server.Chat.Systems;
+using Content.Shared.Chat.Prototypes;
 using Content.Server.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
+using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Yautja;
@@ -27,14 +33,30 @@ namespace Content.Server.CMU14.Yautja;
 /// </summary>
 public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
 {
+    // CM-SS13 mcomp_tendwounds.dm:192-195 - the patient roars with "loudroar" if Yautja, otherwise emotes "pain".
+    private static readonly ProtoId<EmotePrototype> YautjaLoudRoarEmote = "CMUYautjaLoudRoar";
+    // CM emotes "pain" here; this codebase has no generic pain emote (CMUYautjaPain is Yautja-only), so the nearest
+    // audible equivalent is Scream - a non-Yautja patient still vocalises, which is what the reference does.
+    private static readonly ProtoId<EmotePrototype> PainEmote = "Scream";
+
+    // loudroar's get_sound() picks from pred_roar4/5/6 at volume 60 (species/yautja/yautja_sound.dm:86-87).
+    private static readonly SoundSpecifier[] LoudRoarSounds =
+    [
+        new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar4.wav"),
+        new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar5.wav"),
+        new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar6.wav"),
+    ];
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedOrganHealthSystem _organHealth = default!;
+    [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private CMUSurgerySystem _surgery = default!;
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
-    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private ChatSystem _chat = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -42,7 +64,10 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
+    // cmss13 Slow(300) / Superslow(150) on stabilize and tend, ticked down every 2s life tick. only the clamp
+    // clears it, so a pred can't tend early, walk off and bank the clamp's full heal for later
     private static readonly TimeSpan MedicompSlowdownDuration = TimeSpan.FromMinutes(10);
+    private static readonly TimeSpan MedicompSuperSlowdownDuration = TimeSpan.FromMinutes(5);
 
     public override void Initialize()
     {
@@ -96,6 +121,8 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
             foreach (var (part, _) in _medicalIndex.GetBodyParts(args.Body))
             {
                 if (!HasComp<CMUEscharComponent>(part)
+                    && (!TryComp<BodyPartWoundComponent>(part, out var wounds) || _woundLedger.GetEntries(wounds).Count == 0)
+                    && (!TryComp<BodyPartHealthComponent>(part, out var health) || health.Current >= health.Max)
                     && !HasComp<InternalBleedingComponent>(part)
                     && !HasComp<CMUSurgicalInternalBleedingComponent>(part)
                     && _surgicalTraits.CountTraits(part) == 0)
@@ -165,8 +192,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
             _organHealth.HealOrgan((organ.Owner, health), args.Body, health.Max);
         }
 
-        _slow.TrySlowdown(args.Body, MedicompSlowdownDuration);
-        _slow.TrySuperSlowdown(args.Body, MedicompSlowdownDuration);
+        ApplyMedicompSlowdown(args.Body);
 
         // Keep master's deep repairs in the authoritative surgery completion,
         // so the healing capsule and session checks also apply to these wounds.
@@ -182,6 +208,7 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
         EnsureComp<CMUYautjaMedicompTreatedComponent>(args.Part);
         gun.Comp.Loaded = false;
         Dirty(gun);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-medicomp-treated"), args.Body, args.User);
     }
 
     private void OnClamp(Entity<CMUYautjaMedicompClampStepComponent> ent, ref CMSurgeryStepEvent args)
@@ -195,8 +222,9 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
 
         foreach (var (part, _) in _medicalIndex.GetBodyParts(args.Body))
         {
-            _wounds.StopSurfaceBleedingOnPart(part);
-            _woundLedger.TryUpdateExternalBleeding(part, ExternalBleedTier.None);
+            _wounds.ClearAllWounds(part);
+            if (TryComp<BodyPartHealthComponent>(part, out var health))
+                _partHealth.SetCurrent((part, health), health.Max);
             // CMSS13's clamp returns the selected defense zone to surface
             // depth. In CMU that is represented by removing the open-incision
             // markers and suppressing only the surgical bleed source.
@@ -208,6 +236,22 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
         }
 
         RemComp<CMUYautjaMedicompTreatedComponent>(args.Part);
+
+        // CM-SS13 roars loudly when a Yautja's treatment is clamped shut, and a non-Yautja patient emotes pain
+        // (mcomp_tendwounds.dm:192-195). This runs from the successful step callback only, so an interrupted or failed
+        // surgery stays silent.
+        if (TerminatingOrDeleted(args.Body))
+            return;
+
+        if (HasComp<YautjaComponent>(args.Body))
+        {
+            _audio.PlayPvs(_random.Pick(LoudRoarSounds), args.Body);
+            _chat.TryEmoteWithChat(args.Body, YautjaLoudRoarEmote);
+        }
+        else
+        {
+            _chat.TryEmoteWithChat(args.Body, PainEmote);
+        }
     }
 
     private void ApplyGroupHeal(EntityUid body, int amount)
@@ -253,21 +297,21 @@ public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
     /// </summary>
     private void ApplyMedicompSlowdown(EntityUid body)
     {
-        // CMU14: RMCSlowSystem refuses to slow a regular Yautja, and the medicomp patient is normally a
-        // Yautja hunter, so the procedure has to drive the slow components itself. The clamp step clears them.
-        var expire = _timing.CurTime + MedicompSlowdownDuration;
+        // Medicomp slowdown is part of treatment, so apply it independently of combat slow resistance.
+        // Repeated steps extend the timers; only the clamp clears both effects early.
+        var now = _timing.CurTime;
 
         var slow = EnsureComp<RMCSlowdownComponent>(body);
-        if (expire > slow.ExpiresAt)
+        if (now + MedicompSlowdownDuration > slow.ExpiresAt)
         {
-            slow.ExpiresAt = expire;
+            slow.ExpiresAt = now + MedicompSlowdownDuration;
             Dirty(body, slow);
         }
 
         var super = EnsureComp<RMCSuperSlowdownComponent>(body);
-        if (expire > super.ExpiresAt)
+        if (now + MedicompSuperSlowdownDuration > super.ExpiresAt)
         {
-            super.ExpiresAt = expire;
+            super.ExpiresAt = now + MedicompSuperSlowdownDuration;
             Dirty(body, super);
         }
     }

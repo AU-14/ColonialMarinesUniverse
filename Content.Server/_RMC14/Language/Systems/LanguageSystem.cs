@@ -155,6 +155,18 @@ public sealed partial class LanguageSystem : SharedLanguageSystem
         UpdateEntityLanguages(ent.Owner);
     }
 
+    // cmu edit start: lets CMU systems pick the language a character speaks by default
+    public void SetDefaultLanguage(Entity<LanguageComponent?> ent, ProtoId<LanguagePrototype> language)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ent.Comp.DefaultLanguage = language;
+        if (!TryFixCurrentLanguage(ent))
+            Dirty(ent);
+    }
+    // cmu edit end
+
     public bool TryFixCurrentLanguage(Entity<LanguageComponent?> ent)
     {
         if (!Resolve(ent, ref ent.Comp, false))

@@ -2040,6 +2040,63 @@
     slots:
     - Mask
     - Suitstorage
+
+# cmss13 thrall half-mask, same mask with a different sprite
+- type: entity
+  parent: CMUYautjaMaskThrallEbony
+  id: CMUYautjaMaskThrallAltEbony
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_ebony.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_ebony.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallSilver
+  id: CMUYautjaMaskThrallAltSilver
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_silver.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_silver.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallGold
+  id: CMUYautjaMaskThrallAltGold
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_gold.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_gold.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallCrimson
+  id: CMUYautjaMaskThrallAltCrimson
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_crimson.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_crimson.rsi
+
+- type: entity
+  parent: CMUYautjaMaskThrallBone
+  id: CMUYautjaMaskThrallAltBone
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/thrallmask_alt_bone.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/thrallmask_alt_bone.rsi
+
 - type: entity
   parent: CMUYautjaMaskFunctionalBase
   id: CMUYautjaBadBloodMaskBase
@@ -2066,6 +2123,7 @@
     isCorrodible: false
   - type: YautjaMask
     requiresYautjaWearer: false
+    allowAnyWearer: false
     drain: 3
     drainEvery: 2
     zoomLevel: 1.6
@@ -2084,8 +2142,9 @@
     sprite: CMU14/Yautja/masks/pred_mask_elite_anubys.rsi
     layers:
     - state: icon
+  # cmss13 draws this mask from a 64x64 sheet, the 32x32 copy cut the top off
   - type: Clothing
-    sprite: CMU14/Yautja/masks/pred_mask_elite_anubys.rsi
+    sprite: CMU14/Yautja/masks/pred_mask_elite_anubys_worn.rsi
     slots:
     - Mask
     - Suitstorage
@@ -2132,8 +2191,158 @@
     sprite: CMU14/Yautja/masks/pred_mask_elite_ronin.rsi
     layers:
     - state: icon
+  # cmss13 draws this mask from a 64x64 sheet, the 32x32 copy cut the top off
   - type: Clothing
-    sprite: CMU14/Yautja/masks/pred_mask_elite_ronin.rsi
+    sprite: CMU14/Yautja/masks/pred_mask_elite_ronin_worn.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacyShadow
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_collector_dark.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_collector_dark.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacyKnight
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_knight.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_knight.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacySeeker
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_seeker.rsi
+    layers:
+    - state: icon
+  # cmss13 draws this mask from a 64px sheet
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_seeker_worn.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskLegacySerpent
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_serpent.rsi
+    layers:
+    - state: icon
+  # cmss13 draws this mask from a 64px sheet
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_legacy_serpent_worn.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskUniqueSeekerInitiate
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_elite_seeker_a.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_elite_seeker_a.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskUniqueSeekerAdept
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_elite_seeker_b.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_elite_seeker_b.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskUniqueDefender
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_elite_xenobone_d.rsi
+    layers:
+    - state: icon
+  # cmss13 draws this mask from a 64px sheet
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_elite_xenobone_d_worn.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskUniqueWarrior
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_elite_xenobone_w.rsi
+    layers:
+    - state: icon
+  # cmss13 draws this mask from a 64px sheet
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_elite_xenobone_w_worn.rsi
+    slots:
+    - Mask
+    - Suitstorage
+
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaMaskUniquePraetorian
+  name: clan mask
+  description: A beautifully designed metallic face mask, both ornate and functional.
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/masks/pred_mask_lead_xenobone_p.rsi
+    layers:
+    - state: icon
+  # cmss13 draws this mask from a 64px sheet
+  - type: Clothing
+    sprite: CMU14/Yautja/masks/pred_mask_lead_xenobone_p_worn.rsi
     slots:
     - Mask
     - Suitstorage

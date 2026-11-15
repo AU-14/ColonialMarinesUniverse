@@ -1,0 +1,6 @@
+- type: soundCollection
+  id: CMUAlienClawMetal
+  files:
+  - /Audio/CMU14/Yautja/alien_claw_metal1.ogg
+  - /Audio/CMU14/Yautja/alien_claw_metal2.ogg
+  - /Audio/CMU14/Yautja/alien_claw_metal3.ogg

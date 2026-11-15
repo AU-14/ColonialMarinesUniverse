@@ -1,0 +1,28 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Health analyzers keep updating their open readings after being put down.
+  type: Fix
+- message: Steam mole readouts no longer show excessive decimal digits.
+  type: Fix
+- message: Cutters can make large beakers and electronics kits using their circuit
+    selector.
+  type: Fix
+- message: P90s accept rail flashlights, and New Colonist no longer inherits police
+    eligibility requirements.
+  type: Fix
+- message: Chemistry hotplates can be purchased through Research requisitions.
+  type: Add
+- message: Narrowed the UPP fighter collision width.
+  type: Tweak
+- message: Improved baguette storage alignment and facial hair hiding under raised
+    scarves.
+  type: Fix
+- message: Delayed respawns no longer remove revived or replacement bodies.
+  type: Fix
+- message: Researched Yautja surgery access requires wearing the unlocked bracer.
+  type: Fix
+- message: Ladders reject destinations that become blocked during a climb.
+  type: Fix
+time: '2026-11-05T12:37:57.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2477

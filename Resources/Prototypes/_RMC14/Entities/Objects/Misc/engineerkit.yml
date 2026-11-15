@@ -61,7 +61,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
     - id: CMAPCElectronics
       amount: 3
     - id: RMCPowerCellAPC

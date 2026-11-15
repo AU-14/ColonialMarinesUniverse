@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/obj/items/hunter/pred_gear.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/pred_gear.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/items_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/items_righthand.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "falcon_drone"
+    },
+    {
+      "name": "falcon_drone_badblood"
+    },
+    {
+      "name": "falcon_drone_active",
+      "directions": 4
+    },
+    {
+      "name": "falcon_drone_badblood_active",
+      "directions": 4
+    },
+    {
+      "name": "falcon_drone_destroyed"
+    },
+    {
+      "name": "falcon_drone_emped"
+    },
+    {
+      "name": "equipped-EARS",
+      "directions": 4
+    },
+    {
+      "name": "badblood-equipped-EARS",
+      "directions": 4
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    }
+  ]
+}

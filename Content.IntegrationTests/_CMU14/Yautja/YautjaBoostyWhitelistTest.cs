@@ -87,10 +87,8 @@ public sealed class YautjaBoostyWhitelistTest
         await pair.Server.WaitPost(() =>
         {
             pair.Server.CfgMan.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, false);
-            pair.Server.CfgMan.SetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds, 1);
-            pair.Server.CfgMan.SetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds, 1);
-            pair.Server.CfgMan.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, true);
             ticker.RestartRound();
+            Assert.That(pair.Server.System<YautjaPredatorRoundSystem>().TryInitializePredatorRound(out _), Is.True);
             ticker.ToggleReadyAll(true);
             ticker.StartRound();
         });

@@ -287,3 +287,77 @@
   id: CMUYautjaTileHunterFloorsBorderlessH
   name: tiles-cmu-legacy-yautja-floor-borderless-h
   sprite: "/Textures/CMU14/Tiles/Yautja/hunter_floors/borderless_h.png"
+
+# lodge floors, built from runed sandstone (lodge_recipes.yml)
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleFloor
+  name: tiles-cmu-yautja-temple-floor
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/floor.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDecoSquareVertical
+  name: tiles-cmu-yautja-temple-deco-square-vertical
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/deco_square_vertical.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDecoSquareHorizontal
+  name: tiles-cmu-yautja-temple-deco-square-horizontal
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/deco_square_horizontal.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDecoDiamond
+  name: tiles-cmu-yautja-temple-deco-diamond
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/deco_diamond.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDecoPatternVertical
+  name: tiles-cmu-yautja-temple-deco-pattern-vertical
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/deco_pattern_vertical.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDecoPatternHorizontal
+  name: tiles-cmu-yautja-temple-deco-pattern-horizontal
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/deco_pattern_horizontal.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDarkDecoSquareVertical
+  name: tiles-cmu-yautja-temple-dark-deco-square-vertical
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/dark_deco_square_vertical.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDarkDecoSquareHorizontal
+  name: tiles-cmu-yautja-temple-dark-deco-square-horizontal
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/dark_deco_square_horizontal.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDarkDecoDiamond
+  name: tiles-cmu-yautja-temple-dark-deco-diamond
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/dark_deco_diamond.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDarkDecoPatternVertical
+  name: tiles-cmu-yautja-temple-dark-deco-pattern-vertical
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/dark_deco_pattern_vertical.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleDarkDecoPatternHorizontal
+  name: tiles-cmu-yautja-temple-dark-deco-pattern-horizontal
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/dark_deco_pattern_horizontal.png"
+
+- type: tile
+  parent: CMUYautjaHunterFloorBase
+  id: CMUYautjaTileTempleEngraved
+  name: tiles-cmu-yautja-temple-engraved
+  sprite: "/Textures/CMU14/Tiles/Yautja/temple/engraved.png"

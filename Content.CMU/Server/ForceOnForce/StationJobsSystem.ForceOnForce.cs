@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.CMU14.ForceOnForce;
+using Content.Server.CMU14.Lobby;
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
@@ -53,20 +54,21 @@ public sealed partial class StationJobsSystem
         var expanded = new Dictionary<NetUserId, HumanoidCharacterProfile>();
         foreach (var (player, profile) in profiles)
         {
+            var effectiveProfile = EntityManager.System<CMUEventAccessSystem>().GetEffectiveProfile(player, profile);
             var priorities = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
             foreach (var (id, _, side) in jobs)
             {
                 var job = ProtoMan.Index(id);
                 if (!EntityManager.System<ForceOnForceRespawnSystem>().CanJoinSide(player, side))
                     continue;
-                var cost = GetForceOnForceJobCost(profile, job);
+                var cost = GetForceOnForceJobCost(effectiveProfile, job);
                 if (cost == null || _gameTicker.ResolveProfileForAllegiance(player, profile, id.Id) == null) continue;
                 // Resolve character eligibility before balancing; candidate events then enforce
                 // playtime, whitelists, bans, and antag exclusions.
                 priorities[id] = JobPriority.Low;
                 costs[(player, id)] = cost.Value;
             }
-            expanded[player] = profile.WithJobPriorities(priorities);
+            expanded[player] = effectiveProfile.WithJobPriorities(priorities);
         }
         var eligible = GetJobCandidates(expanded);
         var players = profiles.Keys.ToList();
@@ -91,13 +93,7 @@ public sealed partial class StationJobsSystem
 
     private int? GetForceOnForceJobCost(HumanoidCharacterProfile profile, JobPrototype job)
     {
-        var desired = profile.FoFSide switch
-        {
-            ForceOnForceSide.Govfor => RoundJobSide.Govfor,
-            ForceOnForceSide.Opfor => RoundJobSide.Opfor,
-            _ => RoundJobSide.None,
-        };
-        var otherSide = desired != RoundJobSide.None && job.RoundSide != desired;
+        var otherSide = profile.IsForceOnForceOtherSide(job);
         if (otherSide && !profile.FoFFallback.HasFlag(ForceOnForceFallback.OtherSide)) return null;
 
         var priority = profile.GetForceOnForceJobPriority(job, ProtoMan);

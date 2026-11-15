@@ -92,6 +92,20 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.5 # XENO_SPEED_TIER_10
     baseSprintSpeed: 8.0
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.3
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.3
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.1
+      whitelist:
+        components:
+        - XenoHeavy
   - type: MeleeWeapon
     attackRate: 2.5 # attack_delay = -4 in CM13
     damage:

@@ -1,3 +1,4 @@
+using Content.Server.Administration.Logs; // CMU14: teleport links in admin notifications
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
@@ -24,6 +25,7 @@ namespace Content.Server._RMC14.Telephone;
 public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 {
     [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!; // CMU14: teleport links in admin notifications
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private CommunicationsTowerSystem _communicationsTower = default!;
@@ -118,6 +120,11 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
         if (TryComp<RotaryPhoneComponent>(ev.Receiving, out var phone) && phone.NotifyAdmins)
         {
             _chatManager.SendAdminAnnouncement(Loc.GetString("admin-call-incoming", ("actor", Name(ev.Actor)), ("from", Name(ev.Calling)), ("to", ToPrettyString(ev.Receiving))));
+
+            // CMU14: teleport links to the caller and the called phone
+            if (_adminLog.CreateTpLinks(Loc.GetString("admin-call-teleport-header"),
+                    [(ev.Actor, Name(ev.Actor)), (ev.Receiving, Name(ev.Receiving))], out var tpLinks))
+                _chatManager.SendAdminAnnouncementNoFormatOrEscape(tpLinks);
         }
     }
 

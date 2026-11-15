@@ -1,0 +1,53 @@
+# A small mine for the clay levels: two rooms of the vanilla mineshaft joined by a corridor.
+- type: dungeonPreset
+  id: RUMCSmallMine
+  roomPacks:
+    - 0,0,17,17
+    - 20,0,37,17
+
+- type: dungeonConfig
+  id: RUMCSmallMineshaft
+  layers:
+  - !type:PrefabDunGen
+    roomWhitelist:
+      tags:
+      - Mineshaft
+    presets:
+    - RUMCSmallMine
+
+  - !type:CorridorDunGen
+    width: 3
+    tile: FloorCave
+
+  - !type:DungeonEntranceDunGen
+    count: 2
+    tile: FloorCave
+    contents: BaseWoodWall
+
+  - !type:RoomEntranceDunGen
+    tile: FloorCave
+    contents: BaseWoodWall
+
+  - !type:EntranceFlankDunGen
+    tile: FloorCave
+    contents: BaseWoodWall
+
+  - !type:ExternalWindowDunGen
+    tile: FloorCave
+    contents: BaseWoodWall
+
+  - !type:JunctionDunGen
+    width: 1
+    tile: FloorCave
+    contents: BaseWoodSupport
+
+  - !type:JunctionDunGen
+    width: 3
+    tile: FloorCave
+    contents: BaseWoodSupport
+
+  - !type:AutoCablingDunGen
+    entity: Catwalk
+
+  - !type:CornerClutterDunGen
+    contents: MineshaftClutter

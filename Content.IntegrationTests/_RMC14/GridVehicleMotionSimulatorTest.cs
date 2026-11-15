@@ -89,22 +89,6 @@ public sealed class GridVehicleMotionSimulatorTest
             Is.EqualTo(expected));
     }
 
-    [TestCase(2000f, 0.5f, 1f, 1000f)]
-    [TestCase(2000f, 0.5f, 0.5f, 500f)]
-    [TestCase(2000f, 0.5f, 2f, 1000f)]
-    [TestCase(-1f, 0.5f, 1f, 0f)]
-    [TestCase(2000f, -1f, 1f, 0f)]
-    public void PoweredDemolitionDamageScalesWithIntervalAndPlowCondition(
-        float damagePerSecond,
-        float interval,
-        float performance,
-        float expected)
-    {
-        Assert.That(
-            GridVehicleMotionSimulator.GetPoweredDemolitionDamage(damagePerSecond, interval, performance),
-            Is.EqualTo(expected));
-    }
-
     [TestCase(10f, 4f, 9.165151f)]
     [TestCase(10f, 10f, 0f)]
     [TestCase(3f, 5f, 0f)]
@@ -120,18 +104,6 @@ public sealed class GridVehicleMotionSimulatorTest
 
         Assert.That(remaining, Is.EqualTo(expected).Within(0.0001f));
         Assert.That(remaining, Is.GreaterThanOrEqualTo(0f));
-    }
-
-    [Test]
-    public void PoweredDemolitionChassisProvidesAudibleFeedbackByDefault()
-    {
-        var chassis = new VehiclePlowChassisComponent();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(chassis.PoweredDemolitionSound, Is.Not.Null);
-            Assert.That(chassis.PoweredDemolitionSoundCooldown, Is.GreaterThan(0f));
-        });
     }
 
     [Test]

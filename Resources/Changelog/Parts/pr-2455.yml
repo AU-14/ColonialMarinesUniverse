@@ -1,0 +1,8 @@
+author: maertayn
+category: CMU
+changes:
+- message: Colony land enforcement is off by default now; servers can turn it back
+    on with cmu.land_enforcement
+  type: Tweak
+time: '2026-11-03T23:13:08.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2455

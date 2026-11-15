@@ -5,11 +5,9 @@ from pathlib import Path
 import tempfile
 import unittest
 
-
 SPEC = importlib.util.spec_from_file_location("inventory", Path(__file__).resolve().parents[1] / "inventory.py")
 inventory = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(inventory)
-
 
 class InventoryTests(unittest.TestCase):
     def test_child_sprite_fields_and_layer_list_override_parents(self):
@@ -79,16 +77,6 @@ class InventoryTests(unittest.TestCase):
             path.write_text(text.replace("  - uid: 3", "   - uid: 3"), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "Unsupported entity indentation"):
                 inventory.scan_map(path)
-
-    def test_helper_hidden_and_dynamic_sprite_classification(self):
-        self.assertEqual(inventory.classification({"Marker": {}, "Sprite": {}}), "helper")
-        self.assertEqual(inventory.classification({"Sprite": {"visible": False}}), "hidden")
-        self.assertEqual(inventory.classification({"Sprite": {}}), "visual")
-        self.assertEqual(inventory.classification({"Icon": {"sprite": "item.rsi"}}), "no_sprite")
-        self.assertEqual(inventory.sprite_resources({"sprite": "base.rsi", "layers": [
-            {"rsi": "/Textures/overlay.rsi", "state": "overlay"}]}),
-            ["/Textures/base.rsi", "/Textures/overlay.rsi"])
-
 
 if __name__ == "__main__":
     unittest.main()

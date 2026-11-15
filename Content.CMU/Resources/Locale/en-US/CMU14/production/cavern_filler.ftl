@@ -1,0 +1,16 @@
+ent-CMUCavernShale = shale fragments
+    .desc = Thin plates of fractured stone.
+ent-CMUCavernCalcite = calcite fan
+    .desc = Pale mineral ridges spread across the rock.
+ent-CMUCavernLimestone = limestone knobs
+    .desc = Rounded deposits sculpted by dripping water.
+ent-CMUCavernSilt = silt bank
+    .desc = A shallow bank of sediment left by receding water.
+ent-CMUCavernRootTangle = buried root tangle
+    .desc = Twisted roots preserved in the dry cave air.
+ent-CMUCavernFungalMat = collapsed fungal mat
+    .desc = A flattened carpet of old fungal growth.
+ent-CMUCavernIronCrust = iron-stained crust
+    .desc = Rust-coloured mineral veins stain the cave floor.
+ent-CMUCavernScoria = volcanic clinker
+    .desc = Rough fragments of cooled volcanic rock.

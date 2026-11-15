@@ -154,7 +154,8 @@ namespace Content.Client.Verbs
 
             for (var i = entities.Count - 1; i >= 0; i--)
             {
-                if (_tagSystem.HasTag(entities[i], HideContextMenuTag))
+                if (_tagSystem.HasTag(entities[i], HideContextMenuTag) &&
+                    !CMUShowHiddenInMenu(player, entities[i])) // CMU14
                     entities.RemoveSwap(i);
             }
 

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprite of the transformer provided by the project author",
+  "size": {
+    "x": 30,
+    "y": 29
+  },
+  "states": [
+    {
+      "name": "transformer"
+    }
+  ]
+}

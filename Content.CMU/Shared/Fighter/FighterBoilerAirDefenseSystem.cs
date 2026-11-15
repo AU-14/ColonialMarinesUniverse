@@ -18,6 +18,7 @@ public sealed partial class FighterBoilerAirDefenseSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<XenoBombardComponent, MapInitEvent>(OnBoilerInit);
+        SubscribeLocalEvent<XenoBombardComponent, ComponentShutdown>(OnBombardShutdown);
         SubscribeLocalEvent<FighterBoilerAirDefenseComponent, FighterBoilerWatchAirspaceEvent>(OnWatch);
         SubscribeLocalEvent<FighterBoilerAirDefenseComponent, ComponentShutdown>(OnShutdown);
     }
@@ -28,6 +29,15 @@ public sealed partial class FighterBoilerAirDefenseSystem : EntitySystem
         var air = EnsureComp<FighterBoilerAirDefenseComponent>(ent);
         _actions.AddAction(ent, ref air.Action, air.ActionId);
         Dirty(ent, air);
+    }
+
+    // so gambler drone doesnt get to keep it
+    private void OnBombardShutdown(Entity<XenoBombardComponent> ent, ref ComponentShutdown args)
+    {
+        if (_net.IsClient || TerminatingOrDeleted(ent))
+            return;
+
+        RemCompDeferred<FighterBoilerAirDefenseComponent>(ent);
     }
 
     public bool CanWatch(EntityUid user) => HasComp<XenoBombardComponent>(user) &&

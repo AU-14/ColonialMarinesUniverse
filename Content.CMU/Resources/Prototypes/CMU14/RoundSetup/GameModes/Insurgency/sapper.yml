@@ -67,9 +67,12 @@
 - type: startingGear
   id: AU14GearCLFSapper
   equipment:
-    id: AU14IDCardCLFCivilian
-    # A full colonist toolbelt so the sapper can build and disarm without scavenging tools first.
-    belt: CMBeltUtilityFilled
+    head: RMCHardhatWhite
+    jumpsuit: AU14CivilianWeYuEngineerClothes
+    outerClothing: CMUClothingOuterSuitEngineer
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyEngineer
+  # Engineering clothing and ID, allowing the sapper to blend in as engineering staff.
   inhand:
   - AU14CLFHeadset
   # The Sapper's signature trap kit (Phase 4b). Later phases let them refill it by crafting at a workbench.
@@ -94,9 +97,12 @@
   id: JobAU14JobCLFSapper
   points: 7
   groups:
-  - CivSatchelAU14
-  - CivFootwearAU14
-  - CivJumpsuitAU14
+  - EngiSatchelAU14
+  - EngiJacketAU14
+  - EngiGlovesAU14
+  - EngiBeltAU14
+  - EngiPouchAU14
+  - EngiPouchRightAU14
   - PaperworkRMC
   - RecreationalRMC
   - CannedDrinksAU14

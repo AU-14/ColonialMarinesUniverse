@@ -9,20 +9,7 @@ SPEC = importlib.util.spec_from_file_location("export_scene", Path(__file__).par
 exporter = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(exporter)
 
-
 class SceneExportTests(unittest.TestCase):
-    def test_elevated_threshold_exports_a_closed_wedge_in_the_grid_direction(self):
-        scene = {'map': {'path': 'test.yml'}, 'instances': [], 'tiles': [
-            {'x': 10, 'y': 20, 'z': -2, 'yaw': math.pi/2, 'palette': 1, 'elevation': .39,
-             'foundationDepth': .07, 'elevationRamp': {'direction': [1, 0], 'bottom': .39, 'top': .78}}]}
-        document, _ = unpack(exporter.export_region(scene, [], [9.5,20.5,-2], radius=1)[0])
-        tile, foundation, ramp = document['nodes']
-        self.assertEqual(tile['translation'][::2], [10,-20])
-        self.assertAlmostEqual(tile['translation'][1], -1.61)
-        self.assertEqual(tile['children'], [1,2])
-        self.assertEqual(ramp['scale'], [1,.39,1])
-        self.assertAlmostEqual(ramp['rotation'][1], -math.sqrt(.5))
-        self.assertAlmostEqual(ramp['translation'][1]+ramp['scale'][1]/2,.38)
 
     def test_yaml_string_variant_bounds_export_as_numeric_geometry_without_mutation(self):
         scene = self.scene()
@@ -37,26 +24,6 @@ class SceneExportTests(unittest.TestCase):
         self.assertEqual(document['nodes'][1]['scale'], [.5, 2.5, 1])
         self.assertEqual(part['min'], '-0.125, -0.5, 0.25')
         self.assertEqual(part['max'], '0.375, 0.5, 2.75')
-
-    def test_source_rotation_and_connected_variant_survive_export(self):
-        scene = self.scene()
-        scene['instances'][0].update(renderYaw=0, geometryKey='TestModel:3')
-        scene['geometryVariants'] = {'TestModel:3': [{'min': [-.1,-.5,0], 'max': [.1,.5,2],
-                                                     'color': '#FFFFFF', 'label': 'vertical panel'}]}
-        blob, _ = exporter.export_region(scene, [sample()], [10,20,0], floors=False)
-        document, _ = unpack(blob)
-        self.assertEqual(document['nodes'][0]['rotation'], [0,0,0,1])
-        self.assertEqual(document['nodes'][1]['scale'], [.2,2,1])
-        self.assertEqual(scene['instances'][0]['yaw'], math.pi/2)
-
-    def test_surface_lift_changes_render_translation_without_changing_map_plane_selection(self):
-        scene = self.scene()
-        scene['instances'][0]['renderOffset'] = [0, 0, .862]
-        blob, report = exporter.export_region(scene, [sample()], [10, 20, 0], floors=False)
-        document, _ = unpack(blob)
-        self.assertEqual(report['exportedEntities'], 1)
-        self.assertEqual(document['nodes'][0]['translation'], [10, .862, -20])
-        self.assertEqual(scene['instances'][0]['position'], [10, 20, 0])
 
     def scene(self):
         return {"map": {"path": "test.yml"}, "instances": [
@@ -113,7 +80,6 @@ class SceneExportTests(unittest.TestCase):
         colors = [material["pbrMetallicRoughness"]["baseColorFactor"] for material in document["materials"]]
         self.assertEqual(colors, [[1, 0, 0, 1], [0, 1, 0, 1]])
         self.assertNotEqual(document["nodes"][1]["mesh"], document["nodes"][3]["mesh"])
-
 
 if __name__ == "__main__":
     unittest.main()

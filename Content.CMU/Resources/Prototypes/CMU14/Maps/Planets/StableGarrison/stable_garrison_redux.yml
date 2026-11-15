@@ -2,12 +2,14 @@
   id: CMUPlanetStableGarrisonRedux
   name: Stable Garrison Redux
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: English
   - type: RMCPlanetMapPrototype
     votename: "Stable Garrison Redux"
     mapId: StableGarrisonRedux
     lorePrimer: AU14PrimerPlanetStableGarrison
     allegiance: UA
-    camouflage: Desert
+    camouflage: Jungle
     announcement: "Stable Garrison, a joint UA base and its surrounding settlement, has gone dark. A response force has been dispatched to re-establish contact."
     platoonsGovfor:
     - LACN
@@ -18,10 +20,9 @@
     - VAIPO
     platoonsOpfor:
     - UPP
-    - ProdigySF
     - HAZOPS
     defaultgovfor: USCM
-    defaultopfor: ProdigySF
+    defaultopfor: UPP
     govforinship: false
     opforinship: true
     daycycleenabled: true

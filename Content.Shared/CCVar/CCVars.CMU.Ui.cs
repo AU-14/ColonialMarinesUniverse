@@ -46,7 +46,7 @@ public sealed partial class CCVars
 
     /// <summary>
     ///     Console command(s) to run once, a few seconds after connecting. Semicolon-separated.
-    ///     For example <c>--cvar cmu.startup_command=golobby</c>.
+    ///     For example <c>--cvar cmu.startup_command=golobby confirm</c>. <!-- CMU14: golobby needs confirm now -->
     /// </summary>
     /// <remarks>
     ///     <para>

@@ -14,7 +14,8 @@ public sealed class CMUThreatSpeechDeliveryTest : GameTest
 {
     [TestCase("CMU14XenoNeomorph", "CMMobHuman", "Pathogen")]
     [TestCase("CMXenoDrone", "CMMobHuman", "Xeno")]
-    [TestCase("CMXenoDrone", "CMMobHuman", "English")]
+    // only queens speak human while corrupted, so the English case speaks through a queen
+    [TestCase("CMXenoQueen", "CMMobHuman", "English")]
     [TestCase("CMUMobYautja", "CMUMobYautjaHellhound", "Yautja")]
     public async Task KnownLanguageSpeechReachesListener(string speakerPrototype, string listenerPrototype, string language)
     {

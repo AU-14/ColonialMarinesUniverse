@@ -28,6 +28,12 @@ internal static class YautjaProfileSerializer
         public YautjaQuillStyle? QuillStyle { get; set; }
         public YautjaDreadColor? DreadColor { get; set; }
         public YautjaSkinColor? SkinColorPreset { get; set; }
+
+        /// <summary>
+        /// Whether the player picked <see cref="SkinColorPreset"/> themselves. Null on profiles saved before the flag
+        /// existed, which load as "not picked" so they still get a rolled tone.
+        /// </summary>
+        public bool? SkinColorSelected { get; set; }
         public YautjaGearMaterial ArmorMaterial { get; set; }
         public int ArmorStyle { get; set; }
         public YautjaGearMaterial MaskMaterial { get; set; }
@@ -104,7 +110,11 @@ internal static class YautjaProfileSerializer
             .WithFlavorText(parsed.FlavorText ?? string.Empty);
 
         if (parsed.SkinColorPreset is { } skinColor)
-            yautjaProfile = yautjaProfile.WithSkinColor(skinColor);
+        {
+            // CMU14: load the stored choice rather than assuming one. WithSkinColor used to mark every profile as
+            // picked, so an un-chosen default kept its green tone forever and the spawn randomiser never ran.
+            yautjaProfile = yautjaProfile.WithSkinColor(skinColor, markSelected: parsed.SkinColorSelected ?? false);
+        }
 
         if (parsed.QuillStyle is { } quillStyle)
             yautjaProfile = yautjaProfile.WithQuillStyle(quillStyle);
@@ -131,6 +141,7 @@ internal static class YautjaProfileSerializer
             QuillStyle = profile.QuillStyle,
             DreadColor = profile.DreadColor,
             SkinColorPreset = profile.SkinColor,
+            SkinColorSelected = profile.SkinColorSelected,
             ArmorMaterial = profile.ArmorMaterial,
             ArmorStyle = profile.ArmorStyle,
             MaskMaterial = profile.MaskMaterial,

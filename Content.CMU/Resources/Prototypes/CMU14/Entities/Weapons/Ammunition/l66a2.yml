@@ -1,0 +1,9 @@
+- type: entity
+  parent: RMCBoxBulletsSmartGun
+  id: CMUBoxBulletsL66A2
+  name: L66A2 ammunition box (10x30mm)
+  description: A box of dedicated 10x30mm ammunition for L66A2 magazines. Incompatible with smart gun magazines.
+  components:
+  - type: BulletBox
+    bulletType: CMUBoxBulletsL66A2
+    ammoProto: CMCCartridgeGPMGTWE

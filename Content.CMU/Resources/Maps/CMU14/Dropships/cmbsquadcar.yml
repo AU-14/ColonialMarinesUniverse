@@ -165,7 +165,7 @@ entities:
       parent: 1
     - type: Physics
       bodyType: Dynamic
-- proto: CMUAirFillerVent
+- proto: CMULifeSupportVent
   entities:
   - uid: 205
     components:

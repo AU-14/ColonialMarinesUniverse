@@ -8,7 +8,6 @@ SPEC = importlib.util.spec_from_file_location("serve", Path(__file__).parents[1]
 serve = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(serve)
 
-
 class PublicFileTests(unittest.TestCase):
     def test_sprite_route_prefers_overlay_and_serves_only_texture_images_and_metadata(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -47,7 +46,6 @@ class PublicFileTests(unittest.TestCase):
                          "/viewer/%00index.html", "/generated/", "/generated/private.tar.gz", "/viewer/private.json.gz"):
                 with self.subTest(path=path):
                     self.assertIsNone(serve.public_file(root, path))
-
 
 if __name__ == "__main__":
     unittest.main()

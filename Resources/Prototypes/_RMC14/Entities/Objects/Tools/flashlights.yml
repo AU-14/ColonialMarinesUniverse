@@ -11,6 +11,7 @@
   - type: HandheldLight
     blinkingBehaviourId: blinking
     radiatingBehaviourId: radiating
+  - type: CMUHelmetMountedLight # CMU14: toggleable while stored in a worn helmet
   - type: LightBehaviour
     behaviours:
       - !type:FadeBehaviour
@@ -227,6 +228,8 @@
         map: [ "light" ]
   - type: PointLight
     radius: 6
+  - type: Tag # CMU14: tripod lamps are not handheld flashlights for storage whitelists.
+    tags: []
 
 - type: entity
   parent: RMCLampTripod

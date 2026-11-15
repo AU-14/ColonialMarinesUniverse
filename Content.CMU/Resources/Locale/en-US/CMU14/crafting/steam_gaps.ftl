@@ -1,0 +1,15 @@
+au14-craft-recipe-ingot-mold = Mold of sand
+au14-craft-recipe-forge-hammer = Smithing hammer
+au14-craft-recipe-forge-tongs = Forge tongs
+au14-craft-recipe-forge-chisel = Chisel
+au14-craft-recipe-anvil = Anvil
+au14-craft-recipe-solid-fuel-press = Solid-fuel press
+au14-craft-recipe-steam-grinder = Steam grinder
+au14-craft-recipe-industrial-boiler = Steel boiler
+au14-craft-recipe-industrial-steam-generator = Industrial steam generator
+au14-craft-recipe-industrial-steam-smelter = Industrial steam smelter
+au14-craft-recipe-industrial-steam-press = Industrial steam press
+au14-craft-recipe-industrial-steam-drill = Industrial steam drill
+au14-craft-recipe-industrial-solid-fuel-press = Industrial solid-fuel press
+au14-craft-recipe-industrial-steam-grinder = Industrial steam grinder
+au14-craft-recipe-industrial-condenser = Industrial condenser

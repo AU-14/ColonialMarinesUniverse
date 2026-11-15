@@ -1,0 +1,96 @@
+- type: cmuFighterAirframe
+  id: CMUFighter
+  vtolState: jetfighter
+
+- type: cmuFighterAirframe
+  id: CMUFighterUPP
+  soundSet: upp
+  takeoffRoll: 2
+  landingRoll: 1.5
+  liftPoint: 0.62
+  touchdownPoint: 0.5
+  engineOffsets: ["0,-147"]
+  wheelOffsets: ["-31,-64", "31,-64", "0,67"]
+  exhaustColor: "#FFAF55"
+  exhaustLength: 2.3
+  exhaustWidth: 0.14
+  exhaustCells: 3
+  liftWash: 0
+  hull: CMUFighterHullUPP
+  canopy: CMUFighterCanopyUPP
+  pilotSeat: CMUFighterPilotSeatUPP
+  observerSeat: CMUFighterObserverSeatUPP
+  flyby: CMUFighterFlybyUPP
+  sprite: /Textures/CMU14/Vehicles/Fighter/uppjet.rsi
+  groundState: mig_base
+  vtolState: mig_base
+  flightState: mig_base
+  spriteRotation: 180
+  foldWings: false
+  pilotOffset: 0, 7.75
+  observerOffset: 0, 5.9375
+  gauOffset: 0, 9.25
+  pylonOffsets: ["-2.5,-0.5", "-4,-1.6", "-5.5,-2.7", "2.5,-0.5", "4,-1.6", "5.5,-2.7"]
+  spriteSize: 217, 346
+  pilotWindowCenter: 108.5, 47
+  pilotWindowHalfSize: 4.5, 4
+  observerWindowCenter: 108.5, 76
+  observerWindowHalfSize: 4.5, 13
+
+- type: cmuFighterAirframe
+  id: CMUFighterSwept
+  soundSet: swept
+  takeoffRoll: 1.25
+  landingRoll: 0.75
+  liftPoint: 0.45
+  touchdownPoint: 0.58
+  engineOffsets: ["-31,-157", "31,-157"]
+  wheelOffsets: ["-26,-25", "26,-25"]
+  exhaustColor: "#8BBAFF"
+  exhaustLength: 1.8
+  exhaustWidth: 0.17
+  exhaustCells: 5
+  liftWash: 0.35
+  extendedWingFixtures: [ leftWing, rightWing ]
+  hull: CMUFighterHullSwept
+  canopy: CMUFighterCanopySwept
+  pilotSeat: CMUFighterPilotSeatSwept
+  observerSeat: CMUFighterObserverSeatSwept
+  flyby: CMUFighterFlybySwept
+  sprite: /Textures/CMU14/Vehicles/Fighter/sweptjet.rsi
+  groundState: folded
+  vtolState: flight
+  flightState: flight
+  pilotOffset: 0, 4.375
+  observerOffset: 0, 2.25
+  spriteSize: 288, 384
+  pilotWindowCenter: 144, 262
+  pilotWindowHalfSize: 8, 14
+  observerWindowCenter: 144, 225.5
+  observerWindowHalfSize: 9, 13.5
+
+- type: shader
+  id: CMUFighterCockpitFrameUPP
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/cockpit-frame.swsl
+  params:
+    sprite_size: 217, 346
+    pilot_center: 108.5, 47
+    pilot_half_size: 4.5, 4
+    observer_center: 108.5, 76
+    observer_half_size: 4.5, 13
+    frame_min: 98, 28
+    frame_max: 119, 96
+
+- type: shader
+  id: CMUFighterCockpitFrameSwept
+  kind: source
+  path: /Textures/CMU14/Vehicles/Fighter/cockpit-frame.swsl
+  params:
+    sprite_size: 288, 384
+    pilot_center: 144, 262
+    pilot_half_size: 8, 14
+    observer_center: 144, 225.5
+    observer_half_size: 9, 13.5
+    frame_min: 123, 194
+    frame_max: 165, 287

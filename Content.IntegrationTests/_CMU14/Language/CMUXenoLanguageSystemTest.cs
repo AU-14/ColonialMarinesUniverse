@@ -13,8 +13,41 @@ public sealed class CMUXenoLanguageSystemTest
 {
     private static readonly ProtoId<LanguagePrototype> XenoLanguage = "Xeno";
 
+    // the overmind rules the pathogen hive, the queen-only check left it mute in a corrupted hive
     [Test]
-    public async Task CorruptedHiveXenoKeepsXenoAndGainsEnglishOnHiveAssignment()
+    public async Task CorruptedPathogenOvermindSpeaksHumanLanguages()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid overmind = default;
+        EntityUid corruptedHive = default;
+
+        await server.WaitPost(() =>
+        {
+            overmind = server.EntMan.SpawnEntity("CMU14XenoOvermind", map.GridCoords);
+            corruptedHive = server.EntMan.SpawnEntity("CMUCorruptedHive", map.GridCoords);
+        });
+
+        await pair.RunTicksSync(5);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<LanguageSystem>().CanSpeak(overmind, SharedLanguageSystem.CommonLanguage), Is.False);
+            server.EntMan.System<XenoHiveSystem>().SetHive(overmind, corruptedHive);
+        });
+
+        await pair.RunTicksSync(1);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<LanguageSystem>().CanSpeak(overmind, SharedLanguageSystem.CommonLanguage), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase("CMXenoDrone", false)]
+    [TestCase("CMXenoQueen", true)]
+    public async Task CorruptedHiveOnlyQueenGainsHumanSpeechOnHiveAssignment(string prototype, bool canSpeakHuman)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -24,7 +57,7 @@ public sealed class CMUXenoLanguageSystemTest
 
         await server.WaitPost(() =>
         {
-            xeno = server.EntMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+            xeno = server.EntMan.SpawnEntity(prototype, map.GridCoords);
             corruptedHive = server.EntMan.SpawnEntity("CMUCorruptedHive", map.GridCoords);
         });
 
@@ -57,11 +90,12 @@ public sealed class CMUXenoLanguageSystemTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(language.CanSpeak(xeno, SharedLanguageSystem.CommonLanguage), Is.True);
+                Assert.That(language.CanSpeak(xeno, SharedLanguageSystem.CommonLanguage), Is.EqualTo(canSpeakHuman));
+                Assert.That(language.CanSpeak(xeno, "Russian"), Is.EqualTo(canSpeakHuman));
                 Assert.That(language.CanUnderstand(xeno, SharedLanguageSystem.CommonLanguage), Is.True);
                 Assert.That(language.CanSpeak(xeno, XenoLanguage), Is.True);
                 Assert.That(language.CanUnderstand(xeno, XenoLanguage), Is.True);
-                Assert.That(language.GetCurrentLanguage(xeno), Is.EqualTo(SharedLanguageSystem.CommonLanguage));
+                Assert.That(language.GetCurrentLanguage(xeno), Is.EqualTo(canSpeakHuman ? SharedLanguageSystem.CommonLanguage : XenoLanguage));
             });
         });
 

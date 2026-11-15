@@ -4,8 +4,11 @@ using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Raffles;
 using Content.Server.Humanoid.Systems;
 using Content.Shared.Administration.Managers;
+using Content.Shared.CMU14.Clothing;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
@@ -16,9 +19,12 @@ using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost.Roles.Raffles;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Inventory;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
+using Content.Shared.Radio.Components;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
@@ -37,8 +43,10 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoorSystem _door = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
@@ -75,11 +83,20 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         _huntingGroundActivated = false;
         _nextHuntAt = TimeSpan.Zero;
         _nextBloodingAt = TimeSpan.Zero;
+        _preserveHive = null;
     }
 
     private void OnHuntPreyRoleTaken(Entity<YautjaHuntPreyComponent> ent, ref TakeGhostRoleEvent args)
     {
         var player = args.Player;
+        Timer.Spawn(TimeSpan.FromSeconds(3), () =>
+        {
+            if (TerminatingOrDeleted(ent.Owner) || !CarriesJammedOptics(ent.Owner))
+                return;
+
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-prey-optics-jammed-arrival"), ent.Owner, ent.Owner, PopupType.MediumCaution);
+        });
+
         Timer.Spawn(TimeSpan.FromSeconds(10), () =>
         {
             if (!TerminatingOrDeleted(ent.Owner))
@@ -335,7 +352,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         if (blooding)
         {
             if (!TryGetDestination(destinationKind, ent.Comp.DestinationId, out var deployDestination) ||
-                !TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out coordinates, out _, false))
+                !TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out coordinates, out _, true))
             {
                 var unavailable = blooding
                     ? "cmu-yautja-hunt-console-blooding-unavailable"
@@ -371,9 +388,19 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             ? _random.Next(minCount, maxCount + 1)
             : maxCount;
         var spawnedCount = 0;
+        var tierCounts = new int[option.Tiers.Count];
         for (var i = 0; i < count; i++)
         {
-            var spawned = TrySpawnPrey(ent.Comp, option, coordinates, blooding);
+            // cmss13 picks a spawn landmark per ert member, so prey come in scattered over the preserve instead of
+            // as one clump on the first marker. the 5s reuse window keeps picks off the markers already taken
+            var memberCoordinates = coordinates;
+            if (i > 0 &&
+                TryGetSpawnCoordinates(spawnKind, destinationKind, ent.Comp.DestinationId, out var picked, out _, false))
+            {
+                memberCoordinates = picked;
+            }
+
+            var spawned = TrySpawnPrey(ent.Comp, option, memberCoordinates, blooding, tierCounts);
             if (spawned == null)
                 continue;
 
@@ -445,9 +472,12 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         YautjaHuntConsoleComponent console,
         YautjaHuntCallOption option,
         MapCoordinates coordinates,
-        bool blooding)
+        bool blooding,
+        int[] tierCounts)
     {
-        var entry = PickSpawnEntry(option.Spawns);
+        var entry = option.Tiers.Count > 0
+            ? PickTierEntry(option.Tiers, tierCounts)
+            : PickSpawnEntry(option.Spawns);
         if (entry == null)
         {
             entry = new YautjaHuntSpawnEntry
@@ -461,7 +491,9 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             if (!_prototype.HasIndex<RandomHumanoidSettingsPrototype>(settings))
                 return null;
 
-            return _randomHumanoid.SpawnRandomHumanoid(settings, _transform.ToCoordinates(coordinates), string.Empty);
+            var humanoid = _randomHumanoid.SpawnRandomHumanoid(settings, _transform.ToCoordinates(coordinates), string.Empty);
+            SanitizePreyGear(console, humanoid);
+            return humanoid;
         }
 
         if (entry.EntityPrototype is { } prototype)
@@ -469,7 +501,96 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             if (!_prototype.HasIndex<EntityPrototype>(prototype))
                 return null;
 
-            return Spawn(prototype, coordinates);
+            var spawned = Spawn(prototype, coordinates);
+            AssignPreserveHive(spawned);
+            SanitizePreyGear(console, spawned);
+            return spawned;
+        }
+
+        return null;
+    }
+
+    private void SanitizePreyGear(YautjaHuntConsoleComponent console, EntityUid prey)
+    {
+        StripHeadset(prey);
+
+        // serpents and youngbloods see in the dark by nature, only the party kits get cleaned up
+        if (HasComp<XenoComponent>(prey) || HasComp<YautjaComponent>(prey))
+            return;
+
+        // the kit (and its job components) is all on by now, GhostRoleApplySpecial equips at MapInit
+        var contained = new List<EntityUid>();
+        CollectContained(prey, contained);
+        foreach (var item in contained)
+        {
+            if (TerminatingOrDeleted(item))
+                continue;
+
+            // the gear stays on them but the night vision is burned out, YautjaPreyJammedOptics tells them so.
+            // scopes like the M42A's integrated one still zoom, they just lose the NV
+            if (HasComp<NightVisionItemComponent>(item) ||
+                HasComp<NightVisionVisorComponent>(item) ||
+                HasComp<CMUHelmetGarbNightVisionComponent>(item))
+            {
+                RemComp<NightVisionItemComponent>(item);
+                RemComp<NightVisionVisorComponent>(item);
+                EnsureComp<YautjaPreyJammedOpticsComponent>(item);
+            }
+
+            if (MetaData(item).EntityPrototype?.ID is { } id &&
+                console.PreyAmmoReplacements.TryGetValue(id, out var replacement) &&
+                _container.TryGetContainingContainer(item, out var container))
+            {
+                var owner = container.Owner;
+                var containerId = container.ID;
+                Del(item);
+                SpawnInContainerOrDrop(replacement, owner, containerId);
+            }
+        }
+
+        // and anything the job put straight on the body, prey get no night vision at all
+        RemComp<NightVisionComponent>(prey);
+    }
+
+    private bool CarriesJammedOptics(EntityUid prey)
+    {
+        var contained = new List<EntityUid>();
+        CollectContained(prey, contained);
+        return contained.Any(item => HasComp<YautjaPreyJammedOpticsComponent>(item));
+    }
+
+    private void CollectContained(EntityUid uid, List<EntityUid> into)
+    {
+        if (!TryComp<ContainerManagerComponent>(uid, out var manager))
+            return;
+
+        foreach (var container in manager.Containers.Values)
+        {
+            foreach (var contained in container.ContainedEntities)
+            {
+                into.Add(contained);
+                CollectContained(contained, into);
+            }
+        }
+    }
+
+    // The preserve is its own game: prey may keep handheld shortwaves but never a worn headset reaching round comms.
+    private void StripHeadset(EntityUid prey)
+    {
+        if (_inventory.TryGetSlotEntity(prey, "ears", out var worn)
+            && HasComp<HeadsetComponent>(worn))
+            Del(worn.Value);
+    }
+
+    private YautjaHuntSpawnEntry? PickTierEntry(List<YautjaHuntSpawnTier> tiers, int[] tierCounts)
+    {
+        for (var i = 0; i < tiers.Count; i++)
+        {
+            if (tiers[i].Max > 0 && tierCounts[i] >= tiers[i].Max)
+                continue;
+
+            tierCounts[i]++;
+            return PickSpawnEntry(tiers[i].Spawns);
         }
 
         return null;
@@ -689,6 +810,40 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
                component.DoAfters.Values.Any(active => !active.Cancelled && !active.Completed);
     }
 
+    private readonly List<EntityUid> _spawnCandidates = new();
+    private readonly List<EntityUid> _unusedSpawnCandidates = new();
+    private readonly List<KeyValuePair<EntityUid, TimeSpan>> _recentlyUsedSpawnPoints = new();
+
+    private static readonly TimeSpan SpawnPointReuseDelay = TimeSpan.FromSeconds(5);
+
+
+    private bool TryPickSpawnCandidate(out MapCoordinates coordinates)
+    {
+        if (_spawnCandidates.Count == 0)
+        {
+            coordinates = default;
+            return false;
+        }
+
+        var now = _timing.CurTime;
+        _recentlyUsedSpawnPoints.RemoveAll(entry => now - entry.Value >= SpawnPointReuseDelay);
+
+        _unusedSpawnCandidates.Clear();
+        foreach (var candidate in _spawnCandidates)
+        {
+            if (!_recentlyUsedSpawnPoints.Any(entry => entry.Key == candidate))
+                _unusedSpawnCandidates.Add(candidate);
+        }
+
+        var chosen = _random.Pick(_unusedSpawnCandidates.Count > 0 ? _unusedSpawnCandidates : _spawnCandidates);
+        _recentlyUsedSpawnPoints.Add(new KeyValuePair<EntityUid, TimeSpan>(chosen, now));
+        _spawnCandidates.Clear();
+        _unusedSpawnCandidates.Clear();
+
+        coordinates = _transform.GetMapCoordinates(chosen);
+        return true;
+    }
+
     private bool TryGetSpawnCoordinates(
         YautjaHuntSpawnKind spawnKind,
         YautjaHuntTeleporterKind destinationKind,
@@ -697,17 +852,48 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         out EntityUid? destination,
         bool allowDestinationFallback = true)
     {
+        // CMU14: spawn points that do not name a destination used to match *any* request, and the loop returned the
+        // first hit - so on a map that also places an untagged youngblood point at its hunting ground (jungle_moon,
+        // desert_moon_caves), blooding youngbloods spawned at the preserve instead of aboard the ship, depending on
+        // entity order. Look for an exact destination match first and only accept untagged points afterwards, which
+        // keeps this working for every map without naming coordinates.
+        _spawnCandidates.Clear();
         var query = EntityQueryEnumerator<YautjaHuntSpawnPointComponent>();
         while (query.MoveNext(out var uid, out var component))
         {
             if (Deleted(uid) ||
                 component.Kind != spawnKind ||
+                component.DestinationId == null ||
                 !SpawnDestinationMatches(component.DestinationId, destinationId))
             {
                 continue;
             }
 
-            coordinates = _transform.GetMapCoordinates(uid);
+            _spawnCandidates.Add(uid);
+        }
+
+        if (TryPickSpawnCandidate(out coordinates))
+        {
+            destination = null;
+            return true;
+        }
+
+        _spawnCandidates.Clear();
+        var fallbackQuery = EntityQueryEnumerator<YautjaHuntSpawnPointComponent>();
+        while (fallbackQuery.MoveNext(out var uid, out var component))
+        {
+            if (Deleted(uid) ||
+                component.Kind != spawnKind ||
+                component.DestinationId != null)
+            {
+                continue;
+            }
+
+            _spawnCandidates.Add(uid);
+        }
+
+        if (TryPickSpawnCandidate(out coordinates))
+        {
             destination = null;
             return true;
         }

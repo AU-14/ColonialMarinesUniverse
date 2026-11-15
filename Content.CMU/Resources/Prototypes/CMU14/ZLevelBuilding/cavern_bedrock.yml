@@ -1,0 +1,13 @@
+- type: entity
+  parent: CMBaseWallInvincible
+  id: CMUCavernBedrock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/kutjevo_rock.rsi
+    state: rock
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/kutjevo_rock.rsi
+    state: rock
+  - type: IconSmooth
+    key: walls
+    base: rock

@@ -2,6 +2,7 @@
 - type: factionSwapSet
   id: OpforShipSwaps
   swaps:
+    CMUVendorChemistryGovfor: CMUVendorChemistryOpfor
     ANPRC117GRadio: ANPRC117GRadioOPFOR
     AU14TabletGovfor: AU14TabletOpfor
 # ├──[ Doors ]──────────────────────────────────────────┤

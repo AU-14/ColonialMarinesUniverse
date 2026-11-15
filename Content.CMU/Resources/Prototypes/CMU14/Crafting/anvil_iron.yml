@@ -1,0 +1,14 @@
+# The anvil of iron: the same anvil as the brass one, for a colony that has iron ingots and no brass yet.
+- type: craftRecipe
+  id: RUMCCraftAnvilIron
+  name: au14-craft-recipe-anvil-iron
+  output: RUMCAnvil
+  time: 20
+  minigames: [Rhythm, Polish]
+  tools:
+  - Hammering
+  consumables:
+  - stack: RUMCIronIngot
+    amount: 5
+  - stack: RUMCStone
+    amount: 4

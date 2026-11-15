@@ -14,6 +14,7 @@
     silentSensesAlert: true
     batteryTrick: false
     headbiteStrikes: false
+    canGrabXenos: true
     grabEscapeMessage: rmc-k9-arm-grab-escape-hellhound
     praiseMessage: rmc-k9-good-boy-hellhound
     praiseSound: /Audio/_RMC14/Voice/Vulpkanin/dog_whine.ogg

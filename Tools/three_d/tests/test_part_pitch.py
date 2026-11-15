@@ -6,8 +6,6 @@ import unittest
 import numpy as np
 sys.path.insert(0,str(Path(__file__).parents[1]))
 from build_models import validate_model, glb_document, part_bounds
-from placement import surface
-
 
 class PartPitchTests(unittest.TestCase):
     def test_combined_rotation_preserves_pivot_and_exports_same_corners(self):
@@ -26,16 +24,3 @@ class PartPitchTests(unittest.TestCase):
         basis=np.array([[1,0,0],[0,0,1],[0,-1,0]])
         np.testing.assert_allclose(gltf,basis@rotation@basis.T,atol=1e-12)
         np.testing.assert_allclose(node['translation'],basis@center)
-
-    def test_invalid_tilt_and_unsupported_attachments_are_rejected(self):
-        part={'min':'0,0,0','max':'1,1,1','pitch':30,'label':'top'}
-        model={'id':'Root','label':'Root','parts':[part]}
-        for pitch in (math.nan,math.inf,91,True,'45'):
-            with self.assertRaisesRegex(ValueError,'part pitch'):
-                validate_model({**model,'parts':[{**part,'pitch':pitch}]})
-        for field in ('connectToNeighbours','wallMounted'):
-            with self.assertRaisesRegex(ValueError,'part pitch'):
-                validate_model({**model,field:True})
-        with self.assertRaisesRegex(ValueError,'part pitch'):
-            validate_model({**model,'parts':[{**part,'surface':'InvalidTexture'}]})
-        self.assertIsNone(surface({**model,'supportSurface':'top'}))

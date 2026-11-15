@@ -225,6 +225,7 @@
 
 - type: thirdParty
   id: CMUProdigyGuardDetail
+  allegiance: Prodigy
   displayName: Prodigy Security Guard Detail
   partyspawn: CMUProdigyGuardDetailSpawn
   entrymethod: shuttle

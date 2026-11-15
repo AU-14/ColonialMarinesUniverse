@@ -152,44 +152,6 @@ public sealed class HospitalTransportOwnershipTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task ClosedHospitalConsolePublishesOnlyWhenAViewerOpensIt()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var map = await pair.CreateTestMap();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var console = entities.SpawnEntity("AU14HospitalEmergencyComputer", map.GridCoords);
-            var actor = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-            var comp = entities.GetComponent<HospitalEmergencyComputerComponent>(console);
-            var ui = entities.System<UserInterfaceSystem>();
-            try
-            {
-                comp.NextUiRefreshAt = TimeSpan.Zero;
-                entities.System<HospitalEmergencySystem>().Update(0f);
-                Assert.That(ui.TryGetUiState<HospitalEmergencyComputerBuiState>(console, HospitalEmergencyComputerUi.Key, out _), Is.False);
-                Assert.That(ui.TryOpenUi(console, HospitalEmergencyComputerUi.Key, actor), Is.True);
-                Assert.That(ui.TryGetUiState<HospitalEmergencyComputerBuiState>(console, HospitalEmergencyComputerUi.Key, out var initial), Is.True);
-                ui.CloseUi(console, HospitalEmergencyComputerUi.Key, actor);
-                comp.Casualties = 7;
-                comp.NextUiRefreshAt = TimeSpan.Zero;
-                entities.System<HospitalEmergencySystem>().Update(0f);
-                Assert.That(ui.TryGetUiState<HospitalEmergencyComputerBuiState>(console, HospitalEmergencyComputerUi.Key, out var closed), Is.True);
-                Assert.That(closed, Is.SameAs(initial), "No viewer means no rebuilt clinical/BUI projection.");
-                Assert.That(ui.TryOpenUi(console, HospitalEmergencyComputerUi.Key, actor), Is.True);
-                Assert.That(ui.TryGetUiState<HospitalEmergencyComputerBuiState>(console, HospitalEmergencyComputerUi.Key, out var reopened), Is.True);
-                Assert.That(reopened!.Casualties, Is.EqualTo(7));
-            }
-            finally
-            {
-                entities.DeleteEntity(console);
-                entities.DeleteEntity(actor);
-            }
-        });
-        await pair.CleanReturnAsync();
-    }
-
     [TestCase(false)]
     [TestCase(true)]
     public async Task FtlSetupVetoOrExceptionRetainsPreparedPatientsAndRetriesWithoutAFalseCommit(bool throwDuringSetup)

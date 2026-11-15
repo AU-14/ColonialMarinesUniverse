@@ -1,0 +1,86 @@
+<controls:CMUAdminActionsWindow xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.CMU14.Administration"
+    Title="{Loc cmu-admin-actions-title}" MinSize="580 420" SetSize="660 480">
+    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+        <BoxContainer SeparationOverride="6">
+            <Label Name="TargetName" Access="Public" HorizontalExpand="True" ClipText="True" />
+            <Label Name="TargetId" Access="Public" StyleClasses="CMUAdminDim" />
+            <Button Name="Refresh" Access="Public" Text="{Loc cmu-admin-refresh}" />
+        </BoxContainer>
+        <TabContainer Name="Tabs" Access="Public" VerticalExpand="True">
+            <BoxContainer Name="TransformTab" Orientation="Vertical" Margin="6" SeparationOverride="6">
+                <BoxContainer SeparationOverride="4">
+                    <Button Name="XenoCategory" Text="{Loc cmu-admin-category-xeno}" ToggleMode="True" HorizontalExpand="True" />
+                    <Button Name="NeomorphCategory" Text="{Loc cmu-admin-category-neomorph}" ToggleMode="True" HorizontalExpand="True" />
+                </BoxContainer>
+                <BoxContainer SeparationOverride="6">
+                    <LineEdit Name="TransformSearch" Access="Public" PlaceHolder="{Loc cmu-admin-search-castes}" HorizontalExpand="True" />
+                    <Label Name="TransformCount" Access="Public" StyleClasses="CMUAdminDim" />
+                </BoxContainer>
+                <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                    <BoxContainer Name="Transforms" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+                </ScrollContainer>
+                <Label Name="TransformEmpty" Access="Public" Text="{Loc cmu-admin-no-results}" Visible="False" StyleClasses="CMUAdminDim" />
+                <Label Text="{Loc cmu-admin-transform-hint}" StyleClasses="CMUAdminDim" ClipText="True" />
+            </BoxContainer>
+            <TabContainer Name="MarineTab" Margin="6">
+                <BoxContainer Name="SkillsTab" Orientation="Vertical" Margin="4" SeparationOverride="6">
+                    <LineEdit Name="SkillSearch" Access="Public" PlaceHolder="{Loc cmu-admin-search-skills}" />
+                    <Label Text="{Loc cmu-admin-skills-hint}" StyleClasses="CMUAdminDim" ClipText="True" />
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                        <BoxContainer Name="Skills" Access="Public" Orientation="Vertical" SeparationOverride="4" />
+                    </ScrollContainer>
+                </BoxContainer>
+                <BoxContainer Name="SquadsTab" Orientation="Vertical" Margin="4" SeparationOverride="6">
+                    <BoxContainer SeparationOverride="6">
+                        <Label Name="CurrentSquad" Access="Public" HorizontalExpand="True" ClipText="True" />
+                        <Button Name="RemoveSquad" Access="Public" Text="{Loc cmu-admin-remove-squad}" />
+                    </BoxContainer>
+                    <LineEdit Name="SquadSearch" Access="Public" PlaceHolder="{Loc cmu-admin-search-squads}" />
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                        <BoxContainer Name="Squads" Access="Public" Orientation="Vertical" SeparationOverride="4" />
+                    </ScrollContainer>
+                </BoxContainer>
+                <BoxContainer Name="EquipmentTab" Orientation="Vertical" Margin="4" SeparationOverride="6">
+                    <Label Text="{Loc rmc-ui-automated-vendor-points}" StyleClasses="CMUAdminHeading" />
+                    <BoxContainer SeparationOverride="6">
+                        <Label Text="{Loc rmc-ui-points}" HorizontalExpand="True" />
+                        <SpinBox Name="Points" Access="Public" MinWidth="110" />
+                        <Button Name="ApplyPoints" Access="Public" Text="{Loc cmu-admin-apply}" />
+                    </BoxContainer>
+                    <BoxContainer SeparationOverride="6">
+                        <Label Text="{Loc rmc-ui-specialist-points}" HorizontalExpand="True" />
+                        <SpinBox Name="SpecialistPoints" Access="Public" MinWidth="110" />
+                        <Button Name="ApplySpecialistPoints" Access="Public" Text="{Loc cmu-admin-apply}" />
+                    </BoxContainer>
+                    <Label Text="{Loc rmc-ui-weapons-specialist-skills}" Margin="0 6 0 0" StyleClasses="CMUAdminHeading" />
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                        <BoxContainer Name="SpecialistSkills" Access="Public" Orientation="Vertical" SeparationOverride="4" />
+                    </ScrollContainer>
+                </BoxContainer>
+            </TabContainer>
+            <TabContainer Name="XenoTab" Margin="6">
+                <BoxContainer Name="HivesTab" Orientation="Vertical" Margin="4" SeparationOverride="6">
+                    <BoxContainer SeparationOverride="6">
+                        <Label Name="CurrentHive" Access="Public" HorizontalExpand="True" ClipText="True" />
+                        <Button Name="LeaveHive" Access="Public" Text="{Loc cmu-admin-leave-hive}" />
+                    </BoxContainer>
+                    <RichTextLabel Name="HiveHint" Access="Public" />
+                    <LineEdit Name="HiveSearch" Access="Public" PlaceHolder="{Loc cmu-admin-search-hives}" />
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                        <BoxContainer Name="Hives" Access="Public" Orientation="Vertical" SeparationOverride="6" />
+                    </ScrollContainer>
+                    <Button Name="CreateCorruptedHive" Access="Public" Text="{Loc cmu-admin-create-corrupted-hive}" HorizontalAlignment="Left" />
+                </BoxContainer>
+                <BoxContainer Name="CreateHiveTab" Orientation="Vertical" Margin="4" SeparationOverride="6">
+                    <LineEdit Name="HiveName" Access="Public" PlaceHolder="{Loc cmu-admin-hive-name}" />
+                    <CheckBox Name="AssignCreatedHive" Access="Public" Text="{Loc cmu-admin-assign-created-hive}" Pressed="True" />
+                    <Label Text="{Loc cmu-admin-create-hive-hint}" StyleClasses="CMUAdminDim" ClipText="True" />
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                        <GridContainer Name="HiveTypes" Access="Public" Columns="2" HorizontalExpand="True" VerticalAlignment="Top" />
+                    </ScrollContainer>
+                </BoxContainer>
+            </TabContainer>
+        </TabContainer>
+    </BoxContainer>
+</controls:CMUAdminActionsWindow>

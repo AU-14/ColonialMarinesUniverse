@@ -295,7 +295,8 @@
 
 - type: entity
   parent: ClothingEyesBase
-  id: RMCGlassesMarineRpg # TODO make this actually prescription
+  # CMU14: was "TODO make this actually prescription"
+  id: RMCGlassesMarineRpg
   name: marine RPG glasses
   description: The Corps may call them Regulation Prescription Glasses but you know them as Rut Prevention Glasses.
   components:
@@ -308,6 +309,8 @@
     slots:
     - MASK
     - EYES
+  - type: VisionCorrection # CMU14
+    visionBonus: -4
   - type: Tag
     tags:
     - RMCPrescriptionGlasses

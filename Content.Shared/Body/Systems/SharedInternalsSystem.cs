@@ -170,6 +170,15 @@ public abstract partial class SharedInternalsSystem : EntitySystem
     private void OnInternalsShutdown(Entity<InternalsComponent> ent, ref ComponentShutdown args)
     {
         _alerts.ClearAlert(ent.Owner, ent.Comp.InternalsAlert);
+        // CMU14: clear the tank link here. otherwise the tank's networked User dangles for the
+        // rest of the tick and PVS logs a resolve error serializing it. no disconnect ceremony:
+        // mid-teardown it would play sounds and toggle actions on deleted entities
+        if (TryComp(ent.Comp.GasTankEntity, out GasTankComponent? tank))
+        {
+            tank.User = null;
+            Dirty(ent.Comp.GasTankEntity.Value, tank);
+        }
+        ent.Comp.GasTankEntity = null;
         RaiseCMUInternalsChanged(ent, shutdown: true);
     }
 

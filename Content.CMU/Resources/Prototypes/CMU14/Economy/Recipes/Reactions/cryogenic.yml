@@ -1,5 +1,6 @@
 # CMU versions of the cryogenic medicine recipes using available ingredients.
-
+# Marine Cryoxadone is made by the existing CMCryoxadone reaction.
+# CMU14: Keep the former CMU reaction ID for downstream recipes while producing Marine Cryoxadone.
 - type: reaction
   id: CMUCryoxadone
   reactants:
@@ -10,13 +11,13 @@
     RMCOxygen:
       amount: 1
   products:
-    Cryoxadone: 3
+    CMCryoxadone: 3
 
 - type: reaction
   id: CMUAloxadone
   impact: Medium
   reactants:
-    Cryoxadone:
+    CMCryoxadone:
       amount: 2
     Aloe:
       amount: 1
@@ -28,7 +29,7 @@
 - type: reaction
   id: CMUTraumoxadone
   reactants:
-    Cryoxadone:
+    CMCryoxadone:
       amount: 1
     CMUPhenol:
       amount: 1
@@ -40,7 +41,7 @@
 - type: reaction
   id: CMUUrishoxadone
   reactants:
-    Cryoxadone:
+    CMCryoxadone:
       amount: 3
     CMUUrishiol:
       amount: 5
@@ -52,7 +53,7 @@
 - type: reaction
   id: CMUDoxarubixadone
   reactants:
-    Cryoxadone:
+    CMCryoxadone:
       amount: 1
     CMUUnstableMutagen:
       amount: 1
@@ -68,7 +69,7 @@
       amount: 3
     RMCMindbreakerToxin:
       amount: 1
-    Cryoxadone:
+    CMCryoxadone:
       amount: 2
   products:
     Necrosol: 2

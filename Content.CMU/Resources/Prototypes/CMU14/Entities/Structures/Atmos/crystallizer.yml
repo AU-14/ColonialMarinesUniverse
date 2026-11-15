@@ -72,7 +72,7 @@
     prototype: CMUGasCrystallizer
     stackRequirements:
       CMSteel: 2
-      RMCCable: 2
+      CMUThinCableLV: 2
       CMGlass: 1
 
 - type: entity

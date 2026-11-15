@@ -883,15 +883,15 @@
     - id: AU14MaintenanceJackSpecialAdmin
       name: Special Maintenance Jack
       price: 45
-    - id: CableApcStack
+    - id: CMUCableThinLVStack
       section: Power
       name: LV Cable Coil
       price: 10
-    - id: CableMVStack
+    - id: CMUCableThinMVStack
       section: Power
       name: MV Cable Coil
       price: 15
-    - id: CableHVStack
+    - id: CMUCableThinHVStack
       section: Power
       name: HV Cable Coil
       price: 20

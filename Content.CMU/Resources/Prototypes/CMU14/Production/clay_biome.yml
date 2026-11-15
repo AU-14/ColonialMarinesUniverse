@@ -1,0 +1,32 @@
+- type: entity
+  parent: mineablesolarisrocksteel
+  id: RUMCClayWall
+  name: clay wall
+  description: A wall of rough rock veined with soft, workable clay.
+  components:
+  - type: Sprite
+    sprite: Structures/Walls/stone-dirt.rsi
+  - type: Icon
+    sprite: Structures/Walls/stone-dirt.rsi
+    state: full
+  - type: OreVein
+    currentOre: RUMCOreClay
+  - type: PreferredTool
+    whitelist:
+      components:
+      - Shovel
+
+# A vein of coal in the clay layer: the clay wall with the vanilla coal overlay.
+- type: entity
+  parent: [ BaseVeinCoal, RUMCClayWall ]
+  id: RUMCClayWallCoal
+  name: clay wall
+
+- type: entity
+  parent: mineablesolarisrocksteel
+  id: RUMCStoneWall
+  components:
+  - type: PreferredTool
+    whitelist:
+      tags:
+      - Pickaxe

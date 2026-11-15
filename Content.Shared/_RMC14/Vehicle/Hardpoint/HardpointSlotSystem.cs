@@ -286,8 +286,14 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         var state = EnsureState(ent.Owner);
         CleanupStaleInsertTracking(ent.Owner, state, "interact-using");
 
+        // CMU14: a shape-matching part must say why it refuses to fit
         if (!_hardpoints.TryFindEmptyInstallLocation(ent.Owner, ent.Comp, used, out var targetLocation))
+        {
+            if (_hardpoints.TryFindIncompatibleEmptyLocation(ent.Owner, ent.Comp, used, out _))
+                _popup.PopupEntity(Loc.GetString("cmu-hardpoint-incompatible", ("item", used)), ent.Owner, user);
+
             return false;
+        }
 
         if (targetLocation.Definition.InsertDelay <= 0f)
         {

@@ -40,9 +40,11 @@ public sealed partial class CMUPathogenSporeSacSystem : EntitySystem
 
     private void OnDamageChanged(Entity<CMUPathogenSporeSacComponent> sac, ref DamageChangedEvent args)
     {
-        // Swap for whatever your actual damageable→health bridge looks like;
-        // if you're not using DamageableComponent for this, drive Health
-        // directly from wherever attack damage lands and call HealthCheck from there.
+        if (!args.DamageIncreased || args.DamageDelta is not { } delta)
+            return;
+
+        sac.Comp.Health -= delta.GetTotal();
+        Dirty(sac);
         HealthCheck(sac);
     }
 
@@ -56,7 +58,8 @@ public sealed partial class CMUPathogenSporeSacSystem : EntitySystem
             return false;
 
         // Don't trigger on members of the same hive as whoever placed the sac.
-        if (sac.Comp.Placer is { } placer && _hive.FromSameHive(placer, crosser))
+        if (_hive.FromSameHive(sac.Owner, crosser) ||
+            sac.Comp.Placer is { } placer && _hive.FromSameHive(placer, crosser))
             return false;
 
         // TODO: predator (yautja) exclusion, matching isyautja() in DM.
@@ -122,7 +125,9 @@ public sealed partial class CMUPathogenSporeSacSystem : EntitySystem
         }
 
         var cloud = SpawnAtPosition(sac.Comp.CloudPrototype, Transform(sac).Coordinates);
-        if (sac.Comp.Placer is { } placer)
+        if (_hive.GetHive(sac.Owner) != null)
+            _hive.SetSameHive(sac.Owner, cloud);
+        else if (sac.Comp.Placer is { } placer)
             _hive.SetSameHive(placer, cloud);
 
         if (TryComp(cloud, out CMUPathogenSporeCloudComponent? cloudComp))

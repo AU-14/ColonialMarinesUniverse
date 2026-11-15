@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for Colonial Marines Universe; desaturated copy for the industrial machine",
+  "size": {
+    "x": 33,
+    "y": 33
+  },
+  "states": [
+    {
+      "name": "boiler"
+    },
+    {
+      "name": "boiler_on"
+    }
+  ]
+}

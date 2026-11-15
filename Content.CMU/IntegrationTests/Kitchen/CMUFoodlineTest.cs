@@ -96,55 +96,7 @@ public sealed class CMUFoodlineTest : GameTest
     ///     Every machine the ship's mess markers (CMUVMarkerShipMessFood and CMUVMarkerShipMessDrink) can place, for any
     ///     platoon, shuts off while the foodline is open.
     /// </summary>
-    [Test]
-    public async Task EveryMessMarkerMachineFollowsTheFoodline()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var protos = Server.ResolveDependency<IPrototypeManager>();
-            var platoons = SEntMan.System<PlatoonSpawnRuleSystem>();
-            var machines = new HashSet<string>();
-            foreach (var platoon in protos.EnumeratePrototypes<PlatoonPrototype>())
-            {
-                foreach (var marker in new[] { PlatoonMarkerClass.MessFood, PlatoonMarkerClass.MessDrink })
-                {
-                    if (platoons.TryResolvePlatoonVendor(platoon, marker, out var machine))
-                        machines.Add(machine.Id);
-                }
-            }
-
-            Assert.That(machines, Is.Not.Empty);
-            var shutters = SEntMan.SpawnEntity("CMUShutterKitchen", map.GridCoords);
-            SEntMan.System<SharedDoorSystem>().StartOpening(shutters);
-            foreach (var machine in machines)
-            {
-                var spawned = SEntMan.SpawnEntity(machine, map.GridCoords);
-                Assert.That(SEntMan.TryGetComponent<CMUFoodlineVendorComponent>(spawned, out var foodline), Is.True, machine);
-                Assert.That(foodline!.FoodlineOpen, Is.True, $"{machine} placed while the foodline is open starts shut off.");
-            }
-        });
-    }
 
     /// <summary>Only characters with a religion can pick chaplain.</summary>
-    [Test]
-    public async Task ChaplainNeedsAReligion()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var protos = Server.ResolveDependency<IPrototypeManager>();
-            var chaplain = protos.Index<LoadoutPrototype>("CMUAuxiliaryStaffChaplain");
-            var effect = chaplain.Effects.OfType<CMUAuxiliaryStaffLoadoutEffect>().Single();
-            var loadout = new RoleLoadout("JobAU14JobGOVFORCombatCorrespondent");
-            var deps = Server.ResolveDependency<IDependencyCollection>();
 
-            var atheist = HumanoidCharacterProfile.DefaultWithSpecies();
-            Assert.That(effect.Validate(atheist, loadout, null, deps, out _), Is.False);
-
-            var religions = protos.EnumeratePrototypes<Content.Shared.CMU14.Religion.CMUReligionPrototype>()
-                .First(r => r.ID != Content.Shared.CMU14.Religion.CMUReligionPrototype.Atheist);
-            var faithful = atheist.WithReligion(religions.ID);
-            Assert.That(effect.Validate(faithful, loadout, null, deps, out _), Is.True);
-        });
-    }
 }

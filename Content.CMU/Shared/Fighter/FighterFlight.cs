@@ -23,12 +23,12 @@ public static class FighterFlight
     public static bool Finite(Vector2 p) => float.IsFinite(p.X) && float.IsFinite(p.Y);
     public static bool CanControl(bool pilot, FighterCommand command) => command switch
     {
-        FighterCommand.FormUp or FighterCommand.Takeoff or FighterCommand.Launch or FighterCommand.Ascend or FighterCommand.Descend or FighterCommand.Return or FighterCommand.Flares or
+        FighterCommand.Takeoff or FighterCommand.Launch or FighterCommand.Ascend or FighterCommand.Descend or FighterCommand.Return or FighterCommand.Flares or
             FighterCommand.PrepareRun or FighterCommand.QueueFire => pilot,
         FighterCommand.TrainingRelease => !pilot,
         FighterCommand.Mark or FighterCommand.Zoom or FighterCommand.Center or FighterCommand.Lock or FighterCommand.Fire => true,
         FighterCommand.VisionNormal or FighterCommand.VisionNight or FighterCommand.VisionThermal => true,
-        FighterCommand.Laser => true,
+        FighterCommand.Laser or FighterCommand.ProgramGuidance => true,
         FighterCommand.SwapSeat or FighterCommand.LeaveSeat or FighterCommand.ConfirmEject or FighterCommand.CancelEject => true,
         _ => false,
     };

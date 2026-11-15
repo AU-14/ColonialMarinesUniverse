@@ -3,8 +3,29 @@
   id: CMUWeaponRifleXM40Raider
   name: XM40 assault rifle
   suffix: CMU, Raider
-  description: The leader's old service rifle, carried out the door the day they deserted. The proprietary HEAP stock ran out years ago; it is fed standard M41A MK2 magazines now, and the finish is worn down to bare metal.
+  description: The leader's old service rifle, carried out the door the day they deserted. The proprietary HEAP stock ran out years ago; it is fed standard M41A MK2 magazines now, and the finish is worn down to bare metal. A flashlight grip is bolted under the barrel.
   components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RMCAttachmentSuppressorXM40
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressorXM40
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentFlashlightGrip
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -19,7 +40,42 @@
           - CMMagazineRifleM54CAP
           - CMMagazineRifleM54CExt
           - RMCMagazineRifleXM40AP
-          - RMCMagazineRifleXM40HEAP
+
+- type: entity
+  parent: RMCWeaponRifleM54CMK1
+  id: CMUWeaponRifleM54CMK1Raider
+  name: M41A pulse rifle MK1
+  suffix: CMU, Raider
+  description: An old MK1 pulse rifle with the serials ground off. Someone taped a flashlight to the rail and kept the underslung launcher; it has been looked after better than anything else the crew owns.
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentRailFlashlight
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentM54CMK1StockCollapsible
+        whitelist:
+          tags:
+          - RMCAttachmentM54CStockCollapsible
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentMK1GrenadeLauncher
+        whitelist:
+          tags:
+          - RMCAttachmentMK1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentExtinguisher
 
 - type: entity
   parent: RMCJumpsuitMarsoc
@@ -33,45 +89,49 @@
   id: CMUArmorRaider
   name: raider plate carrier
   suffix: CMU
-  description: What is left of a suit of marine raider armour. The ceramic inserts were sold off long ago and replaced with scrap plating, so it now stops less than an off-the-rack M3.
+  description: What is left of a suit of marine raider armour. The original ceramic inserts were sold off long ago, but the crew relined it with salvaged plate. It is heavier than it looks and still stops more than an off-the-rack M3.
   components:
   - type: CMArmor
-    melee: 15
-    bullet: 15
-    bio: 10
-    explosionArmor: 15
+    melee: 25
+    bullet: 25
+    bio: 15
+    explosionArmor: 25
 
 - type: entity
   parent: RMCArmorHelmetMARSOC
   id: CMUArmorHelmetRaider
   name: raider helmet
   suffix: CMU
-  description: A scuffed SOF operator helmet with the optics pulled and pawned. The shell is cracked along one side and held together with tape.
+  description: A scuffed SOF operator helmet with the optics pulled and pawned. The shell is cracked along one side, but the liner underneath is still original.
   components:
   - type: CMArmor
-    melee: 15
-    bullet: 15
-    bio: 10
+    melee: 20
+    bullet: 25
+    bio: 20
 
 - type: entity
   parent: RMCSatchelMARSOC
   id: CMUSatchelRaider
   name: raider combat pack
   suffix: CMU
-  description: A streamlined military combat pack with the unit patches burned off. Kept empty on the way in; it leaves full.
+  description: A streamlined military combat pack with the unit patches burned off. Packed light on the way in; it leaves full.
 
 # ├──[ POUCHES ]─────────────────────────────────────────────────────┤
 - type: entity
-  parent: RMCPouchTools
-  id: CMUPouchToolsRaiderFill
+  parent: RMCPouchMedicalSoc
+  id: CMUPouchMedicalRaiderFill
   suffix: CMU, Raider, Filled
   components:
   - type: StorageFill
     contents:
-    - id: CMCrowbar
-    - id: CMScrewdriver
-    - id: CMWirecutter
-    - id: CMMultitool
+    - id: CMTraumaKit10
+      amount: 2
+    - id: CMBurnKit10
+    - id: CMGauze10
+    - id: CMBicaridineAutoInjector
+    - id: CMKelotaneAutoInjector
+    - id: CMEmergencyAutoInjector
+      amount: 2
 
 # ├──[ COMMS ]───────────────────────────────────────────────────────┤
 - type: entity

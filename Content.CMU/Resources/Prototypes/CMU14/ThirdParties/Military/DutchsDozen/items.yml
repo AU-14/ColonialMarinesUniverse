@@ -1,0 +1,78 @@
+# Only what Dutch's Dozen needs that nothing else in the game already stocks.
+
+# cmss13 /obj/item/explosive/grenade/empgrenade/dutch: empulse(src, 15, 20).
+# The pulse decloaks any Yautja caught in it and drains the bracer, through YautjaBracerEmpSystem.
+- type: entity
+  parent: CMGrenadeBase
+  id: CMUGrenadeEMPDutch
+  name: Dutch's Concoction
+  description: Wide area EMP grenade. The label reads, 'CLOAKER DESTROYER - EXTREMELY STRONG'.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Grenades/empgrenade.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: Item
+    size: Small
+  - type: Appearance
+  - type: TimerTriggerVisuals
+  - type: EmpOnTrigger
+    keysIn:
+    - trigger
+    range: 15
+    # a bracer drains in full at 50000, cmss13 severity 1
+    energyConsumption: 50000
+    disableDuration: 20
+  - type: DeleteOnTrigger
+    keysIn:
+    - trigger
+  - type: Tag
+    tags:
+    - Grenade
+
+# cmss13 /obj/item/storage/pouch/explosive/emp_dutch
+- type: entity
+  parent: RMCPouchExplosive
+  id: CMUPouchExplosiveFilledDutchEMP
+  suffix: Filled, Dutch's Concoction
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeEMPDutch
+      amount: 3
+
+# cmss13 /obj/item/storage/belt/marine/dutch/m16/ap
+- type: entity
+  parent: CMBeltMarine
+  id: CMUBeltMarineFilledM16APDutch
+  name: ammo load rig
+  description: Good for carrying around extra ammo in the heat of the jungle. Made of special rot-resistant fabric.
+  suffix: Filled, M16 AP
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleM16AP
+      amount: 5
+
+# cmss13 /obj/item/storage/pouch/magazine/large/m16/ap
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: CMUPouchMagazineLargeFilledM16AP
+  suffix: Filled, M16 AP
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleM16AP
+      amount: 4
+
+# cmss13 /obj/item/storage/pouch/flamertank with a large X and a large B tank
+- type: entity
+  parent: RMCPouchFuelTank
+  id: CMUPouchFuelTankFilledDutch
+  suffix: Filled, Dutch's Dozen
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14TankFlamerM240A2HAZOPSNapalmX
+    - id: AU14TankFlamerM240A2HAZOPSNapalmB

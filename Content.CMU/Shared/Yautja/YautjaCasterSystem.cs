@@ -3,7 +3,11 @@ using Content.Shared.Popups;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Standing;
 using Content.Shared._RMC14.Weapons.Common;
+using Content.Shared._RMC14.Explosion;
+using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -23,6 +27,9 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
 
     public override void Initialize()
     {
@@ -35,7 +42,6 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);
         SubscribeLocalEvent<YautjaCasterComponent, TakeAmmoEvent>(OnTakeAmmo, before: [_gun.GetType()]);
         SubscribeLocalEvent<YautjaCasterComponent, AmmoShotEvent>(OnAmmoShot);
-        SubscribeLocalEvent<YautjaCasterComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<YautjaCasterComponent, ContainerGettingInsertedAttemptEvent>(OnCasterInsertAttempt);
         SubscribeLocalEvent<YautjaCasterProjectileRefundComponent, EntityTerminatingEvent>(OnProjectileTerminating);
     }
@@ -121,7 +127,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        if (!TryGetSourceBracer(ent.Owner, out var sourceBracer))
+        if (!TryGetSourceBracer(ent.Owner, args.User, out var sourceBracer))
         {
             args.Cancelled = true;
             return;
@@ -147,6 +153,13 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (!_power.HasPowerPopup(sourceBracer, args.User, GetPowerCost(ent.Comp)))
         {
             args.Cancelled = true;
+            // CMU14: the gun has already advanced NextFire by the mode's fire rate (10s on the eradicator) by the
+            // time this attempt is raised, and SharedGunSystem only puts it back when ResetCooldown is set:
+            //   gun.Comp.NextFire = attemptEv.ResetCooldown ? curTime : nextFireBeforeAttempt;
+            // Without this a shot refused for want of bracer charge still started the whole cooldown, so the next
+            // attempt reported "Plasma caster is not ready to fire. 10 seconds remaining." for a shot that never
+            // fired. Clearing it restores exactly the pre-shot state.
+            args.ResetCooldown = true;
         }
     }
 
@@ -190,7 +203,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         args.Shots = 0;
 
         if (args.User is not { } user ||
-            !TryGetSourceBracer(ent.Owner, out var sourceBracer) ||
+            !TryGetSourceBracer(ent.Owner, user, out var sourceBracer) ||
             GetMode(ent.Comp) is not { } mode)
         {
             args.Reason = Loc.GetString("cmu-yautja-spike-launcher-denied");
@@ -207,6 +220,15 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             }
 
             var projectile = Spawn(mode.Projectile, args.Coordinates);
+            // Configure both predicted and authoritative projectiles before the gun creates its effects.
+            var visual = EnsureComp<CMUYautjaPlasmaVisualComponent>(projectile);
+            visual.Mode = GetVisualMode(projectile);
+            if (TryComp<AmmoComponent>(projectile, out var ammo))
+                ammo.MuzzleFlash = null;
+            if (TryComp<ProjectileComponent>(projectile, out var shotProjectile))
+                shotProjectile.ImpactEffect = null;
+            RemComp<CMExplosionEffectComponent>(projectile);
+            Dirty(projectile, visual);
             if (_net.IsServer)
                 AddProjectileRefund(projectile, sourceBracer, chargeCost);
 
@@ -218,6 +240,15 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     {
         foreach (var projectile in args.FiredProjectiles)
         {
+            if (TryComp<ProjectileComponent>(projectile, out var shot))
+            {
+                var visual = EnsureComp<CMUYautjaPlasmaVisualComponent>(projectile);
+                visual.Mode = GetVisualMode(projectile);
+                visual.Origin = _transform.GetWorldPosition(projectile);
+                // Projectile.Angle is the sprite's authored rotation offset, not its flight heading.
+                visual.Direction = (_transform.GetWorldRotation(projectile) - shot.Angle).ToWorldVec();
+                Dirty(projectile, visual);
+            }
             if (!TryComp(projectile, out YautjaCasterProjectileRefundComponent? refund))
                 continue;
 
@@ -225,10 +256,11 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         }
     }
 
-    private void OnGunShot(Entity<YautjaCasterComponent> ent, ref GunShotEvent args)
-    {
-        _audio.PlayPredicted(GetFireSound(ent.Comp), ent.Owner, args.User);
-    }
+    private CMUYautjaPlasmaMode GetVisualMode(EntityUid projectile) =>
+        HasComp<YautjaCasterEradicatorProjectileComponent>(projectile) ? CMUYautjaPlasmaMode.Eradicator :
+        HasComp<YautjaCasterSingleLethalProjectileComponent>(projectile) ? CMUYautjaPlasmaMode.Lethal :
+        HasComp<YautjaCasterImmobilizerProjectileComponent>(projectile) ? CMUYautjaPlasmaMode.Immobilizer :
+        CMUYautjaPlasmaMode.Stun;
 
     private void OnProjectileTerminating(Entity<YautjaCasterProjectileRefundComponent> ent, ref EntityTerminatingEvent args)
     {
@@ -264,6 +296,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
     private static void OnGunRefreshModifiers(Entity<YautjaCasterComponent> ent, ref GunRefreshModifiersEvent args)
     {
+        args.SoundGunshot = GetFireSound(ent.Comp);
         var mode = GetMode(ent.Comp);
         if (mode?.FireRate > 0)
             args.FireRate = mode.FireRate;
@@ -312,14 +345,31 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         return component.CurrentMode >= 2;
     }
 
+    /// <summary>Weapons that project the red tri-dot targeting laser: the plasma caster and the dual plasma cannons.</summary>
+    public bool IsSightWeapon(EntityUid item)
+    {
+        return HasComp<YautjaCasterComponent>(item) || HasComp<YautjaCannonPackLinkedCannonComponent>(item);
+    }
+
+    /// <summary>The targeting laser shows only while the holder is up and able to fire, never crit, dead or downed.</summary>
+    public bool CanAimSight(EntityUid user, EntityUid item)
+    {
+        return IsSightWeapon(item) && !_mobState.IsIncapacitated(user) && !_standing.IsDown(user);
+    }
+
     private bool CanUseCasterTech(EntityUid user)
     {
         return HasComp<YautjaComponent>(user) ||
                HasComp<YautjaTechAuthorizedComponent>(user);
     }
 
-    private bool TryGetSourceBracer(EntityUid caster, out Entity<YautjaBracerComponent> bracer)
+    private bool TryGetSourceBracer(EntityUid caster, EntityUid user, out Entity<YautjaBracerComponent> bracer)
     {
+        // Attachment bookkeeping is server-only. Predict against the holder's replicated worn bracer;
+        // the server still validates the actual attachment and alone consumes its power.
+        if (_net.IsClient && _hands.IsHolding(user, caster))
+            return _power.TryGetWornBracer(user, out bracer);
+
         bracer = default;
         if (!TryComp(caster, out YautjaStoredGearComponent? stored) ||
             stored.Bracer is not { } source ||

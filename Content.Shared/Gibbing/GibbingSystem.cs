@@ -18,6 +18,33 @@ public sealed partial class GibbingSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly SoundSpecifier? GibSound = new SoundCollectionSpecifier("gib", AudioParams.Default.WithVariation(0.025f));
+    // CMU14 Begin
+    private int _suppressedDamageDepth;
+
+    public bool GibbingSuppressed => _suppressedDamageDepth > 0;
+
+    public DamageScope BeginDamage(EntityUid? origin, EntityUid? tool = null)
+    {
+        return PreventGibbing(HasComp<NonGibbingDamageComponent>(origin) || HasComp<NonGibbingDamageComponent>(tool));
+    }
+
+    public DamageScope PreventGibbing(bool prevent)
+    {
+        if (!prevent)
+            return new DamageScope(null);
+        _suppressedDamageDepth++;
+        return new DamageScope(this);
+    }
+
+    public readonly struct DamageScope(GibbingSystem? system) : IDisposable
+    {
+        public void Dispose()
+        {
+            if (system != null)
+                system._suppressedDamageDepth--;
+        }
+        // CMU14 End
+    }
 
     /// <summary>
     /// Attempts to gib an entity.
@@ -38,6 +65,11 @@ public sealed partial class GibbingSystem : EntitySystem
         // This guard can be removed once it is gone and replaced by a prediction-safe system.
         if (!_net.IsServer)
             return new();
+
+        // CMU14 Begin
+        if (GibbingSuppressed && HasComp<Content.Shared.Body.BodyComponent>(ent))
+            return new();
+        // CMU14 End
 
         if (!_destructible.DestroyEntity(ent))
             return new();

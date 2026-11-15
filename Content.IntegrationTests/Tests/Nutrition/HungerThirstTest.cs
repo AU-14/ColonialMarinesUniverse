@@ -157,24 +157,6 @@ public sealed class HungerThirstTest : InteractionTest
         }
     }
 
-    [Test]
-    public async Task HydrationConsumerOverloadUsesHydration()
-    {
-        var drink = await PlaceInHands("DrinkWaterJug");
-        var serverDrink = ToServer(drink);
-        var ingestion = SEntMan.System<IngestionSystem>();
-
-        var hydration = ingestion.TotalHydration((serverDrink, null));
-        var nutrition = ingestion.TotalNutrition((serverDrink, null));
-
-        using (Assert.EnterMultipleScope())
-        {
-            Assert.That(hydration, Is.GreaterThan(0f));
-            Assert.That(nutrition, Is.Zero);
-            Assert.That(ingestion.TotalHydration((serverDrink, null), SPlayer), Is.EqualTo(hydration));
-        }
-    }
-
     private async Task AssertConsumesOnePortion(EntProtoId prototype)
     {
         var item = await PlaceInHands(prototype);

@@ -107,6 +107,18 @@ public sealed class AmbassadorOpenThirdPartyBuiMsg : BoundUserInterfaceMessage
 {
 }
 
+// RUMC: opens the window of the exchange with the mother faction
+[Serializable, NetSerializable]
+public sealed class AmbassadorOpenMotherBuiMsg : BoundUserInterfaceMessage
+{
+}
+
+// RUMC: opens the window of the world map (it is a window of its own, as the call of the third parties is)
+[Serializable, NetSerializable]
+public sealed class AmbassadorOpenMapBuiMsg : BoundUserInterfaceMessage
+{
+}
+
 [Serializable, NetSerializable]
 public sealed class AmbassadorDepositBuiMsg : BoundUserInterfaceMessage
 {

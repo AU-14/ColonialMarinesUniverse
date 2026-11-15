@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Drawn for the project by the user",
+  "size": {
+    "x": 19,
+    "y": 19
+  },
+  "states": [
+    {
+      "name": "mushroom"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+author: IntelligenceOfficerArthur
+category: CMU
+changes:
+- message: Admins can now spawn Intelligence Section Case Officers, Paramilitary Officers
+    and Paramilitary Members.
+  type: Admin
+- message: Admins can now spawn Intelligence Section Case Officers, Paramilitary Officers
+    and Paramilitary Members.
+  type: Add
+- message: For ease of making intelligence operatin!
+  type: Admin
+time: '2026-11-06T13:14:03.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2479

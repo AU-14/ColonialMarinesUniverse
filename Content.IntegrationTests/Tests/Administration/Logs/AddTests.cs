@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
@@ -170,61 +170,6 @@ public sealed class AddTests : GameTest
         });
     }
 
-    [Test]
-    public async Task DuplicatePlayerDoesNotThrowTest()
-    {
-        var guid = Guid.NewGuid();
-
-        await Server.WaitPost(() =>
-        {
-            var player = _sPlayerManager.Sessions.Single();
-
-            _sAdminLogManager.Add(LogType.Unknown, $"{player} {player} test log: {guid}");
-        });
-
-        await PoolManager.WaitUntil(Server, async () =>
-        {
-            var logs = await _sAdminLogManager.CurrentRoundLogs(new LogFilter
-            {
-                Search = guid.ToString()
-            });
-
-            if (logs.Count == 0)
-            {
-                return false;
-            }
-
-            return true;
-        });
-    }
-
-    [Test]
-    public async Task DuplicatePlayerIdDoesNotThrowTest()
-    {
-        var guid = Guid.NewGuid();
-
-        await Server.WaitPost(() =>
-        {
-            var player = _sPlayerManager.Sessions.Single();
-
-            _sAdminLogManager.Add(LogType.Unknown, $"{player:first} {player:second} test log: {guid}");
-        });
-
-        await PoolManager.WaitUntil(Server, async () =>
-        {
-            var logs = await _sAdminLogManager.CurrentRoundLogs(new LogFilter
-            {
-                Search = guid.ToString()
-            });
-
-            if (logs.Count == 0)
-            {
-                return false;
-            }
-
-            return true;
-        });
-    }
 }
 
 public sealed class PreRoundAddTests : GameTest

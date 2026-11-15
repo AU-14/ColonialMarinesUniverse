@@ -1,0 +1,28 @@
+- type: job
+  parent: AU14UPPGROMSupportTech
+  id: AU14UPPGROMRRUSupportTech
+  description: au14-uppgrom-rru-description
+  spawnMenuRoleName: UPP GROM Support Technician (Rapid Response Unit)
+# startingGear: same as parent
+  greeting: au14-uppgrom-rru-greeting
+
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14UPPGROMRRUSupportTech
+  name: UPP GROM Support Tech
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-support-tech
+    description: au14-uppgrom-rru-description
+    reregister: false
+    job: AU14UPPGROMSupportTech
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules

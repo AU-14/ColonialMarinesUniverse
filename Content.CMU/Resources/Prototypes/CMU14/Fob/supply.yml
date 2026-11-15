@@ -1,0 +1,14 @@
+- type: entity
+  id: CMUFobSupplyCatalog
+  categories: [HideSpawnMenu]
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: FOB
+      entries:
+      - cost: 4000
+        crate: CMUFobWeaponryCrate
+        roundLimit: 2
+      - cost: 1500
+        crate: CMUFobSupportCrate
+        roundLimit: 3

@@ -3,6 +3,7 @@ au14-department-govforces = Government Forces
 
 au14-job-supervisors-govforplatco = High Command
 au14-job-supervisors-govfor = Commanding Officer
+cmu-job-supervisors-rifleman = your Fireteam Leader and Squad Leader
 
 au14-job-name-govforplatco = Commanding Officer
 au14-job-description-govforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.

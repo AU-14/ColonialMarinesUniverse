@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprite given by the project author",
+  "size": {
+    "x": 36,
+    "y": 27
+  },
+  "states": [
+    {
+      "name": "icon"
+    }
+  ]
+}

@@ -285,7 +285,8 @@ public sealed partial class GunSystem
         }
     }
 
-    private sealed class RevolverStatusControl : Control
+    // CMU14: retain chamber controls and update only changed contents or the active index.
+    private sealed partial class RevolverStatusControl : Control
     {
         private readonly BoxContainer _bulletsList;
 
@@ -305,88 +306,7 @@ public sealed partial class GunSystem
 
         public void Update(int currentIndex, bool?[] bullets)
         {
-            _bulletsList.RemoveAllChildren();
-            var capacity = bullets.Length;
-
-            string texturePath;
-            if (capacity <= 20)
-            {
-                texturePath = "/Textures/Interface/ItemStatus/Bullets/normal.png";
-            }
-            else if (capacity <= 30)
-            {
-                texturePath = "/Textures/Interface/ItemStatus/Bullets/small.png";
-            }
-            else
-            {
-                texturePath = "/Textures/Interface/ItemStatus/Bullets/tiny.png";
-            }
-
-            var texture = StaticIoC.ResC.GetTexture(texturePath);
-            var spentTexture = StaticIoC.ResC.GetTexture("/Textures/Interface/ItemStatus/Bullets/empty.png");
-
-            FillBulletRow(currentIndex, bullets, _bulletsList, texture, spentTexture);
-        }
-
-        private void FillBulletRow(int currentIndex, bool?[] bullets, Control container, Texture texture, Texture emptyTexture)
-        {
-            var capacity = bullets.Length;
-            var colorA = Color.FromHex("#b68f0e");
-            var colorB = Color.FromHex("#d7df60");
-            var colorSpentA = Color.FromHex("#b50e25");
-            var colorSpentB = Color.FromHex("#d3745f");
-            var colorGoneA = Color.FromHex("#000000");
-            var colorGoneB = Color.FromHex("#222222");
-
-            var altColor = false;
-            var scale = 1.3f;
-
-            for (var i = 0; i < capacity; i++)
-            {
-                var bulletFree = bullets[i];
-                // Add a outline
-                var box = new Control()
-                {
-                    MinSize = texture.Size * scale,
-                };
-                if (i == currentIndex)
-                {
-                    box.AddChild(new TextureRect
-                    {
-                        Texture = texture,
-                        TextureScale = new Vector2(scale, scale),
-                        ModulateSelfOverride = Color.LimeGreen,
-                    });
-                }
-                Color color;
-                Texture bulletTexture = texture;
-
-                if (bulletFree.HasValue)
-                {
-                    if (bulletFree.Value)
-                    {
-                        color = altColor ? colorA : colorB;
-                    }
-                    else
-                    {
-                        color = altColor ? colorSpentA : colorSpentB;
-                        bulletTexture = emptyTexture;
-                    }
-                }
-                else
-                {
-                    color = altColor ? colorGoneA : colorGoneB;
-                }
-
-                box.AddChild(new TextureRect
-                {
-                    Stretch = TextureRect.StretchMode.KeepCentered,
-                    Texture = bulletTexture,
-                    ModulateSelfOverride = color,
-                });
-                altColor ^= true;
-                container.AddChild(box);
-            }
+            CMUUpdateChambers(currentIndex, bullets);
         }
     }
 

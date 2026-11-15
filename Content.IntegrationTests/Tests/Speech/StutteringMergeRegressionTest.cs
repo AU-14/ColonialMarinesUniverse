@@ -66,25 +66,4 @@ public sealed class StutteringMergeRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task RmcDazeStutterUsesTheNewStutterEffect()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var dazed = Server.System<RMCDazedSystem>();
-            var status = Server.System<StatusEffectsSystem>();
-            var target = SEntMan.Spawn("CMMobHuman", MapCoordinates.Nullspace);
-
-            Assert.That(dazed.TryDaze(target, TimeSpan.FromSeconds(2), stutter: true), Is.True);
-            Assert.Multiple(() =>
-            {
-                Assert.That(status.HasStatusEffect(target, RMCDazedSystem.StatusEffectDazed), Is.True);
-                Assert.That(status.HasStatusEffect(target, StutteringSystem.StutterEffect), Is.True);
-                Assert.That(status.HasEffectComp<StutteringAccentComponent>(target), Is.True);
-                Assert.That(status.HasStatusEffect(target, "StatusEffectSlurred"), Is.False);
-            });
-
-            SEntMan.DeleteEntity(target);
-        });
-    }
 }

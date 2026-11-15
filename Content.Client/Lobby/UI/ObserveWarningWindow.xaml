@@ -11,17 +11,15 @@
      didn't match plain Button's - which is what made Nevermind's label sit closer to its left edge
      than the other two.
 
-     CrtContent/CrtOverlay is the sibling pair CrtScreenControl needs (see OptionsMenu.xaml for the
-     same pattern): CrtOverlay draws after CrtContent and covers it with the shaded, scanlined copy.
-     Unlike a chat log or anything else that scrolls, this window's content never changes after it
-     opens, so the render-target capture the shader relies on can never go stale - the trap that
-     rules out CrtScreenControl for live content doesn't apply here. -->
+     CMU14: CrtScreenContainer retains the source for input and layout while drawing its live
+     contents once through the CrtOverlay sibling. -->
 <DefaultWindow
     xmlns="https://spacestation14.io"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:cmu="clr-namespace:Content.Client.CMU14.Interface"
     SetSize="504 248">
-    <Control>
+    <!-- CMU14: capture the live content once through its CRT sibling. -->
+    <cmu:CrtScreenContainer>
         <Control Name="CrtContent" HorizontalExpand="True" VerticalExpand="True">
             <PanelContainer StyleClasses="CrtScreenPanel" HorizontalExpand="True" VerticalExpand="True">
                 <BoxContainer Orientation="Vertical" Margin="16 18 16 14" SeparationOverride="8">
@@ -59,5 +57,5 @@
             </PanelContainer>
         </Control>
         <cmu:CrtScreenControl Name="CrtOverlay" HorizontalExpand="True" VerticalExpand="True"/>
-    </Control>
+    </cmu:CrtScreenContainer>
 </DefaultWindow>

@@ -30,6 +30,7 @@ public sealed record FighterEffectCue(uint Sequence, FighterEffectKind Kind, Tim
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
 public sealed partial class FighterStrikeVisualComponent : Component
 {
+    public bool WarningPlayed;
     [DataField, AutoNetworkedField] public FighterWeaponKind Kind;
     [DataField, AutoNetworkedField] public Vector2 Direction;
     [DataField, AutoNetworkedField] public int Volleys;
@@ -54,6 +55,15 @@ public sealed partial class FighterPayloadVisualComponent : Component
 
 public static class FighterEffects
 {
+    public static readonly TimeSpan LaserLead = TimeSpan.FromSeconds(2.3);
+    public static readonly TimeSpan WarningLead = TimeSpan.FromSeconds(1);
+
+    public static bool LaserVisible(FighterStrikeVisualComponent strike, TimeSpan now) =>
+        now >= strike.ImpactAt - LaserLead && now < strike.ImpactAt;
+
+    public static bool WarningVisible(FighterStrikeVisualComponent strike, TimeSpan now) =>
+        now >= strike.ImpactAt - WarningLead && now < strike.ImpactAt;
+
     public const int MaximumCues = 24;
     public const float HistorySeconds = 8;
     public const int MaximumGroundImpacts = 48;

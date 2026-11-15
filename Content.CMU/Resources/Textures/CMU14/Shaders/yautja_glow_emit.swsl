@@ -1,0 +1,10 @@
+light_mode unshaded;
+blend_mode add;
+uniform highp vec4 glow;
+uniform highp float intensity;
+
+void fragment() {
+    highp float falloff = max(0.0, 1.0 - length(UV2 * 2.0 - 1.0)) * intensity;
+    // Complete screen blending in the world's linear colour space without covering floor detail.
+    COLOR = vec4(glow.rgb * falloff, 1.0);
+}

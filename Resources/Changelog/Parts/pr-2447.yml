@@ -1,0 +1,13 @@
+author: SupremecyS
+category: CMU
+changes:
+- message: New UPP Peaked Caps for Squad leads (and FTLs once they have a vendor).
+  type: Add
+- message: UM4 Helmet to UPP apparel vendor.
+  type: Add
+- message: Removed Free altyns for SGOs and lowered amount of Altyns that Req gets.
+  type: Tweak
+- message: Readded Command peaked caps to UPP command vendor
+  type: Add
+time: '2026-11-03T20:04:16.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2447

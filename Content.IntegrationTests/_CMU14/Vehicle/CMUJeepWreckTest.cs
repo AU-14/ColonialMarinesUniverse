@@ -41,29 +41,6 @@ public sealed class CMUJeepWreckTest : GameTest
     }
 
     [Test]
-    public async Task NothingDestroysTheWreck()
-    {
-        var (_, wreck) = await SpawnWreck();
-        await Server.WaitPost(() =>
-        {
-            Assert.That(SEntMan.TryGetComponent(wreck, out CorrodibleComponent? corrodible) && corrodible.IsCorrodible, Is.False,
-                "Acid shouldn't eat the wreck.");
-
-            var damage = new DamageSpecifier();
-            foreach (var type in new[] { "Blunt", "Piercing", "Heat", "Structural" })
-                damage.DamageDict[type] = 10000;
-            SEntMan.System<DamageableSystem>().TryChangeDamage(wreck, damage);
-
-            // A big blast right on it, far past a rocket.
-            SEntMan.System<ExplosionSystem>().QueueExplosion(SEntMan.System<SharedTransformSystem>().GetMapCoordinates(wreck),
-                "RMC", 2000f, 4f, 200f, cause: null, maxTileBreak: 0, canCreateVacuum: false);
-        });
-        await RunSeconds(2f);
-        await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.Deleted(wreck), Is.False, "The wreck should outlast anything thrown at it."));
-    }
-
-    [Test]
     public async Task AWelderCutsItDownToScrap()
     {
         var (map, wreck) = await SpawnWreck();

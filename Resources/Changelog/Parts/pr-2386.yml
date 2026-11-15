@@ -1,0 +1,14 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Scientists can investigate recovered hunting bracers through twenty experiments
+    and decipher five clues to unlock their controls.
+  type: Add
+- message: Yautja abilities now have distinct cloak, plasma, leap, roar, recall, drone
+    and staged trophy effects.
+  type: Tweak
+- message: Caster sights and shots follow their firing mode and direction, with firing
+    sounds; Xenomorph victims remain visible during Butcher.
+  type: Fix
+time: '2026-10-30T23:42:30.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2386

@@ -20,7 +20,7 @@
     range: 12
     volume: -8
     sound:
-      path: /Audio/CMU14/Fighter/jet-cockpit.ogg
+      path: /Audio/CMU14/Fighter/original/cockpit.ogg
 
 - type: entity
   id: CMUFighterCanopy

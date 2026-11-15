@@ -137,8 +137,12 @@ public sealed partial class JoinXenoSystem : EntitySystem
 
         var entries = new List<JoinXenoHiveEntry>();
         var hives = EntityQueryEnumerator<HiveComponent, MetaDataComponent>();
-        while (hives.MoveNext(out var hiveId, out _, out var metaData))
+        // CMU14: keep queued hives visible so players can still leave an inactive hive's queue.
+        while (hives.MoveNext(out var hiveId, out var hive, out var metaData))
         {
+            if (!_hive.CMUIsHiveActive((hiveId, hive)) && !queueStatus.Queues.ContainsKey(hiveId))
+                continue;
+
             var status = JoinXenoQueueStatus.NotQueued;
             var position = 0;
             if (queueStatus.Queues.TryGetValue(hiveId, out var queueUserStatus))

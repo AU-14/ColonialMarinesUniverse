@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Numerics;
 using System.Text;
+using Content.Client.CMU14.Overlays;
 using Content.Client.Resources;
 using Content.Shared.CMU14.Chat;
 using Content.Shared._RMC14.Language.Prototypes;
@@ -60,17 +61,27 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
     private readonly record struct TextRun(string Text, bool Bold, bool Italic, Color? ColorOverride = null);
 
     public RunechatSpeechBubble(SpeechType type, ChatMessage message, EntityUid senderEntity)
-        : base(
-            message,
-            senderEntity,
-            GetStyleClass(type, message),
-            GetTextColor(type, message, senderEntity),
-            GetLifetime(GetRunPages(GetRuns(message, GetStyleClass(type, message)))))
+        : this(message, senderEntity, GetStyleClass(type, message), GetTextColor(type, message, senderEntity))
+    {
+    }
+
+    private RunechatSpeechBubble(ChatMessage message, EntityUid senderEntity, string style, Color color)
+        : this(message, senderEntity, style, color, PrepareBubble(message, style, color))
+    {
+    }
+
+    private RunechatSpeechBubble(ChatMessage message, EntityUid senderEntity, string style, Color color,
+        (Control Bubble, TimeSpan Lifetime) prepared)
+        : base(message, senderEntity, style, color, prepared.Lifetime, prepared.Bubble)
     {
         RectClipContent = false;
     }
 
     protected override Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null)
+        => PrepareBubble(message, speechStyleClass, fontColor).Bubble;
+
+    private static (Control Bubble, TimeSpan Lifetime) PrepareBubble(ChatMessage message, string speechStyleClass,
+        Color? fontColor)
     {
         var runs = GetRuns(message, speechStyleClass);
         var (style, forceBold) = GetVisualStyle(message, speechStyleClass, runs);
@@ -89,7 +100,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             ? GetLanguageIconTexture(message)
             : null;
 
-        return new RunechatTextControl(pages, fontColor ?? DefaultColor, style, languageIcon);
+        return (new RunechatTextControl(pages, fontColor ?? DefaultColor, style, languageIcon), GetLifetime(pages));
     }
 
     private static Texture? GetLanguageIconTexture(ChatMessage message)
@@ -777,6 +788,12 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private readonly Font _regularFont;
         private readonly Font _italicFont;
 
+        private readonly CMUCachedDrawing _drawing;
+        private int _drawnPage = -1;
+        private float _drawnScale;
+        private float _drawnOpacity;
+        private Color _drawnModulate;
+        private Vector2i _drawnSize;
         private readonly List<RunechatPageLayout> _layouts = new();
         private Vector2 _cachedSize;
         private bool _layoutDirty = true;
@@ -798,6 +815,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                      Math.Clamp(_configManager.GetCVar(CCVars.ChatRunechatBubbleScale), MinimumRunechatScale, MaximumRunechatScale);
 
             var fontSize = style.GetScaledFontSize(_scale);
+            _drawing = new CMUCachedDrawing(IoCManager.Resolve<IClyde>(), IoCManager.Resolve<IPrototypeManager>());
             _regularFont = LoadRunechatFont(fontSize, false);
             _italicFont = LoadRunechatFont(fontSize, true);
         }
@@ -825,7 +843,58 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             return _cachedSize;
         }
 
-        protected override void Draw(DrawingHandleScreen handle)
+        protected override void ExitedTree()
+        {
+            _drawing.Dispose();
+            base.ExitedTree();
+        }
+
+        protected override void Draw(IRenderHandle render)
+        {
+            if (_pages.Count == 0)
+                return;
+
+            EnsureLayout();
+            var handle = render.DrawingHandleScreen;
+            var size = PixelSize;
+            // Bound each bubble's texture. Unusually large UI scales retain the direct drawing path.
+            if (size.X <= 0 || size.Y <= 0 || size.X > 2048 || size.Y > 2048 || (long) size.X * size.Y > 1048576)
+            {
+                _drawing.Dispose();
+                DrawText(handle, animate: true);
+                return;
+            }
+
+            var opacity = _configManager.GetCVar(CCVars.SpeechBubbleTextOpacity);
+            if (_drawing.Texture == null || _drawnPage != _currentPage || _drawnScale != UIScale ||
+                _drawnSize != size || _drawnOpacity != opacity || _drawnModulate != handle.Modulate)
+            {
+                // Bake the original halo/stroke passes, including their alpha overlap. Parent fades
+                // invalidate the snapshot; the steady part of a bubble's lifetime is one texture draw.
+                _drawing.Update(render, size, handle.Modulate, cached => DrawText(cached, animate: false));
+                _drawnPage = _currentPage;
+                _drawnScale = UIScale;
+                _drawnSize = size;
+                _drawnOpacity = opacity;
+                _drawnModulate = handle.Modulate;
+            }
+
+            var modulate = handle.Modulate;
+            var shader = handle.GetShader();
+            try
+            {
+                handle.Modulate = Color.White;
+                handle.UseShader(_drawing.Shader);
+                handle.DrawTexture(_drawing.Texture!, new Vector2(GetPanicShakeOffset(), 0));
+            }
+            finally
+            {
+                handle.Modulate = modulate;
+                handle.UseShader(shader);
+            }
+        }
+
+        private void DrawText(DrawingHandleScreen handle, bool animate)
         {
             base.Draw(handle);
 
@@ -839,7 +908,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             var textColor = _color.WithAlpha(_color.A * textOpacity);
             var lineHeight = GetLineHeight();
             var y = (PixelSize.Y - layout.Height) / 2f;
-            var shakeOffset = GetPanicShakeOffset();
+            var shakeOffset = animate ? GetPanicShakeOffset() : 0f;
 
             for (var i = 0; i < layout.Lines.Count; i++)
             {
@@ -1293,9 +1362,9 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             bool useRunColor,
             float textOpacity)
         {
-            foreach (var direction in offsets)
+            for (var i = 0; i < offsets.Count; i++)
             {
-                DrawLineMain(handle, position + direction * offset, line, color, useRunColor, textOpacity);
+                DrawLineMain(handle, position + offsets[i] * offset, line, color, useRunColor, textOpacity);
             }
         }
 

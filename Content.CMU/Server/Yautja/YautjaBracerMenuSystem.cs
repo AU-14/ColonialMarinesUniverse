@@ -1,5 +1,9 @@
 using System.Numerics;
+using Content.Shared.CMU14.Xenonids.Hive;
+using Content.Server.EUI;
+using Content.Server.GameTicking;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Rules;
@@ -7,8 +11,10 @@ using Content.Shared.Actions;
 using Content.Shared.Item;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Station;
 using Content.Shared.UserInterface;
 using Robust.Shared.Containers;
+using Robust.Shared.Player;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -27,9 +33,11 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
 
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private YautjaMarkSystem _marks = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStationSystem _station = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -39,6 +47,8 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     [Dependency] private YautjaThrallSystem _thralls = default!;
     [Dependency] private YautjaYoungbloodSystem _youngbloods = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private TimeSpan _nextTrackerRefresh;
 
@@ -146,6 +156,10 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             case YautjaBracerPanelCommand.RemoteExecuteYoungblood:
                 _youngbloods.TryOpenRemoteExecution(ent, args.Actor);
                 break;
+            case YautjaBracerPanelCommand.OpenClanHall:
+                if (TryComp<ActorComponent>(args.Actor, out var actor))
+                    _eui.OpenEui(new YautjaClanHallEui(), actor.PlayerSession);
+                break;
             case YautjaBracerPanelCommand.OpenTranslator:
                 _utility.TryOpenTranslator(ent, args.Actor);
                 break;
@@ -209,6 +223,16 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             out var thrallBracerLocked);
 
         var tracker = BuildTracker(actor, bracer.Owner);
+        var comp = bracer.Comp;
+        // crystal and human crystal share one cooldown on the server, so they share it here too
+        var fabricator = new List<YautjaBracerFabricatorEntry>
+        {
+            new(YautjaBracerPanelCommand.CreateStabilisingCrystal, comp.StabilisingCrystalCost.Int(), comp.NextStabilisingCrystal),
+            new(YautjaBracerPanelCommand.CreateHumanStabilisingCrystal, comp.HumanStabilisingCrystalCost.Int(), comp.NextStabilisingCrystal),
+            new(YautjaBracerPanelCommand.CreateHuntingTrap, comp.HuntingTrapCost.Int(), comp.NextHuntingTrap),
+            new(YautjaBracerPanelCommand.CreateHealingCapsule, comp.HealingCapsuleCost.Int(), comp.NextHealingCapsule, comp.HealingEnabled),
+        };
+
         var state = new YautjaBracerPanelState(
             (int) bracer.Comp.Charge,
             (int) bracer.Comp.MaxCharge,
@@ -220,7 +244,12 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             thrallSelfDestructArmed,
             thrallBracerLocked,
             tracker.Readout,
-            tracker.Entries);
+            tracker.Entries,
+            fabricator,
+            comp.SelfDestructExplosionType,
+            comp.SelfDestructAt,
+            comp.NotificationSound,
+            CompOrNull<YautjaComponent>(actor)?.BracerNameActive ?? false);
 
         _ui.SetUiState(bracer.Owner, YautjaBracerUIKey.Key, state);
     }
@@ -228,6 +257,10 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
     private TrackerBuildResult BuildTracker(EntityUid user, EntityUid bracer)
     {
         var origin = _transform.GetMapCoordinates(user);
+        // stacked z-levels are one z in cmss13 terms, so gear a floor up or down still gets a direction
+        var originLevels = origin.MapId == MapId.Nullspace
+            ? new HashSet<MapId> { origin.MapId }
+            : _zLevels.GetAllNetworkMapIds(origin.MapId);
         var readout = new TrackerReadoutBuilder();
         var groups = new Dictionary<(int X, int Y), TrackerSignalGroup>();
 
@@ -236,15 +269,17 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         var yautja = EntityQueryEnumerator<YautjaComponent, TransformComponent>();
         while (yautja.MoveNext(out var uid, out _, out var xform))
         {
-            if (uid == bracer || !_mobState.IsDead(uid))
+            // CMU14: yaut_bracers.dm:738 applies the same AREA_YAUTJA_GROUNDS skip to dead Yautja, so bodies
+            // resting aboard the Yautja ship are not announced as bio signatures that need recovering.
+            if (uid == bracer || !_mobState.IsDead(uid) || IsAboardYautjaShip(uid))
                 continue;
 
             var coords = _transform.GetMapCoordinates(uid, xform);
             if (coords.MapId == MapId.Nullspace)
                 continue;
 
-            readout.AddDead(GetTrackerLevelBucket(uid, xform, coords, origin));
-            if (coords.MapId == origin.MapId)
+            readout.AddDead(GetTrackerLevelBucket(uid, xform, coords, originLevels));
+            if (originLevels.Contains(coords.MapId))
                 AddTrackerSignal(groups, origin, coords, Loc.GetString(DeadYautjaBioSignatureName), readout, null);
         }
 
@@ -265,8 +300,8 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             if (coords.MapId == MapId.Nullspace)
                 continue;
 
-            readout.AddGear(GetTrackerLevelBucket(uid, xform, coords, origin));
-            if (coords.MapId == origin.MapId)
+            readout.AddGear(GetTrackerLevelBucket(uid, xform, coords, originLevels));
+            if (originLevels.Contains(coords.MapId))
                 AddTrackerSignal(groups, origin, coords, Name(uid), readout, Name(uid));
         }
 
@@ -326,7 +361,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             : Loc.GetString("rmc-tacmap-alert-no-area");
     }
 
-    private TrackerLevelBucket GetTrackerLevelBucket(EntityUid uid, TransformComponent xform, MapCoordinates coords, MapCoordinates origin)
+    private TrackerLevelBucket GetTrackerLevelBucket(EntityUid uid, TransformComponent xform, MapCoordinates coords, HashSet<MapId> originLevels)
     {
         if (_areas.TryGetArea(coords, out var area, out var areaPrototype))
         {
@@ -342,7 +377,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         if (IsPlanetOrGroundMap(xform))
             return TrackerLevelBucket.HuntingGrounds;
 
-        return coords.MapId == origin.MapId
+        return originLevels.Contains(coords.MapId)
             ? TrackerLevelBucket.HuntingGrounds
             : TrackerLevelBucket.LowOrbit;
     }
@@ -374,9 +409,26 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         return string.Equals(powerNet, expected, StringComparison.OrdinalIgnoreCase);
     }
 
-    private bool ShouldHideFromTracker(EntityUid uid)
+    public bool ShouldHideFromTracker(EntityUid uid)
     {
-        return IsStoredInsideYautjaGearContainer(uid) || IsOnYautja(uid);
+        return IsStoredInsideYautjaGearContainer(uid) || IsOnYautja(uid) || IsAboardYautjaShip(uid) ||
+               TryComp<YautjaTrackerHiddenUntilComponent>(uid, out var hidden) &&
+               _gameTicker.RoundDuration() < hidden.RoundTime;
+    }
+
+    /// <summary>
+    /// CMU14: yaut_bracers.dm:719 skips any signature whose area carries AREA_YAUTJA_GROUNDS, which
+    /// game/area/Yautja.dm:12 and :162 set on the Yautja ship decks, so gear and bodies aboard the Yautja ship
+    /// are never reported as loose gear needing recovery. CMU has no DM area flags; the equivalent marker for
+    /// those decks is the station-side CMUHunterShipHiveBootstrap that the CMUYautjaHunterShip game map
+    /// declares (Prototypes/CMU14/Maps/huntership.yml). Resolving it through the entity's owning station makes
+    /// this work for gear on the floor, gear inside a container, and gear carried by someone aboard, and it
+    /// stops applying as soon as the gear is off the ship's grids.
+    /// </summary>
+    private bool IsAboardYautjaShip(EntityUid uid)
+    {
+        return _station.GetOwningStation(uid) is { } station &&
+               HasComp<CMUHunterShipHiveBootstrapComponent>(station);
     }
 
     private bool IsStoredInsideYautjaGearContainer(EntityUid uid)
@@ -419,6 +471,12 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             {
                 return true;
             }
+
+            // CMU14: yautja_tracked_item.dm/proc/is_honorable_carrier also counts an honored or thralled
+            // human synth that is still alive, so gear in such a carrier's hands is not "loose" gear and must
+            // not show up as gear that needs recovering.
+            if (HasComp<YautjaTechAuthorizedComponent>(current) && !_mobState.IsDead(current))
+                return true;
 
             if (_containers.TryGetContainingContainer((current, null, null), out var containing))
             {

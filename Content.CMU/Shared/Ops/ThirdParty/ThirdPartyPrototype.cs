@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.Allegiance;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Robust.Shared.Utility;
@@ -68,6 +69,13 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField]
     public List<string> WhitelistedPlatoons { get; private set; } = new();
 
+    /// <summary>
+    ///     Allegiance this party fights for. In Force on Force a party whose allegiance matches
+    ///     a side's platoon is tagged with that side, so identification treats it as a teammate.
+    /// </summary>
+    [DataField("allegiance")]
+    public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
+
     [DataField("roundstart", required: false)]
     public bool RoundStart { get; private set; }
 
@@ -77,11 +85,36 @@ public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototy
     [DataField]
     public bool AnnounceAsSurvivors { get; private set; }
 
+    /// <summary>
+    /// Whether the party's members also speak the colony's language (the planet's <c>CMUColonyLanguage</c>).
+    /// Their own default language stays. Set on civilian parties.
+    /// </summary>
+    [DataField]
+    public bool SpeaksColonyLanguage { get; private set; }
+
+    /// <summary>
+    /// Whether the party's members also speak the languages of the faction that called them in from a console
+    /// (the ambassador console's <c>languages</c>).
+    /// </summary>
+    [DataField]
+    public bool SpeaksCallerLanguage { get; private set; }
+
+    /// <summary>
+    /// With <see cref="SpeaksCallerLanguage"/>, the caller's first language also becomes the members' default.
+    /// </summary>
+    [DataField]
+    public bool DefaultsToCallerLanguage { get; private set; }
+
     [DataField("partyspawn", required: true)]
     public ProtoId<PartySpawnPrototype> PartySpawn { get; private set; }
 
     [DataField("announcearrival")]
-    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict zone.";
+    public string? AnnounceArrival { get; private set; } = "A responding force has made their entrance into the conflict.";
+
+    // optional header for the arrival line instead of the plain announcement wrap,
+    // e.g. Dutch's Dozen uses cmss13's "Intercepted Transmission:"
+    [DataField("announcearrivaltitle")]
+    public LocId? AnnounceArrivalTitle { get; private set; }
 
     /// <summary>
     ///     Announced when a scheduled party goes ready and starts gathering ghost volunteers,

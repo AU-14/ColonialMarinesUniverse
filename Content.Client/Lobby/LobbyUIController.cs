@@ -360,6 +360,10 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         {
             lobbyGui.SwitchState(LobbyGui.LobbyGuiState.Default);
         }
+
+        // cmu edit start: observers can open character setup from the escape menu mid-round
+        CloseInGameCharacterSetup();
+        // cmu edit end
     }
 
     private void OpenSavePanel()
@@ -475,6 +479,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             var loadout = profile.GetLoadoutOrDefault(key, _playerManager.LocalSession, profile.Species, EntityManager, _prototypeManager);
             GiveDummyLoadout(dummy, loadout);
         }
+        GiveDummyLoadout(dummy, profile.GetLoadoutOrDefault(HumanoidCharacterProfile.GlobalLoadoutId,
+            _playerManager.LocalSession, profile.Species, EntityManager, _prototypeManager)); // CMU14
     }
 
     /// <summary>
@@ -637,6 +643,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
                 var loadout = humanoid.GetLoadoutOrDefault(key, _playerManager.LocalSession, humanoid.Species, EntityManager, _prototypeManager);
                 GiveDummyLoadout(dummyEnt, loadout);
             }
+            GiveDummyLoadout(dummyEnt, humanoid.GetLoadoutOrDefault(HumanoidCharacterProfile.GlobalLoadoutId,
+                _playerManager.LocalSession, humanoid.Species, EntityManager, _prototypeManager)); // CMU14
         }
 
         return dummyEnt;

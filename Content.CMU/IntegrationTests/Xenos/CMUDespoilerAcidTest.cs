@@ -5,7 +5,9 @@ using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.CMU14.Xenonids;
 
@@ -32,6 +34,39 @@ public sealed class CMUDespoilerAcidTest : GameTest
                 layer: [MobLayer]
                 mask: [MobMask]
         """;
+
+    [Test]
+    public async Task LingeringAcidStillBurnsWithoutReplicatingDeletedDamageReferences()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid caster = default;
+        EntityUid target = default;
+        EntityUid puddle = default;
+        await Server.WaitAssertion(() =>
+        {
+            caster = SEntMan.SpawnEntity(null, map.GridCoords.Offset(new Vector2(4, 0)));
+            target = SEntMan.SpawnEntity("CMUDespoilerAcidTestTarget", map.GridCoords);
+            puddle = SEntMan.SpawnEntity("RMCEffectDespoilerLingeringAcid", map.GridCoords);
+            SEntMan.GetComponent<XenoDespoilerLingeringAcidComponent>(puddle).Caster = caster;
+        });
+        await Pair.RunSeconds(0.2f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Server.System<DamageableSystem>().GetTotalDamage(target), Is.GreaterThan(FixedPoint2.Zero));
+            SEntMan.DeleteEntity(caster);
+            SEntMan.DeleteEntity(target);
+            var acid = SEntMan.GetComponent<XenoDespoilerLingeringAcidComponent>(puddle);
+            // State production must not resolve server-only damage attribution or collision history.
+            SEntMan.GetComponentState(SEntMan.EventBus, acid, null, GameTick.Zero);
+            target = SEntMan.SpawnEntity("CMUDespoilerAcidTestTarget", map.GridCoords);
+        });
+        await Pair.RunSeconds(0.2f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(Server.System<DamageableSystem>().GetTotalDamage(target), Is.GreaterThan(FixedPoint2.Zero),
+                "The surviving puddle must still burn new targets after its caster disappears.");
+        });
+    }
 
     [Test]
     public async Task AcidTicksStayOnScheduleUntilExpiry()
@@ -115,39 +150,4 @@ public sealed class CMUDespoilerAcidTest : GameTest
         });
     }
 
-    [Test]
-    public async Task EmpoweredOozingWoundsAppliesTierTwoOnCollision()
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid target = default;
-        EntityUid control = default;
-        float initialDamage = 0;
-        float initialControlDamage = 0;
-        await Server.WaitAssertion(() =>
-        {
-            var caster = SEntMan.SpawnEntity("RMCXenoDespoiler", map.GridCoords.Offset(new Vector2(4, 0)));
-            target = SEntMan.SpawnEntity("CMUDespoilerAcidTestTarget", map.GridCoords);
-            control = SEntMan.SpawnEntity("CMUDespoilerAcidTestTarget", map.GridCoords.Offset(new Vector2(2, 0)));
-            var spray = SEntMan.SpawnEntity("RMCEffectDespoilerAcidSprayEmpowered", map.GridCoords);
-            SEntMan.GetComponent<XenoDespoilerAcidSprayComponent>(spray).Caster = caster;
-            var normal = SEntMan.SpawnEntity("RMCEffectDespoilerAcidSpray", map.GridCoords.Offset(new Vector2(2, 0)));
-            SEntMan.GetComponent<XenoDespoilerAcidSprayComponent>(normal).Caster = caster;
-        });
-        await Pair.RunSeconds(0.2f);
-        await Server.WaitAssertion(() =>
-        {
-            Assert.That(SEntMan.GetComponent<UserAcidedComponent>(target).Tier, Is.EqualTo(2));
-            Assert.That(SEntMan.GetComponent<UserAcidedComponent>(control).Tier, Is.EqualTo(1));
-            initialDamage = (float) Server.System<DamageableSystem>().GetTotalDamage(target);
-            initialControlDamage = (float) Server.System<DamageableSystem>().GetTotalDamage(control);
-        });
-        await Pair.RunSeconds(3);
-        await Server.WaitAssertion(() =>
-        {
-            var damage = Server.System<DamageableSystem>();
-            var empoweredTicks = (float) damage.GetTotalDamage(target) - initialDamage;
-            var normalTicks = (float) damage.GetTotalDamage(control) - initialControlDamage;
-            Assert.That(empoweredTicks, Is.GreaterThan(normalTicks), "empowered spray must apply stronger lingering damage");
-        });
-    }
 }

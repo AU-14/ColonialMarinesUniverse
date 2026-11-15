@@ -78,7 +78,7 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: RadiationGridResistance
-- proto: CMUAirFillerVent
+- proto: CMULifeSupportVent
   entities:
   - uid: 201
     components:

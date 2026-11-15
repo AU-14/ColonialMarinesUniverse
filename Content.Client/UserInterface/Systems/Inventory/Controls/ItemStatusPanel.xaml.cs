@@ -31,6 +31,7 @@ public sealed partial class ItemStatusPanel : Control
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
+        _cmuItemNameLabel = ItemNameLabel; // CMU14: generated named-control lookups allocate an ancestor iterator.
     }
 
     public void SetSide(HandLocation location)
@@ -171,16 +172,22 @@ public sealed partial class ItemStatusPanel : Control
             return;
         }
 
+        // CMU14: keep identity checks live, but do not invalidate unchanged label layout every frame.
+        string name;
         if (_entityManager.TryGetComponent(_entity, out VirtualItemComponent? virtualItem)
             && _entityManager.EntityExists(virtualItem.BlockingEntity))
         {
             // Uses identity because we can be blocked by pulling someone
-            ItemNameLabel.Text = Identity.Name(virtualItem.BlockingEntity, _entityManager, _player.LocalEntity);
+            name = Identity.Name(virtualItem.BlockingEntity, _entityManager, _player.LocalEntity);
         }
         else
         {
-            ItemNameLabel.Text = Identity.Name(_entity.Value, _entityManager, _player.LocalEntity);
+            name = Identity.Name(_entity.Value, _entityManager, _player.LocalEntity);
         }
+
+        if (_cmuItemNameLabel.Text != name)
+            _cmuItemNameLabel.Text = name;
+        // CMU14 End
     }
 
     private void ClearOldStatus()

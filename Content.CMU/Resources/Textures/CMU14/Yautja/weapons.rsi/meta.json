@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/obj/items/hunter/pred_gear.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/obj/items/weapons/melee/shields.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/hunter/items_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/hunter/items_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/inhands/weapons/melee/shields_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/inhands/weapons/melee/shields_righthand.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/obj/items/hunter/pred_gear.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/obj/items/weapons/melee/shields.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/hunter/items_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/hunter/items_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/inhands/weapons/melee/shields_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/icons/mob/humans/onmob/inhands/weapons/melee/shields_righthand.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata. Raised shield inhands (*_ready-inhand-*) taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/items_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/hunter/items_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/inhands/weapons/melee/shields_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/e726c70638354dc773b438fd5991a20d19c0e557/icons/mob/humans/onmob/inhands/weapons/melee/shields_righthand.dmi.",
   "size": {
     "x": 32,
     "y": 32
@@ -309,6 +309,78 @@
     },
     {
       "name": "duelling_knife-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "war_glaive_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "war_glaive_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "cleaving_glaive_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "cleaving_glaive_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "combistick_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "combistick_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "hunter_spear_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "hunter_spear_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "longaxe_w-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "longaxe_w-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "clan_shield_ready-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "clan_shield_ready-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "ancient_shield_ready-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "ancient_shield_ready-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "ancient_shield_alt_ready-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "ancient_shield_alt_ready-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "ancient_shield_temple_ready-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "ancient_shield_temple_ready-inhand-right",
       "directions": 4
     }
   ]

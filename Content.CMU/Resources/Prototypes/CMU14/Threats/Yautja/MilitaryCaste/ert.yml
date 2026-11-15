@@ -1,0 +1,48 @@
+# cmss13 /datum/emergency_call/yautja_mcaste (deathsquad.dm): admin-called only (probability = 0), 3-8 members,
+# first volunteer with leader time becomes the Enforcer, the rest are Soldiers, hostile to everyone but other Yautja.
+# Call it with: spawnthirdparty CMUYautjaMilitaryCaste true  (or CMUYautjaMilitaryCasteLowThreat for the weaker kit)
+
+- type: partySpawn
+  id: CMUYautjaMilitaryCasteSpawn
+  leadersToSpawn:
+    CMUMobYautjaMilitaryCasteEnforcer: 1
+  gruntsToSpawn:
+    CMUMobYautjaMilitaryCasteSoldier: 7
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUYautjaMilitaryCaste
+  displayName: cmu-yautja-mcaste-party-name
+  partyspawn: CMUYautjaMilitaryCasteSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Dropships/mcaste_shuttle.yml
+  # admin only: a negative cap keeps it out of every automatic roll
+  minplayers: 0
+  maxplayers: -1
+  announcearrival: cmu-yautja-mcaste-arrival
+
+- type: partySpawn
+  id: CMUYautjaMilitaryCasteLowThreatSpawn
+  leadersToSpawn:
+    CMUMobYautjaMilitaryCasteEnforcerLowThreat: 1
+  gruntsToSpawn:
+    CMUMobYautjaMilitaryCasteSoldierLowThreat: 7
+  spawnTogether: true
+
+- type: thirdParty
+  parent: CMUYautjaMilitaryCaste
+  id: CMUYautjaMilitaryCasteLowThreat
+  displayName: cmu-yautja-mcaste-low-threat-party-name
+  partyspawn: CMUYautjaMilitaryCasteLowThreatSpawn
+
+# the hunter shuttle console flies it, but as a third-party shuttle so it lands where responders land.
+# YautjaShuttleConsole still turns away anyone without yautja tech, like cmss13's pred_mcaste console
+- type: entity
+  parent: CMUYautjaHunterShuttleConsole
+  id: CMUYautjaMilitaryCasteShuttleConsole
+  suffix: Yautja, Military Caste Shuttle
+  components:
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true

@@ -11,6 +11,17 @@ namespace Content.Shared._RMC14.Xenonids.Parasite;
 // CMU14: how long a parasite holds on to a face, and shaking it loose.
 public abstract partial class SharedXenoParasiteSystem
 {
+    /// <summary>
+    /// Neomorph infections produce raspy breathing after stage one, before the late burst symptoms.
+    /// Ordinary xenonid embryos do not produce this diagnostic clue.
+    /// </summary>
+    public bool HasNeomorphBreathingSymptoms(EntityUid patient)
+    {
+        return TryComp<VictimInfectedComponent>(patient, out var infected)
+            && infected.BurstSpawn == "CMU14XenoBloodburster"
+            && infected.CurrentStage >= 2;
+    }
+
     private void CMUInitialize()
     {
         SubscribeLocalEvent<InfectableComponent, InteractHandEvent>(CMUOnInfectableInteractHand,

@@ -85,6 +85,7 @@
 
 - type: thirdParty
   id: ProfessorVonBandolier
+  speaksColonyLanguage: true
   partyspawn: ProfessorVonBandolierSpawn
   entrymethod: shuttle
   weight: 1

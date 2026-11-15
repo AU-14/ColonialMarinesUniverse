@@ -37,6 +37,7 @@ public sealed partial class CassetteSystem : SharedCassetteSystem
         base.Initialize();
 
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<CassettePlayerComponent, ComponentRemove>(OnPlayerRemoved); // CMU14
 
         Subs.CVar(_config, RMCCVars.VolumeGainCassettes, SetGain, true);
 
@@ -64,6 +65,39 @@ public sealed partial class CassetteSystem : SharedCassetteSystem
         */
         // CMU14 End
     }
+
+    // CMU14: reconcile local audio after state application and prediction replay have finished.
+    // Applying an intermediate rollback state directly would stop a freshly predicted track.
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+
+        var players = EntityQueryEnumerator<CassettePlayerComponent>();
+        while (players.MoveNext(out var uid, out var player))
+        {
+            if (player.CustomAudioStream == null)
+                continue;
+
+            if (player.State == AudioState.Stopped)
+                StopCustomTrack((uid, player));
+            else
+                _audio.SetState(player.CustomAudioStream, player.State);
+        }
+    }
+
+    private void OnPlayerRemoved(Entity<CassettePlayerComponent> ent, ref ComponentRemove args)
+    {
+        StopCustomTrack(ent);
+    }
+
+    private void StopCustomTrack(Entity<CassettePlayerComponent> player)
+    {
+        // This entity is client-owned. Authoritative removal must also clean it up during state application.
+        if (player.Comp.CustomAudioStream is { } stream && IsClientSide(stream))
+            QueueDel(stream);
+        player.Comp.CustomAudioStream = null;
+    }
+    // CMU14 end
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {

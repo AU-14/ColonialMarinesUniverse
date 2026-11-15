@@ -153082,7 +153082,7 @@ entities:
           showEnts: False
           occludes: True
           ent: null
-- proto: RMCCableCoil20
+- proto: CMUCableThinLVStack20 # CMU14: replaced RMCCableCoil20, thin LV cable
   entities:
   - uid: 1902
     components:

@@ -100,7 +100,8 @@
 
 # Freelancer
 - type: entity
-  parent: RMCArmorSPP
+  # CMU14: was RMCArmorSPP, whose UPP-jumpsuit requirement fits no role that wears this cuirass
+  parent: CMArmorM3Medium
   id: CMArmorFreelancer
   name: freelancer cuirass
   description: An armored protective chestplate scrapped together from various plates. It keeps up remarkably well, as the craftsmanship is solid, and the design mirrors such armors in the UPP and the UNMC. The many skilled craftsmen in the freelancers ranks produce these vests at a rate about one a month.
@@ -124,6 +125,9 @@
     grid:
     - 0,0,3,1 # 2 slots
     maxItemSize: Small
+  # CMU14: pinned from the old RMCArmorSPP parent so M3 camo variants do not inherit in
+  - type: ItemCamouflage
+    camouflageVariations: { }
 
 # Colonial militia
 # TODO: implement storage whitelist for this

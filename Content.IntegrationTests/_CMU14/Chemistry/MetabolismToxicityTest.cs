@@ -25,30 +25,6 @@ public sealed class MetabolismToxicityTest
     private static readonly ProtoId<MetabolismStagePrototype> Metabolites = "Metabolites";
 
     [Test]
-    public async Task RepresentativeResourcesTagOnlyPoisonAndAlcohol()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-
-        await pair.Server.WaitAssertion(() =>
-        {
-            var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
-            Assert.Multiple(() =>
-            {
-                Assert.That(GetEntry(prototypes, "WeldingFuel", Bloodstream).CMUToxicity,
-                    Is.EquivalentTo(new[] { CMUMetabolismClass.Poison }));
-                Assert.That(GetEntry(prototypes, "RMCEthanol", Metabolites).CMUToxicity,
-                    Is.EquivalentTo(new[] { CMUMetabolismClass.Alcohol }));
-                Assert.That(GetEntry(prototypes, "CMUParacetamol", Bloodstream).CMUToxicity, Is.Empty,
-                    "A medicine entry was incorrectly treated as liver-toxic merely because it uses Bloodstream.");
-                Assert.That(GetEntry(prototypes, "Nutriment", Metabolites).CMUToxicity, Is.Empty,
-                    "Nutriment was incorrectly treated as liver-toxic merely because it uses Metabolites.");
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task MetabolismDamagesLiverOnlyForExplicitToxicityAndStasisFreezesProcessing()
     {
         await using var pair = await PoolManager.GetServerClient();

@@ -225,18 +225,10 @@ namespace Content.Client.UserInterface.Controls
             BlockedTexturePath = "blocked";
         }
 
+        // CMU14 method: release the slot-owned preview, including detached controls.
         public void ClearHover()
         {
-            if (!EntityHover)
-                return;
-
-            var tempQualifier = HoverSpriteView.Entity;
-            if (tempQualifier != null)
-            {
-                IoCManager.Resolve<IEntityManager>().QueueDeleteEntity(tempQualifier);
-            }
-
-            HoverSpriteView.SetEntity(null);
+            CMUClearHover();
         }
 
         /// <summary>
@@ -286,27 +278,8 @@ namespace Content.Client.UserInterface.Controls
                 ? fullTexture.Texture
                 : Theme.ResolveTextureOrNull(_buttonTexturePath)?.Texture;
             ButtonRect.Texture = texture;
-            // RMC14 - Refresh icon label
-            IconLabel.Text = "";
-            IconLabel.FontColorOverride = Color.White;
-            if (_entities.TryGetComponent(Entity, out IconLabelComponent? iconLabel))
-            {
-                if (iconLabel.LabelTextLocId is not null && _loc.TryGetString(iconLabel.LabelTextLocId, out var labelText, iconLabel.LabelTextParams.ToArray()))
-                {
-                    if (labelText.Length > iconLabel.LabelMaxSize)
-                        labelText = labelText[..iconLabel.LabelMaxSize];
-
-                    IconLabel.Text = labelText;
-                }
-
-                if (Color.TryFromName(iconLabel.TextColor, out Color color))
-                {
-                    IconLabel.FontColorOverride = color;
-                }
-
-                IconLabel.SetSize = new Vector2(iconLabel.TextSize);
-            }
-            // RMC14 - End Refresh icon label
+            // CMU14: share the control-owned localization cache and preserve unchanged label layout.
+            CMUUpdateIconLabel();
         }
 
         private void OnButtonPressed(GUIBoundKeyEventArgs args)

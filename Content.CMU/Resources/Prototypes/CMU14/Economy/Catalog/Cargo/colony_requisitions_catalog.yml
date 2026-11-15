@@ -15,6 +15,8 @@
       entries:
       - cost: 370
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 1200
+        crate: CMUCrateHESCO
       - cost: 800
         crate: CMUCrateAtmosSupplies
       - cost: 600
@@ -33,6 +35,12 @@
         crate: CMUCrateEngineeringWiring
       - cost: 350
         crate: RMCCrateMechanicalMaintenance
+      - cost: 150
+        crate: RUMCCrateHandSaws # RUMC: the saw for logs
+      - cost: 1500
+        crate: RUMCCrateIndustryStart # RUMC: the sealed kit of the start of the industry, opened with a crowbar
+      - cost: 450
+        crate: RUMCCrateConcreteMixer # RUMC: the concrete mixer, to mix bags of concrete from stone powder, sand and water
       - cost: 350
         crate: RMCCrateReplacementLights
       - cost: 350
@@ -77,6 +85,8 @@
         crate: RMCCrateSuppliesBoxes
     - name: Food and Drinks
       entries:
+      - cost: 600
+        crate: CMUCrateLivestockCow
       - cost: 380
         crate: AU14CrateBoxboxofingredients
       - cost: 390
@@ -400,6 +410,10 @@
         stockReplenishDelay: 300
       - cost: 1900
         crate: CMUCrateVehiclePartAPCFrontCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehiclePartAPCDualCannon
         maxStock: 2
         stockReplenishDelay: 300
 

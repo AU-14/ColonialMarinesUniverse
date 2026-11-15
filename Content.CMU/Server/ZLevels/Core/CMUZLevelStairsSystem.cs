@@ -40,7 +40,7 @@ public sealed partial class CMUZLevelStairsSystem : EntitySystem
 
     private void OnGlobalMove(ref MoveEvent ev)
     {
-        if (_moving.Contains(ev.Sender) ||
+        if (ev.OnlyRotation || _moving.Contains(ev.Sender) ||
             !_gridQuery.TryGetComponent(ev.OldPosition.EntityId, out var oldGrid) ||
             !_gridQuery.TryGetComponent(ev.NewPosition.EntityId, out var newGrid) ||
             ev.OldPosition.EntityId != ev.NewPosition.EntityId)

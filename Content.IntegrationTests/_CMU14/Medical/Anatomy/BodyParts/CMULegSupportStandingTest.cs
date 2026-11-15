@@ -5,8 +5,12 @@ using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Medical.Surgery;
+using Content.Shared._RMC14.Slow;
 using Content.Shared.Body.Part;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
+using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Standing;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -18,8 +22,9 @@ namespace Content.IntegrationTests.CMU14.Medical.Anatomy.BodyParts;
 [TestFixture]
 public sealed class CMULegSupportStandingTest
 {
-    [Test]
-    public async Task ReattachingBothLegsStandsThePatientBackUp()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task ReattachingBothLegsStandsThePatientBackUp(bool slowed)
     {
         await using var pair = await PoolManager.GetServerClient();
         var em = pair.Server.EntMan;
@@ -36,6 +41,13 @@ public sealed class CMULegSupportStandingTest
                 surgeon = em.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
                 // pain from the amputations would knock them down for its own reasons
                 em.System<SharedPainShockSystem>().AddPainSuppressionProfile(patient, 1f, 4, 0f, TimeSpan.FromSeconds(60));
+
+                if (slowed)
+                {
+                    var armor = em.SpawnEntity("CMArmorM3Medium", MapCoordinates.Nullspace);
+                    Assert.That(em.System<InventorySystem>().TryEquip(patient, armor, "outerClothing", silent: true, force: true), Is.True);
+                    em.System<RMCSlowSystem>().TrySuperSlowdown(patient, TimeSpan.FromSeconds(1));
+                }
 
                 var index = em.System<CMUMedicalBodyIndexSystem>();
                 Assert.That(index.TryGetBodyPart(patient, new(BodyPartType.Torso, BodyPartSymmetry.None), out torso), Is.True);
@@ -54,10 +66,13 @@ public sealed class CMULegSupportStandingTest
             {
                 var standing = em.System<StandingStateSystem>();
                 Assert.That(standing.IsDown(patient), Is.True, "a legless patient must be on the floor");
+                em.System<MovementSpeedModifierSystem>().RefreshMovementSpeedModifiers(patient);
+                Assert.That(float.IsFinite(em.GetComponent<MovementSpeedModifierComponent>(patient).CurrentSprintSpeed), Is.True,
+                    "Clothing and temporary slows must not corrupt speed when both legs are missing.");
 
                 Reattach(em, surgeon, patient, torso, carriers[BodyPartSymmetry.Left], BodyPartType.Leg, BodyPartSymmetry.Left);
             });
-            await pair.RunTicksSync(5);
+            await pair.RunTicksSync(90);
 
             await pair.Server.WaitAssertion(() =>
             {
@@ -70,6 +85,10 @@ public sealed class CMULegSupportStandingTest
             {
                 Assert.That(em.System<StandingStateSystem>().IsDown(patient), Is.False,
                     "with both legs back nothing else holds them down, so they must stand again");
+                em.System<MovementSpeedModifierSystem>().RefreshMovementSpeedModifiers(patient);
+                var speed = em.GetComponent<MovementSpeedModifierComponent>(patient).CurrentSprintSpeed;
+                Assert.That(float.IsFinite(speed) && speed > 0, Is.True,
+                    "Reattached legs must restore movement after the temporary slow expires.");
             });
         }
         finally

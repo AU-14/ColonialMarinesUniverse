@@ -1,6 +1,7 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Trigger.Systems;
 using Robust.Shared.GameObjects;
 
@@ -39,20 +40,21 @@ public sealed class ChemFoamReactionTest : GameTest
         });
     }
 
-    // same reaction without the payload plumbing, so a grenade-side break doesn't hide a reaction-side one
+    // same reaction without the payload plumbing, so a grenade-side break doesn't hide a reaction-side one.
+    // metal foam needs CMUMix: adding the reagents does nothing until the lid is closed and the beaker is mixed
     [Test]
     public async Task BeakerMixSpawnsMetalFoam()
     {
         var map = await Pair.CreateTestMap();
+        EntityUid beaker = default;
 
         await Server.WaitAssertion(() =>
         {
             var solutions = Server.System<SharedSolutionContainerSystem>();
-            var beaker = SEntMan.SpawnEntity("CMBeaker", map.GridCoords);
+            beaker = SEntMan.SpawnEntity("CMBeaker", map.GridCoords);
             var solutionName = SEntMan.GetComponent<FitsInDispenserComponent>(beaker).Solution;
             Assert.That(solutions.TryGetSolution(beaker, solutionName, out var soln, out _), Is.True);
 
-            // aluminium first, then the agent + acid, so the reaction fires on the second add
             solutions.TryAddReagent(soln!.Value, "RMCAluminum", 6, out _);
             Assert.That(CountFoam(), Is.Zero);
             solutions.TryAddReagent(soln.Value, "FoamingAgent", 2, out _);
@@ -63,7 +65,18 @@ public sealed class ChemFoamReactionTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            Assert.That(CountFoam(), Is.GreaterThan(0), "foam reaction in a beaker spawned nothing");
+            Assert.That(CountFoam(), Is.Zero, "metal foam fired without being mixed");
+
+            // what the Mix verb's doafter does once it finishes
+            Server.System<OpenableSystem>().SetOpen(beaker, false);
+            Assert.That(Server.System<ShakeableSystem>().TryShake(beaker), Is.True, "a closed beaker should mix");
+        });
+
+        await Pair.RunTicksSync(5);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(CountFoam(), Is.GreaterThan(0), "foam reaction in a mixed beaker spawned nothing");
         });
     }
 

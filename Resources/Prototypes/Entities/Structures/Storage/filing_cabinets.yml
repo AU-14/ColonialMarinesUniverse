@@ -165,7 +165,8 @@
   - type: EntityTableContainerFill
     containers:
       storagebase: !type:NestedSelector
-        tableId: FilingCabinetFillTable
+        # tableId: FilingCabinetFillTable # CMU14: use CM paperwork without upstream cartridges.
+        tableId: CMUFilingCabinetFillTable
 
 - type: entity
   parent: [BaseBureaucraticStorageFill, filingCabinet]

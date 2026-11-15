@@ -9,7 +9,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client._RMC14.Weapons.Ranged.Targeting;
 
-public sealed class TargetingOverlay : Overlay
+public sealed partial class TargetingOverlay : Overlay // CMU14: reuse descriptors.
 {
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
@@ -33,6 +33,7 @@ public sealed class TargetingOverlay : Overlay
     ///     Draws a line between any targeted entities and the entities targeting them.
     ///     Also draws a targeting visual on the targeted entity.
     /// </summary>
+    // CMU14 method: keep resource resolution live while reusing descriptors and target positions.
     protected override void Draw(in OverlayDrawArgs args)
     {
         var query = _entManager.EntityQueryEnumerator<RMCTargetedComponent>();
@@ -47,6 +48,7 @@ public sealed class TargetingOverlay : Overlay
             if (!xformQuery.TryGetComponent(uid, out var targetXform) || targetXform.MapID != args.MapId)
                 continue;
 
+            var worldPos = _transform.GetWorldPosition(targetXform, xformQuery);
             // Laser visuals
             foreach (var targeter in targeted.TargetedBy)
             {
@@ -59,7 +61,6 @@ public sealed class TargetingOverlay : Overlay
                 if (targetXform.MapID != gunXform.MapID)
                     continue;
 
-                var worldPos = _transform.GetWorldPosition(targetXform, xformQuery);
                 var gunWorldPos = _transform.GetWorldPosition(gunXform, xformQuery);
                 var diff = worldPos - gunWorldPos;
                 var angle = diff.ToWorldAngle();
@@ -82,13 +83,13 @@ public sealed class TargetingOverlay : Overlay
                     ? targetingLaser.LaserState
                     : targetingLaser.LaserIntenseState;
 
-                var laserTexture = _sprite.GetState(new SpriteSpecifier.Rsi(targetingLaser.RsiPath, rsiState));
+                var laserTexture = _sprite.GetState(CMUGetDescriptor(targetingLaser.RsiPath, rsiState));
                 var laserRsi = laserTexture.Frame0;
 
                 worldHandle.DrawTextureRect(laserRsi, rotated, Color.White.WithAlpha(alpha));
             }
 
-            var worldPosCross = _transform.GetWorldPosition(targetXform, xformQuery);
+            var worldPosCross = worldPos;
 
             if (targeted.TargetType == TargetedEffects.None)
                 continue;
@@ -109,7 +110,7 @@ public sealed class TargetingOverlay : Overlay
                     break;
             }
 
-            var lockOnRsi = _sprite.GetState(new SpriteSpecifier.Rsi(targeted.RsiPath, lockOnState));
+            var lockOnRsi = _sprite.GetState(CMUGetDescriptor(targeted.RsiPath, lockOnState));
             var time = _animTime % lockOnRsi.AnimationLength;
             var delay = 0f;
             var frameIndex = 0;
@@ -142,7 +143,7 @@ public sealed class TargetingOverlay : Overlay
                 _ => RsiDirection.South,
             };
 
-            var directionRsi = _sprite.GetState(new SpriteSpecifier.Rsi(targeted.RsiPath, directionState));
+            var directionRsi = _sprite.GetState(CMUGetDescriptor(targeted.RsiPath, directionState));
             var directionTexture = directionRsi.GetFrame(rsiDirection, 0);
             worldHandle.DrawTexture(directionTexture, worldPosCross - centerOffset);
         }

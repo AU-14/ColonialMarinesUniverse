@@ -16,6 +16,7 @@ on:
       - "Content.CMU/Resources/Maps/CMU14/**/*.yml"
       # Also run if the mapchecker itself or its config is changed.
       - ".github/map_checker/**"
+      - ".github/workflows/mapchecker.yml"
   workflow_dispatch:
 
 env:
@@ -28,6 +29,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # CMU14: compare the complete PR diff, including renames.
 
       - name: Setup Rust
         run: rustup update stable && rustup default stable
@@ -51,35 +54,37 @@ jobs:
       - name: Build
         run: cd .github/map_checker && cargo b --release
 
-      - name: Check map trees
-        shell: bash
+      # CMU14: check changed map files; checker/config changes and manual runs check both trees.
+      - name: Check affected maps
+        shell: python
+        env:
+          CI_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          CI_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          set +e
+          import os
+          import re
+          import subprocess
+          from pathlib import Path
 
-          names=("_RMC14" "CMU14")
-          paths=("Resources/Maps/_RMC14" "Content.CMU/Resources/Maps/CMU14")
-          pids=()
-          status=0
-
-          mkdir -p /tmp/map-checker
-
-          for i in "${!names[@]}"; do
-            ./.github/map_checker/target/release/map_checker \
-              -c .github/map_checker/matchers.yml \
-              -m "${paths[$i]}" \
-              > "/tmp/map-checker/${names[$i]}.log" 2>&1 &
-            pids+=("$!")
-          done
-
-          for i in "${!names[@]}"; do
-            name="${names[$i]}"
-            if ! wait "${pids[$i]}"; then
-              echo "::error title=Map checker failed::$name"
-              status=1
-            fi
-
-            echo "===== $name ====="
-            cat "/tmp/map-checker/$name.log"
-          done
-
-          exit "$status"
+          roots = ("Resources/Maps/_RMC14", "Content.CMU/Resources/Maps/CMU14")
+          targets = list(roots)
+          base, head = os.environ["CI_BASE_SHA"], os.environ["CI_HEAD_SHA"]
+          if all(re.fullmatch(r"[0-9a-f]{40}", sha) for sha in (base, head)):
+              try:
+                  changed = subprocess.check_output([
+                      "git", "diff", "--no-ext-diff", "--no-textconv", "--no-renames",
+                      "--name-only", "-z", f"{base}...{head}", "--"
+                  ]).decode("utf-8").split("\0")
+                  if not any(p.startswith(".github/map_checker/") or
+                             p == ".github/workflows/mapchecker.yml" for p in changed):
+                      targets = [p for p in changed if p.endswith(".yml") and
+                                 any(p.startswith(root + "/") for root in roots) and Path(p).is_file()]
+              except (subprocess.CalledProcessError, UnicodeError):
+                  print("Map diff unavailable; checking both map trees.", flush=True)
+          status = 0
+          for target in targets:
+              status |= subprocess.run([
+                  "./.github/map_checker/target/release/map_checker",
+                  "-c", ".github/map_checker/matchers.yml", "-m", target
+              ]).returncode
+          raise SystemExit(status)

@@ -186,6 +186,28 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
                (!receiver.NeedsPower || receiver.Powered);
     }
 
+    // CMU14 method: PowerNetSystem skips RMC receivers, so wire cuts (ApcPowerReceiver.PowerDisabled)
+    // never reached PowerChangedEvent; converge them on the power tick
+    private void UpdatePowerDisabledReceivers()
+    {
+        var receivers = EntityQueryEnumerator<RMCPowerReceiverComponent, ApcPowerReceiverComponent>();
+        while (receivers.MoveNext(out var uid, out var receiver, out var apc))
+        {
+            if (!apc.NeedsPower)
+                continue;
+
+            var powered = !apc.PowerDisabled
+                          && receiver.Area is { } area
+                          && IsAreaPowered(area, receiver.Channel);
+
+            if (apc.Powered == powered)
+                continue;
+
+            var ev = new PowerChangedEvent(powered, 0);
+            UpdateReceiverPower(uid, ref ev);
+        }
+    }
+
     private void UpdatePortableGenerators()
     {
         _portableGenPower.Clear();
@@ -320,6 +342,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
         _toRemove.Clear();
 
         UpdatePortableGenerators();
+        UpdatePowerDisabledReceivers(); // CMU14
 
         var power = new Dictionary<EntityUid, float>();
         var generators = EntityQueryEnumerator<RMCFusionReactorComponent, TransformComponent>();

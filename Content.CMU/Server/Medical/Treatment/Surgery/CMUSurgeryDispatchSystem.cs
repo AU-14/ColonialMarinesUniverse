@@ -81,8 +81,15 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!CanAccessPatient(surgeon, patient))
             return false;
 
-        if (tool is { } usedTool && IsUiLessSurgeryEnabled(surgeon))
+        // CMU14: UI-less surgery needs a body zone the surgeon has aimed at; without one it used to refuse here and
+        // the surgery could never be started while the option was on. Fall through to the normal window flow when
+        // there is no zone selection, so the option only changes behaviour once a site is actually chosen.
+        if (tool is { } usedTool
+            && IsUiLessSurgeryEnabled(surgeon)
+            && TryGetSelectedPart(surgeon, out _, out _))
+        {
             return TryDispatchUiLess(surgeon, patient, usedTool);
+        }
 
         var allowStanding = tool is { } dispatchTool && IsYautjaMedicompTool(dispatchTool);
         if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true, allowStanding: allowStanding))

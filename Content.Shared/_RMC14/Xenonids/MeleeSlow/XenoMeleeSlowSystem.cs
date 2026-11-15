@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Slow;
+using Content.Shared.CMU14.Yautja.Slow; // CMU14
 using Content.Shared.Movement.Systems;
 using Content.Shared.Standing;
 using Content.Shared.Weapons.Melee.Events;
@@ -11,6 +12,7 @@ public sealed partial class XenoMeleeSlowSystem : EntitySystem
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private CMUYautjaSlowSystem _yautjaSlow = default!; // CMU14
 
     public override void Initialize()
     {
@@ -31,7 +33,8 @@ public sealed partial class XenoMeleeSlowSystem : EntitySystem
                 return;
 
             var slow = xeno.Comp.HigherOnXenos ? _xeno.TryApplyXenoDebuffMultiplier(entity, xeno.Comp.SlowTime) : xeno.Comp.SlowTime;
-            _slow.TrySlowdown(entity, slow, ignoreDurationModifier: true);
+            if (!_yautjaSlow.TryApply(entity, xeno.Comp.YautjaSlow)) // CMU14
+                _slow.TrySlowdown(entity, slow, ignoreDurationModifier: true);
 
             break;
         }

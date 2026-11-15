@@ -13,6 +13,10 @@
   suffix: AU14 z-build
   description: A handheld scanner that overlays the stability of dug-out ceilings. Toggle it in hand to see where a cavern is about to cave in.
   components:
+  - type: GuideHelp
+    guides:
+    - CMUGuideIndustryDig
+    - CMUGuideIndustry
   - type: Sprite
     sprite: Structures/Machines/salvage.rsi
     state: salvage-magnet

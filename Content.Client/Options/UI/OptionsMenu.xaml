@@ -4,10 +4,8 @@
             xmlns:cmu="clr-namespace:Content.Client.CMU14.Interface"
             Title="{Loc 'ui-options-title'}"
             MinSize="800 450">
-    <!-- CrtContent holds everything the shader re-draws; CrtOverlay is its sibling and draws after
-         it, so the shaded copy covers the original. See CrtScreenControl for why it has to be a
-         sibling rather than a parent. -->
-    <Control>
+    <!-- CMU14: capture the live content once through its CRT sibling. -->
+    <cmu:CrtScreenContainer>
         <Control Name="CrtContent" HorizontalExpand="True" VerticalExpand="True">
             <!-- CrtPanelFill, not CrtPanel: a plain ground with no border and no inset, so this is
                  still not a third concentric rectangle. It exists because TabContainer paints its
@@ -28,5 +26,5 @@
             </PanelContainer>
         </Control>
         <cmu:CrtScreenControl Name="CrtOverlay" HorizontalExpand="True" VerticalExpand="True" />
-    </Control>
+    </cmu:CrtScreenContainer>
 </DefaultWindow>

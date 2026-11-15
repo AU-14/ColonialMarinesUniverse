@@ -1,0 +1,47 @@
+- type: entity
+  parent: ActionMarineToggleable
+  id: CMUActionManpadLowAltitudeAim
+  name: Scan low altitude
+  description: Raise the wielded MANPAD and search for a gunship or Blackfoot above you. Once a target is locked, press the fire button. Toggle again to lower it. Cannot be used together with the high altitude scan.
+  components:
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_sniper_actions.rsi
+      state: elevation_down
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:CMUManpadLowAltitudeAimActionEvent
+
+- type: entity
+  id: CMUManpadGunshipHitEffect
+  categories: [ HideSpawnMenu, DoNotMap ]
+  name: missile hit
+  components:
+  - type: Sprite
+    sprite: _RMC14/Effects/grenade_explosion.rsi
+    state: grenade
+    scale: 3, 3
+    drawdepth: Effects
+  - type: PointLight
+    color: "#FFB45E"
+    radius: 6
+    energy: 4
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  id: CMUManpadBlackfootHitEffect
+  categories: [ HideSpawnMenu, DoNotMap ]
+  name: missile hit
+  components:
+  - type: Sprite
+    sprite: _RMC14/Effects/grenade_explosion.rsi
+    state: grenade
+    scale: 1.5, 1.5
+    drawdepth: Effects
+  - type: PointLight
+    color: "#FFB45E"
+    radius: 3
+    energy: 3
+  - type: TimedDespawn
+    lifetime: 0.8

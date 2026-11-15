@@ -1,0 +1,28 @@
+# The good things that can happen in a city of the world map (see WorldCityEventPrototype). The factions pay to support them and share the favour that they give.
+
+- type: worldCityEvent
+  id: RUMCEventFestival
+  name: rumc-event-festival-name
+  description: rumc-event-festival-desc
+  durationSeconds: 300
+  weight: 1.2
+  reward: 18
+  goal: 700
+
+- type: worldCityEvent
+  id: RUMCEventFair
+  name: rumc-event-fair-name
+  description: rumc-event-fair-desc
+  durationSeconds: 360
+  weight: 1
+  reward: 22
+  goal: 1000
+
+- type: worldCityEvent
+  id: RUMCEventDelegation
+  name: rumc-event-delegation-name
+  description: rumc-event-delegation-desc
+  durationSeconds: 300
+  weight: 0.8
+  reward: 26
+  goal: 1200

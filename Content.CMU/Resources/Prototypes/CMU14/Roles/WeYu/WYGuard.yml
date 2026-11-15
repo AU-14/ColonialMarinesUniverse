@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   abstract: true
+  displayWeight: 14
   id: AU14JobWYGuardBase
   name: au14-job-name-wyguard
   description: au14-job-description-wyguard

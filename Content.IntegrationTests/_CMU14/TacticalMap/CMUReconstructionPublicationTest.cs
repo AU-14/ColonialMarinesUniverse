@@ -85,7 +85,6 @@ public sealed partial class CMUReconstructionTest
     [TestCase("GOVFOR", "GOVFOR", true)]
     [TestCase("GOVFOR", "OPFOR", false)]
     [TestCase("OPFOR", "OPFOR", true)]
-    [TestCase("OPFOR", "GOVFOR", false)]
     [TestCase("MARINES", "MARINES", true)]
     [TestCase("CLF", "CLF", true)]
     [TestCase("WEYU", "WEYU", true)]

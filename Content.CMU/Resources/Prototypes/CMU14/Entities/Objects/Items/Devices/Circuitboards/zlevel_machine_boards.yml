@@ -1,6 +1,6 @@
 # Machine boards for the cross-deck z-level infrastructure: opening vents,
 # pipe risers, power risers, and the automatic transfer switch.
-# Parts pools only use stacks obtainable in CM rounds: CMSteel, RMCCable,
+# Parts pools only use stacks obtainable in CM rounds: CMSteel, CMUThinCableLV,
 # CMGlass. Upstream Manipulator/Cable/Glass are R&D or NT-supply goods this
 # fork never stocks, and empty pools build for free.
 - type: entity
@@ -15,7 +15,7 @@
     prototype: CMUOpeningVentDown
     stackRequirements:
       CMSteel: 1
-      RMCCable: 1
+      CMUThinCableLV: 1
 
 - type: entity
   parent: CMBaseMachineCircuitboard
@@ -29,7 +29,7 @@
     prototype: CMUPipeRiserUp
     stackRequirements:
       CMSteel: 1
-      RMCCable: 1
+      CMUThinCableLV: 1
 
 - type: entity
   parent: CMBaseMachineCircuitboard
@@ -43,7 +43,7 @@
     prototype: CMUPowerRiserDown
     stackRequirements:
       CMSteel: 2
-      RMCCable: 2
+      CMUThinCableLV: 2
 
 - type: entity
   parent: CMBaseMachineCircuitboard
@@ -57,5 +57,5 @@
     prototype: CMUAutoTransferSwitch
     stackRequirements:
       CMSteel: 1
-      RMCCable: 2
+      CMUThinCableLV: 2
       CMGlass: 1

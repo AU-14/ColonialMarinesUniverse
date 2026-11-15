@@ -32,7 +32,7 @@ public static class CmuReadyToggle
     ///     that has no defined winner - the first attempt at this rendered both states identically,
     ///     which only turned up because the pixels were sampled rather than eyeballed.
     /// </remarks>
-    public static void Apply(Button button, bool ready)
+    public static void Apply(Button button, bool ready, string onKey = "cmu-lobby-ready-yes", string offKey = "cmu-lobby-ready-no")
     {
         var wanted = ready
             ? StyleNano.StyleClassCrtReadyToggleOn
@@ -47,7 +47,7 @@ public static class CmuReadyToggle
         if (!button.HasStyleClass(wanted))
             button.AddStyleClass(wanted);
 
-        button.Text = Loc.GetString(ready ? "cmu-lobby-ready-yes" : "cmu-lobby-ready-no");
+        button.Text = Loc.GetString(ready ? onKey : offKey);
 
         // Dark on the lit fill, dim on the inert one. A plain property, so it beats any rule and
         // cannot be lost to the specificity problem above.

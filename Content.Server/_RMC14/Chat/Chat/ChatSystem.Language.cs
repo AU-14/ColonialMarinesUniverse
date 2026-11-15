@@ -168,16 +168,16 @@ public sealed partial class ChatSystem
 
     private bool IsUnconsciousForWhisper(EntityUid source) =>
         !_mobStateSystem.IsDead(source)
-        && (_mobStateSystem.IsCritical(source)
-            || HasComp<SleepingComponent>(source)
-            || HasComp<RMCUnconsciousComponent>(source));
+        // CMU14
+        && (_mobStateSystem.IsCritical(source) || HasComp<SleepingComponent>(source) || HasComp<RMCUnconsciousComponent>(source))
+            && TryComp<SpeechComponent>(source, out var speech) && speech.Enabled
+            && (!TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted);
 
     private bool CanWhisperInCrit(EntityUid source) =>
         _critWhisperEnabled
         && IsUnconsciousForWhisper(source)
-        && TryComp<SpeechComponent>(source, out var speech) && speech.Enabled
-        && !HasMuteOtherThanKnockout(source)
-        && (!TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted);
+        // CMU14
+        && !HasMuteOtherThanKnockout(source);
 
     // Knockouts mute normal speech; any other mute still blocks whispering.
     private bool HasMuteOtherThanKnockout(EntityUid source)

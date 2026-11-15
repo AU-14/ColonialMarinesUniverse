@@ -78,6 +78,8 @@ public sealed partial class OptionsTabControlRow : Control
     public T AddOption<T>(T option) where T : BaseOption
     {
         _options.Add(option);
+        if (_initialized && _inTree) // CMU14
+            option.StartListening();
         return option;
     }
 
@@ -187,6 +189,14 @@ public sealed partial class OptionsTabControlRow : Control
             option.LoadValue();
         }
 
+        // CMU14 Begin: subscriptions exist only while the initialized row is in the UI tree.
+        _initialized = true;
+        if (_inTree)
+        {
+            foreach (var option in _options)
+                option.StartListening();
+        }
+        // CMU14 End
         UpdateButtonState();
     }
 

@@ -30,6 +30,7 @@
     minimumSpeed: 2
     damage: {}
   - type: RMCSmartFridgeInsertable
+  - type: CMUChemicalPayloadContainer # CMU14: chemical payloads take vials, beakers and large beakers
 
 - type: entity
   parent: BaseBeakerMetallic
@@ -63,6 +64,16 @@
   description: A beaker. Can hold up to 60 units.
   components:
   - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
+  - type: Shakeable # CMU14: lid-closed Mix verb (OpenableSystem blocks it while the lid is off)
+    shakeDuration: 3
+    requireInHand: false
+    shakeVerbText: cmu-chem-mix-verb
+    shakePopupMessageSelf: cmu-chem-mix-popup-self
+    shakePopupMessageOthers: cmu-chem-mix-popup-others
+  - type: ReactionMixer # CMU14: what the Mix verb reacts with
+    mixerType: None
+    reactionTypes:
+    - CMUMix
   - type: Sprite
     sprite: _RMC14/Objects/Medical/beaker.rsi
     layers:
@@ -115,6 +126,16 @@
   description: A large beaker. Can hold up to 120 units.
   components:
   - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
+  - type: Shakeable # CMU14: lid-closed Mix verb (OpenableSystem blocks it while the lid is off)
+    shakeDuration: 3
+    requireInHand: false
+    shakeVerbText: cmu-chem-mix-verb
+    shakePopupMessageSelf: cmu-chem-mix-popup-self
+    shakePopupMessageOthers: cmu-chem-mix-popup-others
+  - type: ReactionMixer # CMU14: what the Mix verb reacts with
+    mixerType: None
+    reactionTypes:
+    - CMUMix
   - type: Sprite
     sprite: _RMC14/Objects/Medical/large_beaker.rsi
     layers:
@@ -162,6 +183,17 @@
   description: A beaker with an enlarged holding capacity, made with blue-tinted plexiglass in order to withstand greater pressure. Can hold up to 300 units.
   components:
   - type: CMUSpillWhenStoredOpen # CMU14: spills in storage without a lid
+  - type: CMUChemicalPayloadContainer # CMU14: chemical payloads take high-capacity beakers
+  - type: Shakeable # CMU14: lid-closed Mix verb (OpenableSystem blocks it while the lid is off)
+    shakeDuration: 3
+    requireInHand: false
+    shakeVerbText: cmu-chem-mix-verb
+    shakePopupMessageSelf: cmu-chem-mix-popup-self
+    shakePopupMessageOthers: cmu-chem-mix-popup-others
+  - type: ReactionMixer # CMU14: what the Mix verb reacts with
+    mixerType: None
+    reactionTypes:
+    - CMUMix
   - type: Sprite
     sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
     layers:

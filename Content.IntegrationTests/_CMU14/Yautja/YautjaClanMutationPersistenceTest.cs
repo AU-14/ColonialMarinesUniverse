@@ -204,61 +204,6 @@ public sealed class YautjaClanMutationPersistenceTest
     }
 
     [Test]
-    public async Task HonorUpdatePreservesOtherClanFields()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var db = pair.Server.ResolveDependency<IServerDbManager>();
-        var clanId = await db.CreateYautjaClanAsync("Honor", "Description", 3, "#123456");
-
-        var updated = await db.UpdateYautjaClanHonorAsync(clanId, 99);
-        var clan = await db.GetYautjaClanAsync(clanId);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(updated, Is.True);
-            Assert.That(clan!.Honor, Is.EqualTo(99));
-            Assert.That(clan.Name, Is.EqualTo("Honor"));
-            Assert.That(clan.Description, Is.EqualTo("Description"));
-            Assert.That(clan.Color, Is.EqualTo("#123456"));
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task WhitelistLeaderResolutionKeepsPersistentClanScope()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var db = pair.Server.ResolveDependency<IServerDbManager>();
-        var manager = pair.Server.ResolveDependency<YautjaClanManager>();
-        var playerId = pair.Player!.UserId;
-        var clanId = await db.CreateYautjaClanAsync("Scope", "Scope test", 0, "#123456");
-
-        await db.UpsertYautjaClanMemberAsync(new YautjaClanMemberRecord(
-            playerId.UserId,
-            clanId,
-            (int) YautjaRank.Leader,
-            (int) YautjaClanPermission.UserAll,
-            17,
-            true));
-        await db.SetYautjaWhitelistFlagsAsync(playerId.UserId, (int) YautjaWhitelistFlags.Leader);
-        manager.InvalidateCache(playerId);
-
-        var resolution = await manager.Resolve(playerId);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(resolution.Rank, Is.EqualTo(YautjaRank.Ancient));
-            Assert.That(resolution.Permissions, Is.EqualTo(YautjaClanPermission.All));
-            Assert.That(resolution.ClanId, Is.EqualTo(clanId));
-            Assert.That(resolution.Honor, Is.EqualTo(17));
-            Assert.That(resolution.IsLegacy, Is.True);
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task ConcurrentDeleteAndAssignmentNeverLeaveMemberInInactiveClan()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });

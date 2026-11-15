@@ -52,7 +52,7 @@ public sealed partial class DamageOtherOnHitSystem : SharedDamageOtherOnHitSyste
             return;
         }
 
-        var damage = GetThrownHitDamage(uid, args.Target, component.Damage);
+        var damage = component.Damage;
         var modified = damage * _damageable.UniversalThrownDamageModifier;
         var impact = DamageImpact.ForThrown(modified);
         if (TryComp<DamageImpactProfileComponent>(uid, out var profile))
@@ -87,18 +87,6 @@ public sealed partial class DamageOtherOnHitSystem : SharedDamageOtherOnHitSyste
         var damage = ent.Comp.Damage;
         if (TryComp(ent, out YautjaTechItemComponent? tech))
             damage *= tech.DamageMultiplier;
-
-        return damage;
-    }
-
-    private DamageSpecifier GetThrownHitDamage(EntityUid uid, EntityUid target, DamageSpecifier damage)
-    {
-        if (TryComp(uid, out YautjaSmartDiscComponent? disc) &&
-            HasComp<HumanoidProfileComponent>(target) &&
-            !HasComp<YautjaComponent>(target))
-        {
-            return damage * disc.HumanDamageMultiplier;
-        }
 
         return damage;
     }

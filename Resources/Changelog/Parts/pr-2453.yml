@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Fixed runechat briefly flashing in the top-left corner before appearing
+    above the speaker.
+  type: Fix
+time: '2026-11-03T18:57:11.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2453

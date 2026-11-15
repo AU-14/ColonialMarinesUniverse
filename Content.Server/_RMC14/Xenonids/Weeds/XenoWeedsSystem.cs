@@ -215,6 +215,9 @@ public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
 
                         weedable.Entity = SpawnAtPosition(weedable.Spawn, anchoredId.ToCoordinates());
                         var wallWeeds = EnsureComp<XenoWallWeedsComponent>(weedable.Entity.Value);
+                        // CMU14: track every covering, including windows without a nest surface.
+                        wallWeeds.Weedable = anchoredId;
+                        Dirty(anchoredId, weedable);
                         wallWeeds.Weeds = source;
                         _hive.SetSameHive(uid, weedable.Entity.Value);
                         Dirty(weedable.Entity.Value, wallWeeds);

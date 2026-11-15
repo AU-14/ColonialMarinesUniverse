@@ -334,6 +334,9 @@
       - id: AU14IEDLarge
         amount: 3
         points: 15
+      - id: CMULungeMine
+        amount: 2
+        points: 20
     - name: Protective Equipment
       entries:
       - id: CMUArmorProdigyFlakVestAlt
@@ -395,8 +398,8 @@
     - name: Special Equipment
       entries:
       - id: CMUFlareJeepDropCLF
-        amount: 1
-        points: 200
+        amount: 2
+        points: 100
       - id: CMUDeployableZLevelLadder
         amount: 2
         points: 10

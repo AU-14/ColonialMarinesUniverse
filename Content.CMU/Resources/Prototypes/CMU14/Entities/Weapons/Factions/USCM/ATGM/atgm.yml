@@ -63,7 +63,7 @@
     canRotateWithoutTool: true
     mountOnDeploy: false
     mountExclusionAreaSize: 0
-    barricadeExclusionAreaSize: 2
+    barricadeExclusionAreaSize: 0
     assembleDelay: 9
     disassembleDelay: 5
     undeploySound: null

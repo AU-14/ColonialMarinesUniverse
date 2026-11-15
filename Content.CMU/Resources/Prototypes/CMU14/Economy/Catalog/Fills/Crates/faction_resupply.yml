@@ -1,0 +1,53 @@
+- type: entity
+  parent: RMCCrateConstruction
+  id: CMUCrateHESCO
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14HescoKit
+      amount: 20
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: CMUCrateKramerAutocannon
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUKramerAutocannonCase
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateKramer30mmHE
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineKramer30mmHE
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateKramer30mmHEAP
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineKramer30mmHEAP
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: CMUCrateZHNK72
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRevolverZHNK72Empty
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateZHNK72Speedloaders
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderZHNK72
+      amount: 4

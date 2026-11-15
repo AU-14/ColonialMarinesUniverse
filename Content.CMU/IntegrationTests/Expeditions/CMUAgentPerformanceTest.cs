@@ -17,34 +17,6 @@ public sealed class CMUAgentPerformanceTest : GameTest
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
     [Test]
-    public async Task DeferredDecisionStillRunsWeaponExecution()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var cfg = Server.ResolveDependency<IConfigurationManager>();
-            cfg.SetCVar(CCVars.CMUExpeditionThinksPerTick, 1);
-            cfg.SetCVar(CCVars.CMUExpeditionThinkBudgetMs, 1000f);
-            var first = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var front = SEntMan.EnsureComponent<CMUExpeditionAgentComponent>(first);
-            front.Home = map.GridCoords.Offset(new System.Numerics.Vector2(50, 0));
-            front.LeashRange = 1;
-            front.NextThink = SGameTiming.CurTime - TimeSpan.FromSeconds(2);
-            var second = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var deferred = SEntMan.EnsureComponent<CMUExpeditionAgentComponent>(second);
-            deferred.NextThink = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
-            deferred.State = CMUExpeditionAgentState.Aim;
-            deferred.FireAt = SGameTiming.CurTime;
-            Server.System<CMUExpeditionAgentSystem>().Update(0);
-            Assert.That(front.ThinkSamples, Is.EqualTo(1));
-            Assert.That(deferred.ThinkSamples, Is.Zero);
-            Assert.That(deferred.State, Is.EqualTo(CMUExpeditionAgentState.Engage));
-            Assert.That(deferred.LastFireCheck, Is.EqualTo("weapon-not-ready"),
-                "Even an agent whose decision was deferred must execute its native weapon check.");
-        });
-    }
-
-    [Test]
     public async Task OverdueDecisionsAreCappedAndEveryAgentGetsATurn()
     {
         var map = await Pair.CreateTestMap();

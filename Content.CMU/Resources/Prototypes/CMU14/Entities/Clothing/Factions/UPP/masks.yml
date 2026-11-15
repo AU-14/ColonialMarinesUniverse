@@ -1,0 +1,26 @@
+- type: entity
+  parent: ClothingMaskBase
+  id: AU14MaskUPPPilotOxygen
+  name: UPP Pilot Mask
+  description: A mask attached to the UPP ZSh-7A Pilot helmet, designed to provide the aircrewman with breathable oxygen.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/Masks/upppilotoxygenmask.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/Masks/upppilotoxygenmask.rsi
+  - type: BreathMask
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Snout
+    layers:
+      HeadTop: MASK
+      HeadSide: MASK
+      Snout: MASK
+  - type: IdentityBlocker
+    coverage: MOUTH
+  - type: Item
+    storedRotation: -90
+  - type: MycotoxinProtection
+    fullProtection: false

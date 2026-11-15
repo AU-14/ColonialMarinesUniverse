@@ -1,0 +1,24 @@
+- type: entity
+  parent: BaseWallmount
+  id: CMUShipFireAlarm
+  name: ship fire alarm
+  description: A manual alarm for the whole craft. Pulling it freezes life support so the air stays out of any fire; reset it once the flames are handled.
+  suffix: CMU
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: Sprite
+    sprite: Structures/Wallmounts/fire-alarm.rsi
+    layers:
+    - state: fire_0
+      map: ["alarm"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUShipFireAlarmVisuals.Active:
+        alarm:
+          True: { state: fire_2 }
+          False: { state: fire_0 }
+  - type: CMUShipFireAlarm

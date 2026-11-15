@@ -2,14 +2,8 @@
   abstract: true
   id: RMCBaseMeleeWeapon
   components:
-  - type: MeleeDamageMultiplier
-    whitelist:
-      components:
-      - Xeno
   - type: MeleeWeapon
     angle: 0
-  - type: CMArmorPiercing
-    amount: 20
   - type: InteractedBlacklist
     blacklist:
       components:
@@ -85,6 +79,7 @@
   - type: Tool
     qualities:
     - Cutting
+    - Slicing # CMU14: retain the base knife's slicing capability.
     speedModifier: 0.8
     useSound:
       path: /Audio/Items/wirecutter.ogg

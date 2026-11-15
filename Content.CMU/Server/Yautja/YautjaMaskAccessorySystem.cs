@@ -30,7 +30,9 @@ public sealed partial class YautjaMaskAccessorySystem : EntitySystem
         if (args.Handled || !HasComp<YautjaMaskOrnamentComponent>(args.Used))
             return;
 
-        if (!HasComp<YautjaComponent>(args.User))
+        // CMU14: yaut_mask.dm:128 gates mask functions on
+        // "!HAS_TRAIT(user, TRAIT_YAUTJA_TECH) && !user.hunter_data.thralled", so authorized users count.
+        if (!HasComp<YautjaComponent>(args.User) && !HasComp<YautjaTechAuthorizedComponent>(args.User))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-mask-ornament-denied"), args.User, args.User, PopupType.SmallCaution);
             return;
@@ -54,7 +56,7 @@ public sealed partial class YautjaMaskAccessorySystem : EntitySystem
     {
         if (!args.CanInteract ||
             !args.CanAccess ||
-            !HasComp<YautjaComponent>(args.User))
+            !HasComp<YautjaComponent>(args.User) && !HasComp<YautjaTechAuthorizedComponent>(args.User))
         {
             return;
         }

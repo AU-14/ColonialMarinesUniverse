@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Drawn for the project by the user",
+  "size": {
+    "x": 30,
+    "y": 22
+  },
+  "states": [
+    {
+      "name": "planter"
+    }
+  ]
+}

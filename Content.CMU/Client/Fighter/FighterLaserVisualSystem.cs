@@ -27,20 +27,36 @@ public sealed class FighterLaserOverlay(IEntityManager entities) : Overlay
     protected override void Draw(in OverlayDrawArgs args)
     {
         var handle = args.WorldHandle;
-        var query = entities.EntityQueryEnumerator<FighterLaserComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var laser, out var xform))
+        // Cinematic bombardment also reuses this beam, without owning a seat
+        // designation. Its authored lifetime remains independent of CAS cues.
+        var beams = entities.EntityQueryEnumerator<FighterLaserComponent, TransformComponent>();
+        while (beams.MoveNext(out var beamUid, out var beam, out var beamTransform))
         {
-            if (_timing.CurTime >= laser.ExpiresAt || xform.MapID != args.MapId ||
-                !args.WorldAABB.Enlarged(24).Contains(_transform.GetWorldPosition(uid))) continue;
-            var age = MathF.Max(0, (float) (_timing.CurTime - laser.StartedAt).TotalSeconds);
-            // Server rotation points local +Y toward the jet over the ground map.
-            handle.SetTransform(_transform.GetWorldMatrix(uid));
+            if (beam.Aircraft != EntityUid.Invalid || _timing.CurTime < beam.StartedAt ||
+                _timing.CurTime >= beam.ExpiresAt || beamTransform.MapID != args.MapId ||
+                !args.WorldAABB.Enlarged(24).Contains(_transform.GetWorldPosition(beamUid))) continue;
+            handle.SetTransform(_transform.GetWorldMatrix(beamUid));
             _particles.Clear();
-            var incomingAge = (float) (_timing.CurTime - laser.IncomingAt).TotalSeconds;
+            var age = (float) (_timing.CurTime - beam.StartedAt).TotalSeconds;
+            CargoGuildBeam.Draw(_particles, Vector2.Zero, Math.Clamp(age * 3, 0, 1), age, color: beam.BeamColor);
+            _particles.Draw(handle, (float) _timing.CurTime.TotalSeconds);
+        }
+        var query = entities.EntityQueryEnumerator<FighterStrikeVisualComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var strike, out var xform))
+        {
+            if (!FighterEffects.LaserVisible(strike, _timing.CurTime) || xform.MapID != args.MapId ||
+                !args.WorldAABB.Enlarged(24).Contains(_transform.GetWorldPosition(uid))) continue;
+            var age = (float) (_timing.CurTime - strike.ImpactAt + FighterEffects.LaserLead).TotalSeconds;
+            var rotation = new Angle(Math.Atan2(-strike.Direction.X, strike.Direction.Y));
+            handle.SetTransform(_transform.GetWorldPosition(uid), rotation);
+            _particles.Clear();
+            var incomingAge = (float) (_timing.CurTime - strike.ImpactAt + FighterEffects.WarningLead).TotalSeconds;
+            var incoming = FighterEffects.WarningVisible(strike, _timing.CurTime);
+            var beamColor = Color.FromHex("#FF3636");
             var power = Math.Clamp(age * 3, 0, 1);
-            if (laser.Incoming) power *= .35f + .65f * (.5f + .5f * MathF.Sin(incomingAge * MathF.Tau * 3));
-            CargoGuildBeam.Draw(_particles, Vector2.Zero, power, age, color: laser.BeamColor);
-            if (laser.Incoming)
+            if (incoming) power *= .35f + .65f * (.5f + .5f * MathF.Sin(incomingAge * MathF.Tau * 3));
+            CargoGuildBeam.Draw(_particles, Vector2.Zero, power, age, color: beamColor);
+            if (incoming)
             {
                 LastIncomingDrawAt = _timing.CurTime;
                 for (var i = 0; i < 2; i++)
@@ -48,7 +64,7 @@ public sealed class FighterLaserOverlay(IEntityManager entities) : Overlay
                     var phase = incomingAge * 1.5f + i * .5f;
                     phase -= MathF.Floor(phase);
                     var radius = .4f + phase * 1.8f;
-                    var tint = laser.BeamColor.WithAlpha((1 - phase) * .95f);
+                    var tint = beamColor.WithAlpha((1 - phase) * .95f);
                     const int segments = 48;
                     for (var segment = 0; segment < segments; segment++)
                     {

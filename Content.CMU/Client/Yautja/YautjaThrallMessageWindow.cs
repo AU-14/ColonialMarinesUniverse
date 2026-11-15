@@ -1,81 +1,47 @@
 using System.Numerics;
-using Robust.Client.UserInterface;
+using Content.Client.CMU14.Yautja.ClanHall;
 using Robust.Client.UserInterface.Controls;
-using Robust.Client.UserInterface.CustomControls;
-using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
 namespace Content.Client.CMU14.Yautja;
 
-public sealed class YautjaThrallMessageWindow : DefaultWindow
+// the private line between a hunter and their thrall
+public sealed class YautjaThrallMessageWindow : YautjaHudWindow
 {
     private const int MaxLength = 160;
 
     private readonly Label _limitLabel;
     private readonly TextEdit _messageEdit;
-    private readonly Button _sendButton;
+    private readonly HudButton _sendButton;
 
     public event Action<string>? OnSend;
 
     public YautjaThrallMessageWindow()
+        : base(Loc.GetString("cmu-yautja-thrall-message-title"), new Vector2(420, 240), new Vector2(360, 210))
     {
-        Title = Loc.GetString("cmu-yautja-thrall-message-title");
-        SetSize = new Vector2(360, 190);
-        MinSize = new Vector2(320, 160);
-
-        var rootPanel = YautjaBracerUiStyle.Panel(YautjaBracerUiStyle.Surface, YautjaBracerUiStyle.Border, new Thickness(2));
-        AddChild(rootPanel);
-
-        var root = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Vertical,
-            SeparationOverride = 6,
-            Margin = new Thickness(7),
-            HorizontalExpand = true,
-            VerticalExpand = true,
-        };
-        rootPanel.AddChild(root);
-
-        var header = YautjaBracerUiStyle.Panel(YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder);
-        root.AddChild(header);
-
-        var statusRow = new BoxContainer
-        {
-            Orientation = BoxContainer.LayoutOrientation.Horizontal,
-            SeparationOverride = 8,
-            Margin = new Thickness(7, 4),
-            HorizontalExpand = true,
-        };
-        header.AddChild(statusRow);
-
-        var title = YautjaBracerUiStyle.Label(Loc.GetString("cmu-yautja-thrall-message-title"), YautjaBracerUiStyle.Muted, "LabelSubText");
-        title.HorizontalExpand = true;
-        title.VerticalAlignment = Control.VAlignment.Center;
-        statusRow.AddChild(title);
-
-        _limitLabel = YautjaBracerUiStyle.Label(string.Empty, YautjaBracerUiStyle.Muted, "LabelSubText");
-        _limitLabel.VerticalAlignment = Control.VAlignment.Center;
-        statusRow.AddChild(_limitLabel);
-
-        var close = YautjaBracerUiStyle.CloseButton();
-        close.OnPressed += _ => Close();
-        statusRow.AddChild(close);
+        AddClose();
 
         _messageEdit = new TextEdit
         {
             HorizontalExpand = true,
             VerticalExpand = true,
-            MinHeight = 64,
+            MinHeight = 72,
             Placeholder = new Rope.Leaf(Loc.GetString("cmu-yautja-thrall-message-placeholder")),
         };
         _messageEdit.OnTextChanged += args => UpdateLimit(Rope.Collapse(args.TextRope));
-        root.AddChild(YautjaBracerUiStyle.Wrap(_messageEdit, YautjaBracerUiStyle.DeepCard, YautjaBracerUiStyle.MutedBorder, new Thickness(5), new Thickness(1)));
+        Body.AddChild(Field(_messageEdit));
 
-        _sendButton = BuildSendButton(
-            Loc.GetString("cmu-yautja-thrall-message-send"),
-            YautjaBracerUiStyle.Green);
-        _sendButton.OnPressed += _ => Send();
-        root.AddChild(_sendButton);
+        var footer = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 8 };
+        _limitLabel = Reading(Hud.Muted);
+        _limitLabel.HorizontalExpand = true;
+        footer.AddChild(_limitLabel);
+        _sendButton = new HudButton(Loc.GetString("cmu-yautja-thrall-message-send").ToUpperInvariant(), LabelFont)
+        {
+            MinWidth = 140,
+        };
+        _sendButton.Activated += Send;
+        footer.AddChild(_sendButton);
+        Body.AddChild(footer);
 
         UpdateLimit(string.Empty);
     }
@@ -84,24 +50,13 @@ public sealed class YautjaThrallMessageWindow : DefaultWindow
     {
         var length = text.Length;
         _limitLabel.Text = Loc.GetString("cmu-yautja-translator-limit", ("count", length), ("max", MaxLength));
-        _limitLabel.FontColorOverride = length > MaxLength ? YautjaBracerUiStyle.HotRed : YautjaBracerUiStyle.Muted;
-    }
-
-    private static Button BuildSendButton(string title, Color accent)
-    {
-        return new Button
-        {
-            Text = title,
-            HorizontalExpand = true,
-            MinHeight = 34,
-            SetHeight = 34,
-            StyleBoxOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.DeepCard, accent),
-        };
+        _limitLabel.FontColorOverride = length > MaxLength ? Hud.Hot : Hud.Muted;
+        _sendButton.Disabled = string.IsNullOrWhiteSpace(text);
     }
 
     private void Send()
     {
-        var text = Rope.Collapse(_messageEdit.TextRope).Trim();
+        var text = Collapse(_messageEdit).Trim();
         if (string.IsNullOrWhiteSpace(text))
             return;
 

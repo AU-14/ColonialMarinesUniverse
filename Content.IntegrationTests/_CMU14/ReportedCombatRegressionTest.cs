@@ -75,10 +75,21 @@ public sealed class ReportedCombatRegressionTest
             foreach (var airlock in airlocks)
                 entities.GetComponent<DoorComponent>(airlock).State = DoorState.Open;
             Assert.That(line.CanReachTile(start, end, true), Is.True);
+            // Reusing a preview path must observe door changes and leave previously fired paths alone.
+            var closedSnapshot = closed.ToArray();
+            var preview = new List<LineTile>();
+            line.DrawLine(start, end, TimeSpan.Zero, 8, out _, hitBlocker: true, thick: thick, buffer: preview);
+            Assert.That(preview.Any(tile => transform.WithEntityId(transform.ToCoordinates(tile.Coordinates), map.Grid).X > 3),
+                Is.True, "An open door must allow the refreshed preview through.");
             foreach (var airlock in airlocks)
                 entities.GetComponent<DoorComponent>(airlock).State = DoorState.Closed;
             #pragma warning restore RA0002
             Assert.That(line.CanReachTile(start, end, true), Is.False, "A door closed after firing must stop delayed flames.");
+            line.DrawLine(start, end, TimeSpan.Zero, 8, out _, hitBlocker: true, thick: thick, buffer: preview);
+            Assert.That(preview, Is.EqualTo(closedSnapshot), "Reused previews must discard tiles behind newly closed doors.");
+            line.DrawLine(start, start, TimeSpan.Zero, 8, out _, buffer: preview);
+            Assert.That(preview, Is.Empty, "A rejected path must clear the previous preview.");
+            Assert.That(closed, Is.EqualTo(closedSnapshot), "Preview reuse must not overwrite an independently owned path.");
         });
         await pair.CleanReturnAsync();
     }

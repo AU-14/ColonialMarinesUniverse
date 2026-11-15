@@ -51,7 +51,9 @@ namespace Content.Client.ContextMenu.UI
             MenuPanel.MaxHeight = MaxItemsBeforeScroll * (ContextMenuElement.ElementHeight + 2 * ContextMenuElement.ElementMargin) + styleSize.Y;
 
             UserInterfaceManager.ModalRoot.AddChild(this);
-            MenuBody.OnChildRemoved += ctrl => _uiController.OnRemoveElement(this, ctrl);
+            // CMU14: retain a matching handler for teardown.
+            // MenuBody.OnChildRemoved += ctrl => _uiController.OnRemoveElement(this, ctrl);
+            MenuBody.OnChildRemoved += CMUOnChildRemoved;
             MenuBody.VSeparationOverride = 0;
             MenuBody.HSeparationOverride = 0;
 
@@ -70,10 +72,13 @@ namespace Content.Client.ContextMenu.UI
             };
         }
 
+        // CMU14: unwind the stack while the parent link is still available.
         protected override void ExitedTree()
         {
+            _uiController.CloseSubMenus(ParentElement?.ParentMenu);
             base.ExitedTree();
-            MenuBody.OnChildRemoved -= ctrl => _uiController.OnRemoveElement(this, ctrl);
+            MenuBody.OnChildRemoved -= CMUOnChildRemoved;
+            CMUPopulate = null;
             ParentElement = null;
         }
     }

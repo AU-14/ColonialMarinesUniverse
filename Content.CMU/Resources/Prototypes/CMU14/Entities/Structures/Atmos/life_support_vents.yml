@@ -1,0 +1,19 @@
+- type: entity
+  id: CMULifeSupportVent
+  name: LS-1 life support vent
+  description: A flush floor vent that keeps the compartment at a fixed oxygen-nitrogen mix and pressure, breathing in fresh air and drawing out excess and waste gases.
+  categories: [ HideSpawnMenu ]
+  suffix: CMU, MAPPER
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/dropship_attachment_points.rsi
+    state: equip_base
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: AtmosDevice
+  - type: CMULifeSupportVent

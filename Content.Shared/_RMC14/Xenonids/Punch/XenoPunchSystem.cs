@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Melee;
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -65,7 +66,8 @@ public sealed partial class XenoPunchSystem : EntitySystem
         _obstacleSlamming.MakeImmune(targetId);
         _size.KnockBack(targetId, origin, xeno.Comp.Range, xeno.Comp.Range, xeno.Comp.ThrowSpeed);
 
-        if (!HasComp<XenoComponent>(targetId))
+        // CMU14: cmss13 Warrior.dm only slows ishuman_strict, preds take the hit without the slow
+        if (!HasComp<XenoComponent>(targetId) && !HasComp<YautjaComponent>(targetId))
             _slow.TrySlowdown(targetId, xeno.Comp.SlowDuration);
 
         if (_net.IsServer)

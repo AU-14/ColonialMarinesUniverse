@@ -34,6 +34,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         bool pushing,
         float frameTime)
     {
+        var previousNetworkState = new MovementNetworkState(mover); // CMU14: avoid replicating unchanged fixed steps.
         if (vehicle.Operator != null)
         {
             var canRunEvent = new VehicleCanRunEvent((uid, vehicle));
@@ -42,7 +43,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             {
                 StopMover(mover);
                 SetGridPosition(uid, grid, mover.Position);
-                Dirty(uid, mover);
+                if (new MovementNetworkState(mover) != previousNetworkState) // CMU14: still replicate the stop transition.
+                    Dirty(uid, mover);
                 return;
             }
         }
@@ -93,7 +95,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (moved || mover.IsMoving)
             physics.WakeBody(uid);
 
-        Dirty(uid, mover);
+        if (new MovementNetworkState(mover) != previousNetworkState) // CMU14: movement simulation can leave the state unchanged.
+            Dirty(uid, mover);
     }
 
     // CMU14 method: vehicle damage and usability.
@@ -473,6 +476,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         CMUVehicleZTraversalComponent zTraversal,
         float frameTime)
     {
+        var previousNetworkState = new MovementNetworkState(mover); // CMU14: stopped falling vehicles need no repeated state.
         GetSmashSlowdownMultiplier(mover);
 
         mover.IsCommittedToMove = false;
@@ -511,7 +515,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (moved || mover.IsMoving)
             physics.WakeBody(uid);
 
-        Dirty(uid, mover);
+        if (new MovementNetworkState(mover) != previousNetworkState) // CMU14: preserve drift and stop replication.
+            Dirty(uid, mover);
     }
 
     private bool TryApplyFacing(
@@ -1357,7 +1362,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 0f;
 
         var maxSpeed = mover.MaxSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, false);
-        maxSpeed *= CMUTyreSpeed(uid); // CMU14: tyres on the ground under the vehicle
+        maxSpeed *= CMUTyreSpeed(uid) * CMUResinSpeed(uid); // CMU14: tyres and resin on the running gear
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;
@@ -1380,7 +1385,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return 0f;
 
         var maxSpeed = mover.MaxReverseSpeed * GetSmashSlowdownMultiplier(mover) * GetDamageSpeedMultiplier(uid, mover, true);
-        maxSpeed *= CMUTyreSpeed(uid); // CMU14: tyres on the ground under the vehicle
+        maxSpeed *= CMUTyreSpeed(uid) * CMUResinSpeed(uid); // CMU14: tyres and resin on the running gear
 
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             maxSpeed *= overcharge.SpeedMultiplier;

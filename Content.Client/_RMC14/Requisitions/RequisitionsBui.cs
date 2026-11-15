@@ -69,6 +69,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         ["Dropship Parts"] = "rmc-requisitions-category-dropship-parts",
         ["Engineering"] = "rmc-requisitions-category-engineering",
         ["Explosives"] = "rmc-requisitions-category-explosives",
+        ["FOB"] = "cmu-requisitions-category-fob",
         ["Food"] = "rmc-requisitions-category-food",
         ["Food and Drinks"] = "rmc-requisitions-category-food-and-drinks",
         ["Furniture"] = "rmc-requisitions-category-furniture",
@@ -1014,6 +1015,10 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     {
         if (!_stock.TryGetValue((category, order), out var stock))
             return "Stock: unlimited";
+
+        // CMU14: a negative replenishment time means a shared allowance that lasts the entire round.
+        if (stock.SecondsUntilNextReplenish < 0)
+            return Loc.GetString("cmu-fob-round-stock", ("current", stock.Current), ("max", stock.Max));
 
         var refill = stock.Current < stock.Max
             ? $"  +{FormatTime(stock.SecondsUntilNextReplenish)}"

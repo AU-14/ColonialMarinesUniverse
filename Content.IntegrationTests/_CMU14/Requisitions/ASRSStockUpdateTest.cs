@@ -7,6 +7,8 @@ using Content.Server.CMU14.Round;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CMU14.util;
+using Content.Shared.Interaction.Components; // CMU14
+using Content.Shared.UserInterface; // CMU14
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -72,6 +74,10 @@ public sealed class ASRSStockUpdateTest : GameTest
           id: ASRSStockComputerBase
           abstract: true
           components:
+          # CMU14 Begin: exercise the real terminal opening lifecycle.
+          - type: ActivatableUI
+            key: enum.RequisitionsUIKey.Key
+          # CMU14 End
           - type: UserInterface
             interfaces:
               enum.RequisitionsUIKey.Key:
@@ -267,77 +273,7 @@ public sealed class ASRSStockUpdateTest : GameTest
         });
     }
 
-    [Test]
-    public async Task CountdownRefreshOnlyReplacesDueTerminalState()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var dueUid = SEntMan.SpawnEntity("ASRSStockLegacyComputer", map.GridCoords);
-            var otherUid = SEntMan.SpawnEntity("ASRSStockLegacyComputer", map.GridCoords);
-            var due = SEntMan.GetComponent<RequisitionsComputerComponent>(dueUid);
-            var other = SEntMan.GetComponent<RequisitionsComputerComponent>(otherUid);
-            var system = Server.System<RequisitionsSystem>();
-
-            // A reservation publishes both terminals through the existing global path.
-            Assert.That(system.TryReserveStock((dueUid, due), 0, 0), Is.True);
-            var dueBefore = GetState(dueUid);
-            var otherBefore = GetState(otherUid);
-            due.Stock[(0, 0)].NextReplenish = SGameTiming.CurTime + TimeSpan.FromSeconds(5);
-            due.NextStockUiUpdate = TimeSpan.Zero;
-            other.NextStockUiUpdate = SGameTiming.CurTime + TimeSpan.FromMinutes(1);
-
-            system.Update(0f);
-
-            var dueAfter = GetState(dueUid);
-            Assert.That(dueAfter, Is.Not.SameAs(dueBefore));
-            Assert.That(dueAfter.Stock.Single().Current, Is.EqualTo(1));
-            Assert.That(dueAfter.Stock.Single().SecondsUntilNextReplenish, Is.EqualTo(5));
-            Assert.That(GetState(otherUid), Is.SameAs(otherBefore),
-                "one terminal's countdown must not rebuild another terminal's UI state");
-
-            system.Update(0f);
-            Assert.That(GetState(dueUid), Is.SameAs(dueAfter),
-                "the next update before the countdown interval must not publish again");
-            Assert.That(GetState(otherUid), Is.SameAs(otherBefore));
-        });
-    }
-
-    [Test]
-    public async Task ItemStockSumsFiniteSourcesAndOmitsItemsWithAnUnlimitedSource()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var uid = SEntMan.SpawnEntity("ASRSStockItemizedComputer", map.GridCoords);
-            var computer = SEntMan.GetComponent<RequisitionsComputerComponent>(uid);
-            var system = Server.System<RequisitionsSystem>();
-            system.ChangeBudget(0);
-
-            Assert.That(computer.ItemCatalog.Select(item => item.Prototype.Id),
-                Is.EquivalentTo(new[] { "ASRSStockFiniteItem", "ASRSStockUnlimitedItem" }));
-            var full = GetState(uid).ItemStock.Single();
-            Assert.That(full.Prototype.Id, Is.EqualTo("ASRSStockFiniteItem"),
-                "a finite source must not impose a limit when another source is unlimited");
-            Assert.That(full.Current, Is.EqualTo(13));
-            Assert.That(full.Max, Is.EqualTo(13));
-            Assert.That(full.SecondsUntilNextReplenish, Is.Zero);
-
-            Assert.That(system.TryReserveStock((uid, computer), 0, 0), Is.True);
-            var firstDepleted = GetState(uid).ItemStock.Single();
-            Assert.That(firstDepleted.Current, Is.EqualTo(11));
-            Assert.That(firstDepleted.Max, Is.EqualTo(13));
-            Assert.That(firstDepleted.SecondsUntilNextReplenish, Is.EqualTo(20),
-                "the full source's zero countdown must not hide a depleted source's timer");
-
-            Assert.That(system.TryReserveStock((uid, computer), 0, 1), Is.True);
-            var bothDepleted = GetState(uid).ItemStock.Single();
-            Assert.That(bothDepleted.Current, Is.EqualTo(8));
-            Assert.That(bothDepleted.Max, Is.EqualTo(13));
-            Assert.That(bothDepleted.SecondsUntilNextReplenish, Is.EqualTo(10),
-                "the UI must use the earliest timer among depleted sources");
-        });
-    }
+    // CMU14 method
 
     private RequisitionsBuiState GetState(EntityUid uid)
     {

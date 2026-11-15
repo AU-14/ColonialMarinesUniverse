@@ -91,7 +91,7 @@ public sealed class YautjaHealthShardCloakTest
                     var hunter = entities.GetEntity(hunterNet);
                     AssertCloak(entities, hunter);
                     var sprite = entities.GetComponent<SpriteComponent>(hunter);
-                    Assert.That(entities.System<SpriteSystem>().TryGetPostShader(sprite, "RMCInvisible", out _), Is.True);
+                    Assert.That(entities.System<SpriteSystem>().TryGetPostShader(sprite, "cmu-yautja-optical-cloak", out _), Is.True);
                     TestContext.Out.WriteLine($"client t={second}: color={sprite.Color}, offset={sprite.Offset}");
                     Assert.That(sprite.Color, Is.EqualTo(Color.White));
                     Assert.That(sprite.Offset, Is.EqualTo(Vector2.Zero));

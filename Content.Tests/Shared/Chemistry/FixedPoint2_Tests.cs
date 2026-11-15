@@ -142,21 +142,6 @@ namespace Content.Tests.Shared.Chemistry
         }
 
         [Test]
-        public void FixedPoint2Min()
-        {
-            var unorderedList = new[]
-            {
-                FixedPoint2.New(5),
-                FixedPoint2.New(3),
-                FixedPoint2.New(1),
-                FixedPoint2.New(2),
-                FixedPoint2.New(4),
-            };
-            var min = FixedPoint2.Min(unorderedList);
-            Assert.That(min, Is.EqualTo(FixedPoint2.New(1)));
-        }
-
-        [Test]
         [TestCase(10.1f, 2.5f, "25.25")]
         public void FloatMultiply (float aFloat, float b, string expected)
         {

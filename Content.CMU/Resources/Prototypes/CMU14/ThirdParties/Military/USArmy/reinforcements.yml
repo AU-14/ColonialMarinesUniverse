@@ -50,6 +50,7 @@
   id: CMUUSArmyCommanderReinforcementsGear
   equipment:
     id: AU14IDCardUSArmyCommander
+    belt: RMCMatebaBeltForeconFilled
     pocket1: RMCPouchCommand
   storage:
     pocket1: []

@@ -6,6 +6,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: CMUMutinyLoyalist # command and MPs side with command in a mutiny
   - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
@@ -55,7 +56,7 @@
     shoes: RMCShoesLaceup
     head: CMHeadCapPeakedService
     id: CMUIDCardGOVFORAdjutantDress
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetGovforHighCommand
     eyes: RMCSunglasses
     back: CMSatchel
     belt: RMCMK80BeltFilled
@@ -87,6 +88,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: CMUMutinyLoyalist # command and MPs side with command in a mutiny
   - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
@@ -137,7 +139,7 @@
     shoes: RMCBootsCBRN
     head: RMCHeadCapGeneral
     id: CMUIDCardGOVFORBrigadierGeneral
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetGovforHighCommand
     eyes: RMCSunglasses
     gloves: RMCHandsVeteranCBRN
     back: RMCSatchelLightpackFilledHighCommand
@@ -286,7 +288,7 @@
     shoes: RMCShoesLaceup
     head: CMHeadCapPeakedService
     id: CMUIDCardOPFORAdjutantDress
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetOpforHighCommand
     eyes: RMCSunglasses
     back: CMSatchel
     belt: RMCMK80BeltFilled
@@ -366,7 +368,7 @@
     shoes: RMCBootsCBRN
     head: RMCHeadCapGeneral
     id: CMUIDCardOPFORBrigadierGeneral
-    ears: CMHeadsetHighCommand
+    ears: CMUHeadsetOpforHighCommand
     eyes: RMCSunglasses
     gloves: RMCHandsVeteranCBRN
     back: RMCSatchelLightpackFilledHighCommand

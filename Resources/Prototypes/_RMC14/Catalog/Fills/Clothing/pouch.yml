@@ -260,7 +260,7 @@
     - id: CMScrewdriver
     - id: CMWirecutter
     - id: CMCrowbar
-    - id: RMCCableCoil
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil, thin LV cable
     - id: CMMultitool
     - id: CMWrench
 
@@ -274,7 +274,7 @@
     - id: CMScrewdriver
     - id: CMWirecutter
     - id: CMCrowbar
-    - id: RMCCableCoil
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil, thin LV cable
     - id: CMMultitool
     - id: CMWrench
     - id: RMCExplosivePlastic
@@ -339,6 +339,6 @@
     - id: CMSheetMetal50
     - id: CMCrowbarRed
     - id: CMWelder
-    - id: RMCCableCoil
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil, thin LV cable
     - id: RMCRadioHandheldColony
     - id: RMCM5Bayonet

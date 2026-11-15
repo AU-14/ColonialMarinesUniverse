@@ -229,6 +229,33 @@ rmc-xeno-bulwark-description = You trade punch, lunge, and fling for plate-based
   - Plate Bash, Tail Swing, and a directional Reflective Shield.
 rmc-xeno-bulwark-popup = This one becomes the wall before the wall breaks.
 
+rmc-xeno-bloodletter-name = Bloodletter
+rmc-xeno-bloodletter-description = You trade your Abduct and most of your damage for abilities that drain your targets blood.
+    You gain:
+    - Scissor Cut, Impale, Tailstab and your Melee Attacks cause the target to lose blood.
+    - Scissor Cut always slows enemies on hit.
+    - An Exsanguinate ability that kills downed targets, drains large amounts of blood and heals you. Your attacks also heal you.
+    - Some health and movement speed.
+    You Lose:
+    - Some armor.
+    - Some attack speed.
+    - Your Blight Strike ability and Abduct ability.
+    - Most of the raw damage of your attacks and abilities.
+rmc-xeno-bloodletter-popup = Open their veins. Bleed them dry. The Mycelium will run red.
+
+cmu-xeno-haze-healer-name = Healer  
+cmu-xeno-haze-healer-description = You trade your ability to secrete structures and spread spores for the ability to heal your sisters' wounds.  
+    You gain:  
+    - The ability to heal sisters by using plasma and some of your own health.  
+    - A faster plasma transfer.  
+    - The Sacrifice ability, letting you give your life to heal a sister. You will only respawn if you maxed out your transferred health by healing.  
+    - Some health and movement speed.  
+    You lose:  
+    - Your Spore Sac and Direct Spore Infect abilities.  
+    - Your ability to build structures.
+    - Some tackle strength and attack strength.
+cmu-xeno-haze-healer-popup = The Confluence provides. Mend the bloom, and the bloom will mend you.
+
 cm-xeno-heatshield-vomit-bile-extinguish = You smother the flames with bile.
 cm-xeno-heatshield-vomit-bile-hostile = You coat the target in volatile bile.
 cm-xeno-heatshield-vomit-bile-tile = You smother the burning ground with bile.

@@ -54,7 +54,21 @@ namespace Content.Server.Database
             {
                 // EnsureCreated means you can't apply migrations later, fine for tests
                 if (snapshot)
+                {
                     prefsCtx.Database.EnsureCreated();
+                    // CMU14: EnsureCreated builds only the EF model, and cmu_antag_pity is raw
+                    // SQL with no entity, so pooled servers would boot without it and the pity
+                    // load would ERRO on every pair. Mirrors 20261016000000_CmuAntagPity, keep
+                    // the two schemas in sync.
+                    prefsCtx.Database.ExecuteSqlRaw("""
+                        CREATE TABLE IF NOT EXISTS cmu_antag_pity (
+                            player_user_id TEXT NOT NULL,
+                            missed integer NOT NULL DEFAULT 0,
+                            last_seen bigint NOT NULL DEFAULT 0,
+                            CONSTRAINT "PK_cmu_antag_pity" PRIMARY KEY (player_user_id)
+                        );
+                        """);
+                }
                 else
                     prefsCtx.Database.Migrate();
 
@@ -402,9 +416,18 @@ namespace Content.Server.Database
 
             await _prefsSemaphore.WaitAsync(cancel);
 
-            var dbContext = new SqliteServerDbContext(_options());
-
-            return new DbGuardImpl(this, dbContext);
+            // CMU14 Begin: the guard owns the slot only after context creation succeeds.
+            try
+            {
+                var dbContext = new SqliteServerDbContext(_options());
+                return new DbGuardImpl(this, dbContext);
+            }
+            catch
+            {
+                _prefsSemaphore.Release();
+                throw;
+            }
+            // CMU14 End
         }
 
         protected override async Task<DbGuard> GetDb(
@@ -430,8 +453,16 @@ namespace Content.Server.Database
 
             public override async ValueTask DisposeAsync()
             {
-                await _ctx.DisposeAsync();
-                _db._prefsSemaphore.Release();
+                // CMU14 Begin: a connection disposal failure must not consume a database slot forever.
+                try
+                {
+                    await _ctx.DisposeAsync();
+                }
+                finally
+                {
+                    _db._prefsSemaphore.Release();
+                }
+                // CMU14 End
             }
         }
 

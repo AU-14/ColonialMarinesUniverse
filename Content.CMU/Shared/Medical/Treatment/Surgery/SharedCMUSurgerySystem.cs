@@ -68,6 +68,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUOrganDamagedSurgeryConditionComponent, CMSurgeryValidEvent>(OnOrganDamagedValid);
         SubscribeLocalEvent<CMUOrganDamagedSurgeryConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnOrganDamagedCompleteCheck);
         SubscribeLocalEvent<CMUInternalBleedingSurgeryConditionComponent, CMSurgeryValidEvent>(OnInternalBleedingValid);
+        SubscribeLocalEvent<CMUInternalBleedingSurgeryConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnInternalBleedingCompleteCheck);
         SubscribeLocalEvent<CMUEscharSurgeryConditionComponent, CMSurgeryValidEvent>(OnEscharValid);
         SubscribeLocalEvent<CMUOpenStumpSurgeryConditionComponent, CMSurgeryValidEvent>(OnOpenStumpValid);
         SubscribeLocalEvent<CMUSurgicalTraitConditionComponent, CMSurgeryValidEvent>(OnSurgicalTraitValid);
@@ -186,7 +187,28 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
 
     private void OnInternalBleedingValid(Entity<CMUInternalBleedingSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)
     {
-        if (!HasComp<InternalBleedingComponent>(args.Part))
+        if (HasComp<InternalBleedingComponent>(args.Part))
+            return;
+
+        // A clotting drug only hides the bleed, so the surgeon can still clamp it.
+        // ExpiresAt is null for a surgical clamp, which already leaves nothing to mend.
+        if (TryComp<CMUInternalBleedingSuppressedComponent>(args.Part, out var held)
+            && held.ExpiresAt != null)
+            return;
+
+        args.Cancelled = true;
+    }
+
+    // Keeps the cauterize step from looking complete while a drug holds the bleed.
+    private void OnInternalBleedingCompleteCheck(Entity<CMUInternalBleedingSurgeryConditionComponent> ent, ref CMSurgeryStepCompleteCheckEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (HasComp<InternalBleedingComponent>(args.Part))
+            args.Cancelled = true;
+        else if (TryComp<CMUInternalBleedingSuppressedComponent>(args.Part, out var held)
+            && held.ExpiresAt != null)
             args.Cancelled = true;
     }
 

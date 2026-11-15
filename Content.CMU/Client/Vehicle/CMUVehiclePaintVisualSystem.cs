@@ -248,9 +248,10 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
     /// </summary>
     private static void SetLayer(Entity<SpriteComponent> ent, int index, ShaderInstance ours, ShaderInstance? shader)
     {
-        if (index >= ent.Comp.AllLayers.Count() || ent.Comp[index] is not SpriteComponent.Layer layer)
+        if (index >= ent.Comp.LayerData.Count)
             return;
 
+        var layer = ent.Comp.LayerData[index];
         var current = layer.Shader;
         if (current == shader || current != null && current != ours)
             return;

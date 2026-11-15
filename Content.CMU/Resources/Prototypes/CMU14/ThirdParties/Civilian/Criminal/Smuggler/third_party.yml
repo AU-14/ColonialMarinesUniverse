@@ -3,12 +3,13 @@
   leadersToSpawn:
     AU14DrugSmuggler: 1
   gruntsToSpawn:
-     AU14DrugSmuggler: 1
+    AU14DrugSmuggler: 1
   scalewithpop: false
   spawnTogether: true
 
 - type: thirdParty
   id: DrugSmuggler
+  speaksColonyLanguage: true
   partyspawn: DrugSmugglerSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
   weight: 20
@@ -16,7 +17,7 @@
   maxplayers: 100
   roundstart: false
   ghostsNeeded: 2
-  ghostsCallable: true
+  ghostsCallable: false
   whitelistedGamemodes:
     - insurgency
     - colonyfall

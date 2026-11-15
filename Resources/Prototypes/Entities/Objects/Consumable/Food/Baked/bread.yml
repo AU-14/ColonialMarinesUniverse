@@ -645,6 +645,7 @@
     shape:
     - 0,0,0,3
     storedRotation: -45
+    cmuStoredRotation: 55 # CMU14: align the rising sprite with its vertical storage footprint.
     inhandVisuals:
       left:
       - state: baguette-inhand-left
@@ -679,6 +680,7 @@
     shape:
     - 0,0,0,3
     storedRotation: -45
+    cmuStoredRotation: 55 # CMU14: match the ordinary baguette's storage orientation.
     inhandVisuals:
       left:
       - state: baguette-cotton-inhand-left

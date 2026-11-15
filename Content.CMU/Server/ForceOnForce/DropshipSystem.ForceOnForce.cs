@@ -1,4 +1,5 @@
 using Content.Server.GameTicking;
+using Content.Server.CMU14.Dropship;
 using Content.Server.CMU14.ForceOnForce;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
@@ -101,12 +102,26 @@ public sealed partial class DropshipSystem
             ForceOnForceSystem.Opponent(faction.GetFaction(user)) == shuttle.Faction?.ToLowerInvariant();
     }
 
+    private bool IsForceOnForcePreset() =>
+        EntityManager.System<GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true;
+
     protected override bool IsForceOnForceHuman(EntityUid user) =>
-        EntityManager.System<GameTicker>().CurrentPreset?.ID.Equals("ForceOnForce", StringComparison.OrdinalIgnoreCase) == true &&
-        !HasComp<XenoComponent>(user) && EntityManager.System<ForceOnForceSystem>().GetFaction(user) != null;
+        IsForceOnForcePreset()
+        && !HasComp<XenoComponent>(user)
+        && EntityManager.System<ForceOnForceSystem>().GetFaction(user) != null;
+
+    protected override bool IsForceOnForceRound() => IsForceOnForcePreset();
 
     private bool CanLandAt(EntityUid computer, EntityUid destination)
     {
+        if (Transform(computer).GridUid is { } grid)
+        {
+            var permission = new CMUDropshipLandingPermissionEvent(destination);
+            RaiseLocalEvent(grid, ref permission);
+            if (permission.Allowed)
+                return true;
+        }
+
         if (!TryComp<WhitelistedShuttleComponent>(computer, out var shuttle))
             return GetCarrierFaction(destination) == null;
 

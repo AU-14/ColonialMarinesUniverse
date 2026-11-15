@@ -1,0 +1,351 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "The metal sheet of CMSS13 (Resources/Textures/_RMC14/Objects/Materials/Sheets/metal.rsi) painted in the colour of each metal",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "iron"
+    },
+    {
+      "name": "iron_2"
+    },
+    {
+      "name": "iron_3"
+    },
+    {
+      "name": "iron_4"
+    },
+    {
+      "name": "iron-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "iron-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "aluminum"
+    },
+    {
+      "name": "aluminum_2"
+    },
+    {
+      "name": "aluminum_3"
+    },
+    {
+      "name": "aluminum_4"
+    },
+    {
+      "name": "aluminum-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "aluminum-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "chrome"
+    },
+    {
+      "name": "chrome_2"
+    },
+    {
+      "name": "chrome_3"
+    },
+    {
+      "name": "chrome_4"
+    },
+    {
+      "name": "chrome-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "chrome-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "cobalt"
+    },
+    {
+      "name": "cobalt_2"
+    },
+    {
+      "name": "cobalt_3"
+    },
+    {
+      "name": "cobalt_4"
+    },
+    {
+      "name": "cobalt-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "cobalt-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "copper"
+    },
+    {
+      "name": "copper_2"
+    },
+    {
+      "name": "copper_3"
+    },
+    {
+      "name": "copper_4"
+    },
+    {
+      "name": "copper-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "copper-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "gold"
+    },
+    {
+      "name": "gold_2"
+    },
+    {
+      "name": "gold_3"
+    },
+    {
+      "name": "gold_4"
+    },
+    {
+      "name": "gold-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "gold-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "lead"
+    },
+    {
+      "name": "lead_2"
+    },
+    {
+      "name": "lead_3"
+    },
+    {
+      "name": "lead_4"
+    },
+    {
+      "name": "lead-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "lead-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "silver"
+    },
+    {
+      "name": "silver_2"
+    },
+    {
+      "name": "silver_3"
+    },
+    {
+      "name": "silver_4"
+    },
+    {
+      "name": "silver-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "silver-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "titanium"
+    },
+    {
+      "name": "titanium_2"
+    },
+    {
+      "name": "titanium_3"
+    },
+    {
+      "name": "titanium_4"
+    },
+    {
+      "name": "titanium-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "titanium-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "tungsten"
+    },
+    {
+      "name": "tungsten_2"
+    },
+    {
+      "name": "tungsten_3"
+    },
+    {
+      "name": "tungsten_4"
+    },
+    {
+      "name": "tungsten-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "tungsten-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "platinum"
+    },
+    {
+      "name": "platinum_2"
+    },
+    {
+      "name": "platinum_3"
+    },
+    {
+      "name": "platinum_4"
+    },
+    {
+      "name": "platinum-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "platinum-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plastitan"
+    },
+    {
+      "name": "plastitan_2"
+    },
+    {
+      "name": "plastitan_3"
+    },
+    {
+      "name": "plastitan_4"
+    },
+    {
+      "name": "plastitan-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plastitan-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "weaponsteel"
+    },
+    {
+      "name": "weaponsteel_2"
+    },
+    {
+      "name": "weaponsteel_3"
+    },
+    {
+      "name": "weaponsteel_4"
+    },
+    {
+      "name": "weaponsteel-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "weaponsteel-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "plasteel"
+    },
+    {
+      "name": "plasteel_2"
+    },
+    {
+      "name": "plasteel_3"
+    },
+    {
+      "name": "plasteel_4"
+    },
+    {
+      "name": "plasteel-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "plasteel-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "uranium"
+    },
+    {
+      "name": "uranium_2"
+    },
+    {
+      "name": "uranium_3"
+    },
+    {
+      "name": "uranium_4"
+    },
+    {
+      "name": "uranium-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "uranium-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "zinc"
+    },
+    {
+      "name": "zinc_2"
+    },
+    {
+      "name": "zinc_3"
+    },
+    {
+      "name": "zinc_4"
+    },
+    {
+      "name": "zinc-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "zinc-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "brass"
+    },
+    {
+      "name": "brass_2"
+    },
+    {
+      "name": "brass_3"
+    },
+    {
+      "name": "brass_4"
+    },
+    {
+      "name": "brass-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "brass-inhand-right",
+      "directions": 4
+    }
+  ]
+}

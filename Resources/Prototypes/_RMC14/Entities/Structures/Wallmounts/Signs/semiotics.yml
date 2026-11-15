@@ -1,10 +1,15 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: BaseSign
   id: CMSemioticBase
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Wallmounts/semiotics.rsi
+  # CMU14: allow PlaceFree offsets without anchoring snapping signs back to tile centers.
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
 
 - type: entity
   parent: CMSemioticBase

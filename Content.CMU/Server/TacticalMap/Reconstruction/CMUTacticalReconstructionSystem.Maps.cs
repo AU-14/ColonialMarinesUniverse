@@ -61,12 +61,16 @@ public sealed partial class CMUTacticalReconstructionSystem
             return true;
         }
         if (!TryComp<CMUZLevelsNetworkComponent>(level.NetworkUid, out var network) || network.ZLevels.Count == 0) return false;
-        min = network.ZLevels.Keys.Min();
-        var count = (long) network.ZLevels.Keys.Max() - min + 1;
+        // Personal cave knowledge must never enter the automatically reconstructed colony atlas.
+        var authored = network.ZLevels.Where(p => p.Value is { } map &&
+            (!TryComp<Content.Shared.CMU14.ZLevelBuilding.ZGeneratedStoneComponent>(map, out var stone) || stone.LocalizedToAuthoredLevel)).ToArray();
+        if (authored.Length == 0) return false;
+        min = authored.Min(p => p.Key);
+        var count = (long) authored.Max(p => p.Key) - min + 1;
         if (count <= 0 || count > CMUReconGeometry.MaxLevels) return false;
         networkUid = level.NetworkUid;
         maps = new EntityUid?[(int) count];
-        foreach (var (depth, map) in network.ZLevels)
+        foreach (var (depth, map) in authored)
             if (map is { } uid && !TerminatingOrDeleted(uid) && HasComp<MapGridComponent>(uid)) maps[depth - min] = uid;
         return true;
     }
