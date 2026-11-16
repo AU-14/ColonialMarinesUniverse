@@ -288,6 +288,8 @@
     sprite: _RMC14/Objects/Clothing/Shoes/Boots/cbrn.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Shoes/Boots/cbrn.rsi
+  - type: CMArmor # CMU14: cmss13 armor_bio GIGAHIGHPLUS, the boots had no bio at all
+    bio: 75
 
 # - type: entity
 #   parent: ClothingShoesBase

@@ -63,8 +63,8 @@
           radius: 0.45
         density: 20
         hard: true
-        layer: [MidImpassable, BulletImpassable]
-        mask: [MidImpassable, BulletImpassable]
+        layer: []
+        mask: [ItemMask]
   - type: Sprite
     sprite: _CMU14/Structures/Fob/weapons_platform.rsi
     drawdepth: Mobs
@@ -181,8 +181,9 @@
       equipment:
         shape: !type:PhysShapeCircle
           radius: 0.3
-        hard: false
-        layer: [LowImpassable]
+        hard: true
+        layer: []
+        mask: [ItemMask]
 
 - type: entity
   parent: CMUFobSupportGun

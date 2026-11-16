@@ -1192,6 +1192,8 @@
       entries:
       - id: AU14WeaponRifleKramerMagazineStandard
         amount: 200
+      - id: CMU14MagazineRifleKramerRubber
+        amount: 20
       - id: AU14WeaponRifleKramerMagazineAP
         amount: 15
       - id: CMUWeaponRifleKramerMagazineHP
@@ -1216,6 +1218,8 @@
       entries:
       - id: CMMagazinePistolM1984
         amount: 200
+      - id: CMU14MagazinePistolM1984Rubber
+        amount: 20
       - id: RMCMagazinePistolM1984AP
         amount: 15
       - id: RMCMagazinePistolM1984HP
@@ -1235,6 +1239,10 @@
       - id: RMCBoxBulletsRifle
         amount: 5
       - id: CMUBoxBulletsPistol9MM
+        amount: 5
+      - id: CMU14BoxBulletsRifle10x24mmRubber
+        amount: 5
+      - id: CMU14BoxBulletsPistol9MMRubber
         amount: 5
     - name: explosives
       entries:

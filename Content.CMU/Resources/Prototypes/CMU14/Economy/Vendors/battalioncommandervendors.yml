@@ -1,0 +1,305 @@
+# Battalion Commander
+# Locked to the platoon commander jobs (GOVFOR and OPFOR, every faction variant) plus command access.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUBattalionCommanderVendor
+  name: Battalion Commander Vendor
+  description: >-
+    An automated dispenser rack stocked with dress blues, service uniforms and ceremonial attire for the Battalion Commander.
+
+    Only use your current faction.
+  components:
+  - type: AccessReader
+    access:
+    - [ "AU14AccessGovforCommand" ]
+    - [ "AU14AccessOpforCommand" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/dress.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORPlatCo
+    - AU14JobOPFORPlatCo
+    - AU14JobGOVFORPlatCoCMBCIU
+    - AU14JobGOVFORPlatCoRMC
+    - AU14JobGOVFORPlatCoUPP
+    - AU14JobGOVFORPlatCoWYPMC
+    sections:
+    - name: Dress Blues
+      takeAll: CMUBattalionCommanderDressBlues
+      entries:
+      - id: RMCMarineUniformDressGeneral
+      - id: CMCoatDressBluesGeneral
+      - id: CMHeadDressBluesOfficer
+      - id: CMHandsWhiteDress
+      - id: RMCShoesLaceup
+    - name: Uniforms
+      choices: { CMUBattalionCommanderUniform: 1 }
+      entries:
+      - id: CMJumpsuitCOService
+        recommended: true
+      - id: CMJumpsuitCOFormalBlack
+      - id: CMJumpsuitCOFormalWhite
+      - id: RMCJumpsuitCOUniform
+      - id: RMCJumpsuitCOUniformGray
+      - id: CMJumpsuitBO
+      - id: CMJumpsuitOperations
+    - name: Jackets
+      choices: { CMUBattalionCommanderCoat: 1 }
+      entries:
+      - id: CMCoatCOBomber
+        recommended: true
+      - id: RMCCoatService
+      - id: RMCCoatAllWeather
+      - id: CMCoatXOFormal
+    - name: Headgear
+      choices: { CMUBattalionCommanderHat: 1 }
+      entries:
+      - id: CMHeadCapCO
+        recommended: true
+      - id: CMHeadCapCOFormalBlack
+      - id: CMHeadCapCOFormalWhite
+      - id: CMHeadCapPeakedFormal
+      - id: CMHeadBeretCO
+      - id: CMHeadBeretCOBlack
+      - id: CMHeadBeretCOWhite
+      - id: CMHeadBeretCOLtCol
+      - id: CMHeadBeretCOCol
+    - name: Footwear and Gloves
+      takeAll: CMUBattalionCommanderFootwear
+      entries:
+      - id: CMShoesLaceupCommander
+      - id: RMCHandsDeluxeMarine
+    - name: Accessories
+      takeAll: CMUBattalionCommanderAccessories
+      entries:
+      - id: RMCSunglassesBig
+    - name: Ceremonial Weapon
+      choices: { CMUBattalionCommanderCeremonial: 1 }
+      entries:
+      - id: RMCScabbardCeremonialFilled
+        name: Commander's Ceremonial Sabre
+    # Other factions' commander apparel (from each faction's command vendor). Only take your own faction's.
+    - name: UPP Commander Apparel (only use your current faction)
+      entries:
+      - id: AU14JumpsuitOfficerUPP
+      - id: AU14ServiceFatiguesUPP
+      - id: AU14CoatUPP
+      - id: AU14CoatUPPSenior
+      - id: RMCBootsSPPFilled
+      - id: RuMCHeadKomisarCap
+      - id: RuMCHeadBeretMarien
+      - id: RuMCUPPNavalInfantryCapUshankaCommander
+      - id: CMHeadCapSPPPeaked
+      - id: RMCHeadCapSPPPolKomWhite
+    - name: LACN Commander Apparel (only use your current faction)
+      entries:
+      - id: AU14LACNUniform
+      - id: CMULACNServiceUniform
+      - id: CMULACNCoatOfficer
+      - id: CMULACNCoatCommandingOfficer
+      - id: CMULACNGlovesService
+      - id: CMULACNGlovesWhite
+      - id: CMULACNBootsWhiteFilled
+      - id: AU14LACNNavyCap
+      - id: CMULACNOfficerCap
+      - id: CMULACNOfficerHeadsetCap
+      - id: CMULACNCommandingOfficerCap
+    - name: CMB CIU Commander Apparel (only use your current faction)
+      entries:
+      - id: AU14UniversalBlackFatigues
+      - id: AU14CMBUniform
+      - id: AU14CMBMarshalWindbreaker
+      - id: RMCBootsPMCFilled
+    - name: TWE Royal Marines Commander Apparel (only use your current faction)
+      entries:
+      - id: AU14FatiguesServiceRMC
+      - id: CMUFatiguesRMCTeamlead
+      - id: RMCBootsRoyalFilled
+      - id: AU14HeadCapOfficerRMC
+      - id: AU14HeadBeretRMCOfficer
+        name: Officer Beret
+    - name: WY Commander Apparel (only use your current faction)
+      entries:
+      - id: RMCJumpsuitVeteranPMCLeaderNoWebbing
+      - id: RMCHeadCapWestonYamadaDark
+      - id: AU14WYPMCBallCap
+      - id: RMCBootsPMCFilled
+
+# Primary weapon kits. Vending a bundle hands out every listed item, so one pick gives the whole kit.
+- type: entity
+  parent: CMVendorBundleRiflemanApparel
+  id: CMUBattalionCommanderBundleM59A
+  name: M59A rifle kit
+  description: Contains an M59A prototype rifle loaded with an AP magazine, a spare AP magazine, three extended magazines and an M42 scout sight (night vision).
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Rifles/m59a/desert.rsi
+    state: icon
+  - type: CMVendorBundle
+    bundle:
+    # The rifle spawns with an AP magazine already loaded, so with the spare that is two AP magazines in total.
+    - RMCWeaponRifleM59A
+    - CMMagazineRifleM54CMK1AP
+    - CMMagazineRifleM54CExt
+    - CMMagazineRifleM54CExt
+    - CMMagazineRifleM54CExt
+    - CMGlassesM42ScoutSight
+
+- type: entity
+  parent: CMVendorBundleRiflemanApparel
+  id: CMUBattalionCommanderBundleM56C
+  name: M56C kit
+  description: Contains an M56C 'cavalier' smart gun, its combat harness and ten drum magazines. Teaches you how to use the smart gun.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/CO.rsi
+    state: base
+  - type: CMVendorBundle
+    bundle:
+    - RMCSmartGunCO
+    - CMArmorSmartGunCombatHarness
+    # The gun spawns with one drum loaded; these are ten spares.
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+    - RMCMagazineSmartGun
+
+- type: entity
+  parent: CMVendorBundleRiflemanApparel
+  id: CMUBattalionCommanderBundleCombatSpec
+  name: combat grenade set
+  description: Contains two R2175/A HEDP grenade packets and two R2175/B HIDP incendiary grenade packets.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/CO.rsi
+    state: base
+  - type: CMVendorBundle
+    bundle:
+    - AU14PacketGrenadeHighExplosiveRMCFilled
+    - AU14PacketGrenadeHighExplosiveRMCFilled
+    - AU14PacketGrenadeIncendiaryRMCFilled
+    - AU14PacketGrenadeIncendiaryRMCFilled
+
+# Combat gear: one armor, one primary weapon kit, one sidearm, a belt and two pouches.
+# Same Commanding Officer lock as the dress vendor. Shared stock lives in the abstract base; the
+# gamemode variants below only differ by name, so their inventories can diverge later.
+- type: entity
+  abstract: true
+  parent: ColMarTechBase
+  id: CMUBattalionCommanderCombatVendorBase
+  components:
+  - type: AccessReader
+    access:
+    - [ "AU14AccessGovforCommand" ]
+    - [ "AU14AccessOpforCommand" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  # Picking the smart gun kit teaches the skill needed to fire it.
+  - type: CMUGrantSkillOnVend
+    skills:
+      RMCSmartGunCO:
+        RMCSkillSmartGun: 1
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORPlatCo
+    - AU14JobOPFORPlatCo
+    - AU14JobGOVFORPlatCoCMBCIU
+    - AU14JobGOVFORPlatCoRMC
+    - AU14JobGOVFORPlatCoUPP
+    - AU14JobGOVFORPlatCoWYPMC
+    sections:
+    - name: Armor
+      choices: { CMUBattalionCommanderArmor: 1 }
+      entries:
+      - id: RMCArmorM3SO
+      - id: RMCArmorVestCommandingOfficer
+      - id: RMCArmorVestSeniorOfficer
+      - id: RMCArmorM3CO
+    - name: Primary Weapon
+      choices: { CMUBattalionCommanderPrimary: 1 }
+      entries:
+      - id: CMUBattalionCommanderBundleM59A
+        recommended: true
+      - id: CMUBattalionCommanderBundleM56C
+    - name: Secondary Weapon
+      choices: { CMUBattalionCommanderSidearm: 1 }
+      entries:
+      - id: RMCMatebaBeltFilled
+        name: Mateba revolver
+        recommended: true
+      - id: RMCMK80BeltFilled
+        name: MK80 pistol
+      - id: RMCM1984BeltFilled
+        name: M1984 service pistol
+      - id: RMCM77BeltFilled
+        name: M77 pistol
+      - id: RMCM44BeltFilled
+        name: M44 revolver
+    - name: Additional Ammunition
+      takeAll: CMUBattalionCommanderAmmo
+      entries:
+      - id: RMCSpeedLoaderMatebaHighImpact
+        name: Mateba high impact speedloader (x4)
+        spawn: 4
+      - id: CMMagazineRifleM54CMK1
+        name: M41A MK1 magazine (x10)
+        spawn: 10
+    - name: Belt
+      choices: { CMUBattalionCommanderBelt: 1 }
+      entries:
+      - id: RMCBeltUtilityGeneral
+        recommended: true
+      - id: CMBeltMarine
+      - id: CMBeltUtilityCombat
+      - id: CMBeltMedicBagFilled
+        name: M276 pattern lifesaver bag (Full)
+      - id: CMBeltMedicalFilled
+        name: M276 pattern medical storage rig (Full)
+      - id: CMBeltSmartGunOperatorFilled
+        name: M280 pattern smart gun operator drum belt (Full)
+    - name: Pouches
+      choices: { CMUBattalionCommanderPouch: 2 }
+      entries:
+      - id: RMCPouchMagazineLarge
+        recommended: true
+      - id: RMCPouchMagazinePistolLarge
+      - id: RMCPouchGeneralLarge
+        recommended: true
+      - id: RMCPouchPistol
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+      - id: RMCPouchMedkit
+      - id: RMCPouchAutoinjectorFill
+      - id: RMCPouchToolsFill
+      - id: RMCPouchGeneralLargeFilledSmartGunDrums
+        name: large general pouch (smart gun drums)
+    # One specialization kit, reusing the corpsman and combat technician essentials bundles.
+    - name: Specialization
+      choices: { CMUBattalionCommanderSpecialization: 1 }
+      entries:
+      - id: AU14VendorBundleCorpsmanEssentials
+        name: Medical (Hospital Corpsman set)
+      - id: AU14VendorBundleCombatTechnicianEssentials
+        name: Combat Technician (engineer set)
+      - id: CMUBattalionCommanderBundleCombatSpec
+        name: Combat (grenade packets)
+
+# Distress Signal and Force on Force
+- type: entity
+  parent: CMUBattalionCommanderCombatVendorBase
+  id: CMUBattalionCommanderCombatVendorDistressFOF
+  name: Battalion Commander Combat Vendor (Distress / FOF)
+  description: An automated combat equipment rack stocked with armor and weapons for the Battalion Commander. Issued for Distress Signal and Force on Force operations.
+
+# Insurgency
+- type: entity
+  parent: CMUBattalionCommanderCombatVendorBase
+  id: CMUBattalionCommanderCombatVendorInsurgency
+  name: Battalion Commander Combat Vendor (Insurgency)
+  description: An automated combat equipment rack stocked with armor and weapons for the Battalion Commander. Issued for Insurgency operations.

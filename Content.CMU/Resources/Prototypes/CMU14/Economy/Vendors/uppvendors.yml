@@ -1432,6 +1432,8 @@
         amount: 40
       - id: AU14MagazineRifleAG80
         amount: 200
+      - id: CMU14MagazineRifleAG80Rubber
+        amount: 20
       - id: AU14MagazineRifleAG80AP
         amount: 10
       - id: AU14MagazineRifleAG80Ext
@@ -1517,6 +1519,8 @@
       - id: RuMCBoxBulletsRifleType71
         amount: 5
       - id: RuMCBoxBulletsPistol762x25mm
+        amount: 5
+      - id: CMU14BoxBulletsRifleAG80Rubber
         amount: 5
       #RuMCBoxBulletsRifleAG80AP
       #RuMCBoxBulletsRifle10x24mmAP
@@ -1826,4 +1830,3 @@
         points: 5
       - id: RMCOuterClothingExternalWebbing
         points: 5
-
