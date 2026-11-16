@@ -56,7 +56,7 @@
         variation: 0.1
     activatedDamage:
       types:
-        Blunt: 45 # It's meant to be a very strong melee option for Officers (CO gets one) and Synthetics. Instant stuns utilize flash anyway so I didn't add that as a feature
+        Blunt: 35 # Strong melee option for Officers (CO gets one) and Synthetics. Instant stuns utilize flash anyway so I didn't add that as a feature
   - type: MeleeWeapon
     wideAnimationRotation: -135
     damage:
