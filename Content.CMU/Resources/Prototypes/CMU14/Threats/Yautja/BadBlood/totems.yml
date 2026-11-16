@@ -50,10 +50,16 @@
     destroyedIntel: 0.7
     intelTeam: govfor
     loot: CMUYautjaHumanSkullTrophy
+    desecrateTime: 45
+    reconsecrateTime: 45
     revealComponents:
     - type: TacticalMapAlwaysVisible
       visibleToMarines: true
       visibleToGovfor: true
+  # a marine reads a desecrated Totem for the Lodge's grid square and the clan's ship progress
+  - type: BadBloodTotemReadable
+    readTime: 25
+    gridSize: 10
   # sits in the Yautja bucket, so marines only see it once it is revealed
   - type: TacticalMapTracked
     trackDead: true

@@ -1041,6 +1041,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
                 var hijackerType = HasComp<CMUPathogenHiveMemberComponent>(args.Actor) ? DropshipHijackerType.Pathogen :
                     HasComp<XenoComponent>(args.Actor) ? DropshipHijackerType.Xeno :
+                    HasComp<Content.Shared.CMU14.Yautja.YautjaComponent>(args.Actor) ? DropshipHijackerType.Yautja : // CMU14: Bad Blood hijack
                     DropshipHijackerType.Other; // CMU14
                 var ev = new DropshipHijackStartEvent(xform.ParentUid, HijackerType: hijackerType); // CMU14
                 RaiseLocalEvent(ref ev);

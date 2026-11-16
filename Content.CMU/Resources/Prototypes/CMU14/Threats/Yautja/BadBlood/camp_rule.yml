@@ -21,7 +21,11 @@
     totemCost: 3
     livingCapBonus: 2
     threatBudgetFraction: 0.25
-    houndsPerMaster: 3
+    landingHoundDivisor: 2
+    houndCapDivisor: 2
+    foundingSquadBase: 1
+    foundingSquadDivisor: 2
+    lastStandSeats: 2
     deadPriorityWindow: 30
     leaderSsdTimeout: 300
     campRebuildCooldown: 300
@@ -46,3 +50,25 @@
     departureTime: 1200
   # the end rule's decision and its absence ledger. BadBloodCampRuleSystem.End.cs
   - type: BadBloodCampEnd
+  # the marine objective chain: infrastructure gate, clan signature, uplink. BadBloodObjectiveChainSystem
+  - type: BadBloodObjectiveChain
+    reactorHold: 300
+    gatePartsRequired: 2
+    totemHold: 600
+    lodgeSurveyTime: 75
+    bracerStepTime: 5
+    fieldRelayCrate: CMUCrateBadBloodFieldRelay
+    fieldRelayCost: 1500
+    fieldRelayCategory: Research
+  # the Vessel Strike fired from a GOVFOR overwatch console after the uplink. BadBloodVesselStrikeSystem
+  - type: BadBloodVesselStrike
+    duration: 1080
+    sabotagePenalty: 60
+    rerouteTime: 30
+    repairImmunity: 180
+    cancelLockout: 300
+    authorizedJobs: [ AU14JobGOVFORPlatCo, AU14JobGOVFORPlatCoCMBCIU, AU14JobGOVFORPlatCoRMC, AU14JobGOVFORPlatCoUPP, AU14JobGOVFORPlatCoWYPMC, AU14JobGOVFORAdjutant, AU14JobGOVFORAdjutantCMBCIU, AU14JobGOVFORAdjutantRMC, AU14JobGOVFORAdjutantUPP, AU14JobGOVFORAdjutantWYPMC, AU14JobGOVFORPlatOp, AU14JobGOVFORPlatOpRMC, AU14JobGOVFORPlatOpUPP, AU14JobGOVFORPlatOpWYPMC ]
+  # the shipside counter: a Bad Blood at the strike console cancels a running strike. BadBloodStrikeSabotageSystem
+  - type: BadBloodShipsideCounter
+    sabotageDoAfter: 30
+    announceOnStart: true

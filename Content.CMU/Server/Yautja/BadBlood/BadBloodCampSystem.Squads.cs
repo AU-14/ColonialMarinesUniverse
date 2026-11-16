@@ -183,7 +183,14 @@ public sealed partial class BadBloodCampSystem
         }
 
         if (TryOpenSquad(seats, out _, seatCost: cost / (float) seats, buyer: buyer, ignoreCaps: true))
+        {
+            // FLOW-502: a bought squad shows the Lodge to marines for a while. free seats (founding, ship,
+            // last stand) open through TryOpenSquad directly and do not reveal
+            if (TryGetLodge(out var lodge))
+                RevealLodge(lodge.Comp.SquadRevealTime, BadBloodRevealSource.Squad);
+
             return true;
+        }
 
         _rule.RefundSp(cost);
         return false;

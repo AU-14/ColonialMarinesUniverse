@@ -292,4 +292,49 @@ public sealed class CampRuleEndTest : GameTest
             });
         }
     }
+
+    // FLOW-510: a completed Vessel Strike decides MarinesVesselDestroyed, recorded as a threat defeat (Marine Major),
+    // and a decided round takes no second outcome
+    [Test]
+    public async Task ACompletedVesselStrikeDestroysTheVessel()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map);
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.System<GameTicker>().RunLevel, Is.Not.EqualTo(GameRunLevel.InRound),
+                    "this test reads the decision, it must not end a real round");
+                Assert.That(party.Rule, Is.Not.Null, "the Bad Blood rule must start");
+
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var strike = Server.EntMan.GetComponent<BadBloodVesselStrikeComponent>(party.Rule!.Value);
+                Assert.That(rules.TryDecideRound(BadBloodRoundOutcome.MarinesVesselDestroyed), Is.False,
+                    "no completed strike, no destroyed vessel");
+
+                strike.Completed = true;
+                Assert.That(Server.System<BadBloodVesselStrikeSystem>().IsStrikeComplete(), Is.True);
+                Assert.That(rules.TryDecideRound(BadBloodRoundOutcome.MarinesVesselDestroyed), Is.True);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetRoundOutcome(), Is.EqualTo(BadBloodRoundOutcome.MarinesVesselDestroyed));
+                    Assert.That(BadBloodCampRuleSystem.GetThreatDefeatedSource(BadBloodRoundOutcome.MarinesVesselDestroyed),
+                        Is.EqualTo(BadBloodCampRuleSystem.VesselStrikeSource),
+                        "recorded as a threat defeat (Marine Major), never as a Bad Blood win");
+                    Assert.That(BadBloodCampRuleSystem.GetThreatDefeatedSource(BadBloodRoundOutcome.BadBloodDeparture),
+                        Is.Null);
+                    Assert.That(rules.TryDecideRound(BadBloodRoundOutcome.MarinesVesselDestroyed), Is.False,
+                        "a round is decided once");
+                    Assert.That(rules.TryDecideRound(BadBloodRoundOutcome.MarinesLeaderAndLodge), Is.False);
+                });
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+        }
+    }
 }

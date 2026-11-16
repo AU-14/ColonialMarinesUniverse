@@ -192,6 +192,8 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
     private void OnTowerInteractHand(Entity<CommunicationsTowerComponent> ent, ref InteractHandEvent args)
     {
+        if (args.Handled) return; // CMU14
+
         if (ent.Comp.State == CommunicationsTowerState.Broken)
         {
             _popup.PopupEntity($"{Name(ent)} needs repairs to be turned back on!", ent, args.User, PopupType.MediumCaution);

@@ -83,7 +83,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
         // Evolution boost is xeno-specific; skip for human-vs-human hijacks
-        if (ev.HijackerType == DropshipHijackerType.Human) // CMU14
+        if (ev.HijackerType is DropshipHijackerType.Human or DropshipHijackerType.Yautja) // CMU14: no surge for Bad Blood hijacks
             return;
 
         var hives = EntityQueryEnumerator<HiveComponent>();

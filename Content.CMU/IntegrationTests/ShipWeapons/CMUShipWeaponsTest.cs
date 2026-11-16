@@ -261,7 +261,7 @@ public sealed class CMUShipWeaponsTest : GameTest
             var component = SComp<CMUShipWeaponsTerminalComponent>(terminal);
             Assert.That(component.MaxSelections, Is.EqualTo(2), "the YAML default is a two-mission loadout");
             component.MaxSelections = limit;
-            var weapons = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>()
+            var weapons = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Where(p => p.Armable)
                 .Select(p => new ProtoId<CMUShipWeaponPrototype>(p.ID)).Take(limit + 1).ToArray();
             Assert.That(weapons, Has.Length.EqualTo(limit + 1));
             Send(terminal, actor, new CMUShipWeaponsArmBuiMsg(weapons));
@@ -452,7 +452,7 @@ public sealed class CMUShipWeaponsTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            var profiles = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().ToArray();
+            var profiles = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Where(p => p.Armable).ToArray();
             Assert.That(profiles, Has.Length.EqualTo(10));
             foreach (var profile in profiles)
             {
@@ -755,7 +755,7 @@ public sealed class CMUShipWeaponsTest : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var weapons = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(w => w.ID).ToList();
+            var weapons = SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Where(p => p.Armable).Select(w => w.ID).ToList();
             foreach (var prototype in new[] { "CMUShipWeaponGun", "CMUShipWeaponGunFlipped" })
             {
                 var gun = SEntMan.SpawnEntity(prototype, map.GridCoords);
@@ -804,7 +804,7 @@ public sealed class CMUShipWeaponsTest : GameTest
                 var ui = SEntMan.System<SharedUserInterfaceSystem>();
                 Assert.That(ui.TryGetUiState<CMUShipWeaponsBuiState>(terminal, CMUShipWeaponsUiKey.Key, out var choices), Is.True);
                 Assert.That(choices!.AvailableWeapons.Select(w => w.Id),
-                    Is.EquivalentTo(SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(p => p.ID)),
+                    Is.EquivalentTo(SProtoMan.EnumeratePrototypes<CMUShipWeaponPrototype>().Where(p => p.Armable).Select(p => p.ID)),
                     "an installed battery can fire every mission");
 
                 var planet = SEntMan.EnsureComponent<RMCPlanetComponent>(map.MapUid);

@@ -1,0 +1,181 @@
+# FLOW-513: Bad Blood bricks and what the clan builds with them. Bricks come only from the Lodge quarry
+# (lodge_quarry.yml). BadBloodQuarrySystem refuses a brick build unless a living Bad Blood stands within build range
+# of the standing Lodge or a registered, undesecrated Totem, and crumbles everything here when the Lodge falls.
+# Kept apart from CMUSandstone (Threats/Yautja/Structures/lodge.yml) so plain sandstone never builds these.
+
+- type: stack
+  id: CMUBadBloodBrick
+  name: Bad Blood brick
+  icon: { sprite: CMU14/Yautja/Lodge/sandstone.rsi, state: sandstone }
+  spawn: CMUSheetBadBloodBrick1
+  maxCount: 50
+
+- type: entity
+  parent: SheetOtherBase
+  id: CMUSheetBadBloodBrick
+  name: Bad Blood brick
+  description: Rough-cut stone from the clan's quarry. It crumbles to grit if the Lodge falls.
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: CMUBadBloodBrick
+    count: 50
+    baseLayer: base
+    layerStates:
+    - sandstone
+    - sandstone_2
+    - sandstone_3
+    - sandstone_4
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    state: sandstone_4
+    color: "#8c7564"
+    layers:
+    - state: sandstone_4
+      map: ["base"]
+  - type: Item
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    size: Normal
+  - type: Appearance
+  - type: RMCConstructionItem
+    buildable:
+    - CMUBadBloodWallBuild
+    - CMUBadBloodBarricadeBuild
+    - CMUBadBloodDoorBuild
+  - type: UserInterface
+    interfaces:
+      enum.RMCConstructionUiKey.Key:
+        type: RMCConstructionBui
+  - type: BadBloodBrick
+
+- type: entity
+  parent: CMUSheetBadBloodBrick
+  id: CMUSheetBadBloodBrick10
+  suffix: 10
+  components:
+  - type: Stack
+    count: 10
+
+- type: entity
+  parent: CMUSheetBadBloodBrick
+  id: CMUSheetBadBloodBrick1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# --- what the bricks build ---
+
+- type: entity
+  parent: CMBaseWall
+  id: CMUBadBloodWall
+  name: clan stone wall
+  description: Quarry stone stacked and mortared by hunter hands. It stands as long as the clan's Lodge does.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/stone.rsi
+    state: stone
+    color: "#8c7564"
+  - type: Icon
+    sprite: _RMC14/Structures/Walls/stone.rsi
+    state: stone
+  - type: IconSmooth
+    key: walls
+    additionalKeys:
+    - windows
+    base: stone
+  - type: ReceiverXenoClaws
+    maxHealth: 1000
+  # CMBaseWall keeps RMCWallExplosionDeletable and DestroyedByExplosionType, so charges and explosions take it down
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1000
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: BadBloodFortification
+
+- type: entity
+  parent: RMCBarricadeWood
+  id: CMUBadBloodBarricade
+  name: clan stone barricade
+  description: A low heap of quarry stone. It crumbles if the clan's Lodge falls.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    color: "#8c7564"
+  # stone, not wood: the base RMC barricade set (CMBarricadeBase, metal barricades) instead of Wood
+  - type: Damageable
+    damageModifierSet: CMBarricade
+  # stone, not planks: nothing drops when it breaks and it cannot be taken apart for wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          path: /Audio/Effects/break_stone.ogg
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: CMUYautjaLodgeStatic
+    node: static
+    deconstructionTarget: null
+  - type: BadBloodFortification
+
+# RMCBaseMaterialDoor is a plain Door, and SharedDoorSystem.HasAccess checks its AccessReader. the access list takes
+# access levels, so it names the level inside the CMUYautjaAccessBadBlood group the Bad Blood bracer chip carries
+- type: entity
+  parent: RMCSandstoneDoor
+  id: CMUBadBloodDoor
+  name: clan stone door
+  description: A slab of quarry stone on a crude pivot. It only answers to a Bad Blood bracer.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    color: "#8c7564"
+  - type: AccessReader
+    access: [["CMUAccessYautjaBadBlood"]]
+  - type: BadBloodFortification
+
+# --- recipes ---
+
+- type: rmcConstruction
+  id: CMUBadBloodBuildBase
+  abstract: true
+  prototype: CMUBadBloodWall
+  skill: RMCSkillConstruction
+  requiredSkillLevel: 2
+
+- type: rmcConstruction
+  parent: CMUBadBloodBuildBase
+  id: CMUBadBloodWallBuild
+  name: clan stone wall
+  prototype: CMUBadBloodWall
+  noRotate: true
+  doAfterTime: 5
+  materialCost: 4
+
+- type: rmcConstruction
+  parent: CMUBadBloodBuildBase
+  id: CMUBadBloodBarricadeBuild
+  name: clan stone barricade
+  prototype: CMUBadBloodBarricade
+  doAfterTime: 2
+  materialCost: 2
+
+- type: rmcConstruction
+  parent: CMUBadBloodBuildBase
+  id: CMUBadBloodDoorBuild
+  name: clan stone door
+  prototype: CMUBadBloodDoor
+  doAfterTime: 5
+  materialCost: 6

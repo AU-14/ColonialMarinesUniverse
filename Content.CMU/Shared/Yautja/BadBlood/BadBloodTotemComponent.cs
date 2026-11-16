@@ -131,6 +131,39 @@ public sealed partial class BadBloodTotemComponent : Component
     /// </summary>
     [ViewVariables]
     public bool Destroyed;
+
+    /// <summary>
+    /// FLOW-503: marines held it with no living Bad Blood near for <see cref="DesecrateTime"/>. A desecrated Totem
+    /// pays nothing, is not ripe and has no aura until the clan reconsecrates it.
+    /// </summary>
+    [ViewVariables]
+    public bool Desecrated;
+
+    /// <summary>
+    /// How long marines must hold the Totem, with no living Bad Blood within <see cref="ContestRadius"/>, to
+    /// desecrate it.
+    /// </summary>
+    [DataField]
+    public TimeSpan DesecrateTime = TimeSpan.FromSeconds(45);
+
+    /// <summary>
+    /// How long Bad Bloods must hold a desecrated Totem, with no living marine within <see cref="ContestRadius"/>,
+    /// to reconsecrate it.
+    /// </summary>
+    [DataField]
+    public TimeSpan ReconsecrateTime = TimeSpan.FromSeconds(45);
+
+    /// <summary>
+    /// Time marines have held it towards <see cref="DesecrateTime"/>. A contested hold pauses, it is never reset.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan DesecrateProgress;
+
+    /// <summary>
+    /// Time Bad Bloods have held it towards <see cref="ReconsecrateTime"/>. A contested hold pauses, it is never reset.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan ReconsecrateProgress;
 }
 
 /// <summary>

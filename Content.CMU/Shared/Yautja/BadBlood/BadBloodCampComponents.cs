@@ -41,6 +41,12 @@ public sealed partial class BadBloodCampComponent : Component
     public TimeSpan AttackRevealTime = TimeSpan.FromSeconds(30);
 
     /// <summary>
+    /// How long the Lodge shows on the marine map after the clan buys a reinforcement squad.
+    /// </summary>
+    [DataField]
+    public TimeSpan SquadRevealTime = TimeSpan.FromSeconds(60);
+
+    /// <summary>
     /// Timed reveals run until this time.
     /// </summary>
     [ViewVariables]
@@ -79,6 +85,7 @@ public enum BadBloodCampPartKind : byte
     Armory,
     Kennel,
     Cauldron,
+    Quarry,
 }
 
 /// <summary>

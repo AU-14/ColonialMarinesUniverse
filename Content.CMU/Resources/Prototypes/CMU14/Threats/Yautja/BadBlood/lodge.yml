@@ -54,6 +54,7 @@
     regen: 1
     alertCooldown: 10
     attackRevealTime: 30
+    squadRevealTime: 60
     revealComponents:
     - type: TacticalMapAlwaysVisible
       visibleToMarines: true
@@ -121,6 +122,12 @@
       neverRedeployableSetup: true
       anchor: true
       offset: 0, -1
+    # FLOW-512: the free front-left corner of the 3x3 layout
+    - prototype: CMUBadBloodCampQuarry
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: -1, -1
 
 - type: entity
   parent: CMUYautjaBadBloodBracer

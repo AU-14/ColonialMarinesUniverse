@@ -58,6 +58,11 @@ public sealed partial class CMUShipWeaponPrototype : IPrototype
     [DataField]
     public TimeSpan StunAfterField = TimeSpan.FromSeconds(25);
 
+    // CMU14 BadBlood: false for entries a game rule offers on the overwatch picker (the Vessel Strike). The arming
+    // terminal never lists or accepts them.
+    [DataField]
+    public bool Armable = true;
+
     /// <summary>
     /// Includes the complete barrage pattern, not just an individual shell's blast.
     /// </summary>

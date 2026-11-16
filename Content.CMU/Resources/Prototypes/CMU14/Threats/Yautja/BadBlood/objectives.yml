@@ -1,0 +1,71 @@
+# COUPLING-501: the marine objective chain against the Bad Blood clan, shown on the GOVFOR objectives console.
+# BadBloodChainObjectiveSystem puts these on the planet and switches them on when the clan's rule starts; they are never
+# left to the objective roll. Each completes, paying no points, when the chain reaches its stage. Level 1 and Boon, so
+# none of them can end the round: the Vessel Strike decides it through the Bad Blood end rule.
+- type: entity
+  id: CMUBadBloodGateObjective
+  name: Restore Colony Infrastructure
+  description: Bring two of the colony's power, communications and sensor systems back online.
+  categories: [HideSpawnMenu]
+  components:
+  - type: CMUObjective
+    id: cmubadbloodgate
+    factionNeutral: false
+    allowedPresets:
+    - DistressSignal
+    factions:
+    - govfor
+    objectiveLevel: 1
+    finalType: Boon
+    objectiveDescription: "Restore two of colony power, communications and the sensor tower"
+
+- type: entity
+  id: CMUBadBloodSignatureObjective
+  name: Acquire the Clan Signature
+  description: Recover a clan signature from a bracer, a held Totem or the clan's Lodge.
+  categories: [HideSpawnMenu]
+  components:
+  - type: CMUObjective
+    id: cmubadbloodsignature
+    factionNeutral: false
+    allowedPresets:
+    - DistressSignal
+    factions:
+    - govfor
+    objectiveLevel: 1
+    finalType: Boon
+    objectiveDescription: "Acquire the clan's signature from a bracer, a desecrated Totem or the Lodge"
+
+- type: entity
+  id: CMUBadBloodUplinkObjective
+  name: Uplink the Clan Vessel's Coordinates
+  description: Run the uplink at a sensor tower, a communications tower or a field uplink relay.
+  categories: [HideSpawnMenu]
+  components:
+  - type: CMUObjective
+    id: cmubadblooduplink
+    factionNeutral: false
+    allowedPresets:
+    - DistressSignal
+    factions:
+    - govfor
+    objectiveLevel: 1
+    finalType: Boon
+    objectiveDescription: "Uplink the clan vessel's coordinates from a tower or a field relay"
+
+- type: entity
+  id: CMUBadBloodStrikeObjective
+  name: Fire the Vessel Strike
+  description: Fire the Vessel Strike from the overwatch console. Keep the lock site up until it lands on the clan vessel.
+  categories: [HideSpawnMenu]
+  components:
+  - type: CMUObjective
+    id: cmubadbloodstrike
+    factionNeutral: false
+    allowedPresets:
+    - DistressSignal
+    factions:
+    - govfor
+    objectiveLevel: 1
+    finalType: Boon
+    objectiveDescription: "Fire the Vessel Strike and hold the lock until the clan vessel is destroyed"

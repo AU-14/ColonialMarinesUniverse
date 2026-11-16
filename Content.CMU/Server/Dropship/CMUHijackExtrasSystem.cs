@@ -96,7 +96,7 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
 
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)
     {
-        if (ev.HijackerType is DropshipHijackerType.Human or DropshipHijackerType.Other
+        if (ev.HijackerType is DropshipHijackerType.Human or DropshipHijackerType.Other or DropshipHijackerType.Yautja
             || HasActiveDistressRule())
             return;
 

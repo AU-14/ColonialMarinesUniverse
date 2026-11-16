@@ -79,3 +79,21 @@ cmu-bad-blood-totem-examine = This Clan Totem is [color=#c9a227]{ $stage }[/colo
 cmu-bad-blood-totem-examine-contested = [color=red]Prey stands near it. A contested Totem pays nothing.[/color]
 cmu-bad-blood-totem-paid = The Clan Totem has fed the clan { $paid } Superiority Points.
 cmu-bad-blood-totem-destroyed-marines = The hostile totem at { $area } has been destroyed. Its fall has exposed the hunters' camp on the tactical map.
+
+# FLOW-503: desecration
+cmu-bad-blood-totem-desecrated-marines = The hostile totem at { $area } has been desecrated. It no longer serves the hunters. Read it for intel while no hunter stands near.
+cmu-bad-blood-totem-desecrated-clan = The prey has desecrated the Clan Totem at { $area }! It feeds the clan nothing until you hold it again.
+cmu-bad-blood-totem-reconsecrated-marines = The hunters have reclaimed the totem at { $area }.
+cmu-bad-blood-totem-reconsecrated-clan = The Clan Totem at { $area } is consecrated again.
+cmu-bad-blood-totem-examine-desecrated = [color=red]The prey has desecrated it. It pays nothing until the clan holds it again with no prey near.[/color]
+
+# FLOW-506: reading a desecrated Totem
+cmu-bad-blood-totem-read-verb = Read the totem
+cmu-bad-blood-totem-read-start = You start working out the markings on the totem.
+cmu-bad-blood-totem-read-consecrated = The markings mean nothing while the totem is still the hunters'.
+cmu-bad-blood-totem-read-hunter-near = A hunter is too close to study the totem.
+cmu-bad-blood-totem-read-already = You have learned all this totem has to tell.
+cmu-bad-blood-totem-read-lodge = The markings point to the hunters' camp, somewhere between grid { $x1 }-{ $x2 } and { $y1 }-{ $y2 }.
+cmu-bad-blood-totem-read-no-lodge = The markings point nowhere. The hunters have no camp standing.
+cmu-bad-blood-totem-read-ripe = The hunters hold { $ripe } of the { $needed } ripe totems they need to call their ship.
+cmu-bad-blood-totem-read-hold = Their ship signal will be ready in about { $minutes } minutes unless one of their ripe totems falls.

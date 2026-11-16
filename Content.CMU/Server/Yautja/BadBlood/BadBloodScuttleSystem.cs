@@ -5,6 +5,7 @@ using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Database;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 
 namespace Content.Server.CMU14.Yautja.BadBlood;
 
@@ -14,6 +15,7 @@ public sealed partial class BadBloodScuttleSystem : SharedBadBloodScuttleSystem
 {
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!; // CMU14 FLOW-511
     [Dependency] private SharedPointLightSystem _pointLight = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
@@ -28,7 +30,8 @@ public sealed partial class BadBloodScuttleSystem : SharedBadBloodScuttleSystem
         if (TerminatingOrDeleted(bracer) ||
             !TryComp(bracer, out YautjaBracerComponent? bracerComp) ||
             bracerComp.SelfDestructArmed ||
-            HasComp<BadBloodScuttleComponent>(bracer))
+            HasComp<BadBloodScuttleComponent>(bracer) ||
+            IsInUplinkSite(bracer)) // CMU14 FLOW-511
         {
             return false;
         }
@@ -58,6 +61,13 @@ public sealed partial class BadBloodScuttleSystem : SharedBadBloodScuttleSystem
         _adminLog.Add(LogType.Action, LogImpact.High,
             $"Bad Blood bracer scuttle armed on {ToPrettyString(bracer):bracer} by {by}, detonation in {scuttle.Fuse.TotalSeconds}s");
         return true;
+    }
+
+    // CMU14 FLOW-511: a bracer a marine put into an uplink site for the bracer signature is out of the clan's reach
+    private bool IsInUplinkSite(EntityUid bracer)
+    {
+        return _container.TryGetContainingContainer((bracer, null, null), out var container) &&
+               HasComp<BadBloodUplinkSiteComponent>(container.Owner);
     }
 
     public override void Update(float frameTime)

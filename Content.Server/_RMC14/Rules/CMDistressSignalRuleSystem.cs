@@ -876,7 +876,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     {
         // CMU14: other presets own their cleanup and larva accounting in CMUHijackExtrasSystem.
         var activeRules = QueryActiveRules();
-        if (!activeRules.MoveNext(out _, out _, out _) || ev.HijackerType == DropshipHijackerType.Other)
+        if (!activeRules.MoveNext(out _, out _, out _) || ev.HijackerType is DropshipHijackerType.Other or DropshipHijackerType.Yautja) // CMU14: Yautja as Other
             return;
 
         // For human hijacks, build a set of map IDs belonging to the hijacker's faction ship(s).

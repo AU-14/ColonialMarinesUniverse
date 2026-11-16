@@ -15,5 +15,6 @@ public enum DropshipHijackerType : byte
     Xeno,     // hive-line xenomorph (queen): full xeno endgame, larva surge
     Pathogen, // pathogen caste (overmind, neomorphs): stranded-crew cleanup only
     Human,    // human-faction hijacker (CLF/OPFOR/GOVFOR): no xeno effects
-    Other,    // yautja, abominations, apes: crash effects only
+    Other,    // abominations, apes: crash effects only
+    Yautja,   // CMU14: Bad Blood Leader (and the Yautja event mob): crash effects only, no hive surge or ovipositor reset
 }

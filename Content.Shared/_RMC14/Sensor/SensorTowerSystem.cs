@@ -208,6 +208,8 @@ public sealed partial class SensorTowerSystem : EntitySystem
 
     private void OnSensorTowerInteractHand(Entity<SensorTowerComponent> ent, ref InteractHandEvent args)
     {
+        if (args.Handled) return; // CMU14
+
         var user = args.User;
         if (HasComp<XenoComponent>(user))
         {

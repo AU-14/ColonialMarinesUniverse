@@ -20,6 +20,11 @@ public enum BadBloodRoundOutcome : byte
     /// Bad Bloods win: the Lodge stood until the clan ship left.
     /// </summary>
     BadBloodDeparture,
+
+    /// <summary>
+    /// Marines win: the Vessel Strike ran out and destroyed the clan vessel (FLOW-510).
+    /// </summary>
+    MarinesVesselDestroyed,
 }
 
 /// <summary>

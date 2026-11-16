@@ -1,12 +1,23 @@
 using Content.IntegrationTests.Pair;
 using Content.Server.GameTicking;
+using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Power;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Mobs;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
+
+// which kind of planet uplink site SpawnUplinkSite makes
+public enum BadBloodTestSiteKind : byte
+{
+    Sensor,
+    Comms,
+}
 
 public sealed class BadBloodTestParty
 {
@@ -131,5 +142,86 @@ public static class BadBloodTestHelpers
     public static Task AdvanceClock(TestPair pair, float seconds)
     {
         return pair.RunSeconds(seconds);
+    }
+
+    public static Task AdvanceTime(TestPair pair, TimeSpan time)
+    {
+        return pair.RunSeconds((float) time.TotalSeconds);
+    }
+
+    // objective-site prototypes: the AU-14 towers in their On state (the sensor one never breaks on its own), and the
+    // plain S-52 reactor, which starts Working. the colony reactors randomize their damage, so they are not used here
+    public const string SensorTowerOnPrototype = "AU14SensorTowerOn";
+    public const string CommsTowerOnPrototype = "AU14CommunicationsTowerOn";
+    public const string ReactorPrototype = "RMCGeneratorFusion";
+    public const string MarinePrototype = "CMMobHuman";
+
+    // a sensor or comms tower that is On. call on the server thread
+    public static EntityUid SpawnUplinkSite(
+        RobustIntegrationTest.ServerIntegrationInstance server,
+        BadBloodTestSiteKind kind,
+        EntityCoordinates coords)
+    {
+        var proto = kind == BadBloodTestSiteKind.Sensor ? SensorTowerOnPrototype : CommsTowerOnPrototype;
+        return server.EntMan.SpawnEntity(proto, coords);
+    }
+
+    // a fusion reactor, Working or fully broken (needs a welder first). call on the server thread
+    public static EntityUid SpawnReactor(
+        RobustIntegrationTest.ServerIntegrationInstance server,
+        EntityCoordinates coords,
+        bool working = true)
+    {
+        var reactor = server.EntMan.SpawnEntity(ReactorPrototype, coords);
+        if (!working)
+        {
+            var comp = server.EntMan.GetComponent<RMCFusionReactorComponent>(reactor);
+            server.System<SharedRMCPowerSystem>().FullyDestroy((reactor, comp));
+        }
+
+        return reactor;
+    }
+
+    // gives the body's mind the job, making a mind with no player behind it if it has none. returns the mind.
+    // call on the server thread
+    public static EntityUid GiveJob(
+        RobustIntegrationTest.ServerIntegrationInstance server,
+        EntityUid mob,
+        ProtoId<JobPrototype> jobId)
+    {
+        var minds = server.System<SharedMindSystem>();
+        EntityUid mind;
+        if (minds.GetMind(mob) is { } existing)
+        {
+            mind = existing;
+        }
+        else
+        {
+            var created = minds.CreateMind(null, server.EntMan.GetComponent<MetaDataComponent>(mob).EntityName);
+            minds.TransferTo(created, mob);
+            mind = created;
+        }
+
+        server.System<SharedRoleSystem>().MindAddJobRole(mind, silent: true, jobPrototype: jobId);
+        return mind;
+    }
+
+    // a marine one tile east of coords, or at coords + offset. call on the server thread
+    public static EntityUid SpawnMarineNear(
+        RobustIntegrationTest.ServerIntegrationInstance server,
+        EntityCoordinates coords,
+        Vector2? offset = null)
+    {
+        var marine = server.EntMan.SpawnEntity(MarinePrototype, coords.Offset(offset ?? new Vector2(1, 0)));
+        server.EntMan.EnsureComponent<MarineComponent>(marine);
+        return marine;
+    }
+
+    // backdates the Totem so it has stood exactly RipeAfter. it is ripe if the clan counts it (Registered).
+    // call on the server thread
+    public static void ForceTotemRipe(RobustIntegrationTest.ServerIntegrationInstance server, EntityUid totem)
+    {
+        var comp = server.EntMan.GetComponent<BadBloodTotemComponent>(totem);
+        comp.PlacedAt = server.ResolveDependency<IGameTiming>().CurTime - comp.RipeAfter;
     }
 }

@@ -3,6 +3,7 @@ using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Hands.EntitySystems;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
 
@@ -167,6 +168,43 @@ public sealed class BadBloodScuttleTest
             entMan.DeleteEntity(hunterBracer);
             entMan.DeleteEntity(badBloodBracer);
             entMan.DeleteEntity(notABracer);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // FLOW-511: a bracer a marine wired into an uplink site for the bracer signature is out of the clan's reach
+    [Test]
+    public async Task BracerInsideAnUplinkSiteCannotBeScuttled()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var scuttles = entMan.System<BadBloodScuttleSystem>();
+            var containers = entMan.System<SharedContainerSystem>();
+
+            var site = entMan.SpawnEntity(null, map.GridCoords);
+            var siteComp = entMan.AddComponent<BadBloodUplinkSiteComponent>(site);
+            var slot = containers.EnsureContainer<ContainerSlot>(site, siteComp.BracerSlot);
+
+            var bracer = entMan.SpawnEntity(BadBloodBracer, map.GridCoords);
+            Assert.That(containers.Insert(bracer, slot), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(scuttles.TryStartScuttle(bracer), Is.False);
+                Assert.That(entMan.HasComponent<BadBloodScuttleComponent>(bracer), Is.False);
+            });
+
+            // the same bracer outside a site still scuttles
+            Assert.That(containers.Remove(bracer, slot), Is.True);
+            Assert.That(scuttles.TryStartScuttle(bracer), Is.True);
+
+            entMan.DeleteEntity(bracer);
+            entMan.DeleteEntity(site);
         });
 
         await pair.CleanReturnAsync();

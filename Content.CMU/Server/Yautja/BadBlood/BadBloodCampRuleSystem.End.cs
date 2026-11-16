@@ -19,7 +19,26 @@ public sealed partial class BadBloodCampRuleSystem
 {
     private const string LeaderAndLodgeSource = "BadBloodCampRule";
     private const string ClanWipeSource = "BadBloodClanWipe";
-    private const int LastStandSeats = 2;
+
+    /// <summary>
+    /// The threat-defeated source the round statistics get for <see cref="BadBloodRoundOutcome.MarinesVesselDestroyed"/>
+    /// (Marine Major on Distress Signal).
+    /// </summary>
+    public const string VesselStrikeSource = "BadBloodVesselStrike";
+
+    /// <summary>
+    /// The threat-defeated source recorded for a marine outcome, null for a Bad Blood win (recorded as threat-survived).
+    /// </summary>
+    public static string? GetThreatDefeatedSource(BadBloodRoundOutcome outcome)
+    {
+        return outcome switch
+        {
+            BadBloodRoundOutcome.MarinesLeaderAndLodge => LeaderAndLodgeSource,
+            BadBloodRoundOutcome.MarinesClanWipe => ClanWipeSource,
+            BadBloodRoundOutcome.MarinesVesselDestroyed => VesselStrikeSource,
+            _ => null,
+        };
+    }
 
     private readonly List<EntityUid> _endScratch = new();
 
@@ -175,10 +194,11 @@ public sealed partial class BadBloodCampRuleSystem
     {
         var camp = EntityManager.System<BadBloodCampSystem>();
         var cost = rule.Comp.SquadOfTwoCost;
-        if (!HasLodge() || camp.GetPendingSquadSeats() > 0 || !TrySpendSp(cost))
+        var seats = rule.Comp.LastStandSeats;
+        if (seats <= 0 || !HasLodge() || camp.GetPendingSquadSeats() > 0 || !TrySpendSp(cost))
             return false;
 
-        if (!camp.TryOpenSquad(LastStandSeats, out _, ignoreCaps: true, seatCost: cost / (float) LastStandSeats))
+        if (!camp.TryOpenSquad(seats, out _, ignoreCaps: true, seatCost: cost / (float) seats))
         {
             RefundSp(cost);
             return false;
@@ -205,6 +225,10 @@ public sealed partial class BadBloodCampRuleSystem
         if (end.Outcome != BadBloodRoundOutcome.None)
             return false;
 
+        // FLOW-510: a round another rule already ended (KillAllGovforRule and the like) gets no second outcome
+        if (GameTicker.RunLevel == GameRunLevel.PostRound)
+            return false;
+
         var now = Timing.CurTime;
 
         // the same checks that brought us here, once more: a Lodge pitched or a Leader seated in between saves it
@@ -220,6 +244,9 @@ public sealed partial class BadBloodCampRuleSystem
                 HasLodge() &&
                 rule.Comp.DepartureRemaining is { } left &&
                 left <= TimeSpan.Zero,
+            // FLOW-510: the Vessel Strike ran out, in any clan ship state
+            BadBloodRoundOutcome.MarinesVesselDestroyed =>
+                EntityManager.System<BadBloodVesselStrikeSystem>().IsStrikeComplete(),
             _ => false,
         };
 
@@ -252,6 +279,11 @@ public sealed partial class BadBloodCampRuleSystem
             case BadBloodRoundOutcome.MarinesClanWipe:
                 stats.RecordThreatDefeatedRule(ClanWipeSource);
                 text = Loc.GetString("cmu-bad-blood-end-clan-wipe");
+                break;
+            // FLOW-510: its own case, the default branch below would record a Bad Blood win
+            case BadBloodRoundOutcome.MarinesVesselDestroyed:
+                stats.RecordThreatDefeatedRule(GetThreatDefeatedSource(outcome) ?? VesselStrikeSource);
+                text = Loc.GetString("cmu-bad-blood-end-vessel-destroyed");
                 break;
             default:
                 // the statistics have no outcome of their own for a departure. threat-survived is the closest one:

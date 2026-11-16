@@ -2,6 +2,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Pair;
 using Content.Server.CMU14.Yautja.BadBlood;
 using Content.Server.GameTicking;
+using Content.Shared._RMC14.Communications;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Destructible;
@@ -544,6 +545,172 @@ public sealed class ShipCallInTest : GameTest
         finally
         {
             spawned.Add(lodge);
+            await Cleanup(party, spawned);
+        }
+    }
+
+    // FLOW-504 (D3, I4): the hold start and break are raised every time, but marines only hear about them through a
+    // comms tower that is On
+    [Test]
+    public async Task TheRipeHoldIsAnnouncedOnlyThroughAWorkingCommsTower()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var spawned = new List<EntityUid>();
+        var announcedBefore = 0;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Server.System<BadBloodObjectiveProbeSystem>().Reset();
+                announcedBefore = rules.ShipSignalsAnnounced;
+
+                // the lock never lifts in this test, so the hold runs without a call
+                rule.Comp.ShipEarliestCall = TimeSpan.FromHours(5);
+                rule.Comp.RipeHoldForCall = TimeSpan.FromMinutes(10);
+                Assert.That(Server.System<CommunicationsTowerSystem>().CanTransmit(), Is.False, "no tower yet");
+
+                SpawnRipeTotems(map, spawned, 3);
+            });
+
+            await Pair.RunSeconds(1.5f);
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var probe = Server.System<BadBloodObjectiveProbeSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(probe.HoldStarted, Is.EqualTo(1));
+                    Assert.That(probe.LastCallAt, Is.EqualTo(rule.Comp.StartedAt + rule.Comp.ShipEarliestCall),
+                        "the call waits for the lock, which is later than the end of the hold");
+                    Assert.That(rules.ShipSignalsAnnounced, Is.EqualTo(announcedBefore), "no tower, no warning");
+                });
+
+                Server.EntMan.DeleteEntity(spawned[^1]);
+                spawned.RemoveAt(spawned.Count - 1);
+            });
+
+            await Pair.RunSeconds(1.5f);
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var probe = Server.System<BadBloodObjectiveProbeSystem>();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(probe.HoldBroken, Is.EqualTo(1));
+                    Assert.That(rules.ShipSignalsAnnounced, Is.EqualTo(announcedBefore));
+                });
+
+                spawned.Add(BadBloodTestHelpers.SpawnUplinkSite(Server, BadBloodTestSiteKind.Comms,
+                    map.GridCoords.Offset(new Vector2(0, 5))));
+                Assert.That(Server.System<CommunicationsTowerSystem>().CanTransmit(), Is.True, "the tower is On");
+                SpawnRipeTotems(map, spawned, 1, firstColumn: 4);
+            });
+
+            await Pair.RunSeconds(1.5f);
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var probe = Server.System<BadBloodObjectiveProbeSystem>();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(probe.HoldStarted, Is.EqualTo(2));
+                    Assert.That(rules.ShipSignalsAnnounced, Is.EqualTo(announcedBefore + 1),
+                        "marines with a working comms tower hear the hold start");
+                });
+
+                Server.EntMan.DeleteEntity(spawned[^1]);
+                spawned.RemoveAt(spawned.Count - 1);
+            });
+
+            await Pair.RunSeconds(1.5f);
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var probe = Server.System<BadBloodObjectiveProbeSystem>();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(probe.HoldBroken, Is.EqualTo(2));
+                    Assert.That(rules.ShipSignalsAnnounced, Is.EqualTo(announcedBefore + 2),
+                        "and that the signal is lost");
+                    Assert.That(rules.GetShipState(), Is.EqualTo(BadBloodShipState.None));
+                });
+            });
+        }
+        finally
+        {
+            await Cleanup(party, spawned);
+        }
+    }
+
+    // FLOW-504 (I4): the ETA the intel reports. During the hold: the rest of the hold or the lock, whichever is later,
+    // plus the inbound time. While inbound: the time left
+    [Test]
+    public async Task TheShipEtaCountsTheHoldTheLockAndTheInboundTime()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var spawned = new List<EntityUid>();
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Server.System<BadBloodObjectiveProbeSystem>().Reset();
+
+                rule.Comp.ShipEarliestCall = TimeSpan.Zero;
+                rule.Comp.RipeHoldForCall = TimeSpan.FromMinutes(10);
+                rule.Comp.ShipInboundTime = TimeSpan.FromMinutes(20);
+
+                spawned.Add(Server.EntMan.SpawnEntity(Lodge, map.GridCoords));
+                Assert.That(rules.GetShipCallEta(), Is.Null, "no hold, no ship");
+                SpawnRipeTotems(map, spawned, 3);
+            });
+
+            await Pair.RunSeconds(1.5f);
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var probe = Server.System<BadBloodObjectiveProbeSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                var since = rule.Comp.RipeHoldStartedAt;
+                Assert.That(since, Is.Not.Null);
+
+                var now = Server.Timing.CurTime;
+                var eta = rules.GetShipCallEta();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(probe.LastCallAt, Is.EqualTo(since!.Value + rule.Comp.RipeHoldForCall),
+                        "the lock has lifted, so the call comes when the hold is complete");
+                    Assert.That(eta, Is.EqualTo(since.Value + rule.Comp.RipeHoldForCall - now + rule.Comp.ShipInboundTime));
+                    Assert.That(eta, Is.GreaterThan(TimeSpan.FromMinutes(29)));
+                    Assert.That(eta, Is.LessThan(TimeSpan.FromMinutes(30)));
+                });
+
+                // the lock lifts 15 minutes from now, after the hold is complete: the lock counts
+                rule.Comp.ShipEarliestCall = now - rule.Comp.StartedAt + TimeSpan.FromMinutes(15);
+                Assert.That(rules.GetShipCallEta(), Is.EqualTo(TimeSpan.FromMinutes(35)));
+
+                rule.Comp.ShipEarliestCall = TimeSpan.Zero;
+                Assert.That(rules.TryCallShip(), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(probe.ShipCalled, Is.EqualTo(1));
+                    Assert.That(probe.LastArrivesAt, Is.EqualTo(rule.Comp.ShipArrivesAt));
+                    Assert.That(probe.LastRevealSource, Is.EqualTo(BadBloodRevealSource.ShipPhase));
+                    Assert.That(rules.GetShipCallEta(), Is.EqualTo(rules.GetShipTimeLeft()));
+                    Assert.That(rules.GetShipCallEta(), Is.EqualTo(TimeSpan.FromMinutes(20)));
+                });
+            });
+        }
+        finally
+        {
             await Cleanup(party, spawned);
         }
     }

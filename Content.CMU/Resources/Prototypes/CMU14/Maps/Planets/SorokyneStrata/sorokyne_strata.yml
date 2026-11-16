@@ -60,7 +60,7 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    # - BadBloodClanThreat
+    - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF
     - CultistThreatCF

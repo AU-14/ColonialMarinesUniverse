@@ -188,7 +188,7 @@ public sealed partial class BadBloodCampSystem : EntitySystem
         if (_rule.GetLodge() != ent.Owner)
             return;
 
-        RevealLodge(ent.Comp.AttackRevealTime);
+        RevealLodge(ent.Comp.AttackRevealTime, BadBloodRevealSource.Attack);
 
         if (ent.Comp.LastAlertAt is { } last && now - last < ent.Comp.AlertCooldown)
             return;
@@ -206,8 +206,9 @@ public sealed partial class BadBloodCampSystem : EntitySystem
     /// <see cref="HideLodge"/> when it is null. A shorter reveal never cuts a longer one short.
     /// The core already reveals it by itself after each hit, for as long as the clan ship is inbound or arrived,
     /// and while no Bad Blood is alive. False if no Lodge stands.
+    /// <paramref name="source"/> is carried on <see cref="BadBloodLodgeRevealedEvent"/> for the objective timeline.
     /// </summary>
-    public bool RevealLodge(TimeSpan? duration = null)
+    public bool RevealLodge(TimeSpan? duration = null, BadBloodRevealSource source = BadBloodRevealSource.Other)
     {
         if (!_rule.TryGetRule(out var rule) || !TryGetLodge(out var lodge))
             return false;
@@ -225,6 +226,9 @@ public sealed partial class BadBloodCampSystem : EntitySystem
         }
 
         RefreshReveal(lodge, rule, now);
+
+        var ev = new BadBloodLodgeRevealedEvent(lodge.Owner, duration, source);
+        RaiseLocalEvent(ref ev);
         return true;
     }
 

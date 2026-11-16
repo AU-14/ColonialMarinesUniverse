@@ -58,7 +58,7 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    # - BadBloodClanThreat
+    # - BadBloodClanThreat # no sensor tower: the Bad Blood objective chain needs one (maintainer, 2026-11-15)
     - XenoThreatCF
     - NeomorphsThreatCF
     - CultistThreatCF

@@ -170,6 +170,7 @@
     guides:
     - CMUGuideBadBlood
   - type: YautjaBadBloodGearChoice
+  - type: BadBloodBracerDataCore # CMU14 FLOW-505: decrypt 30s, RMCSkillIntel 1, reveal 60s, retrieve value 1
   - type: YautjaBracer
     enableRaiseThrall: false
     maxRaiseThrall: 0

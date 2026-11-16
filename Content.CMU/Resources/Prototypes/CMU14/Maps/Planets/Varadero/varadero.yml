@@ -27,7 +27,7 @@
     threats:
     - XenoThreat
     # - NeomorphsThreat
-    # - BadBloodClanThreat
+    - BadBloodClanThreat
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 

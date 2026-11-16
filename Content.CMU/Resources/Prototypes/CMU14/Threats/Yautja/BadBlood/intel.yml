@@ -1,0 +1,23 @@
+# FLOW-507 (I3): Lodge raid loot. The star chart turns up at the Lodge armory when the clan ship is called
+# (BadBloodLodgeIntelSystem). It is intel like a mapped document: read it, then carry it into a retrieve-item area.
+# Both objectives start Active, so it needs no paper scrap to unlock it and the position check picks it up at spawn.
+- type: entity
+  parent: RMCIntelReadableBase
+  id: CMUBadBloodClanStarChart
+  name: clan star chart
+  description: A Yautja chart of star lanes and orbits, scratched onto a hide. One course is marked fresh.
+  suffix: Bad Blood, Intel
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    state: folder_black_red
+  - type: Item
+    size: Small
+  - type: IntelReadObjective
+    state: Active
+    value: 0.5
+    delay: 10
+  - type: IntelRetrieveItemObjective
+    state: Active
+    value: 1
+  - type: BadBloodStarChart

@@ -26,6 +26,7 @@
     daycycleenabled: false
     threats:
     - XenoThreat
+    - BadBloodClanThreat
     thirdpartyinterval: 1800
     thirdparties:
     - IASFSurvBosenmori

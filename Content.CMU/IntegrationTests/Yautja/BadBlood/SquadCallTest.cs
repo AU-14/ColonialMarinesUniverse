@@ -201,6 +201,86 @@ public sealed class SquadCallTest : GameTest
         }
     }
 
+    // FLOW-502: a bought squad shows the Lodge on the marine map for SquadRevealTime. the founding squad (and every
+    // other free seat call, the last stand included) opens through TryOpenSquad and reveals nothing
+    [Test]
+    public async Task BoughtSquadRevealsTheLodgeAndFreeSeatsDoNot()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var session = Pair.Player!;
+        EntityUid lodge = default;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var camp = Server.System<BadBloodCampSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+
+                rule.Comp.ThreatBudgetFraction = 1000f;
+                rule.Comp.HeldVoteSeats = 20;
+                rule.Comp.SquadSpawnTimeout = TimeSpan.FromSeconds(6);
+                rule.Comp.ReserveQueue.Clear();
+                rule.Comp.DeadBadBloods.Clear();
+                Server.PlayerMan.SetAttachedEntity(session, null);
+
+                lodge = entMan.SpawnEntity(Lodge, map.GridCoords);
+                Assert.That(rules.GetLodge(), Is.EqualTo(lodge));
+                Assert.That(entMan.GetComponent<BadBloodCampComponent>(lodge).SquadRevealTime,
+                    Is.EqualTo(TimeSpan.FromSeconds(60)));
+                Assert.That(camp.IsLodgeRevealed(), Is.False);
+
+                // the founding squad, and the seat call it and the last stand make, stay hidden
+                rules.TryOpenFoundingSquad(out _);
+                Assert.That(rule.Comp.FoundingSquadOpened, Is.True);
+                Assert.That(camp.IsLodgeRevealed(), Is.False, "the founding squad does not reveal the Lodge");
+                Assert.That(camp.TryOpenSquad(2, out _, reserveOnly: true, ignoreCaps: true), Is.True);
+                Assert.That(camp.IsLodgeRevealed(), Is.False, "free seats do not reveal the Lodge");
+
+                Assert.That(rules.AddSp(FixedPoint4.New(20)), Is.True);
+                Assert.That(camp.TryBuySquad(party.Leader, 2), Is.True);
+                Assert.That(camp.IsLodgeRevealed(), Is.True, "a bought squad reveals the Lodge");
+            });
+
+            await BadBloodTestHelpers.AdvanceClock(Pair, 30);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.System<BadBloodCampSystem>().IsLodgeRevealed(), Is.True, "still shown at 30 s");
+            });
+
+            await BadBloodTestHelpers.AdvanceClock(Pair, 32);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.System<BadBloodCampSystem>().IsLodgeRevealed(), Is.False, "hidden again after 60 s");
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+            await Server.WaitPost(() =>
+            {
+                var entMan = Server.EntMan;
+                var entries = entMan.EntityQuery<BadBloodSquadSeatsComponent>().Select(comp => comp.Owner).ToList();
+                foreach (var uid in entries)
+                {
+                    entMan.DeleteEntity(uid);
+                }
+
+                if (entMan.EntityExists(lodge))
+                    entMan.DeleteEntity(lodge);
+
+                foreach (var member in party.All)
+                {
+                    if (entMan.EntityExists(member))
+                        entMan.DeleteEntity(member);
+                }
+            });
+        }
+    }
+
     // what the ghost role system asks every tick for each player in the raffle
     private bool RequestAllowed(EntityUid entry, ICommonSession session)
     {

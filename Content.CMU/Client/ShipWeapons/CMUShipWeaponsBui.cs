@@ -134,7 +134,7 @@ public sealed class CMUShipWeaponsWindow : DefaultWindow
         scroll.AddChild(grid);
         root.AddChild(scroll);
 
-        foreach (var profile in _prototypes.EnumeratePrototypes<CMUShipWeaponPrototype>().OrderBy(p => Loc.GetString(p.Name)))
+        foreach (var profile in _prototypes.EnumeratePrototypes<CMUShipWeaponPrototype>().Where(p => p.Armable).OrderBy(p => Loc.GetString(p.Name))) // CMU14 BadBlood: no card for non-armable entries (Vessel Strike)
         {
             var card = new WeaponCard(profile, this);
             card.Button.OnToggled += _ =>

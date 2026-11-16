@@ -17,8 +17,10 @@ using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs;
+using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -927,6 +929,253 @@ public sealed class BadBloodRoundSmokeTest : GameTest
         {
             await Cleanup(map, party);
         }
+    }
+
+    // TEST-502: the marine objective chain from the gate to the Vessel Strike destroying the clan vessel. A reactor
+    // held past ReactorHold and a comms tower On open the gate, a looted bracer tinkered at the tower gives the
+    // signature, the uplink runs at the tower, command fires the strike from a GOVFOR console, a sabotage of the lock
+    // site pauses it with one penalty, a re-route to a sensor tower resumes it, and it runs out. The objective timeline
+    // holds every stage in order
+    [Test]
+    public async Task ObjectiveChainRunsFromTheGateToTheVesselStrike()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitPost(() =>
+        {
+            Server.EntMan.EnsureComponent<RMCPlanetComponent>(map.MapUid);
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = -3; x <= 24; x++)
+            {
+                for (var y = -1; y <= 1; y++)
+                {
+                    maps.SetTile(map.Grid, map.Tile.GridIndices + new Vector2i(x, y), map.Tile.Tile);
+                }
+            }
+        });
+
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var grunt = party.Grunts[0];
+        var timelineStart = 0;
+        EntityUid comms = default;
+        EntityUid sensor = default;
+        EntityUid marine = default;
+        EntityUid bracer = default;
+        EntityUid wirecutter = default;
+        EntityUid wrench = default;
+        EntityUid console = default;
+        EntityUid commander = default;
+
+        try
+        {
+            // gate: a reactor running past the shortened hold and a comms tower that is On
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(party.Rule, Is.Not.Null, "the Bad Blood rule must start");
+                var entMan = Server.EntMan;
+                var chain = Chain();
+                chain.ReactorHold = TimeSpan.FromSeconds(2);
+                chain.BracerStepTime = TimeSpan.FromSeconds(1);
+                timelineStart = Server.System<BadBloodObjectiveTimelineSystem>().GetEntries().Count;
+
+                BadBloodTestHelpers.SpawnReactor(Server, At(map, 16));
+                comms = BadBloodTestHelpers.SpawnUplinkSite(Server, BadBloodTestSiteKind.Comms, At(map, 10));
+                marine = BadBloodTestHelpers.SpawnMarineNear(Server, At(map, 10), new Vector2(-1, 0));
+                bracer = entMan.SpawnEntity(ChainBracer, At(map, 9));
+                wirecutter = entMan.SpawnEntity(ChainWirecutter, At(map, 9));
+                wrench = entMan.SpawnEntity(ChainWrench, At(map, 9));
+            });
+
+            await Pair.RunSeconds(4);
+
+            // signature: the bracer goes into the comms tower, cut, then wrenched
+            await Server.WaitAssertion(() =>
+            {
+                var chain = Chain();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(chain.PowerMet, Is.True, "the reactor ran past the hold");
+                    Assert.That(chain.CommsMet, Is.True);
+                    Assert.That(chain.GateMet, Is.True, "two parts open the gate");
+                    Assert.That(Server.EntMan.HasComponent<BadBloodUplinkSiteComponent>(comms), Is.True,
+                        "a planet comms tower becomes an uplink site");
+                });
+
+                var chains = Server.System<BadBloodObjectiveChainSystem>();
+                var hands = Server.System<SharedHandsSystem>();
+                Assert.That(chains.TryInsertBracer(marine, comms, bracer), Is.True);
+                Assert.That(hands.TryPickupAnyHand(marine, wirecutter), Is.True);
+                Assert.That(chains.TryTinkerStep(marine, comms, wirecutter), Is.True);
+            });
+
+            // an unskilled marine works tools slower than the base step time
+            await Pair.RunSeconds(4);
+
+            await Server.WaitAssertion(() =>
+            {
+                var chains = Server.System<BadBloodObjectiveChainSystem>();
+                var hands = Server.System<SharedHandsSystem>();
+                Assert.That(Server.EntMan.GetComponent<BadBloodUplinkSiteComponent>(comms).BracerStage, Is.EqualTo(2));
+                Assert.That(hands.TryDrop(marine, wirecutter), Is.True);
+                Assert.That(hands.TryPickupAnyHand(marine, wrench), Is.True);
+                Assert.That(chains.TryTinkerStep(marine, comms, wrench), Is.True);
+            });
+
+            await Pair.RunSeconds(4);
+
+            // uplink at the comms tower
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Chain().Signature, Is.EqualTo(BadBloodSignature.Bracer));
+                Server.EntMan.GetComponent<BadBloodUplinkSiteComponent>(comms).UplinkTime = TimeSpan.FromSeconds(1);
+                Assert.That(Server.System<BadBloodObjectiveChainSystem>().TryStartUplink(marine, comms), Is.True);
+            });
+
+            await Pair.RunSeconds(2);
+
+            // the strike: a platoon commander at a GOVFOR console with a ready battery on the same ship
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var chains = Server.System<BadBloodObjectiveChainSystem>();
+                var strikes = Server.System<BadBloodVesselStrikeSystem>();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(chains.IsUplinked(), Is.True);
+                    Assert.That(chains.GetLockSite(), Is.EqualTo(comms), "the uplink site is the lock site");
+                });
+
+                console = entMan.SpawnEntity(GovforConsole, map.GridCoords);
+                entMan.SpawnEntity(ShipBattery, map.GridCoords);
+                commander = BadBloodTestHelpers.SpawnMarineNear(Server, map.GridCoords, new Vector2(0, 1));
+                BadBloodTestHelpers.GiveJob(Server, commander, PlatoonCommander);
+
+                var strike = entMan.GetComponent<BadBloodVesselStrikeComponent>(party.Rule!.Value);
+                strike.Duration = TimeSpan.FromSeconds(30);
+                strike.SabotagePenalty = TimeSpan.FromSeconds(2);
+                Assert.That(strikes.TryStartStrike(commander, console, out var reason), Is.True, reason);
+                Assert.That(strike.Remaining, Is.EqualTo(TimeSpan.FromSeconds(30)));
+
+                // sabotage of the lock site: a pause and one penalty
+                strike.Remaining = TimeSpan.FromSeconds(20);
+                entMan.EnsureComponent<BadBloodSabotageTargetComponent>(comms);
+                Assert.That(Server.System<BadBloodSabotageSystem>().TrySabotage(grunt, comms), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(strike.Paused, Is.True, "sabotage of the lock site pauses the strike");
+                    Assert.That(strike.Remaining, Is.EqualTo(TimeSpan.FromSeconds(22)), "and costs the penalty");
+                    Assert.That(chains.IsSiteWorking(comms), Is.False, "the sabotaged tower is down");
+                });
+
+                sensor = BadBloodTestHelpers.SpawnUplinkSite(Server, BadBloodTestSiteKind.Sensor, At(map, 20));
+                entMan.EnsureComponent<BadBloodUplinkSiteComponent>(sensor).Kind = BadBloodUplinkSiteKind.Sensor;
+                entMan.EnsureComponent<BadBloodSabotageTargetComponent>(sensor);
+            });
+
+            await Pair.RunSeconds(2);
+
+            // re-route to the working sensor tower, then let the strike run out
+            await Server.WaitAssertion(() =>
+            {
+                var strikes = Server.System<BadBloodVesselStrikeSystem>();
+                var strike = Server.EntMan.GetComponent<BadBloodVesselStrikeComponent>(party.Rule!.Value);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(strike.Paused, Is.True, "the strike waits while the lock site is down");
+                    Assert.That(strike.Remaining, Is.EqualTo(TimeSpan.FromSeconds(22)));
+                    Assert.That(strike.PausedTotal, Is.GreaterThan(TimeSpan.Zero));
+                });
+
+                Assert.That(strikes.TryReroute(marine, sensor), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(Server.System<BadBloodObjectiveChainSystem>().GetLockSite(), Is.EqualTo(sensor));
+                    Assert.That(strike.Paused, Is.False, "a re-route resumes the strike");
+                });
+
+                strike.Remaining = TimeSpan.FromSeconds(2);
+            });
+
+            await Pair.RunSeconds(4);
+
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var strikes = Server.System<BadBloodVesselStrikeSystem>();
+                var timeline = Server.System<BadBloodObjectiveTimelineSystem>();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(strikes.IsStrikeComplete(), Is.True);
+                    Assert.That(entMan.GetComponent<BadBloodCampEndComponent>(party.Rule!.Value).Outcome,
+                        Is.EqualTo(BadBloodRoundOutcome.MarinesVesselDestroyed));
+                    Assert.That(timeline.GetStrikePausedShare(), Is.GreaterThan(0f).And.LessThan(1f),
+                        "part of the strike time was paused");
+                });
+
+                var kinds = timeline.GetEntries().Skip(timelineStart).Select(e => e.Kind).ToList();
+                Assert.That(kinds, Is.Not.Empty);
+                var expected = new[]
+                {
+                    BadBloodTimelineKind.GatePart,
+                    BadBloodTimelineKind.GatePart,
+                    BadBloodTimelineKind.GateMet,
+                    BadBloodTimelineKind.Signature,
+                    BadBloodTimelineKind.Uplink,
+                    BadBloodTimelineKind.StrikeStarted,
+                    BadBloodTimelineKind.StrikePaused,
+                    BadBloodTimelineKind.Rerouted,
+                    BadBloodTimelineKind.StrikeResumed,
+                    BadBloodTimelineKind.StrikeCompleted,
+                    BadBloodTimelineKind.RoundDecided,
+                };
+                Assert.That(IsSubsequence(expected, kinds), Is.True,
+                    $"the timeline holds the stages in order: {string.Join(", ", kinds)}");
+
+                var sabotage = kinds.IndexOf(BadBloodTimelineKind.SiteSabotaged);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(sabotage, Is.GreaterThan(kinds.IndexOf(BadBloodTimelineKind.StrikeStarted)),
+                        "the sabotage is recorded after the strike started");
+                    Assert.That(sabotage, Is.LessThan(kinds.IndexOf(BadBloodTimelineKind.Rerouted)),
+                        "and before the re-route");
+                });
+            });
+        }
+        finally
+        {
+            await Cleanup(map, party);
+        }
+    }
+
+    private const string ChainBracer = "CMUYautjaBadBloodBracer";
+    private const string ChainWirecutter = "Wirecutter";
+    private const string ChainWrench = "Wrench";
+    private const string GovforConsole = "RMCOverwatchConsoleGovfor";
+    private const string ShipBattery = "CMUShipWeaponGun";
+    private static readonly ProtoId<JobPrototype> PlatoonCommander = "AU14JobGOVFORPlatCo";
+
+    private static EntityCoordinates At(TestMapData map, int x)
+    {
+        return map.GridCoords.Offset(new Vector2(x, 0));
+    }
+
+    // call on the server thread
+    private BadBloodObjectiveChainComponent Chain()
+    {
+        Assert.That(Server.System<BadBloodObjectiveChainSystem>().TryGetChain(out var chain), Is.True,
+            "the Bad Blood rule carries the objective chain");
+        return chain.Comp;
+    }
+
+    private static bool IsSubsequence<T>(IReadOnlyList<T> expected, IReadOnlyList<T> actual)
+    {
+        var next = 0;
+        foreach (var item in actual)
+        {
+            if (next < expected.Count && EqualityComparer<T>.Default.Equals(item, expected[next]))
+                next++;
+        }
+
+        return next == expected.Count;
     }
 
     #region Helpers

@@ -170,6 +170,17 @@ public sealed partial class RMCConstructionSystem : EntitySystem
             return false;
         }
 
+        // CMU14 Begin: build-attempt hook
+        var buildAttempt = new Content.Shared.CMU14.Construction.CMUConstructionBuildAttemptEvent(user, ent.Owner, protoID, coordinates);
+        RaiseLocalEvent(ref buildAttempt);
+        if (buildAttempt.Cancelled)
+        {
+            if (buildAttempt.Popup is { } attemptPopup)
+                _popup.PopupEntity(attemptPopup, ent, user, PopupType.SmallCaution);
+            return false;
+        }
+        // CMU14 End
+
         if (proto.RestrictedTags is { } tags && _rmcMap.TileHasAnyTag(coordinates, tags))
         {
             var message = Loc.GetString("rmc-construction-not-proper-surface", ("construction", proto.Name));

@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared.CMU14.ShipWeapons;
 using Robust.Client.UserInterface.Controls;
@@ -48,13 +49,28 @@ public sealed class CMUShipWeaponPicker : BoxContainer
     public void Update(OverwatchConsoleComponent console)
     {
         Visible = console.CMUShipWeapons.Length > 0;
-        var rebuild = _ids.Count != console.CMUShipWeapons.Length;
+        var prototypes = IoCManager.Resolve<IPrototypeManager>();
+
+        // CMU14 BadBlood: when the server keeps the standard cannon picked (no armed missions, only rule extras like
+        // the Vessel Strike), the picker lists it first and shows it selected, so the display matches what fires
+        var standard = console.CMUSelectedShipWeapon == null ||
+                       !console.CMUShipWeapons.Any(w => prototypes.Index(w.Weapon).Armable);
+        var offset = standard ? 1 : 0;
+
+        var rebuild = _ids.Count != console.CMUShipWeapons.Length + offset ||
+                      standard && _ids[0] != null;
         for (var i = 0; !rebuild && i < console.CMUShipWeapons.Length; i++)
-            rebuild = _ids[i] != console.CMUShipWeapons[i].Weapon;
+            rebuild = _ids[i + offset] != console.CMUShipWeapons[i].Weapon;
         if (rebuild)
         {
             _weapon.Clear();
             _ids.Clear();
+            if (standard)
+            {
+                _weapon.AddItem(Loc.GetString("cmu-ship-weapons-standard-cannon"), _ids.Count);
+                _ids.Add(null);
+            }
+
             foreach (var status in console.CMUShipWeapons)
             {
                 _weapon.AddItem(string.Empty, _ids.Count);
@@ -62,11 +78,10 @@ public sealed class CMUShipWeaponPicker : BoxContainer
             }
         }
         var selectedId = 0;
-        var prototypes = IoCManager.Resolve<IPrototypeManager>();
         for (var i = 0; i < console.CMUShipWeapons.Length; i++)
         {
             var status = console.CMUShipWeapons[i];
-            var id = i;
+            var id = i + offset;
             _weapon.SetItemText(id, Loc.GetString("cmu-ship-weapons-remaining",
                 ("weapon", Loc.GetString(prototypes.Index(status.Weapon).Name)), ("uses", status.Remaining),
                 ("max", status.Max)));

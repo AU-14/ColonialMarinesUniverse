@@ -169,6 +169,10 @@ public sealed partial class BadBloodCampSystem
         if (!_rule.TryCreditOffering(origin.Body))
             return false;
 
+        // FLOW-512: the quarry and the objective timeline listen for credited offerings
+        var credited = new BadBloodOfferingCreditedEvent(lodge.Owner, trophy, user);
+        RaiseLocalEvent(ref credited);
+
         _popup.PopupEntity(
             Loc.GetString("cmu-bad-blood-offering-finished", ("trophy", trophy), ("sp", rule.Comp.OfferingSp.ToString())),
             user,

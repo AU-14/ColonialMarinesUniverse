@@ -67,6 +67,9 @@ public sealed class BadBloodLeaderEdgeTest : GameTest
             {
                 Assert.That(full!.Bullet, Is.GreaterThan(bestGruntBullet));
                 Assert.That(full.Bullet, Is.LessThan(leaders.Min(l => ArmorOf(l).Bullet)));
+                // the Leader keeps the best melee armor in the clan: patchwork < full clan armor < Leader plate
+                Assert.That(full.Melee, Is.GreaterThan(bestGruntMelee));
+                Assert.That(full.Melee, Is.LessThan(leaders.Min(l => ArmorOf(l).Melee)));
                 Assert.That(armoryComp!.Tiers["CMUBadBloodClanArmor"], Is.EqualTo(2));
             });
 

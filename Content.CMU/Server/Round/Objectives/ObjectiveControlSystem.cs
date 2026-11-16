@@ -10,6 +10,7 @@ using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Round.Objectives;
 using Content.Shared.FixedPoint;
+using Content.Shared.GameTicking;
 using Content.Shared.Maps;
 using Content.Shared.Placeable;
 using Content.Shared._RMC14.Intel;
@@ -54,6 +55,12 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         SubscribeLocalEvent<CMUObjectiveComponent, ComponentStartup>(OnObjectiveStartup);
         SubscribeLocalEvent<CMUObjectiveComponent, ComponentShutdown>(OnObjectiveShutdown);
         SubscribeLocalEvent<SpendWinPointsEvent>(OnSpendWinPoints);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        _suppressedFinalFactions.Clear();
     }
 
     public override void Shutdown()

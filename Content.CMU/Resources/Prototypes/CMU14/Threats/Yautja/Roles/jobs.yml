@@ -465,7 +465,7 @@
     shoes: CMUYautjaBadBloodGreavesBane
     back: CMUYautjaBadBloodCloakPack
 
-# Grunts land in patchwork plate only (35 / 20 / 20 / 30). Full clan armor is earned at the Lodge armory.
+# Grunts land in patchwork plate only (20 / 20 / 20 / 30). Full clan armor is earned at the Lodge armory.
 # ── Grunt variants (21 masks cycled across 10 armor sets) ──
 
 - type: startingGear

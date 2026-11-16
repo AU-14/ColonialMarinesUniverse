@@ -420,6 +420,232 @@ public sealed class ClanTotemTest : GameTest
         }
     }
 
+    // FLOW-503: marines alone at a Totem for 45 s desecrate it: not ripe, no income, no aura. A Bad Blood alone at
+    // the desecrated Totem for 45 s takes it back
+    [Test]
+    public async Task MarinesAloneDesecrateATotemAndABadBloodAloneReconsecratesIt()
+    {
+        var map = await Pair.CreateTestMap();
+        await LayFloor(map, 0, 30, 32, 33);
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var grunt = party.Grunts[0];
+        var spawned = new List<EntityUid>();
+        EntityUid totem = default;
+        EntityUid marine = default;
+        FixedPoint4 paid = default;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                Server.System<BadBloodTotemProbeSystem>().Clear();
+
+                totem = entMan.SpawnEntity(Totem, map.GridCoords.Offset(new Vector2(30, 0)));
+                spawned.Add(totem);
+                BadBloodTestHelpers.ForceTotemRipe(Server, totem);
+
+                var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.DesecrateTime, Is.EqualTo(TimeSpan.FromSeconds(45)));
+                    Assert.That(comp.ReconsecrateTime, Is.EqualTo(TimeSpan.FromSeconds(45)));
+                    Assert.That(Server.System<BadBloodTotemSystem>().IsRipe(totem), Is.True);
+                });
+
+                // the Bad Bloods stand at the origin, 30 tiles away
+                marine = BadBloodTestHelpers.SpawnMarineNear(Server, map.GridCoords, new Vector2(33, 0));
+                spawned.Add(marine);
+            });
+
+            await Pair.RunSeconds(30);
+            await Server.WaitAssertion(() =>
+            {
+                var comp = Server.EntMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.Desecrated, Is.False, "30 seconds is not enough");
+                    Assert.That(comp.DesecrateProgress, Is.GreaterThan(TimeSpan.FromSeconds(20)));
+                    Assert.That(Server.System<BadBloodTotemSystem>().IsRipe(totem), Is.True);
+                });
+            });
+
+            await Pair.RunSeconds(17);
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var totems = Server.System<BadBloodTotemSystem>();
+                var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.Desecrated, Is.True, "45 seconds of marines alone desecrates the Totem");
+                    Assert.That(comp.DesecrateProgress, Is.EqualTo(TimeSpan.Zero));
+                    Assert.That(totems.IsRipe(totem), Is.False, "a desecrated Totem is not ripe");
+                    Assert.That(totems.CountRipeTotems(), Is.Zero);
+                    Assert.That(Server.System<BadBloodTotemProbeSystem>().Desecrated, Does.Contain(totem));
+                });
+
+                // nobody stands at it now, and it still pays nothing
+                entMan.DeleteEntity(marine);
+                paid = comp.PaidIncome;
+                var sp = rules.GetSp();
+                totems.Accrue(new Entity<BadBloodTotemComponent>(totem, comp), Server.Timing.CurTime, TimeSpan.FromMinutes(10));
+                Assert.That(rules.GetSp(), Is.EqualTo(sp), "a desecrated Totem books no income");
+
+                Server.System<SharedTransformSystem>().SetCoordinates(grunt, map.GridCoords.Offset(new Vector2(32, 0)));
+            });
+
+            await Pair.RunSeconds(4);
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.Desecrated, Is.True);
+                    Assert.That(comp.PaidIncome, Is.EqualTo(paid), "a desecrated Totem pays nothing");
+                    Assert.That(entMan.HasComponent<BadBloodTotemAuraComponent>(grunt), Is.False,
+                        "a desecrated Totem has no aura");
+                    Assert.That(comp.ReconsecrateProgress, Is.GreaterThan(TimeSpan.Zero),
+                        "a Bad Blood alone at it starts taking it back");
+                });
+            });
+
+            await Pair.RunSeconds(43);
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.Desecrated, Is.False, "45 seconds of a Bad Blood alone reconsecrates it");
+                    Assert.That(comp.ReconsecrateProgress, Is.EqualTo(TimeSpan.Zero));
+                    Assert.That(Server.System<BadBloodTotemSystem>().IsRipe(totem), Is.True);
+                    Assert.That(entMan.HasComponent<BadBloodTotemAuraComponent>(grunt), Is.True, "the aura is back");
+                    Assert.That(Server.System<BadBloodTotemProbeSystem>().Reconsecrated, Does.Contain(totem));
+                });
+            });
+        }
+        finally
+        {
+            await Cleanup(party, spawned);
+        }
+    }
+
+    // FLOW-503, §5.3a: a Bad Blood stepping in pauses the marines' hold, it never resets it
+    [Test]
+    public async Task ABadBloodStepsInAndTheDesecrationPausesWithoutReset()
+    {
+        var map = await Pair.CreateTestMap();
+        await LayFloor(map, 0, 30, 32, 33);
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var grunt = party.Grunts[0];
+        var spawned = new List<EntityUid>();
+        EntityUid totem = default;
+        var held = TimeSpan.Zero;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                totem = Server.EntMan.SpawnEntity(Totem, map.GridCoords.Offset(new Vector2(30, 0)));
+                spawned.Add(totem);
+                Server.EntMan.GetComponent<BadBloodTotemComponent>(totem).DesecrateTime = TimeSpan.FromSeconds(10);
+                spawned.Add(BadBloodTestHelpers.SpawnMarineNear(Server, map.GridCoords, new Vector2(33, 0)));
+            });
+
+            await Pair.RunSeconds(5);
+            await Server.WaitAssertion(() =>
+            {
+                var comp = Server.EntMan.GetComponent<BadBloodTotemComponent>(totem);
+                held = comp.DesecrateProgress;
+                Assert.That(held, Is.GreaterThan(TimeSpan.Zero));
+                Assert.That(comp.Desecrated, Is.False);
+
+                Server.System<SharedTransformSystem>().SetCoordinates(grunt, map.GridCoords.Offset(new Vector2(32, 0)));
+            });
+
+            await Pair.RunSeconds(4);
+            await Server.WaitAssertion(() =>
+            {
+                var comp = Server.EntMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.Desecrated, Is.False);
+                    Assert.That(comp.DesecrateProgress, Is.EqualTo(held), "a Bad Blood at the Totem pauses the hold and keeps it");
+                });
+
+                Server.System<SharedTransformSystem>().SetCoordinates(grunt, map.GridCoords);
+            });
+
+            // the rest of the ten seconds, not a fresh ten
+            await Pair.RunSeconds(7);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.EntMan.GetComponent<BadBloodTotemComponent>(totem).Desecrated, Is.True,
+                    "the hold resumes where it paused");
+            });
+        }
+        finally
+        {
+            await Cleanup(party, spawned);
+        }
+    }
+
+    // FLOW-503: a desecrated Totem is not ripe, so desecrating one of three ripe Totems breaks the ship-call hold
+    [Test]
+    public async Task DesecratingOneOfThreeRipeTotemsBreaksTheRipeHold()
+    {
+        var map = await Pair.CreateTestMap();
+        await LayFloor(map, 0, 30, 33, 60, 90);
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var spawned = new List<EntityUid>();
+        var raised = new List<EntityUid>();
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                foreach (var column in new[] { 30, 60, 90 })
+                {
+                    var totem = Server.EntMan.SpawnEntity(Totem, map.GridCoords.Offset(new Vector2(column, 0)));
+                    spawned.Add(totem);
+                    raised.Add(totem);
+                    BadBloodTestHelpers.ForceTotemRipe(Server, totem);
+                }
+
+                Assert.That(Server.System<BadBloodTotemSystem>().CountRipeTotems(), Is.EqualTo(3));
+            });
+
+            await Pair.RunSeconds(2);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.System<BadBloodCampRuleSystem>().TryGetRule(out var rule), Is.True);
+                Assert.That(rule.Comp.RipeHoldStartedAt, Is.Not.Null, "three ripe Totems start the hold");
+
+                Server.EntMan.GetComponent<BadBloodTotemComponent>(raised[0]).DesecrateTime = TimeSpan.FromSeconds(2);
+                spawned.Add(BadBloodTestHelpers.SpawnMarineNear(Server, map.GridCoords, new Vector2(33, 0)));
+            });
+
+            await Pair.RunSeconds(4);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.System<BadBloodCampRuleSystem>().TryGetRule(out var rule), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(Server.EntMan.GetComponent<BadBloodTotemComponent>(raised[0]).Desecrated, Is.True);
+                    Assert.That(Server.System<BadBloodTotemSystem>().CountRipeTotems(), Is.EqualTo(2));
+                    Assert.That(rule.Comp.RipeHoldStartedAt, Is.Null, "a desecrated Totem breaks the hold");
+                });
+            });
+        }
+        finally
+        {
+            await Cleanup(party, spawned);
+        }
+    }
+
     // the Totem is a structure and needs floor to stand on
     private async Task LayFloor(TestMapData map, params int[] columns)
     {

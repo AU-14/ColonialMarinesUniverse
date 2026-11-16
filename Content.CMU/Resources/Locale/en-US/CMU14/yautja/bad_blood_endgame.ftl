@@ -27,3 +27,10 @@ cmu-bad-blood-ship-departure-resumed-clan = A Lodge stands again. The clan ship 
 cmu-bad-blood-ship-departure-resumed-marines = The Yautja have raised a new Lodge. Their ship leaves in { $minutes } minutes.
 cmu-bad-blood-ship-departed-clan = The clan ship takes you home with your trophies.
 cmu-bad-blood-ship-departed-marines = The Yautja clan ship has left orbit with its hunters.
+
+# FLOW-504: the early warning, heard only through a comms tower that is On
+cmu-bad-blood-ship-signal-marines = The colony comms tower is picking up unknown vessel signals. The Yautja are calling a ship, and it will be called in { $minutes } { $minutes ->
+        [one] minute
+       *[other] minutes
+    } unless their Totems are broken.
+cmu-bad-blood-ship-signal-lost-marines = The unknown vessel signals have gone quiet. The Yautja ship call has been broken.

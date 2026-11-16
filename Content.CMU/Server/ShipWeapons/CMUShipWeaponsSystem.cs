@@ -145,7 +145,9 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         var available = TryGetShip(terminal, out var ship);
         var weapons = available
             ? (_requireGuns ? GetSupportedWeapons(ship).ToArray() :
-                _prototypes.EnumeratePrototypes<CMUShipWeaponPrototype>().Select(w => new ProtoId<CMUShipWeaponPrototype>(w.ID)).ToArray())
+                _prototypes.EnumeratePrototypes<CMUShipWeaponPrototype>()
+                    .Where(w => w.Armable) // CMU14 BadBlood
+                    .Select(w => new ProtoId<CMUShipWeaponPrototype>(w.ID)).ToArray())
             : [];
         var terminalComp = Comp<CMUShipWeaponsTerminalComponent>(terminal);
         _ui.SetUiState(terminal, CMUShipWeaponsUiKey.Key,
@@ -156,11 +158,24 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
 
     private void UpdateOverwatch(Entity<OverwatchConsoleComponent> console)
     {
-        var weapons = TryGetShip(console, out var ship) ? GetWeapons(ship) : [];
+        var hasShip = TryGetShip(console, out var ship); // CMU14 BadBlood
+        var armed = hasShip ? GetWeapons(ship) : [];
+        var weapons = armed;
+
+        // CMU14 BadBlood: rules can list their own entries after the armed weapons (the Vessel Strike)
+        if (hasShip)
+        {
+            var collect = new CMUShipWeaponsCollectExtrasEvent(ship, new List<CMUShipWeaponStatus>());
+            RaiseLocalEvent(console, ref collect);
+            if (collect.Extras.Count > 0)
+                weapons = armed.Concat(collect.Extras.Where(e => !armed.Any(a => a.Weapon == e.Weapon))).ToArray();
+        }
+
         var selected = console.Comp.CMUSelectedShipWeapon;
         // Once the ship has fire missions they replace the standard cannon, so the console always has one picked.
+        // CMU14 BadBlood: only an armed weapon is ever picked automatically, never an extra
         if (selected == null || !weapons.Any(w => w.Weapon == selected))
-            selected = weapons.Length > 0 ? weapons[0].Weapon : (ProtoId<CMUShipWeaponPrototype>?) null;
+            selected = armed.Length > 0 ? armed[0].Weapon : (ProtoId<CMUShipWeaponPrototype>?) null;
 
         var next = TryComp(ship, out CMUShipWeaponsComponent? state) ? state.NextLaunch : TimeSpan.Zero;
         _overwatch.CMUSetShipWeapons(console, weapons, selected, console.Comp.CMUShipWeaponBearing, next);
@@ -181,6 +196,34 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
             if (TryGetShip(uid, out var owner) && owner == ship)
                 UpdateOverwatch((uid, console));
         }
+    }
+
+    // CMU14 BadBlood: rules that offer extras rebuild every overwatch console's list when their offer changes
+    public void CMURefreshOverwatchConsoles()
+    {
+        var consoles = EntityQueryEnumerator<OverwatchConsoleComponent>();
+        while (consoles.MoveNext(out var uid, out var console))
+            UpdateOverwatch((uid, console));
+    }
+
+    // CMU14 BadBlood: an installed battery on this ship that is ready to fire, whatever missions it supports
+    public bool CMUTryGetReadyGun(EntityUid ship, out Entity<CMUShipWeaponGunComponent> gun)
+    {
+        gun = default;
+        var guns = EntityQueryEnumerator<CMUShipWeaponGunComponent, TransformComponent>();
+        while (guns.MoveNext(out var uid, out var comp, out var xform))
+        {
+            if (!xform.Anchored || !comp.Ready || TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid) ||
+                !TryGetShip(uid, out var owner) || owner != ship)
+            {
+                continue;
+            }
+
+            gun = (uid, comp);
+            return true;
+        }
+
+        return false;
     }
 
     private void Reject(EntityUid user, string message)
@@ -211,7 +254,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
 
         if (args.Weapons.Length < 1 || args.Weapons.Length > ent.Comp.MaxSelections ||
             args.Weapons.Distinct().Count() != args.Weapons.Length ||
-            args.Weapons.Any(w => !_prototypes.HasIndex(w)))
+            args.Weapons.Any(w => !_prototypes.TryIndex(w, out var proto) || !proto.Armable)) // CMU14 BadBlood: Armable
         {
             _popup.PopupCursor(Loc.GetString("cmu-ship-weapons-invalid-selection",
                 ("max", ent.Comp.MaxSelections)), args.Actor, PopupType.LargeCaution);
@@ -252,6 +295,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
 
         if (!Enum.IsDefined(args.Bearing) ||
             args.Weapon is { } weapon &&
+            !ent.Comp.CMUShipWeapons.Any(w => w.Weapon == weapon) && // CMU14 BadBlood: an extra the server listed
             (!TryGetShip(ent, out var ship) ||
              !TryComp(ship, out CMUShipWeaponsComponent? state) ||
              !state.Weapons.Contains(weapon)))
@@ -270,6 +314,15 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
         if (!_access.IsAllowed(args.User, ent))
         {
             Reject(args.User, "cmu-ship-weapons-access-denied");
+            return;
+        }
+
+        // CMU14 BadBlood: a rule that owns the selected entry (the Vessel Strike) takes the launch
+        var intercept = new CMUShipWeaponLaunchInterceptEvent(args.User, ent.Comp.CMUSelectedShipWeapon);
+        RaiseLocalEvent(ent, ref intercept);
+        if (intercept.Handled)
+        {
+            UpdateOverwatch(ent);
             return;
         }
 

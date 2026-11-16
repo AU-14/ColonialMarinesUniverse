@@ -28,7 +28,8 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 /// Lodge, other Totems and the landing zones. A standing Totem pays the clan through the rule
 /// (<see cref="BadBloodCampRuleSystem.AddTotemIncome"/>), more the longer it has stood and nothing while a marine
 /// is beside it, and gives the Bad Bloods around it an aura. Marines are told where it is, see it on their map after
-/// a while, and reveal the Lodge by destroying it.
+/// a while, and reveal the Lodge by destroying it. FLOW-503: marines who hold it with no Bad Blood near desecrate it
+/// (no income, not ripe, no aura) until Bad Bloods hold it back.
 /// </summary>
 public sealed partial class BadBloodTotemSystem : EntitySystem
 {
@@ -105,7 +106,7 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         if (ent.Comp.Loot is { } loot)
             Spawn(loot, Transform(ent.Owner).Coordinates);
 
-        _camp.RevealLodge(ent.Comp.LodgeRevealTime);
+        _camp.RevealLodge(ent.Comp.LodgeRevealTime, BadBloodRevealSource.TotemFell);
 
         if (ent.Comp.DestroyedIntel > FixedPoint2.Zero)
             _intel.AddPoints(_intel.EnsureTechTree(ent.Comp.IntelTeam), ent.Comp.DestroyedIntel, ent.Comp.IntelTeam);
@@ -139,13 +140,14 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     }
 
     /// <summary>
-    /// A ripe Totem has stood for <see cref="BadBloodTotemComponent.RipeAfter"/>. Deleted and uncounted Totems
-    /// are never ripe.
+    /// A ripe Totem has stood for <see cref="BadBloodTotemComponent.RipeAfter"/>. Deleted, uncounted and
+    /// desecrated Totems are never ripe.
     /// </summary>
     public bool IsRipe(EntityUid totem)
     {
         return TryComp(totem, out BadBloodTotemComponent? comp) &&
                comp.Registered &&
+               !comp.Desecrated &&
                !TerminatingOrDeleted(totem) &&
                _timing.CurTime - comp.PlacedAt >= comp.RipeAfter;
     }
@@ -186,6 +188,27 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         return false;
     }
 
+    /// <summary>
+    /// FLOW-503: a living Bad Blood stands within the Totem's contest radius.
+    /// </summary>
+    public bool IsBadBloodNear(Entity<BadBloodTotemComponent> totem)
+    {
+        var here = _transform.GetMapCoordinates(totem.Owner);
+        var range = totem.Comp.ContestRadius * totem.Comp.ContestRadius;
+
+        var badBloods = EntityQueryEnumerator<YautjaBadBloodComponent, TransformComponent>();
+        while (badBloods.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.MapID != here.MapId || _mobState.IsDead(uid))
+                continue;
+
+            if ((_transform.GetWorldPosition(xform) - here.Position).LengthSquared() <= range)
+                return true;
+        }
+
+        return false;
+    }
+
     private void UpdateTotems(TimeSpan now, TimeSpan elapsed)
     {
         var totems = EntityQueryEnumerator<BadBloodTotemComponent>();
@@ -196,8 +219,9 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 
             var ent = new Entity<BadBloodTotemComponent>(uid, totem);
             totem.Contested = IsContested(ent);
+            UpdateDesecration(ent, IsBadBloodNear(ent), elapsed);
 
-            if (!totem.Contested)
+            if (!totem.Contested && !totem.Desecrated)
                 Accrue(ent, now, elapsed);
 
             if (!totem.MapRevealed && now - totem.PlacedAt >= totem.MapRevealDelay)
@@ -208,13 +232,72 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         }
     }
 
+    // FLOW-503: marines alone at a consecrated Totem desecrate it, Bad Bloods alone at a desecrated one reconsecrate
+    // it. Any other mix, or nobody, pauses the hold where it is: progress is never reset
+    private void UpdateDesecration(Entity<BadBloodTotemComponent> totem, bool badBloodNear, TimeSpan elapsed)
+    {
+        var comp = totem.Comp;
+        if (!comp.Desecrated)
+        {
+            if (!comp.Contested || badBloodNear)
+                return;
+
+            comp.DesecrateProgress += elapsed;
+            if (comp.DesecrateProgress >= comp.DesecrateTime)
+                SetDesecrated(totem, true);
+        }
+        else
+        {
+            if (comp.Contested || !badBloodNear)
+                return;
+
+            comp.ReconsecrateProgress += elapsed;
+            if (comp.ReconsecrateProgress >= comp.ReconsecrateTime)
+                SetDesecrated(totem, false);
+        }
+    }
+
+    /// <summary>
+    /// Desecrates or reconsecrates the Totem at once, zeroing both holds, raising the broadcast event and telling
+    /// the clan and the marines. Does nothing when it is already in that state.
+    /// </summary>
+    public void SetDesecrated(Entity<BadBloodTotemComponent> totem, bool desecrated)
+    {
+        var comp = totem.Comp;
+        if (comp.Desecrated == desecrated || !comp.Registered || comp.Destroyed)
+            return;
+
+        comp.Desecrated = desecrated;
+        comp.DesecrateProgress = TimeSpan.Zero;
+        comp.ReconsecrateProgress = TimeSpan.Zero;
+
+        var area = _area.GetAreaName(totem.Owner);
+        if (desecrated)
+        {
+            var ev = new BadBloodTotemDesecratedEvent(totem.Owner);
+            RaiseLocalEvent(ref ev);
+
+            _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-totem-desecrated-marines", ("area", area)));
+            _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-desecrated-clan", ("area", area)), PopupType.LargeCaution);
+        }
+        else
+        {
+            var ev = new BadBloodTotemReconsecratedEvent(totem.Owner);
+            RaiseLocalEvent(ref ev);
+
+            _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-totem-reconsecrated-marines", ("area", area)));
+            _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-reconsecrated-clan", ("area", area)));
+        }
+    }
+
     /// <summary>
     /// Books <paramref name="elapsed"/> of uncontested standing time and pays the clan whatever has built up past
-    /// the payout step. The once-a-second update calls this for every Totem nobody contests.
+    /// the payout step. The once-a-second update calls this for every Totem nobody contests. A desecrated Totem
+    /// books nothing.
     /// </summary>
     public void Accrue(Entity<BadBloodTotemComponent> totem, TimeSpan now, TimeSpan elapsed)
     {
-        if (!totem.Comp.Registered || elapsed <= TimeSpan.Zero)
+        if (!totem.Comp.Registered || totem.Comp.Desecrated || elapsed <= TimeSpan.Zero)
             return;
 
         totem.Comp.PendingIncome += GetIncomePerMinute(totem.Comp, now) * elapsed.TotalMinutes;
@@ -235,14 +318,18 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         totem.Comp.PaidIncome += payout;
 
         // the steps are too small to see, so the Totem speaks up each time it has fed the clan a whole point
-        if (totem.Comp.PaidIncome.Long() > wholeBefore)
+        var wholeNow = totem.Comp.PaidIncome.Long();
+        if (wholeNow > wholeBefore)
         {
             _popup.PopupEntity(
-                Loc.GetString("cmu-bad-blood-totem-paid", ("paid", totem.Comp.PaidIncome.Long())),
+                Loc.GetString("cmu-bad-blood-totem-paid", ("paid", wholeNow)),
                 totem.Owner,
                 Filter.Empty().AddWhereAttachedEntity(_badBlood.IsBadBlood),
                 false,
                 PopupType.Medium);
+
+            var ev = new BadBloodTotemPaidEvent(totem.Owner, (int) (wholeNow - wholeBefore));
+            RaiseLocalEvent(ref ev);
         }
     }
 
@@ -268,7 +355,9 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
             ("rate", GetIncomePerMinute(totem.Comp, now).ToString("0.00", CultureInfo.InvariantCulture)),
             ("paid", BadBloodCampSystem.FormatSp(totem.Comp.PaidIncome)));
 
-        if (IsContested(totem))
+        if (totem.Comp.Desecrated)
+            text += "\n" + Loc.GetString("cmu-bad-blood-totem-examine-desecrated");
+        else if (IsContested(totem))
             text += "\n" + Loc.GetString("cmu-bad-blood-totem-examine-contested");
 
         return text;
@@ -505,7 +594,7 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         var totems = EntityQueryEnumerator<BadBloodTotemComponent, TransformComponent>();
         while (totems.MoveNext(out _, out var totem, out var xform))
         {
-            if (!totem.Registered || totem.Destroyed || totem.AuraRadius <= 0f)
+            if (!totem.Registered || totem.Destroyed || totem.Desecrated || totem.AuraRadius <= 0f)
                 continue;
 
             _auras.Add((xform.MapID, _transform.GetWorldPosition(xform), totem.AuraRadius));

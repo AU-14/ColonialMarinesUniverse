@@ -169,4 +169,35 @@ public sealed class BadBloodCampRuleTest : GameTest
             await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
         }
     }
+
+    // STATE-502: the threat budget reads the population the threat started with, not who is connected now
+    [Test]
+    public async Task ThreatBudgetUsesTheRoundstartPopulation()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.That(rule.Comp.ThreatBudgetFraction, Is.EqualTo(0.25f), "the default share");
+
+                // this test server has no client connected, so the live count is nowhere near 100
+                rule.Comp.RoundstartPopulation = 100;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetPlayerCount(), Is.EqualTo(100));
+                    Assert.That(rules.GetThreatBudget(), Is.EqualTo(25));
+                    Assert.That(rules.GetTotemLimit(), Is.EqualTo(rule.Comp.TotemLimitHighPop));
+                });
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+        }
+    }
 }

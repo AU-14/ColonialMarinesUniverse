@@ -114,11 +114,17 @@ public sealed partial class BadBloodHoundSystem : EntitySystem
     }
 
     /// <summary>
-    /// The most hounds the clan may have: one for every two living Bad Bloods, rounded up.
+    /// The most hounds the clan may have: one for every <see cref="BadBloodCampRuleComponent.HoundCapDivisor"/>
+    /// living Bad Bloods, rounded up. 0 without a rule.
     /// </summary>
     public int GetHoundCap()
     {
-        return (_rule.CountLivingBadBloods() + 1) / 2;
+        if (!_rule.TryGetRule(out var rule))
+            return 0;
+
+        // a divisor of zero or less counts as 1 (one hound per Bad Blood) rather than lifting the cap
+        var divisor = Math.Max(1, rule.Comp.HoundCapDivisor);
+        return (_rule.CountLivingBadBloods() + divisor - 1) / divisor;
     }
 
     /// <summary>
@@ -162,12 +168,13 @@ public sealed partial class BadBloodHoundSystem : EntitySystem
     }
 
     /// <summary>
-    /// The landing hounds: one sleeper for every two Bad Bloods of the landing party, beside the Leader.
-    /// Returns how many were laid out.
+    /// The landing hounds: one sleeper for every <see cref="BadBloodCampRuleComponent.LandingHoundDivisor"/> Bad
+    /// Bloods of the landing party, beside the Leader. Returns how many were laid out.
     /// </summary>
     public int SpawnLandingHounds(Entity<BadBloodCampRuleComponent> rule)
     {
-        var count = rule.Comp.LandingParty / 2;
+        var divisor = rule.Comp.LandingHoundDivisor;
+        var count = divisor > 0 ? rule.Comp.LandingParty / divisor : 0;
         if (count <= 0)
             return 0;
 

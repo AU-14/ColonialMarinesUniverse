@@ -236,6 +236,14 @@
       Piercing: 2000
       Structural: 2000
 
+# CMU14 BadBlood: the Vessel Strike on the Bad Blood clan ship. It is never armed at the terminal and fires nothing
+# on the map: on Bad Blood rounds the rule lists it on GOVFOR overwatch consoles after the uplink, and
+# BadBloodVesselStrikeSystem takes the launch (it spends a ready orbital battery and starts the strike timer).
+- type: cmuShipWeapon
+  id: CMUVesselStrike
+  name: cmu-ship-weapons-vessel-strike
+  armable: false
+
 # The ship's two orbital batteries. Either one fires any mission. Every shot burns out the battery, and the crew have to
 # work through its eight repair steps, each with its own tool, before it can fire again.
 - type: entity

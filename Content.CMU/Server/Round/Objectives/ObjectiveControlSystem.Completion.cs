@@ -196,12 +196,48 @@ public sealed partial class ObjectiveControlSystem
         _vendorSystem.UpdateVendorFactionPointsCache(key, data.CurrentWinPoints.Int());
         _intel.UpdateTree(_intel.EnsureTechTree(key));
 
-        if (!master.FactionsGivenFinalObjective.Contains(key) && data.CurrentWinPoints >= data.RequiredWinPoints)
+        if (!master.FactionsGivenFinalObjective.Contains(key)
+            && !_suppressedFinalFactions.Contains(key)
+            && data.CurrentWinPoints >= data.RequiredWinPoints)
             TryActivateFinalObjective(key);
+    }
+
+    // COUPLING-501: factions that must never be given a final objective this round. Kept here as well as on the
+    // master, so a suppression made before the master exists still holds. Cleared on round restart
+    private readonly HashSet<string> _suppressedFinalFactions = new();
+
+    /// <summary>
+    /// Keeps <paramref name="faction"/> from being given a final (level 3) objective for the rest of the round, so
+    /// win points never activate an <c>InstantWin</c> objective. Used by threats that decide the round themselves,
+    /// such as the Bad Blood rule.
+    /// </summary>
+    public void SuppressFinalObjective(string faction)
+    {
+        if (string.IsNullOrWhiteSpace(faction))
+            return;
+
+        var key = faction.ToLowerInvariant();
+        _suppressedFinalFactions.Add(key);
+
+        if (GetOrReselectObjMaster() is { } master && master.FactionsGivenFinalObjective.Add(key))
+            DirtyObjectiveMaster();
+
+        _logs.Info($"[OBJ-FINAL] Final objectives suppressed for faction '{key}'.");
+    }
+
+    /// <summary>
+    /// True when <see cref="SuppressFinalObjective"/> was called for <paramref name="faction"/> this round.
+    /// </summary>
+    public bool IsFinalObjectiveSuppressed(string faction)
+    {
+        return _suppressedFinalFactions.Contains(faction.ToLowerInvariant());
     }
 
     private void TryActivateFinalObjective(string factionKey)
     {
+        if (_suppressedFinalFactions.Contains(factionKey))
+            return;
+
         var finalObjectives = new List<(EntityUid Uid, CMUObjectiveComponent Comp)>();
         var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
         foreach (var (uid, comp) in _allObjectives)

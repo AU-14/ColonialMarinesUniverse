@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
@@ -149,6 +150,46 @@ public sealed partial class BadBloodCampRuleSystem
         return true;
     }
 
+    /// <summary>
+    /// FLOW-504: time until the clan ship is in orbit. While the ripe hold runs: what is left of the hold (never
+    /// before the lock lifts) plus the inbound time. While inbound: <see cref="GetShipTimeLeft"/>. Otherwise null.
+    /// A running hold still needs a standing Lodge when it completes, so this is the earliest arrival.
+    /// </summary>
+    public TimeSpan? GetShipCallEta()
+    {
+        if (!TryGetRule(out var rule))
+            return null;
+
+        var comp = rule.Comp;
+        switch (comp.ShipState)
+        {
+            case BadBloodShipState.Inbound:
+                return GetShipTimeLeft();
+            case BadBloodShipState.None when comp.RipeHoldStartedAt is { } since:
+                var untilCall = GetShipCallAt(comp, since) - Timing.CurTime;
+                if (untilCall < TimeSpan.Zero)
+                    untilCall = TimeSpan.Zero;
+
+                return untilCall + comp.ShipInboundTime;
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>
+    /// How many ship-signal lines (hold started or lost) reached the marines because a comms tower was On.
+    /// Instrumentation for the objective timeline and the tests.
+    /// </summary>
+    public int ShipSignalsAnnounced { get; private set; }
+
+    // the hold is complete at holdStart + RipeHoldForCall, and the ship is never called before the lock lifts
+    private static TimeSpan GetShipCallAt(BadBloodCampRuleComponent comp, TimeSpan holdStart)
+    {
+        var held = holdStart + comp.RipeHoldForCall;
+        var unlocked = comp.StartedAt + comp.ShipEarliestCall;
+        return held > unlocked ? held : unlocked;
+    }
+
     // the hold is tracked with or without a Lodge, the call itself waits for one
     private void UpdateRipeHold(Entity<BadBloodCampRuleComponent> rule, TimeSpan now)
     {
@@ -158,9 +199,34 @@ public sealed partial class BadBloodCampRuleSystem
 
         var ripe = EntityManager.System<BadBloodTotemSystem>().CountRipeTotems();
         if (comp.RipeTotemsForCall > 0 && ripe >= comp.RipeTotemsForCall)
-            comp.RipeHoldStartedAt ??= now;
-        else
+        {
+            if (comp.RipeHoldStartedAt != null)
+                return;
+
+            // FLOW-504 (D3, I4): the hold starts, and marines with a working comms tower hear it
+            comp.RipeHoldStartedAt = now;
+            var callAt = GetShipCallAt(comp, now);
+            var started = new BadBloodRipeHoldStartedEvent(rule, callAt);
+            RaiseLocalEvent(ref started);
+            AnnounceShipSignal(Loc.GetString("cmu-bad-blood-ship-signal-marines", ("minutes", MinutesLeft(callAt - now))));
+        }
+        else if (comp.RipeHoldStartedAt != null)
+        {
             comp.RipeHoldStartedAt = null;
+            var broken = new BadBloodRipeHoldBrokenEvent(rule);
+            RaiseLocalEvent(ref broken);
+            AnnounceShipSignal(Loc.GetString("cmu-bad-blood-ship-signal-lost-marines"));
+        }
+    }
+
+    // FLOW-504: the early warning only reaches the marines through a comms tower that is On
+    private void AnnounceShipSignal(string message)
+    {
+        if (!EntityManager.System<CommunicationsTowerSystem>().CanTransmit())
+            return;
+
+        ShipSignalsAnnounced++;
+        AnnounceShipToMarines(message);
     }
 
     private bool IsShipCallDue(Entity<BadBloodCampRuleComponent> rule, TimeSpan now)
@@ -182,8 +248,12 @@ public sealed partial class BadBloodCampRuleSystem
         comp.ShipState = BadBloodShipState.Inbound;
         comp.ShipArrivesAt = now + comp.ShipInboundTime;
 
+        // FLOW-504: the Lodge loot and the objective timeline listen for the call
+        var called = new BadBloodShipCalledEvent(rule, comp.ShipArrivesAt.Value);
+        RaiseLocalEvent(ref called);
+
         // the Lodge is on the marine map for as long as the ship is inbound or here
-        EntityManager.System<BadBloodCampSystem>().RevealLodge();
+        EntityManager.System<BadBloodCampSystem>().RevealLodge(null, BadBloodRevealSource.ShipPhase);
 
         var minutes = MinutesLeft(comp.ShipInboundTime);
         AnnounceToClan(Loc.GetString("cmu-bad-blood-ship-called-clan", ("minutes", minutes)), PopupType.Large);

@@ -16,7 +16,7 @@ namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
 
 // STATE-107: the non-combat numbers of the Bad Blood master value sheet (docs/GraphAudit-BadBlood-Balance.md §12),
 // read from the prototypes. If one of these fails, a number was retuned: change the sheet and this test together.
-// The body's damage set and the armor values are not pinned here, they wait for the maintainer's combat sign-off.
+// The body's damage set and the melee armor pin the signed-off fire/melee Option 2 (docs/GraphAudit-BadBlood-Objectives.md §4.3).
 [TestFixture]
 public sealed class BadBloodValueSheetTest
 {
@@ -120,7 +120,12 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.ReserveChoiceTime, Is.EqualTo(TimeSpan.FromSeconds(20)));
                 Assert.That(rule.ThreatBudgetFraction, Is.EqualTo(0.25f));
                 Assert.That(rule.LivingCapBonus, Is.EqualTo(2));
-                Assert.That(rule.HoundsPerMaster, Is.EqualTo(3));
+                Assert.That(rule.LandingHoundDivisor, Is.EqualTo(2));
+                Assert.That(rule.HoundCapDivisor, Is.EqualTo(2));
+                Assert.That(rule.FoundingSquadBase, Is.EqualTo(1));
+                Assert.That(rule.FoundingSquadDivisor, Is.EqualTo(2));
+                Assert.That(rule.LastStandSeats, Is.EqualTo(2));
+                Assert.That(rule.RoundstartPopulation, Is.EqualTo(0), "recorded when the rule starts, not configured");
                 Assert.That(rule.TotemLimit, Is.EqualTo(3));
                 Assert.That(rule.TotemLimitHighPop, Is.EqualTo(4));
                 Assert.That(rule.TotemHighPopPlayers, Is.EqualTo(80));
@@ -131,6 +136,10 @@ public sealed class BadBloodValueSheetTest
                 var landing = protos.Index<PartySpawnPrototype>("badBloodClanParty");
                 Assert.That(landing.LeadersToSpawn["CMUMobYautjaBadBloodLeader"], Is.EqualTo(1));
                 Assert.That(landing.GruntsToSpawn["CMUMobYautjaBadBloodGrunt"], Is.EqualTo(3));
+                // one extra grunt per ~17 players above 30
+                var gruntScaling = landing.Scaling["CMUMobYautjaBadBloodGrunt"];
+                Assert.That(gruntScaling.Scale, Is.EqualTo(0.06f).Within(0.0001f));
+                Assert.That(gruntScaling.WhenToBeginScaling, Is.EqualTo(30));
 
                 // Clan Totem: 0.2 / 0.4 / 0.7 a minute, ripening at 10 and 20 min, radius 7
                 var totem = Comp<BadBloodTotemComponent>(Totem);
@@ -160,7 +169,8 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(thirst.BaseChangeRate, Is.EqualTo(-0.1f).Within(0.0001f), "-0.1 a second is 6 a minute");
                 Assert.That(thirst.StartingValueMinimum, Is.EqualTo(300));
 
-                // body: Bad Bloods take a little more than honourable hunters, who are untouched
+                // body (fire/melee Option 2): Bad Bloods take more melee and less fire than honourable hunters, who
+                // are untouched
                 foreach (var mob in new[] { "CMUMobYautjaBadBloodGrunt", "CMUMobYautjaBadBloodLeader" })
                 {
                     Assert.That(Comp<DamageableComponent>(mob).DamageModifierSetId?.Id, Is.EqualTo("CMUYautjaBadBlood"), mob);
@@ -168,15 +178,27 @@ public sealed class BadBloodValueSheetTest
 
                 Assert.That(Comp<DamageableComponent>("CMUMobYautja").DamageModifierSetId?.Id, Is.EqualTo("CMUYautja"));
                 var badBloodSet = protos.Index<DamageModifierSetPrototype>("CMUYautjaBadBlood").Coefficients;
-                Assert.That(badBloodSet["Blunt"], Is.EqualTo(0.30f));
-                Assert.That(badBloodSet["Slash"], Is.EqualTo(0.30f));
+                Assert.That(badBloodSet["Blunt"], Is.EqualTo(0.40f));
+                Assert.That(badBloodSet["Slash"], Is.EqualTo(0.45f));
                 Assert.That(badBloodSet["Piercing"], Is.EqualTo(0.30f));
-                Assert.That(badBloodSet["Heat"], Is.EqualTo(0.75f));
+                Assert.That(badBloodSet["Heat"], Is.EqualTo(0.50f));
                 Assert.That(badBloodSet["Poison"], Is.EqualTo(0.5f));
                 Assert.That(badBloodSet.ContainsKey("Caustic"), Is.False, "caustic lands in full");
                 var hunterSet = protos.Index<DamageModifierSetPrototype>("CMUYautja").Coefficients;
                 Assert.That(hunterSet["Slash"], Is.EqualTo(0.28f));
                 Assert.That(hunterSet["Heat"], Is.EqualTo(0.65f));
+
+                // armor (Option 2): patchwork melee 20, Leader plate melee 30 on every Leader piece and the armory's
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodArmorPatchwork").Melee, Is.EqualTo(20));
+                foreach (var plate in new[]
+                         {
+                             "CMUBadBloodLeaderArmorCommandoAlt", "CMUBadBloodLeaderArmorBane",
+                             "CMUBadBloodLeaderArmorLunatic", "CMUBadBloodLeaderArmorScavengerAlt",
+                             "CMUBadBloodLeaderArmor",
+                         })
+                {
+                    Assert.That(Comp<CMArmorComponent>(plate).Melee, Is.EqualTo(30), plate);
+                }
 
                 // blades against marines: Bad Blood wrist blades penetration 50 / strip 0.006, honourable 40 / 0.01
                 var badBloodBlades = Comp<YautjaHumanMeleeComponent>("CMUYautjaBadBloodWristBlades");

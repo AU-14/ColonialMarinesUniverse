@@ -169,8 +169,42 @@ public sealed partial class BadBloodCampRuleComponent : Component
     [DataField]
     public float ThreatBudgetFraction = 0.25f;
 
+    /// <summary>
+    /// Players on the server when the threat started (the threat vote's population). The threat budget and the
+    /// Totem high-pop limit read this instead of the live count. Zero means unknown: the live count is used.
+    /// </summary>
     [DataField]
-    public int HoundsPerMaster = 3;
+    public int RoundstartPopulation;
+
+    /// <summary>
+    /// The landing party brings one sleeping hound per this many Bad Bloods, rounded down. Zero or less: none.
+    /// </summary>
+    [DataField]
+    public int LandingHoundDivisor = 2;
+
+    /// <summary>
+    /// The clan may keep one hound per this many living Bad Bloods, rounded up. Zero or less counts as 1.
+    /// </summary>
+    [DataField]
+    public int HoundCapDivisor = 2;
+
+    /// <summary>
+    /// The founding squad has at most this many seats + <see cref="LandingParty"/> / <see cref="FoundingSquadDivisor"/>.
+    /// </summary>
+    [DataField]
+    public int FoundingSquadBase = 1;
+
+    /// <summary>
+    /// See <see cref="FoundingSquadBase"/>. Zero or less: the founding squad is only <see cref="FoundingSquadBase"/>.
+    /// </summary>
+    [DataField]
+    public int FoundingSquadDivisor = 2;
+
+    /// <summary>
+    /// Seats of the last-stand squad a Clan Wipe calls. Zero or less: no last-stand squad.
+    /// </summary>
+    [DataField]
+    public int LastStandSeats = 2;
 
     /// <summary>
     /// Players whose Bad Blood died this round, with the time of death. Squad and hound seats favour them.

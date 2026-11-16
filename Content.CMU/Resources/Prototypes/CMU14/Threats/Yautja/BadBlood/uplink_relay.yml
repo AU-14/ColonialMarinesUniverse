@@ -1,0 +1,60 @@
+# FLOW-508: the field uplink relay. GOVFOR requisitions sell the crate on Bad Blood rounds only (BadBloodFieldRelaySystem
+# adds the entry at runtime; price and category are on the rule's BadBloodObjectiveChain). The kit plants the relay
+# under open sky; the relay is an uplink site on its own battery that Bad Bloods can destroy outright.
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBadBloodFieldRelay
+  name: field uplink relay crate
+  description: A crate holding a field uplink relay kit.
+  suffix: Bad Blood
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUBadBloodFieldRelayKit
+
+- type: entity
+  parent: BaseItem
+  id: CMUBadBloodFieldRelayKit
+  name: field uplink relay kit
+  description: A folded relay tripod with its own battery. Plant it under open sky to run an uplink from it.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/overwatch_tripod_camera.rsi
+    state: undeployed
+  - type: Item
+    size: Large
+  - type: BadBloodFieldRelayKit
+    plantTime: 20
+    relay: CMUBadBloodFieldRelay
+
+- type: entity
+  parent: BaseStructure
+  id: CMUBadBloodFieldRelay
+  name: field uplink relay
+  description: A battery-powered relay tripod. Marines can run an uplink from it while it is anchored and charged.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/overwatch_tripod_camera.rsi
+    state: deployed
+  - type: InteractionOutline
+  - type: Damageable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: BadBloodFieldRelay
+    chargeDuration: 3600
+  - type: BadBloodUplinkSite
+    kind: Relay
+    uplinkTime: 150
+  - type: BadBloodSabotageTarget

@@ -1,0 +1,31 @@
+# Lodge part: the quarry (FLOW-512). Deployed with the Lodge and removed with it. Bad Bloods draw bricks here and
+# hand back what they do not use. Offerings, Totem income and sabotage add stone. BadBloodQuarrySystem runs it.
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodCampQuarry
+  name: Lodge quarry
+  description: A heap of cut stone dragged in from the prey's ruins. The clan builds its walls from it.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    drawdepth: Objects
+    color: "#8c7564"
+    scale: 1.5, 1.5
+    layers:
+    - state: sandstone_4
+  - type: Icon
+    sprite: CMU14/Yautja/Lodge/sandstone.rsi
+    state: sandstone_4
+  - type: Clickable
+  - type: BadBloodCampPart
+    kind: Quarry
+  - type: BadBloodQuarry
+    startStone: 20
+    stoneCap: 40
+    drawAmount: 10
+    offeringStone: 5
+    totemStonePerSp: 1
+    sabotageStone: 3
+    buildRadius: 12
+    brickPrototype: CMUSheetBadBloodBrick1

@@ -720,7 +720,7 @@
   - type: Clothing
     sprite: CMU14/Yautja/armor_badblood_patchwork.rsi
   - type: CMArmor
-    melee: 35
+    melee: 20 # Bad Blood only: marines close in with blades (Bad Blood fire/melee Option 2)
     bullet: 20
     bio: 20 # CM-SS13 scalable MEDIUM
     explosionArmor: 30 # CM-SS13 scalable bomb base
