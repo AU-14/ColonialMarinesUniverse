@@ -50,7 +50,7 @@ public sealed class CMUXenoHealerHumanTest : GameTest
 #pragma warning restore RA0002
 
             var action = new XenoApplySalveActionEvent { Target = human };
-            SEntMan.EventBus.RaiseLocalEvent(healer, ref action);
+            SEntMan.EventBus.RaiseLocalEvent(healer, action);
             Assert.That(action.Handled, Is.True);
 
             var healed = Server.System<DamageableSystem>().GetAllDamage(human).DamageDict;

@@ -169,6 +169,9 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
     private void OnXenoApplySalveAction(Entity<XenoComponent> ent, ref XenoApplySalveActionEvent args)
     {
+        if (args.Handled) // CMU14: human salve treatment handles this action separately.
+            return;
+
         var target = args.Target;
 
         LocId? failureMessageId = null;

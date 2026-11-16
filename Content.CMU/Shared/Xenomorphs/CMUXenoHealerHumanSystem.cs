@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Xenonids.Strain;
 using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
+using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
@@ -45,16 +46,16 @@ public sealed class CMUXenoHealerHumanSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<XenoComponent, XenoApplySalveActionEvent>(
+        SubscribeLocalEvent<XenoStrainComponent, XenoApplySalveActionEvent>(
             OnApplySalveToHuman,
             before: [typeof(SharedXenoHealSystem)]);
     }
 
-    private void OnApplySalveToHuman(Entity<XenoComponent> healer, ref XenoApplySalveActionEvent args)
+    private void OnApplySalveToHuman(Entity<XenoStrainComponent> healer, ref XenoApplySalveActionEvent args)
     {
         if (args.Handled ||
-            !TryComp<XenoStrainComponent>(healer, out var strain) ||
-            strain.Name != "rmc-xeno-healer-name" ||
+            !HasComp<XenoComponent>(healer) ||
+            healer.Comp.Name != "rmc-xeno-healer-name" ||
             !HasComp<CMUHumanMedicalComponent>(args.Target) ||
             HasComp<SynthComponent>(args.Target) ||
             healer.Owner == args.Target ||
