@@ -40,6 +40,8 @@
       path: /Audio/Machines/quickbeep.ogg
   - type: CMUCameraGear
     network: CMUSurveillanceCameraColonyCMB
+  - type: ActiveListener # the microphone needs one; listed here so spawning doesn't add it
+    range: 10
   - type: CMUCameraMicrophone
     listenRange: 7
   - type: CMUCameraFeedStatic # the CMB monitor shows this feed through static

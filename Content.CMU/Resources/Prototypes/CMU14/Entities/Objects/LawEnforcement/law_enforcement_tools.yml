@@ -34,6 +34,8 @@
     - CMUIDCardCMBTacticalLeader
     - CMUIDCardCMBTacticalDeputy
     - CMUIDCardCMBTacticalDeputyShotgun
+  - type: ActiveListener # the microphone needs one; listed here so spawning doesn't add it
+    range: 10
   - type: CMUCameraMicrophone
     listenRange: 5
   - type: CMUCameraFeedStatic
