@@ -19,7 +19,6 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
-using Content.Shared.Humanoid; // CMU14: healer drones can identify human salve targets.
 using Content.Shared.Interaction;
 using Content.Shared.Jittering;
 using Content.Shared.Maps;
@@ -171,20 +170,16 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     private void OnXenoApplySalveAction(Entity<XenoComponent> ent, ref XenoApplySalveActionEvent args)
     {
         var target = args.Target;
-        // CMU14: the healer drone's configured salve action may also target humans.
-        var humanTarget = args.AllowHumanTargets &&
-                          TryComp(target, out HumanoidProfileComponent? humanoid) &&
-                          humanoid.Species == "Human";
 
         LocId? failureMessageId = null;
 
-        if (!HasComp<XenoComponent>(target) && !humanTarget) // CMU14: keep other salve users Xeno-only.
+        if (!HasComp<XenoComponent>(target))
             failureMessageId = "rmc-xeno-apply-salve-target-not-xeno-failure";
 
         if (ent.Owner == target)
             failureMessageId = "rmc-xeno-apply-salve-target-self-failure";
 
-        if (!humanTarget && !_hive.FromSameHive(ent.Owner, target)) // CMU14: humans are not hive members.
+        if (!_hive.FromSameHive(ent.Owner, target))
             failureMessageId = "rmc-xeno-apply-salve-target-hostile-failure";
 
         if (!_interact.InRangeUnobstructed(ent.Owner, target, args.Range))
@@ -198,10 +193,6 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         if (TryComp(target, out DamageableComponent? damageComp) &&
             _damageable.GetTotalDamage((target, damageComp)) == 0)
-            failureMessageId = "rmc-xeno-apply-salve-target-full-health-failure";
-
-        // CMU14: human treatment requires a damageable patient.
-        if (humanTarget && damageComp == null)
             failureMessageId = "rmc-xeno-apply-salve-target-full-health-failure";
 
         if (failureMessageId != null)
@@ -248,40 +239,16 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         args.Handled = true;
 
-        // CMU14: treat humans immediately while preserving the original Xeno heal-over-time behavior.
-        if (humanTarget)
+        var heal = EnsureComp<XenoBeingHealedComponent>(target);
+        var healStack = new XenoHealStack()
         {
-            var humanHeal = _rmcDamageable.DistributeDamageCached(target, BruteGroup, args.HumanBruteHeal);
-            humanHeal = _rmcDamageable.DistributeDamageCached(target, BurnGroup, args.HumanBurnHeal, humanHeal);
-            if (humanHeal.GetTotal() > FixedPoint2.Zero)
-                _damageable.TryChangeDamage(target, -humanHeal, true);
-
-            var toxinDamage = new DamageSpecifier
-            {
-                DamageDict =
-                {
-                    ["Poison"] = args.HumanToxinDamage,
-                },
-            };
-            _damageable.TryChangeDamage(target, toxinDamage, ignoreResistances: true, origin: ent.Owner);
-            var healedHuman = new XenoHumanSalveAppliedEvent(target);
-            RaiseLocalEvent(target, ref healedHuman, broadcast: true);
-        }
-        else
-        {
-            var heal = EnsureComp<XenoBeingHealedComponent>(target);
-            var healStack = new XenoHealStack()
-            {
-                Charges = (int) (args.TotalHealDuration.TotalSeconds / args.TimeBetweenHeals.TotalSeconds),
-                TimeBetweenHeals = args.TimeBetweenHeals,
-            };
-            healStack.HealAmount = totalHealAmount / healStack.Charges;
-            healStack.NextHealAt = _timing.CurTime + healStack.TimeBetweenHeals;
-            heal.HealStacks.Add(healStack);
-            heal.ParallizeHealing = true;
-            Dirty(target, heal);
-        }
-
+            Charges = (int) (args.TotalHealDuration.TotalSeconds / args.TimeBetweenHeals.TotalSeconds),
+            TimeBetweenHeals = args.TimeBetweenHeals,
+        };
+        healStack.HealAmount = totalHealAmount / healStack.Charges;
+        healStack.NextHealAt = _timing.CurTime + healStack.TimeBetweenHeals;
+        heal.HealStacks.Add(healStack);
+        heal.ParallizeHealing = true;
         var salved = EnsureComp<RecentlySalvedComponent>(ent);
         salved.ExpiresAt = _timing.CurTime + args.TotalHealDuration;
 
@@ -302,6 +269,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
                 _popup.PopupSelf(Loc.GetString("rmc-xeno-sacrifice-heal-will-respawn"), ent, PopupType.Large);
             }
         }
+        Dirty(target, heal);
     }
 
     private void OnXenoSacrificeHealAction(Entity<XenoComponent> ent, ref XenoSacrificeHealActionEvent args)

@@ -268,7 +268,7 @@
   parent: ActionXenoBase
   id: ActionXenoApplySalve
   name: Apply Salve (200)
-  description: cmu-xeno-apply-salve-desc # CMU14: disclose healer drone human treatment.
+  description: Apply a salve to use some of your health to heal allied Xenos up to 100 health over 5 seconds. You can stack multiple salves.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -281,11 +281,7 @@
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
-    event: !type:XenoApplySalveActionEvent # CMU14: configure human treatment for the healer drone.
-      allowHumanTargets: true # CMU14
-      humanBruteHeal: 75 # CMU14
-      humanBurnHeal: 50 # CMU14
-      humanToxinDamage: 5 # CMU14
+    event: !type:XenoApplySalveActionEvent
   - type: RMCDazeableAction
   - type: ActionBlockIfResting
 
