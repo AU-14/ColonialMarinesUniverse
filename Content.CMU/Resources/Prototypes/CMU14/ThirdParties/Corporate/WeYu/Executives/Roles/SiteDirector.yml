@@ -87,8 +87,6 @@
     pocket1: RMCPouchCommand
     pocket2: RMCPouchGeneralLarge
   storage:
-    back:
-    - CMUGuidebookCorporateHandbook
     pocket1:
     - RMCRangefinder
 

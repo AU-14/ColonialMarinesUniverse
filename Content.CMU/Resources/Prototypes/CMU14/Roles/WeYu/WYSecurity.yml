@@ -77,7 +77,6 @@
     suitstorage: RMCM77BeltPMCFilled
   storage:
     back:
-    - CMUGuidebookSecurityHandbook
     - RMCMREWeYa
     - CMCanteen
     - CMU14TearGasGrenade
@@ -175,9 +174,6 @@
   id: CMUGearWYPersonalProtection
   equipment:
     id: CMUIDCardWYPersonalProtection
-  # Kit comes from the vendor, so the handbook is carried in hand.
-  inhand:
-  - CMUGuidebookSecurityHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -267,9 +263,6 @@
   id: CMUGearWYPersonalProtectionCoordinator
   equipment:
     id: CMUIDCardWYPersonalProtectionCoordinator
-  # Kit comes from the vendor, so the handbook is carried in hand.
-  inhand:
-  - CMUGuidebookSecurityHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase

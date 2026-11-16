@@ -72,9 +72,6 @@
     back: CMSatchel
     pocket1: RMCUniversalRecorder
     pocket2: CMClipboard
-  storage:
-    back:
-    - CMUGuidebookCorporateHandbook
 
 - type: playTimeTracker
   id: CMUJobWeYuChiefExecutive

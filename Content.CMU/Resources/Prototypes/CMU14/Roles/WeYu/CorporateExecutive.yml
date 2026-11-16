@@ -68,10 +68,6 @@
     ears: AU14ColonyWeylandHeadset
   inhand:
   - CMUMobilePhone
-  # The loadout satchel is equipped before this, so the handbook lands in it.
-  storage:
-    back:
-    - CMUGuidebookEmployeeHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase

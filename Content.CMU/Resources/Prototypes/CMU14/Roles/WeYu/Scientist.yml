@@ -71,7 +71,6 @@
   storage:
     back:
     - AU14StampWYSci
-    - CMUGuidebookResearchHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase

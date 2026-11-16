@@ -61,9 +61,6 @@
     pocket1: AU14StampWYSci
   inhand:
   - CMUMobilePhone
-  storage:
-    outerClothing:
-    - CMUGuidebookResearchHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase

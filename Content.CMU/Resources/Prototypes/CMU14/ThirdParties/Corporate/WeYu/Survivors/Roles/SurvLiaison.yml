@@ -90,7 +90,6 @@
     outerClothing:
     - CMCrowbar
     - RMCFlashlight
-    - CMUGuidebookCorporateHandbook
 
 - type: entity
   parent: RMCPouchDocumentSmall

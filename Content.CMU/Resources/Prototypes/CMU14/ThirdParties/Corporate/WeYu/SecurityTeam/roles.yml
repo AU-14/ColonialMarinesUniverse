@@ -173,7 +173,6 @@
     - CMU14TearGasGrenade
     - RMCGrenadeFlashBang
     - RMCMREWeYa
-    - CMUGuidebookSecurityHandbook
 
 - type: startingGear
   parent: CMUGearWYSecurityTeamOfficer

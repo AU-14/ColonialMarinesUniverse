@@ -72,9 +72,6 @@
     pocket2: CMClipboard
   inhand:
   - CMUMobilePhone
-  storage:
-    back:
-    - CMUGuidebookCorporateHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -174,9 +171,6 @@
     pocket2: CMClipboard
   inhand:
   - CMUMobilePhone
-  storage:
-    back:
-    - CMUGuidebookCorporateHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase

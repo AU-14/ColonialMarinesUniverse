@@ -87,10 +87,6 @@
   inhand:
   - RMCPortableVendorCorporate
   - CMUMobilePhone
-  # The loadout bag is equipped before this, so the handbook lands in it.
-  storage:
-    back:
-    - CMUGuidebookCorporateHandbook
 
 - type: entity
   parent: CMSpawnPointJobBase
