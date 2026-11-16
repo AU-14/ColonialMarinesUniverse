@@ -5,12 +5,14 @@ using Content.Shared.CMU14.BadgeNumber;
 using Content.Shared.Examine;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Item.ItemToggle;
+using Content.Shared.Item.ItemToggle.Components;
 
 namespace Content.Server.CMU14.Camera.Bodycam;
 
 /// <summary>
 /// Puts worn <see cref="CMUCameraGearComponent"/> gear on its camera network, listed by the wearer's surname and
-/// badge number, and takes it off again when it's removed. The listing is worked out when the gear goes on and
+/// badge number, and takes it off again when it's removed or switched off. The listing is worked out when the gear goes on and
 /// again when the wearer is issued a badge, never on a timer.
 /// </summary>
 public sealed class CMUCameraGearSystem : EntitySystem
@@ -19,6 +21,7 @@ public sealed class CMUCameraGearSystem : EntitySystem
     [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private CameraNetworkSystem _networks = default!;
+    [Dependency] private ItemToggleSystem _toggle = default!;
 
     public override void Initialize()
     {
@@ -27,6 +30,7 @@ public sealed class CMUCameraGearSystem : EntitySystem
         SubscribeLocalEvent<CMUCameraGearComponent, GotEquippedEvent>(OnEquipped);
         SubscribeLocalEvent<CMUCameraGearComponent, GotUnequippedEvent>(OnUnequipped);
         SubscribeLocalEvent<CMUCameraGearComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<CMUCameraGearComponent, ItemToggledEvent>(OnToggled);
     }
 
     private void OnEquipped(Entity<CMUCameraGearComponent> ent, ref GotEquippedEvent args)
@@ -36,7 +40,8 @@ public sealed class CMUCameraGearSystem : EntitySystem
 
         ent.Comp.Wearer = args.EquipTarget;
         UpdateName(ent);
-        _networks.AddNetwork(ent, ent.Comp.Network);
+        if (_toggle.IsActivated(ent.Owner))
+            _networks.AddNetwork(ent, ent.Comp.Network);
     }
 
     private void OnUnequipped(Entity<CMUCameraGearComponent> ent, ref GotUnequippedEvent args)
@@ -50,10 +55,33 @@ public sealed class CMUCameraGearSystem : EntitySystem
         _camera.SetCameraName(ent, Name(ent), null);
     }
 
+    // Switched on or off: only worn gear is on the network, so taking it off the wearer already handles the rest.
+    private void OnToggled(Entity<CMUCameraGearComponent> ent, ref ItemToggledEvent args)
+    {
+        if (ent.Comp.Wearer == null)
+            return;
+
+        if (args.Activated)
+        {
+            _networks.AddNetwork(ent, ent.Comp.Network);
+            _networks.RefreshMemberDirectory(ent);
+        }
+        else
+        {
+            _networks.RemoveNetwork(ent, ent.Comp.Network);
+        }
+    }
+
     private void OnExamined(Entity<CMUCameraGearComponent> ent, ref ExaminedEvent args)
     {
         if (!args.IsInDetailsRange)
             return;
+
+        if (!_toggle.IsActivated(ent.Owner))
+        {
+            args.PushMarkup(Loc.GetString("cmu-camera-gear-examine-switched-off"));
+            return;
+        }
 
         args.PushMarkup(ent.Comp.Wearer != null && ent.Comp.ShownName is { } name
             ? Loc.GetString("cmu-camera-gear-examine-live", ("name", name))

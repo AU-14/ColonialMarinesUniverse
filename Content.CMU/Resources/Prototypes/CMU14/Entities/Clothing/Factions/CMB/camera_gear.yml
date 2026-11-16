@@ -28,6 +28,16 @@
   - type: CameraNetworkMember
     networks: []
     sourceKinds: Rmc
+  - type: ItemToggle # switched off, it stays off the network and hears nothing
+    activated: true
+    verbToggleOn: cmu-camera-gear-verb-on
+    verbToggleOff: cmu-camera-gear-verb-off
+    popupActivate: cmu-camera-gear-popup-on
+    popupDeactivate: cmu-camera-gear-popup-off
+    soundActivate:
+      path: /Audio/Machines/quickbeep.ogg
+    soundDeactivate:
+      path: /Audio/Machines/quickbeep.ogg
   - type: CMUCameraGear
     network: CMUSurveillanceCameraColonyCMB
   - type: CMUCameraMicrophone
