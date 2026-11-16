@@ -6,6 +6,11 @@ using Content.Shared.CMU14.Threats.Mobs.Biomorph;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
+using Content.Shared.Bed.Sleep;
+using Content.Shared.Cuffs;
+using Content.Shared.DoAfter;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Speech.Components;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -41,6 +46,8 @@ public sealed partial class CMUSpecimenCaptureSystem : EntitySystem
     [Dependency] private AccessReaderSystem _access = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedCuffableSystem _cuffable = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -77,6 +84,9 @@ public sealed partial class CMUSpecimenCaptureSystem : EntitySystem
         SubscribeLocalEvent<CMUSpecimenCrateComponent, EntityTerminatingEvent>(OnCrateTerminating);
         SubscribeLocalEvent<CMUSpecimenCrateComponent, ExaminedEvent>(OnCrateExamined);
         SubscribeLocalEvent<CMUSpecimenCrateComponent, ActivateInWorldEvent>(OnCrateActivate);
+        SubscribeLocalEvent<CMUSpecimenCrateComponent, CMUCratePutInDoAfterEvent>(OnCratePutIn);
+        SubscribeLocalEvent<CMUSpecimenCrateComponent, EntInsertedIntoContainerMessage>(OnCrateInserted);
+        SubscribeLocalEvent<CMUSpecimenCrateComponent, EntRemovedFromContainerMessage>(OnCrateRemoved);
     }
 
     #region Sedation
@@ -314,6 +324,14 @@ public sealed partial class CMUSpecimenCaptureSystem : EntitySystem
             return;
 
         args.Handled = true;
+
+        // There's no getting out: not even Corporate Security can open it from the inside.
+        if (_container.TryGetContainingContainer(args.User, out var inside) && inside.Owner == ent.Owner)
+        {
+            _popup.PopupClient(Loc.GetString("cmu-specimen-crate-no-escape"), ent, args.User, PopupType.SmallCaution);
+            return;
+        }
+
         TryToggle(ent, args.User);
     }
 
@@ -326,8 +344,19 @@ public sealed partial class CMUSpecimenCaptureSystem : EntitySystem
         switch (ent.Comp.State)
         {
             case CMUSpecimenCrateState.Open:
-                if (_net.IsServer && GetSpecimen(ent) == null && FindSpecimenOnCrate(ent) is { } specimen)
+                if (GetSpecimen(ent) == null && FindSpecimenOnCrate(ent) == null && FindPersonOnCrate(ent, user) is { } person)
+                {
+                    // A person has to be forced in, which takes a while; then the lid closes on them.
+                    if (user != null)
+                        return StartPutIn(ent, user.Value, person);
+
+                    if (_net.IsServer)
+                        TryContain(ent, person);
+                }
+                else if (_net.IsServer && GetSpecimen(ent) == null && FindSpecimenOnCrate(ent) is { } specimen)
+                {
                     TryContain(ent, specimen);
+                }
 
                 SetBlocking(ent, true);
                 return StartMoving(ent, false, user);
@@ -356,6 +385,96 @@ public sealed partial class CMUSpecimenCaptureSystem : EntitySystem
         }
 
         return null;
+    }
+
+    /// <summary>
+    ///     Anyone the capture kit isn't for (people, synthetics, animals) lying or standing on the open crate,
+    ///     other than whoever is closing it.
+    /// </summary>
+    private EntityUid? FindPersonOnCrate(Entity<CMUSpecimenCrateComponent> crate, EntityUid? closer = null)
+    {
+        foreach (var uid in _lookup.GetEntitiesInRange(crate, OnCrateRange))
+        {
+            // Whoever is closing the lid isn't the one going in.
+            if (uid != crate.Owner && uid != closer && !IsSpecimen(uid) && HasComp<MobStateComponent>(uid) && !_container.IsEntityInContainer(uid))
+                return uid;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    ///     Downed, cuffed, unconscious or asleep: quick to force into a crate.
+    /// </summary>
+    public bool IsRestrained(EntityUid uid)
+    {
+        return IsSubdued(uid) ||
+               _cuffable.IsCuffed(uid) ||
+               HasComp<RMCUnconsciousComponent>(uid) ||
+               HasComp<SleepingComponent>(uid);
+    }
+
+    private bool StartPutIn(Entity<CMUSpecimenCrateComponent> crate, EntityUid user, EntityUid person)
+    {
+        var time = IsRestrained(person) ? crate.Comp.PutInTimeRestrained : crate.Comp.PutInTime;
+        var doAfter = new DoAfterArgs(EntityManager, user, time, new CMUCratePutInDoAfterEvent(), crate, person, crate)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            NeedHand = true,
+        };
+
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return false;
+
+        _popup.PopupPredicted(Loc.GetString("cmu-specimen-crate-putting-in", ("user", user), ("target", person)), crate, user, PopupType.MediumCaution);
+        return true;
+    }
+
+    private void OnCratePutIn(Entity<CMUSpecimenCrateComponent> ent, ref CMUCratePutInDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled || args.Target is not { } person)
+            return;
+
+        args.Handled = true;
+        if (ent.Comp.State != CMUSpecimenCrateState.Open || GetSpecimen(ent) != null || FindPersonOnCrate(ent, args.User) != person)
+            return;
+
+        if (_net.IsServer && !TryContain(ent, person))
+            return;
+
+        SetBlocking(ent, true);
+        StartMoving(ent, false, args.User);
+    }
+
+    /// <summary>
+    ///     Whoever is shut in can still talk, but only muffled through the lid.
+    /// </summary>
+    private void OnCrateInserted(Entity<CMUSpecimenCrateComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        if (_net.IsClient || args.Container.ID != ent.Comp.ContainerId || IsSpecimen(args.Entity))
+            return;
+
+        var crated = EnsureComp<CMUCratedPersonComponent>(args.Entity);
+        if (!HasComp<MumbleAccentComponent>(args.Entity))
+        {
+            AddComp<MumbleAccentComponent>(args.Entity);
+            crated.AddedMuffle = true;
+        }
+    }
+
+    private void OnCrateRemoved(Entity<CMUSpecimenCrateComponent> ent, ref EntRemovedFromContainerMessage args)
+    {
+        if (_net.IsClient || args.Container.ID != ent.Comp.ContainerId ||
+            !TryComp<CMUCratedPersonComponent>(args.Entity, out var crated))
+        {
+            return;
+        }
+
+        if (crated.AddedMuffle)
+            RemComp<MumbleAccentComponent>(args.Entity);
+
+        RemComp<CMUCratedPersonComponent>(args.Entity);
     }
 
     private bool StartMoving(Entity<CMUSpecimenCrateComponent> ent, bool open, EntityUid? user = null)

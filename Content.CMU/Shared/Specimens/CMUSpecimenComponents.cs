@@ -94,4 +94,35 @@ public sealed partial class CMUSpecimenCrateComponent : Component
 
     [DataField]
     public SoundSpecifier? MoveSound = new SoundPathSpecifier("/Audio/_RMC14/Structures/secure_box_opening/secure_box_opening.ogg");
+
+    /// <summary>
+    ///     How long it takes to force a downed, cuffed or unconscious person into the crate.
+    /// </summary>
+    [DataField]
+    public TimeSpan PutInTimeRestrained = TimeSpan.FromSeconds(2);
+
+    /// <summary>
+    ///     How long it takes to force in someone who's still up and free.
+    /// </summary>
+    [DataField]
+    public TimeSpan PutInTime = TimeSpan.FromSeconds(8);
+}
+
+/// <summary>
+///     Forcing a person into a specimen crate.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class CMUCratePutInDoAfterEvent : Content.Shared.DoAfter.SimpleDoAfterEvent
+{
+}
+
+/// <summary>
+///     A person shut in a specimen crate, muffled for as long as they're in it. Remembers whether
+///     the crate gave them the muffle, so letting them out doesn't strip one they already had.
+/// </summary>
+[RegisterComponent]
+public sealed partial class CMUCratedPersonComponent : Component
+{
+    [DataField]
+    public bool AddedMuffle;
 }

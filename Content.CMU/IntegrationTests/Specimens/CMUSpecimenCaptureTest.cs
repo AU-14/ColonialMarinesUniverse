@@ -206,4 +206,66 @@ public sealed class CMUSpecimenCaptureTest
 
         await pair.CleanReturnAsync();
     }
+
+    [Test]
+    public async Task PeopleCanBeForcedIntoTheCrate()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+        var capture = server.System<CMUSpecimenCaptureSystem>();
+        var container = server.System<SharedContainerSystem>();
+
+        Entity<CMUSpecimenCrateComponent> crate = default;
+        EntityUid handler = default;
+        EntityUid person = default;
+        await server.WaitAssertion(() =>
+        {
+            var uid = entities.SpawnEntity("CMUSpecimenCrate", map.GridCoords);
+            crate = (uid, entities.GetComponent<CMUSpecimenCrateComponent>(uid));
+            person = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            handler = entities.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
+
+            // Someone still up and free takes the long put-in time; the lid waits for it.
+            Assert.That(capture.IsRestrained(person), Is.False);
+            Assert.That(capture.TryToggle(crate, handler), Is.True);
+            Assert.That(crate.Comp.State, Is.EqualTo(CMUSpecimenCrateState.Open), "The lid closed before the person was in.");
+        });
+
+        await server.WaitRunTicks(Ticks(pair, 4));
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(container.IsEntityInContainer(person), Is.False, "A free person went in faster than the long put-in time.");
+        });
+
+        await server.WaitRunTicks(Ticks(pair, 7));
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(container.IsEntityInContainer(person), Is.True, "The person wasn't forced into the crate.");
+            Assert.That(capture.GetSpecimen(crate), Is.EqualTo(person));
+            Assert.That(entities.HasComponent<Content.Shared.Speech.Components.MumbleAccentComponent>(person), Is.True, "The person inside isn't muffled.");
+        });
+
+        await server.WaitRunTicks(Ticks(pair, 3));
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(crate.Comp.State, Is.EqualTo(CMUSpecimenCrateState.Closed));
+
+            // Security can let them out from outside; they can't let themselves out.
+            Assert.That(capture.TryToggle(crate), Is.True);
+        });
+
+        await server.WaitRunTicks(Ticks(pair, 3));
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(container.IsEntityInContainer(person), Is.False);
+            Assert.That(entities.HasComponent<Content.Shared.Speech.Components.MumbleAccentComponent>(person), Is.False, "Getting out didn't take the muffle off.");
+            entities.DeleteEntity(crate);
+            entities.DeleteEntity(person);
+            entities.DeleteEntity(handler);
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
