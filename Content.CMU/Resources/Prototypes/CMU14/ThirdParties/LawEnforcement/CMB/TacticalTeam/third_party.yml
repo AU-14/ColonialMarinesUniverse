@@ -3,7 +3,27 @@
 # gas and breaching charges. Laid out like the NSPA tactical team.
 
 - type: job
+  abstract: true
   parent: AU14JobInvestigationCMBDeputy
+  id: CMUJobCMBTacticalBase
+  # deputy skills plus engineer 1, which the breaching charge in their satchel needs (NSPA constables have it too)
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillEngineer: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillVehicles: 1
+
+- type: job
+  parent: CMUJobCMBTacticalBase
   id: CMUJobCMBTacticalLeader
   name: cmu-job-title-cmb-tactical-leader
   description: cmu-job-description-cmb-tactical
@@ -39,7 +59,7 @@
     rules: cmu-job-rules-cmb-tactical
 
 - type: job
-  parent: AU14JobInvestigationCMBDeputy
+  parent: CMUJobCMBTacticalBase
   id: CMUJobCMBTacticalDeputy
   name: cmu-job-title-cmb-tactical-deputy
   description: cmu-job-description-cmb-tactical
@@ -75,7 +95,7 @@
     rules: cmu-job-rules-cmb-tactical
 
 - type: job
-  parent: AU14JobInvestigationCMBDeputy
+  parent: CMUJobCMBTacticalBase
   id: CMUJobCMBTacticalDeputyShotgun
   name: cmu-job-title-cmb-tactical-deputy
   description: cmu-job-description-cmb-tactical
