@@ -1,74 +1,74 @@
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbook
+  id: CMUHandbookExecutive
   name: cmu-guide-entry-corporate
   priority: 4
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbook.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutive.xml"
   children:
-  - CMUCorporateHandbookGrades
-  - CMUCorporateHandbookStructure
-  - CMUCorporateHandbookDivisions
-  - CMUCorporateHandbookContractors
-  - CMUCorporateHandbookProcedure
-  - CMUCorporateHandbookPartnership
-  - CMUCorporateHandbookResearch
-  - CMUCorporateHandbookConduct
+  - CMUHandbookExecutiveGrades
+  - CMUHandbookExecutiveStructure
+  - CMUHandbookExecutiveDivisions
+  - CMUHandbookExecutiveContractors
+  - CMUHandbookExecutiveProcedure
+  - CMUHandbookExecutivePartnership
+  - CMUHandbookExecutiveResearch
+  - CMUHandbookExecutiveConduct
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookResearch
+  id: CMUHandbookExecutiveResearch
   name: cmu-guide-entry-corporate-research
   priority: 0
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookResearch.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutiveResearch.xml"
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookGrades
+  id: CMUHandbookExecutiveGrades
   name: cmu-guide-entry-corporate-grades
   priority: 0
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookGrades.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutiveGrades.xml"
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookContractors
+  id: CMUHandbookExecutiveContractors
   name: cmu-guide-entry-corporate-contractors
   priority: 2
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookContractors.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutiveContractors.xml"
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookStructure
+  id: CMUHandbookExecutiveStructure
   name: cmu-guide-entry-corporate-structure
   priority: 0
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookStructure.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutiveStructure.xml"
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookDivisions
+  id: CMUHandbookExecutiveDivisions
   name: cmu-guide-entry-corporate-divisions
   priority: 1
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookDivisions.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutiveDivisions.xml"
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookProcedure
+  id: CMUHandbookExecutiveProcedure
   name: cmu-guide-entry-corporate-procedure
   priority: 3
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookProcedure.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutiveProcedure.xml"
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookPartnership
+  id: CMUHandbookExecutivePartnership
   name: cmu-guide-entry-corporate-partnership
   priority: 4
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookPartnership.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutivePartnership.xml"
 
 - type: guideEntry
   parent: RMC
-  id: CMUCorporateHandbookConduct
+  id: CMUHandbookExecutiveConduct
   name: cmu-guide-entry-corporate-conduct
   priority: 5
-  text: "/ServerInfo/Guidebook/CMU14/Corporate/CMUCorporateHandbookConduct.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Corporate/Executive/CMUHandbookExecutiveConduct.xml"
 
 - type: entity
   parent: RMCGuidebookBase
@@ -81,7 +81,7 @@
   # The executive edition has every other handbook bound in.
   - type: GuideHelp
     guides:
-    - CMUCorporateHandbook
+    - CMUHandbookExecutive
     - CMUHandbookStaff
     - CMUHandbookScience
     - CMUHandbookSecurity

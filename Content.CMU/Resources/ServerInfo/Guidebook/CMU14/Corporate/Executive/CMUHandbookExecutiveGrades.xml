@@ -7,7 +7,7 @@
   A callsign is written [bold][Location] [Division][Job code]-[Seniority][/bold].
 
   - [bold]Location[/bold]: [bold]Lower[/bold] for floors 1 to 30 of the Corporate Offices, [bold]Upper[/bold] for floor 31 and above. An Upper employee doesn't outrank a Lower employee with a higher job code.
-  - [bold]Division[/bold]: the division number, 1 to 7. See [textlink="Divisions" link="CMUCorporateHandbookDivisions"/].
+  - [bold]Division[/bold]: the division number, 1 to 7. See [textlink="Divisions" link="CMUHandbookExecutiveDivisions"/].
   - [bold]Job code[/bold]: a letter from A to K. There is no E.
   - [bold]Seniority[/bold]: time in the same chair. [bold]-L[/bold] Lower, [bold]-M[/bold] Middle, [bold]-S[/bold] Senior.
 

@@ -1,7 +1,7 @@
 <Document>
   # Chain of Command
 
-  Authority in the Company follows paygrade. Your paygrade is printed on your identification card. Promotion is earned through tenure and results. The full grade structure is listed under [textlink="Grades and Callsigns" link="CMUCorporateHandbookGrades"/].
+  Authority in the Company follows paygrade. Your paygrade is printed on your identification card. Promotion is earned through tenure and results. The full grade structure is listed under [textlink="Grades and Callsigns" link="CMUHandbookExecutiveGrades"/].
 
   ## Executive grades
   - [bold]WYC1 Trainee[/bold]: probationary office staff.
@@ -28,6 +28,6 @@
 
   ## Restricted systems
   - The corporate console and the corporate Overwatch console are restricted to [bold]WYC5 and above[/bold].
-  - Divestment (see [textlink="Colonial Partnership" link="CMUCorporateHandbookPartnership"/]) can only be authorised at [bold]WYC5 and above[/bold].
+  - Divestment (see [textlink="Colonial Partnership" link="CMUHandbookExecutivePartnership"/]) can only be authorised at [bold]WYC5 and above[/bold].
   - Work terminals are open to all Company staff.
 </Document>
