@@ -1,6 +1,7 @@
-// CMU14: stacking test merges. "Test Merge" is the wanted state: add the label after a review, or type
-// the number into the dispatch and the bot adds it. The "TM: *" labels are bot status and only change
-// after a publish actually succeeded.
+// CMU14: stacking test merges. "Test Merge" marks a PR for the next test merge publish (add it after a
+// review, or type the number into the dispatch); a successful publish uses the mark up. "TM: Live" = in
+// the build the server runs now, "TM: Outdated" = live but the PR has newer commits. Every publish
+// recomputes the "TM: *" labels; to keep a PR on through the next test merge, mark it again.
 const REQUEST = 'Test Merge';
 const LIVE = 'TM: Live';
 const CONFLICT = 'TM: Conflict';
@@ -170,8 +171,8 @@ async function collect({ github, context, core }) {
     : `No test merge PRs; publishing ${baseRef} @ ${baseBranch.object.sha}.`);
 }
 
-// After a successful test merge publish: merged PRs go live, conflicting ones are flagged,
-// and anything that was live before but is not in this build loses its status.
+// After a successful test merge publish: merged PRs go live, conflicting ones are flagged, both lose
+// their "Test Merge" mark, and anything that was live before but is not in this build loses its status.
 async function finalize({ github, context, core }) {
   const h = helpers({ github, context, core });
   const baseSha = process.env.BASE_SHA;
@@ -205,14 +206,14 @@ async function finalize({ github, context, core }) {
     const { data: latest } = await github.rest.pulls.get({ ...h.repo, pull_number: pull.number });
     const outdated = latest.head.sha !== pull.head_sha;
     await h.setLabels(pull.number, {
-      add: outdated ? [REQUEST, LIVE, OUTDATED] : [REQUEST, LIVE],
-      remove: outdated ? [CONFLICT] : [CONFLICT, OUTDATED],
+      add: outdated ? [LIVE, OUTDATED] : [LIVE],
+      remove: outdated ? [REQUEST, CONFLICT] : [REQUEST, CONFLICT, OUTDATED],
     });
     await h.upsertComment(pull.number, liveBody);
   }
 
   for (const pull of conflicts) {
-    await h.setLabels(pull.number, { add: [REQUEST, CONFLICT], remove: [LIVE, OUTDATED] });
+    await h.setLabels(pull.number, { add: [CONFLICT], remove: [REQUEST, LIVE, OUTDATED] });
     const files = pull.files.length > 0 ? pull.files.map(file => `- \`${file}\``).join('\n') : '- (git did not list the files)';
     const before = merged.filter(other => other.number < pull.number).map(other => `#${other.number}`);
     await h.upsertComment(pull.number, [
@@ -220,7 +221,7 @@ async function finalize({ github, context, core }) {
       '',
       files,
       '',
-      `It keeps the \`${REQUEST}\` label: resolve the conflict and the next run picks it up again, or remove the label to drop it.`,
+      `The \`${REQUEST}\` label was taken off: resolve the conflict and add it again to retry.`,
     ].join('\n'));
   }
 
@@ -229,22 +230,22 @@ async function finalize({ github, context, core }) {
     if (inBuild.has(issue.number)) continue;
     const had = await h.setLabels(issue.number, { remove: STATUS });
     if (had.has(LIVE) || had.has(OUTDATED)) {
-      await h.upsertComment(issue.number, `**Test merge ended @ ${at}:** removed, not part of the new test merge build \`${shortSha(mergeSha)}\`.`);
+      await h.upsertComment(issue.number, `**Test merge ended @ ${at}:** removed, not part of the new test merge build \`${shortSha(mergeSha)}\`. Add the \`${REQUEST}\` label again to test merge it on the next run.`);
     }
   }
 }
 
-// After a successful clean (non test merge) publish: every test merge is gone from the server, but the
-// "Test Merge" label stays so the PR is queued for the next test merge run.
+// After a successful clean (non test merge) publish: every test merge is gone from the server, so every
+// test merge label goes, "Test Merge" marks included.
 async function endAll({ github, context, core }) {
   const h = helpers({ github, context, core });
   const version = process.env.PUBLISH_VERSION;
   const at = formatUtc(new Date());
 
-  for (const issue of await h.openPullsWithAny(STATUS)) {
-    const had = await h.setLabels(issue.number, { remove: STATUS });
+  for (const issue of await h.openPullsWithAny(ALL)) {
+    const had = await h.setLabels(issue.number, { remove: ALL });
     if (had.has(LIVE) || had.has(OUTDATED)) {
-      await h.upsertComment(issue.number, `**Test merge paused @ ${at}:** removed from the server by publish [${shortSha(version)}](${h.commitLink(version)}). It keeps the \`${REQUEST}\` label and goes back on with the next test merge run; remove the label to drop it.`);
+      await h.upsertComment(issue.number, `**Test merge ended @ ${at}:** removed from the server by publish [${shortSha(version)}](${h.commitLink(version)}). Add the \`${REQUEST}\` label again to test merge it on the next run.`);
     }
   }
 }

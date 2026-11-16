@@ -19,12 +19,13 @@
   parent: CMPill
   id: AU14PillDermaline
   components:
+  # 15u is exactly the overdose line and overdose triggers at >=, so one pill was already an OD
   - type: Solution
     solution:
-        maxVol: 15
+        maxVol: 10
         reagents:
         - ReagentId: CMDermaline
-          Quantity: 15
+          Quantity: 10
   - type: Sprite
     layers:
     - state: pill7
@@ -36,12 +37,13 @@
   parent: CMPill
   id: AU14PillMeralyne
   components:
+  # 15u is exactly the overdose line and overdose triggers at >=, so one pill was already an OD
   - type: Solution
     solution:
-        maxVol: 15
+        maxVol: 10
         reagents:
         - ReagentId: CMMeralyne
-          Quantity: 15
+          Quantity: 10
   - type: Sprite
     layers:
     - state: pill4
