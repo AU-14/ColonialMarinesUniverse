@@ -18080,5 +18080,16 @@
   id: 1054
   time: '2026-11-15T09:42:10.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2618
+- author: Dongo4
+  changes:
+  - message: Synthetic language learning plateauing around 40%. It does still slow
+      down at 40% but higher levels are now attainable within the time frame of a
+      normal round.
+    type: Fix
+  - message: Synthetic language learning speed doubled.
+    type: Tweak
+  id: 1055
+  time: '2026-11-15T20:03:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2617
 Name: CMU
 Order: -1
