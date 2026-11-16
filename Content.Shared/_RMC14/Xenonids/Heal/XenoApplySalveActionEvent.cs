@@ -1,6 +1,7 @@
 using Content.Shared.Actions;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using System;
 using System.Collections.Generic;
@@ -44,4 +45,19 @@ public sealed partial class XenoApplySalveActionEvent : EntityTargetActionEvent
 
     [DataField]
     public SoundSpecifier HealSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_drool1.ogg");
+
+    [DataField]
+    public bool AllowHumanTargets;
+
+    [DataField]
+    public FixedPoint2 HumanBruteHeal = 75;
+
+    [DataField]
+    public FixedPoint2 HumanBurnHeal = 50;
+
+    [DataField]
+    public FixedPoint2 HumanToxinDamage = 5;
 }
+
+[ByRefEvent]
+public record struct XenoHumanSalveAppliedEvent(EntityUid Patient);

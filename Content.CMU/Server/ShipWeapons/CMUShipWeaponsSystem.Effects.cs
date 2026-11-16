@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Atmos.Components;
+using Content.Server.CMU14.Maps;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Xenonids;
@@ -20,6 +21,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
@@ -34,6 +36,7 @@ public sealed partial class CMUShipWeaponsSystem
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private ITileDefinitionManager _cloudTileDefinitions = default!;
+    [Dependency] private CMUTileDestructionSystem _tileDestruction = default!;
     private readonly HashSet<Entity<DamageableComponent>> _railTargets = new();
     private readonly HashSet<Entity<IsRoofComponent>> _cloudRoofs = new();
     private readonly List<(EntityUid Field, Vector2i Tile)> _verticalCloudSpread = new();
@@ -369,6 +372,39 @@ public sealed partial class CMUShipWeaponsSystem
         {
             if (_zLevels.TryGetMapCoordinates(map, impact.Position, out var projected))
                 RailImpactOnLevel(source, damage, projected);
+        }
+    }
+
+    private void BreakCaveRoofAbove(MapCoordinates impact)
+    {
+        var impactMap = _map.GetMap(impact.MapId);
+        if (!_zLevels.TryGetZNetwork(impactMap, out var network))
+            return;
+
+        var levels = _zLevels.GetOrderedNetworkMaps(network.Value);
+        var impactDepth = levels.First(level => level.Map == impactMap).Depth;
+        foreach (var (depth, map) in levels)
+        {
+            if (depth <= impactDepth ||
+                !_zLevels.TryGetMapCoordinates(map, impact.Position, out var coordinates) ||
+                !_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
+            {
+                continue;
+            }
+
+            var tile = _map.WorldToTile(gridUid, grid, coordinates.Position);
+            if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) ||
+                tileRef.Tile.IsEmpty ||
+                _cloudTileDefinitions[tileRef.Tile.TypeId] is not ContentTileDefinition tileDefinition ||
+                !tileDefinition.CMUBlocksLookUp ||
+                tileDefinition.Indestructible ||
+                !tileDefinition.ID.StartsWith("CMURoof", StringComparison.Ordinal) ||
+                tileDefinition.ID.StartsWith("CMURoofOuterHull", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            _tileDestruction.DestroyTile(tileRef);
         }
     }
 
