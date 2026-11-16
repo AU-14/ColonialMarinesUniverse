@@ -1,10 +1,12 @@
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
+using Content.Server.Popups;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Cargo;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Government;
+using Content.Shared.Interaction;
 using Content.Shared.Materials;
 using Content.Shared.Stacks;
 using Robust.Shared.Containers;
@@ -17,6 +19,7 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 {
     [Dependency] private readonly RMCReagentSystem _reagents = default!;
     [Dependency] private readonly PricingSystem _pricing = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
 
     private readonly Dictionary<EntProtoId, double> _entityPrices = new();
     private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
@@ -25,6 +28,7 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     public override void Initialize()
     {
         BuildCanonicalPriceCache();
+        SubscribeLocalEvent<ASRSSellableDebugToolComponent, AfterInteractEvent>(OnDebugToolAfterInteract);
         SubscribeLocalEvent<ASRSSellableComponent, PriceCalculationEvent>(OnSellablePrice);
         SubscribeLocalEvent<FluidTankComponent, PriceCalculationEvent>(OnTankPrice);
         SubscribeLocalEvent<StackComponent, PriceCalculationEvent>(OnStackPrice);
@@ -82,6 +86,29 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
         args.Price = price;
         args.Handled = true;
+    }
+
+    private void OnDebugToolAfterInteract(Entity<ASRSSellableDebugToolComponent> tool, ref AfterInteractEvent args)
+    {
+        if (args.Handled || !args.CanReach || args.Target is not { } target)
+            return;
+
+        args.Handled = true;
+        var targetName = Name(target);
+        if (HasComp<ASRSSellableComponent>(target))
+        {
+            _popup.PopupEntity(
+                Loc.GetString("cmu-asrs-debug-tool-already-sellable", ("target", targetName)),
+                target,
+                args.User);
+            return;
+        }
+
+        EnsureComp<ASRSSellableComponent>(target);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-asrs-debug-tool-applied", ("target", targetName)),
+            target,
+            args.User);
     }
 
     public bool CanExport(EntityUid uid)

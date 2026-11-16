@@ -6,3 +6,25 @@
   components:
   - type: PriceGun
     onlyASRSSellable: true
+
+- type: entity
+  parent: BaseItem
+  id: CMUASRSSellableDebugTool
+  name: ASRS sellability marker
+  description: A debug tool that permanently marks any targeted entity as sellable through an ASRS platform.
+  suffix: DEBUG, CMU
+  categories: [ Debug ]
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/appraisal-tool.rsi
+    state: icon
+    color: "#ff6b6b"
+  - type: Item
+    sprite: Objects/Tools/appraisal-tool.rsi
+    size: Small
+  - type: Clothing
+    sprite: Objects/Tools/appraisal-tool.rsi
+    quickEquip: false
+    slots:
+    - Belt
+  - type: ASRSSellableDebugTool

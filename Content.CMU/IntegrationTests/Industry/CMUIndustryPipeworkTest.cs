@@ -397,4 +397,32 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             SEntMan.DeleteEntity(drive);
         });
     }
+
+    [Test]
+    public async Task AsrsSellableDebugToolAppliesMarker()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var tool = SEntMan.SpawnEntity("CMUASRSSellableDebugTool", MapCoordinates.Nullspace);
+            var target = SEntMan.SpawnEntity("RUMCKitDriveItem", MapCoordinates.Nullspace);
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(target), Is.False);
+
+            var interaction = new AfterInteractEvent(tool, tool, target, default, true);
+            SEntMan.EventBus.RaiseLocalEvent(tool, interaction);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(interaction.Handled, Is.True);
+                Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(target), Is.True);
+            });
+
+            // Applying the marker again is intentionally harmless.
+            var repeated = new AfterInteractEvent(tool, tool, target, default, true);
+            SEntMan.EventBus.RaiseLocalEvent(tool, repeated);
+            Assert.That(repeated.Handled, Is.True);
+
+            SEntMan.DeleteEntity(tool);
+            SEntMan.DeleteEntity(target);
+        });
+    }
 }
