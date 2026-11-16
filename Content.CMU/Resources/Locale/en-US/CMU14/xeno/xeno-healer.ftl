@@ -1,0 +1,1 @@
+cmu-xeno-apply-salve-desc = Apply a salve to use some of your health to heal allied Xenos up to 100 health over 5 seconds. Healer drones can also treat humans, healing up to 75 Brute and 50 Burn, dealing 5 Poison damage, and stopping external bleeding.

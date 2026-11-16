@@ -9,6 +9,7 @@ using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -62,13 +63,13 @@ public sealed class CMUXenoHealerHumanTest : GameTest
 
             Assert.That(ev.Handled, Is.True);
             var healed = damageable.GetAllDamage(human).DamageDict;
-            Assert.That(healed["Blunt"], Is.EqualTo(5));
-            Assert.That(healed["Heat"], Is.EqualTo(5));
-            Assert.That(healed["Poison"], Is.EqualTo(5));
+            Assert.That(healed["Blunt"], Is.EqualTo(FixedPoint2.New(5)));
+            Assert.That(healed["Heat"], Is.EqualTo(FixedPoint2.New(5)));
+            Assert.That(healed["Poison"], Is.EqualTo(FixedPoint2.New(5)));
 
             var plasma = SEntMan.GetComponent<XenoPlasmaComponent>(healer).Plasma;
-            Assert.That(plasma, Is.EqualTo(800));
-            Assert.That(damageable.GetAllDamage(healer).DamageDict["Blunt"], Is.EqualTo(75));
+            Assert.That(plasma, Is.EqualTo(FixedPoint2.New(800)));
+            Assert.That(damageable.GetAllDamage(healer).DamageDict["Blunt"], Is.EqualTo(FixedPoint2.New(75)));
 
             foreach (var part in medicalIndex.GetBodyParts(human))
                 Assert.That(SEntMan.GetComponent<BodyPartWoundComponent>(part.Owner).ExternalBleeding,

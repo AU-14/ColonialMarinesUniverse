@@ -19,7 +19,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
-using Content.Shared.Humanoid;
+using Content.Shared.Humanoid; // CMU14: healer drones can identify human salve targets.
 using Content.Shared.Interaction;
 using Content.Shared.Jittering;
 using Content.Shared.Maps;
@@ -171,19 +171,20 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
     private void OnXenoApplySalveAction(Entity<XenoComponent> ent, ref XenoApplySalveActionEvent args)
     {
         var target = args.Target;
+        // CMU14: the healer drone's configured salve action may also target humans.
         var humanTarget = args.AllowHumanTargets &&
                           TryComp(target, out HumanoidProfileComponent? humanoid) &&
                           humanoid.Species == "Human";
 
         LocId? failureMessageId = null;
 
-        if (!HasComp<XenoComponent>(target) && !humanTarget)
+        if (!HasComp<XenoComponent>(target) && !humanTarget) // CMU14: keep other salve users Xeno-only.
             failureMessageId = "rmc-xeno-apply-salve-target-not-xeno-failure";
 
         if (ent.Owner == target)
             failureMessageId = "rmc-xeno-apply-salve-target-self-failure";
 
-        if (!humanTarget && !_hive.FromSameHive(ent.Owner, target))
+        if (!humanTarget && !_hive.FromSameHive(ent.Owner, target)) // CMU14: humans are not hive members.
             failureMessageId = "rmc-xeno-apply-salve-target-hostile-failure";
 
         if (!_interact.InRangeUnobstructed(ent.Owner, target, args.Range))
@@ -199,6 +200,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
             _damageable.GetTotalDamage((target, damageComp)) == 0)
             failureMessageId = "rmc-xeno-apply-salve-target-full-health-failure";
 
+        // CMU14: human treatment requires a damageable patient.
         if (humanTarget && damageComp == null)
             failureMessageId = "rmc-xeno-apply-salve-target-full-health-failure";
 
@@ -246,6 +248,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
         args.Handled = true;
 
+        // CMU14: treat humans immediately while preserving the original Xeno heal-over-time behavior.
         if (humanTarget)
         {
             var humanHeal = _rmcDamageable.DistributeDamageCached(target, BruteGroup, args.HumanBruteHeal);

@@ -1,7 +1,7 @@
 using Content.Shared.Actions;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
-using Robust.Shared.GameObjects;
+using Robust.Shared.GameObjects; // CMU14: dispatch the post-treatment bleeding event.
 using Robust.Shared.Prototypes;
 using System;
 using System.Collections.Generic;
@@ -47,17 +47,18 @@ public sealed partial class XenoApplySalveActionEvent : EntityTargetActionEvent
     public SoundSpecifier HealSound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_drool1.ogg");
 
     [DataField]
-    public bool AllowHumanTargets;
+    public bool AllowHumanTargets; // CMU14: configure human treatment for healer drones.
 
     [DataField]
-    public FixedPoint2 HumanBruteHeal = 75;
+    public FixedPoint2 HumanBruteHeal = 75; // CMU14: cap Brute healing for humans.
 
     [DataField]
-    public FixedPoint2 HumanBurnHeal = 50;
+    public FixedPoint2 HumanBurnHeal = 50; // CMU14: cap Burn healing for humans.
 
     [DataField]
-    public FixedPoint2 HumanToxinDamage = 5;
+    public FixedPoint2 HumanToxinDamage = 5; // CMU14: human salve treatment has a toxin cost.
 }
 
+// CMU14 event
 [ByRefEvent]
 public record struct XenoHumanSalveAppliedEvent(EntityUid Patient);

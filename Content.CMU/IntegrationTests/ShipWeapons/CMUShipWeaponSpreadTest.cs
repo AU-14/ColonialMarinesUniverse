@@ -40,8 +40,9 @@ public sealed class CMUShipWeaponSpreadTest : GameTest
                 upper = maps.CreateMap(runMapInit: true);
                 var upperGrid = SEntMan.EnsureComponent<MapGridComponent>(upper);
                 var levels = SEntMan.System<CMUZLevelsSystem>();
-                network = levels.CreateZNetwork();
-                Assert.That(levels.TryAddMapsIntoZNetwork(network,
+                var zNetwork = levels.CreateZNetwork();
+                network = zNetwork.Owner;
+                Assert.That(levels.TryAddMapsIntoZNetwork(zNetwork,
                     new() { [map.MapUid] = 0, [upper] = 1 }), Is.True);
 
                 var areas = SEntMan.System<AreaSystem>();
