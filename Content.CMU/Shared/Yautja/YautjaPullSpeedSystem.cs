@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.Pulling;
 using Content.Shared.Item;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Systems;
 
@@ -16,6 +17,24 @@ public sealed partial class YautjaPullSpeedSystem : EntitySystem
     private void OnRefreshSpeed(Entity<YautjaComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
         CancelPullerSlowdown(ent, args);
+        ApplyBadBloodDragSlowdown(ent, args);
+    }
+
+    // Bad Bloods dragged kills to the Lodge at full sprint, so a dead marine was gone before a medic could reach
+    // them. Applied here rather than through SlowOnPull because fireman carry cancels SlowOnPull outright. A carry
+    // always rides on the pull (stopping the pull ends it), so Pulling covers both, and PullingSystem clears it before
+    // the refresh it runs when the pull stops, so the slowdown never outlives the drag.
+    private void ApplyBadBloodDragSlowdown(EntityUid uid, RefreshMovementSpeedModifiersEvent args)
+    {
+        if (!TryComp(uid, out YautjaBadBloodComponent? badBlood) ||
+            !TryComp(uid, out PullerComponent? puller) ||
+            puller.Pulling is not { } target ||
+            !HasComp<MobStateComponent>(target))
+        {
+            return;
+        }
+
+        args.ModifySpeed(badBlood.DragSpeedMultiplier, badBlood.DragSpeedMultiplier);
     }
 
     private void OnNoPullSlowdownRefreshSpeed(Entity<CMUNoPullSlowdownComponent> ent, ref RefreshMovementSpeedModifiersEvent args)

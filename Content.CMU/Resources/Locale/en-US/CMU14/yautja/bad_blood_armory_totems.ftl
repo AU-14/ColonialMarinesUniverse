@@ -59,7 +59,7 @@ ent-CMUActionBadBloodRaiseTotem = Raise Clan Totem
     .desc = Raise a Clan Totem where you stand. It needs open sky, and distance from the Lodge, other Totems and the prey's landing zones. The clan's first is free, the rest cost Superiority Points.
 
 ent-CMUBadBloodTotemObjective = Destroy the Clan Totems
-    .desc = Find and destroy the totems the hostile clan has raised in the area of operations.
+    .desc = Find and destroy the totems the hostile clan has raised. Each one destroyed reveals their Lodge on the tactical map for 90 seconds.
 
 cmu-bad-blood-totem-not-clan = Only a Bad Blood of a standing clan can raise a Clan Totem.
 cmu-bad-blood-totem-limit = The clan holds as many Clan Totems as it can.
@@ -69,31 +69,50 @@ cmu-bad-blood-totem-near-totem = This is too close to another Clan Totem.
 cmu-bad-blood-totem-near-landing-zone = This is too close to the prey's landing zone to raise a Clan Totem.
 cmu-bad-blood-totem-cannot-afford = The clan cannot pay for another Clan Totem.
 cmu-bad-blood-totem-raising = You start raising a Clan Totem.
-cmu-bad-blood-totem-raised-clan = A Clan Totem stands at { $area }. Hold it and it feeds the clan.
-cmu-bad-blood-totem-raised-marines = Hostile structure detected at { $area }. Unknown hunters are marking territory.
+cmu-bad-blood-totem-raised-clan = A Clan Totem stands at { $area }. It feeds the clan until the prey desecrates it.
+cmu-bad-blood-totem-raised-marines = Hostile clan totem raised at { $area }. It feeds the hunters while it stands and shows on the tactical map in 2 minutes. Desecrate it (right-click, 45 seconds) or destroy it.
 cmu-bad-blood-totem-destroyed-clan = The Clan Totem at { $area } has fallen! The prey now knows where the Lodge stands.
 cmu-bad-blood-totem-stage-young = young
 cmu-bad-blood-totem-stage-growing = growing
 cmu-bad-blood-totem-stage-ripe = ripe
 cmu-bad-blood-totem-examine = This Clan Totem is [color=#c9a227]{ $stage }[/color]. It pays the clan [color=#c9a227]{ $rate }[/color] Superiority Points a minute and has paid [color=#c9a227]{ $paid }[/color] so far.
-cmu-bad-blood-totem-examine-contested = [color=red]Prey stands near it. A contested Totem pays nothing.[/color]
 cmu-bad-blood-totem-paid = The Clan Totem has fed the clan { $paid } Superiority Points.
-cmu-bad-blood-totem-destroyed-marines = The hostile totem at { $area } has been destroyed. Its fall has exposed the hunters' camp on the tactical map.
+cmu-bad-blood-totem-destroyed-marines = The hostile totem at { $area } has been destroyed. The hunters' Lodge is on the tactical map for 90 seconds: survey it or strike it now.
 
 # FLOW-503: desecration
-cmu-bad-blood-totem-desecrated-marines = The hostile totem at { $area } has been desecrated. It no longer serves the hunters. Read it for intel while no hunter stands near.
-cmu-bad-blood-totem-desecrated-clan = The prey has desecrated the Clan Totem at { $area }! It feeds the clan nothing until you hold it again.
-cmu-bad-blood-totem-reconsecrated-marines = The hunters have reclaimed the totem at { $area }.
+cmu-bad-blood-totem-desecrated-marines = The hostile totem at { $area } is desecrated and feeds the hunters nothing. Right-click it: Read the totem for the Lodge's location, or Survey Totem for the clan signature. The hunters can reconsecrate it, so hold it or destroy it.
+cmu-bad-blood-totem-desecrated-clan = The prey has desecrated the Clan Totem at { $area }! It feeds the clan nothing until one of you reconsecrates it (right-click it).
+cmu-bad-blood-totem-reconsecrated-marines = The hunters have reconsecrated the totem at { $area }. It feeds them again. Desecrate it again or destroy it.
 cmu-bad-blood-totem-reconsecrated-clan = The Clan Totem at { $area } is consecrated again.
-cmu-bad-blood-totem-examine-desecrated = [color=red]The prey has desecrated it. It pays nothing until the clan holds it again with no prey near.[/color]
+cmu-bad-blood-totem-examine-desecrated = [color=red]The prey has desecrated it. It pays nothing until a Bad Blood reconsecrates it: right-click it and hold still for 45 seconds.[/color]
+cmu-bad-blood-totem-examine-marine = [color=#c9a227]A hostile clan totem. It feeds the hunters while it stands. Right-click it and choose [bold]Desecrate Totem[/bold], then hold still for 45 seconds. Or destroy it outright: that is permanent and reveals their Lodge for 90 seconds. Explosives work best.[/color]
+cmu-bad-blood-totem-examine-marine-desecrated = [color=#c9a227]This totem is desecrated and feeds the hunters nothing. Right-click it to [bold]Read the totem[/bold] (the Lodge's grid square) or [bold]Survey Totem[/bold] (clan signature for the uplink). The hunters can reconsecrate it; destroy it when you are done.[/color]
+
+cmu-bad-blood-totem-desecrate-verb = Desecrate Totem
+cmu-bad-blood-totem-desecrate-verb-message = Stop the totem feeding the hunters, so it can be read and surveyed. Takes 45 seconds; moving or getting hurt interrupts you.
+cmu-bad-blood-totem-reconsecrate-verb = Reconsecrate Totem
+cmu-bad-blood-totem-reconsecrate-verb-message = Take the Totem back for the clan. Takes 45 seconds; moving or getting hurt interrupts you.
+cmu-bad-blood-totem-desecrate-start = You start defacing the totem. Hold still for { $seconds } seconds; moving or getting hurt interrupts you.
+cmu-bad-blood-totem-reconsecrate-start = You start reconsecrating the Totem. Hold still for { $seconds } seconds.
+cmu-bad-blood-totem-desecrate-marines-only = Only the prey would desecrate a Totem.
+cmu-bad-blood-totem-reconsecrate-clan-only = Only a Bad Blood can reconsecrate this.
+cmu-bad-blood-totem-already-desecrated = It is already desecrated.
+cmu-bad-blood-totem-not-desecrated = The Totem is already consecrated.
+cmu-bad-blood-totem-consecration-gone = The totem is gone.
 
 # FLOW-506: reading a desecrated Totem
 cmu-bad-blood-totem-read-verb = Read the totem
-cmu-bad-blood-totem-read-start = You start working out the markings on the totem.
-cmu-bad-blood-totem-read-consecrated = The markings mean nothing while the totem is still the hunters'.
-cmu-bad-blood-totem-read-hunter-near = A hunter is too close to study the totem.
-cmu-bad-blood-totem-read-already = You have learned all this totem has to tell.
-cmu-bad-blood-totem-read-lodge = The markings point to the hunters' camp, somewhere between grid { $x1 }-{ $x2 } and { $y1 }-{ $y2 }.
-cmu-bad-blood-totem-read-no-lodge = The markings point nowhere. The hunters have no camp standing.
+cmu-bad-blood-totem-read-start = You start reading the totem's markings. Hold still. If a hunter comes close before you finish, you learn nothing.
+cmu-bad-blood-totem-read-consecrated = Desecrate the totem first. Its markings mean nothing while it is still the hunters'.
+cmu-bad-blood-totem-read-hunter-near = A hunter is too close (within 7 tiles). Drive them off before you read the totem.
+cmu-bad-blood-totem-read-already = You have learned all this totem has to tell until it is desecrated again.
+cmu-bad-blood-totem-read-lodge = The markings point to the hunters' Lodge: X { $x1 }-{ $x2 }, Y { $y1 }-{ $y2 } (rangefinder coordinates).
+cmu-bad-blood-totem-read-no-lodge = The markings point nowhere. The hunters have no Lodge standing.
 cmu-bad-blood-totem-read-ripe = The hunters hold { $ripe } of the { $needed } ripe totems they need to call their ship.
-cmu-bad-blood-totem-read-hold = Their ship signal will be ready in about { $minutes } minutes unless one of their ripe totems falls.
+cmu-bad-blood-totem-read-hold = Their ship will be called in about { $minutes } minutes unless you destroy or desecrate one of their ripe totems.
+
+# Bad Blood vehicle breach: BadBloodVehicleBreachSystem
+cmu-bad-blood-vehicle-force-verb = Force hatch
+cmu-bad-blood-vehicle-force-verb-message = Rip the locked hatch open with your hands. Takes {$seconds} seconds; moving or getting hurt interrupts you.
+cmu-bad-blood-vehicle-force-start = You dig your claws into the hatch seams and start wrenching it open.
+cmu-bad-blood-vehicle-force-start-others = Something is tearing at the hatch!

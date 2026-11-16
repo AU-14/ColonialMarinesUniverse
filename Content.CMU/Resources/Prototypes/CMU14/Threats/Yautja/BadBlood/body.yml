@@ -67,3 +67,6 @@
             types:
               Blunt: 0.15
   - type: BadBloodSurvival
+  # xeno-rate damage against vehicle hulls, so a crewed tank or APC is not untouchable for the clan
+  - type: VehicleDamageMultiplier
+    multiplier: 3

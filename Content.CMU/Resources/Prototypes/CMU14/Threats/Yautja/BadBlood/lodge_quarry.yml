@@ -21,11 +21,11 @@
   - type: BadBloodCampPart
     kind: Quarry
   - type: BadBloodQuarry
-    startStone: 20
-    stoneCap: 40
+    startStone: 40
+    stoneCap: 100
     drawAmount: 10
-    offeringStone: 5
-    totemStonePerSp: 1
-    sabotageStone: 3
+    offeringStone: 10
+    totemStonePerSp: 2
+    sabotageStone: 6
     buildRadius: 12
     brickPrototype: CMUSheetBadBloodBrick1

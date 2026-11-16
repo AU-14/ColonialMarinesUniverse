@@ -109,6 +109,13 @@ public sealed partial class BadBloodCampSystem
             return false;
         }
 
+        // a fresh kill can still be revived, it has to rot past saving before the clan may cook it
+        if (!_badBlood.IsRotten(body))
+        {
+            reason = "cmu-bad-blood-spit-too-fresh";
+            return false;
+        }
+
         if (!IsSpitLit(spit.Owner))
         {
             reason = "cmu-bad-blood-spit-unlit";

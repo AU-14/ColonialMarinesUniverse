@@ -1,6 +1,7 @@
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Yautja.BadBlood;
 using Content.Shared._RMC14.Campfire;
+using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body;
 using Content.Shared.CMU14.Yautja.BadBlood;
@@ -59,6 +60,11 @@ public sealed class CampSpitTest : GameTest
                 Assert.That(alive, Is.EqualTo("cmu-bad-blood-spit-not-dead"));
 
                 Server.System<MobStateSystem>().ChangeMobState(prey, MobState.Dead);
+                Assert.That(camp.CanCookCorpse(cook, prey, out var fresh), Is.False, "a fresh kill can still be revived");
+                Assert.That(fresh, Is.EqualTo("cmu-bad-blood-spit-too-fresh"));
+
+                // the revival window runs out
+                Server.System<RMCUnrevivableSystem>().MakeUnrevivable(prey);
                 Assert.That(camp.CanCookCorpse(cook, prey, out _), Is.True);
                 Assert.That(rules.GetCookRemaining(prey), Is.EqualTo(FixedPoint4.New(3)));
 
@@ -69,6 +75,7 @@ public sealed class CampSpitTest : GameTest
 
                 var second = Spawn(entMan, spawned, Human, map.GridCoords);
                 Server.System<MobStateSystem>().ChangeMobState(second, MobState.Dead);
+                Server.System<RMCUnrevivableSystem>().MakeUnrevivable(second);
                 Assert.That(camp.TryStartCookCorpse(cook, party.Leader, second), Is.False, "one corpse at a time");
             });
 
@@ -148,6 +155,7 @@ public sealed class CampSpitTest : GameTest
                 var prey = Spawn(entMan, spawned, Human, map.GridCoords);
                 GivePlayerMind(prey);
                 mobState.ChangeMobState(prey, MobState.Dead);
+                Server.System<RMCUnrevivableSystem>().MakeUnrevivable(prey);
 
                 Assert.Multiple(() =>
                 {

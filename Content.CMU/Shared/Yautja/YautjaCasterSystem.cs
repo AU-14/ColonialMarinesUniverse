@@ -171,7 +171,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
         }
 
-        ApplyMode(ent);
+        // the mode's fire rate is applied in OnShotAttempted, before the gun spends its cooldown
         if (!_power.HasPowerPopup(sourceBracer, args.User, GetPowerCost(ent.Comp)))
         {
             args.Cancelled = true;
@@ -187,7 +187,16 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
     private void OnShotAttempted(Entity<YautjaCasterComponent> ent, ref ShotAttemptedEvent args)
     {
-        if (args.Cancelled || !CanUseCasterTech(args.User))
+        if (args.Cancelled)
+            return;
+
+        // CMU14: SharedGunSystem.AttemptShoot raises this before it checks NextFire and spends the cooldown as
+        // 1 / FireRateModified. AttemptShootEvent comes only after that, so applying the mode there let a shot
+        // after a mode change that skipped SetMode (ForceMode) start the previous mode's shorter cooldown: a lethal
+        // bolt fired at the stun bolt's refire. Put the current mode's fire rate on the gun before it is read.
+        EnsureModeFireRate(ent, args.Used);
+
+        if (!CanUseCasterTech(args.User))
             return;
 
         var cooldownUntil = args.Used.Comp.NextFire;
@@ -304,7 +313,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     }
 
     // CMU14: moves a caster to a mode from outside, e.g. back to the lethal bolt after a Bad Blood's one eradicator
-    // shot. the fire rate follows on the next shot attempt, which applies the mode before anything else
+    // shot. the fire rate follows on the next shot attempt: OnShotAttempted applies the mode before the gun reads it
     public void ForceMode(Entity<YautjaCasterComponent?> ent, int mode)
     {
         if (!Resolve(ent, ref ent.Comp, false) || mode < 0 || mode >= ent.Comp.Modes.Count)
@@ -332,6 +341,21 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             _gun.SetFireRate((ent.Owner, gun), mode.FireRate);
 
         _gun.RefreshModifiers(ent.Owner);
+    }
+
+    // only refreshes when the gun does not already fire at the current mode's rate, since this runs on every trigger pull
+    private void EnsureModeFireRate(Entity<YautjaCasterComponent> ent, Entity<GunComponent> gun)
+    {
+        if (GetMode(ent.Comp) is not { FireRate: > 0 } mode)
+            return;
+
+        if (MathHelper.CloseTo(gun.Comp.FireRate, mode.FireRate) &&
+            MathHelper.CloseTo(gun.Comp.FireRateModified, mode.FireRate))
+        {
+            return;
+        }
+
+        ApplyMode(ent);
     }
 
     private static void OnGunRefreshModifiers(Entity<YautjaCasterComponent> ent, ref GunRefreshModifiersEvent args)

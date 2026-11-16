@@ -1096,6 +1096,15 @@ public sealed partial class ThreatSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Turns <paramref name="entity"/> into a threat ghost role for <paramref name="leader"/>'s job. Used for bodies a
+    /// player left with /ghost, so they can be taken over like the round-start leftovers.
+    /// </summary>
+    public void MakeThreatGhostRole(EntityUid entity, bool leader)
+    {
+        MakeThreatGhostRole(entity, leader ? ThreatLeaderJobId : ThreatMemberJobId);
+    }
+
     private void MakeThreatGhostRole(EntityUid entity, ProtoId<JobPrototype> jobId)
     {
         AddThreatFaction(entity, jobId);

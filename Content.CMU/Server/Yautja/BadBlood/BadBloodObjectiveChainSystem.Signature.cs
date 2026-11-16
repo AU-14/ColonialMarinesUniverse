@@ -16,7 +16,7 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 
 // FLOW-511: the three signature avenues. The first one to finish latches the signature; later ones do nothing.
 //   B1 bracer: a looted Bad Blood bracer put into a working uplink site, then cut, then wrenched
-//   B2 Totem:  marines hold a desecrated Totem with no Bad Blood near it (the hold pauses and is never reset)
+//   B2 Totem:  a marine surveys a desecrated Totem (verb + do-after)
 //   B3 Lodge:  survey the revealed Lodge, or recover the clan star chart
 public sealed partial class BadBloodObjectiveChainSystem
 {
@@ -38,6 +38,8 @@ public sealed partial class BadBloodObjectiveChainSystem
         SubscribeLocalEvent<BadBloodUplinkSiteComponent, BadBloodBracerTinkerDoAfterEvent>(OnTinkerDoAfter);
 
         SubscribeLocalEvent<BadBloodCampComponent, GetVerbsEvent<Verb>>(OnLodgeVerbs);
+        SubscribeLocalEvent<BadBloodTotemReadableComponent, GetVerbsEvent<Verb>>(OnTotemSurveyVerbs);
+        SubscribeLocalEvent<BadBloodTotemReadableComponent, BadBloodTotemSurveyDoAfterEvent>(OnTotemSurveyDoAfter);
         SubscribeLocalEvent<BadBloodCampComponent, BadBloodLodgeSurveyDoAfterEvent>(OnSurveyDoAfter);
 
         SubscribeLocalEvent<BadBloodStarChartRecoveredEvent>(OnStarChartRecovered);
@@ -315,31 +317,120 @@ public sealed partial class BadBloodObjectiveChainSystem
 
     #region B2 Totem
 
-    // per Totem: desecrated, no living Bad Blood in its contest radius and at least one living marine in it.
-    // Anything else pauses that Totem's hold where it is; reconsecration keeps it
-    private void TickTotemHold(Entity<BadBloodObjectiveChainComponent> chain, TimeSpan elapsed)
+    // the Totem verb sits on the readable component: BadBloodTotemSystem already owns the Totem's GetVerbsEvent<Verb>
+    private void OnTotemSurveyVerbs(Entity<BadBloodTotemReadableComponent> ent, ref GetVerbsEvent<Verb> args)
     {
-        if (chain.Comp.Signature != BadBloodSignature.None)
+        if (!args.CanAccess || !args.CanInteract || !CanSurveyTotem(args.User, ent.Owner, out _))
             return;
 
-        var query = EntityQueryEnumerator<BadBloodTotemComponent>();
-        while (query.MoveNext(out var uid, out var totem))
+        var user = args.User;
+        var totem = ent.Owner;
+        args.Verbs.Add(new Verb
         {
-            if (!totem.Registered || totem.Destroyed || !totem.Desecrated || TerminatingOrDeleted(uid))
-                continue;
+            Text = Loc.GetString("cmu-bad-blood-obj-totem-survey-verb"),
+            Message = Loc.GetString("cmu-bad-blood-obj-totem-survey-verb-message"),
+            Act = () => TryStartTotemSurvey(user, totem),
+        });
+    }
 
-            var ent = new Entity<BadBloodTotemComponent>(uid, totem);
-            if (_totem.IsBadBloodNear(ent) || !_totem.IsContested(ent))
-                continue;
-
-            var held = chain.Comp.TotemHeld.GetValueOrDefault(uid) + elapsed;
-            chain.Comp.TotemHeld[uid] = held;
-            if (held < chain.Comp.TotemHold)
-                continue;
-
-            TryLatchSignature(BadBloodSignature.Totem, uid, null);
-            return;
+    /// <summary>
+    /// Whether <paramref name="user"/> may survey <paramref name="totem"/> for the Totem signature now: a marine, no
+    /// signature yet, and a counted Totem that is desecrated. <paramref name="reason"/> is the locale id of the
+    /// refusal.
+    /// </summary>
+    public bool CanSurveyTotem(EntityUid user, EntityUid totem, [NotNullWhen(false)] out string? reason)
+    {
+        reason = null;
+        if (!TryGetChain(out var chain))
+        {
+            reason = "cmu-bad-blood-obj-no-rule";
+            return false;
         }
+
+        if (!IsMarine(user))
+        {
+            reason = "cmu-bad-blood-obj-marines-only";
+            return false;
+        }
+
+        if (chain.Comp.Signature != BadBloodSignature.None)
+        {
+            reason = "cmu-bad-blood-obj-signature-done";
+            return false;
+        }
+
+        if (!TryComp(totem, out BadBloodTotemComponent? comp) ||
+            !comp.Registered ||
+            comp.Destroyed ||
+            TerminatingOrDeleted(totem))
+        {
+            reason = "cmu-bad-blood-totem-consecration-gone";
+            return false;
+        }
+
+        if (!comp.Desecrated)
+        {
+            reason = "cmu-bad-blood-obj-totem-survey-consecrated";
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// B2: starts the Totem survey do-after. Tells <paramref name="user"/> why when it is refused.
+    /// </summary>
+    public bool TryStartTotemSurvey(EntityUid user, EntityUid totem)
+    {
+        if (!CanSurveyTotem(user, totem, out var reason) || !TryGetChain(out var chain))
+        {
+            _popup.PopupEntity(Loc.GetString(reason ?? "cmu-bad-blood-obj-no-rule"), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        var doAfter = new DoAfterArgs(EntityManager, user, chain.Comp.TotemSurveyTime,
+            new BadBloodTotemSurveyDoAfterEvent(), totem, target: totem)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+            BlockDuplicate = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameTarget | DuplicateConditions.SameEvent,
+        };
+
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return false;
+
+        _popup.PopupEntity(
+            Loc.GetString("cmu-bad-blood-obj-totem-survey-start", ("seconds", (int) chain.Comp.TotemSurveyTime.TotalSeconds)),
+            user,
+            user);
+        return true;
+    }
+
+    private void OnTotemSurveyDoAfter(Entity<BadBloodTotemReadableComponent> ent, ref BadBloodTotemSurveyDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled)
+            return;
+
+        args.Handled = true;
+        TryCompleteTotemSurvey(args.User, ent.Owner);
+    }
+
+    /// <summary>
+    /// Finishes a Totem survey at once: the conditions are checked again (the clan can have reconsecrated it) and
+    /// the Totem signature is latched.
+    /// </summary>
+    public bool TryCompleteTotemSurvey(EntityUid user, EntityUid totem)
+    {
+        if (!CanSurveyTotem(user, totem, out var reason))
+        {
+            _popup.PopupEntity(Loc.GetString(reason), user, user, PopupType.SmallCaution);
+            return false;
+        }
+
+        _popup.PopupEntity(Loc.GetString("cmu-bad-blood-obj-totem-survey-done"), user, user, PopupType.Medium);
+        return TryLatchSignature(BadBloodSignature.Totem, totem, user);
     }
 
     #endregion

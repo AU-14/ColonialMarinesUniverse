@@ -64,7 +64,6 @@ public sealed class TotemIncomeLoopTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(comp.Contested, Is.False);
                     Assert.That(paid, Is.GreaterThanOrEqualTo(FixedPoint4.New(0.08)),
                         "a young Totem pays several steps in 40 seconds of the real update loop");
                     Assert.That(paid, Is.LessThanOrEqualTo(FixedPoint4.New(0.2)));
@@ -79,19 +78,17 @@ public sealed class TotemIncomeLoopTest : GameTest
                     Assert.That(text, Does.Contain("0.20"), "the examine shows the rate a minute");
                     Assert.That(text, Does.Contain(BadBloodCampSystem.FormatSp(comp.PaidIncome)),
                         "the examine shows what the Totem has paid");
-                    Assert.That(text, Does.Not.Contain(loc.GetString("cmu-bad-blood-totem-examine-contested")));
+                    Assert.That(text, Does.Not.Contain(loc.GetString("cmu-bad-blood-totem-examine-desecrated")));
                 });
 
                 Assert.That(BadBloodCampSystem.FormatSp(FixedPoint4.New(1.239)), Is.EqualTo("1.23"),
                     "SP is shown to two decimals and never rounded up");
 
-                // a marine walks up
-                var marine = Server.EntMan.SpawnEntity(Human, map.GridCoords.Offset(new Vector2(33, 0)));
-                spawned.Add(marine);
-                Server.EntMan.EnsureComponent<MarineComponent>(marine);
+                // the prey desecrates it
+                totems.SetDesecrated(ent, true);
                 Assert.That(totems.GetTotemExamineText(ent),
-                    Does.Contain(loc.GetString("cmu-bad-blood-totem-examine-contested")),
-                    "the examine says when the Totem is contested");
+                    Does.Contain(loc.GetString("cmu-bad-blood-totem-examine-desecrated")),
+                    "the examine says when the Totem is desecrated");
             });
         }
         finally

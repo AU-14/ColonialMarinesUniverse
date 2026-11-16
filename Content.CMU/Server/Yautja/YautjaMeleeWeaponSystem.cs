@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.CMU14.Yautja.BadBlood;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Server.Humanoid;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
@@ -51,6 +52,7 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     [Dependency] private YautjaTrophySystem _trophies = default!;
     [Dependency] private YautjaMachineSystem _machines = default!;
     [Dependency] private BadBloodProvenanceSystem _provenance = default!;
+    [Dependency] private BadBloodSystem _badBlood = default!;
 
     public override void Initialize()
     {
@@ -209,6 +211,13 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
         if (HasComp<SynthComponent>(target))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-synth"), user, user);
+            return true;
+        }
+
+        // flaying makes the body permanently dead, Bad Bloods have to wait for it to rot past revival first
+        if (_badBlood.IsBadBlood(user) && !_badBlood.IsRotten(target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-butcher-too-fresh"), user, user, PopupType.SmallCaution);
             return true;
         }
 

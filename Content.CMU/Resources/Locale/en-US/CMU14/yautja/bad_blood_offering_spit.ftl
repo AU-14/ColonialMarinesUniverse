@@ -22,6 +22,7 @@ cmu-bad-blood-spit-not-prey = That is not prey. The spit is for humans and serpe
 cmu-bad-blood-spit-refuse-yautja = The clan does not eat its own kind.
 cmu-bad-blood-spit-refuse-synth = There is no meat on a synthetic.
 cmu-bad-blood-spit-refuse-larva = There is nothing on that worth cooking.
+cmu-bad-blood-spit-too-fresh = The meat is still warm. It could yet be saved; let it rot before the clan cooks it.
 cmu-bad-blood-spit-unlit = The fire is out. Rekindle it first.
 cmu-bad-blood-spit-busy = Something is already turning on the spit.
 cmu-bad-blood-spit-rekindled = You rekindle the fire.

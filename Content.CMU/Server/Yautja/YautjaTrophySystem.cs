@@ -461,6 +461,13 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             return false;
         }
 
+        // rot only goes one way, so checking at the start also covers every chained skinning stage
+        if (IsRoundRemovingProcedure(procedure) && IsTooFreshForBadBlood(hunter, target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-butcher-too-fresh"), hunter, hunter, PopupType.SmallCaution);
+            return false;
+        }
+
         if (procedure != YautjaButcherProcedure.Skin &&
             (!TryGetBodyPartForButcherProcedure(procedure, out var type, out var symmetry) ||
              !_medicalIndex.TryGetBodyPart(target, new CMUMedicalBodyPartKey(type, symmetry), out _)))
@@ -1251,6 +1258,14 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             return false;
         }
 
+        // the skull and ribcage make the body permanently dead, Bad Bloods wait for it to rot first
+        if (IsUnrevivableTrophy(kind) && IsTooFreshForBadBlood(hunter, target))
+        {
+            if (popup)
+                _popup.PopupEntity(Loc.GetString("cmu-bad-blood-butcher-too-fresh"), hunter, hunter, PopupType.SmallCaution);
+            return false;
+        }
+
         if (!TryGetTrophyPrototype(kind, out prototype))
             return false;
 
@@ -1819,6 +1834,18 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         }
 
         return false;
+    }
+
+    // Bad Bloods may take limbs off a fresh kill, but anything that removes the body for good (skinning it away,
+    // the head, a skull or ribcage trophy) waits until it has rotted past revival, so marines can still save it
+    private bool IsTooFreshForBadBlood(EntityUid hunter, EntityUid target)
+    {
+        return _badBlood.IsBadBlood(hunter) && !_badBlood.IsRotten(target);
+    }
+
+    private static bool IsRoundRemovingProcedure(YautjaButcherProcedure procedure)
+    {
+        return procedure is YautjaButcherProcedure.Skin or YautjaButcherProcedure.Head;
     }
 
     private bool CanUseYautjaTech(EntityUid user)

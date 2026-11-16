@@ -1,4 +1,7 @@
+using Content.Shared.ActionBlocker;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.GameObjects;
@@ -13,6 +16,8 @@ public sealed class BadBloodHumanWeaponLockoutTest
 {
     private const string Hunter = "CMUMobYautja";
     private const string MarineRifle = "RMCWeaponRifleM54C2";
+    private const string Flashbang = "RMCGrenadeFlashBang";
+    private const string HandFlash = "Flash";
 
     private static readonly string[] YautjaGuns =
     [
@@ -106,6 +111,58 @@ public sealed class BadBloodHumanWeaponLockoutTest
                         $"{proto.ID} is a Yautja gun without YautjaTechItem; Bad Bloods could not fire it");
                 }
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // flashes and flashbangs: a Bad Blood cannot use one in hand (fire the flash, arm the flashbang) or hit with a flash
+    [Test]
+    public async Task BadBloodsCannotUseFlashesOrFlashbangs()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var blocker = entMan.System<ActionBlockerSystem>();
+            var spawned = new List<EntityUid>();
+
+            EntityUid Spawn(string prototype)
+            {
+                var uid = entMan.SpawnEntity(prototype, map.GridCoords);
+                spawned.Add(uid);
+                return uid;
+            }
+
+            try
+            {
+                var hunter = Spawn(Hunter);
+                var grunt = Spawn(BadBloodTestHelpers.GruntPrototype);
+                var flashbang = Spawn(Flashbang);
+                var flash = Spawn(HandFlash);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(blocker.CanUseHeldEntity(grunt, flashbang), Is.False, "a Bad Blood cannot arm a flashbang");
+                    Assert.That(blocker.CanUseHeldEntity(grunt, flash), Is.False, "a Bad Blood cannot fire a flash");
+                    Assert.That(blocker.CanUseHeldEntity(hunter, flashbang), Is.True, "honourable hunters are not locked out");
+
+                    var attack = new AttackAttemptEvent(grunt, null, (flash, entMan.GetComponent<MeleeWeaponComponent>(flash)));
+                    entMan.EventBus.RaiseLocalEvent(grunt, attack);
+                    Assert.That(attack.Cancelled, Is.True, "a Bad Blood cannot flash someone by hitting them");
+                });
+            }
+            finally
+            {
+                foreach (var uid in spawned)
+                {
+                    if (entMan.EntityExists(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
         });
 
         await pair.CleanReturnAsync();

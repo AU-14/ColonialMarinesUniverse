@@ -61,35 +61,35 @@ public sealed class BadBloodQuarryTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(entMan.GetComponent<BadBloodCampPartComponent>(quarry).Kind, Is.EqualTo(BadBloodCampPartKind.Quarry));
-                    Assert.That(comp.Stone, Is.EqualTo(20), "a new quarry holds its starting stone");
-                    Assert.That(comp.StoneCap, Is.EqualTo(40));
+                    Assert.That(comp.Stone, Is.EqualTo(40), "a new quarry holds its starting stone");
+                    Assert.That(comp.StoneCap, Is.EqualTo(100));
                     Assert.That(comp.BuildRadius, Is.EqualTo(12f));
                 });
 
                 var offering = new BadBloodOfferingCreditedEvent(lodge, party.Leader, party.Leader);
                 entMan.EventBus.RaiseEvent(EventSource.Local, ref offering);
-                Assert.That(comp.Stone, Is.EqualTo(25), "a credited offering adds 5 stone");
+                Assert.That(comp.Stone, Is.EqualTo(50), "a credited offering adds 10 stone");
 
                 var paid = new BadBloodTotemPaidEvent(EntityUid.Invalid, 2);
                 entMan.EventBus.RaiseEvent(EventSource.Local, ref paid);
-                Assert.That(comp.Stone, Is.EqualTo(27), "Totem income adds 1 stone per whole SP");
+                Assert.That(comp.Stone, Is.EqualTo(54), "Totem income adds 2 stone per whole SP");
 
                 var sabotage = new BadBloodSiteSabotagedEvent(lodge, party.Leader);
                 entMan.EventBus.RaiseEvent(EventSource.Local, ref sabotage);
-                Assert.That(comp.Stone, Is.EqualTo(30), "a sabotage adds 3 stone");
+                Assert.That(comp.Stone, Is.EqualTo(60), "a sabotage adds 6 stone");
 
-                for (var i = 0; i < 5; i++)
+                for (var i = 0; i < 10; i++)
                 {
                     var more = new BadBloodSiteSabotagedEvent(lodge, party.Leader);
                     entMan.EventBus.RaiseEvent(EventSource.Local, ref more);
                 }
 
-                Assert.That(comp.Stone, Is.EqualTo(40), "the quarry stops at its cap");
+                Assert.That(comp.Stone, Is.EqualTo(100), "the quarry stops at its cap");
 
                 // a marine gets nothing
                 var marine = BadBloodTestHelpers.SpawnMarineNear(Server, map.GridCoords);
                 Assert.That(quarries.TryDraw(found, marine), Is.Null);
-                Assert.That(comp.Stone, Is.EqualTo(40));
+                Assert.That(comp.Stone, Is.EqualTo(100));
 
                 // a Bad Blood draws ten
                 var bricks = quarries.TryDraw(found, party.Leader);
@@ -98,14 +98,14 @@ public sealed class BadBloodQuarryTest : GameTest
                 {
                     Assert.That(entMan.HasComponent<BadBloodBrickComponent>(bricks!.Value), Is.True);
                     Assert.That(stacks.GetCount((bricks.Value, null)), Is.EqualTo(10));
-                    Assert.That(comp.Stone, Is.EqualTo(30));
+                    Assert.That(comp.Stone, Is.EqualTo(90));
                 });
 
                 // and hands them back
                 var use = new InteractUsingEvent(party.Leader, bricks!.Value, quarry, entMan.GetComponent<TransformComponent>(quarry).Coordinates);
                 entMan.EventBus.RaiseLocalEvent(quarry, use);
                 Assert.That(use.Handled, Is.True);
-                Assert.That(comp.Stone, Is.EqualTo(40), "returned bricks go back into the stock");
+                Assert.That(comp.Stone, Is.EqualTo(100), "returned bricks go back into the stock");
 
                 // the last of the stock
                 comp.Stone = 3;

@@ -331,57 +331,64 @@ public sealed class BadBloodObjectiveChainTest : GameTest
         }
     }
 
+    // B2 is a verb now: a marine surveys a desecrated Totem with a do-after. Standing at it does nothing, and a Totem
+    // the clan takes back before the survey finishes gives nothing
     [Test]
-    public async Task TotemHoldPausesAndIsKeptAcrossReconsecration()
+    public async Task TotemSurveyLatchesTheSignatureOnlyOnADesecratedTotem()
     {
         var (map, party) = await SetUp();
         var spawned = new List<EntityUid>();
         EntityUid totem = default;
-        var heldAtPause = TimeSpan.Zero;
+        EntityUid marine = default;
 
         try
         {
             await Server.WaitAssertion(() =>
             {
-                Assert.That(Chain().TotemHold, Is.EqualTo(TimeSpan.FromMinutes(10)), "the YAML default");
-                Chain().TotemHold = TimeSpan.FromSeconds(4);
+                Assert.That(Chain().TotemSurveyTime, Is.EqualTo(TimeSpan.FromSeconds(75)), "the YAML default");
+                Chain().TotemSurveyTime = TimeSpan.FromSeconds(3);
 
                 totem = SEntMan.SpawnEntity(Totem, At(map, 30));
                 spawned.Add(totem);
                 Assert.That(SComp<BadBloodTotemComponent>(totem).Registered, Is.True);
-                spawned.Add(BadBloodTestHelpers.SpawnMarineNear(Server, At(map, 30)));
+                marine = BadBloodTestHelpers.SpawnMarineNear(Server, At(map, 30));
+                spawned.Add(marine);
+
+                var chain = Server.System<BadBloodObjectiveChainSystem>();
+                Assert.That(chain.CanSurveyTotem(marine, totem, out _), Is.False, "a consecrated Totem cannot be surveyed");
+                Assert.That(chain.CanSurveyTotem(party.Grunts[0], totem, out _), Is.False, "only marines survey");
 
                 Server.System<BadBloodTotemSystem>().SetDesecrated((totem, SComp<BadBloodTotemComponent>(totem)), true);
             });
 
-            await Pair.RunSeconds(2.5f);
-
+            // standing at a desecrated Totem is no longer a hold
+            await Pair.RunSeconds(5);
             await Server.WaitAssertion(() =>
             {
-                var chain = Chain();
-                Assert.That(chain.TotemHeld.GetValueOrDefault(totem), Is.GreaterThan(TimeSpan.Zero));
-                Assert.That(chain.Signature, Is.EqualTo(BadBloodSignature.None));
-                heldAtPause = chain.TotemHeld[totem];
+                Assert.That(Chain().Signature, Is.EqualTo(BadBloodSignature.None), "no passive hold any more");
+                Assert.That(Server.System<BadBloodObjectiveChainSystem>().TryStartTotemSurvey(marine, totem), Is.True);
+            });
 
+            await Pair.RunSeconds(1);
+            await Server.WaitAssertion(() =>
+            {
                 Server.System<BadBloodTotemSystem>().SetDesecrated((totem, SComp<BadBloodTotemComponent>(totem)), false);
             });
 
-            await Pair.RunSeconds(3);
-
+            await Pair.RunSeconds(4);
             await Server.WaitAssertion(() =>
             {
-                var chain = Chain();
-                Assert.That(chain.TotemHeld[totem], Is.EqualTo(heldAtPause), "a reconsecrated Totem keeps the hold");
-                Assert.That(chain.Signature, Is.EqualTo(BadBloodSignature.None));
+                Assert.That(Chain().Signature, Is.EqualTo(BadBloodSignature.None),
+                    "a Totem reconsecrated during the survey gives nothing");
 
                 Server.System<BadBloodTotemSystem>().SetDesecrated((totem, SComp<BadBloodTotemComponent>(totem)), true);
+                Assert.That(Server.System<BadBloodObjectiveChainSystem>().TryStartTotemSurvey(marine, totem), Is.True);
             });
 
             await Pair.RunSeconds(4);
-
             await Server.WaitAssertion(() =>
             {
-                Assert.That(Chain().Signature, Is.EqualTo(BadBloodSignature.Totem), "re-desecrating resumes the hold");
+                Assert.That(Chain().Signature, Is.EqualTo(BadBloodSignature.Totem), "a finished survey latches the signature");
             });
         }
         finally

@@ -17,17 +17,17 @@ cmu-ship-weapons-standard-cannon = Standard orbital cannon
 
 cmu-bad-blood-strike-no-rule = There is no Yautja vessel to strike.
 cmu-bad-blood-strike-wrong-console = This console cannot direct a strike on the Yautja vessel.
-cmu-bad-blood-strike-no-uplink = There are no coordinates for the Yautja vessel. Run the uplink first.
-cmu-bad-blood-strike-unauthorized = Only the platoon commander, the adjutant or a staff officer can authorize the Vessel Strike.
+cmu-bad-blood-strike-no-uplink = There are no coordinates for the Yautja vessel. Run the uplink at a working tower or field relay first.
+cmu-bad-blood-strike-unauthorized = Only the Commanding Officer, the Executive Officer or a Staff Officer can authorize the Vessel Strike.
 cmu-bad-blood-strike-running = The Vessel Strike is already under way.
 cmu-bad-blood-strike-completed = The Yautja vessel is already destroyed.
 cmu-bad-blood-strike-lockout = The strike systems are still recovering. Try again in { $seconds } seconds.
 cmu-bad-blood-strike-no-battery = No orbital battery on this ship is ready to fire.
 cmu-bad-blood-strike-fired = Vessel Strike authorized.
 
-cmu-bad-blood-strike-started-marines = Vessel Strike authorized. The orbital battery is locked onto the Yautja vessel and fires in { $minutes } minutes. Keep the lock site working.
+cmu-bad-blood-strike-started-marines = Vessel Strike authorized. The orbital battery is locked onto the Yautja vessel and fires in { $minutes } minutes. Keep the lock site working and guard the firing console.
 cmu-bad-blood-strike-started-clan = The humans have locked their guns onto the clan vessel. It is destroyed in { $minutes } minutes unless you break their lock site.
-cmu-bad-blood-strike-paused-marines = The Vessel Strike lock is lost and the strike is on hold with { $minutes } minutes left. Repair the lock site or re-route the lock to another uplink site.
+cmu-bad-blood-strike-paused-marines = The Vessel Strike lock is lost and the strike is on hold with { $minutes } minutes left. Repair the lock site, or right-click another working tower or field relay and Re-route lock.
 cmu-bad-blood-strike-paused-clan = The human lock is broken. Their strike is on hold until they restore it.
 cmu-bad-blood-strike-resumed-marines = The Vessel Strike lock is restored. The strike fires in { $minutes } minutes.
 cmu-bad-blood-strike-resumed-clan = The humans have restored their lock. The clan vessel is destroyed in { $minutes } minutes.
@@ -37,7 +37,7 @@ cmu-bad-blood-strike-completed-marines = The Vessel Strike has destroyed the Yau
 cmu-bad-blood-strike-completed-clan = The humans have destroyed the clan vessel.
 
 cmu-bad-blood-strike-reroute-verb = Re-route lock
-cmu-bad-blood-strike-reroute-verb-message = Move the Vessel Strike lock to this uplink site.
+cmu-bad-blood-strike-reroute-verb-message = Move the Vessel Strike lock to this uplink site. Only while the current lock site is down. Takes 30 seconds.
 cmu-bad-blood-strike-reroute-start = You start re-routing the strike lock through this site.
 cmu-bad-blood-strike-reroute-done = The strike lock now runs through this site.
 cmu-bad-blood-strike-reroute-not-running = No Vessel Strike is under way.

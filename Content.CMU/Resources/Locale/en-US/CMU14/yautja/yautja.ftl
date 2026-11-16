@@ -312,6 +312,7 @@ cmu-yautja-butcher-start-others = {$hunter} begins ritual butchery on {$target}!
 cmu-butcher-start-self = You start carving up {$target}.
 cmu-butcher-start-others = {$hunter} starts carving up {$target}!
 cmu-butcher-need-blade = You need a knife or something sharp in your hand.
+cmu-bad-blood-butcher-too-fresh = This kill is still fresh enough to be saved. Let it rot first.
 cmu-yautja-butcher-stage-complete = You complete butchery stage {$stage} on {$target}.
 cmu-yautja-butcher-finished = You finish butchering {$target}.
 cmu-yautja-butcher-already-finished = The corpse has already been butchered.

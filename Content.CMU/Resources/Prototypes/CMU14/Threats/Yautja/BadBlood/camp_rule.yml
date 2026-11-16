@@ -54,7 +54,7 @@
   - type: BadBloodObjectiveChain
     reactorHold: 300
     gatePartsRequired: 2
-    totemHold: 600
+    totemSurveyTime: 75
     lodgeSurveyTime: 75
     bracerStepTime: 5
     fieldRelayCrate: CMUCrateBadBloodFieldRelay

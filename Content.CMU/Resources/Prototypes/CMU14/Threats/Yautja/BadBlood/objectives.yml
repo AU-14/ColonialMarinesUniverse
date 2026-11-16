@@ -22,7 +22,7 @@
 - type: entity
   id: CMUBadBloodSignatureObjective
   name: Acquire the Clan Signature
-  description: Recover a clan signature from a bracer, a held Totem or the clan's Lodge.
+  description: Recover the clan's signature. Survey a desecrated Totem or the revealed Lodge, take the clan star chart, or wire a looted bracer into an uplink site.
   categories: [HideSpawnMenu]
   components:
   - type: CMUObjective

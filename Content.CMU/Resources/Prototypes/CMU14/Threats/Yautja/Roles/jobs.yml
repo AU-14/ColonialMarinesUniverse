@@ -262,10 +262,12 @@
   equipment:
     outerClothing: CMUYautjaClanArmorBone
 
-# Bad Blood base loadout — standalone, no communicator or smart disc
+# Bad Blood base loadout — standalone, no smart disc. The modified communicator is on the long-range Bad Blood
+# channel, so it works with every comms tower down
 - type: startingGear
   id: CMUYautjaBadBloodGearBase
   equipment:
+    ears: CMUYautjaBadBloodCommunicator
     gloves: CMUYautjaBadBloodBracer
     back: CMUYautjaCloakPack
     outerClothing: CMUYautjaClanArmor

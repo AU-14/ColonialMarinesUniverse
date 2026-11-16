@@ -8,8 +8,9 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
 /// <summary>
-/// A Clan Totem: the clan's hold on a piece of the map. While it stands and no marine is near it pays the clan
-/// Superiority Points, more the longer it has stood, and Bad Bloods around it tire and hunger more slowly.
+/// A Clan Totem: the clan's hold on a piece of the map. While it stands consecrated it pays the clan Superiority
+/// Points, more the longer it has stood, and Bad Bloods around it tire and hunger more slowly. Marines take it out of
+/// play with the Desecrate verb, the clan takes it back with Reconsecrate.
 /// The clan's Totem list and limit are on the rule entity. This is the state of one Totem.
 /// </summary>
 [RegisterComponent]
@@ -26,12 +27,6 @@ public sealed partial class BadBloodTotemComponent : Component
     /// </summary>
     [ViewVariables]
     public bool Registered;
-
-    /// <summary>
-    /// A marine stands within <see cref="ContestRadius"/>. A contested Totem pays nothing.
-    /// </summary>
-    [ViewVariables]
-    public bool Contested;
 
     [ViewVariables]
     public TimeSpan NextUpdate;
@@ -82,7 +77,8 @@ public sealed partial class BadBloodTotemComponent : Component
     public FixedPoint4 PayoutStep = FixedPoint4.New(0.01);
 
     /// <summary>
-    /// A living marine this close stops the income, in tiles.
+    /// A living Bad Blood this close stops a marine reading the Totem for intel, in tiles. Income and desecration no
+    /// longer depend on who stands nearby.
     /// </summary>
     [DataField]
     public float ContestRadius = 7f;
@@ -133,37 +129,23 @@ public sealed partial class BadBloodTotemComponent : Component
     public bool Destroyed;
 
     /// <summary>
-    /// FLOW-503: marines held it with no living Bad Blood near for <see cref="DesecrateTime"/>. A desecrated Totem
-    /// pays nothing, is not ripe and has no aura until the clan reconsecrates it.
+    /// FLOW-503: a marine finished the Desecrate do-after on it. A desecrated Totem pays nothing, is not ripe and
+    /// has no aura until a Bad Blood finishes the Reconsecrate do-after.
     /// </summary>
     [ViewVariables]
     public bool Desecrated;
 
     /// <summary>
-    /// How long marines must hold the Totem, with no living Bad Blood within <see cref="ContestRadius"/>, to
-    /// desecrate it.
+    /// The marine Desecrate do-after. Moving or taking damage breaks it.
     /// </summary>
     [DataField]
     public TimeSpan DesecrateTime = TimeSpan.FromSeconds(45);
 
     /// <summary>
-    /// How long Bad Bloods must hold a desecrated Totem, with no living marine within <see cref="ContestRadius"/>,
-    /// to reconsecrate it.
+    /// The Bad Blood Reconsecrate do-after. Moving or taking damage breaks it.
     /// </summary>
     [DataField]
     public TimeSpan ReconsecrateTime = TimeSpan.FromSeconds(45);
-
-    /// <summary>
-    /// Time marines have held it towards <see cref="DesecrateTime"/>. A contested hold pauses, it is never reset.
-    /// </summary>
-    [ViewVariables]
-    public TimeSpan DesecrateProgress;
-
-    /// <summary>
-    /// Time Bad Bloods have held it towards <see cref="ReconsecrateTime"/>. A contested hold pauses, it is never reset.
-    /// </summary>
-    [ViewVariables]
-    public TimeSpan ReconsecrateProgress;
 }
 
 /// <summary>
@@ -232,3 +214,23 @@ public sealed partial class BadBloodRaiseTotemActionEvent : InstantActionEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class BadBloodRaiseTotemDoAfterEvent : SimpleDoAfterEvent;
+
+/// <summary>
+/// A marine finished desecrating a Clan Totem (<see cref="Desecrate"/> true), or a Bad Blood finished
+/// reconsecrating one (false). Started from the Totem's verb.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class BadBloodTotemConsecrationDoAfterEvent : SimpleDoAfterEvent
+{
+    [DataField]
+    public bool Desecrate;
+
+    public BadBloodTotemConsecrationDoAfterEvent()
+    {
+    }
+
+    public BadBloodTotemConsecrationDoAfterEvent(bool desecrate)
+    {
+        Desecrate = desecrate;
+    }
+}

@@ -60,7 +60,6 @@ public sealed partial class BadBloodObjectiveChainSystem : EntitySystem
     [Dependency] private YautjaSelfDestructSystem _selfDestruct = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedToolSystem _tool = default!;
-    [Dependency] private BadBloodTotemSystem _totem = default!;
 
     private readonly List<(EntityUid Uid, BadBloodUplinkSiteKind Kind)> _siteScratch = new();
 
@@ -172,7 +171,6 @@ public sealed partial class BadBloodObjectiveChainSystem : EntitySystem
         // planet tower is a site. A sweep instead of ComponentStartup keeps clear of the RMC tower subscriptions
         SweepSites();
         TickGate(chain, elapsed);
-        TickTotemHold(chain, elapsed);
     }
 
     #endregion

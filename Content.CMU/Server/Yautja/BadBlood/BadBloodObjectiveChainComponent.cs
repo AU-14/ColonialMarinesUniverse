@@ -38,10 +38,10 @@ public sealed partial class BadBloodObjectiveChainComponent : Component
     public int GatePartsRequired = 2;
 
     /// <summary>
-    /// How long marines must hold a desecrated Totem (summed, pausing while contested) for the Totem signature.
+    /// The Totem survey do-after on a desecrated Totem, for the Totem signature.
     /// </summary>
     [DataField]
-    public TimeSpan TotemHold = TimeSpan.FromMinutes(10);
+    public TimeSpan TotemSurveyTime = TimeSpan.FromSeconds(75);
 
     /// <summary>
     /// The Lodge survey do-after for the Lodge signature.
@@ -95,12 +95,6 @@ public sealed partial class BadBloodObjectiveChainComponent : Component
 
     [ViewVariables]
     public BadBloodSignature Signature;
-
-    /// <summary>
-    /// Totem-hold progress per Totem, kept when the Totem is reconsecrated.
-    /// </summary>
-    [ViewVariables]
-    public readonly Dictionary<EntityUid, TimeSpan> TotemHeld = new();
 
     [ViewVariables]
     public bool Uplinked;

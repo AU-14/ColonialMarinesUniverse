@@ -266,6 +266,10 @@ public sealed partial class BadBloodCampSystem : EntitySystem
             EntityManager.AddComponents(lodge.Owner, lodge.Comp.RevealComponents);
         else
             EntityManager.RemoveComponents(lodge.Owner, lodge.Comp.RevealComponents);
+
+        // nothing on the tactical map listens for the reveal components, so re-place the Lodge's blip: that marks the
+        // map changed and the reveal (or its end) reaches open maps on the next publish, not whenever something moves
+        EntityManager.System<Content.Shared._RMC14.TacticalMap.SharedTacticalMapSystem>().RefreshTracked(lodge.Owner);
     }
 
     #endregion

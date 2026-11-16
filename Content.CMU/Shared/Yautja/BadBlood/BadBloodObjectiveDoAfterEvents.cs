@@ -34,3 +34,9 @@ public sealed partial class BadBloodBracerTinkerDoAfterEvent : SimpleDoAfterEven
 /// </summary>
 [Serializable, NetSerializable]
 public sealed partial class BadBloodRelayPlantDoAfterEvent : SimpleDoAfterEvent;
+
+/// <summary>
+/// A marine finished surveying a desecrated Clan Totem for the Totem signature.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class BadBloodTotemSurveyDoAfterEvent : SimpleDoAfterEvent;

@@ -3412,6 +3412,8 @@
           type: TacticalMapComputerBui
     - type: TacticalMapComputer
       allowCanvas: false
+      # the hunters' own map: unassigned consoles no longer show the Yautja bucket
+      faction: YAUTJA
     - type: ApcPowerReceiver
       powerLoad: 250
       needsPower: true

@@ -10,6 +10,7 @@ using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Events;
 using Content.Shared._RMC14.Intel;
+using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.CMU14.Threats;
@@ -157,6 +158,11 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 second = SpawnPrey(map, 4);
                 mobState.ChangeMobState(first, MobState.Dead, origin: hunter);
                 mobState.ChangeMobState(second, MobState.Dead, origin: hunter);
+
+                // nobody recovers them in time: Bad Bloods only take a skull or cook a body once it has rotted
+                var unrevivable = Server.System<RMCUnrevivableSystem>();
+                unrevivable.MakeUnrevivable(first);
+                unrevivable.MakeUnrevivable(second);
                 Assert.Multiple(() =>
                 {
                     Assert.That(ascension.GetKills(hunter), Is.EqualTo(2), "worthy kills are tallied for the killer");

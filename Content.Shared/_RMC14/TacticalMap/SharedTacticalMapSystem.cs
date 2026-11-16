@@ -225,7 +225,9 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         bool WantsOpfor() => faction == null || faction == OpforFaction;
         bool WantsGovfor() => faction == null || faction == GovforFaction;
         bool WantsClf() => faction == null || faction == ClfFaction;
-        bool WantsYautja() => faction == null || faction is "YAUTJA" or "PREDATOR";
+        // CMU14: the hunters' bucket is never part of an unassigned console's show-everything view. Marine consoles
+        // start unassigned, so they showed the Bad Blood Lodge and Totems whether or not they were revealed.
+        bool WantsYautja() => faction is "YAUTJA" or "PREDATOR";
         bool WantsWeYu() => faction == null || faction == WeYuFaction;
 
         var blips = _computerBlipBuffers.TryPop(out var buffer) ? buffer : new Dictionary<int, TacticalMapBlip>();
@@ -260,6 +262,21 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
             AddIf(WantsClf() || sensorsOnline, map.ClfBlips);
             AddIf(WantsWeYu(), map.WeYuBlips);
             AddIf(WantsYautja(), map.YautjaBlips);
+
+            // CMU14: a hunter structure revealed to this console's faction (the Bad Blood Lodge, a Clan Totem) shows
+            // for as long as it carries TacticalMapAlwaysVisible, and leaves on the next refresh after the reveal ends
+            if (!WantsYautja())
+            {
+                var alwaysVisible = EntityQueryEnumerator<TacticalMapAlwaysVisibleComponent>();
+                while (alwaysVisible.MoveNext(out var visibleUid, out var visible))
+                {
+                    if (IsAlwaysVisibleToComputer(visible, faction) &&
+                        map.YautjaBlips.TryGetValue(visibleUid.Id, out var yautjaBlip))
+                    {
+                        blips.TryAdd(visibleUid.Id, yautjaBlip);
+                    }
+                }
+            }
 
                 // Ensure infrastructure (comms, sensors, tunnels) is always visible on computers
             // Track their entity ids so we can exclude them from enemy-sprite replacement.
@@ -392,6 +409,23 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         labelsChanged |= PublishLabels(ref labels.ClfLabels, WantsClf() ? map.ClfLabels : null);
         labelsChanged |= PublishLabels(ref labels.WeYuLabels, WantsWeYu() ? map.WeYuLabels : null);
         if (labelsChanged) Dirty(computer, labels);
+    }
+
+    // CMU14: the TacticalMapAlwaysVisible flags a console of this normalized faction honours. An unassigned console
+    // shows every human and xeno bucket, so it honours all of those flags
+    private static bool IsAlwaysVisibleToComputer(TacticalMapAlwaysVisibleComponent visible, string? faction)
+    {
+        return faction switch
+        {
+            null => visible.VisibleToMarines || visible.VisibleToXenos || visible.VisibleToOpfor ||
+                    visible.VisibleToGovfor || visible.VisibleToClf,
+            MarinesFaction => visible.VisibleToMarines,
+            XenosFaction => visible.VisibleToXenos,
+            OpforFaction => visible.VisibleToOpfor,
+            GovforFaction => visible.VisibleToGovfor,
+            ClfFaction => visible.VisibleToClf,
+            _ => false,
+        };
     }
 
     private static bool DictionaryEqual<TKey, TValue>(Dictionary<TKey, TValue> left, Dictionary<TKey, TValue> right) where TKey : notnull

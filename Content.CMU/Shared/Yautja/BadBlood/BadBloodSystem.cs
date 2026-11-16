@@ -1,4 +1,6 @@
+using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.Traits.Assorted;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.Roles;
@@ -16,6 +18,16 @@ public sealed partial class BadBloodSystem : EntitySystem
     public bool IsBadBlood(EntityUid uid)
     {
         return HasComp<YautjaBadBloodComponent>(uid);
+    }
+
+    /// <summary>
+    /// Whether <paramref name="body"/> has rotted past saving: its revival timer ran out or something else made it
+    /// permanently dead. Bodies that were never revivable (xenos) always count. Bad Bloods may only butcher, flay or
+    /// spit-cook a rotten body, so a fresh kill stays recoverable for the marines.
+    /// </summary>
+    public bool IsRotten(EntityUid body)
+    {
+        return !HasComp<RMCRevivableComponent>(body) || HasComp<UnrevivableComponent>(body);
     }
 
     /// <summary>
