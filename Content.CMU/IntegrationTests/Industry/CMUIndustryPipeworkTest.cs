@@ -22,6 +22,7 @@ using Content.Shared.Stacks;
 using Robust.Shared.Map;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU.Industry;
 
@@ -350,6 +351,50 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(SEntMan.IsQueuedForDeletion(product), Is.True);
             SEntMan.DeleteEntity(accountUid);
             SEntMan.DeleteEntity(otherUid);
+        });
+    }
+
+    [Test]
+    public async Task CanonicalIndustryPricesArePrototypeBasedAndStackAware()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var prototypes = Server.ResolveDependency<IPrototypeManager>()
+                .EnumeratePrototypes<CMUIndustryPricePrototype>()
+                .ToArray();
+            Assert.That(prototypes, Has.Length.EqualTo(349));
+            Assert.That(prototypes.Select(price => price.Product.Trim().ToLowerInvariant()).Distinct().ToArray(),
+                Has.Length.EqualTo(349));
+            Assert.That(prototypes.All(price => price.Price > 0), Is.True);
+
+            var pricing = Server.System<PricingSystem>();
+            var industry = Server.System<CMUIndustryExportSystem>();
+            var stacks = Server.System<SharedStackSystem>();
+
+            var ore = SEntMan.SpawnEntity("RUMCAluminumOre", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(ore);
+            stacks.SetCount(ore, 4);
+            Assert.That(industry.TryGetCanonicalUnitPrice(ore, out var oreUnitPrice), Is.True);
+            Assert.That(oreUnitPrice, Is.EqualTo(25));
+            Assert.That(pricing.GetPrice(ore), Is.EqualTo(100));
+
+            var ingot = SEntMan.SpawnEntity("RUMCAluminumIngot", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(ingot);
+            stacks.SetCount(ingot, 3);
+            Assert.That(industry.TryGetCanonicalUnitPrice(ingot, out var ingotUnitPrice), Is.True);
+            Assert.That(ingotUnitPrice, Is.EqualTo(30));
+            Assert.That(pricing.GetPrice(ingot), Is.EqualTo(90));
+
+            var drive = SEntMan.SpawnEntity("RUMCKitDriveItem", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(drive);
+            stacks.SetCount(drive, 4);
+            Assert.That(industry.TryGetCanonicalUnitPrice(drive, out var driveUnitPrice), Is.True);
+            Assert.That(driveUnitPrice, Is.EqualTo(90));
+            Assert.That(pricing.GetPrice(drive), Is.EqualTo(360));
+
+            SEntMan.DeleteEntity(ore);
+            SEntMan.DeleteEntity(ingot);
+            SEntMan.DeleteEntity(drive);
         });
     }
 }

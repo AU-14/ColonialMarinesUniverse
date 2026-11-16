@@ -8,6 +8,7 @@ using Content.Shared.CMU14.Government;
 using Content.Shared.Materials;
 using Content.Shared.Stacks;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.ColonyEconomy;
 
@@ -17,10 +18,70 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
     [Dependency] private readonly RMCReagentSystem _reagents = default!;
     [Dependency] private readonly PricingSystem _pricing = default!;
 
+    private readonly Dictionary<EntProtoId, double> _entityPrices = new();
+    private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
+    private readonly Dictionary<string, double> _namePrices = new(StringComparer.OrdinalIgnoreCase);
+
     public override void Initialize()
     {
+        BuildCanonicalPriceCache();
+        SubscribeLocalEvent<ASRSSellableComponent, PriceCalculationEvent>(OnSellablePrice);
         SubscribeLocalEvent<FluidTankComponent, PriceCalculationEvent>(OnTankPrice);
         SubscribeLocalEvent<StackComponent, PriceCalculationEvent>(OnStackPrice);
+    }
+
+    private void BuildCanonicalPriceCache()
+    {
+        _entityPrices.Clear();
+        _stackPrices.Clear();
+        _namePrices.Clear();
+
+        foreach (var price in ProtoMan.EnumeratePrototypes<CMUIndustryPricePrototype>())
+            _namePrices[NormalizeProductName(price.Product)] = price.Price;
+
+        foreach (var stack in ProtoMan.EnumeratePrototypes<StackPrototype>())
+        {
+            if (!_namePrices.TryGetValue(NormalizeProductName(stack.Name), out var price))
+                continue;
+
+            _stackPrices[stack.ID] = price;
+            if (!string.IsNullOrWhiteSpace(stack.Spawn.Id))
+                _entityPrices[stack.Spawn] = price;
+        }
+
+        foreach (var prototype in ProtoMan.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (_namePrices.TryGetValue(NormalizeProductName(prototype.Name), out var price))
+                _entityPrices[prototype.ID] = price;
+        }
+
+        Log.Info($"Loaded {_namePrices.Count} canonical RUMC prices; resolved {_stackPrices.Count} stacks and {_entityPrices.Count} entities.");
+    }
+
+    public bool TryGetCanonicalUnitPrice(EntityUid uid, out double price)
+    {
+        if (TryComp<StackComponent>(uid, out var stack) && _stackPrices.TryGetValue(stack.StackTypeId, out price))
+            return true;
+
+        if (MetaData(uid).EntityPrototype is { } prototype && _entityPrices.TryGetValue(prototype.ID, out price))
+            return true;
+
+        return _namePrices.TryGetValue(NormalizeProductName(Name(uid)), out price);
+    }
+
+    private static string NormalizeProductName(string name)
+        => string.Join(' ', name.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries));
+
+    private void OnSellablePrice(Entity<ASRSSellableComponent> sellable, ref PriceCalculationEvent args)
+    {
+        if (args.Handled || !TryGetCanonicalUnitPrice(sellable, out var price))
+            return;
+
+        if (TryComp<StackComponent>(sellable, out var stack))
+            price *= stack.Count;
+
+        args.Price = price;
+        args.Handled = true;
     }
 
     public bool CanExport(EntityUid uid)
