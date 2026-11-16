@@ -28,7 +28,7 @@
   - Players who asked for the threat are seated first.
   - If you voted for the clan but got no body, you wait in the [bold]Blood Reserve[/bold]. You are first in line for the next seats, and you can leave for the lobby from the reserve dialog.
   - When the first Lodge is pitched, a free [bold]founding squad[/bold] opens for the reserve.
-  - Living Bad Bloods, hounds and open seats together can never exceed [bold]a quarter of the player count[/bold].
+  - Living Bad Bloods, hounds and open seats together can never exceed [bold]a quarter of the players on the server[/bold]; the cap rises and falls as players join and leave.
   - There is no honourable predator hunt on a Bad Blood round.
 
   ## Leader and grunts
@@ -150,6 +150,8 @@
   - [bold]Eradicator[/bold]: Leader only, unlocked at the armory after the lethal bolt. One shot, then a 10-minute cooldown.
 
   Each mode drains bracer power: stun 60, immobilizer 300, lethal 150, eradicator 1500.
+
+  [bold]Range cap:[/bold] every Bad Blood caster bolt flies at most [bold]16 tiles[/bold]. An honourable hunter's caster reaches 20-22, so close in before you fire.
 
   ## Reinforcements
   - [bold]Squads[/bold] are called at the Ascension Stone by the Leader, or by any Bad Blood while the clan has no Leader: 2 grunts for 12 SP, 3 grunts for 16 SP.

@@ -75,11 +75,6 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
         var rule = new Entity<BadBloodCampRuleComponent>(uid, component);
         component.StartedAt = Timing.CurTime;
         component.LandingParty = CountLivingBadBloods();
-        // the threat vote's population: StartThreatWinConditions starts this rule synchronously while it is set.
-        // A rule started any other way (admin, tests) takes the live count
-        component.RoundstartPopulation =
-            EntityManager.System<global::Content.Server.CMU14.Threats.ThreatSystem>().StartingThreatPopulation ??
-            _player.PlayerCount;
         _nextTick = TimeSpan.Zero;
 
         if (FindLandingLeader() is { } leader)
@@ -644,14 +639,11 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     #region Headcount
 
     /// <summary>
-    /// The round's population: <see cref="BadBloodCampRuleComponent.RoundstartPopulation"/> once the rule has
-    /// recorded one, else the live player count.
+    /// The live server population. The threat budget and the Totem high-pop limit follow it as players join and
+    /// leave, so the clan's ceiling scales with the server during the round.
     /// </summary>
     public int GetPlayerCount()
     {
-        if (TryGetRule(out var rule) && rule.Comp.RoundstartPopulation > 0)
-            return rule.Comp.RoundstartPopulation;
-
         return _player.PlayerCount;
     }
 

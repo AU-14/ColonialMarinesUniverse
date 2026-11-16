@@ -77,6 +77,20 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(immobilizer.StunTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
                 var lethal = modes[BadBloodEradicatorSystem.LethalMode].Projectile;
                 Assert.That(Comp<ProjectileMaxRangeComponent>(lethal).Max, Is.EqualTo(16f));
+
+                // range cap: every Bad Blood caster mode has its own bolt capped at 16 tiles, short of the hunters' bolt
+                var hunterModes = Comp<YautjaCasterComponent>("CMUYautjaPlasmaCaster").Modes;
+                for (var i = 0; i < modes.Count; i++)
+                {
+                    var bolt = modes[i].Projectile;
+                    Assert.That(bolt.Id, Does.StartWith("CMUYautjaBadBlood"), $"mode {i} fires a Bad Blood bolt");
+                    Assert.That(Comp<ProjectileMaxRangeComponent>(bolt).Max, Is.EqualTo(16f), $"mode {i} range cap");
+
+                    var hunterBolt = hunterModes.Find(m => m.Name == modes[i].Name)?.Projectile;
+                    if (hunterBolt is { } hunter)
+                        Assert.That(Comp<ProjectileMaxRangeComponent>(hunter).Max, Is.GreaterThan(16f),
+                            $"mode {i}: the hunters' bolt keeps its longer range");
+                }
                 Assert.That(protos.HasIndex<EntityPrototype>("CMUYautjaBadBloodCasterLethalBolt"), Is.False,
                     "the bolt nothing fired is gone");
 
@@ -125,7 +139,6 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.FoundingSquadBase, Is.EqualTo(1));
                 Assert.That(rule.FoundingSquadDivisor, Is.EqualTo(2));
                 Assert.That(rule.LastStandSeats, Is.EqualTo(2));
-                Assert.That(rule.RoundstartPopulation, Is.EqualTo(0), "recorded when the rule starts, not configured");
                 Assert.That(rule.TotemLimit, Is.EqualTo(3));
                 Assert.That(rule.TotemLimitHighPop, Is.EqualTo(4));
                 Assert.That(rule.TotemHighPopPlayers, Is.EqualTo(80));

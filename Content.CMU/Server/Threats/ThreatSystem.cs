@@ -77,12 +77,6 @@ public sealed partial class ThreatSystem : EntitySystem
 
     private readonly List<PendingThreatForceSpawn> _pendingSpawns = new();
 
-    /// <summary>
-    /// The population the threat was scaled for, set only while its win-condition rules start (their Started runs
-    /// synchronously inside <see cref="StartThreatWinConditions"/>). Null at every other time.
-    /// </summary>
-    public int? StartingThreatPopulation { get; private set; }
-
     private readonly ISawmill _sawmill = Logger.GetSawmill("au14.threat");
     public readonly ProtoId<NpcFactionPrototype> threatNPCFaction = "THREAT";
 
@@ -384,15 +378,7 @@ public sealed partial class ThreatSystem : EntitySystem
                 {
                     if (step == ForceDeploymentStep.Completed && startWinConditions)
                     {
-                        StartingThreatPopulation = population;
-                        try
-                        {
-                            StartThreatWinConditions(threat);
-                        }
-                        finally
-                        {
-                            StartingThreatPopulation = null;
-                        }
+                        StartThreatWinConditions(threat);
 
                         if (forced)
                         {

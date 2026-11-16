@@ -30,7 +30,7 @@
       fireSound:
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav
     - name: cmu-yautja-caster-mode-eradicator
-      projectile: CMUYautjaCasterEradicatorBolt
+      projectile: CMUYautjaBadBloodCasterEradicatorBolt
       examineStrength: cmu-yautja-caster-mode-eradicator
       fireRate: 0.083333
       powerCost: 1500
@@ -38,6 +38,8 @@
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav
 
 # The Bad Blood caster's own bolts. The hunters' bolts stay as they are.
+# Range cap: every Bad Blood caster bolt flies at most 16 tiles, short of the hunters' 20-22, so a Bad Blood has to
+# close in to use its caster. Change all four together; BadBloodValueSheetTest pins them.
 
 # 3 s on anyone, no extra second on humans
 - type: entity
@@ -48,6 +50,8 @@
   - type: YautjaCasterStunProjectile
     stunTime: 3
     humanBonusStunTime: 0
+  - type: ProjectileMaxRange
+    max: 16
 
 # radius 4 for 3 s
 - type: entity
@@ -58,11 +62,22 @@
   - type: YautjaCasterImmobilizerProjectile
     stunRange: 4
     stunTime: 3
+  - type: ProjectileMaxRange
+    max: 16
 
 # the hunters' lethal bolt with its damage untouched, it only flies 16 tiles
 - type: entity
   parent: CMUYautjaCasterLethalBolt
   id: CMUYautjaBadBloodCasterPlasmaBolt
+  categories: [HideSpawnMenu]
+  components:
+  - type: ProjectileMaxRange
+    max: 16
+
+# the hunters' eradicator bolt with its blast untouched, capped at 16 tiles like the other Bad Blood bolts
+- type: entity
+  parent: CMUYautjaCasterEradicatorBolt
+  id: CMUYautjaBadBloodCasterEradicatorBolt
   categories: [HideSpawnMenu]
   components:
   - type: ProjectileMaxRange

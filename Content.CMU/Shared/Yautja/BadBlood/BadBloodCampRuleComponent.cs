@@ -164,17 +164,11 @@ public sealed partial class BadBloodCampRuleComponent : Component
     public int LivingCapBonus = 2;
 
     /// <summary>
-    /// Bad Bloods + hounds never exceed this share of the player count.
+    /// Bad Bloods + hounds never exceed this share of the live player count. It is read every time, so the ceiling
+    /// rises and falls with the server population during the round. Nobody is removed when it falls; new seats wait.
     /// </summary>
     [DataField]
     public float ThreatBudgetFraction = 0.25f;
-
-    /// <summary>
-    /// Players on the server when the threat started (the threat vote's population). The threat budget and the
-    /// Totem high-pop limit read this instead of the live count. Zero means unknown: the live count is used.
-    /// </summary>
-    [DataField]
-    public int RoundstartPopulation;
 
     /// <summary>
     /// The landing party brings one sleeping hound per this many Bad Bloods, rounded down. Zero or less: none.

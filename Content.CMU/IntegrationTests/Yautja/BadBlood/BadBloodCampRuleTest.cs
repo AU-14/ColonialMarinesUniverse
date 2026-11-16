@@ -170,12 +170,13 @@ public sealed class BadBloodCampRuleTest : GameTest
         }
     }
 
-    // STATE-502: the threat budget reads the population the threat started with, not who is connected now
+    // the threat budget follows the live server population: it rises as players join and falls as they leave
     [Test]
-    public async Task ThreatBudgetUsesTheRoundstartPopulation()
+    public async Task ThreatBudgetFollowsTheLivePopulation()
     {
         var map = await Pair.CreateTestMap();
         var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var start = 0;
 
         try
         {
@@ -184,20 +185,39 @@ public sealed class BadBloodCampRuleTest : GameTest
                 var rules = Server.System<BadBloodCampRuleSystem>();
                 Assert.That(rules.TryGetRule(out var rule), Is.True);
                 Assert.That(rule.Comp.ThreatBudgetFraction, Is.EqualTo(0.25f), "the default share");
+                start = rules.GetPlayerCount();
+                Assert.That(start, Is.EqualTo(Server.PlayerMan.PlayerCount), "the live count");
+            });
 
-                // this test server has no client connected, so the live count is nowhere near 100
-                rule.Comp.RoundstartPopulation = 100;
+            // 12 players join mid-round: the ceiling rises by a quarter of them
+            var joined = await Server.AddDummySessions(12);
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetPlayerCount(), Is.EqualTo(100));
-                    Assert.That(rules.GetThreatBudget(), Is.EqualTo(25));
-                    Assert.That(rules.GetTotemLimit(), Is.EqualTo(rule.Comp.TotemLimitHighPop));
+                    Assert.That(rules.GetPlayerCount(), Is.EqualTo(start + 12));
+                    Assert.That(rules.GetThreatBudget(), Is.EqualTo(Budget(start + 12)));
+                    Assert.That(rules.GetThreatBudget(), Is.GreaterThan(Budget(start)));
                 });
+            });
+
+            // they leave again: the ceiling falls back
+            foreach (var session in joined)
+                await Server.RemoveDummySession(session);
+
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.GetPlayerCount(), Is.EqualTo(start));
+                Assert.That(rules.GetThreatBudget(), Is.EqualTo(Budget(start)));
             });
         }
         finally
         {
             await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
         }
+
+        static int Budget(int players) => (int) MathF.Round(players * 0.25f, MidpointRounding.AwayFromZero);
     }
 }
