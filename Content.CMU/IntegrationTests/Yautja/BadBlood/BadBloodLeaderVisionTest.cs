@@ -36,9 +36,8 @@ public sealed class BadBloodLeaderVisionTest : GameTest
 
                 foreach (var body in party.All)
                 {
-                    var mask = Mask(body);
-                    mask.Comp.VisorEnabled = true;
-                    Server.System<YautjaMaskSystem>().RefreshVisorGlasses(body);
+                    Assert.That(Server.System<YautjaMaskSystem>().TryEnableWornVisor(body, feedback: false), Is.True,
+                        "Test setup: the visor turns on");
                 }
 
                 Assert.Multiple(() =>

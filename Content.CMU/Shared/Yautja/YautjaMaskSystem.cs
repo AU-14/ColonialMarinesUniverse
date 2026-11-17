@@ -419,6 +419,24 @@ public sealed partial class YautjaMaskSystem : EntitySystem
     /// see (a Bad Blood taking up the Engineer caste, or gaining or losing the clan's leadership) takes effect without
     /// toggling the visor.
     /// </summary>
+    /// <summary>
+    /// Turns on the visor of the mask <paramref name="user"/> is wearing, through the same path the toggle
+    /// action takes once its checks pass. Returns whether the visor is on afterwards.
+    /// </summary>
+    public bool TryEnableWornVisor(EntityUid user, bool feedback = true)
+    {
+        if (!_inventory.TryGetSlotEntity(user, "mask", out var maskUid) ||
+            !TryComp(maskUid, out YautjaMaskComponent? mask))
+        {
+            return false;
+        }
+
+        if (!mask.VisorEnabled)
+            EnableVisor((maskUid.Value, mask), user, feedback);
+
+        return mask.VisorEnabled;
+    }
+
     public void RefreshVisorGlasses(EntityUid user)
     {
         if (!_inventory.TryGetSlotEntity(user, "mask", out var maskUid) ||
