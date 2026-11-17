@@ -28,7 +28,7 @@
     requirement:
       !type:RoleTimeRequirement
       role: AU14JobCivilianCMBMarshal
-      time: 360000 # 200 hours
+      time: 360000 # 100 hours
   equipment:
     suitstorage: CMUBeltHolsterPistolAuto9
 
