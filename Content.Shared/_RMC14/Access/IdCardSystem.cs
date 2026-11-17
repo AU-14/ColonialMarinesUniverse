@@ -50,7 +50,7 @@ public sealed partial class IdCardSystem : EntitySystem
             }
 
             if (TryComp<IdCardOwnerComponent>(uid, out var cardOwner) &&
-                TerminatingOrDeleted(cardOwner.Id))
+                cardOwner.Id.IsValid() && TerminatingOrDeleted(cardOwner.Id))
             {
                 cardOwner.Id = EntityUid.Invalid;
                 Dirty(uid, cardOwner);

@@ -9,9 +9,15 @@ public sealed class EntityReferenceSystem : EntitySystem
     }
 
     public void Watch(EntityUid owner, EntityUid target)
+        => WatchNullable(owner, target);
+
+    public EntityUid? WatchNullable(EntityUid owner, EntityUid? target)
     {
-        if (!TerminatingOrDeleted(owner) && !TerminatingOrDeleted(target))
-            EnsureComp<ReferencedEntityComponent>(target).Observers.Add(owner);
+        if (target is not { } uid || TerminatingOrDeleted(uid) || TerminatingOrDeleted(owner))
+            return null;
+
+        EnsureComp<ReferencedEntityComponent>(uid).Observers.Add(owner);
+        return uid;
     }
 
     private void OnTerminating(Entity<ReferencedEntityComponent> ent, ref EntityTerminatingEvent args)
