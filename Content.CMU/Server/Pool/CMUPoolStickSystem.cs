@@ -16,12 +16,14 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Pool;
 
 public sealed partial class CMUPoolStickSystem : EntitySystem
 {
+    private const float KnockdownChance = 0.25f;
     private static readonly EntProtoId BrokenStick = "CMUPoolStickBroken";
     private static readonly ProtoId<EmotePrototype> Scream = "Scream";
     private static readonly SoundCollectionSpecifier Snap = new("CMUPoolStickSnap");
@@ -31,6 +33,7 @@ public sealed partial class CMUPoolStickSystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCStandingSystem _rest = default!;
     [Dependency] private StandingStateSystem _standing = default!;
 
@@ -61,10 +64,11 @@ public sealed partial class CMUPoolStickSystem : EntitySystem
         var user = args.User;
         var target = args.HitEntities[0];
 
-        Timer.Spawn(TimeSpan.Zero, () => FinishBreak(stick.Owner, user, target));
+        var attemptKnockdown = _random.Prob(KnockdownChance);
+        Timer.Spawn(TimeSpan.Zero, () => FinishBreak(stick.Owner, user, target, attemptKnockdown));
     }
 
-    private void FinishBreak(EntityUid stick, EntityUid user, EntityUid target)
+    private void FinishBreak(EntityUid stick, EntityUid user, EntityUid target, bool attemptKnockdown)
     {
         if (TerminatingOrDeleted(stick))
             return;
@@ -80,7 +84,7 @@ public sealed partial class CMUPoolStickSystem : EntitySystem
         if (held)
             _hands.TryPickup(user, broken, animate: false);
 
-        if (!_mob.IsAlive(target) || !TryComp<RMCRestComponent>(target, out var rest))
+        if (!attemptKnockdown || !_mob.IsAlive(target) || !TryComp<RMCRestComponent>(target, out var rest))
             return;
 
         var armor = new CMGetArmorEvent(SlotFlags.HEAD | SlotFlags.MASK | SlotFlags.EYES,

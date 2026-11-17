@@ -1,6 +1,8 @@
+using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Pool;
 
@@ -8,11 +10,19 @@ public sealed partial class SharedCMUPoolInteractionSystem : EntitySystem
 {
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedPopupSystem _popups = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<CMUPoolStickComponent, GotEquippedHandEvent>(OnStickPickedUp);
         SubscribeLocalEvent<CMUPoolTableComponent, ActivatableUIOpenAttemptEvent>(OnAttemptOpen);
         SubscribeLocalEvent<CMUPoolTableComponent, BoundUserInterfaceMessageAttempt>(OnUiMessageAttempt);
+    }
+
+    private void OnStickPickedUp(Entity<CMUPoolStickComponent> stick, ref GotEquippedHandEvent args)
+    {
+        if (!_timing.ApplyingState && _hands.IsHolding(args.User, stick.Owner, out var hand))
+            _hands.SetActiveHand(args.User, hand);
     }
 
     public bool HasActiveStick(EntityUid user)
