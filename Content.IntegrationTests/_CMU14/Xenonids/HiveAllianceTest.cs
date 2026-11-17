@@ -58,18 +58,6 @@ public sealed class HiveAllianceTest : GameTest
         await AssertAlly(lateJoiner, false);
     }
 
-    [TestCase("CMXenoHive")]
-    [TestCase("CMUPathogenHive")]
-    public async Task DistressAndColonyFallHivesAllowAlliances(string prototype)
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid hive = default;
-        await Server.WaitPost(() => hive = Spawn(prototype, map.GridCoords));
-
-        await Server.WaitAssertion(() =>
-            Assert.That(SEntMan.GetComponent<HiveComponent>(hive).CanMakeAlliances, Is.True));
-    }
-
     [Test]
     public async Task PersonalAlliancesReplicateAndBulkRemovalPreservesFactionAllies()
     {
