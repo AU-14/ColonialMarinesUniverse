@@ -46,7 +46,12 @@ public sealed class CMUWorldMarketRouteTest : GameTest
             Assert.That(isolated.Actions.Single(a => a.Id == festival).Blocked, Is.Not.Empty);
             Assert.That(cities.Single(c => c.Id == origin).CanAfford, Is.True);
             Assert.That(world.DoCityAction(faction, site, festival, budget), Is.Null);
-            world.EnsureMarket().Comp.Hazards.Clear();
+            var market = world.EnsureMarket();
+            // If the strongest city is the destination, the runner-up must be able to reach it.
+            world.AddCityInfluence(market, faction, site, 50);
+            Assert.That(world.BuildCities(faction, budget, out _, out _).Single(c => c.Id == origin).CanAfford, Is.False);
+            Assert.That(world.GiftCity(faction, origin, budget), Is.Null);
+            market.Comp.Hazards.Clear();
         });
 
         await Pair.RunTicksSync(Pair.SecondsToTicks(2));

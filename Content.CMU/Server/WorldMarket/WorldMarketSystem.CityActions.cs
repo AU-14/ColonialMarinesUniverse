@@ -150,8 +150,7 @@ public sealed partial class WorldMarketSystem
     // Why the action cannot be done now (in words), or nothing if it can.
     public string? ActionBlocked(Entity<WorldMarketComponent> market, string faction, string cityId, WorldCityActionPrototype action, float budget)
     {
-        bool? hasRoute = null;
-        return GetActionBlock(market, faction, cityId, action, budget, ref hasRoute)?.Localize(Loc);
+        return GetActionBlock(market, faction, cityId, action, budget)?.Localize(Loc);
     }
 
     private readonly record struct CityActionText(WorldCityActionPrototype Prototype, string Name, string Description);
@@ -162,7 +161,7 @@ public sealed partial class WorldMarketSystem
     }
 
     private CityActionBlock? GetActionBlock(Entity<WorldMarketComponent> market, string faction, string cityId,
-        WorldCityActionPrototype action, float budget, ref bool? hasRoute)
+        WorldCityActionPrototype action, float budget, bool? hasRoute = null)
     {
         var now = _timing.CurTime;
 
@@ -194,7 +193,7 @@ public sealed partial class WorldMarketSystem
             return new CityActionBlock("rumc-map-need-budget");
 
         // What goes by the roads needs an open way from the city that it goes from.
-        if (!action.OnlyInCrisis && action.PointCost == 0 && !(hasRoute ??= RouteOk(market, faction, cityId)))
+        if (!action.OnlyInCrisis && action.PointCost == 0 && !(hasRoute ?? RouteOk(market, faction, cityId)))
             return new CityActionBlock("rumc-map-no-route");
 
         return null;
@@ -458,7 +457,7 @@ public sealed partial class WorldMarketSystem
     // What the console of a faction is told about a city: its trouble, what the faction has going there, what it can order.
     private (string Name, string Description, int Seconds, bool Repaired, List<ProjectEntry> Projects, List<ActionEntry> Actions) CityStatus(
         Entity<WorldMarketComponent> market, string faction, string cityId, float budget,
-        CityActionText[] catalog, Dictionary<CityActionBlock, string> blockedReasons, ref bool? hasRoute)
+        CityActionText[] catalog, Dictionary<CityActionBlock, string> blockedReasons, bool hasRoute)
     {
         var now = _timing.CurTime;
 
@@ -497,7 +496,7 @@ public sealed partial class WorldMarketSystem
                 continue;
 
             var reason = string.Empty;
-            if (GetActionBlock(market, faction, cityId, action, budget, ref hasRoute) is { } block &&
+            if (GetActionBlock(market, faction, cityId, action, budget, hasRoute) is { } block &&
                 !blockedReasons.TryGetValue(block, out reason))
             {
                 reason = block.Localize(Loc);
