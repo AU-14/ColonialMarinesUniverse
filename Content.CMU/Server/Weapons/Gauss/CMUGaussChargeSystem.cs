@@ -5,7 +5,6 @@ using Content.Shared.Camera;
 using Content.Shared.CMU14.Weapons.Gauss;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Item.ItemToggle;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Hitscan.Events;
 using Content.Shared.Weapons.Ranged.Components;
@@ -34,7 +33,6 @@ public sealed class CMUGaussChargeSystem : EntitySystem
     [Dependency] private CMUGaussGunSystem _gauss = default!;
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private ItemToggleSystem _itemToggle = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -79,12 +77,6 @@ public sealed class CMUGaussChargeSystem : EntitySystem
         if (ent.Comp.ChargeStart != null)
         {
             _popup.PopupEntity(Loc.GetString("cmu-gauss-must-fire"), ent, user, PopupType.SmallCaution);
-            return;
-        }
-
-        if (!_itemToggle.IsActivated(ent.Owner))
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-gauss-not-active", ("gun", ent)), ent, user, PopupType.SmallCaution);
             return;
         }
 
@@ -225,8 +217,7 @@ public sealed class CMUGaussChargeSystem : EntitySystem
             var ent = (uid, comp);
             if (comp.ChargeUser is not { } user ||
                 TerminatingOrDeleted(user) ||
-                !_hands.IsHolding(user, uid) ||
-                !_itemToggle.IsActivated(uid))
+                !_hands.IsHolding(user, uid))
             {
                 StopCharge(ent);
                 continue;

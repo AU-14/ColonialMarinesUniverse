@@ -32,17 +32,16 @@
     fireCost: 75
   - type: BatterySelfRecharger
     autoRechargeRate: 15
-  # Has to be switched on before it fires, like a defibrillator. Z is the wield key, so it toggles from
-  # its action button or the activation verb instead.
-  - type: ItemToggle
-    onUse: false
-    verbToggleOn: cmu-gauss-verb-activate
-    verbToggleOff: cmu-gauss-verb-deactivate
-    soundActivate:
-      path: /Audio/CMU14/Weapons/m60gauss/tau_activate.ogg
-    soundDeactivate:
-      path: /Audio/Machines/button.ogg
   - type: CMUGaussGun
+  # Right click bashes with the gun instead of firing.
+  - type: AltFireMelee
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 10
+    soundHit:
+      collection: GenericHit
   - type: UniqueAction
   - type: Appearance
   - type: GunRequiresWield
@@ -181,22 +180,6 @@
     chance: 0.6
     intensity: 5
     duration: 8
-
-- type: entity
-  parent: ActionMarineToggleable
-  id: CMUActionToggleGaussGun
-  name: Toggle gauss gun power
-  description: Powers the XM6283-185E gauss gun on or off. It won't fire while off. [color=red]Charge a shot with the unique gun action keybind, Spacebar by default, then pull the trigger to release it.[/color]
-  components:
-  - type: Action
-    useDelay: 1
-  - type: Sprite
-    layers:
-    - sprite: CMU14/Weapons/Guns/HAZOPS/M60Gauss.rsi
-      state: icon
-      map: ["enum.ActionVisuals.Icon"]
-  - type: InstantAction
-    event: !type:CMUGaussToggleActionEvent
 
 - type: entity
   parent: RMCGunCaseBase

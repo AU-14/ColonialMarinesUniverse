@@ -6,8 +6,6 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
-using Content.Shared.Item.ItemToggle;
-using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -19,8 +17,7 @@ using Robust.Shared.Timing;
 namespace Content.Shared.CMU14.Weapons.Gauss;
 
 /// <summary>
-///     Shared half of the M60 gauss gun: gates the trigger on the gun being powered on, turns a trigger pull
-///     during a charge into the charged release, scales recoil by firearms skill, and lets a multitool strip
+///     Shared half of the M60 gauss gun: turns a trigger pull during a charge into the charged release, scales recoil by firearms skill, and lets a multitool strip
 ///     the ID lock. Charging itself runs on the server (<c>CMUGaussChargeSystem</c>).
 /// </summary>
 public sealed class CMUGaussGunSystem : EntitySystem
@@ -28,7 +25,6 @@ public sealed class CMUGaussGunSystem : EntitySystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private CMGunSystem _cmGun = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private ItemToggleSystem _itemToggle = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -39,10 +35,6 @@ public sealed class CMUGaussGunSystem : EntitySystem
     {
         SubscribeLocalEvent<CMUGaussGunComponent, AttemptShootEvent>(OnAttemptShoot, after: [typeof(GunIDLockSystem)]);
         SubscribeLocalEvent<CMUGaussGunComponent, GunRefreshModifiersEvent>(OnRefreshModifiers);
-        SubscribeLocalEvent<CMUGaussGunComponent, GetItemActionsEvent>(OnGetActions);
-        SubscribeLocalEvent<CMUGaussGunComponent, CMUGaussToggleActionEvent>(OnToggleAction);
-        SubscribeLocalEvent<CMUGaussGunComponent, ItemToggledEvent>(OnToggled);
-        SubscribeLocalEvent<CMUGaussGunComponent, ItemToggleDeactivateAttemptEvent>(OnDeactivateAttempt);
         SubscribeLocalEvent<CMUGaussGunComponent, ContainerGettingRemovedAttemptEvent>(OnRemoveAttempt);
         SubscribeLocalEvent<CMUGaussGunComponent, HeldRelayedEvent<UnwieldAttemptEvent>>(OnUnwieldAttempt);
         SubscribeLocalEvent<CMUGaussGunComponent, ExaminedEvent>(OnExamined);
@@ -71,13 +63,6 @@ public sealed class CMUGaussGunSystem : EntitySystem
     {
         if (args.Cancelled)
             return;
-
-        if (!_itemToggle.IsActivated(ent.Owner))
-        {
-            args.Cancelled = true;
-            _popup.PopupEntity(Loc.GetString("cmu-gauss-not-active", ("gun", ent)), ent, args.User, PopupType.SmallCaution);
-            return;
-        }
 
         if (!IsCharging(ent.Comp))
         {
@@ -112,35 +97,7 @@ public sealed class CMUGaussGunSystem : EntitySystem
         args.CameraRecoilScalar *= GetRecoilFraction(ent.Comp, user.Owner);
     }
 
-    private void OnGetActions(Entity<CMUGaussGunComponent> ent, ref GetItemActionsEvent args)
-    {
-        if (!args.InHands)
-            return;
-
-        args.AddAction(ref ent.Comp.ToggleActionEntity, ent.Comp.ToggleAction);
-        Dirty(ent);
-    }
-
-    private void OnToggleAction(Entity<CMUGaussGunComponent> ent, ref CMUGaussToggleActionEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        args.Handled = true;
-        _itemToggle.Toggle(ent.Owner, args.Performer);
-    }
-
-    // Once a charge is building it has to be fired: the gun can't be powered off, let go of or unwielded
-    // until then.
-    private void OnDeactivateAttempt(Entity<CMUGaussGunComponent> ent, ref ItemToggleDeactivateAttemptEvent args)
-    {
-        if (!IsCharging(ent.Comp))
-            return;
-
-        args.Cancelled = true;
-        args.Popup = Loc.GetString("cmu-gauss-must-fire");
-    }
-
+    // Once a charge is building it has to be fired: the gun can't be let go of or unwielded until then.
     private void OnRemoveAttempt(Entity<CMUGaussGunComponent> ent, ref ContainerGettingRemovedAttemptEvent args)
     {
         if (IsCharging(ent.Comp) && !_timing.ApplyingState)
@@ -156,29 +113,16 @@ public sealed class CMUGaussGunSystem : EntitySystem
         args.Args.Message = Loc.GetString("cmu-gauss-must-fire");
     }
 
-    private void OnToggled(Entity<CMUGaussGunComponent> ent, ref ItemToggledEvent args)
-    {
-        if (ent.Comp.ToggleActionEntity is { } action)
-            _actions.SetToggled(action, args.Activated);
-    }
-
     private void OnExamined(Entity<CMUGaussGunComponent> ent, ref ExaminedEvent args)
     {
-        if (!args.IsInDetailsRange)
+        if (!args.IsInDetailsRange || !IsCharging(ent.Comp))
             return;
 
         using (args.PushGroup(nameof(CMUGaussGunComponent)))
         {
-            args.PushMarkup(Loc.GetString(_itemToggle.IsActivated(ent.Owner)
-                ? "cmu-gauss-examine-active"
-                : "cmu-gauss-examine-inactive"));
-
-            if (IsCharging(ent.Comp))
-            {
-                args.PushMarkup(Loc.GetString(IsFullyCharged(ent.Comp)
-                    ? "cmu-gauss-examine-charged"
-                    : "cmu-gauss-examine-charging"));
-            }
+            args.PushMarkup(Loc.GetString(IsFullyCharged(ent.Comp)
+                ? "cmu-gauss-examine-charged"
+                : "cmu-gauss-examine-charging"));
         }
     }
 

@@ -11,8 +11,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Weapons.Gauss;
 
 /// <summary>
-///     The M60 experimental gauss gun. It must be powered on (an <c>ItemToggle</c>) before it fires.
-///     The trigger fires a quick hitscan bolt off the gun's battery; the unique action spins the gun up
+///     The M60 experimental gauss gun. The trigger fires a quick hitscan bolt off the gun's battery; the unique action spins the gun up
 ///     for a charged shot that is released with the trigger once fully charged. A charge held too long
 ///     overcharges and discharges on its own, with a chance to burn or gib the person holding it.
 /// </summary>
@@ -29,7 +28,7 @@ public sealed partial class CMUGaussGunComponent : Component
 
     /// <summary>Seconds of charging before the charged shot can be released.</summary>
     [DataField]
-    public TimeSpan ChargeTime = TimeSpan.FromSeconds(4);
+    public TimeSpan ChargeTime = TimeSpan.FromSeconds(3);
 
     /// <summary>Seconds after the charge started at which the gun discharges by itself.</summary>
     [DataField]
@@ -84,12 +83,6 @@ public sealed partial class CMUGaussGunComponent : Component
 
     [DataField]
     public EntProtoId<SkillDefinitionComponent> HackSkill = "RMCSkillEngineer";
-
-    [DataField]
-    public EntProtoId ToggleAction = "CMUActionToggleGaussGun";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? ToggleActionEntity;
 
     /// <summary>The shot itself, for both a released charge and an overcharge.</summary>
     [DataField]
@@ -150,8 +143,6 @@ public sealed class CMUGaussAimMessage(NetEntity gun, MapCoordinates target) : E
     public readonly NetEntity Gun = gun;
     public readonly MapCoordinates Target = target;
 }
-
-public sealed partial class CMUGaussToggleActionEvent : InstantActionEvent;
 
 /// <summary>Multitool do-after that strips the ID lock off the gun.</summary>
 [Serializable, NetSerializable]
