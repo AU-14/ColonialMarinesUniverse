@@ -41,6 +41,7 @@ public static class CMUAppalachianAccentRules
         // single words
         ("think", "reckon"), ("those", "them"), ("very", "right"), ("quite", "right"),
         ("completely", "plumb"), ("tired", "tuckered"), ("pretty", "purty"),
+        ("child", "young'un"), ("children", "young'uns"), ("kids", "young'uns"),
         ("grandmother", "mamaw"), ("grandma", "mamaw"), ("grandfather", "papaw"), ("grandpa", "papaw"),
         ("valley", "holler"), ("bag", "poke"), ("bags", "pokes"), ("dinner", "supper"),
         ("wash", "warsh"), ("washed", "warshed"), ("potato", "tater"), ("tomato", "tomater"),
@@ -50,7 +51,7 @@ public static class CMUAppalachianAccentRules
         ("carry", "tote"), ("gun", "hog rifle"), ("heard", "heared"), ("saw", "seed"),
         ("bug", "crawdad"), ("water", "warter"),
         // family and folks
-        ("people", "folks"),
+        ("mother", "mama"), ("mom", "mama"), ("father", "daddy"), ("dad", "daddy"), ("people", "folks"),
         // places and things
         ("creek", "crick"), ("hollow", "holler"), ("sandwich", "sammich"), ("alcohol", "shine"),
         // how folks are doing
@@ -81,7 +82,7 @@ public static class CMUAppalachianAccentRules
     // "was running" -> "was a-running": an -ing verb after is/was/are/'s/'re/'m gets an a- in front.
     // The lookahead skips -ing nouns like "is nothing" and "was morning".
     private static readonly Regex APrefix = new(
-        @"((?:\b(?:was|were|is|are|am|be|been)|'(?:s|re|m))\s+)(?!\w*(?:thing|morning|evening|ceiling|building|during)\b)(\w*[aeiouy]\w*)ing\b",
+        @"((?:\b(?:was|were|is|are|am|be|been)|'(?:s|re|m))\s+)(?!\w*(?:thing|morning|evening|ceiling|building|during)\b)(\w*[aeiouy]\w*)(ing)\b",
         Options);
 
     public static string Apply(string message)
@@ -89,7 +90,9 @@ public static class CMUAppalachianAccentRules
         var msg = CMUAccentText.ApplyWords(Words, message);
 
         // must run before DropG, which would otherwise turn "running" into "runnin'" first
-        msg = APrefix.Replace(msg, "${1}a-${2}in'");
+        msg = APrefix.Replace(msg, m => m.Groups[3].Value == "ING"
+            ? m.Groups[1].Value + "A-" + m.Groups[2].Value + "IN'"
+            : m.Groups[1].Value + "a-" + m.Groups[2].Value + "in'");
 
         return CMUAccentText.DropG(msg);
     }

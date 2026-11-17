@@ -49,7 +49,7 @@ public static class CMUTexasAccentRules
         ("what the hell", "what in tarnation"), ("what the fuck", "what in tarnation"),
         ("holy shit", "well I'll be"), ("bug hunt", "varmint hunt"),
         ("oh my god", "well I'll be"), ("oh my gosh", "well I'll be"), ("wow", "well I'll be"),
-        ("damn it", "dadgummit"), ("i think", "i reckon"),
+        ("i think", "i reckon"),
         ("you're welcome", "you bet"), ("you are welcome", "you bet"),
         ("good morning", "mornin'"), ("good evening", "evenin'"),
         ("what are you doing", "what're you up to"), ("let's go", "let's mosey"),
@@ -59,8 +59,8 @@ public static class CMUTexasAccentRules
         ("a lot of", "a whole lotta"), ("thank you", "much obliged"), ("thanks", "much obliged"),
         // single words
         ("hello", "howdy"), ("hi", "howdy"), ("yes", "yessir"),
-        ("friend", "partner"), ("friends", "partners"), ("idiot", "fool"),
-        ("very", "mighty"), ("really", "real"), ("soda", "coke"), ("god", "got"),
+        ("my friend", "ol' pal"), ("my friends", "ol' pals"), ("friend", "partner"), ("friends", "partners"), ("idiot", "fool"),
+        ("very", "mighty"), ("really", "real"), ("soda", "coke"),
         ("hey", "howdy"), ("okay", "alrighty"), ("dinner", "supper"), ("barbecue", "BBQ"), ("truck", "pickup"),
         ("guy", "fella"), ("guys", "fellas"), ("girl", "gal"), ("girls", "gals"),
         ("cop", "lawman"), ("cops", "lawmen"), ("nonsense", "hogwash"),
@@ -72,7 +72,7 @@ public static class CMUTexasAccentRules
         ("slow down", "hold your horses"), ("definitely", "sure as shootin'"), ("certainly", "sure as shootin'"),
         // people
         ("man", "fella"), ("men", "fellas"), ("woman", "gal"), ("women", "gals"),
-        ("dude", "pardner"), ("buddy", "pardner"), ("pal", "pardner"), ("coward", "yellow-belly"),
+        ("dude", "pardner"), ("buddy", "pardner"), ("coward", "yellow-belly"),
         ("police officer", "lawman"), ("criminal", "outlaw"), ("criminals", "outlaws"),
         // how things are
         ("sick", "under the weather"), ("tired", "worn out"), ("awesome", "mighty fine"),
@@ -81,7 +81,7 @@ public static class CMUTexasAccentRules
         ("hat", "Stetson"), ("shoes", "boots"), ("shoe", "boot"), ("pants", "britches"),
         ("animal", "critter"), ("animals", "critters"), ("bug", "critter"), ("pest", "varmint"), ("steal", "rustle"),
         // more words
-        ("damn", "dadgum"), ("goddamn", "dadgum"), ("hell", "heck"), ("fuck", "dang"), ("fucking", "dadgum"),
+        ("hell", "heck"), ("fuck", "dang"), ("fucking", "dadgum"),
         ("shit", "dang"), ("crazy", "plumb loco"), ("stupid", "dumb as a box of rocks"),
         ("amazing", "downright amazin'"), ("totally", "plumb"), ("absolutely", "plumb"), ("almost", "just about"),
         ("a lot", "a whole bunch"), ("lots of", "a whole heap of"),
@@ -99,9 +99,25 @@ public static class CMUTexasAccentRules
         // swearing
         ("bullshit", "hogwash"), ("asshole", "jackass"), ("bastard", "scoundrel"));
 
+    // "god damn" / "goddamn" -> "got damn". Handled outside the word list so the plain "damn" rule can skip it.
+    private static readonly Regex GodDamn = new(@"\bgod\s?damn\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+    // "damn it" -> "dadgummit", except right after "got" ("god damn it" becomes "got damn it")
+    private static readonly Regex DamnIt = new(@"(?<!\bgot\s)\bdamn it\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+    // "damn" -> "dadgum", except right after "got" (so "got damn" is left alone)
+    private static readonly Regex Damn = new(@"(?<!\bgot\s)\bdamn\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+    // "pal" -> "pardner", except in "ol' pal" (which "my friend" turns into)
+    private static readonly Regex Pal = new(@"(?<!\bol'\s)\bpal\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
     public static string Apply(string message)
     {
-        var msg = CMUAccentText.ApplyWords(Words, message);
+        var msg = GodDamn.Replace(message, m => CMUAccentText.MatchCase(m.Value, "got damn"));
+        msg = CMUAccentText.ApplyWords(Words, msg);
+        msg = Pal.Replace(msg, m => CMUAccentText.MatchCase(m.Value, "pardner"));
+        msg = DamnIt.Replace(msg, m => CMUAccentText.MatchCase(m.Value, "dadgummit"));
+        msg = Damn.Replace(msg, m => CMUAccentText.MatchCase(m.Value, "dadgum"));
         return CMUAccentText.DropG(msg);
     }
 }

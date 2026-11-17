@@ -10,7 +10,7 @@ public static class CMUAccentText
     private const RegexOptions Options = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
 
     // -ing words that have a vowel before the "ing" (so "thing", "king" and "bring" are left alone)
-    private static readonly Regex IngWord = new(@"\b(\w*[aeiouy]\w*)ing\b", Options);
+    private static readonly Regex IngWord = new(@"\b(\w*[aeiouy]\w*)(ing)\b", Options);
 
     // the end of a message: any trailing . ! ? plus whitespace (the match can be empty)
     private static readonly Regex MessageEnd = new(@"([.!?]*)\s*$", RegexOptions.CultureInvariant);
@@ -41,9 +41,12 @@ public static class CMUAccentText
         return msg;
     }
 
-    /// <summary>"running" becomes "runnin'", "something" becomes "somethin'". "thing" and "king" are untouched.</summary>
+    /// <summary>
+    /// "running" becomes "runnin'", "something" becomes "somethin'". "thing" and "king" are untouched.
+    /// The ending copies the capitalization of the word: "GETTING" becomes "GETTIN'", not "GETTin'".
+    /// </summary>
     public static string DropG(string message)
-        => IngWord.Replace(message, "${1}in'");
+        => IngWord.Replace(message, m => m.Groups[1].Value + (m.Groups[2].Value == "ING" ? "IN'" : "in'"));
 
     /// <summary>
     /// Adds ", tag" to the end of the message ("Sure." becomes "Sure, tag."), unless it already ends in the tag.
