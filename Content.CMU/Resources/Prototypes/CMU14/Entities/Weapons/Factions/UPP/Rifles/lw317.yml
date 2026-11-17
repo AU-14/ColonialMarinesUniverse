@@ -2,7 +2,7 @@
   parent: RMCWeaponRifleM54C
   id: CMUWeaponRifleLW317
   name: LW-317 Carbine
-  description: Light Weapon, Type 317. Originating from Norcomm before the CANC's absorption, the Type 317 served the CANC's arsenals for close quarters battle. Also preferred for its ease of use among former CANC soldiers. Chambered in 6x38mm, but can also fire 10x24mm rounds. This variant appears to be missing its 2x 'Yaoguai' scope, and is covered in cosmoline residue. Unfortunate.
+  description: Light Weapon, Type 317. Originating from Norcomm before the CANC's absorption, the Type 317 served the CANC's arsenals for close quarters battle. Also preferred for its ease of use among former CANC soldiers. Chambered in 6x38mm, but can also fit 10x24mm rounds. This unit appears to be missing it's integrated 2x scope, and has been replaced with iron sights. 
   components:
   - type: Icon
     sprite: CMU14/Weapons/Guns/UPP/LW-317.rsi
@@ -123,3 +123,12 @@
     proto: CMUCartridgeRifle6x38AP
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifleAP
+
+- type: Tag
+  id: CMUMagazineSMGLW317
+
+- type: Tag
+  id: CMUMagazineSMGLW317AP
+
+- type: Tag
+  id: CMUCartridgeRifle6x38AP
