@@ -362,12 +362,14 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
                 else
                     _lookup.GetEntitiesInRange(_transform.GetMapCoordinates(uid), gun.Range, _candidates);
                 var nearest = float.MaxValue;
+                var origin = _transform.GetWorldPosition(uid);
                 foreach (var candidate in _candidates)
                 {
-                    if (candidate.Owner == uid || !ValidTarget(ent, candidate))
+                    if (candidate.Owner == uid || TerminatingOrDeleted(candidate))
                         continue;
-                    var distance = Vector2.DistanceSquared(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(candidate));
-                    if (distance >= nearest)
+
+                    var distance = Vector2.DistanceSquared(origin, _transform.GetWorldPosition(candidate));
+                    if (distance >= nearest || !ValidTarget(ent, candidate))
                         continue;
                     nearest = distance;
                     gun.Target = candidate;
