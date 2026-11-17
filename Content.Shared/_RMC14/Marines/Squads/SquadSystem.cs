@@ -89,6 +89,7 @@ public sealed partial class SquadSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeCardOwnerLifetime(); // CMU14
         _mapToSquadQuery = GetEntityQuery<RMCMapToSquadComponent>();
         _originalRoleQuery = GetEntityQuery<OriginalRoleComponent>();
         _squadArmorWearerQuery = GetEntityQuery<SquadArmorWearerComponent>();
@@ -1113,7 +1114,7 @@ public sealed partial class SquadSystem : EntitySystem
                 if (HasComp<IdCardComponent>(item) &&
                     !EnsureComp<IdCardOwnerComponent>(item, out var owner))
                 {
-                    owner.Id = uid;
+                    SetCardOwner((item, owner), uid); // CMU14
                 }
             }
 
