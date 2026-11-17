@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Xenonids.Heal;
+using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Damage;
@@ -33,6 +34,10 @@ public sealed class CMUXenoHealerHumanTest : GameTest
             healer = SEntMan.SpawnEntity("CMXenoDroneHealer", map.GridCoords);
             human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
 
+            var hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
+            var hives = Server.System<SharedXenoHiveSystem>();
+            hives.SetHive(healer, hive);
+
             var damage = new DamageSpecifier
             {
                 DamageDict =
@@ -42,6 +47,11 @@ public sealed class CMUXenoHealerHumanTest : GameTest
                 },
             };
             Server.System<DamageableSystem>().TryChangeDamage(human, damage, ignoreResistances: true);
+
+            var refused = new XenoApplySalveActionEvent { Target = human };
+            SEntMan.EventBus.RaiseLocalEvent(healer, refused);
+            Assert.That(refused.Handled, Is.False);
+            hives.SetHiveIndividualAlly(human, hive, true);
 
             var parts = Server.System<CMUMedicalBodyIndexSystem>().GetBodyParts(human).ToArray();
 #pragma warning disable RA0002
@@ -60,6 +70,15 @@ public sealed class CMUXenoHealerHumanTest : GameTest
             Assert.That(
                 Server.System<DamageableSystem>().GetAllDamage(healer).DamageDict.GetValueOrDefault("Blunt"),
                 Is.EqualTo(FixedPoint2.New(75)));
+
+            if (expectedBrute == 0 && expectedBurn == 0)
+            {
+                var repeat = new XenoApplySalveActionEvent { Target = human };
+                SEntMan.EventBus.RaiseLocalEvent(healer, repeat);
+                Assert.That(repeat.Handled, Is.False, "Poison alone is not treatable with salve.");
+                Assert.That(Server.System<DamageableSystem>().GetAllDamage(healer).DamageDict["Blunt"],
+                    Is.EqualTo(FixedPoint2.New(75)));
+            }
 
             foreach (var (part, _) in parts)
                 Assert.That(SEntMan.GetComponent<BodyPartWoundComponent>(part).ExternalBleeding, Is.EqualTo(ExternalBleedTier.None));

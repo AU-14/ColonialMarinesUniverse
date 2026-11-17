@@ -268,7 +268,7 @@
   parent: ActionXenoBase
   id: ActionXenoApplySalve
   name: Apply Salve (200)
-  description: Apply a salve to use some of your health to heal an allied Xeno over 5 seconds, or heal a human for up to 75 Brute and 50 Burn while dealing 5 Poison damage and stopping all external bleeding. # CMU14
+  description: Apply a salve to use some of your health to heal an allied Xeno over 5 seconds, or heal an allied human for up to 75 Brute and 50 Burn while dealing 5 Poison damage and stopping all external bleeding. # CMU14
   components:
   - type: Action
     itemIconStyle: NoItem
