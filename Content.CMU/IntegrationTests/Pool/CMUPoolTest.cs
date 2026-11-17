@@ -128,7 +128,17 @@ public sealed class CMUPoolInteractionTest : InteractionTest
     {
         var table = ToServer(await SpawnTarget(Table));
         var original = await PlaceInHands(Stick);
-        await AttemptLightAttack();
+        var stick = ToServer(original);
+
+        await Server.WaitPost(() =>
+            SEntMan.EventBus.RaiseLocalEvent(stick, new MeleeHitEvent([], SPlayer, stick, new DamageSpecifier(), null)));
+        await RunTicks(5);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(HandSys.GetActiveItem((SPlayer, Hands)), Is.EqualTo(stick));
+            SEntMan.EventBus.RaiseLocalEvent(stick, new MeleeHitEvent([table], SPlayer, stick, new DamageSpecifier(), null));
+        });
         await RunTicks(5);
 
         AssertDeleted(original);
@@ -191,3 +201,4 @@ public sealed class CMUPoolInteractionTest : InteractionTest
             Assert.That(Server.System<StandingStateSystem>().IsDown(target), Is.EqualTo(falls)));
     }
 }
+
