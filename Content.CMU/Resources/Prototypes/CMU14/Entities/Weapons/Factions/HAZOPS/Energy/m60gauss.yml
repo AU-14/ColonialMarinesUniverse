@@ -153,12 +153,12 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 265
+        Heat: 325
         Blunt: 15
         Asphyxiation: 20
         Radiation: 10
   - type: CMUGaussIgnite
-    chance: 0.2
+    chance: 0.4
     intensity: 5
     duration: 8
 
