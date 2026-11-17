@@ -1278,7 +1278,7 @@
       - id: RMCAttachmentMicroLaserSight
         amount: 8
       - id: RMCAttachmentMiniFlamethrower
-        amount: 7
+        amount: 6
     - name: Stock Attachments
       entries:
       - id: RMCAttachmentM54CStockCollapsible
