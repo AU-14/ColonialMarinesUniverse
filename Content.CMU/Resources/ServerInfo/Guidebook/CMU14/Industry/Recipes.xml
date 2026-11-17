@@ -1,15 +1,15 @@
 <Document>
-  # Recipes & where to get things
+  # RUMC machine recipe guide
 
   [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
 
-  [bold]What are we building?[/bold] Search for an item, material or machine. Click a material or equipment sprite to see how to make it, where it drops, or which machine produces it. Use Back to return to your project.
+  Every recipe currently loaded for a RUMC production machine or work station is listed below. Choose a machine, then search by product, ingredient or equipment. This catalog reads the same prototypes as the machines, so new recipes appear here automatically.
 
-  Pick a production method, then choose how many batches to pack for. Tools and molds marked [bold]kept[/bold] are reusable. Gathering cards show possible sources; drops and deposits can vary.
+  Select a result to see its exact inputs, outputs, processing time, circuit setting, temperature, reusable mold or catalyst, and compatible equipment. Choose how many batches to plan. Items marked [bold]kept[/bold] are not consumed.
 
-  <CMUGuideCraftingRecipes/>
+  <CMUGuideCraftingRecipes MachinesOnly="True"/>
 
-  [bold]Ready to make it?[/bold] Hand recipes: carry the supplies and right-click yourself → Craft. Machine recipes: use the listed equipment and follow the card's instructions. The planner shows base quantities; crafting challenges and machine speed can change the result or time.
+  [bold]Need an ingredient?[/bold] Click its row to open every known production or gathering source, including hand recipes, mining, drilling, plants and pumps. Use Back to return to the same machine and recipe. The quantities shown are the base recipe; upgrades and machine speed can change processing time.
 
   [textlink="First workshop" link="CMUGuideIndustryStart"] · [textlink="Forge" link="CMUGuideIndustryForge"] · [textlink="Steam" link="CMUGuideIndustrySteam"] · [textlink="Electricity" link="CMUGuideIndustryElectric"]
 </Document>

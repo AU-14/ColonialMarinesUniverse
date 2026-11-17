@@ -45,6 +45,8 @@ public sealed class CMUGuideRecipe
     public bool CanPlan = true;
     public string Name = string.Empty;
     public string Search = string.Empty;
+    public string? StationGroup;
+    public string? StationName;
 }
 
 /// <summary>
@@ -149,6 +151,18 @@ public sealed partial class CMUGuideRecipeCatalog
         }
     }
 
+    /// <summary>
+    /// Marks a production entry as belonging to a RUMC machine or work station. The guide uses this
+    /// metadata to build its station picker directly from loaded prototypes instead of maintaining a
+    /// second, hand-written recipe list that can go stale.
+    /// </summary>
+    private void AddAtStation(CMUGuideRecipe entry, string group, string? name = null)
+    {
+        entry.StationGroup = group;
+        entry.StationName = name ?? entry.Method;
+        Add(entry);
+    }
+
     private void Index(CMUGuideMaterial material, string id)
     {
         if (!_sources.TryGetValue(material, out var entries))
@@ -197,7 +211,7 @@ public sealed partial class CMUGuideRecipeCatalog
             entry.Method = string.Join(" / ", machines.Select(m => _prototypes.Index(m).Name).Distinct());
             if (recipe.Circuit is { } circuit)
                 entry.Instructions += " " + Loc.GetString("cmu-industry-source-circuit", ("circuit", circuit));
-            Add(entry);
+            AddAtStation(entry, "machine:" + recipe.Machine);
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<GrinderRecipePrototype>())
@@ -205,7 +219,8 @@ public sealed partial class CMUGuideRecipeCatalog
             var outputs = new List<CMUGuideIngredient> { Stack(recipe.Result, recipe.ResultAmount) };
             outputs.AddRange(recipe.Extras.Select(p => Stack(p.Result, p.Amount)));
             var inputs = new List<CMUGuideIngredient> { Stack(recipe.Input, recipe.InputAmount) };
-            Add(Recipe("grind:" + recipe.ID, "grinder", "grinder-help", outputs, inputs, With<GrinderComponent>()));
+            AddAtStation(Recipe("grind:" + recipe.ID, "grinder", "grinder-help", outputs, inputs,
+                With<GrinderComponent>()), "grinder");
 
             var ore = _prototypes.Index(_prototypes.Index(recipe.Input).Spawn);
             if (ore.TryComp<GroundStackComponent>(out _, _entities.ComponentFactory))
@@ -223,7 +238,7 @@ public sealed partial class CMUGuideRecipeCatalog
                 new() { Stack(recipe.Result, recipe.ResultAmount) }, Stacks(recipe.Materials),
                 With<ElectricSmelterComponent>(m => m.MaxTemperature >= recipe.MinTemperature), recipe.Duration.TotalSeconds);
             entry.Instructions += " " + Loc.GetString("cmu-industry-source-temperature", ("temperature", recipe.MinTemperature));
-            Add(entry);
+            AddAtStation(entry, "electric-smelter");
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<PressRecipePrototype>())
@@ -231,8 +246,9 @@ public sealed partial class CMUGuideRecipeCatalog
             var inputs = Stacks(recipe.Inputs);
             inputs.AddRange(recipe.Fluids.Select(p => Fluid(p.Key, p.Value)));
             AddMold(inputs, recipe.Shape);
-            Add(Recipe("press:" + recipe.ID, "press", "press-help", new() { Stack(recipe.Result, recipe.ResultAmount) },
-                inputs, With<SolidFuelPressComponent>(), recipe.Duration));
+            AddAtStation(Recipe("press:" + recipe.ID, "press", "press-help",
+                new() { Stack(recipe.Result, recipe.ResultAmount) }, inputs, With<SolidFuelPressComponent>(), recipe.Duration),
+                "press");
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<SteamSmeltRecipePrototype>())
@@ -247,7 +263,8 @@ public sealed partial class CMUGuideRecipeCatalog
                 var outputs = new List<CMUGuideIngredient> { Stack(recipe.Result, recipe.ResultAmount) };
                 if (producesSlag && recipe.Slag > 0)
                     outputs.Add(Fluid("RUMCSlag", recipe.Slag));
-                Add(Recipe($"steam:{recipe.ID}:{producesSlag}", "steam", "steam-help", outputs, inputs, smelters, recipe.Duration));
+                AddAtStation(Recipe($"steam:{recipe.ID}:{producesSlag}", "steam", "steam-help", outputs, inputs,
+                    smelters, recipe.Duration), "steam-smelter");
             }
         }
 
@@ -260,8 +277,9 @@ public sealed partial class CMUGuideRecipeCatalog
             };
             if (recipe.Material is { } material)
                 inputs.Add(Stack(material, recipe.MaterialAmount));
-            Add(Recipe("condense:" + recipe.ID, "condenser", "condenser-help",
-                new() { Stack(recipe.Result, recipe.ResultAmount) }, inputs, With<CondenserComponent>(), recipe.Duration));
+            AddAtStation(Recipe("condense:" + recipe.ID, "condenser", "condenser-help",
+                new() { Stack(recipe.Result, recipe.ResultAmount) }, inputs, With<CondenserComponent>(), recipe.Duration),
+                "condenser");
         }
 
         foreach (var recipe in _prototypes.EnumeratePrototypes<AnvilRecipePrototype>())
@@ -276,7 +294,7 @@ public sealed partial class CMUGuideRecipeCatalog
                 entry.Method += " · " + _prototypes.Index(ingot).Name;
                 entry.Instructions += " " + Loc.GetString("cmu-industry-source-strikes",
                     ("tools", string.Join(" → ", recipe.Steps.Select(s => Loc.GetString(_prototypes.Index(s).ToolName)))));
-                Add(entry);
+                AddAtStation(entry, "anvil");
             }
         }
 
@@ -291,7 +309,7 @@ public sealed partial class CMUGuideRecipeCatalog
             entry.Instructions += " " + string.Join("; ", recipe.Layout.OrderBy(p => p.Key).Select(p =>
                 Loc.GetString("cmu-industry-source-assembly-slot", ("slot", p.Key + 1),
                     ("count", p.Value.Amount), ("name", Name(CMUGuideMaterial.Stack(p.Value.Material))))));
-            Add(entry);
+            AddAtStation(entry, "assembly-machine");
         }
 
         foreach (var entity in _equipment)
@@ -301,8 +319,10 @@ public sealed partial class CMUGuideRecipeCatalog
                 for (var i = 0; i < mold.Recipes.Count; i++)
                 {
                     var recipe = mold.Recipes[i];
-                    Add(Recipe($"cast:{entity.ID}:{i}", "cast", "cast-help", new() { Item(recipe.Output, recipe.OutputCount) },
-                        recipe.Ingredients.Select(p => Fluid(p.Key.Id, p.Value.Float())).ToList(), new() { entity.ID }, recipe.CoolTime.TotalSeconds));
+                    AddAtStation(Recipe($"cast:{entity.ID}:{i}", "cast", "cast-help",
+                        new() { Item(recipe.Output, recipe.OutputCount) },
+                        recipe.Ingredients.Select(p => Fluid(p.Key.Id, p.Value.Float())).ToList(), new() { entity.ID },
+                        recipe.CoolTime.TotalSeconds), "casting-molds", Loc.GetString("cmu-industry-station-casting"));
                 }
             }
             if (entity.TryComp<ForgeComponent>(out var forge, _entities.ComponentFactory))
@@ -314,7 +334,7 @@ public sealed partial class CMUGuideRecipeCatalog
                         new() { Stack(ingredient.Input) }, new() { entity.ID });
                     if (_entities.System<RMCReagentSystem>().Index(ingredient.Reagent).MeltingPoint is { } temperature)
                         entry.Instructions += " " + Loc.GetString("cmu-industry-source-temperature", ("temperature", temperature));
-                    Add(entry);
+                    AddAtStation(entry, "forge", Loc.GetString("cmu-industry-station-forge"));
                 }
             }
             if (entity.TryComp<SmeltingPotComponent>(out var pot, _entities.ComponentFactory))
@@ -329,7 +349,7 @@ public sealed partial class CMUGuideRecipeCatalog
                         inputs, new() { entity.ID }, recipe.Duration.TotalSeconds);
                     if (recipe.InputAnyElectronics)
                         entry.Instructions += " " + Loc.GetString("cmu-industry-source-electronics", ("count", recipe.InputAmount));
-                    Add(entry);
+                    AddAtStation(entry, "smelting-pot");
                 }
             }
         }
