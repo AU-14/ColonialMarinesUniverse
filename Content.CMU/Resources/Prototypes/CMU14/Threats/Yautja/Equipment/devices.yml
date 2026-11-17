@@ -1668,7 +1668,9 @@
     slotFlags: EYES
     defaultState: Full
     green: false
-    overlay: true
+    # no thermals: a scavenged mask only sees in the dark. people and creatures behind walls stay hidden like
+    # everything else there. the clan's Leader and Engineers wear the hunters' visor instead (YautjaMaskSystem)
+    overlay: false
     blockScopes: true
     ignoreUserOnlyHalf: true
     experimentalMesonFov: false

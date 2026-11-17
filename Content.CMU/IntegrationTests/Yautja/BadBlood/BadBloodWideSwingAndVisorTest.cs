@@ -115,7 +115,8 @@ public sealed class BadBloodWideSwingAndVisorTest
             Assert.Multiple(() =>
             {
                 Assert.That(badBlood.ID, Is.Not.EqualTo(honourable.ID));
-                Assert.That(badBloodVision!.Overlay, Is.True, "mobs are still drawn through walls");
+                Assert.That(badBloodVision!.Overlay, Is.False, "no thermals: mobs behind walls stay hidden");
+                Assert.That(honourableVision!.Overlay, Is.True, "the honourable visor, worn by the Leader and Engineers, keeps them");
                 Assert.That(badBloodVision.ExperimentalMesonFov, Is.False, "walls hide the map behind them");
                 Assert.That(badBloodVision.DefaultState, Is.EqualTo(honourableVision!.DefaultState));
                 Assert.That(honourableVision.ExperimentalMesonFov, Is.True, "honourable hunters keep wall vision");
