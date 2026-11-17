@@ -52,6 +52,34 @@ public sealed class BattalionCommanderVendorTest : InteractionTest
         }
     }
 
+    [Test]
+    public async Task HonorGuardVendorRenamesTakerToHonorGuard()
+    {
+        await SpawnTarget("CMUHonorGuardVendor");
+
+        var vendor = SEntMan.GetComponent<CMAutomatedVendorComponent>(STarget!.Value);
+        var entry = vendor.Sections.Single().Entries.Single();
+
+        Assert.That(entry.Id.Id, Is.EqualTo("RMCKitHonorGuard"));
+        Assert.That(entry.GiveSquadRoleName?.Id, Is.EqualTo("rmc-job-name-honor-guard"));
+        Assert.That(entry.GivePrefix?.Id, Is.EqualTo("rmc-job-prefix-honor-guard"));
+        Assert.That(entry.IsAppendSquadRoleName, Is.False, "Title must be replaced, not appended.");
+
+        foreach (var job in new[]
+                 {
+                     "AU14JobGOVFORMilitaryPoliceMan", "AU14JobOPFORMilitaryPoliceMan",
+                     "AU14JobGOVFOROfficerMP", "AU14JobOPFOROfficerMP",
+                 })
+        {
+            Assert.That(vendor.Jobs, Does.Contain((ProtoId<JobPrototype>) job),
+                $"Honor Guard vendor must be usable by {job}.");
+        }
+
+        Assert.That(vendor.Jobs, Does.Not.Contain((ProtoId<JobPrototype>) "AU14JobGOVFORPlatCo"),
+            "Honor Guard is a Military Police role, not for platoon commanders.");
+        Assert.That(vendor.Jobs, Does.Not.Contain((ProtoId<JobPrototype>) "CMCommandingOfficer"));
+    }
+
     [TestCase("CMUBattalionCommanderCombatVendorDistressFOF")]
     [TestCase("CMUBattalionCommanderCombatVendorInsurgency")]
     public async Task CombatVendorStockIsRestricted(string vendorPrototype)
@@ -69,7 +97,11 @@ public sealed class BattalionCommanderVendorTest : InteractionTest
             "General officer armor must not be offered.");
         Assert.That(vendor.Sections.Select(s => s.Name), Does.Contain("Belt").And.Contain("Pouches"));
 
+        // Only the Insurgency vendor offers the M59A kit with the target lock visor.
+        var expectedM59A = vendorPrototype == "CMUBattalionCommanderCombatVendorInsurgency"
+            ? "CMUBattalionCommanderBundleM59AVisor"
+            : "CMUBattalionCommanderBundleM59A";
         Assert.That(primary.Entries.Select(e => e.Id.Id),
-            Is.EquivalentTo(new[] { "CMUBattalionCommanderBundleM59A", "CMUBattalionCommanderBundleM56C" }));
+            Is.EquivalentTo(new[] { expectedM59A, "CMUBattalionCommanderBundleM56C" }));
     }
 }

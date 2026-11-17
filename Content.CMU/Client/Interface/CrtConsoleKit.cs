@@ -30,7 +30,8 @@ public sealed class CrtConsoleKit
     /// <summary>The screen behind the CRT tube; add this to the window's contents.</summary>
     public readonly Control Tube;
 
-    public CrtConsoleKit()
+    /// <param name="neutral">Plain white-on-grey scanlines instead of the theme's green, even with the theme off.</param>
+    public CrtConsoleKit(bool neutral = false)
     {
         var cache = IoCManager.Resolve<IResourceCache>();
         Small = cache.GetFont(MonoRegular, 10);
@@ -59,7 +60,8 @@ public sealed class CrtConsoleKit
         Tube.AddChild(new CrtScreenControl
         {
             Source = screen,
-            Phosphor = CrtTerminalPalette.Accent,
+            Phosphor = neutral ? Color.FromHex("#E6E6E6") : CrtTerminalPalette.Accent,
+            Force = neutral,
             Roll = false,
             Grain = false,
         });

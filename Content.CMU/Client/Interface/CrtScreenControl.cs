@@ -71,6 +71,9 @@ public sealed partial class CrtScreenControl : Control
     /// </summary>
     public bool Roll { get; set; } = true;
 
+    /// <summary>Draws the effect even when the CRT theme is switched off (the effect-intensity setting still applies).</summary>
+    public bool Force { get; set; }
+
     /// <summary>
     ///     Whether the animated grain runs. Off for anything being read continuously: per-pixel noise
     ///     redrawn every frame under a paragraph is constant motion in the worst place for it.
@@ -128,7 +131,7 @@ public sealed partial class CrtScreenControl : Control
         && Source.Visible
         && Visible
         && PixelSize.X > 0 && PixelSize.Y > 0
-        && StyleNano.CrtUiEnabled
+        && (Force || StyleNano.CrtUiEnabled)
         && _cfg.GetCVar(CCVars.CMUCrtEffectIntensity) > 0f
         && LastError == null;
 
@@ -159,7 +162,7 @@ public sealed partial class CrtScreenControl : Control
         var handle = renderHandle.DrawingHandleScreen;
 
         // A failed render pass is retried every frame; LastError only gates Drawing for callers.
-        if (_shader == null || Source == null || !StyleNano.CrtUiEnabled)
+        if (_shader == null || Source == null || !(Force || StyleNano.CrtUiEnabled))
             return;
 
         var intensity = _cfg.GetCVar(CCVars.CMUCrtEffectIntensity);

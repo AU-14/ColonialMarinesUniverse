@@ -1,0 +1,48 @@
+# Honor Guard
+# Hands out the RMC honor guard kit (the one from the commander locker) and renames whoever takes it to Honor Guard.
+# Same title, prefix, HUD icon and tactical map blip the honor guard pamphlet gives.
+# Honor Guard is a Military Police role, so this is locked to the MP jobs (Military Policeman and Chief MP,
+# GOVFOR and OPFOR, every faction variant) plus security/command access. Platoon commanders cannot use it.
+- type: entity
+  parent: ColMarTechBase
+  id: CMUHonorGuardVendor
+  name: Honor Guard Vendor
+  description: >-
+    An automated dispenser stocked with the Military Police honor guard kit. Whoever takes a kit is registered as an Honor Guard.
+
+    Only use your current faction.
+  components:
+  - type: AccessReader
+    access:
+    - [ "AU14AccessGovforSecurity" ]
+    - [ "AU14AccessOpforSecurity" ]
+    - [ "AU14AccessGovforCommand" ]
+    - [ "AU14AccessOpforCommand" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/dress.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORMilitaryPoliceMan
+    - AU14JobOPFORMilitaryPoliceMan
+    - AU14JobGOVFOROfficerMP
+    - AU14JobOPFOROfficerMP
+    - AU14JobGOVFOROfficerMPCMBCIU
+    - AU14JobGOVFOROfficerMPRMC
+    - AU14JobGOVFOROfficerMPUPP
+    - AU14JobGOVFOROfficerMPWYPMC
+    sections:
+    - name: Honor Guard
+      choices: { CMUHonorGuardKit: 1 }
+      entries:
+      - id: RMCKitHonorGuard
+        recommended: true
+        giveSquadRoleName: rmc-job-name-honor-guard
+        isAppendSquadRoleName: false
+        givePrefix: rmc-job-prefix-honor-guard
+        isAppendPrefix: false
+        giveIcon:
+          sprite: _RMC14/Interface/cm_job_icons.rsi
+          state: hudsquad_hgmp
+        giveMapBlip:
+          sprite: /Textures/_RMC14/Interface/map_blips.rsi
+          state: honorguard
