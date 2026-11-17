@@ -42,18 +42,13 @@
           False: { visible: true }
   - type: Storage
     grid:
-    - 0,0,19,15
+    - 0,0,9,5
     maxItemSize: Normal
     storageOpenSound: /Audio/Effects/closetopen.ogg
     storageCloseSound: /Audio/Effects/closetclose.ogg
     whitelist:
       tags:
       - Ore
-      - RUMCCrystal
-  - type: MagnetPickup
-    slotFlags: null
-    requireActiveHand: false
-    range: 3
   - type: UserInterface
     interfaces:
       enum.StorageUiKey.Key:

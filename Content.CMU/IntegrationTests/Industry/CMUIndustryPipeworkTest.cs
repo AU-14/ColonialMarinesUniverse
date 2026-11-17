@@ -362,10 +362,13 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var prototypes = Server.ResolveDependency<IPrototypeManager>()
                 .EnumeratePrototypes<CMUIndustryPricePrototype>()
                 .ToArray();
-            Assert.That(prototypes, Has.Length.EqualTo(349));
-            Assert.That(prototypes.Select(price => price.Product.Trim().ToLowerInvariant()).Distinct().ToArray(),
-                Has.Length.EqualTo(349));
+            Assert.That(prototypes.Select(price => price.Product.Trim().ToLowerInvariant()), Is.Unique);
             Assert.That(prototypes.All(price => price.Price > 0), Is.True);
+            var priceByProduct = prototypes.ToDictionary(price => price.Product.Trim().ToLowerInvariant(), price => price.Price);
+            Assert.That(priceByProduct["gold ingot"], Is.GreaterThan(priceByProduct["gold ore"]));
+            Assert.That(priceByProduct["gold sheet"], Is.GreaterThan(priceByProduct["gold ingot"]));
+            Assert.That(priceByProduct["gold powder"] * 4, Is.GreaterThan(priceByProduct["gold ore"]));
+            Assert.That(priceByProduct["fine gold wire"] * 2, Is.GreaterThan(priceByProduct["gold ingot"]));
 
             var pricing = Server.System<PricingSystem>();
             var industry = Server.System<CMUIndustryExportSystem>();
@@ -395,6 +398,25 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             SEntMan.DeleteEntity(ore);
             SEntMan.DeleteEntity(ingot);
             SEntMan.DeleteEntity(drive);
+        });
+    }
+
+    [Test]
+    public async Task UnmarkedStackRemovesSellabilityWhenMergedIntoMarkedStack()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var stacks = Server.System<SharedStackSystem>();
+            var marked = SEntMan.SpawnEntity("RUMCPlasteelIngot", MapCoordinates.Nullspace);
+            var unmarked = SEntMan.SpawnEntity("RUMCPlasteelIngot", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(marked);
+
+            Assert.That(stacks.TryMergeStacks(unmarked, marked, out var transferred), Is.True);
+            Assert.That(transferred, Is.EqualTo(1));
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(marked), Is.False);
+
+            SEntMan.DeleteEntity(marked);
+            SEntMan.DeleteEntity(unmarked);
         });
     }
 

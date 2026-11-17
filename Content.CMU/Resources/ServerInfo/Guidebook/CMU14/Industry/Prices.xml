@@ -1,0 +1,11 @@
+<Document>
+  # ASRS sell-price sheet
+
+  [textlink="Back to Mining & Industry" link="CMUGuideIndustry"] · [textlink="RUMC Machine Recipes" link="CMUGuideIndustryRecipes"]
+
+  This sheet shows the exact price paid by an ASRS for one unit of every canonically priced RUMC product and MegaSeed crop. Stack sales multiply the listed unit price by the number of items in the stack.
+
+  Use the search box above to find a product or price. The sheet reads the same price prototypes used by the ASRS, so its values update automatically with the economy.
+
+  <CMUGuidePriceSheet/>
+</Document>

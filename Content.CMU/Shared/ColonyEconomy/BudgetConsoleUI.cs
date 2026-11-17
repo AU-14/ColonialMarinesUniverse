@@ -24,15 +24,17 @@ public sealed class BudgetConsoleWithdrawBuiMsg : BoundUserInterfaceMessage
 public sealed class BudgetConsoleBuiState : BoundUserInterfaceState
 {
     public float Budget { get; }
+    public int ColonyAsrsBudget { get; }
     public List<BudgetConsoleDepartmentInfo> Departments { get; }
     public float WithdrawalRemaining { get; }
     public float WithdrawalLimit { get; }
     public int WithdrawalResetSeconds { get; }
 
-    public BudgetConsoleBuiState(float budget, List<BudgetConsoleDepartmentInfo> departments,
+    public BudgetConsoleBuiState(float budget, int colonyAsrsBudget, List<BudgetConsoleDepartmentInfo> departments,
         float withdrawalRemaining, float withdrawalLimit, int withdrawalResetSeconds)
     {
         Budget = budget;
+        ColonyAsrsBudget = colonyAsrsBudget;
         Departments = departments;
         WithdrawalRemaining = withdrawalRemaining;
         WithdrawalLimit = withdrawalLimit;
@@ -62,6 +64,19 @@ public sealed class BudgetConsoleTransferToDeptBuiMsg : BoundUserInterfaceMessag
     public float Amount { get; }
 
     public BudgetConsoleTransferToDeptBuiMsg(NetEntity deptConsoleUid, float amount)
+    {
+        DeptConsoleUid = deptConsoleUid;
+        Amount = amount;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class BudgetConsoleTransferAsrsToDeptBuiMsg : BoundUserInterfaceMessage
+{
+    public NetEntity DeptConsoleUid { get; }
+    public int Amount { get; }
+
+    public BudgetConsoleTransferAsrsToDeptBuiMsg(NetEntity deptConsoleUid, int amount)
     {
         DeptConsoleUid = deptConsoleUid;
         Amount = amount;

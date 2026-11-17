@@ -804,6 +804,22 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     }
 
     /// <summary>
+    ///     Transfer credits from the colony ASRS account to a colony-managed department.
+    /// </summary>
+    public bool TransferASRSToDepartment(EntityUid deptConsoleUid, int amount)
+    {
+        if (!TryComp<DepartmentConsoleComponent>(deptConsoleUid, out var dept)
+            || !dept.ColonyManaged
+            || amount <= 0
+            || !_requisitions.TrySpendFunds("colony", amount))
+            return false;
+
+        dept.DepartmentBudget += amount;
+        UpdateAllUiForDepartment(deptConsoleUid, dept);
+        return true;
+    }
+
+    /// <summary>
     ///     Withdraw cash from the department's own budget, spawning physical cash at the console.
     /// </summary>
     private void OnWithdraw(EntityUid uid, DepartmentConsoleComponent comp, DepartmentConsoleWithdrawBuiMsg msg)

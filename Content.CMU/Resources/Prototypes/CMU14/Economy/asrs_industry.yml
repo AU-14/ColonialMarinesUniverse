@@ -8,6 +8,25 @@
     onlyASRSSellable: true
 
 - type: entity
+  parent: OreBox
+  id: CMURUMCMagneticOreBox
+  name: RUMC magnetic ore box
+  description: A high-capacity ore box that magnetically collects RUMC ores and crystals.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,19,15
+    maxItemSize: Normal
+    whitelist:
+      tags:
+      - Ore
+      - RUMCCrystal
+  - type: MagnetPickup
+    slotFlags: null
+    requireActiveHand: false
+    range: 3
+
+- type: entity
   parent: BaseItem
   id: CMUASRSSellableDebugTool
   name: ASRS sellability marker

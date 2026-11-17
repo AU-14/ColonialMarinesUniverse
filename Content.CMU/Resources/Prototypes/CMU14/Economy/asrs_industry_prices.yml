@@ -589,7 +589,7 @@
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice118
   product: "fine gold wire"
-  price: 15
+  price: 30
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice119
@@ -674,7 +674,7 @@
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice135
   product: "gold ingot"
-  price: 25
+  price: 55
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice136
@@ -684,12 +684,12 @@
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice137
   product: "gold powder"
-  price: 7
+  price: 14
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice138
   product: "gold sheet"
-  price: 30
+  price: 60
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice139

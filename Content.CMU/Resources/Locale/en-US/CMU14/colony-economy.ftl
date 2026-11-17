@@ -149,9 +149,12 @@ cmu-budget-department-count = { $count ->
 }
 cmu-budget-transfer-amount = TRANSFER AMOUNT
 cmu-budget-transfer = TRANSFER
+cmu-budget-transfer-treasury = TREASURY → DEPT
+cmu-budget-transfer-asrs = ASRS → DEPT
+cmu-budget-asrs-balance = Colony ASRS available: { $amount }
 cmu-budget-department-budget = BUDGET { $amount }
 cmu-budget-total = Held by departments
-cmu-budget-footer = Transfers move money from the colony budget into a department's budget.
+cmu-budget-footer = Transfers can draw from the colony treasury or colony ASRS into a department's budget.
 cmu-colony-department-truck-access-denied = This truck is restricted to colony engineering and logistics personnel.
 
 # Cash vendor front

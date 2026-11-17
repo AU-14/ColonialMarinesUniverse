@@ -15,6 +15,13 @@ namespace Content.Server._RMC14.Requisitions;
 public sealed partial class RequisitionsSystem
 {
     private static readonly EntProtoId ASRSAppraisalTool = "CMUASRSAppraisalTool";
+    private static readonly HashSet<string> RUMCIndustryFactions =
+    [
+        "govfor",
+        "opfor",
+        "colony",
+        "corporate",
+    ];
 
     private static readonly EntProtoId[] RUMCIndustryMachines =
     [
@@ -99,6 +106,7 @@ public sealed partial class RequisitionsSystem
         "RUMCBatteryBuffer",
         "RUMCSolarPanel",
         "RUMCSolarPanelSilver",
+        "CMURUMCMagneticOreBox",
     ];
 
     /// <summary>
@@ -111,6 +119,9 @@ public sealed partial class RequisitionsSystem
         comp.Categories = comp.Categories
             .Where(category => !string.Equals(category.Name, categoryName, StringComparison.OrdinalIgnoreCase))
             .ToList();
+
+        if (comp.Faction == null || !RUMCIndustryFactions.Contains(comp.Faction))
+            return;
 
         var entries = new List<RequisitionsEntry>();
         foreach (var id in RUMCIndustryMachines)

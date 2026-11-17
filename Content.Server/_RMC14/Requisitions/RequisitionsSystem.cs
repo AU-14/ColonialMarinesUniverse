@@ -1306,16 +1306,26 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     }
 
     /// <summary>
+    /// Returns the current balance for a faction's requisitions account.
+    /// </summary>
+    public int GetFunds(string faction)
+    {
+        return GetAccount(faction).Comp.Balance;
+    }
+
+    /// <summary>
     /// Attempts to deduct <paramref name="amount"/> from the specified faction's requisitions account.
     /// Returns false if the account has insufficient funds.
     /// </summary>
     public bool TrySpendFunds(string faction, int amount)
     {
         var account = GetAccount(faction);
-        if (!TryComp(account, out RequisitionsAccountComponent? comp) || comp.Balance < amount)
+        if (amount <= 0 || !TryComp(account, out RequisitionsAccountComponent? comp) || comp.Balance < amount)
             return false;
 
         comp.Balance -= amount;
+        Dirty(account.Owner, comp);
+        SendUIStateAll();
         return true;
     }
 }

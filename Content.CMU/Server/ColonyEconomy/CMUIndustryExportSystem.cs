@@ -30,6 +30,7 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         BuildCanonicalPriceCache();
         SubscribeLocalEvent<ASRSSellableDebugToolComponent, AfterInteractEvent>(OnDebugToolAfterInteract);
         SubscribeLocalEvent<ASRSSellableComponent, PriceCalculationEvent>(OnSellablePrice);
+        SubscribeLocalEvent<ASRSSellableComponent, CMUStackMergeAttemptEvent>(OnSellableStackMergeAttempt);
         SubscribeLocalEvent<FluidTankComponent, PriceCalculationEvent>(OnTankPrice);
         SubscribeLocalEvent<StackComponent, PriceCalculationEvent>(OnStackPrice);
     }
@@ -86,6 +87,14 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
         args.Price = price;
         args.Handled = true;
+    }
+
+    private void OnSellableStackMergeAttempt(Entity<ASRSSellableComponent> sellable, ref CMUStackMergeAttemptEvent args)
+    {
+        if (args.Recipient != sellable.Owner || HasComp<ASRSSellableComponent>(args.Donor))
+            return;
+
+        RemComp<ASRSSellableComponent>(sellable.Owner);
     }
 
     private void OnDebugToolAfterInteract(Entity<ASRSSellableDebugToolComponent> tool, ref AfterInteractEvent args)

@@ -1,4 +1,5 @@
 using Content.Server.Stack;
+using Content.Server._RMC14.Requisitions;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.GameTicking;
 using Content.Shared.Stacks;
@@ -20,6 +21,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private DepartmentConsoleSystem _department = default!;
+    [Dependency] private RequisitionsSystem _requisitions = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private float _withdrawnThisPeriod;
@@ -31,6 +33,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         SubscribeLocalEvent<BudgetConsoleComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleWithdrawBuiMsg>(OnWithdraw);
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleTransferToDeptBuiMsg>(OnTransferToDept);
+        SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleTransferAsrsToDeptBuiMsg>(OnTransferAsrsToDept);
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleDispenseSalariesBuiMsg>(OnDispenseSalaries);
         SubscribeLocalEvent<BudgetConsoleComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
@@ -75,7 +78,8 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         var resetSeconds = _withdrawnThisPeriod > 0
             ? Math.Max(0, (int) Math.Ceiling((_withdrawalResetAt - _timing.CurTime).TotalSeconds))
             : 0;
-        return new BudgetConsoleBuiState(_budget.GetBudget(), departments, remaining, WithdrawalLimit, resetSeconds);
+        return new BudgetConsoleBuiState(_budget.GetBudget(), _requisitions.GetFunds("colony"), departments,
+            remaining, WithdrawalLimit, resetSeconds);
     }
 
     private void OnUiOpened(EntityUid uid, BudgetConsoleComponent comp, BoundUIOpenedEvent args)
@@ -106,6 +110,14 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
     {
         var deptUid = _entities.GetEntity(msg.DeptConsoleUid);
         _department.TransferToDepartment(deptUid, msg.Amount);
+
+        UpdateAllUi();
+    }
+
+    private void OnTransferAsrsToDept(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleTransferAsrsToDeptBuiMsg msg)
+    {
+        var deptUid = _entities.GetEntity(msg.DeptConsoleUid);
+        _department.TransferASRSToDepartment(deptUid, msg.Amount);
 
         UpdateAllUi();
     }
