@@ -32,7 +32,7 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def api(path, token, body=None):
+def api(path, token, body=None, *, allow_not_found=False):
     request = urllib.request.Request(
         API + path,
         data=json.dumps(body).encode() if body is not None else None,
@@ -45,6 +45,8 @@ def api(path, token, body=None):
             data = response.read()
             return json.loads(data) if data else None
     except urllib.error.HTTPError as error:
+        if error.code == 404 and allow_not_found:
+            return None
         if error.code == 302:
             return error.headers["Location"]
         # Private API bodies and logs must not be echoed into public workflow logs.
@@ -92,13 +94,56 @@ def download_artifact(url, destination):
         raise PackageError("Unexpected GitHub artifact download host")
     # Signed artifact URLs receive no repository credential and cannot redirect it elsewhere.
     with urllib.request.build_opener(NoRedirect).open(url, timeout=120) as response:
-        total = 0
-        with destination.open("wb") as target:
-            while chunk := response.read(1024 * 1024):
-                total += len(chunk)
-                if total > MAX_PACKAGE_SIZE + 1024**2:
-                    raise PackageError("Private artifact exceeds the size limit")
-                target.write(chunk)
+        copy_download(response, destination)
+
+
+def copy_download(response, destination):
+    total = 0
+    with destination.open("wb") as target:
+        while chunk := response.read(1024 * 1024):
+            total += len(chunk)
+            if total > MAX_PACKAGE_SIZE + 1024**2:
+                raise PackageError("Private artifact exceeds the size limit")
+            target.write(chunk)
+
+
+def download_release_asset(asset_id, token, destination):
+    """GitHub may stream an asset or redirect to signed storage; never forward the token."""
+    if type(asset_id) is not int or asset_id <= 0:
+        raise PackageError("Invalid private package asset")
+    request = urllib.request.Request(
+        f"{API}/releases/assets/{asset_id}",
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/octet-stream",
+                 "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "CMU-package-request"},
+    )
+    try:
+        with urllib.request.build_opener(NoRedirect).open(request, timeout=120) as response:
+            copy_download(response, destination)
+    except urllib.error.HTTPError as error:
+        if error.code != 302:
+            raise PackageError(f"Private package download returned HTTP {error.code}") from None
+        download_artifact(error.headers["Location"], destination)
+
+
+def fetch_package(run_id, request_id, build_sha, token, destination):
+    release = api(f"/releases/tags/cmu-ci-{run_id}-package", token, allow_not_found=True)
+    if release is not None:
+        if release["draft"] or not release["prerelease"] or release["target_commitish"] != build_sha:
+            raise PackageError("Private package release does not match the requested build")
+        matches = [asset for asset in release["assets"] if asset["name"] == "package.zip"]
+        if (len(matches) != 1 or matches[0]["state"] != "uploaded"
+                or not 0 < matches[0]["size"] < 2 * 1024**3):
+            raise PackageError("Missing or invalid private package release asset")
+        download_release_asset(matches[0]["id"], token, destination)
+        return
+
+    # Allow the requester to ship before the private workflow changes transport.
+    artifacts = api(f"/actions/runs/{run_id}/artifacts?per_page=100", token)["artifacts"]
+    matches = [a for a in artifacts if a["name"] == f"server-{request_id}" and not a["expired"]]
+    if len(matches) != 1:
+        raise PackageError("Missing or ambiguous private package artifact")
+    location = api(f"/actions/artifacts/{matches[0]['id']}/zip", token)
+    download_artifact(location, destination)
 
 
 def request_package(args):
@@ -164,14 +209,9 @@ def request_package(args):
         time.sleep(10)
     else:
         raise PackageError("Timed out waiting for the private build")
-    artifacts = api(f"/actions/runs/{run_id}/artifacts?per_page=100", token)["artifacts"]
-    matches = [a for a in artifacts if a["name"] == f"server-{request_id}" and not a["expired"]]
-    if len(matches) != 1:
-        raise PackageError("Missing or ambiguous private package artifact")
     with tempfile.TemporaryDirectory() as temporary:
         archive = Path(temporary) / "artifact.zip"
-        location = api(f"/actions/artifacts/{matches[0]['id']}/zip", token)
-        download_artifact(location, archive)
+        fetch_package(run_id, request_id, build_sha, token, archive)
         package = receive_package(archive, args.output, expected)
     print(f"Verified package: {package.name}", flush=True)
 
