@@ -59,7 +59,9 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
         }
 
-        var mode = GetStrengthToggleMode(ent.Comp);
+        var mode = ent.Comp.CycleEarnedModes
+            ? GetNextEarnedMode(ent, args.User)
+            : GetStrengthToggleMode(ent.Comp);
         if (mode == null)
             return;
 
@@ -387,6 +389,23 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     private static Robust.Shared.Audio.SoundSpecifier GetFireSound(YautjaCasterComponent component)
     {
         return GetMode(component)?.FireSound ?? component.FireSound;
+    }
+
+    // CMU14: the next mode after the current one that the holder may switch to, wrapping around. null when no
+    // other mode is open to them
+    private int? GetNextEarnedMode(Entity<YautjaCasterComponent> ent, EntityUid user)
+    {
+        var count = ent.Comp.Modes.Count;
+        for (var step = 1; step < count; step++)
+        {
+            var candidate = (ent.Comp.CurrentMode + step) % count;
+            var attempt = new YautjaCasterModeAttemptEvent(ent.Owner, candidate) { Silent = true };
+            RaiseLocalEvent(user, ref attempt);
+            if (!attempt.Cancelled)
+                return candidate;
+        }
+
+        return null;
     }
 
     private static int? GetStrengthToggleMode(YautjaCasterComponent component)

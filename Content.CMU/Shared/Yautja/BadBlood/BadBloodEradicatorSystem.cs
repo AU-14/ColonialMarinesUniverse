@@ -60,7 +60,9 @@ public sealed partial class BadBloodEradicatorSystem : EntitySystem
         if (!HasComp<BadBloodLethalBoltComponent>(ent.Owner))
         {
             args.Cancelled = true;
-            _popup.PopupClient(Loc.GetString("cmu-bad-blood-lethal-locked"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            if (!args.Silent)
+                _popup.PopupClient(Loc.GetString("cmu-bad-blood-lethal-locked"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+
             return;
         }
 
@@ -70,7 +72,9 @@ public sealed partial class BadBloodEradicatorSystem : EntitySystem
         if (!TryComp(ent.Owner, out BadBloodEradicatorComponent? eradicator))
         {
             args.Cancelled = true;
-            _popup.PopupClient(Loc.GetString("cmu-bad-blood-eradicator-locked"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            if (!args.Silent)
+                _popup.PopupClient(Loc.GetString("cmu-bad-blood-eradicator-locked"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+
             return;
         }
 
@@ -79,6 +83,9 @@ public sealed partial class BadBloodEradicatorSystem : EntitySystem
             return;
 
         args.Cancelled = true;
+        if (args.Silent)
+            return;
+
         var seconds = (int) Math.Ceiling((eradicator.NextUseAt - now).TotalSeconds);
         _popup.PopupClient(Loc.GetString("cmu-bad-blood-eradicator-cooldown", ("seconds", seconds)), ent.Owner, ent.Owner, PopupType.SmallCaution);
     }

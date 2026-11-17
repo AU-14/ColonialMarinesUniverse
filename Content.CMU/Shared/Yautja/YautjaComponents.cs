@@ -1685,6 +1685,14 @@ public sealed partial class YautjaCasterComponent : Component
 
     [DataField]
     public SoundSpecifier? CooldownSound;
+
+    /// <summary>
+    /// CMU14: use in hand steps through every mode the holder may use (stun, immobilizer, lethal, eradicator),
+    /// skipping the ones they have not earned, instead of the honourable caster's strength toggle. The Bad Blood
+    /// caster sets it, so a mode bought at the Lodge armory shows up in the cycle.
+    /// </summary>
+    [DataField]
+    public bool CycleEarnedModes;
 }
 
 [DataDefinition]

@@ -8,6 +8,11 @@ namespace Content.Shared.CMU14.Yautja;
 public record struct YautjaCasterModeAttemptEvent(EntityUid Caster, int Mode)
 {
     public bool Cancelled;
+
+    /// <summary>
+    /// Only asking, e.g. to find the next mode in a cycle: a refusal tells the user nothing.
+    /// </summary>
+    public bool Silent;
 }
 
 /// <summary>

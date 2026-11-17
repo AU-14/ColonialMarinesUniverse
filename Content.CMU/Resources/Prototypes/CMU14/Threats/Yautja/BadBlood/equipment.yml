@@ -8,6 +8,8 @@
   components:
   - type: BadBloodGearLock
   - type: YautjaCaster
+    # use in hand steps through every mode the carrier has earned, so a bought lethal bolt and eradicator show up
+    cycleEarnedModes: true
     modes:
     - name: cmu-yautja-caster-mode-stun
       projectile: CMUYautjaBadBloodCasterStunBolt

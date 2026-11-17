@@ -1334,6 +1334,69 @@ public sealed class YautjaSmokeTest
         await pair.CleanReturnAsync();
     }
 
+    // an attachment put only into the second (right) slot used to be invisible to the deploy action: "The bracer
+    // cannot find that stored tool"
+    [Test]
+    public async Task BracerAttachmentInTheSecondSlotAloneDeploys()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var hands = entMan.System<SharedHandsSystem>();
+
+            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
+            var scimitarHolder = entMan.SpawnEntity("CMUYautjaScimitarAttachment", MapCoordinates.Nullspace);
+            var action = entMan.SpawnEntity("CMUActionYautjaToggleScimitar", MapCoordinates.Nullspace);
+
+            try
+            {
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
+                Assert.That(hands.TryPickupAnyHand(hunter, scimitarHolder), Is.True);
+
+                var bracerCoords = entMan.GetComponent<TransformComponent>(bracer).Coordinates;
+                entMan.EventBus.RaiseLocalEvent(bracer, new InteractUsingEvent(hunter, scimitarHolder, bracer, bracerCoords));
+                RaiseDialogOption(entMan, bracer, hunter, "Right");
+
+                var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
+                Assert.That(gearComp.SecondaryGear.GetValueOrDefault(YautjaGearKind.Scimitar), Is.EqualTo(scimitarHolder),
+                    "Test setup: the scimitar went into the second slot");
+                Assert.That(gearComp.Gear.ContainsKey(YautjaGearKind.Scimitar), Is.False,
+                    "Test setup: nothing of that kind is in the first slot");
+
+                var scimitarStored = entMan.GetComponent<YautjaStoredGearComponent>(scimitarHolder);
+                var actionComp = entMan.GetComponent<ActionComponent>(action);
+                entMan.EventBus.RaiseLocalEvent(bracer, NewToggleScimitarEvent(hunter, action, actionComp));
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(scimitarStored.Deployed, Is.True, "the deploy action finds the second-slot scimitar");
+                    Assert.That(scimitarStored.AttachedWeapon is { } blade && hands.IsHolding(hunter, blade), Is.True);
+                });
+
+                entMan.EventBus.RaiseLocalEvent(bracer, NewToggleScimitarEvent(hunter, action, actionComp));
+                Assert.That(scimitarStored.Deployed, Is.False, "and retracts it again");
+            }
+            finally
+            {
+                entMan.DeleteEntity(hunter);
+                entMan.DeleteEntity(action);
+
+                if (!entMan.Deleted(bracer))
+                    entMan.DeleteEntity(bracer);
+                if (!entMan.Deleted(scimitarHolder))
+                    entMan.DeleteEntity(scimitarHolder);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task BracerAttachmentUseInHandRetractsPairLikeCmss13AttackSelf()
     {

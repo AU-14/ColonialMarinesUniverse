@@ -487,6 +487,11 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearUseInHand(Entity<YautjaStoredGearComponent> ent, ref UseInHandEvent args)
     {
+        // cmss13 plasma_caster/attack_self changes the fire mode, it does not retract. YautjaCasterSystem answers
+        // use in hand for the caster; the Toggle Plasma Caster action retracts it
+        if (HasComp<YautjaCasterComponent>(ent.Owner))
+            return;
+
         var holder = ent.Comp.AttachmentHolder ?? ent.Owner;
         var holderStored = ent.Comp.AttachmentHolder is { } attachmentHolder && TryComp(attachmentHolder, out YautjaStoredGearComponent? attachmentStored)
             ? attachmentStored
@@ -967,13 +972,24 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     private bool TryToggleGear(Entity<YautjaGearContainerComponent> bracer, EntityUid user, YautjaGearKind kind)
     {
         var container = EnsureContainer(bracer);
-        if (EnsureGear(bracer, kind) is not { } gear)
+        var secondary = bracer.Comp.SecondaryGear.GetValueOrDefault(kind);
+        EntityUid gear;
+        if (EnsureGear(bracer, kind) is { } primary)
+        {
+            gear = primary;
+        }
+        else if (secondary != default && !TerminatingOrDeleted(secondary))
+        {
+            // CMU14: an attachment installed into the second (right) slot of a bracer with none of that kind in the
+            // first is only in SecondaryGear. it toggles on its own instead of the bracer not finding it
+            gear = secondary;
+            secondary = default;
+        }
+        else
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-gear-missing"), user, user, PopupType.SmallCaution);
             return false;
         }
-
-        var secondary = bracer.Comp.SecondaryGear.GetValueOrDefault(kind);
         if (IsStoredAndRetracted(container, gear) &&
             (secondary == default || TerminatingOrDeleted(secondary) || IsStoredAndRetracted(container, secondary)))
         {
