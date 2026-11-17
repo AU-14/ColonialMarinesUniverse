@@ -67,6 +67,7 @@
     - ActionXenoPheromones
     - ActionXenoOrderConstruction
     - ActionXenoDigTunnel
+    - ActionXenoDigZLevel
     - ActionXenoPlantWeeds
     - ActionXenoResinHole
     - ActionXenoBurrow

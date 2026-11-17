@@ -1,0 +1,30 @@
+# Burrower's digging claw. Copycat of jackhammer without battery, less brute damage, same swing speed and structural.
+- type: entity
+  name: Digging Claw
+  description: Specialized set of durable claws, which can dig into other Z-Levels and break structures. Too dull to really hurt anyone.
+  parent: BaseItem
+  id: CMUDiggingClaw
+  components:
+  - type: Sprite
+    sprite: CMU14\Objects\Xeno\Burrower\DiggingClaw.rsi
+    state: icon
+  - type: Item
+    sprite: CMU14\Objects\Xeno\Burrower\DiggingClaw.rsi
+    size: Large
+  - type: MeleeWeapon
+    autoAttack: true
+    attackRate: 3
+    angle: 0
+    wideAnimationRotation: -90
+    damage:
+      types:
+        Structural: 220
+        Blunt: 3
+    soundHit:
+      collection: MetalThud
+  - type: PitDiggingTool
+    digTimeMultiplier: 0.35
+  - type: Tag
+    tags:
+    - Pickaxe
+    - Jackhammer

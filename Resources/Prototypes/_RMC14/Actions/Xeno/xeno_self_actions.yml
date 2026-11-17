@@ -760,3 +760,25 @@
   - type: ActionBlockIfResting
   - type: ActionInRangeUnobstructed
     range: 5
+
+- type: entity
+  parent: BaseAction
+  id: ActionXenoDigZLevel
+  name: Digging Claw
+  description: Extrude a specialized, dull claw, which is able to dig.
+  components:
+  - type: Action
+    raiseOnAction: true
+    itemIconStyle: NoItem
+  - type: Sprite
+      sprite: _CMU14\Actions\burrower.rsi
+      state: burrower_digging_claw
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:OnRetractableItemActionEvent
+  - type: RetractableItemAction
+    spawnedPrototype: CMUDiggingClaw
+    summonSounds:
+      collection: gib # Placeholder
+    retractSounds:
+      collection: gib # Placeholder
