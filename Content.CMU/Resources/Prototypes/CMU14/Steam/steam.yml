@@ -91,6 +91,8 @@
   name: steel pipe
   description: A length of steel pipe for liquids. It carries any liquid, one at a time, and pipes next to each other pass it along slowly. Join it to a machine with a screwdriver, the pipe first and then the machine.
   components:
+  - type: FluidPipe
+    rate: 30
   - type: Sprite
     noRot: true
     drawdepth: FloorObjects
@@ -118,6 +120,7 @@
   description: A steel pipe that goes down through the floor, and the liquid it carries goes to the pipe in the same place on the level below.
   components:
   - type: FluidPipe
+    rate: 30
     down: true
 
 # Molten slag, left by the smelter.
