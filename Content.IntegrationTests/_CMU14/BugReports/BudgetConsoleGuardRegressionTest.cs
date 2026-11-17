@@ -17,6 +17,7 @@ public sealed class BudgetConsoleGuardRegressionTest : GameTest
         {
             var budget = Server.System<ColonyBudgetSystem>();
             var console = SEntMan.SpawnEntity("AUbudgetConsole", map.GridCoords);
+            var secondConsole = SEntMan.SpawnEntity("AUbudgetConsole", map.GridCoords);
 
             try
             {
@@ -31,10 +32,19 @@ public sealed class BudgetConsoleGuardRegressionTest : GameTest
 
                 SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleWithdrawBuiMsg(250f));
                 Assert.That(budget.GetBudget(), Is.EqualTo(750f).Within(0.01f));
+
+                // The 3,000-credit allowance is shared colony-wide. A second console
+                // must not be able to bypass the 30-minute withdrawal window.
+                budget.SetBudget(5000f);
+                SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleWithdrawBuiMsg(2750f));
+                Assert.That(budget.GetBudget(), Is.EqualTo(2250f).Within(0.01f));
+                SEntMan.EventBus.RaiseLocalEvent(secondConsole, new BudgetConsoleWithdrawBuiMsg(100f));
+                Assert.That(budget.GetBudget(), Is.EqualTo(2250f).Within(0.01f));
             }
             finally
             {
                 SEntMan.DeleteEntity(console);
+                SEntMan.DeleteEntity(secondConsole);
             }
         });
     }

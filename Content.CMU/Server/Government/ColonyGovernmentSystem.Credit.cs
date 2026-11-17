@@ -1,15 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Linq;
 using Content.Shared.CMU14.Government;
-using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Government;
 
 public sealed partial class ColonyGovernmentSystem
 {
-    // How many loans the city can have at once, how many things it can have money in at once, the step of a loan, and how many instalments missed make a default.
+    // How many loans the city can have at once, the step of a loan, and how many instalments missed make a default.
     public const int MaxLoans = 3;
-    public const int MaxInvestments = 2;
     public const int LoanStep = 500;
     public const int DefaultAfterMissed = 3;
 
@@ -139,25 +137,6 @@ public sealed partial class ColonyGovernmentSystem
                 Default(comp, lender, now);
         }
 
-        foreach (var investment in comp.Investments)
-        {
-            if (investment.Done || now < investment.ReadyAt || !_proto.TryIndex<ColonyInvestmentPrototype>(investment.Proto, out var proto))
-                continue;
-
-            investment.Done = true;
-            investment.Success = _random.Prob(InvestmentChance(comp, proto));
-
-            if (investment.Success)
-            {
-                _budget.AddToBudget(proto.Cost * proto.PayoutMultiplier);
-                ShiftRating(comp, proto.RatingOnSuccess);
-            }
-            else
-            {
-                _budget.AddToBudget(proto.Cost * proto.SalvageMultiplier);
-                ShiftRating(comp, proto.RatingOnFailure);
-            }
-        }
     }
 
     // A default: the lender takes a half of what is owed to it out of the treasury (or the treasury, if it is less), takes the loans away, does not lend again for twenty minutes, and the rating falls hard.
@@ -171,40 +150,6 @@ public sealed partial class ColonyGovernmentSystem
         comp.Loans.RemoveAll(l => l.Lender == lender.ID);
         comp.LenderBlockedUntil[lender.ID] = now + TimeSpan.FromMinutes(20);
         ShiftRating(comp, -30);
-    }
-
-    #endregion
-
-    #region Investments
-
-    // The chance that a thing pays: its own, moved a little by the credit rating.
-    private static float InvestmentChance(ColonyGovernmentComponent comp, ColonyInvestmentPrototype proto)
-    {
-        return Math.Clamp(proto.SuccessChance + (comp.CreditRating - 50) / 400f, 0.1f, 0.95f);
-    }
-
-    private string? InvestmentBlocked(ColonyGovernmentComponent comp, ColonyInvestmentPrototype proto)
-    {
-        if (comp.Investments.Count(i => !i.Done) >= MaxInvestments)
-            return Loc.GetString("rumc-government-investment-blocked-many", ("max", MaxInvestments));
-
-        if (_budget.GetBudget() < proto.Cost)
-            return Loc.GetString("rumc-government-blocked-money");
-
-        return null;
-    }
-
-    private void OnInvest(Entity<ColonyGovernmentConsoleComponent> console, ref InvestMessage msg)
-    {
-        var government = EnsureGovernment();
-        var comp = government.Comp;
-        if (!_proto.TryIndex<ColonyInvestmentPrototype>(msg.Investment, out var proto) || InvestmentBlocked(comp, proto) != null)
-            return;
-
-        _budget.AddToBudget(-proto.Cost);
-        comp.Investments.Add(new Investment(comp.NextInvestmentId++, proto.ID, _timing.CurTime + TimeSpan.FromSeconds(proto.DurationSeconds)));
-
-        Refresh();
     }
 
     #endregion

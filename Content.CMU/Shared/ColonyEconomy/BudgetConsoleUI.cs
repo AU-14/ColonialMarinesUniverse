@@ -25,11 +25,18 @@ public sealed class BudgetConsoleBuiState : BoundUserInterfaceState
 {
     public float Budget { get; }
     public List<BudgetConsoleDepartmentInfo> Departments { get; }
+    public float WithdrawalRemaining { get; }
+    public float WithdrawalLimit { get; }
+    public int WithdrawalResetSeconds { get; }
 
-    public BudgetConsoleBuiState(float budget, List<BudgetConsoleDepartmentInfo> departments)
+    public BudgetConsoleBuiState(float budget, List<BudgetConsoleDepartmentInfo> departments,
+        float withdrawalRemaining, float withdrawalLimit, int withdrawalResetSeconds)
     {
         Budget = budget;
         Departments = departments;
+        WithdrawalRemaining = withdrawalRemaining;
+        WithdrawalLimit = withdrawalLimit;
+        WithdrawalResetSeconds = withdrawalResetSeconds;
     }
 }
 

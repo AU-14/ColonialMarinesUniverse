@@ -1,21 +1,29 @@
 using Content.Server.Stack;
 using Content.Shared.CMU14.ColonyEconomy;
+using Content.Shared.GameTicking;
 using Content.Shared.Stacks;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.ColonyEconomy;
 
 public sealed partial class BudgetConsoleSystem : EntitySystem
 {
     private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+    public const float WithdrawalLimit = 3000;
+    public static readonly TimeSpan WithdrawalCooldown = TimeSpan.FromMinutes(30);
 
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ColonyBudgetSystem _budget = default!;
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private DepartmentConsoleSystem _department = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    private float _withdrawnThisPeriod;
+    private TimeSpan _withdrawalResetAt;
 
     public override void Initialize()
     {
@@ -25,16 +33,49 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleTransferToDeptBuiMsg>(OnTransferToDept);
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleDispenseSalariesBuiMsg>(OnDispenseSalaries);
         SubscribeLocalEvent<BudgetConsoleComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        if (_withdrawnThisPeriod <= 0 || _timing.CurTime < _withdrawalResetAt)
+            return;
+
+        ResetWithdrawalAllowance();
+        UpdateAllUi();
+    }
+
+    private void RefreshWithdrawalAllowance()
+    {
+        if (_withdrawnThisPeriod > 0 && _timing.CurTime >= _withdrawalResetAt)
+            ResetWithdrawalAllowance();
+    }
+
+    private void ResetWithdrawalAllowance()
+    {
+        _withdrawnThisPeriod = 0;
+        _withdrawalResetAt = TimeSpan.Zero;
+    }
+
+    private void OnRoundRestart(RoundRestartCleanupEvent args)
+    {
+        ResetWithdrawalAllowance();
     }
 
     private BudgetConsoleBuiState BuildState()
     {
+        RefreshWithdrawalAllowance();
         var departments = new List<BudgetConsoleDepartmentInfo>();
         foreach (var (netUid, name, budget) in _department.GetAllDepartments())
         {
             departments.Add(new BudgetConsoleDepartmentInfo(netUid, name, budget));
         }
-        return new BudgetConsoleBuiState(_budget.GetBudget(), departments);
+        var remaining = Math.Max(0, WithdrawalLimit - _withdrawnThisPeriod);
+        var resetSeconds = _withdrawnThisPeriod > 0
+            ? Math.Max(0, (int) Math.Ceiling((_withdrawalResetAt - _timing.CurTime).TotalSeconds))
+            : 0;
+        return new BudgetConsoleBuiState(_budget.GetBudget(), departments, remaining, WithdrawalLimit, resetSeconds);
     }
 
     private void OnUiOpened(EntityUid uid, BudgetConsoleComponent comp, BoundUIOpenedEvent args)
@@ -44,11 +85,17 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
 
     private void OnWithdraw(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleWithdrawBuiMsg msg)
     {
+        RefreshWithdrawalAllowance();
+        var remaining = WithdrawalLimit - _withdrawnThisPeriod;
         if (!float.IsFinite(msg.Amount)
             || msg.Amount <= 0
-            || msg.Amount > _budget.GetBudget())
+            || msg.Amount > _budget.GetBudget()
+            || msg.Amount > remaining)
             return;
 
+        if (_withdrawnThisPeriod <= 0)
+            _withdrawalResetAt = _timing.CurTime + WithdrawalCooldown;
+        _withdrawnThisPeriod += msg.Amount;
         _budget.AddToBudget(-msg.Amount);
         _stack.SpawnMultipleNextToOrDrop(CashPrototype, (int) msg.Amount, uid);
 

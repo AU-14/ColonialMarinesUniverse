@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Content.Shared.Botany.Components;
 using Content.Shared.Botany.Items.Components;
+using Content.Shared.Botany.Events;
 using Content.Shared.EntityEffects;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -85,6 +86,9 @@ public sealed partial class BotanySystem
             Dirty(entity, produce);
             ProduceGrown((entity, produce));
             _appearance.SetData(entity, ProduceVisuals.Potency, ent.Comp1.Potency);
+
+            var ev = new ProduceSpawnedEvent(ent.Owner, ent.Comp2.PacketPrototype);
+            RaiseLocalEvent(entity, ref ev);
         }
     }
 }

@@ -27,8 +27,11 @@ public sealed class BudgetConsoleWindow : DefaultWindow
     private readonly Label _budgetText;
     private readonly Label _held;
     private readonly Label _count;
+    private readonly Label _withdrawalAllowance;
+    private readonly Label _withdrawalReset;
     private readonly LineEdit _amount;
     private readonly BoxContainer _departments;
+    private readonly List<(BaseButton Button, int Amount)> _withdrawButtons = [];
 
     private BudgetConsoleBuiState? _state;
 
@@ -58,9 +61,14 @@ public sealed class BudgetConsoleWindow : DefaultWindow
             button.HorizontalExpand = true;
             button.OnPressed += _ => OnWithdraw?.Invoke(amount);
             withdraw.AddChild(button);
+            _withdrawButtons.Add((button, amount));
         }
 
         treasury.AddChild(withdraw);
+        _withdrawalAllowance = CrtConsoleKit.Text(string.Empty, _kit.Small, CrtTerminalPalette.TextDim);
+        treasury.AddChild(_withdrawalAllowance);
+        _withdrawalReset = CrtConsoleKit.Text(string.Empty, _kit.Small, CrtTerminalPalette.TextDim);
+        treasury.AddChild(_withdrawalReset);
 
         // Payroll.
         var dispense = new ConfirmButton
@@ -120,6 +128,16 @@ public sealed class BudgetConsoleWindow : DefaultWindow
             state.Budget > 0 ? CrtTerminalPalette.Accent : CrtTerminalPalette.Alert);
         _count.Text = Loc.GetString("cmu-budget-department-count", ("count", state.Departments.Count));
         _held.Text = Loc.GetString("cmu-budget-total") + ": " + CrtConsoleKit.Money(state.Departments.Sum(d => d.Budget));
+        _withdrawalAllowance.Text = Loc.GetString("cmu-budget-withdrawal-allowance",
+            ("remaining", CrtConsoleKit.Money(state.WithdrawalRemaining)),
+            ("limit", CrtConsoleKit.Money(state.WithdrawalLimit)));
+        var minutes = state.WithdrawalResetSeconds / 60;
+        var seconds = state.WithdrawalResetSeconds % 60;
+        _withdrawalReset.Text = state.WithdrawalResetSeconds > 0
+            ? Loc.GetString("cmu-budget-withdrawal-reset", ("minutes", minutes), ("seconds", seconds))
+            : Loc.GetString("cmu-budget-withdrawal-ready");
+        foreach (var (button, amount) in _withdrawButtons)
+            button.Disabled = amount > state.Budget || amount > state.WithdrawalRemaining;
         Rebuild();
     }
 

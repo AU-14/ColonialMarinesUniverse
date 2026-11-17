@@ -1,7 +1,14 @@
 using Content.Shared.Botany.Items.Components;
 using Content.Shared.Burial.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Botany.Events;
+
+/// <summary>
+/// Raised on a newly harvested produce entity after its plant snapshot has been applied.
+/// </summary>
+[ByRefEvent]
+public readonly record struct ProduceSpawnedEvent(EntityUid PlantHolder, EntProtoId SeedPacket);
 
 /// <summary>
 /// Event raised when a botany hoe is used on a tray.
