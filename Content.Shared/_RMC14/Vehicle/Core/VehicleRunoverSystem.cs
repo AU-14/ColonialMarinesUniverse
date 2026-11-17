@@ -68,7 +68,11 @@ public sealed partial class VehicleRunoverSystem : EntitySystem
                     comp.Duration = TimeSpan.FromSeconds(1.5);
 
                 comp.ExpiresAt = time + comp.Duration + StandUpGrace;
-                _stun.TryKnockdown(uid, comp.Duration, true);
+                // CMU14: a Yautja keeps the knockdown of the hit but is not held down under the hull: the runover stays
+                // so they pass through it, and they get up and walk out
+                if (!Content.Shared.CMU14.Vehicle.CMUVehicleRunover.IgnoresPin(EntityManager, uid))
+                    _stun.TryKnockdown(uid, comp.Duration, true);
+
                 continue;
             }
 
