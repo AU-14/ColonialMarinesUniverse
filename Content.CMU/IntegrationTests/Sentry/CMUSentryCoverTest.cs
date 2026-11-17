@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._RMC14.Sentry;
+using Content.Shared.BarricadeBlock;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Interaction;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -29,7 +30,7 @@ public sealed class CMUSentryCoverTest : GameTest
             var turret = SEntMan.SpawnEntity("RMCTurretGaussSpaceborne", map.GridCoords);
             var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(4, 0)));
             var targeting = Server.System<SentryTargetingSystem>();
-            var barricade = SEntMan.GetComponent<Content.Shared.BarricadeBlock.BarricadeBlockComponent>(cover);
+            var barricade = SEntMan.GetComponent<BarricadeBlockComponent>(cover);
             Assert.That(targeting.ClearsBarricade(turret, cover, barricade), Is.True);
 
             Server.System<SharedTransformSystem>().SetCoordinates(cover, map.GridCoords.Offset(new Vector2(5, 0)));
@@ -55,6 +56,8 @@ public sealed class CMUSentryCoverTest : GameTest
 
             sentry = SEntMan.SpawnEntity("RMCSentry", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
             var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));
+            // Ordinary shots always stop here, so a hit proves the gun cleared the barricade.
+            SEntMan.GetComponent<BarricadeBlockComponent>(cover).Blocking = 100;
             var transform = Server.System<SharedTransformSystem>();
             transform.SetLocalRotation(sentry, Direction.East.ToAngle());
             transform.SetLocalRotation(cover, Direction.East.ToAngle());

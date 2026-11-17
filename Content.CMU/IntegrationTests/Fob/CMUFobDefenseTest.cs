@@ -5,6 +5,7 @@ using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.CMU14.Fob;
 using Content.Server.GameTicking.Events;
+using Content.Shared.BarricadeBlock;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Sentry;
@@ -288,6 +289,8 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
             SetAmmo(Magazine(secondGun), 0);
 
             var cover = SEntMan.SpawnAtPosition("CMBarricadeMetal", _gunCoords.Offset(new Vector2(4, 0)));
+            // Ordinary shots always stop here, so a hit proves the gun cleared the barricade.
+            SEntMan.GetComponent<BarricadeBlockComponent>(cover).Blocking = 100;
             Transform.SetWorldRotation(cover, Vector2.UnitX.ToWorldAngle());
             Transform.SetCoordinates(_victim, _gunCoords.Offset(new Vector2(6, 0)));
             Assert.That(Reserve.TryActivate(_network), Is.True);
