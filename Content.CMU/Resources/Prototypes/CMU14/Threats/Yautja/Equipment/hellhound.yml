@@ -35,6 +35,9 @@
   - type: Sprite
     drawdepth: Mobs
     sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
+    # the 64x64 frames are bottom-aligned (CM-SS13 draws them from the tile's bottom edge): the hound sits 16 px
+    # low in the frame, so lift it half a tile to stand on its own tile. The Bad Blood hound inherits this
+    offset: 0,0.5
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: "Normal_Hellhound_Walking"

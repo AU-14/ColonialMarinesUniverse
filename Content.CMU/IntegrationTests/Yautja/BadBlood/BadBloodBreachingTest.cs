@@ -79,9 +79,13 @@ public sealed class BadBloodBreachingTest
                     Assert.That(entMan.HasComponent<DamageBoostsComponent>(honourable), Is.False,
                         "Honourable melee gear must stay as it is.");
 
-                    // the weapon's own damage, which is all a mob ever takes from it, is untouched
-                    Assert.That(badBloodMelee.Damage.Equals(honourableMelee.Damage), Is.True,
-                        "The Bad Blood variant must hit mobs exactly as hard as the hunter's weapon.");
+                    // the weapon's own damage, which is all a mob ever takes from it: the same damage types as the
+                    // hunter's weapon, 2-3 harder (ARCH-03, exact values in BadBloodValueSheetTest). Breaching adds nothing
+                    Assert.That(badBloodMelee.Damage.DamageDict.Keys, Is.EquivalentTo(honourableMelee.Damage.DamageDict.Keys),
+                        "The Bad Blood variant deals the same kind of damage as the hunter's weapon.");
+                    var extra = (badBloodMelee.Damage.GetTotal() - honourableMelee.Damage.GetTotal()).Float();
+                    Assert.That(extra, Is.InRange(2f, 3f),
+                        "The Bad Blood variant hits mobs only slightly harder than the hunter's weapon.");
                     Assert.That(badBloodMelee.AttackRate, Is.EqualTo(honourableMelee.AttackRate));
 
                     // the boost only lands on targets flagged Breaching, and a marine is not one

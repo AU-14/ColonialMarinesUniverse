@@ -115,10 +115,10 @@
 
   ## Joining the clan
   - The clan needs [bold]30 players[/bold] to appear on the threat vote.
-  - It lands as [bold]1 Leader and 3 grunts[/bold], plus one more grunt for about every 17 players above 30, and one sleeping hound for every two Bad Bloods.
+  - It lands as [bold]1 Leader and 4 grunts[/bold], plus one more grunt for about every 12 players above 30, and one sleeping hound for every two Bad Bloods, rounded up.
   - Players who asked for the threat are seated first. Voters without a body wait in the [bold]Blood Reserve[/bold] and are first in line for new seats. You can leave the reserve for the lobby.
   - Pitching the first Lodge opens a free [bold]founding squad[/bold] for the reserve.
-  - Bad Bloods, hounds and open seats together never exceed [bold]a quarter of the players on the server[/bold].
+  - Bad Bloods, hounds and open seats together never exceed [bold]30% of the players on the server[/bold].
   - If you ghost, your Bad Blood or hound is offered to another player.
   - There is no honourable hunt on a Bad Blood round.
 
@@ -130,9 +130,9 @@
   - a ceremonial dagger, a polishing rag and a cleanser gel vial, for trophies;
   - two hunting traps, a water flask, a hunting pouch, a toolbelt and a hound observation pad.
 
-  [bold]Grunts[/bold] wear patchwork armor (20 melee / 20 bullet / 20 bio / 30 explosion).
+  [bold]Grunts[/bold] wear patchwork armor (20 melee / 25 bullet / 20 bio / 30 explosion).
 
-  [bold]The Leader[/bold] wears Leader-grade armor (30 / 50 / 30 / 40) and carries an extra healing capsule. Tier II and III wares open to the Leader one tier early. Only the Leader can pitch the Lodge, call squads while alive, buy the lethal bolt and the eradicator, fire the eradicator, and hijack a dropship.
+  [bold]The Leader[/bold] wears Leader-grade armor (30 / 55 / 30 / 40) and carries an extra healing capsule. Tier II and III wares open to the Leader one tier early. Only the Leader can pitch the Lodge, call squads while alive, buy the lethal bolt and the eradicator, fire the eradicator, and hijack a dropship.
 
   [bold]Your hide:[/bold] before armor you take 40% of blunt, 45% of slash, 30% of piercing and 50% of burn damage, half of poison and all of caustic. You are softer in melee and tougher against fire than an honourable hunter.
 
@@ -231,7 +231,7 @@
   - Every Bad Blood bolt flies at most [bold]16 tiles[/bold].
 
   ## Reinforcements and hounds
-  - The Leader calls [bold]squads[/bold] at the Ascension Stone (any Bad Blood can while there is no Leader): 2 grunts for 12 SP, 3 grunts for 16 SP.
+  - The Leader calls [bold]squads[/bold] at the Ascension Stone (any Bad Blood can while there is no Leader): 1 grunt for 7 SP, 3 grunts for 16 SP, 5 grunts for 24 SP.
   - Seats go out as ghost roles, Blood Reserve first. Unclaimed seats are refunded.
   - [bold]Buying a squad reveals the Lodge to the marines for 60 seconds.[/bold]
   - [bold]Hounds[/bold] cost 6 SP at the kennel. A hound arrives asleep and is reserved for its buyer for one minute; waking it offers it as a ghost role.
@@ -254,7 +254,7 @@
   - Bad Bloods are [bold]dishonoured[/bold]: no rank, no honour, worth no honour to anyone.
 
   ## When the Leader dies
-  - With a Lodge standing, an [bold]ascension vote[/bold] opens at the Ascension Stone. Any living Bad Blood can stand, and every Bad Blood votes.
+  - With a Lodge standing, an [bold]ascension vote[/bold] opens and every Bad Blood is asked over their bracer whether to claim the Lodge (the Ascension Stone works too, and shows the vote again if you closed it). Any living Bad Blood can stand, and every Bad Blood votes.
   - The vote lasts 60 seconds, plus 10 per candidate, up to 2 minutes. Ties go to the candidate with more kills, then to whoever stood first.
   - Every other leader bracer [bold]scuttles[/bold]: a 10-second warning, then a small blast. It cannot be taken off or picked up meanwhile.
   - [bold]If the Leader dies with no Lodge standing, the marines win.[/bold]

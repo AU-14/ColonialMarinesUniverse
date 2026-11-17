@@ -178,6 +178,7 @@
   id: CMUBadBloodWristBladesAttachment
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: YautjaStoredGear
     kind: WristBlades
     deployedPrototype: CMUYautjaBadBloodWristBlades
@@ -187,6 +188,7 @@
   id: CMUBadBloodScimitarAttachment
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: YautjaStoredGear
     kind: Scimitar
     deployedPrototype: CMUYautjaBadBloodScimitar
@@ -196,6 +198,7 @@
   id: CMUBadBloodChainGauntletAttachment
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: YautjaStoredGear
     kind: ChainGauntlet
     deployedPrototype: CMUYautjaBadBloodChainGauntlet
@@ -208,13 +211,14 @@
   description: A clan mask backed with scavenged plating.
   suffix: Bad Blood, Armored
   components:
+  - type: BadBloodGearLock
   - type: CMArmor
     melee: 20
-    bullet: 25
+    bullet: 30
     bio: 20
     explosionArmor: 10
 
-# 25 / 45 / 25 / 35: a full suit of clan armor. grunts land in patchwork (20 / 20 / 20 / 30) and earn this at tier II.
+# 25 / 50 / 25 / 35: a full suit of clan armor. grunts land in patchwork (20 / 25 / 20 / 30) and earn this at tier II.
 # melee stays between patchwork and the Leader's plate (30) so the Leader keeps the best armor in the clan.
 # its own CMArmor so the honourable CMUYautjaClanArmor (35 melee) is untouched
 - type: entity
@@ -224,13 +228,14 @@
   description: A complete suit of clan plate, taken or traded for. Far better than the patchwork a Bad Blood lands in.
   suffix: Bad Blood, Full
   components:
+  - type: BadBloodGearLock
   - type: CMArmor
     melee: 25
-    bullet: 45
+    bullet: 50
     bio: 25
     explosionArmor: 35
 
-# 30 / 50 / 30 / 40, the same plate the Leader lands in (leader_gear.yml). it makes a grunt a viable successor
+# 30 / 55 / 30 / 40, the same plate the Leader lands in (leader_gear.yml). it makes a grunt a viable successor
 - type: entity
   parent: CMUYautjaBadBloodArmorCommando
   id: CMUBadBloodLeaderArmor
@@ -238,9 +243,10 @@
   description: Heavy plate of the kind a clan's Leader wears.
   suffix: Bad Blood, Leader
   components:
+  - type: BadBloodGearLock
   - type: CMArmor
     melee: 30
-    bullet: 50
+    bullet: 55
     bio: 30
     explosionArmor: 40
 

@@ -165,6 +165,7 @@
   description: A worn hunting bracer, crudely maintained. Its weapon bay has been damaged. A communicator has been wired
     directly into the bracer.
   components:
+  - type: BadBloodGearLock
   # Bad Bloods are not bound by the honour code, an empty list takes the guide off the bracer
   - type: GuideHelp
     guides:
@@ -484,6 +485,7 @@
   name: ceremonial cloaking harness
   description: A ceremonial cape fitted with a compact cloaking field generator.
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/cape_ceremonial.rsi
     state: icon
@@ -1659,6 +1661,7 @@
   id: CMUBadBloodNightVisionGlasses
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: NightVisionItem
     actionId:
     toggleable: false

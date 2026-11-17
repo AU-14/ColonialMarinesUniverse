@@ -76,6 +76,7 @@
   description: Bone poles, hide and plating, bundled for carrying. Only the clan's Leader knows how it goes together.
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: Item
     size: Huge
   - type: Sprite
@@ -135,6 +136,7 @@
   name: clan leader's bracer
   description: A scavenged hunting bracer wound with the clan's kill-cords. Whoever leads the Bad Bloods wears it.
   components:
+  - type: BadBloodGearLock
   - type: BadBloodLeaderBracer
 
 - type: entity

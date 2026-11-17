@@ -8,13 +8,14 @@
     Poison: 0
 
 # Bad Bloods are squishier than honourable hunters in melee (Blunt 0.40, Slash 0.45), so marines can close in
-# and win the exchange with blades. Heat 0.50 keeps the flamer from out-killing melee. Piercing stays at 0.30.
+# and win the exchange with blades. Heat 0.50 keeps the flamer from out-killing melee. Piercing 0.27 (was 0.30):
+# bullets bite a little less.
 # Caustic is left at 1.0 and poison lands at half instead of being ignored.
 - type: damageModifierSet
   id: CMUYautjaBadBlood
   coefficients:
     Blunt: 0.40
     Slash: 0.45
-    Piercing: 0.30
+    Piercing: 0.27
     Heat: 0.50
     Poison: 0.5

@@ -112,11 +112,21 @@ public sealed partial class BadBloodCampRuleComponent : Component
     [DataField]
     public FixedPoint4 CookSpCapPerBody = 3;
 
+    // ARCH-02: reinforcements come in three tiers, 1, 3 and 5 grunts. The bigger tiers are cheaper per seat
     [DataField]
-    public FixedPoint4 SquadOfTwoCost = 12;
+    public FixedPoint4 SquadOfOneCost = 7;
 
     [DataField]
     public FixedPoint4 SquadOfThreeCost = 16;
+
+    [DataField]
+    public FixedPoint4 SquadOfFiveCost = 24;
+
+    /// <summary>
+    /// What the clan pays for the last-stand squad a Clan Wipe calls (<see cref="LastStandSeats"/> seats).
+    /// </summary>
+    [DataField]
+    public FixedPoint4 LastStandCost = 12;
 
     [DataField]
     public FixedPoint4 HoundCost = 6;
@@ -161,17 +171,17 @@ public sealed partial class BadBloodCampRuleComponent : Component
     public int FoundingSeats;
 
     [DataField]
-    public int LivingCapBonus = 2;
+    public int LivingCapBonus = 3;
 
     /// <summary>
     /// Bad Bloods + hounds never exceed this share of the live player count. It is read every time, so the ceiling
     /// rises and falls with the server population during the round. Nobody is removed when it falls; new seats wait.
     /// </summary>
     [DataField]
-    public float ThreatBudgetFraction = 0.25f;
+    public float ThreatBudgetFraction = 0.3f;
 
     /// <summary>
-    /// The landing party brings one sleeping hound per this many Bad Bloods, rounded down. Zero or less: none.
+    /// The landing party brings one sleeping hound per this many Bad Bloods, rounded up. Zero or less: none.
     /// </summary>
     [DataField]
     public int LandingHoundDivisor = 2;
@@ -181,6 +191,12 @@ public sealed partial class BadBloodCampRuleComponent : Component
     /// </summary>
     [DataField]
     public int HoundCapDivisor = 2;
+
+    /// <summary>
+    /// Hounds the clan may keep on top of the <see cref="HoundCapDivisor"/> share.
+    /// </summary>
+    [DataField]
+    public int HoundCapBonus = 1;
 
     /// <summary>
     /// The founding squad has at most this many seats + <see cref="LandingParty"/> / <see cref="FoundingSquadDivisor"/>.
@@ -292,6 +308,13 @@ public sealed partial class BadBloodCampRuleComponent : Component
 
     [DataField]
     public TimeSpan VoteMaxDuration = TimeSpan.FromSeconds(120);
+
+    /// <summary>
+    /// A clan whose landing party brought no Leader holds a vote this long after the rule starts, unless a Leader
+    /// body has been seated by then. Without it nobody could ever lead and founding grace would run out.
+    /// </summary>
+    [DataField]
+    public TimeSpan LeaderlessVoteDelay = TimeSpan.FromSeconds(30);
 
     // ---- the Blood Reserve and squads ----
 

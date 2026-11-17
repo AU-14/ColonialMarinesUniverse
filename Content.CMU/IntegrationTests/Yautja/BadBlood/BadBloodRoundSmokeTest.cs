@@ -381,13 +381,14 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 rule.Comp.DeadBadBloods.Clear();
                 Server.PlayerMan.SetAttachedEntity(session, null);
 
+                Assert.That(rules.AddSp(rule.Comp.SquadOfThreeCost), Is.True);
                 var beforeCall = rules.GetSp();
-                Assert.That(camp.TryBuySquad(grunt, 2), Is.False, "a grunt cannot call a squad while the Leader lives");
-                Assert.That(camp.TryBuySquad(leader, 2), Is.True);
-                Assert.That(rules.GetSp(), Is.EqualTo(beforeCall - rule.Comp.SquadOfTwoCost), "a squad of two costs the clan its price");
+                Assert.That(camp.TryBuySquad(grunt, 3), Is.False, "a grunt cannot call a squad while the Leader lives");
+                Assert.That(camp.TryBuySquad(leader, 3), Is.True);
+                Assert.That(rules.GetSp(), Is.EqualTo(beforeCall - rule.Comp.SquadOfThreeCost), "a squad of three costs the clan its price");
                 Assert.That(rule.Comp.SquadCalls, Has.Count.EqualTo(1));
                 var call = rule.Comp.SquadCalls[0];
-                Assert.That(camp.GetPendingSquadSeats(), Is.EqualTo(2));
+                Assert.That(camp.GetPendingSquadSeats(), Is.EqualTo(3));
                 Assert.That(camp.TryGetSquadSeats(call, out entry), Is.True);
                 Assert.That(entMan.HasComponent<GhostRoleComponent>(entry), Is.True, "the seats are a ghost role");
 
@@ -419,8 +420,8 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                     Assert.That(entMan.TryGetComponent(arrival.Value, out ThreatComponent? threat), Is.True);
                     Assert.That(threat?.ObjectiveJob, Is.EqualTo(BadBloodTestHelpers.MemberJob));
                     Assert.That(rule.Comp.SquadCalls, Is.Empty);
-                    Assert.That(rules.GetSp(), Is.EqualTo(spAfterCall + FixedPoint4.New(6)),
-                        "the seat nobody took gives its 6 SP back");
+                    Assert.That(rules.GetSp(), Is.EqualTo(spAfterCall + FixedPoint4.New(10.67)),
+                        "the two seats nobody took give 2 x 16/3 SP back");
                     Assert.That(rules.GetRoundOutcome(), Is.EqualTo(BadBloodRoundOutcome.None));
                 });
 
@@ -533,7 +534,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(rules.GetRoundOutcome(), Is.EqualTo(BadBloodRoundOutcome.None));
-                    Assert.That(rules.GetSp(), Is.EqualTo(spAfterCall + FixedPoint4.New(6)), "the clan's points outlive the Lodge");
+                    Assert.That(rules.GetSp(), Is.EqualTo(spAfterCall + FixedPoint4.New(10.67)), "the clan's points outlive the Lodge");
                 });
             });
 
@@ -869,7 +870,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
 
                 Server.PlayerMan.SetAttachedEntity(session, null);
                 entMan.SpawnEntity("threatleaderspawnmarker", map.GridCoords);
-                for (var i = 0; i < 3; i++)
+                for (var i = 0; i < 4; i++)
                 {
                     entMan.SpawnEntity("threatmemberspawnmarker", map.GridCoords);
                 }
@@ -881,7 +882,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 interest.SetInterest(session, id, true);
                 Assert.That(interest.GetForces(session).Single(force => force.Identifier == id).Interested, Is.True);
 
-                // one volunteer is not a quorum for four roles, so staff deploy it by hand
+                // one volunteer is not a quorum for five roles, so staff deploy it by hand
                 interest.CompleteForce(session, id);
             });
 
@@ -901,7 +902,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(clan, Has.Count.EqualTo(4), "the base party is one Leader and three grunts");
+                    Assert.That(clan, Has.Count.EqualTo(5), "the base party is one Leader and four grunts");
                     Assert.That(entMan.GetComponent<MetaDataComponent>(seated.Value).EntityPrototype?.ID,
                         Is.EqualTo(BadBloodTestHelpers.LeaderPrototype), "volunteers fill the Leader body first");
                     Assert.That(entMan.GetComponent<ThreatComponent>(seated.Value).ObjectiveJob,

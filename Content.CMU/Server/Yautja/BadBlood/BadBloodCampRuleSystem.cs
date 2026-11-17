@@ -659,7 +659,7 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     }
 
     /// <summary>
-    /// The most living Bad Bloods the clan may have: the landing party + the founding squad + 2, or the seats the
+    /// The most living Bad Bloods the clan may have: the landing party + the founding squad + 3, or the seats the
     /// vote held, whichever is higher. Once the ship has arrived it is the threat budget. Callers still check
     /// <see cref="GetThreatBudget"/> for Bad Bloods and hounds together.
     /// </summary>

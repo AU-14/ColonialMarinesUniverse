@@ -26,6 +26,7 @@
   description: A spike launcher with a cracked housing and a magazine patched from scrap. It holds half of what it should and recharges slowly.
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: BasicEntityAmmoProvider
     proto: CMUBadBloodScavengedSpike
     capacity: 6

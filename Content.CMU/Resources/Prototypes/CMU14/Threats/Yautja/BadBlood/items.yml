@@ -20,6 +20,7 @@
   id: CMUYautjaBadBloodHealingGun
   suffix: Yautja, Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: CMUImprovisedSurgeryTool
     delayMultiplier: 1.25
 
@@ -28,6 +29,7 @@
   id: CMUYautjaBadBloodWoundClamp
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: CMUImprovisedSurgeryTool
     delayMultiplier: 1.25
 
@@ -36,6 +38,7 @@
   id: CMUYautjaBadBloodMedicompFull
   suffix: Yautja, Bad Blood, Filled
   components:
+  - type: BadBloodGearLock
   - type: StorageFill
     contents:
     - id: CMUYautjaBadBloodStabilizerGel

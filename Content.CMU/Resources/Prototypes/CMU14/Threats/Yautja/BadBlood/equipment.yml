@@ -6,33 +6,34 @@
   id: CMUYautjaBadBloodPlasmaCaster
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: YautjaCaster
     modes:
     - name: cmu-yautja-caster-mode-stun
       projectile: CMUYautjaBadBloodCasterStunBolt
       examineStrength: cmu-yautja-caster-mode-stun
-      fireRate: 0.8
+      fireRate: 0.7
       powerCost: 60
       fireSound:
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
     - name: cmu-yautja-caster-mode-immobilizer
       projectile: CMUYautjaBadBloodCasterImmobilizerBolt
       examineStrength: cmu-yautja-caster-mode-immobilizer
-      fireRate: 0.066667 # one every 15 s
+      fireRate: 0.058824 # one every 17 s
       powerCost: 300
       fireSound:
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav
     - name: cmu-yautja-caster-mode-lethal
       projectile: CMUYautjaBadBloodCasterPlasmaBolt
       examineStrength: cmu-yautja-caster-mode-lethal
-      fireRate: 0.1 # one every 10 s, so a Bad Blood cannot chain lethal bolts
+      fireRate: 0.083333 # one every 12 s, so a Bad Blood cannot chain lethal bolts
       powerCost: 150
       fireSound:
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav
     - name: cmu-yautja-caster-mode-eradicator
       projectile: CMUYautjaBadBloodCasterEradicatorBolt
       examineStrength: cmu-yautja-caster-mode-eradicator
-      fireRate: 0.083333
+      fireRate: 0.071429 # one every 14 s
       powerCost: 1500
       fireSound:
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav
@@ -65,7 +66,7 @@
   - type: ProjectileMaxRange
     max: 16
 
-# the hunters' lethal bolt with its damage untouched, it only flies 16 tiles.
+# the hunters' lethal bolt at 68 Heat instead of 75 and a smaller blast (45 instead of 50), flying only 16 tiles.
 # VehicleDamageMultiplier: vehicles' RequireProjectileTarget always lets it hit (alwaysHitWhitelist), and the
 # hardpoint combat damage takes the multiplier from the bolt, so the lethal bolt reliably hurts vehicles
 - type: entity
@@ -73,18 +74,34 @@
   id: CMUYautjaBadBloodCasterPlasmaBolt
   categories: [HideSpawnMenu]
   components:
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 68
+  - type: Explosive
+    explosionType: CMUYautjaCasterExplosion
+    maxIntensity: 45
+    intensitySlope: 6
+    totalIntensity: 45
+    maxTileBreak: 2
   - type: ProjectileMaxRange
     max: 16
   - type: VehicleDamageMultiplier
     multiplier: 3
 
-# the hunters' eradicator bolt with its blast untouched, capped at 16 tiles like the other Bad Blood bolts.
+# the hunters' eradicator bolt at 50 Heat instead of 55, capped at 16 tiles like the other Bad Blood bolts.
 # hits and hurts vehicles like the lethal bolt above
 - type: entity
   parent: CMUYautjaCasterEradicatorBolt
   id: CMUYautjaBadBloodCasterEradicatorBolt
   categories: [HideSpawnMenu]
   components:
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 50
   - type: ProjectileMaxRange
     max: 16
   - type: VehicleDamageMultiplier
@@ -96,6 +113,12 @@
   id: CMUYautjaBadBloodWristBlades
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
+  # ARCH-03: Slash 22 (the honourable blades hit for 20)
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 22
   # sharper against marines than the honourable blades (40 / 0.01): about 15 a hit through standard armor
   - type: YautjaHumanMelee
     penetration: 50
@@ -112,6 +135,12 @@
   id: CMUYautjaBadBloodScimitar
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
+  # ARCH-03: Slash 28 (the honourable scimitar hits for 25)
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 28
   - type: DamageBoosts
     boosts:
     - flags: Breaching
@@ -124,6 +153,12 @@
   id: CMUYautjaBadBloodChainGauntlet
   suffix: Bad Blood
   components:
+  - type: BadBloodGearLock
+  # ARCH-03: Blunt 22 (the honourable gauntlet hits for 20)
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 22
   - type: DamageBoosts
     boosts:
     - flags: Breaching

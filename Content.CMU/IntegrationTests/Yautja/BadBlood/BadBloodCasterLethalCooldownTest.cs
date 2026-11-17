@@ -67,8 +67,8 @@ public sealed class BadBloodCasterLethalCooldownTest
                 "Test setup: the gun starts at the stun bolt's fire rate.");
             Assert.That(1f / stunRate, Is.LessThan(1.5f),
                 "Test setup: the stun refire must be shorter than the 1.5 s probe below.");
-            Assert.That(lethalDelay.TotalSeconds, Is.EqualTo(10).Within(0.01),
-                "A Bad Blood lethal bolt waits 10 seconds before the next one.");
+            Assert.That(lethalDelay.TotalSeconds, Is.EqualTo(12).Within(0.01),
+                "A Bad Blood lethal bolt waits 12 seconds before the next one.");
 
             // the same call the armory gate makes after an eradicator shot: CurrentMode moves, SetMode is skipped
             entMan.System<YautjaCasterSystem>().ForceMode(caster, BadBloodEradicatorSystem.LethalMode);
@@ -108,7 +108,7 @@ public sealed class BadBloodCasterLethalCooldownTest
             Delete(entMan, shot);
         });
 
-        await pair.RunSeconds(9f);
+        await pair.RunSeconds(11f); // 1.5 + 11 = 12.5 s, past the 12 s lethal cooldown
 
         await server.WaitAssertion(() =>
         {

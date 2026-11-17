@@ -1,6 +1,8 @@
 using Content.Server.CMU14.Threats;
 using Content.Server.EUI;
+using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Threats;
+using Content.Shared.Database;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.GameTicking;
@@ -39,6 +41,7 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
     private static readonly ProtoId<JobPrototype> MemberJob = "AU14JobThreatMember";
     private const string BracerSlot = "gloves";
 
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private BadBloodSystem _badBlood = default!;
     [Dependency] private EuiManager _eui = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -60,6 +63,7 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         SubscribeLocalEvent<BadBloodLeaderChangedEvent>(OnLeaderChanged);
         SubscribeLocalEvent<BadBloodLodgeDestroyedEvent>(OnLodgeDestroyed);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
 
         SubscribeLocalEvent<BadBloodAscensionStoneComponent, StepTriggerAttemptEvent>(OnStoneStepAttempt);
         SubscribeLocalEvent<BadBloodAscensionStoneComponent, StepTriggeredOffEvent>(OnStoneStepped);
@@ -68,12 +72,18 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
 
     public override void Update(float frameTime)
     {
-        if (!_rule.TryGetRule(out var rule) || rule.Comp.ActiveVote is not { } vote)
+        if (!_rule.TryGetRule(out var rule))
         {
             // the rule ended under a running vote
             if (_voteUis.Count > 0 || _promptUis.Count > 0)
                 CloseUis();
 
+            return;
+        }
+
+        if (rule.Comp.ActiveVote is not { } vote)
+        {
+            TryOpenLeaderlessVote(rule);
             return;
         }
 
@@ -118,9 +128,10 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
 
     /// <summary>
     /// Opens the vote. It opens by itself when the Leader is lost, and again when someone stands on the Stone
-    /// after a vote lapsed. False if one is running or <see cref="CanVoteRun"/> is false.
+    /// after a vote lapsed. False if one is running or <see cref="CanVoteRun"/> is false. <paramref name="claimer"/>,
+    /// someone opening the vote by claiming the Lodge, is not offered the claim again.
     /// </summary>
-    public bool TryOpenVote()
+    public bool TryOpenVote(EntityUid? claimer = null)
     {
         if (!_rule.TryGetRule(out var rule) || rule.Comp.ActiveVote != null || !CanVoteRun())
             return false;
@@ -136,22 +147,44 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         rule.Comp.ActiveVote = vote;
 
         _rule.AnnounceToClan(
-            Loc.GetString(vote.FromBracer ? "cmu-bad-blood-ascension-opened-bracer" : "cmu-bad-blood-ascension-opened",
+            Loc.GetString(!rule.Comp.LeaderEverAssigned
+                    ? "cmu-bad-blood-ascension-opened-leaderless"
+                    : vote.FromBracer ? "cmu-bad-blood-ascension-opened-bracer" : "cmu-bad-blood-ascension-opened",
                 ("seconds", (int) Math.Ceiling(rule.Comp.VoteDuration.TotalSeconds))),
             PopupType.LargeCaution);
 
-        // no Stone to stand on yet: the offer goes to everyone over their bracer
-        if (vote.FromBracer)
+        _adminLog.Add(LogType.Vote, LogImpact.Medium,
+            $"Bad Blood ascension vote opened ({(vote.FromBracer ? "bracer, founding grace" : "Lodge")}), closes in {rule.Comp.VoteDuration.TotalSeconds}s");
+
+        // FLOW-02: every eligible Bad Blood gets the offer at once, over the bracer. With a Lodge the Stone is a
+        // second way in, not the only one: a chat line alone was easy to miss and the vote lapsed unclaimed
+        var clan = EntityQueryEnumerator<YautjaBadBloodComponent, ActorComponent>();
+        while (clan.MoveNext(out var uid, out _, out var actor))
         {
-            var clan = EntityQueryEnumerator<YautjaBadBloodComponent, ActorComponent>();
-            while (clan.MoveNext(out var uid, out _, out var actor))
-            {
-                if (CanStand(uid, out _))
-                    OpenPrompt(actor.PlayerSession, uid, true);
-            }
+            if (uid != claimer && CanStand(uid, out _))
+                OpenPrompt(actor.PlayerSession, uid, vote.FromBracer);
         }
 
         return true;
+    }
+
+    /// <summary>
+    /// FLOW-01: a clan whose landing party had no Leader never raises <see cref="BadBloodLeaderGoneEvent"/>, so the
+    /// vote is opened here once <see cref="BadBloodCampRuleComponent.LeaderlessVoteDelay"/> has passed with nobody
+    /// seated. A Leader body seated later closes it through <see cref="OnLeaderChanged"/>.
+    /// </summary>
+    private void TryOpenLeaderlessVote(Entity<BadBloodCampRuleComponent> rule)
+    {
+        if (rule.Comp.LeaderEverAssigned ||
+            rule.Comp.Leader != null ||
+            _timing.CurTime < rule.Comp.StartedAt + rule.Comp.LeaderlessVoteDelay ||
+            !CanVoteRun() ||
+            _rule.CountLivingBadBloods() == 0)
+        {
+            return;
+        }
+
+        TryOpenVote();
     }
 
     /// <summary>
@@ -165,6 +198,7 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         rule.Comp.ActiveVote = null;
         CloseUis();
         _rule.AnnounceToClan(Loc.GetString(reason), PopupType.MediumCaution);
+        _adminLog.Add(LogType.Vote, LogImpact.Medium, $"Bad Blood ascension vote cancelled: {reason}");
         return true;
     }
 
@@ -190,6 +224,8 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
 
         args.Rule.Comp.ActiveVote = null;
         CloseUis();
+        _adminLog.Add(LogType.Vote, LogImpact.Medium,
+            $"Bad Blood ascension vote closed: {ToPrettyString(args.New.Value):player} was made Leader outside the vote");
     }
 
     private void OnLodgeDestroyed(ref BadBloodLodgeDestroyedEvent args)
@@ -270,7 +306,7 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         if (!CanStand(uid, out _) || !_rule.TryGetRule(out var rule))
             return false;
 
-        if (rule.Comp.ActiveVote == null && !TryOpenVote())
+        if (rule.Comp.ActiveVote == null && !TryOpenVote(uid))
             return false;
 
         if (rule.Comp.ActiveVote is not { } vote)
@@ -286,6 +322,8 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-ascension-candidate",
             ("name", Name(uid)),
             ("kills", GetKills(uid))));
+        _adminLog.Add(LogType.Vote, LogImpact.Medium,
+            $"{ToPrettyString(uid):player} stood for Bad Blood Leader ({GetKills(uid)} kills), vote now ends in {(vote.EndsAt - _timing.CurTime).TotalSeconds:0}s");
 
         OpenVoteUis();
         return true;
@@ -301,6 +339,8 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
 
         vote.Votes[voter] = candidate;
         DirtyVoteUis();
+        _adminLog.Add(LogType.Vote, LogImpact.Low,
+            $"{ToPrettyString(voter):player} voted for {ToPrettyString(candidate):candidate} as Bad Blood Leader");
         return true;
     }
 
@@ -375,8 +415,10 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         rule.Comp.ActiveVote = null;
         CloseUis();
 
+
         if (winner is not { } chosen)
         {
+            _adminLog.Add(LogType.Vote, LogImpact.Medium, $"Bad Blood ascension vote lapsed: no living candidate");
             _rule.AnnounceToClan(Loc.GetString(vote.FromBracer
                 ? "cmu-bad-blood-ascension-lapsed-bracer"
                 : "cmu-bad-blood-ascension-lapsed"), PopupType.MediumCaution);
@@ -390,6 +432,8 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
 
         if (!Promote(rule, chosen))
             return null;
+
+        _adminLog.Add(LogType.Vote, LogImpact.Medium, $"Bad Blood ascension vote won by {ToPrettyString(chosen):player} with {votes} votes");
 
         _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-ascension-won",
             ("name", Name(chosen)),
@@ -464,8 +508,20 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         {
             Text = Loc.GetString("cmu-bad-blood-ascension-verb"),
             Message = Loc.GetString("cmu-bad-blood-ascension-verb-message"),
+            Priority = 1,
             Act = () => OfferStone(user, false),
         });
+
+        // FLOW-04: the vote window only opened on a new candidacy, so a closed window stayed closed
+        if (GetVote() is { Candidates.Count: > 0 } && _player.TryGetSessionByEntity(user, out var session))
+        {
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("cmu-bad-blood-ascension-view-verb"),
+                Message = Loc.GetString("cmu-bad-blood-ascension-view-verb-message"),
+                Act = () => OpenVoteUi(session, user),
+            });
+        }
     }
 
     private void OfferStone(EntityUid user, bool quiet)
@@ -490,8 +546,14 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
 
     private void OpenPrompt(ICommonSession session, EntityUid candidate, bool fromBracer)
     {
-        if (_promptUis.ContainsKey(session))
-            return;
+        // FLOW-03: an offer already open for this player used to swallow the new one without a word, so a window
+        // lost behind another made the Stone look dead. Replace it, which also brings it back to the front
+        if (_promptUis.TryGetValue(session, out var open))
+        {
+            _promptUis.Remove(session);
+            if (!open.IsShutDown)
+                open.Close();
+        }
 
         var eui = new BadBloodAscensionPromptEui(this, candidate, fromBracer);
         _promptUis[session] = eui;
@@ -503,6 +565,22 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         // they may have died, or the clan may have its Leader, since the window opened
         if (accept && eui.Player.AttachedEntity == eui.Candidate)
             TryStandAsCandidate(eui.Candidate);
+
+        // standing aside still leaves a vote to cast
+        if (!accept && eui.Player.AttachedEntity is { } voter && GetVote() is { Candidates.Count: > 0 })
+            OpenVoteUi(eui.Player, voter);
+    }
+
+    // FLOW-04: someone who reconnects or takes a new body mid-vote gets the offer or the vote window again
+    private void OnPlayerAttached(PlayerAttachedEvent args)
+    {
+        if (GetVote() is not { } vote || !_badBlood.IsBadBlood(args.Entity))
+            return;
+
+        if (CanStand(args.Entity, out _))
+            OpenPrompt(args.Player, args.Entity, vote.FromBracer);
+        else if (vote.Candidates.Count > 0)
+            OpenVoteUi(args.Player, args.Entity);
     }
 
     internal void OnPromptClosed(BadBloodAscensionPromptEui eui)
@@ -554,15 +632,32 @@ public sealed partial class BadBloodAscensionSystem : EntitySystem
         var clan = EntityQueryEnumerator<YautjaBadBloodComponent, ActorComponent>();
         while (clan.MoveNext(out var uid, out _, out var actor))
         {
-            if (_mobState.IsDead(uid) || _voteUis.ContainsKey(actor.PlayerSession))
-                continue;
-
-            var eui = new BadBloodAscensionVoteEui(this);
-            _voteUis[actor.PlayerSession] = eui;
-            _eui.OpenEui(eui, actor.PlayerSession);
+            OpenVoteUi(actor.PlayerSession, uid, false);
         }
 
         DirtyVoteUis();
+    }
+
+    /// <summary>
+    /// Opens the vote window for one living Bad Blood. A window that is already open is refreshed, which the
+    /// client takes as "show it again" (BadBloodAscensionVoteEui.HandleState reopens a closed window).
+    /// </summary>
+    private void OpenVoteUi(ICommonSession session, EntityUid voter, bool dirty = true)
+    {
+        if (GetVote() == null || _mobState.IsDead(voter) || !_badBlood.IsBadBlood(voter))
+            return;
+
+        if (_voteUis.TryGetValue(session, out var open) && !open.IsShutDown)
+        {
+            if (dirty)
+                open.StateDirty();
+
+            return;
+        }
+
+        var eui = new BadBloodAscensionVoteEui(this);
+        _voteUis[session] = eui;
+        _eui.OpenEui(eui, session);
     }
 
     private void DirtyVoteUis()

@@ -68,6 +68,7 @@
   - type: Sprite
     sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
     drawdepth: SmallObjects
+    offset: 0,0.5 # same bottom-aligned frame as the awake hound (hellhound.yml)
     layers:
     - state: "Normal_Hellhound_Sleeping"
   - type: Icon
@@ -108,5 +109,6 @@
   description: A scavenged camera pad, tuned to the clan's hounds.
   suffix: Yautja, Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: YautjaHoundPad
     internalCameraPrototype: CMUBadBloodHoundObservationPadInternalCamera

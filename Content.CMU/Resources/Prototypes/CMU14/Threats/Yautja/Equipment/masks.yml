@@ -53,6 +53,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodBane
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_bane.rsi
     layers:
@@ -67,6 +68,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodCommando
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_commando.rsi
     layers:
@@ -81,6 +83,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodCommandoAlt
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_commandoalt.rsi
     layers:
@@ -95,6 +98,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodEmissaryClassic
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_emissary_classic.rsi
     layers:
@@ -109,6 +113,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodEmissaryDesert
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_emissary_desert.rsi
     layers:
@@ -123,6 +128,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodEmissaryJungle
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_emissary_jungle.rsi
     layers:
@@ -137,6 +143,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodEmissarySnow
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_emissary_snow.rsi
     layers:
@@ -151,6 +158,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodEmissaryUrban
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_emissary_urban.rsi
     layers:
@@ -165,6 +173,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodLunatic
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_lunatic.rsi
     layers:
@@ -179,6 +188,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodPatchwork
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_patchwork.rsi
     layers:
@@ -193,6 +203,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodPatchworkAlt
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_patchworkalt.rsi
     layers:
@@ -207,6 +218,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodScav
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_scav.rsi
     layers:
@@ -221,6 +233,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodScavAlt
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_scavalt.rsi
     layers:
@@ -235,6 +248,7 @@
   parent: CMUYautjaBadBloodMaskBase
   id: CMUYautjaMaskBadBloodVenator
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/masks/pred_mask_bb_venator.rsi
     layers:
@@ -2104,6 +2118,7 @@
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
   components:
+  - type: BadBloodGearLock
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem

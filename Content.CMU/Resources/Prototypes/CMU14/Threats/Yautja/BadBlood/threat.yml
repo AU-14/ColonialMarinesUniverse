@@ -7,7 +7,7 @@
     "Anomalous cloaked contacts detected. Something is hunting us.": 2
     "Yautja confirmed in AO. Expect plasma casters, cloaking technology, and wrist blades.": 3
 
-# Base: 1 leader + 3 grunts. Scales at 0.06 per player above 30 (one extra grunt per ~17 players above 30).
+# Base: 1 leader + 4 grunts. Scales at 0.08 per player above 30 (one extra grunt per ~12-13 players above 30).
 - type: threat
   id: BadBloodClanThreat
   lorePrimer: AU14PrimerThreatBadBlood
@@ -35,9 +35,9 @@
   leadersToSpawn:
     CMUMobYautjaBadBloodLeader: 1
   gruntsToSpawn:
-    CMUMobYautjaBadBloodGrunt: 3
+    CMUMobYautjaBadBloodGrunt: 4
   scaling:
     CMUMobYautjaBadBloodGrunt:
-      scale: 0.06
+      scale: 0.08
       whenToBeginScaling: 30
   spawnTogether: true

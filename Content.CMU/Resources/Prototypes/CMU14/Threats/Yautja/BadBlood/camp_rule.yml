@@ -15,14 +15,19 @@
     corpseCookSp: 3
     meatCookSp: 0.5
     cookSpCapPerBody: 3
-    squadOfTwoCost: 12
+    # reinforcement tiers: 1, 3 and 5 grunts
+    squadOfOneCost: 7
     squadOfThreeCost: 16
+    squadOfFiveCost: 24
+    lastStandCost: 12
     houndCost: 6
     totemCost: 3
-    livingCapBonus: 2
-    threatBudgetFraction: 0.25
-    landingHoundDivisor: 2
+    livingCapBonus: 3
+    # 0.3: the bigger landing (5 + 3 sleeping hounds) still leaves the clan room to buy reinforcements at 30-40 players
+    threatBudgetFraction: 0.3
+    landingHoundDivisor: 2 # rounded up: a landing party of 5 brings 3 hounds
     houndCapDivisor: 2
+    houndCapBonus: 1
     foundingSquadBase: 1
     foundingSquadDivisor: 2
     lastStandSeats: 2

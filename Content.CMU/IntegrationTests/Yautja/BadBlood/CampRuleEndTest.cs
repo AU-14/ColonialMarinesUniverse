@@ -173,8 +173,8 @@ public sealed class CampRuleEndTest : GameTest
                 rule.Comp.SquadSpawnTimeout = TimeSpan.FromSeconds(2);
 
                 lodge = Server.EntMan.SpawnEntity(Lodge, map.GridCoords);
-                // a squad of two and 2 SP over
-                Assert.That(rules.AddSp(rule.Comp.SquadOfTwoCost + FixedPoint4.New(2)), Is.True);
+                // the last-stand price and 2 SP over
+                Assert.That(rules.AddSp(rule.Comp.LastStandCost + FixedPoint4.New(2)), Is.True);
                 Assert.That(rules.IsClanWiped(), Is.False);
             });
 
@@ -186,7 +186,7 @@ public sealed class CampRuleEndTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(rule.Comp.WipeCollapseAt, Is.Null, "the clan is alive, no timer runs");
-                    Assert.That(rules.GetSp(), Is.EqualTo(rule.Comp.SquadOfTwoCost + FixedPoint4.New(2)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(rule.Comp.LastStandCost + FixedPoint4.New(2)));
                 });
             });
 
@@ -205,7 +205,7 @@ public sealed class CampRuleEndTest : GameTest
                 {
                     Assert.That(rules.IsClanWiped(), Is.True);
                     Assert.That(rule.Comp.LastStandSquadOpened, Is.True, "the clan can pay: one last squad is called");
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(2)), "the last stand costs a squad of two");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(2)), "the last stand costs LastStandCost");
                     Assert.That(rule.Comp.WipeCollapseAt, Is.Not.Null);
                     Assert.That(rules.GetRoundOutcome(), Is.EqualTo(BadBloodRoundOutcome.None));
                 });
@@ -221,7 +221,7 @@ public sealed class CampRuleEndTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(rules.GetRoundOutcome(), Is.EqualTo(BadBloodRoundOutcome.MarinesClanWipe));
-                    Assert.That(rules.GetSp(), Is.EqualTo(rule.Comp.SquadOfTwoCost + FixedPoint4.New(2)), "one last stand, not one after another");
+                    Assert.That(rules.GetSp(), Is.EqualTo(rule.Comp.LastStandCost + FixedPoint4.New(2)), "one last stand, not one after another");
                     Assert.That(rule.Comp.SquadCalls, Is.Empty);
                 });
             });

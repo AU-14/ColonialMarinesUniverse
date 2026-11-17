@@ -21,7 +21,8 @@
 - type: radioChannel
   id: CMUYautjaBadBlood
   name: chat-radio-cmu-yautja-badblood
-  keycode: "b"
+  # "r" for renegade. "b" read as GOVFOR Bravo (:b) in headset examines
+  keycode: "r"
   frequency: 154.3
   color: "#c44343"
   longRange: true
@@ -68,6 +69,7 @@
   description: An alien cipher chip tuned to renegade hunter channels.
   suffix: Yautja
   components:
+  - type: BadBloodGearLock
   - type: EncryptionKey
     channels:
     - CMUYautjaBadBlood
@@ -127,6 +129,7 @@
     function to a standard human radio. This one has been modified in some way.
   suffix: Yautja, Bad Blood
   components:
+  - type: BadBloodGearLock
   - type: ContainerFill
     containers:
       key_slots:
@@ -731,6 +734,7 @@
   parent: CMUYautjaFalconDrone
   id: CMUYautjaFalconDroneBadBlood
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     state: falcon_drone_badblood
   - type: Clothing

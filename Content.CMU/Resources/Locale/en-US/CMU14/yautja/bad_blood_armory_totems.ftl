@@ -116,3 +116,6 @@ cmu-bad-blood-vehicle-force-verb = Force hatch
 cmu-bad-blood-vehicle-force-verb-message = Rip the locked hatch open with your hands. Takes {$seconds} seconds; moving or getting hurt interrupts you.
 cmu-bad-blood-vehicle-force-start = You dig your claws into the hatch seams and start wrenching it open.
 cmu-bad-blood-vehicle-force-start-others = Something is tearing at the hatch!
+
+# ECS-01: Bad Blood gear refuses anyone who is not a Yautja
+cmu-bad-blood-gear-denied = The clan's gear is built for a hunter's hands. You cannot make it work.

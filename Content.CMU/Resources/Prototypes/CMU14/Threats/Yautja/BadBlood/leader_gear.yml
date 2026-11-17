@@ -1,4 +1,4 @@
-# What the Bad Blood Leader lands in. Leader-grade plate (30 / 50 / 30 / 40) on each of the four Leader armor looks:
+# What the Bad Blood Leader lands in. Leader-grade plate (30 / 55 / 30 / 40) on each of the four Leader armor looks:
 # a step above the patchwork every grunt lands in (20 / 20 / 20 / 30), so the Leader is the hardest of the clan to
 # bring down.
 # CMUBadBloodLeaderArmor (lodge_armory.yml) is the same plate, sold to grunts at tier III.
@@ -10,9 +10,10 @@
   description: Heavy plate of the kind a clan's Leader wears.
   suffix: Bad Blood, Leader
   components:
+  - type: BadBloodGearLock
   - type: CMArmor
     melee: 30
-    bullet: 50
+    bullet: 55
     bio: 30
     explosionArmor: 40
 
@@ -23,9 +24,10 @@
   description: Heavy plate of the kind a clan's Leader wears.
   suffix: Bad Blood, Leader
   components:
+  - type: BadBloodGearLock
   - type: CMArmor
     melee: 30
-    bullet: 50
+    bullet: 55
     bio: 30
     explosionArmor: 40
 
@@ -36,9 +38,10 @@
   description: Heavy plate of the kind a clan's Leader wears.
   suffix: Bad Blood, Leader
   components:
+  - type: BadBloodGearLock
   - type: CMArmor
     melee: 30
-    bullet: 50
+    bullet: 55
     bio: 30
     explosionArmor: 40
 
@@ -49,8 +52,9 @@
   description: Heavy plate of the kind a clan's Leader wears.
   suffix: Bad Blood, Leader
   components:
+  - type: BadBloodGearLock
   - type: CMArmor
     melee: 30
-    bullet: 50
+    bullet: 55
     bio: 30
     explosionArmor: 40

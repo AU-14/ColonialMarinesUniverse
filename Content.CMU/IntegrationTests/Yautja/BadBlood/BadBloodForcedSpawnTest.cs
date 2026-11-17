@@ -100,7 +100,7 @@ public sealed class BadBloodForcedSpawnTest : GameTest
         {
             Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
             SEntMan.SpawnEntity("threatleaderspawnmarker", map.GridCoords);
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < 4; i++)
                 SEntMan.SpawnEntity("threatmemberspawnmarker", map.GridCoords);
 
             Assert.That(SEntMan.System<ThreatSystem>().ForceSpawnThreat(BadBloodThreat, map.Grid, false), Is.True);
@@ -115,7 +115,7 @@ public sealed class BadBloodForcedSpawnTest : GameTest
                 .Select(comp => comp.Owner)
                 .Where(uid => SEntMan.GetComponent<TransformComponent>(uid).MapID == map.MapId)
                 .ToList();
-            Assert.That(clan, Has.Count.EqualTo(4), "base party is one leader and three grunts");
+            Assert.That(clan, Has.Count.EqualTo(5), "base party is one leader and four grunts");
             Assert.That(clan.Count(uid => SEntMan.GetComponent<ThreatComponent>(uid).ObjectiveJob
                 == ThreatVoteSelection.ThreatLeaderJobId), Is.EqualTo(1));
             AssertOpenGhostRoles(clan);
@@ -131,7 +131,7 @@ public sealed class BadBloodForcedSpawnTest : GameTest
         {
             Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
             SEntMan.SpawnEntity("threatleaderspawnmarker", map.GridCoords);
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < 4; i++)
                 SEntMan.SpawnEntity("threatmemberspawnmarker", map.GridCoords);
 
             Assert.That(SEntMan.System<ThreatSystem>().ForceSpawnThreat(BadBloodThreat, map.Grid, false, skipInterest: true),
@@ -146,7 +146,7 @@ public sealed class BadBloodForcedSpawnTest : GameTest
                 .Select(comp => comp.Owner)
                 .Where(uid => SEntMan.GetComponent<TransformComponent>(uid).MapID == map.MapId)
                 .ToList();
-            Assert.That(clan, Has.Count.EqualTo(4), "the whole party lands without anyone showing interest");
+            Assert.That(clan, Has.Count.EqualTo(5), "the whole party lands without anyone showing interest");
             AssertOpenGhostRoles(clan);
 
             // a Bad Blood body is its own ghost role, raffled like the squad seats and hounds, not the generic threat

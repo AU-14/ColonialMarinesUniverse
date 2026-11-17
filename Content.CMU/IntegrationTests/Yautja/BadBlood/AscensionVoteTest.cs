@@ -300,6 +300,54 @@ public sealed class AscensionVoteTest : GameTest
         }
     }
 
+    // FLOW-01: a landing party with no Leader never raises BadBloodLeaderGoneEvent. The vote opens anyway, over the
+    // bracers, once LeaderlessVoteDelay has passed with nobody seated
+    [Test]
+    public async Task AClanThatNeverHadALeaderStillGetsAVote()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map);
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var ascension = Server.System<BadBloodAscensionSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+
+                // as if the Leader job had never been filled
+                rules.SetLeader(null);
+                rule.Comp.LeaderEverAssigned = false;
+                rule.Comp.LeaderlessVoteDelay = TimeSpan.FromSeconds(1);
+                Assert.That(rules.InFoundingGrace(), Is.True);
+                Assert.That(ascension.IsVoteOpen(), Is.False, "nothing raised the Leader-gone event");
+            });
+
+            await Pair.RunSeconds(2);
+
+            await Server.WaitAssertion(() =>
+            {
+                var ascension = Server.System<BadBloodAscensionSystem>();
+                Assert.That(ascension.IsVoteOpen(), Is.True, "a leaderless clan gets its vote");
+                Assert.That(ascension.GetVote()!.FromBracer, Is.True, "no Lodge yet, so over the bracers");
+
+                Assert.That(ascension.TryStandAsCandidate(party.Grunts[0]), Is.True);
+                Assert.That(ascension.ResolveVote(), Is.EqualTo(party.Grunts[0]));
+                Assert.That(Server.System<BadBloodCampRuleSystem>().GetLeader(), Is.EqualTo(party.Grunts[0]));
+            });
+
+            await Pair.RunSeconds(2);
+            await Server.WaitAssertion(() =>
+                Assert.That(Server.System<BadBloodAscensionSystem>().IsVoteOpen(), Is.False,
+                    "a seated Leader stops the leaderless vote from coming back"));
+        }
+        finally
+        {
+            await Cleanup(party, new List<EntityUid>());
+        }
+    }
+
     private async Task Cleanup(BadBloodTestParty party, List<EntityUid> spawned)
     {
         await BadBloodTestHelpers.EndBadBloodRule(Pair, party);

@@ -12,11 +12,14 @@ cmu-bad-blood-grunt-ghost-description = One of the Bad Blood clan's landing part
 cmu-bad-blood-leader-ghost-name = Bad Blood Leader
 cmu-bad-blood-leader-ghost-description = The Bad Blood clan's Leader. Pitch the Lodge, spend the clan's Superiority Points and keep the clan alive until the clan ship arrives.
 
-cmu-bad-blood-squad-verb = Call a squad of { $seats } ({ $cost } SP)
+cmu-bad-blood-squad-verb = Call { $seats } { $seats ->
+        [one] grunt
+       *[other] grunts
+    } ({ $cost } SP)
 cmu-bad-blood-squad-verb-message = Spend the clan's Superiority Points to call reinforcements to the Lodge.
 cmu-bad-blood-squad-leader-only = Only the clan's Leader calls reinforcements.
 cmu-bad-blood-squad-no-lodge = The clan has no Lodge to call reinforcements to.
-cmu-bad-blood-squad-cap = The clan cannot take { $seats } more hunters: { $living } living and { $pending } on the way, the limit is { $limit }. Until the clan ship arrives the limit is the landing party, plus the founding squad, plus 2. Bad Bloods and hounds together never pass a quarter of the players.
+cmu-bad-blood-squad-cap = The clan cannot take { $seats } more hunters: { $living } living and { $pending } on the way, the limit is { $limit }. Until the clan ship arrives the limit is the landing party, plus the founding squad, plus 3. Bad Bloods and hounds together never pass 30% of the players.
 cmu-bad-blood-squad-cannot-afford = The clan needs { $cost } Superiority Points for that squad.
 cmu-bad-blood-squad-called = Reinforcements have been called to the Lodge: { $seats } { $seats ->
         [one] seat

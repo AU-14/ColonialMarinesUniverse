@@ -1,6 +1,7 @@
 # The ascension vote
 
-cmu-bad-blood-ascension-opened = The Leader has fallen. Stand at the Ascension Stone to claim the Lodge. The vote closes in { $seconds } seconds.
+cmu-bad-blood-ascension-opened = The Leader has fallen. Answer your bracer, or stand at the Ascension Stone, to claim the Lodge. The vote closes in { $seconds } seconds.
+cmu-bad-blood-ascension-opened-leaderless = The clan landed without a Leader. Your bracer asks who will lead. The vote closes in { $seconds } seconds.
 cmu-bad-blood-ascension-opened-bracer = The Leader has fallen before the Lodge was raised. Your bracer asks who will lead. The vote closes in { $seconds } seconds.
 cmu-bad-blood-ascension-candidate = { $name } claims the Lodge ({ $kills } kills). Cast your vote.
 cmu-bad-blood-ascension-won = { $name } leads the clan now, with { $votes } votes.
@@ -18,6 +19,8 @@ cmu-bad-blood-ascension-already-standing = You already claim the Lodge.
 
 cmu-bad-blood-ascension-verb = Claim the Lodge
 cmu-bad-blood-ascension-verb-message = Stand for Leader of the clan.
+cmu-bad-blood-ascension-view-verb = View the ascension vote
+cmu-bad-blood-ascension-view-verb-message = Open the vote window again to see the candidates and cast your vote.
 
 cmu-bad-blood-ascension-prompt-title = Ascension
 cmu-bad-blood-ascension-prompt-text = The clan has no Leader. Claim the Lodge and stand in the vote?

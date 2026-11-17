@@ -236,7 +236,8 @@ public sealed partial class EncryptionKeySystem : EntitySystem
 
             var key = id == SharedChatSystem.CommonChannel
                 ? SharedChatSystem.RadioCommonPrefix.ToString()
-                : $"{SharedChatSystem.RadioChannelPrefix}{proto.KeyCode}";
+                // cmu edit: show the channel's own prefix, e.g. Yautja channels use '#' and would otherwise read as a ':' key
+                : $"{proto.RadioPrefix}{proto.KeyCode}";
 
 
             var readOnlyMarkup = "";

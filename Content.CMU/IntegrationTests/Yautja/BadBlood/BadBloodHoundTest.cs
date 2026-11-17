@@ -66,6 +66,10 @@ public sealed class BadBloodHoundTest : GameTest
                 var landing = Sleepers(map);
                 Assert.That(landing, Has.Count.EqualTo(1), "a landing party of two lands with one sleeping hound");
                 Assert.That(hounds.CountHounds(), Is.EqualTo(1));
+                Assert.That(hounds.GetHoundCap(), Is.EqualTo(2), "one hound for every two living Bad Bloods, plus one");
+
+                // the rest of this test is about the share: take the bonus hound out of the way
+                rule.Comp.HoundCapBonus = 0;
                 Assert.That(hounds.GetHoundCap(), Is.EqualTo(1), "one hound for every two living Bad Bloods");
 
                 Assert.That(rules.AddSp(FixedPoint4.New(6)), Is.True);
@@ -200,6 +204,38 @@ public sealed class BadBloodHoundTest : GameTest
                     .ToList();
 
                 foreach (var uid in leftovers)
+                {
+                    if (entMan.EntityExists(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+        }
+    }
+
+    // ARCH-01: one landing hound per two Bad Bloods, rounded up, so the default landing party of five brings three
+    [Test]
+    public async Task LandingHoundsRoundUp()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 4);
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.That(rule.Comp.LandingParty, Is.EqualTo(5));
+                Assert.That(Sleepers(map), Has.Count.EqualTo(3), "five Bad Bloods land with three sleeping hounds");
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+            await Server.WaitPost(() =>
+            {
+                var entMan = Server.EntMan;
+                foreach (var uid in Sleepers(map).Concat(party.All))
                 {
                     if (entMan.EntityExists(uid))
                         entMan.DeleteEntity(uid);

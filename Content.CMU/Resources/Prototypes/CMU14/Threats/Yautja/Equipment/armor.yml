@@ -715,13 +715,14 @@
   parent: CMUYautjaClanArmor
   id: CMUYautjaBadBloodArmorPatchwork
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_patchwork.rsi
   - type: Clothing
     sprite: CMU14/Yautja/armor_badblood_patchwork.rsi
   - type: CMArmor
     melee: 20 # Bad Blood only: marines close in with blades (Bad Blood fire/melee Option 2)
-    bullet: 20
+    bullet: 25 # ARCH-03: +5 bullet across Bad Blood armor
     bio: 20 # CM-SS13 scalable MEDIUM
     explosionArmor: 30 # CM-SS13 scalable bomb base
 
@@ -733,6 +734,7 @@
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorLunatic
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_lunatic.rsi
   - type: Clothing
@@ -742,6 +744,7 @@
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorScavenger
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_scavenger.rsi
   - type: Clothing
@@ -751,6 +754,7 @@
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorVenator
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_venator.rsi
   - type: Clothing
@@ -760,6 +764,7 @@
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorCommando
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_commando.rsi
   - type: Clothing
@@ -769,6 +774,7 @@
   parent: CMUYautjaBadBloodArmorPatchwork
   id: CMUYautjaBadBloodArmorBane
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_bane.rsi
   - type: Clothing
@@ -779,6 +785,7 @@
   id: CMUYautjaBadBloodArmorPatchworkAlt
   suffix: Alternate
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_patchwork_alt.rsi
   - type: Clothing
@@ -789,6 +796,7 @@
   id: CMUYautjaBadBloodArmorScavengerAlt
   suffix: Alternate
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_scavenger_alt.rsi
   - type: Clothing
@@ -799,6 +807,7 @@
   id: CMUYautjaBadBloodArmorCommandoAlt
   suffix: Alternate
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/armor_badblood_commando_alt.rsi
   - type: Clothing
@@ -1377,6 +1386,7 @@
   parent: CMUYautjaClanGreaves
   id: CMUYautjaBadBloodGreavesPatchwork
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_patchwork.rsi
   - type: Clothing
@@ -1384,7 +1394,7 @@
   - type: YautjaTechItem
   - type: CMArmor
     melee: 40
-    bullet: 45
+    bullet: 50 # ARCH-03: +5 bullet across Bad Blood armor
     bio: 20 # CM-SS13 scalable MEDIUM
     explosionArmor: 30 # CM-SS13 scalable bomb base
   - type: YautjaScalableRepair
@@ -1394,6 +1404,7 @@
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesLunatic
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_lunatic.rsi
   - type: Clothing
@@ -1403,6 +1414,7 @@
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesScavenger
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_scavenger.rsi
   - type: Clothing
@@ -1412,6 +1424,7 @@
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesVenator
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_venator.rsi
   - type: Clothing
@@ -1421,6 +1434,7 @@
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesCommando
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_commando.rsi
   - type: Clothing
@@ -1430,6 +1444,7 @@
   parent: CMUYautjaBadBloodGreavesPatchwork
   id: CMUYautjaBadBloodGreavesBane
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_bane.rsi
   - type: Clothing
@@ -1440,6 +1455,7 @@
   id: CMUYautjaBadBloodGreavesPatchworkAlt
   suffix: Alternate
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_patchwork_alt.rsi
   - type: Clothing
@@ -1450,6 +1466,7 @@
   id: CMUYautjaBadBloodGreavesScavengerAlt
   suffix: Alternate
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_scavenger_alt.rsi
   - type: Clothing
@@ -1460,6 +1477,7 @@
   id: CMUYautjaBadBloodGreavesCommandoAlt
   suffix: Alternate
   components:
+  - type: BadBloodGearLock
   - type: Sprite
     sprite: CMU14/Yautja/greaves_badblood_commando_alt.rsi
   - type: Clothing

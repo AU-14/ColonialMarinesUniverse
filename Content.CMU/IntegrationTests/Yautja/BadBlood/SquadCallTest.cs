@@ -53,22 +53,26 @@ public sealed class SquadCallTest : GameTest
 
                 Server.PlayerMan.SetAttachedEntity(session, null);
 
-                Assert.That(camp.TryBuySquad(party.Leader, 2), Is.False, "there is no Lodge to call a squad to");
+                Assert.That(camp.TryBuySquad(party.Leader, 3), Is.False, "there is no Lodge to call a squad to");
 
                 lodge = entMan.SpawnEntity(Lodge, map.GridCoords);
                 Assert.That(rules.GetLodge(), Is.EqualTo(lodge));
 
                 Assert.That(rules.AddSp(FixedPoint4.New(20)), Is.True);
-                Assert.That(camp.TryBuySquad(grunt, 2), Is.False, "a grunt cannot call a squad while the Leader lives");
-                Assert.That(camp.TryBuySquad(party.Leader, 4), Is.False, "squads come in twos and threes");
+                Assert.That(camp.TryBuySquad(grunt, 3), Is.False, "a grunt cannot call a squad while the Leader lives");
+                Assert.That(camp.TryBuySquad(party.Leader, 2), Is.False, "squads come in ones, threes and fives");
+                Assert.That(camp.TryBuySquad(party.Leader, 4), Is.False, "squads come in ones, threes and fives");
+                Assert.That(camp.GetSquadCost(1), Is.EqualTo(rule.Comp.SquadOfOneCost));
+                Assert.That(camp.GetSquadCost(5), Is.EqualTo(rule.Comp.SquadOfFiveCost));
+                Assert.That(camp.GetSquadCost(2), Is.Null, "there is no squad of two any more");
                 Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(20)), "a refused call costs nothing");
 
-                Assert.That(camp.TryBuySquad(party.Leader, 2), Is.True);
-                Assert.That(rule.Comp.SquadOfTwoCost, Is.EqualTo(FixedPoint4.New(12)));
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(20) - rule.Comp.SquadOfTwoCost), "a squad of two costs 12 SP");
+                Assert.That(camp.TryBuySquad(party.Leader, 3), Is.True);
+                Assert.That(rule.Comp.SquadOfThreeCost, Is.EqualTo(FixedPoint4.New(16)));
+                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(20) - rule.Comp.SquadOfThreeCost), "a squad of three costs 16 SP");
                 Assert.That(rule.Comp.SquadCalls, Has.Count.EqualTo(1));
                 call = rule.Comp.SquadCalls[0];
-                Assert.That(camp.GetPendingSquadSeats(), Is.EqualTo(2));
+                Assert.That(camp.GetPendingSquadSeats(), Is.EqualTo(3));
                 Assert.That(camp.TryGetSquadSeats(call, out entry), Is.True);
                 Assert.That(entMan.HasComponent<GhostRoleComponent>(entry), Is.True, "the seats are a ghost role");
 
@@ -137,7 +141,7 @@ public sealed class SquadCallTest : GameTest
                     Assert.That(rule.Comp.SquadCalls, Is.Empty);
                     Assert.That(entMan.Deleted(entry), Is.True,
                         "the ghost role closes with the call");
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14)), "the unclaimed seat gives its 6 SP back");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14.67)), "the two unclaimed seats give 2 x 16/3 SP back");
                 });
             });
 
@@ -147,20 +151,20 @@ public sealed class SquadCallTest : GameTest
                 var camp = Server.System<BadBloodCampSystem>();
                 Assert.That(rules.TryGetRule(out var rule), Is.True);
 
-                // three living Bad Bloods under a cap of four: one more seat, not two
+                // three living Bad Bloods under a cap of five (landing 2 + bonus 3): two more seats, not three
                 rule.Comp.HeldVoteSeats = 0;
                 rule.Comp.FoundingSeats = 0;
                 rule.Comp.LandingParty = 2;
-                Assert.That(rules.GetLivingBadBloodCap(), Is.EqualTo(4));
-                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(1));
-                Assert.That(camp.TryBuySquad(party.Leader, 2), Is.False, "the living cap holds");
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14)));
+                Assert.That(rules.GetLivingBadBloodCap(), Is.EqualTo(5));
+                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(2));
+                Assert.That(camp.TryBuySquad(party.Leader, 3), Is.False, "the living cap holds");
+                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14.67)));
 
                 // the free seat API obeys the caps too, unless it is told not to
-                Assert.That(camp.TryOpenSquad(2, out _), Is.False);
+                Assert.That(camp.TryOpenSquad(3, out _), Is.False);
                 Assert.That(camp.TryOpenFreeSeat(), Is.True);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14)), "a free seat costs nothing");
-                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(0));
+                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14.67)), "a free seat costs nothing");
+                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(1));
             });
 
             // a free seat that nobody takes closes without a refund
@@ -171,7 +175,7 @@ public sealed class SquadCallTest : GameTest
                 var rules = Server.System<BadBloodCampRuleSystem>();
                 Assert.That(rules.TryGetRule(out var rule), Is.True);
                 Assert.That(rule.Comp.SquadCalls, Is.Empty);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14)));
+                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14.67)));
             });
         }
         finally
@@ -241,7 +245,7 @@ public sealed class SquadCallTest : GameTest
                 Assert.That(camp.IsLodgeRevealed(), Is.False, "free seats do not reveal the Lodge");
 
                 Assert.That(rules.AddSp(FixedPoint4.New(20)), Is.True);
-                Assert.That(camp.TryBuySquad(party.Leader, 2), Is.True);
+                Assert.That(camp.TryBuySquad(party.Leader, 1), Is.True);
                 Assert.That(camp.IsLodgeRevealed(), Is.True, "a bought squad reveals the Lodge");
             });
 

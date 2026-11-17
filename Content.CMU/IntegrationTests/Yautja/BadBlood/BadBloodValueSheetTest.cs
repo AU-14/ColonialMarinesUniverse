@@ -9,6 +9,8 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.Prototypes;
+using Content.Shared.Projectiles;
+using Content.Shared.Weapons.Melee;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -57,18 +59,20 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(bracer.CloakBadBloodCombatLockout, Is.EqualTo(TimeSpan.FromSeconds(4)));
                 Assert.That(bracer.BulletDecloakAbsorbs, Is.False, "a bullet that drops the cloak still lands");
 
-                // caster: stun 60 at 0.8/s, immobilizer 300 every 15 s, lethal 150, eradicator 1500
+                // caster: stun 60 at 0.7/s, immobilizer 300 every 17 s, lethal 150 every 12 s, eradicator 1500 every 14 s
                 var modes = Comp<YautjaCasterComponent>(Caster).Modes;
                 Assert.That(modes, Has.Count.EqualTo(4));
                 Assert.That(modes[0].PowerCost, Is.EqualTo(FixedPoint2.New(60)));
-                Assert.That(modes[0].FireRate, Is.EqualTo(0.8f).Within(0.0001f));
+                Assert.That(modes[0].FireRate, Is.EqualTo(0.7f).Within(0.0001f));
                 Assert.That(modes[1].PowerCost, Is.EqualTo(FixedPoint2.New(300)));
-                Assert.That(1f / modes[1].FireRate, Is.EqualTo(15f).Within(0.01f));
+                Assert.That(1f / modes[1].FireRate, Is.EqualTo(17f).Within(0.01f));
                 Assert.That(modes[BadBloodEradicatorSystem.LethalMode].PowerCost, Is.EqualTo(FixedPoint2.New(150)));
                 Assert.That(modes[BadBloodEradicatorSystem.EradicatorMode].PowerCost, Is.EqualTo(FixedPoint2.New(1500)));
+                Assert.That(1f / modes[BadBloodEradicatorSystem.LethalMode].FireRate, Is.EqualTo(12f).Within(0.01f));
+                Assert.That(1f / modes[BadBloodEradicatorSystem.EradicatorMode].FireRate, Is.EqualTo(14f).Within(0.01f));
                 Assert.That(new BadBloodEradicatorComponent().Cooldown, Is.EqualTo(TimeSpan.FromMinutes(10)));
 
-                // its bolts: stun 3 s with no human bonus, immobilizer radius 4 for 3 s, lethal 75 raw out to 16 tiles
+                // its bolts: stun 3 s with no human bonus, immobilizer radius 4 for 3 s, lethal 68 Heat out to 16 tiles
                 var stun = Comp<YautjaCasterStunProjectileComponent>(modes[0].Projectile);
                 Assert.That(stun.StunTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
                 Assert.That(stun.HumanBonusStunTime, Is.EqualTo(TimeSpan.Zero));
@@ -77,6 +81,12 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(immobilizer.StunTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
                 var lethal = modes[BadBloodEradicatorSystem.LethalMode].Projectile;
                 Assert.That(Comp<ProjectileMaxRangeComponent>(lethal).Max, Is.EqualTo(16f));
+                Assert.That(Comp<ProjectileComponent>(lethal).Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(68)));
+                var blast = Comp<Content.Shared.Explosion.Components.ExplosiveComponent>(lethal);
+                Assert.That(blast.MaxIntensity, Is.EqualTo(45f));
+                Assert.That(blast.TotalIntensity, Is.EqualTo(45f));
+                var eradicator = modes[BadBloodEradicatorSystem.EradicatorMode].Projectile;
+                Assert.That(Comp<ProjectileComponent>(eradicator).Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(50)));
 
                 // range cap: every Bad Blood caster mode has its own bolt capped at 16 tiles, short of the hunters' bolt
                 var hunterModes = Comp<YautjaCasterComponent>("CMUYautjaPlasmaCaster").Modes;
@@ -102,6 +112,8 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(Comp<YautjaCasterImmobilizerProjectileComponent>("CMUYautjaCasterImmobilizerBolt").StunRange,
                     Is.EqualTo(7f));
                 Assert.That(Comp<ProjectileMaxRangeComponent>("CMUYautjaCasterLethalBolt").Max, Is.EqualTo(22f));
+                Assert.That(Comp<ProjectileComponent>("CMUYautjaCasterLethalBolt").Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(75)));
+                Assert.That(Comp<ProjectileComponent>("CMUYautjaCasterEradicatorBolt").Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(55)));
                 Assert.That(Comp<YautjaBracerComponent>("CMUYautjaBracer").BulletDecloakAbsorbs, Is.True);
 
                 // Superiority Points, tiers, vote, end and population
@@ -111,8 +123,10 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.CorpseCookSp, Is.EqualTo(FixedPoint4.New(3)));
                 Assert.That(rule.MeatCookSp, Is.EqualTo(FixedPoint4.New(0.5)));
                 Assert.That(rule.CookSpCapPerBody, Is.EqualTo(FixedPoint4.New(3)));
-                Assert.That(rule.SquadOfTwoCost, Is.EqualTo(FixedPoint4.New(12)));
+                Assert.That(rule.SquadOfOneCost, Is.EqualTo(FixedPoint4.New(7)));
                 Assert.That(rule.SquadOfThreeCost, Is.EqualTo(FixedPoint4.New(16)));
+                Assert.That(rule.SquadOfFiveCost, Is.EqualTo(FixedPoint4.New(24)));
+                Assert.That(rule.LastStandCost, Is.EqualTo(FixedPoint4.New(12)));
                 Assert.That(rule.HoundCost, Is.EqualTo(FixedPoint4.New(6)));
                 Assert.That(rule.TotemCost, Is.EqualTo(FixedPoint4.New(3)));
                 Assert.That(rule.TierTwoLifetimeSp, Is.EqualTo(FixedPoint4.New(12)));
@@ -132,10 +146,12 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.SummonInterval, Is.EqualTo(TimeSpan.FromSeconds(60)));
                 Assert.That(rule.DepartureTime, Is.EqualTo(TimeSpan.FromMinutes(20)));
                 Assert.That(rule.ReserveChoiceTime, Is.EqualTo(TimeSpan.FromSeconds(20)));
-                Assert.That(rule.ThreatBudgetFraction, Is.EqualTo(0.25f));
-                Assert.That(rule.LivingCapBonus, Is.EqualTo(2));
+                Assert.That(rule.ThreatBudgetFraction, Is.EqualTo(0.3f));
+                Assert.That(rule.LivingCapBonus, Is.EqualTo(3));
                 Assert.That(rule.LandingHoundDivisor, Is.EqualTo(2));
                 Assert.That(rule.HoundCapDivisor, Is.EqualTo(2));
+                Assert.That(rule.HoundCapBonus, Is.EqualTo(1));
+                Assert.That(rule.LeaderlessVoteDelay, Is.EqualTo(TimeSpan.FromSeconds(30)));
                 Assert.That(rule.FoundingSquadBase, Is.EqualTo(1));
                 Assert.That(rule.FoundingSquadDivisor, Is.EqualTo(2));
                 Assert.That(rule.LastStandSeats, Is.EqualTo(2));
@@ -148,10 +164,10 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(threat.ReserveLeftoverVoters, Is.True);
                 var landing = protos.Index<PartySpawnPrototype>("badBloodClanParty");
                 Assert.That(landing.LeadersToSpawn["CMUMobYautjaBadBloodLeader"], Is.EqualTo(1));
-                Assert.That(landing.GruntsToSpawn["CMUMobYautjaBadBloodGrunt"], Is.EqualTo(3));
-                // one extra grunt per ~17 players above 30
+                Assert.That(landing.GruntsToSpawn["CMUMobYautjaBadBloodGrunt"], Is.EqualTo(4));
+                // one extra grunt per ~12-13 players above 30
                 var gruntScaling = landing.Scaling["CMUMobYautjaBadBloodGrunt"];
-                Assert.That(gruntScaling.Scale, Is.EqualTo(0.06f).Within(0.0001f));
+                Assert.That(gruntScaling.Scale, Is.EqualTo(0.08f).Within(0.0001f));
                 Assert.That(gruntScaling.WhenToBeginScaling, Is.EqualTo(30));
 
                 // Clan Totem: 0.2 / 0.4 / 0.7 a minute, ripening at 10 and 20 min, radius 7
@@ -193,7 +209,7 @@ public sealed class BadBloodValueSheetTest
                 var badBloodSet = protos.Index<DamageModifierSetPrototype>("CMUYautjaBadBlood").Coefficients;
                 Assert.That(badBloodSet["Blunt"], Is.EqualTo(0.40f));
                 Assert.That(badBloodSet["Slash"], Is.EqualTo(0.45f));
-                Assert.That(badBloodSet["Piercing"], Is.EqualTo(0.30f));
+                Assert.That(badBloodSet["Piercing"], Is.EqualTo(0.27f));
                 Assert.That(badBloodSet["Heat"], Is.EqualTo(0.50f));
                 Assert.That(badBloodSet["Poison"], Is.EqualTo(0.5f));
                 Assert.That(badBloodSet.ContainsKey("Caustic"), Is.False, "caustic lands in full");
@@ -211,6 +227,25 @@ public sealed class BadBloodValueSheetTest
                          })
                 {
                     Assert.That(Comp<CMArmorComponent>(plate).Melee, Is.EqualTo(30), plate);
+                    Assert.That(Comp<CMArmorComponent>(plate).Bullet, Is.EqualTo(55), plate);
+                }
+
+                // bullet armor (ARCH-03): patchwork 25, armored mask 30, full clan armor 50
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodArmorPatchwork").Bullet, Is.EqualTo(25));
+                Assert.That(Comp<CMArmorComponent>("CMUBadBloodArmoredMask").Bullet, Is.EqualTo(30));
+                Assert.That(Comp<CMArmorComponent>("CMUBadBloodClanArmor").Bullet, Is.EqualTo(50));
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodGreavesPatchwork").Bullet, Is.EqualTo(50));
+
+                // melee (ARCH-03): the Bad Blood weapons hit a little harder than the honourable ones they copy
+                foreach (var (badBlood, hunter, type, hit, hunterHit) in new[]
+                         {
+                             ("CMUYautjaBadBloodWristBlades", "CMUYautjaWristBlades", "Slash", 22, 20),
+                             ("CMUYautjaBadBloodScimitar", "CMUYautjaScimitar", "Slash", 28, 25),
+                             ("CMUYautjaBadBloodChainGauntlet", "CMUYautjaChainGauntlet", "Blunt", 22, 20),
+                         })
+                {
+                    Assert.That(Comp<MeleeWeaponComponent>(badBlood).Damage.DamageDict[type], Is.EqualTo(FixedPoint2.New(hit)), badBlood);
+                    Assert.That(Comp<MeleeWeaponComponent>(hunter).Damage.DamageDict[type], Is.EqualTo(FixedPoint2.New(hunterHit)), hunter);
                 }
 
                 // blades against marines: Bad Blood wrist blades penetration 50 / strip 0.006, honourable 40 / 0.01

@@ -189,11 +189,11 @@ public sealed partial class BadBloodCampRuleSystem
             TryDecideRound(BadBloodRoundOutcome.MarinesClanWipe);
     }
 
-    // the clan pays for its cheapest squad by itself. seats nobody takes are refunded as usual
+    // the clan pays LastStandCost for the last-stand seats by itself. seats nobody takes are refunded as usual
     private bool TryOpenLastStandSquad(Entity<BadBloodCampRuleComponent> rule)
     {
         var camp = EntityManager.System<BadBloodCampSystem>();
-        var cost = rule.Comp.SquadOfTwoCost;
+        var cost = rule.Comp.LastStandCost;
         var seats = rule.Comp.LastStandSeats;
         if (seats <= 0 || !HasLodge() || camp.GetPendingSquadSeats() > 0 || !TrySpendSp(cost))
             return false;

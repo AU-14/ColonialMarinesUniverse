@@ -87,7 +87,12 @@ public sealed partial class BadBloodCampSystem
     }
 
     /// <summary>
-    /// What a squad of <paramref name="seats"/> costs: 2 or 3 seats. Null for any other size or without a rule.
+    /// The squad sizes the clan can buy, smallest first.
+    /// </summary>
+    public static readonly int[] SquadSizes = [1, 3, 5];
+
+    /// <summary>
+    /// What a squad of <paramref name="seats"/> costs: 1, 3 or 5 seats. Null for any other size or without a rule.
     /// </summary>
     public FixedPoint4? GetSquadCost(int seats)
     {
@@ -96,8 +101,9 @@ public sealed partial class BadBloodCampSystem
 
         return seats switch
         {
-            2 => rule.Comp.SquadOfTwoCost,
+            1 => rule.Comp.SquadOfOneCost,
             3 => rule.Comp.SquadOfThreeCost,
+            5 => rule.Comp.SquadOfFiveCost,
             _ => null,
         };
     }
@@ -135,7 +141,7 @@ public sealed partial class BadBloodCampSystem
 
     /// <summary>
     /// How many more seats the threat budget alone allows: Bad Bloods, open seats and hounds against
-    /// round(pop x 0.25). The living cap is not counted.
+    /// round(pop x 0.3). The living cap is not counted.
     /// </summary>
     public int GetSquadBudgetRoom()
     {
@@ -147,7 +153,7 @@ public sealed partial class BadBloodCampSystem
     }
 
     /// <summary>
-    /// <paramref name="buyer"/> pays for a squad of 2 or 3 and its seats open at the Lodge. Refused, with a popup
+    /// <paramref name="buyer"/> pays for a squad of 1, 3 or 5 and its seats open at the Lodge. Refused, with a popup
     /// and nothing spent, for the wrong buyer, without a Lodge, over the caps or without the SP.
     /// </summary>
     public bool TryBuySquad(EntityUid buyer, int seats)
@@ -253,12 +259,11 @@ public sealed partial class BadBloodCampSystem
             return;
 
         var user = args.User;
-        for (var seats = 2; seats <= 3; seats++)
+        foreach (var size in SquadSizes)
         {
-            if (GetSquadCost(seats) is not { } cost)
+            if (GetSquadCost(size) is not { } cost)
                 continue;
 
-            var size = seats;
             args.Verbs.Add(new Verb
             {
                 Text = Loc.GetString("cmu-bad-blood-squad-verb", ("seats", size), ("cost", cost.ToString())),
