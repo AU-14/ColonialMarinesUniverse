@@ -43,15 +43,24 @@
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
     accuracyMultiplierUnwielded: 4
-  - type: BallisticAmmoProvider
-    cycleable: false
-    proto: RMCTankFlamer
-    capacity: 1
-  - type: RefillableByBulletBox
-    bulletType: RMCTankFlamer
-  - type: VehicleHardpointAmmo
-    magazineSize: 100
-    maxStoredMagazines: 4
+  - type: SolutionContainerManager
+    solutions:
+      rmc_flamer_tank:
+        maxVol: 100
+        reagents:
+        - ReagentId: RMCNapalmUTTank
+          Quantity: 100
+  - type: RMCFlamerAmmoProvider
+  - type: RMCFlamerTank
+    maxIntensity: 30
+    maxDuration: 20
+    maxRange: 9
+    reagentWhitelist:
+    - RMCNapalmUTTank
+  - type: RMCFlushableSolution
+    solution: rmc_flamer_tank
+    flushTime: 1.5
+  - type: NoMixingReagents
   - type: GunFireArc
     arc: 120
   - type: GunMuzzleOffset
