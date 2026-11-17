@@ -46,6 +46,7 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private BadBloodSystem _badBlood = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private YautjaMaskSystem _mask = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private IPlayerManager _player = default!;
@@ -508,6 +509,9 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
                 _actions.RemoveAction(holder, held.PitchCampActionEntity);
 
             RemComp<BadBloodLeaderComponent>(holder);
+
+            // a deposed Leader loses the honourable sight at once, an Engineer keeps it
+            _mask.RefreshVisorGlasses(holder);
         }
 
         if (leader is { } uid)
@@ -515,6 +519,9 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
             var comp = EnsureComp<BadBloodLeaderComponent>(uid);
             _actions.AddAction(uid, ref comp.PitchCampActionEntity, comp.PitchCampAction);
             Dirty(uid, comp);
+
+            // the Leader sees as an honourable hunter does, like an Engineer, without toggling the visor
+            _mask.RefreshVisorGlasses(uid);
 
             if (promoteBracer &&
                 _inventory.TryGetSlotEntity(uid, BracerSlot, out var bracer) &&

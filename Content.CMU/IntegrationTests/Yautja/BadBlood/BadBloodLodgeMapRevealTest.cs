@@ -21,8 +21,17 @@ public sealed class BadBloodLodgeMapRevealTest : GameTest
     {
         var map = await Pair.CreateTestMap();
 
-        // the tracker files blips only on a grid with a tactical map
-        await Server.WaitPost(() => Server.EntMan.EnsureComponent<TacticalMapComponent>(map.Grid));
+        // the tracker files blips only on a grid with a tactical map, and only for entities standing on it.
+        // CreateTestMap lays a single tile at (0,0): an anchored Lodge spawned off-tile is detached to the map and
+        // never tracked, so floor everything this test spawns on
+        await Server.WaitPost(() =>
+        {
+            Server.EntMan.EnsureComponent<TacticalMapComponent>(map.Grid);
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = -4; x <= 4; x++)
+            for (var y = -1; y <= 4; y++)
+                maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
+        });
 
         var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
         EntityUid lodge = default;
