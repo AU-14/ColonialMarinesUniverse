@@ -1263,9 +1263,18 @@ public abstract partial class CMUSharedZLevelsSystem
         out EntityUid gridUid,
         [NotNullWhen(true)] out MapGridComponent? grid)
     {
+        _movementDeckCandidates.Clear();
+        // The map grid itself is outside the child-grid tree. With no proxies it is
+        // the only possible support, even when the map tile under the body is empty.
+        if (!_movementGridTreeQuery.TryComp(mapUid, out var tree) || tree.Tree.ProxyCount == 0)
+        {
+            grid = _gridQuery.CompOrNull(mapUid);
+            gridUid = grid != null ? mapUid : default;
+            return grid != null;
+        }
+
         // A deployed ramp sits on top of the landing pad. Prefer its supporting
         // surface to the terrain floor when both grids occupy the same tile.
-        _movementDeckCandidates.Clear();
         var candidates = _movementDeckCandidates;
         FindMovementDecks(mapUid, Box2.CenteredAround(worldPosition, new Vector2(0.01f)), ref candidates);
         foreach (var candidate in _movementDeckCandidates)
