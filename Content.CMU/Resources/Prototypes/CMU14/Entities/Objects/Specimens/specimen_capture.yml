@@ -31,6 +31,9 @@
   - type: AccessReader
     access: [["CMUAccessWYSecurity"]]
   - type: CMUSpecimenCrate
+  - type: ContainerContainer # declared here so the crate doesn't gain it on spawn
+    containers:
+      cmu_specimen: !type:ContainerSlot
 
 # Map this onto the Whiteout shuttle; it puts an empty, open crate there when the shuttle loads.
 - type: entity
