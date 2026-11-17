@@ -51,7 +51,7 @@ public static class CMUFrenchAccentRules
     private const RegexOptions Options = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
 
     // voiced "th" -> "z" in common words (the -> ze, this -> zis), plus "with" -> "wiz". Whole words only, but contractions (they're, that's) still match.
-    private static readonly (Regex Pattern, string Replacement)[] Words = BuildWords(
+    private static readonly (Regex Pattern, MatchEvaluator Replace)[] Words = CMUAccentText.BuildWords(
         // phrases that contain "the" or a swear word come first
         ("the company", "la compagnie"), ("what the hell", "zut alors"), ("what the fuck", "zut alors"),
         ("holy shit", "merde alors"),
@@ -97,18 +97,12 @@ public static class CMUFrenchAccentRules
 
     public static string Apply(string message)
     {
-        var msg = message;
-
-        foreach (var (pattern, replacement) in Words)
-        {
-            var rep = replacement;
-            msg = pattern.Replace(msg, m => MatchCase(m.Value, rep));
-        }
+        var msg = CMUAccentText.ApplyWords(Words, message);
 
         msg = Fillers.Replace(msg, m => CMUAccentText.MatchCase(m.Value, "euh"));
 
-        msg = ThBeforeIng.Replace(msg, m => MatchCase(m.Value, "t"));
-        msg = ThAny.Replace(msg, m => MatchCase(m.Value, "t"));
+        msg = ThBeforeIng.Replace(msg, m => CMUAccentText.MatchCase(m.Value, "t"));
+        msg = ThAny.Replace(msg, m => CMUAccentText.MatchCase(m.Value, "t"));
 
         msg = StartH.Replace(msg, m =>
         {
@@ -123,19 +117,4 @@ public static class CMUFrenchAccentRules
 
         return msg;
     }
-
-    private static (Regex, string)[] BuildWords(params (string Word, string Replacement)[] words)
-    {
-        var result = new (Regex, string)[words.Length];
-        for (var i = 0; i < words.Length; i++)
-        {
-            var pattern = new Regex($@"\b{Regex.Escape(words[i].Word)}\b", Options);
-            result[i] = (pattern, words[i].Replacement);
-        }
-
-        return result;
-    }
-
-    private static string MatchCase(string source, string replacement)
-        => CMUAccentText.MatchCase(source, replacement);
 }

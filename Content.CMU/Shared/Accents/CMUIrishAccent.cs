@@ -62,7 +62,7 @@ public sealed partial class CMUIrishAccentSystem : RelayAccentSystem<CMUIrishAcc
 public static class CMUIrishAccentRules
 {
     // Whole words only. Add more pairs here: ("english word", "irish word").
-    private static readonly (Regex Pattern, string Replacement)[] Words = CMUAccentText.BuildWords(
+    private static readonly (Regex Pattern, MatchEvaluator Replace)[] Words = CMUAccentText.BuildWords(
         // greetings and phrases
         ("what the fuck", "what the feck"), ("what the hell", "what the feck"), ("holy shit", "holy feck"),
         ("oh my god", "Jaysus"), ("jesus christ", "Jaysus"),

@@ -16,27 +16,25 @@ public static class CMUAccentText
     private static readonly Regex MessageEnd = new(@"([.!?]*)\s*$", RegexOptions.CultureInvariant);
 
     /// <summary>Builds whole-word, case-insensitive replacements from (word, replacement) pairs.</summary>
-    public static (Regex Pattern, string Replacement)[] BuildWords(params (string Word, string Replacement)[] words)
+    public static (Regex Pattern, MatchEvaluator Replace)[] BuildWords(params (string Word, string Replacement)[] words)
     {
-        var result = new (Regex, string)[words.Length];
+        var result = new (Regex, MatchEvaluator)[words.Length];
         for (var i = 0; i < words.Length; i++)
         {
             var pattern = new Regex($@"\b{Regex.Escape(words[i].Word)}\b", Options);
-            result[i] = (pattern, words[i].Replacement);
+            var replacement = words[i].Replacement;
+            result[i] = (pattern, match => MatchCase(match.Value, replacement));
         }
 
         return result;
     }
 
     /// <summary>Applies the replacements in order, keeping the capitalization of each replaced word.</summary>
-    public static string ApplyWords((Regex Pattern, string Replacement)[] words, string message)
+    public static string ApplyWords((Regex Pattern, MatchEvaluator Replace)[] words, string message)
     {
         var msg = message;
-        foreach (var (pattern, replacement) in words)
-        {
-            var rep = replacement;
-            msg = pattern.Replace(msg, m => MatchCase(m.Value, rep));
-        }
+        foreach (var (pattern, replace) in words)
+            msg = pattern.Replace(msg, replace);
 
         return msg;
     }

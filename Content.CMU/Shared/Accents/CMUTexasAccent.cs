@@ -43,7 +43,7 @@ public sealed partial class CMUTexasAccentSystem : RelayAccentSystem<CMUTexasAcc
 public static class CMUTexasAccentRules
 {
     // Whole words only. Add more pairs here: ("english word", "texan word").
-    private static readonly (Regex Pattern, string Replacement)[] Words = CMUAccentText.BuildWords(
+    private static readonly (Regex Pattern, MatchEvaluator Replace)[] Words = CMUAccentText.BuildWords(
         // phrases first. ("going to" is left out on purpose: it is also "going to the store".)
         ("gonna", "fixin' to"), ("about to", "fixin' to"),
         ("what the hell", "what in tarnation"), ("what the fuck", "what in tarnation"),

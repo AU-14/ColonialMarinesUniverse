@@ -46,7 +46,7 @@ public static class CMUAustralianAccentRules
     private const RegexOptions Options = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
 
     // Whole words only. Add more pairs here: ("english word", "aussie word").
-    private static readonly (Regex Pattern, string Replacement)[] Words = BuildWords(
+    private static readonly (Regex Pattern, MatchEvaluator Replace)[] Words = CMUAccentText.BuildWords(
         // greetings and people
         ("hello", "g'day"), ("hi", "g'day"),
         ("friend", "mate"), ("friends", "mates"), ("buddy", "mate"), ("pal", "mate"),
@@ -102,17 +102,7 @@ public static class CMUAustralianAccentRules
     private static readonly Regex MessageEnd = new(@"([.!?]*)\s*$", RegexOptions.CultureInvariant);
 
     public static string Apply(string message)
-    {
-        var msg = message;
-
-        foreach (var (pattern, replacement) in Words)
-        {
-            var rep = replacement;
-            msg = pattern.Replace(msg, m => CMUAccentText.MatchCase(m.Value, rep));
-        }
-
-        return msg;
-    }
+        => CMUAccentText.ApplyWords(Words, message);
 
     /// <summary>"That's great." becomes "That's great, mate." and "Sure" becomes "Sure, mate".</summary>
     public static string AddMate(string message)
@@ -121,17 +111,5 @@ public static class CMUAustralianAccentRules
             return message;
 
         return MessageEnd.Replace(message, ", mate$1", 1);
-    }
-
-    private static (Regex, string)[] BuildWords(params (string Word, string Replacement)[] words)
-    {
-        var result = new (Regex, string)[words.Length];
-        for (var i = 0; i < words.Length; i++)
-        {
-            var pattern = new Regex($@"\b{Regex.Escape(words[i].Word)}\b", Options);
-            result[i] = (pattern, words[i].Replacement);
-        }
-
-        return result;
     }
 }

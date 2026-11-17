@@ -30,7 +30,7 @@ public static class CMUAppalachianAccentRules
     private const RegexOptions Options = RegexOptions.IgnoreCase | RegexOptions.CultureInvariant;
 
     // Whole words only. Add more pairs here: ("english word", "appalachian word").
-    private static readonly (Regex Pattern, string Replacement)[] Words = CMUAccentText.BuildWords(
+    private static readonly (Regex Pattern, MatchEvaluator Replace)[] Words = CMUAccentText.BuildWords(
         // phrases first
         ("what the hell", "what in tarnation"), ("what the fuck", "what in tarnation"),
         ("holy shit", "land sakes"), ("oh my god", "land sakes"), ("bug hunt", "varmint hunt"),

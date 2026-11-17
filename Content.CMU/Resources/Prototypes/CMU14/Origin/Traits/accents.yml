@@ -151,7 +151,7 @@
     accent: british
 
 - type: trait
-  id: FrenchAccent
+  id: CMUFrenchAccent
   name: cmu-trait-french-name
   description: cmu-trait-french-desc
   category: SpeechTraits
@@ -160,7 +160,7 @@
   - type: CMUFrenchAccent
 
 - type: trait
-  id: CanadianAccent
+  id: CMUCanadianAccent
   name: cmu-trait-canadian-name
   description: cmu-trait-canadian-desc
   category: SpeechTraits
@@ -169,7 +169,7 @@
   - type: CMUCanadianAccent
 
 - type: trait
-  id: AustralianAccent
+  id: CMUAustralianAccent
   name: cmu-trait-australian-name
   description: cmu-trait-australian-desc
   category: SpeechTraits
@@ -178,7 +178,7 @@
   - type: CMUAustralianAccent
 
 - type: trait
-  id: TexasAccent
+  id: CMUTexasAccent
   name: cmu-trait-texas-name
   description: cmu-trait-texas-desc
   category: SpeechTraits
@@ -187,7 +187,7 @@
   - type: CMUTexasAccent
 
 - type: trait
-  id: AppalachianAccent
+  id: CMUAppalachianAccent
   name: cmu-trait-appalachian-name
   description: cmu-trait-appalachian-desc
   category: SpeechTraits
@@ -196,7 +196,7 @@
   - type: CMUAppalachianAccent
 
 - type: trait
-  id: IrishAccent
+  id: CMUIrishAccent
   name: cmu-trait-irish-name
   description: cmu-trait-irish-desc
   category: SpeechTraits
