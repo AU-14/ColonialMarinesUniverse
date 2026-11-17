@@ -13,7 +13,7 @@
     melee: 30
     bullet: 20
     bio: 20
-    explosionArmor: 15
+    explosionArmor: 10
   - type: ClothingSpeedModifier
     walkModifier: 0.897
     sprintModifier: 0.897
