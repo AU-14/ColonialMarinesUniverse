@@ -256,6 +256,13 @@ public sealed class BadBloodValueSheetTest
                 // bullet armor (ARCH-03): patchwork 25, armored mask 30, full clan armor 50
                 Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodArmorPatchwork").Bullet, Is.EqualTo(25));
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodArmoredMask").Bullet, Is.EqualTo(30));
+
+                // the armored clan mask is the upgrade over the crimson mask a grunt lands in
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaMaskPred01Crimson").Melee, Is.EqualTo(20));
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaMaskPred20Crimson").Bio, Is.EqualTo(20));
+                Assert.That(Comp<CMArmorComponent>("CMUBadBloodArmoredMask").Melee, Is.EqualTo(25));
+                Assert.That(Comp<CMArmorComponent>("CMUBadBloodArmoredMask").Bio, Is.EqualTo(25));
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaMask").Melee, Is.EqualTo(25), "the honourable mask is untouched");
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodClanArmor").Bullet, Is.EqualTo(50));
                 Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodGreavesPatchwork").Bullet, Is.EqualTo(50));
 

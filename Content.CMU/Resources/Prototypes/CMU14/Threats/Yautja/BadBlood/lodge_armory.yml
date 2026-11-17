@@ -256,11 +256,14 @@
   suffix: Bad Blood, Armored
   components:
   - type: BadBloodGearLock
+  # the upgrade over the crimson mask a grunt lands in (20 / 30 / 20 / 10)
   - type: CMArmor
-    melee: 20
+    melee: 25
     bullet: 30
-    bio: 20
+    bio: 25
     explosionArmor: 10
+    coveredZones:
+    - Head
 
 # 25 / 50 / 25 / 35: a full suit of clan armor. grunts land in patchwork (20 / 25 / 20 / 30) and earn this at tier II.
 # melee stays between patchwork and the Leader's plate (30) so the Leader keeps the best armor in the clan.

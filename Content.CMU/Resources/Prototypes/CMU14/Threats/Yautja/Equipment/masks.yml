@@ -387,8 +387,23 @@
     - Mask
     - Suitstorage
 
+# the crimson clan masks a Bad Blood grunt lands in (CMUYautjaBadBloodGruntGear*). a step below the honourable mask
+# (25 / 30 / 25 / 10) so the armory's armored clan mask is the upgrade it is sold as
 - type: entity
   parent: CMUYautjaMask
+  id: CMUYautjaMaskBadBloodGruntBase
+  abstract: true
+  components:
+  - type: CMArmor
+    melee: 20
+    bullet: 30
+    bio: 20
+    explosionArmor: 10
+    coveredZones:
+    - Head
+
+- type: entity
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred01Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -468,7 +483,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred02Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -548,7 +563,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred03Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -628,7 +643,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred04Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -708,7 +723,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred05Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -788,7 +803,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred06Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -868,7 +883,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred07Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -948,7 +963,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred08Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1028,7 +1043,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred09Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1108,7 +1123,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred10Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1188,7 +1203,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred11Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1268,7 +1283,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred12Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1348,7 +1363,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred13Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1428,7 +1443,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred14Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1508,7 +1523,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred15Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1588,7 +1603,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred16Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1668,7 +1683,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred17Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1748,7 +1763,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred18Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1828,7 +1843,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred19Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
@@ -1908,7 +1923,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaMask
+  parent: CMUYautjaMaskBadBloodGruntBase
   id: CMUYautjaMaskPred20Crimson
   name: clan mask
   description: A beautifully designed metallic face mask, both ornate and functional.
