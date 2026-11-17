@@ -397,9 +397,7 @@ public sealed partial class CMUShipWeaponsSystem
                 tileRef.Tile.IsEmpty ||
                 _cloudTileDefinitions[tileRef.Tile.TypeId] is not ContentTileDefinition tileDefinition ||
                 !tileDefinition.CMUBlocksLookUp ||
-                tileDefinition.Indestructible ||
-                !tileDefinition.ID.StartsWith("CMURoof", StringComparison.Ordinal) ||
-                tileDefinition.ID.StartsWith("CMURoofOuterHull", StringComparison.Ordinal))
+                tileDefinition.Indestructible)
             {
                 continue;
             }
