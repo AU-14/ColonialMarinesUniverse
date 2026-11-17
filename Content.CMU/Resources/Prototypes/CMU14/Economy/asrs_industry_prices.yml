@@ -1752,194 +1752,194 @@
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice350
   product: "aloe"
-  price: 18
+  price: 12
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice351
   product: "ambrosia vulgaris"
-  price: 25
+  price: 17
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice352
   product: "apple"
-  price: 10
+  price: 7
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice353
   product: "banana"
-  price: 8
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice354
   product: "berries"
-  price: 18
+  price: 12
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice355
   product: "carrot"
-  price: 9
+  price: 6
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice356
   product: "cabbage"
-  price: 8
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice357
   product: "chanterelle cluster"
-  price: 22
+  price: 15
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice358
   product: "cherry"
-  price: 16
+  price: 11
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice359
   product: "chili pepper"
-  price: 14
+  price: 9
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice360
   product: "cocoa pod"
-  price: 20
+  price: 13
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice361
   product: "ear of corn"
-  price: 7
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice362
   product: "cotton boll"
-  price: 12
+  price: 8
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice363
   product: "eggplant"
-  price: 12
+  price: 8
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice364
   product: "galaxythistle"
-  price: 28
+  price: 19
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice365
   product: "garlic"
-  price: 16
+  price: 11
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice366
   product: "grapes"
-  price: 14
+  price: 9
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice367
   product: "lemon"
-  price: 11
+  price: 7
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice368
   product: "lime"
-  price: 12
+  price: 8
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice369
   product: "pineapple"
-  price: 16
+  price: 11
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice370
   product: "lingzhi"
-  price: 30
+  price: 20
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice371
   product: "oat bushel"
-  price: 6
+  price: 4
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice372
   product: "onion"
-  price: 8
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice373
   product: "red onion"
-  price: 10
+  price: 7
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice374
   product: "orange"
-  price: 10
+  price: 7
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice375
   product: "pea pod"
-  price: 9
+  price: 6
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice376
   product: "poppy"
-  price: 22
+  price: 15
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice377
   product: "potato"
-  price: 7
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice378
   product: "pumpkin"
-  price: 14
+  price: 9
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice379
   product: "rice bushel"
-  price: 8
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice380
   product: "soybeans"
-  price: 8
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice381
   product: "sugarcane"
-  price: 7
+  price: 5
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice382
   product: "tea leaves"
-  price: 15
+  price: 10
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice383
   product: "tomato"
-  price: 10
+  price: 7
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice384
   product: "tower-cap log"
-  price: 20
+  price: 13
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice385
   product: "wheat bushel"
-  price: 6
+  price: 4
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice386
   product: "watermelon"
-  price: 18
+  price: 12
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice387
   product: "tobacco leaves"
-  price: 24
+  price: 16
 
 - type: cmuIndustryPrice
   id: RUMCIndustryPrice388
   product: "fly amanita"
-  price: 20
+  price: 13
