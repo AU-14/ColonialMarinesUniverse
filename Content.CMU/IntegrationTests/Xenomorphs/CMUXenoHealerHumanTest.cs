@@ -18,7 +18,7 @@ public sealed class CMUXenoHealerHumanTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [TestCase(100, 100, 25, 50)]
-    [TestCase(10, 25, 0, 0)]
+    [TestCase(0, 0, 0, 0)] // Surface bleeding alone is treatable.
     public async Task SalveHealsHumanWithinDamageCapsAndStopsBleeding(
         double initialBrute,
         double initialBurn,

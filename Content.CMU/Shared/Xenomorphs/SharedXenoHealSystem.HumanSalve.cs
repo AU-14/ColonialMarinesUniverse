@@ -51,9 +51,9 @@ public abstract partial class SharedXenoHealSystem
             !TryComp<DamageableComponent>(target, out var damage))
             return true;
 
-        var healing = _rmcDamageable.DistributeDamageCached((target, damage), BruteGroup, args.HumanBruteHeal);
-        _rmcDamageable.DistributeDamageCached((target, damage), BurnGroup, args.HumanBurnHeal, healing);
-        if (healing.Empty && !HasSurfaceBleeding(target))
+        var treatment = _rmcDamageable.DistributeHealingCached((target, damage), BruteGroup, args.HumanBruteHeal);
+        _rmcDamageable.DistributeHealingCached((target, damage), BurnGroup, args.HumanBurnHeal, treatment);
+        if (treatment.Empty && !HasSurfaceBleeding(target))
         {
             _popup.PopupEntity(Loc.GetString("cmu-xeno-healer-human-no-wounds"), healer, healer);
             return true;
@@ -63,7 +63,6 @@ public abstract partial class SharedXenoHealSystem
             return true;
 
         args.Handled = true;
-        var treatment = -healing;
         treatment.DamageDict[SalvePoison] = args.HumanPoison;
         _damageable.TryChangeDamage(target, treatment, ignoreResistances: true, interruptsDoAfters: false, origin: healer);
         foreach (var (part, _) in _medicalIndex.GetBodyParts(target))
