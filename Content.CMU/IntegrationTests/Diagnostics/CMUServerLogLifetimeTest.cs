@@ -1,4 +1,9 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Server.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.MotionDetector;
+using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared.Interaction.Events;
 using Content.Shared._RMC14.Targeting;
 using Content.Shared._RMC14.Tracker;
 using Content.Shared._RMC14.Tracker.Xeno;
@@ -22,6 +27,81 @@ namespace Content.IntegrationTests.CMU14.Diagnostics;
 [TestFixture]
 public sealed class CMUServerLogLifetimeTest : GameTest
 {
+    [Test]
+    public async Task TrapKeepsItsCaptiveWhenTheHunterIsDeleted()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var hunter = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            SEntMan.EnsureComponent<YautjaComponent>(hunter);
+            var target = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var trap = SEntMan.SpawnAtPosition("CMUYautjaHuntingTrap", map.GridCoords);
+            var component = SEntMan.GetComponent<YautjaTrapComponent>(trap);
+            var traps = Server.System<YautjaTrapSystem>();
+            Assert.That(traps.TryArmTrap((trap, component), hunter), Is.True);
+            Assert.That(traps.TryTriggerTrap((trap, component), target), Is.True);
+
+            SEntMan.DeleteEntity(hunter);
+            Assert.That(component.TrapOwner, Is.Null);
+            Assert.That(component.TrappedMob, Is.EqualTo(target));
+            SEntMan.GetComponentState(SEntMan.EventBus, component, null, GameTick.Zero);
+
+            SEntMan.DeleteEntity(target);
+            Assert.That(component.TrappedMob, Is.Null);
+            SEntMan.GetComponentState(SEntMan.EventBus, component, null, GameTick.Zero);
+        });
+    }
+
+    [Test]
+    public async Task MotionDetectorFollowsItsCurrentUserAcrossHandoffs()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var first = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            var second = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            var detector = SEntMan.SpawnAtPosition("RMCMotionDetector", map.GridCoords);
+            var component = SEntMan.GetComponent<MotionDetectorComponent>(detector);
+            var hands = Server.System<SharedHandsSystem>();
+            foreach (var user in new[] { first, second })
+            {
+                Assert.That(hands.TryPickupAnyHand(user, detector), Is.True);
+                SEntMan.EventBus.RaiseLocalEvent(detector, new UseInHandEvent(user));
+                Assert.That(component.LastUser, Is.EqualTo(user));
+                Assert.That(hands.TryDrop(user, detector), Is.True);
+            }
+
+            SEntMan.DeleteEntity(first);
+            Assert.That(component.LastUser, Is.EqualTo(second));
+            SEntMan.DeleteEntity(second);
+            Assert.That(component.LastUser, Is.Null);
+            SEntMan.GetComponentState(SEntMan.EventBus, component, null, GameTick.Zero);
+        });
+    }
+
+    [Test]
+    public async Task SurvivingSquadCardRetainsItsOwnerRestriction()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var marine = SEntMan.SpawnAtPosition("CMMobHuman", map.GridCoords);
+            var card = SEntMan.SpawnAtPosition("CMIDCardPilotDropship", map.GridCoords);
+            var hands = Server.System<SharedHandsSystem>();
+            Assert.That(hands.TryPickupAnyHand(marine, card), Is.True);
+            SEntMan.EnsureComponent<SquadGrantAccessComponent>(marine).AccessLevels = [];
+            Server.System<SquadSystem>().Update(0);
+            Assert.That(SEntMan.GetComponent<IdCardOwnerComponent>(card).Id, Is.EqualTo(marine));
+            Assert.That(hands.TryDrop(marine, card), Is.True);
+
+            SEntMan.DeleteEntity(marine);
+            var owner = SEntMan.GetComponent<IdCardOwnerComponent>(card);
+            Assert.That(owner.Id, Is.EqualTo(EntityUid.Invalid));
+            SEntMan.GetComponentState(SEntMan.EventBus, owner, null, GameTick.Zero);
+        });
+    }
+
     [Test]
     public async Task DestroyedBlockingItemReleasesVirtualHandImmediately()
     {
