@@ -181,7 +181,7 @@ public sealed partial class CMUFobDefenseSystem : EntitySystem
             return false;
         return _interaction.InRangeUnobstructed(gun.Owner, target, gun.Comp.Range,
             CollisionGroup.Impassable | CollisionGroup.BulletImpassable,
-            predicate: blocker => _targeting.CanShootOverBarricade(gun.Owner, blocker));
+            predicate: blocker => _targeting.CanTargetAcrossBarricade(gun.Owner, blocker));
     }
 
     private void OnAuthorizeFire(Entity<CMUFobSupportGunComponent> gun, ref CMUFobFireAuthorizationEvent args)

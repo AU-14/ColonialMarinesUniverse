@@ -5,7 +5,7 @@ using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Projectiles.Penetration;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Weapons.Ranged;
-using Content.Shared._RMC14.Sentry;
+using Content.Shared._RMC14.Sentry; // CMU14
 using Content.Shared._RMC14.Xenonids.Damage;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.Administration.Logs;
@@ -83,7 +83,7 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedGunSystem _guns = default!;
-    [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
+    [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!; // CMU14
     [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
@@ -436,67 +436,13 @@ public abstract partial class SharedProjectileSystem : EntitySystem
                 current = container.Owner;
             }
         }
-        //check for BarricadeBlock component (percentage of chance to hit/pass over)
-        if (TryComp(args.OtherEntity, out BarricadeBlockComponent? BarricadeBlock))
+        // CMU14: a shot that clears the barricade avoids its normal interception roll.
+        if (TryComp<BarricadeBlockComponent>(args.OtherEntity, out var cover)
+            && ((component.Shooter is { } shooter && Exists(shooter)
+                    && _sentryTargeting.ClearsBarricade(shooter, args.OtherEntity, cover))
+                || _random.NextFloat(0f, 100f) >= cover.Blocking))
         {
-            var alwaysPassThrough = false;
-            //_sawmill.Info("Checking BarricadeBlock...");
-            if (component.Shooter is { } shooterUid && Exists(shooterUid))
-            {
-                if (HasComp<SentryComponent>(shooterUid))
-                {
-                    alwaysPassThrough = _sentryTargeting.CanShootOverBarricade(shooterUid, args.OtherEntity);
-                }
-                else
-                {
-                    // Condition 1: Directions are the same (using cardinal directions).
-                    // Or, if bidirectional, directions can be opposite.
-                    var shooterWorldRotation = _transform.GetWorldRotation(shooterUid);
-                    var BarricadeBlockWorldRotation = _transform.GetWorldRotation(args.OtherEntity);
-
-                    var shooterDir = shooterWorldRotation.GetCardinalDir();
-                    var BarricadeBlockDir = BarricadeBlockWorldRotation.GetCardinalDir();
-
-                    bool directionallyAllowed = false;
-                    if (shooterDir == BarricadeBlockDir)
-                    {
-                        directionallyAllowed = true;
-                    }
-                    else if (BarricadeBlock.Bidirectional)
-                    {
-                        var oppositeBarricadeBlockDir = (Direction)(((int)BarricadeBlockDir + 4) % 8);
-                        if (shooterDir == oppositeBarricadeBlockDir)
-                            directionallyAllowed = true;
-                    }
-
-                    if (directionallyAllowed)
-                    {
-                        var shooterCoords = Transform(shooterUid).Coordinates;
-                        var barricadeCoords = Transform(args.OtherEntity).Coordinates;
-                        alwaysPassThrough = shooterCoords.TryDistance(EntityManager, barricadeCoords, out var distance)
-                                            && distance <= BarricadeBlock.Distance;
-                    }
-                }
-            }
-
-            if (alwaysPassThrough)
-            {
-                args.Cancelled = true;
-            }
-            else
-            {
-                //_sawmill.Debug("BarricadeBlock direction/distance check failed or shooter not valid.");
-                // Standard BarricadeBlock blocking logic if the special conditions are not met.
-                var rando = _random.NextFloat(0.0f, 100.0f);
-                if (rando >= BarricadeBlock.Blocking)
-                {
-                    args.Cancelled = true;
-                }
-                else
-                {
-                    return;
-                }
-            }
+            args.Cancelled = true;
         }
     }
 

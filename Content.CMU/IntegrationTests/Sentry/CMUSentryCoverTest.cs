@@ -21,6 +21,24 @@ public sealed class CMUSentryCoverTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [Test]
+    public async Task LegacyLandingZoneTurretCanTargetBeyondItsGuaranteedClearance()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var turret = SEntMan.SpawnEntity("RMCTurretGaussSpaceborne", map.GridCoords);
+            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(4, 0)));
+            var targeting = Server.System<SentryTargetingSystem>();
+            var barricade = SEntMan.GetComponent<Content.Shared.BarricadeBlock.BarricadeBlockComponent>(cover);
+            Assert.That(targeting.ClearsBarricade(turret, cover, barricade), Is.True);
+
+            Server.System<SharedTransformSystem>().SetCoordinates(cover, map.GridCoords.Offset(new Vector2(5, 0)));
+            Assert.That(targeting.ClearsBarricade(turret, cover, barricade), Is.False);
+            Assert.That(targeting.CanTargetAcrossBarricade(turret, cover), Is.True);
+        });
+    }
+
+    [Test]
     public async Task SentryShootsPastLowCoverButNotWalls()
     {
         var map = await Pair.CreateTestMap();

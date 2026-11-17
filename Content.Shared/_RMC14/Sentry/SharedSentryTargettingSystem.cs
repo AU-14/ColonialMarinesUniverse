@@ -4,7 +4,6 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Construction.FloorResin; // CMU14
 using Content.Shared._RMC14.Xenonids.Hive; // CMU14
 using Content.Shared._RMC14.Xenonids.Weeds; // CMU14
-using Content.Shared.BarricadeBlock;
 using Content.Shared.CMU14.AllianceConsole;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs; // CMU14
@@ -31,7 +30,6 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
 
     private const string SentryExcludedFaction = "RMCDumb";
-    private const float SentryBarricadePassOverDistance = 4f;
 
     public static readonly Dictionary<string, EntProtoId<IFFFactionComponent>> SentryFactionToIff = new()
     {
@@ -53,26 +51,6 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     private readonly HashSet<Entity<UserIFFComponent>> _userIffLookupBuffer = new();
     private readonly HashSet<EntityUid> _candidateLookupBuffer = new();
     private readonly HashSet<string> _friendlyNpcFactionBuffer = new();
-
-    public bool CanShootOverBarricade(EntityUid shooter, EntityUid barricade)
-    {
-        if (!HasComp<SentryComponent>(shooter)
-            || !TryComp<BarricadeBlockComponent>(barricade, out var cover))
-            return false;
-
-        var shooterTransform = Transform(shooter);
-        var barricadeTransform = Transform(barricade);
-        if (shooterTransform.MapUid != barricadeTransform.MapUid
-            || !shooterTransform.Coordinates.TryDistance(EntityManager, barricadeTransform.Coordinates, out var distance)
-            || distance > SentryBarricadePassOverDistance)
-            return false;
-
-        var shooterDirection = _xform.GetWorldRotation(shooter).GetCardinalDir();
-        var barricadeDirection = _xform.GetWorldRotation(barricade).GetCardinalDir();
-        return shooterDirection == barricadeDirection
-               || cover.Bidirectional
-               && shooterDirection == (Direction)(((int)barricadeDirection + 4) % 8);
-    }
 
     public override void Initialize()
     {
