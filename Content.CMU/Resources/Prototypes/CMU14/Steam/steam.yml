@@ -89,7 +89,7 @@
   parent: RUMCFluidPipeBase
   id: RUMCSteelPipe
   name: steel pipe
-  description: A length of steel pipe for liquids. It carries any liquid, one at a time, and pipes next to each other pass it along slowly. Join it to a machine with a screwdriver, the pipe first and then the machine.
+  description: A length of steel pipe for liquids. It carries any liquid, one at a time, and pipes next to each other pass it along quickly. Join it to a machine with a screwdriver, the pipe first and then the machine.
   components:
   - type: FluidPipe
     capacity: 100
