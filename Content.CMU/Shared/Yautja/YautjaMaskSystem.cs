@@ -414,6 +414,22 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         return false;
     }
 
+    /// <summary>
+    /// CMU14: rebuilds the visor glasses of <paramref name="user"/>'s active mask, so a change in what the wearer may
+    /// see (a Bad Blood taking up the Engineer caste) takes effect without toggling the visor.
+    /// </summary>
+    public void RefreshVisorGlasses(EntityUid user)
+    {
+        if (!_inventory.TryGetSlotEntity(user, "mask", out var maskUid) ||
+            !TryComp(maskUid, out YautjaMaskComponent? mask) ||
+            !mask.VisorEnabled)
+        {
+            return;
+        }
+
+        CreateVisorGlasses((maskUid.Value, mask), user);
+    }
+
     private bool CreateVisorGlasses(Entity<YautjaMaskComponent> mask, EntityUid user)
     {
         DeleteVisorGlasses(mask, user);
@@ -421,7 +437,10 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (_inventory.TryGetSlotEntity(user, "eyes", out _))
             return false;
 
-        var prototype = HasComp<YautjaBadBloodComponent>(user)
+        // ARCH-04: a Bad Blood Engineer sees as an honourable hunter does
+        var prototype = HasComp<YautjaBadBloodComponent>(user) &&
+                        !(TryComp(user, out Content.Shared.CMU14.Yautja.BadBlood.BadBloodCasteComponent? caste) &&
+                          caste.Caste == Content.Shared.CMU14.Yautja.BadBlood.BadBloodCaste.Engineer)
             ? mask.Comp.BadBloodVisorGlassesPrototype
             : mask.Comp.VisorGlassesPrototype;
         var glasses = Spawn(prototype, Transform(user).Coordinates);

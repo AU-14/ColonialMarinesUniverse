@@ -94,8 +94,25 @@ public sealed partial class BadBloodCampRuleComponent : Component
     [DataField]
     public float TotemTierCredit = 0.5f;
 
+    /// <summary>
+    /// ARCH-01: what one polished trophy offered at the Lodge pays the Bad Blood who offered it, as personal Honour for
+    /// the armory. Trophies no longer pay clan SP; cooking and Totems do.
+    /// </summary>
     [DataField]
-    public FixedPoint4 OfferingSp = 1;
+    public FixedPoint4 OfferingHonour = 2;
+
+    /// <summary>
+    /// The share of Honour that counts towards armory tiers. Half keeps a body worth 5 lifetime points (2 trophies
+    /// x 2 Honour x 0.5 + 3 from cooking), as it was before Honour.
+    /// </summary>
+    [DataField]
+    public float HonourTierCredit = 0.5f;
+
+    /// <summary>
+    /// Personal Honour by holder: the Bad Blood's mind, so it follows the player into a new body. Spent at the armory.
+    /// </summary>
+    [ViewVariables]
+    public readonly Dictionary<EntityUid, FixedPoint4> Honour = new();
 
     [DataField]
     public int MaxOfferingsPerBody = 2;

@@ -155,7 +155,10 @@ public sealed partial class RadioSystem : SharedRadioSystem
         var evt = new TransformSpeakerNameEvent(messageSource, MetaData(messageSource).EntityName);
         RaiseLocalEvent(messageSource, evt);
 
-        var name = GetRadioSpeakerName(messageSource, channel, evt.VoiceName);
+        // cmu edit: a Bad Blood is known on the radio by role and clan code, never as "unknown"
+        var voiceName = EntityManager.System<Content.Shared.CMU14.Yautja.BadBlood.BadBloodCodeSystem>().GetClanName(messageSource)
+                        ?? evt.VoiceName;
+        var name = GetRadioSpeakerName(messageSource, channel, voiceName);
 
         SpeechVerbPrototype speech;
         if (evt.SpeechVerb != null && ProtoMan.Resolve(evt.SpeechVerb, out var evntProto))

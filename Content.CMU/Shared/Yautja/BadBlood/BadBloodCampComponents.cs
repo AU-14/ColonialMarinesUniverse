@@ -86,6 +86,8 @@ public enum BadBloodCampPartKind : byte
     Kennel,
     Cauldron,
     Quarry,
+    EngineerStation,
+    MedicStation,
 }
 
 /// <summary>

@@ -234,6 +234,66 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
         return tier >= 1 && GetTier() >= tier;
     }
 
+    /// <summary>
+    /// Whose Honour <paramref name="body"/> earns and spends: its mind, so Honour follows a player into a new body,
+    /// or the body itself without one.
+    /// </summary>
+    public EntityUid GetHonourHolder(EntityUid body)
+    {
+        return _mind.TryGetMind(body, out var mindId, out _) ? mindId : body;
+    }
+
+    /// <summary>
+    /// The personal Honour of the Bad Blood in <paramref name="body"/>.
+    /// </summary>
+    public FixedPoint4 GetHonour(EntityUid body)
+    {
+        return TryGetRule(out var rule)
+            ? rule.Comp.Honour.GetValueOrDefault(GetHonourHolder(body))
+            : FixedPoint4.Zero;
+    }
+
+    /// <summary>
+    /// ARCH-01: credits <paramref name="body"/>'s own Honour. It counts towards armory tiers at
+    /// <see cref="BadBloodCampRuleComponent.HonourTierCredit"/>, so a body opens the tiers as fast as it did when
+    /// trophies paid clan SP.
+    /// </summary>
+    public bool AddHonour(EntityUid body, FixedPoint4 amount)
+    {
+        if (amount <= FixedPoint4.Zero || !TryGetRule(out var rule))
+            return false;
+
+        var holder = GetHonourHolder(body);
+        rule.Comp.Honour[holder] = rule.Comp.Honour.GetValueOrDefault(holder) + amount;
+        rule.Comp.LifetimeSp += amount * Math.Clamp(rule.Comp.HonourTierCredit, 0f, 1f);
+
+        var ev = new BadBloodHonourChangedEvent(rule, holder);
+        RaiseLocalEvent(ref ev);
+        return true;
+    }
+
+    /// <summary>
+    /// Takes <paramref name="amount"/> of <paramref name="body"/>'s own Honour, or nothing if it cannot pay in full.
+    /// </summary>
+    public bool TrySpendHonour(EntityUid body, FixedPoint4 amount)
+    {
+        if (amount < FixedPoint4.Zero || !TryGetRule(out var rule))
+            return false;
+
+        var holder = GetHonourHolder(body);
+        var have = rule.Comp.Honour.GetValueOrDefault(holder);
+        if (have < amount)
+            return false;
+
+        if (amount == FixedPoint4.Zero)
+            return true;
+
+        rule.Comp.Honour[holder] = have - amount;
+        var ev = new BadBloodHonourChangedEvent(rule, holder);
+        RaiseLocalEvent(ref ev);
+        return true;
+    }
+
     private void RaiseSpChanged(Entity<BadBloodCampRuleComponent> rule, FixedPoint4 old)
     {
         var ev = new BadBloodSpChangedEvent(rule, old, rule.Comp.Sp);
@@ -259,17 +319,18 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     }
 
     /// <summary>
-    /// Books one trophy offering from <paramref name="body"/> and pays the clan for it. False, with nothing paid,
-    /// once the body has given its <see cref="BadBloodCampRuleComponent.MaxOfferingsPerBody"/>. The caller has
-    /// already checked the trophy itself (polished, worthy origin).
+    /// Books one trophy offering from <paramref name="body"/> and pays <paramref name="offerer"/> Honour for it
+    /// (ARCH-01: trophies feed the offerer's own gear, not the clan's reinforcements). False, with nothing paid, once
+    /// the body has given its <see cref="BadBloodCampRuleComponent.MaxOfferingsPerBody"/>. The caller has already
+    /// checked the trophy itself (polished, worthy origin).
     /// </summary>
-    public bool TryCreditOffering(EntityUid body)
+    public bool TryCreditOffering(EntityUid body, EntityUid offerer)
     {
         if (!TryGetRule(out var rule) || !CanOffer(body))
             return false;
 
         rule.Comp.OfferedPerBody[body] = rule.Comp.OfferedPerBody.GetValueOrDefault(body) + 1;
-        AddSp(rule.Comp.OfferingSp);
+        AddHonour(offerer, rule.Comp.OfferingHonour);
         return true;
     }
 

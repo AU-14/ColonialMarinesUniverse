@@ -7,7 +7,7 @@ cmu-bad-blood-offering-unknown = Nobody knows whose body {THE($trophy)} came fro
 cmu-bad-blood-offering-unworthy = {CAPITALIZE(THE($trophy))} was not cut from a kill, or it came from a Yautja, a synthetic or a larva. The Lodge will not take it.
 cmu-bad-blood-offering-body-spent = The Lodge already holds two trophies from that body.
 cmu-bad-blood-offering-start = You begin hanging {THE($trophy)} on the Lodge.
-cmu-bad-blood-offering-finished = You hang {THE($trophy)} on the Lodge. The clan gains { $sp } Superiority Points.
+cmu-bad-blood-offering-finished = You hang {THE($trophy)} on the Lodge. You gain { $sp } Honour to spend at the armory.
 cmu-bad-blood-offering-examine = { $count ->
         [0] No trophies hang on it yet.
         [one] One trophy hangs on it.

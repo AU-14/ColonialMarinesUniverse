@@ -40,6 +40,13 @@ public sealed partial class BadBloodCampArmoryComponent : Component
     /// </summary>
     [ViewVariables]
     public bool TierFourApplied;
+
+    /// <summary>
+    /// ARCH-06: a caste station. Only a Bad Blood of this caste may open it; others can claim the caste here.
+    /// Null for the clan's own armory, open to every Bad Blood.
+    /// </summary>
+    [DataField]
+    public BadBloodCaste? RequiredCaste;
 }
 
 /// <summary>

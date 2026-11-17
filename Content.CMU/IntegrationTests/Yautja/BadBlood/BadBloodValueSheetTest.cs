@@ -118,7 +118,7 @@ public sealed class BadBloodValueSheetTest
 
                 // Superiority Points, tiers, vote, end and population
                 var rule = Comp<BadBloodCampRuleComponent>(Rule);
-                Assert.That(rule.OfferingSp, Is.EqualTo(FixedPoint4.New(1)));
+                Assert.That(rule.OfferingHonour, Is.EqualTo(FixedPoint4.New(2)));
                 Assert.That(rule.MaxOfferingsPerBody, Is.EqualTo(2));
                 Assert.That(rule.CorpseCookSp, Is.EqualTo(FixedPoint4.New(3)));
                 Assert.That(rule.MeatCookSp, Is.EqualTo(FixedPoint4.New(0.5)));
@@ -245,12 +245,12 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodClanArmor").Bullet, Is.EqualTo(50));
                 Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodGreavesPatchwork").Bullet, Is.EqualTo(50));
 
-                // melee (ARCH-03): the Bad Blood weapons hit a little harder than the honourable ones they copy
+                // melee (ARCH-02): the starter weapons hit like the honourable ones; the forge and the golden tier add
                 foreach (var (badBlood, hunter, type, hit, hunterHit) in new[]
                          {
-                             ("CMUYautjaBadBloodWristBlades", "CMUYautjaWristBlades", "Slash", 22, 20),
-                             ("CMUYautjaBadBloodScimitar", "CMUYautjaScimitar", "Slash", 28, 25),
-                             ("CMUYautjaBadBloodChainGauntlet", "CMUYautjaChainGauntlet", "Blunt", 22, 20),
+                             ("CMUYautjaBadBloodWristBlades", "CMUYautjaWristBlades", "Slash", 20, 20),
+                             ("CMUYautjaBadBloodScimitar", "CMUYautjaScimitar", "Slash", 25, 25),
+                             ("CMUYautjaBadBloodChainGauntlet", "CMUYautjaChainGauntlet", "Blunt", 20, 20),
                          })
                 {
                     Assert.That(Comp<MeleeWeaponComponent>(badBlood).Damage.DamageDict[type], Is.EqualTo(FixedPoint2.New(hit)), badBlood);
@@ -264,6 +264,25 @@ public sealed class BadBloodValueSheetTest
                 var hunterBlades = Comp<YautjaHumanMeleeComponent>("CMUYautjaWristBlades");
                 Assert.That(hunterBlades.Penetration, Is.EqualTo(40));
                 Assert.That(hunterBlades.StripChancePerArmor, Is.EqualTo(0.01f));
+
+                // weapon tiers (ARCH-02): the forge adds a fifth, the blessed weapons are the golden tier
+                Assert.That(Comp<BadBloodForgeUpgradeComponent>("CMUBadBloodForgeUpgrade").Multiplier, Is.EqualTo(1.2f).Within(0.001f));
+                Assert.That(Comp<MeleeWeaponComponent>("CMUBadBloodBlessedWarGlaive").Damage.DamageDict["Slash"], Is.EqualTo(FixedPoint2.New(20)));
+                Assert.That(Comp<MeleeWeaponComponent>("CMUYautjaWarGlaive").Damage.DamageDict["Slash"], Is.EqualTo(FixedPoint2.New(15)));
+                foreach (var (blessed, hunter, type) in new[]
+                         {
+                             ("CMUBadBloodBlessedChainwhip", "CMUYautjaChainwhip", "Slash"),
+                             ("CMUBadBloodBlessedSeveringSword", "CMUYautjaSeveringSword", "Slash"),
+                             ("CMUBadBloodBlessedCruelStaff", "CMUYautjaCruelStaff", "Slash"),
+                             ("CMUBadBloodBlessedDualWarScythe", "CMUYautjaDualWarScythe", "Slash"),
+                             ("CMUBadBloodBlessedWarAxe", "CMUYautjaWarAxe", "Slash"),
+                             ("CMUBadBloodBlessedHunterSpear", "CMUYautjaHunterSpear", "Piercing"),
+                         })
+                {
+                    var ratio = Comp<MeleeWeaponComponent>(blessed).Damage.DamageDict[type].Float() /
+                                Comp<MeleeWeaponComponent>(hunter).Damage.DamageDict[type].Float();
+                    Assert.That(ratio, Is.InRange(1.2f, 1.35f), $"{blessed} hits about a quarter harder than {hunter}");
+                }
 
                 // scuttle: 10 s fuse, max 12 / total 120 / slope 6
                 var scuttle = new BadBloodScuttleComponent();

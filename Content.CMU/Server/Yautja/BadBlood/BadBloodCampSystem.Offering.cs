@@ -166,7 +166,7 @@ public sealed partial class BadBloodCampSystem
             return false;
 
         EnsureComp<BadBloodOfferedTrophyComponent>(trophy);
-        if (!_rule.TryCreditOffering(origin.Body))
+        if (!_rule.TryCreditOffering(origin.Body, user))
             return false;
 
         // FLOW-512: the quarry and the objective timeline listen for credited offerings
@@ -174,11 +174,11 @@ public sealed partial class BadBloodCampSystem
         RaiseLocalEvent(ref credited);
 
         _popup.PopupEntity(
-            Loc.GetString("cmu-bad-blood-offering-finished", ("trophy", trophy), ("sp", rule.Comp.OfferingSp.ToString())),
+            Loc.GetString("cmu-bad-blood-offering-finished", ("trophy", trophy), ("sp", rule.Comp.OfferingHonour.ToString())),
             user,
             user);
         _offeringAdminLog.Add(LogType.Action, LogImpact.Low,
-            $"{ToPrettyString(user):player} offered Yautja trophy {ToPrettyString(trophy):trophy} at the Bad Blood Lodge {ToPrettyString(lodge.Owner):lodge} for {rule.Comp.OfferingSp} SP, cut from body {origin.Body}");
+            $"{ToPrettyString(user):player} offered Yautja trophy {ToPrettyString(trophy):trophy} at the Bad Blood Lodge {ToPrettyString(lodge.Owner):lodge} for {rule.Comp.OfferingHonour} Honour, cut from body {origin.Body}");
         return true;
     }
 

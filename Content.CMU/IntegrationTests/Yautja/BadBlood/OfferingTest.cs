@@ -67,7 +67,7 @@ public sealed class OfferingTest : GameTest
                 Assert.That(camp.TryOfferTrophy(party.Grunts[0], curedHide), Is.True);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(1)));
+                    Assert.That(rules.GetHonour(party.Grunts[0]), Is.EqualTo(FixedPoint4.New(2)));
                     Assert.That(rules.GetOfferings(body), Is.EqualTo(1));
                     Assert.That(camp.GetOfferedTrophyCount(), Is.EqualTo(1));
                     Assert.That(entMan.GetComponent<TransformComponent>(curedHide).ParentUid, Is.EqualTo(lodge),
@@ -114,14 +114,14 @@ public sealed class OfferingTest : GameTest
                 // a xeno trophy is accepted
                 xenoSkull = Trophy(entMan, spawned, XenoSkull, map.GridCoords, otherBody, polished: true, xeno: true);
                 Assert.That(camp.TryOfferTrophy(party.Leader, xenoSkull), Is.True);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(2)));
+                Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(FixedPoint4.New(2)));
 
                 // the body's second trophy goes through the real interaction
                 bone = Trophy(entMan, spawned, Bone, map.GridCoords, body, polished: true);
                 var use = new InteractUsingEvent(party.Leader, bone, lodge, entMan.GetComponent<TransformComponent>(lodge).Coordinates);
                 entMan.EventBus.RaiseLocalEvent(lodge, use);
                 Assert.That(use.Handled, Is.True);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(2)), "nothing is paid before the do-after ends");
+                Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(FixedPoint4.New(2)), "nothing is paid before the do-after ends");
             });
 
             await Pair.RunSeconds(4);
@@ -134,7 +134,7 @@ public sealed class OfferingTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(3)));
+                    Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(FixedPoint4.New(4)));
                     Assert.That(rules.GetOfferings(body), Is.EqualTo(2));
                     Assert.That(entMan.GetComponent<TransformComponent>(bone).ParentUid, Is.EqualTo(lodge));
                 });
@@ -144,7 +144,7 @@ public sealed class OfferingTest : GameTest
                 Assert.That(camp.CanOfferTrophy(third, out var reason), Is.False);
                 Assert.That(reason, Is.EqualTo("cmu-bad-blood-offering-body-spent"));
                 Assert.That(camp.TryOfferTrophy(party.Leader, third), Is.False);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(3)));
+                Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(FixedPoint4.New(4)));
 
                 Assert.That(Server.System<SharedDestructibleSystem>().DestroyEntity(lodge), Is.True);
             });
@@ -166,7 +166,7 @@ public sealed class OfferingTest : GameTest
                             "a spilled trophy cannot be offered again at the next Lodge");
                     }
 
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(3)), "the clan keeps what it was paid");
+                    Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(FixedPoint4.New(4)), "the offerer keeps what they were paid");
                     Assert.That(rules.GetOfferings(body), Is.EqualTo(2), "the ledger outlives the Lodge");
                 });
             });

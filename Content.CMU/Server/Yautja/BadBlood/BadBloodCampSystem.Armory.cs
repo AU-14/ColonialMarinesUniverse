@@ -10,14 +10,17 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Yautja.BadBlood;
 
-// FLOW-112, the Lodge armory: an automated vendor on the armory part that sells from the clan's Superiority
-// Points. The vendor asks through CMUVendorPooledPointsEvent before it charges anyone, and this answers for the
-// armory: tier, Leader-only wares and the price all come from the rule, never from the buyer's own vendor points.
-// The plasma caster is not sold here. Its lethal bolt and its eradicator are: both are clan unlocks, not items.
-// Dependency fields taken by this file: _armoryEradicator, _armoryProto, _armoryVendor.
+// FLOW-112, the Lodge armory: an automated vendor on the armory part. ARCH-01: it sells for the buyer's own Honour,
+// earned by offering trophies, so gear never eats the clan SP that buys squads, hounds and Totems. The vendor asks
+// through CMUVendorPooledPointsEvent before it charges anyone, and this answers for the armory: tier, Leader-only
+// wares and the price all come from the rule, never from the buyer's own vendor points. The plasma caster is not
+// sold here. Its lethal bolt and its eradicator are: both are clan unlocks the Leader pays for from their Honour.
+// ARCH-02: the forge ware upgrades the buyer's bracer weapon in place.
+// Dependency fields taken by this file: _armoryEradicator, _armoryForge, _armoryProto, _armoryVendor.
 public sealed partial class BadBloodCampSystem
 {
     [Dependency] private BadBloodEradicatorUnlockSystem _armoryEradicator = default!;
+    [Dependency] private BadBloodForgeSystem _armoryForge = default!;
     [Dependency] private IPrototypeManager _armoryProto = default!;
     [Dependency] private SharedCMAutomatedVendorSystem _armoryVendor = default!;
 
@@ -26,7 +29,7 @@ public sealed partial class BadBloodCampSystem
         SubscribeLocalEvent<BadBloodCampArmoryComponent, CMUVendorPooledPointsEvent>(OnArmoryPooledPoints);
         SubscribeLocalEvent<BadBloodCampArmoryComponent, CMUVendorVendedItemEvent>(OnArmoryVended);
         SubscribeLocalEvent<BadBloodCampArmoryComponent, ActivatableUIOpenAttemptEvent>(OnArmoryOpenAttempt);
-        SubscribeLocalEvent<BadBloodSpChangedEvent>(OnArmorySpChanged);
+        SubscribeLocalEvent<BadBloodHonourChangedEvent>(OnArmoryHonourChanged);
     }
 
     /// <summary>
@@ -39,17 +42,13 @@ public sealed partial class BadBloodCampSystem
         return (hundredths / 100m).ToString("0.00", CultureInfo.InvariantCulture);
     }
 
-    // every change to the clan's SP reaches the open vendor windows at once: Totem income, offerings and the
-    // spit pay in without anyone buying
-    private void OnArmorySpChanged(ref BadBloodSpChangedEvent args)
+    // every change to anyone's Honour reaches the open vendor windows at once: an offering pays in without buying
+    private void OnArmoryHonourChanged(ref BadBloodHonourChangedEvent args)
     {
-        if (args.Old.Int() == args.New.Int())
-            return;
-
         var armories = EntityQueryEnumerator<BadBloodCampArmoryComponent>();
         while (armories.MoveNext(out _, out var armory))
         {
-            SyncArmoryBalance(armory.PointsType, args.New);
+            SyncArmoryBalance(armory.PointsType);
         }
     }
 
@@ -62,7 +61,7 @@ public sealed partial class BadBloodCampSystem
             if (rule.Comp.TierFourUnlocked)
                 ApplyArmoryTierFour((uid, armory));
 
-            SyncArmoryBalance(armory.PointsType, rule.Comp.Sp);
+            SyncArmoryBalance(armory.PointsType);
         }
     }
 
@@ -116,6 +115,21 @@ public sealed partial class BadBloodCampSystem
             return false;
         }
 
+        // ARCH-06: a caste station sells only to its caste
+        if (armory.Comp.RequiredCaste is { } requiredCaste &&
+            !(TryComp(user, out BadBloodCasteComponent? holder) && holder.Caste == requiredCaste))
+        {
+            reason = "cmu-bad-blood-caste-station-locked";
+            return false;
+        }
+
+        // ARCH-02: the forge needs a chosen bracer weapon that is not forged yet
+        if (IsForgeWare(ware) && GetForgeableWeapons(user).Count == 0)
+        {
+            reason = "cmu-bad-blood-armory-forge-nothing";
+            return false;
+        }
+
         if (IsEradicatorUnlockWare(ware))
         {
             if (_armoryEradicator.IsEradicatorUnlocked() || _rule.IsShipArrived())
@@ -135,8 +149,8 @@ public sealed partial class BadBloodCampSystem
     }
 
     /// <summary>
-    /// Pays <paramref name="price"/> Superiority Points for <paramref name="ware"/> out of the clan's pool, or
-    /// nothing if the ware is locked for this buyer or the clan cannot afford it. The buyer is told why.
+    /// Pays <paramref name="price"/> of the buyer's own Honour for <paramref name="ware"/>, or nothing if the ware is
+    /// locked for this buyer or they cannot afford it. The buyer is told why.
     /// </summary>
     public bool TryPayArmory(Entity<BadBloodCampArmoryComponent> armory, EntityUid user, EntProtoId ware, int price)
     {
@@ -150,17 +164,17 @@ public sealed partial class BadBloodCampSystem
             return false;
         }
 
-        if (!_rule.TrySpendSp(FixedPoint4.New(Math.Max(price, 0))))
+        if (!_rule.TrySpendHonour(user, FixedPoint4.New(Math.Max(price, 0))))
         {
             _popup.PopupEntity(
-                Loc.GetString("cmu-bad-blood-armory-not-enough", ("price", price), ("sp", FormatSp(_rule.GetSp()))),
+                Loc.GetString("cmu-bad-blood-armory-not-enough", ("price", price), ("sp", FormatSp(_rule.GetHonour(user)))),
                 armory.Owner,
                 user,
                 PopupType.SmallCaution);
             return false;
         }
 
-        SyncArmoryBalance(armory.Comp.PointsType, _rule.GetSp());
+        SyncArmoryBalance(armory.Comp.PointsType);
         return true;
     }
 
@@ -174,6 +188,19 @@ public sealed partial class BadBloodCampSystem
     // a ware that is an unlock and not a thing to carry is applied here and the placeholder is deleted
     private void OnArmoryVended(Entity<BadBloodCampArmoryComponent> ent, ref CMUVendorVendedItemEvent args)
     {
+        if (TryComp<BadBloodForgeUpgradeComponent>(args.Item, out var forge))
+        {
+            var multiplier = forge.Multiplier;
+            QueueDel(args.Item);
+            foreach (var weapon in GetForgeableWeapons(args.User))
+            {
+                _armoryForge.TryForge(weapon, multiplier);
+            }
+
+            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-armory-forged"), args.User, args.User);
+            return;
+        }
+
         if (HasComp<BadBloodLethalUnlockComponent>(args.Item))
         {
             QueueDel(args.Item);
@@ -191,6 +218,38 @@ public sealed partial class BadBloodCampSystem
             return;
 
         _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-armory-eradicator-unlocked"));
+    }
+
+    private bool IsForgeWare(EntProtoId ware)
+    {
+        return _armoryProto.TryIndex(ware, out var proto) &&
+               proto.TryComp<BadBloodForgeUpgradeComponent>(out _, EntityManager.ComponentFactory);
+    }
+
+    /// <summary>
+    /// The weapon the forge would upgrade for <paramref name="user"/>: the starter weapon they picked on landing, in
+    /// the bracer they wear, if it is not forged yet. Empty otherwise.
+    /// </summary>
+    public List<EntityUid> GetForgeableWeapons(EntityUid user)
+    {
+        var weapons = new List<EntityUid>();
+        if (!_spitInventory.TryGetSlotEntity(user, "gloves", out var bracer) ||
+            !TryComp(bracer, out YautjaBadBloodGearChoiceComponent? choice) ||
+            !choice.Chosen ||
+            !TryComp(bracer, out YautjaGearContainerComponent? gear))
+        {
+            return weapons;
+        }
+
+        if (choice.ChosenKind is { } kind &&
+            gear.Gear.TryGetValue(kind, out var weapon) &&
+            !TerminatingOrDeleted(weapon) &&
+            !HasComp<BadBloodForgedComponent>(weapon))
+        {
+            weapons.Add(weapon);
+        }
+
+        return weapons;
     }
 
     private bool IsLethalUnlockWare(EntProtoId ware)
@@ -225,6 +284,17 @@ public sealed partial class BadBloodCampSystem
             return;
         }
 
+        // ARCH-06: a caste station opens only for its caste. The others are told how to take it up
+        if (ent.Comp.RequiredCaste is { } caste &&
+            !(TryComp(args.User, out BadBloodCasteComponent? held) && held.Caste == caste))
+        {
+            if (!args.Silent)
+                _popup.PopupEntity(Loc.GetString("cmu-bad-blood-caste-station-locked"), ent.Owner, args.User, PopupType.SmallCaution);
+
+            args.Cancel();
+            return;
+        }
+
         PrepareArmoryBuyer(ent, args.User);
     }
 
@@ -235,16 +305,17 @@ public sealed partial class BadBloodCampSystem
     public void PrepareArmoryBuyer(Entity<BadBloodCampArmoryComponent> armory, EntityUid user)
     {
         var buyer = EnsureComp<CMVendorUserComponent>(user);
-        _armoryVendor.SetExtraPoints((user, buyer), armory.Comp.PointsType, _rule.GetSp().Int());
+        _armoryVendor.SetExtraPoints((user, buyer), armory.Comp.PointsType, _rule.GetHonour(user).Int());
     }
 
-    // whole SP only, the window has no room for fractions. the real balance stays on the rule
-    private void SyncArmoryBalance(string pointsType, FixedPoint4 sp)
+    // each buyer sees their own Honour, whole points only: the window has no room for fractions. the real balance
+    // stays on the rule
+    private void SyncArmoryBalance(string pointsType)
     {
-        var shown = sp.Int();
         var buyers = EntityQueryEnumerator<YautjaBadBloodComponent, CMVendorUserComponent>();
         while (buyers.MoveNext(out var uid, out _, out var buyer))
         {
+            var shown = _rule.GetHonour(uid).Int();
 #pragma warning disable RA0002 // read-only lookup on the vendor user's points
             if (buyer.ExtraPoints != null &&
                 buyer.ExtraPoints.TryGetValue(pointsType, out var current) &&

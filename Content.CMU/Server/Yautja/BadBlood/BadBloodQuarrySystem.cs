@@ -267,6 +267,11 @@ public sealed class BadBloodQuarrySystem : EntitySystem
         return IsInBuildRange(_transform.ToMapCoordinates(coords), ignoreTotem);
     }
 
+    private bool IsEngineer(EntityUid user)
+    {
+        return TryComp(user, out BadBloodCasteComponent? caste) && caste.Caste == BadBloodCaste.Engineer;
+    }
+
     private static bool Within(MapCoordinates a, MapCoordinates b, float radius)
     {
         return a.MapId == b.MapId && (a.Position - b.Position).Length() <= radius;
@@ -284,7 +289,8 @@ public sealed class BadBloodQuarrySystem : EntitySystem
             return;
         }
 
-        if (!IsInBuildRange(args.Coordinates))
+        // ARCH-04: an Engineer builds anywhere
+        if (!IsInBuildRange(args.Coordinates) && !IsEngineer(args.User))
         {
             args.Cancelled = true;
             args.Popup = Loc.GetString("cmu-bad-blood-brick-out-of-range", ("radius", (int) GetBuildRadius()));
@@ -294,7 +300,7 @@ public sealed class BadBloodQuarrySystem : EntitySystem
     // the range can lapse during the build's do-after: what finishes out of range crumbles at once
     private void OnFortificationBuilt(Entity<BadBloodFortificationComponent> ent, ref ConstructionCompletedEvent args)
     {
-        if (IsInBuildRange(_transform.GetMapCoordinates(ent.Owner)))
+        if (IsInBuildRange(_transform.GetMapCoordinates(ent.Owner)) || IsEngineer(args.Builder))
             return;
 
         _adminLog.Add(LogType.Action, LogImpact.Low,

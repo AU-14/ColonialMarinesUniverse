@@ -1644,6 +1644,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     private void CommitBadBloodChoice(Entity<YautjaBadBloodGearChoiceComponent> ent, YautjaGearKind choice)
     {
         ent.Comp.Chosen = true;
+        ent.Comp.ChosenKind = choice;
         ent.Comp.PendingChoice = null;
         Dirty(ent);
 

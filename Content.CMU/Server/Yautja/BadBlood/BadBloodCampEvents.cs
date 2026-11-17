@@ -34,6 +34,12 @@ public readonly record struct BadBloodLeaderChangedEvent(Entity<BadBloodCampRule
 public readonly record struct BadBloodLeaderGoneEvent(Entity<BadBloodCampRuleComponent> Rule, EntityUid? Leader);
 
 /// <summary>
+/// A Bad Blood's personal Honour changed. <paramref name="Holder"/> is the mind (or body) the ledger keys on.
+/// </summary>
+[ByRefEvent]
+public readonly record struct BadBloodHonourChangedEvent(Entity<BadBloodCampRuleComponent> Rule, EntityUid Holder);
+
+/// <summary>
 /// A Bad Blood died while the rule runs.
 /// </summary>
 [ByRefEvent]

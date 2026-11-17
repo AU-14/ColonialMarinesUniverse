@@ -129,6 +129,17 @@
       neverRedeployableSetup: true
       anchor: true
       offset: -1, -1
+    # ARCH-06: the caste stations take the last two free tiles (castes.yml)
+    - prototype: CMUBadBloodCampEngineerStation
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: 1, -1
+    - prototype: CMUBadBloodCampMedicStation
+      mode: Reactive
+      neverRedeployableSetup: true
+      anchor: true
+      offset: 0, 1
 
 - type: entity
   parent: CMUYautjaBadBloodBracer

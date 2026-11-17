@@ -100,23 +100,25 @@ public sealed class BadBloodAllPreyTest : GameTest
                     Assert.That(provenance.IsWorthyPrey(body), Is.True, $"{what} is prey");
                 }
 
-                var expected = rules.GetSp();
+                var expected = rules.GetHonour(party.Leader);
+                var clanSp = rules.GetSp();
                 foreach (var (body, prototype, what) in prey)
                 {
                     var trophy = Trophy(prototype, body);
                     Assert.That(camp.CanOfferTrophy(trophy, out var reason), Is.True, $"{what}: refused with {reason}");
                     Assert.That(camp.TryOfferTrophy(party.Leader, trophy), Is.True, $"the Lodge takes a trophy off {what}");
 
-                    expected += rule.Comp.OfferingSp;
-                    Assert.That(rules.GetSp(), Is.EqualTo(expected), $"a trophy off {what} pays the clan");
+                    expected += rule.Comp.OfferingHonour;
+                    Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(expected), $"a trophy off {what} pays the offerer");
+                    Assert.That(rules.GetSp(), Is.EqualTo(clanSp), "trophies pay Honour, not clan SP");
                     Assert.That(rules.GetOfferings(body), Is.EqualTo(1));
                 }
 
-                Assert.That(rule.Comp.OfferingSp, Is.EqualTo(FixedPoint4.New(1)), "a trophy is worth 1 SP");
+                Assert.That(rule.Comp.OfferingHonour, Is.EqualTo(FixedPoint4.New(2)), "a trophy is worth 2 Honour");
 
                 // the cap of two a body still holds, for prey without a player as for any other
-                Assert.That(camp.TryOfferTrophy(party.Grunts[0], Trophy(Hide, mindless)), Is.True);
-                expected += rule.Comp.OfferingSp;
+                Assert.That(camp.TryOfferTrophy(party.Leader, Trophy(Hide, mindless)), Is.True);
+                expected += rule.Comp.OfferingHonour;
                 var third = Trophy(Skull, mindless);
                 Assert.Multiple(() =>
                 {
@@ -124,7 +126,7 @@ public sealed class BadBloodAllPreyTest : GameTest
                     Assert.That(camp.CanOfferTrophy(third, out var spent), Is.False);
                     Assert.That(spent, Is.EqualTo("cmu-bad-blood-offering-body-spent"));
                     Assert.That(camp.TryOfferTrophy(party.Leader, third), Is.False);
-                    Assert.That(rules.GetSp(), Is.EqualTo(expected), "a third trophy off one body pays nothing");
+                    Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(expected), "a third trophy off one body pays nothing");
                 });
 
                 // still refused: a Yautja, a synth, a larva, and anything cut off the living
@@ -163,7 +165,7 @@ public sealed class BadBloodAllPreyTest : GameTest
                     Assert.That(provenance.IsWorthyPrey(hunter), Is.False);
                     Assert.That(provenance.IsWorthyPrey(synth), Is.False);
                     Assert.That(provenance.IsWorthyPrey(larva), Is.False);
-                    Assert.That(rules.GetSp(), Is.EqualTo(expected), "nothing refused was paid for");
+                    Assert.That(rules.GetHonour(party.Leader), Is.EqualTo(expected), "nothing refused was paid for");
                 });
             });
         }

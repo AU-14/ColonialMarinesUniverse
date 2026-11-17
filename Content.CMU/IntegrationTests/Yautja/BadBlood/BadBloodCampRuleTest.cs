@@ -102,16 +102,29 @@ public sealed class BadBloodCampRuleTest : GameTest
 
                 var first = Server.EntMan.SpawnEntity(null, map.GridCoords);
                 var second = Server.EntMan.SpawnEntity(null, map.GridCoords);
+                var offerer = Server.EntMan.SpawnEntity(null, map.GridCoords);
 
-                // trophies: two per body
+                // trophies: two per body, and they pay the offerer's own Honour, not the clan (ARCH-01)
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.TryCreditOffering(first), Is.True);
-                    Assert.That(rules.TryCreditOffering(first), Is.True);
-                    Assert.That(rules.TryCreditOffering(first), Is.False, "a third trophy from one body pays nothing");
+                    Assert.That(rules.TryCreditOffering(first, offerer), Is.True);
+                    Assert.That(rules.TryCreditOffering(first, offerer), Is.True);
+                    Assert.That(rules.TryCreditOffering(first, offerer), Is.False, "a third trophy from one body pays nothing");
                     Assert.That(rules.CanOffer(first), Is.False);
                     Assert.That(rules.CanOffer(second), Is.True);
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(2)));
+                    Assert.That(rules.GetHonour(offerer), Is.EqualTo(FixedPoint4.New(4)), "two trophies, 2 Honour each");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.Zero), "trophies no longer pay clan SP");
+                    Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(2)), "Honour counts half towards the tiers");
+                });
+
+                // Honour is spent by its owner only, and never below zero
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.TrySpendHonour(second, FixedPoint4.New(1)), Is.False, "nobody spends another's Honour");
+                    Assert.That(rules.TrySpendHonour(offerer, FixedPoint4.New(5)), Is.False);
+                    Assert.That(rules.TrySpendHonour(offerer, FixedPoint4.New(1)), Is.True);
+                    Assert.That(rules.GetHonour(offerer), Is.EqualTo(FixedPoint4.New(3)));
+                    Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(2)), "spending never lowers the tiers");
                 });
 
                 // the spit: loose meat and the corpse share one cap of 3
@@ -122,15 +135,15 @@ public sealed class BadBloodCampRuleTest : GameTest
                     Assert.That(rules.TryCreditCook(second, rule.Comp.CorpseCookSp), Is.EqualTo(FixedPoint4.Zero),
                         "a body is cooked for points once");
                     Assert.That(rules.GetCookRemaining(second), Is.EqualTo(FixedPoint4.Zero));
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(5)));
-                    Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(5)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(3)), "cooking pays the clan");
+                    Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(5)), "a body is still worth 5 towards the tiers");
                 });
 
                 // Totem income pays in full and counts half towards tiers
                 Assert.That(rules.AddTotemIncome(FixedPoint4.New(2)), Is.True);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(7)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(5)));
                     Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(6)));
                     Assert.That(rules.GetTier(), Is.EqualTo(1));
                 });
@@ -144,11 +157,11 @@ public sealed class BadBloodCampRuleTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(rules.TrySpendSp(FixedPoint4.New(100)), Is.False);
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(13)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(11)));
                     Assert.That(rules.TrySpendSp(FixedPoint4.New(4)), Is.True);
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(9)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(7)));
                     Assert.That(rules.RefundSp(FixedPoint4.New(1)), Is.True);
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(10)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(8)));
                     Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(12)));
                     Assert.That(rules.IsTierUnlocked(2), Is.True);
                     Assert.That(rules.IsTierUnlocked(3), Is.False);
@@ -218,6 +231,6 @@ public sealed class BadBloodCampRuleTest : GameTest
             await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
         }
 
-        static int Budget(int players) => (int) MathF.Round(players * 0.25f, MidpointRounding.AwayFromZero);
+        static int Budget(int players) => (int) MathF.Round(players * 0.35f, MidpointRounding.AwayFromZero);
     }
 }

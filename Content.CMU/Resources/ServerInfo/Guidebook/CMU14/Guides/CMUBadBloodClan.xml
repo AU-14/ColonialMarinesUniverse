@@ -142,20 +142,33 @@
   - It has 900 health and heals slowly when left alone. Explosives and fire are what threaten it.
   - It shows on the marines' map when it is hit, when you buy a squad, when a marine decrypts one of your bracers, when a Totem is destroyed, and for as long as your ship is called or in orbit.
 
-  The Lodge comes with six parts:
+  The Lodge comes with eight parts:
   - [bold]Spit:[/bold] cook bodies and meat for food and SP, refill your flask.
   - [bold]Ascension Stone:[/bold] call reinforcement squads, choose a new Leader.
-  - [bold]Armory:[/bold] spend SP on equipment.
+  - [bold]Armory:[/bold] spend your own Honour on equipment.
   - [bold]Kennel:[/bold] buy hounds.
   - [bold]Cauldron:[/bold] boil prepared limbs down to bone.
   - [bold]Quarry:[/bold] draw bricks for walls, barricades and doors.
+  - [bold]Forge-bench:[/bold] take up the Engineer path, and the Engineers' store.
+  - [bold]Medicine cache:[/bold] take up the Medic path, and the Medics' store.
+
+  ## Castes
+  A Bad Blood may take up a caste at its station on the Lodge, for the rest of that life. The clan may have one of each caste for every four Bad Bloods, and always at least one.
+  - [bold]Engineer:[/bold] sees as an honourable hunter does, builds walls and barricades anywhere, and plants charges. The forge-bench sells demolition charges and a siege plasma rifle that tears into vehicles.
+  - [bold]Medic:[/bold] works Yautja medicine faster than other Bad Bloods. The medicine cache sells gels, clamps, injectors and the medicomp cheaper than the armory.
+
+  ## Knowing your clan
+  Every Bad Blood carries a clan code. Other Bad Bloods see you, and the radio names you, by your role and code: [bold]Leader (BB-12)[/bold], [bold]Engineer (BB-31)[/bold], [bold]Grunt (BB-45)[/bold].
 
   ## Superiority Points (SP)
-  SP is shared by the whole clan. One body is worth up to [bold]5 SP[/bold]: 2 from trophies and 3 from cooking.
+  The clan earns two kinds of points, so gear never eats the points meant for reinforcements:
+  - [bold]Clan SP[/bold] is shared and buys squads, hounds and Totems. It comes from cooking bodies and from Totems. Hauling bodies home and cooking them is how you feed the clan.
+  - [bold]Honour[/bold] is yours alone and buys armory gear. It comes from the trophies you offer at the Lodge.
+  Both count towards the clan's armory tiers. One body is worth up to [bold]4 Honour[/bold] to whoever offers its trophies and [bold]3 clan SP[/bold] from cooking.
 
   [bold]A body must rot first.[/bold] You can take arms, legs and other limbs from a fresh kill. You can only [bold]skin[/bold] a body (butcher Skin, or flay with the ceremonial dagger), take its [bold]head[/bold], take [bold]skull or ribcage[/bold] trophies, or [bold]roast it whole[/bold] once it is past its revival window (5 minutes after death, longer in stasis). Until then the marines can still save it.
 
-  [bold]Trophies: 1 SP each, at most 2 from one body.[/bold]
+  [bold]Trophies: 2 Honour each to the one who offers them, at most 2 trophies from one body.[/bold]
   - Polish hard trophies (skulls, spines, torsos, bones) with the [bold]polishing rag[/bold].
   - Cure soft trophies (hides, scalps, pelts) with the [bold]cleanser gel[/bold], one piece at a time.
   - Use the prepared trophy on the Lodge and wait 3 seconds. A trophy can only be offered once.
@@ -202,7 +215,9 @@
   - When a Totem falls, walls near it crumble unless the Lodge or another Totem is also in range. When the Lodge falls, [bold]every[/bold] wall crumbles.
 
   ## The armory
-  Tiers open with the clan's [bold]lifetime SP[/bold]: [bold]tier II at 12[/bold], [bold]tier III at 30[/bold]. Tier IV opens when the clan ship arrives.
+  Everything here costs your own [bold]Honour[/bold]. Tiers open with the clan's [bold]lifetime SP and Honour[/bold]: [bold]tier II at 12[/bold], [bold]tier III at 30[/bold]. Tier IV opens when the clan ship arrives.
+
+  Your weapon grows with you: the bracer weapon you pick on landing is the [bold]starter[/bold]; at tier II the forge makes it [bold]forged[/bold] (a fifth more damage); at tier III the [bold]blessed[/bold] weapons, gold-sprited and about a quarter stronger, are on sale.
 
   [bold]Tier I[/bold]
   - Cleanser gel vial: 2
@@ -213,12 +228,16 @@
   [bold]Tier II[/bold]
   - Wrist blade, scimitar and chain gauntlet attachments, bracer shield attachment, hunter spear, armored clan mask: 4 each
   - Combistick, clan sword, chainwhip, war axe: 6 each
-  - Full clan armor (25 / 45 / 25 / 35): 7
+  - Forge your bracer weapon (+20% damage): 5
+  - Full clan armor (25 / 50 / 25 / 35): 7
   - Lethal bolt unlock for the whole clan: 7, Leader only, once
 
   [bold]Tier III[/bold]
   - War glaive, dual war scythe: 8 each
-  - Leader-grade armor (30 / 50 / 30 / 40): 9
+  - Leader-grade armor (30 / 55 / 30 / 40): 9
+  - Blessed hunter spear and the three blessed ancient shields: 9 each
+  - Blessed chainwhip, dual war scythe, war axe: 10 each
+  - Blessed severing sword, cruel staff, war glaive: 11 each
   - Scavenged spike launcher: 10, one per hunter
   - Hivebreaker: 11, one per hunter
   - Eradicator unlock: 11, Leader only, once

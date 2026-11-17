@@ -1,6 +1,6 @@
 # Lodge part: the armory. Deployed with the Lodge and removed with it.
-# It is an automated vendor that sells from the clan's Superiority Points (BadBloodCampArmory answers the vendor's
-# pooled-points hook), so "points" below are SP. Tiers open by lifetime SP on the rule: II at 12, III at 30, IV with
+# It is an automated vendor that sells for the buyer's own Honour, earned by offering trophies (BadBloodCampArmory
+# answers the vendor's pooled-points hook), so "points" below are Honour. Clan SP only buys squads, hounds and Totems. Tiers open by lifetime SP on the rule: II at 12, III at 30, IV with
 # the clan ship. The plasma caster itself is never sold: a Bad Blood lands with stun and immobilizer, the clan buys
 # the lethal bolt once at tier II, and the Leader buys the eradicator at tier III after it. The plasma lance is not
 # sold at all: it gibs humans, and a gibbed body gives the clan nothing.
@@ -51,12 +51,23 @@
       CMUYautjaChainwhip: 2
       CMUYautjaWarAxe: 2
       CMUBadBloodLethalUnlock: 2
+      CMUBadBloodForgeUpgrade: 2
       CMUYautjaWarGlaive: 3
       CMUYautjaDualWarScythe: 3
       CMUBadBloodScavengedSpikeLauncher: 3
       CMUBadBloodEradicatorUnlock: 3
       CMUBadBloodLeaderArmor: 3
       CMUYautjaHivebreaker: 3
+      CMUBadBloodBlessedWarGlaive: 3
+      CMUBadBloodBlessedSeveringSword: 3
+      CMUBadBloodBlessedCruelStaff: 3
+      CMUBadBloodBlessedChainwhip: 3
+      CMUBadBloodBlessedDualWarScythe: 3
+      CMUBadBloodBlessedWarAxe: 3
+      CMUBadBloodBlessedHunterSpear: 3
+      CMUBadBloodBlessedShield: 3
+      CMUBadBloodBlessedShieldAlt: 3
+      CMUBadBloodBlessedShieldTemple: 3
     leaderOnly:
     - CMUBadBloodEradicatorUnlock
     # bought by the Leader, unlocked for the whole clan
@@ -133,6 +144,9 @@
       - id: CMUBadBloodLethalUnlock
         name: Lethal Bolt (whole clan, once)
         points: 7
+      - id: CMUBadBloodForgeUpgrade
+        name: Forge Your Bracer Weapon (+20% damage)
+        points: 5
     - name: Tier III (30 lifetime SP)
       entries:
       - id: CMUYautjaWarGlaive
@@ -156,6 +170,36 @@
       - id: CMUBadBloodEradicatorUnlock
         name: Eradicator Mode (Leader only, once, needs the lethal bolt)
         points: 11
+      - id: CMUBadBloodBlessedWarGlaive
+        name: Blessed War Glaive
+        points: 11
+      - id: CMUBadBloodBlessedSeveringSword
+        name: Blessed Severing Sword
+        points: 11
+      - id: CMUBadBloodBlessedCruelStaff
+        name: Blessed Cruel Staff
+        points: 11
+      - id: CMUBadBloodBlessedChainwhip
+        name: Blessed Chainwhip
+        points: 10
+      - id: CMUBadBloodBlessedDualWarScythe
+        name: Blessed Dual War Scythe
+        points: 10
+      - id: CMUBadBloodBlessedWarAxe
+        name: Blessed War Axe
+        points: 10
+      - id: CMUBadBloodBlessedHunterSpear
+        name: Blessed Hunter Spear
+        points: 9
+      - id: CMUBadBloodBlessedShield
+        name: Blessed Ancient Shield
+        points: 9
+      - id: CMUBadBloodBlessedShieldAlt
+        name: Blessed Ancient Shield (skull)
+        points: 9
+      - id: CMUBadBloodBlessedShieldTemple
+        name: Blessed Temple Shield
+        points: 9
 
 - type: entity
   id: CMUBadBloodArmoryTrapsBundle

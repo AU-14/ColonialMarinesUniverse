@@ -10,7 +10,8 @@
     tierTwoLifetimeSp: 12
     tierThreeLifetimeSp: 30
     totemTierCredit: 0.5
-    offeringSp: 1
+    # trophies pay the Bad Blood who offers them, as Honour for the armory. clan SP comes from cooking and Totems
+    offeringHonour: 2
     maxOfferingsPerBody: 2
     corpseCookSp: 3
     meatCookSp: 0.5

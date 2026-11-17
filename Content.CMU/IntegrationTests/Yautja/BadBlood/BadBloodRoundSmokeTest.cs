@@ -227,7 +227,8 @@ public sealed class BadBloodRoundSmokeTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(1)), "an offered trophy pays the clan 1 SP");
+                    Assert.That(rules.GetHonour(hunter), Is.EqualTo(FixedPoint4.New(2)), "an offered trophy pays the offerer 2 Honour");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.Zero), "and nothing to the clan");
                     Assert.That(rules.GetOfferings(first), Is.EqualTo(1));
                     Assert.That(entMan.GetComponent<TransformComponent>(skull).ParentUid, Is.EqualTo(lodge),
                         "the offered trophy hangs on the Lodge");
@@ -236,7 +237,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 Assert.That(camp.TryOfferTrophy(grunt, scalp), Is.True);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(2)));
+                    Assert.That(rules.GetHonour(grunt), Is.EqualTo(FixedPoint4.New(2)));
                     Assert.That(rules.GetOfferings(first), Is.EqualTo(2));
                     Assert.That(rules.CanOffer(first), Is.False, "a body gives two trophies and no more");
                 });
@@ -262,7 +263,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(entMan.EntityExists(first), Is.False, "the fire takes the body");
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(5)), "a cooked corpse pays the clan 3 SP");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(3)), "a cooked corpse pays the clan 3 SP");
                     Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(5)));
                     Assert.That(rules.GetTier(), Is.EqualTo(1));
                 });
@@ -271,7 +272,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                     entMan.GetComponent<BadBloodCampArmoryComponent>(armory));
                 camp.PrepareArmoryBuyer(armoryEnt, hunter);
                 Vend(armory, hunter, Combistick);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(5)), "a tier II ware is refused at tier I");
+                Assert.That(rules.GetHonour(hunter), Is.EqualTo(FixedPoint4.New(2)), "a tier II ware is refused at tier I");
 
                 // the second body's trophies. the rag and the gel were shown above, here they are just marked
                 Assert.That(trophies.TryHarvestTrophy(hunter, second, YautjaTrophyKind.HumanSkull, out var secondSkull), Is.True);
@@ -283,7 +284,8 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 Assert.That(camp.TryOfferTrophy(grunt, secondScalp), Is.True);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(7)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(3)));
+                    Assert.That(rules.GetHonour(hunter), Is.EqualTo(FixedPoint4.New(4)));
                     Assert.That(rules.GetTier(), Is.EqualTo(1), "7 lifetime SP is still tier I");
                     Assert.That(camp.GetOfferedTrophyCount(), Is.EqualTo(4));
                 });
@@ -308,8 +310,8 @@ public sealed class BadBloodRoundSmokeTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(10)));
-                    Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(10)));
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(6)));
+                    Assert.That(rules.GetLifetimeSp(), Is.EqualTo(FixedPoint4.New(10)), "Honour counts half, so a body is still worth 5");
                     Assert.That(rules.GetTier(), Is.EqualTo(1), "two bodies are 10 lifetime SP, tier II needs 12");
                 });
 
@@ -322,7 +324,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(rule.Comp.FreeTotems, Is.Zero);
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(10)), "the first Totem is free");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(6)), "the first Totem is free");
                     Assert.That(rules.GetTotems(), Has.Count.EqualTo(1));
                 });
 
@@ -341,19 +343,22 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                     Assert.That(rules.GetTier(), Is.EqualTo(2), "17 lifetime SP unlock tier II");
                 });
 
-                // tier II: a purchase spends the pool and never lowers the tier
+                // tier II: a purchase spends the buyer's own Honour, never the clan's SP, and never lowers the tier
                 var armoryEnt = new Entity<BadBloodCampArmoryComponent>(armory,
                     entMan.GetComponent<BadBloodCampArmoryComponent>(armory));
+                Assert.That(rules.AddHonour(hunter, FixedPoint4.New(10)), Is.True);
                 camp.PrepareArmoryBuyer(armoryEnt, hunter);
                 var beforeBuy = rules.GetSp();
+                var honourBeforeBuy = rules.GetHonour(hunter);
                 var lifetimeBeforeBuy = rules.GetLifetimeSp();
                 var combistickPrice = FindWare(armory, Combistick).Entry.Points;
                 Assert.That(combistickPrice, Is.Not.Null);
                 Vend(armory, hunter, Combistick);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rules.GetSp(), Is.EqualTo(beforeBuy - FixedPoint4.New(combistickPrice!.Value)),
-                        "the combi-stick costs the clan its price");
+                    Assert.That(rules.GetHonour(hunter), Is.EqualTo(honourBeforeBuy - FixedPoint4.New(combistickPrice!.Value)),
+                        "the combi-stick costs the buyer its price");
+                    Assert.That(rules.GetSp(), Is.EqualTo(beforeBuy), "the clan's SP is not touched");
                     Assert.That(rules.GetLifetimeSp(), Is.EqualTo(lifetimeBeforeBuy), "spending does not lower the tier");
                     Assert.That(rules.GetTier(), Is.EqualTo(2));
                 });
@@ -677,9 +682,15 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 var armoryEnt = new Entity<BadBloodCampArmoryComponent>(armory,
                     entMan.GetComponent<BadBloodCampArmoryComponent>(armory));
                 Assert.That(FindWare(armory, Glaive).Entry.Points, Is.EqualTo(4), "the armory turns over to tier IV prices");
+                Assert.That(rules.AddHonour(grunt, FixedPoint4.New(4)), Is.True);
+                var honourBeforeGlaive = rules.GetHonour(grunt);
                 camp.PrepareArmoryBuyer(armoryEnt, grunt);
                 Vend(armory, grunt, Glaive);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(1)), "the glaive is half price at tier IV");
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetHonour(grunt), Is.EqualTo(honourBeforeGlaive - FixedPoint4.New(4)), "the glaive is half price at tier IV");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(5)), "paid in Honour, not the clan's SP");
+                });
 
                 // a player takes one of the summoned seats
                 Assert.That(camp.TryGetSquadSeats(rule.Comp.SquadCalls[0], out var entry), Is.True);
@@ -1239,8 +1250,12 @@ public sealed class BadBloodRoundSmokeTest : GameTest
         var taken = new List<Vector2>();
 
         var parts = entMan.EntityQueryEnumerator<BadBloodCampPartComponent, TransformComponent>();
-        while (parts.MoveNext(out _, out _, out var xform))
+        while (parts.MoveNext(out _, out var part, out var xform))
         {
+            // the caste stations fill the last free tiles of the Lodge's ring, and like every part they can be stood on
+            if (part.Kind is BadBloodCampPartKind.EngineerStation or BadBloodCampPartKind.MedicStation)
+                continue;
+
             taken.Add(xforms.GetWorldPosition(xform));
         }
 

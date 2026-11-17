@@ -135,8 +135,14 @@ public sealed class TotemIncomeLoopTest : GameTest
             {
                 var rules = Server.System<BadBloodCampRuleSystem>();
                 Assert.That(rules.GetSp(), Is.GreaterThanOrEqualTo(FixedPoint4.New(1)));
+                // ARCH-01: Totem SP is the clan's, so the armory window, which shows the buyer's own Honour, stays put
                 Assert.That(Server.EntMan.GetComponent<CMVendorUserComponent>(grunt).ExtraPoints?.GetValueOrDefault(pointsType),
-                    Is.EqualTo(1), "the vendor balance follows a Totem payout without a purchase");
+                    Is.EqualTo(0), "Totem income pays the clan, not the armory balance");
+
+                // and the window follows the buyer's Honour without a purchase
+                Assert.That(rules.AddHonour(grunt, FixedPoint4.New(1)), Is.True);
+                Assert.That(Server.EntMan.GetComponent<CMVendorUserComponent>(grunt).ExtraPoints?.GetValueOrDefault(pointsType),
+                    Is.EqualTo(1), "the vendor balance follows the buyer's Honour without a purchase");
             });
         }
         finally

@@ -42,10 +42,13 @@ cmu-bad-blood-armory-already-unlocked = The clan already has the eradicator.
 cmu-bad-blood-armory-lethal-already-unlocked = The clan already has the lethal bolt.
 cmu-bad-blood-armory-needs-lethal = The clan must earn the lethal bolt before the eradicator.
 cmu-bad-blood-armory-lethal-unlocked = The clan has earned the lethal bolt. Every plasma caster can fire it.
-cmu-bad-blood-armory-not-enough = The clan cannot pay for this. It costs { $price } Superiority Points and the clan has { $sp }.
+cmu-bad-blood-armory-not-enough = You cannot pay for this. It costs { $price } Honour and you have { $sp }. Offer trophies at the Lodge to earn more.
+cmu-bad-blood-armory-forge-nothing = The forge needs a bracer weapon you chose and have not forged yet. Wear your bracer.
+cmu-bad-blood-armory-forged = The forge reworks your bracer weapon. It hits harder now.
+cmu-bad-blood-forged-examine = It has been [color=orange]forged[/color] at the clan's Lodge and hits a fifth harder.
 cmu-bad-blood-armory-eradicator-unlocked = The clan has earned the eradicator. The Leader's plasma caster can fire it.
 
-cmu-bad-blood-lethal-locked = The clan has not earned the lethal bolt. Any Bad Blood can buy it at the Lodge armory.
+cmu-bad-blood-lethal-locked = The clan has not earned the lethal bolt. The Leader buys it for the whole clan at the Lodge armory.
 cmu-bad-blood-eradicator-locked = The eradicator is not yours to fire. The clan's Leader buys it at the Lodge armory.
 cmu-bad-blood-eradicator-cooldown = The eradicator is still cooling. Wait { $seconds } more seconds.
 
@@ -119,3 +122,25 @@ cmu-bad-blood-vehicle-force-start-others = Something is tearing at the hatch!
 
 # ECS-01: Bad Blood gear refuses anyone who is not a Yautja
 cmu-bad-blood-gear-denied = The clan's gear is built for a hunter's hands. You cannot make it work.
+
+# ARCH-04 to ARCH-06: castes
+ent-CMUBadBloodCampEngineerStation = forge-bench
+    .desc = Scrap, charges and a heavy plasma rifle under oiled hides. The clan's engineers arm themselves here.
+ent-CMUBadBloodCampMedicStation = medicine cache
+    .desc = Gels, clamps and injectors packed in bone boxes. The clan's medics stock up here.
+cmu-bad-blood-caste-verb-engineer = Take up the Engineer path
+cmu-bad-blood-caste-verb-medic = Take up the Medic path
+cmu-bad-blood-caste-verb-message = A caste lasts for the rest of this life. The clan may have { $cap } of each.
+cmu-bad-blood-caste-taken-engineer = You are the clan's Engineer: you build anywhere, see as an honourable hunter does, and the forge-bench arms you.
+cmu-bad-blood-caste-taken-medic = You are the clan's Medic: you work Yautja medicine faster, and the medicine cache stocks you.
+cmu-bad-blood-caste-not-clan = Only a living Bad Blood can take up a caste.
+cmu-bad-blood-caste-already = You already follow a path.
+cmu-bad-blood-caste-full = The clan already has { $cap } of this caste.
+cmu-bad-blood-caste-station-locked = This station serves its caste. Take up the path here first.
+
+# clan codes: how Bad Bloods know each other and how the radio names them
+cmu-bad-blood-code-name = { $role } (BB-{ $number })
+cmu-bad-blood-code-role-leader = Leader
+cmu-bad-blood-code-role-engineer = Engineer
+cmu-bad-blood-code-role-medic = Medic
+cmu-bad-blood-code-role-grunt = Grunt

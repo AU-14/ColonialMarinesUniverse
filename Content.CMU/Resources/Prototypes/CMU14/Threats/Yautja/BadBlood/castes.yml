@@ -1,0 +1,185 @@
+# ARCH-04 to ARCH-06: the Bad Blood castes. Each caste has a station on the Lodge (deployed with it, on the two free
+# tiles of the 3x3 layout). A Bad Blood takes up the caste there ("Take up the ... path" verb, BadBloodCasteSystem):
+# one of each caste per four living Bad Bloods, at least one. The station is a Lodge armory only its caste may open,
+# and it sells for the buyer's own Honour like the clan armory does.
+
+# the Engineer's forge-bench: demolition and anti-tank gear. Engineers also build anywhere, see as an honourable
+# hunter does, and get RMC engineering to plant charges
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodCampEngineerStation
+  name: forge-bench
+  description: Scrap, charges and a heavy plasma rifle under oiled hides. The clan's engineers arm themselves here.
+  suffix: Bad Blood, Engineer
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    drawdepth: Objects
+    layers:
+    - state: "autolathe_r"
+  - type: Icon
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    state: "autolathe_r"
+  - type: BadBloodCampPart
+    kind: EngineerStation
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMAutomatedVendorBui
+        interactionRange: 2.5
+  - type: ActivatableUI
+    key: enum.CMAutomatedVendorUI.Key
+  - type: BadBloodCampArmory
+    pointsType: BadBloodSp
+    requiredCaste: Engineer
+    tiers:
+      CMUBadBloodDemolitionCharge: 1
+      CMUBadBloodSiegeRifle: 2
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    pointsType: BadBloodSp
+    scaling: false
+    sections:
+    - name: Demolition
+      entries:
+      - id: CMUBadBloodDemolitionCharge
+        name: Demolition Charge
+        points: 4
+    - name: Anti-Tank (tier II)
+      entries:
+      - id: CMUBadBloodSiegeRifle
+        name: Siege Plasma Rifle
+        points: 10
+        maxPerUser: 1
+
+# the Medic's medicine cache: the clan's Yautja medicine, cheaper than at the armory. Medics also work it faster
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUBadBloodCampMedicStation
+  name: medicine cache
+  description: Gels, clamps and injectors packed in bone boxes. The clan's medics stock up here.
+  suffix: Bad Blood, Medic
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    drawdepth: Objects
+    layers:
+    - state: "autodoc_closed"
+  - type: Icon
+    sprite: CMU14/Yautja/Structures/yautja_machines.rsi
+    state: "autodoc_closed"
+  - type: BadBloodCampPart
+    kind: MedicStation
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMAutomatedVendorBui
+        interactionRange: 2.5
+  - type: ActivatableUI
+    key: enum.CMAutomatedVendorUI.Key
+  - type: BadBloodCampArmory
+    pointsType: BadBloodSp
+    requiredCaste: Medic
+    tiers:
+      CMUYautjaBadBloodMedicompFull: 2
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    pointsType: BadBloodSp
+    scaling: false
+    sections:
+    - name: Medicine
+      entries:
+      - id: CMUYautjaCleanserGelVial
+        name: Cleanser Gel Vial
+        points: 1
+      - id: CMUYautjaHealingGel
+        name: Healing Capsule
+        points: 2
+      - id: CMUYautjaBadBloodStabilizerGel
+        name: Stabilizer Gel
+        points: 2
+      - id: CMUYautjaBadBloodWoundClamp
+        name: Wound Clamp
+        points: 2
+      - id: CMUYautjaAlienHealthAnalyzer
+        name: Alien Health Analyzer
+        points: 2
+      - id: CMUYautjaAutoInjector
+        name: Auto-Injector
+        points: 3
+      - id: CMUYautjaBadBloodHealingGun
+        name: Healing Gun
+        points: 4
+    - name: Field Kit (tier II)
+      entries:
+      - id: CMUYautjaBadBloodMedicompFull
+        name: Medicomp
+        points: 6
+        maxPerUser: 1
+
+# anti-tank: a heavy bolt that always finds a vehicle and hits its hardpoints five times as hard. Against people it
+# is weak (30 Heat, 20 armour piercing, no fire), slow to fire and hungry for charge: no rifle for fighting marines
+- type: entity
+  parent: CMUYautjaPlasmaRifleBolt
+  id: CMUBadBloodSiegeBolt
+  categories: [HideSpawnMenu]
+  components:
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 30
+  - type: CMArmorPiercing
+    amount: 20
+  - type: VehicleDamageMultiplier
+    multiplier: 5
+  - type: RemoveComponents
+    components:
+    - type: YautjaIncendiaryPlasmaProjectile
+
+- type: entity
+  parent: CMUYautjaPlasmaRifle
+  id: CMUBadBloodSiegeRifle
+  name: siege plasma rifle
+  description: A plasma rifle rebuilt by a clan engineer to fire one slow, heavy bolt that tears into armoured vehicles.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Gun
+    projectileSpeed: 30
+    fireRate: 0.25
+    cameraRecoilScalar: 0
+    minAngle: 10
+    maxAngle: 10
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
+  # the fire rate the gun really uses is set from RMCSelectiveFire when it starts up
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    scatterWielded: 10
+    scatterUnwielded: 10
+    baseFireRate: 0.25
+  - type: BatteryAmmoProvider
+    proto: CMUBadBloodSiegeBolt
+    fireCost: 25
+  - type: YautjaPlasmaWeapon
+    rechargeRate: 1
+    nonYautjaExamineText: This thing looks like an alien rifle of some kind. Strange.
+    minimumShootCharge: 25
+    lowPowerWarning: cmu-yautja-plasma-rifle-low-power
+    maxChargePopup: cmu-yautja-plasma-rifle-max-charge
+
+# demolition: the marines' plastic explosive (C4), rebuilt from scrap: it sticks to walls, doors and vehicles.
+# Planting it takes RMC engineering, which an Engineer gets when they take up the caste
+- type: entity
+  parent: RMCExplosivePlastic
+  id: CMUBadBloodDemolitionCharge
+  name: demolition charge
+  description: A scavenged breaching charge in a crude alien casing. Stick it to a wall, a door or a vehicle and stand clear.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock

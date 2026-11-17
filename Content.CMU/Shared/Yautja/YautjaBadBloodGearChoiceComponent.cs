@@ -18,4 +18,10 @@ public sealed partial class YautjaBadBloodGearChoiceComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool Chosen;
+
+    /// <summary>
+    /// The weapon picked, once <see cref="Chosen"/>. The Lodge forge upgrades this one.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public YautjaGearKind? ChosenKind;
 }

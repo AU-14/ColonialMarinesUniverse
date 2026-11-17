@@ -34,3 +34,186 @@
   - type: YautjaSpikeLauncher
     rechargeCooldown: 20
     rechargeSound: null
+
+# ARCH-02 weapon tiers: starter (the bracer weapon picked on landing) -> forged (tier II, the forge ware below) ->
+# golden (tier III, the gilded war glaive and the golden ancient shield).
+
+# tier II: not a thing to carry. Buying it forges the buyer's bracer weapon in place (BadBloodForged: +20% damage)
+# and the armory deletes this placeholder
+- type: entity
+  id: CMUBadBloodForgeUpgrade
+  name: forged bracer weapon
+  description: The clan's forge reworks your bracer weapon. It hits a fifth harder from now on.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/actions.rsi
+    state: bracer_framed
+  - type: BadBloodForgeUpgrade
+    multiplier: 1.2
+
+# tier III, golden: the clan's blessed weapons. Like the hunters' blessed relics they wear their own sprite in gold
+# (#ffd65c); the glaive keeps the ancient art. Each hits about a quarter harder than the weapon it copies.
+- type: entity
+  parent: CMUYautjaWarGlaive
+  id: CMUBadBloodBlessedWarGlaive
+  name: blessed war glaive
+  description: An ancient war glaive, its acid-scarred blades reforged and blessed in gold by the clan. Few hunters ever carry one.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Sprite
+    color: "#ffd65c"
+    state: ancient_war_glaive
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 20
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Slash: 40
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 20
+
+- type: entity
+  parent: CMUYautjaChainwhip
+  id: CMUBadBloodBlessedChainwhip
+  name: blessed chainwhip
+  description: A chainwhip reforged by the clan, every link blessed in gold. It bites deeper than any whip a hunter carries.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Sprite
+    color: "#ffd65c"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 38
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 30
+
+- type: entity
+  parent: CMUYautjaSeveringSword
+  id: CMUBadBloodBlessedSeveringSword
+  name: blessed severing sword
+  description: A severing sword reforged by the clan and blessed in gold along the blade. It parts armour like hide.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Sprite
+    color: "#ffd65c"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 44
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 30
+
+- type: entity
+  parent: CMUYautjaCruelStaff
+  id: CMUBadBloodBlessedCruelStaff
+  name: blessed cruel staff
+  description: A cruel staff reforged by the clan, its hooked head blessed in gold.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Sprite
+    color: "#ffd65c"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 44
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 30
+
+- type: entity
+  parent: CMUYautjaDualWarScythe
+  id: CMUBadBloodBlessedDualWarScythe
+  name: blessed dual war scythe
+  description: Twin war scythes reforged by the clan and blessed in gold to the grip.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Sprite
+    color: "#ffd65c"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 38
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 30
+
+- type: entity
+  parent: CMUYautjaWarAxe
+  id: CMUBadBloodBlessedWarAxe
+  name: blessed war axe
+  description: A war axe reforged by the clan, its head blessed in gold. It splits bone with a single swing.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Sprite
+    color: "#ffd65c"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 38
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Slash: 38
+
+- type: entity
+  parent: CMUYautjaHunterSpear
+  id: CMUBadBloodBlessedHunterSpear
+  name: blessed hunter spear
+  description: A hunter spear reforged by the clan, its point blessed in gold. Thrown, it punches through plate.
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+  - type: Sprite
+    color: "#ffd65c"
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 19
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Piercing: 25
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Piercing: 35
+
+# tier III, golden: every ancient shield of golden alloy
+- type: entity
+  parent: CMUYautjaAncientShield
+  id: CMUBadBloodBlessedShield
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+
+- type: entity
+  parent: CMUYautjaAncientShieldAlt
+  id: CMUBadBloodBlessedShieldAlt
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+
+- type: entity
+  parent: CMUYautjaAncientShieldTemple
+  id: CMUBadBloodBlessedShieldTemple
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock

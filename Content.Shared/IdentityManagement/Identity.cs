@@ -36,6 +36,15 @@ public static class Identity
         // CMU Related Change
         var yautjaViewer = viewer != null && ent.HasComponent<YautjaComponent>(viewer.Value);
 
+        // cmu edit: a Bad Blood knows the rest of its clan by role and code, "Grunt (BB-12)", not as "unknown"
+        if (viewer != null &&
+            ent.HasComponent<YautjaBadBloodComponent>(viewer.Value) &&
+            ent.HasComponent<YautjaBadBloodComponent>(uid) &&
+            ent.System<Content.Shared.CMU14.Yautja.BadBlood.BadBloodCodeSystem>().GetClanName(uid) is { } clanName)
+        {
+            return new IdentityEntity(uid, clanName);
+        }
+
         if (yautjaViewer && ent.TryGetComponent(uid, out YautjaComponent? yautja))
         {
             var yautjaName = yautja.BracerNameActive
