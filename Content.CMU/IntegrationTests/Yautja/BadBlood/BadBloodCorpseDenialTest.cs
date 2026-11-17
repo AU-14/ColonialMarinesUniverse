@@ -49,7 +49,7 @@ public sealed class BadBloodCorpseDenialTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(gruntRatio, Is.EqualTo(0.35f).Within(0.01f), "a Bad Blood drags a body at 35% speed");
+                    Assert.That(gruntRatio, Is.EqualTo(0.45f).Within(0.01f), "a Bad Blood drags a body at 45% speed");
                     Assert.That(hunterRatio, Is.EqualTo(1f).Within(0.01f), "an honourable hunter still drags at full speed");
                 });
             });

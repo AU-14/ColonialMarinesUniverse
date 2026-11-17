@@ -53,6 +53,22 @@
   # the bite is the hound's own melee, so the piercing sits on the hound
   - type: CMArmorPiercing
     amount: 20
+  # a clan hound drags about a fifth faster than the hunters' hellhound (0.3825 / 0.425 / 0.2475), which was too harsh
+  # for the clan's corpse runs
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.46
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.51
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.3
+      whitelist:
+        components:
+        - XenoHeavy
 
 - type: entity
   id: CMUBadBloodSleepingHound

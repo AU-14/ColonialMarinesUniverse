@@ -14,5 +14,5 @@ public sealed partial class YautjaBadBloodComponent : Component
     /// marines can catch them before a kill reaches the Lodge.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float DragSpeedMultiplier = 0.35f;
+    public float DragSpeedMultiplier = 0.45f;
 }
