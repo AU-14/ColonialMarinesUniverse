@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics; // CMU14
 using Content.Client._RMC14.NamedItems;
 // cmu edit start
 using Content.Client.Administration.UI.CustomControls;
@@ -201,7 +202,7 @@ public sealed partial class HumanoidProfileEditor
 
         RefreshThreatPreferences();
         // CMU14: Force on Force roles, hijacking, announcements and identification.
-        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        UpdateEventSideControls(); // CMU14
         FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         InitializeNamedItems();
         CrtLobbyTheme.Apply(this);
@@ -371,7 +372,7 @@ public sealed partial class HumanoidProfileEditor
     private void UpdateCmuControls()
     {
         // CMU14: Force on Force roles, hijacking, announcements and identification.
-        FoFSideButton.SelectId((int) (Profile?.FoFSide ?? ForceOnForceSide.Either));
+        UpdateEventSideControls(); // CMU14
         FoFFallbackButton.SelectId((int) (Profile?.FoFFallback ?? ForceOnForceFallback.StayInLobby));
         MarkPreviewJobsDirty();
         UpdateRegulationHairPickers();
@@ -536,7 +537,8 @@ public sealed partial class HumanoidProfileEditor
         var previousSignature = _previewJobSignature;
         _previewJobs.Clear();
         if (Profile != null)
-            _previewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(Profile, _prototypeManager));
+            _previewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(EventProfile()!, _prototypeManager)
+                .Where(entry => !EventAccess.IsLocked(entry.Job.ID))); // CMU14
 
         _previewJobSignature = LobbyHighJobPreview.GetSignature(_previewJobs);
         _previewJobsDirty = false;
@@ -968,16 +970,82 @@ public sealed partial class HumanoidProfileEditor
             selector.UnlockRequirements();
         }
 
+        // CMU14 Synthetic Character Preferences Begin
+        var generationRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            Margin = new Thickness(3f, 3f, 3f, 0f),
+            Visible = Profile?.Synthetic == true,
+        };
+        generationRow.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-profile-editor-synthetic-generation-label"),
+        });
+        generationRow.AddChild(new Control { HorizontalExpand = true });
+
+        var generationSelector = new OptionButton { MinWidth = 140 };
+        for (var generation = HumanoidCharacterProfile.MinSyntheticGeneration;
+             generation <= HumanoidCharacterProfile.MaxSyntheticGeneration;
+             generation++)
+        {
+            generationSelector.AddItem(
+                Loc.GetString($"cmu-profile-editor-synthetic-generation-{generation}"),
+                generation - HumanoidCharacterProfile.MinSyntheticGeneration);
+        }
+
+        generationSelector.SelectId((Profile?.SyntheticGeneration ?? HumanoidCharacterProfile.MinSyntheticGeneration)
+            - HumanoidCharacterProfile.MinSyntheticGeneration);
+        generationRow.AddChild(generationSelector);
+
+        var modelSuffixRow = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            Margin = new Thickness(3f, 3f, 3f, 0f),
+            Visible = Profile?.Synthetic == true,
+        };
+        modelSuffixRow.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-profile-editor-synthetic-model-suffix-label"),
+        });
+        modelSuffixRow.AddChild(new Control { HorizontalExpand = true });
+
+        var modelSuffixEdit = new LineEdit
+        {
+            MinSize = new Vector2(180, 0),
+            Text = Profile?.SyntheticModelSuffix ?? string.Empty,
+            IsValid = text => text.Length <= HumanoidCharacterProfile.SyntheticModelSuffixMaxLength,
+        };
+        modelSuffixRow.AddChild(modelSuffixEdit);
+
         selector.OnSelected += preference =>
         {
             Profile = Profile?.WithSynthetic(preference == 0);
+            generationRow.Visible = preference == 0;
+            modelSuffixRow.Visible = preference == 0;
             CMUUpdateSyntheticNameFields();
             CMURecomposeName();
             SetDirty();
             UpdateSaveButton();
             RefreshJobs();
         };
+        generationSelector.OnItemSelected += args =>
+        {
+            generationSelector.SelectId(args.Id);
+            Profile = Profile?.WithSyntheticGeneration(args.Id + HumanoidCharacterProfile.MinSyntheticGeneration);
+            SetDirty();
+            UpdateSaveButton();
+        };
+        modelSuffixEdit.OnTextChanged += args =>
+        {
+            Profile = Profile?.WithSyntheticModelSuffix(args.Text);
+            SetDirty();
+            UpdateSaveButton();
+        };
+
         SyntheticContainer.AddChild(selector);
+        SyntheticContainer.AddChild(generationRow);
+        SyntheticContainer.AddChild(modelSuffixRow);
+        // CMU14 End
     }
 
     public void RefreshAllegiances()

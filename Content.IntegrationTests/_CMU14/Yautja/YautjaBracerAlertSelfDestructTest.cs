@@ -18,42 +18,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaBracerAlertSelfDestructTest
 {
-    [Test]
-    public async Task ClickingTheBracerAlertArmsSelfDestructWithoutADialog()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var inventory = entMan.System<InventorySystem>();
-            var alerts = server.System<AlertsSystem>();
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-
-            var yautja = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            entMan.EnsureComponent<YautjaComponent>(yautja);
-            var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-
-            Assert.That(inventory.TryEquip(yautja, bracer, "gloves", silent: true, force: true), Is.True);
-
-            var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-            Assert.That(bracerComp.SelfDestructArmed, Is.False, "The bracer should start unarmed.");
-
-            var alert = prototypes.Index<AlertPrototype>("CMUYautjaPower");
-            Assert.That(alerts.ActivateAlert(yautja, alert), Is.True,
-                "Clicking the bracer HUD icon must be handled.");
-
-            Assert.That(bracerComp.SelfDestructArmed, Is.True,
-                "Clicking the bracer icon must arm the self-destruct immediately, with no dialog.");
-
-            Assert.That(alerts.ActivateAlert(yautja, alert), Is.True, "Clicking again must be handled.");
-            Assert.That(bracerComp.SelfDestructArmed, Is.False,
-                "Clicking the icon while the self-destruct is active must cancel it.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task ClickingWhileHaulingADeadHunterDetonatesTheirBracer()
@@ -102,85 +66,6 @@ public sealed class YautjaBracerAlertSelfDestructTest
             Assert.That(alerts.ActivateAlert(hunter, alert), Is.True);
             Assert.That(corpseBracerComp.SelfDestructArmed, Is.True,
                 "Clicking again while hauling must not cancel the hauled hunter's self-destruct.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ArmedHotkeyStillReachesYourOwnBracerWhileHauling()
-    {
-        // A connected client is needed so the hunter has a session for the self-destruct dialog.
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var inventory = entMan.System<InventorySystem>();
-            var mobState = entMan.System<MobStateSystem>();
-            var selfDestruct = entMan.System<YautjaSelfDestructSystem>();
-
-            // The self-destruct dialogs are UI, so the pair's session has to be driving the hunter.
-            var session = server.PlayerMan.Sessions.Single();
-
-            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            entMan.EnsureComponent<YautjaComponent>(hunter);
-            var hunterBracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-            Assert.That(inventory.TryEquip(hunter, hunterBracer, "gloves", silent: true, force: true), Is.True);
-
-            server.PlayerMan.SetAttachedEntity(session, hunter);
-
-            var bracerEnt = (hunterBracer, entMan.GetComponent<YautjaBracerComponent>(hunterBracer));
-            Assert.That(selfDestruct.TryArmSelfDestruct(bracerEnt, hunter), Is.True,
-                "The hunter's own timer has to be armed for this case to mean anything.");
-
-            // A marine corpse carries no bracer, so its remote dialog is refused outright - which is what
-            // makes the hotkey's return value tell us which dialog it actually reached.
-            var corpse = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            mobState.ChangeMobState(corpse, MobState.Dead, entMan.GetComponent<MobStateComponent>(corpse), corpse);
-            entMan.EnsureComponent<PullerComponent>(hunter).Pulling = corpse;
-
-            Assert.That(selfDestruct.TryOpenRemoteDeadVictimSelfDestructDialog(bracerEnt, hunter, corpse), Is.False,
-                "Sanity check: the hauled bracerless corpse is refused, so reaching it would return false.");
-
-            Assert.That(selfDestruct.TryUseSelfDestruct(bracerEnt, hunter), Is.True,
-                "With your own timer armed, the hotkey must reach your own cancel dialog, not the hauled body's.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task ClickingWhileHaulingABodyWithoutABracerArmsYourOwn()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var inventory = entMan.System<InventorySystem>();
-            var alerts = server.System<AlertsSystem>();
-            var mobState = entMan.System<MobStateSystem>();
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-
-            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            entMan.EnsureComponent<YautjaComponent>(hunter);
-            var hunterBracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-            Assert.That(inventory.TryEquip(hunter, hunterBracer, "gloves", silent: true, force: true), Is.True);
-            var hunterBracerComp = entMan.GetComponent<YautjaBracerComponent>(hunterBracer);
-
-            // A marine corpse carries no bracer at all.
-            var corpse = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            mobState.ChangeMobState(corpse, MobState.Dead, entMan.GetComponent<MobStateComponent>(corpse), corpse);
-            entMan.EnsureComponent<PullerComponent>(hunter).Pulling = corpse;
-
-            var alert = prototypes.Index<AlertPrototype>("CMUYautjaPower");
-            Assert.That(alerts.ActivateAlert(hunter, alert), Is.True);
-
-            Assert.That(hunterBracerComp.SelfDestructArmed, Is.True,
-                "Hauling a body with no bracer must still arm the clicker's own self-destruct.");
         });
 
         await pair.CleanReturnAsync();

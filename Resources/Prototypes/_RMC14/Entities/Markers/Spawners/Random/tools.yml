@@ -108,9 +108,9 @@
         - RMCSpawnerRandomPowercell
         - CMFireExtinguisher
         - CMHandsInsulated
-        - RMCCableCoil # x3
-        - RMCCableCoil
-        - RMCCableCoil
+        - CMUCableThinLVStack # CMU14: replaces RMCCableCoil, thin LV cable; x3
+        - CMUCableThinLVStack
+        - CMUCableThinLVStack
         - RMCSpawnerRandomToolbox # x2
         - RMCSpawnerRandomToolbox
         - CMBeltUtility # x2

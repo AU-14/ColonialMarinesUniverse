@@ -5,6 +5,8 @@ using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Ops.ThirdParty;
 using Content.Server.CMU14.Threats;
+using Content.Server.Ghost.Roles;
+using Content.Server.Ghost.Roles.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.GameTicking;
 using Robust.Shared.Prototypes;
@@ -31,6 +33,9 @@ public sealed class ForceDeploymentBudgetTest : GameTest
           partyspawn: CMUTestBudgetSpawn
           entrymethod: ground
           announcearrival: ""
+        - type: threat
+          id: CMUTestBudgetThreat
+          roundstartspawns: CMUTestBudgetSpawn
         - type: partySpawn
           id: CMUTestMissingShuttleMarkers
           leadersToSpawn:
@@ -43,6 +48,51 @@ public sealed class ForceDeploymentBudgetTest : GameTest
           partyspawn: CMUTestMissingShuttleMarkers
           announcearrival: ""
         """;
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task ThreatDeploymentYieldsAndReleasesRolesOnCompletionOrCancellation(bool cancel)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            for (var i = 0; i < 3; i++)
+                SEntMan.SpawnEntity("threatentityspawnmarker", map.GridCoords);
+            Assert.That(SEntMan.System<ThreatSystem>().ForceSpawnThreat("CMUTestBudgetThreat", map.Grid, false), Is.True);
+            var forces = SEntMan.System<ForceInterestSystem>();
+            typeof(ForceInterestSystem).GetField("_nextRefresh", BindingFlags.Instance | BindingFlags.NonPublic)!
+                .SetValue(forces, TimeSpan.Zero);
+            forces.Update(0f);
+            Assert.That(BodyCount(), Is.Zero, "threat preparation must yield before creating bodies");
+            forces.Update(0f);
+            Assert.That(BodyCount(), Is.EqualTo(1), "a deployment step must not spawn the entire threat group");
+            var body = SEntMan.EntityQuery<PendingForceRoleComponent>().Single().Owner;
+            var role = SEntMan.AddComponent<GhostRoleComponent>(body);
+            var ghosts = SEntMan.System<GhostRoleSystem>();
+            ghosts.RegisterGhostRole((body, role));
+            Assert.That(ghosts.GetGhostRolesInfo(null).Any(info => info.Entity == SEntMan.GetNetEntity(body)), Is.False,
+                "startup or re-registration must not expose bodies before reserved assignments finish");
+
+            if (cancel)
+                SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+            else
+            {
+                for (var expected = 2; expected <= 3; expected++)
+                {
+                    forces.Update(0f);
+                    Assert.That(BodyCount(), Is.EqualTo(expected));
+                }
+            }
+
+            for (var i = 0; i < 5; i++)
+                forces.Update(0f);
+            Assert.That(BodyCount(), Is.EqualTo(cancel ? 1 : 3), "cancelled or completed work must not restart");
+            Assert.That(SEntMan.HasComponent<PendingForceRoleComponent>(body), Is.False);
+            if (!cancel)
+                Assert.That(ghosts.GetGhostRolesInfo(null).Any(info => info.Entity == SEntMan.GetNetEntity(body)), Is.True,
+                    "an unassigned body must become available after deployment");
+        });
+    }
 
     [Test]
     public async Task DeploymentSpansUpdatesAndCompletesWithoutDuplicateBodies()

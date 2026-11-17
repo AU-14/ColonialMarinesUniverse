@@ -91,6 +91,10 @@ namespace Content.Server.Administration.Systems
             Subs.CVar(_config, CCVars.DiscordOnCallWebhook, OnCallChanged, true);
 
             Subs.CVar(_config, CCVars.DiscordAHelpWebhook, OnWebhookChanged, true);
+            // CMU14: re-resolve the effective ahelp webhook when the CMU override changes; the
+            // upstream subscription above only fires for its own cvar.
+            Subs.CVar(_config, CCVars.HelpRelayWebhookAHelp,
+                _ => OnWebhookChanged(_config.GetCVar(CCVars.DiscordAHelpWebhook)), true);
             Subs.CVar(_config, CCVars.DiscordAHelpFooterIcon, OnFooterIconChanged, true);
             Subs.CVar(_config, CCVars.DiscordAHelpAvatar, OnAvatarChanged, true);
             Subs.CVar(_config, CVars.GameHostName, OnServerNameChanged, true);
@@ -341,6 +345,12 @@ namespace Content.Server.Administration.Systems
 
         private async void OnWebhookChanged(string url)
         {
+            // CMU14: the CMU override wins when set, so ops can split ahelp onto its own channel
+            // without touching upstream's discord_ahelp_webhook.
+            var cmuOverride = _config.GetCVar(CCVars.HelpRelayWebhookAHelp);
+            if (!string.IsNullOrWhiteSpace(cmuOverride))
+                url = cmuOverride;
+
             _webhookUrl = url;
 
             RaiseNetworkEvent(new BwoinkDiscordRelayUpdated(!string.IsNullOrWhiteSpace(url)));

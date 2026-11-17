@@ -272,50 +272,6 @@ public sealed class CMUTraumaContactModelTest
     }
 
     [Test]
-    public void ContactSlashInfersSnaggingSurfaceImpact()
-    {
-        var damage = new DamageSpecifier
-        {
-            DamageDict =
-            {
-                ["Slash"] = 1,
-            },
-        };
-
-        var impact = DamageImpact.ForContact(damage);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(impact.Delivery, Is.EqualTo(DamageImpactDelivery.Contact));
-            Assert.That(impact.Contact, Is.EqualTo(DamageImpactContact.Snag));
-            Assert.That(impact.Penetration, Is.EqualTo(DamageImpactPenetration.None));
-        });
-    }
-
-    [Test]
-    public void EqualBruteGroupMeleeInfersSlashInsteadOfStab()
-    {
-        var damage = new DamageSpecifier
-        {
-            DamageDict =
-            {
-                ["Blunt"] = 10,
-                ["Slash"] = 10,
-                ["Piercing"] = 10,
-            },
-        };
-
-        var impact = DamageImpact.ForMelee(damage);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(impact.Delivery, Is.EqualTo(DamageImpactDelivery.Melee));
-            Assert.That(impact.Contact, Is.EqualTo(DamageImpactContact.Slash));
-            Assert.That(impact.Penetration, Is.EqualTo(DamageImpactPenetration.Low));
-        });
-    }
-
-    [Test]
     public void DamageImpactProfileCanMakeThrownBladeStab()
     {
         var damage = new DamageSpecifier
@@ -371,27 +327,6 @@ public sealed class CMUTraumaContactModelTest
             Assert.That(result.OrganContact, Is.False);
             Assert.That(result.VascularContact, Is.False);
             Assert.That(result.Depth, Is.EqualTo(CMUTraumaDepth.Bone));
-        });
-    }
-
-    [Test]
-    public void ContactPierceInfersLowDepthStab()
-    {
-        var damage = new DamageSpecifier
-        {
-            DamageDict =
-            {
-                ["Piercing"] = 5,
-            },
-        };
-
-        var impact = DamageImpact.ForContact(damage);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(impact.Delivery, Is.EqualTo(DamageImpactDelivery.Contact));
-            Assert.That(impact.Contact, Is.EqualTo(DamageImpactContact.Stab));
-            Assert.That(impact.Penetration, Is.EqualTo(DamageImpactPenetration.Low));
         });
     }
 

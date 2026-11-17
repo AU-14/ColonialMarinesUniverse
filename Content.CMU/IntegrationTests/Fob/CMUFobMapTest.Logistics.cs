@@ -137,21 +137,24 @@ public sealed partial class CMUFobMapTest
             Assert.That(Server.System<CMUFobInteractionSystem>().TryBindControl((control,
                 SEntMan.GetComponent<CMUFobControlComponent>(control)), out _), Is.True);
             var platforms = cargo.Where(SEntMan.HasComponent<CMUFobGunMountComponent>).ToArray();
-            var heavy = cargo.First(uid => SEntMan.TryGetComponent<CMUFobSupportGunComponent>(uid, out var g) && !g.RequiresSensor);
+            var heavy = cargo.Where(uid => SEntMan.TryGetComponent<CMUFobSupportGunComponent>(uid, out var g) && !g.RequiresSensor).ToArray();
             var rocket = cargo.Single(uid => SEntMan.TryGetComponent<CMUFobSupportGunComponent>(uid, out var g) && g.RequiresSensor);
             var defense = Server.System<CMUFobDefenseSystem>();
             var loader = SEntMan.SpawnAtPosition("RMCMechPowerLoader", SEntMan.GetComponent<TransformComponent>(control).Coordinates);
-            for (var i = 0; i < 2; i++)
+            var weapons = new[] { rocket, heavy[0], heavy[1] };
+            for (var i = 0; i < weapons.Length; i++)
             {
-                var coords = lz.Offset(new Vector2(-7, i == 0 ? -1 : 1));
+                var coords = lz.Offset(new Vector2(-7, i * 2 - 1));
                 Transform.SetCoordinates(platforms[i], coords);
                 Transform.SetCoordinates(user, coords.Offset(new Vector2(-1, 0)));
                 Transform.SetCoordinates(loader, coords.Offset(new Vector2(-1, 0)));
                 SEntMan.EventBus.RaiseLocalEvent(platforms[i], new InteractUsingEvent(user, wrench, platforms[i], coords));
+                Assert.That(SEntMan.GetComponent<TransformComponent>(platforms[i]).Anchored, Is.True,
+                    $"Delivered platform {i + 1} must deploy on clear ground at {coords}.");
                 var slots = SEntMan.GetComponent<CMUFobDefenseNetworkComponent>(bank).Mounts;
                 Assert.That(slots[i], Is.EqualTo(platforms[i]), "Assembly registers the delivered platform where the operator placed it.");
                 var mount = SEntMan.GetComponent<CMUFobGunMountComponent>(platforms[i]);
-                var weapon = i == 0 ? rocket : heavy;
+                var weapon = weapons[i];
                 Transform.SetCoordinates(weapon, coords.Offset(new Vector2(-1, 0)));
                 Assert.That(hands.TryPickupAnyHand(loader, weapon, checkActionBlocker: false), Is.True);
                 var ammo = Server.System<SharedGunSystem>().GetAmmoCount(weapon);
@@ -159,14 +162,14 @@ public sealed partial class CMUFobMapTest
                 Assert.That(defense.TryInstallModule((weapon, SEntMan.GetComponent<CMUFobSupportGunComponent>(weapon)), platforms[i], user, loader), Is.True);
                 Assert.That(Server.System<SharedGunSystem>().GetAmmoCount(weapon), Is.EqualTo(ammo));
             }
-            Assert.That(OnSurface<CMUFobSupportGunComponent>().Count(uid => SEntMan.GetComponent<CMUFobSupportGunComponent>(uid).Mount != null), Is.EqualTo(2));
-            var unusedHeavy = cargo.Single(uid => SEntMan.TryGetComponent<CMUFobSupportGunComponent>(uid, out var g) && !g.RequiresSensor && g.Mount == null);
-            Assert.That(Server.System<SharedGunSystem>().GetAmmoCount(unusedHeavy), Is.GreaterThan(0),
-                "The unused module remains a real finite-ammo spare, not a third deployed weapon.");
-            var extra = SEntMan.SpawnAtPosition("CMUFobPlatformModule", lz.Offset(new Vector2(-7, 3)));
-            Transform.SetCoordinates(user, lz.Offset(new Vector2(-8, 3)));
+            Assert.That(OnSurface<CMUFobSupportGunComponent>().Count(uid => SEntMan.GetComponent<CMUFobSupportGunComponent>(uid).Mount != null), Is.EqualTo(3));
+            Assert.That(defense.GetGunStatus(bank).Select(status => status.Ammunition),
+                Is.EqualTo(weapons.Select(weapon => Server.System<SharedGunSystem>().GetAmmoCount(weapon))),
+                "The terminal must report all three installed weapons and their real ammunition.");
+            var extra = SEntMan.SpawnAtPosition("CMUFobPlatformModule", lz.Offset(new Vector2(-7, 5)));
+            Transform.SetCoordinates(user, lz.Offset(new Vector2(-8, 5)));
             Assert.That(defense.TryDeployPlatform((extra, SEntMan.GetComponent<CMUFobGunMountComponent>(extra)), user), Is.False,
-                "Free placement must still enforce the two-platform budget.");
+                "A fourth platform must not exceed the three-platform budget.");
             var after = OnSurface<CMUFobSupportGunComponent>();
             Land(Site(selected == "Nexus" ? "Robotics" : "Nexus"));
             Assert.That(OnSurface<CMUFobSupportGunComponent>(), Is.EquivalentTo(after));

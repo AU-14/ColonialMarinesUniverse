@@ -350,9 +350,9 @@
 
 | Предмет | Из чего | Инструменты | Время, с |
 |---|---|---|---|
-| моток кабеля (`RMCCableCoil`) | изолированный кабель ×5 | Hammering | 12 |
-| CableMVStack1 (`CableMVStack1`) | изолированный кабель ×5; лист резины ×2 | Hammering | 12 |
-| CableHVStack1 (`CableHVStack1`) | изолированный кабель ×5; лист резины ×4; тонкий серебряный провод ×2 | Hammering | 16 |
+| моток кабеля (`CMUCableThinLVStack`) | изолированный кабель ×5 | Hammering | 12 |
+| моток кабеля (`CMUCableThinMVStack`) | изолированный кабель ×5; лист резины ×2 | Hammering | 12 |
+| моток кабеля (`CMUCableThinHVStack`) | изолированный кабель ×5; лист резины ×4; тонкий серебряный провод ×2 | Hammering | 16 |
 | LightBulb (`LightBulb`) | стеклянная трубка ×1; тонкий медный провод ×1 | Hammering | 8 |
 | LightTube (`LightTube`) | стеклянная трубка ×2; тонкий медный провод ×1 | Hammering | 8 |
 | PowerCellSmall (`PowerCellSmall`) | лист свинца ×1; цинковый лист ×1; лист резины ×1 | Hammering | 12 |

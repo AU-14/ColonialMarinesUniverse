@@ -76,6 +76,8 @@ public sealed partial class MountableWeaponSystem : EntitySystem
             args.Cancelled = true;
             _popup.PopupSelf(Loc.GetString("mountable-weapon-no-free-hands"), args.User, PopupType.SmallCaution);
         }
+
+        _cmuCrewIff.CheckGunshipShot(ent, ref args); // CMU14: advanced crew visor hull interlock.
     }
 
     private void OnTakeAmmo(Entity<MountableWeaponComponent> ent, ref TakeAmmoEvent args)

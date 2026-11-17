@@ -11,7 +11,6 @@
   - !type:TraitsRequirement
     inverted: true
     traits:
-    - NoEnglish
     - CMUAlcoholic
     - CMUDrugAddict
     - CMUBadLeg

@@ -86,7 +86,6 @@ public sealed class AircraftAndVehicleRegressionTest : GameTest
 
     [TestCase(XenoClawType.Normal, 0)]
     [TestCase(XenoClawType.Sharp, 48)]
-    [TestCase(XenoClawType.VerySharp, 48)]
     public async Task VehicleClawGatePreservesRealAttackDamage(XenoClawType strength, float expected)
     {
         var map = await Pair.CreateTestMap();

@@ -1,0 +1,8 @@
+author: IntelligenceOfficerArthur
+category: CMU
+changes:
+- message: Added the M1A1 multi-spectrum visor, cheap half-strength night vision that
+    glows and sometimes cuts out until fixed with a screwdriver.
+  type: Add
+time: '2026-11-07T20:33:01.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2513

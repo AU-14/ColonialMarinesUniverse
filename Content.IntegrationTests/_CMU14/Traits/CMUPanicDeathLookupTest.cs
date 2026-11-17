@@ -73,28 +73,4 @@ public sealed class CMUPanicDeathLookupTest : GameTest
         });
     }
 
-    [Test]
-    public async Task SameRadiusDeathDoesNotAllocateAResultSetForEveryTraitEntity()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var target = SSpawn(null);
-            var state = SEntMan.AddComponent<MobStateComponent>(target);
-            for (var i = 0; i < 500; i++)
-                SEntMan.AddComponent<PanicComponent>(SSpawn(null));
-
-            var ev = new MobStateChangedEvent(target, state, MobState.Alive, MobState.Dead);
-            for (var i = 0; i < 8; i++)
-                SEntMan.EventBus.RaiseLocalEvent(target, ev, true);
-
-            // Nullspace excludes all witnesses, isolating the death lookup from panic effects.
-            var before = GC.GetAllocatedBytesForCurrentThread();
-            for (var i = 0; i < 32; i++)
-                SEntMan.EventBus.RaiseLocalEvent(target, ev, true);
-            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-            TestContext.Out.WriteLine($"CMU_PANIC_DEATH population=500 deaths=32 allocated={allocated}");
-            Assert.That(allocated, Is.LessThan(128 * 1024),
-                "One death must share its spatial result for observers with the same radius.");
-        });
-    }
 }

@@ -4,6 +4,7 @@ using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Gibbing;
 using Content.Shared.Projectiles;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.GameObjects;
@@ -16,8 +17,9 @@ public sealed class CMUTankOwnBlastTest : GameTest
 {
     public override PoolSettings PoolSettings => PsDisconnected;
 
-    [Test]
-    public async Task QueuedShellRetainsFiringTankAfterDeletionWithoutExemptingEnemyBlasts()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task QueuedShellRetainsFiringTankAfterDeletionWithoutExemptingEnemyBlasts(bool nonGibbing)
     {
         var map = await Pair.CreateTestMap();
         EntityUid tank = default;
@@ -52,6 +54,8 @@ public sealed class CMUTankOwnBlastTest : GameTest
         {
             var coords = SEntMan.GetComponent<TransformComponent>(tank).Coordinates;
             var projectile = SEntMan.SpawnEntity("CMUProjectileLTBCannonHE", coords);
+            if (nonGibbing)
+                SEntMan.AddComponent<NonGibbingDamageComponent>(projectile);
             SEntMan.GetComponent<ProjectileComponent>(projectile).Shooter = shooter;
             Server.System<ExplosionSystem>().TriggerExplosive(projectile);
             // Deletion also spawns the shell's separate HE impact explosion.

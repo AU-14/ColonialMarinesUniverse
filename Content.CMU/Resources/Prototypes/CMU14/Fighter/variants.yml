@@ -25,14 +25,14 @@
       leftWing:
         shape:
           !type:PolygonShape
-          vertices: ["0.37578,-0.71094", "0.39609,1.05625", "2.18359,1.50313", "2.18359,1.03594"]
+          vertices: ["0.37578,-0.71094", "0.39609,1.05625", "1.45,1.50313", "1.45,1.03594"]
         density: 1000
         layer: [ LargeMobLayer ]
         mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]
       rightWing:
         shape:
           !type:PolygonShape
-          vertices: ["-0.37578,-0.71094", "-2.18359,1.03594", "-2.18359,1.50313", "-0.39609,1.05625"]
+          vertices: ["-0.37578,-0.71094", "-1.45,1.03594", "-1.45,1.50313", "-0.39609,1.05625"]
         density: 1000
         layer: [ LargeMobLayer ]
         mask: [ Impassable, MidImpassable, HighImpassable, LowImpassable, BarricadeImpassable, LargeMobLayer ]

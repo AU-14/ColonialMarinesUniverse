@@ -4,9 +4,6 @@ trait-category-language = Languages
 au14-trait-english-language-name = English Language
 au14-trait-english-language-desc = You can speak and understand English. Good day, innit'?
 
-au14-trait-no-english-name = Forget English Language
-au14-trait-no-english-desc = Sho?
-
 au14-trait-no-language-learning-name = Language Impairment
 au14-trait-no-language-learning-desc = You can't pick up new languages during a round. Gives you one more language point to spend on languages you already know.
 

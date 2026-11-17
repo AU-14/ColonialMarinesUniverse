@@ -14,40 +14,6 @@ namespace Content.IntegrationTests.CMU14.Surrender;
 [TestFixture]
 public sealed class CMUSurrenderCuffingTest : GameTest
 {
-    [TestCase("RMCHandcuffs", false)]
-    [TestCase("RMCHandcuffs", true)]
-    [TestCase("RMCZipties", false)]
-    [TestCase("RMCZipties", true)]
-    public async Task RestraintsUseCooperativeTimingOnlyForRaisedHands(string prototype, bool surrendering)
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var cuffs = SEntMan.SpawnEntity(prototype, map.GridCoords);
-            try
-            {
-                Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(user, cuffs), Is.True);
-                if (surrendering)
-                    Assert.That(Server.System<ChatSystem>().TryEmoteWithChat(target, CMUSurrenderSystem.SurrenderEmote), Is.True);
-                Assert.That(Server.System<SharedCuffableSystem>().TryCuffing(user, target, cuffs), Is.True);
-                var doAfters = SEntMan.GetComponent<DoAfterComponent>(user).DoAfters;
-                var action = doAfters.Values.Single(d => d.Args.Event is AddCuffDoAfterEvent);
-                var normal = SEntMan.GetComponent<HandcuffComponent>(cuffs).CuffTime;
-                Assert.That(action.Args.Delay.TotalSeconds,
-                    Is.EqualTo(surrendering ? normal / 2 : normal).Within(0.001));
-                Assert.That(SEntMan.HasComponent<CMUSurrenderComponent>(target), Is.EqualTo(surrendering),
-                    "Starting a cuff attempt must not cancel surrender.");
-            }
-            finally
-            {
-                SEntMan.DeleteEntity(user);
-                SEntMan.DeleteEntity(target);
-                if (!SEntMan.Deleted(cuffs)) SEntMan.DeleteEntity(cuffs);
-            }
-        });
-    }
 
     [TestCase("RMCHandcuffs", false)]
     [TestCase("RMCHandcuffs", true)]

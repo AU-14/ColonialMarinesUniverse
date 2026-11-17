@@ -1,10 +1,14 @@
 using System.Diagnostics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.ZLevelBuilding;
+using Content.Server.CMU14.ZLevelBuilding.Pit;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevelBuilding;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Gravity;
+using Content.Shared.Damage.Components;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Station.Components;
 using Content.Server.Gravity;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -13,6 +17,87 @@ namespace Content.IntegrationTests.CMU.ZLevelBuilding;
 
 public sealed class CMUCavernGenerationTest : GameTest
 {
+    [Test]
+    public async Task LocalizedCaveFitsBesideMappedRoomAndSealsVoid()
+    {
+        var surface = await Pair.CreateTestMap();
+        EntityUid lower = default;
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var building = Server.System<ZLevelBuildingSystem>();
+            var settings = SEntMan.EnsureComponent<ZBuildableMapComponent>(surface.MapUid);
+            settings.DepthBiomes.Clear();
+            settings.StoneOreVeins.Clear();
+            settings.StoneDeposits.Clear();
+            settings.StoneCaveDecor.Clear();
+            settings.StoneWater = null;
+            for (var x = 0; x < 16; x++)
+            for (var y = 0; y < 16; y++)
+                maps.SetTile(surface.Grid, new Vector2i(x, y), surface.Tile.Tile);
+
+            var entrance = new Vector2i(6, 5);
+            var position = maps.GridTileToWorldPos(surface.Grid.Owner, surface.Grid.Comp, entrance);
+            Assert.That(building.EnsureNeighborLevel(surface.MapUid, -1, surface.Grid.Owner, position,
+                out lower, out var gridUid), Is.True);
+            var grid = SEntMan.GetComponent<MapGridComponent>(gridUid);
+            SEntMan.EnsureComponent<BecomesStationComponent>(gridUid);
+            // A room intersects the same generation chunk as the entrance. Area markers also cover empty ground.
+            var roomTile = new Vector2i(8, 5);
+            maps.SetTile(gridUid, grid, roomTile, surface.Tile.Tile);
+            var room = SEntMan.SpawnEntity("CMWallMetal", maps.GridTileToLocal(gridUid, grid, roomTile));
+            var area = SEntMan.SpawnEntity("AU14AreaGarrisonOutofBounds", maps.GridTileToLocal(gridUid, grid, entrance));
+
+            Assert.That(building.PrepareStoneForStair(surface.MapUid, surface.Grid.Owner, position,
+                out var landingGrid, singleTile: true), Is.True);
+            Assert.That(landingGrid, Is.EqualTo(gridUid));
+            var stone = SEntMan.GetComponent<ZGeneratedStoneComponent>(lower);
+            Assert.That(maps.GetTileRef(gridUid, grid, entrance).Tile.IsEmpty, Is.False,
+                "An area marker must not leave the landing in void.");
+            Assert.That(stone.GeneratedTiles.Contains(entrance), Is.True);
+            Assert.That(SEntMan.EntityExists(area), Is.True);
+            Assert.That(SEntMan.EntityExists(room), Is.True);
+            Assert.That(maps.GetTileRef(gridUid, grid, roomTile).Tile, Is.EqualTo(surface.Tile.Tile));
+
+            var digCoordinates = maps.GridTileToLocal(surface.Grid.Owner, surface.Grid.Comp, entrance);
+            var miner = SEntMan.SpawnEntity("MobHuman", digCoordinates);
+            var tool = SEntMan.SpawnEntity("Pickaxe", digCoordinates);
+            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(miner, tool), Is.True);
+            Assert.That(Server.System<PitDiggingToolSystem>().TryStartDig(tool, miner, digCoordinates), Is.True,
+                "The normal tool interaction must accept an entrance beside mapped terrain.");
+            SEntMan.DeleteEntity(miner);
+            if (SEntMan.EntityExists(tool))
+                SEntMan.DeleteEntity(tool);
+
+            foreach (var edge in new[] { new Vector2i(7, 5), new Vector2i(0, 5) })
+            {
+                var walls = maps.GetAnchoredEntities(gridUid, grid, edge).ToList();
+                Assert.That(walls.Any(uid => SEntMan.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == "CMUCavernBedrock"), Is.True);
+                Assert.That(walls.All(uid => !SEntMan.HasComponent<DamageableComponent>(uid)), Is.True,
+                    "The seal must survive mining, rather than become an exit into mapped terrain or void.");
+                var edgePosition = maps.GridTileToWorldPos(surface.Grid.Owner, surface.Grid.Comp, edge);
+                Assert.That(building.PrepareStoneForStair(surface.MapUid, surface.Grid.Owner, edgePosition,
+                    out _, singleTile: true), Is.False, "Landing preparation must not clear the seal.");
+            }
+
+            building.EnsureChunkAt((lower, stone), lower, new Vector2i(-1, 5));
+            Assert.That(maps.GetTileRef(gridUid, grid, new Vector2i(-1, 5)).Tile.IsEmpty, Is.True,
+                "Streaming must stop at the footprint instead of extending into void.");
+            Assert.That(building.PrepareStoneForStair(lower, gridUid, position, out var deeperGrid, singleTile: true), Is.True);
+            var deeper = SEntMan.GetComponent<TransformComponent>(deeperGrid).MapUid!.Value;
+            var deeperGridComp = SEntMan.GetComponent<MapGridComponent>(deeperGrid);
+            Assert.That(maps.GetAnchoredEntities(deeperGrid, deeperGridComp, new Vector2i(7, 5))
+                .Any(uid => SEntMan.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == "CMUCavernBedrock"), Is.True,
+                "Digging deeper must not provide a way around the seal.");
+            maps.SetTile(gridUid, grid, entrance, Tile.Empty);
+            building.EnsureChunkAt((lower, stone), lower, entrance);
+            Assert.That(maps.GetTileRef(gridUid, grid, entrance).Tile.IsEmpty, Is.True,
+                "Revisiting a clipped chunk must retain player excavation.");
+            SEntMan.DeleteEntity(deeper);
+            SEntMan.DeleteEntity(lower);
+        });
+    }
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity

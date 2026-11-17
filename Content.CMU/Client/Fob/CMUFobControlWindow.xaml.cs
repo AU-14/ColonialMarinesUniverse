@@ -40,6 +40,7 @@ public sealed partial class CMUFobControlWindow : DefaultWindow
         Deactivate.Disabled = !state.CanDeactivate;
         FirstGun.Text = GunLabel(state.Guns, 0);
         SecondGun.Text = GunLabel(state.Guns, 1);
+        ThirdGun.Text = GunLabel(state.Guns, 2);
         var hasJob = state.First.Length > 0 || state.Second.Length > 0;
         JobLabel.Text = Loc.GetString(state.NoRelayPair ? "cmu-fob-job-unavailable" : hasJob ? "cmu-fob-job-active"
             : state.JobTime > 0 ? "cmu-fob-job-next" : "cmu-fob-job-waiting", ("time", Clock(state.JobTime)));

@@ -73,6 +73,22 @@
 
 - type: entity
   parent: RMCMarineHelmetBase
+  id: AU14NRAT79
+  name: Type 79 Steel Helmet
+  description: A steel helmet manufactured for the Revolutionary Army's Soldiers. Features a leather liner for comfort and a reinforced brow plate for additional shrapnel protection.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/helmets/Type79.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/helmets/Type79.rsi
+  - type: CMArmor
+    melee: 25
+    bullet: 25
+    bio: 5
+    explosionArmor: 20
+  
+- type: entity
+  parent: RMCMarineHelmetBase
   id: AU14UPPPilot
   name: ZSh-7A
   description: A standard Soviet and Russian fighter pilot flight helmet developed in the late 1980s, Still issued to UPP pilots today.
@@ -81,3 +97,40 @@
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/UPP/helmets/upppilothelmet.rsi
+    
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14AltynCustom
+  name: Altyn-R2M Custom
+  description: An old earth design initially created for special forces and internal security to use in close quarters combat. Still worn by UPP forces after more than a century. This one has been custom painted with black and white paint.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/UPP/helmets/blackaltyn.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/UPP/helmets/blackaltyn.rsi
+  - type: ItemToggle
+    activated: true
+  - type: ToggleClothing
+    action: AU14ActionToggleAltynVisor
+  - type: ParasiteResistance
+    maxCount: 6
+  - type: RMCItemToggleClothingVisuals
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: icon-on}
+          False: {state: icon}
+  - type: Appearance
+  - type: HelmetAccessory
+    rsi:
+      sprite: CMU14/Clothing/UPP/helmets/blackaltyn.rsi
+      state: equipped-HELMET
+    toggledRsi:
+      sprite: CMU14/Clothing/UPP/helmets/blackaltyn.rsi
+      state: helmet-down
+  - type: CMArmor
+    melee: 35
+    bullet: 45
+    bio: 10
+    explosionArmor: 25

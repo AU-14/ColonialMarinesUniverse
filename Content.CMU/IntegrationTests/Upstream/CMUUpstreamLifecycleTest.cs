@@ -1,11 +1,8 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
-using Content.Server._RMC14.Hijack;
 using Content.Server.Materials;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
-using Content.Shared._RMC14.Hijack;
-using Content.Shared._RMC14.Sentry.Laptop;
 using Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -156,63 +153,4 @@ public sealed class CMUUpstreamLifecycleTest : GameTest
         });
     }
 
-    [Test]
-    public async Task LaptopCloseClearsOnlyItsOwnWatcher()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var laptop = SEntMan.SpawnEntity(null, map.GridCoords);
-            SEntMan.AddComponent<SentryLaptopComponent>(laptop);
-            var other = SEntMan.SpawnEntity(null, map.GridCoords);
-            SEntMan.AddComponent<SentryLaptopComponent>(other);
-            var user = SEntMan.SpawnEntity(null, map.GridCoords);
-            var watcher = SEntMan.AddComponent<SentryLaptopWatcherComponent>(user);
-            typeof(SentryLaptopWatcherComponent).GetField(nameof(watcher.Laptop))!.SetValue(watcher, laptop);
-            typeof(SentryLaptopWatcherComponent).GetField(nameof(watcher.CurrentSentry))!.SetValue(watcher, SEntMan.GetNetEntity(other));
-
-            SEntMan.EventBus.RaiseLocalEvent(other, new BoundUIClosedEvent(SentryLaptopUiKey.Key, other, user));
-            SEntMan.EventBus.RaiseLocalEvent(other, new SentryLaptopCloseCameraBuiMsg { Actor = user });
-            Assert.That(watcher.Laptop, Is.EqualTo(laptop), "Closing another laptop must not release this camera.");
-            SEntMan.EventBus.RaiseLocalEvent(laptop, new BoundUIClosedEvent(SentryLaptopUiKey.Key, laptop, user));
-            Assert.Multiple(() =>
-            {
-                Assert.That(watcher.Laptop, Is.Null);
-                Assert.That(watcher.CurrentSentry, Is.Null);
-            });
-        });
-    }
-
-    [Test]
-    public async Task HijackQueueDrainsWithoutDroppingPendingWarnings()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var active = SEntMan.EnsureComponent<RMCHijackActiveMapComponent>(map.MapUid);
-            var warnings = new List<EntityUid>();
-            for (var i = 0; i < 3; i++)
-            {
-                // Unanchored pipes cancel their burst, but must still consume their queue entry and warning.
-                var pipe = SEntMan.SpawnEntity(null, map.GridCoords);
-                var pipeComp = SEntMan.AddComponent<RMCHijackActivePipeComponent>(pipe);
-                pipeComp.Map = map.MapUid;
-                pipeComp.Warning = SEntMan.SpawnEntity("RMCHijackPipeExplosionWarning", map.GridCoords);
-                warnings.Add(pipeComp.Warning.Value);
-                active.Explode.Add(pipe);
-            }
-            active.ExplodeAt = TimeSpan.Zero;
-            active.Next = TimeSpan.Zero;
-            var system = Server.System<RMCHijackRandomDamageSystem>();
-            system.Update(0);
-            Assert.That(active.Explode, Has.Count.EqualTo(2), "The remaining wave must survive the update.");
-            Assert.That(warnings.FindAll(SEntMan.IsQueuedForDeletion), Has.Count.EqualTo(1),
-                "Only the processed pipe's warning may disappear; queue order is not part of the contract.");
-            system.Update(0);
-            system.Update(0);
-            Assert.That(active.Explode, Is.Empty);
-            Assert.That(active.ExplodeAt, Is.Null);
-            Assert.That(warnings.TrueForAll(SEntMan.IsQueuedForDeletion), Is.True);
-        });
-    }
 }

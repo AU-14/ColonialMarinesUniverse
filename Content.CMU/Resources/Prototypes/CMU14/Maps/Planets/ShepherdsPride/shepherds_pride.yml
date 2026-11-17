@@ -2,6 +2,8 @@
   id: AUPlanetShepherdsPride
   name: Shepherds' Pride
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: Spanish
   - type: RMCPlanetMapPrototype
     votename: "Shepherds' Pride"
     mapId: Sheperds
@@ -18,7 +20,6 @@
     platoonsOpfor:
     - UPP
     - HAZOPS
-    - ProdigySF
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: VAIPO
@@ -130,7 +131,6 @@
             AU14JobCivilianCorporateAssistant: [1, 1]
 
             AU14JobCivilianScientist: [4, 4]
-            AU14JobCorporateSynthetic: [1, 1]
             AU14JobWYGuard: [3, 3]
 
             # Security/LEO

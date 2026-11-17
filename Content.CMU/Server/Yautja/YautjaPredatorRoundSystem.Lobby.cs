@@ -159,6 +159,11 @@ public sealed partial class YautjaPredatorRoundSystem
         return true;
     }
 
+    private void OnHuntActiveQuery(ref YautjaHuntActiveQueryEvent ev)
+    {
+        ev.Active |= IsHuntActive();
+    }
+
     private bool IsHuntActive()
     {
         var query = QueryAllRules();
@@ -275,6 +280,7 @@ public sealed partial class YautjaPredatorRoundSystem
     {
         _rolledHunt = null;
         _huntReady.Clear();
+        _huntersThisRound.Clear();
         _roundStartHunters.Clear();
     }
 

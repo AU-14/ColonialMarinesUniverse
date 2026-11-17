@@ -197,6 +197,9 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
             hiddenActions = UpgradeHistoricalHiddenActions(orderComp.Id, order, clientActions);
         }
 
+        // CMU14: Early Warning Joe wheel abilities stay off the bar unless the saved order places them (a pin)
+        hiddenActions = HideUnpinnedWheelActions(clientActions, order, hiddenActions.Value);
+
         var allActions = ReconcileActionOrder(
             clientActions,
             order,

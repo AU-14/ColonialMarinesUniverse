@@ -1475,7 +1475,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack # CMU14: replaced RMCCableCoil30, thin LV cable
   entities:
   - uid: 316
     components:

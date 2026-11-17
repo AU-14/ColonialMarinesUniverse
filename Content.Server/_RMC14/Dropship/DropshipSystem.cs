@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Server.CMU14.Dropship.TacticalLand;
 using Content.Server.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Dropship.DirectFire; // CMU14
+using Content.Shared.CMU14.Dropship.Exchange; // CMU14
 using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
 using Content.Shared.CMU14.Dropship.Integrity;
@@ -942,6 +943,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         var tacticalHoverActive = HasComp<DropshipTacticalHoverComponent>(grid);
         TryComp(computer, out GunshipControlsComponent? gunshipControls); // CMU14: firearm toggle state
         TryComp(grid, out DropshipIntegrityComponent? shipIntegrity); // CMU14: master alarm mute state
+        TryComp(grid, out CMUDropshipMohawkExchangeComponent? mohawkExchange); // CMU14: gunship-for-mohawk exchange offer
 
         if (tacticalHoverActive ||
             !TryComp(grid, out FTLComponent? ftl) ||
@@ -1037,7 +1039,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                                     (HasComp<RMCPlanetComponent>(gridXform.MapUid.Value) || HasComp<RMCPlanetComponent>(grid));
             }
 
-            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, tacticalHoverActive, gunshipControls != null, gunshipControls?.Armed ?? false, shipIntegrity != null, shipIntegrity?.MasterAlarmSilenced ?? false); // CMU14: firearm + alarm state
+            // CMU14: the exchange is only offered while parked on the round-start pad
+            var canExchangeMohawk = mohawkExchange is { Parked: true, Departing: false } && !tacticalHoverActive;
+            var state = new DropshipNavigationDestinationsBuiState(flyBy, destinations, doorLockStatus, computer.Comp.RemoteControl, canTacticalLand, computer.Comp.LaunchAlarmStatus, canWithdrawReturn, tacticalHoverActive, gunshipControls != null, gunshipControls?.Armed ?? false, shipIntegrity != null, shipIntegrity?.MasterAlarmSilenced ?? false, canExchangeMohawk, mohawkExchange?.Pending ?? false); // CMU14: firearm + alarm + exchange state
             _ui.SetUiState(computer.Owner, DropshipNavigationUiKey.Key, state);
             return;
         }

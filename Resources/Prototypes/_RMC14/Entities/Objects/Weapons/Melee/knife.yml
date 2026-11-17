@@ -79,6 +79,7 @@
   - type: Tool
     qualities:
     - Cutting
+    - Slicing # CMU14: retain the base knife's slicing capability.
     speedModifier: 0.8
     useSound:
       path: /Audio/Items/wirecutter.ogg

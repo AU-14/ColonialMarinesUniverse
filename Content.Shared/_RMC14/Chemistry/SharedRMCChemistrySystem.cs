@@ -260,7 +260,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
             slot.ContainerSlot?.ContainedEntity is not { } contained ||
             !_solution.TryGetMixableSolution(contained, out var solutionEnt, out _) ||
             !ent.Comp.Reagents.Contains(args.Reagent) ||
-            !TryGetStorage(ent.Comp.Network, out var storage))
+            !TryGetStorage(ent, out var storage)) // CMU14: use the dispenser's ship/deck supply network.
         {
             return;
         }
@@ -283,7 +283,8 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
         _solution.TryAddReagent(solutionEnt.Value, args.Reagent, ent.Comp.DispenseSetting);
     }
 
-    public bool TryGetStorage(EntProtoId network, out Entity<RMCChemicalStorageComponent> storage)
+    // CMU14: matching network IDs on unrelated ships or colonies are separate supplies.
+    public bool TryGetStorage(Entity<RMCChemicalDispenserComponent> dispenser, out Entity<RMCChemicalStorageComponent> storage)
     {
         var storages = EntityQueryEnumerator<RMCChemicalStorageComponent>();
         while (storages.MoveNext(out var storageId, out var storageComp))
@@ -291,7 +292,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
             if (IsClientSide(storageId))
                 continue;
 
-            if (storageComp.Network == network)
+            if (storageComp.Network == dispenser.Comp.Network && CMUShareChemicalSupply(storageId, dispenser)) // CMU14
             {
                 storage = (storageId, storageComp);
                 return true;
@@ -310,10 +311,10 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
         var dispensers = EntityQueryEnumerator<RMCChemicalDispenserComponent>();
         while (dispensers.MoveNext(out var dispenserId, out var dispenserComp))
         {
-            if (dispenserComp.Network != storage.Comp.Network)
+            if (dispenserComp.Network != storage.Comp.Network || !CMUShareChemicalSupply(storage, dispenserId)) // CMU14
                 continue;
 
-            dispenserComp.Energy = energy;
+            dispenserComp.Energy = storage.Comp.Energy; // CMU14: replicate the clamped authoritative value.
             Dirty(dispenserId, dispenserComp);
         }
     }
@@ -337,17 +338,17 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
             storage.RechargeAt = time + storage.RechargeEvery;
             Dirty(storageId, storage);
 
-            var storageTransform = Transform(storageId);
-
+            // CMU14 Chemical Supply Begin: use one ownership rule for drawing and recharging.
+            // var storageTransform = Transform(storageId);
             _dispensers.Clear();
             var dispensers = EntityQueryEnumerator<RMCChemicalDispenserComponent>();
             while (dispensers.MoveNext(out var dispenserId, out var dispenser))
             {
-                var dispenserTransform = Transform(dispenserId);
-
-                if (dispenser.Network == storage.Network && storageTransform.GridUid == dispenserTransform.GridUid)
+                // var dispenserTransform = Transform(dispenserId);
+                if (dispenser.Network == storage.Network && CMUShareChemicalSupply(storageId, dispenserId))
                     _dispensers.Add((dispenserId, dispenser));
             }
+            // CMU14 End
 
             storage.MaxEnergy = storage.BaseMax + storage.MaxPer * _dispensers.Count;
             storage.Recharge = storage.BaseRecharge + storage.RechargePer * _dispensers.Count;

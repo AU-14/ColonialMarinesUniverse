@@ -45,7 +45,8 @@ public sealed record YautjaClanResolution(
     int Honor,
     YautjaWhitelistFlags WhitelistFlags);
 
-// rank rules live in YautjaClanHallPolicy, this is just the shared bits
+// rank rules live in YautjaClanHallPolicy, this is just the shared bits. Leader and Ancient aren't in the
+// assignable list, they only come from the Leader and Council whitelists
 public static class YautjaClanPolicy
 {
     private static readonly YautjaRank[] NormalAssignableRanks =
@@ -54,7 +55,6 @@ public static class YautjaClanPolicy
         YautjaRank.Blooded,
         YautjaRank.Elite,
         YautjaRank.Elder,
-        YautjaRank.Leader,
     ];
 
     public static IReadOnlyList<YautjaRank> GetNormalAssignableRanks()

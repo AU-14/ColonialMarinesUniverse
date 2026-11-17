@@ -1443,8 +1443,10 @@ public sealed partial class DropshipTacticalLandSystem
             if (!_zLevels.TryMapOffset(mapUid, offset, out var lower))
                 return false;
 
-            if (TryComp(lower.Value.Owner, out MapGridComponent? grid)
-                && _map.TryGetTileRef(lower.Value.Owner, grid, worldPosition, out _))
+            var coordinates = new MapCoordinates(worldPosition, Transform(lower.Value.Owner).MapID);
+            if (_map.TryFindGridAt(coordinates, out var gridUid, out var grid) &&
+                _map.TryGetTileRef(gridUid, grid, _map.WorldToTile(gridUid, grid, worldPosition), out var tile) &&
+                !tile.Tile.IsEmpty)
                 return true;
         }
     }

@@ -232,7 +232,7 @@
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCCutter
   name: cutting machine
-  description: "Cuts rods into fasteners, glass into tubes and silicon into wafers."
+  description: "Cuts rods into fasteners and silicon into wafers. Select the glass output with the circuit setting: 0 for small beakers, 1 for large beakers, or 2 for electronics kits."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/cutter.rsi
@@ -251,6 +251,7 @@
   - type: ActivatableUIRequiresPower
   - type: RecipeMachine
     kind: cutter
+    maxCircuit: 2
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
@@ -781,7 +782,24 @@
     ports:
     - id: liquid_in
       rate: 8
-    - id: liquid_out
+    - id: hydrogen_out
+      kind: Hydrogen
+      output: true
+      rate: 8
+    - id: oxygen_out
+      kind: Oxygen
+      output: true
+      rate: 8
+    - id: chlorine_out
+      kind: Chlorine
+      output: true
+      rate: 8
+    - id: caustic_out
+      kind: SodiumHydroxide
+      output: true
+      rate: 8
+    - id: mercury_out
+      kind: Mercury
       output: true
       rate: 8
     - id: salt_in
@@ -1078,7 +1096,7 @@
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
   id: RUMCTannery
   name: tannery
-  description: "Tans hides in water with chrome powder into leather, and cuts leather into boots and gloves."
+  description: "Tans hides from butchered cows in water with chrome powder into leather, and cuts leather into boots and gloves."
   components:
   - type: Sprite
     sprite: CMU14/Production/Electric/tannery.rsi

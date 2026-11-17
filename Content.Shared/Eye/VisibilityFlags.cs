@@ -14,6 +14,7 @@ namespace Content.Shared.Eye
         Rider = 1 << 12, // CMU14: seize spectator/ghost proxy.
         ImaginaryFriend = 1 << 13,
         Yautja = 1 << 14, // CMU14: Yautja-only hunting equipment.
+        XenoBuildMark = 1 << 4, // CMU14: keep existing visibility assignments.
         Xeno = 1 << 15,
     }
 }

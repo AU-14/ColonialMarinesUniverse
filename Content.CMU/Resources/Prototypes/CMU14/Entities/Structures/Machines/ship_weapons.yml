@@ -88,7 +88,7 @@
     state: smoke2
     color: "#adadad"
   - type: TimedDespawn
-    lifetime: 30
+    lifetime: 60
   - type: Tag
     tags:
     - HideContextMenu
@@ -121,8 +121,8 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: RMCDazed
-    visionReduction: 0 # 0.15
-    alpha: 0 #0.3
+    visionReduction: 0.2 # 0.15
+    alpha: 0.4 #0.3
     color: "#75963c"
 
 - type: entity
@@ -133,7 +133,7 @@
   - type: Sprite
     color: "#88cce8"
   - type: TimedDespawn
-    lifetime: 30
+    lifetime: 60
 
 - type: entity
   parent: StatusEffectStunned
@@ -191,14 +191,17 @@
   name: cmu-ship-weapons-gas
   cloud: CMUShipWeaponGas
   cloudRadius: 30
+  cloudMaxRadius: 45
+  fieldDuration: 60
 
 - type: cmuShipWeapon
   id: CMUEMSStrike
   name: cmu-ship-weapons-ems
   cloud: CMUShipWeaponEmsCloud
   cloudRadius: 30
+  cloudMaxRadius: 45
   ems: true
-  fieldDuration: 30
+  fieldDuration: 60
   stunAfterField: 35
 
 - type: cmuShipWeapon
@@ -206,6 +209,8 @@
   name: cmu-ship-weapons-smoke
   cloud: CMUShipWeaponSmoke
   cloudRadius: 30
+  cloudMaxRadius: 45
+  fieldDuration: 60
 
 - type: cmuShipWeapon
   id: CMUAirburstStrike

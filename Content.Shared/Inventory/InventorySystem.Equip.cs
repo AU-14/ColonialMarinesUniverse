@@ -101,6 +101,9 @@ public abstract partial class InventorySystem
         // unequip the item.
         if (itemUid != null)
         {
+            if (CMUTryRetrieveVestSling(actor, ev.Slot, itemUid))
+                return;
+
             if (_rmcHands.TryStorageEjectHand(actor, itemUid.Value))
                 return;
 
@@ -295,6 +298,12 @@ public abstract partial class InventorySystem
             return false;
 
         DebugTools.Assert(slotDefinition.Name == slot);
+        if (CMURejectVestSlingSuitStorage(itemUid, slot))
+        {
+            reason = "inventory-component-can-equip-does-not-fit";
+            return false;
+        }
+
         if (slotDefinition.DependsOn != null && !CMUHasIndependentSuitStorage(itemUid, slot)) // CMU14: an attached sling supports the weapon without armor.
         {
             if (!TryGetSlotEntity(target, slotDefinition.DependsOn, out EntityUid? slotEntity, inventory))
@@ -318,8 +327,10 @@ public abstract partial class InventorySystem
         var fittingInPocket = slotDefinition.SlotFlags.HasFlag(SlotFlags.POCKET) &&
                               item != null &&
                               _item.GetSizePrototype(item.Size) <= _item.GetSizePrototype(PocketableItemSize);
-        if (clothing == null && !fittingInPocket
-            || clothing != null && !clothing.Slots.HasFlag(slotDefinition.SlotFlags) && !fittingInPocket)
+        var vestSling = CMUCanEquipVestSling(itemUid, slot);
+        if (!vestSling &&
+            (clothing == null && !fittingInPocket
+             || clothing != null && !clothing.Slots.HasFlag(slotDefinition.SlotFlags) && !fittingInPocket))
         {
             reason = "inventory-component-can-equip-does-not-fit";
             return false;

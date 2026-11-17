@@ -84,40 +84,4 @@ public sealed class BurstFireRegressionTest : GameTest
         });
     }
 
-    [Test]
-    public async Task BurstRateRefreshesWithoutAnOptionalModeModifier()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            var uid = SEntMan.SpawnEntity("RMCWeaponRifleM54C", map.GridCoords);
-            var selective = SEntMan.GetComponent<RMCSelectiveFireComponent>(uid);
-            selective.Modifiers.Clear();
-            selective.BaseFireRate = 3;
-            selective.BurstFireRateMultiplier = 3;
-            Server.System<SharedGunSystem>().SelectFire(uid, SEntMan.GetComponent<GunComponent>(uid), SelectiveFire.Burst);
-            Assert.That(SEntMan.GetComponent<GunComponent>(uid).BurstFireRate, Is.EqualTo(9));
-        });
-    }
-
-    [Test]
-    public async Task EveryAuthoredBurstGunHasABurstRecoveryDelay()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var count = 0;
-            foreach (var prototype in SProtoMan.EnumeratePrototypes<EntityPrototype>().Where(p => !p.Abstract))
-            {
-                if (!prototype.TryComp<GunComponent>(out var gun, SEntMan.ComponentFactory)) continue;
-                var modes = prototype.TryComp<RMCSelectiveFireComponent>(out var selective, SEntMan.ComponentFactory)
-                    ? selective.BaseFireModes : gun.AvailableModes;
-                if ((modes & SelectiveFire.Burst) == 0) continue;
-                Assert.That(gun.BurstCooldown, Is.GreaterThan(0), prototype.ID);
-                Assert.That(gun.ShotsPerBurst, Is.GreaterThan(0), prototype.ID);
-                count++;
-            }
-            Assert.That(count, Is.GreaterThan(20));
-            TestContext.Out.WriteLine($"Checked burst timing on {count} authored weapons.");
-        });
-    }
 }

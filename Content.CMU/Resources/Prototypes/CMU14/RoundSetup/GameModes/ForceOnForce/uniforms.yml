@@ -64,18 +64,6 @@
   - AU14HAZOPUrbanFatigues
 
 - type: forceOnForceUniform
-  id: ProdigySF
-  uniforms:
-  - AU14ProdigyFatigues
-  - AU14ProdigyFatiguesRU
-  - AU14ProdigyFatiguesRUSynth
-  - CMU14ProdigySuitBlackSkirt
-  - CMU14ProdigySuitGreySkirt
-  - CMU14ProdigySuitBlack
-  - CMU14ProdigySuitGrey
-  - CMU14ProdigyJumpsuitGrey
-
-- type: forceOnForceUniform
   id: VAIPO
   uniforms:
   - AU14JumpsuitTShirtGrayVAIMAR40

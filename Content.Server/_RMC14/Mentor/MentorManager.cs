@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
-using Content.Server.CMU14.HelpRelay;
+using Content.Server.CMU14.HelpRelay.Systems;
 using Content.Server.Database;
 using Content.Server.GameTicking;
 using Content.Server.Players.RateLimiting;
@@ -15,7 +15,7 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
-using Content.Shared.CMU14.BugHelp; // CMU14: anonymity alias for Discord relay surfaces
+using Content.Shared.CMU14.HelpRelay.BugHelp; // CMU14: anonymity alias for Discord relay surfaces
 using Content.Shared.Players.RateLimiting;
 using Content.Shared.Roles;
 using Robust.Server.Player;

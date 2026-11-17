@@ -7,9 +7,10 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
-    ///     URL of the Discord webhook that receives all help relay traffic (ahelp/mhelp/bughelp)
-    ///     unless a per-source override is set. Empty disables Discord delivery for sources without
-    ///     an override; the in-game flows keep working.
+    ///     URL of the Discord webhook that receives ahelp and mhelp traffic unless a per-source
+    ///     override is set. Bughelp never uses it: bug posts need forum threads, which require
+    ///     <c>cmu.help_relay_webhook_bughelp</c>. Empty disables Discord delivery for sources
+    ///     without an override; the in-game flows keep working.
     /// </summary>
     public static readonly CVarDef<string> HelpRelayWebhook =
         CVarDef.Create("cmu.help_relay_webhook", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
@@ -31,8 +32,10 @@ public sealed partial class CCVars
 
     /// <summary>
     ///     Per-source override of <c>cmu.help_relay_webhook</c> for ahelp traffic. Empty falls through
-    ///     to the primary webhook. Ahelp traffic still originates from the ahelp relay; this is the
-    ///     R3 channel-split knob, kept here so no code changes when the split happens.
+    ///     to the primary webhook for relay-delivered sources. Ahelp itself rides upstream's
+    ///     BwoinkSystem Discord relay: a CMU14-tagged hook there makes this override win over
+    ///     <c>discord_ahelp_webhook</c> when set, so ops can split ahelp onto its own channel.
+    ///     Must be a text-channel webhook; the upstream relay posts plain messages, not threads.
     /// </summary>
     public static readonly CVarDef<string> HelpRelayWebhookAHelp =
         CVarDef.Create("cmu.help_relay_webhook_ahelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
@@ -45,11 +48,39 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.help_relay_webhook_mhelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
 
     /// <summary>
-    ///     URL of the Discord webhook for bug reports. Empty falls through to
-    ///     the primary webhook; both empty disables the bughelp command.
+    ///     URL of the Discord webhook for bug reports. Must be a forum-channel webhook; the
+    ///     primary chat webhook cannot carry threads, so this never falls through. Empty
+    ///     disables the bughelp command.
     /// </summary>
     public static readonly CVarDef<string> HelpRelayWebhookBugHelp =
         CVarDef.Create("cmu.help_relay_webhook_bughelp", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /// <summary>
+    ///     URL of the Discord webhook that receives the round's station news at round end: one forum
+    ///     thread per round, one message per article inside it. Must be a forum-channel webhook; the
+    ///     primary chat webhook cannot carry threads, so this never falls through. Empty disables
+    ///     news delivery. Upstream's <c>discord.news_webhook</c> path stays dormant either way; this
+    ///     is the CMU replacement for it.
+    /// </summary>
+    public static readonly CVarDef<string> HelpRelayWebhookNews =
+        CVarDef.Create("cmu.help_relay_webhook_news", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /// <summary>
+    ///     URL of the Discord webhook that receives server-side error logs: every Error and Fatal
+    ///     log line the server emits, plus Info-and-up traffic from sawmills named in
+    ///     <c>cmu.help_relay_errors_sawmills</c>. Must be a text-channel webhook; this never falls
+    ///     through to the primary webhook, it serves its own channel. Empty disables the relay.
+    /// </summary>
+    public static readonly CVarDef<string> HelpRelayWebhookErrors =
+        CVarDef.Create("cmu.help_relay_webhook_errors", string.Empty, CVar.SERVERONLY | CVar.CONFIDENTIAL);
+
+    /// <summary>
+    ///     Sawmills whose logs mirror to the error channel at every level from info up, comma
+    ///     separated. Entries match the sawmill and its children (<c>eng</c> also matches
+    ///     <c>eng.net</c>). Empty mirrors nothing below the default Error threshold.
+    /// </summary>
+    public static readonly CVarDef<string> HelpRelayErrorsSawmills =
+        CVarDef.Create("cmu.help_relay_errors_sawmills", string.Empty, CVar.SERVERONLY);
 
     /// <summary>
     ///     Forum tag ids for bughelp report categories, grammar <c>code:&lt;id&gt;,mapping:&lt;id&gt;</c>.

@@ -1,10 +1,23 @@
 using Content.Shared.Climbing.Components;
+using Content.Shared.Physics;
 
 namespace Content.Shared.Climbing.Systems;
 
 public sealed partial class ClimbSystem
 {
     private readonly Queue<Entity<ClimbingComponent>> _cmuPendingClimbEnds = new();
+
+    private bool CMUClimbPathClear(EntityUid climber, EntityUid target)
+    {
+        // Interaction reach can stop at the surface's near edge. The transition moves
+        // to its center, so check that whole path without wall-mounted interaction exemptions.
+        return _interactionSystem.InRangeUnobstructed(
+            _xformSystem.GetMapCoordinates(climber),
+            _xformSystem.GetMapCoordinates(target),
+            range: 0,
+            collisionMask: CollisionGroup.Impassable | CollisionGroup.HighImpassable,
+            predicate: entity => entity == climber || entity == target);
+    }
 
     private void QueueCMUClimbEnd(EntityUid uid, ClimbingComponent climbing)
     {

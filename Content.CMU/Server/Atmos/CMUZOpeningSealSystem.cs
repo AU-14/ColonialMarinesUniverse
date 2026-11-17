@@ -230,20 +230,22 @@ public sealed class CMUZOpeningSealSystem : EntitySystem
             if (member is not { } map)
                 continue;
 
+            InvalidateOpenings(map);
             var children = Transform(map).ChildEnumerator;
             while (children.MoveNext(out var grid))
-            {
-                if (!_gridAtmosQuery.TryComp(grid, out var atmos))
-                    continue;
+                InvalidateOpenings(grid);
+        }
+    }
 
-                foreach (var (indices, tile) in atmos.Tiles)
-                {
-                    if (tile.NoGridTile || !tile.MapAtmosphere)
-                        continue;
+    private void InvalidateOpenings(EntityUid grid)
+    {
+        if (!_gridAtmosQuery.TryComp(grid, out var atmos))
+            return;
 
-                    _atmosphere.InvalidateTile((grid, atmos), indices);
-                }
-            }
+        foreach (var (indices, tile) in atmos.Tiles)
+        {
+            if (!tile.NoGridTile && tile.MapAtmosphere)
+                _atmosphere.InvalidateTile((grid, atmos), indices);
         }
     }
 

@@ -125,6 +125,9 @@ ent-CMUYautjaGreavesUniqueRonin = ronin unique clan greaves
 ent-CMUYautjaBracer = hunting bracer
     .desc = A heavy wrist computer packed with alien hunting tools.
 
+ent-CMUYautjaResearchBracer = { ent-CMUYautjaBracer }
+    .desc = { ent-CMUYautjaBracer.desc }
+
 ent-CMUYautjaBadBloodBracer = scavenged hunting bracer
     .desc = A worn hunting bracer, crudely maintained. Its weapon bay has been damaged. A communicator has been wired directly into the bracer.
 
@@ -1052,8 +1055,8 @@ ent-CMUYautjaLarvaPeltTrophy = Larva pelt
 ent-CMUYautjaAbominationPeltTrophy = Abomination pelt
     .desc = The pelt of a mysterious hybrid xenomorph, a horror on the field.
 
-ent-CMUYautjaHumanHide = flayed hide
-    .desc = A sheet of human hide removed during Yautja butchery.
+ent-CMUYautjaHumanHide = human skin
+    .desc = The by-product of human farming.
 
 ent-CMUYautjaHumanSpine = skull
     .desc = A bone that appears to be of human origin.

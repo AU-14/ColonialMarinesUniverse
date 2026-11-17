@@ -370,6 +370,7 @@
       visible: false
   - type: XenoStrain
     name: rmc-xeno-maid-name
+    baseCaste: CMXenoQueen # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-maid-description
     popup: rmc-xeno-maid-popup
   - type: OwOAccent

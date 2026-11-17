@@ -22,6 +22,7 @@ public sealed partial class YautjaGearRackAccessSystem : EntitySystem
     private static readonly ProtoId<AccessLevelPrototype> YautjaBadBloodAccess = "CMUAccessYautjaBadBlood";
     private static readonly ProtoId<JobPrototype> HunterJob = "CMUYautjaHunter";
     private static readonly ProtoId<JobPrototype> YoungbloodJob = "CMUYautjaYoungblood";
+    private static readonly ProtoId<JobPrototype> AncientJob = "CMUYautjaAncient";
 
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private SharedJobSystem _job = default!;
@@ -34,13 +35,13 @@ public sealed partial class YautjaGearRackAccessSystem : EntitySystem
         {
             YautjaGearRackKind.Adult => DenyIfMissingAccessThenWrongRole(
                 HasRackAccess(user, YautjaRank.Blooded),
-                HasJob(user, HunterJob)),
+                IsAdultHunter(user)),
             YautjaGearRackKind.Youngblood => DenyIfMissingAccessThenWrongRole(
                 HasRackAccess(user, YautjaRank.YoungBlood),
-                HasJob(user, YoungbloodJob) || HasJob(user, HunterJob)),
+                HasJob(user, YoungbloodJob) || IsAdultHunter(user)),
             YautjaGearRackKind.Elder => DenyIfMissingAccessThenWrongRole(
                 HasRackAccess(user, YautjaRank.Elder),
-                HasJob(user, HunterJob)),
+                IsAdultHunter(user)),
             YautjaGearRackKind.Thrall => HasComp<YautjaThrallComponent>(user)
                 ? null
                 : "cm-vending-machine-access-denied",
@@ -90,6 +91,13 @@ public sealed partial class YautjaGearRackAccessSystem : EntitySystem
         }
 
         return false;
+    }
+
+    // the ancient slot is its own job so it can skip the hunt cap, but it's a hunter in every other way.
+    // without this every rack told ancients they had the wrong role
+    private bool IsAdultHunter(EntityUid user)
+    {
+        return HasJob(user, HunterJob) || HasJob(user, AncientJob);
     }
 
     private bool HasJob(EntityUid user, ProtoId<JobPrototype> job)

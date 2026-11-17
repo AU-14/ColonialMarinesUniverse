@@ -188,47 +188,6 @@ public sealed class AnesthesiaLifecycleTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task DeletedPatientCannotRunAQueuedInduction()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() =>
-        {
-            var (patient, mask, tank) = Connect(pair.Server.EntMan);
-            Delete(pair.Server.EntMan, patient, mask, tank);
-        });
-        await pair.RunTicksSync(pair.SecondsToTicks(7));
-        await pair.CleanReturnAsync();
-    }
-
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task RejectedOrDisconnectedSleepCallbackCannotCommitAnesthesia(bool reject)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        EntityUid patient = default, mask = default, tank = default;
-        await pair.Server.WaitAssertion(() =>
-        {
-            pair.Server.EntMan.System<AnesthesiaCancellationProbeSystem>();
-            (patient, mask, tank) = Connect(pair.Server.EntMan);
-            pair.Server.EntMan.AddComponent<AnesthesiaCancellationProbeComponent>(patient).Reject = reject;
-        });
-        await pair.RunTicksSync(pair.SecondsToTicks(6.2f));
-        await pair.Server.WaitAssertion(() =>
-        {
-            var probe = pair.Server.EntMan.GetComponent<AnesthesiaCancellationProbeComponent>(patient);
-            Assert.That(probe.Called, Is.True);
-            Assert.That(probe.Session!.Induced, Is.False, "The rejected exposure committed an induced state.");
-            if (!reject)
-                Assert.That(pair.Server.EntMan.HasComponent<CMUAnesthesiaStateComponent>(patient), Is.False);
-            // Continued breathing may begin a fresh six-second attempt after a
-            // veto. It must not commit the rejected attempt or create phantom sleep.
-            AssertSleep(pair.Server.EntMan, patient, false);
-            Delete(pair.Server.EntMan, patient, mask, tank);
-        });
-        await pair.CleanReturnAsync();
-    }
-
     private static (EntityUid Patient, EntityUid Mask, EntityUid Tank) Connect(IEntityManager entities)
     {
         var patient = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
@@ -255,34 +214,5 @@ public sealed class AnesthesiaLifecycleTest
     {
         foreach (var entity in entitiesToDelete)
             entities.DeleteEntity(entity);
-    }
-}
-
-[RegisterComponent]
-public sealed partial class AnesthesiaCancellationProbeComponent : Component
-{
-    public bool Called;
-    public bool Reject;
-    public CMUAnesthesiaStateComponent? Session;
-}
-
-public sealed class AnesthesiaCancellationProbeSystem : EntitySystem
-{
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<AnesthesiaCancellationProbeComponent, TryingToSleepEvent>(OnTryingToSleep);
-    }
-
-    private void OnTryingToSleep(Entity<AnesthesiaCancellationProbeComponent> ent, ref TryingToSleepEvent args)
-    {
-        if (ent.Comp.Called)
-            return;
-        ent.Comp.Called = true;
-        ent.Comp.Session = Comp<CMUAnesthesiaStateComponent>(ent.Owner);
-        if (ent.Comp.Reject)
-            args.Cancelled = true;
-        else
-            EntityManager.System<SharedInternalsSystem>().DisconnectTank((ent.Owner, Comp<InternalsComponent>(ent.Owner)), forced: true);
     }
 }

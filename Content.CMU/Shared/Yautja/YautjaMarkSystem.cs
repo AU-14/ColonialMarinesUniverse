@@ -52,6 +52,7 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         SubscribeLocalEvent<NewXenoEvolvedEvent>(OnNewXenoEvolved);
         SubscribeLocalEvent<XenoDevolvedEvent>(OnXenoDevolved);
         SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
+        SubscribeLocalEvent<YautjaMarkComponent, ExaminedEvent>(OnMarkExamined);
 
         Subs.BuiEvents<YautjaBracerComponent>(YautjaMarkUIKey.Key, subs =>
         {
@@ -60,6 +61,63 @@ public sealed partial class YautjaMarkSystem : EntitySystem
             subs.Event<YautjaMarkPanelUnmarkMsg>(OnUnmarkMsg);
             subs.Event<YautjaMarkPanelChangeMsg>(OnChangeMsg);
         });
+    }
+
+    // cmss13 human examine.dm: hunters (and ghosts) see who claimed a target, so nobody kills someone else's prey
+    private void OnMarkExamined(Entity<YautjaMarkComponent> ent, ref ExaminedEvent args)
+    {
+        if (ent.Comp.Marks.Count == 0 || !CanReadMarks(args.Examiner))
+            return;
+
+        using (args.PushGroup(nameof(YautjaMarkSystem)))
+        {
+            foreach (var kind in ExamineOrder)
+            {
+                if (!ent.Comp.Marks.TryGetValue(kind, out var hunter))
+                    continue;
+
+                var reason = ent.Comp.Reasons.GetValueOrDefault(kind) ?? string.Empty;
+                var hunterName = Exists(hunter) ? Name(hunter) : Loc.GetString("cmu-yautja-mark-examine-unknown-hunter");
+                args.PushMarkup(Loc.GetString(GetExamineText(kind),
+                    ("target", ent.Owner),
+                    ("hunter", hunterName),
+                    ("reason", reason),
+                    ("hasReason", string.IsNullOrWhiteSpace(reason) ? "no" : "yes")));
+            }
+        }
+    }
+
+    private static readonly YautjaMarkKind[] ExamineOrder =
+    {
+        YautjaMarkKind.Prey,
+        YautjaMarkKind.Dishonored,
+        YautjaMarkKind.Honored,
+        YautjaMarkKind.Thrall,
+        YautjaMarkKind.GearCarrier,
+        YautjaMarkKind.Student,
+        YautjaMarkKind.Blooded,
+    };
+
+    private bool CanReadMarks(EntityUid examiner)
+    {
+        return HasComp<YautjaComponent>(examiner) ||
+               HasComp<YautjaTechAuthorizedComponent>(examiner) ||
+               HasComp<GhostComponent>(examiner);
+    }
+
+    private static string GetExamineText(YautjaMarkKind kind)
+    {
+        return kind switch
+        {
+            YautjaMarkKind.Prey => "cmu-yautja-mark-examine-prey",
+            YautjaMarkKind.Honored => "cmu-yautja-mark-examine-honored",
+            YautjaMarkKind.Dishonored => "cmu-yautja-mark-examine-dishonored",
+            YautjaMarkKind.GearCarrier => "cmu-yautja-mark-examine-gear-carrier",
+            YautjaMarkKind.Thrall => "cmu-yautja-mark-examine-thrall",
+            YautjaMarkKind.Student => "cmu-yautja-mark-examine-student",
+            YautjaMarkKind.Blooded => "cmu-yautja-mark-examine-blooded",
+            _ => "cmu-yautja-mark-examine-prey",
+        };
     }
 
     private void OnNewXenoEvolved(ref NewXenoEvolvedEvent args)

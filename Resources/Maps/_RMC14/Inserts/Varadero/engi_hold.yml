@@ -888,7 +888,7 @@ entities:
       parent: 1
     - type: Fixtures
       fixtures: {}
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack # CMU14: replaced RMCCableCoil30, thin LV cable
   entities:
   - uid: 179
     components:

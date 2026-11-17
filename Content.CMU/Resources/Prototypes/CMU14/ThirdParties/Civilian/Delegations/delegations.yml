@@ -1,0 +1,1152 @@
+# Embassy staff sent by an ambassador: an aide to handle the paperwork and a press secretary to speak for the
+# embassy. They speak the ambassador's languages, the colony's and English, and default to the ambassador's.
+
+# jobs
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobEmbassyAide
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: EmbassyAide
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUEmbassyAideOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-embassy-aide
+  description: cmu-job-description-embassy-aide
+  playTimeTracker: CMUJobEmbassyAide
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearEmbassyAide
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobEmbassyAide
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobEmbassyPressSecretary
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: EmbassyPressSecretary
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUEmbassyPressSecretaryOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  - type: CMUExtraLanguages
+    languages:
+    - English
+  name: cmu-job-name-embassy-press-secretary
+  description: cmu-job-description-embassy-press-secretary
+  playTimeTracker: CMUJobEmbassyPressSecretary
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearEmbassyPressSecretary
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobEmbassyPressSecretary
+  isHumanoid: true
+
+# gear
+
+- type: startingGear
+  id: CMUGearEmbassyAide
+  equipment:
+    id: CMUIDCardEmbassyAide
+    jumpsuit: CMJumpsuitLiaisonCorporateFormal
+    ears: CMHeadsetColony
+    pocket1: CMUMobilePhone
+    pocket2: RMCPouchDocument
+    belt: CMClipboard
+  inhand:
+  - RMCBriefcasePaperPen
+
+- type: entity
+  id: CMUEmbassyAideOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - RMCJacketCorporateBlue
+      - RMCJacketCorporateKhaki
+      shoes:
+      - RMCShoesLaceup
+      - RMCShoesFancyLeather
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardEmbassyAide
+  name: embassy aide ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobEmbassyAide
+
+- type: startingGear
+  id: CMUGearEmbassyPressSecretary
+  equipment:
+    id: CMUIDCardEmbassyPressSecretary
+    jumpsuit: CMJumpsuitLiaisonCorporateFormal
+    ears: CMHeadsetColony
+    pocket1: CMUMobilePhone
+    pocket2: RMCPouchDocument
+    back: CMSatchel
+  storage:
+    back:
+    - CMUPhotoCamera
+    - CMUCameraFilm
+    - CMUCameraFilm
+    - BoxFolderBlue
+    - Pen
+  inhand:
+  - RMCMegaphone
+
+- type: entity
+  id: CMUEmbassyPressSecretaryOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - RMCJacketCorporateKhaki
+      - RMCJacketCorporateBlue
+      shoes:
+      - RMCShoesLaceup
+      - RMCShoesFancyLeather
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardEmbassyPressSecretary
+  name: embassy press secretary ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobEmbassyPressSecretary
+
+# ghost roles
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobEmbassyAide
+  name: Embassy Aide
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Embassy Aide
+    description: "You are an aide sent by your faction's embassy. Support the ambassador who called you: carry their messages, handle their paperwork and speak for them when they cannot."
+    reregister: false
+    job: CMUJobEmbassyAide
+    raffle:
+      settings: short
+    rules: "You are a civilian diplomat. Negotiate and report; you are not a combatant."
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobEmbassyPressSecretary
+  name: Embassy Press Secretary
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Embassy Press Secretary
+    description: "You are the press secretary of your faction's embassy. Speak to the colony and the press for the ambassador who called you, and make sure your faction's side of the story is heard."
+    reregister: false
+    job: CMUJobEmbassyPressSecretary
+    raffle:
+      settings: short
+    rules: "You are a civilian spokesperson. Talk, announce and spin; you are not a combatant."
+
+# party
+
+- type: partySpawn
+  id: CMUEmbassyStaffSpawn
+  leadersToSpawn:
+    CMUPartyJobEmbassyAide: 1
+  gruntsToSpawn:
+    CMUPartyJobEmbassyPressSecretary: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUEmbassyStaff
+  displayName: Embassy Staff
+  partyspawn: CMUEmbassyStaffSpawn
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
+  defaultsToCallerLanguage: true
+  entrymethod: shuttle
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  roundstart: false
+  ghostsNeeded: 2
+  announcearrival: "A diplomatic shuttle carrying embassy staff has landed."
+
+# A trade delegation sent to strike deals with the colony: an envoy with money to spend and two clerks to keep
+# the books. They default to the calling faction's language.
+
+# jobs
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobTradeEnvoy
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: TradeEnvoy
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUTradeEnvoyOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-trade-envoy
+  description: cmu-job-description-trade-envoy
+  playTimeTracker: CMUJobTradeEnvoy
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearTradeEnvoy
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobTradeEnvoy
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobTradeClerk
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: TradeClerk
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUTradeClerkOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-trade-clerk
+  description: cmu-job-description-trade-clerk
+  playTimeTracker: CMUJobTradeClerk
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearTradeClerk
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobTradeClerk
+  isHumanoid: true
+
+# gear
+
+- type: startingGear
+  id: CMUGearTradeEnvoy
+  equipment:
+    id: CMUIDCardTradeEnvoy
+    jumpsuit: CMJumpsuitLiaisonCorporateFormal
+    ears: CMHeadsetColony
+    pocket1: CMUMobilePhone
+    pocket2: RMCPouchDocument
+    back: CMSatchel
+  storage:
+    back:
+    - RMCSpaceCash1000
+    - RMCSpaceCash1000
+    - BoxFolderBlue
+    - Pen
+  inhand:
+  - BriefcaseBrownFilled
+
+- type: entity
+  id: CMUTradeEnvoyOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - RMCJacketCorporateKhaki
+      - RMCJacketCorporateBlue
+      - RMCCoatBomberKhaki
+      shoes:
+      - RMCShoesLaceup
+      - RMCShoesFancyLeather
+      head:
+      - ClothingHeadHatFedoraBrown
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardTradeEnvoy
+  name: trade envoy ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobTradeEnvoy
+
+- type: startingGear
+  id: CMUGearTradeClerk
+  equipment:
+    id: CMUIDCardTradeClerk
+    jumpsuit: CMJumpsuitTShirtWhite
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    belt: CMClipboard
+    back: CMBackpack
+  storage:
+    back:
+    - RMCSpaceCash500
+    - BoxFolderBlue
+    - Pen
+
+- type: entity
+  id: CMUTradeClerkOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketKhakiPufferVest
+      - RMCCoatBomberKhaki
+      shoes:
+      - RMCShoesBrown
+      - RMCShoesBlack
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardTradeClerk
+  name: trade clerk ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobTradeClerk
+
+# ghost roles
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobTradeEnvoy
+  name: Trade Envoy
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Trade Envoy
+    description: "You lead a trade delegation. Buy, sell and sign deals that benefit the faction that sent you, and bring the paperwork home."
+    reregister: false
+    job: CMUJobTradeEnvoy
+    raffle:
+      settings: short
+    rules: "You are a civilian trader. Haggle and bargain; you are not a combatant."
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobTradeClerk
+  name: Trade Clerk
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Trade Clerk
+    description: "You are a clerk with a trade delegation. Keep the envoy's ledgers, count the money and make sure every deal is written down."
+    reregister: false
+    job: CMUJobTradeClerk
+    raffle:
+      settings: short
+    rules: "You are a civilian clerk. Keep the books; you are not a combatant."
+
+# party
+
+- type: partySpawn
+  id: CMUTradeDelegationSpawn
+  leadersToSpawn:
+    CMUPartyJobTradeEnvoy: 1
+  gruntsToSpawn:
+    CMUPartyJobTradeClerk: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUTradeDelegation
+  displayName: Trade Delegation
+  partyspawn: CMUTradeDelegationSpawn
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
+  defaultsToCallerLanguage: true
+  entrymethod: shuttle
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  roundstart: false
+  ghostsNeeded: 3
+  announcearrival: "A trade delegation's shuttle has landed. They are here to do business."
+
+# Labor union organizers sent to rally the colony's workers: an organizer with a megaphone and two stewards.
+# They speak the colony's language and the calling faction's.
+
+# jobs
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUnionOrganiser
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: UnionOrganiser
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUUnionOrganiserOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-union-organiser
+  description: cmu-job-description-union-organiser
+  playTimeTracker: CMUJobUnionOrganiser
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUnionOrganiser
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobUnionOrganiser
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobUnionSteward
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: UnionSteward
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUUnionStewardOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-union-steward
+  description: cmu-job-description-union-steward
+  playTimeTracker: CMUJobUnionSteward
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearUnionSteward
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobUnionSteward
+  isHumanoid: true
+
+# gear
+
+- type: startingGear
+  id: CMUGearUnionOrganiser
+  equipment:
+    id: CMUIDCardUnionOrganiser
+    jumpsuit: CMJumpsuitTShirtGray
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    back: CMSatchel
+  storage:
+    back:
+    - BoxFolderRed
+    - Pen
+  inhand:
+  - RMCMegaphone
+
+- type: entity
+  id: CMUUnionOrganiserOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketGreenParka
+      - AU14CivilianJacketKhakiPufferVest
+      shoes:
+      - CMBootsBlack
+      head:
+      - AU14CivBallCapRedTrucker
+      - AU14CivBallCapBlack
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardUnionOrganiser
+  name: union organizer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUnionOrganiser
+
+- type: startingGear
+  id: CMUGearUnionSteward
+  equipment:
+    id: CMUIDCardUnionSteward
+    jumpsuit: CMJumpsuitTShirtGray
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    belt: CMClipboard
+
+- type: entity
+  id: CMUUnionStewardOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketKhakiPufferVest
+      - AU14CivilianJacketGreenParka
+      shoes:
+      - CMBootsBlack
+      head:
+      - AU14CivBallCapBlack
+      - AU14CivBallCapRedTrucker
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardUnionSteward
+  name: union steward ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobUnionSteward
+
+# ghost roles
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobUnionOrganiser
+  name: Union Organizer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Union Organizer
+    description: "You are a labor union organizer. Rally the colony's workers, press their demands and negotiate with whoever runs the colony."
+    reregister: false
+    job: CMUJobUnionOrganiser
+    raffle:
+      settings: short
+    rules: "You are a civilian organizer. Protest, strike and negotiate; do not start violence."
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobUnionSteward
+  name: Union Steward
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Union Steward
+    description: "You are a union steward. Sign up members, keep the picket line organized and back up the organizer."
+    reregister: false
+    job: CMUJobUnionSteward
+    raffle:
+      settings: short
+    rules: "You are a civilian union steward. Protest and organize; do not start violence."
+
+# party
+
+- type: partySpawn
+  id: CMUUnionOrganisersSpawn
+  leadersToSpawn:
+    CMUPartyJobUnionOrganiser: 1
+  gruntsToSpawn:
+    CMUPartyJobUnionSteward: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUUnionOrganisers
+  displayName: Labor Union Organizers
+  partyspawn: CMUUnionOrganisersSpawn
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
+  entrymethod: shuttle
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  roundstart: false
+  ghostsNeeded: 3
+  announcearrival: "A shuttle of labor union organizers has landed. The colony's workers have visitors."
+
+# An academic archaeology team that wants access to a site on the colony: a lead archaeologist and two field
+# archaeologists with digging tools. They speak the colony's language and the calling faction's.
+
+# jobs
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobLeadArchaeologist
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: LeadArchaeologist
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMULeadArchaeologistOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-lead-archaeologist
+  description: cmu-job-description-lead-archaeologist
+  playTimeTracker: CMUJobLeadArchaeologist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearLeadArchaeologist
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobLeadArchaeologist
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobFieldArchaeologist
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: FieldArchaeologist
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUFieldArchaeologistOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-field-archaeologist
+  description: cmu-job-description-field-archaeologist
+  playTimeTracker: CMUJobFieldArchaeologist
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearFieldArchaeologist
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobFieldArchaeologist
+  isHumanoid: true
+
+# gear
+
+- type: startingGear
+  id: CMUGearLeadArchaeologist
+  equipment:
+    id: CMUIDCardLeadArchaeologist
+    jumpsuit: CMJumpsuitTShirtWhite
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    belt: CMClipboard
+    back: CMBackpack
+  storage:
+    back:
+    - CMUPhotoCamera
+    - CMUCameraFilm
+    - CMUCameraFilm
+    - Pen
+  inhand:
+  - AU14ToolShovel
+
+- type: entity
+  id: CMULeadArchaeologistOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketKhakiPufferVest
+      - RMCCoatBomberKhaki
+      shoes:
+      - CMBootsBlack
+      - RMCShoesBrown
+      head:
+      - ClothingHeadHatFedoraBrown
+      - AU14JungleBoonieHat
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardLeadArchaeologist
+  name: lead archaeologist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobLeadArchaeologist
+
+- type: startingGear
+  id: CMUGearFieldArchaeologist
+  equipment:
+    id: CMUIDCardFieldArchaeologist
+    jumpsuit: CMJumpsuitTShirtGray
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    back: CMBackpack
+  storage:
+    back:
+    - AU14ToolShovel
+  inhand:
+  - AU14ToolPickaxe
+
+- type: entity
+  id: CMUFieldArchaeologistOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianJacketGreenParka
+      - AU14CivilianJacketKhakiPufferVest
+      shoes:
+      - CMBootsBlack
+      head:
+      - AU14JungleBoonieHat
+      - AU14CivBallCapBlack
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardFieldArchaeologist
+  name: field archaeologist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobFieldArchaeologist
+
+# ghost roles
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobLeadArchaeologist
+  name: Lead Archaeologist
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Lead Archaeologist
+    description: "You lead an archaeology team. Get permission to dig, find something worth the trip and document it."
+    reregister: false
+    job: CMUJobLeadArchaeologist
+    raffle:
+      settings: short
+    rules: "You are a civilian academic. Dig and document; you are not a combatant."
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobFieldArchaeologist
+  name: Field Archaeologist
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Field Archaeologist
+    description: "You are a field archaeologist. Dig where the lead tells you, handle finds carefully and keep the team out of trouble."
+    reregister: false
+    job: CMUJobFieldArchaeologist
+    raffle:
+      settings: short
+    rules: "You are a civilian academic. Dig and document; you are not a combatant."
+
+# party
+
+- type: partySpawn
+  id: CMUArchaeologyTeamSpawn
+  leadersToSpawn:
+    CMUPartyJobLeadArchaeologist: 1
+  gruntsToSpawn:
+    CMUPartyJobFieldArchaeologist: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUArchaeologyTeam
+  displayName: Archaeology Team
+  partyspawn: CMUArchaeologyTeamSpawn
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
+  entrymethod: shuttle
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  roundstart: false
+  ghostsNeeded: 3
+  announcearrival: "An archaeology team's shuttle has landed. They have come to dig."
+
+# A FEMA disaster response team sent by the United Americas: a coordinator to run the relief effort, three relief
+# workers with first aid, rations and an extinguisher, and an EMT. They speak the colony's language and the caller's.
+
+# jobs
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobFEMACoordinator
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: FEMACoordinator
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUFEMACoordinatorOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-fema-coordinator
+  description: cmu-job-description-fema-coordinator
+  playTimeTracker: CMUJobFEMACoordinator
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearFEMACoordinator
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobFEMACoordinator
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobFEMAReliefWorker
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: FEMAReliefWorker
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUFEMAReliefWorkerOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-fema-relief-worker
+  description: cmu-job-description-fema-relief-worker
+  playTimeTracker: CMUJobFEMAReliefWorker
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearFEMAReliefWorker
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobFEMAReliefWorker
+  isHumanoid: true
+
+- type: job
+  parent: CMJobBase
+  id: CMUJobFEMAEmt
+  roundSide: ThirdParty
+  roundForce: MISC
+  roundRole: FEMAEmt
+  roundComponents:
+  - type: EquipEntityPreset
+    preset: CMUFEMAEmtOutfit
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+  name: cmu-job-name-fema-emt
+  description: cmu-job-description-fema-emt
+  playTimeTracker: CMUJobFEMAEmt
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearFEMAEmt
+  icon: AU14JobIconColonyColonist
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  accessGroups:
+  - Colonist
+  hidden: false
+
+- type: playTimeTracker
+  id: CMUJobFEMAEmt
+  isHumanoid: true
+
+# gear
+
+- type: startingGear
+  id: CMUGearFEMACoordinator
+  equipment:
+    id: CMUIDCardFEMACoordinator
+    jumpsuit: CMJumpsuitTShirtGray
+    ears: CMHeadsetColony
+    pocket1: CMUMobilePhone
+    pocket2: RMCFlashlight
+    belt: CMClipboard
+    back: CMBackpack
+  storage:
+    back:
+    - CMFirstAidKitFilled
+    - CMMRE
+    - CMMRE
+    - BoxFolderBlue
+    - Pen
+  inhand:
+  - RMCMegaphone
+
+- type: entity
+  id: CMUFEMACoordinatorOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianHazardVestParamedicGreen
+      shoes:
+      - CMBootsBlack
+      head:
+      - AU14CivBallCapBlack
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardFEMACoordinator
+  name: fema coordinator ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobFEMACoordinator
+
+- type: startingGear
+  id: CMUGearFEMAReliefWorker
+  equipment:
+    id: CMUIDCardFEMAReliefWorker
+    jumpsuit: CMJumpsuitTShirtGray
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    back: CMBackpack
+  storage:
+    back:
+    - CMFirstAidKitFilled
+    - CMMRE
+    - CMMRE
+    - CMMRE
+    - CMCrowbar
+  inhand:
+  - CMFireExtinguisherPortable
+
+- type: entity
+  id: CMUFEMAReliefWorkerOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianHazardVestSanitation
+      - AU14CivilianHazardVestParamedicGreen
+      shoes:
+      - CMBootsBlack
+      head:
+      - AU14CivBallCapBlack
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardFEMAReliefWorker
+  name: fema relief worker ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobFEMAReliefWorker
+
+- type: startingGear
+  id: CMUGearFEMAEmt
+  equipment:
+    id: CMUIDCardFEMAEmt
+    jumpsuit: CMJumpsuitTShirtWhite
+    ears: CMHeadsetColony
+    pocket1: RMCFlashlight
+    back: CMBackpack
+  storage:
+    back:
+    - CMFirstAidKitFilled
+    - CMFirstAidKitFilled
+    - CMMRE
+  inhand:
+  - CMAdvFirstAidKitFilled
+
+- type: entity
+  id: CMUFEMAEmtOutfit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomStartingGear:
+      outerClothing:
+      - AU14CivilianHazardVestParamedicWhite
+      shoes:
+      - CMBootsBlack
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardFEMAEmt
+  name: fema emt ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobFEMAEmt
+
+# ghost roles
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobFEMACoordinator
+  name: FEMA Coordinator
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: FEMA Coordinator
+    description: "You run a FEMA disaster response team sent by the United Americas. Find out what the colony needs most, organize the relief effort and keep civilians safe."
+    reregister: false
+    job: CMUJobFEMACoordinator
+    raffle:
+      settings: short
+    rules: "You are a civilian relief worker. Help, treat and shelter; you are not a combatant."
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobFEMAReliefWorker
+  name: FEMA Relief Worker
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: FEMA Relief Worker
+    description: "You are a FEMA relief worker. Hand out supplies, treat the injured, put out fires and help colonists get to safety."
+    reregister: false
+    job: CMUJobFEMAReliefWorker
+    raffle:
+      settings: short
+    rules: "You are a civilian relief worker. Help, treat and shelter; you are not a combatant."
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUPartyJobFEMAEmt
+  name: FEMA EMT
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: FEMA EMT
+    description: "You are the EMT with a FEMA disaster response team. Triage and treat injured colonists, stabilize the worst and get them to a doctor."
+    reregister: false
+    job: CMUJobFEMAEmt
+    raffle:
+      settings: short
+    rules: "You are a civilian medic. Treat anyone who needs it; you are not a combatant."
+
+# party
+
+- type: partySpawn
+  id: CMUFEMAResponseTeamSpawn
+  leadersToSpawn:
+    CMUPartyJobFEMACoordinator: 1
+  gruntsToSpawn:
+    CMUPartyJobFEMAReliefWorker: 3
+    CMUPartyJobFEMAEmt: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUFEMAResponseTeam
+  displayName: FEMA Response Team
+  partyspawn: CMUFEMAResponseTeamSpawn
+  speaksColonyLanguage: true
+  speaksCallerLanguage: true
+  entrymethod: shuttle
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  roundstart: false
+  ghostsNeeded: 5
+  announcearrival: "A Federal Emergency Management Agency shuttle has landed. Disaster relief has arrived."

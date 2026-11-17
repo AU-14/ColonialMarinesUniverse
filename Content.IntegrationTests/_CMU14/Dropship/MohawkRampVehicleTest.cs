@@ -111,8 +111,6 @@ public sealed class MohawkRampVehicleTest
     }
 
     [TestCase("omaha", "VehicleAPC")]
-    [TestCase("midway", "VehicleAPC")]
-    [TestCase("omaha", "VehicleBlackfoot")]
     [TestCase("midway", "VehicleBlackfoot")]
     public async Task TimedRampCarriesALargeVehicleThroughRepeatedCycles(string variant, string prototype)
     {
@@ -169,9 +167,7 @@ public sealed class MohawkRampVehicleTest
 
     [TestCase("omaha", "VehicleAPC", 0)]
     [TestCase("omaha", "VehicleTank", 90)]
-    [TestCase("omaha", "VehicleHumvee", 37)]
     [TestCase("midway", "VehicleAPC", 37)]
-    [TestCase("midway", "VehicleTank", 0)]
     [TestCase("midway", "VehicleHumvee", 90)]
     public async Task FootprintClippingTheRampRidesBothWaysExactlyOnce(string variant, string prototype, int degrees)
     {

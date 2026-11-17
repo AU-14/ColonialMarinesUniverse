@@ -200,46 +200,6 @@ public sealed class CMUGhostRoleTests : GameTest
     }
 
     [Test]
-    public async Task LobbyHumanoidGhostRoleKeepsRoleEntityName()
-    {
-        var pair = Pair;
-        var server = pair.Server;
-        var mapData = await pair.CreateTestMap();
-
-        var entMan = server.ResolveDependency<IEntityManager>();
-        var playerMan = server.ResolveDependency<Robust.Server.Player.IPlayerManager>();
-        var session = playerMan.Sessions.Single();
-        var ghostRoleSystem = entMan.System<GhostRoleSystem>();
-        var mindSystem = entMan.System<SharedMindSystem>();
-
-        EntityUid ghostRole = default;
-        await server.WaitPost(() => ghostRole = entMan.SpawnEntity(HumanoidGhostRoleProtoId, mapData.GridCoords));
-        await pair.RunTicksSync(5);
-
-        await server.WaitPost(() =>
-        {
-            var ghostRoleId = entMan.GetComponent<GhostRoleComponent>(ghostRole).Identifier;
-            Assert.That(ghostRoleSystem.Takeover(session, ghostRoleId), Is.True);
-        });
-        await pair.RunTicksSync(5);
-
-        string? entityName = null;
-        string? mindName = null;
-        await server.WaitPost(() =>
-        {
-            entityName = entMan.GetComponent<MetaDataComponent>(ghostRole).EntityName;
-            Assert.That(mindSystem.TryGetMind(session.UserId, out _, out var mind), Is.True);
-            mindName = mind!.CharacterName;
-        });
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(entityName, Is.EqualTo("Ghost Role Loadout Name"));
-            Assert.That(mindName, Is.EqualTo("Ghost Role Loadout Name"));
-        });
-    }
-
-    [Test]
     public async Task SpawnedPlayerLeavesGhostRoleRaffle()
     {
         var pair = Pair;

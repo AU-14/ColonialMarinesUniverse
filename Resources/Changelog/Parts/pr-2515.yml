@@ -1,0 +1,13 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: FOB weaponry crates now include a platform for each supplied weapon.
+  type: Fix
+- message: Simplified FOB equipment feedback and examine text, relaxed placement around
+    clutter, and opened console controls to all friendly Marines.
+  type: Tweak
+- message: Powerloaders can no longer pull installed FOB weapons off their platforms
+    without first detaching them.
+  type: Fix
+time: '2026-11-07T15:53:26.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2515

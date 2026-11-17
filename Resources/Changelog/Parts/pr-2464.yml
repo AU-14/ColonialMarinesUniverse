@@ -1,0 +1,14 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Gas, EMS, and smoke orbital strikes now spread outward to a 45-tile radius
+    and initially cover every connected Z-level.
+  type: Tweak
+- message: Support clouds last 60 seconds now (from 25-30) the extra time being the
+    time it takes to fully spread to 45 tiles and then stay there for 5-7 seconds
+  type: Tweak
+- message: Support clouds spread through doors and vertical openings, while walls,
+    floors, and roofs block their spread.
+  type: Tweak
+time: '2026-11-06T15:24:01.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2464

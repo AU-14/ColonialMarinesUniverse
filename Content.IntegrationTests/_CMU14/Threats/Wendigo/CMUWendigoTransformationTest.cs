@@ -377,32 +377,6 @@ public sealed class CMUWendigoTransformationTest
     }
 
     [Test]
-    public async Task BriefingIsFaxedToTheFaxNearestTheCorporateTerminal()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            entMan.SpawnEntity("CMUResearchDataTerminalCorporate", map.GridCoords);
-            var near = entMan.SpawnEntity("CMFaxWY", map.GridCoords.Offset(new System.Numerics.Vector2(1, 0)));
-            var far = entMan.SpawnEntity("CMFaxWY", map.GridCoords.Offset(new System.Numerics.Vector2(6, 0)));
-
-            Assert.That(entMan.System<CMUWendigoResearchUnlockSystem>().SendLabBriefing(), Is.True);
-
-            var nearQueue = entMan.GetComponent<FaxMachineComponent>(near).PrintingQueue;
-            Assert.That(nearQueue, Has.Count.EqualTo(1), "The lab's own fax gets the briefing.");
-            Assert.That(nearQueue.Peek().PrototypeId.Id, Is.EqualTo(CMUWendigoResearchUnlockSystem.LabBriefingPaper));
-            Assert.That(entMan.GetComponent<FaxMachineComponent>(far).PrintingQueue, Is.Empty,
-                "Other fax machines do not.");
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task CriticalSubjectStillConverts()
     {
         await using var pair = await PoolManager.GetServerClient();

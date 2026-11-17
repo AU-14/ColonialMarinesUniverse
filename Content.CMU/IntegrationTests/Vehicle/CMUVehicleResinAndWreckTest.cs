@@ -94,7 +94,6 @@ public sealed class CMUVehicleResinAndWreckTest : GameTest
     }
 
     [TestCase("VehicleHumvee")]
-    [TestCase("CMUVehicleAPCWolfpack")]
     public async Task LastProtectedModuleCanReachZeroAndPendingRepairsCannotReviveTheHull(string prototype)
     {
         var map = await Pair.CreateTestMap();

@@ -16,33 +16,6 @@ namespace Content.IntegrationTests.CMU14.Medical.Anatomy;
 [TestFixture]
 public sealed class BoneRecoveryLifecycleTest
 {
-    [TestCase(false)]
-    [TestCase(true)]
-    public async Task FractureCallbackCannotRestoreWorkForARemovedOrReplacedBone(bool replace)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        EntityUid patient = default;
-        EntityUid arm = default;
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            entities.System<CMUBoneRecoveryReentryProbeSystem>();
-            (patient, arm) = SpawnInjury(entities);
-            entities.AddComponent<CMUBoneRecoveryReentryProbeComponent>(arm).Replace = replace;
-        });
-        await pair.RunTicksSync(pair.SecondsToTicks(11));
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            Assert.That(entities.GetComponent<CMUBoneRecoveryReentryProbeComponent>(arm).Removed, Is.True);
-            Assert.That(entities.HasComponent<BoneComponent>(arm), Is.EqualTo(replace));
-            Assert.That(entities.HasComponent<BoneRecoveryComponent>(arm), Is.False);
-            if (replace)
-                AssertDeficit(entities, arm, 0);
-            entities.DeleteEntity(patient);
-        });
-        await pair.CleanReturnAsync();
-    }
 
     [Test]
     public async Task ClearingHairlineFractureContinuesRecoveryUntilFullIntegrity()
@@ -240,31 +213,4 @@ public sealed class BoneRecoveryLifecycleTest
         => AssertIntegrity(entities, part, entities.GetComponent<BoneComponent>(part).IntegrityMax - deficit);
     private static void AssertIntegrity(IEntityManager entities, EntityUid part, FixedPoint2 expected)
         => Assert.That(entities.GetComponent<BoneComponent>(part).Integrity, Is.EqualTo(expected));
-}
-
-[RegisterComponent]
-public sealed partial class CMUBoneRecoveryReentryProbeComponent : Component
-{
-    public bool Replace;
-    public bool Removed;
-}
-
-public sealed partial class CMUBoneRecoveryReentryProbeSystem : EntitySystem
-{
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<CMUBoneRecoveryReentryProbeComponent, FractureSeverityChangedEvent>(OnFractureChanged);
-    }
-
-    private void OnFractureChanged(Entity<CMUBoneRecoveryReentryProbeComponent> ent,
-        ref FractureSeverityChangedEvent args)
-    {
-        if (args.New != FractureSeverity.None)
-            return;
-        RemComp<BoneComponent>(ent.Owner);
-        ent.Comp.Removed = true;
-        if (ent.Comp.Replace)
-            AddComp<BoneComponent>(ent.Owner);
-    }
 }

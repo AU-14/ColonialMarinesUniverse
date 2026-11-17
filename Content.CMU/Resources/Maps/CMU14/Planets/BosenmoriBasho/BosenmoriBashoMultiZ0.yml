@@ -134988,7 +134988,7 @@ entities:
       pos: 134.5,32.5
     - type: Sprite
       offset: 0.09375,-0.0625
-- proto: RMCCableCoil
+- proto: CMUCableThinLVStack
   entities:
   - uid: 50412
     components:
@@ -221135,7 +221135,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 104.5,28.5
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack
   entities:
   - uid: 48842
     components:

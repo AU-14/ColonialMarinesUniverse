@@ -2,6 +2,8 @@
   id: AUPlanetSorokyne
   name: Sorokyne Strata
   components:
+  - type: CMUColonyLanguage
+    defaultLanguage: Mandarin
   - type: RMCPlanetMapPrototype
     votename: "Sorokyne Strata"
     mapId: au14sorokyne
@@ -11,7 +13,6 @@
     announcement: "Sorokyne Strata, a Union of Progressive Peoples research outpost in the Neroid Sector, has stopped responding. A response force has been dispatched to investigate."
     platoonsGovfor:
     - UPP
-    - ProdigySF
     - LACN
     - CMBCIU
     platoonsOpfor:
@@ -36,9 +37,6 @@
     - cultistThirdParty
     - UPPGROM
     - UPPGROMAlt
-    - CHTORM_PMC_BEAR
-    - GROZA_PMC_BEAR
-    - SKALA_PMC_BEAR
     - UPPGROMAlt2
     - CLFSurvsBig
     - CLFSurvsMedium

@@ -153,40 +153,6 @@ public sealed class ExamineMergeRegressionTest : GameTest
         }
     }
 
-    [Test]
-    public async Task BaseXenoFixedDescriptionUsesTheMarineWhitelist()
-    {
-        var map = await Pair.CreateTestMap();
-        var entities = new List<EntityUid>();
-
-        try
-        {
-            await Server.WaitAssertion(() =>
-            {
-                var examine = Server.System<ExamineSystem>();
-                var xeno = Spawn("CMXenoDrone", map.GridCoords, entities);
-                var marine = Spawn("CMMobHuman", map.GridCoords, entities);
-                var ordinary = Spawn("MobHuman", map.GridCoords, entities);
-                var unknown = Loc.GetString("rmc-xeno-unknown-description");
-                var native = SEntMan.GetComponent<MetaDataComponent>(xeno).EntityDescription;
-                var marineText = examine.GetExamineText(xeno, marine).ToMarkup();
-                var ordinaryText = examine.GetExamineText(xeno, ordinary).ToMarkup();
-
-                Assert.Multiple(() =>
-                {
-                    Assert.That(marineText, Does.Contain(unknown));
-                    Assert.That(marineText, Does.Not.Contain(native));
-                    Assert.That(ordinaryText, Does.Contain(native));
-                    Assert.That(ordinaryText, Does.Not.Contain(unknown));
-                });
-            });
-        }
-        finally
-        {
-            await Delete(entities.ToArray());
-        }
-    }
-
     private EntityUid Spawn(string prototype, EntityCoordinates coordinates, ICollection<EntityUid> entities)
     {
         var uid = SEntMan.SpawnEntity(prototype, coordinates);

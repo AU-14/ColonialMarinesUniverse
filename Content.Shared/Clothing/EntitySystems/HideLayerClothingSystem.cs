@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Clothing;
 using Content.Shared.Clothing.Components;
+using Content.Shared.Foldable; // CMU14
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Robust.Shared.Timing;
@@ -17,6 +18,13 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
         SubscribeLocalEvent<HideLayerClothingComponent, ClothingGotUnequippedEvent>(OnHideGotUnequipped);
         SubscribeLocalEvent<HideLayerClothingComponent, ClothingGotEquippedEvent>(OnHideGotEquipped);
         SubscribeLocalEvent<HideLayerClothingComponent, ItemMaskToggledEvent>(OnHideToggled);
+        SubscribeLocalEvent<HideLayerClothingComponent, FoldedEvent>(OnFolded); // CMU14
+    }
+
+    // CMU14: foldable scarfs can be raised/lowered while worn in either neck or mask slots.
+    private void OnFolded(Entity<HideLayerClothingComponent> ent, ref FoldedEvent args)
+    {
+        RefreshLayerVisibility(ent.Owner);
     }
 
     private void OnHideToggled(Entity<HideLayerClothingComponent> ent, ref ItemMaskToggledEvent args)
@@ -122,6 +130,10 @@ public sealed partial class HideLayerClothingSystem : EntitySystem
 
         if (!clothing.Comp1.HideOnToggle)
             return true;
+
+        // CMU14: folding lowers a scarf without using MaskComponent's toggle action.
+        if (TryComp<FoldableComponent>(clothing, out var foldable) && foldable.IsFolded)
+            return false;
 
         if (!TryComp(clothing, out MaskComponent? mask))
             return true;

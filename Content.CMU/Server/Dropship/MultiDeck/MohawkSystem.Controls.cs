@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Dropship.MultiDeck;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Overmind;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Tools;
 using Content.Shared._RMC14.Xenonids;
@@ -34,7 +35,8 @@ public sealed partial class MohawkSystem
     private void TrySabotage(Entity<MohawkControlComponent> control, EntityUid user)
     {
         if (control.Comp.Group == MohawkControlGroup.Hatch ||
-            !TryComp<XenoComponent>(user, out var xeno) || xeno.Role != QueenRole ||
+            !TryComp<XenoComponent>(user, out var xeno) ||
+            xeno.Role != QueenRole && !HasComp<CMUXenoOvermindComponent>(user) ||
             !_dropships.TryGetGridDropship(control, out var ship) || !CanDeploy(ship) ||
             !TryComp<MohawkMechanismsComponent>(ship, out var state) ||
             state.BrokenControls.Contains(control.Comp.Group))

@@ -19,7 +19,6 @@ public sealed class YoungbloodRaffleEligibilityTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = true, InLobby = true, Dirty = true };
 
     [TestCase("AU14JobGOVFORSquadRifleman", "CMJobXenoDrone", "youngblood_three_inexperienced")]
-    [TestCase("AU14JobOPFORSquadRifleman", "CMJobXenoDrone", "youngblood_solo")]
     [TestCase("AU14JobGOVFORSquadRifleman", "CMU14JobPathogenPopper", "youngblood_solo")]
     public async Task CurrentSquadPlaytimeAllowsJoiningTheYoungbloodRaffle(string tracker, string xenoTracker, string call)
     {

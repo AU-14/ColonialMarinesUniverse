@@ -6,6 +6,8 @@ using Content.Shared.CMU14.Chemistry.Effects.Positive;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Components;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
@@ -18,6 +20,47 @@ namespace Content.IntegrationTests.CMU14.Medical;
 [TestOf(typeof(SharedCMUWoundsSystem))]
 public sealed class CMUInternalBleedLimbTest : GameTest
 {
+    [Test]
+    public async Task HeadAndTorsoInternalBleedsDrainBloodAcrossTicks()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid patient = default;
+        float initialBlood = 0;
+        float firstBlood = 0;
+        await Server.WaitAssertion(() =>
+        {
+            patient = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var index = Server.System<CMUMedicalBodyIndexSystem>();
+            var wounds = Server.System<SharedCMUWoundsSystem>();
+            foreach (var type in new[] { BodyPartType.Head, BodyPartType.Torso })
+            {
+                Assert.That(index.TryGetBodyPart(patient, new(type, BodyPartSymmetry.None), out var part), Is.True);
+                wounds.SeedInternalBleed(part, "vascular:test", 0.5f);
+            }
+            initialBlood = BloodVolume();
+        });
+        await Server.WaitRunTicks(300);
+        await Server.WaitAssertion(() =>
+        {
+            firstBlood = BloodVolume();
+            Assert.That(firstBlood, Is.LessThan(initialBlood), "Untreated internal bleeds must drain blood.");
+        });
+        await Server.WaitRunTicks(300);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(BloodVolume(), Is.LessThan(firstBlood), "Bleeding must continue after its first tick.");
+            SEntMan.DeleteEntity(patient);
+        });
+
+        float BloodVolume()
+        {
+            var blood = SEntMan.GetComponent<BloodstreamComponent>(patient);
+            Assert.That(Server.System<SharedSolutionContainerSystem>().TryGetSolution(patient,
+                blood.BloodSolutionName, out _, out var solution), Is.True);
+            return solution.Volume.Float();
+        }
+    }
+
     [Test]
     public async Task TranexamicSuppressesPersistentBleedingUntilItWearsOff()
     {

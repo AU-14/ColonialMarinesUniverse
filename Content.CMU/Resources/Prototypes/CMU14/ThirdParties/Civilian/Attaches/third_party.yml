@@ -7,6 +7,7 @@
 
 - type: thirdParty
   id: DiplomaticAttaches
+  speaksColonyLanguage: true
   announceAsSurvivors: true
   partyspawn: AttachesSpawn
   entrymethod: ground

@@ -42,6 +42,7 @@ public sealed class RecipeMachineSystem : EntitySystem
 
         SubscribeLocalEvent<RecipeMachineComponent, RecipeMachineCircuitMessage>(OnCircuit);
         SubscribeLocalEvent<RecipeMachineComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<RecipeMachineComponent, CMUFluidTankRoomEvent>(OnGetFluidTankRoom);
         _proto.PrototypesReloaded += _ => _recipes.Clear();
     }
 
@@ -77,6 +78,16 @@ public sealed class RecipeMachineSystem : EntitySystem
     {
         machine.Comp.Circuit = Math.Clamp(args.Circuit, 0, machine.Comp.MaxCircuit);
         Dirty(machine);
+    }
+
+    private void OnGetFluidTankRoom(Entity<RecipeMachineComponent> machine, ref CMUFluidTankRoomEvent args)
+    {
+        if (machine.Comp.ActiveRecipe is { } active &&
+            _proto.TryIndex<MachineRecipePrototype>(active, out var recipe))
+        {
+            // Inputs are paid at the start. Keep their newly freed room for the batch's products.
+            args.Available -= FluidTotal(recipe.FluidOutputs);
+        }
     }
 
     public override void Update(float frameTime)
@@ -205,6 +216,8 @@ public sealed class RecipeMachineSystem : EntitySystem
                 SpawnItem(machine, coords, proto);
         }
 
+        // Release the reservation before adding the products it was protecting.
+        machine.Comp.ActiveRecipe = null;
         foreach (var (kind, amount) in recipe.FluidOutputs)
             _fluids.Add(machine, kind, amount);
 

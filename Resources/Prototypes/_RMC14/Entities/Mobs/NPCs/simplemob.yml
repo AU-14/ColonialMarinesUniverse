@@ -226,10 +226,25 @@
 # TODO: Emotes: "chimper", "scratch", "jump", "roll", "tail", "rocks about", "creaks", "chimpers". Upstream uses chance values for nearby item use and vocalization.
 - type: entity
   id: RMCSmallHost
-  parent: [RMCSimpleMob, StripableInventoryBase] # TODO: Consider BaseOrganic once this is safer to change.
+  # CMU14: BaseSlicingRefinable and the butchering block below give small hosts the knife
+  # butchering route RMC animals use, matching CM-SS13 where monkeys yield meat
+  parent: [RMCSimpleMob, StripableInventoryBase, BaseSlicingRefinable]
   name: abstract small host
   abstract: true
   components:
+  # CMU14 Begin
+  - type: Butcherable
+    spawned:
+    - id: FoodMeat
+      amount: 3
+  - type: ToolRefinable
+    qualityNeeded: Slicing
+    refineTime: 8
+    popupType: LargeCaution
+    refineResult:
+    - id: FoodMeat
+      amount: 3
+  # CMU14 End
   - type: CombatMode
   - type: Inventory #placeholder until the monkey equipped sprites are ported
     templateId: monkey

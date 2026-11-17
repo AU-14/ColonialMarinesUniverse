@@ -383,6 +383,17 @@
       visible: false
   - type: ApcPowerReceiver
     powerLoad: 120
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,1.45"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
   - type: PowerState
     idlePowerDraw: 120
     workingPowerDraw: 2400
@@ -390,6 +401,7 @@
   - type: FluidTank
     capacity: 600
   - type: FluidPorts
+    connectionTiles: ["0,0", "0,1"]
     ports:
     - id: liquid_in
       rate: 30

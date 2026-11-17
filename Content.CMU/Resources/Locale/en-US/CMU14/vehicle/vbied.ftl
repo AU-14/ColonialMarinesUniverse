@@ -1,0 +1,10 @@
+cmu-vbied-verb-rig-impact = Rig IED (detonate on impact)
+cmu-vbied-verb-rig-proximity = Rig IED (detonate near hostiles)
+cmu-vbied-verb-inspect = Inspect for explosives
+cmu-vbied-rig-start = You start wiring the IED into {THE($vehicle)}...
+cmu-vbied-rig-done-impact = You finish rigging {THE($vehicle)}. The IED will go off when it hits something, or if it takes too much damage.
+cmu-vbied-rig-done-proximity = You finish rigging {THE($vehicle)}. The IED will go off when anyone hostile to you comes close, or if it takes too much damage.
+cmu-vbied-rig-already = There's already something wired into {THE($vehicle)}.
+cmu-vbied-inspect-start = You start looking {THE($vehicle)} over for anything out of place...
+cmu-vbied-inspect-found = There's an explosive wired into {THE($vehicle)}!
+cmu-vbied-inspect-clear = You don't find anything suspicious in {THE($vehicle)}.

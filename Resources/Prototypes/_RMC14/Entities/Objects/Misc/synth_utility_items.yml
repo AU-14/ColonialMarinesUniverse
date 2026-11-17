@@ -59,7 +59,7 @@
   - type: StorageFill
     contents:
     - id: CMWelder
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
     - id: CMWirecutter
     - id: CMMultitool
 
@@ -71,7 +71,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCCableCoil30
+    - id: CMUCableThinLVStack # CMU14: replaces RMCCableCoil30, thin LV cable
       amount: 2
     - id: CMWirecutter
     - id: CMMultitool

@@ -99,6 +99,7 @@
                     <fighter:FighterCockpitButton Name="Gau" Text="{Loc 'cmu-fighter-kind-gau'}" VerticalReadout="True" MinWidth="60" MaxWidth="60" />
                 </BoxContainer>
                 <BoxContainer Name="FireControls" MinHeight="26" MaxHeight="26" SeparationOverride="4">
+                    <fighter:FighterCockpitButton Name="Guidance" Text="{Loc 'cmu-guidance-title'}" MinWidth="110" />
                     <BoxContainer Name="RunAssist" HorizontalExpand="True" SizeFlagsStretchRatio="2" SeparationOverride="4">
                         <fighter:FighterCockpitButton Name="PrepareRun" Text="{Loc 'cmu-fighter-hud-prepare'}" HorizontalExpand="True" />
                         <fighter:FighterCockpitButton Name="QueueFire" Text="{Loc 'cmu-fighter-hud-queue'}" HorizontalExpand="True" />

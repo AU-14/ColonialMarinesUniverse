@@ -512,6 +512,8 @@
     - name: Ammo
       entries:
       - cost: 250
+        crate: CMUCrateMagazineGAU19M
+      - cost: 250
         crate: RMCCrateBoxMagazineSmartPistol
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching

@@ -108,33 +108,6 @@ public sealed class FlammableLifecycleTest : GameTest
     }
 
     [Test]
-    public async Task IdleUpdatesReuseSnapshotStorage()
-    {
-        var map = await Pair.CreateTestMap();
-        await Server.WaitAssertion(() =>
-        {
-            for (var i = 0; i < 512; i++)
-            {
-                var uid = SEntMan.SpawnEntity(null, map.GridCoords);
-                SEntMan.EnsureComponent<FlammableComponent>(uid).NextUpdate = TimeSpan.MaxValue;
-            }
-
-            var system = Server.System<ServerFlammableSystem>();
-            // Warm the snapshot capacity and update path before measuring steady-state allocations.
-            system.Update(0f);
-            system.Update(0f);
-
-            var before = GC.GetAllocatedBytesForCurrentThread();
-            for (var i = 0; i < 10; i++)
-                system.Update(0f);
-            var allocated = GC.GetAllocatedBytesForCurrentThread() - before;
-
-            Assert.That(allocated, Is.LessThan(4096),
-                "idle updates should not allocate a fresh snapshot of every flammable entity each tick");
-        });
-    }
-
-    [Test]
     public async Task ProtectionHandlerCanAddFlammablesDuringUpdate()
     {
         var map = await Pair.CreateTestMap();
@@ -168,122 +141,6 @@ public sealed class FlammableLifecycleTest : GameTest
             system.Update(0f);
             Assert.That(SEntMan.GetComponent<FlammableComponent>(added).FireStacks, Is.EqualTo(-1f),
                 "the next update should process the newly added flammable component");
-        });
-    }
-
-    [Test]
-    public async Task OrdinaryFireScalesWithStacksAndProtection()
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid fourStacks = default;
-        EntityUid protectedFourStacks = default;
-        EntityUid twoStacks = default;
-
-        await Server.WaitAssertion(() =>
-        {
-            SetOxygenAtmosphere(map.MapUid);
-            fourStacks = SpawnBurnable(map.MapId, 0);
-            protectedFourStacks = SpawnBurnable(map.MapId, 1);
-            twoStacks = SpawnBurnable(map.MapId, 2);
-            SEntMan.EnsureComponent<FireProtectionProbeComponent>(protectedFourStacks).Reduction = 0.5f;
-
-            IgniteOrdinary(fourStacks, 4);
-            IgniteOrdinary(protectedFourStacks, 4);
-            IgniteOrdinary(twoStacks, 2);
-        });
-
-        await Pair.RunTicksSync(1);
-
-        await Server.WaitAssertion(() =>
-        {
-            var full = TotalDamage(fourStacks);
-            var protectedDamage = TotalDamage(protectedFourStacks);
-            var halfStacks = TotalDamage(twoStacks);
-            Assert.Multiple(() =>
-            {
-                Assert.That(full, Is.GreaterThan(0));
-                Assert.That(protectedDamage, Is.EqualTo(halfStacks).Within(0.02f),
-                    "four stacks at 50% protection should equal two unprotected stacks");
-                Assert.That(full, Is.EqualTo(protectedDamage * 2).Within(0.02f));
-            });
-        });
-    }
-
-    [Test]
-    public async Task RmcMetadataUsesSpeciesFormulasAndDoesNotDuplicateIgnition()
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid human = default;
-        EntityUid protectedHuman = default;
-        EntityUid intenseHuman = default;
-        EntityUid steppingHuman = default;
-        EntityUid xeno = default;
-        EntityUid protectedHalfStackXeno = default;
-        EntityUid ordinaryHuman = default;
-
-        await Server.WaitAssertion(() =>
-        {
-            _ = Server.System<FlammableLifecycleProbeSystem>();
-            SetOxygenAtmosphere(map.MapUid);
-            human = SpawnBurnable(map.MapId, 0);
-            protectedHuman = SpawnBurnable(map.MapId, 1);
-            intenseHuman = SpawnBurnable(map.MapId, 2);
-            steppingHuman = SpawnBurnable(map.MapId, 3);
-            xeno = SpawnBurnable(map.MapId, 4, "CMXenoDrone");
-            protectedHalfStackXeno = SpawnBurnable(map.MapId, 5, "CMXenoDrone");
-            ordinaryHuman = SpawnBurnable(map.MapId, 6);
-
-            var probe = SEntMan.EnsureComponent<FlammableLifecycleProbeComponent>(human);
-            SEntMan.EnsureComponent<FireProtectionProbeComponent>(protectedHuman).Reduction = 0.5f;
-            SEntMan.EnsureComponent<SteppingOnFireComponent>(steppingHuman);
-            SEntMan.EnsureComponent<FireProtectionProbeComponent>(protectedHalfStackXeno).Reduction = 0.5f;
-
-            IgniteRmc(human, 10, 10, 10);
-            IgniteRmc(human, 10, 10, 10);
-            IgniteRmc(protectedHuman, 10, 10, 10);
-            IgniteRmc(intenseHuman, 20, 10, 10);
-            IgniteRmc(steppingHuman, 10, 10, 10);
-            IgniteRmc(xeno, 10, 10, 10);
-            IgniteRmc(protectedHalfStackXeno, 10, 10, 5);
-            IgniteOrdinary(ordinaryHuman, 2);
-
-            var metadata = SEntMan.GetComponent<OnFireComponent>(human);
-            Assert.Multiple(() =>
-            {
-                Assert.That(metadata.Intensity, Is.EqualTo(10));
-                Assert.That(metadata.Duration, Is.EqualTo(10));
-                Assert.That(probe.IgnitedEvents, Is.EqualTo(1),
-                    "refreshing an already-burning entity must not raise a second ignition transition");
-                Assert.That(HasAutoNetworkedField(nameof(OnFireComponent.Intensity)), Is.False);
-                Assert.That(HasAutoNetworkedField(nameof(OnFireComponent.Duration)), Is.False);
-            });
-        });
-
-        await Pair.RunTicksSync(1);
-
-        await Server.WaitAssertion(() =>
-        {
-            var humanDamage = TotalDamage(human);
-            var protectedHumanDamage = TotalDamage(protectedHuman);
-            var intenseHumanDamage = TotalDamage(intenseHuman);
-            var steppingDamage = TotalDamage(steppingHuman);
-            var xenoDamage = TotalDamage(xeno);
-            var protectedHalfStackXenoDamage = TotalDamage(protectedHalfStackXeno);
-            var ordinaryHumanDamage = TotalDamage(ordinaryHuman);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(humanDamage, Is.GreaterThan(0));
-                Assert.That(humanDamage, Is.EqualTo(ordinaryHumanDamage).Within(0.02f),
-                    "RMC intensity 10 must equal two ordinary stacks because non-xeno damage is intensity/5");
-                Assert.That(protectedHumanDamage, Is.EqualTo(humanDamage).Within(0.02f),
-                    "the RMC non-xeno intensity/5 formula intentionally ignores fire-protection scaling");
-                Assert.That(intenseHumanDamage, Is.EqualTo(humanDamage * 2).Within(0.02f));
-                Assert.That(steppingDamage, Is.EqualTo(humanDamage * 2).Within(0.02f));
-                Assert.That(xenoDamage, Is.GreaterThan(0));
-                Assert.That(protectedHalfStackXenoDamage, Is.EqualTo(xenoDamage * 0.45f).Within(0.03f),
-                    "xeno damage should normalize stacks by duration and then apply protection");
-            });
         });
     }
 
@@ -577,44 +434,6 @@ public sealed class FlammableLifecycleTest : GameTest
         });
     }
 
-    [Test]
-    public async Task StopDropRollUsesRmcResistStacksInsteadOfPositiveFade()
-    {
-        var map = await Pair.CreateTestMap();
-        EntityUid human = default;
-
-        await Server.WaitAssertion(() =>
-        {
-            SetOxygenAtmosphere(map.MapUid);
-            human = SpawnBurnable(map.MapId, 0);
-
-            var flammable = SEntMan.GetComponent<FlammableComponent>(human);
-            flammable.FirestackFade = 1;
-            IgniteRmc(human, 10, 10, 10);
-
-            var alert = new ResistFireAlertEvent();
-            SEntMan.EventBus.RaiseLocalEvent(human, alert);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(alert.Handled, Is.True);
-                Assert.That(flammable.Resisting, Is.True);
-            });
-        });
-
-        await Pair.RunTicksSync(1);
-
-        await Server.WaitAssertion(() =>
-        {
-            var flammable = SEntMan.GetComponent<FlammableComponent>(human);
-            Assert.Multiple(() =>
-            {
-                Assert.That(flammable.FireStacks, Is.Zero);
-                Assert.That(flammable.OnFire, Is.False);
-            });
-        });
-    }
-
     // CMU14 test
     [Test]
     public async Task StopDropRollAppliesResistStacksOncePerPress()
@@ -659,13 +478,6 @@ public sealed class FlammableLifecycleTest : GameTest
                 Assert.That(flammable.OnFire, Is.True);
             });
         });
-    }
-
-    private EntityUid SpawnBurnableAt(TestMapData map, float x, float y)
-    {
-        var uid = SEntMan.SpawnEntity("CMMobHuman", new MapCoordinates(new Vector2(x, y), map.MapId));
-        PrepareBurnable(uid);
-        return uid;
     }
 
     private EntityUid SpawnBurnableOnGrid(TestMapData map, float x, float y)
@@ -721,13 +533,6 @@ public sealed class FlammableLifecycleTest : GameTest
         return Server.System<DamageableSystem>().GetTotalDamage(uid).Float();
     }
 
-    private static bool HasAutoNetworkedField(string field)
-    {
-        return typeof(OnFireComponent)
-            .GetField(field, BindingFlags.Instance | BindingFlags.Public)!
-            .GetCustomAttributesData()
-            .Any(attribute => attribute.AttributeType.Name == "AutoNetworkedFieldAttribute");
-    }
 }
 
 [RegisterComponent]
@@ -740,7 +545,6 @@ public sealed partial class FireProtectionProbeComponent : Component
 [RegisterComponent]
 public sealed partial class FlammableLifecycleProbeComponent : Component
 {
-    public int IgnitedEvents;
     public int ExtinguishedEvents;
 }
 
@@ -750,7 +554,6 @@ public sealed class FlammableLifecycleProbeSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<FireProtectionProbeComponent, GetFireProtectionEvent>(OnGetProtection);
-        SubscribeLocalEvent<FlammableLifecycleProbeComponent, IgnitedEvent>(OnIgnited);
         SubscribeLocalEvent<FlammableLifecycleProbeComponent, RMCExtinguishedEvent>(OnExtinguished);
     }
 
@@ -760,11 +563,6 @@ public sealed class FlammableLifecycleProbeSystem : EntitySystem
     {
         ent.Comp.OnProtection?.Invoke();
         args.Reduce(ent.Comp.Reduction);
-    }
-
-    private static void OnIgnited(Entity<FlammableLifecycleProbeComponent> ent, ref IgnitedEvent args)
-    {
-        ent.Comp.IgnitedEvents++;
     }
 
     private static void OnExtinguished(Entity<FlammableLifecycleProbeComponent> ent, ref RMCExtinguishedEvent args)

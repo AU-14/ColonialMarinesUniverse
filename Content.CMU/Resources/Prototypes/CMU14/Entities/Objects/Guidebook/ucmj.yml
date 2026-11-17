@@ -14,6 +14,7 @@
   - AU14UCMJGENCON
   - AU14UCMJDNR
   - AU14UCMJExecutions
+  - AU14UCMJBattlefieldExecutions
 
 - type: guideEntry
   parent: RMC
@@ -70,6 +71,13 @@
   name: cmu-guide-entry-ucmj-executions
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/UCMJ/AU14UCMJExecutions.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14UCMJBattlefieldExecutions
+  name: cmu-guide-entry-ucmj-battlefield-executions
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/UCMJ/AU14UCMJBattlefieldExecutions.xml"
 
 - type: guideEntry
   parent: RMC

@@ -237,6 +237,23 @@ cmu-yautja-mark-thrall = Thrall
 cmu-yautja-mark-student = Student
 cmu-yautja-mark-blooded = Blooded
 cmu-yautja-mark-unknown = Unknown
+cmu-yautja-mark-examine-unknown-hunter = an unknown hunter
+cmu-yautja-mark-examine-prey = [color=orange]{CAPITALIZE(THE($target))} is being hunted by {$hunter}.[/color]
+cmu-yautja-mark-examine-dishonored = [color=red]{CAPITALIZE(THE($target))} was marked as dishonorable by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-honored = [color=green]{CAPITALIZE(THE($target))} was honored by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-thrall = [color=green]{CAPITALIZE(THE($target))} was thralled by {$hunter}{ $hasReason ->
+    [yes] {" "}for '{$reason}'.
+   *[no] .
+}[/color]
+cmu-yautja-mark-examine-gear-carrier = [color=red]{CAPITALIZE(THE($target))} was marked as carrying gear by {$hunter}.[/color]
+cmu-yautja-mark-examine-student = [color=green]{CAPITALIZE(THE($target))} is being taught by {$hunter}.[/color]
+cmu-yautja-mark-examine-blooded = [color=green]{CAPITALIZE(THE($target))} was blooded by {$hunter}.[/color]
 cmu-yautja-mark-view-recent = Nearby Targets
 cmu-yautja-mark-view-history = Marked History
 cmu-yautja-mark-view-recent-detail = Recently seen targets must be nearby when you place their first mark.
@@ -574,6 +591,7 @@ cmu-yautja-hunt-console-blooding-message = Available youngblood groups to awaken
 cmu-yautja-hunt-console-blooding-cancelled = You choose not to awaken any youngbloods.
 cmu-yautja-hunt-console-cooldown = You may begin another hunt in: {$time}.
 cmu-yautja-hunt-console-spawn-failed = The hunting preserve cannot awaken any suitable prey.
+cmu-yautja-preserve-hive-name = Preserve Hive
 cmu-yautja-hunt-console-hunt-ground-started = A hunting-ground prey call has been opened.
 cmu-yautja-hunt-console-blooding-started = A youngblood blooding call has been opened.
 cmu-yautja-hunt-console-hunt-ground-broadcast = {$hunter} has chosen to hunt {$hunt} in the hunting grounds.
@@ -581,6 +599,9 @@ cmu-yautja-hunt-console-blooding-broadcast = {$hunter} has awakened {$hunt} for 
 cmu-yautja-hunt-prey-ghost-name = Hunted Prey
 cmu-yautja-hunt-prey-ghost-description = Enter the Yautja hunting ground as event prey.
 cmu-yautja-hunt-prey-ghost-rules = You are event prey in a Yautja hunt. Follow staff direction and keep the hunt interesting.
+cmu-yautja-prey-optics-jammed-examine = [color=#a0a0a0]Strange glyphs are burned into the lenses. Its night vision is dead.[/color]
+cmu-yautja-prey-optics-jammed-dead = You try {THE($item)}, but the night vision stays black, crawling with strange glyphs. Something fried it.
+cmu-yautja-prey-optics-jammed-arrival = Your night vision optics flicker and die, leaving only strange glyphs behind. Something out here doesn't want you seeing in the dark.
 cmu-yautja-youngblood-ghost-name = Youngblood Yautja
 cmu-yautja-youngblood-ghost-description = Join the hunt as a youngblood Yautja undergoing blooding.
 cmu-yautja-youngblood-ghost-rules = You are a youngblood Yautja. Follow senior hunters and staff direction during the hunt.
@@ -912,6 +933,32 @@ cmu-yautja-ceremonial-dagger-flay-start-others = {$user} begins to flay {$victim
 cmu-yautja-ceremonial-dagger-flay-start-self = You start flaying {$victim} with your {$dagger}...
 cmu-yautja-ceremonial-dagger-flay-first-pass-others = {$user} makes a series of cuts in {$victim}'s skin.
 cmu-yautja-ceremonial-dagger-flay-first-pass-self = You prepare the skin, cutting the flesh off in vital places.
+cmu-yautja-ceremonial-dagger-flay-resume-others = {$user} resumes the flaying of {$victim} with {$dagger}...
+cmu-yautja-ceremonial-dagger-flay-resume-self = You resume the flaying of {$victim} with your {$dagger}...
+cmu-yautja-ceremonial-dagger-flay-busy = You can't flay {$victim}, {$flayer} is already at work!
+cmu-yautja-ceremonial-dagger-flay-interrupted = You were interrupted before you could finish your work!
+cmu-yautja-ceremonial-dagger-flay-scalp-others = {$user} cuts around {$victim}'s hairline, then tears {POSS-ADJ($victim)} scalp from {POSS-ADJ($victim)} head!
+cmu-yautja-ceremonial-dagger-flay-scalp-self = You cut around {$victim}'s hairline, then rip {POSS-ADJ($victim)} scalp from {POSS-ADJ($victim)} head.
+cmu-yautja-ceremonial-dagger-flay-scalp-bald-others = {$user} makes some rough cuts on {$victim}'s head and face.
+cmu-yautja-ceremonial-dagger-flay-scalp-bald-self = You make some rough cuts on {$victim}'s head and face.
+cmu-yautja-ceremonial-dagger-flay-scalp-headless-others = {$user} peels the skin around the stump of {$victim}'s head loose.
+cmu-yautja-ceremonial-dagger-flay-scalp-headless-self = {$victim} is missing {POSS-ADJ($victim)} head. Pelts like this just aren't the same... You peel the skin around the stump loose.
+cmu-yautja-ceremonial-dagger-flay-strip-others = {$user} jabs {POSS-ADJ($user)} dagger into {$victim}'s cuts, prying, cutting, then tearing off large areas of skin. The remainder hangs loosely.
+cmu-yautja-ceremonial-dagger-flay-strip-self = You jab your dagger into {$victim}'s cuts, prying, cutting, then tearing off large areas of skin. The remainder hangs loosely.
+cmu-yautja-ceremonial-dagger-flay-skin-others = {$user} completely flays {$victim}, pulling the remaining skin off of {POSS-ADJ($victim)} body like a glove!
+cmu-yautja-ceremonial-dagger-flay-skin-self = You completely flay {$victim}, pulling the remaining skin off of {POSS-ADJ($victim)} body like a glove. Use rope to hang {OBJECT($victim)} from the ceiling.
+cmu-yautja-ceremonial-dagger-flay-meat-name = raw {$name} steak
+cmu-yautja-ceremonial-dagger-flay-hide-name = {$name}-hide
+cmu-yautja-ceremonial-dagger-flayed-name = ???
+cmu-yautja-flayed-examine-xeno = Its outer flesh has been removed...
+cmu-yautja-flayed-examine-face = [italic]...You cannot tell anymore, {SUBJECT($target)} {CONJUGATE-BASIC($target, "don't", "doesn't")} have a face![/italic]
+cmu-yautja-flayed-examine-skin = [color=red][bold]{ GENDER($target) ->
+    [male] HIS
+    [female] HER
+    [epicene] THEIR
+   *[other] ITS
+  } SKIN HAS BEEN PEELED OFF.[/bold][/color]
+stack-cmu-yautja-human-hide = human skin
 cmu-yautja-ceremonial-dagger-limb-already-flayed = This limb has already been flayed.
 cmu-yautja-ceremonial-dagger-limb-flay-start = You start flaying the skin from {$limb}.
 cmu-yautja-ceremonial-dagger-limb-flay-cancel = You decide not to flay {$limb}.
@@ -1005,8 +1052,11 @@ cmu-yautja-chain-gauntlet-start = You raise {$item} in front of your face and st
 cmu-yautja-chain-gauntlet-already = You're already charging.
 cmu-yautja-chain-gauntlet-chain-wrapped = You wrap {$chain} around {$item}.
 cmu-yautja-chain-gauntlet-chain-existing = This one already has chains on it!
+cmu-yautja-chain-gauntlet-unwrap-verb = Unwrap chain
+cmu-yautja-chain-gauntlet-chain-unwrapped = You unwrap {$chain} from {$item}.
 cmu-yautja-chain-gauntlet-help-message = {$user} grabs {$target} by the back of the head and slams them on the ground!
 cmu-yautja-chain-gauntlet-execution-message = {$user} grabs {$target} and slowly lifts them above their head before smashing them down!
+cmu-yautja-chain-gauntlet-disarm-message = {$user} hits {$target} with an extremely strong punch, sending them flying!
 cmu-yautja-cleaving-glaive-skull-denied = Why would you want to do this!?.
 cmu-yautja-cleaving-glaive-skull-existing = You already have a {$skull} mounted on {$glaive}.
 cmu-yautja-cleaving-glaive-skull-mounted = You mount {$skull} to {$glaive}.
@@ -1243,7 +1293,7 @@ cmu-yautja-lobby-summary-cape = Cape: { $value }
 cmu-yautja-lobby-summary-bracer = Bracer: { $value }
 cmu-yautja-lobby-summary-caster = Shoulder caster: { $value }
 cmu-yautja-lobby-locked-rank = Requires rank: { $rank }
-cmu-yautja-lobby-locked-leader-ancient = Requires Leader or Ancient rank
+cmu-yautja-lobby-locked-leader-ancient = Requires Clan Leader or Ancient rank
 cmu-yautja-lobby-bracer-material = Bracer style
 cmu-yautja-lobby-armor-material = Armor material
 cmu-yautja-lobby-armor-style = Armor style
@@ -1261,13 +1311,14 @@ cmu-yautja-dread-color-auburn = Auburn
 cmu-yautja-dread-color-ash = Ash
 cmu-yautja-dread-color-bone = Bone
 cmu-yautja-lobby-quills = Quills
-cmu-yautja-lobby-legacy = Legacy set
-cmu-yautja-lobby-locked-legacy = Requires Legacy whitelist
+cmu-yautja-lobby-ancient-sets = Ancient sets
+cmu-yautja-lobby-locked-ancient = Requires the Ancient (Council) whitelist
 cmu-yautja-lobby-status = Status
 cmu-yautja-lobby-status-normal = Normal
-cmu-yautja-lobby-status-council = Council
-cmu-yautja-lobby-status-leader = Leader
-cmu-yautja-lobby-unique = Unique set
+cmu-yautja-lobby-status-council = Ancient (Council)
+cmu-yautja-lobby-status-leader = Clan Leader
+cmu-yautja-lobby-leader-sets = Leader sets
+cmu-yautja-lobby-no-set = No set
 cmu-yautja-lobby-sets = Sets
 cmu-yautja-lobby-tech = Tech
 cmu-yautja-lobby-armor = Armor
@@ -1345,3 +1396,14 @@ cmu-yautja-cape-mount-remove = Unfasten cape
 cmu-yautja-cape-mount-removed = You unfasten {THE($cape)}.
 cmu-yautja-cape-mount-examine = {CAPITALIZE(THE($cape))} is fastened to it.
 cmu-yautja-cape-mount-hint = It can be fastened to clan armor to keep your back free.
+cmu-yautja-pounce-body-slam-self = {CAPITALIZE(THE($yautja))} body slams us!
+cmu-yautja-pounce-body-slam-others = {CAPITALIZE(THE($yautja))} body slams {THE($xeno)}!
+ent-CMUActionYautjaJoinHunt = Join the Hunt
+    .desc = Join the ongoing hunt as a Yautja. Only once per round.
+cmu-yautja-ghost-join-hunt-title = Join the Hunt
+cmu-yautja-ghost-join-hunt-confirm = Confirm joining the hunt. You will join as a {$rank} Yautja.
+cmu-yautja-ghost-join-hunt-not-whitelisted = You are not whitelisted! You may apply on the forums to be whitelisted as a Yautja.
+cmu-yautja-ghost-join-hunt-no-hunt = There is no Hunt this round! Maybe the next one.
+cmu-yautja-ghost-join-hunt-already = You already were a Yautja! Give someone else a chance.
+cmu-yautja-ghost-join-hunt-full = There are no hunter slots left. Leaders, Councillors and Ancients do not count towards them.
+cmu-yautja-ghost-join-hunt-failed = You could not join the hunt.

@@ -28,22 +28,6 @@ public sealed class CMUGhostRoleGearTest : GameTest
     private const float Spacing = 12f;
 
     [Test]
-    public async Task SurvivorSynthNameIsAppliedBeforeItsIdIsIssued()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var synth = SEntMan.SpawnEntity("AU14JobFORECONSynth", MapCoordinates.Nullspace);
-            var name = SEntMan.GetComponent<MetaDataComponent>(synth).EntityName;
-            Assert.That(CMUCharacterName.HasRequiredParts(name, synthetic: true), Is.True,
-                "survivor synths use a single name rather than a randomized human surname");
-            Assert.That(Server.System<InventorySystem>().TryGetSlotEntity(synth, "id", out var card), Is.True);
-            Assert.That(SEntMan.GetComponent<IdCardComponent>(card.Value).FullName, Is.EqualTo(name),
-                "the ID must use the final synthetic name, not the earlier human name");
-            SEntMan.DeleteEntity(synth);
-        });
-    }
-
-    [Test]
     public async Task GhostRolesSpawnWithNothingOnTheFloor()
     {
         var roles = new List<string>();

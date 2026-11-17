@@ -1,5 +1,9 @@
 using System.Linq;
+using Content.Server.Humanoid;
+using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Inventory;
+using Content.Shared.Stacks;
 using Content.Shared.CMU14.Fishing.Components;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Core;
@@ -34,7 +38,12 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _organAppearance = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
@@ -45,7 +54,6 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     {
         SubscribeLocalEvent<YautjaHunterSpearFishingComponent, AfterInteractEvent>(OnHunterSpearAfterInteract);
         SubscribeLocalEvent<YautjaHunterSpearFishingComponent, YautjaHunterSpearFishingDoAfterEvent>(OnHunterSpearFishingDoAfter);
-        SubscribeLocalEvent<YautjaCeremonialDaggerComponent, MeleeHitEvent>(OnCeremonialDaggerMeleeHit);
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, AfterInteractEvent>(OnCeremonialDaggerAfterInteract);
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, YautjaCeremonialDaggerPrepareFlayDoAfterEvent>(OnCeremonialDaggerPrepareFlayDoAfter);
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, YautjaCeremonialDaggerFlayDoAfterEvent>(OnCeremonialDaggerFlayDoAfter);
@@ -149,63 +157,71 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
             args.User);
     }
 
-    private void OnCeremonialDaggerMeleeHit(Entity<YautjaCeremonialDaggerComponent> dagger, ref MeleeHitEvent args)
-    {
-        if (args.Handled ||
-            !args.IsHit ||
-            args.HitEntities.Count != 1)
-        {
-            return;
-        }
-
-        var target = args.HitEntities[0];
-        if (!_mobState.IsDead(target))
-            return;
-
-        if (!HasComp<HumanoidProfileComponent>(target) || HasComp<XenoComponent>(target))
-        {
-            args.Handled = true;
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-non-human"), args.User, args.User);
-            return;
-        }
-
-        // cmss13 checks TRAIT_SUPER_STRONG here, which linked thralls get too
-        if (!HasComp<YautjaComponent>(args.User) && !HasComp<YautjaThrallHeroComponent>(args.User))
-        {
-            args.Handled = true;
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-not-strong"), args.User, args.User);
-            return;
-        }
-
-        if (HasComp<YautjaComponent>(target))
-        {
-            args.Handled = true;
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-yautja"), args.User, args.User, PopupType.LargeCaution);
-            return;
-        }
-
-        if (HasComp<SynthComponent>(target))
-        {
-            args.Handled = true;
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-synth"), args.User, args.User);
-            return;
-        }
-
-        if (TryComp(target, out YautjaFlayedComponent? flayed))
-        {
-            args.Handled = TryCompleteCeremonialDaggerScalpStage(dagger, args.User, target, flayed);
-            return;
-        }
-
-        args.Handled = TryStartCeremonialDaggerPrepareFlay(dagger, args.User, target);
-    }
-
+    // a plain click on the corpse, same as flaying a severed limb or head. cmss13 does it from attack(),
+    // which is just a click there, so it shouldn't need combat mode here
     private void OnCeremonialDaggerAfterInteract(Entity<YautjaCeremonialDaggerComponent> dagger, ref AfterInteractEvent args)
     {
         if (args.Handled || args.Target is not { } target)
             return;
 
+        if (TryStartCeremonialDaggerBodyFlay(dagger, args.User, target, args.CanReach))
+        {
+            args.Handled = true;
+            return;
+        }
+
         args.Handled = TryStartCeremonialDaggerLimbFlay(dagger, args.User, target, args.CanReach);
+    }
+
+    private bool TryStartCeremonialDaggerBodyFlay(
+        Entity<YautjaCeremonialDaggerComponent> dagger,
+        EntityUid user,
+        EntityUid target,
+        bool canReach)
+    {
+        if (!canReach ||
+            !_mobState.IsDead(target) ||
+            _hands.GetActiveItem(user) != dagger.Owner)
+        {
+            return false;
+        }
+
+        if (!HasComp<HumanoidProfileComponent>(target) || HasComp<XenoComponent>(target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-non-human"), user, user);
+            return true;
+        }
+
+        if (!CanFlay(user))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-not-strong"), user, user);
+            return true;
+        }
+
+        if (HasComp<YautjaComponent>(target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-yautja"), user, user, PopupType.LargeCaution);
+            return true;
+        }
+
+        if (HasComp<SynthComponent>(target))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-synth"), user, user);
+            return true;
+        }
+
+        if (TryComp(target, out YautjaFlayedComponent? flayed))
+        {
+            // fully flayed, nothing left to take
+            if (flayed.NextStage == YautjaFlayingStage.Complete)
+                return false;
+
+            TryResumeCeremonialDaggerFlay(dagger, user, (target, flayed));
+            return true;
+        }
+
+        TryStartCeremonialDaggerPrepareFlay(dagger, user, target);
+        return true;
     }
 
     private bool TryStartCeremonialDaggerLimbFlay(
@@ -301,12 +317,61 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
             args.Target is not { } target ||
             Deleted(target) ||
             !_mobState.IsDead(target) ||
-            !HasComp<YautjaComponent>(args.User))
+            !CanFlay(args.User))
         {
             return;
         }
 
+        _popup.PopupEntity(
+            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-start-others", ("user", args.User), ("victim", target), ("dagger", dagger.Owner)),
+            args.User,
+            Filter.PvsExcept(args.User),
+            true,
+            PopupType.MediumCaution);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-start-self", ("victim", target), ("dagger", dagger.Owner)),
+            args.User,
+            args.User,
+            PopupType.MediumCaution);
+        _audio.PlayPvs(dagger.Comp.StartFlaySound, target);
         StartCeremonialDaggerFlay(dagger, args.User, target);
+    }
+
+    // cmss13 thralls flay too, they get TRAIT_SUPER_STRONG from the link
+    private bool CanFlay(EntityUid user)
+    {
+        return HasComp<YautjaComponent>(user) || HasComp<YautjaThrallHeroComponent>(user);
+    }
+
+    private void TryResumeCeremonialDaggerFlay(
+        Entity<YautjaCeremonialDaggerComponent> dagger,
+        EntityUid user,
+        Entity<YautjaFlayedComponent> target)
+    {
+        if (target.Comp.CurrentFlayer is { } current && current != user && !TerminatingOrDeleted(current))
+        {
+            _popup.PopupEntity(
+                Loc.GetString("cmu-yautja-ceremonial-dagger-flay-busy", ("victim", target.Owner), ("flayer", current)),
+                user,
+                user);
+            return;
+        }
+
+        if (!StartCeremonialDaggerFlay(dagger, user, target))
+            return;
+
+        _popup.PopupEntity(
+            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-resume-others", ("user", user), ("victim", target.Owner), ("dagger", dagger.Owner)),
+            user,
+            Filter.PvsExcept(user),
+            true,
+            PopupType.MediumCaution);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-resume-self", ("victim", target.Owner), ("dagger", dagger.Owner)),
+            user,
+            user,
+            PopupType.MediumCaution);
+        _audio.PlayPvs(dagger.Comp.StartFlaySound, target);
     }
 
     private bool StartCeremonialDaggerFlay(
@@ -314,19 +379,6 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
         EntityUid user,
         EntityUid target)
     {
-        _popup.PopupEntity(
-            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-start-others", ("user", user), ("victim", target), ("dagger", dagger.Owner)),
-            user,
-            Filter.PvsExcept(user),
-            true,
-            PopupType.MediumCaution);
-        _popup.PopupEntity(
-            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-start-self", ("victim", target), ("dagger", dagger.Owner)),
-            user,
-            user,
-            PopupType.MediumCaution);
-        _audio.PlayPvs(dagger.Comp.StartFlaySound, target);
-
         var doAfter = new DoAfterArgs(
             EntityManager,
             user,
@@ -347,9 +399,19 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
             ForceVisible = true,
         };
 
-        return _doAfter.TryStartDoAfter(doAfter);
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return false;
+
+        if (TryComp(target, out YautjaFlayedComponent? flayed))
+        {
+            flayed.CurrentFlayer = user;
+            Dirty(target, flayed);
+        }
+
+        return true;
     }
 
+    // one doafter per stage and it repeats until the body is done, the same loop cmss13 runs
     private void OnCeremonialDaggerFlayDoAfter(
         Entity<YautjaCeremonialDaggerComponent> dagger,
         ref YautjaCeremonialDaggerFlayDoAfterEvent args)
@@ -359,16 +421,48 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
 
         args.Handled = true;
 
-        if (args.Cancelled ||
-            args.Target is not { } target ||
-            Deleted(target) ||
-            !_mobState.IsDead(target) ||
-            !HasComp<YautjaComponent>(args.User))
+        if (args.Target is not { } target || TerminatingOrDeleted(target))
+            return;
+
+        TryComp(target, out YautjaFlayedComponent? flayed);
+        if (args.Cancelled || !_mobState.IsDead(target) || !CanFlay(args.User))
         {
+            if (flayed != null && flayed.CurrentFlayer == args.User)
+            {
+                flayed.CurrentFlayer = null;
+                Dirty(target, flayed);
+            }
+
+            if (args.Cancelled)
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-ceremonial-dagger-flay-interrupted"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
-        FinishCeremonialDaggerFirstFlayPass(dagger, args.User, target);
+        if (flayed == null)
+        {
+            flayed = FinishCeremonialDaggerFirstFlayPass(dagger, args.User, target);
+        }
+        else
+        {
+            switch (flayed.NextStage)
+            {
+                case YautjaFlayingStage.Scalp:
+                    FinishCeremonialDaggerScalpStage(dagger, args.User, (target, flayed));
+                    break;
+                case YautjaFlayingStage.Strip:
+                    FinishCeremonialDaggerStripStage(dagger, args.User, (target, flayed));
+                    break;
+                case YautjaFlayingStage.Skin:
+                    FinishCeremonialDaggerSkinStage(dagger, args.User, (target, flayed));
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        flayed.CurrentFlayer = flayed.NextStage == YautjaFlayingStage.Complete ? null : args.User;
+        Dirty(target, flayed);
+        args.Repeat = flayed.NextStage != YautjaFlayingStage.Complete;
     }
 
     private void OnCeremonialDaggerLimbFlayDoAfter(
@@ -406,55 +500,169 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
             PopupType.MediumCaution);
     }
 
-    private void FinishCeremonialDaggerFirstFlayPass(
+    private YautjaFlayedComponent FinishCeremonialDaggerFirstFlayPass(
         Entity<YautjaCeremonialDaggerComponent> dagger,
         EntityUid user,
         EntityUid target)
     {
-        _popup.PopupEntity(
-            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-first-pass-others", ("user", user), ("victim", target)),
-            user,
-            Filter.PvsExcept(user),
-            true,
-            PopupType.MediumCaution);
-        _popup.PopupEntity(
-            Loc.GetString("cmu-yautja-ceremonial-dagger-flay-first-pass-self", ("victim", target)),
-            user,
-            user,
-            PopupType.MediumCaution);
+        PopupFlayStage(user, target, "first-pass");
         _audio.PlayPvs(dagger.Comp.FirstPassSound, target);
 
         var flayed = EnsureComp<YautjaFlayedComponent>(target);
         flayed.Stage = 1;
         flayed.NextStage = YautjaFlayingStage.Scalp;
-        flayed.CurrentFlayer = null;
-        Dirty(target, flayed);
 
-        var damage = new DamageSpecifier(dagger.Comp.FirstPassDamage);
-        if (TryComp<DamageableComponent>(target, out var damageable))
-            _damage.AddDamage(target, damageable, damage);
+        ApplyFlayDamage(target, dagger.Owner, dagger.Comp.FirstPassDamage);
+        SpawnFlayLeftovers(dagger, target, meat: true, hide: 0);
+        return flayed;
+    }
 
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
+    private void FinishCeremonialDaggerScalpStage(
+        Entity<YautjaCeremonialDaggerComponent> dagger,
+        EntityUid user,
+        Entity<YautjaFlayedComponent> target)
+    {
+        target.Comp.NextStage = YautjaFlayingStage.Strip;
+        _audio.PlayPvs(dagger.Comp.ScalpSound, target);
+
+        if (!TryGetFlayHead(target, out _))
         {
-            _bodyPartHealth.TryApplyPartDamage(target, partUid, damage, tool: dagger.Owner, ignoreResistance: true);
+            ApplyFlayDamage(target, dagger.Owner, dagger.Comp.ScalpDamage, BodyPartType.Torso);
+            PopupFlayStage(user, target, "scalp-headless");
+            return;
+        }
+
+        ApplyFlayDamage(target, dagger.Owner, dagger.Comp.ScalpDamage, BodyPartType.Head);
+        SpawnFlayLeftovers(dagger, target, meat: false, hide: dagger.Comp.ScalpHide);
+
+        // you can't scalp someone with no hair
+        if (!_organAppearance.TryGetMarkings(target, HumanoidVisualLayers.Hair, out var organ, out _, out var hair) ||
+            hair.Count == 0)
+        {
+            PopupFlayStage(user, target, "scalp-bald");
+            return;
+        }
+
+        PopupFlayStage(user, target, "scalp");
+        var scalp = _trophies.SpawnRuntimeScalp(target, user);
+        _hands.PickupOrDrop(user, scalp, checkActionBlocker: false);
+
+        // the hair comes off with the scalp
+        _organAppearance.SetMarkings(target, organ, HumanoidVisualLayers.Hair, []);
+    }
+
+    private void FinishCeremonialDaggerStripStage(
+        Entity<YautjaCeremonialDaggerComponent> dagger,
+        EntityUid user,
+        Entity<YautjaFlayedComponent> target)
+    {
+        target.Comp.Stage = 2;
+        target.Comp.NextStage = YautjaFlayingStage.Skin;
+        PopupFlayStage(user, target, "strip");
+        _audio.PlayPvs(dagger.Comp.StripSound, target);
+
+        ApplyFlayDamage(target, dagger.Owner, dagger.Comp.StripDamage);
+        SpawnFlayLeftovers(dagger, target, meat: false, hide: dagger.Comp.StripHide);
+
+        // uniform comes off with the skin, so the stripped body actually shows
+        _inventory.TryUnequip(target, target, "jumpsuit", silent: true, force: true);
+        if (_organAppearance.TryGetMarkings(target, HumanoidVisualLayers.FacialHair, out var organ, out _, out var beard) &&
+            beard.Count > 0)
+        {
+            _organAppearance.SetMarkings(target, organ, HumanoidVisualLayers.FacialHair, []);
         }
     }
 
-    private bool TryCompleteCeremonialDaggerScalpStage(
+    private void FinishCeremonialDaggerSkinStage(
         Entity<YautjaCeremonialDaggerComponent> dagger,
         EntityUid user,
-        EntityUid target,
-        YautjaFlayedComponent flayed)
+        Entity<YautjaFlayedComponent> target)
     {
-        if (flayed.NextStage != YautjaFlayingStage.Scalp)
-            return false;
+        target.Comp.Stage = 3;
+        target.Comp.NextStage = YautjaFlayingStage.Complete;
+        PopupFlayStage(user, target, "skin");
+        _audio.PlayPvs(dagger.Comp.SkinSound, target);
 
-        flayed.NextStage = YautjaFlayingStage.Strip;
-        flayed.CurrentFlayer = null;
-        Dirty(target, flayed);
+        ApplyFlayDamage(target, dagger.Owner, dagger.Comp.SkinDamage);
+        SpawnFlayLeftovers(dagger, target, meat: true, hide: dagger.Comp.SkinHide);
 
-        _audio.PlayPvs(dagger.Comp.FirstPassSound, target);
-        _trophies.SpawnRuntimeScalp(target, user);
-        return true;
+        _hands.DropAll(target.Owner, checkActionBlocker: false, doDropInteraction: false);
+        var slots = _inventory.GetSlotEnumerator(target.Owner);
+        while (slots.MoveNext(out var slot))
+        {
+            if (slot.ContainedEntity != null)
+                _inventory.TryUnequip(target, target, slot.ID, silent: true, force: true);
+        }
+
+        // cmss13 PERMANENTLY_DEAD, nobody's coming back from this
+        _unrevivable.MakeUnrevivable(target.Owner);
+        _meta.SetEntityName(target, Loc.GetString("cmu-yautja-ceremonial-dagger-flayed-name"));
+    }
+
+    private void PopupFlayStage(EntityUid user, EntityUid target, string stage)
+    {
+        _popup.PopupEntity(
+            Loc.GetString($"cmu-yautja-ceremonial-dagger-flay-{stage}-others", ("user", user), ("victim", target)),
+            user,
+            Filter.PvsExcept(user),
+            true,
+            PopupType.MediumCaution);
+        _popup.PopupEntity(
+            Loc.GetString($"cmu-yautja-ceremonial-dagger-flay-{stage}-self", ("victim", target)),
+            user,
+            user,
+            PopupType.MediumCaution);
+    }
+
+    private bool TryGetFlayHead(EntityUid target, out EntityUid head)
+    {
+        foreach (var (partUid, part) in _body.GetBodyChildren(target))
+        {
+            if (part.PartType != BodyPartType.Head)
+                continue;
+
+            head = partUid;
+            return true;
+        }
+
+        head = default;
+        return false;
+    }
+
+    // null part = every part, same as the first pass always did
+    private void ApplyFlayDamage(EntityUid target, EntityUid dagger, DamageSpecifier damage, BodyPartType? only = null)
+    {
+        var specifier = new DamageSpecifier(damage);
+        if (TryComp<DamageableComponent>(target, out var damageable))
+            _damage.AddDamage(target, damageable, specifier);
+
+        foreach (var (partUid, part) in _body.GetBodyChildren(target))
+        {
+            if (only != null && part.PartType != only)
+                continue;
+
+            _bodyPartHealth.TryApplyPartDamage(target, partUid, specifier, tool: dagger, ignoreResistance: true);
+        }
+    }
+
+    private void SpawnFlayLeftovers(Entity<YautjaCeremonialDaggerComponent> dagger, EntityUid victim, bool meat, int hide)
+    {
+        var coords = Transform(victim).Coordinates;
+        var name = Name(victim);
+        if (meat)
+        {
+            var steak = Spawn(dagger.Comp.MeatPrototype, coords);
+            _meta.SetEntityName(steak, Loc.GetString("cmu-yautja-ceremonial-dagger-flay-meat-name", ("name", name)));
+        }
+
+        if (hide <= 0)
+            return;
+
+        var skin = Spawn(dagger.Comp.HidePrototype, coords);
+        _stack.SetCount(skin, hide);
+        _meta.SetEntityName(skin, Loc.GetString("cmu-yautja-ceremonial-dagger-flay-hide-name", ("name", name)));
+        var owner = EnsureComp<YautjaFlayedHideComponent>(skin);
+        owner.Victim = name;
+        Dirty(skin, owner);
     }
 }

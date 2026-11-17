@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.Chemistry.Components;
+using Content.Shared.Clothing.Components;
 using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.Farming;
 using Content.Shared.CMU14.Flora;
@@ -63,7 +64,11 @@ public sealed partial class CMUGuideRecipeCatalog
             if (entity.TryComp<LogSplittableComponent>(out var log, _entities.ComponentFactory))
                 Add(Recipe("split:" + entity.ID, "chop", "split-help", new() { Item(log.Firewood, log.Pieces) }, new() { Item(entity.ID) }));
 
-            if (entity.TryComp<ToolRefinableComponent>(out var refine, _entities.ComponentFactory))
+            // Clothing recycling belongs here only when the garment is part of an industry recipe.
+            // Otherwise every upstream uniform and glove becomes another cloth acquisition entry.
+            if (entity.TryComp<ToolRefinableComponent>(out var refine, _entities.ComponentFactory) &&
+                (!entity.TryComp<ClothingComponent>(out _, _entities.ComponentFactory) ||
+                 _materials.Contains(CMUGuideMaterial.Item(entity.ID))))
             {
                 var outputs = new List<CMUGuideIngredient>();
                 foreach (var spawn in refine.RefineResult)

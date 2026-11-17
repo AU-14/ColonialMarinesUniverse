@@ -98,7 +98,7 @@ public sealed class SteamSmelterSystem : EntitySystem
 
         // Nothing to make, nowhere to put it, or no room left for the slag: what was begun is forgotten.
         if (job == null || !CanTakeOutput(smelter, job) ||
-            _fluids.Room(Tank(smelter), FluidKinds.Slag, comp.SlagLimit) < job.Slag)
+            _fluids.Room((smelter.Owner, Tank(smelter)), FluidKinds.Slag, comp.SlagLimit) < job.Slag)
         {
             Stop(smelter, job == null || comp.ActiveRecipe != job.Id);
             return;

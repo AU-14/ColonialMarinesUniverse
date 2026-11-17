@@ -147695,14 +147695,14 @@ entities:
     - type: Transform
       parent: 1
       pos: 37.5,-95.5
-- proto: RMCCableCoil
+- proto: CMUCableThinLVStack
   entities:
   - uid: 20005
     components:
     - type: Transform
       parent: 1
       pos: 42.508247,-7.5118093
-- proto: RMCCableCoil1
+- proto: CMUCableThinLVStack1
   entities:
   - uid: 20006
     components:
@@ -147716,7 +147716,7 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: -54.5,-50.5
-- proto: RMCCableCoil30
+- proto: CMUCableThinLVStack
   entities:
   - uid: 20008
     components:

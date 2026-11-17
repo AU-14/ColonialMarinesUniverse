@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Lidgren.Network;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
@@ -19,6 +19,7 @@ public sealed class LinkAccountStatusMsg : NetMessage
 
         buffer.ReadPadBits();
         var length = buffer.ReadVariableInt32();
+        buffer.AssertAtLeastSize(length); // CMU14: validate before allocation.
         using var stream = new MemoryStream(length);
         buffer.ReadAlignedMemory(stream, length);
         Patron = serializer.Deserialize<SharedRMCPatronFull>(stream);

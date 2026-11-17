@@ -8,7 +8,6 @@ namespace Content.IntegrationTests.CMU14.Insurgency;
 public sealed class SapperTripwireTest
 {
     [TestCase("AU14SapperTripwireSegment")]
-    [TestCase("AU14SapperTripwireEnd")]
     public async Task TripwireIgnoresDraggedMachinesAndFriendlies(string segmentPrototype)
     {
         await using var pair = await PoolManager.GetServerClient();

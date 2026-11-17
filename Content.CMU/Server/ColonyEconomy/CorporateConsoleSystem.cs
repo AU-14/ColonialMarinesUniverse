@@ -143,7 +143,8 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto))
             return;
 
-        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false,
+            caller: new ThirdPartyCaller(Name(msg.Actor), Loc.GetString("cmu-third-party-caller-corporate"), Actor: msg.Actor, Console: uid));
 
         // Deduct from ALL corporate consoles (they share one budget)
         var nextCallIn = _timing.CurTime + comp.CallInCooldown;

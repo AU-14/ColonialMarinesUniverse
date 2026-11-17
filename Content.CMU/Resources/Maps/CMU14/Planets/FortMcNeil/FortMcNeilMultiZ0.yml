@@ -39554,7 +39554,7 @@ entities:
       pos: 162.5,20.5
     - type: Fixtures
       fixtures: {}
-- proto: RMCCableCoil
+- proto: CMUCableThinLVStack
   entities:
   - uid: 7971
     components:

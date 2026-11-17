@@ -9,6 +9,11 @@
   - type: FoldableClothing
     foldedEquippedPrefix: flipped
     foldedHeldPrefix: flipped
+  # CMU14: a raised wrap covers facial hair in both supported equipment slots.
+  - type: HideLayerClothing
+    hideOnToggle: true
+    layers:
+      FacialHair: MASK, NECK
   - type: Sprite
     layers:
     - state: icon

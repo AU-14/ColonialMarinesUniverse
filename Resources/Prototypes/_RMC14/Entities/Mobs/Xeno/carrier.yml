@@ -223,6 +223,7 @@
     - ActionXenoDevolve
   - type: XenoStrain
     name: rmc-xeno-eggsac-name
+    baseCaste: CMXenoCarrier # CMU14: allow returning to the unstrained caste.
     description: rmc-xeno-eggsac-description
     popup: rmc-xeno-eggsac-popup
   - type: DrawableSolution

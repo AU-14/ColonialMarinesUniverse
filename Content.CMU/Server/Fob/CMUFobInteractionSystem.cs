@@ -16,14 +16,12 @@ using Content.Shared.Interaction;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
-using Content.Shared.Physics;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Fob;
@@ -31,6 +29,7 @@ namespace Content.Server.CMU14.Fob;
 /// <summary>Physical access and repair authority for the optional FOB reserve equipment.</summary>
 public sealed partial class CMUFobInteractionSystem : EntitySystem
 {
+    [Dependency] private CMUFobCollisionSystem _collision = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private RMCConstructionSystem _construction = default!;
@@ -60,6 +59,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<CMUFobCrateComponent, CMUFobCrateOpenAttemptEvent>(OnCrateOpenAttempt);
         SubscribeLocalEvent<CMUFobRepairableComponent, InteractUsingEvent>(OnRepairInteract);
         SubscribeLocalEvent<CMUFobRepairableComponent, CMUFobRepairDoAfterEvent>(OnRepairFinished);
         SubscribeLocalEvent<CMUFobRepairableComponent, DoAfterAttemptEvent<CMUFobRepairDoAfterEvent>>(OnRepairAttempt);
@@ -81,6 +81,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
     private void OnControlMapInit(Entity<CMUFobControlComponent> control, ref MapInitEvent args)
     {
+        UpdateControlCollision(control);
         // This engine cannot deserialize boxed Boolean appearance defaults from YAML.
         _appearance.SetData(control, CMUFobVisuals.Stowed, !Transform(control).Anchored);
     }
@@ -154,11 +155,16 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
     private void OnOpenAttempt(Entity<CMUFobControlComponent> control, ref ActivatableUIOpenAttemptEvent args)
     {
         if (TryBindControl(control, out _) && !control.Comp.Broken
-            && CanInteract(control, args.User, control.Comp.Faction) && IsOperator(args.User))
+            && CanInteract(control, args.User, control.Comp.Faction))
             return;
 
         args.Cancel();
-        _popup.PopupEntity(Loc.GetString("cmu-fob-control-denied"), control, args.User);
+        var reason = !_reserve.Enabled ? "cmu-fob-disabled"
+            : control.Comp.Broken ? "cmu-fob-control-broken"
+            : !Transform(control).Anchored ? "cmu-fob-control-folded"
+            : !CanInteract(control, args.User, control.Comp.Faction) ? "cmu-fob-console-access-denied"
+            : "cmu-fob-control-site-required";
+        _popup.PopupEntity(Loc.GetString(reason), control, args.User);
     }
 
     private void OnOpened(Entity<CMUFobControlComponent> control, ref BoundUIOpenedEvent args) => UpdateControl(control);
@@ -166,7 +172,7 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
     private void OnControlMessage(Entity<CMUFobControlComponent> control, ref CMUFobControlMessage args)
     {
         // Revalidate every message: an already-open UI is not continuing permission to operate the device.
-        if (control.Comp.Broken || !CanInteract(control, args.Actor, control.Comp.Faction) || !IsOperator(args.Actor)
+        if (control.Comp.Broken || !CanInteract(control, args.Actor, control.Comp.Faction)
             || !TryBindControl(control, out var network))
         {
             _ui.CloseUi(control.Owner, CMUFobControlUiKey.Key, args.Actor);
@@ -179,6 +185,16 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         UpdateControl(control);
     }
 
+    // opening on the pad spills the folded terminal where it can never be deployed, only dragged off with a powerloader
+    private void OnCrateOpenAttempt(Entity<CMUFobCrateComponent> crate, ref CMUFobCrateOpenAttemptEvent args)
+    {
+        if (args.Cancelled || !_maps.IsInAnyLandingArea(crate))
+            return;
+
+        args.Cancelled = true;
+        _popup.PopupEntity(Loc.GetString("cmu-fob-crate-landing"), crate, args.User, PopupType.SmallCaution);
+    }
+
     private void OnRepairInteract(Entity<CMUFobRepairableComponent> device, ref InteractUsingEvent args)
     {
         if (args.Handled || !_reserve.Enabled)
@@ -187,25 +203,40 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         args.Handled = true;
         if (_tools.HasQuality(args.Used, Wrench) && TryComp<CMUFobControlComponent>(device, out var control))
         {
-            if (control.Broken || !_reserve.TryGetNetwork(control.Faction, out var bank)
-                || bank.Comp.State is CMUFobReserveState.Active or CMUFobReserveState.Starting or CMUFobReserveState.Closed
-                || !CanOperate(device, args.User, control.Faction)
-                || Transform(device).MapUid != bank.Comp.Map
-                || Vector2.DistanceSquared(_transform.GetWorldPosition(device), _transform.GetWorldPosition(bank)) > bank.Comp.DeploymentRange * bank.Comp.DeploymentRange) return;
+            var reason = control.Broken ? "cmu-fob-control-broken"
+                : !CanOperate(device, args.User, control.Faction) ? "cmu-fob-operator-required"
+                : !_reserve.TryGetNetwork(control.Faction, out _) ? "cmu-fob-network-required" : null;
+            if (reason != null)
+            {
+                _popup.PopupEntity(Loc.GetString(reason), device, args.User);
+                return;
+            }
+            if (!_reserve.TryGetNetwork(control.Faction, out var bank)) return;
+            if (bank.Comp.State is CMUFobReserveState.Active or CMUFobReserveState.Starting or CMUFobReserveState.Closed)
+            {
+                _popup.PopupEntity(Loc.GetString(bank.Comp.State == CMUFobReserveState.Closed
+                    ? "cmu-fob-network-closed" : "cmu-fob-support-off-required"), device, args.User);
+                return;
+            }
             if (Transform(device).Anchored) _transform.Unanchor(device);
             else
             {
-                if (Transform(device).GridUid is not { } grid || !TryComp<MapGridComponent>(grid, out var mapGrid)) return;
-                var tile = _map.GetTileRef(grid, mapGrid, Transform(device).Coordinates);
-                var center = _map.GridTileToWorld(grid, mapGrid, tile.GridIndices).Position;
-                if (tile.Tile.IsEmpty || Vector2.DistanceSquared(center, _transform.GetWorldPosition(bank)) > bank.Comp.DeploymentRange * bank.Comp.DeploymentRange
-                    || !_maps.CanPlaceUtility(bank, center)
-                    || !_construction.CanBuildAt(Transform(device).Coordinates, Name(device), out _, anchoring: true,
-                        collision: CollisionGroup.Impassable | CollisionGroup.MidImpassable)
-                    || !_transform.AnchorEntity(device)) return;
+                var failure = GetPlacementFailure(device, bank, out var coordinates);
+                if (failure != null)
+                {
+                    _popup.PopupEntity(Loc.GetString(failure), device, args.User);
+                    return;
+                }
+                if (!_transform.AnchorEntity((device.Owner, Transform(device), MetaData(device)), coordinates))
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-fob-placement-blocked"), device, args.User);
+                    return;
+                }
             }
             _appearance.SetData(device, CMUFobVisuals.Stowed, !Transform(device).Anchored);
             _effects.Play(device, Transform(device).Anchored ? CMUFobPresentationCue.Deploy : CMUFobPresentationCue.Pack);
+            _popup.PopupEntity(Loc.GetString(Transform(device).Anchored
+                ? "cmu-fob-control-deployed" : "cmu-fob-equipment-packed"), device, args.User);
             return;
         }
         TryStartRepair(device, args.User, args.Used);
@@ -398,7 +429,14 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
         => CheckControlSite(control);
 
     private void OnControlAnchorChanged(Entity<CMUFobControlComponent> control, ref AnchorStateChangedEvent args)
-        => CheckControlSite(control);
+    {
+        UpdateControlCollision(control);
+        CheckControlSite(control);
+    }
+
+    private void UpdateControlCollision(EntityUid control)
+        => _collision.SetBlocking(control, Transform(control).Anchored,
+            Content.Shared.Physics.CollisionGroup.MidImpassable | Content.Shared.Physics.CollisionGroup.LowImpassable);
 
     private void CheckControlSite(Entity<CMUFobControlComponent> control)
     {
@@ -426,9 +464,8 @@ public sealed partial class CMUFobInteractionSystem : EntitySystem
 
         if (TryComp<CMUFobControlComponent>(device, out var control))
         {
-            args.PushMarkup(Loc.GetString(control.Broken ? "cmu-fob-control-broken" : "cmu-fob-control-examine"));
-            if (TryBindControl((device, control), out var network))
-                args.PushMarkup(_reserve.GetPublicState(network));
+            args.PushMarkup(Loc.GetString(control.Broken ? "cmu-fob-control-broken"
+                : Transform(device).Anchored ? "cmu-fob-control-anchored" : "cmu-fob-control-folded"));
         }
         else
             args.PushMarkup(Loc.GetString(_reserve.TryGetRelayAssignment(device, out _)

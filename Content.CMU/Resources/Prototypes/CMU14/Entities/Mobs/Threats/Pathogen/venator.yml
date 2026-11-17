@@ -46,7 +46,7 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
-    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenGrapple
     - CMU14ActionXenoPathogenAbduct
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenScissorCut
@@ -62,7 +62,10 @@
   - type: XenoDevour
   - type: XenoTailSeize
   - type: XenoAbduct
-  - type: XenoImpale
+  - type: XenoFling
+    range: -3
+    paralyzeTime: 0
+    slowTime: 0
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
@@ -97,6 +100,20 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.0
     baseSprintSpeed: 6.0
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.7
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.4
+      whitelist:
+        components:
+        - XenoHeavy
   - type: RMCSize
     size: Big
   - type: MeleeWeapon
@@ -229,6 +246,7 @@
     - CMU14GibEffectPathogenVenator
   - type: XenoStrain
     name: rmc-xeno-bloodletter-name
+    baseCaste: CMU14XenoVenator
     description: rmc-xeno-bloodletter-description
     popup: rmc-xeno-bloodletter-popup
   - type: XenoHidden  

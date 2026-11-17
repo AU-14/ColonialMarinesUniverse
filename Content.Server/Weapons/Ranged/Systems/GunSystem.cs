@@ -120,6 +120,7 @@ public sealed partial class GunSystem : SharedGunSystem
                         RaiseLocalEvent(cartridgeUid, new AmmoShotEvent
                         {
                             FiredProjectiles = shotProjectiles,
+                            TargetCoordinates = toCoordinates, // CMU14
                         });
 
                         SetCartridgeSpent(cartridgeUid, cartridge, true);
@@ -179,6 +180,7 @@ public sealed partial class GunSystem : SharedGunSystem
         RaiseLocalEvent(gun, new AmmoShotEvent
         {
             FiredProjectiles = shotProjectiles,
+            TargetCoordinates = toCoordinates, // CMU14
         });
 
         Logs.Add(

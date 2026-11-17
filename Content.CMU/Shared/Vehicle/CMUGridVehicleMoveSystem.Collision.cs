@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared._RMC14.Crate;
 using Content.Shared._RMC14.Entrenching;
@@ -67,12 +68,30 @@ public sealed partial class GridVehicleMoverSystem
 
     private void CMUOnCrashed(EntityUid vehicle, GridVehicleMoverComponent mover, EntityUid target, float hullDamage)
     {
+        var impact = new CMUVehicleImpactEvent(target);
+        RaiseLocalEvent(vehicle, ref impact);
+
         if (hullDamage <= 0f)
             return;
 
         var speed = mover.MaxSpeed > 0f ? MathF.Min(1f, MathF.Abs(mover.CurrentSpeed) / mover.MaxSpeed) : 0f;
         var ev = new CMUVehicleCrashedEvent(hullDamage, CMUIsFrontalCrash(vehicle, mover, target), speed, CMUCrashContact(vehicle, target));
         RaiseLocalEvent(vehicle, ref ev);
+    }
+
+    /// <summary>
+    /// Running someone down counts as an impact only at the speed a crash would.
+    /// </summary>
+    private void CMUOnMobHit(EntityUid vehicle, GridVehicleMoverComponent mover, EntityUid target)
+    {
+        if (_net.IsClient ||
+            MathF.Abs(mover.CurrentSpeed) < MathF.Max(mover.CollisionDamageMinSpeed, mover.WallSmashMinSpeed))
+        {
+            return;
+        }
+
+        var impact = new CMUVehicleImpactEvent(target);
+        RaiseLocalEvent(vehicle, ref impact);
     }
 
     /// <summary>

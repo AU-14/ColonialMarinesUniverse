@@ -547,8 +547,13 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
         }
         else
         {
-            var proto = Reagent.Index(reagentQuantity.Reagent.Prototype);
-            solution.AddReagent(proto, acceptedQuantity, temperature.Value, ProtoMan);
+            // CMU14 start: keep reagent data (STATE-02). A generated reagent can be missing from the client registry
+            // during prediction (ChemMaster moves are predicted), so fall back to the temperature-less add, not a throw.
+            if (Reagent.TryIndex(reagentQuantity.Reagent.Prototype, out var proto))
+                solution.AddReagent(proto, acceptedQuantity, temperature.Value, ProtoMan, reagentQuantity.Reagent.Data);
+            else
+                solution.AddReagent(reagentQuantity.Reagent, acceptedQuantity);
+            // CMU14 end
         }
 
         UpdateChemicals(soln);

@@ -179,17 +179,21 @@
     sections:
     - name: Tools
       entries:
-      - id: RMCCableCoil
-        amount: 15
+      - id: CMUCableThinHVStack
+        amount: 5
+      - id: CMUCableThinMVStack
+        amount: 5
+      - id: CMUCableThinLVStack
+        amount: 5
       - id: CMMultitool
         amount: 6
     - name: Power
       entries:
-      - id: CableHVStack
+      - id: CMUCableThinHVStack
         amount: 6
-      - id: CableMVStack
+      - id: CMUCableThinMVStack
         amount: 6
-      - id: CableApcStack
+      - id: CMUCableThinLVStack
         amount: 6
       - id: CMAPCElectronics
         amount: 4
@@ -327,8 +331,12 @@
       # Roboticist Jumpsuit
     - name: Tools
       entries:
-      - id: RMCCableCoil
-        amount: 15
+      - id: CMUCableThinHVStack
+        amount: 5
+      - id: CMUCableThinMVStack
+        amount: 5
+      - id: CMUCableThinLVStack
+        amount: 5
       - id: SawElectric
         amount: 5
       - id: CMCrowbar

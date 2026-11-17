@@ -12,6 +12,7 @@
         </BoxContainer>
         <Label Name="FirstGun" />
         <Label Name="SecondGun" />
+        <Label Name="ThirdGun" />
         <Button Name="Instructions" Access="Public" Text="{Loc cmu-fob-guide-open}" />
         <Label Name="JobLabel" />
         <Label Name="FirstRelay" />

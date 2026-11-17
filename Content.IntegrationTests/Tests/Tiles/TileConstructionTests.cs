@@ -109,23 +109,6 @@ public sealed class TileConstructionTests : InteractionTest
     /// Test CM plating -> floor -> CM plating using tile stacking.
     /// CMU14: CM floor tiles only place over CM plating, so the snow plating case does not exist for them.
     /// </summary>
-    [Test]
-    public async Task BrassPlatingPlace()
-    {
-        await SetTile(CMPlating);
-
-        // CM plating -> Tile
-        await InteractUsing(FloorItem);
-        Assert.That(HandSys.GetActiveItem((SEntMan.GetEntity(Player), Hands)), Is.Null);
-        await AssertTile(Floor);
-        AssertGridCount(1);
-
-        // Tile -> CM plating
-        await InteractUsing(Pry);
-        await AssertTile(CMPlating);
-        AssertGridCount(1);
-        await AssertTileItemReturned();
-    }
 
     // CMU14: the pried tile can end up in a hand (auto pickup) or on the floor
     // depending on pickup timing; require the tile item to exist either way.

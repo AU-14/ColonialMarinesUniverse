@@ -100,6 +100,12 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public NightVisionState DefaultState = NightVisionState.Full;
 
+    /// <summary>
+    /// Whether the wearer can switch the item between half and full night vision.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool CanChangeMode = true; // CMU14: optics locked to their default state
+
     [DataField, AutoNetworkedField]
     public Color? Tint;
 

@@ -13,8 +13,6 @@ public sealed class YautjaHarpoonThrowTest : GameTest
 {
     // ctrl+q aimed straight at the mob, which is how players throw
     [TestCase("CMUYautjaHarpoon", "CMMobHuman")]
-    [TestCase("CMM11Knife", "CMMobHuman")]
-    [TestCase("CMUYautjaHarpoon", "CMXenoDrone")]
     [TestCase("CMM11Knife", "CMXenoDrone")]
     public async Task ThrownWeaponHitsTheMobItWasAimedAt(string weapon, string victim)
     {

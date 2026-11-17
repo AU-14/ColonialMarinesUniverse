@@ -321,17 +321,14 @@ public sealed class GunshipPilotHudOverlay : Overlay
     private readonly CombatModeSystem _combatMode;
     private readonly Font _font;
     private readonly Font _smallFont;
-    private readonly List<string> _warningLines = new();
+    private readonly GunshipHudStatusDisplay _statusDisplay;
 
     private static readonly Color HudColor = new(0.25f, 0.88f, 1f, 0.95f);
     private static readonly Color HudBackground = new(0.015f, 0.06f, 0.08f, 0.78f);
     private static readonly Color HudDim = new(0.25f, 0.88f, 1f, 0.38f);
-    private static readonly Color IntegrityColor = new(0.92f, 0.08f, 0.08f, 0.95f);
-    private static readonly Color IntegrityBorder = new(1f, 0.22f, 0.22f, 0.8f);
     private static readonly Color ThrustColor = new(0.20f, 0.78f, 1f, 0.95f);
     private static readonly Color ThrustBorder = new(0.35f, 0.9f, 1f, 0.8f);
     private static readonly Color AmmoColor = new(1f, 0.72f, 0.16f, 0.95f);
-    private static readonly Color MalfunctionColor = new(1f, 0.24f, 0.12f, 0.98f);
 
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
@@ -345,6 +342,7 @@ public sealed class GunshipPilotHudOverlay : Overlay
         var cache = IoCManager.Resolve<IResourceCache>();
         _font = cache.GetFont("/Fonts/NotoSans/NotoSans-Bold.ttf", 18);
         _smallFont = cache.GetFont("/Fonts/NotoSans/NotoSans-Bold.ttf", 12);
+        _statusDisplay = new GunshipHudStatusDisplay(_smallFont);
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -437,40 +435,8 @@ public sealed class GunshipPilotHudOverlay : Overlay
         handle.DrawLine(tip, tip - direction * 10f - side * 6f, HudColor);
     }
 
-    private void DrawIntegrityBar(
-        DrawingHandleScreen handle,
-        UIBox2i bounds,
-        GunshipPilotHudComponent hud)
-    {
-        const float width = 320f;
-        const float height = 24f;
-        const float bottomMargin = 24f;
-        var left = bounds.Left + (bounds.Width - width) * 0.5f;
-        var top = bounds.Bottom - bottomMargin - height;
-        var box = new UIBox2(left, top, left + width, top + height);
-        var ratio = hud.MaxIntegrity > 0f
-            ? Math.Clamp(hud.Integrity / hud.MaxIntegrity, 0f, 1f)
-            : 0f;
-
-        handle.DrawRect(box, HudBackground);
-        if (ratio > 0f)
-        {
-            var fill = new UIBox2(box.Left + 3f,
-                box.Top + 3f,
-                box.Left + 3f + (box.Width - 6f) * ratio,
-                box.Bottom - 3f);
-            handle.DrawRect(fill, IntegrityColor);
-        }
-
-        handle.DrawRect(box, IntegrityBorder, false);
-
-        var text = Loc.GetString("cmu-gunship-hud-hull-percent",
-            ("percent", MathF.Round(ratio * 100f)));
-        var textSize = handle.GetDimensions(_smallFont, text, 1);
-        var textPosition = box.Center - new Vector2(textSize.X / 2f, 0);
-        handle.DrawString(_smallFont, textPosition + Vector2.One, text, Color.Black);
-        handle.DrawString(_smallFont, textPosition, text, Color.White);
-    }
+    private void DrawIntegrityBar(DrawingHandleScreen handle, UIBox2i bounds, GunshipPilotHudComponent hud)
+        => _statusDisplay.DrawIntegrityBar(handle, bounds, hud.Integrity, hud.MaxIntegrity);
 
     private void DrawThrustBar(
         DrawingHandleScreen handle,
@@ -567,54 +533,9 @@ public sealed class GunshipPilotHudOverlay : Overlay
         handle.DrawCircle(center, 2f, HudColor);
     }
 
-    private void DrawWarnings(
-        DrawingHandleScreen handle,
-        UIBox2i bounds,
-        GunshipPilotHudComponent hud)
-    {
-        if (hud.Malfunctions.Count == 0 && hud.Alarms.Count == 0)
-            return;
-
-        const float margin = 24f;
-        const float lineHeight = 20f;
-        const float padding = 10f;
-        var blinkOn = (int)_timing.CurTime.TotalSeconds % 2 == 0;
-        if (!blinkOn)
-            return;
-
-        var lines = _warningLines;
-        lines.Clear();
-        lines.Add(Loc.GetString("cmu-gunship-hud-system-warnings"));
-        foreach (var alarm in hud.Alarms)
-            lines.Add(DropshipAlarmData.GetAlertName(alarm));
-        foreach (var malfunction in hud.Malfunctions)
-            lines.Add(Loc.GetString("cmu-gunship-malfunction-detected",
-                ("malfunction", DropshipMalfunctionData.GetAlertName(malfunction))));
-        if (hud.MasterAlarmSilenced && hud.Alarms.Count > 0)
-            lines.Add(Loc.GetString("cmu-gunship-hud-master-alarm-silenced"));
-
-        var width = 260f;
-        foreach (var text in lines)
-            width = MathF.Max(width, handle.GetDimensions(_smallFont, text, 1).X + padding * 2f);
-
-        var height = padding * 2f + lineHeight * lines.Count;
-        var bottomMargin = hud.ManeuveringCamera != GunshipManeuveringCamera.None ? 224f : 24f;
-        var box = new UIBox2(bounds.Right - margin - width,
-            bounds.Bottom - bottomMargin - height,
-            bounds.Right - margin,
-            bounds.Bottom - bottomMargin);
-
-        var warningColor = MalfunctionColor;
-        handle.DrawRect(box, HudBackground);
-        handle.DrawRect(box, warningColor, false);
-        for (var i = 0; i < lines.Count; i++)
-        {
-            handle.DrawString(_smallFont,
-                new Vector2(box.Left + padding, box.Top + padding + lineHeight * i),
-                lines[i],
-                i == lines.Count - 1 && hud.MasterAlarmSilenced && hud.Alarms.Count > 0 ? HudColor : warningColor);
-        }
-    }
+    private void DrawWarnings(DrawingHandleScreen handle, UIBox2i bounds, GunshipPilotHudComponent hud)
+        => _statusDisplay.DrawWarnings(handle, bounds, hud.Malfunctions, hud.Alarms, hud.MasterAlarmSilenced,
+            _timing.CurTime, hud.ManeuveringCamera != GunshipManeuveringCamera.None ? 224f : 24f);
 }
 
 public sealed class GunshipPilotOverlay : Overlay

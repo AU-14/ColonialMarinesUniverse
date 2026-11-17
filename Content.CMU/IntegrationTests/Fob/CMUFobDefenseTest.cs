@@ -85,7 +85,12 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
     private async Task SetupGuns(int ammo = 20, bool portablePlatforms = false)
     {
         await SetTile(Plating, TargetCoords);
-        await SpawnTarget("CMUFobControl");
+        // Keep the terminal off the gun's tile so collision probes measure the gun alone.
+        NetCoordinates controlCoords = default;
+        await Server.WaitPost(() => controlCoords = SEntMan.GetNetCoordinates(
+            SEntMan.GetCoordinates(TargetCoords).Offset(new Vector2(0, 2))));
+        await SetTile(Plating, controlCoords);
+        await SpawnTarget("CMUFobControl", controlCoords);
         NetCoordinates second = default;
         await Server.WaitPost(() => second = SEntMan.GetNetCoordinates(SEntMan.GetCoordinates(TargetCoords).Offset(new Vector2(0, 8))));
         await SetTile(Plating, second);
@@ -325,11 +330,11 @@ public sealed partial class CMUFobDefenseTest : InteractionTest
             afterBreak = Ammo;
             Server.System<TagSystem>().AddTag(SPlayer, "InstantDoAfters");
         });
-        foreach (var tool in new[] { "CMWirecutter", "RMCWelderAdmin", "RMCCableCoil", "CMScrewdriver", "CMMultitool", "RMCWelderAdmin" })
+        foreach (var tool in new[] { "CMWirecutter", "RMCWelderAdmin", "CMUCableThinLVStack", "CMScrewdriver", "CMMultitool", "RMCWelderAdmin" })
         {
-            var item = await PlaceInHands(tool, quantity: tool == "RMCCableCoil" ? 30 : 1);
+            var item = await PlaceInHands(tool, quantity: tool == "CMUCableThinLVStack" ? 30 : 1);
             await Interact();
-            if (tool == "RMCCableCoil")
+            if (tool == "CMUCableThinLVStack")
                 await Server.WaitAssertion(() => Assert.That(SEntMan.GetComponent<StackComponent>(SEntMan.GetEntity(item)).Count,
                     Is.LessThan(30), "Repair must consume material instead of producing free hardware."));
         }

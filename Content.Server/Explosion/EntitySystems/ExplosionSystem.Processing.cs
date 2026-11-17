@@ -840,7 +840,10 @@ sealed class Explosion
     public readonly EntityUid VisualEnt;
 
     public readonly EntityUid? Cause;
-    public readonly EntityUid? SourceVehicle; // CMU14: captured before projectile deletion.
+    // CMU14 Begin
+    public readonly bool NonGibbing;
+    public readonly EntityUid? SourceVehicle; // Captured before projectile deletion.
+    // CMU14 End
 
     /// <summary>
     ///     Initialize a new instance for processing
@@ -859,14 +862,20 @@ sealed class Explosion
         IEntityManager entMan,
         EntityUid visualEnt,
         EntityUid? cause,
-        EntityUid? sourceVehicle, // CMU14
+        // CMU14 Begin
+        bool nonGibbing,
+        EntityUid? sourceVehicle,
+        // CMU14 End
         SharedMapSystem mapSystem,
         DamageableSystem damageable,
         EntityQuery<TileHistoryComponent> historyQuery)
     {
         VisualEnt = visualEnt;
         Cause = cause;
-        SourceVehicle = sourceVehicle; // CMU14
+        // CMU14 Begin
+        NonGibbing = nonGibbing;
+        SourceVehicle = sourceVehicle;
+        // CMU14 End
         _system = system;
         _mapSystem = mapSystem;
         ExplosionType = explosionType;
@@ -996,6 +1005,9 @@ sealed class Explosion
     /// </summary>
     public int Process(int processingTarget)
     {
+        // CMU14 Begin
+        using var gibbingScope = _entMan.System<Content.Shared.Gibbing.GibbingSystem>().PreventGibbing(NonGibbing);
+        // CMU14 End
         // In case the explosion terminated early last tick due to exceeding the allocated processing time, use this
         // time to update the tiles.
         SetTiles();
@@ -1109,6 +1121,9 @@ sealed class Explosion
 /// </summary>
 public sealed partial class QueuedExplosion(ExplosionPrototype proto)
 {
+    // CMU14 Begin
+    public bool NonGibbing;
+    // CMU14 End
     public MapCoordinates Epicenter;
     public ExplosionPrototype Proto = proto;
     public float TotalIntensity, Slope, MaxTileIntensity, TileBreakScale;

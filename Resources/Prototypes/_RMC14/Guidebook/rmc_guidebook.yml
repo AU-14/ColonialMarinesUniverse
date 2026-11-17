@@ -189,7 +189,7 @@
   id: RMCGuideRoleCAS
   priority: 11
   name: "Dropships and CAS"
-  text: "/ServerInfo/Guidebook/_RMC14/Guides/RMCGuideRoleCAS.xml"
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUCAS.xml"
 
 - type: guideEntry # made by Gabrote42
   parent: RMC

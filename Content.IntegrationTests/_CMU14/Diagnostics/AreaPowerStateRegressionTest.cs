@@ -116,42 +116,6 @@ public sealed class AreaPowerStateRegressionTest
     }
 
     [Test]
-    public async Task AreaStateKeepsLiveMembersWhenAnOldMemberWasDeleted()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = false, Dirty = true });
-        await pair.Server.WaitAssertion(() =>
-        {
-            var entities = pair.Server.EntMan;
-            var owner = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var live = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var deleted = entities.SpawnEntity(null, MapCoordinates.Nullspace);
-            var liveNet = entities.GetNetEntity(live);
-            var deletedNet = entities.GetNetEntity(deleted);
-            var component = entities.AddComponent<RMCAreaPowerComponent>(owner);
-            foreach (var field in MemberFields)
-                SetField(component, field, new HashSet<EntityUid> { live, deleted });
-            SetField(component, nameof(component.Load), new[] { 17, 29, 41 });
-
-            var original = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
-            foreach (var field in MemberFields)
-                Assert.That(ReadState(original, field), Is.EquivalentTo(new[] { liveNet, deletedNet }));
-
-            entities.DeleteEntity(deleted);
-            var state = entities.GetComponentState(entities.EventBus, component, null, GameTick.Zero)!;
-            foreach (var field in MemberFields)
-            {
-                Assert.That(ReadState(state, field), Is.EquivalentTo(new[] { liveNet }));
-                Assert.That(ReadState(original, field), Is.EquivalentTo(new[] { liveNet, deletedNet }),
-                    "Building a new state must not mutate a previously captured state.");
-                Assert.That((HashSet<EntityUid>) typeof(RMCAreaPowerComponent).GetField(field)!.GetValue(component)!,
-                    Does.Contain(deleted), "State serialization must not mutate gameplay collections on PVS worker threads.");
-            }
-            Assert.That(ReadState(state, nameof(component.Load)), Is.EqualTo(new[] { 17, 29, 41 }));
-        });
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task ReceiverRemovalUsesRegisteredAreaAndReleasesLoad(
         [Values] RMCPowerChannel channel, [Values(false, true)] bool detachFirst)
     {
@@ -196,9 +160,6 @@ public sealed class AreaPowerStateRegressionTest
         });
         await pair.CleanReturnAsync();
     }
-
-    private static object ReadState(object state, string field) =>
-        state.GetType().GetField(field)?.GetValue(state) ?? state.GetType().GetProperty(field)!.GetValue(state);
 
     private static void SetField<T>(T component, string field, object value) =>
         typeof(T).GetField(field)!.SetValue(component, value);

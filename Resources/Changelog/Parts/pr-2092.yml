@@ -1,0 +1,101 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Added Green, Blue, White and Rapid Fire laser batteries, including selectable
+    wide-ring and sweeping-line patterns.
+  type: Add
+- message: Added Weedkiller, Cluster Incendiary, Smoke, Flare, Thermobaric, HEAT and
+    White Phosphorus rockets with payload-specific effects.
+  type: Add
+- message: Added a JDAM bomb clamp with HE, Incendiary, AP, Cluster, Buster and Napalm
+    bombs.
+  type: Add
+- message: Added the 40mm BOFORS autocannon with adjustable airburst heights and the
+    105mm Howitzer with multiple shell types. Both support hand-loading while landed.
+  type: Add
+- message: Added Hornet fragmentation, Lance armor-piercing and Cinder incendiary
+    GAU ammunition, plus mixed belt carriers that alternate between up to three ammunition
+    crates.
+  type: Add
+- message: Added interior weapon mounting, fire-mission support for internal weapons
+    and console pages for up to seven weapons.
+  type: Add
+- message: Added weapon-specific impact and dispersion previews, loadout summaries
+    and preflight warnings.
+  type: Add
+- message: Added fire-control boot sequences, hardpoint faults, landing wear and weapon
+    jams, with multitool maintenance.
+  type: Add
+- message: Overhauled the Mohawk M90 into a crewed triple-feed turret with a 225-degree
+    forward arc and 20-tile ground engagement range.
+  type: Add
+- message: Added M90 calibration, IFF programming, manual aiming, AR gunnery, target
+    tracking, and Normal, Night and Thermal optics.
+  type: Add
+- message: Added M90 airborne flare bombardment with impact previews and warnings
+    for players in the target area.
+  type: Add
+- message: Added explicitly activated M90 AI free fire and close defense, with planet-only
+    automatic ground operation, line-of-sight checks and airborne target approval.
+  type: Add
+- message: Added Squall, HEAP, Gale, Ember and Tempest M90 ammunition, manual and
+    automatic feed selection, and low-ammunition warnings.
+  type: Add
+- message: Added M90 barrel heat, overheating, spent casings, turret damage and staged
+    repairs.
+  type: Add
+- message: Added a shared pilot and gunner flare list.
+  type: Add
+- message: Added an RTO CAS uplink with structured strike requests, target previews,
+    weapon and effect selection, remarks and battle damage assessments.
+  type: Add
+- message: RTOs can request support on friendly flare, laser and GPS reports, or call
+    their own position with selectable offsets and radio-ranging deviation.
+  type: Add
+- message: Pilots can accept or deny CAS requests and choose manual or automatic carry-out.
+    Only automatic carry-out requires RTO cleared-hot authorization.
+  type: Add
+- message: RTOs can clear automatic requests hot, abort requests and broadcast their
+    current position over JTAC.
+  type: Add
+- message: RTO laser designation improves strike accuracy near the designated point.
+  type: Add
+- message: Added danger-close warnings and repeat-shot confirmation for console strikes
+    near living friendlies.
+  type: Add
+- message: Xenos and players holding sharp tools can sabotage RTO radio wiring through
+    a seven-second action. RTOs or personnel with Engineering skill 1 can repair it
+    using five cable.
+  type: Add
+- message: Added programmable laser codes to designators and aircraft receivers. Designators
+    default to 1111-1; mismatched lasers cannot be detected or locked.
+  type: Add
+- message: Dropships and jets can individually program guided missiles and JDAMs for
+    laser or GPS guidance.
+  type: Add
+- message: Ground rangefinder measurements generate faction-specific GPS reports using
+    planet coordinate offsets. Reports expire after five minutes and carry fixed deviation
+    of up to fifteen tiles per axis.
+  type: Add
+- message: Programmed GPS munitions retain their target solution without a continuing
+    laser designation or active source report.
+  type: Add
+- message: Added a GPS-guided 105mm HE shell costing twice standard HE with the same
+    explosive payload.
+  type: Add
+- message: CAS damage no longer gibs bodies or automatically severs the head or torso.
+    Lethal damage and ordinary limb loss remain possible.
+  type: Tweak
+- message: Dropship targeting cameras view marks from the highest connected z-level.
+  type: Fix
+- message: Dropship weapons consoles resize to use available window space.
+  type: Fix
+- message: Added CAS controls for boot sequences, faults, ammunition refills, repairs
+    and requests, with expanded firing, loading and maintenance logs.
+  type: Admin
+- message: 'Note to PLAYERS: I HIGHELY RECOMMEND reading the guidebook before using
+    systems or writing feedback/bug reports, I will genuinely laugh if someone pings
+    me with a report saying "my guns wont shoot" well did you fix the hardpoint?'
+  type: Admin
+time: '2026-11-06T18:05:03.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2092

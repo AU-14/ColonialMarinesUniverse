@@ -10,8 +10,9 @@ namespace Content.IntegrationTests.CMU14.ZLevels;
 
 public sealed class CMUZLadderLandingTest : GameTest
 {
-    [Test]
-    public async Task RemovedLandingKeepsClimberAndPulledBodyOnOriginalLevel()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task UnsafeLandingKeepsClimberAndPulledBodyOnOriginalLevel(bool blockedByWall)
     {
         var upper = await Pair.CreateTestMap();
         var lower = await Pair.CreateTestMap();
@@ -19,6 +20,7 @@ public sealed class CMUZLadderLandingTest : GameTest
         EntityUid body = default;
         EntityUid ladder = default;
         EntityUid network = default;
+        EntityUid obstruction = default;
         await Server.WaitAssertion(() =>
         {
             var maps = Server.System<SharedMapSystem>();
@@ -40,15 +42,22 @@ public sealed class CMUZLadderLandingTest : GameTest
 
         await RunSeconds(0.25f);
         await Server.WaitAssertion(() =>
-            Server.System<SharedMapSystem>().SetTile(lower.Grid, Vector2i.Zero, Tile.Empty));
+        {
+            if (blockedByWall)
+                obstruction = SSpawnAtPosition("WallSolid", new EntityCoordinates(lower.Grid.Owner, new Vector2(0.5f)));
+            else
+                Server.System<SharedMapSystem>().SetTile(lower.Grid, Vector2i.Zero, Tile.Empty);
+        });
         await RunSeconds(1.25f);
         await Server.WaitAssertion(() =>
         {
             Assert.That(SComp<TransformComponent>(climber).MapUid, Is.EqualTo(upper.MapUid),
-                "A landing removed during the climb must not drop the climber into the opening.");
+                "A landing made unsafe during the climb must not move the climber into an opening or wall.");
             Assert.That(SComp<TransformComponent>(body).MapUid, Is.EqualTo(upper.MapUid),
                 "Rejecting a climb must also leave the pulled body on its original level.");
             Server.System<SharedMapSystem>().SetTile(lower.Grid, Vector2i.Zero, lower.Tile.Tile);
+            if (blockedByWall)
+                SEntMan.DeleteEntity(obstruction);
             SEntMan.EventBus.RaiseLocalEvent(ladder, new ActivateInWorldEvent(climber, ladder, true));
         });
 

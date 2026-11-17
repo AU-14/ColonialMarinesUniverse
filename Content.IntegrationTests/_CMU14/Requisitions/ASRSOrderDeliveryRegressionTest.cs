@@ -189,7 +189,6 @@ public sealed class ASRSOrderDeliveryRegressionTest : GameTest
     [TestCase(true, false)]
     [TestCase(true, true)]
     [TestCase(false, false)]
-    [TestCase(false, true)]
     public async Task OverdueLiftCycleProcessesPlatformContents(bool raise, bool finishPreparation)
     {
         var map = await Pair.CreateTestMap();

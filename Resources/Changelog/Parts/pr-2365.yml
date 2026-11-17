@@ -1,0 +1,80 @@
+author: Operator-Exi
+category: CMU
+changes:
+- message: Some reactions now need heat, cold, or mixing. Close a container's lid
+    and use Mix from the right-click menu for foams, smoke, tear gas, napalm blends,
+    synth blood, pepper spray and hard research recipes.
+  type: Add
+- message: Methamphetamine, fentanyl, space drugs, phenol-formaldehyde and synthetic
+    latex must be heated to form. Any heat source works, including a freshly made
+    hot chemical.
+  type: Add
+- message: Stabilized mutagen and MH-33 must be kept cold and mixed.
+  type: Add
+- message: Added a chemistry chiller and an ice brine reaction for cooling solutions.
+  type: Add
+- message: Hotplate and chiller flatpacks can be ordered from every ASRS for $250
+    each.
+  type: Add
+- message: Hard research contracts can include a sub-contract chemical, printed on
+    the same contract paper.
+  type: Add
+- message: The research terminal has new Contracts and Properties tabs.
+  type: Add
+- message: Any lidded bottle holding a flammable mix can be made into a molotov with
+    paper.
+  type: Add
+- message: Stock napalm ignites when heated, and chemical grenades with fuel burst
+    into a ring of fire.
+  type: Add
+- message: Fire-penetrating level 3 and above melts walls, barricades and doors over
+    time.
+  type: Add
+- message: Flowing chemicals make their fire spread; Viscous chemicals stop it spreading.
+  type: Add
+- message: Fire colour now shows intensity, from red through orange, yellow and blue
+    to white. Only specialist flamer tanks can reach blue.
+  type: Tweak
+- message: Flamethrowers fire an arrow-shaped cone. Standard tanks reach less far
+    and stay narrower; specialist tanks get their full reach and widest cone.
+  type: Tweak
+- message: Fires from beakers, grenades and molotovs are sized by their contents and
+    burn in a circle.
+  type: Tweak
+- message: B-gel is now a spreading fuel with a wider flame.
+  type: Tweak
+- message: Explosive research chemicals scale their blast with level, up to a large
+    IED, and detonate when heated instead of when made.
+  type: Tweak
+- message: Research chemicals with Hyperthermic or Hypothermic heat or cool their
+    mixture.
+  type: Tweak
+- message: Research contracts give 1 sample data (2 for Hard). Repeating a simulator
+    operation doubles its cost each time.
+  type: Tweak
+- message: Napalm mixes are much weaker against xenos, generated fuels no longer stack
+    their bonuses twice, and Oxidizing maxes at level 3.
+  type: Tweak
+- message: Chemical payloads only accept vials and beakers, including high-capacity
+    beakers.
+  type: Tweak
+- message: GOVFOR can no longer do research during Insurgency.
+  type: Tweak
+- message: Sprays reach anything along their path, so effects like Repairing work
+    on synths, people and barricades without clicking them directly.
+  type: Fix
+- message: Spray vapor no longer passes over barricades, and each puff affects a target
+    only once.
+  type: Fix
+- message: Research contracts no longer ask for unobtainable chemicals like café de
+    olla.
+  type: Fix
+- message: The simulator charges exactly the cost it shows.
+  type: Fix
+- message: Contract hints show readable chemical and property names.
+  type: Fix
+- message: Added a shared fire stat system for flamers, molotovs, grenades and chemical
+    ignition.
+  type: Code
+time: '2026-11-06T18:04:48.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2365

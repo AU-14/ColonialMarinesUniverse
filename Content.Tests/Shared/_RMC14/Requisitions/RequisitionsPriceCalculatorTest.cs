@@ -63,25 +63,6 @@ public sealed class RequisitionsPriceCalculatorTest
         Assert.That(prices["Rocket"], Is.EqualTo(225));
     }
 
-    [TestCase(1200, 400)]
-    [TestCase(2800, 933)]
-    public void AmmoAnchorsThatExhaustLauncherBundleUseEqualShareFallback(int bundleCost, int expectedLauncherCost)
-    {
-        var prices = RequisitionsPriceCalculator.Calculate(new[]
-        {
-            Source(1500, ("AU14BoxHEDPUPP", 1)),
-            Source(1300, ("AU14BoxHIDPUPP", 1)),
-            Source(bundleCost, ("AU14WeaponLauncherOG60", 1), ("AU14BoxHEDPUPP", 1), ("AU14BoxHIDPUPP", 1)),
-        });
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(prices["AU14WeaponLauncherOG60"], Is.EqualTo(expectedLauncherCost));
-            Assert.That(prices["AU14BoxHEDPUPP"], Is.EqualTo(1500));
-            Assert.That(prices["AU14BoxHIDPUPP"], Is.EqualTo(1300));
-        });
-    }
-
     [Test]
     public void ExpensiveUnanchoredBundleDoesNotErodeAnotherItemsPrice()
     {

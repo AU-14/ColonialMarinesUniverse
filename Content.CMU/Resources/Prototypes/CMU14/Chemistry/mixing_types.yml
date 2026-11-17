@@ -1,0 +1,9 @@
+# Lid-closed mixing. Beakers, bottles and jugs get a "Mix" verb (Shakeable + ReactionMixer) that only works with
+# the lid on; chemical payloads mix with this when the grenade goes off. Kept separate from the bar's Shake so
+# drink shakers can't make chemistry.
+- type: mixingCategory
+  id: CMUMix
+  verbText: mixing-verb-cmu-mix
+  icon:
+    sprite: _RMC14/Objects/Medical/beaker.rsi
+    state: beaker

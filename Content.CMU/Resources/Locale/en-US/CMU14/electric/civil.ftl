@@ -10,6 +10,10 @@ ent-RUMCSolarPanelSilver = silver solar panel
     .desc = A panel of silicon cells with silver contacts and a better glass. It makes twice as much as the plain one.
 ent-RUMCLeatherItem = leather
     .desc = A piece of tanned leather, soft and strong, ready to be cut into boots and gloves.
+ent-CMUCowHide = cow hide
+    .desc = An untanned cow hide. Process it in a tannery with water and chrome powder to make leather.
+ent-CMUCrateLivestockCow = cow crate
+    .desc = A live cow for milk, meat and hides.
 
 au14-craft-recipe-buildsolarpanel = Solar panel
 au14-craft-recipe-buildsolarpanelsilver = Silver solar panel

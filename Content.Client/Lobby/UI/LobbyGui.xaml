@@ -59,6 +59,8 @@
                                             StyleClasses="ButtonBig" HorizontalExpand="True"
                                             MinHeight="{x:Static cmu:CmuPanelMetrics.Row}"
                                             Visible="False" />
+                                    <!-- CMU14: available before readying and during late join. -->
+                                    <lineup:CMUEventLobbyButtons />
                                     <!-- A rule, not just a gap. Ready/Join and Observe are ranked
                                          rather than equal, and off-theme two stacked buttons of the
                                          same fill read as one control without something between

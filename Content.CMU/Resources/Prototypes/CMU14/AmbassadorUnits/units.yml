@@ -97,7 +97,7 @@
     factions:
     - AUUpp
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole
@@ -180,7 +180,7 @@
     factions:
     - AUUpp
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole
@@ -261,7 +261,7 @@
     factions:
     - CMUTWE
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole
@@ -344,7 +344,7 @@
     factions:
     - CMUTWE
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole
@@ -425,7 +425,7 @@
     factions:
     - AUUnitedAmericas
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole
@@ -508,7 +508,7 @@
     factions:
     - AUUnitedAmericas
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole
@@ -589,7 +589,7 @@
     factions:
     - CMUFreelancers
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole
@@ -672,7 +672,7 @@
     factions:
     - CMUFreelancers
   - type: RandomHumanoidAppearance
-    randomizeName: false
+    randomizeName: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
   - type: GhostRole

@@ -52,6 +52,7 @@ cmu-guide-entry-ucmj-arresting = Arresting Procedures
 cmu-guide-entry-ucmj-definitions = Definitions and Glossary
 cmu-guide-entry-ucmj-dnr = DNR
 cmu-guide-entry-ucmj-executions = Executions
+cmu-guide-entry-ucmj-battlefield-executions = Battlefield Executions
 cmu-guide-entry-ucmj-criminal-code = Criminal Code
 cmu-guide-entry-ucmj-optional = Optional Crimes
 cmu-guide-entry-ucmj-minor = Minor Crimes
@@ -97,6 +98,7 @@ cmu-guide-entry-research-hydroponics = Hydroponics
 # Antagonists
 cmu-guide-entry-hearing-loss = Hearing Loss
 cmu-guide-entry-cmu = Guidebook
+cmu-guide-entry-cas = Dropships and CAS
 cmu-guide-entry-mortar = Mortar
 cmu-guide-entry-explosives = Explosives
 cmu-guide-entry-forensics = Forensics

@@ -10,7 +10,7 @@
       - material: CMSteel
         amount: 2
         doAfter: 0
-      - material: RMCCable
+      - material: CMUThinCableLV # CMU14: thin LV cable replaces the deprecated RMCCableCoil
         amount: 10
         doAfter: 2
 

@@ -39,14 +39,17 @@ namespace Content.Server.Chemistry.EntitySystems
         private void HandleCollide(Entity<VaporComponent> entity, ref StartCollideEvent args)
         {
             var solution = Comp<SolutionComponent>(entity);
-            _reactive.DoEntityReaction(args.OtherEntity, solution.Solution, ReactionMethod.Touch);
+            if (entity.Comp.ReactedEntities.Add(args.OtherEntity)) // CMU14: once per entity per puff
+            {
+                _reactive.DoEntityReaction(args.OtherEntity, solution.Solution, ReactionMethod.Touch);
 
-            var power = 7;
-            if (TryComp<RMCExtinguisherPowerComponent>(entity, out var extinguisher))
-                power = extinguisher.Power;
+                var power = 7;
+                if (TryComp<RMCExtinguisherPowerComponent>(entity, out var extinguisher))
+                    power = extinguisher.Power;
 
-            var ev = new VaporHitEvent((entity.Owner, solution), power);
-            RaiseLocalEvent(args.OtherEntity, ref ev);
+                var ev = new VaporHitEvent((entity.Owner, solution), power);
+                RaiseLocalEvent(args.OtherEntity, ref ev);
+            }
 
             // Check for collision with a impassable object (e.g. wall) and stop
             if ((args.OtherFixture.CollisionLayer & (int)CollisionGroup.Impassable) != 0 && args.OtherFixture.Hard)

@@ -1,0 +1,19 @@
+- type: accessLevel
+  id: CMUAccessIntelligenceSection
+  name: cmu-access-intelligence-section
+
+- type: accessGroup
+  id: CMUIntelligenceSection
+  tags:
+  - CMAccessColonyPublic
+  - CMUAccessIntelligenceSection
+
+# Private section channel. Shares the "i" key with OPFOR Intel; the speaker's own channel is picked.
+- type: radioChannel
+  id: CMUIntelSection
+  name: cmu-radio-intel-section
+  keycode: "i"
+  frequency: 123.5
+  color: "#7f95ab"
+  longRange: true
+  tower: true

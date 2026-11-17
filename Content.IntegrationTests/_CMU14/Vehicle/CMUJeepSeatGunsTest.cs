@@ -3,6 +3,8 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Vehicle.Open;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Movement.Pulling.Components; // CMU14
+using Content.Shared.Movement.Pulling.Systems; // CMU14
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Wieldable;
@@ -25,6 +27,7 @@ public sealed class CMUJeepSeatGunsTest : GameTest
         var map = await Pair.CreateTestMap();
         EntityUid jeep = default;
         EntityUid wielded = default;
+        EntityUid dragged = default; // CMU14
         var riders = new EntityUid[3];
         await Server.WaitPost(() =>
         {
@@ -37,6 +40,7 @@ public sealed class CMUJeepSeatGunsTest : GameTest
                 }
             }
 
+            dragged = SEntMan.SpawnAtPosition("CMMobHuman", new EntityCoordinates(map.Grid, 0.5f, 0.5f)); // CMU14
             jeep = SEntMan.SpawnEntity("CMUVehicleJeepGunner", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
             for (var i = 0; i < riders.Length; i++)
             {
@@ -50,7 +54,10 @@ public sealed class CMUJeepSeatGunsTest : GameTest
         {
             wielded = Hold(riders[0], "RMCWeaponRifleL24");
             Assert.That(SEntMan.System<SharedWieldableSystem>().TryWield(wielded, riders[0]), Is.True);
+            // CMU14: enter with a pull joint already replicated to the client.
+            Assert.That(SEntMan.System<PullingSystem>().TryStartPull(riders[1], dragged), Is.True);
         });
+        await RunTicksSync(5); // CMU14
 
         // The gun jeep's seats in order: driver, passenger, gunner.
         await Server.WaitPost(() =>
@@ -62,6 +69,9 @@ public sealed class CMUJeepSeatGunsTest : GameTest
             }
         });
         await RunSeconds(4f);
+
+        // CMU14: seating must tear down the previous pull without a missing-physics resolve error.
+        await Server.WaitAssertion(() => Assert.That(SEntMan.GetComponent<PullerComponent>(riders[1]).Pulling, Is.Null));
 
         var fires = new bool[3, 2];
         var wields = new bool[3];

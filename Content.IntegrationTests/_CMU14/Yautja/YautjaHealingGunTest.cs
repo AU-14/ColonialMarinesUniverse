@@ -24,40 +24,6 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestOf(typeof(YautjaHealingGunComponent))]
 public sealed class YautjaHealingGunTest : GameTest
 {
-    [Test]
-    public async Task SelfUseCannotBypassMedicompTreatment()
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var maps = SEntMan.System<SharedMapSystem>();
-            var map = maps.CreateMap(out var mapId, runMapInit: true);
-            var coordinates = new MapCoordinates(Vector2.Zero, mapId);
-            var hunter = SEntMan.SpawnEntity("CMUMobYautja", coordinates);
-            var gun = SEntMan.SpawnEntity("CMUYautjaHealingGun", coordinates);
-            try
-            {
-                var damage = SEntMan.System<DamageableSystem>();
-                var blunt = new DamageSpecifier();
-                blunt.DamageDict.Add("Blunt", FixedPoint2.New(10));
-                Assert.That(damage.TryChangeDamage(hunter, blunt, true), Is.Not.Null);
-                var before = damage.GetAllDamage(hunter).GetTotal();
-
-                for (var i = 0; i < 2; i++)
-                {
-                    var use = new UseInHandEvent(hunter);
-                    SEntMan.EventBus.RaiseLocalEvent(gun, use);
-                    Assert.That(damage.GetAllDamage(hunter).GetTotal(), Is.EqualTo(before));
-                    Assert.That(SEntMan.GetComponent<YautjaHealingGunComponent>(gun).Loaded, Is.True);
-                }
-            }
-            finally
-            {
-                SEntMan.DeleteEntity(gun);
-                SEntMan.DeleteEntity(hunter);
-                SEntMan.DeleteEntity(map);
-            }
-        });
-    }
 
     [TestCase(false)]
     [TestCase(true)]

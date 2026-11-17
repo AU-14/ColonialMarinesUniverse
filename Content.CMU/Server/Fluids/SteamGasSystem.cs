@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
+using System.Globalization;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
@@ -106,6 +107,6 @@ public sealed class SteamGasSystem : EntitySystem
         if (!args.IsInDetailsRange)
             return;
 
-        args.PushMarkup(Loc.GetString("au14-steam-port-examine", ("moles", MathF.Round(GetMoles(machine), 1)), ("pressure", (int) GetPressure(machine))));
+        args.PushMarkup(Loc.GetString("au14-steam-port-examine", ("moles", GetMoles(machine).ToString("0.#", CultureInfo.InvariantCulture)), ("pressure", (int) GetPressure(machine))));
     }
 }

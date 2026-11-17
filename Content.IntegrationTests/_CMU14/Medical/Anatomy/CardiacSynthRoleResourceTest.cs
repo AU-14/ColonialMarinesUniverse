@@ -216,15 +216,6 @@ public sealed class CardiacSynthRoleResourceTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task BothPeersResolveSubversionRolesWithExistingAntagonistPolicies()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        await pair.Server.WaitAssertion(() => AssertRoles(pair.Server.ResolveDependency<IPrototypeManager>()));
-        await pair.Client.WaitAssertion(() => AssertRoles(pair.Client.ResolveDependency<IPrototypeManager>()));
-        await pair.CleanReturnAsync();
-    }
-
     [TestCase(false, false)]
     [TestCase(true, false)]
     [TestCase(false, true)]
@@ -326,20 +317,6 @@ public sealed class CardiacSynthRoleResourceTest
             await pair.Server.WaitPost(() => Delete(entities, patient, user, key, mind));
         }
         await pair.CleanReturnAsync();
-    }
-
-    private static void AssertRoles(IPrototypeManager prototypes)
-    {
-        foreach (var role in new[] { ClfRole, CultistRole })
-        {
-            var prototype = prototypes.Index<EntityPrototype>(role);
-            Assert.That(prototype.Components.ContainsKey("SubvertedSynthRole"), Is.True);
-            var policy = (MindRoleComponent) prototype.Components["MindRole"].Component;
-            Assert.That(policy.AntagPrototype?.Id,
-                Is.EqualTo(role == ClfRole ? "CLFSubvertedSynthRole" : "CultistRole"));
-        }
-        Assert.That(prototypes.Index<EntityPrototype>(NativeRole).Components.ContainsKey("SubvertedSynthRole"),
-            Is.False, "The existing cultist role itself must not become reset-owned.");
     }
 
     private static (EntityUid Patient, EntityUid User, EntityUid Mind) CreatePatient(

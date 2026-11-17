@@ -1,0 +1,15 @@
+# Early Warning Joe, phase E5: the Grand Machine's Hand (balance A-11). Summoned into a hand by the
+# action and deleted when it leaves it; the arsenal system seeds internal bleeding on organic hits.
+- type: entity
+  parent: AU14ToolMachete
+  id: CMUEWJoeMachete
+  suffix: EW Joe
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 55
+  - type: Unremoveable
+    deleteOnDrop: true
+  - type: EWJoeMachete

@@ -47,6 +47,7 @@
   - type: Physics
     bodyType: Static
     canCollide: true
+  - type: Airtight # CMU14: the physical cabin hull must retain its finite air supply.
   - type: Occluder
   - type: Fixtures
     fixtures:
