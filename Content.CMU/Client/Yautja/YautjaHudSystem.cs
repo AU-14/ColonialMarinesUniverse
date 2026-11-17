@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Client.Player;
@@ -18,12 +19,29 @@ public sealed partial class YautjaHudSystem : EntitySystem
     private StatusIconData? _bloodedThrallIcon;
     private bool _cached;
 
+    /// <summary>
+    /// The Ancient's council symbol, worn by the Bad Blood clan's Leader so the clan can find them.
+    /// </summary>
+    public static readonly ProtoId<HealthIconPrototype> BadBloodLeaderIcon = "CMUBadBloodLeaderIcon";
+
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaMarkComponent, GetStatusIconsEvent>(OnGetStatusIcons);
         SubscribeLocalEvent<YautjaComponent, GetStatusIconsEvent>(OnGetRankStatusIcons);
         SubscribeLocalEvent<YautjaMilitaryCasteComponent, GetStatusIconsEvent>(OnGetMilitaryStatusIcons);
         SubscribeLocalEvent<YautjaFalconHudIconComponent, GetStatusIconsEvent>(OnFalconGetStatusIcons);
+        SubscribeLocalEvent<BadBloodLeaderComponent, GetStatusIconsEvent>(OnBadBloodLeaderStatusIcons);
+    }
+
+    // the clan sees who leads it: every Bad Blood, the Leader included, sees the council symbol over the Leader.
+    // nobody else does, so it gives the Leader away to no hunter or marine
+    private void OnBadBloodLeaderStatusIcons(Entity<BadBloodLeaderComponent> ent, ref GetStatusIconsEvent args)
+    {
+        if (_player.LocalEntity is not { } viewer || !HasComp<YautjaBadBloodComponent>(viewer))
+            return;
+
+        if (_prototypes.TryIndex(BadBloodLeaderIcon, out var icon))
+            args.StatusIcons.Add(icon);
     }
 
     private void OnGetRankStatusIcons(Entity<YautjaComponent> ent, ref GetStatusIconsEvent args)

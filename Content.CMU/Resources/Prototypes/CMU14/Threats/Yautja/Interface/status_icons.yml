@@ -157,3 +157,11 @@
   icon:
     sprite: /Textures/CMU14/Yautja/hud_yautja.rsi
     state: councilhud
+
+# the Ancient's council symbol over the Bad Blood clan's Leader. only Bad Bloods see it (YautjaHudSystem)
+- type: healthIcon
+  parent: CMUYautjaRankIconBase
+  id: CMUBadBloodLeaderIcon
+  icon:
+    sprite: /Textures/CMU14/Yautja/hud_yautja.rsi
+    state: councilhud

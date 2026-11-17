@@ -30,6 +30,20 @@ public sealed class BadBloodValueSheetTest
     private const string Hound = "CMUMobYautjaBadBloodHound";
     private const string Armory = "CMUBadBloodCampArmory";
 
+    // the clan's Leader wears the Ancient's council symbol, which YautjaHudSystem shows to Bad Bloods only
+    [Test]
+    public async Task TheLeaderIconIsTheAncientSymbol()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var protos = pair.Server.ResolveDependency<IPrototypeManager>();
+
+        Assert.That(protos.TryIndex<Content.Shared.StatusIcon.HealthIconPrototype>("CMUBadBloodLeaderIcon", out var leader), Is.True);
+        var ancient = protos.Index<Content.Shared.StatusIcon.HealthIconPrototype>("CMUYautjaRankIconAncient");
+        Assert.That(leader!.Icon.ToString(), Is.EqualTo(ancient.Icon.ToString()), "the Leader's icon is the Ancient's");
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task PrototypesHoldTheValueSheet()
     {
