@@ -49,7 +49,7 @@ public sealed partial class CMUIrishAccentSystem : RelayAccentSystem<CMUIrishAcc
 
         var chance = ent?.Comp.SoItIsChance ?? 0.1f;
         if (_random.Prob(chance))
-            msg = CMUAccentText.AppendTag(msg, "so it is");
+            msg = CMUIrishAccentRules.AddSoItIs(msg);
 
         return msg;
     }
@@ -61,6 +61,11 @@ public sealed partial class CMUIrishAccentSystem : RelayAccentSystem<CMUIrishAcc
 /// </summary>
 public static class CMUIrishAccentRules
 {
+    private static readonly Regex EndsWithTag = new(@"\bso it is\W*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+    public static string AddSoItIs(string message)
+        => CMUAccentText.AppendTag(message, "so it is", EndsWithTag);
+
     // Whole words only. Add more pairs here: ("english word", "irish word").
     private static readonly (Regex Pattern, MatchEvaluator Replace)[] Words = CMUAccentText.BuildWords(
         // greetings and phrases

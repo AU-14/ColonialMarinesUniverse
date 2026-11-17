@@ -49,12 +49,12 @@ public static class CMUAccentText
     /// <summary>
     /// Adds ", tag" to the end of the message ("Sure." becomes "Sure, tag."), unless it already ends in the tag.
     /// </summary>
-    public static string AppendTag(string message, string tag)
+    public static string AppendTag(string message, string tag, Regex endsWithTag)
     {
         if (string.IsNullOrWhiteSpace(message))
             return message;
 
-        if (Regex.IsMatch(message, $@"\b{Regex.Escape(tag)}\W*$", Options))
+        if (endsWithTag.IsMatch(message))
             return message;
 
         return MessageEnd.Replace(message, ", " + tag + "$1", 1);

@@ -98,18 +98,10 @@ public static class CMUAustralianAccentRules
 
     private static readonly Regex EndsWithMate = new(@"\bmates?\W*$", Options);
 
-    // the end of the message: any trailing . ! ? plus whitespace (the match can be empty)
-    private static readonly Regex MessageEnd = new(@"([.!?]*)\s*$", RegexOptions.CultureInvariant);
-
     public static string Apply(string message)
         => CMUAccentText.ApplyWords(Words, message);
 
     /// <summary>"That's great." becomes "That's great, mate." and "Sure" becomes "Sure, mate".</summary>
     public static string AddMate(string message)
-    {
-        if (string.IsNullOrWhiteSpace(message) || EndsWithMate.IsMatch(message))
-            return message;
-
-        return MessageEnd.Replace(message, ", mate$1", 1);
-    }
+        => CMUAccentText.AppendTag(message, "mate", EndsWithMate);
 }

@@ -18,11 +18,11 @@ public sealed class CMUAccentTextTest
     public string DropG(string message)
         => CMUAccentText.DropG(message);
 
-    [TestCase("Sure.", "partner", ExpectedResult = "Sure, partner.")]
-    [TestCase("Sure, partner.", "partner", ExpectedResult = "Sure, partner.")]
-    [TestCase("", "partner", ExpectedResult = "")]
-    public string AppendTag(string message, string tag)
-        => CMUAccentText.AppendTag(message, tag);
+    [TestCase("Sure.", ExpectedResult = "Sure, partner.")]
+    [TestCase("Sure, partner.", ExpectedResult = "Sure, partner.")]
+    [TestCase("", ExpectedResult = "")]
+    public string AppendTag(string message)
+        => CMUTexasAccentRules.AddPartner(message);
 
     [Test]
     public void ApplyWordsReplacesWholeWordsOnly()

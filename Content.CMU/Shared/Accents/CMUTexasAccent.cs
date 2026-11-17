@@ -30,7 +30,7 @@ public sealed partial class CMUTexasAccentSystem : RelayAccentSystem<CMUTexasAcc
 
         var chance = ent?.Comp.PartnerChance ?? 0.15f;
         if (_random.Prob(chance))
-            msg = CMUAccentText.AppendTag(msg, "partner");
+            msg = CMUTexasAccentRules.AddPartner(msg);
 
         return msg;
     }
@@ -42,6 +42,11 @@ public sealed partial class CMUTexasAccentSystem : RelayAccentSystem<CMUTexasAcc
 /// </summary>
 public static class CMUTexasAccentRules
 {
+    private static readonly Regex EndsWithTag = new(@"\bpartner\W*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+    public static string AddPartner(string message)
+        => CMUAccentText.AppendTag(message, "partner", EndsWithTag);
+
     // Whole words only. Add more pairs here: ("english word", "texan word").
     private static readonly (Regex Pattern, MatchEvaluator Replace)[] Words = CMUAccentText.BuildWords(
         // phrases first. ("going to" is left out on purpose: it is also "going to the store".)

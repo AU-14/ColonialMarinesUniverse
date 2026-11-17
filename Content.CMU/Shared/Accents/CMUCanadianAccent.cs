@@ -100,18 +100,10 @@ public static class CMUCanadianAccentRules
 
     private static readonly Regex EndsWithEh = new(@"\beh\W*$", Options);
 
-    // the end of the message: any trailing . ! ? plus whitespace (the match can be empty)
-    private static readonly Regex MessageEnd = new(@"([.!?]*)\s*$", RegexOptions.CultureInvariant);
-
     public static string Apply(string message)
         => CMUAccentText.ApplyWords(Words, message);
 
     /// <summary>"That's great." becomes "That's great, eh." and "Sure" becomes "Sure, eh".</summary>
     public static string AddEh(string message)
-    {
-        if (string.IsNullOrWhiteSpace(message) || EndsWithEh.IsMatch(message))
-            return message;
-
-        return MessageEnd.Replace(message, ", eh$1", 1);
-    }
+        => CMUAccentText.AppendTag(message, "eh", EndsWithEh);
 }
