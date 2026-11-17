@@ -27,13 +27,20 @@ public sealed class CMUSentryCoverTest : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var turret = SEntMan.SpawnEntity("RMCTurretGaussSpaceborne", map.GridCoords);
-            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(4, 0)));
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = 0; x <= 5; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+            var origin = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
+            var turret = SEntMan.SpawnEntity("RMCTurretGaussSpaceborne", origin);
+            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", origin.Offset(new Vector2(4, 0)));
+            var transform = Server.System<SharedTransformSystem>();
+            transform.SetWorldRotation(turret, Direction.East.ToAngle());
+            transform.SetWorldRotation(cover, Direction.East.ToAngle());
             var targeting = Server.System<SentryTargetingSystem>();
             var barricade = SEntMan.GetComponent<BarricadeBlockComponent>(cover);
             Assert.That(targeting.ClearsBarricade(turret, cover, barricade), Is.True);
 
-            Server.System<SharedTransformSystem>().SetCoordinates(cover, map.GridCoords.Offset(new Vector2(5, 0)));
+            transform.SetCoordinates(cover, origin.Offset(new Vector2(5, 0)));
             Assert.That(targeting.ClearsBarricade(turret, cover, barricade), Is.False);
             Assert.That(targeting.CanTargetAcrossBarricade(turret, cover), Is.True);
         });

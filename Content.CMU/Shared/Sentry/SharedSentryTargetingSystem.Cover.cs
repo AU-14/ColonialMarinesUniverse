@@ -15,7 +15,9 @@ public abstract partial class SharedSentryTargetingSystem
     public bool ClearsBarricade(EntityUid shooter, EntityUid blocker, BarricadeBlockComponent cover)
     {
         var distance = HasComp<SentryTargetingComponent>(shooter) ? SentryCoverDistance : cover.Distance;
-        if (!_xform.InRange(Transform(shooter).Coordinates, Transform(blocker).Coordinates, distance))
+        var origin = Transform(shooter).Coordinates;
+        if (!origin.TryDistance(EntityManager, _xform, Transform(blocker).Coordinates, out var separation)
+            || separation > distance)
             return false;
 
         var facing = _xform.GetWorldRotation(shooter).GetCardinalDir();
