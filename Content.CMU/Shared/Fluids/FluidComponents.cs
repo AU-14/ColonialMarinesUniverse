@@ -60,10 +60,6 @@ public sealed partial class FluidPipeComponent : Component
     [DataField]
     public float Rate = 0.6f;
 
-    // The maximum amount of liquid that can move through this pipe per second.
-    [DataField]
-    public float MaxFlowRate;
-
     // A pipe that goes down: it also passes its liquid to the pipe in the same place on the level below.
     [DataField]
     public bool Down;
