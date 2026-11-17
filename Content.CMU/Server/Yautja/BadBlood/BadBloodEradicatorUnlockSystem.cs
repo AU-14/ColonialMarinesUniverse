@@ -27,6 +27,20 @@ public sealed partial class BadBloodEradicatorUnlockSystem : EntitySystem
         SubscribeLocalEvent<YautjaBadBloodComponent, YautjaCasterFiredEvent>(OnCasterFired);
     }
 
+    /// <summary>
+    /// Hands a Bad Blood who has just arrived whatever the clan has already earned, instead of a second later when
+    /// <see cref="SyncHolders"/> next runs: in that gap a reinforcement's caster refused the lethal bolt with "the clan
+    /// has not earned" it.
+    /// </summary>
+    public void GrantEarnedUnlocks(EntityUid uid)
+    {
+        if (ShouldHoldLethal(uid))
+            EnsureComp<BadBloodLethalBoltComponent>(uid);
+
+        if (ShouldHoldEradicator(uid))
+            EnsureComp<BadBloodEradicatorComponent>(uid);
+    }
+
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;

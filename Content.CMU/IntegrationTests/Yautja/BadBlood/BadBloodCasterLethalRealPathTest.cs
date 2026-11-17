@@ -112,6 +112,44 @@ public sealed class BadBloodCasterLethalRealPathTest : GameTest
         }
     }
 
+    // a reinforcement (the same grunt body a squad call spawns) lands holding the clan's unlocks and can use them
+    // straight away, without waiting for the once-a-second sync
+    [Test]
+    public async Task ReinforcementsLandWithTheClansUnlocks()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var spawned = new List<EntityUid>();
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var unlocks = Server.System<BadBloodEradicatorUnlockSystem>();
+                Assert.That(unlocks.UnlockLethal(), Is.True);
+
+                // what BadBloodCampSystem.ResolveSquadCall does for each seat: spawn the grunt, hand it the unlocks
+                var arrival = entMan.SpawnEntity(BadBloodCampSystem.SquadMemberPrototype, map.GridCoords);
+                spawned.Add(arrival);
+                Assert.That(entMan.HasComponent<BadBloodLethalBoltComponent>(arrival), Is.False,
+                    "Test setup: a fresh body has not been synced yet");
+                unlocks.GrantEarnedUnlocks(arrival);
+
+                Assert.That(entMan.HasComponent<BadBloodLethalBoltComponent>(arrival), Is.True,
+                    "the reinforcement holds the lethal bolt the moment it lands");
+
+                var caster = DeployedCaster(arrival, out _);
+                Assert.That(Cycle(caster, arrival, 2), Is.EqualTo(new[] { 1, 2 }),
+                    "and its caster steps into the lethal bolt at once");
+            });
+        }
+        finally
+        {
+            await Cleanup(party, spawned);
+        }
+    }
+
     // the caster the Bad Blood's own bracer carries, marked deployed so it fires from that bracer
     private Entity<YautjaCasterComponent> DeployedCaster(EntityUid badBlood, out EntityUid bracer)
     {

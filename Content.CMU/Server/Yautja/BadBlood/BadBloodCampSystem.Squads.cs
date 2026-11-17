@@ -494,6 +494,8 @@ public sealed partial class BadBloodCampSystem
                     continue;
 
                 var body = Spawn(SquadMemberPrototype, at);
+                // the squad lands holding the clan's caster unlocks, not a second later
+                _armoryEradicator.GrantEarnedUnlocks(body);
                 _squadGhostRoles.GhostRoleInternalCreateMindAndTransfer(session, entry, body, role);
 
                 // the threat role makes marine objectives see the arrival
