@@ -3,12 +3,14 @@
 
 - type: loadout
   id: CMBMarshalSidearmSpearheadCMU
+  dummyEntity: RMCWeaponRevolverSpearhead # show the gun, not the holster rig
   cost: 0
   equipment:
     suitstorage: CMUBeltHolsterRevolverSpearheadMarshal
 
 - type: loadout
   id: CMBMarshalSidearmM48A4CMU
+  dummyEntity: AU14WeaponPistolM48A4
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
@@ -20,6 +22,7 @@
 
 - type: loadout
   id: CMBMarshalSidearmAuto9CMU
+  dummyEntity: CMUWeaponPistolAuto9
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:

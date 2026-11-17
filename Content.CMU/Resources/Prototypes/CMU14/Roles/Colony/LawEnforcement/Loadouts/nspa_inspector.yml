@@ -3,12 +3,14 @@
 
 - type: loadout
   id: NSPAInspectorSidearmWarwickCMU
+  dummyEntity: CMUWeaponRevolverWarwickPolice # show the gun, not the holster rig or case
   cost: 0
   equipment:
     suitstorage: CMUBeltHolsterRevolverNSPA
 
 - type: loadout
   id: NSPAInspectorSidearmCommissionerCMU
+  dummyEntity: CMUWeaponRevolverWarwickCommissioner
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:

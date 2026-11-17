@@ -1085,7 +1085,7 @@
       choices: { AU14Outerwear: 1 }
       entries:
       - id: AU14CMBDeputyWindbreaker
-      - id: RMCCoatSnowSurvivorCMBDeputy
+      - id: CMUCoatCMBDeputyParka
     - name: Vest
       choices: { AU14vest: 1 }
       entries:

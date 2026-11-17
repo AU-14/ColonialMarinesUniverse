@@ -1078,11 +1078,6 @@
       - PillCanister
       - CMSurgicalCase
   # cmu edit start
-  - type: CMArmor # same protection as the CMB deputy jacket
-    melee: 30
-    bullet: 15
-    bio: 10
-    explosionArmor: 10
   # - type: CMArmor
   #   melee: 30
   #   bullet: 15

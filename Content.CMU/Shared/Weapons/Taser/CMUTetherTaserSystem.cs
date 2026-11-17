@@ -3,7 +3,9 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Attachable.Components;
 using Content.Shared._RMC14.Attachable.Systems;
 using Content.Shared._RMC14.Stamina;
+using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Database;
 using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -35,6 +37,7 @@ namespace Content.Shared.CMU14.Weapons.Taser;
 /// </summary>
 public sealed partial class CMUTetherTaserSystem : EntitySystem
 {
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private AttachableHolderSystem _attachableHolder = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBatterySystem _battery = default!;
@@ -123,10 +126,10 @@ public sealed partial class CMUTetherTaserSystem : EntitySystem
             return;
         }
 
-        Attach((gun, taser), target);
+        Attach((gun, taser), target, projectile.Shooter);
     }
 
-    private void Attach(Entity<CMUTetherTaserComponent> taser, EntityUid target)
+    private void Attach(Entity<CMUTetherTaserComponent> taser, EntityUid target, EntityUid? shooter)
     {
         Detach(taser, null, null);
 
@@ -149,6 +152,9 @@ public sealed partial class CMUTetherTaserSystem : EntitySystem
         Dirty(target, tethered);
 
         PopupStage(target, "cmu-taser-probe-hit", PopupType.MediumCaution);
+
+        _adminLog.Add(LogType.Stamina, LogImpact.Medium,
+            $"{ToPrettyString(shooter):user} hooked {ToPrettyString(target):target} with a taser probe from {ToPrettyString(taser):tool}");
     }
 
     /// <summary>Pulls the probe and drops the wire. Shows <paramref name="message"/> to <paramref name="user"/>, if any.</summary>
@@ -359,6 +365,9 @@ public sealed partial class CMUTetherTaserSystem : EntitySystem
             // otherwise be made to scream every pulse.
             if (_flammable.IsOnFire(target))
             {
+                _adminLog.Add(LogType.Flammable, LogImpact.High,
+                    $"{ToPrettyString(shooter):user} set {ToPrettyString(target):target} on fire by holding the current on {ToPrettyString(taser):tool}");
+
                 var burning = new CMUTaserEmoteEvent(comp.BurningEmote);
                 RaiseLocalEvent(target, ref burning);
             }

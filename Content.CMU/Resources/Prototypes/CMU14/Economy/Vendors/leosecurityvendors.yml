@@ -30,7 +30,7 @@
       choices: { CMUCMBDutyJacket: 1 }
       entries:
       - id: AU14CMBDeputyWindbreaker
-      - id: RMCCoatSnowSurvivorCMBDeputy
+      - id: CMUCoatCMBDeputyParka
     - name: Belt
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
@@ -66,7 +66,7 @@
       - id: RMCBinocularsCivPVE
       - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
-      - id: AU14TeleBaton
+      - id: CMUTeleBatonLawEnforcement
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
@@ -185,7 +185,7 @@
       - id: RMCBinocularsCivPVE
       - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
-      - id: AU14TeleBaton
+      - id: CMUTeleBatonLawEnforcement
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
@@ -309,7 +309,7 @@
       - id: RMCBinocularsCivPVE
       - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
-      - id: AU14TeleBaton
+      - id: CMUTeleBatonLawEnforcement
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
