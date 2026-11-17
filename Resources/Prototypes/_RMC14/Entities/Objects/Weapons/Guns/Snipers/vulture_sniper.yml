@@ -64,7 +64,11 @@
       components:
       - VultureWhitelist
   - type: VultureRifle
+    unbracedDamage: # CMU14: was 95, the windup and unbraced spread are the cost now
+      types:
+        Blunt: 40
   - type: VultureAim
+  - type: CMUVultureWindup # CMU14: 1.5s settle with a laser mark before every shot
   - type: AttachableHolder
     slots:
       rmc-aslot-barrel:
@@ -107,7 +111,7 @@
   - type: RemoveComponents
     components:
     - type: AimedShot
-    - type: TargetingLaser
+    # - type: TargetingLaser # CMU14: kept, the windup mark draws its laser from it
     - type: GunToggleableLaser
       settings:
       - icon:
@@ -253,7 +257,7 @@
     deleteOnCollide: false
     damage:
       types:
-        Piercing: 550
+        Piercing: 400 # CMU14: back to the original port value, was 550
         Blunt: 25
         Structural: 1800
     soundHit:
@@ -264,7 +268,7 @@
       falloff: 9999
       ignoreModifiers: true
   - type: CMArmorPiercing
-    amount: 70
+    amount: 50 # CMU14: back to the original port value, was 70
   - type: RMCPenetratingProjectile
     range: 40
     rangeLossPerHit: 3

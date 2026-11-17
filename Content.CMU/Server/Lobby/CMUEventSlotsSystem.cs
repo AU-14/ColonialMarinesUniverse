@@ -110,7 +110,7 @@ public sealed partial class CMUEventSlotsSystem : EntitySystem
                 var ship = job.RoundSide == RoundJobSide.Govfor
                     ? _round.ResolveGovforShip(preset)
                     : _round.ResolveOpforShip(preset);
-                if (!string.IsNullOrEmpty(ship) && _round.TryGetLoadedShipGrids(ship, out var grids))
+                if (!string.IsNullOrEmpty(ship) && _round.TryGetLoadedShipGrids(ship, job.RoundSide == RoundJobSide.Govfor ? "govfor" : "opfor", out var grids))
                 {
                     foreach (var grid in grids)
                     {

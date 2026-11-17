@@ -154,7 +154,7 @@ public sealed partial class CMUZLevelsSystem
     private void SetActiveStatus(EntityUid ent, bool active, ZGroundContact? unchangedGround = null)
     {
         if (active)
-            WakeZPhysics(ent, unchangedGround);
+            WakeZPhysics(ent, unchangedGround, activationChecked: true);
         else
         {
             RemCompDeferred<CMUZFallingComponent>(ent);
@@ -180,14 +180,15 @@ public sealed partial class CMUZLevelsSystem
         }
 
         var xform = Transform(ent);
+        var worldPosition = _transform.GetWorldPosition(xform);
         if (xform.MapUid is not { } mapUid ||
-            !TryResolveMovementGrid(mapUid, _transform.GetWorldPosition(ent), out var gridUid, out var grid))
+            !TryResolveMovementGrid(mapUid, worldPosition, out var gridUid, out var grid))
         {
             return false;
         }
 
         map = gridUid;
-        tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(_transform.GetWorldPosition(xform), xform.MapID));
+        tile = _map.TileIndicesFor(gridUid, grid, new MapCoordinates(worldPosition, xform.MapID));
         return true;
     }
 

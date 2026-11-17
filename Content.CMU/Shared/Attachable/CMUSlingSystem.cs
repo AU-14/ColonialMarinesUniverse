@@ -25,6 +25,26 @@ public sealed partial class CMUSlingSystem : EntitySystem
         SubscribeLocalEvent<CMUSlingComponent, GetVerbsEvent<AlternativeVerb>>(OnGetVerbs);
         SubscribeLocalEvent<CMUSlingComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<ItemComponent, InteractUsingEvent>(OnVestInteractUsing);
+        SubscribeLocalEvent<CMUSlingVestComponent, GetVerbsEvent<AlternativeVerb>>(OnVestGetVerbs);
+    }
+
+    // nothing ever called TryRetrieveFromVest, so a rifle clipped to the vest was stuck there for good
+    private void OnVestGetVerbs(Entity<CMUSlingVestComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract ||
+            !_containers.TryGetContainer(ent, CMUSlingVestComponent.ContainerId, out var container) ||
+            container.Count == 0)
+        {
+            return;
+        }
+
+        var user = args.User;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString("cmu-sling-vest-retrieve"),
+            Priority = 2,
+            Act = () => TryRetrieveFromVest(ent, user),
+        });
     }
 
     private void OnGetVerbs(Entity<CMUSlingComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)

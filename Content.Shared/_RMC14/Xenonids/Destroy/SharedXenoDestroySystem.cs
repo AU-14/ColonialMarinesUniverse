@@ -228,14 +228,8 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
 
                     if (_net.IsServer)
                     {
-                        var gibAttempt = new XenoGibTargetAttemptEvent(xeno.Owner, ent);
-                        RaiseLocalEvent(ent, ref gibAttempt);
-
-                        if (!gibAttempt.Handled)
-                        {
-                            _rmcGib.ScatterInventoryItems(ent);
-                            _body.GibBody(ent, true, body);
-                        }
+                        _rmcGib.ScatterInventoryItems(ent);
+                        _body.GibBody(ent, true, body);
                     }
                     continue;
                 }

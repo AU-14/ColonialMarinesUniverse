@@ -135,41 +135,47 @@
   id: CMUCrateSecureWYRandomExp
   table: !type:GroupSelector
     children:
-    - id: CMUYautjaBracer
+    # the recovered pred bracer only turns up on a hunt round, and then 1 crate in 100
+    - id: CMUYautjaResearchBracer
       weight: 1
-    - !type:AllSelector
+      conditions:
+      - !type:YautjaHuntActiveCondition
+    - !type:GroupSelector
+      weight: 99
       children:
-      - id: XenoEgg
-      - id: XenoEgg
-      - id: CMUWeYuHivebreaker
-        prob: 0.1
-      weight: 1
-    - !type:AllSelector
-      children:
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      - id: AU14BiomorphVenomSyringe
-      weight: 1
-    - !type:AllSelector
-      children:
-      - id: RMCBottleMindbreaker
-      - id: RMCBottleMindbreaker
-      - id: RMCBottleMindbreaker
-      - id: RMCBottleMindbreaker
-      - id: RMCBottleMindbreaker
-      - id: RMCBottleMindbreaker
-      - id: RMCBottleMindbreaker
-      - id: AU14DrugDealerDrugBottle
-      - id: AU14DrugDealerDrugBottle
-      - id: AU14DrugDealerDrugBottle
-      - id: AU14DrugDealerDrugBottle
-      - id: AU14DrugDealerDrugBottle
-      - id: AU14DrugDealerDrugBottle
-      - id: AU14DrugDealerDrugBottle
-      weight: 5
+        - !type:AllSelector
+          children:
+          - id: XenoEgg
+          - id: XenoEgg
+          - id: CMUWeYuHivebreaker
+            prob: 0.1
+          weight: 1
+        - !type:AllSelector
+          children:
+          - id: AU14BiomorphVenomSyringe
+          - id: AU14BiomorphVenomSyringe
+          - id: AU14BiomorphVenomSyringe
+          - id: AU14BiomorphVenomSyringe
+          - id: AU14BiomorphVenomSyringe
+          - id: AU14BiomorphVenomSyringe
+          weight: 1
+        - !type:AllSelector
+          children:
+          - id: RMCBottleMindbreaker
+          - id: RMCBottleMindbreaker
+          - id: RMCBottleMindbreaker
+          - id: RMCBottleMindbreaker
+          - id: RMCBottleMindbreaker
+          - id: RMCBottleMindbreaker
+          - id: RMCBottleMindbreaker
+          - id: AU14DrugDealerDrugBottle
+          - id: AU14DrugDealerDrugBottle
+          - id: AU14DrugDealerDrugBottle
+          - id: AU14DrugDealerDrugBottle
+          - id: AU14DrugDealerDrugBottle
+          - id: AU14DrugDealerDrugBottle
+          - id: AU14DrugDealerDrugBottle
+          weight: 5
 
 - type: entity
   id: AU14CrateSecureWeYuCounteragent

@@ -34,4 +34,5 @@
   - type: CMArmor
     melee: 25
     bullet: 25
+    bio: 75 # cmss13 armor_bio GIGAHIGHPLUS; armor is per zone, so the suit's bio never covers the feet
     explosionArmor: 20

@@ -83,6 +83,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         _huntingGroundActivated = false;
         _nextHuntAt = TimeSpan.Zero;
         _nextBloodingAt = TimeSpan.Zero;
+        _preserveHive = null;
     }
 
     private void OnHuntPreyRoleTaken(Entity<YautjaHuntPreyComponent> ent, ref TakeGhostRoleEvent args)
@@ -501,6 +502,7 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
                 return null;
 
             var spawned = Spawn(prototype, coordinates);
+            AssignPreserveHive(spawned);
             SanitizePreyGear(console, spawned);
             return spawned;
         }

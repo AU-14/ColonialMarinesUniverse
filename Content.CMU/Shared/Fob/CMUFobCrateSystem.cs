@@ -58,16 +58,26 @@ public sealed partial class CMUFobCrateSystem : EntitySystem
                && _interaction.InRangeUnobstructed(user, crate);
     }
 
+    // the server vetoes opening on the dropship landing footprint, the terminal can't be deployed there
+    private bool CanOpenHere(EntityUid crate, EntityUid user)
+    {
+        var ev = new CMUFobCrateOpenAttemptEvent(user);
+        RaiseLocalEvent(crate, ref ev);
+        return !ev.Cancelled;
+    }
+
     private bool TryStartOpening(Entity<CMUFobCrateComponent> ent, EntityUid user, EntityUid tool)
     {
         return CanUseWrench(ent, user, tool)
+               && CanOpenHere(ent, user)
                && _tools.UseTool(tool, user, ent, (float) ent.Comp.OpenDuration.TotalSeconds, WrenchQuality,
                    new CMUFobCrateOpenDoAfterEvent());
     }
 
     private void OnOpenDoAfter(Entity<CMUFobCrateComponent> ent, ref CMUFobCrateOpenDoAfterEvent args)
     {
-        if (args.Handled || args.Cancelled || args.Used is not { } tool || !CanUseWrench(ent, args.User, tool))
+        if (args.Handled || args.Cancelled || args.Used is not { } tool || !CanUseWrench(ent, args.User, tool) ||
+            !CanOpenHere(ent, args.User))
             return;
 
         args.Handled = true;

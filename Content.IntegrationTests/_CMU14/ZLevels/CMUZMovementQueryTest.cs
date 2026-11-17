@@ -153,6 +153,65 @@ public sealed class CMUZMovementQueryTest : GameTest
 
     private int Floors => (int) DistanceFloors.GetValue(_z)!;
 
+    [Test]
+    public async Task VehicleSupportTracksGeometryAndSamplingEditsAtAnEdge()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            CreateScenario(true);
+            var traversal = SComp<CMUVehicleZTraversalComponent>(_body);
+            var fixtures = SComp<FixturesComponent>(_body);
+            var samples = new List<Vector2>();
+            var fixtureSystem = Server.System<FixtureSystem>();
+            Move(5.8f);
+            CheckSupport();
+
+            fixtureSystem.DestroyFixture(_body, "body");
+            var shape = new Robust.Shared.Physics.Collision.Shapes.PolygonShape();
+            shape.SetAsBox(2.8f, .6f);
+            Assert.That(fixtureSystem.TryCreateFixture(_body, shape, "body"), Is.True);
+            CheckSupport();
+            traversal.SupportSampleSpacing = .83f;
+            CheckSupport();
+            traversal.SupportSampleInset = .4f;
+            CheckSupport();
+            _transform.SetWorldRotation(_body, new Angle(.7));
+            CheckSupport();
+            return;
+
+            void CheckSupport()
+            {
+                Assert.That(CMUVehicleSupportFootprint.TryGetFixtureLocalAabb(fixtures, out var bounds), Is.True);
+                CMUVehicleSupportFootprint.GenerateWorldSamples(bounds, traversal.SupportSampleSpacing,
+                    traversal.SupportSampleInset, _transform.GetWorldPosition(_body),
+                    _transform.GetWorldRotation(_body), samples);
+                var falling = SEntMan.HasComponent<CMUZFallingComponent>(_body);
+                var supportedDistances = new List<float>();
+                foreach (var sample in samples)
+                {
+                    var distance = _z.DistanceToGroundAtWorldPosition((_body, _bodyZ), sample, out var sticky);
+                    if (CMUVehicleSupportFootprint.IsSampleSupported(distance, sticky,
+                            traversal.MaxSupportStepHeight, traversal.SupportSnapDistance, falling))
+                        supportedDistances.Add(distance);
+                }
+                Assert.That(supportedDistances.Count, Is.InRange(1, samples.Count - 1),
+                    "The fixture must straddle the edge so a stale sample layout changes support.");
+                // Exercise both sides of the rejection boundary, including equality (which remains supported).
+                var boundary = 1f - supportedDistances.Count / (float) samples.Count;
+                foreach (var threshold in new[] { MathF.Max(0, boundary - .01f), boundary })
+                {
+                    traversal.EdgeTipUnsupportedFraction = threshold;
+                    SEntMan.RemoveComponent<CMUZFallingComponent>(_body);
+                    var expected = boundary > threshold ? 1f : supportedDistances.Average();
+                    var actual = _z.DistanceToGround((_body, _bodyZ), out var sticky);
+                    Assert.That(actual, Is.EqualTo(expected).Within(.0001f),
+                        "A full geometric scan and the cached/short-circuit query must agree after each edit.");
+                    Assert.That(sticky, Is.False);
+                }
+            }
+        });
+    }
+
     private void CreateScenario(bool vehicle)
     {
         _originalProfiler = Server.CfgMan.GetCVar(Robust.Shared.CVars.ProfEnabled);

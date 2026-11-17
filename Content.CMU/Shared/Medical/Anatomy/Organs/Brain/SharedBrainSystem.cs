@@ -3,7 +3,6 @@ using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Body.Events;
 using Content.Shared._RMC14.Medical.Stasis;
-using Content.Shared._RMC14.Synth;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -77,9 +76,6 @@ public abstract partial class SharedBrainSystem : EntitySystem
             return;
 
         ReconcileSpeechImpairment(args.OldBody);
-        if (HasComp<SynthComponent>(args.OldBody))
-            return;
-
         if (!_medicalEnabled || !_organEnabled)
             return;
 
