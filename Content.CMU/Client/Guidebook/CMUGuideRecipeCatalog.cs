@@ -77,6 +77,23 @@ public sealed partial class CMUGuideRecipeCatalog
 
     public HashSet<string>? Sources(CMUGuideMaterial material) => _sources.GetValueOrDefault(material);
 
+    public CMUGuideRecipe? TryGet(string id) => _entries.GetValueOrDefault(id);
+
+    public CMUGuideMaterial Canonical(CMUGuideMaterial material)
+    {
+        if (material.Kind == CMUGuideMaterialKind.Item &&
+            _prototypes.Index<EntityPrototype>(material.Id).TryComp<StackComponent>(out var stack, _entities.ComponentFactory))
+            return CMUGuideMaterial.Stack(stack.StackTypeId);
+        return material;
+    }
+
+    public IPrototype Prototype(CMUGuideMaterial material) => material.Kind switch
+    {
+        CMUGuideMaterialKind.Stack => _prototypes.Index<EntityPrototype>(_prototypes.Index<StackPrototype>(material.Id).Spawn),
+        CMUGuideMaterialKind.Fluid => _entities.System<RMCReagentSystem>().Index(material.Id),
+        _ => _prototypes.Index<EntityPrototype>(material.Id),
+    };
+
     public string Name(CMUGuideMaterial material) => material.Kind switch
     {
         CMUGuideMaterialKind.Stack => _prototypes.Index(_prototypes.Index<StackPrototype>(material.Id).Spawn).Name,

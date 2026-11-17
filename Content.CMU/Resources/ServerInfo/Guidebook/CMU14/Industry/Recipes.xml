@@ -3,13 +3,13 @@
 
   [textlink="Back to Mining & Industry" link="CMUGuideIndustry"]
 
-  Every recipe currently loaded for a RUMC production machine or work station is listed below. Choose a machine, then search by product, ingredient or equipment. This catalog reads the same prototypes as the machines, so new recipes appear here automatically.
+  Every product currently made by a RUMC production machine or work station is listed below. Use the search box above to filter by product, ingredient, process or machine. This catalog reads the same prototypes as the machines, so new recipes appear here automatically.
 
-  Select a result to see its exact inputs, outputs, processing time, circuit setting, temperature, reusable mold or catalyst, and compatible equipment. Choose how many batches to plan. Items marked [bold]kept[/bold] are not consumed.
+  Expand [bold]Recipe[/bold] for exact inputs, outputs, processing time, circuit setting, temperature, reusable mold or catalyst, and compatible equipment. Expand [bold]Sources[/bold] for other known ways to obtain that product. Items marked [bold]kept[/bold] are not consumed.
 
-  <CMUGuideCraftingRecipes MachinesOnly="True"/>
+  <CMUGuideRecipeCards/>
 
-  [bold]Need an ingredient?[/bold] Click its row to open every known production or gathering source, including hand recipes, mining, drilling, plants and pumps. Use Back to return to the same machine and recipe. The quantities shown are the base recipe; upgrades and machine speed can change processing time.
+  Blue ingredient links jump to that material's card when it is made by another RUMC machine. The quantities shown are per batch; upgrades and machine speed can change processing time.
 
   [textlink="First workshop" link="CMUGuideIndustryStart"] · [textlink="Forge" link="CMUGuideIndustryForge"] · [textlink="Steam" link="CMUGuideIndustrySteam"] · [textlink="Electricity" link="CMUGuideIndustryElectric"]
 </Document>

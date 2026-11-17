@@ -71,6 +71,7 @@
   name: cmu-guide-entry-industry-recipes
   priority: 8
   text: "/ServerInfo/Guidebook/CMU14/Industry/Recipes.xml"
+  filterEnabled: True
 
 - type: guideEntry
   parent: RMC
