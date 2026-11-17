@@ -3,9 +3,9 @@
   id: AU14PrimerThreatBadBlood
   threattext: "You are a Bad Blood — a dishonored Yautja cast out from your clan. You are no longer bound by the code. Hunt everything."
   KnowledgeLevelsGovforThreat:
-    "Threat Unknown": 1
+    "Threat Unknown.": 1
     "Anomalous cloaked contacts detected. Something is hunting us.": 2
-    "Yautja confirmed in AO. Expect plasma casters, cloaking technology, and wrist blades.": 3
+    "A cloaked warship hovers in orbit over the area of operations.": 3
 
 # Base: 1 leader + 4 grunts. Scales at 0.08 per player above 30 (one extra grunt per ~12-13 players above 30).
 - type: threat

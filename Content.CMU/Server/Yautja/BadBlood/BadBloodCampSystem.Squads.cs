@@ -141,7 +141,7 @@ public sealed partial class BadBloodCampSystem
 
     /// <summary>
     /// How many more seats the threat budget alone allows: Bad Bloods, open seats and hounds against
-    /// round(pop x 0.3). The living cap is not counted.
+    /// round(pop x 0.35). The living cap is not counted.
     /// </summary>
     public int GetSquadBudgetRoom()
     {

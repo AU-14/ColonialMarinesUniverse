@@ -1,6 +1,7 @@
 using Content.Server.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Inventory;
+using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
@@ -103,6 +104,91 @@ public sealed class BadBloodWeaponChoiceTest
                 SendChoice(entMan, bracer, badBlood, YautjaGearKind.WristBlades);
                 Assert.That(gear.Gear.ContainsKey(YautjaGearKind.WristBlades), Is.False,
                     "A second weapon must not be installed after the choice is made.");
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+
+                foreach (var uid in spawned)
+                {
+                    if (entMan.EntityExists(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    // the spawn bug: a body is spawned wearing its bracer before any player is in it, and a player who picked a weapon
+    // and closed the menu without the confirming second click got nothing and could not open the menu again
+    [Test]
+    public async Task TheMenuReachesTheSpawnedPlayerAndClosingItKeepsThePick()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid? previousAttached = null;
+        var spawned = new List<EntityUid>();
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var inventory = entMan.System<InventorySystem>();
+                var ui = entMan.System<SharedUserInterfaceSystem>();
+                var session = server.PlayerMan.Sessions.Single();
+                previousAttached = session.AttachedEntity;
+
+                // the body is dressed first, with nobody in it, the way the threat and squad spawns do it
+                var badBlood = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+                spawned.Add(badBlood);
+                entMan.EnsureComponent<YautjaBadBloodComponent>(badBlood);
+                if (inventory.TryUnequip(badBlood, "gloves", out var oldBracer, silent: true, force: true))
+                    entMan.DeleteEntity(oldBracer.Value);
+
+                var bracer = entMan.SpawnEntity(BadBloodBracer, map.GridCoords);
+                spawned.Add(bracer);
+                Assert.That(inventory.TryEquip(badBlood, bracer, "gloves", silent: true, force: true), Is.True);
+                var choice = entMan.GetComponent<YautjaBadBloodGearChoiceComponent>(bracer);
+                var gear = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
+                ui.CloseUi(bracer, YautjaBadBloodWeaponChoiceUI.Key);
+
+                // a player takes the body: the menu is offered to them
+                server.PlayerMan.SetAttachedEntity(session, badBlood);
+                Assert.That(ui.IsUiOpen(bracer, YautjaBadBloodWeaponChoiceUI.Key, badBlood), Is.True,
+                    "taking over a body with an unchosen bracer opens the weapon menu");
+
+                // closed without picking: the bracer offers the menu again
+                ui.CloseUi(bracer, YautjaBadBloodWeaponChoiceUI.Key);
+                Assert.That(choice.Chosen, Is.False, "closing with nothing picked chooses nothing");
+                var verbs = entMan.System<SharedVerbSystem>().GetLocalVerbs(bracer, badBlood, typeof(Verb));
+                var reopen = verbs.FirstOrDefault(v => v.Text == Loc.GetString("cmu-yautja-badblood-weapon-choice-verb"));
+                Assert.That(reopen, Is.Not.Null, "the bracer can open the menu again while nothing is chosen");
+                entMan.System<SharedVerbSystem>().ExecuteVerb(reopen!, badBlood, bracer);
+                Assert.That(ui.IsUiOpen(bracer, YautjaBadBloodWeaponChoiceUI.Key, badBlood), Is.True);
+
+                // one click, then the window is closed: the pick stands
+                SendChoice(entMan, bracer, badBlood, YautjaGearKind.ChainGauntlet);
+                Assert.That(choice.PendingChoice, Is.EqualTo(YautjaGearKind.ChainGauntlet));
+                ui.CloseUi(bracer, YautjaBadBloodWeaponChoiceUI.Key);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(choice.Chosen, Is.True, "closing the menu with a weapon picked takes that weapon");
+                    Assert.That(gear.Gear.TryGetValue(YautjaGearKind.ChainGauntlet, out var installed), Is.True);
+                    Assert.That(gear.InstalledGear, Does.Contain(installed));
+                    Assert.That(entMan.System<SharedVerbSystem>().GetLocalVerbs(bracer, badBlood, typeof(Verb))
+                            .Any(v => v.Text == Loc.GetString("cmu-yautja-badblood-weapon-choice-verb")), Is.False,
+                        "once chosen, the menu is gone for good");
+                });
             });
         }
         finally

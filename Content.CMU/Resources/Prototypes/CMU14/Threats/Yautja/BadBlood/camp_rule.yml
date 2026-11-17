@@ -22,9 +22,11 @@
     lastStandCost: 12
     houndCost: 6
     totemCost: 3
-    livingCapBonus: 3
-    # 0.3: the bigger landing (5 + 3 sleeping hounds) still leaves the clan room to buy reinforcements at 30-40 players
-    threatBudgetFraction: 0.3
+    # room for the biggest squad (5) on top of the landing party and the founding squad
+    livingCapBonus: 5
+    # 0.35, sized against the landing (5 Bad Bloods + 3 sleeping hounds at 30 players): 30 players -> 11, room for a
+    # squad of 3 from the start; 40 players -> 14 against 6 + 3 landed, room for a squad of 5
+    threatBudgetFraction: 0.35
     landingHoundDivisor: 2 # rounded up: a landing party of 5 brings 3 hounds
     houndCapDivisor: 2
     houndCapBonus: 1

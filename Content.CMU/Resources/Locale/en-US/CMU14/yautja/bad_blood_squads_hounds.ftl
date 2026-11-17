@@ -19,7 +19,7 @@ cmu-bad-blood-squad-verb = Call { $seats } { $seats ->
 cmu-bad-blood-squad-verb-message = Spend the clan's Superiority Points to call reinforcements to the Lodge.
 cmu-bad-blood-squad-leader-only = Only the clan's Leader calls reinforcements.
 cmu-bad-blood-squad-no-lodge = The clan has no Lodge to call reinforcements to.
-cmu-bad-blood-squad-cap = The clan cannot take { $seats } more hunters: { $living } living and { $pending } on the way, the limit is { $limit }. Until the clan ship arrives the limit is the landing party, plus the founding squad, plus 3. Bad Bloods and hounds together never pass 30% of the players.
+cmu-bad-blood-squad-cap = The clan cannot take { $seats } more hunters: { $living } living and { $pending } on the way, the limit is { $limit }. Until the clan ship arrives the limit is the landing party, plus the founding squad, plus 5. Bad Bloods and hounds together never pass 35% of the players.
 cmu-bad-blood-squad-cannot-afford = The clan needs { $cost } Superiority Points for that squad.
 cmu-bad-blood-squad-called = Reinforcements have been called to the Lodge: { $seats } { $seats ->
         [one] seat

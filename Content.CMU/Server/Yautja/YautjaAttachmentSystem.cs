@@ -17,6 +17,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Popups;
 using Content.Shared.Prying.Systems;
@@ -25,6 +26,8 @@ using Content.Shared.Standing;
 using Content.Shared.Throwing;
 using Content.Shared._RMC14.Xenonids.Construction.ResinWhisper;
 using Content.Shared.UserInterface;
+using Content.Shared.Verbs;
+using Robust.Shared.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -44,6 +47,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     [Dependency] private SharedDoorSystem _doors = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
@@ -77,7 +81,10 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         Subs.BuiEvents<YautjaBadBloodGearChoiceComponent>(YautjaBadBloodWeaponChoiceUI.Key, subs =>
         {
             subs.Event<YautjaBadBloodWeaponChoiceMsg>(OnBadBloodWeaponChoice);
+            subs.Event<BoundUIClosedEvent>(OnBadBloodChoiceClosed);
         });
+        SubscribeLocalEvent<YautjaBadBloodGearChoiceComponent, GetVerbsEvent<Verb>>(OnBadBloodChoiceVerbs);
+        SubscribeLocalEvent<PlayerAttachedEvent>(OnBadBloodPlayerAttached);
 
         SubscribeLocalEvent<YautjaStoredGearComponent, UseInHandEvent>(OnStoredGearUseInHand);
         SubscribeLocalEvent<YautjaStoredGearComponent, ThrowItemAttemptEvent>(OnStoredGearThrowAttempt);
@@ -1625,30 +1632,82 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
         if (ent.Comp.PendingChoice == args.Choice)
         {
-            ent.Comp.Chosen = true;
-            ent.Comp.PendingChoice = null;
-            Dirty(ent);
-
-            if (TryComp(ent.Owner, out YautjaGearContainerComponent? gear))
-            {
-                if (EnsureGear((ent.Owner, gear), args.Choice) is { } chosenGear)
-                {
-                    // The bad-blood choice is the attachment operation: the selected
-                    // weapon is already installed in the damaged bay, so it must be
-                    // treated like a physical bracer attachment by action discovery.
-                    gear.InstalledGear.Add(chosenGear);
-                    Dirty(ent.Owner, gear);
-                }
-                GrantChosenGearAction((ent.Owner, gear), args.Choice);
-            }
-
-            _ui.CloseUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key);
-
+            CommitBadBloodChoice(ent, args.Choice);
             return;
         }
 
         ent.Comp.PendingChoice = args.Choice;
         Dirty(ent);
+        UpdateBadBloodChoiceUi(ent);
+    }
+
+    private void CommitBadBloodChoice(Entity<YautjaBadBloodGearChoiceComponent> ent, YautjaGearKind choice)
+    {
+        ent.Comp.Chosen = true;
+        ent.Comp.PendingChoice = null;
+        Dirty(ent);
+
+        if (TryComp(ent.Owner, out YautjaGearContainerComponent? gear))
+        {
+            if (EnsureGear((ent.Owner, gear), choice) is { } chosenGear)
+            {
+                // The bad-blood choice is the attachment operation: the selected
+                // weapon is already installed in the damaged bay, so it must be
+                // treated like a physical bracer attachment by action discovery.
+                gear.InstalledGear.Add(chosenGear);
+                Dirty(ent.Owner, gear);
+            }
+            GrantChosenGearAction((ent.Owner, gear), choice);
+        }
+
+        _ui.CloseUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key);
+    }
+
+    // a player who picked a weapon and closed the menu without the second click got nothing and could never open
+    // the menu again. Closing it with a weapon picked now takes that weapon
+    private void OnBadBloodChoiceClosed(Entity<YautjaBadBloodGearChoiceComponent> ent, ref BoundUIClosedEvent args)
+    {
+        if (ent.Comp.Chosen || ent.Comp.PendingChoice is not { } pending)
+            return;
+
+        CommitBadBloodChoice(ent, pending);
+    }
+
+    // the menu can be opened again for as long as no weapon was chosen
+    private void OnBadBloodChoiceVerbs(Entity<YautjaBadBloodGearChoiceComponent> ent, ref GetVerbsEvent<Verb> args)
+    {
+        if (ent.Comp.Chosen ||
+            !args.CanAccess ||
+            !TryComp(ent.Owner, out YautjaBracerComponent? bracer) ||
+            bracer.User != args.User)
+        {
+            return;
+        }
+
+        var user = args.User;
+        args.Verbs.Add(new Verb
+        {
+            Text = Loc.GetString("cmu-yautja-badblood-weapon-choice-verb"),
+            Act = () => OpenBadBloodChoice(ent, user),
+        });
+    }
+
+    // bodies are spawned wearing the bracer, before any player is in them: offer the menu to whoever takes the body
+    private void OnBadBloodPlayerAttached(PlayerAttachedEvent args)
+    {
+        if (!_inventory.TryGetSlotEntity(args.Entity, "gloves", out var worn) ||
+            !TryComp(worn, out YautjaBadBloodGearChoiceComponent? choice) ||
+            choice.Chosen)
+        {
+            return;
+        }
+
+        OpenBadBloodChoice((worn.Value, choice), args.Entity);
+    }
+
+    private void OpenBadBloodChoice(Entity<YautjaBadBloodGearChoiceComponent> ent, EntityUid user)
+    {
+        _ui.TryOpenUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, user);
         UpdateBadBloodChoiceUi(ent);
     }
 

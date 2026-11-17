@@ -151,20 +151,20 @@ public sealed class SquadCallTest : GameTest
                 var camp = Server.System<BadBloodCampSystem>();
                 Assert.That(rules.TryGetRule(out var rule), Is.True);
 
-                // three living Bad Bloods under a cap of five (landing 2 + bonus 3): two more seats, not three
+                // three living Bad Bloods under a cap of seven (landing 2 + bonus 5): four more seats, not five
                 rule.Comp.HeldVoteSeats = 0;
                 rule.Comp.FoundingSeats = 0;
                 rule.Comp.LandingParty = 2;
-                Assert.That(rules.GetLivingBadBloodCap(), Is.EqualTo(5));
-                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(2));
-                Assert.That(camp.TryBuySquad(party.Leader, 3), Is.False, "the living cap holds");
+                Assert.That(rules.GetLivingBadBloodCap(), Is.EqualTo(7));
+                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(4));
+                Assert.That(camp.TryBuySquad(party.Leader, 5), Is.False, "the living cap holds");
                 Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14.67)));
 
                 // the free seat API obeys the caps too, unless it is told not to
-                Assert.That(camp.TryOpenSquad(3, out _), Is.False);
+                Assert.That(camp.TryOpenSquad(5, out _), Is.False);
                 Assert.That(camp.TryOpenFreeSeat(), Is.True);
                 Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(14.67)), "a free seat costs nothing");
-                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(1));
+                Assert.That(camp.GetSquadSeatRoom(), Is.EqualTo(3));
             });
 
             // a free seat that nobody takes closes without a refund

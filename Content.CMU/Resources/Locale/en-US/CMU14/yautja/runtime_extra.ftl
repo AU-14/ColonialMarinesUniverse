@@ -83,4 +83,5 @@ cmu-yautja-job-description-youngblood = A young Yautja hunter undergoing the Blo
 cmu-yautja-job-name-youngblood = Yautja Youngblood
 
 cmu-yautja-badblood-weapon-choice-title = Choose Your Weapon
-cmu-yautja-badblood-weapon-choice-warning = This action is irreversible, are you sure?
+cmu-yautja-badblood-weapon-choice-warning = This action is irreversible. Click it again to confirm, or close this window to keep it.
+cmu-yautja-badblood-weapon-choice-verb = Choose your weapon

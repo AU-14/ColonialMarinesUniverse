@@ -146,8 +146,17 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.SummonInterval, Is.EqualTo(TimeSpan.FromSeconds(60)));
                 Assert.That(rule.DepartureTime, Is.EqualTo(TimeSpan.FromMinutes(20)));
                 Assert.That(rule.ReserveChoiceTime, Is.EqualTo(TimeSpan.FromSeconds(20)));
-                Assert.That(rule.ThreatBudgetFraction, Is.EqualTo(0.3f));
-                Assert.That(rule.LivingCapBonus, Is.EqualTo(3));
+                Assert.That(rule.ThreatBudgetFraction, Is.EqualTo(0.35f));
+                Assert.That(rule.LivingCapBonus, Is.EqualTo(5));
+
+                // the squad tiers fit the budget: Bad Bloods + landing hounds against round(players x fraction).
+                // 30 players land 5 (+3 hounds) and leave room for a squad of 3; 40 land 6 (+3) and leave room for 5
+                int Room(int players, int landing) =>
+                    (int) MathF.Round(players * rule.ThreatBudgetFraction, MidpointRounding.AwayFromZero)
+                    - landing - (landing + rule.LandingHoundDivisor - 1) / rule.LandingHoundDivisor;
+                Assert.That(Room(30, 5), Is.GreaterThanOrEqualTo(3), "a squad of 3 fits at 30 players");
+                Assert.That(Room(40, 6), Is.GreaterThanOrEqualTo(5), "a squad of 5 fits at 40 players");
+                Assert.That(rule.LivingCapBonus, Is.GreaterThanOrEqualTo(5), "the living cap admits a squad of 5");
                 Assert.That(rule.LandingHoundDivisor, Is.EqualTo(2));
                 Assert.That(rule.HoundCapDivisor, Is.EqualTo(2));
                 Assert.That(rule.HoundCapBonus, Is.EqualTo(1));

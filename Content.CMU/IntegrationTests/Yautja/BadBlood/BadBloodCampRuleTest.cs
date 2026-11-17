@@ -184,7 +184,7 @@ public sealed class BadBloodCampRuleTest : GameTest
             {
                 var rules = Server.System<BadBloodCampRuleSystem>();
                 Assert.That(rules.TryGetRule(out var rule), Is.True);
-                Assert.That(rule.Comp.ThreatBudgetFraction, Is.EqualTo(0.3f), "the default share");
+                Assert.That(rule.Comp.ThreatBudgetFraction, Is.EqualTo(0.35f), "the default share");
                 start = rules.GetPlayerCount();
                 Assert.That(start, Is.EqualTo(Server.PlayerMan.PlayerCount), "the live count");
             });

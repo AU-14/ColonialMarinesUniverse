@@ -171,14 +171,14 @@ public sealed partial class BadBloodCampRuleComponent : Component
     public int FoundingSeats;
 
     [DataField]
-    public int LivingCapBonus = 3;
+    public int LivingCapBonus = 5;
 
     /// <summary>
     /// Bad Bloods + hounds never exceed this share of the live player count. It is read every time, so the ceiling
     /// rises and falls with the server population during the round. Nobody is removed when it falls; new seats wait.
     /// </summary>
     [DataField]
-    public float ThreatBudgetFraction = 0.3f;
+    public float ThreatBudgetFraction = 0.35f;
 
     /// <summary>
     /// The landing party brings one sleeping hound per this many Bad Bloods, rounded up. Zero or less: none.
