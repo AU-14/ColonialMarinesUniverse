@@ -1,6 +1,9 @@
 - type: job
   parent: CMJobBase
   id: CMUJobParamarineSynthetic
+  isSynthetic: true
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
   roundSide: ThirdParty
   roundForce: CMUParamarines
   roundRole: ParamarineSynthetic
@@ -20,15 +23,24 @@
       RMCSkillMeleeWeapons: 2
   - type: JobPrefix
     prefix: cmu-paramarines-prefix-synthetic
+  # same synth body as the other ERT synths (US Army, Prodigy)
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.15
+        volume: -1
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 35
+  - type: Synth
   - type: Language
-    spokenLanguages:
-    - English
-    - TacticalSignLanguage
-    understoodLanguages:
-    - English
-    - TacticalSignLanguage
-    currentLanguage: English
-    defaultLanguage: English
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
   name: cmu-paramarines-name-synthetic-title
   description: cmu-paramarines-description-synthetic
   playTimeTracker: CMUJobParamarineSynthetic

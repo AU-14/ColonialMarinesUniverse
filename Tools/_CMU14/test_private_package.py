@@ -5,6 +5,7 @@ import json
 import sys
 import tempfile
 import unittest
+import urllib.error
 from types import SimpleNamespace
 from unittest.mock import patch
 import zipfile
@@ -12,6 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from request_private_package import PackageError, receive_package, request_package
+from request_private_package import download_release_asset, fetch_package
 
 
 class PrivatePackageTests(unittest.TestCase):
@@ -92,6 +94,81 @@ class PrivatePackageTests(unittest.TestCase):
                     receive_package(self.artifact(extra=extra), output, self.expected)
                 self.assertFalse(output.exists())
                 self.assertFalse((self.root / "escaped.txt").exists())
+
+    def test_selects_package_asset_without_downloading_private_diagnostics(self):
+        asset = {"id": 42, "name": "package.zip", "state": "uploaded", "size": 500}
+        release = {"draft": False, "prerelease": True, "target_commitish": "b" * 40,
+                   "assets": [{"id": 43, "name": "diagnostics.zip"}, asset]}
+        archive = self.root / "download.zip"
+        with patch("request_private_package.api", return_value=release) as api, \
+                patch("request_private_package.download_release_asset") as download:
+            fetch_package(100, "request-one", "b" * 40, "token", archive)
+        download.assert_called_once_with(42, "token", archive)
+        api.assert_called_once_with("/releases/tags/cmu-ci-100-package", "token", allow_not_found=True)
+
+    def test_invalid_release_does_not_fall_back_to_artifacts(self):
+        release = {"draft": False, "prerelease": True, "target_commitish": "b" * 40,
+                   "assets": [{"id": 42, "name": "package.zip", "state": "uploaded", "size": 500}]}
+        for change in ({"target_commitish": "c" * 40}, {"draft": True}, {"assets": []}):
+            with self.subTest(change=change), \
+                    patch("request_private_package.api", return_value={**release, **change}) as api, \
+                    patch("request_private_package.download_release_asset") as download:
+                with self.assertRaises(PackageError):
+                    fetch_package(100, "request-one", "b" * 40, "token", self.root / "download.zip")
+                self.assertEqual(api.call_count, 1)
+                download.assert_not_called()
+
+    def test_old_workflow_remains_downloadable_during_rollout(self):
+        with patch("request_private_package.api", side_effect=[None, {"artifacts": [
+                {"id": 77, "name": "server-request-one", "expired": False}]},
+                "https://signed.blob.core.windows.net/package"]) as api, \
+                patch("request_private_package.download_artifact") as download:
+            destination = self.root / "download.zip"
+            fetch_package(100, "request-one", "b" * 40, "token", destination)
+        download.assert_called_once_with("https://signed.blob.core.windows.net/package", destination)
+        self.assertEqual(api.call_args.args, ("/actions/artifacts/77/zip", "token"))
+
+    def test_release_asset_supports_direct_response_and_credential_free_redirect(self):
+        for redirect in (False, True):
+            with self.subTest(redirect=redirect), patch("request_private_package.urllib.request.build_opener") as factory:
+                destination = self.root / "download.zip"
+                if redirect:
+                    location = "https://release-assets.githubusercontent.com/package"
+                    factory.return_value.open.side_effect = [urllib.error.HTTPError(
+                        "https://api.github.com/asset", 302, "Found", {"Location": location}, None),
+                        io.BytesIO(self.package)]
+                else:
+                    factory.return_value.open.return_value = io.BytesIO(self.package)
+                download_release_asset(42, "private-token", destination)
+                self.assertEqual(destination.read_bytes(), self.package)
+                calls = factory.return_value.open.call_args_list
+                self.assertEqual(calls[0].args[0].get_header("Authorization"), "Bearer private-token")
+                if redirect:
+                    self.assertEqual(calls[1].args, (location,))
+                    self.assertEqual(calls[1].kwargs, {"timeout": 120})
+
+    def test_untrusted_asset_redirect_is_rejected_before_download(self):
+        with patch("request_private_package.urllib.request.build_opener") as factory:
+            factory.return_value.open.side_effect = urllib.error.HTTPError(
+                "https://api.github.com/asset", 302, "Found", {"Location": "https://example.com/leak"}, None)
+            with self.assertRaisesRegex(PackageError, "Unexpected GitHub artifact download host"):
+                download_release_asset(42, "private-token", self.root / "download.zip")
+            self.assertEqual(factory.return_value.open.call_count, 1)
+
+    def test_failed_regression_run_never_downloads_a_package(self):
+        run = {"id": 100, "head_sha": "b" * 40, "event": "workflow_dispatch",
+               "path": ".github/workflows/package-server.yml", "display_title": "package-request-one",
+               "status": "completed", "conclusion": "failure"}
+        args = SimpleNamespace(source_sha="a" * 40, patch=None, platform="linux-x64",
+                               require_audio=True, timeout_minutes=1, output=self.root / "release")
+        with patch.dict("os.environ", {"CMU_PRIVATE_BUILD_TOKEN": "token"}, clear=True), \
+                patch("request_private_package.uuid.uuid4", return_value=SimpleNamespace(hex="request-one")), \
+                patch("request_private_package.api", side_effect=[{"object": {"sha": "b" * 40}},
+                                                                  None, {"workflow_runs": [run]}]), \
+                patch("request_private_package.fetch_package") as fetch:
+            with self.assertRaisesRegex(PackageError, "Private build failed"):
+                request_package(args)
+            fetch.assert_not_called()
 
 
 if __name__ == "__main__":
