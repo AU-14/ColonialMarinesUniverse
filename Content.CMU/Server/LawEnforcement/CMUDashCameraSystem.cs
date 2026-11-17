@@ -40,7 +40,8 @@ public sealed partial class CMUDashCameraSystem : EntitySystem
         SubscribeLocalEvent<CMUDashCameraComponent, CMUDashCameraMountDoAfterEvent>(OnMountDoAfter);
         SubscribeLocalEvent<CMUDashCameraComponent, ExaminedEvent>(OnCameraExamined);
 
-        SubscribeLocalEvent<CMUDashCameraMountComponent, InteractUsingEvent>(OnVehicleInteractUsing);
+        SubscribeLocalEvent<CMUDashCameraMountComponent, InteractUsingEvent>(OnVehicleInteractUsing,
+            after: [typeof(Content.Shared._RMC14.Vehicle.HardpointSystem), typeof(Content.Shared._RMC14.Vehicle.VehicleLockSystem)]);
         SubscribeLocalEvent<CMUDashCameraMountComponent, CMUDashCameraRemoveDoAfterEvent>(OnRemoveDoAfter);
         SubscribeLocalEvent<CMUDashCameraMountComponent, CMUDashCameraShortDoAfterEvent>(OnShortDoAfter);
         SubscribeLocalEvent<CMUDashCameraMountComponent, ExaminedEvent>(OnVehicleExamined);
