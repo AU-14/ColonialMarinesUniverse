@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.ZLevels.Core.Components;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Atmos.Components;
@@ -378,14 +379,12 @@ public sealed partial class CMUShipWeaponsSystem
     private void BreakCaveRoofAbove(MapCoordinates impact)
     {
         var impactMap = _map.GetMap(impact.MapId);
-        if (!_zLevels.TryGetZNetwork(impactMap, out var network))
+        if (!_zLevels.TryGetZNetwork(impactMap, out var network) || !TryComp<CMUZLevelMapComponent>(impactMap, out var level))
             return;
 
-        var levels = _zLevels.GetOrderedNetworkMaps(network.Value);
-        var impactDepth = levels.First(level => level.Map == impactMap).Depth;
-        foreach (var (depth, map) in levels)
+        foreach (var (depth, map) in _zLevels.GetOrderedNetworkMaps(network.Value))
         {
-            if (depth <= impactDepth ||
+            if (depth <= level.Depth ||
                 !_zLevels.TryGetMapCoordinates(map, impact.Position, out var coordinates) ||
                 !_map.TryFindGridAt(coordinates, out var gridUid, out var grid))
             {
@@ -396,7 +395,7 @@ public sealed partial class CMUShipWeaponsSystem
             if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) ||
                 tileRef.Tile.IsEmpty ||
                 _cloudTileDefinitions[tileRef.Tile.TypeId] is not ContentTileDefinition tileDefinition ||
-                !tileDefinition.CMUBlocksLookUp ||
+                !tileDefinition.BreachableCaveRoof ||
                 tileDefinition.Indestructible)
             {
                 continue;

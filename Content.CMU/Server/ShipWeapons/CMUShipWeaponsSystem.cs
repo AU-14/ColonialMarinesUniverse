@@ -462,7 +462,7 @@ public sealed partial class CMUShipWeaponsSystem : EntitySystem
 
     private void Impact(EntityUid source, CMUShipWeaponPrototype profile, MapCoordinates impact)
     {
-        if (profile.ID is "CMUPrecisionStrike" or "CMURailcannonStrike")
+        if (profile.BreachesCaveRoofs)
             BreakCaveRoofAbove(impact);
 
         if (profile.RailDamage is { } damage)

@@ -23,13 +23,14 @@ public sealed class CMUShipWeaponSpreadTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
-    [TestCase("CMUPrecisionStrike")]
-    [TestCase("CMURailcannonStrike")]
-    public async Task BreachingStrikesDestroyCaveRoofsOnHigherNetworkLevels(string weapon)
+    [TestCase("CMUPrecisionStrike", "CMURoofDestroyable", true)]
+    [TestCase("CMURailcannonStrike", "CMURoofSouthDestroyable", true)]
+    [TestCase("CMURailcannonStrike", "CMURoofOuterHull8Destroyable", false)]
+    public async Task BreachingStrikesRespectRoofMaterial(string weapon, string roofId, bool breaches)
     {
         var map = await Pair.CreateTestMap();
         EntityUid upper = default, network = default;
-        var roofTile = Server.ResolveDependency<ITileDefinitionManager>()["CMURoofDestroyable"].TileId;
+        var roofTile = Server.ResolveDependency<ITileDefinitionManager>()[roofId].TileId;
         var spaceTile = Server.ResolveDependency<ITileDefinitionManager>()["Space"].TileId;
 
         try
@@ -59,8 +60,8 @@ public sealed class CMUShipWeaponSpreadTest : GameTest
                 SEntMan.EnsureComponent<CMUShipWeaponStrikeComponent>(strike).Weapon = weapon;
                 SEntMan.System<CMUShipWeaponsSystem>().Update(0);
 
-                Assert.That(maps.GetTileRef(upper, upperGrid, Vector2i.Zero).Tile.TypeId, Is.EqualTo(spaceTile),
-                    $"{weapon} should open the cave roof directly above its impact");
+                Assert.That(maps.GetTileRef(upper, upperGrid, Vector2i.Zero).Tile.TypeId, Is.EqualTo(breaches ? spaceTile : roofTile),
+                    $"{weapon} struck below {roofId}");
             });
         }
         finally
