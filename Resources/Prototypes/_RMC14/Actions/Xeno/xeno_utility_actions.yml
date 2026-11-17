@@ -282,6 +282,7 @@
     range: 2
   - type: EntityTargetAction
     event: !type:XenoApplySalveActionEvent
+      canTreatHumans: true # CMU14
   - type: RMCDazeableAction
   - type: ActionBlockIfResting
 

@@ -40,15 +40,23 @@ public abstract partial class SharedXenoHealSystem
         if (_net.IsClient)
             return true;
 
-        if (_hive.GetHive(healer) is not { } hive || !_hive.IsAllyOfHive(target, hive.Owner))
+        LocId? failure = null;
+        if (_mobState.IsDead(target))
+            failure = "rmc-xeno-apply-salve-target-dead-failure";
+        else if (_flammable.IsOnFire(target))
+            failure = "rmc-xeno-apply-salve-target-on-fire-failure";
+        else if (!_interact.InRangeUnobstructed(healer, target, args.Range))
+            failure = "rmc-xeno-apply-salve-target-too-far-away-failure";
+        else if (_hive.GetHive(healer) is not { } hive || !_hive.IsAllyOfHive(target, hive.Owner))
+            failure = "rmc-xeno-apply-salve-target-hostile-failure";
+
+        if (failure != null)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-xeno-healer-human-not-allied"), healer, healer);
+            _popup.PopupEntity(Loc.GetString(failure.Value, ("target_xeno", target)), healer, healer);
             return true;
         }
 
-        if (_mobState.IsDead(target) || _flammable.IsOnFire(target) ||
-            !_interact.InRangeUnobstructed(healer, target, args.Range) ||
-            !TryComp<DamageableComponent>(target, out var damage))
+        if (!TryComp<DamageableComponent>(target, out var damage))
             return true;
 
         var treatment = _rmcDamageable.DistributeHealingCached((target, damage), BruteGroup, args.HumanBruteHeal);

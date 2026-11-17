@@ -174,7 +174,7 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
             return;
 
         var target = args.Target;
-        if (!HasComp<XenoComponent>(target) && TryApplyHumanSalve(ent, args))
+        if (args.CanTreatHumans && !HasComp<XenoComponent>(target) && TryApplyHumanSalve(ent, args))
             return;
 
         LocId? failureMessageId = null;

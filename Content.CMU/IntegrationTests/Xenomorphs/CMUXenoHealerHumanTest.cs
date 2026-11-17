@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Actions;
 using Content.Shared._RMC14.Xenonids.Heal;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.CMU14.Medical.Core;
@@ -48,9 +49,17 @@ public sealed class CMUXenoHealerHumanTest : GameTest
             };
             Server.System<DamageableSystem>().TryChangeDamage(human, damage, ignoreResistances: true);
 
-            var refused = new XenoApplySalveActionEvent { Target = human };
-            SEntMan.EventBus.RaiseLocalEvent(healer, refused);
-            Assert.That(refused.Handled, Is.False);
+            var actions = Server.System<SharedActionsSystem>();
+            var salve = actions.GetActions(healer).Select(a => actions.GetEvent(a)).OfType<XenoApplySalveActionEvent>().Single();
+            bool Apply()
+            {
+                salve.Target = human;
+                salve.Handled = false;
+                SEntMan.EventBus.RaiseLocalEvent(healer, salve);
+                return salve.Handled;
+            }
+
+            Assert.That(Apply(), Is.False);
             hives.SetHiveIndividualAlly(human, hive, true);
 
             var parts = Server.System<CMUMedicalBodyIndexSystem>().GetBodyParts(human).ToArray();
@@ -59,9 +68,7 @@ public sealed class CMUXenoHealerHumanTest : GameTest
                 SEntMan.EnsureComponent<BodyPartWoundComponent>(part).ExternalBleeding = ExternalBleedTier.Severe;
 #pragma warning restore RA0002
 
-            var action = new XenoApplySalveActionEvent { Target = human };
-            SEntMan.EventBus.RaiseLocalEvent(healer, action);
-            Assert.That(action.Handled, Is.True);
+            Assert.That(Apply(), Is.True);
 
             var healed = Server.System<DamageableSystem>().GetAllDamage(human).DamageDict;
             Assert.That(healed.GetValueOrDefault("Blunt"), Is.EqualTo(FixedPoint2.New(expectedBrute)));
@@ -73,9 +80,7 @@ public sealed class CMUXenoHealerHumanTest : GameTest
 
             if (expectedBrute == 0 && expectedBurn == 0)
             {
-                var repeat = new XenoApplySalveActionEvent { Target = human };
-                SEntMan.EventBus.RaiseLocalEvent(healer, repeat);
-                Assert.That(repeat.Handled, Is.False, "Poison alone is not treatable with salve.");
+                Assert.That(Apply(), Is.False, "Poison alone is not treatable with salve.");
                 Assert.That(Server.System<DamageableSystem>().GetAllDamage(healer).DamageDict["Blunt"],
                     Is.EqualTo(FixedPoint2.New(75)));
             }
