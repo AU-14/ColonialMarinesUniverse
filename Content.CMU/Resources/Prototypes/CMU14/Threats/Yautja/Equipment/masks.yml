@@ -64,8 +64,23 @@
     - Mask
     - Suitstorage
 
+# the masks the clan's Leader lands in (CMUYautjaBadBloodLeaderGear*): a step above the armory's armored clan mask
+# (25 / 30 / 25 / 10) on every value, so the Leader keeps the best mask in the clan as they keep the best plate
 - type: entity
   parent: CMUYautjaBadBloodMaskBase
+  id: CMUYautjaBadBloodLeaderMaskBase
+  abstract: true
+  components:
+  - type: CMArmor
+    melee: 30
+    bullet: 35
+    bio: 30
+    explosionArmor: 15
+    coveredZones:
+    - Head
+
+- type: entity
+  parent: CMUYautjaBadBloodLeaderMaskBase
   id: CMUYautjaMaskBadBloodCommando
   components:
   - type: BadBloodGearLock
@@ -80,7 +95,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaBadBloodMaskBase
+  parent: CMUYautjaBadBloodLeaderMaskBase
   id: CMUYautjaMaskBadBloodCommandoAlt
   components:
   - type: BadBloodGearLock
@@ -170,7 +185,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaBadBloodMaskBase
+  parent: CMUYautjaBadBloodLeaderMaskBase
   id: CMUYautjaMaskBadBloodLunatic
   components:
   - type: BadBloodGearLock
@@ -245,7 +260,7 @@
     - Suitstorage
 
 - type: entity
-  parent: CMUYautjaBadBloodMaskBase
+  parent: CMUYautjaBadBloodLeaderMaskBase
   id: CMUYautjaMaskBadBloodVenator
   components:
   - type: BadBloodGearLock
@@ -2134,6 +2149,14 @@
   description: A beautifully designed metallic face mask, both ornate and functional.
   components:
   - type: BadBloodGearLock
+  # a grunt's mask, like the crimson ones they land in (CMUYautjaMaskBadBloodGruntBase). these masks had no armor at all
+  - type: CMArmor
+    melee: 20
+    bullet: 30
+    bio: 20
+    explosionArmor: 10
+    coveredZones:
+    - Head
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem

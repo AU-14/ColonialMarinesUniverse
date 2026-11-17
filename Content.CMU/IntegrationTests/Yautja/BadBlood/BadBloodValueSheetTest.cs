@@ -263,6 +263,18 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodArmoredMask").Melee, Is.EqualTo(25));
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodArmoredMask").Bio, Is.EqualTo(25));
                 Assert.That(Comp<CMArmorComponent>("CMUYautjaMask").Melee, Is.EqualTo(25), "the honourable mask is untouched");
+
+                // no Bad Blood mask is bare: the Bane grunt mask has grunt armor, the Leader's masks the best
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaMaskBadBloodBane").Melee, Is.EqualTo(20));
+                foreach (var leaderMask in new[]
+                         {
+                             "CMUYautjaMaskBadBloodCommando", "CMUYautjaMaskBadBloodCommandoAlt",
+                             "CMUYautjaMaskBadBloodLunatic", "CMUYautjaMaskBadBloodVenator",
+                         })
+                {
+                    Assert.That(Comp<CMArmorComponent>(leaderMask).Melee, Is.EqualTo(30), leaderMask);
+                    Assert.That(Comp<CMArmorComponent>(leaderMask).Bullet, Is.EqualTo(35), leaderMask);
+                }
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodClanArmor").Bullet, Is.EqualTo(50));
                 Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodGreavesPatchwork").Bullet, Is.EqualTo(50));
 
