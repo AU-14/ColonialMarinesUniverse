@@ -15,6 +15,7 @@
   - type: Injurable
     damageContainer: CMUCombatDrone
   - type: Destructible
+    generateOverkillThreshold: false # Always release the material cargo and leave the chassis.
     thresholds:
     - trigger: !type:DamageTrigger
         damage: 200
