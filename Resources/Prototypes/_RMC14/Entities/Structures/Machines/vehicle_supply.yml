@@ -306,8 +306,8 @@
     - name: Cheetah 2A (UPP)
       vehicle: VehicleSPPTank
       factoryModules: # CMU14: depot issue
-      - VehicleSPPTankReactiveArmor
-      - VehicleSPPTankWarningArray
+      - VehicleUPPTankReactiveArmor
+      - VehicleUPPTankWarningArray
       group: vehicle-tank
       hardpoints:
       - VehicleSPPTankTurret
