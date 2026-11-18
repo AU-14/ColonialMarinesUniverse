@@ -606,18 +606,6 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         Crash((ent.Owner, flight));
     }
 
-    private void OnFuelDepleted( // basically just a wrapper ig. kinda used as a universal event calling vehicle-specific procs
-        Entity<VehiclePowerSourceTankComponent> ent,
-        ref VehicleFuelDepletedEvent args)
-    {
-        if (!TryComp(ent.Owner, out BlackfootFlightComponent? flight) || !IsAirborneOrTransitioning(flight.State))
-        {
-            return;
-        }
-
-        Crash((ent.Owner, flight));
-    }
-
     public void Crash(Entity<BlackfootFlightComponent> flight)
     {
         DeleteShadow(flight);
