@@ -13,6 +13,8 @@ public sealed class BudgetConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInt
         _window = this.CreateWindow<BudgetConsoleWindow>();
         _window.OnWithdraw += amount => SendPredictedMessage(new BudgetConsoleWithdrawBuiMsg(amount));
         _window.OnDispenseSalaries += () => SendPredictedMessage(new BudgetConsoleDispenseSalariesBuiMsg());
+        _window.OnTransferToGarrison += (faction, amount) =>
+            SendMessage(new BudgetConsoleTransferToGarrisonBuiMsg(faction, amount));
         _window.OnTransfer += (department, amount) =>
             SendPredictedMessage(new BudgetConsoleTransferToDeptBuiMsg(department, amount));
     }

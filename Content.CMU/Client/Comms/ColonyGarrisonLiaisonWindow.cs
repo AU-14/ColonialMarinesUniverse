@@ -15,7 +15,7 @@ namespace Content.Client.CMU14.Comms;
 public sealed class ColonyGarrisonLiaisonWindow : DefaultWindow
 {
     public event Action<string>? OnSend;
-    public event Action<bool, int>? OnTransfer;
+    public event Action<int>? OnTransfer;
 
     private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
     private readonly CrtConsoleKit _kit = new();
@@ -91,16 +91,10 @@ public sealed class ColonyGarrisonLiaisonWindow : DefaultWindow
         };
         funds.AddChild(_amount);
 
-        var transfers = CrtConsoleKit.Row(8);
         var toColony = _kit.Button(Loc.GetString("colony-garrison-liaison-to-colony"));
-        var toGarrison = _kit.Button(Loc.GetString("colony-garrison-liaison-to-garrison"));
         toColony.HorizontalExpand = true;
-        toGarrison.HorizontalExpand = true;
-        toColony.OnPressed += _ => Transfer(true);
-        toGarrison.OnPressed += _ => Transfer(false);
-        transfers.AddChild(toColony);
-        transfers.AddChild(toGarrison);
-        funds.AddChild(transfers);
+        toColony.OnPressed += _ => Transfer();
+        funds.AddChild(toColony);
 
         _kit.Root.AddChild(_kit.Footer(out var footer));
         footer.Text = Loc.GetString("colony-garrison-liaison-footer");
@@ -127,12 +121,12 @@ public sealed class ColonyGarrisonLiaisonWindow : DefaultWindow
         _colonyFunds.Text = CrtConsoleKit.Money(funds.ColonyFunds);
     }
 
-    private void Transfer(bool toColony)
+    private void Transfer()
     {
         if (!int.TryParse(_amount.Text, out var amount) || amount <= 0)
             return;
 
-        OnTransfer?.Invoke(toColony, amount);
+        OnTransfer?.Invoke(amount);
         _amount.Text = string.Empty;
     }
 

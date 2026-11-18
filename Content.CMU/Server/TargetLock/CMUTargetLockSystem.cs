@@ -1,4 +1,8 @@
 using Content.Server.CMU14.CharacterDescription;
+using Content.Shared._RMC14.Armor;
+using Content.Shared.Armor;
+using Content.Shared.Projectiles;
+using Robust.Shared.Timing;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Access.Components;
@@ -38,6 +42,7 @@ namespace Content.Server.CMU14.TargetLock;
 /// </summary>
 public sealed class CMUTargetLockSystem : EntitySystem
 {
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ActionContainerSystem _actionContainer = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedCMChatSystem _cmChat = default!;
@@ -62,6 +67,7 @@ public sealed class CMUTargetLockSystem : EntitySystem
         SubscribeLocalEvent<HelmetAccessoryHolderComponent, GetItemActionsEvent>(OnGetItemActions);
         SubscribeLocalEvent<HelmetAccessoryHolderComponent, CMUTargetLockActionEvent>(OnAction);
         SubscribeLocalEvent<CMUTargetLockComponent, CMUTargetLockDoAfterEvent>(OnDoAfter);
+        SubscribeLocalEvent<CMUTargetLockedComponent, DamageModifyEvent>(OnLockedDamage);
         SubscribeLocalEvent<CMUTargetLockComponent, EntGotInsertedIntoContainerMessage>(OnVisorInserted);
         SubscribeLocalEvent<CMUTargetLockComponent, EntGotRemovedFromContainerMessage>(OnVisorRemoved);
     }
@@ -158,7 +164,8 @@ public sealed class CMUTargetLockSystem : EntitySystem
 
         var doAfter = new DoAfterArgs(EntityManager, user, visor.Comp.LockTime, new CMUTargetLockDoAfterEvent(), visor, target, visor)
         {
-            BreakOnMove = true,
+            // They can keep moving while it locks; getting too far away or hurt still breaks it.
+            BreakOnMove = false,
             BreakOnDamage = true,
             DistanceThreshold = visor.Comp.Range,
         };
@@ -172,6 +179,11 @@ public sealed class CMUTargetLockSystem : EntitySystem
             return;
 
         args.Handled = true;
+
+        var locked = EnsureComp<CMUTargetLockedComponent>(target);
+        locked.Owner = args.User;
+        locked.Multiplier = ent.Comp.AimBuff;
+        locked.Until = _timing.CurTime + ent.Comp.AimBuffTime;
 
         var report = BuildReport(ent, target);
         if (TryComp(args.User, out ActorComponent? actor))
@@ -208,7 +220,49 @@ public sealed class CMUTargetLockSystem : EntitySystem
             percent,
             BuildCriminalRecord(name),
             BuildMedicalRecord(target),
-            FindWeapons(target, scanner.Comp.MeleeWeaponDamage));
+            FindWeapons(target, scanner.Comp.MeleeWeaponDamage),
+            BuildAdvice(target));
+    }
+
+    private bool IsArmored(EntityUid target, string slot)
+    {
+        return _inventory.TryGetSlotEntity(target, slot, out var worn) &&
+               (HasComp<ArmorComponent>(worn) || HasComp<CMArmorComponent>(worn));
+    }
+
+    /// <summary>Where to aim to put them down quickest: the part of them that is not armored.</summary>
+    private string BuildAdvice(EntityUid target)
+    {
+        if (_mobState.IsDead(target))
+            return Loc.GetString("cmu-target-lock-advice-down");
+
+        var head = IsArmored(target, "head");
+        var chest = IsArmored(target, "outerClothing");
+
+        if (!head && !chest)
+            return Loc.GetString("cmu-target-lock-advice-none");
+
+        if (!head)
+            return Loc.GetString("cmu-target-lock-advice-head");
+
+        if (!chest)
+            return Loc.GetString("cmu-target-lock-advice-chest");
+
+        return Loc.GetString("cmu-target-lock-advice-both");
+    }
+
+    // The one who locked on hits harder with shots for a while, which is what makes the lock worth having.
+    private void OnLockedDamage(Entity<CMUTargetLockedComponent> ent, ref DamageModifyEvent args)
+    {
+        if (args.Origin != ent.Comp.Owner ||
+            _timing.CurTime > ent.Comp.Until ||
+            args.Tool is not { } tool ||
+            !HasComp<ProjectileComponent>(tool))
+        {
+            return;
+        }
+
+        args.Damage = args.Damage * ent.Comp.Multiplier;
     }
 
     private (CMUTargetLockHealth, int) EstimateHealth(EntityUid target)

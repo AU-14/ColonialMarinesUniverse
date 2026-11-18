@@ -1,0 +1,14 @@
+cmu-build-menu-title = Build Orders
+cmu-build-menu-heading = BUILD ORDERS
+cmu-build-menu-subheading = Show your side what to build
+cmu-build-menu-tag = READY
+cmu-build-menu-hint = Pick what to build, then use Mark build site and click where it goes. Your whole side sees a blueprint there until it is built.
+cmu-build-menu-clear = TAKE DOWN ALL BLUEPRINTS
+cmu-build-menu-footer = Blueprints go away once built, or after fifteen minutes.
+cmu-build-order-selected = Next build order: { $name }.
+cmu-build-order-cleared = You took down all your blueprints.
+cmu-build-order-nothing-selected = Pick something in the build orders menu first.
+cmu-build-order-too-far = That is too far away to mark.
+cmu-build-order-notice = Build order: { $name }. Look for the blueprint.
+cmu-mark-notice = Commander has marked { $name }.
+cmu-push-notice = PUSH { $direction }. Follow the arrow.

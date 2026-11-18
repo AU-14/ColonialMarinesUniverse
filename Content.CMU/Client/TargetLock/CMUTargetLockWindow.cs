@@ -83,6 +83,9 @@ public sealed class CMUTargetLockWindow : DefaultWindow
             armed.AddChild(CrtConsoleKit.Wrapping(string.Join(", ", report.Weapons), CrtTerminalPalette.Alert));
         }
 
+        body.AddChild(_kit.Section(Loc.GetString("cmu-target-lock-advice"), out var advice, CrtTerminalPalette.Caution));
+        advice.AddChild(CrtConsoleKit.Wrapping(report.Advice, CrtTerminalPalette.TextBright));
+
         var buttons = CrtConsoleKit.Row(8);
         var criminal = _kit.Button(Loc.GetString("cmu-target-lock-criminal"), CmuButtonStyles.Variant.Caution);
         var medical = _kit.Button(Loc.GetString("cmu-target-lock-medical"), CmuButtonStyles.Variant.Affirm);

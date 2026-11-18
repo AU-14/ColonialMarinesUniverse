@@ -21,13 +21,13 @@ public sealed class ColonyGarrisonLiaisonBuiState(int maxLength, TimeSpan nextSe
     public readonly TimeSpan Cooldown = cooldown;
 }
 
-/// <summary>Moves money between the garrison's own requisitions account and the colony's budget.</summary>
+/// <summary>
+///     Pays the colony's budget out of the garrison's own requisitions account. It only goes one way: getting it back
+///     is the colony's decision, made at the Budget Console.
+/// </summary>
 [Serializable, NetSerializable]
-public sealed class ColonyGarrisonLiaisonTransferBuiMsg(bool toColony, int amount) : BoundUserInterfaceMessage
+public sealed class ColonyGarrisonLiaisonTransferBuiMsg(int amount) : BoundUserInterfaceMessage
 {
-    /// <summary>True to pay the colony from the garrison's account, false to pay the garrison from the colony's budget.</summary>
-    public readonly bool ToColony = toColony;
-
     public readonly int Amount = amount;
 }
 

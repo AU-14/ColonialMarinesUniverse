@@ -393,6 +393,13 @@ namespace Content.Client.Construction
             if (prototype.CanBuildInImpassable)
                 EnsureComp<WallMountComponent>(ghost.Value).Arc = new(Math.Tau);
 
+            // CMU: a commander's ghosts are shown to their whole side as blueprints.
+            if (HasComp<Content.Shared.CMU14.BuildOrders.CMUBuildOrderAbilityComponent>(user))
+            {
+                RaiseNetworkEvent(new Content.Shared.CMU14.BuildOrders.CMUBuildGhostPlacedEvent(
+                    targetProtoId.ToString(), GetNetCoordinates(loc)));
+            }
+
             return true;
         }
 

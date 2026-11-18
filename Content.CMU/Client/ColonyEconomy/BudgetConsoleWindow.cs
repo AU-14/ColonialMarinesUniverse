@@ -20,6 +20,7 @@ public sealed class BudgetConsoleWindow : DefaultWindow
     public event Action<int>? OnWithdraw;
     public event Action? OnDispenseSalaries;
     public event Action<NetEntity, float>? OnTransfer;
+    public event Action<string, int>? OnTransferToGarrison;
 
     private readonly CrtConsoleKit _kit = new();
 
@@ -29,6 +30,7 @@ public sealed class BudgetConsoleWindow : DefaultWindow
     private readonly Label _count;
     private readonly LineEdit _amount;
     private readonly BoxContainer _departments;
+    private readonly BoxContainer _garrisons;
 
     private BudgetConsoleBuiState? _state;
 
@@ -107,6 +109,13 @@ public sealed class BudgetConsoleWindow : DefaultWindow
         _held = CrtConsoleKit.Text(string.Empty, _kit.Small, CrtTerminalPalette.TextDim);
         departments.AddChild(_held);
 
+        // Garrisons: they can pay the colony from the Liaison Office, but getting it back is the colony's choice,
+        // made here with the same amount.
+        body.AddChild(_kit.Section(Loc.GetString("cmu-budget-garrisons"), out var garrisons));
+        garrisons.AddChild(CrtConsoleKit.Wrapping(Loc.GetString("cmu-budget-garrisons-hint"), CrtTerminalPalette.TextDim));
+        _garrisons = CrtConsoleKit.Column(4);
+        garrisons.AddChild(_garrisons);
+
         _kit.Root.AddChild(_kit.Footer(out var footer));
         footer.Text = Loc.GetString("cmu-budget-footer");
 
@@ -127,8 +136,35 @@ public sealed class BudgetConsoleWindow : DefaultWindow
     private void Rebuild()
     {
         _departments.RemoveAllChildren();
+        _garrisons.RemoveAllChildren();
         if (_state is not { } state)
             return;
+
+        var payable = int.TryParse(_amount.Text, out var garrisonAmount) && garrisonAmount > 0;
+        foreach (var garrison in state.Garrisons.OrderBy(g => g.Faction))
+        {
+            var row = CrtConsoleKit.Row(4);
+            var label = CrtConsoleKit.Text(
+                $"{garrison.Faction.ToUpperInvariant()}  {CrtConsoleKit.Money(garrison.Balance)}",
+                _kit.Small, CrtTerminalPalette.TextBright);
+            label.HorizontalExpand = true;
+            label.VerticalAlignment = VAlignment.Center;
+            row.AddChild(label);
+
+            var pay = _kit.Button(payable
+                ? $"{Loc.GetString("cmu-budget-pay-garrison")} {CrtConsoleKit.Money(garrisonAmount)}"
+                : Loc.GetString("cmu-budget-pay-garrison"), CmuButtonStyles.Variant.Affirm);
+            pay.MinWidth = 150;
+            pay.Disabled = !payable || garrisonAmount > state.Budget;
+            var faction = garrison.Faction;
+            pay.OnPressed += _ =>
+            {
+                if (int.TryParse(_amount.Text, out var sent) && sent > 0)
+                    OnTransferToGarrison?.Invoke(faction, sent);
+            };
+            row.AddChild(pay);
+            _garrisons.AddChild(row);
+        }
 
         if (state.Departments.Count == 0)
         {

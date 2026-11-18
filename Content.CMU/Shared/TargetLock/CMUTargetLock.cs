@@ -31,6 +31,31 @@ public sealed partial class CMUTargetLockComponent : Component
     /// <summary>A melee item only counts as a weapon if it does at least this much damage.</summary>
     [DataField]
     public float MeleeWeaponDamage = 10f;
+
+    /// <summary>Shots from the wearer hit a locked target this many times as hard.</summary>
+    [DataField]
+    public float AimBuff = 1.5f;
+
+    /// <summary>How long the target stays locked for the aimed-shot buff.</summary>
+    [DataField]
+    public TimeSpan AimBuffTime = TimeSpan.FromSeconds(20);
+
+    /// <summary>The ammo warning shows when the gun in hand has this fraction of its magazine or less.</summary>
+    [DataField]
+    public float LowAmmoFraction = 0.25f;
+
+    /// <summary>The medical warning shows when the wearer has this fraction of their health or less.</summary>
+    [DataField]
+    public float LowHealthFraction = 0.4f;
+}
+
+/// <summary>On someone who has been locked on to: the one who locked them gets a damage bonus with shots, for a while.</summary>
+[RegisterComponent]
+public sealed partial class CMUTargetLockedComponent : Component
+{
+    public EntityUid Owner;
+    public TimeSpan Until;
+    public float Multiplier = 1.5f;
 }
 
 [Serializable, NetSerializable]
@@ -57,8 +82,12 @@ public sealed class CMUTargetLockReportEvent(
     int healthPercent,
     string criminalRecord,
     string medicalRecord,
-    List<string> weapons) : EntityEventArgs
+    List<string> weapons,
+    string advice) : EntityEventArgs
 {
+    /// <summary>Where to shoot them, given what they are wearing.</summary>
+    public readonly string Advice = advice;
+
     public readonly NetEntity Target = target;
     public readonly string Name = name;
     public readonly string Position = position;

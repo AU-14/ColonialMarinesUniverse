@@ -10,7 +10,7 @@ namespace Content.Server.CMU14.Comms;
 
 /// <summary>
 ///     The Colony Garrison Liaison Office's money: the liaison can pay the colony's budget out of their faction's
-///     requisitions account, and pay the garrison back out of the colony's budget.
+///     requisitions account. Paying the garrison back is up to the colony, at the Budget Console.
 /// </summary>
 public sealed class ColonyGarrisonLiaisonFundsSystem : EntitySystem
 {
@@ -40,28 +40,14 @@ public sealed class ColonyGarrisonLiaisonFundsSystem : EntitySystem
             return;
         }
 
-        if (args.ToColony)
+        if (account.Comp.Balance < amount)
         {
-            if (account.Comp.Balance < amount)
-            {
-                _popup.PopupEntity(Loc.GetString("colony-garrison-liaison-not-enough-garrison"), ent, user);
-                return;
-            }
-
-            _requisitions.ChangeBudget(-amount, account.Comp.Faction);
-            _colonyBudget.AddToBudget(amount);
+            _popup.PopupEntity(Loc.GetString("colony-garrison-liaison-not-enough-garrison"), ent, user);
+            return;
         }
-        else
-        {
-            if (_colonyBudget.GetBudget() < amount)
-            {
-                _popup.PopupEntity(Loc.GetString("colony-garrison-liaison-not-enough-colony"), ent, user);
-                return;
-            }
 
-            _colonyBudget.AddToBudget(-amount);
-            _requisitions.ChangeBudget(amount, account.Comp.Faction);
-        }
+        _requisitions.ChangeBudget(-amount, account.Comp.Faction);
+        _colonyBudget.AddToBudget(amount);
 
         _budgetConsole.UpdateAllUi();
         RefreshAll();
@@ -91,7 +77,7 @@ public sealed class ColonyGarrisonLiaisonFundsSystem : EntitySystem
     }
 
     /// <summary>Everyone using an office sees the new balances, each their own garrison's.</summary>
-    private void RefreshAll()
+    public void RefreshAll()
     {
         var query = EntityQueryEnumerator<ColonyCommsConsoleComponent>();
         while (query.MoveNext(out var uid, out _))

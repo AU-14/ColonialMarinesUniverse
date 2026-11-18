@@ -12,7 +12,7 @@ public sealed class ColonyGarrisonLiaisonBui(EntityUid owner, Enum uiKey) : Boun
         base.Open();
         _window = this.CreateWindow<ColonyGarrisonLiaisonWindow>();
         _window.OnSend += message => SendPredictedMessage(new ColonyCommsConsoleSendMessageBuiMsg(message));
-        _window.OnTransfer += (toColony, amount) => SendMessage(new ColonyGarrisonLiaisonTransferBuiMsg(toColony, amount));
+        _window.OnTransfer += amount => SendMessage(new ColonyGarrisonLiaisonTransferBuiMsg(amount));
     }
 
     protected override void ReceiveMessage(BoundUserInterfaceMessage message)

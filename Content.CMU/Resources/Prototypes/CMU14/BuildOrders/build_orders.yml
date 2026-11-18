@@ -1,0 +1,71 @@
+# The blueprint everyone on the commander's side sees where a build was ordered. Its picture is swapped for the
+# ordered structure on the client; it has no collision and nothing can interact with it.
+- type: entity
+  id: CMUBuildOrderMarker
+  name: build order
+  description: The commander wants something built here.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Actions/marine_actions.rsi
+    state: focus
+    drawdepth: Overdoors
+    noRot: true
+  - type: CMUBuildOrderMarker
+
+- type: entity
+  parent: ActionMarineBase
+  id: ActionCMUBuildMenu
+  name: Build orders
+  description: Pick what you want built. Then use Mark build site to show your side where it goes.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
+      state: focus
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.BuildOrders.CMUBuildMenuActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: ActionCMUBuildPlace
+  name: Mark build site
+  description: Mark a spot for what you picked in the build orders menu. Everyone on your side sees a blueprint there.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
+      state: move
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 0
+    repeat: true
+    deselectOnMiss: false
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared.CMU14.BuildOrders.CMUBuildPlaceActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: ActionCMUMarkTarget
+  name: Highlight target
+  description: Highlight someone for five seconds. Everyone on your side sees a red ring around them.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/marine_actions.rsi
+      state: hold
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 30
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:Content.Shared.CMU14.BuildOrders.CMUMarkActionEvent

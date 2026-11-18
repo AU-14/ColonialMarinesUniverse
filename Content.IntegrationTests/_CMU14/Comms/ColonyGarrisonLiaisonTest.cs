@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CMU14;
+using Content.Shared.CMU14.ColonyEconomy;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._CMU14.Comms;
@@ -52,18 +53,29 @@ public sealed class ColonyGarrisonLiaisonTest : InteractionTest
             SEntMan.EnsureComponent<MarineComponent>(liaison).Faction = "govfor";
 
             // Garrison pays the colony.
-            SEntMan.EventBus.RaiseLocalEvent(office, new ColonyGarrisonLiaisonTransferBuiMsg(true, 400) { Actor = liaison }, true);
+            SEntMan.EventBus.RaiseLocalEvent(office, new ColonyGarrisonLiaisonTransferBuiMsg(400) { Actor = liaison }, true);
             Assert.That(accountComp.Balance, Is.EqualTo(600));
             Assert.That(budget.GetBudget(), Is.EqualTo(700f));
 
-            // Colony pays the garrison.
-            SEntMan.EventBus.RaiseLocalEvent(office, new ColonyGarrisonLiaisonTransferBuiMsg(false, 100) { Actor = liaison }, true);
+            // The garrison can't overdraw its account, and the office has no way to take money back out of the colony.
+            SEntMan.EventBus.RaiseLocalEvent(office, new ColonyGarrisonLiaisonTransferBuiMsg(5000) { Actor = liaison }, true);
+            Assert.That(accountComp.Balance, Is.EqualTo(600));
+            Assert.That(budget.GetBudget(), Is.EqualTo(700f));
+
+            // The garrison can't take it back out of the colony's budget themselves.
+            var console = SEntMan.SpawnEntity("AUbudgetConsole", SEntMan.GetCoordinates(PlayerCoords));
+            SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleTransferToGarrisonBuiMsg("govfor", 100) { Actor = liaison }, true);
+            Assert.That(accountComp.Balance, Is.EqualTo(600));
+            Assert.That(budget.GetBudget(), Is.EqualTo(700f));
+
+            // The colony chooses to send it back.
+            var colonyOfficial = SEntMan.SpawnEntity("CMMobHuman", SEntMan.GetCoordinates(PlayerCoords));
+            SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleTransferToGarrisonBuiMsg("govfor", 100) { Actor = colonyOfficial }, true);
             Assert.That(accountComp.Balance, Is.EqualTo(700));
             Assert.That(budget.GetBudget(), Is.EqualTo(600f));
 
-            // Neither side can overdraw.
-            SEntMan.EventBus.RaiseLocalEvent(office, new ColonyGarrisonLiaisonTransferBuiMsg(true, 5000) { Actor = liaison }, true);
-            SEntMan.EventBus.RaiseLocalEvent(office, new ColonyGarrisonLiaisonTransferBuiMsg(false, 5000) { Actor = liaison }, true);
+            // Not more than the colony has.
+            SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleTransferToGarrisonBuiMsg("govfor", 5000) { Actor = colonyOfficial }, true);
             Assert.That(accountComp.Balance, Is.EqualTo(700));
             Assert.That(budget.GetBudget(), Is.EqualTo(600f));
         });
