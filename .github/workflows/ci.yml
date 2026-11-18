@@ -385,8 +385,8 @@ jobs:
     needs: [source-guards, build]
     if: needs.source-guards.outputs.gameplay == 'true'
     runs-on: ubuntu-latest
-    # CMU14: at most six groups per lane, each with a 30-minute execution budget.
-    timeout-minutes: 190
+    # CMU14: lanes are balanced to ~35-40 min. Each group is capped at 30 min by adaptive_ci.py.
+    timeout-minutes: 50
     strategy:
       fail-fast: false
       # CMU14: cap this run; hosted runners still share capacity across PRs.

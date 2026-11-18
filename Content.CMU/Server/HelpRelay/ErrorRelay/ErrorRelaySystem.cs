@@ -50,6 +50,7 @@ public sealed class ErrorRelaySystem : EntitySystem, ILogHandler
 
     private const string RelaySawmill = "helprelay";
     private const string SelfSawmill = "errorrelay";
+    private const string HubSawmill = "hub";
 
     private readonly ConcurrentQueue<ErrorLine> _buffer = new();
 
@@ -159,6 +160,11 @@ public sealed class ErrorRelaySystem : EntitySystem, ILogHandler
         // feed the loop that logged it.
         if (sawmillName == RelaySawmill || sawmillName == SelfSawmill
             || sawmillName.StartsWith($"{RelaySawmill}.") || sawmillName.StartsWith($"{SelfSawmill}."))
+            return;
+
+        // The engine hub sawmill logs only hub advertisement plumbing; a transient advertise
+        // failure per heartbeat retries successfully next interval, so the console keeps the record.
+        if (sawmillName == HubSawmill || sawmillName.StartsWith($"{HubSawmill}."))
             return;
 
         var level = message.Level;

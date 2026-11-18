@@ -61,8 +61,9 @@ post budget does not reach wait for the next flush. Consecutive identical
 entries collapse into a ×N marker; only lines past the 256-line buffer are counted in a suppression note
 rather than half-posted. Fatal entries skip the batch and post immediately with the last context snapshot: Fatal
 usually precedes the shutdown that would outrun the next flush. The relay never relays its own sawmills (helprelay,
-errorrelay), so a failed delivery cannot loop. A hard kill (OOM, SIGKILL, watchdog) posts nothing; the console log
-stays the only record of those.
+errorrelay), so a failed delivery cannot loop, and it skips the engine's hub sawmill: hub advertisement retries every
+interval, so one transient failure per heartbeat would stack up in the feed. A hard kill (OOM, SIGKILL, watchdog)
+posts nothing; the console log stays the only record of those.
 
 Extreme admin logs (LogImpact.Extreme) join the same channel through the ahelp conversation model instead of one-shot
 posts. AdminLogManager raises them through a CMU14-tagged hook in Add - gated at the raise site, so Low/Medium/High
