@@ -451,7 +451,7 @@ public sealed partial class FluidSystem : EntitySystem
 
         // The amounts the two would have if they were levelled out, and the part of the way there that this step covers.
         var target = (pipe.Amount + otherPipe.Amount) * pipe.Capacity / total;
-        var move = (pipe.Amount - target) * Math.Min(1f, pipe.Rate * step);
+        var move = (pipe.Amount - target) * Math.Min(1f, Math.Min(pipe.Rate, otherPipe.Rate) * step);
 
         pipe.Amount = Math.Clamp(pipe.Amount - move, 0f, pipe.Capacity);
         otherPipe.Amount = Math.Clamp(otherPipe.Amount + move, 0f, otherPipe.Capacity);

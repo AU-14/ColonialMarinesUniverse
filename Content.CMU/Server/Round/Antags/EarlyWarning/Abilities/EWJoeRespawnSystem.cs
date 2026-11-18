@@ -26,8 +26,8 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 
 /// <summary>
 /// Playtest 4: the river's copy. An assimilation that finds no synthetic to meld gives the Early Warning
-/// Joe one respawn (never more than one held). The next transition to Dead is turned back: the Joe stays
-/// up, and on the next tick it is mended, a large EMP goes off where it fell (its own gear spared), it
+/// Joe one respawn (never more than one held, and since rebalance RB-05 never more than one per round).
+/// The next transition to Dead is turned back: the Joe stays up, and on the next tick it is mended, a large EMP goes off where it fell (its own gear spared), it
 /// drops two levels and it is put down on a free tile of its map away from every living player.
 /// Deaths that set Dead directly stand: chasms and gibbing never reach the threshold check, and an
 /// execution or a suicide lands a lethal blow first, which spends the copy, then sets Dead past it.
@@ -58,19 +58,32 @@ public sealed partial class EWJoeRespawnSystem : EntitySystem
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
     }
 
-    /// <summary>Gives the Joe its one respawn. False when it already holds one.</summary>
+    /// <summary>
+    /// Gives the Joe its one respawn. False when it already holds one or (rebalance RB-05, decision 3) has
+    /// already been given one this round, whether or not it was spent: a Joe earns the copy at most once.
+    /// </summary>
     public bool Grant(Entity<EWJoeComponent> joe)
     {
-        if (joe.Comp.RespawnReady)
+        if (joe.Comp.RespawnReady || HasSpentGrant(joe))
             return false;
 
         joe.Comp.RespawnReady = true;
         Dirty(joe);
+        EnsureComp<EWJoeRespawnGrantedComponent>(joe);
         _alerts.ShowAlert(joe.Owner, joe.Comp.RespawnAlert);
         _messages.Notify(joe, Loc.GetString("cmu-ew-joe-respawn-granted"));
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"Early Warning Joe {ToPrettyString(joe):joe} was given a respawn (no synthetic to meld)");
         return true;
+    }
+
+    /// <summary>
+    /// True when this Joe has already been given its one respawn this round (held, under way or spent).
+    /// The marker outlives a stand-down, so a Joe made again later in the round does not earn another.
+    /// </summary>
+    public bool HasSpentGrant(Entity<EWJoeComponent> joe)
+    {
+        return HasComp<EWJoeRespawnGrantedComponent>(joe) || joe.Comp.Respawns > 0;
     }
 
     /// <summary>
@@ -317,6 +330,13 @@ public sealed partial class EWJoeRespawnSystem : EntitySystem
         _alerts.ClearAlert(args.Joe, joe.RespawnAlert);
     }
 }
+
+/// <summary>
+/// Rebalance RB-05: marks a Joe that has been given its respawn once this round. Never removed, so the
+/// grant cannot be earned again after the copy is spent. Server only.
+/// </summary>
+[RegisterComponent]
+public sealed partial class EWJoeRespawnGrantedComponent : Component;
 
 /// <summary>A death was turned back this tick; the respawn finishes on the next update. Server only.</summary>
 [RegisterComponent]

@@ -1,0 +1,133 @@
+- type: entity
+  parent: BaseStructure
+  id: CMUPoolTable
+  name: pool table
+  description: A felt-lined table for playing pool.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Furniture/pool_table.rsi
+    state: table
+    drawdepth: SmallObjects
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      table:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.36,-0.43,1.36,0.6"
+        density: 100
+        layer:
+        - TableLayer
+  - type: Construction
+    graph: CMUPoolTable
+    node: table
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [ Destruction ]
+  - type: CMUPoolTable
+  - type: ActivatableUI
+    key: enum.CMUPoolUiKey.FreePlay
+    singleUser: true
+    blockSpectators: true
+    verbText: cmu-pool-play
+  - type: UserInterface
+    interfaces:
+      enum.CMUPoolUiKey.FreePlay:
+        type: CMUPoolBui
+
+- type: entity
+  id: CMUPoolStickHolder
+  name: pool stick holder
+  description: A wooden holder with room for six pool sticks.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Rotatable
+  - type: Physics
+    canCollide: false
+  - type: Fixtures
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Tag
+    tags:
+    - Structure
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: CMU14/Structures/Furniture/pool_stick_holder.rsi
+    layers:
+    - state: sticks-0
+      map: [holder-fill]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.CMUPoolStickHolderVisuals.Fill:
+        holder-fill:
+          Empty: { state: sticks-0 }
+          One: { state: sticks-1 }
+          Two: { state: sticks-2 }
+          Three: { state: sticks-3 }
+          Four: { state: sticks-4 }
+          Five: { state: sticks-5 }
+          Six: { state: sticks-6 }
+  - type: CMUPoolStickHolder
+  - type: ContainerContainer
+    containers:
+      sticks: !type:Container
+  - type: Construction
+    graph: CMUPoolStickHolder
+    node: holder
+  - type: Damageable
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:EmptyContainersBehaviour
+        containers: [ sticks ]
+      - !type:DoActsBehavior
+        acts: [ Destruction ]
+
+- type: entity
+  parent: CMUPoolStickHolder
+  id: CMUPoolStickHolderStocked
+  name: pool stick holder
+  suffix: Stocked
+  components:
+  - type: Sprite
+    layers:
+    - state: sticks-6
+      map: [holder-fill]
+  - type: ContainerFill
+    containers:
+      sticks:
+      - CMUPoolStick
+      - CMUPoolStick
+      - CMUPoolStick
+      - CMUPoolStick
+      - CMUPoolStick
+      - CMUPoolStick
