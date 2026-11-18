@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Interaction;
+using Content.Shared.Physics;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared._RMC14.Actions;
@@ -152,6 +153,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         if (_rmcMap.IsTileBlocked(coords))
             return false;
 
-        return _interaction.InRangeUnobstructed(xeno.Owner, coords, xeno.Comp.Range);
+        return _interaction.InRangeUnobstructed(xeno.Owner, coords, xeno.Comp.Range,
+            SharedInteractionSystem.InRangeUnobstructedMask | CollisionGroup.BarricadeImpassable);
     }
 }

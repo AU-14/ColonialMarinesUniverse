@@ -62,6 +62,7 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
+  - type: BlockXenoConstruction
   - type: CMUBlightCore
   - type: HiveCore
   - type: HiveMember

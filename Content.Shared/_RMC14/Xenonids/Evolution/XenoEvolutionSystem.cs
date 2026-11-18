@@ -285,7 +285,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         RaiseLocalEvent(newXeno, ref afterEv);
     }
 
-    private bool CanCorruptedHiveEvolveToQueen(EntityUid xeno, bool doPopup)
+    public bool CanCorruptedHiveEvolveToQueen(EntityUid xeno, bool doPopup) // CMU14: also used for blight-core elections
     {
         if (_net.IsClient)
             return true;
@@ -931,6 +931,11 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             if (HasComp<DoorComponent>(id) || HasComp<AirlockComponent>(id))
                 comp.StopCollide.Add(id);
         }
+
+        // CMU14 Begin: restore a climb only if the previous body was already climbing.
+        comp.TriedClimb = !TryComp(xeno, out ClimbingComponent? oldClimbing) || !oldClimbing.IsClimbing;
+        Dirty(newXeno, comp);
+        // CMU14 End
 
         var newRecently = EnsureComp<XenoRecentlyDevolvedComponent>(newXeno);
         if (TryComp(xeno, out XenoRecentlyDevolvedComponent? oldRecently))

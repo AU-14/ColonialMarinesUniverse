@@ -138,9 +138,11 @@ public sealed class RecipeMachineLifecycleTest
             foreach (var (kind, _) in recipe.FluidInputs)
                 Assert.That(fluids.GetAmount(machine, kind), Is.Zero, "Inputs must be charged when the batch starts.");
 
+            var runningLoad = power.Load;
             var progressBeforeOutage = operation.Progress;
             power.Powered = false;
             recipes.Update(recipe.Duration * 2);
+            Assert.That(power.Load, Is.EqualTo(runningLoad), "A pending batch must keep its demand stable during an outage.");
             Assert.That(operation.Progress, Is.EqualTo(progressBeforeOutage), "An unpowered batch must pause.");
             foreach (var (kind, _) in recipe.FluidOutputs)
                 Assert.That(fluids.GetAmount(machine, kind), Is.Zero, "Power loss must not finish the batch.");

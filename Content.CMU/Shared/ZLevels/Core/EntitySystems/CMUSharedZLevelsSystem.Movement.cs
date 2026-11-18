@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Popper;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared.CMU14.Dropship.MultiDeck;
@@ -223,7 +224,7 @@ public abstract partial class CMUSharedZLevelsSystem
     /// </summary>
     private void OnFallAreaImpact(Entity<PhysicsComponent> ent, ref CMUZLevelHitEvent args)
     {
-        if (_vehicleTraversalQuery.HasComp(ent.Owner) || !HasSolidFallImpact(ent.Owner))
+        if (_vehicleTraversalQuery.HasComp(ent.Owner) || HasComp<CMUPathogenPopperComponent>(ent.Owner) || !HasSolidFallImpact(ent.Owner))
             return;
 
         _fallImpactVictims.Clear();
