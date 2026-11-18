@@ -172,9 +172,11 @@
     capacity: 55
   # can be wired into a civilian vehicle as a car bomb
   - type: CMUVBIED
-    interiorTotalIntensity: 1000
-    interiorMaxIntensity: 30
-    ProximityRange: 3
+    interiorTotalIntensity: 1700
+    interiorMaxIntensity: 50
+    interiorIntensitySlope: 10
+    interiorExplosionType: CMUIEDStrong
+    proximityRange: 2
 
 
 - type: entity
