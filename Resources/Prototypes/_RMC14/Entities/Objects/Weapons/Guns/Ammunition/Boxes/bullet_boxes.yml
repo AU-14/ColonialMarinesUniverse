@@ -412,7 +412,8 @@
       map: [ "enum.BulletBoxLayers2.Fill" ]
       color: "#ffc000"
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24
+    # bulletType: RMCBoxBulletsRifleL24
+    bulletType: CMUBoxBulletsRifleL23 # CMU14: shared magazine refill type
 
 - type: entity
   parent: RMCBoxBulletsRifleL24
@@ -420,7 +421,8 @@
   suffix: Empty
   components:
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24
+    # bulletType: RMCBoxBulletsRifleL24
+    bulletType: CMUBoxBulletsRifleL23 # CMU14: shared magazine refill type
     amount: 0
 
 # -- AP 8.88x51mm Rifle Ammunition Box --
@@ -444,7 +446,8 @@
       map: [ "enum.BulletBoxLayers2.Fill" ]
       color: "#318b11"
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24AP
+    # bulletType: RMCBoxBulletsRifleL24AP
+    bulletType: CMUBoxBulletsRifleL23AP # CMU14: shared magazine refill type
 
 - type: entity
   parent: RMCBoxBulletsRifleL24AP
@@ -452,5 +455,6 @@
   suffix: Empty
   components:
   - type: BulletBox
-    bulletType: RMCBoxBulletsRifleL24AP
+    # bulletType: RMCBoxBulletsRifleL24AP
+    bulletType: CMUBoxBulletsRifleL23AP # CMU14: shared magazine refill type
 
