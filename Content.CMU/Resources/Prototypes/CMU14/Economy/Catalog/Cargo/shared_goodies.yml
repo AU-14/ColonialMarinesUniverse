@@ -40,6 +40,9 @@
         crate: CMUCrateHazardGear
       - cost: 500
         crate: CMUCrateEngineeringWiring
+      - cost: 1500
+        crate: CMUCrateConstructionRobot
+        roundLimit: 3
 
 - type: entity
   abstract: true
