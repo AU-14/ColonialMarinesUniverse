@@ -110,9 +110,10 @@ public sealed class ErrorRelaySystem : EntitySystem, ILogHandler
             return;
 
         // Upstream marks player explosions Extreme past an intensity threshold and smite verbs
-        // declare Extreme impacts; normal rounds produce too many of both for the feed. In-game
+        // declare Extreme impacts; normal rounds produce too many of both for the feed. Recyclers,
+        // kitchen spikes and FTL shuttles gib in normal round flow, so Gib stays out too. In-game
         // admin chat alerts still fire from the source.
-        if (ev.Type is LogType.Explosion or LogType.Verb)
+        if (ev.Type is LogType.Explosion or LogType.Verb or LogType.Gib)
             return;
 
         var message = ErrorRelayFormat.Truncate(ErrorRelayFormat.Sanitize(ev.Message), AdminLineCap);
