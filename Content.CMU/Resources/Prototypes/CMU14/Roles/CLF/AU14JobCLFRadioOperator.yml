@@ -78,10 +78,9 @@
 - type: startingGear
   id: AU14GearCLFRadioOperator
   equipment:
+    ears: AU14HeadsetCLF
     id: AU14IDCardCLFCivilian
     pocket1: ANPRCFreqCardCLF
-  inhand:
-  - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -46,3 +46,13 @@
     containers:
       key_slots:
       - AU14EncryptionKeyCLF
+
+- type: entity
+  parent: CMUHeadsetColonyMedical
+  id: CMUHeadsetCLFMedical
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCLF
+      - CMUEncryptionKeyColonyMedical

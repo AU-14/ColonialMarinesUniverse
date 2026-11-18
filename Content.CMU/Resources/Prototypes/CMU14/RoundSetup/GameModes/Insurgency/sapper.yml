@@ -67,6 +67,7 @@
 - type: startingGear
   id: AU14GearCLFSapper
   equipment:
+    ears: AU14HeadsetCLF
     head: RMCHardhatWhite
     jumpsuit: AU14CivilianWeYuEngineerClothes
     outerClothing: CMUClothingOuterSuitEngineer
@@ -74,7 +75,6 @@
     id: AU14IDCardColonyEngineer
   # Engineering clothing and ID, allowing the sapper to blend in as engineering staff.
   inhand:
-  - AU14CLFHeadset
   # The Sapper's signature trap kit (Phase 4b). Later phases let them refill it by crafting at a workbench.
   - AU14SapperTrapToolbox
 

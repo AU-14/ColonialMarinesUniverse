@@ -66,13 +66,13 @@
 - type: startingGear
   id: AU14GearCLFMachineGunnerReinforcement
   equipment:
+    ears: AU14HeadsetCLF
     outerClothing: AU14ArmorBallisticVest
     gloves: CMHandsInsulated
     neck: RMCCLFArmband
     id: AU14IDCardColonyColonist
   inhand:
   - RMCWeaponLMGM60
-  - AU14CLFHeadset
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicBaseMilitary
