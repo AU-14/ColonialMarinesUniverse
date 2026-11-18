@@ -3,6 +3,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Robust.Shared.Network;
@@ -40,11 +41,12 @@ public sealed class BadBloodBerserkerSystem : EntitySystem
         _actions.AddAction(ent.Owner, ref ent.Comp.RageActionEntity, ent.Comp.RageAction);
         Dirty(ent);
 
-        if (ent.Comp.ThresholdsRaised)
+        // a body without thresholds has nothing to raise, and the flag stays false so shutdown takes nothing off
+        if (ent.Comp.ThresholdsRaised || !TryComp<MobThresholdsComponent>(ent, out var thresholds))
             return;
 
         ent.Comp.ThresholdsRaised = true;
-        ShiftThresholds(ent, ent.Comp.ThresholdBonus);
+        ShiftThresholds(ent, ent.Comp.ThresholdBonus, thresholds);
     }
 
     private void OnShutdown(Entity<BadBloodBerserkerComponent> ent, ref ComponentShutdown args)
@@ -64,15 +66,16 @@ public sealed class BadBloodBerserkerSystem : EntitySystem
             return;
 
         ent.Comp.ThresholdsRaised = false;
-        ShiftThresholds(ent, -ent.Comp.ThresholdBonus);
+        if (TryComp<MobThresholdsComponent>(ent, out var thresholds))
+            ShiftThresholds(ent, -ent.Comp.ThresholdBonus, thresholds);
     }
 
-    private void ShiftThresholds(EntityUid uid, int amount)
+    private void ShiftThresholds(EntityUid uid, int amount, MobThresholdsComponent thresholds)
     {
         foreach (var state in new[] { MobState.Critical, MobState.Dead })
         {
-            if (_thresholds.TryGetThresholdForState(uid, state, out var threshold))
-                _thresholds.SetMobStateThreshold(uid, threshold.Value + FixedPoint2.New(amount), state);
+            if (_thresholds.TryGetThresholdForState(uid, state, out var threshold, thresholds))
+                _thresholds.SetMobStateThreshold(uid, threshold.Value + FixedPoint2.New(amount), state, thresholds);
         }
     }
 

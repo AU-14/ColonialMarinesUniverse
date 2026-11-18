@@ -10,11 +10,13 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
@@ -95,6 +97,24 @@ public sealed class BadBloodBerserkerTest : GameTest
         {
             await Cleanup(party, spawned);
         }
+    }
+
+    // CMU14 TEST-01: the caste on a body without thresholds raises nothing and logs no error (teardown fails on error logs)
+    [Test]
+    public async Task BerserkerOnBodyWithoutThresholdsDoesNothing()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var entMan = Server.EntMan;
+            var bare = entMan.Spawn(null, MapCoordinates.Nullspace);
+            Assert.That(entMan.HasComponent<MobThresholdsComponent>(bare), Is.False, "Test setup: no thresholds");
+
+            var comp = entMan.AddComponent<BadBloodBerserkerComponent>(bare);
+            Assert.That(comp.ThresholdsRaised, Is.False, "nothing was raised, so shutdown has nothing to take off");
+
+            entMan.RemoveComponent<BadBloodBerserkerComponent>(bare);
+            entMan.DeleteEntity(bare);
+        });
     }
 
     [Test]
