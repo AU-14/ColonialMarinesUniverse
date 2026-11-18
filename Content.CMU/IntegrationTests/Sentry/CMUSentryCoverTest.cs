@@ -1,6 +1,10 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._RMC14.Sentry;
+using Content.Server.CMU14.Round;
+using Content.Server.Station.Systems;
+using Content.Shared.CMU14.util;
+using Content.Shared.Preferences;
 using Content.Shared.BarricadeBlock;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Interaction;
@@ -20,6 +24,37 @@ namespace Content.IntegrationTests.CMU14.Sentry;
 public sealed class CMUSentryCoverTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
+
+    [Test]
+    public async Task CorporateShipTurretRecognizesItsOwnPlatoon()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            var original = platoons.SelectedGovforPlatoon;
+            var spawning = Server.System<StationSpawningSystem>();
+            var targeting = Server.System<SentryTargetingSystem>();
+            var turret = SSpawnAtPosition("AU14TurretAlmayerWeYu", map.GridCoords);
+            var component = SEntMan.GetComponent<SentryTargetingComponent>(turret);
+            try
+            {
+                platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>("WEYU");
+                var contractor = spawning.SpawnPlayerMob(map.GridCoords, "AU14JobGOVFORSquadRifleman",
+                    new HumanoidCharacterProfile(), station: null);
+                Assert.That(targeting.IsValidTarget((turret, component), contractor), Is.False);
+
+                platoons.SelectedGovforPlatoon = null;
+                var marine = spawning.SpawnPlayerMob(map.GridCoords, "AU14JobGOVFORSquadRifleman",
+                    new HumanoidCharacterProfile(), station: null);
+                Assert.That(targeting.IsValidTarget((turret, component), marine), Is.True);
+            }
+            finally
+            {
+                platoons.SelectedGovforPlatoon = original;
+            }
+        });
+    }
 
     [Test]
     public async Task LegacyLandingZoneTurretCanTargetBeyondItsGuaranteedClearance()
