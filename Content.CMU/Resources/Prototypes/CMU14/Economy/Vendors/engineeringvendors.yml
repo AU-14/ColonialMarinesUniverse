@@ -155,6 +155,8 @@
         amount: 5
       - id: CMUCircuitboardRecharger
         amount: 4
+      - id: CMUCircuitboardChemicalRecipeMachine
+        amount: 1
 #      - id: CMCircuitboardDispenserBooze
 #        amount: 2
 #      - id: CMCircuitboardDispenserSoda
@@ -218,6 +220,8 @@
       - id: CMSMESMachineCircuitboard
         amount: 1
       - id: CMUCircuitboardRecharger
+        amount: 1
+      - id: CMUCircuitboardChemicalRecipeMachine
         amount: 1
       - id: CMUCrystallizerMachineCircuitboard
         amount: 2
