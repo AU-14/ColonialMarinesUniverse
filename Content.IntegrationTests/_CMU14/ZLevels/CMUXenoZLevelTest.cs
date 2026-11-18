@@ -78,6 +78,10 @@ public sealed class CMUXenoZLevelTest : GameTest
             SEntMan.EventBus.RaiseLocalEvent(_xeno, new CMUZLevelHitEvent(10));
             Assert.That(damage.GetTotalDamage(marine), Is.EqualTo(before), "A sensor-only impact cannot crush nearby bodies.");
 
+            var popper = SEntMan.SpawnEntity("CMU14XenoPopper", new EntityCoordinates(_lower, new Vector2(0.5f)));
+            SEntMan.EventBus.RaiseLocalEvent(popper, new CMUZLevelHitEvent(10));
+            Assert.That(damage.GetTotalDamage(marine), Is.EqualTo(before), "A landing popper must not crush a bystander.");
+
             var weight = SEntMan.SpawnEntity("Wrench", new EntityCoordinates(_lower, new Vector2(0.5f)));
             SEntMan.EventBus.RaiseLocalEvent(weight, new CMUZLevelHitEvent(10));
             Assert.That(damage.GetTotalDamage(marine), Is.GreaterThan(before), "Solid falling objects must still cause impact damage.");
