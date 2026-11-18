@@ -879,7 +879,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
 
         // Respect cards with a prototype-defined title (e.g. fixed-role/faction IDs).
-        if (card.JobTitle == null)
+        if (card.JobTitle == null && !HasClfCoverId(cardId, jobPrototype)) // CMU14
         {
             _cardSystem.TryChangeJobTitle(cardId, jobPrototype.LocalizedName, card);
 
@@ -925,7 +925,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         // Set name and (unless fixed by prototype) job title/icon from the selected job.
         _cardSystem.TryChangeFullName(cardId, characterName, card);
         _cmuIdBloodType.Stamp(cardId, entity); // CMU14: print the blood type on the ID
-        if (card.JobTitle == null)
+        if (card.JobTitle == null && !HasClfCoverId(cardId, accessJobPrototype)) // CMU14
         {
             _cardSystem.TryChangeJobTitle(cardId, titleJobPrototype.LocalizedName, card);
             if (_prototypeManager.TryIndex(titleJobPrototype.Icon, out var jobIcon))
