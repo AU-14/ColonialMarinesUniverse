@@ -2,7 +2,10 @@ using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Inventory;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Egg;
+using Content.Shared._RMC14.Xenonids.JoinXeno;
+using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Paralyzing;
 using Content.Shared._RMC14.Xenonids.Reaper;
 using Content.Shared._RMC14.Xenonids.Sentinel;
@@ -10,11 +13,14 @@ using Content.Shared.Actions.Components;
 using Content.Shared.CMU14.Traits.DrugAllergy;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Smelting;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.MycotoxinInject;
+using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared.Clothing;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -360,6 +366,103 @@ public sealed class NovemberEighteenRegressionTest : GameTest
                 Assert.That(traits.All(r => r.Check(SEntMan, protos, profile, new Dictionary<string, TimeSpan>(), out _)), Is.False, prosthetic);
             }
         });
+    }
+
+    // BUG-344: a reanimated marine kept their dogtag IFF, so their old side's bullets went straight through the walker
+    [Test]
+    public async Task ReanimatedWalkersLoseTheirIFF()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var iff = SEntMan.System<GunIFFSystem>();
+            SEntMan.SpawnEntity("CMUPathogenHive", map.GridCoords);
+            var injector = SEntMan.SpawnEntity("CMU14XenoPopper", map.GridCoords);
+            var victim = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            iff.AddUserFaction(victim, "FactionMarine");
+            Assert.That(iff.IsInFaction(victim, "FactionMarine"), Is.True);
+
+            SEntMan.EventBus.RaiseEvent(EventSource.Local, new CMUMycotoxinInjectDoReanimateEvent(victim, injector));
+
+            Assert.That(SEntMan.HasComponent<CMUPathogenWalkerComponent>(victim), Is.True);
+            Assert.That(iff.IsInFaction(victim, "FactionMarine"), Is.False);
+        });
+    }
+
+    // BUG-128: most colony reinforced windows could be punched apart, only the almayer ones were immune
+    [Test]
+    public async Task ReinforcedWindowsShrugOffFists()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var human = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+
+            foreach (var id in new[] { "CMWindowWhiteColonyReinforced", "RMCWindowHybrisaReinforced", "RMCWindowKutjevoReinforced", "RMCWindowSPPReinforced" })
+                Assert.That(Punch(human, id, map.GridCoords), Is.True, id);
+
+            // plain glass still breaks to fists
+            foreach (var id in new[] { "CMWindowWhiteColony", "RMCWindowHybrisa" })
+                Assert.That(Punch(human, id, map.GridCoords), Is.False, id);
+
+            SEntMan.DeleteEntity(human);
+        });
+    }
+
+    // BUG-270: the join-xeno window only got its state when it opened, so the queue spot never showed up until you reopened it
+    [Test]
+    public async Task JoinXenoWindowRefreshesWhileOpen()
+    {
+        var map = await Pair.CreateTestMap();
+        var previous = ServerSession!.AttachedEntity;
+        EntityUid ghost = default;
+        EntityUid hive = default;
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                ghost = SEntMan.SpawnEntity("MobObserver", map.GridCoords);
+                SEntMan.EnsureComponent<JoinXenoCooldownIgnoreComponent>(ghost);
+                hive = SEntMan.SpawnEntity("CMXenoHive", map.GridCoords);
+                // the window hides hives with nobody alive in them
+                var drone = SEntMan.SpawnEntity("CMXenoDrone", map.GridCoords);
+                SEntMan.System<SharedXenoHiveSystem>().SetHive(drone, hive);
+                Server.PlayerMan.SetAttachedEntity(ServerSession, ghost);
+
+                SEntMan.EventBus.RaiseLocalEvent(ghost, new JoinXenoActionEvent { Performer = ghost });
+                Assert.That(JoinXenoEntry(ghost, hive).Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued));
+
+                SEntMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(SEntMan.GetNetEntity(hive)));
+                Assert.That(JoinXenoEntry(ghost, hive).Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued), "nothing resent yet");
+            });
+
+            await RunSeconds(1.5f);
+
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(JoinXenoEntry(ghost, hive).Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => Server.PlayerMan.SetAttachedEntity(ServerSession, previous));
+        }
+    }
+
+    private bool Punch(EntityUid attacker, string window, EntityCoordinates where)
+    {
+        var target = SEntMan.SpawnEntity(window, where);
+        var ev = new GettingAttackedAttemptEvent(attacker, attacker, false);
+        SEntMan.EventBus.RaiseLocalEvent(target, ref ev);
+        SEntMan.DeleteEntity(target);
+        return ev.Cancelled;
+    }
+
+    private JoinXenoHiveEntry JoinXenoEntry(EntityUid ghost, EntityUid hive)
+    {
+        var ui = SEntMan.System<SharedUserInterfaceSystem>();
+        Assert.That(ui.TryGetUiState<JoinXenoBuiState>(ghost, JoinXenoUIKey.Key, out var state), Is.True);
+        return state!.Entries.Single(e => e.Hive == SEntMan.GetNetEntity(hive));
     }
 
     // fresh planter each time, BlockDuplicate would otherwise eat the second attempt and hide a broken check
