@@ -28,6 +28,10 @@ public sealed partial class ContentTileDefinition
     [DataField]
     public bool AllowCharges;
 
+    /// <summary>Ship weapons with roof-breaching capability can open this tile above their impact.</summary>
+    [DataField]
+    public bool BreachableCaveRoof;
+
     /// <summary>
     /// Whether this tile collapses once none of the four tiles around it are left, so destroyable tiles can't float
     /// on their own.

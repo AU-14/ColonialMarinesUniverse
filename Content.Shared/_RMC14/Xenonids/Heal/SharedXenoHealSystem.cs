@@ -169,7 +169,13 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
 
     private void OnXenoApplySalveAction(Entity<XenoComponent> ent, ref XenoApplySalveActionEvent args)
     {
+        // CMU14: human and xeno treatments share the action and its resource costs.
+        if (args.Handled)
+            return;
+
         var target = args.Target;
+        if (args.CanTreatHumans && !HasComp<XenoComponent>(target) && TryApplyHumanSalve(ent, args))
+            return;
 
         LocId? failureMessageId = null;
 
@@ -217,23 +223,9 @@ public abstract partial class SharedXenoHealSystem : EntitySystem
             healedHealerOrSmallXeno = true;
         }
 
-        if (!_xenoPlasma.TryRemovePlasmaPopup(ent.Owner, (totalHealAmount * args.PlasmaCostModifier)))
-        {
+        // CMU14: use the same payment path for both patient types.
+        if (!TryPaySalveCost(ent.Owner, args, totalHealAmount, damageTakenModifier, out var damageTaken))
             return;
-        }
-
-        var damageTaken = totalHealAmount * damageTakenModifier;
-
-        var damageTakenSpecifier = new DamageSpecifier
-        {
-            DamageDict =
-            {
-                [BluntGroup] = damageTaken,
-            },
-        };
-
-        if (TryComp<DamageableComponent>(ent, out var damage))
-            _damageable.AddDamage(ent.Owner, damage, damageTakenSpecifier);
 
         _popup.PopupSelf(Loc.GetString("rmc-xeno-apply-salve-self", ("target_xeno", target)), ent, PopupType.Medium);
 

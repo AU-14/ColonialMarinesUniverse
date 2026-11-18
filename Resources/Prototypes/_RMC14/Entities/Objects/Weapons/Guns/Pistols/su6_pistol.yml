@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: CMWeaponPistolBase
   id: RMCWeaponPistolSU6
   name: SU-6 smart pistol
@@ -23,6 +23,7 @@
   - type: GunIFF
     enabled: true
     preventFriendlyFire: true # CMU14: block firing at friendlies like the smart-scope
+  - type: GunAimAssist # CMU14: toggle SGO aim assistance on this sidearm.
   - type: Gun
     shotsPerBurst: 3
     selectedMode: SemiAuto

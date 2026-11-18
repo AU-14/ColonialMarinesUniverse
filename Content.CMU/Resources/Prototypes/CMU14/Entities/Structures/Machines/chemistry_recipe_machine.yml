@@ -17,6 +17,9 @@
   - type: Icon
     sprite: Structures/Machines/mixer.rsi
     state: mixer_empty
+  - type: GuideHelp
+    guides:
+    - CMUGuideMedicalMachines
   - type: ActivatableUI
     key: enum.CMUChemicalRecipeMachineUiKey.Key
   - type: ActivatableUIRequiresPower

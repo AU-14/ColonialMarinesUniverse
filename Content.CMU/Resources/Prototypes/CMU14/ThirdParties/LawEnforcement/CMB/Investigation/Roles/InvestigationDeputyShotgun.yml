@@ -59,6 +59,9 @@
     pocket1: RMCPouchShotgunLargeBuckshot
   inhand:
   - RMCWeaponShotgunHG3712
+  storage:
+    back:
+    - CMUCameraGearM3aCivilian
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicCMB

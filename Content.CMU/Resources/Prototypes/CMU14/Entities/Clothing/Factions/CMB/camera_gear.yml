@@ -1,0 +1,49 @@
+# Colonial law enforcement bodycams, on the CMB camera network the CMB colony security monitor watches.
+- type: entity
+  parent: Clothing
+  id: CMUCameraGearM3aCivilian
+  name: M3a Civilian Camera Gear
+  description: A civilian cut of the M5 camera gear, issued to colonial law enforcement. While worn it streams what the officer sees and hears to the CMB security monitors. Can be worn over the ear or head.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Accessory/camera_gear.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Clothing/Accessory/camera_gear.rsi
+  - type: Clothing
+    quickEquip: false
+    sprite: _RMC14/Objects/Clothing/Accessory/camera_gear.rsi
+    slots:
+    - EARS
+    - HEAD
+  - type: Tag
+    tags:
+    - RipOffOnInfection
+  - type: Eye
+    zoom: 0.3, 0.3
+  - type: RMCStaticZoomLevel
+  - type: RMCCamera
+    rename: false
+  - type: CameraNetworkMember
+    networks: []
+    sourceKinds: Rmc
+  - type: ItemToggle # switched off, it stays off the network and hears nothing
+    activated: true
+    verbToggleOn: cmu-camera-gear-verb-on
+    verbToggleOff: cmu-camera-gear-verb-off
+    popupActivate: cmu-camera-gear-popup-on
+    popupDeactivate: cmu-camera-gear-popup-off
+    soundActivate:
+      path: /Audio/Machines/quickbeep.ogg
+    soundDeactivate:
+      path: /Audio/Machines/quickbeep.ogg
+  - type: CMUCameraGear
+    network: CMUSurveillanceCameraColonyCMB
+  - type: ActiveListener # the microphone needs one; listed here so spawning doesn't add it
+    range: 10
+  - type: CMUCameraMicrophone
+    listenRange: 7
+  - type: CMUCameraFeedStatic # the CMB monitor shows this feed through static
+  - type: CMUCameraListPriority
+    priority: 0 # top of the CMB monitor list

@@ -150,6 +150,7 @@
     - CMMagazineSMGMP5
     - CMMagazineSMGMP5
     back:
+    - CMUCameraGearM3aCivilian
     - AU14PacketGrenadeTearGasFilled
     - RMCExplosiveBreachingCharge
     - RMCZipties
@@ -162,6 +163,7 @@
     id: CMUIDCardCMBTacticalLeader
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14PacketGrenadeTearGasFilled
     - RMCExplosiveBreachingCharge
     - RMCZipties

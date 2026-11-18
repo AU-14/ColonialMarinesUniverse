@@ -203,6 +203,9 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
 
         if (_role.MindHasRole<SubvertedSynthRoleComponent>(mindId))
             _role.MindRemoveRole<SubvertedSynthRoleComponent>(mindId);
+        // a revived Early Warning Joe keeps its antagonist programming; "returned to its original state" would lie
+        if (HasComp<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeComponent>(target))
+            return;
         if (mind is { UserId: not null } && _player.TryGetSessionById(mind.UserId, out ICommonSession? session))
             _antag.SendBriefing(session, Loc.GetString("clf-subverted-synth-repaired"), Color.CornflowerBlue, null);
     }

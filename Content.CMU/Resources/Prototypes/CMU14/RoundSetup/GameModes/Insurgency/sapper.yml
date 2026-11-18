@@ -71,12 +71,18 @@
     jumpsuit: AU14CivilianWeYuEngineerClothes
     outerClothing: CMUClothingOuterSuitEngineer
     shoes: RMCBootsCorporate
-    id: AU14IDCardColonyEngineer
+    id: CMUIDCardCLFSapper
   # Engineering clothing and ID, allowing the sapper to blend in as engineering staff.
   inhand:
-  - AU14CLFHeadset
   # The Sapper's signature trap kit (Phase 4b). Later phases let them refill it by crafting at a workbench.
   - AU14SapperTrapToolbox
+
+- type: entity
+  parent: AU14IDCardColonyEngineer
+  id: CMUIDCardCLFSapper
+  components:
+  - type: IdCard
+    jobTitle: au14-job-name-civilianengineer
 
 - type: entity
   parent: CMSpawnPointJobBase

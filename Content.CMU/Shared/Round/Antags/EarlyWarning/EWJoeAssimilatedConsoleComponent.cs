@@ -21,6 +21,13 @@ public sealed partial class EWJoeAssimilatedConsoleComponent : Component
     public EntityUid? AssimilatedBy;
 
     /// <summary>
+    /// A core shard for this console already dropped from its Joe. A defibrillated Joe that dies again owes
+    /// shards only for consoles it took since. Server only.
+    /// </summary>
+    [DataField]
+    public bool ShardDropped;
+
+    /// <summary>
     /// Repair progress: 0 = sealed (needs a screwdriver), 1 = panel open (needs wirecutters),
     /// 2 = wires cut (needs a core shard). The third step removes the component.
     /// </summary>

@@ -1,4 +1,3 @@
-using Content.Server.Chat.Systems;
 using Content.Server.CMU14.Chat;
 using Content.Server.CMU14.Chemistry.Research;
 using Content.Server.CMU14.ColonyEconomy;
@@ -19,7 +18,7 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Consoles;
 /// </summary>
 public sealed partial class EWJoeConsoleSystem
 {
-    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private BudgetConsoleSystem _budgetConsole = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
     [Dependency] private ColonyCommsConsoleSystem _comms = default!;
@@ -121,7 +120,7 @@ public sealed partial class EWJoeConsoleSystem
             return;
 
         var line = Loc.GetString(_random.Pick(SpoofLines));
-        _comms.BroadcastColonyAlert(console, line);
+        _comms.BroadcastColonyAlert(console, line, apollo: true);
     }
 
     /// <summary>Colony-wide announcement (everyone but Threat/Xeno/Yautja) naming the console and its area.</summary>
@@ -131,13 +130,11 @@ public sealed partial class EWJoeConsoleSystem
         if (_area.TryGetArea(Transform(console).Coordinates, out var area, out _))
             areaName = Name(area.Value);
 
-        _chat.DispatchFilteredAnnouncement(
-            ColonyAnnouncements.Recipients(EntityManager),
+        _apollo.AnnounceColony(
             // text pass A: APOLLO names the console and its area in capitals
             Loc.GetString(locKey, ("console", Name(console).ToUpperInvariant()), ("area", areaName.ToUpperInvariant())),
             sender: Loc.GetString("cmu-ew-joe-announcement-sender"),
-            playSound: true,
-            announcementSound: AnnounceSound);
+            sound: AnnounceSound);
     }
 
     /// <summary>A value scaled by a random factor in [1 − variance, 1 + variance].</summary>

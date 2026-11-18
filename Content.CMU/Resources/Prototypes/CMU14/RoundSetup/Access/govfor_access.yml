@@ -68,3 +68,7 @@
   id: CMUAccessKitchen
   name: cmu-access-kitchen
   accessGroup: GOVFOR Access
+
+- type: accessLevel
+  id: CMUAccessMohawkRamp
+  name: cmu-access-mohawk-ramp

@@ -1,0 +1,32 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CMU14 pool contribution by Scott-SS14, design and art direction.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "sticks-0"
+        },
+        {
+            "name": "sticks-1"
+        },
+        {
+            "name": "sticks-2"
+        },
+        {
+            "name": "sticks-3"
+        },
+        {
+            "name": "sticks-4"
+        },
+        {
+            "name": "sticks-5"
+        },
+        {
+            "name": "sticks-6"
+        }
+    ]
+}

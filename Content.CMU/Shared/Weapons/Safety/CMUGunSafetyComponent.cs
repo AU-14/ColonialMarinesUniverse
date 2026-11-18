@@ -21,4 +21,13 @@ public sealed partial class CMUGunSafetyComponent : Component
     public TimeSpan PopupCooldown = TimeSpan.FromSeconds(1);
 
     public TimeSpan NextPopup;
+    public EntityUid? PressedBy;
+    public TimeSpan FirstPress;
+    public int PressCount;
+}
+
+[Serializable, Robust.Shared.Serialization.NetSerializable]
+public sealed class CMUSafetyTriggerPress(NetEntity gun) : EntityEventArgs
+{
+    public NetEntity Gun = gun;
 }

@@ -167,7 +167,7 @@
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
 - type: entity
-  parent: CMCartridgeSentry10x50mm
+  parent: VehicleCartridgeSentry10x50mm
   id: VehicleCartridgeSentry10x28mm
   name: cartridge (10x28mm)
   categories: [ HideSpawnMenu ]

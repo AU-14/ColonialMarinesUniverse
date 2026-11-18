@@ -1,5 +1,6 @@
 - type: gamePreset
   id: ColonyFall
+  allowDiggingDown: false
   alias:
   - colonyfall
   name: cmu-gamemode-colonyfall-name
@@ -19,6 +20,7 @@
 
 - type: gamePreset
   id: DistressSignal
+  allowDiggingDown: false
   alias:
   - distresssignal
   name: cmu-gamemode-distresssignal-name
@@ -84,6 +86,7 @@
 
 - type: gamePreset
   id: ForceOnForce
+  allowDiggingDown: false
   alias:
   - forceonforce
   name: cmu-gamemode-forceonforce-name
@@ -110,6 +113,7 @@
   - AddOpfor
   - AddOpforAuxiliaryStaff
   - AddColonist
+  - FoFAntags
   - FoFTimeLimitRule
 
 - type: gamePreset
