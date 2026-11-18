@@ -143,7 +143,7 @@ public sealed partial class CMUCharacterLanguageSystem : EntitySystem
     private void ApplyJobLanguages(Entity<LanguageComponent> ent, JobPrototype job)
     {
         var side = _roundJobProfiles.GetRoundSide(job);
-        if (IsColonyJob(job, side) || job.RoundRole == "Cultist")
+        if (IsColonyJob(job, side))
             ApplyColonyLanguages(ent);
         else if (side == RoundJobSide.Govfor && IsInsurgencyColonySpeaker(job))
             TeachColonyLanguage(ent);
@@ -179,9 +179,9 @@ public sealed partial class CMUCharacterLanguageSystem : EntitySystem
         }
     }
 
-    private static bool IsColonyJob(JobPrototype job, RoundJobSide side)
+    public static bool IsColonyJob(JobPrototype job, RoundJobSide side)
     {
-        return side == RoundJobSide.Civilian ||
+        return side == RoundJobSide.Civilian || job.RoundRole == "Cultist" ||
                string.Equals(job.RoundForce, ColonyForceClf, StringComparison.OrdinalIgnoreCase);
     }
 
