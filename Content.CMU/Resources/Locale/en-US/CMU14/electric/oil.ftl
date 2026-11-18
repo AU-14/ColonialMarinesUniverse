@@ -1,6 +1,6 @@
 ent-RUMCOilDeposit = oil deposit
     .desc = A seep of crude oil under the stone. Set an oil pump on it.
-ent-RUMCOilPump = oil pump
+ent-RUMCMachineOilPump = oil pump
     .desc = A pump that goes down into a deposit of crude oil and brings it up into its tank. Set it on a deposit, give it power, and join a pipe to its outlet with a screwdriver.
 ent-RUMCOilTank = oil tank
     .desc = A big tank for liquids, made for oil and fuel. Pour a canister into it, draw from it with a container in the hand using the right click, or join pipes to its inlet and outlet with a screwdriver. It takes any liquid.
@@ -8,15 +8,15 @@ ent-RUMCOilBarrel = oil barrel
     .desc = A barrel of oil or fuel, small enough to roll. Pour into it, draw from it with a container in the hand using the right click, or join pipes with a screwdriver.
 ent-RUMCFuelCanister = fuel canister
     .desc = A canister for fuel. Pour it into a generator, or draw it full from a tank with the right click.
-ent-RUMCDieselGenerator = diesel generator
+ent-RUMCMachineDieselGenerator = diesel generator
     .desc = A generator that burns diesel. Pour diesel into it from a canister (or pipe it in), join a high voltage cable, and it makes power for as long as the fuel lasts.
-ent-RUMCDistillationTower = distillation tower
+ent-RUMCMachineDistillationTower = distillation tower
     .desc = A two-tile tower that splits crude oil into naphtha, light fuel, heavy fuel and gas. Connect a separate pipe run for the inlet and each of the four outputs around its footprint.
-ent-RUMCFuelBlender = fuel blender
+ent-RUMCMachineFuelBlender = fuel blender
     .desc = Mixes light and heavy fuel into diesel in the right proportion.
-ent-RUMCSteamCracker = steam cracker
+ent-RUMCMachineSteamCracker = steam cracker
     .desc = Breaks naphtha and gas apart with steam into ethylene, the gas that plastic is made of.
-ent-RUMCPolymerizer = polymerizer
+ent-RUMCMachinePolymerizer = polymerizer
     .desc = Turns ethylene into plastic pellets. The pellets are pressed into sheets in the bending machine.
 
 au14-craft-recipe-buildoilpump = Oil pump
@@ -38,7 +38,7 @@ au14-oil-deposit-examine = There are { $amount } units of oil in the deposit.
 au14-oil-pump-examine-deposit = It stands on a deposit of oil.
 au14-oil-pump-examine-none = There is no deposit of oil under it.
 
-ent-RUMCGasTurbine = gas turbine
+ent-RUMCMachineGasTurbine = gas turbine
     .desc = A turbine that burns the gas of the refinery, benzene or naphtha. Join the pipes with the fuel to its inlets (or pour it in), join a high voltage cable, and it makes power for as long as the fuel lasts.
 au14-craft-recipe-buildgasturbine = Gas turbine
 au14-fluid-port-light_in = light fuel inlet

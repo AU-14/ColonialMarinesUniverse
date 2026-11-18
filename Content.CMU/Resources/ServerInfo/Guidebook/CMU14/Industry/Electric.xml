@@ -4,8 +4,8 @@
   [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Equipment recipes" link="CMUGuideIndustryRecipes"]
 
   <Box>
-    <GuideEntityEmbed Entity="RUMCSteamGenerator" Caption="GENERATE"/>
-    <GuideEntityEmbed Entity="RUMCTransformerDown" Caption="HV → MV"/>
+    <GuideEntityEmbed Entity="RUMCMachineSteamGenerator" Caption="GENERATE"/>
+    <GuideEntityEmbed Entity="RUMCMachineTransformerDown" Caption="HV → MV"/>
     <GuideEntityEmbed Entity="PowerPanel" Caption="ELECTRICAL PANEL"/>
   </Box>
   [bold]Generator → HV cable → step-down transformer → MV cable → electrical panel → nearby machines.[/bold] Anchor the electrical panel directly over the MV cable; it supplies powered devices within five tiles. Anchor equipment and connect the matching cable networks. A generator alone does not power every machine in the room.
@@ -23,8 +23,8 @@
 
   ## Turn oil into useful supplies
   <Box>
-    <GuideEntityEmbed Entity="RUMCOilPump" Caption="ON THE DEPOSIT"/>
-    <GuideEntityEmbed Entity="RUMCDistillationTower" Caption="SEPARATE FRACTIONS"/>
+    <GuideEntityEmbed Entity="RUMCMachineOilPump" Caption="ON THE DEPOSIT"/>
+    <GuideEntityEmbed Entity="RUMCMachineDistillationTower" Caption="SEPARATE FRACTIONS"/>
   </Box>
   1. Activate a [textlink="prospector" link="CMUGuideIndustryTools"] to find nearby deposits. Place the oil pump on one and power it.
   2. Lay a touching [textlink="liquid pipe run" link="CMUGuideIndustryPipes"] from the pump to the tower. Use a screwdriver on the first pipe, then the pump → OUTPUT → Connect selected pipe. Select the last pipe, then the tower → crude oil INPUT → Connect selected pipe.

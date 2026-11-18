@@ -61,7 +61,7 @@
 
 - type: entity
   parent: [ BaseMachine, BaseMachineDestructible ]
-  id: RUMCAssemblyMachine
+  id: RUMCMachineAssembly
   name: assembly machine
   description: A programmable fabricator - seat a programmed blueprint and a charged cell, then feed it exactly what it asks for.
   components:
