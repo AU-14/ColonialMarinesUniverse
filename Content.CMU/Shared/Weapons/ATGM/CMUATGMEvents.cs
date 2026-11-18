@@ -25,3 +25,22 @@ public sealed partial class CMUATGMLoadDoAfterEvent : SimpleDoAfterEvent;
 /// </summary>
 [Serializable, NetSerializable]
 public sealed partial class CMUATGMLinkDoAfterEvent : SimpleDoAfterEvent;
+
+/// <summary>
+///     Sent by the pilot to mark an enemy for the gunship ATGM launcher.
+///     The server resolves the launcher from the gunner's mounted weapon.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CMUATGMMarkTargetEvent(EntityUid target) : EntityEventArgs
+{
+    public EntityUid Target = target;
+}
+
+/// <summary>
+///     Sent by the pilot to unmark all targets or a specific target from the gunship ATGM launcher.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class CMUATGMUnmarkTargetEvent(EntityUid? target = null) : EntityEventArgs
+{
+    public EntityUid? Target = target;
+}

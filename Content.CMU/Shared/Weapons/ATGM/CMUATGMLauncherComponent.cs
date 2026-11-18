@@ -1,6 +1,8 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Content.Shared.CMU14.Weapons.ATGM;
 
@@ -110,4 +112,53 @@ public sealed partial class CMUATGMLauncherComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan TargetSightTimeout = TimeSpan.FromSeconds(2);
+
+    /// <summary>
+    ///     For gunship launchers: list of currently marked enemy entities with their mark times.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<(EntityUid Entity, TimeSpan MarkedAt)> MarkedTargets = new();
+
+    /// <summary>
+    ///     For gunship launchers: maximum number of targets that can be marked simultaneously.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int MaxMarkedTargets = 3;
+
+    /// <summary>
+    ///     For gunship launchers: duration before a mark expires, in seconds. 0 means indefinite.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float MarkExpirationSeconds = 30f;
+
+    /// <summary>
+    ///     For gunship launchers: requires a marked target to fire.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool RequireMarkedTargetToFire = true;
+
+    /// <summary>
+    ///     Returns the currently valid marked targets (removing expired ones).
+    /// </summary>
+    public IReadOnlyList<EntityUid> GetValidMarkedTargets(TimeSpan currentTime)
+    {
+        var validTargets = new List<EntityUid>();
+        
+        // Remove expired marks and collect valid ones
+        MarkedTargets = MarkedTargets
+            .Where(m =>
+            {
+                if (MarkExpirationSeconds > 0)
+                {
+                    var age = (currentTime - m.MarkedAt).TotalSeconds;
+                    if (age > MarkExpirationSeconds)
+                        return false;
+                }
+                validTargets.Add(m.Entity);
+                return true;
+            })
+            .ToList();
+
+        return validTargets;
+    }
 }

@@ -41,6 +41,10 @@
     fillPrototype: CMProjectileShrapnel
     capacity: 20
   - type: ClusterLimitHits
+  - type: CMUStaggeredFragment
+    delayBetweenFragments: 0.1
+    useTrianglePattern: true
+    triangleSpreadAngle: 20
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container

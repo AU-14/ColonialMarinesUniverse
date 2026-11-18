@@ -381,9 +381,27 @@ public sealed partial class CMUATGMSystem : EntitySystem
 
     private void OnLauncherAttemptShoot(Entity<CMUATGMLauncherComponent> ent, ref AttemptShootEvent args)
     {
-        if (args.Cancelled || IsGunshipLauncher(ent))
+        if (args.Cancelled)
             return;
 
+        // Gunship launchers require marked targets
+        if (IsGunshipLauncher(ent))
+        {
+            if (ent.Comp.RequireMarkedTargetToFire)
+            {
+                var validTargets = ent.Comp.GetValidMarkedTargets(_timing.CurTime);
+                if (validTargets.Count == 0)
+                {
+                    args.Cancelled = true;
+                    _popup.PopupEntity(Loc.GetString("cmu-atgm-no-marked-target", ("launcher", ent.Owner)),
+                        args.User, args.User, PopupType.SmallCaution);
+                    return;
+                }
+            }
+            return;
+        }
+
+        // Ground launchers require spotter
         if (!_skills.HasSkill(args.User, ent.Comp.Skill, 1))
         {
             args.Cancelled = true;
@@ -456,5 +474,49 @@ public sealed partial class CMUATGMSystem : EntitySystem
         finder = linked;
         reason = null;
         return true;
+    }
+
+    /// <summary>
+    ///     Marks a target for the gunship ATGM launcher.
+    /// </summary>
+    public bool TryMarkTarget(Entity<CMUATGMLauncherComponent> launcher, EntityUid target)
+    {
+        if (!IsGunshipLauncher(launcher))
+            return false;
+
+        var currentTime = _timing.CurTime;
+        var validTargets = launcher.Comp.GetValidMarkedTargets(currentTime);
+
+        // Check if already marked
+        if (launcher.Comp.MarkedTargets.Any(m => m.Entity == target))
+            return true;
+
+        // Check if we can add more marks
+        if (validTargets.Count >= launcher.Comp.MaxMarkedTargets)
+            return false;
+
+        launcher.Comp.MarkedTargets.Add((target, currentTime));
+        Dirty(launcher);
+        return true;
+    }
+
+    /// <summary>
+    ///     Unmarks a specific target or all targets from the gunship ATGM launcher.
+    /// </summary>
+    public void UnmarkTarget(Entity<CMUATGMLauncherComponent> launcher, EntityUid? target = null)
+    {
+        if (!IsGunshipLauncher(launcher))
+            return;
+
+        if (target == null)
+        {
+            launcher.Comp.MarkedTargets.Clear();
+        }
+        else
+        {
+            launcher.Comp.MarkedTargets.RemoveAll(m => m.Entity == target);
+        }
+
+        Dirty(launcher);
     }
 }

@@ -15,6 +15,10 @@ cmu-atgm-spotter-incapacitated = Your spotter can't guide the missile right now.
 cmu-atgm-spotter-unskilled = Your spotter doesn't know how to guide the missile.
 cmu-atgm-spotter-too-far = Your spotter is too far from the launcher.
 
+cmu-atgm-no-marked-target = You need to mark a target before firing the ATGM.
+cmu-atgm-mark-too-many = You already have the maximum number of targets marked.
+cmu-atgm-mark-already-marked = That target is already marked.
+
 cmu-atgm-examine-loaded = A missile is [color=green]loaded[/color].
 cmu-atgm-examine-empty = The launch tube is [color=red]empty[/color].
 cmu-atgm-examine-linked = A finder is [color=green]wired in[/color].

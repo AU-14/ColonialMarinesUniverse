@@ -82,3 +82,20 @@
     - sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
       state: sniperscope
       map: ["enum.ActionVisuals.Icon"]
+
+- type: entity
+  id: ActionATGMMarkTarget
+  name: Mark Target
+  description: Mark an enemy for ATGM targeting. Click on an enemy to mark it for the missile system.
+  components:
+  - type: WorldTargetAction
+    event: !type:Content.Shared.CMU14.Weapons.ATGM.CMUATGMMarkTargetEvent
+  - type: Action
+    checkCanInteract: false
+    useDelay: 0.25
+    itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+      map: ["enum.ActionVisuals.Icon"]

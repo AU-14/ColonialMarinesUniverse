@@ -48,6 +48,34 @@
     cost: 100
 
 - type: entity
+  parent: AU14MagazineMk86Hornet
+  id: CMUMagazineMk86HornetGunship
+  name: Mk86 Gunship Ammunition Box (AGM-H 40mm hornet grenade)
+  description: A box of 15, AGM-H 40mm hornet grenade rounds packed for hardpoint use. Only fits a Mk86 deployed from a gunship hardpoint.
+  components:
+  - type: Tag
+    tags:
+    - CMUGunshipMagazineMk86
+    - CMUGunshipHardpointMagazine
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 125
+
+- type: entity
+  parent: AU14MagazineMk86Smoke
+  id: CMUMagazineMk86SmokeGunship
+  name: Mk86 Gunship Ammunition Box (AGM-S 40mm smoke grenade)
+  description: A box of 15, AGM-S 40mm smoke grenade rounds packed for hardpoint use. Only fits a Mk86 deployed from a gunship hardpoint.
+  components:
+  - type: Tag
+    tags:
+    - CMUGunshipMagazineMk86
+    - CMUGunshipHardpointMagazine
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 100
+
+- type: entity
   parent: CMUATGMMissile
   id: CMUATGMMissileGunship
   name: FOGO-ATGM gunship missile
@@ -60,6 +88,38 @@
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 200
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoMiniRocket
+  id: CMUDropshipAttachmentAmmoRocketMiniMikeGunship
+  name: AGR-59-G 'Mini-Minny'
+  description: The AGR-59-G 'Mini-Minny' minirocket is a compact variant designed exclusively for gunship hardpoint use. It carries half the payload of standard mini-rockets but provides 12 shots with improved accuracy for door gunner operations. Only fits a gunship hardpoint rocket launcher.
+  components:
+  - type: Sprite
+    layers:
+    - state: minirocket_6
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    ammoType: minirocket_gunship
+    rounds: 12
+    maxRounds: 12
+    roundsPerShot: 1
+    fireMissionDelay: 250
+    explosion:
+      type: CMUCASMunition
+      total: 425
+      slope: 4
+      max: 20
+    impactEffects:
+    - RMCEffectExplosionParticle
+    - RMCSmokeExplosionProofSmall
+  - type: Tag
+    tags:
+    - CMUGunshipMiniMikeGunship
+    - CMUGunshipHardpointMagazine
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 300
 
 # Fixed weapons
 
@@ -251,3 +311,6 @@
 
 - type: Tag
   id: CMUGunshipATGMMissile
+
+- type: Tag
+  id: CMUGunshipMiniMikeGunship
