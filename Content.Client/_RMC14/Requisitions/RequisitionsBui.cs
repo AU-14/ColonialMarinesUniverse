@@ -56,6 +56,8 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
     internal static readonly Dictionary<string, string> CategoryLocKeys = new()
     {
+        ["Musical Instruments"] = "cmu-asrs-category-instruments", // CMU14
+        ["Colony Administration"] = "cmu-asrs-category-administration",
         ["Air Defense"] = "rmc-requisitions-category-air-defense",
         ["Ammo"] = "rmc-requisitions-category-ammo",
         ["Ammunition"] = "rmc-requisitions-category-ammunition",

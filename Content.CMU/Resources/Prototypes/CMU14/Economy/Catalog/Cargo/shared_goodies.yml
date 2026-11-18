@@ -156,3 +156,24 @@
       #   crate: CMUCanisterPhoron
       - cost: 1200
         crate: CMUCrateAtmosPhoronKit
+
+- type: entity
+  abstract: true
+  id: CMUASRSInstruments
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Musical Instruments
+      entries:
+      - cost: 600
+        crate: CrateFunInstrumentsVariety
+      - cost: 600
+        crate: CrateFunInstrumentsBrass
+      - cost: 600
+        crate: CrateFunInstrumentsString
+      - cost: 600
+        crate: CrateFunInstrumentsWoodwind
+      - cost: 600
+        crate: CrateFunInstrumentsKeyedPercussion
+      - cost: 600
+        crate: CrateFunInstrumentsSpecial
