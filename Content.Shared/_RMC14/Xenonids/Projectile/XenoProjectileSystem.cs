@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Xenonids.Construction;
+using Content.Shared._RMC14.Xenonids.Devour; // CMU14
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.FixedPoint;
@@ -221,6 +222,10 @@ public sealed partial class XenoProjectileSystem : EntitySystem
                   Adjust Substep: {substep}
                 """);
 
+        // CMU14: a historical pose cannot make a swallowed target reachable.
+        if (HasComp<DevouredComponent>(target))
+            return true;
+
         var hitConfirmed = _rmcLagCompensation.ValidatePredictedHit(target, (shot.Value, physics), args.SenderSession, msg.LastRealTick, substep); // CMU14
 
         if (hitConfirmed)
@@ -316,6 +321,12 @@ public sealed partial class XenoProjectileSystem : EntitySystem
     {
         if (args.Cancelled)
             return;
+
+        if (HasComp<DevouredComponent>(args.OtherEntity)) // CMU14
+        {
+            args.Cancelled = true;
+            return;
+        }
 
         if (_preventAttackLightOffQuery.HasComp(args.OtherEntity) &&
             _rmcPoweredLight.IsOff(args.OtherEntity))
