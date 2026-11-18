@@ -120,10 +120,10 @@ public sealed class VehicleGameplayRegressionTest : GameTest
         await Server.WaitAssertion(() =>
         {
             vehicle = SEntMan.SpawnEntity("VehicleHumvee", map.GridCoords.Offset(new Vector2(2, 0)));
-            wheel = SEntMan.SpawnEntity("VehicleHumveeWheel", map.GridCoords);
             var slots = Server.System<ItemSlotsSystem>();
             Assert.That(slots.TryGetSlot(vehicle, "wheel-1", out var slot), Is.True);
-            Assert.That(slots.TryInsert(vehicle, slot!, wheel, null), Is.True);
+            Assert.That(slot!.Item, Is.Not.Null);
+            wheel = slot.Item!.Value;
             before = Integrity(wheel).Integrity;
             var xeno = SEntMan.SpawnEntity("CMXenoSpitter", map.GridCoords);
             Server.System<XenoSprayAcidSystem>().CreateLine(xeno, map.GridCoords,

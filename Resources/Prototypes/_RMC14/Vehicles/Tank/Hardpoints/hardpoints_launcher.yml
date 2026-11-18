@@ -1,8 +1,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankFlamer # CMU14
-  name: tank flamer
-  description: A tank-mounted flamethrower hardpoint.
+  name: M4A3R3 flamethrower
+  description: A tank-mounted M4A3R3 flamethrower hardpoint.
   components:
   - type: Sprite
     state: flamer
@@ -37,7 +37,8 @@
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    soundGunshot: /Audio/_RMC14/Weapons/Guns/Flamer/gun_flamethrower2.ogg
+    soundGunshot:
+      collection: RMCFlamerShoot
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
@@ -162,7 +163,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankTowLauncher # CMU14
-  name: tank TOW launcher
+  name: 84mm tank TOW launcher
   description: A tank-mounted TOW launcher hardpoint.
   components:
   - type: ContainerContainer
@@ -470,4 +471,4 @@
   - type: HardpointVisual
     vehicleState: mounted_cupola_0
     damagedVehicleState: mounted_cupola_1
-    
+

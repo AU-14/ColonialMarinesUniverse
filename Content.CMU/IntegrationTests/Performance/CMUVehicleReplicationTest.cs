@@ -36,8 +36,8 @@ public sealed class CMUVehicleReplicationTest : GameTest
                 maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
 
             vehicle = SEntMan.SpawnEntity("VehicleHumvee", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
-            var wheels = SEntMan.SpawnEntity("VehicleHumveeWheel", map.GridCoords);
-            Assert.That(Server.System<ItemSlotsSystem>().TryInsert(vehicle, "wheel-1", wheels, null), Is.True);
+            Assert.That(Server.System<ItemSlotsSystem>().TryGetSlot(vehicle, "wheel-1", out var wheelSlot), Is.True);
+            Assert.That(wheelSlot!.Item, Is.Not.Null);
             driver = SEntMan.SpawnEntity(null, map.GridCoords);
             SEntMan.EnsureComponent<HandsComponent>(driver);
             SEntMan.EnsureComponent<EyeComponent>(driver);

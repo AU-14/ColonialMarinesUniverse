@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseItem
   id: VehicleSPPVanTurret
-  name: SPP van turret
-  description: A roof-mounted turret fitted to an SPP van.
+  name: UPP van turret
+  description: A roof-mounted turret fitted to a UPP van.
   components:
   - type: HardpointState
   - type: ContainerContainer
@@ -59,8 +59,8 @@
 - type: entity
   parent: VehicleHumveeCannon
   id: VehicleSPPVanCannon
-  name: SPP van cannon
-  description: A turret-mounted cannon for an SPP van.
+  name: UPP van cannon
+  description: A turret-mounted cannon for an UPP van.
   components:
   - type: ContainerContainer
     containers:
@@ -118,8 +118,8 @@
 - type: entity
   parent: RMCVanWheel
   id: VehicleSPPVanWheel
-  name: SPP van wheel
-  description: A reinforced wheel for SPP vans.
+  name: UPP van wheel
+  description: A reinforced wheel for UPP vans.
   components:
   - type: HardpointIntegrity
     integrity: 250
