@@ -143,7 +143,7 @@ public sealed partial class CMUCharacterLanguageSystem : EntitySystem
     private void ApplyJobLanguages(Entity<LanguageComponent> ent, JobPrototype job)
     {
         var side = _roundJobProfiles.GetRoundSide(job);
-        if (IsColonyJob(job, side))
+        if (IsColonyJob(job, side) || job.RoundRole == "Cultist")
             ApplyColonyLanguages(ent);
         else if (side == RoundJobSide.Govfor && IsInsurgencyColonySpeaker(job))
             TeachColonyLanguage(ent);

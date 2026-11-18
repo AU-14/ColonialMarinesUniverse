@@ -206,8 +206,7 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
         EnsureComp<CMUCaveSurveyAccessComponent>(actor);
         // Ghosts cannot pass normal interaction checks. This UI only reads their own observations.
         _ui.SetUi(actor, Key, new InterfaceData("CMUCaveSurveyBui", requireInputValidation: !ghost));
-        if (ghost || !HasComp<TacticalMapUserComponent>(actor))
-            EnsureComp<CMUCaveSurveyMemoryComponent>(actor).Action = _actions.AddAction(actor, ghost ? GhostSurveyAction : SurveyAction);
+        EnsureComp<CMUCaveSurveyMemoryComponent>(actor).Action = _actions.AddAction(actor, ghost ? GhostSurveyAction : SurveyAction);
     }
 
     private void OnGhostAttached(Entity<GhostComponent> ent, ref PlayerAttachedEvent args) => GrantAccess(ent);

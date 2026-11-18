@@ -67,8 +67,8 @@ public sealed partial class CMUCaveSurveyAccessSystem : EntitySystem
 
     private void OnOpen(Entity<CMUCaveSurveyAccessComponent> ent, ref CMUOpenCaveSurveyEvent args)
     {
-        // Observers have a separate mining action; keep their colony tactical map available.
-        if (HasComp<GhostComponent>(ent)) return;
+        // Keep the tactical map shortcut on the colony map. The survey has its own action.
+        if (HasComp<GhostComponent>(ent) || HasComp<Content.Shared._RMC14.TacticalMap.TacticalMapUserComponent>(ent)) return;
         args.Handled = true;
         Toggle(ent);
     }
