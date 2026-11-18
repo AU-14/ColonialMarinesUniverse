@@ -18,7 +18,7 @@ public sealed partial class FoldableIdentityBlockerSystem : EntitySystem
         if (!TryComp<IdentityBlockerComponent>(ent, out var blocker))
             return;
 
-        blocker.Enabled = args.IsFolded;
+        blocker.Enabled = args.IsFolded == ent.Comp.CoversWhenFolded;
         Dirty(ent, blocker);
         _identity.QueueIdentityUpdate(Transform(ent).ParentUid);
     }
