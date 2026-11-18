@@ -25,7 +25,11 @@ public sealed partial class CMUGuideRecipeCards : BoxContainer, IDocumentTag
     public bool TryParseTag(Dictionary<string, string> args, [NotNullWhen(true)] out Control? control)
     {
         var catalog = _entities.System<CMUGuideRecipeCatalogSystem>().GetCatalog();
-        var products = catalog.Entries.Where(entry => entry.StationGroup != null)
+        // Include every producible route: powered/steam machines, hand crafting,
+        // tool processing, casting and other stations. Non-plannable gathering
+        // entries remain visible as sources rather than primary recipes.
+        var recipes = catalog.Entries.Where(entry => entry.CanPlan).ToList();
+        var products = recipes
             .SelectMany(entry => entry.Outputs.Select(output => catalog.Canonical(output.Material)))
             .Distinct()
             .OrderBy(catalog.Name, StringComparer.CurrentCultureIgnoreCase);
@@ -40,7 +44,7 @@ public sealed partial class CMUGuideRecipeCards : BoxContainer, IDocumentTag
                          .OrderBy(entry => entry.Method, StringComparer.CurrentCultureIgnoreCase)
                          .ThenBy(entry => entry.Name, StringComparer.CurrentCultureIgnoreCase))
             {
-                if (entry.StationGroup != null)
+                if (entry.CanPlan)
                     productRecipes.Add(entry);
                 else
                     otherSources.Add(entry);

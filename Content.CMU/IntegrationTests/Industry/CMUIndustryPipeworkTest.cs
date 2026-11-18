@@ -10,6 +10,7 @@ using Content.Server.CMU14.Portable;
 using Content.Shared.ActionBlocker;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CMU14.CCVar;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.Fluids;
@@ -212,6 +213,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var user = SSpawnAtPosition("CMMobHuman", map.GridCoords);
             var solutions = Server.System<SharedSolutionContainerSystem>();
             var pricing = Server.System<PricingSystem>();
+            var emptyTankValue = pricing.GetPrice(tank);
             Assert.That(solutions.TryGetRefillableSolution(canister, out var solution, out _), Is.True);
             Assert.That(solutions.TryAddReagent(solution.Value, "RUMCDiesel", FixedPoint2.New(40), out _), Is.True);
             var originalValue = pricing.GetPrice(canister) + pricing.GetPrice(tank);
@@ -219,8 +221,28 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var pour = new InteractUsingEvent(user, canister, tank, map.GridCoords);
             SEntMan.EventBus.RaiseLocalEvent(tank, pour);
             Assert.That(Server.System<FluidSystem>().GetAmount(tank, "RUMCDiesel"), Is.EqualTo(40));
+            Assert.That(pricing.GetPrice(tank) - emptyTankValue, Is.EqualTo(30).Within(0.001),
+                "Diesel must use the balanced 0.75 credit price per exact fluid unit.");
             Assert.That(pricing.GetPrice(tank) + pricing.GetPrice(canister), Is.EqualTo(originalValue).Within(0.001));
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(tank), Is.True);
+
+            var processGasTank = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            Server.System<FluidSystem>().Add(processGasTank, "RUMCEthylene", 40);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(processGasTank);
+            Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(processGasTank), Is.False,
+                "A sellable marker must not allow process reagents or gases; only fuel and oil are eligible.");
+
+            var mixedTank = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
+            Server.System<FluidSystem>().Add(mixedTank, "RUMCDiesel", 40);
+            Server.System<FluidSystem>().Add(mixedTank, "Water", 1);
+            Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(mixedTank), Is.False,
+                "A tank containing any non-fuel liquid must be rejected rather than partially sold.");
+
+            var processGasCanister = SSpawnAtPosition("RUMCFuelCanister", map.GridCoords);
+            Assert.That(solutions.TryGetRefillableSolution(processGasCanister, out var processSolution, out _), Is.True);
+            Assert.That(solutions.TryAddReagent(processSolution.Value, "RUMCEthylene", FixedPoint2.New(40), out _), Is.True);
+            Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(processGasCanister), Is.False,
+                "Portable industry canisters must obey the same fuel/oil whitelist as tanks.");
 
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
             Assert.That(Server.System<CMUIndustryExportSystem>().CanExport(kit), Is.True);
@@ -384,6 +406,65 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(remaining, Is.EquivalentTo(new[] { marked, purchased }));
             Assert.That(pricing.GetPrice(marked), Is.EqualTo(originalValue));
             Assert.That(SComp<StackComponent>(purchased).Count, Is.EqualTo(1));
+        });
+    }
+
+    [Test]
+    public async Task CanonicalIndustryPricesAreMappedBalancedAndStackAware()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var protoMan = Server.ResolveDependency<IPrototypeManager>();
+            var prototypes = protoMan.EnumeratePrototypes<CMUIndustryPricePrototype>().ToArray();
+
+            Assert.That(prototypes.All(price => price.Price > 0), Is.True);
+            Assert.That(prototypes.All(price => (price.Stack is null) != (price.Entity is null)), Is.True,
+                "Every price must map to exactly one tangible stack or entity prototype.");
+            Assert.That(prototypes.Where(price => price.Stack is not null).Select(price => price.Stack!.Value.Id), Is.Unique);
+            Assert.That(prototypes.Where(price => price.Entity is not null).Select(price => price.Entity!.Value.Id), Is.Unique);
+            Assert.That(prototypes.Where(price => price.Entity is not null)
+                .All(price => !price.Entity!.Value.Id.StartsWith("RUMCMachine", StringComparison.Ordinal)), Is.True,
+                "Capital machinery must not appear in the sellable product price registry.");
+
+            double StackPrice(string id) => prototypes.Single(price =>
+                price.Stack is { } stack && stack.Id == id).Price;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(StackPrice("RUMCAlexandriteCrystal"), Is.EqualTo(10));
+                Assert.That(StackPrice("RUMCGemAlexandrite"), Is.EqualTo(15));
+                Assert.That(StackPrice("RUMCRawDiamondCrystal"), Is.EqualTo(60));
+                Assert.That(StackPrice("RUMCGemDiamond"), Is.EqualTo(90));
+                Assert.That(StackPrice("RUMCEmeraldCrystal"), Is.EqualTo(60));
+                Assert.That(StackPrice("RUMCGemEmerald"), Is.EqualTo(90));
+                Assert.That(StackPrice("RUMCRubyCrystal"), Is.EqualTo(60));
+                Assert.That(StackPrice("RUMCGemRuby"), Is.EqualTo(90));
+                Assert.That(StackPrice("RUMCAluminumOre"), Is.EqualTo(12.5));
+                Assert.That(StackPrice("RUMCAluminumIngot"), Is.EqualTo(22.5));
+                Assert.That(StackPrice("RUMCKitDrive"), Is.EqualTo(67.5));
+            });
+
+            var fuelPrices = new Dictionary<string, double>
+            {
+                ["RUMCCrudeOil"] = 0.075,
+                ["RUMCNaphtha"] = 0.375,
+                ["RUMCLightFuel"] = 0.375,
+                ["RUMCHeavyFuel"] = 0.1875,
+                ["RUMCDiesel"] = 0.75,
+            };
+            foreach (var (id, expected) in fuelPrices)
+                Assert.That(protoMan.Index<ReagentPrototype>(id).PricePerUnit, Is.EqualTo(expected));
+
+            var pricing = Server.System<PricingSystem>();
+            var industry = Server.System<CMUIndustryExportSystem>();
+            var stacks = Server.System<SharedStackSystem>();
+            var ore = SEntMan.SpawnEntity("RUMCAluminumOre", MapCoordinates.Nullspace);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(ore);
+            stacks.SetCount(ore, 4);
+            Assert.That(industry.TryGetCanonicalUnitPrice(ore, out var unitPrice), Is.True);
+            Assert.That(unitPrice, Is.EqualTo(12.5));
+            Assert.That(pricing.GetPrice(ore), Is.EqualTo(50));
+            SEntMan.DeleteEntity(ore);
         });
     }
 

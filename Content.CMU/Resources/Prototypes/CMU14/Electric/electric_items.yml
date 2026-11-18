@@ -500,7 +500,7 @@
 
 - type: reagent
   id: RUMCCrudeOil
-  pricePerUnit: 0.1
+  pricePerUnit: 0.075
   name: reagent-name-au14-crude-oil
   group: Elements
   desc: reagent-desc-au14-crude-oil
@@ -512,7 +512,7 @@
 
 - type: reagent
   id: RUMCNaphtha
-  pricePerUnit: 0.5
+  pricePerUnit: 0.375
   name: reagent-name-au14-naphtha
   group: Elements
   desc: reagent-desc-au14-naphtha
@@ -524,7 +524,7 @@
 
 - type: reagent
   id: RUMCLightFuel
-  pricePerUnit: 0.5
+  pricePerUnit: 0.375
   name: reagent-name-au14-light-fuel
   group: Elements
   desc: reagent-desc-au14-light-fuel
@@ -536,7 +536,7 @@
 
 - type: reagent
   id: RUMCHeavyFuel
-  pricePerUnit: 0.25
+  pricePerUnit: 0.1875
   name: reagent-name-au14-heavy-fuel
   group: Elements
   desc: reagent-desc-au14-heavy-fuel
@@ -548,7 +548,7 @@
 
 - type: reagent
   id: RUMCDiesel
-  pricePerUnit: 1
+  pricePerUnit: 0.75
   name: reagent-name-au14-diesel
   group: Elements
   desc: reagent-desc-au14-diesel
@@ -560,7 +560,7 @@
 
 - type: reagent
   id: RUMCRefineryGas
-  pricePerUnit: 0.2
+  pricePerUnit: 0.15
   name: reagent-name-au14-refinery-gas
   group: Elements
   desc: reagent-desc-au14-refinery-gas
@@ -572,7 +572,7 @@
 
 - type: reagent
   id: RUMCEthylene
-  pricePerUnit: 0.75
+  pricePerUnit: 0.5625
   name: reagent-name-au14-ethylene
   group: Elements
   desc: reagent-desc-au14-ethylene
