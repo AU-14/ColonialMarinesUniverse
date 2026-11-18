@@ -932,6 +932,11 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 comp.StopCollide.Add(id);
         }
 
+        // CMU14 Begin: restore a climb only if the previous body was already climbing.
+        comp.TriedClimb = !TryComp(xeno, out ClimbingComponent? oldClimbing) || !oldClimbing.IsClimbing;
+        Dirty(newXeno, comp);
+        // CMU14 End
+
         var newRecently = EnsureComp<XenoRecentlyDevolvedComponent>(newXeno);
         if (TryComp(xeno, out XenoRecentlyDevolvedComponent? oldRecently))
         {
