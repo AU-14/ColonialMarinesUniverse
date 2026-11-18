@@ -161,7 +161,8 @@ public sealed partial class FighterSystem
                 selected.Ammo is { } ammo && _guidance.UsesGps(ammo))
             {
                 var gps = weapons.Targets.FirstOrDefault(t => t.Gps && t.Id == GetNetEntity(ammo));
-                if (seat.Target != gps?.Id)
+                // An unprogrammed round has no designation to replace a manually selected sensor target.
+                if (seat.Target != gps?.Id && (gps != null || seat.Target == GetNetEntity(ammo)))
                 {
                     CancelLaserLock((uid, seat));
                     CancelQueuedFire((uid, seat));
