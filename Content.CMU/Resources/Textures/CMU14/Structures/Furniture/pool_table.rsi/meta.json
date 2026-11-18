@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CMU14 pool contribution by Scott-SS14, design and art direction. Felt emblem adapted from the Colonial Marines Universe Discord icon (https://cdn.discordapp.com/icons/1412210184121614447/a_e5a55cbaf8bac72af43137b081557d69.webp).",
+    "size": {
+        "x": 96,
+        "y": 48
+    },
+    "states": [
+        {
+            "name": "table"
+        }
+    ]
+}

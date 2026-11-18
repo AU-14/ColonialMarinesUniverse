@@ -1,0 +1,66 @@
+- type: construction
+  parent: RMC
+  id: CMUPoolTable
+  graph: CMUPoolTable
+  targetNode: table
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:CMUPoolTablePlacement
+
+- type: constructionGraph
+  parent: RMC
+  id: CMUPoolTable
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity
+    edges:
+    - to: table
+      steps:
+      - tag: CMUPoolTableParts
+        name: cmu-pool-table-parts
+        icon:
+          sprite: CMU14/Objects/pool_table_parts.rsi
+          state: icon
+        doAfter: 60
+  - node: table
+    entity: CMUPoolTable
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMUPoolTableParts
+        amount: 1
+      steps:
+      - tool: Anchoring
+        doAfter: 60
+        duplicateConditions: All
+
+- type: construction
+  parent: RMC
+  id: CMUPoolStickHolder
+  graph: CMUPoolStickHolder
+  targetNode: holder
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:TileNotBlocked
+
+- type: constructionGraph
+  parent: RMC
+  id: CMUPoolStickHolder
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: holder
+      steps:
+      - material: RMCWood
+        amount: 6
+        doAfter: 3
+  - node: holder
+    entity: CMUPoolStickHolder
