@@ -39,6 +39,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : CM
         }
 
         Window = this.CreatePopOutableWindow<TacticalMapWindow>();
+        ConfigurePersonalSurveyButton(Window.OpenPersonalSurvey); // CMU14
 
         if (mapEntity != null)
         {
