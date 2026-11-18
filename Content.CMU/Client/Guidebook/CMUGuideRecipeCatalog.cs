@@ -51,7 +51,7 @@ public sealed class CMUGuideRecipe
 
 /// <summary>
 /// Read-only acquisition index built from loaded prototypes, never from live entities or sampled loot rolls.
-/// Each guide widget builds it once; textures are resolved only when the selected entry is rendered.
+/// Textures are resolved when the corresponding entry is rendered.
 /// </summary>
 public sealed partial class CMUGuideRecipeCatalog
 {
@@ -73,6 +73,8 @@ public sealed partial class CMUGuideRecipeCatalog
         _equipment = prototypes.EnumeratePrototypes<EntityPrototype>().Where(p => !p.Abstract).ToArray();
         AddProduction();
         AddGathering();
+        _equipment = [];
+        _components.Clear();
     }
 
     public HashSet<string>? Sources(CMUGuideMaterial material) => _sources.GetValueOrDefault(material);
@@ -100,6 +102,13 @@ public sealed partial class CMUGuideRecipeCatalog
         CMUGuideMaterialKind.Fluid => _entities.System<RMCReagentSystem>().Index(material.Id).LocalizedName,
         _ => _prototypes.Index<EntityPrototype>(material.Id).Name,
     };
+
+    public string DescribeIngredient(CMUGuideIngredient ingredient)
+    {
+        var name = Name(ingredient.Material);
+        var text = ingredient.Amount is { } count ? $"{name} [{count:g}]" : name;
+        return ingredient.Kept ? Loc.GetString("cmu-industry-source-kept", ("item", text)) : text;
+    }
 
     public SpriteSpecifier? Icon(CMUGuideMaterial material) => material.Kind switch
     {
@@ -144,8 +153,11 @@ public sealed partial class CMUGuideRecipeCatalog
         var output = entry.HandRecipe is { } hand ? Loc.GetString(hand.Name) :
             string.Join(" + ", entry.Outputs.Select(p => Name(p.Material)).Distinct());
         entry.Name = Loc.GetString("cmu-industry-source-title", ("name", output), ("method", entry.Method));
-        entry.Search = string.Join(" ", entry.Inputs.Select(p => Name(p.Material))
-            .Concat(entry.Equipment.Select(p => _prototypes.Index(p).Name)).Prepend(entry.Name));
+        entry.Search = string.Join(" ", entry.Inputs.Concat(entry.Outputs).Select(DescribeIngredient)
+            .Concat(entry.Equipment.Select(p => _prototypes.Index(p).Name))
+            .Prepend(entry.Name).Append(entry.Instructions));
+        if (entry.Seconds is { } seconds)
+            entry.Search += " " + Loc.GetString("cmu-industry-recipes-time", ("seconds", seconds));
 
         foreach (var material in entry.Inputs.Concat(entry.Outputs).Select(p => p.Material))
         {

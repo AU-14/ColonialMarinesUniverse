@@ -149,6 +149,7 @@ public sealed partial class FluidSystem : EntitySystem
             return 0f;
 
         tank.Contents[kind] = tank.Get(kind) + added;
+        tank.ContentsRevision++;
         _dirtyTanks.Add(owner);
         return added;
     }
@@ -169,6 +170,7 @@ public sealed partial class FluidSystem : EntitySystem
         else
             tank.Contents[kind] = have - taken;
 
+        tank.ContentsRevision++;
         _dirtyTanks.Add(owner);
         return taken;
     }

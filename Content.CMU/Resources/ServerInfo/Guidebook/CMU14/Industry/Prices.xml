@@ -3,7 +3,7 @@
 
   [textlink="Back to Mining & Industry" link="CMUGuideIndustry"] · [textlink="RUMC Machine Recipes" link="CMUGuideIndustryRecipes"]
 
-  This sheet shows the exact price paid by an ASRS for one unit of every canonically priced RUMC product and MegaSeed crop. Stack sales multiply the listed unit price by the number of items in the stack.
+  These are the ASRS values per unit of each priced RUMC product and MegaSeed crop. A stack contributes its unit price times its quantity. The ASRS totals the shipment and deposits whole credits. Any fraction counts toward the faction’s next sale.
 
   Use the search box above to find a product or price. The sheet reads the same price prototypes used by the ASRS, so its values update automatically with the economy.
 

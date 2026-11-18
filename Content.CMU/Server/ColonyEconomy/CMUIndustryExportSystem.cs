@@ -23,44 +23,44 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
     private readonly Dictionary<EntProtoId, double> _entityPrices = new();
     private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
-    private readonly Dictionary<string, double> _namePrices = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<ProtoId<StackPrototype>, int> _tradePrices = new();
 
     public override void Initialize()
     {
-        BuildCanonicalPriceCache();
+        BuildPriceCaches();
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<ASRSSellableDebugToolComponent, AfterInteractEvent>(OnDebugToolAfterInteract);
         SubscribeLocalEvent<ASRSSellableComponent, PriceCalculationEvent>(OnSellablePrice);
-        SubscribeLocalEvent<ASRSSellableComponent, CMUStackMergeAttemptEvent>(OnSellableStackMergeAttempt);
         SubscribeLocalEvent<FluidTankComponent, PriceCalculationEvent>(OnTankPrice);
         SubscribeLocalEvent<StackComponent, PriceCalculationEvent>(OnStackPrice);
     }
 
-    private void BuildCanonicalPriceCache()
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        if (args.WasModified<CMUIndustryPricePrototype>() || args.WasModified<ColonyWorldGoodPrototype>())
+            BuildPriceCaches();
+    }
+
+    private void BuildPriceCaches()
     {
         _entityPrices.Clear();
         _stackPrices.Clear();
-        _namePrices.Clear();
+        _tradePrices.Clear();
 
         foreach (var price in ProtoMan.EnumeratePrototypes<CMUIndustryPricePrototype>())
-            _namePrices[NormalizeProductName(price.Product)] = price.Price;
-
-        foreach (var stack in ProtoMan.EnumeratePrototypes<StackPrototype>())
         {
-            if (!_namePrices.TryGetValue(NormalizeProductName(stack.Name), out var price))
-                continue;
-
-            _stackPrices[stack.ID] = price;
-            if (!string.IsNullOrWhiteSpace(stack.Spawn.Id))
-                _entityPrices[stack.Spawn] = price;
+            if (price.Stack is { } stack)
+                _stackPrices.Add(stack, price.Price);
+            if (price.Entity is { } entity)
+                _entityPrices.Add(entity, price.Price);
         }
 
-        foreach (var prototype in ProtoMan.EnumeratePrototypes<EntityPrototype>())
+        foreach (var good in ProtoMan.EnumeratePrototypes<ColonyWorldGoodPrototype>())
         {
-            if (_namePrices.TryGetValue(NormalizeProductName(prototype.Name), out var price))
-                _entityPrices[prototype.ID] = price;
+            if (good.Stack is { } stack &&
+                (!_tradePrices.TryGetValue(stack, out var existing) || good.SellPrice < existing))
+                _tradePrices[stack] = good.SellPrice;
         }
-
-        Log.Info($"Loaded {_namePrices.Count} canonical RUMC prices; resolved {_stackPrices.Count} stacks and {_entityPrices.Count} entities.");
     }
 
     public bool TryGetCanonicalUnitPrice(EntityUid uid, out double price)
@@ -68,14 +68,9 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         if (TryComp<StackComponent>(uid, out var stack) && _stackPrices.TryGetValue(stack.StackTypeId, out price))
             return true;
 
-        if (MetaData(uid).EntityPrototype is { } prototype && _entityPrices.TryGetValue(prototype.ID, out price))
-            return true;
-
-        return _namePrices.TryGetValue(NormalizeProductName(Name(uid)), out price);
+        price = 0;
+        return MetaData(uid).EntityPrototype is { } prototype && _entityPrices.TryGetValue(prototype.ID, out price);
     }
-
-    private static string NormalizeProductName(string name)
-        => string.Join(' ', name.Split((char[]?) null, StringSplitOptions.RemoveEmptyEntries));
 
     private void OnSellablePrice(Entity<ASRSSellableComponent> sellable, ref PriceCalculationEvent args)
     {
@@ -87,14 +82,6 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 
         args.Price = price;
         args.Handled = true;
-    }
-
-    private void OnSellableStackMergeAttempt(Entity<ASRSSellableComponent> sellable, ref CMUStackMergeAttemptEvent args)
-    {
-        if (args.Recipient != sellable.Owner || HasComp<ASRSSellableComponent>(args.Donor))
-            return;
-
-        RemComp<ASRSSellableComponent>(sellable.Owner);
     }
 
     private void OnDebugToolAfterInteract(Entity<ASRSSellableDebugToolComponent> tool, ref AfterInteractEvent args)
@@ -138,7 +125,11 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
             foreach (var item in container.ContainedEntities)
             {
                 if (CanExport(item))
-                    price += _pricing.GetPrice(item, includeContents: false);
+                {
+                    var itemPrice = _pricing.GetPrice(item, includeContents: false);
+                    if (double.IsFinite(itemPrice) && itemPrice > 0)
+                        price += itemPrice;
+                }
                 price += GetContainedExportPrice(item);
             }
         }
@@ -162,19 +153,8 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         if (args.Handled || HasComp<MaterialComponent>(stack) || HasComp<StackPriceComponent>(stack)
             || HasComp<StaticPriceComponent>(stack))
             return;
-        args.Price += stack.Comp.Count * GetTradePrice(stack.Comp);
+        args.Price += (double) stack.Comp.Count * GetTradePrice(stack.Comp);
     }
 
-    private int GetTradePrice(StackComponent stack)
-    {
-        var price = 0;
-        foreach (var good in ProtoMan.EnumeratePrototypes<ColonyWorldGoodPrototype>())
-        {
-            if (good.Stack != stack.StackTypeId)
-                continue;
-            if (price == 0 || good.SellPrice < price)
-                price = good.SellPrice;
-        }
-        return price;
-    }
+    private int GetTradePrice(StackComponent stack) => _tradePrices.GetValueOrDefault(stack.StackTypeId);
 }

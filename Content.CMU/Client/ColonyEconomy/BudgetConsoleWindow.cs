@@ -7,6 +7,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.ColonyEconomy;
 
@@ -36,6 +37,9 @@ public sealed class BudgetConsoleWindow : DefaultWindow
     private readonly List<(BaseButton Button, int Amount)> _withdrawButtons = [];
 
     private BudgetConsoleBuiState? _state;
+    private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
+    private TimeSpan _resetAt;
+    private int _lastResetSeconds = -1;
 
     public BudgetConsoleWindow()
     {
@@ -137,14 +141,30 @@ public sealed class BudgetConsoleWindow : DefaultWindow
         _withdrawalAllowance.Text = Loc.GetString("cmu-budget-withdrawal-allowance",
             ("remaining", CrtConsoleKit.Money(state.WithdrawalRemaining)),
             ("limit", CrtConsoleKit.Money(state.WithdrawalLimit)));
-        var minutes = state.WithdrawalResetSeconds / 60;
-        var seconds = state.WithdrawalResetSeconds % 60;
-        _withdrawalReset.Text = state.WithdrawalResetSeconds > 0
-            ? Loc.GetString("cmu-budget-withdrawal-reset", ("minutes", minutes), ("seconds", seconds))
-            : Loc.GetString("cmu-budget-withdrawal-ready");
+        _resetAt = _timing.CurTime + TimeSpan.FromSeconds(state.WithdrawalResetSeconds);
+        UpdateResetTime();
         foreach (var (button, amount) in _withdrawButtons)
             button.Disabled = amount > state.Budget || amount > state.WithdrawalRemaining;
         Rebuild();
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        if (_lastResetSeconds > 0)
+            UpdateResetTime();
+    }
+
+    private void UpdateResetTime()
+    {
+        var remaining = Math.Max(0, (int) Math.Ceiling((_resetAt - _timing.CurTime).TotalSeconds));
+        if (remaining == _lastResetSeconds)
+            return;
+
+        _lastResetSeconds = remaining;
+        _withdrawalReset.Text = remaining > 0
+            ? Loc.GetString("cmu-budget-withdrawal-reset", ("minutes", remaining / 60), ("seconds", remaining % 60))
+            : Loc.GetString("cmu-budget-withdrawal-ready");
     }
 
     /// <summary>Redraws the department cards, so their transfer buttons match the amount typed in.</summary>

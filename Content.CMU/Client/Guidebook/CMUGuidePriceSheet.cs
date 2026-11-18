@@ -29,15 +29,22 @@ public sealed class CMUGuidePriceSheet : BoxContainer, IDocumentTag
 
     public bool TryParseTag(Dictionary<string, string> args, [NotNullWhen(true)] out Control? control)
     {
-        foreach (var price in _prototypes.EnumeratePrototypes<CMUIndustryPricePrototype>()
-                     .OrderBy(entry => entry.Product, StringComparer.CurrentCultureIgnoreCase))
-        {
-            AddChild(new CMUGuidePriceRow(price.Product, price.Price));
-        }
+        var rows = _prototypes.EnumeratePrototypes<CMUIndustryPricePrototype>()
+            .Select(price => (Name: ProductName(price), price.Price))
+            .OrderBy(row => row.Name, StringComparer.CurrentCultureIgnoreCase);
+        foreach (var row in rows)
+            AddChild(new CMUGuidePriceRow(row.Name, row.Price));
 
         CrtLobbyTheme.Apply(this, useCrtTypography: false);
         control = this;
         return true;
+    }
+
+    private string ProductName(CMUIndustryPricePrototype price)
+    {
+        if (price.Stack is { } stack)
+            return _prototypes.Index(_prototypes.Index(stack).Spawn).Name;
+        return price.Entity is { } entity ? _prototypes.Index(entity).Name : price.Product;
     }
 }
 

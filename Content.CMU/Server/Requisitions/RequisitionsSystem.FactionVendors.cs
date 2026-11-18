@@ -115,15 +115,12 @@ public sealed partial class RequisitionsSystem
     /// </summary>
     private void AddRUMCIndustryToCatalog(EntityUid consoleUid, RequisitionsComputerComponent comp)
     {
-        const string categoryName = "RUMC Industry";
-        comp.Categories = comp.Categories
-            .Where(category => !string.Equals(category.Name, categoryName, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-
-        if (comp.Faction == null || !RUMCIndustryFactions.Contains(comp.Faction))
+        var categoryName = Loc.GetString("cmu-asrs-category-industry");
+        comp.Categories.RemoveAll(category => category.Name == categoryName);
+        if (!RUMCIndustryFactions.Contains(comp.Faction))
             return;
 
-        var entries = new List<RequisitionsEntry>();
+        var entries = new List<RequisitionsEntry>(RUMCIndustryMachines.Length + 1);
         foreach (var id in RUMCIndustryMachines)
         {
             if (!_prototypeManager.TryIndex<EntityPrototype>(id, out var prototype))

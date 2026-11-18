@@ -11,6 +11,7 @@ using Content.Shared.Power.EntitySystems;
 using Content.Shared.Stacks;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 
@@ -44,7 +45,29 @@ public sealed class RecipeMachineSystem : EntitySystem
         SubscribeLocalEvent<RecipeMachineComponent, RecipeMachineCircuitMessage>(OnCircuit);
         SubscribeLocalEvent<RecipeMachineComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<RecipeMachineComponent, CMUFluidTankRoomEvent>(OnGetFluidTankRoom);
-        _proto.PrototypesReloaded += _ => _recipes.Clear();
+        SubscribeLocalEvent<RecipeMachineComponent, EntInsertedIntoContainerMessage>(OnSlotChanged);
+        SubscribeLocalEvent<RecipeMachineComponent, EntRemovedFromContainerMessage>(OnSlotChanged);
+        SubscribeLocalEvent<StackComponent, StackCountChangedEvent>(OnStackCountChanged);
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+    }
+
+    private void OnSlotChanged(EntityUid uid, RecipeMachineComponent comp, ContainerModifiedMessage args)
+    {
+        comp.NeedsRecipeCheck = true;
+    }
+
+    private void OnStackCountChanged(EntityUid uid, StackComponent comp, StackCountChangedEvent args)
+    {
+        if (TryComp<RecipeMachineComponent>(Transform(uid).ParentUid, out var machine))
+            machine.NeedsRecipeCheck = true;
+    }
+
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        _recipes.Clear();
+        var query = AllEntityQuery<RecipeMachineComponent>();
+        while (query.MoveNext(out var machine))
+            machine.NeedsRecipeCheck = true;
     }
 
     // The recipes of a kind of machine, in the order they are tried in.
@@ -77,6 +100,7 @@ public sealed class RecipeMachineSystem : EntitySystem
 
     private void OnCircuit(Entity<RecipeMachineComponent> machine, ref RecipeMachineCircuitMessage args)
     {
+        machine.Comp.NeedsRecipeCheck = true;
         machine.Comp.Circuit = Math.Clamp(args.Circuit, 0, machine.Comp.MaxCircuit);
         Dirty(machine);
     }
@@ -116,10 +140,21 @@ public sealed class RecipeMachineSystem : EntitySystem
                 continue;
             }
 
-            if (comp.ActiveRecipe == null)
-                TryStart(machine);
+            if (comp.ActiveRecipe == null || comp.Blocked)
+            {
+                var revision = CompOrNull<FluidTankComponent>(uid)?.ContentsRevision ?? 0;
+                if (comp.NeedsRecipeCheck || comp.LastTankRevision != revision)
+                {
+                    comp.LastTankRevision = revision;
+                    comp.NeedsRecipeCheck = false;
+                    if (comp.ActiveRecipe == null)
+                        TryStart(machine);
+                    else
+                        Step(machine, frameTime);
+                }
+            }
 
-            if (comp.ActiveRecipe != null)
+            if (comp.ActiveRecipe != null && !comp.Blocked)
                 Step(machine, frameTime);
 
             var working = comp.ActiveRecipe != null && !comp.Blocked;
@@ -170,6 +205,7 @@ public sealed class RecipeMachineSystem : EntitySystem
     private void Reset(Entity<RecipeMachineComponent> machine)
     {
         var comp = machine.Comp;
+        comp.NeedsRecipeCheck = true;
         comp.ActiveRecipe = null;
         comp.Active = false;
         comp.Blocked = false;
@@ -352,7 +388,7 @@ public sealed class RecipeMachineSystem : EntitySystem
         {
             if (_itemSlots.GetItemOrNull(machine.Owner, slotId) is not { } held)
                 free++;
-            else if (TryComp<StackComponent>(held, out var stack))
+            else if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack))
                 space[stack.StackTypeId] = space.GetValueOrDefault(stack.StackTypeId) + _stack.GetAvailableSpace(stack);
         }
 
@@ -418,7 +454,6 @@ public sealed class RecipeMachineSystem : EntitySystem
                     continue;
                 }
 
-                EnsureComp<ASRSSellableComponent>(held);
                 _stack.TryMergeStacks((result, resultStack), (held, heldStack), out _);
                 if (TerminatingOrDeleted(result) || resultStack.Count <= 0)
                     return;

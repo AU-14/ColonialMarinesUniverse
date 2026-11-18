@@ -2,7 +2,7 @@
   parent: AppraisalTool
   id: CMUASRSAppraisalTool
   name: ASRS appraisal tool
-  description: Reads the exact ASRS sale value of marked industrial products. It refuses anything the ASRS will not buy.
+  description: Displays the value of cargo accepted by an ASRS platform, including eligible contents and invoice rewards.
   components:
   - type: PriceGun
     onlyASRSSellable: true
@@ -13,6 +13,9 @@
   name: RUMC magnetic ore box
   description: A high-capacity ore box that magnetically collects RUMC ores and crystals.
   components:
+  - type: CargoSellWhitelist
+  - type: RequisitionsCrate
+    reward: 0
   - type: Storage
     grid:
     - 0,0,19,15

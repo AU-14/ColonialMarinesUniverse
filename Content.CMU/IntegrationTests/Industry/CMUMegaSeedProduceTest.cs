@@ -1,5 +1,9 @@
+using System.Linq;
 using Content.IntegrationTests.Fixtures;
-using Content.Shared.Botany.Events;
+using Content.Server.Cargo.Systems;
+using Content.Server.CMU14.ColonyEconomy;
+using Content.Shared.Botany.Items.Components;
+using Content.Shared.Botany.Systems;
 using Content.Shared.CMU14.ColonyEconomy;
 
 namespace Content.IntegrationTests.CMU14.Industry;
@@ -9,37 +13,32 @@ public sealed class CMUMegaSeedProduceTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
-    [Test]
-    public async Task OnlyMegaSeedProduceHarvestedFromTrayBecomesSellable()
+    [TestCase("RMCMangoPlants", true, true)]
+    [TestCase("TobaccoPlants", true, false)]
+    [TestCase("RMCMangoPlants", false, false)]
+    public async Task OnlyMegaSeedProduceHarvestedFromTrayBecomesSellable(string plantId, bool inTray, bool sellable)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
             var tray = SEntMan.SpawnEntity("HydroponicsTrayEmpty", map.GridCoords);
-            var trayPlant = SEntMan.SpawnEntity("ApplePlants", map.GridCoords);
-            SEntMan.System<SharedTransformSystem>().SetParent(trayPlant, tray);
+            var plant = SEntMan.SpawnEntity(plantId, map.GridCoords);
+            if (inTray)
+                SEntMan.System<SharedTransformSystem>().SetParent(plant, tray);
 
-            var sellable = SEntMan.SpawnEntity("FoodApple", map.GridCoords);
-            var megaSeedEvent = new ProduceSpawnedEvent(trayPlant, "AppleSeeds");
-            SEntMan.EventBus.RaiseLocalEvent(sellable, ref megaSeedEvent);
-            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(sellable), Is.True);
+            var before = SEntMan.EntityQuery<ProduceComponent>().Select(p => p.Owner).ToHashSet();
+            SEntMan.System<BotanySystem>().SpawnProduce(plant, map.GridCoords, 1);
+            var harvest = SEntMan.EntityQuery<ProduceComponent>().Select(p => p.Owner).Single(uid => !before.Contains(uid));
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(harvest), Is.EqualTo(sellable));
+            if (sellable)
+            {
+                Assert.That(SEntMan.System<CMUIndustryExportSystem>().TryGetCanonicalUnitPrice(harvest, out var unitPrice), Is.True);
+                Assert.That(SEntMan.System<PricingSystem>().GetPrice(harvest), Is.EqualTo(unitPrice));
+            }
 
-            var unsupported = SEntMan.SpawnEntity("FoodApple", map.GridCoords);
-            var unsupportedSeedEvent = new ProduceSpawnedEvent(trayPlant, "CannabisSeeds");
-            SEntMan.EventBus.RaiseLocalEvent(unsupported, ref unsupportedSeedEvent);
-            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(unsupported), Is.False);
-
-            var detachedPlant = SEntMan.SpawnEntity("ApplePlants", map.GridCoords);
-            var detachedProduce = SEntMan.SpawnEntity("FoodApple", map.GridCoords);
-            var detachedEvent = new ProduceSpawnedEvent(detachedPlant, "AppleSeeds");
-            SEntMan.EventBus.RaiseLocalEvent(detachedProduce, ref detachedEvent);
-            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(detachedProduce), Is.False);
-
+            SEntMan.DeleteEntity(harvest);
+            SEntMan.DeleteEntity(plant);
             SEntMan.DeleteEntity(tray);
-            SEntMan.DeleteEntity(sellable);
-            SEntMan.DeleteEntity(unsupported);
-            SEntMan.DeleteEntity(detachedPlant);
-            SEntMan.DeleteEntity(detachedProduce);
         });
     }
 }

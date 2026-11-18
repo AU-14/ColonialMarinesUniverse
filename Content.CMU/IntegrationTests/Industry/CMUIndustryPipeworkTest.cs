@@ -3,13 +3,17 @@ using Content.Server.Cargo.Systems;
 using Content.Server.Cargo.Components;
 using Content.Server._RMC14.Requisitions;
 using Content.Server.CMU14.ColonyEconomy;
+using Content.Server.CMU14.Electric;
 using Content.Server.CMU14.Fluids;
+using Content.Server.Power.Components;
 using Content.Server.CMU14.Portable;
 using Content.Shared.ActionBlocker;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CMU14.CCVar;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.CMU14.Electric;
 using Content.Shared.CMU14.Fluids;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.Portable;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.FixedPoint;
@@ -249,7 +253,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var barrel = SSpawnAtPosition("RUMCOilBarrel", map.GridCoords);
             var fluids = Server.System<FluidSystem>();
             fluids.Add(barrel, "RUMCCrudeOil", SComp<FluidTankComponent>(barrel).Capacity);
-            var value = (int) Math.Round(Server.System<PricingSystem>().GetPrice(barrel));
+            var value = (int) Math.Floor(Server.System<PricingSystem>().GetPrice(barrel));
             Assert.That(value, Is.GreaterThan(0), "A full crude-oil barrel must have export value.");
 
             Server.System<RequisitionsSystem>().Update(0.1f);
@@ -284,7 +288,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var kit = SSpawnAtPosition("RUMCKitDriveItem", map.GridCoords);
             Server.System<FluidSystem>().Add(barrel, "RUMCDiesel", 200);
             var pricing = Server.System<PricingSystem>();
-            var expected = (int) Math.Round(pricing.GetPrice(barrel)) + (int) Math.Round(pricing.GetPrice(kit));
+            var expected = pricing.GetPrice(barrel) + pricing.GetPrice(kit);
             var shipment = kit;
             if (inCrate)
             {
@@ -301,11 +305,11 @@ public sealed class CMUIndustryPipeworkTest : GameTest
                 var tool = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
                 SEntMan.EnsureComponent<StaticPriceComponent>(tool).Price = 500;
                 Assert.That(containers.Insert(tool, storage), Is.True);
-                expected += SComp<RequisitionsCrateComponent>(crate).Reward + (int) Math.Round(pricing.GetPrice(canister));
+                expected += SComp<RequisitionsCrateComponent>(crate).Reward + pricing.GetPrice(canister);
             }
             Assert.That(expected, Is.GreaterThan(0));
             Server.System<RequisitionsSystem>().Update(0.1f);
-            Assert.That(account.Balance, Is.EqualTo(expected));
+            Assert.That(account.Balance, Is.EqualTo(Math.Floor(expected)));
             Assert.That(SEntMan.IsQueuedForDeletion(barrel), Is.True);
             Assert.That(SEntMan.IsQueuedForDeletion(shipment), Is.True);
             SEntMan.DeleteEntity(accountUid);
@@ -355,69 +359,119 @@ public sealed class CMUIndustryPipeworkTest : GameTest
     }
 
     [Test]
-    public async Task CanonicalIndustryPricesArePrototypeBasedAndStackAware()
+    public async Task SplitIndustryOutputKeepsItsPriceAndRejectsMixingWithPurchasedStock()
     {
+        var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var prototypes = Server.ResolveDependency<IPrototypeManager>()
-                .EnumeratePrototypes<CMUIndustryPricePrototype>()
-                .ToArray();
-            Assert.That(prototypes.Select(price => price.Product.Trim().ToLowerInvariant()), Is.Unique);
-            Assert.That(prototypes.All(price => price.Price > 0), Is.True);
-            var priceByProduct = prototypes.ToDictionary(price => price.Product.Trim().ToLowerInvariant(), price => price.Price);
-            Assert.That(priceByProduct["gold ingot"], Is.GreaterThan(priceByProduct["gold ore"]));
-            Assert.That(priceByProduct["gold sheet"], Is.GreaterThan(priceByProduct["gold ingot"]));
-            Assert.That(priceByProduct["gold powder"] * 4, Is.GreaterThan(priceByProduct["gold ore"]));
-            Assert.That(priceByProduct["fine gold wire"] * 2, Is.GreaterThan(priceByProduct["gold ingot"]));
-
-            var pricing = Server.System<PricingSystem>();
-            var industry = Server.System<CMUIndustryExportSystem>();
             var stacks = Server.System<SharedStackSystem>();
+            var pricing = Server.System<PricingSystem>();
+            var marked = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            var purchased = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(marked);
+            stacks.SetCount(marked, 3);
+            var originalValue = pricing.GetPrice(marked);
+            Assert.That(originalValue, Is.Positive);
 
-            var ore = SEntMan.SpawnEntity("RUMCAluminumOre", MapCoordinates.Nullspace);
-            SEntMan.EnsureComponent<ASRSSellableComponent>(ore);
-            stacks.SetCount(ore, 4);
-            Assert.That(industry.TryGetCanonicalUnitPrice(ore, out var oreUnitPrice), Is.True);
-            Assert.That(oreUnitPrice, Is.EqualTo(25));
-            Assert.That(pricing.GetPrice(ore), Is.EqualTo(100));
-
-            var ingot = SEntMan.SpawnEntity("RUMCAluminumIngot", MapCoordinates.Nullspace);
-            SEntMan.EnsureComponent<ASRSSellableComponent>(ingot);
-            stacks.SetCount(ingot, 3);
-            Assert.That(industry.TryGetCanonicalUnitPrice(ingot, out var ingotUnitPrice), Is.True);
-            Assert.That(ingotUnitPrice, Is.EqualTo(30));
-            Assert.That(pricing.GetPrice(ingot), Is.EqualTo(90));
-
-            var drive = SEntMan.SpawnEntity("RUMCKitDriveItem", MapCoordinates.Nullspace);
-            SEntMan.EnsureComponent<ASRSSellableComponent>(drive);
-            stacks.SetCount(drive, 4);
-            Assert.That(industry.TryGetCanonicalUnitPrice(drive, out var driveUnitPrice), Is.True);
-            Assert.That(driveUnitPrice, Is.EqualTo(90));
-            Assert.That(pricing.GetPrice(drive), Is.EqualTo(360));
-
-            SEntMan.DeleteEntity(ore);
-            SEntMan.DeleteEntity(ingot);
-            SEntMan.DeleteEntity(drive);
+            var split = stacks.Split((marked, SComp<StackComponent>(marked)), 1, map.GridCoords)!.Value;
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(split), Is.True);
+            Assert.That(pricing.GetPrice(marked) + pricing.GetPrice(split), Is.EqualTo(originalValue));
+            Assert.That(stacks.TryMergeStacks(purchased, split, out _), Is.False);
+            Assert.That(stacks.TryMergeStacks(split, purchased, out _), Is.False);
+            Assert.That(stacks.TryMergeStacks(split, marked, out _), Is.True);
+            HashSet<EntityUid> remaining = [marked, purchased];
+            stacks.MergeStacks(ref remaining);
+            Assert.That(remaining, Is.EquivalentTo(new[] { marked, purchased }));
+            Assert.That(pricing.GetPrice(marked), Is.EqualTo(originalValue));
+            Assert.That(SComp<StackComponent>(purchased).Count, Is.EqualTo(1));
         });
     }
 
     [Test]
-    public async Task UnmarkedStackRemovesSellabilityWhenMergedIntoMarkedStack()
+    public async Task SifterLeavesPurchasedOutputSeparateFromItsProduction()
     {
+        var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var stacks = Server.System<SharedStackSystem>();
-            var marked = SEntMan.SpawnEntity("RUMCPlasteelIngot", MapCoordinates.Nullspace);
-            var unmarked = SEntMan.SpawnEntity("RUMCPlasteelIngot", MapCoordinates.Nullspace);
-            SEntMan.EnsureComponent<ASRSSellableComponent>(marked);
+            var machine = SSpawnAtPosition("RUMCMachineSifter", map.GridCoords);
+            var recipe = Server.ResolveDependency<IPrototypeManager>().Index<MachineRecipePrototype>("RUMCMRSifterStonePowderToSand");
+            var slots = Server.System<ItemSlotsSystem>();
+            var powder = SSpawnAtPosition("RUMCStonePowderItem", map.GridCoords);
+            Server.System<SharedStackSystem>().SetCount(powder, recipe.Inputs["RUMCStonePowder"]);
+            var purchased = SSpawnAtPosition("RUMCSandItem", map.GridCoords);
+            var purchasedCount = SComp<StackComponent>(purchased).Count;
+            Assert.That(slots.TryInsert(machine, "input1", powder, null), Is.True);
+            Assert.That(slots.TryInsert(machine, "output1", purchased, null), Is.True);
 
-            Assert.That(stacks.TryMergeStacks(unmarked, marked, out var transferred), Is.True);
-            Assert.That(transferred, Is.EqualTo(1));
-            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(marked), Is.False);
-
-            SEntMan.DeleteEntity(marked);
-            SEntMan.DeleteEntity(unmarked);
+            SComp<ApcPowerReceiverComponent>(machine).Powered = true;
+            Server.System<RecipeMachineSystem>().Update(recipe.Duration);
+            var output = slots.GetItemOrNull(machine, "output2")!.Value;
+            Assert.That(SComp<StackComponent>(output).Count, Is.EqualTo(recipe.Outputs["RUMCSand"]));
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(output), Is.True);
+            Assert.That(SComp<StackComponent>(purchased).Count, Is.EqualTo(purchasedCount));
+            Assert.That(SEntMan.HasComponent<ASRSSellableComponent>(purchased), Is.False);
         });
+    }
+
+    [Test]
+    public async Task OreBoxAndLooseCargoSettleFractionalValueAcrossTrips()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid accountUid = default;
+        EntityUid elevator = default;
+        var openingBalance = 0;
+        var unitValue = 0.0;
+        await Server.WaitAssertion(() =>
+        {
+            Server.ResolveDependency<IConfigurationManager>().SetCVar(AU14CCVars.SellCargoRewards, true);
+            accountUid = SEntMan.SpawnEntity("CMUTestIndustryAccount", MapCoordinates.Nullspace);
+            openingBalance = SComp<RequisitionsAccountComponent>(accountUid).Balance;
+            elevator = SSpawnAtPosition("CMCargoElevator", map.GridCoords);
+            var crate = SSpawnAtPosition("RUMCMachineMagneticOreBox", map.GridCoords);
+            var containers = Server.System<SharedContainerSystem>();
+            var storage = containers.GetContainer(crate, "storagebase");
+            var purchased = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            var mined = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(mined);
+            var requisitions = Server.System<RequisitionsSystem>();
+            var damagedPrice = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
+            SEntMan.EnsureComponent<CargoSellWhitelistComponent>(damagedPrice);
+            SEntMan.EnsureComponent<StaticPriceComponent>(damagedPrice).Price = double.NaN;
+            Assert.That(requisitions.TryAppraiseAsrsCargo(damagedPrice, out _), Is.False);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(purchased, out _), Is.False);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(mined, out unitValue), Is.True);
+            Assert.That(unitValue % 1, Is.EqualTo(0.5), "Use a half-credit product to exercise settlement.");
+            Assert.That(containers.Insert(mined, storage), Is.True);
+            Assert.That(containers.Insert(purchased, storage), Is.True);
+            Assert.That(requisitions.TryAppraiseAsrsCargo(crate, out var crateValue), Is.True);
+            Assert.That(crateValue, Is.EqualTo(unitValue));
+
+            Lower();
+            Assert.That(SEntMan.IsQueuedForDeletion(crate), Is.True);
+            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + Math.Floor(unitValue)));
+        });
+
+        await Pair.RunTicksSync(2);
+        await Server.WaitAssertion(() =>
+        {
+            var loose = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
+            SEntMan.EnsureComponent<ASRSSellableComponent>(loose);
+            Lower();
+            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + 2 * unitValue));
+            SEntMan.DeleteEntity(accountUid);
+        });
+
+        void Lower()
+        {
+            var lift = SComp<RequisitionsElevatorComponent>(elevator);
+            lift.Faction = "colony";
+            lift.Mode = RequisitionsElevatorMode.Lowering;
+            lift.NextMode = RequisitionsElevatorMode.Lowered;
+            lift.ToggledAt = SGameTiming.CurTime - TimeSpan.FromSeconds(5);
+            lift.LowerDelay = TimeSpan.Zero;
+            lift.LoweringSound = null;
+            Server.System<RequisitionsSystem>().Update(0.1f);
+        }
     }
 
     [Test]

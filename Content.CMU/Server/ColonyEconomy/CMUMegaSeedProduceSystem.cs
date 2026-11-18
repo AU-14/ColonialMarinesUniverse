@@ -13,7 +13,7 @@ namespace Content.Server.CMU14.ColonyEconomy;
 /// </summary>
 public sealed class CMUMegaSeedProduceSystem : EntitySystem
 {
-    private const string MegaSeedInventory = "MegaSeedServitorInventory";
+    private static readonly ProtoId<VendingMachineInventoryPrototype> MegaSeedInventory = "CMVendorSeeds";
 
     private readonly HashSet<EntProtoId> _sellableSeedPackets = [];
 
@@ -21,7 +21,14 @@ public sealed class CMUMegaSeedProduceSystem : EntitySystem
     {
         base.Initialize();
         BuildSeedPacketCache();
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<ProduceComponent, ProduceSpawnedEvent>(OnProduceSpawned);
+    }
+
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        if (args.WasModified<VendingMachineInventoryPrototype>())
+            BuildSeedPacketCache();
     }
 
     private void BuildSeedPacketCache()

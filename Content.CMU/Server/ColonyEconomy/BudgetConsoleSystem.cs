@@ -24,6 +24,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
     [Dependency] private RequisitionsSystem _requisitions = default!;
     [Dependency] private IGameTiming _timing = default!;
 
+    private bool _uiRefreshPending;
     private float _withdrawnThisPeriod;
     private TimeSpan _withdrawalResetAt;
 
@@ -37,16 +38,20 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         SubscribeLocalEvent<BudgetConsoleComponent, BudgetConsoleDispenseSalariesBuiMsg>(OnDispenseSalaries);
         SubscribeLocalEvent<BudgetConsoleComponent, EntInsertedIntoContainerMessage>(OnCashInserted);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
+        SubscribeLocalEvent<CMUColonyAsrsBalanceChangedEvent>(OnAsrsBalanceChanged);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        if (_withdrawnThisPeriod <= 0 || _timing.CurTime < _withdrawalResetAt)
-            return;
+        RefreshWithdrawalAllowance();
+        if (_uiRefreshPending)
+            UpdateAllUi();
+    }
 
-        ResetWithdrawalAllowance();
-        UpdateAllUi();
+    private void OnAsrsBalanceChanged(ref CMUColonyAsrsBalanceChangedEvent args)
+    {
+        _uiRefreshPending = true;
     }
 
     private void RefreshWithdrawalAllowance()
@@ -57,6 +62,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
 
     private void ResetWithdrawalAllowance()
     {
+        _uiRefreshPending = true;
         _withdrawnThisPeriod = 0;
         _withdrawalResetAt = TimeSpan.Zero;
     }
@@ -69,11 +75,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
     private BudgetConsoleBuiState BuildState()
     {
         RefreshWithdrawalAllowance();
-        var departments = new List<BudgetConsoleDepartmentInfo>();
-        foreach (var (netUid, name, budget) in _department.GetAllDepartments())
-        {
-            departments.Add(new BudgetConsoleDepartmentInfo(netUid, name, budget));
-        }
+        var departments = _department.GetAllDepartments();
         var remaining = Math.Max(0, WithdrawalLimit - _withdrawnThisPeriod);
         var resetSeconds = _withdrawnThisPeriod > 0
             ? Math.Max(0, (int) Math.Ceiling((_withdrawalResetAt - _timing.CurTime).TotalSeconds))
@@ -92,6 +94,7 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
         RefreshWithdrawalAllowance();
         var remaining = WithdrawalLimit - _withdrawnThisPeriod;
         if (!float.IsFinite(msg.Amount)
+            || msg.Amount != MathF.Truncate(msg.Amount)
             || msg.Amount <= 0
             || msg.Amount > _budget.GetBudget()
             || msg.Amount > remaining)
@@ -109,17 +112,15 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
     private void OnTransferToDept(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleTransferToDeptBuiMsg msg)
     {
         var deptUid = _entities.GetEntity(msg.DeptConsoleUid);
-        _department.TransferToDepartment(deptUid, msg.Amount);
-
-        UpdateAllUi();
+        if (_department.TransferToDepartment(deptUid, msg.Amount))
+            UpdateAllUi();
     }
 
     private void OnTransferAsrsToDept(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleTransferAsrsToDeptBuiMsg msg)
     {
         var deptUid = _entities.GetEntity(msg.DeptConsoleUid);
-        _department.TransferASRSToDepartment(deptUid, msg.Amount);
-
-        UpdateAllUi();
+        if (_department.TransferASRSToDepartment(deptUid, msg.Amount))
+            UpdateAllUi();
     }
 
     private void OnDispenseSalaries(EntityUid uid, BudgetConsoleComponent comp, BudgetConsoleDispenseSalariesBuiMsg msg)
@@ -141,9 +142,13 @@ public sealed partial class BudgetConsoleSystem : EntitySystem
 
     public void UpdateAllUi()
     {
-        var state = BuildState();
+        _uiRefreshPending = false;
+        BudgetConsoleBuiState? state = null;
         var query = EntityQueryEnumerator<BudgetConsoleComponent>();
         while (query.MoveNext(out var uid, out _))
-            _ui.SetUiState(uid, BudgetConsoleUi.Key, state);
+        {
+            if (_ui.IsUiOpen(uid, BudgetConsoleUi.Key))
+                _ui.SetUiState(uid, BudgetConsoleUi.Key, state ??= BuildState());
+        }
     }
 }

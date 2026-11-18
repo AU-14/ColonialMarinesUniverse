@@ -86,7 +86,7 @@ public sealed partial class CMUGuideCraftingRecipes : BoxContainer, IDocumentTag
             return false;
 
         // Ingredient links may leave a chapter's starter list; Back restores its exact selection and batch count.
-        _catalog = new CMUGuideRecipeCatalog(_entities, _prototypes);
+        _catalog = _entities.System<CMUGuideRecipeCatalogSystem>().GetCatalog();
         _entries.AddRange(_catalog.Entries.OrderBy(e => e.Name, StringComparer.CurrentCultureIgnoreCase).ThenBy(e => e.Id));
         PopulateStationFilter();
         FilterRecipes();

@@ -4,13 +4,14 @@ using Content.Shared.Cargo.Components;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Timing;
 using Content.Shared.Cargo.Systems;
-using Content.Shared.CMU14.ColonyEconomy;
+using Content.Server._RMC14.Requisitions; // CMU14
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Server.Cargo.Systems;
 
 public sealed partial class PriceGunSystem : SharedPriceGunSystem
 {
+    [Dependency] private RequisitionsSystem _requisitions = default!; // CMU14
     [Dependency] private UseDelaySystem _useDelay = default!;
     [Dependency] private PricingSystem _pricingSystem = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
@@ -23,16 +24,15 @@ public sealed partial class PriceGunSystem : SharedPriceGunSystem
         if (!TryComp(entity.Owner, out UseDelayComponent? useDelay) || _useDelay.IsDelayed((entity.Owner, useDelay)))
             return false;
 
-        if (entity.Comp.OnlyASRSSellable && !HasComp<ASRSSellableComponent>(target))
+        // CMU14 Begin: use the same cargo eligibility, contents, and paperwork valuation as the elevator.
+        if (entity.Comp.OnlyASRSSellable)
         {
-            _popupSystem.PopupEntity(Loc.GetString("cmu-asrs-appraisal-not-sellable"), user, user);
-            _audio.PlayPvs(entity.Comp.AppraisalSound, entity.Owner);
-            _useDelay.TryResetDelay((entity.Owner, useDelay));
-            return true;
-        }
-
-        // Check if we're scanning a bounty crate
-        if (_bountySystem.IsBountyComplete(target, out _))
+            var message = _requisitions.TryAppraiseAsrsCargo(target, out var value)
+                ? Loc.GetString("cmu-asrs-appraisal-value", ("target", Identity.Entity(target, EntityManager)), ("value", $"{value:0.##}"))
+                : Loc.GetString("cmu-asrs-appraisal-not-sellable");
+            _popupSystem.PopupEntity(message, user, user);
+        } // CMU14 End
+        else if (_bountySystem.IsBountyComplete(target, out _))
         {
             _popupSystem.PopupEntity(Loc.GetString("price-gun-bounty-complete"), user, user);
         }

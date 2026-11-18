@@ -11,7 +11,7 @@
             </PanelContainer>
             <BoxContainer Name="RecipesContainer" HorizontalExpand="True">
                 <Collapsible HorizontalExpand="True">
-                    <CollapsibleHeading Title="{Loc 'guidebook-reagent-recipes-header'}" />
+                    <CollapsibleHeading Name="RecipeHeading" Title="{Loc 'guidebook-reagent-recipes-header'}" />
                     <CollapsibleBody>
                         <BoxContainer Name="RecipesBody"
                                       Orientation="Vertical"
@@ -22,7 +22,7 @@
             </BoxContainer>
             <BoxContainer Name="SourcesContainer" HorizontalExpand="True">
                 <Collapsible HorizontalExpand="True">
-                    <CollapsibleHeading Title="{Loc 'guidebook-reagent-sources-header'}" />
+                    <CollapsibleHeading Name="SourceHeading" Title="{Loc 'guidebook-reagent-sources-header'}" />
                     <CollapsibleBody>
                         <BoxContainer Name="SourcesBody"
                                       Orientation="Vertical"

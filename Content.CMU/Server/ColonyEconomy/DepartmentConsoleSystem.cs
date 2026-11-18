@@ -838,9 +838,9 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     /// <summary>
     ///     Gets all department consoles for the budget console to list.
     /// </summary>
-    public List<(NetEntity Uid, string Name, float Budget)> GetAllDepartments()
+    public List<BudgetConsoleDepartmentInfo> GetAllDepartments()
     {
-        var result = new List<(NetEntity, string, float)>();
+        var result = new List<BudgetConsoleDepartmentInfo>();
         var seenDepartments = new HashSet<string>();
         var query = EntityQueryEnumerator<DepartmentConsoleComponent>();
         while (query.MoveNext(out var uid, out var dept))
@@ -853,7 +853,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             if (dept.DepartmentId != null && !seenDepartments.Add(dept.DepartmentId))
                 continue;
 
-            result.Add((GetNetEntity(uid), dept.DepartmentName, dept.DepartmentBudget));
+            result.Add(new BudgetConsoleDepartmentInfo(GetNetEntity(uid), dept.DepartmentName, dept.DepartmentBudget));
         }
         return result;
     }

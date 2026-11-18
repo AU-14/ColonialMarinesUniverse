@@ -75,6 +75,9 @@ public sealed partial class RecipeMachineComponent : Component
 
     [ViewVariables]
     public float NextDirty;
+
+    public bool NeedsRecipeCheck = true;
+    public uint LastTankRevision;
 }
 
 // What the machine looks like: the picture of a working machine is shown while it works.

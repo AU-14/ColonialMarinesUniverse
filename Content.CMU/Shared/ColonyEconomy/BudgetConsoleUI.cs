@@ -3,6 +3,9 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.ColonyEconomy;
 
+[ByRefEvent]
+public readonly record struct CMUColonyAsrsBalanceChangedEvent;
+
 [Serializable, NetSerializable]
 public enum BudgetConsoleUi
 {
