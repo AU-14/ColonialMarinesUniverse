@@ -26,7 +26,8 @@ namespace Content.Client.Voting.UI
     [GenerateTypedNameReferences]
     public sealed partial class VoteCallMenu : BaseWindow
     {
-        private const bool CallVoteCreationEnabled = false;
+        // CMU14: const removed, the menu follows the server-synced vote state now.
+        // private const bool CallVoteCreationEnabled = false;
 
         [Dependency] private IClientConsoleHost _consoleHost = default!;
         [Dependency] private IVoteManager _voteManager = default!;
@@ -88,7 +89,8 @@ namespace Content.Client.Voting.UI
             VoteTypeButton.OnItemSelected += VoteTypeSelected;
             FollowButton.OnPressed += FollowSelected;
 
-            SetCallVoteCreationEnabled(CallVoteCreationEnabled);
+            // CMU14: follow the server-synced vote state instead of the removed const.
+            SetCallVoteCreationEnabled(_voteManager.CanCallVote);
         }
 
         protected override void Opened()
@@ -196,6 +198,9 @@ namespace Content.Client.Voting.UI
 
         private void CanCallVoteChanged(bool obj)
         {
+            // CMU14: refresh the menu when the server-synced vote state flips.
+            SetCallVoteCreationEnabled(obj);
+
             if (!obj)
                 Close();
         }
@@ -253,7 +258,8 @@ namespace Content.Client.Voting.UI
         {
             var typeKey = (StandardVoteType)VoteTypeButton.SelectedId;
             var isAvailable = _voteManager.CanCallStandardVote(typeKey, out var timeout);
-            if (!CallVoteCreationEnabled || typeKey == StandardVoteType.Votekick && !IsAllowedVotekick)
+            // CMU14: poll the server-synced state instead of the removed const.
+            if (!_voteManager.CanCallVote || typeKey == StandardVoteType.Votekick && !IsAllowedVotekick)
                 CreateButton.Disabled = true;
             else
                 CreateButton.Disabled = !isAvailable;
