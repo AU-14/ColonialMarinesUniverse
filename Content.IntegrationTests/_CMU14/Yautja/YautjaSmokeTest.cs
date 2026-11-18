@@ -2001,7 +2001,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task ChainGauntletWrapsChainwhipOnceLikeCmss13()
+    public async Task ChainGauntletWrapsChainwhipOnceAndKeepsIt()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -2015,6 +2015,7 @@ public sealed class YautjaSmokeTest
             var gauntlet = entMan.SpawnEntity("CMUYautjaChainGauntlet", MapCoordinates.Nullspace);
             var chainwhip = entMan.SpawnEntity("CMUYautjaChainwhip", MapCoordinates.Nullspace);
             var extraChainwhip = entMan.SpawnEntity("CMUYautjaChainwhip", MapCoordinates.Nullspace);
+            var containers = entMan.System<SharedContainerSystem>();
 
             try
             {
@@ -2025,6 +2026,9 @@ public sealed class YautjaSmokeTest
                 var wrap = new InteractUsingEvent(hunter, chainwhip, gauntlet, coords);
                 entMan.EventBus.RaiseLocalEvent(gauntlet, wrap);
 
+                // The whip is kept in the gauntlet so the unwrap verb can take it back off.
+                var chain = entMan.GetComponent<YautjaChainGauntletComponent>(gauntlet);
+                var container = containers.GetContainer(gauntlet, chain.ChainContainerId);
                 Assert.Multiple(() =>
                 {
                     Assert.That(wrap.Handled, Is.True);
