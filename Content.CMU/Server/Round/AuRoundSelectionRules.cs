@@ -13,6 +13,11 @@ internal static class AuRoundSelectionRules
         return ContainsIgnoreCase(proto.WhitelistedGamemodes, gamemode);
     }
 
+    public static bool IsBlacklistedForGamemode(ThirdPartyPrototype proto, string? gamemode)
+    {
+        return gamemode != null && ContainsIgnoreCase(proto.BlacklistedGamemodes, gamemode);
+    }
+
     public static bool IsThirdPartyAllowed(
         ThirdPartyPrototype proto,
         string currentGamemode,
@@ -21,7 +26,7 @@ internal static class AuRoundSelectionRules
         string? opforPlatoon,
         int playerCount)
     {
-        if (ContainsIgnoreCase(proto.BlacklistedGamemodes, currentGamemode))
+        if (IsBlacklistedForGamemode(proto, currentGamemode))
             return false;
 
         if (proto.WhitelistedGamemodes.Count > 0 &&
