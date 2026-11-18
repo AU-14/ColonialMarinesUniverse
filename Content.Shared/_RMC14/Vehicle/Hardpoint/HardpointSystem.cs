@@ -1849,7 +1849,7 @@ public sealed partial class HardpointSystem : EntitySystem
         HardpointSlotsComponent hardpoints,
         InteractUsingEvent args)
     {
-        if (TryComp(owner, out HardpointIntegrityComponent? integrity) &&
+        if (TryComp(owner, out HardpointIntegrityComponent? integrity) && (integrity.Integrity > 0f || IsVehicleFrame(owner)) && // CMU14
             TryStartFailureRepair((owner, integrity), args))
         {
             return true;
@@ -1861,7 +1861,7 @@ public sealed partial class HardpointSystem : EntitySystem
         foreach (var mountedSlot in _topology.GetMountedSlots(owner, hardpoints, itemSlots))
         {
             if (mountedSlot.Item is not { } item ||
-                !TryComp(item, out HardpointIntegrityComponent? mountedIntegrity))
+                !TryComp(item, out HardpointIntegrityComponent? mountedIntegrity) || mountedIntegrity.Integrity <= 0f) // CMU14
             {
                 continue;
             }
@@ -2022,7 +2022,7 @@ public sealed partial class HardpointSystem : EntitySystem
         foreach (var mountedSlot in _topology.GetMountedSlots(ent.Owner, hardpoints, itemSlots))
         {
             if (mountedSlot.Item is not { } item ||
-                !TryComp(item, out HardpointIntegrityComponent? integrity))
+                !TryComp(item, out HardpointIntegrityComponent? integrity) || integrity.Integrity <= 0f) // CMU14
             {
                 continue;
             }
@@ -2035,7 +2035,7 @@ public sealed partial class HardpointSystem : EntitySystem
         {
             if (mountedSlot.Item is not { } item ||
                 !TryComp(item, out HardpointIntegrityComponent? integrity) ||
-                !NeedsIntegrityRepair(integrity) ||
+                integrity.Integrity <= 0f || !NeedsIntegrityRepair(integrity) || // CMU14: skip scrapped modules.
                 !_tool.HasQuality(args.Used, integrity.RepairToolQuality) ||
                 !HasComp<BlowtorchComponent>(args.Used))
             {
@@ -2196,8 +2196,10 @@ public sealed partial class HardpointSystem : EntitySystem
         var previousIntegrity = ent.Comp.Integrity;
         var capacityFloor = MathF.Max(previousIntegrity,
             ent.Comp.NativeMaxIntegrity * Math.Clamp(ent.Comp.MinimumRepairCapacityFraction, 0f, 1f));
+        // CMU14: modules wear four times faster, with double wear below a quarter of factory integrity.
+        var wearScale = isFrame ? 1f : previousIntegrity < ent.Comp.NativeMaxIntegrity * 0.25f ? 8f : 4f;
         var wear = MathF.Min(MathF.Max(0f, ent.Comp.MaxIntegrity - capacityFloor),
-            repairAmount * Math.Clamp(ent.Comp.RepairWearFraction, 0f, 1f));
+            repairAmount * Math.Clamp(ent.Comp.RepairWearFraction, 0f, 1f) * wearScale);
         ent.Comp.RepairWear += wear;
         ent.Comp.MaxIntegrity -= wear;
         ent.Comp.Integrity = MathF.Min(ent.Comp.MaxIntegrity, ent.Comp.Integrity + repairAmount);
@@ -2359,7 +2361,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 continue;
             }
 
-            if (NeedsIntegrityRepair(integrity))
+            if (integrity.Integrity > 0f && NeedsIntegrityRepair(integrity)) // CMU14
                 return true;
         }
 
