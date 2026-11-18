@@ -1373,6 +1373,7 @@
 
 - type: thirdParty
   id: RUMCMedicsUPP
+  speaksColonyLanguage: true
   displayName: UPP medics
   announceAsSurvivors: false
   partyspawn: RUMCMedicsSpawnUPP
@@ -1395,6 +1396,7 @@
 
 - type: thirdParty
   id: RUMCEngineersUPP
+  speaksColonyLanguage: true
   displayName: UPP engineers
   announceAsSurvivors: false
   partyspawn: RUMCEngineersSpawnUPP
