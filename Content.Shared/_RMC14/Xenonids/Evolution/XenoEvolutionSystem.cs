@@ -285,7 +285,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         RaiseLocalEvent(newXeno, ref afterEv);
     }
 
-    private bool CanCorruptedHiveEvolveToQueen(EntityUid xeno, bool doPopup)
+    public bool CanCorruptedHiveEvolveToQueen(EntityUid xeno, bool doPopup) // CMU14: also used for blight-core elections
     {
         if (_net.IsClient)
             return true;
