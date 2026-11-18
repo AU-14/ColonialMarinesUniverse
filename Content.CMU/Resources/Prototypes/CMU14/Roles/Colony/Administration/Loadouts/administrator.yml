@@ -1,5 +1,6 @@
 - type: loadout
   id: ColonyAdministratorSidearmMatebaCustomAU14
+  dummyEntity: RMCWeaponRevolverMatebaNoStun # show the gun, not the holster rig
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
@@ -11,6 +12,7 @@
 
 - type: loadout
   id: ColonyAdministratorSidearmMatebaSpecialAU14
+  dummyEntity: RMCWeaponRevolverMatebaSpecialNoStun
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
@@ -22,6 +24,7 @@
 
 - type: loadout
   id: ColonyAdministratorHandcannonBeltAU14
+  dummyEntity: RMCWeaponPistolHandcannon
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
@@ -33,6 +36,7 @@
 
 - type: loadout
   id: ColonyAdministratorGoldHandcannonBeltAU14
+  dummyEntity: RMCWeaponPistolHandcannonGold
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:
@@ -44,6 +48,7 @@
 
 - type: loadout
   id: ColonyAdministratorWinterWyvernBeltAU14
+  dummyEntity: RMCWeaponPistolHandcannonWinterWyvern
   effects:
   - !type:JobRequirementLoadoutEffect
     requirement:

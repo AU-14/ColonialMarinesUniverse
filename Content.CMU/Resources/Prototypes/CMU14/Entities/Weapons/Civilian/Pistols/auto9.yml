@@ -1,0 +1,415 @@
+- type: entity
+  parent: RMCMK80
+  id: CMUWeaponPistolAuto9
+  name: Auto-9 pistol
+  description: An advanced, select-fire machine pistol capable of a blistering three-round burst, fed from a long 50-round 9mm magazine. It takes no attachments. Last seen cleaning up the mean streets of Detroit.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Civilian/auto9.rsi
+  - type: Clothing
+    sprite: CMU14/Weapons/Guns/Civilian/auto9.rsi
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 15
+  - type: Gun
+    shotsPerBurst: 3
+    availableModes:
+    - SemiAuto
+    - Burst
+    soundGunshot:
+      path: /Audio/CMU14/Weapons/Guns/Gunshots/auto_9_fire.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    recoilWielded: 1
+    recoilUnwielded: 2
+    scatterWielded: 6
+    scatterUnwielded: 6
+    baseFireRate: 7.5 
+    burstFireRateMultiplier: 1.5 
+    burstScatterMult: 2
+    modifiers:
+      Burst:
+        fireDelay: 0
+        maxScatterModifier: 8
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 1.5
+        shotsToMaxScatter: 9
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazinePistolAuto9
+        startingItem: CMUMagazinePistolAuto9Tracer
+  - type: AttachableHolder
+    slots: {}
+  - type: AttachableHolderVisuals
+    offsets: {}
+  - type: Tag
+    tags:
+    - Sidearm
+    - RMCb92fs 
+    - CMUWeaponPistolAuto9
+
+- type: entity
+  parent: CMUWeaponPistolAuto9
+  id: CMUWeaponPistolAuto9Empty
+  suffix: Empty
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMUMagazinePistolAuto9
+
+# Auto-9 magazines. Each load is colour-coded with a band, using CM13's ammo band colours: AP green, HEAP
+# yellow, wall-penetrating steel blue, rubber blue, incendiary red, squash-head orange (as on the MP5's), and
+# tracer the M54C's tracer orange-red. Standard 9mm has no band.
+- type: entity
+  abstract: true
+  parent: CMBaseMagazinePistol
+  id: CMUMagazinePistolAuto9Base
+  description: A long 50-round magazine for the Auto-9 pistol.
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMUMagazinePistolAuto9
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    capacity: 50
+  - type: MagazineVisuals
+    magState: extended
+    steps: 2
+    zeroVisible: false
+    zeroOnlyOnEmpty: true
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Civilian/auto9_magazine.rsi
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9
+  name: Auto-9 magazine (9mm)
+  description: A long 50-round magazine of standard 9mm for the Auto-9 pistol.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgePistol9mm
+    proto: CMCartridgePistol9mm
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9AP
+  name: Auto-9 AP magazine (9mm)
+  description: A long 50-round magazine of armor-piercing 9mm for the Auto-9 pistol. It hits harder on armored targets and softer on unarmored ones.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgePistol9mmAP
+    proto: CMCartridgePistolM77AP
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMAP
+  - type: Sprite
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9HEAP
+  name: Auto-9 HEAP magazine (9mm)
+  description: A long 50-round magazine of high-explosive armor-piercing 9mm squash-head for the Auto-9 pistol.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgePistol9mmHEAP
+    proto: CMUCartridgePistol9mmHEAP
+  - type: Sprite
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#9C9A19"
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9WP
+  name: Auto-9 WP magazine (9mm)
+  description: A long 50-round magazine of wall-penetrating 9mm squash-head for the Auto-9 pistol. The rounds punch through walls and anyone behind them.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgePistol9mmWP
+    proto: CMUCartridgePistol9mmWP
+  - type: Sprite
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#67819C"
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9Rubber
+  name: Auto-9 rubber magazine (9mm)
+  description: A long 50-round magazine of rubber 9mm for the Auto-9 pistol. Less-lethal rounds that wear a target down rather than kill them.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmRubber
+    proto: RMCCartridgePistol9mmRubber
+  - type: RefillableByBulletBox
+    bulletType: CMU14BoxBulletsPistol9MMRubber
+  - type: Sprite
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#556696"
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9Tracer
+  name: Auto-9 tracer magazine (9mm)
+  description: A long 50-round magazine of 9mm tracer for the Auto-9 pistol. Each round glows on its way to the target.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgePistol9mmTracer
+    proto: CMUCartridgePistol9mmTracer
+  - type: Sprite
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#ff4300"
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9Incendiary
+  name: Auto-9 incendiary magazine (9mm)
+  description: A long 50-round magazine of incendiary 9mm squash-head for the Auto-9 pistol. The rounds set what they hit alight.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMUCartridgePistol9mmIncendiary
+    proto: CMUCartridgePistol9mmIncendiary
+  - type: Sprite
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#9C2219"
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: CMUGunCasePistolAuto9
+  name: Auto-9 pistol case
+  description: A gun case containing an Auto-9 machine pistol and three 50-round magazines for it.
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,1
+    whitelist:
+      tags:
+      - CMUWeaponPistolAuto9
+      - CMUMagazinePistolAuto9
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponPistolAuto9Empty
+    - id: CMUMagazinePistolAuto9
+      amount: 3
+
+- type: entity
+  parent: CMUMagazinePistolAuto9Base
+  id: CMUMagazinePistolAuto9SquashHead
+  name: Auto-9 magazine (9mm Squash-Head)
+  description: A long 50-round magazine of 9mm squash-head for the Auto-9 pistol. Squash-head to squash criminals' heads.
+  components:
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmSquashHead
+    proto: RMCCartridgePistol9mmSquashHead
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MMSH
+  - type: Sprite
+    layers:
+    - state: extended
+      map: ["enum.GunVisualLayers.Base"]
+    - state: extended-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#BA5D00"
+
+- type: entity
+  parent: AU14BeltHolsterPistolBlack
+  id: CMUBeltHolsterPistolAuto9
+  name: Auto-9 pistol holster rig
+  description: A black pistol holster rig carrying an Auto-9 machine pistol loaded with tracer and a spare tracer magazine in its side pouch.
+  suffix: Filled, Auto-9
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazinePistolAuto9Tracer
+    - id: CMUWeaponPistolAuto9
+
+# Auto-9 rounds. Stats follow CM13's 9mm squash-head variants for the VP78 and Auto-9; CM13 has no pistol tracer, so
+# the tracer is standard 9mm with the M54C tracer's glow.
+- type: entity
+  parent: RMCCartridgePistol9mmSquashHead
+  id: CMUCartridgePistol9mmHEAP
+  name: cartridge (9mm HEAP)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgePistol9mmHEAP
+  - type: CartridgeAmmo
+    proto: CMUBulletPistol9mmHEAP
+
+- type: entity
+  parent: RCMBulletPistol9mmSquashHead
+  id: CMUBulletPistol9mmHEAP
+  name: bullet (9mm HEAP)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 50
+  - type: CMArmorPiercing
+    amount: 50
+
+- type: entity
+  parent: RMCCartridgePistol9mmSquashHead
+  id: CMUCartridgePistol9mmWP
+  name: cartridge (9mm WP)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgePistol9mmWP
+  - type: CartridgeAmmo
+    proto: CMUBulletPistol9mmWP
+
+- type: entity
+  parent: RCMBulletPistol9mmSquashHead
+  id: CMUBulletPistol9mmWP
+  name: bullet (9mm WP)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    deleteOnCollide: false
+  - type: CMArmorPiercing
+    amount: 50
+  - type: RMCPenetratingProjectile
+  - type: TimedDespawn # like the other wall-penetrating rounds, so spent rounds don't fly on forever
+    lifetime: 0.2
+
+- type: entity
+  parent: CMCartridgePistol9mm
+  id: CMUCartridgePistol9mmTracer
+  name: cartridge (9mm tracer)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgePistol9mmTracer
+  - type: CartridgeAmmo
+    proto: CMUBulletPistol9mmTracer
+
+- type: entity
+  parent: CMBulletPistol9mm
+  id: CMUBulletPistol9mmTracer
+  name: bullet (9mm tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#ff4300"
+    radius: 2.0
+    energy: 7.0
+
+- type: entity
+  parent: RMCCartridgePistol9mmSquashHead
+  id: CMUCartridgePistol9mmIncendiary
+  name: cartridge (9mm incendiary)
+  components:
+  - type: Tag
+    tags:
+    - Cartridge
+    - CMUCartridgePistol9mmIncendiary
+  - type: CartridgeAmmo
+    proto: CMUBulletPistol9mmIncendiary
+
+- type: entity
+  parent: RCMBulletPistol9mmSquashHead
+  id: CMUBulletPistol9mmIncendiary
+  name: bullet (9mm incendiary)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 35
+  - type: IgniteOnProjectileHit
+
+- type: Tag
+  id: CMUWeaponPistolAuto9
+
+- type: Tag
+  id: CMUMagazinePistolAuto9
+
+- type: Tag
+  id: CMUCartridgePistol9mmHEAP
+
+- type: Tag
+  id: CMUCartridgePistol9mmWP
+
+- type: Tag
+  id: CMUCartridgePistol9mmTracer
+
+- type: Tag
+  id: CMUCartridgePistol9mmIncendiary

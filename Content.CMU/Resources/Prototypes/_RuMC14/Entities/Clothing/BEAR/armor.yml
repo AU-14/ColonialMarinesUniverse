@@ -8,7 +8,7 @@
     sprite: _RuMC14/Clothing/BEAR/armor/bear_armor.rsi
   - type: ClothingRequireEquipped
     autoUnequip: true
-    denyReason: rmc-armor-not-spp-jumpsuit
+    denyReason: cmu-armor-requires-bear-uniform # CMU14
     whitelist:
       tags:
       - RuMCUniformBEAR

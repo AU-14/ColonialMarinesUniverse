@@ -1,14 +1,21 @@
 using System.Linq;
+using System.Numerics;
 using Content.Server.CMU14.Round.Antags.EarlyWarning;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared._RMC14.Projectiles.Reflect;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
+using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
+using Content.Shared.Projectiles;
 using Content.Shared.Stunnable;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests._CMU14.Round.Antags;
@@ -25,6 +32,7 @@ public sealed class EWJoeLevelFiveTest
     private const string Rifle = "AU14WeaponRifleM41AMK2Tactical";
     private const string Armor = "CMArmorM3Medium";
     private const string Helmet = "ArmorHelmetM10";
+    private const string Bullet = "CMBulletSentry10x50mm";
 
     [Test]
     public async Task TheLightEnvelopsAViewerWhoFacesTheJoe()
@@ -40,7 +48,13 @@ public sealed class EWJoeLevelFiveTest
         {
             joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
-            entities.EnsureComponent<EWJoeLightComponent>(joe);
+            var light = entities.EnsureComponent<EWJoeLightComponent>(joe);
+            Assert.Multiple(() =>
+            {
+                Assert.That(light.FillTime, Is.EqualTo(TimeSpan.FromSeconds(5)), "RB-22: 5 s fill");
+                Assert.That(light.Paralyze, Is.EqualTo(TimeSpan.FromSeconds(2.5)), "RB-22: 2.5 s paralyze");
+                Assert.That(light.Immunity, Is.EqualTo(TimeSpan.FromSeconds(20)), "RB-22: 20 s immunity");
+            });
 
             var spot = EWJoeTestHelpers.TileEast(entities, map, 2);
             viewer = entities.SpawnEntity(Human, spot);
@@ -52,7 +66,8 @@ public sealed class EWJoeLevelFiveTest
             xforms.SetWorldRotation(bystander, xforms.GetWorldRotation(bystander) + Angle.FromDegrees(180));
         });
 
-        await pair.RunTicksSync((int) Math.Ceiling(4.75 / timing.TickPeriod.TotalSeconds));
+        // RB-22: the envelope fills over 5 s
+        await pair.RunTicksSync((int) Math.Ceiling(5.75 / timing.TickPeriod.TotalSeconds));
 
         await server.WaitAssertion(() =>
         {
@@ -136,6 +151,71 @@ public sealed class EWJoeLevelFiveTest
             var refused = new EWJoeSaturateActionEvent { Performer = joe, Target = targetTile };
             entities.EventBus.RaiseLocalEvent(joe, refused);
             Assert.That(refused.Handled, Is.False, "an overheated core cannot saturate");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Rebalance RB-06: Magnetic Resonance turns back only bullets arriving inside the Joe's frontal 120°, and a
+    /// reflected bullet keeps its IFF.
+    /// </summary>
+    [Test]
+    public async Task ResonanceReflectsOnlyFrontalBulletsAndKeepsTheirIff()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var projectiles = entities.System<SharedProjectileSystem>();
+            var physics = entities.System<SharedPhysicsSystem>();
+            var iffSys = entities.System<GunIFFSystem>();
+            var xforms = entities.System<SharedTransformSystem>();
+
+            (EntityUid Bullet, ProjectileComponent Projectile) Fire(EntityUid target, Vector2 velocity)
+            {
+                var bullet = entities.SpawnEntity(Bullet, map.GridCoords);
+                iffSys.GiveAmmoIFF(bullet, "FactionMarine", true);
+                physics.SetLinearVelocity(bullet, velocity);
+                var projectile = entities.GetComponent<ProjectileComponent>(bullet);
+                projectiles.ProjectileCollide((bullet, projectile, entities.GetComponent<PhysicsComponent>(bullet)), target);
+                return (bullet, projectile);
+            }
+
+            var defaults = new EWJoeResonanceComponent();
+            Assert.Multiple(() =>
+            {
+                Assert.That(defaults.Chance, Is.EqualTo(0.1f).Within(0.0001f), "RB-06: 10%");
+                Assert.That(defaults.FrontalArc.Degrees, Is.EqualTo(120).Within(0.01), "RB-06: frontal 120°");
+            });
+
+            // the Joe faces south (rotation zero); every bullet in its arc is turned back for this test
+            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            entities.EnsureComponent<EWJoeComponent>(joe);
+            entities.AddComponent(joe, new EWJoeResonanceComponent { Chance = 1f });
+            xforms.SetWorldRotation(joe, Angle.Zero);
+
+            // fired from the south, flying north: inside the arc
+            var damageable = entities.System<DamageableSystem>();
+            var (front, _) = Fire(joe, new Vector2(0, 10));
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.HasComponent<RMCReflectedProjectileComponent>(front), "a frontal bullet is turned back");
+                Assert.That(entities.GetComponent<PhysicsComponent>(front).LinearVelocity.Y, Is.LessThan(0f), "and flies back south");
+                Assert.That(entities.GetComponent<ProjectileIFFComponent>(front).Enabled, "it keeps its IFF");
+                Assert.That(damageable.GetTotalDamage(joe), Is.EqualTo(FixedPoint2.Zero), "the Joe takes nothing from it");
+            });
+
+            // fired from the west, flying east: 90° off the facing, outside the ±60° arc
+            var (flank, _) = Fire(joe, new Vector2(10, 0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(entities.HasComponent<RMCReflectedProjectileComponent>(flank), Is.False, "flanking fire is not turned back");
+                Assert.That(damageable.GetTotalDamage(joe), Is.GreaterThan(FixedPoint2.Zero), "it lands on the Joe");
+            });
         });
 
         await pair.CleanReturnAsync();

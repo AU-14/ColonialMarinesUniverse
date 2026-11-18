@@ -132,7 +132,10 @@
   parent: RMCOuterClothingExternalWebbing
   id: RMCCoatTSEPA
   name: NSPA police jacket
-  description: A black polyester jacket with a silver Sakura emblem of the Neroid Sector Policing Authority pinned to it. Empire and Honor, Bound by Duty. Duty Beyond Borders, Justice Across Worlds.
+  # cmu edit start
+  # description: A black polyester jacket with a silver Sakura emblem of the Neroid Sector Policing Authority pinned to it. Empire and Honor, Bound by Duty. Duty Beyond Borders, Justice Across Worlds.
+  description: A black polyester jacket with a silver Sakura emblem of the Neroid Sector Policing Authority pinned to it. Empire and Honor, Bound by Duty. Duty Beyond Borders, Justice Across Worlds. Kevlar padding sewn into the lining helps turn aside knife attacks.
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/jacket.rsi
@@ -148,7 +151,10 @@
   parent: RMCCoatTSEPA
   id: RMCCoatTSEPAFormal
   name: NSPA police formal jacket
-  description: A heavy woolen formal coat commonly used by Neroid Sector Policing Authority Constables. Empire and Honor, Bound by Duty. Duty Beyond Borders, Justice Across Worlds.
+  # cmu edit start
+  # description: A heavy woolen formal coat commonly used by Neroid Sector Policing Authority Constables. Empire and Honor, Bound by Duty. Duty Beyond Borders, Justice Across Worlds.
+  description: A heavy woolen formal coat commonly used by Neroid Sector Policing Authority Constables. Empire and Honor, Bound by Duty. Duty Beyond Borders, Justice Across Worlds. Kevlar padding sewn into the lining helps turn aside knife attacks.
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/formal_jacket.rsi
@@ -159,7 +165,10 @@
   parent: RMCCoatTSEPA
   id: RMCCoatTSEPAHighVis
   name: NSPA high-vis jacket
-  description: A green and white striped (high-visibility) polyester vest commonly used by Neroid Sector Policing Authority personnel.
+  # cmu edit start
+  # description: A green and white striped (high-visibility) polyester vest commonly used by Neroid Sector Policing Authority personnel.
+  description: A green and white striped (high-visibility) polyester vest commonly used by Neroid Sector Policing Authority personnel. Kevlar padding sewn into the lining helps turn aside knife attacks. 
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/highvis_jacket.rsi
@@ -170,7 +179,10 @@
   parent: RMCCoatTSEPA
   id: RMCCoatTSEPAHighVisVest
   name: NSPA hazard vest
-  description: A green and white striped (high-visibility) polyester vest commonly used by Neroid Sector Policing Authority personnel.
+  # cmu edit start
+  # description: A green and white striped (high-visibility) polyester vest commonly used by Neroid Sector Policing Authority personnel.
+  description: A green and white striped (high-visibility) polyester vest commonly used by Neroid Sector Policing Authority personnel. Kevlar padding sewn into the lining helps turn aside knife attacks. 
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/highvis_vest.rsi

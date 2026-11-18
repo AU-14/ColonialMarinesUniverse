@@ -13,7 +13,7 @@
     skills:
       RMCSkillCqc: 3
       RMCSkillEndurance: 3
-      RMCSkillFirearms: 1
+      RMCSkillFirearms: 2
       RMCSkillFireman: 2
       RMCSkillIntel: 1
       RMCSkillMedical: 1
@@ -51,9 +51,27 @@
     - CMUBadLeg
   ranks:
     RMCRankCivilian: []
-  chevrons:
-    Inspector:
-      entity: AU14ChevronNSPAInspector
+  chevrons: # highest rank the player has the law enforcement leadership playtime for
+    AU14RankNSPACommissioner:
+      entity: AU14ChevronNSPACommissioner
+      requirements:
+      - !type:TotalJobsTimeRequirement
+        group: CMUJobsLawEnforcementLeaders
+        time: 180000 # 50 hours
+    AU14RankNSPADeputyCommissioner:
+      entity: AU14ChevronNSPADeputyCommissioner
+      requirements:
+      - !type:TotalJobsTimeRequirement
+        group: CMUJobsLawEnforcementLeaders
+        time: 108000 # 30 hours
+    AU14RankNSPASuperintendent:
+      entity: AU14ChevronNSPASuperintendent
+      requirements:
+      - !type:TotalJobsTimeRequirement
+        group: CMUJobsLawEnforcementLeaders
+        time: 54000 # 15 hours
+    AU14RankNSPAChiefInspector:
+      entity: AU14ChevronNSPAChiefInspector
       requirements: []
   startingGear: AU14GearCivilianNSPAInspector
   icon: "RMCJobIconTSEPAInspector"
@@ -78,16 +96,32 @@
     head: RMCHeadCapTSEPAPeakedGold
     belt: CMBeltSecurityMarshalFilled
     ears: AU14CMBHeadset
-    outerClothing: RMCCoatTSEPA
-    suitstorage: AU14BeltHolsterPistolBlack
+    outerClothing: RMCCoatTSEPAFormal
+    # Fallback for spawns without a loadout, such as the ghost role. The rig picked from the NSPAInspectorSidearmCMU
+    # loadout group is equipped first and keeps the slot; this one is then discarded.
+    suitstorage: CMUBeltHolsterRevolverNSPA
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14GuidebookLawColonial
     - AU14StampNSPA
     - CMURecordsTablet
     - ForensicScanner
+
+- type: roleLoadout
+  id: JobAU14JobCivilianNSPAInspector
+  points: 7
+  groups:
+  - NSPAInspectorSidearmCMU
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 - type: entity
   parent: CMSpawnPointJobBase

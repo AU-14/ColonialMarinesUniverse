@@ -1,3 +1,14 @@
+# Leadership, held by the CWPS chief ranger job.
+- type: rank
+  id: AU14RankCWPSChiefRanger
+  name: CWPS Chief Ranger
+  prefix: Chf. Ranger
+
+- type: rank
+  id: AU14RankCWPSDeputyChiefRanger
+  name: CWPS Deputy Chief Ranger
+  prefix: Dep. Chf. Ranger
+
 - type: rank
   id: AU14RankCWPSSeniorRanger
   name: Senior Ranger

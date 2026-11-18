@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Content.Shared.Botany.Components;
 using Content.Shared.Botany.Items.Components;
+using Content.Shared.Botany.Events; // CMU14
 using Content.Shared.EntityEffects;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -85,6 +86,10 @@ public sealed partial class BotanySystem
             Dirty(entity, produce);
             ProduceGrown((entity, produce));
             _appearance.SetData(entity, ProduceVisuals.Potency, ent.Comp1.Potency);
+
+            // CMU14: notify harvest consumers after produce genetics have been applied.
+            var ev = new ProduceSpawnedEvent(ent.Owner, ent.Comp2.PacketPrototype);
+            RaiseLocalEvent(entity, ref ev);
         }
     }
 }

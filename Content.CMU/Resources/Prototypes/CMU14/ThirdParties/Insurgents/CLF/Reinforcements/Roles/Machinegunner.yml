@@ -72,7 +72,6 @@
     id: AU14IDCardColonyColonist
   inhand:
   - RMCWeaponLMGM60
-  - AU14CLFHeadset
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicBaseMilitary

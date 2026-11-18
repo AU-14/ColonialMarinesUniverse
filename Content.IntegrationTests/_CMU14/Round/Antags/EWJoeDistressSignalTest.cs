@@ -64,12 +64,13 @@ public sealed class EWJoeDistressSignalTest
             mindSys.TransferTo(mind, joe);
             entities.System<SharedRoleSystem>().MindAddRole(mind, EWMindRole, silent: true);
             var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+            // FLOW-03: the directive is only offered while xenofauna lives on the planet
+            xeno = entities.SpawnEntity(Xeno, map.GridCoords);
             Assert.That(mindSys.TryAddObjective(mind, mind.Comp, MaimObjective));
             var maim = mind.Comp.Objectives.Last();
             comp.CurrentObjectives.Add(maim);
             counter = entities.GetComponent<CounterConditionComponent>(maim);
 
-            xeno = entities.SpawnEntity(Xeno, map.GridCoords);
             Assert.That(thresholds.TryGetThresholdForState(xeno, MobState.Critical, out var crit), "the xeno has a critical threshold");
             Assert.That(thresholds.TryGetThresholdForState(xeno, MobState.Dead, out var dead));
             var amount = crit!.Value + (dead!.Value - crit.Value) / 2;
@@ -97,7 +98,7 @@ public sealed class EWJoeDistressSignalTest
     }
 
     [Test]
-    public async Task XenoDirectivesExistOnlyInDistressSignal()
+    public async Task XenofaunaDirectivesNeedLivingXenofauna()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -121,19 +122,18 @@ public sealed class EWJoeDistressSignalTest
             var previous = auRound.SelectedPreset;
             try
             {
+                // FLOW-03 (decided): the mode no longer matters, living xenofauna does; Colony Fall included
                 auRound.SetPreset(protos.Index<GamePresetPrototype>("ColonyFall"));
                 Assert.That(xenoObjectives.IsDistressSignal(), Is.False);
-                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, MaimObjective), Is.False, "no xeno directives outside Distress Signal");
+                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, MaimObjective), Is.False, "no xenofauna, no directive");
                 Assert.That(mindSys.TryAddObjective(mind, mind.Comp, DeliverObjective), Is.False);
 
-                auRound.SetPreset(protos.Index<GamePresetPrototype>(EWJoeXenoObjectiveSystem.DistressSignalPreset));
-                Assert.That(xenoObjectives.IsDistressSignal());
-                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, MaimObjective), "maim is offered in Distress Signal");
+                var first = entities.SpawnEntity(Xeno, map.GridCoords);
+                Assert.That(mindSys.TryAddObjective(mind, mind.Comp, MaimObjective), "maim is offered once xenofauna lives, even in Colony Fall");
                 var maim = mind.Comp.Objectives.Last();
                 comp.CurrentObjectives.Add(maim);
                 var counter = entities.GetComponent<CounterConditionComponent>(maim);
 
-                var first = entities.SpawnEntity(Xeno, map.GridCoords);
                 var second = entities.SpawnEntity(Xeno, map.GridCoords);
                 var stranger = entities.SpawnEntity(Human, map.GridCoords);
                 var third = entities.SpawnEntity(Xeno, map.GridCoords);

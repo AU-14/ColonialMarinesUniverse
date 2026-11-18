@@ -50,6 +50,14 @@ public sealed partial class ExpendableLightSystem : VisualizerSystem<ExpendableL
         UpdateBurnAmbience((uid, comp), state); // CMU14
         switch (state)
         {
+            // CMU14 Begin: initialize the burning sprite for observers entering mid-burn.
+            case ExpendableLightState.PhaseOne:
+            case ExpendableLightState.PhaseTwo:
+            case ExpendableLightState.PhaseThree:
+            case ExpendableLightState.PhaseFour:
+            case ExpendableLightState.PhaseFive:
+            case ExpendableLightState.Fading:
+            // CMU14 End
             case ExpendableLightState.Lit:
                 // CMU14 Begin: burn audio shares the ambient budget instead of restarting on every appearance change.
                 // _audioSystem.Stop(comp.PlayingStream);

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
@@ -57,6 +58,39 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private static readonly string[] SporeProtectionSlots = ["mask", "head"];
+
+    public bool TryGetWornSporeFilter(EntityUid wearer, out Entity<GasMaskFilterComponent> working)
+    {
+        foreach (var slot in SporeProtectionSlots)
+        {
+            if (!_inventory.TryGetSlotEntity(wearer, slot, out var gear) ||
+                TryComp<MaskComponent>(gear, out var mask) && mask.IsToggled ||
+                !TryGetFilterSlot(gear.Value, out var filterSlot) ||
+                filterSlot.Item is not { } item || !TryComp<GasMaskFilterComponent>(item, out var filter) ||
+                IsFilterBroken((item, filter)))
+                continue;
+
+            working = (item, filter);
+            return true;
+        }
+
+        working = default;
+        return false;
+    }
+
+    // Filter-equipped gear relies on its cartridge. Only other worn gear can supply passive spore protection.
+    public bool CanUsePassiveSporeProtection(EntityUid item) =>
+        !(TryComp<MaskComponent>(item, out var mask) && mask.IsToggled) &&
+        !TryGetFilterSlot(item, out _);
+
+    private bool TryGetFilterSlot(EntityUid gear, [NotNullWhen(true)] out ItemSlot? filterSlot)
+    {
+        filterSlot = null;
+        return TryComp<ItemSlotsComponent>(gear, out var slots) &&
+            _itemSlots.TryGetSlot((gear, slots), "filter", out filterSlot);
     }
 
     public bool IsFilterBroken(Entity<GasMaskFilterComponent> ent)

@@ -44,7 +44,7 @@
 - type: craftRecipe
   id: RUMCCraftClaySmeltery
   name: au14-craft-recipe-clay-smeltery
-  output: RUMCSmeltery
+  output: RUMCMachineSmeltery
   time: 10
   minigames: [Hold]
   consumables:
@@ -54,7 +54,7 @@
 - type: craftRecipe
   id: RUMCCraftStoneSmeltery
   name: au14-craft-recipe-stone-smeltery
-  output: RUMCStoneSmeltery
+  output: RUMCMachineStoneSmeltery
   time: 10
   minigames: [Rhythm]
   consumables:
@@ -339,7 +339,7 @@
 - type: craftRecipe
   id: RUMCCraftBrassPump
   name: au14-craft-recipe-brass-pump
-  output: RUMCBrassPump
+  output: RUMCMachineBrassPump
   time: 12
   minigames: [Rhythm, Center]
   tools:
@@ -367,7 +367,7 @@
 - type: craftRecipe
   id: RUMCCraftBrassCondenser
   name: au14-craft-recipe-brass-condenser
-  output: RUMCBrassCondenser
+  output: RUMCMachineBrassCondenser
   time: 15
   minigames: [Rhythm, Hold]
   tools:
@@ -382,7 +382,7 @@
 - type: craftRecipe
   id: RUMCCraftBoiler
   name: au14-craft-recipe-boiler
-  output: RUMCBoiler
+  output: RUMCMachineBoiler
   time: 15
   minigames: [Rhythm, Hold]
   tools:
@@ -398,7 +398,7 @@
 - type: craftRecipe
   id: RUMCCraftSteamGenerator
   name: au14-craft-recipe-steam-generator
-  output: RUMCSteamGenerator
+  output: RUMCMachineSteamGenerator
   time: 18
   minigames: [Rhythm, Hold, Center]
   tools:
@@ -412,7 +412,7 @@
 - type: craftRecipe
   id: RUMCCraftSteamSmelter
   name: au14-craft-recipe-steam-smelter
-  output: RUMCSteamSmelter
+  output: RUMCMachineSteamSmelter
   time: 18
   minigames: [Rhythm, Hold]
   tools:
@@ -426,7 +426,7 @@
 - type: craftRecipe
   id: RUMCCraftSteamPress
   name: au14-craft-recipe-steam-press
-  output: RUMCSteamPress
+  output: RUMCMachineSteamPress
   time: 20
   minigames: [Rhythm, Center]
   tools:
@@ -440,7 +440,7 @@
 - type: craftRecipe
   id: RUMCCraftSteamDrill
   name: au14-craft-recipe-steam-drill
-  output: RUMCSteamDrill
+  output: RUMCMachineSteamDrill
   time: 18
   minigames: [Rhythm, Drill, Center]
   tools:
@@ -480,7 +480,7 @@
 - type: craftRecipe
   id: RUMCCraftSteelPump
   name: au14-craft-recipe-steel-pump
-  output: RUMCSteelPump
+  output: RUMCMachineSteelPump
   time: 12
   minigames: [Rhythm, Center]
   tools:

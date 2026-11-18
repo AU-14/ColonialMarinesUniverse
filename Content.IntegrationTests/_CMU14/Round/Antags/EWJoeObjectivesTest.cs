@@ -8,7 +8,9 @@ using Content.Server.Objectives;
 using Content.Server.Objectives.Components;
 using Content.Server.Objectives.Systems;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
+using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
@@ -42,6 +44,9 @@ public sealed class EWJoeObjectivesTest
     // the collect mechanics (pick up once, spent never again) on guns, which every test map can spawn;
     // the real firearms directive is an Offer objective now
     private const string FirearmsObjective = "CMUEWJoeTestCollectGunsObjective";
+    private const string PowerCellsObjective = "CMUEWJoeCollectPowerCellsObjective";
+    private const string PowerCell = "RMCPowerCell";
+    private const string ColonyFallThreat = "ApeThreatCF";
 
     [TestPrototypes]
     private const string Prototypes = """
@@ -159,6 +164,123 @@ public sealed class EWJoeObjectivesTest
             Assert.That(mind.Comp.Objectives, Does.Not.Contain(second.Value), "unfinished firearms objective withdrawn");
             Assert.That(comp.SpentCollectibles, Does.Contain(revolverC), "the rifle obtained for the withdrawn objective is spent");
             Assert.That(comp.SpentCollectibles, Does.Not.Contain(revolverD), "an untouched rifle is not");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// RB-34: Tithe of Power asks for 3-5 cells, and only cells the Joe holds count: one picked up and put down
+    /// again does not, and the count falls when a held cell leaves its frame.
+    /// </summary>
+    [Test]
+    public async Task PowerCellsMustBeHeld()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var mindSys = entities.System<MindSystem>();
+            var objectives = entities.System<ObjectivesSystem>();
+            var hands = entities.System<SharedHandsSystem>();
+            var containers = entities.System<SharedContainerSystem>();
+
+            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var mind = mindSys.CreateMind(null, "Early Warning Joe");
+            mindSys.TransferTo(mind, joe);
+            entities.System<SharedRoleSystem>().MindAddRole(mind, EWMindRole, silent: true);
+            entities.EnsureComponent<EWJoeComponent>(joe);
+
+            foreach (var held in hands.EnumerateHeld(joe).ToArray())
+                hands.TryDrop(joe, held);
+
+            // exactly three fresh cells lie on the planet (the Joe's own are spent at assignment)
+            var cells = new List<EntityUid>();
+            for (var i = 0; i < 3; i++)
+                cells.Add(entities.SpawnEntity(PowerCell, map.GridCoords));
+
+            Assert.That(objectives.TryCreateObjective((mind, mind.Comp), PowerCellsObjective, out var created), "Tithe of Power");
+            var objective = created!.Value;
+            mindSys.AddObjective(mind, mind.Comp, objective);
+            var collect = entities.GetComponent<EWJoeCollectConditionComponent>(objective);
+            Assert.Multiple(() =>
+            {
+                Assert.That(collect.RequireHeld, "cells must be held");
+                Assert.That(collect.Min, Is.EqualTo(3));
+                Assert.That(collect.Max, Is.EqualTo(5));
+                Assert.That(collect.Target, Is.InRange(3, 5));
+            });
+            // three are asked for here, whatever else the map holds
+            collect.Target = 3;
+
+            // picked up and put down: acquisition no longer counts
+            Assert.That(hands.TryPickupAnyHand(joe, cells[0]), "pick up a cell");
+            Assert.That(objectives.GetProgress(objective, (mind, mind.Comp)), Is.EqualTo(1f / 3f).Within(0.01f), "a held cell counts");
+            Assert.That(hands.TryDrop(joe, cells[0]), "put it down");
+            Assert.That(objectives.GetProgress(objective, (mind, mind.Comp)), Is.EqualTo(0f).Within(0.01f), "a dropped cell does not");
+
+            // all three on the frame at once completes it; one leaving undoes that
+            var pouch = containers.EnsureContainer<Container>(joe, "ew-test-pouch");
+            foreach (var cell in cells)
+                Assert.That(containers.Insert(cell, pouch), Is.True);
+            Assert.That(objectives.IsCompleted(objective, (mind, mind.Comp)), "three held");
+
+            Assert.That(containers.Remove(cells[2], pouch), Is.True);
+            Assert.That(objectives.IsCompleted(objective, (mind, mind.Comp)), Is.False, "two held is not enough");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// RB-36: Colony Fall's double credit outlasts the threat vote. It ends when the threat arrives (its
+    /// win-condition rules are added in the same callback that spawns its bodies), not when it is selected.
+    /// </summary>
+    [Test]
+    public async Task ColonyFallDoubleCreditLastsUntilTheThreatArrives()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entities = server.EntMan;
+        var protoMan = server.ResolveDependency<IPrototypeManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            var system = entities.System<EWJoeObjectiveSystem>();
+            var auRound = entities.System<AuRoundSystem>();
+            var ticker = entities.System<GameTicker>();
+            var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
+            var comp = entities.EnsureComponent<EWJoeComponent>(joe);
+
+            var previousPreset = auRound.SelectedPreset;
+            EntityUid? rule = null;
+            auRound.SetPreset(protoMan.Index<GamePresetPrototype>("ColonyFall"));
+            try
+            {
+                Assert.That(system.CreditFor(comp), Is.EqualTo(comp.PreThreatCreditMultiplier), "no threat yet: double");
+
+                var threat = protoMan.Index<ThreatPrototype>(ColonyFallThreat);
+                Assert.That(threat.WinConditions, Is.Not.Empty);
+                auRound.SetSelectedThreat(threat);
+                Assert.That(system.ThreatHasArrived(), Is.False, "selected, but not spawned");
+                Assert.That(system.CreditFor(comp), Is.EqualTo(comp.PreThreatCreditMultiplier), "the vote alone does not end the window");
+
+                rule = ticker.AddGameRule(threat.WinConditions[0]);
+                Assert.That(system.ThreatHasArrived(), "its win condition is in play: it has arrived");
+                Assert.That(system.CreditFor(comp), Is.EqualTo(1), "the colonist-only window is over");
+            }
+            finally
+            {
+                if (rule is { } ruleEntity)
+                    entities.DeleteEntity(ruleEntity);
+                auRound.SetSelectedThreat(null);
+                auRound.SetPreset(previousPreset);
+                entities.DeleteEntity(joe);
+            }
         });
 
         await pair.CleanReturnAsync();

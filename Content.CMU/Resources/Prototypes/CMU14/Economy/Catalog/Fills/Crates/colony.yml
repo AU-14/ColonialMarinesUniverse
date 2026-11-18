@@ -103,6 +103,26 @@
 
 - type: entity
   parent: RMCCrateBase
+  id: CMUCrateM20AColony
+  name: M20A pulse rifle crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: AUWeaponRifleM20A
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateM20AColonyMagazine
+  name: M20A standard magazine crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleM20A
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
   id: CMUCrateBoxAR10Colony
   name: AR10 colony rifle crate (x1 AR10 colony rifle)
   components:

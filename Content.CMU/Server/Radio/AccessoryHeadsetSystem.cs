@@ -28,6 +28,7 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        InitializeInsurgentIssue();
 
         // When the earpiece itself is inserted into / removed from a uniform's accessory container
         SubscribeLocalEvent<AccessoryHeadsetComponent, EntGotInsertedIntoContainerMessage>(OnInserted);

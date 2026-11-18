@@ -1092,6 +1092,7 @@
 
 - type: platoon
   id: WEYU
+  npcFaction: AUWeYu
   vehicleSupplyCatalog:
   - CMUFighterGround
   - VehicleTankPMC

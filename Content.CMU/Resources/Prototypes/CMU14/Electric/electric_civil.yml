@@ -247,7 +247,7 @@
 # A solar panel of the game with a power of its own, carried like a machine and set down where there is sun. It takes the grid like the generators do.
 - type: entity
   parent: [ SolarPanelBasePhysSprite, StructureHealthMachineWeak ]
-  id: RUMCSolarPanel
+  id: RUMCMachineSolarPanel
   name: solar panel
   description: A frame of glass over silicon cells that makes current out of the sun. Face it toward the sun and keep it clear of shade.
   components:
@@ -272,8 +272,8 @@
   - type: PortableStructure
 
 - type: entity
-  parent: RUMCSolarPanel
-  id: RUMCSolarPanelSilver
+  parent: RUMCMachineSolarPanel
+  id: RUMCMachineSolarPanelSilver
   name: silver solar panel
   description: A panel of silicon cells with silver contacts and a better glass. It makes twice as much as the plain one.
   components:
@@ -285,7 +285,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildSolarPanel
   name: au14-craft-recipe-buildsolarpanel
-  output: RUMCSolarPanel
+  output: RUMCMachineSolarPanel
   time: 20
   minigames: [Polish, Trace]
   tools:
@@ -303,7 +303,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildSolarPanelSilver
   name: au14-craft-recipe-buildsolarpanelsilver
-  output: RUMCSolarPanelSilver
+  output: RUMCMachineSolarPanelSilver
   time: 25
   minigames: [Polish, Trace]
   tools:

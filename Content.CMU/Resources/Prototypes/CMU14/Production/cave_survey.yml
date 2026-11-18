@@ -45,25 +45,3 @@
         doAfter: 2
   - node: map
     entity: CMUCaveSurveyMap
-
-- type: entity
-  id: CMUActionCaveSurvey
-  components:
-  - type: Action
-    itemIconStyle: NoItem
-    useDelay: 0.5
-  - type: Sprite
-    layers:
-    - sprite: Objects/Misc/bureaucracy.rsi
-      state: paper
-      map: ["enum.ActionVisuals.Icon"]
-  - type: InstantAction
-    event: !type:CMUOpenCaveSurveyActionEvent
-
-- type: entity
-  parent: CMUActionCaveSurvey
-  id: CMUActionGhostCaveSurvey
-  components:
-  - type: Action
-    checkCanInteract: false
-    checkConsciousness: false

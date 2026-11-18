@@ -9,6 +9,23 @@ public sealed partial class HardpointSystem
     private static readonly ProtoId<TagPrototype> MaintenancePlowTag = "VehiclePlow";
     [Dependency] private TagSystem _maintenanceTags = default!;
 
+    public void FitFactoryModules(EntityUid vehicle, IReadOnlyList<EntProtoId> modules)
+    {
+        if (!TryComp<HardpointSlotsComponent>(vehicle, out var slots))
+            return;
+
+        foreach (var prototype in modules)
+        {
+            var item = Spawn(prototype, Transform(vehicle).Coordinates);
+            if (!TryFindEmptyInstallLocation(vehicle, slots, item, out var location) ||
+                !_itemSlots.TryInsert(location.Owner, location.Slot, item, null, excludeUserAudio: true))
+            {
+                Log.Warning($"Could not fit factory module {prototype} on {ToPrettyString(vehicle)}");
+                QueueDel(item);
+            }
+        }
+    }
+
     private bool IsFaultImmuneHardpoint(EntityUid hardpoint) =>
         HasComp<VehiclePlowComponent>(hardpoint) || _maintenanceTags.HasTag(hardpoint, MaintenancePlowTag);
 

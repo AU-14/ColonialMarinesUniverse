@@ -43,6 +43,13 @@ public sealed partial class EWJoeScourComponent : Component
     [DataField]
     public TimeSpan NextRepairTick;
 
+    /// <summary>
+    /// Rebalance RB-04: the fuel self-repair does nothing before this time. Pushed forward by
+    /// <c>EWJoeComponent.ScourRepairDamagePause</c> whenever the Joe takes damage.
+    /// </summary>
+    [DataField]
+    public TimeSpan RepairPausedUntil;
+
     /// <summary>Radio channels granted for the buff (a digested radio); revoked on expiry.</summary>
     [DataField]
     public List<ProtoId<RadioChannelPrototype>> RadioChannels = new();

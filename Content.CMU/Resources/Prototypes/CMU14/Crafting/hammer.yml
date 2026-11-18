@@ -23,7 +23,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 5
+        Blunt: 14
     soundHit:
       collection: MetalThud
   - type: PhysicalComposition

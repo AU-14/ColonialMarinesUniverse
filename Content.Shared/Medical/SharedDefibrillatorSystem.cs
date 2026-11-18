@@ -160,6 +160,11 @@ public abstract partial class SharedDefibrillatorSystem : EntitySystem
 
         var delay = ent.Comp.DoAfterDuration +
                     ent.Comp.SkillMultiplierDuration * _skills.GetSkillDelayMultiplier(user, ent.Comp.Skill);
+        // cmu edit start: the patient can change the charge time
+        var cmuDelay = new Content.Shared.CMU14.Medical.Defibrillator.CMUDefibZapDelayEvent(user, ent.Owner, delay);
+        RaiseLocalEvent(target, ref cmuDelay);
+        delay = cmuDelay.Delay;
+        // cmu edit end
         var doAfter = new DoAfterArgs(EntityManager, user, delay, new DefibrillatorZapDoAfterEvent(),
             ent.Owner, target, ent.Owner)
         {

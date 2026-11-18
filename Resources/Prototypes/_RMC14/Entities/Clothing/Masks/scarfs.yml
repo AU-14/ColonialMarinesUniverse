@@ -78,8 +78,13 @@
     sprite: _RMC14/Objects/Clothing/Mask/Scarfs/alpha.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Mask/Scarfs/alpha.rsi
+  # CMU14 Begin: a raised tactical wrap conceals the face in either supported slot.
   - type: IdentityBlocker
-    coverage: MOUTH
+    # coverage: MOUTH
+    coverage: FULL
+  - type: FoldableIdentityBlocker
+    coversWhenFolded: false
+  # CMU14 End
 
 - type: entity
   parent: [RMCBaseScarfDown, RMCMaskScarfAlpha]

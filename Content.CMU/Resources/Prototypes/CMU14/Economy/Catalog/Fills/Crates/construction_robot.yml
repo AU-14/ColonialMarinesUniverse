@@ -1,0 +1,9 @@
+- type: entity
+  id: CMUCrateConstructionRobot
+  parent: RMCCrateConstruction
+  name: construction UGV crate
+  description: A crate containing one deployable construction UGV kit.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUConstructionRobotKit

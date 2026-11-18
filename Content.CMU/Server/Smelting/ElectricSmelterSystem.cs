@@ -162,6 +162,7 @@ public sealed class ElectricSmelterSystem : EntitySystem
         if (_proto.TryIndex(recipe.Result, out var resultProto) && !string.IsNullOrEmpty(resultProto.Spawn.Id))
         {
             var result = Spawn(resultProto.Spawn, coords);
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(result);
             if (TryComp<StackComponent>(result, out var resultStack))
                 _stack.SetCount(result, recipe.ResultAmount, resultStack);
 

@@ -56,6 +56,9 @@ public sealed partial class VehicleSupplyEntry
     [DataField]
     public List<EntProtoId> Hardpoints = new();
 
+    [DataField] // CMU14: issued once, when a new frame comes out of the depot.
+    public List<EntProtoId> FactoryModules = new();
+
     [DataField]
     public List<VehicleSupplyLoadoutCategory> LoadoutCategories = new();
 

@@ -17,3 +17,6 @@
   path: "/Textures/Shaders/CMU14/overwatch_vhs.swsl"
   params:
     aspect: 1.0
+    nightVision: 0.0
+    vhs: 0.0
+    seed: 0.0

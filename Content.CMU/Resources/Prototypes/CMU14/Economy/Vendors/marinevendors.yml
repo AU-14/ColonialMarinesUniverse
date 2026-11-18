@@ -1243,6 +1243,7 @@
       entries:
       - id: AU14CaseSentry
       - id: AU14CaseSentryFlamer
+      - id: CMUConstructionRobotKit
       - id: RMCM271A2BruteLauncherRigFilled
     - name: Sentry Gun Upgrade Kit
       entries:
@@ -1256,8 +1257,6 @@
         recommended: true
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
-      - id: RMCBeltConstruction
-        name: M277 pattern construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
@@ -1270,6 +1269,8 @@
     - name: Engineering Storage Pouch
       choices: { CMUPouchesCT: 2 }
       entries:
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
       - id: RMCPouchConstruction
         recommended: true
       - id: RMCPouchEngineerKit

@@ -4,6 +4,7 @@
 # (KillAllAbominationsRule, counts disguised mimics).
 - type: threat
   id: BiomorphsThreatCF
+  xenofauna: true # non-humanoid threat life; EW Joe xenofauna directives
   voteCooldownGroup: Biomorphs
   lorePrimer: AU14PrimerThreatBiomorph
   roundstartspawns: biomorphsParty

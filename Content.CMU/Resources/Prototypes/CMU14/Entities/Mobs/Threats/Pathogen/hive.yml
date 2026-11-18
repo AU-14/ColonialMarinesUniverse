@@ -6,7 +6,7 @@
   - type: Hive
     lateJoinGainLarva: true
     hiveUIColor: "#8a8c50"
-    canMakeAlliances: false
+    canMakeAlliances: true
     corrupted: false
     burrowedLarvaId: CMU14XenoBloodburster
     tierLimits:

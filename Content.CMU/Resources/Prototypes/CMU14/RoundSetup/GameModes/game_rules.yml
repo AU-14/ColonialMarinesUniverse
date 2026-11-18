@@ -154,6 +154,18 @@
   - type: GameRule
   - type: DistressAntagsRule
 
+# Force on Force clears the planet's jobs like Distress Signal, so it rolls the ghost-role variants
+# from its own table. An empty table keeps Force on Force independent of the Distress Signal defaults.
+- type: entity
+  id: FoFAntags
+  parent: BaseGameRule
+  name: Force on Force Antags
+  description: Randomly rolls for each Force on Force antag to be present this round.
+  components:
+  - type: GameRule
+  - type: DistressAntagsRule
+    rules: {}
+
 - type: entity
   id: AuVoteRule
   parent: BaseGameRule

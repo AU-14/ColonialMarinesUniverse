@@ -1,0 +1,115 @@
+# Ported from RMC-14 PR #10578. Hoops and the reset button are linked to scoreboards with a multitool.
+# Names and descriptions are in Locale/*/CMU14/basketball/basketball.ftl so forks can translate them.
+
+- type: entity
+  parent: RMCBasketballHoop
+  id: CMUBasketballHoopLeft
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Fixtures
+    fixtures:
+      basketball:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.2,0.35,0.2"
+        hard: false
+        mask:
+        - ItemMask
+        layer:
+        - HighImpassable
+  - type: DeviceLinkSource
+    ports:
+    - CMUBasketballScore
+  - type: CMUBasketballHoop
+    side: Left
+
+- type: entity
+  parent: RMCBasketballHoopAlt
+  id: CMUBasketballHoopRight
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: true
+  - type: Fixtures
+    fixtures:
+      basketball:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.35,-0.2,0.35,0.2"
+        hard: false
+        mask:
+        - ItemMask
+        layer:
+        - HighImpassable
+  - type: DeviceLinkSource
+    ports:
+    - CMUBasketballScore
+  - type: CMUBasketballHoop
+    side: Right
+
+- type: entity
+  id: CMUBasketballScoreboard
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: CMU14/Structures/basketball_scoreboard.rsi
+    layers:
+    - state: scoreboard
+      map: [ "enum.CMUBasketballScoreboardLayers.Base" ]
+    - state: s0a
+      map: [ "enum.CMUBasketballScoreboardLayers.LeftTens" ]
+    - state: s0b
+      map: [ "enum.CMUBasketballScoreboardLayers.LeftOnes" ]
+    - state: s0c
+      map: [ "enum.CMUBasketballScoreboardLayers.RightTens" ]
+    - state: s0d
+      map: [ "enum.CMUBasketballScoreboardLayers.RightOnes" ]
+  - type: WallMount
+    arc: 360
+  - type: DeviceLinkSink
+    ports:
+    - CMUBasketballScore
+    - CMUBasketballReset
+  - type: Speech
+    speechVerb: Robotic
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: CMUBasketballScoreboard
+
+- type: entity
+  id: CMUBasketballReset
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Structures/objects.rsi
+    layers:
+    - state: launcherbtt
+      map: [ "enum.CMUBasketballResetLayers.Base" ]
+  - type: WallMount
+    arc: 360
+  - type: DeviceLinkSource
+    ports:
+    - CMUBasketballReset
+  - type: CMUBasketballReset

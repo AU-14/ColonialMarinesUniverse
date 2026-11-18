@@ -15,6 +15,8 @@ public sealed class BudgetConsoleBui(EntityUid owner, Enum uiKey) : BoundUserInt
         _window.OnDispenseSalaries += () => SendPredictedMessage(new BudgetConsoleDispenseSalariesBuiMsg());
         _window.OnTransfer += (department, amount) =>
             SendPredictedMessage(new BudgetConsoleTransferToDeptBuiMsg(department, amount));
+        _window.OnTransferAsrs += (department, amount) =>
+            SendPredictedMessage(new BudgetConsoleTransferAsrsToDeptBuiMsg(department, amount));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

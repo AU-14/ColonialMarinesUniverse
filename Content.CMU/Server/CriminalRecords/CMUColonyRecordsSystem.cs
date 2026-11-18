@@ -1,6 +1,7 @@
 using Content.Server.CriminalRecords.Systems;
 using Content.Server.Traits;
 using Content.Shared.Access.Systems;
+using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.CMU14.CriminalRecords;
 using Content.Shared.CriminalRecords;
@@ -21,6 +22,7 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
     [Dependency] private StationRecordsSystem _records = default!;
     [Dependency] private CMUUniversalRecordsSystem _universalRecords = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private InventorySystem _inventory = default!;
 
     private static readonly ProtoId<DepartmentPrototype>[] RecordedDepartments =
     {
@@ -61,7 +63,8 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
         if (!ProtoMan.TryIndex<JobPrototype>(jobId, out var job) ||
             !string.Equals(job.RoundForce, "CLF", StringComparison.OrdinalIgnoreCase) ||
             !_records.TryGetRecord<GeneralStationRecord>(key, out var general) ||
-            !_idCard.TryFindIdCard(mob, out var card))
+            !_inventory.TryGetSlotEntity(mob, "id", out var worn) ||
+            !_idCard.TryGetIdCard(worn.Value, out var card))
         {
             return;
         }

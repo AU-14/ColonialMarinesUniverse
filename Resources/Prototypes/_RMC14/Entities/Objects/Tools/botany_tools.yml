@@ -36,6 +36,10 @@
   name: hatchet
   description: A sharp hand hatchet, commonly used to cut things apart, be it timber or other objects. Often found in the hands of woodsmen, scouts, and looters.
   components:
+  - type: MeleeWeapon # CMU14: improvised melee damage.
+    damage:
+      types:
+        Slash: 26
   - type: Sprite
     sprite: _RMC14/Objects/Tools/Hydroponics/hatchet.rsi
     state: icon
