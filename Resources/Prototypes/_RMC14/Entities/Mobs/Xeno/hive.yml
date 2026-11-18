@@ -5,3 +5,4 @@
   components:
   - type: Hive
     lateJoinGainLarva: true
+    canMakeAlliances: true # CMU14

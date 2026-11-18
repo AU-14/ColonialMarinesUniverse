@@ -152,6 +152,7 @@
     - RMCCampfireBuild
     - AU14TorchBuild
     - AU14BaseballBatBuild
+    - CMUPoolStickBuild # CMU14
     - AU14FishingRodBuild
     - AU14WoodenChairBuild
     - RMCWoodenBarricadeBuild

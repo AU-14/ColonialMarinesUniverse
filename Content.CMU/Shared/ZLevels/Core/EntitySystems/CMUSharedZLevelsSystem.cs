@@ -42,6 +42,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     private EntityQuery<MapComponent> _mapQuery;
     private EntityQuery<CMUZLevelMapComponent> _zMapQuery;
     private EntityQuery<MapGridComponent> _gridQuery;
+    private EntityQuery<GridTreeComponent> _movementGridTreeQuery;
     private EntityQuery<TransformComponent> _xformQuery;
 
     public override void Initialize()
@@ -51,6 +52,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         _mapQuery = GetEntityQuery<MapComponent>();
         _zMapQuery = GetEntityQuery<CMUZLevelMapComponent>();
         _gridQuery = GetEntityQuery<MapGridComponent>();
+        _movementGridTreeQuery = GetEntityQuery<GridTreeComponent>();
         _xformQuery = GetEntityQuery<TransformComponent>();
 
         InitBuckle();

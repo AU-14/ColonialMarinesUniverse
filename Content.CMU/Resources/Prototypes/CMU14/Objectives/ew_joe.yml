@@ -121,22 +121,51 @@
       components:
       - IntelDetectorTracked
 
+# The encrypted-disk directive was pruned (FLOW-04): disks only spawn in Distress Signal and FoF, never
+# where the job-based Joe rolls. The CMUIntelDisk tag stays; storage fills use it.
+
+# Tithe of Power: power cells the Joe takes. Its own tools' cells are spent at assignment, so only what it
+# takes afterwards counts (EWJoeCollectFreshOnly). RB-34: 3-5, and only cells it holds count (requireHeld), so
+# they must still be on its frame when the directive completes.
 - type: entity
   parent: CMUEWJoeBaseCollectObjective
-  id: CMUEWJoeCollectDisksObjective
+  id: CMUEWJoeCollectPowerCellsObjective
   components:
   - type: Objective
     icon:
-      sprite: _RMC14/Objects/Misc/computer_disks.rsi
-      state: disk3
+      sprite: _RMC14/Objects/Power/cells.rsi
+      state: cell
   - type: EWJoeCollectCondition
-    min: 1
-    max: 2
-    title: cmu-ew-joe-objective-collect-disks-title
-    description: cmu-ew-joe-objective-collect-disks-description
+    min: 3
+    max: 5
+    requireHeld: true
+    title: cmu-ew-joe-objective-collect-power-cells-title
+    description: cmu-ew-joe-objective-collect-power-cells-description
     whitelist:
-      tags:
-      - CMUIntelDisk
+      components:
+      - PowerCell
+  - type: EWJoeCollectFreshOnly
+
+# Strip Their Names: ID cards the Joe takes. Its own ID card is spent at assignment (EWJoeCollectFreshOnly).
+# RB-34: 3-5, held when the directive completes (requireHeld).
+- type: entity
+  parent: CMUEWJoeBaseCollectObjective
+  id: CMUEWJoeCollectIdCardsObjective
+  components:
+  - type: Objective
+    icon:
+      sprite: _RMC14/Objects/CMIDs/id.rsi
+      state: plain
+  - type: EWJoeCollectCondition
+    min: 3
+    max: 5
+    requireHeld: true
+    title: cmu-ew-joe-objective-collect-id-cards-title
+    description: cmu-ew-joe-objective-collect-id-cards-description
+    whitelist:
+      components:
+      - IdCard
+  - type: EWJoeCollectFreshOnly
 
 # Assimilate a console: pins one whitelisted console on the owner's planet; the Assimilate action is
 # gated on this objective (playtest 4).
@@ -161,9 +190,14 @@
       - DepartmentConsole
       - ColonyCommsConsole
 
-# Distress Signal only (an admin-made Joe there; the antag never rolls in that preset). Both are
-# refused on assignment in any other mode, so the pools below can list them everywhere.
-# Maim N xenofauna: each xeno the Joe brings down to critical (or kills outright) counts once.
+# Xenofauna directives: xenofauna is non-humanoid threat life (EWJoeTargetRules.IsXenofauna), whatever the
+# round's threat is. Any mode can offer them, Colony Fall included (the Joe rolls in Colony Fall and
+# Insurgency through the job and in Distress Signal through EWJoeDistress). EWJoeRequiresXenofauna refuses
+# them unless living xenofauna is on the Joe's planet (RB-37: a threat merely flagged xenofauna that has not
+# spawned no longer opens them), so humanoid-threat rounds, Insurgency and FoF never offer them and the pools
+# below can list them everywhere.
+# Maim N xenofauna: each xenofauna body the Joe brings down to critical (or kills outright) counts once;
+# xeno parasites do not. Two counts by level (ECS-04): 2-3 here for levels 2+, 1-2 in the early variant.
 - type: entity
   parent: [ CMUEWJoeBaseObjective, BaseCounterObjective ]
   id: CMUEWJoeMaimXenoObjective
@@ -172,17 +206,29 @@
     difficulty: 1.5
     unique: false
     icon:
-      sprite: _RMC14/Mobs/Xenonids/Drone/drone.rsi
-      state: crit
+      sprite: Structures/Wallmounts/signs.rsi
+      state: biohazard
   - type: NumberObjective
     min: 2
-    max: 4
+    max: 3
     title: cmu-ew-joe-objective-maim-xeno-title
     description: cmu-ew-joe-objective-maim-xeno-description
   - type: EWJoeXenoCounter
-  - type: EWJoeDistressSignalOnly
+  - type: EWJoeRequiresXenofauna
 
-# Gather N xenofauna victims (burst corpses or the still-infected) in a pinned powered area at once.
+# Levels 0-1: the early kit barely hurts xenofauna, so fewer are asked for.
+- type: entity
+  parent: CMUEWJoeMaimXenoObjective
+  id: CMUEWJoeMaimXenoEarlyObjective
+  components:
+  - type: NumberObjective
+    min: 1
+    max: 2
+    title: cmu-ew-joe-objective-maim-xeno-title
+    description: cmu-ew-joe-objective-maim-xeno-description
+
+# Gather N xenofauna victims in a pinned powered area at once: burst or infected hosts, biomorph or
+# dormant-spore carriers, or organics the xenofauna downed or killed.
 - type: entity
   parent: CMUEWJoeBaseObjective
   id: CMUEWJoeDeliverVictimsObjective
@@ -191,8 +237,8 @@
     difficulty: 2
     unique: false
     icon:
-      sprite: _RMC14/Mobs/Xenonids/Larva/larva.rsi
-      state: embryo
+      sprite: _RMC14/Structures/Wallmounts/semiotics.rsi
+      state: biohazard
   - type: EWJoeDeliverVictimsCondition
     min: 1
     max: 2
@@ -201,75 +247,328 @@
     areaSource:
       components:
       - RMCApc
-  - type: EWJoeDistressSignalOnly
+  - type: EWJoeRequiresXenofauna
 
+# ---- ARCH-03 batch 2 (N9): new directives (Objectives report §6/§6a). Claim a Peer (N10) is not built. ----
+
+# Tithe of Flesh-Work: robotic limbs and hands the Joe takes (they are items, BaseItem via OrganBase). The
+# Joe's own robotic parts sit in its body's containers and are spent at assignment (EWJoeCollectFreshOnly),
+# so only parts taken from someone else count; parts still attached to a synth are fair game.
+- type: entity
+  parent: CMUEWJoeBaseCollectObjective
+  id: CMUEWJoeCollectFleshWorkObjective
+  components:
+  - type: Objective
+    difficulty: 1.5
+    icon:
+      sprite: CMU14/Mobs/DroneAndroid/parts.rsi
+      state: l_arm
+  - type: EWJoeCollectCondition
+    min: 1
+    max: 2
+    title: cmu-ew-joe-objective-collect-flesh-work-title
+    description: cmu-ew-joe-objective-collect-flesh-work-description
+    whitelist:
+      components:
+      - CMURoboticLimb
+  - type: EWJoeCollectFreshOnly
+
+# Offer the Ordnance: loose grenades and explosives (Explosive) consumed with the Offer action. The default
+# offering filter (COUPLING-02) still keeps mines that are anchored, sentries and hardpoints out.
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeOfferOrdnanceObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+    icon:
+      sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
+      state: icon
+  - type: EWJoeOfferCondition
+    min: 1
+    max: 2
+    title: cmu-ew-joe-objective-offer-ordnance-title
+    description: cmu-ew-joe-objective-offer-ordnance-description
+    whitelist:
+      components:
+      - Explosive
+
+# Blind the Watch (ARCH-11, a Meld directive): security cameras the Joe Offers. A camera is not taken in but
+# melded into the river where it hangs: lit orange and switched off until a welder burns the meld out (RB-30,
+# EWJoeMeldedStructureSystem). RB-35: 2-4 cameras.
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeBlindTheWatchObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+    icon:
+      sprite: _RMC14/Structures/Wallmounts/camera.rsi
+      state: camera
+  - type: EWJoeOfferCondition
+    meld: true
+    min: 2
+    max: 4
+    title: cmu-ew-joe-objective-blind-watch-title
+    description: cmu-ew-joe-objective-blind-watch-description
+    whitelist:
+      components:
+      - SurveillanceCamera
+
+# Silence the Colony (ARCH-11, a Meld directive): telecomms servers the Joe Offers. Colony servers cannot be
+# destroyed (FLOW-13); a melded one glows orange and is no longer a server (TelecomServer removed) until a
+# welder burns the meld out (RB-30).
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeSilenceColonyObjective
+  components:
+  - type: Objective
+    difficulty: 2
+    unique: false
+    icon:
+      sprite: _RMC14/Structures/Machines/telecomms.rsi
+      state: comm_server
+  - type: EWJoeOfferCondition
+    meld: true
+    min: 1
+    max: 2
+    title: cmu-ew-joe-objective-silence-colony-title
+    description: cmu-ew-joe-objective-silence-colony-description
+    whitelist:
+      components:
+      - TelecomServer
+
+# Darken a District (§6a): pins an area that is lit now (an APC, not always-powered); a blackout the Joe
+# causes after assignment that lasts 3 minutes completes it, light returning resets it, and a blackout it did
+# not cause re-pins. Refused where no area is lit. Never completes on its own.
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeDarkenDistrictObjective
+  components:
+  - type: Objective
+    difficulty: 2
+    unique: false
+    icon:
+      sprite: _RMC14/Structures/Power/apc.rsi
+      state: apc0
+  - type: EWJoeDarkenCondition
+    title: cmu-ew-joe-objective-darken-district-title
+    description: cmu-ew-joe-objective-darken-district-description
+
+# Purge the Nest (§6a, ARCH-11): whatever the round's threat builds (CMUThreatStructure: xeno resin, eggs and
+# hive structures, pathogen structures and mycelium, biomorph flesh nests and walls), Offered and consumed like
+# items (anchored structures allowed: defaultFilter off), by weight (a flesh nest counts 3; kudzu, weight 0,
+# never). RB-31: hive, overmind and blight cores are blacklisted: never offered, never counted as available.
+# Offering a structure takes 6 s (EWJoeOfferSystem.StructureOfferDelay). Refused while the planet holds less
+# than the minimum, so it waits for the threat to build. No gate on the threat's kind: an ape or wendigo round
+# simply has nothing to count.
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoePurgeNestObjective
+  components:
+  - type: Objective
+    difficulty: 1.5
+    unique: false
+    icon:
+      sprite: Objects/Tools/welder.rsi
+      state: icon
+  - type: EWJoeOfferCondition
+    defaultFilter: false
+    weighted: true
+    min: 3
+    max: 5
+    title: cmu-ew-joe-objective-purge-nest-title
+    description: cmu-ew-joe-objective-purge-nest-description
+    whitelist:
+      components:
+      - CMUThreatStructure
+    blacklist:
+      components:
+      - HiveCore
+      - CMUBlightCore
+
+# Bear Witness: distinct living victims of the Joe's Test of Faith or Judgement. Refused unless six living
+# organic people stand on the planet (a near-empty colony has no crowd to judge). RB-33: 4-6 people, and one
+# cast counts at most two of them (maxPerCast).
+- type: entity
+  parent: CMUEWJoeBaseObjective
+  id: CMUEWJoeBearWitnessObjective
+  components:
+  - type: Objective
+    difficulty: 1
+    unique: false
+    icon:
+      sprite: Objects/Weapons/Melee/flash.rsi
+      state: flash
+  - type: EWJoeTallyCondition
+    kind: Witness
+    minPopulation: 6
+    maxPerCast: 2
+    min: 4
+    max: 6
+    title: cmu-ew-joe-objective-bear-witness-title
+    description: cmu-ew-joe-objective-bear-witness-description
+
+# ---- Groups (Objectives §6). Each group is listed only at the levels its members belong to. ----
+
+# Xenofauna, level 0.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupXenoEarly
+  weights:
+    CMUEWJoeMaimXenoEarlyObjective: 1
+    CMUEWJoeDeliverVictimsObjective: 1
+
+# Xenofauna, level 1: Purge the Nest joins.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupXenoEarlyPurge
+  weights:
+    CMUEWJoeMaimXenoEarlyObjective: 1
+    CMUEWJoeDeliverVictimsObjective: 1
+    CMUEWJoePurgeNestObjective: 1
+
+# Xenofauna, levels 2-4.
 - type: weightedRandom
   id: CMUEWJoeObjectiveGroupXeno
   weights:
     CMUEWJoeMaimXenoObjective: 1
     CMUEWJoeDeliverVictimsObjective: 1
+    CMUEWJoePurgeNestObjective: 1
 
 # Pools. PickFromPool picks a group, then an objective inside it, and skips anything whose
 # requirements or target search fail (no valid victim, no firearms on the planet, every console taken).
 
+# Kill, levels 0-3: Bear Witness joins.
 - type: weightedRandom
   id: CMUEWJoeObjectiveGroupKill
   weights:
     CMUEWJoeKillPersonObjective: 1
     CMUEWJoeKillCountObjective: 0.5
+    CMUEWJoeBearWitnessObjective: 1
 
+# Kill, level 4.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupKillLate
+  weights:
+    CMUEWJoeKillPersonObjective: 1
+    CMUEWJoeKillCountObjective: 0.5
+
+# Collect, level 0.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupCollectEarly
+  weights:
+    CMUEWJoeOfferFirearmsObjective: 1
+    CMUEWJoeCollectIntelObjective: 1
+    CMUEWJoeCollectPowerCellsObjective: 1
+    CMUEWJoeCollectIdCardsObjective: 1
+
+# Collect, levels 1-2: flesh-work and ordnance join.
 - type: weightedRandom
   id: CMUEWJoeObjectiveGroupCollect
   weights:
     CMUEWJoeOfferFirearmsObjective: 1
     CMUEWJoeCollectIntelObjective: 1
-    CMUEWJoeCollectDisksObjective: 0.5
+    CMUEWJoeCollectPowerCellsObjective: 1
+    CMUEWJoeCollectIdCardsObjective: 1
+    CMUEWJoeCollectFleshWorkObjective: 1
+    CMUEWJoeOfferOrdnanceObjective: 1
 
+# Collect, level 3: power cells leave.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupCollectLate
+  weights:
+    CMUEWJoeOfferFirearmsObjective: 1
+    CMUEWJoeCollectIntelObjective: 1
+    CMUEWJoeCollectIdCardsObjective: 1
+    CMUEWJoeCollectFleshWorkObjective: 1
+    CMUEWJoeOfferOrdnanceObjective: 1
+
+# Collect, level 4.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupCollectFinal
+  weights:
+    CMUEWJoeOfferFirearmsObjective: 1
+    CMUEWJoeCollectIntelObjective: 1
+    CMUEWJoeOfferOrdnanceObjective: 1
+
+# Console, level 1.
 - type: weightedRandom
   id: CMUEWJoeObjectiveGroupConsole
   weights:
     CMUEWJoeAssimilateConsoleObjective: 1
 
+# Console, levels 2-4: Silence the Colony joins.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupConsoleLate
+  weights:
+    CMUEWJoeAssimilateConsoleObjective: 1
+    CMUEWJoeSilenceColonyObjective: 1
+
+# Silence, level 0: the colony's eyes.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupSilenceEarly
+  weights:
+    CMUEWJoeBlindTheWatchObjective: 1
+
+# Silence, levels 1-2: Darken a District joins.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupSilence
+  weights:
+    CMUEWJoeBlindTheWatchObjective: 1
+    CMUEWJoeDarkenDistrictObjective: 1
+
+# Silence, levels 3-4.
+- type: weightedRandom
+  id: CMUEWJoeObjectiveGroupSilenceLate
+  weights:
+    CMUEWJoeDarkenDistrictObjective: 1
+
 # Dormant -> UNDERTOW: quiet work only.
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel0
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupXenoEarly: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
-    CMUEWJoeObjectiveGroupCollect: 1
+    CMUEWJoeObjectiveGroupCollectEarly: 1
+    CMUEWJoeObjectiveGroupSilenceEarly: 0.5
 
 # UNDERTOW -> MURMUR: consoles enter the pool.
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel1
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupXenoEarlyPurge: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
     CMUEWJoeObjectiveGroupCollect: 1
     CMUEWJoeObjectiveGroupConsole: 0.5
+    CMUEWJoeObjectiveGroupSilence: 0.5
 
 # MURMUR -> CHORUS
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel2
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupXeno: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
     CMUEWJoeObjectiveGroupCollect: 1
-    CMUEWJoeObjectiveGroupConsole: 1
+    CMUEWJoeObjectiveGroupConsoleLate: 1
+    CMUEWJoeObjectiveGroupSilence: 1
 
 # CHORUS -> ATTENTION
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel3
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
+    CMUEWJoeObjectiveGroupXeno: 1 # refused unless living xenofauna is present (RB-37)
     CMUEWJoeObjectiveGroupKill: 1
-    CMUEWJoeObjectiveGroupCollect: 0.5
-    CMUEWJoeObjectiveGroupConsole: 1
+    CMUEWJoeObjectiveGroupCollectLate: 0.5
+    CMUEWJoeObjectiveGroupConsoleLate: 1
+    CMUEWJoeObjectiveGroupSilenceLate: 1
 
 # ATTENTION -> MELDING: the level table forces a console objective into this offer (D8).
 - type: weightedRandom
   id: CMUEWJoeObjectivesLevel4
   weights:
-    CMUEWJoeObjectiveGroupXeno: 1 # Distress Signal only
-    CMUEWJoeObjectiveGroupKill: 1
-    CMUEWJoeObjectiveGroupCollect: 0.5
-    CMUEWJoeObjectiveGroupConsole: 1
+    CMUEWJoeObjectiveGroupXeno: 1 # refused unless living xenofauna is present (RB-37)
+    CMUEWJoeObjectiveGroupKillLate: 1
+    CMUEWJoeObjectiveGroupCollectFinal: 0.5
+    CMUEWJoeObjectiveGroupConsoleLate: 1
+    CMUEWJoeObjectiveGroupSilenceLate: 1

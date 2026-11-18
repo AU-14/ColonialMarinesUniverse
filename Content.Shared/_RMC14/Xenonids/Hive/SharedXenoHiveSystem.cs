@@ -267,22 +267,10 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         if (hive.IndividualAllies.Contains(ent))
             return true;
 
-        if (TryComp<NpcFactionMemberComponent>(ent, out var factionComp))
-        {
-            bool hit = false;
-            // O(n) at best i think
-            foreach (var fac in factionComp.Factions)
-            {
-                if (hive.Allies.Contains(fac))
-                {
-                    hit = true;
-                    break;
-                }
-            }
-            return hit;
-        }
-
-        return false;
+        // CMU14: most hives have no faction alliances. Skip the target lookup in that case.
+        return hive.Allies.Count > 0
+               && TryComp<NpcFactionMemberComponent>(ent, out var factions)
+               && hive.Allies.Overlaps(factions.Factions);
     }
 
     /// <summary>

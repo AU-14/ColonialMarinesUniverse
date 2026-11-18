@@ -38,16 +38,28 @@
         crate: RMCCrateReplacementLights
     - name: WEYSEC Gear
       entries:
+      - cost: 50
+        crate: AU14AttachmentTwoPointSling
+      - cost: 150
+        crate: AU14PVEHandsInsulatedBlackMarine
+      - cost: 250
+        crate: RMCArmorHelmetPMCBlack
+      - cost: 500
+        crate: CMUArmorProdigyFlakVest
       - cost: 700
         crate: CMUCrateBiosuitWYTSSArmor
     - name: WEYSEC Weapons
       entries:
+      - cost: 4500
+        crate: CMUCrateNSG23
       - cost: 1500
         crate: CMUCrateP90
       - cost: 4500
         crate: CMUCrateWYSentry
     - name: WEYSEC Ammo
       entries:
+      - cost: 50
+        crate: CMUCrateNSG23Magazine
       - cost: 750
         crate: CMUCrateP90Mags
       - cost: 2250

@@ -6,7 +6,8 @@ namespace Content.Server.CMU14.Round.Antags.EarlyWarning.Objectives;
 /// "Obtain N items": counts distinct whitelisted entities the owner has taken in hand or equipped
 /// since the objective was assigned (<see cref="Obtained"/>) plus whatever it currently carries, minus
 /// items already spent on an earlier collect objective (<see cref="EWJoeComponent.SpentCollectibles"/>).
-/// Acquisition, not possession: an item that cannot be bagged still counts once it was picked up.
+/// Acquisition, not possession: an item that cannot be bagged still counts once it was picked up, unless
+/// <see cref="RequireHeld"/> asks for possession (RB-34: power cells and ID cards).
 /// Whitelist-driven rather than StealTarget-driven so items count without tagging each one with a
 /// networked component (Balance H-6). Firearms are offered, not collected (EWJoeOfferConditionComponent).
 /// </summary>
@@ -31,6 +32,15 @@ public sealed partial class EWJoeCollectConditionComponent : Component
     /// <summary>Whitelisted items the owner has picked up or equipped since assignment.</summary>
     [DataField]
     public HashSet<EntityUid> Obtained = new();
+
+    /// <summary>
+    /// RB-34: possession, not acquisition. Only matching items in the owner's container tree right now count
+    /// (hands, slots, bags, a cell inside a carried tool); <see cref="Obtained"/> is not kept, so an item picked
+    /// up and put down again no longer counts and the items must be held when the directive completes. Set on
+    /// power cells and ID cards; intel and flesh-work keep counting acquisitions.
+    /// </summary>
+    [DataField]
+    public bool RequireHeld;
 
     /// <summary>The ladder credited this objective, or withdrew it: its items are spent either way.</summary>
     [DataField]
