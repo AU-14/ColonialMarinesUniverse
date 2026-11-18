@@ -1,16 +1,22 @@
 #pragma warning disable RA0002 // tests read component data directly
 using Content.Shared._RMC14.Armor;
+using Content.Shared._RMC14.Gibbing;
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Vendors;
+using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
+using Content.Shared.Ghost.Roles.Components;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Nutrition.Prototypes;
 using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Melee;
+using Robust.Shared.Audio;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -29,6 +35,7 @@ public sealed class BadBloodValueSheetTest
     private const string Lodge = "CMUBadBloodCamp";
     private const string Hound = "CMUMobYautjaBadBloodHound";
     private const string Armory = "CMUBadBloodCampArmory";
+    private const string Kennel = "CMUBadBloodCampKennel";
 
     // the clan's Leader wears the Ancient's council symbol, which YautjaHudSystem shows to Bad Bloods only
     [Test]
@@ -73,11 +80,12 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(bracer.CloakBadBloodCombatLockout, Is.EqualTo(TimeSpan.FromSeconds(4)));
                 Assert.That(bracer.BulletDecloakAbsorbs, Is.False, "a bullet that drops the cloak still lands");
 
-                // caster: stun 60 at 0.7/s, immobilizer 300 every 17 s, lethal 150 every 12 s, eradicator 1500 every 14 s
+                // caster (COUPLING-602): stun 80 at 0.5/s, immobilizer 300 every 17 s, lethal 150 every 12 s,
+                // eradicator 1500 every 14 s
                 var modes = Comp<YautjaCasterComponent>(Caster).Modes;
                 Assert.That(modes, Has.Count.EqualTo(4));
-                Assert.That(modes[0].PowerCost, Is.EqualTo(FixedPoint2.New(60)));
-                Assert.That(modes[0].FireRate, Is.EqualTo(0.7f).Within(0.0001f));
+                Assert.That(modes[0].PowerCost, Is.EqualTo(FixedPoint2.New(80)));
+                Assert.That(modes[0].FireRate, Is.EqualTo(0.5f).Within(0.0001f));
                 Assert.That(modes[1].PowerCost, Is.EqualTo(FixedPoint2.New(300)));
                 Assert.That(1f / modes[1].FireRate, Is.EqualTo(17f).Within(0.01f));
                 Assert.That(modes[BadBloodEradicatorSystem.LethalMode].PowerCost, Is.EqualTo(FixedPoint2.New(150)));
@@ -86,15 +94,19 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(1f / modes[BadBloodEradicatorSystem.EradicatorMode].FireRate, Is.EqualTo(14f).Within(0.01f));
                 Assert.That(new BadBloodEradicatorComponent().Cooldown, Is.EqualTo(TimeSpan.FromMinutes(10)));
 
-                // its bolts: stun 3 s with no human bonus, immobilizer radius 4 for 3 s, lethal 68 Heat out to 16 tiles
+                // its bolts: stun 3 s with no human bonus, immobilizer radius 4 for 3 s, lethal 68 Heat. both stuns leave a
+                // 6 s window after the stun in which another only slows for 2 s (COUPLING-601)
                 var stun = Comp<YautjaCasterStunProjectileComponent>(modes[0].Projectile);
                 Assert.That(stun.StunTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
                 Assert.That(stun.HumanBonusStunTime, Is.EqualTo(TimeSpan.Zero));
+                Assert.That(stun.ImmunityWindow, Is.EqualTo(TimeSpan.FromSeconds(6)));
+                Assert.That(stun.ImmuneSlow, Is.EqualTo(TimeSpan.FromSeconds(2)));
                 var immobilizer = Comp<YautjaCasterImmobilizerProjectileComponent>(modes[1].Projectile);
                 Assert.That(immobilizer.StunRange, Is.EqualTo(4f));
                 Assert.That(immobilizer.StunTime, Is.EqualTo(TimeSpan.FromSeconds(3)));
+                Assert.That(immobilizer.ImmunityWindow, Is.EqualTo(TimeSpan.FromSeconds(6)));
+                Assert.That(immobilizer.ImmuneSlow, Is.EqualTo(TimeSpan.FromSeconds(2)));
                 var lethal = modes[BadBloodEradicatorSystem.LethalMode].Projectile;
-                Assert.That(Comp<ProjectileMaxRangeComponent>(lethal).Max, Is.EqualTo(16f));
                 Assert.That(Comp<ProjectileComponent>(lethal).Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(68)));
                 var blast = Comp<Content.Shared.Explosion.Components.ExplosiveComponent>(lethal);
                 Assert.That(blast.MaxIntensity, Is.EqualTo(45f));
@@ -102,17 +114,19 @@ public sealed class BadBloodValueSheetTest
                 var eradicator = modes[BadBloodEradicatorSystem.EradicatorMode].Projectile;
                 Assert.That(Comp<ProjectileComponent>(eradicator).Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(50)));
 
-                // range cap: every Bad Blood caster mode has its own bolt capped at 16 tiles, short of the hunters' bolt
+                // range by mode, closer for control (COUPLING-602): stun 7, immobilizer 7, lethal 12, eradicator 12, each
+                // short of the hunters' bolt for the same mode
+                float[] ranges = [7f, 7f, 12f, 12f];
                 var hunterModes = Comp<YautjaCasterComponent>("CMUYautjaPlasmaCaster").Modes;
                 for (var i = 0; i < modes.Count; i++)
                 {
                     var bolt = modes[i].Projectile;
                     Assert.That(bolt.Id, Does.StartWith("CMUYautjaBadBlood"), $"mode {i} fires a Bad Blood bolt");
-                    Assert.That(Comp<ProjectileMaxRangeComponent>(bolt).Max, Is.EqualTo(16f), $"mode {i} range cap");
+                    Assert.That(Comp<ProjectileMaxRangeComponent>(bolt).Max, Is.EqualTo(ranges[i]), $"mode {i} range cap");
 
                     var hunterBolt = hunterModes.Find(m => m.Name == modes[i].Name)?.Projectile;
                     if (hunterBolt is { } hunter)
-                        Assert.That(Comp<ProjectileMaxRangeComponent>(hunter).Max, Is.GreaterThan(16f),
+                        Assert.That(Comp<ProjectileMaxRangeComponent>(hunter).Max, Is.GreaterThan(ranges[i]),
                             $"mode {i}: the hunters' bolt keeps its longer range");
                 }
                 Assert.That(protos.HasIndex<EntityPrototype>("CMUYautjaBadBloodCasterLethalBolt"), Is.False,
@@ -123,8 +137,12 @@ public sealed class BadBloodValueSheetTest
                     Is.True);
                 Assert.That(Comp<YautjaCasterStunProjectileComponent>("CMUYautjaCasterStunBolt").HumanBonusStunTime,
                     Is.EqualTo(TimeSpan.FromSeconds(1)));
+                Assert.That(Comp<YautjaCasterStunProjectileComponent>("CMUYautjaCasterStunBolt").ImmunityWindow,
+                    Is.EqualTo(TimeSpan.Zero), "the hunters' stun bolt has no diminishing returns");
                 Assert.That(Comp<YautjaCasterImmobilizerProjectileComponent>("CMUYautjaCasterImmobilizerBolt").StunRange,
                     Is.EqualTo(7f));
+                Assert.That(Comp<YautjaCasterImmobilizerProjectileComponent>("CMUYautjaCasterImmobilizerBolt").ImmunityWindow,
+                    Is.EqualTo(TimeSpan.Zero));
                 Assert.That(Comp<ProjectileMaxRangeComponent>("CMUYautjaCasterLethalBolt").Max, Is.EqualTo(22f));
                 Assert.That(Comp<ProjectileComponent>("CMUYautjaCasterLethalBolt").Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(75)));
                 Assert.That(Comp<ProjectileComponent>("CMUYautjaCasterEradicatorBolt").Damage.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(55)));
@@ -141,7 +159,6 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.SquadOfThreeCost, Is.EqualTo(FixedPoint4.New(16)));
                 Assert.That(rule.SquadOfFiveCost, Is.EqualTo(FixedPoint4.New(24)));
                 Assert.That(rule.LastStandCost, Is.EqualTo(FixedPoint4.New(12)));
-                Assert.That(rule.HoundCost, Is.EqualTo(FixedPoint4.New(6)));
                 Assert.That(rule.TotemCost, Is.EqualTo(FixedPoint4.New(3)));
                 Assert.That(rule.TierTwoLifetimeSp, Is.EqualTo(FixedPoint4.New(12)));
                 Assert.That(rule.TierThreeLifetimeSp, Is.EqualTo(FixedPoint4.New(30)));
@@ -163,11 +180,15 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.ThreatBudgetFraction, Is.EqualTo(0.35f));
                 Assert.That(rule.LivingCapBonus, Is.EqualTo(5));
 
-                // the squad tiers fit the budget: Bad Bloods + landing hounds against round(players x fraction).
-                // 30 players land 5 (+3 hounds) and leave room for a squad of 3; 40 land 6 (+3) and leave room for 5
+                // Blooded kill (STATE-603): +1 Honour when a worthy target dies within 5 s of a Bad Blood melee hit
+                Assert.That(rule.BloodedKillWindow, Is.EqualTo(TimeSpan.FromSeconds(5)));
+                Assert.That(rule.BloodedKillHonour, Is.EqualTo(FixedPoint4.New(1)));
+
+                // the squad tiers fit the budget: Bad Bloods against round(players x fraction). ARCH-603: hounds are
+                // free kennel filler outside the budget. 30 players land 5 and leave room for a squad of 3; 40 land 6
+                // and leave room for 5
                 int Room(int players, int landing) =>
-                    (int) MathF.Round(players * rule.ThreatBudgetFraction, MidpointRounding.AwayFromZero)
-                    - landing - (landing + rule.LandingHoundDivisor - 1) / rule.LandingHoundDivisor;
+                    (int) MathF.Round(players * rule.ThreatBudgetFraction, MidpointRounding.AwayFromZero) - landing;
                 Assert.That(Room(30, 5), Is.GreaterThanOrEqualTo(3), "a squad of 3 fits at 30 players");
                 Assert.That(Room(40, 6), Is.GreaterThanOrEqualTo(5), "a squad of 5 fits at 40 players");
                 Assert.That(rule.LivingCapBonus, Is.GreaterThanOrEqualTo(5), "the living cap admits a squad of 5");
@@ -202,6 +223,10 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(totem.RipeAfter, Is.EqualTo(TimeSpan.FromMinutes(20)));
                 Assert.That(totem.AuraRadius, Is.EqualTo(7f));
                 Assert.That(totem.ContestRadius, Is.EqualTo(7f));
+                // FLOW-607: contested Totems
+                Assert.That(totem.ContestAnnounceCooldown, Is.EqualTo(TimeSpan.FromSeconds(60)));
+                Assert.That(totem.LightEnergy, Is.EqualTo(1.5f));
+                Assert.That(totem.ContestedLightEnergy, Is.EqualTo(0.4f));
 
                 // Lodge: 1 HP/s after 60 s without damage
                 var lodge = Comp<BadBloodCampComponent>(Lodge);
@@ -211,6 +236,42 @@ public sealed class BadBloodValueSheetTest
                 // hound: xeno armor 30, a bite that pierces 20
                 Assert.That(Comp<CMArmorComponent>(Hound).XenoArmor, Is.EqualTo(30));
                 Assert.That(Comp<CMArmorPiercingComponent>(Hound).Amount, Is.EqualTo(20));
+
+                // ECS-606: the clan hound is grunt spam: crit 150 / dead 220, a 1 s leap knockdown, always gibbed. The
+                // override replaces the whole thresholds map; the rest of the leap is the hellhound's
+                var houndThresholds = Comp<MobThresholdsComponent>(Hound).Thresholds;
+                Assert.That(houndThresholds, Has.Count.EqualTo(3));
+                Assert.That(houndThresholds[FixedPoint2.New(150)], Is.EqualTo(MobState.Critical));
+                Assert.That(houndThresholds[FixedPoint2.New(220)], Is.EqualTo(MobState.Dead));
+                var houndLeap = Comp<XenoLeapComponent>(Hound);
+                Assert.That(houndLeap.KnockdownTime, Is.EqualTo(TimeSpan.FromSeconds(1)));
+                Assert.That(houndLeap.Delay, Is.EqualTo(TimeSpan.Zero));
+                Assert.That(houndLeap.CanBeShieldBlocked, Is.False);
+                Assert.That(houndLeap.Damage.GetTotal(), Is.EqualTo(FixedPoint2.New(30)));
+                Assert.That(Comp<RMCGibOnDeathComponent>(Hound).GibChance, Is.EqualTo(1f));
+                Assert.That(protos.Index<EntityPrototype>(Hound).TryComp<Content.Shared.Traits.Assorted.UnrevivableComponent>(out _, factory),
+                    Is.True, "an unrevivable hound gibs when it dies from crit too");
+
+                // the hunters' hellhound is untouched: 230 / 330, a 2 s leap knockdown, no gib
+                var hellhoundThresholds = Comp<MobThresholdsComponent>("CMUMobYautjaHellhound").Thresholds;
+                Assert.That(hellhoundThresholds[FixedPoint2.New(230)], Is.EqualTo(MobState.Critical));
+                Assert.That(hellhoundThresholds[FixedPoint2.New(330)], Is.EqualTo(MobState.Dead));
+                Assert.That(Comp<XenoLeapComponent>("CMUMobYautjaHellhound").KnockdownTime, Is.EqualTo(TimeSpan.FromSeconds(2)));
+                Assert.That(protos.Index<EntityPrototype>("CMUMobYautjaHellhound").TryComp<RMCGibOnDeathComponent>(out _, factory),
+                    Is.False);
+
+                // ARCH-603, the kennel: 2 free hounds at pitch, one more every 2 minutes, one per 2 living Bad Bloods,
+                // the reserve's first minute. FLOW-605: a minute between a player's hounds
+                var kennel = Comp<BadBloodKennelSpawnerComponent>(Kennel);
+                Assert.That(kennel.MinStock, Is.EqualTo(2));
+                Assert.That(kennel.BadBloodsPerHound, Is.EqualTo(2));
+                Assert.That(kennel.Interval, Is.EqualTo(TimeSpan.FromSeconds(120)));
+                Assert.That(kennel.ReservePriority, Is.EqualTo(TimeSpan.FromSeconds(60)));
+                var kennelSpawner = Comp<GhostRoleMobSpawnerComponent>(Kennel);
+                Assert.That(kennelSpawner.Prototype?.Id, Is.EqualTo(Hound));
+                Assert.That(kennelSpawner.DeleteOnSpawn, Is.False);
+                Assert.That(rule.HoundRespawnDelay, Is.EqualTo(TimeSpan.FromSeconds(60)));
+                Assert.That(rule.LodgeRegionSize, Is.EqualTo(30), "FLOW-606: the marine map box around the Lodge");
 
                 // survival: hunger 8 and thirst 6 a minute, starting at 300 to 380
                 var hunger = protos.Index<SatiationPrototype>("CMUYautjaBadBloodHunger");
@@ -240,6 +301,20 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(hunterSet["Slash"], Is.EqualTo(0.28f));
                 Assert.That(hunterSet["Heat"], Is.EqualTo(0.65f));
 
+                // health (ECS-608): Bad Bloods go critical at 280 and die at 380, the hunters stay at 240 / 340. the
+                // override replaces the whole map, so no 240 / 340 entry is left over
+                foreach (var mob in new[] { "CMUMobYautjaBadBloodGrunt", "CMUMobYautjaBadBloodLeader" })
+                {
+                    var thresholds = Comp<MobThresholdsComponent>(mob).Thresholds;
+                    Assert.That(thresholds, Has.Count.EqualTo(3), mob);
+                    Assert.That(thresholds[FixedPoint2.New(280)], Is.EqualTo(MobState.Critical), mob);
+                    Assert.That(thresholds[FixedPoint2.New(380)], Is.EqualTo(MobState.Dead), mob);
+                }
+
+                var hunterThresholds = Comp<MobThresholdsComponent>("CMUMobYautja").Thresholds;
+                Assert.That(hunterThresholds[FixedPoint2.New(240)], Is.EqualTo(MobState.Critical));
+                Assert.That(hunterThresholds[FixedPoint2.New(340)], Is.EqualTo(MobState.Dead));
+
                 // armor (Option 2): patchwork melee 20, Leader plate melee 30 on every Leader piece and the armory's
                 Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodArmorPatchwork").Melee, Is.EqualTo(20));
                 foreach (var plate in new[]
@@ -253,8 +328,8 @@ public sealed class BadBloodValueSheetTest
                     Assert.That(Comp<CMArmorComponent>(plate).Bullet, Is.EqualTo(55), plate);
                 }
 
-                // bullet armor (ARCH-03): patchwork 25, armored mask 30, full clan armor 50
-                Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodArmorPatchwork").Bullet, Is.EqualTo(25));
+                // bullet armor (ARCH-03, ECS-608): patchwork 40 (melee stays 20), armored mask 30, full clan armor 50
+                Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodArmorPatchwork").Bullet, Is.EqualTo(40));
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodArmoredMask").Bullet, Is.EqualTo(30));
 
                 // the armored clan mask is the upgrade over the crimson mask a grunt lands in
@@ -278,25 +353,44 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(Comp<CMArmorComponent>("CMUBadBloodClanArmor").Bullet, Is.EqualTo(50));
                 Assert.That(Comp<CMArmorComponent>("CMUYautjaBadBloodGreavesPatchwork").Bullet, Is.EqualTo(50));
 
-                // melee (ARCH-02): the starter weapons hit like the honourable ones; the forge and the golden tier add
-                foreach (var (badBlood, hunter, type, hit, hunterHit) in new[]
+                // melee (ECS-607): the Bad Blood weapons hit 20-28% harder than the honourable ones and keep their attack
+                // rate and sounds; the forge and the golden tier add on top. against marines all three pierce 50 / strip
+                // 0.004, the honourable weapons 40 / 0.01. each staggers a marine (ECS-604) and pays 10 charge a hit
+                // (ECS-609)
+                foreach (var (badBlood, hunter, type, hit, hunterHit, slow, cooldown) in new[]
                          {
-                             ("CMUYautjaBadBloodWristBlades", "CMUYautjaWristBlades", "Slash", 20, 20),
-                             ("CMUYautjaBadBloodScimitar", "CMUYautjaScimitar", "Slash", 25, 25),
-                             ("CMUYautjaBadBloodChainGauntlet", "CMUYautjaChainGauntlet", "Blunt", 20, 20),
+                             ("CMUYautjaBadBloodWristBlades", "CMUYautjaWristBlades", "Slash", 24, 20, 0.8, 2.0),
+                             ("CMUYautjaBadBloodScimitar", "CMUYautjaScimitar", "Slash", 32, 25, 1.5, 2.5),
+                             ("CMUYautjaBadBloodChainGauntlet", "CMUYautjaChainGauntlet", "Blunt", 24, 20, 1.2, 2.0),
                          })
                 {
-                    Assert.That(Comp<MeleeWeaponComponent>(badBlood).Damage.DamageDict[type], Is.EqualTo(FixedPoint2.New(hit)), badBlood);
-                    Assert.That(Comp<MeleeWeaponComponent>(hunter).Damage.DamageDict[type], Is.EqualTo(FixedPoint2.New(hunterHit)), hunter);
+                    var badBloodMelee = Comp<MeleeWeaponComponent>(badBlood);
+                    var hunterMelee = Comp<MeleeWeaponComponent>(hunter);
+                    Assert.That(badBloodMelee.Damage.DamageDict[type], Is.EqualTo(FixedPoint2.New(hit)), badBlood);
+                    Assert.That(badBloodMelee.Damage.DamageDict, Has.Count.EqualTo(1), badBlood);
+                    Assert.That(hunterMelee.Damage.DamageDict[type], Is.EqualTo(FixedPoint2.New(hunterHit)), hunter);
+                    Assert.That(badBloodMelee.AttackRate, Is.EqualTo(hunterMelee.AttackRate), $"{badBlood} keeps the attack rate");
+                    Assert.That((badBloodMelee.HitSound as SoundCollectionSpecifier)?.Collection,
+                        Is.EqualTo((hunterMelee.HitSound as SoundCollectionSpecifier)?.Collection).And.Not.Null,
+                        $"{badBlood} keeps its hit sound");
+
+                    var badBloodHuman = Comp<YautjaHumanMeleeComponent>(badBlood);
+                    Assert.That(badBloodHuman.Penetration, Is.EqualTo(50), badBlood);
+                    Assert.That(badBloodHuman.StripChancePerArmor, Is.EqualTo(0.004f), badBlood);
+                    var hunterHuman = Comp<YautjaHumanMeleeComponent>(hunter);
+                    Assert.That(hunterHuman.Penetration, Is.EqualTo(40), hunter);
+                    Assert.That(hunterHuman.StripChancePerArmor, Is.EqualTo(0.01f), hunter);
+
+                    var onHit = Comp<BadBloodMeleeComponent>(badBlood);
+                    Assert.That(onHit.StaggerSlow, Is.EqualTo(TimeSpan.FromSeconds(slow)), badBlood);
+                    Assert.That(onHit.StaggerCooldown, Is.EqualTo(TimeSpan.FromSeconds(cooldown)), badBlood);
+                    Assert.That(onHit.ChargeRefund, Is.EqualTo(10f), badBlood);
+                    Assert.That(protos.Index<EntityPrototype>(hunter).TryComp<BadBloodMeleeComponent>(out _, factory), Is.False,
+                        $"{hunter} stays as it is");
                 }
 
-                // blades against marines: Bad Blood wrist blades penetration 50 / strip 0.006, honourable 40 / 0.01
-                var badBloodBlades = Comp<YautjaHumanMeleeComponent>("CMUYautjaBadBloodWristBlades");
-                Assert.That(badBloodBlades.Penetration, Is.EqualTo(50));
-                Assert.That(badBloodBlades.StripChancePerArmor, Is.EqualTo(0.006f));
-                var hunterBlades = Comp<YautjaHumanMeleeComponent>("CMUYautjaWristBlades");
-                Assert.That(hunterBlades.Penetration, Is.EqualTo(40));
-                Assert.That(hunterBlades.StripChancePerArmor, Is.EqualTo(0.01f));
+                Assert.That(Comp<StaminaDamageOnHitComponent>("CMUYautjaBadBloodChainGauntlet").Damage, Is.EqualTo(15f),
+                    "the Bad Blood chain gauntlet keeps its stamina damage");
 
                 // weapon tiers (ARCH-02): the forge adds a fifth, the blessed weapons are the golden tier
                 Assert.That(Comp<BadBloodForgeUpgradeComponent>("CMUBadBloodForgeUpgrade").Multiplier, Is.EqualTo(1.2f).Within(0.001f));
@@ -335,11 +429,101 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(armory.LeaderOnly, Does.Contain(new EntProtoId("CMUBadBloodLethalUnlock")));
                 Assert.That(PriceOf(Comp<CMAutomatedVendorComponent>(Armory), "CMUBadBloodLethalUnlock"), Is.EqualTo(7));
                 Assert.That(armory.TierFourPrices["CMUYautjaWarGlaive"], Is.EqualTo(4));
+
+                // STATE-602: kennel breeding is tier I for 5 (halves the interval, twice), the pack tier II for 7
+                // (two more hounds always ready, once)
+                var vendor = Comp<CMAutomatedVendorComponent>(Armory);
+                Assert.That(armory.Tiers["CMUBadBloodKennelRate"], Is.EqualTo(1));
+                Assert.That(PriceOf(vendor, "CMUBadBloodKennelRate"), Is.EqualTo(5));
+                var rate = Comp<BadBloodKennelUpgradeComponent>("CMUBadBloodKennelRate");
+                Assert.That(rate.IntervalMultiplier, Is.EqualTo(0.5f));
+                Assert.That(rate.MinStockBonus, Is.EqualTo(0));
+                Assert.That(rate.MaxBuys, Is.EqualTo(2));
+                Assert.That(armory.Tiers["CMUBadBloodKennelPack"], Is.EqualTo(2));
+                Assert.That(PriceOf(vendor, "CMUBadBloodKennelPack"), Is.EqualTo(7));
+                var pack = Comp<BadBloodKennelUpgradeComponent>("CMUBadBloodKennelPack");
+                Assert.That(pack.IntervalMultiplier, Is.EqualTo(1f));
+                Assert.That(pack.MinStockBonus, Is.EqualTo(2));
+                Assert.That(pack.MaxBuys, Is.EqualTo(1));
                 Assert.That(armory.TierFourPrices["CMUBadBloodLeaderArmor"], Is.EqualTo(5));
 
                 // STATE-102: the old job-body gear and the unmapped vendor are retired
                 Assert.That(protos.HasIndex<Content.Shared.Roles.StartingGearPrototype>("CMUYautjaBadBloodGear"), Is.False);
                 Assert.That(protos.HasIndex<EntityPrototype>("CMUYautjaBadBloodLoadoutVendor"), Is.False);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14 ARCH-604 to ARCH-607: every caste is one per four living Bad Bloods and at least one, the perks hold the
+    // sheet, and each perk component's code default is its YAML value
+    [Test]
+    public async Task CastesHoldTheValueSheet()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var protos = server.ProtoMan;
+            var factory = server.EntMan.ComponentFactory;
+            ProtoId<BadBloodCastePrototype> engineer = "Engineer";
+            ProtoId<BadBloodCastePrototype> medic = "Medic";
+            ProtoId<BadBloodCastePrototype> berserker = "Berserker";
+            ProtoId<BadBloodCastePrototype> tracker = "Tracker";
+            ProtoId<BadBloodCastePrototype> falconer = "Falconer";
+
+            T Perk<T>(ProtoId<BadBloodCastePrototype> caste) where T : IComponent, new()
+            {
+                var found = protos.Index(caste).AddComponents.TryGetValue(factory.GetComponentName<T>(), out var entry);
+                Assert.That(found, Is.True, $"{caste.Id} adds no {typeof(T).Name}");
+                return (T) entry.Component;
+            }
+
+            Assert.Multiple(() =>
+            {
+                foreach (var caste in new[] { engineer, medic, berserker, tracker, falconer })
+                {
+                    var proto = protos.Index(caste);
+                    Assert.That(proto.CapDivisor, Is.EqualTo(4), $"{caste.Id}: one per four living Bad Bloods");
+                    Assert.That(proto.MinCap, Is.EqualTo(1), $"{caste.Id}: at least one");
+                }
+
+                // Engineer: RMC engineering 2, builds anywhere, the honourable visor
+                Assert.That(protos.Index(engineer).Skills["RMCSkillEngineer"], Is.EqualTo(2));
+                Perk<BadBloodBuildAnywhereComponent>(engineer);
+                Perk<BadBloodHunterVisorComponent>(engineer);
+
+                // Medic: Yautja medicine in 60% of the time
+                Assert.That(Perk<BadBloodMedicSpeedComponent>(medic).Multiplier, Is.EqualTo(0.6f).Within(0.0001f));
+                Assert.That(new BadBloodMedicSpeedComponent().Multiplier, Is.EqualTo(0.6f).Within(0.0001f));
+
+                // Berserker: +80 thresholds, 85% damage taken, 90% sprint, 1.5x stagger
+                foreach (var b in new[] { Perk<BadBloodBerserkerComponent>(berserker), new BadBloodBerserkerComponent() })
+                {
+                    Assert.That(b.ThresholdBonus, Is.EqualTo(80));
+                    Assert.That(b.DamageTakenMultiplier, Is.EqualTo(0.85f).Within(0.0001f));
+                    Assert.That(b.SprintMultiplier, Is.EqualTo(0.9f).Within(0.0001f));
+                    Assert.That(b.StaggerMultiplier, Is.EqualTo(1.5f).Within(0.0001f));
+                }
+
+                // Tracker: 85% armour, 75% cloak cooldown, marks show for 60 s
+                foreach (var t in new[] { Perk<BadBloodTrackerComponent>(tracker), new BadBloodTrackerComponent() })
+                {
+                    Assert.That(t.ArmorMultiplier, Is.EqualTo(0.85f).Within(0.0001f));
+                    Assert.That(t.CloakCooldownMultiplier, Is.EqualTo(0.75f).Within(0.0001f));
+                    Assert.That(t.MarkDuration, Is.EqualTo(TimeSpan.FromSeconds(60)));
+                }
+
+                // Falconer: no perks, the falcon drone at the armory, tier I for 4, one each, Falconers only
+                Assert.That(protos.Index(falconer).AddComponents, Is.Empty);
+                var armory = protos.Index<EntityPrototype>(Armory);
+                Assert.That(armory.TryComp<BadBloodCampArmoryComponent>(out var armoryComp, factory), Is.True);
+                Assert.That(armory.TryComp<CMAutomatedVendorComponent>(out var vendor, factory), Is.True);
+                Assert.That(armoryComp!.Tiers["CMUYautjaFalconDroneBadBlood"], Is.EqualTo(1));
+                Assert.That(armoryComp.CasteWares["CMUYautjaFalconDroneBadBlood"], Is.EqualTo(falconer));
+                Assert.That(PriceOf(vendor!, "CMUYautjaFalconDroneBadBlood"), Is.EqualTo(4));
             });
         });
 

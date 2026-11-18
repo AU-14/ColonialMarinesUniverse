@@ -5,7 +5,12 @@
   KnowledgeLevelsGovforThreat:
     "Threat Unknown.": 1
     "Anomalous cloaked contacts detected. Something is hunting us.": 2
-    "A cloaked warship hovers in orbit over the area of operations.": 3
+    "Intercepts point to an outcast clan, cut off from its own hunts and signalling for a ship that has not come.": 3
+  # FLOW-611: a quarter of rounds, marine intel reads like another threat's, so the marines are misled
+  decoyChance: 0.25
+  decoyPrimers:
+  - AU14PrimerThreatXeno
+  - AU14PrimerThreatNeomorphs
 
 # Base: 1 leader + 4 grunts. Scales at 0.08 per player above 30 (one extra grunt per ~12-13 players above 30).
 - type: threat

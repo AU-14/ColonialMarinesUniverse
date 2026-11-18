@@ -226,7 +226,11 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         if (selectedThreat == null || selectedThreat.LorePrimer is not { } primerId)
             return;
 
-        if (!_prototypes.TryIndex(primerId, out LorePrimerPrototype? primer) || primer.KnowledgeLevels is null || primer.KnowledgeLevels.Count == 0)
+        if (!_prototypes.TryIndex(primerId, out LorePrimerPrototype? primer))
+            return;
+
+        primer = LorePrimerDecoy.Resolve(primer, _prototypes, _random); // CMU14 FLOW-611: intel may point at another threat
+        if (primer.KnowledgeLevels is null || primer.KnowledgeLevels.Count == 0)
             return;
 
         var levels = primer.KnowledgeLevels.Values.Distinct().ToList();

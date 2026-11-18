@@ -43,7 +43,7 @@ cmu-bad-blood-squad-seat-closed = That squad has no seat left.
 cmu-bad-blood-squad-seat-held = You already hold a seat in a Bad Blood squad.
 cmu-bad-blood-squad-seat-hunter = You hunted with honour this round. The Bad Bloods will not have you.
 cmu-bad-blood-squad-seat-reserve-only = These seats are held for the Blood Reserve.
-cmu-bad-blood-squad-seat-priority = The Blood Reserve and the clan's fallen choose first. Ask again in a moment.
+cmu-bad-blood-squad-seat-priority = The Blood Reserve chooses first. Ask again in a moment.
 
 # Hounds
 
@@ -64,17 +64,14 @@ ent-CMUBadBloodHoundObservationPadInternalCamera = Clan Hound Observation Interf
 
 cmu-bad-blood-houndpad-interface-title = Clan Hound Observation
 cmu-bad-blood-hound-ghost-name = Bad Blood clan hound
-cmu-bad-blood-hound-ghost-description = A hunting hound woken by a Bad Blood. You are bound to the one who woke you.
+cmu-bad-blood-hound-ghost-description = A hunting hound of the Bad Blood clan. You answer to the one who woke you, or to the clan's Leader.
 cmu-bad-blood-hound-ghost-rules = You are a Bad Blood's hound. Obey your master, stay with the clan and attack whatever they hunt.
 
-cmu-bad-blood-hound-verb = Call a hound ({ $cost } SP)
-cmu-bad-blood-hound-verb-message = Spend the clan's Superiority Points on a sleeping hound. Only you can wake it at first.
-cmu-bad-blood-hound-no-kennel = The clan has no kennel to keep a hound in.
-cmu-bad-blood-hound-cap = The clan cannot keep any more hounds.
-cmu-bad-blood-hound-cannot-afford = The clan needs { $cost } Superiority Points for a hound.
-cmu-bad-blood-hound-bought = A hound sleeps at the kennel. It is yours alone to wake for { $seconds } seconds.
+cmu-bad-blood-kennel-ghost-name = Bad Blood clan hound (kennel)
+cmu-bad-blood-kennel-no-clan = No clan is left for these hounds to hunt with.
+cmu-bad-blood-kennel-ghost-description = A hunting hound from the clan's kennel. You answer to the clan's Leader. If you fall, another hound waits for you in a minute.
+cmu-bad-blood-hound-respawn-wait = Your last hound fell only moments ago. You can take another in { $seconds } seconds.
 cmu-bad-blood-hound-sleeper-not-clan = The hound does not know you. It sleeps on.
 cmu-bad-blood-hound-sleeper-reserved = This hound was called by another of the clan. Leave it to them for now.
 cmu-bad-blood-hound-seat-hunter = You hunted with honour this round. The clan's hounds will not answer you.
 cmu-bad-blood-hound-seat-reserve = The Blood Reserve chooses first. Ask again in a moment.
-cmu-bad-blood-hound-seat-priority = The clan's fallen choose first. Ask again in a moment.

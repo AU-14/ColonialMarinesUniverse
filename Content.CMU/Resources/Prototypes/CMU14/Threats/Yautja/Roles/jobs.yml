@@ -269,11 +269,11 @@
   equipment:
     ears: CMUYautjaBadBloodCommunicator
     gloves: CMUYautjaBadBloodBracer
-    back: CMUYautjaCloakPack
+    back: CMUYautjaBadBloodCloakPackPlain # CMU14 ECS-602: the gear-locked grunt harness, mesh and mask
     outerClothing: CMUYautjaClanArmor
-    jumpsuit: CMUYautjaBodyMesh
+    jumpsuit: CMUYautjaBadBloodBodyMesh
     shoes: CMUYautjaClanGreaves
-    mask: CMUYautjaMask
+    mask: CMUYautjaBadBloodMask
     belt: CMUYautjaTrophyBelt
     pocket1: CMUYautjaHealthShard
     pocket2: CMUYautjaBadBloodMedicompFull

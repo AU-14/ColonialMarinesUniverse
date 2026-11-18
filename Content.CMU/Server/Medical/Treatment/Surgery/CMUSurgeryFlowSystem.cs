@@ -148,12 +148,10 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         }
         if (TryComp<CMUImprovisedSurgeryToolComponent>(tool, out var improvised))
             delay = TimeSpan.FromSeconds(delay.TotalSeconds * MathF.Max(1f, improvised.DelayMultiplier));
-        // CMU14 ARCH-05: a Bad Blood Medic works the clan's medicine faster than other Bad Bloods
-        if (TryComp<Content.Shared.CMU14.Yautja.BadBlood.BadBloodCasteComponent>(surgeon, out var caste) &&
-            caste.Caste == Content.Shared.CMU14.Yautja.BadBlood.BadBloodCaste.Medic)
-        {
-            delay = TimeSpan.FromSeconds(delay.TotalSeconds * Math.Clamp(caste.MedicDelayMultiplier, 0.1f, 1f));
-        }
+        // CMU14 ARCH-05: a Bad Blood Medic works the clan's medicine faster than other Bad Bloods.
+        // CMU14 ARCH-604: the Medic's perk is a marker component
+        if (TryComp<Content.Shared.CMU14.Yautja.BadBlood.BadBloodMedicSpeedComponent>(surgeon, out var medic))
+            delay = TimeSpan.FromSeconds(delay.TotalSeconds * Math.Clamp(medic.Multiplier, 0.1f, 1f));
 
         var ev = new CMUSurgeryStepDoAfterEvent(
             token,

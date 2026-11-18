@@ -22,6 +22,19 @@ public sealed partial class LorePrimerPrototype : IPrototype
         [DataField("threattext", required: false)]
         public string? ThreatText { get; private set; }
 
+        /// <summary>
+        /// CMU14 FLOW-611: the chance (0-1) that this round's marine knowledge line is drawn from one of
+        /// <see cref="DecoyPrimers"/> instead, so the marines' intel points at the wrong threat.
+        /// </summary>
+        [DataField("decoyChance")]
+        public float DecoyChance { get; private set; }
+
+        /// <summary>
+        /// CMU14 FLOW-611: primers whose knowledge levels may stand in for this one's.
+        /// </summary>
+        [DataField("decoyPrimers")]
+        public List<ProtoId<LorePrimerPrototype>>? DecoyPrimers { get; private set; }
+
 
 }
 

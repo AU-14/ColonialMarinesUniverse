@@ -168,6 +168,10 @@ public sealed partial class YautjaClanHallEui : BaseEui
     private bool IsStaff => _admin.HasAdminFlag(Player, AdminFlags.Clans);
     private bool IsHost => _admin.HasAdminFlag(Player, AdminFlags.Host);
 
+    // CMU14 STATE-604
+    private bool IsBadBloodBody =>
+        Player.AttachedEntity is { } body && _entities.HasComponent<YautjaBadBloodComponent>(body);
+
     private async Task<YautjaClanHallActor> Actor()
     {
         var actor = await _clans.ResolveActor(Player.UserId, IsStaff, IsHost);
@@ -316,6 +320,13 @@ public sealed partial class YautjaClanHallEui : BaseEui
 
             case YautjaClanHallPetitionMessage petition:
             {
+                // CMU14 STATE-604: a Bad Blood is cast out of the clans, even when a whitelisted hunter plays it
+                if (petition.ClanId != null && IsBadBloodBody)
+                {
+                    Report(false, "cmu-yautja-hall-denied-petition-bad-blood");
+                    return;
+                }
+
                 var result = await _clans.HallPetition(actor, petition.ClanId);
                 Report(result, petition.ClanId == null ? "cmu-yautja-hall-done-withdrawn" : "cmu-yautja-hall-done-petition");
                 return;
@@ -562,7 +573,10 @@ public sealed partial class YautjaClanHallEui : BaseEui
                 Staff = actor.Staff,
                 Host = actor.Host,
                 Council = YautjaClanHallPolicy.IsCouncil(actor),
-                CanPetition = YautjaClanHallPolicy.CanPetition(actor),
+                // CMU14 STATE-604: the board holds exactly the whitelisted or profiled hunters HallPetition accepts
+                CanPetition = YautjaClanHallPolicy.CanPetition(actor) &&
+                              snapshots.ContainsKey(Player.UserId) &&
+                              !IsBadBloodBody,
                 PetitionClanId = petitions.FirstOrDefault(entry => entry.PlayerUserId == Player.UserId.UserId)?.ClanId,
             },
             Clans = clanRows,
@@ -667,15 +681,13 @@ public sealed partial class YautjaClanHallEui : BaseEui
 
         if (YautjaClanHallPolicy.CanAnswerPetitions(actor, clan.Id))
         {
+            // CMU14 STATE-604: a request from someone off the hunter board (no whitelist, no clan profile) is one
+            // the old ungated petition let through. it showed as a raw user id and can't be accepted, so hide it
             page.Petitions = petitions
                 .Where(petition => petition.ClanId == clan.Id)
-                .Select(petition =>
-                {
-                    var id = new NetUserId(petition.PlayerUserId);
-                    return snapshots.TryGetValue(id, out var entry)
-                        ? Row(entry.Snapshot, entry.Row.Name)
-                        : new YautjaClanHallHunterRow { PlayerId = id, Name = NameOf(id, string.Empty) };
-                })
+                .Select(petition => new NetUserId(petition.PlayerUserId))
+                .Where(snapshots.ContainsKey)
+                .Select(id => Row(snapshots[id].Snapshot, snapshots[id].Row.Name))
                 .ToList();
         }
 

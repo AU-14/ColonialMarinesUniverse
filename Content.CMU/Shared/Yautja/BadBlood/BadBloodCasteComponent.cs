@@ -1,38 +1,52 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
 /// <summary>
-/// ARCH-04 to ARCH-06: the Bad Blood castes. A Bad Blood takes one up at its station on the Lodge and keeps it for
-/// the rest of that life.
-/// </summary>
-[Serializable, NetSerializable]
-public enum BadBloodCaste : byte
-{
-    /// <summary>
-    /// Builds anywhere, sees as an honourable hunter does, and carries anti-tank and demolition gear.
-    /// </summary>
-    Engineer,
-
-    /// <summary>
-    /// Works Yautja medicine faster than other Bad Bloods and carries the clan's medical supplies.
-    /// </summary>
-    Medic,
-}
-
-/// <summary>
-/// On a Bad Blood who has taken up a caste.
+/// On a Bad Blood who has taken up a caste (ARCH-04 to ARCH-06; CMU14 ARCH-604: castes are prototypes). The caste's
+/// powers are the marker components its prototype adds, not this.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class BadBloodCasteComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public BadBloodCaste Caste;
+    public ProtoId<BadBloodCastePrototype> Caste;
+}
 
-    /// <summary>
-    /// What a Medic's medical and surgical steps take, as a share of another Bad Blood's.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public float MedicDelayMultiplier = 0.6f;
+/// <summary>
+/// CMU14 ARCH-604: the Lodge's "Choose your caste" verb sits on the entity that carries this (BadBloodCasteSystem).
+/// </summary>
+[RegisterComponent]
+public sealed partial class BadBloodCasteChoiceComponent : Component;
+
+/// <summary>
+/// CMU14 ARCH-604: the Lodge's caste dialog sends this back when a Bad Blood picks <see cref="Caste"/>.
+/// <see cref="Lodge"/> is the Lodge the dialog was opened at: the choice only counts while the user still stands there.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed record BadBloodCasteChosenEvent(NetEntity User, ProtoId<BadBloodCastePrototype> Caste, NetEntity Lodge);
+
+/// <summary>
+/// CMU14 ARCH-604 (Engineer): builds anywhere, the Lodge's build range aside (BadBloodQuarrySystem).
+/// </summary>
+[RegisterComponent]
+public sealed partial class BadBloodBuildAnywhereComponent : Component;
+
+/// <summary>
+/// CMU14 ARCH-604 (Engineer): the mask visor sees as an honourable hunter's does (YautjaMaskSystem).
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class BadBloodHunterVisorComponent : Component;
+
+/// <summary>
+/// CMU14 ARCH-604 (Medic): Yautja medical and surgical steps take <see cref="Multiplier"/> of their time
+/// (CMUSurgeryFlowSystem).
+/// </summary>
+[RegisterComponent]
+public sealed partial class BadBloodMedicSpeedComponent : Component
+{
+    [DataField]
+    public float Multiplier = 0.6f;
 }

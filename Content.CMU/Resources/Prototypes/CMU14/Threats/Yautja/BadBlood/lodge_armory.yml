@@ -1,6 +1,6 @@
 # Lodge part: the armory. Deployed with the Lodge and removed with it.
 # It is an automated vendor that sells for the buyer's own Honour, earned by offering trophies (BadBloodCampArmory
-# answers the vendor's pooled-points hook), so "points" below are Honour. Clan SP only buys squads, hounds and Totems. Tiers open by lifetime SP on the rule: II at 12, III at 30, IV with
+# answers the vendor's pooled-points hook), so "points" below are Honour. Clan SP only buys squads and Totems; hounds are free at the kennel. Tiers open by lifetime SP on the rule: II at 12, III at 30, IV with
 # the clan ship. The plasma caster itself is never sold: a Bad Blood lands with stun and immobilizer, the clan buys
 # the lethal bolt once at tier II, and the Leader buys the eradicator at tier III after it. The plasma lance is not
 # sold at all: it gibs humans, and a gibbed body gives the clan nothing.
@@ -39,6 +39,8 @@
       CMUYautjaCleanserGelVial: 1
       CMUYautjaHarpoon: 1
       CMUYautjaCeremonialDagger: 1
+      CMUBadBloodKennelRate: 1
+      CMUYautjaFalconDroneBadBlood: 1
       CMUBadBloodWristBladesAttachment: 2
       CMUBadBloodScimitarAttachment: 2
       CMUBadBloodChainGauntletAttachment: 2
@@ -52,6 +54,7 @@
       CMUYautjaWarAxe: 2
       CMUBadBloodLethalUnlock: 2
       CMUBadBloodForgeUpgrade: 2
+      CMUBadBloodKennelPack: 2
       CMUYautjaWarGlaive: 3
       CMUYautjaDualWarScythe: 3
       CMUBadBloodScavengedSpikeLauncher: 3
@@ -77,6 +80,9 @@
     tierFourPrices:
       CMUYautjaWarGlaive: 4
       CMUBadBloodLeaderArmor: 5
+    # CMU14 ARCH-604: wares only one caste may buy
+    casteWares:
+      CMUYautjaFalconDroneBadBlood: Falconer
   - type: CMAutomatedVendor
     uiStyle: Yautja
     pointsType: BadBloodSp
@@ -105,6 +111,14 @@
       - id: CMUYautjaSmartDisc
         name: Smart-Disc
         points: 5
+      - id: CMUBadBloodKennelRate
+        name: Kennel Breeding (whole clan, hounds twice as fast, twice)
+        points: 5
+      # CMU14 ARCH-607: the Falconer's scout drone, one each
+      - id: CMUYautjaFalconDroneBadBlood
+        name: Falcon Drone (Falconer only)
+        points: 4
+        maxPerUser: 1
     - name: Tier II (12 lifetime SP)
       entries:
       - id: CMUBadBloodWristBladesAttachment
@@ -147,6 +161,9 @@
       - id: CMUBadBloodForgeUpgrade
         name: Forge Your Bracer Weapon (+20% damage)
         points: 5
+      - id: CMUBadBloodKennelPack
+        name: Kennel Pack (whole clan, two more hounds ready, once)
+        points: 7
     - name: Tier III (30 lifetime SP)
       entries:
       - id: CMUYautjaWarGlaive
@@ -321,3 +338,32 @@
     sprite: CMU14/Yautja/actions.rsi
     state: bracer_framed
   - type: BadBloodEradicatorUnlock
+
+# STATE-602: not things to carry. Kennel upgrades bought with Honour: the clan buys the kennel's rate and stock, never
+# the hounds themselves. The armory applies them to the standing kennel and deletes the placeholder. Rebuilding the
+# Lodge builds a new kennel without them
+- type: entity
+  id: CMUBadBloodKennelRate
+  name: kennel breeding
+  description: The kennel raises its hounds twice as fast.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
+    state: "Normal_Hellhound_Sleeping"
+  - type: BadBloodKennelUpgrade
+    intervalMultiplier: 0.5
+    maxBuys: 2
+
+- type: entity
+  id: CMUBadBloodKennelPack
+  name: kennel pack
+  description: The kennel always keeps two more hounds ready.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
+    state: "Normal_Hellhound_Sleeping"
+  - type: BadBloodKennelUpgrade
+    minStockBonus: 2
+    maxBuys: 1

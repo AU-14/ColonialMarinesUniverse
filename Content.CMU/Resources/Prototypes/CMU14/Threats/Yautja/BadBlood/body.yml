@@ -18,6 +18,13 @@
   components:
   - type: Damageable
     damageModifierSet: CMUYautjaBadBlood
+  # ECS-608: tougher than an honourable hunter (240 / 340), so closing in to fight is survivable. Overriding
+  # thresholds replaces the whole map, so this is CMUMobYautja's full list with the numbers raised
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      280: Critical
+      380: Dead
   # overriding organs replaces the whole map, so this is AppearanceYautja's list with the stomach swapped
   - type: InitialBody
     organs:

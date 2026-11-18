@@ -23,6 +23,12 @@
   - type: Icon
     sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop"
+  # FLOW-607: both sides read a contest off this. BadBloodTotemSystem sets it bright, dim or off
+  - type: PointLight
+    color: "#c41e1e"
+    radius: 3
+    energy: 1.5
+    castShadows: false
   - type: Damageable
     damageModifierSet: BadBloodTotem
   - type: Destructible
@@ -52,6 +58,11 @@
     loot: CMUYautjaHumanSkullTrophy
     desecrateTime: 45
     reconsecrateTime: 45
+    # contested (a marine in contestRadius, no Bad Blood): the clan is told at most once a minute per Totem, and
+    # the light dims from lightEnergy to contestedLightEnergy. It goes out while desecrated
+    contestAnnounceCooldown: 60
+    lightEnergy: 1.5
+    contestedLightEnergy: 0.4
     revealComponents:
     - type: TacticalMapAlwaysVisible
       visibleToMarines: true
@@ -105,7 +116,7 @@
     maxRepeatable: 10
     objectiveLevel: 1
     customPoints: 8
-    objectiveDescription: "Destroy a Clan Totem raised by the hostile hunters"
+    objectiveDescription: cmu-bad-blood-obj-desc-totems
   - type: DestroyObjective
     targetPrototype: CMUBadBloodTotem
     spawnCount: 0

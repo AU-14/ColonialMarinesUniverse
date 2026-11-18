@@ -48,11 +48,14 @@ public sealed class BadBloodCasterCostTest
                 // a leftover mode-switch cost must not leak into any mode
                 casterComp.PowerCost = 7;
 
+                // COUPLING-602: the stun bolt costs 80, up from 60
+                int[] expected = [80, 300, 150, 1500];
                 var costs = new HashSet<FixedPoint2>();
                 for (var mode = 0; mode < casterComp.Modes.Count; mode++)
                 {
                     var modeCost = casterComp.Modes[mode].PowerCost;
                     Assert.That(modeCost, Is.Not.Null, $"Bad Blood caster mode {mode} has no cost of its own.");
+                    Assert.That(modeCost, Is.EqualTo(FixedPoint2.New(expected[mode])), $"Bad Blood caster mode {mode} cost.");
                     costs.Add(modeCost!.Value);
 
                     casterComp.CurrentMode = mode;

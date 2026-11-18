@@ -49,16 +49,26 @@
         Base: "Normal_Hellhound_Knocked_Down"
       Dead:
         Base: "Normal_Hellhound_Dead"
+  # FLOW-610: the body that walks is 0.35 like every marine, Yautja and xeno. A 0.45 body stops against the wall at a
+  # stair's top before reaching the height that carries it up a level (CMUMultiZStairs), so the hound could not climb.
+  # fix2 keeps the old 0.45 hitbox for bullets and thrown things, the way base_xeno does. The density keeps the old
+  # ~102 mass (160 at 0.45)
   - type: Fixtures
     fixtures:
       fix1:
         shape: !type:PhysShapeCircle
-          radius: 0.45
-        density: 160
+          radius: 0.35
+        density: 265
         mask:
         - MobMask
         layer:
         - MobLayer
+      fix2:
+        shape: !type:PhysShapeCircle
+          radius: 0.45
+        density: 0
+        layer:
+        - BulletImpassable
   - type: MobState
     allowedStates:
     - Alive

@@ -31,7 +31,11 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 /// (<see cref="BadBloodCampRuleSystem.AddTotemIncome"/>), more the longer it has stood, and gives the Bad Bloods
 /// around it an aura. Marines are told where it is, see it on their map after a while, and reveal the Lodge by
 /// destroying it. FLOW-503: a marine desecrates it with the Desecrate verb and a do-after (no income, not ripe, no
-/// aura) until a Bad Blood reconsecrates it the same way. Nothing here depends on who stands nearby.
+/// aura) until a Bad Blood reconsecrates it the same way.
+/// FLOW-604: marines hear of a Totem and see its pin only once they have landed on the planet.
+/// FLOW-607: a living marine in its contest radius with no living Bad Blood contests it: no income, no ripening and
+/// no aura while that lasts. The marines in range get a popup, the clan is told, and the Totem's light dims. Standing
+/// near it never desecrates it; that is still the verb.
 /// </summary>
 public sealed partial class BadBloodTotemSystem : EntitySystem
 {
@@ -48,6 +52,7 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private BadBloodCampRuleSystem _rule = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
     [Dependency] private SatiationSystem _satiation = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTacticalMapSystem _tacticalMap = default!;
@@ -55,8 +60,21 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 
     private TimeSpan _nextUpdate;
     private readonly List<EntityUid> _scratch = new();
+    private readonly List<EntityUid> _marinesNear = new();
     private readonly HashSet<EntityUid> _inAura = new();
     private readonly List<(MapId Map, Vector2 Position, float Radius)> _auras = new();
+
+    /// <summary>
+    /// How many Totem sightings (a raise, or the sensor sweep at the landing) reached the marines. Instrumentation
+    /// for the tests.
+    /// </summary>
+    public int MarineTotemIntelSent { get; private set; }
+
+    // FLOW-607 instrumentation for the tests: contest popups to marines, and the clan's contest lines
+    public int ContestPopupsSent { get; private set; }
+    public int ContestBrokenPopupsSent { get; private set; }
+    public int ContestAnnouncementsSent { get; private set; }
+    public int ContestEndedAnnouncementsSent { get; private set; }
 
     public override void Initialize()
     {
@@ -71,6 +89,8 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         SubscribeLocalEvent<BadBloodTotemBuilderComponent, BadBloodRaiseTotemDoAfterEvent>(OnRaiseTotemDoAfter);
 
         SubscribeLocalEvent<BadBloodTotemAuraComponent, DamageChangedEvent>(OnAuraDamaged);
+
+        SubscribeLocalEvent<BadBloodMarinesLandedEvent>(OnMarinesLanded);
     }
 
     public override void Update(float frameTime)
@@ -92,6 +112,7 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     {
         ent.Comp.PlacedAt = _timing.CurTime;
         ent.Comp.Registered = _rule.TryRegisterTotem(ent.Owner);
+        RefreshLight(ent);
     }
 
     private void OnTotemDestruction(Entity<BadBloodTotemComponent> ent, ref DestructionEventArgs args)
@@ -111,13 +132,17 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         if (ent.Comp.Loot is { } loot)
             Spawn(loot, Transform(ent.Owner).Coordinates);
 
-        _camp.RevealLodge(ent.Comp.LodgeRevealTime, BadBloodRevealSource.TotemFell);
+        // CMU14 FLOW-604: marines still in orbit learn nothing from a Totem that falls before the drop
+        var marinesLanded = _rule.HaveMarinesLanded();
+        if (marinesLanded)
+            _camp.RevealLodge(ent.Comp.LodgeRevealTime, BadBloodRevealSource.TotemFell);
 
         if (ent.Comp.DestroyedIntel > FixedPoint2.Zero)
             _intel.AddPoints(_intel.EnsureTechTree(ent.Comp.IntelTeam), ent.Comp.DestroyedIntel, ent.Comp.IntelTeam);
 
         var area = _area.GetAreaName(ent.Owner);
-        _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-totem-destroyed-marines", ("area", area)));
+        if (marinesLanded)
+            _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-totem-destroyed-marines", ("area", area)));
         _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-destroyed-clan", ("area", area)), PopupType.LargeCaution);
     }
 
@@ -133,20 +158,20 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     }
 
     /// <summary>
-    /// SP per minute a Totem of this age pays while it is consecrated.
+    /// SP per minute a Totem that has stood uncontested this long (<see cref="BadBloodTotemComponent.StoodFor"/>)
+    /// pays while it is consecrated and uncontested.
     /// </summary>
-    public float GetIncomePerMinute(BadBloodTotemComponent totem, TimeSpan now)
+    public float GetIncomePerMinute(BadBloodTotemComponent totem)
     {
-        var age = now - totem.PlacedAt;
-        if (age >= totem.RipeAfter)
+        if (totem.StoodFor >= totem.RipeAfter)
             return totem.RipeIncome;
 
-        return age >= totem.GrowingAfter ? totem.GrowingIncome : totem.YoungIncome;
+        return totem.StoodFor >= totem.GrowingAfter ? totem.GrowingIncome : totem.YoungIncome;
     }
 
     /// <summary>
-    /// A ripe Totem has stood for <see cref="BadBloodTotemComponent.RipeAfter"/>. Deleted, uncounted and
-    /// desecrated Totems are never ripe.
+    /// A ripe Totem has stood uncontested for <see cref="BadBloodTotemComponent.RipeAfter"/>. Deleted, uncounted
+    /// and desecrated Totems are never ripe.
     /// </summary>
     public bool IsRipe(EntityUid totem)
     {
@@ -154,7 +179,7 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
                comp.Registered &&
                !comp.Desecrated &&
                !TerminatingOrDeleted(totem) &&
-               _timing.CurTime - comp.PlacedAt >= comp.RipeAfter;
+               comp.StoodFor >= comp.RipeAfter;
     }
 
     /// <summary>
@@ -173,8 +198,8 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     }
 
     /// <summary>
-    /// A living Bad Blood stands within the Totem's contest radius. Only the intel read still asks this: a marine
-    /// cannot read a Totem with a hunter beside it.
+    /// A living Bad Blood stands within the Totem's contest radius. A marine cannot read a Totem with a hunter beside
+    /// it, and a hunter beside it keeps it from being contested.
     /// </summary>
     public bool IsBadBloodNear(Entity<BadBloodTotemComponent> totem)
     {
@@ -194,8 +219,135 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         return false;
     }
 
+    /// <summary>
+    /// FLOW-607: fills <paramref name="marines"/> with the living marines who are not Bad Bloods within the Totem's
+    /// contest radius, the same people <see cref="IsDesecrator"/> lets desecrate.
+    /// </summary>
+    private void GetMarinesNear(Entity<BadBloodTotemComponent> totem, List<EntityUid> marines)
+    {
+        marines.Clear();
+        var here = _transform.GetMapCoordinates(totem.Owner);
+        var range = totem.Comp.ContestRadius * totem.Comp.ContestRadius;
+
+        var query = EntityQueryEnumerator<MarineComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.MapID != here.MapId || !_mobState.IsAlive(uid) || _badBlood.IsBadBlood(uid))
+                continue;
+
+            if ((_transform.GetWorldPosition(xform) - here.Position).LengthSquared() <= range)
+                marines.Add(uid);
+        }
+    }
+
+    /// <summary>
+    /// FLOW-607: works out whether a consecrated Totem is contested (a marine near, no Bad Blood near) and tells
+    /// both sides when that starts or ends. Every marine in range gets the contest popup once per contest.
+    /// </summary>
+    private void UpdateContest(Entity<BadBloodTotemComponent> totem, TimeSpan now)
+    {
+        var comp = totem.Comp;
+        _marinesNear.Clear();
+        var badBloodNear = false;
+        if (!comp.Desecrated)
+        {
+            GetMarinesNear(totem, _marinesNear);
+            badBloodNear = _marinesNear.Count > 0 && IsBadBloodNear(totem);
+        }
+
+        if (_marinesNear.Count == 0 || badBloodNear)
+        {
+            // a Bad Blood stepping in breaks it in front of the marines; marines walking off just let it go
+            if (comp.Contested)
+                EndContest(totem, broken: badBloodNear, announce: true);
+
+            return;
+        }
+
+        if (!comp.Contested)
+            StartContest(totem, now);
+
+        foreach (var marine in _marinesNear)
+        {
+            if (!comp.ContestWarned.Add(marine))
+                continue;
+
+            ContestPopupsSent++;
+            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-totem-contest-start-marine"), totem.Owner, marine, PopupType.Medium);
+        }
+    }
+
+    private void StartContest(Entity<BadBloodTotemComponent> totem, TimeSpan now)
+    {
+        var comp = totem.Comp;
+        comp.Contested = true;
+        comp.ContestedSince = now;
+        comp.ContestWarned.Clear();
+        comp.ContestAnnounced = false;
+
+        if (comp.LastContestAnnouncedAt is not { } last || now - last >= comp.ContestAnnounceCooldown)
+        {
+            comp.LastContestAnnouncedAt = now;
+            comp.ContestAnnounced = true;
+            ContestAnnouncementsSent++;
+            _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-contested-clan", ("area", _area.GetAreaName(totem.Owner))),
+                PopupType.MediumCaution);
+        }
+
+        RefreshLight(totem);
+    }
+
+    // broken: a Bad Blood stepped in, so the marines still in range (_marinesNear) hear it come back. announce: tell
+    // the clan it feeds them again, if they were told it stopped
+    private void EndContest(Entity<BadBloodTotemComponent> totem, bool broken, bool announce)
+    {
+        var comp = totem.Comp;
+        if (!comp.Contested)
+            return;
+
+        comp.Contested = false;
+        comp.ContestedSince = null;
+        comp.ContestWarned.Clear();
+
+        if (broken)
+        {
+            foreach (var marine in _marinesNear)
+            {
+                ContestBrokenPopupsSent++;
+                _popup.PopupEntity(Loc.GetString("cmu-bad-blood-totem-contest-broken-marine"), totem.Owner, marine, PopupType.Medium);
+            }
+        }
+
+        if (announce && comp.ContestAnnounced)
+        {
+            ContestEndedAnnouncementsSent++;
+            _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-contest-ended-clan", ("area", _area.GetAreaName(totem.Owner))));
+        }
+
+        comp.ContestAnnounced = false;
+        RefreshLight(totem);
+    }
+
+    /// <summary>
+    /// FLOW-607: the Totem's light is bright while it works, dim while contested and off while desecrated.
+    /// </summary>
+    private void RefreshLight(Entity<BadBloodTotemComponent> totem)
+    {
+        if (!_pointLight.TryGetLight(totem.Owner, out var light))
+            return;
+
+        var comp = totem.Comp;
+        var lit = comp.Registered && !comp.Destroyed && !comp.Desecrated;
+        _pointLight.SetEnabled(totem.Owner, lit, light);
+        if (lit)
+            _pointLight.SetEnergy(totem.Owner, comp.Contested ? comp.ContestedLightEnergy : comp.LightEnergy, light);
+    }
+
     private void UpdateTotems(TimeSpan now, TimeSpan elapsed)
     {
+        // FLOW-604: no pin before the drop, then MapRevealDelay counted from the later of the raise and the landing
+        TimeSpan? landedAt = _rule.HaveMarinesLanded() ? _rule.MarinesLandedAt() ?? TimeSpan.Zero : null;
+
         var totems = EntityQueryEnumerator<BadBloodTotemComponent>();
         while (totems.MoveNext(out var uid, out var totem))
         {
@@ -203,10 +355,19 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
                 continue;
 
             var ent = new Entity<BadBloodTotemComponent>(uid, totem);
-            if (!totem.Desecrated)
-                Accrue(ent, now, elapsed);
 
-            if (!totem.MapRevealed && now - totem.PlacedAt >= totem.MapRevealDelay)
+            // FLOW-607: a contested Totem neither ripens nor pays. A desecrated one still ages, as before
+            UpdateContest(ent, now);
+            if (!totem.Contested)
+            {
+                totem.StoodFor += elapsed;
+                if (!totem.Desecrated)
+                    Accrue(ent, now, elapsed);
+            }
+
+            if (!totem.MapRevealed &&
+                landedAt is { } landed &&
+                now - (totem.PlacedAt > landed ? totem.PlacedAt : landed) >= totem.MapRevealDelay)
             {
                 totem.MapRevealed = true;
                 EntityManager.AddComponents(uid, totem.RevealComponents);
@@ -216,8 +377,8 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     }
 
     /// <summary>
-    /// Desecrates or reconsecrates the Totem at once, raising the broadcast event and telling the clan and the
-    /// marines. Does nothing when it is already in that state.
+    /// Desecrates or reconsecrates the Totem at once, raising the broadcast event, telling the clan, and showing the
+    /// marines standing at it what happens. Does nothing when it is already in that state.
     /// </summary>
     public void SetDesecrated(Entity<BadBloodTotemComponent> totem, bool desecrated)
     {
@@ -227,13 +388,17 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 
         comp.Desecrated = desecrated;
 
+        // FLOW-607: a desecrated Totem is not contested; the desecration line below tells the clan instead
+        _marinesNear.Clear();
+        EndContest(totem, broken: false, announce: false);
+        RefreshLight(totem);
+
         var area = _area.GetAreaName(totem.Owner);
         if (desecrated)
         {
             var ev = new BadBloodTotemDesecratedEvent(totem.Owner);
             RaiseLocalEvent(ref ev);
 
-            _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-totem-desecrated-marines", ("area", area)));
             _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-desecrated-clan", ("area", area)), PopupType.LargeCaution);
         }
         else
@@ -241,21 +406,32 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
             var ev = new BadBloodTotemReconsecratedEvent(totem.Owner);
             RaiseLocalEvent(ref ev);
 
-            _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-totem-reconsecrated-marines", ("area", area)));
             _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-reconsecrated-clan", ("area", area)));
+        }
+
+        // FLOW-608: no remote observer tells the marines. Only those standing at it see it happen, in the voice of the
+        // contest popups
+        GetMarinesNear(totem, _marinesNear);
+        var seen = Loc.GetString(desecrated
+            ? "cmu-bad-blood-totem-desecrated-nearby-marine"
+            : "cmu-bad-blood-totem-reconsecrated-nearby-marine");
+        foreach (var marine in _marinesNear)
+        {
+            _popup.PopupEntity(seen, totem.Owner, marine, PopupType.Medium);
         }
     }
 
     /// <summary>
     /// Books <paramref name="elapsed"/> of standing time and pays the clan whatever has built up past the payout
-    /// step. The once-a-second update calls this for every consecrated Totem. A desecrated Totem books nothing.
+    /// step. The once-a-second update calls this for every consecrated, uncontested Totem. A desecrated or contested
+    /// Totem books nothing.
     /// </summary>
     public void Accrue(Entity<BadBloodTotemComponent> totem, TimeSpan now, TimeSpan elapsed)
     {
-        if (!totem.Comp.Registered || totem.Comp.Desecrated || elapsed <= TimeSpan.Zero)
+        if (!totem.Comp.Registered || totem.Comp.Desecrated || totem.Comp.Contested || elapsed <= TimeSpan.Zero)
             return;
 
-        totem.Comp.PendingIncome += GetIncomePerMinute(totem.Comp, now) * elapsed.TotalMinutes;
+        totem.Comp.PendingIncome += GetIncomePerMinute(totem.Comp) * elapsed.TotalMinutes;
 
         var step = totem.Comp.PayoutStep.Double();
         if (step <= 0d || totem.Comp.PendingIncome < step)
@@ -297,8 +473,7 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         if (!totem.Comp.Registered || totem.Comp.Destroyed)
             return null;
 
-        var now = _timing.CurTime;
-        var age = now - totem.Comp.PlacedAt;
+        var age = totem.Comp.StoodFor;
         var stage = age >= totem.Comp.RipeAfter
             ? "cmu-bad-blood-totem-stage-ripe"
             : age >= totem.Comp.GrowingAfter
@@ -307,11 +482,13 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 
         var text = Loc.GetString("cmu-bad-blood-totem-examine",
             ("stage", Loc.GetString(stage)),
-            ("rate", GetIncomePerMinute(totem.Comp, now).ToString("0.00", CultureInfo.InvariantCulture)),
+            ("rate", GetIncomePerMinute(totem.Comp).ToString("0.00", CultureInfo.InvariantCulture)),
             ("paid", BadBloodCampSystem.FormatSp(totem.Comp.PaidIncome)));
 
         if (totem.Comp.Desecrated)
             text += "\n" + Loc.GetString("cmu-bad-blood-totem-examine-desecrated");
+        else if (totem.Comp.Contested)
+            text += "\n" + Loc.GetString("cmu-bad-blood-totem-examine-contested");
 
         return text;
     }
@@ -333,6 +510,14 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         args.PushMarkup(Loc.GetString(ent.Comp.Desecrated
             ? "cmu-bad-blood-totem-examine-marine-desecrated"
             : "cmu-bad-blood-totem-examine-marine"));
+
+        // FLOW-607: what a marine can hear of it standing there
+        if (!ent.Comp.Desecrated)
+        {
+            args.PushMarkup(Loc.GetString(ent.Comp.Contested
+                ? "cmu-bad-blood-totem-examine-marine-contested"
+                : "cmu-bad-blood-totem-examine-marine-active"));
+        }
     }
 
     #endregion
@@ -654,9 +839,38 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         totem = spawned;
 
         var area = _area.GetAreaName(spawned);
-        _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-totem-raised-marines", ("area", area)));
+
+        // FLOW-604: marines still in orbit hear nothing. The sensor sweep at the landing tells them instead
+        if (_rule.HaveMarinesLanded())
+            SendTotemIntelToMarines(Loc.GetString("cmu-bad-blood-totem-raised-marines", ("area", area)));
+
         _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-raised-clan", ("area", area)));
         return true;
+    }
+
+    // FLOW-604: the first landing sweeps the planet once and names every Totem that already stands. Their pins
+    // follow MapRevealDelay later through UpdateTotems
+    private void OnMarinesLanded(ref BadBloodMarinesLandedEvent ev)
+    {
+        var areas = new List<string>();
+        foreach (var uid in _rule.GetTotems())
+        {
+            if (TryComp(uid, out BadBloodTotemComponent? totem) && totem.Registered && !totem.Destroyed)
+                areas.Add(_area.GetAreaName(uid));
+        }
+
+        if (areas.Count == 0)
+            return;
+
+        SendTotemIntelToMarines(Loc.GetString("cmu-bad-blood-totem-sensor-sweep",
+            ("count", areas.Count),
+            ("areas", string.Join(", ", areas))));
+    }
+
+    private void SendTotemIntelToMarines(string message)
+    {
+        MarineTotemIntelSent++;
+        _marineAnnounce.AnnounceToMarines(message);
     }
 
     #endregion
@@ -683,7 +897,8 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         var totems = EntityQueryEnumerator<BadBloodTotemComponent, TransformComponent>();
         while (totems.MoveNext(out _, out var totem, out var xform))
         {
-            if (!totem.Registered || totem.Destroyed || totem.Desecrated || totem.AuraRadius <= 0f)
+            // FLOW-607: a contested Totem gives no aura either
+            if (!totem.Registered || totem.Destroyed || totem.Desecrated || totem.Contested || totem.AuraRadius <= 0f)
                 continue;
 
             _auras.Add((xform.MapID, _transform.GetWorldPosition(xform), totem.AuraRadius));

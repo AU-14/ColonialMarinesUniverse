@@ -22,6 +22,7 @@ public sealed class BadBloodLeaderEdgeTest : GameTest
     private const string Glaive = "CMUYautjaWarGlaive";
     private const string SmartDisc = "CMUYautjaSmartDisc";
     private const string HealingGel = "CMUYautjaHealingGel";
+    private const string LethalUnlock = "CMUBadBloodLethalUnlock";
 
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
@@ -126,6 +127,11 @@ public sealed class BadBloodLeaderEdgeTest : GameTest
 
                     // one tier ahead, not two
                     Assert.That(camp.CanBuyFromArmory(armoryEnt, party.Leader, Glaive, out _), Is.False);
+
+                    // CMU14 STATE-601: but not the lethal unlock, a tier II ware the Leader waits for like the clan (D3)
+                    Assert.That(camp.CanBuyFromArmory(armoryEnt, party.Leader, LethalUnlock, out var lethalWhy), Is.False,
+                        "the Leader cannot buy the lethal bolt at tier I");
+                    Assert.That(lethalWhy, Is.EqualTo("cmu-bad-blood-armory-tier-locked"));
                 });
 
                 // 12 lifetime SP: the clan reaches tier II, the Leader reaches the tier III wares
@@ -138,6 +144,9 @@ public sealed class BadBloodLeaderEdgeTest : GameTest
                     Assert.That(camp.CanBuyFromArmory(armoryEnt, grunt, Combistick, out _), Is.True);
                     Assert.That(camp.CanBuyFromArmory(armoryEnt, party.Leader, Glaive, out _), Is.True);
                     Assert.That(camp.CanBuyFromArmory(armoryEnt, grunt, Glaive, out _), Is.False);
+
+                    // CMU14 STATE-601: the lethal unlock opens with the clan's tier II
+                    Assert.That(camp.CanBuyFromArmory(armoryEnt, party.Leader, LethalUnlock, out _), Is.True);
                 });
             });
         }

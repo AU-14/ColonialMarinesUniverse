@@ -397,6 +397,15 @@
     coveredZones:
     - Head
 
+# CMU14 ECS-602: the plain mask in the Bad Blood base kit (every grunt variant swaps in a crimson one). A human cannot
+# wear it
+- type: entity
+  parent: CMUYautjaMask
+  id: CMUYautjaBadBloodMask
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
+
 - type: entity
   parent: IDCardStandard
   id: CMUYautjaBracerIdChip
@@ -478,6 +487,15 @@
     items:
       tags:
       - CMUYautjaToolbelt
+
+# CMU14 ECS-602: the plain harness a Bad Blood grunt lands in. Same look as the honourable one, but a human cannot
+# wear it. The ceremonial harness below is the Leader's
+- type: entity
+  parent: CMUYautjaCloakPack
+  id: CMUYautjaBadBloodCloakPackPlain
+  suffix: Bad Blood
+  components:
+  - type: BadBloodGearLock
 
 - type: entity
   parent: CMUYautjaCloakPack

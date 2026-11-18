@@ -1,5 +1,6 @@
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Shared.CMU14.Yautja.BadBlood;
@@ -12,6 +13,7 @@ namespace Content.Shared.CMU14.Yautja.BadBlood;
 public sealed class BadBloodCodeSystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     private readonly HashSet<int> _taken = new();
@@ -73,8 +75,9 @@ public sealed class BadBloodCodeSystem : EntitySystem
         string role;
         if (HasComp<BadBloodLeaderComponent>(uid))
             role = "cmu-bad-blood-code-role-leader";
-        else if (TryComp(uid, out BadBloodCasteComponent? caste))
-            role = caste.Caste == BadBloodCaste.Engineer ? "cmu-bad-blood-code-role-engineer" : "cmu-bad-blood-code-role-medic";
+        // CMU14 ARCH-604: the caste names its own role
+        else if (TryComp(uid, out BadBloodCasteComponent? caste) && _proto.TryIndex(caste.Caste, out var casteProto))
+            role = casteProto.CodeRole;
         else
             role = "cmu-bad-blood-code-role-grunt";
 

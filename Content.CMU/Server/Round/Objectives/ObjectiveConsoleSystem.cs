@@ -44,7 +44,14 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
             if (desc == null && !string.IsNullOrEmpty(proto.DescriptionText)) desc = proto.DescriptionText;
             if (title != null && desc != null) break;
         }
-        return (title ?? objComp.Id, desc ?? objComp.ObjectiveDescription);
+        return (title ?? objComp.Id, desc ?? LocDescription(objComp));
+    }
+
+    // CMU14 FLOW-609: an objectiveDescription may be a loc id; a plain string still shows as written
+    private string LocDescription(CMUObjectiveComponent objComp)
+    {
+        var desc = objComp.ObjectiveDescription;
+        return Loc.TryGetString(desc, out var s) ? s : desc;
     }
 
     private void OnUiOpened(EntityUid uid, ObjectivesConsoleComponent comp, BoundUIOpenedEvent args)
@@ -141,7 +148,7 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
                     ? $"{factionProgress}/{captureComp.MaxHoldTimes}"
                     : $"{factionProgress}";
 
-                var displayDesc = objComp.ObjectiveDescription;
+                var displayDesc = LocDescription(objComp);
                 if (objComp.IntelTiersProtos.Count > 0)
                 {
                     var unlockedCount = 1;
@@ -224,7 +231,7 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
                 fetchProgress = $"{arrested}/{arrestComp.ArrestCount} arrests";
             }
 
-            var displayDesc2 = objComp.ObjectiveDescription;
+            var displayDesc2 = LocDescription(objComp);
             if (objComp.IntelTiersProtos.Count > 0)
             {
                 var unlockedCount2 = 1;
@@ -278,10 +285,10 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
             var tiers = new List<ObjectiveIntelTierEntry>();
             if (objComp.IntelTiersProtos.Count == 0)
             {
-                tiers.Add(new ObjectiveIntelTierEntry(0, objComp.Id, objComp.ObjectiveDescription, 0));
+                tiers.Add(new ObjectiveIntelTierEntry(0, objComp.Id, LocDescription(objComp), 0));
 
                 var teamKeyDefault = string.IsNullOrEmpty(comp.Faction) ? Team.None : comp.Faction.ToLowerInvariant();
-                var stateFull = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, objComp.ObjectiveDescription, tiers, 1, _intel.GetIntelPointsExact(teamKeyDefault));
+                var stateFull = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, LocDescription(objComp), tiers, 1, _intel.GetIntelPointsExact(teamKeyDefault));
 
                 _logs.Debug($"[OBJ-CON] Sending intel UI state: objective={objComp.Id} team={teamKeyDefault} tiers={tiers.Count} unlocked=1 points={_intel.GetIntelPoints(teamKeyDefault)}");
                 _ui.ServerSendUiMessage(uid, ObjectivesConsoleKey.Key, stateFull, msg.Actor);
@@ -317,7 +324,7 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
 
             _logs.Debug($"[OBJ-CON] Sending intel UI state: objective={objComp.Id} team={team} tiers={tiers.Count} unlocked={unlocked} points={_intel.GetIntelPoints(team)}");
 
-            var state2 = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, objComp.ObjectiveDescription, tiers, unlocked, _intel.GetIntelPointsExact(team));
+            var state2 = new ObjectiveIntelBoundUserInterfaceMessage(objComp.Id, LocDescription(objComp), tiers, unlocked, _intel.GetIntelPointsExact(team));
             _ui.ServerSendUiMessage(uid, ObjectivesConsoleKey.Key, state2, msg.Actor);
             return;
         }

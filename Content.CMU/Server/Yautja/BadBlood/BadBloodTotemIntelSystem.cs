@@ -148,7 +148,17 @@ public sealed partial class BadBloodTotemIntelSystem : EntitySystem
     /// </summary>
     public bool TryGetLodgeSquare(int gridSize, out Vector2i corner)
     {
+        return TryGetLodgeSquare(gridSize, out corner, out _);
+    }
+
+    /// <summary>
+    /// <see cref="TryGetLodgeSquare(int, out Vector2i)"/>, also giving the tile the Lodge stands on in the same
+    /// coordinates, so a caller can place the square relative to the Lodge (FLOW-606, the marine map region).
+    /// </summary>
+    public bool TryGetLodgeSquare(int gridSize, out Vector2i corner, out Vector2i lodgeTile)
+    {
         corner = default;
+        lodgeTile = default;
         if (_rule.GetLodge() is not { } lodge || TerminatingOrDeleted(lodge))
             return false;
 
@@ -158,6 +168,7 @@ public sealed partial class BadBloodTotemIntelSystem : EntitySystem
             position += offset;
 
         var size = Math.Max(1, gridSize);
+        lodgeTile = position;
         corner = new Vector2i(
             (int) Math.Floor(position.X / (double) size) * size,
             (int) Math.Floor(position.Y / (double) size) * size);

@@ -15,7 +15,7 @@ using Robust.UnitTesting.Pool;
 namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
 
 // FLOW-111: a squad call opens seats at the Lodge, the squad arrives together, unclaimed seats are refunded,
-// the reserve and the fallen go first, arrivals count for marine objectives and the caps hold
+// the reserve goes first (the fallen get no priority), arrivals count for marine objectives and the caps hold
 [TestFixture]
 public sealed class SquadCallTest : GameTest
 {
@@ -79,17 +79,21 @@ public sealed class SquadCallTest : GameTest
                 // priority: with nobody waiting an ordinary ghost may ask at once
                 Assert.That(RequestAllowed(entry, session), Is.True);
 
-                // a fallen Bad Blood is waiting: the ordinary ghost has to let them go first
+                // FLOW-601: a fallen Bad Blood does not hold an ordinary ghost back
                 var fallen = new NetUserId(Guid.NewGuid());
                 rule.Comp.DeadBadBloods[fallen] = Server.Timing.CurTime;
-                Assert.That(RequestAllowed(entry, session), Is.False, "the clan's fallen go before ordinary ghosts");
+                Assert.That(RequestAllowed(entry, session), Is.True, "the clan's fallen do not go before ordinary ghosts");
+
+                // and gets no pass of their own: with someone in the reserve they wait like anyone else
+                rule.Comp.DeadBadBloods[session.UserId] = Server.Timing.CurTime;
+                rule.Comp.ReserveQueue.Add(new NetUserId(Guid.NewGuid()));
+                Assert.That(RequestAllowed(entry, session), Is.False, "a fallen Bad Blood waits for the reserve");
                 Assert.That(camp.CanTakeSquadSeat(call, session, out var reason), Is.False);
                 Assert.That(reason, Is.EqualTo("cmu-bad-blood-squad-seat-priority"));
+                rule.Comp.ReserveQueue.Clear();
+                rule.Comp.DeadBadBloods.Clear();
 
-                // the fallen and the reserve do not wait
-                rule.Comp.DeadBadBloods[session.UserId] = Server.Timing.CurTime;
-                Assert.That(RequestAllowed(entry, session), Is.True);
-                rule.Comp.DeadBadBloods.Remove(session.UserId);
+                // the reserve does not wait
                 rule.Comp.ReserveQueue.Add(session.UserId);
                 Assert.That(RequestAllowed(entry, session), Is.True);
 

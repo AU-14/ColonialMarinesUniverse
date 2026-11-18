@@ -267,9 +267,10 @@ public sealed class BadBloodQuarrySystem : EntitySystem
         return IsInBuildRange(_transform.ToMapCoordinates(coords), ignoreTotem);
     }
 
+    // CMU14 ARCH-604: the Engineer caste's perk, as a marker component
     private bool IsEngineer(EntityUid user)
     {
-        return TryComp(user, out BadBloodCasteComponent? caste) && caste.Caste == BadBloodCaste.Engineer;
+        return HasComp<BadBloodBuildAnywhereComponent>(user);
     }
 
     private static bool Within(MapCoordinates a, MapCoordinates b, float radius)

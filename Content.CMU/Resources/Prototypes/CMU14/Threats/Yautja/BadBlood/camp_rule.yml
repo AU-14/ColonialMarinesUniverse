@@ -21,12 +21,11 @@
     squadOfThreeCost: 16
     squadOfFiveCost: 24
     lastStandCost: 12
-    houndCost: 6
     totemCost: 3
     # room for the biggest squad (5) on top of the landing party and the founding squad
     livingCapBonus: 5
-    # 0.35, sized against the landing (5 Bad Bloods + 3 sleeping hounds at 30 players): 30 players -> 11, room for a
-    # squad of 3 from the start; 40 players -> 14 against 6 + 3 landed, room for a squad of 5
+    # 0.35, sized against the landing (5 Bad Bloods at 30 players): 30 players -> 11, room for a squad of 3 from the
+    # start; 40 players -> 14 against 6 landed, room for a squad of 5. hounds are free kennel filler, outside the budget
     threatBudgetFraction: 0.35
     landingHoundDivisor: 2 # rounded up: a landing party of 5 brings 3 hounds
     houndCapDivisor: 2
@@ -43,6 +42,8 @@
     votePerCandidate: 10
     voteMaxDuration: 120
     reserveChoiceTime: 20
+    reserveExpiry: 300 # 5 minutes without a body, then back to the ghost pool
+    reserveBodyPriority: 30 # a freed Bad Blood body is reserve-only this long
     seatRaffleTime: 15
     squadSpawnTimeout: 60
     clanWipeDelay: 120
@@ -56,6 +57,13 @@
     summonInterval: 60
     shipRegenBonus: 0.25
     departureTime: 1200
+    # Blooded kill: +1 Honour when a worthy target dies within 5 s of the striker's Bad Blood melee hit
+    bloodedKillWindow: 5
+    bloodedKillHonour: 1
+    # a hound player whose hound died waits a minute before taking another
+    houndRespawnDelay: 60
+    # after the drop, the Lodge's 30-tile square is boxed on the marine map
+    lodgeRegionSize: 30
   # the end rule's decision and its absence ledger. BadBloodCampRuleSystem.End.cs
   - type: BadBloodCampEnd
   # the marine objective chain: infrastructure gate, clan signature, uplink. BadBloodObjectiveChainSystem

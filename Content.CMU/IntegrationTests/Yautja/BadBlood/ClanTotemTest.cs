@@ -97,15 +97,23 @@ public sealed class ClanTotemTest : GameTest
         }
     }
 
+    // FLOW-607: a marine alone in the contest radius pauses income and ripening, dims the light and tells both sides.
+    // A Bad Blood stepping in breaks the contest. Standing near it never desecrates it
     [Test]
-    public async Task IncomeRipensIgnoresMarinesNearbyAndCountsHalfTowardsTiers()
+    public async Task IncomeRipensCountsHalfTowardsTiersAndAMarineAlonePausesIt()
     {
         var map = await Pair.CreateTestMap();
-        await LayFloor(map, 0, 30, 33);
+        await LayFloor(map, 0, 30, 31, 33);
         var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var grunt = party.Grunts[0];
         var spawned = new List<EntityUid>();
         EntityUid totem = default;
+        EntityUid marine = default;
         FixedPoint4 before = default;
+        var popups = 0;
+        var announcements = 0;
+        var broken = 0;
+        var ended = 0;
 
         try
         {
@@ -122,20 +130,22 @@ public sealed class ClanTotemTest : GameTest
                 var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
                 var ent = new Entity<BadBloodTotemComponent>(totem, comp);
                 Assert.That(comp.Registered, Is.True, "a Totem raised while the rule runs is the clan's");
+                Assert.That(comp.ContestAnnounceCooldown, Is.EqualTo(TimeSpan.FromSeconds(60)), "the YAML default");
+                AssertLight(totem, comp.LightEnergy, "a working Totem burns bright");
 
-                // ripening: 0.2, then 0.4 after 10 minutes, then 0.7 after 20
-                Assert.That(totems.GetIncomePerMinute(comp, now), Is.EqualTo(0.2f).Within(0.0001f));
-                comp.PlacedAt = now - TimeSpan.FromMinutes(11);
+                // ripening by uncontested standing time: 0.2, then 0.4 after 10 minutes, then 0.7 after 20
+                Assert.That(totems.GetIncomePerMinute(comp), Is.EqualTo(0.2f).Within(0.0001f));
+                comp.StoodFor = TimeSpan.FromMinutes(11);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(totems.GetIncomePerMinute(comp, now), Is.EqualTo(0.4f).Within(0.0001f));
+                    Assert.That(totems.GetIncomePerMinute(comp), Is.EqualTo(0.4f).Within(0.0001f));
                     Assert.That(totems.IsRipe(totem), Is.False);
                 });
 
-                comp.PlacedAt = now - TimeSpan.FromMinutes(21);
+                comp.StoodFor = TimeSpan.FromMinutes(21);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(totems.GetIncomePerMinute(comp, now), Is.EqualTo(0.7f).Within(0.0001f));
+                    Assert.That(totems.GetIncomePerMinute(comp), Is.EqualTo(0.7f).Within(0.0001f));
                     Assert.That(totems.IsRipe(totem), Is.True);
                     Assert.That(totems.CountRipeTotems(), Is.EqualTo(1));
                 });
@@ -151,20 +161,75 @@ public sealed class ClanTotemTest : GameTest
                         "Totem income counts 50% towards tiers");
                 });
 
-                // a marine walks up. Standing near it no longer does anything: only the Desecrate verb stops it
-                var marine = entMan.SpawnEntity(Human, map.GridCoords.Offset(new Vector2(33, 0)));
+                // a marine walks up with no Bad Blood near: the Totem is contested
+                marine = entMan.SpawnEntity(Human, map.GridCoords.Offset(new Vector2(33, 0)));
                 spawned.Add(marine);
                 entMan.EnsureComponent<MarineComponent>(marine);
                 before = rules.GetSp();
+                popups = totems.ContestPopupsSent;
+                announcements = totems.ContestAnnouncementsSent;
             });
 
-            await Pair.RunSeconds(15);
+            await Pair.RunSeconds(30);
             await Server.WaitAssertion(() =>
             {
-                Assert.That(Server.System<BadBloodCampRuleSystem>().GetSp(), Is.GreaterThan(before),
-                    "a marine standing beside a consecrated Totem does not stop its income");
-                Assert.That(Server.EntMan.GetComponent<BadBloodTotemComponent>(totem).Desecrated, Is.False,
-                    "and does not desecrate it without the verb");
+                var entMan = Server.EntMan;
+                var totems = Server.System<BadBloodTotemSystem>();
+                var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.Contested, Is.True, "a marine alone in range contests the Totem");
+                    Assert.That(Server.System<BadBloodCampRuleSystem>().GetSp(), Is.EqualTo(before),
+                        "a contested Totem pays nothing");
+                    Assert.That(comp.StoodFor, Is.EqualTo(TimeSpan.FromMinutes(21)), "and does not ripen");
+                    Assert.That(totems.IsRipe(totem), Is.True, "a contest freezes ripeness, it does not undo it");
+                    Assert.That(comp.Desecrated, Is.False, "a marine standing beside it does not desecrate it without the verb");
+                    Assert.That(comp.ContestWarned, Does.Contain(marine));
+                    Assert.That(totems.ContestPopupsSent, Is.EqualTo(popups + 1), "the marine hears it once per contest");
+                    Assert.That(totems.ContestAnnouncementsSent, Is.EqualTo(announcements + 1), "the clan is told once");
+                    Assert.That(totems.GetTotemExamineText((totem, comp)),
+                        Does.Contain(Loc.GetString("cmu-bad-blood-totem-examine-contested")), "a Bad Blood reads the contest");
+                });
+                AssertLight(totem, comp.ContestedLightEnergy, "a contested Totem's light is dim");
+
+                // a Bad Blood steps in and breaks the contest
+                broken = totems.ContestBrokenPopupsSent;
+                ended = totems.ContestEndedAnnouncementsSent;
+                Server.System<SharedTransformSystem>().SetCoordinates(grunt, map.GridCoords.Offset(new Vector2(31, 0)));
+            });
+
+            await Pair.RunSeconds(5);
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var totems = Server.System<BadBloodTotemSystem>();
+                var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(comp.Contested, Is.False, "a Bad Blood at its Totem keeps it working");
+                    Assert.That(Server.System<BadBloodCampRuleSystem>().GetSp(), Is.GreaterThan(before), "income resumes");
+                    Assert.That(comp.StoodFor, Is.GreaterThan(TimeSpan.FromMinutes(21)), "and so does ripening");
+                    Assert.That(totems.ContestBrokenPopupsSent, Is.EqualTo(broken + 1), "the marine hears the hum come back");
+                    Assert.That(totems.ContestEndedAnnouncementsSent, Is.EqualTo(ended + 1), "the clan hears it feeds them again");
+                });
+                AssertLight(totem, comp.LightEnergy, "the light is bright again");
+
+                // the Bad Blood walks off and the marine holds it again within the minute
+                Server.System<SharedTransformSystem>().SetCoordinates(grunt, map.GridCoords);
+            });
+
+            await Pair.RunSeconds(3);
+            await Server.WaitAssertion(() =>
+            {
+                var totems = Server.System<BadBloodTotemSystem>();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(Server.EntMan.GetComponent<BadBloodTotemComponent>(totem).Contested, Is.True);
+                    Assert.That(totems.ContestAnnouncementsSent, Is.EqualTo(announcements + 1),
+                        "a second contest within 60 seconds is not announced to the clan again");
+                    Assert.That(totems.ContestPopupsSent, Is.EqualTo(popups + 2), "the marine is told of the new contest");
+                    Assert.That(Server.EntMan.GetComponent<BadBloodTotemComponent>(totem).Desecrated, Is.False);
+                });
             });
         }
         finally
@@ -200,7 +265,7 @@ public sealed class ClanTotemTest : GameTest
                     var totem = entMan.SpawnEntity(Totem, map.GridCoords.Offset(new Vector2(column, 0)));
                     spawned.Add(totem);
                     raised.Add(totem);
-                    entMan.GetComponent<BadBloodTotemComponent>(totem).PlacedAt = now - TimeSpan.FromMinutes(21);
+                    entMan.GetComponent<BadBloodTotemComponent>(totem).StoodFor = TimeSpan.FromMinutes(21);
                 }
 
                 Assert.That(totems.CountRipeTotems(), Is.EqualTo(3));
@@ -342,8 +407,11 @@ public sealed class ClanTotemTest : GameTest
                 Assert.That(entMan.HasComponent<TacticalMapAlwaysVisibleComponent>(totem), Is.False,
                     "a fresh Totem is not on the marine map");
 
-                // the first has stood for its 120 seconds, the second has not
+                // the first has stood for its 120 seconds, the second has not. FLOW-604: the clock also waits for
+                // the landing, so the marines landed long ago here
                 entMan.GetComponent<BadBloodTotemComponent>(totem).PlacedAt = now - TimeSpan.FromSeconds(121);
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                rule.Comp.MarinesLandedAt = now - TimeSpan.FromSeconds(121);
             });
 
             await Pair.RunSeconds(3);
@@ -389,8 +457,82 @@ public sealed class ClanTotemTest : GameTest
         }
     }
 
+    // FLOW-604: before the drop a raised Totem tells the marines nothing and never pins, however old it is. The landing
+    // sends one sensor sweep, and the pin follows 120 seconds after the landing
+    [Test]
+    public async Task MarinesLearnOfTotemsOnlyOnceTheyLand()
+    {
+        var map = await Pair.CreateTestMap();
+        await LayFloor(map, 0, 25);
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1, startLanded: false);
+        var grunt = party.Grunts[0];
+        var spawned = new List<EntityUid>();
+        EntityUid totem = default;
+        var intelBefore = 0;
+
+        try
+        {
+            await Server.WaitPost(() => spawned.Add(Server.EntMan.SpawnEntity(Lodge, map.GridCoords)));
+
+            // every Bad Blood gets the Raise Totem action once the rule runs
+            await Pair.RunSeconds(2);
+
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var totems = Server.System<BadBloodTotemSystem>();
+                Assert.That(rules.HaveMarinesLanded(), Is.False, "the marines are still in orbit");
+
+                intelBefore = totems.MarineTotemIntelSent;
+                Assert.That(Raise(totems, map, grunt, 25, spawned), Is.True);
+                totem = spawned[^1];
+                Assert.That(totems.MarineTotemIntelSent, Is.EqualTo(intelBefore), "marines in orbit hear of no raise");
+
+                // it has stood well past its 120 seconds
+                var now = Server.ResolveDependency<IGameTiming>().CurTime;
+                Server.EntMan.GetComponent<BadBloodTotemComponent>(totem).PlacedAt = now - TimeSpan.FromSeconds(130);
+            });
+
+            await Pair.RunSeconds(3);
+            await Server.WaitAssertion(() =>
+            {
+                var totems = Server.System<BadBloodTotemSystem>();
+                Assert.That(Server.EntMan.HasComponent<TacticalMapAlwaysVisibleComponent>(totem), Is.False,
+                    "no pin before the marines land");
+
+                Assert.That(Server.System<BadBloodCampRuleSystem>().MarkMarinesLanded(), Is.True);
+                Assert.That(totems.MarineTotemIntelSent, Is.EqualTo(intelBefore + 1), "the landing sends one sensor sweep");
+            });
+
+            await Pair.RunSeconds(3);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.EntMan.HasComponent<TacticalMapAlwaysVisibleComponent>(totem), Is.False,
+                    "the pin waits 120 seconds from the landing, not from the raise");
+
+                // the landing was 121 seconds ago
+                var now = Server.ResolveDependency<IGameTiming>().CurTime;
+                Assert.That(Server.System<BadBloodCampRuleSystem>().TryGetRule(out var rule), Is.True);
+                rule.Comp.MarinesLandedAt = now - TimeSpan.FromSeconds(121);
+            });
+
+            await Pair.RunSeconds(3);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(Server.EntMan.HasComponent<TacticalMapAlwaysVisibleComponent>(totem), Is.True,
+                    "the Totem pins 120 seconds after the landing");
+                Assert.That(Server.System<BadBloodTotemSystem>().MarineTotemIntelSent, Is.EqualTo(intelBefore + 1),
+                    "the sweep is sent once");
+            });
+        }
+        finally
+        {
+            await Cleanup(party, spawned);
+        }
+    }
+
     // FLOW-503: a marine desecrates a Totem with the Desecrate verb and a 45 s do-after: not ripe, no income, no
-    // aura. A Bad Blood takes it back with Reconsecrate the same way. Standing near it does nothing by itself
+    // aura. A Bad Blood takes it back with Reconsecrate the same way. Standing near it only contests it (FLOW-607)
     [Test]
     public async Task AMarineDesecratesWithTheVerbAndABadBloodReconsecratesIt()
     {
@@ -434,6 +576,7 @@ public sealed class ClanTotemTest : GameTest
                 var totems = Server.System<BadBloodTotemSystem>();
                 var ent = new Entity<BadBloodTotemComponent>(totem, entMan.GetComponent<BadBloodTotemComponent>(totem));
                 Assert.That(ent.Comp.Desecrated, Is.False, "standing near a Totem no longer desecrates it");
+                Assert.That(ent.Comp.Contested, Is.True, "it only contests it");
 
                 Assert.Multiple(() =>
                 {
@@ -465,7 +608,9 @@ public sealed class ClanTotemTest : GameTest
                     Assert.That(totems.IsRipe(totem), Is.False, "a desecrated Totem is not ripe");
                     Assert.That(totems.CountRipeTotems(), Is.Zero);
                     Assert.That(Server.System<BadBloodTotemProbeSystem>().Desecrated, Does.Contain(totem));
+                    Assert.That(comp.Contested, Is.False, "a desecrated Totem is not contested");
                 });
+                AssertLight(totem, null, "a desecrated Totem's light is out");
 
                 paid = comp.PaidIncome;
                 var sp = rules.GetSp();
@@ -645,6 +790,20 @@ public sealed class ClanTotemTest : GameTest
 
         spawned.Add(totem);
         return true;
+    }
+
+    // FLOW-607: the Totem's light is on at this energy, or off for null. call on the server thread
+    private void AssertLight(EntityUid totem, float? energy, string message)
+    {
+        Assert.That(Server.System<SharedPointLightSystem>().TryGetLight(totem, out var light), Is.True, "the Totem has a light");
+        if (energy is not { } expected)
+        {
+            Assert.That(light!.Enabled, Is.False, message);
+            return;
+        }
+
+        Assert.That(light!.Enabled, Is.True, message);
+        Assert.That(light.Energy, Is.EqualTo(expected).Within(0.0001f), message);
     }
 
     private static void Refresh(IEntityManager entMan, EntityUid uid)

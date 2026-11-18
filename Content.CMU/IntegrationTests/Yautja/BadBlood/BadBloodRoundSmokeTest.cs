@@ -330,7 +330,7 @@ public sealed class BadBloodRoundSmokeTest : GameTest
 
                 // twenty uncontested minutes of a ripe Totem: 14 SP to spend, half of it towards the tiers
                 var comp = entMan.GetComponent<BadBloodTotemComponent>(totem);
-                comp.PlacedAt = now - TimeSpan.FromMinutes(21);
+                comp.StoodFor = TimeSpan.FromMinutes(21);
                 Assert.That(totems.IsRipe(totem), Is.True);
                 var sp = rules.GetSp();
                 var lifetime = rules.GetLifetimeSp();
@@ -596,9 +596,9 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 rule.Comp.DeadBadBloods.Clear();
                 Server.PlayerMan.SetAttachedEntity(session, null);
 
-                // the budget leaves room for two more than the clan and its hounds
+                // the budget leaves room for two more than the clan. CMU14 ARCH-603: hounds no longer count
                 living = rules.CountLivingBadBloods();
-                var bodies = living + Server.System<BadBloodHoundSystem>().CountHounds();
+                var bodies = living;
                 rule.Comp.ThreatBudgetFraction = (bodies + 2f) / rules.GetPlayerCount();
                 Assert.That(rules.GetThreatBudget(), Is.EqualTo(bodies + 2));
 

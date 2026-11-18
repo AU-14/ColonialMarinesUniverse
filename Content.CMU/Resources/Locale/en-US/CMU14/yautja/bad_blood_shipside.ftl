@@ -9,9 +9,3 @@ cmu-bad-blood-shipside-sabotage-not-alive = You are in no state to do that.
 cmu-bad-blood-shipside-sabotage-no-strike = No strike runs from this console.
 
 cmu-bad-blood-shipside-sabotage-ares-start = Warning: hostile tampering detected at the Vessel Strike console. Targeting integrity failing.
-cmu-bad-blood-shipside-sabotage-ares-cancelled = Vessel Strike aborted: the firing console was sabotaged. The coordinates are kept. The console can fire again in {$minutes} {$minutes ->
-    [one] minute
-   *[other] minutes
-}.
-
-cmu-bad-blood-shipside-sabotage-clan = {$name} has broken the humans' strike on our vessel. They will need time to aim again.

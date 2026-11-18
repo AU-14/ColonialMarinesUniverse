@@ -2,10 +2,13 @@ using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.Yautja.BadBlood;
+using Content.Server.Ghost.Roles.Components;
+using Content.Server.Ghost.Roles.Events;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Ghost.Components;
+using Content.Shared.Mind;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -16,7 +19,8 @@ namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
 
 // FLOW-116: leftover Bad Blood voters wait in the Blood Reserve instead of the lobby, in the order they were handed
 // over. taking another body leaves it, the first Lodge opens the founding squad for the front of the queue once,
-// and a reserve member gets a seat before an ordinary ghost
+// and a reserve member gets a seat before an ordinary ghost. FLOW-602: a member nobody seats returns to the ghost
+// pool after ReserveExpiry. FLOW-603: a freed Bad Blood body is the reserve's first for ReserveBodyPriority
 [TestFixture]
 public sealed class BloodReserveTest : GameTest
 {
@@ -230,6 +234,159 @@ public sealed class BloodReserveTest : GameTest
             await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
             await Cleanup(party, ghosts.Concat(spawned));
         }
+    }
+
+    [Test]
+    public async Task AnUnseatedReserveMemberReturnsToTheGhostPool()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var dummies = await Server.AddDummySessions(2);
+        var member = dummies[0];
+        var outsider = dummies[1];
+        var ghosts = new List<EntityUid>();
+        var spawned = new List<EntityUid>();
+        BadBloodSquadCall? call = null;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.That(rule.Comp.ReserveExpiry, Is.EqualTo(TimeSpan.FromMinutes(5)),
+                    "the reserve waits five minutes for a body");
+
+                rule.Comp.ReserveExpiry = TimeSpan.FromSeconds(2);
+                rule.Comp.ThreatBudgetFraction = 1000f;
+                rule.Comp.DeadBadBloods.Clear();
+
+                foreach (var dummy in dummies)
+                {
+                    ghosts.Add(MakeObserver(dummy, map));
+                }
+
+                RaiseLeftovers(BadBloodThreat, new List<NetUserId> { member.UserId });
+                Assert.That(rules.GetReserve(), Is.EqualTo(new[] { member.UserId }));
+                Assert.That(rule.Comp.ReserveJoinedAt.ContainsKey(member.UserId), Is.True);
+                Assert.That(rule.Comp.FoundingSquadOpened, Is.False, "Test setup: no Lodge yet");
+            });
+
+            // the reserve was promised a founding seat: its clock does not run before the first Lodge
+            await BadBloodTestHelpers.AdvanceClock(Pair, 4);
+
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var camp = Server.System<BadBloodCampSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.That(rules.IsInReserve(member.UserId), Is.True,
+                    "nobody expires before the founding squad has had its chance");
+
+                // the founding squad would seat the member: the rest of this test is about one nobody seats
+                rule.Comp.FoundingSquadOpened = true;
+
+                spawned.Add(entMan.SpawnEntity(Lodge, map.GridCoords));
+                Assert.That(camp.TryOpenSquad(1, out call, ignoreCaps: true), Is.True);
+                Assert.That(camp.CanTakeSquadSeat(call!, outsider, out var reason), Is.False,
+                    "Test setup: the waiting member holds an ordinary ghost back");
+                Assert.That(reason, Is.EqualTo("cmu-bad-blood-squad-seat-priority"));
+            });
+
+            await BadBloodTestHelpers.AdvanceClock(Pair, 4);
+
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var camp = Server.System<BadBloodCampSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.That(rules.IsInReserve(member.UserId), Is.False, "nobody found a body for them in time");
+                Assert.That(rule.Comp.ReserveJoinedAt.ContainsKey(member.UserId), Is.False);
+                Assert.That(member.AttachedEntity, Is.EqualTo(ghosts[0]),
+                    "an expired member goes back to the ghosts, not to the lobby");
+                Assert.That(camp.CanTakeSquadSeat(call!, outsider, out _), Is.True,
+                    "an expired reserve no longer holds ordinary ghosts back");
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+            await Cleanup(party, ghosts.Concat(spawned));
+        }
+    }
+
+    [Test]
+    public async Task AFreedBodyGoesToTheReserveFirst()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var dummies = await Server.AddDummySessions(2);
+        var member = dummies[0];
+        var outsider = dummies[1];
+        var ghosts = new List<EntityUid>();
+        var freed = party.Grunts[0];
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.That(rule.Comp.ReserveBodyPriority, Is.EqualTo(TimeSpan.FromSeconds(30)),
+                    "a freed body is the reserve's for thirty seconds");
+                rule.Comp.ReserveBodyPriority = TimeSpan.FromSeconds(2);
+
+                foreach (var dummy in dummies)
+                {
+                    ghosts.Add(MakeObserver(dummy, map));
+                }
+
+                RaiseLeftovers(BadBloodThreat, new List<NetUserId> { member.UserId });
+                Assert.That(rules.GetReserve(), Is.EqualTo(new[] { member.UserId }));
+
+                // the grunt's player uses /ghost: the body is offered to ghosts again
+                var minds = Server.System<SharedMindSystem>();
+                Assert.That(minds.TryGetMind(freed, out var mind, out _), Is.True);
+                var left = entMan.SpawnEntity(Observer, map.GridCoords);
+                ghosts.Add(left);
+                minds.TransferTo(mind, left);
+                Assert.That(entMan.HasComponent<GhostRoleComponent>(freed), Is.True,
+                    "Test setup: the body left with /ghost is a ghost role");
+
+                Assert.That(RequestAllowed(freed, outsider), Is.False, "a freed body is the reserve's first");
+                Assert.That(RequestAllowed(freed, member), Is.True, "a reserve member may ask for it at once");
+
+                // the window only holds while somebody waits in the reserve
+                rule.Comp.ReserveQueue.Remove(member.UserId);
+                Assert.That(RequestAllowed(freed, outsider), Is.True, "with nobody in the reserve the body is open");
+                rule.Comp.ReserveQueue.Add(member.UserId);
+            });
+
+            await BadBloodTestHelpers.AdvanceClock(Pair, 3);
+
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                Assert.That(rules.IsInReserve(member.UserId), Is.True, "Test setup: the member still waits");
+                Assert.That(RequestAllowed(freed, outsider), Is.True, "after the window anyone may ask");
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+            await Cleanup(party, ghosts);
+        }
+    }
+
+    // what the ghost role system asks every tick for each player in the raffle. call on the server thread
+    private bool RequestAllowed(EntityUid body, ICommonSession session)
+    {
+        var role = Server.EntMan.GetComponent<GhostRoleComponent>(body);
+        var attempt = new GhostRoleRequestAttemptEvent(session, body, role);
+        Server.EntMan.EventBus.RaiseLocalEvent(body, ref attempt);
+        return !attempt.Cancelled;
     }
 
     // call on the server thread

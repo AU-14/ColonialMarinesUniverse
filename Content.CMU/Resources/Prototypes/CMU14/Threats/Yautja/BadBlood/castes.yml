@@ -1,10 +1,82 @@
-# ARCH-04 to ARCH-06: the Bad Blood castes. Each caste has a station on the Lodge (deployed with it, on the two free
-# tiles of the 3x3 layout). A Bad Blood takes up the caste there ("Take up the ... path" verb, BadBloodCasteSystem):
-# one of each caste per four living Bad Bloods, at least one. The station is a Lodge armory only its caste may open,
-# and it sells for the buyer's own Honour like the clan armory does.
+# ARCH-04 to ARCH-06: the Bad Blood castes. CMU14 ARCH-604: a caste is a badBloodCaste prototype. A Bad Blood
+# chooses one at the Lodge ("Choose your caste", a dialog of every caste, BadBloodCasteSystem) and keeps it for the
+# rest of that life: one of each caste per capDivisor living Bad Bloods, at least minCap. The caste's powers are the
+# components it adds. The Engineer and the Medic also have a station on the Lodge (on the two free tiles of the 3x3
+# layout): a Lodge armory only that caste may open, selling for the buyer's own Honour like the clan armory does.
+# Other castes buy their wares at the clan armory, locked to the caste (BadBloodCampArmory casteWares).
 
-# the Engineer's forge-bench: demolition and anti-tank gear. Engineers also build anywhere, see as an honourable
-# hunter does, and get RMC engineering to plant charges
+# builds anywhere, sees as an honourable hunter does, and gets RMC engineering to plant charges
+- type: badBloodCaste
+  id: Engineer
+  name: cmu-bad-blood-caste-name-engineer
+  verb: cmu-bad-blood-caste-verb-engineer
+  taken: cmu-bad-blood-caste-taken-engineer
+  codeRole: cmu-bad-blood-code-role-engineer
+  capDivisor: 4
+  minCap: 1
+  skills:
+    RMCSkillEngineer: 2
+  addComponents:
+  - type: BadBloodBuildAnywhere
+  - type: BadBloodHunterVisor
+
+# works Yautja medicine faster than other Bad Bloods
+- type: badBloodCaste
+  id: Medic
+  name: cmu-bad-blood-caste-name-medic
+  verb: cmu-bad-blood-caste-verb-medic
+  taken: cmu-bad-blood-caste-taken-medic
+  codeRole: cmu-bad-blood-code-role-medic
+  capDivisor: 4
+  minCap: 1
+  addComponents:
+  - type: BadBloodMedicSpeed
+    multiplier: 0.6
+
+# ARCH-605: the frontline brute. +80 to the crit and death thresholds, takes 15% less damage, sprints 10% slower,
+# staggers 50% longer with Bad Blood melee, and carries no stun bolt (the immobilizer stays)
+- type: badBloodCaste
+  id: Berserker
+  name: cmu-bad-blood-caste-name-berserker
+  verb: cmu-bad-blood-caste-verb-berserker
+  taken: cmu-bad-blood-caste-taken-berserker
+  codeRole: cmu-bad-blood-code-role-berserker
+  capDivisor: 4
+  minCap: 1
+  addComponents:
+  - type: BadBloodBerserker
+    thresholdBonus: 80
+    damageTakenMultiplier: 0.85
+    sprintMultiplier: 0.9
+    staggerMultiplier: 1.5
+
+# ARCH-606: finds and calls targets rather than outranging them. 85% armour, 75% cloak cooldown, and a "Mark for the
+# clan" verb that shows the prey on every Bad Blood's bracer map for 60 s. The caster keeps the clan's 7-tile stun
+- type: badBloodCaste
+  id: Tracker
+  name: cmu-bad-blood-caste-name-tracker
+  verb: cmu-bad-blood-caste-verb-tracker
+  taken: cmu-bad-blood-caste-taken-tracker
+  codeRole: cmu-bad-blood-code-role-tracker
+  capDivisor: 4
+  minCap: 1
+  addComponents:
+  - type: BadBloodTracker
+    armorMultiplier: 0.85
+    cloakCooldownMultiplier: 0.75
+    markDuration: 60
+
+# ARCH-607: no stat perks. Only a Falconer may buy the clan's falcon drone at the armory
+- type: badBloodCaste
+  id: Falconer
+  name: cmu-bad-blood-caste-name-falconer
+  verb: cmu-bad-blood-caste-verb-falconer
+  taken: cmu-bad-blood-caste-taken-falconer
+  codeRole: cmu-bad-blood-code-role-falconer
+  capDivisor: 4
+  minCap: 1
+
+# the Engineer's forge-bench: demolition and anti-tank gear
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUBadBloodCampEngineerStation

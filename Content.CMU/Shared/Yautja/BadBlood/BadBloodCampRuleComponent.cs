@@ -146,9 +146,6 @@ public sealed partial class BadBloodCampRuleComponent : Component
     public FixedPoint4 LastStandCost = 12;
 
     [DataField]
-    public FixedPoint4 HoundCost = 6;
-
-    [DataField]
     public FixedPoint4 TotemCost = 3;
 
     /// <summary>
@@ -167,6 +164,19 @@ public sealed partial class BadBloodCampRuleComponent : Component
 
     [ViewVariables]
     public TimeSpan StartedAt;
+
+    /// <summary>
+    /// True once the first dropship lands on the planet this rule runs on. Marine-facing Totem and Lodge intel waits
+    /// for it.
+    /// </summary>
+    [DataField]
+    public bool MarinesLanded;
+
+    /// <summary>
+    /// When <see cref="MarinesLanded"/> latched. Null before the landing.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? MarinesLandedAt;
 
     /// <summary>
     /// Living Bad Bloods when the rule started (L in the design).
@@ -191,8 +201,9 @@ public sealed partial class BadBloodCampRuleComponent : Component
     public int LivingCapBonus = 5;
 
     /// <summary>
-    /// Bad Bloods + hounds never exceed this share of the live player count. It is read every time, so the ceiling
-    /// rises and falls with the server population during the round. Nobody is removed when it falls; new seats wait.
+    /// Bad Bloods and their open seats never exceed this share of the live player count. It is read every time, so
+    /// the ceiling rises and falls with the server population during the round. Nobody is removed when it falls; new
+    /// seats wait. CMU14 ARCH-603: hounds are free filler from the kennel and are not counted.
     /// </summary>
     [DataField]
     public float ThreatBudgetFraction = 0.35f;
@@ -234,13 +245,14 @@ public sealed partial class BadBloodCampRuleComponent : Component
     public int LastStandSeats = 2;
 
     /// <summary>
-    /// Players whose Bad Blood died this round, with the time of death. Squad and hound seats favour them.
+    /// Players whose Bad Blood died this round, with the time of death. The clan-wipe check reads it; it gives no
+    /// seat priority (FLOW-601).
     /// </summary>
     [ViewVariables]
     public readonly Dictionary<NetUserId, TimeSpan> DeadBadBloods = new();
 
     /// <summary>
-    /// How long a dead Bad Blood keeps seat priority over ordinary ghosts once a seat opens.
+    /// How long the Blood Reserve keeps squad seat priority over everyone else once a squad call opens.
     /// </summary>
     [DataField]
     public TimeSpan DeadPriorityWindow = TimeSpan.FromSeconds(30);
@@ -343,6 +355,21 @@ public sealed partial class BadBloodCampRuleComponent : Component
 
     [DataField]
     public TimeSpan ReserveChoiceTime = TimeSpan.FromSeconds(20);
+
+    // CMU14: FLOW-602, a reserve member who waits this long without a body goes back to the ghost pool.
+    // zero or less: the reserve never expires
+    [DataField]
+    public TimeSpan ReserveExpiry = TimeSpan.FromMinutes(5);
+
+    /// <summary>
+    /// When each <see cref="ReserveQueue"/> member joined. A member missing here is stamped on the next prune.
+    /// </summary>
+    [ViewVariables]
+    public readonly Dictionary<NetUserId, TimeSpan> ReserveJoinedAt = new();
+
+    // CMU14: FLOW-603, a freed Bad Blood body takes only reserve members this long after it is offered
+    [DataField]
+    public TimeSpan ReserveBodyPriority = TimeSpan.FromSeconds(30);
 
     [ViewVariables]
     public readonly List<BadBloodSquadCall> SquadCalls = new();
@@ -455,4 +482,55 @@ public sealed partial class BadBloodCampRuleComponent : Component
     /// </summary>
     [ViewVariables]
     public readonly HashSet<int> DepartureAnnounced = new();
+
+    // ---- Blooded kill ----
+
+    // CMU14 STATE-603: a worthy mob that dies within this long of a Bad Blood melee hit pays the striker
+    // BloodedKillHonour. BadBloodMeleeSystem
+    [DataField]
+    public TimeSpan BloodedKillWindow = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public FixedPoint4 BloodedKillHonour = 1;
+
+    // ---- hounds ----
+
+    // CMU14 FLOW-605: a player whose hound died waits this long before taking another. BadBloodHoundSystem
+    [DataField]
+    public TimeSpan HoundRespawnDelay = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// When each player's last hound died, for <see cref="HoundRespawnDelay"/>.
+    /// </summary>
+    [ViewVariables]
+    public readonly Dictionary<NetUserId, TimeSpan> HoundDiedAt = new();
+
+    // ---- Lodge region ----
+
+    // CMU14 FLOW-606: once the marines have landed, the square of this many tiles a side that the Lodge stands in is
+    // boxed on the marine tactical map. BadBloodCampSystem.Region
+    [DataField]
+    public int LodgeRegionSize = 30;
+
+    /// <summary>
+    /// The lowest corner of the boxed square, in rangefinder coordinates. Null while no region is shown.
+    /// </summary>
+    [ViewVariables]
+    public Vector2i? LodgeRegionCorner;
+
+    /// <summary>
+    /// The tactical map the box is drawn on, and the box as drawn, so it is removed with the same geometry. Null
+    /// while nothing is drawn.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid? LodgeRegionMap;
+
+    [ViewVariables]
+    public System.Numerics.Vector2 LodgeRegionCanvas;
+
+    [ViewVariables]
+    public float LodgeRegionHalfSize;
+
+    [ViewVariables]
+    public int LodgeRegionDepth;
 }

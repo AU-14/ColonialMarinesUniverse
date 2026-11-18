@@ -3,6 +3,8 @@ using Content.Shared.Trigger;
 using Content.Shared.Trigger.Systems;
 using System.Numerics;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
+using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
@@ -46,6 +48,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     [Dependency] private FlammableSystem _flammable = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private ExplosionSystem _explosions = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -88,7 +91,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         if (IsHuman(args.Target))
             duration += ent.Comp.HumanBonusStunTime;
 
-        ApplyCasterStun(args.Target, duration);
+        ApplyCasterStun(args.Target, duration, ent.Comp.ImmunityWindow, ent.Comp.ImmuneSlow);
     }
 
     private void OnGibHumansHit(Entity<YautjaGibHumansOnHitComponent> ent, ref ProjectileHitEvent args)
@@ -372,7 +375,7 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
             if (HasComp<YautjaComponent>(target))
                 duration -= ent.Comp.YautjaStunReduction;
 
-            ApplyCasterStun(target, duration);
+            ApplyCasterStun(target, duration, ent.Comp.ImmunityWindow, ent.Comp.ImmuneSlow);
         }
     }
 
@@ -390,10 +393,27 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
                humanoid.Species == "Human";
     }
 
-    private void ApplyCasterStun(EntityUid target, TimeSpan duration)
+    // CMU14 COUPLING-601: a bolt with an immunity window (the Bad Blood bolts) only slows a target it, or another such
+    // bolt, stunned within the stun plus the window. A zero window (honourable bolts, the eradicator crash) stuns as
+    // before and never reads or writes the immunity
+    private void ApplyCasterStun(EntityUid target, TimeSpan duration, TimeSpan immunityWindow = default, TimeSpan immuneSlow = default)
     {
         if (duration <= TimeSpan.Zero)
             return;
+
+        if (immunityWindow > TimeSpan.Zero)
+        {
+            var now = _timing.CurTime;
+            if (TryComp(target, out CMUCasterStunImmunityComponent? immunity) && now < immunity.Until)
+            {
+                if (immuneSlow > TimeSpan.Zero)
+                    _slow.TrySlowdown(target, immuneSlow);
+
+                return;
+            }
+
+            EnsureComp<CMUCasterStunImmunityComponent>(target).Until = now + duration + immunityWindow;
+        }
 
         _stun.TryStun(target, duration, true);
 

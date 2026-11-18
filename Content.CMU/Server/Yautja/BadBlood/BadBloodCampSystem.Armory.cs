@@ -11,11 +11,13 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.Yautja.BadBlood;
 
 // FLOW-112, the Lodge armory: an automated vendor on the armory part. ARCH-01: it sells for the buyer's own Honour,
-// earned by offering trophies, so gear never eats the clan SP that buys squads, hounds and Totems. The vendor asks
+// earned by offering trophies, so gear never eats the clan SP that buys squads and Totems. The vendor asks
 // through CMUVendorPooledPointsEvent before it charges anyone, and this answers for the armory: tier, Leader-only
 // wares and the price all come from the rule, never from the buyer's own vendor points. The plasma caster is not
 // sold here. Its lethal bolt and its eradicator are: both are clan unlocks the Leader pays for from their Honour.
 // ARCH-02: the forge ware upgrades the buyer's bracer weapon in place.
+// CMU14 STATE-602: the kennel wares upgrade the standing kennel's stock (BadBloodCampSystem.Kennel.cs).
+// CMU14 ARCH-604: caste stations sell to their caste only, and CasteWares lock single wares of the clan's armory.
 // Dependency fields taken by this file: _armoryEradicator, _armoryForge, _armoryProto, _armoryVendor.
 public sealed partial class BadBloodCampSystem
 {
@@ -90,9 +92,10 @@ public sealed partial class BadBloodCampSystem
         }
 
         // the Leader is armed a step ahead of the clan: tier II and III wares open to them one tier early.
-        // tier IV still waits for the clan ship.
+        // tier IV still waits for the clan ship. CMU14 STATE-601: the lethal unlock is not discounted (D3), so the
+        // clan never holds lethal bolts from the start
         var tier = GetArmoryTier(armory, ware);
-        if (tier is 2 or 3 && _badBlood.IsBadBloodLeader(user))
+        if (tier is 2 or 3 && _badBlood.IsBadBloodLeader(user) && !IsLethalUnlockWare(ware))
             tier--;
 
         if (!_rule.IsTierUnlocked(tier))
@@ -116,10 +119,16 @@ public sealed partial class BadBloodCampSystem
         }
 
         // ARCH-06: a caste station sells only to its caste
-        if (armory.Comp.RequiredCaste is { } requiredCaste &&
-            !(TryComp(user, out BadBloodCasteComponent? holder) && holder.Caste == requiredCaste))
+        if (armory.Comp.RequiredCaste is { } requiredCaste && !HoldsCaste(user, requiredCaste))
         {
-            reason = "cmu-bad-blood-caste-station-locked";
+            reason = "cmu-bad-blood-caste-armory-locked";
+            return false;
+        }
+
+        // CMU14 ARCH-604: and a caste ware in the clan's armory only to its caste
+        if (armory.Comp.CasteWares.TryGetValue(ware, out var wareCaste) && !HoldsCaste(user, wareCaste))
+        {
+            reason = "cmu-bad-blood-caste-ware-locked";
             return false;
         }
 
@@ -145,6 +154,22 @@ public sealed partial class BadBloodCampSystem
             }
         }
 
+        // CMU14 STATE-602: a kennel upgrade needs a standing kennel that can still take it
+        if (GetKennelUpgrade(ware) is { } upgrade)
+        {
+            if (!TryGetKennel(out var kennel))
+            {
+                reason = "cmu-bad-blood-armory-kennel-none";
+                return false;
+            }
+
+            if (kennel.Comp.Upgrades.GetValueOrDefault(ware) >= upgrade.MaxBuys)
+            {
+                reason = "cmu-bad-blood-armory-kennel-maxed";
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -157,7 +182,7 @@ public sealed partial class BadBloodCampSystem
         if (!CanBuyFromArmory(armory, user, ware, out var reason))
         {
             _popup.PopupEntity(
-                Loc.GetString(reason, ("tier", GetArmoryTier(armory, ware))),
+                Loc.GetString(reason, ("tier", GetArmoryTier(armory, ware)), ("caste", GetWareCasteName(armory, ware))),
                 armory.Owner,
                 user,
                 PopupType.SmallCaution);
@@ -198,6 +223,22 @@ public sealed partial class BadBloodCampSystem
             }
 
             _popup.PopupEntity(Loc.GetString("cmu-bad-blood-armory-forged"), args.User, args.User);
+            return;
+        }
+
+        // CMU14 STATE-602
+        if (TryComp<BadBloodKennelUpgradeComponent>(args.Item, out var kennelUpgrade))
+        {
+            var ware = MetaData(args.Item).EntityPrototype?.ID;
+            QueueDel(args.Item);
+            if (ware != null && TryGetKennel(out var kennel))
+            {
+                ApplyKennelUpgrade(kennel, ware, kennelUpgrade);
+                _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-armory-kennel-improved",
+                    ("seconds", (int) kennel.Comp.Interval.TotalSeconds),
+                    ("stock", kennel.Comp.MinStock)));
+            }
+
             return;
         }
 
@@ -264,6 +305,28 @@ public sealed partial class BadBloodCampSystem
                proto.TryComp<BadBloodEradicatorUnlockComponent>(out _, EntityManager.ComponentFactory);
     }
 
+    // CMU14 ARCH-604
+    private bool HoldsCaste(EntityUid user, ProtoId<BadBloodCastePrototype> caste)
+    {
+        return TryComp(user, out BadBloodCasteComponent? held) && held.Caste == caste;
+    }
+
+    // CMU14 ARCH-604: the caste a locked ware is for, as players read it. Empty for a ware open to every Bad Blood
+    private string GetWareCasteName(Entity<BadBloodCampArmoryComponent> armory, EntProtoId ware)
+    {
+        var caste = armory.Comp.CasteWares.TryGetValue(ware, out var wareCaste) ? wareCaste : armory.Comp.RequiredCaste;
+        return caste is { } id && _armoryProto.TryIndex(id, out var proto) ? Loc.GetString(proto.Name) : string.Empty;
+    }
+
+    // CMU14 STATE-602
+    private BadBloodKennelUpgradeComponent? GetKennelUpgrade(EntProtoId ware)
+    {
+        return _armoryProto.TryIndex(ware, out var proto) &&
+               proto.TryComp<BadBloodKennelUpgradeComponent>(out var upgrade, EntityManager.ComponentFactory)
+            ? upgrade
+            : null;
+    }
+
     #endregion
 
     #region The vendor window
@@ -284,12 +347,11 @@ public sealed partial class BadBloodCampSystem
             return;
         }
 
-        // ARCH-06: a caste station opens only for its caste. The others are told how to take it up
-        if (ent.Comp.RequiredCaste is { } caste &&
-            !(TryComp(args.User, out BadBloodCasteComponent? held) && held.Caste == caste))
+        // ARCH-06: a caste station opens only for its caste. The others are told where to take it up
+        if (ent.Comp.RequiredCaste is { } caste && !HoldsCaste(args.User, caste))
         {
             if (!args.Silent)
-                _popup.PopupEntity(Loc.GetString("cmu-bad-blood-caste-station-locked"), ent.Owner, args.User, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cmu-bad-blood-caste-armory-locked"), ent.Owner, args.User, PopupType.SmallCaution);
 
             args.Cancel();
             return;

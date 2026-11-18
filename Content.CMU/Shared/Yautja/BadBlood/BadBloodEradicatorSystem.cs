@@ -1,10 +1,12 @@
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.Popups;
+using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
-// the gates on the Bad Blood caster: the lethal bolt and the eradicator mode. stun and immobilizer are always there
+// the gates on the Bad Blood caster: the lethal bolt and the eradicator mode. the immobilizer is always there, and
+// the stun bolt for everyone but a Berserker (CMU14 ARCH-605)
 public sealed partial class BadBloodEradicatorSystem : EntitySystem
 {
     /// <summary>
@@ -22,6 +24,13 @@ public sealed partial class BadBloodEradicatorSystem : EntitySystem
     /// </summary>
     public const int StunMode = 0;
 
+    /// <summary>
+    /// The immobilizer, where a Berserker's caster falls back to from the stun bolt.
+    /// </summary>
+    public const int ImmobilizerMode = 1;
+
+    [Dependency] private YautjaCasterSystem _caster = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -53,6 +62,26 @@ public sealed partial class BadBloodEradicatorSystem : EntitySystem
 
     private void OnCasterModeAttempt(Entity<YautjaBadBloodComponent> ent, ref YautjaCasterModeAttemptEvent args)
     {
+        // CMU14 ARCH-605: a Berserker carries no stun bolt. use in hand steps past it (a silent ask). a caster left
+        // in it (its first shot, a mode forced back to it, or the lethal toggle back to it) falls back to the
+        // immobilizer, so the Berserker is never stuck on a mode it cannot fire
+        if (!args.Cancelled && args.Mode == StunMode && HasComp<BadBloodBerserkerComponent>(ent.Owner))
+        {
+            args.Cancelled = true;
+            if (args.Silent)
+                return;
+
+            _popup.PopupClient(Loc.GetString("cmu-bad-blood-berserker-no-stun"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            if (_net.IsServer &&
+                TryComp(args.Caster, out YautjaCasterComponent? caster) &&
+                caster.Modes.Count > ImmobilizerMode)
+            {
+                _caster.ForceMode((args.Caster, caster), ImmobilizerMode);
+            }
+
+            return;
+        }
+
         if (args.Cancelled || args.Mode < LethalMode)
             return;
 

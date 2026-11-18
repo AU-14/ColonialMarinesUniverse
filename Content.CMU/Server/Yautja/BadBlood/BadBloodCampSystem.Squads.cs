@@ -126,8 +126,8 @@ public sealed partial class BadBloodCampSystem
     }
 
     /// <summary>
-    /// How many more seats the caps allow right now: the living Bad Blood cap, and the threat budget that Bad
-    /// Bloods and hounds share. Seats already open count as taken.
+    /// How many more seats the caps allow right now: the living Bad Blood cap, and the threat budget of Bad
+    /// Bloods and open seats. Seats already open count as taken.
     /// </summary>
     public int GetSquadSeatRoom()
     {
@@ -140,8 +140,8 @@ public sealed partial class BadBloodCampSystem
     }
 
     /// <summary>
-    /// How many more seats the threat budget alone allows: Bad Bloods, open seats and hounds against
-    /// round(pop x 0.35). The living cap is not counted.
+    /// How many more seats the threat budget alone allows: Bad Bloods and open seats against round(pop x 0.35).
+    /// The living cap is not counted. CMU14 ARCH-603: hounds are free filler and stay out of the budget
     /// </summary>
     public int GetSquadBudgetRoom()
     {
@@ -149,7 +149,7 @@ public sealed partial class BadBloodCampSystem
             return 0;
 
         var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats();
-        return Math.Max(0, _rule.GetThreatBudget() - bodies - _kennelHounds.CountHounds());
+        return Math.Max(0, _rule.GetThreatBudget() - bodies);
     }
 
     /// <summary>
@@ -299,8 +299,8 @@ public sealed partial class BadBloodCampSystem
 
     /// <summary>
     /// Whether <paramref name="session"/> may ask for a seat of <paramref name="call"/> right now.
-    /// The order is the reserve, then this round's dead Bad Bloods, then anyone: while the clan has either, an
-    /// ordinary ghost waits out <see cref="BadBloodCampRuleComponent.DeadPriorityWindow"/> from the call.
+    /// The reserve goes first: while the clan has one, everyone else waits out
+    /// <see cref="BadBloodCampRuleComponent.DeadPriorityWindow"/> from the call. A dead Bad Blood gets no priority.
     /// This round's honourable hunters never get a seat. <paramref name="reason"/> is a locale id.
     /// </summary>
     public bool CanTakeSquadSeat(BadBloodSquadCall call, ICommonSession session, out string reason)
@@ -332,10 +332,11 @@ public sealed partial class BadBloodCampSystem
             return false;
         }
 
-        if (inReserve || rule.Comp.DeadBadBloods.ContainsKey(user))
+        // CMU14: FLOW-601, a dead Bad Blood gets no pass and holds nobody back
+        if (inReserve)
             return true;
 
-        if ((rule.Comp.ReserveQueue.Count > 0 || rule.Comp.DeadBadBloods.Count > 0) &&
+        if (rule.Comp.ReserveQueue.Count > 0 &&
             _timing.CurTime < call.OpenedAt + rule.Comp.DeadPriorityWindow)
         {
             reason = "cmu-bad-blood-squad-seat-priority";
@@ -356,14 +357,11 @@ public sealed partial class BadBloodCampSystem
         return false;
     }
 
-    // lower goes first: the reserve in queue order, then dead Bad Bloods, then everyone else
+    // lower goes first: the reserve in queue order, then everyone else
     private static int GetSquadSeatRank(Entity<BadBloodCampRuleComponent> rule, NetUserId user)
     {
         var queued = rule.Comp.ReserveQueue.IndexOf(user);
-        if (queued >= 0)
-            return queued;
-
-        return rule.Comp.DeadBadBloods.ContainsKey(user) ? int.MaxValue - 1 : int.MaxValue;
+        return queued >= 0 ? queued : int.MaxValue;
     }
 
     private void OnSquadSeatRequestAttempt(Entity<BadBloodSquadSeatsComponent> ent, ref GhostRoleRequestAttemptEvent args)

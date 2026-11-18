@@ -57,6 +57,12 @@ public readonly record struct BadBloodLodgePitchedEvent(Entity<BadBloodCampRuleC
 [ByRefEvent]
 public readonly record struct BadBloodLodgeDestroyedEvent(Entity<BadBloodCampRuleComponent> Rule, EntityUid Lodge);
 
+/// <summary>
+/// The first dropship of the round landed on the planet while the rule runs. Raised once per rule.
+/// </summary>
+[ByRefEvent]
+public readonly record struct BadBloodMarinesLandedEvent(Entity<BadBloodCampRuleComponent> Rule);
+
 // ---- objectives (docs/GraphAudit-BadBlood-ObjectivesPlan.md ARCH-501). Every event below is broadcast. ----
 
 /// <summary>

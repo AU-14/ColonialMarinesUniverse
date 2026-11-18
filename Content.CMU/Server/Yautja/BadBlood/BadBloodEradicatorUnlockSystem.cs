@@ -16,6 +16,7 @@ public sealed partial class BadBloodEradicatorUnlockSystem : EntitySystem
     private static readonly TimeSpan UpdateEvery = TimeSpan.FromSeconds(1);
 
     [Dependency] private YautjaCasterSystem _caster = default!;
+    [Dependency] private YautjaCloakSystem _cloak = default!;
     [Dependency] private BadBloodCampRuleSystem _rule = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -222,9 +223,12 @@ public sealed partial class BadBloodEradicatorUnlockSystem : EntitySystem
         return false;
     }
 
+    // ECS-601: any shot from cloak, the stun bolt included, drops the cloak first.
     // one eradicator shot, then the caster drops back to the lethal bolt and the eradicator rests
     private void OnCasterFired(Entity<YautjaBadBloodComponent> ent, ref YautjaCasterFiredEvent args)
     {
+        _cloak.DecloakFromAttack(ent.Owner);
+
         if (args.Mode != BadBloodEradicatorSystem.EradicatorMode || !_rule.IsRuleActive())
             return;
 

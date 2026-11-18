@@ -146,9 +146,10 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             if (now >= bracer.CloakExpiresAt)
             {
                 ForceDecloak(user);
-                bracer.CloakCooldownUntil = now + bracer.CloakCooldown;
+                var cooldown = GetCloakCooldown(bracer, user); // CMU14 ARCH-606
+                bracer.CloakCooldownUntil = now + cooldown;
                 Dirty(uid, bracer);
-                _actions.SetCooldown(bracer.ToggleCloakAction, bracer.CloakCooldown);
+                _actions.SetCooldown(bracer.ToggleCloakAction, cooldown);
             }
         }
     }
@@ -266,13 +267,23 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
         if (!enabling && bracer.Comp.CloakCooldown > TimeSpan.Zero)
         {
-            bracer.Comp.CloakCooldownUntil = _timing.CurTime + bracer.Comp.CloakCooldown;
+            var cooldown = GetCloakCooldown(bracer.Comp, user); // CMU14 ARCH-606
+            bracer.Comp.CloakCooldownUntil = _timing.CurTime + cooldown;
             Dirty(bracer);
-            _actions.SetCooldown(bracer.Comp.ToggleCloakAction, bracer.Comp.CloakCooldown);
+            _actions.SetCooldown(bracer.Comp.ToggleCloakAction, cooldown);
         }
 
         _actions.SetToggled(bracer.Comp.ToggleCloakAction, enabling);
         return true;
+    }
+
+    // CMU14 ARCH-606: a Bad Blood Tracker's cloak comes back sooner. only the Tracker caste carries the component,
+    // so every other bracer, honourable or Bad Blood, keeps its own cooldown
+    private TimeSpan GetCloakCooldown(YautjaBracerComponent bracer, EntityUid user)
+    {
+        return TryComp(user, out BadBloodTrackerComponent? tracker)
+            ? bracer.CloakCooldown * tracker.CloakCooldownMultiplier
+            : bracer.CloakCooldown;
     }
 
     private void OnBracerUnequipped(Entity<YautjaBracerComponent> ent, ref YautjaBracerUnequippedEvent args)
@@ -524,6 +535,15 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             && args.DamageDelta?.AnyPositive() == true)
             ForceDecloak(target);
 
+        // CMU14 ECS-605: a Bad Blood that is hit cannot cloak at once to sprint away. Ticks that do not interrupt
+        // do-afters (bleeding, hunger, chems) do not count, so only real hits gate the cloak.
+        if (_net.IsServer &&
+            args.InterruptsDoAfters &&
+            args.DamageDelta?.AnyPositive() == true)
+        {
+            ApplyBadBloodDamagedLockout(target);
+        }
+
         if (_net.IsClient ||
             args.Origin is not { } origin ||
             args.DamageDelta?.AnyPositive() != true ||
@@ -569,6 +589,30 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         _damageable.TryChangeDamage(target, bonus, ignoreResistances: true, origin: attacker);
     }
 
+    /// <summary>
+    /// ECS-601: a Bad Blood's own attack from cloak drops the cloak, even one that deals no damage such as the
+    /// stun bolt, and starts the offensive combat lockout. It is the Bad Blood's own strike, so there is no ambush
+    /// bonus and no forced-decloak cooldown. Honourable hunters are untouched. The caster calls this server-side
+    /// when it fires; every change here is networked.
+    /// </summary>
+    public void DecloakFromAttack(EntityUid user)
+    {
+        if (!HasComp<YautjaBadBloodComponent>(user) ||
+            !HasComp<EntityActiveInvisibleComponent>(user) ||
+            !TryComp(user, out EntityTurnInvisibleComponent? cloak) ||
+            !cloak.Enabled ||
+            !_power.TryGetWornBracer(user, out var bracer))
+        {
+            return;
+        }
+
+        if (!TrySetInvisibility(bracer, user, false, true))
+            return;
+
+        _actions.SetToggled(bracer.Comp.ToggleCloakAction, false);
+        ApplyOffensiveCombatLockout(user);
+    }
+
     public void ApplyOffensiveCombatLockout(EntityUid attacker)
     {
         if (!HasComp<YautjaComponent>(attacker) ||
@@ -581,6 +625,27 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             ? bracer.Comp.CloakBadBloodCombatLockout
             : bracer.Comp.CloakCombatLockout;
         var until = _timing.CurTime + lockout;
+        if (until <= bracer.Comp.CloakCombatLockoutUntil)
+            return;
+
+        bracer.Comp.CloakCombatLockoutUntil = until;
+        Dirty(bracer);
+    }
+
+    /// <summary>
+    /// CMU14 ECS-605: taking a hit raises a Bad Blood's combat lockout to at least
+    /// <see cref="YautjaBracerComponent.CloakBadBloodDamagedLockout"/>. Never shortens a longer lockout already
+    /// running. Honourable hunters are untouched.
+    /// </summary>
+    private void ApplyBadBloodDamagedLockout(EntityUid target)
+    {
+        if (!HasComp<YautjaBadBloodComponent>(target) ||
+            !_power.TryGetWornBracer(target, out var bracer))
+        {
+            return;
+        }
+
+        var until = _timing.CurTime + bracer.Comp.CloakBadBloodDamagedLockout;
         if (until <= bracer.Comp.CloakCombatLockoutUntil)
             return;
 

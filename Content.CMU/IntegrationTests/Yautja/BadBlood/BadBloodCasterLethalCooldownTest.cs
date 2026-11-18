@@ -65,8 +65,8 @@ public sealed class BadBloodCasterLethalCooldownTest
                 "Test setup: the Bad Blood caster lands on the stun bolt.");
             Assert.That(gun.FireRateModified, Is.EqualTo(stunRate).Within(0.0001f),
                 "Test setup: the gun starts at the stun bolt's fire rate.");
-            Assert.That(1f / stunRate, Is.LessThan(1.5f),
-                "Test setup: the stun refire must be shorter than the 1.5 s probe below.");
+            Assert.That(1f / stunRate, Is.LessThan(2.5f),
+                "Test setup: the stun refire must be shorter than the 2.5 s probe below.");
             Assert.That(lethalDelay.TotalSeconds, Is.EqualTo(12).Within(0.01),
                 "A Bad Blood lethal bolt waits 12 seconds before the next one.");
 
@@ -88,7 +88,7 @@ public sealed class BadBloodCasterLethalCooldownTest
         });
 
         // past the stun refire, short of the lethal one
-        await pair.RunSeconds(1.5f);
+        await pair.RunSeconds(2.5f);
 
         await server.WaitAssertion(() =>
         {
@@ -108,7 +108,7 @@ public sealed class BadBloodCasterLethalCooldownTest
             Delete(entMan, shot);
         });
 
-        await pair.RunSeconds(11f); // 1.5 + 11 = 12.5 s, past the 12 s lethal cooldown
+        await pair.RunSeconds(10f); // 2.5 + 10 = 12.5 s, past the 12 s lethal cooldown
 
         await server.WaitAssertion(() =>
         {

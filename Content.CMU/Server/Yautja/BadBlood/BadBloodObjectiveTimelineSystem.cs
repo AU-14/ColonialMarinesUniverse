@@ -255,7 +255,10 @@ public sealed class BadBloodObjectiveTimelineSystem : EntitySystem
 
     private void OnTotemRead(ref BadBloodTotemReadEvent ev)
     {
-        Record(BadBloodTimelineKind.TotemRead, $"read by {Name(ev.Reader)}", ev.Totem, log: true);
+        Record(BadBloodTimelineKind.TotemRead,
+            Loc.GetString("cmu-bad-blood-timeline-detail-read", ("reader", Name(ev.Reader))),
+            ev.Totem,
+            log: true);
     }
 
     // every hit on the Lodge reveals it again: one entry per source per RevealDedupe
@@ -267,8 +270,12 @@ public sealed class BadBloodObjectiveTimelineSystem : EntitySystem
             return;
 
         _lastReveal[ev.Source] = now;
-        var duration = ev.Duration is { } time ? $"{(int) time.TotalSeconds}s" : "until cleared";
-        Record(BadBloodTimelineKind.LodgeRevealed, $"{ev.Source}, {duration}", ev.Lodge, log: true);
+        // the detail starts with the source's enum name: the timeline test reads it
+        var source = ev.Source.ToString();
+        var detail = ev.Duration is { } time
+            ? Loc.GetString("cmu-bad-blood-timeline-detail-reveal", ("source", source), ("seconds", (int) time.TotalSeconds))
+            : Loc.GetString("cmu-bad-blood-timeline-detail-reveal-held", ("source", source));
+        Record(BadBloodTimelineKind.LodgeRevealed, detail, ev.Lodge, log: true);
     }
 
     private void OnLodgeDestroyed(ref BadBloodLodgeDestroyedEvent ev)
@@ -279,7 +286,9 @@ public sealed class BadBloodObjectiveTimelineSystem : EntitySystem
     private void OnRipeHoldStarted(ref BadBloodRipeHoldStartedEvent ev)
     {
         var callIn = ev.CallAt - _timing.CurTime;
-        Record(BadBloodTimelineKind.RipeHoldStarted, $"ship call in {(int) callIn.TotalSeconds}s", log: true);
+        Record(BadBloodTimelineKind.RipeHoldStarted,
+            Loc.GetString("cmu-bad-blood-timeline-detail-hold", ("seconds", (int) callIn.TotalSeconds)),
+            log: true);
     }
 
     private void OnRipeHoldBroken(ref BadBloodRipeHoldBrokenEvent ev)
@@ -290,27 +299,39 @@ public sealed class BadBloodObjectiveTimelineSystem : EntitySystem
     private void OnShipCalled(ref BadBloodShipCalledEvent ev)
     {
         var arrivesIn = ev.ArrivesAt - _timing.CurTime;
-        Record(BadBloodTimelineKind.ShipCalled, $"arrives in {(int) arrivesIn.TotalSeconds}s", log: true);
+        Record(BadBloodTimelineKind.ShipCalled,
+            Loc.GetString("cmu-bad-blood-timeline-detail-ship", ("seconds", (int) arrivesIn.TotalSeconds)),
+            log: true);
     }
 
     private void OnBracerDecrypted(ref BadBloodBracerDecryptedEvent ev)
     {
-        Record(BadBloodTimelineKind.BracerDecrypted, $"by {Name(ev.User)}", ev.Bracer);
+        Record(BadBloodTimelineKind.BracerDecrypted, By(ev.User), ev.Bracer);
     }
 
     private void OnStarChartRecovered(ref BadBloodStarChartRecoveredEvent ev)
     {
-        Record(BadBloodTimelineKind.StarChartRecovered, $"by {Name(ev.User)}", ev.Chart);
+        Record(BadBloodTimelineKind.StarChartRecovered, By(ev.User), ev.Chart);
     }
 
     private void OnTrophyStripped(ref BadBloodTrophyStrippedEvent ev)
     {
-        Record(BadBloodTimelineKind.TrophyStripped, $"{Name(ev.Trophy)} by {Name(ev.User)}", ev.Lodge);
+        Record(BadBloodTimelineKind.TrophyStripped, ItemBy(ev.Trophy, ev.User), ev.Lodge);
     }
 
     private void OnSiteSabotaged(ref BadBloodSiteSabotagedEvent ev)
     {
-        Record(BadBloodTimelineKind.SiteSabotaged, $"{Name(ev.Site)} by {Name(ev.User)}", ev.Site);
+        Record(BadBloodTimelineKind.SiteSabotaged, ItemBy(ev.Site, ev.User), ev.Site);
+    }
+
+    private string By(EntityUid user)
+    {
+        return Loc.GetString("cmu-bad-blood-timeline-detail-by", ("user", Name(user)));
+    }
+
+    private string ItemBy(EntityUid item, EntityUid user)
+    {
+        return Loc.GetString("cmu-bad-blood-timeline-detail-item-by", ("item", Name(item)), ("user", Name(user)));
     }
 
     private void OnRoundDecided(ref BadBloodRoundDecidedEvent ev)

@@ -1,4 +1,6 @@
-# Lodge part: the kennel. Deployed with the Lodge and removed with it. Buying hounds goes on this prototype.
+# Lodge part: the kennel. Deployed with the Lodge and removed with it. A free hound spawner, like RMC's lesser-drone
+# pylon: 2 hounds on offer at pitch, one more every 2 minutes, up to 2 or one per 2 living Bad Bloods. The armory's
+# kennel wares (lodge_armory.yml) speed it up and raise the floor.
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUBadBloodCampKennel
@@ -18,7 +20,22 @@
     state: base
   - type: BadBloodCampPart
     kind: Kennel
-  # any Bad Blood buys a sleeping hound here
-  - type: BadBloodKennel
-    buyerReservation: 60
-    padPrototype: CMUBadBloodHoundObservationPad
+  # ARCH-603: the stock. BadBloodCampSystem.Kennel.cs sets the takeovers on the spawner below
+  - type: BadBloodKennelSpawner
+    minStock: 2
+    badBloodsPerHound: 2
+    interval: 120
+    reservePriority: 60
+  - type: GhostRole
+    name: cmu-bad-blood-kennel-ghost-name
+    description: cmu-bad-blood-kennel-ghost-description
+    rules: cmu-bad-blood-hound-ghost-rules
+    # like the squad seats: a job and the threat mind role, so the hound counts as part of the clan's threat
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  - type: GhostRoleMobSpawner
+    prototype: CMUMobYautjaBadBloodHound
+    deleteOnSpawn: false

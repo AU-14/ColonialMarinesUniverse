@@ -9,12 +9,15 @@ using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost.Roles.Raffles;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Yautja.BadBlood;
 
 // the landing party's unclaimed bodies: Bad Blood text instead of the generic threat role, a raffle like the squad
-// seats and hounds instead of first come, and this round's honourable hunters kept out like everywhere else
+// seats and hounds instead of first come, and this round's honourable hunters kept out like everywhere else.
+// FLOW-603: a freed body goes to the Blood Reserve first, for BadBloodCampRuleComponent.ReserveBodyPriority
 public sealed partial class BadBloodGhostRoleSystem : EntitySystem
 {
     [Dependency] private BadBloodSystem _badBlood = default!;
@@ -22,7 +25,9 @@ public sealed partial class BadBloodGhostRoleSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private YautjaPredatorRoundSystem _predatorRound = default!;
+    [Dependency] private BadBloodCampRuleSystem _rule = default!;
     [Dependency] private ThreatSystem _threats = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private static readonly ProtoId<GhostRoleRaffleSettingsPrototype> RaffleSettings = "default";
 
@@ -49,10 +54,31 @@ public sealed partial class BadBloodGhostRoleSystem : EntitySystem
 
     private void OnBadBloodMindRemoved(Entity<YautjaBadBloodComponent> ent, ref MindRemovedMessage args)
     {
-        if (!LeftForGhost(ent.Owner, args) || HasComp<GhostTakeoverAvailableComponent>(ent))
+        if (!LeftForGhost(ent.Owner, args))
+            return;
+
+        // CMU14: FLOW-603, a body GhostRoleSystem re-registers is offered again too
+        MarkOffered(ent.Owner);
+
+        if (HasComp<GhostTakeoverAvailableComponent>(ent))
             return;
 
         _threats.MakeThreatGhostRole(ent.Owner, _badBlood.IsBadBloodLeader(ent.Owner));
+    }
+
+    private void MarkOffered(EntityUid body)
+    {
+        EnsureComp<BadBloodOfferedBodyComponent>(body).BodyOfferedAt = _timing.CurTime;
+    }
+
+    // while anyone waits in the reserve, a freshly freed body is theirs: everyone else waits out the window
+    private bool IsHeldForReserve(EntityUid body, NetUserId user)
+    {
+        return TryComp(body, out BadBloodOfferedBodyComponent? offered) &&
+               _rule.TryGetRule(out var rule) &&
+               rule.Comp.ReserveQueue.Count > 0 &&
+               !rule.Comp.ReserveQueue.Contains(user) &&
+               _timing.CurTime < offered.BodyOfferedAt + rule.Comp.ReserveBodyPriority;
     }
 
     // hounds carry their ghost role from the prototype; this covers one whose takeover was stripped. It runs on the
@@ -80,15 +106,24 @@ public sealed partial class BadBloodGhostRoleSystem : EntitySystem
             : "cmu-bad-blood-grunt-ghost-description";
         role.RoleRules = "cmu-bad-blood-squad-ghost-rules";
         role.RaffleConfig = new GhostRoleRaffleConfig(_proto.Index(RaffleSettings).Settings);
+        MarkOffered(ent.Owner); // CMU14: FLOW-603
     }
 
     private void OnRequestAttempt(Entity<YautjaBadBloodComponent> ent, ref GhostRoleRequestAttemptEvent args)
     {
-        if (args.Cancelled || !_predatorRound.WasHunterThisRound(args.Player.UserId))
+        if (args.Cancelled)
+            return;
+
+        string reason;
+        if (_predatorRound.WasHunterThisRound(args.Player.UserId))
+            reason = "cmu-bad-blood-squad-seat-hunter";
+        else if (IsHeldForReserve(ent.Owner, args.Player.UserId))
+            reason = "cmu-bad-blood-reserve-body-held";
+        else
             return;
 
         args.Cancelled = true;
         if (args.ExplicitRequest)
-            _chat.DispatchServerMessage(args.Player, Loc.GetString("cmu-bad-blood-squad-seat-hunter"));
+            _chat.DispatchServerMessage(args.Player, Loc.GetString(reason));
     }
 }

@@ -79,8 +79,7 @@ public sealed class BadBloodHarnessObjectivesTest : GameTest
                 Assert.That(totems.IsRipe(totem), Is.False);
 
                 BadBloodTestHelpers.ForceTotemRipe(Server, totem);
-                var now = Server.ResolveDependency<IGameTiming>().CurTime;
-                Assert.That(now - comp.PlacedAt, Is.GreaterThanOrEqualTo(comp.RipeAfter));
+                Assert.That(comp.StoodFor, Is.GreaterThanOrEqualTo(comp.RipeAfter));
                 Assert.That(totems.IsRipe(totem), Is.True);
             });
         }

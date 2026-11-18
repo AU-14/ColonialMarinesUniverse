@@ -1196,7 +1196,11 @@ public sealed partial class YautjaItemSystem : EntitySystem
 
         var sourceName = FormattedMessage.EscapeText(nameEv.VoiceName);
         var speechVerb = Loc.GetString(_random.Pick(speech.SpeechVerbStrings));
-        var relay = $"Falcon Relay: {sourceName} {speechVerb}, \"{FormattedMessage.EscapeText(args.Message)}\"";
+        // CMU14 ARCH-607: the text is in loc now, unchanged
+        var relay = Loc.GetString("cmu-yautja-falcon-relay",
+            ("name", sourceName),
+            ("verb", speechVerb),
+            ("message", FormattedMessage.EscapeText(args.Message)));
         _chat.ChatMessageToOne(ChatChannel.Radio, relay, relay, drone.Owner, false, actor.PlayerSession.Channel);
     }
 

@@ -3,27 +3,9 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
 /// <summary>
-/// The Lodge kennel: any Bad Blood buys a sleeping hound here.
-/// </summary>
-[RegisterComponent]
-public sealed partial class BadBloodKennelComponent : Component
-{
-    /// <summary>
-    /// How long only the buyer can wake a hound they paid for.
-    /// </summary>
-    [DataField]
-    public TimeSpan BuyerReservation = TimeSpan.FromSeconds(60);
-
-    /// <summary>
-    /// Handed to the buyer with each hound, so they can watch through it.
-    /// </summary>
-    [DataField]
-    public EntProtoId? PadPrototype = "CMUBadBloodHoundObservationPad";
-}
-
-/// <summary>
-/// A sleeping Bad Blood hound. Only a Bad Blood wakes it, and for a while after a purchase only the buyer.
-/// The wake itself is the shared sleeping-hellhound path.
+/// A sleeping Bad Blood hound. Only a Bad Blood wakes it, and while a reservation runs only the one it is reserved
+/// for. The wake itself is the shared sleeping-hellhound path. CMU14 ARCH-603: the kennel no longer sells sleepers,
+/// it is a free spawner (<see cref="BadBloodKennelSpawnerComponent"/>); sleepers are the landing hounds.
 /// </summary>
 [RegisterComponent]
 public sealed partial class BadBloodSleepingHoundComponent : Component
@@ -49,6 +31,12 @@ public sealed partial class BadBloodHoundComponent : Component
     /// </summary>
     [ViewVariables]
     public bool Claimed;
+
+    /// <summary>
+    /// CMU14 ARCH-603: taken from a kennel, so a rebuilt kennel counts it as one of its living hounds.
+    /// </summary>
+    [ViewVariables]
+    public bool FromKennel;
 
     [DataField]
     public TimeSpan UnclaimedSleepAfter = TimeSpan.FromMinutes(3);

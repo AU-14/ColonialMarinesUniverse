@@ -338,10 +338,9 @@ public sealed class ShipCallInTest : GameTest
                 rule.Comp.ReserveQueue.Clear();
 
                 // round(players x fraction) = the three already here + 2
-                // the landing hound counts against the same budget as the Bad Bloods
-                var hounds = Server.System<BadBloodHoundSystem>().CountHounds();
-                rule.Comp.ThreatBudgetFraction = (5f + hounds) / rules.GetPlayerCount();
-                cap = rules.GetThreatBudget() - rules.CountLivingBadBloods() - hounds;
+                // CMU14 ARCH-603: hounds come free from the Kennel and no longer count against the budget
+                rule.Comp.ThreatBudgetFraction = 5f / rules.GetPlayerCount();
+                cap = rules.GetThreatBudget() - rules.CountLivingBadBloods();
                 Assert.That(cap, Is.EqualTo(2));
 
                 lodge = Server.EntMan.SpawnEntity(Lodge, map.GridCoords);
@@ -364,7 +363,7 @@ public sealed class ShipCallInTest : GameTest
                     Assert.That(rules.GetTier(), Is.EqualTo(4), "tier IV unlocks on arrival");
                     Assert.That(rules.GetDepartureRemaining(), Is.Not.Null);
                     Assert.That(camp.GetPendingSquadSeats(), Is.EqualTo(cap),
-                        "a seat opens every interval, up to round(pop x 0.25) Bad Bloods and hounds");
+                        "a seat opens every interval, up to round(pop x fraction) Bad Bloods");
                     Assert.That(rules.GetRoundOutcome(), Is.EqualTo(BadBloodRoundOutcome.None));
                 });
 

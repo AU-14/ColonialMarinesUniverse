@@ -19,6 +19,14 @@ public sealed class BadBloodHumanWeaponLockoutTest
     private const string Flashbang = "RMCGrenadeFlashBang";
     private const string HandFlash = "Flash";
 
+    // CMU14 ECS-603: MP tools (D8)
+    private const string StunBaton = "CMStunbaton";
+    private const string Handcuffs = "Handcuffs";
+    private const string Zipties = "Zipties";
+    private const string FragGrenade = "CMGrenadeFrag";
+    private const string DemolitionCharge = "CMUBadBloodDemolitionCharge";
+    private const string Crowbar = "CMCrowbar";
+
     private static readonly string[] YautjaGuns =
     [
         "CMUYautjaPlasmaCaster",
@@ -153,6 +161,78 @@ public sealed class BadBloodHumanWeaponLockoutTest
                     var attack = new AttackAttemptEvent(grunt, null, (flash, entMan.GetComponent<MeleeWeaponComponent>(flash)));
                     entMan.EventBus.RaiseLocalEvent(grunt, attack);
                     Assert.That(attack.Cancelled, Is.True, "a Bad Blood cannot flash someone by hitting them");
+                });
+            }
+            finally
+            {
+                foreach (var uid in spawned)
+                {
+                    if (entMan.EntityExists(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14 ECS-603: batons, cuffs, zipties and human grenades are refused like flashes. The clan's own demolition
+    // charge and generic human melee (a crowbar) stay allowed (D8), and honourable hunters are not locked out
+    [Test]
+    public async Task BadBloodsCannotUseMpTools()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var blocker = entMan.System<ActionBlockerSystem>();
+            var spawned = new List<EntityUid>();
+
+            EntityUid Spawn(string prototype)
+            {
+                var uid = entMan.SpawnEntity(prototype, map.GridCoords);
+                spawned.Add(uid);
+                return uid;
+            }
+
+            // a light attack with the item, the check the melee system makes before every swing. true means refused
+            bool SwingRefused(EntityUid user, EntityUid weapon)
+            {
+                var attack = new AttackAttemptEvent(user, null, (weapon, entMan.GetComponent<MeleeWeaponComponent>(weapon)));
+                entMan.EventBus.RaiseLocalEvent(user, attack);
+                return attack.Cancelled;
+            }
+
+            try
+            {
+                var hunter = Spawn(Hunter);
+                var grunt = Spawn(BadBloodTestHelpers.GruntPrototype);
+                var baton = Spawn(StunBaton);
+                var cuffs = Spawn(Handcuffs);
+                var zipties = Spawn(Zipties);
+                var frag = Spawn(FragGrenade);
+                var charge = Spawn(DemolitionCharge);
+                var crowbar = Spawn(Crowbar);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(SwingRefused(grunt, baton), Is.True, "a Bad Blood cannot hit with a stun baton");
+                    Assert.That(blocker.CanUseHeldEntity(grunt, baton), Is.False, "a Bad Blood cannot switch a stun baton on");
+                    Assert.That(blocker.CanUseHeldEntity(grunt, cuffs), Is.False, "a Bad Blood cannot use handcuffs");
+                    Assert.That(blocker.CanUseHeldEntity(grunt, zipties), Is.False, "a Bad Blood cannot use zipties");
+                    Assert.That(SwingRefused(grunt, cuffs), Is.True, "a Bad Blood cannot cuff someone by hitting them");
+                    Assert.That(blocker.CanUseHeldEntity(grunt, frag), Is.False, "a Bad Blood cannot arm a frag grenade");
+
+                    Assert.That(blocker.CanUseHeldEntity(grunt, charge), Is.True, "the Engineer's demolition charge stays usable");
+                    Assert.That(blocker.CanUseHeldEntity(grunt, crowbar), Is.True, "a crowbar stays usable");
+                    Assert.That(SwingRefused(grunt, crowbar), Is.False, "a Bad Blood can still swing a crowbar");
+
+                    Assert.That(SwingRefused(hunter, baton), Is.False, "honourable hunters are not locked out of batons");
+                    Assert.That(blocker.CanUseHeldEntity(hunter, cuffs), Is.True, "honourable hunters are not locked out of cuffs");
+                    Assert.That(blocker.CanUseHeldEntity(hunter, frag), Is.True, "honourable hunters are not locked out of grenades");
                 });
             }
             finally

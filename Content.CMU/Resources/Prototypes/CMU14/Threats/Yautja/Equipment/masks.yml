@@ -409,6 +409,7 @@
   id: CMUYautjaMaskBadBloodGruntBase
   abstract: true
   components:
+  - type: BadBloodGearLock # CMU14 ECS-602: a human cannot wear a grunt's mask
   - type: CMArmor
     melee: 20
     bullet: 30

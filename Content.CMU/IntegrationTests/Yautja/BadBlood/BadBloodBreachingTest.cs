@@ -79,10 +79,13 @@ public sealed class BadBloodBreachingTest
                     Assert.That(entMan.HasComponent<DamageBoostsComponent>(honourable), Is.False,
                         "Honourable melee gear must stay as it is.");
 
-                    // the weapon's own damage, which is all a mob ever takes from it, is the hunter's: the starter tier
-                    // (ARCH-02). The Lodge forge raises it later, and Breaching adds nothing to mobs
-                    Assert.That(badBloodMelee.Damage.Equals(honourableMelee.Damage), Is.True,
-                        "The Bad Blood starter weapon must hit mobs exactly as hard as the hunter's weapon.");
+                    // CMU14 ECS-607: the Bad Blood starter weapon hits mobs about a fifth harder than the hunter's, so
+                    // the clan fights up close (D9). Breaching itself still adds nothing to mobs
+                    var ratio = badBloodMelee.Damage.GetTotal().Float() / honourableMelee.Damage.GetTotal().Float();
+                    Assert.That(ratio, Is.InRange(1.19f, 1.29f),
+                        "The Bad Blood starter weapon must hit mobs 20-28% harder than the hunter's weapon.");
+                    Assert.That(badBloodMelee.Damage.DamageDict.Keys, Is.EquivalentTo(honourableMelee.Damage.DamageDict.Keys),
+                        "The Bad Blood retune keeps the weapon's damage type.");
                     Assert.That(badBloodMelee.AttackRate, Is.EqualTo(honourableMelee.AttackRate));
 
                     // the boost only lands on targets flagged Breaching, and a marine is not one

@@ -1,5 +1,6 @@
-# Bad Blood hounds. A hound only comes from a sleeping hound and only a ghost drives it.
-# Same body as the hunters' hellhound (330 health, xeno armor 30), with a bite that pierces 20 armor.
+# Bad Blood hounds. Only a ghost drives one: the landing party's come from sleeping hounds, the rest are taken free
+# from the Lodge kennel. ECS-606: grunt spam, not the hunters' hellhound: crit 150 / dead 220 (the hellhound is
+# 230 / 330), a 1 s leap knockdown (2 s) and always gibbed on death. Xeno armor 30 and a bite that pierces 20 armor.
 
 # stands still: no wandering and no hostile fallback while nobody is driving it
 - type: htnCompound
@@ -53,6 +54,20 @@
   # the bite is the hound's own melee, so the piercing sits on the hound
   - type: CMArmorPiercing
     amount: 20
+  # ECS-606: the override replaces the whole thresholds map; the alerts are inherited field by field
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Critical
+      220: Dead
+  # the other leap fields (no delay, the pounce damage, no shield block) are inherited field by field
+  - type: XenoLeap
+    knockdownTime: 1
+  # a dead clan hound always gibs, so corpses do not pile up. Unrevivable lets it gib from crit too: RMCGibSystem
+  # spares a revivable mob (RMCSimpleMob is one) that dies from crit
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+  - type: Unrevivable
   # a clan hound drags about a fifth faster than the hunters' hellhound (0.3825 / 0.425 / 0.2475), which was too harsh
   # for the clan's corpse runs
   - type: SlowOnPull

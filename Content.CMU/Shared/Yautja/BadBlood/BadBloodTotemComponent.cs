@@ -17,10 +17,64 @@ namespace Content.Shared.CMU14.Yautja.BadBlood;
 public sealed partial class BadBloodTotemComponent : Component
 {
     /// <summary>
-    /// When it was raised. Income ripens by how long it has stood.
+    /// When it was raised. The marine map pin counts from this (FLOW-604); ripening counts <see cref="StoodFor"/>.
     /// </summary>
     [ViewVariables]
     public TimeSpan PlacedAt;
+
+    /// <summary>
+    /// CMU14 FLOW-607: how long it has stood uncontested. Income ripens by this, so time the prey holds the ground
+    /// around it does not count.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan StoodFor;
+
+    /// <summary>
+    /// CMU14 FLOW-607: a living marine stands within <see cref="ContestRadius"/> and no living Bad Blood does. A
+    /// contested Totem books no income, does not ripen and has no aura. Only a consecrated Totem is contested.
+    /// </summary>
+    [ViewVariables]
+    public bool Contested;
+
+    /// <summary>
+    /// When the running contest started. Null while it is not contested.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? ContestedSince;
+
+    /// <summary>
+    /// The clan is told a Totem is contested at most this often, per Totem.
+    /// </summary>
+    [DataField]
+    public TimeSpan ContestAnnounceCooldown = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// When the clan was last told this Totem is contested, for <see cref="ContestAnnounceCooldown"/>.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? LastContestAnnouncedAt;
+
+    /// <summary>
+    /// The clan was told of the running contest, so it is also told when it ends.
+    /// </summary>
+    [ViewVariables]
+    public bool ContestAnnounced;
+
+    /// <summary>
+    /// Marines who have had the contest popup during the running contest. Cleared when it ends.
+    /// </summary>
+    [ViewVariables]
+    public readonly HashSet<EntityUid> ContestWarned = new();
+
+    /// <summary>
+    /// The Totem's light while it works. It is dimmed to <see cref="ContestedLightEnergy"/> while contested and off
+    /// while desecrated.
+    /// </summary>
+    [DataField]
+    public float LightEnergy = 1.5f;
+
+    [DataField]
+    public float ContestedLightEnergy = 0.4f;
 
     /// <summary>
     /// The clan counts it: it was raised while the rule ran and the clan was under its limit.
@@ -65,7 +119,8 @@ public sealed partial class BadBloodTotemComponent : Component
     public TimeSpan GrowingAfter = TimeSpan.FromMinutes(10);
 
     /// <summary>
-    /// A Totem that has stood this long is ripe. Ripe Totems held together call the clan ship early.
+    /// A Totem that has stood uncontested this long (<see cref="StoodFor"/>) is ripe. Ripe Totems held together call
+    /// the clan ship early.
     /// </summary>
     [DataField]
     public TimeSpan RipeAfter = TimeSpan.FromMinutes(20);
@@ -77,8 +132,8 @@ public sealed partial class BadBloodTotemComponent : Component
     public FixedPoint4 PayoutStep = FixedPoint4.New(0.01);
 
     /// <summary>
-    /// A living Bad Blood this close stops a marine reading the Totem for intel, in tiles. Income and desecration no
-    /// longer depend on who stands nearby.
+    /// In tiles. A living Bad Blood this close stops a marine reading the Totem for intel. FLOW-607: a living marine
+    /// this close with no Bad Blood contests it. Desecration does not depend on who stands nearby.
     /// </summary>
     [DataField]
     public float ContestRadius = 7f;

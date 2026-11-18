@@ -317,10 +317,25 @@ public sealed partial class YautjaClanManager
         return Finish(Done(result.DetachedPlayers.Select(player => new NetUserId(player)).ToArray()));
     }
 
+    // CMU14 STATE-604: who may ask to join an honourable clan. a Yautja whitelist or a clan profile, the same
+    // players the hunter board lists. wearing a yautja body (a Bad Blood, a youngblood) is not enough
+    public async Task<bool> IsKnownHunter(NetUserId userId)
+    {
+        if (await _db.GetYautjaWhitelistFlagsAsync(userId.UserId) != (int) YautjaWhitelistFlags.None)
+            return true;
+
+        return await _db.GetYautjaClanMemberAsync(userId.UserId) != null;
+    }
+
     public async Task<YautjaClanMutationResult> HallPetition(YautjaClanHallActor actor, int? clanId)
     {
         if (clanId != null && !YautjaClanHallPolicy.CanPetition(actor))
             return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-petition");
+
+        // CMU14 STATE-604: a player with no whitelist and no clan profile resolves to a clanless Blooded,
+        // so CanPetition alone let anyone wearing a yautja body (a Bad Blood) ask to join
+        if (clanId != null && !await IsKnownHunter(actor.Member.PlayerId))
+            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-petition-not-hunter");
 
         return await _db.SetYautjaClanPetitionAsync(actor.Member.PlayerId.UserId, clanId)
             ? Finish(Done())
@@ -345,6 +360,11 @@ public sealed partial class YautjaClanManager
             await _db.SetYautjaClanPetitionAsync(targetId.UserId, null);
             return Finish(Done());
         }
+
+        // CMU14 STATE-604: re-check the requester. a request stored before the gate, from a player with no
+        // whitelist and no clan profile, must not make a clan member
+        if (!await IsKnownHunter(targetId))
+            return YautjaClanMutationResult.Denied("cmu-yautja-hall-denied-petition-not-hunter");
 
         var target = await ResolveSnapshot(targetId);
         if (target.ClanId != null)

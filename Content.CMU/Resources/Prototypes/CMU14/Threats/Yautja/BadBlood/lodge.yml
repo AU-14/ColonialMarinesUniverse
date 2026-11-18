@@ -67,6 +67,8 @@
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: core
+  # CMU14 ARCH-604: the "Choose your caste" verb
+  - type: BadBloodCasteChoice
 
 # the Leader's Pitch Camp action makes one. the Lodge swallows it when it is deployed
 - type: entity

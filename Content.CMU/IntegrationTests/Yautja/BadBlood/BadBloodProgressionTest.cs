@@ -1,5 +1,7 @@
+#pragma warning disable RA0002 // tests read component data directly
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Yautja.BadBlood;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.CMU14.Construction;
@@ -18,8 +20,9 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
 
 // ARCH-02: the bracer weapon is forged in place at the armory (tier II of starter -> forged -> golden).
-// ARCH-04 to ARCH-06: the Engineer and Medic castes are taken up at their Lodge stations, capped by clan size, and
-// only their caste may use a station.
+// ARCH-04 to ARCH-06: the Engineer and Medic castes are capped by clan size, and only their caste may use a station.
+// CMU14 ARCH-604: castes are chosen at the Lodge ("Choose your caste" dialog). ARCH-607: only a Falconer may buy the
+// clan's falcon drone.
 [TestFixture]
 public sealed class BadBloodProgressionTest : GameTest
 {
@@ -29,6 +32,11 @@ public sealed class BadBloodProgressionTest : GameTest
     private const string Forge = "CMUBadBloodForgeUpgrade";
     private const string Bracer = "CMUYautjaBadBloodBracer";
     private const string Brick = "CMUSheetBadBloodBrick";
+    private const string Lodge = "CMUBadBloodCamp";
+    private const string FalconDrone = "CMUYautjaFalconDroneBadBlood";
+    private static readonly ProtoId<BadBloodCastePrototype> Engineer = "Engineer";
+    private static readonly ProtoId<BadBloodCastePrototype> Medic = "Medic";
+    private static readonly ProtoId<BadBloodCastePrototype> Falconer = "Falconer";
 
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
@@ -106,7 +114,7 @@ public sealed class BadBloodProgressionTest : GameTest
     }
 
     [Test]
-    public async Task CastesAreTakenAtTheirStationsAndCappedByClanSize()
+    public async Task CastesAreChosenAtTheLodgeAndCappedByClanSize()
     {
         var map = await Pair.CreateTestMap();
         var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 3);
@@ -122,30 +130,58 @@ public sealed class BadBloodProgressionTest : GameTest
                 var skills = entMan.System<SkillsSystem>();
                 var engineerStation = entMan.SpawnEntity(EngineerStation, map.GridCoords);
                 var medicStation = entMan.SpawnEntity(MedicStation, map.GridCoords);
+                var lodge = entMan.SpawnEntity(Lodge, map.GridCoords);
                 spawned.Add(engineerStation);
                 spawned.Add(medicStation);
 
                 var (a, b, c) = (party.Grunts[0], party.Grunts[1], party.Grunts[2]);
 
                 // four living Bad Bloods: one of each caste
-                Assert.That(castes.GetCasteCap(BadBloodCaste.Engineer), Is.EqualTo(1));
+                Assert.That(castes.GetCasteCap(Engineer), Is.EqualTo(1));
 
-                // the station offers the caste to whoever has none
-                var take = verbs.GetLocalVerbs(engineerStation, a, typeof(Verb))
-                    .FirstOrDefault(v => v.Text == Loc.GetString("cmu-bad-blood-caste-verb-engineer"));
-                Assert.That(take, Is.Not.Null, "the forge-bench offers the Engineer path");
-                verbs.ExecuteVerb(take!, a, engineerStation);
+                // the stations no longer hand out castes: the Lodge does, through one dialog
+                Assert.That(verbs.GetLocalVerbs(engineerStation, a, typeof(Verb))
+                        .Any(v => v.Text == Loc.GetString("cmu-bad-blood-caste-verb-engineer")),
+                    Is.False,
+                    "the forge-bench sells to Engineers, it does not make them");
+                var choose = verbs.GetLocalVerbs(lodge, a, typeof(Verb))
+                    .FirstOrDefault(v => v.Text == Loc.GetString("cmu-bad-blood-caste-choose-verb"));
+                Assert.That(choose, Is.Not.Null, "the Lodge offers a caste to whoever has none");
+
+                // a dialog left open does not travel: walking away from the Lodge voids the choice
+                verbs.ExecuteVerb(choose!, a, lodge);
+                var xforms = entMan.System<SharedTransformSystem>();
+                var atLodge = entMan.GetComponent<TransformComponent>(a).Coordinates;
+                xforms.SetCoordinates(a, map.GridCoords.Offset(new System.Numerics.Vector2(30, 0)));
+                PickCaste(entMan, a, Engineer);
+                Assert.That(castes.IsCaste(a, Engineer), Is.False, "a caste is only taken at the Lodge");
+                xforms.SetCoordinates(a, atLodge);
+
+                verbs.ExecuteVerb(choose!, a, lodge);
+                PickCaste(entMan, a, Engineer);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(castes.IsCaste(a, BadBloodCaste.Engineer), Is.True);
+                    Assert.That(castes.IsCaste(a, Engineer), Is.True);
                     Assert.That(skills.GetSkill(a, "RMCSkillEngineer"), Is.GreaterThanOrEqualTo(1),
                         "an Engineer can plant the demolition charge");
-                    Assert.That(castes.TryTakeCaste(b, BadBloodCaste.Engineer), Is.False, "one Engineer per four Bad Bloods");
-                    Assert.That(castes.TryTakeCaste(a, BadBloodCaste.Medic), Is.False, "one caste per life");
-                    Assert.That(castes.TryTakeCaste(b, BadBloodCaste.Medic), Is.True);
-                    Assert.That(castes.IsCaste(b, BadBloodCaste.Medic), Is.True);
+                    Assert.That(entMan.HasComponent<BadBloodBuildAnywhereComponent>(a), Is.True);
+                    Assert.That(entMan.HasComponent<BadBloodHunterVisorComponent>(a), Is.True);
+                    Assert.That(verbs.GetLocalVerbs(lodge, a, typeof(Verb))
+                            .Any(v => v.Text == Loc.GetString("cmu-bad-blood-caste-choose-verb")),
+                        Is.False,
+                        "a Bad Blood with a caste is not offered another");
+                    Assert.That(castes.TryTakeCaste(b, Engineer), Is.False, "one Engineer per four Bad Bloods");
+                    Assert.That(castes.TryTakeCaste(a, Medic), Is.False, "one caste per life");
+                    Assert.That(castes.TryTakeCaste(b, Medic), Is.True);
+                    Assert.That(castes.IsCaste(b, Medic), Is.True);
+                    Assert.That(entMan.TryGetComponent(b, out BadBloodMedicSpeedComponent? medic) ? medic.Multiplier : 0f,
+                        Is.EqualTo(0.6f).Within(0.0001f),
+                        "a Medic works Yautja medicine in 60% of the time");
                 });
+
+                // the Lodge builds for everyone near it: take it away before the build check below
+                entMan.DeleteEntity(lodge);
 
                 // a station opens only for its caste
                 Assert.Multiple(() =>
@@ -214,6 +250,82 @@ public sealed class BadBloodProgressionTest : GameTest
             await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
             await Cleanup(spawned, party);
         }
+    }
+
+    [Test]
+    public async Task OnlyAFalconerBuysTheFalconDrone()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 3);
+        var spawned = new List<EntityUid>();
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var rules = entMan.System<BadBloodCampRuleSystem>();
+                var camp = entMan.System<BadBloodCampSystem>();
+                var castes = entMan.System<BadBloodCasteSystem>();
+
+                spawned.Add(entMan.SpawnEntity(Lodge, map.GridCoords));
+                var armory = entMan.SpawnEntity(Armory, map.GridCoords);
+                spawned.Add(armory);
+                var armoryEnt = new Entity<BadBloodCampArmoryComponent>(armory, entMan.GetComponent<BadBloodCampArmoryComponent>(armory));
+
+                var (falconer, other) = (party.Grunts[0], party.Grunts[1]);
+                Assert.That(castes.TryTakeCaste(falconer, Falconer), Is.True);
+                Assert.That(castes.TryTakeCaste(other, Engineer), Is.True);
+
+                var entry = Entry(entMan, armory, FalconDrone).Entry;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(camp.GetArmoryTier(armoryEnt, FalconDrone), Is.EqualTo(1), "tier I");
+                    Assert.That(entry.Points, Is.EqualTo(4), "4 Honour");
+                    Assert.That(entry.MaxPerUser, Is.EqualTo(1), "one per Falconer");
+                });
+
+                foreach (var buyer in new[] { falconer, other })
+                {
+                    Assert.That(rules.AddHonour(buyer, FixedPoint4.New(20)), Is.True);
+                    camp.PrepareArmoryBuyer(armoryEnt, buyer);
+                }
+
+                // another caste is refused, and pays nothing
+                Assert.That(camp.CanBuyFromArmory(armoryEnt, other, FalconDrone, out var why), Is.False);
+                Assert.That(why, Is.EqualTo("cmu-bad-blood-caste-ware-locked"));
+                var otherBefore = rules.GetHonour(other);
+                Vend(entMan, armory, other, FalconDrone);
+                Assert.That(rules.GetHonour(other), Is.EqualTo(otherBefore), "a refused buyer pays nothing");
+
+                // the Falconer buys it for 4 Honour
+                Assert.That(camp.CanBuyFromArmory(armoryEnt, falconer, FalconDrone, out _), Is.True);
+                var before = rules.GetHonour(falconer);
+                Vend(entMan, armory, falconer, FalconDrone);
+                Assert.That(rules.GetHonour(falconer), Is.EqualTo(before - FixedPoint4.New(4)), "the Falconer pays 4 Honour");
+
+                // the rest of the armory stays open to every caste
+                Assert.That(camp.CanBuyFromArmory(armoryEnt, other, "CMUYautjaHealingGel", out _), Is.True);
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+            await Cleanup(spawned, party);
+        }
+    }
+
+    // picks the caste's option in the Lodge dialog the verb opened on the user
+    private static void PickCaste(IEntityManager entMan, EntityUid user, ProtoId<BadBloodCastePrototype> caste)
+    {
+        var dialog = entMan.GetComponent<DialogComponent>(user);
+        var index = dialog.Options.FindIndex(o => o.Event is BadBloodCasteChosenEvent chosen && chosen.Caste == caste);
+        Assert.That(index, Is.Not.Negative, $"the caste dialog offers {caste.Id}");
+        entMan.EventBus.RaiseLocalEvent(user, new DialogOptionBuiMsg(index)
+        {
+            Actor = user,
+            UiKey = DialogUiKey.Key,
+        });
     }
 
     private static bool OpenRefused(IEntityManager entMan, EntityUid station, EntityUid user)

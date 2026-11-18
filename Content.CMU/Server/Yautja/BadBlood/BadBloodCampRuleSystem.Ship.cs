@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Communications;
 using Content.Shared._RMC14.Marines.Announce;
+using Content.Shared._RMC14.Stealth;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Popups;
@@ -24,7 +25,7 @@ public sealed partial class BadBloodCampRuleSystem
 
     partial void InitializeShip()
     {
-        SubscribeLocalEvent<YautjaBadBloodComponent, YautjaBracerRegenModifyEvent>(OnShipRegenModify);
+        SubscribeLocalEvent<YautjaBadBloodComponent, YautjaBracerRegenModifyEvent>(OnBadBloodRegenModify);
     }
 
     partial void StartedShip(Entity<BadBloodCampRuleComponent> rule)
@@ -275,11 +276,21 @@ public sealed partial class BadBloodCampRuleSystem
         AnnounceShipToMarines(Loc.GetString("cmu-bad-blood-ship-turned-back-marines"));
     }
 
-    // +25% bracer regen while the ship is on its way
-    private void OnShipRegenModify(Entity<YautjaBadBloodComponent> ent, ref YautjaBracerRegenModifyEvent args)
+    // +25% bracer regen while the ship is on its way.
+    // CMU14 ECS-610: regen is also cut while the Bad Blood is actively cloaked, so hanging back hidden costs charge.
+    // Both live in this one handler: the (YautjaBadBloodComponent, YautjaBracerRegenModifyEvent) pair can only be
+    // subscribed once.
+    private void OnBadBloodRegenModify(Entity<YautjaBadBloodComponent> ent, ref YautjaBracerRegenModifyEvent args)
     {
         if (TryGetRule(out var rule) && rule.Comp.ShipState == BadBloodShipState.Inbound)
             args.Multiplier *= 1f + Math.Max(0f, rule.Comp.ShipRegenBonus);
+
+        if (TryComp(ent, out EntityTurnInvisibleComponent? cloak) &&
+            cloak.Enabled &&
+            TryComp(args.Bracer, out YautjaBracerComponent? bracer))
+        {
+            args.Multiplier *= Math.Max(0f, bracer.CloakBadBloodRegenMultiplier);
+        }
     }
 
     #endregion

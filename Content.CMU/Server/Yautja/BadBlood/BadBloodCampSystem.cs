@@ -55,6 +55,7 @@ public sealed partial class BadBloodCampSystem : EntitySystem
         InitializeSquads();
         InitializeArmory();
         InitializeKennel();
+        InitializeRegion(); // CMU14 FLOW-606
     }
 
     public override void Update(float frameTime)
@@ -82,6 +83,7 @@ public sealed partial class BadBloodCampSystem : EntitySystem
         TickSquads(lodge, rule, now);
         TickArmory(lodge, rule, now);
         TickKennel(lodge, rule, now);
+        TickRegion(lodge, rule, now); // CMU14 FLOW-606
     }
 
     #region The Lodge and its parts
@@ -135,6 +137,7 @@ public sealed partial class BadBloodCampSystem : EntitySystem
         LodgePitchedSquads(ent, rule, first);
         LodgePitchedArmory(ent, rule, first);
         LodgePitchedKennel(ent, rule, first);
+        LodgePitchedRegion(ent, rule, first); // CMU14 FLOW-606
 
         var ev = new BadBloodLodgePitchedEvent(rule, ent.Owner, first);
         RaiseLocalEvent(ref ev);
@@ -170,6 +173,7 @@ public sealed partial class BadBloodCampSystem : EntitySystem
         LodgeDestroyedSquads(ent, rule);
         LodgeDestroyedArmory(ent, rule);
         LodgeDestroyedKennel(ent, rule);
+        LodgeDestroyedRegion(ent, rule); // CMU14 FLOW-606
 
         var ev = new BadBloodLodgeDestroyedEvent(rule, ent.Owner);
         RaiseLocalEvent(ref ev);
@@ -421,6 +425,12 @@ public sealed partial class BadBloodCampSystem : EntitySystem
     partial void TickKennel(Entity<BadBloodCampComponent> lodge, Entity<BadBloodCampRuleComponent> rule, TimeSpan now);
     partial void LodgePitchedKennel(Entity<BadBloodCampComponent> lodge, Entity<BadBloodCampRuleComponent> rule, bool first);
     partial void LodgeDestroyedKennel(Entity<BadBloodCampComponent> lodge, Entity<BadBloodCampRuleComponent> rule);
+
+    // CMU14 FLOW-606: the Lodge region on the marine map
+    partial void InitializeRegion();
+    partial void TickRegion(Entity<BadBloodCampComponent> lodge, Entity<BadBloodCampRuleComponent> rule, TimeSpan now);
+    partial void LodgePitchedRegion(Entity<BadBloodCampComponent> lodge, Entity<BadBloodCampRuleComponent> rule, bool first);
+    partial void LodgeDestroyedRegion(Entity<BadBloodCampComponent> lodge, Entity<BadBloodCampRuleComponent> rule);
 
     #endregion
 }

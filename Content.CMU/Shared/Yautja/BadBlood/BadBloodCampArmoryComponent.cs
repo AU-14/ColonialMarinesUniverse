@@ -42,11 +42,18 @@ public sealed partial class BadBloodCampArmoryComponent : Component
     public bool TierFourApplied;
 
     /// <summary>
-    /// ARCH-06: a caste station. Only a Bad Blood of this caste may open it; others can claim the caste here.
-    /// Null for the clan's own armory, open to every Bad Blood.
+    /// ARCH-06: a caste station. Only a Bad Blood of this caste may open it. Null for the clan's own armory, open to
+    /// every Bad Blood. CMU14 ARCH-604: the caste is chosen at the Lodge, not here.
     /// </summary>
     [DataField]
-    public BadBloodCaste? RequiredCaste;
+    public ProtoId<BadBloodCastePrototype>? RequiredCaste;
+
+    /// <summary>
+    /// CMU14 ARCH-604: wares only one caste may buy, in an armory open to every Bad Blood. Kept here and not on the
+    /// vendor entry, which RMC owns.
+    /// </summary>
+    [DataField]
+    public Dictionary<EntProtoId, ProtoId<BadBloodCastePrototype>> CasteWares = new();
 }
 
 /// <summary>

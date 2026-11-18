@@ -45,3 +45,6 @@ cmu-bad-blood-camp-pitched-first = The Lodge stands. Bring it trophies and prey.
 cmu-bad-blood-camp-pitched = The Lodge stands again.
 cmu-bad-blood-camp-under-attack = The Lodge is under attack!
 cmu-bad-blood-camp-destroyed = The Lodge has fallen! Only the Leader can raise another.
+
+# FLOW-606: sent when the Lodge's square is boxed on the marine map (the landing, a new Lodge, a moved one)
+cmu-bad-blood-lodge-region-marines = Dropship sensors have traced the hostile hunters' camp to grid X { $x1 }-{ $x2 }, Y { $y1 }-{ $y2 }. The area is marked on the tactical map.

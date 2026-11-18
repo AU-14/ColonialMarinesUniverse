@@ -26,6 +26,9 @@ public sealed class ArmoryPooledSpTest : GameTest
     private const string Hivebreaker = "CMUYautjaHivebreaker";
     private const string Eradicator = "CMUBadBloodEradicatorUnlock";
     private const string Lethal = "CMUBadBloodLethalUnlock";
+    private const string Kennel = "CMUBadBloodCampKennel";
+    private const string KennelRate = "CMUBadBloodKennelRate";
+    private const string KennelPack = "CMUBadBloodKennelPack";
 
     [TestPrototypes]
     private const string Prototypes = """
@@ -252,6 +255,115 @@ public sealed class ArmoryPooledSpTest : GameTest
             await Server.WaitPost(() =>
             {
                 foreach (var uid in spawned.Append(party.Leader).Append(grunt))
+                {
+                    if (Server.EntMan.EntityExists(uid))
+                        Server.EntMan.DeleteEntity(uid);
+                }
+            });
+        }
+    }
+
+    // STATE-602: the kennel wares buy the standing kennel's rate and stock, never a hound
+    [Test]
+    public async Task KennelWaresUpgradeTheStandingKennel()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 1);
+        var grunt = party.Grunts[0];
+        var spawned = new List<EntityUid>();
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var entMan = Server.EntMan;
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var camp = Server.System<BadBloodCampSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+
+                spawned.Add(entMan.SpawnEntity(Lodge, map.GridCoords));
+                var armory = entMan.SpawnEntity(Armory, map.GridCoords);
+                spawned.Add(armory);
+                var armoryEnt = new Entity<BadBloodCampArmoryComponent>(armory, entMan.GetComponent<BadBloodCampArmoryComponent>(armory));
+                camp.PrepareArmoryBuyer(armoryEnt, grunt);
+
+                FixedPoint4 Price(string id) => FixedPoint4.New(FindEntry(entMan, armory, id).Entry.Points!.Value);
+                // Honour also credits armory tiers: keep the clan at tier I until the test lifts it with SP
+                rule.Comp.HonourTierCredit = 0f;
+                Assert.That(rules.GetTier(), Is.EqualTo(1));
+                Assert.That(rules.AddHonour(grunt, Price(KennelRate) + Price(KennelRate) + Price(KennelRate)), Is.True);
+                var g = rules.GetHonour(grunt);
+
+                // no kennel stands: nothing to improve, nothing spent
+                Assert.That(camp.CanBuyFromArmory(armoryEnt, grunt, KennelRate, out var why), Is.False);
+                Assert.That(why, Is.EqualTo("cmu-bad-blood-armory-kennel-none"));
+                Vend(entMan, armory, grunt, KennelRate);
+                Assert.That(rules.GetHonour(grunt), Is.EqualTo(g), "a kennel ware without a kennel is refused");
+
+                var kennel = entMan.SpawnEntity(Kennel, map.GridCoords.Offset(new Vector2(1, 0)));
+                spawned.Add(kennel);
+                var stock = entMan.GetComponent<BadBloodKennelSpawnerComponent>(kennel);
+                var interval = stock.Interval;
+                Assert.That(interval, Is.EqualTo(TimeSpan.FromSeconds(120)));
+
+                // tier I, any Bad Blood: each buy halves the interval
+                Vend(entMan, armory, grunt, KennelRate);
+                g -= Price(KennelRate);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetHonour(grunt), Is.EqualTo(g), "the rate ware costs the buyer its price");
+                    Assert.That(stock.Interval, Is.EqualTo(interval / 2), "the rate ware halves the kennel's interval");
+                    Assert.That(stock.NextAt - Server.Timing.CurTime, Is.LessThanOrEqualTo(stock.Interval),
+                        "the next hound comes no later than the new interval");
+                });
+
+                Vend(entMan, armory, grunt, KennelRate);
+                g -= Price(KennelRate);
+                Assert.That(stock.Interval, Is.EqualTo(interval / 4), "the second buy halves it again");
+
+                // a third is refused and costs nothing
+                Vend(entMan, armory, grunt, KennelRate);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetHonour(grunt), Is.EqualTo(g), "the rate ware is bought twice at most");
+                    Assert.That(stock.Interval, Is.EqualTo(interval / 4));
+                    Assert.That(camp.CanBuyFromArmory(armoryEnt, grunt, KennelRate, out var maxed), Is.False);
+                    Assert.That(maxed, Is.EqualTo("cmu-bad-blood-armory-kennel-maxed"));
+                });
+
+                // the pack ware is tier II: two more hounds always ready, once
+                Assert.That(rules.AddHonour(grunt, Price(KennelPack) + Price(KennelPack)), Is.True);
+                g = rules.GetHonour(grunt);
+                var minStock = stock.MinStock;
+                Assert.That(rules.GetTier(), Is.EqualTo(1), "Test setup: the clan is still at tier I");
+                Vend(entMan, armory, grunt, KennelPack);
+                Assert.That(rules.GetHonour(grunt), Is.EqualTo(g), "the pack ware waits for tier II");
+
+                Assert.That(rules.AddSp(rule.Comp.TierTwoLifetimeSp), Is.True);
+                Assert.That(rules.GetTier(), Is.EqualTo(2));
+                Vend(entMan, armory, grunt, KennelPack);
+                g -= Price(KennelPack);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetHonour(grunt), Is.EqualTo(g));
+                    Assert.That(stock.MinStock, Is.EqualTo(minStock + 2), "the pack ware raises the kennel's floor by two");
+                    Assert.That(stock.Max, Is.GreaterThanOrEqualTo(minStock + 2));
+                });
+
+                Vend(entMan, armory, grunt, KennelPack);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetHonour(grunt), Is.EqualTo(g), "the pack ware is bought once");
+                    Assert.That(stock.MinStock, Is.EqualTo(minStock + 2));
+                });
+            });
+        }
+        finally
+        {
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+            await Server.WaitPost(() =>
+            {
+                foreach (var uid in spawned.Concat(party.All))
                 {
                     if (Server.EntMan.EntityExists(uid))
                         Server.EntMan.DeleteEntity(uid);

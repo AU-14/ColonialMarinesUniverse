@@ -14,8 +14,8 @@
     - name: cmu-yautja-caster-mode-stun
       projectile: CMUYautjaBadBloodCasterStunBolt
       examineStrength: cmu-yautja-caster-mode-stun
-      fireRate: 0.7
-      powerCost: 60
+      fireRate: 0.5
+      powerCost: 80
       fireSound:
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
     - name: cmu-yautja-caster-mode-immobilizer
@@ -41,10 +41,11 @@
         path: /Audio/CMU14/Yautja/Weapons/Plasma/pulse.wav
 
 # The Bad Blood caster's own bolts. The hunters' bolts stay as they are.
-# Range cap: every Bad Blood caster bolt flies at most 16 tiles, short of the hunters' 20-22, so a Bad Blood has to
-# close in to use its caster. Change all four together; BadBloodValueSheetTest pins them.
+# Range by mode, closer for control: stun and immobilizer fly 7 tiles, lethal and eradicator 12, all short of the
+# hunters' 20-22, so a Bad Blood has to close in to use its caster. BadBloodValueSheetTest pins each mode.
 
-# 3 s on anyone, no extra second on humans
+# 3 s on anyone, no extra second on humans. diminishing returns (COUPLING-601): for the stun plus 6 s afterwards a
+# target only takes a 2 s slow from a Bad Blood stun or immobilizer bolt
 - type: entity
   parent: CMUYautjaCasterStunBolt
   id: CMUYautjaBadBloodCasterStunBolt
@@ -53,10 +54,12 @@
   - type: YautjaCasterStunProjectile
     stunTime: 3
     humanBonusStunTime: 0
+    immunityWindow: 6
+    immuneSlow: 2
   - type: ProjectileMaxRange
-    max: 16
+    max: 7
 
-# radius 4 for 3 s
+# radius 4 for 3 s, with the stun bolt's diminishing returns
 - type: entity
   parent: CMUYautjaCasterImmobilizerBolt
   id: CMUYautjaBadBloodCasterImmobilizerBolt
@@ -65,10 +68,12 @@
   - type: YautjaCasterImmobilizerProjectile
     stunRange: 4
     stunTime: 3
+    immunityWindow: 6
+    immuneSlow: 2
   - type: ProjectileMaxRange
-    max: 16
+    max: 7
 
-# the hunters' lethal bolt at 68 Heat instead of 75 and a smaller blast (45 instead of 50), flying only 16 tiles.
+# the hunters' lethal bolt at 68 Heat instead of 75 and a smaller blast (45 instead of 50), flying only 12 tiles.
 # VehicleDamageMultiplier: vehicles' RequireProjectileTarget always lets it hit (alwaysHitWhitelist), and the
 # hardpoint combat damage takes the multiplier from the bolt, so the lethal bolt reliably hurts vehicles
 - type: entity
@@ -88,11 +93,11 @@
     totalIntensity: 45
     maxTileBreak: 2
   - type: ProjectileMaxRange
-    max: 16
+    max: 12
   - type: VehicleDamageMultiplier
     multiplier: 3
 
-# the hunters' eradicator bolt at 50 Heat instead of 55, capped at 16 tiles like the other Bad Blood bolts.
+# the hunters' eradicator bolt at 50 Heat instead of 55, capped at 12 tiles like the lethal bolt.
 # hits and hurts vehicles like the lethal bolt above
 - type: entity
   parent: CMUYautjaCasterEradicatorBolt
@@ -105,22 +110,33 @@
       types:
         Heat: 50
   - type: ProjectileMaxRange
-    max: 16
+    max: 12
   - type: VehicleDamageMultiplier
     multiplier: 3
 
 # structure-only Breaching: the boost only lands on things flagged Breaching (barricades, doors, windows), never on mobs
+# Bad Blood melee (ECS-604/607/609, STATE-603): about a quarter harder than the honourable weapon, sharper against
+# marines (penetration 50 / strip 0.004 against the honourable 40 / 0.01), a short stagger on a living human, 10
+# bracer charge back per hit on one, and +1 Honour when a marked worthy target dies within 5 s (camp_rule.yml).
+# only damage is overridden in MeleeWeapon, so attack rate, animation and sounds stay inherited. the Lodge forge
+# (BadBloodForgeUpgrade) still multiplies the damage
 - type: entity
   parent: CMUYautjaWristBlades
   id: CMUYautjaBadBloodWristBlades
   suffix: Bad Blood
   components:
   - type: BadBloodGearLock
-  # the starter tier hits like the honourable blades (Slash 20). the Lodge forge raises it (BadBloodForgeUpgrade)
-  # sharper against marines than the honourable blades (40 / 0.01): about 15 a hit through standard armor
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 24
   - type: YautjaHumanMelee
     penetration: 50
-    stripChancePerArmor: 0.006
+    stripChancePerArmor: 0.004
+  - type: BadBloodMelee
+    staggerSlow: 0.8
+    staggerCooldown: 2
+    chargeRefund: 10
   - type: DamageBoosts
     boosts:
     - flags: Breaching
@@ -134,6 +150,17 @@
   suffix: Bad Blood
   components:
   - type: BadBloodGearLock
+  - type: MeleeWeapon
+    damage:
+      types:
+        Slash: 32
+  - type: YautjaHumanMelee
+    penetration: 50
+    stripChancePerArmor: 0.004
+  - type: BadBloodMelee
+    staggerSlow: 1.5
+    staggerCooldown: 2.5
+    chargeRefund: 10
   - type: DamageBoosts
     boosts:
     - flags: Breaching
@@ -147,6 +174,18 @@
   suffix: Bad Blood
   components:
   - type: BadBloodGearLock
+  # the stamina damage (StaminaDamageOnHit 15) stays inherited
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 24
+  - type: YautjaHumanMelee
+    penetration: 50
+    stripChancePerArmor: 0.004
+  - type: BadBloodMelee
+    staggerSlow: 1.2
+    staggerCooldown: 2
+    chargeRefund: 10
   - type: DamageBoosts
     boosts:
     - flags: Breaching

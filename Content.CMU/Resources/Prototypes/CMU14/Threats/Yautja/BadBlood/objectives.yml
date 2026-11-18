@@ -17,12 +17,12 @@
     - govfor
     objectiveLevel: 1
     finalType: Boon
-    objectiveDescription: "Restore two of colony power, communications and the sensor tower"
+    objectiveDescription: cmu-bad-blood-obj-desc-gate
 
 - type: entity
   id: CMUBadBloodSignatureObjective
   name: Acquire the Clan Signature
-  description: Recover the clan's signature. Survey a desecrated Totem or the revealed Lodge, take the clan star chart, or wire a looted bracer into an uplink site.
+  description: Recover the clan's signature. Survey a defiled Totem or the revealed Lodge, take the clan star chart, or wire a looted bracer into an uplink site.
   categories: [HideSpawnMenu]
   components:
   - type: CMUObjective
@@ -34,7 +34,7 @@
     - govfor
     objectiveLevel: 1
     finalType: Boon
-    objectiveDescription: "Acquire the clan's signature from a bracer, a desecrated Totem or the Lodge"
+    objectiveDescription: cmu-bad-blood-obj-desc-signature
 
 - type: entity
   id: CMUBadBloodUplinkObjective
@@ -51,7 +51,7 @@
     - govfor
     objectiveLevel: 1
     finalType: Boon
-    objectiveDescription: "Uplink the clan vessel's coordinates from a tower or a field relay"
+    objectiveDescription: cmu-bad-blood-obj-desc-uplink
 
 - type: entity
   id: CMUBadBloodStrikeObjective
@@ -68,4 +68,4 @@
     - govfor
     objectiveLevel: 1
     finalType: Boon
-    objectiveDescription: "Fire the Vessel Strike and hold the lock until the clan vessel is destroyed"
+    objectiveDescription: cmu-bad-blood-obj-desc-strike

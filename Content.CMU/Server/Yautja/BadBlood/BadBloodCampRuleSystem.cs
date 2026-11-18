@@ -18,7 +18,6 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Roles;
 using Robust.Server.Player;
-using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
@@ -66,6 +65,7 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
         InitializeEnd();
         InitializeShip();
         InitializeReserve();
+        InitializeLanding();
     }
 
     protected override void Started(EntityUid uid, BadBloodCampRuleComponent component, GameRuleComponent gameRule,
@@ -716,7 +716,7 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     }
 
     /// <summary>
-    /// The most Bad Bloods and hounds together the round allows: a share of the player count.
+    /// The most Bad Bloods the round allows: a share of the player count. Kennel hounds do not count against it.
     /// </summary>
     public int GetThreatBudget()
     {
@@ -729,7 +729,7 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     /// <summary>
     /// The most living Bad Bloods the clan may have: the landing party + the founding squad + 5, or the seats the
     /// vote held, whichever is higher. Once the ship has arrived it is the threat budget. Callers still check
-    /// <see cref="GetThreatBudget"/> for Bad Bloods and hounds together.
+    /// <see cref="GetThreatBudget"/> for the clan as a whole.
     /// </summary>
     public int GetLivingBadBloodCap()
     {
@@ -762,14 +762,6 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
         }
 
         return count;
-    }
-
-    /// <summary>
-    /// The player lost a Bad Blood body this round.
-    /// </summary>
-    public bool IsDeadBadBlood(NetUserId user)
-    {
-        return TryGetRule(out var rule) && rule.Comp.DeadBadBloods.ContainsKey(user);
     }
 
     private void OnMobStateChanged(MobStateChangedEvent args)
@@ -863,6 +855,9 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     partial void LodgePitchedReserve(Entity<BadBloodCampRuleComponent> rule, EntityUid lodge, bool first);
     partial void LodgeDestroyedReserve(Entity<BadBloodCampRuleComponent> rule, EntityUid lodge);
     partial void BadBloodDiedReserve(Entity<BadBloodCampRuleComponent> rule, EntityUid body);
+
+    // the marine landing (BadBloodCampRuleSystem.Landing.cs)
+    partial void InitializeLanding();
 
     #endregion
 }

@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Pair;
+using Content.Server.CMU14.Yautja.BadBlood;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Power;
@@ -49,7 +50,8 @@ public static class BadBloodTestHelpers
         TestMapData map,
         int grunts = 3,
         bool attachMinds = true,
-        bool startRule = true)
+        bool startRule = true,
+        bool startLanded = true)
     {
         var server = pair.Server;
         var party = new BadBloodTestParty();
@@ -77,7 +79,7 @@ public static class BadBloodTestHelpers
         });
 
         if (startRule)
-            await StartBadBloodRule(pair, party);
+            await StartBadBloodRule(pair, party, startLanded);
 
         return party;
     }
@@ -85,7 +87,9 @@ public static class BadBloodTestHelpers
     // extension hook: later Bad Blood nodes put their rule setup here so every test that spawns a party gets it.
     // the rule picks the party's Leader when it starts. a started rule is global state: call EndBadBloodRule in a
     // finally block unless the pair is dirty
-    public static async Task StartBadBloodRule(TestPair pair, BadBloodTestParty party)
+    // startLanded latches MarinesLanded right away, so tests that predate the landing gate keep their behaviour.
+    // pass false to test the pre-landing state
+    public static async Task StartBadBloodRule(TestPair pair, BadBloodTestParty party, bool startLanded = true)
     {
         var server = pair.Server;
         await server.WaitPost(() =>
@@ -93,8 +97,12 @@ public static class BadBloodTestHelpers
             if (!server.ProtoMan.HasIndex<EntityPrototype>(RulePrototype.Id))
                 return;
 
-            if (server.System<GameTicker>().StartGameRule(RulePrototype, out var rule))
-                party.Rule = rule;
+            if (!server.System<GameTicker>().StartGameRule(RulePrototype, out var rule))
+                return;
+
+            party.Rule = rule;
+            if (startLanded)
+                server.System<BadBloodCampRuleSystem>().MarkMarinesLanded();
         });
     }
 
@@ -217,11 +225,11 @@ public static class BadBloodTestHelpers
         return marine;
     }
 
-    // backdates the Totem so it has stood exactly RipeAfter. it is ripe if the clan counts it (Registered).
-    // call on the server thread
+    // FLOW-607: books exactly RipeAfter of uncontested standing on the Totem. it is ripe if the clan counts it
+    // (Registered). PlacedAt, which the FLOW-604 map pin counts from, is left alone. call on the server thread
     public static void ForceTotemRipe(RobustIntegrationTest.ServerIntegrationInstance server, EntityUid totem)
     {
         var comp = server.EntMan.GetComponent<BadBloodTotemComponent>(totem);
-        comp.PlacedAt = server.ResolveDependency<IGameTiming>().CurTime - comp.RipeAfter;
+        comp.StoodFor = comp.RipeAfter;
     }
 }

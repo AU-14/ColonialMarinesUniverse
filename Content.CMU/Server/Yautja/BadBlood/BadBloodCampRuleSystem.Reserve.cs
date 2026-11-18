@@ -49,6 +49,7 @@ public sealed partial class BadBloodCampRuleSystem
     partial void EndedReserve(Entity<BadBloodCampRuleComponent> rule)
     {
         rule.Comp.ReserveQueue.Clear();
+        rule.Comp.ReserveJoinedAt.Clear();
         _reservePending.Clear();
         _reserveFoundingDue = false;
     }
@@ -102,6 +103,7 @@ public sealed partial class BadBloodCampRuleSystem
         }
 
         rule.Comp.ReserveQueue.Add(user);
+        rule.Comp.ReserveJoinedAt[user] = Timing.CurTime; // CMU14: FLOW-602
         ChatManager.DispatchServerMessage(session, Loc.GetString("cmu-bad-blood-reserve-joined",
             ("place", rule.Comp.ReserveQueue.Count)));
 
@@ -119,6 +121,8 @@ public sealed partial class BadBloodCampRuleSystem
     {
         if (!TryGetRule(out var rule) || !rule.Comp.ReserveQueue.Remove(user))
             return false;
+
+        rule.Comp.ReserveJoinedAt.Remove(user); // CMU14: FLOW-602
 
         if (toLobby && _player.TryGetSessionById(user, out var session) && CanWaitInReserve(session))
             GameTicker.Respawn(session);
@@ -142,14 +146,57 @@ public sealed partial class BadBloodCampRuleSystem
     private void PruneReserve(Entity<BadBloodCampRuleComponent> rule)
     {
         var queue = rule.Comp.ReserveQueue;
+        var joined = rule.Comp.ReserveJoinedAt;
         if (queue.Count == 0)
+        {
+            joined.Clear();
             return;
+        }
 
+        var now = Timing.CurTime;
         for (var i = queue.Count - 1; i >= 0; i--)
         {
-            if (!_player.TryGetSessionById(queue[i], out var session) || !CanWaitInReserve(session))
+            var user = queue[i];
+            if (!_player.TryGetSessionById(user, out var session) || !CanWaitInReserve(session))
+            {
                 queue.RemoveAt(i);
+                joined.Remove(user);
+                continue;
+            }
+
+            // CMU14: FLOW-602, nobody found a body for them in time: back to the ghost pool, still an observer.
+            // a member queued without a join time (tests add to the list directly) counts from now, and so does
+            // everyone until the founding squad opens: the reserve was promised a seat in it, so the clock only starts
+            // once the first Lodge stands
+            if (!rule.Comp.FoundingSquadOpened || !joined.TryGetValue(user, out var joinedAt))
+            {
+                joined[user] = now;
+                continue;
+            }
+
+            // a member holding a squad seat has found a body, it just has not arrived yet
+            if (rule.Comp.ReserveExpiry <= TimeSpan.Zero ||
+                now - joinedAt < rule.Comp.ReserveExpiry ||
+                HoldsReserveSeat(rule, user))
+            {
+                continue;
+            }
+
+            queue.RemoveAt(i);
+            joined.Remove(user);
+            ChatManager.DispatchServerMessage(session, Loc.GetString("cmu-bad-blood-reserve-expired"));
         }
+    }
+
+    private static bool HoldsReserveSeat(Entity<BadBloodCampRuleComponent> rule, NetUserId user)
+    {
+        foreach (var call in rule.Comp.SquadCalls)
+        {
+            if (call.Claimed.Contains(user))
+                return true;
+        }
+
+        return false;
     }
 
     private void AddVotersToReserve(Entity<BadBloodCampRuleComponent> rule, IReadOnlyList<NetUserId> voters)
@@ -170,6 +217,7 @@ public sealed partial class BadBloodCampRuleSystem
             return;
 
         var seconds = (int) Math.Ceiling(rule.Comp.ReserveChoiceTime.TotalSeconds);
+        var minutes = (int) Math.Ceiling(rule.Comp.ReserveExpiry.TotalMinutes);
         var options = new List<DialogOption>
         {
             new(Loc.GetString("cmu-bad-blood-reserve-dialog-stay")),
@@ -182,7 +230,10 @@ public sealed partial class BadBloodCampRuleSystem
             ghost,
             Loc.GetString("cmu-bad-blood-reserve-dialog-title"),
             options,
-            Loc.GetString("cmu-bad-blood-reserve-dialog-message", ("seconds", seconds)),
+            Loc.GetString(rule.Comp.ReserveExpiry > TimeSpan.Zero
+                    ? "cmu-bad-blood-reserve-dialog-message"
+                    : "cmu-bad-blood-reserve-dialog-message-no-expiry",
+                ("seconds", seconds), ("minutes", minutes)),
             timeout: rule.Comp.ReserveChoiceTime);
     }
 

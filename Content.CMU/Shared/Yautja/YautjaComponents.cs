@@ -851,6 +851,18 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public TimeSpan CloakBadBloodCombatLockout = TimeSpan.FromSeconds(4);
 
     /// <summary>
+    /// CMU14 ECS-605: a Bad Blood that takes a hit cannot cloak for at least this long.
+    /// </summary>
+    [DataField]
+    public TimeSpan CloakBadBloodDamagedLockout = TimeSpan.FromSeconds(3);
+
+    /// <summary>
+    /// CMU14 ECS-610: bracer regen multiplier while a Bad Blood wearer is actively cloaked.
+    /// </summary>
+    [DataField]
+    public float CloakBadBloodRegenMultiplier = 0.5f;
+
+    /// <summary>
     /// Bad Blood ambush rule: the first damaging hit dealt from cloak deals this fraction as bonus damage
     /// and drops the cloak.
     /// </summary>
@@ -3724,6 +3736,14 @@ public sealed partial class YautjaCasterStunProjectileComponent : Component
 
     [DataField]
     public TimeSpan HumanBonusStunTime = TimeSpan.FromSeconds(1);
+
+    // CMU14 COUPLING-601: after this bolt stuns, the target only takes ImmuneSlow from such bolts for the stun plus
+    // this long. Zero (the honourable bolt) keeps the old refresh-every-hit stun
+    [DataField]
+    public TimeSpan ImmunityWindow = TimeSpan.Zero;
+
+    [DataField]
+    public TimeSpan ImmuneSlow = TimeSpan.FromSeconds(2);
 }
 
 [RegisterComponent]
@@ -3737,6 +3757,13 @@ public sealed partial class YautjaCasterImmobilizerProjectileComponent : Compone
 
     [DataField]
     public TimeSpan YautjaStunReduction = TimeSpan.FromSeconds(2);
+
+    // CMU14 COUPLING-601: see YautjaCasterStunProjectileComponent.ImmunityWindow
+    [DataField]
+    public TimeSpan ImmunityWindow = TimeSpan.Zero;
+
+    [DataField]
+    public TimeSpan ImmuneSlow = TimeSpan.FromSeconds(2);
 
     [DataField]
     public SoundSpecifier StunSound = new SoundPathSpecifier(
