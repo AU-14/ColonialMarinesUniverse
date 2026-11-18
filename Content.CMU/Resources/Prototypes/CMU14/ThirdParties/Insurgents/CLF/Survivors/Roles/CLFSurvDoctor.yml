@@ -68,7 +68,6 @@
 - type: startingGear
   id: AU14GearCLFSurvDoctor
   equipment:
-    ears: CMUHeadsetCLFMedical
     id: AU14IDCardCLFCivilian
     shoes: RMCShoesJackboots
     belt: AU14BeltMedicBagSupportSynth

@@ -66,7 +66,6 @@
 - type: startingGear
   id: AU14GearCLFMachineGunnerReinforcement
   equipment:
-    ears: AU14HeadsetCLF
     outerClothing: AU14ArmorBallisticVest
     gloves: CMHandsInsulated
     neck: RMCCLFArmband

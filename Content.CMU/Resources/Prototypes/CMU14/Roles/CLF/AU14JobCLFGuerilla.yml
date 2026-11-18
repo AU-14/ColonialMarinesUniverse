@@ -59,7 +59,6 @@
 - type: startingGear
   id: AU14GearCLFGuerilla
   equipment:
-    ears: AU14HeadsetCLF
     id: AU14IDCardCLFCivilian
    # neck: RMCCLFArmband
 

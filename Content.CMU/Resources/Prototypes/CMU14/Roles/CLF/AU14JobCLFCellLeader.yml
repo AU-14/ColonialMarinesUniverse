@@ -88,7 +88,6 @@
 - type: startingGear
   id: AU14GearCLFCellLeader
   equipment:
-    ears: AU14HeadsetCLF
     outerClothing: AU14ExternalWebbing
     gloves: RMCHandsVeteranSPP
     shoes: RMCScoutShoes

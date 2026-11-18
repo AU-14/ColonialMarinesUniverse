@@ -133,7 +133,6 @@
 - type: startingGear
   id: AU14GearCLFSurvFighter
   equipment:
-    ears: AU14HeadsetCLF
     id: AU14IDCardCLFCivilian
     shoes: RMCShoesJackboots
 

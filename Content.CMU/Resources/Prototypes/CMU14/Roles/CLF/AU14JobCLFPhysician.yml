@@ -75,7 +75,6 @@
 - type: startingGear
   id: AU14GearCLFPhysician
   equipment:
-    ears: CMUHeadsetCLFMedical
     ears2: RMCFlashlightPen
     suitstorage: RMCFlashlight
     id: AU14IDCardCLFPhysician

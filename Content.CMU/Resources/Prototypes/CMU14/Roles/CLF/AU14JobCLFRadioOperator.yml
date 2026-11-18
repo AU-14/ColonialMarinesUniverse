@@ -78,7 +78,6 @@
 - type: startingGear
   id: AU14GearCLFRadioOperator
   equipment:
-    ears: AU14HeadsetCLF
     id: AU14IDCardCLFCivilian
     pocket1: ANPRCFreqCardCLF
 

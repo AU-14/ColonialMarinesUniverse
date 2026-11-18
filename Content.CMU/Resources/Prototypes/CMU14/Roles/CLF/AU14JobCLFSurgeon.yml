@@ -79,7 +79,6 @@
 - type: startingGear
   id: AU14GearCLFSurgeon
   equipment:
-    ears: AU14HeadsetCLF
     back: CMBackpackMedical
     ears2: RMCFlashlightPen
     suitstorage: RMCFlashlight

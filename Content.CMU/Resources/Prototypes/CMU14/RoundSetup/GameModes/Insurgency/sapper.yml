@@ -67,7 +67,6 @@
 - type: startingGear
   id: AU14GearCLFSapper
   equipment:
-    ears: AU14HeadsetCLF
     head: RMCHardhatWhite
     jumpsuit: AU14CivilianWeYuEngineerClothes
     outerClothing: CMUClothingOuterSuitEngineer

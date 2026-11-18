@@ -48,11 +48,13 @@
       - AU14EncryptionKeyCLF
 
 - type: entity
-  parent: CMUHeadsetColonyMedical
-  id: CMUHeadsetCLFMedical
+  parent: AU14CLFHeadset
+  id: CMUInsurgentMedicalEarpiece
+  suffix: INSFOR, Colony Medical
   components:
-  - type: ContainerFill
-    containers:
-      key_slots:
-      - AU14EncryptionKeyCLF
-      - CMUEncryptionKeyColonyMedical
+  - type: AccessoryHeadset
+    channels:
+    - Colony
+    - radioCLF
+    - ColonyMedical
+    defaultChannel: radioCLF
