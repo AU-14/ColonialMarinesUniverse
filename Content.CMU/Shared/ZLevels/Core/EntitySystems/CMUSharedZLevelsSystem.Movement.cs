@@ -125,7 +125,7 @@ public abstract partial class CMUSharedZLevelsSystem
     // Only passed directly to activation in the same move event. A height change, transition,
     // or wake can invoke other systems, so those paths must query the current ground again.
     protected readonly record struct ZGroundContact(float Distance, bool Sticky, ZFallCheck? FallCheck);
-    protected readonly record struct ZFallCheck(EntityUid? Grid, Vector2i Tile);
+    protected readonly record struct ZFallCheck(EntityUid? Grid, Vector2i Tile, bool HasHighGround);
 
     protected void OnZPhysicsMoveGroundSnap(
         Entity<CMUZPhysicsComponent> ent, ref MoveEvent args, out ZGroundContact? unchangedGround)
@@ -1170,26 +1170,28 @@ public abstract partial class CMUSharedZLevelsSystem
             if (!TryResolveMovementGrid(checkingMap.Owner, worldPos, out var checkingGridUid, out var checkingGrid))
             {
                 if (floor == 0)
-                    fallCheck = new ZFallCheck(null, default);
+                    fallCheck = new ZFallCheck(null, default, false);
                 continue;
             }
 
             var gridLocal = _map.WorldToLocal(checkingGridUid, checkingGrid, worldPos) / checkingGrid.TileSize;
             var checkingTile = new Vector2i((int) Math.Floor(gridLocal.X), (int) Math.Floor(gridLocal.Y));
+            var foundHighGround = TryGetHighGroundDistance(
+                target,
+                localPosition,
+                velocity,
+                checkingGridUid,
+                checkingGrid,
+                checkingTile,
+                gridLocal,
+                floor,
+                out var highGroundDistance,
+                out var hasHighGroundOnTile,
+                ref stickyGround);
             if (floor == 0)
-                fallCheck = new ZFallCheck(checkingGridUid, checkingTile);
+                fallCheck = new ZFallCheck(checkingGridUid, checkingTile, hasHighGroundOnTile);
 
-            if (TryGetHighGroundDistance(
-                    target,
-                    localPosition,
-                    velocity,
-                    checkingGridUid,
-                    checkingGrid,
-                    checkingTile,
-                    gridLocal,
-                    floor,
-                    out var highGroundDistance,
-                    ref stickyGround))
+            if (foundHighGround)
             {
                 if (profiling)
                     _profileZDistanceHighGroundHits++;
@@ -1261,9 +1263,18 @@ public abstract partial class CMUSharedZLevelsSystem
         out EntityUid gridUid,
         [NotNullWhen(true)] out MapGridComponent? grid)
     {
+        _movementDeckCandidates.Clear();
+        // The map grid itself is outside the child-grid tree. With no proxies it is
+        // the only possible support, even when the map tile under the body is empty.
+        if (!_movementGridTreeQuery.TryComp(mapUid, out var tree) || tree.Tree.ProxyCount == 0)
+        {
+            grid = _gridQuery.CompOrNull(mapUid);
+            gridUid = grid != null ? mapUid : default;
+            return grid != null;
+        }
+
         // A deployed ramp sits on top of the landing pad. Prefer its supporting
         // surface to the terrain floor when both grids occupy the same tile.
-        _movementDeckCandidates.Clear();
         var candidates = _movementDeckCandidates;
         FindMovementDecks(mapUid, Box2.CenteredAround(worldPosition, new Vector2(0.01f)), ref candidates);
         foreach (var candidate in _movementDeckCandidates)
@@ -1332,6 +1343,7 @@ public abstract partial class CMUSharedZLevelsSystem
         Vector2 gridLocal,
         int floor,
         out float distance,
+        out bool hasHighGroundOnTile,
         ref bool stickyGround)
     {
         if (!Prof.IsEnabled)
@@ -1345,6 +1357,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 gridLocal,
                 floor,
                 out distance,
+                out hasHighGroundOnTile,
                 ref stickyGround);
 
         using var profile = Prof.Group("CMU Z HighGroundDistance");
@@ -1358,6 +1371,7 @@ public abstract partial class CMUSharedZLevelsSystem
             gridLocal,
             floor,
             out distance,
+            out hasHighGroundOnTile,
             ref stickyGround);
     }
 
@@ -1378,9 +1392,11 @@ public abstract partial class CMUSharedZLevelsSystem
         Vector2 gridLocal,
         int floor,
         out float distance,
+        out bool hasHighGroundOnTile,
         ref bool stickyGround)
     {
         distance = 0f;
+        hasHighGroundOnTile = false;
         var found = false;
         var bestDistance = 0f;
         var bestSticky = false;
@@ -1411,6 +1427,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     if (!_highgroundQuery.TryComp(uid, out var heightComp))
                         continue;
 
+                    hasHighGroundOnTile |= isCurrentTile;
                     if (floor == 0 && (heightComp.SupportOnlyFromAbove || !CanClimbHighGround(target, heightComp)))
                         continue;
 
@@ -1502,7 +1519,11 @@ public abstract partial class CMUSharedZLevelsSystem
 
         var delta = newMapCoordinates.Position - oldMapCoordinates.Position;
         var moveDistance = delta.Length();
-        if (moveDistance <= 0.001f)
+        var sampleCount = Math.Clamp(
+            (int)MathF.Ceiling(moveDistance / MoveGroundSnapSweepStep),
+            1,
+            MaxMoveGroundSnapSweepSamples);
+        if (sampleCount <= 1)
             return false;
 
         var xform = Transform(target);
@@ -1517,13 +1538,6 @@ public abstract partial class CMUSharedZLevelsSystem
         var currentGroundSnapDistance = GetMoveGroundSnapDistance(currentDistanceToGround, currentStickyGround);
         var bestSnappedLocalPosition = target.Comp.LocalPosition - currentGroundSnapDistance;
         if (ShouldProcessImmediateMoveSnapZLevelTransition(_net.IsClient, bestSnappedLocalPosition, currentStickyGround))
-            return false;
-
-        var sampleCount = Math.Clamp(
-            (int)MathF.Ceiling(moveDistance / MoveGroundSnapSweepStep),
-            1,
-            MaxMoveGroundSnapSweepSamples);
-        if (sampleCount <= 1)
             return false;
 
         if (Prof.IsEnabled)
