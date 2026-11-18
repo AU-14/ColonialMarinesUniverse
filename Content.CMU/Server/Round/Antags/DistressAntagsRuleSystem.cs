@@ -19,12 +19,25 @@ public sealed partial class DistressAntagsRuleSystem : GameRuleSystem<DistressAn
         { "RunawaySynth", 0.25f },
         { "Replicant", 0.15f },
         // its own rule: Distress Signal clears the planet's jobs, so it brings its own colony Working Joe
-        { EWJoeRuleSystem.DistressAntagId, 0.35f },
+        { EWJoeRuleSystem.DistressAntagId, 0.25f },
     };
 
     protected override void Added(EntityUid uid, DistressAntagsRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
     {
         base.Added(uid, component, gameRule, args);
+
+        // a preset with its own table in YAML (e.g. FoFAntags) rolls that instead of the Distress Signal one
+        if (component.Rules is { } rules)
+        {
+            foreach (var (rule, chance) in rules)
+            {
+                if (_random.Prob(chance))
+                    GameTicker.AddGameRule(rule.Id);
+            }
+
+            return;
+        }
+
         foreach (var (antag, chance) in AntagRulePrototypes)
         {
             if (_random.Prob(chance))

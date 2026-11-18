@@ -3,6 +3,7 @@
   name: acid pillar
   description: A tall pillar that is capable of firing weak acid.
   components:
+  - type: CMUThreatStructure # CMU14: counted by the Early Warning Joe's Purge the Nest
   - type: Transform
     anchored: true
   - type: Physics
