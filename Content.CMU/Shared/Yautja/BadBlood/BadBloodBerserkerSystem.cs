@@ -1,3 +1,4 @@
+using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
@@ -14,6 +15,7 @@ namespace Content.Shared.CMU14.Yautja.BadBlood;
 /// </summary>
 public sealed class BadBloodBerserkerSystem : EntitySystem
 {
+    [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private INetManager _net = default!;
@@ -31,7 +33,14 @@ public sealed class BadBloodBerserkerSystem : EntitySystem
         _movement.RefreshMovementSpeedModifiers(ent.Owner);
 
         // the thresholds are networked with the body, so only the server raises them
-        if (_net.IsClient || ent.Comp.ThresholdsRaised)
+        if (_net.IsClient)
+            return;
+
+        // CMU14 ECS-703: the Blood Rage action comes and goes with the caste
+        _actions.AddAction(ent.Owner, ref ent.Comp.RageActionEntity, ent.Comp.RageAction);
+        Dirty(ent);
+
+        if (ent.Comp.ThresholdsRaised)
             return;
 
         ent.Comp.ThresholdsRaised = true;
@@ -45,7 +54,13 @@ public sealed class BadBloodBerserkerSystem : EntitySystem
 
         _movement.RefreshMovementSpeedModifiers(ent.Owner);
 
-        if (_net.IsClient || !ent.Comp.ThresholdsRaised)
+        if (_net.IsClient)
+            return;
+
+        _actions.RemoveAction(ent.Owner, ent.Comp.RageActionEntity);
+        RemComp<BadBloodBloodRageComponent>(ent.Owner);
+
+        if (!ent.Comp.ThresholdsRaised)
             return;
 
         ent.Comp.ThresholdsRaised = false;

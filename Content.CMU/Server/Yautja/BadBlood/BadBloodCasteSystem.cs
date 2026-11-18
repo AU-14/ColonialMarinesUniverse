@@ -25,6 +25,7 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 public sealed class BadBloodCasteSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private BadBloodSystem _badBlood = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
@@ -40,6 +41,14 @@ public sealed class BadBloodCasteSystem : EntitySystem
     {
         SubscribeLocalEvent<BadBloodCasteChoiceComponent, GetVerbsEvent<Verb>>(OnLodgeVerbs);
         SubscribeLocalEvent<BadBloodCasteChosenEvent>(OnCasteChosen);
+        SubscribeLocalEvent<BadBloodLeaderChangedEvent>(OnLeaderChanged);
+    }
+
+    // CMU14 ARCH-704 (D1): the Hunt Leader is a caste of its own. A caste-holder who takes the lead sheds the caste
+    private void OnLeaderChanged(ref BadBloodLeaderChangedEvent ev)
+    {
+        if (ev.New is { } leader && !TerminatingOrDeleted(leader) && TryDropCaste(leader))
+            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-caste-shed-for-leader"), leader, leader, PopupType.Medium);
     }
 
     public bool IsCaste(EntityUid uid, ProtoId<BadBloodCastePrototype> caste)
@@ -89,6 +98,11 @@ public sealed class BadBloodCasteSystem : EntitySystem
         if (HasComp<BadBloodCasteComponent>(user))
             return false;
 
+        // CMU14 ARCH-704: the Hunt Leader holds no caste
+        reason = "cmu-bad-blood-caste-leader";
+        if (HasComp<BadBloodLeaderComponent>(user))
+            return false;
+
         reason = "cmu-bad-blood-caste-full";
         return CountCaste(caste) < GetCasteCap(caste);
     }
@@ -106,13 +120,26 @@ public sealed class BadBloodCasteSystem : EntitySystem
 
         var comp = EnsureComp<BadBloodCasteComponent>(user);
         comp.Caste = caste;
+        comp.SkillsBefore.Clear();
+        comp.AddedComponents.Clear();
         Dirty(user, comp);
 
         // an Engineer plants charges, which need RMC engineering
         foreach (var (skill, level) in proto.Skills)
         {
-            if (_skills.GetSkill(user, skill) < level)
-                _skills.SetSkill(user, skill, level);
+            var before = _skills.GetSkill(user, skill);
+            if (before >= level)
+                continue;
+
+            comp.SkillsBefore[skill] = before;
+            _skills.SetSkill(user, skill, level);
+        }
+
+        // CMU14 ARCH-701: remember what the caste added, so dropping it removes only that
+        foreach (var (name, entry) in proto.AddComponents)
+        {
+            if (!HasComp(user, entry.Component.GetType()))
+                comp.AddedComponents.Add(name);
         }
 
         EntityManager.AddComponents(user, proto.AddComponents, removeExisting: false);
@@ -123,6 +150,43 @@ public sealed class BadBloodCasteSystem : EntitySystem
 
         _popup.PopupEntity(Loc.GetString(proto.Taken), user, user, PopupType.Medium);
         _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} took up the Bad Blood {caste.Id} caste");
+
+        var ev = new BadBloodCasteTakenEvent(user, caste);
+        RaiseLocalEvent(ref ev);
+        return true;
+    }
+
+    /// <summary>
+    /// CMU14 ARCH-701: takes <paramref name="user"/>'s caste away: the components it added go, the skills it raised
+    /// go back to what they were, and the slot frees. Used when a caste-holder becomes the Hunt Leader (ARCH-704).
+    /// Returns false when they hold no caste.
+    /// </summary>
+    public bool TryDropCaste(EntityUid user)
+    {
+        if (!TryComp(user, out BadBloodCasteComponent? comp))
+            return false;
+
+        var caste = comp.Caste;
+        foreach (var name in comp.AddedComponents)
+        {
+            if (_componentFactory.TryGetRegistration(name, out var registration))
+                RemComp(user, registration.Type);
+        }
+
+        foreach (var (skill, level) in comp.SkillsBefore)
+        {
+            _skills.SetSkill(user, skill, level);
+        }
+
+        RemComp<BadBloodCasteComponent>(user);
+
+        // an Engineer's visor goes back to the clan's own sight
+        _mask.RefreshVisorGlasses(user);
+
+        _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user):player} dropped the Bad Blood {caste.Id} caste");
+
+        var ev = new BadBloodCasteDroppedEvent(user, caste);
+        RaiseLocalEvent(ref ev);
         return true;
     }
 
@@ -154,7 +218,8 @@ public sealed class BadBloodCasteSystem : EntitySystem
         if (!args.CanAccess ||
             !args.CanInteract ||
             !_badBlood.IsBadBlood(args.User) ||
-            HasComp<BadBloodCasteComponent>(args.User))
+            HasComp<BadBloodCasteComponent>(args.User) ||
+            HasComp<BadBloodLeaderComponent>(args.User))
         {
             return;
         }

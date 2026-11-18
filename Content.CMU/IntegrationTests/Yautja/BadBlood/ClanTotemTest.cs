@@ -42,53 +42,47 @@ public sealed class ClanTotemTest : GameTest
         {
             await Server.WaitPost(() => spawned.Add(Server.EntMan.SpawnEntity(Lodge, map.GridCoords)));
 
-            // every Bad Blood gets the Raise Totem action once the rule runs
             await Pair.RunSeconds(2);
 
             await Server.WaitAssertion(() =>
             {
-                var entMan = Server.EntMan;
                 var rules = Server.System<BadBloodCampRuleSystem>();
                 var totems = Server.System<BadBloodTotemSystem>();
                 Assert.That(rules.TryGetRule(out var rule), Is.True);
 
-                Assert.That(entMan.TryGetComponent(grunt, out BadBloodTotemBuilderComponent? builder), Is.True);
-                Assert.That(builder!.RaiseTotemActionEntity, Is.Not.Null, "every Bad Blood holds the Raise Totem action");
-                Assert.That(rule.Comp.FreeTotems, Is.EqualTo(1), "the first Lodge grants one free Totem");
-                Assert.That(rules.GetTotemLimit(), Is.EqualTo(3));
-
-                Assert.That(Raise(totems, map, grunt, 5, spawned), Is.False, "a Totem keeps 20 tiles from the Lodge");
-
-                Assert.That(Raise(totems, map, grunt, 25, spawned), Is.True, "the first Totem is free");
+                // CMU14 ECS-706: Totems rise only on seized Hunt Orders. Nobody carries a Raise Totem action
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rule.Comp.FreeTotems, Is.Zero);
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.Zero));
+                    Assert.That(Server.ResolveDependency<IComponentFactory>().TryGetRegistration("BadBloodTotemBuilder", out _), Is.False,
+                        "the Raise Totem builder component is gone");
+                    Assert.That(Server.ProtoMan.HasIndex<EntityPrototype>("CMUActionBadBloodRaiseTotem"), Is.False,
+                        "the Raise Totem action is gone");
+                    Assert.That(Server.EntMan.HasComponent<BadBloodHuntPetitionComponent>(grunt), Is.False,
+                        "a grunt has no Hunt Leader action either");
+                    Assert.That(rules.GetTotemLimit(), Is.EqualTo(3));
+                    Assert.That(rule.Comp.TotemLimitHighPop, Is.EqualTo(3), "three on every population (D6)");
+                });
+
+                Assert.That(Raise(totems, map, 5, spawned), Is.False, "a Totem keeps 20 tiles from the Lodge");
+
+                Assert.That(Raise(totems, map, 25, spawned), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.Zero), "an ordered Totem costs nothing");
                     Assert.That(rules.GetTotems(), Has.Count.EqualTo(1));
                 });
 
-                Assert.That(Raise(totems, map, grunt, 50, spawned), Is.False, "the second Totem costs SP the clan does not have");
-                Assert.That(rules.GetTotems(), Has.Count.EqualTo(1), "a Totem that is not paid for is not left standing");
+                Assert.That(Raise(totems, map, 50, spawned), Is.True);
+                Assert.That(Raise(totems, map, 60, spawned), Is.False, "a Totem keeps 20 tiles from another Totem");
+                Assert.That(Raise(totems, map, 75, spawned), Is.True);
 
-                Assert.That(rules.AddSp(10), Is.True);
-                Assert.That(Raise(totems, map, grunt, 50, spawned), Is.True);
-                Assert.That(rule.Comp.TotemCost, Is.EqualTo(FixedPoint4.New(3)));
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(10) - rule.Comp.TotemCost), "a Totem costs 3 SP");
-
-                Assert.That(Raise(totems, map, grunt, 60, spawned), Is.False, "a Totem keeps 20 tiles from another Totem");
-
-                Assert.That(Raise(totems, map, grunt, 75, spawned), Is.True);
-                Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(4)));
-
-                Assert.That(Raise(totems, map, grunt, 100, spawned), Is.False, "the clan holds three Totems at most");
+                Assert.That(Raise(totems, map, 100, spawned), Is.False, "the clan holds three Totems at most");
                 Assert.Multiple(() =>
                 {
                     Assert.That(rules.GetTotems(), Has.Count.EqualTo(3));
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(4)), "a refused Totem costs nothing");
+                    Assert.That(Count(Server.EntMan, Totem), Is.EqualTo(3), "a refused Totem is not left standing");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.Zero));
                 });
-
-                // only a Bad Blood raises a Totem
-                Assert.That(totems.TryStartRaisingTotem(spawned[0]), Is.False);
             });
         }
         finally
@@ -474,7 +468,6 @@ public sealed class ClanTotemTest : GameTest
         {
             await Server.WaitPost(() => spawned.Add(Server.EntMan.SpawnEntity(Lodge, map.GridCoords)));
 
-            // every Bad Blood gets the Raise Totem action once the rule runs
             await Pair.RunSeconds(2);
 
             await Server.WaitAssertion(() =>
@@ -484,7 +477,7 @@ public sealed class ClanTotemTest : GameTest
                 Assert.That(rules.HaveMarinesLanded(), Is.False, "the marines are still in orbit");
 
                 intelBefore = totems.MarineTotemIntelSent;
-                Assert.That(Raise(totems, map, grunt, 25, spawned), Is.True);
+                Assert.That(Raise(totems, map, 25, spawned), Is.True);
                 totem = spawned[^1];
                 Assert.That(totems.MarineTotemIntelSent, Is.EqualTo(intelBefore), "marines in orbit hear of no raise");
 
@@ -781,11 +774,16 @@ public sealed class ClanTotemTest : GameTest
         });
     }
 
-    // moves the builder to the column and raises a Totem there, skipping the build time
-    private bool Raise(BadBloodTotemSystem totems, TestMapData map, EntityUid user, int column, List<EntityUid> spawned)
+    // CMU14 ECS-706: raises a Totem in the column as a seized Hunt Order does, if the site rules let one stand there.
+    // call on the server thread
+    private bool Raise(BadBloodTotemSystem totems, TestMapData map, int column, List<EntityUid> spawned)
     {
-        Server.System<SharedTransformSystem>().SetCoordinates(user, map.GridCoords.Offset(new Vector2(column, 0)));
-        if (!totems.TryRaiseTotem(user, out var totem))
+        Assert.That(Server.System<BadBloodCampRuleSystem>().TryGetRule(out var rule), Is.True);
+        var where = Server.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords.Offset(new Vector2(column, 0)));
+        if (totems.GetSiteDenial(where, rule.Comp.OrderSpacing, rule.Comp.OrderLandingZoneDistance) != null)
+            return false;
+
+        if (totems.SpawnOrderedTotem(where) is not { } totem)
             return false;
 
         spawned.Add(totem);

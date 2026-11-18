@@ -1,0 +1,625 @@
+# CMU14 Playtest 5 (docs/GraphAudit-BadBlood-Playtest5Plan.md ARCH-707, ECS-708, ECS-709): the Beast-Master's
+# thralls. A cage is bought at the kennel (lodge_kennel.yml) and stands there until a ghost takes the thrall from it,
+# in the hound's order (reserve first, never this round's honourable hunters, the beast respawn delay). The cage's own
+# YautjaHivebreaker is the conversion's settings (BadBloodThrallBeastSystem -> YautjaThrallSystem.HivebreakXeno): Bad
+# Blood hive, the Beast-Master's factions, hivebroken, no dishonour, no broadcast, no blooding. The thrall answers to
+# the Beast-Master who bought the cage. A thrall is a strong grunt, not a hive caste: 20% less health than its caste,
+# it cannot evolve or devolve, never goes to the larva queue, leaves no corpse, intel or acid splash, and its
+# abilities, spit and tackle spare the clan (BadBloodBeastFriendlyFireSystem). Thralls count against the clan's
+# threat budget, hounds do not. Phase 2: Runner, Defender. Phase 3: Sentinel, Lurker, Warrior, Spitter. No neomorph
+# (D12). Never a drone, carrier, hivelord, burrower, queen, king or larva: no infection, eggs or tunnels.
+
+- type: entity
+  abstract: true
+  id: CMUBadBloodThrallCageBase
+  name: thrall cage
+  description: A barred crate rattling with something that hisses. A ghost may take the thrall inside for the clan.
+  suffix: Bad Blood, Beast
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: Structures/Storage/Crates/cage.rsi
+    drawdepth: Objects
+    layers:
+    - state: base
+    - state: closed
+  - type: Icon
+    sprite: Structures/Storage/Crates/cage.rsi
+    state: icon
+  - type: BadBloodThrallCage
+    reservePriority: 60
+  - type: GhostRole
+    name: cmu-bad-blood-thrall-ghost-name
+    description: cmu-bad-blood-thrall-ghost-description
+    rules: cmu-bad-blood-thrall-ghost-rules
+    allowMovement: true
+    # like the hounds: a beast's job and the threat mind role, so the thrall counts as part of the clan's threat
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  # the conversion's settings, not a tool: nothing ever uses the cage on a xeno
+  - type: YautjaHivebreaker
+    requireBadBloodUser: false
+    dishonorOnConversion: false
+    broadcastOnConversion: false
+    bloodOnConversion: false
+    authorizeTechOnConversion: false
+    healOnConversion: false
+    humanSpeechOnConversion: false
+    copyMasterFactions: true
+    # without a living master the cage stands in, and this is the faction the thrall gets
+    thrallNpcFaction: CMUYautjaBadBlood
+
+- type: entity
+  parent: CMUBadBloodThrallCageBase
+  id: CMUBadBloodThrallCageRunner
+  name: runner cage
+  components:
+  - type: GhostRoleMobSpawner
+    prototype: CMUBadBloodThrallRunner
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMUBadBloodThrallCageBase
+  id: CMUBadBloodThrallCageDefender
+  name: defender cage
+  components:
+  - type: GhostRoleMobSpawner
+    prototype: CMUBadBloodThrallDefender
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMUBadBloodThrallCageBase
+  id: CMUBadBloodThrallCageSentinel
+  name: sentinel cage
+  components:
+  - type: GhostRoleMobSpawner
+    prototype: CMUBadBloodThrallSentinel
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMUBadBloodThrallCageBase
+  id: CMUBadBloodThrallCageLurker
+  name: lurker cage
+  components:
+  - type: GhostRoleMobSpawner
+    prototype: CMUBadBloodThrallLurker
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMUBadBloodThrallCageBase
+  id: CMUBadBloodThrallCageWarrior
+  name: warrior cage
+  components:
+  - type: GhostRoleMobSpawner
+    prototype: CMUBadBloodThrallWarrior
+    deleteOnSpawn: true
+
+- type: entity
+  parent: CMUBadBloodThrallCageBase
+  id: CMUBadBloodThrallCageSpitter
+  name: spitter cage
+  components:
+  - type: GhostRoleMobSpawner
+    prototype: CMUBadBloodThrallSpitter
+    deleteOnSpawn: true
+
+# ---- the thralls (ECS-708: Runner, Defender; ECS-709: Sentinel, Lurker, Warrior, Spitter) ----
+# each is written out in full on its caste: a second parent would merge GhostRole, Xeno and RemoveComponents with the
+# caste's own in an order that is easy to get wrong. The Xeno override is field by field; actionIds replaces the list
+
+- type: entity
+  parent: CMXenoRunner
+  id: CMUBadBloodThrallRunner
+  name: thralled runner
+  description: A runner broken from its hive and leashed to the clan's Beast-Master.
+  suffix: Bad Blood, Beast
+  components:
+  - type: BadBloodBeast
+  # CMU14 (Playtest 5 follow-up): the clan's map and voice. Only the Yautja hunting map shows it (YautjaMapTracked
+  # keeps it off every hive's map), it opens that map instead of a hive's, keeps the thralls' own hivemind and talks
+  # on the Bad Blood channel (:r), and understands the clan and its hounds
+  - type: YautjaMapTracked
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    - Yautja
+    - Beast
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
+  - type: BadBloodThrallBeast
+    unclaimedTimeout: 180
+    reservePriority: 60
+  - type: Xeno
+    contributesToVictory: false
+    countedInSlots: false
+    autoAssignHive: false
+    unlockAt: 0
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoHide
+    - ActionXenoLeap
+    - ActionXenoBoneChips
+    - ActionXenoZoom
+  - type: XenoHidden
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  # 270 / 360, less 20%
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      216: Critical
+      288: Dead
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+    # RMC lowers the chance by how far below the death threshold the damage is; a thrall always gibs
+    damageGibMultiplier: 0
+  - type: Unrevivable
+  - type: GhostRole
+    name: cmu-bad-blood-thrall-ghost-name
+    description: cmu-bad-blood-thrall-ghost-description
+    rules: cmu-bad-blood-thrall-ghost-rules
+    allowMovement: true
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  # no growth or infection back doors, no larva queue, no marine intel or acid splash. The takeover comes back only
+  # when its player leaves it, behind the clan's own gate (BadBloodGhostRoleSystem)
+  - type: RemoveComponents
+    components:
+    - type: XenoEvolution
+    - type: XenoDevolve
+    - type: LarvaQueueable
+    - type: AcidBloodSplash
+    - type: IntelRecoverCorpseObjectiveOnDeath
+    - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: CMXenoDefender
+  id: CMUBadBloodThrallDefender
+  name: thralled defender
+  description: A defender broken from its hive and leashed to the clan's Beast-Master.
+  suffix: Bad Blood, Beast
+  components:
+  - type: BadBloodBeast
+  # CMU14 (Playtest 5 follow-up): the clan's map and voice. Only the Yautja hunting map shows it (YautjaMapTracked
+  # keeps it off every hive's map), it opens that map instead of a hive's, keeps the thralls' own hivemind and talks
+  # on the Bad Blood channel (:r), and understands the clan and its hounds
+  - type: YautjaMapTracked
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    - Yautja
+    - Beast
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
+  - type: BadBloodThrallBeast
+    unclaimedTimeout: 180
+    reservePriority: 60
+  - type: Xeno
+    contributesToVictory: false
+    countedInSlots: false
+    autoAssignHive: false
+    unlockAt: 0
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailSlam
+    - ActionXenoToggleCrest
+    - ActionXenoHeadbutt
+    - ActionXenoTailSweep
+    - ActionXenoFortify
+  - type: XenoHidden
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  # 500 / 600, less 20%
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      400: Critical
+      480: Dead
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+    # RMC lowers the chance by how far below the death threshold the damage is; a thrall always gibs
+    damageGibMultiplier: 0
+  - type: Unrevivable
+  - type: GhostRole
+    name: cmu-bad-blood-thrall-ghost-name
+    description: cmu-bad-blood-thrall-ghost-description
+    rules: cmu-bad-blood-thrall-ghost-rules
+    allowMovement: true
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  - type: RemoveComponents
+    components:
+    - type: XenoEvolution
+    - type: XenoDevolve
+    - type: LarvaQueueable
+    - type: AcidBloodSplash
+    - type: IntelRecoverCorpseObjectiveOnDeath
+    - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: CMXenoSentinel
+  id: CMUBadBloodThrallSentinel
+  name: thralled sentinel
+  description: A sentinel broken from its hive and leashed to the clan's Beast-Master. Its spit spares the clan.
+  suffix: Bad Blood, Beast
+  components:
+  - type: BadBloodBeast
+  # CMU14 (Playtest 5 follow-up): the clan's map and voice. Only the Yautja hunting map shows it (YautjaMapTracked
+  # keeps it off every hive's map), it opens that map instead of a hive's, keeps the thralls' own hivemind and talks
+  # on the Bad Blood channel (:r), and understands the clan and its hounds
+  - type: YautjaMapTracked
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    - Yautja
+    - Beast
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
+  - type: BadBloodThrallBeast
+    unclaimedTimeout: 180
+    reservePriority: 60
+  - type: Xeno
+    contributesToVictory: false
+    countedInSlots: false
+    autoAssignHive: false
+    unlockAt: 0
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoAcidWeak
+    - ActionXenoSlowingSpit
+    - ActionXenoScatteredSpit
+    - ActionXenoParalyzingSlash
+  - type: XenoHidden
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  # 500 / 600, less 20%
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      400: Critical
+      480: Dead
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+    # RMC lowers the chance by how far below the death threshold the damage is; a thrall always gibs
+    damageGibMultiplier: 0
+  - type: Unrevivable
+  - type: GhostRole
+    name: cmu-bad-blood-thrall-ghost-name
+    description: cmu-bad-blood-thrall-ghost-description
+    rules: cmu-bad-blood-thrall-ghost-rules
+    allowMovement: true
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  - type: RemoveComponents
+    components:
+    - type: XenoEvolution
+    - type: XenoDevolve
+    - type: LarvaQueueable
+    - type: AcidBloodSplash
+    - type: IntelRecoverCorpseObjectiveOnDeath
+    - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: CMXenoLurker
+  id: CMUBadBloodThrallLurker
+  name: thralled lurker
+  description: A lurker broken from its hive and leashed to the clan's Beast-Master.
+  suffix: Bad Blood, Beast
+  components:
+  - type: BadBloodBeast
+  # CMU14 (Playtest 5 follow-up): the clan's map and voice. Only the Yautja hunting map shows it (YautjaMapTracked
+  # keeps it off every hive's map), it opens that map instead of a hive's, keeps the thralls' own hivemind and talks
+  # on the Bad Blood channel (:r), and understands the clan and its hounds
+  - type: YautjaMapTracked
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    - Yautja
+    - Beast
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
+  - type: BadBloodThrallBeast
+    unclaimedTimeout: 180
+    reservePriority: 60
+  - type: Xeno
+    contributesToVictory: false
+    countedInSlots: false
+    autoAssignHive: false
+    unlockAt: 0
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoPounce
+    - ActionXenoTurnInvisible
+    - ActionXenoCripplingStrike
+  - type: XenoHidden
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  # 450 / 550, less 20%
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      360: Critical
+      440: Dead
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+    # RMC lowers the chance by how far below the death threshold the damage is; a thrall always gibs
+    damageGibMultiplier: 0
+  - type: Unrevivable
+  - type: GhostRole
+    name: cmu-bad-blood-thrall-ghost-name
+    description: cmu-bad-blood-thrall-ghost-description
+    rules: cmu-bad-blood-thrall-ghost-rules
+    allowMovement: true
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  - type: RemoveComponents
+    components:
+    - type: XenoEvolution
+    - type: XenoDevolve
+    - type: LarvaQueueable
+    - type: AcidBloodSplash
+    - type: IntelRecoverCorpseObjectiveOnDeath
+    - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: CMXenoWarrior
+  id: CMUBadBloodThrallWarrior
+  name: thralled warrior
+  description: A warrior broken from its hive and leashed to the clan's Beast-Master.
+  suffix: Bad Blood, Beast
+  components:
+  - type: BadBloodBeast
+  # CMU14 (Playtest 5 follow-up): the clan's map and voice. Only the Yautja hunting map shows it (YautjaMapTracked
+  # keeps it off every hive's map), it opens that map instead of a hive's, keeps the thralls' own hivemind and talks
+  # on the Bad Blood channel (:r), and understands the clan and its hounds
+  - type: YautjaMapTracked
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    - Yautja
+    - Beast
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
+  - type: BadBloodThrallBeast
+    unclaimedTimeout: 180
+    reservePriority: 60
+  - type: Xeno
+    contributesToVictory: false
+    countedInSlots: false
+    autoAssignHive: false
+    unlockAt: 0
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoPunch
+    - ActionXenoLunge
+    - ActionXenoFling
+  - type: XenoHidden
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  # 500 / 600, less 20%
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      400: Critical
+      480: Dead
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+    # RMC lowers the chance by how far below the death threshold the damage is; a thrall always gibs
+    damageGibMultiplier: 0
+  - type: Unrevivable
+  - type: GhostRole
+    name: cmu-bad-blood-thrall-ghost-name
+    description: cmu-bad-blood-thrall-ghost-description
+    rules: cmu-bad-blood-thrall-ghost-rules
+    allowMovement: true
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  - type: RemoveComponents
+    components:
+    - type: XenoEvolution
+    - type: XenoDevolve
+    - type: LarvaQueueable
+    - type: AcidBloodSplash
+    - type: IntelRecoverCorpseObjectiveOnDeath
+    - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: CMXenoSpitter
+  id: CMUBadBloodThrallSpitter
+  name: thralled spitter
+  description: A spitter broken from its hive and leashed to the clan's Beast-Master. Its spit spares the clan.
+  suffix: Bad Blood, Beast
+  components:
+  - type: BadBloodBeast
+  # CMU14 (Playtest 5 follow-up): the clan's map and voice. Only the Yautja hunting map shows it (YautjaMapTracked
+  # keeps it off every hive's map), it opens that map instead of a hive's, keeps the thralls' own hivemind and talks
+  # on the Bad Blood channel (:r), and understands the clan and its hounds
+  - type: YautjaMapTracked
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - CMUYautjaBadBlood
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    - Yautja
+    - Beast
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
+  - type: BadBloodThrallBeast
+    unclaimedTimeout: 180
+    reservePriority: 60
+  - type: Xeno
+    contributesToVictory: false
+    countedInSlots: false
+    autoAssignHive: false
+    unlockAt: 0
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStabCorrosive
+    - ActionXenoAcidNormal
+    - ActionXenoSpit
+    - ActionXenoChargeSpit
+    - ActionXenoSprayAcid
+  - type: XenoHidden
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  # 550 / 650, less 20%
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      440: Critical
+      520: Dead
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+    # RMC lowers the chance by how far below the death threshold the damage is; a thrall always gibs
+    damageGibMultiplier: 0
+  - type: Unrevivable
+  - type: GhostRole
+    name: cmu-bad-blood-thrall-ghost-name
+    description: cmu-bad-blood-thrall-ghost-description
+    rules: cmu-bad-blood-thrall-ghost-rules
+    allowMovement: true
+    job: CMUYautjaHellhound
+    mindRoles:
+    - MindRoleThreat
+    raffle:
+      settings: default
+  - type: RemoveComponents
+    components:
+    - type: XenoEvolution
+    - type: XenoDevolve
+    - type: LarvaQueueable
+    - type: AcidBloodSplash
+    - type: IntelRecoverCorpseObjectiveOnDeath
+    - type: GhostTakeoverAvailable

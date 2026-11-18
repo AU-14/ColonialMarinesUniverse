@@ -456,10 +456,10 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (_inventory.TryGetSlotEntity(user, "eyes", out _))
             return false;
 
-        // ARCH-04: a Bad Blood Engineer and the clan's Leader see as an honourable hunter does.
-        // CMU14 ARCH-604: the Engineer's perk is a marker component
+        // ARCH-04: a Bad Blood Engineer sees as an honourable hunter does.
+        // CMU14 ARCH-604: the Engineer's perk is a marker component. CMU14 FLOW-701: the Hunt Leader no longer does;
+        // they have the command sight instead (BadBloodCommandSightComponent)
         var seesAsHonourable =
-            HasComp<Content.Shared.CMU14.Yautja.BadBlood.BadBloodLeaderComponent>(user) ||
             HasComp<Content.Shared.CMU14.Yautja.BadBlood.BadBloodHunterVisorComponent>(user);
         var prototype = HasComp<YautjaBadBloodComponent>(user) && !seesAsHonourable
             ? mask.Comp.BadBloodVisorGlassesPrototype

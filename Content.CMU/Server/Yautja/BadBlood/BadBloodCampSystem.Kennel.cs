@@ -1,6 +1,4 @@
 using Content.Server.Ghost.Roles;
-using Content.Shared._RMC14.K9;
-using Content.Shared._RMC14.K9.Components;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Roles.Components;
@@ -14,10 +12,11 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 // (XenoPylonSystem.UpdateGhostRoles): ghosts take hounds from its GhostRoleMobSpawner, the stock regrows on a timer
 // and the living clan raises its cap. Nobody buys a hound any more; SP buys the kennel's rate and stock at the
 // armory (STATE-602). Who may take one is BadBloodHoundSystem.CanTakeHound. The landing sleepers are unchanged.
-// Dependency fields taken by this file: _kennelK9. It reuses _squadGhostRoles (Squads.cs) and _spitMobState (Spit.cs).
+// CMU14 ARCH-706: kennel hounds bind through the pack layer (BadBloodBeastSystem), to the Beast-Master first.
+// Dependency fields taken by this file: _kennelBeasts. It reuses _squadGhostRoles (Squads.cs) and _spitMobState (Spit.cs).
 public sealed partial class BadBloodCampSystem
 {
-    [Dependency] private K9System _kennelK9 = default!;
+    [Dependency] private BadBloodBeastSystem _kennelBeasts = default!;
 
     partial void InitializeKennel()
     {
@@ -97,10 +96,12 @@ public sealed partial class BadBloodCampSystem
         _squadGhostRoles.SetCurrent((uid, spawner), kennel.LiveHounds.Count);
     }
 
+    // CMU14 STATE-702: each living Beast-Master keeps one more hound ready
     private int GetKennelMax(BadBloodKennelSpawnerComponent kennel)
     {
         var perHound = Math.Max(1, kennel.BadBloodsPerHound);
-        return Math.Max(kennel.MinStock, _rule.CountLivingBadBloods() / perHound);
+        return Math.Max(kennel.MinStock, _rule.CountLivingBadBloods() / perHound) +
+               _kennelBeasts.CountLivingBeastMasters();
     }
 
     /// <summary>
@@ -137,8 +138,10 @@ public sealed partial class BadBloodCampSystem
         comp.Max = GetKennelMax(comp);
     }
 
-    // a ghost took a hound from the kennel: it is the kennel's to count, and the living Leader's to command, as the
-    // wake path binds a woken sleeper. Leaderless, it has no master (a preset-bond dog simply has no owner to sense)
+    // a ghost took a hound from the kennel: it is the kennel's to count. CMU14 ARCH-706: it answers to the clan's
+    // Beast-Master, or the living Hunt Leader if none lives (BadBloodBeastSystem.GetMasterFor). With neither it has
+    // no master yet (a preset-bond dog simply has no owner to sense) and binds when one appears.
+    // STATE-702: a war-painted kennel's hounds bite harder
     private void OnKennelHoundSpawned(Entity<BadBloodHoundComponent> ent, ref GhostRoleSpawnerUsedEvent args)
     {
         if (!TryComp(args.Spawner, out BadBloodKennelSpawnerComponent? kennel))
@@ -147,11 +150,24 @@ public sealed partial class BadBloodCampSystem
         kennel.LiveHounds.Add(ent.Owner);
         ent.Comp.FromKennel = true;
 
-        if (_rule.GetLeader() is { } leader &&
-            !_spitMobState.IsDead(leader) &&
-            TryComp(ent, out K9DogComponent? k9))
+        if (TryComp(args.Spawner, out BadBloodWarPaintComponent? paint))
+            EnsureComp<BadBloodWarPaintComponent>(ent).Multiplier = paint.Multiplier;
+
+        if (_kennelBeasts.GetMasterFor(ent.Owner) is { } master)
+            _kennelBeasts.Bind(ent.Owner, master);
+    }
+
+    /// <summary>
+    /// CMU14 STATE-702: war-paints <paramref name="kennel"/>: its living hounds and every hound it lets out from now on
+    /// bite <paramref name="multiplier"/> times as hard.
+    /// </summary>
+    public void ApplyKennelWarPaint(Entity<BadBloodKennelSpawnerComponent> kennel, float multiplier)
+    {
+        EnsureComp<BadBloodWarPaintComponent>(kennel).Multiplier = multiplier;
+        foreach (var hound in kennel.Comp.LiveHounds)
         {
-            _kennelK9.BindMaster(ent.Owner, k9, leader, asHandler: true);
+            if (!TerminatingOrDeleted(hound))
+                EnsureComp<BadBloodWarPaintComponent>(hound).Multiplier = multiplier;
         }
     }
 }

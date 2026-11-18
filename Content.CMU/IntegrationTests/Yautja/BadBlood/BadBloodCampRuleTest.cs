@@ -167,8 +167,7 @@ public sealed class BadBloodCampRuleTest : GameTest
                     Assert.That(rules.IsTierUnlocked(3), Is.False);
                 });
 
-                // Totems: the limit holds, and there is no free one before the first Lodge
-                Assert.That(rules.TryTakeFreeTotem(), Is.False);
+                // Totems: the limit holds
                 for (var i = 0; i < rules.GetTotemLimit(); i++)
                 {
                     Assert.That(rules.TryRegisterTotem(Server.EntMan.SpawnEntity(null, map.GridCoords)), Is.True);

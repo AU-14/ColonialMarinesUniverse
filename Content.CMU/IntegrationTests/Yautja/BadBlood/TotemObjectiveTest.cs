@@ -62,7 +62,7 @@ public sealed class TotemObjectiveTest : GameTest
                 Assert.That(destroy.SpawnCount, Is.Zero, "the objective must not raise Totems of its own");
 
                 Assert.That(objective!.Repeating, Is.True);
-                Assert.That(objective.MaxRepeatable, Is.EqualTo(10));
+                Assert.That(objective.MaxRepeatable, Is.EqualTo(8), "COUPLING-702: tuned to the Hunt Order cadence");
                 Assert.That(objective.CustomPoints, Is.EqualTo(8));
                 Assert.That(objective.FactionNeutral, Is.False);
                 Assert.That(objective.Factions, Does.Contain(Faction));

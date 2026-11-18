@@ -197,8 +197,18 @@ public sealed class BadBloodMeleeTest
                     var blooded = Marine(0);
                     Hit(entMan, blades, grunt, blooded);
                     mobState.ChangeMobState(blooded, MobState.Dead);
+                    // CMU14 STATE-701: a grunt (no caste, not the Hunt Leader) earns 1 more
+                    Assert.That(rules.GetHonour(grunt), Is.EqualTo(honour + FixedPoint4.New(2)),
+                        "a worthy kill within 5 s of the hit is +1 Honour, +1 more for a grunt");
+                    honour = rules.GetHonour(grunt);
+
+                    // a caste-holder earns the plain +1
+                    Assert.That(server.System<BadBloodCasteSystem>().TryTakeCaste(grunt, "Tracker"), Is.True);
+                    var casteKill = Marine(3);
+                    Hit(entMan, blades, grunt, casteKill);
+                    mobState.ChangeMobState(casteKill, MobState.Dead);
                     Assert.That(rules.GetHonour(grunt), Is.EqualTo(honour + FixedPoint4.New(1)),
-                        "a worthy kill within 5 s of the hit is +1 Honour");
+                        "a caste-holder's Blooded kill is +1 Honour");
                     honour = rules.GetHonour(grunt);
 
                     // the hit was 6 s ago

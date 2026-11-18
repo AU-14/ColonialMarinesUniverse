@@ -6,7 +6,6 @@ using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.TacticalMap;
-using Content.Shared.Actions;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Damage.Systems;
@@ -19,15 +18,20 @@ using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Yautja.BadBlood;
 
 /// <summary>
-/// FLOW-118, Clan Totems: the clan's territory. Any Bad Blood raises one with the Raise Totem action, away from the
-/// Lodge, other Totems and the landing zones. A standing Totem pays the clan through the rule
+/// FLOW-118, Clan Totems: the clan's territory. CMU14 ECS-706: a Totem rises only on a seized Hunt Order
+/// (<see cref="BadBloodHuntOrderSystem"/> through <see cref="SpawnOrderedTotem"/>); there is no Raise Totem action and
+/// no price any more. Sites keep away from the Lodge, other Totems and the landing zones
+/// (<see cref="GetSiteDenial"/>). A standing Totem pays the clan through the rule
 /// (<see cref="BadBloodCampRuleSystem.AddTotemIncome"/>), more the longer it has stood, and gives the Bad Bloods
 /// around it an aura. Marines are told where it is, see it on their map after a while, and reveal the Lodge by
 /// destroying it. FLOW-503: a marine desecrates it with the Desecrate verb and a do-after (no income, not ripe, no
@@ -41,13 +45,14 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 {
     private static readonly TimeSpan UpdateEvery = TimeSpan.FromSeconds(1);
 
-    [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private BadBloodSystem _badBlood = default!;
     [Dependency] private BadBloodCampSystem _camp = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private IntelSystem _intel = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -58,11 +63,17 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     [Dependency] private SharedTacticalMapSystem _tacticalMap = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
+    /// <summary>
+    /// CMU14 ARCH-703: what <see cref="SpawnOrderedTotem"/> raises when it is not told otherwise.
+    /// </summary>
+    public static readonly EntProtoId DefaultTotemPrototype = "CMUBadBloodTotem";
+
     private TimeSpan _nextUpdate;
     private readonly List<EntityUid> _scratch = new();
     private readonly List<EntityUid> _marinesNear = new();
     private readonly HashSet<EntityUid> _inAura = new();
     private readonly List<(MapId Map, Vector2 Position, float Radius)> _auras = new();
+    private readonly List<(EntityUid Medic, MapId Map, Vector2 Position)> _mendingMedics = new();
 
     /// <summary>
     /// How many Totem sightings (a raise, or the sensor sweep at the landing) reached the marines. Instrumentation
@@ -76,6 +87,12 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     public int ContestAnnouncementsSent { get; private set; }
     public int ContestEndedAnnouncementsSent { get; private set; }
 
+    // CMU14 FLOW-711 instrumentation: Totem sounds played (only counted when the clip is set)
+    public int ContestedSoundsPlayed { get; private set; }
+    public int FreedSoundsPlayed { get; private set; }
+    public int DesecratedSoundsPlayed { get; private set; }
+    public int ReconsecratedSoundsPlayed { get; private set; }
+
     public override void Initialize()
     {
         SubscribeLocalEvent<BadBloodTotemComponent, MapInitEvent>(OnTotemMapInit);
@@ -84,9 +101,6 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         SubscribeLocalEvent<BadBloodTotemComponent, ExaminedEvent>(OnTotemExamined);
         SubscribeLocalEvent<BadBloodTotemComponent, GetVerbsEvent<Verb>>(OnTotemVerbs);
         SubscribeLocalEvent<BadBloodTotemComponent, BadBloodTotemConsecrationDoAfterEvent>(OnConsecrationDoAfter);
-
-        SubscribeLocalEvent<BadBloodTotemBuilderComponent, BadBloodRaiseTotemActionEvent>(OnRaiseTotem);
-        SubscribeLocalEvent<BadBloodTotemBuilderComponent, BadBloodRaiseTotemDoAfterEvent>(OnRaiseTotemDoAfter);
 
         SubscribeLocalEvent<BadBloodTotemAuraComponent, DamageChangedEvent>(OnAuraDamaged);
 
@@ -101,7 +115,6 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 
         _nextUpdate = now + UpdateEvery;
 
-        SyncBuilders();
         UpdateTotems(now, UpdateEvery);
         UpdateAuras(now, UpdateEvery);
     }
@@ -203,20 +216,52 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     /// </summary>
     public bool IsBadBloodNear(Entity<BadBloodTotemComponent> totem)
     {
-        var here = _transform.GetMapCoordinates(totem.Owner);
-        var range = totem.Comp.ContestRadius * totem.Comp.ContestRadius;
+        CountNear(_transform.GetMapCoordinates(totem.Owner), totem.Comp.ContestRadius, out var badBloods, out _, null);
+        return badBloods > 0;
+    }
 
-        var badBloods = EntityQueryEnumerator<YautjaBadBloodComponent, TransformComponent>();
-        while (badBloods.MoveNext(out var uid, out _, out var xform))
+    /// <summary>
+    /// CMU14 ARCH-703: the one definition of "near" a Totem or a Hunt Ground uses. Counts the living Bad Bloods within
+    /// <paramref name="radius"/> of <paramref name="here"/> (<paramref name="badBloods"/>) and their summed contest
+    /// weight (<paramref name="weight"/>, 1 each unless <see cref="BadBloodContestWeightEvent"/> says otherwise), and
+    /// fills <paramref name="marines"/>, when given, with the living marines who are not Bad Bloods in that radius.
+    /// </summary>
+    public void CountNear(MapCoordinates here, float radius, out int badBloods, out float weight, List<EntityUid>? marines)
+    {
+        badBloods = 0;
+        weight = 0f;
+        marines?.Clear();
+        if (here.MapId == MapId.Nullspace)
+            return;
+
+        var range = radius * radius;
+        var query = EntityQueryEnumerator<YautjaBadBloodComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out _, out var xform))
         {
             if (xform.MapID != here.MapId || _mobState.IsDead(uid))
                 continue;
 
-            if ((_transform.GetWorldPosition(xform) - here.Position).LengthSquared() <= range)
-                return true;
+            if ((_transform.GetWorldPosition(xform) - here.Position).LengthSquared() > range)
+                continue;
+
+            badBloods++;
+            var ev = new BadBloodContestWeightEvent();
+            RaiseLocalEvent(uid, ref ev);
+            weight += ev.Weight;
         }
 
-        return false;
+        if (marines == null)
+            return;
+
+        var marineQuery = EntityQueryEnumerator<MarineComponent, TransformComponent>();
+        while (marineQuery.MoveNext(out var uid, out _, out var xform))
+        {
+            if (xform.MapID != here.MapId || !_mobState.IsAlive(uid) || _badBlood.IsBadBlood(uid))
+                continue;
+
+            if ((_transform.GetWorldPosition(xform) - here.Position).LengthSquared() <= range)
+                marines.Add(uid);
+        }
     }
 
     /// <summary>
@@ -225,19 +270,7 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     /// </summary>
     private void GetMarinesNear(Entity<BadBloodTotemComponent> totem, List<EntityUid> marines)
     {
-        marines.Clear();
-        var here = _transform.GetMapCoordinates(totem.Owner);
-        var range = totem.Comp.ContestRadius * totem.Comp.ContestRadius;
-
-        var query = EntityQueryEnumerator<MarineComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out _, out var xform))
-        {
-            if (xform.MapID != here.MapId || !_mobState.IsAlive(uid) || _badBlood.IsBadBlood(uid))
-                continue;
-
-            if ((_transform.GetWorldPosition(xform) - here.Position).LengthSquared() <= range)
-                marines.Add(uid);
-        }
+        CountNear(_transform.GetMapCoordinates(totem.Owner), totem.Comp.ContestRadius, out _, out _, marines);
     }
 
     /// <summary>
@@ -285,6 +318,10 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         comp.ContestWarned.Clear();
         comp.ContestAnnounced = false;
 
+        // CMU14 FLOW-711 (D16): a sound at the Totem, so the light is not the only cue
+        if (PlayAt(comp.ContestedSound, totem.Owner))
+            ContestedSoundsPlayed++;
+
         if (comp.LastContestAnnouncedAt is not { } last || now - last >= comp.ContestAnnounceCooldown)
         {
             comp.LastContestAnnouncedAt = now;
@@ -318,6 +355,11 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
             }
         }
 
+        // CMU14 FLOW-711: freed by the clan or by the marines walking off. A desecration ends the contest with
+        // announce: false and plays its own sound instead
+        if (announce && PlayAt(comp.FreedSound, totem.Owner))
+            FreedSoundsPlayed++;
+
         if (announce && comp.ContestAnnounced)
         {
             ContestEndedAnnouncementsSent++;
@@ -326,6 +368,16 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 
         comp.ContestAnnounced = false;
         RefreshLight(totem);
+    }
+
+    // CMU14 FLOW-711: null plays nothing
+    private bool PlayAt(SoundSpecifier? sound, EntityUid totem)
+    {
+        if (sound == null || TerminatingOrDeleted(totem))
+            return false;
+
+        _audio.PlayPvs(sound, totem);
+        return true;
     }
 
     /// <summary>
@@ -392,6 +444,12 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         _marinesNear.Clear();
         EndContest(totem, broken: false, announce: false);
         RefreshLight(totem);
+
+        // CMU14 FLOW-711: a break and a restore sound at the Totem
+        if (desecrated && PlayAt(comp.DesecratedSound, totem.Owner))
+            DesecratedSoundsPlayed++;
+        else if (!desecrated && PlayAt(comp.ReconsecratedSound, totem.Owner))
+            ReconsecratedSoundsPlayed++;
 
         var area = _area.GetAreaName(totem.Owner);
         if (desecrated)
@@ -600,6 +658,11 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         }
 
         var time = desecrate ? comp.DesecrateTime : comp.ReconsecrateTime;
+
+        // CMU14 ARCH-703: an Engineer reconsecrates faster (BadBloodConsecrationTimeEvent)
+        var timeEv = new BadBloodConsecrationTimeEvent(desecrate);
+        RaiseLocalEvent(user, ref timeEv);
+        time *= Math.Max(timeEv.Multiplier, 0.05f);
         var doAfter = new DoAfterArgs(EntityManager, user, time, new BadBloodTotemConsecrationDoAfterEvent(desecrate), totem, totem)
         {
             BreakOnMove = true,
@@ -647,90 +710,41 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
 
     #endregion
 
-    #region Raising a Totem
-
-    // every Bad Blood can raise a Totem while the clan's rule runs, so every one of them carries the action
-    private void SyncBuilders()
-    {
-        _scratch.Clear();
-
-        if (!_rule.IsRuleActive())
-        {
-            var holders = EntityQueryEnumerator<BadBloodTotemBuilderComponent>();
-            while (holders.MoveNext(out var uid, out _))
-            {
-                _scratch.Add(uid);
-            }
-
-            foreach (var uid in _scratch)
-            {
-                if (TryComp(uid, out BadBloodTotemBuilderComponent? builder))
-                    _actions.RemoveAction(uid, builder.RaiseTotemActionEntity);
-
-                RemComp<BadBloodTotemBuilderComponent>(uid);
-            }
-
-            return;
-        }
-
-        var badBloods = EntityQueryEnumerator<YautjaBadBloodComponent>();
-        while (badBloods.MoveNext(out var uid, out _))
-        {
-            if (!HasComp<BadBloodTotemBuilderComponent>(uid))
-                _scratch.Add(uid);
-        }
-
-        foreach (var uid in _scratch)
-        {
-            var builder = EnsureComp<BadBloodTotemBuilderComponent>(uid);
-            _actions.AddAction(uid, ref builder.RaiseTotemActionEntity, builder.RaiseTotemAction);
-            Dirty(uid, builder);
-        }
-    }
-
-    private void OnRaiseTotem(Entity<BadBloodTotemBuilderComponent> ent, ref BadBloodRaiseTotemActionEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        args.Handled = true;
-        TryStartRaisingTotem(ent.Owner);
-    }
+    #region Ordered Totems
 
     /// <summary>
-    /// Why <paramref name="user"/> cannot raise a Totem where they stand, as a loc key, or null when they can.
-    /// The price is not looked at here.
+    /// CMU14 ARCH-703: why a Totem cannot stand at <paramref name="here"/>, as a loc key, or null when it can. Under a
+    /// roof, within <paramref name="spacing"/> of the Lodge or another Totem, within <paramref name="lzDistance"/> of
+    /// a dropship destination, or in a landing-zone area. The clan's limit and the price are not looked at here.
     /// </summary>
-    public string? GetRaiseDenial(EntityUid user, BadBloodTotemBuilderComponent builder)
+    public string? GetSiteDenial(MapCoordinates here, float spacing, float lzDistance)
     {
-        if (!_badBlood.IsBadBlood(user) || !_rule.IsRuleActive())
-            return "cmu-bad-blood-totem-not-clan";
+        if (here.MapId == MapId.Nullspace || !_mapSystem.MapExists(here.MapId))
+            return "cmu-bad-blood-totem-roofed";
 
-        if (_rule.GetTotems().Count >= _rule.GetTotemLimit())
-            return "cmu-bad-blood-totem-limit";
-
-        var coords = Transform(user).Coordinates;
+        var coords = _transform.ToCoordinates(here);
         _area.CanOrbitalBombard(coords, out var roofed);
         if (roofed)
             return "cmu-bad-blood-totem-roofed";
 
-        var here = _transform.GetMapCoordinates(user);
-
-        if (_rule.GetLodge() is { } lodge && IsWithin(lodge, here, builder.Spacing))
+        if (_rule.GetLodge() is { } lodge && IsWithin(lodge, here, spacing))
             return "cmu-bad-blood-totem-near-lodge";
 
         foreach (var totem in _rule.GetTotems())
         {
-            if (IsWithin(totem, here, builder.Spacing))
+            if (IsWithin(totem, here, spacing))
                 return "cmu-bad-blood-totem-near-totem";
         }
 
         var zones = EntityQueryEnumerator<DropshipDestinationComponent>();
         while (zones.MoveNext(out var zone, out _))
         {
-            if (IsWithin(zone, here, builder.LandingZoneDistance))
+            if (IsWithin(zone, here, lzDistance))
                 return "cmu-bad-blood-totem-near-landing-zone";
         }
+
+        if (_area.TryGetArea(coords, out var area, out _) && area.Value.Comp.LandingZone)
+            return "cmu-bad-blood-totem-near-landing-zone";
 
         return null;
     }
@@ -745,98 +759,23 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
     }
 
     /// <summary>
-    /// Whether the clan can pay for a Totem right now: it has a free one, or the SP.
+    /// CMU14 ARCH-703: raises a Totem at <paramref name="where"/> for a seized Hunt Order (FLOW-705). No price, no user
+    /// and no placement check: the order's site was checked when it was picked. The clan and (after the landing) the
+    /// marines hear of it as of a raised Totem. Null, with nothing left behind, when the clan is at its limit or the
+    /// rule is not running.
     /// </summary>
-    public bool CanAffordTotem()
+    public EntityUid? SpawnOrderedTotem(MapCoordinates where, EntProtoId? prototype = null)
     {
-        return _rule.TryGetRule(out var rule) && (rule.Comp.FreeTotems > 0 || rule.Comp.Sp >= rule.Comp.TotemCost);
-    }
-
-    /// <summary>
-    /// Starts the build do-after where <paramref name="user"/> stands. They are told why when it is refused.
-    /// </summary>
-    public bool TryStartRaisingTotem(EntityUid user)
-    {
-        if (!TryComp(user, out BadBloodTotemBuilderComponent? builder))
-            return false;
-
-        if (GetRaiseDenial(user, builder) is { } denial)
-        {
-            _popup.PopupEntity(Loc.GetString(denial), user, user, PopupType.SmallCaution);
-            return false;
-        }
-
-        if (!CanAffordTotem())
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-totem-cannot-afford"), user, user, PopupType.SmallCaution);
-            return false;
-        }
-
-        var doAfter = new DoAfterArgs(EntityManager, user, builder.BuildTime, new BadBloodRaiseTotemDoAfterEvent(), user)
-        {
-            BreakOnMove = true,
-            BreakOnDamage = true,
-            BlockDuplicate = true,
-            CancelDuplicate = true,
-            DuplicateCondition = DuplicateConditions.SameEvent,
-        };
-
-        if (!_doAfter.TryStartDoAfter(doAfter))
-            return false;
-
-        _popup.PopupEntity(Loc.GetString("cmu-bad-blood-totem-raising"), user, user);
-        return true;
-    }
-
-    private void OnRaiseTotemDoAfter(Entity<BadBloodTotemBuilderComponent> ent, ref BadBloodRaiseTotemDoAfterEvent args)
-    {
-        if (args.Cancelled || args.Handled)
-            return;
-
-        args.Handled = true;
-        TryRaiseTotem(ent.Owner, out _);
-    }
-
-    /// <summary>
-    /// Raises a Totem where <paramref name="user"/> stands, at once: the placement rules and the clan's limit are
-    /// checked again, and the clan pays with a free Totem if it has one, with SP otherwise. Nothing is built or
-    /// paid when it fails, and the user is told why.
-    /// </summary>
-    public bool TryRaiseTotem(EntityUid user, out EntityUid totem)
-    {
-        totem = default;
-        if (!TryComp(user, out BadBloodTotemBuilderComponent? builder) || !_rule.TryGetRule(out var rule))
-            return false;
-
-        if (GetRaiseDenial(user, builder) is { } denial)
-        {
-            _popup.PopupEntity(Loc.GetString(denial), user, user, PopupType.SmallCaution);
-            return false;
-        }
-
-        if (!CanAffordTotem())
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-totem-cannot-afford"), user, user, PopupType.SmallCaution);
-            return false;
-        }
+        if (!_rule.IsRuleActive() || where.MapId == MapId.Nullspace)
+            return null;
 
         // MapInit puts it on the clan's list, or does not if the clan turned out to be at its limit
-        var spawned = Spawn(builder.TotemPrototype, Transform(user).Coordinates);
+        var spawned = Spawn(prototype ?? DefaultTotemPrototype, where);
         if (!TryComp(spawned, out BadBloodTotemComponent? comp) || !comp.Registered)
         {
             Del(spawned);
-            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-totem-limit"), user, user, PopupType.SmallCaution);
-            return false;
+            return null;
         }
-
-        if (!_rule.TryTakeFreeTotem() && !_rule.TrySpendSp(rule.Comp.TotemCost))
-        {
-            Del(spawned);
-            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-totem-cannot-afford"), user, user, PopupType.SmallCaution);
-            return false;
-        }
-
-        totem = spawned;
 
         var area = _area.GetAreaName(spawned);
 
@@ -845,11 +784,12 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
             SendTotemIntelToMarines(Loc.GetString("cmu-bad-blood-totem-raised-marines", ("area", area)));
 
         _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-totem-raised-clan", ("area", area)));
-        return true;
+        return spawned;
     }
 
     // FLOW-604: the first landing sweeps the planet once and names every Totem that already stands. Their pins
     // follow MapRevealDelay later through UpdateTotems
+    // CMU14 FLOW-707: the same sweep names the open Hunt Grounds, in the same voice
     private void OnMarinesLanded(ref BadBloodMarinesLandedEvent ev)
     {
         var areas = new List<string>();
@@ -857,6 +797,12 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
         {
             if (TryComp(uid, out BadBloodTotemComponent? totem) && totem.Registered && !totem.Destroyed)
                 areas.Add(_area.GetAreaName(uid));
+        }
+
+        foreach (var ground in ev.Rule.Comp.HuntOrders)
+        {
+            if (!TerminatingOrDeleted(ground) && HasComp<BadBloodHuntGroundComponent>(ground))
+                areas.Add(_area.GetAreaName(ground));
         }
 
         if (areas.Count == 0)
@@ -925,6 +871,14 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
             }
         }
 
+        // CMU14 ECS-711: the living Medics standing in an aura, and where
+        _mendingMedics.Clear();
+        foreach (var uid in _inAura)
+        {
+            if (HasComp<BadBloodMedicSpeedComponent>(uid))
+                _mendingMedics.Add((uid, Transform(uid).MapID, _transform.GetWorldPosition(uid)));
+        }
+
         _scratch.Clear();
         var holders = EntityQueryEnumerator<BadBloodTotemAuraComponent>();
         while (holders.MoveNext(out var uid, out var aura))
@@ -935,11 +889,15 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
                 continue;
             }
 
-            if (aura.Heal > 0f &&
-                now - aura.LastDamagedAt >= aura.HealDelay &&
+            // CMU14 ECS-711: another Medic standing in the aura mends the others faster
+            var mending = _mendingMedics.Count > 0 && IsMendedBy(uid);
+            var heal = mending ? aura.Heal * aura.MendingHealMultiplier : aura.Heal;
+            var delay = mending ? aura.HealDelay * aura.MendingDelayMultiplier : aura.HealDelay;
+            if (heal > 0f &&
+                now - aura.LastDamagedAt >= delay &&
                 _damageable.GetTotalDamage(uid) > FixedPoint2.Zero)
             {
-                _damageable.HealEvenly(uid, FixedPoint2.New(-aura.Heal * (float) elapsed.TotalSeconds));
+                _damageable.HealEvenly(uid, FixedPoint2.New(-heal * (float) elapsed.TotalSeconds));
             }
         }
 
@@ -956,6 +914,30 @@ public sealed partial class BadBloodTotemSystem : EntitySystem
             aura.LastDamagedAt = now;
             RefreshDrain(uid);
         }
+    }
+
+    // CMU14 ECS-711: another Medic in the same Totem's aura mends this Bad Blood. A Medic does not mend itself
+    private bool IsMendedBy(EntityUid uid)
+    {
+        var xform = Transform(uid);
+        var position = _transform.GetWorldPosition(xform);
+        foreach (var (medic, map, medicPosition) in _mendingMedics)
+        {
+            if (medic == uid || map != xform.MapID)
+                continue;
+
+            foreach (var (auraMap, center, radius) in _auras)
+            {
+                if (auraMap == map &&
+                    (position - center).LengthSquared() <= radius * radius &&
+                    (medicPosition - center).LengthSquared() <= radius * radius)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     // hunger and thirst only work out their drain again when a threshold is crossed, so nudge them

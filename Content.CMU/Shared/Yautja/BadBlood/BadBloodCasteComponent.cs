@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -13,6 +14,19 @@ public sealed partial class BadBloodCasteComponent : Component
 {
     [DataField, AutoNetworkedField]
     public ProtoId<BadBloodCastePrototype> Caste;
+
+    /// <summary>
+    /// CMU14 ARCH-701: each skill the caste raised, at the level it had before. Dropping the caste puts them back.
+    /// </summary>
+    [DataField]
+    public Dictionary<EntProtoId<SkillDefinitionComponent>, int> SkillsBefore = new();
+
+    /// <summary>
+    /// CMU14 ARCH-701: the components the caste added that the body did not already have. Dropping the caste removes
+    /// exactly these.
+    /// </summary>
+    [DataField]
+    public HashSet<string> AddedComponents = new();
 }
 
 /// <summary>

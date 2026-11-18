@@ -27,7 +27,7 @@ ent-CMUBadBloodLethalUnlock = lethal bolt
     .desc = The clan's plasma casters are tuned for the lethal bolt. Every Bad Blood may fire it.
 
 ent-CMUBadBloodEradicatorUnlock = eradicator mode
-    .desc = The clan's plasma caster is tuned for the eradicator. Only the Leader may fire it.
+    .desc = The clan's plasma caster is tuned for the eradicator. Only the Hunt Leader may fire it.
 
 ent-CMUBadBloodKennelRate = kennel breeding
     .desc = The kennel raises its hounds twice as fast.
@@ -43,7 +43,7 @@ ent-CMUBadBloodScavengedSpikeLauncher = scavenged spike launcher
 
 cmu-bad-blood-armory-not-clan = The armory answers only to the clan.
 cmu-bad-blood-armory-tier-locked = The clan has not earned this yet. It needs armory tier { $tier }.
-cmu-bad-blood-armory-leader-only = Only the clan's Leader may take this.
+cmu-bad-blood-armory-leader-only = Only the Hunt Leader may take this.
 cmu-bad-blood-armory-already-unlocked = The clan already has the eradicator.
 cmu-bad-blood-armory-lethal-already-unlocked = The clan already has the lethal bolt.
 cmu-bad-blood-armory-needs-lethal = The clan must earn the lethal bolt before the eradicator.
@@ -52,13 +52,13 @@ cmu-bad-blood-armory-not-enough = You cannot pay for this. It costs { $price } H
 cmu-bad-blood-armory-forge-nothing = The forge needs a bracer weapon you chose and have not forged yet. Wear your bracer.
 cmu-bad-blood-armory-forged = The forge reworks your bracer weapon. It hits harder now.
 cmu-bad-blood-forged-examine = It has been [color=orange]forged[/color] at the clan's Lodge and hits a fifth harder.
-cmu-bad-blood-armory-eradicator-unlocked = The clan has earned the eradicator. The Leader's plasma caster can fire it.
+cmu-bad-blood-armory-eradicator-unlocked = The clan has earned the eradicator. The Hunt Leader's plasma caster can fire it.
 cmu-bad-blood-armory-kennel-none = The clan has no kennel to improve.
 cmu-bad-blood-armory-kennel-maxed = The kennel cannot be improved this way any further.
 cmu-bad-blood-armory-kennel-improved = The clan's kennel is improved. It now stocks a hound every { $seconds } seconds and keeps { $stock } ready.
 
-cmu-bad-blood-lethal-locked = The clan has not earned the lethal bolt. The Leader buys it for the whole clan at the Lodge armory.
-cmu-bad-blood-eradicator-locked = The eradicator is not yours to fire. The clan's Leader buys it at the Lodge armory.
+cmu-bad-blood-lethal-locked = The clan has not earned the lethal bolt. The Hunt Leader buys it for the whole clan at the Lodge armory.
+cmu-bad-blood-eradicator-locked = The eradicator is not yours to fire. The Hunt Leader buys it at the Lodge armory.
 cmu-bad-blood-eradicator-cooldown = The eradicator is still cooling. Wait { $seconds } more seconds.
 
 ## Clan Totems
@@ -67,22 +67,15 @@ ent-CMUBadBloodTotem = Clan Totem
     .desc = A spear driven into the ground and hung with skulls. The clan that raised it claims everything around it.
     .suffix = Bad Blood
 
-ent-CMUActionBadBloodRaiseTotem = Raise Clan Totem
-    .desc = Raise a Clan Totem where you stand. It needs open sky, and distance from the Lodge, other Totems and the prey's landing zones. The clan's first is free, the rest cost Superiority Points.
-
 ent-CMUBadBloodTotemObjective = Destroy the Clan Totems
     .desc = Find and destroy the totems the hostile clan has raised in the area of operations. Each one that falls exposes their Lodge on the tactical map for a short time.
 # FLOW-609: the GOVFOR objectives console line (objectiveDescription in totems.yml)
 cmu-bad-blood-obj-desc-totems = Destroy a Clan Totem raised by the hostile hunters. Each one that falls exposes their Lodge on the tactical map for a short time.
 
-cmu-bad-blood-totem-not-clan = Only a Bad Blood of a standing clan can raise a Clan Totem.
-cmu-bad-blood-totem-limit = The clan holds as many Clan Totems as it can.
 cmu-bad-blood-totem-roofed = A Clan Totem needs open sky. You cannot raise it under a roof.
 cmu-bad-blood-totem-near-lodge = This is too close to the Lodge. Take the clan's claim further out.
 cmu-bad-blood-totem-near-totem = This is too close to another Clan Totem.
 cmu-bad-blood-totem-near-landing-zone = This is too close to the prey's landing zone to raise a Clan Totem.
-cmu-bad-blood-totem-cannot-afford = The clan cannot pay for another Clan Totem.
-cmu-bad-blood-totem-raising = You start raising a Clan Totem.
 cmu-bad-blood-totem-raised-clan = A Clan Totem stands at { $area }. It feeds the clan until the prey desecrates it.
 cmu-bad-blood-totem-raised-marines = Sensors register an unknown emitter near { $area }.
 cmu-bad-blood-totem-destroyed-clan = The Clan Totem at { $area } has fallen! The prey now knows where the Lodge stands.
@@ -159,14 +152,14 @@ ent-CMUBadBloodCampMedicStation = medicine cache
 cmu-bad-blood-caste-verb-engineer = Take up the Engineer path
 cmu-bad-blood-caste-verb-medic = Take up the Medic path
 cmu-bad-blood-caste-taken-engineer = You are the clan's Engineer: you build anywhere, see as an honourable hunter does, and the forge-bench arms you.
-cmu-bad-blood-caste-taken-medic = You are the clan's Medic: you work Yautja medicine faster, and the medicine cache stocks you.
+cmu-bad-blood-caste-taken-medic = You are the clan's Medic: Field Mend and Blood Rite keep the clan standing, you drag the fallen faster and brew tonic at the cauldron, but your armour is lighter and you carry no immobilizer.
 cmu-bad-blood-caste-not-clan = Only a living Bad Blood can take up a caste.
 cmu-bad-blood-caste-already = You already follow a path.
 cmu-bad-blood-caste-full = The clan already has { $cap } of this caste.
 
 # clan codes: how Bad Bloods know each other and how the radio names them
 cmu-bad-blood-code-name = { $role } (BB-{ $number })
-cmu-bad-blood-code-role-leader = Leader
+cmu-bad-blood-code-role-leader = Hunt Leader
 cmu-bad-blood-code-role-engineer = Engineer
 cmu-bad-blood-code-role-medic = Medic
 cmu-bad-blood-code-role-grunt = Grunt

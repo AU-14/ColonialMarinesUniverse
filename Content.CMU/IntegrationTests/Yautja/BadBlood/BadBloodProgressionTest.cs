@@ -21,8 +21,8 @@ namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
 
 // ARCH-02: the bracer weapon is forged in place at the armory (tier II of starter -> forged -> golden).
 // ARCH-04 to ARCH-06: the Engineer and Medic castes are capped by clan size, and only their caste may use a station.
-// CMU14 ARCH-604: castes are chosen at the Lodge ("Choose your caste" dialog). ARCH-607: only a Falconer may buy the
-// clan's falcon drone.
+// CMU14 ARCH-604: castes are chosen at the Lodge ("Choose your caste" dialog). ARCH-607 / ARCH-705: only a Beast-Master
+// may buy the clan's falcon drone, and STATE-702: their first one is free.
 [TestFixture]
 public sealed class BadBloodProgressionTest : GameTest
 {
@@ -36,7 +36,7 @@ public sealed class BadBloodProgressionTest : GameTest
     private const string FalconDrone = "CMUYautjaFalconDroneBadBlood";
     private static readonly ProtoId<BadBloodCastePrototype> Engineer = "Engineer";
     private static readonly ProtoId<BadBloodCastePrototype> Medic = "Medic";
-    private static readonly ProtoId<BadBloodCastePrototype> Falconer = "Falconer";
+    private static readonly ProtoId<BadBloodCastePrototype> BeastMaster = "BeastMaster";
 
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
@@ -253,7 +253,7 @@ public sealed class BadBloodProgressionTest : GameTest
     }
 
     [Test]
-    public async Task OnlyAFalconerBuysTheFalconDrone()
+    public async Task OnlyABeastMasterBuysTheFalconDroneAndTheFirstIsFree()
     {
         var map = await Pair.CreateTestMap();
         var party = await BadBloodTestHelpers.SpawnParty(Pair, map, grunts: 3);
@@ -273,8 +273,8 @@ public sealed class BadBloodProgressionTest : GameTest
                 spawned.Add(armory);
                 var armoryEnt = new Entity<BadBloodCampArmoryComponent>(armory, entMan.GetComponent<BadBloodCampArmoryComponent>(armory));
 
-                var (falconer, other) = (party.Grunts[0], party.Grunts[1]);
-                Assert.That(castes.TryTakeCaste(falconer, Falconer), Is.True);
+                var (beastMaster, other) = (party.Grunts[0], party.Grunts[1]);
+                Assert.That(castes.TryTakeCaste(beastMaster, BeastMaster), Is.True);
                 Assert.That(castes.TryTakeCaste(other, Engineer), Is.True);
 
                 var entry = Entry(entMan, armory, FalconDrone).Entry;
@@ -282,10 +282,10 @@ public sealed class BadBloodProgressionTest : GameTest
                 {
                     Assert.That(camp.GetArmoryTier(armoryEnt, FalconDrone), Is.EqualTo(1), "tier I");
                     Assert.That(entry.Points, Is.EqualTo(4), "4 Honour");
-                    Assert.That(entry.MaxPerUser, Is.EqualTo(1), "one per Falconer");
+                    Assert.That(entry.MaxPerUser, Is.EqualTo(1), "one per Beast-Master");
                 });
 
-                foreach (var buyer in new[] { falconer, other })
+                foreach (var buyer in new[] { beastMaster, other })
                 {
                     Assert.That(rules.AddHonour(buyer, FixedPoint4.New(20)), Is.True);
                     camp.PrepareArmoryBuyer(armoryEnt, buyer);
@@ -298,11 +298,18 @@ public sealed class BadBloodProgressionTest : GameTest
                 Vend(entMan, armory, other, FalconDrone);
                 Assert.That(rules.GetHonour(other), Is.EqualTo(otherBefore), "a refused buyer pays nothing");
 
-                // the Falconer buys it for 4 Honour
-                Assert.That(camp.CanBuyFromArmory(armoryEnt, falconer, FalconDrone, out _), Is.True);
-                var before = rules.GetHonour(falconer);
-                Vend(entMan, armory, falconer, FalconDrone);
-                Assert.That(rules.GetHonour(falconer), Is.EqualTo(before - FixedPoint4.New(4)), "the Falconer pays 4 Honour");
+                // STATE-702: the Beast-Master's first falcon is free, after that it costs its 4 Honour
+                Assert.That(camp.CanBuyFromArmory(armoryEnt, beastMaster, FalconDrone, out _), Is.True);
+                Assert.That(camp.GetArmoryPrice(armoryEnt, beastMaster, FalconDrone, 4), Is.EqualTo(FixedPoint4.Zero));
+                var before = rules.GetHonour(beastMaster);
+                Vend(entMan, armory, beastMaster, FalconDrone);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rules.GetHonour(beastMaster), Is.EqualTo(before), "the first falcon is free");
+                    Assert.That(entMan.GetComponent<BadBloodBeastMasterComponent>(beastMaster).FreeFalconClaimed, Is.True);
+                    Assert.That(camp.GetArmoryPrice(armoryEnt, beastMaster, FalconDrone, 4), Is.EqualTo(FixedPoint4.New(4)),
+                        "only the first is free");
+                });
 
                 // the rest of the armory stays open to every caste
                 Assert.That(camp.CanBuyFromArmory(armoryEnt, other, "CMUYautjaHealingGel", out _), Is.True);

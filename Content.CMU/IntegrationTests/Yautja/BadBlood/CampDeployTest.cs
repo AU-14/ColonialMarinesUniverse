@@ -113,7 +113,6 @@ public sealed class CampDeployTest : GameTest
                     Assert.That(rule.Comp.CampPlaced, Is.True);
                     Assert.That(rule.Comp.KitOut, Is.False, "the kit is used up");
                     Assert.That(rule.Comp.FirstCampPitched, Is.True);
-                    Assert.That(rule.Comp.FreeTotems, Is.EqualTo(1), "the first Lodge grants one free Totem");
                     Assert.That(entMan.GetComponent<TransformComponent>(kit).ParentUid, Is.EqualTo(lodge),
                         "the kit is inside the Lodge, not on the ground");
 
@@ -152,7 +151,7 @@ public sealed class CampDeployTest : GameTest
                     Assert.That(rules.HasLodge(), Is.False);
                     Assert.That(rule.Comp.CampPlaced, Is.False);
                     Assert.That(rule.Comp.NextCampAt, Is.Not.Null);
-                    Assert.That(rule.Comp.FreeTotems, Is.EqualTo(1), "the clan's state outlives the Lodge");
+                    Assert.That(rule.Comp.FirstCampPitched, Is.True, "the clan's state outlives the Lodge");
                 });
 
                 Assert.That(camp.TryPitchCamp(party.Leader), Is.False, "no rebuild before the cooldown is over");

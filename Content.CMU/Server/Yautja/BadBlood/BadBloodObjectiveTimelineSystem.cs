@@ -1,5 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.GameTicking;
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CMU14.Yautja.BadBlood;
@@ -41,6 +42,10 @@ public enum BadBloodTimelineKind : byte
     TrophyStripped,
     SiteSabotaged,
     RoundDecided,
+    // CMU14 FLOW-707: Hunt Orders
+    HuntOrderIssued,
+    HuntOrderSeized,
+    HuntOrderLapsed,
 }
 
 /// <summary>
@@ -73,6 +78,7 @@ public readonly record struct BadBloodEngagement(string Name, int MarineDeaths, 
 public sealed class BadBloodObjectiveTimelineSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private AreaSystem _area = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private BadBloodCampRuleSystem _rule = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -115,6 +121,10 @@ public sealed class BadBloodObjectiveTimelineSystem : EntitySystem
         SubscribeLocalEvent<BadBloodTrophyStrippedEvent>(OnTrophyStripped);
         SubscribeLocalEvent<BadBloodSiteSabotagedEvent>(OnSiteSabotaged);
         SubscribeLocalEvent<BadBloodRoundDecidedEvent>(OnRoundDecided);
+
+        SubscribeLocalEvent<BadBloodHuntOrderIssuedEvent>(OnHuntOrderIssued);
+        SubscribeLocalEvent<BadBloodHuntOrderSeizedEvent>(OnHuntOrderSeized);
+        SubscribeLocalEvent<BadBloodHuntOrderLapsedEvent>(OnHuntOrderLapsed);
     }
 
     #region Public read API
@@ -251,6 +261,23 @@ public sealed class BadBloodObjectiveTimelineSystem : EntitySystem
     private void OnTotemReconsecrated(ref BadBloodTotemReconsecratedEvent ev)
     {
         Record(BadBloodTimelineKind.TotemReconsecrated, Name(ev.Totem), ev.Totem, log: true);
+    }
+
+    // CMU14 FLOW-707: nobody else admin-logs the order lifecycle. The ground is still there while these are raised
+    private void OnHuntOrderIssued(ref BadBloodHuntOrderIssuedEvent ev)
+    {
+        Record(BadBloodTimelineKind.HuntOrderIssued, _area.GetAreaName(ev.Ground), ev.Ground, log: true);
+    }
+
+    private void OnHuntOrderSeized(ref BadBloodHuntOrderSeizedEvent ev)
+    {
+        // the ground is about to go: the entry points at the Totem that rose on it
+        Record(BadBloodTimelineKind.HuntOrderSeized, _area.GetAreaName(ev.Ground), ev.Totem, log: true);
+    }
+
+    private void OnHuntOrderLapsed(ref BadBloodHuntOrderLapsedEvent ev)
+    {
+        Record(BadBloodTimelineKind.HuntOrderLapsed, _area.GetAreaName(ev.Ground), log: true);
     }
 
     private void OnTotemRead(ref BadBloodTotemReadEvent ev)

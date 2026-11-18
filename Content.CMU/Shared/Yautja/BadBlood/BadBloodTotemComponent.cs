@@ -1,6 +1,6 @@
-using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
@@ -201,6 +201,26 @@ public sealed partial class BadBloodTotemComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan ReconsecrateTime = TimeSpan.FromSeconds(45);
+
+    // ---- CMU14 FLOW-711 (D16): sounds at the Totem, played with PlayPvs. Null plays nothing ----
+
+    /// <summary>
+    /// A marine alone in <see cref="ContestRadius"/> starts a contest.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? ContestedSound;
+
+    /// <summary>
+    /// The contest ends: a Bad Blood stepped in or the marines left. Not played when a desecration ends it.
+    /// </summary>
+    [DataField]
+    public SoundSpecifier? FreedSound;
+
+    [DataField]
+    public SoundSpecifier? DesecratedSound;
+
+    [DataField]
+    public SoundSpecifier? ReconsecratedSound;
 }
 
 /// <summary>
@@ -230,45 +250,21 @@ public sealed partial class BadBloodTotemAuraComponent : Component
     [DataField]
     public TimeSpan HealDelay = TimeSpan.FromSeconds(10);
 
+    /// <summary>
+    /// CMU14 ECS-711: with another Medic in the same aura, <see cref="Heal"/> is multiplied by this...
+    /// </summary>
+    [DataField]
+    public float MendingHealMultiplier = 2f;
+
+    /// <summary>
+    /// ...and <see cref="HealDelay"/> by this.
+    /// </summary>
+    [DataField]
+    public float MendingDelayMultiplier = 0.5f;
+
     [ViewVariables]
     public TimeSpan LastDamagedAt;
 }
-
-/// <summary>
-/// On every Bad Blood while the clan's rule runs: the Raise Totem action.
-/// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class BadBloodTotemBuilderComponent : Component
-{
-    [DataField, AutoNetworkedField]
-    public EntProtoId RaiseTotemAction = "CMUActionBadBloodRaiseTotem";
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? RaiseTotemActionEntity;
-
-    [DataField]
-    public EntProtoId TotemPrototype = "CMUBadBloodTotem";
-
-    [DataField]
-    public TimeSpan BuildTime = TimeSpan.FromSeconds(10);
-
-    /// <summary>
-    /// A Totem may not stand this close to the Lodge or to another Totem, in tiles.
-    /// </summary>
-    [DataField]
-    public float Spacing = 20f;
-
-    /// <summary>
-    /// A Totem may not stand this close to a dropship landing zone, in tiles.
-    /// </summary>
-    [DataField]
-    public float LandingZoneDistance = 25f;
-}
-
-public sealed partial class BadBloodRaiseTotemActionEvent : InstantActionEvent;
-
-[Serializable, NetSerializable]
-public sealed partial class BadBloodRaiseTotemDoAfterEvent : SimpleDoAfterEvent;
 
 /// <summary>
 /// A marine finished desecrating a Clan Totem (<see cref="Desecrate"/> true), or a Bad Blood finished

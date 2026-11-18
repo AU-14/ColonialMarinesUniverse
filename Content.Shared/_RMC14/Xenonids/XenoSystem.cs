@@ -546,6 +546,8 @@ public sealed partial class XenoSystem : EntitySystem
         if (_hive.FromSameHive(xeno, target))
             return false;
 
+        if (XenoTargetFilter.IsBlocked(EntityManager, xeno, target)) return false; // CMU14: a fork spares the xeno's allies (Bad Blood beasts)
+
         if (_mobState.IsDead(target))
             return false;
 

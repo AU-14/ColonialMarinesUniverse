@@ -63,6 +63,16 @@
     contestAnnounceCooldown: 60
     lightEnergy: 1.5
     contestedLightEnergy: 0.4
+    # FLOW-711 (D16): every state change is heard at the Totem, not only seen in its light. CMSS13 and tgstation
+    # clips, CC-BY-SA-3.0 (see the folders' attributions.yml)
+    contestedSound:
+      path: /Audio/CMU14/Yautja/woodhit.ogg
+    freedSound:
+      path: /Audio/CMU14/Yautja/signal.ogg
+    desecratedSound:
+      path: /Audio/Effects/break_stone.ogg
+    reconsecratedSound:
+      path: /Audio/CMU14/Yautja/runedsanddoor.ogg
     revealComponents:
     - type: TacticalMapAlwaysVisible
       visibleToMarines: true
@@ -80,22 +90,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: core
 
-# every Bad Blood carries this while the clan's rule runs
-- type: entity
-  parent: CMUYautjaActionBase
-  id: CMUActionBadBloodRaiseTotem
-  name: Raise Clan Totem
-  description: Raise a Clan Totem where you stand. It needs open sky, and distance from the Lodge, other Totems and the prey's landing zones. The clan's first is free, the rest cost Superiority Points.
-  components:
-  - type: Action
-    useDelay: 5
-  - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodRaiseTotemActionEvent
-  - type: Sprite
-    layers:
-    - sprite: CMU14/Yautja/actions.rsi
-      state: bracer_framed
-      map: [enum.ActionVisuals.Icon]
+# CMU14 ECS-706: there is no Raise Totem action. A Totem rises on a seized Hunt Order (hunt_orders.yml)
 
 # Marines are paid for every Totem they really destroy. BadBloodTotemObjectiveSystem puts this on the planet and
 # switches it on in every Bad Blood round, it is never left to the objective roll.
@@ -113,7 +108,8 @@
     factions:
     - govfor
     repeating: true
-    maxRepeatable: 10
+    # CMU14 COUPLING-702: tuned to the Hunt Order cadence (at most 3 standing, one new order per 4 minutes)
+    maxRepeatable: 8
     objectiveLevel: 1
     customPoints: 8
     objectiveDescription: cmu-bad-blood-obj-desc-totems

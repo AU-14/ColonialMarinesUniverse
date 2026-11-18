@@ -1,5 +1,7 @@
+using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.DoAfter;
@@ -16,9 +18,11 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 /// </summary>
 public sealed partial class BadBloodTotemIntelSystem : EntitySystem
 {
+    [Dependency] private AreaSystem _area = default!;
     [Dependency] private BadBloodSystem _badBlood = default!;
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private RMCPlanetSystem _planet = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private BadBloodCampRuleSystem _rule = default!;
@@ -31,7 +35,13 @@ public sealed partial class BadBloodTotemIntelSystem : EntitySystem
         SubscribeLocalEvent<BadBloodTotemReadableComponent, GetVerbsEvent<AlternativeVerb>>(OnGetVerbs);
         SubscribeLocalEvent<BadBloodTotemReadableComponent, BadBloodTotemReadDoAfterEvent>(OnReadDoAfter);
         SubscribeLocalEvent<BadBloodTotemReconsecratedEvent>(OnReconsecrated);
+        SubscribeLocalEvent<BadBloodHuntOrderIssuedEvent>(OnHuntOrderIssued);
     }
+
+    /// <summary>
+    /// CMU14 FLOW-707: how many Hunt Order lines reached the marines. Instrumentation for the tests.
+    /// </summary>
+    public int MarineOrderIntelSent { get; private set; }
 
     private void OnGetVerbs(Entity<BadBloodTotemReadableComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
@@ -224,5 +234,17 @@ public sealed partial class BadBloodTotemIntelSystem : EntitySystem
     {
         if (TryComp(args.Totem, out BadBloodTotemReadableComponent? readable))
             readable.ReadThisDesecration = false;
+    }
+
+    // CMU14 FLOW-707: once they have landed, the marines hear of every new Hunt Order as emitter activity. Before the
+    // landing they hear nothing; the landing sweep (BadBloodTotemSystem) names the open ones
+    private void OnHuntOrderIssued(ref BadBloodHuntOrderIssuedEvent ev)
+    {
+        if (!_rule.HaveMarinesLanded() || TerminatingOrDeleted(ev.Ground))
+            return;
+
+        MarineOrderIntelSent++;
+        _marineAnnounce.AnnounceToMarines(Loc.GetString("cmu-bad-blood-hunt-order-issued-marines",
+            ("area", _area.GetAreaName(ev.Ground))));
     }
 }

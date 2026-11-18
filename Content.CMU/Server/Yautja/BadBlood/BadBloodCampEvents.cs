@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.FixedPoint;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Yautja.BadBlood;
 
@@ -180,3 +181,38 @@ public readonly record struct BadBloodSiteSabotagedEvent(EntityUid Site, EntityU
 /// </summary>
 [ByRefEvent]
 public readonly record struct BadBloodObjectiveStageEvent(BadBloodObjectiveStage Stage, string Detail, EntityUid? Site = null);
+
+// ---- castes and beasts (docs/GraphAudit-BadBlood-Playtest5Plan.md ARCH-701). Broadcast. ----
+
+/// <summary>
+/// A Bad Blood took up <paramref name="Caste"/> at the Lodge.
+/// </summary>
+[ByRefEvent]
+public readonly record struct BadBloodCasteTakenEvent(EntityUid User, ProtoId<BadBloodCastePrototype> Caste);
+
+/// <summary>
+/// A Bad Blood lost <paramref name="Caste"/>, for example on becoming the Hunt Leader. Its components are already gone.
+/// </summary>
+[ByRefEvent]
+public readonly record struct BadBloodCasteDroppedEvent(EntityUid User, ProtoId<BadBloodCastePrototype> Caste);
+
+// ---- Hunt Orders (docs/GraphAudit-BadBlood-Playtest5Plan.md ARCH-703). Broadcast. ----
+
+/// <summary>
+/// The Clan Leader ordered the clan to seize <paramref name="Ground"/>, a Hunt Ground marker.
+/// </summary>
+[ByRefEvent]
+public readonly record struct BadBloodHuntOrderIssuedEvent(EntityUid Ground);
+
+/// <summary>
+/// The clan seized <paramref name="Ground"/> and <paramref name="Totem"/> rose there. The marker is about to go.
+/// </summary>
+[ByRefEvent]
+public readonly record struct BadBloodHuntOrderSeizedEvent(EntityUid Ground, EntityUid Totem);
+
+/// <summary>
+/// <paramref name="Ground"/> was not seized in time and is about to go.
+/// </summary>
+[ByRefEvent]
+public readonly record struct BadBloodHuntOrderLapsedEvent(EntityUid Ground);
+

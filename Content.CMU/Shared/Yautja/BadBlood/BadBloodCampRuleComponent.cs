@@ -1,5 +1,7 @@
 using Content.Shared.FixedPoint;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
@@ -61,6 +63,18 @@ public sealed class BadBloodAscensionVote
     /// Founding grace: the vote runs from a bracer prompt because no Lodge has stood yet.
     /// </summary>
     public bool FromBracer;
+}
+
+/// <summary>
+/// CMU14 FLOW-706: two candidate sites offered to the Hunt Leader for one order.
+/// </summary>
+public sealed class BadBloodHuntOrderPick
+{
+    public int Id;
+    public EntityUid Leader;
+    public bool Near;
+    public TimeSpan DecideAt;
+    public readonly List<MapCoordinates> Sites = new();
 }
 
 /// <summary>
@@ -145,6 +159,10 @@ public sealed partial class BadBloodCampRuleComponent : Component
     [DataField]
     public FixedPoint4 LastStandCost = 12;
 
+    /// <summary>
+    /// CMU14 ECS-706: Totems are no longer bought. This is what the Hunt Leader pays to petition the Clan Leader for a
+    /// different Hunt Ground (FLOW-706).
+    /// </summary>
     [DataField]
     public FixedPoint4 TotemCost = 3;
 
@@ -405,17 +423,12 @@ public sealed partial class BadBloodCampRuleComponent : Component
     [DataField]
     public int TotemLimit = 3;
 
+    // CMU14 FLOW-703 (D6): open Hunt Orders and standing Totems together stay at 3 on every population
     [DataField]
-    public int TotemLimitHighPop = 4;
+    public int TotemLimitHighPop = 3;
 
     [DataField]
     public int TotemHighPopPlayers = 80;
-
-    /// <summary>
-    /// Totems the clan may place for nothing. The first Lodge grants one.
-    /// </summary>
-    [DataField]
-    public int FreeTotems;
 
     [DataField]
     public int RipeTotemsForCall = 3;
@@ -431,6 +444,178 @@ public sealed partial class BadBloodCampRuleComponent : Component
     /// </summary>
     [DataField]
     public TimeSpan RipeHoldForCall = TimeSpan.FromMinutes(10);
+
+    // ---- CMU14 FLOW-703: Hunt Orders. BadBloodHuntOrderSystem ----
+
+    /// <summary>
+    /// Off: the Clan Leader issues no orders on their own (tests that want a quiet map).
+    /// </summary>
+    [DataField]
+    public bool HuntOrdersEnabled = true;
+
+    [DataField]
+    public EntProtoId HuntGroundPrototype = "CMUBadBloodHuntGround";
+
+    /// <summary>
+    /// The first order comes this long after the first Lodge stands.
+    /// </summary>
+    [DataField]
+    public TimeSpan OrderFirstDelay = TimeSpan.FromSeconds(120);
+
+    /// <summary>
+    /// After an order is issued, and after a slot frees (a Totem falls, an order lapses), the next waits this long.
+    /// </summary>
+    [DataField]
+    public TimeSpan OrderCooldown = TimeSpan.FromSeconds(240);
+
+    /// <summary>
+    /// An order not seized this long after it was issued lapses. No penalty beyond the lost time (D8).
+    /// </summary>
+    [DataField]
+    public TimeSpan OrderTimeout = TimeSpan.FromSeconds(480);
+
+    /// <summary>
+    /// No site found: the Clan Leader tries again this much later.
+    /// </summary>
+    [DataField]
+    public TimeSpan OrderRetryDelay = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// The Hunt Leader has this long to pick one of the two sites, else the first is taken (D7).
+    /// </summary>
+    [DataField]
+    public TimeSpan OrderPickTime = TimeSpan.FromSeconds(30);
+
+    [DataField]
+    public TimeSpan SeizeTime = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// Tiles from the Lodge: the first order is in the near band, the rest in the far band.
+    /// </summary>
+    [DataField]
+    public float OrderNearMin = 25f;
+
+    [DataField]
+    public float OrderNearMax = 45f;
+
+    [DataField]
+    public float OrderFarMin = 35f;
+
+    [DataField]
+    public float OrderFarMax = 70f;
+
+    /// <summary>
+    /// No site in the band: the band is widened by this many tiles each way, once.
+    /// </summary>
+    [DataField]
+    public float OrderBandWiden = 15f;
+
+    /// <summary>
+    /// A Hunt Ground keeps this many tiles from the Lodge, every Totem and every other order.
+    /// </summary>
+    [DataField]
+    public float OrderSpacing = 20f;
+
+    /// <summary>
+    /// A Hunt Ground keeps this many tiles from every dropship destination.
+    /// </summary>
+    [DataField]
+    public float OrderLandingZoneDistance = 25f;
+
+    [DataField]
+    public int OrderSampleTries = 200;
+
+    [DataField]
+    public int OrderCandidates = 8;
+
+    /// <summary>
+    /// Site score: points per tile of distance from the nearest Totem or order (spread the front), capped at
+    /// <see cref="OrderSpreadCap"/> tiles.
+    /// </summary>
+    [DataField]
+    public float OrderSpreadWeight = 1f;
+
+    [DataField]
+    public float OrderSpreadCap = 60f;
+
+    /// <summary>
+    /// Site score: points lost per tile from the marines (their centroid, else their landing zone). 0 for the first
+    /// order, then rising by a quarter of this per order to the full weight.
+    /// </summary>
+    [DataField]
+    public float OrderPullWeight = 0.5f;
+
+    /// <summary>
+    /// Site score: points lost for an area the clan was ordered to within <see cref="OrderRepeatAreaWindow"/>.
+    /// </summary>
+    [DataField]
+    public float OrderRepeatAreaPenalty = 100f;
+
+    [DataField]
+    public TimeSpan OrderRepeatAreaWindow = TimeSpan.FromMinutes(10);
+
+    /// <summary>
+    /// Paid to the clan as Totem income (<see cref="TotemTierCredit"/>) when a Hunt Ground is seized.
+    /// </summary>
+    [DataField]
+    public FixedPoint4 SeizeRewardSp = 2;
+
+    /// <summary>
+    /// Paid to each Bad Blood who stood on the ground within <see cref="SeizeRewardWindow"/> of the seize.
+    /// </summary>
+    [DataField]
+    public FixedPoint4 SeizeRewardHonour = 1;
+
+    [DataField]
+    public TimeSpan SeizeRewardWindow = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// The Hunt Leader may petition the Clan Leader for a different ground this often, for <see cref="TotemCost"/>.
+    /// </summary>
+    [DataField]
+    public TimeSpan RerollCooldown = TimeSpan.FromSeconds(600);
+
+    /// <summary>
+    /// The next order is issued at this time, once a slot is free. Null before the first Lodge.
+    /// </summary>
+    [ViewVariables]
+    public TimeSpan? NextOrderAt;
+
+    [ViewVariables]
+    public TimeSpan NextRerollAt;
+
+    /// <summary>
+    /// The open Hunt Grounds.
+    /// </summary>
+    [ViewVariables]
+    public readonly List<EntityUid> HuntOrders = new();
+
+    /// <summary>
+    /// Orders issued this round.
+    /// </summary>
+    [ViewVariables]
+    public int OrdersIssued;
+
+    /// <summary>
+    /// The Hunt Leader is choosing between two sites. It holds a slot.
+    /// </summary>
+    [ViewVariables]
+    public BadBloodHuntOrderPick? PendingPick;
+
+    [ViewVariables]
+    public int LastPickId;
+
+    /// <summary>
+    /// Orders, the pending pick and Totems as last counted, so a freed slot starts the cooldown.
+    /// </summary>
+    [ViewVariables]
+    public int LastActiveCount;
+
+    /// <summary>
+    /// Area name to when the clan was last ordered there.
+    /// </summary>
+    [ViewVariables]
+    public readonly Dictionary<string, TimeSpan> RecentOrderAreas = new();
 
     // ---- the clan ship ----
 
@@ -492,6 +677,12 @@ public sealed partial class BadBloodCampRuleComponent : Component
 
     [DataField]
     public FixedPoint4 BloodedKillHonour = 1;
+
+    /// <summary>
+    /// CMU14 STATE-701: a grunt (no caste, not the Hunt Leader) earns this much more for a Blooded kill.
+    /// </summary>
+    [DataField]
+    public FixedPoint4 GruntBloodedKillBonus = 1;
 
     // ---- hounds ----
 

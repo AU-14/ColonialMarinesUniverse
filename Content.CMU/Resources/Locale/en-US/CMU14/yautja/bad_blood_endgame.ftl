@@ -1,6 +1,6 @@
 # How a Bad Blood round ends
 
-cmu-bad-blood-end-marines-win = The Bad Blood clan is broken: its Leader is gone and its Lodge has fallen.
+cmu-bad-blood-end-marines-win = The Bad Blood clan is broken: its Hunt Leader is gone and its Lodge has fallen.
 cmu-bad-blood-end-clan-wipe = The Bad Blood clan has been wiped out.
 cmu-bad-blood-end-departure = The Bad Blood clan has left with its trophies. Its Lodge stood to the end.
 cmu-bad-blood-end-last-stand = The clan has no one left on the ground. A last squad is called to the Lodge.
@@ -11,7 +11,7 @@ cmu-bad-blood-ship-called-clan = The Lodge has called the clan ship. It arrives 
 cmu-bad-blood-ship-called-marines = ARES orbital tracking: an unidentified vessel is inbound on the hunters' signal, arriving in { $minutes } minutes. The signal traces to the hunters' Lodge, now marked on the tactical map.
 cmu-bad-blood-ship-turned-back-clan = The Lodge has fallen. The clan ship has turned back.
 cmu-bad-blood-ship-turned-back-marines = The Yautja Lodge is destroyed. Their clan ship has turned back.
-cmu-bad-blood-ship-arrived-clan = The clan ship is in orbit. Hunters will join you for as long as the Lodge stands and the clan has a Leader. Hold the Lodge for { $minutes } minutes and the clan leaves with its trophies.
+cmu-bad-blood-ship-arrived-clan = The clan ship is in orbit. Hunters will join you for as long as the Lodge stands and the clan has a Hunt Leader. Hold the Lodge for { $minutes } minutes and the clan leaves with its trophies.
 cmu-bad-blood-ship-arrived-marines = ARES orbital tracking: the Yautja clan vessel has entered orbit. Drop signatures are converging on the hunters' Lodge. Projected departure in { $minutes } { $minutes ->
         [one] minute
        *[other] minutes

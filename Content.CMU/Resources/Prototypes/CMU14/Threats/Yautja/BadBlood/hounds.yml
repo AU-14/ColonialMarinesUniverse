@@ -10,6 +10,23 @@
     - !type:HTNPrimitiveTask
       operator: !type:NoOperator
 
+# CMU14 (Playtest 5 follow-up): a clan hound speaks as a beast, and understands the clan (Yautja), other hounds and
+# the clan's thralls (Xeno). Bad Bloods understand Beast (body.yml)
+- type: entity
+  id: CMUBadBloodHoundLanguagePreset
+  categories: [ HideSpawnMenu ]
+  name: Clan Hound Languages
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - Beast
+    understoodLanguages:
+    - Yautja
+    - Beast
+    - Xeno
+    currentLanguage: Beast
+    defaultLanguage: Beast
+
 # the hound's camera id is its prototype id, like the hunters' hellhound
 - type: cameraNetwork
   id: CMUMobYautjaBadBloodHound
@@ -26,8 +43,33 @@
     unclaimedSleepAfter: 180
     reservePriority: 60
     sleeperPrototype: CMUBadBloodSleepingHound
+  # CMU14 ARCH-702: a clan beast on the pack layer. It answers to a Beast-Master before the Hunt Leader
+  # (BadBloodBeastSystem), and its abilities and tackle spare the clan (BadBloodBeastFriendlyFireSystem)
+  - type: BadBloodBeast
   - type: YautjaHellhound
     cameraId: CMUMobYautjaBadBloodHound
+  # CMU14 (Playtest 5 follow-up): a clan beast is on the clan's map and voice. It shows on, and opens, the Yautja
+  # hunting map the Bad Bloods use (TacticalMapSystem syncs a clan beast's map as a Yautja's), talks on the Bad
+  # Blood channel (:r, like the Modified Communicator), and understands the clan and its thralls
+  - type: TacticalMapTracked
+  - type: YautjaMapTracked
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: UserInterface
+    interfaces:
+      enum.TacticalMapUserUi.Key:
+        type: TacticalMapUserBui
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - CMUYautjaBadBlood
+  - type: ActiveRadio
+    channels:
+    - CMUYautjaBadBlood
+  # the hellhound's preset would replace any language lists set here when the hound starts, so the clan hound has its own
+  - type: Language
+    preset: CMUBadBloodHoundLanguagePreset
   # a pad lists the hounds on its camera network. this list takes the place of the hellhound's, so a clan hound is
   # on the clan's network only: the clan's pad sees it and the hunters' pad never does (BadBloodHoundPadScopeTest)
   - type: CameraNetworkMember

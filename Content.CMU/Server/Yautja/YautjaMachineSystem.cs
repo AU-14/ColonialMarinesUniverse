@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Server.CMU14.Yautja.BadBlood;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -179,6 +180,23 @@ public sealed partial class YautjaMachineSystem : EntitySystem
             !HasComp<YautjaFlayedComponent>(limb) ||
             !TryGetBonePrototype(bodyPart, out var prototype))
         {
+            return;
+        }
+
+        // CMU14 ECS-711 (D17): a Medic at the Lodge cauldron brews the limb into regeneration tonic instead of a bone
+        if (TryComp(ent, out BadBloodTonicCauldronComponent? tonic) && HasComp<BadBloodFieldMendComponent>(args.User))
+        {
+            var coords = Transform(ent).Coordinates;
+            for (var i = 0; i < tonic.Count; i++)
+            {
+                Spawn(tonic.Output, coords);
+            }
+
+            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-medic-cauldron-tonic", ("count", tonic.Count)),
+                args.User,
+                args.User,
+                PopupType.Medium);
+            QueueDel(limb);
             return;
         }
 

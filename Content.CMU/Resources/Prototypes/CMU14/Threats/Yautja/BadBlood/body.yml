@@ -74,6 +74,27 @@
             types:
               Blunt: 0.15
   - type: BadBloodSurvival
+  # CMU14 (Playtest 5 follow-up): a Bad Blood understands the clan's hounds (Beast) as well as Yautja and the
+  # thralls' Xeno. It speaks as every Yautja does
+  - type: Language
+    spokenLanguages:
+    - Yautja
+    - Xeno
+    understoodLanguages:
+    - Yautja
+    - Xeno
+    - Beast
+    currentLanguage: Yautja
+    defaultLanguage: Yautja
+  # CMU14 COUPLING-704: a xeno dragging a downed Bad Blood chokes it (RMC's species base), but the clan's own beasts
+  # drag their downed clanmates to safety. Every RMC xeno carries LarvaQueueable (base_xeno.yml); clan hounds never
+  # had it and thralls strip it (beasts.yml), so requiring both spares the clan's beasts and no hostile xeno
+  - type: DamageOnPulledWhileCrit
+    pullerWhitelist:
+      requireAll: true
+      components:
+      - Xeno
+      - LarvaQueueable
   # xeno-rate damage against vehicle hulls, so a crewed tank or APC is not untouchable for the clan
   - type: VehicleDamageMultiplier
     multiplier: 3

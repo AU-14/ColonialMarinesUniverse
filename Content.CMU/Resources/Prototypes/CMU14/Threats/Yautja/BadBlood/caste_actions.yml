@@ -1,0 +1,50 @@
+# CMU14 Playtest 5 (D4): the caste signature actives. Granted with the caste (or with leadership for the War Cry) by
+# their systems: BadBloodBerserkerSystem, BadBloodLeaderPerksSystem, BadBloodEngineerSystem.
+
+# ECS-703: Berserker. Under half health: harder melee, no slows or stuns, no cloak, counts double at a Hunt Ground
+- type: entity
+  id: CMUActionBadBloodBloodRage
+  name: Blood Rage
+  description: Under half health, roar and rage for 10 seconds. Your blade hits a quarter harder, slows and stuns do not take, your cloak stays off, and you count double toward seizing a Hunt Ground.
+  components:
+  - type: Action
+    useDelay: 120
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodBloodRageActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: voice_roar_framed
+      map: [enum.ActionVisuals.Icon]
+
+# ECS-705: the Hunt Leader. Clanmates in 7 tiles move faster and stagger for less for 8 seconds
+- type: entity
+  id: CMUActionBadBloodWarCry
+  name: War Cry
+  description: Cry out to the clan. Every Bad Blood within 7 tiles, you too, moves faster and staggers for half as long for 8 seconds.
+  components:
+  - type: Action
+    useDelay: 90
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodWarCryActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: voice_growl_framed
+      map: [enum.ActionVisuals.Icon]
+
+# ECS-701: the Engineer. Three clan barricades on the tiles in front, two bricks each from a stack in hand
+- type: entity
+  id: CMUActionBadBloodRaiseBulwark
+  name: Raise Bulwark
+  description: Stack the bricks in your hand into a line of clan barricades on the three tiles in front of you, two bricks each.
+  components:
+  - type: Action
+    useDelay: 60
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodRaiseBulwarkActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: bracer_shield_framed
+      map: [enum.ActionVisuals.Icon]

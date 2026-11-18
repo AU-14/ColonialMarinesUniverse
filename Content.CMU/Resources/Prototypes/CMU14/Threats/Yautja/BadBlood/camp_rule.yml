@@ -47,9 +47,29 @@
     seatRaffleTime: 15
     squadSpawnTimeout: 60
     clanWipeDelay: 120
+    # open Hunt Orders + standing Totems, on every population
     totemLimit: 3
-    totemLimitHighPop: 4
+    totemLimitHighPop: 3
     totemHighPopPlayers: 80
+    # Hunt Orders: the Clan Leader names the ground, the clan seizes it and a Totem rises. BadBloodHuntOrderSystem
+    orderFirstDelay: 120
+    orderCooldown: 240
+    orderTimeout: 480
+    orderRetryDelay: 30
+    orderPickTime: 30
+    seizeTime: 60
+    orderNearMin: 25
+    orderNearMax: 45
+    orderFarMin: 35
+    orderFarMax: 70
+    orderBandWiden: 15
+    orderSpacing: 20
+    orderLandingZoneDistance: 25
+    seizeRewardSp: 2
+    seizeRewardHonour: 1
+    seizeRewardWindow: 30
+    # the Hunt Leader's petition for a different ground costs totemCost SP
+    rerollCooldown: 600
     ripeTotemsForCall: 3
     ripeHoldForCall: 600
     shipEarliestCall: 2700
@@ -60,6 +80,7 @@
     # Blooded kill: +1 Honour when a worthy target dies within 5 s of the striker's Bad Blood melee hit
     bloodedKillWindow: 5
     bloodedKillHonour: 1
+    gruntBloodedKillBonus: 1
     # a hound player whose hound died waits a minute before taking another
     houndRespawnDelay: 60
     # after the drop, the Lodge's 30-tile square is boxed on the marine map

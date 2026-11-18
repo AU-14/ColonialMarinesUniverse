@@ -5,7 +5,8 @@
 # layout): a Lodge armory only that caste may open, selling for the buyer's own Honour like the clan armory does.
 # Other castes buy their wares at the clan armory, locked to the caste (BadBloodCampArmory casteWares).
 
-# builds anywhere, sees as an honourable hunter does, and gets RMC engineering to plant charges
+# builds anywhere, sees as an honourable hunter does, and gets RMC engineering to plant charges. CMU14 ECS-701: raises
+# a bulwark of clan stone, reconsecrates and repairs fast, and counts 1.5 toward seizing a Hunt Ground
 - type: badBloodCaste
   id: Engineer
   name: cmu-bad-blood-caste-name-engineer
@@ -19,8 +20,13 @@
   addComponents:
   - type: BadBloodBuildAnywhere
   - type: BadBloodHunterVisor
+  # CMU14 ECS-701: Raise Bulwark, half-time reconsecration and repair, counts 1.5 at a Hunt Ground
+  - type: BadBloodEngineer
 
-# works Yautja medicine faster than other Bad Bloods
+# works Yautja medicine faster than other Bad Bloods. CMU14 ECS-702 / ECS-711 / ECS-712 (D17): a front-line field
+# medic. Field Mend patches a clanmate or beast in reach, Blood Rite lifts one out of crit, Death's Door slows a downed
+# clanmate's drain nearby, and it drags clanmates at 0.8 speed. Its field kit goes on in half the time and it brews
+# tonic at the Lodge cauldron. The price: armour counts for 0.9, and no immobilizer on the caster
 - type: badBloodCaste
   id: Medic
   name: cmu-bad-blood-caste-name-medic
@@ -32,6 +38,23 @@
   addComponents:
   - type: BadBloodMedicSpeed
     multiplier: 0.6
+  - type: BadBloodFieldMend
+    mendDelay: 3
+    mendCost: 150
+    mendTargetCooldown: 20
+    mendPainTiers: 1
+    mendPainDuration: 30
+    armorMultiplier: 0.9
+    kitDelayMultiplier: 0.5
+  - type: BadBloodBloodRite
+    riteDelay: 6
+    riteMarginBelowCrit: 10
+    secondWindDuration: 8
+    secondWindSpeedMultiplier: 1.2
+    riteSicknessDuration: 180
+    deathsDoorRange: 5
+    deathsDoorMultiplier: 0.5
+    stretcherDragMultiplier: 0.8
 
 # ARCH-605: the frontline brute. +80 to the crit and death thresholds, takes 15% less damage, sprints 10% slower,
 # staggers 50% longer with Bad Blood melee, and carries no stun bolt (the immobilizer stays)
@@ -66,15 +89,19 @@
     cloakCooldownMultiplier: 0.75
     markDuration: 60
 
-# ARCH-607: no stat perks. Only a Falconer may buy the clan's falcon drone at the armory
+# CMU14 ARCH-705 (Playtest 5): the Beast-Master replaces the Falconer. Kennel hounds and thralls bind to the clan's
+# Beast-Master before the Hunt Leader (BadBloodBeastSystem), it alone buys the falcon drone and kennel wares, and it
+# has the pack actions (ECS-707). Its armour counts for less (BadBloodBeastMaster armorMultiplier)
 - type: badBloodCaste
-  id: Falconer
-  name: cmu-bad-blood-caste-name-falconer
-  verb: cmu-bad-blood-caste-verb-falconer
-  taken: cmu-bad-blood-caste-taken-falconer
-  codeRole: cmu-bad-blood-code-role-falconer
+  id: BeastMaster
+  name: cmu-bad-blood-caste-name-beast-master
+  verb: cmu-bad-blood-caste-verb-beast-master
+  taken: cmu-bad-blood-caste-taken-beast-master
+  codeRole: cmu-bad-blood-code-role-beast-master
   capDivisor: 4
   minCap: 1
+  addComponents:
+  - type: BadBloodBeastMaster
 
 # the Engineer's forge-bench: demolition and anti-tank gear
 - type: entity
@@ -124,7 +151,8 @@
         points: 10
         maxPerUser: 1
 
-# the Medic's medicine cache: the clan's Yautja medicine, cheaper than at the armory. Medics also work it faster
+# the Medic's medicine cache: the clan's Yautja medicine, cheaper than at the armory. Medics also work it faster.
+# CMU14 ECS-702 / ECS-711: also the field kit (tourniquet, splints, packing) and the tonic and large thwei crystals
 - type: entity
   parent: CMUYautjaStructureBase
   id: CMUBadBloodCampMedicStation
@@ -181,6 +209,27 @@
         points: 3
       - id: CMUYautjaBadBloodHealingGun
         name: Healing Gun
+        points: 4
+    # CMU14 ECS-702: the field kit, which the Medic puts on in half the time
+    - name: Field Care
+      entries:
+      - id: CMUBadBloodHideTourniquet
+        name: Hide Tourniquet
+        points: 1
+      - id: CMUBadBloodBoneSplints
+        name: Bone Splints (3)
+        points: 2
+      - id: CMUBadBloodGutMossPacking
+        name: Gut-Moss Packing (5)
+        points: 1
+    # CMU14 ECS-711: the regeneration tonic, and a thwei crystal half again as large
+    - name: Crystals
+      entries:
+      - id: CMUBadBloodTonicCrystal
+        name: Tonic Crystal (15u)
+        points: 3
+      - id: CMUBadBloodLargeThweiCrystal
+        name: Large Thwei Crystal (45u)
         points: 4
     - name: Field Kit (tier II)
       entries:

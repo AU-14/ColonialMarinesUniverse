@@ -82,7 +82,16 @@
       CMUBadBloodLeaderArmor: 5
     # CMU14 ARCH-604: wares only one caste may buy
     casteWares:
-      CMUYautjaFalconDroneBadBlood: Falconer
+      CMUYautjaFalconDroneBadBlood: BeastMaster
+  # CMU14 Playtest 5 prices (BadBloodCampSystem.GetArmoryPrice). STATE-701: a grunt (no caste, not the Hunt Leader)
+  # pays 80% for tier I. STATE-702: a Beast-Master pays 60% for the kennel wares and gets the first falcon free
+  - type: BadBloodArmoryPrice
+    gruntTierOneMultiplier: 0.8
+    kennelWares:
+    - CMUBadBloodKennelRate
+    - CMUBadBloodKennelPack
+    firstFreeForBeastMaster:
+    - CMUYautjaFalconDroneBadBlood
   - type: CMAutomatedVendor
     uiStyle: Yautja
     pointsType: BadBloodSp
@@ -114,9 +123,9 @@
       - id: CMUBadBloodKennelRate
         name: Kennel Breeding (whole clan, hounds twice as fast, twice)
         points: 5
-      # CMU14 ARCH-607: the Falconer's scout drone, one each
+      # CMU14 ARCH-607 / ARCH-705: the Beast-Master's scout drone, one each
       - id: CMUYautjaFalconDroneBadBlood
-        name: Falcon Drone (Falconer only)
+        name: Falcon Drone (Beast-Master only)
         points: 4
         maxPerUser: 1
     - name: Tier II (12 lifetime SP)

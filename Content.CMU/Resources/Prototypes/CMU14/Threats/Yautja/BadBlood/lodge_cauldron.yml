@@ -1,10 +1,14 @@
 # Lodge part: the cauldron. A working Yautja cauldron that is deployed with the Lodge and removed with it.
+# CMU14 ECS-711: a Medic who boils a prepared prey limb here brews two tonic crystals instead of a bone trophy
 - type: entity
   parent: CMUYautjaStructureYautjaMachinesVat
   id: CMUBadBloodCampCauldron
   name: Lodge cauldron
-  description: A black pot kept at a rolling boil. It strips a severed limb down to clean bone.
+  description: A black pot kept at a rolling boil. It strips a severed limb down to clean bone, or, in a medic's hands, renders it into tonic.
   suffix: Bad Blood
   components:
   - type: BadBloodCampPart
     kind: Cauldron
+  - type: BadBloodTonicCauldron
+    output: CMUBadBloodTonicCrystal
+    count: 2

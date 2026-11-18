@@ -101,6 +101,16 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
 
         // nobody leads a clan that has no rule, IsBadBloodLeader goes back to the objective job
         ApplyLeader(rule, null, false);
+
+        // CMU14 FLOW-703: a rule that ends takes its open Hunt Orders and any pick still waiting with it
+        foreach (var ground in component.HuntOrders)
+        {
+            if (!TerminatingOrDeleted(ground))
+                QueueDel(ground);
+        }
+
+        component.HuntOrders.Clear();
+        component.PendingPick = null;
     }
 
     protected override void ActiveTick(EntityUid uid, BadBloodCampRuleComponent component, GameRuleComponent gameRule,
@@ -380,7 +390,8 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     }
 
     /// <summary>
-    /// 3 Totems, or 4 on a high population round.
+    /// TotemLimit, or TotemLimitHighPop on a high population round (both 3 since Hunt Orders, D6). Open Hunt Orders
+    /// count against it too (BadBloodHuntOrderSystem).
     /// </summary>
     public int GetTotemLimit()
     {
@@ -427,18 +438,6 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
     {
         if (TryGetRule(out var rule))
             rule.Comp.Totems.Remove(totem);
-    }
-
-    /// <summary>
-    /// Uses up one free Totem, if the clan has one. The first Lodge grants one.
-    /// </summary>
-    public bool TryTakeFreeTotem()
-    {
-        if (!TryGetRule(out var rule) || rule.Comp.FreeTotems <= 0)
-            return false;
-
-        rule.Comp.FreeTotems--;
-        return true;
     }
 
     #endregion
@@ -520,7 +519,8 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
             _actions.AddAction(uid, ref comp.PitchCampActionEntity, comp.PitchCampAction);
             Dirty(uid, comp);
 
-            // the Leader sees as an honourable hunter does, like an Engineer, without toggling the visor
+            // CMU14 FLOW-701: the Leader's sight is the command sight now (BadBloodLeaderPerksSystem); an Engineer who
+            // took the lead keeps nothing of the caste (ARCH-704), so this refresh hands out the Bad Blood glasses
             _mask.RefreshVisorGlasses(uid);
 
             if (promoteBracer &&
@@ -656,8 +656,6 @@ public sealed partial class BadBloodCampRuleSystem : GameRuleSystem<BadBloodCamp
         rule.Comp.CampPlaced = true;
         rule.Comp.KitOut = false;
         rule.Comp.FirstCampPitched = true;
-        if (first)
-            rule.Comp.FreeTotems++;
 
         LodgePitchedEnd(rule, lodge, first);
         LodgePitchedShip(rule, lodge, first);

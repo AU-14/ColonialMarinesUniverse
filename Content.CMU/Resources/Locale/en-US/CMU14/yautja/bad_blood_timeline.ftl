@@ -35,3 +35,7 @@ cmu-bad-blood-timeline-kind-starchartrecovered = Star chart recovered
 cmu-bad-blood-timeline-kind-trophystripped = Trophy stripped
 cmu-bad-blood-timeline-kind-sitesabotaged = Site sabotaged
 cmu-bad-blood-timeline-kind-rounddecided = Round decided
+# CMU14 FLOW-707: the Clan Leader's Hunt Orders
+cmu-bad-blood-timeline-kind-huntorderissued = Hunt Order issued
+cmu-bad-blood-timeline-kind-huntorderseized = Hunt Ground seized (Totem raised)
+cmu-bad-blood-timeline-kind-huntorderlapsed = Hunt Order lapsed

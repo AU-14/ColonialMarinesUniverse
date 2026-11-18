@@ -134,7 +134,7 @@ public sealed partial class BadBloodCampSystem
         if (!_rule.TryGetRule(out _))
             return 0;
 
-        var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats();
+        var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats() + _armoryThralls.CountClanThralls(); // CMU14 D11: thralls count
         var byCap = _rule.GetLivingBadBloodCap() - bodies;
         return Math.Max(0, Math.Min(byCap, GetSquadBudgetRoom()));
     }
@@ -148,7 +148,7 @@ public sealed partial class BadBloodCampSystem
         if (!_rule.TryGetRule(out _))
             return 0;
 
-        var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats();
+        var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats() + _armoryThralls.CountClanThralls(); // CMU14 D11: thralls count
         return Math.Max(0, _rule.GetThreatBudget() - bodies);
     }
 

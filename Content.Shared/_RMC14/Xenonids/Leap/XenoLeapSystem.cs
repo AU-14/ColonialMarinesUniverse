@@ -559,7 +559,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
         if (!IsValidLeapHit(xeno, target))
             return false;
 
-        if (_hive.FromSameHive(xeno.Owner, target))
+        if (_hive.FromSameHive(xeno.Owner, target) || XenoTargetFilter.IsBlocked(EntityManager, xeno.Owner, target)) // CMU14: a fork spares the leaper's allies (Bad Blood beasts)
         {
             StopLeap(xeno);
             return true;

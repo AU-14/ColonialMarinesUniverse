@@ -1,0 +1,76 @@
+# CMU14 ECS-707 (docs/GraphAudit-BadBlood-Playtest5Plan.md): the Beast-Master's pack actions, on the pack layer so they
+# reach hounds and thralls alike (BadBloodBeastSystem.Pack.cs). Given and taken with the BadBloodBeastMaster component.
+# Pack Bond (x1.5 regeneration near the Beast-Master) and Last Order (the pack rages 20 s over a dead Beast-Master,
+# then finds a new master) are passive.
+
+# a mark: every beast bonded to the Beast-Master deals x1.35 to the target for 15 s
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodBloodScent
+  name: Blood Scent
+  description: Give your pack the scent of a prey. Every beast bonded to you hits it 35% harder for 15 seconds.
+  components:
+  - type: Action
+    useDelay: 20
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: mark_for_hunt_framed
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 15
+  - type: EntityTargetAction
+    event: !type:BadBloodBloodScentActionEvent
+
+# the pack within 15 tiles runs 20% faster for 6 s
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodRallyHowl
+  name: Rally Howl
+  description: Call your pack to you. Your beasts within 15 tiles run 20% faster for 6 seconds.
+  components:
+  - type: Action
+    useDelay: 45
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: voice_roar_framed
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:BadBloodRallyHowlActionEvent
+
+# a 5 s do-after: heals a clan beast by 60, once a minute for each beast
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodMendBeast
+  name: Mend Beast
+  description: Tend one of the clan's beasts. After 5 seconds it heals 60. Each beast can be mended once a minute.
+  components:
+  - type: Action
+    useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: gel_vial_framed
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:BadBloodMendBeastActionEvent
+
+# Pack Bond: the clan hound camera, built in
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodPackSight
+  name: Pack Sight
+  description: See through the eyes of the clan's hounds.
+  components:
+  - type: Action
+    useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: zoom_framed
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:BadBloodPackSightActionEvent

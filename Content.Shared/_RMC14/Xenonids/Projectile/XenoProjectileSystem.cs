@@ -324,6 +324,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
             return;
         }
 
+        if (XenoTargetFilter.IsProjectileBlocked(EntityManager, ent.Owner, args.OtherEntity)) { args.Cancelled = true; return; } // CMU14: a fork spares the shooter's allies (Bad Blood beasts), spit that deletes on friendly xenos too
         if (ent.Comp.DeleteOnFriendlyXeno)
             return;
 

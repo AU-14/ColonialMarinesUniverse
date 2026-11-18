@@ -2,12 +2,14 @@ using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Nutrition.Prototypes;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
 public sealed partial class BadBloodSurvivalSystem : EntitySystem
 {
     [Dependency] private SatiationSystem _satiation = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     // keyed by the threshold names the human hunger and thirst prototypes define. above Okay is well fed
     private static readonly Dictionary<SatiationValue, BadBloodSatiationState> HungerStates = new()
@@ -69,9 +71,15 @@ public sealed partial class BadBloodSurvivalSystem : EntitySystem
 
     public float GetLimbRegrowDelayMultiplier(EntityUid uid)
     {
-        return TryComp(uid, out BadBloodSurvivalComponent? survival) && IsStarving(uid)
+        var multiplier = TryComp(uid, out BadBloodSurvivalComponent? survival) && IsStarving(uid)
             ? survival.StarvingLimbRegrowMultiplier
             : 1f;
+
+        // CMU14 ECS-711: the Medic's regeneration tonic shortens the regrowth while it is in the body
+        if (TryComp(uid, out BadBloodTonicRegrowthComponent? tonic) && _timing.CurTime < tonic.ExpiresAt)
+            multiplier *= tonic.Multiplier;
+
+        return multiplier;
     }
 
     private BadBloodSatiationState GetState(

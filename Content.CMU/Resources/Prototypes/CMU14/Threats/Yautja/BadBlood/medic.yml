@@ -1,0 +1,221 @@
+# CMU14 ECS-702 / ECS-711 / ECS-712 (D17): the front-line Medic. Its two actions, the field kit and crystals sold in
+# the medicine cache (castes.yml), the regeneration tonic, and the pieces the Medic's actions use but never carries.
+# The Medic's components and numbers are on the Medic caste (castes.yml); the systems are BadBloodMedicSystem and
+# BadBloodMedicKitSystem.
+
+# --- actions ---
+
+# ECS-702: 3 s, 150 bracer charge, 20 s per patient (BadBloodFieldMend)
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodFieldMend
+  name: Field Mend
+  description: Patch a clanmate or clan beast in reach. Stops their surface bleeding, splints their worst break, dulls their pain and shakes off slows. Costs 150 bracer charge. Internal bleeding and organs still need the medicomp.
+  components:
+  - type: Action
+    useDelay: 1
+    raiseOnUser: true
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    canTargetSelf: true
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodFieldMendActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: gel_vial_framed
+      map: [enum.ActionVisuals.Icon]
+
+# ECS-712: 6 s over a critical clanmate or clan beast, standing still (BadBloodBloodRite)
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodBloodRite
+  name: Blood Rite
+  description: Chant over a critical clanmate or clan beast in reach while standing still. It rises with a short second wind to get away, but cannot fight until it fades, and cannot be ritted again for three minutes.
+  components:
+  - type: Action
+    useDelay: 2
+    raiseOnUser: true
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    canTargetSelf: false
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodBloodRiteActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: thwei_framed
+      map: [enum.ActionVisuals.Icon]
+
+# --- field kit (ECS-702): CMU field-care items, gear-locked. A Medic puts them on in half the time ---
+
+- type: entity
+  parent: AU14Tourniquet
+  id: CMUBadBloodHideTourniquet
+  name: hide tourniquet
+  description: A strap of cured hide and a bone windlass that clamps a limb's bleeding shut. A clan medic ties it on in half the time.
+  suffix: Bad Blood
+  components:
+  - type: CMUTourniquetItem
+    refundOnRemove: CMUBadBloodHideTourniquet
+  - type: BadBloodGearLock
+  - type: BadBloodMedicKit
+
+- type: entity
+  parent: CMUSplintItem
+  id: CMUBadBloodBoneSplints
+  name: bone splints
+  description: Three lengths of prey bone and sinew to bind a broken limb. A clan medic binds them in half the time.
+  suffix: Bad Blood
+  components:
+  - type: CMUSplintItem
+    uses: 3
+  - type: BadBloodGearLock
+  - type: BadBloodMedicKit
+
+- type: stack
+  id: CMUBadBloodGutMoss
+  name: gut-moss packing
+  icon: { sprite: "/Textures/_RMC14/Objects/Medical/medical.rsi", state: gauze }
+  spawn: CMUBadBloodGutMossPacking1
+  maxCount: 10
+
+# the bandage path: packs surface wounds like gauze
+- type: entity
+  parent: CMGauze
+  id: CMUBadBloodGutMossPacking
+  name: gut-moss packing
+  description: Wads of a bitter, blood-drinking moss. Packed into a wound, it stems the surface bleeding.
+  suffix: Bad Blood, Five
+  components:
+  - type: Stack
+    stackType: CMUBadBloodGutMoss
+    count: 5
+  - type: BadBloodGearLock
+
+- type: entity
+  parent: CMUBadBloodGutMossPacking
+  id: CMUBadBloodGutMossPacking1
+  suffix: Bad Blood, One
+  components:
+  - type: Stack
+    count: 1
+
+# --- crystals (ECS-711) ---
+
+# blood-moss tonic: heals slowly while not in crit, knits bone, hurries lost limbs back. Overdoses at 30 u, so two
+# crystals at once are already too much
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUBadBloodTonic
+  name: reagent-name-cmu-bad-blood-tonic
+  desc: reagent-desc-cmu-bad-blood-tonic
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: metallic
+  color: "#6fbf3a"
+  flags: Medical, NoGeneration
+  overdose: 30
+  metabolisms:
+    Bloodstream:
+      # 15 u lasts about 60 s
+      metabolismRate: 0.25
+      effects:
+      # not while critical: the tonic keeps a fighter up, it does not pull anyone out of crit (Blood Rite does)
+      - !type:EvenHealthChange
+        conditions:
+        - !type:MobStateCondition
+          mobstate: Alive
+        damage:
+          Brute: -0.4
+          Burn: -0.2
+      - !type:CMUBoneRegenBoostEffect
+        multiplier: 1.5
+        durationSeconds: 5
+      - !type:CMUBadBloodTonicRegrowthEffect
+        multiplier: 0.5
+        durationSeconds: 5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          min: 30
+        damage:
+          types:
+            Poison: 1
+
+- type: entity
+  parent: CMUYautjaAutoInjector
+  id: CMUBadBloodTonicCrystal
+  name: tonic crystal
+  description: A green crystal charged with blood-moss tonic. It heals slowly while you keep fighting, knits bone and hurries a lost limb back.
+  suffix: Bad Blood
+  components:
+  - type: Sprite
+    sprite: CMU14/Yautja/medical.rsi
+    layers:
+    - state: crystal
+    - state: thwei_1
+      color: "#6fbf3a"
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: Hypospray
+    transferAmount: 15
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMUBadBloodTonic
+          Quantity: 15
+  - type: CMRefillableSolution
+    solution: pen
+    reagents:
+      CMUBadBloodTonic: 15
+  - type: BadBloodGearLock
+
+# potency through volume: the Medic's thwei crystal holds half again as much
+- type: entity
+  parent: CMUYautjaAutoInjector
+  id: CMUBadBloodLargeThweiCrystal
+  name: large unusual crystal
+  description: A strange glowing crystal with a spike at one end, larger than most.
+  suffix: Bad Blood, 45u
+  components:
+  - type: Hypospray
+    transferAmount: 45
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: thwei
+          Quantity: 45
+  - type: CMRefillableSolution
+    solution: pen
+    reagents:
+      thwei: 45
+  - type: BadBloodGearLock
+
+# --- pieces the Medic's actions use ---
+
+# ECS-702: the splint Field Mend puts on the worst break. Spawned out of sight and deleted at once. It holds up to a
+# compound fracture; a shattered bone still needs surgery
+- type: entity
+  id: CMUBadBloodFieldMendSplint
+  name: field mend splint
+  categories: [HideSpawnMenu]
+  components:
+  - type: CMUSplintItem
+    maxSuppressed: Compound
+    consumedOnApply: false
+
+# ECS-712 (D16): the green glow on a ritted body, for as long as its second wind lasts
+- type: entity
+  id: CMUBadBloodRiteGlow
+  name: blood rite glow
+  categories: [HideSpawnMenu]
+  components:
+  - type: PointLight
+    color: "#3cd65a"
+    radius: 2.5
+    energy: 1.5
+  - type: TimedDespawn
+    lifetime: 8

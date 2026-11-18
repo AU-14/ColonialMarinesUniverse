@@ -145,7 +145,6 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                 {
                     Assert.That(rule.Comp.FirstCampPitched, Is.True);
                     Assert.That(rule.Comp.KitOut, Is.False, "the kit is used up");
-                    Assert.That(rule.Comp.FreeTotems, Is.EqualTo(1), "the first Lodge grants one free Totem");
                     Assert.That(rule.Comp.FoundingSquadOpened, Is.True, "the founding squad is offered once, to the reserve");
                     Assert.That(rule.Comp.SquadCalls, Is.Empty, "with nobody in the reserve no seat opens");
                     Assert.That(rules.InFoundingGrace(), Is.False, "founding grace ends with the first Lodge");
@@ -315,16 +314,15 @@ public sealed class BadBloodRoundSmokeTest : GameTest
                     Assert.That(rules.GetTier(), Is.EqualTo(1), "two bodies are 10 lifetime SP, tier II needs 12");
                 });
 
-                // the free Totem, raised away from the Lodge
-                Assert.That(entMan.HasComponent<BadBloodTotemBuilderComponent>(grunt), Is.True,
-                    "every Bad Blood can raise a Totem while the rule runs");
+                // CMU14 ECS-706: a Totem rises on a seized Hunt Order, away from the Lodge
                 var home = entMan.GetComponent<TransformComponent>(grunt).Coordinates;
                 xforms.SetCoordinates(grunt, map.GridCoords.Offset(new Vector2(TotemColumn, 0)));
-                Assert.That(totems.TryRaiseTotem(grunt, out var totem), Is.True);
+                var raised = totems.SpawnOrderedTotem(xforms.ToMapCoordinates(map.GridCoords.Offset(new Vector2(TotemColumn, 0))));
+                Assert.That(raised, Is.Not.Null);
+                var totem = raised!.Value;
                 Assert.Multiple(() =>
                 {
-                    Assert.That(rule.Comp.FreeTotems, Is.Zero);
-                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(6)), "the first Totem is free");
+                    Assert.That(rules.GetSp(), Is.EqualTo(FixedPoint4.New(6)), "an ordered Totem costs nothing");
                     Assert.That(rules.GetTotems(), Has.Count.EqualTo(1));
                 });
 

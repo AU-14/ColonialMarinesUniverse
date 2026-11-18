@@ -5,19 +5,19 @@ ent-CMUBadBloodSquadSeats = Bad Blood reinforcements
 
 cmu-bad-blood-squad-ghost-name = Bad Blood reinforcement
 cmu-bad-blood-squad-ghost-description = The Bad Blood clan has called a squad to its Lodge. Win a seat and you arrive with the rest of the squad as a Bad Blood grunt.
-cmu-bad-blood-squad-ghost-rules = You are a Bad Blood: a dishonoured Yautja, hostile to everyone but your clan. Follow the clan's Leader and defend the Lodge.
+cmu-bad-blood-squad-ghost-rules = You are a Bad Blood: a dishonoured Yautja, hostile to everyone but your clan. Follow the Hunt Leader and defend the Lodge.
 
 cmu-bad-blood-grunt-ghost-name = Bad Blood grunt
-cmu-bad-blood-grunt-ghost-description = One of the Bad Blood clan's landing party. Follow the Leader, pitch the Lodge and hunt everything.
-cmu-bad-blood-leader-ghost-name = Bad Blood Leader
-cmu-bad-blood-leader-ghost-description = The Bad Blood clan's Leader. Pitch the Lodge, spend the clan's Superiority Points and keep the clan alive until the clan ship arrives.
+cmu-bad-blood-grunt-ghost-description = One of the Bad Blood clan's landing party. Follow the Hunt Leader, pitch the Lodge and hunt everything.
+cmu-bad-blood-leader-ghost-name = Bad Blood Hunt Leader
+cmu-bad-blood-leader-ghost-description = The Bad Blood clan's Hunt Leader. Pitch the Lodge, spend the clan's Superiority Points and keep the clan alive until the clan ship arrives.
 
 cmu-bad-blood-squad-verb = Call { $seats } { $seats ->
         [one] grunt
        *[other] grunts
     } ({ $cost } SP)
 cmu-bad-blood-squad-verb-message = Spend the clan's Superiority Points to call reinforcements to the Lodge.
-cmu-bad-blood-squad-leader-only = Only the clan's Leader calls reinforcements.
+cmu-bad-blood-squad-leader-only = Only the Hunt Leader calls reinforcements.
 cmu-bad-blood-squad-no-lodge = The clan has no Lodge to call reinforcements to.
 cmu-bad-blood-squad-cap = The clan cannot take { $seats } more hunters: { $living } living and { $pending } on the way, the limit is { $limit }. Until the clan ship arrives the limit is the landing party, plus the founding squad, plus 5. Bad Bloods and hounds together never pass 35% of the players.
 cmu-bad-blood-squad-cannot-afford = The clan needs { $cost } Superiority Points for that squad.
@@ -64,12 +64,12 @@ ent-CMUBadBloodHoundObservationPadInternalCamera = Clan Hound Observation Interf
 
 cmu-bad-blood-houndpad-interface-title = Clan Hound Observation
 cmu-bad-blood-hound-ghost-name = Bad Blood clan hound
-cmu-bad-blood-hound-ghost-description = A hunting hound of the Bad Blood clan. You answer to the one who woke you, or to the clan's Leader.
+cmu-bad-blood-hound-ghost-description = A hunting hound of the Bad Blood clan. You answer to the one who woke you, or to the Hunt Leader.
 cmu-bad-blood-hound-ghost-rules = You are a Bad Blood's hound. Obey your master, stay with the clan and attack whatever they hunt.
 
 cmu-bad-blood-kennel-ghost-name = Bad Blood clan hound (kennel)
 cmu-bad-blood-kennel-no-clan = No clan is left for these hounds to hunt with.
-cmu-bad-blood-kennel-ghost-description = A hunting hound from the clan's kennel. You answer to the clan's Leader. If you fall, another hound waits for you in a minute.
+cmu-bad-blood-kennel-ghost-description = A hunting hound from the clan's kennel. You answer to the clan's Beast-Master, or to the Hunt Leader when there is none. If you fall, another hound waits for you in a minute.
 cmu-bad-blood-hound-respawn-wait = Your last hound fell only moments ago. You can take another in { $seconds } seconds.
 cmu-bad-blood-hound-sleeper-not-clan = The hound does not know you. It sleeps on.
 cmu-bad-blood-hound-sleeper-reserved = This hound was called by another of the clan. Leave it to them for now.

@@ -16,7 +16,8 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 /// hit, so fighting up close pays. A living human who is not of the clan is staggered (rate-limited per target) and
 /// pays charge back into the wielder's bracer. Every living target is marked; if a worthy one dies within the rule's
 /// Blooded kill window, the striker earns Honour. CMU14 ARCH-605: a Berserker's stagger lasts StaggerMultiplier times
-/// as long.
+/// as long. CMU14 ECS-703: a Blood Rage adds RageMeleeMultiplier. CMU14 STATE-701: a grunt's Blooded kill pays
+/// GruntBloodedKillBonus more.
 /// </summary>
 public sealed partial class BadBloodMeleeSystem : EntitySystem
 {
@@ -46,7 +47,13 @@ public sealed partial class BadBloodMeleeSystem : EntitySystem
         // CMU14 ARCH-605: a Berserker's stagger lasts longer
         var stagger = ent.Comp.StaggerSlow;
         if (TryComp(args.User, out BadBloodBerserkerComponent? berserker))
+        {
             stagger *= berserker.StaggerMultiplier;
+
+            // CMU14 ECS-703: a Blood Rage hits harder
+            if (HasComp<BadBloodBloodRageComponent>(args.User) && berserker.RageMeleeMultiplier > 1f)
+                args.BonusDamage += args.BaseDamage * (berserker.RageMeleeMultiplier - 1f);
+        }
 
         foreach (var target in args.HitEntities)
         {
@@ -100,6 +107,10 @@ public sealed partial class BadBloodMeleeSystem : EntitySystem
         }
 
         var honour = rule.Comp.BloodedKillHonour;
+
+        // CMU14 STATE-701: a grunt (no caste, not the Hunt Leader) earns a little more for a Blooded kill
+        if (!HasComp<BadBloodCasteComponent>(striker) && !HasComp<BadBloodLeaderComponent>(striker))
+            honour += rule.Comp.GruntBloodedKillBonus;
         if (!_rule.AddHonour(striker, honour))
             return;
 

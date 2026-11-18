@@ -294,6 +294,40 @@ public sealed partial class BadBloodHoundSystem : EntitySystem
         return CanTakeHound(session, kennel.Comp.StockedAt + kennel.Comp.ReservePriority, out reason);
     }
 
+    /// <summary>
+    /// CMU14 FLOW-709: the hound's order for any clan beast (a thrall cage, an abandoned thrall): no honourable hunter
+    /// of this round, the beast respawn delay, then the reserve until <paramref name="reserveUntil"/>, then anyone. A
+    /// beast left standing after the clan's rule ended offers nothing. <paramref name="reason"/> is a locale id.
+    /// </summary>
+    public bool CanTakeBeast(ICommonSession session, TimeSpan reserveUntil, out string reason)
+    {
+        if (!_rule.IsRuleActive())
+        {
+            reason = "cmu-bad-blood-kennel-no-clan";
+            return false;
+        }
+
+        return CanTakeHound(session, reserveUntil, out reason);
+    }
+
+    /// <summary>
+    /// CMU14 FLOW-709: refuses a ghost-role request with <paramref name="reason"/>, told to the player only when they
+    /// asked for it themselves, as the hound gate does.
+    /// </summary>
+    public void RefuseRequest(ref GhostRoleRequestAttemptEvent args, string reason)
+    {
+        Refuse(ref args, reason);
+    }
+
+    /// <summary>
+    /// CMU14 FLOW-709: <paramref name="user"/>'s beast just died, their respawn delay starts. A thrall counts as a hound.
+    /// </summary>
+    public void RecordBeastDeath(NetUserId user)
+    {
+        if (_rule.TryGetRule(out var rule))
+            rule.Comp.HoundDiedAt[user] = _timing.CurTime;
+    }
+
     private bool CanTakeHound(ICommonSession session, TimeSpan reserveUntil, out string reason)
     {
         reason = string.Empty;

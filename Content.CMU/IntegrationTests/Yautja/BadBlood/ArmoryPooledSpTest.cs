@@ -97,7 +97,18 @@ public sealed class ArmoryPooledSpTest : GameTest
 
                 // prices come from the vendor's own entries, so a retune does not break this
                 FixedPoint4 Price(string id) => FixedPoint4.New(FindEntry(entMan, armory, id).Entry.Points!.Value);
+                // CMU14 STATE-701: what the grunt really pays, 80% for a tier I ware
+                FixedPoint4 GruntPays(string id) =>
+                    camp.GetArmoryPrice(armoryEnt, grunt, id, FindEntry(entMan, armory, id).Entry.Points!.Value);
                 Assert.That(rules.TryGetRule(out var rule), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(GruntPays(Traps), Is.EqualTo(FixedPoint4.New(Price(Traps).Double() * 0.8)),
+                        "a caste-less grunt pays 80% for a tier I ware");
+                    Assert.That(GruntPays(Hivebreaker), Is.EqualTo(Price(Hivebreaker)), "and full price above tier I");
+                    Assert.That(camp.GetArmoryPrice(armoryEnt, party.Leader, Traps, FindEntry(entMan, armory, Traps).Entry.Points!.Value),
+                        Is.EqualTo(Price(Traps)), "the Hunt Leader is no grunt");
+                });
 
                 // ARCH-01: the armory sells for each buyer's own Honour and never touches the clan's SP, which is
                 // kept for squads, hounds and Totems
@@ -133,7 +144,7 @@ public sealed class ArmoryPooledSpTest : GameTest
 
                 // tier I spends the buyer's own Honour
                 Vend(entMan, armory, grunt, Traps);
-                g -= Price(Traps);
+                g -= GruntPays(Traps);
                 Assert.Multiple(() =>
                 {
                     Assert.That(rules.GetHonour(grunt), Is.EqualTo(g), "the traps cost the buyer their price");
@@ -288,6 +299,9 @@ public sealed class ArmoryPooledSpTest : GameTest
                 camp.PrepareArmoryBuyer(armoryEnt, grunt);
 
                 FixedPoint4 Price(string id) => FixedPoint4.New(FindEntry(entMan, armory, id).Entry.Points!.Value);
+                // CMU14 STATE-701: the caste-less grunt pays 80% for the tier I rate ware, full price for the tier II pack
+                FixedPoint4 GruntPays(string id) =>
+                    camp.GetArmoryPrice(armoryEnt, grunt, id, FindEntry(entMan, armory, id).Entry.Points!.Value);
                 // Honour also credits armory tiers: keep the clan at tier I until the test lifts it with SP
                 rule.Comp.HonourTierCredit = 0f;
                 Assert.That(rules.GetTier(), Is.EqualTo(1));
@@ -308,7 +322,7 @@ public sealed class ArmoryPooledSpTest : GameTest
 
                 // tier I, any Bad Blood: each buy halves the interval
                 Vend(entMan, armory, grunt, KennelRate);
-                g -= Price(KennelRate);
+                g -= GruntPays(KennelRate);
                 Assert.Multiple(() =>
                 {
                     Assert.That(rules.GetHonour(grunt), Is.EqualTo(g), "the rate ware costs the buyer its price");
@@ -318,7 +332,7 @@ public sealed class ArmoryPooledSpTest : GameTest
                 });
 
                 Vend(entMan, armory, grunt, KennelRate);
-                g -= Price(KennelRate);
+                g -= GruntPays(KennelRate);
                 Assert.That(stock.Interval, Is.EqualTo(interval / 4), "the second buy halves it again");
 
                 // a third is refused and costs nothing
@@ -342,7 +356,7 @@ public sealed class ArmoryPooledSpTest : GameTest
                 Assert.That(rules.AddSp(rule.Comp.TierTwoLifetimeSp), Is.True);
                 Assert.That(rules.GetTier(), Is.EqualTo(2));
                 Vend(entMan, armory, grunt, KennelPack);
-                g -= Price(KennelPack);
+                g -= GruntPays(KennelPack);
                 Assert.Multiple(() =>
                 {
                     Assert.That(rules.GetHonour(grunt), Is.EqualTo(g));

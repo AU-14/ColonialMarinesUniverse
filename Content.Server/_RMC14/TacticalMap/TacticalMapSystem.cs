@@ -346,8 +346,9 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             return;
         }
 
-        // CMU14 Begin: Yautja maps are live, private, and faction-isolated.
-        if (HasComp<YautjaComponent>(ent))
+        // CMU14 Begin: Yautja maps are live, private, and faction-isolated. A Bad Blood clan beast (hound or thrall)
+        // uses the clan's map, not a hive's
+        if (HasComp<YautjaComponent>(ent) || HasComp<Content.Shared.CMU14.Yautja.BadBlood.BadBloodBeastComponent>(ent))
         {
             var changed = !ent.Comp.Yautja || ent.Comp.Marines || ent.Comp.Xenos
                 || ent.Comp.Opfor || ent.Comp.Govfor || ent.Comp.Clf || !ent.Comp.LiveUpdate;

@@ -37,6 +37,8 @@ public sealed partial class BadBloodGhostRoleSystem : EntitySystem
         SubscribeLocalEvent<YautjaBadBloodComponent, GhostRoleRequestAttemptEvent>(OnRequestAttempt);
         SubscribeLocalEvent<YautjaBadBloodComponent, MindRemovedMessage>(OnBadBloodMindRemoved);
         SubscribeLocalEvent<BadBloodHoundComponent, BeforeMindRemovedMessage>(OnHoundBeforeMindRemoved);
+        // CMU14 FLOW-709: a thrall's prototype strips its takeover so it is never listed before a cage gives it out
+        SubscribeLocalEvent<BadBloodThrallBeastComponent, BeforeMindRemovedMessage>(OnThrallBeforeMindRemoved);
     }
 
     /// <summary>
@@ -85,16 +87,30 @@ public sealed partial class BadBloodGhostRoleSystem : EntitySystem
     // Before message so GhostRoleSystem's own MindRemovedMessage handler then frees and re-registers the role
     private void OnHoundBeforeMindRemoved(Entity<BadBloodHoundComponent> ent, ref BeforeMindRemovedMessage args)
     {
+        ReofferBeast(ent, args);
+    }
+
+    // CMU14 FLOW-709: a thrall left for a ghost is offered again like a hound, behind the thrall's own request gate
+    // (BadBloodThrallBeastSystem) and never through the larva queue
+    private void OnThrallBeforeMindRemoved(Entity<BadBloodThrallBeastComponent> ent, ref BeforeMindRemovedMessage args)
+    {
+        if (ReofferBeast(ent, args))
+            ent.Comp.AbandonedAt = _timing.CurTime;
+    }
+
+    private bool ReofferBeast(EntityUid beast, BeforeMindRemovedMessage args)
+    {
         if (args.TransferEntity is not { } to ||
             !HasComp<GhostComponent>(to) ||
-            TerminatingOrDeleted(ent) ||
-            _mobState.IsDead(ent) ||
-            !HasComp<GhostRoleComponent>(ent))
+            TerminatingOrDeleted(beast) ||
+            _mobState.IsDead(beast) ||
+            !HasComp<GhostRoleComponent>(beast))
         {
-            return;
+            return false;
         }
 
-        EnsureComp<GhostTakeoverAvailableComponent>(ent);
+        EnsureComp<GhostTakeoverAvailableComponent>(beast);
+        return true;
     }
 
     private void OnThreatGhostRoleMade(Entity<YautjaBadBloodComponent> ent, ref ThreatGhostRoleMadeEvent args)

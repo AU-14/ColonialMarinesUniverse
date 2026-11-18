@@ -1,0 +1,76 @@
+# CMU14 FLOW-703: Hunt Orders. The Clan Leader names a Hunt Ground; Bad Bloods standing on it with no marine seize it
+# and a Clan Totem rises there. BadBloodHuntOrderSystem.
+
+- type: entity
+  id: CMUBadBloodHuntGround
+  name: Hunt Ground
+  description: A bone stake hammered into the earth, daubed with fresh blood. The clan has been ordered to claim this ground.
+  suffix: Bad Blood
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Objects
+    noRot: true
+    layers:
+    - sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
+      state: "hunter_armor_prop_3"
+  - type: Icon
+    sprite: CMU14/Yautja/Structures/32x32_hunter_props.rsi
+    state: "hunter_armor_prop_3"
+  - type: Clickable
+  - type: InteractionOutline
+  # FLOW-705: steady and dim while idle, pulsing while the clan fills the meter, low while contested
+  - type: PointLight
+    color: "#c41e1e"
+    radius: 3
+    energy: 0.6
+    castShadows: false
+  - type: BadBloodHuntGround
+    seizeTime: 60
+    drainMultiplier: 1
+    radius: 7
+    contestAnnounceCooldown: 60
+    mapRevealDelay: 120
+    idleLightEnergy: 0.6
+    pulseLightEnergy: 2
+    contestedLightEnergy: 0.3
+    # FLOW-711 (D16): a cue for every state change. CMSS13 clips, CC-BY-SA-3.0 (see the folders' attributions.yml)
+    seizeStartSound:
+      path: /Audio/CMU14/Yautja/runedsanddoor.ogg
+    seizePulseSound:
+      path: /Audio/CMU14/Yautja/woodhit.ogg
+    seizePulseInterval: 10
+    contestedSound:
+      path: /Audio/CMU14/Yautja/signal.ogg
+    risenSound:
+      path: /Audio/CMU14/Yautja/HuntingGrounds/hunt_begin.ogg
+    revealComponents:
+    - type: TacticalMapAlwaysVisible
+      visibleToMarines: true
+      visibleToGovfor: true
+  # on every bracer map at once; marines only see it once revealed, like a Totem
+  - type: TacticalMapTracked
+    trackDead: true
+  - type: YautjaMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: unknown
+
+# CMU14 FLOW-706: the Hunt Leader asks the Clan Leader for a different ground
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionBadBloodPetitionClanLeader
+  name: Petition the Clan Leader
+  description: Ask the Clan Leader for a different Hunt Ground in place of an order the clan has not started on. Costs the clan Superiority Points, and the Clan Leader hears one petition every ten minutes.
+  components:
+  - type: Action
+    useDelay: 5
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.BadBlood.BadBloodPetitionClanLeaderActionEvent
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Yautja/actions.rsi
+      state: bracer_framed
+      map: [enum.ActionVisuals.Icon]

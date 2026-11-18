@@ -6,15 +6,15 @@ using Content.Shared.Inventory;
 
 namespace Content.IntegrationTests.CMU14.Yautja.BadBlood;
 
-// the clan's Leader sees as an honourable hunter does, the way an Engineer does: their visor hands out the honourable
-// glasses instead of the Bad Blood ones. leadership moves, and the sight follows it at once
+// CMU14 FLOW-701 (D3): the honourable visor is the Engineer's alone. The Hunt Leader keeps the Bad Blood glasses and
+// has the command sight instead; leadership moves, and the command sight follows it at once
 [TestFixture]
 public sealed class BadBloodLeaderVisionTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [Test]
-    public async Task TheLeaderSeesAsAnHonourableHunterAndTheSightFollowsLeadership()
+    public async Task TheLeaderHasCommandSightNotTheHonourableVisor()
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitPost(() =>
@@ -42,8 +42,10 @@ public sealed class BadBloodLeaderVisionTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(Glasses(party.Leader), Is.EqualTo(Mask(party.Leader).Comp.VisorGlassesPrototype.Id),
-                        "the Leader sees as an honourable hunter does");
+                    Assert.That(Glasses(party.Leader), Is.EqualTo(Mask(party.Leader).Comp.BadBloodVisorGlassesPrototype.Id),
+                        "the Leader keeps the Bad Blood sight");
+                    Assert.That(Server.EntMan.HasComponent<BadBloodCommandSightComponent>(party.Leader), Is.True,
+                        "the Leader has the command sight");
                     Assert.That(Glasses(grunt), Is.EqualTo(Mask(grunt).Comp.BadBloodVisorGlassesPrototype.Id),
                         "a grunt keeps the Bad Blood sight");
                 });
@@ -52,11 +54,18 @@ public sealed class BadBloodLeaderVisionTest : GameTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(Glasses(grunt), Is.EqualTo(Mask(grunt).Comp.VisorGlassesPrototype.Id),
-                        "the new Leader gains the honourable sight without toggling the visor");
-                    Assert.That(Glasses(party.Leader), Is.EqualTo(Mask(party.Leader).Comp.BadBloodVisorGlassesPrototype.Id),
-                        "the deposed Leader loses it without toggling the visor");
+                    Assert.That(Server.EntMan.HasComponent<BadBloodCommandSightComponent>(grunt), Is.True,
+                        "the new Leader gains the command sight");
+                    Assert.That(Server.EntMan.HasComponent<BadBloodCommandSightComponent>(party.Leader), Is.False,
+                        "the deposed Leader loses it");
+                    Assert.That(Glasses(grunt), Is.EqualTo(Mask(grunt).Comp.BadBloodVisorGlassesPrototype.Id),
+                        "leading does not hand out the honourable visor");
                 });
+
+                // an Engineer still sees as an honourable hunter does
+                Assert.That(Server.System<BadBloodCasteSystem>().TryTakeCaste(party.Leader, "Engineer"), Is.True);
+                Assert.That(Glasses(party.Leader), Is.EqualTo(Mask(party.Leader).Comp.VisorGlassesPrototype.Id),
+                    "the Engineer sees as an honourable hunter does");
             });
         }
         finally

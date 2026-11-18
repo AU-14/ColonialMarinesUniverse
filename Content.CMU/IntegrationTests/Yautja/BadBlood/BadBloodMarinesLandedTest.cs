@@ -77,6 +77,57 @@ public sealed class BadBloodMarinesLandedTest : GameTest
         Server.EntMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
     }
 
+    // CMU14 FLOW-707: marines in orbit hear nothing of Hunt Orders; the landing sweep names the open ones, and after the
+    // landing every new order sends one line
+    [Test]
+    public async Task HuntOrdersReachTheMarinesOnlyAfterTheLanding()
+    {
+        var map = await Pair.CreateTestMap();
+        var party = await BadBloodTestHelpers.SpawnParty(Pair, map, startLanded: false);
+        var spawned = new List<EntityUid>();
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var rules = Server.System<BadBloodCampRuleSystem>();
+                var orders = Server.System<BadBloodHuntOrderSystem>();
+                var intel = Server.System<BadBloodTotemIntelSystem>();
+                var totems = Server.System<BadBloodTotemSystem>();
+                var xforms = Server.System<SharedTransformSystem>();
+                Assert.That(rules.TryGetRule(out var rule), Is.True);
+                rule.Comp.HuntOrdersEnabled = false;
+
+                var orderLines = intel.MarineOrderIntelSent;
+                var sweeps = totems.MarineTotemIntelSent;
+                var first = orders.IssueOrderAt(xforms.ToMapCoordinates(map.GridCoords.Offset(new Vector2(30, 0))));
+                Assert.That(first, Is.Not.Null);
+                spawned.Add(first!.Value);
+                Assert.That(intel.MarineOrderIntelSent, Is.EqualTo(orderLines), "nothing before the landing");
+
+                Assert.That(rules.MarkMarinesLanded(), Is.True);
+                Assert.That(totems.MarineTotemIntelSent, Is.EqualTo(sweeps + 1), "the landing sweep names the open order");
+
+                var second = orders.IssueOrderAt(xforms.ToMapCoordinates(map.GridCoords.Offset(new Vector2(-30, 0))));
+                Assert.That(second, Is.Not.Null);
+                spawned.Add(second!.Value);
+                Assert.That(intel.MarineOrderIntelSent, Is.EqualTo(orderLines + 1), "one line per order after the landing");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                foreach (var uid in spawned)
+                {
+                    if (Server.EntMan.EntityExists(uid))
+                        Server.EntMan.DeleteEntity(uid);
+                }
+            });
+            await BadBloodTestHelpers.EndBadBloodRule(Pair, party);
+        }
+    }
+
     [Test]
     public async Task TheHelperStartsLandedByDefault()
     {

@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Pack;
+using Content.Shared.CMU14.Yautja.BadBlood;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
@@ -98,6 +99,11 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         {
             // Lab-made Wendigos contribute to no counter.
             if (_entMan.HasComponent<CMUWendigoLabMadeComponent>(uid))
+                continue;
+
+            // Bad Blood clan beasts (kennel hounds, thralls) are the clan's, not the xeno threat: they never hold
+            // up a xeno defeat (docs/GraphAudit-BadBlood-Playtest5Plan.md COUPLING-703)
+            if (_entMan.HasComponent<BadBloodBeastComponent>(uid))
                 continue;
 
             // Adrift in space outside the ship: left out until they get back aboard.

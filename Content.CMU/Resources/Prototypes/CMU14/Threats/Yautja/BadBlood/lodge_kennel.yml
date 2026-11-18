@@ -39,3 +39,72 @@
   - type: GhostRoleMobSpawner
     prototype: CMUMobYautjaBadBloodHound
     deleteOnSpawn: false
+  # CMU14 STATE-702 / ARCH-707: the kennel is also the Beast-Master's vendor (the Lodge's 3x3 is full). Ghosts take
+  # hounds through the ghost-role menu, not by using the kennel, so the vendor window does not get in their way.
+  # Sold for the buyer's own Honour like the clan's armory: war-paint for the kennel's hounds, and thrall cages, each
+  # stocking one thrall a ghost takes here (beasts.yml). A Beast-Master keeps at most two thralls, and thralls count
+  # against the clan's threat budget
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMAutomatedVendorBui
+        interactionRange: 2.5
+  - type: ActivatableUI
+    key: enum.CMAutomatedVendorUI.Key
+  - type: BadBloodCampArmory
+    pointsType: BadBloodSp
+    requiredCaste: BeastMaster
+    tiers:
+      CMUBadBloodKennelWarPaint: 1
+      CMUBadBloodThrallCageRunner: 2
+      CMUBadBloodThrallCageDefender: 2
+      CMUBadBloodThrallCageSentinel: 3
+      CMUBadBloodThrallCageLurker: 3
+      CMUBadBloodThrallCageWarrior: 3
+      CMUBadBloodThrallCageSpitter: 3
+  - type: CMAutomatedVendor
+    uiStyle: Yautja
+    pointsType: BadBloodSp
+    scaling: false
+    sections:
+    - name: Kennel
+      entries:
+      - id: CMUBadBloodKennelWarPaint
+        name: War-paint (kennel hounds bite 15% harder, once)
+        points: 3
+    - name: Thrall Cages (tier II)
+      entries:
+      - id: CMUBadBloodThrallCageRunner
+        name: Runner Cage
+        points: 6
+      - id: CMUBadBloodThrallCageDefender
+        name: Defender Cage
+        points: 7
+    - name: Thrall Cages (tier III)
+      entries:
+      - id: CMUBadBloodThrallCageSentinel
+        name: Sentinel Cage
+        points: 8
+      - id: CMUBadBloodThrallCageLurker
+        name: Lurker Cage
+        points: 9
+      - id: CMUBadBloodThrallCageWarrior
+        name: Warrior Cage
+        points: 10
+      - id: CMUBadBloodThrallCageSpitter
+        name: Spitter Cage
+        points: 10
+
+# CMU14 STATE-702: not a thing to carry. Buying it war-paints the standing kennel: its living hounds and every hound it
+# lets out bite 15% harder. The kennel's vendor deletes this placeholder
+- type: entity
+  id: CMUBadBloodKennelWarPaint
+  name: war-paint
+  description: The kennel's hounds are daubed in the clan's colours and bite harder for it.
+  categories: [HideSpawnMenu]
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
+    state: "Normal_Hellhound_Sleeping"
+  - type: BadBloodWarPaintWare
+    multiplier: 1.15

@@ -27,4 +27,38 @@ public sealed partial class BadBloodTrackerComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public TimeSpan MarkDuration = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// CMU14 ECS-704: Blood Trail. Bleeding marines within this many tiles show on the clan's bracer maps...
+    /// </summary>
+    [DataField]
+    public float BloodTrailRange = 15f;
+
+    /// <summary>
+    /// ...checked this often, each shown for <see cref="BloodTrailShowFor"/>.
+    /// </summary>
+    [DataField]
+    public TimeSpan BloodTrailEvery = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public TimeSpan BloodTrailShowFor = TimeSpan.FromSeconds(6);
+
+    [ViewVariables]
+    public TimeSpan NextBloodTrail;
+
+    /// <summary>
+    /// CMU14 ECS-704: early warning. A marine this many tiles beyond a Totem's contest radius warns the Tracker
+    /// before the contest starts...
+    /// </summary>
+    [DataField]
+    public float WarningPadding = 6f;
+
+    /// <summary>
+    /// ...at most once per Totem in this long.
+    /// </summary>
+    [DataField]
+    public TimeSpan WarningCooldown = TimeSpan.FromSeconds(60);
+
+    [ViewVariables]
+    public Dictionary<EntityUid, TimeSpan> WarnedAt = new();
 }

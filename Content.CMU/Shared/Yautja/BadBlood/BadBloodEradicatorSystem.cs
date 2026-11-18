@@ -6,7 +6,7 @@ using Robust.Shared.Timing;
 namespace Content.Shared.CMU14.Yautja.BadBlood;
 
 // the gates on the Bad Blood caster: the lethal bolt and the eradicator mode. the immobilizer is always there, and
-// the stun bolt for everyone but a Berserker (CMU14 ARCH-605)
+// the stun bolt for everyone but a Berserker (CMU14 ARCH-605), the immobilizer for everyone but a Medic (ECS-702)
 public sealed partial class BadBloodEradicatorSystem : EntitySystem
 {
     /// <summary>
@@ -77,6 +77,25 @@ public sealed partial class BadBloodEradicatorSystem : EntitySystem
                 caster.Modes.Count > ImmobilizerMode)
             {
                 _caster.ForceMode((args.Caster, caster), ImmobilizerMode);
+            }
+
+            return;
+        }
+
+        // CMU14 ECS-702 (D17): a Medic carries no immobilizer, the price of the field kit. refused the same way as
+        // the Berserker's stun bolt, falling back to the stun bolt
+        if (!args.Cancelled && args.Mode == ImmobilizerMode && HasComp<BadBloodFieldMendComponent>(ent.Owner))
+        {
+            args.Cancelled = true;
+            if (args.Silent)
+                return;
+
+            _popup.PopupClient(Loc.GetString("cmu-bad-blood-medic-no-immobilizer"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            if (_net.IsServer &&
+                TryComp(args.Caster, out YautjaCasterComponent? medicCaster) &&
+                medicCaster.Modes.Count > StunMode)
+            {
+                _caster.ForceMode((args.Caster, medicCaster), StunMode);
             }
 
             return;

@@ -6,7 +6,7 @@ ent-CMUBadBloodCamp = Bad Blood Lodge
     .suffix = Bad Blood
 
 ent-CMUBadBloodCampKit = Lodge kit
-    .desc = Bone poles, hide and plating, bundled for carrying. Only the clan's Leader knows how it goes together.
+    .desc = Bone poles, hide and plating, bundled for carrying. Only the Hunt Leader knows how it goes together.
     .suffix = Bad Blood
 
 ent-CMUYautjaBadBloodLeaderBracer = clan leader's bracer
@@ -20,7 +20,7 @@ ent-CMUBadBloodCampSpit = Lodge spit
     .suffix = Bad Blood
 
 ent-CMUBadBloodCampAscensionStone = Ascension Stone
-    .desc = A slab cut with the marks of every Leader the clan has followed. Whoever would be the next one stands here.
+    .desc = A slab cut with the marks of every Hunt Leader the clan has followed. Whoever would be the next one stands here.
     .suffix = Bad Blood
 
 ent-CMUBadBloodCampArmory = Lodge armory
@@ -35,7 +35,7 @@ ent-CMUBadBloodCampCauldron = Lodge cauldron
     .desc = A black pot kept at a rolling boil. It strips a severed limb down to clean bone.
     .suffix = Bad Blood
 
-cmu-bad-blood-camp-kit-leader-only = Only the clan's Leader can raise the Lodge.
+cmu-bad-blood-camp-kit-leader-only = Only the Hunt Leader can raise the Lodge.
 cmu-bad-blood-camp-kit-ready = You bundle a Lodge kit. Use it on open ground to raise the Lodge.
 cmu-bad-blood-camp-already-standing = The clan's Lodge already stands.
 cmu-bad-blood-camp-cooldown = The clan is not ready to raise another Lodge. Wait { $seconds } more seconds.
@@ -44,7 +44,7 @@ cmu-bad-blood-camp-near-landing-zone = This is too close to the prey's landing z
 cmu-bad-blood-camp-pitched-first = The Lodge stands. Bring it trophies and prey. The clan may raise one Clan Totem for free.
 cmu-bad-blood-camp-pitched = The Lodge stands again.
 cmu-bad-blood-camp-under-attack = The Lodge is under attack!
-cmu-bad-blood-camp-destroyed = The Lodge has fallen! Only the Leader can raise another.
+cmu-bad-blood-camp-destroyed = The Lodge has fallen! Only the Hunt Leader can raise another.
 
 # FLOW-606: sent when the Lodge's square is boxed on the marine map (the landing, a new Lodge, a moved one)
 cmu-bad-blood-lodge-region-marines = Dropship sensors have traced the hostile hunters' camp to grid X { $x1 }-{ $x2 }, Y { $y1 }-{ $y2 }. The area is marked on the tactical map.

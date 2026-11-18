@@ -68,6 +68,8 @@ public sealed partial class TackleSystem : EntitySystem
         if (!TryComp(user, out TackleComponent? tackle))
             return;
 
+        if (XenoTargetFilter.IsBlocked(EntityManager, user, target)) { args.Handled = true; return; } // CMU14: a fork spares the tackler's allies (Bad Blood beasts)
+
         args.Handled = true;
 
         DoDisarmEffects(user, target);

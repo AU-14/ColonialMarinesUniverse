@@ -200,7 +200,7 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(rule.FoundingSquadDivisor, Is.EqualTo(2));
                 Assert.That(rule.LastStandSeats, Is.EqualTo(2));
                 Assert.That(rule.TotemLimit, Is.EqualTo(3));
-                Assert.That(rule.TotemLimitHighPop, Is.EqualTo(4));
+                Assert.That(rule.TotemLimitHighPop, Is.EqualTo(3), "D6: orders + Totems never above 3");
                 Assert.That(rule.TotemHighPopPlayers, Is.EqualTo(80));
 
                 var threat = protos.Index<ThreatPrototype>("BadBloodClanThreat");
@@ -472,7 +472,7 @@ public sealed class BadBloodValueSheetTest
             ProtoId<BadBloodCastePrototype> medic = "Medic";
             ProtoId<BadBloodCastePrototype> berserker = "Berserker";
             ProtoId<BadBloodCastePrototype> tracker = "Tracker";
-            ProtoId<BadBloodCastePrototype> falconer = "Falconer";
+            ProtoId<BadBloodCastePrototype> beastMaster = "BeastMaster";
 
             T Perk<T>(ProtoId<BadBloodCastePrototype> caste) where T : IComponent, new()
             {
@@ -483,7 +483,7 @@ public sealed class BadBloodValueSheetTest
 
             Assert.Multiple(() =>
             {
-                foreach (var caste in new[] { engineer, medic, berserker, tracker, falconer })
+                foreach (var caste in new[] { engineer, medic, berserker, tracker, beastMaster })
                 {
                     var proto = protos.Index(caste);
                     Assert.That(proto.CapDivisor, Is.EqualTo(4), $"{caste.Id}: one per four living Bad Bloods");
@@ -494,6 +494,18 @@ public sealed class BadBloodValueSheetTest
                 Assert.That(protos.Index(engineer).Skills["RMCSkillEngineer"], Is.EqualTo(2));
                 Perk<BadBloodBuildAnywhereComponent>(engineer);
                 Perk<BadBloodHunterVisorComponent>(engineer);
+
+                // CMU14 ECS-701: Raise Bulwark (3 barricades, 2 bricks each), half-time reconsecration, 1.5 at a seize,
+                // a 5 s repair of 100
+                foreach (var e in new[] { Perk<BadBloodEngineerComponent>(engineer), new BadBloodEngineerComponent() })
+                {
+                    Assert.That(e.BulwarkWidth, Is.EqualTo(3));
+                    Assert.That(e.BricksPerBarricade, Is.EqualTo(2));
+                    Assert.That(e.ConsecrationTimeMultiplier, Is.EqualTo(0.5f).Within(0.0001f));
+                    Assert.That(e.ContestWeight, Is.EqualTo(1.5f).Within(0.0001f));
+                    Assert.That(e.RepairTime, Is.EqualTo(TimeSpan.FromSeconds(5)));
+                    Assert.That(e.RepairAmount, Is.EqualTo(100f).Within(0.0001f));
+                }
 
                 // Medic: Yautja medicine in 60% of the time
                 Assert.That(Perk<BadBloodMedicSpeedComponent>(medic).Multiplier, Is.EqualTo(0.6f).Within(0.0001f));
@@ -506,7 +518,20 @@ public sealed class BadBloodValueSheetTest
                     Assert.That(b.DamageTakenMultiplier, Is.EqualTo(0.85f).Within(0.0001f));
                     Assert.That(b.SprintMultiplier, Is.EqualTo(0.9f).Within(0.0001f));
                     Assert.That(b.StaggerMultiplier, Is.EqualTo(1.5f).Within(0.0001f));
+
+                    // CMU14 ECS-703: Blood Rage under half health, 10 s, +25% melee, counts 2 at a seize
+                    Assert.That(b.RageHealthThreshold, Is.EqualTo(0.5f).Within(0.0001f));
+                    Assert.That(b.RageDuration, Is.EqualTo(TimeSpan.FromSeconds(10)));
+                    Assert.That(b.RageMeleeMultiplier, Is.EqualTo(1.25f).Within(0.0001f));
+                    Assert.That(b.RageContestWeight, Is.EqualTo(2f).Within(0.0001f));
                 }
+
+                // CMU14 ECS-705: War Cry, 7 tiles, 8 s, x1.15 speed, half stagger
+                var cry = new BadBloodWarCryComponent();
+                Assert.That(cry.Radius, Is.EqualTo(7f).Within(0.0001f));
+                Assert.That(cry.Duration, Is.EqualTo(TimeSpan.FromSeconds(8)));
+                Assert.That(cry.SpeedMultiplier, Is.EqualTo(1.15f).Within(0.0001f));
+                Assert.That(cry.StaggerMultiplier, Is.EqualTo(0.5f).Within(0.0001f));
 
                 // Tracker: 85% armour, 75% cloak cooldown, marks show for 60 s
                 foreach (var t in new[] { Perk<BadBloodTrackerComponent>(tracker), new BadBloodTrackerComponent() })
@@ -514,15 +539,22 @@ public sealed class BadBloodValueSheetTest
                     Assert.That(t.ArmorMultiplier, Is.EqualTo(0.85f).Within(0.0001f));
                     Assert.That(t.CloakCooldownMultiplier, Is.EqualTo(0.75f).Within(0.0001f));
                     Assert.That(t.MarkDuration, Is.EqualTo(TimeSpan.FromSeconds(60)));
+
+                    // CMU14 ECS-704: Blood Trail in 15 tiles; early warning 6 tiles out, once a minute per Totem
+                    Assert.That(t.BloodTrailRange, Is.EqualTo(15f).Within(0.0001f));
+                    Assert.That(t.WarningPadding, Is.EqualTo(6f).Within(0.0001f));
+                    Assert.That(t.WarningCooldown, Is.EqualTo(TimeSpan.FromSeconds(60)));
                 }
 
-                // Falconer: no perks, the falcon drone at the armory, tier I for 4, one each, Falconers only
-                Assert.That(protos.Index(falconer).AddComponents, Is.Empty);
+                // CMU14 ARCH-705: the Beast-Master replaces the Falconer and alone buys the falcon drone at the armory,
+                // tier I for 4, one each
+                Assert.That(protos.HasIndex<BadBloodCastePrototype>("Falconer"), Is.False, "the Falconer is retired");
+                Perk<BadBloodBeastMasterComponent>(beastMaster);
                 var armory = protos.Index<EntityPrototype>(Armory);
                 Assert.That(armory.TryComp<BadBloodCampArmoryComponent>(out var armoryComp, factory), Is.True);
                 Assert.That(armory.TryComp<CMAutomatedVendorComponent>(out var vendor, factory), Is.True);
                 Assert.That(armoryComp!.Tiers["CMUYautjaFalconDroneBadBlood"], Is.EqualTo(1));
-                Assert.That(armoryComp.CasteWares["CMUYautjaFalconDroneBadBlood"], Is.EqualTo(falconer));
+                Assert.That(armoryComp.CasteWares["CMUYautjaFalconDroneBadBlood"], Is.EqualTo(beastMaster));
                 Assert.That(PriceOf(vendor!, "CMUYautjaFalconDroneBadBlood"), Is.EqualTo(4));
             });
         });

@@ -18,12 +18,16 @@ namespace Content.Server.CMU14.Yautja.BadBlood;
 // ARCH-02: the forge ware upgrades the buyer's bracer weapon in place.
 // CMU14 STATE-602: the kennel wares upgrade the standing kennel's stock (BadBloodCampSystem.Kennel.cs).
 // CMU14 ARCH-604: caste stations sell to their caste only, and CasteWares lock single wares of the clan's armory.
-// Dependency fields taken by this file: _armoryEradicator, _armoryForge, _armoryProto, _armoryVendor.
+// CMU14 Playtest 5: STATE-701 (a caste-less grunt pays less for tier I), STATE-702 (the kennel is the Beast-Master's
+// vendor: war-paint and thrall cages; the Beast-Master pays less for kennel wares and gets the first falcon free) and
+// ARCH-707 (thrall cages, capped per Beast-Master and by the clan's threat budget). Prices: GetArmoryPrice.
+// Dependency fields taken by this file: _armoryEradicator, _armoryForge, _armoryProto, _armoryThralls, _armoryVendor.
 public sealed partial class BadBloodCampSystem
 {
     [Dependency] private BadBloodEradicatorUnlockSystem _armoryEradicator = default!;
     [Dependency] private BadBloodForgeSystem _armoryForge = default!;
     [Dependency] private IPrototypeManager _armoryProto = default!;
+    [Dependency] private BadBloodThrallBeastSystem _armoryThralls = default!;
     [Dependency] private SharedCMAutomatedVendorSystem _armoryVendor = default!;
 
     partial void InitializeArmory()
@@ -170,7 +174,101 @@ public sealed partial class BadBloodCampSystem
             }
         }
 
+        // CMU14 STATE-702: war-paint needs a standing kennel that is not painted yet
+        if (IsArmoryWare<BadBloodWarPaintWareComponent>(ware))
+        {
+            if (!TryGetKennel(out var kennel))
+            {
+                reason = "cmu-bad-blood-armory-kennel-none";
+                return false;
+            }
+
+            if (HasComp<BadBloodWarPaintComponent>(kennel))
+            {
+                reason = "cmu-bad-blood-armory-kennel-maxed";
+                return false;
+            }
+        }
+
+        // CMU14 ARCH-707: a thrall cage is the Beast-Master's, within their own thrall cap and the clan's threat budget
+        if (IsArmoryWare<BadBloodThrallCageComponent>(ware))
+        {
+            if (!TryComp(user, out BadBloodBeastMasterComponent? beastMaster))
+            {
+                reason = "cmu-bad-blood-caste-armory-locked";
+                return false;
+            }
+
+            if (_armoryThralls.CountThralls(user) >= beastMaster.MaxThralls)
+            {
+                reason = "cmu-bad-blood-thrall-cap";
+                return false;
+            }
+
+            if (GetThrallBudgetRoom() <= 0)
+            {
+                reason = "cmu-bad-blood-thrall-budget";
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    /// <summary>
+    /// CMU14 ARCH-707 (D11): how many more thralls the clan's threat budget allows: the budget less the living Bad
+    /// Bloods, the open squad seats and the thralls and cages already out. Counted here and not through
+    /// <see cref="GetSquadBudgetRoom"/>, so it stays right whether or not that counts thralls too.
+    /// </summary>
+    public int GetThrallBudgetRoom()
+    {
+        if (!_rule.TryGetRule(out _))
+            return 0;
+
+        var bodies = _rule.CountLivingBadBloods() + GetPendingSquadSeats() + _armoryThralls.CountClanThralls();
+        return Math.Max(0, _rule.GetThreatBudget() - bodies);
+    }
+
+    /// <summary>
+    /// What <paramref name="user"/> pays for <paramref name="ware"/> listed at <paramref name="price"/>, by the
+    /// armory's <see cref="BadBloodArmoryPriceComponent"/>: STATE-702, a Beast-Master's first falcon is free and the
+    /// kennel wares cost them a share; STATE-701, a grunt (no caste, not the Hunt Leader) pays a share for tier I at
+    /// the clan's armory. Without the component the listed price.
+    /// </summary>
+    public FixedPoint4 GetArmoryPrice(Entity<BadBloodCampArmoryComponent> armory, EntityUid user, EntProtoId ware, int price)
+    {
+        var listed = Math.Max(price, 0);
+        if (!TryComp(armory, out BadBloodArmoryPriceComponent? rules))
+            return FixedPoint4.New(listed);
+
+        var multiplier = 1.0;
+        if (TryComp(user, out BadBloodBeastMasterComponent? beastMaster))
+        {
+            if (!beastMaster.FreeFalconClaimed && rules.FirstFreeForBeastMaster.Contains(ware))
+                return FixedPoint4.Zero;
+
+            if (rules.KennelWares.Contains(ware))
+                multiplier *= beastMaster.KennelWareMultiplier;
+        }
+
+        if (IsArmoryGrunt(armory, user) && GetArmoryTier(armory, ware) == 1)
+            multiplier *= rules.GruntTierOneMultiplier;
+
+        return FixedPoint4.New(listed * multiplier);
+    }
+
+    // CMU14 STATE-701: the grunt passive belongs to the clan's own armory only, and is lost with a caste
+    private bool IsArmoryGrunt(Entity<BadBloodCampArmoryComponent> armory, EntityUid user)
+    {
+        return armory.Comp.RequiredCaste == null &&
+               !HasComp<BadBloodCasteComponent>(user) &&
+               !_badBlood.IsBadBloodLeader(user);
+    }
+
+    private bool IsArmoryWare<T>(EntProtoId ware) where T : IComponent, new()
+    {
+        return _armoryProto.TryIndex(ware, out var proto) &&
+               proto.TryComp<T>(out _, EntityManager.ComponentFactory);
     }
 
     /// <summary>
@@ -189,14 +287,24 @@ public sealed partial class BadBloodCampSystem
             return false;
         }
 
-        if (!_rule.TrySpendHonour(user, FixedPoint4.New(Math.Max(price, 0))))
+        // CMU14 STATE-701 / STATE-702: the buyer's own price
+        var cost = GetArmoryPrice(armory, user, ware, price);
+        if (!_rule.TrySpendHonour(user, cost))
         {
             _popup.PopupEntity(
-                Loc.GetString("cmu-bad-blood-armory-not-enough", ("price", price), ("sp", FormatSp(_rule.GetHonour(user)))),
+                Loc.GetString("cmu-bad-blood-armory-not-enough", ("price", FormatSp(cost)), ("sp", FormatSp(_rule.GetHonour(user)))),
                 armory.Owner,
                 user,
                 PopupType.SmallCaution);
             return false;
+        }
+
+        // CMU14 STATE-702: the Beast-Master's free falcon is spent
+        if (TryComp(armory, out BadBloodArmoryPriceComponent? rules) &&
+            rules.FirstFreeForBeastMaster.Contains(ware) &&
+            TryComp(user, out BadBloodBeastMasterComponent? beastMaster))
+        {
+            beastMaster.FreeFalconClaimed = true;
         }
 
         SyncArmoryBalance(armory.Comp.PointsType);
@@ -239,6 +347,30 @@ public sealed partial class BadBloodCampSystem
                     ("stock", kennel.Comp.MinStock)));
             }
 
+            return;
+        }
+
+        // CMU14 STATE-702: war-paint for the standing kennel
+        if (TryComp<BadBloodWarPaintWareComponent>(args.Item, out var warPaint))
+        {
+            var multiplier = warPaint.Multiplier;
+            QueueDel(args.Item);
+            if (TryGetKennel(out var kennel))
+            {
+                ApplyKennelWarPaint(kennel, multiplier);
+                _rule.AnnounceToClan(Loc.GetString("cmu-bad-blood-beast-war-paint",
+                    ("percent", (int) MathF.Round((multiplier - 1f) * 100f))));
+            }
+
+            return;
+        }
+
+        // CMU14 ARCH-707: a thrall cage stands at the kennel, the buyer's, until a ghost takes the thrall
+        if (TryComp<BadBloodThrallCageComponent>(args.Item, out var cage))
+        {
+            cage.Master = args.User;
+            cage.StockedAt = _timing.CurTime;
+            _popup.PopupEntity(Loc.GetString("cmu-bad-blood-thrall-cage-stocked"), args.User, args.User, PopupType.Medium);
             return;
         }
 

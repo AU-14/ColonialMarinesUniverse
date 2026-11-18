@@ -71,8 +71,8 @@
 
   ## Clan Totems
   A Totem pays the clan Superiority Points every minute it is [bold]consecrated[/bold] (the normal state) and not contested. It ripens with the time it has stood uncontested: ripe after [bold]20 minutes[/bold]. Three ripe Totems start the ship call.
-  - [bold]Spotting them:[/bold] you learn nothing while still in orbit. When the first dropship lands, its sensors name every Totem already standing; after that ARES names each new one as it is raised. Each shows on your tactical map [bold]2 minutes[/bold] after the later of its raising and the landing. Totems stand at least 20 tiles from the Lodge and from each other.
-  - [bold]Contest it:[/bold] while a living marine is within [bold]7 tiles[/bold] and no Bad Blood is, the Totem pays nothing and stops ripening. Its hum stutters and its red light dims. A Bad Blood stepping in starts it again, and the clan is warned when you hold one.
+  - [bold]Spotting them:[/bold] the clan does not choose where its Totems go: its Clan Leader orders it to seize a [bold]Hunt Ground[/bold], and a Totem rises when the clan has held the ground for about a minute. You learn nothing while still in orbit. After the first dropship lands, its sensors name every Totem already standing, and ARES warns of "unknown emitter activity" in an area each time a new Hunt Ground is ordered. Each Totem and Hunt Ground shows on your tactical map [bold]2 minutes[/bold] after the later of its appearance and the landing. The clan never holds more than 3 Totems and open orders together.
+  - [bold]Contest it:[/bold] while a living marine is within [bold]7 tiles[/bold] and no Bad Blood is, the Totem pays nothing and stops ripening. You hear it, and its red light dims. A Bad Blood stepping in starts it again, and the clan is warned when you hold one. Standing on a [bold]Hunt Ground[/bold] drains the clan's progress there, and holding it with them freezes it, so contest the ground before a Totem ever rises.
   - [bold]Defile:[/bold] right-click it, choose [bold]Defile Totem[/bold], hold still for [bold]45 seconds[/bold]. Moving or taking damage interrupts you, so post guards.
   - A defiled Totem (the clan calls it desecrated) [bold]pays nothing, is not ripe[/bold], gives the clan no aura, and they cannot build walls from it. Its light goes out.
   - [bold]It is not permanent.[/bold] A Bad Blood can [bold]Reconsecrate[/bold] it in 45 seconds, and a Totem keeps aging while defiled, so an old one is ripe again the moment it is reconsecrated.
@@ -100,8 +100,8 @@
 
   ## Killing the clan
   - [bold]The Lodge[/bold] has 900 health. Rifle fire barely scratches it. [bold]Explosives deal double damage[/bold] and fire burns it. It slowly heals if nobody hits it for a minute. When it falls, every clan wall crumbles.
-  - [bold]The Leader:[/bold] stands a little taller than the rest of the clan. While a Lodge stands, a dead Leader is replaced by a clan vote within 2 minutes. With no Lodge, a dead Leader means you win.
-  - After the Lodge falls, the Leader can pitch a new one 5 minutes later. [bold]Kill the Leader inside that window.[/bold]
+  - [bold]The Hunt Leader:[/bold] stands a little taller than the rest of the clan. While a Lodge stands, a dead Hunt Leader is replaced by a clan vote within 2 minutes. With no Lodge, a dead Hunt Leader means you win.
+  - After the Lodge falls, the Hunt Leader can pitch a new one 5 minutes later. [bold]Kill the Hunt Leader inside that window.[/bold]
   - [bold]Destroying the Lodge turns back an inbound clan ship.[/bold] Once the ship has arrived, destroying the Lodge pauses its departure.
   - If every Bad Blood dies, the clan gets one last squad at its Lodge if it can pay for one. If nobody is left 2 minutes later, you win. A clan whose ship has arrived cannot be wiped out this way: take the Lodge.
   - A Bad Blood who ghosts is replaced by another player.
@@ -145,22 +145,22 @@
 
   [bold]Every Bad Blood[/bold] goes critical at 280 damage and dies at 380.
 
-  [bold]The Leader[/bold] wears Leader-grade armor (30 / 55 / 30 / 40) and carries an extra healing capsule, and sees as an honourable hunter does, like an Engineer. Tier II and III wares open to the Leader one tier early, except the lethal bolt. Only the Leader can pitch the Lodge, call squads while alive, buy the lethal bolt and the eradicator, fire the eradicator, and hijack a dropship.
+  [bold]The Hunt Leader[/bold] wears Leader-grade armor (30 / 55 / 30 / 40) and carries an extra healing capsule, and has the [bold]command sight[/bold]: clanmates, clan beasts and Hunt Grounds within 20 tiles show through walls (the honourable visor is the Engineer's alone). The Hunt Leader holds [bold]no caste[/bold]: a caste-holder who takes the lead loses theirs. [bold]War Cry[/bold] (90 s cooldown) speeds every Bad Blood within 7 tiles by 15% and halves their stagger for 8 seconds. Tier II and III wares open to the Hunt Leader one tier early, except the lethal bolt. Only the Hunt Leader can pitch the Lodge, call squads while alive, buy the lethal bolt and the eradicator, fire the eradicator, and hijack a dropship.
 
   [bold]Your hide:[/bold] before armor you take 40% of blunt, 45% of slash, 30% of piercing and 50% of burn damage, half of poison and all of caustic. You are softer in melee and tougher against fire than an honourable hunter.
 
   ## The Lodge
-  - The Leader uses [bold]Pitch Camp[/bold] to get a Lodge kit, then uses it on open ground away from the landing zones.
-  - One Lodge at a time. If it falls, the Leader can pitch a new one after 5 minutes.
+  - The Hunt Leader uses [bold]Pitch Camp[/bold] to get a Lodge kit, then uses it on open ground away from the landing zones.
+  - One Lodge at a time. If it falls, the Hunt Leader can pitch a new one after 5 minutes.
   - It has 900 health and heals slowly when left alone. Explosives and fire are what threaten it.
   - It shows on the marines' map when it is hit, when you buy a squad, when a marine decrypts one of your bracers, when a Totem is destroyed, and for as long as your ship is called or in orbit.
   - Once the marines land, the 30-by-30-tile square it stands in is boxed on their map for as long as it stands.
 
   The Lodge comes with eight parts:
   - [bold]Spit:[/bold] cook bodies and meat for food and SP, refill your flask.
-  - [bold]Ascension Stone:[/bold] call reinforcement squads, choose a new Leader.
+  - [bold]Ascension Stone:[/bold] call reinforcement squads, choose a new Hunt Leader.
   - [bold]Armory:[/bold] spend your own Honour on equipment.
-  - [bold]Kennel:[/bold] free hounds for ghosts to take.
+  - [bold]Kennel:[/bold] free hounds for ghosts to take. The Beast-Master also shops here: war-paint for the hounds and thrall cages.
   - [bold]Cauldron:[/bold] boil prepared limbs down to bone.
   - [bold]Quarry:[/bold] draw bricks for walls, barricades and doors.
   - [bold]Forge-bench:[/bold] the Engineers' store. Only an Engineer can open it.
@@ -168,18 +168,19 @@
 
   ## Castes
   Right-click the Lodge and use [bold]Choose your caste[/bold]. One caste per life. The clan may have one of each caste for every four living Bad Bloods, and always at least one.
-  - [bold]Engineer:[/bold] sees as an honourable hunter does, builds walls and barricades anywhere, and plants charges. The forge-bench sells demolition charges and a siege plasma rifle that tears into vehicles.
-  - [bold]Medic:[/bold] works Yautja medicine faster than other Bad Bloods. The medicine cache sells gels, clamps, injectors and the medicomp cheaper than the armory.
-  - [bold]Berserker:[/bold] the frontline brute. +80 to the critical and death thresholds, takes 15% less damage, sprints 10% slower, and staggers 50% longer with Bad Blood melee. Carries no stun bolt.
-  - [bold]Tracker:[/bold] armor counts for 85%, the cloak cools down in 75% of the time, and [bold]Mark for the clan[/bold] shows a target on every Bad Blood's bracer map for 60 seconds.
-  - [bold]Falconer:[/bold] the only caste that can buy the falcon drone (armory, tier I, 4).
+  - [bold]Engineer:[/bold] sees as an honourable hunter does, builds walls and barricades anywhere, and plants charges. [bold]Raise Bulwark[/bold] (60 s cooldown) stacks the bricks in hand into three barricades in front of you, two bricks each. Reconsecrates a Totem in half the time, counts 1.5 toward seizing a Hunt Ground, and can [bold]Repair[/bold] a damaged Totem or the Lodge (5 s, 100 health). The forge-bench sells demolition charges and a siege plasma rifle that tears into vehicles.
+  - [bold]Medic:[/bold] a front-line field medic. [bold]Field Mend[/bold] (3 s, 150 bracer charge, once per 20 s per patient) stops surface bleeding, splints the worst fracture, eases pain and clears slows on a clanmate or clan beast; internal bleeding still needs the medicomp. [bold]Blood Rite[/bold] (6 s) lifts a critical clanmate out of crit with 8 seconds of second wind, then 3 minutes of rite sickness. A critical Bad Blood within 5 tiles of a Medic suffocates and bleeds out at half the rate. Drags the fallen at 80% speed, works Yautja medicine and the field kit faster, sees clanmates' state at a glance, and brews regeneration tonic at the cauldron from a prey limb. Armor counts for 90% and the Medic carries no immobilizer. The medicine cache sells gels, clamps, injectors, the field kit, tonic and the medicomp.
+  - [bold]Berserker:[/bold] the frontline brute. +80 to the critical and death thresholds, takes 15% less damage, sprints 10% slower, and staggers 50% longer with Bad Blood melee. Carries no stun bolt. [bold]Blood Rage[/bold] (under half health, 2 min cooldown): for 10 seconds you roar, glow red, hit 25% harder, shrug off slows and stuns, cannot cloak, and count double toward seizing a Hunt Ground.
+  - [bold]Tracker:[/bold] armor counts for 85%, the cloak cools down in 75% of the time, and [bold]Mark for the clan[/bold] shows a target on every Bad Blood's bracer map for 60 seconds. [bold]Blood Trail:[/bold] bleeding marines within 15 tiles show on the clan's bracer maps. You are warned when marines close on a Totem or Hunt Ground, before they contest it.
+  - [bold]Beast-Master:[/bold] the clan's kennel hounds and thralls answer to you (to the Hunt Leader when there is no Beast-Master). Pack actions: [bold]Blood Scent[/bold] (your beasts deal 35% more to a marked target for 15 s), [bold]Rally Howl[/bold] (+20% beast speed for 6 s), [bold]Mend Beast[/bold] (heal 60), [bold]Pack Sight[/bold], and beasts near you regenerate faster. Only a Beast-Master buys the falcon drone (the first is free) and shops at the kennel, at 60% of the kennel wares' price. Armor counts for 90%.
+  - A caste-less Bad Blood (a [bold]grunt[/bold]) earns 1 more Honour for a Blooded kill and pays 80% for tier I clan-armory wares.
 
   ## Knowing your clan
-  Every Bad Blood carries a clan code. Other Bad Bloods see you, and the radio names you, by your role and code: [bold]Leader (BB-12)[/bold], [bold]Engineer (BB-31)[/bold], [bold]Grunt (BB-45)[/bold].
+  Every Bad Blood carries a clan code. Other Bad Bloods see you, and the radio names you, by your role and code: [bold]Hunt Leader (BB-12)[/bold], [bold]Engineer (BB-31)[/bold], [bold]Grunt (BB-45)[/bold].
 
   ## Superiority Points (SP)
   The clan earns two kinds of points, so gear never eats the points meant for reinforcements:
-  - [bold]Clan SP[/bold] is shared and buys squads and Totems. It comes from cooking bodies and from Totems. Hauling bodies home and cooking them is how you feed the clan.
+  - [bold]Clan SP[/bold] is shared and buys squads and Hunt Order re-rolls. It comes from cooking bodies and from Totems. Hauling bodies home and cooking them is how you feed the clan.
   - [bold]Honour[/bold] is yours alone and buys armory gear, kennel upgrades included. It comes from the trophies you offer at the Lodge.
   Both count towards the clan's armory tiers. One body is worth up to [bold]4 Honour[/bold] to whoever offers its trophies and [bold]3 clan SP[/bold] from cooking.
 
@@ -199,9 +200,11 @@
   [bold]Dragging is slow.[/bold] You drag or carry a body at 45% speed. Clear the way before you haul.
 
   ## Clan Totems
-  - Any Bad Blood can use [bold]Raise Clan Totem[/bold]. The first is free, each one after costs 3 SP.
-  - It needs open sky and at least 20 tiles from the Lodge and other Totems, and 25 from a landing zone.
-  - The clan holds up to 3 Totems (4 on rounds with more than 80 players).
+  [bold]Hunt Orders.[/bold] Nobody raises a Totem by hand. About 2 minutes after the first Lodge stands, the Clan Leader orders the clan to seize a [bold]Hunt Ground[/bold], shown on every bracer map. The Hunt Leader picks one of two sites within 30 seconds (else the first is taken).
+  - [bold]Seize it:[/bold] stand on it with no marine near. It fills in about a minute (a raging Berserker counts 2, an Engineer 1.5). Marines alone drain it; both sides together freeze it. When it fills, a Totem rises there, the clan gets 2 SP and every Bad Blood who held it in the last 30 seconds gets 1 Honour.
+  - An order lapses after 8 minutes. A new one comes 4 minutes after a slot frees. Open orders and Totems together never exceed 3.
+  - The Hunt Leader can [bold]Petition the Clan Leader[/bold] once every 10 minutes for 3 SP to re-roll an order nobody has started on.
+  - Sites are at least 20 tiles from the Lodge and other Totems, 25 from a landing zone, under open sky.
   - A consecrated Totem pays SP every minute it is not contested. Its stage counts only that time:
     - young (first 10 minutes): 0.2 SP a minute;
     - growing (10 to 20 minutes): 0.4 SP a minute;
@@ -209,9 +212,9 @@
   - Totem SP counts only half towards armory tiers.
   - [bold]Aura:[/bold] Bad Bloods within 7 tiles of a consecrated Totem get hungry more slowly and heal slowly while out of combat.
   - Examine a Totem to see its stage, its rate and what it has paid.
-  - Marines still in orbit learn nothing. When their first dropship lands, its sensors name every Totem standing, and after that each new one as it is raised. A Totem shows on their map 2 minutes after the later of its raising and the landing.
+  - Marines still in orbit learn nothing. When their first dropship lands, its sensors name every Totem standing, and after that they hear of each new Hunt Ground in its area. A Totem shows on their map 2 minutes after the later of its raising and the landing.
 
-  [bold]Contested.[/bold] A living marine within 7 tiles with no Bad Blood near stops the Totem: no SP and no ripening. A Bad Blood standing at it keeps it working, so defend it in person.
+  [bold]Contested.[/bold] A living marine within 7 tiles with no Bad Blood near stops the Totem: no SP and no ripening. A Bad Blood standing at it keeps it working, so defend it in person. It sounds when contested and freed, desecrated and restored.
   - The clan is warned when one is contested (at most once a minute per Totem) and told when it works again.
   - Its red light burns bright while it works, dims while contested and goes out while desecrated.
 
@@ -246,7 +249,7 @@
   - Harpoon, ceremonial dagger: 4 each
   - Smart disc: 5
   - Kennel Breeding (halves the kennel's interval, twice): 5
-  - Falcon drone (Falconer only, one each): 4
+  - Falcon drone (Beast-Master only, one each, the first free): 4
 
   [bold]Tier II[/bold]
   - Wrist blade, scimitar and chain gauntlet attachments, bracer shield attachment, hunter spear, armored clan mask: 4 each
@@ -268,7 +271,7 @@
 
   ## The plasma caster
   - [bold]Stun[/bold] and [bold]immobilizer[/bold]: from the landing (a Berserker has no stun bolt). The stun fires at most one bolt every 2 seconds, the immobilizer one every 17 seconds.
-  - [bold]Lethal bolt:[/bold] after the Leader buys it, for the whole clan. One bolt every [bold]12 seconds[/bold]. It hits and damages vehicles.
+  - [bold]Lethal bolt:[/bold] after the Hunt Leader buys it, for the whole clan. One bolt every [bold]12 seconds[/bold]. It hits and damages vehicles.
   - [bold]Eradicator:[/bold] Leader only, after the lethal bolt. One shot, then a 10-minute cooldown.
   - Bracer power per shot: stun 80, immobilizer 300, lethal 150, eradicator 1500.
   - Stun and immobilizer bolts fly at most [bold]7 tiles[/bold]; lethal and eradicator bolts [bold]12[/bold].
@@ -276,11 +279,12 @@
   - Firing from cloak drops your cloak.
 
   ## Reinforcements and hounds
-  - The Leader calls [bold]squads[/bold] at the Ascension Stone (any Bad Blood can while there is no Leader): 1 grunt for 7 SP, 3 grunts for 16 SP, 5 grunts for 24 SP.
+  - The Hunt Leader calls [bold]squads[/bold] at the Ascension Stone (any Bad Blood can while there is no Leader): 1 grunt for 7 SP, 3 grunts for 16 SP, 5 grunts for 24 SP.
   - Seats go out as ghost roles, Blood Reserve first. Unclaimed seats are refunded.
   - [bold]Buying a squad reveals the Lodge to the marines for 60 seconds.[/bold]
   - [bold]Hounds[/bold] are free. The kennel stocks hound takeovers for ghosts: 2 when the Lodge is pitched, then one more every 2 minutes, up to 2 or one for every two living Bad Bloods, whichever is more.
-  - Hounds answer to the Leader. They go critical at 150 damage, die at 220 and are always gibbed. A player whose hound dies waits 60 seconds before taking another. Hounds can climb stairs and ramps.
+  - Hounds answer to the Beast-Master, or to the Hunt Leader when there is none. They go critical at 150 damage, die at 220 and are always gibbed. A player whose hound dies waits 60 seconds before taking another. Hounds can climb stairs and ramps. Clan beasts never bite, spit at or tackle the clan, and do not choke a downed clanmate they drag. Hounds and thralls see the clan's hunting map, talk on the clan channel ([bold]:r[/bold]) and understand the clan; Bad Bloods understand them.
+  - [bold]Thralls:[/bold] a Beast-Master buys a thrall cage at the kennel (Runner 6, Defender 7 at tier II; Sentinel 8, Lurker 9, Warrior 10, Spitter 10 at tier III), up to 2 thralls each. A ghost takes the cage and becomes a hivebroken xeno of the clan. Thralls cannot evolve, have 20% less health, gib on death, and count against the clan's population cap.
   - Kennel Breeding and Kennel Pack (armory, Honour) speed up and deepen the stock. They live on the kennel, so a rebuilt Lodge starts without them.
   - Your traps and smart discs ignore your own hounds.
 
@@ -299,27 +303,27 @@
   - [bold]Breaching:[/bold] wrist blades, the scimitar and the chain gauntlet deal bonus damage to barricades and other structures.
   - [bold]Wide swing:[/bold] right click swings any Yautja melee weapon wide. The chain gauntlet shoves instead.
   - [bold]Vehicles:[/bold] you deal triple damage to vehicles in melee. Right-click a locked vehicle and choose [bold]Force hatch[/bold] (15 seconds, no tool) to break its lock and climb in.
-  - [bold]Mask vision:[/bold] night vision only, no thermals. The Leader and Engineers see as honourable hunters do: people, creatures and rooms through walls.
+  - [bold]Mask vision:[/bold] night vision only, no thermals. Engineers see as honourable hunters do: people, creatures and rooms through walls. The Hunt Leader has the command sight instead.
   - You cannot fire human guns or use the humans' MP tools: cuffs, zipties, stun batons (not even thrown), grenades and flashes. You cannot raise or link thralls. A Hivebreaker turns one downed xeno into a thrall.
   - Bad Bloods are [bold]dishonoured[/bold]: no rank, no honour, worth no honour to anyone.
 
-  ## When the Leader dies
+  ## When the Hunt Leader dies
   - With a Lodge standing, an [bold]ascension vote[/bold] opens and every Bad Blood is asked over their bracer whether to claim the Lodge (the Ascension Stone works too, and shows the vote again if you closed it). Any living Bad Blood can stand, and every Bad Blood votes.
   - The vote lasts 60 seconds, plus 10 per candidate, up to 2 minutes. Ties go to the candidate with more kills, then to whoever stood first.
   - Every other leader bracer [bold]scuttles[/bold]: a 10-second warning, then a small blast. It cannot be taken off or picked up meanwhile.
-  - [bold]If the Leader dies with no Lodge standing, the marines win.[/bold]
+  - [bold]If the Hunt Leader dies with no Lodge standing, the marines win.[/bold]
 
   ## The clan ship
   - [bold]The call:[/bold] hold [bold]3 ripe, consecrated Totems for 10 minutes[/bold] without a break, with the Lodge standing. Never earlier than 45 minutes after the landing.
   - Losing or desecrating a ripe Totem restarts the 10 minutes. Marines with a working comms tower hear the hold start.
   - When the ship is called, a [bold]clan star chart[/bold] appears at the Lodge armory. Do not let the marines take it.
   - [bold]Inbound:[/bold] 20 minutes. The Lodge is on the marines' map the whole time. [bold]If the Lodge falls, the ship turns back.[/bold]
-  - [bold]Arrived:[/bold] one free grunt seat every minute while the clan has a Leader and a Lodge; armory tier IV (war glaive and Leader-grade armor at half price, every bracer can fire the eradicator, free lethal bolt); a free smart disc for every living Bad Blood.
+  - [bold]Arrived:[/bold] one free grunt seat every minute while the clan has a Hunt Leader and a Lodge; armory tier IV (war glaive and Leader-grade armor at half price, every bracer can fire the eradicator, free lethal bolt); a free smart disc for every living Bad Blood.
   - [bold]Departure:[/bold] if the Lodge stands for 20 minutes after the arrival, the clan leaves with its trophies and wins. The timer stops while no Lodge stands.
 
   ## Stopping the Vessel Strike
   - Right-click a sensor tower, comms tower, field relay or colony reactor and choose [bold]Sabotage[/bold] ([bold]25 seconds[/bold]). Towers and reactors break and need repairs; a field relay is destroyed. Switching a tower off by hand does not work.
   - Sabotaging the strike's lock site pauses the strike and adds 60 seconds. Sabotaging a reactor pauses the marines' reactor hold. Each sabotage adds 6 stone to the quarry.
   - A site the marines just repaired or re-routed to is immune for 3 minutes. Hit the others meanwhile.
-  - From [bold]40 minutes[/bold] into the round the Leader can [bold]hijack a dropship[/bold] to the marine ship. A living Bad Blood at the console the strike was fired from can sabotage it in [bold]30 seconds[/bold]. The marines get an ARES warning. This cancels the strike and locks it out for 5 minutes.
+  - From [bold]40 minutes[/bold] into the round the Hunt Leader can [bold]hijack a dropship[/bold] to the marine ship. A living Bad Blood at the console the strike was fired from can sabotage it in [bold]30 seconds[/bold]. The marines get an ARES warning. This cancels the strike and locks it out for 5 minutes.
 </Document>

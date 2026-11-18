@@ -34,7 +34,18 @@ public sealed partial class YautjaPullSpeedSystem : EntitySystem
             return;
         }
 
-        args.ModifySpeed(badBlood.DragSpeedMultiplier, badBlood.DragSpeedMultiplier);
+        var multiplier = badBlood.DragSpeedMultiplier;
+
+        // CMU14 ECS-712 (D17): the stretcher-bearer. a Medic dragging a clanmate, alive or downed, moves at the Medic's
+        // own drag speed. read from the networked Medic component (the caste adds it beside BadBloodMedicSpeed, which
+        // the client does not see) so the client predicts the same speed
+        if (HasComp<YautjaBadBloodComponent>(target) &&
+            TryComp(uid, out Content.Shared.CMU14.Yautja.BadBlood.BadBloodBloodRiteComponent? medic))
+        {
+            multiplier = medic.StretcherDragMultiplier;
+        }
+
+        args.ModifySpeed(multiplier, multiplier);
     }
 
     private void OnNoPullSlowdownRefreshSpeed(Entity<CMUNoPullSlowdownComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
