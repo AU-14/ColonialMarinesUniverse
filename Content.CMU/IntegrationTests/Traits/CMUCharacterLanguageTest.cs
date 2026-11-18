@@ -113,8 +113,9 @@ public sealed class CMUCharacterLanguageTest : GameTest
         });
     }
 
-    [Test]
-    public async Task ClfReinforcementGhostRoleDefaultsToColonyLanguage()
+    [TestCase(ClfReinforcement)]
+    [TestCase("AU14JobCultist")]
+    public async Task ColonyGhostRolesDefaultToColonyLanguage(string role)
     {
         var map = await Pair.CreateTestMap();
         LanguageComponent language = default!;
@@ -126,8 +127,8 @@ public sealed class CMUCharacterLanguageTest : GameTest
             // third parties spawn as ghost-role bodies and never raise PlayerSpawnCompleteEvent
             var mob = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var ghostRole = SEntMan.EnsureComponent<GhostRoleComponent>(mob);
-            ghostRole.JobProto = ClfReinforcement;
-            var job = Server.ProtoMan.Index<JobPrototype>(ClfReinforcement);
+            ghostRole.JobProto = role;
+            var job = Server.ProtoMan.Index<JobPrototype>(role);
             Assert.That(Server.System<RoundJobProfileSystem>().ApplyJobProfile(mob, job), Is.True);
             language = SEntMan.GetComponent<LanguageComponent>(mob);
         });
@@ -136,7 +137,7 @@ public sealed class CMUCharacterLanguageTest : GameTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(language.SpokenLanguages, Does.Contain(Mandarin), "CLF reinforcements speak their colony's language");
+            Assert.That(language.SpokenLanguages, Does.Contain(Mandarin), "The ghost role speaks the colony's language");
             Assert.That(language.DefaultLanguage, Is.EqualTo(Mandarin));
         });
     }

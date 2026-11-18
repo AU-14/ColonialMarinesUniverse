@@ -13,6 +13,8 @@ public sealed partial class IdModificationConsoleComponent : Component
     public static string PrivilegedIdCardSlotId = "IdCardConsole-privilegedId";
     public static string TargetIdCardSlotId = "IdCardConsole-targetId";
 
+    [DataField] public bool UseConfiguredAccess; // CMU14: colony terminals use their declared access catalog.
+
     [DataField] [AutoNetworkedField] // cmu edit: lets each faction's console ask for its own command access
     public ProtoId<AccessLevelPrototype> Access = "RMCAccessDatabase";
 

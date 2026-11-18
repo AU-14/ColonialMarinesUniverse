@@ -16,5 +16,5 @@ public sealed partial class CMUCaveSurveyMemoryComponent : Component
     public int LastViewRequest = -1;
     public TimeSpan NextCopy;
     public TimeSpan NextRead;
-    public EntityUid? Action;
+    public bool GrantedTacticalMap;
 }

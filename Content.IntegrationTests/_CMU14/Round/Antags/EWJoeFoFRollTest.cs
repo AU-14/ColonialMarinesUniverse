@@ -19,7 +19,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests._CMU14.Round.Antags;
 
 /// <summary>
-/// Force on Force rolls the Early Warning Joe at 25% from its own table (FoFAntags), and the rolled rule offers
+/// Early Warning Joe is reserved for explicit rolls. The Force on Force variant offers
 /// 1-2 ghost-role Joes scaled by player count, never more than 2 (ARCH-01). The ghost role is gated by the
 /// synthetic whitelist only and previews a Working Joe (COUPLING-01).
 /// </summary>
@@ -47,7 +47,7 @@ public sealed class EWJoeFoFRollTest
         """;
 
     [Test]
-    public async Task FoFRollsItsOwnTableAndCapsAtTwoJoes()
+    public async Task NaturalRollsExcludeJoeAndExplicitFoFRollsCapAtTwo()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -57,17 +57,17 @@ public sealed class EWJoeFoFRollTest
 
         await server.WaitAssertion(() =>
         {
-            // the preset carries the roller, and the roller's table is the 25% Joe (rebalance)
+            // FoF must use its own table, since a null table falls back to Distress Signal.
             Assert.That(protos.Index<GamePresetPrototype>(FoFPreset).Rules, Does.Contain(new EntProtoId(FoFRoller)));
             Assert.That(protos.Index<EntityPrototype>(FoFRoller).TryGetComponent(out DistressAntagsRuleComponent? roller, entities.ComponentFactory));
-            Assert.That(roller!.Rules, Is.EquivalentTo(new Dictionary<EntProtoId, float> { [FoFRule] = 0.25f }));
+            Assert.That(roller!.Rules, Is.Not.Null);
+            Assert.That(roller.Rules!.ContainsKey(FoFRule), Is.False);
 
-            // every Early Warning Joe roll is 25%, and (RB-41) the colony demand boost never raises it
+            // The host remains available for admin events in all three modes.
             Assert.Multiple(() =>
             {
-                Assert.That(ColonyAntagsRuleSystem.AntagRulePrototypes[EWJoeRuleSystem.AntagId], Is.EqualTo(0.25f), "Colony Fall roll");
-                Assert.That(ColonyAntagsRuleSystem.DemandExemptRules, Does.Contain(EWJoeRuleSystem.AntagId), "25% is a hard ceiling");
-                Assert.That(DistressAntagsRuleSystem.AntagRulePrototypes[EWJoeRuleSystem.DistressAntagId], Is.EqualTo(0.25f), "Distress Signal roll");
+                Assert.That(ColonyAntagsRuleSystem.AntagRulePrototypes.ContainsKey(EWJoeRuleSystem.AntagId), Is.False);
+                Assert.That(DistressAntagsRuleSystem.AntagRulePrototypes.ContainsKey(EWJoeRuleSystem.DistressAntagId), Is.False);
             });
 
             // the rolled rule is the planet ghost-role Joe on the Distress host specifier, so the rule system's gates match it

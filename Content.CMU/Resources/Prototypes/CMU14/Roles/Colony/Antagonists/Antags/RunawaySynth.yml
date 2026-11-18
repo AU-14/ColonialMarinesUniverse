@@ -93,6 +93,8 @@
 - type: antag
   parent: CMUAntagColonyBase
   id: RunawaySynthRole
+  blacklistedGamemodes:
+  - DistressSignal
   name: roles-antag-runaway-synth-name
   setPreference: true
   objective: roles-antag-synth-objective

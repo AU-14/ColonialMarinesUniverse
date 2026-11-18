@@ -220,6 +220,7 @@
       params:
         volume: -1
   - type: IdModificationConsole
+    useConfiguredAccess: true
     access: AU14AccessColonyAdministrator
     faction: FactionSurvivor
     squadGroup: COLONY
@@ -254,3 +255,33 @@
     - AU14AccessColonyForeman
     - AU14AccessColonyAdministrator
     - AU14AccessColonyHeadOfService
+
+- type: entity
+  parent: BaseFlatpack
+  id: CMUColonyIDConsoleFlatpack
+  components:
+  - type: Item
+    size: Normal
+  - type: Flatpack
+    entity: CMUIDComputerColony
+
+- type: entity
+  parent: BoxCardboardSmall
+  id: CMUReplacementColonyIDs
+  components:
+  - type: Storage
+    grid:
+    - 0,0,4,0
+    whitelist:
+      components:
+      - IdCard
+  - type: StorageFill
+    contents:
+    - id: CMUReplacementColonyID
+      amount: 5
+
+- type: entity
+  parent: AU14IDCardColonyColonist
+  id: CMUReplacementColonyID
+  components:
+  - type: CMUReplacementColonyID

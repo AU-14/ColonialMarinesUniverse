@@ -102,3 +102,9 @@ public sealed class InsurgencyFactionSelectCustomMessage : EuiMessageBase
         Definition = definition;
     }
 }
+
+[Serializable, NetSerializable]
+public sealed class CMUInsurgencyExclusionsMessage(int[] ids) : EuiMessageBase
+{
+    public int[] Ids = ids;
+}
