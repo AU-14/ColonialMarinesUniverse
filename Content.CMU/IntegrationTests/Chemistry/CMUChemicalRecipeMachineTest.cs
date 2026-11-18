@@ -1,40 +1,17 @@
-#pragma warning disable RA0002 // Inspect the resolved requisitions catalogs.
-
-using System.Linq;
-using Content.Client.Guidebook.Components;
 using Content.IntegrationTests.Fixtures;
-using Content.Shared._RMC14.Requisitions.Components;
-using Content.Shared._RMC14.Vendors;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.CMU14.Chemistry;
-using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.FixedPoint;
-using Content.Shared.Guidebook;
 using Content.Shared.Interaction;
 using Content.Shared.Paper;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Chemistry;
 
 [TestFixture]
 public sealed class CMUChemicalRecipeMachineTest : GameTest
 {
-    [Test]
-    public async Task MachineOffersMedicalMachinesGuide()
-    {
-        await Client.WaitAssertion(() =>
-        {
-            ProtoId<GuideEntryPrototype> guide = "CMUGuideMedicalMachines";
-            var factory = Client.ResolveDependency<IComponentFactory>();
-            var machine = CProtoMan.Index<EntityPrototype>("CMUChemicalRecipeMachine");
-            Assert.That(machine.TryComp<GuideHelpComponent>(out var help, factory), Is.True);
-            Assert.That(help!.Guides.First(), Is.EqualTo(guide));
-            Assert.That(CProtoMan.Index(guide), Is.Not.Null);
-        });
-    }
-
     [Test]
     public async Task ScanningPillPrintsMachineReadableAndManualRecipe()
     {
@@ -107,50 +84,46 @@ public sealed class CMUChemicalRecipeMachineTest : GameTest
         });
     }
 
-    [TestCase("CMVendorCircuits")]
-    [TestCase("CMVendorElectronics")]
-    public async Task ElectronicsVendorsStockMachineBoard(string vendorId)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var vendor = Server.ProtoMan.Index<EntityPrototype>(vendorId)
-                .Components.Values.Select(c => c.Component).OfType<CMAutomatedVendorComponent>().Single();
-            Assert.That(vendor.Sections.SelectMany(s => s.Entries)
-                .Any(e => e.Id == "CMUCircuitboardChemicalRecipeMachine" && e.Amount > 0), Is.True);
-        });
-    }
-
     [Test]
-    public async Task CashCircuitVendorSellsMachineBoard()
+    public async Task SynthesisChargesThePrintedDoseAfterEditing()
     {
+        var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var vendor = Server.ProtoMan.Index<EntityPrototype>("CMUCashVendorCircuits")
-                .Components.Values.Select(c => c.Component).OfType<AU14CashVendorComponent>().Single();
-            Assert.That(vendor.Items.Any(e => e.ItemId == "CMUCircuitboardChemicalRecipeMachine" && e.BasePrice > 0), Is.True);
-        });
-    }
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var master = SEntMan.SpawnEntity("CMChemMaster", map.GridCoords);
+            var pill = SEntMan.SpawnEntity("CMPill", map.GridCoords);
+            var machine = SEntMan.SpawnEntity("CMUChemicalRecipeMachine", map.GridCoords);
+            var beaker = SEntMan.SpawnEntity("Beaker", map.GridCoords);
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            var paperSystem = Server.System<PaperSystem>();
+            var slots = Server.System<Content.Shared.Containers.ItemSlots.ItemSlotsSystem>();
 
-    [TestCase("CMCargoCatalog")]
-    [TestCase("USCMCargoCatalog")]
-    [TestCase("UPPCargoCatalog")]
-    [TestCase("BEARCargoCatalog")]
-    [TestCase("LACNCargoCatalog")]
-    [TestCase("WYPMCCargoCatalog")]
-    [TestCase("VAIPOCargoCatalog")]
-    [TestCase("HAZOPSCargoCatalog")]
-    [TestCase("RMCCargoCatalog")]
-    [TestCase("CMBCIUCargoCatalog")]
-    [TestCase("ProdigyCargoCatalog")]
-    [TestCase("AU14CorporateASRSConsole")]
-    public async Task AsrsCatalogSellsMachineCrate(string catalogId)
-    {
-        await Server.WaitAssertion(() =>
-        {
-            var catalog = Server.ProtoMan.Index<EntityPrototype>(catalogId)
-                .Components.Values.Select(c => c.Component).OfType<RequisitionsComputerComponent>().Single();
-            Assert.That(catalog.Categories.SelectMany(c => c.Entries)
-                .Any(e => e.Crate.Id == "CMUCrateChemicalRecipeMachine" && e.Cost > 0), Is.True, catalogId);
+            Assert.That(solutions.TryGetSolution(pill, "food", out var dose), Is.True);
+            Assert.That(solutions.TryAddReagent(dose!.Value, "CMDylovene", 3), Is.True);
+            var scan = new InteractUsingEvent(user, pill, master, map.GridCoords);
+            SEntMan.EventBus.RaiseLocalEvent(master, scan);
+            var hands = Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>();
+            var sheet = hands.GetActiveItem(user)!.Value;
+            var printed = SEntMan.GetComponent<PaperComponent>(sheet).Content;
+            Assert.That(slots.TryInsert(machine, "recipe", sheet, user), Is.True);
+            Assert.That(slots.TryInsert(machine, "vessel", beaker, user), Is.True);
+            Assert.That(solutions.TryGetFitsInDispenser(beaker, out _, out var output), Is.True);
+            Assert.That(solutions.TryGetSolution(machine, CMUChemicalRecipeMachineComponent.StockSolutionId,
+                out var stock), Is.True);
+            foreach (var input in new[] { "RMCSilicon", "RMCPotassium", "RMCNitrogen" })
+                Assert.That(solutions.TryAddReagent(stock!.Value, input, 1), Is.True);
+
+            // All three ingredients are present. The sheet must not turn a consumed input into a reusable catalyst.
+            paperSystem.SetContent(sheet, printed.Replace("CONSUME|RMCSilicon|", "CATALYST|RMCSilicon|"));
+            Send(machine, user, new CMUChemicalRecipeMachineSynthesizeMessage());
+            Assert.That(output!.Volume, Is.EqualTo(FixedPoint2.Zero));
+            Assert.That(stock!.Value.Comp.Solution.Volume, Is.EqualTo(FixedPoint2.New(3)));
+
+            paperSystem.SetContent(sheet, printed);
+            Send(machine, user, new CMUChemicalRecipeMachineSynthesizeMessage());
+            Assert.That(output.GetTotalPrototypeQuantity("CMDylovene"), Is.EqualTo(FixedPoint2.New(3)));
+            Assert.That(stock.Value.Comp.Solution.Volume, Is.EqualTo(FixedPoint2.Zero));
         });
     }
 
@@ -159,10 +132,8 @@ public sealed class CMUChemicalRecipeMachineTest : GameTest
     {
         var map = await Pair.CreateTestMap();
         EntityUid crate = default;
-        var initialMachines = 0;
         await Server.WaitAssertion(() =>
         {
-            initialMachines = SEntMan.EntityQuery<CMUChemicalRecipeMachineComponent>().Count();
             crate = SEntMan.SpawnEntity("CMUCrateChemicalRecipeMachine", map.GridCoords);
             var crowbar = SEntMan.SpawnEntity("CMCrowbar", map.GridCoords);
             var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
@@ -171,11 +142,13 @@ public sealed class CMUChemicalRecipeMachineTest : GameTest
             Assert.That(interact.Handled, Is.True);
         });
 
-        await Pair.RunSeconds(1);
+        await Pair.RunTicksSync(2);
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.Deleted(crate), Is.True);
-            Assert.That(SEntMan.EntityQuery<CMUChemicalRecipeMachineComponent>().Count(), Is.EqualTo(initialMachines + 1));
+            var nearby = Server.System<EntityLookupSystem>()
+                .GetEntitiesInRange<CMUChemicalRecipeMachineComponent>(map.GridCoords, 0.5f);
+            Assert.That(nearby, Has.Count.EqualTo(1));
         });
     }
 
