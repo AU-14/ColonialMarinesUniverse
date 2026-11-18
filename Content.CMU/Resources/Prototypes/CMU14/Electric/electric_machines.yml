@@ -158,7 +158,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCWiremill
+  id: RUMCMachineWiremill
   name: wiremill
   description: "Draws ingots into fine wire, twice as much as hands could."
   components:
@@ -182,7 +182,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCBender
+  id: RUMCMachineBender
   name: bending machine
   description: "Presses ingots into sheets. On circuit 2 it presses steel into floor tiles."
   components:
@@ -206,7 +206,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCLathe
+  id: RUMCMachineLathe
   name: lathe
   description: "Turns a sheet of steel into rods (circuit 1), straight into fasteners (circuit 2), into metal rods for building (circuit 3)."
   components:
@@ -230,7 +230,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCCutter
+  id: RUMCMachineCutter
   name: cutting machine
   description: "Cuts rods into fasteners and silicon into wafers. Select the glass output with the circuit setting: 0 for small beakers, 1 for large beakers, or 2 for electronics kits."
   components:
@@ -255,7 +255,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCPolarizer
+  id: RUMCMachinePolarizer
   name: polarizer
   description: "Magnetizes steel rods."
   components:
@@ -279,7 +279,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCExtractor
+  id: RUMCMachineExtractor
   name: extractor
   description: "Presses resin out of wood and turns resin into raw rubber."
   components:
@@ -303,7 +303,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCMixer
+  id: RUMCMachineMixer
   name: mixer
   description: "Mixes metals into alloys and solder, raw rubber with cinnabar into rubber sheets, and flares out of saltpeter, sulfur and paper."
   components:
@@ -327,7 +327,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCChemicalReactor
+  id: RUMCMachineChemicalReactor
   name: chemical reactor
   description: "Boils glue out of resin, vulcanizes rubber better than the mixer does, and cooks gunpowder."
   components:
@@ -373,7 +373,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCElectricAssembler
+  id: RUMCMachineElectricAssembler
   name: assembler
   description: "Assembles motors, boards, circuits and every other part of the electric age out of smaller ones, and radios, multitools, flashlights, defibrillators and reinforced glass for the colony."
   components:
@@ -419,7 +419,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCElectricBlastFurnace
+  id: RUMCMachineElectricBlastFurnace
   name: electric blast furnace
   description: "A furnace of heating coils: it smelts silicon out of quartz or sand and coke."
   components:
@@ -443,7 +443,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCOreWasher
+  id: RUMCMachineOreWasher
   name: ore washer
   description: "Washes ore in water: the stone is carried off and more of the ore comes out as powder than the grinder gets."
   components:
@@ -467,7 +467,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCThermalCentrifuge
+  id: RUMCMachineThermalCentrifuge
   name: thermal centrifuge
   description: "Spins hot metal powder apart and sorts out the other metal that was in the ore. It eats a lot of power."
   components:
@@ -491,7 +491,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCMagneticSeparator
+  id: RUMCMachineMagneticSeparator
   name: electromagnetic separator
   description: "Picks the metal that is left in the stone dust out of it."
   components:
@@ -515,7 +515,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCSifter
+  id: RUMCMachineSifter
   name: sifter
   description: "Sorts a crystal into the gem in it without crushing it, and a little powder and stone dust come with it."
   components:
@@ -539,7 +539,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCAutoclave
+  id: RUMCMachineAutoclave
   name: autoclave
   description: "Grows a gem back out of its powder in water, slowly. It is what to do with the powder of a crystal that was crushed."
   components:
@@ -563,7 +563,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCPyrolysisOven
+  id: RUMCMachinePyrolysisOven
   name: pyrolysis oven
   description: "Cooks wood, branches and coal without air into coke, and the tar that comes off it is resin."
   components:
@@ -587,7 +587,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCGalvanicBath
+  id: RUMCMachineGalvanicBath
   name: galvanic bath
   description: "Coats a steel sheet with zinc or chrome out of its powder in water, with current."
   components:
@@ -611,7 +611,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCRecycler
+  id: RUMCMachineRecycler
   name: recycler
   description: "Takes parts and finished things apart and gives back half of the material they were made of. It takes any item."
   components:
@@ -645,7 +645,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCFertilizerMixer
+  id: RUMCMachineFertilizerMixer
   name: fertilizer mixer
   description: "Dissolves saltpeter and phosphorus in water into a fertilizer that plants take up. Pipe it to an automatic tray."
   components:
@@ -669,7 +669,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCCannery
+  id: RUMCMachineCannery
   name: cannery
   description: "Rolls cans out of galvanized steel and fills them with nutrient paste or protein, then seals them."
   components:
@@ -709,7 +709,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCJewelersBench
+  id: RUMCMachineJewelersBench
   name: jeweler's machine
   description: "Casts gold and silver into rings and sets gems in them."
   components:
@@ -733,7 +733,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCLaserEngraver
+  id: RUMCMachineLaserEngraver
   name: laser engraver
   description: "Burns the pattern of a chip into a silicon wafer. The lens in the slot decides which: ruby, alexandrite, emerald or diamond. The lens is not used up."
   components:
@@ -757,7 +757,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCElectrolyzer
+  id: RUMCMachineElectrolyzer
   name: electrolyzer
   description: "Splits water into hydrogen and oxygen with current, and cinnabar into sulfur and mercury."
   components:
@@ -811,7 +811,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCArcFurnace
+  id: RUMCMachineArcFurnace
   name: arc furnace
   description: "Smelts glass out of sand and quartz with an arc and a breath of oxygen, and alloys brass, steel of iron sheets and coke, plasteel of steel and coke, and the alloys of the steel family and the heat-resistant one."
   components:
@@ -835,7 +835,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCChemicalBath
+  id: RUMCMachineChemicalBath
   name: chemical bath
   description: "Soaks wood into paper (or, on circuit 1, into cardboard), and etches circuit boards with acid."
   components:
@@ -878,7 +878,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCCentrifuge
+  id: RUMCMachineCentrifuge
   name: centrifuge
   description: "Spins mixtures apart: slag into powder, resin into rubber and glue, cinnabar into sulfur."
   components:
@@ -915,7 +915,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCCompressor
+  id: RUMCMachineCompressor
   name: compressor
   description: "Presses powder back into stone, and branches into planks."
   components:
@@ -939,7 +939,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCFluidSolidifier
+  id: RUMCMachineFluidSolidifier
   name: fluid solidifier
   description: "Lets a molten metal or glass set into ingots and sheets, without a mold."
   components:
@@ -979,7 +979,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCExtruder
+  id: RUMCMachineExtruder
   name: extruder
   description: "Presses a sheet of steel into rods (circuit 1) or into a box of fasteners (circuit 2)."
   components:
@@ -1003,7 +1003,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCPharmaMachine
+  id: RUMCMachinePharma
   name: pharmaceutical machine
   description: "Makes the field-medicine ingredients out of the chemistry (antiseptic, coagulant, burn gel, tissue sealant, trauma foam), plain gauze and dressings out of cloth, and mixes them into the prepared ones."
   components:
@@ -1046,7 +1046,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCConcreteMixer
+  id: RUMCMachineConcreteMixer
   name: concrete mixer
   description: "Mixes stone dust and sand with water into bags of concrete, and casts reinforced ones around metal rods. Build walls of the bags."
   components:
@@ -1070,7 +1070,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCSewingMachine
+  id: RUMCMachineSewing
   name: sewing machine
   description: "Makes cloth out of cotton, and sews bags, belts, pouches, clothes and sandbags out of cloth, for less cloth than the tailor's table takes."
   components:
@@ -1094,7 +1094,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCTannery
+  id: RUMCMachineTannery
   name: tannery
   description: "Tans hides from butchered cows in water with chrome powder into leather, and cuts leather into boots and gloves."
   components:
@@ -1128,7 +1128,7 @@
 
 - type: entity
   parent: [ RUMCFabricatorBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCFabricator
+  id: RUMCMachineFabricator
   name: complex assembly bench
   description: "A bench with eighteen slots for materials and one for the finished thing: it assembles the complex hand things out of many parts at once, the electric tools above all."
   components:
@@ -1154,7 +1154,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, BaseMachinePowered, BaseMachineDestructible ]
-  id: RUMCCircuitAssembler
+  id: RUMCMachineCircuitAssembler
   name: circuit assembler
   description: "The machine that makes circuits properly: cheaper sets of simple circuits and the good circuits."
   components:
@@ -1178,7 +1178,7 @@
 
 - type: entity
   parent: [ RUMCRecipeMachineBase, RUMCFluidMachineBase, RUMCSteamMachineBase ]
-  id: RUMCSteamExtractor
+  id: RUMCMachineSteamExtractor
   name: steam extractor
   description: "An extractor driven by steam. It presses resin out of wood and turns resin into raw rubber, which is how rubber is had before the grid. Join a gas pipe with steam to it."
   components:
@@ -1215,4 +1215,4 @@
     - CMUGuideIndustry
   - type: StorageFill
     contents:
-    - id: RUMCConcreteMixer
+    - id: RUMCMachineConcreteMixer

@@ -297,7 +297,7 @@
 
 - type: entity
   parent: CMBaseStructure
-  id: RUMCSmeltery
+  id: RUMCMachineSmeltery
   name: clay smeltery
   description: A furnace of baked clay built to take a crucible. Feed it fuel and light it, then work it with forge tongs. It heats up to 1500 degrees.
   components:
@@ -346,7 +346,7 @@
 
 - type: entity
   parent: CMBaseStructure
-  id: RUMCStoneSmeltery
+  id: RUMCMachineStoneSmeltery
   name: stone smeltery
   description: A furnace of dressed stone built to take a crucible. Feed it fuel and light it, then work it with forge tongs. It heats up to 2000 degrees.
   components:
@@ -395,7 +395,7 @@
 
 - type: entity
   parent: CMBaseStructure
-  id: RUMCAnvil
+  id: RUMCMachineAnvil
   name: anvil
   description: A solid steel anvil for forging hot metal. Set a heated ingot on it with tongs, then click it to pick what to make.
   components:

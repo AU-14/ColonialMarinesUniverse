@@ -161,7 +161,7 @@
 
 - type: entity
   parent: RUMCSteamMachineBase
-  id: RUMCBoiler
+  id: RUMCMachineBoiler
   name: boiler
   description: A boiler. Put coal, coke, planks or branches in its fuel slot and pipe water in, and it turns the water into steam in the gas pipes joined to it.
   components:
@@ -236,7 +236,7 @@
 
 - type: entity
   parent: [ BaseGenerator ]
-  id: RUMCSteamGenerator
+  id: RUMCMachineSteamGenerator
   name: steam generator
   description: A generator turned by steam. Join a gas pipe with steam to it and a high voltage cable, and it makes power for as long as the steam lasts.
   components:
@@ -267,7 +267,7 @@
 
 - type: entity
   parent: RUMCSteamMachineBase
-  id: RUMCBrassPump
+  id: RUMCMachineBrassPump
   name: brass water pump
   description: A brass pump that draws water up, slowly, and gives it to a pipe.
   components:
@@ -293,7 +293,7 @@
 # The steel pump does twice as much and holds twice as much as the brass one.
 - type: entity
   parent: RUMCSteamMachineBase
-  id: RUMCSteelPump
+  id: RUMCMachineSteelPump
   name: steel water pump
   description: A steel pump that draws water up twice as fast as the brass one, and holds twice as much, and gives it to a pipe.
   components:
@@ -394,7 +394,7 @@
 
 - type: entity
   parent: [ RUMCCondenserBase, BaseMachinePowered ]
-  id: RUMCCondenser
+  id: RUMCMachineCondenser
   name: condenser
   description: A condenser that runs on the grid. A liquid comes in at one inlet and the liquid that cools it at the other, and with a material in its slot the liquid sets into solid pieces. Slag is cooled with water.
   components:
@@ -408,7 +408,7 @@
 # The brass condenser needs neither power nor steam, only a steady supply of the coolant.
 - type: entity
   parent: RUMCCondenserBase
-  id: RUMCBrassCondenser
+  id: RUMCMachineBrassCondenser
   name: brass condenser
   description: A brass condenser that needs no power, only a steady supply of the liquid that cools. A liquid comes in at one inlet and the coolant at the other, and with a material in its slot the liquid sets into solid pieces. Slag is cooled with water.
   components:
@@ -432,7 +432,7 @@
 
 - type: entity
   parent: RUMCSteamMachineBase
-  id: RUMCSteamSmelter
+  id: RUMCMachineSteamSmelter
   name: steam smelter
   description: A brass smelter driven by steam. It has no thermostat and no recipes of its own, so seat a mold for three ingots and enough ore for them, and it makes three ingots, leaving slag that goes out through a liquid pipe.
   components:

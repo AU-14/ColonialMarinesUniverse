@@ -35,7 +35,7 @@
 # The one that steps the high voltage line down to the medium one, as the substation does, with a battery of its own.
 - type: entity
   parent: RUMCTransformerBase
-  id: RUMCTransformerDown
+  id: RUMCMachineTransformerDown
   name: step-down transformer
   description: Takes the high voltage line and gives the medium voltage one, and after it come the panels and the APCs. Join the high voltage cable to one side and the medium to the other (under it or run by hand).
   components:
@@ -58,7 +58,7 @@
 # And the one that steps the medium line up to the high one, for a generator that makes the medium voltage, or to carry power far along the thin cable.
 - type: entity
   parent: RUMCTransformerBase
-  id: RUMCTransformerUp
+  id: RUMCMachineTransformerUp
   name: step-up transformer
   description: Takes the medium voltage line and gives the high voltage one, to carry the power far, or from a generator of the medium voltage to the grid. Join the medium voltage cable to one side and the high to the other (under it or run by hand).
   components:
@@ -85,7 +85,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildTransformerDown
   name: au14-craft-recipe-buildtransformerdown
-  output: RUMCTransformerDown
+  output: RUMCMachineTransformerDown
   time: 25
   minigames: [Rhythm, Trace]
   tools:
@@ -102,7 +102,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildTransformerUp
   name: au14-craft-recipe-buildtransformerup
-  output: RUMCTransformerUp
+  output: RUMCMachineTransformerUp
   time: 25
   minigames: [Rhythm, Trace]
   tools:
@@ -137,7 +137,7 @@
 # the live terminals can shock, and the screen is out of reach.
 - type: entity
   parent: BaseAPC
-  id: RUMCColonyApc
+  id: RUMCMachineColonyApc
   name: colony APC
   description: A steel power cabinet with a door. Shut, it shows its screen; open, it shows the wiring. Feed it the medium voltage and it gives the low one to a cable run by hand and to every device in its reach.
   components:
@@ -188,7 +188,7 @@
 - type: craftRecipe
   id: RUMCCraftBuildColonyApc
   name: au14-craft-recipe-buildcolonyapc
-  output: RUMCColonyApc
+  output: RUMCMachineColonyApc
   time: 20
   minigames: [Rhythm, Trace]
   tools:

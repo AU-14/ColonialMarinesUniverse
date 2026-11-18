@@ -14,7 +14,7 @@ namespace Content.IntegrationTests.CMU.Industry;
 [TestFixture]
 public sealed class RecipeMachineLifecycleTest
 {
-    private static readonly EntProtoId Electrolyzer = "RUMCElectrolyzer";
+    private static readonly EntProtoId Electrolyzer = "RUMCMachineElectrolyzer";
     private static readonly ProtoId<MachineRecipePrototype> WaterRecipe = "RUMCMRElectrolyzerWater";
 
     [TestCase("RUMCMRElectrolyzerWater")]

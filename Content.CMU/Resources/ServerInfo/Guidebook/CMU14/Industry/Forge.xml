@@ -4,7 +4,7 @@
   [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Make this equipment" link="CMUGuideIndustryRecipes"]
 
   <Box>
-    <GuideEntityEmbed Entity="RUMCSmeltery" Caption="HEAT"/>
+    <GuideEntityEmbed Entity="RUMCMachineSmeltery" Caption="HEAT"/>
     <GuideEntityEmbed Entity="RUMCCrucible" Caption="MELT"/>
     <GuideEntityEmbed Entity="RUMCIngotMold" Caption="CAST"/>
   </Box>
@@ -19,7 +19,7 @@
 
   ## Forge an ingot into parts
   <Box>
-    <GuideEntityEmbed Entity="RUMCAnvil" Caption="HOT WORKPIECE"/>
+    <GuideEntityEmbed Entity="RUMCMachineAnvil" Caption="HOT WORKPIECE"/>
     <GuideEntityEmbed Entity="RUMCForgeHammer" Caption="HAMMER"/>
     <GuideEntityEmbed Entity="RUMCForgeChisel" Caption="CHISEL"/>
   </Box>

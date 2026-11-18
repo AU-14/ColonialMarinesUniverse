@@ -9,7 +9,7 @@
 
 - type: entity
   parent: OreBox
-  id: CMURUMCMagneticOreBox
+  id: RUMCMachineMagneticOreBox
   name: RUMC magnetic ore box
   description: A high-capacity ore box that magnetically collects RUMC ores and crystals.
   components:
