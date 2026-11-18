@@ -2,6 +2,7 @@ using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Clothing;
 using Content.Shared.CMU14.Items; // CMU14
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.CriminalRecords.Systems;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -220,6 +221,10 @@ public sealed partial class IdentitySystem : EntitySystem
 
             Dirty(ident, identityGrammar);
         }
+
+        // CMU14: compare and publish the Yautja's public alias before logging a change.
+        if (TryComp<YautjaComponent>(ent, out var yautja))
+            name = Loc.GetString(yautja.IdentityName);
 
         if (name == Name(ident))
             return;

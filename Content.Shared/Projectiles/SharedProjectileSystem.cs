@@ -136,6 +136,10 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         DamageImpactContext context = DamageImpactContext.None)
     {
         var (uid, component, ourBody) = projectile;
+        // CMU14: direct hit paths can bypass physics, but explicit point-blank shots have their own self-targeting rules.
+        if ((context & DamageImpactContext.PointBlank) == 0 && IsIgnoringSource(component, target))
+            return;
+
         if (projectile.Comp1.ProjectileSpent)
         {
             if (_net.IsServer && component.DeleteOnCollide)
@@ -416,8 +420,11 @@ public abstract partial class SharedProjectileSystem : EntitySystem
     //ported from civ14
     private void PreventCollision(EntityUid uid, ProjectileComponent component, ref PreventCollideEvent args)
     {
-        if (_timing.CurTime < component.WhenToStopIgnoringShooter
-            && (args.OtherEntity == component.Shooter || args.OtherEntity == component.Weapon))
+        // CMU14 Begin
+        // if (_timing.CurTime < component.WhenToStopIgnoringShooter
+        //     && (args.OtherEntity == component.Shooter || args.OtherEntity == component.Weapon))
+        if (IsIgnoringSource(component, args.OtherEntity))
+        // CMU14 End
         {
             args.Cancelled = true;
         }
@@ -444,6 +451,13 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         {
             args.Cancelled = true;
         }
+    }
+
+    // CMU14: prediction and physics share the same launch immunity window.
+    public bool IsIgnoringSource(ProjectileComponent projectile, EntityUid target)
+    {
+        return _timing.CurTime < projectile.WhenToStopIgnoringShooter &&
+            (target == projectile.Shooter || target == projectile.Weapon);
     }
 
     private void OnEmbedThrowDoHit(Entity<EmbeddableProjectileComponent> embeddable, ref ThrowDoHitEvent args)
