@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Client._RMC14.TacticalMap;
 using Content.Client._RMC14.UserInterface;
 using Content.Shared.CCVar;
+using Content.Shared.CMU14.CaveSurvey;
 using Content.Shared.CMU14.TacticalMap.Reconstruction;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
@@ -19,6 +20,14 @@ public partial class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopO
     protected override TacticalMapWindow? Window { get; set; }
     protected bool UsingReconstruction { get; private set; }
     protected virtual void OpenClassicWindow() { }
+
+    protected void ConfigurePersonalSurveyButton(Robust.Client.UserInterface.Controls.Button button)
+    {
+        button.Visible = UiKey is TacticalMapUserUi && Owner == PlayerManager.LocalEntity &&
+                         EntMan.HasComponent<CMUCaveSurveyAccessComponent>(Owner);
+        if (button.Visible)
+            button.OnPressed += _ => SendMessage(new CMUCaveSurveyFromColonyMessage());
+    }
     [Dependency] private IConfigurationManager _cfg = default!;
     private CMUReconstructionWindow? _window;
     private CMUReconCameraWindow? _cameraWindow;
@@ -70,7 +79,7 @@ public partial class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopO
     {
         base.Open();
         _remembered = false;
-        _choice = CMUReconMapChoice.Automatic;
+        _choice = UiKey is TacticalMapUserUi ? CMUReconMapChoice.Planet : CMUReconMapChoice.Automatic;
         _layer = CMUReconLayer.Combined;
         _explicitChoice = false;
         _classic = _cfg.GetCVar(CCVars.CMUTacMapClassic);
@@ -82,12 +91,13 @@ public partial class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopO
         if (!_classic)
         {
             _window = this.CreatePopOutableWindow<CMUReconstructionWindow>();
+            ConfigurePersonalSurveyButton(_window.OpenPersonalSurvey);
             var cache = EntMan.System<CMUReconstructionCacheSystem>();
             _window.LoadView = cache.GetView;
             _window.SaveView = cache.SaveView;
             _window.CenterOnOpening = _cfg.GetCVar(CCVars.CMUTacMapCenterOnOpen);
             if (_actor is { } actor && EntMan.System<CMUReconstructionCacheSystem>().TryTake(Owner, actor, out var scene, out var camera, out var render,
-                    _cfg.GetCVar(CCVars.CMUTacMapPlanetOnShip)))
+                    _choice == CMUReconMapChoice.Planet || _cfg.GetCVar(CCVars.CMUTacMapPlanetOnShip)))
             {
                 _window.RestoreCached(scene, camera, render);
                 _layer = scene.Layer;

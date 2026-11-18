@@ -5,8 +5,8 @@
 
   <Box>
     <GuideEntityEmbed Entity="RUMCWoodenShovel" Caption="DIG"/>
-    <GuideEntityEmbed Entity="RUMCAnvil" Caption="MAKE"/>
-    <GuideEntityEmbed Entity="RUMCSteamDrill" Caption="AUTOMATE"/>
+    <GuideEntityEmbed Entity="RUMCMachineAnvil" Caption="MAKE"/>
+    <GuideEntityEmbed Entity="RUMCMachineSteamDrill" Caption="AUTOMATE"/>
   </Box>
 
   ## Pick your next job

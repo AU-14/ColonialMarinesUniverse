@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Emote;
+using Content.Shared._RMC14.Entrenching; // CMU14
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.OnCollide;
@@ -1538,7 +1539,13 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
                 }
 
                 if (!isStepping)
+                {
+                    // CMU14: a barricade should only keep burning from tile fire while the flame is present.
+                    if (HasComp<BarricadeComponent>(uid))
+                        Extinguish(uid);
+
                     RemCompDeferred<SteppingOnFireComponent>(uid);
+                }
                 else
                 {
                     if (previousState != (stepping.ArmorMultiplier, stepping.Distance, stepping.UpdateAt, stepping.LastPosition))

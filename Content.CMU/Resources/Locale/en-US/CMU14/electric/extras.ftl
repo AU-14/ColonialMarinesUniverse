@@ -11,9 +11,9 @@ au14-autotray-examine-unpowered = It has no power, so it feeds nobody. The tank 
 au14-autotray-verb-load-seed = Load seed for replanting
 au14-autotray-verb-take-seed = Take out the replanting seed
 
-ent-RUMCCharger = charger
+ent-RUMCMachineCharger = charger
     .desc = Charges the power cell set in it much faster than the old recharger, as long as it has power.
-ent-RUMCBatteryBuffer = battery buffer
+ent-RUMCMachineBatteryBuffer = battery buffer
     .desc = A small energy store for the high voltage line. It takes in power when the generators make more than is used and gives it back when they make less. Join it through a cable terminal, as a big SMES is.
 
 au14-craft-recipe-buildcharger = Charger

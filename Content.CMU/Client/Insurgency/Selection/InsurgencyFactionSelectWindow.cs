@@ -1,5 +1,8 @@
 using System;
 using System.Numerics;
+using System.Collections.Generic;
+using System.Linq;
+using Robust.Shared.ContentPack;
 using Content.Shared.CMU14.Insurgency;
 using Content.Shared.CMU14.Insurgency.Selection;
 using Robust.Client.UserInterface;
@@ -11,7 +14,7 @@ using Robust.Shared.Utility;
 namespace Content.Client.CMU14.Insurgency.Selection;
 
 /// <summary>
-///     The CLF-leader faction selection popup. A single scrolling list of the round's Default factions:
+///     The cell's faction ballot. A single scrolling list of the round's Default factions:
 ///     each row shows just the title, and expands on click to reveal its description, playstyle, and a
 ///     sprite preview of what its cell kit deploys. Factions that do not oppose the round's GOVFOR are
 ///     shown but cannot be chosen. The server has the final say on every pick.
@@ -24,12 +27,32 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
     private readonly BoxContainer _list;
 
     public event Action<int>? OnSelectDefault;
+    public event Action<int[]>? OnExclusionsChanged;
+    private readonly HashSet<int> _excluded = new();
+    private readonly IResourceManager _resources = IoCManager.Resolve<IResourceManager>();
+    private readonly ResPath? _exclusionsFile;
+
+    public int[] Exclusions => _excluded.ToArray();
 
     public InsurgencyFactionSelectWindow()
     {
         _prototype = IoCManager.Resolve<IPrototypeManager>();
 
-        Title = Loc.GetString("insfor-select-title");
+        if (IoCManager.Resolve<Robust.Shared.Network.IClientNetManager>().ServerChannel is { } channel)
+        {
+            var server = channel.RemoteEndPoint;
+            _exclusionsFile = new ResPath($"/cmu-insurgency-{channel.UserId}-{server.Address.ToString().Replace(':', '-')}-{server.Port}.txt");
+            if (_resources.UserData.TryReadAllText(_exclusionsFile.Value, out var saved))
+            {
+                foreach (var field in saved.Split(' '))
+                {
+                    if (int.TryParse(field, out var id))
+                        _excluded.Add(id);
+                }
+            }
+        }
+
+        Title = Loc.GetString("cmu-insfor-ballot-title");
         MinSize = new Vector2(760, 620);
 
         var root = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true, VerticalExpand = true };
@@ -37,7 +60,7 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
         _govforLabel = new RichTextLabel { Margin = new Thickness(6, 4) };
         root.AddChild(_govforLabel);
 
-        root.AddChild(new Label { Text = Loc.GetString("insfor-select-default-header"), StyleClasses = { "LabelHeading" }, Margin = new Thickness(6, 2) });
+        root.AddChild(new Label { Text = Loc.GetString("cmu-insfor-ballot-help"), StyleClasses = { "LabelHeading" }, Margin = new Thickness(6, 2) });
 
         _list = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, HorizontalExpand = true };
         // HScrollEnabled false so the row content wraps to the viewport width instead of running off it.
@@ -135,13 +158,29 @@ public sealed class InsurgencyFactionSelectWindow : DefaultWindow
         var id = option.Id;
         var choose = new Button
         {
-            Text = Loc.GetString("insfor-select-choose"),
-            Disabled = !option.Opposes,
+            Text = Loc.GetString("cmu-insfor-ballot-vote"),
+            Disabled = !option.Opposes || _excluded.Contains(id),
             HorizontalAlignment = HAlignment.Left,
             Margin = new Thickness(0, 8, 0, 0),
         };
         choose.OnPressed += _ => OnSelectDefault?.Invoke(id);
         textCol.AddChild(choose);
+        var exclude = new CheckBox { Text = Loc.GetString("cmu-insfor-ballot-exclude"), Pressed = _excluded.Contains(id) };
+        exclude.OnToggled += args =>
+        {
+            if (args.Pressed)
+                _excluded.Add(id);
+            else
+                _excluded.Remove(id);
+            choose.Disabled = !option.Opposes || args.Pressed;
+            if (_exclusionsFile is { } file)
+            {
+                using var writer = _resources.UserData.OpenWriteText(file);
+                writer.Write(string.Join(" ", _excluded.Where(choice => choice >= InsurgencyBuiltinFactions.VanillaClfId)));
+            }
+            OnExclusionsChanged?.Invoke(Exclusions);
+        };
+        textCol.AddChild(exclude);
 
         detail.AddChild(textCol);
 

@@ -4,9 +4,9 @@
   [textlink="Mining & Industry" link="CMUGuideIndustry"] · [textlink="Equipment recipes" link="CMUGuideIndustryRecipes"]
 
   <Box>
-    <GuideEntityEmbed Entity="RUMCBrassPump" Caption="WATER"/>
-    <GuideEntityEmbed Entity="RUMCBoiler" Caption="STEAM"/>
-    <GuideEntityEmbed Entity="RUMCSteamDrill" Caption="ORE"/>
+    <GuideEntityEmbed Entity="RUMCMachineBrassPump" Caption="WATER"/>
+    <GuideEntityEmbed Entity="RUMCMachineBoiler" Caption="STEAM"/>
+    <GuideEntityEmbed Entity="RUMCMachineSteamDrill" Caption="ORE"/>
   </Box>
   [bold]Water → pump → liquid pipe → boiler → gas pipe → machine.[/bold]
 
@@ -20,9 +20,9 @@
   Click a placed machine with an empty hand to open its window. Hold an ingredient and click its input slot to insert it; use an empty hand on an occupied slot to retrieve it. Matching stacks can be topped up. Machines process automatically when their requirements are met.
 
   <Box>
-    <GuideEntityEmbed Entity="RUMCSteamPress" Caption="INGOT → SHEET"/>
-    <GuideEntityEmbed Entity="RUMCSteamGrinder" Caption="ORE → POWDER"/>
-    <GuideEntityEmbed Entity="RUMCBrassCondenser" Caption="COOL LIQUIDS"/>
+    <GuideEntityEmbed Entity="RUMCMachineSteamPress" Caption="INGOT → SHEET"/>
+    <GuideEntityEmbed Entity="RUMCMachineSteamGrinder" Caption="ORE → POWDER"/>
+    <GuideEntityEmbed Entity="RUMCMachineBrassCondenser" Caption="COOL LIQUIDS"/>
   </Box>
   - [bold]Drill:[/bold] place over a deposit or supported rock floor. Supply steam or electricity and empty the output slots. It extracts material; use a handheld tool to open a shaft.
   - [bold]Press:[/bold] insert the correct reusable mold and ingots. The solid-fuel version takes fuel; the steam version takes steam.

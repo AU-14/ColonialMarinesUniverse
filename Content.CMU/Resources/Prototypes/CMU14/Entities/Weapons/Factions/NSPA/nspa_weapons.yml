@@ -1,0 +1,149 @@
+# Neroid Sector Policing Authority service weapons: civilian police cuts of TSE military arms.
+
+# Revolvers
+
+- type: entity
+  parent: RMCWeaponRevolverWarwickMkVII
+  id: CMUWeaponRevolverWarwickPolice
+  name: Warwick MkVII-P police revolver
+  description: A civilian police model of the Warwick MkVII top-break revolver, issued to the Neroid Sector Policing Authority. It keeps the .44 Magnum chambering and the mule-kick recoil, but drops the bayonet lug and military optics rail fittings. Takes M44 speedloaders.
+  components:
+  - type: Tag
+    tags:
+    - Sidearm
+    - RMCRevolver
+    - RMCWeaponRevolverM44
+    - RMCWeaponRevolverWarwickMkVII
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentExtendedBarrel
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentLaserSight
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.6875, 0.125
+      rmc-aslot-rail: 0, 0.185
+      rmc-aslot-underbarrel: 0.375, -0.155
+
+- type: entity
+  parent: CMUWeaponRevolverWarwickPolice
+  id: CMUWeaponRevolverWarwickCommissioner
+  name: Commissioner's Warwick
+  description: A hand-finished Warwick MkVII-P carried by a Commissioner of the Neroid Sector Policing Authority. Dark furniture, a polished frame and the silver Sakura of the NSPA set into the grip. Empire and Honor, Bound by Duty.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Pistols/warwick_alt.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Weapons/Guns/Pistols/warwick_alt.rsi
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: CMUGunCaseRevolverWarwickPolice
+  name: Warwick MkVII-P police revolver case
+  description: A gun case containing a Warwick MkVII-P police revolver, a rail flashlight and six M44 speedloaders.
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,15,1
+  - type: StorageFill
+    contents:
+    - id: RMCAttachmentRailFlashlight
+    - id: CMUWeaponRevolverWarwickPolice
+    - id: RMCSpeedLoaderM44
+      amount: 6
+
+- type: entity
+  parent: RMCBeltHolsterRevolver
+  id: CMUBeltHolsterRevolverNSPA
+  name: NSPA revolver holster rig
+  description: A black leather revolver rig issued to Inspectors of the Neroid Sector Policing Authority, with a holster for their Warwick and six pouches for speedloaders.
+  suffix: Filled, NSPA
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderM44
+      amount: 6
+    - id: CMUWeaponRevolverWarwickPolice
+
+- type: entity
+  parent: CMUBeltHolsterRevolverNSPA
+  id: CMUBeltHolsterRevolverCommissioner
+  name: Commissioner's revolver holster rig
+  description: A black leather revolver rig worn by Commissioners of the Neroid Sector Policing Authority, carrying their Warwick, four speedloaders and two of marksman rounds.
+  suffix: Filled, NSPA, Commissioner
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderM44
+      amount: 4
+    - id: RMCSpeedLoader44Marksman
+      amount: 2
+    - id: CMUWeaponRevolverWarwickCommissioner
+
+# Rifles
+
+- type: entity
+  parent: RMCWeaponRifleL90A1
+  id: CMUWeaponRifleL90A1Police
+  name: SLRA1-P police carbine
+  description: A civilian police model of the SLRA1 infantry carbine, issued to the Neroid Sector Policing Authority. Semi-automatic only, with the grenade launcher fittings removed. Takes standard SLR magazines. Chambered in 7x43mm.
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCM5Bayonet
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentExtendedCompensator
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentFlashlightGrip
+
+- type: entity
+  parent: RMCKitBase
+  id: CMUKitWeaponL90A1PoliceLEO
+  name: SLRA1-P police carbine case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMUWeaponRifleL90A1Police
+        amount: 1
+      - id: RMCMagazineRifleL90
+        amount: 3

@@ -1,3 +1,4 @@
+using Content.Server.CMU14.Language;
 using Content.Server.CMU14.Telephone;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._RMC14.Telephone;
@@ -18,6 +19,7 @@ public sealed partial class RMCTelephoneSystem
 {
     [Dependency] private IGameTiming _cmuTiming = default!;
     [Dependency] private SharedPopupSystem _cmuPopup = default!;
+    [Dependency] private CMUCharacterLanguageSystem _colonyLanguage = default!;
     [Dependency] private RadioSystem _cmuRadio = default!;
     [Dependency] private SharedUserInterfaceSystem _cmuUi = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
@@ -182,9 +184,10 @@ public sealed partial class RMCTelephoneSystem
 
         // Sent from an off-map speaker so the radio shows "911 Dispatch" and nothing is said near the caller
         var dispatcher = GetDispatcher();
+        var language = _colonyLanguage.GetColonyLanguages()?.DefaultLanguage;
         foreach (var channel in CMUDispatchChannels)
         {
-            _cmuRadio.SendRadioMessage(dispatcher, report, channel, dispatcher);
+            _cmuRadio.SendRadioMessage(dispatcher, report, channel, dispatcher, language);
         }
     }
 

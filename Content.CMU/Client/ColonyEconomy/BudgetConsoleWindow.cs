@@ -7,6 +7,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.ColonyEconomy;
 
@@ -20,6 +21,7 @@ public sealed class BudgetConsoleWindow : DefaultWindow
     public event Action<int>? OnWithdraw;
     public event Action? OnDispenseSalaries;
     public event Action<NetEntity, float>? OnTransfer;
+    public event Action<NetEntity, int>? OnTransferAsrs;
 
     private readonly CrtConsoleKit _kit = new();
 
@@ -27,10 +29,17 @@ public sealed class BudgetConsoleWindow : DefaultWindow
     private readonly Label _budgetText;
     private readonly Label _held;
     private readonly Label _count;
+    private readonly Label _asrsBudget;
+    private readonly Label _withdrawalAllowance;
+    private readonly Label _withdrawalReset;
     private readonly LineEdit _amount;
     private readonly BoxContainer _departments;
+    private readonly List<(BaseButton Button, int Amount)> _withdrawButtons = [];
 
     private BudgetConsoleBuiState? _state;
+    private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
+    private TimeSpan _resetAt;
+    private int _lastResetSeconds = -1;
 
     public BudgetConsoleWindow()
     {
@@ -58,9 +67,14 @@ public sealed class BudgetConsoleWindow : DefaultWindow
             button.HorizontalExpand = true;
             button.OnPressed += _ => OnWithdraw?.Invoke(amount);
             withdraw.AddChild(button);
+            _withdrawButtons.Add((button, amount));
         }
 
         treasury.AddChild(withdraw);
+        _withdrawalAllowance = CrtConsoleKit.Text(string.Empty, _kit.Small, CrtTerminalPalette.TextDim);
+        treasury.AddChild(_withdrawalAllowance);
+        _withdrawalReset = CrtConsoleKit.Text(string.Empty, _kit.Small, CrtTerminalPalette.TextDim);
+        treasury.AddChild(_withdrawalReset);
 
         // Payroll.
         var dispense = new ConfirmButton
@@ -78,6 +92,8 @@ public sealed class BudgetConsoleWindow : DefaultWindow
         // Departments: one amount, sent to whichever department you pick.
         _count = CrtConsoleKit.Text(string.Empty, _kit.Small, CrtTerminalPalette.TextDim);
         body.AddChild(_kit.Section(Loc.GetString("cmu-budget-departments"), out var departments, right: _count));
+        _asrsBudget = CrtConsoleKit.Text(string.Empty, _kit.Small, CrtTerminalPalette.Accent);
+        departments.AddChild(_asrsBudget);
         var amountRow = CrtConsoleKit.Row(4);
         var key = CrtConsoleKit.Text(Loc.GetString("cmu-budget-transfer-amount"), _kit.Small, CrtTerminalPalette.TextDim);
         key.VerticalAlignment = VAlignment.Center;
@@ -119,8 +135,36 @@ public sealed class BudgetConsoleWindow : DefaultWindow
         CrtConsoleKit.SetTag(_budgetTag, _budgetText, CrtConsoleKit.Money(state.Budget),
             state.Budget > 0 ? CrtTerminalPalette.Accent : CrtTerminalPalette.Alert);
         _count.Text = Loc.GetString("cmu-budget-department-count", ("count", state.Departments.Count));
+        _asrsBudget.Text = Loc.GetString("cmu-budget-asrs-balance",
+            ("amount", CrtConsoleKit.Money(state.ColonyAsrsBudget)));
         _held.Text = Loc.GetString("cmu-budget-total") + ": " + CrtConsoleKit.Money(state.Departments.Sum(d => d.Budget));
+        _withdrawalAllowance.Text = Loc.GetString("cmu-budget-withdrawal-allowance",
+            ("remaining", CrtConsoleKit.Money(state.WithdrawalRemaining)),
+            ("limit", CrtConsoleKit.Money(state.WithdrawalLimit)));
+        _resetAt = _timing.CurTime + TimeSpan.FromSeconds(state.WithdrawalResetSeconds);
+        UpdateResetTime();
+        foreach (var (button, amount) in _withdrawButtons)
+            button.Disabled = amount > state.Budget || amount > state.WithdrawalRemaining;
         Rebuild();
+    }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        if (_lastResetSeconds > 0)
+            UpdateResetTime();
+    }
+
+    private void UpdateResetTime()
+    {
+        var remaining = Math.Max(0, (int) Math.Ceiling((_resetAt - _timing.CurTime).TotalSeconds));
+        if (remaining == _lastResetSeconds)
+            return;
+
+        _lastResetSeconds = remaining;
+        _withdrawalReset.Text = remaining > 0
+            ? Loc.GetString("cmu-budget-withdrawal-reset", ("minutes", remaining / 60), ("seconds", remaining % 60))
+            : Loc.GetString("cmu-budget-withdrawal-ready");
     }
 
     /// <summary>Redraws the department cards, so their transfer buttons match the amount typed in.</summary>
@@ -136,7 +180,8 @@ public sealed class BudgetConsoleWindow : DefaultWindow
             return;
         }
 
-        var valid = float.TryParse(_amount.Text, out var amount) && amount > 0;
+        var valid = float.TryParse(_amount.Text, out var amount) && float.IsFinite(amount) && amount > 0;
+        var asrsValid = int.TryParse(_amount.Text, out var asrsAmount) && asrsAmount > 0;
         foreach (var department in state.Departments.OrderBy(d => d.Name))
         {
             var funded = department.Budget > 0;
@@ -162,20 +207,35 @@ public sealed class BudgetConsoleWindow : DefaultWindow
                 _kit.Small, funded ? CrtTerminalPalette.Accent : CrtTerminalPalette.Alert));
             row.AddChild(column);
 
-            var transfer = _kit.Button(valid
-                ? $"{Loc.GetString("cmu-budget-transfer")} {CrtConsoleKit.Money(amount)}"
-                : Loc.GetString("cmu-budget-transfer"), CmuButtonStyles.Variant.Affirm);
-            transfer.MinWidth = 150;
-            transfer.VerticalAlignment = VAlignment.Center;
-            transfer.Margin = new Thickness(0, 0, 8, 0);
-            transfer.Disabled = !valid || amount > state.Budget;
             var uid = department.Uid;
-            transfer.OnPressed += _ =>
+            var transferButtons = CrtConsoleKit.Column(3);
+            transferButtons.MinWidth = 170;
+            transferButtons.VerticalAlignment = VAlignment.Center;
+            transferButtons.Margin = new Thickness(0, 4, 8, 4);
+
+            var treasuryTransfer = _kit.Button(valid
+                ? $"{Loc.GetString("cmu-budget-transfer-treasury")} {CrtConsoleKit.Money(amount)}"
+                : Loc.GetString("cmu-budget-transfer-treasury"), CmuButtonStyles.Variant.Affirm);
+            treasuryTransfer.Disabled = !valid || amount > state.Budget;
+            treasuryTransfer.OnPressed += _ =>
             {
                 if (float.TryParse(_amount.Text, out var sent) && sent > 0)
                     OnTransfer?.Invoke(uid, sent);
             };
-            row.AddChild(transfer);
+            transferButtons.AddChild(treasuryTransfer);
+
+            var asrsTransfer = _kit.Button(asrsValid
+                ? $"{Loc.GetString("cmu-budget-transfer-asrs")} {CrtConsoleKit.Money(asrsAmount)}"
+                : Loc.GetString("cmu-budget-transfer-asrs"));
+            asrsTransfer.Disabled = !asrsValid || asrsAmount > state.ColonyAsrsBudget;
+            asrsTransfer.OnPressed += _ =>
+            {
+                if (int.TryParse(_amount.Text, out var sent) && sent > 0)
+                    OnTransferAsrs?.Invoke(uid, sent);
+            };
+            transferButtons.AddChild(asrsTransfer);
+
+            row.AddChild(transferButtons);
             card.AddChild(row);
             _departments.AddChild(card);
         }

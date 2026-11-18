@@ -87,11 +87,12 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
         if (!TryContainerEntity(ent, ent.Comp.TargetIdSlot, out var uid) || !TryComp(uid, out AccessComponent? access))
             return;
 
-        access.Tags.Clear();
-
-        if (!_prototype.TryIndex(args.AccessGroup, out var accessGroupPrototype))
+        // CMU14: validate the configured job before replacing the card's existing access.
+        if ((ent.Comp.UseConfiguredAccess && !ent.Comp.JobList.Contains(args.AccessGroup)) ||
+            !_prototype.TryIndex(args.AccessGroup, out var accessGroupPrototype))
             return;
 
+        access.Tags.Clear();
         foreach (var tag in accessGroupPrototype.Tags)
         {
             access.Tags.Add(tag);
@@ -304,7 +305,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
     private void OnAccessChangeMsg(Entity<IdModificationConsoleComponent> ent,
         ref IdModificationConsoleAccessChangeBuiMsg args)
     {
-        if (!ent.Comp.Authenticated)
+        if (!ent.Comp.Authenticated || (ent.Comp.UseConfiguredAccess && !ent.Comp.AccessList.Contains(args.Access))) // CMU14
             return;
 
         if (!TryContainerEntity(ent, ent.Comp.TargetIdSlot, out var uid) || !TryComp(uid, out AccessComponent? access))
@@ -474,9 +475,13 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
             }
         }
 
-        ent.Comp.AccessGroups = accessGroups;
-        ent.Comp.AccessList = accessList;
-        ent.Comp.HiddenAccessList = accessListHidden;
+        // CMU14: preserve a curated terminal's displayed and assignable access after spawning.
+        if (!ent.Comp.UseConfiguredAccess)
+        {
+            ent.Comp.AccessGroups = accessGroups;
+            ent.Comp.AccessList = accessList;
+            ent.Comp.HiddenAccessList = accessListHidden;
+        }
 
         var groupList = new HashSet<ProtoId<AccessGroupPrototype>>();
         // var groupListHidden = new HashSet<ProtoId<AccessGroupPrototype>>();

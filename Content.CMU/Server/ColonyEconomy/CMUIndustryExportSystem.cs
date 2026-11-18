@@ -1,13 +1,16 @@
 using Content.Server.Cargo.Components;
 using Content.Server.Cargo.Systems;
+using Content.Server.Popups;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Cargo;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Government;
+using Content.Shared.Interaction;
 using Content.Shared.Materials;
 using Content.Shared.Stacks;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.ColonyEconomy;
 
@@ -16,15 +19,97 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
 {
     [Dependency] private readonly RMCReagentSystem _reagents = default!;
     [Dependency] private readonly PricingSystem _pricing = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
+
+    private readonly Dictionary<EntProtoId, double> _entityPrices = new();
+    private readonly Dictionary<ProtoId<StackPrototype>, double> _stackPrices = new();
+    private readonly Dictionary<ProtoId<StackPrototype>, int> _tradePrices = new();
 
     public override void Initialize()
     {
+        BuildPriceCaches();
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+        SubscribeLocalEvent<ASRSSellableDebugToolComponent, AfterInteractEvent>(OnDebugToolAfterInteract);
+        SubscribeLocalEvent<ASRSSellableComponent, PriceCalculationEvent>(OnSellablePrice);
         SubscribeLocalEvent<FluidTankComponent, PriceCalculationEvent>(OnTankPrice);
         SubscribeLocalEvent<StackComponent, PriceCalculationEvent>(OnStackPrice);
     }
 
+    private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
+    {
+        if (args.WasModified<CMUIndustryPricePrototype>() || args.WasModified<ColonyWorldGoodPrototype>())
+            BuildPriceCaches();
+    }
+
+    private void BuildPriceCaches()
+    {
+        _entityPrices.Clear();
+        _stackPrices.Clear();
+        _tradePrices.Clear();
+
+        foreach (var price in ProtoMan.EnumeratePrototypes<CMUIndustryPricePrototype>())
+        {
+            if (price.Stack is { } stack)
+                _stackPrices.Add(stack, price.Price);
+            if (price.Entity is { } entity)
+                _entityPrices.Add(entity, price.Price);
+        }
+
+        foreach (var good in ProtoMan.EnumeratePrototypes<ColonyWorldGoodPrototype>())
+        {
+            if (good.Stack is { } stack &&
+                (!_tradePrices.TryGetValue(stack, out var existing) || good.SellPrice < existing))
+                _tradePrices[stack] = good.SellPrice;
+        }
+    }
+
+    public bool TryGetCanonicalUnitPrice(EntityUid uid, out double price)
+    {
+        if (TryComp<StackComponent>(uid, out var stack) && _stackPrices.TryGetValue(stack.StackTypeId, out price))
+            return true;
+
+        price = 0;
+        return MetaData(uid).EntityPrototype is { } prototype && _entityPrices.TryGetValue(prototype.ID, out price);
+    }
+
+    private void OnSellablePrice(Entity<ASRSSellableComponent> sellable, ref PriceCalculationEvent args)
+    {
+        if (args.Handled || !TryGetCanonicalUnitPrice(sellable, out var price))
+            return;
+
+        if (TryComp<StackComponent>(sellable, out var stack))
+            price *= stack.Count;
+
+        args.Price = price;
+        args.Handled = true;
+    }
+
+    private void OnDebugToolAfterInteract(Entity<ASRSSellableDebugToolComponent> tool, ref AfterInteractEvent args)
+    {
+        if (args.Handled || !args.CanReach || args.Target is not { } target)
+            return;
+
+        args.Handled = true;
+        var targetName = Name(target);
+        if (HasComp<ASRSSellableComponent>(target))
+        {
+            _popup.PopupEntity(
+                Loc.GetString("cmu-asrs-debug-tool-already-sellable", ("target", targetName)),
+                target,
+                args.User);
+            return;
+        }
+
+        EnsureComp<ASRSSellableComponent>(target);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-asrs-debug-tool-applied", ("target", targetName)),
+            target,
+            args.User);
+    }
+
     public bool CanExport(EntityUid uid)
-        => HasComp<CMUIndustryExportComponent>(uid)
+        => HasComp<ASRSSellableComponent>(uid)
+           || HasComp<CMUIndustryExportComponent>(uid)
            || HasComp<FluidTankComponent>(uid) && HasComp<FluidFillableComponent>(uid)
            || TryComp<StackComponent>(uid, out var stack) && GetTradePrice(stack) > 0;
 
@@ -40,7 +125,11 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
             foreach (var item in container.ContainedEntities)
             {
                 if (CanExport(item))
-                    price += _pricing.GetPrice(item, includeContents: false);
+                {
+                    var itemPrice = _pricing.GetPrice(item, includeContents: false);
+                    if (double.IsFinite(itemPrice) && itemPrice > 0)
+                        price += itemPrice;
+                }
                 price += GetContainedExportPrice(item);
             }
         }
@@ -64,19 +153,8 @@ public sealed partial class CMUIndustryExportSystem : EntitySystem
         if (args.Handled || HasComp<MaterialComponent>(stack) || HasComp<StackPriceComponent>(stack)
             || HasComp<StaticPriceComponent>(stack))
             return;
-        args.Price += stack.Comp.Count * GetTradePrice(stack.Comp);
+        args.Price += (double) stack.Comp.Count * GetTradePrice(stack.Comp);
     }
 
-    private int GetTradePrice(StackComponent stack)
-    {
-        var price = 0;
-        foreach (var good in ProtoMan.EnumeratePrototypes<ColonyWorldGoodPrototype>())
-        {
-            if (good.Stack != stack.StackTypeId)
-                continue;
-            if (price == 0 || good.SellPrice < price)
-                price = good.SellPrice;
-        }
-        return price;
-    }
+    private int GetTradePrice(StackComponent stack) => _tradePrices.GetValueOrDefault(stack.StackTypeId);
 }

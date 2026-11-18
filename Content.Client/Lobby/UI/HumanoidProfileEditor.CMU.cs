@@ -240,12 +240,6 @@ public sealed partial class HumanoidProfileEditor
         HeightFeetEdit.OnTextChanged += _ => UpdateHeightFromEdits();
         HeightInchesEdit.OnTextChanged += _ => UpdateHeightFromEdits();
 
-        WeightEdit.OnTextChanged += args =>
-        {
-            if (int.TryParse(args.Text, out var newWeight))
-                SetWeight(newWeight);
-        };
-
         FullDescriptionEdit.OnTextChanged += _ => SetFullDescription(Rope.Collapse(FullDescriptionEdit.TextRope));
         MedicalRecordEdit.OnTextChanged += _ => SetMedicalRecord(Rope.Collapse(MedicalRecordEdit.TextRope));
         CriminalRecordEdit.OnTextChanged += _ => SetCriminalRecord(Rope.Collapse(CriminalRecordEdit.TextRope));
@@ -677,12 +671,6 @@ public sealed partial class HumanoidProfileEditor
         SetCharacterHeight(feet.Length == 1 && inches.Length is 1 or 2 ? $"{feet}'{inches}" : string.Empty);
     }
 
-    private void SetWeight(int value)
-    {
-        Profile = Profile?.WithWeight(value);
-        SetDirty();
-    }
-
     // CMU14 method: keep the Character Records build and visible body in sync.
     private void SetBuild(BuildType value)
     {
@@ -797,7 +785,7 @@ public sealed partial class HumanoidProfileEditor
         HeightInchesEdit.Text = heightParts.Length == 2 ? heightParts[1] : string.Empty;
         _loadingHeightControls = false;
 
-        WeightEdit.Text = (Profile?.Weight ?? 160).ToString();
+        // CMU14: legacy profile weight is retained only for stored profiles.
         FullDescriptionEdit.TextRope = new Rope.Leaf(Profile?.FullDescription ?? string.Empty);
         MedicalRecordEdit.TextRope = new Rope.Leaf(Profile?.MedicalRecord ?? string.Empty);
         CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);

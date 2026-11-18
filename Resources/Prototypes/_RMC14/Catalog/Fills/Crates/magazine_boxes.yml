@@ -11,7 +11,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateBoxMagazineRifleM54CAP
-  name: Magazine box (M54C, 10x AP mags)
+  name: Magazine box (M41A, 10x AP mags) # CMU14
   components:
   - type: StorageFill
     contents:

@@ -2,7 +2,7 @@
   parent: [ RMCBaseWeaponShotgun, RMCBaseAttachableHolder ]
   name: MR35 pump shotgun
   id: RuMCWeaponShotgunMR35
-  #description: 3dasdaasd
+  description: A Union pump-action shotgun built around a slug-only magazine tube. It will not chamber buckshot or other shells, only 12-gauge slugs.
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Weapons/Guns/Shotgun/MR35/inhands.rsi

@@ -13,3 +13,6 @@
     sprite: _RMC14/Objects/Clothing/Hands/Gloves/cbrn.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Hands/Gloves/cbrn.rsi
+  # armor is per zone, the suit's bio doesn't reach the hands
+  - type: CMArmor
+    bio: 75

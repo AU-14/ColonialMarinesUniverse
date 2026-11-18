@@ -57,6 +57,15 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
             return false;
 
         // Check for protection via masks/helmets (SPOREPROOF or BLOCKGASEFFECT).
+        if (_net.IsClient)
+            return false;
+
+        if (_gasMask.TryGetWornSporeFilter(target, out var filter))
+        {
+            _gasMask.DamageFilter(filter.Owner, filter.Comp, 0.3f);
+            return false;
+        }
+
         if (IsProtected(target))
             return false;
 
@@ -110,7 +119,7 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
             if (!_inventory.TryGetSlotEntity(target, slot, out var item))
                 continue;
 
-            if (!TryComp(item, out MycotoxinProtectionComponent? protection))
+            if (!TryComp(item, out MycotoxinProtectionComponent? protection) || !_gasMask.CanUsePassiveSporeProtection(item.Value))
                 continue;
 
             // A single fully-protective item (SPOREPROOF) blocks outright.

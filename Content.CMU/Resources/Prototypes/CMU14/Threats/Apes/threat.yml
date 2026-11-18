@@ -9,6 +9,7 @@
 # Colony Fall
 - type: threat
   id: ApeThreatCF
+  xenofauna: true # non-humanoid threat life; EW Joe xenofauna directives
   voteCooldownGroup: Ape
   lorePrimer: AU14PrimerThreatApe
   roundstartspawns: apePartycf

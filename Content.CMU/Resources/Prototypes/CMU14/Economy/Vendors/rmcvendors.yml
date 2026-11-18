@@ -1263,6 +1263,7 @@
       entries:
       - id: AU14CaseSentry
       - id: AU14CaseSentryFlamer
+      - id: CMUConstructionRobotKit
     - name: Sentry Gun Upgrade Kit
       entries:
       - id: RMCEngineeringUpgrade
@@ -1474,6 +1475,8 @@
       entries:
       - id: RMCMagazinePistolL54
         amount: 200
+      - id: CMU14MagazinePistolL54Rubber
+        amount: 20
       - id: AU14MagazinePistolL165A1
         amount: 200
       - id: RMCMagazinePistolSU6
@@ -1499,6 +1502,8 @@
       - id: RMCBoxBulletsSmartGun
         amount: 5
       - id: CMUBoxBulletsPistol9MM
+        amount: 5
+      - id: CMU14BoxBulletsPistol9MMRubber
         amount: 5
       - id: CMUBoxBulletsPistol9MMSH
         amount: 5

@@ -24,7 +24,6 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
-using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Fob;
@@ -34,7 +33,7 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
 {
     [Dependency] private SharedAmbientSoundSystem _ambient = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private CollisionWakeSystem _collisionWake = default!;
+    [Dependency] private CMUFobCollisionSystem _collision = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private CMUFobInteractionSystem _controls = default!;
     [Dependency] private DamageableSystem _damage = default!;
@@ -46,7 +45,6 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private CMUFobMapSystem _sites = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMUFobReserveSystem _reserve = default!;
     [Dependency] private SharedRoofSystem _roof = default!;
@@ -72,9 +70,25 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
         SubscribeLocalEvent<CMUFobEquipmentComponent, DamageChangedEvent>(OnDamage);
         SubscribeLocalEvent<CMUFobEquipmentComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CMUFobEquipmentComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<CMUFobEquipmentComponent, AnchorStateChangedEvent>(OnAnchorChanged);
     }
 
-    private void OnMapInit(Entity<CMUFobEquipmentComponent> ent, ref MapInitEvent args) => UpdateVisuals(ent);
+    private void OnMapInit(Entity<CMUFobEquipmentComponent> ent, ref MapInitEvent args)
+    {
+        UpdateDeploymentCollision(ent);
+        UpdateVisuals(ent);
+    }
+
+    private void OnAnchorChanged(Entity<CMUFobEquipmentComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (!args.Anchored)
+        {
+            ent.Comp.Deployed = false;
+            ent.Comp.Network = null;
+        }
+        UpdateDeploymentCollision(ent);
+        UpdateVisuals(ent);
+    }
 
     private bool AtSite(Entity<CMUFobEquipmentComponent> ent, out Entity<CMUFobNetworkComponent> bank)
     {
@@ -294,11 +308,9 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
 
     private void UpdateDeploymentCollision(Entity<CMUFobEquipmentComponent> ent)
     {
-        // Portable items may stop colliding when asleep; deployed structures must stay in the broadphase.
-        _collisionWake.SetEnabled(ent, !ent.Comp.Deployed);
-        if (TryComp<FixturesComponent>(ent, out var fixtures))
-            foreach (var fixture in fixtures.Fixtures.Values)
-                _physics.SetHard(ent, fixture, ent.Comp.Deployed && ent.Comp.Kind != CMUFobEquipmentKind.Sensor);
+        var layer = CollisionGroup.MidImpassable | CollisionGroup.LowImpassable;
+        _collision.SetBlocking(ent, ent.Comp.Deployed && Transform(ent).Anchored
+            && ent.Comp.Kind != CMUFobEquipmentKind.Sensor, layer);
     }
 
     private void OnPickup(Entity<CMUFobEquipmentComponent> ent, ref GettingPickedUpAttemptEvent args)
@@ -310,7 +322,12 @@ public sealed partial class CMUFobEquipmentSystem : EntitySystem
     {
         if (!args.DamageIncreased) return;
         _doAfter.Cancel(ent.Comp.Work);
-        if (args.Origin is { } attacker && _interaction.InRangeUnobstructed(ent.Owner, attacker, 1.5f)) Shock(ent, attacker);
+        // Explosions can outlive their source entity, and damage handlers can delete the equipment.
+        if (args.Origin is { } attacker
+            && TryComp<TransformComponent>(ent, out var equipmentTransform)
+            && TryComp<TransformComponent>(attacker, out var attackerTransform)
+            && _interaction.InRangeUnobstructed((ent.Owner, equipmentTransform), (attacker, attackerTransform), 1.5f))
+            Shock(ent, attacker);
     }
 
     private void OnCollide(Entity<CMUFobEquipmentComponent> ent, ref StartCollideEvent args) => Shock(ent, args.OtherEntity);

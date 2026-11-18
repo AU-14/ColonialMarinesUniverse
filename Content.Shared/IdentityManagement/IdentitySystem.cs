@@ -1,6 +1,8 @@
 using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Clothing;
+using Content.Shared.CMU14.Items; // CMU14
+using Content.Shared.CMU14.Yautja; // CMU14
 using Content.Shared.CriminalRecords.Systems;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -34,6 +36,8 @@ public sealed partial class IdentitySystem : EntitySystem
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
+
+    [Dependency] private InventorySystem _inventory = default!; // CMU14
 
     // The name of the container holding the identity entity
     private const string SlotName = "identity";
@@ -218,6 +222,10 @@ public sealed partial class IdentitySystem : EntitySystem
             Dirty(ident, identityGrammar);
         }
 
+        // CMU14: compare and publish the Yautja's public alias before logging a change.
+        if (TryComp<YautjaComponent>(ent, out var yautja))
+            name = Loc.GetString(yautja.IdentityName);
+
         if (name == Name(ident))
             return;
 
@@ -253,6 +261,13 @@ public sealed partial class IdentitySystem : EntitySystem
         var ev = new SeeIdentityAttemptEvent();
 
         RaiseLocalEvent(target, ev);
+        // CMU14 Begin: tactical wraps may also cover the face from the neck slot.
+        if (!ev.Cancelled && _inventory.TryGetSlotEntity(target, "neck", out var neck)
+            && HasComp<FoldableIdentityBlockerComponent>(neck) && TryComp<IdentityBlockerComponent>(neck, out var blocker))
+        {
+            OnSeeIdentity((neck.Value, blocker), ref ev);
+        }
+        // CMU14 End
         return representation.ToStringKnown(!ev.Cancelled, ev.NameOverride);
     }
 
