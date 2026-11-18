@@ -1,6 +1,7 @@
 # Weapons
 - type: loadout
   id: HoldoutPistolRMC
+  dummyEntity: RMCWeaponPistolD18 # CMU14: show the gun, not the case
   cost: 4
   storage:
     back:
@@ -8,36 +9,42 @@
 
 - type: loadout
   id: CustomM1984RMC
+  dummyEntity: CMWeaponPistolM1984Custom # CMU14: show the gun, not the case
   cost: 4
   inhand:
     - RMCGunCasePistolM1984Custom
 
 - type: loadout
   id: CustomM44RMC
+  dummyEntity: RMCWeaponRevolverM44Custom # CMU14: show the gun, not the case
   cost: 4
   inhand:
     - RMCGunCasePistolM44Custom
 
 - type: loadout
   id: HG45AguilaCaseRMC
+  dummyEntity: RMCWeaponPistolHG45Aguila # CMU14: show the gun, not the case
   cost: 4
   inhand:
     - RMCGunCasePistolHG45Aguila
 
 - type: loadout
   id: HG45MarinaCaseRMC
+  dummyEntity: RMCWeaponPistolHG45Marina # CMU14: show the gun, not the case
   cost: 4
   inhand:
     - RMCGunCasePistolHG45Marina
 
 - type: loadout
   id: T73CaseRMC
+  dummyEntity: RMCWeaponPistolT73 # CMU14: show the gun, not the case
   cost: 4
   inhand:
     - RMCGunCasePistolT73
 
 - type: loadout
   id: ZHNK72CaseRMC
+  dummyEntity: RMCWeaponRevolverZHNK72 # CMU14: show the gun, not the case
   cost: 4
   inhand:
     - RMCGunCasePistolZHNK72

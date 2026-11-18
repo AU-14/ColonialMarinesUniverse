@@ -168,6 +168,8 @@
         door:
           True: { state: open }
           False: { state: closed }
+  - type: Apc
+    maxLoad: 50000
   - type: Battery
     maxCharge: 100000
     startingCharge: 100000

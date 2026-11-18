@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "CMU14 pool contribution by Scott-SS14, design and art direction. Held poses reference the CMSS13 gambling table parts sprites (https://github.com/cmss13-devs/cmss13/tree/master/icons/mob/humans/onmob/inhands/equipment).",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon"
+        },
+        {
+            "name": "inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "inhand-right",
+            "directions": 4
+        }
+    ]
+}

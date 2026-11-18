@@ -982,6 +982,16 @@ public sealed partial class CameraNetworkSystem : EntitySystem
         QueueAffectedReceivers(marker.Owner, directoryChanged);
     }
 
+    /// <summary>
+    /// Tells the receivers on a camera's networks that its listing changed, such as a name set through
+    /// <see cref="RMCCameraComponent.NameOverride"/>, which raises no rename event of its own.
+    /// </summary>
+    public void RefreshMemberDirectory(EntityUid member)
+    {
+        if (TryComp(member, out CameraNetworkMemberComponent? component))
+            QueueMemberDirectoryChange((member, component));
+    }
+
     private void QueueMemberDirectoryChange(Entity<CameraNetworkMemberComponent> member)
     {
         if (TryComp(member.Owner, out CameraMapMarkerComponent? marker))

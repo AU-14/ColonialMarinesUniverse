@@ -1,0 +1,31 @@
+- files: [stick_strike.ogg]
+  license: CC-BY-4.0
+  copyright: >-
+    KVV_Audio, “SPRTIndor-BILLIARDS_Billiard Ball Cue Hit 01_KVV AUDIO_FREE”.
+    One cue strike excerpted from the public preview, downmixed to mono,
+    filtered, faded, and level matched.
+  source: https://freesound.org/people/KVV_Audio/sounds/851086/
+- files: [ball_clack.ogg]
+  license: CC-BY-4.0
+  copyright: >-
+    juskiddink, “Billiard balls single hit-dry.wav”. Public preview
+    downmixed to mono, filtered, faded, and level matched.
+  source: https://freesound.org/people/juskiddink/sounds/108615/
+- files: [pocket_drop.ogg]
+  license: CC-BY-3.0
+  copyright: >-
+    jtroan, “Pool Ball in pocket.wav”. Public preview trimmed, filtered,
+    faded, and level matched.
+  source: https://freesound.org/people/jtroan/sounds/241373/
+- files: [rail_thud.ogg]
+  license: CC0-1.0
+  copyright: Github Scott-SS14.
+  source: https://creativecommons.org/publicdomain/zero/1.0/
+- files: [stick_snap_1.ogg, stick_snap_2.ogg]
+  license: CC0-1.0
+  copyright: >-
+    Sonicquinn, “Foley_Elements_Wood_Breaking-Ply_StereoSP_192000.wav”, layered
+    with craigsmith's “R26-23-Smashing Wood on Wall.wav”
+    (https://freesound.org/people/craigsmith/sounds/481919/, CC0-1.0).
+    Excerpts downmixed to mono, trimmed, filtered, and level matched.
+  source: https://freesound.org/people/Sonicquinn/sounds/518791/

@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Vendors;
+using Content.Shared._RMC14.Emplacements;
 using System.Linq;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared.Examine;
@@ -49,6 +50,7 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<GunComponent, GetVerbsEvent<Verb>>(OnGetVerbs);
+        SubscribeLocalEvent<WeaponMountComponent, GetVerbsEvent<Verb>>(OnMountGetVerbs);
         SubscribeLocalEvent<CMUGunSafetyComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<CMUGunSafetyComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<CombatModeComponent, ExaminedEvent>(OnCarrierExamined);
@@ -146,6 +148,28 @@ public sealed partial class CMUGunSafetySystem : EntitySystem
             Text = Loc.GetString(on ? "cmu-gun-safety-verb-off" : "cmu-gun-safety-verb-on"),
             Icon = ToggleIcon,
             Act = () => SetSafety(ent, !on, user),
+        });
+    }
+
+    // a deployed gun sits inside its mount where the right click menu can't reach it, so an M56D
+    // vended on safety could never be fired. the mount offers the gun's toggle instead
+    private void OnMountGetVerbs(Entity<WeaponMountComponent> ent, ref GetVerbsEvent<Verb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract ||
+            ent.Comp.MountedEntity is not { } gun ||
+            !HasComp<GunComponent>(gun) ||
+            HasComp<CMUNoSafetyComponent>(gun))
+        {
+            return;
+        }
+
+        var user = args.User;
+        var on = IsOn(gun);
+        args.Verbs.Add(new Verb
+        {
+            Text = Loc.GetString(on ? "cmu-gun-safety-verb-off" : "cmu-gun-safety-verb-on"),
+            Icon = ToggleIcon,
+            Act = () => SetSafety(gun, !on, user),
         });
     }
 

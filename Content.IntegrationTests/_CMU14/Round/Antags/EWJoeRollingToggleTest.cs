@@ -4,6 +4,7 @@ using Content.Server.CMU14.Round.Antags;
 using Content.Server.CMU14.Round.Antags.EarlyWarning;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Server.Antag.Components;
+using Content.Server.Antag; // CMU14
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Actions.Components;
@@ -34,6 +35,35 @@ public sealed class EWJoeRollingToggleTest
     private const string ColonyJoe = "AU14MobWorkingJoeColony";
 
     private const string GhostSpawner = "CMUSpawnPointGhostEWJoe";
+
+    // CMU14: administrator verbs must respect a rule that disables itself while being added.
+    [Test]
+    public async Task AdminAssignmentDoesNotRestartADisabledRule()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            DummyTicker = false,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        await server.WaitAssertion(() =>
+        {
+            server.CfgMan.SetCVar(CCVars.CMUEWJoeEnabled, false);
+            var antags = server.EntMan.System<AntagSelectionSystem>();
+            antags.ForceMakeAntag<GameRuleComponent>(pair.Player!, EWJoeRuleSystem.AntagId, EWJoeRuleSystem.AntagId);
+            var rules = server.EntMan.EntityQueryEnumerator<EWJoeRuleComponent>();
+            var found = false;
+            while (rules.MoveNext(out var uid, out _))
+            {
+                found = true;
+                Assert.That(server.EntMan.HasComponent<EndedGameRuleComponent>(uid), Is.True);
+                Assert.That(server.EntMan.HasComponent<AntagSelectionComponent>(uid), Is.False);
+            }
+            Assert.That(found, Is.True, "The admin path must actually attempt to create the rejected rule.");
+        });
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task TheSwitchOnlyStopsTheAntagBeingRolled()

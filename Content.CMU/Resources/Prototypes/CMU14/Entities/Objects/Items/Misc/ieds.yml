@@ -138,6 +138,7 @@
     quickEquip: false
     equipDelay: 10
     unequipDelay: 6
+  - type: CMUIEDVest
   - type: ContainerContainer
     containers:
       storagebase: !type:Container

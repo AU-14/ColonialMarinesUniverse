@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Systems;
 using Content.Server.CMU14.Chat;
+using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared._RMC14.Barricade;
 using Content.Shared.CMU14.Chemistry.Effects;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Brain;
@@ -52,8 +53,10 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RotateToFaceSystem _rotate = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EWJoeXenoKitSystem _xenoKit = default!;
+    // RB-13: THE LIGHT's paralyze and Saturate's knockdown are hard CC through the shared window
+    [Dependency] private EWJoeLiturgySystem _liturgy = default!;
 
     private static readonly SoundPathSpecifier AnnounceSound = new("/Audio/Announcements/announce.ogg");
     private static readonly ProtoId<DamageTypePrototype> BrainDamageType = "Blunt";
@@ -179,8 +182,8 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
         if (victim.Owner == joe.Owner || !_mobState.IsAlive(victim, victim.Comp))
             return false;
 
-        // organics only: synthetics have no brain to burn and thralls belong to the Joe
-        if (!EWJoeTargetRules.IsOrganic(EntityManager, victim) || HasComp<RiverMeldedComponent>(victim))
+        // FLOW-12: organics and Yautja only: synthetics have no brain to burn and thralls belong to the Joe
+        if (!EWJoeTargetRules.IsLightTarget(EntityManager, victim) || HasComp<RiverMeldedComponent>(victim))
             return false;
 
         return _facing.IsFacingTarget(victim, joe) && _examine.InRangeUnOccluded(victim.Owner, joe.Owner, joe.Comp.Range);
@@ -188,7 +191,8 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 
     private void Envelop(Entity<EWJoeLightComponent> joe, Entity<EWJoeEnvelopedComponent> victim, TimeSpan now)
     {
-        _stun.TryParalyze(victim, joe.Comp.Paralyze, true);
+        // ECS-11 + RB-13: scaled for xenofauna (when the source is a Joe), then the CC window
+        _liturgy.ApplyHardCc(joe, victim, joe.Comp.Paralyze, EWJoeHardCcKind.Paralyze);
         // Direct: the light lands whatever the victim has in their blood
         _medical.DamageOrgan<CMUBrainComponent>(victim, joe.Comp.BrainDamage, BrainDamageType, OrganDamageSource.Direct);
 
@@ -376,7 +380,11 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 
     private void Strip(Entity<EWJoeComponent> joe, EntityUid target)
     {
-        _stun.TryKnockdown(target, joe.Comp.SaturateKnockdown, refresh: true, autoStand: true, drop: true);
+        // ECS-11 + RB-13: scaled for xenofauna, then the CC window; refreshed, standing back up, dropping what is held
+        _liturgy.ApplyHardCc(joe, target, joe.Comp.SaturateKnockdown, EWJoeHardCcKind.Knockdown);
+
+        // 5B Saturate (xeno): xenofauna wear no helmet to tear away, so the cone dazes them and cracks their armor
+        _xenoKit.SaturateXeno(joe, target);
 
         // knockdown only drops held items on the first fall, so drop them explicitly
         foreach (var held in _hands.EnumerateHeld(target).ToArray())
