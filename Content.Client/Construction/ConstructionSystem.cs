@@ -2,7 +2,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Popups;
 using Content.Shared._RMC14.Construction;
-using Content.Shared.CMU14.ConstructionRobot;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Examine;
@@ -53,6 +52,7 @@ namespace Content.Client.Construction
             UpdatesOutsidePrediction = true;
             SubscribeLocalEvent<LocalPlayerAttachedEvent>(HandlePlayerAttached);
             SubscribeNetworkEvent<AckStructureConstructionMessage>(HandleAckStructure);
+            InitializeConstructionRobotTracking(); // CMU14: sync plans with claimed construction robots.
             SubscribeNetworkEvent<ResponseConstructionGuide>(OnConstructionGuideReceived);
             SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnConstructionPrototypesReloaded);
 
@@ -298,6 +298,7 @@ namespace Content.Client.Construction
 
         private void HandlePlayerAttached(LocalPlayerAttachedEvent msg)
         {
+            StartTrackingRobotGhosts(msg.Entity); // CMU14: restore robot plans when reattaching.
             var available = IsCraftingAvailable(msg.Entity);
             if (!_rmcConstruction.CanConstruct(msg.Entity))
                 available = false;
@@ -427,11 +428,10 @@ namespace Content.Client.Construction
             if (prototype.CanBuildInImpassable)
                 EnsureComp<WallMountComponent>(ghost.Value).Arc = new(Math.Tau);
 
-            RaiseNetworkEvent(new ConstructionRobotGhostPlacedMessage(
-                GetNetCoordinates(Transform(ghost.Value).Coordinates),
-                prototype.ID,
-                dir.ToAngle(),
-                comp.GhostId));
+            // CMU14 Begin: share personal construction plans with their owner's robots.
+            comp.Planner = user;
+            NotifyRobotGhostPlaced(ghost.Value, comp);
+            // CMU14 End
 
             return true;
         }
@@ -518,7 +518,7 @@ namespace Content.Client.Construction
             if (!_ghosts.TryGetValue(ghostId, out var ghost))
                 return;
 
-            RaiseNetworkEvent(new ConstructionRobotGhostRemovedMessage(ghostId));
+            NotifyRobotGhostRemoved(ghostId); // CMU14: cancel this robot plan.
             QueueDel(ghost);
             _ghosts.Remove(ghostId);
         }
@@ -528,8 +528,13 @@ namespace Content.Client.Construction
         /// </summary>
         public void ClearAllGhosts()
         {
-            foreach (var ghostId in _ghosts.Keys.ToArray())
-                ClearGhost(ghostId);
+            ClearRobotGhosts(); // CMU14: cancel the owner's pending robot plans.
+            foreach (var ghost in _ghosts.Values)
+            {
+                QueueDel(ghost);
+            }
+
+            _ghosts.Clear();
         }
 
         public void QueryMenuExtensions(ref ConstructionMenuFilterEvent args)

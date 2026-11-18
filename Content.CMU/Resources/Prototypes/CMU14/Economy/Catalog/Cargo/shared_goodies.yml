@@ -38,11 +38,9 @@
         crate: CMUCrateHazardGear
       - cost: 500
         crate: CMUCrateEngineeringWiring
-    - name: Engineering
-      entries:
       - cost: 1500
         crate: CMUCrateConstructionRobot
-        maxStock: 3
+        roundLimit: 3
 
 - type: entity
   abstract: true

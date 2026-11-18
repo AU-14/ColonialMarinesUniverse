@@ -11,6 +11,21 @@
     noRot: true
     layers:
     - state: healthy-hull
+  - type: Damageable
+  - type: Injurable
+    damageContainer: CMUCombatDrone
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:EmptyAllContainersBehaviour
+      - !type:SpawnEntitiesBehavior
+        offset: 0
+        spawn:
+          CMUConstructionRobotWreck: { min: 1, max: 1 }
+      - !type:DoActsBehavior
+        acts: [Destruction]
   - type: MovementSpeedModifier
     baseWalkSpeed: 2
     baseSprintSpeed: 3
@@ -38,6 +53,16 @@
     refuelDelay: 15
   - type: Tag
     tags: [DoorBumpOpener]
+
+- type: entity
+  id: CMUConstructionRobotWreck
+  parent: BaseStructureDynamic
+  name: wrecked construction UGV
+  description: A burnt-out construction UGV chassis.
+  components:
+  - type: Sprite
+    sprite: CMU14/Mobs/CombatDrone/ugv.rsi
+    state: destroyed
 
 - type: entity
   id: CMUConstructionRobotKit

@@ -11,7 +11,7 @@ namespace Content.Shared.CMU14.ConstructionRobot;
 public sealed partial class CMUConstructionRobotComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public EntityUid? Owner;
+    public EntityUid? Operator;
 
     [DataField, AutoNetworkedField]
     public float WeldingFuel = 1000f;
@@ -34,8 +34,6 @@ public sealed partial class CMUConstructionRobotComponent : Component
     public Container? Materials;
 
     public bool IsBuilding;
-
-    public int? ActiveGhostId;
 
     public EntityCoordinates? CurrentFollowTarget;
 }

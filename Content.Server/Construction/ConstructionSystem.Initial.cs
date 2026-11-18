@@ -591,19 +591,13 @@ namespace Content.Server.Construction
             var pathFind = constructionGraph.Path(startNode.Name, targetNode.Name);
 
 
-            if (_beingBuilt.TryGetValue(args.SenderSession, out var set))
+            // CMU14 Begin: share ghost reservations with construction UGVs.
+            if (!TryReserveGhost(args.SenderSession, ev.Ack))
             {
-                if (!set.Add(ev.Ack))
-                {
-                    _popup.PopupEntity(Loc.GetString("construction-system-already-building"), user, user);
-                    return;
-                }
+                _popup.PopupEntity(Loc.GetString("construction-system-already-building"), user, user);
+                return;
             }
-            else
-            {
-                var newSet = new HashSet<int> {ev.Ack};
-                _beingBuilt[args.SenderSession] = newSet;
-            }
+            // CMU14 End
 
             var location = GetCoordinates(ev.Location);
 
@@ -618,7 +612,7 @@ namespace Content.Server.Construction
 
             void Cleanup()
             {
-                _beingBuilt[args.SenderSession].Remove(ev.Ack);
+                ReleaseGhost(args.SenderSession, ev.Ack); // CMU14
             }
 
             if (!_actionBlocker.CanInteract(user, null)
