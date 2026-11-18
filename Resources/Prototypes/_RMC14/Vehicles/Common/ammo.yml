@@ -168,12 +168,12 @@
 
 - type: entity
   parent: CMCartridgeSentry10x50mm
-  id: VehicleCartridgeSentry10x50mm
-  name: cartridge (10x50mm)
+  id: VehicleCartridgeSentry10x28mm
+  name: cartridge (10x28mm)
   categories: [ HideSpawnMenu ]
   components:
   - type: CartridgeAmmo
-    proto: VehicleBulletSentry10x50mm
+    proto: VehicleBulletSentry10x28mm
     muzzleFlash: MuzzleFlashEffectVehicleOver
 
 - type: entity

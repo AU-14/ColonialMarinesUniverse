@@ -175,7 +175,7 @@
     accuracyMultiplierUnwielded: 5
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeRERotaryCannon10x50mm
+    proto: VehicleCartridgeRERotaryCannon20x102mm
     capacity: 500
   - type: VehicleHardpointAmmo
     magazineSize: 500

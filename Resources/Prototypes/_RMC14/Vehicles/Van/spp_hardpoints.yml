@@ -100,7 +100,7 @@
     - FactionSPP
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeSentry10x50mm
+    proto: VehicleCartridgeSentry756x54mm
     capacity: 500
   - type: VehicleHardpointAmmo
     magazineSize: 500
