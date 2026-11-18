@@ -15,7 +15,7 @@
     damage:
       types:
         Blunt: 15
-        Slash: 10
+        Slash: 22 # CMU14: heavier cutting damage.
     soundHit:
       collection: GenericHit
     wideAnimationRotation: 90

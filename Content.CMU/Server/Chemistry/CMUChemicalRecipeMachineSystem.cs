@@ -25,6 +25,7 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
     private const string RecipeHeader = "CMU14-CHEM-RECIPE/1";
     private const string PillSolutionId = "food";
     private const int MaxRecipeEntries = 64;
+    private const int MaxPlanningSteps = 256;
     private const int MaxPaperContentSize = 10000;
     private static readonly FixedPoint2 MaxRecipeAmount = FixedPoint2.New(1000);
     private static readonly EntProtoId PaperPrototype = "CMUChemRecipePaper";
@@ -39,9 +40,16 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
     [Dependency] private readonly SharedUserInterfaceSystem _ui = default!;
     [Dependency] private readonly INetManager _net = default!;
 
+    private Dictionary<string, ReactionPrototype>? _reactionByProduct;
+
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(args =>
+        {
+            if (args.WasModified<ReactionPrototype>())
+                _reactionByProduct = null;
+        });
 
         SubscribeLocalEvent<RMCChemMasterComponent, RMCChemMasterPillScanEvent>(OnPillScan);
         SubscribeLocalEvent<CMUChemicalRecipeMachineComponent, EntInsertedIntoContainerMessage>(OnContainerChanged);
@@ -91,37 +99,14 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
     private string CreateRecipePaper(string pillName, Solution solution)
     {
         var outputs = new Dictionary<string, FixedPoint2>();
-        var consumed = new Dictionary<string, FixedPoint2>();
-        var catalysts = new Dictionary<string, FixedPoint2>();
+        foreach (var reagent in solution.Contents)
+        {
+            var id = reagent.Reagent.Prototype.ToString();
+            outputs[id] = outputs.GetValueOrDefault(id) + reagent.Quantity;
+        }
+
         var steps = new List<string>();
-        var exceededLimits = false;
-
-        foreach (var reagent in solution.Contents.OrderBy(content => content.Reagent.Prototype.ToString(), StringComparer.Ordinal))
-        {
-            AddSynthesisRequirements(
-                reagent.Reagent.Prototype,
-                reagent.Quantity,
-                new HashSet<string>(StringComparer.Ordinal),
-                consumed,
-                catalysts,
-                steps,
-                ref exceededLimits);
-            outputs[reagent.Reagent.Prototype] = reagent.Quantity;
-        }
-
-        if (exceededLimits ||
-            consumed.Count + catalysts.Count + outputs.Count > MaxRecipeEntries ||
-            InputTotalExceedsLimit(consumed, catalysts))
-        {
-            consumed.Clear();
-            catalysts.Clear();
-            steps.Clear();
-            foreach (var (id, amount) in outputs)
-            {
-                TryAddAmount(consumed, id, amount);
-                AddRawMaterialStep(id, steps);
-            }
-        }
+        var (consumed, catalysts) = PlanInputs(outputs, steps);
 
         var text = new StringBuilder();
         text.AppendLine(RecipeHeader);
@@ -190,15 +175,69 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
         }
     }
 
+    private (Dictionary<string, FixedPoint2> Consumed, Dictionary<string, FixedPoint2> Catalysts) PlanInputs(
+        Dictionary<string, FixedPoint2> outputs, List<string>? steps = null)
+    {
+        var consumed = new Dictionary<string, FixedPoint2>();
+        var catalysts = new Dictionary<string, FixedPoint2>();
+        var path = new HashSet<string>(StringComparer.Ordinal);
+        var remainingSteps = MaxPlanningSteps;
+        var exceededLimits = false;
+        foreach (var (id, amount) in outputs)
+        {
+            AddSynthesisRequirements(id, amount, path, consumed, catalysts, steps, ref remainingSteps, ref exceededLimits);
+            if (exceededLimits)
+                break;
+        }
+
+        if (!exceededLimits && consumed.Count + catalysts.Count + outputs.Count <= MaxRecipeEntries &&
+            !InputTotalExceedsLimit(consumed, catalysts))
+            return (consumed, catalysts);
+
+        // Complex formulations can always be repackaged using the finished reagents themselves.
+        steps?.Clear();
+        if (steps != null)
+        {
+            foreach (var id in outputs.Keys)
+                AddRawMaterialStep(id, steps);
+        }
+        return (outputs, new Dictionary<string, FixedPoint2>());
+    }
+
+    private Dictionary<string, ReactionPrototype> IndexSynthesisReactions()
+    {
+        var reactions = new Dictionary<string, ReactionPrototype>(StringComparer.Ordinal);
+        foreach (var reaction in _prototypes.EnumeratePrototypes<ReactionPrototype>().OrderBy(r => r.ID, StringComparer.Ordinal))
+        {
+            if (reaction.Source || reaction.Effects.Length > 0 ||
+                !reaction.Reactants.Values.Any(r => !r.Catalyst && r.Amount > FixedPoint2.Zero))
+                continue;
+
+            foreach (var (product, amount) in reaction.Products)
+            {
+                if (amount > FixedPoint2.Zero)
+                    reactions.TryAdd(product.Id, reaction);
+            }
+        }
+        return reactions;
+    }
+
     private void AddSynthesisRequirements(
         string reagentId,
         FixedPoint2 amount,
         HashSet<string> path,
         Dictionary<string, FixedPoint2> consumed,
         Dictionary<string, FixedPoint2> catalysts,
-        List<string> steps,
+        List<string>? steps,
+        ref int remainingSteps,
         ref bool exceededLimits)
     {
+        if (exceededLimits || --remainingSteps < 0)
+        {
+            exceededLimits = true;
+            return;
+        }
+
         if (amount <= FixedPoint2.Zero)
             return;
 
@@ -216,15 +255,8 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
             return;
         }
 
-        var reaction = _prototypes.EnumeratePrototypes<ReactionPrototype>()
-            .Where(candidate => !candidate.Source &&
-                                candidate.Effects.Length == 0 &&
-                                candidate.Reactants.Count > 0 &&
-                                candidate.Products.Any(product => product.Key.ToString() == reagentId && product.Value > FixedPoint2.Zero))
-            .OrderBy(candidate => candidate.ID, StringComparer.Ordinal)
-            .FirstOrDefault();
-
-        if (reaction == null)
+        _reactionByProduct ??= IndexSynthesisReactions();
+        if (!_reactionByProduct.TryGetValue(reagentId, out var reaction))
         {
             if (!TryAddAmount(consumed, reagentId, amount))
                 exceededLimits = true;
@@ -233,7 +265,7 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
             return;
         }
 
-        var productAmount = reaction.Products.First(product => product.Key.ToString() == reagentId).Value;
+        var productAmount = reaction.Products[reagentId];
         var reactionUnits = amount.Double() / productAmount.Double();
         if (!double.IsFinite(reactionUnits) || reactionUnits > MaxRecipeAmount.Double())
         {
@@ -261,22 +293,28 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
                 continue;
             }
 
-            var requiredAmount = reactant.Value.Amount.Double() * reactionsNeeded.Double();
-            if (!double.IsFinite(requiredAmount) || requiredAmount > MaxRecipeAmount.Double())
+            // Round up to the smallest transferable unit so a fractional dose always pays its cost.
+            var requiredCents = decimal.Ceiling((decimal) reactant.Value.Amount.Value * reactionsNeeded.Value / 100);
+            if (requiredCents > MaxRecipeAmount.Value)
             {
                 exceededLimits = true;
-                requiredAmount = MaxRecipeAmount.Double();
+                break;
             }
 
             AddSynthesisRequirements(
                 reactantId,
-                FixedPoint2.New(requiredAmount),
+                FixedPoint2.FromCents((int) requiredCents),
                 path,
                 consumed,
                 catalysts,
                 steps,
+                ref remainingSteps,
                 ref exceededLimits);
         }
+
+        path.Remove(reagentId);
+        if (steps == null || exceededLimits)
+            return;
 
         var reactionName = string.IsNullOrWhiteSpace(reaction.Name)
             ? reaction.ID
@@ -300,11 +338,13 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
                 ("amount", FormatAmount(amount)),
                 ("name", productName),
                 ("conditions", string.Join("; ", conditions))));
-        path.Remove(reagentId);
     }
 
-    private void AddRawMaterialStep(string reagentId, List<string> steps)
+    private void AddRawMaterialStep(string reagentId, List<string>? steps)
     {
+        if (steps == null)
+            return;
+
         var name = TryGetReagent(reagentId, out var reagent)
             ? reagent.LocalizedName
             : reagentId;
@@ -371,12 +411,12 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
         var totalTransfer = FixedPoint2.Zero;
         foreach (var (id, amount) in required)
         {
-            var stored = stock.Value.Comp.Solution.GetTotalPrototypeQuantity(id);
+            var stored = stock.Value.Comp.Solution.GetReagentQuantity(new ReagentId(id, null));
             var remaining = amount - stored;
             if (remaining <= FixedPoint2.Zero)
                 continue;
 
-            var available = source.GetTotalPrototypeQuantity(id);
+            var available = source.GetReagentQuantity(new ReagentId(id, null));
             var transfer = FixedPoint2.Min(available, remaining);
             if (transfer <= FixedPoint2.Zero)
                 continue;
@@ -450,7 +490,7 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
 
         foreach (var (id, amount) in GetInputs(recipe))
         {
-            if (stock.Value.Comp.Solution.GetTotalPrototypeQuantity(id) < amount)
+            if (stock.Value.Comp.Solution.GetReagentQuantity(new ReagentId(id, null)) < amount)
             {
                 _popup.PopupEntity(Loc.GetString("cmu-chem-recipe-machine-ingredients-missing"), ent, args.Actor);
                 UpdateUi(ent);
@@ -461,14 +501,15 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        var batch = new Solution(recipe.Outputs.Count);
         foreach (var (id, amount) in recipe.Outputs)
+            batch.AddReagent(id, amount);
+
+        if (!_solutions.TryAddSolution(outputSolution.Value, batch))
         {
-            if (!_solutions.TryAddReagent(outputSolution.Value, id, amount))
-            {
-                _popup.PopupEntity(Loc.GetString("cmu-chem-recipe-machine-output-failed"), ent, args.Actor);
-                UpdateUi(ent);
-                return;
-            }
+            _popup.PopupEntity(Loc.GetString("cmu-chem-recipe-machine-output-failed"), ent, args.Actor);
+            UpdateUi(ent);
+            return;
         }
 
         foreach (var (id, amount) in recipe.ConsumedInputs)
@@ -518,7 +559,7 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
             _solutions.TryGetSolution(ent.Owner, CMUChemicalRecipeMachineComponent.StockSolutionId, out var stock);
             foreach (var (id, amount) in GetInputs(recipe).OrderBy(pair => pair.Key, StringComparer.Ordinal))
             {
-                var stored = stock?.Comp.Solution.GetTotalPrototypeQuantity(id) ?? FixedPoint2.Zero;
+                var stored = stock?.Comp.Solution.GetReagentQuantity(new ReagentId(id, null)) ?? FixedPoint2.Zero;
                 var displayName = TryGetReagent(id, out var reagent)
                     ? reagent.LocalizedName
                     : id;
@@ -547,7 +588,7 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
                 _solutions.TryGetSolution(ent.Owner, CMUChemicalRecipeMachineComponent.StockSolutionId, out var stockSolution))
             {
                 canSynthesize = GetInputs(recipe).All(input =>
-                    stockSolution.Value.Comp.Solution.GetTotalPrototypeQuantity(input.Key) >= input.Value);
+                    stockSolution.Value.Comp.Solution.GetReagentQuantity(new ReagentId(input.Key, null)) >= input.Value);
             }
         }
 
@@ -587,6 +628,9 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
 
     private bool TryParseRecipe(string content, RecipeData recipe)
     {
+        if (content.Length > MaxPaperContentSize)
+            return false;
+
         var lines = content.Split('\n', StringSplitOptions.TrimEntries);
         if (lines.Length == 0 || lines[0] != RecipeHeader)
             return false;
@@ -643,7 +687,23 @@ public sealed partial class CMUChemicalRecipeMachineSystem : EntitySystem
         return hasOutput &&
                recipe.Outputs.Count > 0 &&
                Sum(recipe.Outputs.Values) <= MaxRecipeAmount &&
-               !InputTotalExceedsLimit(recipe.ConsumedInputs, recipe.Catalysts);
+               !InputTotalExceedsLimit(recipe.ConsumedInputs, recipe.Catalysts) &&
+               HasValidIngredientCosts(recipe);
+    }
+
+    private bool HasValidIngredientCosts(RecipeData recipe)
+    {
+        // Supplying the finished chemicals is sufficient for a direct transfer.
+        if (Covers(recipe.ConsumedInputs, recipe.Outputs))
+            return true;
+
+        var (consumed, catalysts) = PlanInputs(recipe.Outputs);
+        return Covers(recipe.ConsumedInputs, consumed) && Covers(recipe.Catalysts, catalysts);
+    }
+
+    private static bool Covers(Dictionary<string, FixedPoint2> supplied, Dictionary<string, FixedPoint2> required)
+    {
+        return required.All(entry => supplied.GetValueOrDefault(entry.Key) >= entry.Value);
     }
 
     private static Dictionary<string, FixedPoint2> GetInputs(RecipeData recipe)

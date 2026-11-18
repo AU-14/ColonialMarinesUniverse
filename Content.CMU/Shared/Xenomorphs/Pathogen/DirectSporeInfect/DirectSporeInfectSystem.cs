@@ -1,4 +1,3 @@
-using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -8,9 +7,7 @@ using Content.Shared.Popups;
 using Content.Shared.DoAfter;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared._RMC14.Xenonids.Hive;
-using Content.Shared.Inventory;
 using Robust.Shared.Network;
-using Robust.Shared.Random;
 
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
 
@@ -23,8 +20,6 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private InventorySystem _inventory = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private INetManager _net = default!;
 
@@ -141,38 +136,6 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
             return;
 
         var sourceHive = _hive.GetHive(xeno.Owner)?.Owner;
-
-        EntityUid? protItem = null;
-        foreach (var slot in new[] { "mask", "head" })
-        {
-            if (!_inventory.TryGetSlotEntity(target, slot, out var item))
-                continue;
-            if (!TryComp(item, out MycotoxinProtectionComponent? _))
-                continue;
-            protItem = item;
-            break;
-        }
-
-        if (protItem != null && !_random.Prob(xeno.Comp.ProtectionBypassChance)) // CMU14, direct infect chance is now defined per caste
-        {
-            _popup.PopupEntity(
-                Loc.GetString("cmu-xeno-direct-spore-infect-blocked"),
-                xeno, xeno, PopupType.SmallCaution);
-            return;
-        }
-
-        // Strip the protective item on success
-        if (protItem != null)
-        {
-            foreach (var slot in new[] { "mask", "head" })
-            {
-                if (_inventory.TryGetSlotEntity(target, slot, out var slotItem) && slotItem == protItem)
-                {
-                    _inventory.TryUnequip(target, slot, force: true);
-                    break;
-                }
-            }
-        }
 
         args.Handled = true;
 

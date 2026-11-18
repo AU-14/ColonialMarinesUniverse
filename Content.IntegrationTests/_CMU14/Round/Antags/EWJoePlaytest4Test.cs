@@ -59,24 +59,26 @@ public sealed class EWJoePlaytest4Test
             {
                 var bullet = entities.SpawnEntity(Bullet, map.GridCoords);
                 iffSys.GiveAmmoIFF(bullet, "FactionMarine", true);
-                physics.SetLinearVelocity(bullet, new Vector2(10, 0));
+                // RB-06: from the Joe's front (it faces south at rotation 0), travelling north into it
+                physics.SetLinearVelocity(bullet, new Vector2(0, 10));
                 var projectile = entities.GetComponent<ProjectileComponent>(bullet);
                 projectiles.ProjectileCollide((bullet, projectile, entities.GetComponent<PhysicsComponent>(bullet)), target);
                 return (bullet, projectile);
             }
 
-            // the Joe: every bullet is turned back, IFF or not
+            // the Joe: a frontal bullet is turned back, IFF or not
             var joe = entities.SpawnEntity(ColonyJoe, map.GridCoords);
             entities.EnsureComponent<EWJoeComponent>(joe);
             entities.AddComponent(joe, new EWJoeResonanceComponent { Chance = 1f });
+            entities.System<SharedTransformSystem>().SetWorldRotation(joe, Angle.Zero);
 
             var (bullet, projectile) = Fire(joe);
             Assert.Multiple(() =>
             {
                 Assert.That(damageable.GetTotalDamage(joe), Is.EqualTo(Content.Shared.FixedPoint.FixedPoint2.Zero), "the Joe takes nothing");
-                Assert.That(entities.GetComponent<PhysicsComponent>(bullet).LinearVelocity.X, Is.LessThan(0f), "the bullet flies back");
+                Assert.That(entities.GetComponent<PhysicsComponent>(bullet).LinearVelocity.Y, Is.LessThan(0f), "the bullet flies back");
                 Assert.That(entities.HasComponent<RMCReflectedProjectileComponent>(bullet), "marked as reflected");
-                Assert.That(entities.GetComponent<ProjectileIFFComponent>(bullet).Enabled, Is.False, "its IFF is cleared, so it can strike its own side");
+                Assert.That(entities.GetComponent<ProjectileIFFComponent>(bullet).Enabled, Is.True, "RB-06: it keeps its IFF, so it can't strike its own side");
                 Assert.That(projectile.Damage.GetTotal(), Is.GreaterThan(Content.Shared.FixedPoint.FixedPoint2.Zero), "and it still hurts");
             });
 

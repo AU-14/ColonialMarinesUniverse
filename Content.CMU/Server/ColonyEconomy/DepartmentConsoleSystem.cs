@@ -804,6 +804,22 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     }
 
     /// <summary>
+    ///     Transfer credits from the colony ASRS account to a colony-managed department.
+    /// </summary>
+    public bool TransferASRSToDepartment(EntityUid deptConsoleUid, int amount)
+    {
+        if (!TryComp<DepartmentConsoleComponent>(deptConsoleUid, out var dept)
+            || !dept.ColonyManaged
+            || amount <= 0
+            || !_requisitions.TrySpendFunds("colony", amount))
+            return false;
+
+        dept.DepartmentBudget += amount;
+        UpdateAllUiForDepartment(deptConsoleUid, dept);
+        return true;
+    }
+
+    /// <summary>
     ///     Withdraw cash from the department's own budget, spawning physical cash at the console.
     /// </summary>
     private void OnWithdraw(EntityUid uid, DepartmentConsoleComponent comp, DepartmentConsoleWithdrawBuiMsg msg)
@@ -822,9 +838,9 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
     /// <summary>
     ///     Gets all department consoles for the budget console to list.
     /// </summary>
-    public List<(NetEntity Uid, string Name, float Budget)> GetAllDepartments()
+    public List<BudgetConsoleDepartmentInfo> GetAllDepartments()
     {
-        var result = new List<(NetEntity, string, float)>();
+        var result = new List<BudgetConsoleDepartmentInfo>();
         var seenDepartments = new HashSet<string>();
         var query = EntityQueryEnumerator<DepartmentConsoleComponent>();
         while (query.MoveNext(out var uid, out var dept))
@@ -837,7 +853,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
             if (dept.DepartmentId != null && !seenDepartments.Add(dept.DepartmentId))
                 continue;
 
-            result.Add((GetNetEntity(uid), dept.DepartmentName, dept.DepartmentBudget));
+            result.Add(new BudgetConsoleDepartmentInfo(GetNetEntity(uid), dept.DepartmentName, dept.DepartmentBudget));
         }
         return result;
     }

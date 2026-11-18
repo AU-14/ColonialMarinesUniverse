@@ -1,0 +1,7 @@
+author: KeiKiyomi
+category: CMU
+changes:
+- message: Precision orbital and railcannon strikes can breach cave roofs.
+  type: Tweak
+time: '2026-11-18T11:24:08.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2628

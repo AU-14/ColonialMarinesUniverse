@@ -117,7 +117,6 @@
   - type: CMUXenoDirectSporeInfect
     plasmaCost: 50
     embryoSpawn: CMU14XenoBloodburster
-    protectionBypassChance: 0.5
   - type: CMUSporeCloudOnDeath
     cloudPrototype: CMUPathogenSporeCloud
   - type: Fixtures
@@ -220,8 +219,7 @@
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
-    - map: [ "enum.XenoHealerVisualLayers.Goop" ]
-      visible: false  
+    # no Goop layer: haze_healer.rsi has no salved states, so salving showed the error sprite
     - map: [ "enum.RMCDamageVisualLayers.Base" ]
       visible: false
     - map: [ "enum.XenoInhandVisualLayers.Left" ]

@@ -1,0 +1,148 @@
+author: Operator-Exi
+category: CMU
+changes:
+- message: 'The Early Warning Joe can now roll on FoF: one Joe, or two with 150 or
+    more players.'
+  type: Add
+- message: 'Machine Grip: the Early Warning Joe''s first Ctrl-click warns the target
+    ("The machine''s cold hands lurch towards you suddenly!") and goes straight to
+    an aggressive grab unless they move away. Its grabs take a little longer to break
+    free from as it levels.'
+  type: Add
+- message: From level 2 the Early Warning Joe can aggressively grab xenos up to tier
+    3, such as the praetorian, boiler and despoiler, with a longer windup on large
+    castes. Crushers, queens, kings and the abomination cannot be grabbed. Xeno grabs
+    last 3 seconds and have a 10 second cooldown.
+  type: Add
+- message: 'Desecrate: a level 2 targeted punch that deals heavy blunt damage, always
+    fractures and knocks the target back, slamming them into anything in the way.'
+  type: Add
+- message: 'The Early Warning Joe gains one or two anti-xenofauna abilities at every
+    level: Acid Plating, Industrial Grip, Cutting Torch, Overpressure, Chitin Crack,
+    Pin, Rending Edge, Steady, Purge Ground, Unwind Recoil, Searing Light and a xeno-shredding
+    Saturate. These use the same abilities as the ones targeting humans, but have
+    different effects on xenofauna.'
+  type: Add
+- message: 'Liturgy: landing hits, shoves, grabs and abilities builds up to 5 Liturgy
+    stacks. Each stack slightly raises attack speed and shortens incoming slows. At
+    maximum stacks the next hand or CQC move is empowered. An empowered move deals
+    more damage and has an extra effect.'
+  type: Add
+- message: 'CQC sequences: entering chains of inputs, such as Hit, Hit, Shove, triggers
+    Rebuke, Seize, Profane, Silence, Penance or Unmaking. Sequences cost no stacks,
+    share a 4 second cooldown and are listed in Signal Status. Unmaking needs a blade
+    for its wide swing. Each successful hit on a target reduces CQCs cooldown by 0.5
+    seconds.'
+  type: Add
+- message: 'New directives: Darken a District (depower an area yourself and keep it
+    dead) and Bear Witness (use Judgement on a number of different people).'
+  type: Add
+- message: 'Blind the Watch and Silence the Colony are now Meld directives. Offering
+    a camera or telecomms server melds it into the river: it glows bright orange and
+    stops working until a colonist repairs it with a lit welder.'
+  type: Add
+- message: Purge the Nest is completed by offering threat structures, which are destroyed.
+    Hive, overmind and blight cores cannot be offered.
+  type: Add
+- message: Reaching level 3 now sends the Colonial Marshal Bureau a fax naming five
+    suspects, one of them the Joe.
+  type: Add
+- message: The platoon commander now carries a Weyland reset key in Distress Signal
+    and FoF
+  type: Add
+- message: The Early Warning Joe now rolls at 25% in every mode (was 35%), and antag
+    demand no longer raises it.
+  type: Tweak
+- message: Every stun or knockdown from the Early Warning Joe opens a short window
+    on its target; further hard stuns inside it last half as long. Its flashes count
+    too.
+  type: Tweak
+- message: Early Warning Joe stuns now hold xenos for about as long as humans, instead
+    of a split second.
+  type: Tweak
+- message: Rebalanced the Early Warning Joe's durability. Its armor now grows by 4
+    against bullets and 2 against melee per level. The body-armor scour gives +5 bullet
+    armor for 3 minutes. The fuel-can scour repairs 2 health per second for 45 seconds
+    and stalls for 5 seconds when it is hurt. It can only be given one respawn per
+    round, and only if no River-Melded synthetic is found.
+  type: Tweak
+- message: Magnetic Resonance now turns back one bullet in ten, only from in front,
+    and reflected bullets keep their IFF.
+  type: Tweak
+- message: Rebalanced the Early Warning Joe's abilities. Consecrate deals 40 heat,
+    stuns for 1.5 seconds, has a 16 second cooldown and costs 30 heat. THE LIGHT takes
+    5 seconds to fill, paralyzes for 2.5 seconds and grants 20 seconds of immunity.
+    Unwind reaches 4 tiles, costs 20 heat, has a 45 second cooldown and silences sentries
+    for 6 seconds. Saturate's cooldown is now 15 seconds. The Grand Machine's Hand
+    deals 45 slash. Industrial Grip adds 15% damage against xenofauna.
+  type: Tweak
+- message: A held victim's struggle can only be restarted once per hold, and a choke
+    can only knock them out once per hold.
+  type: Tweak
+- message: Steady only refuses knockdowns caused by a xeno, and Overclock now runs
+    for at most 15 seconds and recharges for as long as it ran.
+  type: Tweak
+- message: Directives that can no longer be completed are withdrawn and rerolled.
+    Encrypted-disk directives and Claim a Peer are removed.
+  type: Tweak
+- message: Xeno directives now cover all xenofauna, meaning any non-humanoid threat
+    life, and are only given while living xenofauna is on the planet, including on
+    Colony Fall.
+  type: Tweak
+- message: Power cell and ID card directives need 3 to 5 items still held when they
+    complete. Bear Witness needs 4 to 6 people and counts at most 2 per cast. Blind
+    the Watch needs 2 to 4 cameras. Offering a structure takes 6 seconds.
+  type: Tweak
+- message: Darken a District only counts a blackout the Joe caused itself.
+  type: Tweak
+- message: Colony Fall's double directive credit now lasts until the threat actually
+    arrives.
+  type: Tweak
+- message: A dead Joe drops one corrupted core shard for each console it still holds,
+    so every assimilated console can be repaired.
+  type: Tweak
+- message: The Distress Signal ghost role now appears as a Working Joe, is limited
+    to synthetic-whitelisted players and only spawns on safe planet tiles.
+  type: Tweak
+- message: The Early Warning Joe no longer suffers any self-repair penalty, including
+    the slow chassis repair time.
+  type: Tweak
+- message: The Early Warning Joe is not slowed by weeds, sticky resin or mycelium.
+  type: Tweak
+- message: THE LIGHT now affects Yautja. Your technology cannot save you here.
+  type: Tweak
+- message: Offer can now target grenades and explosives.
+  type: Tweak
+- message: River-Melded now searches the planet for a synthetic for up to 5 minutes
+    before falling back to a copy.
+  type: Tweak
+- message: The Early Warning Joe ghost role no longer spawns in space or in unmapped
+    areas.
+  type: Fix
+- message: Silence the Colony can now be completed. Telecomms servers could not be
+    destroyed.
+  type: Fix
+- message: A victim held by the Early Warning Joe can now break free while it keeps
+    attacking them.
+  type: Fix
+- message: Grabbing corpses no longer builds Liturgy stacks.
+  type: Fix
+- message: The admin antag menu can make someone an Early Warning Joe even while ewjoemechanics
+    is off, and the role has its own Working Joe icon.
+  type: Admin
+- message: Added CMUSafeSpawnSystem, a reusable safe planet spawn check.
+  type: Code
+- message: Added hook events for pull paralysis immunity (CMUPullParalyzeImmuneEvent)
+    and slow duration (CMUGetSlowDurationMultiplierEvent).
+  type: Code
+- message: Added FiremanCarrySystem helpers for telegraphed aggressive grabs, plus
+    CMUAggressiveGrabbedEvent.
+  type: Code
+- message: Added EWJoeLiturgySystem.ApplyHardCc, the single path for every Early Warning
+    Joe stun and knockdown.
+  type: Code
+- message: Added CMU14-marked hooks in RMC's pulling, slow, temporary speed, synth
+    repair, wounds, weeds and fireman carry systems.
+  type: Code
+time: '2026-11-18T11:33:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2526

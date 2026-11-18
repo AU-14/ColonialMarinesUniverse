@@ -509,11 +509,9 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
 
     private void ToggleMapUI(Entity<TacticalMapUserComponent> user)
     {
-        // CMU14: remembered cave surveys are accessible through the ordinary tactical action.
-        var survey = new Content.Shared.CMU14.CaveSurvey.CMUOpenCaveSurveyEvent();
-        RaiseLocalEvent(user.Owner, ref survey);
-        if (survey.Handled)
-            return;
+        // CMU14: the map shortcut always returns to the colony view from a personal survey.
+        if (_ui.IsUiOpen(user.Owner, Content.Shared.CMU14.CaveSurvey.CMUCaveSurveyUiKey.Key, user))
+            _ui.CloseUi(user.Owner, Content.Shared.CMU14.CaveSurvey.CMUCaveSurveyUiKey.Key, user);
 
         if (_ui.IsUiOpen(user.Owner, TacticalMapUserUi.Key, user))
         {

@@ -432,7 +432,10 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
                 return false;
         }
 
-        var attemptEv = new AttemptHyposprayUseEvent(user, target, TimeSpan.Zero);
+        // CMU14: refillable pouch injectors require a wind-up for each dose on another mob.
+        // var attemptEv = new AttemptHyposprayUseEvent(user, target, TimeSpan.Zero);
+        var delay = user != target && HasComp<MobStateComponent>(target) ? entity.Comp.OtherInjectionDelay : TimeSpan.Zero;
+        var attemptEv = new AttemptHyposprayUseEvent(user, target, delay);
         RaiseLocalEvent(entity, ref attemptEv);
         var doAfter = new HyposprayDoAfterEvent();
         var args = new DoAfterArgs(EntityManager, user, attemptEv.DoAfter, doAfter, entity, target, entity)

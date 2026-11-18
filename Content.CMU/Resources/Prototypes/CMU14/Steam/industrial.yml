@@ -4,8 +4,8 @@
 
 # The steel boiler: the boiler, gray.
 - type: entity
-  parent: RUMCBoiler
-  id: RUMCSteelBoiler
+  parent: RUMCMachineBoiler
+  id: RUMCMachineSteelBoiler
   name: steel boiler
   description: A boiler of steel. Put coal, coke, planks or branches in its fuel slot and pipe water in, and it turns the water into steam in the gas pipes joined to it.
   components:
@@ -23,8 +23,8 @@
 
 # The industrial steam generator: gives twice the power of the brass one, from the same steam.
 - type: entity
-  parent: RUMCSteamGenerator
-  id: RUMCIndustrialSteamGenerator
+  parent: RUMCMachineSteamGenerator
+  id: RUMCMachineIndustrialSteamGenerator
   name: industrial steam generator
   description: A gray generator turned by steam, built for the industry, it makes twice the power of the ordinary steam generator from the same steam. Join a gas pipe with steam to it and a high voltage cable.
   components:
@@ -36,8 +36,8 @@
 
 # The industrial steam drill: the steam drill, gray.
 - type: entity
-  parent: RUMCSteamDrill
-  id: RUMCIndustrialSteamDrill
+  parent: RUMCMachineSteamDrill
+  id: RUMCMachineIndustrialSteamDrill
   name: industrial steam drill
   description: A gray drilling rig that runs on steam. Join a gas pipe with steam to it, set it on a deposit of ore and it takes ore out of the deposit.
   components:
@@ -60,8 +60,8 @@
 
 # The industrial steam press: the steam press, gray.
 - type: entity
-  parent: RUMCSteamPress
-  id: RUMCIndustrialSteamPress
+  parent: RUMCMachineSteamPress
+  id: RUMCMachineIndustrialSteamPress
   name: industrial steam press
   description: A heavy gray press driven by steam. Join a gas pipe with steam to it, seat a mold and one or two ingots, and it presses them.
   components:
@@ -75,8 +75,8 @@
 
 # The industrial steam smelter: the steam smelter, gray, and it melts the ore clean: no slag.
 - type: entity
-  parent: RUMCSteamSmelter
-  id: RUMCIndustrialSteamSmelter
+  parent: RUMCMachineSteamSmelter
+  id: RUMCMachineIndustrialSteamSmelter
   name: industrial steam smelter
   description: A gray smelter driven by steam. It has no thermostat and no recipes of its own, so seat a mold for three ingots and enough ore for them, and it makes three ingots. It leaves no slag.
   components:
@@ -92,8 +92,8 @@
 
 # The industrial steam extractor: the steam extractor, gray, and it works twice as fast on the same steam. It is built of machine hulls.
 - type: entity
-  parent: RUMCSteamExtractor
-  id: RUMCIndustrialSteamExtractor
+  parent: RUMCMachineSteamExtractor
+  id: RUMCMachineIndustrialSteamExtractor
   name: industrial steam extractor
   description: A gray extractor driven by steam, built of machine hulls. It presses resin out of wood and turns resin into raw rubber, twice as fast as the brass one on the same steam. Join a gas pipe with steam to it.
   components:
@@ -104,8 +104,8 @@
 
 # The industrial solid-fuel press: the press that runs on planks, gray, and built of machine hulls.
 - type: entity
-  parent: RUMCSolidFuelPress
-  id: RUMCIndustrialSolidFuelPress
+  parent: RUMCMachineSolidFuelPress
+  id: RUMCMachineIndustrialSolidFuelPress
   name: industrial solid-fuel press
   description: A heavy gray press that runs on wood instead of the grid, built of machine hulls. Open it, put planks in for fuel, seat a mold and one or two ingots, and it presses them into a piece.
   components:
@@ -119,8 +119,8 @@
 
 # The industrial steam grinder: the steam grinder in steel, built of machine hulls.
 - type: entity
-  parent: RUMCSteamGrinder
-  id: RUMCIndustrialSteamGrinder
+  parent: RUMCMachineSteamGrinder
+  id: RUMCMachineIndustrialSteamGrinder
   name: industrial steam grinder
   description: A gray shredder driven by steam, built of machine hulls. Join a gas pipe with steam to it and it chews through every slot it can at once.
   components:
@@ -131,8 +131,8 @@
 
 # The industrial condenser: the brass condenser in steel. It needs neither power nor steam, only a steady supply of the coolant.
 - type: entity
-  parent: RUMCBrassCondenser
-  id: RUMCIndustrialCondenser
+  parent: RUMCMachineBrassCondenser
+  id: RUMCMachineIndustrialCondenser
   name: industrial condenser
   description: A steel condenser that needs no power, only a steady supply of the liquid that cools. A liquid comes in at one inlet and the coolant at the other, and with a material in its slot the liquid sets into solid pieces. Slag is cooled with water.
   components:
@@ -156,13 +156,13 @@
     - CMUGuideIndustry
   - type: CrateOpenable
     spawn:
-    - id: RUMCSteelPump
+    - id: RUMCMachineSteelPump
     - id: RUMCSteelPipe
       amount: 3
-    - id: RUMCSteelBoiler
-    - id: RUMCIndustrialSteamGenerator
-    - id: RUMCIndustrialSteamDrill
-    - id: RUMCIndustrialSteamPress
+    - id: RUMCMachineSteelBoiler
+    - id: RUMCMachineIndustrialSteamGenerator
+    - id: RUMCMachineIndustrialSteamDrill
+    - id: RUMCMachineIndustrialSteamPress
     - id: RUMCMoldIngots
     - id: RUMCMoldSheet
-    - id: RUMCIndustrialSteamSmelter
+    - id: RUMCMachineIndustrialSteamSmelter

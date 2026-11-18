@@ -32,6 +32,7 @@
     - AU14JobCivilianOrbitalArbiter
     - AU14JobCivilianOrbitalManager
     - AU14JobCivilianCMBMarshal
+    - AU14JobCivilianCWPSMarshal
 
 - type: antagJobBlacklist
   id: CMUAmbassadorJobs
@@ -51,6 +52,7 @@
     - AU14JobCivilianCMBDetective
     - AU14JobCivilianCMBMarshal
     - AU14JobCivilianCWPSRanger
+    - AU14JobCivilianCWPSMarshal
     - AU14JobCivilianPaPOfficer
     - AU14JobCivilianNSPAConstable
     - AU14JobCivilianNSPAInspector

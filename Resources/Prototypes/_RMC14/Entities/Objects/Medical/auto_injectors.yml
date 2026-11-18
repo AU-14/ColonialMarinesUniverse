@@ -365,7 +365,9 @@
   parent: RMCMedicAutoInjectorBase
   id: RMCMedicAutoInjectorEZ1
   name: autoinjector (E-U)
-  description: A custom-made EZ autoinjector, likely from research. Injects its entire payload immediately and doesn't require any training.
+  # CMU14: external injections now have a short delay.
+  # description: A custom-made EZ autoinjector, likely from research. Injects its entire payload immediately and doesn't require any training.
+  description: A custom-made EZ autoinjector, likely from research. Injects its entire payload in one dose and doesn't require any training.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Medical/ez_medic_auto_injector.rsi
@@ -596,6 +598,10 @@
   id: RMCMedicAutoInjectorBase
   abstract: true
   components:
+  # CMU14 Begin
+  - type: Hypospray
+    otherInjectionDelay: 2
+  # CMU14 End
   - type: Tag
     tags:
     - CMAutoInjector

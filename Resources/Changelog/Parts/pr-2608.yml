@@ -1,0 +1,13 @@
+author: ChumpShrimpson
+category: CMU
+changes:
+- message: M20A and NSG-23 to their respective ASRSes
+  type: Add
+- message: Added flak vests to the colony asrs for 500 dollars
+  type: Add
+- message: Lowered prices of certain items in ASRSes
+  type: Tweak
+- message: Mask and eyewear slots to the WYSEC loadout menu
+  type: Add
+time: '2026-11-18T11:30:41.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2608

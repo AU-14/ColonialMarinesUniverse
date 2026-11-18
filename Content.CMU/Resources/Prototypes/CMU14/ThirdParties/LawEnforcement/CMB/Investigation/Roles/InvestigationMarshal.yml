@@ -71,6 +71,7 @@
     ears: AU14CMBHeadsetOnlyCMB
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - RMCUniversalRecorder
 
 - type: entity

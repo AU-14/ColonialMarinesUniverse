@@ -123,6 +123,34 @@ public sealed class CMUZHighGroundQueryPruningTest : GameTest
         }
     }
 
+    [Test]
+    public async Task GroundFollowsAChildGridEnteringAndLeavingTheMap()
+    {
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                CreateScenario();
+                var center = new Vector2(0.5f);
+                AssertGround(center, 0f, false);
+
+                var maps = Server.System<SharedMapSystem>();
+                var child = maps.CreateGridEntity(SComp<MapComponent>(_grid.Owner).MapId);
+                maps.SetTile(child, Vector2i.Zero,
+                    new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId));
+                CreateSupport(Vector2i.Zero, Direction.North, false, new[] { 0.6f, 0.6f }, child);
+                AssertGround(center, -0.6f, true);
+
+                SEntMan.DeleteEntity(child);
+                AssertGround(center, 0f, false);
+            });
+        }
+        finally
+        {
+            await CleanupScenario();
+        }
+    }
+
     private void CreateScenario()
     {
         _originalProfiler = Server.CfgMan.GetCVar(Robust.Shared.CVars.ProfEnabled);
@@ -144,17 +172,19 @@ public sealed class CMUZHighGroundQueryPruningTest : GameTest
         _bodyZ = SEntMan.AddComponent<CMUZPhysicsComponent>(_body);
     }
 
-    private EntityUid CreateSupport(Vector2i tile, Direction direction, bool corner, float[] curve)
+    private EntityUid CreateSupport(Vector2i tile, Direction direction, bool corner, float[] curve,
+        Entity<MapGridComponent>? supportGrid = null)
     {
+        var grid = supportGrid ?? _grid;
         var uid = SEntMan.SpawnEntity(null,
-            new EntityCoordinates(_grid.Owner, new Vector2(tile.X + 0.5f, tile.Y + 0.5f)));
+            new EntityCoordinates(grid.Owner, new Vector2(tile.X + 0.5f, tile.Y + 0.5f)));
         var support = SEntMan.AddComponent<CMUZLevelHighGroundComponent>(uid);
         support.HeightCurve = curve.ToList();
         support.Stick = true;
         support.Corner = corner;
         var transform = Server.System<SharedTransformSystem>();
         transform.SetWorldRotation(uid, direction.ToAngle());
-        Assert.That(transform.AnchorEntity((uid, SComp<TransformComponent>(uid)), _grid, tile), Is.True);
+        Assert.That(transform.AnchorEntity((uid, SComp<TransformComponent>(uid)), grid, tile), Is.True);
         return uid;
     }
 
