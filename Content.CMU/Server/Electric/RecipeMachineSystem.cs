@@ -109,7 +109,7 @@ public sealed class RecipeMachineSystem : EntitySystem
             if (!powered)
             {
                 if (!steamMode)
-                    _powerState.TrySetWorkingState(uid, false);
+                    _powerState.TrySetWorkingState(uid, comp.ActiveRecipe != null && !comp.Blocked);
 
                 _appearance.SetData(uid, RecipeMachineVisuals.Working, false);
                 continue;
