@@ -374,7 +374,7 @@
   - type: Sprite
     sprite: CMU14/Production/Oil/tower.rsi
     noRot: true
-    offset: 0,0.47
+    offset: 0.5,0.47
     layers:
     - state: off
       map: [ "off" ]
@@ -388,7 +388,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-0.45,-0.45,0.45,1.45"
+          bounds: "-0.45,-0.45,1.45,0.45"
         density: 190
         mask:
         - MachineMask
@@ -401,7 +401,7 @@
   - type: FluidTank
     capacity: 600
   - type: FluidPorts
-    connectionTiles: ["0,0", "0,1"]
+    connectionTiles: ["0,0", "1,0"]
     ports:
     - id: liquid_in
       rate: 30
