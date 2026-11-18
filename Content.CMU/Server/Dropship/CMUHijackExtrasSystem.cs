@@ -128,7 +128,14 @@ public sealed partial class CMUHijackExtrasSystem : EntitySystem
         var originalXenos = new List<(EntityUid Uid, XenoComponent Xeno, TransformComponent Transform)>();
         var xenos = EntityQueryEnumerator<XenoComponent, MobStateComponent, TransformComponent>();
         while (xenos.MoveNext(out var xeno, out var comp, out _, out var xform))
+        {
             originalXenos.Add((xeno, comp, xform));
+
+            // Rejoining one player can choose another body before its turn in the cleanup loop.
+            if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform) &&
+                !_mobState.IsDead(xeno) && !HasComp<CMUWendigoLabMadeComponent>(xeno))
+                EnsureComp<BurrowedLarvaSpawnBlockedComponent>(xeno);
+        }
 
         // Rejoining can spawn a burrowed larva immediately. Only process the original bodies.
         foreach (var (xeno, comp, xform) in originalXenos)
