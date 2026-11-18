@@ -1,11 +1,11 @@
 # Last match in file takes precedence.
 
-# troytroy400 (host/owner) & AK5intow (co-host), Twinkle (head moderator)
-# maertayn & TheHellFireo (code maintainers)
+# troytroy400 (host/owner) & AK5intow (co-host)
+# maertayn & TheHellFireo & rokudara-sen (code maintainers)
 # Nzzy (sprite maintainer), Vencallium (map maintainer)
 
 # Code zones and bulk content directories are exempt.
-* @maertayn @TheHellFireo
+* @maertayn @TheHellFireo @rokudara-sen
 /Content.CMU/ 
 /Content.Server/ 
 /Content.Client/ 
@@ -25,5 +25,5 @@
 /Resources/Maps/ @Vencallium
 /Content.CMU/Resources/Maps/ @Vencallium
 
-/Resources/ServerInfo/ @troytroy400 @AK5intow @twinklezzzz
-/Content.CMU/Resources/ServerInfo/ @troytroy400 @AK5intow @twinklezzzz
+/Resources/ServerInfo/ @troytroy400 @AK5intow
+/Content.CMU/Resources/ServerInfo/ @troytroy400 @AK5intow
