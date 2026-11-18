@@ -8,6 +8,8 @@ using Content.Server.Polymorph.Systems;
 using Content.Shared.Actions;
 using Content.Shared.CMU14.Round.Antags.Rider;
 using Content.Shared.Mind;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Robust.Client.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
@@ -18,6 +20,25 @@ namespace Content.IntegrationTests.CMU14.Round.Antags;
 [TestFixture]
 public sealed class RiderSeizeReleaseTest : GameTest
 {
+    [Test]
+    public async Task UnhostedRiderCanSustainItsOwnBody()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var rider = SSpawnAtPosition("CMURiderHatchling", map.GridCoords);
+            var damage = Server.System<DamageableSystem>();
+            var burn = new DamageSpecifier();
+            burn.DamageDict["Heat"] = 10;
+            damage.TryChangeDamage(rider, burn, ignoreResistances: true);
+            var before = damage.GetTotalDamage(rider);
+            Assert.That(before.Float(), Is.Positive);
+            var actions = Server.System<SharedActionsSystem>();
+            actions.PerformAction(rider, actions.GetAction(SComp<RiderComponent>(rider).SustainAction)!.Value);
+            Assert.That(damage.GetTotalDamage(rider).Float(), Is.LessThan(before.Float()));
+        });
+    }
+
     [TestCase("release")]
     [TestCase("timeout")]
     [TestCase("conversion")]

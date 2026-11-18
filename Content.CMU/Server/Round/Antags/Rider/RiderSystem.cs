@@ -1526,13 +1526,8 @@ public sealed partial class RiderSystem : EntitySystem
 
     private void OnSustainAction(Entity<RiderComponent> ent, ref RiderSustainActionEvent args)
     {
-        if (ent.Comp.Host is not { } host)
-        {
-            RiderPopup(ent, "rider-no-host");
-            return;
-        }
-
-        if (!SpendGrip(ent, ent.Comp.SustainCost))
+        var host = ent.Comp.Host;
+        if (host != null && !SpendGrip(ent, ent.Comp.SustainCost))
         {
             RiderPopup(ent, "rider-grip-low");
             return;
@@ -1544,13 +1539,17 @@ public sealed partial class RiderSystem : EntitySystem
             {
                 ["Blunt"] = -35,
                 ["Slash"] = -15,
-                ["Burn"] = -10,
+                ["Heat"] = -10,
             },
         };
-        _damageable.TryChangeDamage(host, heal);
-        _popup.PopupEntity(Loc.GetString("rider-sustain-host"), host, host);
+        _damageable.TryChangeDamage(ent.Owner, heal);
+        if (host is { } ridden)
+        {
+            _damageable.TryChangeDamage(ridden, heal);
+            _popup.PopupEntity(Loc.GetString("rider-sustain-host"), ridden, ridden);
+        }
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
-            $"{ToPrettyString(ent):rider} sustained {ToPrettyString(host):host}");
+            $"{ToPrettyString(ent):rider} sustained {ToPrettyString(host ?? ent.Owner):target}");
         MarkUsed(ent, args);
     }
 
