@@ -17875,5 +17875,221 @@
   id: 1037
   time: '2026-11-12T14:58:58.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2569
+- author: Dongo4
+  changes:
+  - message: CMO now spawns with their uniform
+    type: Fix
+  - message: Hyperthrottling has it's OD effects again
+    type: Fix
+  id: 1038
+  time: '2026-11-12T18:30:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2573
+- author: ILoveDespoiler
+  changes:
+  - message: Most Neomorphs, including Blight and Sprinter, are now slowed down more
+      in general upon dragging Marines or other Neomorphs. Healer Haze can drag other
+      Neos at full movespeed.
+    type: Add
+  - message: Changed Base Venators kit. Swapped out Impale for a new ability, "Grapple"
+      which can fling targets.
+    type: Tweak
+  - message: Overmind can now upgrade Mycelium walls and such.
+    type: Fix
+  - message: Grungus can now properly build their various Hive Structures.
+    type: Fix
+  - message: Blight Cores match colors with whichever Hive they are a part of.
+    type: Fix
+  - message: Blight Cores use the same damage profile as Hive Cores. They take more
+      damage from explosives and such. They can also now be destroyed by Melee attacks,
+      both Neo, Xeno, and Marine.
+    type: Fix
+  id: 1039
+  time: '2026-11-12T18:32:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2571
+- author: rokudara-sen
+  changes:
+  - message: The M707 Vulture takes 1.5 seconds to settle before every shot, and the
+      target sees a sniper laser on them while it does.
+    type: Tweak
+  - message: Vulture rounds do 400 damage with less armour piercing (was 550).
+    type: Tweak
+  - message: Firing the Vulture without its bipod deployed throws the shot off target,
+      but the recoil only does 40 damage now.
+    type: Tweak
+  id: 1040
+  time: '2026-11-12T19:13:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2589
+- author: rokudara-sen
+  changes:
+  - message: The plasma eradicator explodes when it hits a wall instead of fizzling.
+    type: Fix
+  - message: 'Yautja shots that run out of range now act like CM-SS13: eradicators
+      and lances explode, immobilizers stun, explosive and EMP arrows go off, and
+      other arrows land on the floor.'
+    type: Fix
+  - message: The dual plasma cannons explode on walls and show the targeting laser.
+    type: Fix
+  - message: The plasma caster's targeting laser turns off when the hunter is knocked
+      down or in crit.
+    type: Fix
+  - message: Decapitated players stay dead in their body instead of living on in the
+      severed head.
+    type: Fix
+  - message: The pathogen can no longer turn yautja into walkers.
+    type: Fix
+  id: 1041
+  time: '2026-11-12T19:53:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2591
+- author: TheHellFireo
+  changes:
+  - message: Reduced server allocation pressure and repeated work while preparing
+      nearby entity updates.
+    type: Fix
+  id: 1042
+  time: '2026-11-12T21:19:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2593
+- author: KeiKiyomi
+  changes:
+  - message: Fixed bomb vests, they can no longer be put onto mannequins to get around
+      their gib on detonation
+    type: Fix
+  id: 1043
+  time: '2026-11-13T11:24:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2601
+- author: OverusedMeme
+  changes:
+  - message: The Mk481 and Spas-12 are no longer meltable as they are specialist grade
+      weapons.
+    type: Tweak
+  id: 1044
+  time: '2026-11-13T11:36:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2594
+- author: KeiKiyomi
+  changes:
+  - message: Added Rubber Round ammo to req for all standard GOVFOR ammo
+    type: Add
+  - message: Changed rubber rounds to now do stamina damage
+    type: Tweak
+  id: 1045
+  time: '2026-11-13T14:29:38.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2596
+- author: Dongo4
+  changes:
+  - message: Runaway Synth and Synth Replicant antags now get the synth language component.
+      Additionally they start with English selected instead of binary so they don't
+      accidentally give themselves away at round start.
+    type: Tweak
+  id: 1046
+  time: '2026-11-13T15:29:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2604
+- author: KeiKiyomi
+  changes:
+  - message: The Osprey can now be exchanged for a Mohawk Midway (The heavy gunship)
+    type: Fix
+  id: 1047
+  time: '2026-11-13T15:30:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2533
+- author: rokudara-sen
+  changes:
+  - message: Added BALANCE.md and balance questions to the PR template.
+    type: Code
+  id: 1048
+  time: '2026-11-14T09:34:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2610
+- author: rokudara-sen
+  changes:
+  - message: The Test Merge label now only marks a PR for the next publish; re-add
+      it to keep a PR test merged, and a normal publish clears every test merge label.
+    type: Code
+  id: 1049
+  time: '2026-11-14T09:37:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2609
+- author: TheHellFireo
+  changes:
+  - message: Fixed Varadero's station initialization identifier.
+    type: Fix
+  id: 1050
+  time: '2026-11-14T13:52:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2613
+- author: TheHellFireo
+  changes:
+  - message: Fixed FOB equipment collisions while deployed, packed, anchored, and
+      broken.
+    type: Fix
+  - message: Fixed stale entity references producing metadata errors after equipment
+      and targets were deleted.
+    type: Fix
+  - message: Fixed rejected antagonist assignments, tube-fed gun disruption, expired
+      explosion sources, and jeep seat pull-joint errors.
+    type: Fix
+  id: 1051
+  time: '2026-11-14T13:54:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2614
+- author: TheHellFireo
+  changes:
+  - message: Fixed LV-624's station initialization identifier.
+    type: Fix
+  id: 1052
+  time: '2026-11-14T14:33:42.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2612
+- author: IntelligenceOfficerArthur
+  changes:
+  - message: Added the Battalion Commander dress vendor and combat vendors for the
+      platoon Commanding Officer.
+    type: Add
+  - message: Platoon Commanding Officer now has Surgery +1.
+    type: Tweak
+  - message: M59A prototype rifle has lower max scatter.
+    type: Tweak
+  id: 1053
+  time: '2026-11-14T14:40:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2606
+- author: rokudara-sen
+  changes:
+  - message: The GAU-19/M door gun no longer faces backwards.
+    type: Fix
+  - message: The overmind can build while moving its eye, can skip the hijack and
+      can sabotage the Mohawk controls.
+    type: Fix
+  - message: Swapping overmind forms no longer resets blight scream.
+    type: Fix
+  - message: Walkers and spore sac infections join the hive that made them.
+    type: Fix
+  - message: The healer haze no longer shows an error sprite when healing.
+    type: Fix
+  - message: Pathogen blooms rot away once they leave a walker's head.
+    type: Fix
+  - message: Dermaline and meralyne pills are 10u, one pill is no longer an overdose.
+    type: Fix
+  - message: MOPP gloves, boots and the UPP hood now protect against bio.
+    type: Fix
+  - message: Royal Marines spawn with their small backpack, HAZOPS smartgunners get
+      a spare battery and UPP militsiya get headsets.
+    type: Fix
+  - message: The CMB tactical team can use its breaching charges.
+    type: Fix
+  - message: The IASF Parachute Regiment synthetic is a synth and their commander
+      can give orders.
+    type: Fix
+  - message: A mounted gun's safety can be switched from the mount.
+    type: Fix
+  - message: FOB radio reports use the platoon's language.
+    type: Fix
+  - message: The MR35 description says it only takes slugs.
+    type: Tweak
+  id: 1054
+  time: '2026-11-15T09:42:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2618
+- author: Dongo4
+  changes:
+  - message: Synthetic language learning plateauing around 40%. It does still slow
+      down at 40% but higher levels are now attainable within the time frame of a
+      normal round.
+    type: Fix
+  - message: Synthetic language learning speed doubled.
+    type: Tweak
+  id: 1055
+  time: '2026-11-15T20:03:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2617
 Name: CMU
 Order: -1

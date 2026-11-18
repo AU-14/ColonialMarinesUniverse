@@ -27,6 +27,14 @@ public sealed partial class EWJoeAssimilateConditionSystem : EntitySystem
         SubscribeLocalEvent<EWJoeAssimilateConditionComponent, ObjectiveAssignedEvent>(OnAssigned);
         SubscribeLocalEvent<EWJoeAssimilateConditionComponent, ObjectiveAfterAssignEvent>(OnAfterAssign);
         SubscribeLocalEvent<EWJoeAssimilateConditionComponent, ObjectiveGetProgressEvent>(OnGetProgress);
+        SubscribeLocalEvent<EWJoeAssimilateConditionComponent, EWJoeObjectiveStillPossibleEvent>(OnStillPossible);
+    }
+
+    /// <summary>ARCH-02: a destroyed console, or one someone else assimilated, can never be finished.</summary>
+    private void OnStillPossible(Entity<EWJoeAssimilateConditionComponent> ent, ref EWJoeObjectiveStillPossibleEvent args)
+    {
+        if (!CanStillFinish(ent, args.Owner))
+            args.Possible = false;
     }
 
     private void OnAssigned(Entity<EWJoeAssimilateConditionComponent> ent, ref ObjectiveAssignedEvent args)

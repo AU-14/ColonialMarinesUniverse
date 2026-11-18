@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.EntityReferences;
 using Content.Shared.Ghost.Components;
 using Content.Server.Humanoid;
 using System.Linq;
@@ -51,6 +52,7 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaTrophySystem : EntitySystem
 {
+    [Dependency] private EntityReferenceSystem _references = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _organAppearance = default!;
     private static readonly EntProtoId HumanSkullPrototype = "CMUYautjaHumanSkullTrophy";
     private static readonly EntProtoId HumanLeftArmBonePrototype = "CMUYautjaHumanLeftArmBoneTrophy";
@@ -121,6 +123,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, YautjaButcherProcedureSelectedEvent>(OnButcherProcedureSelected);
         SubscribeLocalEvent<YautjaButcherAbilityComponent, YautjaButcherTargetSelectedEvent>(OnAbilityButcherTargetSelected);
         SubscribeLocalEvent<YautjaButcherAbilityComponent, YautjaButcherProcedureSelectedEvent>(OnAbilityButcherProcedureSelected);
+        SubscribeLocalEvent<YautjaTrophyComponent, ComponentStartup>(OnTrophyStartup);
+        SubscribeLocalEvent<YautjaTrophyComponent, ReferencedEntityTerminatingEvent>(OnTrophyReferenceTerminating);
         SubscribeLocalEvent<YautjaTrophyComponent, ExaminedEvent>(OnTrophyExamined);
         SubscribeLocalEvent<YautjaTrophyComponent, InteractUsingEvent>(OnTrophyInteractUsing);
         SubscribeLocalEvent<YautjaTrophyComponent, UniformAccessoryInsertAttemptEvent>(OnTrophyUniformAccessoryInsertAttempt);
@@ -132,6 +136,30 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
 
         InitializeRag();
+    }
+
+    internal void SetHunter(Entity<YautjaTrophyComponent> trophy, EntityUid? hunter)
+    {
+        trophy.Comp.Hunter = _references.WatchNullable(trophy, hunter);
+    }
+
+    private void OnTrophyStartup(Entity<YautjaTrophyComponent> trophy, ref ComponentStartup args)
+    {
+        trophy.Comp.Source = _references.WatchNullable(trophy, trophy.Comp.Source);
+        SetHunter(trophy, trophy.Comp.Hunter);
+    }
+
+    private void OnTrophyReferenceTerminating(Entity<YautjaTrophyComponent> trophy, ref ReferencedEntityTerminatingEvent args)
+    {
+        if (trophy.Comp.Hunter != args.Entity && trophy.Comp.Source != args.Entity)
+            return;
+
+        if (trophy.Comp.Hunter == args.Entity)
+            trophy.Comp.Hunter = null;
+        if (trophy.Comp.Source == args.Entity)
+            trophy.Comp.Source = null;
+
+        Dirty(trophy);
     }
 
     private void OnMobStateExamined(Entity<MobStateComponent> ent, ref ExaminedEvent args)
@@ -854,7 +882,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         var uid = Spawn(GetTrophyPrototype(xeno, kind, fallback), coords);
         var trophy = EnsureComp<YautjaTrophyComponent>(uid);
         trophy.Kind = kind;
-        trophy.Hunter = hunter;
+        SetHunter((uid, trophy), hunter);
         trophy.SourceName = GetSourceName(xeno, kind);
         Dirty(uid, trophy);
         _meta.SetEntityName(uid, name);

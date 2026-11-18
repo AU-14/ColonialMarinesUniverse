@@ -3,12 +3,17 @@
   parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
   id: AU14CMBDeputyWindbreaker
   name: CMB Deputy Windbreaker
-  description: A windbreaker made for CMB deputies.
+  description: A windbreaker made for CMB deputies. Kevlar padding sewn into the lining helps turn aside knife attacks.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/CMB/cmbdeputywindbreaker.rsi
   - type: Clothing
     sprite: CMU14/Clothing/CMB/cmbdeputywindbreaker.rsi
+  - type: CMArmor # same protection as the CMB deputy jacket
+    melee: 30
+    bullet: 15
+    bio: 10
+    explosionArmor: 10
   - type: AllowSuitStorage
     whitelist:
       components:
@@ -68,3 +73,18 @@
       - RMCMacheteScabbard
       - RMCScabbardKatana
       - RMCDetector
+
+# Parkas
+# The CMB deputy parka, given the same protection as the deputy windbreaker. Kept apart from the RMC parka so the
+# other snow parkas don't pick up its armour.
+- type: entity
+  parent: RMCCoatSnowSurvivorCMBDeputy
+  id: CMUCoatCMBDeputyParka
+  name: CMB deputy parka
+  description: A snow suit tailored to the CMB's needs. It can protect the wearer from extreme cold. The back is enscribed with the powerful letters of 'DEPUTY' representing justice, authority, and protection in the outer rim. Its lining hides kevlar padding to turn aside knife attacks.
+  components:
+  - type: CMArmor # same protection as the CMB deputy windbreaker
+    melee: 30
+    bullet: 15
+    bio: 10
+    explosionArmor: 10

@@ -110,6 +110,7 @@
   - AddOpfor
   - AddOpforAuxiliaryStaff
   - AddColonist
+  - FoFAntags
   - FoFTimeLimitRule
 
 - type: gamePreset

@@ -1097,6 +1097,7 @@
   id: CMU3DFieldAU14TeleBatonCloudHeldAU14TeleBaton
   sourcePrototypes:
   - AU14TeleBaton
+  - CMUTeleBatonLawEnforcement
   model: CMU3DFieldAU14TeleBatonCloud
   slot: hand
   pivot: -0.2513617, -0.1805186, 0.053

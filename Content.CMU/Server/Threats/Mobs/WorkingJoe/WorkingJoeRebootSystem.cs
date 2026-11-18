@@ -102,7 +102,8 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
 
         args.Handled = true;
 
-        if (!_mobState.IsDead(ent.Owner))
+        // the verb refuses an Early Warning Joe; a reboot already under way when the body became one stops here
+        if (!_mobState.IsDead(ent.Owner) || HasComp<Content.Shared.CMU14.Round.Antags.EarlyWarning.EWJoeComponent>(ent.Owner))
             return;
 
         RemComp<UnrevivableComponent>(ent.Owner);

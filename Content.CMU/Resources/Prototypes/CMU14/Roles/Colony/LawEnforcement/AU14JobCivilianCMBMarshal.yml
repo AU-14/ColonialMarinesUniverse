@@ -63,11 +63,14 @@
     id: AU14IDCardColonyCMBMarshal
     ears: AU14CMBHeadset
     outerClothing: RMCCoatBureauMarshal
-    suitstorage: CMUBeltHolsterRevolverM2019Fill
+    # Fallback for spawns without a loadout, such as the ghost role. The rig picked from the CMBMarshalSidearmCMU
+    # loadout group is equipped first and keeps the slot; this one is then discarded.
+    suitstorage: CMUBeltHolsterRevolverSpearheadMarshal
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14GuidebookLawColonial
     - ForensicScanner
     - CMURecordsTablet
@@ -82,6 +85,19 @@
     job_id: AU14JobCivilianCMBMarshal
   - type: Sprite
     state: syn_spawn
+
+- type: roleLoadout
+  id: JobAU14JobCivilianCMBMarshal
+  points: 7
+  groups:
+  - CMBMarshalSidearmCMU
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 - type: entity
   parent: MarkerBase
@@ -100,3 +116,97 @@
   components:
   - type: RMCJobSpawner
     job: AU14JobCivilianCMBMarshal
+
+# The CWPS counterpart of the marshal. Maps policed by the CWPS turn the CMB marshal pick into this job.
+- type: job
+  parent: AU14JobLEOLeaderBase
+  displayWeight: 18
+  id: AU14JobCivilianCWPSMarshal
+  roundSide: Civilian
+  roundForce: CWPS
+  roundRole: CivilianCWPSMarshal
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 5
+      RMCSkillIntel: 1
+      RMCSkillMedical: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillLeadership: 3
+      RMCSkillJtac: 3
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancwpsmarshal
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: cmb_mar
+
+  name: au14-job-name-civiliancwpsmarshal
+  description: au14-job-description-civiliancwpsmarshal
+  setPreference: false # picked as the CMB marshal
+  canBeAntag: false
+  ranks:
+    RMCRankCivilian: []
+  chevrons: # highest rank the player has the law enforcement leadership playtime for
+    AU14RankCWPSChiefRanger:
+      entity: AU14ChevronCWPSChiefRanger
+      requirements:
+      - !type:TotalJobsTimeRequirement
+        group: CMUJobsLawEnforcementLeaders
+        time: 36000 # 10 hours
+    AU14RankCWPSDeputyChiefRanger:
+      entity: AU14ChevronCWPSDeputyChiefRanger
+      requirements: []
+  startingGear: AU14GearCivilianCWPSMarshal
+  icon: "RMCJobIconBureauMarshal"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: CWPS Chief Ranger (CMU)
+  accessGroups:
+  - auadmin
+  - aucmb
+  - Colonist
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCWPSMarshal
+  equipment:
+    head: AU14CWPSCampaignHat
+    jumpsuit: AU14CWPSUniform
+    back: CMSatchelSecurity
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardColonyCWPSMarshal
+    ears: AU14CMBHeadset
+    outerClothing: AU14CWPSBomber
+    suitstorage: RMCBeltHolsterRevolver
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchGeneralLargeLEOFilled
+  inhand:
+  - AU14GunCasePistolM44Civ
+  storage:
+    back:
+    - CMUCameraGearM3aCivilian
+    - AU14GuidebookLawColonial
+    - ForensicScanner
+    - CMURecordsTablet
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCWPSMarshal
+  name: Spawn Point Civilian CWPS Chief Ranger
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCWPSMarshal
+  - type: Sprite
+    state: syn_spawn

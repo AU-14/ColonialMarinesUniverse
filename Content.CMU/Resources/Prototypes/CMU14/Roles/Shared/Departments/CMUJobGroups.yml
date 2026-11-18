@@ -74,11 +74,27 @@
     - AU14JobCivilianCMBDetective
     - AU14JobCivilianCMBMarshal
     - AU14JobCivilianCWPSRanger
+    - AU14JobCivilianCWPSMarshal
     - AU14JobCivilianPaPOfficer
     - AU14JobCivilianNSPAConstable
     - AU14JobCivilianNSPAInspector
     - AU14JobCivilianColonySecurityOfficer
     - AU14JobCivilianColonySecurityLeader
+
+# The heads of the colony's law enforcement agencies. Hours in any of them count towards the leaders' ranks and
+# personal sidearms, so a player isn't held to one agency's leader job.
+- type: entity
+  id: CMUJobsLawEnforcementLeaders
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-law-enforcement-leader-roles
+    color: "#A8252C"
+    jobs:
+    - AU14JobLEOLeaderBase
+    - AU14JobCivilianCMBMarshal
+    - AU14JobCivilianCWPSMarshal
+    - AU14JobCivilianNSPAInspector
 
 - type: entity
   id: CMUJobsVehicleCrew

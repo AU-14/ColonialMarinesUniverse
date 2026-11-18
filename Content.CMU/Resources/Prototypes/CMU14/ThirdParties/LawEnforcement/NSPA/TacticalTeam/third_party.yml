@@ -114,6 +114,7 @@
     suitstorage: RMCWeaponSMGPDW90
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14PacketGrenadeTearGasFilled
     - RMCExplosiveBreachingCharge
     - RMCZipties
@@ -124,6 +125,7 @@
   id: CMUGearNSPATacticalLeader
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14PacketGrenadeTearGasFilled
     - RMCExplosiveBreachingCharge
     - RMCZipties

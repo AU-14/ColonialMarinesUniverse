@@ -133,7 +133,8 @@ namespace Content.Server.Construction
             ConstructionGraphEdge edge,
             ConstructionGraphNode targetNode,
             EntityCoordinates coords,
-            Angle angle = default)
+            Angle angle = default,
+            ConstructionPrototype? placement = null) // CMU14
         {
             if (!_rmcConstruction.CanConstruct(user))
                 return null;
@@ -338,6 +339,23 @@ namespace Content.Server.Construction
                 FailCleanup();
                 return null;
             }
+
+            // CMU14 Begin: Placement can become obstructed while a structure is being built.
+            if (placement != null)
+            {
+                foreach (var condition in placement.Conditions)
+                {
+                    if (!condition.RecheckOnCompletion || condition.Condition(user, coords, angle.GetCardinalDir()))
+                        continue;
+
+                    if (condition.GenerateGuideEntry() is { } entry)
+                        _popup.PopupEntity(Loc.GetString(entry.Localization, entry.Arguments ?? []), user, user);
+
+                    FailCleanup();
+                    return null;
+                }
+            }
+            // CMU14 End
 
             var newEntityProto = graph.Nodes[edge.Target].Entity.GetId(null, user, new(EntityManager));
             var newEntity = SpawnAttachedTo(newEntityProto, coords, rotation: angle);
@@ -675,7 +693,8 @@ namespace Content.Server.Construction
                     edge,
                     targetNode,
                     GetCoordinates(ev.Location),
-                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero) is not {Valid: true} structure)
+                    constructionPrototype.CanRotate ? ev.Angle : Angle.Zero,
+                    constructionPrototype) is not {Valid: true} structure) // CMU14
             {
                 Cleanup();
                 return;

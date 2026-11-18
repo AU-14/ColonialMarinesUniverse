@@ -50,11 +50,10 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         var maps = _zLevels.GetOrderedNetworkMaps(network.Value);
         for (var i = maps.Count - 1; i >= 0; i--)
         {
-            var depth = maps[i].Depth;
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var map, out var mapComp))
+            var (depth, map) = maps[i];
+            if (!_zLevels.TryGetMapCoordinates(map, selected.Position, out var coordinates))
                 continue;
 
-            var coordinates = new MapCoordinates(selected.Position, mapComp.MapId);
             if (!TryGetBlockingSurface(coordinates, depth, out var surface))
                 continue;
 
@@ -122,13 +121,10 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         var maps = _zLevels.GetOrderedNetworkMaps(network.Value);
         for (var i = maps.Count - 1; i >= 0; i--)
         {
-            var depth = maps[i].Depth;
-            if (depth >= currentDepth)
-                continue;
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out _, out var mapComp))
+            var (depth, map) = maps[i];
+            if (depth >= currentDepth || !_zLevels.TryGetMapCoordinates(map, current.Position, out var coordinates))
                 continue;
 
-            var coordinates = new MapCoordinates(current.Position, mapComp.MapId);
             if (!TryGetBlockingSurface(coordinates, depth, out var found))
                 continue;
 
@@ -163,14 +159,11 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
             return false;
         }
 
-        foreach (var (depth, _) in _zLevels.GetOrderedNetworkMaps(network.Value))
+        foreach (var (depth, map) in _zLevels.GetOrderedNetworkMaps(network.Value))
         {
-            if (depth <= currentDepth)
-                continue;
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out _, out var mapComp))
+            if (depth <= currentDepth || !_zLevels.TryGetMapCoordinates(map, coordinates.Position, out var above))
                 continue;
 
-            var above = new MapCoordinates(coordinates.Position, mapComp.MapId);
             if (!IsOpening(above))
                 return false;
         }

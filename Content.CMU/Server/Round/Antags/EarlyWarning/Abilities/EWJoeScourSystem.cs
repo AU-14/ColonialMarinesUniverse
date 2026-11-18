@@ -7,14 +7,19 @@ using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Stamina;
 using Content.Shared._RMC14.Stealth;
+using Content.Shared._RMC14.Xenonids.Construction;
+using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Alert;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning;
 using Content.Shared.CMU14.Round.Antags.EarlyWarning.Abilities;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Clothing.Components;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
+using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
@@ -24,6 +29,7 @@ using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.Storage;
 using Content.Shared.Tag;
+using Content.Shared.Tools.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
@@ -49,6 +55,7 @@ public sealed partial class EWJoeScourSystem : EntitySystem
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDestructibleSystem _destructible = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCStaminaSystem _stamina = default!;
@@ -57,6 +64,8 @@ public sealed partial class EWJoeScourSystem : EntitySystem
 
     private static readonly ProtoId<TagPrototype>[] BatonTags = { "Stunbaton", "AU14TeleBaton" };
     private static readonly ProtoId<TagPrototype> FuelCanTag = "CMUJerryCan";
+    private static readonly ProtoId<DamageTypePrototype> TorchDamage = "Heat";
+    private static readonly ProtoId<DamageTypePrototype> UnarmedDamage = "Blunt";
 
     /// <summary>The status alert each buff kind shows while it lasts.</summary>
     public static readonly Dictionary<EWJoeScourKind, ProtoId<AlertPrototype>> Alerts = new()
@@ -89,6 +98,8 @@ public sealed partial class EWJoeScourSystem : EntitySystem
         SubscribeLocalEvent<EWJoeComponent, EWJoeScourDoAfterEvent>(OnScourDoAfter);
         SubscribeLocalEvent<EWJoeComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<EWJoeScourComponent, ComponentShutdown>(OnScourShutdown);
+        // RB-04: on the buff component, not EWJoeComponent (EWJoeRepentanceSystem already listens there)
+        SubscribeLocalEvent<EWJoeScourComponent, DamageChangedEvent>(OnScourDamaged);
         SubscribeLocalEvent<EWJoeRemovedEvent>(OnJoeRemoved);
         SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
     }
@@ -113,13 +124,24 @@ public sealed partial class EWJoeScourSystem : EntitySystem
                     expired.Add((uid, kind));
             }
 
-            // ABIL-12: a dead Joe is not mended
+            // ABIL-12: a dead Joe is not mended; RB-04: nor one hurt in the last few seconds
             if (scour.Expiries.TryGetValue(EWJoeScourKind.Fuel, out var repairUntil)
-                && now < repairUntil && now >= scour.NextRepairTick && !_mobState.IsDead(uid))
+                && now < repairUntil && now >= scour.NextRepairTick && now >= scour.RepairPausedUntil
+                && !_mobState.IsDead(uid))
             {
                 scour.NextRepairTick = now + TimeSpan.FromSeconds(1);
                 _damageable.HealEvenly(uid, -joe.ScourRepairPerSecond, origin: uid); // negative heals
             }
+        }
+
+        var torches = EntityQueryEnumerator<EWJoeCuttingTorchComponent>();
+        while (torches.MoveNext(out var uid, out var torch))
+        {
+            if (torch.ActiveUntil == TimeSpan.Zero || now < torch.ActiveUntil)
+                continue;
+
+            torch.ActiveUntil = TimeSpan.Zero;
+            _messages.Notify(uid, Loc.GetString("cmu-ew-joe-xenokit-torch-expired"));
         }
 
         foreach (var (uid, kind) in expired)
@@ -143,7 +165,8 @@ public sealed partial class EWJoeScourSystem : EntitySystem
             return;
 
         var item = args.Target;
-        if (Classify(item) is not { } kind)
+        // 1A: with the Cutting Torch a welder is food too; it is not one of the timed kinds
+        if (!IsTorchFood(ent, item) && Classify(item) == null)
         {
             _popup.PopupEntity(Loc.GetString("cmu-ew-joe-scour-invalid"), ent, ent, PopupType.SmallCaution);
             return;
@@ -177,7 +200,12 @@ public sealed partial class EWJoeScourSystem : EntitySystem
 
         args.Handled = true;
 
-        if (!Exists(item) || Classify(item) is not { } kind)
+        if (!Exists(item))
+            return;
+
+        var torch = IsTorchFood(ent, item);
+        var kind = torch ? null : Classify(item);
+        if (!torch && kind == null)
             return;
 
         // someone picked it up during the do-after: the Joe digests gear on the ground, not out of a hand
@@ -187,7 +215,13 @@ public sealed partial class EWJoeScourSystem : EntitySystem
             return;
         }
 
-        Scour(ent, item, kind);
+        if (kind is not { } scourKind)
+        {
+            ScourTorch(ent, item);
+            return;
+        }
+
+        Scour(ent, item, scourKind);
     }
 
     /// <summary>What a piece of colony technology gives the Joe, or null when it is not food for it.</summary>
@@ -248,7 +282,12 @@ public sealed partial class EWJoeScourSystem : EntitySystem
         var permanent = IsOneOfAKind(item) || scour.Permanent.Contains(kind);
         var until = permanent
             ? TimeSpan.MaxValue
-            : now + (kind == EWJoeScourKind.Fuel ? joe.Comp.ScourRepairDuration : joe.Comp.ScourDuration);
+            : now + kind switch
+            {
+                EWJoeScourKind.Fuel => joe.Comp.ScourRepairDuration,
+                EWJoeScourKind.Armor => joe.Comp.ScourArmorDuration, // RB-03
+                _ => joe.Comp.ScourDuration,
+            };
         var granted = true;
 
         switch (kind)
@@ -320,12 +359,82 @@ public sealed partial class EWJoeScourSystem : EntitySystem
             $"Early Warning Joe {ToPrettyString(joe):joe} scoured {itemName} ({kind})");
     }
 
+    /// <summary>1A: a welder lying loose is Scour food for a Joe with the Cutting Torch.</summary>
+    public bool IsTorchFood(EntityUid joe, EntityUid item)
+    {
+        return HasComp<EWJoeCuttingTorchComponent>(joe) && Exists(item) && HasComp<WelderComponent>(item);
+    }
+
+    /// <summary>
+    /// 1A Cutting Torch: consumes the welder and lights the torch for its duration (refreshing a lit one).
+    /// Public so tests can skip the do-after.
+    /// </summary>
+    public bool ScourTorch(EntityUid joe, EntityUid item)
+    {
+        if (!TryComp(joe, out EWJoeCuttingTorchComponent? torch))
+            return false;
+
+        torch.ActiveUntil = _timing.CurTime + torch.Duration;
+
+        var itemName = Name(item);
+        QueueDel(item);
+
+        _messages.Notify(joe, Loc.GetString("cmu-ew-joe-xenokit-torch-done", ("item", itemName)));
+        _adminLogger.Add(LogType.Action, LogImpact.Medium,
+            $"Early Warning Joe {ToPrettyString(joe):joe} scoured {itemName} (cutting torch)");
+        return true;
+    }
+
+    public bool IsTorchLit(EntityUid joe)
+    {
+        return TryComp(joe, out EWJoeCuttingTorchComponent? torch) && _timing.CurTime < torch.ActiveUntil;
+    }
+
+    /// <summary>
+    /// 1A: a lit torch burns every xenofauna the hit lands on for its bonus and breaks xeno resin
+    /// structures and weeds outright; the hive core is never one hit. Called for the Joe's own punches
+    /// and from the machete hit. The burn is dealt per target so a swing that also catches a person
+    /// does not burn them.
+    /// </summary>
+    public void ApplyCuttingTorch(EntityUid joe, MeleeHitEvent args)
+    {
+        if (!args.IsHit || args.Handled || !TryComp(joe, out EWJoeCuttingTorchComponent? torch)
+            || _timing.CurTime >= torch.ActiveUntil)
+        {
+            return;
+        }
+
+        var burn = new DamageSpecifier();
+        burn.DamageDict[TorchDamage] = torch.BurnBonus;
+
+        foreach (var hit in args.HitEntities)
+        {
+            if (hit == joe || TerminatingOrDeleted(hit))
+                continue;
+
+            if (HasComp<XenoWeedsComponent>(hit) || HasComp<XenoConstructComponent>(hit) && !HasComp<HiveCoreComponent>(hit))
+            {
+                _destructible.DestroyEntity(hit);
+                continue;
+            }
+
+            if (torch.BurnBonus > 0 && EWJoeTargetRules.IsXenofauna(EntityManager, hit))
+                _damageable.TryChangeDamage(hit, burn, origin: joe, tool: args.Weapon);
+        }
+    }
+
     #endregion
 
     #region Effects
 
     private void OnMeleeHit(Entity<EWJoeComponent> ent, ref MeleeHitEvent args)
     {
+        // the Joe's own fists; the machete forwards its hits from EWJoeArsenalSystem
+        if (args.IsHit && args.Weapon == ent.Owner && ent.Comp.UnarmedBonusDamage > 0)
+            args.BonusDamage.DamageDict[UnarmedDamage] = args.BonusDamage.DamageDict.GetValueOrDefault(UnarmedDamage) + ent.Comp.UnarmedBonusDamage;
+
+        ApplyCuttingTorch(ent, args);
+
         if (!TryComp(ent, out EWJoeScourComponent? scour) || scour.PunchStamina <= 0)
             return;
 
@@ -339,6 +448,9 @@ public sealed partial class EWJoeScourSystem : EntitySystem
     /// <summary>Ends every buff and undoes everything they added (stand-down).</summary>
     public void Expire(EntityUid joe, string why)
     {
+        if (TryComp(joe, out EWJoeCuttingTorchComponent? torch))
+            torch.ActiveUntil = TimeSpan.Zero;
+
         if (!HasComp<EWJoeScourComponent>(joe))
             return;
 
@@ -388,6 +500,18 @@ public sealed partial class EWJoeScourSystem : EntitySystem
         {
             RemoveKind(ent, kind);
         }
+    }
+
+    /// <summary>
+    /// RB-04: taking damage pauses the fuel self-repair for <see cref="EWJoeComponent.ScourRepairDamagePause"/>.
+    /// The repair's own heals lower damage, so they never pause it. The pause does not extend the window.
+    /// </summary>
+    private void OnScourDamaged(Entity<EWJoeScourComponent> ent, ref DamageChangedEvent args)
+    {
+        if (!args.DamageIncreased || !TryComp(ent, out EWJoeComponent? joe))
+            return;
+
+        ent.Comp.RepairPausedUntil = _timing.CurTime + joe.ScourRepairDamagePause;
     }
 
     private void OnJoeRemoved(ref EWJoeRemovedEvent args)

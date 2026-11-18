@@ -1,5 +1,6 @@
 - type: loadout
   id: TPR9CivilianCaseCMU
+  dummyEntity: CMUWeaponPistolTPR9Civilian # show the gun, not the holster rig or case
   cost: 4
   inhand:
     - CMUGunCasePistolTPR9CivilianLoadout

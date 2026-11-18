@@ -110,10 +110,20 @@
   - SlingSatchelBlackAU14
   - SlingSatchelBlueAU14
 
+- type: loadoutGroup
+  id: CMUDetectiveSidearmAU14
+  name: cmu-loadout-group-detective-sidearm
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMUDetectiveSidearmSpearhead
+  - CMUDetectiveSidearmM2019
+
 - type: roleLoadout
   id: JobAU14JobCivilianCMBDetective
   points: 7
   groups:
+  - CMUDetectiveSidearmAU14
   - CMUDetectiveUniformAU14
   - CMUDetectiveTieAU14
   - CMUDetectiveCoatAU14
