@@ -117,14 +117,14 @@
     params:
       volume: 0
 
-# 155mm IED, just adding in structural damage.
+# Just IED but stronger with structural damage.
 - type: explosion
   id: CMUIEDStrong
   damagePerIntensity:
     types:
       Blunt: 14
       Heat: 14
-      Structural: 634
+      Structural: 300
   tileBreakChance: [0, 0.5, 1]
   tileBreakIntensity: [0, 10, 30]
   tileBreakRerollReduction: 20
