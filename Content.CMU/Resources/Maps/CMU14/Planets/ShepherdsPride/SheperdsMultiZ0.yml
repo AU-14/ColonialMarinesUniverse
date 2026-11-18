@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 11/18/2026 10:09:44
-  entityCount: 43573
+  entityCount: 43575
 maps:
 - 1
 grids:
@@ -66179,6 +66179,13 @@ entities:
     - type: Transform
       parent: 1
       pos: 75.5,-149.5
+- proto: AU14SpawnPointCivilianCWPSMarshal
+  entities:
+  - uid: 354492
+    components:
+    - type: Transform
+      pos: 32.5,133.5
+      parent: 1
 - proto: AU14SpawnPointCivilianCWPSRanger
   entities:
   - uid: 279100
@@ -66196,6 +66203,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 32.5,133.5
+  - uid: 354491
+    components:
+    - type: Transform
+      pos: 31.5,132.5
+      parent: 1
 - proto: AU14SpawnPointCivilianEmergencyResponseOfficer
   entities:
   - uid: 344624

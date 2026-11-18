@@ -24,6 +24,7 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
 
     private readonly EyeLerpingSystem _eyeLerping;
     private bool _editorEnabled;
+    private Control? _feedStatic; // cmu edit
 
     protected override RMCCameraWindow? Window { get; set; }
 
@@ -53,6 +54,21 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
         Window.NetworkEditor.HiddenRequested += message => SendPredictedMessage(message);
         Window.NetworkEditor.SaveCameraRequested += message => SendPredictedMessage(message);
         Window.NetworkEditor.EditorCameraSelected += _ => RefreshEditorPreview();
+
+        // cmu edit start: some monitors show worn camera feeds with the television's static and a hint of tape
+        if (EntMan.HasComponent<Content.Shared.CMU14.Camera.CMUCameraFeedStaticComponent>(Owner))
+        {
+            _feedStatic = new Content.Client.CMU14.Overwatch.CMUVhsScreenControl
+            {
+                Source = Window.Viewport,
+                HorizontalExpand = true,
+                VerticalExpand = true,
+                Vhs = 0.35f,
+                Visible = false,
+            };
+            Window.Viewport.Parent?.AddChild(_feedStatic);
+        }
+        // cmu edit end
 
         Refresh();
     }
@@ -237,6 +253,15 @@ public sealed class RMCCameraBui : RMCPopOutBui<RMCCameraWindow>
             _eyeLerping.RemoveEye(oldCamera);
 
         _currentCamera = null;
+
+        // cmu edit start: the static only covers a worn camera's feed, not the fixed cameras
+        if (_feedStatic != null)
+        {
+            _feedStatic.Visible = _directory.ActiveCamera is { } staticCamera &&
+                                  EntMan.TryGetEntity(staticCamera, out var staticUid) &&
+                                  EntMan.HasComponent<Content.Shared.CMU14.Camera.CMUCameraFeedStaticComponent>(staticUid);
+        }
+        // cmu edit end
 
         if (_directory.ActiveCamera is not { } netCamera
             || !EntMan.TryGetEntity(netCamera, out var cameraUid)

@@ -1,7 +1,34 @@
+# Senior leadership, held by the NSPA inspector job.
+- type: rank
+  id: AU14RankNSPACommissioner
+  name: Commissioner
+  prefix: Commr.
+
+- type: rank
+  id: AU14RankNSPADeputyCommissioner
+  name: Deputy Commissioner
+  prefix: Dep. Commr.
+
+- type: rank
+  id: AU14RankNSPASuperintendent
+  name: Superintendent
+  prefix: Supt.
+
+- type: rank
+  id: AU14RankNSPAChiefInspector
+  name: Chief Inspector
+  prefix: Chf. Insp.
+
+# Rank and file, held by the NSPA constable job.
 - type: rank
   id: AU14RankNSPAInspector
   name: Inspector
   prefix: Insp.
+
+- type: rank
+  id: AU14RankNSPASergeant
+  name: Sergeant
+  prefix: Sgt.
 
 - type: rank
   id: AU14RankNSPASeniorConstable
@@ -12,3 +39,8 @@
   id: AU14RankNSPAConstable
   name: Constable
   prefix: Constable
+
+- type: rank
+  id: AU14RankNSPAProbationaryConstable
+  name: Probationary Constable
+  prefix: Prob. Constable

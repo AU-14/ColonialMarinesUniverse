@@ -9,6 +9,7 @@ using Content.Shared.SurveillanceCamera.Components;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
+using Content.Server.CMU14.Camera; // cmu edit
 
 namespace Content.Server._RMC14.Camera;
 
@@ -155,7 +156,11 @@ public sealed partial class RMCCameraSystem : SharedRMCCameraSystem
             ? session.AuthorizedCameras
                 .Where(camera => _cameraNetworks.IsMemberOfNetwork(camera, activeNetwork))
                 .Where(camera => TryComp(camera, out RMCCameraComponent? _))
-                .OrderBy(camera => GetCameraName(camera, Comp<RMCCameraComponent>(camera)), StringComparer.Ordinal)
+                // cmu edit start: bodycams and dash cameras list above fixed cameras
+                .OrderBy(camera => CompOrNull<CMUCameraListPriorityComponent>(camera)?.Priority
+                    ?? CMUCameraListPriorityComponent.Default)
+                .ThenBy(camera => GetCameraName(camera, Comp<RMCCameraComponent>(camera)), StringComparer.Ordinal)
+                // cmu edit end
                 .ThenBy(camera => camera.Id)
                 .Select(camera => new CameraSessionCameraUiData(
                     GetNetEntity(camera),

@@ -1,0 +1,42 @@
+# Wired taser probes, fired by the projectile disabler gun and the Glock underbarrel taser. The probe embeds in whoever
+# it hits and trails a wire back to the gun; holding the trigger then sends current down it.
+# See CMUTetherTaserComponent.
+
+# The probe in flight. Short-ranged: it can't fly further than its wire reaches.
+- type: entity
+  parent: RMCBaseBullet
+  id: CMUProjectileTaserProbe
+  categories: [ HideSpawnMenu ]
+  name: taser probe
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/stun_projectiles.rsi
+    layers:
+    - state: stun
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 1
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/energy_metal1.ogg
+    forceSound: true
+  - type: ProjectileMaxRange
+    max: 7
+  - type: RMCProjectileAccuracy
+    accuracy: 125
+  - type: CMUTaserProbe
+  - type: Tag
+    tags:
+    - Taser
+
+# The end of the wire: an invisible anchor riding along in whoever the probe hit. The wire to the gun is drawn
+# client-side as a thin line, like the rotary phone's cord.
+- type: entity
+  id: CMUTaserProbeEmbedded
+  categories: [ HideSpawnMenu ]
+  name: taser probe
+  components:
+  - type: Tag
+    tags:
+    - HideContextMenu

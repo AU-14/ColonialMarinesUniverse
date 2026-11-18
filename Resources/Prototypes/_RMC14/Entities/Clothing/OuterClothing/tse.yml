@@ -8,11 +8,16 @@
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/tsepa_police_vest.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/OuterClothing/TSE/TSEPA/tsepa_police_vest.rsi
+  # cmu edit start: same stats as the M4 pattern light NSPA armour
   - type: CMArmor
     melee: 30
     bullet: 20
     bio: 20
     explosionArmor: 10
+  - type: ClothingSpeedModifier
+    walkModifier: 0.897
+    sprintModifier: 0.897
+  # cmu edit end
 
 - type: entity
   id: RMCBaseTSEArmor
