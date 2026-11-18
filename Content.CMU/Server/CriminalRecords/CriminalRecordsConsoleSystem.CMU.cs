@@ -244,7 +244,7 @@ public sealed partial class CriminalRecordsConsoleSystem
                 continue;
 
             _ui.ServerSendUiMessage(ent.Owner, CriminalRecordsConsoleKey.Key,
-                new CMURecordPersonnelMsg(_cmuRoster.BuildEntry(uid, mindId, false)), msg.Actor);
+                new CMURecordPersonnelMsg(_cmuRoster.BuildEntry(uid, mindId, _cmuRoster.IsClfMember(uid))), msg.Actor);
             return;
         }
 

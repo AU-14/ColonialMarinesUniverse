@@ -49,7 +49,7 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
         if (args.JobId == null || !IsRecordedJob(args.JobId))
             return;
 
-        if (EnsureCharacterRecord(args.Mob, args.Profile.Name, args.Profile.Age, args.Profile.Gender) is { } key)
+        if (EnsureCharacterRecord(args.Profile.Name, args.Profile.Age, args.Profile.Gender) is { } key)
         {
             FillArrival(key, args.Mob, args.Profile);
             ApplyClfCover(key, args.Mob, args.JobId);
