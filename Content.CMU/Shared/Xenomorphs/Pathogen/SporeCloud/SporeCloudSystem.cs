@@ -23,6 +23,7 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
     [Dependency] private SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private CMUPathogenSporeProtectionSystem _protection = default!;
     [Dependency] private SharedGasMaskSystem _gasMask = default!;
 
     public override void Initialize()
@@ -60,14 +61,12 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
         if (_net.IsClient)
             return false;
 
-        if (_gasMask.TryGetWornSporeFilter(target, out var filter))
+        if (_protection.IsProtected(target, out var filterItem, out var filter))
         {
-            _gasMask.DamageFilter(filter.Owner, filter.Comp, 0.3f);
+            if (filter != null)
+                _gasMask.DamageFilter(filterItem!.Value, filter, 0.3f);
             return false;
         }
-
-        if (IsProtected(target))
-            return false;
 
         // Check for existing embryos from the same hive.
         var cloudHive = _hive.GetHive(cloud.Owner);
@@ -100,45 +99,6 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
 
         QueueDel(cloud);
         return true;
-    }
-
-    /// <summary>
-    /// Checks if the target is wearing protective gear (mask/helmet) that blocks spores.
-    /// Mirrors DM's SPOREPROOF (always blocks) / BLOCKGASEFFECT (prob 80% blocks) logic.
-    /// </summary>
-    private bool IsProtected(EntityUid target)
-    {
-        if (_gasMask.IsBreathingInternals(target))
-            return true;
-
-        MycotoxinProtectionComponent? single = null;
-        var protectiveItemCount = 0;
-
-        foreach (var slot in new[] { "mask", "head" })
-        {
-            if (!_inventory.TryGetSlotEntity(target, slot, out var item))
-                continue;
-
-            if (!TryComp(item, out MycotoxinProtectionComponent? protection) || !_gasMask.CanUsePassiveSporeProtection(item.Value))
-                continue;
-
-            // A single fully-protective item (SPOREPROOF) blocks outright.
-            if (protection.FullProtection)
-                return true;
-
-            protectiveItemCount++;
-            single = protection;
-        }
-
-        // Two or more partial-protection items together count as full protection.
-        if (protectiveItemCount >= 2)
-            return true;
-
-        // Exactly one partial-protection item: roll its chance (mirrors prob(80) in DM).
-        if (protectiveItemCount == 1 && single != null)
-            return _random.Prob(single.PartialBlockChance);
-
-        return false;
     }
 
     /// <summary>
