@@ -23,7 +23,7 @@ public sealed class CMUInserterTest : GameTest
                 maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
             SSpawnAtPosition("RUMCConveyorBeltTileFast", map.GridCoords);
             var arm = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(1, 0)));
-            var target = SSpawnAtPosition("RUMCElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
+            var target = SSpawnAtPosition("RUMCMachineElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
             var transform = Server.System<SharedTransformSystem>();
             transform.SetLocalRotation(arm, Angle.FromDegrees(90));
             var arms = Server.System<CMUInserterSystem>();
@@ -64,11 +64,11 @@ public sealed class CMUInserterTest : GameTest
             for (var x = 0; x <= 4; x++)
                 maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
 
-            var source = SSpawnAtPosition("RUMCSteamDrill", map.GridCoords);
+            var source = SSpawnAtPosition("RUMCMachineSteamDrill", map.GridCoords);
             var first = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(1, 0)));
             var belt = SSpawnAtPosition("RUMCConveyorBeltTile", map.GridCoords.Offset(new Vector2(2, 0)));
             var second = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(3, 0)));
-            var target = SSpawnAtPosition("RUMCElectricSmelter", map.GridCoords.Offset(new Vector2(4, 0)));
+            var target = SSpawnAtPosition("RUMCMachineElectricSmelter", map.GridCoords.Offset(new Vector2(4, 0)));
             var transform = Server.System<SharedTransformSystem>();
             transform.SetLocalRotation(first, Angle.FromDegrees(90));
             transform.SetLocalRotation(second, Angle.FromDegrees(90));
@@ -103,9 +103,9 @@ public sealed class CMUInserterTest : GameTest
             var maps = Server.System<SharedMapSystem>();
             for (var x = 0; x <= 2; x++)
                 maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
-            var source = SSpawnAtPosition("RUMCLathe", map.GridCoords);
+            var source = SSpawnAtPosition("RUMCMachineLathe", map.GridCoords);
             var arm = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(1, 0)));
-            var target = SSpawnAtPosition("RUMCElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
+            var target = SSpawnAtPosition("RUMCMachineElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
             Server.System<SharedTransformSystem>().SetLocalRotation(arm, Angle.FromDegrees(90));
             var slots = Server.System<ItemSlotsSystem>();
             var stacks = Server.System<SharedStackSystem>();
@@ -162,7 +162,7 @@ public sealed class CMUInserterTest : GameTest
                 maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
             var storage = SSpawnAtPosition(storagePrototype, map.GridCoords);
             var arm = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(1, 0)));
-            var target = SSpawnAtPosition("RUMCRecycler", map.GridCoords.Offset(new Vector2(2, 0)));
+            var target = SSpawnAtPosition("RUMCMachineRecycler", map.GridCoords.Offset(new Vector2(2, 0)));
             var tool = SSpawnAtPosition("CMScrewdriver", map.GridCoords);
             Assert.That(Server.System<ConveyorBeltSystem>().TryPut(storage, tool), Is.True);
             var component = SComp<CMUInserterComponent>(arm);
@@ -205,9 +205,9 @@ public sealed class CMUInserterTest : GameTest
             var maps = Server.System<SharedMapSystem>();
             for (var x = 0; x <= 2; x++)
                 maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
-            var source = SSpawnAtPosition("RUMCLathe", map.GridCoords);
+            var source = SSpawnAtPosition("RUMCMachineLathe", map.GridCoords);
             var arm = SSpawnAtPosition("CMUInserterArm", map.GridCoords.Offset(new Vector2(1, 0)));
-            SSpawnAtPosition("RUMCElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
+            SSpawnAtPosition("RUMCMachineElectricSmelter", map.GridCoords.Offset(new Vector2(2, 0)));
             var transform = Server.System<SharedTransformSystem>();
             transform.SetLocalRotation(arm, Angle.FromDegrees(90));
             var ore = SSpawnAtPosition("SteelOre1", map.GridCoords);

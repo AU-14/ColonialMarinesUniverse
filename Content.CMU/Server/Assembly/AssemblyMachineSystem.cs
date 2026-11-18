@@ -101,6 +101,7 @@ public sealed class AssemblyMachineSystem : EntitySystem
 
         var coords = Transform(machine).Coordinates;
         var result = Spawn(recipe.Result, coords);
+        EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(result);
         if (recipe.ResultAmount != 1 && TryComp<StackComponent>(result, out var resultStack))
             _stack.SetCount(result, recipe.ResultAmount, resultStack);
 

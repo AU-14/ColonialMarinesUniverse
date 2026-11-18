@@ -15,7 +15,7 @@ using static Content.Client.CMU14.WorldMarket.TermKit;
 namespace Content.Client.CMU14.Government;
 
 // The window of the city relations, which the console of the administration opens (the administrator is the mayor of one city): six tabs. The factions (the petitions and the demands of the
-// ambassadors, the agreements with the factions); the other cities of the map (gifts, help in troubles, agreements); the credit (the lenders, the loans, the investments); the licences (given
+// ambassadors, the agreements with the factions); the other cities of the map (gifts, help in troubles, agreements); the credit (the lenders and loans); the licences (given
 // to the people who stand by the console, and the cards of them); the land (the zones, the plots, the rent and the tax); and the symbols (the flag, the arms, the motto, the holidays; see
 // ColonyGovernmentWindow.Land.cs). The page is made again only when what it is made of changes (a thing done, a price that is now within reach); the numbers that tick (the time, the money) are
 // changed in place, so that a button is not taken from under the cursor.
@@ -73,7 +73,6 @@ public sealed partial class ColonyGovernmentWindow : BaseWindow
     public event Action<int, PetitionAnswer>? OnAnswer;
     public event Action<string, int>? OnTakeLoan;
     public event Action<int>? OnRepayLoan;
-    public event Action<string>? OnInvest;
     public event Action<string>? OnGift;
     public event Action<string>? OnAid;
     public event Action<string, string>? OnSignAccord;
@@ -282,9 +281,7 @@ public sealed partial class ColonyGovernmentWindow : BaseWindow
                 var credit = state.Credit;
                 return "k|" + credit.Rating
                        + "|" + string.Join(";", credit.Lenders.Select(l => $"{l.Id}:{l.Available}:{l.Blocked}"))
-                       + "|" + string.Join(";", credit.Loans.Select(l => $"{l.Id}:{l.Left}:{l.Instalment}:{l.Missed}:{state.Budget >= l.Instalment * l.Left}"))
-                       + "|" + string.Join(";", credit.Investments.Select(i => $"{i.Id}:{i.ChancePercent}:{i.Blocked}"))
-                       + "|" + string.Join(";", credit.Active.Select(a => $"{a.Id}:{a.Done}:{a.Success}"));
+                       + "|" + string.Join(";", credit.Loans.Select(l => $"{l.Id}:{l.Left}:{l.Instalment}:{l.Missed}:{state.Budget >= l.Instalment * l.Left}"));
 
             case Tab.Land:
                 return LandSignature(state);
@@ -666,50 +663,6 @@ public sealed partial class ColonyGovernmentWindow : BaseWindow
 
         _page.AddChild(Card(loans));
 
-        // The investments.
-        var investments = Column(6);
-        investments.AddChild(Gold(Loc.GetString("rumc-government-investments")));
-        investments.AddChild(Wrapped(Loc.GetString("rumc-government-investments-hint"), TermPalette.Muted));
-        foreach (var investment in credit.Investments)
-        {
-            investments.AddChild(Rule());
-            investments.AddChild(Text(investment.Name, TermPalette.Text));
-            investments.AddChild(Wrapped(investment.Description, TermPalette.Muted));
-            investments.AddChild(Muted(Loc.GetString("rumc-government-investment-line", ("cost", Money(investment.Cost)), ("time", Time(investment.DurationSeconds)),
-                ("chance", investment.ChancePercent), ("payout", Money(investment.Payout)))));
-            if (investment.Income > 0f)
-                investments.AddChild(Muted(Loc.GetString("rumc-government-investment-income", ("income", (int) MathF.Round(investment.Income)))));
-
-            var id = investment.Id;
-            var row = Row(8);
-            row.AddChild(Action(Loc.GetString("rumc-government-invest"), () => OnInvest?.Invoke(id), investment.Blocked.Length == 0, 110));
-            if (investment.Blocked.Length > 0)
-                row.AddChild(Muted(investment.Blocked, expand: true));
-
-            investments.AddChild(row);
-        }
-
-        if (credit.Active.Count > 0)
-        {
-            investments.AddChild(Rule());
-            investments.AddChild(Gold(Loc.GetString("rumc-government-investments-active")));
-            foreach (var active in credit.Active)
-            {
-                var id = active.Id;
-                if (active.Done)
-                {
-                    investments.AddChild(Text(Loc.GetString(active.Success ? "rumc-government-investment-success" : "rumc-government-investment-failure", ("name", active.Name)),
-                        active.Success ? TermPalette.Good : TermPalette.Bad));
-                }
-                else
-                {
-                    investments.AddChild(Live(s => Loc.GetString("rumc-government-investment-running", ("name", active.Name),
-                        ("time", Time(s.Credit.Active.FirstOrDefault(a => a.Id == id)?.LeftSeconds ?? 0))), TermPalette.Gold));
-                }
-            }
-        }
-
-        _page.AddChild(Card(investments));
     }
 
     // ---------------------------------------------------------------- the licences

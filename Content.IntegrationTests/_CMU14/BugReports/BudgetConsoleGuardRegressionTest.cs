@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Server._RMC14.Requisitions;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.ColonyEconomy;
 
@@ -17,6 +18,7 @@ public sealed class BudgetConsoleGuardRegressionTest : GameTest
         {
             var budget = Server.System<ColonyBudgetSystem>();
             var console = SEntMan.SpawnEntity("AUbudgetConsole", map.GridCoords);
+            var secondConsole = SEntMan.SpawnEntity("AUbudgetConsole", map.GridCoords);
 
             try
             {
@@ -31,10 +33,19 @@ public sealed class BudgetConsoleGuardRegressionTest : GameTest
 
                 SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleWithdrawBuiMsg(250f));
                 Assert.That(budget.GetBudget(), Is.EqualTo(750f).Within(0.01f));
+
+                // The 3,000-credit allowance is shared colony-wide. A second console
+                // must not be able to bypass the 30-minute withdrawal window.
+                budget.SetBudget(5000f);
+                SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleWithdrawBuiMsg(2750f));
+                Assert.That(budget.GetBudget(), Is.EqualTo(2250f).Within(0.01f));
+                SEntMan.EventBus.RaiseLocalEvent(secondConsole, new BudgetConsoleWithdrawBuiMsg(100f));
+                Assert.That(budget.GetBudget(), Is.EqualTo(2250f).Within(0.01f));
             }
             finally
             {
                 SEntMan.DeleteEntity(console);
+                SEntMan.DeleteEntity(secondConsole);
             }
         });
     }
@@ -73,6 +84,19 @@ public sealed class BudgetConsoleGuardRegressionTest : GameTest
                 SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleTransferToDeptBuiMsg(deptNet, 200f));
                 Assert.That(budget.GetBudget(), Is.EqualTo(800f).Within(0.01f));
                 Assert.That(deptComp.DepartmentBudget, Is.EqualTo(550f).Within(0.01f));
+
+                var requisitions = Server.System<RequisitionsSystem>();
+                var colonyAsrs = requisitions.GetFunds("colony");
+                requisitions.ChangeBudget(1000 - colonyAsrs, "colony");
+
+                SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleTransferAsrsToDeptBuiMsg(deptNet, -100));
+                SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleTransferAsrsToDeptBuiMsg(deptNet, 2000));
+                Assert.That(requisitions.GetFunds("colony"), Is.EqualTo(1000));
+                Assert.That(deptComp.DepartmentBudget, Is.EqualTo(550f).Within(0.01f));
+
+                SEntMan.EventBus.RaiseLocalEvent(console, new BudgetConsoleTransferAsrsToDeptBuiMsg(deptNet, 600));
+                Assert.That(requisitions.GetFunds("colony"), Is.EqualTo(400));
+                Assert.That(deptComp.DepartmentBudget, Is.EqualTo(1150f).Within(0.01f));
             }
             finally
             {

@@ -55,7 +55,7 @@
 - type: craftRecipe
   id: RUMCCraftAnvil
   name: au14-craft-recipe-anvil
-  output: RUMCAnvil
+  output: RUMCMachineAnvil
   time: 20
   minigames: [Rhythm, Polish]
   tools:
@@ -69,7 +69,7 @@
 - type: craftRecipe
   id: RUMCCraftSolidFuelPress
   name: au14-craft-recipe-solid-fuel-press
-  output: RUMCSolidFuelPress
+  output: RUMCMachineSolidFuelPress
   time: 20
   minigames: [Rhythm, Center]
   tools:
@@ -85,7 +85,7 @@
 - type: craftRecipe
   id: RUMCCraftSteamGrinder
   name: au14-craft-recipe-steam-grinder
-  output: RUMCSteamGrinder
+  output: RUMCMachineSteamGrinder
   time: 20
   minigames: [Rhythm, Center]
   tools:
