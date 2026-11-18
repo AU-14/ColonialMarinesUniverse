@@ -134,7 +134,6 @@ public sealed partial class FactionRosterConsoleSystem : EntitySystem
             entry.CriminalRecord = desc.CriminalRecord;
             entry.GeneralRecord = desc.GeneralRecord;
             entry.Height = desc.Height;
-            entry.Weight = desc.Weight;
             entry.Age = desc.Age;
             entry.Build = Loc.GetString($"build-type-{desc.Build.ToString().ToLowerInvariant()}");
 
