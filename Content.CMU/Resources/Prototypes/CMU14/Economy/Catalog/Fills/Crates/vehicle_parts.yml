@@ -2,8 +2,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartLTB86
-  name: 86mm LTB Cannon
-  description: An 86mm LTB cannon barrel complete with auxillary components, can be fitted on M34A2 "Longstreet" Light MBT.
+  name: 86mm M32B1 LTB cannon
+  description: A light tank cannon barrel, takes 86mm shells, designed specifically for M34A2 Longstreet.
   components:
   - type: StorageFill
     contents:
@@ -13,8 +13,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartACE
-  name:  30mm AC3-E Autocannon
-  description: A 30mm AC3-E autocannon barrel complete with auxillary components, can be fitted on M34A2 "Longstreet" Light MTB and IFVs.
+  name: 30mm XM317 autocannon
+  description: A 30mm AC3-E autocannon, designated XM317. Still undergoes testing.
   components:
   - type: StorageFill
     contents:
@@ -24,8 +24,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartACEWolfpack
-  name: 30mm Wolfpack AC3-E Autocannon
-  description: A 30mm AC3-E autocannon barrel complete with auxillary components, can be fitted on the "Wolfpack".
+  name: 30mm XM317L autocannon
+  description: A 30mm AC3-E autocannon, designated XM317. Still undergoes testing.
   components:
   - type: StorageFill
     contents:
@@ -35,8 +35,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartMinigun
-  name:  20mm LTAA AP Rotary Cannon
-  description: A 20mm AC3-E autocannon weapon system complete with auxillary components, can be fitted on M34A2 "Longstreet" Light MTB and IFVs.
+  name: 20mm M238E rotary cannon
+  description: A light anti-air LTAA AP rotary cannon hardpoint, extended length variant.
   components:
   - type: StorageFill
     contents:
@@ -46,8 +46,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartFlamer
-  name:  DRG-NF Flamethrower
-  description: A DRG-NF Flamethrower system fitted with "Dragon" flamethrower, can be fitted on M34A2 "Longstreet" Light MTB and IFVs.
+  name: DRG-NF flamethrower
+  description: A DRG-NF flamethrower hardpoint.
   components:
   - type: StorageFill
     contents:
@@ -59,8 +59,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartLaserTWE
-  name:  L215A1 Heavy Electrolaser
-  description: An experimental electrolaser cannon L215A1 prototype produced by Tosubishi Heavy Industrial Manufacturing.
+  name: 20MW L215A1 heavy electrolaser
+  description: An experimental prototype made by Tosubishi Heavy Industrial Manufacturing. An arcing electroshock laser assisted cannon, currently going through field testing. Theoretically it has limitless firing potential, as long as it is powered.
   components:
   - type: StorageFill
     contents:
@@ -70,8 +70,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAutoTWE
-  name:  45mm L26A2 Autocannon
-  description: 45mm L26A2 autocannon barrel complete with auxillary components, can be fitted on TWE FV150.
+  name: 45mm L26A2 autocannon
+  description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
   components:
   - type: StorageFill
     contents:
@@ -83,8 +83,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartMinigunUPP
-  name:  20mm P-17702 Rotary Cannon
-  description: A UPP rotary cannon tank hardpoint.
+  name: 20mm P-17702 rotary cannon
+  description: A 20mm UPP rotary cannon tank hardpoint.
   components:
   - type: StorageFill
     contents:
@@ -94,8 +94,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartRailgunUPP
-  name: 91mm D-91TM-RGm "Tunguska" Railgun
-  description: A railgun hardpoint for UPP tank turrets.
+  name: "37mm D-64TM-RGm 'Tunguska' Railgun"
+  description: A 37mm hypervelocity railgun main armament 'Tunguska' designed for UPP panzers.
   components:
   - type: StorageFill
     contents:
@@ -107,8 +107,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxFlamer
-  name:  Tank Flamer
-  description: A tank-mounted flamethrower hardpoint.
+  name: M4A3R3 flamethrower
+  description: A tank-mounted M4A3R3 flamethrower hardpoint.
   components:
   - type: StorageFill
     contents:
@@ -118,8 +118,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxGrenadeLauncher
-  name:  Tank Grenade Launcher
-  description: A tank-mounted grenade launcher hardpoint.
+  name: 30mm M95C grenade launcher
+  description: A 30x71mm tank-mounted cupola M95 GL, fires semi-auto. Produced by Armat Battlefield Systems.
   components:
   - type: StorageFill
     contents:
@@ -129,8 +129,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxTOW
-  name:  Tank TOW Launcher
-  description: A tank-mounted TOW launcher hardpoint.
+  name: "84mm MSS 2.4 AC 'Lanca' ATGM launcher"
+  description: A tank-mounted 84mm ATGM launcher hardpoint, developed in the southern hemisphere of Earth UA.
   components:
   - type: StorageFill
     contents:
@@ -140,8 +140,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxM56
-  name:  M56 cupola
-  description: A cupola-mounted weapon hardpoint.
+  name: 10mm M56C cupola-mounted GPMG
+  description: A 10x28mm cupola-mounted vehicle version of M56 smartgun, comes with IFF.
   components:
   - type: StorageFill
     contents:
@@ -151,8 +151,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxRERE700
-  name:  RE700 cupola
-  description: A dual-barrel cupola-mounted weapon hardpoint. The integrated IFF component seems to be missing.
+  name: 10mm M56C-2R twin-linked GPMG
+  description: A 10x28mm dual-barrel cupola-mounted GPMG, spun off the good old m56, albeit in a twin-barrel configuration. The integrated IFF component is missing from the newer variants, a cost-cutting measure.
   components:
   - type: StorageFill
     contents:
@@ -164,12 +164,12 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxL98
-  name: 10x28mm L98 Hull General Purpose Machine Gun
-  description: Imperial implementation of a hull machine gun in a powered cupola.
+  name: 10mm L98 Hull GPMG
+  description: Imperial implementation of a 10x28mm hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
   components:
   - type: StorageFill
     contents:
-    - id: VehicleTankRERE700
+    - id: VehicleTankCupolaTWE
       amount: 1
 
 ### WEAPONS #SECONDARY UPP ###
@@ -178,7 +178,7 @@
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxHJ35T
   name: 84mm HJ35T launcher
-  description: An UPP anti-armor launcher for tank turrets.
+  description: A UPP 84mm ATGM launcher mountable on tank turrets.
   components:
   - type: StorageFill
     contents:
@@ -188,8 +188,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAuxT60P3M
-  name: T60P3M cupola
-  description: A cupola-mounted weapon fitted to UPP armor.
+  name: 7.62mm T60P3M GPMG
+  description: A cupola-mounted UPP GPMG weapon fitted to UPP panzers, comes in 7.62mm calibre.
   components:
   - type: StorageFill
     contents:
@@ -201,7 +201,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartHumveeARCCannon
-  name: ARC Humvee Cannon
+  name: 20mm RE700V-B humvee-mounted
   description: A burst-fire cannon configured for an ARC humvee turret.
   components:
   - type: StorageFill
@@ -212,7 +212,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartHumveeCannon
-  name: Humvee Cannon
+  name: 10mm M56V humvee GPMG
   description: A fixed forward cannon for a humvee hardpoint.
   components:
   - type: StorageFill
@@ -223,8 +223,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartHumveeLauncher
-  name: Humvee Launcher
-  description: A launcher hardpoint for a humvee.
+  name: 86mm M271A1 humvee launcher
+  description: An 86mm ATGM launcher for a humvee.
   components:
   - type: StorageFill
     contents:
@@ -234,8 +234,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAPCFrontCannon
-  name: APC Frontal Cannon
-  description: A fixed forward cannon for an APC hardpoint.
+  name: 20mm RE700 APC frontal cannon
+  description: A fixed forward Republic Electric RE700 20mm rotary cannon for an APC hardpoint.
   components:
   - type: StorageFill
     contents:
@@ -245,8 +245,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAPCFrontCannonWolfpack
-  name: Wolfpack Frontal Autocannon
-  description: A stanard-fit MP7A2 APC frontal autocannon complete with auxillary components, can be fitted on the "Wolfpack".
+  name: 20mm RE700 APC frontal cannon
+  description: A fixed forward Republic Electric RE700 20mm rotary cannon for an APC hardpoint.
   components:
   - type: StorageFill
     contents:
@@ -256,7 +256,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartAPCDualCannon
-  name: APC Dual Cannon
+  name: 20MW PARS-150 "Boyars" dual cannon
   description: A dual cannon turret for an APC hardpoint.
   components:
   - type: StorageFill
@@ -269,8 +269,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartTreads
-  name: Tank Treads
-  description: Standard heavy duty tank treads.
+  name: tank treads
+  description: Heavy duty tank treads.
   components:
   - type: StorageFill
     contents:
@@ -280,7 +280,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartTreadsReinforced
-  name: Tank Treads, Reinforced
+  name: reinforced tank treads
   description: Heavier tank treads with better durability and acid resistance at the cost of acceleration.
   components:
   - type: StorageFill
@@ -293,8 +293,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartTreadsReinforcedTWE
-  name: Tank Treads
-  description: Standard heavy duty tank treads. Can be fitted on TWE FV150.
+  name: tank treads
+  description: Heavy duty tank treads.
   components:
   - type: StorageFill
     contents:
@@ -306,7 +306,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartWheelVan
-  name: Van Wheel
+  name: van wheel
   description: A sturdy wheel for the van. Can be removed or replaced.
   components:
   - type: StorageFill
@@ -317,8 +317,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartWheelHumvee
-  name: Humvee Wheel
-  description: A reinforced humvee wheel..
+  name: M1531-W2 humvee wheel
+  description: A reinforced humvee wheel.
   components:
   - type: StorageFill
     contents:
@@ -328,7 +328,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartWheelAPC
-  name: APC wheel
+  name: 17R5 XML-V APC wheel
   description: A reinforced APC wheel.
   components:
   - type: StorageFill
@@ -341,7 +341,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartWheelAPCUPP
-  name: UPP APC wheel
+  name: KI-31 APC wheel
   description: A reinforced APC wheel produced for UPP vehicles.
   components:
   - type: StorageFill
@@ -354,7 +354,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportSensor
-  name: Integrated Weapons Sensor Array
+  name: AN/VSG-21 integrated weapons sensor array
   description: An integrated sensor array that improves accuracy and fire rate of onboard weapons.
   components:
   - type: StorageFill
@@ -365,7 +365,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportOverdrive
-  name: Overdrive Enhancer
+  name: M412C1 overdrive enhancer
   description: An overdrive enhancer support attachment for a tank.
   components:
   - type: StorageFill
@@ -376,7 +376,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportSmoke
-  name: Smoke Launcher
+  name: M157A1 smoke launcher
   description: A smoke launcher support attachment for a tank.
   components:
   - type: StorageFill
@@ -387,7 +387,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportFlare
-  name: Flare Module
+  name: M74A1 flare module
   description: A flare launcher support attachment for a tank.
   components:
   - type: StorageFill
@@ -398,8 +398,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportFlareWolfpack
-  name: Wolfpack Flare Launcher
-  description:  A flare launcher support attachment for the "Wolpack".
+  name: M74A1L APC flare launcher
+  description: A flare launcher hardpoint for APC support slots.
   components:
   - type: StorageFill
     contents:
@@ -409,7 +409,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportArtillery
-  name: Artillery Module
+  name: AN/VSG-5 integrated weapons artillery module
   description: An artillery support module for a tank.
   components:
   - type: StorageFill
@@ -420,7 +420,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportSnowPlow
-  name: tank snowplow
+  name: M17 tank snowplow
   description: A reinforced snowplow attachment for a tank.
   components:
   - type: StorageFill
@@ -455,7 +455,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportArtilleryTWE
-  name: Artillery Module
+  name: L15A1 Artillery module
   description: An artillery support module for a tank.
   components:
   - type: StorageFill
@@ -466,7 +466,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportSnowPlowTWE
-  name: Tank Snowplow
+  name: L5C1 tank snowplow
   description: A reinforced snowplow attachment for a tank.
   components:
   - type: StorageFill
@@ -479,8 +479,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportSmokeUPP
-  name: Type-43 "Pokrov" smoke launcher
-  description: A smoke launcher support attachment for an UPP tank.
+  name: DM25 NMWA "Pokrov" smoke launcher
+  description: A smoke launcher support attachment for a UPP tank.
   components:
   - type: StorageFill
     contents:
@@ -490,8 +490,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportFlareUPP
-  name: UPP Flare Module
-  description: A flare launcher support attachment for an UPP tank.
+  name: DM26 Sigpat "Lux-Fackel" flare launcher
+  description: A DM26 flare launcher support attachment for a UPP tank.
   components:
   - type: StorageFill
     contents:
@@ -501,7 +501,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportWarningArrayUPP
-  name: UPP Warning Array
+  name: Type 96L "Erduo" warning array
   description: An integrated weapons sensor array for UPP tank support slots.
   components:
   - type: StorageFill
@@ -512,8 +512,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportOverdriveUPP
-  name: UPP Overdrive Enhancer
-  description: An overdrive enhancer support attachment for an UPP tank.
+  name: Type 5D "Xigai" overdrive enhancer
+  description: An overdrive enhancer support attachment for a UPP tank.
   components:
   - type: StorageFill
     contents:
@@ -523,8 +523,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportArtilleryUPP
-  name: UPP Artillery Module
-  description: An artillery support module for an UPP tank.
+  name: Type 11P "Yanjing" artillery module
+  description: An artillery support module for a UPP tank.
   components:
   - type: StorageFill
     contents:
@@ -536,7 +536,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportSnowPlowHumvee
-  name: Humvee Snowplow
+  name: M16B2 humvee snowplow
   description: A reinforced plow attachment for a humvee.
   components:
   - type: StorageFill
@@ -547,7 +547,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportOverlightHumvee
-  name: Humvee Overlight
+  name: AN/VSS-9 humvee overlight
   description: An overlight array for a humvee.
   components:
   - type: StorageFill
@@ -558,7 +558,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportFlareAPC
-  name: APC Flare Launcher
+  name: M74A1L APC flare launcher
   description: A flare launcher hardpoint for APC support slots.
   components:
   - type: StorageFill
@@ -569,7 +569,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportCommsRelayAPC
-  name: APC Comms Relay
+  name: AN/VRC-52 APC comms relay
   description: A communications relay array for APC support slots.
   components:
   - type: StorageFill
@@ -580,7 +580,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartSupportFreightStorageAPC
-  name: APC Freight Storage
+  name: M577-C2 APC freight storage
   description: A cargo pod for APC support slots.
   components:
   - type: StorageFill
@@ -593,7 +593,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartArmorBallistic
-  name: Ballistic Armor Plating
+  name: M12B ballistic armor plating
   description: Ballistic armor plating for a tank.
   components:
   - type: StorageFill
@@ -604,7 +604,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartArmorConcussive
-  name: Concussive Armor Plating
+  name: M12C concussive armor plating
   description: Concussive armor plating for a tank.
   components:
   - type: StorageFill
@@ -615,8 +615,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartArmorCaustic
-  name: Caustic Armor Plating
-  description: Caustic armor plating for a tank.
+  name: M12AR caustic armor plating
+  description: Acid-resistant armor plating for a tank.
   components:
   - type: StorageFill
     contents:
@@ -626,7 +626,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartArmorPaladin
-  name: Paladin Armor Plating
+  name: 'M16P "Paladin" armor plating'
   description: Paladin armor plating for a tank.
   components:
   - type: StorageFill
@@ -639,8 +639,8 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartArmorReactiveUPP
-  name: Reactive Armor Plating
-  description: Reactive armor plating for an UPP tank.
+  name: FY-17 "Huanji" reactive armor plating
+  description: Reactive armor plating for a UPP tank.
   components:
   - type: StorageFill
     contents:
@@ -652,7 +652,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartBlackfootThrusters
-  name: Blackfoot Thrusters
+  name: Blackfoot thrusters
   description: Reinforced VTOL thrusters for an AD-71E Blackfoot.
   components:
   - type: StorageFill
@@ -663,7 +663,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartBlackfootLaunchers
-  name: Blackfoot Flare Launcher Pod
+  name: Blackfoot flare launcher pod
   description: A Blackfoot pilot-operated utility flare launcher pod.
   components:
   - type: StorageFill
@@ -674,7 +674,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartBlackfootDoorGun
-  name: M866 Automatic Grenade Launcher
+  name: M866 automatic grenade launcher
   description: A rear-door automatic grenade launcher for the AD-71E Blackfoot.
   components:
   - type: StorageFill
@@ -685,7 +685,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartBlackfootReconSystem
-  name: Blackfoot Recon System
+  name: Blackfoot recon system
   description: A Blackfoot stealth and reconnaissance support package.
   components:
   - type: StorageFill
@@ -696,7 +696,7 @@
 - type: entity
   parent: RMCCrateBase
   id: CMUCrateVehiclePartBlackfootSensorArray
-  name: Blackfoot Sensor Array
+  name: Blackfoot sensor array
   description: A deferred sensor package for a Blackfoot recon variant.
   components:
   - type: StorageFill

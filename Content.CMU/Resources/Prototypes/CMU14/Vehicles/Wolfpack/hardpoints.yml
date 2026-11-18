@@ -67,7 +67,7 @@
 - type: entity
   parent: VehicleTankAceAutocannon
   id: CMUVehicleAPCWolfpackAutocannon
-  name: Wolfpack AC3-E Autocannon
+  name: 30mm XM317L autocannon
   components:
   - type: HardpointItem
     hardpointType: Cannon

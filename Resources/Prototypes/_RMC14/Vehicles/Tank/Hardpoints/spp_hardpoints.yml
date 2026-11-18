@@ -12,8 +12,8 @@
 - type: entity
   parent: VehicleTankTurret
   id: VehicleSPPTankTurret
-  name: SPP tank turret
-  description: A tank turret configured for SPP armor.
+  name: UPP tank turret
+  description: A tank turret configured for UPP panzers.
   components:
   - type: HardpointState
   - type: ContainerContainer
@@ -49,13 +49,11 @@
   - type: ItemSlots
     slots:
       turret-cannon:
-        startingItem: VehicleUPPTankP17702
         disableEject: true
         whitelist:
           components:
           - HardpointItem
       turret-launcher:
-        startingItem: VehicleUPPTankCupola
         disableEject: true
         whitelist:
           components:
@@ -80,7 +78,7 @@
   parent: VehicleTankLTAAAPMinigun
   id: VehicleUPPTankP17702
   name: 20mm P-17702 rotary cannon
-  description: A 20mm UPP rotary cannon tank hardpoint.
+  description: A 20mm UPP rotary cannon.
   components:
   - type: ContainerContainer
     containers:
@@ -128,8 +126,8 @@
 - type: entity
   parent: VehicleTankLTBCannon
   id: VehicleUPPTankRailgun
-  name: 91mm D-64TM-RGm "Tunguska" Railgun
-  description: A railgun hardpoint for UPP tank turrets.
+  name: 37mm D-64TM-RGm 'Tunguska' Railgun
+  description: A 37mm hypervelocity railgun 'Tunguska', designed for UPP panzers.
   components:
   - type: ContainerContainer
     containers:
@@ -167,12 +165,18 @@
     muzzleOffset: "0,-1"
     useAimDirection: true
     useContainerOwner: false
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: CMUCartridgeLTBCannonHEAT_UPP
+    capacity: 1
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxLTBCannon
 
 - type: entity
   parent: VehicleTankTowLauncher
   id: VehicleUPPTankHJ35TLauncher
   name: 84mm HJ35T launcher
-  description: A UPP anti-armor launcher for tank turrets.
+  description: A UPP 84mm ATGM launcher mountable on tank turrets.
   components:
   - type: ContainerContainer
     containers:
@@ -215,8 +219,8 @@
 - type: entity
   parent: VehicleTankM56Cupola
   id: VehicleUPPTankCupola
-  name: 12.7mm caseless T60P3M cupola
-  description: A cupola-mounted weapon fitted to UPP armor.
+  name: 7.62mm T60P3M GPMG
+  description: A cupola-mounted UPP GPMG weapon fitted to UPP panzers, comes in 7.62x54mmR.
   components:
   - type: ContainerContainer
     containers:
@@ -258,11 +262,22 @@
     muzzleOffset: "0,0"
     useAimDirection: true
     useContainerOwner: false
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: CMUCartridgeCupolaTracer_UPP
+    capacity: 500
+  - type: VehicleHardpointAmmo
+    magazineSize: 500
+    maxStoredMagazines: 1
+  - type: GunFireArc
+    arc: 180
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxCupola_UPP
 
 - type: entity
   parent: VehicleTankArmorBallistic
   id: VehicleUPPTankReactiveArmor
-  name: '"Huanji" reactive armor plating'
+  name: 'FY-17 "Huanji" reactive armor plating'
   description: Reactive armor plating for a UPP tank.
   components:
   - type: HardpointIntegrity
@@ -279,8 +294,8 @@
 - type: entity
   parent: VehicleTankRocketLauncher
   id: VehicleUPPTankRocketLauncher
-  name: Type-43 "Pokrov" smoke launcher
-  description: A smoke launcher support attachment for an UPP tank.
+  name: DM25 NMWA "Pokrov" smoke launcher
+  description: A smoke launcher support attachment for a UPP tank.
   components:
   - type: ContainerContainer
     containers:
@@ -302,8 +317,8 @@
 - type: entity
   parent: VehicleTankFlareModule
   id: VehicleUPPTankFlareModule
-  name: Type-43 "Pokrov" smoke launcher
-  description: A flare launcher support attachment for an UPP tank.
+  name: DM26 Sigpat "Lux-Fackel" flare launcher
+  description: A DM26 flare launcher support attachment for a UPP tank.
   components:
   - type: ContainerContainer
     containers:
@@ -325,7 +340,7 @@
 - type: entity
   parent: VehicleTankWarningArray
   id: VehicleUPPTankWarningArray
-  name: UPP warning array
+  name: Type 96L "Erduo" warning array
   description: An integrated weapons sensor array for UPP tank support slots.
   components:
   - type: HardpointIntegrity
@@ -342,8 +357,8 @@
 - type: entity
   parent: VehicleTankOverdriveEnhancer
   id: VehicleUPPTankOverdriveEnhancer
-  name: UPP overdrive enhancer
-  description: An overdrive enhancer support attachment for an UPP tank.
+  name: Type 5D "Xigai" overdrive enhancer
+  description: An overdrive enhancer support attachment for a UPP tank.
   components:
   - type: HardpointIntegrity
     integrity: 250
@@ -359,8 +374,8 @@
 - type: entity
   parent: VehicleTankArtilleryModule
   id: VehicleUPPTankArtilleryModule
-  name: UPP artillery module
-  description: An artillery support module for an UPP tank.
+  name: Type 11P "Yanjing" artillery module
+  description: An artillery support module for a UPP tank.
   components:
   - type: HardpointIntegrity
     integrity: 250

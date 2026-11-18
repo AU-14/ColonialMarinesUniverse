@@ -198,24 +198,23 @@
     - name: Vehicle Ammo
       entries:
       - cost: 1900
-        crate: CMUCrateVehicleAmmoLTBCannonMixed
+        crate: CMUCrateVehicleAmmoLTBCannonAPFSDS_UPP
+        maxStock: 2
+      - cost: 1900
+        crate: VehicleAmmoBoxLTBCannon_UPP
+        maxStock: 2
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonHEAT_UPP
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1900
-        crate: CMUCrateVehicleAmmoLTBCannonAPFSDS
+        crate: CMUCrateVehicleAmmoLTBCannonHE_UPP
         maxStock: 2
       - cost: 1900
-        crate: CMUCrateVehicleAmmoLTBCannonHEAT
-        maxStock: 2
-        stockReplenishDelay: 300
-      - cost: 1900
-        crate: CMUCrateVehicleAmmoLTBCannonHE
+        crate: CMUCrateVehicleAmmoLTBCannonCanister_UPP
         maxStock: 2
       - cost: 1900
-        crate: CMUCrateVehicleAmmoLTBCannonCanister
-        maxStock: 2
-      - cost: 1900
-        crate: CMUCrateVehicleAmmoLTBCannonNapalm
+        crate: CMUCrateVehicleAmmoLTBCannonNapalm_UPP
         maxStock: 2
       - cost: 1800
         crate: RMCCrateVehicleAmmoLTAAAP
@@ -246,11 +245,11 @@
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1025
-        crate: CMUCrateVehicleAmmoCupolaMixed
+        crate: CMUCrateVehicleAmmoCupolaMixed_UPP
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1050
-        crate: CMUCrateVehicleAmmoCupolaTracer
+        crate: CMUCrateVehicleAmmoCupolaTracer_UPP
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1200

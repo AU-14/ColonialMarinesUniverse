@@ -321,7 +321,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankRERE700 # CMU14
-  name: 10mm twin-linked M56C-2R GPMG
+  name: 10mm M56C-2R twin-linked GPMG
   description: A 10x28mm dual-barrel cupola-mounted GPMG, spun off the good old m56, albeit in a twin-barrel configuration. The integrated IFF component is missing from the newer variants, a cost-cutting measure.
   components:
   - type: ContainerContainer

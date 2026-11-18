@@ -83,7 +83,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankTurretTWE
-  name: Improper TBA3 'Vandeleur' Turret
+  name: TBA3 'Vandeleur' Turret
   description: The TBA3 'Vandeleur' Turret, developed by Weyland Yutani as part of the 'B' upgrade package for the FV150 'Hobelar' Light Cavalry Tank. The Vandeleur is a direct evolution of the original FV150-A turret, with improvements to the internal systems and modularity. It can mount a wide array of weapon systems both quickly and easily, and features an inbuilt flare deployment system.
   components:
   - type: HardpointState

@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCProjectileRocket84mm
   id: RMCProjectileLTBCannon
-  name: LTB HESH cannon shell
+  name: 86mm M342 HESH cannon shell
   categories: [ HideSpawnMenu ]
   components:
   - type: ContainerContainer

@@ -1,7 +1,7 @@
 - type: entity
   parent: CMBaseCartridgeRifle
   id: CMUCartridgeLTBCannonAPFSDS
-  name: cartridge (LTB cannon, APFSDS)
+  name: cartridge (86mm M369 APFSDS)
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
@@ -22,7 +22,7 @@
 - type: entity
   parent: CMBaseCartridgeRifle
   id: CMUCartridgeLTBCannonHEAT
-  name: cartridge (LTB cannon, HEAT)
+  name: cartridge (86mm M320 HEAT)
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
@@ -43,7 +43,7 @@
 - type: entity
   parent: CMBaseCartridgeRifle
   id: CMUCartridgeLTBCannonHE
-  name: cartridge (LTB cannon, HE)
+  name: cartridge (86mm M326 HE)
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
@@ -64,7 +64,7 @@
 - type: entity
   parent: CMBaseCartridgeRifle
   id: CMUCartridgeLTBCannonCanister
-  name: cartridge (LTB cannon, canister)
+  name: cartridge (86mm M371 canister)
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
@@ -85,7 +85,7 @@
 - type: entity
   parent: CMBaseCartridgeRifle
   id: CMUCartridgeLTBCannonNapalm
-  name: cartridge (LTB cannon, napalm)
+  name: cartridge (86mm M402 napalm)
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
@@ -103,10 +103,40 @@
     muzzleFlash: MuzzleFlashEffectVehicleOverLarge
     muzzleFlashOffset: 2.2, 0
 
+- type: entity
+  parent: CMUCartridgeLTBCannonAPFSDS
+  id: CMUCartridgeLTBCannonAPFSDS_UPP
+  name: cartridge (37mm DM143 KE)
+
+- type: entity
+  parent: CMUCartridgeLTBCannonHEAT
+  id: CMUCartridgeLTBCannonHEAT_UPP
+  name: cartridge (37mm DM142 MZ)
+
+- type: entity
+  parent: CMUCartridgeLTBCannonHE
+  id: CMUCartridgeLTBCannonHE_UPP
+  name: cartridge (37mm DM131 HE-FLAT)
+
+- type: entity
+  parent: VehicleCartridgeLTBCannon
+  id: CMUCartridgeLTBCannonQK_UPP
+  name: cartridge (37mm DM136 QK)
+
+- type: entity
+  parent: CMUCartridgeLTBCannonCanister
+  id: CMUCartridgeLTBCannonCanister_UPP
+  name: cartridge (37mm DM155 FLAT)
+
+- type: entity
+  parent: CMUCartridgeLTBCannonNapalm
+  id: CMUCartridgeLTBCannonNapalm_UPP
+  name: cartridge (37mm DM196 BRAND)
+
 # Impacts
 - type: entity
   id: CMULTBCannonImpactAPFSDS
-  name: LTB APFSDS cannon impact
+  name: 86mm M369 APFSDS cannon impact
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
@@ -117,7 +147,7 @@
 
 - type: entity
   id: CMULTBCannonImpactHEAT
-  name: LTB HEAT cannon impact
+  name: 86mm M320 HEAT cannon impact
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
@@ -140,7 +170,7 @@
 
 - type: entity
   id: CMULTBCannonImpactHE
-  name: LTB HE cannon impact
+  name: 86mm M326 HE cannon impact
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
@@ -163,7 +193,7 @@
 
 - type: entity
   id: CMULTBCannonImpactCanister
-  name: LTB canister cannon impact
+  name: 86mm M371 canister cannon impact
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
@@ -174,7 +204,7 @@
 
 - type: entity
   id: CMULTBCannonImpactNapalm
-  name: LTB napalm cannon impact
+  name: 86mm M402 napalm cannon impact
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
