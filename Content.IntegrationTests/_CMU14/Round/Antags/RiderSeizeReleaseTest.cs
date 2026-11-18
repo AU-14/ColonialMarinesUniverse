@@ -3,6 +3,8 @@ using System.Numerics;
 using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Round.Antags.Rider;
+using Content.Server.CMU14.Threats.Mobs.Biomorph;
+using Content.Server.Polymorph.Systems;
 using Content.Shared.Actions;
 using Content.Shared.CMU14.Round.Antags.Rider;
 using Content.Shared.Mind;
@@ -71,6 +73,11 @@ public sealed class RiderSeizeReleaseTest : GameTest
             var comp = SComp<RiderComponent>(rider);
             Assert.That(comp.SeizeActive, Is.False, "pressing the exit button mid-seize should hand the body back");
             Assert.That(comp.Host, Is.EqualTo(host), "ending a seize shouldn't throw the rider out of the host");
+            Assert.That(ServerSession!.AttachedEntity, Is.EqualTo(rider), "releasing the host must restore the Rider's player");
+            var changed = Server.System<PolymorphSystem>().PolymorphEntity(host, BiomorphAssimilateSystem.HumanoidTurnPolymorph);
+            Assert.That(changed, Is.Not.Null);
+            Assert.That(comp.Host, Is.Null, "the converted body cannot carry the Rider into storage");
+            Assert.That(SComp<TransformComponent>(rider).GridUid, Is.EqualTo(map.Grid.Owner));
         });
     }
 }
