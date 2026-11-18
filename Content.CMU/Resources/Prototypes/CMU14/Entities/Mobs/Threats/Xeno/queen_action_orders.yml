@@ -1,0 +1,7 @@
+- type: entity
+  abstract: true
+  id: CMUQueenImmatureOvipositorOrder
+
+- type: entity
+  abstract: true
+  id: CMUQueenMatureOvipositorOrder

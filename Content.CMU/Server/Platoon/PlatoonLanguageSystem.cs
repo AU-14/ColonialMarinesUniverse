@@ -32,7 +32,7 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
         if (!TryComp<MarineComponent>(ent.Owner, out var marine))
             return;
 
-        var platoon = GetPlatoonForMarine(marine);
+        var platoon = GetFactionPlatoon(marine.Faction);
         if (platoon == null)
             return;
 
@@ -64,18 +64,18 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
             _language.SetDefaultLanguage(uid, language);
     }
 
-    private PlatoonPrototype? GetPlatoonForMarine(MarineComponent marine)
+    public PlatoonPrototype? GetFactionPlatoon(string? faction)
     {
-        if (marine.Faction == "govfor")
+        if (string.Equals(faction, "govfor", StringComparison.OrdinalIgnoreCase))
             return _platoonSpawnRule.SelectedGovforPlatoon;
-        if (marine.Faction == "opfor")
+        if (string.Equals(faction, "opfor", StringComparison.OrdinalIgnoreCase))
             return _platoonSpawnRule.SelectedOpforPlatoon;
         return null;
     }
 
     private void OnDetermineLanguages(Entity<MarineComponent> ent, ref DetermineEntityLanguagesEvent args)
     {
-        var platoon = GetPlatoonForMarine(ent.Comp);
+        var platoon = GetFactionPlatoon(ent.Comp.Faction);
         if (platoon == null)
             return;
 
@@ -101,7 +101,7 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
         if (!TryComp<MarineComponent>(ev.Mob, out var marine))
             return;
 
-        var platoon = GetPlatoonForMarine(marine);
+        var platoon = GetFactionPlatoon(marine.Faction);
         if (platoon == null)
             return;
 

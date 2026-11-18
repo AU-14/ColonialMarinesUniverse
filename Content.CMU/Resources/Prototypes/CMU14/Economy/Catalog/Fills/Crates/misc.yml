@@ -122,6 +122,13 @@
     spawn: CMUChemSimulator
 
 - type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateChemicalRecipeMachine
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUChemicalRecipeMachine
+
+- type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
   id: AU14CrateMedicalBloodVendor
   name: WeYu blood dispenser crate

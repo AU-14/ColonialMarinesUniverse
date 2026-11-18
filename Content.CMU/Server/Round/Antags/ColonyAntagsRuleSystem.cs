@@ -44,14 +44,7 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
         { "Vigilante", 0.25f },
         { "BountyHunter", 0.20f },
         { "Replicant", 0.20f },
-        { "Rider", 0.20f },
-        { "EWJoe", 0.25f }
-    };
-
-    // Rebalance RB-41: the demand boost never raises these, so their weight above is a hard ceiling.
-    public static readonly HashSet<string> DemandExemptRules = new()
-    {
-        "EWJoe"
+        { "Rider", 0.20f }
     };
 
     public const float CorporateAntagChance = 0.35f;
@@ -63,7 +56,8 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
     };
 
     public static bool IsColonyAntagRule(string protoId)
-        => AntagRulePrototypes.ContainsKey(protoId)
+        => protoId == EarlyWarning.EWJoeRuleSystem.AntagId
+        || AntagRulePrototypes.ContainsKey(protoId)
         || CorporateRuleWeights.ContainsKey(protoId);
 
     protected override void Added(EntityUid uid, ColonyAntagsRuleComponent component, GameRuleComponent gameRule, GameRuleAddedEvent args)
@@ -79,7 +73,7 @@ public sealed partial class ColonyAntagsRuleSystem : GameRuleSystem<ColonyAntags
         foreach (var (antag, chance) in AntagRulePrototypes)
         {
             var effective = chance;
-            if (demand != null && !DemandExemptRules.Contains(antag))
+            if (demand != null)
                 effective = MathF.Min(chance + boost * demand.GetValueOrDefault(antag), MathF.Max(chance, cap));
 
             if (_random.Prob(effective))

@@ -33,6 +33,27 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
 
     private readonly record struct Depot(Entity<VehicleSupplyConsoleComponent> Console, Entity<VehicleSupplyLiftComponent> Lift);
 
+    [Test]
+    public async Task FactoryLoadoutsFitTheirVehicleMounts()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var depot = CreateDepot(map.GridCoords);
+            var topology = SEntMan.System<VehicleTopologySystem>();
+            var hardpoints = SEntMan.System<HardpointSystem>();
+            foreach (var entry in depot.Console.Comp.Vehicles.Where(entry => entry.FactoryModules.Count > 0))
+            {
+                var vehicle = SEntMan.SpawnEntity(entry.Vehicle, map.GridCoords);
+                var before = topology.GetMountedSlots(vehicle).Count(slot => slot.Item != null);
+                hardpoints.FitFactoryModules(vehicle, entry.FactoryModules);
+                Assert.That(topology.GetMountedSlots(vehicle).Count(slot => slot.Item != null) - before,
+                    Is.EqualTo(entry.FactoryModules.Count), $"Factory loadout must fit {entry.Vehicle}");
+                SEntMan.DeleteEntity(vehicle);
+            }
+        });
+    }
+
     // CMU14 method: reject foreign chassis while allowing each platoon's current catalog.
 
     [Test]

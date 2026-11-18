@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Server.CMU14.ZLevelBuilding;
+using Content.Server._RMC14.TacticalMap;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._RMC14.Water;
 using Content.Shared.Actions;
@@ -34,6 +35,7 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private TacticalMapSystem _tacticalMap = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private ZLevelBuildingSystem _building = default!;
@@ -41,8 +43,6 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
 
     private const int MaxWorlds = 4;
     private const int ObserversPerTick = 8;
-    private static readonly EntProtoId SurveyAction = "CMUActionCaveSurvey";
-    private static readonly EntProtoId GhostSurveyAction = "CMUActionGhostCaveSurvey";
     private static readonly CMUCaveSurveyUiKey Key = CMUCaveSurveyUiKey.Key;
     private readonly Queue<EntityUid> _observers = new();
     private readonly List<CMUCaveSurveySample> _samples = new(16);
@@ -55,6 +55,8 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
         SubscribeLocalEvent<CMUCaveSurveyMapComponent, UseInHandEvent>(OnRead);
         SubscribeLocalEvent<CMUCaveSurveyMapComponent, GetVerbsEvent<AlternativeVerb>>(OnMapVerbs);
         SubscribeLocalEvent<GhostComponent, PlayerAttachedEvent>(OnGhostAttached);
+        Subs.BuiEvents<TacticalMapUserComponent>(TacticalMapUserUi.Key, subs =>
+            subs.Event<CMUCaveSurveyFromColonyMessage>(OnSurveyFromColony));
         Subs.BuiEvents<CMUCaveSurveyAccessComponent>(Key, subs =>
         {
             subs.Event<BoundUIOpenedEvent>(OnOpened);
@@ -80,8 +82,13 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
                 memory.LastViewRequest = -1;
                 memory.WarnedFull = false;
                 _ui.CloseUi(uid, Key);
-                _actions.RemoveAction(memory.Action);
-                memory.Action = null;
+                if (memory.GrantedTacticalMap && TryComp<TacticalMapUserComponent>(uid, out var map))
+                {
+                    _ui.CloseUi(uid, TacticalMapUserUi.Key);
+                    _actions.RemoveAction(map.Action);
+                    RemComp<TacticalMapUserComponent>(uid);
+                    memory.GrantedTacticalMap = false;
+                }
                 RemComp<CMUCaveSurveyAccessComponent>(uid);
             }
         });
@@ -206,8 +213,11 @@ public sealed partial class CMUCaveSurveySystem : EntitySystem
         EnsureComp<CMUCaveSurveyAccessComponent>(actor);
         // Ghosts cannot pass normal interaction checks. This UI only reads their own observations.
         _ui.SetUi(actor, Key, new InterfaceData("CMUCaveSurveyBui", requireInputValidation: !ghost));
-        if (ghost || !HasComp<TacticalMapUserComponent>(actor))
-            EnsureComp<CMUCaveSurveyMemoryComponent>(actor).Action = _actions.AddAction(actor, ghost ? GhostSurveyAction : SurveyAction);
+        if (!HasComp<TacticalMapUserComponent>(actor))
+        {
+            _tacticalMap.GrantColonyMap(actor);
+            EnsureComp<CMUCaveSurveyMemoryComponent>(actor).GrantedTacticalMap = true;
+        }
     }
 
     private void OnGhostAttached(Entity<GhostComponent> ent, ref PlayerAttachedEvent args) => GrantAccess(ent);

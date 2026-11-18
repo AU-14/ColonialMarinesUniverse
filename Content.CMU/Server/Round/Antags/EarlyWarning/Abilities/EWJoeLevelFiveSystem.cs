@@ -1,6 +1,5 @@
 using System.Linq;
 using Content.Server.Administration.Logs;
-using Content.Server.Chat.Systems;
 using Content.Server.CMU14.Chat;
 using Content.Server.CMU14.Round.Antags.EarlyWarning.Combat;
 using Content.Shared._RMC14.Barricade;
@@ -39,7 +38,7 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private CMUApolloAnnouncementSystem _apollo = default!;
     [Dependency] private SharedDirectionalAttackBlockSystem _facing = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -90,12 +89,10 @@ public sealed partial class EWJoeLevelFiveSystem : EntitySystem
             return;
 
         joe.AnnouncedMelding = true;
-        _chat.DispatchFilteredAnnouncement(
-            ColonyAnnouncements.Recipients(EntityManager),
+        _apollo.AnnounceColony(
             Loc.GetString("cmu-ew-joe-melding-announcement"),
             sender: Loc.GetString("cmu-ew-joe-announcement-sender"),
-            playSound: true,
-            announcementSound: AnnounceSound);
+            sound: AnnounceSound);
 
         _messages.Notify(args.Joe, Loc.GetString("cmu-ew-joe-melding-reached"));
         _adminLogger.Add(LogType.AntagSelection, LogImpact.High,

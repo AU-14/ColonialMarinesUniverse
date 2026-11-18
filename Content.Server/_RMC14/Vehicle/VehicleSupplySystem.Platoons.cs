@@ -61,10 +61,11 @@ public sealed partial class VehicleSupplySystem
 
     public List<VehicleSupplyEntry> GetCatalog(EntityUid uid, VehicleSupplyConsoleComponent console)
     {
-        var platoon = GetSupplyPlatoon(GetSupplySide(uid));
+        var side = GetSupplySide(uid);
+        var platoon = GetSupplyPlatoon(side);
         return platoon == null
             ? new List<VehicleSupplyEntry>()
-            : console.Vehicles.Where(entry => platoon.VehicleSupplyCatalog.Contains(entry.Vehicle)).ToList();
+            : console.Vehicles.Where(entry => platoon.VehicleSupplyCatalog.Contains(entry.Vehicle) && ModeAllowsVehicle(side, entry)).ToList();
     }
 
     private List<IssuedVehicle> GetIssued(string side)
@@ -76,7 +77,7 @@ public sealed partial class VehicleSupplySystem
 
     private bool CanIssueVehicle(string? side, VehicleSupplyEntry entry, EntityUid? ignoreLift = null)
     {
-        if (side == null || GetSupplyPlatoon(side) is not { } platoon ||
+        if (!ModeAllowsVehicle(side, entry) || side == null || GetSupplyPlatoon(side) is not { } platoon ||
             !platoon.VehicleSupplyCatalog.Contains(entry.Vehicle))
             return false;
 
