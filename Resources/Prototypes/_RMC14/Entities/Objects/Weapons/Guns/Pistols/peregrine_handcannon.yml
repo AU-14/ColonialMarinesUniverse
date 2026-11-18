@@ -45,6 +45,8 @@
         whitelist:
           tags:
           - RMCMagazinePistolHandcannon
+          - RMCMagazinePistolHandcannonHI
+          - RMCMagazinePistolHandcannonHIAP
         startingItem: RMCMagazinePistolHandcannon
   - type: AttachableHolder
     slots:
