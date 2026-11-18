@@ -18,8 +18,10 @@ namespace Content.IntegrationTests.CMU14.Round.Antags;
 [TestFixture]
 public sealed class RiderSeizeReleaseTest : GameTest
 {
-    [Test]
-    public async Task RiderCanEndSeizeEarlyFromTheHostBody()
+    [TestCase("release")]
+    [TestCase("timeout")]
+    [TestCase("conversion")]
+    public async Task RiderRegainsControlWhenSeizeEnds(string ending)
     {
         var map = await Pair.CreateTestMap();
         EntityUid rider = default;
@@ -48,36 +50,52 @@ public sealed class RiderSeizeReleaseTest : GameTest
 
         await RunTicksSync(10);
 
-        NetEntity exitNet = default;
-        await Server.WaitAssertion(() =>
+        if (ending == "release")
         {
-            var exit = SComp<RiderComponent>(rider).SeizeExitAction;
-            Assert.That(exit, Is.Not.Null, "host has no way to end the seize");
-            // the old button was a copy of "Abandon Host", which reads like it throws you out, so nobody pressed it
-            Assert.That(SEntMan.GetComponent<MetaDataComponent>(exit!.Value).EntityPrototype?.ID,
-                Is.EqualTo("ActionRiderSeizeRelease"));
-            exitNet = SEntMan.GetNetEntity(exit.Value);
-        });
+            NetEntity exitNet = default;
+            await Server.WaitAssertion(() =>
+            {
+                var exit = SComp<RiderComponent>(rider).SeizeExitAction;
+                Assert.That(exit, Is.Not.Null, "host has no way to end the seize");
+                // the old button was a copy of "Abandon Host", which reads like it throws you out, so nobody pressed it
+                Assert.That(SEntMan.GetComponent<MetaDataComponent>(exit!.Value).EntityPrototype?.ID,
+                    Is.EqualTo("ActionRiderSeizeRelease"));
+                exitNet = SEntMan.GetNetEntity(exit.Value);
+            });
 
-        await Client.WaitPost(() =>
+            await Client.WaitPost(() =>
+            {
+                var attached = Client.ResolveDependency<IPlayerManager>().LocalEntity;
+                Assert.That(attached, Is.EqualTo(ToClientUid(host)), "player should be driving the host body");
+                CEntMan.RaisePredictiveEvent(new RequestPerformActionEvent(exitNet, Client.ResolveDependency<IGameTiming>().CurTick));
+            });
+        }
+        else
         {
-            var attached = Client.ResolveDependency<IPlayerManager>().LocalEntity;
-            Assert.That(attached, Is.EqualTo(ToClientUid(host)), "player should be driving the host body");
-            CEntMan.RaisePredictiveEvent(new RequestPerformActionEvent(exitNet, Client.ResolveDependency<IGameTiming>().CurTick));
-        });
+            await Server.WaitAssertion(() =>
+            {
+                if (ending == "timeout")
+                    SComp<RiderComponent>(rider).SeizeEndsAt = Server.ResolveDependency<IGameTiming>().CurTime;
+                else
+                    Assert.That(Server.System<PolymorphSystem>().PolymorphEntity(host,
+                        BiomorphAssimilateSystem.HumanoidTurnPolymorph), Is.Not.Null);
+            });
+        }
 
         await RunTicksSync(10);
 
         await Server.WaitAssertion(() =>
         {
             var comp = SComp<RiderComponent>(rider);
-            Assert.That(comp.SeizeActive, Is.False, "pressing the exit button mid-seize should hand the body back");
-            Assert.That(comp.Host, Is.EqualTo(host), "ending a seize shouldn't throw the rider out of the host");
-            Assert.That(ServerSession!.AttachedEntity, Is.EqualTo(rider), "releasing the host must restore the Rider's player");
-            var changed = Server.System<PolymorphSystem>().PolymorphEntity(host, BiomorphAssimilateSystem.HumanoidTurnPolymorph);
-            Assert.That(changed, Is.Not.Null);
-            Assert.That(comp.Host, Is.Null, "the converted body cannot carry the Rider into storage");
-            Assert.That(SComp<TransformComponent>(rider).GridUid, Is.EqualTo(map.Grid.Owner));
+            Assert.That(comp.SeizeActive, Is.False);
+            Assert.That(ServerSession!.AttachedEntity, Is.EqualTo(rider));
+            if (ending == "conversion")
+            {
+                Assert.That(comp.Host, Is.Null);
+                Assert.That(SComp<TransformComponent>(rider).GridUid, Is.EqualTo(map.Grid.Owner));
+            }
+            else
+                Assert.That(comp.Host, Is.EqualTo(host));
         });
     }
 }
