@@ -5,7 +5,6 @@ using Content.Shared.Inventory;
 using Content.Shared.Preferences;
 using Content.Shared.CMU14.CriminalRecords;
 using Content.Shared.CriminalRecords;
-using Content.Shared.Forensics.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
 using Content.Shared.Security;
@@ -96,23 +95,18 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
     /// <summary>
     /// Makes sure a character has their normal record on the criminal records consoles, separate from any antag alias.
     /// </summary>
-    public StationRecordKey? EnsureCharacterRecord(EntityUid mob, string name, int age, Gender gender)
+    public StationRecordKey? EnsureCharacterRecord(string name, int age, Gender gender)
     {
         if (_universalRecords.GetRecords() is not { } station)
             return null;
 
-        var dna = CompOrNull<DnaComponent>(mob)?.DNA;
-        var fingerprint = CompOrNull<FingerprintComponent>(mob)?.Fingerprint;
-
+        // Prints and DNA are never filed here: a manifest that knows every colonist's prints
+        // names any criminal from one scene print and voids witness descriptions. The forensic
+        // scanner files them when a marshal processes the person in the field.
         StationRecordKey key;
         if (_records.GetRecordByName(station, name) is { } recordId)
         {
             key = new StationRecordKey(recordId, station);
-            if (_records.TryGetRecord<GeneralStationRecord>(key, out var general))
-            {
-                general.DNA ??= dna;
-                general.Fingerprint ??= fingerprint;
-            }
         }
         else
         {
@@ -121,8 +115,6 @@ public sealed partial class CMUColonyRecordsSystem : EntitySystem
                 Name = name,
                 Age = age,
                 Gender = gender,
-                DNA = dna,
-                Fingerprint = fingerprint,
             });
 
             if (!key.IsValid())

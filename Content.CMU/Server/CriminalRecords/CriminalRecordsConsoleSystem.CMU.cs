@@ -5,6 +5,9 @@ using Content.Shared.Mind.Components;
 using Content.Shared.CMU14.CriminalRecords;
 using Content.Shared.CriminalRecords;
 using Content.Shared.CriminalRecords.Components;
+using Content.Shared.Cuffs.Components;
+using Content.Shared.Forensics.Components;
+using Content.Shared.Popups;
 using Content.Shared.StationRecords;
 using Content.Shared.StationRecords.Events;
 
@@ -246,5 +249,68 @@ public sealed partial class CriminalRecordsConsoleSystem
         }
 
         _popup.PopupEntity(Loc.GetString("cmu-records-personnel-none"), ent, msg.Actor);
+    }
+
+    /// <summary>
+    /// Booking Detained rolls the person's prints and DNA into their record, but only while
+    /// they are actually in cuffs. Statuses alone are paperwork a deputy can spam; prints
+    /// enter the manifest only through real custody here or the forensic scanner, never at
+    /// spawn, or one scene print names any criminal and witness descriptions mean nothing.
+    /// </summary>
+    // CMU14 method
+    private void CMUFilePrintsOnBooking(Entity<CriminalRecordsConsoleComponent> ent, StationRecordKey key, EntityUid actor)
+    {
+        if (!_records.TryGetRecord<GeneralStationRecord>(key, out var general))
+            return;
+
+        if (general.Fingerprint != null
+            && general.DNA != null)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-records-prints-already", ("name", general.Name)),
+                ent, actor, PopupType.Medium);
+            return;
+        }
+
+        // The record's person, found the way the personnel file is: by name, alive with a mind
+        var query = EntityQueryEnumerator<MindContainerComponent, MetaDataComponent>();
+        while (query.MoveNext(out var uid, out _, out var meta))
+        {
+            if (meta.EntityName != general.Name
+                || !_cmuMinds.TryGetMind(uid, out _, out _))
+                continue;
+
+            // First name match decides: not actually cuffed, the booking is paperwork only
+            if (CompOrNull<CuffableComponent>(uid) is not { } cuffs
+                || cuffs.CuffedHandCount == 0)
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-records-prints-not-restrained", ("name", general.Name)),
+                    ent, actor, PopupType.Medium);
+                return;
+            }
+
+            var filled = false;
+            if (general.Fingerprint == null
+                && CompOrNull<FingerprintComponent>(uid)?.Fingerprint is { } prints)
+            {
+                general.Fingerprint = prints;
+                filled = true;
+            }
+
+            if (general.DNA == null
+                && CompOrNull<DnaComponent>(uid)?.DNA is { } dna)
+            {
+                general.DNA = dna;
+                filled = true;
+            }
+
+            if (filled)
+            {
+                CMUSave(ent, key);
+                _popup.PopupEntity(Loc.GetString("cmu-records-prints-filed", ("name", general.Name)),
+                    ent, actor, PopupType.Medium);
+            }
+
+            return;
+        }
     }
 }
