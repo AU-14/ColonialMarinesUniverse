@@ -59,6 +59,9 @@
         crate: CMUCrateM2CRH
       - cost: 150
         crate: RMCCrateClothingMagazinePouchesLargePMC
+      - cost: 150
+        crate: RMCBeltPMC
+        cmuFactionVendorItem: true
     - name: WEYSEC Weapons
       entries:
       - cost: 4500

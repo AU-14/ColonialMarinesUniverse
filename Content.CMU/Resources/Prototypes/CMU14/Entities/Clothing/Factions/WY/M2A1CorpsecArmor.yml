@@ -90,9 +90,9 @@
   description: A ballcap reinforced with kevlar fibers used by Corporate Security in more humid areas.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/WY_PMC/CorporateOfficerTacCap.rsi
+    sprite: CMU14/Clothing/WY_PMC/CorporateLeadTacCap.rsi
   - type: Clothing
-    sprite: CMU14/Clothing/WY_PMC/CorporateOfficerTacCap.rsi
+    sprite: CMU14/Clothing/WY_PMC/CorporateLeadTacCap.rsi
 
 - type: entity
   parent: RMCMarineHelmetBase

@@ -55,6 +55,9 @@
         crate: CMUCrateEngineeringWiring
       - cost: 1200
         crate: AU14CBRNKitWeYu
+      - cost: 500
+        crate: AU14SuitBioWeYu
+        cmuFactionVendorItem: true
       - cost: 400
         crate: CMUCrateGasMaskFilterHAZOPS
       - cost: 300
