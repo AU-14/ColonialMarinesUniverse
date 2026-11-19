@@ -11,10 +11,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
-using Content.Shared.CMU14.Medical.Injuries.Wounds;
-using Content.Shared.Body.Systems;
 using Robust.Shared.Prototypes;
-using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 
 namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
@@ -30,8 +27,7 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private CMUPathogenSporeProtectionSystem _protection = default!;
     [Dependency] private SharedGasMaskSystem _gasMask = default!;
 
     private enum ProtectionResult { None, Partial, Filter }
@@ -77,6 +73,10 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         filterItem = null;
         filter = null;
 
+        if (_protection.HasOpenWound(target))
+            return ProtectionResult.None;
+
+        // Internals block inhaled spores outright; Partial means this tick is blocked.
         if (_gasMask.IsBreathingInternals(target))
             return ProtectionResult.Partial;
 
@@ -86,9 +86,6 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
             filter = working.Comp;
             return ProtectionResult.Filter;
         }
-
-        if (HasOpenWound(target))
-            return ProtectionResult.None;
 
         foreach (var slot in new[] { "mask", "head" })
         {
@@ -106,16 +103,6 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         }
 
         return ProtectionResult.None;
-    }
-
-    private bool HasOpenWound(EntityUid target)
-    {
-        foreach (var (partUid, _) in _body.GetBodyChildren(target))
-        {
-            if (_wounds.HasOpenWound(partUid))
-                return true;
-        }
-        return false;
     }
 
     public override void Update(float frameTime)

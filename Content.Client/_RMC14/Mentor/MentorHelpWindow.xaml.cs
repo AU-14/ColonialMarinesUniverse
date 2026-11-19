@@ -14,4 +14,11 @@ public sealed partial class MentorHelpWindow : DefaultWindow
 
         CrtLobbyTheme.ApplyChatScrollBar(Messages);
     }
+
+    // CMU14 method: live mentor count line for askers; showmentors' answer inside the window itself.
+    public void SetMentorCount(int count)
+    {
+        MentorCountLabel.Text = Loc.GetString("cmu-mentor-help-online-mentors", ("count", count));
+        MentorCountLabel.Visible = true;
+    }
 }

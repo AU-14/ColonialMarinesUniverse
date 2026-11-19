@@ -115,6 +115,11 @@ public sealed partial class FactionRosterConsoleSystem : EntitySystem
         return entries;
     }
 
+    /// <summary>True when the body belongs to the CLF; colony-facing rosters disguise them as colonists.</summary>
+    public bool IsClfMember(EntityUid uid)
+        => TryComp(uid, out NpcFactionMemberComponent? factions)
+            && ThreatRuleHelper.HasFaction(factions, ClfFactionId);
+
     /// <summary>The dossier for <paramref name="uid"/>; also used by the criminal records console's personnel file.</summary>
     public FactionRosterEntry BuildEntry(EntityUid uid, EntityUid mindId, bool disguiseAsColonist)
     {
