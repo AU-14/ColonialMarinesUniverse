@@ -15,29 +15,29 @@ public sealed class GunshipDoorGunnerActionGrantSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<GunshipDoorGunnerActionComponent, BuckledEvent>(OnGunnerBuckled);
-        SubscribeLocalEvent<GunshipDoorGunnerActionComponent, UnbuckledEvent>(OnGunnerUnbuckled);
+        SubscribeLocalEvent<GunshipDoorGunnerActionComponent, StrappedEvent>(OnGunnerStrapped);
+        SubscribeLocalEvent<GunshipDoorGunnerActionComponent, UnstrappedEvent>(OnGunnerUnstrapped);
     }
 
-    private void OnGunnerBuckled(Entity<GunshipDoorGunnerActionComponent> gun, ref BuckledEvent args)
+    private void OnGunnerStrapped(Entity<GunshipDoorGunnerActionComponent> gun, ref StrappedEvent args)
     {
         // Grant hang-out action to the buckled entity (the gunner)
-        _actions.AddAction(args.BuckledEntity, ref gun.Comp.HangOutActionEntity, gun.Comp.HangOutAction, gun.Owner);
+        _actions.AddAction(args.Buckle.Owner, ref gun.Comp.HangOutActionEntity, gun.Comp.HangOutAction, gun.Owner);
         
         // Grant hang-back action to the buckled entity
-        _actions.AddAction(args.BuckledEntity, ref gun.Comp.HangBackActionEntity, gun.Comp.HangBackAction, gun.Owner);
+        _actions.AddAction(args.Buckle.Owner, ref gun.Comp.HangBackActionEntity, gun.Comp.HangBackAction, gun.Owner);
 
         Dirty(gun);
     }
 
-    private void OnGunnerUnbuckled(Entity<GunshipDoorGunnerActionComponent> gun, ref UnbuckledEvent args)
+    private void OnGunnerUnstrapped(Entity<GunshipDoorGunnerActionComponent> gun, ref UnstrappedEvent args)
     {
         // Remove actions from the unbuckled entity
         if (gun.Comp.HangOutActionEntity is { } hangOut)
-            _actions.RemoveAction(args.BuckledEntity, hangOut);
+            _actions.RemoveAction(args.Buckle.Owner, hangOut);
 
         if (gun.Comp.HangBackActionEntity is { } hangBack)
-            _actions.RemoveAction(args.BuckledEntity, hangBack);
+            _actions.RemoveAction(args.Buckle.Owner, hangBack);
 
         gun.Comp.HangOutActionEntity = null;
         gun.Comp.HangBackActionEntity = null;

@@ -26,7 +26,7 @@ public sealed class GunshipDoorGunnerHangOutSystem : EntitySystem
 
         SubscribeLocalEvent<ActiveGunshipDoorGunnerComponent, GunshipDoorGunnerHangOutActionEvent>(OnHangOut);
         SubscribeLocalEvent<ActiveGunshipDoorGunnerComponent, GunshipDoorGunnerHangBackActionEvent>(OnHangBack);
-        SubscribeLocalEvent<GunshipDoorGunnerHangingOutComponent, UnbuckleAttemptEvent>(OnUnbuckleAttempt);
+        SubscribeLocalEvent<GunshipDoorGunnerHangingOutComponent, UnstrapAttemptEvent>(OnUnstrapAttempt);
     }
 
     private void OnHangOut(Entity<ActiveGunshipDoorGunnerComponent> gunner, ref GunshipDoorGunnerHangOutActionEvent args)
@@ -77,15 +77,13 @@ public sealed class GunshipDoorGunnerHangOutSystem : EntitySystem
         var gunXform = Transform(gunner);
         
         // Move back to the mount/door position (should be at the door)
-        if (gunner.Comp.AttachmentPoint is { } point && TryComp(point, out var pointXform))
+        if (gunner.Comp.AttachmentPoint is { } point
+            && TryComp<TransformComponent>(point, out var pointXform)
+            && pointXform.GridUid is { } grid)
         {
-            var pointTransform = Transform(point);
-            if (pointTransform.GridUid is { } grid)
-            {
-                // Position back at the door (similar to original door gunner positioning)
-                var pointPosition = pointTransform.LocalPosition;
-                _transform.SetCoordinates(gunner, new EntityCoordinates(grid, pointPosition));
-            }
+            // Position back at the door (similar to original door gunner positioning)
+            var pointPosition = pointXform.LocalPosition;
+            _transform.SetCoordinates(gunner, new EntityCoordinates(grid, pointPosition));
         }
 
         // Restore rotation
@@ -100,11 +98,11 @@ public sealed class GunshipDoorGunnerHangOutSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void OnUnbuckleAttempt(Entity<GunshipDoorGunnerHangingOutComponent> hangingGunner, ref UnbuckleAttemptEvent args)
+    private void OnUnstrapAttempt(Entity<GunshipDoorGunnerHangingOutComponent> hangingGunner, ref UnstrapAttemptEvent args)
     {
         // Prevent unbuckling while hanging out
         if (hangingGunner.Comp.HangingOut)
-            args.Cancel();
+            args.Cancelled = true;
     }
 
     /// <summary>
