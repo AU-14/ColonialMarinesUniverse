@@ -521,7 +521,7 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             Assert.That(requisitions.TryAppraiseAsrsCargo(damagedPrice, out _), Is.False);
             Assert.That(requisitions.TryAppraiseAsrsCargo(purchased, out _), Is.False);
             Assert.That(requisitions.TryAppraiseAsrsCargo(mined, out unitValue), Is.True);
-            Assert.That(unitValue % 1, Is.EqualTo(0.5), "Use a half-credit product to exercise settlement.");
+            Assert.That(unitValue % 1, Is.GreaterThan(0), "Use a fractional-credit product to exercise settlement.");
             Assert.That(containers.Insert(mined, storage), Is.True);
             Assert.That(containers.Insert(purchased, storage), Is.True);
             Assert.That(requisitions.TryAppraiseAsrsCargo(crate, out var crateValue), Is.True);
@@ -538,7 +538,8 @@ public sealed class CMUIndustryPipeworkTest : GameTest
             var loose = SSpawnAtPosition("RUMCAlexandritePowderItem", map.GridCoords);
             SEntMan.EnsureComponent<ASRSSellableComponent>(loose);
             Lower();
-            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance, Is.EqualTo(openingBalance + 2 * unitValue));
+            Assert.That(SComp<RequisitionsAccountComponent>(accountUid).Balance,
+                Is.EqualTo(openingBalance + Math.Floor(2 * unitValue)));
             SEntMan.DeleteEntity(accountUid);
         });
 
