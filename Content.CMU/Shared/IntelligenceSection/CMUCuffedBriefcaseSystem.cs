@@ -41,6 +41,7 @@ public sealed partial class CMUCuffedBriefcaseSystem : EntitySystem
     {
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, MapInitEvent>(OnBriefcaseMapInit);
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, ComponentShutdown>(OnBriefcaseShutdown);
+        SubscribeLocalEvent<CMUCuffedBriefcaseComponent, EntityTerminatingEvent>(OnBriefcaseTerminating);
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, GotEquippedHandEvent>(OnBriefcasePickedUp);
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, GotUnequippedHandEvent>(OnBriefcaseLeftHand);
         SubscribeLocalEvent<CMUCuffedBriefcaseComponent, InteractUsingEvent>(OnBriefcaseInteractUsing,
@@ -98,6 +99,13 @@ public sealed partial class CMUCuffedBriefcaseSystem : EntitySystem
 
         ent.Comp.Key = key;
         Dirty(ent);
+    }
+
+    /// <summary>The key fits no other case, so it dies with it instead of lingering behind.</summary>
+    private void OnBriefcaseTerminating(Entity<CMUCuffedBriefcaseComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (ent.Comp.Key is { } key && !TerminatingOrDeleted(key))
+            QueueDel(key);
     }
 
     /// <summary>The first pickup, such as a Case Officer's spawn, cuffs the case on and pockets its key.</summary>

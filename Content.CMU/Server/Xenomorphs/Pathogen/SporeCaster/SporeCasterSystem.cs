@@ -1,5 +1,6 @@
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Sporecaster;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Popper;
+using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -16,7 +17,6 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Content.Shared.Interaction;
-using Content.Shared.CMU14.Medical.Injuries.Wounds;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared.Examine;
 using Content.Server.Ghost.Roles;
@@ -35,7 +35,9 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedMycotoxinSystem _mycotoxin = default!;
+    [Dependency] private CMUNeoHeadgearSystem _headgear = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private CMUPathogenSporeProtectionSystem _protection = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;   // NEW
   
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();
@@ -194,6 +196,15 @@ public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
                     continue;
                 if (_mobState.IsDead(target))
                     continue;
+                if (_protection.IsProtected(target))
+                {
+                    // Adjacency is not free: slow mask erosion on the same tick as releases.
+                    caster.NextAutoReleaseAt = time + caster.AutoReleaseInterval;
+                    Dirty(uid, caster);
+                    _headgear.TryRipMask(uid, target, caster.MaskStripChance);
+                    break;
+                }
+
                 caster.NextAutoReleaseAt = time + caster.AutoReleaseInterval;
                 Dirty(uid, caster);
                 ReleaseCloud((uid, caster));

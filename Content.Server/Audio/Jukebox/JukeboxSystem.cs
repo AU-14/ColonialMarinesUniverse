@@ -160,9 +160,10 @@ public sealed partial class JukeboxSystem : SharedJukeboxSystem
                 return false;
             }
 
-            // cmu edit start: heard out to 10 tiles, fading away well before the edge instead of cutting off
-            ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f).WithRolloffFactor(2f))?.Entity;
-            // cmu edit end
+            // CMU14 Begin: range tunable on JukeboxComponent; default rolloff fades linearly across the whole range so it stays quiet far away
+            // ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(10f).WithRolloffFactor(2f))?.Entity;
+            ent.Comp.AudioStream = Audio.PlayPvs(jukeboxProto.Path, ent, AudioParams.Default.WithMaxDistance(ent.Comp.Range))?.Entity;
+            // CMU14 End
             if (ent.Comp.AudioStream is { } stream)
                 References.Watch(ent.Owner, stream);
             Dirty(ent);

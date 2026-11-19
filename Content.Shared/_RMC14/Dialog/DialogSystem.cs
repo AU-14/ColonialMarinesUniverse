@@ -164,7 +164,8 @@ public sealed partial class DialogSystem : EntitySystem
         OpenInput(actor, actor, message, ev, largeInput, characterLimit, minCharacterLimit, smartCheck, autoFocus, title);
     }
 
-    public void OpenConfirmation(EntityUid target, EntityUid actor, string title, string message, object ev)
+    // CMU14: optional cancel event, mirroring OpenOptions, so confirmations can hook dismissal
+    public void OpenConfirmation(EntityUid target, EntityUid actor, string title, string message, object ev, object? cancelEvent = null)
     {
         var dialog = BeginDialog(target, actor);
         dialog.DialogType = DialogType.Confirm;
@@ -172,7 +173,7 @@ public sealed partial class DialogSystem : EntitySystem
         dialog.Message = new DialogOption(message, ev);
         dialog.ConfirmEvent = ev;
         dialog.InputEvent = null;
-        dialog.CancelEvent = null;
+        dialog.CancelEvent = cancelEvent;
         dialog.SuppressCancelEvent = false;
         dialog.CloseAt = null;
         Dirty(target, dialog);

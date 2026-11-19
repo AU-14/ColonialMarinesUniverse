@@ -1,5 +1,6 @@
 using Content.Client.CMU14.TacticalMap.Reconstruction;
 using Content.Client.UserInterface.Systems.Chat;
+using Content.Server._RMC14.Language.Systems;
 using Content.Server._RMC14.TacticalMap;
 using Content.Server._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Marines;
@@ -104,6 +105,9 @@ public sealed partial class CMUReconstructionTest
                 tactical.SetComputerFaction((_console, SComp<TacticalMapComputerComponent>(_console)), senderFaction);
                 receiver = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(_upper, new Vector2(2.5f)));
                 SEntMan.EnsureComponent<MarineComponent>(receiver).Faction = receiverFaction;
+                // The faction lands after mapinit, so re-run the language pass to pick up
+                // platoon languages; otherwise the faction announcement arrives garbled.
+                SEntMan.System<LanguageSystem>().UpdateEntityLanguages(receiver);
                 Server.PlayerMan.SetAttachedEntity(session, receiver);
             });
             await Pair.RunUntilSynced();

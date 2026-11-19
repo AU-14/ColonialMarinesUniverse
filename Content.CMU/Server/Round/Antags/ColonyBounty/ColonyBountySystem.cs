@@ -94,7 +94,7 @@ public sealed partial class ColonyBountySystem : EntitySystem
         // Cache the own record for the per-tick Detained check; null means it doesn't exist yet
         // The character keeps their normal record alongside the antag alias
         var profile = CompOrNull<HumanoidProfileComponent>(uid);
-        var ownKey = _colonyRecords.EnsureCharacterRecord(uid, name, profile?.Age ?? 18, profile?.Gender ?? Gender.Epicene);
+        var ownKey = _colonyRecords.EnsureCharacterRecord(name, profile?.Age ?? 18, profile?.Gender ?? Gender.Epicene);
         comp.OwnRecordId = ownKey?.Id ?? _stationRecords.GetRecordByName(station.Value, name);
         comp.OwnRecordName = name;
         var key = _stationRecords.AddRecordEntry(station.Value, new GeneralStationRecord
