@@ -1,3 +1,4 @@
+using Content.Server._RMC14.Explosion;
 using Content.Server.Explosion.Components;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._RMC14.Explosion;
@@ -6,6 +7,7 @@ using Content.Shared.CMU14.Explosion;
 using Content.Shared.Projectiles;
 using Content.Shared.Trigger;
 using Robust.Server.GameObjects;
+using Robust.Shared.Collections;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Random;
