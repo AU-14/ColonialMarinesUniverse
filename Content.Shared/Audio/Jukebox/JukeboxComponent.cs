@@ -15,6 +15,12 @@ public sealed partial class JukeboxComponent : Component
     public EntityUid? AudioStream;
 
     /// <summary>
+    /// Maximum distance in tiles the jukebox can be heard from.
+    /// </summary>
+    [DataField]
+    public float Range = 20f; // CMU14: per-instance hearable range
+
+    /// <summary>
     /// RSI state for the jukebox being on.
     /// </summary>
     [DataField]

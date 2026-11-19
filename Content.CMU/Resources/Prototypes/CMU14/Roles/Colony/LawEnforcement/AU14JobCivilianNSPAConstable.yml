@@ -52,21 +52,33 @@
   canBeAntag: false
   ranks:
     RMCRankCivilian: []
-  chevrons:
-    Inspector:
+  chevrons: # highest rank the player has the law enforcement playtime for
+    AU14RankNSPAInspector:
       entity: AU14ChevronNSPAInspector
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobCivilianCMBDeputy
-        time: 90000 # 25 hours
-    SeniorConstable:
+        time: 180000 # 50 hours
+    AU14RankNSPASergeant:
+      entity: AU14ChevronNSPASergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 108000 # 30 hours
+    AU14RankNSPASeniorConstable:
       entity: AU14ChevronNSPASeniorConstable
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobCivilianCMBDeputy
-        time: 36000 # 10 hours
-    Constable:
+        time: 54000 # 15 hours
+    AU14RankNSPAConstable:
       entity: AU14ChevronNSPAConstable
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 18000 # 5 hours
+    AU14RankNSPAProbationaryConstable:
+      entity: AU14ChevronNSPAProbationaryConstable
       requirements: []
   startingGear: AU14GearCivilianNSPAConstable
   icon: "RMCJobIconTSEPAConstable"
@@ -95,6 +107,7 @@
     pocket2: AU14PouchGeneralLargeLEOFilled
   storage:
     back:
+    - CMUCameraGearM3aCivilian
     - AU14GuidebookLawColonial
     - CMURecordsTablet
     - ForensicScanner

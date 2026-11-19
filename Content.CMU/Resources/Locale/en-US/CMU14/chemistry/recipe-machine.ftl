@@ -42,3 +42,6 @@ cmu-chem-recipe-machine-output-not-empty = The output beaker must be empty.
 cmu-chem-recipe-machine-output-too-small = The output beaker does not have enough capacity.
 cmu-chem-recipe-machine-ingredients-missing = Internal storage does not contain all required chemicals.
 cmu-chem-recipe-machine-output-failed = The final formulation could not be added to the beaker.
+
+ent-CMUCrateChemicalRecipeMachine = chemical synthesis unit crate
+    .desc = A crate containing a chemical synthesis unit. Open it with a crowbar.

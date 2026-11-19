@@ -55,6 +55,9 @@ public sealed partial class EWJoeChokeActionEvent : InstantActionEvent;
 /// <summary>Sculpted Hands: throw the grabbed target (A-7).</summary>
 public sealed partial class EWJoeThrowActionEvent : EntityTargetActionEvent;
 
+/// <summary>Sculpted Hands: Desecrate, a targeted punch that breaks a bone and knocks the target back (ECS-05).</summary>
+public sealed partial class EWJoeDesecrateActionEvent : EntityTargetActionEvent;
+
 /// <summary>Repentance: direction and distance to whoever last hurt the Joe (A-8).</summary>
 public sealed partial class EWJoeSenseActionEvent : InstantActionEvent;
 

@@ -24,6 +24,9 @@ public sealed partial class FluidTankComponent : Component
     [DataField, AutoNetworkedField]
     public Dictionary<string, float> Contents = new();
 
+    // Server-side revision for consumers waiting on a change in quantity or composition.
+    public uint ContentsRevision;
+
     public float Total
     {
         get

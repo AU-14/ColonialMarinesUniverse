@@ -1,0 +1,21 @@
+# The NSPA inspector's sidearm rigs, worn in suit storage. Picked from the NSPAInspectorSidearmCMU group; the
+# Commissioner's rig unlocks with hours as any law enforcement leader, like the colony administrator's sidearms.
+
+- type: loadout
+  id: NSPAInspectorSidearmWarwickCMU
+  dummyEntity: CMUWeaponRevolverWarwickPolice # show the gun, not the holster rig or case
+  cost: 0
+  equipment:
+    suitstorage: CMUBeltHolsterRevolverNSPA
+
+- type: loadout
+  id: NSPAInspectorSidearmCommissionerCMU
+  dummyEntity: CMUWeaponRevolverWarwickCommissioner
+  effects:
+  - !type:JobRequirementLoadoutEffect
+    requirement:
+      !type:TotalJobsTimeRequirement
+      group: CMUJobsLawEnforcementLeaders
+      time: 180000 # 50 hours
+  equipment:
+    suitstorage: CMUBeltHolsterRevolverCommissioner

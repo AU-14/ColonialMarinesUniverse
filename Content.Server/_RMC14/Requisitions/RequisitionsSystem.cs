@@ -129,6 +129,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         ApplyPlatoonCatalogToComputer(uid, comp);
         AppendFactionVendorGear(uid, comp); // CMU14: use the ReqVend/ReqEquipment vmarker mapping for ASRS stock.
         AddXRFToCatalog(uid, comp);
+        AddRUMCIndustryToCatalog(uid, comp); // CMU14
         var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
@@ -279,6 +280,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             return;
 
         account.Balance -= order.Cost;
+        CMUNotifyBalanceChanged(account); // CMU14
         elevator.Comp.Orders.Add(order);
         // cmu edit start: who bought it, for the colony firearm registry
         var bought = new Content.Server.CMU14.Requisitions.CMURequisitionsOrderBoughtEvent(elevator, elevator.Comp.Orders.Count - 1, actor,
@@ -631,46 +633,31 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         // var entities = _lookup.GetEntitiesIntersecting(elevator);
         var entities = _lookup.GetEntitiesIntersecting(elevator, LookupFlags.Uncontained);
         var soldAny = false;
-        var rewards = 0;
+        // CMU14 Begin: appraise the shipment once and carry fractional credits on its faction account.
+        var shipmentValue = 0.0;
 
         foreach (var entity in entities)
         {
-            if (entity == elevator.Comp.Audio)
+            if (entity == elevator.Comp.Audio || EntityManager.IsQueuedForDeletion(entity))
                 continue;
 
-            // Instead of blacklist, we use a whitelist to selectively control generated funds from selling
-            // if (HasComp<CargoSellBlacklistComponent>(entity))
-            //     continue;
-            // CMU14: Accept loose invoices and industry exports as well as explicitly whitelisted cargo.
-            if (!HasComp<CargoSellWhitelistComponent>(entity) && !HasComp<RequisitionsInvoiceComponent>(entity)
-                && !_industryExports.CanExport(entity))
+            if (TryAppraiseAsrsCargo(entity, out var value))
             {
-                QueueDel(entity);
-                continue;
+                soldAny |= value > 0 || !_sellCargoRewards;
+                shipmentValue = Math.Min(shipmentValue + value, int.MaxValue);
             }
-
-            if (_sellCargoRewards)
-            {
-                var entRewards = SubmitInvoices(entity);
-                if (TryComp(entity, out RequisitionsCrateComponent? crate))
-                {
-                    // CMU14: Preserve the crate refund and pay for eligible industry contents.
-                    // entRewards += crate.Reward;
-                    entRewards += crate.Reward + (int) Math.Round(_industryExports.GetContainedExportPrice(entity));
-                }
-                else
-                    entRewards += (int)Math.Round(_pricing.GetPrice(entity));
-
-                if (entRewards > 0)
-                    soldAny = true;
-
-                rewards += entRewards;
-            }
-            else
-                soldAny = true; // cvar is off, sell is allowed without rewards
 
             QueueDel(entity);
         }
+
+        if (shipmentValue <= 0)
+            return soldAny;
+
+        var settlement = shipmentValue + account.Comp.ExportCreditRemainder;
+        var wholeCredits = Math.Floor(settlement);
+        account.Comp.ExportCreditRemainder = settlement - wholeCredits;
+        var rewards = (int) Math.Min(wholeCredits, int.MaxValue - Math.Max(0, account.Comp.Balance));
+        // CMU14 End
 
         if (rewards > 0)
         {
@@ -955,56 +942,41 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         var updateUi = ProcessItemizedStock(computer, time);
         var waitingForStock = false;
-        for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
+        // CMU14: EnsureStockEntries already indexes only locally replenishing stock.
+        foreach (var (key, stock) in computer.Comp.Stock)
         {
-            var category = computer.Comp.Categories[categoryIndex];
-            for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
+            var entry = computer.Comp.Categories[key.Category].Entries[key.Order];
+            if (stock.Current >= entry.MaxStock)
             {
-                var entry = category.Entries[orderIndex];
-                // CMU14: round stock never replenishes.
-                // if (!IsLimitedStock(entry))
-                if (!IsLimitedStock(entry) || entry.RoundLimit > 0)
-                    continue;
+                stock.NextReplenish = TimeSpan.Zero;
+                continue;
+            }
 
-                if (HasItemizedSource(computer.Owner, (categoryIndex, orderIndex)))
-                    continue;
+            waitingForStock = true;
+            if (stock.NextReplenish == TimeSpan.Zero)
+                stock.NextReplenish = GetNextStockReplenish(time, entry);
 
-                var key = (categoryIndex, orderIndex);
-                if (!computer.Comp.Stock.TryGetValue(key, out var stock))
-                    continue;
+            if (entry.StockReplenishDelay <= TimeSpan.Zero)
+            {
+                stock.Current = entry.MaxStock;
+                stock.NextReplenish = TimeSpan.Zero;
+                updateUi = true;
+                continue;
+            }
+
+            while (stock.Current < entry.MaxStock &&
+                   time >= stock.NextReplenish)
+            {
+                stock.Current = Math.Min(entry.MaxStock, stock.Current + Math.Max(1, entry.StockReplenishAmount));
+                updateUi = true;
 
                 if (stock.Current >= entry.MaxStock)
                 {
                     stock.NextReplenish = TimeSpan.Zero;
-                    continue;
+                    break;
                 }
 
-                waitingForStock = true;
-                if (stock.NextReplenish == TimeSpan.Zero)
-                    stock.NextReplenish = GetNextStockReplenish(time, entry);
-
-                if (entry.StockReplenishDelay <= TimeSpan.Zero)
-                {
-                    stock.Current = entry.MaxStock;
-                    stock.NextReplenish = TimeSpan.Zero;
-                    updateUi = true;
-                    continue;
-                }
-
-                while (stock.Current < entry.MaxStock &&
-                       time >= stock.NextReplenish)
-                {
-                    stock.Current = Math.Min(entry.MaxStock, stock.Current + Math.Max(1, entry.StockReplenishAmount));
-                    updateUi = true;
-
-                    if (stock.Current >= entry.MaxStock)
-                    {
-                        stock.NextReplenish = TimeSpan.Zero;
-                        break;
-                    }
-
-                    stock.NextReplenish += entry.StockReplenishDelay;
-                }
+                stock.NextReplenish += entry.StockReplenishDelay;
             }
         }
 
@@ -1239,6 +1211,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         }
 
         reqAccount.Comp.Balance += stackCount;
+        CMUNotifyBalanceChanged(reqAccount.Comp); // CMU14
         Dirty(reqAccount);
 
         QueueDel(args.Entity);
@@ -1254,6 +1227,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             ApplyPlatoonCatalogToComputer(uid, comp);
             AppendFactionVendorGear(uid, comp); // CMU14: keep selected platoon vendor stock after round-start catalog refreshes.
             AddResearchTerminalToCatalog(uid, comp); // CMU14
+            AddRUMCIndustryToCatalog(uid, comp); // CMU14
             var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(uid); RaiseLocalEvent(uid, ref catalogBuilt, true); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
@@ -1304,16 +1278,33 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     }
 
     /// <summary>
+    /// Returns the current balance for a faction's requisitions account.
+    /// </summary>
+    public int GetFunds(string faction) // CMU14
+    {
+        return GetAccount(faction).Comp.Balance;
+    }
+
+    /// <summary>
     /// Attempts to deduct <paramref name="amount"/> from the specified faction's requisitions account.
     /// Returns false if the account has insufficient funds.
     /// </summary>
     public bool TrySpendFunds(string faction, int amount)
     {
         var account = GetAccount(faction);
-        if (!TryComp(account, out RequisitionsAccountComponent? comp) || comp.Balance < amount)
+        if (amount <= 0 || !TryComp(account, out RequisitionsAccountComponent? comp) || comp.Balance < amount)
             return false;
 
         comp.Balance -= amount;
+        CMUNotifyBalanceChanged(comp); // CMU14
+        Dirty(account.Owner, comp);
+        // CMU14: only viewers of this account need its updated balance.
+        var computers = EntityQueryEnumerator<RequisitionsComputerComponent>();
+        while (computers.MoveNext(out var uid, out var computer))
+        {
+            if (computer.Account == account.Owner && _itemizedUi.IsUiOpen(uid, RequisitionsUIKey.Key))
+                SendUIState((uid, computer));
+        }
         return true;
     }
 }

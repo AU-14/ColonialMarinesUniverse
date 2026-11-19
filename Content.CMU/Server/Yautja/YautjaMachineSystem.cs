@@ -151,7 +151,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         var bone = Spawn(prototype, Transform(ent).Coordinates);
         var trophy = EnsureComp<YautjaTrophyComponent>(bone);
         trophy.Kind = GetTrophyKind(bodyPart);
-        trophy.Hunter = args.User;
+        _trophies.SetHunter((bone, trophy), args.User);
         trophy.SourceName = Name(limb);
         Dirty(bone, trophy);
         _trophies.RecordCraftedTrophy(args.User, trophy.Kind);

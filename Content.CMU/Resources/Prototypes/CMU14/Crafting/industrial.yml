@@ -10,7 +10,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialSteelBoiler
   name: au14-craft-recipe-industrial-boiler
-  output: RUMCSteelBoiler
+  output: RUMCMachineSteelBoiler
   time: 18
   minigames: [Rhythm, Hold]
   tools:
@@ -24,7 +24,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialIndustrialSteamGenerator
   name: au14-craft-recipe-industrial-steam-generator
-  output: RUMCIndustrialSteamGenerator
+  output: RUMCMachineIndustrialSteamGenerator
   time: 18
   minigames: [Rhythm, Hold, Center]
   tools:
@@ -36,7 +36,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialIndustrialSteamSmelter
   name: au14-craft-recipe-industrial-steam-smelter
-  output: RUMCIndustrialSteamSmelter
+  output: RUMCMachineIndustrialSteamSmelter
   time: 18
   minigames: [Rhythm, Hold]
   tools:
@@ -48,7 +48,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialIndustrialSteamPress
   name: au14-craft-recipe-industrial-steam-press
-  output: RUMCIndustrialSteamPress
+  output: RUMCMachineIndustrialSteamPress
   time: 18
   minigames: [Rhythm, Center]
   tools:
@@ -60,7 +60,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialIndustrialSteamDrill
   name: au14-craft-recipe-industrial-steam-drill
-  output: RUMCIndustrialSteamDrill
+  output: RUMCMachineIndustrialSteamDrill
   time: 18
   minigames: [Rhythm, Drill, Center]
   tools:
@@ -72,7 +72,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialIndustrialSolidFuelPress
   name: au14-craft-recipe-industrial-solid-fuel-press
-  output: RUMCIndustrialSolidFuelPress
+  output: RUMCMachineIndustrialSolidFuelPress
   time: 18
   minigames: [Rhythm, Center]
   tools:
@@ -86,7 +86,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialIndustrialSteamGrinder
   name: au14-craft-recipe-industrial-steam-grinder
-  output: RUMCIndustrialSteamGrinder
+  output: RUMCMachineIndustrialSteamGrinder
   time: 18
   minigames: [Rhythm, Center]
   tools:
@@ -98,7 +98,7 @@
 - type: craftRecipe
   id: RUMCCraftIndustrialIndustrialCondenser
   name: au14-craft-recipe-industrial-condenser
-  output: RUMCIndustrialCondenser
+  output: RUMCMachineIndustrialCondenser
   time: 18
   minigames: [Rhythm, Hold]
   tools:

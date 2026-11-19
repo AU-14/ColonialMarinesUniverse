@@ -4,6 +4,7 @@ namespace Content.Shared.Construction.Conditions
 {
     public interface IConstructionCondition
     {
+        bool RecheckOnCompletion => false; // CMU14
         ConstructionGuideEntry? GenerateGuideEntry();
         bool Condition(EntityUid user, EntityCoordinates location, Direction direction);
     }

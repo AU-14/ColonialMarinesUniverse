@@ -9,12 +9,16 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianCWPSMarshal, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
     - name: Rail Attachments
       entries:
       - id: CMUAttachmentNightVisionScope
         amount: 3
+      - id: AU14AttachmentTwoPointSling
+        amount: 5
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -26,12 +30,16 @@
       choices: { CMUCMBDutyJacket: 1 }
       entries:
       - id: AU14CMBDeputyWindbreaker
-      - id: RMCCoatSnowSurvivorCMBDeputy
+      - id: CMUCoatCMBDeputyParka
     - name: Belt
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
       - id: CMBeltSecurityMarshalFilled
-      - id: RMCBeltHolsterPistolTSE
+    - name: Holster
+      choices: { CMUCMBDutyHolster: 1 }
+      entries:
+      - id: AU14BeltHolsterPistolBlack
+      - id: RMCBeltHolsterRevolver
     - name: Bag
       choices: { CMUCMBDutyStorageBag: 1 }
       entries:
@@ -58,12 +66,14 @@
       - id: RMCBinocularsCivPVE
       - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
+      - id: CMUTeleBatonLawEnforcement
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
-      - id: RMCGunCasePistolM1984
       - id: AU14GunCasePistolHG45
+      - id: RMCGunCasePistolM1984
       - id: CMUGunCasePistolTPR9Civilian
+      - id: AU14GunCasePistolM44Civ
     - name: Long Arms
       choices: { CMUCMBLongArms: 1 }
       entries:
@@ -71,6 +81,12 @@
       - id: CMUKitWeaponKramerEnforcerLEO
       - id: CMUKitWeaponMP5LEO
       - id: CMUKitWeaponM20A2LEO
+    - name: Less-Lethal Ammunition
+      entries:
+      - id: CMU14MagazinePistolMK45Rubber
+        amount: 6
+      - id: CMU14MagazinePistolM1984Rubber
+        amount: 6
     - name: Restraining Gear
       entries:
       - id: CMUPepperSpray
@@ -89,6 +105,10 @@
         amount: 2
       - id: ClothingHandsGlovesNitrile
         amount: 10
+    - name: Vehicle Equipment
+      entries:
+      - id: CMUDashCamera
+        amount: 3
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
@@ -107,12 +127,16 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianCWPSMarshal, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
     - name: Rail Attachments
       entries:
       - id: CMUAttachmentNightVisionScope
         amount: 3
+      - id: AU14AttachmentTwoPointSling
+        amount: 5
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -130,7 +154,11 @@
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
       - id: CMBeltSecurityMarshalFilled
-      - id: RMCBeltHolsterPistolTSE
+    - name: Holster
+      choices: { CMUCMBDutyHolster: 1 }
+      entries:
+      - id: RMCBeltHolsterRevolver
+      - id: AU14BeltHolsterPistolBlack
     - name: Bag
       choices: { CMUCMBDutyStorageBag: 1 }
       entries:
@@ -157,11 +185,25 @@
       - id: RMCBinocularsCivPVE
       - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
+      - id: CMUTeleBatonLawEnforcement
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: AU14GunCasePistolHG45
       - id: RMCGunCasePistolM1984
+      - id: AU14GunCasePistolM44Civ
+    - name: Long Arms
+      choices: { CMUCMBLongArms: 1 }
+      entries:
+      - id: AU14KitWeaponBasira
+      - id: AU14KitWeaponABR40Civ
+      - id: AU14KitWeaponM357
+    - name: Less-Lethal Ammunition
+      entries:
+      - id: CMU14MagazinePistolMK45Rubber
+        amount: 6
+      - id: CMU14MagazinePistolM1984Rubber
+        amount: 6
     - name: Restraining Gear
       entries:
       - id: CMUPepperSpray
@@ -172,6 +214,10 @@
         amount: 10
       - id: RMCZipties
         amount: 30
+    - name: Vehicle Equipment
+      entries:
+      - id: CMUDashCamera
+        amount: 3
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
@@ -190,12 +236,16 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianCWPSMarshal, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector ]
     sections:
     - name: Rail Attachments
       entries:
       - id: CMUAttachmentNightVisionScope
         amount: 3
+      - id: AU14AttachmentTwoPointSling
+        amount: 5
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
     - name: Clothes
       takeAll: CMUCMBEssentialEquipmentClothes
       entries:
@@ -228,7 +278,11 @@
       takeAll: CMUCMBEssentialEquipmentBelt
       entries:
       - id: CMBeltSecurityMarshalFilled
-      - id: RMCBeltHolsterPistolTSE
+    - name: Holster
+      choices: { CMUCMBDutyHolster: 1 }
+      entries:
+      - id: RMCBeltHolsterRevolver
+      - id: AU14BeltHolsterPistolBlack
     - name: Bag
       choices: { CMUCMBDutyStorageBag: 1 }
       entries:
@@ -255,16 +309,22 @@
       - id: RMCBinocularsCivPVE
       - id: RMCHandcuffs
       - id: RMCRadioHandheldColonyOff
+      - id: CMUTeleBatonLawEnforcement
     - name: Duty Weapons
       choices: { CMUCMBDutyWeapons: 1 }
       entries:
       - id: AU14GunCasePistolL45
+      - id: CMUGunCaseRevolverWarwickPolice
     - name: Long Arms
       choices: { CMUCMBLongArms: 1 }
       entries:
       - id: CMUKitWeaponHG3712LEO
-      - id: CMUKitWeaponKramerEnforcerLEO
+      - id: CMUKitWeaponL90A1PoliceLEO
       - id: CMUKitWeaponMP5LEO
+    - name: Less-Lethal Ammunition
+      entries:
+      - id: CMU14MagazinePistolL54Rubber
+        amount: 6
     - name: Restraining Gear
       entries:
       - id: CMUPepperSpray
@@ -281,6 +341,12 @@
         amount: 4
       - id: ForensicScanner
         amount: 2
+      - id: ClothingHandsGlovesNitrile
+        amount: 10
+    - name: Vehicle Equipment
+      entries:
+      - id: CMUDashCamera
+        amount: 3
     - name: Inmate Clothing
       entries:
       - id: AU14CivilianPrisonJumpsuit
@@ -299,7 +365,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector, AU14JobCivilianPaPOfficer ]
+    jobs: [ AU14JobLEOLeaderBase, AU14JobLEOBase, AU14JobCivilianCMBDeputy, AU14JobCivilianCMBDetective, AU14JobCivilianCMBMarshal, AU14JobCivilianCWPSRanger, AU14JobCivilianCWPSMarshal, AU14JobCivilianNSPAConstable, AU14JobCivilianNSPAInspector, AU14JobCivilianPaPOfficer ]
     sections:
     - name: Rail Attachments
       entries:

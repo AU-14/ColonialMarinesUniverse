@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using Content.Server.CMU14.Fluids;
+using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Fluids;
 using Content.Shared.CMU14.Smelting;
 using Content.Shared.Containers.ItemSlots;
@@ -265,7 +266,7 @@ public sealed class SolidFuelPressSystem : EntitySystem
             if (_itemSlots.GetItemOrNull(press.Owner, slotId) is not { } held)
                 return true;
 
-            if (TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
+            if (HasComp<ASRSSellableComponent>(held) && TryComp<StackComponent>(held, out var stack) && stack.StackTypeId == recipe.Result &&
                 _stack.GetAvailableSpace(stack) >= recipe.ResultAmount)
             {
                 return true;
@@ -294,6 +295,7 @@ public sealed class SolidFuelPressSystem : EntitySystem
         }
 
         var made = Spawn(resultProto.Spawn, Transform(press).Coordinates);
+        EnsureComp<ASRSSellableComponent>(made);
         if (TryComp<StackComponent>(made, out var madeStack))
             _stack.SetCount((made, madeStack), recipe.ResultAmount);
 
@@ -306,11 +308,8 @@ public sealed class SolidFuelPressSystem : EntitySystem
                 continue;
             }
 
-            _stack.TryMergeStacks(made, (held, heldStack), out _);
-            if (!TerminatingOrDeleted(made))
-                Del(made);
-
-            return;
+            if (_stack.TryMergeStacks(made, (held, heldStack), out _))
+                return;
         }
 
         foreach (var slotId in SolidFuelPressComponent.OutputSlotIds)

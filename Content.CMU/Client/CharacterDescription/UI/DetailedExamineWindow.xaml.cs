@@ -29,7 +29,6 @@ public sealed partial class DetailedExamineWindow : DefaultWindow
         CharacterDescriptionRowBuilder.AddHeading(ContentContainer, state.Name);
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-age"), state.Age > 0 ? state.Age.ToString() : null, Loc.GetString("detailed-examine-age-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-height"), state.Height, Loc.GetString("detailed-examine-height-tooltip"));
-        CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-weight"), state.Weight > 0 ? Loc.GetString("detailed-examine-weight-value", ("weight", state.Weight)) : null, Loc.GetString("detailed-examine-weight-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-build"), state.Build, Loc.GetString("detailed-examine-build-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-skin-tone"), state.SkinToneName, Loc.GetString("detailed-examine-skin-tone-tooltip"));
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-hair-color"), state.HairColorName, Loc.GetString("detailed-examine-hair-color-tooltip"));

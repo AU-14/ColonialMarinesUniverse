@@ -1,4 +1,5 @@
 #pragma warning disable RA0002 // The fixture controls phase durations and inspects committed transport state.
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.CMU14.Hospital;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.CMU14.Dropship;
@@ -10,6 +11,7 @@ using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Hospital;
+using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.Round;
 using Content.Shared.Shuttles.Components;
@@ -127,6 +129,21 @@ public sealed class HospitalFtlRoundTripTest
             {
                 AssertLanded(delivery);
                 Assert.That(entities.GetComponent<TransformComponent>(patient).GridUid, Is.EqualTo(delivery));
+                Assert.That(server.System<AtmosphereSystem>().GetTileMixture(patient)?.Pressure, Is.GreaterThan(50f),
+                    "The patient must arrive on a pressurized cabin tile.");
+                var markers = entities.AllEntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent>();
+                var patientBerths = 0;
+                while (markers.MoveNext(out var berth, out var marker, out var transform))
+                {
+                    if (!marker.ThirdParty || transform.GridUid != delivery)
+                        continue;
+
+                    patientBerths++;
+                    Assert.That(server.System<AtmosphereSystem>().GetTileMixture(berth)?.Pressure, Is.GreaterThan(50f),
+                        $"Hospital berth at {transform.Coordinates} must be pressurized after landing.");
+                }
+
+                Assert.That(patientBerths, Is.Positive);
                 server.System<SharedTransformSystem>().SetCoordinates(patient, map.GridCoords);
                 entities.EventBus.RaiseLocalEvent(computer, new HospitalEmergencyReleaseShuttleMsg { Actor = actor });
                 AssertWaitingForCooldown(delivery);

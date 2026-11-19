@@ -4,6 +4,7 @@
   status: draft
   sourcePrototypes:
   - AU14TeleBaton
+  - CMUTeleBatonLawEnforcement
   referencePrototype: AU14TeleBaton
   referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/telebaton.rsi
   referenceState: telebaton_off

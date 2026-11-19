@@ -248,6 +248,7 @@ public sealed partial class SmeltingPotSystem : EntitySystem
             amount -= chunk;
 
             var ent = Spawn(spawnProto, coords);
+            EnsureComp<Content.Shared.CMU14.ColonyEconomy.ASRSSellableComponent>(ent);
             if (TryComp<StackComponent>(ent, out var stack))
                 _stack.SetCount((ent, stack), chunk);
 

@@ -1,0 +1,30 @@
+author: P-MCT
+category: CMU
+changes:
+- message: Added the CWPS Chief Ranger, who now leads the park rangers on Shepherd's
+    Pride.
+  type: Add
+- message: New Auto-9 machine pistol, with sprites, ported from CM13.
+  type: Add
+- message: Added Updated NSPA rank structure, from Probationary Constable to Commissioner.
+  type: Add
+- message: Law enforcement officers now wear bodycams that stream to the CMB monitor,
+    and dash cameras can be fitted to vehicles.
+  type: Add
+- message: CMB, NSPA and CWPS officers now carry a badge number on their ID.
+  type: Add
+- message: Rubber magazines are available in the CMB, CWPS and NSPA equipment vendors.
+  type: Add
+- message: Law enforcement equipment vendors vend out respective faction firearms.
+  type: Tweak
+- message: The CMB Marshal can now choose sidearms unlocked by playtime.
+  type: Tweak
+- message: CWPS and NSPA coats now give the same protection as the CMB deputy jacket.
+  type: Tweak
+- message: Renovated the paddywagon interior.
+  type: Tweak
+- message: The taser now fire a wired probe. Holding the trigger sends current down
+    the wire. Don't hold it down for too long!
+  type: Tweak
+time: '2026-11-18T11:35:59.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2622

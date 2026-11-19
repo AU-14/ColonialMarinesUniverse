@@ -1,5 +1,7 @@
 using Content.Server.Chat.Managers;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Administration.Logs;
+using Content.Shared.Database;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
@@ -25,6 +27,7 @@ namespace Content.Server.CMU14.Surrender;
 
 public sealed class CMUSurrenderSystem : EntitySystem
 {
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -86,6 +89,7 @@ public sealed class CMUSurrenderSystem : EntitySystem
         RemoveEffect(ent);
         _effects[ent] = SpawnAttachedTo(RaiseEffect, ent.Owner.ToCoordinates());
         _audio.PlayPvs(RaiseSound, ent.Owner);
+        _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(ent.Owner):player} surrendered.");
         AnnounceSurrender(ent);
     }
 

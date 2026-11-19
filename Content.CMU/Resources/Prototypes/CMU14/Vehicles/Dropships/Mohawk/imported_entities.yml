@@ -2114,7 +2114,7 @@
   - type: Occluder
     enabled: true
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkOmahaOmahaAftc2defca88a
   name: ramp access
   suffix: Mohawk, Omaha
@@ -2193,7 +2193,7 @@
     layers:
     - state: 1,0
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkOmahaOmahaAft12a1798b10
   name: ramp access
   suffix: Mohawk, Omaha
@@ -5771,7 +5771,7 @@
   - type: Occluder
     enabled: true
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkOmahaNavyOmahaAftc2defca88a
   name: ramp access
   suffix: Mohawk, Omaha, Navy
@@ -5850,7 +5850,7 @@
     layers:
     - state: 1,0
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkOmahaNavyOmahaAft12a1798b10
   name: ramp access
   suffix: Mohawk, Omaha, Navy
@@ -9256,7 +9256,7 @@
   - type: Occluder
     enabled: true
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkMidwayMidwayAft19d11253d9
   name: ramp access
   suffix: Mohawk, Midway
@@ -9335,7 +9335,7 @@
     layers:
     - state: 1,0
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkMidwayMidwayAft5b1b2c6551
   name: ramp access
   suffix: Mohawk, Midway
@@ -12893,7 +12893,7 @@
   - type: Occluder
     enabled: true
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkMidwayNavyMidwayAft19d11253d9
   name: ramp access
   suffix: Mohawk, Midway, Navy
@@ -12972,7 +12972,7 @@
     layers:
     - state: 1,0
 - type: entity
-  parent: CMUMohawkControl
+  parent: CMUMohawkRampControl
   id: CMUMohawkMidwayNavyMidwayAft5b1b2c6551
   name: ramp access
   suffix: Mohawk, Midway, Navy

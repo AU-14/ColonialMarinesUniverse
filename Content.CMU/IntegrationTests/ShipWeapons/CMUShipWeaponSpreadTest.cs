@@ -23,6 +23,60 @@ public sealed class CMUShipWeaponSpreadTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
+    [TestCase("CMUPrecisionStrike", "CMURoofDestroyable", true)]
+    [TestCase("CMURailcannonStrike", "CMURoofSouthDestroyable", true)]
+    [TestCase("CMURailcannonStrike", "CMURoofOuterHull8Destroyable", false)]
+    public async Task BreachingStrikesRespectRoofMaterial(string weapon, string roofId, bool breaches)
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid upper = default, network = default;
+        var roofTile = Server.ResolveDependency<ITileDefinitionManager>()[roofId].TileId;
+        var spaceTile = Server.ResolveDependency<ITileDefinitionManager>()["Space"].TileId;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var maps = SEntMan.System<SharedMapSystem>();
+                upper = maps.CreateMap(runMapInit: true);
+                var upperGrid = SEntMan.EnsureComponent<MapGridComponent>(upper);
+                var levels = SEntMan.System<CMUZLevelsSystem>();
+                var zNetwork = levels.CreateZNetwork();
+                network = zNetwork.Owner;
+                Assert.That(levels.TryAddMapsIntoZNetwork(zNetwork,
+                    new() { [map.MapUid] = 0, [upper] = 1 }), Is.True);
+
+                var areas = SEntMan.System<AreaSystem>();
+                var lowerArea = SEntMan.EnsureComponent<AreaGridComponent>(map.Grid);
+                var upperArea = SEntMan.EnsureComponent<AreaGridComponent>(upper);
+                maps.SetTile(map.Grid, Vector2i.Zero, map.Tile.Tile);
+                areas.ReplaceArea(lowerArea, Vector2i.Zero, "RMCAreaDesertDamInterior");
+                maps.SetTile(upper, upperGrid, Vector2i.Zero, new Tile(roofTile));
+                areas.ReplaceArea(upperArea, Vector2i.Zero, "RMCAreaDesertDamInterior");
+                SComp<AreaComponent>(lowerArea.AreaEntities["RMCAreaDesertDamInterior"]).OB = true;
+
+                var strike = SEntMan.SpawnAtPosition("CMUShipWeaponStrike",
+                    new EntityCoordinates(map.Grid, new Vector2(.5f)));
+                SEntMan.EnsureComponent<CMUShipWeaponStrikeComponent>(strike).Weapon = weapon;
+                SEntMan.System<CMUShipWeaponsSystem>().Update(0);
+
+                Assert.That(maps.GetTileRef(upper, upperGrid, Vector2i.Zero).Tile.TypeId, Is.EqualTo(breaches ? spaceTile : roofTile),
+                    $"{weapon} struck below {roofId}");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                foreach (var uid in new[] { upper, network })
+                {
+                    if (!SEntMan.Deleted(uid))
+                        SEntMan.DeleteEntity(uid);
+                }
+            });
+        }
+    }
+
     [TestCase("CMUSmokeStrike")]
     [TestCase("CMUGasStrike")]
     [TestCase("CMUEMSStrike")]

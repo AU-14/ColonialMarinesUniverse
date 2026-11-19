@@ -1,6 +1,11 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._RMC14.Sentry;
+using Content.Server.CMU14.Round;
+using Content.Server.Station.Systems;
+using Content.Shared.CMU14.util;
+using Content.Shared.Preferences;
+using Content.Shared.BarricadeBlock;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Interaction;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -21,6 +26,62 @@ public sealed class CMUSentryCoverTest : GameTest
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [Test]
+    public async Task CorporateShipTurretRecognizesItsOwnPlatoon()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var platoons = Server.System<PlatoonSpawnRuleSystem>();
+            var original = platoons.SelectedGovforPlatoon;
+            var spawning = Server.System<StationSpawningSystem>();
+            var targeting = Server.System<SentryTargetingSystem>();
+            var turret = SSpawnAtPosition("AU14TurretAlmayerWeYu", map.GridCoords);
+            var component = SEntMan.GetComponent<SentryTargetingComponent>(turret);
+            try
+            {
+                platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>("WEYU");
+                var contractor = spawning.SpawnPlayerMob(map.GridCoords, "AU14JobGOVFORSquadRifleman",
+                    new HumanoidCharacterProfile(), station: null);
+                Assert.That(targeting.IsValidTarget((turret, component), contractor), Is.False);
+
+                platoons.SelectedGovforPlatoon = null;
+                var marine = spawning.SpawnPlayerMob(map.GridCoords, "AU14JobGOVFORSquadRifleman",
+                    new HumanoidCharacterProfile(), station: null);
+                Assert.That(targeting.IsValidTarget((turret, component), marine), Is.True);
+            }
+            finally
+            {
+                platoons.SelectedGovforPlatoon = original;
+            }
+        });
+    }
+
+    [Test]
+    public async Task LegacyLandingZoneTurretCanTargetBeyondItsGuaranteedClearance()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = 0; x <= 5; x++)
+                maps.SetTile(map.Grid, new Vector2i(x, 0), map.Tile.Tile);
+            var origin = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
+            var turret = SEntMan.SpawnEntity("RMCTurretGaussSpaceborne", origin);
+            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", origin.Offset(new Vector2(4, 0)));
+            var transform = Server.System<SharedTransformSystem>();
+            transform.SetWorldRotation(turret, Direction.East.ToAngle());
+            transform.SetWorldRotation(cover, Direction.East.ToAngle());
+            var targeting = Server.System<SentryTargetingSystem>();
+            var barricade = SEntMan.GetComponent<BarricadeBlockComponent>(cover);
+            Assert.That(targeting.ClearsBarricade(turret, cover, barricade), Is.True);
+
+            transform.SetCoordinates(cover, origin.Offset(new Vector2(5, 0)));
+            Assert.That(targeting.ClearsBarricade(turret, cover, barricade), Is.False);
+            Assert.That(targeting.CanTargetAcrossBarricade(turret, cover), Is.True);
+        });
+    }
+
+    [Test]
     public async Task SentryShootsPastLowCoverButNotWalls()
     {
         var map = await Pair.CreateTestMap();
@@ -36,7 +97,9 @@ public sealed class CMUSentryCoverTest : GameTest
                 maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
 
             sentry = SEntMan.SpawnEntity("RMCSentry", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
-            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(1.5f, 0.5f)));
+            var cover = SEntMan.SpawnEntity("CMBarricadeMetal", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));
+            // Ordinary shots always stop here, so a hit proves the gun cleared the barricade.
+            SEntMan.GetComponent<BarricadeBlockComponent>(cover).Blocking = 100;
             var transform = Server.System<SharedTransformSystem>();
             transform.SetLocalRotation(sentry, Direction.East.ToAngle());
             transform.SetLocalRotation(cover, Direction.East.ToAngle());
@@ -56,9 +119,9 @@ public sealed class CMUSentryCoverTest : GameTest
         await Pair.RunSeconds(6);
         await Server.WaitAssertion(() =>
         {
-            Assert.That(Ammo(), Is.LessThan(initialAmmo), "Low cover must not prevent acquiring a target beyond the barricade.");
+            Assert.That(Ammo(), Is.LessThan(initialAmmo), "A sentry within four tiles of an aligned barricade must acquire targets beyond it.");
             Assert.That(Server.System<DamageableSystem>().GetTotalDamage(hostile), Is.GreaterThan(FixedPoint2.Zero),
-                "Actual projectiles must pass the aligned nearby barricade and reach the target.");
+                "Actual projectiles must pass the aligned barricade within four tiles and reach the target.");
             // The first body is also ballistic cover; keep the next phase limited to the wall under test.
             SEntMan.DeleteEntity(hostile);
             wall = SEntMan.SpawnEntity("CMWallMetal", map.GridCoords.Offset(new Vector2(3.5f, 0.5f)));

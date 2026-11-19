@@ -22,6 +22,22 @@ public sealed partial class CMUCaveSurveySystem
         public int Sent;
     }
 
+    private void OnSurveyFromColony(Entity<TacticalMapUserComponent> ent, ref CMUCaveSurveyFromColonyMessage args)
+    {
+        if (args.Actor != ent.Owner || !_ui.IsUiOpen(ent.Owner, TacticalMapUserUi.Key, args.Actor) ||
+            !HasComp<CMUCaveSurveyAccessComponent>(ent))
+            return;
+
+        if (!TryComp<CMUCaveSurveyMemoryComponent>(ent, out var memory) || memory.Worlds.Count == 0)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-survey-no-recording"), ent, ent);
+            return;
+        }
+
+        if (_ui.TryOpenUi(ent.Owner, Key, args.Actor))
+            _ui.CloseUi(ent.Owner, TacticalMapUserUi.Key, args.Actor);
+    }
+
     private void OnSurface(Entity<CMUCaveSurveyAccessComponent> ent, ref CMUCaveSurveySurfaceMessage args)
     {
         if (args.Actor != ent.Owner || !_ui.IsUiOpen(ent.Owner, Key, args.Actor) || !HasComp<TacticalMapUserComponent>(args.Actor)) return;

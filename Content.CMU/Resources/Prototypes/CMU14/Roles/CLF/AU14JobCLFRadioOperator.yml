@@ -80,8 +80,6 @@
   equipment:
     id: AU14IDCardCLFCivilian
     pocket1: ANPRCFreqCardCLF
-  inhand:
-  - AU14CLFHeadset
 
 - type: entity
   parent: CMSpawnPointJobBase

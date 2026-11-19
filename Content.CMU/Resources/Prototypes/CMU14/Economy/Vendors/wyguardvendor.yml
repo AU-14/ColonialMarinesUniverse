@@ -73,6 +73,7 @@
       takeAll: CMUCMBEssentialEquipment
       entries:
       - id: RMCBinocularsCivPVE
+      - id: RMCGlassesHUDSecurity
       - id: RMCHandcuffs
       - id: CMStunbaton
       - id: RMCWeaponTaser

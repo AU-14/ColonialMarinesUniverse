@@ -3,6 +3,7 @@
 
 - type: loadout
   id: PlatCOSidearmMatebaCustomAU14
+  dummyEntity: RMCWeaponRevolverMatebaNoStun # show the gun, not the holster rig
   cost: 0
   effects:
     - !type:JobRequirementLoadoutEffect
@@ -15,6 +16,7 @@
 
 - type: loadout
   id: PlatCOSidearmMatebaSpecialAU14
+  dummyEntity: RMCWeaponRevolverMatebaSpecialNoStun
   cost: 0
   effects:
     - !type:JobRequirementLoadoutEffect
@@ -27,12 +29,14 @@
 
 - type: loadout
   id: PlatCOSidearmM48A5AU14
+  dummyEntity: AU14WeaponPistolM48A5CO
   cost: 0
   equipment:
     belt:  AU14BeltPostelPistolM48A5NoSuper
 
 - type: loadout
   id: CMUPlatCOHandcannonBelt
+  dummyEntity: RMCWeaponPistolHandcannon
   cost: 0
   effects:
   - !type:JobRequirementLoadoutEffect
@@ -45,6 +49,7 @@
 
 - type: loadout
   id: CMUPlatCOWinterWyvernBelt
+  dummyEntity: RMCWeaponPistolHandcannonWinterWyvern
   cost: 0
   effects:
   - !type:JobRequirementLoadoutEffect
@@ -57,6 +62,7 @@
 
 - type: loadout
   id: CMUPlatCOGoldHandcannonBelt
+  dummyEntity: RMCWeaponPistolHandcannonGold
   cost: 0
   effects:
   - !type:JobRequirementLoadoutEffect

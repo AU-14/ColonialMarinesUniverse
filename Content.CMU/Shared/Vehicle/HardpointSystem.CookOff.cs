@@ -35,6 +35,13 @@ public sealed partial class HardpointSystem
 
     private bool CanRepairCookOff(EntityUid target, EntityUid user)
     {
+        if (!IsVehicleFrame(target) && TryComp<HardpointIntegrityComponent>(target, out var module) &&
+            module.Integrity <= 0f)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-hardpoint-broken"), target, user, PopupType.SmallCaution);
+            return false;
+        }
+
         if (!IsWrecked(target))
             return true;
 
