@@ -1,5 +1,6 @@
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Dropship.AttachmentPoint;
 
