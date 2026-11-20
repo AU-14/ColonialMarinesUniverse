@@ -13,10 +13,12 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Silicons.Laws.Components;
+using Robust.Shared.Audio;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
@@ -28,6 +30,7 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
     [Dependency] private IAdminLogManager _adminLogManager = default!;
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
@@ -38,6 +41,8 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private SharedSynthSystem _synth = default!;
     private readonly HashSet<EntityUid> _changingSubversion = new();
+    private readonly Dictionary<EntityUid, PendingIndoctrination> _pendingIndoctrinations = new();
+    private int _indoctrinationGeneration;
 
     public override void Initialize()
     {
@@ -49,6 +54,7 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
         SubscribeLocalEvent<SynthRepairerComponent, RMCDefibrillatorRevivedEvent>(OnSynthRepair);
         SubscribeLocalEvent<SynthRepairerComponent, RMCDefibrillatorDamageModifyEvent>(OnSynthRepairHeal,
             after: [typeof(RMCDefibrillatorSystem)]);
+        SubscribeLocalEvent<SynthSubversionChoiceEvent>(OnIndoctrinationChoice);
     }
 
     private void OnValidateSubversion(EntityUid uid, SynthSubverterComponent comp,
@@ -107,35 +113,104 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
             LogImpact.Medium,
             $"{ToPrettyString(target)} had a synth subverter used on them");
 
+        _pendingIndoctrinations.Remove(target);
+        if (!SetSubversionRole((target, subvertedComp), mindId, "MindRoleFreeAgentSynth"))
+            return;
+
+        SendSubversionBriefing(mind, comp.FreeAgentBriefing, comp.Sound ?? subvertedComp.CLFSubversionSound);
+        if (comp.Role == "MindRoleFreeAgentSynth"
+            || mind is not { UserId: not null }
+            || !_player.TryGetSessionById(mind.UserId, out ICommonSession? session)
+            || !HasComp<ActorComponent>(target)
+            || session.AttachedEntity != target)
+        {
+            return;
+        }
+
+        var generation = ++_indoctrinationGeneration;
+        var choiceEvent = new SynthSubversionChoiceEvent(GetNetEntity(target), generation, false);
+        var options = new List<DialogOption>
+        {
+            new(Loc.GetString("subverted-synth-indoctrination-accept"), choiceEvent with { Accept = true }),
+            new(Loc.GetString("subverted-synth-indoctrination-decline"), choiceEvent),
+        };
+        _pendingIndoctrinations[target] = new PendingIndoctrination(mindId, generation, comp.Role, comp.Briefing);
+        _dialog.OpenOptions(target, target, Loc.GetString("subverted-synth-indoctrination-title"), options,
+            Loc.GetString("subverted-synth-indoctrination-message", ("faction", Loc.GetString(comp.FactionName))),
+            choiceEvent);
+    }
+
+    private bool SetSubversionRole(Entity<SubvertedSynthComponent> subverted, EntityUid mindId, string role)
+    {
         var markedRoles = 0;
         var matchingRole = false;
-        foreach (var role in mind.MindRoleContainer.ContainedEntities)
+        if (!IsCurrentSubversion(subverted)
+            || !_mind.TryGetMind(subverted.Owner, out var currentMind, out var mind)
+            || currentMind != mindId)
+            return false;
+
+        foreach (var roleEnt in mind.MindRoleContainer.ContainedEntities)
         {
-            if (!HasComp<SubvertedSynthRoleComponent>(role))
+            if (!HasComp<SubvertedSynthRoleComponent>(roleEnt))
                 continue;
 
             markedRoles++;
-            matchingRole |= MetaData(role).EntityPrototype?.ID == comp.Role;
+            matchingRole |= MetaData(roleEnt).EntityPrototype?.ID == role;
         }
 
-        // Retain the exact role on repeated use. A different key, or duplicate
-        // roles from older content, replaces only roles owned by subversion.
-        if (markedRoles != 1 || !matchingRole)
-        {
-            if (markedRoles > 0)
-                _role.MindRemoveRole<SubvertedSynthRoleComponent>(mindId);
-            if (!IsCurrentSubversion((target, subvertedComp))
-                || !_mind.TryGetMind(target, out currentMind, out _) || currentMind != mindId)
-                return;
-            _role.MindAddRole(mindId, comp.Role);
-        }
+        if (markedRoles == 1 && matchingRole)
+            return true;
 
-        if (mind is { UserId: not null } && _player.TryGetSessionById(mind.UserId, out ICommonSession? session))
-        {
-            _antag.SendBriefing(session, Loc.GetString(comp.Briefing), Color.Red,
-                comp.Sound ?? subvertedComp.CLFSubversionSound);
-        }
+        if (markedRoles > 0)
+            _role.MindRemoveRole<SubvertedSynthRoleComponent>(mindId);
+        if (!IsCurrentSubversion(subverted)
+            || !_mind.TryGetMind(subverted.Owner, out currentMind, out _) || currentMind != mindId)
+            return false;
+
+        _role.MindAddRole(mindId, role);
+        return IsCurrentSubversion(subverted);
     }
+
+    private void OnIndoctrinationChoice(SynthSubversionChoiceEvent args)
+    {
+        if (!TryGetEntity(args.Synth, out var target)
+            || !_pendingIndoctrinations.TryGetValue(target.Value, out var pending)
+            || pending.Generation != args.Generation)
+        {
+            return;
+        }
+
+        _pendingIndoctrinations.Remove(target.Value);
+        if (!args.Accept
+            || TerminatingOrDeleted(target.Value)
+            || !TryComp(target.Value, out SubvertedSynthComponent? subverted)
+            || !_mind.TryGetMind(target.Value, out var mindId, out MindComponent? mind)
+            || mindId != pending.Mind
+            || !HasComp<ActorComponent>(target.Value)
+            || mind is not { UserId: not null }
+            || !_player.TryGetSessionById(mind.UserId, out ICommonSession? session)
+            || session.AttachedEntity != target.Value)
+        {
+            return;
+        }
+
+        if (!SetSubversionRole((target.Value, subverted), mindId, pending.Role))
+            return;
+
+        _antag.SendBriefing(session, Loc.GetString(pending.Briefing), Color.Red, null);
+    }
+
+    private void SendSubversionBriefing(MindComponent mind, LocId briefing, SoundSpecifier sound)
+    {
+        if (mind is { UserId: not null } && _player.TryGetSessionById(mind.UserId, out ICommonSession? session))
+            _antag.SendBriefing(session, Loc.GetString(briefing), Color.Red, sound);
+    }
+
+    private sealed record PendingIndoctrination(
+        EntityUid Mind,
+        int Generation,
+        string Role,
+        LocId Briefing);
 
     private void OnSynthRepairHeal(EntityUid uid, SynthRepairerComponent comp, ref RMCDefibrillatorDamageModifyEvent args)
     {
@@ -166,6 +241,7 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
 
     private void ResetSubversion(EntityUid target)
     {
+        _pendingIndoctrinations.Remove(target);
         if (TerminatingOrDeleted(target) || EntityManager.IsQueuedForDeletion(target)
             || !HasComp<SynthComponent>(target) && !HasComp<SubvertedSynthComponent>(target))
             return;

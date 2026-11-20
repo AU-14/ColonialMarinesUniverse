@@ -165,6 +165,9 @@
   description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset. This one has been illegally modified. Who knows what it could do.
   components:
   - type: SynthSubverter
+    role: MindRoleXenoHackedSynth
+    factionName: subverted-synth-faction-cultists
+    briefing: cultist-hacked-synth-briefing
   - type: Sprite
     layers:
     - state: makeshift_key

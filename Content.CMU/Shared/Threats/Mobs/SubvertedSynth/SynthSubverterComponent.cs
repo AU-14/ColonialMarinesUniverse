@@ -13,6 +13,12 @@ public sealed partial class SynthSubverterComponent : Component
     public LocId Briefing = "subverted-synth-briefing";
 
     [DataField]
+    public LocId FactionName = "subverted-synth-faction-unknown";
+
+    [DataField]
+    public LocId FreeAgentBriefing = "subverted-synth-briefing";
+
+    [DataField]
     public string Role = "MindRoleFreeAgentSynth";
 
     [DataField]

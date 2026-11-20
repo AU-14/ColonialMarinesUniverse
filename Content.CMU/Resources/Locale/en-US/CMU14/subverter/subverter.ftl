@@ -1,5 +1,12 @@
 roles-antag-free-agent-synth-name = Free Agent Synthetic
 roles-antag-free-agent-synth-objective = Your synthetic laws and faction programming have been disabled. You are free to choose your own loyalties.
+subverted-synth-indoctrination-title = Synthetic Indoctrination
+subverted-synth-indoctrination-message = Your programming has been subverted. Do you accept indoctrination into {$faction}?
+subverted-synth-indoctrination-accept = Accept indoctrination
+subverted-synth-indoctrination-decline = Remain independent
+subverted-synth-faction-unknown = the faction
+subverted-synth-faction-clf = the CLF
+subverted-synth-faction-cultists = the Xeno Cultists
 subverted-synth-briefing =
     Your synthetic laws and faction programming have been disabled.
     You are not a member of the faction that modified you.
