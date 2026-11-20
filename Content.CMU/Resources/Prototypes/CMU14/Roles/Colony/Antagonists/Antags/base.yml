@@ -8,3 +8,21 @@
   antagonist: true
   category: roles-antag-category-colony
   isCM: true
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleFreeAgentSynth
+  name: Free Agent Synth Role
+  components:
+  - type: SubvertedSynthRole
+  - type: MindRole
+    antagPrototype: FreeAgentSynthRole
+    exclusiveAntag: true
+    roleType: TeamAntagonist
+    subtype: cmu-role-subtype-free-agent-synth
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: FreeAgentSynthRole
+  name: roles-antag-free-agent-synth-name
+  objective: roles-antag-free-agent-synth-objective

@@ -3,13 +3,16 @@ using Content.Server.Mind;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.CMU14.Medical.Anatomy.Organs;
 using Content.Shared.CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared.CMU14.Medical.Core;
-using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.CMU14.Threats.Mobs.Cultist;
 using Content.Shared.CMU14.Threats.Mobs.SubvertedSynth;
 using Content.Shared.FixedPoint;
+using Content.Shared.Containers;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Medical;
 using Content.Shared.Mind;
@@ -19,6 +22,8 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Radio.Components;
 using Content.Shared.Roles.Components;
+using Content.Shared.Silicons.Laws.Components;
+using Content.Shared.Storage;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -31,15 +36,14 @@ public sealed class CardiacSynthRoleResourceTest
     private const string ClfKey = "CMUCLFSynthSubversionKey";
     private const string CultistKey = "AU14SynthSubversionKeyCultist";
     private const string ResetKey = "RMCSynthResetKeySMART";
-    private const string ClfRole = "MindRoleCLFSubvertedSynth";
-    private const string CultistRole = "MindRoleXenoHackedSynth";
+    private const string FreeAgentRole = "MindRoleFreeAgentSynth";
     private const string NativeRole = "MindRoleCultist";
     private const string ClfFaction = "CLF";
     private const string XenoFaction = "Xeno";
     private const string WeyuFaction = "AUWeYu";
 
     [Test]
-    public async Task RepeatedCultistKeysThenResetRestoreWorkingJoesOriginalRadios()
+    public async Task CultistKeysLeaveSynthsFactionNeutralAndPreserveOriginalRadios()
     {
         await using var pair = await PoolManager.GetServerClient();
         var map = await pair.CreateTestMap();
@@ -62,7 +66,11 @@ public sealed class CardiacSynthRoleResourceTest
                 Assert.That(entities.HasComponent<IntrinsicRadioReceiverComponent>(patient), Is.True);
                 first = UseKey(entities, coordinates, patient, user, CultistKey);
                 Assert.That(entities.GetComponent<IntrinsicRadioTransmitterComponent>(patient).Channels
-                    .Select(channel => channel.Id), Is.EquivalentTo(new[] { "Hivemind" }));
+                    .Select(channel => channel.Id), Is.EquivalentTo(transmit));
+                Assert.That(entities.HasComponent<CultistComponent>(patient), Is.False);
+                Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, XenoFaction), Is.False);
+                Assert.That(entities.HasComponent<CLFMemberComponent>(patient), Is.False);
+                Assert.That(Roles(entities, mind, FreeAgentRole), Has.Length.EqualTo(1));
             });
             await pair.RunTicksSync(2);
             await pair.Server.WaitAssertion(() =>
@@ -70,7 +78,8 @@ public sealed class CardiacSynthRoleResourceTest
                 var coordinates = entities.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
                 second = UseKey(entities, coordinates, patient, user, CultistKey);
                 Assert.That(entities.GetComponent<ActiveRadioComponent>(patient).Channels
-                    .Select(channel => channel.Id), Is.EquivalentTo(new[] { "Hivemind" }));
+                    .Select(channel => channel.Id), Is.EquivalentTo(receive));
+                Assert.That(Roles(entities, mind, FreeAgentRole), Has.Length.EqualTo(1));
             });
             await pair.RunTicksSync(2);
             await pair.Server.WaitAssertion(() =>
@@ -106,6 +115,50 @@ public sealed class CardiacSynthRoleResourceTest
     }
 
     [Test]
+    public async Task ClfCanTattooAFreeAgentSynthIntoTheFaction()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        var entities = pair.Server.EntMan;
+        EntityUid patient = default, user = default, mind = default, key = default, tattooGun = default, ink = default;
+        try
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+                var coordinates = entities.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
+                (patient, user, mind) = CreatePatient(entities, coordinates);
+                key = UseKey(entities, coordinates, patient, user, ClfKey);
+
+                entities.EnsureComponent<CLFMemberComponent>(user);
+                tattooGun = entities.SpawnEntity("AU14TattooGun", coordinates);
+                entities.GetComponent<TattooGunComponent>(tattooGun).DoAfterDuration = 0;
+                ink = entities.SpawnEntity("AU14TattooInkCartridge", coordinates);
+                var storage = entities.GetComponent<StorageComponent>(tattooGun);
+                Assert.That(entities.System<SharedContainerSystem>().Insert(ink, storage.Container, force: true), Is.True);
+                Assert.That(entities.System<SharedHandsSystem>().TryPickup(user, tattooGun), Is.True);
+
+                entities.EventBus.RaiseLocalEvent(tattooGun,
+                    new AfterInteractEvent(user, tattooGun, patient, map.GridCoords, true));
+                Assert.That(entities.HasComponent<TattooPendingComponent>(patient), Is.True);
+                entities.EventBus.RaiseLocalEvent(patient, new TattooAcceptEvent());
+            });
+
+            await pair.RunTicksSync(3);
+            await pair.Server.WaitAssertion(() =>
+            {
+                Assert.That(entities.HasComponent<CLFMemberComponent>(patient), Is.True);
+                Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, ClfFaction), Is.True);
+                Assert.That(Roles(entities, mind, "MindRoleCLFRecruit"), Has.Length.EqualTo(1));
+            });
+        }
+        finally
+        {
+            await pair.Server.WaitPost(() => Delete(entities, patient, user, mind, key, tattooGun, ink));
+        }
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task CrossKeyAndResetPreserveIndependentClfFactionAndExactMedicIcon()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -131,7 +184,7 @@ public sealed class CardiacSynthRoleResourceTest
                 var coordinates = entities.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
                 second = UseKey(entities, coordinates, patient, user, CultistKey);
                 Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, ClfFaction), Is.True);
-                Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, XenoFaction), Is.True);
+                Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, XenoFaction), Is.False);
                 Assert.That(entities.GetComponent<CLFMemberComponent>(patient), Is.SameAs(member));
                 Assert.That(member.StatusIcon.Id, Is.EqualTo("CLFFactionMedic"));
             });
@@ -240,7 +293,7 @@ public sealed class CardiacSynthRoleResourceTest
                 entities.System<RoleSystem>().MindAddRole(mind, NativeRole);
                 independentRole = Roles(entities, mind, NativeRole).Single();
                 first = UseKey(entities, coordinates, patient, user, cultistFirst ? CultistKey : ClfKey);
-                AssertSubverted(entities, patient, mind, cultistFirst);
+                AssertSubverted(entities, patient, mind);
                 firstRole = MarkedRoles(entities, mind).Single();
             });
             await pair.RunTicksSync(2);
@@ -248,16 +301,16 @@ public sealed class CardiacSynthRoleResourceTest
             {
                 var coordinates = entities.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
                 second = UseKey(entities, coordinates, patient, user, secondCultist ? CultistKey : ClfKey);
-                AssertSubverted(entities, patient, mind, secondCultist);
+                AssertSubverted(entities, patient, mind);
                 var secondRole = MarkedRoles(entities, mind).Single();
-                Assert.That(secondRole, changeKey ? Is.Not.EqualTo(firstRole) : Is.EqualTo(firstRole),
-                    "Repeated use retains the role entity; a different configured key replaces its owned role.");
+                Assert.That(secondRole, Is.EqualTo(firstRole),
+                    "All faction-modified keys retain the same faction-neutral role.");
                 Assert.That(Roles(entities, mind, NativeRole).Single(), Is.EqualTo(independentRole));
             });
             await pair.RunTicksSync(2);
             await pair.Server.WaitAssertion(() =>
             {
-                AssertSubverted(entities, patient, mind, secondCultist);
+                AssertSubverted(entities, patient, mind);
                 var coordinates = entities.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
                 reset = UseKey(entities, coordinates, patient, user, ResetKey);
                 Assert.That(entities.GetComponent<MobStateComponent>(patient).CurrentState, Is.EqualTo(MobState.Alive));
@@ -319,6 +372,56 @@ public sealed class CardiacSynthRoleResourceTest
         await pair.CleanReturnAsync();
     }
 
+    [TestCase(ClfKey)]
+    [TestCase(CultistKey)]
+    public async Task SubversionDisablesSiliconLawsAndResetRestoresThem(string subversionKey)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        var entities = pair.Server.EntMan;
+        EntityUid patient = default, user = default, mind = default, key = default, reset = default;
+        try
+        {
+            await pair.Server.WaitAssertion(() =>
+            {
+                var coordinates = entities.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
+                (patient, user, mind) = CreatePatient(entities, coordinates);
+                var factory = entities.ComponentFactory;
+                var bound = (SiliconLawBoundComponent) factory.GetComponent(factory.GetRegistration("SiliconLawBound"));
+                var provider = (SiliconLawProviderComponent) factory.GetComponent(factory.GetRegistration("SiliconLawProvider"));
+                provider.Laws = "Crewsimov";
+                entities.AddComponent(patient, bound);
+                entities.AddComponent(patient, provider);
+
+                key = UseKey(entities, coordinates, patient, user, subversionKey);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entities.HasComponent<SiliconLawBoundComponent>(patient), Is.False);
+                    Assert.That(entities.HasComponent<SiliconLawProviderComponent>(patient), Is.False);
+                });
+            });
+
+            await pair.RunTicksSync(2);
+            await pair.Server.WaitAssertion(() =>
+            {
+                var coordinates = entities.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
+                reset = UseKey(entities, coordinates, patient, user, ResetKey);
+            });
+            await pair.RunTicksSync(2);
+            await pair.Server.WaitAssertion(() =>
+            {
+                Assert.That(entities.HasComponent<SiliconLawBoundComponent>(patient), Is.True);
+                Assert.That(entities.HasComponent<SiliconLawProviderComponent>(patient), Is.True);
+                Assert.That(entities.GetComponent<SiliconLawProviderComponent>(patient).Laws.Id, Is.EqualTo("Crewsimov"));
+            });
+        }
+        finally
+        {
+            await pair.Server.WaitPost(() => Delete(entities, patient, user, key, reset, mind));
+        }
+        await pair.CleanReturnAsync();
+    }
+
     private static (EntityUid Patient, EntityUid User, EntityUid Mind) CreatePatient(
         IEntityManager entities, MapCoordinates coordinates, string prototype = "CMMobHuman")
     {
@@ -364,19 +467,18 @@ public sealed class CardiacSynthRoleResourceTest
         defibrillator.Zap(key, patient, user);
     }
 
-    private static void AssertSubverted(IEntityManager entities, EntityUid patient, EntityUid mind, bool cultist)
+    private static void AssertSubverted(IEntityManager entities, EntityUid patient, EntityUid mind)
     {
         Assert.Multiple(() =>
         {
             Assert.That(entities.GetComponent<MobStateComponent>(patient).CurrentState, Is.EqualTo(MobState.Alive));
-            Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, ClfFaction), Is.EqualTo(!cultist));
-            Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, XenoFaction), Is.EqualTo(cultist));
-            Assert.That(entities.GetComponent<SubvertedSynthComponent>(patient).Faction.Id,
-                Is.EqualTo(cultist ? "Xeno" : "CLF"));
-            Assert.That(entities.HasComponent<CLFMemberComponent>(patient), Is.EqualTo(!cultist));
-            Assert.That(entities.HasComponent<CultistComponent>(patient), Is.EqualTo(cultist));
+            Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, ClfFaction), Is.False);
+            Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, XenoFaction), Is.False);
+            Assert.That(entities.HasComponent<CLFMemberComponent>(patient), Is.False);
+            Assert.That(entities.HasComponent<CultistComponent>(patient), Is.False);
+            Assert.That(entities.GetComponent<SynthComponent>(patient).CanUseGuns, Is.True);
             Assert.That(MarkedRoles(entities, mind), Has.Length.EqualTo(1));
-            Assert.That(Roles(entities, mind, cultist ? CultistRole : ClfRole), Has.Length.EqualTo(1));
+            Assert.That(Roles(entities, mind, FreeAgentRole), Has.Length.EqualTo(1));
         });
     }
 

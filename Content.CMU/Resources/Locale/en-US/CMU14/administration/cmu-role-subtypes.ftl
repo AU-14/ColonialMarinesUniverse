@@ -26,3 +26,4 @@ cmu-role-subtype-vigilante = {cmu-antag-vigilante-name}
 cmu-role-subtype-threat = {au14-threat-ghost-role-name}
 cmu-role-subtype-wendigo-lab = Lab Wendigo
 cmu-role-subtype-cultist = {roles-antag-cultist-name}
+cmu-role-subtype-free-agent-synth = {roles-antag-free-agent-synth-name}

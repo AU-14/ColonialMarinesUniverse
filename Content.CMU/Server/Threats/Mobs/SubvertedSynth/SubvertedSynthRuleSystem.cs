@@ -5,7 +5,6 @@ using Content.Server.Mind;
 using Content.Server.Popups;
 using Content.Server.Roles;
 using Content.Shared.CMU14.SynthRepairer;
-using Content.Shared.CMU14.Threats.Mobs.CLF;
 using Content.Shared.CMU14.Threats.Mobs.SubvertedSynth;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Synth;
@@ -17,9 +16,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
-using Content.Shared.NPC.Components;
-using Content.Shared.NPC.Prototypes;
-using Content.Shared.NPC.Systems;
+using Content.Shared.Silicons.Laws.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager;
@@ -34,14 +31,12 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
-    [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private ISerializationManager _serialization = default!;
     [Dependency] private RoleSystem _role = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private SharedSynthSystem _synth = default!;
-    public readonly ProtoId<NpcFactionPrototype> CLFNPCFaction = "CLF";
     private readonly HashSet<EntityUid> _changingSubversion = new();
 
     public override void Initialize()
@@ -100,28 +95,17 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
         if (!RestoreSubversionOverlay((target, subvertedComp)))
             return;
 
-        var alreadyMember = _npcFaction.IsMember(target, comp.Faction);
-        _npcFaction.AddFaction(target, comp.Faction);
-        if (!IsCurrentSubversion((target, subvertedComp)))
-            return;
-        subvertedComp.Faction = comp.Faction;
-        subvertedComp.AddedFactionTo = alreadyMember ? null : Comp<NpcFactionMemberComponent>(target);
         subvertedComp.AdditionalComponents = comp.AdditionalComponents;
-        if (!ApplySubversionOverlay((target, subvertedComp), comp.AdditionalComponents))
+        if (!ApplySubversionOverlay((target, subvertedComp), comp.AdditionalComponents)
+            || !RemoveSubversionLaws((target, subvertedComp)))
             return;
-        if (comp.Faction == CLFNPCFaction && !HasComp<CLFMemberComponent>(target))
-        {
-            var member = new CLFMemberComponent();
-            subvertedComp.AddedClfMember = member;
-            AddComp(target, member);
-        }
         if (!IsCurrentSubversion((target, subvertedComp))
             || !_mind.TryGetMind(target, out var currentMind, out _) || currentMind != mindId)
             return;
 
         _adminLogManager.Add(LogType.Mind,
             LogImpact.Medium,
-            $"{ToPrettyString(target)} had a {comp.Faction} synth subverter used on them");
+            $"{ToPrettyString(target)} had a synth subverter used on them");
 
         var markedRoles = 0;
         var matchingRole = false;
@@ -167,7 +151,7 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
     private void OnSynthRepair(EntityUid uid, SynthRepairerComponent comp, ref RMCDefibrillatorRevivedEvent args)
     {
         // Subversion keys inherit the normal reset-key component. They must never
-        // run repair cleanup on the faction/components just added by subversion.
+        // run repair cleanup on the components and role just applied by subversion.
         if (HasComp<SynthSubverterComponent>(uid) || !_changingSubversion.Add(args.Target))
             return;
         try
@@ -239,6 +223,30 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
         return IsCurrentSubversion(ent);
     }
 
+    private bool RemoveSubversionLaws(Entity<SubvertedSynthComponent> ent)
+        => RemoveSubversionComponent<SiliconLawBoundComponent>(ent)
+           && RemoveSubversionComponent<SiliconLawProviderComponent>(ent);
+
+    private bool RemoveSubversionComponent<T>(Entity<SubvertedSynthComponent> ent) where T : Component
+    {
+        if (!IsCurrentSubversion(ent))
+            return false;
+
+        if (!TryComp(ent.Owner, out T? existing))
+            return true;
+
+        var previous = ent.Comp.ComponentOverlays.ContainsKey(typeof(T))
+            ? null
+            : (Component) _serialization.CreateCopy(existing, notNullableOverride: true);
+        RemComp(ent.Owner, existing);
+        if (!IsCurrentSubversion(ent))
+            return false;
+
+        if (previous != null)
+            ent.Comp.RemovedComponents.Add(previous);
+        return true;
+    }
+
     private bool RestoreSubversionOverlay(Entity<SubvertedSynthComponent> ent)
     {
         if (!IsCurrentSubversion(ent))
@@ -247,35 +255,38 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
         // Detach the ownership record before component lifecycle callbacks run.
         var overlays = ent.Comp.ComponentOverlays;
         ent.Comp.ComponentOverlays = new();
-        var faction = ent.Comp.AddedFactionTo;
-        ent.Comp.AddedFactionTo = null;
-        var member = ent.Comp.AddedClfMember;
-        ent.Comp.AddedClfMember = null;
+        var removedComponents = ent.Comp.RemovedComponents;
+        ent.Comp.RemovedComponents = new();
         foreach (var (type, overlay) in overlays)
         {
             if (!IsCurrentSubversion(ent))
                 return false;
-            if (!TryComp(ent.Owner, type, out var current)
-                || !ReferenceEquals(current, overlay.Applied))
-                continue;
+            if (TryComp(ent.Owner, type, out var current) && current != null)
+            {
+                if (!ReferenceEquals(current, overlay.Applied))
+                    continue;
 
-            RemComp(ent.Owner, current);
-            if (!IsCurrentSubversion(ent))
-                return false;
+                RemComp(ent.Owner, current);
+                if (!IsCurrentSubversion(ent))
+                    return false;
+            }
+            else if (HasComp(ent.Owner, type))
+            {
+                continue;
+            }
             if (overlay.Previous != null && !HasComp(ent.Owner, type))
                 AddComp(ent.Owner, overlay.Previous);
         }
 
         if (!IsCurrentSubversion(ent))
             return false;
-        if (faction != null && TryComp<NpcFactionMemberComponent>(ent.Owner, out var currentFaction)
-            && ReferenceEquals(faction, currentFaction))
-            _npcFaction.RemoveFaction(ent.Owner, ent.Comp.Faction);
-        if (!IsCurrentSubversion(ent))
-            return false;
-        if (member != null && TryComp<CLFMemberComponent>(ent.Owner, out var currentMember)
-            && ReferenceEquals(member, currentMember))
-            RemComp(ent.Owner, member);
+        foreach (var removed in removedComponents)
+        {
+            if (!IsCurrentSubversion(ent))
+                return false;
+            if (!HasComp(ent.Owner, removed.GetType()))
+                AddComp(ent.Owner, removed);
+        }
         return IsCurrentSubversion(ent);
     }
 

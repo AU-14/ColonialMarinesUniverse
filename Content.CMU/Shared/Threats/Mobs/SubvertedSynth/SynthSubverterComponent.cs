@@ -1,4 +1,3 @@
-using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 
@@ -11,13 +10,10 @@ public sealed partial class SynthSubverterComponent : Component
     public ComponentRegistry AdditionalComponents = new();
 
     [DataField]
-    public LocId Briefing = "clf-subverted-synth-briefing";
+    public LocId Briefing = "subverted-synth-briefing";
 
     [DataField]
-    public ProtoId<NpcFactionPrototype> Faction = "CLF";
-
-    [DataField]
-    public string Role = "MindRoleCLFSubvertedSynth";
+    public string Role = "MindRoleFreeAgentSynth";
 
     [DataField]
     public SoundSpecifier? Sound;

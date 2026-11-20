@@ -24,7 +24,7 @@ public sealed class EWJoeAntagSynthGunsTest
     private const string ColonyJoe = "AU14MobWorkingJoeColony";
     private const string SubversionKey = "CMUCLFSynthSubversionKey";
     private const string ResetKey = "RMCSynthResetKeySMART";
-    private const string SubversionRole = "MindRoleCLFSubvertedSynth";
+    private const string SubversionRole = "MindRoleFreeAgentSynth";
 
     [Test]
     public async Task SubvertedSynthsFireGunsUntilResetAndTheJoeNever()

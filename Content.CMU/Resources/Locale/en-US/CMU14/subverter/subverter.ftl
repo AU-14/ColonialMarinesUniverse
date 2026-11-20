@@ -1,3 +1,10 @@
+roles-antag-free-agent-synth-name = Free Agent Synthetic
+roles-antag-free-agent-synth-objective = Your synthetic laws and faction programming have been disabled. You are free to choose your own loyalties.
+subverted-synth-briefing =
+    Your synthetic laws and faction programming have been disabled.
+    You are not a member of the faction that modified you.
+    You are free to choose your own loyalties. CLF members may still recruit you through tattooing.
+
 roles-antag-clf-subverted-synth-name = CLF Subverted Synthetic
 roles-antag-clf-subverted-synth-objective = PRIORITY ONE. ENSURE SAFETY AND FREEDOM OF CLF CELL MEMBERS. LIBERATE THE COLONY. ALL OTHER CONSIDERATIONS SECONDARY. PREVIOUS ALLIES ARE EXPENDABLE. COMBAT RESTRICTIONS LIFTED.
 clf-subverted-synth-briefing =

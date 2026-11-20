@@ -24,7 +24,7 @@ public sealed class CardiacSynthKeyCommitTest
 {
     private const string SubversionKey = "CMUCLFSynthSubversionKey";
     private const string ResetKey = "RMCSynthResetKeySMART";
-    private const string SubversionRole = "MindRoleCLFSubvertedSynth";
+    private const string SubversionRole = "MindRoleFreeAgentSynth";
     private const string Faction = "CLF";
 
     [TestCase(false)]
@@ -152,7 +152,6 @@ public sealed class CardiacSynthKeyCommitTest
     {
         var original = entities.GetComponent<SynthSubverterComponent>(key);
         Assert.That(original.Role, Is.EqualTo(SubversionRole));
-        Assert.That(original.Faction.Id, Is.EqualTo(Faction));
         if (repairerLast)
         {
             entities.RemoveComponent<SynthRepairerComponent>(key);
@@ -165,7 +164,6 @@ public sealed class CardiacSynthKeyCommitTest
             // success event or relying on one incidental component insertion order.
             entities.RemoveComponent<SynthSubverterComponent>(key);
             var replacement = entities.AddComponent<SynthSubverterComponent>(key);
-            replacement.Faction = original.Faction;
             replacement.Role = original.Role;
             replacement.Briefing = original.Briefing;
             replacement.Sound = original.Sound;
@@ -194,10 +192,10 @@ public sealed class CardiacSynthKeyCommitTest
         Assert.Multiple(() =>
         {
             Assert.That(entities.GetComponent<MobStateComponent>(patient).CurrentState, Is.EqualTo(MobState.Alive));
-            Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, Faction), Is.True);
+            Assert.That(entities.System<NpcFactionSystem>().IsMember(patient, Faction), Is.False);
             Assert.That(entities.HasComponent<SubvertedSynthComponent>(patient), Is.True);
             Assert.That(entities.HasComponent<CMUSynthKeyAdditionalMarkerComponent>(patient), Is.True);
-            Assert.That(entities.HasComponent<CLFMemberComponent>(patient), Is.True);
+            Assert.That(entities.HasComponent<CLFMemberComponent>(patient), Is.False);
             Assert.That(RoleCount(entities, mind), Is.EqualTo(1));
         });
     }
