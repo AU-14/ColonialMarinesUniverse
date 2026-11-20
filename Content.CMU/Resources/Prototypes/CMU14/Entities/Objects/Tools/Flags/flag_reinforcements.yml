@@ -1,0 +1,195 @@
+# The third parties and intel reinforcements each nation's flags rally on top of that nation's platoon. A flag with
+# one of these lists never rallies any other third party, so a UPP flag won't buff UA reinforcements and a UA flag
+# won't buff UPP ones. Set on a flag with CMUFlagAllegiance's reinforcements.
+
+# UA: the colonial guard, Dutch's Dozen, FORECON, the LACN, CCAF, US Army, USASF, CMB, FEMA, USCM, CWPS and every
+# other UA third party.
+- type: cmuFlagReinforcements
+  id: CMUFlagReinforcementsUA
+  thirdParties:
+  # Colonial guard, including the lost riflemen
+  - CMUUACGPatrol
+  - CMUUACGPlatoon
+  - UACGLostTeam
+  # Dutch's Dozen
+  - CMUDutchsDozen
+  - CMUDutchsDozenFull
+  # FORECON
+  - AU14IntelThirdPartyMarksmanGOVFOR
+  - AU14IntelThirdPartySniperGOVFOR
+  - FORECONFirstRecon
+  - FORECONKillTeam
+  - FORECON
+  - FORECONAlt
+  - FORECONAlt2
+  # LACN, including the MASH team
+  - CMULACNCommandoTeam
+  - CMULACNConstructionTeam
+  - CMULACNMASH
+  - LACNSniperteam
+  - LACNSniperteamIntel
+  # CCAF
+  - CMUCCAFFireTeam
+  # US Army
+  - USArmyArmored
+  - CMUUSArmyIntelPair
+  - USArmyTank
+  - USArmy
+  - USArmyAlt
+  - USArmyAlt2
+  - CMUUSArmyReinforcements
+  # USASF
+  - CMUIntelThirdPartyK9USASF
+  # CMB tactical team, investigation party and the rest of the bureau
+  - CMUCMBTacticalTeam
+  - CMBInvestigationParty
+  - CMBInvestigationPartyAlt
+  - CMBBureauObserverParty
+  - CMBParoleeTransport
+  - CMBParoleeTransportBig
+  # FEMA
+  - CMUFEMAResponseTeam
+  # USCM
+  - CMUUSCMEngineerTeam
+  - CMUUSCMMPFireteam
+  - MarineSecurityGuard
+  - CMUUSCMPlasmaTeam
+  # UA ambassador units
+  - RUMCMercsUA
+  - RUMCMedicsUA
+  - RUMCEngineersUA
+  roundForces:
+  - UA
+  - UACG
+  - DutchsDozen
+  - FORECON
+  - LACN
+  - CMUCCAF
+  - USARMY
+  - USASF
+  - USCM
+  - CWPS
+  # The colony's CMB patrol
+  jobs:
+  - AU14JobCivilianCMBMarshal
+  - AU14JobCivilianCMBDetective
+  - AU14JobCivilianCMBDeputy
+
+# Royal Marines: the IASF and its Paramarines, SAS, RMC, NSPA and TWE ambassador units.
+- type: cmuFlagReinforcements
+  id: CMUFlagReinforcementsRMC
+  thirdParties:
+  # IASF
+  - CMUIASFReinforcements
+  - CMUIASFMortarTeam
+  - IASFSurvSmall
+  - IASFSurvMedium
+  - IASFSurvLarge
+  - IASFSurvBosenmori
+  - IASFSurvBosenmoriPilot
+  # IASF Paramarines
+  - TWEParamarines
+  - TWEParamarinesSurv
+  # SAS
+  - SAS
+  - CMUSASAssaultSquad
+  # RMC
+  - CMURMCCombatEngineers
+  - RMCRRT
+  # NSPA tactical team and investigation party
+  - CMUNSPATacticalTeam
+  - NSPAInvestigationParty
+  - NSPAInvestigationPartyAlt
+  - NSPAInvestigationPartyArmored
+  # TWE ambassador units
+  - RUMCMercsTWE
+  - RUMCMedicsTWE
+  - RUMCEngineersTWE
+  roundForces:
+  - CMUParamarines
+  - CMUSAS
+  - RMC
+  - NSPA
+
+# UPP and BEAR: GROM, the line squad, militsiya, territorial defence, liquidators, line commandos, naval infantry,
+# kommissar detail, sappers, BEAR, UPP migrants, labor union organizers and the MSS.
+- type: cmuFlagReinforcements
+  id: CMUFlagReinforcementsUPP
+  thirdParties:
+  # GROM
+  - UPPGROM
+  - UPPGROMAlt
+  - UPPGROMAlt2
+  - UPPGROMRRUSquad
+  - UPPGROMRRUTeam
+  # Line squad
+  - UPPLineSquad
+  - UPPLineSquadSurv
+  # Militsiya
+  - CMUUPPMilitsiya
+  - CMUIntelThirdPartyK9UPP
+  # Territorial defence
+  - UPPTDLostTeam
+  - CMUUPPTDPatrol
+  - CMUUPPTDPlatoon
+  # Liquidators
+  - Liquidators
+  # Line commandos, naval infantry, kommissar detail and sappers
+  - UPPLineCommandos
+  - CMUUPPLineRPGTeam
+  - CMUUPPLineSniperPair
+  - CMUUPPKommissarDetail
+  - CMUUPPSapperTeam
+  # BEAR
+  - SKALA_PMC_BEAR
+  - GROZA_PMC_BEAR
+  - CHTORM_PMC_BEAR
+  # Civilians
+  - Migrant_UPP
+  - CMUUnionOrganisers
+  # MSS
+  - MSSOperationalGroup
+  roundForces:
+  - GROM
+  - UPPLine
+  - UPP_TD
+  - BEAR
+  - MSS
+
+# Weyland-Yutani: corporate security, PMCs, the hazard transport, executives, IPIE, legal and the colony's corporate
+# staff.
+- type: cmuFlagReinforcements
+  id: CMUFlagReinforcementsWY
+  thirdParties:
+  # Corporate security team
+  - CMUWYSecurityTeam
+  # PMC teams and party
+  - WYPMCParty
+  - WYPMCPartyAlt
+  - CMUWYPMCTeamSmall
+  - WYPMCWhiteout
+  # Hazard transport
+  - WYHT
+  # Executives: site director, division manager, legal, lawyers and goons
+  - WYExecutives
+  - WYExecutivesSurv
+  # IPIE
+  - IPIE
+  - IPIESynth
+  # Survivors
+  - WEYUSurvLarge
+  - WEYUSurvMedium
+  - WEYUSurvSmall
+  # Every corporate job, including the colony's liaison, assistants, administrator, scientist and security officers
+  roundForces:
+  - WY
+
+# UN: only the UNISC and the Red Cross. UN flags rally no platoon.
+- type: cmuFlagReinforcements
+  id: CMUFlagReinforcementsUN
+  thirdParties:
+  - UNISCTeamParty
+  - ICRCReliefParty
+  roundForces:
+  - UNISC
+  - ICRC

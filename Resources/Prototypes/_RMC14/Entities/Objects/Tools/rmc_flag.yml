@@ -1,6 +1,6 @@
 ﻿- type: entity
   abstract: true
-  parent: BaseItem
+  parent: [BaseItem, CMUFlagCarriableDestructible] # CMU14: was BaseItem
   id: RMCFlagCarriableBase
   name: flag
   components:

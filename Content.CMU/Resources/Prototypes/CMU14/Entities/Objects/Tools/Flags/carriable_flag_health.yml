@@ -1,0 +1,24 @@
+# Mixed into RMCFlagCarriableBase. Carriable flags can be shot or smashed apart once planted, like a planted warbanner
+# but with no wreck to repair. Only aimed shots hit them, so they don't soak up stray fire. The hitbox they're shot
+# through is added by CMUFlagAuraSystem, since BaseItem's fixtures don't merge with a second parent's.
+- type: entity
+  abstract: true
+  id: CMUFlagCarriableDestructible
+  components:
+  - type: RequireProjectileTarget
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RMCHealthExaminable
+    speciesType: Mechanical
