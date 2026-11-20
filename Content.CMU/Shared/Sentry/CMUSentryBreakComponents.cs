@@ -14,6 +14,13 @@ public sealed partial class CMUSentryBreakableComponent : Component
     /// <summary>Share of the ammo left in the magazine that's lost when it breaks.</summary>
     [DataField]
     public float AmmoLoss = 0.25f;
+
+    /// <summary>
+    ///     Prefix of the breakdown and repair messages, so other deployables (such as planted flags) can describe
+    ///     the same repair steps in their own words.
+    /// </summary>
+    [DataField]
+    public string LocPrefix = "cmu-sentry";
 }
 
 /// <summary>
