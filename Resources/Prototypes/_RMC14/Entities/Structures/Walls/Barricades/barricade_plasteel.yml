@@ -154,6 +154,10 @@
   - type: RMCConstructionUpgradeTarget
     upgrades: null
     downgrade: RMCBruteUpgradePlasteel
+  - type: DirectionalBulletBlocker
+    frontBlockAngle: 180
+    blockChance: 0.45
+
 
 - type: entity
   parent: RMCBarricadePlasteel

@@ -106,7 +106,7 @@
     bidirectional: true
     blocking: 100
 
-  # (100 / 100) * 0.35 = 0.35 * 100= 35% chance of blocking bullets from the front
+  # (100 / 100) * 0.35 = 0.35 = 35% chance of blocking bullets from the front
 
   # - type: RMCGenericExamine TODO
     # messageId: rmc-barricade-examine-tip
