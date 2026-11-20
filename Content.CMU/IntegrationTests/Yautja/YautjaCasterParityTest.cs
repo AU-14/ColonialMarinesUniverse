@@ -15,6 +15,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared._RMC14.Projectiles;
 using Content.Shared.Projectiles;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Ranged.Components;
@@ -69,7 +70,7 @@ public sealed class YautjaCasterParityTest
             maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
     }
 
-    private static void Fire(RobustIntegrationTest.ServerIntegrationInstance server, EntityUid hunter, EntityUid caster,
+    private static EntityUid Fire(RobustIntegrationTest.ServerIntegrationInstance server, EntityUid hunter, EntityUid caster,
         EntityCoordinates target)
     {
         var entMan = server.EntMan;
@@ -78,6 +79,7 @@ public sealed class YautjaCasterParityTest
         gun.ShootCoordinates = target;
         var shot = entMan.System<SharedGunSystem>().AttemptShoot(hunter, (caster, gun));
         Assert.That(shot, Is.Not.Null.And.Count.EqualTo(1), "Test setup: the caster must fire.");
+        return shot![0];
     }
 
     private static FixedPoint2 Damage(IEntityManager entMan, EntityUid uid) =>
@@ -272,9 +274,18 @@ public sealed class YautjaCasterParityTest
             var entMan = server.EntMan;
             Floor(map, entMan, 30);
             var (hunter, caster) = ArmHunter(entMan, map.GridCoords.Offset(new Vector2(0.5f, 0.5f)), EradicatorMode);
-            // Off the bolt's line, where its 20-tile range runs out: only a range-end blast reaches them.
-            bystander = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(20.5f, 2.5f)));
-            Fire(server, hunter, caster, map.GridCoords.Offset(new Vector2(28.5f, 0.5f)));
+            var bolt = Fire(server, hunter, caster, map.GridCoords.Offset(new Vector2(28.5f, 0.5f)));
+
+            // The caster's spread is seeded per tick and gun, so the bolt's heading varies between pooled pairs.
+            // Place the bystander off the line actually flown, 2 tiles to the side of where its range runs out,
+            // so only a range-end blast reaches them. Step toward the floor's centre line to stay on the floor.
+            var start = entMan.System<SharedTransformSystem>().GetMapCoordinates(bolt);
+            var heading = Vector2.Normalize(entMan.GetComponent<PhysicsComponent>(bolt).LinearVelocity);
+            var end = start.Position + heading * entMan.GetComponent<ProjectileMaxRangeComponent>(bolt).Max;
+            var side = new Vector2(-heading.Y, heading.X) * 2f;
+            if (end.Y + side.Y > start.Position.Y + 2f)
+                side = -side;
+            bystander = entMan.SpawnEntity("CMMobHuman", new MapCoordinates(end + side, start.MapId));
         });
 
         await pair.RunTicksSync(240);
