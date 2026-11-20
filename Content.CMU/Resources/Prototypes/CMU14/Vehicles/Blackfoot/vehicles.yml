@@ -139,16 +139,13 @@
     - 0,-1
     takeoffDuration: 23.66
     landingDuration: 19
-  - type: BlackfootFuelPower
-    fuel: 600
-    maxFuel: 600
-    battery: 600
-    maxBattery: 600
-    idleFuelDrain: 0.5
-    vtolFuelDrain: 3
-    flightFuelDrain: 1
-    sensorBatteryDrain: 1
-    minimumTakeoffFuel: 30
+  - type: VehiclePowerSourceTank
+  - type: VehiclePowerSourceDrain
+  - type: VehicleMovementState
+  - type: VehiclePowerSourceStates
+  - type: VehicleMovementMode
+  - type: VehicleMovementModeModifiers
+  - type: VehicleMovementSpeedGear
   - type: BlackfootTow
     canTow: false
     canBeTowed: true

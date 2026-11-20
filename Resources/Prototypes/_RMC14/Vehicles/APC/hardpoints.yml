@@ -15,7 +15,7 @@
 - type: entity
   parent: RMCAPCHardpointBase
   id: RMCAPCWheel # CMU14
-  name: APC wheel
+  name: 17R5 XML-V APC wheel
   description: A reinforced APC wheel.
   components:
   - type: Sprite
@@ -38,8 +38,8 @@
 - type: entity
   parent: RMCAPCHardpointBase
   id: RMCAPCFrontCannon
-  name: APC frontal cannon
-  description: A fixed forward cannon for an APC hardpoint.
+  name: 20mm RE700 APC frontal cannon
+  description: A fixed forward Republic Electric RE700 20mm rotary cannon for an APC hardpoint.
   components:
   - type: ContainerContainer
     containers:
@@ -89,7 +89,7 @@
 - type: entity
   parent: RMCAPCHardpointBase
   id: RMCAPCDualCannon
-  name: APC dual cannon
+  name: 20MW PARS-150 "Boyars" dual cannon
   description: A dual cannon turret for an APC hardpoint.
   components:
   - type: ContainerContainer
@@ -145,7 +145,7 @@
 - type: entity
   parent: RMCAPCHardpointBase
   id: RMCAPCCommsRelay
-  name: APC comms relay
+  name: AN/VRC-52 APC comms relay
   description: A communications relay array for APC support slots.
   components:
   - type: Sprite
@@ -167,7 +167,7 @@
 - type: entity
   parent: RMCAPCHardpointBase
   id: RMCAPCFlareLauncher
-  name: APC flare launcher
+  name: M74A1L APC flare launcher
   description: A flare launcher hardpoint for APC support slots.
   components:
   - type: ContainerContainer
@@ -226,7 +226,7 @@
 - type: entity
   parent: RMCAPCHardpointBase
   id: RMCAPCFreightStorage
-  name: APC freight storage
+  name: M577-C2 APC freight storage
   description: A cargo pod for APC support slots.
   components:
   - type: Sprite

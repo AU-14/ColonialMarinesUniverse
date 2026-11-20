@@ -1,8 +1,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankLTBCannon # CMU14
-  name: 86mm LTB cannon
-  description: A light tank cannon hardpoint.
+  name: 86mm M32B1 LTB cannon
+  description: A light tank cannon barrel, takes 86mm shells, designed specifically for M34A2 Longstreet.
   components:
   - type: ContainerContainer
     containers:
@@ -73,8 +73,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankLTAAAPMinigun
-  name: 20mm LTAA AP rotary cannon
-  description: A light anti-air rotary cannon hardpoint.
+  name: 20mm M238E rotary cannon
+  description: A light anti-air LTAA AP rotary cannon hardpoint, extended length variant.
   components:
   # cmu edit start: caseless
   - type: CMUCaselessGun
@@ -168,8 +168,8 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankAceAutocannon # CMU14
-  name: 30mm AC3-E autocannon
-  description: A 30mm AC3-E autocannon hardpoint.
+  name: 30mm XM317 autocannon
+  description: A 30mm AC3-E autocannon, designated XM317. Still undergoes testing.
   components:
   - type: ContainerContainer
     containers:
@@ -245,7 +245,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankAutocannonTWE # CMU14
-  name: Improper 45mm L26A2 autocannon
+  name: 45mm L26A2 autocannon
   description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
   components:
   - type: ContainerContainer
@@ -323,7 +323,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankHeavyElectrolaserTWE # CMU14
-  name: Improper L215A1 heavy electrolaser
+  name: 20MW L215A1 heavy electrolaser
   description: An experimental prototype made by Tosubishi Heavy Industrial Manufacturing. An arcing electroshock laser assisted cannon, currently going through field testing. Theoretically it has limitless firing potential, as long as it is powered.
   components:
   - type: ContainerContainer

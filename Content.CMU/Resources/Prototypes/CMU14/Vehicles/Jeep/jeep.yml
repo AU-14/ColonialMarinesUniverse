@@ -492,7 +492,7 @@
     accuracyMultiplierUnwielded: 3
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeSentry10x50mm
+    proto: VehicleCartridgeSentry10x28mm
     capacity: 300
   - type: VehicleHardpointAmmo
     magazineSize: 300

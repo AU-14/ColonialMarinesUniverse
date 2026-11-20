@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: CMUCrateVehicleAmmoCupolaTracer
-  name: M56 cupola magazines crate (tracer) (x2)
+  name: 10x28mm cupola GPMG ammo bins crate (tracer) (x2)
   components:
   - type: StorageFill
     contents:
@@ -11,8 +11,8 @@
 - type: entity
   parent: RMCCrateAmmo
   id: CMUCrateVehicleAmmoCupolaMixed
-  name: M56 cupola magazines crate (mixed) (x2)
-  description: A mixed crate of M56 cupola magazines, carrying one standard and one tracer magazine instead of a single type in bulk.
+  name: 10x28mm cupola GPMG ammo bins crate (mixed) (x2)
+  description: A mixed crate of 10x28mm GPMG ammo bins, carrying one standard and one tracer bin instead of a single type in bulk.
   components:
   - type: StorageFill
     contents:
@@ -22,9 +22,42 @@
       amount: 1
 
 - type: entity
+  parent: CMUCrateVehicleAmmoCupolaTracer
+  id: CMUCrateVehicleAmmoCupolaTracer_UPP
+  name: 7.62x54mmR cupola GPMG ammo bins crate (tracer) (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxCupolaTracer_UPP
+      amount: 2
+
+- type: entity
+  parent: CMUCrateVehicleAmmoCupolaMixed
+  id: CMUCrateVehicleAmmoCupolaMixed_UPP
+  name: 7.62x54mmR cupola GPMG ammo bins crate (mixed) (x2)
+  description: A mixed crate of 7.62x54mmR GPMG ammo bins, carrying one standard and one tracer bin instead of a single type in bulk.
+  components:
+  - type: StorageFill
+    contents:
+    - id: VehicleAmmoBoxCupola_UPP
+      amount: 1
+    - id: CMUAmmoBoxCupolaTracer_UPP
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateVehicleAmmoLTBCannon
+  name: 86mm M342 HESH cannon shell crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: VehicleAmmoBoxLTBCannon
+      amount: 16
+
+- type: entity
   parent: RMCCrateAmmo
   id: CMUCrateVehicleAmmoLTBCannonAPFSDS
-  name: LTB APFSDS cannon shell crate (x16)
+  name: 86mm M369 APFSDS cannon shell crate (x16)
   components:
   - type: StorageFill
     contents:
@@ -34,7 +67,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: CMUCrateVehicleAmmoLTBCannonHEAT
-  name: LTB HEAT cannon shell crate (x16)
+  name: 86mm M320 HEAT cannon shell crate (x16)
   components:
   - type: StorageFill
     contents:
@@ -44,7 +77,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: CMUCrateVehicleAmmoLTBCannonHE
-  name: LTB HE cannon shell crate (x16)
+  name: 86mm M326 HE cannon shell crate (x16)
   components:
   - type: StorageFill
     contents:
@@ -54,7 +87,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: CMUCrateVehicleAmmoLTBCannonCanister
-  name: LTB canister cannon shell crate (x16)
+  name: 86mm M371 canister cannon shell crate (x16)
   components:
   - type: StorageFill
     contents:
@@ -64,11 +97,71 @@
 - type: entity
   parent: RMCCrateAmmo
   id: CMUCrateVehicleAmmoLTBCannonNapalm
-  name: LTB napalm cannon shell crate (x16)
+  name: 86mm M402 napalm cannon shell crate (x16)
   components:
   - type: StorageFill
     contents:
     - id: CMUAmmoBoxLTBCannonNapalm
+      amount: 16
+
+- type: entity
+  parent: VehicleAmmoBoxLTBCannon
+  id: VehicleAmmoBoxLTBCannon_UPP
+  name: 37mm DM136 QK round (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonHESH_UPP
+      amount: 16
+
+- type: entity
+  parent: CMUCrateVehicleAmmoLTBCannonAPFSDS
+  id: CMUCrateVehicleAmmoLTBCannonAPFSDS_UPP
+  name: 37mm DM143 KE round crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonAPFSDS_UPP
+      amount: 16
+
+- type: entity
+  parent: CMUCrateVehicleAmmoLTBCannonHEAT
+  id: CMUCrateVehicleAmmoLTBCannonHEAT_UPP
+  name: 37mm DM142 MZ round crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonHEAT_UPP
+      amount: 16
+
+- type: entity
+  parent: CMUCrateVehicleAmmoLTBCannonHE
+  id: CMUCrateVehicleAmmoLTBCannonHE_UPP
+  name: 37mm DM131 HE-FLAT round crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonHE_UPP
+      amount: 16
+
+- type: entity
+  parent: CMUCrateVehicleAmmoLTBCannonCanister
+  id: CMUCrateVehicleAmmoLTBCannonCanister_UPP
+  name: 37mmm DM155 FLAT round crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonCanister_UPP
+      amount: 16
+
+- type: entity
+  parent: CMUCrateVehicleAmmoLTBCannonNapalm
+  id: CMUCrateVehicleAmmoLTBCannonNapalm_UPP
+  name: 37mm DM196 BRAND round (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonNapalm_UPP
       amount: 16
 
 - type: entity

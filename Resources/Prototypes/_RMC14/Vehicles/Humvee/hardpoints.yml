@@ -11,7 +11,7 @@
 - type: entity
   parent: VehicleHumveeHardpointBase
   id: VehicleHumveeWheel # CMU14
-  name: humvee wheel
+  name: M1531-W2 humvee wheel
   description: A reinforced humvee wheel.
   components:
   - type: Sprite
@@ -131,7 +131,7 @@
 - type: entity
   parent: VehicleHumveeHardpointBase
   id: VehicleHumveeCannon
-  name: humvee cannon
+  name: 20mm M56V humvee GPMG
   description: A fixed forward cannon for a humvee hardpoint.
   components:
   - type: ContainerContainer
@@ -175,7 +175,7 @@
     accuracyMultiplierUnwielded: 5
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeRERotaryCannon10x50mm
+    proto: VehicleCartridgeRERotaryCannon20x102mm
     capacity: 500
   - type: VehicleHardpointAmmo
     magazineSize: 500
@@ -195,7 +195,7 @@
 - type: entity
   parent: VehicleHumveeCannon
   id: VehicleHumveeARCCannon
-  name: ARC cannon
+  name: 20mm RE700V-B humvee-mounted
   description: A burst-fire cannon configured for an ARC humvee turret.
   components:
   - type: ContainerContainer
@@ -217,8 +217,8 @@
 - type: entity
   parent: VehicleHumveeHardpointBase
   id: VehicleHumveeLauncher
-  name: humvee launcher
-  description: A launcher hardpoint for a humvee.
+  name: 86mm M271A1 humvee launcher
+  description: An 86mm ATGM launcher for a humvee.
   components:
   - type: ContainerContainer
     containers:
@@ -276,7 +276,7 @@
 - type: entity
   parent: VehicleHumveeHardpointBase
   id: VehicleHumveeSnowplow
-  name: humvee snowplow
+  name: M16B2 humvee snowplow
   description: A reinforced plow attachment for a humvee.
   components:
   - type: Sprite
@@ -301,7 +301,7 @@
 - type: entity
   parent: VehicleHumveeHardpointBase
   id: VehicleHumveeOverlight
-  name: humvee overlight
+  name: AN/VSS-9 humvee overlight
   description: An overlight array for a humvee.
   components:
   - type: Sprite

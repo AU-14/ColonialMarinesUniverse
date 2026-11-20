@@ -1,7 +1,7 @@
 - type: entity
   parent: RMCProjectileLTBCannon
   id: CMUProjectileLTBCannonAPFSDS
-  name: LTB APFSDS cannon shell
+  name: 86mm M369 APFSDS cannon shell
   categories: [ HideSpawnMenu ]
   components:
   - type: TankCookOffProjectile # CMU14
@@ -37,7 +37,7 @@
 - type: entity
   parent: RMCProjectileLTBCannon
   id: CMUProjectileLTBCannonHEAT
-  name: LTB HEAT cannon shell
+  name: 86mm M320 HEAT cannon shell
   categories: [ HideSpawnMenu ]
   components:
   - type: TankCookOffProjectile # CMU14
@@ -74,7 +74,7 @@
 - type: entity
   parent: RMCProjectileLTBCannon
   id: CMUProjectileLTBCannonHE
-  name: LTB HE cannon shell
+  name: 86mm M326 HE cannon shell
   categories: [ HideSpawnMenu ]
   components:
   # Not an anti-armour round: opts out of the HESH parent's hull chunk and cook-off roll.
@@ -110,7 +110,7 @@
 - type: entity
   parent: RMCProjectileLTBCannon
   id: CMUProjectileLTBCannonCanister
-  name: LTB canister cannon shell
+  name: 86mm M371 canister cannon shell
   categories: [ HideSpawnMenu ]
   components:
   # Not an anti-armour round: opts out of the HESH parent's hull chunk and cook-off roll.
@@ -145,7 +145,7 @@
 - type: entity
   parent: RMCProjectileLTBCannon
   id: CMUProjectileLTBCannonNapalm
-  name: LTB napalm cannon shell
+  name: 86mm M402 napalm cannon shell
   categories: [ HideSpawnMenu ]
   components:
   # Not an anti-armour round: opts out of the HESH parent's hull chunk and cook-off roll.

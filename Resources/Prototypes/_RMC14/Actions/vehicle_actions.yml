@@ -47,6 +47,67 @@
       visible: false
 
 - type: entity
+  id: ActionVehicleGearUp
+  parent: BaseAction
+  name: Gear UP
+  description: Someone's havin' doubts, huh? Hell, I'm just trying to keep this thing interesting. You can't write me off like that. You're just a voice, pal! YOU DON'T KNOW A DAMN THING ABOUT RACING!
+  components:
+  - type: InstantAction
+    event: !type:VehicleGearShiftUpEvent
+  - type: Action
+    itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/id_lock_actions.rsi
+      state: id_lock_unlocked
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/id_lock_actions.rsi
+      state: id_lock_locked
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+
+- type: entity
+  id: ActionVehicleGearDown
+  parent: BaseAction
+  name: Gear DOWN
+  description: Not gonna make it to the finish line this way...
+  components:
+  - type: InstantAction
+    event: !type:VehicleGearShiftDownEvent
+  - type: Action
+    itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/id_lock_actions.rsi
+      state: id_lock_unlocked
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/id_lock_actions.rsi
+      state: id_lock_locked
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+
+- type: entity
+  id: ActionVehicleToggleEngine
+  parent: BaseAction
+  name: "Startup/Shutdown"
+  description: Switch the engine state
+  components:
+  - type: InstantAction
+    event: !type:VehicleStartUpShutDownEvent
+  - type: Action
+    itemIconStyle: BigItem
+    raiseOnUser: true
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: engine_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: engine_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+
+- type: entity
   id: ActionVehicleSelectHardpoint
   name: Select Hardpoint
   description: Select this hardpoint for firing.

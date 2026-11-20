@@ -52,11 +52,6 @@
   id: VehicleCartridgeDragonFlame
   name: cartridge (DRGN flame)
   components:
-  - type: Sprite
-    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
-    layers:
-    - state: base
-      map: ["enum.AmmoVisualLayers.Base"]
   - type: CartridgeAmmo
     proto: VehicleProjectileDragonFlame
     muzzleFlash: MuzzleFlashEffectVehicleOver
@@ -78,7 +73,7 @@
 - type: entity
   parent: CMCartridge10x20mmAP
   id: VehicleCartridgeLTAAAP
-  name: cartridge (10x20mm-APC)
+  name: cartridge (20x125mm-APC)
   components:
   - type: CartridgeAmmo
     proto: VehicleBulletLTAAAP
@@ -86,7 +81,7 @@
 # Projectiles
 - type: entity
   id: VehicleLTBCannonImpact
-  name: LTB HESH cannon impact
+  name: 86mm M342 HESH cannon impact
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
@@ -204,6 +199,7 @@
   - type: CMArmorPiercing
     amount: 15
   - type: IgnorePredictionHide
+
 - type: entity
   parent: RMCBaseBullet
   id: VehicleProjectileDragonFlame
@@ -253,7 +249,7 @@
 - type: entity
   parent: Bullet10x20mmAP
   id: VehicleBulletLTAAAP
-  name: bullet (10x20mm-APC)
+  name: bullet (20x105mm-APC)
   categories: [ HideSpawnMenu ]
   components:
   - type: PreventCollideWithDead # CMU14: corpses must not absorb the tank minigun's following shots.
@@ -370,3 +366,4 @@
   - type: TileFireOnTrigger
     range: 2
     spawn: RMCTileFireBlue
+

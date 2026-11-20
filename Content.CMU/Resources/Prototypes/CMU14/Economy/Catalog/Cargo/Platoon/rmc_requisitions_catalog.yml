@@ -392,10 +392,6 @@
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 5000
-        crate: CMUCrateVehiclePartSupportSmoke
-        maxStock: 2
-        stockReplenishDelay: 300
-      - cost: 5000
         crate: CMUCrateVehiclePartSupportSmokeTWE
         maxStock: 2
         stockReplenishDelay: 300
@@ -404,15 +400,7 @@
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 5000
-        crate: CMUCrateVehiclePartSupportArtillery
-        maxStock: 2
-        stockReplenishDelay: 300
-      - cost: 5000
         crate: CMUCrateVehiclePartSupportArtilleryTWE
-        maxStock: 2
-        stockReplenishDelay: 300
-      - cost: 5000
-        crate: CMUCrateVehiclePartSupportSnowPlow
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 5000
