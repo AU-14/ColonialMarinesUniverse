@@ -20,13 +20,7 @@ public sealed partial class CMUConstructionRobotComponent : Component
     public float FuelCapacity = 1000f;
 
     [DataField]
-    public int MaxMaterialStacks = 20;
-
-    [DataField]
     public float MaterialPickupRadius = 5f;
-
-    [DataField]
-    public string MaterialsContainerId = "cmu-construction-robot-materials";
 
     [DataField]
     public TimeSpan RefuelDelay = TimeSpan.FromSeconds(15);

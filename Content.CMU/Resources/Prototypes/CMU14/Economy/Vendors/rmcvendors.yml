@@ -1263,7 +1263,7 @@
       entries:
       - id: AU14CaseSentry
       - id: AU14CaseSentryFlamer
-      - id: CMUConstructionRobotKit
+      - id: CMUConstructionRobotVendorKit
     - name: Sentry Gun Upgrade Kit
       entries:
       - id: RMCEngineeringUpgrade

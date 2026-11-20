@@ -40,6 +40,18 @@
         mask: [MobMask]
         layer: [MobLayer]
   - type: Pullable
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,9,7
+    whitelist:
+      components:
+      - Stack
+  - type: FixedItemSizeStorage
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
   - type: NoSlip
   - type: RMCImmuneToFireTileDamage
   - type: HTN
@@ -49,7 +61,6 @@
   - type: CMUConstructionRobot
     weldingFuel: 1000
     fuelCapacity: 1000
-    maxMaterialStacks: 20
     materialPickupRadius: 5
     refuelDelay: 15
   - type: Tag
@@ -77,3 +88,27 @@
   - type: Item
     size: Normal
   - type: CMUConstructionRobotKit
+
+- type: entity
+  parent: CMUConstructionRobot
+  id: CMUConstructionRobotVendor
+  suffix: Vendor, Full
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSheetMetal50
+      amount: 5
+    - id: CMSheetPlasteel50
+      amount: 5
+    - id: RMCPlankWood
+      amount: 5
+    - id: CMSheetGlass
+      amount: 5
+
+- type: entity
+  parent: CMUConstructionRobotKit
+  id: CMUConstructionRobotVendorKit
+  suffix: Vendor, Full
+  components:
+  - type: CMUConstructionRobotKit
+    robotPrototype: CMUConstructionRobotVendor
