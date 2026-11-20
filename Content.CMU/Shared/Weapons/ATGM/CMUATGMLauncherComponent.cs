@@ -117,7 +117,7 @@ public sealed partial class CMUATGMLauncherComponent : Component
     ///     For gunship launchers: list of currently marked enemy entities with their mark times.
     /// </summary>
     [DataField, AutoNetworkedField]
-    public List<(EntityUid Entity, TimeSpan MarkedAt)> MarkedTargets = new();
+    public Dictionary<EntityUid, TimeSpan> MarkedTargets = new();
 
     /// <summary>
     ///     For gunship launchers: maximum number of targets that can be marked simultaneously.
@@ -150,14 +150,14 @@ public sealed partial class CMUATGMLauncherComponent : Component
             {
                 if (MarkExpirationSeconds > 0)
                 {
-                    var age = (currentTime - m.MarkedAt).TotalSeconds;
+                    var age = (currentTime - m.Value).TotalSeconds;
                     if (age > MarkExpirationSeconds)
                         return false;
                 }
-                validTargets.Add(m.Entity);
+                validTargets.Add(m.Key);
                 return true;
             })
-            .ToList();
+            .ToDictionary(m => m.Key, m => m.Value);
 
         return validTargets;
     }

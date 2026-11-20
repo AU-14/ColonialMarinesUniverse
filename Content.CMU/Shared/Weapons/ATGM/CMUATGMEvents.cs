@@ -1,3 +1,4 @@
+using Content.Shared.Actions;
 using Content.Shared.DoAfter;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
@@ -27,20 +28,15 @@ public sealed partial class CMUATGMLoadDoAfterEvent : SimpleDoAfterEvent;
 public sealed partial class CMUATGMLinkDoAfterEvent : SimpleDoAfterEvent;
 
 /// <summary>
-///     Sent by the pilot to mark an enemy for the gunship ATGM launcher.
-///     The server resolves the launcher from the gunner's mounted weapon.
+///     Action to mark a target for the gunship ATGM launcher.
 /// </summary>
-[Serializable, NetSerializable]
-public sealed class CMUATGMMarkTargetEvent(EntityUid target) : EntityEventArgs
-{
-    public EntityUid Target = target;
-}
+public sealed partial class CMUATGMMarkTargetEvent : WorldTargetActionEvent;
 
 /// <summary>
 ///     Sent by the pilot to unmark all targets or a specific target from the gunship ATGM launcher.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed class CMUATGMUnmarkTargetEvent(EntityUid? target = null) : EntityEventArgs
+public sealed class CMUATGMUnmarkTargetEvent(NetEntity? target = null) : EntityEventArgs
 {
-    public EntityUid? Target = target;
+    public NetEntity? Target = target;
 }

@@ -490,14 +490,14 @@ public sealed partial class CMUATGMSystem : EntitySystem
         var validTargets = launcher.Comp.GetValidMarkedTargets(currentTime);
 
         // Check if already marked
-        if (launcher.Comp.MarkedTargets.Any(m => m.Entity == target))
+        if (launcher.Comp.MarkedTargets.ContainsKey(target))
             return true;
 
         // Check if we can add more marks
         if (validTargets.Count >= launcher.Comp.MaxMarkedTargets)
             return false;
 
-        launcher.Comp.MarkedTargets.Add((target, currentTime));
+        launcher.Comp.MarkedTargets.Add(target, currentTime);
         Dirty(launcher);
         return true;
     }
@@ -516,7 +516,7 @@ public sealed partial class CMUATGMSystem : EntitySystem
         }
         else
         {
-            launcher.Comp.MarkedTargets.RemoveAll(m => m.Entity == target);
+            launcher.Comp.MarkedTargets.Remove(target.Value);
         }
 
         Dirty(launcher);
