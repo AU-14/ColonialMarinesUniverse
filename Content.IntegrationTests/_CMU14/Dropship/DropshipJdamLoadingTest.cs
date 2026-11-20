@@ -19,6 +19,34 @@ public sealed class DropshipJdamLoadingTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
+    [TestCase("RMCDropshipAttachmentAmmoGAU")]
+    [TestCase("RMCDropshipAttachmentAmmoGAUAP")]
+    [TestCase("CMUDropshipAmmoGAUFragmentation")]
+    [TestCase("CMUDropshipMixedGauBelt")]
+    public async Task InternalGauAndAmmunitionCanBeLoaded(string ammunition)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var ship = SEntMan.EnsureComponent<DropshipComponent>(map.Grid);
+            var point = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", map.GridCoords);
+            ship.AttachmentPoints.Add(point);
+            var mount = SEntMan.GetComponent<DropshipUtilityPointComponent>(point);
+            var loader = SEntMan.SpawnEntity("RMCMechPowerLoader", map.GridCoords);
+            var weapon = SEntMan.SpawnEntity("RMCDropshipAttachmentGau21Cannon", map.GridCoords);
+            SEntMan.GetComponent<PowerLoaderAttachableComponent>(weapon).AttachDelay = TimeSpan.Zero;
+            SEntMan.EventBus.RaiseLocalEvent(weapon, new BeforeRangedInteractEvent(loader, weapon, point, map.GridCoords, true));
+
+            var containers = Server.System<SharedContainerSystem>();
+            Assert.That(containers.GetContainer(point, mount.UtilitySlotId).Contains(weapon), Is.True);
+
+            var ammo = SEntMan.SpawnEntity(ammunition, map.GridCoords);
+            SEntMan.GetComponent<PowerLoaderAttachableComponent>(ammo).AttachDelay = TimeSpan.Zero;
+            SEntMan.EventBus.RaiseLocalEvent(ammo, new BeforeRangedInteractEvent(loader, ammo, point, map.GridCoords, true));
+            Assert.That(containers.GetContainer(point, mount.AmmoContainerSlotId).Contains(ammo), Is.True);
+        });
+    }
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task PowerloaderLoadingRejectsFlightAndTakeoffDuringLoading(bool internalMount)

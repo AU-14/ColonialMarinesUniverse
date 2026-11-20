@@ -1,9 +1,18 @@
 ## Weapon jams
 
-cmu-dropship-weapon-jammed = WEAPON STOPPAGE: {$reason}. Clear it at the hardpoint with a multitool.
+cmu-dropship-weapon-jammed = WEAPON STOPPAGE: {$reason}. Examine the hardpoint for repair instructions.
 cmu-dropship-fault-reason-jam-feed = feed tray jam
 cmu-dropship-fault-reason-jam-double = double-feed stoppage
 cmu-dropship-fault-reason-jam-gremlin = something is rattling around in the breech
+cmu-dropship-fault-reason-jam-extractor = extractor stuck on a spent casing
+cmu-dropship-fault-reason-jam-belt = ammunition belt twisted in the feed
+cmu-dropship-fault-reason-jam-breech = breech obstructed by debris
+cmu-dropship-fault-reason-jam-sensor = feed sensor wiring shorted
+cmu-dropship-fault-reason-jam-actuator = breech actuator stalled
+cmu-dropship-fault-reason-jam-link = broken belt link caught in the feed
+cmu-dropship-fault-reason-jam-roller = feed roller out of alignment
+cmu-dropship-fault-reason-jam-interlock = firing interlock misaligned and shorted
+cmu-dropship-fault-reason-jam-chamber = spent casing wedged in the chamber
 
 ## Ground crew checklist
 
