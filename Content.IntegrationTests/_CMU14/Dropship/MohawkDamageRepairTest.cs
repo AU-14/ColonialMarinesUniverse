@@ -155,6 +155,61 @@ public sealed class MohawkDamageRepairTest : GameTest
     }
 
     [Test]
+    public async Task HardpointFaultRequiresOrderedPanelAndResetSteps()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var point = SEntMan.SpawnEntity("AU14InteriorWeaponAttachmentPoint", map.GridCoords);
+            var actor = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 0.5f)));
+            Server.System<SkillsSystem>().SetSkill(actor, "RMCSkillEngineer", 1);
+            var boot = Server.System<DropshipFireControlBootSystem>();
+            boot.ForceFault(point, "cmu-dropship-fault-reason-circuit");
+            var fault = SEntMan.GetComponent<DropshipHardpointFaultComponent>(point);
+            var screwdriver = SEntMan.SpawnEntity("CMScrewdriver", map.GridCoords);
+            var multitool = SEntMan.SpawnEntity("CMMultitool", map.GridCoords);
+            var hands = Server.System<SharedHandsSystem>();
+
+            Assert.That(hands.TryPickupAnyHand(actor, multitool), Is.True);
+            SEntMan.EventBus.RaiseLocalEvent(point, new InteractUsingEvent(actor, multitool, point, map.GridCoords));
+            Assert.That(fault.RepairStage, Is.EqualTo(HardpointRepairStage.Open));
+            hands.TryDrop(actor, multitool);
+
+            void Repair(EntityUid tool, HardpointRepairStage stage, int seconds)
+            {
+                Assert.That(hands.TryPickupAnyHand(actor, tool), Is.True);
+                SEntMan.EventBus.RaiseLocalEvent(point, new InteractUsingEvent(actor, tool, point, map.GridCoords));
+                var after = SEntMan.GetComponent<DoAfterComponent>(actor).DoAfters.Values.Single(d => !d.Cancelled && !d.Completed);
+                Assert.That(((DropshipHardpointResetDoAfterEvent) after.Args.Event).Stage, Is.EqualTo(stage));
+                Assert.That(after.Args.Delay, Is.EqualTo(TimeSpan.FromSeconds(seconds)));
+                after.StartTime = SGameTiming.CurTime - after.Args.Delay - TimeSpan.FromSeconds(1);
+                Server.System<SharedDoAfterSystem>().Update(0);
+                Assert.That(after.Completed, Is.True);
+                hands.TryDrop(actor, tool);
+            }
+
+            Repair(screwdriver, HardpointRepairStage.Open, 4);
+            Repair(multitool, HardpointRepairStage.Reset, 6);
+            Assert.That(fault.Faulted, Is.True);
+            Repair(screwdriver, HardpointRepairStage.Close, 4);
+            Assert.That(fault.Faulted, Is.False);
+            Assert.That(fault.RepairStage, Is.EqualTo(HardpointRepairStage.Open));
+
+            var crowbar = SEntMan.SpawnEntity("CMCrowbar", map.GridCoords);
+            var wrench = SEntMan.SpawnEntity("CMWrench", map.GridCoords);
+            boot.ForceFault(point, "cmu-dropship-fault-reason-jam-chamber");
+            Repair(screwdriver, HardpointRepairStage.Open, 4);
+            Repair(wrench, HardpointRepairStage.UnboltBreech, 6);
+            Repair(crowbar, HardpointRepairStage.PryFeed, 4);
+            Repair(crowbar, HardpointRepairStage.ClearDebris, 4);
+            Repair(wrench, HardpointRepairStage.SecureFeed, 4);
+            Assert.That(fault.Faulted, Is.True);
+            Repair(screwdriver, HardpointRepairStage.Close, 4);
+            Assert.That(fault.Faulted, Is.False);
+        });
+    }
+
+    [Test]
     public async Task DisabledMountRequiresOrderedPartsCableWeldingAndCalibration()
     {
         var map = await Pair.CreateTestMap();

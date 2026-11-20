@@ -17,13 +17,13 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.dropship.landing_reboot", true, CVar.SERVERONLY | CVar.ARCHIVE);
 
     /// <summary>
-    /// Base chance for a hardpoint to fault during a landing reboot.
+    /// Base chance for a hardpoint to fault during a landing reboot, before the threefold gameplay multiplier.
     /// </summary>
     public static readonly CVarDef<float> DropshipLandingFaultChance =
         CVarDef.Create("cmu.dropship.landing_fault_chance", 0.005f, CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
 
     /// <summary>
-    /// Chance added for every landing since the hardpoint was last serviced.
+    /// Chance added for every landing since the hardpoint was last serviced, before the threefold gameplay multiplier.
     /// </summary>
     public static readonly CVarDef<float> DropshipLandingFaultStep =
         CVarDef.Create("cmu.dropship.landing_fault_step", 0.002f, CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
@@ -47,7 +47,7 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.dropship.fault_max_chance", 0.75f, CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);
 
     /// <summary>
-    /// Base chance for a CAS weapon to jam after a shot. Scaled by the hardpoint's firing engagements since service.
+    /// Base chance for a CAS weapon to jam after a shot, before the threefold gameplay multiplier and wear.
     /// </summary>
     public static readonly CVarDef<float> DropshipJamChance =
         CVarDef.Create("cmu.dropship.jam_chance", 0.002f, CVar.SERVER | CVar.REPLICATED | CVar.ARCHIVE);

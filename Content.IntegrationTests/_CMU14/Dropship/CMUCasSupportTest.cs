@@ -89,12 +89,22 @@ public sealed class CMUCasSupportTest
             var point = entities.SpawnEntity("CMUMohawkM90Point", coordinates);
             var boot = entities.System<DropshipFireControlBootSystem>();
             var maxChance = config.GetCVar(CCVars.DropshipFaultMaxChance);
+            var landingChance = config.GetCVar(CCVars.DropshipLandingFaultChance);
+            var landingStep = config.GetCVar(CCVars.DropshipLandingFaultStep);
+            var useMultiplier = config.GetCVar(CCVars.DropshipFaultUseMultiplier);
 
             Assert.That(boot.TryJam(point), Is.False, "Tests run with jams disabled.");
-            config.SetCVar(CCVars.DropshipJamChance, 1f);
             config.SetCVar(CCVars.DropshipFaultMaxChance, 1f);
             try
             {
+                config.SetCVar(CCVars.DropshipJamChance, 0.1f);
+                config.SetCVar(CCVars.DropshipLandingFaultChance, 0.02f);
+                config.SetCVar(CCVars.DropshipLandingFaultStep, 0.01f);
+                config.SetCVar(CCVars.DropshipFaultUseMultiplier, 0.01f);
+                var wear = new DropshipHardpointFaultComponent { Uses = 10, Landings = 2 };
+                Assert.That(boot.GetJamChance(wear), Is.EqualTo(0.33f).Within(0.0001f));
+                Assert.That(boot.GetLandingFaultChance(wear, false), Is.EqualTo(0.099f).Within(0.0001f));
+                config.SetCVar(CCVars.DropshipJamChance, 1f);
                 Assert.That(boot.TryJam(point), Is.True);
                 var fault = entities.GetComponent<DropshipHardpointFaultComponent>(point);
                 Assert.That(fault.Faulted, Is.True);
@@ -108,6 +118,9 @@ public sealed class CMUCasSupportTest
             {
                 config.SetCVar(CCVars.DropshipJamChance, 0f);
                 config.SetCVar(CCVars.DropshipFaultMaxChance, maxChance);
+                config.SetCVar(CCVars.DropshipLandingFaultChance, landingChance);
+                config.SetCVar(CCVars.DropshipLandingFaultStep, landingStep);
+                config.SetCVar(CCVars.DropshipFaultUseMultiplier, useMultiplier);
             }
 
             var mount = entities.GetComponent<DropshipWeaponPointComponent>(point);

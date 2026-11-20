@@ -15,6 +15,11 @@
     weapon: RMCDropshipAttachmentGau21Cannon
     fireMissionDelay: 1
   - type: DropshipMixedBelt
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipWeaponPoint
+    - RMCDropshipUtilityPoint
+    - AU14InteriorWeaponPoint
   - type: ContainerContainer
     containers:
       belt1: !type:ContainerSlot
